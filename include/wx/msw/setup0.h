@@ -711,6 +711,8 @@
 // space)
 #define wxUSE_SNGLINST_CHECKER  1
 
+#define wxUSE_DRAGIMAGE 1
+
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        1

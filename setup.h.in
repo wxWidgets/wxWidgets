@@ -269,6 +269,11 @@
 #define wxUSE_DIRDLG 0
 
 /*
+ * Use wxDragImage class
+ */
+#define wxUSE_DRAGIMAGE 0
+
+/*
  * Use property sheet classes
  */
 #define wxUSE_PROPSHEET 0

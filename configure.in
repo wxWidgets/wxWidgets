@@ -674,6 +674,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CLIPBOARD=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAG_AND_DROP=no
+  DEFAULT_wxUSE_DRAGIMAGE=no
   DEFAULT_wxUSE_SPLINES=no
 
   DEFAULT_wxUSE_MDI_ARCHITECTURE=no
@@ -822,6 +823,7 @@ else
   DEFAULT_wxUSE_CLIPBOARD=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
   DEFAULT_wxUSE_DRAG_AND_DROP=yes
+  DEFAULT_wxUSE_DRAGIMAGE=yes
   DEFAULT_wxUSE_SPLINES=yes
 
   DEFAULT_wxUSE_MDI_ARCHITECTURE=yes
@@ -1233,6 +1235,7 @@ WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derive
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
+WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -4199,6 +4202,11 @@ dnl if test "$wxUSE_WXTREE" = "yes"; then
 dnl   AC_DEFINE(wxUSE_WXTREE)
 dnl fi
 
+if test "$wxUSE_DRAGIMAGE" = "yes"; then
+    AC_DEFINE(wxUSE_DRAGIMAGE)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dragimag"
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
@@ -4376,7 +4384,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl TODO some samples are never built so far:
     dnl      ipc, mfc, nativdlg, oleauto, ownerdrw, proplist
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag \
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs \
                      drawing dynamic event font fractal image \
                      minimal richedit widgets"
 
