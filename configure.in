@@ -263,6 +263,11 @@ case "${host}" in
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
+    dnl "c++" wrapper is not always available, so always use plain gcc.
+    CXX=gcc
+    dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
+    LIBS="$LIBS -lstdcpp"
+    LDFLAGS="$LDFLAGS -Zcrtdll -Zsysv-signals"
   ;;
 
   powerpc-*-darwin* )
@@ -1931,11 +1936,13 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
         fi
         AC_CHECK_HEADER(tiffio.h,
-                        AC_CHECK_LIB(tiff, TIFFError,
-                                     TIFF_LINK=" -ltiff",
-                                     ,
-                                     $TIFF_PREREQ_LINKS)
-                       )
+            [
+                AC_CHECK_LIB(tiff, TIFFError,
+                             TIFF_LINK=" -ltiff",
+                             ,
+                             $TIFF_PREREQ_LINKS)
+            ]
+        )
 
         if test "x$TIFF_LINK" = "x" ; then
             if test "$wxUSE_LIBTIFF" = "sys" ; then
@@ -3461,12 +3468,16 @@ AC_CHECK_FUNCS(inet_addr,
     [
         AC_CHECK_LIB(nsl, inet_addr,
             INET_LINK="nsl",
-            AC_CHECK_LIB(resolv, inet_addr,
-                INET_LINK="resolv",
-                AC_CHECK_LIB(socket, inet_addr,
-                    INET_LINK="socket"
+            [
+                AC_CHECK_LIB(resolv, inet_addr,
+                    INET_LINK="resolv",
+                    [
+                        AC_CHECK_LIB(socket, inet_addr,
+                            INET_LINK="socket"
+                        )
+                    ]
                 )
-            )
+            ]
         )
     ]
 )
@@ -3499,7 +3510,7 @@ dnl ---------------------------------------------------------------------------
 
 dnl under MSW (except mingw32) we always have thread support
 CPP_MT_FLAG=
-if test "$TOOLKIT" != "MSW"; then
+if test "$TOOLKIT" != "MSW" -a "$TOOLKIT" != "PM"; then
 
     dnl the code below:
     dnl
@@ -3794,6 +3805,11 @@ else
                 dnl it doesn't
                 CFLAGS="$CFLAGS_OLD"
             fi
+        ;;
+        *-pc-os2*emx )
+	    CFLAGS="$CFLAGS -Zmt"	
+	    CXXFLAGS="$CXXFLAGS -Zmt"	
+	    LDFLAGS="$LDFLAGS -Zmt"	
         ;;
       esac
     fi
@@ -4258,15 +4274,17 @@ if test "$wxUSE_SOCKETS" = "yes"; then
     if test "$TOOLKIT" != "MSW"; then
         dnl under Solaris and OS/2, socket functions live in -lsocket
         AC_CHECK_FUNC(socket,,
-            AC_CHECK_LIB(socket, socket,
-                if test "$INET_LINK" != " -lsocket"; then
-                    INET_LINK="$INET_LINK -lsocket"
-                fi,
-                [
-                    AC_MSG_WARN([socket library not found - sockets will be disabled])
-                    wxUSE_SOCKETS=no
-                ]
-            )
+            [
+                AC_CHECK_LIB(socket, socket,
+                    if test "$INET_LINK" != " -lsocket"; then
+                        INET_LINK="$INET_LINK -lsocket"
+                    fi,
+                    [
+                        AC_MSG_WARN([socket library not found - sockets will be disabled])
+                        wxUSE_SOCKETS=no
+                    ]
+                )
+            ]
         )
     fi
 fi
@@ -4420,8 +4438,11 @@ if test "$TOOLKIT" != "MSW"; then
         dnl check also for dlerror()
         if test "$HAVE_DL_FUNCS" = 1; then
             AC_CHECK_FUNCS(dlerror,
-                           AC_DEFINE(HAVE_DLERROR),
-                           AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR)))
+                AC_DEFINE(HAVE_DLERROR),
+                [
+                    AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR))
+                ]
+            )
         fi
         fi
 
