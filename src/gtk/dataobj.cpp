@@ -204,7 +204,7 @@ size_t wxFileDataObject::GetDataSize() const
     return res + 1;
 }
 
-bool wxFileDataObject::SetData(size_t size, const void *buf)
+bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
     // VZ: old format
 #if 0

@@ -625,6 +625,20 @@ Gets the name of this handler.
 
 Gets the file extension associated with this handler.
 
+\membersection{wxImageHandler::GetImageCount}\label{wximagehandlergetimagecount}
+
+\func{int}{GetImageCount}{\param{wxInputStream\&}{ stream}}
+
+If the image file contains more than one image and the image handler is capable 
+of retrieving these individually, this function will return the number of
+available images.
+
+\docparam{stream}{Opened input stream for reading image file.}
+
+\wxheading{Return value}
+
+Number of available images. For most image handles, this defaults to 1.
+
 \membersection{wxImageHandler::GetType}
 
 \constfunc{long}{GetType}{\void}
@@ -639,16 +653,21 @@ Gets the MIME type associated with this handler.
 
 \membersection{wxImageHandler::LoadFile}\label{wximagehandlerloadfile}
 
-\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}}
+\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}, \param{bool}{ verbose=TRUE}, \param{int}{ index=0}}
 
-Loads a image from a stream, putting the resulting data into {\it image}.
+Loads a image from a stream, putting the resulting data into {\it image}. If the image file contains
+more than one image and the image handler is capable of retrieving these individually, {\it index}
+indicates which image to read from the stream.
 
 \wxheading{Parameters}
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{stream}{Opened input stream.
-The meaning of {\it stream} is determined by the {\it type} parameter.}
+\docparam{stream}{Opened input stream for reading images.}
+
+\docparam{verbose}{If set to TRUE, errors reported by the image handler will produce wxLogMessages.}
+
+\docparam{index}{The index of the image in the file (starting from zero).}
 
 \wxheading{Return value}
 
@@ -670,7 +689,7 @@ Saves a image in the output stream.
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{stream}{A stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
+\docparam{stream}{An opened stream for writing images.}
 
 \wxheading{Return value}
 

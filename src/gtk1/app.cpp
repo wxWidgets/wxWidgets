@@ -226,12 +226,25 @@ void wxapp_install_idle_handler()
 {
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
-    /* this routine gets called by all event handlers
-       indicating that the idle is over. */
+    /* This routine gets called by all event handlers
+       indicating that the idle is over. It may also
+       get called from other thread for sending events
+       to the main thread (and processing these in
+       idle time). */
+
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        GDK_THREADS_ENTER ();
+#endif
 
     wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
 
     g_isIdle = FALSE;
+    
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        GDK_THREADS_LEAVE ();
+#endif
 }
 
 #if wxUSE_THREADS

@@ -12,16 +12,14 @@
 # on your system.
 #
 
-CPP = g++
+CPP = gcc
 CC = gcc
 
 Penguin: penguin.o trackball.o lw.o glcanvas.o
-	$(CPP) -o Penguin \
-	penguin.o trackball.o lw.o glcanvas.o \
-	`wx-config --libs` -lMesaGL -lMesaGLU
+	$(CPP) -o Penguin penguin.o trackball.o lw.o glcanvas.o `wx-config --libs` -lMesaGL -lMesaGLU
 
 penguin.o: penguin.cpp
-	$(CPP) `wx-config --cflags` -g -I../../gtk -c penguin.cpp
+	$(CPP) `wx-config --cflags` -I../../gtk -c penguin.cpp
 
 lw.o: lw.cpp
 	$(CPP) `wx-config --cflags` -I../../gtk -c lw.cpp

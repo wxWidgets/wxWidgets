@@ -574,6 +574,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     m_message = message;
     m_dialogStyle = style;
+    
+    if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
+        m_dialogStyle &= ~wxMULTIPLE;
+    
     m_dir = defaultDir;
     if (m_dir.IsEmpty())
     {
@@ -657,8 +661,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     staticsizer->Add( m_static, 1 );
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
-    m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, wxSize(440,180),
-      wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+    if (m_dialogStyle & wxMULTIPLE)
+        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, 
+	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER );
+    else
+        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, 
+	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -887,6 +895,44 @@ void wxFileDialog::SetPath( const wxString& path )
             m_fileName += wxT(".");
             m_fileName += ext;
         }
+    }
+}
+
+void wxFileDialog::GetPaths( wxArrayString& paths ) const
+{
+    paths.Empty();
+    paths.Alloc( m_list->GetSelectedItemCount() );
+
+    wxString dir;
+    m_list->GetDir( dir );
+    if (dir != wxT("/")) dir += wxT("/");
+
+    wxListItem item;
+    item.m_mask = wxLIST_MASK_TEXT;
+
+    item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    while ( item.m_itemId != -1 ) {
+        m_list->GetItem( item );
+        paths.Add( dir + item.m_text );
+        item.m_itemId = m_list->GetNextItem( item.m_itemId + 1,
+            wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    }
+}
+
+void wxFileDialog::GetFilenames(wxArrayString& files) const
+{
+    files.Empty();
+    files.Alloc( m_list->GetSelectedItemCount() );
+
+    wxListItem item;
+    item.m_mask = wxLIST_MASK_TEXT;
+
+    item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    while ( item.m_itemId != -1 ) {
+        m_list->GetItem( item );
+        files.Add( item.m_text );
+        item.m_itemId = m_list->GetNextItem( item.m_itemId + 1,
+            wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
     }
 }
 

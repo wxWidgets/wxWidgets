@@ -201,7 +201,7 @@ gtk_pizza_new ()
     return GTK_WIDGET (pizza);
 }
 
-void  
+static void  
 gtk_pizza_scroll_set_adjustments (GtkPizza     *pizza,
 				    GtkAdjustment  *hadj,
 				    GtkAdjustment  *vadj)

@@ -12,12 +12,10 @@
 # on your system.
 #
 
-CC = g++
+CC = gcc
 
 cube: cube.o glcanvas.o
-	$(CC) -o cube \
-	cube.o glcanvas.o \
-	`wx-config --libs` -lMesaGL -lMesaGLU
+	$(CC) -o cube cube.o glcanvas.o `wx-config --libs` -lMesaGL -lMesaGLU
 
 cube.o: cube.cpp
 	$(CC) `wx-config --cflags` -I../../gtk -c cube.cpp

@@ -76,6 +76,7 @@ void ScanCodeCtrl::OnKeyDown( wxKeyEvent& event )
 /*------------------------------------------------------------------
  Dialog for defining a keypress
 -------------------------------------------------------------------*/
+
 class ScanCodeDialog : public wxDialog
 {
 public:
@@ -85,15 +86,7 @@ public:
 private:
   ScanCodeCtrl       *m_ScanCode;
   wxTextCtrl         *m_Description;
-// any class wishing to process wxWindows events must use this macro
-  DECLARE_EVENT_TABLE()
 };
-
-BEGIN_EVENT_TABLE( ScanCodeDialog, wxDialog )
-//
-END_EVENT_TABLE()
-
-/* ---------------------------------------------------------------- */
 
 ScanCodeDialog::ScanCodeDialog( wxWindow* parent, wxWindowID id, 
                const int code, const wxString &descr, const wxString& title )
@@ -172,46 +165,49 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name):
   wxGLCanvas(parent, NULL, id, pos, size, style, name )
 {
-  m_init = FALSE;
-  m_gllist = 0;
-  m_rleft = WXK_LEFT;
-  m_rright = WXK_RIGHT;
+    m_init = FALSE;
+    m_gllist = 0;
+    m_rleft = WXK_LEFT;
+    m_rright = WXK_RIGHT;
 }
+
 TestGLCanvas::TestGLCanvas(wxWindow *parent, const TestGLCanvas &other, 
     wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
     const wxString& name ) :
       wxGLCanvas(parent, other.GetContext(), id, pos, size, style, name  )
 {
-  m_init = FALSE;
-  m_gllist = other.m_gllist;    /* share display list */
-  m_rleft = WXK_LEFT;
-  m_rright = WXK_RIGHT;
+    m_init = FALSE;
+    m_gllist = other.m_gllist;    /* share display list */
+    m_rleft = WXK_LEFT;
+    m_rright = WXK_RIGHT;
 }
-TestGLCanvas::~TestGLCanvas(void)
+
+TestGLCanvas::~TestGLCanvas()
 {
 }
 
-void TestGLCanvas::Render( void  )
+void TestGLCanvas::Render()
 {
-  wxPaintDC dc(this);
+    wxPaintDC dc(this);
 
 #ifndef __WXMOTIF__
-  if (!GetContext()) return;
+    if (!GetContext()) return;
 #endif
-  SetCurrent();
-  /* init OpenGL once, but after SetCurrent */
-  if (!m_init)
-  {
-    InitGL();
-    m_init = TRUE;
-  }
-  /* clear color and depth buffers */
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SetCurrent();
+    /* init OpenGL once, but after SetCurrent */
+    if (!m_init)
+    {
+        InitGL();
+        m_init = TRUE;
+    }
+    
+    /* clear color and depth buffers */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if( m_gllist == 0 )
   {
     m_gllist = glGenLists( 1 );
-    printf( "List=%d\n", m_gllist );
     glNewList( m_gllist, GL_COMPILE_AND_EXECUTE );        
     /* draw six faces of a cube */
     glBegin(GL_QUADS);
@@ -251,26 +247,26 @@ void TestGLCanvas::Render( void  )
 
 void TestGLCanvas::OnEnterWindow( wxMouseEvent& event )
 {
-  SetFocus();
+    SetFocus();
 }
 
 void TestGLCanvas::OnPaint( wxPaintEvent& event )
 {
-  Render();
+    Render();
 }
 
 void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
-  int width, height;
-  GetClientSize(& width, & height);
+    int width, height;
+    GetClientSize(& width, & height);
 
 #ifndef __WXMOTIF__
-  if (GetContext())
+    if (GetContext())
 #endif
-  {
-    SetCurrent();
-    glViewport(0, 0, width, height);
-  }
+    {
+        SetCurrent();
+        glViewport(0, 0, width, height);
+    }
 }
 
 void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
@@ -278,25 +274,25 @@ void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
   // Do nothing, to avoid flashing.
 }
 
-void TestGLCanvas::InitGL(void)
+void TestGLCanvas::InitGL()
 {
-  SetCurrent();
+    SetCurrent();
     
-  /* set viewing projection */
-  glMatrixMode(GL_PROJECTION);
-  glFrustum(-0.5F, 0.5F, -0.5F, 0.5F, 1.0F, 3.0F);
+    /* set viewing projection */
+    glMatrixMode(GL_PROJECTION);
+    glFrustum(-0.5F, 0.5F, -0.5F, 0.5F, 1.0F, 3.0F);
 
-  /* position viewer */
-  glMatrixMode(GL_MODELVIEW);
-  glTranslatef(0.0F, 0.0F, -2.0F);
+    /* position viewer */
+    glMatrixMode(GL_MODELVIEW);
+    glTranslatef(0.0F, 0.0F, -2.0F);
 
-  /* position object */
-  glRotatef(30.0F, 1.0F, 0.0F, 0.0F);
-  glRotatef(30.0F, 0.0F, 1.0F, 0.0F);
+    /* position object */
+    glRotatef(30.0F, 1.0F, 0.0F, 0.0F);
+    glRotatef(30.0F, 0.0F, 1.0F, 0.0F);
 
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 }
 
 GLfloat TestGLCanvas::CalcRotateSpeed( unsigned long acceltime )
@@ -314,65 +310,74 @@ GLfloat TestGLCanvas::CalcRotateSpeed( unsigned long acceltime )
 
   return(v);
 }
+
 GLfloat TestGLCanvas::CalcRotateAngle( unsigned long lasttime,
                                   unsigned long acceltime )
 {
-  GLfloat t,s1,s2;
+    GLfloat t,s1,s2;
 
-  t = ((GLfloat)(acceltime - lasttime)) / 1000.0f;
-  s1 = CalcRotateSpeed( lasttime );
-  s2 = CalcRotateSpeed( acceltime );
-  return( t * (s1 + s2) * 135.0f );
+    t = ((GLfloat)(acceltime - lasttime)) / 1000.0f;
+    s1 = CalcRotateSpeed( lasttime );
+    s2 = CalcRotateSpeed( acceltime );
+    
+    return( t * (s1 + s2) * 135.0f );
 }
+
 void TestGLCanvas::Action( long code, unsigned long lasttime,
                            unsigned long acceltime )
 {
-  GLfloat angle = CalcRotateAngle( lasttime, acceltime );
+    GLfloat angle = CalcRotateAngle( lasttime, acceltime );
 
-  if( code == m_rleft ) Rotate( angle );
-  else if( code == m_rright ) Rotate( -angle );
+    if (code == m_rleft) 
+        Rotate( angle );
+    else if (code == m_rright) 
+            Rotate( -angle );
 }
 
 void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 {
-  long evkey = event.KeyCode();
-  if( evkey == 0 ) return;
+    long evkey = event.KeyCode();
+    if (evkey == 0) return;
 
-  if( !m_TimeInitialized )
-  {
-    m_TimeInitialized = 1;
-    m_xsynct = event.m_timeStamp;
-    m_gsynct = wxStopWatch(&m_secbase);
+    if (!m_TimeInitialized)
+    {
+        m_TimeInitialized = 1;
+        m_xsynct = event.m_timeStamp;
+        m_gsynct = wxStopWatch(&m_secbase);
 
-    m_Key = evkey;
-    m_StartTime = 0;
-    m_LastTime = 0;
-    m_LastRedraw = 0;
-  }
+        m_Key = evkey;
+        m_StartTime = 0;
+        m_LastTime = 0;
+        m_LastRedraw = 0;
+    }
 
-  unsigned long currTime = event.m_timeStamp - m_xsynct;
+    unsigned long currTime = event.m_timeStamp - m_xsynct;
   
-  if( evkey != m_Key )
-  {
-    m_Key = evkey;
-    m_LastRedraw = m_StartTime = m_LastTime = currTime;
-  }
+    if (evkey != m_Key)
+    {
+        m_Key = evkey;
+        m_LastRedraw = m_StartTime = m_LastTime = currTime;
+    }
 
-  if( currTime >= m_LastRedraw )      // Redraw:
-  {
-    Action( m_Key, m_LastTime-m_StartTime, currTime-m_StartTime );
+    if (currTime >= m_LastRedraw)      // Redraw:
+    {
+        Action( m_Key, m_LastTime-m_StartTime, currTime-m_StartTime );
                   
-    m_LastRedraw = wxStopWatch(&m_secbase) - m_gsynct;
-    m_LastTime = currTime;
-  }
+        m_LastRedraw = wxStopWatch(&m_secbase) - m_gsynct;
+        m_LastTime = currTime;
+    }
+    
+    event.Skip();
 }
 
 void TestGLCanvas::OnKeyUp( wxKeyEvent& event )
 {
-  m_Key = 0;
-  m_StartTime = 0;
-  m_LastTime = 0;
-  m_LastRedraw = 0;
+    m_Key = 0;
+    m_StartTime = 0;
+    m_LastTime = 0;
+    m_LastRedraw = 0;
+    
+    event.Skip();
 }
 
 void TestGLCanvas::Rotate( GLfloat deg )

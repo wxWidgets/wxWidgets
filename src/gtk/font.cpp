@@ -188,7 +188,7 @@ wxFont::wxFont( const wxString& fontname, const wxFontData& fontdata )
 
     tmp = tn.GetNextToken();                     // pointsize
     long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
-    M_FONTDATA->m_pointSize = num / 10;
+    M_FONTDATA->m_pointSize = (int)(num / 10);
 
     tn.GetNextToken();                           // x-res
     tn.GetNextToken();                           // y-res

@@ -155,6 +155,26 @@ gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 }
 
 //-----------------------------------------------------------------------------
+// "map" from m_wxwindow
+//-----------------------------------------------------------------------------
+
+static gint
+gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
+{
+    if (win->m_glContext/* && win->m_exposed*/)
+    {
+        wxPaintEvent event( win->GetId() );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+
+        win->m_exposed = FALSE;
+        win->GetUpdateRegion().Clear();
+    }
+
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
@@ -313,6 +333,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
                             GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
+                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this );
 
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
         GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
