@@ -1046,6 +1046,7 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
     }
 
     attr->SetTextColour(col);
+    Refresh();
 }
 
 void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
@@ -1062,6 +1063,7 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
     }
 
     attr->SetBackgroundColour(col);
+    Refresh();
 }
 
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
@@ -1077,6 +1079,7 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
     }
 
     attr->SetFont(font);
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -2143,14 +2146,14 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
                 NMCUSTOMDRAW& nmcd = lptvcd->nmcd;
-                switch( nmcd.dwDrawStage )
+                switch ( nmcd.dwDrawStage )
                 {
                     case CDDS_PREPAINT:
                         // if we've got any items with non standard attributes,
                         // notify us before painting each item
                         *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
                                                : CDRF_DODEFAULT;
-                        return TRUE;
+                        break;
 
                     case CDDS_ITEMPREPAINT:
                         {
@@ -2160,7 +2163,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             if ( !attr )
                             {
                                 // nothing to do for this item
-                                return CDRF_DODEFAULT;
+                                *result = CDRF_DODEFAULT;
+                                break;
                             }
 
                             HFONT hFont;
@@ -2223,16 +2227,16 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             {
                                 *result = CDRF_DODEFAULT;
                             }
-
-                            return TRUE;
                         }
+                        break;
 
                     default:
                         *result = CDRF_DODEFAULT;
-                        return TRUE;
                 }
             }
-//            break;  // can never be reached
+
+            // we always process it
+            return TRUE;
 #endif // _WIN32_IE >= 0x300
 
         case NM_DBLCLK:
