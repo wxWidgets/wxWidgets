@@ -413,6 +413,7 @@ SOURCE=.\common\radiocmn.cpp
 # Begin Source File
 
 SOURCE=.\common\regex.cpp
+# ADD CPP /I "regex"
 # End Source File
 # Begin Source File
 
@@ -1224,26 +1225,25 @@ SOURCE=..\include\wx\msw\setup.h
 # Begin Source File
 
 SOURCE=.\regex\regcomp.c
+# ADD CPP /I "regex"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\regex\regerror.c
+# ADD CPP /I "regex"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\regex\regexec.c
+# ADD CPP /I "regex"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=.\regex\regfree.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\regex\split.c
+# ADD CPP /I "regex"
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group

@@ -423,6 +423,11 @@ SOURCE=.\common\radiocmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\regex.cpp
+# ADD CPP /I "regex"
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\resourc2.cpp
 # End Source File
 # Begin Source File
