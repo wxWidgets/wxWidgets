@@ -3627,15 +3627,19 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 #ifndef __WXGTK20__
     if (g_isIdle)
         wxapp_install_idle_handler();
-    wxRect myRect (0, 0, m_wxwindow->allocation.width,
-		   m_wxwindow->allocation.height);
-    
-    if (rect){
-      myRect.Intersect(*rect);
-      if (!myRect.width || !myRect.height)
-	// nothing to do, rectangle is empty
-	return;
-      rect = &myRect;
+
+    wxRect myRect(0,0,0,0);
+    if (m_wxwindow)
+        myRect.SetSize(wxSize( m_wxwindow->allocation.width,
+                               m_wxwindow->allocation.height));
+
+    if (rect)
+    {
+        myRect.Intersect(*rect);
+        if (!myRect.width || !myRect.height)
+            // nothing to do, rectangle is empty
+            return;
+        rect = &myRect;
     }
 
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
