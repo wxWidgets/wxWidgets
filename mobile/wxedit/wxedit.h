@@ -29,6 +29,15 @@
 #define ID_SAVEAS   203
 #define ID_QUIT     204
 
+#define ID_COPY     300
+#define ID_CUT      301
+#define ID_PASTE    302
+#define ID_DELETE   303
+
+#define ID_LAST_1   401
+#define ID_LAST_2   402
+#define ID_LAST_3   403
+
 //----------------------------------------------------------------------------
 // MyFrame
 //----------------------------------------------------------------------------
@@ -55,6 +64,19 @@ private:
     void OnSave( wxCommandEvent &event );
     void OnSaveAs( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
+    
+    void OnCopy( wxCommandEvent &event );
+    void OnCut( wxCommandEvent &event );
+    void OnPaste( wxCommandEvent &event );
+    void OnDelete( wxCommandEvent &event );
+    
+    void OnLast1( wxCommandEvent &event );
+    void OnLast2( wxCommandEvent &event );
+    void OnLast3( wxCommandEvent &event );
+    
+    bool Save();
+    bool Discard();
+    
     void OnCloseWindow( wxCloseEvent &event );
     
 private:
