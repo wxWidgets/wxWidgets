@@ -10,6 +10,7 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
+from __future__ import nested_scopes
 
 
 def grayOut(anImage):
