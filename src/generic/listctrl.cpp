@@ -3204,7 +3204,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     {
         m_renameTimer->Stop();
         m_lastOnSame = FALSE;
-
+        
         if ( current == m_lineLastClicked )
         {
             SendNotify( current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
