@@ -44,7 +44,9 @@ bool MyApp::OnInit(void)
     wxMessageBox("No joystick detected!");
     return FALSE;
   }
+#if wxUSE_WAVE
   m_fire.Create("gun.wav");
+#endif // wxUSE_WAVE
 
   m_maxX = stick.GetXMax();
   m_maxY = stick.GetYMax();
