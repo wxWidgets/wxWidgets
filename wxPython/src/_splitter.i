@@ -164,7 +164,7 @@ update the display.", "");
         void , Initialize(wxWindow *window),
         "Initializes the splitter window to have one pane.  This should be
 called if you wish to initially view only a single pane in the
-splitter window.", "");
+splitter window.  The child window is shown if it is currently hidden.", "");
     
 
     // Associates the given window with window 2, drawing the appropriate sash
@@ -178,7 +178,8 @@ splitter window.", "");
         virtual bool , SplitVertically(wxWindow *window1,
                                        wxWindow *window2,
                                        int sashPosition = 0),
-        "Initializes the left and right panes of the splitter window.",
+        "Initializes the left and right panes of the splitter window.  The
+child windows are shown if they are currently hidden.",
         "
     :param window1:       The left pane.
     :param window2:       The right pane.
@@ -195,7 +196,7 @@ split).
 SplitVertically should be called if you wish to initially view two
 panes. It can also be called at any subsequent time, but the
 application should check that the window is not currently split using
-IsSplit.
+`IsSplit`.
 ");
     
 
@@ -203,7 +204,8 @@ IsSplit.
         virtual bool , SplitHorizontally(wxWindow *window1,
                                          wxWindow *window2,
                                          int sashPosition = 0),
-        "Initializes the top and bottom panes of the splitter window.",
+        "Initializes the top and bottom panes of the splitter window.  The
+child windows are shown if they are currently hidden.",
         "
     :param window1:       The top pane.
     :param window2:       The bottom pane.
@@ -220,7 +222,7 @@ split).
 SplitHorizontally should be called if you wish to initially view two
 panes. It can also be called at any subsequent time, but the
 application should check that the window is not currently split using
-IsSplit.
+`IsSplit`.
 ");
 
     
@@ -377,7 +379,7 @@ public:
 
     DocDeclStr(
         void , SetSashPosition(int pos),
-        "This funciton is only meaningful during EVT_SPLITTER_SASH_POS_CHANGING
+        "This function is only meaningful during EVT_SPLITTER_SASH_POS_CHANGING
 and EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of _CHANGED
 events, sets the the new sash position. In the case of _CHANGING
 events, sets the new tracking bar position so visual feedback during
