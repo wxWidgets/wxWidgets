@@ -23,7 +23,6 @@
 #include <Xm/Xm.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
-#include <Xm/RowColumn.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
@@ -43,19 +42,12 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
+    if( !CreateControl( parent, id, pos, size, style, wxDefaultValidator,
+                        name ) )
+        return false;
+
     m_messageBitmap = bitmap;
     m_messageBitmapOriginal = bitmap;
-    SetName(name);
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
-    if (parent) parent->AddChild(this);
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
-
-    m_windowStyle = style;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -72,7 +64,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     DoSetBitmap();
 
-    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     wxSize actualSize(size);
@@ -81,9 +72,10 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
         actualSize.x = bitmap.GetWidth() ? bitmap.GetWidth() : 1;
     if (actualSize.y == -1)
         actualSize.y = bitmap.GetHeight() ? bitmap.GetHeight() : 1;
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, actualSize.x, actualSize.y);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, actualSize.x, actualSize.y);
 
-    return TRUE;
+    return true;
 }
 
 wxStaticBitmap::~wxStaticBitmap()
@@ -153,11 +145,6 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     m_messageBitmapOriginal = bitmap;
 
     DoSetBitmap();
-}
-
-void wxStaticBitmap::ChangeFont(bool keepOriginalSize)
-{
-    wxWindow::ChangeFont(keepOriginalSize);
 }
 
 void wxStaticBitmap::ChangeBackgroundColour()

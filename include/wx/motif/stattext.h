@@ -16,11 +16,7 @@
 #pragma interface "stattext.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
-
-class WXDLLEXPORT wxStaticText: public wxControl
+class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 {
     DECLARE_DYNAMIC_CLASS(wxStaticText)
         
@@ -53,12 +49,10 @@ public:
         return FALSE;
     }
     
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
-    virtual void ChangeBackgroundColour();
-    virtual void ChangeForegroundColour();
     virtual void SetLabel(const wxString& label);
     
-    // Get the widget that corresponds to the label (for font setting, label setting etc.)
+    // Get the widget that corresponds to the label
+    // (for font setting, label setting etc.)
     virtual WXWidget GetLabelWidget() const
         { return m_labelWidget; }
     
