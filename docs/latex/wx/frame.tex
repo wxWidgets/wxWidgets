@@ -439,6 +439,20 @@ The frame takes a `copy' of {\it icon}, but since it uses reference
 counting, the copy is very quick. It is safe to delete {\it icon} after
 calling this function.
 
+See also \helpref{wxIcon}{wxicon}.
+
+\membersection{wxFrame::SetIcons}\label{wxframeseticons}
+
+\func{void}{SetIcons}{\param{const wxIconBundle\& }{icons}}
+
+Sets the icons for this frame.
+
+\wxheading{Parameters}
+
+\docparam{icons}{The icons to associate with this frame.}
+
+See also \helpref{wxIconBundle}{wxiconbundle}.
+
 % VZ: we don't have all this any more (18.08.00) 
 %
 %Under Windows, instead of using {\bf SetIcon}, you can add the
@@ -465,8 +479,6 @@ calling this function.
 %
 %You can replace std.ico, mdi.ico and child.ico with your own defaults
 %for all your wxWindows application. Currently they show the same icon.
-
-See also \helpref{wxIcon}{wxicon}.
 
 \membersection{wxFrame::SetMenuBar}\label{wxframesetmenubar}
 
