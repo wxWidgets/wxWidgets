@@ -55,7 +55,6 @@ public:
 
   // Calls that CLIENT can make
   virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
-  virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
   virtual char *Request(const wxString& item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
   virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
   virtual bool StartAdvise(const wxString& item);
@@ -66,18 +65,6 @@ public:
 
   // Calls that both can make
   virtual bool Disconnect(void);
-
-  // Callbacks to SERVER - override at will
-  virtual bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format) { return FALSE; };
-  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format) { return NULL; };
-  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
-  virtual bool OnStartAdvise(const wxString& topic, const wxString& item) { return FALSE; };
-  virtual bool OnStopAdvise(const wxString& topic, const wxString& item) { return FALSE; };
-
-  // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
-
-  // Callbacks to BOTH
 
   // Default behaviour is to delete connection and return TRUE
   virtual bool OnDisconnect(void);

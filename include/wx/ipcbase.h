@@ -67,20 +67,40 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   virtual bool Disconnect(void) = 0;
 
   // Callbacks to SERVER - override at will
-  virtual bool OnExecute( const wxString& WXUNUSED(topic), char *WXUNUSED(data), int WXUNUSED(size), 
-                          int WXUNUSED(format) ) { return FALSE; };
-  virtual char *OnRequest( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), 
-			     int *WXUNUSED(size), int WXUNUSED(format) ) { return (char *) NULL; };
-  virtual bool OnPoke( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), wxChar *WXUNUSED(data), 
-		       int WXUNUSED(size), int WXUNUSED(format) ) { return FALSE; };
-  virtual bool OnStartAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item) ) 
-                              { return FALSE; };
-  virtual bool OnStopAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item) ) 
+  virtual bool OnExecute     ( const wxString& WXUNUSED(topic),
+                               char *WXUNUSED(data),
+                               int WXUNUSED(size),
+                               wxIPCFormat WXUNUSED(format) )
+                             { return FALSE; };
+
+  virtual char *OnRequest    ( const wxString& WXUNUSED(topic),
+                               const wxString& WXUNUSED(item),
+                               int *WXUNUSED(size),
+                               wxIPCFormat WXUNUSED(format) )
+                             { return (char *) NULL; };
+
+  virtual bool OnPoke        ( const wxString& WXUNUSED(topic),
+                               const wxString& WXUNUSED(item),
+                               wxChar *WXUNUSED(data),
+                               int WXUNUSED(size),
+                               wxIPCFormat WXUNUSED(format) )
+                             { return FALSE; };
+
+  virtual bool OnStartAdvise ( const wxString& WXUNUSED(topic),
+                               const wxString& WXUNUSED(item) )
+                             { return FALSE; };
+
+  virtual bool OnStopAdvise  ( const wxString& WXUNUSED(topic),
+                               const wxString& WXUNUSED(item) )
                              { return FALSE; };
 
   // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise( const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), char *WXUNUSED(data), 
-			 int WXUNUSED(size), int WXUNUSED(format) ) { return FALSE; };
+  virtual bool OnAdvise      ( const wxString& WXUNUSED(topic),
+                               const wxString& WXUNUSED(item),
+                               char *WXUNUSED(data),
+                               int WXUNUSED(size),
+                               wxIPCFormat WXUNUSED(format) )
+                             { return FALSE; };
 
   // Callbacks to BOTH
 
