@@ -216,7 +216,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
 
     if (!win->m_hasVMT)
         return FALSE;
-    
+
 #if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
@@ -283,7 +283,7 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
            func |= GDK_FUNC_RESIZE;
            decor |= GDK_DECOR_RESIZEH;
         }
-        
+
         gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
         gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
     }
@@ -475,7 +475,7 @@ bool wxFrame::Create( wxWindow *parent,
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
     gtk_widget_set_usize( m_widget, m_width, m_height );
-        
+
     /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
@@ -535,7 +535,7 @@ void wxFrame::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width)
 {
     wxFAIL_MSG( wxT("DoMoveWindow called for wxFrame") );
 }
-    
+
 void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
@@ -738,23 +738,22 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
-    
-    /* set size hints */
-    gint flag = 0; // GDK_HINT_POS;
-    if ((m_minWidth != -1) || (m_minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-    if ((m_maxWidth != -1) || (m_maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-    GdkGeometry geom;
-    geom.min_width = m_minWidth;
-    geom.min_height = m_minHeight;
-    geom.max_width = m_maxWidth;
-    geom.max_height = m_maxHeight;
-    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget), 
-                                   (GtkWidget*) NULL,
-                                   &geom,
-                                   (GdkWindowHints) flag );
 
     if (m_mainWidget)
     {
+        /* set size hints */
+        gint flag = 0; // GDK_HINT_POS;
+        if ((m_minWidth != -1) || (m_minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
+        if ((m_maxWidth != -1) || (m_maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
+        GdkGeometry geom;
+        geom.min_width = m_minWidth;
+        geom.min_height = m_minHeight;
+        geom.max_width = m_maxWidth;
+        geom.max_height = m_maxHeight;
+        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
+                                       (GtkWidget*) NULL,
+                                       &geom,
+                                       (GdkWindowHints) flag );
 
         /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
          * menubar, the toolbar and the client area, which is represented by
@@ -926,7 +925,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             gtk_signal_disconnect_by_func( GTK_OBJECT(m_frameMenuBar->m_widget),
                 GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
         }
-        
+
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
         gtk_widget_ref( m_frameMenuBar->m_widget );
         gtk_widget_unparent( m_frameMenuBar->m_widget );
