@@ -632,7 +632,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        m_attrs.Delete(item.iItem); // remove existing attributes
+        delete m_attrs.Delete(item.iItem); // remove existing attributes
         m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
 
         m_hasAnyAttr = TRUE;
