@@ -214,10 +214,10 @@ wxDllLoader::GetProgramHandle(void)
 {
 #if defined( HAVE_DLOPEN ) && !defined(__EMX__)
    // optain handle for main program
-   return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/); 
+   return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
 #elif defined (HAVE_SHL_LOAD)
    // shl_findsymbol with NULL handle looks up in main program
-   return 0; 
+   return 0;
 #else
    wxFAIL_MSG( wxT("This method is not implemented under Windows or OS/2"));
    return 0;
@@ -247,7 +247,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen((char *)libname);
+    handle = wxDllOpen((char *)libname.c_str());
 #endif // OS
 
     if ( !handle )
