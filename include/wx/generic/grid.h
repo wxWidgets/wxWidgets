@@ -1062,12 +1062,16 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
 class WXDLLIMPEXP_ADV wxGrid : public wxScrolledWindow
 {
 public:
-    wxGrid()
-        {
-            Create();
-        }
+    wxGrid() ;
 
-    wxGrid( wxWindow *parent,
+        wxGrid( wxWindow *parent,
+            wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxWANTS_CHARS,
+            const wxString& name = wxPanelNameStr );
+
+    bool Create( wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
