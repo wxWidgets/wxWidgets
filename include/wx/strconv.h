@@ -188,7 +188,8 @@ private:
     // do create m_convReal (unconditionally)
     wxMBConv *DoCreate() const;
 
-    void SetEncoding();
+    // set the name (may be only called when m_name == NULL), makes copy of
+    // charset string
     void SetName(const wxChar *charset);
 
 

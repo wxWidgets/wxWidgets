@@ -1247,37 +1247,21 @@ void wxCSConv::Init()
     m_deferred = true;
 }
 
-// find a valid value for the encoding
-void wxCSConv::SetEncoding()
-{
-#if wxUSE_INTL
-    m_encoding = wxLocale::GetSystemEncoding();
-#else
-    m_encoding = wxFONTENCODING_SYSTEM;
-#endif
-}
-
 wxCSConv::wxCSConv(const wxChar *charset)
 {
     Init();
 
     if ( charset )
     {
-        // not used
-        m_encoding = wxFONTENCODING_SYSTEM;
-
         SetName(charset);
     }
-    else // no charset specified
-    {
-        SetEncoding();
-    }
+
+    m_encoding = wxFONTENCODING_SYSTEM;
 }
 
 wxCSConv::wxCSConv(wxFontEncoding encoding)
 {
-    if ( encoding == wxFONTENCODING_MAX ||
-            encoding == wxFONTENCODING_DEFAULT )
+    if ( encoding == wxFONTENCODING_MAX || encoding == wxFONTENCODING_DEFAULT )
     {
         wxFAIL_MSG( _T("invalid encoding value in wxCSConv ctor") );
 
@@ -1286,14 +1270,7 @@ wxCSConv::wxCSConv(wxFontEncoding encoding)
 
     Init();
 
-    if ( encoding == wxFONTENCODING_SYSTEM )
-    {
-        SetEncoding();
-    }
-    else // have valid encoding, use it
-    {
-        m_encoding = encoding;
-    }
+    m_encoding = encoding;
 }
 
 wxCSConv::~wxCSConv()
@@ -1464,6 +1441,16 @@ void wxCSConv::CreateConvIfNeeded() const
     if ( m_deferred )
     {
         wxCSConv *self = (wxCSConv *)this; // const_cast
+
+#if wxUSE_INTL
+        // if we don't have neither the name nor the encoding, use the default
+        // encoding for this system
+        if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
+        {
+            self->m_encoding = wxLocale::GetSystemEncoding();
+        }
+#endif // wxUSE_INTL
+
         self->m_convReal = DoCreate();
         self->m_deferred = false;
     }
