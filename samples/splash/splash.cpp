@@ -32,6 +32,7 @@
 
 #include "wx/image.h"
 #include "wx/splash.h"
+#include "wx/mediactrl.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -194,16 +195,23 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     {
         wxImage image = bitmap.ConvertToImage();
         image.Rescale( bitmap.GetWidth()/2, bitmap.GetHeight()/2 );
-        bitmap = wxBitmap(image); 
+        bitmap = wxBitmap(image);
         wxSplashScreen *splash = new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_NO_TIMEOUT,
             0, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
-        wxStaticText *text = new wxStaticText( splash->GetSplashWindow(), wxID_EXIT, _T("click somewhere\non image"), wxPoint(13,11) );
+        wxWindow *win = splash->GetSplashWindow();
+#if wxUSE_MEDIACTRL
+        wxMediaCtrl *media = new wxMediaCtrl( win, wxID_EXIT, _T("press.mpg"), wxPoint(2,2));
+        media->SetSize(wxSize(80,60));
+        media->Play();
+#else
+        wxStaticText *text = new wxStaticText( win, wxID_EXIT, _T("click somewhere\non image"), wxPoint(13,11) );
         text->SetBackgroundColour(*wxWHITE);
         text->SetForegroundColour(*wxBLACK);
         wxFont font = text->GetFont();
         font.SetPointSize(2*font.GetPointSize()/3);
         text->SetFont(font);
+#endif
     }
 }
