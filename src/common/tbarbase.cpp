@@ -525,7 +525,8 @@ void wxToolBarBase::OnMouseEnter(int id)
     // set the status text anyhow, even if the string is empty: this ensures
     // that it is cleared when the mouse leaves the toolbar or enters a tool
     // without help
-    frame->SetStatusText(helpstring);
+	if (frame->GetStatusBar())
+		frame->SetStatusText(helpstring);
 }
 
 // ----------------------------------------------------------------------------
