@@ -423,19 +423,29 @@ wxString wxNativeFontInfo::ToUserString() const
             // we don't distinguish between the two for now anyhow...
         case wxFONTSTYLE_ITALIC:
         case wxFONTSTYLE_SLANT:
-            desc << _("italic ");
+            desc << _("italic");
             break;
     }
 
-    if ( !facename.empty() )
+    wxString face = GetFaceName();
+    if ( !face.empty() )
     {
-        desc << facename << _T(' ');
+        desc << _T(' ') << face;
     }
 
-    if ( pointsize != wxNORMAL_FONT->GetPointSize() )
+    int size = GetPointSize();
+    if ( size != wxNORMAL_FONT->GetPointSize() )
     {
-        desc << pointsize;
+        desc << _T(' ') << size;
     }
+
+    wxFontEncoding enc = GetEncoding();
+    if ( enc != wxFONTENCODING_DEFAULT && enc != wxFONTENCODING_SYSTEM )
+    {
+        desc << _T(' ') << wxTheFontMapper->GetEncodingName(enc);
+    }
+
+    return desc;
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)
@@ -478,7 +488,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         }
         else if ( token.ToULong(&size) )
         {
-            pointsize = (int)size;
+            SetPointSize(size);
         }
         else if ( (encoding = wxTheFontMapper->CharsetToEncoding(token, FALSE))
                     != wxFONTENCODING_DEFAULT )

@@ -86,7 +86,6 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    int GetFontId() const;
     virtual bool IsFree() const;
     virtual bool RealizeResource();
     virtual WXHANDLE GetResourceHandle();
