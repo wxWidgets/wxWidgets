@@ -3090,7 +3090,6 @@ wxGrid::~wxGrid()
 void wxGrid::Create()
 {
     m_created = FALSE;    // set to TRUE by CreateGrid
-    m_displayed = TRUE; // FALSE;  // set to TRUE by OnPaint
 
     m_table        = (wxGridTableBase *) NULL;
     m_ownTable     = FALSE;
@@ -4966,15 +4965,6 @@ bool wxGrid::SendEvent( const wxEventType type,
 void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc( this );
-
-    if ( m_currentCellCoords == wxGridNoCellCoords  &&
-         m_numRows && m_numCols )
-    {
-        m_currentCellCoords.Set(0, 0);
-        ShowCellEditControl();
-    }
-
-    m_displayed = TRUE;
 }
 
 
@@ -5170,8 +5160,7 @@ void wxGrid::OnEraseBackground(wxEraseEvent&)
 
 void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
-    if ( m_displayed  &&
-         m_currentCellCoords != wxGridNoCellCoords )
+    if ( m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
         DisableCellEditControl();
@@ -5187,14 +5176,13 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-    if ( m_displayed )
-    {
-        wxClientDC dc(m_gridWin);
-        PrepareDC(dc);
+    wxClientDC dc(m_gridWin);
+    PrepareDC(dc);
 
-        wxGridCellAttr* attr = GetCellAttr(coords);
-        DrawCellHighlight(dc, attr);
-        attr->DecRef();
+    wxGridCellAttr* attr = GetCellAttr(coords);
+    DrawCellHighlight(dc, attr);
+    attr->DecRef();
+
 #if 0
         // SN: For my extended selection code, automatic
         //     deselection is definitely not a good idea.
@@ -5205,7 +5193,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
         }
 #endif
-    }
 }
 
 
@@ -5408,6 +5395,15 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 
 void wxGrid::DrawHighlight(wxDC& dc)
 {
+    // This if block was previously in wxGrid::OnPaint but that doesn't
+    // seem to get called under wxGTK - MB
+    //
+    if ( m_currentCellCoords == wxGridNoCellCoords  &&
+         m_numRows && m_numCols )
+    {
+        m_currentCellCoords.Set(0, 0);
+    }
+
     if ( IsCellEditControlEnabled() )
     {
         // don't show highlight when the edit control is shown
