@@ -1,0 +1,180 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds OGL classes library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+OBJECTSDIR = $(WXDIR)\utils\ogl
+THISDIR = $(WXDIR)\utils\ogl\src
+EXTRALIBS=$(WXDIR)\lib\ogl.lib $(WXDIR)\lib\mfutils.lib
+EXTRAINC=/I$(WXDIR)\utils\mfutils\src /I$(WXDIR)\utils\prologio\src
+EXTRAFLAGS=/DPROLOGIO=1
+DOCDIR=$(WXDIR)\docs
+LOCALDOCDIR=$(WXDIR)\utils\ogl\docs
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+PROGRAM=test
+ 
+OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj misc.obj divided.obj constrnt.obj\
+ composit.obj drawn.obj bitmap.obj mfutils.obj
+
+LIBTARGET=$(WXDIR)\lib\ogl.lib
+
+all:    $(LIBTARGET)
+
+$(PROGRAM):    $(PROGRAM).exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+# NOTE: This causes a floating point stack error when optimized,
+# so DON'T optimize!
+basic.obj:      basic.$(SRCSUFF) basic.h lines.h misc.h canvas.h
+        cl @<<
+$(CPPFLAGS) /Od /c /Tp $*.$(SRCSUFF)
+<<
+
+basic2.obj:      basic2.$(SRCSUFF) basic.h lines.h misc.h canvas.h
+        cl @<<
+$(CPPFLAGS) /Od /c /Tp $*.$(SRCSUFF)
+<<
+
+canvas.obj:      canvas.$(SRCSUFF) basic.h misc.h canvas.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+ogldiag.obj:      ogldiag.$(SRCSUFF) ogldiag.h canvas.h basic.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+lines.obj:      lines.$(SRCSUFF) basic.h misc.h canvas.h lines.h basicp.h linesp.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+misc.obj:      misc.$(SRCSUFF) basic.h misc.h constrnt.h basicp.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+divided.obj:      divided.$(SRCSUFF) basic.h misc.h canvas.h divided.h basicp.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+constrnt.obj:     constrnt.$(SRCSUFF) basic.h constrnt.h 
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+composit.obj:      composit.$(SRCSUFF) basic.h misc.h canvas.h constrnt.h composit.h basicp.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+drawn.obj:      drawn.$(SRCSUFF) basic.h misc.h canvas.h drawn.h drawnp.h basicp.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+bitmap.obj:      bitmap.$(SRCSUFF) basic.h misc.h canvas.h bitmap.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+mfutils.obj:      mfutils.$(SRCSUFF) mfutils.h
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\ogl.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\ogl\ogl.htm
+hlp: $(DOCDIR)\winhelp\ogl.hlp
+pdfrtf: $(DOCDIR)\pdf\ogl.rtf
+ps: $(DOCDIR)\ps\ogl.ps
+
+$(DOCDIR)\winhelp\ogl.hlp:         $(LOCALDOCDIR)\ogl.rtf $(LOCALDOCDIR)\ogl.hpj
+        cd $(LOCALDOCDIR)
+        -erase ogl.ph
+        hc ogl
+        move ogl.hlp $(DOCDIR)\winhelp\ogl.hlp
+        move ogl.cnt $(DOCDIR)\winhelp\ogl.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\ogl.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start /w tex2rtf $(LOCALDOCDIR)\ogl.tex $(LOCALDOCDIR)\ogl.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\ogl.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start /w tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\pdf\ogl.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\ogl\ogl.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\ogl
+        cp *.gif $(DOCDIR)\html\ogl
+        -start /w tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\html\ogl\ogl.htm -twice -html
+        -erase $(DOCDIR)\html\ogl\*.con
+        -erase $(DOCDIR)\html\ogl\*.ref
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\ogl.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex ogl
+        -latex ogl
+        -makeindx ogl
+        -bibtex ogl
+        -latex ogl
+        -latex ogl
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\ogl.ps:	$(LOCALDOCDIR)\ogl.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o ogl.ps ogl
+        move ogl.ps $(WXDIR)\docs\ps\ogl.ps
+        cd $(THISDIR)
+
+

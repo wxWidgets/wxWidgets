@@ -1,0 +1,2505 @@
+\chapter{Class reference}\label{classref}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+
+These are the main \ogl\ classes.
+
+\section{\class{OGLConstraint}: wxObject}\label{oglconstraint}
+
+\overview{wxCompositeShape overview}{compositeshapeoverview}
+
+An OGLConstraint object helps specify how child shapes are laid out with respect
+to siblings and parents.
+
+\membersection{OGLConstraint::OGLConstraint}\label{oglconstraintconstr}
+
+\func{void}{OGLConstraint}{\void}
+
+Default constructor.
+
+\func{void}{OGLConstraint}{\param{int}{ type}, \param{wxShape *}{constraining}, \param{wxList\& }{constrained}}
+
+Constructor.
+
+{\it constraining} is the shape which is used as the reference for positioning the {\it constrained} objects.
+
+{\it constrained} contains a list of wxShapes which are to be constrained (with respect
+to {\it constraining}) using {\it type}.
+
+{\it type} can be one of:
+
+\begin{itemize}\itemsep=0pt
+\item {\bf gyCONSTRAINT\_CENTRED\_VERTICALLY}: the Y co-ordinates of the centres of the
+bounding boxes of the constrained objects and the constraining object
+will be the same
+\item {\bf gyCONSTRAINT\_CENTRED\_HORIZONTALLY}: the X co-ordinates of the centres of the
+bounding boxes of the constrained objects and the constraining object
+will be the same
+\item {\bf gyCONSTRAINT\_CENTRED\_BOTH}: the co-ordinates of the centres of the bounding boxes
+of the constrained objects and the constraining object will be the same
+\item {\bf gyCONSTRAINT\_LEFT\_OF}: the X co-ordinates of the right hand vertical edges
+of the bounding boxes of the constrained objects will be less than
+the X co-ordinate of the left hand vertical edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_RIGHT\_OF}: the X co-ordinates of the left hand vertical edges
+of the bounding boxes of the constrained objects will be greater than
+the X co-ordinate of the right hand vertical edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_ABOVE}: the Y co-ordinates of the bottom horizontal edges of the
+bounding boxes of the constrained objects will be less than the
+Y co-ordinate of the top horizontal edge of the bounding box of the
+constraining object
+\item {\bf gyCONSTRAINT\_BELOW}: the Y co-ordinates of the top horizontal edges of the
+bounding boxes of the constrained objects will be greater than
+the X co-ordinate of the bottom horizontal edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_ALIGNED\_TOP}: the Y co-ordinates of the top horizontal edges of the
+bounding boxes of the constrained objects will be the same as the
+Y co-ordinate of the top horizontal edge of the bounding box of the
+constraining object
+\item {\bf gyCONSTRAINT\_ALIGNED\_BOTTOM}: the Y co-ordinates of the bottom horizontal edges
+of the bounding boxes of the constrained objects will be the same as
+the Y co-ordinate of the bottom horizontal edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_ALIGNED\_LEFT}: the X co-ordinates of the left hand vertical edges
+of the bounding boxes of the constrained objects will be the same as
+the X co-ordinate of the left hand vertical edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_ALIGNED\_RIGHT}: the X co-ordinates of the right hand vertical edges
+of the bounding boxes of the constrained objects will be the same as
+the X co-ordinate of the right hand vertical edge of the bounding box
+of the constraining object
+\item {\bf gyCONSTRAINT\_MIDALIGNED\_TOP}: the Y co-ordinates of the centres of
+the bounding boxes of the constrained objects will be the same
+as the Y co-ordinate of the top horizontal edge of
+the bounding box of the constraining object
+\item {\bf gyCONSTRAINT\_MIDALIGNED\_BOTTOM}: the Y co-ordinates of the centres of
+the bounding boxes of the constrained objects will be the same
+as the Y co-ordinate of the bottom horizontal edge of
+the bounding box of the constraining object
+\item {\bf gyCONSTRAINT\_MIDALIGNED\_LEFT}: the X co-ordinates of the centres of
+the bounding boxes of the constrained objects will be the same
+as the X co-ordinate of the left hand vertical edge of
+the bounding box of the constraining object
+\item {\bf gyCONSTRAINT\_MIDALIGNED\_RIGHT}: the X co-ordinates of the centres of
+the bounding boxes of the constrained objects will be the same as
+the X co-ordinate of the right hand vertical edge of
+the bounding box of the constraining object
+\end{itemize}
+
+
+\membersection{OGLConstraint::\destruct{OGLConstraint}}
+
+\func{void}{\destruct{OGLConstraint}}{\void}
+
+Destructor.
+
+\membersection{OGLConstraint::Equals}
+
+\func{bool}{Equals}{\param{float}{ x}, \param{float}{ y}}
+
+Returns TRUE if {\it x} and {\it y} are approximately equal (for the purposes
+of evaluating the constraint).
+
+\membersection{OGLConstraint::Evaluate}
+
+\func{bool}{Evaluate}{\void}
+
+Evaluates this constraint, returning TRUE if anything changed.
+
+\membersection{OGLConstraint::SetSpacing}\label{oglconstraintsetspacing}
+
+\func{void}{SetSpacing}{\param{float}{ x}, \param{float}{ y}}
+
+Sets the horizontal and vertical spacing for the constraint.
+
+
+\section{\class{wxBitmapShape}: wxRectangleShape}\label{wxbitmapshape}
+
+Draws a bitmap (non-resizable).
+
+See also \helpref{wxRectangleShape}{wxrectangleshape}.
+
+\membersection{wxBitmapShape::wxBitmapShape}
+
+\func{void}{wxBitmapShape}{\void}
+
+Constructor.
+
+\membersection{wxBitmapShape::\destruct{wxBitmapShape}}
+
+\func{void}{\destruct{wxBitmapShape}}{\void}
+
+Destructor.
+
+\membersection{wxBitmapShape::GetDeleteBitmap}
+
+\func{bool}{GetDeleteBitmap}{\void}
+
+Returns TRUE if the bitmap will be deleted when the shape is deleted.
+
+\membersection{wxBitmapShape::GetBitmap}
+
+\func{wxBitmap\&}{GetBitmap}{\void}
+
+Returns a reference to the bitmap associated with this shape.
+
+\membersection{wxBitmapShape::GetFilename}
+
+\func{wxString}{GetFilename}{\void}
+
+Returns the bitmap filename.
+
+\membersection{wxBitmapShape::SetDeleteBitmap}
+
+\func{void}{SetDeleteBitmap}{\param{bool}{ deleteBitmap}}
+
+Determines whether the bitmap will be deleted when the shape is deleted.
+
+\membersection{wxBitmapShape::SetBitmap}
+
+\func{void}{SetBitmap}{\param{const wxBitmap\&}{ bitmap}}
+
+Sets the bitmap associated with this shape. You can delete the bitmap
+from the calling application, since reference counting will take care of
+holding on to the internal bitmap data.
+
+\membersection{wxBitmapShape::SetFilename}
+
+\func{void}{SetFilename}{\param{const wxString\& }{filename}}
+
+Sets the bitmap filename.
+
+\section{\class{wxDiagram}: wxObject}\label{wxdiagram}
+
+Encapsulates an entire diagram, with methods for reading/writing and drawing.
+
+\membersection{wxDiagram::wxDiagram}
+
+\func{void}{wxDiagram}{\void}
+
+Constructor.
+
+\membersection{wxDiagram::\destruct{wxDiagram}}
+
+\func{void}{\destruct{wxDiagram}}{\void}
+
+Destructor.
+
+\membersection{wxDiagram::AddShape}
+
+\func{void}{AddShape}{\param{wxShape *}{shape}, \param{wxShape *}{addAfter = NULL}}
+
+Adds a shape to the diagram. If {\it addAfter} is non-NULL, the shape will be added after this
+one.
+
+\membersection{wxDiagram::Clear}
+
+\func{void}{Clear}{\void}
+
+Clears the device context associated with the diagram.
+
+\membersection{wxDiagram::DeleteAllShapes}
+
+\func{void}{DeletesAllShapes}{\void}
+
+Removes and deletes all shapes in the diagram.
+
+\membersection{wxDiagram::DrawOutline}
+
+\func{void}{DrawOutline}{\param{float}{ x1}, \param{float}{ y1}, \param{float}{ x2}, \param{float}{ y2}}
+
+Draws an outline rectangle on the current device context.
+
+\membersection{wxDiagram::GetCanvas}
+
+\func{wxCanvas *}{GetCanvas}{\void}
+
+Returns the canvas associated with this diagram.
+
+\membersection{wxDiagram::GetGridSpacing}
+
+\func{float}{GetGridSpacing}{\void}
+
+Returns the grid spacing.
+
+\membersection{wxDiagram::GetMouseTolerance}
+
+\func{int}{GetMouseTolerance}{\void}
+
+Returns the tolerance within which a mouse move is ignored.
+
+\membersection{wxDiagram::GetShapeList}
+
+\func{wxList *}{GetShapeList}{\void}
+
+Returns a pointer to the internal shape list.
+
+\membersection{wxDiagram::GetQuickEditMode}
+
+\func{bool}{GetQuickEditMode}{\void}
+
+Returns quick edit mode.
+
+\membersection{wxDiagram::GetSnapToGrid}
+
+\func{bool}{GetSnapToGrid}{\void}
+
+Returns snap-to-grid mode.
+
+\membersection{wxDiagram::InsertShape}
+
+\func{void}{InsertShape}{\param{wxShape *}{shape}}
+
+Inserts a shape at the front of the shape list.
+
+\membersection{wxDiagram::LoadFile}
+
+\func{bool}{LoadFile}{\param{const wxString\& }{filename}}
+
+Loads the diagram from a PrologIO file.
+
+\membersection{wxDiagram::OnDatabaseLoad}
+
+\func{void}{OnDatabaseLoad}{\param{PrologDatabase\&}{ database}}
+
+Called just after the nodes and lines have been read from the PrologDatabase. You may override this;
+the default member does nothing.
+
+
+\membersection{wxDiagram::OnDatabaseSave}
+
+\func{void}{OnDatabaseSave}{\param{PrologDatabase\&}{ database}}
+
+Called just after the nodes and lines have been written to the PrologDatabase. You may override this;
+the default member does nothing.
+
+\membersection{wxDiagram::OnHeaderLoad}
+
+\func{bool}{OnHeaderLoad}{\param{PrologDatabase\&}{ database}, \param{PrologExpr\&}{ expr}}
+
+Called to allow the `diagram' header object to be read. The default member reads no further information.
+You may wish to override this to read version information, author name, etc.
+
+
+\membersection{wxDiagram::OnHeaderSave}
+
+\func{bool}{OnHeaderSave}{\param{PrologDatabase\&}{ database}, \param{PrologExpr\&}{ expr}}
+
+Called to allow instantiation of the `diagram' header object. The default member writes no further information.
+You may wish to override this to include version information, author name, etc.
+
+\membersection{wxDiagram::OnShapeLoad}
+
+\func{bool}{OnShapeLoad}{\param{PrologDatabase\&}{ database}, \param{wxShape\&}{ shape}, \param{PrologExpr\&}{ expr}}
+
+Called to read the shape from the {\it expr}. You may override this, but call this function first.
+The default member calls ReadPrologAttributes for the shape.
+
+\membersection{wxDiagram::OnShapeSave}
+
+\func{bool}{OnShapeSave}{\param{PrologDatabase\&}{ database}, \param{wxShape\&}{ shape}, \param{PrologExpr\&}{ expr}}
+
+Called to save the shape to the {\it expr} and {\it database}. You may override this, but call this function first.
+The default member calls WritePrologAttributes for the shape, appends the shape to the database, and of the shape
+is a composite, recursively calls OnShapeSave for its children.
+
+\membersection{wxDiagram::ReadContainerGeometry}
+
+\func{void}{ReadContainerGeometry}{\param{PrologDatabase\&}{ database}}
+
+Reads container geometry from a PrologDatabase, linking up nodes which
+are part of a composite. You probably won't need to redefine this.
+
+\membersection{wxDiagram::ReadLines}
+
+\func{void}{ReadLines}{\param{PrologDatabase\&}{ database}}
+
+Reads lines from a PrologDatabase. You probably won't need to redefine this.
+
+\membersection{wxDiagram::ReadNodes}
+
+\func{void}{ReadNodes}{\param{PrologDatabase\&}{ database}}
+
+Reads nodes from a PrologDatabase. You probably won't need to redefine this.
+
+
+\membersection{wxDiagram::RecentreAll}
+
+\func{void}{RecentreAll}{\void}
+
+Make sure all text that should be centred, is centred.
+
+\membersection{wxDiagram::Redraw}
+
+\func{void}{Redraw}{\void}
+
+Draws the shapes in the diagram on the currently set device context.
+
+\membersection{wxDiagram::RemoveAllShapes}
+
+\func{void}{RemoveAllShapes}{\void}
+
+Removes all shapes from the diagram but does not delete the shapes.
+
+\membersection{wxDiagram::RemoveShape}
+
+\func{void}{RemoveShape}{\param{wxShape *}{shape}}
+
+Removes the shape from the diagram (non-recursively) but does not delete it.
+
+\membersection{wxDiagram::SaveFile}
+
+\func{bool}{SaveFile}{\param{const wxString\& }{filename}}
+
+Saves the diagram in a PrologIO file.
+
+\membersection{wxDiagram::SetCanvas}
+
+\func{void}{SetCanvas}{\param{wxShapeCanvas *}{canvas}}
+
+Sets the canvas associated with this diagram.
+
+\membersection{wxDiagram::SetGridSpacing}
+
+\func{void}{SetGridSpacing}{\param{float}{ spacing}}
+
+Sets the grid spacing. The default is 5.
+
+\membersection{wxDiagram::SetMouseTolerance}
+
+\func{void}{SetMouseTolerance}{\param{int}{ tolerance}}
+
+Sets the tolerance within which a mouse move is ignored. The default is 3 pixels.
+
+\membersection{wxDiagram::SetQuickEditMode}
+
+\func{void}{SetQuickEditMode}{\param{bool}{ mode}}
+
+Sets quick-edit-mode on or off. In this mode, refreshes are minimized, but the
+diagram may need manual refreshing occasionally.
+
+\membersection{wxDiagram::SetSnapToGrid}
+
+\func{void}{SetSnapToGrid}{\param{bool}{ snap}}
+
+Sets snap-to-grid mode on or off. The default is on.
+
+\membersection{wxDiagram::ShowAll}
+
+\func{void}{ShowAll}{\param{bool}{ show}}
+
+Calls Show for each shape in the diagram.
+
+\membersection{wxDiagram::Snap}
+
+\func{void}{Snap}{\param{float *}{x}, \param{float *}{y}}
+
+`Snaps' the coordinate to the nearest grid position, if snap-to-grid is on.
+
+
+\section{\class{wxDrawnShape}: wxRectangleShape}\label{wxdrawnshape}
+
+Draws a pseduo-metafile shape, which can be loaded from a simple Windows metafile.
+
+See also \helpref{wxRectangleShape}{wxrectangleshape}.
+
+\membersection{wxDrawnShape::wxDrawnShape}
+
+\func{void}{wxDrawnShape}{\void}
+
+Constructor.
+
+\membersection{wxDrawnShape::\destruct{wxDrawnShape}}
+
+\func{void}{\destruct{wxDrawnShape}}{\void}
+
+Destructor.
+
+\membersection{wxDrawnShape::GetMetaFile}
+
+\func{wxPseudoMetaFile\& }{GetMetaFile}{\void}
+
+Returns a reference to the internal `pseudo-metafile'.
+
+\membersection{wxDrawnShape::LoadFromMetaFile}
+
+\func{bool}{LoadFromMetaFile}{\param{const wxString\& }{filename}}
+
+Loads a (very simple) Windows metafile, created for example by Top Draw, the Windows shareware graphics package.
+
+\membersection{wxDrawnShape::Rotate}
+
+\func{void}{Rotate}{\param{float }{x}, \param{float }{y}, \param{float }{theta}}
+
+Rotate about the given axis by the given amount in radians.
+
+\membersection{wxDrawnShape::Scale}
+
+\func{void}{Scale}{\param{float }{sx}, \param{float }{sy}}
+
+Scales the shape by the given amount.
+
+\membersection{wxDrawnShape::SetSaveToFile}
+
+\func{void}{SetSaveToFile}{\param{bool }{save}}
+
+If {\it save} is TRUE, the image will be saved along with the shape's other attributes. The reason
+why this might not be desirable is that if there are many shapes with the same image, it would be
+more efficient for the application to save one copy, and not duplicate the information for every
+shape. The default is TRUE.
+
+\membersection{wxDrawnShape::Translate}
+
+\func{void}{Translate}{\param{float }{x}, \param{float }{y}}
+
+Translates the shape by the given amount.
+
+\section{\class{wxCircleShape}: wxEllipseShape}\label{wxcircleshape}
+
+An wxEllipseShape whose width and height are the same.
+
+See also \helpref{wxEllipseShape}{wxellipseshape}.
+
+\membersection{wxCircleShape::wxCircleShape}
+
+\func{void}{wxCircleShape}{\param{float}{ width = 0.0}}
+
+Constructor.
+
+\membersection{wxCircleShape::\destruct{wxCircleShape}}
+
+\func{void}{\destruct{wxCircleShape}}{\void}
+
+Destructor.
+
+
+\section{\class{wxCompositeShape}: wxRectangleShape}\label{wxcompositeshape}
+
+\overview{wxCompositeShape overview}{compositeshapeoverview}
+
+This is an object with a list of child objects, and a list of size
+and positioning constraints between the children.
+
+See also \helpref{wxRectangleShape}{wxrectangleshape}.
+
+\membersection{wxCompositeShape::wxCompositeShape}
+
+\func{void}{wxCompositeShape}{\void}
+
+Constructor.
+
+\membersection{wxCompositeShape::\destruct{wxCompositeShape}}
+
+\func{void}{\destruct{wxCompositeShape}}{\void}
+
+Destructor.
+
+\membersection{wxCompositeShape::AddChild}\label{wxcompositeshapeaddchild}
+
+\func{void}{AddChild}{\param{wxShape *}{child}, \param{wxShape *}{addAfter = NULL}}
+
+Adds a child shape to the composite. If {\it addAfter} is non-NULL, the shape will be added
+after this shape.
+
+\membersection{wxCompositeShape::AddConstraint}\label{wxcompositeshapeaddconstraint}
+
+\func{OGLConstraint *}{AddConstraint}{\param{OGLConstraint *}{constraint}}
+
+\func{OGLConstraint *}{AddConstraint}{\param{int}{ type}, \param{wxShape *}{constraining}, \param{wxList\&}{constrained}}
+
+\func{OGLConstraint *}{AddConstraint}{\param{int}{ type}, \param{wxShape *}{constraining}, \param{wxShape *}{constrained}}
+
+Adds a constraint to the composite.
+
+\membersection{wxCompositeShape::CalculateSize}
+
+\func{void}{CalculateSize}{\void}
+
+Calculates the size and position of the composite based on child sizes and positions.
+
+\membersection{wxCompositeShape::ContainsDivision}
+
+\func{bool}{FindContainerImage}{\param{wxDivisionShape *}{division}}
+
+Returns TRUE if {\it division} is a descendant of this container.
+
+\membersection{wxCompositeShape::DeleteConstraint}
+
+\func{void}{DeleteConstraint}{\param{OGLConstraint *}{constraint}}
+
+Deletes constraint from composite.
+
+\membersection{wxCompositeShape::DeleteConstraintsInvolvingChild}
+
+\func{void}{DeleteConstraintsInvolvingChild}{\param{wxShape *}{child}}
+
+This function deletes constraints which mention the given child. Used when
+deleting a child from the composite.
+
+\membersection{wxCompositeShape::FindConstraint}
+
+\func{OGLConstraint *}{FindConstraint}{\param{long}{ id}, \param{wxCompositeShape **}{actualComposite}}
+
+Finds the constraint with the given id, also returning the actual composite the constraint was in,
+in case that composite was a descendant of this composite.
+
+\membersection{wxCompositeShape::FindContainerImage}
+
+\func{wxShape *}{FindContainerImage}{\void}
+
+Finds the image used to visualize a container. This is any child
+of the composite that is not in the divisions list.
+
+\membersection{wxCompositeShape::GetConstraints}
+
+\func{wxList\&}{GetConstraints}{\void}
+
+Returns a reference to the list of constraints.
+
+\membersection{wxCompositeShape::GetDivisions}
+
+\func{wxList\&}{GetDivisions}{\void}
+
+Returns a reference to the list of divisions.
+
+\membersection{wxCompositeShape::MakeContainer}\label{wxcompositeshapemakecontainer}
+
+\func{void}{MakeContainer}{\void}
+
+Makes this composite into a container by creating one child wxDivisionShape.
+
+\membersection{wxCompositeShape::OnCreateDivision}
+
+\func{wxDivisionShape *}{OnCreateDivision}{\void}
+
+Called when a new division shape is required. Can be overriden to allow an application
+to use a different class of division.
+
+\membersection{wxCompositeShape::Recompute}\label{wxcompositeshaperecompute}
+
+\func{bool}{Recompute}{\void} 
+
+Recomputes any constraints associated with the object. If FALSE is returned,
+the constraints could not be satisfied (there was an inconsistency).
+
+\membersection{wxCompositeShape::RemoveChild}
+
+\func{void}{RemoveChild}{\param{wxShape *}{child}}
+
+Removes the child from the composite and any constraint relationships, but does not
+delete the child.
+
+\section{\class{wxDividedShape}: wxRectangleShape}\label{wxdividedshape}
+
+\overview{wxDividedShape overview}{dividedshapeoverview}
+
+A wxDividedShape is a rectangle with a number of vertical divisions. Each
+division may have its text formatted with independent characteristics, and
+the size of each division relative to the whole image may be specified.
+
+See also \helpref{wxRectangleShape}{wxrectangleshape}.
+
+\membersection{wxDividedShape::wxDividedShape}
+
+\func{void}{wxDividedShape}{\param{float}{ width = 0.0}, \param{float}{ height = 0.0}}
+
+Constructor.
+
+\membersection{wxDividedShape::\destruct{wxDividedShape}}
+
+\func{void}{\destruct{wxDividedShape}}{\void}
+
+Destructor.
+
+\membersection{wxDividedShape::EditRegions}
+
+\func{void}{EditRegions}{\void}
+
+Edit the region colours and styles.
+
+\membersection{wxDividedShape::SetRegionSizes}
+
+\func{void}{SetRegionSizes}{\void}
+
+Set all region sizes according to proportions and
+this object total size.
+
+
+
+
+\section{\class{wxDivisionShape}: wxCompositeShape}\label{wxdivisionshape}
+
+\overview{wxCompositeShape overview}{compositeshapeoverview}
+
+A division shape is like a composite in that it can contain further objects, but is used exclusively to
+divide another shape into regions, or divisions. A wxDivisionShape is never free-standing.
+
+See also \helpref{wxCompositeShape}{wxcompositeshape}.
+
+\membersection{wxDivisionShape::wxDivisionShape}
+
+\func{void}{wxDivisionShape}{\void}
+
+Constructor.
+
+\membersection{wxDivisionShape::\destruct{wxDivisionShape}}
+
+\func{void}{\destruct{wxDivisionShape}}{\void}
+
+Destructor.
+
+\membersection{wxDivisionShape::AdjustBottom}
+
+\func{void}{AdjustBottom}{\param{float}{ bottom}, \param{bool}{ test}}
+
+Adjust a side, returning FALSE if it's not physically possible to adjust it to this point.
+
+\membersection{wxDivisionShape::AdjustLeft}
+
+\func{void}{AdjustLeft}{\param{float}{ left}, \param{bool}{ test}}
+
+Adjust a side, returning FALSE if it's not physically possible to adjust it to this point.
+
+\membersection{wxDivisionShape::AdjustRight}
+
+\func{void}{AdjustRight}{\param{float}{ right}, \param{bool}{ test}}
+
+Adjust a side, returning FALSE if it's not physically possible to adjust it to this point.
+
+\membersection{wxDivisionShape::AdjustTop}
+
+\func{void}{AdjustTop}{\param{float}{ top}, \param{bool}{ test}}
+
+Adjust a side, returning FALSE if it's not physically possible to adjust it to this point.
+
+\membersection{wxDivisionShape::Divide}\label{wxdivisionshapedivide}
+
+\func{void}{Divide}{\param{int}{ direction}}
+
+Divide this division into two further divisions, horizontally ({\it direction} is wxHORIZONTAL) or
+vertically ({\it direction} is wxVERTICAL).
+
+\membersection{wxDivisionShape::EditEdge}
+
+\func{void}{EditEdge}{\param{int}{ side}}
+
+Interactively edit style of left or top side.
+
+\membersection{wxDivisionShape::GetBottomSide}
+
+\func{wxDivisionShape *}{GetBottomSide}{\void}
+
+Returns a pointer to the division on the bottom side of this division.
+
+\membersection{wxDivisionShape::GetHandleSide}
+
+\func{int}{GetHandleSide}{\void}
+
+Returns the side which the handle appears on (DIVISION\_SIDE\_LEFT or DIVISION\_SIDE\_TOP).
+
+\membersection{wxDivisionShape::GetLeftSide}
+
+\func{wxDivisionShape *}{GetLeftSide}{\void}
+
+Returns a pointer to the division on the left side of this division.
+
+\membersection{wxDivisionShape::GetLeftSideColour}
+
+\func{wxString}{GetLeftSideColour}{\void}
+
+Returns a pointer to the colour used for drawing the left side of the division.
+
+\membersection{wxDivisionShape::GetLeftSidePen}
+
+\func{wxPen *}{GetLeftSidePen}{\void}
+
+Returns a pointer to the pen used for drawing the left side of the division.
+
+\membersection{wxDivisionShape::GetRightSide}
+
+\func{wxDivisionShape *}{GetRightSide}{\void}
+
+Returns a pointer to the division on the right side of this division.
+
+\membersection{wxDivisionShape::GetTopSide}
+
+\func{wxDivisionShape *}{GetTopSide}{\void}
+
+Returns a pointer to the division on the top side of this division.
+
+\membersection{wxDivisionShape::GetTopSideColour}
+
+\func{wxString}{GetTopSideColour}{\void}
+
+Returns a pointer to the colour used for drawing the top side of the division.
+
+\membersection{wxDivisionShape::GetTopSidePen}
+
+\func{wxPen *}{GetTopSidePen}{\void}
+
+Returns a pointer to the pen used for drawing the left side of the division.
+
+
+\membersection{wxDivisionShape::ResizeAdjoining}
+
+\func{void}{ResizeAdjoining}{\param{int}{ side}, \param{float}{ newPos}, \param{bool}{ test}}
+
+Resize adjoining divisions at the given side. If {\it test} is TRUE,
+just see whether it's possible for each adjoining region,
+returning FALSE if it's not.
+
+{\it side} can be one of:
+
+\begin{itemize}\itemsep=0pt
+\item DIVISION\_SIDE\_NONE
+\item DIVISION\_SIDE\_LEFT
+\item DIVISION\_SIDE\_TOP
+\item DIVISION\_SIDE\_RIGHT
+\item DIVISION\_SIDE\_BOTTOM
+\end{itemize}
+
+\membersection{wxDivisionShape::PopupMenu}
+
+\func{void}{PopupMenu}{\param{float}{ x}, \param{float}{ y}}
+
+Popup the division menu.
+
+\membersection{wxDivisionShape::SetBottomSide}
+
+\func{void}{SetBottomSide}{\param{wxDivisionShape *}{shape}}
+
+Set the pointer to the division on the bottom side of this division.
+
+\membersection{wxDivisionShape::SetHandleSide}
+
+\func{int}{SetHandleSide}{\void}
+
+Sets the side which the handle appears on (DIVISION\_SIDE\_LEFT or DIVISION\_SIDE\_TOP).
+
+\membersection{wxDivisionShape::SetLeftSide}
+
+\func{void}{SetLeftSide}{\param{wxDivisionShape *}{shape}}
+
+Set the pointer to the division on the left side of this division.
+
+\membersection{wxDivisionShape::SetLeftSideColour}
+
+\func{void}{SetLeftSideColour}{\param{const wxString\& }{colour}}
+
+Sets the colour for drawing the left side of the division.
+
+\membersection{wxDivisionShape::SetLeftSidePen}
+
+\func{void}{SetLeftSidePen}{\param{wxPen *}{pen}}
+
+Sets the pen for drawing the left side of the division.
+
+\membersection{wxDivisionShape::SetRightSide}
+
+\func{void}{SetRightSide}{\param{wxDivisionShape *}{shape}}
+
+Set the pointer to the division on the right side of this division.
+
+\membersection{wxDivisionShape::SetTopSide}
+
+\func{void}{SetTopSide}{\param{wxDivisionShape *}{shape}}
+
+Set the pointer to the division on the top side of this division.
+
+\membersection{wxDivisionShape::SetTopSideColour}
+
+\func{void}{SetTopSideColour}{\param{const wxString\& }{colour}}
+
+Sets the colour for drawing the top side of the division.
+
+\membersection{wxDivisionShape::SetTopSidePen}
+
+\func{void}{SetTopSidePen}{\param{wxPen *}{pen}}
+
+Sets the pen for drawing the top side of the division.
+
+
+
+\section{\class{wxEllipseShape}: wxShape}\label{wxellipseshape}
+
+The wxEllipseShape behaves similarly to the wxRectangleShape but is
+elliptical.
+
+See also \helpref{wxShape}{wxshape}.
+
+\membersection{wxEllipseShape::wxEllipseShape}
+
+\func{void}{wxEllipseShape}{\param{float}{ width = 0.0}, \param{float}{ height = 0.0}}
+
+Constructor.
+
+\membersection{wxEllipseShape::\destruct{wxEllipseShape}}
+
+\func{void}{\destruct{wxEllipseShape}}{\void}
+
+Destructor.
+
+\section{\class{wxLineShape}: wxShape}\label{wxlineshape}
+
+A wxLineShape may be attached to two nodes; it may be segmented, in which
+case a control point is drawn for each joint.
+
+See also \helpref{wxShape}{wxshape}.
+
+\membersection{wxLineShape::wxLineShape}
+
+\func{void}{wxLineShape}{\void}
+
+\func{void}{wxLineShape}{\param{wxList *}{list}}
+
+Constructors. In the second (usual) form, supply a list of wxPoints, each to be used
+as a `control point' for the line. The minimum number of points is two.
+
+\membersection{wxLineShape::\destruct{wxLineShape}}
+
+\func{void}{\destruct{wxLineShape}}{\void}
+
+Destructor.
+
+\membersection{wxLineShape::AddArrow}
+
+\func{void}{AddArrow}{\param{WXTYPE}{ type}, \param{bool}{ end = ARROW\_POSITION\_END}, \param{float}{ arrowSize = 10.0},
+ \param{float}{ xOffset = 0.0}, \param{const wxString\& }{name = NULL}, \param{wxPseudoMetaFile *}{mf = NULL}, \param{long}{ arrowId = -1}}
+
+Adds an arrow (or annotation) to the line.
+
+{\it type} may currently be one of:
+
+\begin{description}\itemsep=0pt
+\item[ARROW\_HOLLOW\_CIRCLE] Hollow circle.
+\item[ARROW\_FILLED\_CIRCLE] Filled circle.
+\item[ARROW\_ARROW] Conventional arrowhead.
+\item[ARROW\_SINGLE\_OBLIQUE] Single oblique stroke.
+\item[ARROW\_DOUBLE\_OBLIQUE] Double oblique stroke.
+\item[ARROW\_DOUBLE\_METAFILE] Custom arrowhead.
+\end{description}
+
+{\it end} may currently be one of:
+
+\begin{description}\itemsep=0pt
+\item[ARROW\_POSITION\_END] Arrow appears at the end.
+\item[ARROW\_POSITION\_START] Arrow appears at the start.
+\end{description}
+
+{\it arrowSize} specifies the length of the arrow.
+
+{\it xOffset} specifies the offset from the end of the line.
+
+{\it name} specifies a name for the arrow.
+
+{\it mf} can be a wxPseduoMetaFile, perhaps loaded from a simple Windows metafile.
+
+{\it arrowId} is the id for the arrow.
+
+\membersection{wxLineShape::AddArrowOrdered}
+
+\func{void}{AddArrowOrdered}{\param{wxArrowHead *}{arrow}, \param{wxList\&}{ referenceList}, \param{int}{ end}}
+
+Add an arrowhead in the position indicated by the reference
+list of arrowheads, which contains all legal arrowheads for this
+line, in the correct order.
+E.g.
+
+\begin{verbatim}
+  Reference list:      a b c d e
+  Current line list:   a d
+\end{verbatim}
+
+Add c, then line list is: a c d.
+
+If no legal arrowhead position, return FALSE.  Assume reference list is
+for one end only, since it potentially defines the ordering for any one
+of the 3 positions. So we don't check the reference list for arrowhead
+position.
+
+\membersection{wxLineShape::ClearArrow}
+
+\func{bool}{ClearArrow}{\param{const wxString\& }{name}}
+
+Delete the arrow with the given name.
+
+\membersection{wxLineShape::ClearArrowsAtPosition}
+
+\func{void}{ClearArrowsAtPosition}{\param{int}{ position = -1}}
+
+Delete the arrows at the specified position, or at any position if {\it position} is -1.
+
+\membersection{wxLineShape::DrawArrow}
+
+\func{void}{DrawArrow}{\param{ArrowHead *}{arrow}, \param{float}{ xOffset}, \param{bool}{ proportionalOffset}}
+
+Draws the given arrowhead (or annotation).
+
+\membersection{wxLineShape::DeleteArrowHead}
+
+\func{bool}{DeleteArrowHead}{\param{long}{ arrowId}}
+
+\func{bool}{DeleteArrowHead}{\param{int}{ position}, \param{const wxString\& }{name}}
+
+Delete arrowhead by id or position and name.
+
+\membersection{wxLineShape::DeleteLineControlPoint}
+
+\func{bool}{DeleteLineControlPoint}{\void}
+
+Deletes an arbitary point on the line.
+
+\membersection{wxLineShape::DrawArrows}
+
+\func{void}{DrawArrows}{\void}
+
+Draws all arrows.
+
+\membersection{wxLineShape::DrawRegion}
+
+\func{void}{DrawRegion}{\param{wxShapeRegion *}{region}, \param{float}{ x}, \param{float}{ y}}
+
+Format one region at this position.
+
+\membersection{wxLineShape::EraseRegion}
+
+\func{void}{EraseRegion}{\param{wxShapeRegion *}{region}, \param{float}{ x}, \param{float}{ y}}
+
+Format one region at this position.
+
+\membersection{wxLineShape::FindArrowHead}
+
+\func{wxArrowHead *}{FindArrowHead}{\param{long}{ arrowId}}
+
+\func{wxArrowHead *}{FindArrowHead}{\param{int}{ position}, \param{const wxString\& }{name}}
+
+Find arrowhead by id or position and name.
+
+\membersection{wxLineShape::FindLineEndPoints}
+
+\func{void}{FindLineEndPoints}{\param{float *}{fromX}, \param{float *}{fromY}, \param{float *}{toX}, \param{float *}{toY}}
+
+Finds the x, y points at the two ends of the line. This function can be
+used by e.g. line-routing routines to get the actual points on the two
+node images where the lines will be drawn to/from.
+
+\membersection{wxLineShape::FindLinePosition}
+
+\func{int}{FindLinePosition}{\param{float }{x}, \param{float }{y}}
+
+Find which position we're talking about at this x, y.
+Returns ARROW\_POSITION\_START, ARROW\_POSITION\_MIDDLE, ARROW\_POSITION\_END.
+
+\membersection{wxLineShape::FindMinimumWidth}
+
+\func{float}{FindMinimumWidth}{\void}
+
+Finds the horizontal width for drawing a line with arrows in minimum
+space. Assume arrows at end only.
+
+\membersection{wxLineShape::FindNth}
+
+\func{void}{FindNth}{\param{wxShape *}{image}, \param{int *}{nth}, \param{int *}{noArcs}, \param{bool}{ incoming}}
+
+Finds the position of the line on the given object. Specify whether incoming or outgoing lines are
+being considered with {\it incoming}.
+
+\membersection{wxLineShape::GetAttachmentFrom}
+
+\func{int}{GetAttachmentFrom}{\void}
+
+Returns the attachment point on the `from' node.
+
+\membersection{wxLineShape::GetAttachmentTo}
+
+\func{int}{GetAttachmentTo}{\void}
+
+Returns the attachment point on the `to' node.
+
+\membersection{wxLineShape::GetEnds}
+
+\func{void}{GetEnds}{\param{float *}{x1}, \param{float *}{y1}, \param{float *}{x2}, \param{float *}{y2}}
+
+Gets the visible endpoints of the lines for drawing between two objects.
+
+\membersection{wxLineShape::GetFormatMode}
+
+\func{int}{GetFormatMode}{\param{int}{ regionId = 0}}
+
+Returns the format mode for this region. See als \helpref{SetFormatMode}{setformatmode}.
+
+\membersection{wxLineShape::GetFrom}
+
+\func{wxShape *}{GetFrom}{\void}
+
+Gets the `from' object.
+
+\membersection{wxLineShape::GetLabelPosition}
+
+\func{void}{GetLabelPosition}{\param{int}{ position}, \param{float *}{x}, \param{float *}{y}}
+
+Get the reference point for a label. Region x and y are offsets from this.
+position is 0 (middle), 1 (start), 2 (end).
+
+\membersection{wxLineShape::GetNextControlPoint}
+
+\func{wxPoint *}{GetNextControlPoint}{\param{wxShape *}{shape}}
+
+Find the next control point in the line after the start/end point,
+depending on whether the shape is at the start or end.
+
+\membersection{wxLineShape::GetTo}
+
+\func{wxShape *}{GetTo}{\void}
+
+Gets the `to' object.
+
+\membersection{wxLineShape::Initialise}
+
+\func{void}{Initialise}{\void}
+
+Initialises the line object.
+
+\membersection{wxLineShape::InsertLineControlPoint}
+
+\func{void}{InsertLineControlPoint}{\void}
+
+Inserts a control point at an arbitrary position.
+
+\membersection{wxLineShape::IsEnd}
+
+\func{bool}{IsEnd}{\param{wxShape *}{shape}}
+
+Returns TRUE if {\it shape} is at the end of the line.
+
+\membersection{wxLineShape::IsSpline}
+
+\func{bool}{IsSpline}{\void}
+
+Returns TRUE if a spline is drawn through the control points, and FALSE otherwise.
+
+\membersection{wxLineShape::MakeLineControlPoints}
+
+\func{void}{MakeLineControlPoints}{\param{int}{ n}}
+
+Make a given number of control points.
+
+\membersection{wxLineShape::OnMoveLink}
+
+\func{void}{OnMoveLink}{\void}
+
+Called when a connected object has moved, to move the link to
+correct position.
+
+\membersection{wxLineShape::SetAttachments}
+
+\func{void}{SetAttachments}{\param{int}{ fromAttach}, \param{int}{ toAttach}}
+
+Specifies which object attachment points should be used at each end of the line.
+
+\membersection{wxLineShape::SetEnds}
+
+\func{void}{SetEnds}{\param{float}{ x1}, \param{float}{ y1}, \param{float}{ x2}, \param{float}{ y2}}
+
+Sets the end positions of the line.
+
+\membersection{wxLineShape::SetFrom}
+
+\func{void}{SetFrom}{\param{wxShape *}{object}}
+
+Sets the `from' object for the line.
+
+\membersection{wxLineShape::SetIgnoreOffsets}
+
+\func{void}{SetIgnoreOffsets}{\param{bool}{ ignore}}
+
+Tells the shape whether to ignore offsets from the end of the line when drawing.
+
+\membersection{wxLineShape::SetSpline}
+
+\func{void}{SetSpline}{\param{bool}{ spline}}
+
+Specifies whether a spline is to be drawn through the control points (TRUE), or a line (FALSE).
+
+\membersection{wxLineShape::SetTo}
+
+\func{void}{SetTo}{\param{wxShape *}{object}}
+
+Sets the `to' object for the line.
+
+\membersection{wxLineShape::Straighten}
+
+\func{void}{Straighten}{\void}
+
+Straighten verticals and horizontals.
+
+\membersection{wxLineShape::Unlink}
+
+\func{void}{Unlink}{\void}
+
+Unlinks the line from the nodes at either end.
+
+
+\section{\class{wxPolygonShape}: wxShape}\label{wxpolygonshape}
+
+A wxPolygonShape's shape is defined by a number of points passed to the object's
+constructor. It can be used to create new shapes such as diamonds and triangles.
+
+See also \helpref{wxShape}{wxshape}.
+
+\membersection{wxPolygonShape::wxPolygonShape}
+
+\func{void}{wxPolygonShape}{void}
+
+Constructor. Call Create to specify the polygon's vertices.
+
+\membersection{wxPolygonShape::\destruct{wxPolygonShape}}
+
+\func{void}{\destruct{wxPolygonShape}}{\void}
+
+Destructor.
+
+\membersection{wxPolygonShape::Create}
+
+\func{void}{Create}{\param{wxList *}{points}}
+
+Takes a list of wxPoints; each point is an {\it offset} from the centre.
+The polygon's destructor will delete these points, so do not delete them yourself.
+
+\membersection{wxPolygonShape::AddPolygonPoint}
+
+\func{void}{AddPolygonPoint}{\param{int}{ pos = 0}}
+
+Add a control point after the given point.
+
+\membersection{wxPolygonShape::CalculatePolygonCentre}
+
+\func{void}{CalculatePolygonCentre}{\void}
+
+Recalculates the centre of the polygon.
+
+\membersection{wxPolygonShape::DeletePolygonPoint}
+
+\func{void}{DeletePolygonPoint}{\param{int}{ pos = 0}}
+
+Deletes a control point.
+
+\membersection{wxPolygonShape::GetPoints}
+
+\func{wxList *}{GetPoints}{\void}
+
+Returns a pointer to the internal list of polygon vertices.
+
+\membersection{wxPolygonShape::UpdateOriginalPoints}
+
+\func{void}{UpdateOriginalPoints}{\void}
+
+If we've changed the shape, must make the original
+points match the working points with this function.
+
+\section{\class{wxRectangleShape}: wxShape}\label{wxrectangleshape}
+
+The wxRectangleShape has rounded or square corners.
+
+See also \helpref{wxShape}{wxshape}.
+
+\membersection{wxRectangleShape::wxRectangleShape}
+
+\func{void}{wxRectangleShape}{\param{float}{ width = 0.0}, \param{float}{ height = 0.0}}
+
+Constructor.
+
+\membersection{wxRectangleShape::\destruct{wxRectangleShape}}
+
+\func{void}{\destruct{wxRectangleShape}}{\void}
+
+Destructor.
+
+\membersection{wxRectangleShape::SetCornerRadius}
+
+\func{void}{SetCornerRadius}{\param{float}{ radius}}
+
+Sets the radius of the rectangle's rounded corners. If the radius is zero, a non-rounded
+rectangle will be drawn. If the radius is negative, the value is the proportion of the
+smaller dimension of the rectangle.
+
+\section{\class{wxPseudoMetaFile}: wxObject}\label{wxpseudometafile}
+
+A simple metafile-like class which can load data from a Windows metafile on all platforms.
+
+
+\section{\class{wxShape}: wxShapeEvtHandler}\label{wxshape}
+
+The wxShape is the top-level, abstract object that all other
+objects are derived from. All common functionality is represented by
+wxShape's members, and overriden members that appear in derived
+classes and have behaviour as documented for wxShape, are not
+documented separately.
+
+See also \helpref{wxShapeEvtHandler}{wxshapeevthandler}.
+
+\membersection{wxShape::wxShape}
+
+\func{void}{wxShape}{\param{wxShapeCanvas *}{canvas = NULL}}
+
+Constructs a new wxShape.
+
+\membersection{wxShape::\destruct{wxShape}}
+
+\func{void}{\destruct{wxShape}}{\void}
+
+Destructor.
+
+\membersection{wxShape::AddLine}
+
+\func{void}{AddLine}{\param{wxLineShape *}{line}, \param{wxShape *}{other}, \param{int}{attachFrom = 0}, \param{int}{ attachTo = 0}}
+
+Adds a line between the specified canvas objects, at the specified attachment points.
+
+\membersection{wxShape::AddRegion}
+
+\func{void}{AddRegion}{\param{wxShapeRegion *}{region}}
+
+Adds a region to the shape.
+
+\membersection{wxShape::AddText}
+
+\func{void}{AddText}{\param{const wxString\& }{string}}
+
+Adds a line of text to the object's default text region.
+
+\membersection{wxShape::AddToCanvas}
+
+\func{void}{AddToCanvas}{\param{wxShapeCanvas *}{theCanvas}, \param{wxShape *}{addAfter=NULL}}
+
+Adds the object to the canvas's object list. If {\it addAfter} is
+non-NULL, will add the shape after this one.
+
+\membersection{wxShape::AncestorSelected}
+
+\func{bool}{AncestorSelected}{\void}
+
+TRUE if the object's ancestor is currently selected.
+
+\membersection{wxShape::AssignNewIds}
+
+\func{void}{AssignNewIds}{\void}
+
+Assigns new ids to this image and its children.
+
+\membersection{wxShape::Attach}
+
+\func{void}{Attach}{\param{wxShapeCanvas *}{can}}
+
+Sets the object's internal canvas pointer to point to the given canvas.
+
+\membersection{wxShape::CalculateSize}
+
+\func{void}{CalculateSize}{\void}
+
+Called to calculate the object's size if dependent on children sizes.
+
+\membersection{wxShape::ClearAttachments}
+
+\func{void}{ClearAttachments}{\void}
+
+Clears internal custom attachment point objects (of class wxAttachmentPoint).
+
+\membersection{wxShape::ClearRegions}
+
+\func{void}{ClearRegions}{\void}
+
+Clears the wxShapeRegions from the shape.
+
+\membersection{wxShape::ClearText}
+
+\func{void}{ClearText}{\param{int}{ regionId = 0}}
+
+Clears the text from the specified text region.
+
+\membersection{wxShape::Constrain}
+
+\func{bool}{Constrain}{\void}
+
+Calculates the object's constraints (if any). Applicable
+only to wxCompositeShape, does nothing if the object is of
+a different class.
+
+\membersection{wxShape::Copy}
+
+\func{void}{Copy}{\param{wxShape\&}{ copy}}
+
+Copy the object into the given object. Every derived class must have one of these.
+
+\membersection{wxShape::CreateNewCopy}
+
+\func{wxShape *}{CreateNewCopy}{\param{wxShapeCanvas *}{theCanvas = NULL}}
+
+Creates and returns a new copy of this object (calling PrivateCopy). Do not override this function.
+
+This function should always be used to create a new copy, since it must do special processing
+for copying constraints associated with constraints.
+
+\membersection{wxShape::DeleteControlPoints}
+
+\func{void}{DeleteControlPoints}{\void}
+
+Deletes the control points (or handles) for the object. Does not redraw
+the object.
+
+\membersection{wxShape::Detach}
+
+\func{void}{Detach}{\void}
+
+Disassociates the object from its canvas by setting the internal object
+canvas pointer to NULL.
+
+\membersection{wxShape::Draggable}
+
+\func{bool}{Draggable}{\void} 
+
+TRUE if the object may be dragged by the user.
+
+\membersection{wxShape::Draw}
+
+\func{void}{Draw}{\void}
+
+Draws the whole object and any lines attached to it.
+
+Do not override this function: override OnDraw, which is called
+by this function.
+
+\membersection{wxShape::DrawContents}
+
+\func{void}{DrawContents}{\void}
+
+Draws the internal graphic of the object (such as
+text).
+
+Do not override this function: override OnDrawContents, which is called
+by this function.
+
+\membersection{wxShape::DrawLines}
+
+\func{void}{DrawLinks}{\param{int}{ attachment = -1}}
+
+Draws any lines linked to this object.
+
+\membersection{wxShape::Erase}
+
+\func{void}{Erase}{\void}
+
+Erases the object, but does not repair damage caused to other
+objects.
+
+\membersection{wxShape::EraseContents}
+
+\func{void}{EraseContents}{\void}
+
+Erases the object contents, that is, the area within the object's
+minimum bounding box.
+
+\membersection{wxShape::EraseLinks}
+
+\func{void}{EraseLinks}{\param{int}{ attachment = -1}}
+
+Erases links attached to this object, but does not repair
+damage caused to other objects.
+
+\membersection{wxShape::FindRegion}
+
+\func{wxShape *}{FindRegion}{\param{const wxString\& }{regionName}, \param{int *}{regionId}}
+
+Finds the actual image (`this' if non-composite) and region id for the given
+region name.
+
+\membersection{wxShape::FindRegionNames}
+
+\func{void}{FindRegionNames}{\param{wxStringList\&}{ list}}
+
+Finds all region names for this image (composite or simple).
+Supply an empty string list.
+
+\membersection{wxShape::Flash}
+
+\func{void}{Flash}{\void}
+
+Flashes the object.
+
+\membersection{wxShape::FormatText}
+
+\func{void}{FormatText}{\param{const wxString\& }{s}, \param{int}{ i = 0}}
+
+Reformats the given text region; defaults to formatting the default region.
+
+\membersection{wxShape::GetAttachmentMode}
+
+\func{void}{GetAttachmentMode}{\void}
+
+Returns the attachment mode. See \helpref{SetAttachmentMode}{setattachmentmode}.
+
+\membersection{wxShape::GetAttachmentPosition}
+
+\func{void}{GetAttachmentPosition}{\param{int}{ attachment}, \param{float *}{x}, \param{float *}{y}, \param{int}{ nth = 0}, \param{int}{ noArcs = 1}}
+
+Gets the position at which the given attachment point should be drawn.
+
+\membersection{wxShape::GetBoundingBoxMax}
+
+\func{void}{GetBoundingBoxMax}{\param{float *}{width}, \param{float *}{height}}
+
+Gets the maximum bounding box for the object, taking into
+account external features such as shadows.
+
+\membersection{wxShape::GetBoundingBoxMin}
+
+\func{void}{GetBoundingBoxMin}{\param{float *}{width}, \param{float *}{height}}
+
+Gets the minimum bounding box for the object, that defines
+the area available for drawing the contents (such as text).
+
+\membersection{wxShape::GetBrush}
+
+\func{wxBrush *}{GetBrush}{\void}
+
+Returns the brush used for filling the shape.
+
+\membersection{wxShape::GetCanvas}
+
+\func{wxShapeCanvas *}{GetCanvas}{\void}
+
+Gets the internal canvas pointer.
+
+\membersection{wxShape::GetCentreResize}
+
+\func{bool}{GetCentreResize}{\void}
+
+Returns TRUE if the shape is to be resized from the centre (the centre
+stands still), or FALSE if from the corner or side being dragged (the
+other corner or side stands still).
+
+\membersection{wxShape::GetChildren}
+
+\func{wxList\&}{GetChildren}{\void}
+
+Returns a reference to the list of children for this shape.
+
+\membersection{wxShape::GetClientData}
+
+\func{wxObject *}{GetClientData}{\void}
+
+Gets the client data associated with the object (NULL if there is
+none).
+
+\membersection{wxShape::GetDisableLabel}
+
+\func{bool}{GetDisableLabel}{\void}
+
+Returns TRUE if the default region will not be shown, FALSE otherwise.
+
+\membersection{wxShape::GetEventHandler}
+
+\func{wxShapeEvtHandler *}{GetEventHandler}{\void}
+
+Returns the event handler for this shape.
+
+\membersection{wxShape::GetFixedHeight}
+
+\func{bool}{GetFixedHeight}{\void}
+
+Returns TRUE if the shape cannot be resized in the vertical plane.
+
+\membersection{wxShape::GetFixedSize}
+
+\func{void}{GetFixedSize}{\param{bool *}{ x}, \param{bool *}{ y}} 
+
+Returns flags indicating whether the shape is of fixed size in either direction.
+
+\membersection{wxShape::GetFixedWidth}
+
+\func{bool}{GetFixedWidth}{\void}
+
+Returns TRUE if the shape cannot be resized in the horizontal plane.
+
+\membersection{wxShape::GetFont}
+
+\func{int}{GetFont}{\param{int}{ regionId = 0}}
+
+Gets the font for the specified text region.
+
+\membersection{wxShape::GetFunctor}
+
+\func{char*}{GetFunctor}{\void}
+
+Gets a string representing the type of the object, to be used when
+writing out object descriptions to a file. This is overridden by
+each derived object class to provide an appropriate type string.
+
+\membersection{wxShape::GetId}
+
+\func{long}{GetId}{\void}
+
+Returns the integer identifier for this shape.
+
+\membersection{wxShape::GetLines}
+
+\func{wxList\&}{GetLines}{\void}
+
+Returns a reference to the list of lines connected to this shape.
+
+\membersection{wxShape::GetNumberOfAttachments}
+
+\func{int}{GetNumberOfAttachments}{\void}
+
+Gets the number of attachment points for this object.
+
+\membersection{wxShape::GetNumberOfTextRegions}
+
+\func{int}{GetNumberOfTextRegions}{\void} 
+
+Gets the number of text regions for this object.
+
+\membersection{wxShape::GetParent}
+
+\func{wxShape *}{GetParent}{\void}
+
+Returns the parent of this shape, if it is part of a composite.
+
+\membersection{wxShape::GetPen}
+
+\func{wxPen *}{GetPen}{\void}
+
+Returns the pen used for drawing the shape's outline.
+
+\membersection{wxShape::GetPerimeterPoint}
+
+\func{bool}{GetPerimeterPoint}{\param{float}{ x1}, \param{float}{ y1}, \param{float}{ x2}, \param{float}{ y2}, \param{float *}{x3}, \param{float *}{y3}}
+
+Gets the point at which the line from (x1, y1) to (x2, y2) hits the object. Returns TRUE if the
+line hits the perimeter.
+
+\membersection{wxShape::GetRegionId}\label{getregionid}
+
+\func{int}{GetRegionId}{\param{const wxString\& }{name}}
+
+Gets the region's identifier by name. This is {\it not} unique for within an entire composite, but
+is unique for the image.
+
+\membersection{wxShape::GetRegionName}\label{getregionname}
+
+\func{wxString}{GetRegionName}{\param{int}{ regionId = 0}}
+
+Gets the region's name. A region's name can be used to uniquely determine a region within
+an entire composite image hierarchy. See also \helpref{SetRegionName}{setregionname}.
+
+\membersection{wxShape::GetRegions}\label{getregions}
+
+\func{wxList\&}{GetRegions}{\void}
+
+Returns the list of wxShapeRegions.
+
+\membersection{wxShape::GetRotation}
+
+\func{float}{GetRotatation}{\void}
+
+Returns the angle of rotation in radians.
+
+\membersection{wxShape::GetSensitivityFilter}
+
+\func{void}{GetSensitivityFilter}{\void}
+
+Returns the sensitivity filter, a bitlist of values. See \helpref{SetSensitivityFilter}{setsensitivityfilter}.
+
+\membersection{wxShape::GetShadowMode}
+
+\func{int}{SetShadowMode}{\void}
+
+Returns the shadow mode. See \helpref{SetShadowMode}{setshadowmode}.
+
+\membersection{wxShape::GetSpaceAttachments}
+
+\func{bool}{GetSpaceAttachments}{\void}
+
+Indicates whether lines should be spaced out evenly at the point they touch the node (TRUE), or whether they
+should join at a single point (FALSE).
+
+\membersection{wxShape::GetTextColour}
+
+\func{wxString}{GetTextColour}{\param{int}{ regionId = 0}}
+
+Gets the colour for the specified text region.
+
+\membersection{wxShape::GetTopAncestor}
+
+\func{wxShape *}{GetTopAncestor}{\void}
+
+Returns the top-most ancestor of this shape (the root of the composite).
+
+\membersection{wxShape::GetX}
+
+\func{float}{GetX}{\void}
+
+Gets the x position of the centre of the object.
+
+\membersection{wxShape::GetY}
+
+\func{float}{GetY}{\void}
+
+Gets the y position of the centre of the object.
+
+\membersection{wxShape::HitTest}
+
+\func{bool}{HitTest}{\param{float}{ x}, \param{float}{ y}, \param{int *}{attachment}, \param{float *}{distance}}
+
+Given a point on a canvas, returns TRUE if the point was on the object, and returns
+the nearest attachment point and distance from the given point and target.
+
+\membersection{wxShape::Insert}
+
+\func{void}{InsertInCanvas}{\param{wxShapeCanvas *}{canvas}}
+
+Inserts the shape at the front of the object list of {\it canvas}.
+
+\membersection{wxShape::IsHighlighted}
+
+\func{bool}{IsHighlighted}{\void}
+
+Returns TRUE if the shape is highlighted. Shape highlighting is unimplemented.
+
+\membersection{wxShape::IsShown}
+
+\func{bool}{IsShown}{\void}
+
+Returns TRUE if the shape is in a visible state, FALSE otherwise. Note
+that this has nothing to do with whether the window is hidden or the
+shape has scrolled off the canvas; it refers to the internal
+visibility flag.
+
+\membersection{wxShape::MakeControlPoints}
+
+\func{void}{MakeControlPoints}{\void}
+
+Make a list of control points (draggable handles) appropriate to the object.
+
+\membersection{wxShape::MakeMandatoryControlPoints}
+
+\func{void}{MakeMandatoryControlPoints}{\void}
+
+Make the mandatory control points. For example, the control point on a dividing line should
+appear even if the divided rectangle shape's handles should not appear (because it is the child of
+a composite, and children are not resizable).
+
+\membersection{wxShape::Move}
+
+\func{void}{Move}{\param{float}{ x1}, \param{float}{ y1}, \param{bool}{ display = TRUE}}
+
+Move the object to the given position, redrawing if {\it display} is TRUE.
+
+\membersection{wxShape::MoveLineToNewAttachment}
+
+\func{void}{MoveLineToNewAttachment}{\param{wxLineShape *}{toMove}, \param{float}{ x}, \param{float}{ y}}
+
+Move the given line (which must already be attached to the object) to 
+a different attachment point on the object.
+
+\membersection{wxShape::MoveLinks}
+
+\func{void}{MoveLinks}{\void}
+
+Redraw all the lines attached to the object.
+
+\membersection{wxShape::NameRegions}
+
+\func{void}{NameRegions}{\param{const wxString\& }{parentName = ``"}}
+
+Make unique names for all the regions in a shape or composite shape.
+
+\membersection{wxShape::NewCopy}
+
+\func{wxShape *}{NewCopy}{\void} 
+
+Returns a new instance, and does the copy for this class. Should be
+defined for each object class.
+
+\membersection{wxShape::PrivateCopy}
+
+\func{wxShape *}{PrivateCopy}{\void}
+
+Returns a new instance, and does the copy for this class. This member
+should be define for each class.
+
+\membersection{wxShape::Rotate}
+
+\func{void}{Rotate}{\param{float }{x}, \param{float }{y}, \param{float }{theta}}
+
+Rotate about the given axis by the given amount in radians (does nothing
+for most objects). But even non-rotating objects should record their
+notional rotation in case it's important (e.g. in dog-leg code). 
+
+\membersection{wxShape::ReadConstraints}
+
+\func{void}{ReadConstraints}{\param{PrologExpr *}{clause}, \param{PrologDatabase *}{database}}
+
+If the object is a composite, it may have constraints that need to be read in in a separate pass.
+
+\membersection{wxShape::ReadPrologAttributes}
+
+\func{void}{ReadPrologAttributes}{\param{PrologExpr *}{clause}}
+
+Reads the attributes (data member values) from the given expression.
+
+\membersection{wxShape::ReadRegions}
+
+\func{void}{ReadRegions}{\param{PrologExpr *}{clause}}
+
+Reads in the regions.
+
+\membersection{wxShape::Recentre}
+
+\func{void}{Recentre}{\void}
+
+Does recentring (or other formatting) for all the text regions for this object.
+
+\membersection{wxShape::RemoveFromCanvas}
+
+\func{void}{RemoveFromCanvas}{\param{wxShapeCanvas *}{canvas}}
+
+Removes the shape from the canvas.
+
+\membersection{wxShape::ResetControlPoints}
+
+\func{void}{ResetControlPoints}{\void}
+
+Resets the positions of the control points (for instance when the
+object's shape has changed).
+
+\membersection{wxShape::ResetMandatoryControlPoints}
+
+\func{void}{ResetMandatoryControlPoints}{\void}
+
+Reset the mandatory control points. For example, the control point on a dividing line should
+appear even if the divided rectangle shape's handles should not appear (because it is the child of
+a composite, and children are not resizable).
+
+\membersection{wxShape::Recompute}
+
+\func{bool}{Recompute}{\void} 
+
+Recomputes any constraints associated with the object (normally
+applicable to wxCompositeShapes only, but harmless for other
+classes of object).
+
+\membersection{wxShape::RemoveLine}
+
+\func{void}{RemoveLine}{\param{wxLineShape *}{line}}
+
+Removes the given line from the object's list of attached lines.
+
+\membersection{wxShape::Select}
+
+\func{void}{Select}{\param{bool}{ select = TRUE}}
+
+Selects or deselects the given object, drawing or erasing control points
+(handles) as necessary.
+
+\membersection{wxShape::Selected}
+
+\func{bool}{Selected}{\void}
+
+TRUE if the object is currently selected.
+
+\membersection{wxShape::SetAttachmentMode}\label{setattachmentmode}
+
+\func{void}{SetAttachmentMode}{\param{bool}{ flag}}
+
+Sets the attachment mode to TRUE or FALSE. If TRUE, attachment points
+will be significant when drawing lines to and from this object.
+If FALSE, lines will be drawn as if to the centre of the object.
+
+\membersection{wxShape::SetBrush}
+
+\func{void}{SetBrush}{\param{wxBrush *}{brush}}
+
+Sets the brush for filling the object's shape.
+
+\membersection{wxShape::SetCanvas}
+
+\func{void}{SetCanvas}{\param{wxShapeCanvas *}{theCanvas}}
+
+Identical to Attach.
+
+\membersection{wxShape::SetCentreResize}
+
+\func{void}{SetCentreResize}{\param{bool}{ cr}}
+
+Specify whether the shape is to be resized from the centre (the centre stands still) or from the corner or side
+being dragged (the other corner or side stands still).
+
+\membersection{wxShape::SetClientData}
+
+\func{void}{SetClientData}{\param{wxObject *}{clientData}}
+
+Sets the client data.
+
+
+\membersection{wxShape::SetDC}
+
+\func{void}{SetDC}{\param{wxDC *}{dc}}
+
+Sets the device context associated with the object. This may temporarily be set
+to (for example) a printer device context, so that the object will be printed
+instead of drawn on a canvas.
+
+\membersection{wxShape::SetDefaultRegionSize}\label{setdefaultregionsize}
+
+\func{void}{SetDefaultRegionSize}{\void}
+
+Set the default region to be consistent with the shape size.
+
+\membersection{wxShape::SetDisableLabel}
+
+\func{void}{SetDisableLabel}{\param{bool}{ flag}}
+
+Set {\it flag} to TRUE to stop the default region being shown, FALSE otherwise.
+
+\membersection{wxShape::SetDraggable}
+
+\func{void}{SetDraggable}{\param{bool}{ drag}, \param{bool}{ recursive = FALSE}}
+
+Sets the object to be draggable or not draggable.
+
+\membersection{wxShape::SetDrawHandles}
+
+\func{void}{SetDrawHandles}{\param{bool}{ drawH}}
+
+Sets the {\it drawHandles} flag for this shape and all descendants. If {\it drawH} is TRUE (the default),
+any handles (control points) will be drawn. Otherwise, the handles will not be drawn.
+
+\membersection{wxShape::SetEventHandler}
+
+\func{void}{GetEventHandler}{\param{wxShapeEvtHandler *}{handler}}
+
+Sets the event handler for this shape.
+
+\membersection{wxShape::SetFixedSize}
+
+\func{void}{SetFixedSize}{\param{bool}{ x}, \param{bool}{ y}} 
+
+Sets the object to be of the given, fixed size.
+
+\membersection{wxShape::SetFont}
+
+\func{void}{SetFont}{\param{wxFont *}{font}, \param{int}{ regionId = 0}}
+
+Sets the font for the specified text region.
+
+\membersection{wxShape::SetFormatMode}\label{setformatmode}
+
+\func{void}{SetFormatMode}{\param{int}{ mode}, \param{int}{ regionId = 0}} 
+
+Sets the format mode of the default text region. The argument can be a bit list
+of the following:
+
+\begin{description}\itemsep=0pt
+\item[FORMAT\_NONE] No formatting.
+\item[FORMAT\_CENTRE\_HORIZ] Horizontal centring.
+\item[FORMAT\_CENTRE\_VERT] Vertical centring.
+\end{description}
+
+\membersection{wxShape::SetHighlight}
+
+\func{void}{SetHighlight}{\param{bool}{ hi}, \param{bool}{ recurse = FALSE}}
+
+Sets the highlight for a shape. Shape highlighting is unimplemented.
+
+\membersection{wxShape::SetId}
+
+\func{void}{SetId}{\param{long}{ id}}
+
+Set the integer identifier for this shape.
+
+\membersection{wxShape::SetPen}
+
+\func{void}{SetPen}{\param{wxPen *}{pen}}
+
+Sets the pen for drawing the object's outline.
+
+\membersection{wxShape::SetRegionName}\label{setregionname}
+
+\func{void}{SetRegionName}{\param{const wxString\& }{name}, \param{int}{ regionId = 0}}
+
+Sets the name for this region. The name for a region is unique within the scope of the whole
+composite, whereas a region id is unique only for a single image.
+
+\membersection{wxShape::SetSensitivityFilter}\label{setsensitivityfilter}
+
+\func{void}{SetSensitivityFilter}{\param{int}{ sens=OP\_ALL}, \param{bool}{ recursive = FALSE}}
+
+Sets the object to be sensitive or insensitive to specific mouse operations.
+
+{\it sens} is a bitlist of the following:
+
+\begin{itemize}\itemsep=0pt
+\item OP\_CLICK\_LEFT
+\item OP\_CLICK\_RIGHT
+\item OP\_DRAG\_LEFT
+\item OP\_DRAG\_RIGHT
+\item OP\_ALL (equivalent to a combination of all the above).
+\end{itemize}
+
+\membersection{wxShape::SetShadowMode}\label{setshadowmode}
+
+\func{void}{SetShadowMode}{\param{int}{ mode}, \param{bool}{ redraw = FALSE}}
+
+Sets the shadow mode (whether a shadow is drawn or not). {\it mode} can be one of
+the following:
+
+\begin{description}\itemsep=0pt
+\item[SHADOW\_NONE] No shadow (the default).
+\item[SHADOW\_LEFT] Shadow on the left side.
+\item[SHADOW\_RIGHT] Shadow on the right side.
+\end{description}
+
+\membersection{wxShape::SetSize}
+
+\func{void}{SetSize}{\param{float}{ x}, \param{float}{ y}, \param{bool}{ recursive = TRUE}}
+
+Sets the object's size.
+
+\membersection{wxShape::SetSpaceAttachments}
+
+\func{void}{SetSpaceAttachments}{\param{bool}{ sp}}
+
+Indicate whether lines should be spaced out evenly at the point they touch the node (TRUE), or whether they
+should join at a single point (FALSE).
+
+\membersection{wxShape::SetTextColour}
+
+\func{void}{SetTextColour}{\param{const wxString\& }{colour}, \param{int}{ regionId = 0}}
+
+Sets the colour for the specified text region.
+
+\membersection{wxShape::SetX}
+
+\func{void}{SetX}{\param{float}{ x}}
+
+Sets the {\it x} position of the shape.
+
+\membersection{wxShape::SetX}
+
+\func{void}{SetY}{\param{float}{ y}}
+
+Sets the {\it y} position of the shape.
+
+\membersection{wxShape::SpaceAttachments}
+
+\func{void}{SpaceAttachments}{\param{bool}{ sp}} 
+
+Sets the spacing mode: if TRUE, lines at the same attachment point will be
+spaced evenly across that side of the object. If false, all lines at the
+same attachment point will emanate from the same point.
+
+\membersection{wxShape::Show}
+
+\func{void}{Show}{\param{bool}{ show}}
+
+Sets a flag indicating whether the object should be drawn.
+
+\membersection{wxShape::Unlink}
+
+\func{void}{Unlink}{\void}
+
+If the shape is a line, unlinks the nodes attached to the object, removing itself from the list of
+lines for each of the `to' and `from' nodes.
+
+\membersection{wxShape::WritePrologAttributes}
+
+\func{void}{WritePrologAttributes}{\param{PrologExpr *}{clause}}
+
+Writes the object's attributes (data member values) into the given expression.
+
+\membersection{wxShape::WriteRegions}
+
+\func{void}{WriteRegions}{\param{PrologExpr *}{clause}}
+
+Writes the regions.
+
+
+
+\section{\class{wxShapeCanvas}: wxCanvas}\label{wxshapecanvas}
+
+A canvas for drawing diagrams on.
+
+\membersection{wxShapeCanvas::wxShapeCanvas}
+
+\func{void}{wxShapeCanvas}{\void}
+
+Constructor.
+
+\membersection{wxShapeCanvas::\destruct{wxShapeCanvas}}
+
+\func{void}{\destruct{wxShapeCanvas}}{\void}
+
+Destructor.
+
+\membersection{wxShapeCanvas::AddShape}
+
+\func{void}{AddShape}{\param{wxShape *}{shape}, \param{wxShape *}{addAfter = NULL}}
+
+Adds a shape to the diagram. If {\it addAfter} is non-NULL, the shape will be added after this
+one.
+
+\membersection{wxShapeCanvas::Clear}
+
+\func{void}{Clear}{\void}
+
+Clears the device context associated with the diagram.
+
+\membersection{wxShapeCanvas::DrawOutline}
+
+\func{void}{DrawOutline}{\param{float}{ x1}, \param{float}{ y1}, \param{float}{ x2}, \param{float}{ y2}}
+
+Draws an outline rectangle on the current device context.
+
+\membersection{wxShapeCanvas::FindShape}
+
+\func{wxShape *}{FindShape}{\param{float}{ x1}, \param{float}{ y}, \param{int *}{attachment}, \param{wxClassInfo *}{info = NULL},
+ \param{wxShape *}{notImage = NULL}}
+
+Find a shape under this mouse click. Returns the shape (or NULL), and the nearest attachment point.
+
+If {\it info} is non-NULL, a shape whose class which is a descendant of the desired class is found.
+
+If {\it notImage} is non-NULL, shapes which are descendants of {\it notImage} are ignored.
+
+\membersection{wxShapeCanvas::FindFirstSensitiveShape}
+
+\func{wxShape *}{FindFirstSensitiveShape}{\param{float}{ x1}, \param{float}{ y}, \param{int *}{attachment}, \param{int}{ op}}
+
+Finds the first sensitive shape whose sensitivity filter matches {\it op}, working up the hierarchy of composites until
+one (or none) is found.
+
+\membersection{wxShapeCanvas::GetCanvas}
+
+\func{wxCanvas *}{GetCanvas}{\void}
+
+Returns the canvas associated with this diagram.
+
+\membersection{wxShapeCanvas::GetDC}
+
+\func{wxDC *}{GetDC}{\void}
+
+Returns the device context associated with this diagram.
+
+\membersection{wxShapeCanvas::GetGridSpacing}
+
+\func{float}{GetGridSpacing}{\void}
+
+Returns the grid spacing.
+
+\membersection{wxShapeCanvas::GetMouseTolerance}
+
+\func{int}{GetMouseTolerance}{\void}
+
+Returns the tolerance within which a mouse move is ignored.
+
+\membersection{wxShapeCanvas::GetShapeList}
+
+\func{wxList *}{GetShapeList}{\void}
+
+Returns a pointer to the internal shape list.
+
+\membersection{wxShapeCanvas::GetQuickEditMode}
+
+\func{bool}{GetQuickEditMode}{\void}
+
+Returns quick edit mode for the associated diagram.
+
+\membersection{wxShapeCanvas::InsertShape}
+
+\func{void}{InsertShape}{\param{wxShape *}{shape}}
+
+Inserts a shape at the front of the shape list.
+
+\membersection{wxShapeCanvas::OnBeginDragLeft}\label{onbegindragleft}
+
+\func{void}{OnBeginDragLeft}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when the start of a left-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnDragLeft}{ondragleft}, \helpref{OnEndDragLeft}{onenddragleft}.
+
+\membersection{wxShapeCanvas::OnBeginDragRight}\label{onbegindragright}
+
+\func{void}{OnBeginDragRight}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when the start of a right-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnDragRight}{ondragright}, \helpref{OnEndDragRight}{onenddragright}.
+
+\membersection{wxShapeCanvas::OnEndDragLeft}\label{onenddragleft}
+
+\func{void}{OnEndDragLeft}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when the end of a left-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnDragLeft}{ondragleft}, \helpref{OnBeginDragLeft}{onbegindragleft}.
+
+\membersection{wxShapeCanvas::OnEndDragRight}\label{onenddragright}
+
+\func{void}{OnEndDragRight}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when the end of a right-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnDragRight}{ondragright}, \helpref{OnBeginDragRight}{onbegindragright}.
+
+\membersection{wxShapeCanvas::OnDragLeft}\label{ondragleft}
+
+\func{void}{OnDragLeft}{\param{bool}{ draw}, \param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when a left-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it draw} is alternately TRUE and FALSE, to assist drawing and erasing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnBeginDragLeft}{onbegindragleft}, \helpref{OnEndDragLeft}{onenddragleft}.
+
+\membersection{wxShapeCanvas::OnDragRight}\label{ondragright}
+
+\func{void}{OnDragRight}{\param{bool}{ draw}, \param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when a right-button drag event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it draw} is alternately TRUE and FALSE, to assist drawing and erasing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+See also \helpref{OnBeginDragRight}{onbegindragright}, \helpref{OnEndDragRight}{onenddragright}.
+
+\membersection{wxShapeCanvas::OnLeftClick}\label{onleftclick}
+
+\func{void}{OnLeftClick}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when a left click event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+\membersection{wxShapeCanvas::OnRightClick}\label{onrightclick}
+
+\func{void}{OnRightClick}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}}
+
+Called when a right click event on the canvas background is detected by OnEvent. You may override this member;
+by default it does nothing.
+
+{\it keys} is a bit list of the following:
+
+\begin{itemize}\itemsep=0pt
+\item KEY\_SHIFT
+\item KEY\_CTRL
+\end{itemize}
+
+\membersection{wxShapeCanvas::Redraw}
+
+\func{void}{Redraw}{\void}
+
+Calls wxDiagram::Redraw.
+
+\membersection{wxShapeCanvas::RemoveShape}
+
+\func{void}{RemoveShape}{\param{wxShape *}{shape}}
+
+Calls wxDiagram::RemoveShape.
+
+\membersection{wxShapeCanvas::SetDiagram}
+
+\func{void}{SetDiagram}{\param{wxDiagram *}{diagram}}
+
+Sets the diagram associated with this diagram.
+
+\membersection{wxShapeCanvas::Snap}
+
+\func{void}{Snap}{\param{float *}{x}, \param{float *}{y}}
+
+Calls wxDiagram::Snap.
+
+
+
+\section{\class{wxShapeEvtHandler}: wxObject}\label{wxshapeevthandler}
+
+wxShapeEvtHandler is a class from which wxShape (and therefore all shape classes) are derived.
+A wxShape also contains a pointer to its current wxShapeEvtHandler. Event handlers
+can be swapped in and out, altering the behaviour of a shape. This allows, for example,
+a range of behaviours to be redefined in one class, rather than requiring
+each shape class to be subclassed.
+
+\membersection{wxShapeEvtHandler::handlerShape}
+
+\member{wxShape *}{handlerShape}
+
+Pointer to the shape associated with this handler.
+
+\membersection{wxShapeEvtHandler::previousHandler}
+
+\member{wxShapeEvtHandler *}{previousHandler}
+
+Pointer to the previous handler.
+
+\membersection{wxShapeEvtHandler::wxShapeEvtHandler}
+
+\func{void}{wxShapeEvtHandler}{\param{wxShapeEvtHandler *}{previous = NULL}, \param{wxShape *}{shape = NULL}}
+
+Constructs a new event handler.
+
+\membersection{wxShapeEvtHandler::\destruct{wxShapeEvtHandler}}
+
+\func{void}{\destruct{wxShapeEvtHandler}}{\void}
+
+Destructor.
+
+\membersection{wxShapeEvtHandler::GetShape}
+
+\func{void}{GetShape}{\void}
+
+Returns the shape associated with this handler.
+
+\membersection{wxShapeEvtHandler::OnBeginDragLeft}
+
+\func{void}{OnBeginDragLeft}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called when the user is beginning to drag using the left mouse button.
+
+\membersection{wxShapeEvtHandler::OnBeginDragRight}
+
+\func{void}{OnBeginDragRight}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called when the user is beginning to drag using the right mouse button.
+
+\membersection{wxShapeEvtHandler::OnBeginSize}
+
+\func{void}{OnBeginSize}{\param{float}{ width}, \param{float}{ height}}
+
+Called when a shape starts to be resized.
+
+\membersection{wxShapeEvtHandler::OnDragLeft}
+
+\func{void}{OnDragLeft}{\param{bool}{ draw}, \param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called twice when the object is being dragged, once to allow erasing the old
+image, and again to allow drawing at the new position.
+
+\membersection{wxShapeEvtHandler::OnDragRight}
+
+\func{void}{OnDragRight}{\param{bool}{ draw}, \param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called twice when the object is being dragged, once to allow erasing the old
+image, and again to allow drawing at the new position.
+
+\membersection{wxShapeEvtHandler::OnDraw}
+
+\func{void}{OnDraw}{\void}
+
+Defined for each class to draw the main graphic, but
+not the contents.
+
+\membersection{wxShapeEvtHandler::OnDrawContents}
+
+\func{void}{OnDrawContents}{\void}
+
+Defined for each class to draw the contents of the
+object, such as text.
+
+\membersection{wxShapeEvtHandler::OnDrawControlPoints}
+
+\func{void}{OnDrawControlPoints}{\void}
+
+Called when the object's control points (handles) should
+be drawn.
+
+\membersection{wxShapeEvtHandler::OnDrawOutline}
+
+\func{void}{OnDrawOutline}{\void}
+
+Called when the outline of the object should be drawn.
+
+\membersection{wxShapeEvtHandler::OnEndDragLeft}
+
+\func{void}{OnEndDragLeft}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called when the user is stopping dragging using the left mouse button.
+
+\membersection{wxShapeEvtHandler::OnEndDragRight}
+
+\func{void}{OnEndDragRight}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys=0}, \param{int}{ attachment = 0}}
+
+Called when the user is stopping dragging using the right mouse button.
+
+\membersection{wxShapeEvtHandler::OnEndSize}
+
+\func{void}{OnEndSize}{\param{float}{ width}, \param{float}{ height}}
+
+Called after a shape is resized.
+
+\membersection{wxShapeEvtHandler::OnErase}
+
+\func{void}{OnErase}{\void}
+
+Called when the whole object should be erased.
+
+\membersection{wxShapeEvtHandler::OnEraseContents}
+
+\func{void}{OnEraseContents}{\void}
+
+Called when the contents should be erased.
+
+\membersection{wxShapeEvtHandler::OnEraseControlPoints}
+
+\func{void}{OnEraseControlPoints}{\void}
+
+Called when the object's control points (handles) should
+be erased.
+
+\membersection{wxShapeEvtHandler::OnHighlight}
+
+\func{void}{OnHighlight}{\void}
+
+Called when the object should be highlighted.
+
+\membersection{wxShapeEvtHandler::OnLeftClick}
+
+\func{void}{OnLeftClick}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys =0}, \param{int}{ attachment = 0}}
+
+Called when the object receives a left mouse click event.
+
+\membersection{wxShapeEvtHandler::OnMove}
+
+\func{void}{OnMove}{\param{float}{ x}, \param{float}{ y}, \param{float}{ oldX}, \param{float}{ oldY}, \param{bool}{ display = TRUE}}
+
+Called when the object receives a move request.
+
+\membersection{wxShapeEvtHandler::OnMoveLink}
+
+\func{void}{OnMoveLink}{\param{bool}{ moveControlPoints=TRUE}}
+
+Called when the line attached to an object need to be repositioned,
+because the object has moved.
+
+\membersection{wxShapeEvtHandler::OnMoveLinks}
+
+\func{void}{OnMoveLinks}{\void}
+
+Called when the lines attached to an object need to be repositioned,
+because the object has moved.
+
+\membersection{wxShapeEvtHandler::OnMovePre}
+
+\func{bool}{OnMovePre}{\param{float}{ x}, \param{float}{ y}, \param{float}{ oldX}, \param{float}{ oldY}, \param{bool}{ display = TRUE}}
+
+Called just after the object receives a move request.
+
+\membersection{wxShapeEvtHandler::OnMovePre}
+
+\func{bool}{OnMovePre}{\param{float}{ x}, \param{float}{ y}, \param{float}{ oldX}, \param{float}{ oldY}, \param{bool}{ display = TRUE}}
+
+Called just before the object receives a move request. Returning TRUE
+allows the move to be processed; returning FALSE vetoes the move. 
+
+\membersection{wxShapeEvtHandler::OnRightClick}
+
+\func{void}{OnRightClick}{\param{float}{ x}, \param{float}{ y}, \param{int}{ keys = 0}, \param{int}{ attachment = 0}}
+
+Called when the object receives a mouse mouse click event.
+
+\membersection{wxShapeEvtHandler::OnSize}
+
+\func{void}{OnSize}{\param{float}{ x}, \param{float}{ y}}
+
+Called when the object receives a resize request.
+
+
+
+\section{\class{wxTextShape}: wxRectangleShape}\label{wxtextshape}
+
+As wxRectangleShape, but only the text is displayed.
+
+See also \helpref{wxRectangleShape}{wxrectangleshape}.
+
+\membersection{wxTextShape::wxTextShape}
+
+\func{void}{wxTextShape}{\param{float}{ width = 0.0}, \param{float}{ height = 0.0}}
+
+Constructor.
+
+\membersection{wxTextShape::\destruct{wxTextShape}}
+
+\func{void}{\destruct{wxTextShape}}{\void}
+
+Destructor.
+
+\section{Functions}\label{functions}
+
+These are the OGL functions.
+
+\membersection{::wxOGLInitialize}
+
+\func{void}{wxOGLInitialize}{\param{wxHelpInstance *}{helpInstance = NULL}, \param{const wxString\& }{helpFile = NULL},
+ \param{wxFont *}{buttonFont = NULL}, \param{wxFont *}{labelFont = NULL}}
+ 
+Initializes OGL. The optional parameters tell OGL what to use for on-line help and font sizes.
+
+\membersection{::wxOGLCleanUp}
+
+\func{void}{wxOGLCleanUp}{\void}
+ 
+Cleans up OGL.
