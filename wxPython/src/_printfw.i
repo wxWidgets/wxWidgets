@@ -550,8 +550,8 @@ public:
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* win = wxPyMake_wxObject(a);                               \
-            PyObject* dc  = wxPyMake_wxObject(&b);                              \
+            PyObject* win = wxPyMake_wxObject(a,false);                               \
+            PyObject* dc  = wxPyMake_wxObject(&b,false);                              \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", win, dc));\
             Py_DECREF(win);                                                     \
             Py_DECREF(dc);                                                      \

@@ -32,7 +32,7 @@ struct wxVisualAttributes
     %extend {
         wxVisualAttributes() { return new wxVisualAttributes; }
         ~wxVisualAttributes() { delete self; }
-    }
+    } 
     
     // the font used for control label/text inside it
     wxFont font;
@@ -1302,7 +1302,7 @@ themes represent the appearance chosen by the user to be used for all
 applications on the system.", "");
 
     DocDeclStr(
-        void , SetOwnBackroundColour(const wxColour& colour),
+        void , SetOwnBackgroundColour(const wxColour& colour),
         "", "");
     
 

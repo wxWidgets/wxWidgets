@@ -953,7 +953,7 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 
 
 
-PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
+PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHandler) {
     PyObject* target = NULL;
     bool      isEvtHandler = False;
 
@@ -986,7 +986,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
                 exists = wxPyCheckSwigType(name);
             }
             if (info) {
-                target = wxPyConstructObject((void*)source, name, False);
+                target = wxPyConstructObject((void*)source, name, setThisOwn);
                 if (target && isEvtHandler)
                     ((wxEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
             } else {
@@ -1003,7 +1003,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
 }
 
 
-PyObject*  wxPyMake_wxSizer(wxSizer* source) {
+PyObject*  wxPyMake_wxSizer(wxSizer* source, bool setThisOwn) {
     PyObject* target = NULL;
 
     if (source && wxIsKindOf(source, wxSizer)) {
@@ -1018,7 +1018,7 @@ PyObject*  wxPyMake_wxSizer(wxSizer* source) {
         }
     }
     if (! target) {
-        target = wxPyMake_wxObject(source, False);
+        target = wxPyMake_wxObject(source, setThisOwn, False);
         if (target != Py_None)
             ((wxSizer*)source)->SetClientObject(new wxPyOORClientData(target));
     }
@@ -1841,7 +1841,7 @@ PyObject* wxPy_ConvertList(wxListBase* listbase) {
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
-        pyObj = wxPyMake_wxObject(wxObj);
+        pyObj = wxPyMake_wxObject(wxObj,false);
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }

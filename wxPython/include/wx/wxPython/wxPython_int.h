@@ -109,8 +109,8 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* classname);
 PyObject* wx2PyString(const wxString& src);
 wxString  Py2wxString(PyObject* source);
 
-PyObject* wxPyMake_wxObject(wxObject* source, bool checkEvtHandler=True);
-PyObject* wxPyMake_wxSizer(wxSizer* source);
+PyObject* wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHandler=True);
+PyObject* wxPyMake_wxSizer(wxSizer* source, bool setThisOwn);
 void      wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
 
 PyObject* wxPy_ConvertList(wxListBase* list);
@@ -414,8 +414,8 @@ struct wxPyCoreAPI {
     PyObject*           (*p_wxPyCBH_callCallbackObj)(const wxPyCallbackHelper& cbh, PyObject* argTuple);
     void                (*p_wxPyCBH_delete)(wxPyCallbackHelper* cbh);
 
-    PyObject*           (*p_wxPyMake_wxObject)(wxObject* source, bool checkEvtHandler);
-    PyObject*           (*p_wxPyMake_wxSizer)(wxSizer* source);
+    PyObject*           (*p_wxPyMake_wxObject)(wxObject* source, bool setThisOwn, bool checkEvtHandler);
+    PyObject*           (*p_wxPyMake_wxSizer)(wxSizer* source, bool setThisOwn);
     void                (*p_wxPyPtrTypeMap_Add)(const char* commonName, const char* ptrName);
     bool                (*p_wxPy2int_seq_helper)(PyObject* source, int* i1, int* i2);
     bool                (*p_wxPy4int_seq_helper)(PyObject* source, int* i1, int* i2, int* i3, int* i4);
@@ -939,7 +939,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                     \
         bool blocked = wxPyBeginBlockThreads();                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {        \
-            PyObject* obj = wxPyMake_wxObject(&a);                      \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -965,7 +965,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                     \
         bool blocked = wxPyBeginBlockThreads();                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {        \
-            PyObject* obj = wxPyMake_wxObject(&a);                      \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -989,7 +989,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                     \
         bool blocked = wxPyBeginBlockThreads();                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {        \
-            PyObject* obj = wxPyMake_wxObject(&a);                      \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b));  \
             Py_DECREF(obj);                                             \
         }                                                               \
@@ -1056,7 +1056,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                                     \
         bool blocked = wxPyBeginBlockThreads();                                         \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                        \
-            PyObject* obj = wxPyMake_wxObject(&a);                                      \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                                \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));  \
             Py_DECREF(obj);                                                             \
         }                                                                               \
@@ -1081,7 +1081,7 @@ extern wxPyApp *wxPythonApp;
         bool blocked = wxPyBeginBlockThreads();                                         \
         bool rval=False;                                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                        \
-            PyObject* obj = wxPyMake_wxObject(&a);                                      \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                                \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddddi)", obj, b, c, d, e, (int)f));\
             Py_DECREF(obj);                                                             \
         }                                                                               \
@@ -1128,7 +1128,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(&a);                              \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                        \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Odddd)", obj, b, c, d, e));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1152,7 +1152,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(&a);                              \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                        \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", obj, (int)b)); \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1177,7 +1177,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(a);                               \
+            PyObject* obj = wxPyMake_wxObject(a,false);                         \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oiddii)", obj, (int)b, c, d, e, f));\
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1202,7 +1202,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(a);                               \
+            PyObject* obj = wxPyMake_wxObject(a,false);                         \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oddii)", obj, b, c, d, e));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1679,7 +1679,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(a);                               \
+            PyObject* obj = wxPyMake_wxObject(a,false);                         \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));   \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1705,8 +1705,8 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* win = wxPyMake_wxObject(a);                               \
-            PyObject* dc  = wxPyMake_wxObject(&b);                              \
+            PyObject* win = wxPyMake_wxObject(a,false);                         \
+            PyObject* dc  = wxPyMake_wxObject(&b,false);                        \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", win, dc));\
             Py_DECREF(win);                                                     \
             Py_DECREF(dc);                                                      \
@@ -1732,7 +1732,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(a);                               \
+            PyObject* obj = wxPyMake_wxObject(a,false);                         \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));          \
             Py_DECREF(obj);                                                     \
         }                                                                       \
@@ -1824,7 +1824,7 @@ extern wxPyApp *wxPythonApp;
         wxFSFile* rval=0;                                                       \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
             PyObject* ro;                                                       \
-            PyObject* obj = wxPyMake_wxObject(&a);                              \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                        \
             PyObject* s = wx2PyString(b);                                       \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)",        \
                                          obj, s));                              \
@@ -2367,7 +2367,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(&a);                              \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                        \
             PyObject* ro = wxPyConstructObject((void*)&b, wxT("wxRect"), 0);    \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOi)", obj, ro, (int)c)); \
             Py_DECREF(obj);                                                     \
@@ -2387,7 +2387,7 @@ extern wxPyApp *wxPythonApp;
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                 \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* obj = wxPyMake_wxObject(&a);                              \
+            PyObject* obj = wxPyMake_wxObject(&a,false);                        \
             PyObject* ro = wxPyConstructObject((void*)&b, wxT("wxRect"), 0);    \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOi)", obj, ro, (int)c)); \
             Py_DECREF(obj);                                                     \

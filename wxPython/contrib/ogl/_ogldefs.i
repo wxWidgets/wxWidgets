@@ -16,15 +16,15 @@
 
 
 // OOR Support
-%typemap(out) wxPyShape*                { $result = wxPyMake_wxShapeEvtHandler($1); }
-%typemap(out) wxPyShapeEvtHandler*      { $result = wxPyMake_wxShapeEvtHandler($1); }
-%typemap(out) wxPyDivisionShape*        { $result = wxPyMake_wxShapeEvtHandler($1); }
+%typemap(out) wxPyShape*                { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
+%typemap(out) wxPyShapeEvtHandler*      { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
+%typemap(out) wxPyDivisionShape*        { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
 
-%typemap(out) wxPyShapeCanvas*          { $result = wxPyMake_wxObject($1); }
-%typemap(out) wxDiagram*                { $result = wxPyMake_wxObject($1); }
-%typemap(out) wxOGLConstraint*          { $result = wxPyMake_wxObject($1); }
-%typemap(out) wxPseudoMetaFile*         { $result = wxPyMake_wxObject($1); }
-%typemap(out) wxArrowHead*              { $result = wxPyMake_wxObject($1); }
+%typemap(out) wxPyShapeCanvas*          { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxDiagram*                { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxOGLConstraint*          { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxPseudoMetaFile*         { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxArrowHead*              { $result = wxPyMake_wxObject($1, $owner); }
 
 
 

@@ -285,7 +285,7 @@ public:
         bool found;
         bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
-            PyObject* dcobj = wxPyMake_wxObject(&dc);
+            PyObject* dcobj = wxPyMake_wxObject(&dc,false);
             PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), False);
             PyObject* recobj= wxPyConstructObject((void*)&rect, wxT("wxRect"), False);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", dcobj, idobj, recobj));
@@ -951,7 +951,7 @@ public:
     wxTreeItemId FindItem (const wxTreeItemId& item, const wxString& str, int flags = 0);
 
     wxWindow* GetHeaderWindow() const;
-    wxWindow* GetMainWindow() const;
+    wxScrolledWindow* GetMainWindow() const;
 
 };
 

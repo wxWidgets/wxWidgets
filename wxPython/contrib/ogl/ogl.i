@@ -245,7 +245,7 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
 
 //---------------------------------------------------------------------------
 
-PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
+PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source, bool setThisOwn) {
     PyObject* target = NULL;
 
     if (source && wxIsKindOf(source, wxShapeEvtHandler)) {
@@ -260,7 +260,7 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
         }
     }
     if (! target) {
-        target = wxPyMake_wxObject2(source, FALSE);
+        target = wxPyMake_wxObject2(source, setThisOwn, false);
         if (target != Py_None)
             ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
     }
@@ -301,7 +301,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
-        pyObj = wxPyMake_wxShapeEvtHandler((wxShapeEvtHandler*)wxObj);
+        pyObj = wxPyMake_wxShapeEvtHandler((wxShapeEvtHandler*)wxObj, false);
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }
