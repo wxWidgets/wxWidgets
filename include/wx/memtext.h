@@ -28,21 +28,21 @@ public:
 
 protected:
     virtual bool OnExists() const
-        { return false; }
+        { return FALSE; }
 
     virtual bool OnOpen(const wxString &strBufferName,
                         wxTextBufferOpenMode OpenMode)
-        { return true; }
+        { return TRUE; }
 
     virtual bool OnClose()
-        { return true; }
+        { return TRUE; }
 
     virtual bool OnRead(wxMBConv& conv)
-        { return true; }
+        { return TRUE; }
 
     virtual bool OnWrite(wxTextFileType typeNew,
                          wxMBConv& conv = wxConvLibc)
-        { return true; }
+        { return TRUE; }
 };
 
 #endif // wxUSE_TEXTBUFFER
