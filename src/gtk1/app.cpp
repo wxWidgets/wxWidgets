@@ -596,6 +596,8 @@ int wxEntry( int argc, char *argv[] )
 
     gtk_init( &argc, &argv );
 
+    wxSetDetectableAutoRepeat( TRUE );
+    
     if (!wxApp::Initialize())
         return -1;
 

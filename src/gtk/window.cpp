@@ -563,14 +563,17 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     printf( "\n" );
 */
 
-    bool ret = FALSE;
-    
     int x = 0;
     int y = 0;
     GdkModifierType state;
     if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     long key_code = get_unmodified_wx_keysym( gdk_event );
+    
+    /* sending unknown key events doesn't really make sense */
+    if (key_code == 0) return FALSE;
+
+    bool ret = FALSE;
     
     wxKeyEvent event( wxEVT_KEY_DOWN );         
     event.SetTimestamp( gdk_event->time );
@@ -702,6 +705,9 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 */
 
     long key_code = get_unmodified_wx_keysym( gdk_event );
+    
+    /* sending unknown key events doesn't really make sense */
+    if (key_code == 0) return FALSE;
 
     int x = 0;
     int y = 0;

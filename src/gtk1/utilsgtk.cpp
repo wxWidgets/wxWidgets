@@ -35,6 +35,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkfeatures.h>
 #include <gdk/gdkx.h>
+#include "X11/XKBlib.h"
 
 // ----------------------------------------------------------------------------
 // misc.
@@ -43,6 +44,15 @@
 void wxBell()
 {
     gdk_beep();
+}
+
+// Synthesize KeyUp events holding down a key and producing
+// KeyDown events with autorepeat.
+bool wxSetDetectableAutoRepeat( bool flag )
+{
+    Bool result;
+    XkbSetDetectableAutoRepeat( GDK_DISPLAY(), flag, &result );
+    return result;       // true if keyboard hardware supports this mode
 }
 
 // ----------------------------------------------------------------------------

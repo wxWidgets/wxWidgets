@@ -84,6 +84,11 @@ WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *
 // Return a string with the current date/time
 WXDLLEXPORT wxString wxNow();
 
+// Synthesize KeyUp events holding down a key and producing
+// KeyDown events with autorepeat. On by default an always
+// on in wxMSW.
+WXDLLEXPORT bool wxSetDetectableAutoRepeat( bool flag );
+
 // ----------------------------------------------------------------------------
 // Window ID management
 // ----------------------------------------------------------------------------
