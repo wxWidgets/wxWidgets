@@ -213,6 +213,11 @@ determines the bitmap to use according to this algorithm:
   2. Load the bitmap from the file in attribute value.
 
 
+Boolean
+-------
+Boolean value, either "0" (false) or "1" (true).
+
+
 
 4. Supported classes
 ====================
@@ -241,7 +246,7 @@ wxButton
 --------
 position                   Position                -1,-1
 size                       Size                    -1,-1
-style                      Style[wxButton]         
+style                      Style[wxButton]    
 
 label                      I18nString
 default                    Boolean                 false
@@ -252,7 +257,40 @@ wxCalendarCtrl
 --------------
 position                   Position                -1,-1
 size                       Size                    -1,-1
-style                      Style[wxButton]         
+style                      Style[wxCalendarCtrl]
+
+
+wxCheckBox
+----------
+position                   Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxCheckBox]
+checked                    Boolean                 false
+
+
+wxCheckList
+-----------
+position                   Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxCheckList]
+content                    (see bellow)            (empty)
+
+Optional "content" attribute does not have attribute value. Instead,
+arbitrary number of <item> nodes may be rooted under it (the control
+is filled with strings contained in these nodes). Each <item>
+node must contain I18nString value and may have "checked" property
+with possible values "0" or "1" indicating the the item is initially
+checked.
+
+Example:
+<object class="wxCheckList">
+    <content>
+      <item>One</item>
+      <item checked="1">Two</item>
+      <item checked="1">Three</item>
+      <item>Four</item>
+    </content>
+</object>
 
 
 
