@@ -2245,7 +2245,13 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         return wxFONTENCODING_CP950;
     }
 #elif defined(__WXMAC__)
-    return wxMacGetFontEncFromSystemEnc( CFStringGetSystemEncoding() ) ;
+	TextEncoding encoding = 0 ;
+#if TARGET_CARBON
+	encoding = CFStringGetSystemEncoding() ;
+#else
+	 UpgradeScriptInfoToTextEncoding ( smSystemScript , kTextLanguageDontCare , kTextRegionDontCare , NULL , &encoding ) ;
+#endif
+    return wxMacGetFontEncFromSystemEnc( encoding ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
