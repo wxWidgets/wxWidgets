@@ -59,6 +59,8 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"));
 
+    virtual ~wxSpinCtrl();
+
     // operations
     void SetValue(int val);
     void SetValue(const wxString& text);

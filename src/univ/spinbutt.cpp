@@ -142,9 +142,19 @@ void wxSpinButton::SetValue(int val)
 int wxSpinButton::NormalizeValue(int value) const
 {
     if ( value > m_max )
-        value = m_max;
+    {
+        if ( GetWindowStyleFlag() & wxSP_WRAP )
+            value = m_min + (value - m_max) % (m_max - m_min);
+        else
+            value = m_max;
+    }
     else if ( value < m_min )
-        value = m_min;
+    {
+        if ( GetWindowStyleFlag() & wxSP_WRAP )
+            value = m_max - (m_min - value) % (m_max - m_min);
+        else
+            value = m_min;
+    }
 
     return value;
 }
@@ -152,6 +162,13 @@ int wxSpinButton::NormalizeValue(int value) const
 bool wxSpinButton::ChangeValue(int inc)
 {
     int valueNew = NormalizeValue(m_value + inc);
+
+    if ( valueNew == m_value )
+    {
+        // nothing changed - most likely because we are already at min/max
+        // value
+        return FALSE;
+    }
 
     wxSpinEvent event(inc > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN,
                       GetId());
@@ -205,9 +222,11 @@ int wxSpinButton::GetArrowState(wxScrollArrows::Arrow arrow) const
     // the arrow may also be disabled: either because the control is completely
     // disabled
     bool disabled = !IsEnabled();
-    if ( !disabled )
+
+    if ( !disabled && !(GetWindowStyleFlag() & wxSP_WRAP) )
     {
-        // ... or because we can't go any further
+        // ... or because we can't go any further - note that this never
+        // happens if we just wrap
         if ( IsVertical() )
         {
             if ( arrow == wxScrollArrows::Arrow_First )

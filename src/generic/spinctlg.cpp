@@ -88,10 +88,12 @@ END_EVENT_TABLE()
 class wxSpinCtrlButton : public wxSpinButton
 {
 public:
-    wxSpinCtrlButton(wxSpinCtrl *spin)
+    wxSpinCtrlButton(wxSpinCtrl *spin, int style)
         : wxSpinButton(spin->GetParent())
     {
         m_spin = spin;
+
+        SetWindowStyle(style);
     }
 
 protected:
@@ -144,7 +146,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     m_text = new wxSpinCtrlText(this, value);
-    m_btn = new wxSpinCtrlButton(this);
+    m_btn = new wxSpinCtrlButton(this, style);
 
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
@@ -158,6 +160,15 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_isEnabled = TRUE;
 
     return TRUE;
+}
+
+wxSpinCtrl::~wxSpinCtrl()
+{
+    // delete the controls now, don't leave them alive even though they woudl
+    // still be eventually deleted by our parent - but it will be too late, the
+    // user code expects them to be gone now
+    delete m_text;
+    delete m_btn;
 }
 
 // ----------------------------------------------------------------------------

@@ -460,6 +460,6 @@ void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
     wxASSERT_MSG( value == m_slider->GetValue(),
                   _T("slider value should be the same") );
 
-    wxLogMessage(_T("Slider valuie changed, now %d"), value);
+    wxLogMessage(_T("Slider value changed, now %d"), value);
 }
 
