@@ -894,15 +894,9 @@ enum wxBorder
 // always show an entire number of rows
 #define wxLB_INT_HEIGHT     0x0800
 
-// use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
-// position and wxTE_WORDWRAP to wrap at words boundary
-#define wxTE_DONTWRAP       wxHSCROLL
-#define wxTE_LINEWRAP       0x0800
-#define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
-
 // deprecated synonyms
-#define wxPROCESS_ENTER     wxTE_PROCESS_ENTER
-#define wxPASSWORD          wxTE_PASSWORD
+#define wxPROCESS_ENTER     0x0400  // wxTE_PROCESS_ENTER
+#define wxPASSWORD          0x0800  // wxTE_PASSWORD
 
 /*
  * wxComboBox style flags
@@ -1055,13 +1049,14 @@ enum wxBorder
  */
 
 // wxCENTRE already defined as  0x00000001
+#define wxYES                   0x00000002
 #define wxOK                    0x00000004
-#define wxYES_NO                0x00000008
+#define wxNO                    0x00000008
+#define wxYES_NO                (wxYES | wxNO)
 #define wxCANCEL                0x00000010
-#define wxYES                   0x00000020
-#define wxNO                    0x00000040
+
+#define wxYES_DEFAULT           0x00000000  // has no effect (default)
 #define wxNO_DEFAULT            0x00000080
-#define wxYES_DEFAULT           0x00000000  // has no effect
 
 #define wxICON_EXCLAMATION      0x00000100
 #define wxICON_HAND             0x00000200

@@ -19,11 +19,6 @@ wxBase:
 
 All (GUI):
 
-- wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
-
-- wxGridCellAttrProvider class API changed, you will need to update your code
-  if you derived any classes from it
-
 - the event type constants are not constants any more but are dynamically
   allocated during run-time which means that they can't be used as case labels
   in the switch()es, you must rewrite them to use if()s instead
@@ -31,6 +26,21 @@ All (GUI):
   You may also define WXWIN_COMPATIBILITY_EVENT_TYPES to get the old behaviour
   but this is strongly discouraged, please consider changing your codei
   instead!
+
+- wxYES_NO is now wxYES | wxNO and the manifest values of both wxYES and wxNO
+  have changed (to fix some unfortunate clashes), please check your code to
+  ensure that no tests for wxYES or wxNO are broken: for example, the following
+  will *NOT* work any longer:
+
+        if ( flags & wxYES_NO )
+                ... do something ...
+        if ( flags & wxYES )
+                ... do something else ...
+
+- wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
+
+- wxGridCellAttrProvider class API changed, you will need to update your code
+  if you derived any classes from it
 
 wxMSW:
 
