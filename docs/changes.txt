@@ -185,6 +185,7 @@ All:
 Unix (GUI):
 
 - fixed the "close" button of dialogs under KDE 3.1
+- fixed memory leak in wxMimeTypesManager
 
 wxBase
 

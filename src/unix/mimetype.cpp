@@ -1851,6 +1851,10 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
                         entryOld->AddOrReplaceVerb(verb, entry->GetCmd(i));
                     }
                 }
+
+                // as we don't store it anywhere, it won't be deleted later as
+                // usual -- do it immediately instead
+                delete entry;
             }
         }
     }
