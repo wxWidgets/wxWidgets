@@ -1292,47 +1292,14 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         ok = FALSE;
     }
 
-    // VZ: I'm leaving the old code in for now in case it is needed under Win95
-    //     or any other broken Windows versions but it is horribly inefficient:
-    //     creating 100 masks for 80x80 bitmaps takes 7.8 seconds on my machine
-    //     but only 0.2 using the new code!
-#if 0
-    // this is not very efficient, but I can't think of a better way of doing
-    // it
-    for ( int w = 0; ok && (w < width); w++ )
+    if ( ok )
     {
-        for ( int h = 0; ok && (h < height); h++ )
-        {
-            COLORREF col = GetPixel(srcDC, w, h);
-            if ( col == CLR_INVALID )
-            {
-                wxLogLastError(wxT("GetPixel"));
-
-                // doesn't make sense to continue
-                ok = FALSE;
-
-                break;
-            }
-
-            if ( col == maskColour )
-            {
-                ::SetPixel(destDC, w, h, RGB(0, 0, 0));
-            }
-            else
-            {
-                ::SetPixel(destDC, w, h, RGB(255, 255, 255));
-            }
-        }
+        // this will create a monochrome bitmap with 0 points for the pixels
+        // which have the same value as the background colour and 1 for the
+        // others
+        ::SetBkColor(srcDC, maskColour);
+        ::BitBlt(destDC, 0, 0, width, height, srcDC, 0, 0, NOTSRCCOPY);
     }
-#else
-    HBRUSH hbrMask = ::CreateSolidBrush(maskColour);
-    HGDIOBJ hbrOld = ::SelectObject(destDC, hbrMask);
-
-    // the ternary raster operation 0x3C004A is dest := src ^ brush
-    ::BitBlt(destDC, 0, 0, width, height, srcDC, 0, 0, 0x3C004A);
-
-    ::SelectObject(destDC, hbrOld);
-#endif
 
     ::SelectObject(srcDC, hbmpSrcOld);
     ::DeleteDC(srcDC);
@@ -1340,9 +1307,9 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     ::DeleteDC(destDC);
 
     return ok;
-#else
+#else // __WXMICROWIN__
     return FALSE;
-#endif
+#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 // ----------------------------------------------------------------------------
