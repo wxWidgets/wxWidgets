@@ -504,261 +504,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
     draw_frame( widget, win );
 }
 
-#endif
-
-//-----------------------------------------------------------------------------
-// key code mapping routines
-//-----------------------------------------------------------------------------
-
-static long map_to_unmodified_wx_keysym( GdkEventKey *event )
-{
-    // VZ: it seems that GDK_KEY_RELEASE event doesn't set event->string
-    //     but only event->keyval which is quite useless to us, so remember
-    //     the last character from GDK_KEY_PRESS and reuse it as last resort
-    //
-    // NB: should be MT-neutral as always called from main thread only
-    static struct
-    {
-        KeySym keysym;
-        long   keycode;
-    } s_lastKeyPress = { 0, 0 };
-
-    KeySym keysym = event->keyval;
-    long key_code;
-
-    switch ( keysym )
-    {
-        case GDK_Shift_L:
-        case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
-        case GDK_Control_L:
-        case GDK_Control_R:     key_code = WXK_CONTROL;     break;
-        case GDK_Meta_L:
-        case GDK_Meta_R:
-        case GDK_Alt_L:
-        case GDK_Alt_R:
-        case GDK_Super_L:
-        case GDK_Super_R:       key_code = WXK_ALT;         break;
-        case GDK_Menu:          key_code = WXK_MENU;        break;
-        case GDK_Help:          key_code = WXK_HELP;        break;
-        case GDK_BackSpace:     key_code = WXK_BACK;        break;
-        case GDK_ISO_Left_Tab:
-        case GDK_Tab:           key_code = WXK_TAB;         break;
-        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
-        case GDK_Clear:         key_code = WXK_CLEAR;       break;
-        case GDK_Return:        key_code = WXK_RETURN;      break;
-        case GDK_Pause:         key_code = WXK_PAUSE;       break;
-        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
-        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
-        case GDK_Delete:        key_code = WXK_DELETE;      break;
-        case GDK_Home:          key_code = WXK_HOME;        break;
-        case GDK_Left:          key_code = WXK_LEFT;        break;
-        case GDK_Up:            key_code = WXK_UP;          break;
-        case GDK_Right:         key_code = WXK_RIGHT;       break;
-        case GDK_Down:          key_code = WXK_DOWN;        break;
-        case GDK_Prior:         key_code = WXK_PRIOR;       break;
-//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
-        case GDK_Next:          key_code = WXK_NEXT;        break;
-//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
-        case GDK_End:           key_code = WXK_END;         break;
-        case GDK_Begin:         key_code = WXK_HOME;        break;
-        case GDK_Select:        key_code = WXK_SELECT;      break;
-        case GDK_Print:         key_code = WXK_PRINT;       break;
-        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
-        case GDK_Insert:        key_code = WXK_INSERT;      break;
-        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-
-        case GDK_KP_0:         key_code = WXK_NUMPAD0;      break;
-        case GDK_KP_1:         key_code = WXK_NUMPAD1;      break;
-        case GDK_KP_2:         key_code = WXK_NUMPAD2;      break;
-        case GDK_KP_3:         key_code = WXK_NUMPAD3;      break;
-        case GDK_KP_4:         key_code = WXK_NUMPAD4;      break;
-        case GDK_KP_5:         key_code = WXK_NUMPAD5;      break;
-        case GDK_KP_6:         key_code = WXK_NUMPAD6;      break;
-        case GDK_KP_7:         key_code = WXK_NUMPAD7;      break;
-        case GDK_KP_8:         key_code = WXK_NUMPAD8;      break;
-        case GDK_KP_9:         key_code = WXK_NUMPAD9;      break;
-        case GDK_KP_Space:     key_code = WXK_NUMPAD_SPACE; break;
-        case GDK_KP_Tab:       key_code = WXK_NUMPAD_TAB;   break;
-        case GDK_KP_Enter:     key_code = WXK_NUMPAD_ENTER; break;
-        case GDK_KP_F1:        key_code = WXK_NUMPAD_F1;    break;
-        case GDK_KP_F2:        key_code = WXK_NUMPAD_F2;    break;
-        case GDK_KP_F3:        key_code = WXK_NUMPAD_F3;    break;
-        case GDK_KP_F4:        key_code = WXK_NUMPAD_F4;    break;
-        case GDK_KP_Home:      key_code = WXK_NUMPAD_HOME;  break;
-        case GDK_KP_Left:      key_code = WXK_NUMPAD_LEFT;  break;
-        case GDK_KP_Up:        key_code = WXK_NUMPAD_UP;    break;
-        case GDK_KP_Right:     key_code = WXK_NUMPAD_RIGHT; break;
-        case GDK_KP_Down:      key_code = WXK_NUMPAD_DOWN;  break;
-        case GDK_KP_Prior:     key_code = WXK_NUMPAD_PRIOR; break;
-//      case GDK_KP_Page_Up:   key_code = WXK_NUMPAD_PAGEUP;   break;
-        case GDK_KP_Next:      key_code = WXK_NUMPAD_NEXT;  break;
-//      case GDK_KP_Page_Down: key_code = WXK_NUMPAD_PAGEDOWN; break;
-        case GDK_KP_End:       key_code = WXK_NUMPAD_END;   break;
-        case GDK_KP_Begin:     key_code = WXK_NUMPAD_BEGIN; break;
-        case GDK_KP_Insert:    key_code = WXK_NUMPAD_INSERT; break;
-        case GDK_KP_Delete:    key_code = WXK_NUMPAD_DELETE; break;
-        case GDK_KP_Equal:     key_code = WXK_NUMPAD_EQUAL;  break;
-        case GDK_KP_Multiply:  key_code = WXK_NUMPAD_MULTIPLY; break;
-        case GDK_KP_Add:       key_code = WXK_NUMPAD_ADD;    break;
-        case GDK_KP_Separator: key_code = WXK_NUMPAD_SEPARATOR; break;
-        case GDK_KP_Subtract:  key_code = WXK_NUMPAD_SUBTRACT;  break;
-        case GDK_KP_Decimal:   key_code = WXK_NUMPAD_DECIMAL;   break;
-        case GDK_KP_Divide:    key_code = WXK_NUMPAD_DIVIDE;    break;
-
-        case GDK_F1:            key_code = WXK_F1;          break;
-        case GDK_F2:            key_code = WXK_F2;          break;
-        case GDK_F3:            key_code = WXK_F3;          break;
-        case GDK_F4:            key_code = WXK_F4;          break;
-        case GDK_F5:            key_code = WXK_F5;          break;
-        case GDK_F6:            key_code = WXK_F6;          break;
-        case GDK_F7:            key_code = WXK_F7;          break;
-        case GDK_F8:            key_code = WXK_F8;          break;
-        case GDK_F9:            key_code = WXK_F9;          break;
-        case GDK_F10:           key_code = WXK_F10;         break;
-        case GDK_F11:           key_code = WXK_F11;         break;
-        case GDK_F12:           key_code = WXK_F12;         break;
-        default:
-        {
-            // do we have the translation?
-            if ( event->length == 1 )
-            {
-                keysym = (KeySym)event->string[0];
-            }
-            else if ( (keysym & 0xFF) != keysym )
-            {
-                // non ASCII key, what to do?
-
-                if ( event->type == GDK_KEY_RELEASE )
-                {
-                    // reuse the one from the last keypress if any
-                    if ( keysym == s_lastKeyPress.keysym )
-                    {
-                        key_code = s_lastKeyPress.keycode;
-
-                        // skip "return 0"
-                        break;
-                    }
-                }
-
-                // ignore this one, we don't know it
-                return 0;
-            }
-            //else: ASCII key, ok
-
-            guint upper = gdk_keyval_to_upper( (guint)keysym );
-            key_code = upper ? upper : keysym;
-
-            if ( event->type == GDK_KEY_PRESS )
-            {
-                // remember it to be reused below later
-                s_lastKeyPress.keysym = keysym;
-                s_lastKeyPress.keycode = key_code;
-            }
-        }
-    }
-
-    return key_code;
-}
-
-static long map_to_wx_keysym( GdkEventKey *event )
-{
-    KeySym keysym = event->keyval;
-    guint key_code = 0;
-
-    switch (keysym)
-    {
-        case GDK_Menu:          key_code = WXK_MENU;        break;
-        case GDK_Help:          key_code = WXK_HELP;        break;
-        case GDK_BackSpace:     key_code = WXK_BACK;        break;
-        case GDK_ISO_Left_Tab:
-        case GDK_Tab:           key_code = WXK_TAB;         break;
-        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
-        case GDK_Clear:         key_code = WXK_CLEAR;       break;
-        case GDK_Return:        key_code = WXK_RETURN;      break;
-        case GDK_Pause:         key_code = WXK_PAUSE;       break;
-        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
-        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
-        case GDK_Delete:        key_code = WXK_DELETE;      break;
-        case GDK_Home:          key_code = WXK_HOME;        break;
-        case GDK_Left:          key_code = WXK_LEFT;        break;
-        case GDK_Up:            key_code = WXK_UP;          break;
-        case GDK_Right:         key_code = WXK_RIGHT;       break;
-        case GDK_Down:          key_code = WXK_DOWN;        break;
-        case GDK_Prior:         key_code = WXK_PRIOR;       break;
-//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
-        case GDK_Next:          key_code = WXK_NEXT;        break;
-//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
-        case GDK_End:           key_code = WXK_END;         break;
-        case GDK_Begin:         key_code = WXK_HOME;        break;
-        case GDK_Select:        key_code = WXK_SELECT;      break;
-        case GDK_Print:         key_code = WXK_PRINT;       break;
-        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
-        case GDK_Insert:        key_code = WXK_INSERT;      break;
-        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-
-        case GDK_KP_0:         key_code = '0';      break;
-        case GDK_KP_1:         key_code = '1';      break;
-        case GDK_KP_2:         key_code = '2';      break;
-        case GDK_KP_3:         key_code = '3';      break;
-        case GDK_KP_4:         key_code = '4';      break;
-        case GDK_KP_5:         key_code = '5';      break;
-        case GDK_KP_6:         key_code = '6';      break;
-        case GDK_KP_7:         key_code = '7';      break;
-        case GDK_KP_8:         key_code = '8';      break;
-        case GDK_KP_9:         key_code = '9';      break;
-        case GDK_KP_Space:     key_code = ' ';      break;
-        case GDK_KP_Tab:       key_code = WXK_TAB;    break;        /* or '\t' ??? */
-        case GDK_KP_Enter:     key_code = WXK_RETURN; break;        /* or '\r' ??? */
-        case GDK_KP_F1:        key_code = WXK_NUMPAD_F1;    break;
-        case GDK_KP_F2:        key_code = WXK_NUMPAD_F2;    break;
-        case GDK_KP_F3:        key_code = WXK_NUMPAD_F3;    break;
-        case GDK_KP_F4:        key_code = WXK_NUMPAD_F4;    break;
-        case GDK_KP_Home:      key_code = WXK_HOME;  break;
-        case GDK_KP_Left:      key_code = WXK_LEFT;  break;
-        case GDK_KP_Up:        key_code = WXK_UP;    break;
-        case GDK_KP_Right:     key_code = WXK_RIGHT; break;
-        case GDK_KP_Down:      key_code = WXK_DOWN;  break;
-        case GDK_KP_Prior:     key_code = WXK_PRIOR; break;
-//      case GDK_KP_Page_Up:   key_code = WXK_PAGEUP; break;
-        case GDK_KP_Next:      key_code = WXK_NEXT;  break;
-//      case GDK_KP_Page_Down: key_code = WXK_PAGEDOWN; break;
-        case GDK_KP_End:       key_code = WXK_END;    break;
-        case GDK_KP_Begin:     key_code = WXK_HOME;   break;
-        case GDK_KP_Insert:    key_code = WXK_INSERT; break;
-        case GDK_KP_Delete:    key_code = WXK_DELETE; break;
-        case GDK_KP_Equal:     key_code = '=';   break;
-        case GDK_KP_Multiply:  key_code = '*';   break;
-        case GDK_KP_Add:       key_code = '+';   break;
-        case GDK_KP_Separator: key_code = ',';   break;
-        case GDK_KP_Subtract:  key_code = '-';   break;
-        case GDK_KP_Decimal:   key_code = '.';   break;
-        case GDK_KP_Divide:    key_code = '/';   break;
-
-        case GDK_F1:            key_code = WXK_F1;          break;
-        case GDK_F2:            key_code = WXK_F2;          break;
-        case GDK_F3:            key_code = WXK_F3;          break;
-        case GDK_F4:            key_code = WXK_F4;          break;
-        case GDK_F5:            key_code = WXK_F5;          break;
-        case GDK_F6:            key_code = WXK_F6;          break;
-        case GDK_F7:            key_code = WXK_F7;          break;
-        case GDK_F8:            key_code = WXK_F8;          break;
-        case GDK_F9:            key_code = WXK_F9;          break;
-        case GDK_F10:           key_code = WXK_F10;         break;
-        case GDK_F11:           key_code = WXK_F11;         break;
-        case GDK_F12:           key_code = WXK_F12;         break;
-        default:
-            if (event->length == 1)
-            {
-                key_code = (unsigned char)*event->string;
-            }
-            else if ((keysym & 0xFF) == keysym)
-            {
-                key_code = (guint)keysym;
-            }
-    }
-
-    return key_code;
-}
+#endif // GTK+ < 2.0
 
 //-----------------------------------------------------------------------------
 // "size_request" of m_widget
@@ -964,22 +710,377 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 // set WXTRACE to this to see the key event codes on the console
 #define TRACE_KEYS  _T("keyevent")
 
+// translates an X key symbol to WXK_XXX value
+//
+// if isChar is true it means that the value returned will be used for EVT_CHAR
+// event and then we choose the logical WXK_XXX, i.e. '/' for GDK_KP_Divide,
+// for example, while if it is false it means that the value is going to be
+// used for KEY_DOWN/UP events and then we translate GDK_KP_Divide to
+// WXK_NUMPAD_DIVIDE
+static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
+{
+    long key_code;
+
+    switch ( keysym )
+    {
+        // Shift, Control and Alt don't generate the CHAR events at all
+        case GDK_Shift_L:
+        case GDK_Shift_R:
+            key_code = isChar ? 0 : WXK_SHIFT;
+            break;
+        case GDK_Control_L:
+        case GDK_Control_R:
+            key_code = isChar ? 0 : WXK_CONTROL;
+            break;
+        case GDK_Meta_L:
+        case GDK_Meta_R:
+        case GDK_Alt_L:
+        case GDK_Alt_R:
+        case GDK_Super_L:
+        case GDK_Super_R:
+            key_code = isChar ? 0 : WXK_ALT;
+            break;
+
+        // neither do the toggle modifies
+        case GDK_Scroll_Lock:
+            key_code = isChar ? 0 : WXK_SCROLL;
+            break;
+
+        case GDK_Caps_Lock:
+            key_code = isChar ? 0 : WXK_CAPITAL;
+            break;
+
+        case GDK_Num_Lock:
+            key_code = isChar ? 0 : WXK_NUMLOCK;
+            break;
+
+
+        // various other special keys
+        case GDK_Menu:
+            key_code = WXK_MENU;
+            break;
+
+        case GDK_Help:
+            key_code = WXK_HELP;
+            break;
+
+        case GDK_BackSpace:
+            key_code = WXK_BACK;
+            break;
+
+        case GDK_ISO_Left_Tab:
+        case GDK_Tab:
+            key_code = WXK_TAB;
+            break;
+
+        case GDK_Linefeed:
+        case GDK_Return:
+            key_code = WXK_RETURN;
+            break;
+
+        case GDK_Clear:
+            key_code = WXK_CLEAR;
+            break;
+
+        case GDK_Pause:
+            key_code = WXK_PAUSE;
+            break;
+
+        case GDK_Select:
+            key_code = WXK_SELECT;
+            break;
+
+        case GDK_Print:
+            key_code = WXK_PRINT;
+            break;
+
+        case GDK_Execute:
+            key_code = WXK_EXECUTE;
+            break;
+
+        case GDK_Escape:
+            key_code = WXK_ESCAPE;
+            break;
+
+        // cursor and other extended keyboard keys
+        case GDK_Delete:
+            key_code = WXK_DELETE;
+            break;
+
+        case GDK_Home:
+            key_code = WXK_HOME;
+            break;
+
+        case GDK_Left:
+            key_code = WXK_LEFT;
+            break;
+
+        case GDK_Up:
+            key_code = WXK_UP;
+            break;
+
+        case GDK_Right:
+            key_code = WXK_RIGHT;
+            break;
+
+        case GDK_Down:
+            key_code = WXK_DOWN;
+            break;
+
+        case GDK_Prior:     // == GDK_Page_Up
+            key_code = WXK_PRIOR;
+            break;
+
+        case GDK_Next:      // == GDK_Page_Down
+            key_code = WXK_NEXT;
+            break;
+
+        case GDK_End:
+            key_code = WXK_END;
+            break;
+
+        case GDK_Begin:
+            key_code = WXK_HOME;
+            break;
+
+        case GDK_Insert:
+            key_code = WXK_INSERT;
+            break;
+
+
+        // numpad keys
+        case GDK_KP_0:
+        case GDK_KP_1:
+        case GDK_KP_2:
+        case GDK_KP_3:
+        case GDK_KP_4:
+        case GDK_KP_5:
+        case GDK_KP_6:
+        case GDK_KP_7:
+        case GDK_KP_8:
+        case GDK_KP_9:
+            key_code = (isChar ? '0' : WXK_NUMPAD0) + keysym - GDK_KP_0;
+            break;
+
+        case GDK_KP_Space:
+            key_code = isChar ? ' ' : WXK_NUMPAD_SPACE;
+            break;
+
+        case GDK_KP_Tab:
+            key_code = isChar ? WXK_TAB : WXK_NUMPAD_TAB;
+            break;
+
+        case GDK_KP_Enter:
+            key_code = isChar ? WXK_RETURN : WXK_NUMPAD_ENTER;
+            break;
+
+        case GDK_KP_F1:
+            key_code = isChar ? WXK_F1 : WXK_NUMPAD_F1;
+            break;
+
+        case GDK_KP_F2:
+            key_code = isChar ? WXK_F2 : WXK_NUMPAD_F2;
+            break;
+
+        case GDK_KP_F3:
+            key_code = isChar ? WXK_F3 : WXK_NUMPAD_F3;
+            break;
+
+        case GDK_KP_F4:
+            key_code = isChar ? WXK_F4 : WXK_NUMPAD_F4;
+            break;
+
+        case GDK_KP_Home:
+            key_code = isChar ? WXK_HOME : WXK_NUMPAD_HOME;
+            break;
+
+        case GDK_KP_Left:
+            key_code = isChar ? WXK_LEFT : WXK_NUMPAD_LEFT;
+            break;
+
+        case GDK_KP_Up:
+            key_code = isChar ? WXK_UP : WXK_NUMPAD_UP;
+            break;
+
+        case GDK_KP_Right:
+            key_code = isChar ? WXK_RIGHT : WXK_NUMPAD_RIGHT;
+            break;
+
+        case GDK_KP_Down:
+            key_code = isChar ? WXK_DOWN : WXK_NUMPAD_DOWN;
+            break;
+
+        case GDK_KP_Prior: // == GDK_KP_Page_Up
+            key_code = isChar ? WXK_PRIOR : WXK_NUMPAD_PRIOR;
+            break;
+
+        case GDK_KP_Next: // == GDK_KP_Page_Down
+            key_code = isChar ? WXK_NEXT : WXK_NUMPAD_NEXT;
+            break;
+
+        case GDK_KP_End:
+            key_code = isChar ? WXK_END : WXK_NUMPAD_END;
+            break;
+
+        case GDK_KP_Begin:
+            key_code = isChar ? WXK_HOME : WXK_NUMPAD_BEGIN;
+            break;
+
+        case GDK_KP_Insert:
+            key_code = isChar ? WXK_INSERT : WXK_NUMPAD_INSERT;
+            break;
+
+        case GDK_KP_Delete:
+            key_code = isChar ? WXK_DELETE : WXK_NUMPAD_DELETE;
+            break;
+
+        case GDK_KP_Equal:
+            key_code = isChar ? '=' : WXK_NUMPAD_EQUAL;
+            break;
+
+        case GDK_KP_Multiply:
+            key_code = isChar ? '*' : WXK_NUMPAD_MULTIPLY;
+            break;
+
+        case GDK_KP_Add:
+            key_code = isChar ? '+' : WXK_NUMPAD_ADD;
+            break;
+
+        case GDK_KP_Separator:
+            // FIXME: what is this?
+            key_code = isChar ? '.' : WXK_NUMPAD_SEPARATOR;
+            break;
+
+        case GDK_KP_Subtract:
+            key_code = isChar ? '-' : WXK_NUMPAD_SUBTRACT;
+            break;
+
+        case GDK_KP_Decimal:
+            key_code = isChar ? '.' : WXK_NUMPAD_DECIMAL;
+            break;
+
+        case GDK_KP_Divide:
+            key_code = isChar ? '/' : WXK_NUMPAD_DIVIDE;
+            break;
+
+
+        // function keys
+        case GDK_F1:
+        case GDK_F2:
+        case GDK_F3:
+        case GDK_F4:
+        case GDK_F5:
+        case GDK_F6:
+        case GDK_F7:
+        case GDK_F8:
+        case GDK_F9:
+        case GDK_F10:
+        case GDK_F11:
+        case GDK_F12:
+            key_code = WXK_F1 + keysym - GDK_F1;
+            break;
+
+        default:
+            key_code = 0;
+    }
+
+    return key_code;
+}
+
+static inline bool wxIsAsciiKeysym(KeySym ks)
+{
+    return ks < 256;
+}
+
 static bool
 wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                            wxWindowGTK *win,
                            GdkEventKey *gdk_event)
 {
-    long key_code = map_to_unmodified_wx_keysym( gdk_event );
+    // VZ: it seems that GDK_KEY_RELEASE event doesn't set event->string
+    //     but only event->keyval which is quite useless to us, so remember
+    //     the last character from GDK_KEY_PRESS and reuse it as last resort
+    //
+    // NB: should be MT-safe as we're always called from the main thread only
+    static struct
+    {
+        KeySym keysym;
+        long   keycode;
+    } s_lastKeyPress = { 0, 0 };
 
-    wxLogTrace(TRACE_KEYS, _T("Key %s event: %d => %ld"),
+    KeySym keysym = gdk_event->keyval;
+    long key_code = wxTranslateKeySymToWXKey(keysym, FALSE /* !isChar */);
+
+    if ( !key_code )
+    {
+        // do we have the translation or is it a plain ASCII character?
+        if ( (gdk_event->length == 1) || wxIsAsciiKeysym(keysym) )
+        {
+            // we should use keysym if it is ASCII as X does some translations
+            // like "I pressed while Control is down" => "Ctrl-I" == "TAB"
+            // which we don't want here (but which we do use for OnChar())
+            if ( !wxIsAsciiKeysym(keysym) )
+            {
+                keysym = (KeySym)gdk_event->string[0];
+            }
+
+            // we want to always get the same key code when the same key is
+            // pressed regardless of the state of the modifies, i.e. on a
+            // standard US keyboard pressing '5' or '%' ('5' key with
+            // Shift) should result in the same key code in OnKeyDown():
+            // '5' (although OnChar() will get either '5' or '%').
+            //
+            // to do it we first translate keysym to keycode (== scan code)
+            // and then back but always using the lower register
+            Display *dpy = (Display *)wxGetDisplay();
+            KeyCode keycode = XKeysymToKeycode(dpy, keysym);
+            KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
+
+            // use the normalized, i.e. lower register, keysym if we've
+            // got one
+            key_code = keysymNormalized ? keysymNormalized : keysym;
+
+            // as explained above, we want to have lower register key codes
+            // normally but for the letter keys we want to have the upper ones
+            //
+            // NB: don't use XConvertCase() here, we want to do it for letters
+            // only
+            key_code = toupper(key_code);
+        }
+        else // non ASCII key, what to do?
+        {
+            // by default, ignore it
+            key_code = 0;
+
+            // but if we have cached information from the last KEY_PRESS
+            if ( gdk_event->type == GDK_KEY_RELEASE )
+            {
+                // then reuse it
+                if ( keysym == s_lastKeyPress.keysym )
+                {
+                    key_code = s_lastKeyPress.keycode;
+                }
+            }
+        }
+
+        if ( gdk_event->type == GDK_KEY_PRESS )
+        {
+            // remember it to be reused for KEY_UP event later
+            s_lastKeyPress.keysym = keysym;
+            s_lastKeyPress.keycode = key_code;
+        }
+    }
+
+    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %d => keycode = %ld"),
                event.GetEventType() == wxEVT_KEY_UP ? _T("release")
                                                     : _T("press"),
                gdk_event->keyval, key_code);
 
     // sending unknown key events doesn't really make sense
-    if (key_code == 0)
+    if ( !key_code )
         return FALSE;
 
+    // now fill all the other fields
     int x = 0;
     int y = 0;
     GdkModifierType state;
@@ -1011,13 +1112,15 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return FALSE;
-    if (g_blockEventsOnDrag) return FALSE;
+    if (!win->m_hasVMT)
+        return FALSE;
+    if (g_blockEventsOnDrag)
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
-        // unknown key pressed, ignore (the event would be useless anyhow
+        // unknown key pressed, ignore (the event would be useless anyhow)
         return FALSE;
     }
 
@@ -1047,7 +1150,20 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
        will only be sent if it is not in an accelerator table. */
     if ( !ret )
     {
-        long key_code = map_to_wx_keysym( gdk_event );
+        KeySym keysym = gdk_event->keyval;
+        long key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
+        if ( !key_code )
+        {
+            if ( gdk_event->length == 1 )
+            {
+                key_code = gdk_event->string[0];
+            }
+            else if ((keysym & 0xFF) == keysym)
+            {
+                // ASCII key
+                key_code = (guint)keysym;
+            }
+        }
 
         if ( key_code )
         {
