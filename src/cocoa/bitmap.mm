@@ -157,12 +157,17 @@ WX_NSImage wxBitmap::GetNSImage(bool useMask) const
     [nsimage addRepresentation: M_BITMAPDATA->m_cocoaNSBitmapImageRep];
     if(useMask && GetMask())
     {
+        // Show before/after to prove that the bitmap itself is not changed
+        // even though we just composited onto the NSImage
+        wxLogTrace(wxTRACE_COCOA,"Before: bpp=%d",[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
         NSImage *maskImage = [[NSImage alloc]
                 initWithSize:NSMakeSize(GetWidth(), GetHeight())];
         [maskImage addRepresentation: GetMask()->GetNSBitmapImageRep()];
         [nsimage lockFocus];
         [maskImage compositeToPoint:NSZeroPoint operation:NSCompositeDestinationIn];
         [nsimage unlockFocus];
+        [maskImage release];
+        wxLogTrace(wxTRACE_COCOA,"After: bpp=%d",[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
     }
     return nsimage;
 }
@@ -538,7 +543,8 @@ static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colou
         }
         // Handle the remaining 0-7 pixels in the row
         unsigned char *dstByte = dstRow + width_aligned/8;
-        *dstByte = 0;
+        if(nCols%8>0)
+            *dstByte = 0;
         for(int j=0; j<(nCols%8); ++j, ++p)
         {
             *dstByte +=
