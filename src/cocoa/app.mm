@@ -28,6 +28,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/module.h"
+
 #include "wx/cocoa/ObjcPose.h"
 
 #if wxUSE_WX_RESOURCES
