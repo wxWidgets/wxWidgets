@@ -1345,3 +1345,10 @@ demos/dbbrowse/help.std/*.hhp
 demos/dbbrowse/help.std/*.hhk
 demos/dbbrowse/*.bkl
 
+tests/mbconv/*.cpp
+tests/mbconv/*.bkl
+
+tests/formatconverter/*.pl
+tests/formatconverter/*.cpp
+tests/formatconverter/*.txt
+
