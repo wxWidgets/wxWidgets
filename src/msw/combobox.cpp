@@ -347,6 +347,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 if ( sel == -1 )
                 {
                     m_value = wxGetWindowText(GetHwnd());
+                    m_selectionOld = -1;
                 }
                 else // we're synthesizing text updated event from sel change
                 {
