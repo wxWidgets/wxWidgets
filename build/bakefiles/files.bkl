@@ -80,10 +80,10 @@
 <set var="BASE_DARWIN_SRC">
     src/unix/baseunix.cpp
     src/unix/dir.cpp
-    src/mac/gsocket.c
-    src/mac/mimetmac.cpp
-    src/mac/utils.cpp
-    src/mac/utilsexc.cpp
+    src/unix/gsocket.c
+    src/unix/mimetype.cpp
+    src/unix/snglinst.cpp
+    src/unix/threadpsx.cpp
 </set>
 <set var="BASE_AND_GUI_DARWIN_SRC">
     src/unix/utilsunx.cpp
@@ -1445,12 +1445,8 @@
 <!-- ====================================================================== -->
 
 <set var="COCOA_LOWLEVEL_SRC">
-    <!-- Unix files used by wxCocoa: -->
-    $(BASE_UNIX_SRC)
-    src/unix/utilsunx.cpp
 </set>
 <set var="COCOA_LOWLEVEL_HDR">
-    $(BASE_UNIX_HDR)
 </set>
 <set var="COCOA_SRC">
     src/cocoa/NSBox.mm
