@@ -15,6 +15,7 @@
 #include "wx/treectrl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 // wxTreeItem
