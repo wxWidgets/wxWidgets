@@ -929,14 +929,14 @@ void wxTextCtrl::Redo()
 bool wxTextCtrl::CanUndo() const
 {
     // TODO
-    wxFAIL_MSG( wxT("wxTextCtrl::CanUndo not implemented") );
+    //wxFAIL_MSG( wxT("wxTextCtrl::CanUndo not implemented") );
     return FALSE;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
     // TODO
-    wxFAIL_MSG( wxT("wxTextCtrl::CanRedo not implemented") );
+    //wxFAIL_MSG( wxT("wxTextCtrl::CanRedo not implemented") );
     return FALSE;
 }
 

@@ -1246,9 +1246,13 @@ wxTreeItemId wxGenericTreeCtrl::InsertItem(const wxTreeItemId& parentId,
         return AddRoot(text, image, selImage, data);
     }
 
-    int index = parent->GetChildren().Index((wxGenericTreeItem*) idPrevious.m_pItem);
-    wxASSERT_MSG( index != wxNOT_FOUND,
-                  wxT("previous item in wxGenericTreeCtrl::InsertItem() is not a sibling") );
+    int index = -1;
+    if (idPrevious.IsOk())
+    {
+        index = parent->GetChildren().Index((wxGenericTreeItem*) idPrevious.m_pItem);
+        wxASSERT_MSG( index != wxNOT_FOUND,
+                      wxT("previous item in wxGenericTreeCtrl::InsertItem() is not a sibling") );
+    }
 
     return DoInsertItem(parentId, (size_t)++index, text, image, selImage, data);
 }
