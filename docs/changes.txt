@@ -116,6 +116,7 @@ All (GUI):
 
 wxMSW:
 
+- fixed DDE memory leaks
 - fixed wxTE_*WRAP styles handling
 - wxTextCtrl::GetValue() works with text in non default encoding
 - changed wxCrashReport to generate minidumps instead of text files

@@ -112,6 +112,7 @@ static HSZ DDEGetAtom(const wxString& string);
 // string handles
 static HSZ DDEAtomFromString(const wxString& s);
 static wxString DDEStringFromAtom(HSZ hsz);
+static void DDEFreeString(HSZ hsz);
 
 // error handling
 static wxString DDEGetErrorMsg(UINT error);
@@ -301,26 +302,45 @@ bool wxDDEServer::Create(const wxString& server)
 {
     m_serviceName = server;
 
-    if ( !DdeNameService(DDEIdInst, DDEAtomFromString(server), (HSZ)NULL, DNS_REGISTER) )
-    {
-        DDELogError(wxString::Format(_("Failed to register DDE server '%s'"),
-                                     server.c_str()));
+    HSZ hsz = DDEAtomFromString(server);
 
+    if ( !hsz )
+    {
         return false;
     }
 
-    return true;
+
+    bool success = (DdeNameService(DDEIdInst, hsz, (HSZ) NULL, DNS_REGISTER)
+        != NULL);
+
+    if (!success)
+    {
+        DDELogError(wxString::Format(_("Failed to register DDE server '%s'"),
+            server.c_str()));
+    }
+
+    DDEFreeString(hsz);
+
+    return success;
 }
 
 wxDDEServer::~wxDDEServer()
 {
     if ( !!m_serviceName )
     {
-        if ( !DdeNameService(DDEIdInst, DDEAtomFromString(m_serviceName),
-                             (HSZ)NULL, DNS_UNREGISTER) )
+        HSZ hsz = DDEAtomFromString(m_serviceName);
+
+        if (hsz)
         {
-            DDELogError(wxString::Format(_("Failed to unregister DDE server '%s'"),
-                                         m_serviceName.c_str()));
+            if ( !DdeNameService(DDEIdInst, hsz,
+                (HSZ) NULL, DNS_UNREGISTER) )
+            {
+                DDELogError(wxString::Format(
+                    _("Failed to unregister DDE server '%s'"),
+                    m_serviceName.c_str()));
+            }
+
+            DDEFreeString(hsz);
         }
     }
 
@@ -418,12 +438,35 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
                                               const wxString& server,
                                               const wxString& topic)
 {
-    HCONV hConv = DdeConnect(DDEIdInst, DDEAtomFromString(server), DDEAtomFromString(topic),
-                             (PCONVCONTEXT)NULL);
+    HSZ hszServer = DDEAtomFromString(server);
+
+    if ( !hszServer )
+    {
+        return (wxConnectionBase*) NULL;
+    }
+
+
+    HSZ hszTopic = DDEAtomFromString(topic);
+
+    if ( !hszTopic )
+    {
+        DDEFreeString(hszServer);
+        return (wxConnectionBase*) NULL;
+    }
+
+
+    HCONV hConv = ::DdeConnect(DDEIdInst, hszServer, hszTopic,
+        (PCONVCONTEXT) NULL);
+
+    DDEFreeString(hszServer);
+    DDEFreeString(hszTopic);
+
+
     if ( !hConv )
     {
-        DDELogError(wxString::Format(_("Failed to create connection to server '%s' on topic '%s'"),
-                                     server.c_str(), topic.c_str()));
+        DDELogError( wxString::Format(
+            _("Failed to create connection to server '%s' on topic '%s'"),
+            server.c_str(), topic.c_str()) );
     }
     else
     {
@@ -576,9 +619,9 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     wxChar *data = GetBufferAtLeast( len );
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxDDEConnection::Request") );
-    DdeGetData(returned_data, (LPBYTE)data, len, 0);
+    (void) DdeGetData(returned_data, (LPBYTE)data, len, 0);
 
-    DdeFreeDataHandle(returned_data);
+    (void) DdeFreeDataHandle(returned_data);
 
     if (size)
         *size = (int)len;
@@ -947,7 +990,10 @@ static HSZ DDEGetAtom(const wxString& str)
     return DDEAddAtom(str);
 }
 
-// atom <-> strings
+/* atom <-> strings
+The returned handle has to be freed by the caller (using
+(static) DDEFreeString).
+*/
 static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, _T("DDE not initialized") );
@@ -970,6 +1016,15 @@ static wxString DDEStringFromAtom(HSZ hsz)
     (void)DdeQueryString(DDEIdInst, hsz, wxStringBuffer(s, len), len, DDE_CP);
 
     return s;
+}
+
+static void DDEFreeString(HSZ hsz)
+{
+    // DS: Failure to free a string handle might indicate there's
+    // some other severe error.
+    bool ok = (::DdeFreeStringHandle(DDEIdInst, hsz) != 0);
+    wxASSERT_MSG( ok, wxT("Failed to free DDE string handle") );
+    wxUnusedVar(ok);
 }
 
 // ----------------------------------------------------------------------------
