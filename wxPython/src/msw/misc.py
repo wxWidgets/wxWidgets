@@ -174,8 +174,6 @@ EndBusyCursor = _misc.EndBusyCursor
 
 GetElapsedTime = _misc.GetElapsedTime
 
-GetFreeMemory = _misc.GetFreeMemory
-
 GetMousePosition = _misc.GetMousePosition
 
 IsBusy = _misc.IsBusy
@@ -189,6 +187,8 @@ StartTimer = _misc.StartTimer
 GetOsVersion = _misc.GetOsVersion
 
 GetOsDescription = _misc.GetOsDescription
+
+GetFreeMemory = _misc.GetFreeMemory
 SHUTDOWN_POWEROFF = _misc.SHUTDOWN_POWEROFF
 SHUTDOWN_REBOOT = _misc.SHUTDOWN_REBOOT
 
@@ -267,8 +267,6 @@ GetActiveWindow = _misc.GetActiveWindow
 GenericFindWindowAtPoint = _misc.GenericFindWindowAtPoint
 
 FindWindowAtPoint = _misc.FindWindowAtPoint
-
-CheckForInterrupt = _misc.CheckForInterrupt
 
 GetTopLevelParent = _misc.GetTopLevelParent
 

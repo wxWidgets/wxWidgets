@@ -138,7 +138,7 @@ _calendar.CalendarCtrl_swigregister(CalendarCtrlPtr)
 def PreCalendarCtrl(*args, **kwargs):
     val = _calendar.new_PreCalendarCtrl(*args, **kwargs)
     val.thisown = 1
-    val._setOORInfo(val)
+    
     return val
 
 

@@ -527,7 +527,7 @@ _html.HtmlWindow_swigregister(HtmlWindowPtr)
 def PreHtmlWindow(*args, **kwargs):
     val = _html.new_PreHtmlWindow(*args, **kwargs)
     val.thisown = 1
-    val._setOORInfo(val)
+    
     return val
 
 HtmlWindow_AddFilter = _html.HtmlWindow_AddFilter

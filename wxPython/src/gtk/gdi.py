@@ -463,13 +463,13 @@ class RegionPtr(Region):
         self.__class__ = Region
 _gdi.Region_swigregister(RegionPtr)
 
-def RegionFromPoints(*args, **kwargs):
-    val = _gdi.new_RegionFromPoints(*args, **kwargs)
+def RegionFromBitmap(*args, **kwargs):
+    val = _gdi.new_RegionFromBitmap(*args, **kwargs)
     val.thisown = 1
     return val
 
-def RegionFromBitmap(*args, **kwargs):
-    val = _gdi.new_RegionFromBitmap(*args, **kwargs)
+def RegionFromPoints(*args, **kwargs):
+    val = _gdi.new_RegionFromPoints(*args, **kwargs)
     val.thisown = 1
     return val
 
@@ -1660,11 +1660,6 @@ class PrinterDCPtr(PrinterDC):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PrinterDC
 _gdi.PrinterDC_swigregister(PrinterDCPtr)
-
-def PrinterDC2(*args, **kwargs):
-    val = _gdi.new_PrinterDC2(*args, **kwargs)
-    val.thisown = 1
-    return val
 
 #---------------------------------------------------------------------------
 

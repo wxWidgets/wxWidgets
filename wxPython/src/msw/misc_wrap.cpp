@@ -1670,28 +1670,6 @@ static PyObject *_wrap_GetElapsedTime(PyObject *self, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_GetFreeMemory(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    long result;
-    char *kwnames[] = {
-        NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetFreeMemory",kwnames)) goto fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (long)wxGetFreeMemory();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_GetMousePosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int *arg1 = (int *) 0 ;
@@ -1897,6 +1875,28 @@ static PyObject *_wrap_GetOsDescription(PyObject *self, PyObject *args, PyObject
         resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
 #endif
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GetFreeMemory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    long result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetFreeMemory",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (long)wxGetFreeMemory();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3584,31 +3584,6 @@ static PyObject *_wrap_FindWindowAtPoint(PyObject *self, PyObject *args, PyObjec
     {
         resultobj = wxPyMake_wxObject(result); 
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_CheckForInterrupt(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxWindow *arg1 = (wxWindow *) 0 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "wnd", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CheckForInterrupt",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxCheckForInterrupt(arg1);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -24078,7 +24053,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bell", (PyCFunction) _wrap_Bell, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EndBusyCursor", (PyCFunction) _wrap_EndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetElapsedTime", (PyCFunction) _wrap_GetElapsedTime, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GetFreeMemory", (PyCFunction) _wrap_GetFreeMemory, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetMousePosition", (PyCFunction) _wrap_GetMousePosition, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"IsBusy", (PyCFunction) _wrap_IsBusy, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Now", (PyCFunction) _wrap_Now, METH_VARARGS | METH_KEYWORDS },
@@ -24086,6 +24060,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StartTimer", (PyCFunction) _wrap_StartTimer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetOsVersion", (PyCFunction) _wrap_GetOsVersion, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetOsDescription", (PyCFunction) _wrap_GetOsDescription, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GetFreeMemory", (PyCFunction) _wrap_GetFreeMemory, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Shutdown", (PyCFunction) _wrap_Shutdown, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sleep", (PyCFunction) _wrap_Sleep, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Usleep", (PyCFunction) _wrap_Usleep, METH_VARARGS | METH_KEYWORDS },
@@ -24124,7 +24099,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GetActiveWindow", (PyCFunction) _wrap_GetActiveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GenericFindWindowAtPoint", (PyCFunction) _wrap_GenericFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FindWindowAtPoint", (PyCFunction) _wrap_FindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"CheckForInterrupt", (PyCFunction) _wrap_CheckForInterrupt, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetTopLevelParent", (PyCFunction) _wrap_GetTopLevelParent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"WakeUpMainThread", (PyCFunction) _wrap_WakeUpMainThread, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MutexGuiEnter", (PyCFunction) _wrap_MutexGuiEnter, METH_VARARGS | METH_KEYWORDS },
@@ -25582,11 +25556,11 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_STRING,  (char*)"TRACE_ResAlloc", 0, 0, (void *)"resalloc", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_RefCount", 0, 0, (void *)"refcount", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_OleCalls", 0, 0, (void *)"ole", 0},
-{ SWIG_PY_INT,     (char *)"TraceMemAlloc", (long) wxTraceMemAlloc, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceMessages", (long) wxTraceMessages, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceResAlloc", (long) wxTraceResAlloc, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceRefCount", (long) wxTraceRefCount, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceOleCalls", (long) wxTraceOleCalls, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"TraceMemAlloc", (long) 0x0001, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"TraceMessages", (long) 0x0002, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"TraceResAlloc", (long) 0x0004, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"TraceRefCount", (long) 0x0008, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"TraceOleCalls", (long) 0x0100, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"PROCESS_DEFAULT", (long) wxPROCESS_DEFAULT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"PROCESS_REDIRECT", (long) wxPROCESS_REDIRECT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"KILL_OK", (long) wxKILL_OK, 0, 0, 0},

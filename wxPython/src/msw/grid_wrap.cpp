@@ -15049,9 +15049,6 @@ static void *_p_wxGridCellFloatEditorTo_p_wxGridCellTextEditor(void *x) {
 static void *_p_wxGridCellAutoWrapStringEditorTo_p_wxGridCellTextEditor(void *x) {
     return (void *)((wxGridCellTextEditor *)  ((wxGridCellAutoWrapStringEditor *) x));
 }
-static void *_p_wxPrinterDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *)  ((wxPrinterDC *) x));
-}
 static void *_p_wxSashEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxSashEvent *) x));
 }
@@ -15114,7 +15111,7 @@ static swig_type_info _swigt__p_wxGridCellRenderer[] = {{"_p_wxGridCellRenderer"
 static swig_type_info _swigt__p_wxGridCellStringRenderer[] = {{"_p_wxGridCellStringRenderer", 0, "wxGridCellStringRenderer *", 0},{"_p_wxGridCellStringRenderer"},{"_p_wxGridCellNumberRenderer", _p_wxGridCellNumberRendererTo_p_wxGridCellStringRenderer},{"_p_wxGridCellFloatRenderer", _p_wxGridCellFloatRendererTo_p_wxGridCellStringRenderer},{"_p_wxGridCellDateTimeRenderer", _p_wxGridCellDateTimeRendererTo_p_wxGridCellStringRenderer},{"_p_wxGridCellEnumRenderer", _p_wxGridCellEnumRendererTo_p_wxGridCellStringRenderer},{"_p_wxGridCellAutoWrapStringRenderer", _p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellStringRenderer},{0}};
 static swig_type_info _swigt__p_wxGridCellAttr[] = {{"_p_wxGridCellAttr", 0, "wxGridCellAttr *", 0},{"_p_wxGridCellAttr"},{0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0},{"_p_wxColour"},{0}};
-static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{"_p_wxPrinterDC", _p_wxPrinterDCTo_p_wxDC},{0}};
+static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{0}};
 static swig_type_info _swigt__p_wxGridTableMessage[] = {{"_p_wxGridTableMessage", 0, "wxGridTableMessage *", 0},{"_p_wxGridTableMessage"},{0}};
 static swig_type_info _swigt__p_wxGrid[] = {{"_p_wxGrid", 0, "wxGrid *", 0},{"_p_wxGrid"},{0}};
 static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{"_p_wxPanel"},{"_p_wxGrid", _p_wxGridTo_p_wxPanel},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxPanel},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxPanel},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxPanel},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxPanel},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxPanel},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxPanel},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxPanel},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPanel},{0}};

@@ -567,6 +567,36 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 
 
 
+#ifdef __WXMAC__
+// implement dummy classes and such for wxMac
+
+class wxTaskBarIcon : public wxEvtHandler
+{
+public:
+    wxTaskBarIcon()  { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+ 
+
+class wxTaskBarIconEvent : public wxEvent
+{
+public:
+    wxTaskBarIconEvent(wxEventType, wxTaskBarIcon *)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    virtual wxEvent* Clone() const { return NULL; }
+};
+
+enum {
+    wxEVT_TASKBAR_MOVE = 0,
+    wxEVT_TASKBAR_LEFT_DOWN = 0,
+    wxEVT_TASKBAR_LEFT_UP = 0,
+    wxEVT_TASKBAR_RIGHT_DOWN = 0,
+    wxEVT_TASKBAR_RIGHT_UP = 0,
+    wxEVT_TASKBAR_LEFT_DCLICK = 0,
+    wxEVT_TASKBAR_RIGHT_DCLICK = 0,
+};
+#endif
+
+
 
     DECLARE_DEF_STRING(FileSelectorPromptStr);
     DECLARE_DEF_STRING(DirSelectorPromptStr);

@@ -314,7 +314,10 @@ static swig_type_info *swig_types[114];
 #include <wx/hashmap.h>
 WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
- 
+
+// Maintains a hashmap of className to swig_type_info pointers.  Given the
+// name of a class either looks up the type info in the cache, or scans the
+// SWIG tables for it.
 static
 swig_type_info* wxPyFindSwigType(const wxChar* className) {
 
@@ -514,6 +517,11 @@ wxString wxObject_GetClassName(wxObject *self){
 void wxObject_Destroy(wxObject *self){
             delete self;
         }
+
+#ifndef __WXMAC__
+#define wxCURSOR_COPY_ARROW wxCURSOR_ARROW
+#endif
+
 PyObject *wxSize_asTuple(wxSize *self){
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -941,12 +949,17 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 }
 
 
-wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
-    wxWindow* win = new wxWindow;
-    win->SetHWND(hWnd);
-    win->SubclassWin(hWnd);
-    return win;
-}
+    wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
+#ifdef __WXMSW__
+        wxWindow* win = new wxWindow;
+        win->SetHWND(hWnd);
+        win->SubclassWin(hWnd);
+        return win;
+#else
+        PyErr_SetNone(PyExc_NotImplementedError);
+        return NULL;
+#endif
+    }
 
 
 IMP_PYCALLBACK_BOOL_WXWIN(wxPyValidator, wxValidator, Validate);
@@ -18023,28 +18036,6 @@ static PyObject *_wrap_PyApp_SetAssertMode(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyApp_GetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    bool result;
-    char *kwnames[] = {
-        NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":PyApp_GetMacDefaultEncodingIsPC",kwnames)) goto fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxPyApp::GetMacDefaultEncodingIsPC();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool result;
@@ -18155,31 +18146,6 @@ static PyObject *_wrap_PyApp_GetMacHelpMenuTitleName(PyObject *self, PyObject *a
         resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
 #endif
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PyApp_SetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    bool arg1 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "val", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyApp_SetMacDefaultEncodingIsPC",kwnames,&obj0)) goto fail;
-    arg1 = PyInt_AsLong(obj0) ? true : false;
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxPyApp::SetMacDefaultEncodingIsPC(arg1);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -33416,13 +33382,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_GetPrintMode", (PyCFunction) _wrap_PyApp_GetPrintMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetAssertMode", (PyCFunction) _wrap_PyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetAssertMode", (PyCFunction) _wrap_PyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"PyApp_GetMacDefaultEncodingIsPC", (PyCFunction) _wrap_PyApp_GetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_PyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_PyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"PyApp_SetMacDefaultEncodingIsPC", (PyCFunction) _wrap_PyApp_SetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
@@ -35229,6 +35193,7 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"CURSOR_WATCH", (long) wxCURSOR_WATCH, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_BLANK", (long) wxCURSOR_BLANK, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_DEFAULT", (long) wxCURSOR_DEFAULT, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"CURSOR_COPY_ARROW", (long) wxCURSOR_COPY_ARROW, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_ARROWWAIT", (long) wxCURSOR_ARROWWAIT, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_MAX", (long) wxCURSOR_MAX, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"FromStart", (long) wxFromStart, 0, 0, 0},

@@ -10395,9 +10395,6 @@ static void *_p_wxPrintDialogTo_p_wxEvtHandler(void *x) {
 static void *_p_wxMDIParentFrameTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxMDIParentFrame *) x));
 }
-static void *_p_wxPrinterDCTo_p_wxDC(void *x) {
-    return (void *)((wxDC *)  ((wxPrinterDC *) x));
-}
 static void *_p_wxHtmlPrintoutTo_p_wxPyPrintout(void *x) {
     return (void *)((wxPyPrintout *)  ((wxHtmlPrintout *) x));
 }
@@ -10443,7 +10440,7 @@ static void *_p_wxHtmlFontCellTo_p_wxHtmlCell(void *x) {
 static swig_type_info _swigt__p_wxHtmlDCRenderer[] = {{"_p_wxHtmlDCRenderer", 0, "wxHtmlDCRenderer *", 0},{"_p_wxHtmlDCRenderer"},{0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0},{"_p_wxColour"},{0}};
 static swig_type_info _swigt__p_wxPageSetupDialogData[] = {{"_p_wxPageSetupDialogData", 0, "wxPageSetupDialogData *", 0},{"_p_wxPageSetupDialogData"},{0}};
-static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{"_p_wxPrinterDC", _p_wxPrinterDCTo_p_wxDC},{0}};
+static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{0}};
 static swig_type_info _swigt__p_wxDefaultHtmlRenderingStyle[] = {{"_p_wxDefaultHtmlRenderingStyle", 0, "wxDefaultHtmlRenderingStyle *", 0},{"_p_wxDefaultHtmlRenderingStyle"},{0}};
 static swig_type_info _swigt__p_wxHtmlRenderingStyle[] = {{"_p_wxHtmlRenderingStyle", 0, "wxHtmlRenderingStyle *", 0},{"_p_wxHtmlRenderingStyle"},{"_p_wxDefaultHtmlRenderingStyle", _p_wxDefaultHtmlRenderingStyleTo_p_wxHtmlRenderingStyle},{0}};
 static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMouseEvent *", 0},{"_p_wxMouseEvent"},{0}};

@@ -414,6 +414,13 @@ bool wxRegionIterator___nonzero__(wxRegionIterator *self){
 wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
             return self->ToString();
         }
+
+    wxNativeEncodingInfo* wxGetNativeFontEncoding(wxFontEncoding encoding)
+        { PyErr_SetNone(PyExc_NotImplementedError); return NULL; }
+    
+    bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
+        { PyErr_SetNone(PyExc_NotImplementedError); return false; }
+
 PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncoding encoding,wxString const &facename,bool interactive){
             wxFontEncoding alt_enc;
             if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
@@ -535,6 +542,9 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
 
 
 #include <wx/dcps.h>
+
+
+#include <wx/metafile.h>
 
 
 
@@ -4284,42 +4294,6 @@ static PyObject *_wrap_new_Region(PyObject *self, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_new_RegionFromPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    int arg1 ;
-    wxPoint *arg2 = (wxPoint *) 0 ;
-    int arg3 = (int) wxWINDING_RULE ;
-    wxRegion *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "points",(char *) "fillStyle", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_RegionFromPoints",kwnames,&obj0,&arg3)) goto fail;
-    {
-        arg2 = wxPoint_LIST_helper(obj0, &arg1);
-        if (arg2 == NULL) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxRegion *)new wxRegion(arg1,arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxRegion, 1);
-    {
-        if (arg2) delete [] arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (arg2) delete [] arg2;
-    }
-    return NULL;
-}
-
-
 static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = 0 ;
@@ -4355,6 +4329,42 @@ static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyOb
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxRegion, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_RegionFromPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    wxPoint *arg2 = (wxPoint *) 0 ;
+    int arg3 = (int) wxWINDING_RULE ;
+    wxRegion *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "points",(char *) "fillStyle", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_RegionFromPoints",kwnames,&obj0,&arg3)) goto fail;
+    {
+        arg2 = wxPoint_LIST_helper(obj0, &arg1);
+        if (arg2 == NULL) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRegion *)new wxRegion(arg1,arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxRegion, 1);
+    {
+        if (arg2) delete [] arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (arg2) delete [] arg2;
+    }
     return NULL;
 }
 
@@ -6250,6 +6260,57 @@ static PyObject * NativeEncodingInfo_swigregister(PyObject *self, PyObject *args
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_GetNativeFontEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    wxNativeEncodingInfo *result;
+    char *kwnames[] = {
+        (char *) "encoding", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:GetNativeFontEncoding",kwnames,&arg1)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxNativeEncodingInfo *)wxGetNativeFontEncoding((wxFontEncoding )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxNativeEncodingInfo, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TestFontEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNativeEncodingInfo *arg1 = 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "info", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TestFontEncoding",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxNativeEncodingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxTestFontEncoding((wxNativeEncodingInfo const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_new_FontMapper(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFontMapper *result;
@@ -14273,83 +14334,6 @@ static PyObject *_wrap_new_PrinterDC(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_new_PrinterDC2(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxString *arg1 = 0 ;
-    wxString *arg2 = 0 ;
-    wxString *arg3 = 0 ;
-    bool arg4 = (bool) TRUE ;
-    int arg5 = (int) wxPORTRAIT ;
-    wxPrinterDC *result;
-    bool temp1 = false ;
-    bool temp2 = false ;
-    bool temp3 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
-    char *kwnames[] = {
-        (char *) "driver",(char *) "device",(char *) "output",(char *) "interactive",(char *) "orientation", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|Oi:new_PrinterDC2",kwnames,&obj0,&obj1,&obj2,&obj3,&arg5)) goto fail;
-    {
-        arg1 = wxString_in_helper(obj0);
-        if (arg1 == NULL) SWIG_fail;
-        temp1 = true;
-    }
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
-    }
-    if (obj3) {
-        arg4 = PyInt_AsLong(obj3) ? true : false;
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxPrinterDC *)new wxPrinterDC((wxString const &)*arg1,(wxString const &)*arg2,(wxString const &)*arg3,arg4,arg5);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxPrinterDC, 1);
-    {
-        if (temp1)
-        delete arg1;
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
-    {
-        if (temp3)
-        delete arg3;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp1)
-        delete arg1;
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
-    {
-        if (temp3)
-        delete arg3;
-    }
-    return NULL;
-}
-
-
 static PyObject * PrinterDC_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -17190,8 +17174,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Cursor_SetSize", (PyCFunction) _wrap_Cursor_SetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Cursor_swigregister", Cursor_swigregister, METH_VARARGS },
 	 { (char *)"new_Region", (PyCFunction) _wrap_new_Region, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_RegionFromPoints", (PyCFunction) _wrap_new_RegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_RegionFromBitmap", (PyCFunction) _wrap_new_RegionFromBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RegionFromPoints", (PyCFunction) _wrap_new_RegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Region", (PyCFunction) _wrap_delete_Region, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_Clear", (PyCFunction) _wrap_Region_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_Offset", (PyCFunction) _wrap_Region_Offset, METH_VARARGS | METH_KEYWORDS },
@@ -17263,6 +17247,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NativeEncodingInfo_FromString", (PyCFunction) _wrap_NativeEncodingInfo_FromString, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"NativeEncodingInfo_ToString", (PyCFunction) _wrap_NativeEncodingInfo_ToString, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"NativeEncodingInfo_swigregister", NativeEncodingInfo_swigregister, METH_VARARGS },
+	 { (char *)"GetNativeFontEncoding", (PyCFunction) _wrap_GetNativeFontEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TestFontEncoding", (PyCFunction) _wrap_TestFontEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_FontMapper", (PyCFunction) _wrap_new_FontMapper, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_FontMapper", (PyCFunction) _wrap_delete_FontMapper, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FontMapper_Get", (PyCFunction) _wrap_FontMapper_Get, METH_VARARGS | METH_KEYWORDS },
@@ -17530,7 +17516,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MetaFileDC_Close", (PyCFunction) _wrap_MetaFileDC_Close, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MetaFileDC_swigregister", MetaFileDC_swigregister, METH_VARARGS },
 	 { (char *)"new_PrinterDC", (PyCFunction) _wrap_new_PrinterDC, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_PrinterDC2", (PyCFunction) _wrap_new_PrinterDC2, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PrinterDC_swigregister", PrinterDC_swigregister, METH_VARARGS },
 	 { (char *)"new_ImageList", (PyCFunction) _wrap_new_ImageList, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_ImageList", (PyCFunction) _wrap_delete_ImageList, METH_VARARGS | METH_KEYWORDS },

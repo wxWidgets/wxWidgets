@@ -630,6 +630,7 @@ CURSOR_WAIT = _core.CURSOR_WAIT
 CURSOR_WATCH = _core.CURSOR_WATCH
 CURSOR_BLANK = _core.CURSOR_BLANK
 CURSOR_DEFAULT = _core.CURSOR_DEFAULT
+CURSOR_COPY_ARROW = _core.CURSOR_COPY_ARROW
 CURSOR_ARROWWAIT = _core.CURSOR_ARROWWAIT
 CURSOR_MAX = _core.CURSOR_MAX
 #---------------------------------------------------------------------------
@@ -2882,13 +2883,11 @@ class PyApp(EvtHandler):
     def GetPrintMode(*args, **kwargs): return _core.PyApp_GetPrintMode(*args, **kwargs)
     def GetAssertMode(*args, **kwargs): return _core.PyApp_GetAssertMode(*args, **kwargs)
     def SetAssertMode(*args, **kwargs): return _core.PyApp_SetAssertMode(*args, **kwargs)
-    GetMacDefaultEncodingIsPC = staticmethod(_core.PyApp_GetMacDefaultEncodingIsPC)
     GetMacSupportPCMenuShortcuts = staticmethod(_core.PyApp_GetMacSupportPCMenuShortcuts)
     GetMacAboutMenuItemId = staticmethod(_core.PyApp_GetMacAboutMenuItemId)
     GetMacPreferencesMenuItemId = staticmethod(_core.PyApp_GetMacPreferencesMenuItemId)
     GetMacExitMenuItemId = staticmethod(_core.PyApp_GetMacExitMenuItemId)
     GetMacHelpMenuTitleName = staticmethod(_core.PyApp_GetMacHelpMenuTitleName)
-    SetMacDefaultEncodingIsPC = staticmethod(_core.PyApp_SetMacDefaultEncodingIsPC)
     SetMacSupportPCMenuShortcuts = staticmethod(_core.PyApp_SetMacSupportPCMenuShortcuts)
     SetMacAboutMenuItemId = staticmethod(_core.PyApp_SetMacAboutMenuItemId)
     SetMacPreferencesMenuItemId = staticmethod(_core.PyApp_SetMacPreferencesMenuItemId)
@@ -2906,8 +2905,6 @@ class PyAppPtr(PyApp):
         self.__class__ = PyApp
 _core.PyApp_swigregister(PyAppPtr)
 
-PyApp_GetMacDefaultEncodingIsPC = _core.PyApp_GetMacDefaultEncodingIsPC
-
 PyApp_GetMacSupportPCMenuShortcuts = _core.PyApp_GetMacSupportPCMenuShortcuts
 
 PyApp_GetMacAboutMenuItemId = _core.PyApp_GetMacAboutMenuItemId
@@ -2917,8 +2914,6 @@ PyApp_GetMacPreferencesMenuItemId = _core.PyApp_GetMacPreferencesMenuItemId
 PyApp_GetMacExitMenuItemId = _core.PyApp_GetMacExitMenuItemId
 
 PyApp_GetMacHelpMenuTitleName = _core.PyApp_GetMacHelpMenuTitleName
-
-PyApp_SetMacDefaultEncodingIsPC = _core.PyApp_SetMacDefaultEncodingIsPC
 
 PyApp_SetMacSupportPCMenuShortcuts = _core.PyApp_SetMacSupportPCMenuShortcuts
 
@@ -3073,13 +3068,11 @@ your Mac."""
 
 
 # change from wxPyApp_ to wxApp_
-App_GetMacDefaultEncodingIsPC    = _core.PyApp_GetMacDefaultEncodingIsPC
 App_GetMacSupportPCMenuShortcuts = _core.PyApp_GetMacSupportPCMenuShortcuts
 App_GetMacAboutMenuItemId        = _core.PyApp_GetMacAboutMenuItemId
 App_GetMacPreferencesMenuItemId  = _core.PyApp_GetMacPreferencesMenuItemId
 App_GetMacExitMenuItemId         = _core.PyApp_GetMacExitMenuItemId
 App_GetMacHelpMenuTitleName      = _core.PyApp_GetMacHelpMenuTitleName
-App_SetMacDefaultEncodingIsPC    = _core.PyApp_SetMacDefaultEncodingIsPC
 App_SetMacSupportPCMenuShortcuts = _core.PyApp_SetMacSupportPCMenuShortcuts
 App_SetMacAboutMenuItemId        = _core.PyApp_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId  = _core.PyApp_SetMacPreferencesMenuItemId
@@ -3357,7 +3350,7 @@ _core.Window_swigregister(WindowPtr)
 def PreWindow(*args, **kwargs):
     val = _core.new_PreWindow(*args, **kwargs)
     val.thisown = 1
-    val._setOORInfo(self)
+    
     return val
 
 Window_NewControlId = _core.Window_NewControlId
@@ -3590,6 +3583,7 @@ class MenuItem(Object):
     def GetHelp(*args, **kwargs): return _core.MenuItem_GetHelp(*args, **kwargs)
     def GetAccel(*args, **kwargs): return _core.MenuItem_GetAccel(*args, **kwargs)
     def SetAccel(*args, **kwargs): return _core.MenuItem_SetAccel(*args, **kwargs)
+    GetDefaultMarginWidth = staticmethod(_core.MenuItem_GetDefaultMarginWidth)
     def SetBitmap(*args, **kwargs): return _core.MenuItem_SetBitmap(*args, **kwargs)
     def GetBitmap(*args, **kwargs): return _core.MenuItem_GetBitmap(*args, **kwargs)
     def __repr__(self):
@@ -3603,6 +3597,8 @@ class MenuItemPtr(MenuItem):
 _core.MenuItem_swigregister(MenuItemPtr)
 
 MenuItem_GetLabelFromText = _core.MenuItem_GetLabelFromText
+
+MenuItem_GetDefaultMarginWidth = _core.MenuItem_GetDefaultMarginWidth
 
 #---------------------------------------------------------------------------
 
@@ -3630,7 +3626,7 @@ _core.Control_swigregister(ControlPtr)
 def PreControl(*args, **kwargs):
     val = _core.new_PreControl(*args, **kwargs)
     val.thisown = 1
-    val._setOORInfo(self)
+    
     return val
 
 #---------------------------------------------------------------------------

@@ -385,6 +385,24 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
 
 
 
+#ifdef __WXMAC__
+// implement dummy classes and such for wxMac
+
+#define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
+class wxToggleButton : public wxControl
+{
+public:
+    wxToggleButton(wxWindow *, wxWindowID, const wxString&,
+                   const wxPoint&, const wxSize&, long,
+                   const wxValidator&, const wxString&)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    
+    wxToggleButton()
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+#endif
+
+
 #include <wx/notebook.h>
 #include <wx/listbook.h>
 
@@ -4925,31 +4943,6 @@ static PyObject *_wrap_ListBox_AppendAndEnsureVisible(PyObject *self, PyObject *
         if (temp2)
         delete arg2;
     }
-    return NULL;
-}
-
-
-static PyObject *_wrap_ListBox_HasMultipleSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxListBox *arg1 = (wxListBox *) 0 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ListBox_HasMultipleSelection",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListBox,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxListBox const *)arg1)->HasMultipleSelection();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
-    return resultobj;
-    fail:
     return NULL;
 }
 
@@ -25422,7 +25415,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListBox_SetFirstItemStr", (PyCFunction) _wrap_ListBox_SetFirstItemStr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_EnsureVisible", (PyCFunction) _wrap_ListBox_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_AppendAndEnsureVisible", (PyCFunction) _wrap_ListBox_AppendAndEnsureVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"ListBox_HasMultipleSelection", (PyCFunction) _wrap_ListBox_HasMultipleSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_IsSorted", (PyCFunction) _wrap_ListBox_IsSorted, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_swigregister", ListBox_swigregister, METH_VARARGS },
 	 { (char *)"new_CheckListBox", (PyCFunction) _wrap_new_CheckListBox, METH_VARARGS | METH_KEYWORDS },
