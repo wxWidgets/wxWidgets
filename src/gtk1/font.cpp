@@ -38,26 +38,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-static GdkFont *wxLoadQueryFont( int pointSize,
-                                 int family,
-                                 int style,
-                                 int weight,
-                                 bool underlined,
-                                 const wxString &facename,
-                                 wxFontEncoding encoding );
-
-static GdkFont *wxLoadQueryNearestFont( int pointSize,
-                                        int family,
-                                        int style,
-                                        int weight,
-                                        bool underlined,
-                                        const wxString &facename,
-                                        wxFontEncoding encoding);
-
-// ----------------------------------------------------------------------------
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
