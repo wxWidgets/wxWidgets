@@ -46,8 +46,7 @@ from an {\bf OnSize} event handler.
 Default constructor.
 
 \func{}{wxStatusBar}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
-\param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
-\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{long}{ style = wxST\_SIZEGRIP},\rtfsp
 \param{const wxString\& }{name = ``statusBar"}}
 
 Constructor, creating the window.
@@ -57,12 +56,6 @@ Constructor, creating the window.
 \docparam{parent}{The window parent, usually a frame.}
 
 \docparam{id}{The window identifier. It may take a value of -1 to indicate a default value.}
-
-\docparam{pos}{The window position. A value of (-1, -1) indicates a default position, chosen by
-either the windowing system or wxWindows, depending on platform.}
-
-\docparam{size}{The window size. A value of (-1, -1) indicates a default size, chosen by
-either the windowing system or wxWindows, depending on platform.}
 
 \docparam{style}{The window style. See \helpref{wxStatusBar}{wxstatusbar}.}
 
@@ -83,8 +76,7 @@ Destructor.
 \membersection{wxStatusBar::Create}\label{wxstatusbarcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
-\param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
-\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{long}{ style = wxST\_SIZEGRIP},\rtfsp
 \param{const wxString\& }{name = ``statusBar"}}
 
 Creates the window, for two-step construction.
