@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#---------------------------------------------------------------------------
 """
 This demo attempts to override the C++ MainLoop and implement it
 in Python.  This is not part of the demo framework.
