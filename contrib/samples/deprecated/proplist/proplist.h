@@ -16,8 +16,8 @@
 #ifndef _PROPTEST_H_
 #define _PROPTEST_H_
 
-#include "wx/proplist.h"
-#include "wx/propform.h"
+#include "wx/deprecated/proplist.h"
+#include "wx/deprecated/propform.h"
 
 class MyChild;
 
