@@ -3,17 +3,9 @@ A Panel that includes the FloatCanvas and Navigation controls
 
 """
 
-#from Numeric import array,Float,cos,pi,sum,minimum,maximum,Int32
-
-#from time import clock, sleep
-
 import wx
 
-#import types
-#import os        
-
 import FloatCanvas, Resources
-
 
 ID_ZOOM_IN_BUTTON = wx.NewId()
 ID_ZOOM_OUT_BUTTON = wx.NewId()

@@ -1,7 +1,10 @@
 try:
-    from Numeric import array,asarray,Float,cos,pi,sum,minimum,maximum,Int32,zeros, ones, concatenate, sqrt, argmin, power, absolute
+    from Numeric import array,asarray,Float,cos, sin, pi,sum,minimum,maximum,Int32,zeros, ones, concatenate, sqrt, argmin, power, absolute, matrixmultiply, transpose, sometrue
 except ImportError:
-    from numarray import array, asarray, Float, cos, pi, sum, minimum, maximum, Int32, zeros, concatenate
+    try:
+        from numarray import array, asarray, Float, cos, sin, pi, sum, minimum, maximum, Int32, zeros, concatenate, matrixmultiply, transpose, sometrue
+    except ImportError:
+        raise ImportError("I could not import either Numeric or numarray")
 
 from time import clock, sleep
 
@@ -17,10 +20,11 @@ global ScreenPPI
 
 ## a custom Exceptions:
 
-class FloatCanvasException(Exception):
+class FloatCanvasError(Exception):
     pass
 
 ## Create all the mouse events
+# I don't see a need for these two, but maybe some day!
 #EVT_FC_ENTER_WINDOW = wx.NewEventType()
 #EVT_FC_LEAVE_WINDOW = wx.NewEventType()
 EVT_FC_LEFT_DOWN = wx.NewEventType() 
@@ -92,8 +96,9 @@ class _MouseEvent(wx.PyCommandEvent):
         self._NativeEvent = NativeEvent
         self.Coords = Coords
     
-    def SetCoords(self,Coords):
-        self.Coords = Coords
+# I don't think this is used.
+#    def SetCoords(self,Coords):
+#        self.Coords = Coords
         
     def GetCoords(self):
         return self.Coords
@@ -294,7 +299,6 @@ class DrawObject:
             self._Canvas.MakeHitDict()
         self._Canvas.HitDict[Event][self.HitColor] = (self) # put the object in the hit dict, indexed by it's color
 
-
     def UnBindAll(self):
         ## fixme: this only removes one from each list, there could be more.
         if self._Canvas.HitDict:
@@ -420,6 +424,10 @@ class XYObjectMixin:
     def SetXY(self, x, y):
         self.XY = array( (x, y), Float)
         self.CalcBoundingBox()
+
+    def CalcBoundingBox(self):
+        ## This may get overwritten in some subclasses
+        self.BoundingBox = array( (self.XY, self.XY), Float )
 
     def SetPoint(self, xy):
         self.XY = array( xy, Float)
@@ -601,6 +609,98 @@ class Line(DrawObject,PointsObjectMixin,LineOnlyMixin):
             HTdc.SetPen(self.HitPen)
             HTdc.DrawLines(Points)
 
+class Arrow(DrawObject,XYObjectMixin,LineOnlyMixin):
+    """
+
+    Arrow(XY, # coords of origin of arrow (x,y)
+          Length, # length of arrow in pixels
+          theta, # angle of arrow in degrees: zero is straight up
+                 # angle is to the right
+          LineColor = "Black",
+          LineStyle = "Solid",
+          LineWidth    = 1, 
+          ArrowHeadSize = 4,
+          ArrowHeadAngle = 45,
+          InForeground = False):
+
+    It will draw an arrow , starting at the point, (X,Y) pointing in
+    direction, theta.
+
+
+    """
+    def __init__(self,
+                 XY,
+                 Length,
+                 Direction,
+                 LineColor = "Black",
+                 LineStyle = "Solid",
+                 LineWidth    = 2, # pixels
+                 ArrowHeadSize = 8, # pixels
+                 ArrowHeadAngle = 30, # degrees
+                 InForeground = False):
+
+        DrawObject.__init__(self, InForeground)
+
+        self.XY = array(XY, Float)
+        self.XY.shape = (2,) # Make sure it is a 1X2 array, even if there is only one point
+        self.Length = Length
+        self.Direction = float(Direction)
+        self.ArrowHeadSize = ArrowHeadSize 
+        self.ArrowHeadAngle = float(ArrowHeadAngle)        
+
+        self.CalcArrowPoints()
+        self.CalcBoundingBox()
+
+        self.LineColor = LineColor
+        self.LineStyle = LineStyle
+        self.LineWidth = LineWidth
+
+        self.SetPen(LineColor,LineStyle,LineWidth)
+
+        ##fixme: How should the HitTest be drawn?
+        self.HitLineWidth = max(LineWidth,self.MinHitLineWidth)
+
+    def SetDirection(self, Direction):
+        self.Direction = float(Direction)
+        self.CalcArrowPoints()
+        
+    def SetLength(self, Length):
+        self.Length = Length
+        self.CalcArrowPoints()
+
+    def SetLengthDirection(self, Length, Direction):
+        self.Direction = float(Direction)
+        self.Length = Length
+        self.CalcArrowPoints()
+        
+    def SetLength(self, Length):
+        self.Length = Length
+        self.CalcArrowPoints()
+
+    def CalcArrowPoints(self):
+        L = self.Length
+        S = self.ArrowHeadSize
+        phi = self.ArrowHeadAngle * pi / 360
+        theta = (self.Direction-90.0) * pi / 180
+        ArrowPoints = array( ( (0, L, L - S*cos(phi),L, L - S*cos(phi) ),
+                               (0, 0, S*sin(phi),    0, -S*sin(phi)    ) ),
+                             Float )
+        RotationMatrix = array( ( ( cos(theta), -sin(theta) ),
+                                  ( sin(theta), cos(theta) ) ),
+                                Float
+                                )
+        ArrowPoints = matrixmultiply(RotationMatrix, ArrowPoints)
+        self.ArrowPoints = transpose(ArrowPoints)
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        dc.SetPen(self.Pen)
+        xy = WorldToPixel(self.XY)
+        ArrowPoints = xy + self.ArrowPoints
+        dc.DrawLines(ArrowPoints)
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            HTdc.DrawLines(ArrowPoints)
+
 ##class LineSet(DrawObject, ObjectSetMixin):
 ##    """
 ##    The LineSet class takes a list of 2-tuples, or a NX2 NumPy array of point coordinates.
@@ -755,8 +855,6 @@ class Point(DrawObject,XYObjectMixin,ColorOnlyMixin):
     def SetDiameter(self,Diameter):
             self.Diameter = Diameter
 
-    def CalcBoundingBox(self):
-        self.BoundingBox = array( (self.XY, self.XY), Float )
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         dc.SetPen(self.Pen)
@@ -821,9 +919,6 @@ class RectEllipse(DrawObject, XYObjectMixin,LineAndFillMixin):
 
 
 class Rectangle(RectEllipse):
-#    def __init__(*args, **kwargs):
-#        RectEllipse.__init__(*args, **kwargs)
-#        raise "an error"
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         ( XY, WH ) = self.SetUpDraw(dc,
@@ -992,10 +1087,6 @@ class Text(DrawObject, TextObjectMixin):
 
         (self.TextWidth, self.TextHeight) = (None, None)
         self.ShiftFun = self.ShiftFunDict[Position]
-
-    def CalcBoundingBox(self):
-        self.BoundingBox = array((self.XY, self.XY),Float)
-        
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         XY = WorldToPixel(self.XY)
@@ -1321,7 +1412,7 @@ class FloatCanvas(wx.Panel):
         elif ProjectionFun is None:
             self.ProjectionFun = lambda x=None: array( (1,1), Float)
         else:
-            raise FloatCanvasException('Projectionfun must be either: "FlatEarth", None, or a function that takes the ViewPortCenter and returns a MapProjectionVector')
+            raise FloatCanvasError('Projectionfun must be either: "FlatEarth", None, or a function that takes the ViewPortCenter and returns a MapProjectionVector')
 
     def FlatEarthProjection(self,CenterPoint):
         return array((cos(pi*CenterPoint[1]/180),1),Float)
@@ -1330,7 +1421,7 @@ class FloatCanvas(wx.Panel):
         if Mode in ["ZoomIn","ZoomOut","Move","Mouse",None]:
             self.GUIMode = Mode
         else:
-            raise FloatCanvasException('"%s" is Not a valid Mode'%Mode)
+            raise FloatCanvasError('"%s" is Not a valid Mode'%Mode)
 
     def MakeHitDict(self):
         ##fixme: Should this just be None if nothing has been bound? 
@@ -1465,7 +1556,8 @@ class FloatCanvas(wx.Panel):
                 self._RaiseMouseEvent(event, EventType)
 
     def WheelEvent(self,event):
-        if self.GUIMode == "Mouse":
+        ##if self.GUIMode == "Mouse":
+        ## Why not always raise this?
             self._RaiseMouseEvent(event, EVT_FC_MOUSEWHEEL)
 
 
@@ -1516,7 +1608,7 @@ class FloatCanvas(wx.Panel):
                     StartMove = self.StartMove
                     EndMove = array((event.GetX(),event.GetY()))
                     if sum((StartMove-EndMove)**2) > 16:
-                        self.Move(StartMove-EndMove,'Pixel')
+                        self.MoveImage(StartMove-EndMove,'Pixel')
                     self.StartMove = None
             elif self.GUIMode == "Mouse":
                 EventType = EVT_FC_LEFT_UP
@@ -1694,8 +1786,9 @@ class FloatCanvas(wx.Panel):
         animation, for instance.
         
         """
-        #print "In Draw"
-        if self.PanelSize < (1,1): # it's possible for this to get called before being properly initialized.
+#        print "in Draw", self.PanelSize
+        if sometrue(self.PanelSize < 1 ): # it's possible for this to get called before being properly initialized.
+#        if self.PanelSize < (1,1): # it's possible for this to get called before being properly initialized.
             return
         if self.Debug: start = clock()
         ScreenDC =  wx.ClientDC(self)
@@ -1779,7 +1872,7 @@ class FloatCanvas(wx.Panel):
 ##        else:
 ##            return False
 
-    def Move(self,shift,CoordType):
+    def MoveImage(self,shift,CoordType):
         """
         move the image in the window.
 
@@ -1798,7 +1891,8 @@ class FloatCanvas(wx.Panel):
 
         """
         
-        shift = array(shift,Float)
+        shift = asarray(shift,Float)
+        #print "shifting by:", shift
         if CoordType == 'Panel':# convert from panel coordinates
             shift = shift * array((-1,1),Float) *self.PanelSize/self.TransformVector
         elif CoordType == 'Pixel': # convert from pixel coordinates
@@ -1806,8 +1900,10 @@ class FloatCanvas(wx.Panel):
         elif CoordType == 'World': # No conversion
             pass
         else:
-            raise FloatCanvasException('CoordType must be either "Panel", "Pixel", or "World"')
-            
+            raise FloatCanvasError('CoordType must be either "Panel", "Pixel", or "World"')
+
+        #print "shifting by:", shift
+        
         self.ViewPortCenter = self.ViewPortCenter + shift 
         self.MapProjectionVector = self.ProjectionFun(self.ViewPortCenter)
         self.TransformVector = array((self.Scale,-self.Scale),Float) * self.MapProjectionVector
@@ -2010,7 +2106,7 @@ class FloatCanvas(wx.Panel):
         NumBetweenBlits = self.NumBetweenBlits # for speed
         for i, Object in enumerate(self._ShouldRedraw(DrawList, ViewPortBB)):
             Object._Draw(dc, WorldToPixel, ScaleWorldToPixel, HTdc)
-            if i % NumBetweenBlits == 0:
+            if i+1 % NumBetweenBlits == 0:
                 Blit(0, 0, PanelSize0, PanelSize1, dc, 0, 0)
         dc.EndDrawing()
 
@@ -2035,7 +2131,7 @@ class FloatCanvas(wx.Panel):
 
 def _makeFloatCanvasAddMethods(): ## lrk's code for doing this in module __init__
     classnames = ["Circle", "Ellipse", "Rectangle", "ScaledText", "Polygon",
-               "Line", "Text", "PointSet","Point"]
+               "Line", "Text", "PointSet","Point", "Arrow"]
     for classname in classnames:
         klass = globals()[classname]
         def getaddshapemethod(klass=klass):

@@ -1,92 +1,39 @@
 #!/usr/bin/env python2.3
+
+import wx
+
+##First, make sure Numeric or numarray can be imported.
 try:
     import Numeric
     import RandomArray
     haveNumeric = True
 except ImportError:
+    # Numeric isn't there, let's try numarray
     try:
         import numarray as Numeric
         import numarray.random_array as RandomArray
         haveNumeric = True
     except ImportError:
+        # numarray isn't there either
         haveNumeric = False
-
-if not haveNumeric:
-    errorText = """
-The FloatCanvas requires either the Numeric or Numarray module:
-You can get them at:
-     http://sourceforge.net/projects/numpy
-
-NOTE: The Numeric module is substantially faster than numarray for this
-purpose, if you have lot's of objects
-"""
-
-StartUpDemo = "all"
-if __name__ == "__main__": # parse options if run stand-alone
-    # check options:
-    import sys, getopt
-    optlist, args = getopt.getopt(sys.argv[1:],'l',["local","all","text","map","stext","hit","hitf","animate","speed","temp","props"])
-
-    for opt in optlist:
-        if opt[0] == "--all":
-            StartUpDemo = "all"
-        elif opt[0] == "--text":
-            StartUpDemo = "text"
-        elif opt[0] == "--map":
-            StartUpDemo = "map"
-        elif opt[0] == "--stext":
-            StartUpDemo = "stext"
-        elif opt[0] == "--hit":
-            StartUpDemo = "hit"
-        elif opt[0] == "--hitf":
-            StartUpDemo = "hitf"
-        elif opt[0] == "--animate":
-            StartUpDemo = "animate"
-        elif opt[0] == "--speed":
-            StartUpDemo = "speed"
-        elif opt[0] == "--temp":
-            StartUpDemo = "temp"
-        elif opt[0] == "--props":
-            StartUpDemo = "props"
-import wx
-import time, random
-
+        errorText = (
+        "The FloatCanvas requires either the Numeric or numarray module\n\n"
+        "You can get them at:\n"
+        "http://sourceforge.net/projects/numpy\n\n"
+        "NOTE: The Numeric module is substantially faster than numarray for this\n"
+        "purpose, if you have lots of objects\n"
+        )
+      
 #---------------------------------------------------------------------------
 
-class TestPanel(wx.Panel):
-    def __init__(self, parent, log):
-        self.log = log
-        wx.Panel.__init__(self, parent, -1)
-
-        b = wx.Button(self, -1, "Show the FloatCanvas sample", (50,50))
-        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
-
-
-    def OnButton(self, evt):
-        if not haveNumeric:
-            dlg = wx.MessageDialog(self, errorText, 'Sorry', wx.OK |
-                                   wx.ICON_INFORMATION)
-            dlg.ShowModal()
-            dlg.Destroy()
-
-        else:
-            win = DrawFrame(None, -1, "FloatCanvas Drawing Window",wx.DefaultPosition,(500,500))
-            win.Show(True)
-            win.DrawTest()
-
-
-
-#---------------------------------------------------------------------------
-
-
-if haveNumeric:
-
+def BuildDrawFrame(): # this gets called when needed, rather than on import
     try:
         from floatcanvas import NavCanvas, FloatCanvas
     except ImportError: # if it's not there locally, try the wxPython lib.
         from wx.lib.floatcanvas import NavCanvas, FloatCanvas
 
-    import wxPython.lib.colourdb
+    import wx.lib.colourdb
+    import time, random
 
     class DrawFrame(wx.Frame):
 
@@ -133,6 +80,9 @@ if haveNumeric:
             self.Bind(wx.EVT_MENU, self.SpeedTest, item)
             item = draw_menu.Append(-1, "Change &Properties","Run a test of Changing Object Properties")
             self.Bind(wx.EVT_MENU, self.PropertiesChangeTest, item)
+            item = draw_menu.Append(-1, "&Arrows","Run a test of Arrows")
+            self.Bind(wx.EVT_MENU, self.ArrowTest, item)
+
             MenuBar.Append(draw_menu, "&Tests")
 
             view_menu = wx.Menu()
@@ -164,8 +114,8 @@ if haveNumeric:
             self.EventsAreBound = False
 
             ## getting all the colors and linestyles  for random objects
-            wxPython.lib.colourdb.updateColourDB()
-            self.colors = wxPython.lib.colourdb.getColourList()
+            wx.lib.colourdb.updateColourDB()
+            self.colors = wx.lib.colourdb.getColourList()
             #self.LineStyles = FloatCanvas.DrawObject.LineStyleList.keys()
 
 
@@ -190,7 +140,20 @@ if haveNumeric:
             self.EventsAreBound = True
 
         def UnBindAllMouseEvents(self):
-            ## Here is how you catch FloatCanvas mouse events
+            ## Here is how you unbind FloatCanvas mouse events
+            FloatCanvas.EVT_LEFT_DOWN(self.Canvas, None ) 
+            FloatCanvas.EVT_LEFT_UP(self.Canvas, None )
+            FloatCanvas.EVT_LEFT_DCLICK(self.Canvas, None) 
+
+            FloatCanvas.EVT_MIDDLE_DOWN(self.Canvas, None )
+            FloatCanvas.EVT_MIDDLE_UP(self.Canvas, None )
+            FloatCanvas.EVT_MIDDLE_DCLICK(self.Canvas, None )
+
+            FloatCanvas.EVT_RIGHT_DOWN(self.Canvas, None )
+            FloatCanvas.EVT_RIGHT_UP(self.Canvas, None )
+            FloatCanvas.EVT_RIGHT_DCLICK(self.Canvas, None )
+
+            FloatCanvas.EVT_MOUSEWHEEL(self.Canvas, None )
             FloatCanvas.EVT_LEFT_DOWN(self.Canvas, None ) 
             FloatCanvas.EVT_LEFT_UP(self.Canvas, None )
             FloatCanvas.EVT_LEFT_DCLICK(self.Canvas, None) 
@@ -250,10 +213,18 @@ if haveNumeric:
         def OnWheel(self, event):
             print "Mouse Wheel Moved in DrawFrame"
             self.PrintCoords(event)
-
+            Rot = event.GetWheelRotation()
+            print "Wheel Rotation is:", Rot
+            print "Wheel Delta is:", event.GetWheelDelta()
+            Rot = Rot / abs(Rot) * 0.1
+            if event.ControlDown(): # move left-right
+                self.Canvas.MoveImage( (Rot, 0), "Panel" )
+            else: # move up-down
+                self.Canvas.MoveImage( (0, Rot), "Panel" )
+                
         def OnMove(self, event):
             """
-            Updates the staus bar with the world coordinates
+            Updates the status bar with the world coordinates
             """
             self.SetStatusText("%.2f, %.2f"%tuple(event.Coords))
 
@@ -283,8 +254,7 @@ if haveNumeric:
 
         def DrawTest(self,event=None):
             wx.GetApp().Yield()
-#            import random
-#            import RandomArray
+
             Range = (-10,10)
             colors = self.colors
 
@@ -320,8 +290,7 @@ if haveNumeric:
                 D = random.randint(1,50)
                 cf = random.randint(0,len(colors)-1)
                 Canvas.AddPoint((x,y), Color = colors[cf], Diameter = D)
-
-                # Circles
+            # Circles
             for i in range(5):
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
                 D = random.randint(1,5)
@@ -330,8 +299,7 @@ if haveNumeric:
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddCircle(x,y,D,LineWidth = lw,LineColor = colors[cl],FillColor = colors[cf])
                 Canvas.AddText("Circle # %i"%(i),x,y,Size = 12,BackgroundColor = None,Position = "cc")
-
-                # Lines
+            # Lines
             for i in range(5):
                 points = []
                 for j in range(random.randint(2,10)):
@@ -341,8 +309,7 @@ if haveNumeric:
                 cf = random.randint(0,len(colors)-1)
                 cl = random.randint(0,len(colors)-1)
                 Canvas.AddLine(points, LineWidth = lw, LineColor = colors[cl])
-
-                # Polygons
+            # Polygons
             for i in range(3):
                 points = []
                 for j in range(random.randint(2,6)):
@@ -380,6 +347,17 @@ if haveNumeric:
                 cf = random.randint(0,len(colors)-1)
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
                 Canvas.AddScaledText(String, x, y, Size = ts, Color = colors[cf], Position = "cc")
+
+            # Arrows
+            N = 5
+            Points = RandomArray.uniform(Range[0], Range[1], (N,2) )
+            for i in range(N):
+                Canvas.AddArrow(Points[i],
+                                random.uniform(20,100),
+                                Direction = random.uniform(0,360),
+                                LineWidth = random.uniform(1,5),
+                                LineColor = colors[random.randint(0,len(colors)-1)],
+                                ArrowHeadAngle = random.uniform(20,90))
 
             Canvas.ZoomToBB()
 
@@ -518,7 +496,7 @@ if haveNumeric:
             Canvas.ClearAll()
             Canvas.SetProjectionFun(None)
 
-            #Add a HitAble rectangle
+            #Add a Hit-able rectangle
             w, h = 60, 20
 
             dx = 80
@@ -941,7 +919,7 @@ if haveNumeric:
             self.Canvas.ClearAll()
             self.Canvas.SetProjectionFun("FlatEarth")
             #start = time.clock()
-            Shorelines = Read_MapGen(os.path.join("data",'world.dat'),stats = 0)
+            Shorelines = self.Read_MapGen(os.path.join("data",'world.dat'),stats = 0)
             #print "It took %f seconds to load %i shorelines"%(time.clock() - start,len(Shorelines) )
             #start = time.clock()
             for segment in Shorelines:
@@ -1147,6 +1125,52 @@ if haveNumeric:
                 x,y = (random.uniform(Range[0],Range[1]),random.uniform(Range[0],Range[1]))
                 w,h = random.randint(1,5), random.randint(1,5)
                 Object.SetShape(x,y,w,h)
+            self.Canvas.Draw(Force = True)
+
+        def ArrowTest(self,event=None):
+            wx.GetApp().Yield()
+            self.UnBindAllMouseEvents()
+            Canvas = self.Canvas
+
+            Canvas.ClearAll()
+            Canvas.SetProjectionFun(None)
+
+            # put in a rectangle to get a bounding box
+            Canvas.AddRectangle(0,0,20,20,LineColor = None)
+
+            # Draw some Arrows
+            Canvas.AddArrow((10,10),Length = 40, Direction = 0)
+            Canvas.AddArrow((10,10),Length = 50, Direction = 45 ,LineWidth = 2, LineColor = "Black", ArrowHeadAngle = 20)
+            Canvas.AddArrow((10,10),Length = 60, Direction = 90 ,LineWidth = 3, LineColor = "Red",   ArrowHeadAngle = 30)
+            Canvas.AddArrow((10,10),Length = 70, Direction = 135,LineWidth = 4, LineColor = "Red",   ArrowHeadAngle = 40)
+            Canvas.AddArrow((10,10),Length = 80, Direction = 180,LineWidth = 5, LineColor = "Blue",  ArrowHeadAngle = 50)
+            Canvas.AddArrow((10,10),Length = 90, Direction = 225,LineWidth = 4, LineColor = "Blue",  ArrowHeadAngle = 60)
+            Canvas.AddArrow((10,10),Length = 100,Direction = 270,LineWidth = 3, LineColor = "Green", ArrowHeadAngle = 70)
+            Canvas.AddArrow((10,10),Length = 110,Direction = 315,LineWidth = 2, LineColor = "Green", ArrowHeadAngle = 90 )
+
+            Canvas.AddText("Clickable Arrow",4,18,Position = "bc")
+            Arrow = Canvas.AddArrow((4,18), 80, Direction = 90 ,LineWidth = 3, LineColor = "Red",   ArrowHeadAngle = 30)
+            Arrow.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.ArrowClicked)
+
+            Canvas.AddText("Changable Arrow",16,4,Position = "cc")
+            self.RotArrow = Canvas.AddArrow((16,4), 80, Direction = 0 ,LineWidth = 3, LineColor = "Green",   ArrowHeadAngle = 30)
+            self.RotArrow.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.RotateArrow)
+
+
+
+            Canvas.ZoomToBB()
+
+        def ArrowClicked(self,event):
+            print "The Arrow was Clicked"
+
+        def RotateArrow(self,event):
+            print "The Changeable Arrow was Clicked"
+            ## You can do them either one at a time, or both at once
+            ## Doing them both at once prevents the arrow points from being calculated twice
+            #self.RotArrow.SetDirection(self.RotArrow.Direction + random.uniform(-90,90))
+            #self.RotArrow.SetLength(self.RotArrow.Length + random.randint(-20,20))
+            self.RotArrow.SetLengthDirection(self.RotArrow.Length + random.randint(-20,20),
+                                             self.RotArrow.Direction + random.uniform(-90,90) )
 
             self.Canvas.Draw(Force = True)
 
@@ -1202,7 +1226,95 @@ if haveNumeric:
             print "Point Num: %i Hit"%Point.VerticeNum
             self.SelectedPoint = Point
 
+        def Read_MapGen(self, filename, stats = 0,AllLines=0):
+            """
+            This function reads a MapGen Format file, and
+            returns a list of NumPy arrays with the line segments in them.
 
+            Each NumPy array in the list is an NX2 array of Python Floats.
+
+            The demo should have come with a file, "world.dat" that is the
+            shorelines of the whole world, in MapGen format.
+
+            """
+            import string
+            file = open(filename,'rt')
+            data = file.readlines()
+            data = map(string.strip,data)
+
+            Shorelines = []
+            segment = []
+            for line in data:
+                if line:
+                    if line == "# -b": #New segment beginning
+                        if segment: Shorelines.append(Numeric.array(segment))
+                        segment = []
+                    else:
+                        segment.append(map(float,string.split(line)))
+            if segment: Shorelines.append(Numeric.array(segment))
+
+            if stats:
+                NumSegments = len(Shorelines)
+                NumPoints = 0
+                for segment in Shorelines:
+                    NumPoints = NumPoints + len(segment)
+                AvgPoints = NumPoints / NumSegments
+                print "Number of Segments: ", NumSegments
+                print "Average Number of Points per segment: ",AvgPoints
+            if AllLines:
+                Lines = []
+                for segment in Shorelines:
+                    Lines.append(segment[0])
+                    for point in segment[1:-1]:
+                        Lines.append(point)
+                        Lines.append(point)
+                    Lines.append(segment[-1])
+                return Lines
+            else:
+                return Shorelines
+    return DrawFrame 
+
+#---------------------------------------------------------------------------
+      
+if __name__ == "__main__":
+    # check options:
+    import sys, getopt
+    optlist, args = getopt.getopt(sys.argv[1:],'l',["local","all","text","map","stext","hit","hitf","animate","speed","temp","props","arrow"])
+
+    if not haveNumeric:
+        raise ImportError(errorText)
+    StartUpDemo = "all" # the default
+    for opt in optlist:
+        if opt[0] == "--all":
+            StartUpDemo = "all"
+        elif opt[0] == "--text":
+            StartUpDemo = "text"
+        elif opt[0] == "--map":
+            StartUpDemo = "map"
+        elif opt[0] == "--stext":
+            StartUpDemo = "stext"
+        elif opt[0] == "--hit":
+            StartUpDemo = "hit"
+        elif opt[0] == "--hitf":
+            StartUpDemo = "hitf"
+        elif opt[0] == "--animate":
+            StartUpDemo = "animate"
+        elif opt[0] == "--speed":
+            StartUpDemo = "speed"
+        elif opt[0] == "--temp":
+            StartUpDemo = "temp"
+        elif opt[0] == "--props":
+            StartUpDemo = "props"
+        elif opt[0] == "--arrow":
+            StartUpDemo = "arrow"
+    try:
+        import fixdc
+    except ImportError:
+        print  ("\n *************Notice*************\n"
+                "The fixdc module fixes the DC API for wxPython2.5.1.6 You can get the module from:\n"
+                "http://prdownloads.sourceforge.net/wxpython/fixdc.py?download\n"
+                " It will set up the DC methods to match both older and upcoming versions\n")
+        raise
 
     class DemoApp(wx.App):
         """
@@ -1259,6 +1371,7 @@ if haveNumeric:
 
         def OnInit(self):
             wx.InitAllImageHandlers()
+            DrawFrame = BuildDrawFrame()
             frame = DrawFrame(None, -1, "FloatCanvas Demo App",wx.DefaultPosition,(700,700))
 
             self.SetTopWindow(frame)
@@ -1290,98 +1403,72 @@ if haveNumeric:
             elif StartUpDemo == "props":
                 "starting PropertiesChange Test"
                 frame.PropertiesChangeTest()
+            elif StartUpDemo == "arrow":
+                "starting arrow Test"
+                frame.ArrowTest()
 
             return True
 
-    def Read_MapGen(filename,stats = 0,AllLines=0):
-        """
-        This function reads a MapGen Format file, and
-        returns a list of NumPy arrays with the line segments in them.
-
-        Each NumPy array in the list is an NX2 array of Python Floats.
-
-        The demo should have come with a file, "world.dat" that is the
-        shorelines of the whole world, in MapGen format.
-
-        """
-        import string
-        file = open(filename,'rt')
-        data = file.readlines()
-        data = map(string.strip,data)
-
-        Shorelines = []
-        segment = []
-        for line in data:
-            if line:
-                if line == "# -b": #New segment beginning
-                    if segment: Shorelines.append(Numeric.array(segment))
-                    segment = []
-                else:
-                    segment.append(map(float,string.split(line)))
-        if segment: Shorelines.append(Numeric.array(segment))
-
-        if stats:
-            NumSegments = len(Shorelines)
-            NumPoints = 0
-            for segment in Shorelines:
-                NumPoints = NumPoints + len(segment)
-            AvgPoints = NumPoints / NumSegments
-            print "Number of Segments: ", NumSegments
-            print "Average Number of Points per segment: ",AvgPoints
-        if AllLines:
-            Lines = []
-            for segment in Shorelines:
-                Lines.append(segment[0])
-                for point in segment[1:-1]:
-                    Lines.append(point)
-                    Lines.append(point)
-                Lines.append(segment[-1])
-            return Lines
-        else:
-            return Shorelines
-
-#---------------------------------------------------------------------------
-## for the wxPython demo:
-
-def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
-    return win
-
-
-if haveNumeric:    
-    try:
-        import floatcanvas
-    except ImportError: # if it's not there locally, try the wxPython lib.
-        from wx.lib import floatcanvas
-
-    overview = floatcanvas.__doc__
+    app = DemoApp(False)# put in True if you want output to go to it's own window.
+    app.MainLoop()
 
 else:
-    overview = ""
-    
-
-
-      
-if __name__ == "__main__":
+    # It's not running stand-alone, set up for wxPython demo.
     if not haveNumeric:
-        print errorText
+        ## TestPanel and runTest used for integration into wxPython Demo
+        class TestPanel(wx.Panel):
+            def __init__(self, parent, log):
+                self.log = log
+                wx.Panel.__init__(self, parent, -1)
+
+                import images
+
+                note1 = wx.StaticText(self, -1, errorText)
+                note2 = wx.StaticText(self, -1, "This is what the FloatCanvas can look like:")
+                S = wx.BoxSizer(wx.VERTICAL)
+                S.Add((10, 10), 1)
+                S.Add(note1, 0, wx.ALIGN_CENTER)
+                S.Add(note2, 0, wx.ALIGN_CENTER | wx.BOTTOM, 4)
+                S.Add(wx.StaticBitmap(self,-1,images.getFloatCanvasBitmap()),0,wx.ALIGN_CENTER)
+                S.Add((10, 10), 1)
+                self.SetSizer(S)
+                self.Layout()
+
     else:
-        app = DemoApp(False)# put in True if you want output to go to it's own window.
-        app.MainLoop()
-    
-    
-    
-    
+        ## TestPanel and runTest used for integration into wxPython Demo
+        class TestPanel(wx.Panel):
+            def __init__(self, parent, log):
+                self.log = log
+                wx.Panel.__init__(self, parent, -1)
+                note1 = wx.StaticText(self, -1, "The FloatCanvas Demo needs")
+                note2 = wx.StaticText(self, -1, "a separate frame")
+                b = wx.Button(self, -1, "Open Demo Frame Now")
+                b.Bind(wx.EVT_BUTTON, self.OnButton)
 
+                S = wx.BoxSizer(wx.VERTICAL)
+                S.Add((10, 10), 1)
+                S.Add(note1, 0, wx.ALIGN_CENTER)
+                S.Add(note2, 0, wx.ALIGN_CENTER | wx.BOTTOM, 5)
+                S.Add(b, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+                S.Add((10, 10), 1)
+                self.SetSizer(S)
+                self.Layout()
 
+            def OnButton(self, evt):
+                DrawFrame = BuildDrawFrame()
+                frame = DrawFrame(None, -1, "FloatCanvas Drawing Window",wx.DefaultPosition,(500,500))
 
+                #win = wx.lib.plot.TestFrame(self, -1, "PlotCanvas Demo")
+                frame.Show()
+                frame.DrawTest()
 
+    def runTest(frame, nb, log):
+        win = TestPanel(nb, log)
+        return win
 
-
-
-
-
-
+    # import to get the doc
+    from wx.lib import floatcanvas
+    overview = floatcanvas.__doc__
 
 
 

@@ -2,7 +2,7 @@
 This is the floatcanvas package. It provides two primary modules, and a
 support module.
 
-FloatCanvas.py contains the main FloatCanvas class, and it's supporting
+FloatCanvas.py contains the main FloatCanvas class, and its supporting
 classes.  NavCanvas.py contains a wrapper for the FloatCanvas that
 provides the canvas and a toolbar with tools that allow you to navigate
 the canvas (zooming, panning, etc.)  Resources.py is a module that
@@ -73,6 +73,10 @@ just like the regular mouse events, but include an extra attribute:
 Event.GetCoords(), that returns the (x,y) position in world coordinates,
 as a length-2 NumPy vector of Floats.
 
+There are also a full set of bindings to mouse events on objects, so
+that you can specify a given function be called when an objects is
+clicked, mouse-over'd, etc.
+
 See the Demo for what it can do, and how to use it.
 
 Copyright: Christopher Barker
@@ -90,6 +94,6 @@ Chris.Barker@noaa.gov
 
 """
 
-__version__ = "0.8.5"
+__version__ = "0.8.7"
 
 
