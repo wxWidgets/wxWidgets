@@ -619,6 +619,16 @@ int wxDialog::ShowModal()
        return GetReturnCode();
     }
 
+    if ( !GetParent() )
+    {
+        wxWindow *parent = wxTheApp->GetTopWindow();
+        if ( parent && parent != this )
+        {
+            m_parent = parent;
+            gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(parent->m_widget) );
+        }
+    }
+
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
 
     Show( TRUE );

@@ -538,9 +538,11 @@ bool wxNotebook::RemovePage( int page )
 
     wxCHECK_MSG( nb_page, FALSE, _T("wxNotebook::RemovePage: invalid page") );
 
+    gtk_widget_ref( nb_page->m_client->m_widget );
+    gtk_widget_unrealize( nb_page->m_client->m_widget );
+    gtk_widget_unparent( nb_page->m_client->m_widget );
+        
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
-
-    nb_page->m_client->Destroy();
 
     m_pages.DeleteObject( nb_page );
 
