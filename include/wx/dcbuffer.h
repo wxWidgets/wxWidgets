@@ -110,17 +110,20 @@ class WXDLLIMPEXP_ADV wxBufferedPaintDC : public wxBufferedDC
 public:
     // this ctor creates a bitmap of the size of the window for buffering
     wxBufferedPaintDC(wxWindow *window, int flags = wxBUFFER_DC_DEFAULT)
-        : wxBufferedDC(&m_paintdc, window->GetClientSize(), flags),
-          m_paintdc(window)
+        : m_paintdc(window)
     {
         Prepare(window);
+
+        Init(&m_paintdc, window->GetClientSize(), flags);
     }
 
     // the bitmap must be valid here
     wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer)
-        : wxBufferedDC(&m_paintdc, buffer)
+        : m_paintdc(window)
     {
         Prepare(window);
+
+        Init(&m_paintdc, buffer);
     }
 
     // default copy ctor ok.
