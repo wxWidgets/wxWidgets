@@ -1363,6 +1363,15 @@ not be used at all.", "");
 foreground colour is dependent on the window class; it may be the text
 colour or other colour, or it may not be used at all.", "");
 
+    DocDeclStr(
+        bool , InheritsBackgroundColour() const,
+        "", "");
+    
+    DocDeclStr(
+        bool , UseBgCol() const,
+        "", "");
+    
+    
 // TODO:
 //     // if the window shouldn't inherit its colour from the parent, override
 //     // this function to return true

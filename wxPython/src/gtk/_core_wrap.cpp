@@ -29449,6 +29449,62 @@ static PyObject *_wrap_Window_GetForegroundColour(PyObject *, PyObject *args, Py
 }
 
 
+static PyObject *_wrap_Window_InheritsBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_InheritsBackgroundColour",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxWindow const *)arg1)->InheritsBackgroundColour();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_UseBgCol(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_UseBgCol",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxWindow const *)arg1)->UseBgCol();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetBackgroundStyle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -45634,6 +45690,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_SetOwnForegroundColour", (PyCFunction) _wrap_Window_SetOwnForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_InheritsBackgroundColour", (PyCFunction) _wrap_Window_InheritsBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_UseBgCol", (PyCFunction) _wrap_Window_UseBgCol, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetBackgroundStyle", (PyCFunction) _wrap_Window_SetBackgroundStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBackgroundStyle", (PyCFunction) _wrap_Window_GetBackgroundStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_HasTransparentBackground", (PyCFunction) _wrap_Window_HasTransparentBackground, METH_VARARGS | METH_KEYWORDS, NULL},
