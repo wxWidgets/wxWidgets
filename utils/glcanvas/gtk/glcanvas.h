@@ -54,10 +54,7 @@ class wxGLCanvas;
 
 class wxGLContext: public wxObject
 {
-  DECLARE_CLASS(wxGLContext)
-   
-  public:
-  
+public:
     wxGLContext( bool isRGB, wxWindow *win, const wxPalette& palette = wxNullPalette );
     wxGLContext( 
                bool WXUNUSED(isRGB), wxWindow *win, 
@@ -79,13 +76,15 @@ class wxGLContext: public wxObject
     inline GtkWidget* GetWidget() const { return m_widget; }
     inline GLXContext GetContext() const { return m_glContext; }
 
- public:
-
+public:
    GLXContext       m_glContext;
 
    GtkWidget       *m_widget;
    wxPalette        m_palette;
    wxWindow*        m_window;
+   
+private:
+  DECLARE_CLASS(wxGLContext)
 };
 
 //---------------------------------------------------------------------------
@@ -94,9 +93,7 @@ class wxGLContext: public wxObject
 
 class wxGLCanvas: public wxScrolledWindow
 {
-   DECLARE_CLASS(wxGLCanvas)
-   
- public:
+public:
    wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
@@ -137,7 +134,9 @@ class wxGLCanvas: public wxScrolledWindow
     wxGLContext      *m_glContext; 
     GtkWidget        *m_glWidget;
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxGLCanvas)
 };
 
 #endif

@@ -242,8 +242,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
     XFree( g_vi );
     g_vi = (XVisualInfo*) NULL;
 
-//    gdk_window_set_back_pixmap( m_glWidget->window, None, 0 );
-     
     /* we pretend to have a m_wxwindow so that PostCreation hooks
        up the events for expose and draw */
     m_wxwindow = m_glWidget;
@@ -269,10 +267,10 @@ void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     int width, height;
     GetClientSize( &width, &height );
+    
     if (m_glContext && GTK_WIDGET_REALIZED(m_glWidget) )
     {
         SetCurrent(); 
-//        gdk_window_set_back_pixmap( gtk_widget_get_parent_window(m_glWidget), None, 0 );
 	
         glViewport(0, 0, (GLint)width, (GLint)height );
         glMatrixMode(GL_PROJECTION);

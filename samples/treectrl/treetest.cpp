@@ -72,6 +72,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_Unselect, MyFrame::OnUnselect)
 #endif // NO_MULTIPLE_SELECTION
     EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
+    EVT_MENU(TreeTest_Count, MyFrame::OnCount)
+    EVT_MENU(TreeTest_CountRec, MyFrame::OnCountRec)
     EVT_MENU(TreeTest_Sort, MyFrame::OnSort)
     EVT_MENU(TreeTest_SortRev, MyFrame::OnSortRev)
     EVT_MENU(TreeTest_Bold, MyFrame::OnSetBold)
@@ -154,6 +156,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_Delete, "&Delete this item");
     tree_menu->Append(TreeTest_DeleteChildren, "Delete &children");
     tree_menu->Append(TreeTest_DeleteAll, "Delete &all items");
+    tree_menu->AppendSeparator();
+    tree_menu->Append(TreeTest_Count, "Count children of current item");
+    tree_menu->Append(TreeTest_CountRec, "Recursively count children of current item");
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_Sort, "Sort children of current item");
     tree_menu->Append(TreeTest_SortRev, "Sort in reversed order");
@@ -270,6 +275,28 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
 
     // TODO demonstrate creating a custom edit control...
     (void)m_treeCtrl->EditLabel(item);
+}
+
+void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId item = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( item );
+
+    int i = m_treeCtrl->GetChildrenCount( item, FALSE );
+    
+    wxLogMessage(_T("%d children"), i);
+}
+
+void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId item = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( item );
+
+    int i = m_treeCtrl->GetChildrenCount( item );
+    
+    wxLogMessage(_T("%d children"), i);
 }
 
 void MyFrame::DoSort(bool reverse)

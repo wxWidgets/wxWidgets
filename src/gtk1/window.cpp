@@ -2564,13 +2564,22 @@ bool wxWindow::Reparent( wxWindowBase *newParentBase )
     wxWindow *oldParent = m_parent,
              *newParent = (wxWindow *)newParentBase;
 
+    wxASSERT( GTK_IS_WIDGET(m_widget) );
+
     if ( !wxWindowBase::Reparent(newParent) )
         return FALSE;
+
+    wxASSERT( GTK_IS_WIDGET(m_widget) );
+
+    /* prevent GTK from deleting the widget arbitrarily */
+    gtk_widget_ref( m_widget );
 
     if (oldParent)
     {
         gtk_container_remove( GTK_CONTAINER(oldParent->m_wxwindow), m_widget );
     }
+
+    wxASSERT( GTK_IS_WIDGET(m_widget) );
 
     if (newParent)
     {
@@ -2578,6 +2587,9 @@ bool wxWindow::Reparent( wxWindowBase *newParentBase )
         (*(newParent->m_insertCallback))(newParent, this);
     }
 
+    /* reverse: prevent GTK from deleting the widget arbitrarily */
+    gtk_widget_unref( m_widget );
+    
     return TRUE;
 }
 

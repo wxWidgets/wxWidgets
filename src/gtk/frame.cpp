@@ -270,6 +270,8 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 
 static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 {
+    wxASSERT( GTK_IS_WIDGET(child->m_widget) );
+    
     if (!parent->m_insertInClientArea)
     {
         /* these are outside the client area */

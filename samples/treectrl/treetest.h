@@ -130,6 +130,9 @@ public:
 
     void OnEnsureVisible(wxCommandEvent& event);
 
+    void OnCount(wxCommandEvent& event);
+    void OnCountRec(wxCommandEvent& event);
+    
     void OnRename(wxCommandEvent& event);
     void OnSort(wxCommandEvent& event) { DoSort(); }
     void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
@@ -161,6 +164,8 @@ enum
     TreeTest_About,
     TreeTest_Dump,
     TreeTest_DumpSelected,
+    TreeTest_Count,
+    TreeTest_CountRec,
     TreeTest_Sort,
     TreeTest_SortRev,
     TreeTest_Bold,

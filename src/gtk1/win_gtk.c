@@ -695,6 +695,9 @@ gtk_myfixed_remove (GtkContainer *container,
 	  
 	  gtk_widget_unparent (widget);
 
+          /* security checks */
+          g_return_if_fail (GTK_IS_WIDGET (widget));
+  
 	  myfixed->children = g_list_remove_link (myfixed->children, children);
 	  g_list_free (children);
 	  g_free (child);
@@ -702,6 +705,9 @@ gtk_myfixed_remove (GtkContainer *container,
 	  if (was_visible && GTK_WIDGET_VISIBLE (container))
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
+          /* security checks */
+	  g_return_if_fail (GTK_IS_WIDGET (widget));
+	  
 	  break;
 	}
 

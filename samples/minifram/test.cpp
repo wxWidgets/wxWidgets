@@ -133,7 +133,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
+  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Reparent the button");
   currentX += width + 5;
   toolBar->AddSeparator();
   toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Help");
@@ -155,6 +155,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 BEGIN_EVENT_TABLE(MyMiniFrame, wxMiniFrame)
     EVT_CLOSE  (              MyMiniFrame::OnCloseWindow)
     EVT_BUTTON (ID_REPARENT,  MyMiniFrame::OnReparent)
+    EVT_MENU   (wxID_PRINT,   MyMiniFrame::OnReparent)
 END_EVENT_TABLE()
 
 MyMiniFrame::MyMiniFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
@@ -180,6 +181,7 @@ void MyMiniFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
 BEGIN_EVENT_TABLE(MyMainFrame, wxFrame)
     EVT_CLOSE  (              MyMainFrame::OnCloseWindow)
     EVT_BUTTON (ID_REPARENT,  MyMainFrame::OnReparent)
+    EVT_MENU   (wxID_PRINT,   MyMainFrame::OnReparent)
 END_EVENT_TABLE()
 
 MyMainFrame::MyMainFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
