@@ -460,7 +460,7 @@ _TIFFprintAscii(FILE* fd, const char* cp)
 	for (; *cp != '\0'; cp++) {
 		const char* tp;
 
-		if (isprint(*cp)) {
+		if (isprint((int)*cp)) {
 			fputc(*cp, fd);
 			continue;
 		}
