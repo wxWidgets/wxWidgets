@@ -177,6 +177,16 @@ INSTALL=	$(LIBPL)/install-sh -c
 # Also, making them read-only seems to be a good idea...
 INSTALL_SHARED=	${INSTALL} -m 555
 
+#---------------------------------------------------
+# Possibly change some definintions for C++
+ifdef MY_LDSHARED
+LDSHARED=$(MY_LDSHARED)
+endif
+ifdef MY_LINKCC
+LINKCC=$(MY_LINKCC)
+endif
+
+
 # === Fixed rules ===
 
 # Default target.  This builds shared libraries only
@@ -198,7 +208,7 @@ $(TARGET):	$(ADDOBJS) lib.a $(PYTHONLIBS) Makefile $(BASELIB)
 
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
-# This is a defaul version of the install target for wxPython.  It just
+# This is a default version of the install target for wxPython.  It just
 # redirects to wxInstall below...
 
 install:	wxInstall
@@ -314,9 +324,6 @@ distclean:	clobber
 # Custom rules and dependencies added for wxPython
 #
 
-ifdef MY_LDSHARED
-LDSHARED=$(MY_LDSHARED)
-endif
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
 

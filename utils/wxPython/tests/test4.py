@@ -274,8 +274,9 @@ class AppFrame(wxFrame):
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition,
                          wxSize(420, 200))
-        self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
-        self.SetIcon(self.icon)
+        if wxPlatform == '__WXMSW__':
+            self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
+            self.SetIcon(self.icon)
 
         self.mainmenu = wxMenuBar()
         menu = wxMenu()
@@ -384,9 +385,8 @@ class AppFrame(wxFrame):
 
     def OnTestSimpleControls(self, event):
         dlg = TestSimpleControlsDlg(self, self)
-        dlg.SetModal(true)
         dlg.Centre()
-        dlg.Show(true)
+        dlg.ShowModal()
         dlg.Destroy()
 
     def OnTestTimer(self, event):
@@ -520,6 +520,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/08/22 19:51:18  RD
+# some tweaks for wxGTK
+#
 # Revision 1.1  1998/08/09 08:28:05  RD
 # Initial version
 #

@@ -1372,8 +1372,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.1  1998/08/19 00:10:03  RD
-# GTK version of the SWIG-generated files
+# Revision 1.2  1998/08/22 19:50:58  RD
+# some tweaks for wxGTK
 #
 # Revision 1.2  1998/08/18 19:48:12  RD
 # more wxGTK compatibility things.

@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.1  1998/08/19 00:10:01  RD
- * GTK version of the SWIG-generated files
+ * Revision 1.2  1998/08/22 19:50:56  RD
+ * some tweaks for wxGTK
  *
  ************************************************************************/
 

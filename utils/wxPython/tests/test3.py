@@ -31,20 +31,21 @@ class MyCanvas(wxWindow):
 
 #---------------------------------------------------------------------------
 
-class MyMiniFrame(wxMiniFrame):
-    def __init__(self, parent, ID, title, pos, size, style):
-        wxMiniFrame.__init__(self, parent, ID, title, pos, size, style)
-        panel = wxPanel(self, -1)
-        ID = NewId()
-        button = wxButton(panel, ID, "Close Me")
-        button.SetPosition(wxPoint(15, 15))
-        self.Connect(ID, -1, wxEVT_COMMAND_BUTTON_CLICKED, self.OnCloseMe)
+if wxPlatform == '__WXMSW__':
+    class MyMiniFrame(wxMiniFrame):
+        def __init__(self, parent, ID, title, pos, size, style):
+            wxMiniFrame.__init__(self, parent, ID, title, pos, size, style)
+            panel = wxPanel(self, -1)
+            ID = NewId()
+            button = wxButton(panel, ID, "Close Me")
+            button.SetPosition(wxPoint(15, 15))
+            self.Connect(ID, -1, wxEVT_COMMAND_BUTTON_CLICKED, self.OnCloseMe)
 
-    def OnCloseMe(self, event):
-        self.Close(true)
+        def OnCloseMe(self, event):
+            self.Close(true)
 
-    def OnCloseWindow(self, event):
-        self.Destroy()
+        def OnCloseWindow(self, event):
+            self.Destroy()
 
 #---------------------------------------------------------------------------
 
@@ -62,10 +63,11 @@ class MyFrame(wxFrame):
         menu.Append(200, 'E&xit', 'Get the heck outta here!')
         mainmenu.Append(menu, "&It's a menu!")
         self.SetMenuBar(mainmenu)
-        print menu.GetHelpString(100)
-        print mainmenu.GetHelpString(101)
-        print mainmenu.GetHelpString(200)
-        self.DragAcceptFiles(true)
+        if wxPlatform == '__WXMSW__':
+            print menu.GetHelpString(100)
+            print mainmenu.GetHelpString(101)
+            print mainmenu.GetHelpString(200)
+            self.DragAcceptFiles(true)
 
         self.Connect(-1, -1, wxEVT_COMMAND_MENU_SELECTED, self.OnMenuCommand)
         self.Connect(-1, -1, wxEVT_DROP_FILES, self.OnDropFiles)
@@ -93,13 +95,16 @@ class MyFrame(wxFrame):
         if event.GetInt() == 200:
             self.Close()
         elif event.GetInt() == 101:
-            win = MyMiniFrame(self, -1, "This is a Mini...",
+            if wxPlatform == '__WXMSW__':
+                win = MyMiniFrame(self, -1, "This is a Mini...",
                               wxPoint(-1, -1), #wxPyDefaultPosition,
                               wxSize(150, 150),
                               wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
                               wxTHICK_FRAME | wxSYSTEM_MENU |
                               wxTINY_CAPTION_HORIZ)
-            win.Show(true)
+                win.Show(true)
+            else:
+                print 'Sorry, can\'t do mini\'s...'
 
 
 
@@ -138,6 +143,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/08/22 19:51:17  RD
+# some tweaks for wxGTK
+#
 # Revision 1.1  1998/08/09 08:28:05  RD
 # Initial version
 #
