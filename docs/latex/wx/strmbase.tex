@@ -24,7 +24,7 @@ None
 
 \func{}{wxStreamBase}{\void}
 
-Creates a dummy stream object.
+Creates a dummy stream object. It doesn't do anything.
 
 \membersection{wxStreamBase::\destruct{wxStreamBase}}
 
@@ -49,7 +49,15 @@ This function returns the last error.
 \constfunc{size_t}{StreamSize}{\void}
 
 This function returns the size of the stream. For example, for a file it is the size of
-the file). Warning! There are streams which do not have size by definition, such as a socket.
+the file).
+
+\wxheading{Warning}
+
+There are streams which do not have size by definition, such as socket streams.
+In that cases, StreamSize returns an invalid size represented by
+\begin{verbatim}
+~(size_t)0
+\end{verbatim}
 
 \membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
 

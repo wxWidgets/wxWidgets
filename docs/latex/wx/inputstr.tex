@@ -52,7 +52,11 @@ Returns the first character in the input queue and removes it.
 
 Reads the specified amount of bytes and stores the data in \it{buffer}.
 
-\it{WARNING!} The buffer absolutely needs to have at least the specified size.
+\wxheading{Warning}
+
+The buffer absolutely needs to have at least the specified size.
+
+\wxheading{Return value}
 
 This function returns a reference on the current object, so the user can test
 any states of the stream right away.
@@ -61,6 +65,11 @@ any states of the stream right away.
 
 Reads data from the input queue and stores it in the specified output stream.
 The data is read until an error is raised by one of the two streams.
+
+\wxheading{Return value}
+
+This function returns a reference on the current object, so the user can test
+any states of the stream right away.
 
 % ------------------
 % Position functions

@@ -20,3 +20,7 @@ differs and it is documented below.
 
 \func{}{wxFilterOutputStream}{\param{wxOutputStream\&}{ stream}}
 
+Initializes a "filter" stream. A filter stream has the capability of a normal
+stream but it can be placed on the top of another stream. So, for example, it
+can compress, crypt the datas which are passed to it and write them to another
+stream.

@@ -16,7 +16,7 @@ None
 % -----------
 % ctor & dtor
 % -----------
-\membersection{wxStreamBuffer::wxStreamBuffer}
+\membersection{wxStreamBuffer::wxStreamBuffer}\label{wxstreambufconst}
 
 \func{}{wxStreamBuffer}{\param{wxStreamBase\&}{ stream}, \param{BufMode}{ mode}}
 
@@ -211,11 +211,40 @@ Resets to the initial state variables concerning the buffer.
 \func{void}{SetBufferIO}{\param{char*}{ buffer\_start}, \param{char*}{ buffer\_end}}
 
 Specifies which pointers to use for stream buffering. You need to pass a pointer on the
-start of the buffer end and another on the end.
+start of the buffer end and another on the end. The object will use this buffer
+to cache stream data. It may be used also as a source/destination buffer when
+you create an empty stream buffer (See \helpref{wxStreamBuffer::wxStreamBuffer}{wxstreambufconst}).
+
+\wxheading{Remarks}
+
+When you use this function, you'll have to destroy the IO buffers yourself
+after the stream buffer is destroyed or don't use it anymore.
+In the case you use it with an empty buffer, the stream buffer will not grow
+it when it is full.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer constructor}{wxstreambufconst}\\
+\helpref{wxStreamBuffer::Fixed}{wxstreambuffixed}\\
+\helpref{wxStreamBuffer::Flushable}{wxstreambufflushable}
 
 \func{void}{SetBufferIO}{\param{size\_t}{ bufsize}}
 
-Changes the size of the current IO buffer.
+Destroys or invalidates the previous IO buffer and allocates a new one of the
+specified size.
+
+\wxheading{Warning}
+
+All previous pointers aren't valid anymore.
+
+\wxheading{Remark}
+
+The created IO buffer is growable by the object.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::Fixed}{wxstreambuffixed}\\
+\helpref{wxStreamBuffer::Flushable}{wxstreambufflushable}
 
 \membersection{wxStreamBuffer::GetBufferStart}
 
@@ -239,7 +268,7 @@ Returns a pointer on the current position of the stream buffer.
 
 \constfunc{off\_t}{GetIntPosition}{\void}
 
-Returns the current position in the stream buffer.
+Returns the current position (counted in bytes) in the stream buffer.
 
 \membersection{wxStreamBuffer::SetIntPosition}
 
@@ -258,8 +287,12 @@ Returns the amount of bytes read during the last IO call to the parent stream.
 \func{void}{Fixed}{\param{bool}{ fixed}}
 
 Toggles the fixed flag. Usually this flag is toggled at the same time as 
-\it{flushable}. This flag allows (when it is FALSE) or forbids (when it is TRUE)
-the stream buffer to resize dynamically the IO buffer.
+\it{flushable}. This flag allows (when it has the FALSE value) or forbids
+(when it has the TRUE value) the stream buffer to resize dynamically the IO buffer.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::SetBufferIO}{wxstreambufsetbufferio}
 
 \membersection{wxStreamBuffer::Flushable}
 
