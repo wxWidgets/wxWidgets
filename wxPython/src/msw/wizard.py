@@ -42,7 +42,6 @@ class wxWizardEventPtr(wxNotifyEventPtr):
         return val
     def GetPage(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardEvent_GetPage,(self,) + _args, _kwargs)
-        if val: val = wxWizardPagePtr(val) 
         return val
     def __repr__(self):
         return "<C wxWizardEvent instance at %s>" % (self.this,)
@@ -66,11 +65,9 @@ class wxWizardPagePtr(wxPanelPtr):
         return val
     def GetPrev(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPage_GetPrev,(self,) + _args, _kwargs)
-        if val: val = wxWizardPagePtr(val) 
         return val
     def GetNext(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPage_GetNext,(self,) + _args, _kwargs)
-        if val: val = wxWizardPagePtr(val) 
         return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPage_GetBitmap,(self,) + _args, _kwargs)
@@ -218,7 +215,6 @@ class wxWizardPtr(wxDialogPtr):
         return val
     def GetCurrentPage(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizard_GetCurrentPage,(self,) + _args, _kwargs)
-        if val: val = wxWizardPagePtr(val) 
         return val
     def SetPageSize(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizard_SetPageSize,(self,) + _args, _kwargs)

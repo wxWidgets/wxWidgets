@@ -21,6 +21,9 @@ class TitledPage(wxWizardPageSimple):
 
 #----------------------------------------------------------------------
 
+
+#----------------------------------------------------------------------
+
 class TestPanel(wxPanel):
     ID_wiz = wxNewId()
 
@@ -28,8 +31,11 @@ class TestPanel(wxPanel):
         self.log = log
         wxPanel.__init__(self, parent, -1)
 
-        b = wxButton(self, -1, "Run Simple Wizard", pos=(50,50))
+        b = wxButton(self, -1, "Run Simple Wizard", pos=(50, 50))
         EVT_BUTTON(self, b.GetId(), self.OnRunSimpleWizard)
+
+        b = wxButton(self, -1, "Run Dynamic Wizard", pos=(50, 100))
+        EVT_BUTTON(self, b.GetId(), self.OnRunDynamicWizard)
 
         EVT_WIZARD_PAGE_CHANGED(self, self.ID_wiz, self.OnWizPageChanged)
         EVT_WIZARD_PAGE_CHANGING(self, self.ID_wiz, self.OnWizPageChanging)
@@ -41,14 +47,18 @@ class TestPanel(wxPanel):
             dir = "forward"
         else:
             dir = "backward"
-        self.log.write("OnWizPageChanged: %s, %s\n" % (dir, evt.GetPage()))
+        page = evt.GetPage()
+        self.log.write("OnWizPageChanged: %s, %s\n" % (dir, page.__class__))
+
 
     def OnWizPageChanging(self, evt):
         if evt.GetDirection():
             dir = "forward"
         else:
             dir = "backward"
-        self.log.write("OnWizPageChanging: %s, %s\n" % (dir, evt.GetPage()))
+        page = evt.GetPage()
+        self.log.write("OnWizPageChanging: %s, %s\n" % (dir, page.__class__))
+
 
     def OnWizCancel(self, evt):
         pass
@@ -67,7 +77,7 @@ class TestPanel(wxPanel):
 This wizard is totally useless, but is meant to show how to
 chain simple wizard pages together in a non-dynamic manner.
 IOW, the order of the pages never changes, and so the
-wxWizardPageSimple class can be used for the pages."""))
+wxWizardPageSimple class can easily be used for the pages."""))
         wizard.FitToPage(page1)
 
         # Use the convenience Chain function to connect the pages
@@ -80,6 +90,10 @@ wxWizardPageSimple class can be used for the pages."""))
         else:
             wxMessageBox("Wizard was cancelled", "That's all folks!")
 
+
+
+    def OnRunDynamicWizard(self, evt):
+        pass
 
 #----------------------------------------------------------------------
 

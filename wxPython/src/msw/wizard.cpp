@@ -266,7 +266,6 @@ static PyObject *_wrap_wxWizardEvent_GetPage(PyObject *self, PyObject *args, PyO
     wxWizardEvent * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizardEvent_GetPage",_kwnames,&_argo0)) 
@@ -284,13 +283,7 @@ static PyObject *_wrap_wxWizardEvent_GetPage(PyObject *self, PyObject *args, PyO
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWizardPage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -408,7 +401,6 @@ static PyObject *_wrap_wxWizardPage_GetPrev(PyObject *self, PyObject *args, PyOb
     wxWizardPage * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizardPage_GetPrev",_kwnames,&_argo0)) 
@@ -426,13 +418,7 @@ static PyObject *_wrap_wxWizardPage_GetPrev(PyObject *self, PyObject *args, PyOb
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWizardPage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -443,7 +429,6 @@ static PyObject *_wrap_wxWizardPage_GetNext(PyObject *self, PyObject *args, PyOb
     wxWizardPage * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizardPage_GetNext",_kwnames,&_argo0)) 
@@ -461,13 +446,7 @@ static PyObject *_wrap_wxWizardPage_GetNext(PyObject *self, PyObject *args, PyOb
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWizardPage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1902,7 +1881,6 @@ static PyObject *_wrap_wxWizard_GetCurrentPage(PyObject *self, PyObject *args, P
     wxWizard * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWizard_GetCurrentPage",_kwnames,&_argo0)) 
@@ -1920,13 +1898,7 @@ static PyObject *_wrap_wxWizard_GetCurrentPage(PyObject *self, PyObject *args, P
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWizardPage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
