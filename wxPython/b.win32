@@ -1,0 +1,107 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+
+
+FLAGS="USE_SWIG=1 SWIG=e:/projects/SWIG-cvs/swig.exe"
+
+#  Use non-default python?
+if [[ "$1" = "15" || "$1" = "20" || "$1" = "21" || "$1" = "22" || "$1" = "23" ]]; then
+    VER=$1
+    PYTHON=$TOOLS/python$1/python.exe
+    shift
+else
+    echo You must specify the Python version as first parameter.
+    exit -1
+fi
+
+SETUP="$PYTHON -u setup.py"
+$PYTHON -c "import sys;print '\n', sys.version, '\n'"
+
+
+
+# "c" --> clean
+if [ "$1" = "c" ]; then
+    shift
+    CMD="$SETUP $FLAGS clean $@"
+    OTHERCMD="rm wx/*.pyd"
+
+# just remove the *.pyd's
+elif [ "$1" = "d" ]; then
+    shift
+    CMD="rm wx/*.pyd"
+
+# touch all the *.i files so swig will regenerate
+elif [ "$1" = "t" ]; then
+    shift
+    CMD=
+    find . -name "*.i" | xargs -l touch
+
+# "i" --> install
+elif [ "$1" = "i" ]; then
+    shift
+    CMD="$SETUP build install"
+
+# "r" --> make installer
+elif [ "$1" = "r" ]; then
+    shift
+    CMD="$PYTHON -u distrib\make_installer.py $@"
+
+# "s" --> source dist
+elif [ "$1" = "s" ]; then
+    shift
+    CMD="$SETUP sdist"
+
+# "f" --> FINAL
+elif [ "$1" == "f" ]; then
+    shift
+    CMD="$SETUP $FLAGS FINAL=1 build_ext --inplace $@"
+
+# "h" --> HYBRID
+elif [ "$1" = "h" ]; then
+    shift
+    CMD="$SETUP $FLAGS HYBRID=1 build_ext --inplace $@"
+
+# "a" --> make all installers
+elif [ "$1" = "a" ]; then
+    shift
+    CMD=
+
+    $0 22 d
+    $0 22 h
+    $0 22 r
+    $0 22 d UNICODE=1
+    $0 22 h UNICODE=1
+    $0 22 r UNICODE=1
+    
+    $0 23 d
+    $0 23 h
+    $0 23 r
+    $0 23 d UNICODE=1
+    $0 23 h UNICODE=1
+    $0 23 r UNICODE=1
+
+
+# "b" --> both debug and hybrid builds
+elif [ "$1" = "b" ]; then
+    shift
+    CMD="echo Finished!"
+    $0 $VER   $@
+    $0 $VER h $@
+
+# (no command arg) --> normal build for development
+else
+    CMD="$SETUP $FLAGS HYBRID=0 build_ext --inplace --debug $@"
+fi
+
+
+
+if [ "$CMD" != "" ]; then
+    echo $CMD
+    $CMD
+fi
+
+if [ "$OTHERCMD" != "" ]; then
+    echo $OTHERCMD
+    $OTHERCMD
+fi
+

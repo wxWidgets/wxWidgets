@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/bin/bash
+
+# Are we using bash on win32?  If so source that file and then exit.
+if [ "$OSTYPE" = "cygwin" ]; then
+    source b.win32
+    exit
+fi
+
 
 function getpyver {
     if [ "$1" = "15" ]; then
