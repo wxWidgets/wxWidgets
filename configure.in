@@ -2767,6 +2767,17 @@ case "${host}" in
         ;;
 
     *-*-darwin* )
+        dnl Under Mac OS X, the naming conventions for shared libraries
+        dnl are different: the number precedes the suffix.
+
+        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
+        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
+
+        WX_LIBRARY_LINK1="lib${WX_LIBRARY}.${WX_CURRENT}.${SO_SUFFIX}"
+        WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
+        WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${SO_SUFFIX}"
+        WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
+
         dnl Under Mac OS X, we should build real frameworks instead of simple
         dnl dynamic shared libraries (in order to embed the resources)
         if test "$wxUSE_MAC" = 1; then
@@ -2903,8 +2914,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
         SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
         PIC_FLAG="-dynamic -fPIC"
-        SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
-        SONAME_FLAGS_GL=${SONAME_FLAGS}
+        SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
+        SONAME_FLAGS_GL="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1_GL}"
       ;;
 
       *-*-aix* )
