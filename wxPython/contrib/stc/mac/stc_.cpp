@@ -12589,6 +12589,7 @@ SWIGEXPORT(void) initstc_c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("stc_c", stc_cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"STC_USE_DND", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxSTC_USE_POPUP", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxSTC_INVALID_POSITION", PyInt_FromLong((long) -1));
 	 PyDict_SetItemString(d,"wxSTC_START", PyInt_FromLong((long) 2000));
@@ -13360,7 +13361,6 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_CMD_PARADOWNEXTEND", PyInt_FromLong((long) 2414));
 	 PyDict_SetItemString(d,"wxSTC_CMD_PARAUP", PyInt_FromLong((long) 2415));
 	 PyDict_SetItemString(d,"wxSTC_CMD_PARAUPEXTEND", PyInt_FromLong((long) 2416));
-	 PyDict_SetItemString(d,"STC_USE_DND", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHARADDED", PyInt_FromLong((long) wxEVT_STC_CHARADDED));
