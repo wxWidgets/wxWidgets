@@ -3106,6 +3106,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
+	;;
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then

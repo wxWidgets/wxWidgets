@@ -25346,6 +25346,7 @@ echo "${ECHO_T}$wx_cv_version_script" >&6
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
+	;;
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then
