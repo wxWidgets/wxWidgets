@@ -11907,11 +11907,11 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
 
                 if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
         else
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC}"
         fi
-                        PIC_FLAG=
+                                PIC_FLAG=
       ;;
 
       *-pc-os2_emx | *-pc-os2-emx )

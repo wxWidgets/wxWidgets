@@ -227,6 +227,17 @@ Provides: libwxbase-msw-dev
 Description: wxBase mingw32msvc-cross
  mingw32msvc-cross wxBase libs.
 
+Package: libwxbase-msw=V-dbg
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers-msw (= ${Source-Version})
+Conflicts: libwxbase-msw-dbg
+Replaces: libwxbase-msw-dbg
+Provides: libwxbase-msw-dbg
+Description: wxBase mingw32msvc-cross (debug)
+ mingw32msvc-cross wxBase libs.
+ __WXDEBUG__ version.
+
 Package: libwxmsw=V-dev
 Architecture: i386
 Section: otherosfs
@@ -236,6 +247,17 @@ Replaces: libwxmsw-dev
 Provides: libwxmsw-dev
 Description: wxMSW mingw32msvc-cross
  mingw32msvc-cross wxMSW libs.
+
+Package: libwxmsw=V-dbg
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers-msw (= ${Source-Version})
+Conflicts: libwxmsw-dbg
+Replaces: libwxmsw-dbg
+Provides: libwxmsw-dbg
+Description: wxMSW mingw32msvc-cross (debug)
+ mingw32msvc-cross wxMSW libs.
+ __WXDEBUG__ version.
 
 Package: wxwin=V-headers-msw
 Architecture: i386

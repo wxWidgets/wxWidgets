@@ -1,6 +1,8 @@
 wxwindows2.3 (2.3.2) unstable; urgency=low
 
   * Major Overhaul.  First serious release contender.
+  * Added .dll's to msw-cross packages.
+  * Added -dbg versions of the cross packages.
 
  -- Ron Lee <ron@debian.org>  Thu, 27 Sep 2001 05:55:07 -0700
 
@@ -17,21 +19,26 @@ wxwindows2.3 (2.3.0) unstable; urgency=low
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
 
-wxwindows2.2 (2.2.8) unstable; urgency=low
+wxwindows2.2 (2.2.8) unstable; urgency=medium
 
   * Fixed bogus samples makefile. Closes: #110061
   * Added ability to build wxMSW-cross packages, but they
     are not built and distributed by default.
 
       If you think such creatures belong in the archive,
-      register your vote by filing a wishlist bug (or preferably
-      append some reasoned response to one already posted ;)
+      see README.Debian
 
   * Pruned more inapplicable files from the raw cvs source,
     cleaned configure.in and removed the need for a common setup.h,
     removed superfluous library links and generally tweaked things
     so as to make adding new ports easier.
   * added --gl-libs flag to wx-config.
+  * added wx2.4 forward compatible event macros.
+  * added build fixes for IA64 from Jeff Licquia, and fixed clean
+    rules to pick up unnoticed strays that effected NMU builds.
+    Thanks Jeff.  Closes: #101734, #104679  (fixed in NMU)
+  * Medium urgency since several other packages are waiting
+    for this to get into testing.
 
  -- Ron Lee <ron@debian.org>  Thu, 30 Aug 2001 15:41:49 -0700
 

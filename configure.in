@@ -2513,12 +2513,13 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl install shared libs without symlinks
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
         else
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC}"
         fi
         dnl -fPIC is not required for mingw build -- all code is already
-        dnl position independent
+        dnl position independent.  Because of this we can (and do) build
+        dnl a static lib from the same object files as the dll.
         PIC_FLAG=
       ;;
 
