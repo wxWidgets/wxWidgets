@@ -62,7 +62,7 @@
 #define HAVE_VSNPRINTF_DECL 1
 #define HAVE_WCHAR_H 1
 #define HAVE_WCSLEN 1
-#define HAVE_WCSLEN 1
+#define HAVE_WPRINTF 1
 #define HAVE_WCSRTOMBS 1
 #define HAVE_X11_XKBLIB_H 1
 #define HAVE_X11_XLIB_H 1
