@@ -193,6 +193,13 @@ public:
             return wxArrayString2PyList_helper(strings);
         }
     }
+
+    wxListCtrl* GetListCtrl()       { return m_listCtrl; }
+    wxBitmapButton* GetDelButton()  { return m_bDel; }
+    wxBitmapButton* GetNewButton()  { return m_bNew; }
+    wxBitmapButton* GetUpButton()   { return m_bUp; }
+    wxBitmapButton* GetDownButton() { return m_bDown; }
+    wxBitmapButton* GetEditButton() { return m_bEdit; }
 };
 
 

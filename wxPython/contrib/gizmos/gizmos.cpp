@@ -716,6 +716,216 @@ static PyObject *_wrap_wxEditableListBox_GetStrings(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+#define wxEditableListBox_GetListCtrl(_swigobj)  (_swigobj->GetListCtrl())
+static PyObject *_wrap_wxEditableListBox_GetListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxListCtrl * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetListCtrl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetListCtrl. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxListCtrl *)wxEditableListBox_GetListCtrl(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxListCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEditableListBox_GetDelButton(_swigobj)  (_swigobj->GetDelButton())
+static PyObject *_wrap_wxEditableListBox_GetDelButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetDelButton",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetDelButton. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxBitmapButton *)wxEditableListBox_GetDelButton(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEditableListBox_GetNewButton(_swigobj)  (_swigobj->GetNewButton())
+static PyObject *_wrap_wxEditableListBox_GetNewButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetNewButton",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetNewButton. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxBitmapButton *)wxEditableListBox_GetNewButton(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEditableListBox_GetUpButton(_swigobj)  (_swigobj->GetUpButton())
+static PyObject *_wrap_wxEditableListBox_GetUpButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetUpButton",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetUpButton. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxBitmapButton *)wxEditableListBox_GetUpButton(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEditableListBox_GetDownButton(_swigobj)  (_swigobj->GetDownButton())
+static PyObject *_wrap_wxEditableListBox_GetDownButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetDownButton",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetDownButton. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxBitmapButton *)wxEditableListBox_GetDownButton(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEditableListBox_GetEditButton(_swigobj)  (_swigobj->GetEditButton())
+static PyObject *_wrap_wxEditableListBox_GetEditButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmapButton * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetEditButton",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetEditButton. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxBitmapButton *)wxEditableListBox_GetEditButton(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapButton_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxRemotelyScrolledTreeCtrlTowxPyTreeCtrl(void *ptr) {
     wxRemotelyScrolledTreeCtrl *src;
     wxPyTreeCtrl *dest;
@@ -1760,6 +1970,12 @@ static PyMethodDef gizmoscMethods[] = {
 	 { "wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRemotelyScrolledTreeCtrl_HideVScrollbar", (PyCFunction) _wrap_wxRemotelyScrolledTreeCtrl_HideVScrollbar, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRemotelyScrolledTreeCtrl", (PyCFunction) _wrap_new_wxRemotelyScrolledTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetEditButton", (PyCFunction) _wrap_wxEditableListBox_GetEditButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetDownButton", (PyCFunction) _wrap_wxEditableListBox_GetDownButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetUpButton", (PyCFunction) _wrap_wxEditableListBox_GetUpButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetNewButton", (PyCFunction) _wrap_wxEditableListBox_GetNewButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetDelButton", (PyCFunction) _wrap_wxEditableListBox_GetDelButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_GetListCtrl", (PyCFunction) _wrap_wxEditableListBox_GetListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEditableListBox_GetStrings", (PyCFunction) _wrap_wxEditableListBox_GetStrings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEditableListBox_SetStrings", (PyCFunction) _wrap_wxEditableListBox_SetStrings, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxEditableListBox", (PyCFunction) _wrap_new_wxEditableListBox, METH_VARARGS | METH_KEYWORDS },
