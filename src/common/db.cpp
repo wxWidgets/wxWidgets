@@ -146,7 +146,7 @@ wxDbConnectInf::wxDbConnectInf()
 
 
 /********** wxDbConnectInf Constructor - form 2 **********/
-wxDbConnectInf::wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID, 
+wxDbConnectInf::wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID,
                        const wxString &password, const wxString &defaultDir,
                        const wxString &fileType, const wxString &description)
 {
@@ -250,7 +250,7 @@ void wxDbConnectInf::SetUserID(const wxString &uid)
 void wxDbConnectInf::SetPassword(const wxString &password)
 {
     wxASSERT(password.Length() < sizeof(AuthStr));
-    
+
     wxStrcpy(AuthStr,password);
 }  // wxDbConnectInf::SetPassword()
 
@@ -1897,7 +1897,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt)
     SQLFreeStmt(hstmt, SQL_CLOSE);
 
     retcode = SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
-    if (retcode == SQL_SUCCESS || 
+    if (retcode == SQL_SUCCESS ||
         (Dbms() == dbmsDB2 && (retcode == SQL_SUCCESS_WITH_INFO || retcode == SQL_NO_DATA_FOUND)))
     {
         return(TRUE);
@@ -3226,25 +3226,25 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
     while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
     {
         if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) result.tableQual, sizeof(result.tableQual), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 2, SQL_C_CHAR, (UCHAR*) result.tableOwner, sizeof(result.tableOwner), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 3, SQL_C_CHAR, (UCHAR*) result.tableName, sizeof(result.tableName), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 4, SQL_C_CHAR, (UCHAR*) result.grantor, sizeof(result.grantor), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 5, SQL_C_CHAR, (UCHAR*) result.grantee, sizeof(result.grantee), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 6, SQL_C_CHAR, (UCHAR*) result.privilege, sizeof(result.privilege), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (!failed && SQLGetData(hstmt, 7, SQL_C_CHAR, (UCHAR*) result.grantable, sizeof(result.grantable), &cbRetVal) != SQL_SUCCESS)
-            failed = true;
+            failed = TRUE;
 
         if (failed)
         {
@@ -3480,7 +3480,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
     // Must specify a columnLength if modifying a VARCHAR type column
     if (dataType == DB_DATA_TYPE_VARCHAR && !columnLength)
         return FALSE;
-    
+
     wxString dataTypeName;
 	wxString sqlStmt;
     wxString alterSlashModify;

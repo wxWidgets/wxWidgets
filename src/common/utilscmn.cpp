@@ -60,6 +60,32 @@
 
 #if !defined(__WATCOMC__)
     #if !(defined(_MSC_VER) && (_MSC_VER > 800))
+        //
+        // OS/2's App.h is being included first which includes nerrno.h
+        // so these are already defined.  Undef them if defined before
+        // including errno.h
+        //
+        #ifdef EEXIST
+        #undef EEXIST
+        #endif
+        #ifdef ENOENT
+        #undef ENOENT
+        #endif
+        #ifdef EMFILE
+        #undef EMFILE
+        #endif
+        #ifdef EINTR
+        #undef EINTR
+        #endif
+        #ifdef EINVAL
+        #undef EINVAL
+        #endif
+        #ifdef ENOMEM
+        #undef ENOMEM
+        #endif
+        #ifdef EACCES
+        #undef EACCES
+        #endif
         #include <errno.h>
     #endif
 #endif
