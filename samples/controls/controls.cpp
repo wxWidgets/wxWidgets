@@ -185,6 +185,30 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// a button which intercepts double clicks (for testing...)
+class MyButton : public wxButton
+{
+public:
+    MyButton(wxWindow *parent,
+             wxWindowID id,
+             const wxString& label = wxEmptyString,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize)
+        : wxButton(parent, id, label, pos, size)
+    {
+    }
+
+    void OnDClick(wxMouseEvent& event)
+    {
+        wxLogMessage(_T("MyButton::OnDClick"));
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 // a combo which intercepts chars (to test Windows behaviour)
 class MyComboBox : public wxComboBox
 {
@@ -457,6 +481,10 @@ EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(MyButton, wxButton)
+    EVT_LEFT_DCLICK(MyButton::OnDClick)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
     EVT_CHAR(MyComboBox::OnChar)
     EVT_KEY_DOWN(MyComboBox::OnKeyDown)
@@ -572,9 +600,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_lbSelectNum = new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #&2", wxPoint(180,30), wxSize(140,30) );
     m_lbSelectThis = new wxButton( panel, ID_LISTBOX_SEL_STR, "&Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_CLEAR, "&Clear", wxPoint(180,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
+    (void)new MyButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "D&elete selected item", wxPoint(180,130), wxSize(140,30) );
-    wxButton *button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+    wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
 
     button->SetDefault();
 
@@ -661,6 +689,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     (void)new wxStaticBox( panel, -1, "&wxGauge and wxSlider", wxPoint(10,10), wxSize(200,130) );
     m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
+    m_gauge->SetBackgroundColour(*wxGREEN);
+    m_gauge->SetForegroundColour(*wxRED);
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1), wxSL_LABELS );
     (void)new wxStaticBox( panel, -1, "&Explanation", wxPoint(220,10), wxSize(270,130) );
 #ifdef __WXMOTIF__
