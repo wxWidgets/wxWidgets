@@ -4070,6 +4070,13 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
+    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    {
+        // don't skip the event here, custom background means that the app is
+        // drawing it itself in its OnPaint()
+        return;
+    }
+
     if ( !m_hasBgCol )
     {
         event.Skip();
