@@ -387,6 +387,10 @@ int wxGenericScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
 // Adjust the scrollbars - new version.
 void wxGenericScrolledWindow::AdjustScrollbars()
 {
+#ifdef __WXMAC__
+    m_targetWindow->MacUpdateImmediately();
+#endif
+
     int w, h;
     m_targetWindow->GetClientSize(&w, &h);
 
@@ -452,6 +456,10 @@ void wxGenericScrolledWindow::AdjustScrollbars()
         else
             m_targetWindow->Refresh();
     }
+
+#ifdef __WXMAC__
+    m_targetWindow->MacUpdateImmediately();
+#endif
 }
 
 // Override this function if you don't want to have wxGenericScrolledWindow
@@ -514,6 +522,10 @@ void wxGenericScrolledWindow::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
+#ifdef __WXMAC__
+    m_targetWindow->MacUpdateImmediately();
+#endif
+
     int w, h;
     m_targetWindow->GetClientSize(&w, &h);
 
@@ -561,6 +573,7 @@ void wxGenericScrolledWindow::Scroll( int x_pos, int y_pos )
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately();
 #endif
+
 }
 
 void wxGenericScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
