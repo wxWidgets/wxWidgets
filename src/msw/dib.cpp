@@ -84,13 +84,13 @@
 DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul);
 DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul);
 
-BOOL		 WriteDIB (LPSTR szFile,HANDLE hdib);
+BOOL		 WriteDIB (LPTSTR szFile,HANDLE hdib);
 WORD		 PaletteSize (VOID FAR * pv);
 WORD		 DibNumColors (VOID FAR * pv);
 // HANDLE		 DibFromBitmap (HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal);
 BOOL             PASCAL MakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
 HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER);
-BOOL             ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
+BOOL             ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
 
 /****************************************************************************
  *									    *
@@ -103,7 +103,7 @@ BOOL             ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
  *									    *
  ****************************************************************************/
 
-BOOL WriteDIB(LPSTR szFile, HANDLE hdib)
+BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
 {
 	BITMAPFILEHEADER	hdr;
 	LPBITMAPINFOHEADER  lpbi;
@@ -113,7 +113,7 @@ BOOL WriteDIB(LPSTR szFile, HANDLE hdib)
 	if (!hdib)
 		return FALSE;
 
-	fh = OpenFile(szFile, &of, OF_CREATE | OF_READWRITE);
+	fh = OpenFile(wxFNCONV(szFile), &of, OF_CREATE | OF_READWRITE);
 	if (fh == -1)
 		return FALSE;
 
@@ -418,7 +418,7 @@ DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul)
  *		 FALSE - otherwise
  *
  ****************************************************************************/
-BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
+BOOL ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 {
     int fh;
     LPBITMAPINFOHEADER lpbi;
@@ -434,7 +434,7 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     /* Open the file and get a handle to it's BITMAPINFO */
 
-    fh = OpenFile (lpFileName, &of, OF_READ);
+    fh = OpenFile (wxFNCONV(lpFileName), &of, OF_READ);
     if (fh == -1) {
         wsprintf(str,_T("Can't open file '%s'"), lpFileName);
 	MessageBox(NULL, str, _T("Error"), MB_ICONSTOP | MB_OK);
@@ -696,7 +696,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 
 }
 
-bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxPalette **pal)
+bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
 {
   HBITMAP hBitmap;
   HPALETTE hPalette;
@@ -737,7 +737,7 @@ bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxPalette **pal)
   else return FALSE;
 }
 
-wxBitmap *wxLoadBitmap(char *filename, wxPalette **pal)
+wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **pal)
 {
   wxBitmap *bitmap = new wxBitmap;
   if (wxLoadIntoBitmap(filename, bitmap, pal))
@@ -926,7 +926,7 @@ HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
    return hDIB;
 }
 
-bool wxSaveBitmap(char *filename, wxBitmap *bitmap, wxPalette *colourmap)
+bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap)
 {
   HPALETTE hPalette = 0;
   if (colourmap)
