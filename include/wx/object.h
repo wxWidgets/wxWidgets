@@ -171,9 +171,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // to be replaced by dynamic_cast<> in the future
 #define wxDynamicCast(obj, className) \
-        ((obj) && ((obj)->IsKindOf(&className::sm_class##className)) \
-        ? (className *)(obj) \
-        : (className *)0)
+    (className *) wxCheckDynamicCast((obj), &className::sm_class##className)
 
 // The 'this' pointer is always true, so use this version to cast the this
 // pointer and avoid compiler warnings.
@@ -294,6 +292,11 @@ public:
 private:
     int m_count;
 };
+
+inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
+{
+    return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : 0;
+}
 
 #ifdef __WXDEBUG__
 #ifndef WXDEBUG_NEW
