@@ -132,9 +132,9 @@ protected:
 #endif
 private:
   //Virtual function hiding suppression, do not use
-  wxControl *CreateItem(const wxItemResource* childResource,
-                        const wxItemResource* parentResource,
-                        const wxResourceTable *table = (const wxResourceTable *) NULL)
+  virtual wxControl *CreateItem(const wxItemResource* childResource,
+                                const wxItemResource* parentResource,
+                                const wxResourceTable *table = (const wxResourceTable *) NULL)
   { return(wxWindowBase::CreateItem(childResource, parentResource, table));};
 };
 

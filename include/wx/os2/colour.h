@@ -1,23 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.h
 // Purpose:     wxColour class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COLOUR_H_
 #define _WX_COLOUR_H_
 
-#ifdef __GNUG__
-#pragma interface "colour.h"
-#endif
-
 #include "wx/object.h"
-#include "wx/string.h"
 
 // Colour
 class WXDLLEXPORT wxColour: public wxObject
@@ -66,8 +61,8 @@ public:
   // comparison
   bool operator == (const wxColour& colour) const
   {
-    return (m_red == colour.m_red && 
-            m_green == colour.m_green && 
+    return (m_red == colour.m_red &&
+            m_green == colour.m_green &&
             m_blue == colour.m_blue);
   }
   bool operator != (const wxColour& colour) const { return !(*this == colour); }
@@ -85,10 +80,7 @@ private:
   unsigned char m_green;
 
 public:
-  /* TODO: implementation
      WXCOLORREF m_pixel ;
-   */
-
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)
 };

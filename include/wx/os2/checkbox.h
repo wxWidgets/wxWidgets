@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        checkbox.h
 // Purpose:     wxCheckBox class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CHECKBOX_H_
 #define _WX_CHECKBOX_H_
-
-#ifdef __GNUG__
-#pragma interface "checkbox.h"
-#endif
 
 #include "wx/control.h"
 
@@ -42,11 +38,18 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr);
+
   virtual void SetValue(bool);
   virtual bool GetValue() const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
+  virtual bool OS2Command(WXUINT param, WXWORD id);
   virtual void SetLabel(const wxString& label);
   virtual void Command(wxCommandEvent& event);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+protected:
+  virtual wxSize DoGetBestSize();
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
@@ -72,9 +75,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr);
-  virtual void SetValue(bool);
-  virtual bool GetValue() const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
   virtual void SetLabel(const wxBitmap& bitmap);
 private:
   virtual void SetLabel(const wxString& string)

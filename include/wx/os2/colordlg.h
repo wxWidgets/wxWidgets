@@ -2,20 +2,16 @@
 // Name:        colordlg.h
 // Purpose:     wxColourDialog class. Use generic version if no
 //              platform-specific implementation.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COLORDLG_H_
 #define _WX_COLORDLG_H_
-
-#ifdef __GNUG__
-#pragma interface "colordlg.h"
-#endif
 
 #include "wx/setup.h"
 #include "wx/dialog.h"

@@ -76,18 +76,14 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
-    wxAcceleratorTable(const wxAcceleratorTable& accel)
-        { Ref(accel); }
+    inline wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
+    inline wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
 
     ~wxAcceleratorTable();
 
-    wxAcceleratorTable& operator = (const wxAcceleratorTable& accel)
-        { if ( *this != accel ) Ref(accel); return *this; }
-
-    bool operator == (const wxAcceleratorTable& accel) const
-        { return m_refData == accel.m_refData; }
-    bool operator != (const wxAcceleratorTable& accel) const
-        { return m_refData != accel.m_refData; }
+    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if ( *this != accel ) Ref(accel); return *this; }
+    inline bool operator == (const wxAcceleratorTable& accel) const { return m_refData == accel.m_refData; }
+    inline bool operator != (const wxAcceleratorTable& accel) const { return m_refData != accel.m_refData; }
 
     bool Ok() const;
     void SetHACCEL(WXHACCEL hAccel);

@@ -1,21 +1,29 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        brush.cpp
 // Purpose:     wxBrush
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "brush.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include <stdio.h>
+#include "wx/setup.h"
+#include "wx/list.h"
+#include "wx/utils.h"
+#include "wx/app.h"
+#include "wx/brush.h"
 #endif
 
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/brush.h"
+#include "wx/os2/private.h"
+
+#include "assert.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
@@ -24,17 +32,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 wxBrushRefData::wxBrushRefData()
 {
     m_style = wxSOLID;
-// TODO: null data
+    m_hBrush = 0;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
 {
-  m_style = data.m_style;
-  m_stipple = data.m_stipple;
-  m_colour = data.m_colour;
-/* TODO: null data
-  m_hBrush = 0;
-*/
+    m_style = data.m_style;
+    m_stipple = data.m_stipple;
+    m_colour = data.m_colour;
+    m_hBrush = 0;
 }
 
 wxBrushRefData::~wxBrushRefData()
@@ -61,6 +67,7 @@ wxBrush::wxBrush(const wxColour& col, int Style)
 
     M_BRUSHDATA->m_colour = col;
     M_BRUSHDATA->m_style = Style;
+    M_BRUSHDATA->m_hBrush = 0;
 
     RealizeResource();
 
@@ -74,6 +81,7 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 
     M_BRUSHDATA->m_style = wxSTIPPLE;
     M_BRUSHDATA->m_stipple = stipple;
+    M_BRUSHDATA->m_hBrush = 0;
 
     RealizeResource();
 
@@ -81,6 +89,117 @@ wxBrush::wxBrush(const wxBitmap& stipple)
         wxTheBrushList->AddBrush(this);
 }
 
+bool wxBrush::RealizeResource(void)
+{
+// TODO:
+/*
+    if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0))
+    {
+        if (M_BRUSHDATA->m_style==wxTRANSPARENT)
+        {
+            M_BRUSHDATA->m_hBrush = (WXHBRUSH) ::GetStockObject(NULL_BRUSH);
+            return TRUE;
+        }
+        COLORREF ms_colour = 0 ;
+
+        ms_colour = M_BRUSHDATA->m_colour.GetPixel() ;
+
+        switch (M_BRUSHDATA->m_style)
+        {
+//
+    // Don't reset cbrush, wxTRANSPARENT is handled by wxBrush::SelectBrush()
+    // this could save (many) time if frequently switching from
+    // wxSOLID to wxTRANSPARENT, because Create... is not always called!!
+    //
+    // NB August 95: now create and select a Null brush instead.
+    // This could be optimized as above.
+    case wxTRANSPARENT:
+      M_BRUSHDATA->m_hBrush = NULL;  // Must always select a suitable background brush
+                      // - could choose white always for a quick solution
+      break;
+//
+            case wxBDIAGONAL_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_BDIAGONAL,ms_colour) ;
+                break ;
+
+            case wxCROSSDIAG_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_DIAGCROSS,ms_colour) ;
+                break ;
+
+            case wxFDIAGONAL_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_FDIAGONAL,ms_colour) ;
+                break ;
+
+            case wxCROSS_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_CROSS,ms_colour) ;
+                break ;
+
+            case wxHORIZONTAL_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_HORIZONTAL,ms_colour) ;
+                break ;
+
+            case wxVERTICAL_HATCH:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_VERTICAL,ms_colour) ;
+                break ;
+
+            case wxSTIPPLE:
+                if (M_BRUSHDATA->m_stipple.Ok())
+                    M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreatePatternBrush((HBITMAP) M_BRUSHDATA->m_stipple.GetHBITMAP()) ;
+                else
+                    M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
+                break ;
+
+            case wxSOLID:
+            default:
+                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
+                break;
+        }
+#ifdef WXDEBUG_CREATE
+        if (M_BRUSHDATA->m_hBrush==NULL) wxError("Cannot create brush","Internal error") ;
+#endif
+        return TRUE;
+    }
+    else
+        return FALSE;
+*/
+    return FALSE;
+}
+
+WXHANDLE wxBrush::GetResourceHandle(void)
+{
+  return (WXHANDLE) M_BRUSHDATA->m_hBrush;
+}
+
+bool wxBrush::FreeResource(bool WXUNUSED(force))
+{
+    if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush != 0))
+    {
+// TODO    DeleteObject((HBRUSH) M_BRUSHDATA->m_hBrush);
+        M_BRUSHDATA->m_hBrush = 0;
+        return TRUE;
+    }
+    else return FALSE;
+}
+
+bool wxBrush::IsFree() const
+{
+  return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
+}
+
+void wxBrush::Unshare()
+{
+    // Don't change shared data
+    if (!m_refData)
+    {
+        m_refData = new wxBrushRefData();
+    }
+    else
+    {
+        wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
+}
 
 void wxBrush::SetColour(const wxColour& col)
 {
@@ -116,47 +235,5 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     M_BRUSHDATA->m_stipple = Stipple;
 
     RealizeResource();
-}
-
-bool wxBrush::RealizeResource()
-{
-// TODO: create the brush
-    return FALSE;
-}
-
-WXHANDLE wxBrush::GetResourceHandle(void)
-{
-  return (WXHANDLE) M_BRUSHDATA->m_hBrush;
-}
-
-bool wxBrush::FreeResource(bool WXUNUSED(force))
-{
-  if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush != 0))
-  {
-// TODO    DeleteObject((HBRUSH) M_BRUSHDATA->m_hBrush);
-    M_BRUSHDATA->m_hBrush = 0;
-    return TRUE;
-  }
-  else return FALSE;
-}
-
-bool wxBrush::IsFree() const
-{
-  return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
-}
-
-void wxBrush::Unshare()
-{
-	// Don't change shared data
-	if (!m_refData)
-    {
-		m_refData = new wxBrushRefData();
-	}
-    else
-    {
-		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
 }
 

@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bmpbuttn.h
 // Purpose:     wxBitmapButton class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BMPBUTTN_H_
 #define _WX_BMPBUTTN_H_
-
-#ifdef __GNUG__
-#pragma interface "bmpbuttn.h"
-#endif
 
 #include "wx/button.h"
 
@@ -49,6 +45,10 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
 
   virtual void SetBitmapLabel(const wxBitmap& bitmap);
 
+#if WXWIN_COMPATIBILITY
+    wxBitmap *GetBitmap() const { return (wxBitmap *) & m_buttonBitmap; }
+#endif
+
   inline wxBitmap& GetBitmapLabel() const { return (wxBitmap&) m_buttonBitmap; }
   inline wxBitmap& GetBitmapSelected() const { return (wxBitmap&) m_buttonBitmapSelected; }
   inline wxBitmap& GetBitmapFocus() const { return (wxBitmap&) m_buttonBitmapFocus; }
@@ -62,13 +62,11 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   inline int GetMarginX() { return m_marginX; }
   inline int GetMarginY() { return m_marginY; }
 
-/*
-  // TODO: Implementation
-  virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+  virtual void SetDefault();
+//  virtual bool OS2OnDraw(WXDRAWITEMSTRUCT *item);
   virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
   virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
   virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-*/
 
  protected:
   wxBitmap m_buttonBitmap;

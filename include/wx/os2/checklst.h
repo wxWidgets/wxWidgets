@@ -2,26 +2,24 @@
 // Name:        checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CHECKLST_H_
 #define _WX_CHECKLST_H_
 
-#ifdef __GNUG__
-#pragma interface "checklst.h"
-#endif
+#include <stddef.h>
 
-#include "wx/listbox.h"
+#include "wx/setup.h"
 
-typedef   unsigned int  size_t;
+class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
 
-class wxCheckListBox : public wxListBox
+class WXDLLEXPORT wxCheckListBox : public wxListBox
 {
   DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
@@ -36,9 +34,37 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxListBoxNameStr);
 
+  // override base class virtuals
+  virtual void Delete(int n);
+  virtual void InsertItems(int nItems, const wxString items[], int pos);
+
+  virtual bool SetFont( const wxFont &font );
+
   // items may be checked
-  bool  IsChecked(size_t uiIndex) const;
-  void  Check(size_t uiIndex, bool bCheck = TRUE);
+  bool IsChecked(size_t uiIndex) const;
+  void Check(size_t uiIndex, bool bCheck = TRUE);
+
+  // accessors
+  size_t GetItemHeight() const { return m_nItemHeight; }
+
+protected:
+  // we create our items ourselves and they have non-standard size,
+  // so we need to override these functions
+  virtual wxOwnerDrawn *CreateItem(size_t n);
+//  virtual bool          OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
+
+  // pressing space or clicking the check box toggles the item
+  void OnChar(wxKeyEvent& event);
+  void OnLeftClick(wxMouseEvent& event);
+
+private:
+  size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
+
+  //Virtual function hiding suppression, do not use
+  virtual wxControl *CreateItem(const wxItemResource* childResource,
+                                const wxItemResource* parentResource,
+                                const wxResourceTable *table = (const wxResourceTable *) NULL)
+  { return(wxWindowBase::CreateItem(childResource, parentResource, table));};
 
   DECLARE_EVENT_TABLE()
 };

@@ -12,12 +12,12 @@
 #elif defined(__WXMAC__)
 #include "wx/generic/colrdlgg.h"
 #elif defined(__WXPM__)
-#include "wx/generic/colrdlgg.h"
+#include "wx/os2/colordlg.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/colrdlgg.h"
 #endif
 
-#ifndef __WXMSW__
+#if defined(__WXMSW__)
 #define wxColourDialog wxGenericColourDialog
 #define sm_classwxColourDialog sm_classwxColourDialog
 #endif

@@ -4,101 +4,109 @@
 //              Note: this functionality is under review, and
 //              is derived from wxWindows 1.xx code. Please contact
 //              the wxWindows developers for further information.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CLIPBRD_H_
 #define _WX_CLIPBRD_H_
 
-#ifdef __GNUG__
-#pragma interface "clipbrd.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/setup.h"
 
+#if wxUSE_CLIPBOARD
+
 #include "wx/list.h"
+#include "wx/module.h"
+#include "wx/dataobj.h"     // for wxDataFormat
 
-bool WXDLLEXPORT wxOpenClipboard();
-bool WXDLLEXPORT wxClipboardOpen();
-bool WXDLLEXPORT wxCloseClipboard();
-bool WXDLLEXPORT wxEmptyClipboard();
-bool WXDLLEXPORT wxIsClipboardFormatAvailable(int dataFormat);
-bool WXDLLEXPORT wxSetClipboardData(int dataFormat, wxObject *obj, int width = 0, int height = 0);
-wxObject* WXDLLEXPORT wxGetClipboardData(int dataFormat, long *len = NULL);
-int  WXDLLEXPORT wxEnumClipboardFormats(int dataFormat);
-int  WXDLLEXPORT wxRegisterClipboardFormat(char *formatName);
-bool WXDLLEXPORT wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount);
+// These functions superceded by wxClipboard, but retained in order to
+// implement wxClipboard, and for compatibility.
 
-/* A clipboard client holds data belonging to the clipboard.
-   For plain text, a client is not necessary. */
-class WXDLLEXPORT wxClipboardClient : public wxObject
-{
-  DECLARE_ABSTRACT_CLASS(wxClipboardClient)
+// open/close the clipboard
+WXDLLEXPORT bool wxOpenClipboard();
+WXDLLEXPORT bool wxIsClipboardOpened();
+#define wxClipboardOpen wxIsClipboardOpened
+WXDLLEXPORT bool wxCloseClipboard();
 
- public:
-  /* This list should be filled in with strings indicating the formats
-     this client can provide. Almost all clients will provide "TEXT".
-     Format names should be 4 characters long, so things will work
-     out on the Macintosh */
-  wxStringList formats;
+// get/set data
+WXDLLEXPORT bool wxEmptyClipboard();
+WXDLLEXPORT bool wxSetClipboardData(wxDataFormat dataFormat,
+                                    const void *data,
+                                    int width = 0, int height = 0);
+WXDLLEXPORT void* wxGetClipboardData(wxDataFormat dataFormat,
+                                     long *len = NULL);
 
-  /* This method is called when the client is losing the selection. */
-  virtual void BeingReplaced() = 0;
+// clipboard formats
+WXDLLEXPORT bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
+WXDLLEXPORT wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat);
+WXDLLEXPORT int  wxRegisterClipboardFormat(wxChar *formatName);
+WXDLLEXPORT bool wxGetClipboardFormatName(wxDataFormat dataFormat,
+                                          wxChar *formatName,
+                                          int maxCount);
 
-  /* This method is called when someone wants the data this client is
-     supplying to the clipboard. "format" is a string indicating the
-     format of the data - one of the strings from the "formats"
-     list. "*size" should be filled with the size of the resulting
-     data. In the case of text, "*size" does not count the
-     NULL terminator. */
-  virtual char *GetData(char *format, long *size) = 0;
-};
+//-----------------------------------------------------------------------------
+// wxClipboard
+//-----------------------------------------------------------------------------
 
-/* ONE instance of this class: */
+class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxClipboard : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxClipboard)
+    DECLARE_DYNAMIC_CLASS(wxClipboard)
 
- public:
-  wxClipboardClient *clipOwner;
-  char *cbString, *sentString, *receivedString;
-  void *receivedTargets;
-  long receivedLength;
+public:
+    wxClipboard();
+    ~wxClipboard();
 
-  wxClipboard();
-  ~wxClipboard();
+    // open the clipboard before SetData() and GetData()
+    virtual bool Open();
 
-  /* Set the clipboard data owner. "time" comes from the event record. */
-  void SetClipboardClient(wxClipboardClient *, long time);
+    // close the clipboard after SetData() and GetData()
+    virtual void Close();
 
-  /* Set the clipboard string; does not require a client. */
-  void SetClipboardString(char *, long time);
+    // set the clipboard data. all other formats will be deleted.
+    virtual bool SetData( wxDataObject *data );
 
-  /* Get data from the clipboard in the format "TEXT". */
-  char *GetClipboardString(long time);
+    // add to the clipboard data.
+    virtual bool AddData( wxDataObject *data );
 
-  /* Get data from the clipboard */
-  char *GetClipboardData(char *format, long *length, long time);
+    // ask if data in correct format is available
+    virtual bool IsSupported( wxDataFormat format );
 
-  /* Get the clipboard client directly. Will be NULL if clipboard data
-     is a string, or if some other application owns the clipboard.
-     This can be useful for shortcutting data translation, if the
-     clipboard user can check for a specific client. (This is used
-     by the wxMediaEdit class.) */
-  wxClipboardClient *GetClipboardClient();
+    // fill data with data on the clipboard (if available)
+    virtual bool GetData( wxDataObject *data );
+
+    // clears wxTheClipboard and the system's clipboard if possible
+    virtual void Clear();
+
+    /// X11 has two clipboards which get selected by this call. Empty on MSW.
+    void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
+
 };
 
-/* Initialize wxTheClipboard. Can be called repeatedly */
-void WXDLLEXPORT wxInitClipboard();
-
-/* The clipboard */
+// The global clipboard object
 WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 
+//-----------------------------------------------------------------------------
+// wxClipboardModule: module responsible for initializing the global clipboard
+// object
+//-----------------------------------------------------------------------------
+
+class wxClipboardModule : public wxModule
+{
+    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
+
+public:
+    wxClipboardModule() { }
+
+    bool OnInit();
+    void OnExit();
+};
+
+#endif // wxUSE_CLIPBOARD
 #endif
     // _WX_CLIPBRD_H_

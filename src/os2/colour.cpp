@@ -1,20 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.cpp
 // Purpose:     wxColour class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "colour.h"
-#endif
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #include "wx/gdicmn.h"
-#include "wx/colour.h"
+#define INCL_GPI
+#define INCL_PM
+#include<os2.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
@@ -25,10 +26,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 wxColour::wxColour ()
 {
     m_isInit = FALSE;
-    m_red = m_blue = m_green = 0;
-/* TODO
     m_pixel = 0;
-*/
+    m_red = m_blue = m_green = 0;
 }
 
 wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
@@ -37,9 +36,7 @@ wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
     m_green = g;
     m_blue = b;
     m_isInit = TRUE;
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+//    m_pixel = PALETTERGB (m_red, m_green, m_blue);
 }
 
 wxColour::wxColour (const wxColour& col)
@@ -48,9 +45,7 @@ wxColour::wxColour (const wxColour& col)
     m_green = col.m_green;
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
-/* TODO
     m_pixel = col.m_pixel;
-*/
 }
 
 wxColour& wxColour::operator =(const wxColour& col)
@@ -59,9 +54,7 @@ wxColour& wxColour::operator =(const wxColour& col)
   m_green = col.m_green;
   m_blue = col.m_blue;
   m_isInit = col.m_isInit;
-/* TODO
   m_pixel = col.m_pixel;
-*/
   return *this;
 }
 
@@ -101,3 +94,14 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_pixel = PALETTERGB (m_red, m_green, m_blue);
 */
 }
+
+// Obsolete
+#if WXWIN_COMPATIBILITY
+void wxColour::Get (unsigned char *r, unsigned char *g, unsigned char *b) const
+{
+  *r = m_red;
+  *g = m_green;
+  *b = m_blue;
+}
+#endif
+
