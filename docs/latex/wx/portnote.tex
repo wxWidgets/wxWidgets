@@ -1,12 +1,17 @@
-\chapter{Port notes}\label{portnotes}
+\chapter{Platform details}\label{platformdetails}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-This chapter contains port specific notes.
+wxWidgets defines a common API across platforms, but uses the native graphical
+user interface (GUI) on each platform, so your program will take on the native
+look and feel that users are familiar with. Unfortunatelly native toolkits and
+dedicated hardware not always support complete set of API functionality. This
+chapter collects notes about differences among supported platforms and ports.
 
 \input wxgtk.tex
 \input wxmsw.tex
 \input wxmac.tex
+\input wxpalm.tex
 \input wxos2.tex
 \input wxmgl.tex
 \input wxx11.tex
