@@ -133,8 +133,8 @@ public:
 
     // get data from the buffer of specified length (in the given format),
     // return TRUE if the data was read successfully, FALSE otherwise
-    virtual bool SetData(const wxDataFormat& format,
-                         size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat& WXUNUSED(format),
+                         size_t WXUNUSED(len), const void * WXUNUSED(buf))
     {
         return FALSE;
     }
