@@ -1720,10 +1720,12 @@ wxSize wxWindowMac::DoGetBestSize() const
         {
             bestsize.bottom = 16 ;
         }
+#if wxUSE_SPINBTN 
         else if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
         {
             bestsize.bottom = 24 ;
         }
+#endif // wxUSE_SPINBTN 
         else
         {
             // return wxWindowBase::DoGetBestSize() ;
