@@ -356,6 +356,7 @@ dialog.cpp	Univ
 framuniv.cpp	Univ
 topluniv.cpp	Univ
 gauge.cpp	Univ
+inpcons.cpp	Univ
 inphand.cpp	Univ
 listbox.cpp	Univ
 menu.cpp	Univ
@@ -1212,6 +1213,7 @@ control.h	UnivH
 frame.h	UnivH
 toplevel.h	UnivH
 gauge.h	UnivH
+inpcons.h	UnivH
 inphand.h	UnivH
 listbox.h	UnivH
 menu.h	UnivH
