@@ -494,7 +494,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
 
   xPos = 5;
 
-  wxString choices[2];
+  wxString *choices = new wxString[2];
   choices[0] = _("Portrait");
   choices[1] = _("Landscape");
   orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, _("Orientation"),
@@ -538,6 +538,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   Centre(wxBOTH);
 
   InitDialog();
+  delete [] choices;
 }
 
 wxGenericPageSetupDialog::~wxGenericPageSetupDialog(void)
