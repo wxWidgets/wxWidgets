@@ -1040,7 +1040,8 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
                 p++;
 
                 // if we have 2 backslashes in a row, output one
-                if ( isQuotedByBS )
+                // unless it looks like a UNC path \\machine\dir\file.ext
+                if ( isQuotedByBS || arg.Len() == 0 )
                 {
                     arg += _T('\\');
                     isQuotedByBS = FALSE;
