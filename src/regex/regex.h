@@ -39,7 +39,14 @@
 extern "C" {
 #endif
 
-#include <sys/types.h>
+// FreeBSD, Watcom and DMars require this, CW doesn't have nor need it.
+// Others also don't seem to need it. If you have an error related to
+// (not) including <sys/types.h> please report details to
+// wx-dev@lists.wxwindows.org
+#if defined(__UNIX__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
+#   include <sys/types.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
