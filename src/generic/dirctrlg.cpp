@@ -441,14 +441,14 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_imageList->Add(wxIcon(icon7_xpm));
     m_imageList->Add(wxIcon(icon8_xpm));
 #elif defined(__WXMSW__)
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CLOSED_FOLDER"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_OPEN_FOLDER"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FILE"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_COMPUTER"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_DRIVE"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CDROM"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FLOPPY"), wxBITMAP_TYPE_RESOURCE));
-    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_REMOVEABLE"), wxBITMAP_TYPE_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CLOSED_FOLDER"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_OPEN_FOLDER"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FILE"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_COMPUTER"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_DRIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_CDROM"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_FLOPPY"), wxBITMAP_TYPE_ICO_RESOURCE));
+    m_imageList->Add(wxIcon(wxT("wxICON_SMALL_REMOVEABLE"), wxBITMAP_TYPE_ICO_RESOURCE));
 #else
 #error "Sorry, we don't have icons available for this platforms."
 #endif
