@@ -46,17 +46,15 @@
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
-extern int g_openDialogs;
-
-// ----------------------------------------------------------------------------
-// event tables
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
 
-extern wxList wxPendingDelete;
+extern wxList         wxPendingDelete;
+
+extern int            g_openDialogs;
+extern wxWindowGTK   *g_delayedFocus;
 
 // ----------------------------------------------------------------------------
 // debug
@@ -67,14 +65,6 @@ extern wxList wxPendingDelete;
 extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window );
 
 #endif
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// GTK callbacks
-// ----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // "focus" from m_window
@@ -165,6 +155,18 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
 }
 
 //-----------------------------------------------------------------------------
+// local code
+//-----------------------------------------------------------------------------
+
+static wxWindow* wxGetTopLevelParent(wxWindow *win)
+{
+    wxWindow *p = win;
+    while (p && !p->IsTopLevel())
+         p = p->GetParent();
+    return p;
+}
+
+//-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -200,8 +202,30 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
         win->SetIcons( iconsOld );
     }
 
-    // we set the focus to the child that accepts the focus. this
-    // doesn't really have to be done in "realize" but why not? 
+    // We need to set the focus to some child. Either, this
+    // has been done already or will be done in the next
+    // idle cycle, or we will set it ourselves.
+
+    if (g_delayedFocus)
+    {
+        if (wxGetTopLevelParent(g_delayedFocus))
+            return;
+        else
+            g_delayedFocus = NULL;
+    }
+        
+    wxWindow *currentFocus = wxWindow::FindFocus();
+    if (currentFocus)
+    {
+        // I am not sure if this ever can happen,
+        // since the TLW is just about to get
+        // created and its children probably don't
+        // have any focus.
+        if (wxGetTopLevelParent(currentFocus) == win)
+            return;
+    }
+
+    // We set the focus to the child that accepts the focus.
     wxWindowList::Node *node = win->GetChildren().GetFirst();
     while (node)
     {
@@ -211,7 +235,7 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
             child->SetFocus();
             break;
         }
-
+        
         node = node->GetNext();
     }
 }

@@ -232,12 +232,16 @@ static bool g_captureWindowHasMouse = FALSE;
 // the last window which had the focus - this is normally never NULL (except
 // if we never had focus at all) as even when g_focusWindow is NULL it still
 // keeps its previous value
-static wxWindowGTK *g_focusWindowLast = (wxWindowGTK *)NULL;
+static wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
-static wxWindowGTK *g_activeFrame = (wxWindowGTK *)NULL;
+static wxWindowGTK *g_activeFrame = (wxWindowGTK*) NULL;
 static bool g_activeFrameLostFocus = FALSE;
+
+// If a window get the focus set but has not been realized
+// yet, defer setting the focus to idle time.
+wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
@@ -534,8 +538,8 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-/*
-    if (win->GetName() == wxT("panel"))
+#if 0
+    if (win->GetName())
     {
         wxPrintf( wxT("OnExpose from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -545,7 +549,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                          (int)gdk_event->area.width,
                                          (int)gdk_event->area.height );
     }
-*/
+#endif
 
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
@@ -635,8 +639,8 @@ static void gtk_window_draw_callback( GtkWidget *widget,
         return;
     }
 
-/*
-    if (win->GetName() == wxT("panel"))
+#if 0
+    if (win->GetName())
     {
         wxPrintf( wxT("OnDraw from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -646,7 +650,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
                                          (int)rect->width,
                                          (int)rect->height );
     }
-*/
+#endif
 
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
@@ -1797,11 +1801,11 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     g_focusWindow = win;
 
 #if 0
-    wxLogDebug( wxT("OnSetFocus from %s\n"), win->GetName().c_str() );
+    printf( "OnSetFocus 2 from %s\n", win->GetName().c_str() );
 #endif
 
-    // notify the parent keeping track of focus for the kbd navigation
-    // purposes that we got it
+    // Notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it.
     wxChildFocusEvent eventFocus(win);
     (void)win->GetEventHandler()->ProcessEvent(eventFocus);
 
@@ -1819,6 +1823,8 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
+    g_activeFrameLostFocus = FALSE;
+    
     wxWindowGTK *active = wxGetTopLevelParent(win);
     if ( active != g_activeFrame )
     {
@@ -1835,8 +1841,11 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, g_activeFrame->GetId());
         event.SetEventObject(g_activeFrame);
         g_activeFrame->GetEventHandler()->ProcessEvent(event);
+        
+        // Don't send focus events in addition to activate
+        // if (win == g_activeFrame)
+        //    return TRUE;
     }
-    g_activeFrameLostFocus = FALSE;
 
 
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
@@ -1847,7 +1856,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
        return TRUE;
     }
-
 
     return FALSE;
 }
@@ -2919,6 +2927,15 @@ void wxWindowGTK::OnInternalIdle()
         }
         g_activeFrameLostFocus = FALSE;
     }
+    
+    if (g_delayedFocus == this)
+    {
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_grab_focus( m_widget );
+            g_delayedFocus = NULL;
+        }
+    }
 
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
@@ -3274,13 +3291,6 @@ void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-#if 0
-    wxPrintf( "SetFocus from " );
-    if (GetClassInfo() && GetClassInfo()->GetClassName())
-        wxPrintf( GetClassInfo()->GetClassName() );
-    wxPrintf( ".\n" );
-#endif
-
     if (m_wxwindow)
     {
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
@@ -3292,7 +3302,10 @@ void wxWindowGTK::SetFocus()
     {
         if (GTK_WIDGET_CAN_FOCUS(m_widget) && !GTK_WIDGET_HAS_FOCUS (m_widget) )
         {
-            gtk_widget_grab_focus (m_widget);
+            if (!GTK_WIDGET_REALIZED(m_widget))
+                g_delayedFocus = this;
+            else
+                gtk_widget_grab_focus (m_widget);
         }
         else if (GTK_IS_CONTAINER(m_widget))
         {
@@ -3507,7 +3520,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     }
 
     m_clipPaintRegion = TRUE;
-
+    
     // if (!m_clearRegion.IsEmpty())   // always send an erase event
     {
         wxWindowDC dc( (wxWindow*)this );
@@ -3559,7 +3572,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     {
         GtkPizzaChild *child = (GtkPizzaChild*) children->data;
         children = children->next;
-
+        
         if (GTK_WIDGET_NO_WINDOW (child->widget) &&
             GTK_WIDGET_DRAWABLE (child->widget))
         {
@@ -3599,11 +3612,14 @@ void wxWindowGTK::Clear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
-    if (!m_widget->window) return;
-
     if (m_wxwindow && m_wxwindow->window)
     {
-        gdk_window_clear( m_wxwindow->window );
+        m_clearRegion.Clear();
+        wxSize size( GetClientSize() );
+        m_clearRegion.Union( 0,0,size.x,size.y );
+        
+        // Better do this in idle?
+        Update();
     }
 }
 

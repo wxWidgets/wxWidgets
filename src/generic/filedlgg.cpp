@@ -1403,6 +1403,8 @@ void wxFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
     wxString dir;
     m_list->GetDir( dir );
     m_static->SetLabel( dir );
+    
+    m_text->SetFocus();
 }
 
 void wxFileDialog::OnNew( wxCommandEvent &WXUNUSED(event) )

@@ -44,6 +44,7 @@ extern bool g_isIdle;
 
 extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
+extern wxWindowGTK *g_delayedFocus;
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -1243,6 +1244,15 @@ void wxTextCtrl::OnInternalIdle()
         window = m_widget->window;
         if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
             gdk_window_set_cursor( window, cursor.GetCursor() );
+    }
+
+    if (g_delayedFocus == this)
+    {
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_grab_focus( m_widget );
+            g_delayedFocus = NULL;
+        }
     }
 
     UpdateWindowUI();

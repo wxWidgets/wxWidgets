@@ -37,7 +37,8 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool       g_blockEventsOnDrag;
+extern bool          g_blockEventsOnDrag;
+extern wxWindowGTK  *g_delayedFocus;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -455,7 +456,6 @@ void wxRadioBox::SetFocus()
         }
         node = node->Next();
     }
-
 }
 
 void wxRadioBox::SetSelection( int n )
@@ -710,6 +710,15 @@ void wxRadioBox::OnInternalIdle()
         event.SetEventObject( this );
 
         (void)GetEventHandler()->ProcessEvent( event );
+    }
+
+    if (g_delayedFocus == this)
+    {
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            g_delayedFocus = NULL;
+            SetFocus();
+        }
     }
 }
 

@@ -31,8 +31,9 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool       g_blockEventsOnDrag;
-extern wxCursor   g_globalCursor;
+extern bool           g_blockEventsOnDrag;
+extern wxCursor       g_globalCursor;
+extern wxWindowGTK   *g_delayedFocus;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -206,6 +207,15 @@ void wxCheckBox::OnInternalIdle()
        gdk_window_set_cursor( event_window, cursor.GetCursor() );
     }
 
+    if (g_delayedFocus == this)
+    {
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_grab_focus( m_widget );
+            g_delayedFocus = NULL;
+        }
+    }
+    
     UpdateWindowUI();
 }
 

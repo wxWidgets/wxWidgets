@@ -59,9 +59,10 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool       g_blockEventsOnDrag;
-extern bool       g_blockEventsOnScroll;
-extern wxCursor   g_globalCursor;
+extern bool           g_blockEventsOnDrag;
+extern bool           g_blockEventsOnScroll;
+extern wxCursor       g_globalCursor;
+extern wxWindowGTK   *g_delayedFocus;
 
 static bool       g_hasDoubleClicked = FALSE;
 
@@ -1020,6 +1021,15 @@ void wxListBox::OnInternalIdle()
                 gdk_window_set_cursor( label->window, cursor.GetCursor() );
 
             child = child->next;
+        }
+    }
+
+    if (g_delayedFocus == this)
+    {
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_grab_focus( m_widget );
+            g_delayedFocus = NULL;
         }
     }
 

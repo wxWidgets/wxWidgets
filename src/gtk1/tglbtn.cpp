@@ -21,9 +21,8 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 extern bool      g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
+extern wxWindowGTK *g_delayedFocus;
 
-// void gtk_togglebutton_clicked_callback(GtkWidget *widget, wxToggleButton *cb)
-// Callback function given to gtk.
 static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
 {
    if (g_isIdle)
