@@ -1712,7 +1712,7 @@ fi
 
 dnl the name of the directory where the files for this toolkit live
 if test "$TOOLKIT" != "PM" ; then
-    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "A-Z" "a-z"`
+    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
 else
     TOOLKIT_DIR="os2"
 fi
