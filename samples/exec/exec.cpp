@@ -1114,9 +1114,11 @@ void MyPipeFrame::OnBtnSendFile(wxCommandEvent& WXUNUSED(event))
     while ( len )
     {
         const size_t CHUNK_SIZE = 4096;
-        size_t lenChunk = len > CHUNK_SIZE ? CHUNK_SIZE : len;
+        m_out.Write(pc, len > CHUNK_SIZE ? CHUNK_SIZE : len);
 
-        m_out.Write(pc, lenChunk);
+        // note that not all data could have been written as we don't block on
+        // the write end of the pipe
+        const size_t lenChunk = m_out.LastWrite();
 
         pc += lenChunk;
         len -= lenChunk;
