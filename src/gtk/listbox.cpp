@@ -769,7 +769,7 @@ int wxListBox::GetIndex( GtkWidget *item ) const
 }
 
 #if wxUSE_TOOLTIPS
-void wxListBox::ApplyToolTip( GtkTooltips *tips, const char *tip )
+void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 {
     GList *child = m_list->children;
     while (child)

@@ -44,7 +44,7 @@ wxDataFormat::wxDataFormat( wxDataType type )
     SetType( type );
 }
 
-wxDataFormat::wxDataFormat( const char *id )
+wxDataFormat::wxDataFormat( const wxChar *id )
 {
     if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
     SetId( id );
@@ -127,7 +127,7 @@ wxString wxDataFormat::GetId() const
     return m_id;
 }
 
-void wxDataFormat::SetId( const char *id )
+void wxDataFormat::SetId( const wxChar *id )
 {
     m_type = wxDF_PRIVATE;
     m_id = id;
@@ -427,7 +427,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxPrivateDataObject, wxDataObject )
 
 wxPrivateDataObject::wxPrivateDataObject() 
 { 
-    m_id = "application/";
+    m_id = _T("application/");
     m_id += wxTheApp->GetAppName();
     
     m_format.SetId( m_id );
