@@ -468,6 +468,8 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         }
     }
     //else: we're in non-interactive mode
+#else
+    wxUnusedVar(equivEncoding);
 #endif // wxUSE_FONTDLG
 
     return foundEquivEncoding;
