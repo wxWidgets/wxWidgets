@@ -1139,10 +1139,12 @@ void MyPanel::OnCombo( wxCommandEvent &event )
     m_text->AppendText( "\n" );
 }
 
-void MyPanel::OnComboTextChanged(wxCommandEvent& WXUNUSED(event))
+void MyPanel::OnComboTextChanged(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Text in the combobox changed: now is '%s'."),
-                 m_combo->GetValue().c_str());
+    wxString str;
+    str.Printf( wxT("Text in the combobox changed: now is '%s'."),
+                event.GetString().c_str() );
+    wxLogMessage( str.c_str() );
 }
 
 void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
