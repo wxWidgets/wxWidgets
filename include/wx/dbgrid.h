@@ -3,7 +3,7 @@
 // Purpose:     Displays a wxDbTable in a wxGrid.
 // Author:      Roger Gammans, Paul Gammans
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 The Computer Surgery (roger@computer-surgery.co.uk)
 // Licence:     wxWindows licence
@@ -49,11 +49,11 @@ public:
     {
         DbCol       = ref.DbCol;
         wxtypename  = ref.wxtypename;
-        Title       = ref.Title;    
+        Title       = ref.Title;
     }
     //Empty destructor for member obj's
     ~wxDbGridColInfoBase() {}
-    
+
     int        DbCol;
     wxString   wxtypename;
     wxString   Title;
@@ -112,12 +112,12 @@ public:
     virtual int GetNumberRows()
     {
         wxLogDebug(" GetNumberRows() = %i",m_rowtotal);
-        return m_rowtotal; 
+        return m_rowtotal;
     }
     virtual int GetNumberCols()
-    { 
+    {
         wxLogDebug(" GetNumberCols() = %i",m_nocols);
-        return m_nocols; 
+        return m_nocols;
     }
     virtual bool     IsEmptyCell(int row, int col) ;
     virtual wxString GetValue(int row, int col) ;
@@ -144,10 +144,10 @@ public:
     {
         if (m_row != row)
             return true;
-        else 
+        else
             return Writeback();
     }
-    
+
 private:
     //Operates on the current row
     bool Writeback() const;
@@ -166,4 +166,4 @@ private:
 #endif  // #if wxUSE_NEW_GRID
 #endif  // #if wxUSE_ODBC
 
-#endif _WX_GENERIC_DBGRID_H_
+#endif  // _WX_GENERIC_DBGRID_H_

@@ -315,6 +315,11 @@
     #define FALSE 0
 #endif
 
+#ifdef __VISAGECPP__
+    #define true TRUE
+    #define false FALSE
+#endif
+
 // Add more tests here for Windows compilers that already define bool
 // (under Unix, configure tests for this)
 #ifndef HAVE_BOOL
