@@ -40,7 +40,10 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 # http://www.alanwood.net/demos/charsetdiffs.html for differences
 # between the common latin/roman encodings.
 import locale
-default = locale.getdefaultlocale()[1]
+try:
+    default = locale.getdefaultlocale()[1]
+except ValueError:
+    default = "iso8859-1"
 if default:
     wx.SetDefaultPyEncoding(default)
 del default
