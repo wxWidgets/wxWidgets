@@ -589,6 +589,7 @@ void wxPropertyListView::OnOk(wxCommandEvent& event)
   OnCheck(event);
 
   m_managedWindow->Close(TRUE);
+  sm_dialogCancelled = FALSE;
 }
 
 void wxPropertyListView::OnCancel(wxCommandEvent& WXUNUSED(event))
