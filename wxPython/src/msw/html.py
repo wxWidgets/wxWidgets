@@ -59,6 +59,12 @@ class wxHtmlLinkInfoPtr :
         val = apply(htmlc.wxHtmlLinkInfo_GetHtmlCell,(self,) + _args, _kwargs)
         if val: val = wxHtmlCellPtr(val) 
         return val
+    def SetEvent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_SetEvent,(self,) + _args, _kwargs)
+        return val
+    def SetHtmlCell(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_SetHtmlCell,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxHtmlLinkInfo instance at %s>" % (self.this,)
 class wxHtmlLinkInfo(wxHtmlLinkInfoPtr):
@@ -480,32 +486,6 @@ class wxHtmlWidgetCell(wxHtmlWidgetCellPtr):
 
 
 
-class HtmlHistoryItemPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def GetPos(self, *_args, **_kwargs):
-        val = apply(htmlc.HtmlHistoryItem_GetPos,(self,) + _args, _kwargs)
-        return val
-    def SetPos(self, *_args, **_kwargs):
-        val = apply(htmlc.HtmlHistoryItem_SetPos,(self,) + _args, _kwargs)
-        return val
-    def GetPage(self, *_args, **_kwargs):
-        val = apply(htmlc.HtmlHistoryItem_GetPage,(self,) + _args, _kwargs)
-        return val
-    def GetAnchor(self, *_args, **_kwargs):
-        val = apply(htmlc.HtmlHistoryItem_GetAnchor,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C HtmlHistoryItem instance at %s>" % (self.this,)
-class HtmlHistoryItem(HtmlHistoryItemPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(htmlc.new_HtmlHistoryItem,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
@@ -521,6 +501,12 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         return val
     def GetOpenedPage(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_GetOpenedPage,(self,) + _args, _kwargs)
+        return val
+    def GetOpenedAnchor(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetOpenedAnchor,(self,) + _args, _kwargs)
+        return val
+    def GetOpenedPageTitle(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetOpenedPageTitle,(self,) + _args, _kwargs)
         return val
     def SetRelatedFrame(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_SetRelatedFrame,(self,) + _args, _kwargs)
@@ -552,6 +538,12 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         return val
     def HistoryForward(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_HistoryForward,(self,) + _args, _kwargs)
+        return val
+    def HistoryCanBack(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HistoryCanBack,(self,) + _args, _kwargs)
+        return val
+    def HistoryCanForward(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HistoryCanForward,(self,) + _args, _kwargs)
         return val
     def HistoryClear(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_HistoryClear,(self,) + _args, _kwargs)
@@ -742,6 +734,6 @@ wx.wxHtmlWinTagHandlerPtr   = wxHtmlWinTagHandlerPtr
 wx.wxHtmlCellPtr            = wxHtmlCellPtr
 wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
-wx.HtmlHistoryItemPtr       = HtmlHistoryItemPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
 wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
+
