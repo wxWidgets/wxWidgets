@@ -337,7 +337,8 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                     break ;
             }
             break ;
-        case kEventMouseWheelMoved :
+     case kEventMouseWheelMoved :
+         {
             wxevent.SetEventType(wxEVT_MOUSEWHEEL ) ;
 
             // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
@@ -347,6 +348,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             wxevent.m_wheelDelta = 1;
             wxevent.m_linesPerAction = 1;
             break ;
+         }
         default :
             wxevent.SetEventType(wxEVT_MOTION ) ;
             break ;
