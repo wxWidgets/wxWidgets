@@ -1831,24 +1831,30 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     keychar = short(keymessage & charCodeMask);
     keycode = short(keymessage & keyCodeMask) >> 8 ;
     
-    if ( (modifiers & controlKey) )
+    if ( modifiers & ( controlKey|shiftKey|optionKey ) )
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
         UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~controlKey)) | keycode, &state);
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey|shiftKey|optionKey))) | keycode, &state);
         keychar = short(keyInfo & charCodeMask);
         keycode = short(keyInfo & keyCodeMask) >> 8 ;
     }
     long keyval = wxMacTranslateKey(keychar, keycode) ;
-
+	long realkeyval = keyval ;
+	if ( keyval == keychar )
+	{
+		// we are not on a special character combo -> pass the real os event-value to EVT_CHAR, but not to EVT_KEY
+		realkeyval = short(keymessage & charCodeMask) ;
+	}
+	
     wxKeyEvent event(wxEVT_KEY_DOWN);
     bool handled = false ;
     event.m_shiftDown = modifiers & shiftKey;
     event.m_controlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
     event.m_metaDown = modifiers & cmdKey;
-    event.m_keyCode = wxToupper(keyval );
+    event.m_keyCode = keyval ;
 
     event.m_x = wherex;
     event.m_y = wherey;
@@ -1884,7 +1890,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
         event.Skip( FALSE ) ;
         event.SetEventType( wxEVT_CHAR ) ;
         // raw value again
-        event.m_keyCode = keyval ;
+        event.m_keyCode = realkeyval ;
 
         handled = focus->GetEventHandler()->ProcessEvent( event ) ;
         if ( handled && event.GetSkipped() )
@@ -1969,12 +1975,12 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     short keychar ;
     keychar = short(keymessage & charCodeMask);
     keycode = short(keymessage & keyCodeMask) >> 8 ;
-    if ( (modifiers & controlKey) )
+    if ( modifiers & ( controlKey|shiftKey|optionKey ) )
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
         UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~controlKey)) | keycode, &state);
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey|shiftKey|optionKey))) | keycode, &state);
         keychar = short(keyInfo & charCodeMask);
         keycode = short(keyInfo & keyCodeMask) >> 8 ;
     }
@@ -1987,7 +1993,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     event.m_controlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
     event.m_metaDown = modifiers & cmdKey;
-    event.m_keyCode = wxToupper(keyval );
+    event.m_keyCode = keyval ;
 
     event.m_x = wherex;
     event.m_y = wherey;
