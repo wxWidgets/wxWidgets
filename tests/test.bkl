@@ -46,6 +46,7 @@
             streams/datastreamtest.cpp
             streams/ffilestream.cpp
             streams/filestream.cpp
+            streams/largefile.cpp
             streams/memstream.cpp
             streams/sstream.cpp
             streams/textstreamtest.cpp

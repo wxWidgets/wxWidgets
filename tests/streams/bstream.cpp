@@ -52,6 +52,11 @@ Test *StreamCase::suite()
     STREAM_REGISTER_SUB_SUITE(ffileStream);
     STREAM_REGISTER_SUB_SUITE(zlibStream);
 
+    extern CppUnit::Test* GetlargeFileSuite();
+    Test *lfs = GetlargeFileSuite();
+    if (lfs)
+        suite->addTest(lfs);
+
     /*
     ** Add more stream subtests here
     */
