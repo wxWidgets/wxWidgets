@@ -142,7 +142,7 @@ public:
     {
         if ( m_toolStyle == wxTOOL_STYLE_CONTROL )
         {
-            return m_control->GetClientData();
+            return (wxObject*)m_control->GetClientData();
         }
         else
         {
