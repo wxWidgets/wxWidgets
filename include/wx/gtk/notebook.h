@@ -144,13 +144,19 @@ public:
   bool DeletePage(int nPage);
     // remove all pages
   bool DeleteAllPages();
+  
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-  bool AddPage(wxWindow *pPage,
-               const wxString& strText,
-               bool select = FALSE,
-               int imageId = -1);
-    // TODO VZ: I don't know how to implement InsertPage()
+  bool AddPage( wxWindow *win,
+                const wxString& strText,
+                bool select = FALSE,
+                int imageId = -1 );
+    // the same as AddPage(), but adds it at the specified position
+  bool InsertPage( int position,
+                   wxWindow *win,
+                   const wxString& strText,
+                   bool bSelect = FALSE,
+                   int imageId = -1 );
 
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
@@ -174,7 +180,6 @@ public:
 
   wxImageList*    m_imageList;
   wxList          m_pages;
-  size_t            m_idHandler; // the change page handler id
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
