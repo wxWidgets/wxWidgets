@@ -10,11 +10,11 @@ class TestPanel( wxPanel ):
 
         # 1st group of controls:
         self.group1_ctrls = []
-        radio1 = wxRadioButton( panel, -1, "Radio1", style = wxRB_GROUP )
+        radio1 = wxRadioButton( panel, -1, " Radio1 ", style = wxRB_GROUP )
         text1 = wxTextCtrl( panel, -1, "" )
-        radio2 = wxRadioButton( panel, -1, "Radio2" )
+        radio2 = wxRadioButton( panel, -1, " Radio2 " )
         text2 = wxTextCtrl( panel, -1, "" )
-        radio3 = wxRadioButton( panel, -1, "Radio3" )
+        radio3 = wxRadioButton( panel, -1, " Radio3 " )
         text3 = wxTextCtrl( panel, -1, "" )
         self.group1_ctrls.append((radio1, text1))
         self.group1_ctrls.append((radio2, text2))
@@ -22,11 +22,11 @@ class TestPanel( wxPanel ):
 
         # 2nd group of controls:
         self.group2_ctrls = []
-        radio4 = wxRadioButton( panel, -1, "Radio1", style = wxRB_GROUP )
+        radio4 = wxRadioButton( panel, -1, " Radio1 ", style = wxRB_GROUP )
         text4 = wxTextCtrl( panel, -1, "" )
-        radio5 = wxRadioButton( panel, -1, "Radio2" )
+        radio5 = wxRadioButton( panel, -1, " Radio2 " )
         text5 = wxTextCtrl( panel, -1, "" )
-        radio6 = wxRadioButton( panel, -1, "Radio3" )
+        radio6 = wxRadioButton( panel, -1, " Radio3 " )
         text6 = wxTextCtrl( panel, -1, "" )
         self.group2_ctrls.append((radio4, text4))
         self.group2_ctrls.append((radio5, text5))
@@ -97,7 +97,7 @@ def runTest( frame, nb, log ):
 #----------------------------------------------------------------------
 
 
-overview = """
+overview = """\
 <html><body>
 <P>
 This demo shows how individual radio buttons can be used to build

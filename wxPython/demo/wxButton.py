@@ -44,9 +44,13 @@ class TestPanel(wxPanel):
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
         EVT_BUTTON(self, 30, self.OnClick)
 
+
     def OnClick(self, event):
         self.log.write("Click! (%d)\n" % event.GetId())
+        ##wxLogDebug("debug message")
 
+
+## wxLog_SetLogLevel(wxLOG_Message)  # ignore everything above wxLOG_Message
 
 #----------------------------------------------------------------------
 
