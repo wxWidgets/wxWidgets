@@ -263,7 +263,11 @@ struct wxGridDataTypeInfo
         : m_typeName(typeName), m_renderer(renderer), m_editor(editor)
         { }
 
-    ~wxGridDataTypeInfo() { delete m_renderer; delete m_editor; }
+    ~wxGridDataTypeInfo()
+    {
+        wxSafeDecRef(m_renderer);
+        wxSafeDecRef(m_editor);
+    }
 
     wxString            m_typeName;
     wxGridCellRenderer* m_renderer;
@@ -334,6 +338,8 @@ static const int GRID_HASH_SIZE = 100;
 wxGridCellEditor::wxGridCellEditor()
 {
     m_control = NULL;
+
+    m_nRef = 1;
 }
 
 
@@ -1354,7 +1360,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 // wxGridCellAttr
 // ----------------------------------------------------------------------------
 
-wxGridCellAttr *wxGridCellAttr::Clone()
+wxGridCellAttr *wxGridCellAttr::Clone() const
 {
     wxGridCellAttr *attr = new wxGridCellAttr;
     if ( HasTextColour() )
@@ -1369,12 +1375,12 @@ wxGridCellAttr *wxGridCellAttr::Clone()
     if ( m_renderer )
     {
         attr->SetRenderer(m_renderer);
-        m_renderer = NULL;
+        m_renderer->IncRef();
     }
     if ( m_editor )
     {
         attr->SetEditor(m_editor);
-        m_editor = NULL;
+        m_editor->IncRef();
     }
 
     if ( IsReadOnly() )
@@ -1801,15 +1807,17 @@ void wxGridTypeRegistry::RegisterDataType(const wxString& typeName,
                                           wxGridCellRenderer* renderer,
                                           wxGridCellEditor* editor)
 {
-    int loc;
     wxGridDataTypeInfo* info = new wxGridDataTypeInfo(typeName, renderer, editor);
 
     // is it already registered?
-    if ((loc = FindDataType(typeName)) != -1) {
+    int loc = FindDataType(typeName);
+    if ( loc != wxNOT_FOUND )
+    {
         delete m_typeinfo[loc];
         m_typeinfo[loc] = info;
     }
-    else {
+    else
+    {
         m_typeinfo.Add(info);
     }
 }
@@ -1892,7 +1900,7 @@ void wxGridTableBase::SetAttr(wxGridCellAttr* attr, int row, int col)
     {
         // as we take ownership of the pointer and don't store it, we must
         // free it now
-        attr->SafeDecRef();
+        wxSafeDecRef(attr);
     }
 }
 
@@ -1906,7 +1914,7 @@ void wxGridTableBase::SetRowAttr(wxGridCellAttr *attr, int row)
     {
         // as we take ownership of the pointer and don't store it, we must
         // free it now
-        attr->SafeDecRef();
+        wxSafeDecRef(attr);
     }
 }
 
@@ -1920,7 +1928,7 @@ void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
     {
         // as we take ownership of the pointer and don't store it, we must
         // free it now
-        attr->SafeDecRef();
+        wxSafeDecRef(attr);
     }
 }
 
@@ -2760,7 +2768,7 @@ wxGrid::wxGrid( wxWindow *parent,
 wxGrid::~wxGrid()
 {
     ClearAttrCache();
-    m_defaultCellAttr->SafeDecRef();
+    wxSafeDecRef(m_defaultCellAttr);
 
 #ifdef DEBUG_ATTR_CACHE
     size_t total = gs_nAttrCacheHits + gs_nAttrCacheMisses;
@@ -6486,7 +6494,7 @@ wxColour wxGrid::GetCellBackgroundColour(int row, int col)
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
     wxColour colour = attr->GetBackgroundColour();
-    attr->SafeDecRef();
+    attr->DecRef();
     return colour;
 }
 
@@ -6494,7 +6502,7 @@ wxColour wxGrid::GetCellTextColour( int row, int col )
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
     wxColour colour = attr->GetTextColour();
-    attr->SafeDecRef();
+    attr->DecRef();
     return colour;
 }
 
@@ -6502,7 +6510,7 @@ wxFont wxGrid::GetCellFont( int row, int col )
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
     wxFont font = attr->GetFont();
-    attr->SafeDecRef();
+    attr->DecRef();
     return font;
 }
 
@@ -6510,7 +6518,7 @@ void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
     attr->GetAlignment(horiz, vert);
-    attr->SafeDecRef();
+    attr->DecRef();
 }
 
 wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
@@ -6555,7 +6563,7 @@ void wxGrid::ClearAttrCache()
 {
     if ( m_attrCache.row != -1 )
     {
-        m_attrCache.attr->SafeDecRef();
+        wxSafeDecRef(m_attrCache.attr);
         m_attrCache.row = -1;
     }
 }
@@ -6568,7 +6576,7 @@ void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
     self->m_attrCache.row = row;
     self->m_attrCache.col = col;
     self->m_attrCache.attr = attr;
-    attr->SafeIncRef();
+    wxSafeIncRef(attr);
 }
 
 bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
@@ -6576,7 +6584,7 @@ bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
     if ( row == m_attrCache.row && col == m_attrCache.col )
     {
         *attr = m_attrCache.attr;
-        (*attr)->SafeIncRef();
+        wxSafeIncRef(m_attrCache.attr);
 
 #ifdef DEBUG_ATTR_CACHE
         gs_nAttrCacheHits++;
@@ -6652,7 +6660,7 @@ void wxGrid::SetRowAttr(int row, wxGridCellAttr *attr)
     }
     else
     {
-        attr->SafeDecRef();
+        wxSafeDecRef(attr);
     }
 }
 
@@ -6664,7 +6672,7 @@ void wxGrid::SetColAttr(int col, wxGridCellAttr *attr)
     }
     else
     {
-        attr->SafeDecRef();
+        wxSafeDecRef(attr);
     }
 }
 
@@ -6917,7 +6925,7 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 
     wxCoord extent, extentMax = 0;
     int max = column ? m_numRows : m_numCols;
-    for ( int rowOrCol = 0; rowOrCol < m_numRows; rowOrCol++ )
+    for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
     {
         if ( column )
             row = rowOrCol;
@@ -6965,14 +6973,14 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
     if ( column )
         SetColSize(col, extentMax);
     else
-        SetRowSize(col, extentMax);
+        SetRowSize(row, extentMax);
 
     if ( setAsMin )
     {
         if ( column )
             SetColMinimalWidth(col, extentMax);
         else
-            SetRowMinimalHeight(col, extentMax);
+            SetRowMinimalHeight(row, extentMax);
     }
 }
 

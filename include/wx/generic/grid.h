@@ -82,6 +82,13 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl;
 
 // ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+#define wxSafeIncRef(p) if ( p ) (p)->IncRef()
+#define wxSafeDecRef(p) if ( p ) (p)->DecRef()
+
+// ----------------------------------------------------------------------------
 // wxGridCellRenderer: this class is responsible for actually drawing the cell
 // in the grid. You may pass it to the wxGridCellAttr (below) to change the
 // format of one given cell or to wxGrid::SetDefaultRenderer() to change the
@@ -92,6 +99,14 @@ class WXDLLEXPORT wxSpinCtrl;
 class WXDLLEXPORT wxGridCellRenderer
 {
 public:
+    wxGridCellRenderer() { m_nRef = 1; }
+
+    // this class is ref counted: it is created with ref count of 1, so
+    // calling DecRef() once will delete it. Calling IncRef() allows to lock
+    // it until the matching DecRef() is called
+    void IncRef() { m_nRef++; }
+    void DecRef() { if ( !--m_nRef ) delete this; }
+
     // draw the given cell on the provided DC inside the given rectangle
     // using the style specified by the attribute and the default or selected
     // state corresponding to the isSelected value.
@@ -112,8 +127,17 @@ public:
                                wxDC& dc,
                                int row, int col) = 0;
 
-    // virtual dtor for any base class
+protected:
+    // virtual dtor for any base class - private because only DecRef() can
+    // delete us
     virtual ~wxGridCellRenderer();
+
+private:
+    size_t m_nRef;
+
+    // suppress the stupid gcc warning about the class having private dtor and
+    // no friends
+    friend class wxGridCellRendererDummyFriend;
 };
 
 // the default renderer for the cells containing string data
@@ -236,7 +260,12 @@ class WXDLLEXPORT wxGridCellEditor
 {
 public:
     wxGridCellEditor();
-    virtual ~wxGridCellEditor();
+
+    // this class is ref counted: it is created with ref count of 1, so
+    // calling DecRef() once will delete it. Calling IncRef() allows to lock
+    // it until the matching DecRef() is called
+    void IncRef() { m_nRef++; }
+    void DecRef() { if ( !--m_nRef ) delete this; }
 
     bool IsCreated() { return m_control != NULL; }
 
@@ -284,6 +313,12 @@ public:
     virtual void Destroy();
 
 protected:
+    // the dtor is private because only DecRef() can delete us
+    virtual ~wxGridCellEditor();
+
+    // the ref count - when it goes to 0, we die
+    size_t m_nRef;
+
     // the control we show on screen
     wxControl*  m_control;
 
@@ -293,6 +328,10 @@ protected:
     wxColour m_colFgOld,
              m_colBgOld;
     wxFont m_fontOld;
+
+    // suppress the stupid gcc warning about the class having private dtor and
+    // no friends
+    friend class wxGridCellEditorDummyFriend;
 };
 
 // the editor for string/text data
@@ -465,18 +504,14 @@ public:
         SetAlignment(hAlign, vAlign);
     }
 
-    // creates a new copy of this object: warning, this is destructive copy
-    // (this is why it's non const), the renderer and editor are "given to"
-    // the new object
-    wxGridCellAttr *Clone();
+    // creates a new copy of this object
+    wxGridCellAttr *Clone() const;
 
     // this class is ref counted: it is created with ref count of 1, so
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
     // it until the matching DecRef() is called
     void IncRef() { m_nRef++; }
     void DecRef() { if ( !--m_nRef ) delete this; }
-    void SafeIncRef() { if ( this ) IncRef(); }
-    void SafeDecRef() { if ( this ) DecRef(); }
 
     // setters
     void SetTextColour(const wxColour& colText) { m_colText = colText; }
@@ -491,9 +526,9 @@ public:
 
     // takes ownership of the pointer
     void SetRenderer(wxGridCellRenderer *renderer)
-        { delete m_renderer; m_renderer = renderer; }
+        { wxSafeDecRef(m_renderer); m_renderer = renderer; }
     void SetEditor(wxGridCellEditor* editor)
-        { delete m_editor; m_editor = editor; }
+        { wxSafeDecRef(m_editor); m_editor = editor; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok(); }
@@ -527,7 +562,11 @@ private:
     }
 
     // the dtor is private because only DecRef() can delete us
-    ~wxGridCellAttr() { delete m_renderer; delete m_editor; }
+    ~wxGridCellAttr()
+    {
+        wxSafeDecRef(m_renderer);
+        wxSafeDecRef(m_editor);
+    }
 
     // the ref count - when it goes to 0, we die
     size_t   m_nRef;
