@@ -1223,6 +1223,10 @@ destroyed safely.", "");
 #include <wx/dcbuffer.h>
 %}
 
+enum {
+    wxBUFFER_VIRTUAL_AREA,
+    wxBUFFER_CLIENT_AREA
+};
 
 MustHaveApp(wxBufferedDC);
 
@@ -1264,19 +1268,18 @@ public:
         also requires more memory as the bitmap is never freed. The
         bitmap should have appropriate size, anything drawn outside of
         its bounds is clipped.
+
+    :param style: The style parameter indicates whether the supplied buffer is
+        intended to cover the entire virtual size of a `wx.ScrolledWindow` or
+        if it only covers the client area.  Acceptable values are
+        ``wx.BUFFER_VIRTUAL_AREA`` and ``wx.BUFFER_CLIENT_AREA``.
+
 ");
-    wxBufferedDC( wxDC *dc, const wxBitmap &buffer );
-    wxBufferedDC( wxDC *dc, const wxSize &area );
+    wxBufferedDC( wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA );
+    wxBufferedDC( wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA );
     
 
     
-//     // TODO: Keep this one too?
-//     %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area )
-//         "val.__dc = args[0] # save a ref so the other dc will not be deleted before self";
-//     %RenameCtor(BufferedDCInternalBuffer,  wxBufferedDC( wxDC *dc, const wxSize &area ));
-
-    
-    // The buffer is blit to the real DC when the BufferedDC is destroyed.
     DocCtorStr(
         ~wxBufferedDC(),
         "Copies everything drawn on the DC so far to the underlying DC
@@ -1314,6 +1317,8 @@ automatically when it is destroyed.  For example::
         dc = wx.BufferedPaintDC(self, self.buffer)
 
 
+
+
 ", "");
 
 class wxBufferedPaintDC : public wxBufferedDC
@@ -1321,7 +1326,9 @@ class wxBufferedPaintDC : public wxBufferedDC
 public:
 
     DocCtorStr(
-        wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer = wxNullBitmap ),
+        wxBufferedPaintDC( wxWindow *window,
+                           const wxBitmap &buffer = wxNullBitmap,
+                           int style = wxBUFFER_CLIENT_AREA),
         "Create a buffered paint DC.  As with `wx.BufferedDC`, you may either
 provide the bitmap to be used for buffering or let this object create
 one internally (in the latter case, the size of the client part of the

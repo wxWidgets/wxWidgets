@@ -53,7 +53,7 @@ class MyCanvas(wx.ScrolledWindow):
             # wx.PaintDC and then blit the bitmap to it when dc is
             # deleted.  Since we don't need to draw anything else
             # here that's all there is to it.
-            dc = wx.BufferedPaintDC(self, self.buffer)
+            dc = wx.BufferedPaintDC(self, self.buffer, wx.BUFFER_VIRTUAL_AREA)
         else:
             dc = wx.PaintDC(self)
             self.PrepareDC(dc)

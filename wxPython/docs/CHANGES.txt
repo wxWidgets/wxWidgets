@@ -217,6 +217,9 @@ a temporary 'fix' until properly fixed before 2.6.
 wxMac:  Toolbar is now more native looking with borderless toolbar
 buttons.  
 
+wxMac: Switched wx.Bitmap to use newer Quartz object types and APIs
+internally.  This results in faster display and better alpha support.
+
 Added wx.DatePickerCtrl.
 
 wx.html.HtmlWindow now supports background images.
@@ -252,6 +255,15 @@ the Python version in the wx.lib.ogl package instead.
 The wx.iewin module is no longer built by default.  You can use the
 wx.lib.iewin version instead.
 
+Fixed wx.BufferedPaintDC for scrolled windows to work whether the
+buffer is covering only the client area or the full virtual area of
+the scrolled window.  By default it will assume that only the client
+area is covered.  This is different than the old behavior, to indicate
+that the entire virtual area is covered then add a
+style=wx.BUFFER_VIRTUAL_AREA parameter. 
+
+wx.gizmos.TreeListCtrl:  Add support for the EVT_TREE_ITEM_GETTOOLTIP
+event. 
 
 
 
