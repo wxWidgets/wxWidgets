@@ -23,7 +23,7 @@
 
 /*
  * Paper type: see defs.h for wxPaperSize enum.
- * A wxPrintePaperType can have an id and a name, or just a name and wxPAPER_NONE,
+ * A wxPrintPaperType can have an id and a name, or just a name and wxPAPER_NONE,
  * so you can add further paper types without needing new ids.
  */
 
