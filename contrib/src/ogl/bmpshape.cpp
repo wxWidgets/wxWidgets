@@ -52,7 +52,7 @@ void wxBitmapShape::OnDraw(wxDC& dc)
 {
   if (!m_bitmap.Ok())
     return;
-    
+
   wxMemoryDC tempDC;
   tempDC.SelectObject(m_bitmap);
   double x, y;
@@ -76,7 +76,7 @@ void wxBitmapShape::SetSize(double w, double h, bool recursive)
   SetDefaultRegionSize();
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxBitmapShape::WriteAttributes(wxExpr *clause)
 {
   // Can't really save the bitmap; so instantiate the bitmap

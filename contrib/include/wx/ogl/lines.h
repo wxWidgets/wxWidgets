@@ -188,7 +188,7 @@ class wxLineShape: public wxShape
 
   bool HitTest(double x, double y, int *attachment, double *distance);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   // I/O
   virtual void WriteAttributes(wxExpr *clause);
   virtual void ReadAttributes(wxExpr *clause);

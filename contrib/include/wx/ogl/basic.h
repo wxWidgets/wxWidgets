@@ -22,11 +22,6 @@
 #define DEFAULT_MOUSE_TOLERANCE 3
 #endif
 
-// Edit these lines if you positively don't want PROLOGIO support
-#ifndef PROLOGIO
-#define PROLOGIO
-#endif
-
 // Key identifiers
 #define KEY_SHIFT 1
 #define KEY_CTRL  2
@@ -110,7 +105,7 @@ class wxControlPoint;
 class wxShapeRegion;
 class wxShape;
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 class WXDLLEXPORT wxExpr;
 class WXDLLEXPORT wxExprDatabase;
 #endif
@@ -381,7 +376,7 @@ class wxShape: public wxShapeEvtHandler
   virtual void ClearText(int regionId = 0);
   void RemoveLine(wxLineShape *line);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   // I/O
   virtual void WriteAttributes(wxExpr *clause);
   virtual void ReadAttributes(wxExpr *clause);
@@ -613,7 +608,7 @@ class wxPolygonShape: public wxShape
   // Recalculates the centre of the polygon
   virtual void CalculatePolygonCentre();
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif
@@ -652,7 +647,7 @@ class wxRectangleShape: public wxShape
   void SetSize(double x, double y, bool recursive = TRUE);
   void SetCornerRadius(double rad); // If > 0, rounded corners
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif
@@ -682,8 +677,8 @@ class wxTextShape: public wxRectangleShape
 
   void OnDraw(wxDC& dc);
 
-#ifdef PROLOGIO
-  void WriteAttributes(wxExpr *clause);
+#if wxUSE_PROLOGIO
+    void WriteAttributes(wxExpr *clause);
 #endif
 
   // Does the copying for this object
@@ -704,7 +699,7 @@ class wxEllipseShape: public wxShape
   void OnDraw(wxDC& dc);
   void SetSize(double x, double y, bool recursive = TRUE);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

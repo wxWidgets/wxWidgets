@@ -1697,7 +1697,7 @@ void wxShape::RemoveLine(wxLineShape *line)
   m_lines.DeleteObject(line);
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxShape::WriteAttributes(wxExpr *clause)
 {
   clause->AddAttributeValueString("type", GetClassInfo()->GetClassName());
