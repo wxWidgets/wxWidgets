@@ -2,10 +2,10 @@ wxWindows 2.0 for Motif installation
 ------------------------------------
 
 IMPORTANT NOTE: If you experience problems installing, please re-read this
-		instructions and other related files (todo.txt, bugs.txt and
-		osname.txt for your platform if it exists) carefully before
-		mailing wxwin-users or the author. Preferably, try to fix the
-		problem first and then send a patch to the author. 
+                instructions and other related files (todo.txt, bugs.txt and
+                osname.txt for your platform if it exists) carefully before
+                mailing wxwin-users or the author. Preferably, try to fix the
+                problem first and then send a patch to the author.
 
 - Prerequisites: Motif 1.2 or above, or Lesstif
   (not yet tested). Motif 2.0 and above may also be suitable.
@@ -195,7 +195,7 @@ Other Notes
   is installed and possibly change bitmap.cpp to
   include <xpm.h> instead of <X11/xpm.h>
 
-  Alternatively, edit include/motif/setup.h, set wxUSE_XPM
+  Alternatively, edit include/wx/motif/setup.h, set wxUSE_XPM
   to 0, and recompile. You will not be able to load any XPMs,
   though (currently the only supported colour bitmap format).
 
