@@ -393,6 +393,107 @@ way.  If there are any other platform/toolkit/build flags that make
 sense to add to this tuple please let me know.</p>
 <p>BTW, wx.Platform will probably be deprecated in the future.</p>
 </div>
+<div class="section" id="activex">
+<h1><a name="activex">ActiveX</a></h1>
+<p>Lindsay Mathieson's newest <a class="reference" href="http://members.optusnet.com.au/~blackpaw1/wxactivex.html">wxActiveX</a> class has been wrapped into a new
+extension module called wx.activex.  It is very generic and dynamic
+and should allow hosting of arbitray ActiveX controls within your
+wxPython apps.  So far I've tested it with IE, PDF, and Flash
+controls, (and there are new samples in the demo and also library
+modules supporting these.)</p>
+<p>The new wx.activex module contains a bunch of code, but the most
+important things to look at are ActiveXWindow and ActiveXEvent.
+ActiveXWindow derives from wxWindow and the constructor accepts a
+CLSID for the ActiveX Control that should be created.  (There is also
+a CLSID class that can convert from a progID or a CLSID String.)  The
+ActiveXWindow class simply adds methods that allow you to query some
+of the TypeInfo exposed by the ActiveX object, and also to get/set
+properties or call methods by name.  The Python implementation
+automatically handles converting parameters and return values to/from
+the types expected by the ActiveX code as specified by the TypeInfo,
+(just bool, integers, floating point, strings and None/Empty so far,
+but more can be handled later.)</p>
+<p>That's pretty much all there is to the class, as I mentioned before it
+is very generic and dynamic.  Very little is hard-coded and everything
+that is done with the actual ActiveX control is done at runtime and
+referenced by property or method name.  Since Python is such a dynamic
+language this is a very good match.  I thought for a while about doing
+some Python black-magic and making the specific methods/properties of
+the actual ActiveX control &quot;appear&quot; at runtime, but then decided that
+it would be better and more understandable to do it via subclassing.
+So there is a utility class in wx.activex that given an existing
+ActiveXWindow instance can generate a .py module containing a derived
+class with real methods and properties that do the Right Thing to
+reflect those calls to the real ActiveX control.  There is also a
+script/tool module named genaxmodule that given a CLSID or progID and
+a class name, will generate the module for you.  There are a few
+examples of the output of this tool in the wx.lib package, see
+iewin.py, pdfwin.py and flashwin.py.</p>
+<p>Currently the genaxmodule tool will tweak some of the names it
+generates, but this can be controled if you would like to do it
+differently by deriving your own class from GernerateAXModule,
+overriding some methods and then using this class from a tool like
+genaxmodule.  [TODO: make specifying a new class on genaxmodule's
+command-line possible.]  The current default behavior is that any
+event names that start with &quot;On&quot; will have the &quot;On&quot; dropped, property
+names are converted to all lower case, and if any name is a Python
+keyword it will have an underscore appended to it.  GernerateAXModule
+does it's best when generating the code in the new module, but it can
+only be as good as the TypeInfo data available from the ActiveX
+control so sometimes some tweaking will be needed.  For example, the
+IE web browser control defines the Flags parameter of the Navigate2
+method as required, but MSDN says it is optional.</p>
+<p>It is intended that this new wx.activex module will replace both the
+older version of Lindsay's code available in iewin.IEHtmlWindow, and
+also the wx.lib.activexwraper module.  Probably the biggest
+differences you'll ecounter in migrating activexwrapper-based code
+(besides events working better without causing deadlocks) is that
+events are no longer caught by overriding methods in your derived
+class.  Instead ActiveXWindow uses the wx event system and you bind
+handlers for the ActiveX events exactly the same way you do for any wx
+event.  There is just one extra step needed and that is creating an
+event ID from the ActiveX event name, and if you use the genaxmodule
+tool then this extra step will be handled for you there.  For example,
+for the StatusTextChange event in the IE web browser control, this
+code is generated for you:</p>
+<pre class="literal-block">
+wxEVT_StatusTextChange = wx.activex.RegisterActiveXEvent('StatusTextChange')
+EVT_StatusTextChange = wx.PyEventBinder(wxEVT_StatusTextChange, 1)
+</pre>
+<p>and you would use it in your code like this:</p>
+<pre class="literal-block">
+self.Bind(iewin.EVT_StatusTextChange, self.UpdateStatusText, self.ie)
+</pre>
+<p>When the event happens and your event handler function is called the
+event properties from the ActiveX control (if any) are converted to
+attributes of the event object passed to the handler.  (Can you say
+'event' any more times in a single sentence? ;-) ) For example the
+StatusTextChange event will also send the text that should be put into
+the status line as an event parameter named &quot;Text&quot; and you can access
+it your handlers as an attribute of the event object like this:</p>
+<pre class="literal-block">
+def UpdateStatusText(self, evt):
+    self.SetStatusText(evt.Text)
+</pre>
+<p>Usually these event object attributes should be considered read-only,
+but some will be defined by the TypeInfo as output parameters.  In
+those cases if you modify the event object's attribute then that value
+will be returned to the ActiveX control.  For example, to prevent a
+new window from being opened by the IE web browser control you can do
+this in the handler for the iewin.EVT_NewWindow2 event:</p>
+<pre class="literal-block">
+def OnNewWindow2(self, evt):
+    evt.Cancel = True   
+</pre>
+<p>So how do you know what methods, events and properties that am ActiveX
+control supports?  There is a funciton in wx.activex named GetAXInfo
+that returns a printable summary of the TypeInfo from the ActiveX
+instance passed in.  You can use this as an example of how to browse
+the TypeInfo provided, and there is also a copy of this function's
+output appended as a comment to the modules produced by the
+genaxmodule tool.  Beyond that you'll need to consult the docs
+provided by the makers of the ActiveX control that you are using.</p>
+</div>
 <div class="section" id="other-stuff">
 <h1><a name="other-stuff">Other Stuff</a></h1>
 <p>Instead of over a dozen separate extension modules linked together
@@ -422,18 +523,34 @@ wxPyTypeCast at all.</p>
 there are compatibility aliases for much of the above items.</p>
 <p>The wxWave class has been renamed to wxSound, and now has a slightly
 different API.</p>
-<p>Instead of a very small 20x20 the default window size is now a more
-reasonable size, (currently 400x250 but that may change...)  If you
-don't specify a size, and the window/control class does not have any
-definition of it's own &quot;best size&quot; (most controls do) then the new
-default will be used.  If you have code that accidentally depends on
-the smaller size then things will look a bit odd.  To work around this
-just give those windows an explicit size when created.</p>
+<p>wx.TaskbarIcon works on wxGTK-based platforms now, however you have to
+manage it a little bit more than you did before.  Basically, the app
+will treat it like a top-level frame in that if the wx.TaskBarIcon
+still exists when all the frames are closed then the app will still
+not exit.  You need to ensure that the wx.TaskBarIcon is destroyed
+when your last Frame is closed.  For wxPython apps it is usually
+enough if your main frame object holds the only reference to the
+wx.TaskBarIcon, then when the frame is closed Python reference
+counting takes care of the rest.</p>
+<p>If you are embedding wxPython in a C++ app, or are writing wxPython
+compatible extensions modules, then the usage of wxPyBeginAllowThreads
+and wxPyEndAllowThreads has changed slightly.  wxPyBeginAllowThreads
+now returns a boolean value that must be passed to the coresponding
+wxPyEndAllowThreads function call.  This is to help do the RightThing
+when calls to these two functions are nested, or if calls to external
+code in other extension modules that are wrapped in the standard
+Py_(BEGIN|END)_ALLOW_THERADS may result in wx event handlers being
+called (such as during the call to os.startfile.)</p>
+<p>The bulk of wxPython's setup.py has been moved to another module,
+wx/build/config.py.  This module will be installed as part of wxPython
+so 3rd party modules that wish to use the same setup/configuration
+code can do so simply by importing this module from their own setup.py
+scripts.</p>
 </div>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-03-12 19:55 UTC.
+Generated on: 2004-03-26 21:09 UTC.
 </div>
 </body>
 </html>

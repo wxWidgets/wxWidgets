@@ -163,15 +163,101 @@ replace.</p>
 </div>
 <div class="section" id="where-can-i-find-example-programs-using-the-new-wx-syntax">
 <h1><a class="toc-backref" href="#id9" name="where-can-i-find-example-programs-using-the-new-wx-syntax">Where can I find example programs using the new wx syntax?</a></h1>
-<p>Example programs are included in the wxPython/samples/wx_examples
-directory, and are documented in the <a class="reference" href="wxPythonExamples.html">wxPythonExamples</a> documentation
-file.  Also, all the code in the py package uses the new wx syntax.
-You can learn more about these in the <a class="reference" href="PyManual.html">PyManual</a>.</p>
+<p>The wxPython demo application and most of the sample apps have been
+converted to use the new <tt class="literal"><span class="pre">import</span> <span class="pre">wx</span></tt> style of programming with
+wxPython, so there are lots of examples to look at and to play with.
+Here is one of them, it is the <tt class="literal"><span class="pre">simple</span></tt> sample.</p>
+<pre class="literal-block">
+#----------------------------------------------------------------------
+# A very simple wxPython example.  Just a wxFrame, wxPanel,
+# wxStaticText, wxButton, and a wxBoxSizer, but it shows the basic
+# structure of any wxPython application.
+#----------------------------------------------------------------------
+
+import wx
+
+
+class MyFrame(wx.Frame):
+    &quot;&quot;&quot;
+    This is MyFrame.  It just shows a few controls on a wxPanel,
+    and has a simple menu.
+    &quot;&quot;&quot;
+    def __init__(self, parent, title):
+        wx.Frame.__init__(self, parent, -1, title,
+                          pos=(150, 150), size=(350, 200))
+
+        # Create the menubar
+        menuBar = wx.MenuBar()
+
+        # and a menu 
+        menu = wx.Menu()
+
+        # add an item to the menu, using \tKeyName automatically
+        # creates an accelerator, the third param is some help text
+        # that will show up in the statusbar
+        menu.Append(wx.ID_EXIT, &quot;E&amp;xit\tAlt-X&quot;, &quot;Exit this simple sample&quot;)
+
+        # bind the menu event to an event handler
+        self.Bind(wx.EVT_MENU, self.OnTimeToClose, id=wx.ID_EXIT)
+
+        # and put the menu on the menubar
+        menuBar.Append(menu, &quot;&amp;File&quot;)
+        self.SetMenuBar(menuBar)
+
+        self.CreateStatusBar()
+        
+
+        # Now create the Panel to put the other controls on.
+        panel = wx.Panel(self)
+
+        # and a few controls
+        text = wx.StaticText(panel, -1, &quot;Hello World!&quot;)
+        text.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.BOLD))
+        text.SetSize(text.GetBestSize())
+        btn = wx.Button(panel, -1, &quot;Close&quot;)
+        funbtn = wx.Button(panel, -1, &quot;Just for fun...&quot;)
+
+        # bind the button events to handlers
+        self.Bind(wx.EVT_BUTTON, self.OnTimeToClose, btn)
+        self.Bind(wx.EVT_BUTTON, self.OnFunButton, funbtn)
+
+        # Use a sizer to layout the controls, stacked vertically and with
+        # a 10 pixel border around each
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(text, 0, wx.ALL, 10)
+        sizer.Add(btn, 0, wx.ALL, 10)
+        sizer.Add(funbtn, 0, wx.ALL, 10)
+        panel.SetSizer(sizer)
+        panel.Layout()
+
+
+    def OnTimeToClose(self, evt):
+        &quot;&quot;&quot;Event handler for the button click.&quot;&quot;&quot;
+        print &quot;See ya later!&quot;
+        self.Close()
+
+    def OnFunButton(self, evt):
+        &quot;&quot;&quot;Event handler for the button click.&quot;&quot;&quot;
+        print &quot;Having fun yet?&quot;
+
+
+class MyApp(wx.App):
+    def OnInit(self):
+        frame = MyFrame(None, &quot;Simple wxPython App&quot;)
+        frame.Show(True)
+        self.SetTopWindow(frame)
+        return True
+        
+app = MyApp(True)
+app.MainLoop()
+
+
+</pre>
 </div>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-03-12 19:55 UTC.
+Generated on: 2004-03-26 21:09 UTC.
 </div>
 </body>
 </html>

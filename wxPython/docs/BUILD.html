@@ -244,8 +244,9 @@ wxUSE_AFM_FOR_POSTSCRIPT       0
 wxUSE_DISPLAY                  1
 </pre>
 </li>
-<li><p class="first">Make a %WXWIN%BIN directory and add it to the PATH.  My build
-scripts will copy the wxWidgets DLLs there.</p>
+<li><p class="first">Make sure that %WXWIN%libvc_dll directory is on the PATH.  The
+wxWidgets DLLs will end up there as part of the build and so you'll
+need it on the PATH for them to be found at runtime.</p>
 </li>
 <li><p class="first">Change to the %WXWIN%buildmsw directory and copy my build scripts
 there.</p>
@@ -325,7 +326,7 @@ python demo.py
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-03-12 19:55 UTC.
+Generated on: 2004-03-26 21:09 UTC.
 </div>
 </body>
 </html>
