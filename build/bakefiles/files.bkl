@@ -22,7 +22,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
        BASE_AND_GUI_CMN_SRC          files that must be compiled both into GUI
                                      and base library (all platforms)
 
-       BASE_$(platform)              base files used on platform
+       BASE_$(platform)             base files used on platform
        BASE_AND_GUI_$(platform)_SRC  base & gui files used on platform
 
        $(port)LOWLEVEL               low-level GUI classes
@@ -2544,6 +2544,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_chckl.h
     wx/xrc/xh_choic.h
     wx/xrc/xh_combo.h
+    wx/xrc/xh_datectrl.h
     wx/xrc/xh_dlg.h
     wx/xrc/xh_frame.h
     wx/xrc/xh_gauge.h
