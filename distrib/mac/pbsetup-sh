@@ -10,12 +10,12 @@
 #-- Licence:     wxWindows licence
 #-----------------------------------------------------------------------------
 #
-# Usage: $0 SRCROOT DERIVED_SOURCES_DIR
+# Usage: $0 SRCROOT SYMROOT
 #
 # Display errors/warnings in the correct format for ProjectBuilder parsing
 #
 if [ $# -ne 2 ] ; then
-    echo "${0}:${LINENO}: error: Usage: ${0} SRCROOT DERIVED_SOURCES_DIR"
+    echo "${0}:${LINENO}: error: Usage: ${0} SRCROOT SYMROOT"
     exit 1
 fi
 #
@@ -33,8 +33,8 @@ fi
 #   preserve user modifications made to setup.h
 #
 if [ ! -f "${1}/../include/wx/mac/setup.h" ]; then
-    echo "${0}:${LINENO}: warning: copying \"${1}/../include/wx/mac/setup0.h\" to \"${1}/../include/wx/mac/setup.h\""
-    echo "${0}:${LINENO}: warning: edit \"${1}/../include/wx/mac/setup.h\" to choose the features you would like to compile wxWindows with[out]"
+    echo "${0}:${LINENO}: warning: copying \"include/wx/mac/setup0.h\" to \"include/wx/mac/setup.h\""
+    echo "${0}:${LINENO}: warning: edit \"include/wx/mac/setup.h\" to choose the features you would like to compile wxWindows with[out]"
     cp "${1}/../include/wx/mac/setup0.h" "${1}/../include/wx/mac/setup.h"
     if [ ! -f "${1}/../include/wx/mac/setup.h" ]; then
         echo "${0}:${LINENO}: error: unable to create setup file \"${1}/../include/wx/mac/setup.h\""
@@ -45,8 +45,8 @@ fi
 # Check that stock setup0.h is not newer than user setup.h
 #
 if [ "${1}/../include/wx/mac/setup0.h" -nt "${1}/../include/wx/mac/setup.h" ] ; then
-    echo "${0}:${LINENO}: warning: \"${1}/../include/wx/mac/setup0.h\" is more recent than \"${1}/../include/wx/mac/setup.h\""
-    echo "${0}:${LINENO}: warning: edit or replace \"${1}/../include/wx/mac/setup.h\" to integrate changes"
+    echo "${0}:${LINENO}: warning: \"include/wx/mac/setup0.h\" is more recent than \"include/wx/mac/setup.h\""
+    echo "${0}:${LINENO}: warning: edit or replace \"include/wx/mac/setup.h\" to integrate changes"
 fi
 #
 # Copy setup.h to setup.h if setup.h doesn't exist
