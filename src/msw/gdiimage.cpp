@@ -453,8 +453,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 
     if ( !hicon )
     {
-        // take any (the first one) icon from the file by default
-        hicon = ::ExtractIcon(wxGetInstance(), nameReal, 0 /* first */);
+        // take any size icon from the file by index
+        hicon = ::ExtractIcon(wxGetInstance(), nameReal, iconIndex);
     }
 
     if ( !hicon )
