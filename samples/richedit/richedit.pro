@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = richedit.cpp
-RC_FILE = richedit.rc
+SOURCES = kbList.cpp wxLayout.cpp wxllist.cpp wxlparser.cpp wxlwindow.cpp
+RC_FILE = wxLayout.rc
 TARGET  = richedit

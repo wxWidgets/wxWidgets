@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = listctrl.cpp
-RC_FILE = listctrl.rc
+SOURCES = listtest.cpp
+RC_FILE = listtest.rc
 TARGET  = listctrl

@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = config.cpp
-RC_FILE = config.rc
+SOURCES = conftest.cpp
+RC_FILE = conftest.rc
 TARGET  = config

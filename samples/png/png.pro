@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = png.cpp
-RC_FILE = png.rc
+SOURCES = pngdemo.cpp
+RC_FILE = pngdemo.rc
 TARGET  = png

@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = taskbar.cpp
-RC_FILE = taskbar.rc
+SOURCES = tbtest.cpp
+RC_FILE = tbtest.rc
 TARGET  = taskbar

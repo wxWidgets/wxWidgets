@@ -11,6 +11,9 @@ CONFIG  = wx
 # default one; possible other values are {Debug|Release}Unicode[Dll]
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
+# needed for joystick functions
+win32:LIBS = winmm.lib
+
 # project files
 SOURCES = joytest.cpp
 RC_FILE = joytest.rc

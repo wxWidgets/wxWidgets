@@ -76,19 +76,15 @@ void MyDialog::OnCloseWindow(wxCloseEvent& event)
 
 void MyDialog::Init(void)
 {
-  int dialogWidth = 365;
-  int dialogHeight = 290;
+  (void)new wxStaticText(this, -1, "Press OK to hide me, Exit to quit.",
+                         wxPoint(10, 20));
 
-  wxStaticText* stat = new wxStaticText(this, -1, "Press OK to hide me, Exit to quit.",
-    wxPoint(10, 20));
+  (void)new wxStaticText(this, -1, "Double-click on the taskbar icon to show me again.",
+                         wxPoint(10, 40));
 
-  wxStaticText* stat2 = new wxStaticText(this, -1, "Double-click on the taskbar icon to show me again.",
-    wxPoint(10, 40));
-
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(100, 230), wxSize(80, 25));
-  wxButton *exitButton = new wxButton(this, wxID_EXIT, "Exit", wxPoint(185, 230), wxSize(80, 25));
-  okButton->SetDefault();
-  this->Centre(wxBOTH);
+  (void)new wxButton(this, wxID_EXIT, "Exit", wxPoint(185, 230), wxSize(80, 25));
+  (new wxButton(this, wxID_OK, "OK", wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
+  Centre(wxBOTH);
 }
 
 

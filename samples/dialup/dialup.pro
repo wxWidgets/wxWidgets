@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = dialup.cpp
-RC_FILE = dialup.rc
+SOURCES = nettest.cpp
+RC_FILE = nettest.rc
 TARGET  = dialup

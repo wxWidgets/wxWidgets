@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = mfc.cpp
-RC_FILE = mfc.rc
+SOURCES = mfctest.cpp
+RC_FILE = mfctest.rc
 TARGET  = mfc

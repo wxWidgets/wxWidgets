@@ -12,6 +12,6 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = docview.cpp
+SOURCES = docview.cpp doc.cpp view.cpp
 RC_FILE = docview.rc
 TARGET  = docview
