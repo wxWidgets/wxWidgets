@@ -2074,6 +2074,14 @@ default for the reasons explained in the
 window from being used as an implicit parent for the dialogs which were
 created without a parent. It is useful for the windows which can disappear at
 any moment as creating childs of such windows results in fatal problems.}
+\twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+a wxEVT\_HELP event if the user clicked on an application window.
+This style cannot be used together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
+you should use the style of 
+{\tt wxDEFAULT\_FRAME\_STYLE & ~(wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
+frames having this style (the dialogs don't have minimize nor maximize box by
+default)}
 \end{twocollist}
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}
