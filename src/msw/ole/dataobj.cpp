@@ -1182,7 +1182,7 @@ static const wxChar *GetTymedName(DWORD tymed)
         case TYMED_MFPICT:    return wxT("TYMED_MFPICT");
         case TYMED_ENHMF:     return wxT("TYMED_ENHMF");
         default:
-            wxSprintf(s_szBuf, wxT("type of media format %d (unknown)"), tymed);
+            wxSprintf(s_szBuf, wxT("type of media format %ld (unknown)"), tymed);
             return s_szBuf;
     }
 }
