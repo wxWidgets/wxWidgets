@@ -1948,7 +1948,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     }
 
     wxCHECK_RET( gdk_image, wxT("couldn't create image") );
-
+    
     Create( bitmap.GetWidth(), bitmap.GetHeight() );
     char unsigned *data = GetData();
 

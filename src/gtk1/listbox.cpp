@@ -251,14 +251,19 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 // "select" and "deselect"
 //-----------------------------------------------------------------------------
 
-static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox );
+static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool is_selection );
+
+static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
+{
+    gtk_listitem_select_cb( widget, listbox, TRUE );
+}
 
 static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbox )
 {
-    gtk_listitem_select_callback( widget, listbox );
+    gtk_listitem_select_cb( widget, listbox, FALSE );
 }
 
-static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox )
+static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *listbox, bool is_selection )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -267,6 +272,7 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
+    event.SetExtraLong( (long) is_selection );
 
     wxArrayInt aSelections;
     int n, count = listbox->GetSelections(aSelections);
@@ -430,24 +436,47 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     wxCHECK_RET( pos <= length, wxT("invalid index in wxListBox::InsertItems") );
 
     size_t nItems = items.GetCount();
+    int index;
 
-    if (pos == length)
+    if (m_strings)
     {
-        for ( size_t n = 0; n < nItems; n++ )
+        for (size_t n = 0; n < nItems; n++)
         {
-            GtkAddItem( items[n] );
-
-            m_clientList.Append((wxObject *)NULL);
+            index = m_strings->Add( items[n] );
+            
+            if (index != GetCount())
+            {
+                GtkAddItem( items[n], index );
+                wxNode *node = m_clientList.Nth( index );
+                m_clientList.Insert( node, (wxObject*) NULL );
+            }
+            else
+            {
+                GtkAddItem( items[n] );
+                m_clientList.Append( (wxObject*) NULL );
+            }
         }
     }
     else
     {
-        wxNode *node = m_clientList.Nth( pos );
-        for ( size_t n = 0; n < nItems; n++ )
+        if (pos == length)
         {
-            GtkAddItem( items[n], pos+n );
+            for ( size_t n = 0; n < nItems; n++ )
+            {
+                GtkAddItem( items[n] );
 
-            m_clientList.Insert( node, (wxObject *)NULL );
+                m_clientList.Append((wxObject *)NULL);
+            }
+        }
+        else
+        {
+            wxNode *node = m_clientList.Nth( pos );
+            for ( size_t n = 0; n < nItems; n++ )
+            {
+                GtkAddItem( items[n], pos+n );
+
+                m_clientList.Insert( node, (wxObject *)NULL );
+            }
         }
     }
 

@@ -415,6 +415,7 @@ bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     memdc.SelectObject(bitmap);
     memdc.Blit(0, 0, 1, 1, (wxDC*) this, x1, y1);
     memdc.SelectObject(wxNullBitmap);
+    
     wxImage image(bitmap);
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return TRUE;

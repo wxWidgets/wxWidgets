@@ -61,7 +61,8 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLL_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
 
-    int value = (int)ceil(adjust->value);
+    double dvalue = adjust->value;
+    int value = (int)(dvalue >= 0 ? dvalue - 0.5 : dvalue + 0.5);
 
     int orient = wxHORIZONTAL;
     if ( (win->GetWindowStyleFlag() & wxSB_VERTICAL) == wxSB_VERTICAL)
