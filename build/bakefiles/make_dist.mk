@@ -959,65 +959,26 @@ MANUAL_DIST:
 	cp $(DOCDIR)/latex/wx/*.bib $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
 
-# this target does not generate a complete wxPython dist, it only includes
-# those files needed for the Debian source package.
-# see utils/wxPython/distrib for scripts to make a proper wxPython dist.
-PYTHON_DIST:
-	mkdir $(DISTDIR)/wxPython
-	mkdir $(DISTDIR)/wxPython/contrib
-	mkdir $(DISTDIR)/wxPython/contrib/dllwidget
-	mkdir $(DISTDIR)/wxPython/contrib/gizmos
-	mkdir $(DISTDIR)/wxPython/contrib/gizmos/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/glcanvas
-	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/ogl
-	mkdir $(DISTDIR)/wxPython/contrib/ogl/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/stc
-	mkdir $(DISTDIR)/wxPython/contrib/stc/gtk
-	mkdir $(DISTDIR)/wxPython/contrib/xrc
-	mkdir $(DISTDIR)/wxPython/demo
-	mkdir $(DISTDIR)/wxPython/demo/bitmaps
-	mkdir $(DISTDIR)/wxPython/demo/bmp_source
-	mkdir $(DISTDIR)/wxPython/demo/data
-	mkdir $(DISTDIR)/wxPython/demo/dllwidget
-	mkdir $(DISTDIR)/wxPython/docs
-	mkdir $(DISTDIR)/wxPython/src
-	mkdir $(DISTDIR)/wxPython/src/gtk
-	mkdir $(DISTDIR)/wxPython/scripts
-	mkdir $(DISTDIR)/wxPython/wxPython
-	mkdir $(DISTDIR)/wxPython/wxPython/lib
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/colourchooser
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
-	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
-	mkdir $(DISTDIR)/wxPython/wxPython/tools
-	mkdir $(DISTDIR)/wxPython/wxPython/tools/XRCed
 
-	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/contrib/dllwidget/*.{py,cpp,h,i} $(DISTDIR)/wxPython/contrib/dllwidget
-	cp $(WXDIR)/wxPython/contrib/gizmos/*.{cpp,h,i,txt} $(DISTDIR)/wxPython/contrib/gizmos
-	cp $(WXDIR)/wxPython/contrib/gizmos/gtk/*.{py,cpp} $(DISTDIR)/wxPython/contrib/gizmos/gtk
-	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
-	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
-	-cp $(WXDIR)/wxPython/contrib/ogl/*.{i,txt,h} $(DISTDIR)/wxPython/contrib/ogl
-	-cp $(WXDIR)/wxPython/contrib/ogl/gtk/*.{py,cpp} $(DISTDIR)/wxPython/contrib/ogl/gtk
-	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
-	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc/gtk
-	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
-	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
-	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
-	-cp $(WXDIR)/wxPython/demo/bmp_source/* $(DISTDIR)/wxPython/demo/bmp_source
-	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
-	-cp $(WXDIR)/wxPython/demo/dllwidget/Makefile $(DISTDIR)/wxPython/demo/dllwidget
-	-cp $(WXDIR)/wxPython/demo/dllwidget/test_* $(DISTDIR)/wxPython/demo/dllwidget
-	-cp $(WXDIR)/wxPython/scripts/* $(DISTDIR)/wxPython/scripts
-	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
-	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
-	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
-	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
-	cp $(WXDIR)/wxPython/wxPython/lib/colourchooser/*.py $(DISTDIR)/wxPython/wxPython/lib/colourchooser
-	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
-	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
-	cp $(WXDIR)/wxPython/wxPython/tools/*.py $(DISTDIR)/wxPython/wxPython/tools
+# Copy all the files from wxPython needed for the Debian source package, 
+# and then remove some that are not needed.
+PYTHON_DIST:
+	for dir in `grep -v '#' $(WXDIR)/wxPython/distrib/DIRLIST`; do \
+		echo "Copying dir: $$dir..."; \
+		mkdir $(DISTDIR)/$$dir; \
+		cp $(WXDIR)/$$dir/* $(DISTDIR)/$$dir > /dev/null 2>&1; \
+	done; \
+	\
+	find $(DISTDIR)/wxPython -name "*~"           > RM_FILES; \
+	find $(DISTDIR)/wxPython -name "*.pyc"       >> RM_FILES; \
+	find $(DISTDIR)/wxPython -name "*.bat"       >> RM_FILES; \
+	find $(DISTDIR)/wxPython -name "core"        >> RM_FILES; \
+	find $(DISTDIR)/wxPython -name "core.[0-9]*" >> RM_FILES; \
+	find $(DISTDIR)/wxPython -name "*.orig"      >> RM_FILES; \
+	find $(DISTDIR)/wxPython -name "*.rej"       >> RM_FILES; \
+	for f in `cat RM_FILES`; do rm $$f; done; \
+	rm RM_FILES
+
 
 distrib_clean:
 	$(RM) -r _dist_dir
