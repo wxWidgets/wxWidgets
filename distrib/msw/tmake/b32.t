@@ -29,6 +29,8 @@
     }
 
     foreach $file (sort keys %wxCommon) {
+        next if $wxCommon{$file} =~ /\b(16|U)\b/;
+
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
         $obj = "\$(MSWDIR)\\" . $file . " ";

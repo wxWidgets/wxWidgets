@@ -25,7 +25,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bR\b/;
+        next if $wxCommon{$file} =~ /\b(R|U|16)\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 

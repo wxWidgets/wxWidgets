@@ -24,7 +24,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\b(16)\b/;
+        next if $wxCommon{$file} =~ /\b(16|U)\b/;
 
         #! needs extra files (sql*.h) so not compiled by default.
         #! next if $file =~ /^odbc\./;

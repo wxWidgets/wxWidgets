@@ -31,7 +31,7 @@
 
     foreach $file (sort keys %wxCommon) {
         #! socket files don't compile under Win16 currently
-        next if $wxCommon{$file} =~ /\b(32|S)\b/;
+        next if $wxCommon{$file} =~ /\b(32|S|U)\b/;
 
         #! needs extra files (sql*.h) so not compiled by default.
         next if $file =~ /^odbc\./;
