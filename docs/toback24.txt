@@ -146,3 +146,28 @@ cvs diff: [15:36:24] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindow
 Checking in src/motif/filedlg.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/motif/filedlg.cpp,v  <--  filedlg.cpp
 new revision: 1.16; previous revision: 1.15
+
+12. wxStopWatch::Start() didn't resume it contrary to the docs
+
+Checking in src/common/timercmn.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/timercmn.cpp,v  <--  timercmn.cpp
+new revision: 1.64; previous revision: 1.63
+done
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.234; previous revision: 1.233
+done
+
+13. wxMSW::wxStaticText::GetBestSize() was wrong by '&' width
+
+http://sf.net/tracker/index.php?func=detail&aid=667324&group_id=9863&atid=109863
+
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.235; previous revision: 1.234
+done
+Checking in src/msw/stattext.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/stattext.cpp,v  <--  stattext.cpp
+new revision: 1.34; previous revision: 1.33
+done
+
