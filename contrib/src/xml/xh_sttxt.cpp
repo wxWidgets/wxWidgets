@@ -25,7 +25,10 @@
 wxStaticTextXmlHandler::wxStaticTextXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE( wxST_NO_AUTORESIZE );
+    ADD_STYLE(wxST_NO_AUTORESIZE);
+    ADD_STYLE(wxALIGN_LEFT);
+    ADD_STYLE(wxALIGN_RIGHT);
+    ADD_STYLE(wxALIGN_CENTRE);
     AddWindowStyles();
 }
 
