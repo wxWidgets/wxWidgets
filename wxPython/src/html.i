@@ -883,7 +883,12 @@ public:
     //Adds input filter
     static void AddFilter(wxPyHtmlFilter *filter);
 
+    // Helper functions to select parts of page:
+    void SelectWord(const wxPoint& pos);
+    void SelectLine(const wxPoint& pos);
+    void SelectAll();
 
+    
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const wxString& title);
     void base_OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
