@@ -817,6 +817,24 @@ typedef float wxFloat32;
     typedef double wxDouble;
 #endif
 
+/*
+    Some (non standard) compilers typedef wchar_t as an existing type instead
+    of treating it as a real fundamental type, set wxWCHAR_T_IS_REAL_TYPE to 0
+    for them and to 1 for all the others.
+ */
+#if wxUSE_WCHAR_T
+    /*
+        VC++ typedefs wchar_t as unsigned short by default, that is unless
+        /Za or /Zc:wchar_t option is used in which case _WCHAR_T_DEFINED is
+        defined.
+     */
+#   if defined(__VISUALC__) && !defined(_NATIVE_WCHAR_T_DEFINED)
+#       define wxWCHAR_T_IS_REAL_TYPE 0
+#   else /* compiler having standard-conforming wchar_t */
+#       define wxWCHAR_T_IS_REAL_TYPE 1
+#   endif
+#endif /* wxUSE_WCHAR_T */
+
 /*  ---------------------------------------------------------------------------- */
 /*  byte ordering related definition and macros */
 /*  ---------------------------------------------------------------------------- */
