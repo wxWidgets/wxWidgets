@@ -235,7 +235,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
             {
     			wxTheApp->m_macCurrentEvent = &rec ;
                 wxWindow* focus = wxWindow::FindFocus() ;
-                if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
+                if ( (focus != NULL) && !UMAMenuEvent(&rec) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
                 {
                     // was handled internally
                     result = noErr ;
