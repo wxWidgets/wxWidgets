@@ -198,6 +198,9 @@ WXDLLEXPORT extern bool wxResourceRegisterBitmapData(const wxString& name, char 
 WXDLLEXPORT extern bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
 
+#if defined(__WXPM__)
+#include "wx/os2/wxrsc.h"
+#endif
 #endif
 #endif
     // _WX_RESOURCEH__
