@@ -111,11 +111,11 @@ Card::Card(int value, WayUp way_up) :
 			break;
 		}
 		m_pipValue = 1 + (value - 1) % 13;
-		m_status = TRUE;
+		m_status = true;
     }
     else
     {
-        m_status = FALSE;
+        m_status = false;
     }
 } // Card::Card()
 

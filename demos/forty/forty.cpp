@@ -74,27 +74,30 @@ FortyApp::~FortyApp()
 
 bool FortyApp::OnInit()
 {
-        bool largecards = FALSE;
+  bool largecards = false;
+
         wxSize size(668,510);
 
         if ((argc > 1) && (!wxStrcmp(argv[1],_T("-L"))))
         {
-            largecards = TRUE;
+    largecards = true;
             size = wxSize(1000,750);
         }
 
 	FortyFrame* frame = new FortyFrame(
 			0,
 			_T("Forty Thieves"),
-                        -1, -1, size.x, size.y,largecards
+    wxDefaultPosition,
+    size,
+    largecards
 			);
 
  	// Show the frame
-	frame->Show(TRUE);
+	frame->Show(true);
 
         frame->GetCanvas()->ShowPlayerDialog();
 
-	return TRUE;
+	return true;
 }
 
 const wxColour& FortyApp::BackgroundColour()
@@ -128,8 +131,8 @@ const wxColour& FortyApp::TextColour()
 }
 
 // My frame constructor
-FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int w, int h,bool largecards):
-	wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards):
+	wxFrame(frame, wxID_ANY, title, pos, size)
 {
 #ifdef __WXMAC__
 	wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
@@ -157,21 +160,21 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int 
 	optionsMenu->Append(RIGHT_BUTTON_UNDO,
 			_T("&Right button undo"),
 			_T("Enables/disables right mouse button undo and redo"),
-			TRUE
+			true
 			);
 	optionsMenu->Append(HELPING_HAND,
 			_T("&Helping hand"),
 			_T("Enables/disables hand cursor when a card can be moved"),
-			TRUE
+			true
 			);
         optionsMenu->Append(LARGE_CARDS,
                         _T("&Large cards"),
                         _T("Enables/disables large cards for high resolution displays"),
-                        TRUE
+                        true
                         );
-	optionsMenu->Check(HELPING_HAND, TRUE);
-	optionsMenu->Check(RIGHT_BUTTON_UNDO, TRUE);
-        optionsMenu->Check(LARGE_CARDS, largecards ? TRUE : FALSE);
+	optionsMenu->Check(HELPING_HAND, true);
+	optionsMenu->Check(RIGHT_BUTTON_UNDO, true);
+        optionsMenu->Check(LARGE_CARDS, largecards ? true : false);
 
 	wxMenu* helpMenu = new wxMenu;
 	helpMenu->Append(wxID_HELP_CONTENTS, _T("&Help Contents"), _T("Displays information about playing the game"));
@@ -188,13 +191,12 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int 
         if (largecards)
             Card::SetScale(1.3);
 
-	m_canvas = new FortyCanvas(this, 0, 0, 400, 400);
-	wxLayoutConstraints* constr = new wxLayoutConstraints;
-	constr->left.SameAs(this, wxLeft);
-	constr->top.SameAs(this, wxTop);
-	constr->right.SameAs(this, wxRight);
-	constr->height.SameAs(this, wxHeight);
-	m_canvas->SetConstraints(constr);
+	m_canvas = new FortyCanvas(this, wxDefaultPosition, size);
+
+  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+  topsizer->Add( m_canvas, 1, wxEXPAND | wxALL, 0);
+  SetSizer( topsizer );
+  topsizer->SetSizeHints( this );
 
 	CreateStatusBar();
 }
@@ -222,7 +224,7 @@ FortyFrame::NewGame(wxCommandEvent&)
 void
 FortyFrame::Exit(wxCommandEvent&)
 {
-	Close(TRUE);
+	Close(true);
 }
 
 void
@@ -231,7 +233,7 @@ FortyFrame::Help(wxCommandEvent& event)
 #if wxUSE_HTML
     if (wxFileExists(wxT("about.htm")))
     {
-        FortyAboutDialog dialog(this, -1, wxT("Forty Thieves Instructions"));
+        FortyAboutDialog dialog(this, wxID_ANY, wxT("Forty Thieves Instructions"));
         if (dialog.ShowModal() == wxID_OK)
         {
         }
@@ -380,13 +382,12 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
 
     item0->Add( item2, 0, wxALIGN_RIGHT|wxALL, 5 );
 
-    parent->SetAutoLayout( TRUE );
     parent->SetSizer( item0 );
     parent->Layout();
     item0->Fit( parent );
     item0->SetSizeHints( parent );
 #endif
 
-    return TRUE;
+    return true;
 }
 

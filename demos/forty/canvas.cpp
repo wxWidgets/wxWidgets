@@ -38,12 +38,12 @@ BEGIN_EVENT_TABLE(FortyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(FortyCanvas::OnMouseEvent)
 END_EVENT_TABLE()
 
-FortyCanvas::FortyCanvas(wxWindow* parent, int x, int y, int w, int h) :
-	wxScrolledWindow(parent, -1, wxPoint(x, y), wxSize(w, h)),
-	m_helpingHand(TRUE),
-	m_rightBtnUndo(TRUE),
+FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& size) :
+	wxScrolledWindow(parent, wxID_ANY, pos, size),
+	m_helpingHand(true),
+	m_rightBtnUndo(true),
 	m_playerDialog(0),
-	m_leftBtnDown(FALSE)
+	m_leftBtnDown(false)
 {
 #ifdef __WXGTK__
 	m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
@@ -116,7 +116,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 		else
 		{
 			// user cancelled the dialog - exit the app
-			((wxFrame*)GetParent())->Close(TRUE);
+			((wxFrame*)GetParent())->Close(true);
 		}
 	}
 #endif
@@ -148,7 +148,7 @@ void FortyCanvas::ShowPlayerDialog()
 		else
 		{
 			// user cancelled the dialog - exit the app
-			((wxFrame*)GetParent())->Close(TRUE);
+			((wxFrame*)GetParent())->Close(true);
 		}
         }
 }
@@ -162,9 +162,9 @@ bool FortyCanvas::OnCloseCanvas()
 		wxMessageBox(_T("Are you sure you want to\nabandon the current game?"),
 			_T("Warning"), wxYES_NO | wxICON_QUESTION) == wxNO)
 	{
-        return FALSE;
+        return false;
 	}
-	return TRUE;
+	return true;
 }
 
 void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
@@ -180,7 +180,7 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 	{
 		if (m_leftBtnDown)
 		{
-			m_leftBtnDown = FALSE;
+			m_leftBtnDown = false;
 			ReleaseMouse();
 			m_game->LButtonUp(dc, mouseX, mouseY);
 		}
@@ -190,7 +190,7 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 	{
 		if (!m_leftBtnDown)
 		{
-			m_leftBtnDown = TRUE;
+			m_leftBtnDown = true;
 			CaptureMouse();
 			m_game->LButtonDown(dc, mouseX, mouseY);
 		}
@@ -199,14 +199,14 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 	{
 		if (m_leftBtnDown)
 		{
-			m_leftBtnDown = FALSE;
+			m_leftBtnDown = false;
 			ReleaseMouse();
 			m_game->LButtonUp(dc, mouseX, mouseY);
 		}
 	}
 	else if (event.RightDown() && !event.LeftIsDown())
 	{
-		// only allow right button undo if m_rightBtnUndo is TRUE
+		// only allow right button undo if m_rightBtnUndo is true
 		if (m_rightBtnUndo)
 		{
 			if (event.ControlDown() || event.ShiftDown())

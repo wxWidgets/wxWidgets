@@ -35,7 +35,7 @@
 #include "game.h"
 
 Game::Game(int wins, int games, int score) :
-	m_inPlay(FALSE),
+	m_inPlay(false),
 	m_moveIndex(0),
 	m_redoIndex(0),
 	m_bmap(0),
@@ -181,7 +181,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 
 	if (!m_inPlay)
 	{
-		m_inPlay = TRUE;
+		m_inPlay = true;
 		m_numGames++;
 	}
 	DisplayScore(dc);
@@ -198,7 +198,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 		}
 
 		// This game is over
-		m_inPlay = FALSE;
+		m_inPlay = false;
 
 		// Redraw the score box to update games won
 		DisplayScore(dc);
@@ -212,7 +212,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 		else
 		{
 			// user cancelled the dialog - exit the app
-			((wxFrame*)canvas->GetParent())->Close(TRUE);
+			((wxFrame*)canvas->GetParent())->Close(true);
 		}
 	}
 }
@@ -315,7 +315,7 @@ void Game::Deal()
 		m_totalScore += m_currentScore;
 	}
     m_currentScore = 0;
-    m_inPlay = FALSE;
+    m_inPlay = false;
 }
 
 
@@ -524,21 +524,21 @@ void Game::LButtonDblClk(wxDC& dc, int x, int y)
 // i.e. m_pack, discard and bases are empty
 bool Game::HaveYouWon()
 {
-    if (m_pack->GetTopCard()) return FALSE;
-    if (m_discard->GetTopCard()) return FALSE;
+    if (m_pack->GetTopCard()) return false;
+    if (m_discard->GetTopCard()) return false;
     for(int i = 0; i < 10; i++)
     {
-    	if (m_bases[i]->GetTopCard()) return FALSE;
+    	if (m_bases[i]->GetTopCard()) return false;
     }
     m_numWins++;
     m_totalScore += m_currentScore;
     m_currentScore = 0;
-    return TRUE;
+    return true;
 }
 
 
 // See whether the card under the cursor can be moved somewhere else
-// Returns TRUE if it can be moved, FALSE otherwise
+// Returns 'true' if it can be moved, 'false' otherwise
 bool Game::CanYouGo(int x, int y)
 {
     Pile* pile = WhichPile(x, y);
@@ -553,7 +553,7 @@ bool Game::CanYouGo(int x, int y)
 	    {
 	    	if (m_foundations[i]->AcceptCard(card) && m_foundations[i] != pile)
 		{
-                    return TRUE;
+                    return true;
 		}
             }
 	    for(i = 0; i < 10; i++)
@@ -562,12 +562,12 @@ bool Game::CanYouGo(int x, int y)
 		    m_bases[i]->AcceptCard(card) &&
 		    m_bases[i] != pile)
 		{
-		    return TRUE;
+		    return true;
 		}
             }
 	}
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -642,12 +642,12 @@ void Game::LButtonUp(wxDC& dc, int x, int y)
 
 bool Game::DropCard(int x, int y, Pile* pile, Card* card)
 {
-    bool retval = FALSE;
+    bool retval = false;
     if (pile->Overlap(x, y))
     {
 	if (pile->AcceptCard(card))
 	{
-	    retval = TRUE;
+	    retval = true;
         }
     }
     return retval;
@@ -843,20 +843,20 @@ Base::Base(int x, int y) : Pile(x, y, 0, 12)
 
 bool Base::AcceptCard(Card* card)
 {
-    bool retval = FALSE;
+    bool retval = false;
 
     if (m_topCard >= 0)
     {
 	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
 	        m_cards[m_topCard]->GetPipValue() - 1 == card->GetPipValue())
 	    {
-            retval = TRUE;
+            retval = true;
         }
     }
     else
     {
 		// pile is empty - ACCEPT
-        retval = TRUE;
+        retval = true;
     }
     return retval;
 }
@@ -877,20 +877,20 @@ Foundation::Foundation(int x, int y) : Pile(x, y, 0, 0)
 
 bool Foundation::AcceptCard(Card* card)
 {
-    bool retval = FALSE;
+    bool retval = false;
 
     if (m_topCard >= 0)
     {
 	    if (m_cards[m_topCard]->GetSuit() == card->GetSuit() &&
 	        m_cards[m_topCard]->GetPipValue() + 1 == card->GetPipValue())
 	    {
-            retval = TRUE;
+            retval = true;
         }
     }
     else if (card->GetPipValue() == 1)
     {
 	    // It's an ace and the pile is empty - ACCEPT
-        retval = TRUE;
+        retval = true;
     }
     return retval;
 }

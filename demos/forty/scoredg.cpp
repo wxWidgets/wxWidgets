@@ -30,10 +30,15 @@
 #include "scorefil.h"
 #include "scoredg.h"
 
+#define USE_GRID_FOR_SCORE 0
+
+#if USE_GRID_FOR_SCORE
+#include "wx/grid.h"
+#else
 class ScoreCanvas : public wxScrolledWindow
 {
 public:
-	ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile);
+	ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& pos, wxSize& size);
 	virtual ~ScoreCanvas();
 
 	void OnDraw(wxDC& dc);
@@ -43,17 +48,17 @@ private:
 	wxString	m_text;
 };
 
-
-ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
-	wxScrolledWindow(parent)
+ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& pos, wxSize& size) :
+	wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
 {
+    SetBackgroundColour(*wxWHITE);
 #ifdef __WXGTK__
 	m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
 #else
 	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
 
-        wxArrayString players;
+    wxArrayString players;
 	scoreFile->GetPlayerList( players);
 
 	wxString os;
@@ -124,45 +129,72 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 		if (*str) str++;
 	}
 }
+#endif
 
 BEGIN_EVENT_TABLE(ScoreDialog, wxDialog)
     EVT_CLOSE(ScoreDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-ScoreDialog::ScoreDialog(
-							wxWindow* parent,
-							ScoreFile* file
-							) :
-	wxDialog(parent, -1, _("Scores"),
-			wxDefaultPosition, wxSize(310, 200),
+ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
+	wxDialog(parent, wxID_ANY, _("Scores"),
+			wxDefaultPosition, wxSize(400, 300),
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
 {
-	// enable constraints
-	SetAutoLayout (TRUE);
+    // create grid with players
+    wxArrayString players;
+	file->GetPlayerList(players);
+    
+    wxSize sz = wxSize(400, 300);
 
-	ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile);
-	m_OK = new wxButton(this, wxID_OK, _("OK"));
+#if USE_GRID_FOR_SCORE
+	wxGrid* list = new wxGrid(this, wxID_ANY, wxDefaultPosition, sz, 0);
+    list->CreateGrid(players.Count(), 4);
+	for (unsigned int i = 0; i < players.Count(); i++)
+	{
+		int wins, games, score;
+        wxString string_value;
 
-	wxLayoutConstraints* layout;
+		file->ReadPlayersScore(players[i], wins, games, score);
+		int average = 0;
+		if (games > 0)
+		{
+			average = (2 * score + games) / (2 * games);
+		}
+        list->SetCellValue(i,0,players[i]);
+        string_value.Printf( _T("%u"), wins );
+        list->SetCellValue(i,1,string_value);
+        string_value.Printf( _T("%u"), games );
+        list->SetCellValue(i,2,string_value);
+        string_value.Printf( _T("%u"), average );
+        list->SetCellValue(i,3,string_value);
+    }
+    list->SetColLabelValue(0, _T("Players"));
+    list->SetColLabelValue(1, _T("Wins"));
+    list->SetColLabelValue(2, _T("Games"));
+    list->SetColLabelValue(3, _T("Score"));
+    list->SetEditable(false);
+    list->AutoSizeColumns();
+    list->AutoSizeRows();
+    list->SetRowLabelSize(0);
+    list->EnableDragRowSize(false);
+    list->EnableDragColSize(false);
+    list->EnableDragGridSize(false);
+#else
+	ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
+#endif
 
-	// Constrain the OK button
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->bottom.SameAs	(this,	 wxBottom,	10);
-	layout->height.AsIs();
-	layout->width.AsIs();
-	m_OK->SetConstraints(layout);
+    // locate and resize with sizers
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    topsizer->Add( list, 1, wxALL|wxGROW, 10 );
+    topsizer->Add( new wxButton(this, wxID_OK, _("OK")), 0, wxALIGN_CENTER_HORIZONTAL|wxALL , 10 );
 
-	// Constrain the list of players
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->right.SameAs	(this,	wxRight,	10);
-	layout->top.SameAs		(this,	wxTop,		10);
-	layout->bottom.SameAs	(m_OK,	wxTop,		10);
-	list->SetConstraints(layout);
+    SetSizer( topsizer );
 
-	Layout();
+    GetSizer()->Fit(this);
+    GetSizer()->SetSizeHints(this);
+    
+    CentreOnParent();
 }
 
 ScoreDialog::~ScoreDialog()
@@ -171,7 +203,7 @@ ScoreDialog::~ScoreDialog()
 
 void ScoreDialog::Display()
 {
-	Show(TRUE);
+	Show(true);
 }
 
 void ScoreDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))

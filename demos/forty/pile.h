@@ -66,7 +66,7 @@ public:
 	virtual Card* RemoveTopCard(wxDC& pDC, int xOffset = 0, int yOffset = 0);
 
 	// Functions to add a card to the top of a pile
-	virtual bool AcceptCard(Card*) { return FALSE; }
+	virtual bool AcceptCard(Card*) { return false; }
 	virtual void AddCard(Card* card);	// Add card to top of pile
 	virtual void AddCard(wxDC& pDC, Card* card);	// Add card + redraw it
         void SetPos(int x,int y) {m_x = x;m_y = y;};

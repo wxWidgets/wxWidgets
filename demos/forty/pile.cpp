@@ -224,9 +224,9 @@ bool Pile::CanCardLeave(Card* card)
 {
     for (int i = 0; i <= m_topCard; i++)
     {
-    	if (card == m_cards[i]) return TRUE;
+    	if (card == m_cards[i]) return true;
     }
-    return FALSE;
+    return false;
 }
 
 // Calculate how far x, y is from top card in the pile
@@ -294,9 +294,9 @@ bool Pile::Overlap(int x, int y)
     if (x >= cardX - Card::GetWidth()  && x <= cardX + Card::GetWidth() &&
         y >= cardY - Card::GetHeight() && y <= cardY + Card::GetHeight())
     {
-	    return TRUE;
+	    return true;
     }
-    return FALSE;
+    return false;
 }
 
 

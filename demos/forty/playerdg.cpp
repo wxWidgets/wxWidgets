@@ -44,15 +44,12 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 							wxWindow* parent,
 							ScoreFile* file
 							) :
-	wxDialog(parent, -1, _T("Player Selection"),
-			wxDefaultPosition, wxSize(320, 200),
+	wxDialog(parent, wxID_ANY, _T("Player Selection"),
+			wxDefaultPosition, wxDefaultSize,
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
 {
-	// enable constraints
-	SetAutoLayout (TRUE);
-
-	wxStaticText* msg = new wxStaticText(this, -1, _T("Please select a name or type a new one:"));
+	wxStaticText* msg = new wxStaticText(this, wxID_ANY, _T("Please select a name or type a new one:"));
 
 	wxListBox* list = new wxListBox(
 						this, ID_LISTBOX,
@@ -68,63 +65,24 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 		list->Append(players[i]);
 	}
 
-	m_textField = new wxTextCtrl(this, -1, _T(""), wxDefaultPosition, wxDefaultSize, 0);
+	m_textField = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, 0);
 
 	m_OK = new wxButton(this, wxID_OK, _T("OK"));
 	m_cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
 
-	wxLayoutConstraints* layout;
+  wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
+  button_sizer->Add( m_OK, 0, wxALL, 10 );
+  button_sizer->Add( m_cancel, 0, wxALL, 10 );
 
-	// Constrain the msg at the top of the window
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->top.SameAs		(this,	wxTop,	10);
-	layout->height.AsIs();
-	layout->width.AsIs();
-	msg->SetConstraints(layout);
+  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+  topsizer->Add( msg, 0, wxALL , 10 );
+  topsizer->Add( list, 1, wxEXPAND | wxLEFT | wxRIGHT, 10 );
+  topsizer->Add( m_textField, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
+  topsizer->Add( button_sizer, 0, wxALIGN_LEFT );
 
-	// Constrain the OK button
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->bottom.SameAs	(this,	 wxBottom,	10);
-	layout->height.AsIs();
-	layout->width.AsIs();
-	m_OK->SetConstraints(layout);
+  SetSizer( topsizer );
 
-	// Constrain the OK button
-	layout = new wxLayoutConstraints;
-	layout->left.RightOf	(m_OK,	10);
-	layout->bottom.SameAs	(this,	wxBottom,	10);
-	layout->height.AsIs();
-	layout->width.AsIs();
-	m_cancel->SetConstraints(layout);
-
-	// Constrain the Name text entry field
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->right.SameAs	(this,	wxRight,	10);
-	layout->bottom.SameAs	(m_OK,	wxTop,		10);
-	layout->height.AsIs();
-	m_textField->SetConstraints(layout);
-
-	// Constrain the list of players
-	layout = new wxLayoutConstraints;
-	layout->left.SameAs		(this,	wxLeft,		10);
-	layout->right.SameAs	(this,	wxRight,	10);
-	layout->top.Below		(msg,	10);
-	layout->bottom.SameAs	(m_textField,	wxTop,	10);
-	list->SetConstraints(layout);
-
-	wxString prevPlayer = m_scoreFile->GetPreviousPlayer();
-	if ((prevPlayer.Length() > 0) && (list->FindString(prevPlayer) != -1))
-	{
-		list->SetStringSelection(prevPlayer);
-		m_textField->SetValue(prevPlayer);
-	}
-
-    m_textField->SetFocus();
-
-	Layout();
+  topsizer->SetSizeHints( this );
     
     CentreOnParent();
 }
@@ -142,7 +100,7 @@ const wxString& PlayerSelectionDialog::GetPlayersName()
 {
 /*
 	m_player = "";
-	Show(TRUE);
+	Show(true);
 */
 	return m_player;
 }
