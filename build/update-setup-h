@@ -46,4 +46,3 @@ sed -i -e '/^\/\//d' -e 's@ *//.*$@@' setup.h.in
 
 exit $rc
 
-# vi: set ft=sh:
