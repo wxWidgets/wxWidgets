@@ -161,6 +161,18 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 #endif // WXSTRING_STATISTICS
 
 // ===========================================================================
+// wxStringData core
+// ===========================================================================
+
+#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL) 
+#  pragma message (__FILE__ ": building with Multithreaded non DLL runtime has a performance impact on wxString!") 
+void wxStringData::Free() 
+{ 
+   free(this); 
+} 
+#endif 
+    
+// ===========================================================================
 // wxString class core
 // ===========================================================================
 
