@@ -177,6 +177,9 @@ Unix (Base/GUI):
 - wxWindows may be built using BSD and Solaris (and possibly other) make
   programs and not only GNU make
 - wxTCP-based IPC classes now support communicating over Unix domain sockets
+- wxWindows may be built as a dynamic shared library under Darwin / Mac OS X
+  lazy linking issues have been solved by linking a single module (.o) into
+  the shared library (two step link using distrib/mac/shared-ld-sh)
 
 All (GUI):
 
@@ -297,6 +300,11 @@ wxMSW:
 wxGTK:
 
 - fixed popup menu positioning bug
+
+wxMac:
+
+- support for configuration and build under Mac OS X using the Apple Developer
+  Tools
 
 wxHTML:
 
