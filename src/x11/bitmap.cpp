@@ -150,11 +150,13 @@ bool wxMask::Create( const wxBitmap& bitmap,
 
     XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
 
-    for (int j = 0; j < image.GetHeight(); j++)
+    int width = image.GetWidth();
+    int height = image.GetHeight();
+    for (int j = 0; j < height; j++)
     {
         int start_x = -1;
         int i;
-        for (i = 0; i < image.GetWidth(); i++)
+        for (i = 0; i < width; i++)
         {
             if ((data[index] == red) &&
                 (data[index+1] == green) &&
@@ -906,10 +908,12 @@ wxImage wxBitmap::ConvertToImage() const
 
 //    GdkColormap *cmap = gtk_widget_get_default_colormap();
 
+    int width = GetWidth();
+    int height = GetHeight();
     long pos = 0;
-    for (int j = 0; j < GetHeight(); j++)
+    for (int j = 0; j < height; j++)
     {
-        for (int i = 0; i < GetWidth(); i++)
+        for (int i = 0; i < width; i++)
         {
             unsigned long pixel = XGetPixel( x_image, i, j );
             if (bpp == 1)
