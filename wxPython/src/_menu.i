@@ -292,7 +292,7 @@ public:
 
 class wxMenuItem : public wxObject {
 public:
-    wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_ANY,
                const wxString& text = wxPyEmptyString,
                const wxString& help = wxPyEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
@@ -322,6 +322,7 @@ public:
 
     // what kind of menu item we are
     wxItemKind GetKind() const;
+    void SetKind(wxItemKind kind);
 
     virtual void SetCheckable(bool checkable);
     bool IsCheckable() const;
