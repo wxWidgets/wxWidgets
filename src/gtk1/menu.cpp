@@ -621,21 +621,25 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     if (item->IsCheckable())
     {
-        bool isReallyChecked = item->IsChecked();
-        if ( item->wxMenuItemBase::IsChecked() == isReallyChecked )
+        bool isReallyChecked = item->IsChecked(),
+             isInternallyChecked = item->wxMenuItemBase::IsChecked();
+
+        // ensure that the internal state is always consistent with what is
+        // shown on the screen
+        item->wxMenuItemBase::Check(isReallyChecked);
+
+        // we must not report the events for the radio button going up nor the
+        // events resulting from the calls to wxMenuItem::Check()
+        if ( (item->GetKind() == wxITEM_RADIO && !isReallyChecked) ||
+             (isInternallyChecked == isReallyChecked) )
         {
-            /* the menu item has been checked by calling wxMenuItem->Check() */
             return;
         }
-        else
-        {
-            /* the user pressed on the menu item -> report and make consistent
-             * again */
-            item->wxMenuItemBase::Check(isReallyChecked);
-        }
+
+        // the user pressed on the menu item: report the event below
     }
 
-    menu->SendEvent(item->GetId(), item->IsCheckable() ? item->IsChecked() : -1);
+    menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
 }
 
 //-----------------------------------------------------------------------------
