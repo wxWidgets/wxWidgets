@@ -1606,10 +1606,50 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         }
 #endif
         bool vis = m_peer->IsVisible();
+    
+        int outerBorder = MacGetLeftBorderSize() ;
+        if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
+            outerBorder = 4 ;         
+
+        if ( vis && ( outerBorder > 0 ) )
+        {
+            // as the borders are drawn on the parent we have to properly invalidate all these areas
+            RgnHandle updateInner = NewRgn() , updateOuter = NewRgn() , updateTotal = NewRgn() ;
+            
+            Rect rect ;
+
+            m_peer->GetRect( &rect ) ;
+            RectRgn( updateInner , &rect ) ;
+            InsetRect( &rect , -outerBorder , -outerBorder ) ;
+            RectRgn( updateOuter , &rect ) ;
+            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+            wxPoint parent(0,0); 
+            GetParent()->MacWindowToRootWindow( &parent.x , &parent.y ) ;
+            parent -= GetParent()->GetClientAreaOrigin() ;
+            OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
+            CopyRgn( updateOuter , updateTotal ) ; 
+    
+            rect = r ;
+            RectRgn( updateInner , &rect ) ;
+            InsetRect( &rect , -outerBorder , -outerBorder ) ;
+            RectRgn( updateOuter , &rect ) ;
+            DiffRgn( updateOuter , updateInner ,updateOuter ) ;
+            wxPoint parentorig(0,0); 
+            GetParent()->MacWindowToRootWindow( &parentorig.x , &parentorig.y ) ;
+            parent -= GetParent()->GetClientAreaOrigin() ;
+            OffsetRgn( updateOuter , -parentorig.x , -parentorig.y ) ;
+            CopyRgn( updateOuter , updateTotal ) ; 
+
+            GetParent()->m_peer->SetNeedsDisplay( true , updateTotal ) ;
+            DisposeRgn(updateOuter) ;
+            DisposeRgn(updateInner) ;
+            DisposeRgn(updateTotal) ;
+        }
 
         // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
         if ( vis )
             m_peer->SetVisibility( false , true ) ;
+
         m_peer->SetRect( &r ) ; 
         if ( vis )
             m_peer->SetVisibility( true , true ) ;
