@@ -342,11 +342,8 @@ public:
     // bring the control in sync with current m_windowStyle value
     void UpdateStyle();
 
-    // Implementation: converts wxWindows style to MSW style.
-    // Can be a single style flag or a bit list.
-    // oldStyle is 'normalised' so that it doesn't contain
-    // conflicting styles.
-    long ConvertToMSWStyle(long& oldStyle, long style) const;
+    // Gets the WIN32 style and extra style
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
     // Event handlers
     ////////////////////////////////////////////////////////////////////////////
