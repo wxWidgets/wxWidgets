@@ -56,8 +56,8 @@ public:
   bool Checked( int id ) const;
   void Enable( int id, bool enable );
   bool Enabled( int id ) const;
-  inline bool IsEnabled(int Id) const { return Enabled(Id); };
-  inline bool IsChecked(int Id) const { return Checked(Id); };
+  inline bool IsEnabled(int Id) const { return Enabled(Id); }
+  inline bool IsChecked(int Id) const { return Checked(Id); }
   
   wxString GetLabel( int id ) const;
   void SetLabel( int id, const wxString &label );
@@ -140,6 +140,7 @@ public:
   void          *m_clientData;
 
   GtkWidget     *m_menu;  // GtkMenu
+  GtkWidget     *m_owner;
 };
 
 #endif // __GTKMENUH__

@@ -196,10 +196,6 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
     wxCHECK_MSG( bitmap.Ok(), (wxToolBarTool *)NULL,
                  "invalid bitmap for wxToolBar icon" );
 
-    wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap,
-                                             toggle, clientData,
-                                             helpString1, helpString2 );
-
     wxCHECK_MSG( bitmap.GetBitmap() == NULL, (wxToolBarTool *)NULL,
                  "wxToolBar doesn't support GdkBitmap" );
 
@@ -217,6 +213,11 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
     tool_pixmap = gtk_pixmap_new( pixmap, mask );
   
     gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
+
+    wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap,
+                                             toggle, clientData,
+                                             helpString1, helpString2,
+					     tool_pixmap );
 
     GtkToolbarChildType ctype = toggle ? GTK_TOOLBAR_CHILD_TOGGLEBUTTON
                                        : GTK_TOOLBAR_CHILD_BUTTON;
@@ -288,8 +289,12 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
     {
         wxToolBarTool *tool = (wxToolBarTool*)node->Data();
         if (tool->m_index == toolIndex)
-        { 
+        {
             tool->m_enabled = enable;
+	    
+	    if (tool->m_item)
+	        gtk_widget_set_sensitive( tool->m_item, enable );
+		
             return;
         }
         node = node->Next();

@@ -491,11 +491,11 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
     // VZ: as this function uses setjmp() the only fool proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
+    
+    unsigned char **lines = (unsigned char **) NULL;
+    png_infop info_ptr = (png_infop) NULL;
+    
     image->Destroy();
-
-    unsigned int i;
-    unsigned char **lines = NULL;
-    png_infop info_ptr = NULL;
 
     png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING,
                                                   (voidp) NULL,
@@ -540,7 +540,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     if (lines == NULL)
         goto error;
 
-    for (i = 0; i < height; i++)
+    for (unsigned int i = 0; i < height; i++)
     {
         if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
         {

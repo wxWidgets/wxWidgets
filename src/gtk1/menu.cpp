@@ -55,12 +55,11 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
         if (pos != -1) menu->m_title.Remove( pos, 1 );
     } while (pos != -1);
 
-    GtkWidget *root_menu;
-    root_menu = gtk_menu_item_new_with_label( WXSTRINGCAST(menu->m_title) );
-    gtk_widget_show( root_menu );
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(root_menu), menu->m_menu );
+    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(menu->m_title) );
+    gtk_widget_show( menu->m_owner );
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
-    gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), root_menu );
+    gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), menu->m_owner );
 }
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
@@ -77,6 +76,7 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
         wxMenuItem *item = (wxMenuItem*)node->Data();
         if (item->IsSubMenu())
             return FindMenuItemRecursive(item->GetSubMenu(), menuString, itemString);
+
         node = node->Next();
     }
 
@@ -158,27 +158,50 @@ bool wxMenuBar::Enabled( int id ) const
 wxString wxMenuBar::GetLabel( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
+    
     if (item) return item->GetText();
+    
     return "";
 }
 
 void wxMenuBar::SetLabel( int id, const wxString &label )
 {
     wxMenuItem* item = FindMenuItemById( id );
+    
     if (item) return item->SetText( label );
 }
 
-void wxMenuBar::EnableTop( int WXUNUSED(pos), bool WXUNUSED(flag) )
+void wxMenuBar::EnableTop( int pos, bool flag )
 {
+    wxNode *node = m_menus.Nth( pos );
+  
+    wxCHECK_RET( node, "menu not found" );
+  
+    wxMenu* menu = (wxMenu*)node->Data();
+  
+    if (menu->m_owner) gtk_widget_set_sensitive( menu->m_owner, flag );
 }
 
-wxString wxMenuBar::GetLabelTop( int WXUNUSED(pos) ) const
+wxString wxMenuBar::GetLabelTop( int pos ) const
 {
-  return "menu";
+    wxNode *node = m_menus.Nth( pos );
+  
+    wxCHECK_MSG( node, "invalid", "menu not found" );
+  
+    wxMenu* menu = (wxMenu*)node->Data();
+  
+    return menu->GetTitle();
 }
 
-void wxMenuBar::SetLabelTop( int WXUNUSED(pos), const wxString& WXUNUSED(label) )
+void wxMenuBar::SetLabelTop( int pos, const wxString& label )
 {
+    wxNode *node = m_menus.Nth( pos );
+  
+    wxCHECK_RET( node, "menu not found" );
+  
+    wxMenu* menu = (wxMenu*)node->Data();
+  
+    menu->SetTitle( label );
 }
 
 //-----------------------------------------------------------------------------
@@ -345,6 +368,8 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
         Append(-2, m_title);
         AppendSeparator();
     }
+    
+    m_owner = (GtkWidget*) NULL;
 }
 
 void wxMenu::SetTitle( const wxString& title )

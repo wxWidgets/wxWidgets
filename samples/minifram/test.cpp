@@ -119,6 +119,8 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Help");
 
   toolBar->Realize();
+  
+  toolBar->EnableTool( wxID_HELP, FALSE );
 
   // Can delete the bitmaps since they're reference counted
   int i;
