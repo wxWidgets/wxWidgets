@@ -69,10 +69,11 @@ bool wxVListBox::Create(wxWindow *parent,
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
-
     if ( style & wxLB_MULTIPLE )
         m_selStore = new wxSelectionStore;
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+    m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     return true;
 }
@@ -282,7 +283,7 @@ int wxVListBox::GetNextSelected(unsigned long& cookie) const
 }
 
 // ----------------------------------------------------------------------------
-// wxVListBox painting
+// wxVListBox appearance parameters
 // ----------------------------------------------------------------------------
 
 void wxVListBox::SetMargins(const wxPoint& pt)
@@ -294,6 +295,15 @@ void wxVListBox::SetMargins(const wxPoint& pt)
         Refresh();
     }
 }
+
+void wxVListBox::SetSelectionBackground(const wxColour& col)
+{
+    m_colBgSel = col;
+}
+
+// ----------------------------------------------------------------------------
+// wxVListBox painting
+// ----------------------------------------------------------------------------
 
 wxCoord wxVListBox::OnGetLineHeight(size_t line) const
 {
@@ -337,10 +347,7 @@ void wxVListBox::OnPaint(wxPaintEvent& event)
             {
                 if ( isSelected )
                 {
-                    wxBrush brush(wxSystemSettings::
-                                    GetColour(wxSYS_COLOUR_HIGHLIGHT),
-                                    wxSOLID);
-                    dc.SetBrush(brush);
+                    dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
                 }
                 else // !selected
                 {

@@ -17,6 +17,7 @@
 class WXDLLEXPORT wxHtmlCell;
 class WXDLLEXPORT wxHtmlWinParser;
 class WXDLLEXPORT wxHtmlListBoxCache;
+class WXDLLEXPORT wxHtmlListBoxStyle;
 
 // ----------------------------------------------------------------------------
 // wxHtmlListBox
@@ -73,6 +74,20 @@ protected:
     virtual wxString OnGetItemMarkup(size_t n) const;
 
 
+    // this method allows to customize the selection appearance: it may be used
+    // to specify the colour of the text which normally has the given colour
+    // colFg when it is inside the selection
+    //
+    // by default, the original colour is not used at all and all text has the
+    // same (default for this system) colour inside selection
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
+
+    // this is the same as GetSelectedTextColour() but allows to customize the
+    // background colour -- this is even more rarely used as you can change it
+    // globally using SetSelectionBackground()
+    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
+
+
     // we implement both of these functions in terms of OnGetItem(), they are
     // not supposed to be overridden by our descendants
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
@@ -90,10 +105,18 @@ protected:
     void CacheItem(size_t n) const;
 
 private:
+    // this class caches the pre-parsed HTML to speed up display
     wxHtmlListBoxCache *m_cache;
 
     // HTML parser we use
     wxHtmlWinParser *m_htmlParser;
+
+    // rendering style for the parser which allows us to customize our colours
+    wxHtmlListBoxStyle *m_htmlRendStyle;
+
+
+    // it calls our GetSelectedTextColour() and GetSelectedTextBgColour()
+    friend class wxHtmlListBoxStyle;
 
 
     DECLARE_EVENT_TABLE()

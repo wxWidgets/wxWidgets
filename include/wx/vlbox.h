@@ -120,6 +120,9 @@ public:
     // get the margins around each item
     wxPoint GetMargins() const { return m_ptMargins; }
 
+    // get the background colour of selected cells
+    const wxColour& GetSelectionBackground() const { return m_colBgSel; }
+
 
     // operations
     // ----------
@@ -178,6 +181,9 @@ public:
     // by default both margins are 0
     void SetMargins(const wxPoint& pt);
     void SetMargins(wxCoord x, wxCoord y) { SetMargins(wxPoint(x, y)); }
+
+    // change the background colour of the selected cells
+    void SetSelectionBackground(const wxColour& col);
 
 
 protected:
@@ -257,6 +263,10 @@ private:
 
     // margins
     wxPoint m_ptMargins;
+
+    // the selection bg colour
+    wxColour m_colBgSel;
+
 
     DECLARE_EVENT_TABLE()
 };

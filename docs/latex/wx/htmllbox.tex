@@ -51,7 +51,7 @@ Destructor cleans up whatever resources we use.
 
 \membersection{wxHtmlListBox::Create}\label{wxhtmllistboxcreate}
 
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{size\_t }{countItems = 0}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
 
 Creates the control and optionally sets the initial number of items in it
 (it may also be set or changed later with 
@@ -62,6 +62,40 @@ wxListBox styles can not be used here.
 
 Returns {\tt true} on success or {\tt false} if the control couldn't be created
 
+
+\membersection{wxHtmlListBox::GetSelectedTextBgColour}\label{wxhtmllistboxgetselectedtextbgcolour}
+
+\constfunc{wxColour}{GetSelectedTextBgColour}{\param{const wxColour\& }{colBg}}
+
+This virtual function may be overridden to change the appearance of the
+background of the selected cells in the same way as 
+\helpref{GetSelectedTextColour}{wxhtmllistboxgetselectedtextcolour}.
+
+It should be rarely, if ever, used because 
+\helpref{SetSelectionBackground}{wxvlistboxsetselectionbackground} allows to
+change the selection background for all cells at once and doing anything more
+fancy is probably going to look strangely.
+
+\wxheading{See also}
+
+\helpref{GetSelectedTextColour}{wxhtmllistboxgetselectedtextcolour}
+
+
+\membersection{wxHtmlListBox::GetSelectedTextColour}\label{wxhtmllistboxgetselectedtextcolour}
+
+\constfunc{wxColour}{GetSelectedTextColour}{\param{const wxColour\& }{colFg}}
+
+This virtual function may be overridden to customize the appearance of the
+selected cells. It is used to determine how the colour {\it colFg} is going to
+look inside selection. By default all original colours are completely ignored
+and the standard, system-dependent, selection colour is used but the program
+may wish to override this to achieve some custom appearance.
+
+\wxheading{See also}
+
+\helpref{GetSelectedTextBgColour}{wxhtmllistboxgetselectedtextbgcolour},\\
+\helpref{SetSelectionBackground}{wxvlistboxsetselectionbackground},\\
+\helpref{wxSystemSettings::GetColour}{wxsystemsettingsgetcolour}
 
 
 \membersection{wxHtmlListBox::OnGetItem}\label{wxhtmllistboxongetitem}

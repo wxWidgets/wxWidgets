@@ -39,6 +39,8 @@
     #include "wx/dc.h"
 #endif
 
+#include "wx/colordlg.h"
+
 #include "wx/htmllbox.h"
 
 // you can also have a file containing HTML strings for testing, enable this if
@@ -66,56 +68,22 @@
 class MyHtmlListBox : public wxHtmlListBox
 {
 public:
-    MyHtmlListBox(wxWindow *parent, bool multi = false)
-        : wxHtmlListBox(parent, -1, wxDefaultPosition, wxDefaultSize,
-                        multi ? wxLB_MULTIPLE : 0)
-    {
-        SetMargins(5, 5);
+    MyHtmlListBox(wxWindow *parent, bool multi = false);
 
-#ifdef USE_HTML_FILE
-        if ( !m_file.Open("results") )
-        {
-            wxLogError("Failed to open results file");
-        }
-        else
-        {
-            SetItemCount(m_file.GetLineCount());
-        }
-#else
-        SetItemCount(10);
-#endif
-
-        if ( HasMultipleSelection() )
-            Select(3);
-        else
-            SetSelection(3);
-    }
+    void SetChangeSelFg(bool change) { m_change = change; }
 
 protected:
-    virtual wxString OnGetItem(size_t n) const
-    {
-#ifdef USE_HTML_FILE
-        wxString s;
-        if ( m_file.IsOpened() )
-            s = m_file[n];
+    virtual wxString OnGetItem(size_t n) const;
 
-        return s;
-#else
-        int level = n % 6 + 1;
-        return wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
-                                _T("Item</font> <b>%lu</b>")
-                                _T("</h%d>"),
-                                level,
-                                abs(n - 192) % 256,
-                                abs(n - 256) % 256,
-                                abs(n - 128) % 256,
-                                (unsigned long)n, level);
-#endif
-    }
-
+    // change the appearance by overriding these functions
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
+    bool m_change;
+
+#ifdef USE_HTML_FILE
     wxTextFile m_file;
+#endif
 };
 
 class MyFrame : public wxFrame
@@ -132,6 +100,11 @@ public:
     void OnDrawSeparator(wxCommandEvent&) { m_hlbox->RefreshAll(); }
     void OnToggleMulti(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
+
+    void OnSetBgCol(wxCommandEvent& event);
+    void OnSetSelBgCol(wxCommandEvent& event);
+    void OnSetSelFgCol(wxCommandEvent& event);
+
 
     void OnUpdateUISelectAll(wxUpdateUIEvent& event);
 
@@ -169,6 +142,10 @@ enum
     HtmlLbox_ToggleMulti,
     HtmlLbox_SelectAll,
 
+    HtmlLbox_SetBgCol,
+    HtmlLbox_SetSelBgCol,
+    HtmlLbox_SetSelFgCol,
+
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
@@ -189,6 +166,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(HtmlLbox_About, MyFrame::OnAbout)
 
+    EVT_MENU(HtmlLbox_SetBgCol, MyFrame::OnSetBgCol)
+    EVT_MENU(HtmlLbox_SetSelBgCol, MyFrame::OnSetSelBgCol)
+    EVT_MENU(HtmlLbox_SetSelFgCol, MyFrame::OnSetSelFgCol)
 
     EVT_UPDATE_UI(HtmlLbox_SelectAll, MyFrame::OnUpdateUISelectAll)
 
@@ -226,7 +206,7 @@ MyFrame::MyFrame()
                       _T("Set &margins...\tCtrl-G"),
                       _T("Change the margins around the items"));
     menuHLbox->AppendCheckItem(HtmlLbox_DrawSeparator,
-                               _T("Draw &separators\tCtrl-S"),
+                               _T("&Draw separators\tCtrl-D"),
                                _T("Toggle drawing separators between cells"));
     menuHLbox->AppendSeparator();
     menuHLbox->AppendCheckItem(HtmlLbox_ToggleMulti,
@@ -234,6 +214,12 @@ MyFrame::MyFrame()
                                _T("Toggle multiple selection on/off"));
     menuHLbox->AppendSeparator();
     menuHLbox->Append(HtmlLbox_SelectAll, _T("Select &all items\tCtrl-A"));
+    menuHLbox->AppendSeparator();
+    menuHLbox->Append(HtmlLbox_SetBgCol, _T("Set &background...\tCtrl-B"));
+    menuHLbox->Append(HtmlLbox_SetSelBgCol,
+                      _T("Set &selection background...\tCtrl-S"));
+    menuHLbox->AppendCheckItem(HtmlLbox_SetSelFgCol,
+                               _T("Keep &foreground in selection\tCtrl-F"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
@@ -297,7 +283,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  this);
 }
 
-void MyFrame::OnSetMargins(wxCommandEvent&)
+void MyFrame::OnSetMargins(wxCommandEvent& WXUNUSED(event))
 {
     long margin = wxGetNumberFromUser
                   (
@@ -328,7 +314,7 @@ void MyFrame::OnToggleMulti(wxCommandEvent& event)
     sizer->Layout();
 }
 
-void MyFrame::OnSelectAll(wxCommandEvent& event)
+void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
     m_hlbox->SelectRange(0, m_hlbox->GetItemCount() - 1);
 }
@@ -336,6 +322,36 @@ void MyFrame::OnSelectAll(wxCommandEvent& event)
 void MyFrame::OnUpdateUISelectAll(wxUpdateUIEvent& event)
 {
     event.Enable( m_hlbox && m_hlbox->HasMultipleSelection() );
+}
+
+void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_hlbox->GetBackgroundColour());
+    if ( col.Ok() )
+    {
+        m_hlbox->SetBackgroundColour(col);
+        m_hlbox->Refresh();
+
+        SetStatusText(_T("Background colour changed."));
+    }
+}
+
+void MyFrame::OnSetSelBgCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_hlbox->GetSelectionBackground());
+    if ( col.Ok() )
+    {
+        m_hlbox->SetSelectionBackground(col);
+        m_hlbox->Refresh();
+
+        SetStatusText(_T("Selection background colour changed."));
+    }
+}
+
+void MyFrame::OnSetSelFgCol(wxCommandEvent& event)
+{
+    m_hlbox->SetChangeSelFg(!event.IsChecked());
+    m_hlbox->Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -378,6 +394,34 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
 // MyHtmlListBox
 // ============================================================================
 
+MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
+             : wxHtmlListBox(parent, -1, wxDefaultPosition, wxDefaultSize,
+                             multi ? wxLB_MULTIPLE : 0)
+{
+    m_change = true;
+
+    SetMargins(5, 5);
+
+#ifdef USE_HTML_FILE
+    if ( !m_file.Open("results") )
+    {
+        wxLogError("Failed to open results file");
+    }
+    else
+    {
+        SetItemCount(m_file.GetLineCount());
+    }
+#else
+    SetItemCount(10);
+#endif
+
+    // select something
+    if ( HasMultipleSelection() )
+        Select(3);
+    else
+        SetSelection(3);
+}
+
 void MyHtmlListBox::OnDrawSeparator(wxDC& dc, wxRect& rect, size_t) const
 {
     if ( ((MyFrame *)GetParent())->
@@ -387,5 +431,31 @@ void MyHtmlListBox::OnDrawSeparator(wxDC& dc, wxRect& rect, size_t) const
         dc.DrawLine(rect.x, rect.y, rect.GetRight(), rect.y);
         dc.DrawLine(rect.x, rect.GetBottom(), rect.GetRight(), rect.GetBottom());
     }
+}
+
+wxString MyHtmlListBox::OnGetItem(size_t n) const
+{
+#ifdef USE_HTML_FILE
+    wxString s;
+    if ( m_file.IsOpened() )
+        s = m_file[n];
+
+    return s;
+#else
+    int level = n % 6 + 1;
+    return wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
+                            _T("Item</font> <b>%lu</b>")
+                            _T("</h%d>"),
+                            level,
+                            abs(n - 192) % 256,
+                            abs(n - 256) % 256,
+                            abs(n - 128) % 256,
+                            (unsigned long)n, level);
+#endif
+}
+
+wxColour MyHtmlListBox::GetSelectedTextColour(const wxColour& colFg) const
+{
+    return m_change ? wxHtmlListBox::GetSelectedTextColour(colFg) : colFg;
 }
 

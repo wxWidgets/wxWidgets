@@ -37,8 +37,12 @@
 #include "wx/html/forcelnk.h"
 FORCE_WXHTML_MODULES()
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // private classes
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxHtmlListBoxCache
 // ----------------------------------------------------------------------------
 
 // this class is used by wxHtmlListBox to cache the parsed representation of
@@ -118,6 +122,32 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxHtmlListBoxStyle
+// ----------------------------------------------------------------------------
+
+// just forward wxDefaultHtmlRenderingStyle callbacks to the main class so that
+// they could be overridden by the user code
+class wxHtmlListBoxStyle : public wxDefaultHtmlRenderingStyle
+{
+public:
+    wxHtmlListBoxStyle(wxHtmlListBox& hlbox) : m_hlbox(hlbox) { }
+
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg)
+    {
+        return m_hlbox.GetSelectedTextColour(colFg);
+    }
+
+    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg)
+    {
+        return m_hlbox.GetSelectedTextBgColour(colBg);
+    }
+
+private:
+    const wxHtmlListBox& m_hlbox;
+};
+
+
+// ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
@@ -136,6 +166,7 @@ END_EVENT_TABLE()
 void wxHtmlListBox::Init()
 {
     m_htmlParser = NULL;
+    m_htmlRendStyle = new wxHtmlListBoxStyle(*this);
     m_cache = new wxHtmlListBoxCache;
 }
 
@@ -152,11 +183,30 @@ bool wxHtmlListBox::Create(wxWindow *parent,
 wxHtmlListBox::~wxHtmlListBox()
 {
     delete m_cache;
+
     if ( m_htmlParser )
     {
         delete m_htmlParser->GetDC();
         delete m_htmlParser;
     }
+
+    delete m_htmlRendStyle;
+}
+
+// ----------------------------------------------------------------------------
+// wxHtmlListBox appearance
+// ----------------------------------------------------------------------------
+
+wxColour wxHtmlListBox::GetSelectedTextColour(const wxColour& colFg) const
+{
+    return m_htmlRendStyle->
+                wxDefaultHtmlRenderingStyle::GetSelectedTextColour(colFg);
+}
+
+wxColour
+wxHtmlListBox::GetSelectedTextBgColour(const wxColour& WXUNUSED(colBg)) const
+{
+    return GetSelectionBackground();
 }
 
 // ----------------------------------------------------------------------------
@@ -231,7 +281,9 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
         wxHtmlSelection htmlSel;
         htmlSel.Set(wxPoint(0, 0), cell, wxPoint(INT_MAX, INT_MAX), cell);
         htmlRendInfo.SetSelection(&htmlSel);
-        //htmlRendInfo.SetSelectionState(wxHTML_SEL_IN);
+        if ( m_htmlRendStyle )
+            htmlRendInfo.SetStyle(m_htmlRendStyle);
+        htmlRendInfo.GetState().SetSelectionState(wxHTML_SEL_IN);
     }
 
     // note that we can't stop drawing exactly at the window boundary as then
