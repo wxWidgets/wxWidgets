@@ -174,9 +174,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
 
-    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, OnToggleToolbar)
-    EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, OnEnablePrint)
-    EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, OnToggleHelp)
+    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBAR, MyFrame::OnToggleToolbar)
+    EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
+    EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
     EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
