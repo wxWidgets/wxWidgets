@@ -3800,8 +3800,23 @@ bool wxDateTime::IsWorkDay(Country WXUNUSED(country)) const
 }
 
 // ============================================================================
+// wxDateSpan
+// ============================================================================
+
+wxDateSpan WXDLLIMPEXP_BASE operator*(int n, const wxDateSpan& ds)
+{
+    wxDateSpan ds1(ds);
+    return ds1.Multiply(n);
+}
+
+// ============================================================================
 // wxTimeSpan
 // ============================================================================
+
+wxTimeSpan WXDLLIMPEXP_BASE operator*(int n, const wxTimeSpan& ts)
+{
+    return wxTimeSpan(ts).Multiply(n);
+}
 
 // this enum is only used in wxTimeSpan::Format() below but we can't declare
 // it locally to the method as it provokes an internal compiler error in egcs
@@ -4085,6 +4100,48 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
     }
 
     return holidays.GetCount();
+}
+
+// ============================================================================
+// other helper functions
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// iteration helpers: can be used to write a for loop over enum variable like
+// this:
+//  for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
+// ----------------------------------------------------------------------------
+
+WXDLLIMPEXP_BASE void wxNextMonth(wxDateTime::Month& m)
+{
+    wxASSERT_MSG( m < wxDateTime::Inv_Month, _T("invalid month") );
+
+    // no wrapping or the for loop above would never end!
+    m = (wxDateTime::Month)(m + 1);
+}
+
+WXDLLIMPEXP_BASE void wxPrevMonth(wxDateTime::Month& m)
+{
+    wxASSERT_MSG( m < wxDateTime::Inv_Month, _T("invalid month") );
+
+    m = m == wxDateTime::Jan ? wxDateTime::Inv_Month
+                             : (wxDateTime::Month)(m - 1);
+}
+
+WXDLLIMPEXP_BASE void wxNextWDay(wxDateTime::WeekDay& wd)
+{
+    wxASSERT_MSG( wd < wxDateTime::Inv_WeekDay, _T("invalid week day") );
+
+    // no wrapping or the for loop above would never end!
+    wd = (wxDateTime::WeekDay)(wd + 1);
+}
+
+WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
+{
+    wxASSERT_MSG( wd < wxDateTime::Inv_WeekDay, _T("invalid week day") );
+
+    wd = wd == wxDateTime::Sun ? wxDateTime::Inv_WeekDay
+                               : (wxDateTime::WeekDay)(wd - 1);
 }
 
 #endif // wxUSE_DATETIME

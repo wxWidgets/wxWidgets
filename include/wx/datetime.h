@@ -891,6 +891,42 @@ public:
         // are these two objects equal up to given timespan?
     inline bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
 
+    inline bool operator<(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() < dt.GetValue();
+    }
+
+    inline bool operator<=(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() <= dt.GetValue();
+    }
+
+    inline bool operator>(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() > dt.GetValue();
+    }
+
+    inline bool operator>=(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() >= dt.GetValue();
+    }
+
+    inline bool operator==(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() == dt.GetValue();
+    }
+
+    inline bool operator!=(const wxDateTime& dt) const
+    {
+        wxASSERT_MSG( IsValid() && dt.IsValid(), _T("invalid wxDateTime") );
+        return GetValue() != dt.GetValue();
+    }
+
     // arithmetics with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 
@@ -900,6 +936,12 @@ public:
     inline wxDateTime& Add(const wxTimeSpan& diff);
         // add a time span (positive or negative)
     inline wxDateTime& operator+=(const wxTimeSpan& diff);
+    inline wxDateTime operator+(const wxTimeSpan& ts) const
+    {
+        wxDateTime dt(*this);
+        dt.Add(ts);
+        return dt;
+    }
 
         // return the difference of the date with a time span
     inline wxDateTime Subtract(const wxTimeSpan& diff) const;
@@ -907,6 +949,12 @@ public:
     inline wxDateTime& Subtract(const wxTimeSpan& diff);
         // subtract a time span (positive or negative)
     inline wxDateTime& operator-=(const wxTimeSpan& diff);
+    inline wxDateTime operator-(const wxTimeSpan& ts) const
+    {
+        wxDateTime dt(*this);
+        dt.Subtract(ts);
+        return dt;
+    }
 
         // return the sum of the date with a date span
     inline wxDateTime Add(const wxDateSpan& diff) const;
@@ -914,6 +962,12 @@ public:
     wxDateTime& Add(const wxDateSpan& diff);
         // add a date span (positive or negative)
     inline wxDateTime& operator+=(const wxDateSpan& diff);
+    inline wxDateTime operator+(const wxDateSpan& ds) const
+    {
+        wxDateTime dt(*this);
+        dt.Add(ds);
+        return dt;
+    }
 
         // return the difference of the date with a date span
     inline wxDateTime Subtract(const wxDateSpan& diff) const;
@@ -921,9 +975,16 @@ public:
     inline wxDateTime& Subtract(const wxDateSpan& diff);
         // subtract a date span (positive or negative)
     inline wxDateTime& operator-=(const wxDateSpan& diff);
+    inline wxDateTime operator-(const wxDateSpan& ds) const
+    {
+        wxDateTime dt(*this);
+        dt.Subtract(ds);
+        return dt;
+    }
 
         // return the difference between two dates
     inline wxTimeSpan Subtract(const wxDateTime& dt) const;
+    inline wxTimeSpan operator-(const wxDateTime& dt2) const;
 
     // conversion to/from text: all conversions from text return the pointer to
     // the next character following the date specification (i.e. the one where
@@ -1062,6 +1123,10 @@ public:
     inline wxTimeSpan& Add(const wxTimeSpan& diff);
         // add two timespans together
     wxTimeSpan& operator+=(const wxTimeSpan& diff) { return Add(diff); }
+    inline wxTimeSpan operator+(const wxTimeSpan& ts) const
+    {
+        return wxTimeSpan(GetValue() + ts.GetValue());
+    }
 
         // return the difference of two timespans
     inline wxTimeSpan Subtract(const wxTimeSpan& diff) const;
@@ -1069,6 +1134,10 @@ public:
     inline wxTimeSpan& Subtract(const wxTimeSpan& diff);
         // subtract another timespan
     wxTimeSpan& operator-=(const wxTimeSpan& diff) { return Subtract(diff); }
+    inline wxTimeSpan operator-(const wxTimeSpan& ts)
+    {
+        return wxTimeSpan(GetValue() - ts.GetValue());
+    }
 
         // multiply timespan by a scalar
     inline wxTimeSpan Multiply(int n) const;
@@ -1076,6 +1145,10 @@ public:
     inline wxTimeSpan& Multiply(int n);
         // multiply timespan by a scalar
     wxTimeSpan& operator*=(int n) { return Multiply(n); }
+    inline wxTimeSpan operator*(int n) const
+    {
+        return wxTimeSpan(*this).Multiply(n);
+    }
 
         // return this timespan with inversed sign
     wxTimeSpan Negate() const { return wxTimeSpan(-GetValue()); }
@@ -1115,6 +1188,36 @@ public:
         // hour is shorter than -2 hours. Also, it will return false if the
         // timespans are equal in absolute value.
     bool IsShorterThan(const wxTimeSpan& t) const { return !IsLongerThan(t); }
+
+    inline bool operator<(const wxTimeSpan &ts) const
+    {
+        return GetValue() < ts.GetValue();
+    }
+
+    inline bool operator<=(const wxTimeSpan &ts) const
+    {
+        return GetValue() <= ts.GetValue();
+    }
+
+    inline bool operator>(const wxTimeSpan &ts) const
+    {
+        return GetValue() > ts.GetValue();
+    }
+
+    inline bool operator>=(const wxTimeSpan &ts) const
+    {
+        return GetValue() >= ts.GetValue();
+    }
+
+    inline bool operator==(const wxTimeSpan &ts) const
+    {
+        return GetValue() == ts.GetValue();
+    }
+
+    inline bool operator!=(const wxTimeSpan &ts) const
+    {
+        return GetValue() != ts.GetValue();
+    }
 
     // breaking into days, hours, minutes and seconds
     // ------------------------------------------------------------------------
@@ -1259,6 +1362,13 @@ public:
     inline wxDateSpan& Add(const wxDateSpan& other);
         // add another wxDateSpan to us
     inline wxDateSpan& operator+=(const wxDateSpan& other);
+    inline wxDateSpan operator+(const wxDateSpan& ds) const
+    {
+        return wxDateSpan(GetYears() + ds.GetYears(),
+                          GetMonths() + ds.GetMonths(),
+                          GetWeeks() + ds.GetWeeks(),
+                          GetDays() + ds.GetDays());
+    }
 
         // return difference of two date spans
     inline wxDateSpan Subtract(const wxDateSpan& other) const;
@@ -1266,6 +1376,13 @@ public:
     inline wxDateSpan& Subtract(const wxDateSpan& other);
         // subtract another wxDateSpan from us
     inline wxDateSpan& operator-=(const wxDateSpan& other);
+    inline wxDateSpan operator-(const wxDateSpan& ds) const
+    {
+        return wxDateSpan(GetYears() - ds.GetYears(),
+                          GetMonths() - ds.GetMonths(),
+                          GetWeeks() - ds.GetWeeks(),
+                          GetDays() - ds.GetDays());
+    }
 
         // return a copy of this time span with changed sign
     inline wxDateSpan Negate() const;
@@ -1280,6 +1397,23 @@ public:
     inline wxDateSpan& Multiply(int factor);
         // multiply all components by a (signed) number
     inline wxDateSpan& operator*=(int factor) { return Multiply(factor); }
+    inline wxDateSpan operator*(int n) const
+    {
+        return wxDateSpan(*this).Multiply(n);
+    }
+
+    // ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
+    inline bool operator==(const wxDateSpan& ds) const
+    {
+        return GetYears() == ds.GetYears() &&
+               GetMonths() == ds.GetMonths() &&
+               GetTotalDays() == ds.GetTotalDays();
+    }
+
+    inline bool operator!=(const wxDateSpan& ds) const
+    {
+        return !(*this == ds);
+    }
 
 private:
     int m_years,
@@ -1670,6 +1804,11 @@ inline wxTimeSpan wxDateTime::Subtract(const wxDateTime& datetime) const
     return wxTimeSpan(GetValue() - datetime.GetValue());
 }
 
+inline wxTimeSpan wxDateTime::operator-(const wxDateTime& dt2) const
+{
+    return this->Subtract(dt2);
+}
+
 inline wxDateTime wxDateTime::Add(const wxDateSpan& diff) const
 {
     return wxDateTime(*this).Add(diff);
@@ -1892,203 +2031,16 @@ inline wxDateSpan wxDateSpan::Subtract(const wxDateSpan& other) const
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxDateTime operators
-// ----------------------------------------------------------------------------
-
-// arithmetics
-// -----------
-
-// no need to check for validity - the member functions we call will do it
-
-inline wxDateTime WXDLLIMPEXP_BASE operator+(const wxDateTime& dt,
-                                        const wxTimeSpan& ts)
-{
-    return dt.Add(ts);
-}
-
-inline wxDateTime WXDLLIMPEXP_BASE operator-(const wxDateTime& dt,
-                                        const wxTimeSpan& ts)
-{
-    return dt.Subtract(ts);
-}
-
-inline wxDateTime WXDLLIMPEXP_BASE operator+(const wxDateTime& dt,
-                                        const wxDateSpan& ds)
-{
-    return dt.Add(ds);
-}
-
-inline wxDateTime WXDLLIMPEXP_BASE operator-(const wxDateTime& dt,
-                                        const wxDateSpan& ds)
-{
-    return dt.Subtract(ds);
-}
-
-inline wxTimeSpan WXDLLIMPEXP_BASE operator-(const wxDateTime& dt1,
-                                        const wxDateTime& dt2)
-{
-    return dt1.Subtract(dt2);
-}
-
-// comparison
-// ----------
-
-inline bool WXDLLIMPEXP_BASE operator<(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() < t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator<=(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() <= t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator>(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() > t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator>=(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() >= t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator==(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() == t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator!=(const wxDateTime& t1, const wxDateTime& t2)
-{
-    wxASSERT_MSG( t1.IsValid() && t2.IsValid(), _T("invalid wxDateTime") );
-
-    return t1.GetValue() != t2.GetValue();
-}
-
-// ----------------------------------------------------------------------------
 // wxTimeSpan operators
 // ----------------------------------------------------------------------------
 
-// arithmetics
-// -----------
-
-inline wxTimeSpan WXDLLIMPEXP_BASE operator+(const wxTimeSpan& ts1,
-                                        const wxTimeSpan& ts2)
-{
-    return wxTimeSpan(ts1.GetValue() + ts2.GetValue());
-}
-
-inline wxTimeSpan WXDLLIMPEXP_BASE operator-(const wxTimeSpan& ts1,
-                                        const wxTimeSpan& ts2)
-{
-    return wxTimeSpan(ts1.GetValue() - ts2.GetValue());
-}
-
-inline wxTimeSpan WXDLLIMPEXP_BASE operator*(const wxTimeSpan& ts, int n)
-{
-    return wxTimeSpan(ts).Multiply(n);
-}
-
-inline wxTimeSpan WXDLLIMPEXP_BASE operator*(int n, const wxTimeSpan& ts)
-{
-    return wxTimeSpan(ts).Multiply(n);
-}
-
-// comparison
-// ----------
-
-inline bool WXDLLIMPEXP_BASE operator<(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() < t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator<=(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() <= t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator>(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() > t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator>=(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() >= t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator==(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() == t2.GetValue();
-}
-
-inline bool WXDLLIMPEXP_BASE operator!=(const wxTimeSpan &t1, const wxTimeSpan &t2)
-{
-    return t1.GetValue() != t2.GetValue();
-}
+wxTimeSpan WXDLLIMPEXP_BASE operator*(int n, const wxTimeSpan& ts);
 
 // ----------------------------------------------------------------------------
 // wxDateSpan
 // ----------------------------------------------------------------------------
 
-// comparison
-// ----------
-
-// ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
-inline WXDLLIMPEXP_BASE bool operator==(const wxDateSpan& ds1,
-                                   const wxDateSpan& ds2)
-{
-    return ds1.GetYears() == ds2.GetYears() &&
-           ds1.GetMonths() == ds2.GetMonths() &&
-           ds1.GetTotalDays() == ds2.GetTotalDays();
-}
-
-inline WXDLLIMPEXP_BASE bool operator!=(const wxDateSpan& ds1,
-                                   const wxDateSpan& ds2)
-{
-  return !(ds1 == ds2);
-}
-
-// arithmetics
-// -----------
-
-inline WXDLLIMPEXP_BASE wxDateSpan operator+(const wxDateSpan& ds1,
-                                        const wxDateSpan& ds2)
-{
-    return wxDateSpan(ds1.GetYears() + ds2.GetYears(),
-                      ds1.GetMonths() + ds2.GetMonths(),
-                      ds1.GetWeeks() + ds2.GetWeeks(),
-                      ds1.GetDays() + ds2.GetDays());
-}
-
-inline WXDLLIMPEXP_BASE wxDateSpan operator-(const wxDateSpan& ds1,
-                                        const wxDateSpan& ds2)
-{
-    return wxDateSpan(ds1.GetYears() - ds2.GetYears(),
-                      ds1.GetMonths() - ds2.GetMonths(),
-                      ds1.GetWeeks() - ds2.GetWeeks(),
-                      ds1.GetDays() - ds2.GetDays());
-}
-
-inline WXDLLIMPEXP_BASE wxDateSpan operator*(const wxDateSpan& ds, int n)
-{
-    return wxDateSpan(ds).Multiply(n);
-}
-
-inline WXDLLIMPEXP_BASE wxDateSpan operator*(int n, const wxDateSpan& ds)
-{
-    return wxDateSpan(ds).Multiply(n);
-}
+wxDateSpan WXDLLIMPEXP_BASE operator*(int n, const wxDateSpan& ds);
 
 // ============================================================================
 // other helper functions
@@ -2100,37 +2052,10 @@ inline WXDLLIMPEXP_BASE wxDateSpan operator*(int n, const wxDateSpan& ds)
 //  for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
 // ----------------------------------------------------------------------------
 
-inline WXDLLIMPEXP_BASE void wxNextMonth(wxDateTime::Month& m)
-{
-    wxASSERT_MSG( m < wxDateTime::Inv_Month, _T("invalid month") );
-
-    // no wrapping or the for loop above would never end!
-    m = (wxDateTime::Month)(m + 1);
-}
-
-inline WXDLLIMPEXP_BASE void wxPrevMonth(wxDateTime::Month& m)
-{
-    wxASSERT_MSG( m < wxDateTime::Inv_Month, _T("invalid month") );
-
-    m = m == wxDateTime::Jan ? wxDateTime::Inv_Month
-                             : (wxDateTime::Month)(m - 1);
-}
-
-inline WXDLLIMPEXP_BASE void wxNextWDay(wxDateTime::WeekDay& wd)
-{
-    wxASSERT_MSG( wd < wxDateTime::Inv_WeekDay, _T("invalid week day") );
-
-    // no wrapping or the for loop above would never end!
-    wd = (wxDateTime::WeekDay)(wd + 1);
-}
-
-inline WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
-{
-    wxASSERT_MSG( wd < wxDateTime::Inv_WeekDay, _T("invalid week day") );
-
-    wd = wd == wxDateTime::Sun ? wxDateTime::Inv_WeekDay
-                               : (wxDateTime::WeekDay)(wd - 1);
-}
+WXDLLIMPEXP_BASE void wxNextMonth(wxDateTime::Month& m);
+WXDLLIMPEXP_BASE void wxPrevMonth(wxDateTime::Month& m);
+WXDLLIMPEXP_BASE void wxNextWDay(wxDateTime::WeekDay& wd);
+WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd);
 
 #endif // wxUSE_DATETIME
 
