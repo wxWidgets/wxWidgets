@@ -283,7 +283,7 @@ void wxMenuItem::Check(bool check)
     {
         if ( ::CheckMenuItem(hmenu,
                              GetRealId(),
-                             MF_BYCOMMAND | flags) == -1 )
+                             MF_BYCOMMAND | flags) == (DWORD)-1 )
         {
             wxLogLastError(wxT("CheckMenuItem"));
         }
