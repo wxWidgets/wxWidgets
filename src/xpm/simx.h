@@ -64,7 +64,6 @@ typedef unsigned long COLORREF;
 #ifndef GetRValue
 #  define GetRValue(rgb) ((BYTE)(rgb))
 #endif
-typedef UINT    WORD;
 #endif /* else __OS2__ */
 
 
