@@ -1262,7 +1262,7 @@ static SInt32 wxShapedMacWindowGetFeatures(WindowRef window, SInt32 param)
                         kWindowCanDrawInCurrentPort|
                         //kWindowCanMeasureTitle|
                         kWindowWantsDisposeAtProcessDeath|
-                        kWindowSupportsSetGrowImageRegion|
+                        kWindowSupportsGetGrowImageRegion|
                         kWindowDefSupportsColorGrafPort;
     return 1;
 }
