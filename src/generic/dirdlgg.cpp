@@ -320,9 +320,9 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
     m_paths.Clear();
     m_names.Clear();
 #ifdef __WXMSW__
-    search = data->m_path + "\\*.*";
+    search = data->m_path + _T("\\*.*");
 #else
-    search = data->m_path + "/*";
+    search = data->m_path + _T("/*");
 #endif
     for (path = wxFindFirstFile( search, wxDIR ); !path.IsNull();
        path=wxFindNextFile() )
@@ -331,7 +331,7 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
         /* Don't add "." and ".." to the tree. I think wxFindNextFile
          * also checks this, but I don't quite understand what happens
          * there. Also wxFindNextFile seems to swallow hidden dirs */
-        if ((filename != ".") && (filename != ".."))
+        if ( (filename != _T(".")) && (filename != _T("..")) )
         {
             m_paths.Add(path);
             m_names.Add(filename);
@@ -397,7 +397,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) dir ctrl
-    m_dir = new wxDirCtrl( this, ID_DIRCTRL, "/",
+    m_dir = new wxDirCtrl( this, ID_DIRCTRL, _T("/"),
                            wxDefaultPosition,
                            wxSize(200,200),
                            wxTR_HAS_BUTTONS |
