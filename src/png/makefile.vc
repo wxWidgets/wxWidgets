@@ -29,8 +29,8 @@ PRECOMP=/YuWX.H
 
 !if "$(FINAL)" == "0"
 OPT = /Od
-CPPFLAGS= /W4 /Zi /MD /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
-CFLAGS= /W4 /Zi /MD /GX /Od /D__WXMSW__ $(INC)
+CPPFLAGS= /W4 /Zi /MDd /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
+CFLAGS= /W4 /Zi /MDd /GX /Od /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /CO /ONERROR:NOEXE
 !else
 # /Ox for real FINAL version

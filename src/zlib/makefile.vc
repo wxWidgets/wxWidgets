@@ -10,7 +10,16 @@
 # See zconf.h for details about the memory requirements.
 
 # ------------- Turbo C++, Borland C++ -------------
+!ifndef FINAL
+FINAL=0
+!endif
+
+!if "$(FINAL)" == "0"
+CFLAGS=/Od /MDd /GX
+!else
 CFLAGS=-O2 /MD /GX
+!endif
+
 CC=cl
 LD=cl
 LIB=tlib
