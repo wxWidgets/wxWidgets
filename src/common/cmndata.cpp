@@ -894,6 +894,8 @@ void wxPrintDialogData::ConvertToNative()
         pd->Flags |= PD_NOSELECTION;
     if ( !m_printEnablePageNumbers )
         pd->Flags |= PD_NOPAGENUMS;
+    else if ( (!m_printAllPages) && (!m_printSelection) )
+        pd->Flags |= PD_PAGENUMS;
     if ( m_printEnableHelp )
         pd->Flags |= PD_SHOWHELP;
     if ( m_printSetupDialog )
@@ -940,7 +942,7 @@ void wxPrintDialogData::ConvertFromNative()
     m_printMaxPage = pd->nMaxPage;
     m_printNoCopies = pd->nCopies;
 
-    m_printAllPages = ((pd->Flags & PD_ALLPAGES) == PD_ALLPAGES);
+    m_printAllPages = (((pd->Flags & PD_PAGENUMS) != PD_PAGENUMS) && ((pd->Flags & PD_SELECTION) != PD_SELECTION));
     m_printSelection = ((pd->Flags & PD_SELECTION) == PD_SELECTION);
     m_printCollate = ((pd->Flags & PD_COLLATE) == PD_COLLATE);
     m_printToFile = ((pd->Flags & PD_PRINTTOFILE) == PD_PRINTTOFILE);
