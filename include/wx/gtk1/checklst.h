@@ -41,7 +41,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  int nStrings = 0, 
-                 const wxString choices[] = NULL,
+                 const wxString choices[] = (wxString[]) NULL,
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxListBoxNameStr);

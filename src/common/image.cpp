@@ -446,180 +446,184 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
   
 bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
 {
-   FILE               *f;
-   png_structp         png_ptr;
-   png_infop           info_ptr;
-   unsigned char      *ptr, **lines, *ptr2;
-   int                 transp,bit_depth,color_type,interlace_type;
-   png_uint_32         width, height;
-   unsigned int	       i;
+    image->Destroy();
+   
+    png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 
+                                                  (voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL );
+    if (!png_ptr) return FALSE;
 
-   image->Destroy();
-   
-   transp = 0;
-   png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL );
-   if (!png_ptr) return FALSE;
+    png_infop info_ptr = png_create_info_struct( png_ptr );
+    if (!info_ptr)
+    {
+        png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
+        return FALSE;
+    }
 
-   info_ptr = png_create_info_struct( png_ptr );
-   if (!info_ptr)
-   {
-     png_destroy_read_struct( &png_ptr, NULL, NULL );
-     return FALSE;
-   }
+    if (setjmp(png_ptr->jmpbuf))
+    {
+        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+        return FALSE;
+    }
 
-   if (setjmp(png_ptr->jmpbuf))
-   {
-     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-     return FALSE;
-   }
+    if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+    {
+        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+        return FALSE;
+    }
+   
+    FILE *f = fopen( name, "rb" );
+    png_init_io( png_ptr, f );
+   
+    png_uint_32 width,height;
+    int bit_depth,color_type,interlace_type;
 
-   if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-   {
-     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-     return FALSE;
-   }
+    png_read_info( png_ptr, info_ptr );
+    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
    
-   f = fopen( name, "rb" );
-   png_init_io( png_ptr, f );
+    if (color_type == PNG_COLOR_TYPE_PALETTE) png_set_expand( png_ptr );
    
-   png_read_info( png_ptr, info_ptr );
-   png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
+    png_set_strip_16( png_ptr );
+    png_set_packing( png_ptr );
+    if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS)) png_set_expand( png_ptr );
+    png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
    
-   if (color_type == PNG_COLOR_TYPE_PALETTE) png_set_expand( png_ptr );
+    image->Create( width, height );
    
-   png_set_strip_16( png_ptr );
-   png_set_packing( png_ptr );
-   if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS)) png_set_expand( png_ptr );
-   png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
+    if (!image->Ok())
+    {
+        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+        return FALSE;
+    }
    
-   image->Create( width, height );
+    unsigned char **lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
+    if (lines == NULL)
+    {
+        image->Destroy();
+        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+        return FALSE;
+    }
    
-   if (!image->Ok())
-   {
-     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-     return FALSE;
-   }
-   
-   lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
-   if (lines == NULL)
-   {
-     image->Destroy();
-     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-     return FALSE;
-   }
-   
-   for (i = 0; i < height; i++)
-   {
-     if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
-     {
-       image->Destroy();
-       for (unsigned int n = 0; n < i; n++) free( lines[n] );
-       free( lines );
-       png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-       return FALSE;
-     }
-  }
+    for (unsigned int i = 0; i < height; i++)
+    {
+        if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
+        {
+            image->Destroy();
+            for (unsigned int n = 0; n < i; n++) free( lines[n] );
+            free( lines );
+            png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+            return FALSE;
+        }
+    }
      
-   png_read_image( png_ptr, lines );
-   png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-   ptr = image->GetData();
-   if ((color_type == PNG_COLOR_TYPE_GRAY) ||
-       (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
-     {
+  
+    int transp = 0;
+    png_read_image( png_ptr, lines );
+    png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+    unsigned char *ptr = image->GetData();
+    if ((color_type == PNG_COLOR_TYPE_GRAY) ||
+        (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
+    {
 	for (unsigned int y = 0; y < height; y++)
-	  {
-	     ptr2 = lines[y];
-	     for (unsigned int x = 0; x < width; x++)
-	       {
-		  unsigned char r = *ptr2++;
-		  unsigned char a = *ptr2++;
-		  if (a < 128)
-		    {
-		       *ptr++ = 255;
-		       *ptr++ = 0;
-		       *ptr++ = 255;
-		       transp = 1;
-		    }
-		  else
-		    {
-		       *ptr++ = r;
-		       *ptr++ = r;
-		       *ptr++ = r;
-		    }
-	       }
-	  }
-     }
-   else
-     {
+	{
+	    unsigned char *ptr2 = lines[y];
+	    for (unsigned int x = 0; x < width; x++)
+	    {
+		unsigned char r = *ptr2++;
+		unsigned char a = *ptr2++;
+		if (a < 128)
+		{
+		    *ptr++ = 255;
+		    *ptr++ = 0;
+		    *ptr++ = 255;
+		    transp = 1;
+		}
+		else
+		{
+		    *ptr++ = r;
+		    *ptr++ = r;
+		    *ptr++ = r;
+	        }
+	    }
+	}
+    }
+    else
+    {
 	for (unsigned int y = 0; y < height; y++)
-	  {
-	     ptr2 = lines[y];
-	     for (unsigned int x = 0; x < width; x++)
-	       {
-		  unsigned char r = *ptr2++;
-		  unsigned char g = *ptr2++;
-		  unsigned char b = *ptr2++;
-		  unsigned char a = *ptr2++;
-		  if (a < 128)
-		    {
-		       *ptr++ = 255;
-		       *ptr++ = 0;
-		       *ptr++ = 255;
-		       transp = 1;
-		    }
-		  else
-		    {
-		       if ((r == 255) && (g == 0) && (b == 255)) r = 254;
-		       *ptr++ = r;
-		       *ptr++ = g;
-		       *ptr++ = b;
-		    }
-	       }
-	  }
-     }
-   for (i = 0; i < height; i++) free( lines[i] );
-   free( lines );
-   if (transp)
-     image->SetMaskColour( 255, 0, 255 );
-   else
-     image->SetMask( FALSE );
+	{
+	    unsigned char *ptr2 = lines[y];
+	    for (unsigned int x = 0; x < width; x++)
+	    {
+		unsigned char r = *ptr2++;
+		unsigned char g = *ptr2++;
+		unsigned char b = *ptr2++;
+		unsigned char a = *ptr2++;
+		if (a < 128)
+		{
+		    *ptr++ = 255;
+		    *ptr++ = 0;
+		    *ptr++ = 255;
+		    transp = 1;
+		}
+		else
+		{
+		    if ((r == 255) && (g == 0) && (b == 255)) r = 254;
+		    *ptr++ = r;
+		    *ptr++ = g;
+		    *ptr++ = b;
+		}
+	    }
+	}
+    }
+    
+    for (unsigned int i = 0; i < height; i++) free( lines[i] );
+    free( lines );
+    
+    if (transp)
+    {
+        image->SetMaskColour( 255, 0, 255 );
+    }
+    else
+    {
+        image->SetMask( FALSE );
+    }
    
-   return TRUE;
+    return TRUE;
 }
 
 
 bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
 {
-  FILE *f = fopen( name, "wb" );
-  if (f)
-  {
-    png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    FILE *f = fopen( name, "wb" );
+    if (!f) return FALSE;
+    
+    png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 
+                                                       (voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL);
     if (!png_ptr) 
     { 
-      fclose( f ); 
-      return FALSE; 
+        fclose( f ); 
+        return FALSE; 
     }
     
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-      fclose(f);
-      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
-      return FALSE;
+        fclose(f);
+        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
+        return FALSE;
     }
     
     if (setjmp(png_ptr->jmpbuf))
     {
-      fclose( f );
-      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
-      return FALSE;
+        fclose( f );
+        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
+        return FALSE;
     }
     
     png_init_io( png_ptr, f );
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
-		  PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+	          PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
 		  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-			  
+
     png_color_8 sig_bit;
     sig_bit.red = 8;
     sig_bit.green = 8;
@@ -633,36 +637,41 @@ bool wxPNGHandler::SaveFile( wxImage *image, const wxString& name )
     unsigned char *data = (unsigned char *)malloc( image->GetWidth()*4 );
     if (!data)
     {
-      fclose( f );
-      png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
-      return FALSE;
+        fclose( f );
+        png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
+        return FALSE;
     }
     
     for (int y = 0; y < image->GetHeight(); y++)
     {
-      unsigned char *ptr = image->GetData() + (y * image->GetWidth() * 3);
-      for (int x = 0; x < image->GetWidth(); x++)
-      {
-	data[(x << 2) + 0] = *ptr++;
-	data[(x << 2) + 1] = *ptr++;
-	data[(x << 2) + 2] = *ptr++;
-	if ((data[(x << 2) + 0] == image->GetMaskRed()) &&
-	    (data[(x << 2) + 1] == image->GetMaskGreen()) &&
-	    (data[(x << 2) + 2] == image->GetMaskBlue()))
-          data[(x << 2) + 3] = 0;
-	else
-	  data[(x << 2) + 3] = 255;
-      }
-      png_bytep row_ptr = data;
-      png_write_rows( png_ptr, &row_ptr, 1 );
+        unsigned char *ptr = image->GetData() + (y * image->GetWidth() * 3);
+        for (int x = 0; x < image->GetWidth(); x++)
+        {
+	    data[(x << 2) + 0] = *ptr++;
+	    data[(x << 2) + 1] = *ptr++;
+	    data[(x << 2) + 2] = *ptr++;
+	    if ((data[(x << 2) + 0] == image->GetMaskRed()) &&
+	        (data[(x << 2) + 1] == image->GetMaskGreen()) &&
+	        (data[(x << 2) + 2] == image->GetMaskBlue()))
+	    {
+                data[(x << 2) + 3] = 0;
+	    }
+	    else
+	    {
+	        data[(x << 2) + 3] = 255;
+	    }
+        }
+        png_bytep row_ptr = data;
+        png_write_rows( png_ptr, &row_ptr, 1 );
     }
+    
     free(data);
     png_write_end( png_ptr, info_ptr );
-    png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
+    png_destroy_write_struct( &png_ptr, (png_infopp) NULL );
 
     fclose(f);
-  }
-  return TRUE;
+    
+    return TRUE;
 }
 
 #endif 

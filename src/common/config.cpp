@@ -273,9 +273,9 @@ wxString wxExpandEnvVars(const wxString& str)
   {
     Bracket_None,
     Bracket_Normal  = ')',
-    Bracket_Curly   = '}',
+    Bracket_Curly   = '}'
 #ifdef  __WXMSW__
-    Bracket_Windows = '%'     // yeah, Windows people are a bit strange ;-)
+    ,Bracket_Windows = '%'     // yeah, Windows people are a bit strange ;-)
 #endif
   };
 
@@ -411,5 +411,4 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
 #endif
 
   // wxUSE_CONFIG
-  
-  
+

@@ -174,7 +174,8 @@ wxString wxPathList::FindValidPath (const wxString& file)
   char buf[_MAXPATHLEN];
   strcpy(buf, wxBuffer);
 
-  char *filename = IsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (char *)buf;
+  char *filename = (char*) NULL; /* shut up buggy egcs warning */
+  filename = IsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (char *)buf;
 
   for (wxNode * node = First (); node; node = node->Next ())
     {
