@@ -321,7 +321,7 @@ $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@: glcanvas.o $(build_libdir)/@WX_LIBR
 	@$(INSTALL) -d $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o -L$(build_libdir) @WXCONFIG_LIBS@ $(EXTRALIBS) $(OPENGLLIBS)
 
-$(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@: $(MACRESOURCES)
+$(build_libdir)/@WX_RESOURCES_MACOSX_DATA@: $(MACRESOURCES)
 	@$(INSTALL) -d $(build_libdir)
 	$(RESCOMP) -d __UNIX__ -useDF $^ -o $@
 
