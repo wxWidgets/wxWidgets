@@ -13,8 +13,12 @@ worker threads it already makes much more sense).
 
 Note that a call to \helpref{Signal()}{wxconditionsignal} may happen before the
 other thread calls \helpref{Wait()}{wxconditionwait} and, just as with the
-pthread conditions, the signal is then lost and so if you want to be sure to
-get it you must use a mutex together with the condition variable.
+pthread conditions, the signal is then lost and so if you want to be sure that
+you don't miss it you must keep the mutex associated with the condition
+initially locked and lock it again before calling 
+\helpref{Signal()}{wxconditionsignal}. Of course, this means that this call is
+going to block until \helpref{Wait()}{wxconditionwait} is called by another
+thread.
 
 \wxheading{Example}
 
