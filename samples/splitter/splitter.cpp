@@ -79,8 +79,7 @@ public:
 private:
   void UpdatePosition();
 
-  wxWindow *m_left,
-           *m_right;
+  wxScrolledWindow *m_left, *m_right;
 
   MySplitterWindow* m_splitter;
 
