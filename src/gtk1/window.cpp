@@ -68,6 +68,10 @@
 #include "wx/gtk/win_gtk.h"
 
 #ifdef __WXGTK20__
+#include <pango/pangox.h>
+#endif
+
+#ifdef __WXGTK20__
     #define SET_CONTAINER_FOCUS(w, d) gtk_widget_child_focus((w), (d))
 #else
     #define SET_CONTAINER_FOCUS(w, d) gtk_container_focus(GTK_CONTAINER(w), (d))
@@ -2533,6 +2537,7 @@ void wxWindowGTK::Init()
 
 #ifdef __WXGTK20__
     m_imContext = NULL;
+    m_x11Context = NULL;
 #else            
 #ifdef HAVE_XIM
     m_ic = (GdkIC*) NULL;
@@ -2571,7 +2576,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
         wxFAIL_MSG( wxT("wxWindowGTK creation failed") );
         return FALSE;
     }
-
+    
     m_insertCallback = wxInsertChildInWindow;
     
     // always needed for background clearing
@@ -2806,7 +2811,6 @@ void wxWindowGTK::PostCreation()
         g_signal_connect (G_OBJECT (m_imContext), "commit",
             G_CALLBACK (gtk_wxwindow_commit_cb), this);
 #endif
-
         }
 
         // these are called when the "sunken" or "raised" borders are drawn
@@ -3401,11 +3405,11 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
         if (y) (*y) = 0;
         return;
     }
+    
 #ifdef __WXGTK20__
-
     PangoContext *context = NULL;
     if (m_widget)
-        gtk_widget_get_pango_context( m_widget );
+        context = gtk_widget_get_pango_context( m_widget );
         
     if (!context)
     {
@@ -3982,6 +3986,21 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
 
     return TRUE;
 }
+
+#ifdef __WXGTK20__
+PangoContext *wxWindowGTK::GtkGetPangoDefaultContext()
+{
+    return gtk_widget_get_pango_context( m_widget );
+}
+
+PangoContext *wxWindowGTK::GtkGetPangoX11Context()
+{
+    if (!m_x11Context) 
+        m_x11Context = pango_x_get_context( gdk_display );
+    
+    return m_x11Context;
+}
+#endif
 
 GtkStyle *wxWindowGTK::GetWidgetStyle()
 {

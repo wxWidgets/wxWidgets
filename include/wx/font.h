@@ -81,6 +81,9 @@ struct WXDLLEXPORT wxNativeFontInfo;
 class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
 public:
+    // default constructor
+    wxFontBase() { m_noAA = FALSE; }
+
     // creator function
     virtual ~wxFontBase();
 
@@ -141,6 +144,10 @@ public:
     wxString GetStyleString() const;
     wxString GetWeightString() const;
 
+    // Unofficial API, don't use
+    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    bool GetNoAntiAliasing() { return m_noAA; }
+
     // the default encoding is used for creating all fonts with default
     // encoding parameter
     static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
@@ -150,7 +157,10 @@ protected:
     // get the internal data
     wxFontRefData *GetFontData() const
         { return (wxFontRefData *)m_refData; }
-
+    
+    // Don't use the native anti-aliasing
+    bool m_noAA;
+    
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using

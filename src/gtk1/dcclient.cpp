@@ -330,12 +330,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     wxASSERT_MSG( widget, wxT("DC needs a widget") );
 
 #ifdef __WXGTK20__
-    m_context = gtk_widget_get_pango_context( widget );
-    
-    // Always take Xft context to get matching fonts
-    // for display and printing.
-    // m_context = pango_xft_get_context (GDK_DISPLAY (), DefaultScreen (GDK_DISPLAY ()));
-    
+    m_context = window->GtkGetPangoDefaultContext();
     m_fontdesc = widget->style->font_desc;
 #endif
 
@@ -1414,19 +1409,23 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     if (!m_window) return;
+    
+    if (text.empty()) return;
 
+#ifndef __WXGTK20__
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
     wxCHECK_RET( font, wxT("invalid font") );
+#endif
 
-#if defined(__WXGTK20__)
+#ifdef __WXGTK20__
     wxCHECK_RET( m_context, wxT("no Pango context") );
 #endif
 
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-#if defined(__WXGTK20__)
+#ifdef __WXGTK20__
     // TODO: the layout engine should be abstracted at a higher level!
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
@@ -1734,6 +1733,14 @@ void wxWindowDC::SetFont( const wxFont &font )
     m_font = font;
 #ifdef __WXGTK20__
     m_fontdesc = m_font.GetNativeFontInfo()->description;
+   
+    if (m_owner)
+    {
+        if (m_font.GetNoAntiAliasing())
+            m_context = m_owner->GtkGetPangoX11Context();
+        else
+            m_context = m_owner->GtkGetPangoDefaultContext();
+    }
 #endif
 }
 

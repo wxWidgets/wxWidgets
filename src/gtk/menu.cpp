@@ -385,7 +385,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
 #endif
 
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
-    // adding menu later on.
+    // addings menu later on.
     if (m_invokingWindow)
     {
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
@@ -396,9 +396,9 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
             //               see (and refactor :) similar code in Remove
             //               below.
 
-	wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
+        wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
 
-	if( frame )
+        if( frame )
             frame->UpdateMenuBarSize();
     }
 
@@ -773,11 +773,21 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     {
         if ( *pc == wxT('_')  )
         {
-            // wxGTK escapes "xxx_xxx" to "xxx__xxx"
+            // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
             pc++;
             label += *pc;
             continue;
         }
+
+#if GTK_CHECK_VERSION(2, 0, 0)
+        if ( *pc == wxT('\\')  )
+        {
+            // GTK 2.0 escapes "xxx/xxx" to "xxx\/xxx"
+            pc++;
+            label += *pc;
+            continue;
+        }
+#endif
 
         if ( *pc == wxT('&') )
         {
@@ -807,42 +817,49 @@ void wxMenuItem::SetText( const wxString& str )
     {
         GtkLabel *label;
         if (m_labelWidget)
-          label = (GtkLabel*) m_labelWidget;
+            label = (GtkLabel*) m_labelWidget;
         else
-          label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+            label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
-        /* set new text */
+#if GTK_CHECK_VERSION(2, 0, 0)
+        // We have to imitate item_factory_unescape_label here
+        wxString tmp;
+        for (size_t n = 0; n < m_text.Len(); n++)
+        {
+            if (m_text[n] != wxT('\\'))
+                tmp += m_text[n];
+        }
+        
+        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(tmp) );
+#else
+        // set new text
         gtk_label_set( label, wxGTK_CONV( m_text ) );
 
-        /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( m_text ) );
+        // reparse key accel
+        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV(m_text) );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+#endif
     }
 }
 
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::DoSetText( const wxString& str )
 {
-    /* '\t' is the deliminator indicating a hot key */
+    // '\t' is the deliminator indicating a hot key
     m_text.Empty();
     const wxChar *pc = str;
     for (; (*pc != wxT('\0')) && (*pc != wxT('\t')); pc++ )
     {
-#if GTK_CHECK_VERSION(1, 2, 0)
         if (*pc == wxT('&'))
         {
             m_text << wxT('_');
         }
+
+#if GTK_CHECK_VERSION(2, 0, 0)
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            m_text << wxT("__");
+            // m_text << wxT("__");    doesn't work
         }
-#else // GTK+ < 1.2.0
-        if (*pc == wxT('&'))
-        {
-        }
-#endif
-#if GTK_CHECK_VERSION(2, 0, 0)
         else if (*pc == wxT('/'))      // we have to escape slashes
         {
             m_text << wxT("\\/");
@@ -851,7 +868,11 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             m_text << wxT("\\\\");
         }
-#elif GTK_CHECK_VERSION(1, 2, 0)
+#elif
+        else if ( *pc == wxT('_') )    // escape underscores
+        {
+            m_text << wxT("__");
+        }
         else if (*pc == wxT('/'))      /* we have to filter out slashes ... */
         {
             m_text << wxT('\\');  /* ... and replace them with back slashes */
@@ -1065,7 +1086,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
         if (accel_key != GDK_VoidSymbol)
-            {
+        {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
                                         gtk_menu_ensure_uline_accel_group (GTK_MENU (m_menu)),
@@ -1083,6 +1104,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
+                            
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
 
@@ -1166,10 +1188,15 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         wxString path( mitem->GetFactoryPath() );
         menuItem = gtk_item_factory_get_widget( m_factory, wxGTK_CONV( path ) );
+        
+        if (!menuItem)
+            wxLogError( wxT("Wrong menu path: %s\n"), path.c_str() );
     }
 
     if ( !mitem->IsSeparator() )
     {
+        wxASSERT_MSG( menuItem, wxT("invalid menuitem") );
+    
         gtk_signal_connect( GTK_OBJECT(menuItem), "select",
                             GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
                             (gpointer)this );

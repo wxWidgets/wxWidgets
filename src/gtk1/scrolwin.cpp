@@ -313,7 +313,7 @@ bool wxScrolledWindow::Create(wxWindow *parent,
     PostCreation();
 
     Show( TRUE );
-
+    
     return TRUE;
 }
 

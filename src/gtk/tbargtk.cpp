@@ -475,7 +475,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                     return FALSE;
                 }
-
+                
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
                                     "enter_notify_event",
                                     GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),

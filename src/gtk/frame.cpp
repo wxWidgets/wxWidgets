@@ -164,7 +164,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
                          child->m_y,
                          child->m_width,
                          child->m_height );
-
+                         
 #if wxUSE_TOOLBAR_NATIVE
         // We connect to these events for recalculating the client area
         // space when the toolbar is floating
@@ -192,7 +192,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
                          child->m_width,
                          child->m_height );
     }
-
+    
     // Resize on OnInternalIdle
     parent->GtkUpdateSize();
 }
@@ -219,6 +219,7 @@ bool wxFrame::Create( wxWindow *parent,
     bool rt = wxTopLevelWindow::Create(parent, id, title, pos, sizeOrig,
                                        style, name);
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
+    
     return rt;
 }
 
@@ -576,7 +577,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
             gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
                 GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
         }
-
+        
         m_frameMenuBar->Show( TRUE );
 
         UpdateMenuBarSize();

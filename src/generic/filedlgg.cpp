@@ -1074,7 +1074,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     }
     if ( firstWild.Left( 2 ) == wxT("*.") )
         m_filterExtension = firstWild.Mid( 1 );
-    if ( m_filterExtension == ".*" )
+    if ( m_filterExtension == wxT(".*") )
         m_filterExtension = wxEmptyString;
 
     // layout
