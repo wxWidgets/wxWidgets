@@ -254,7 +254,7 @@ class WXDLLEXPORT wxDataObjectComposite : public wxDataObject
 {
 public:
     // ctor
-    wxDataObjectComposite() { m_preferred = 0; }
+    wxDataObjectComposite();
 
     // add data object (it will be deleted by wxDataObjectComposite, hence it
     // must be allocated on the heap) whose format will become the preferred

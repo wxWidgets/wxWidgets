@@ -94,6 +94,13 @@ bool wxDataObjectBase::IsSupported(const wxDataFormat& format,
 // wxDataObjectComposite
 // ----------------------------------------------------------------------------
 
+wxDataObjectComposite::wxDataObjectComposite()
+{
+    m_preferred = 0;
+
+    m_dataObjects.DeleteContents(TRUE);
+}
+
 wxDataObjectSimple *
 wxDataObjectComposite::GetObject(const wxDataFormat& format) const
 {
