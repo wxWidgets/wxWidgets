@@ -17114,11 +17114,15 @@ EOF
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    cat >> confdefs.h <<\EOF
+    if test "$wxUSE_MAC" = 1; then
+        echo "configure: warning: Popup window is not yet supported under Mac OS" 1>&2
+    else
+        cat >> confdefs.h <<\EOF
 #define wxUSE_POPUPWIN 1
 EOF
 
-    USES_CONTROLS=1
+        USES_CONTROLS=1
+    fi
 fi
 
 if test "$USES_CONTROLS" = 1; then
@@ -17471,7 +17475,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:17475: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:17479: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

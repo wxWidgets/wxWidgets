@@ -4209,8 +4209,12 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    AC_DEFINE(wxUSE_POPUPWIN)
-    USES_CONTROLS=1
+    if test "$wxUSE_MAC" = 1; then
+        AC_MSG_WARN(Popup window is not yet supported under Mac OS)
+    else
+        AC_DEFINE(wxUSE_POPUPWIN)
+        USES_CONTROLS=1
+    fi
 fi
 
 if test "$USES_CONTROLS" = 1; then
