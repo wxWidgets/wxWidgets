@@ -337,13 +337,13 @@ button.cpp	R
 checkbox.cpp	R
 checklst.cpp	R
 choice.cpp	R
-clipbrd.cpp	R
+clipbrd.cpp	R	L
 colour.cpp	R	L
 combobox.cpp	R
 control.cpp	R
 cursor.cpp	R	L
 data.cpp	R	L
-dataobj.cpp	R
+dataobj.cpp	R	L
 dc.cpp	R	L
 dcclient.cpp	R	L
 dcmemory.cpp	R	L
@@ -379,7 +379,7 @@ statline.cpp	R
 stattext.cpp	R
 tbargtk.cpp	R
 textctrl.cpp	R
-timer.cpp	R
+timer.cpp	R	L
 tooltip.cpp	R
 utilsgtk.cpp	R	L
 utilsres.cpp	R

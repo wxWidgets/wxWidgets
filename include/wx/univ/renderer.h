@@ -32,6 +32,7 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxScrollBar;
+class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxWindow;
 
 #include "wx/string.h"
@@ -96,15 +97,6 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL) = 0;
-
-    // draw a line of the text ctrl optionally highlighting the characters in
-    // the given range
-    virtual void DrawTextLine(wxDC& dc,
-                              const wxString& text,
-                              const wxRect &rect,
-                              int selStart = -1,
-                              int selEnd = -1,
-                              int flags = 0) = 0;
 
     // draw the border and optionally return the rectangle containing the
     // region inside the border
@@ -234,6 +226,14 @@ public:
     virtual wxSize GetRadioBitmapSize() const = 0;
     virtual wxCoord GetCheckItemMargin() const = 0;
 
+    // convert between text rectangle and client rectangle for text controls:
+    // by default, the former is equal to the latter, but it can be made
+    // smaller to leave margins around text
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
+                                    const wxRect& rect) = 0;
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text,
+                                     const wxRect& rect) = 0;
+
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -300,13 +300,6 @@ public:
                                  wxRect *rectBounds = NULL)
         { m_renderer->DrawButtonLabel(dc, label, image, rect,
                                       flags, align, indexAccel, rectBounds); }
-    virtual void DrawTextLine(wxDC& dc,
-                              const wxString& text,
-                              const wxRect &rect,
-                              int selStart = -1,
-                              int selEnd = -1,
-                              int flags = 0)
-        { m_renderer->DrawTextLine(dc, text, rect, flags); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -410,6 +403,11 @@ public:
     virtual wxCoord GetCheckItemMargin() const
         { return m_renderer->GetCheckItemMargin(); }
 
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text, const wxRect& rect)
+        { return m_renderer->GetTextTotalArea(text, rect); }
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text, const wxRect& rect)
+        { return m_renderer->GetTextClientArea(text, rect); }
+
 protected:
     wxRenderer *m_renderer;
 };
@@ -428,7 +426,6 @@ public:
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
                    wxCoord marginX = 0, wxCoord marginY = 0);
-    void DrawTextLine(const wxString& text, int selStart = -1, int selEnd = -1);
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);
     void DrawCheckItems(const wxCheckListBox *listbox,

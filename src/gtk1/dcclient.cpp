@@ -73,15 +73,15 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 #include "gdk/gdkprivate.h"
 
-void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
-                          GdkGC               *gc,
-                          GdkDrawable  *src,
-                          gint                xsrc,
-                          gint                ysrc,
-                          gint                xdest,
-                          gint                ydest,
-                          gint                width,
-                          gint                height)
+void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
+                        GdkGC        *gc,
+                        GdkDrawable  *src,
+                        gint         xsrc,
+                        gint         ysrc,
+                        gint         xdest,
+                        gint         ydest,
+                        gint         width,
+                        gint         height)
 {
     gint src_width, src_height;
 #ifndef __WXGTK20__
@@ -1068,9 +1068,12 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 }
 
-bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int logical_func, bool useMask )
+bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
+                         wxCoord width, wxCoord height,
+                         wxDC *source,
+                         wxCoord xsrc, wxCoord ysrc,
+                         int logical_func,
+                         bool useMask )
 {
    /* this is the nth try to get this utterly useless function to
       work. it now completely ignores the scaling or translation
@@ -1082,6 +1085,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     wxCHECK_MSG( source, FALSE, wxT("invalid source dc") );
 
     if (!m_window) return FALSE;
+
+#if 0
+    // transform the source DC coords to the device ones
+    xsrc = XLOG2DEV(xsrc);
+    ysrc = YLOG2DEV(ysrc);
+#endif
 
     wxClientDC *srcDC = (wxClientDC*)source;
     wxMemoryDC *memDC = (wxMemoryDC*)source;
@@ -2213,13 +2222,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 wxPaintDC::wxPaintDC( wxWindow *win )
          : wxClientDC( win )
 {
-#ifdef __WXUNIVERSAL__
-    wxPoint ptOrigin = win->GetClientAreaOrigin();
-    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
-    wxSize size = win->GetClientSize();
-    SetClippingRegion(wxPoint(0, 0), size);
-#endif // __WXUNIVERSAL__
-
 #if USE_PAINT_REGION
     if (!win->m_clipPaintRegion)
         return;
@@ -2245,13 +2247,19 @@ wxPaintDC::wxPaintDC( wxWindow *win )
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC,wxWindowDC)
 
 wxClientDC::wxClientDC()
-  : wxWindowDC()
+          : wxWindowDC()
 {
 }
 
 wxClientDC::wxClientDC( wxWindow *win )
-  : wxWindowDC( win )
+          : wxWindowDC( win )
 {
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    wxSize size = win->GetClientSize();
+    SetClippingRegion(wxPoint(0, 0), size);
+#endif // __WXUNIVERSAL__
 }
 
 // ----------------------------------------------------------------------------

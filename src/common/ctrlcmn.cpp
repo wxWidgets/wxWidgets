@@ -125,7 +125,7 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 
 #if wxUSE_STATBMP
 
-wxSize wxStaticBitmapBase::DoGetBestSize() const
+wxSize wxStaticBitmapBase::DoGetBestClientSize() const
 {
     wxBitmap bmp = GetBitmap();
     if ( bmp.Ok() )

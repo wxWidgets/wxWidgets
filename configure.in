@@ -3519,6 +3519,7 @@ fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
     AC_DEFINE(wxUSE_CLIPBOARD)
+    AC_DEFINE(wxUSE_DATAOBJ)
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then

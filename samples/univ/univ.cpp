@@ -214,6 +214,7 @@ bool MyUnivApp::OnInit()
 #ifdef DEBUG_LISTBOX
     wxLog::AddTraceMask(_T("listbox"));
 #endif
+    wxLog::AddTraceMask(_T("text"));
 
     return TRUE;
 }

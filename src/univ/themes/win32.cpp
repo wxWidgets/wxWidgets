@@ -89,12 +89,6 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
-    virtual void DrawTextLine(wxDC& dc,
-                              const wxString& text,
-                              const wxRect &rect,
-                              int selStart = -1,
-                              int selEnd = -1,
-                              int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -173,6 +167,13 @@ public:
         { return wxSize(13, 13); }
     virtual wxCoord GetCheckItemMargin() const
         { return 0; }
+
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
+                                    const wxRect& rect)
+        { return rect; }
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text,
+                                     const wxRect& rect)
+        { return rect; }
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -1391,16 +1392,6 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
 
         DrawFocusRect(dc, rectText);
     }
-}
-
-void wxWin32Renderer::DrawTextLine(wxDC& dc,
-                                   const wxString& text,
-                                   const wxRect &rect,
-                                   int selStart,
-                                   int selEnd,
-                                   int flags)
-{
-    dc.DrawText(text, rect.x + 2, rect.y + 1);
 }
 
 // ----------------------------------------------------------------------------

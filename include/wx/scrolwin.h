@@ -82,7 +82,7 @@ public:
     virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
 
     // change the DC origin according to the scroll position.
-    void DoPrepareDC(wxDC& dc);
+    virtual void DoPrepareDC(wxDC& dc);
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);

@@ -72,12 +72,6 @@ public:
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
                                  wxRect *rectBounds = NULL);
-    virtual void DrawTextLine(wxDC& dc,
-                              const wxString& text,
-                              const wxRect &rect,
-                              int selStart = -1,
-                              int selEnd = -1,
-                              int flags = 0);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -158,6 +152,13 @@ public:
         { return wxSize(11, 11); }
     virtual wxCoord GetCheckItemMargin() const
         { return 2; }
+
+    virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
+                                    const wxRect& rect)
+        { wxRect rectTotal = rect; rectTotal.Inflate(10); return rectTotal; }
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text,
+                                     const wxRect& rect)
+        { wxRect rectText = rect; rectText.Inflate(-10); return rectText; }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -680,8 +681,11 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-            DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            for ( int width = 0; width < 10; width++ )
+            {
+                DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+                DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            }
             break;
 
         case wxBORDER_STATIC:
@@ -689,7 +693,8 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_RAISED:
-            DrawRaisedBorder(dc, &rect);
+            for ( int width = 0; width < 10; width++ )
+                DrawRaisedBorder(dc, &rect);
             break;
 
         case wxBORDER_DOUBLE:
@@ -722,7 +727,7 @@ wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
     {
         case wxBORDER_RAISED:
         case wxBORDER_SUNKEN:
-            width = 2;
+            width = 20;
             break;
 
         case wxBORDER_SIMPLE:
@@ -913,59 +918,6 @@ void wxGTKRenderer::DrawButtonLabel(wxDC& dc,
     dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
 }
 
-void wxGTKRenderer::DrawTextLine(wxDC& dc,
-                                 const wxString& text,
-                                 const wxRect &rect,
-                                 int selStart,
-                                 int selEnd,
-                                 int flags)
-{
-    if ( selStart == -1 )
-    {
-        // just draw it as is
-        dc.DrawText(text, rect.x, rect.y);
-    }
-    else // we have selection
-    {
-        wxCoord width,
-                x = rect.x;
-
-        // draw the part before selection
-        wxString s(text, (size_t)selStart);
-        if ( !s.empty() )
-        {
-            dc.DrawText(s, x, rect.y);
-
-            dc.GetTextExtent(s, &width, NULL);
-            x += width;
-        }
-
-        // draw the selection itself
-        s = wxString(text.c_str() + selStart, text.c_str() + selEnd);
-        if ( !s.empty() )
-        {
-            wxColour colFg = dc.GetTextForeground();
-            dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
-            dc.SetTextBackground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT));
-            dc.SetBackgroundMode(wxSOLID);
-
-            dc.DrawText(s, x, rect.y);
-            dc.GetTextExtent(s, &width, NULL);
-            x += width;
-
-            dc.SetBackgroundMode(wxTRANSPARENT);
-            dc.SetTextForeground(colFg);
-        }
-
-        // draw the final part
-        s = text.c_str() + selEnd;
-        if ( !s.empty() )
-        {
-            dc.DrawText(s, x, rect.y);
-        }
-    }
-}
-
 void wxGTKRenderer::DrawItem(wxDC& dc,
                              const wxString& label,
                              const wxRect& rect,
@@ -1077,7 +1029,9 @@ void wxGTKRenderer::DrawRadioBitmap(wxDC& dc,
 
     wxCoord yMid = (y + yBottom) / 2;
 
-
+    // this looks ugly when the background colour of the control is not the
+    // same ours - radiobox is not transparent as it should be
+#if 0
     // first fill the middle: as FloodFill() is not implemented on all
     // platforms, this is the only thing to do
     wxColour colBg = flags & wxCONTROL_CURRENT
@@ -1086,6 +1040,7 @@ void wxGTKRenderer::DrawRadioBitmap(wxDC& dc,
     dc.SetBrush(wxBrush(colBg, wxSOLID));
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rect);
+#endif // 0
 
     // then draw the upper half
     dc.SetPen(flags & wxCONTROL_CHECKED ? m_penDarkGrey : m_penHighlight);
@@ -1277,7 +1232,10 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
         bitmap.Create(rect.width, rect.height);
         wxMemoryDC dc;
         dc.SelectObject(bitmap);
+        dc.SetBackground(*wxLIGHT_GREY_BRUSH);
+        dc.Clear();
         DrawRadioBitmap(dc, rect, flags);
+        bitmap.SetMask(new wxMask(bitmap, *wxLIGHT_GREY));
     }
 
     DoDrawCheckOrRadioBitmap(dc, label, bitmap, rectTotal,

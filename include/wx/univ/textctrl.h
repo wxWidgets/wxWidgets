@@ -53,6 +53,8 @@ class WXDLLEXPORT wxCaret;
 // mouse selection
 #define wxACTION_TEXT_ANCHOR_SEL    _T("anchorsel")
 #define wxACTION_TEXT_EXTEND_SEL    _T("extendsel")
+#define wxACTION_TEXT_SEL_WORD      _T("wordsel")
+#define wxACTION_TEXT_SEL_LINE      _T("linesel")
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl
@@ -156,6 +158,7 @@ public:
     // caret stuff
     virtual void ShowCaret(bool show = TRUE);
     void HideCaret() { ShowCaret(FALSE); }
+    wxCoord GetCaretPosition() const; // in pixels
 
     // helpers for cursor movement
     long GetWordStart() const;
@@ -165,9 +168,24 @@ public:
     bool HasSelection() const { return m_selStart != -1; }
     void ClearSelection();
     void RemoveSelection();
+    wxString GetSelectionText() const;
+
+    // find the character at this position, return TRUE if the character is
+    // really there or FALSE if it the position is beyond the end of line/text
+    // and the returned character is the last one
+    bool HitTest(const wxPoint& pt, long *col, long *row) const;
+
+    // scroll the window horizontally
+    void ScrollText(wxCoord x);
+
+    // adjust the DC for horz text control scrolling too
+    virtual void DoPrepareDC(wxDC& dc);
 
     // implementation only from now on
     // -------------------------------
+
+    // override this to take into account our scrollbar-less scrolling
+    virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
     // set the right colours
     virtual bool IsContainerWindow() const { return TRUE; }
@@ -180,6 +198,10 @@ public:
 
 protected:
     // draw the text
+    void DrawTextLine(wxDC& dc, const wxRect& rect,
+                      const wxString& text,
+                      long selStart, long selEnd);
+
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // calc the size from the text extent
@@ -191,11 +213,31 @@ protected:
     // common part of all ctors
     void Init();
 
-    // is this a single-line control?
+    // more readable flag testing methods
     bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
+    bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
+
+    // get the extent (width) of the text
+    wxCoord GetTextWidth(const wxString& text) const;
+
+    // refresh the text in the given range (in client coords) of this line
+    void RefreshLine(long line, wxCoord from, wxCoord to);
+
+    // get the text to show: either the text itself or the text replaced with
+    // starts for wxTE_PASSWORD control
+    wxString GetTextToShow(const wxString& text) const;
+
+    // get the start and end of the selection for this line: if the line is
+    // outside the selection, both will be -1 and FALSE will be returned
+    bool GetSelectedPartOfLine(long line, int *start, int *end) const;
+
+    // update the text rect: the zone inside our client rect (its coords are
+    // client coords) which contains the text
+    void UpdateTextRect();
 
     // event handlers
     void OnChar(wxKeyEvent& event);
+    void OnSize(wxSizeEvent& event);
 
 private:
     // the value (may be only part of it for the multiline controls)
@@ -214,6 +256,13 @@ private:
     // flags
     bool m_isModified:1,
          m_isEditable:1;
+
+    // the rectangle (in client coordinates) to draw text inside
+    wxRect m_rectText;
+
+    // for the controls without horz scrollbar: the offset by which the window
+    // is scrolled to the right
+    wxCoord m_ofsHorz;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)

@@ -102,11 +102,6 @@ wxIcon wxStaticBitmap::GetIcon() const
 // drawing
 // ----------------------------------------------------------------------------
 
-wxSize wxStaticBitmap::DoGetBestClientSize() const
-{
-    return wxStaticBitmapBase::DoGetBestSize();
-}
-
 void wxStaticBitmap::DoDraw(wxControlRenderer *renderer)
 {
     wxControl::DoDraw(renderer);

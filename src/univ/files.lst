@@ -15,11 +15,12 @@ UNIVOBJS = \
            statbox.o \
            statline.o \
            stattext.o \
-           textctrl.o \
            theme.o \
            gtk.o \
            winuniv.o \
            win32.o
+
+#           textctrl.o \
 
 UNIVDEPS = \
            bmpbuttn.d \

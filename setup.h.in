@@ -564,6 +564,10 @@
  */
 #define wxUSE_CLIPBOARD 0
 /*
+ * Use wxDataObject
+ */
+#define wxUSE_DATAOBJ 0
+/*
  * Use tooltips
  */
 #define wxUSE_TOOLTIPS 0

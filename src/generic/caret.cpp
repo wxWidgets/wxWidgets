@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
 #include "wx/caret.h"
@@ -91,6 +92,10 @@ void wxCaret::InitGeneric()
 {
     m_hasFocus = TRUE;
     m_blinkedOut = FALSE;
+
+    m_xOld =
+    m_yOld = -1;
+    m_bmpUnderCaret.Create(m_width, m_height);
 }
 
 wxCaret::~wxCaret()
@@ -98,7 +103,8 @@ wxCaret::~wxCaret()
     if ( IsVisible() )
     {
         // stop blinking
-        m_timer.Stop();
+        if ( m_timer.IsRunning() )
+            m_timer.Stop();
     }
 }
 
@@ -108,7 +114,9 @@ wxCaret::~wxCaret()
 
 void wxCaret::DoShow()
 {
-    m_timer.Start(GetBlinkTime());
+    int blinkTime = GetBlinkTime();
+    if ( blinkTime )
+        m_timer.Start(blinkTime);
 
     m_blinkedOut = TRUE;
     Blink();
@@ -126,11 +134,20 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
-    if ( IsVisible() && !m_blinkedOut )
+    if ( IsVisible() )
     {
-        Blink();
+        if ( !m_blinkedOut )
+        {
+            // hide it right now and it will be shown the next time it blinks
+            Blink();
+
+            // but if the caret is not blinking, we should blink it back into
+            // visibility manually
+            if ( !m_timer.IsRunning() )
+                Blink();
+        }
     }
-    //else: will be shown at the correct location next time it blinks
+    //else: will be shown at the correct location when it is shown
 }
 
 // ----------------------------------------------------------------------------
@@ -153,10 +170,14 @@ void wxCaret::OnKillFocus()
         // the caret must be shown - otherwise, if it is hidden now, it will
         // stay so until the focus doesn't return because it won't blink any
         // more
-        m_blinkedOut = FALSE;
-    }
 
-    Refresh();
+        // hide it first if it isn't hidden ...
+        if ( !m_blinkedOut )
+            Blink();
+
+        // .. and show it in the new style
+        Blink();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -172,20 +193,41 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
-    if ( !m_blinkedOut )
+    wxClientDC dcWin(GetWindow());
+    wxMemoryDC dcMem;
+    dcMem.SelectObject(m_bmpUnderCaret);
+    if ( m_blinkedOut )
     {
-        wxClientDC dc(GetWindow());
-        DoDraw(&dc);
+        // restore the old image
+        dcWin.Blit(m_xOld, m_yOld, m_width, m_height,
+                   &dcMem, 0, 0);
+        m_xOld =
+        m_yOld = -1;
     }
     else
     {
-        // FIXME can't be less efficient than this... we probably should use
-        //       backing store for the caret instead of leaving all the burden
-        //       of correct refresh logic handling to the user code
+        if ( m_xOld == -1 && m_yOld == -1 )
+        {
+            // save the part we're going to overdraw
 
-        // NB: +1 is needed!
-        wxRect rect(m_x, m_y, m_width + 1, m_height + 1);
-        GetWindow()->Refresh(FALSE, &rect);
+            int x = m_x,
+                y = m_y;
+#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
+            wxPoint pt = dcWin.GetDeviceOrigin();
+            x += pt.x;
+            y += pt.y;
+#endif // broken wxGTK wxDC::Blit
+            dcMem.Blit(0, 0, m_width, m_height,
+                       &dcWin, x, y);
+
+            m_xOld = m_x;
+            m_yOld = m_y;
+        }
+        //else: we already saved the image below the caret, don't do it any
+        //      more
+
+        // and draw the caret there
+        DoDraw(&dcWin);
     }
 }
 
@@ -193,19 +235,14 @@ void wxCaret::DoDraw(wxDC *dc)
 {
     dc->SetPen( *wxBLACK_PEN );
 
-    // VZ: Robert's code for I-shaped caret - this is nice but doesn't look
-    //     at all the same as the MSW version and I don't know how to indicate
-    //     that the window has focus or not with such caret
-#if 0
-    dc->DrawLine( m_x, m_y, m_x+m_width, m_y );
-    dc->DrawLine( m_x, m_y+m_height, m_x+m_width, m_y+m_height );
-    dc->DrawLine( m_x+(m_width/2), m_y, m_x+(m_width/2), m_y+m_height );
-//  dc->DrawLine( m_x+(m_width/2)+1, m_y, m_x+(m_width/2)+1, m_y+m_height );
-#else // 1
-    if ( m_hasFocus )
-        dc->SetBrush( *wxBLACK_BRUSH );
-    dc->DrawRectangle( m_x, m_y, m_width, m_height );
-#endif // 0/1
+    dc->SetBrush(*(m_hasFocus ? wxBLACK_BRUSH : wxTRANSPARENT_BRUSH));
+    dc->SetPen(*wxBLACK_PEN);
+
+    // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
+    //     done under wxGTK - no idea why
+    //dc->SetLogicalFunction(wxINVERT);
+
+    dc->DrawRectangle(m_x, m_y, m_width, m_height);
 }
 
 #endif // wxUSE_CARET

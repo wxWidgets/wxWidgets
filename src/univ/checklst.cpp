@@ -215,7 +215,8 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxControl *control,
         wxCheckListBox *lbox = wxStaticCast(control, wxCheckListBox);
         int x, y;
 
-        const wxPoint& pt = event.GetPosition();
+        wxPoint pt = event.GetPosition();
+        pt -= control->GetClientAreaOrigin();
         lbox->CalcUnscrolledPosition(pt.x, pt.y, &x, &y);
 
         wxRenderer *renderer = lbox->GetRenderer();

@@ -80,7 +80,8 @@ typedef wxColourScheme wxColorScheme;
 
 // retrieve the default colour from the theme or the given scheme
 #define wxSCHEME_COLOUR(scheme, what) scheme->Get(wxColorScheme::what)
-#define wxTHEME_COLOUR(what) wxSCHEME_COLOUR(wxTheme::Get(), what)
+#define wxTHEME_COLOUR(what) \
+    wxSCHEME_COLOUR(wxTheme::Get()->GetColourScheme(), what)
 
 // get the background colour for the window in the current theme
 #define wxTHEME_BG_COLOUR(win) \

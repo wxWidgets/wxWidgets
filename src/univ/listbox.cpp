@@ -524,15 +524,20 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
-    // get the items which must be redrawn
-    wxCoord lineHeight = GetLineHeight();
+    // get the update rect
     wxRegion rgnUpdate = GetUpdateRegion();
     rgnUpdate.Intersect(GetClientRect());
     wxRect rectUpdate = rgnUpdate.GetBox();
+    wxPoint ptOrigin = GetClientAreaOrigin();
+    rectUpdate.x -= ptOrigin.x;
+    rectUpdate.y -= ptOrigin.y;
 
     int yTop, yBottom;
     CalcUnscrolledPosition(0, rectUpdate.GetTop(), NULL, &yTop);
     CalcUnscrolledPosition(0, rectUpdate.GetBottom(), NULL, &yBottom);
+
+    // get the items which must be redrawn
+    wxCoord lineHeight = GetLineHeight();
     size_t itemFirst = yTop / lineHeight,
            itemLast = (yBottom + lineHeight - 1) / lineHeight,
            itemMax = m_strings.GetCount();
@@ -934,8 +939,10 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
                                       const wxMouseEvent& event)
 {
+    wxPoint pt = event.GetPosition();
+    pt -= lbox->GetClientAreaOrigin();
     int y;
-    lbox->CalcUnscrolledPosition(0, event.GetPosition().y, NULL, &y);
+    lbox->CalcUnscrolledPosition(0, pt.y, NULL, &y);
     int item = y / lbox->GetLineHeight();
 
     return (item >= 0) && (item < lbox->GetCount()) ? item : -1;

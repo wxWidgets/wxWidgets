@@ -1,13 +1,18 @@
 All
 
+! wxThemeSettings
+! actions/wxInputHandler?
+
 * problem with lbox horz scrolling: the focus rect isn't drawn entirely...
 * write sample testing all listbox styles/events
-* text ctrl horz scrolling
++ text ctrl horz scrolling
 * text ctrl wxTE_XXX styles support
 
 MSW
 
 GTK
+
+* listbox scrolling leaves unpainted areas
 
 + check/radio box remains pressed in win32 mode
 + wxCheckListBox::HitTest doesn't work (clicking the check)

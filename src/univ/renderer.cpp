@@ -456,7 +456,8 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
 
     {
         wxRect rectUpdate = rgnUpdate.GetBox();
-        wxLogTrace(_T("scroll"), _T("%s redraw: update box is (%d, %d)-(%d, %d)"),
+        wxLogTrace(_T("scrollbar"),
+                   _T("%s redraw: update box is (%d, %d)-(%d, %d)"),
                    scrollbar->IsVertical() ? _T("vert") : _T("horz"),
                    rectUpdate.GetLeft(),
                    rectUpdate.GetTop(),
@@ -477,7 +478,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
 
         if ( rgnUpdate.Contains(rectBar) )
         {
-            wxLogTrace(_T("scroll"),
+            wxLogTrace(_T("scrollbar"),
                        _T("drawing bar part %d at (%d, %d)-(%d, %d)"),
                        nBar + 1,
                        rectBar.GetLeft(),
@@ -507,7 +508,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
         wxRect rectArrow = m_renderer->GetScrollbarRect(scrollbar, elem);
         if ( rgnUpdate.Contains(rectArrow) )
         {
-            wxLogTrace(_T("scroll"),
+            wxLogTrace(_T("scrollbar"),
                        _T("drawing arrow %d at (%d, %d)-(%d, %d)"),
                        nArrow + 1,
                        rectArrow.GetLeft(),
@@ -529,7 +530,8 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     wxRect rectThumb = m_renderer->GetScrollbarRect(scrollbar, elem);
     if ( rectThumb.width && rectThumb.height && rgnUpdate.Contains(rectThumb) )
     {
-        wxLogTrace(_T("scroll"), _T("drawing thumb at (%d, %d)-(%d, %d)"),
+        wxLogTrace(_T("scrollbar"),
+                   _T("drawing thumb at (%d, %d)-(%d, %d)"),
                    rectThumb.GetLeft(),
                    rectThumb.GetTop(),
                    rectThumb.GetRight(),
@@ -630,12 +632,3 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
     }
 }
 
-void wxControlRenderer::DrawTextLine(const wxString& text,
-                                     int selStart, int selEnd)
-{
-    m_dc.SetFont(m_window->GetFont());
-    m_dc.SetTextForeground(m_window->GetForegroundColour());
-
-    m_renderer->DrawTextLine(m_dc, text, m_rect, selStart, selEnd,
-                             m_window->GetStateFlags());
-}

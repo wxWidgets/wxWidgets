@@ -164,7 +164,10 @@ void wxWindow::OnErase(wxEraseEvent& event)
         rectCorner.SetRight(size.x - rectBorder.width);
         rectCorner.SetBottom(size.y - rectBorder.height);
 
-        m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
+        if ( GetUpdateRegion().Contains(rectCorner) )
+        {
+            m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
+        }
     }
 }
 
@@ -201,11 +204,7 @@ void wxWindow::OnPaint(wxPaintEvent& event)
 
 bool wxWindow::DoDrawBackground(wxDC& dc)
 {
-    wxRect rect;
-    wxSize size = GetSize(); // full, not client only
-    rect.width = size.x;
-    rect.height = size.y;
-
+    wxRect rect = GetUpdateRegion().GetBox();
     if ( GetBackgroundBitmap().Ok() )
     {
         // get the bitmap and the flags
@@ -246,9 +245,15 @@ void wxWindow::DoDrawBorder(wxDC& dc)
             rect.height -= scrollbar->GetSize().y;
     }
 
-    // draw outline
-    m_renderer->DrawBorder(dc, GetBorder(),
-                           rect, GetStateFlags(), &rect);
+    // draw outline unless the update region is enitrely inside it in which
+    // case we don't need to do it
+#if 0 // doesn't seem to work, why?
+    if ( wxRegion(rect).Contains(GetUpdateRegion().GetBox()) != wxInRegion )
+#endif
+    {
+        m_renderer->DrawBorder(dc, GetBorder(),
+                               rect, GetStateFlags(), &rect);
+    }
 }
 
 void wxWindow::DoDraw(wxControlRenderer *renderer)
@@ -371,11 +376,17 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
     wxSize size = GetSize();
 
+    bool inside = m_renderer->AreScrollbarsInsideBorder();
+
     if ( width )
     {
+        // in any case, take account of the scrollbar
         if ( m_scrollbarVert )
             *width -= size.x - m_scrollbarVert->GetPosition().x;
-        else
+
+        // if we don't have scrollbar or if it is outside the border (and not
+        // blended into it), take account of the right border as well
+        if ( !m_scrollbarVert || !inside )
             *width -= rectBorder.width;
 
         *width -= rectBorder.x;
@@ -385,7 +396,8 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
     {
         if ( m_scrollbarHorz )
             *height -= size.y - m_scrollbarHorz->GetPosition().y;
-        else
+
+        if ( !m_scrollbarHorz || !inside )
             *height -= rectBorder.height;
 
         *height -= rectBorder.y;
@@ -402,15 +414,16 @@ void wxWindow::DoSetClientSize(int width, int height)
     // and the scrollbars (as they may be offset into the border, use the
     // scrollbar position, not size - this supposes that PositionScrollbars()
     // had been called before)
+    bool inside = m_renderer->AreScrollbarsInsideBorder();
     wxSize size = GetSize();
     if ( m_scrollbarVert )
         width += size.x - m_scrollbarVert->GetPosition().x;
-    else
+    if ( !m_scrollbarVert || !inside )
         width += rectBorder.width;
 
     if ( m_scrollbarHorz )
         height += size.y - m_scrollbarHorz->GetPosition().y;
-    else
+    if ( !m_scrollbarHorz || !inside )
         height += rectBorder.height;
 
     wxWindowNative::DoSetClientSize(width, height);
@@ -551,8 +564,6 @@ int wxWindow::GetScrollRange(int orient) const
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
-    wxASSERT_MSG( !rect, _T("scrolling only part of window not implemented") );
-
     if ( !dx && !dy )
     {
         // nothing to do
@@ -561,27 +572,30 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
     // calculate the part of the window which we can just redraw in the new
     // location
-    wxSize sizeTotal = GetClientSize();
+    wxSize sizeTotal = rect ? rect->GetSize() : GetClientSize();
 
-    wxLogTrace(_T("scroll"), _T("window is %dx%d, scroll by %d, %d"),
+    wxLogTrace(_T("scroll"), _T("rect is %dx%d, scroll by %d, %d"),
                sizeTotal.x, sizeTotal.y, dx, dy);
 
-    wxPoint ptSource, ptDest, ptOrigin;
-    ptSource =
-    ptDest =
-    ptOrigin = GetClientAreaOrigin();
+    wxPoint ptSource, ptDest;
+    if ( rect )
+        ptDest = rect->GetPosition();
     wxSize size;
-    size.x = sizeTotal.x - abs(dx) - 1;
-    size.y = sizeTotal.y - abs(dy) - 1;
+    size.x = sizeTotal.x - abs(dx);
+    size.y = sizeTotal.y - abs(dy);
     if ( size.x <= 0 || size.y <= 0 )
     {
         // just redraw everything as nothing of the displayed image will stay
         wxLogTrace(_T("scroll"), _T("refreshing everything"));
 
-        Refresh();
+        Refresh(TRUE, rect);
     }
     else // move the part which doesn't change to the new location
     {
+        wxPoint ptOrigin = GetClientAreaOrigin();
+        if ( rect )
+            ptOrigin += rect->GetPosition();
+
         // note that when we scroll the canvas in some direction we move the
         // block which doesn't need to be refreshed in the opposite direction
 
@@ -612,7 +626,12 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         wxBitmap bmp(size.x, size.y);
         wxMemoryDC dcMem;
         dcMem.SelectObject(bmp);
-        dcMem.Blit(wxPoint(0, 0), size, &dc, ptSource);
+
+        dcMem.Blit(wxPoint(0, 0), size, &dc, ptSource
+#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
+                + ptOrigin
+#endif // broken wxGTK wxDC::Blit
+                  );
         dc.Blit(ptDest, size, &dcMem, wxPoint(0, 0));
 
         wxLogTrace(_T("scroll"),
@@ -647,7 +666,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             rect.height = sizeTotal.y;
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
-                       rect.x, rect.y, rect.GetRight(), rect.GetBottom());
+                       rect.x, rect.y,
+                       rect.GetRight() + 1, rect.GetBottom() + 1);
 
             Refresh(TRUE /* erase bkgnd */, &rect);
         }
@@ -669,7 +689,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             rect.width = sizeTotal.x;
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
-                       rect.x, rect.y, rect.GetRight(), rect.GetBottom());
+                       rect.x, rect.y,
+                       rect.GetRight() + 1, rect.GetBottom() + 1);
 
             Refresh(TRUE /* erase bkgnd */, &rect);
         }
