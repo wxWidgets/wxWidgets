@@ -682,7 +682,7 @@ WX_ARG_CACHE_INIT
 
 dnl useful to test the compilation with minimum options, define as 0 for normal
 dnl usage
-DEBUG_CONFIGURE=1
+DEBUG_CONFIGURE=0
 if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_THREADS=no
@@ -721,11 +721,12 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=no
   DEFAULT_wxUSE_DATETIME=no
+  DEFAULT_wxUSE_TIMEDATE=no
+  DEFAULT_wxUSE_TIMER=no
   DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_FFILE=no
   DEFAULT_wxUSE_TEXTFILE=no
-  DEFAULT_wxUSE_TIMEDATE=no
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
@@ -759,6 +760,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_HELP=no
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
+  DEFAULT_wxUSE_MIMETYPE=no
 
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
@@ -771,6 +773,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTDLG=no
   DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
+  DEFAULT_wxUSE_MENUS=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
   DEFAULT_wxUSE_FILESYSTEM=no
@@ -862,10 +865,11 @@ else
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
   DEFAULT_wxUSE_DATETIME=yes
   DEFAULT_wxUSE_STOPWATCH=yes
+  DEFAULT_wxUSE_TIMEDATE=no
+  DEFAULT_wxUSE_TIMER=yes
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_FFILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
-  DEFAULT_wxUSE_TIMEDATE=yes
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
@@ -899,6 +903,7 @@ else
   DEFAULT_wxUSE_HELP=yes
   DEFAULT_wxUSE_WXTREE=yes
   DEFAULT_wxUSE_METAFILE=yes
+  DEFAULT_wxUSE_MIMETYPE=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_CHOICEDLG=yes
@@ -911,6 +916,7 @@ else
   DEFAULT_wxUSE_TEXTDLG=yes
   DEFAULT_wxUSE_STARTUP_TIPS=yes
   DEFAULT_wxUSE_PROGRESSDLG=yes
+  DEFAULT_wxUSE_MENUS=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_HTML=yes
   DEFAULT_wxUSE_FILESYSTEM=yes
@@ -1067,6 +1073,7 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
 WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
+WX_ARG_ENABLE(timedate,      [  --enable-timedate       use obsolete wxDate/wxTime classes], wxUSE_TIMEDATE)
 WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
@@ -1125,10 +1132,14 @@ dnl WX_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Met
 dnl ---------------------------------------------------------------------------
 dnl resources
 dnl ---------------------------------------------------------------------------
+
 WX_ARG_ENABLE(prologio,    [  --enable-prologio       use Prolog IO library], wxUSE_PROLOGIO)
 WX_ARG_ENABLE(resources,   [  --enable-resources      use wxWindows resources], wxUSE_RESOURCES)
 
 WX_ARG_ENABLE(xresources,  [  --enable-xresources     use X resources for save (default for gtk+)], wxUSE_X_RESOURCES)
+
+WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
+WX_ARG_ENABLE(mimetype,    [  --enable-mimetypes      use wxMimeTypesManager], wxUSE_MIMETYPE)
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -1272,6 +1283,7 @@ WX_ARG_ENABLE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], 
 WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
 WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
+WX_ARG_ENABLE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
@@ -2008,9 +2020,19 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl the (base) name of the library and support files for this toolkit
     TOOLKIT_NAME="${TOOLKIT_DIR}"
 
+    dnl the list of paths containing the files for this toolkit
+    TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}"
+
+    dnl need to add an extra dir for wxMotif
+    if test "$TOOLKIT_NAME" = "motif"; then
+        TOOLKIT_VPATH="${TOOLKIT_VPATH}${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
+    fi
+
     dnl are we using the generic version with this low level toolkit?
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         TOOLKIT_NAME="${TOOLKIT_NAME}univ"
+        UNIV_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes"
+        TOOLKIT_VPATH="${UNIV_VPATH}${PATH_IFS}${TOOLKIT_VPATH}"
         SETUPH_DIR="univ"
     else
         SETUPH_DIR="${TOOLKIT_DIR}"
@@ -3043,6 +3065,10 @@ if test "$wxUSE_DATETIME" = "yes"; then
   AC_DEFINE(wxUSE_DATETIME)
 fi
 
+if test "$wxUSE_TIMEDATE" = "yes"; then
+  AC_DEFINE(wxUSE_TIMEDATE)
+fi
+
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
 fi
@@ -3631,7 +3657,7 @@ if test "$wxUSE_BMPBUTTON" = "yes"; then
 fi
 
 if test "$wxUSE_CALCTRL" = "yes"; then
-  AC_DEFINE(wxUSE_CALENDAR)
+  AC_DEFINE(wxUSE_CALENDARCTRL)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS calendar"
 fi
@@ -3847,9 +3873,50 @@ dnl if test "$wxUSE_WXTREE" = "yes"; then
 dnl   AC_DEFINE(wxUSE_WXTREE)
 dnl fi
 
+if test "$wxUSE_MENUS" = "yes"; then
+    AC_DEFINE(wxUSE_MENUS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+fi
+
 if test "$wxUSE_METAFILE" = "yes"; then
     AC_DEFINE(wxUSE_METAFILE)
 fi
+
+if test "$wxUSE_MIMETYPE" = "yes"; then
+    AC_DEFINE(wxUSE_MIMETYPE)
+fi
+
+if test "$wxUSE_MINIFRAME" = "yes"; then
+    AC_DEFINE(wxUSE_MINIFRAME)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
+fi
+
+if test "$wxUSE_HTML" = "yes"; then
+    AC_DEFINE(wxUSE_HTML)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS html"
+fi
+
+if test "$wxUSE_VALIDATORS" = "yes"; then
+    AC_DEFINE(wxUSE_VALIDATORS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_GIF" = "yes" ; then
+  AC_DEFINE(wxUSE_GIF)
+fi
+
+if test "$wxUSE_PCX" = "yes" ; then
+  AC_DEFINE(wxUSE_PCX)
+fi
+
+if test "$wxUSE_PNM" = "yes" ; then
+  AC_DEFINE(wxUSE_PNM)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl common dialog
+dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_CHOICEDLG" = "yes"; then
     AC_DEFINE(wxUSE_CHOICEDLG)
@@ -3905,34 +3972,6 @@ if test "$wxUSE_PROGRESSDLG" = "yes"; then
     else
         AC_DEFINE(wxUSE_PROGRESSDLG)
     fi
-fi
-
-if test "$wxUSE_MINIFRAME" = "yes"; then
-    AC_DEFINE(wxUSE_MINIFRAME)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
-fi
-
-if test "$wxUSE_HTML" = "yes"; then
-    AC_DEFINE(wxUSE_HTML)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS html"
-fi
-
-if test "$wxUSE_VALIDATORS" = "yes"; then
-    AC_DEFINE(wxUSE_VALIDATORS)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
-fi
-
-if test "$wxUSE_GIF" = "yes" ; then
-  AC_DEFINE(wxUSE_GIF)
-fi
-
-if test "$wxUSE_PCX" = "yes" ; then
-  AC_DEFINE(wxUSE_PCX)
-fi
-
-if test "$wxUSE_PNM" = "yes" ; then
-  AC_DEFINE(wxUSE_PNM)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -4001,7 +4040,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl TODO some samples are never built so far:
     dnl      ipc, mfc, nativdlg, oleauto, ownerdrw, proplist
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag drawing dynamic \
-                     font fractal image menu minimal richedit"
+                     font fractal image minimal richedit"
 
     if test "$wxUSE_UNICODE" = "yes" ; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS univ"
@@ -4075,6 +4114,7 @@ AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(SETUPH_DIR)
 AC_SUBST(TOOLKIT_NAME)
+AC_SUBST(TOOLKIT_VPATH)
 AC_SUBST(TOOLKIT_INCLUDE)
 AC_SUBST(WXCONFIG_INCLUDE)
 

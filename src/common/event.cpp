@@ -713,7 +713,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
 #if wxUSE_GUI
     // check that our flag corresponds to reality
-    wxASSERT_MSG( m_isWindow == IsKindOf(CLASSINFO(wxWindowBase)),
+    wxASSERT_MSG( m_isWindow == IsKindOf(CLASSINFO(wxWindow)),
                   _T("this should [not] be a window but it is [not]") );
 #endif // wxUSE_GUI
 

@@ -11,6 +11,10 @@
 #pragma implementation "button.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_BUTTON
+
 #include "wx/button.h"
 
 #include <gdk/gdk.h>
@@ -185,4 +189,6 @@ wxSize wxButton::DoGetBestSize() const
     if (ret.x < 80) ret.x = 80;
     return ret;
 }
+
+#endif // wxUSE_BUTTON
 

@@ -201,7 +201,7 @@ wxString wxFontBase::GetWeightString() const
     }
 }
 
-#if !defined(__WXGTK__) && !defined(__WXMSW__)
+#if !defined(__WXMSW__)
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo

@@ -12,6 +12,7 @@
 #ifndef _WX_SAMPLE_WIDGETS_H_
 #define _WX_SAMPLE_WIDGETS_H_
 
+class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxNotebook;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxTextCtrl;

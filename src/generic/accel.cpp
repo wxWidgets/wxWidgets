@@ -29,6 +29,11 @@
 
 #if wxUSE_ACCEL
 
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+    #include "wx/list.h"
+#endif // WX_PRECOMP
+
 #include "wx/accel.h"
 
 #include <ctype.h>

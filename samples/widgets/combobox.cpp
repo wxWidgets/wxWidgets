@@ -26,9 +26,14 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
+
+    #include "wx/button.h"
     #include "wx/checkbox.h"
-    #include "wx/radiobox.h"
     #include "wx/combobox.h"
+    #include "wx/radiobox.h"
+    #include "wx/statbox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/sizer.h"
@@ -368,7 +373,11 @@ void ComboboxWidgetsPage::OnButtonChange(wxCommandEvent& WXUNUSED(event))
     int sel = m_combobox->GetSelection();
     if ( sel != -1 )
     {
+#ifndef __WXGTK__
         m_combobox->SetString(sel, m_textChange->GetValue());
+#else
+        wxLogMessage(_T("Not implemented in wxGTK"));
+#endif
     }
 }
 

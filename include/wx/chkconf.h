@@ -181,6 +181,14 @@
 #   endif
 #endif /* !defined(wxUSE_LISTCTRL) */
 
+#ifndef wxUSE_MDI_ARCHITECTURE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MDI_ARCHITECTURE must be defined."
+#   else
+#       define wxUSE_MDI_ARCHITECTURE 0
+#   endif
+#endif /* !defined(wxUSE_MDI_ARCHITECTURE) */
+
 #ifndef wxUSE_MENUS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MENUS must be defined."
@@ -212,6 +220,14 @@
 #       define wxUSE_NOTEBOOK 0
 #   endif
 #endif /* !defined(wxUSE_NOTEBOOK) */
+
+#ifndef wxUSE_POPUPWIN
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_POPUPWIN must be defined."
+#   else
+#       define wxUSE_POPUPWIN 0
+#   endif
+#endif /* !defined(wxUSE_POPUPWIN) */
 
 #ifndef wxUSE_RADIOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -556,19 +572,33 @@
 #       error "wxClipboard requires wxDataObject"
 #   else
 #       undef wxUSE_DATAOBJ
-#       define wxUSE_DATAOBJ
+#       define wxUSE_DATAOBJ 1
 #   endif
 #endif /* wxUSE_CLIPBOARD */
 
-#if defined(__WXUNIVERSAL__) && \
-    (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
-#   if wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
-#   else
-#       undef wxUSE_POPUPWIN
-#       define wxUSE_POPUPWIN
+/* wxUniv-specific dependencies */
+#if defined(__WXUNIVERSAL__)
+#   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
+#       if wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
 #   endif
 #endif /* wxUSE_POPUPWIN */
+
+/* wxGTK-specific dependencies */
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+#   if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
+#       if wxABORT_ON_CONFIG_ERROR
+#           error "MDI requires wxUSE_MENUS in wxGTK"
+#       else
+#           undef wxUSE_MENUS 
+#           define wxUSE_MENUS 1
+#       endif
+#   endif
+#endif /* wxGTK && !wxUniv */
 
 #endif /* wxUSE_GUI */
 

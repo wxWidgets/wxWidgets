@@ -62,6 +62,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };
 
-#endif
-
 #endif // __GTKCHECKBOXH__

@@ -60,7 +60,11 @@ extern int g_openDialogs;
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrameGTK, wxFrameBase)
+#ifdef __WXUNIVERSAL__
+    IMPLEMENT_DYNAMIC_CLASS(wxFrameGTK, wxWindow)
+#else
+    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+#endif
 
 // ----------------------------------------------------------------------------
 // data

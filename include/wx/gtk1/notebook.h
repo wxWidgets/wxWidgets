@@ -83,8 +83,6 @@ public:
 
   // operations
   // ----------
-    // remove one page from the notebook but do not destroy it
-  bool RemovePage(int nPage);
     // remove one page from the notebook
   bool DeletePage(int nPage);
     // remove all pages
@@ -129,12 +127,14 @@ public:
     wxList          m_pages;
     int             m_lastSelection;  /* hack */
 
+protected:
+    // remove one page from the notebook but do not destroy it
+    virtual wxNotebookPage *DoRemovePage(int nPage);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxNotebook)
     DECLARE_EVENT_TABLE()
 };
-
-#endif
 
 #endif
     // __GTKNOTEBOOKH__

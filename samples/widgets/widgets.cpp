@@ -27,11 +27,15 @@
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/button.h"
-    #include "wx/frame.h"
-    #include "wx/listbox.h"
+    #include "wx/log.h"
     #include "wx/panel.h"
+    #include "wx/frame.h"
+    #include "wx/button.h"
+    #include "wx/checkbox.h"
+    #include "wx/listbox.h"
+    #include "wx/statbox.h"
     #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/notebook.h"

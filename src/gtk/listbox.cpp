@@ -333,7 +333,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_widget_show( GTK_WIDGET(m_list) );
 
-    SetSizeOrDefault( size );
+    SetBestSize( size );
 
     if ( style & wxLB_SORT )
     {
@@ -613,7 +613,7 @@ void wxListBox::Delete( int n )
     wxNode *node = m_clientList.Nth( n );
     if ( node )
     {
-        if ( m_clientDataItemsType == ClientData_Object )
+        if ( m_clientDataItemsType == wxClientData_Object )
         {
             wxClientData *cd = (wxClientData*)node->Data();
             delete cd;

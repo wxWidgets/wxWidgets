@@ -19,6 +19,7 @@
 #if wxUSE_STATBMP
 
 #include "wx/control.h"
+#include "wx/bitmap.h"
 
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxBitmap;

@@ -201,6 +201,11 @@
 #define wxUSE_ACCEL 0
 
 /*
+ * Use wxCalendarCtrl
+ */
+#define wxUSE_CALENDARCTRL 0
+
+/*
  * Use wxFileDialog
  */
 #define wxUSE_FILEDLG 0
@@ -209,6 +214,11 @@
  * Use wxFontDialog
  */
 #define wxUSE_FONTDLG 0
+
+/*
+ * Use wxMimeTypesManager and related classes
+ */
+#define wxUSE_MIMETYPE 0
 
 /*
  * Use wxMessageDialog (and wxMessageBox)

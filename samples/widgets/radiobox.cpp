@@ -26,8 +26,13 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
+
+    #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/sizer.h"
@@ -60,8 +65,8 @@ enum
 };
 
 // default values for the number of radiobox items
-static const int DEFAULT_NUM_ENTRIES = 12;
-static const int DEFAULT_MAJOR_DIM = 4;
+static const size_t DEFAULT_NUM_ENTRIES = 12;
+static const size_t DEFAULT_MAJOR_DIM = 4;
 
 // ----------------------------------------------------------------------------
 // RadioWidgetsPage

@@ -26,8 +26,15 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+
+    #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/combobox.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
+    #include "wx/textctrl.h"
 
     #include "wx/dynarray.h"
 #endif

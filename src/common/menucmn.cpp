@@ -33,6 +33,8 @@
 #include <ctype.h>
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/menu.h"
 #endif
 

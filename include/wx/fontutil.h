@@ -42,9 +42,7 @@
 // ToString() and restore them using FromString())
 struct WXDLLEXPORT wxNativeFontInfo
 {
-#if defined(__WXGTK__)
-    wxString     xFontName;
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     LOGFONT      lf;
 #else // other platforms
     //

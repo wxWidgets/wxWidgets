@@ -78,7 +78,8 @@ public:
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection( const wxString& s );
     
-    virtual int Number() const;
+    int Number() const;
+    int GetCount() const { return Number(); }
     int GetNumberOfRowsOrCols() const;
     void SetNumberOfRowsOrCols( int n );
     

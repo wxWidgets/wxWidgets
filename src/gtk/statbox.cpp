@@ -11,9 +11,11 @@
 #pragma implementation "statbox.h"
 #endif
 
-#include "wx/statbox.h"
+#include "wx/defs.h"
 
 #if wxUSE_STATBOX
+
+#include "wx/statbox.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"

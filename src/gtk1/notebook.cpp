@@ -503,11 +503,11 @@ bool wxNotebook::DeletePage( int page )
     return TRUE;
 }
 
-bool wxNotebook::RemovePage( int page )
+wxNotebookPage *wxNotebook::DoRemovePage( int page )
 {
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
 
-    wxCHECK_MSG( nb_page, FALSE, _T("wxNotebook::RemovePage: invalid page") );
+    wxCHECK_MSG( nb_page, NULL, _T("wxNotebook::RemovePage: invalid page") );
 
     gtk_widget_ref( nb_page->m_client->m_widget );
     gtk_widget_unrealize( nb_page->m_client->m_widget );
@@ -515,9 +515,10 @@ bool wxNotebook::RemovePage( int page )
         
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
+    wxNotebookPage *pageRemoved = (wxNotebookPage *)m_pages[page];
     m_pages.DeleteObject( nb_page );
 
-    return TRUE;
+    return pageRemoved;
 }
 
 bool wxNotebook::InsertPage( int position, wxNotebookPage* win, const wxString& text,

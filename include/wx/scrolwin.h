@@ -12,6 +12,8 @@
 #ifndef _WX_SCROLWIN_H_BASE_
 #define _WX_SCROLWIN_H_BASE_
 
+#include "wx/window.h"
+
 class WXDLLEXPORT wxTimer;
 
 // ----------------------------------------------------------------------------

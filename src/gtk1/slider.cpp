@@ -63,7 +63,6 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
 
     int value = (int)ceil(adjust->value);
 
-    int orient = wxHORIZONTAL;
     int orient = win->GetWindowStyleFlag() & wxSL_VERTICAL ? wxVERTICAL
                                                            : wxHORIZONTAL;
 

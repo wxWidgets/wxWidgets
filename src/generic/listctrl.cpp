@@ -3004,7 +3004,8 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-        wxScrolledWindow::OnScroll( event ) ;
+    HandleOnScroll( event );
+
 #if wxUSE_GENERIC_LIST_EXTENSIONS
 
     if (event.GetOrientation() == wxHORIZONTAL && ( m_mode & wxLC_REPORT ))
@@ -3014,7 +3015,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
             {
                     lc->m_headerWin->Refresh() ;
 #ifdef __WXMAC__
-                        lc->m_headerWin->MacUpdateImmediately() ;
+                    lc->m_headerWin->MacUpdateImmediately() ;
 #endif
             }
     }

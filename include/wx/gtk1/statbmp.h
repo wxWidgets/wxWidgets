@@ -15,11 +15,6 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#include "wx/object.h"
-#include "wx/control.h"
-#include "wx/bitmap.h"
 #include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
@@ -45,14 +40,12 @@ public:
                  long style = 0,
                  const wxString& name = wxStaticBitmapNameStr);
 
+    virtual void SetIcon(const wxIcon& icon) { SetBitmap( icon ); }
     virtual void SetBitmap( const wxBitmap& bitmap );
-    virtual void etIcon(const wxIcon& icon) { SetBitmap( icon ); }
-
-    wxBitmap& GetBitmap() { return m_bitmap; }
-    const wxBitmap& GetBitmap() const { return m_bitmap; }
+    virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
     // for compatibility with wxMSW
-    const wxIcon& GetIcon() const
+    wxIcon GetIcon() const
     {
         // don't use wxDynamicCast, icons and bitmaps are really the same thing
         // in wxGTK

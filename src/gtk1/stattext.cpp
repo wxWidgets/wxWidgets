@@ -12,6 +12,10 @@
     #pragma implementation "stattext.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_STATTEXT
+
 #include "wx/stattext.h"
 
 #include "gdk/gdk.h"
@@ -156,3 +160,4 @@ wxSize wxStaticText::DoGetBestSize() const
     return wxSize(req.width, req.height);
 }
 
+#endif // wxUSE_STATTEXT

@@ -11,9 +11,11 @@
 #pragma implementation "bmpbuttn.h"
 #endif
 
-#include "wx/bmpbuttn.h"
+#include "wx/defs.h"
 
 #if wxUSE_BMPBUTTON
+
+#include "wx/bmpbuttn.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

@@ -32,13 +32,13 @@
 #endif // PCH
 
 #ifdef __X__
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <X11/Xlib.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
+    #ifdef __VMS__
+        #pragma message disable nosimpint
+    #endif
+    #include <X11/Xlib.h>
+    #ifdef __VMS__
+        #pragma message enable nosimpint
+    #endif
 
     #include "wx/utils.h"       // for wxGetDisplay()
 #elif defined(__WXGTK__)

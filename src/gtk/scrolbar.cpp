@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.cpp
+// Name:        src/gtk/scrolbar.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -12,9 +12,11 @@
 #pragma implementation "scrolbar.h"
 #endif
 
-#include "wx/scrolbar.h"
+#include "wx/defs.h"
 
 #if wxUSE_SCROLLBAR
+
+#include "wx/scrolbar.h"
 
 #include "wx/utils.h"
 

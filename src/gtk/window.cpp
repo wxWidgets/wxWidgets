@@ -2131,7 +2131,11 @@ wxWindow *wxGetActiveWindow()
 // wxWindowGTK
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowGTK, wxWindowBase)
+#ifdef __WXUNIVERSAL__
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowGTK, wxWindowBase)
+#else
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+#endif
 
 void wxWindowGTK::Init()
 {
