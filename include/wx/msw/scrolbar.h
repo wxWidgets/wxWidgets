@@ -16,14 +16,8 @@
 #pragma interface "scrolbar.h"
 #endif
 
-#if wxUSE_SCROLLBAR
-
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxScrollBarNameStr;
-
 // Scrollbar item
-class WXDLLEXPORT wxScrollBar: public wxControl
+class WXDLLEXPORT wxScrollBar: public wxScrollBarBase
 {
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 
@@ -88,8 +82,6 @@ protected:
 
     DECLARE_EVENT_TABLE()
 };
-
-#endif // wxUSE_SCROLLBAR
 
 #endif
     // _WX_SCROLBAR_H_

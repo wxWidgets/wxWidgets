@@ -79,7 +79,7 @@
 #define wxUSE_RADIOBOX     0
 #define wxUSE_RADIOBTN     0
 #define wxUSE_SASH         0
-#define wxUSE_SCROLLBAR    0
+#define wxUSE_SCROLLBAR    1
 #define wxUSE_SLIDER       0
 #define wxUSE_SPINBTN      0
 #define wxUSE_SPINCTRL     0
@@ -129,7 +129,7 @@
 #define wxUSE_SPLINES     0
 #define wxUSE_DRAG_AND_DROP 0
 #define wxUSE_XPM_IN_MSW   0
-#define wxUSE_IMAGE_LOADING_IN_MSW        0
+#define wxUSE_IMAGE_LOADING_IN_MSW        1
 #define wxUSE_RESOURCE_LOADING_IN_MSW     0
 #define wxUSE_WX_RESOURCES        0
 #define wxUSE_POSTSCRIPT  0

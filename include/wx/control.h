@@ -41,6 +41,11 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxControlNameStr);
 
+    // set the background image
+    virtual void SetBackground(const wxBitmap& bitmap,
+                               int alignment = wxALIGN_CENTRE,
+                               wxStretch stretch = wxSTRETCH_NOT);
+
     // simulates the event of given type (i.e. wxButton::Command() is just as
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);

@@ -20,6 +20,22 @@ class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// control state flags used in wxRenderer and wxColourScheme
+enum
+{
+    wxCONTROL_DISABLED   = 0x00000001,  // control is disabled
+    wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
+    wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
+    wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
+    wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
+
+    wxCONTROL_FLAGS_MASK = 0x0000001f
+};
+
+// ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
 // later it might become an atom (i.e. an opaque handler to string). As one
 // input event may result in several control actions (e.g. a macro expansion
@@ -59,6 +75,9 @@ public:
 // wxControl: the base class for all GUI controls
 // ----------------------------------------------------------------------------
 
+// class name
+#define wxCONTROL_DEFAULT _T("")
+
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
@@ -88,11 +107,22 @@ public:
     virtual void SetLabel(const wxString &label);
     virtual wxString GetLabel() const;
 
+    // set/query the bg image
+    virtual void SetBackground(const wxBitmap& bitmap,
+                               int alignment = wxALIGN_CENTRE,
+                               wxStretch stretch = wxSTRETCH_NOT);
+
+    const wxBitmap& GetBackgroundBitmap(int *alignment = NULL,
+                                        wxStretch *stretch = NULL) const;
+
     // get the state information
     virtual bool IsFocused() const;
     virtual bool IsCurrent() const;
     virtual bool IsPressed() const;
     virtual bool IsDefault() const;
+
+    // return all state flags at once (combination of wxCONTROL_XXX values)
+    int GetStateFlags() const;
 
     // operations
     void SetCurrent(bool doit = TRUE);
@@ -113,6 +143,9 @@ protected:
     // action creates the default one which doesn't do anything
     virtual wxInputHandler *CreateInputHandler() const;
 
+    // draw the control background, return TRUE if done
+    virtual bool DoDrawBackground(wxControlRenderer *renderer);
+
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
 
@@ -128,6 +161,7 @@ protected:
     void OnKeyUp(wxKeyEvent& event);
     void OnFocus(wxFocusEvent& event);
     void OnPaint(wxPaintEvent& event);
+    void OnErase(wxEraseEvent& event);
 
 private:
     // common part of all ctors
@@ -139,9 +173,14 @@ private:
     // input processor
     wxInputHandler *m_handler;
 
-    // label with accel into
+    // label and accel info
     wxString   m_label;
     int        m_indexAccel;
+
+    // background bitmap info
+    wxBitmap  m_bitmapBg;
+    int       m_alignBgBitmap;
+    wxStretch m_stretchBgBitmap;
 
     // state
     bool m_isCurrent;

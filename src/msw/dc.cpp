@@ -1204,7 +1204,11 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxFont *theFont) const
 {
     wxFont *fontToUse = theFont ? theFont : (wxFont *)&m_font;
-    HGDIOBJ hfontOld = ::SelectObject(GetHdc(), GetHfontOf(*fontToUse));
+    HGDIOBJ hfontOld;
+    if ( fontToUse->Ok() )
+        hfontOld = ::SelectObject(GetHdc(), GetHfontOf(*fontToUse));
+    else
+        hfontOld = 0;
 
     SIZE sizeRect;
     TEXTMETRIC tm;
@@ -1217,7 +1221,8 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     if (descent) *descent = tm.tmDescent;
     if (externalLeading) *externalLeading = tm.tmExternalLeading;
 
-    ::SelectObject(GetHdc(), hfontOld);
+    if ( hfontOld )
+        ::SelectObject(GetHdc(), hfontOld);
 }
 
 void wxDC::SetMapMode(int mode)

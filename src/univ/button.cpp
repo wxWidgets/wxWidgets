@@ -27,7 +27,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STATTEXT
+#if wxUSE_BUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -179,5 +179,5 @@ void wxButton::SetDefault()
     m_isDefault = TRUE;
 }
 
-#endif // wxUSE_STATTEXT
+#endif // wxUSE_BUTTON
 

@@ -52,23 +52,23 @@ public:
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
-                            int flags = wxRENDER_ENABLED,
+                            int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL);
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = wxRENDER_ENABLED,
+                                  int flags = 0,
                                   wxRect *rectIn = (wxRect *)NULL);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
@@ -456,7 +456,7 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
 {
     wxRect rect = rectTotal;
 
-    if ( flags & wxRENDER_PRESSED )
+    if ( flags & wxCONTROL_PRESSED )
     {
         // button pressed: draw a black border around it and an inward shade
         DrawRect(dc, &rect, m_penBlack);
@@ -467,12 +467,12 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
     {
         // button not pressed
 
-        if ( flags & wxRENDER_DEFAULT )
+        if ( flags & wxCONTROL_ISDEFAULT )
         {
             // TODO
         }
 
-        if ( flags & wxRENDER_FOCUSED )
+        if ( flags & wxCONTROL_FOCUSED )
         {
             // button is currently default: add an extra border around it
             DrawRect(dc, &rect, m_penBlack);
@@ -481,7 +481,7 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         // now draw a normal button
         DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
         DrawAntiShadedRect(dc, &rect,
-                           flags & wxRENDER_CURRENT ? m_penHighlight
+                           flags & wxCONTROL_CURRENT ? m_penHighlight
                                                     : m_penLightGrey,
                            m_penDarkGrey);
     }
@@ -554,7 +554,7 @@ void wxGTKRenderer::DrawLabel(wxDC& dc,
                                 int alignment,
                                 int indexAccel)
 {
-    if ( !(flags & wxRENDER_ENABLED) )
+    if ( flags & wxCONTROL_DISABLED )
     {
         // make the text grey and draw a shade for it
         dc.SetTextForeground(0xe0e0e0);
@@ -579,11 +579,11 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
 {
     // what colour should we use?
     wxColour colBg;
-    if ( flags & wxRENDER_PRESSED )
+    if ( flags & wxCONTROL_PRESSED )
     {
         colBg = wxColour(0x7f7f7f);
     }
-    else if ( flags & wxRENDER_CURRENT )
+    else if ( flags & wxCONTROL_CURRENT )
     {
         colBg = wxColour(0xe0e0e0);
     }

@@ -817,7 +817,8 @@ enum wxStretch
     wxSHRINK                  = 0x1000,
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
-    wxSHAPED                  = 0x4000
+    wxSHAPED                  = 0x4000,
+    wxTILE                    = 0x8000
 };
 
 // border flags: the values are chosen for backwards compatibility

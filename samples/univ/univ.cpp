@@ -35,6 +35,7 @@
     #include "wx/dcclient.h"
 
     #include "wx/button.h"
+    #include "wx/scrolbar.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
 #endif
@@ -117,9 +118,11 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 400))
+           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 450))
 {
     SetBackgroundColour(*wxLIGHT_GREY);
+
+    wxStaticText *text;
 
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this,
@@ -128,7 +131,6 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
 
-    wxStaticText *text;
     text = new wxStaticText(this, _T("Demo of &border styles:"), wxPoint(10, 60));
     text->SetFont(*wxITALIC_FONT);
     text->SetBackgroundColour(*wxWHITE);
@@ -153,6 +155,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                        wxPoint(10, 150),
                                        wxSize(500, 120));
     box->SetForegroundColour(*wxRED);
+    box->SetBackground(wxBitmap("bricks.bmp", wxBITMAP_TYPE_BMP), 0, wxTILE);
 
     x = 15;
     #define CREATE_STATIC_ALIGN_DEMO(align) \
@@ -172,6 +175,12 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
+
+    wxScrollBar *sb;
+    sb = new wxScrollBar(this, -1, wxPoint(200, 300), wxSize(100, -1));
+    sb->SetScrollbar(0, 10, 100, 10);
+    sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 50), wxSB_VERTICAL);
+    sb->SetScrollbar(50, 50, 100, 10);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)

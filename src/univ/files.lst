@@ -1,5 +1,6 @@
 UNIVOBJS = \
            button.o \
+           colschem.o \
            control.o \
            inphand.o \
            renderer.o \

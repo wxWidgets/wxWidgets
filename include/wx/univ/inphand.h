@@ -37,11 +37,4 @@ public:
     virtual ~wxInputHandler();
 };
 
-// ----------------------------------------------------------------------------
-// the control names which can be passed to wxTheme::GetInputHandler()
-// ----------------------------------------------------------------------------
-
-#define wxCONTROL_DEFAULT   _T("control")
-#define wxCONTROL_BUTTON    _T("button")
-
 #endif // _WX_UNIV_INPHAND_H_

@@ -30,22 +30,6 @@ class WXDLLEXPORT wxWindow;
 #include "wx/gdicmn.h"
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// control state flags used in wxRenderer
-enum
-{
-    wxRENDER_ENABLED    = 0x00000001,
-    wxRENDER_FOCUSED    = 0x00000002,   // control currently has keyboard focus
-    wxRENDER_PRESSED    = 0x00000004,
-    wxRENDER_DEFAULT    = 0x00000008,   // only applies to the buttons
-    wxRENDER_CURRENT    = 0x00000010,   // mouse is currently over the control
-
-    wxRENDER_FLAGS_MASK = 0x0000001f
-};
-
-// ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------
 
@@ -63,7 +47,7 @@ public:
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1) = 0;
 
@@ -72,22 +56,37 @@ public:
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
-                            int flags = wxRENDER_ENABLED,
+                            int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL) = 0;
 
     // draw push button border and return the rectangle left for the label
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = wxRENDER_ENABLED,
+                                  int flags = 0,
                                   wxRect *rectIn = (wxRect *)NULL) = 0;
 
     // draw a frame with the label (horizontal alignment can be specified)
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1) = 0;
+
+    // draw an arrow in the given direction
+    virtual void DrawArrow(wxDC& dc,
+                           wxDirection dir,
+                           const wxRect& rect,
+                           int flags = 0) = 0;
+
+    // draw a scrollbar: thumb positions are in percent of the full scrollbar
+    // length
+    virtual void DrawScrollbar(wxDC& dc,
+                               wxOrientation orient,
+                               int thumbPosStart,
+                               int thumbPosEnd,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
 
     // TODO: having this is ugly but I don't see how to solve GetBestSize()
     //       problem without something like this
@@ -122,28 +121,41 @@ public:
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int align = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1)
         { m_renderer->DrawLabel(dc, label, rect, flags, align, indexAccel); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
-                            int flags = wxRENDER_ENABLED,
+                            int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL)
         { m_renderer->DrawBorder(dc, border, rect, flags, rectIn); }
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int align = wxALIGN_LEFT,
                            int indexAccel = -1)
         { m_renderer->DrawFrame(dc, label, rect, flags, align, indexAccel); }
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = wxRENDER_ENABLED,
+                                  int flags = 0,
                                   wxRect *rectIn = (wxRect *)NULL)
         { m_renderer->DrawButtonBorder(dc, rect, flags, rectIn); }
+    virtual void DrawArrow(wxDC& dc,
+                           wxDirection dir,
+                           const wxRect& rect,
+                           int flags = 0)
+        { m_renderer->DrawArrow(dc, dir, rect, flags); }
+    virtual void DrawScrollbar(wxDC& dc,
+                               wxOrientation orient,
+                               int thumbPosStart,
+                               int thumbPosEnd,
+                               const wxRect& rect,
+                               int flags = 0)
+        { m_renderer->DrawScrollbar(dc, orient, thumbPosStart,
+                                    thumbPosEnd, rect, flags); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
@@ -168,6 +180,8 @@ public:
     void DrawBorder();
     void DrawButtonBorder();
     void DrawFrame();
+    void DrawBackgroundBitmap();
+    void DrawScrollbar(int thumbStart, int thumbEnd);
 
     // accessors
     wxRenderer *GetRenderer() const { return m_renderer; }
@@ -176,10 +190,6 @@ public:
 
     const wxRect& GetRect() const { return m_rect; }
     wxRect& GetRect() { return m_rect; }
-
-protected:
-    // the current window state
-    int GetStateFlags() const;
 
 private:
     wxControl *m_ctrl;

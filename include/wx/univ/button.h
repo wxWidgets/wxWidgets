@@ -31,6 +31,9 @@ class WXDLLEXPORT wxInputHandler;
 // wxButton: a push button
 // ----------------------------------------------------------------------------
 
+// class name
+#define wxCONTROL_BUTTON _T("button")
+
 class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
@@ -88,6 +91,5 @@ private:
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
-#endif
-    // _WX_BUTTON_H_
+#endif // _WX_UNIV_BUTTON_H_
 

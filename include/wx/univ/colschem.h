@@ -28,23 +28,30 @@ public:
     // the standard colours
     enum StdColour
     {
-        // these colours are used for drawing the shadows of 3D objects, use
-        // only FACE in the renderers which don't use 3D shading
-        DARK_SHADOW,
-        FACE,
-        HIGHLIGHT,
-        LIGHT,
-        SHADOW,
-
-        // the default colours for the controls
+        // the background and text colour for the control
+        CONTROL,
         CONTROL_TEXT,
+
+        // the background and text colour for the highlighted item
         HIGHLIGHT,
         HIGHLIGHT_TEXT,
+
+        // these colours are used for drawing the shadows of 3D objects, use
+        // only NORMAL in the renderers which don't use 3D shading
+        SHADOW_DARK,
+        SHADOW_HIGHLIGHT,
+        SHADOW_IN,
+        SHADOW_OUT,
 
         MAX
     };
 
-    virtual wxColour Get(StdColour col) = 0;
+    // get the colour for the control in the state (combination of
+    // wxCONTROL_XXX values)
+    virtual wxColour Get(StdColour col, int flags = 0) const = 0;
+
+    // virtual dtor for any base class
+    virtual ~wxColourScheme();
 };
 
 // some people just can't spell it correctly :-)

@@ -48,7 +48,7 @@ bool wxControlBase::Create(wxWindow *parent,
                            const wxString &name)
 {
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
-    
+
 #if wxUSE_VALIDATORS
     if ( ret )
         SetValidator(validator);
@@ -114,8 +114,14 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 }
 
 // ----------------------------------------------------------------------------
-// border stuff
+// other stuff
 // ----------------------------------------------------------------------------
+
+void wxControlBase::SetBackground(const wxBitmap& bitmap,
+                                  int alignment,
+                                  wxStretch stretch)
+{
+}
 
 wxBorder wxControlBase::GetBorder() const
 {

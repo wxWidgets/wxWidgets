@@ -26,13 +26,16 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
-    #include "wx/button.h"
     #include "wx/dc.h"
     #include "wx/window.h"
+
+    #include "wx/button.h"
+    #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
+#include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
@@ -42,34 +45,62 @@
 class wxWin32Renderer : public wxRenderer
 {
 public:
-    wxWin32Renderer();
+    // constants
+    enum wxArrowDirection
+    {
+        Arrow_Left,
+        Arrow_Right,
+        Arrow_Up,
+        Arrow_Down,
+        Arrow_Max
+    };
+
+    enum wxArrowStyle
+    {
+        Arrow_Normal,
+        Arrow_Disabled,
+        Arrow_StateMax
+    };
+
+    // ctor
+    wxWin32Renderer(const wxColourScheme *scheme);
 
     // implement the base class pure virtuals
     virtual void DrawBackground(wxDC& dc,
                                 const wxColour& col,
                                 const wxRect& rect,
-                                int flags);
+                                int flags = 0);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
-                            int flags = wxRENDER_ENABLED,
+                            int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL);
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
-                           int flags = wxRENDER_ENABLED,
+                           int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = wxRENDER_ENABLED,
+                                  int flags = 0,
                                   wxRect *rectIn = (wxRect *)NULL);
+    virtual void DrawArrow(wxDC& dc,
+                           wxDirection dir,
+                           const wxRect& rect,
+                           int flags = 0);
+    virtual void DrawScrollbar(wxDC& dc,
+                               wxOrientation orient,
+                               int thumbPosStart,
+                               int thumbPosEnd,
+                               const wxRect& rect,
+                               int flags = 0);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
@@ -91,12 +122,34 @@ protected:
     // draw the normal 3D border
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
 
+    // draw the border used for scrollbar arrows
+    void DrawArrowBorder(wxDC& dc, wxRect *rect);
+
+    // public DrawArrow()s helper
+    void DrawArrow(wxDC& dc, const wxRect& rect,
+                   wxArrowDirection arrowDir, wxArrowStyle arrowStyle);
+
+    // DrawArrowButton is used by DrawScrollbar and DrawComboButton
+    void DrawArrowButton(wxDC& dc, const wxRect& rect,
+                         wxArrowDirection arrowDir,
+                         wxArrowStyle arrowStyle);
+
 private:
+    // the sizing parameters (TODO make them changeable)
+    wxSize m_sizeScrollbarArrow;
+
+    // GDI objects we use for drawing
+    wxColour m_colDarkGrey,
+             m_colBg,
+             m_colHighlight;
+
     wxPen m_penBlack,
           m_penDarkGrey,
           m_penLightGrey,
-          m_penWhite,
           m_penHighlight;
+
+    // first row is for the normal state, second - for the disabled
+    wxBitmap m_bmpArrows[Arrow_StateMax][Arrow_Max];
 };
 
 // ----------------------------------------------------------------------------
@@ -130,7 +183,7 @@ private:
 class wxWin32ColourScheme : public wxColourScheme
 {
 public:
-    virtual wxColour Get(StdColour col);
+    virtual wxColour Get(StdColour col, int flags = 0) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -147,7 +200,7 @@ public:
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
     virtual wxInputHandler *GetInputHandler(const wxString& control);
-    virtual wxColourScheme *GetColourScheme() { return m_scheme; }
+    virtual wxColourScheme *GetColourScheme(const wxString& control);
 
 private:
     wxWin32Renderer *m_renderer;
@@ -174,13 +227,16 @@ WX_IMPLEMENT_THEME(wxWin32Theme, win32, wxTRANSLATE("Win32 theme"));
 
 wxWin32Theme::wxWin32Theme()
 {
-    m_renderer = new wxWin32Renderer;
     m_scheme = new wxWin32ColourScheme;
+    m_renderer = new wxWin32Renderer(m_scheme);
 }
 
 wxWin32Theme::~wxWin32Theme()
 {
     WX_CLEAR_ARRAY(m_handlers);
+
+    delete m_renderer;
+    delete m_scheme;
 }
 
 wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
@@ -194,6 +250,8 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
 
         if ( control == wxCONTROL_BUTTON )
             handler = new wxWin32ButtonInputHandler;
+        else if ( control == wxCONTROL_SCROLLBAR )
+            handler = new wxWin32InputHandler; // TODO
         else
         {
             wxASSERT_MSG( control == wxCONTROL_DEFAULT,
@@ -212,27 +270,36 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
     return handler;
 }
 
+wxColourScheme *wxWin32Theme::GetColourScheme(const wxString& control)
+{
+    // Win32 has only one colour scheme for all controls
+    return m_scheme;
+}
+
 // ============================================================================
 // wxWin32ColourScheme
 // ============================================================================
 
-wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col)
+wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
+                                  int flags) const
 {
     switch ( col )
     {
-        case DARK_SHADOW:   return wxColour(0x7f7f7f);
-        case FACE:          return wxColour(0xc0c0c0);
-        case HIGHLIGHT:     return wxColour(0xe0e0e0);
-        case LIGHT:         return wxColour(0xffffff);
-        case SHADOW:        return wxColour(0xc0c0c0);
-        case CONTROL_TEXT:  return wxColour(0x000000);
-        case HIGHLIGHT:     return wxColour(0x0000ff);
-        case HIGHLIGHT_TEXT:return wxColour(0x00ffff);
+        case CONTROL:           return wxColour(0xc0c0c0);
+        case CONTROL_TEXT:      return *wxBLACK;
+
+        case HIGHLIGHT:         return wxColour(0x800000);
+        case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
+
+        case SHADOW_DARK:       return *wxBLACK;
+        case SHADOW_HIGHLIGHT:  return wxColour(0xe0e0e0);
+        case SHADOW_IN:         return wxColour(0xc0c0c0);
+        case SHADOW_OUT:        return wxColour(0x7f7f7f);
 
         case MAX:
         default:
             wxFAIL_MSG(_T("invalid standard colour"));
-            return wxColour(0x000000);
+            return *wxBLACK;
     }
 }
 
@@ -244,13 +311,161 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col)
 // construction
 // ----------------------------------------------------------------------------
 
-wxWin32Renderer::wxWin32Renderer()
-               : m_penBlack(*wxBLACK_PEN),
-                 m_penDarkGrey(wxColour(0x7f7f7f), 0, wxSOLID),
-                 m_penLightGrey(wxColour(0xc0c0c0), 0, wxSOLID),
-                 m_penWhite(*wxWHITE_PEN),
-                 m_penHighlight(wxColour(0xe0e0e0), 0, wxSOLID)
+wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
 {
+    // init data
+    m_sizeScrollbarArrow = wxSize(16, 16);
+
+    // init colours and pens
+    m_penBlack = wxPen(scheme->Get(wxColourScheme::SHADOW_DARK), 0, wxSOLID);
+
+    m_colDarkGrey = scheme->Get(wxColourScheme::SHADOW_OUT);
+    m_penDarkGrey = wxPen(m_colDarkGrey, 0, wxSOLID);
+
+    m_colBg = scheme->Get(wxColourScheme::SHADOW_IN);
+    m_penLightGrey = wxPen(m_colBg, 0, wxSOLID);
+
+    m_colHighlight = scheme->Get(wxColourScheme::SHADOW_HIGHLIGHT);
+    m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
+
+    // init the arrow bitmaps
+    static const size_t ARROW_WIDTH = 7;
+    static const size_t ARROW_LENGTH = 4;
+
+    wxMask *mask;
+    wxMemoryDC dcNormal, dcDisabled;
+    for ( size_t n = 0; n < Arrow_Max; n++ )
+    {
+        bool isVertical = n > Arrow_Right;
+        int w, h;
+        if ( isVertical )
+        {
+            w = ARROW_WIDTH;
+            h = ARROW_LENGTH;
+        }
+        else
+        {
+            h = ARROW_WIDTH;
+            w = ARROW_LENGTH;
+        }
+
+        // disabled arrow is larger because of the shadow
+        m_bmpArrows[Arrow_Normal][n].Create(w, h);
+        m_bmpArrows[Arrow_Disabled][n].Create(w + 1, h + 1);
+
+        dcNormal.SelectObject(m_bmpArrows[Arrow_Normal][n]);
+        dcDisabled.SelectObject(m_bmpArrows[Arrow_Disabled][n]);
+
+        dcNormal.SetBackground(*wxWHITE_BRUSH);
+        dcDisabled.SetBackground(*wxWHITE_BRUSH);
+        dcNormal.Clear();
+        dcDisabled.Clear();
+
+        dcNormal.SetPen(m_penBlack);
+        dcDisabled.SetPen(m_penDarkGrey);
+
+        // calculate the position of the point of the arrow
+        wxCoord x1, y1;
+        if ( isVertical )
+        {
+            x1 = (ARROW_WIDTH - 1)/2;
+            y1 = n == Arrow_Up ? 0 : ARROW_LENGTH - 1;
+        }
+        else // horizontal
+        {
+            x1 = n == Arrow_Left ? 0 : ARROW_LENGTH - 1;
+            y1 = (ARROW_WIDTH - 1)/2;
+        }
+
+        wxCoord x2 = x1,
+                y2 = y1;
+
+        if ( isVertical )
+            x2++;
+        else
+            y2++;
+
+        for ( size_t i = 0; i < ARROW_LENGTH; i++ )
+        {
+            dcNormal.DrawLine(x1, y1, x2, y2);
+            dcDisabled.DrawLine(x1, y1, x2, y2);
+
+            if ( isVertical )
+            {
+                x1--;
+                x2++;
+
+                if ( n == Arrow_Up )
+                {
+                    y1++;
+                    y2++;
+                }
+                else // down arrow
+                {
+                    y1--;
+                    y2--;
+                }
+            }
+            else // left or right arrow
+            {
+                y1--;
+                y2++;
+
+                if ( n == Arrow_Left )
+                {
+                    x1++;
+                    x2++;
+                }
+                else
+                {
+                    x1--;
+                    x2--;
+                }
+            }
+        }
+
+        // draw the shadow for the disabled one
+        dcDisabled.SetPen(m_penHighlight);
+        switch ( n )
+        {
+            case Arrow_Left:
+                y1 += 2;
+                dcDisabled.DrawLine(x1, y1, x2, y2);
+                break;
+
+            case Arrow_Right:
+                x1 = ARROW_LENGTH - 1;
+                y1 = (ARROW_WIDTH - 1)/2 + 1;
+                x2 = 0;
+                y2 = ARROW_WIDTH;
+                dcDisabled.DrawLine(x1, y1, x2, y2);
+                dcDisabled.DrawLine(++x1, y1, x2, ++y2);
+                break;
+
+            case Arrow_Up:
+                x1 += 2;
+                dcDisabled.DrawLine(x1, y1, x2, y2);
+                break;
+
+            case Arrow_Down:
+                x1 = ARROW_WIDTH - 1;
+                y1 = 1;
+                x2 = (ARROW_WIDTH - 1)/2;
+                y2 = ARROW_LENGTH;
+                dcDisabled.DrawLine(x1, y1, x2, y2);
+                dcDisabled.DrawLine(++x1, y1, x2, ++y2);
+                break;
+
+        }
+
+        dcNormal.SelectObject(wxNullBitmap);
+        dcDisabled.SelectObject(wxNullBitmap);
+
+        mask = new wxMask(m_bmpArrows[Arrow_Normal][n], *wxWHITE);
+        m_bmpArrows[Arrow_Normal][n].SetMask(mask);
+        mask = new wxMask(m_bmpArrows[Arrow_Disabled][n], *wxWHITE);
+        m_bmpArrows[Arrow_Disabled][n].SetMask(mask);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -374,6 +589,12 @@ void wxWin32Renderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
     DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
 }
 
+void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penLightGrey, m_penBlack);
+    DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+}
+
 void wxWin32Renderer::DrawBorder(wxDC& dc,
                                  wxBorder border,
                                  const wxRect& rectTotal,
@@ -398,8 +619,7 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_DOUBLE:
-            DrawShadedRect(dc, &rect, m_penLightGrey, m_penBlack);
-            DrawShadedRect(dc, &rect, m_penHighlight, m_penDarkGrey);
+            DrawArrowBorder(dc, &rect);
             DrawRect(dc, &rect, m_penLightGrey);
             break;
 
@@ -431,7 +651,7 @@ void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
 {
     wxRect rect = rectTotal;
 
-    if ( flags & wxRENDER_PRESSED )
+    if ( flags & wxCONTROL_PRESSED )
     {
         // button pressed: draw a double border around it
         DrawRect(dc, &rect, m_penBlack);
@@ -441,7 +661,7 @@ void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
     {
         // button not pressed
 
-        if ( flags & (wxRENDER_FOCUSED | wxRENDER_DEFAULT) )
+        if ( flags & (wxCONTROL_FOCUSED | wxCONTROL_ISDEFAULT) )
         {
             // button either default or focused (or both): add an extra border around it
             DrawRect(dc, &rect, m_penBlack);
@@ -520,26 +740,34 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 int alignment,
                                 int indexAccel)
 {
-    if ( !(flags & wxRENDER_ENABLED) )
+    // shift the label if a button is pressed
+    wxRect rectLabel = rect;
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        rectLabel.x++;
+        rectLabel.y++;
+    }
+
+    if ( flags & wxCONTROL_DISABLED )
     {
         // make the text grey and draw a shade for it
-        dc.SetTextForeground(0xe0e0e0);
-        wxRect rectShadow = rect;
+        dc.SetTextForeground(m_colHighlight);
+        wxRect rectShadow = rectLabel;
         rectShadow.x++;
         rectShadow.y++;
         dc.DrawLabel(label, rectShadow, alignment, indexAccel);
-        dc.SetTextForeground(0x7f7f7f);
+        dc.SetTextForeground(m_colDarkGrey);
     }
 
-    wxRect rectText = rect;
-    if ( flags & wxRENDER_FOCUSED )
+    wxRect rectText = rectLabel;
+    if ( flags & wxCONTROL_FOCUSED )
     {
         rectText.Inflate(-2);
     }
 
     dc.DrawLabel(label, rectText, alignment, indexAccel);
 
-    if ( flags & wxRENDER_FOCUSED )
+    if ( flags & wxCONTROL_FOCUSED )
     {
         // VZ: this doesn't work under Windows, the dotted pen has dots of 3
         //     pixels each while we really need dots here... PS_ALTERNATE might
@@ -590,12 +818,148 @@ void wxWin32Renderer::DrawBackground(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
+// scrollbar
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawArrow(wxDC& dc,
+                                wxDirection dir,
+                                const wxRect& rect,
+                                int flags)
+{
+    // get the bitmap for this arrow
+    wxArrowDirection arrowDir;
+    switch ( dir )
+    {
+        case wxLEFT:    arrowDir = Arrow_Left; break;
+        case wxRIGHT:   arrowDir = Arrow_Right; break;
+        case wxUP:      arrowDir = Arrow_Up; break;
+        case wxDOWN:    arrowDir = Arrow_Down; break;
+
+        default:
+            wxFAIL_MSG(_T("unknown arrow direction"));
+            return;
+    }
+
+    wxArrowStyle arrowStyle = flags & wxCONTROL_DISABLED ? Arrow_Disabled
+                                                         : Arrow_Normal;
+    DrawArrow(dc, rect, arrowDir, arrowStyle);
+}
+
+void wxWin32Renderer::DrawArrow(wxDC& dc,
+                                const wxRect& rect,
+                                wxArrowDirection arrowDir,
+                                wxArrowStyle arrowStyle)
+{
+    const wxBitmap& bmp = m_bmpArrows[arrowStyle][arrowDir];
+
+    // under Windows the arrows always have the same size so just centre it in
+    // the provided rectangle
+    wxCoord x = rect.x + (rect.width - bmp.GetWidth()) / 2,
+            y = rect.y + (rect.height - bmp.GetHeight()) / 2;
+
+    // Windows does it like this...
+    if ( arrowDir == Arrow_Left )
+        x--;
+
+    // draw it
+    dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
+}
+
+void wxWin32Renderer::DrawArrowButton(wxDC& dc,
+                                      const wxRect& rectAll,
+                                      wxArrowDirection arrowDir,
+                                      wxArrowStyle arrowStyle)
+{
+    wxRect rect = rectAll;
+    DrawArrowBorder(dc, &rect);
+    DrawArrow(dc, rect, arrowDir, arrowStyle);
+}
+
+void wxWin32Renderer::DrawScrollbar(wxDC& dc,
+                                    wxOrientation orient,
+                                    int thumbPosStart,
+                                    int thumbPosEnd,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxArrowStyle arrowStyle = flags & wxCONTROL_DISABLED ? Arrow_Disabled
+                                                         : Arrow_Normal;
+
+    // first, draw the arrows at the ends
+    wxRect rectArrow[2];
+    wxArrowDirection arrowDir[2];
+
+    rectArrow[0] =
+    rectArrow[1] = rect;
+    if ( orient == wxVERTICAL )
+    {
+        rectArrow[0].height =
+        rectArrow[1].height = m_sizeScrollbarArrow.y;
+        rectArrow[1].y = rect.GetBottom() - rectArrow[1].height;
+
+        arrowDir[0] = Arrow_Up;
+        arrowDir[1] = Arrow_Down;
+    }
+    else // horizontal
+    {
+        rectArrow[0].width =
+        rectArrow[1].width = m_sizeScrollbarArrow.x;
+        rectArrow[1].x = rect.GetRight() - rectArrow[1].width;
+
+        arrowDir[0] = Arrow_Left;
+        arrowDir[1] = Arrow_Right;
+    }
+
+    for ( size_t nArrow = 0; nArrow < 2; nArrow++ )
+    {
+        DrawArrowButton(dc, rectArrow[nArrow], arrowDir[nArrow], arrowStyle);
+    }
+
+    // next draw the scrollbar area
+    wxRect rectBar = rect;
+    if ( orient == wxVERTICAL )
+        rectBar.Inflate(0, -m_sizeScrollbarArrow.y);
+    else
+        rectBar.Inflate(-m_sizeScrollbarArrow.x, 0);
+
+    DrawBackground(dc, m_colHighlight, rectBar);
+
+    // and, finally, the thumb, if any
+    if ( thumbPosStart < thumbPosEnd )
+    {
+        wxRect rectThumb = rectBar;
+        if ( orient == wxVERTICAL )
+        {
+            rectThumb.y += (rectBar.height*thumbPosStart)/100;
+            rectThumb.height = (rectBar.height*(thumbPosEnd - thumbPosStart))/100;
+        }
+        else // horizontal
+        {
+            rectThumb.x += (rectBar.width*thumbPosStart)/100;
+            rectThumb.width = (rectBar.width*(thumbPosEnd - thumbPosStart))/100;
+        }
+
+        DrawArrowBorder(dc, &rectThumb);
+        DrawBackground(dc, m_colBg, rectThumb);
+    }
+}
+
+// ----------------------------------------------------------------------------
 // size adjustments
 // ----------------------------------------------------------------------------
 
 void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
-    if ( wxDynamicCast(window, wxButton) )
+    if ( wxDynamicCast(window, wxScrollBar) )
+    {
+        // we only set the width of vert scrollbars and height of the
+        // horizontal ones
+        if ( window->GetWindowStyle() & wxSB_HORIZONTAL )
+            size->y = m_sizeScrollbarArrow.y;
+        else
+            size->x = m_sizeScrollbarArrow.x;
+    }
+    else if ( wxDynamicCast(window, wxButton) )
     {
         // TODO
         size->x += 3*window->GetCharWidth();
