@@ -249,13 +249,13 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             }
             //else: nothing to do [here]
         }
+
+        if ( GetExtraStyle() & wxFRAME_EX_CONTEXTHELP )
+            *exflags |= WS_EX_CONTEXTHELP;
 #endif // !__WXWINCE__
 
         if ( style & wxSTAY_ON_TOP )
             *exflags |= WS_EX_TOPMOST;
-
-        if ( GetExtraStyle() & wxFRAME_EX_CONTEXTHELP )
-            *exflags |= WS_EX_CONTEXTHELP;
     }
 
     return msflags;
@@ -360,7 +360,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                        SWP_NOACTIVATE);
     }
 
-#if defined(__WIN95__)
+#if !defined(__WXWINCE__)
     // For some reason, the system menu is activated when we use the
     // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
     if ( exflags & WS_EX_CONTEXTHELP )
@@ -377,7 +377,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
             }
         }
     }
-#endif // __WIN95__
+#endif
 
     // move the dialog to its initial position without forcing repainting
     int x, y, w, h;
@@ -1034,7 +1034,7 @@ wxDlgProc(HWND hDlg,
 #if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__) && !defined(__HANDHELDPC__)
         SHINITDLGINFO shidi;
         shidi.dwMask = SHIDIM_FLAGS;
-        shidi.dwFlags = SHIDIF_SIZEDLGFULLSCREEN
+        shidi.dwFlags = SHIDIF_SIZEDLG // take account of the SIP or menubar
 #ifndef __SMARTPHONE__
                         | SHIDIF_DONEBUTTON
 #endif

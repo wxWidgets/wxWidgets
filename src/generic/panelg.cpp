@@ -126,8 +126,8 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     SetThemeEnabled(true);
 
 #ifdef __WXWINCE__
-    // Required get solid control backgrounds under WinCE
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    // Required to get solid control backgrounds under WinCE
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 #endif
 
     return true;

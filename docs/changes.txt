@@ -8,8 +8,8 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 All:
 
 - wxURI::GetUser() only returns the user name now, use GetUserInfo() to get
-  user and password as in 2.5.4; wxURI::GetPassword() added
-- added wxDebugReport class
+  user and password as in 2.5.4; wxURI::GetPassword() added.
+- Added wxDebugReport class.
 
 All (GUI):
 
@@ -21,19 +21,32 @@ All (GUI):
 
 Unix:
 
-- fixed build on Linux/AMD64
+- Fixed build on Linux/AMD64
 
 wxGTK:
 
 - Improved wxSystemSettings::GetMetric() to work better with X11. (Mart Raudsepp)
-- Corrected wxListBox selection handling
-- Corrected default button size handling for different themes
-- Corrected splitter sash size and look for different themes
-- Fixed keyboard input for dead-keys
+- Corrected wxListBox selection handling.
+- Corrected default button size handling for different themes.
+- Corrected splitter sash size and look for different themes.
+- Fixed keyboard input for dead-keys.
+
+wxMac:
+
+- Added wxFRAME_EX_METAL, wxDIALOG_EX_METAL for metallic-look windows.
 
 wxPalmOS:
 
-- native wxRadioBox implementation
+- native wxRadioBox implementation.
+
+wxWinCE:
+
+- Added wxNB_FLAT for flat-look notebooks on Windows CE.
+- Titlebar OK button on PocketPC now looks for OK, Cancel, Close buttons.
+- Dialog size now takes into account SIP or menubar.
+- Panels more naturally white on PocketPC.
+- wxDIALOG_EX_CONTEXTHELP ignored on WinCE since it interferes
+  with correct titlebar style.
 
 
 2.5.4
@@ -53,12 +66,12 @@ All:
 - added wxURI, a class for dealing with Uniform Resource Identifiers
 - changed wxURL to inherit from wxURI and provide assignment and comparison
 - implemented wxConvUTF7 (modified patch from Fredrik Roubert)
-- added versions of MB2WC and WC2MB for wxMBConv that for embedded null chars
+- added versions of MB2WC and WC2MB for wxMBConv that works for embedded null chars
 - Unicode support in wxODBC is now fully implemented
 - A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
   SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent
   behavior between Unicode and non-unicode builds
-- BLOB example added to samples/db (thanks to Casey ODonnell)
+- BLOB example added to samples/db (thanks to Casey O'Donnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
 - wxGetOsDescription() is now more precise (Olly Betts)
 - XRC supports system fonts and colours (Ray Gilbert)
@@ -68,7 +81,7 @@ All:
   printing stuff in the GTK port.
 - Deprecated print setup dialog.
 - Added support to the wxODBC classes for Firebird 1.5 database
-- The samples\db sample program now includes an optional example of using a BLOB
+- The samples/db sample program now includes an optional example of using a BLOB
   datatype (if BLOB support is enabled and supported by the database)
 - added wxDynamicLibrary::ListLoaded()
 - wxGetPowerType() and wxGetBatteryState() addition

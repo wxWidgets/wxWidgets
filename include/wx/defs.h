@@ -1480,6 +1480,7 @@ enum wxBorder
 #define wxNB_BOTTOM           0x0080
 #define wxNB_MULTILINE        0x0100
 #define wxNB_NOPAGETHEME      0x0200
+#define wxNB_FLAT             0x0400
 #define wxNB_DEFAULT          wxNB_TOP
 
 /*

@@ -133,6 +133,8 @@ wxBEGIN_FLAGS( wxNotebookStyle )
     wxFLAGS_MEMBER(wxNB_LEFT)
     wxFLAGS_MEMBER(wxNB_RIGHT)
     wxFLAGS_MEMBER(wxNB_BOTTOM)
+    wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
+    wxFLAGS_MEMBER(wxNB_FLAT)
 
 wxEND_FLAGS( wxNotebookStyle )
 
@@ -303,6 +305,19 @@ bool wxNotebook::Create(wxWindow *parent,
             SetBackgroundColour(col);
         }
     }
+
+    // Undocumented hack to get flat notebook style
+    // In fact, we should probably only do this in some
+    // curcumstances, i.e. if we know we will have a border
+    // at the bottom (the tab control doesn't draw it itself)
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    if (HasFlag(wxNB_FLAT))
+    {
+        SendMessage(m_hwnd, CCM_SETVERSION, COMCTL32_VERSION, 0);
+        if (!m_hasBgCol)
+            SetBackgroundColour(*wxWHITE);
+    }
+#endif
     return true;
 }
 
@@ -322,7 +337,7 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxNB_LEFT )
         tabStyle |= TCS_VERTICAL;
     else if ( style & wxNB_RIGHT )
-        tabStyle |= TCS_VERTICAL | TCS_RIGHT;
+        tabStyle |= TCS_VERTICAL | TCS_RIGHT; 
 
     // ex style
     if ( exstyle )
@@ -991,6 +1006,17 @@ wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *win)
 {
     if ( m_hasBgCol )
         return GetBackgroundColour();
+
+    // Experimental: don't do this since we're doing it in wxPanel
+#if 0 // defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    // For some reason, the pages will be grey by default.
+    // Normally they should be white on these platforms.
+    // (However the static control backgrounds are painted
+    // in the correct colour, just not the rest of it.)
+    // So let's give WinCE a hint.
+    else if (!win->m_hasBgCol)
+        return *wxWHITE;
+#endif
 
     if ( !wxUxThemeEngine::GetIfActive() )
         return wxNullColour;

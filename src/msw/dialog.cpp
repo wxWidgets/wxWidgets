@@ -452,7 +452,15 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             {
 #ifndef __SMARTPHONE__
                 case IDOK:
-                    wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
+                    // First, try the OK button, since it's closest in meaning.
+                    wxButton *btn = wxDynamicCast(FindWindow(wxID_OK), wxButton);
+
+                    // Next, try Cancel or Close buttons
+                    if (!btn)
+                        btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
+                    if (!btn)
+                        btn = wxDynamicCast(FindWindow(wxID_CLOSE), wxButton);
+
                     if ( btn && btn->IsEnabled() )
                     {
                         // if we do have a cancel button, do press it
@@ -460,6 +468,13 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                         processed = true;
                         break;
                     }
+                    else
+                    {
+                        // Finally, if there aren't appropriate buttons,
+                        // act as if it were the normal close button.
+                        processed = !Close();
+                    }
+
 #else // ifdef __SMARTPHONE__
                 case IDM_LEFT:
                 case IDM_RIGHT:
