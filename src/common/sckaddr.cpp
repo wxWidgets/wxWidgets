@@ -268,7 +268,8 @@ wxString wxUNIXaddress::Filename()
 
   path[0] = 0;
   GAddress_UNIX_GetPath(m_address, path, 1024);
-  return wxString(path);
+  
+  return wxString::FromAscii(path);
 }
 
 #endif // __UNIX__
