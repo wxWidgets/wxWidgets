@@ -422,6 +422,7 @@ public:
     // ------ display update functions
     //
     void CalcRowLabelsExposed( wxRegion& reg );
+
     void CalcColLabelsExposed( wxRegion& reg );
     void CalcCellsExposed( wxRegion& reg );
 
@@ -455,6 +456,7 @@ public:
 
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
+
     void DrawColLabels( wxDC& dc );
     void DrawColLabel( wxDC& dc, int col );
 
@@ -598,10 +600,12 @@ public:
     void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
     void     SetRowSize( int row, int height );
     void     SetDefaultColSize( int width, bool resizeExistingCols = FALSE );
+
     void     SetColSize( int col, int width );
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
+
     void     SetCellTextColour( int row, int col, const wxColour& );
     void     SetDefaultCellFont( const wxFont& );
     void     SetCellFont( int row, int col, const wxFont& );
@@ -827,6 +831,7 @@ public:
     bool GetEditable() { return IsEditable(); }
     void SetEditable( bool edit = TRUE ) { EnableEditing( edit ); }
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
+
     void SetEditInPlace(bool edit = TRUE) { }
 
     void SetCellAlignment( int align, int row, int col)
@@ -1142,3 +1147,4 @@ const wxEventType EVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
 #endif  // #ifndef __WXGRID_H__
 
 #endif  // ifndef wxUSE_NEW_GRID
+
