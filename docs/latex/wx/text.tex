@@ -527,6 +527,10 @@ This function sets the maximum number of characters the user can enter into the
 control. In other words, it allows to limit the text value length to {\it len}
 not counting the terminating {\tt NUL} character.
 
+If {\it len} is $0$, the previously set max length limi, if any, is discarded
+and the user may enter as much text as the underlying native text control
+widget supports (typically at least 32Kb).
+
 If the user tries to enter more characters into the text control when it
 already is filled up to the maximal length, a 
 {\tt wxEVT\_COMMAND\_TEXT\_MAXLEN} event is sent to notify the program about it
