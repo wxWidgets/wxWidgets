@@ -14,7 +14,7 @@
 #define gtk_marshal_NONE__POINTER_POINTER gtk_marshal_NONE__POINTER_POINT
 #endif
 
-#include "wx/gtk/setup.h"
+#include "wx/setup.h"
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkprivate.h"

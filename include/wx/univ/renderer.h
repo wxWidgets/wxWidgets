@@ -19,6 +19,9 @@
 #ifndef _WX_UNIX_RENDERER_H_
 #define _WX_UNIX_RENDERER_H_
 
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxWindow;
+
 class WXDLLEXPORT wxRenderer
 {
 public:

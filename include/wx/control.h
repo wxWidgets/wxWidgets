@@ -24,6 +24,8 @@
 
 #include "wx/window.h"      // base class
 
+extern const wxChar* wxControlNameStr; // the default name
+
 // ----------------------------------------------------------------------------
 // wxControl is the base class for all controls
 // ----------------------------------------------------------------------------
@@ -31,6 +33,14 @@
 class WXDLLEXPORT wxControlBase : public wxWindow
 {
 public:
+    // Create() function adds the validator parameter
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxControlNameStr);
+
     // simulates the event of given type (i.e. wxButton::Command() is just as
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
@@ -57,7 +67,9 @@ protected:
 // include platform-dependent wxControl declarations
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/control.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/control.h"

@@ -78,7 +78,7 @@ public:
         // depend on the toolkit. default version does nothing.
         //
         // Override: rarely.
-    virtual bool OnInitGui() { return TRUE; }
+    virtual bool OnInitGui();
 #endif // wxUSE_GUI
 
         // called to start program execution - the default version just enters

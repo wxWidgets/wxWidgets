@@ -36,6 +36,7 @@ public:
     virtual ~wxApp();
 
     // override base class (pure) virtuals
+    virtual bool OnInitGui() { return TRUE; }
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();

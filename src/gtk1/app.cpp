@@ -275,6 +275,9 @@ wxApp::~wxApp()
 
 bool wxApp::OnInitGui()
 {
+    if ( !wxAppBase::OnInitGui() )
+        return FALSE;
+
     GdkVisual *visual = gdk_visual_get_system();
 
     /* on some machines, the default visual is just 256 colours, so

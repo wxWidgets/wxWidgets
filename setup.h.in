@@ -377,6 +377,10 @@
 /*
  * Use this control
  */
+#define wxUSE_STATTEXT 0
+/*
+ * Use this control
+ */
 #define wxUSE_STATUSBAR 0
 /*
  * Use Tab dialog class - obsolete, use wxNotebook instead

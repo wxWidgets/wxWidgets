@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        univ/window.cpp
-// Purpose:     wxUniversalWindow implementation
+// Purpose:     implementation of extra wxWindow methods for wxUniv port
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.00
@@ -29,7 +29,21 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/event.h"
+
+    #include "wx/univ/renderer.h"
+    #include "wx/univ/theme.h"
 #endif // WX_PRECOMP
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// we don't have any objects of type wxWindowBase so this cast is always safe
+#define self    ((wxWindow *)this)
 
 // ============================================================================
 // implementation
@@ -40,22 +54,28 @@
 // ----------------------------------------------------------------------------
 
 // the event handler executed when the window must be repainted
-void wxUniversalWindow::OnPaint(wxPaintEvent& event)
+void wxWindowBase::OnPaint(wxPaintEvent& event)
 {
-    // get the renderer to use
-    wxRenderer *renderer = wxTheTheme->GetRenderer();
+    // get the renderer and the DC to use
+    wxRenderer *renderer = wxTheme::Get()->GetRenderer();
+    wxPaintDC dc(self);
+
+    // draw the border
+    DoDrawBorder(dc, renderer);
 
     // draw the control
-    wxPaintDC dc(this);
     DoDraw(dc, renderer);
 }
 
 // draw the border
-void DoDrawBorder(wxRenderer *renderer, wxDC& dc, const wxRect& rect)
+void wxWindowBase::DoDrawBorder(wxDC& dc, wxRenderer *renderer)
 {
     if ( !(m_windowStyle & wxNO_BORDER) )
     {
-        renderer->DrawBorder(dc, this);
+        renderer->DrawBorder(dc, self);
     }
 }
 
+void wxWindowBase::DoDraw(wxDC& dc, wxRenderer *renderer)
+{
+}

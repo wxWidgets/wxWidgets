@@ -33,6 +33,8 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/dcclient.h"
+
+    #include "wx/stattext.h"
 #endif
 
 // Define a new application type, each program should derive a class from wxApp
@@ -57,7 +59,6 @@ public:
 
 protected:
     // event handlers
-    void OnPaint(wxPaintEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
 private:
@@ -72,8 +73,6 @@ private:
 IMPLEMENT_APP(MyUnivApp)
 
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
-    EVT_PAINT(MyUnivFrame::OnPaint)
-
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
 
@@ -100,12 +99,8 @@ bool MyUnivApp::OnInit()
 MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(300, 150))
 {
-}
-
-void MyUnivFrame::OnPaint(wxPaintEvent& event)
-{
-    wxPaintDC dc(this);
-    dc.DrawText(_T("Ctrl-click to exit."), 10, 10);
+    new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
+    new wxStaticText(this, _T("Ctrl-click to exit."), wxPoint(40, 10));
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

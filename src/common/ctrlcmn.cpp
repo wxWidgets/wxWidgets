@@ -39,6 +39,24 @@
 // implementation
 // ============================================================================
 
+bool wxControlBase::Create(wxWindow *parent,
+                           wxWindowID id,
+                           const wxPoint &pos,
+                           const wxSize &size,
+                           long style,
+                           const wxValidator& validator,
+                           const wxString &name)
+{
+    bool ret = wxWindow::Create(parent, id, pos, size, style, name);
+    
+#if wxUSE_VALIDATORS
+    if ( ret )
+        SetValidator(validator);
+#endif // wxUSE_VALIDATORS
+
+    return ret;
+}
+
 bool wxControlBase::CreateControl(wxWindowBase *parent,
                                   wxWindowID id,
                                   const wxPoint& pos,

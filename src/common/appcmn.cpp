@@ -36,9 +36,42 @@
 #include "wx/thread.h"
 #include "wx/confbase.h"
 
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+#endif // __WXUNIVERSAL__
+
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+// ----------------------------------------------------------------------------
+// initialization and termination
+// ----------------------------------------------------------------------------
+
+bool wxAppBase::OnInitGui()
+{
+#ifdef __WXUNIVERSAL__
+    if ( !wxTheme::CreateDefault() )
+        return FALSE;
+#endif // __WXUNIVERSAL__
+
+    return TRUE;
+}
+
+int wxAppBase::OnExit()
+{
+#if wxUSE_CONFIG
+    // delete the config object if any (don't use Get() here, but Set()
+    // because Get() could create a new config object)
+    delete wxConfigBase::Set((wxConfigBase *) NULL);
+#endif // wxUSE_CONFIG
+
+#ifdef __WXUNIVERSAL__
+    delete wxTheme::Set(NULL);
+#endif // __WXUNIVERSAL__
+
+    return 0;
+}
 
 // ---------------------------------------------------------------------------
 // wxAppBase
@@ -74,13 +107,3 @@ void wxAppBase::ProcessPendingEvents()
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 
-int wxAppBase::OnExit()
-{
-#if wxUSE_CONFIG
-    // delete the config object if any (don't use Get() here, but Set()
-    // because Get() could create a new config object)
-    delete wxConfigBase::Set((wxConfigBase *) NULL);
-#endif // wxUSE_CONFIG
-
-    return 0;
-}

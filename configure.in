@@ -804,6 +804,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
   DEFAULT_wxUSE_STATLINE=no
+  DEFAULT_wxUSE_STATTEXT=no
   DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TEXTCTRL=no
@@ -941,6 +942,7 @@ else
   DEFAULT_wxUSE_STATBMP=yes
   DEFAULT_wxUSE_STATBOX=yes
   DEFAULT_wxUSE_STATLINE=yes
+  DEFAULT_wxUSE_STATTEXT=yes
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TEXTCTRL=yes
@@ -1235,6 +1237,7 @@ WX_ARG_ENABLE(splitter,    [  --enable-splitter       use wxSplitterWindow class
 WX_ARG_ENABLE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
 WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
 WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
+WX_ARG_ENABLE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
 WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
 WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TABDIALOG)
 WX_ARG_ENABLE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
@@ -1962,6 +1965,9 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl are we using the generic version with this low level toolkit?
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         TOOLKIT_NAME="${TOOLKIT_NAME}univ"
+        SETUPH_DIR="univ"
+    else
+        SETUPH_DIR="${TOOLKIT_DIR}"
     fi
 
     dnl append 'd' to the debug library name
@@ -1980,7 +1986,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl the sources, their dependenices and the headers
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS)"
+        ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
     else
         ALL_OBJECTS="\$(GUIOBJS)"
     fi
@@ -2018,6 +2024,9 @@ if test "$wxUSE_GUI" = "yes"; then
     ALL_DEPFILES="${ALL_DEPFILES} \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
+    fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"
 
@@ -3668,6 +3677,10 @@ if test "$wxUSE_STATBOX" = "yes"; then
     AC_DEFINE(wxUSE_STATBOX)
 fi
 
+if test "$wxUSE_STATTEXT" = "yes"; then
+    AC_DEFINE(wxUSE_STATTEXT)
+fi
+
 if test "$wxUSE_STATLINE" = "yes"; then
     if test "$wxUSE_WINE" = 1 ; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
@@ -3968,6 +3981,7 @@ AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
+AC_SUBST(SETUPH_DIR)
 AC_SUBST(TOOLKIT_NAME)
 AC_SUBST(TOOLKIT_INCLUDE)
 AC_SUBST(WXCONFIG_INCLUDE)
@@ -4032,9 +4046,9 @@ AC_PROG_MAKE_SET
 dnl move setup.h back if available
 if test -d include; then
     if test -d include/wx; then
-        if test -d include/wx/${TOOLKIT_DIR}; then
-            if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
-                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h
+        if test -d include/wx/${SETUPH_DIR}; then
+            if test -f include/wx/${SETUPH_DIR}/setup.h; then
+                mv -f include/wx/${SETUPH_DIR}/setup.h setup.h
             fi
         fi
     fi
@@ -4085,11 +4099,11 @@ AC_OUTPUT([
             if test ! -d lib/wx/include/wx; then
               mkdir lib/wx/include/wx
             fi
-            if test ! -d lib/wx/include/wx/${TOOLKIT_NAME}; then
-              mkdir lib/wx/include/wx/${TOOLKIT_NAME}
+            if test ! -d lib/wx/include/wx/${SETUPH_DIR}; then
+              mkdir lib/wx/include/wx/${SETUPH_DIR}
             fi
             if test -f setup.h; then
-                cp -f setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
+                cp -f setup.h lib/wx/include/wx/${SETUPH_DIR}/setup.h
             fi
 
             dnl *move* setup.h to its final place
@@ -4100,16 +4114,16 @@ AC_OUTPUT([
             if test ! -d include/wx; then
               mkdir include/wx
             fi
-            if test ! -d include/wx/${TOOLKIT_DIR}; then
-              mkdir include/wx/${TOOLKIT_DIR}
+            if test ! -d include/wx/${SETUPH_DIR}; then
+              mkdir include/wx/${SETUPH_DIR}
             fi
             if test -f setup.h; then
-                mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+                mv -f setup.h include/wx/${SETUPH_DIR}/setup.h
             fi
 
           ],
           [
-            TOOLKIT_DIR="${TOOLKIT_DIR}"
+            SETUPH_DIR="${SETUPH_DIR}"
             TOOLKIT_NAME="${TOOLKIT_NAME}"
             LN_S="${LN_S}"
           ]

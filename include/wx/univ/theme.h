@@ -14,6 +14,10 @@
 #ifndef _WX_UNIX_THEME_H_
 #define _WX_UNIX_THEME_H_
 
+#ifdef __GNUG__
+    #pragma interface "theme.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxTheme
 // ----------------------------------------------------------------------------
@@ -25,16 +29,25 @@ class WXDLLEXPORT wxColourScheme;
 class WXDLLEXPORT wxTheme
 {
 public:
+    // create the default theme
+    static bool CreateDefault();
+
+    // change the current scheme
+    static wxTheme *Set(wxTheme *theme);
+
+    // get the current theme (never NULL)
+    static wxTheme *Get() { return ms_theme; }
+
     virtual wxRenderer *GetRenderer() = 0;
     virtual wxInputHandler *GetInputHandler() = 0;
     virtual wxColourScheme *GetColourScheme() = 0;
+
+    virtual ~wxTheme();
+
+private:
+    // the current theme
+    static wxTheme *ms_theme;
 };
-
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-extern WXDLLEXPORT_DATA(wxTheme *) wxTheTheme;
 
 #endif // _WX_UNIX_THEME_H_
 
