@@ -513,6 +513,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
         }
     }
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
+    (void)convertEncoding; // get rid of warnings about unused parameter
 }
 
 wxString wxMsgCatalogFile::GetCharset() const
