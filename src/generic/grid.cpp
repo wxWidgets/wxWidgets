@@ -753,7 +753,6 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
     }
 }
 
-// DJC MAPTEK
 // return the value in the text control
 wxString wxGridCellTextEditor::GetValue() const
 {
@@ -961,7 +960,6 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
     }
 }
 
-// DJC MAPTEK
 // return the value in the spin control if it is there (the text control otherwise)
 wxString wxGridCellNumberEditor::GetValue() const
 {
@@ -1305,12 +1303,12 @@ bool wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent& event)
 
     return FALSE;
 }
-// DJC MAPTEK
+
 // return the value as "1" for true and the empty string for false
 wxString wxGridCellBoolEditor::GetValue() const
 {
   bool bSet = CBox()->GetValue();
-  return bSet ? "1" : wxEmptyString;
+  return bSet ? _T("1") : wxEmptyString;
 }
 
 #endif // wxUSE_CHECKBOX
@@ -1440,12 +1438,12 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
     }
 }
 
-// DJC MAPTEK
 // return the value in the text control
 wxString wxGridCellChoiceEditor::GetValue() const
 {
   return Combo()->GetValue();
 }
+
 #endif // wxUSE_COMBOBOX
 
 // ----------------------------------------------------------------------------
@@ -1523,7 +1521,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 {
     dc.SetBackgroundMode( wxSOLID );
 
-// DJC (MAPTEK) grey out fields if the grid is disabled
+    // grey out fields if the grid is disabled
     if( grid.IsEnabled() )
     {
       if ( isSelected )
@@ -1557,7 +1555,7 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
 
     // TODO some special colours for attr.IsReadOnly() case?
 
-    // DJC (MAPTEK) different coloured text when the grid is disabled
+    // different coloured text when the grid is disabled
     if( grid.IsEnabled() )
     {
       if ( isSelected )
@@ -3597,12 +3595,14 @@ BEGIN_EVENT_TABLE( wxGridWindow, wxWindow )
     EVT_ERASE_BACKGROUND( wxGridWindow::OnEraseBackground )
 END_EVENT_TABLE()
 
-// DJC (MAPTEK) 19-Jun-2001 use wxCLIP_CHILDREN as well
 wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxGridRowLabelWindow *rowLblWin,
                             wxGridColLabelWindow *colLblWin,
-                            wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxCLIP_CHILDREN, wxT("grid window") )
+                            wxWindowID id,
+                            const wxPoint &pos,
+                            const wxSize &size )
+            : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxCLIP_CHILDREN,
+                        wxT("grid window") )
 
 {
     m_owner = parent;
@@ -4052,8 +4052,6 @@ void wxGrid::CalcDimensions()
     int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth + 1 : 0;
     int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight + 1 : 0;
 
-// DJC (MAPTEK) 19-Jun-2001 account for editor since it could possibly
-// be larger than the cell
     // take into account editor if shown
     if( IsCellEditControlShown() )
     {
@@ -6190,12 +6188,13 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     if ( (event.KeyCode() == WXK_F2 && !event.HasModifiers())
                          || editor->IsAcceptedKey(event) )
                     {
-                        // DJC MAPTEK - ensure cell is visble
+                        // ensure cell is visble
                         MakeCellVisible(row, col);
                         EnableCellEditControl();
-                        // DJC MAPTEK - a problem can arise if the cell is not
-                        // completely visible (even after calling MakeCellVisible
-                        // the control is not created and calling StartingKey will
+
+                        // a problem can arise if the cell is not completely
+                        // visible (even after calling MakeCellVisible the
+                        // control is not created and calling StartingKey will
                         // crash the app
                         if( editor->IsCreated() && m_cellEditCtrlEnabled ) editor->StartingKey(event);
                     }
@@ -7389,11 +7388,11 @@ void wxGrid::ShowCellEditControl()
                     rect.SetRight(client_right-1);
             }
 
-// DJC (MAPTEK) 19-Feb-2001 do set size prior to showing the control
             editor->SetSize( rect );
             editor->Show( TRUE, attr );
-// DJC (MAPTEK) 19-Jun-2001 recalc dimensions in case we need to
-// expand the scrolled window to account for editor
+
+            // recalc dimensions in case we need to
+            // expand the scrolled window to account for editor
             CalcDimensions();
 
             editor->BeginEdit(row, col, this);
@@ -7717,7 +7716,6 @@ void wxGrid::MakeCellVisible( int row, int col )
         }
         else if ( right > cw )
         {
-            // DJC MAPTEK
             // position the view so that the cell is on the right
             int x0, y0;
             CalcUnscrolledPosition(0, 0, &x0, &y0);
@@ -9172,7 +9170,7 @@ void wxGrid::SetColSize( int col, int width )
         InitColWidths();
     }
 
-    // DJC MAPTEK if < 0 calc new width from label
+    // if < 0 calc new width from label
     if( width < 0 )
     {
       long w, h;
