@@ -79,20 +79,23 @@ load using for example {\tt wxXmlResource::Get()->LoadDialog(\&dlg, this, "dlg1"
 to a suitable integer identifier, for example {\tt EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)}.
 \end{itemize}
 
-To create an XRC file, use one of the following methods.
+To create an XRC file, you can use one of the following methods.
 
 \begin{itemize}\itemsep=0pt
 \item Create the file by hand;
 \item use \urlref{wxDesigner}{http://www.roebling.de}, a commercial dialog designer/RAD tool;
-\item use \urlref{XRCed}{http://www.mema.ucl.ac.be/~rolinsky/xrced/}, a wxPython-based
+\item use \urlref{DialogBlocks}{http://www.anthemion.co.uk/dialogblocks}, a commercial dialog editor;
+\item use \urlref{XRCed}{http://xrced.sf.net}, a wxPython-based
 dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWindows
 CVS archive;
-\item use \urlref{wxWorkshop}{http://wxworkshop.sourceforge.net} (under development);
+\item use \urlref{Glade}{http://wxglade.sf.net}, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
 \item use wxrcedit ({\tt utils/contrib/wxrcedit}) (under development);
 \item convert WIN32 RC files to XRC with the tool in {\tt contrib/utils/convertrc}.
 \end{itemize}
 
-It is highly recommended that you use a tool such as wxDesigner, since it's fiddly writing
+A complete list of third-party tools that write to XRC can be found at \urlref{www.wxwindows.org/lnk_tool.htm}{http://www.wxwindows.org/lnk_tool.in}.
+
+It is highly recommended that you use a resource editing tool, since it's fiddly writing
 XRC files by hand.
 
 You can use \helpref{wxXmlResource::Load}{wxxmlresourceload} in a number of ways.
