@@ -51,22 +51,107 @@ enum
 // classes
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLCanvas: public wxScrolledWindow
+
+class WXDLLEXPORT wxGLContext: public wxObject
 {
-DECLARE_CLASS(wxGLCanvas)
 public:
-    GLXContext glx_cx;
-
-    inline wxGLCanvas() { glx_cx = 0; }
-
-    wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette);
-    ~wxGLCanvas(void);
+    wxGLContext( bool isRGB, wxWindow *win, 
+                 const wxPalette& palette = wxNullPalette );
+    wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, 
+                 const wxPalette& WXUNUSED(palette),
+                 const wxGLContext *other  /* for sharing display lists */
+               );
+    ~wxGLContext();
 
     void SetCurrent();
+    void SetColour(const char *colour);
     void SwapBuffers();
-    void SetColour(const char *col);
+
+    void SetupPixelFormat();
+    void SetupPalette(const wxPalette& palette);
+    wxPalette CreateDefaultPalette();
+
+    inline wxPalette* GetPalette() const { return (wxPalette*) & m_palette; }
+    inline wxWindow* GetWindow() const { return m_window; }
+    // inline GtkWidget* GetWidget() const { return m_widget; }
+    inline GLXContext GetContext() const { return m_glContext; }
+
+public:
+   GLXContext       m_glContext;
+
+   // GtkWidget       *m_widget;
+   wxPalette        m_palette;
+   wxWindow*        m_window;
+   
+    DECLARE_CLASS(wxGLContext)
+};
+
+
+class WXDLLEXPORT wxGLCanvas: public wxScrolledWindow
+{
+public:
+   inline wxGLCanvas() {
+      m_glContext = (wxGLContext*) NULL;
+      m_sharedContext = (wxGLContext*) NULL;
+      // m_glWidget = (GtkWidget*) NULL;
+      m_vi = (void*) NULL;
+      // m_exposed = FALSE;
+   }
+   wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
+   wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+        wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
+   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL,
+        wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
+
+   bool Create( wxWindow *parent, 
+	const wxGLContext *shared = (wxGLContext*)NULL,
+	const wxGLCanvas *shared_context_of = (wxGLCanvas*)NULL,
+        wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+	long style = 0, const wxString& name = "GLCanvas", 
+	int *attribList = (int*) NULL,
+	const wxPalette& palette = wxNullPalette );
+	
+   ~wxGLCanvas();
+
+   void SetCurrent();
+   void SetColour(const char *colour);
+   void SwapBuffers();
+
+   // void OnSize(wxSizeEvent& event);
+   
+   // void OnInternalIdle();
+
+   inline wxGLContext* GetContext() const { return m_glContext; } 
+
+ // implementation
+  
+    wxGLContext      *m_glContext,
+                     *m_sharedContext;
+    wxGLCanvas       *m_sharedContextOf;
+    void             *m_vi;
+    // GtkWidget        *m_glWidget;
+    // bool              m_exposed;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxGLCanvas)
+
 };
 
 #endif
