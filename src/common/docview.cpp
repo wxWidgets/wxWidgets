@@ -1154,7 +1154,11 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 // template extension.
 
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
+#ifdef __WXMSW__
                                                 int noTemplates,
+#else
+                                                int WXUNUSED(noTemplates),
+#endif
                                                 wxString& path,
                                                 long WXUNUSED(flags),
                                                 bool WXUNUSED(save))

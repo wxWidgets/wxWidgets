@@ -424,7 +424,7 @@ public:
     virtual void Clear() = 0;
 
         // adjust DC for drawing on this window
-    virtual void PrepareDC( wxDC &dc ) { }
+    virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 
         // the update region of the window contains the areas which must be
         // repainted by the program
