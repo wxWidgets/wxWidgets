@@ -15,8 +15,8 @@ tree controls on Unix, they are emulated.
 A detailed 1100-page reference manual is supplied in HTML, PDF and
 Windows Help form: see the docs hierarchy.
 
-For a quick start, point your Web browser at docs/html/index.htm for a list of
-important documents and samples.
+For a quick start, point your Web browser at docs/html/index.htm for a
+list of important documents and samples.
 
 Changes in this release
 -----------------------
@@ -109,11 +109,12 @@ wxWindows for Windows distribution
 As well as the core source, the Windows setup contains:
 
 - Windows Help versions of the documentation (docs/winhelp);
-- wxGLCanvas (OpenGL integration, in utils/glcanvas);
-- OGL 3 (Object Graphics Library, in utils/ogl);
-- wxTreeLayout (for tree drawing, in utils/wxtree);
+- OGL 3 (Object Graphics Library, in contrib/src/ogl);
 - a Dialog Editor binary;
-- the JPEG library.
+- a Tex2RTF binary;
+- Life! sample binary;
+- the JPEG library source;
+- the TIFF library source.
 
 setup.exe               Setup file (Windows 95/98, NT)
 setup.*                 Other setup files

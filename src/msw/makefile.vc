@@ -27,6 +27,8 @@ LIBTARGET=$(WXLIB)
 DUMMYOBJ=$D\dummy.obj
 !endif
 
+USE_GLCANVAS=1
+
 # Please set these according to the settings in setup.h, so we can include
 # the appropriate libraries in wx.lib
 

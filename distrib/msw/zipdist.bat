@@ -89,7 +89,7 @@ zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
 rem Dialog Editor source and binary
 erase %dest\dialoged_source.zip
 zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
-zip32 -j %dest\dialoged.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\bin\dialoged.hlp %src\bin\dialoged.cnt
+zip32 -j %dest\dialoged.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
 erase %dest\dialoged_source.zip
 
 rem Misc. utils not in the main distribution
@@ -143,6 +143,7 @@ erase /Y contrib\docs\winhelp\mmedia.*
 erase /Y contrib\docs\winhelp\stc.*
 erase /Y contrib\docs\pdf\*.*
 deltree /Y contrib\docs\latex\ogl
+erase /Y src\mingegcs.bat
 
 rem Now copy some binary files to 'bin'
 if not isdir bin mkdir bin

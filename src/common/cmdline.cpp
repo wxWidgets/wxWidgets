@@ -348,14 +348,12 @@ void wxCmdLineParser::AddParam(const wxString& desc,
         wxCmdLineParam& param = m_data->m_paramDesc.Last();
 
         wxASSERT_MSG( !(param.flags & wxCMD_LINE_PARAM_MULTIPLE),
-                      _T("all parameters after the one with "
-                         "wxCMD_LINE_PARAM_MULTIPLE style will be ignored") );
+                      _T("all parameters after the one with wxCMD_LINE_PARAM_MULTIPLE style will be ignored") );
 
         if ( !(flags & wxCMD_LINE_PARAM_OPTIONAL) )
         {
             wxASSERT_MSG( !(param.flags & wxCMD_LINE_PARAM_OPTIONAL),
-                          _T("a required parameter can't follow an "
-                             "optional one") );
+                          _T("a required parameter can't follow an optional one") );
         }
     }
 #endif // Debug
@@ -589,8 +587,7 @@ int wxCmdLineParser::Parse()
 
                     if ( *p++ != _T('=') )
                     {
-                        wxLogError(_("Option '%s' requires a value, '=' "
-                                     "expected."), name.c_str());
+                        wxLogError(_("Option '%s' requires a value, '=' expected."), name.c_str());
 
                         ok = FALSE;
                     }
@@ -649,9 +646,7 @@ int wxCmdLineParser::Parse()
                                 }
                                 else
                                 {
-                                    wxLogError(_("'%s' is not a correct "
-                                                 "numeric value for option "
-                                                 "'%s'."),
+                                    wxLogError(_("'%s' is not a correct numeric value for option '%s'."),
                                                value.c_str(), name.c_str());
 
                                     ok = FALSE;
@@ -665,8 +660,7 @@ int wxCmdLineParser::Parse()
                                 const wxChar *res = dt.ParseDate(value);
                                 if ( !res || *res )
                                 {
-                                    wxLogError(_("Option '%s': '%s' cannot "
-                                                  "be converted to a date."),
+                                    wxLogError(_("Option '%s': '%s' cannot be converted to a date."),
                                                name.c_str(), value.c_str());
 
                                     ok = FALSE;
@@ -699,9 +693,7 @@ int wxCmdLineParser::Parse()
                 else
                 {
                     wxASSERT_MSG( currentParam == countParam - 1,
-                                  _T("all parameters after the one with "
-                                     "wxCMD_LINE_PARAM_MULTIPLE style "
-                                     "are ignored") );
+                                  _T("all parameters after the one with wxCMD_LINE_PARAM_MULTIPLE style are ignored") );
 
                     // remember that we did have this last repeatable parameter
                     hadRepeatableParam = TRUE;
