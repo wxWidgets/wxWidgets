@@ -990,7 +990,13 @@ void wxWindow::OnIdle(wxIdleEvent& event)
                 state |= MK_SHIFT;
             if ( wxIsCtrlDown() )
                 state |= MK_CONTROL;
-
+            if ( GetKeyState( VK_LBUTTON ) )
+                state |= MK_LBUTTON;
+            if ( GetKeyState( VK_MBUTTON ) )
+                state |= MK_MBUTTON;
+            if ( GetKeyState( VK_RBUTTON ) )
+                state |= MK_RBUTTON;
+  
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, pt.x, pt.y, state);
 
