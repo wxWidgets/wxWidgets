@@ -27,7 +27,7 @@
     #define wxUSE_CONFIG_NATIVE 1
 #endif
 
-#if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE))
+#if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
 #include "wx/app.h"
 #include "wx/file.h"
