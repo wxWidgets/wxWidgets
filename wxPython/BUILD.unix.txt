@@ -239,7 +239,7 @@ D. To build and install wxPython you simply need to execute the
 	 python setup.py build
    	 python setup.py install
 
-E. At this point you should be able to change into the wxPython\demo
+E. At this point you should be able to change into the wxPython/demo
    directory and run the demo:
 
 	 python demo.py
