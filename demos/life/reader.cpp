@@ -62,7 +62,7 @@ LifeReader::LifeReader(wxInputStream& is)
     line = text_is.ReadLine();
     while (buff_is.IsOk() && line.StartsWith(wxT("#D"), &rest))
     {
-        m_description += rest.Trim(FALSE);
+        m_description += rest.Trim(false);
         m_description += wxT("\n");
         line = text_is.ReadLine();
     }

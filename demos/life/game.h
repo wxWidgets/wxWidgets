@@ -106,7 +106,7 @@ public:
     inline wxString GetRules() const       { return m_rules; };
     inline wxString GetDescription() const { return m_description; };
     bool IsAlive(wxInt32 x, wxInt32 y);
-    void SetCell(wxInt32 x, wxInt32 y, bool alive = TRUE);
+    void SetCell(wxInt32 x, wxInt32 y, bool alive = true);
     void SetPattern(const LifePattern &pattern);
 
     // game control
@@ -123,7 +123,7 @@ public:
     // The following functions find cells within a given viewport; either
     // all alive cells, or only those cells which have changed since last
     // generation. You first call BeginFind() to specify the viewport,
-    // then keep calling FindMore() until it returns TRUE.
+    // then keep calling FindMore() until it returns true.
     //
     // BeginFind:
     //  Specify the viewport and whether to look for alive cells or for
@@ -135,7 +135,7 @@ public:
     //  Fills an array with cells that match the specification given with
     //  BeginFind(). The array itself belongs to the Life object and must
     //  not be modified or freed by the caller. If this function returns
-    //  FALSE, then the operation is not complete: just process all cells
+    //  false, then the operation is not complete: just process all cells
     //  and call FillMore() again.
     //
     void BeginFind(wxInt32 x0, wxInt32 y0,
@@ -146,7 +146,7 @@ public:
 private:
     // cellbox-related
     LifeCellBox *CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv);
-    LifeCellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = TRUE);
+    LifeCellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = true);
     void KillBox(LifeCellBox *c);
 
     // helper for BeginFind & FindMore

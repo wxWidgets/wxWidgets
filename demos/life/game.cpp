@@ -81,8 +81,8 @@ bool LifeCellBox::IsAlive(int dx, int dy) const
 }
 
 // SetCell:
-//  Sets cell dx, dy in this box to 'alive', returns TRUE if
-//  the previous value was different, FALSE if it was the same.
+//  Sets cell dx, dy in this box to 'alive', returns true if
+//  the previous value was different, false if it was the same.
 //
 bool LifeCellBox::SetCell(int dx, int dy, bool alive)
 {
@@ -96,10 +96,10 @@ bool LifeCellBox::SetCell(int dx, int dy, bool alive)
        // reset this here to avoid updating problems
        m_dead = 0;
 
-       return TRUE;
+       return true;
     }
     else
-       return FALSE;
+       return false;
 }
 
 
@@ -129,8 +129,8 @@ Life::Life()
     // state vars for BeginFind & FindMore
     m_cells       = new LifeCell[ARRAYSIZE];
     m_ncells      = 0;
-    m_findmore    = FALSE;
-    m_changed     = FALSE;
+    m_findmore    = false;
+    m_changed     = false;
 }
 
 Life::~Life()
@@ -188,7 +188,7 @@ void Life::Clear()
 //
 bool Life::IsAlive(wxInt32 x, wxInt32 y)
 {
-    LifeCellBox *c = LinkBox(x, y, FALSE);
+    LifeCellBox *c = LinkBox(x, y, false);
 
     return (c && c->IsAlive( x - c->m_x, y - c->m_y ));
 }
@@ -320,7 +320,7 @@ LifeCellBox* Life::LinkBox(wxInt32 x, wxInt32 y, bool create)
     for (c = m_boxes[hv]; c; c = c->m_hnext)
         if ((c->m_x == x) && (c->m_y == y)) return c;
 
-    // if not found, and (create == TRUE), create a new one
+    // if not found, and (create == true), create a new one
     return create? CreateBox(x, y, hv) : (LifeCellBox*) NULL;
 }
 
@@ -393,7 +393,7 @@ LifeCell Life::FindCenter()
 LifeCell Life::FindNorth()
 {
     wxInt32 x = 0, y = 0;
-    bool first = TRUE;
+    bool first = true;
 
     LifeCellBox *c;
     for (c = m_head; c; c = c->m_next)
@@ -401,7 +401,7 @@ LifeCell Life::FindNorth()
         {
             x = c->m_x;
             y = c->m_y;
-            first = FALSE;
+            first = false;
         }
     
     LifeCell cell;
@@ -413,7 +413,7 @@ LifeCell Life::FindNorth()
 LifeCell Life::FindSouth()
 {
     wxInt32 x = 0, y = 0;
-    bool first = TRUE;
+    bool first = true;
 
     LifeCellBox *c;
     for (c = m_head; c; c = c->m_next)
@@ -421,7 +421,7 @@ LifeCell Life::FindSouth()
         {
             x = c->m_x;
             y = c->m_y;
-            first = FALSE;
+            first = false;
         }
     
     LifeCell cell;
@@ -433,7 +433,7 @@ LifeCell Life::FindSouth()
 LifeCell Life::FindWest()
 {
     wxInt32 x = 0, y = 0;
-    bool first = TRUE;
+    bool first = true;
 
     LifeCellBox *c;
     for (c = m_head; c; c = c->m_next)
@@ -441,7 +441,7 @@ LifeCell Life::FindWest()
         {
             x = c->m_x;
             y = c->m_y;
-            first = FALSE;
+            first = false;
         }
     
     LifeCell cell;
@@ -453,7 +453,7 @@ LifeCell Life::FindWest()
 LifeCell Life::FindEast()
 {
     wxInt32 x = 0, y = 0;
-    bool first = TRUE;
+    bool first = true;
 
     LifeCellBox *c;
     for (c = m_head; c; c = c->m_next)
@@ -461,7 +461,7 @@ LifeCell Life::FindEast()
         {
             x = c->m_x;
             y = c->m_y;
-            first = FALSE;
+            first = false;
         }
     
     LifeCell cell;
@@ -509,7 +509,7 @@ void Life::BeginFind(wxInt32 x0, wxInt32 y0, wxInt32 x1, wxInt32 y1, bool change
     m_x1 = (x1 + 7) & 0xfffffff8;
     m_y1 = (y1 + 7) & 0xfffffff8;
 
-    m_findmore = TRUE;
+    m_findmore = true;
     m_changed = changed;
 }
 
@@ -524,14 +524,14 @@ bool Life::FindMore(LifeCell *cells[], size_t *ncells)
         for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
             for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_x, m_y, FALSE)) == NULL)
+                if ((c = LinkBox(m_x, m_y, false)) == NULL)
                     continue;
 
                 // check whether there is enough space left in the array
                 if (m_ncells > (ARRAYSIZE - 64))
                 {
                     *ncells = m_ncells;
-                    return FALSE;
+                    return false;
                 }
 
                 DoLine(m_x, m_y    , c->m_live1,       c->m_old1      );
@@ -549,14 +549,14 @@ bool Life::FindMore(LifeCell *cells[], size_t *ncells)
         for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
             for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_x, m_y, FALSE)) == NULL)
+                if ((c = LinkBox(m_x, m_y, false)) == NULL)
                     continue;
 
                 // check whether there is enough space left in the array
                 if (m_ncells > (ARRAYSIZE - 64))
                 {
                     *ncells = m_ncells;
-                    return FALSE;
+                    return false;
                 }
 
                 DoLine(m_x, m_y    , c->m_live1      );
@@ -571,8 +571,8 @@ bool Life::FindMore(LifeCell *cells[], size_t *ncells)
     }
 
     *ncells = m_ncells;
-    m_findmore = FALSE;
-    return TRUE;
+    m_findmore = false;
+    return true;
 }
 
 // --------------------------------------------------------------------------
@@ -590,7 +590,7 @@ bool Life::NextTic()
 {
     LifeCellBox  *c, *up, *dn, *lf, *rt;
     wxUint32 t1, t2, t3, t4;
-    bool     changed = FALSE;
+    bool     changed = false;
 
     m_numcells = 0;
 
@@ -942,7 +942,7 @@ bool LifeModule::OnInit()
     // see below
     g_tab = new unsigned char [0xfffff];
 
-    if (!g_tab) return FALSE;
+    if (!g_tab) return false;
 
     for (wxUint32 i = 0; i < 0xfffff; i++)
     {
@@ -964,7 +964,7 @@ bool LifeModule::OnInit()
         g_tab[i] = (unsigned char) live;
     }
 
-    return TRUE;
+    return true;
 }
 
 void LifeModule::OnExit()
