@@ -89,6 +89,8 @@ versions, please update your code to not use them.
                      wxHashTable::compatibility_iterator to store the return
                      value
 - wxWave class; use wxSound instead
+- The wxHIDE_READONLY flag for wxFileDialog was not implemented
+  and has now been removed
 
 
 OTHER CHANGES
