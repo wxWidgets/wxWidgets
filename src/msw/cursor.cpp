@@ -368,7 +368,7 @@ wxCursor::wxCursor(const wxString& filename,
         m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
 
 #if WXWIN_COMPATIBILITY_2
-        refData->SetOk();
+        ((wxCursorRefData *)m_refData)->SetOk();
 #endif // WXWIN_COMPATIBILITY_2
     }
 }
