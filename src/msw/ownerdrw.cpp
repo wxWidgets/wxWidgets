@@ -35,6 +35,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 #include "wx/fontutil.h"
+#include "wx/module.h"
 
 #if wxUSE_OWNER_DRAWN
 
