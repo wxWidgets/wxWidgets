@@ -314,7 +314,7 @@ public:
     // from multibyte string
     // (NB: nLength is right now number of Unicode characters, not
     //  characters in psz! So try not to use it yet!)
-  wxString(const char *psz, wxMBConv& conv = wxConvLibc, size_t nLength = wxSTRING_MAXLEN);
+  wxString(const char *psz, wxMBConv& conv, size_t nLength = wxSTRING_MAXLEN);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
