@@ -2291,12 +2291,12 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            /  the correct way would be to map the character names
            /  like 'adieresis' to corresp. positions of ISOEnc and read
            /  these values from AFM files, too. Maybe later ... */
-        lastWidths[196] = lastWidths['A'];  // Ä
-        lastWidths[228] = lastWidths['a'];  // ä
-        lastWidths[214] = lastWidths['O'];  // Ö
-        lastWidths[246] = lastWidths['o'];  // ö
-        lastWidths[220] = lastWidths['U'];  // Ü
-        lastWidths[252] = lastWidths['u'];  // ü
+        lastWidths[196] = lastWidths[(int)'A'];  // Ä
+        lastWidths[228] = lastWidths[(int)'a'];  // ä
+        lastWidths[214] = lastWidths[(int)'O'];  // Ö
+        lastWidths[246] = lastWidths[(int)'o'];  // ö
+        lastWidths[220] = lastWidths[(int)'U'];  // Ü
+        lastWidths[252] = lastWidths[(int)'u'];  // ü
         lastWidths[223] = lastWidths[251];  // ß
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
@@ -2323,7 +2323,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%c' (%d)"), *p,*p);
-            sum += lastWidths[' ']; /* assume space */
+            sum += lastWidths[(int)' ']; /* assume space */
         }
         else
         {
