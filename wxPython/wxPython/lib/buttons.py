@@ -28,6 +28,8 @@ wxGenBitmapToggleButton the same but with bitmaps.
 """
 
 from wxPython.wx import *
+import imageutils
+
 
 #----------------------------------------------------------------------
 
@@ -344,10 +346,10 @@ class wxGenBitmapButton(wxGenButton):
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0, validator = wxDefaultValidator,
                  name = "genbutton"):
-        self.bmpLabel = bitmap
         self.bmpDisabled = None
         self.bmpFocus = None
         self.bmpSelected = None
+        self.SetBitmapLabel(bitmap)
         wxGenButton.__init__(self, parent, ID, "", pos, size, style, validator, name)
 
 
@@ -374,9 +376,19 @@ class wxGenBitmapButton(wxGenButton):
         """Set bitmap to display when the button is selected (pressed down)"""
         self.bmpSelected = bitmap
 
-    def SetBitmapLabel(self, bitmap):
-        """Set the bitmap to display normally.  This is the only one that is required."""
+    def SetBitmapLabel(self, bitmap, createOthers=true):
+        """
+        Set the bitmap to display normally.
+        This is the only one that is required. If
+        createOthers is true, then the other bitmaps
+        will be generated on the fly.  Currently,
+        only the disabled bitmap is generated.
+        """
         self.bmpLabel = bitmap
+        if bitmap is not None and createOthers:
+            image = wxImageFromBitmap(bitmap)
+            imageutils.grayOut(image)
+            self.SetBitmapDisabled(wxBitmapFromImage(image))
 
 
     def _GetLabelSize(self):
@@ -457,10 +469,10 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
 
         pos_x = (width-bw-tw)/2+dw      # adjust for bitmap and text to centre
         if bmp !=None:
-            dc.DrawBitmap(bmp, pos_x, (height-bh)/2+dy, hasMask)        # draw bitmap if available
+            dc.DrawBitmap(bmp, pos_x, (height-bh)/2+dy, hasMask) # draw bitmap if available
             pos_x = pos_x + 2   # extra spacing from bitmap
 
-        dc.DrawText(label, pos_x + dw+bw, (height-th)/2+dy)             # draw the text
+        dc.DrawText(label, pos_x + dw+bw, (height-th)/2+dy)      # draw the text
 
 
 #----------------------------------------------------------------------
