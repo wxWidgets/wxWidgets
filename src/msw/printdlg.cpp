@@ -474,11 +474,11 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         }
         devMode->dmPrintQuality = quality;
         devMode->dmFields |= DM_PRINTQUALITY;
-        
+
         if (data.GetPrivDataLen() > 0)
         {
             memcpy( (char *)devMode+devMode->dmSize, data.GetPrivData(), data.GetPrivDataLen() );
-            devMode->dmDriverExtra = data.GetPrivDataLen();
+            devMode->dmDriverExtra = (WXWORD)data.GetPrivDataLen();
         }
 
         if (data.GetBin() != wxPRINTBIN_DEFAULT)
