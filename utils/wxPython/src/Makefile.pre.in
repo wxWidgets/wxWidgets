@@ -380,3 +380,7 @@ wxInstall :	sharedmods $(PYMODULES)
 	python -O $(LIBDEST)/compileall.py -l $(TARGETDIR)
 
 
+lib : libwxPython.a
+
+libwxPython.a : lib.a
+	cp $< $@
