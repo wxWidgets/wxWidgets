@@ -55,9 +55,12 @@ public:
     inline wxPen(const wxPen& rPen) { Ref(rPen); }
     ~wxPen();
 
-    inline wxPen& operator =  (const wxPen& rPen) { if (*this == rPen) return (*this); Ref(rPen); return *this; }
-    inline bool   operator == (const wxPen& rPen) { return m_refData == rPen.m_refData; }
-    inline bool   operator != (const wxPen& rPen) { return m_refData != rPen.m_refData; }
+    inline wxPen& operator =  (const wxPen& rPen)
+        { if (*this == rPen) return (*this); Ref(rPen); return *this; }
+    inline bool   operator == (const wxPen& rPen) const
+        { return m_refData == rPen.m_refData; }
+    inline bool   operator != (const wxPen& rPen) const
+        { return m_refData != rPen.m_refData; }
 
     virtual bool Ok(void) const { return (m_refData != NULL); }
 

@@ -74,9 +74,12 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
   void SetWindowsMappingMode(int mm);
 
   // Operators
-  inline wxMetafile& operator = (const wxMetafile& metafile) { if (*this == metafile) return (*this); Ref(metafile); return *this; }
-  inline bool operator == (const wxMetafile& metafile) { return m_refData == metafile.m_refData; }
-  inline bool operator != (const wxMetafile& metafile) { return m_refData != metafile.m_refData; }
+  inline wxMetafile& operator = (const wxMetafile& metafile)
+      { if (*this == metafile) return (*this); Ref(metafile); return *this; }
+  inline bool operator== (const wxMetafile& metafile) const
+      { return m_refData == metafile.m_refData; }
+  inline bool operator!= (const wxMetafile& metafile) const
+      { return m_refData != metafile.m_refData; }
 
 protected:
 };

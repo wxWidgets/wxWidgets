@@ -63,8 +63,10 @@ public:
     virtual bool Ok(void) const { return (m_refData != NULL) ; }
 
     inline wxPalette& operator = (const wxPalette& rPalette) { if (*this == rPalette) return (*this); Ref(rPalette); return *this; }
-    inline bool       operator == (const wxPalette& rPalette) { return m_refData == rPalette.m_refData; }
-    inline bool       operator != (const wxPalette& rPalette) { return m_refData != rPalette.m_refData; }
+    inline bool       operator == (const wxPalette& rPalette) const
+        { return m_refData == rPalette.m_refData; }
+    inline bool       operator != (const wxPalette& rPalette) const
+        { return m_refData != rPalette.m_refData; }
 
     virtual bool FreeResource(bool bForce = FALSE);
 
