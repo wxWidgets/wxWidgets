@@ -166,7 +166,7 @@ void wxDestroyMGL_WM()
 static void wxWindowPainter(window_t *wnd, MGLDC *dc)
 {
     wxWindowMGL *w = (wxWindow*) wnd->userData;
-    if (w)
+    if (w && !(w->GetStyle() & wxTRANSPARENT_WINDOW))
     {
         MGLDevCtx ctx(dc);
         w->HandlePaint(&ctx);
@@ -396,7 +396,6 @@ static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
     event.m_scanCode = 0; // not used by wx at all
     event.m_x = where.x;
     event.m_y = where.y;
-    wxLogDebug("key pressed, x=%i y=%i", event.m_x, event.m_y); // FIXME_MGL -remove
     event.m_shiftDown = e->modifiers & EVT_SHIFTKEY;
     event.m_controlDown = e->modifiers & EVT_CTRLSTATE;
     event.m_altDown = e->modifiers & EVT_LEFTALT;
@@ -537,11 +536,18 @@ bool wxWindowMGL::Create(wxWindow *parent,
         y = 0; // FIXME_MGL, something better, see GTK+
     w = WidthDefault(size.x);
     h = HeightDefault(size.y);
+    
+    long mgl_style = 0;
+    if ( !(style & wxNO_FULL_REPAINT_ON_RESIZE) )
+        mgl_style |= MGL_WM_FULL_REPAINT_ON_RESIZE;
+    if ( style & wxSTAY_ON_TOP )
+        mgl_style |= MGL_WM_ALWAYS_ON_TOP;
 
     m_wnd = MGL_wmCreateWindow(g_winMng,
                                parent ? parent->GetHandle() : NULL,
                                x, y, w, h);
 
+    MGL_wmSetWindowFlags(m_wnd, mgl_style);
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
     MGL_wmSetWindowPainter(m_wnd, wxWindowPainter);
     MGL_wmShowWindow(m_wnd, m_isShown);
@@ -675,8 +681,6 @@ bool wxWindowMGL::SetCursor(const wxCursor& cursor)
         MGL_wmSetWindowCursor(m_wnd, *m_cursor.GetMGLCursor());
     else
         MGL_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetMGLCursor());
-    
-    // FIXME_MGL -- should it set children's cursor or not?!
 
     return TRUE;
 }

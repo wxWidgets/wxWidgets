@@ -74,8 +74,6 @@ bool wxYield()
         while (wxEventLoop::GetActive()->Pending())
             wxEventLoop::GetActive()->Dispatch();
     }
-    else
-        MGL_wmUpdateDC(g_winMng); // FIXME_MGL -- temporary hack, please remove
         
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
@@ -209,12 +207,8 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
     win->GetEventHandler()->ProcessEvent(event);
 
-#if 0 // FIXME_MGL - what the hell it is?
-    win->OnInternalIdle();
-
     if ( event.MoreRequested() )
         needMore = TRUE;
-#endif
 
     wxNode* node = win->GetChildren().First();
     while (node)
