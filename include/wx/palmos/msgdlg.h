@@ -25,13 +25,12 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxMessageBoxCaptionStr;
 
-class WXDLLEXPORT wxMessageDialog: public wxDialog
+class WXDLLEXPORT wxMessageDialog: public wxDialog, public wxMessageDialogBase
 {
 DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 protected:
     wxString    m_caption;
     wxString    m_message;
-    long        m_dialogStyle;
     wxWindow *  m_parent;
 public:
     wxMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption = wxMessageBoxCaptionStr,

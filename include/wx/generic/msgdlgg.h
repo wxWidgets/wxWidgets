@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlgg.h
+// Name:        wx/generic/msgdlgg.h
 // Purpose:     Generic wxMessageDialog
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c)
+// Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +24,7 @@
 
 extern WXDLLEXPORT_DATA(const wxChar*) wxMessageBoxCaptionStr;
 
-class WXDLLEXPORT wxGenericMessageDialog: public wxDialog
+class WXDLLEXPORT wxGenericMessageDialog: public wxDialog, public wxMessageDialogBase
 {
 DECLARE_DYNAMIC_CLASS(wxGenericMessageDialog)
 
@@ -38,8 +38,6 @@ public:
     void OnCancel(wxCommandEvent& event);
 
 private:
-    long m_dialogStyle;
-
     DECLARE_EVENT_TABLE()
 };
 

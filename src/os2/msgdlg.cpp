@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlg.cpp
+// Name:        src/os2/msgdlg.cpp
 // Purpose:     wxMessageDialog
 // Author:      David Webster
 // Modified by:
 // Created:     10/10/99
-// RCS-ID:      $$
+// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,8 +46,8 @@ wxMessageDialog::wxMessageDialog(
 {
     m_sCaption     = rsCaption;
     m_sMessage     = rsMessage;
-    m_lDialogStyle = lStyle;
     m_pParent      = NULL; // pParent;
+    SetMessageDialogStyle(lStyle);
 } // end of wxMessageDialog::wxMessageDialog
 
 int wxMessageDialog::ShowModal()
@@ -55,6 +55,7 @@ int wxMessageDialog::ShowModal()
     HWND                            hWnd = 0;
     ULONG                           ulStyle = MB_OK;
     int                             nAns = wxOK;
+    const long                      lStyle = GetMessageDialogStyle();
 
     if (!wxTheApp->GetTopWindow())
     {
@@ -72,31 +73,31 @@ int wxMessageDialog::ShowModal()
         hWnd = (HWND) m_pParent->GetHWND();
     else
         hWnd = HWND_DESKTOP;
-    if (m_lDialogStyle & wxYES_NO)
+    if (lStyle & wxYES_NO)
     {
-        if (m_lDialogStyle & wxCANCEL)
+        if (lStyle & wxCANCEL)
             ulStyle = MB_YESNOCANCEL;
         else
             ulStyle = MB_YESNO;
 
-        if (m_lDialogStyle & wxNO_DEFAULT)
+        if (lStyle & wxNO_DEFAULT)
             ulStyle |= MB_DEFBUTTON2;
     }
 
-    if (m_lDialogStyle & wxOK)
+    if (lStyle & wxOK)
     {
-        if (m_lDialogStyle & wxCANCEL)
+        if (lStyle & wxCANCEL)
             ulStyle = MB_OKCANCEL;
         else
             ulStyle = MB_OK;
     }
-    if (m_lDialogStyle & wxICON_EXCLAMATION)
+    if (lStyle & wxICON_EXCLAMATION)
         ulStyle |= MB_ICONEXCLAMATION;
-    else if (m_lDialogStyle & wxICON_HAND)
+    else if (lStyle & wxICON_HAND)
         ulStyle |= MB_ICONHAND;
-    else if (m_lDialogStyle & wxICON_INFORMATION)
+    else if (lStyle & wxICON_INFORMATION)
         ulStyle |= MB_ICONEXCLAMATION;
-    else if (m_lDialogStyle & wxICON_QUESTION)
+    else if (lStyle & wxICON_QUESTION)
         ulStyle |= MB_ICONQUESTION;
 
     if (hWnd != HWND_DESKTOP)

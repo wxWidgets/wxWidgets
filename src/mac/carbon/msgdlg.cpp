@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlg.cpp
+// Name:        src/mac/carbon/msgdlg.cpp
 // Purpose:     wxMessageDialog
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $$
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -29,53 +29,55 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message, cons
 {
     m_caption = caption;
     m_message = message;
-    m_dialogStyle = style;
     m_parent = parent;
+    SetMessageDialogStyle(style);
 }
 
 int wxMessageDialog::ShowModal()
 {
     int resultbutton = wxID_CANCEL ;
-    
+
     short result ;
-    
-    wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , wxT("this style is not supported on mac") ) ;
-    
+
+    const long style = GetMessageDialogStyle();
+
+    wxASSERT_MSG( ( style & 0x3F ) != wxYES , wxT("this style is not supported on mac") ) ;
+
     AlertType alertType = kAlertPlainAlert ;
-    if (m_dialogStyle & wxICON_EXCLAMATION)
+    if (style & wxICON_EXCLAMATION)
         alertType = kAlertNoteAlert ;
-    else if (m_dialogStyle & wxICON_HAND)
+    else if (style & wxICON_HAND)
         alertType = kAlertStopAlert ;
-    else if (m_dialogStyle & wxICON_INFORMATION)
+    else if (style & wxICON_INFORMATION)
         alertType = kAlertNoteAlert ;
-    else if (m_dialogStyle & wxICON_QUESTION)
+    else if (style & wxICON_QUESTION)
         alertType = kAlertCautionAlert ;
-    
+
 #if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 )
     {
         AlertStdCFStringAlertParamRec param ;
         wxMacCFStringHolder cfNoString(_("No") , m_font.GetEncoding()) ;
         wxMacCFStringHolder cfYesString( _("Yes") , m_font.GetEncoding()) ;
-        
+
         wxMacCFStringHolder cfTitle(m_caption , m_font.GetEncoding());
         wxMacCFStringHolder cfText(m_message , m_font.GetEncoding());
-                
+
         param.movable = true;
         param.flags = 0 ;
         param.version = kStdCFStringAlertVersionOne ;
-        
+
         bool skipDialog = false ;
-        
-        if (m_dialogStyle & wxYES_NO)
+
+        if (style & wxYES_NO)
         {
-            if (m_dialogStyle & wxCANCEL)
+            if (style & wxCANCEL)
             {
                 param.defaultText     = cfYesString ;
                 param.cancelText     = (CFStringRef) kAlertDefaultCancelText;
                 param.otherText     = cfNoString ;
                 param.helpButton     = false ;
-                param.defaultButton = m_dialogStyle & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
+                param.defaultButton = style & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
                 param.cancelButton     = kAlertStdAlertCancelButton;
             }
             else
@@ -84,14 +86,14 @@ int wxMessageDialog::ShowModal()
                 param.cancelText     = NULL;
                 param.otherText     = cfNoString ;
                 param.helpButton     = false ;
-                param.defaultButton = m_dialogStyle & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
+                param.defaultButton = style & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
                 param.cancelButton     = 0;
             }
         }
         // the msw implementation even shows an ok button if it is not specified, we'll do the same
-        else 
+        else
         {
-            if (m_dialogStyle & wxCANCEL)
+            if (style & wxCANCEL)
             {
                 // thats a cancel missing
                 param.defaultText     = (CFStringRef) kAlertDefaultOKText ;
@@ -117,7 +119,7 @@ int wxMessageDialog::ShowModal()
             skipDialog = true ;
         }
         */
-        
+
         param.position = kWindowDefaultPosition;
         if ( !skipDialog )
         {
@@ -125,29 +127,29 @@ int wxMessageDialog::ShowModal()
             CreateStandardAlert( alertType , cfTitle , cfText , &param , &alertRef ) ;
             RunStandardAlert( alertRef , NULL , &result ) ;
         }
-      	if ( skipDialog )
+        if ( skipDialog )
             return wxID_CANCEL ;
     }
     else
 #endif
     {
         AlertStdAlertParamRec    param;
-        
+
         Str255 yesPString ;
         Str255 noPString ;
-        
+
         Str255 pascalTitle ;
         Str255 pascalText ;
         wxMacStringToPascal( m_caption , pascalTitle ) ;
         wxMacStringToPascal( _("Yes") , yesPString ) ;
         wxMacStringToPascal(  _("No") , noPString ) ;
         wxMacStringToPascal( m_message , pascalText ) ;
-        
+
         param.movable         = true;
         param.filterProc     = NULL ;
-        if (m_dialogStyle & wxYES_NO)
+        if (style & wxYES_NO)
         {
-            if (m_dialogStyle & wxCANCEL)
+            if (style & wxCANCEL)
             {
                 param.defaultText     = yesPString ;
                 param.cancelText     = (StringPtr) kAlertDefaultCancelText;
@@ -166,9 +168,9 @@ int wxMessageDialog::ShowModal()
                 param.cancelButton     = 0;
             }
         }
-        else if (m_dialogStyle & wxOK)
+        else if (style & wxOK)
         {
-            if (m_dialogStyle & wxCANCEL)
+            if (style & wxCANCEL)
             {
                 param.defaultText     = (StringPtr) kAlertDefaultOKText ;
                 param.cancelText     = (StringPtr) kAlertDefaultCancelText ;
@@ -191,15 +193,15 @@ int wxMessageDialog::ShowModal()
         {
             return resultbutton ;
         }
-        
+
         param.position         = 0;
-        
+
         StandardAlert( alertType, pascalTitle, pascalText, &param, &result );
     }
-    
-    if (m_dialogStyle & wxOK)
+
+    if (style & wxOK)
     {
-        if (m_dialogStyle & wxCANCEL)                
+        if (style & wxCANCEL)
         {
             //TODO add Cancelbutton
             switch( result )
@@ -227,9 +229,9 @@ int wxMessageDialog::ShowModal()
             }
         }
     }
-    else if (m_dialogStyle & wxYES_NO)
+    else if (style & wxYES_NO)
     {
-        if (m_dialogStyle & wxCANCEL)
+        if (style & wxCANCEL)
         {
             switch( result )
             {
@@ -258,8 +260,8 @@ int wxMessageDialog::ShowModal()
                 break ;
             }
         }
-    } 
-    
+    }
+
     return resultbutton ;
 }
 

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlg.h
+// Name:        wx/os2/msgdlg.h
 // Purpose:     wxMessageDialog class. Use generic version if no
 //              platform-specific implementation.
 // Author:      David Webster
 // Modified by:
 // Created:     10/12/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
  * Message box dialog
  */
 
-class WXDLLEXPORT wxMessageDialog : public wxDialog
+class WXDLLEXPORT wxMessageDialog : public wxDialog, public wxMessageDialogBase
 {
 DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 public:
@@ -36,7 +36,6 @@ public:
 protected:
     wxString                        m_sCaption;
     wxString                        m_sMessage;
-    long                            m_lDialogStyle;
     wxWindow*                       m_pParent;
 }; // end of CLASS wxMessageDialog
 

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msgdlg.cpp
+// Name:        src/motif/msgdlg.cpp
 // Purpose:     wxMessageDialog
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $$
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -108,24 +108,26 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 {
     m_caption = caption;
     m_message = message;
-    m_dialogStyle = style;
     m_parent = parent;
+    SetMessageDialogStyle(style);
 }
 
 int wxMessageDialog::ShowModal()
 {
     Widget (*dialogCreateFunction)(Widget, String, ArgList, Cardinal) = NULL;
-    if ( m_dialogStyle & wxYES_NO )
+    const long style = GetMessageDialogStyle();
+
+    if ( style & wxYES_NO )
     {
         // if we have [Yes], it must be a question
         dialogCreateFunction = XmCreateQuestionDialog;
     }
-    else if ( m_dialogStyle & wxICON_STOP )
+    else if ( style & wxICON_STOP )
     {
         // error dialog is the one with error icon...
         dialogCreateFunction = XmCreateErrorDialog;
     }
-    else if ( m_dialogStyle & wxICON_EXCLAMATION )
+    else if ( style & wxICON_EXCLAMATION )
     {
         // ...and the warning dialog too
         dialogCreateFunction = XmCreateWarningDialog;
@@ -180,11 +182,11 @@ int wxMessageDialog::ShowModal()
     Widget wBtnHelp = XmMessageBoxGetChild(wMsgBox, XmDIALOG_HELP_BUTTON);
     Widget wBtnCancel = XmMessageBoxGetChild(wMsgBox, XmDIALOG_CANCEL_BUTTON);
 
-    if ( m_dialogStyle & wxYES_NO )
+    if ( style & wxYES_NO )
     {
-        wxXmString yes(_("Yes")), no(_("No")), cancel(_("Cancel"));            
+        wxXmString yes(_("Yes")), no(_("No")), cancel(_("Cancel"));
 
-        if ( m_dialogStyle & wxCANCEL )
+        if ( style & wxCANCEL )
         {
             // use the cancel button for No and the help button for
             // Cancel  Yuk :-)  MB
@@ -208,7 +210,7 @@ int wxMessageDialog::ShowModal()
         // requested)
         //
         XtUnmanageChild(wBtnHelp);
-        if ( !(m_dialogStyle & wxCANCEL ) ) XtUnmanageChild(wBtnCancel);
+        if ( !(style & wxCANCEL ) ) XtUnmanageChild(wBtnCancel);
     }
 
     // set the callbacks for the message box buttons
@@ -238,7 +240,7 @@ int wxMessageDialog::ShowModal()
     }
 
     // translate the result if necessary
-    if ( m_dialogStyle & wxYES_NO )
+    if ( style & wxYES_NO )
     {
         if ( m_result == wxID_OK )
             m_result = wxID_YES;

@@ -36,19 +36,10 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
 {
-#ifdef __WXDEBUG__
-    // check for common programming errors
-    if ( (style & wxID_OK) == wxID_OK )
-    {
-        // programmer probably confused wxID_OK with wxOK. Correct one is wxOK.
-        wxFAIL_MSG( _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?") );
-    }
-#endif // __WXDEBUG__
-
     m_caption = caption;
     m_message = message;
-    m_dialogStyle = style;
     m_parent = parent;
+    SetMessageDialogStyle(style);
 }
 
 int wxMessageDialog::ShowModal()
@@ -56,35 +47,36 @@ int wxMessageDialog::ShowModal()
     int AlertID=1000;
     int Result=0;
     int wxResult=wxID_OK;
+    const long style = GetMessageDialogStyle();
 
     // Handle to the currently running application database
     DmOpenRef    AppDB;
     SysGetModuleDatabase(SysGetRefNum(), NULL, &AppDB);
 
     // Translate wx styles into Palm OS styles
-    if (m_dialogStyle & wxYES_NO)
+    if (style & wxYES_NO)
     {
-        if (m_dialogStyle & wxCANCEL)
+        if (style & wxCANCEL)
             AlertID=1300; // Yes No Cancel
         else
             AlertID=1200; // Yes No
     }
-    if (m_dialogStyle & wxOK)
+    if (style & wxOK)
     {
-        if (m_dialogStyle & wxCANCEL)
+        if (style & wxCANCEL)
             AlertID=1100; // Ok Cancel
         else
             AlertID=1000; // Ok
     }
 
     // Add the icon styles
-    if (m_dialogStyle & wxICON_EXCLAMATION)
+    if (style & wxICON_EXCLAMATION)
         AlertID=AlertID+0; // Warning
-    else if (m_dialogStyle & wxICON_HAND)
+    else if (style & wxICON_HAND)
         AlertID=AlertID+1; // Error
-    else if (m_dialogStyle & wxICON_INFORMATION)
+    else if (style & wxICON_INFORMATION)
         AlertID=AlertID+2; // Information
-    else if (m_dialogStyle & wxICON_QUESTION)
+    else if (style & wxICON_QUESTION)
         AlertID=AlertID+3; // Confirmation
 
     // The Palm OS Dialog API does not support custom titles in a dialog box.

@@ -1,9 +1,43 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/msgdlgg.h
+// Purpose:     common header and base class for wxMessageDialog
+// Author:      wxWidgets Team
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWidgets
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_MSGDLG_H_BASE_
 #define _WX_MSGDLG_H_BASE_
 
 #include "wx/setup.h"
 
 #if wxUSE_MSGDLG
+
+class WXDLLEXPORT wxMessageDialogBase
+{
+protected:
+    // common validation of wxMessageDialog style
+    void SetMessageDialogStyle(long style)
+    {
+        wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || ((style & wxYES_NO) == 0),
+                      _T("wxYES and wxNO may only be used together in wxMessageDialog") );
+
+        wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
+                      _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?") );
+
+        m_dialogStyle = style;
+    }
+    inline long GetMessageDialogStyle() const
+    {
+        return m_dialogStyle;
+    }
+
+private:
+    long m_dialogStyle;
+};
 
 #if defined(__WXUNIVERSAL__) || defined(__WXGPE__)
 #include "wx/generic/msgdlgg.h"
@@ -30,10 +64,10 @@
 // ----------------------------------------------------------------------------
 
 int WXDLLEXPORT wxMessageBox(const wxString& message,
-                            const wxString& caption = wxMessageBoxCaptionStr,
-                            long style = wxOK | wxCENTRE,
-                            wxWindow *parent = NULL,
-                            int x = wxDefaultCoord, int y = wxDefaultCoord);
+                             const wxString& caption = wxMessageBoxCaptionStr,
+                             long style = wxOK | wxCENTRE,
+                             wxWindow *parent = NULL,
+                             int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 #endif // wxUSE_MSGDLG
 
