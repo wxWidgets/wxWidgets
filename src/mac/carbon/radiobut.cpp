@@ -84,6 +84,7 @@ void wxRadioButton::SetValue(bool val)
    				}
    			}
    		}
+   MacRedrawControl() ;
 }
 
 bool wxRadioButton::GetValue() const

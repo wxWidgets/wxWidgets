@@ -47,6 +47,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 void wxCheckBox::SetValue(bool val)
 {
    ::SetControlValue( m_macControl , val ) ;
+   MacRedrawControl() ;
 }
 
 bool wxCheckBox::GetValue() const
