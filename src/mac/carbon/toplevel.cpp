@@ -1373,6 +1373,31 @@ wxUint32 wxTopLevelWindowMac::MacGetWindowAttributes() const
     return attr ;
 }
 
+// Attracts the users attention to this window if the application is
+// inactive (should be called when a background event occurs)
+
+static pascal void wxMacNMResponse( NMRecPtr ptr )
+{
+    NMRemove( ptr ) ;
+    DisposePtr( (Ptr) ptr ) ;
+}
+
+
+void wxTopLevelWindowMac::RequestUserAttention(int flags )
+{
+    NMRecPtr notificationRequest = (NMRecPtr) NewPtr( sizeof( NMRec) ) ;
+    static wxMacNMUPP nmupp( wxMacNMResponse )
+     ;
+    memset( notificationRequest , 0 , sizeof(*notificationRequest) ) ;
+    notificationRequest->qType = nmType ;
+    notificationRequest->nmMark = 1 ;
+    notificationRequest->nmIcon = 0 ;
+    notificationRequest->nmSound = 0 ;
+    notificationRequest->nmStr = NULL ;
+    notificationRequest->nmResp = nmupp ;
+    verify_noerr( NMInstall( notificationRequest ) ) ;
+}
+
 // ---------------------------------------------------------------------------
 // Shape implementation
 // ---------------------------------------------------------------------------

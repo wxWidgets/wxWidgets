@@ -306,6 +306,30 @@ protected :
     bool     m_release ;
 } ;
 
+//
+// helper class for allocating and deallocating Universal Proc Ptrs
+//
+
+template <typename procType, typename uppType , uppType (*newUPP)(procType) , void (*disposeUPP)(uppType) > class wxMacUPP
+{
+public :
+    wxMacUPP( procType proc )
+    {
+        m_upp = NULL ;
+        m_upp = (*newUPP)( NULL ) ;
+    }
+    ~wxMacUPP()
+    {
+        if ( m_upp )
+            disposeUPP( m_upp ) ;
+    }
+    operator uppType() { return m_upp ; }
+private :
+    uppType m_upp ;
+} ;
+
+typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP ;
+
 #if wxUSE_GUI
 
 GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
