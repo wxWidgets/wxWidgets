@@ -1378,7 +1378,7 @@ if ( !dir.empty() )
 
 \func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
  \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
- \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
+ \param{const wxString\& }{wildcard = "*.*"}, \param{int }{flags = 0}, \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 Pops up a file selector box. In Windows, this is the common file selector
@@ -1749,7 +1749,7 @@ message will be split into separate lines, to cater for large messages.
  \param{bool }{showAtStartup = TRUE}}
 
 This function shows a "startup tip" to the user. The return value is the
-state of the ``Show tips at startup'' checkbox.
+state of the `Show tips at startup' checkbox.
 
 \docparam{parent}{The parent window for the modal dialog}
 
