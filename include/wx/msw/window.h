@@ -28,13 +28,6 @@
 // a better solution should be found later...
 #define wxUSE_MOUSEEVENT_HACK 0
 
-#include "wx/hash.h"
-
-// pseudo-template HWND <-> wxWindow hash table
-WX_DECLARE_HASH(wxWindow, wxWindowList, wxWinHashTable);
-
-extern wxWinHashTable *wxWinHandleHash;
-
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
@@ -500,6 +493,19 @@ public:
     wxWindowCreationHook(wxWindowMSW *winBeingCreated);
     ~wxWindowCreationHook();
 };
+
+// ----------------------------------------------------------------------------
+// global objects
+// ----------------------------------------------------------------------------
+
+// notice that this hash must be defined after wxWindow declaration as it
+// needs to "see" its dtor and not just forward declaration
+#include "wx/hash.h"
+
+// pseudo-template HWND <-> wxWindow hash table
+WX_DECLARE_HASH(wxWindow, wxWindowList, wxWinHashTable);
+
+extern wxWinHashTable *wxWinHandleHash;
 
 #endif
     // _WX_WINDOW_H_
