@@ -43,6 +43,12 @@
 
 #include <ctype.h>
 
+#ifdef WXLAYOUT_DEBUG
+#  define   WXLO_DEBUG(x)      wxLogDebug x
+#else
+#  define WXLO_DEBUG(x)
+#endif
+
 /// offsets to put a nice frame around text
 #define WXLO_XOFFSET   4
 #define WXLO_YOFFSET   4
@@ -364,7 +370,50 @@ wxLayoutWindow::OnKeyUp(wxKeyEvent& event)
       m_llist->EndSelection();
    event.Skip();
 }
-   
+
+
+void
+wxLayoutWindow::ScrollToCursor(void)
+{
+   wxClientDC dc( this );
+   PrepareDC( dc );
+
+   int x0,y0,x1,y1, dx, dy;
+
+   // Calculate where the top of the visible area is:
+   ViewStart(&x0,&y0);
+   GetScrollPixelsPerUnit(&dx, &dy);
+   x0 *= dx; y0 *= dy;
+
+   // Get the size of the visible window:
+   GetClientSize(&x1,&y1);
+   wxASSERT(x1 > 0);
+   wxASSERT(y1 > 0);
+   // As we have the values anyway, use them to avoid unnecessary
+   // scrollbar updates.
+   if(x1 > m_maxx) m_maxx = x1;  
+   if(y1 > m_maxy) m_maxy = y1;
+   /* Make sure that the scrollbars are at a position so that the
+      cursor is visible if we are editing. */
+      /** Scroll so that cursor is visible! */
+   WXLO_DEBUG(("m_ScrollToCursor = %d", (int) m_ScrollToCursor));
+   if(IsEditable() && m_ScrollToCursor)
+   {
+      wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
+      if(cc.x < x0 || cc.y < y0
+         || cc.x >= x0+(9*x1)/10 || cc.y >= y0+(9*y1/10))  // (9*x)/10 ==  90%
+      {
+         int nx, ny;
+         nx = cc.x - x1/2; if(nx < 0) nx = 0;
+         ny = cc.y - y1/2; if(ny < 0) ny = 0;
+         Scroll(nx/dx,ny/dy); // new view start
+         x0 = nx; y0 = ny;
+         m_ScrollToCursor = false; // avoid recursion
+         Refresh(FALSE);  /// Re-entering this function!
+      }
+   }
+}
+
 void
 wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))  // or: OnDraw(wxDC& dc)
 {
@@ -407,8 +456,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    //m_llist->InvalidateUpdateRect();
    //const wxRect *r = m_llist->GetUpdateRect();
-   wxLogDebug("Update rect: %ld,%ld / %ld,%ld",
-              updateRect->x, updateRect->y, updateRect->x+updateRect->width, updateRect->y+updateRect->height);
+   WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
+               updateRect->x, updateRect->y,
+               updateRect->x+updateRect->width,
+               updateRect->y+updateRect->height));
 
 #if 0
    //FIXME: we should never need to call Layout at all because the
@@ -428,25 +479,6 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    if(IsDirty())
       ResizeScrollbars();
    
-   /* Make sure that the scrollbars are at a position so that the
-      cursor is visible if we are editing. */
-      /** Scroll so that cursor is visible! */
-   wxLogDebug("m_ScrollToCursor = %d", (int) m_ScrollToCursor);
-   if(IsEditable() && m_ScrollToCursor)
-   {
-      wxPoint cc = m_llist->GetCursorScreenPos(*m_memDC);
-      if(cc.x < x0 || cc.y < y0
-         || cc.x >= x0+(9*x1)/10 || cc.y >= y0+(9*y1/10))  // (9*x)/10 ==  90%
-      {
-         int nx, ny;
-         nx = cc.x - x1/2; if(nx < 0) nx = 0;
-         ny = cc.y - y1/2; if(ny < 0) ny = 0;
-         Scroll(nx/dx,ny/dy); // new view start
-         x0 = nx; y0 = ny;
-         m_ScrollToCursor = false; // avoid recursion
-         Refresh(FALSE);  /// Re-entering this function!
-      }
-   }
    
    /* Check whether the window has grown, if so, we need to reallocate 
       the bitmap to be larger. */
@@ -492,8 +524,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    
    /* This is the important bit: we tell the list to draw itself: */
-   wxLogDebug("Update rect: %ld,%ld / %ld,%ld",
-              updateRect->x, updateRect->y, updateRect->x+updateRect->width, updateRect->y+updateRect->height);
+   WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
+               updateRect->x, updateRect->y,
+               updateRect->x+updateRect->width,
+               updateRect->y+updateRect->height)); 
    
    wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
    m_llist->Draw(*m_memDC,offset, y0, y0+y1);
@@ -512,8 +546,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    if(ri)
       while(ri)
       {
-         wxLogDebug("UpdateRegion: %ld,%ld, %ld,%ld",
-                    ri.GetX(),ri.GetY(),ri.GetW(),ri.GetH());
+         WXLO_DEBUG(("UpdateRegion: %ld,%ld, %ld,%ld",
+                     ri.GetX(),ri.GetY(),ri.GetW(),ri.GetH()));
          dc.Blit(x0+ri.GetX(),y0+ri.GetY(),ri.GetW(),ri.GetH(),
                  m_memDC,ri.GetX(),ri.GetY(),wxCOPY,FALSE);
          ri++;
@@ -584,6 +618,34 @@ wxLayoutWindow::Paste(void)
    wxLayoutImportText( m_llist, text);
 }
 
+bool
+wxLayoutWindow::Copy(void)
+{
+   wxLayoutList *llist = m_llist->GetSelection();
+   if(! llist)
+      return FALSE;
+
+   wxString text;
+   wxLayoutExportObject *export;
+   wxLayoutExportStatus status(llist);
+   while((export = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
+   {
+      if(export->type == WXLO_EXPORT_TEXT)
+         text << *(export->content.text);
+      delete export;
+   }
+   delete llist;
+   
+   // Read some text
+   if (wxTheClipboard->Open())
+   {
+      wxTextDataObject *data = new wxTextDataObject( text );
+      bool  rc = wxTheClipboard->SetData( data );
+      wxTheClipboard->Close();
+      return rc;
+   }
+   return FALSE;
+}
 
 wxMenu *
 wxLayoutWindow::MakeFormatMenu()

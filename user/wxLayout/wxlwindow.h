@@ -93,6 +93,8 @@ public:
    bool IsEditable(void) const { return m_Editable; }
    /// Pastes text from clipboard.
    void Paste(void);
+   /// Copies selection to clipboard.
+   bool Copy(void);
    
    //@}
    
@@ -160,7 +162,8 @@ public:
 protected:   
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
-
+   /// as the name says
+   void ScrollToCursor(void);
    /// for sending events
    wxWindow *m_Parent;
    /// Shall we send events?

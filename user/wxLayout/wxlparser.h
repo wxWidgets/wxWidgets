@@ -53,18 +53,12 @@ struct wxLayoutExportObject
 };
 
 
-extern const wxPoint wxLayoutExportNoPosition;
-
 struct wxLayoutExportStatus
 {
-   wxLayoutExportStatus(wxLayoutList *list,
-                        wxPoint fromPos =  wxLayoutExportNoPosition,
-                        wxPoint toPos =  wxLayoutExportNoPosition);
+   wxLayoutExportStatus(wxLayoutList *list);
    wxLayoutLine      * m_line;
    wxLOiterator        m_iterator;
    wxLayoutStyleInfo   m_si;
-   wxPoint       m_fromPos;
-   wxPoint       m_toPos;
 };
 
 #ifdef OS_WIN

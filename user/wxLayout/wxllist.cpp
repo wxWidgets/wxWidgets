@@ -24,10 +24,10 @@
 
 #ifdef M_BASEDIR
 #   include "gui/wxllist.h"
-#   undef  SHOW_SELECTIONS
+#   define  SHOW_SELECTIONS 0
 #else
 #   include "wxllist.h"
-#   define SHOW_SELECTIONS
+#   define SHOW_SELECTIONS 1
 #endif
 
 #ifndef USE_PCH
@@ -104,12 +104,15 @@ void GrowRect(wxRect &r, CoordType x, CoordType y)
       r.height = y - r.y;
 }
 
+#if 0
+// unused
 /// returns true if the point is in the rectangle
 static
 bool Contains(const wxRect &r, const wxPoint &p)
 {
    return r.x <= p.x && r.y <= p.y && (r.x+r.width) >= p.x && (r.y + r.height) >= p.y;
 }
+#endif
 
 
 //@}
@@ -334,6 +337,8 @@ wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
    dc.SetFont(*m_font);
    dc.SetTextForeground(m_ColourFG);
    dc.SetTextBackground(m_ColourBG);
+   if(wxllist)
+      wxllist->SetColour_Internal(&m_ColourFG,& m_ColourBG);
 }
 
 void
@@ -456,7 +461,7 @@ wxLayoutLine::FindObjectScreen(wxDC &dc,
       if( x <= xpos && xpos <= x + width )
       {
          *cxpos = cx + (**i).GetOffsetScreen(dc, xpos-x);
-         wxLogDebug("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos);
+         WXLO_DEBUG(("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos));
          if(found) *found = true;
          return i;
       }
@@ -691,7 +696,7 @@ wxLayoutLine::Draw(wxDC &dc,
                tempto = (**i).GetLength();
             CoordType tmp = from-xpos;
             if(tmp < 0) tmp = 0;
-            (**i).Draw(dc, pos, llist, from-xpos, to);
+            (**i).Draw(dc, pos, llist, from-xpos, tempto);
          }
          else
          {
@@ -971,14 +976,75 @@ wxLayoutLine::Debug(void)
 {
    wxString tmp;
    wxPoint pos = GetPosition();
-   tmp.Printf("Line %ld, Pos (%ld,%ld), Height %ld",
+   WXLO_DEBUG(("Line %ld, Pos (%ld,%ld), Height %ld",
               (long int) GetLineNumber(),
               (long int) pos.x, (long int) pos.y,
-              (long int) GetHeight());
-              
-   wxLogDebug(tmp);
+              (long int) GetHeight()));
 }
 #endif
+
+void
+wxLayoutLine::Copy(wxLayoutList *llist,
+                   CoordType from,
+                   CoordType to)
+{
+   CoordType firstOffset, lastOffset;
+
+   if(to == -1) to = GetLength();
+   
+   wxLOiterator first = FindObject(from, &firstOffset);
+   wxLOiterator last  = FindObject(to, &lastOffset);
+
+   // Common special case: only one object
+   if( *first == *last )
+   {
+      if( (**first).GetType() == WXLO_TYPE_TEXT )
+      {
+         llist->Insert(new wxLayoutObjectText(
+            ((wxLayoutObjectText
+              *)*first)->GetText().substr(firstOffset,
+                                          lastOffset-firstOffset))
+            );
+         return;
+      }
+      else // what can we do?
+      {
+         if(lastOffset > firstOffset) // i.e. +1 :-)
+            llist->Insert( (**first).Copy() );
+         return;
+      }
+   }
+
+   // If we reach here, we can safely copy the whole first object from 
+   // the firstOffset position on:
+   if((**first).GetType() == WXLO_TYPE_TEXT && firstOffset != 0)
+   {
+      llist->Insert(new wxLayoutObjectText(
+         ((wxLayoutObjectText *)*first)->GetText().substr(firstOffset))
+         );
+   }
+   else if(firstOffset == 0)
+      llist->Insert( (**first).Copy() );
+   // else nothing to copy :-(
+   
+   // Now we copy all objects before the last one:
+   wxLOiterator i = first; i++;
+   for( ; i != last; i++)
+      llist->Insert( (**i).Copy() );
+
+   // And now the last object:
+   if(lastOffset != 0)
+   {
+      if( (**last).GetType() == WXLO_TYPE_TEXT )
+      {
+         llist->Insert(new wxLayoutObjectText(
+            ((wxLayoutObjectText *)*last)->GetText().substr(0,lastOffset))
+            );
+      }
+      else
+         llist->Insert( (**last).Copy() );
+   }
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    
@@ -1076,12 +1142,15 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
    m_FontFamily = family;
    m_FontStyle = style;
    m_FontWeight = weight;
-   if(fg) m_ColourFG = *fg;
-   if(bg) m_ColourBG = *bg;
-
-   m_ColourFG = *wxBLACK;
-   m_ColourBG = *wxWHITE;
-   
+   if(fg)
+      m_ColourFG = *fg;
+   else
+      m_ColourFG = *wxBLACK;
+   if(bg)
+      m_ColourBG = *bg;
+   else
+      m_ColourBG = *wxWHITE;
+      
    if(m_DefaultSetting)
       delete m_DefaultSetting;
 
@@ -1429,10 +1498,10 @@ wxLayoutList::Draw(wxDC &dc,
                                     m_CursorLine == m_FirstLine));
    InvalidateUpdateRect();
 
-   wxLogDebug("Selection is %s : l%d,%ld/%ld,%ld",
-              m_Selection.m_valid ? "valid" : "invalid",
-              m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
-              m_Selection.m_CursorB.x, m_Selection.m_CursorB.y);
+   WXLO_DEBUG(("Selection is %s : l%d,%ld/%ld,%ld",
+               m_Selection.m_valid ? "valid" : "invalid",
+               m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
+               m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
 }
 
 wxLayoutObject *
@@ -1548,8 +1617,9 @@ wxLayoutList::SetUpdateRect(CoordType x, CoordType y)
 void
 wxLayoutList::StartSelection(void)
 {
-   wxLogDebug("Starting selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
+   WXLO_DEBUG(("Starting selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
    m_Selection.m_CursorA = m_CursorPos;
+   m_Selection.m_CursorB = m_CursorPos;
    m_Selection.m_selecting = true;
    m_Selection.m_valid = false;
 }
@@ -1559,7 +1629,7 @@ wxLayoutList::ContinueSelection(void)
 {
    wxASSERT(m_Selection.m_selecting == true);
    wxASSERT(m_Selection.m_valid == false);
-   wxLogDebug("Continuing selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
+   WXLO_DEBUG(("Continuing selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
    m_Selection.m_CursorB = m_CursorPos;
    // We always want m_CursorA <= m_CursorB!
    if(! (m_Selection.m_CursorA <= m_Selection.m_CursorB))
@@ -1574,7 +1644,7 @@ void
 wxLayoutList::EndSelection(void)
 {
    ContinueSelection();
-   wxLogDebug("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
+   WXLO_DEBUG(("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y));
    m_Selection.m_selecting = false;
    m_Selection.m_valid = true;
 }
@@ -1641,7 +1711,7 @@ wxLayoutList::IsSelected(const wxLayoutLine *line, CoordType *from,
 void
 wxLayoutList::StartHighlighting(wxDC &dc)
 {
-#ifdef SHOW_SELECTIONS
+#if SHOW_SELECTIONS
    dc.SetTextForeground(m_ColourBG);
    dc.SetTextBackground(m_ColourFG);
 #endif
@@ -1651,17 +1721,76 @@ wxLayoutList::StartHighlighting(wxDC &dc)
 void
 wxLayoutList::EndHighlighting(wxDC &dc)
 {
-#ifdef SHOW_SELECTIONS
+#if SHOW_SELECTIONS
    dc.SetTextForeground(m_ColourFG);
    dc.SetTextBackground(m_ColourBG);
 #endif
 }
 
 
+wxLayoutList *
+wxLayoutList::Copy(const wxPoint &from,
+                   const wxPoint &to)
+{
+   wxLayoutLine
+      * firstLine = NULL,
+      * lastLine = NULL;
+
+   for(firstLine = m_FirstLine;
+       firstLine && firstLine->GetLineNumber() < from.y;
+       firstLine=firstLine->GetNextLine())
+      ;
+   if(!firstLine || firstLine->GetLineNumber() != from.y)
+      return NULL;
+
+   for(lastLine = m_FirstLine;
+       lastLine && lastLine->GetLineNumber() < to.y;
+       lastLine=lastLine->GetNextLine())
+      ;
+   if(!lastLine || lastLine->GetLineNumber() != to.y)
+      return NULL;
+
+   if(to <= from)
+   {
+      wxLayoutLine *tmp = firstLine;
+      firstLine = lastLine;
+      lastLine = tmp;
+   }
+
+   wxLayoutList *llist = new wxLayoutList();
+
+   if(firstLine == lastLine)
+   {
+      firstLine->Copy(llist, from.x, to.x);
+   }
+   else
+   {
+      // Extract objects from first line
+      firstLine->Copy(llist, from.x);
+      // Extract all lines between
+      for(wxLayoutLine *line = firstLine->GetNextLine();
+          line != lastLine;
+          line = line->GetNextLine())
+         line->Copy(llist);
+      // Extract objects from last line
+      lastLine->Copy(llist, 0, to.x);
+   }
+   return llist;
+}
+
+wxLayoutList *
+wxLayoutList::GetSelection(void)
+{
+   if(! m_Selection.m_valid)
+      return NULL;
+
+   return Copy( m_Selection.m_CursorA, m_Selection.m_CursorB );
+}
+   
 #ifdef WXLAYOUT_DEBUG
 
 void
-wxLayoutList::Debug(void)
+wxLayoutList::Debug(void) 
 {
    wxLayoutLine *line;
 

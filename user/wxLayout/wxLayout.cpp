@@ -36,7 +36,7 @@ IMPLEMENT_APP(MyApp)
    enum ids{ ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_WRAP, ID_NOWRAP, ID_PASTE,
+             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
              ID_TEST, ID_LONG_TEST };
 
@@ -93,7 +93,8 @@ MyFrame::MyFrame(void) :
    edit_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
    edit_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
    edit_menu->AppendSeparator();
-   edit_menu->Append(ID_PASTE, "Paste", "Paste text from clipboard.");
+   edit_menu->Append(ID_COPY, "Copy", "Copy text to clipboard.");
+   edit_menu->Append(ID_PASTE,"Paste", "Paste text from clipboard.");
    menu_bar->Append(edit_menu, "Edit" );
 
 #ifndef __WXMSW__
@@ -230,6 +231,9 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       break;
    case ID_PASTE:
       m_lwin->Paste();
+      break;
+   case ID_COPY:
+      m_lwin->Copy();
       break;
    case ID_HTML:
    {

@@ -148,24 +148,11 @@ wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
 
 
-wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list,
-                                           wxPoint fromPos,
-                                           wxPoint toPos)
+wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list)
 {
    list->GetDefaults()->GetStyle(&m_si);
    m_line = list->GetFirstLine();
    m_iterator = m_line->GetFirstObject();
-   m_fromPos = fromPos;
-   m_toPos = toPos;
-
-   if(m_fromPos.x != -1)
-   {
-      while(m_line && m_line->GetLineNumber() != m_fromPos.y)
-         m_line = m_line->GetNextLine();
-      wxASSERT(m_line);
-      CoordType dummy;
-      m_iterator = m_line->FindObject(fromPos.x, &dummy);
-   }
 }
    
 
@@ -175,9 +162,6 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list,
   || (type == WXLO_TYPE_CMD \
       && mode == WXLO_EXPORT_AS_HTML))
 
-
-
-extern const wxPoint wxLayoutExportNoPosition = wxPoint(-1,-1);
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode, int flags)

@@ -29,7 +29,8 @@
 #   define WXMENU_LAYOUT_DBLCLICK   1113
 #endif
 
-#ifdef   __WXDEBUG__
+// do not enable debug mode within Mahogany
+#if defined(__WXDEBUG__)  && ! defined(M_BASEDIR)
 #   define   WXLAYOUT_DEBUG
 #endif
 
@@ -527,6 +528,15 @@ public:
    /// Recalculates the position of this line on the canvas.
    wxPoint RecalculatePosition(wxLayoutList *llist);
 
+   /** Copies the contents of this line to another wxLayoutList
+       @param llist the wxLayoutList destination
+       @param from x cursor coordinate where to start
+       @param to x cursor coordinate where to stop, -1 for end of line
+   */
+   void Copy(wxLayoutList *llist,
+             CoordType from = 0,
+             CoordType to = -1);
+   
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
 #endif
@@ -731,9 +741,16 @@ public:
    /// toggle underline flag
    inline void SetFontUnderline(bool ul) { SetFont(-1,-1,-1,-1,(int)ul); }
    /// set font colours by name
-   inline void SetFontColour(char const *fg, char const *bg = NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
+   inline void SetFontColour(char const *fg, char const *bg = NULL)
+      { SetFont(-1,-1,-1,-1,-1,fg,bg); }
    /// set font colours by colour
-   inline void SetFontColour(wxColour *fg, wxColour *bg = NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
+   inline void SetFontColour(wxColour *fg, wxColour *bg = NULL)
+      { SetFont(-1,-1,-1,-1,-1,fg,bg); }
+
+
+   /// Used by wxLayoutObjectCmd only:
+   void SetColour_Internal(wxColour *fg, wxColour *bg)
+     { if(fg) m_ColourFG = *fg; if(bg) m_ColourBG = *bg; }
    /**
       Returns a pointer to the default settings.
       This is only valid temporarily and should not be stored
@@ -840,6 +857,12 @@ public:
    bool IsSelecting(void);
    bool IsSelected(const wxPoint &cursor);
 
+   /// Return the selection as a wxLayoutList:
+   wxLayoutList *GetSelection(void);
+   
+   wxLayoutList *Copy(const wxPoint &from = wxPoint(0,0),
+                      const wxPoint &to = wxPoint(-1,-1));
+   
    /// starts highlighting of text for selections
    void StartHighlighting(wxDC &dc);
    /// ends highlighting of text for selections
