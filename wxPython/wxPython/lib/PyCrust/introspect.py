@@ -36,7 +36,7 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1, includeDouble=1):
     for item in getAllAttributeNames(object):
         dict[item] = None
     attributes += dict.keys()
-    attributes.sort()
+    attributes.sort(lambda x, y: cmp(x.lower(), y.lower()))
     if not includeSingle:
         attributes = filter(lambda item: item[0]!='_' or item[1]=='_', attributes)
     if not includeDouble:
