@@ -109,7 +109,8 @@ bool MyApp::OnInit()
     if ( argc == 2 )
     {
         // the parameter must be the lang index
-        wxString(argv[1]).ToLong(&lng);
+        wxString tmp(argv[1]);
+        tmp.ToLong(&lng);
     }
 
     static const wxLanguage langIds[] =
