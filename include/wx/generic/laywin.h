@@ -184,6 +184,10 @@ public:
     // Called by layout algorithm to retrieve information about the window.
     void OnQueryLayoutInfo(wxQueryLayoutInfoEvent& event);
 
+#ifdef __WXMAC__
+    virtual bool MacClipChildren() const { return true ; }
+#endif
+
 private:
     void Init();
 

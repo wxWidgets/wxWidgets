@@ -71,6 +71,9 @@ public:
 
     virtual void DoSetVirtualSize(int x, int y);
 
+#ifdef __WXMAC__
+	virtual bool MacClipChildren() const { return true ; }
+#endif
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()

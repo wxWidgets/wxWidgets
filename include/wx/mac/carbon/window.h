@@ -201,6 +201,11 @@ public:
     // returns the visible region of this control in window ie non-client coordinates
     
     wxRegion            MacGetVisibleRegion( bool includeOuterStructures = false ) ;
+    // returns true if children have to clipped to the content area (eg scrolled window)
+    virtual bool		MacClipChildren() const { return false ; }
+    // returns true if the grandchildren have to be clipped to the children's content area (eg
+    // splitter window)
+    virtual bool		MacClipGrandChildren() const { return false ; }
     bool                MacIsWindowScrollbar( const wxScrollBar* sb )
         { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
 

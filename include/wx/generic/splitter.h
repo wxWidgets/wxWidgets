@@ -212,6 +212,9 @@ public:
     void SetNeedUpdating(bool needUpdating) { m_needUpdating = needUpdating; }
     bool GetNeedUpdating() const { return m_needUpdating ; }
 
+#ifdef __WXMAC__
+	virtual bool MacClipGrandChildren() const { return true ; }
+#endif
 protected:
     // event handlers
 #if defined(__WXMSW__) || defined(__WXMAC__)
