@@ -11,8 +11,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from __future__ import division
-
 from _basic import RectangleShape
 
 
@@ -20,14 +18,14 @@ class BitmapShape(RectangleShape):
     """Draws a bitmap (non-resizable)."""
     def __init__(self):
         RectangleShape.__init__(self, 100, 50)
-        self._filename=""
+        self._filename = ""
 
     def OnDraw(self, dc):
         if not self._bitmap.Ok():
             return
 
-        x = self._xpos-self._bitmap.GetWidth() / 2
-        y = self._ypos-self._bitmap.GetHeight() / 2
+        x = self._xpos - self._bitmap.GetWidth() / 2.0
+        y = self._ypos - self._bitmap.GetHeight() / 2.0
         dc.DrawBitmap(self._bitmap, x, y, True)
 
     def SetSize(self, w, h, recursive = True):

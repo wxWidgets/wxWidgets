@@ -11,8 +11,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from __future__ import division
-
 import wx
 import math
 
@@ -254,7 +252,7 @@ class Shape(ShapeEvtHandler):
         self._shadowBrush = wx.BLACK_BRUSH
         self._textMarginX = 5
         self._textMarginY = 5
-        self._regionName="0"
+        self._regionName = "0"
         self._centreResize = True
         self._maintainAspectRatio = False
         self._highlighted = False
@@ -431,8 +429,8 @@ class Shape(ShapeEvtHandler):
     def ClearText(self, regionId = 0):
         """Clear the text from the specified text region."""
         if regionId == 0:
-            self._text=""
-        if regionId<len(self._regions):
+            self._text = ""
+        if regionId < len(self._regions):
             self._regions[regionId].ClearText()
             
     def ClearRegions(self):
@@ -456,18 +454,18 @@ class Shape(ShapeEvtHandler):
         the given point and target.
         """
         width, height = self.GetBoundingBoxMax()
-        if abs(width)<4:
+        if abs(width) < 4:
             width = 4.0
-        if abs(height)<4:
+        if abs(height) < 4:
             height = 4.0
 
         width += 4 # Allowance for inaccurate mousing
         height += 4
         
-        left = self._xpos - (width / 2)
-        top = self._ypos - (height / 2)
-        right = self._xpos + (width / 2)
-        bottom = self._ypos + (height / 2)
+        left = self._xpos - width / 2.0
+        top = self._ypos - height / 2.0
+        right = self._xpos + width / 2.0
+        bottom = self._ypos + height / 2.0
 
         nearest_attachment = 0
 
@@ -485,7 +483,7 @@ class Shape(ShapeEvtHandler):
                 if e:
                     xp, yp = e
                     l = math.sqrt(((xp - x) * (xp - x)) + (yp - y) * (yp - y))
-                    if l<nearest:
+                    if l < nearest:
                         nearest = l
                         nearest_attachment = i
 
@@ -504,7 +502,7 @@ class Shape(ShapeEvtHandler):
         if not self._regions:
             return
 
-        if i>len(self._regions):
+        if i > len(self._regions):
             return
 
         region = self._regions[i]
@@ -595,7 +593,7 @@ class Shape(ShapeEvtHandler):
     def SetFont(self, the_font, regionId = 0):
         """Set the font for the specified text region."""
         self._font = the_font
-        if regionId<len(self._regions):
+        if regionId < len(self._regions):
             self._regions[regionId].SetFont(the_font)
 
     def GetFont(self, regionId = 0):
@@ -615,7 +613,7 @@ class Shape(ShapeEvtHandler):
         FORMAT_CENTRE_VERT
           Vertical centring.
         """
-        if regionId<len(self._regions):
+        if regionId < len(self._regions):
             self._regions[regionId].SetFormatMode(mode)
 
     def GetFormatMode(self, regionId = 0):
@@ -628,7 +626,7 @@ class Shape(ShapeEvtHandler):
         self._textColour = wx.TheColourDatabase.Find(the_colour)
         self._textColourName = the_colour
 
-        if regionId<len(self._regions):
+        if regionId < len(self._regions):
             self._regions[regionId].SetColour(the_colour)
             
     def GetTextColour(self, regionId = 0):
@@ -642,7 +640,7 @@ class Shape(ShapeEvtHandler):
         The name for a region is unique within the scope of the whole
         composite, whereas a region id is unique only for a single image.
         """
-        if regionId<len(self._regions):
+        if regionId < len(self._regions):
             self._regions[regionId].SetName(name)
 
     def GetRegionName(self, regionId = 0):
@@ -688,7 +686,7 @@ class Shape(ShapeEvtHandler):
         for the given region name.
         """
         id = self.GetRegionId(name)
-        if id>-1:
+        if id > -1:
             return self, id
 
         for child in self._children:
@@ -696,7 +694,7 @@ class Shape(ShapeEvtHandler):
             if actualImage:
                 return actualImage, regionId
 
-        return None,-1
+        return None, -1
 
     # Finds all region names for this image (composite or simple).
     def FindRegionNames(self):
@@ -782,8 +780,8 @@ class Shape(ShapeEvtHandler):
         minX, minY = self.GetBoundingBoxMin()
         maxX, maxY = self.GetBoundingBoxMax()
 
-        topLeftX = xp - maxX / 2 - 2
-        topLeftY = yp - maxY / 2 - 2
+        topLeftX = xp - maxX / 2.0 - 2
+        topLeftY = yp - maxY / 2.0 - 2
 
         penWidth = 0
         if self._pen:
@@ -794,7 +792,7 @@ class Shape(ShapeEvtHandler):
 
         dc.DrawRectangle(topLeftX - penWidth, topLeftY - penWidth, maxX + penWidth * 2 + 4, maxY + penWidth * 2 + 4)
 
-    def EraseLinks(self, dc, attachment=-1, recurse = False):
+    def EraseLinks(self, dc, attachment = -1, recurse = False):
         """Erase links attached to this shape, but do not repair damage
         caused to other shapes.
         """
@@ -802,20 +800,20 @@ class Shape(ShapeEvtHandler):
             return
 
         for line in self._lines:
-            if attachment==-1 or (line.GetTo() == self and line.GetAttachmentTo() == attachment or line.GetFrom() == self and line.GetAttachmentFrom() == attachment):
+            if attachment == -1 or (line.GetTo() == self and line.GetAttachmentTo() == attachment or line.GetFrom() == self and line.GetAttachmentFrom() == attachment):
                 line.GetEventHandler().OnErase(dc)
 
         if recurse:
             for child in self._children:
                 child.EraseLinks(dc, attachment, recurse)
 
-    def DrawLinks(self, dc, attachment=-1, recurse = False):
+    def DrawLinks(self, dc, attachment = -1, recurse = False):
         """Draws any lines linked to this shape."""
         if not self._visible:
             return
 
         for line in self._lines:
-            if attachment==-1 or (line.GetTo() == self and line.GetAttachmentTo() == attachment or line.GetFrom() == self and line.GetAttachmentFrom() == attachment):
+            if attachment == -1 or (line.GetTo() == self and line.GetAttachmentTo() == attachment or line.GetFrom() == self and line.GetAttachmentFrom() == attachment):
                 line.GetEventHandler().Draw(dc)
                 
         if recurse:
@@ -878,8 +876,8 @@ class Shape(ShapeEvtHandler):
         # it to another position in the list
         del newOrdering[newOrdering.index(to_move)]
 
-        old_x=-99999.9
-        old_y=-99999.9
+        old_x = -99999.9
+        old_y = -99999.9
 
         found = False
 
@@ -1048,7 +1046,7 @@ class Shape(ShapeEvtHandler):
                 hit = self._parent.HitTest(x, y)
                 if hit:
                     attachment, dist = hit
-            self._parent.GetEventHandler().OnEndDragLeft(x, y, keys, attachment)
+                self._parent.GetEventHandler().OnEndDragLeft(x, y, keys, attachment)
             return
 
         dc = wx.ClientDC(self.GetCanvas())
@@ -1088,14 +1086,13 @@ class Shape(ShapeEvtHandler):
             return
 
     def OnDrawOutline(self, dc, x, y, w, h):
-        points = [[x - w / 2, y - h / 2],
-                [x + w / 2, y - h / 2],
-                [x + w / 2, y + h / 2],
-                [x - w / 2, y + h / 2],
-                [x - w / 2, y - h / 2],
+        points = [[x - w / 2.0, y - h / 2.0],
+                [x + w / 2.0, y - h / 2.0],
+                [x + w / 2.0, y + h / 2.0],
+                [x - w / 2.0, y + h / 2.0],
+                [x - w / 2.0, y - h / 2.0],
                 ]
 
-        #dc.DrawLines([[round(x), round(y)] for x, y in points])
         dc.DrawLines(points)
         
     def Attach(self, can):
@@ -1197,18 +1194,18 @@ class Shape(ShapeEvtHandler):
         if width == 0:
             scaleX = 1.0
         else:
-            scaleX = long(w) / width
+            scaleX = float(w) / width
         if height == 0:
             scaleY = 1.0
         else:
-            scaleY = long(h) / height
+            scaleY = float(h) / height
 
         for point in self._attachmentPoints:
             point._x = point._x * scaleX
             point._y = point._y * scaleY
 
     # Add line FROM this object
-    def AddLine(self, line, other, attachFrom = 0, attachTo = 0, positionFrom=-1, positionTo=-1):
+    def AddLine(self, line, other, attachFrom = 0, attachTo = 0, positionFrom = -1, positionTo = -1):
         """Add a line between this shape and the given other shape, at the
         specified attachment points.
 
@@ -1216,7 +1213,7 @@ class Shape(ShapeEvtHandler):
         so that the line will be drawn at a particular point on its attachment
         point.
         """
-        if positionFrom==-1:
+        if positionFrom == -1:
             if not line in self._lines:
                 self._lines.append(line)
         else:
@@ -1225,12 +1222,12 @@ class Shape(ShapeEvtHandler):
                 self._lines.remove(line)
             except ValueError:
                 pass
-            if positionFrom<len(self._lines):
+            if positionFrom < len(self._lines):
                 self._lines.insert(positionFrom, line)
             else:
                 self._lines.append(line)
 
-        if positionTo==-1:
+        if positionTo == -1:
             if not other in other._lines:
                 other._lines.append(line)
         else:
@@ -1239,7 +1236,7 @@ class Shape(ShapeEvtHandler):
                 other._lines.remove(line)
             except ValueError:
                 pass
-            if positionTo<len(other._lines):
+            if positionTo < len(other._lines):
                 other._lines.insert(positionTo, line)
             else:
                 other._lines.append(line)
@@ -1273,10 +1270,10 @@ class Shape(ShapeEvtHandler):
         heightMin = minY + CONTROL_POINT_SIZE + 2
 
         # Offsets from main object
-        top=-heightMin / 2
-        bottom = heightMin / 2 + (maxY - minY)
-        left=-widthMin / 2
-        right = widthMin / 2 + (maxX - minX)
+        top = -heightMin / 2.0
+        bottom = heightMin / 2.0 + (maxY - minY)
+        left = -widthMin / 2.0
+        right = widthMin / 2.0 + (maxX - minX)
 
         control = ControlPoint(self._canvas, self, CONTROL_POINT_SIZE, left, top, CONTROL_POINT_DIAGONAL)
         self._canvas.AddShape(control)
@@ -1341,10 +1338,10 @@ class Shape(ShapeEvtHandler):
         heightMin = minY + CONTROL_POINT_SIZE + 2
         
         # Offsets from main object
-        top=-heightMin / 2
-        bottom = heightMin / 2 + (maxY - minY)
-        left=-widthMin / 2
-        right = widthMin / 2 + (maxX - minX)
+        top = -heightMin / 2.0
+        bottom = heightMin / 2.0 + (maxY - minY)
+        left = -widthMin / 2.0
+        right = widthMin / 2.0 + (maxX - minX)
 
         self._controlPoints[0]._xoffset = left
         self._controlPoints[0]._yoffset = top
@@ -1458,7 +1455,7 @@ class Shape(ShapeEvtHandler):
         else:
             maxN = 3
             for point in self._attachmentPoints:
-                if point._id>maxN:
+                if point._id > maxN:
                     maxN = point._id
             return maxN + 1
 
@@ -1492,10 +1489,10 @@ class Shape(ShapeEvtHandler):
             else:
                 # Assume is rectangular
                 w, h = self.GetBoundingBoxMax()
-                top = self._ypos + h / 2
-                bottom = self._ypos - h / 2
-                left = self._xpos - w / 2
-                right = self._xpos + w / 2
+                top = self._ypos + h / 2.0
+                bottom = self._ypos - h / 2.0
+                left = self._xpos - w / 2.0
+                right = self._xpos + w / 2.0
 
                 # wtf?
                 line and line.IsEnd(self)
@@ -1583,7 +1580,7 @@ class Shape(ShapeEvtHandler):
         isHorizontal = RoughlyEqual(pt1[1], pt2[1])
 
         if isHorizontal:
-            if pt1[0]>pt2[0]:
+            if pt1[0] > pt2[0]:
                 firstPoint = pt2
                 secondPoint = pt1
             else:
@@ -1594,21 +1591,21 @@ class Shape(ShapeEvtHandler):
                 if line and line.GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE:
                     # Align line according to the next handle along
                     point = line.GetNextControlPoint(self)
-                    if point[0]<firstPoint[0]:
+                    if point[0] < firstPoint[0]:
                         x = firstPoint[0]
-                    elif point[0]>secondPoint[0]:
+                    elif point[0] > secondPoint[0]:
                         x = secondPoint[0]
                     else:
                         x = point[0]
                 else:
-                    x = firstPoint[0] + (nth + 1) * (secondPoint[0] - firstPoint[0]) / (noArcs + 1)
+                    x = firstPoint[0] + (nth + 1) * (secondPoint[0] - firstPoint[0]) / (noArcs + 1.0)
             else:
-                x = (secondPoint[0] - firstPoint[0]) / 2 # Midpoint
+                x = (secondPoint[0] - firstPoint[0]) / 2.0 # Midpoint
             y = pt1[1]
         else:
             assert RoughlyEqual(pt1[0], pt2[0])
 
-            if pt1[1]>pt2[1]:
+            if pt1[1] > pt2[1]:
                 firstPoint = pt2
                 secondPoint = pt1
             else:
@@ -1619,16 +1616,16 @@ class Shape(ShapeEvtHandler):
                 if line and line.GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE:
                     # Align line according to the next handle along
                     point = line.GetNextControlPoint(self)
-                    if point[1]<firstPoint[1]:
+                    if point[1] < firstPoint[1]:
                         y = firstPoint[1]
-                    elif point[1]>secondPoint[1]:
+                    elif point[1] > secondPoint[1]:
                         y = secondPoint[1]
                     else:
                         y = point[1]
                 else:
-                    y = firstPoint[1] + (nth + 1) * (secondPoint[1] - firstPoint[1]) / (noArcs + 1)
+                    y = firstPoint[1] + (nth + 1) * (secondPoint[1] - firstPoint[1]) / (noArcs + 1.0)
             else:
-                y = (secondPoint[1] - firstPoint[1]) / 2 # Midpoint
+                y = (secondPoint[1] - firstPoint[1]) / 2.0 # Midpoint
             x = pt1[0]
 
         return x, y
@@ -1676,8 +1673,8 @@ class Shape(ShapeEvtHandler):
             neck.x = self.GetX()
             neck.y = root.y - self._branchNeckLength
 
-            shoulder1.x = root.x - totalBranchLength / 2
-            shoulder2.x = root.x + totalBranchLength / 2
+            shoulder1.x = root.x - totalBranchLength / 2.0
+            shoulder2.x = root.x + totalBranchLength / 2.0
 
             shoulder1.y = neck.y
             shoulder2.y = neck.y
@@ -1688,14 +1685,14 @@ class Shape(ShapeEvtHandler):
             shoulder1.x = neck.x
             shoulder2.x = neck.x
 
-            shoulder1.y = neck.y - totalBranchLength / 2
-            shoulder1.y = neck.y + totalBranchLength / 2
+            shoulder1.y = neck.y - totalBranchLength / 2.0
+            shoulder1.y = neck.y + totalBranchLength / 2.0
         elif physicalAttachment == 2:
             neck.x = self.GetX()
             neck.y = root.y + self._branchNeckLength
 
-            shoulder1.x = root.x - totalBranchLength / 2
-            shoulder2.x = root.x + totalBranchLength / 2
+            shoulder1.x = root.x - totalBranchLength / 2.0
+            shoulder2.x = root.x + totalBranchLength / 2.0
 
             shoulder1.y = neck.y
             shoulder2.y = neck.y
@@ -1706,8 +1703,8 @@ class Shape(ShapeEvtHandler):
             shoulder1.x = neck.x
             shoulder2.x = neck.x
 
-            shoulder1.y = neck.y - totalBranchLength / 2
-            shoulder2.y = neck.y + totalBranchLength / 2
+            shoulder1.y = neck.y - totalBranchLength / 2.0
+            shoulder2.y = neck.y + totalBranchLength / 2.0
         else:
             raise "Unrecognised attachment point in GetBranchingAttachmentInfo"
         return root, neck, shoulder1, shoulder2
@@ -1769,15 +1766,15 @@ class Shape(ShapeEvtHandler):
         # Assume that we have attachment points 0 to 3: top, right, bottom, left
         if physicalAttachment == 0:
             root.x = self.GetX()
-            root.y = self.GetY() - height / 2
+            root.y = self.GetY() - height / 2.0
         elif physicalAttachment == 1:
-            root.x = self.GetX() + width / 2
+            root.x = self.GetX() + width / 2.0
             root.y = self.GetY()
         elif physicalAttachment == 2:
             root.x = self.GetX()
-            root.y = self.GetY() + height / 2
+            root.y = self.GetY() + height / 2.0
         elif physicalAttachment == 3:
-            root.x = self.GetX() - width / 2
+            root.x = self.GetX() - width / 2.0
             root.y = self.GetY()
         else:
             raise "Unrecognised attachment point in GetBranchingAttachmentRoot"
@@ -1802,7 +1799,7 @@ class Shape(ShapeEvtHandler):
         # Draw neck
         dc.DrawLine(root, neck)
 
-        if count>1:
+        if count > 1:
             # Draw shoulder-to-shoulder line
             dc.DrawLine(shoulder1, shoulder2)
         # Draw all the little branches
@@ -1810,9 +1807,9 @@ class Shape(ShapeEvtHandler):
             pt, stemPt = self.GetBranchingAttachmentPoint(attachment, i)
             dc.DrawLine(stemPt, pt)
 
-            if self.GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB and count>1:
-                blobSize = 6
-                dc.DrawEllipse(stemPt.x - blobSize / 2, stemPt.y - blobSize / 2, blobSize, blobSize)
+            if self.GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB and count > 1:
+                blobSize = 6.0
+                dc.DrawEllipse(stemPt.x - blobSize / 2.0, stemPt.y - blobSize / 2.0, blobSize, blobSize)
 
     def OnDrawBranches(self, dc, erase = False):
         if self._attachmentMode != ATTACHMENT_MODE_BRANCHING:
@@ -1841,17 +1838,17 @@ class Shape(ShapeEvtHandler):
         """
         if RoughlyEqual(self.GetRotation(), 0):
             i = physicalAttachment
-        elif RoughlyEqual(self.GetRotation(), math.pi / 2):
+        elif RoughlyEqual(self.GetRotation(), math.pi / 2.0):
             i = physicalAttachment - 1
         elif RoughlyEqual(self.GetRotation(), math.pi):
             i = physicalAttachment - 2
-        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2):
+        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2.0):
             i = physicalAttachment - 3
         else:
             # Can't handle -- assume the same
             return physicalAttachment
 
-        if i<0:
+        if i < 0:
             i += 4
 
         return i
@@ -1862,16 +1859,16 @@ class Shape(ShapeEvtHandler):
         """
         if RoughlyEqual(self.GetRotation(), 0):
             i = logicalAttachment
-        elif RoughlyEqual(self.GetRotation(), math.pi / 2):
+        elif RoughlyEqual(self.GetRotation(), math.pi / 2.0):
             i = logicalAttachment + 1
         elif RoughlyEqual(self.GetRotation(), math.pi):
             i = logicalAttachment + 2
-        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2):
+        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2.0):
             i = logicalAttachment + 3
         else:
             return logicalAttachment
 
-        if i>3:
+        if i > 3:
             i -= 4
 
         return i
@@ -1879,9 +1876,9 @@ class Shape(ShapeEvtHandler):
     def Rotate(self, x, y, theta):
         """Rotate about the given axis by the given amount in radians."""
         self._rotation = theta
-        if self._rotation<0:
+        if self._rotation < 0:
             self._rotation += 2 * math.pi
-        elif self._rotation>2 * math.pi:
+        elif self._rotation > 2 * math.pi:
             self._rotation -= 2 * math.pi
 
     def GetBackgroundPen(self):
@@ -2128,14 +2125,14 @@ class Shape(ShapeEvtHandler):
                 newX1 = pt._controlPointDragStartX
                 newX2 = newX1 + pt._controlPointDragStartWidth
             elif pt._type == CONTROL_POINT_DIAGONAL and (keys & KEY_SHIFT or self.GetMaintainAspectRatio()):
-                newH = (newX2 - newX1) * (pt._controlPointDragStartHeight / pt._controlPointDragStartWidth)
-                if self.GetY()>pt._controlPointDragStartY:
+                newH = (newX2 - newX1) * (float(pt._controlPointDragStartHeight) / pt._controlPointDragStartWidth)
+                if self.GetY() > pt._controlPointDragStartY:
                     newY2 = newY1 + newH
                 else:
                     newY1 = newY2 - newH
 
-            newWidth = newX2 - newX1
-            newHeight = newY2 - newY1
+            newWidth = float(newX2 - newX1)
+            newHeight = float(newY2 - newY1)
 
             if pt._type == CONTROL_POINT_VERTICAL and self.GetMaintainAspectRatio():
                 newWidth = bound_x * (newHeight / bound_y)
@@ -2143,8 +2140,8 @@ class Shape(ShapeEvtHandler):
             if pt._type == CONTROL_POINT_HORIZONTAL and self.GetMaintainAspectRatio():
                 newHeight = bound_y * (newWidth / bound_x)
 
-            pt._controlPointDragPosX = newX1 + newWidth / 2
-            pt._controlPointDragPosY = newY1 + newHeight / 2
+            pt._controlPointDragPosX = newX1 + newWidth / 2.0
+            pt._controlPointDragPosY = newY1 + newHeight / 2.0
             if self.GetFixedWidth():
                 newWidth = bound_x
 
@@ -2168,20 +2165,20 @@ class Shape(ShapeEvtHandler):
 
         # Choose the 'opposite corner' of the object as the stationary
         # point in case this is non-centring resizing.
-        if pt.GetX()<self.GetX():
-            pt._controlPointDragStartX = self.GetX() + bound_x / 2
+        if pt.GetX() < self.GetX():
+            pt._controlPointDragStartX = self.GetX() + bound_x / 2.0
         else:
-            pt._controlPointDragStartX = self.GetX() - bound_x / 2
+            pt._controlPointDragStartX = self.GetX() - bound_x / 2.0
 
-        if pt.GetY()<self.GetY():
-            pt._controlPointDragStartY = self.GetY() + bound_y / 2
+        if pt.GetY() < self.GetY():
+            pt._controlPointDragStartY = self.GetY() + bound_y / 2.0
         else:
-            pt._controlPointDragStartY = self.GetY() - bound_y / 2
+            pt._controlPointDragStartY = self.GetY() - bound_y / 2.0
 
         if pt._type == CONTROL_POINT_HORIZONTAL:
-            pt._controlPointDragStartY = self.GetY() - bound_y / 2
+            pt._controlPointDragStartY = self.GetY() - bound_y / 2.0
         elif pt._type == CONTROL_POINT_VERTICAL:
-            pt._controlPointDragStartX = self.GetX() - bound_x / 2
+            pt._controlPointDragStartX = self.GetX() - bound_x / 2.0
 
         # We may require the old width and height
         pt._controlPointDragStartWidth = bound_x
@@ -2231,14 +2228,14 @@ class Shape(ShapeEvtHandler):
                 newX1 = pt._controlPointDragStartX
                 newX2 = newX1 + pt._controlPointDragStartWidth
             elif pt._type == CONTROL_POINT_DIAGONAL and (keys & KEYS or self.GetMaintainAspectRatio()):
-                newH = (newX2 - newX1) * (pt._controlPointDragStartHeight / pt._controlPointDragStartWidth)
-                if pt.GetY()>pt._controlPointDragStartY:
+                newH = (newX2 - newX1) * (float(pt._controlPointDragStartHeight) / pt._controlPointDragStartWidth)
+                if pt.GetY() > pt._controlPointDragStartY:
                     newY2 = newY1 + newH
                 else:
                     newY1 = newY2 - newH
 
-            newWidth = newX2 - newX1
-            newHeight = newY2 - newY1
+            newWidth = float(newX2 - newX1)
+            newHeight = float(newY2 - newY1)
 
             if pt._type == CONTROL_POINT_VERTICAL and self.GetMaintainAspectRatio():
                 newWidth = bound_x * (newHeight / bound_y)
@@ -2246,8 +2243,8 @@ class Shape(ShapeEvtHandler):
             if pt._type == CONTROL_POINT_HORIZONTAL and self.GetMaintainAspectRatio():
                 newHeight = bound_y * (newWidth / bound_x)
 
-            pt._controlPointDragPosX = newX1 + newWidth / 2
-            pt._controlPointDragPosY = newY1 + newHeight / 2
+            pt._controlPointDragPosX = newX1 + newWidth / 2.0
+            pt._controlPointDragPosY = newY1 + newHeight / 2.0
             if self.GetFixedWidth():
                 newWidth = bound_x
 
@@ -2285,7 +2282,7 @@ class Shape(ShapeEvtHandler):
 
         # Recursively redraw links if we have a composite
         if len(self.GetChildren()):
-            self.DrawLinks(dc,-1, True)
+            self.DrawLinks(dc, -1, True)
 
         width, height = self.GetBoundingBoxMax()
         self.GetEventHandler().OnEndSize(width, height)
@@ -2310,8 +2307,8 @@ class RectangleShape(Shape):
         self.SetDefaultRegionSize()
 
     def OnDraw(self, dc):
-        x1 = self._xpos - self._width / 2
-        y1 = self._ypos - self._height / 2
+        x1 = self._xpos - self._width / 2.0
+        y1 = self._ypos - self._height / 2.0
 
         if self._shadowMode != SHADOW_NONE:
             if self._shadowBrush:
@@ -2440,19 +2437,19 @@ class PolygonShape(Shape):
     def CalculateBoundingBox(self):
         # Calculate bounding box at construction (and presumably resize) time
         left = 10000
-        right=-10000
+        right = -10000
         top = 10000
-        bottom=-10000
+        bottom = -10000
 
         for point in self._points:
-            if point.x<left:
+            if point.x < left:
                 left = point.x
-            if point.x>right:
+            if point.x > right:
                 right = point.x
 
-            if point.y<top:
+            if point.y < top:
                 top = point.y
-            if point.y>bottom:
+            if point.y > bottom:
                 bottom = point.y
 
         self._boundWidth = right - left
@@ -2466,26 +2463,26 @@ class PolygonShape(Shape):
         box.
         """
         left = 10000
-        right=-10000
+        right = -10000
         top = 10000
-        bottom=-10000
+        bottom = -10000
 
         for point in self._points:
-            if point.x<left:
+            if point.x < left:
                 left = point.x
-            if point.x>right:
+            if point.x > right:
                 right = point.x
 
-            if point.y<top:
+            if point.y < top:
                 top = point.y
-            if point.y>bottom:
+            if point.y > bottom:
                 bottom = point.y
 
         bwidth = right - left
         bheight = bottom - top
 
-        newCentreX = left + bwidth / 2
-        newCentreY = top + bheight / 2
+        newCentreX = left + bwidth / 2.0
+        newCentreY = top + bheight / 2.0
 
         for point in self._points:
             point.x -= newCentreX
@@ -2529,7 +2526,7 @@ class PolygonShape(Shape):
             if e:
                 xp, yp = e
                 l = math.sqrt((xp - x) * (xp - x) + (yp - y) * (yp - y))
-                if l<nearest:
+                if l < nearest:
                     nearest = l
                     nearest_attachment = i
 
@@ -2541,8 +2538,8 @@ class PolygonShape(Shape):
         self.SetAttachmentSize(new_width, new_height)
 
         # Multiply all points by proportion of new size to old size
-        x_proportion = abs(new_width / self._originalWidth)
-        y_proportion = abs(new_height / self._originalHeight)
+        x_proportion = abs(float(new_width) / self._originalWidth)
+        y_proportion = abs(float(new_height) / self._originalHeight)
 
         for i in range(max(len(self._points), len(self._originalPoints))):
             self._points[i].x = self._originalPoints[i][0] * x_proportion
@@ -2579,8 +2576,8 @@ class PolygonShape(Shape):
         except ValueError:
             secondPoint = self._points[0]
 
-        x = (secondPoint.x - firstPoint.x) / 2 + firstPoint.x
-        y = (secondPoint.y - firstPoint.y) / 2 + firstPoint.y
+        x = (secondPoint.x - firstPoint.x) / 2.0 + firstPoint.x
+        y = (secondPoint.y - firstPoint.y) / 2.0 + firstPoint.y
         point = wx.RealPoint(x, y)
 
         if pos >= len(self._points) - 1:
@@ -2596,7 +2593,7 @@ class PolygonShape(Shape):
 
     def DeletePolygonPoint(self, pos):
         """Delete the given control point."""
-        if pos<len(self._points):
+        if pos < len(self._points):
             del self._points[pos]
             self.UpdateOriginalPoints()
             if self._selected:
@@ -2614,9 +2611,9 @@ class PolygonShape(Shape):
             # a heuristic...
             for point in self._points:
                 if point.x == 0:
-                    if y2>y1 and point.y>0:
+                    if y2 > y1 and point.y > 0:
                         return point.x + self._xpos, point.y + self._ypos
-                    elif y2<y1 and point.y<0:
+                    elif y2 < y1 and point.y < 0:
                         return point.x + self._xpos, point.y + self._ypos
 
         xpoints = []
@@ -2647,8 +2644,8 @@ class PolygonShape(Shape):
     def OnDrawOutline(self, dc, x, y, w, h):
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         # Multiply all points by proportion of new size to old size
-        x_proportion = abs(w / self._originalWidth)
-        y_proportion = abs(h / self._originalHeight)
+        x_proportion = abs(float(w) / self._originalWidth)
+        y_proportion = abs(float(h) / self._originalHeight)
 
         intPoints = []
         for point in self._originalPoints:
@@ -2672,12 +2669,12 @@ class PolygonShape(Shape):
     def GetNumberOfAttachments(self):
         maxN = max(len(self._points) - 1, 0)
         for point in self._attachmentPoints:
-            if point._id>maxN:
+            if point._id > maxN:
                 maxN = point._id
         return maxN + 1
 
     def GetAttachmentPosition(self, attachment, nth = 0, no_arcs = 1, line = None):
-        if self._attachmentMode == ATTACHMENT_MODE_EDGE and self._points and attachment<len(self._points):
+        if self._attachmentMode == ATTACHMENT_MODE_EDGE and self._points and attachment < len(self._points):
             point = self._points[0]
             return point.x + self._xpos, point.y + self._ypos
         return Shape.GetAttachmentPosition(self, attachment, nth, no_arcs, line)
@@ -2686,7 +2683,7 @@ class PolygonShape(Shape):
         if not self._points:
             return False
 
-        if attachment >= 0 and attachment<len(self._points):
+        if attachment >= 0 and attachment < len(self._points):
             return True
 
         for point in self._attachmentPoints:
@@ -2840,8 +2837,8 @@ class EllipseShape(Shape):
             if self._shadowBrush:
                 dc.SetBrush(self._shadowBrush)
             dc.SetPen(TransparentPen)
-            dc.DrawEllipse(self._xpos - self.GetWidth() / 2 + self._shadowOffsetX,
-                           self._ypos - self.GetHeight() / 2 + self._shadowOffsetY,
+            dc.DrawEllipse(self._xpos - self.GetWidth() / 2.0 + self._shadowOffsetX,
+                           self._ypos - self.GetHeight() / 2.0 + self._shadowOffsetY,
                            self.GetWidth(), self.GetHeight())
 
         if self._pen:
@@ -2851,7 +2848,7 @@ class EllipseShape(Shape):
                 dc.SetPen(self._pen)
         if self._brush:
             dc.SetBrush(self._brush)
-        dc.DrawEllipse(self._xpos - self.GetWidth() / 2, self._ypos - self.GetHeight() / 2, self.GetWidth(), self.GetHeight())
+        dc.DrawEllipse(self._xpos - self.GetWidth() / 2.0, self._ypos - self.GetHeight() / 2.0, self.GetWidth(), self.GetHeight())
 
     def SetSize(self, x, y, recursive = True):
         self.SetAttachmentSize(x, y)
@@ -2869,16 +2866,16 @@ class EllipseShape(Shape):
             return Shape.GetAttachmentPosition(self, attachment, nth, no_arcs, line)
 
         if self._attachmentMode != ATTACHMENT_MODE_NONE:
-            top = self._ypos + self._height / 2
-            bottom = self._ypos - self._height / 2
-            left = self._xpos - self._width / 2
-            right = self._xpos + self._width / 2
+            top = self._ypos + self._height / 2.0
+            bottom = self._ypos - self._height / 2.0
+            left = self._xpos - self._width / 2.0
+            right = self._xpos + self._width / 2.0
 
             physicalAttachment = self.LogicalToPhysicalAttachment(attachment)
 
             if physicalAttachment == 0:
                 if self._spaceAttachments:
-                    x = left + (nth + 1) * self._width / (no_arcs + 1)
+                    x = left + (nth + 1) * self._width / (no_arcs + 1.0)
                 else:
                     x = self._xpos
                 y = top
@@ -2891,13 +2888,13 @@ class EllipseShape(Shape):
             elif physicalAttachment == 1:
                 x = right
                 if self._spaceAttachments:
-                    y = bottom + (nth + 1) * self._height / (no_arcs + 1)
+                    y = bottom + (nth + 1) * self._height / (no_arcs + 1.0)
                 else:
                     y = self._ypos
                 return DrawArcToEllipse(self._xpos, self._ypos, self._width, self._height, self._xpos + self._width + 500, y, self._xpos, y)
             elif physicalAttachment == 2:
                 if self._spaceAttachments:
-                    x = left + (nth + 1) * self._width / (no_arcs + 1)
+                    x = left + (nth + 1) * self._width / (no_arcs + 1.0)
                 else:
                     x = self._xpos
                 y = bottom
@@ -2905,7 +2902,7 @@ class EllipseShape(Shape):
             elif physicalAttachment == 3:
                 x = left
                 if self._spaceAttachments:
-                    y = bottom + (nth + 1) * self._height / (no_arcs + 1)
+                    y = bottom + (nth + 1) * self._height / (no_arcs + 1.0)
                 else:
                     y = self._ypos
                 return DrawArcToEllipse(self._xpos, self._ypos, self._width, self._height, self._xpos - self._width - 500, y, self._xpos, y)
@@ -2923,7 +2920,7 @@ class CircleShape(EllipseShape):
         self.SetMaintainAspectRatio(True)
 
     def GetPerimeterPoint(self, x1, y1, x2, y2):
-        return FindEndForCircle(self._width / 2, self._xpos, self._ypos, x2, y2)
+        return FindEndForCircle(self._width / 2.0, self._xpos, self._ypos, x2, y2)
 
 
 
@@ -2966,7 +2963,7 @@ class ShapeRegion(object):
                 new_line = ShapeTextLine(line.GetX(), line.GetY(), line.GetText())
                 self._formattedText.append(new_line)
         else:
-            self._regionText=""
+            self._regionText = ""
             self._font = NormalFont
             self._minHeight = 5.0
             self._minWidth = 5.0
@@ -2975,12 +2972,12 @@ class ShapeRegion(object):
             self._x = 0.0
             self._y = 0.0
 
-            self._regionProportionX=-1.0
-            self._regionProportionY=-1.0
+            self._regionProportionX = -1.0
+            self._regionProportionY = -1.0
             self._formatMode = FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT
-            self._regionName=""
-            self._textColour="BLACK"
-            self._penColour="BLACK"
+            self._regionName = ""
+            self._textColour = "BLACK"
+            self._penColour = "BLACK"
             self._penStyle = wx.SOLID
             self._actualColourObject = wx.TheColourDatabase.Find("BLACK")
             self._actualPenObject = None

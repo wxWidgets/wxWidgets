@@ -11,8 +11,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from __future__ import division
-
 import sys
 import math
 
@@ -21,10 +19,10 @@ from _oglmisc import *
 
 # Line alignment flags
 # Vertical by default
-LINE_ALIGNMENT_HORIZ=              1
-LINE_ALIGNMENT_VERT=               0
-LINE_ALIGNMENT_TO_NEXT_HANDLE=     2
-LINE_ALIGNMENT_NONE=               0
+LINE_ALIGNMENT_HORIZ =              1
+LINE_ALIGNMENT_VERT =               0
+LINE_ALIGNMENT_TO_NEXT_HANDLE =     2
+LINE_ALIGNMENT_NONE =               0
 
 
 
@@ -53,7 +51,7 @@ class LineControlPoint(ControlPoint):
 
 
 class ArrowHead(object):
-    def __init__(self, type = 0, end = 0, size = 0.0, dist = 0.0, name="",mf = None, arrowId=-1):
+    def __init__(self, type = 0, end = 0, size = 0.0, dist = 0.0, name = "", mf = None, arrowId = -1):
         if isinstance(type, ArrowHead):
             pass
         else:
@@ -67,7 +65,7 @@ class ArrowHead(object):
             self._arrowName = name
             self._metaFile = mf
             self._id = arrowId
-            if self._id==-1:
+            if self._id == -1:
                 self._id = wx.NewId()
             
     def _GetType(self):
@@ -98,7 +96,7 @@ class ArrowHead(object):
             if oldWidth == 0:
                 return
 
-            scale = size / oldWidth
+            scale = float(size) / oldWidth
             if scale != 1:
                 self._metaFile.Scale(scale, scale)
                 
@@ -139,8 +137,8 @@ class LabelShape(RectangleShape):
         if self._lineShape and not self._lineShape.GetDrawHandles():
             return
 
-        x1 = self._xpos-self._width / 2
-        y1 = self._ypos-self._height / 2
+        x1 = self._xpos - self._width / 2.0
+        y1 = self._ypos - self._height / 2.0
 
         if self._pen:
             if self._pen.GetWidth() == 0:
@@ -149,7 +147,7 @@ class LabelShape(RectangleShape):
                 dc.SetPen(self._pen)
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
 
-        if self._cornerRadius>0:
+        if self._cornerRadius > 0:
             dc.DrawRoundedRectangle(x1, y1, self._width, self._height, self._cornerRadius)
         else:
             dc.DrawRectangle(x1, y1, self._width, self._height)
@@ -296,7 +294,7 @@ class LineShape(Shape):
         self._lineControlPoints = []
         
         for _ in range(n):
-            point = wx.RealPoint(-999,-999)
+            point = wx.RealPoint(-999, -999)
             self._lineControlPoints.append(point)
 
     def InsertLineControlPoint(self, dc = None):
@@ -307,15 +305,15 @@ class LineShape(Shape):
         last_point = self._lineControlPoints[-1]
         second_last_point = self._lineControlPoints[-2]
 
-        line_x = (last_point[0] + second_last_point[0]) / 2
-        line_y = (last_point[1] + second_last_point[1]) / 2
+        line_x = (last_point[0] + second_last_point[0]) / 2.0
+        line_y = (last_point[1] + second_last_point[1]) / 2.0
 
         point = wx.RealPoint(line_x, line_y)
         self._lineControlPoints.insert(len(self._lineControlPoints), point)
 
     def DeleteLineControlPoint(self):
         """Delete an arbitary point on the line."""
-        if len(self._lineControlPoints)<3:
+        if len(self._lineControlPoints) < 3:
             return False
 
         del self._lineControlPoints[-2]
@@ -333,21 +331,21 @@ class LineShape(Shape):
             # and the last.
 
             for point in self._lineControlPoints[1:]:
-                if point[0]==-999:
-                    if first_point[0]<last_point[0]:
+                if point[0] == -999:
+                    if first_point[0] < last_point[0]:
                         x1 = first_point[0]
                         x2 = last_point[0]
                     else:
                         x2 = first_point[0]
                         x1 = last_point[0]
-                    if first_point[1]<last_point[1]:
+                    if first_point[1] < last_point[1]:
                         y1 = first_point[1]
                         y2 = last_point[1]
                     else:
                         y2 = first_point[1]
                         y1 = last_point[1]
-                    point[0] = (x2-x1) / 2 + x1
-                    point[1] = (y2-y1) / 2 + y1
+                    point[0] = (x2 - x1) / 2.0 + x1
+                    point[1] = (y2 - y1) / 2.0 + y1
                     
     def FormatText(self, dc, s, i):
         """Format a text string according to the region size, adding
@@ -368,7 +366,7 @@ class LineShape(Shape):
             w, h = 100, 50
             region.SetSize(w, h)
 
-        string_list = FormatText(dc, s, w-5, h-5, region.GetFormatMode())
+        string_list = FormatText(dc, s, w - 5, h - 5, region.GetFormatMode())
         for s in string_list:
             line = ShapeTextLine(0.0, 0.0, s)
             region.GetFormattedText().append(line)
@@ -380,14 +378,14 @@ class LineShape(Shape):
             if actualW != w or actualH != h:
                 xx, yy = self.GetLabelPosition(i)
                 self.EraseRegion(dc, region, xx, yy)
-                if len(self._labelObjects)<i:
+                if len(self._labelObjects) < i:
                     self._labelObjects[i].Select(False, dc)
                     self._labelObjects[i].Erase(dc)
                     self._labelObjects[i].SetSize(actualW, actualH)
 
                 region.SetSize(actualW, actualH)
 
-                if len(self._labelObjects)<i:
+                if len(self._labelObjects) < i:
                     self._labelObjects[i].Select(True, dc)
                     self._labelObjects[i].Draw(dc)
 
@@ -415,7 +413,7 @@ class LineShape(Shape):
             # Now draw the text
             if region.GetFont():
                 dc.SetFont(region.GetFont())
-                dc.DrawRectangle(xp-w / 2, yp-h / 2, w, h)
+                dc.DrawRectangle(xp - w / 2.0, yp - h / 2.0, w, h)
 
                 if self._pen:
                     dc.SetPen(self._pen)
@@ -440,7 +438,7 @@ class LineShape(Shape):
             dc.SetPen(self.GetBackgroundPen())
             dc.SetBrush(self.GetBackgroundBrush())
 
-            dc.DrawRectangle(xp-w / 2, yp-h / 2, w, h)
+            dc.DrawRectangle(xp - w / 2.0, yp - h / 2.0, w, h)
 
     def GetLabelPosition(self, position):
         """Get the reference point for a label.
@@ -450,16 +448,16 @@ class LineShape(Shape):
         """
         if position == 0:
             # Want to take the middle section for the label
-            half_way = int(len(self._lineControlPoints) / 2)
+            half_way = int(len(self._lineControlPoints) / 2.0)
 
             # Find middle of this line
-            point = self._lineControlPoints[half_way-1]
+            point = self._lineControlPoints[half_way - 1]
             next_point = self._lineControlPoints[half_way]
 
-            dx = next_point[0]-point[0]
-            dy = next_point[1]-point[1]
+            dx = next_point[0] - point[0]
+            dy = next_point[1] - point[1]
 
-            return point[0] + dx / 2, point[1] + dy / 2
+            return point[0] + dx / 2.0, point[1] + dy / 2.0
         elif position == 1:
             return self._lineControlPoints[0][0], self._lineControlPoints[0][1]
         elif position == 2:
@@ -467,7 +465,7 @@ class LineShape(Shape):
 
     def Straighten(self, dc = None):
         """Straighten verticals and horizontals."""
-        if len(self._lineControlPoints)<3:
+        if len(self._lineControlPoints) < 3:
             return
 
         if dc:
@@ -475,7 +473,7 @@ class LineShape(Shape):
 
         GraphicsStraightenLine(self._lineControlPoints[-1], self._lineControlPoints[-2])
 
-        for i in range(len(self._lineControlPoints)-2):
+        for i in range(len(self._lineControlPoints) - 2):
             GraphicsStraightenLine(self._lineControlPoints[i], self._lineControlPoints[i + 1])
                 
         if dc:
@@ -501,8 +499,8 @@ class LineShape(Shape):
         last_point[0] = x2
         last_point[1] = y2
 
-        self._xpos = (x1 + x2) / 2
-        self._ypos = (y1 + y2) / 2
+        self._xpos = (x1 + x2) / 2.0
+        self._ypos = (y1 + y2) / 2.0
 
     # Get absolute positions of ends
     def GetEnds(self):
@@ -532,35 +530,35 @@ class LineShape(Shape):
                     xp, yp = self.GetLabelPosition(i)
                     # Offset region from default label position
                     cx, cy = region.GetPosition()
-                    cw, ch = region.GetSize()
+                    cw, ch = region.GetSize() 
                     cx += xp
                     cy += yp
                     
-                    rLeft = cx-cw / 2
-                    rTop = cy-ch / 2
-                    rRight = cx + cw / 2
-                    rBottom = cy + ch / 2
-                    if x>rLeft and x<rRight and y>rTop and y<rBottom:
+                    rLeft = cx - cw / 2.0
+                    rTop = cy - ch / 2.0
+                    rRight = cx + cw / 2.0
+                    rBottom = cy + ch / 2.0
+                    if x > rLeft and x < rRight and y > rTop and y < rBottom:
                         inLabelRegion = True
                         break
 
-        for i in range(len(self._lineControlPoints)-1):
+        for i in range(len(self._lineControlPoints) - 1):
             point1 = self._lineControlPoints[i]
             point2 = self._lineControlPoints[i + 1]
 
             # For inaccurate mousing allow 8 pixel corridor
             extra = 4
 
-            dx = point2[0]-point1[0]
-            dy = point2[1]-point1[1]
+            dx = point2[0] - point1[0]
+            dy = point2[1] - point1[1]
 
             seg_len = math.sqrt(dx * dx + dy * dy)
             if dy == 0 or dx == 0:
                 return False
-            distance_from_seg = seg_len * ((x-point1[0]) * dy-(y-point1[1]) * dx) / (dy * dy + dx * dx)
-            distance_from_prev = seg_len * ((y-point1[1]) * dy + (x-point1[0]) * dx) / (dy * dy + dx * dx)
+            distance_from_seg = seg_len * float((x - point1[0]) * dy - (y - point1[1]) * dx) / (dy * dy + dx * dx)
+            distance_from_prev = seg_len * float((y - point1[1]) * dy + (x - point1[0]) * dx) / (dy * dy + dx * dx)
 
-            if abs(distance_from_seg)<extra and distance_from_prev >= 0 and distance_from_prev <= seg_len or inLabelRegion:
+            if abs(distance_from_seg) < extra and distance_from_prev >= 0 and distance_from_prev <= seg_len or inLabelRegion:
                 return 0, distance_from_seg
 
         return False
@@ -612,7 +610,7 @@ class LineShape(Shape):
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = math.sqrt((second_line_point[0]-first_line_point[0]) * (second_line_point[0]-first_line_point[0]) + (second_line_point[1]-first_line_point[1]) * (second_line_point[1]-first_line_point[1]))
+                totalLength = math.sqrt((second_line_point[0] - first_line_point[0]) * (second_line_point[0] - first_line_point[0]) + (second_line_point[1] - first_line_point[1]) * (second_line_point[1] - first_line_point[1]))
                 realOffset = XOffset * totalLength
 
             positionOnLineX, positionOnLineY = GetPointOnLine(second_line_point[0], second_line_point[1], first_line_point[0], first_line_point[1], realOffset)
@@ -624,7 +622,7 @@ class LineShape(Shape):
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = math.sqrt((second_last_line_point[0]-last_line_point[0]) * (second_last_line_point[0]-last_line_point[0]) + (second_last_line_point[1]-last_line_point[1]) * (second_last_line_point[1]-last_line_point[1]));
+                totalLength = math.sqrt((second_last_line_point[0] - last_line_point[0]) * (second_last_line_point[0] - last_line_point[0]) + (second_last_line_point[1] - last_line_point[1]) * (second_last_line_point[1] - last_line_point[1]));
                 realOffset = XOffset * totalLength
             
             positionOnLineX, positionOnLineY = GetPointOnLine(second_last_line_point[0], second_last_line_point[1], last_line_point[0], last_line_point[1], realOffset)
@@ -633,14 +631,14 @@ class LineShape(Shape):
             startPositionY = second_last_line_point[1]
         elif ap == ARROW_POSITION_MIDDLE:
             # Choose a point half way between the last and penultimate points
-            x = (last_line_point[0] + second_last_line_point[0]) / 2
-            y = (last_line_point[1] + second_last_line_point[1]) / 2
+            x = (last_line_point[0] + second_last_line_point[0]) / 2.0
+            y = (last_line_point[1] + second_last_line_point[1]) / 2.0
 
             # If we're using a proportional offset, calculate just where this
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = math.sqrt((second_last_line_point[0]-x) * (second_last_line_point[0]-x) + (second_last_line_point[1]-y) * (second_last_line_point[1]-y));
+                totalLength = math.sqrt((second_last_line_point[0] - x) * (second_last_line_point[0] - x) + (second_last_line_point[1] - y) * (second_last_line_point[1] - y));
                 realOffset = XOffset * totalLength
 
             positionOnLineX, positionOnLineY = GetPointOnLine(second_last_line_point[0], second_last_line_point[1], x, y, realOffset)
@@ -663,25 +661,25 @@ class LineShape(Shape):
             #   Where theta = math.tan(-1) of (y3-y1) / (x3-x1)
             x1 = startPositionX
             y1 = startPositionY
-            x3 = positionOnLineX
-            y3 = positionOnLineY
-            d=-arrow.GetYOffset() # Negate so +offset is above line
+            x3 = float(positionOnLineX)
+            y3 = float(positionOnLineY)
+            d = -arrow.GetYOffset() # Negate so +offset is above line
 
             if x3 == x1:
-                theta = math.pi / 2
+                theta = math.pi / 2.0
             else:
-                theta = math.atan((y3-y1) / (x3-x1))
+                theta = math.atan((y3 - y1) / (x3 - x1))
 
-            x4 = x3-d * math.sin(theta)
+            x4 = x3 - d * math.sin(theta)
             y4 = y3 + d * math.cos(theta)
             
-            deltaX = x4-positionOnLineX
-            deltaY = y4-positionOnLineY
+            deltaX = x4 - positionOnLineX
+            deltaY = y4 - positionOnLineY
 
         at = arrow._GetType()
         if at == ARROW_ARROW:
             arrowLength = arrow.GetSize()
-            arrowWidth = arrowLength / 3
+            arrowWidth = arrowLength / 3.0
 
             tip_x, tip_y, side1_x, side1_y, side2_x, side2_y = GetArrowPoints(startPositionX + deltaX, startPositionY + deltaY, positionOnLineX + deltaX, positionOnLineY + deltaY, arrowLength, arrowWidth)
 
@@ -699,9 +697,9 @@ class LineShape(Shape):
             diameter = arrow.GetSize()
             x, y = GetPointOnLine(startPositionX + deltaX, startPositionY + deltaY,
                                positionOnLineX + deltaX, positionOnLineY + deltaY,
-                               diameter / 2)
-            x1 = x-diameter / 2
-            y1 = y-diameter / 2
+                               diameter / 2.0)
+            x1 = x - diameter / 2.0
+            y1 = y - diameter / 2.0
             dc.SetPen(self._pen)
             if arrow._GetType() == ARROW_HOLLOW_CIRCLE:
                 dc.SetBrush(self.GetBackgroundBrush())
@@ -724,7 +722,7 @@ class LineShape(Shape):
                 #
                 x, y = GetPointOnLine(startPositionX, startPositionY,
                                    positionOnLineX, positionOnLineY,
-                                   arrow.GetMetaFile()._width / 2)
+                                   arrow.GetMetaFile()._width / 2.0)
                 # Calculate theta for rotating the metafile.
                 #
                 # |
@@ -738,21 +736,21 @@ class LineShape(Shape):
                 theta = 0.0
                 x1 = startPositionX
                 y1 = startPositionY
-                x2 = positionOnLineX
-                y2 = positionOnLineY
+                x2 = float(positionOnLineX)
+                y2 = float(positionOnLineY)
 
                 if x1 == x2 and y1 == y2:
                     theta = 0.0
-                elif x1 == x2 and y1>y2:
-                    theta = 3.0 * math.pi / 2
-                elif x1 == x2 and y2>y1:
-                    theta = math.pi / 2
-                elif x2>x1 and y2 >= y1:
-                    theta = math.atan((y2-y1) / (x2-x1))
-                elif x2<x1:
-                    theta = math.pi + math.atan((y2-y1) / (x2-x1))
-                elif x2>x1 and y2<y1:
-                    theta = 2 * math.pi + math.atan((y2-y1) / (x2-x1))
+                elif x1 == x2 and y1 > y2:
+                    theta = 3.0 * math.pi / 2.0
+                elif x1 == x2 and y2 > y1:
+                    theta = math.pi / 2.0
+                elif x2 > x1 and y2 >= y1:
+                    theta = math.atan((y2 - y1) / (x2 - x1))
+                elif x2 < x1:
+                    theta = math.pi + math.atan((y2 - y1) / (x2 - x1))
+                elif x2 > x1 and y2 < y1:
+                    theta = 2 * math.pi + math.atan((y2 - y1) / (x2 - x1))
                 else:
                     raise "Unknown arrowhead rotation case"
 
@@ -766,7 +764,7 @@ class LineShape(Shape):
                     minX, minY, maxX, maxY = arrow.GetMetaFile().GetBounds()
                     # Make erasing rectangle slightly bigger or you get droppings
                     extraPixels = 4
-                    dc.DrawRectangle(deltaX + x + minX-extraPixels / 2, deltaY + y + minY-extraPixels / 2, maxX-minX + extraPixels, maxY-minY + extraPixels)
+                    dc.DrawRectangle(deltaX + x + minX - extraPixels / 2.0, deltaY + y + minY - extraPixels / 2.0, maxX - minX + extraPixels, maxY - minY + extraPixels)
                 else:
                     arrow.GetMetaFile().Draw(dc, x + deltaX, y + deltaY)
 
@@ -795,8 +793,8 @@ class LineShape(Shape):
 
         # Drawing over the line only seems to work if the line has a thickness
         # of 1.
-        if old_pen and old_pen.GetWidth()>1:
-            dc.DrawRectangle(self._xpos-bound_x / 2-2, self._ypos-bound_y / 2-2,
+        if old_pen and old_pen.GetWidth() > 1:
+            dc.DrawRectangle(self._xpos - bound_x / 2.0 - 2, self._ypos - bound_y / 2.0 - 2,
                              bound_x + 4, bound_y + 4)
         else:
             self._erasing = True
@@ -811,19 +809,19 @@ class LineShape(Shape):
 
     def GetBoundingBoxMin(self):
         x1, y1 = 10000, 10000
-        x2, y2=-10000,-10000
+        x2, y2 = -10000, -10000
 
         for point in self._lineControlPoints:
-            if point[0]<x1:
+            if point[0] < x1:
                 x1 = point[0]
-            if point[1]<y1:
+            if point[1] < y1:
                 y1 = point[1]
-            if point[0]>x2:
+            if point[0] > x2:
                 x2 = point[0]
-            if point[1]>y2:
+            if point[1] > y2:
                 y2 = point[1]
 
-        return x2-x1, y2-y1
+        return x2 - x1, y2 - y1
         
     # For a node image of interest, finds the position of this arc
     # amongst all the arcs which are attached to THIS SIDE of the node image,
@@ -834,7 +832,7 @@ class LineShape(Shape):
         Specify whether incoming or outgoing lines are being considered
         with incoming.
         """
-        n=-1
+        n = -1
         num = 0
         
         if image == self._to:
@@ -884,8 +882,8 @@ class LineShape(Shape):
             self.SetBrush(None)
 
     def OnMovePre(self, dc, x, y, old_x, old_y, display = True):
-        x_offset = x-old_x
-        y_offset = y-old_y
+        x_offset = x - old_x
+        y_offset = y - old_y
 
         if self._lineControlPoints and not (x_offset == 0 and y_offset == 0):
             for point in self._lineControlPoints:
@@ -897,7 +895,7 @@ class LineShape(Shape):
             if self._labelObjects[i]:
                 self._labelObjects[i].Erase(dc)
                 xp, yp = self.GetLabelPosition(i)
-                if i<len(self._regions):
+                if i < len(self._regions):
                     xr, yr = self._regions[i].GetPosition()
                 else:
                     xr, yr = 0, 0
@@ -911,7 +909,7 @@ class LineShape(Shape):
         if not self._from or not self._to:
             return
 
-        if len(self._lineControlPoints)>2:
+        if len(self._lineControlPoints) > 2:
             self.Initialise()
 
         # Do each end - nothing in the middle. User has to move other points
@@ -930,8 +928,8 @@ class LineShape(Shape):
         self.SetEnds(end_x, end_y, other_end_x, other_end_y)
 
         # Try to move control points with the arc
-        x_offset = self._xpos-oldX
-        y_offset = self._ypos-oldY
+        x_offset = self._xpos - oldX
+        y_offset = self._ypos - oldY
 
         # Only move control points if it's a self link. And only works
         # if attachment mode is ON
@@ -957,7 +955,7 @@ class LineShape(Shape):
         second_point = self._lineControlPoints[1]
         second_last_point = self._lineControlPoints[-2]
         
-        if len(self._lineControlPoints)>2:
+        if len(self._lineControlPoints) > 2:
             if self._from.GetAttachmentMode() != ATTACHMENT_MODE_NONE:
                 nth, no_arcs = self.FindNth(self._from, False) # Not incoming
                 end_x, end_y = self._from.GetAttachmentPosition(self._attachmentFrom, nth, no_arcs, self)
@@ -1015,7 +1013,7 @@ class LineShape(Shape):
         else:
             dc.DrawLines(points)
 
-        if sys.platform[:3]=="win":
+        if sys.platform[:3] == "win":
             # For some reason, last point isn't drawn under Windows
             pt = points[-1]
             dc.DrawPoint(pt.x, pt.y)
@@ -1256,7 +1254,7 @@ class LineShape(Shape):
 
         return True
 
-    def AddArrow(self, type, end = ARROW_POSITION_END, size = 10.0, xOffset = 0.0, name="",mf = None, arrowId=-1):
+    def AddArrow(self, type, end = ARROW_POSITION_END, size = 10.0, xOffset = 0.0, name = "", mf = None, arrowId = -1):
         """Add an arrow (or annotation) to the line.
 
         type may currently be one of:
@@ -1326,7 +1324,7 @@ class LineShape(Shape):
             return True
 
         i1 = i2 = 0
-        while i1<len(referenceList) and i2<len(self._arcArrows):
+        while i1 < len(referenceList) and i2 < len(self._arcArrows):
             refArrow = referenceList[i1]
             currArrow = self._arcArrows[i2]
 
@@ -1337,7 +1335,7 @@ class LineShape(Shape):
             # Check if we're at the correct position in the
             # reference list
             if targetName == refArrow.GetName():
-                if i2<len(self._arcArrows):
+                if i2 < len(self._arcArrows):
                     self._arcArrows.insert(i2, arrow)
                 else:
                     self._arcArrows.append(arrow)
@@ -1351,7 +1349,7 @@ class LineShape(Shape):
         """Delete the arrows at the specified position, or at any position
         if position is -1.
         """
-        if end==-1:
+        if end == -1:
             self._arcArrows = []
             return
 
@@ -1373,7 +1371,7 @@ class LineShape(Shape):
         if position is -1, matches any position.
         """
         for arrow in self._arcArrows:
-            if (position==-1 or position == arrow.GetArrowEnd()) and arrow.GetName() == name:
+            if (position == -1 or position == arrow.GetArrowEnd()) and arrow.GetName() == name:
                 return arow
 
         return None
@@ -1392,7 +1390,7 @@ class LineShape(Shape):
         if position is -1, matches any position.
         """
         for arrow in self._arcArrows:
-            if (position==-1 or position == arrow.GetArrowEnd()) and arrow.GetName() == name:
+            if (position == -1 or position == arrow.GetArrowEnd()) and arrow.GetName() == name:
                 self._arcArrows.remove(arrow)
                 return True
         return False
@@ -1420,7 +1418,7 @@ class LineShape(Shape):
         # We have ABSOLUTE minimum now. So
         # scale it to give it reasonable aesthetics
         # when drawing with line.
-        if minWidth>0:
+        if minWidth > 0:
             minWidth = minWidth * 1.4
         else:
             minWidth = 20.0
@@ -1438,13 +1436,13 @@ class LineShape(Shape):
         startX, startY, endX, endY = self.GetEnds()
 
         # Find distances from centre, start and end. The smallest wins
-        centreDistance = math.sqrt((x-self._xpos) * (x-self._xpos) + (y-self._ypos) * (y-self._ypos))
-        startDistance = math.sqrt((x-startX) * (x-startX) + (y-startY) * (y-startY))
-        endDistance = math.sqrt((x-endX) * (x-endX) + (y-endY) * (y-endY))
+        centreDistance = math.sqrt((x - self._xpos) * (x - self._xpos) + (y - self._ypos) * (y - self._ypos))
+        startDistance = math.sqrt((x - startX) * (x - startX) + (y - startY) * (y - startY))
+        endDistance = math.sqrt((x - endX) * (x - endX) + (y - endY) * (y - endY))
 
-        if centreDistance<startDistance and centreDistance<endDistance:
+        if centreDistance < startDistance and centreDistance < endDistance:
             return ARROW_POSITION_MIDDLE
-        elif startDistance<endDistance:
+        elif startDistance < endDistance:
             return ARROW_POSITION_START
         else:
             return ARROW_POSITION_END
@@ -1495,10 +1493,10 @@ class LineShape(Shape):
         if self._to == shape:
             # Must be END of line, so we want (n - 1)th control point.
             # But indexing ends at n-1, so subtract 2.
-            nn = n-2
+            nn = n - 2
         else:
             nn = 1
-        if nn<len(self._lineControlPoints):
+        if nn < len(self._lineControlPoints):
             return self._lineControlPoints[nn]
         return None
 
@@ -1520,7 +1518,7 @@ class LineShape(Shape):
         xx, yy = self.GetLabelPosition(i)
         # Set the region's offset, relative to the default position for
         # each region.
-        labelShape._shapeRegion.SetPosition(x-xx, y-yy)
+        labelShape._shapeRegion.SetPosition(x - xx, y - yy)
         labelShape.SetX(x)
         labelShape.SetY(y)
 

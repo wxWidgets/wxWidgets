@@ -11,8 +11,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from __future__ import division
-
 import wx
 
 DEFAULT_MOUSE_TOLERANCE = 3

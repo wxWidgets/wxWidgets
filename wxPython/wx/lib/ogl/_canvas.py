@@ -11,8 +11,6 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-from __future__ import division
-
 import wx
 from _lines import LineShape
 from _composit import *
@@ -31,13 +29,13 @@ def WhollyContains(contains, contained):
     w1, h1 = contains.GetBoundingBoxMax()
     w2, h2 = contained.GetBoundingBoxMax()
     
-    left1 = xp1-w1 / 2.0
-    top1 = yp1-h1 / 2.0
+    left1 = xp1 - w1 / 2.0
+    top1 = yp1 - h1 / 2.0
     right1 = xp1 + w1 / 2.0
     bottom1 = yp1 + h1 / 2.0
     
-    left2 = xp2-w2 / 2.0
-    top2 = yp2-h2 / 2.0
+    left2 = xp2 - w2 / 2.0
+    top2 = yp2 - h2 / 2.0
     right2 = xp2 + w2 / 2.0
     bottom2 = yp2 + h2 / 2.0
     
@@ -46,7 +44,7 @@ def WhollyContains(contains, contained):
 
 
 class ShapeCanvas(wx.ScrolledWindow):
-    def __init__(self, parent = None, id=-1, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.BORDER, name="ShapeCanvas"):
+    def __init__(self, parent = None, id = -1, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.BORDER, name = "ShapeCanvas"):
         wx.ScrolledWindow.__init__(self, parent, id, pos, size, style, name)
 
         self._shapeDiagram = None
@@ -95,8 +93,8 @@ class ShapeCanvas(wx.ScrolledWindow):
         # If we're very close to the position we started dragging
         # from, this may not be an intentional drag at all.
         if dragging:
-            dx = abs(dc.LogicalToDeviceX(x-self._firstDragX))
-            dy = abs(dc.LogicalToDeviceY(y-self._firstDragY))
+            dx = abs(dc.LogicalToDeviceX(x - self._firstDragX))
+            dy = abs(dc.LogicalToDeviceY(y - self._firstDragY))
             if self._checkTolerance and (dx <= self.GetDiagram().GetMouseTolerance()) and (dy <= self.GetDiagram().GetMouseTolerance()):
                 return
             # If we've ignored the tolerance once, then ALWAYS ignore
@@ -270,7 +268,9 @@ class ShapeCanvas(wx.ScrolledWindow):
         #     the other objects
         # (b) to find the control points FIRST if they exist
 
-        for object in self.GetDiagram().GetShapeList()[::-1]:
+        rl = self.GetDiagram().GetShapeList()[:]
+        rl.reverse()
+        for object in rl:
             # First pass for lines, which might be inside a container, so we
             # want lines to take priority over containers. This first loop
             # could fail if we clickout side a line, so then we'll
@@ -288,12 +288,12 @@ class ShapeCanvas(wx.ScrolledWindow):
                 # to specify the nearest point to the centre of the line
                 # as our hit criterion, to give the user some room for
                 # manouevre.
-                if dist<nearest:
+                if dist < nearest:
                     nearest = dist
                     nearest_object = object
                     nearest_attachment = temp_attachment
 
-        for object in self.GetDiagram().GetShapeList()[::-1]:
+        for object in rl:
             # On second pass, only ever consider non-composites or
             # divisions. If children want to pass up control to
             # the composite, that's up to them.

@@ -14,7 +14,7 @@ from _composit import *
 
 
 # Set things up for documenting with epydoc.  The __docfilter__ will
-# prevent some things from beign documented, and anything in __all__
+# prevent some things from being documented, and anything in __all__
 # will appear to actually exist in this module.
 import wx._core as _wx
 __docfilter__ = _wx.__DocFilter(globals())
