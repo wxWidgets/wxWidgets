@@ -67,6 +67,12 @@ $(CPPFLAGS) /Fo$@ /Tp $<
 $(CPPFLAGS) /Fo$@ /Tp $<
 <<
 
+{..\os2}.c{..\os2\$D}.obj:
+    @echo $<
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
 {..\html}.cpp{..\html\$D}.obj:
     @echo $<
     icc @<<
@@ -313,6 +319,13 @@ OS2OBJS = \
   ..\os2\$D\frame.obj \
   ..\os2\$D\gauge.obj \
   ..\os2\$D\gdiobj.obj \
+  ..\os2\$D\gsocket.obj \
+  ..\os2\$D\helpwin.obj \
+  ..\os2\$D\icon.obj \
+  ..\os2\$D\imaglist.obj \
+  ..\os2\$D\iniconf.obj \
+  ..\os2\$D\joystick.obj \
+  ..\os2\$D\listbox.obj \
   ..\os2\$D\window.obj
 
 
@@ -347,6 +360,13 @@ OS2LIBOBJS = \
   frame.obj \
   gauge.obj \
   gdiobj.obj \
+  gsocket.obj \
+  helpwin.obj \
+  icon.obj \
+  imaglist.obj \
+  iniconf.obj \
+  joystick.obj \
+  listbox.obj \
   window.obj
 
 HTMLOBJS = \
@@ -524,6 +544,13 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\gauge.obj
   copy ..\os2\$D\gdiobj.obj
+  copy ..\os2\$D\gsocket.obj
+  copy ..\os2\$D\helpwin.obj
+  copy ..\os2\$D\icon.obj
+  copy ..\os2\$D\imaglist.obj
+  copy ..\os2\$D\iniconf.obj
+  copy ..\os2\$D\joystick.obj
+  copy ..\os2\$D\listbox.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL

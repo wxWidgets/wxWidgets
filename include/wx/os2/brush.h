@@ -34,10 +34,7 @@ protected:
     int           m_style;
     wxBitmap      m_stipple ;
     wxColour      m_colour;
-
-/* TODO: implementation
     WXHBRUSH      m_hBrush;
-*/
 };
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
@@ -73,6 +70,10 @@ public:
 
   // Useful helper: create the brush resource
   bool RealizeResource();
+
+  WXHANDLE GetResourceHandle(void) ;
+  bool FreeResource(bool force = FALSE);
+  bool IsFree() const;
 
   // When setting properties, we must make sure we're not changing
   // another object

@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        joystick.h
 // Purpose:     wxJoystick class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_JOYSTICK_H_
 #define _WX_JOYSTICK_H_
-
-#ifdef __GNUG__
-#pragma interface "joystick.h"
-#endif
 
 #include "wx/event.h"
 

@@ -1,18 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        joystick.cpp
 // Purpose:     wxJoystick class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "joystick.h"
-#endif
+#include "wx/string.h"
+#define INCL_PM
+#include "os2.h"
+#include "wx/os2/private.h"
 
+#define NO_JOYGETPOSEX
+
+#include <wx/window.h>
 #include <wx/joystick.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)

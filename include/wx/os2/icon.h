@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        icon.h
 // Purpose:     wxIcon class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ICON_H_
 #define _WX_ICON_H_
-
-#ifdef __GNUG__
-#pragma interface "icon.h"
-#endif
 
 #include "wx/bitmap.h"
 
@@ -27,9 +23,7 @@ public:
     ~wxIconRefData();
 
 public:
-/* TODO: whatever your actual icon handle is
-  WXHICON m_hIcon;
-*/
+    WXHICON m_hIcon;
 };
 
 #define M_ICONDATA ((wxIconRefData *)m_refData)
@@ -58,12 +52,9 @@ public:
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
 
-/* TODO: implementation
   void SetHICON(WXHICON ico);
   inline WXHICON GetHICON() const { return (M_ICONDATA ? M_ICONDATA->m_hIcon : 0); }
-*/
 
-/* TODO */
   virtual bool Ok() const { return (m_refData != NULL) ; }
 private:
   // supress virtual function hiding warning
@@ -73,7 +64,7 @@ private:
    { return(wxBitmap::LoadFile(name, type)); };
 };
 
-/* Example handlers. TODO: write your own handlers for relevant types.
+// Example handlers. TODO: write your own handlers for relevant types.
 
 class WXDLLEXPORT wxICOFileHandler: public wxBitmapHandler
 {
@@ -81,9 +72,9 @@ class WXDLLEXPORT wxICOFileHandler: public wxBitmapHandler
 public:
   inline wxICOFileHandler()
   {
-	m_name = "ICO icon file";
-	m_extension = "ico";
-	m_type = wxBITMAP_TYPE_ICO;
+    m_name = "ICO icon file";
+    m_extension = "ico";
+    m_type = wxBITMAP_TYPE_ICO;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -96,9 +87,9 @@ class WXDLLEXPORT wxICOResourceHandler: public wxBitmapHandler
 public:
   inline wxICOResourceHandler()
   {
-	m_name = "ICO resource";
-	m_extension = "ico";
-	m_type = wxBITMAP_TYPE_ICO_RESOURCE;
+    m_name = "ICO resource";
+    m_extension = "ico";
+    m_type = wxBITMAP_TYPE_ICO_RESOURCE;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -106,7 +97,6 @@ public:
 
 };
 
-*/
-
 #endif
     // _WX_ICON_H_
+

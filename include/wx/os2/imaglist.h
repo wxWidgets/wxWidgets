@@ -3,20 +3,16 @@
 // Purpose:     wxImageList class. Note: if your GUI doesn't have
 //              an image list equivalent, you can use the generic class
 //              in src/generic.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGLIST_H_
 #define _WX_IMAGLIST_H_
-
-#ifdef __GNUG__
-#pragma interface "imaglist.h"
-#endif
 
 #include "wx/bitmap.h"
 
@@ -100,13 +96,6 @@ class WXDLLEXPORT wxImageList: public wxObject
   // 'bitmap' and 'mask' after calling Replace.
   bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
 
-/* Not supported by Win95
-  // Replacing a bitmap, using the specified colour to create the mask bitmap
-  // Note that wxImageList creates new bitmaps, so you may delete
-  // 'bitmap'.
-  bool Replace(int index, const wxBitmap& bitmap, const wxColour& maskColour);
-*/
-
   // Replaces a bitmap and mask from an icon.
   // You can delete 'icon' after calling Replace.
   bool Replace(int index, const wxIcon& icon);
@@ -128,7 +117,6 @@ class WXDLLEXPORT wxImageList: public wxObject
   wxIcon *MakeIcon(int index);
 */
 
-/* TODO
   // Implementation
   ////////////////////////////////////////////////////////////////////////////
 
@@ -137,8 +125,6 @@ class WXDLLEXPORT wxImageList: public wxObject
 
 protected:
   WXHIMAGELIST m_hImageList;
-*/
-
 };
 
 #endif

@@ -81,20 +81,6 @@ wxBrush::wxBrush(const wxBitmap& stipple)
         wxTheBrushList->AddBrush(this);
 }
 
-void wxBrush::Unshare()
-{
-	// Don't change shared data
-	if (!m_refData)
-    {
-		m_refData = new wxBrushRefData();
-	}
-    else
-    {
-		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
-}
 
 void wxBrush::SetColour(const wxColour& col)
 {
@@ -136,5 +122,41 @@ bool wxBrush::RealizeResource()
 {
 // TODO: create the brush
     return FALSE;
+}
+
+WXHANDLE wxBrush::GetResourceHandle(void)
+{
+  return (WXHANDLE) M_BRUSHDATA->m_hBrush;
+}
+
+bool wxBrush::FreeResource(bool WXUNUSED(force))
+{
+  if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush != 0))
+  {
+// TODO    DeleteObject((HBRUSH) M_BRUSHDATA->m_hBrush);
+    M_BRUSHDATA->m_hBrush = 0;
+    return TRUE;
+  }
+  else return FALSE;
+}
+
+bool wxBrush::IsFree() const
+{
+  return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
+}
+
+void wxBrush::Unshare()
+{
+	// Don't change shared data
+	if (!m_refData)
+    {
+		m_refData = new wxBrushRefData();
+	}
+    else
+    {
+		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+		UnRef();
+		m_refData = ref;
+	}
 }
 

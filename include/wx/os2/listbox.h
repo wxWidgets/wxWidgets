@@ -1,24 +1,29 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        listbox.h
 // Purpose:     wxListBox class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
-#ifdef __GNUG__
-#pragma interface "listbox.h"
-#endif
-
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
+
+#if wxUSE_OWNER_DRAWN
+  class WXDLLEXPORT wxOwnerDrawn;
+
+  // define the array of list box items
+  #include  <wx/dynarray.h>
+
+  WX_DEFINE_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+#endif
 
 // forward decl for GetSelections()
 class WXDLLEXPORT wxArrayInt;
@@ -53,6 +58,22 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   ~wxListBox();
 
+    bool OS2Command(WXUINT param, WXWORD id);
+
+#if wxUSE_OWNER_DRAWN
+    bool OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
+    bool OS2OnDraw(WXDRAWITEMSTRUCT *item);
+
+    // plug-in for derived classes
+    virtual wxOwnerDrawn *CreateItem(size_t n);
+
+    // allows to get the item and use SetXXX functions to set it's appearance
+    wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
+
+    // get the index of the given item
+    int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
+#endif // wxUSE_OWNER_DRAWN
+
   virtual void Append(const wxString& item);
   virtual void Append(const wxString& item, void *clientData);
   virtual void Set(int n, const wxString* choices, char **clientData = NULL);
@@ -65,15 +86,14 @@ class WXDLLEXPORT wxListBox: public wxControl
   // For single choice list item only
   virtual int GetSelection() const ;
   virtual void Delete(int n);
-  virtual char *GetClientData(int n) const ;
-  virtual void SetClientData(int n, char *clientData);
+  virtual void *GetClientData(int n) const ;
+  virtual void SetClientData(int n, void *clientData);
   virtual void SetString(int n, const wxString& s);
 
   // For single or multiple choice list item
   virtual int GetSelections(wxArrayInt& aSelections) const;
   virtual bool Selected(int n) const ;
   virtual wxString GetString(int n) const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   // Set the specified item at the first visible item
   // or scroll to max range.
@@ -88,9 +108,34 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   void Command(wxCommandEvent& event);
 
- protected:
+    // OS/2-PM-specific code to set the horizontal extent of
+    // the listbox, if necessary. If s is non-NULL, it's
+    // used to calculate the horizontal extent.
+    // Otherwise, all strings are used.
+    virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
+
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual void SetupColours();
+
+protected:
   int       m_noItems;
   int       m_selected;
+
+  virtual wxSize DoGetBestSize();
+
+#if wxUSE_OWNER_DRAWN
+    // control items
+    wxListBoxItemsArray m_aItems;
+#endif
+private:
+  //Virtual function hiding suppression, do not use
+  wxControl *CreateItem(const wxItemResource* childResource,
+                        const wxItemResource* parentResource,
+                        const wxResourceTable *table = (const wxResourceTable *) NULL)
+  { return(wxWindowBase::CreateItem(childResource, parentResource, table));};
 };
 
 #endif

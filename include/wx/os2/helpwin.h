@@ -1,33 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpxxxx.h
-// Purpose:     Help system: native implementation for your system. Replace
-//              XXXX with suitable name.
-// Author:      AUTHOR
+// Purpose:     Help system: native implementation for your system.
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:      10/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HELPXXXX_H_
-#define _WX_HELPXXXX_H_
-
-#ifdef __GNUG__
-#pragma interface "helpxxxx.h"
-#endif
+#ifndef _WX_HELPWIN_H_
+#define _WX_HELPWIN_H_
 
 #include "wx/wx.h"
 
 #include "wx/helpbase.h"
 
-class WXDLLEXPORT wxXXXXHelpController: public wxHelpControllerBase
+class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 {
-  DECLARE_CLASS(wxXXXXHelpController)
+  DECLARE_CLASS(wxWinHelpController)
 
  public:
-  wxXXXXHelpController();
-  ~wxXXXXHelpController();
+  wxWinHelpController();
+  ~wxWinHelpController();
 
   // Must call this to set the filename and server name
   virtual bool Initialize(const wxString& file);
@@ -46,7 +41,10 @@ class WXDLLEXPORT wxXXXXHelpController: public wxHelpControllerBase
 
 protected:
   wxString m_helpFile;
+private:
+  // virtual function hiding supression :: do not use
+    bool Initialize(const wxString& file, int WXUNUSED(server) ) { return(Initialize(file)); }
 };
 
 #endif
-    // _WX_HELPXXXX_H_
+    // _WX_HELPWIN_H_
