@@ -2539,7 +2539,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 break;
 
             case _T('d'):       // day of a month (01-31)
-                if ( !GetNumericToken(input, &num) || (num > 31) )
+                if ( !GetNumericToken(input, &num) || (num > 31) || (num < 1) )
                 {
                     // no match
                     return (wxChar *)NULL;
