@@ -5190,6 +5190,42 @@ static PyObject *_wrap_wxDC_DrawRectangle(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxDC_DrawRectangleRect(_swigobj,_swigarg0)  (_swigobj->DrawRectangle(_swigarg0))
+static PyObject *_wrap_wxDC_DrawRectangleRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_DrawRectangleRect",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_DrawRectangleRect. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxDC_DrawRectangleRect(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxDC_DrawRotatedText(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawRotatedText(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxDC_DrawRotatedText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6667,6 +6703,42 @@ static PyObject *_wrap_wxDC_SetClippingRegionAsRegion(PyObject *self, PyObject *
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxDC_SetClippingRegionAsRegion(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxDC_SetClippingRect(_swigobj,_swigarg0)  (_swigobj->SetClippingRegion(_swigarg0))
+static PyObject *_wrap_wxDC_SetClippingRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetClippingRect",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_SetClippingRect. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxDC_SetClippingRect(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10188,6 +10260,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_SetFont", (PyCFunction) _wrap_wxDC_SetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetBrush", (PyCFunction) _wrap_wxDC_SetBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetPalette", (PyCFunction) _wrap_wxDC_SetPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetClippingRect", (PyCFunction) _wrap_wxDC_SetClippingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetClippingRegionAsRegion", (PyCFunction) _wrap_wxDC_SetClippingRegionAsRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetClippingRegion", (PyCFunction) _wrap_wxDC_SetClippingRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetBackgroundMode", (PyCFunction) _wrap_wxDC_SetBackgroundMode, METH_VARARGS | METH_KEYWORDS },
@@ -10230,6 +10303,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_DrawSpline", (PyCFunction) _wrap_wxDC_DrawSpline, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawRoundedRectangle", (PyCFunction) _wrap_wxDC_DrawRoundedRectangle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawRotatedText", (PyCFunction) _wrap_wxDC_DrawRotatedText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_DrawRectangleRect", (PyCFunction) _wrap_wxDC_DrawRectangleRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawRectangle", (PyCFunction) _wrap_wxDC_DrawRectangle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawPoint", (PyCFunction) _wrap_wxDC_DrawPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_DrawPolygon", (PyCFunction) _wrap_wxDC_DrawPolygon, METH_VARARGS | METH_KEYWORDS },
