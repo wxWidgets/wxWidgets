@@ -426,6 +426,8 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
                 "mac"
 #elif defined(__WXCOCOA__)
                 "cocoa"
+#else // FIXME - wrong!
+                ""
 #endif
        );
 
