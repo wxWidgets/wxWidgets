@@ -1382,7 +1382,6 @@ void wxMacControl::ScrollRect( wxRect *r , int dx , int dy )
 	{
 		Rect bounds ;
 		GetControlBounds( m_controlRef , &bounds ) ;
-		Point topleft = { bounds.top , bounds.left } ;
 		bounds.left += r->x ;
 		bounds.top += r->y ;
 		bounds.bottom = bounds.top + r->height ;
