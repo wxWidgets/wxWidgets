@@ -29,6 +29,7 @@
     #include "wx/log.h"
     #include "wx/timer.h"
 
+    #include "wx/bitmap.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/radiobox.h"
