@@ -257,10 +257,10 @@ public:
   size_t Len() const { return GetStringData()->nDataLength; }
     /// string contains any characters?
   bool IsEmpty() const { return Len() == 0; }
-    /// reinitialize string (and free data!)
+    /// reinitialize string (and free memory)
   void Empty()
   {
-    if ( GetStringData()->nDataLength != 0 )
+    if ( !IsEmpty() )
       Reinit();
 
     wxASSERT( GetStringData()->nDataLength == 0 );

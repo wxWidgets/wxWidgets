@@ -136,7 +136,7 @@ NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
   {
   public:
     Averager(const char *sz) { m_sz = sz; m_nTotal = m_nCount = 0; }
-   ~Averager() 
+   ~Averager()
    { printf("wxString: average %s = %f\n", m_sz, ((float)m_nTotal)/m_nCount); }
 
     void Add(size_t n) { m_nTotal += n; m_nCount++; }
@@ -775,30 +775,40 @@ wxString& wxString::MakeLower()
 // trims spaces (in the sense of isspace) from left or right side
 wxString& wxString::Trim(bool bFromRight)
 {
-  CopyBeforeWrite();
-
-  if ( bFromRight )
+  // first check if we're going to modify the string at all
+  if ( !IsEmpty() && 
+       ( 
+        (bFromRight && isspace(GetChar(Len() - 1))) ||
+        (!bFromRight && isspace(GetChar(0u)))
+       )
+     )
   {
-    // find last non-space character
-    char *psz = m_pchData + GetStringData()->nDataLength - 1;
-    while ( isspace(*psz) && (psz >= m_pchData) )
-      psz--;
+    // ok, there is at least one space to trim
+    CopyBeforeWrite();
 
-    // truncate at trailing space start
-    *++psz = '\0';
-    GetStringData()->nDataLength = psz - m_pchData;
-  }
-  else
-  {
-    // find first non-space character
-    const char *psz = m_pchData;
-    while ( isspace(*psz) )
-      psz++;
+    if ( bFromRight )
+    {
+      // find last non-space character
+      char *psz = m_pchData + GetStringData()->nDataLength - 1;
+      while ( isspace(*psz) && (psz >= m_pchData) )
+        psz--;
 
-    // fix up data and length
-    int nDataLength = GetStringData()->nDataLength - (psz - m_pchData);
-    memmove(m_pchData, psz, (nDataLength + 1)*sizeof(char));
-    GetStringData()->nDataLength = nDataLength;
+      // truncate at trailing space start
+      *++psz = '\0';
+      GetStringData()->nDataLength = psz - m_pchData;
+    }
+    else
+    {
+      // find first non-space character
+      const char *psz = m_pchData;
+      while ( isspace(*psz) )
+        psz++;
+
+      // fix up data and length
+      int nDataLength = GetStringData()->nDataLength - (psz - m_pchData);
+      memmove(m_pchData, psz, (nDataLength + 1)*sizeof(char));
+      GetStringData()->nDataLength = nDataLength;
+    }
   }
 
   return *this;
