@@ -101,7 +101,7 @@ wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 wxRegion::wxRegion(const wxRect& rect)
 {
     m_refData = new wxRegionRefData;
-    M_REGION = ::CreateRectRgn(rect.GetLeft(), rect.GetTop(), rect.GetRight(), rect.GetBottom());
+    M_REGION = ::CreateRectRgn(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 }
 
 /*
