@@ -9,27 +9,35 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "proplist.h"
+    #pragma implementation "proplist.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/window.h"
-#include "wx/font.h"
-#include "wx/button.h"
-#include "wx/bmpbuttn.h"
-#include "wx/textctrl.h"
-#include "wx/listbox.h"
-#include "wx/settings.h"
-#include "wx/msgdlg.h"
-#include "wx/filedlg.h"
+    #include "wx/window.h"
+    #include "wx/font.h"
+    #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
+    #include "wx/textctrl.h"
+    #include "wx/listbox.h"
+    #include "wx/settings.h"
+    #include "wx/msgdlg.h"
+    #include "wx/filedlg.h"
 #endif
 
 #include "wx/sizer.h"
@@ -44,23 +52,25 @@
 #include <math.h>
 #include <string.h>
 
+// ----------------------------------------------------------------------------
+// XPMs
+// ----------------------------------------------------------------------------
+
 #ifndef __WXMSW__
-#include "wx/generic/cross.xpm"
-#include "wx/generic/tick.xpm"
+    #include "wx/generic/cross.xpm"
+    #include "wx/generic/tick.xpm"
 #endif
 
+// ----------------------------------------------------------------------------
+// accessor functions for the bitmaps (may return NULL, check for it!)
+// ----------------------------------------------------------------------------
 
-/*
- * global data, urgh.
- */
+static wxBitmap *GetTickBitmap();
+static wxBitmap *GetCrossBitmap();
 
-static wxBitmap* gs_tickBitmap = (wxBitmap*) NULL;
-static wxBitmap* gs_crossBitmap = (wxBitmap*) NULL;
-
-
-/*
- * Property text edit control
- */
+// ----------------------------------------------------------------------------
+// Property text edit control
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxPropertyTextEdit, wxTextCtrl)
 
@@ -73,17 +83,17 @@ wxPropertyTextEdit::wxPropertyTextEdit(wxPropertyListView *v, wxWindow *parent,
   m_view = v;
 }
 
-void wxPropertyTextEdit::OnSetFocus(void)
+void wxPropertyTextEdit::OnSetFocus()
 {
 }
 
-void wxPropertyTextEdit::OnKillFocus(void)
+void wxPropertyTextEdit::OnKillFocus()
 {
 }
 
-/*
- * Property list view
- */
+// ----------------------------------------------------------------------------
+// Property list view
+// ----------------------------------------------------------------------------
 
 bool wxPropertyListView::sm_dialogCancelled = FALSE;
 
@@ -121,7 +131,7 @@ wxPropertyListView::wxPropertyListView(wxPanel *propPanel, long flags):wxPropert
   m_detailedEditing = FALSE;
 }
 
-wxPropertyListView::~wxPropertyListView(void)
+wxPropertyListView::~wxPropertyListView()
 {
 }
 
@@ -138,7 +148,7 @@ void wxPropertyListView::ShowView(wxPropertySheet *ps, wxPanel *panel)
 
 // Update this view of the viewed object, called e.g. by
 // the object itself.
-bool wxPropertyListView::OnUpdateView(void)
+bool wxPropertyListView::OnUpdateView()
 {
   return TRUE;
 }
@@ -299,7 +309,7 @@ bool wxPropertyListView::EndShowingProperty(wxProperty *property)
   return TRUE;
 }
 
-void wxPropertyListView::BeginDetailedEditing(void)
+void wxPropertyListView::BeginDetailedEditing()
 {
   if (!m_currentValidator)
     return;
@@ -318,7 +328,7 @@ void wxPropertyListView::BeginDetailedEditing(void)
     m_detailedEditing = TRUE;
 }
 
-void wxPropertyListView::EndDetailedEditing(void)
+void wxPropertyListView::EndDetailedEditing()
 {
   if (!m_currentValidator)
     return;
@@ -441,10 +451,13 @@ bool wxPropertyListView::CreateControls()
 
     if (m_buttonFlags & wxPROP_BUTTON_CHECK_CROSS)
     {
-        if (gs_tickBitmap && gs_crossBitmap)
+        wxBitmap *tickBitmap = GetTickBitmap();
+        wxBitmap *crossBitmap = GetCrossBitmap();
+
+        if ( tickBitmap && crossBitmap )
         {
-            m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, *gs_tickBitmap, wxPoint(-1, -1), smallButtonSize );
-            m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, *gs_crossBitmap, wxPoint(-1, -1), smallButtonSize );
+            m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, *tickBitmap, wxPoint(-1, -1), smallButtonSize );
+            m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, *crossBitmap, wxPoint(-1, -1), smallButtonSize );
         }
         else
         {
@@ -559,7 +572,7 @@ void wxPropertyListView::EnableCross(bool show)
     m_cancelButton->Enable(show);
 }
 
-bool wxPropertyListView::OnClose(void)
+bool wxPropertyListView::OnClose()
 {
   // Retrieve the value if any
   wxCommandEvent event;
@@ -658,9 +671,9 @@ void wxPropertyListView::OnText(wxCommandEvent& event)
   }
 }
 
-/*
- * Property dialog box
- */
+// ----------------------------------------------------------------------------
+// Property dialog box
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxPropertyListDialog, wxDialog)
 
@@ -718,9 +731,9 @@ bool wxPropertyListDialog::ProcessEvent(wxEvent& event)
         return TRUE;
 }
 
-/*
- * Property panel
- */
+// ----------------------------------------------------------------------------
+// Property panel
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxPropertyListPanel, wxPanel)
 
@@ -754,9 +767,9 @@ void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
     Layout();
 }
 
-/*
- * Property frame
- */
+// ----------------------------------------------------------------------------
+// Property frame
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxPropertyListFrame, wxFrame)
 
@@ -785,7 +798,7 @@ wxPropertyListPanel *wxPropertyListFrame::OnCreatePanel(wxFrame *parent, wxPrope
   return new wxPropertyListPanel(v, parent);
 }
 
-bool wxPropertyListFrame::Initialize(void)
+bool wxPropertyListFrame::Initialize()
 {
   m_propertyPanel = OnCreatePanel(this, m_view);
   if (m_propertyPanel)
@@ -799,9 +812,9 @@ bool wxPropertyListFrame::Initialize(void)
     return FALSE;
 }
 
- /*
-  * Property list specific validator
-  */
+// ----------------------------------------------------------------------------
+// Property list specific validator
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxPropertyListValidator, wxPropertyValidator)
 
@@ -863,9 +876,9 @@ bool wxPropertyListValidator::OnClearControls(wxProperty *WXUNUSED(property), wx
   return TRUE;
 }
 
-/*
- * Default validators
- */
+// ----------------------------------------------------------------------------
+// Default validators
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxRealListValidator, wxPropertyListValidator)
 
@@ -1271,7 +1284,7 @@ wxFilenameListValidator::wxFilenameListValidator(wxString message , wxString wil
 {
 }
 
-wxFilenameListValidator::~wxFilenameListValidator(void)
+wxFilenameListValidator::~wxFilenameListValidator()
 {
 }
 
@@ -1359,7 +1372,7 @@ wxColourListValidator::wxColourListValidator(long flags):
 {
 }
 
-wxColourListValidator::~wxColourListValidator(void)
+wxColourListValidator::~wxColourListValidator()
 {
 }
 
@@ -1615,7 +1628,7 @@ class wxPropertyStringListEditorText: public wxTextCtrl
      wxTextCtrl(parent, id, val, pos, size, windowStyle, wxDefaultValidator, name)
   {
   }
-  void OnKillFocus(void)
+  void OnKillFocus()
   {
     wxPropertyStringListEditorDialog *dialog = (wxPropertyStringListEditorDialog *)GetParent();
     dialog->SaveCurrentSelection();
@@ -1794,7 +1807,7 @@ wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
   Destroy();
 }
 
-void wxPropertyStringListEditorDialog::SaveCurrentSelection(void)
+void wxPropertyStringListEditorDialog::SaveCurrentSelection()
 {
   if (m_currentSelection == -1)
     return;
@@ -1811,7 +1824,7 @@ void wxPropertyStringListEditorDialog::SaveCurrentSelection(void)
   m_listBox->SetString(m_currentSelection, (char *)node->Data());
 }
 
-void wxPropertyStringListEditorDialog::ShowCurrentSelection(void)
+void wxPropertyStringListEditorDialog::ShowCurrentSelection()
 {
   if (m_currentSelection == -1)
   {
@@ -1824,47 +1837,46 @@ void wxPropertyStringListEditorDialog::ShowCurrentSelection(void)
   m_stringText->Enable(TRUE);
 }
 
-//-----------------------------------------------------------------------------
-// wxPropertyModule
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
 
-class wxPropertyModule: public wxModule
+// FIXME MT-UNSAFE
+static wxBitmap *GetTickBitmap()
 {
-  DECLARE_DYNAMIC_CLASS(wxPropertyModule)
+    static wxBitmap* s_tickBitmap = (wxBitmap *) NULL;
+    static bool s_loaded = FALSE;
 
-public:
-    wxPropertyModule() {}
-    bool OnInit();
-    void OnExit();
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxPropertyModule,wxModule)
-
-bool wxPropertyModule::OnInit()
-{
-#if defined(__WXMSW__) || defined(__WXOS2__)
-    gs_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
-    gs_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
-#else
-    gs_tickBitmap = new wxBitmap( tick_xpm );
-    gs_crossBitmap =  new wxBitmap( cross_xpm );
-#endif
-    if (!gs_tickBitmap || !gs_crossBitmap || !gs_tickBitmap->Ok() || !gs_crossBitmap->Ok())
+    if ( !s_loaded )
     {
-        if (gs_tickBitmap) delete gs_tickBitmap;
-        if (gs_crossBitmap) delete gs_crossBitmap;
-        gs_tickBitmap = (wxBitmap*) NULL;
-        gs_crossBitmap = (wxBitmap*) NULL;
+        s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
+
+        #if defined(__WXMSW__) || defined(__WXOS2__)
+            s_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
+        #else
+            s_tickBitmap = new wxBitmap( tick_xpm );
+        #endif
     }
 
-    return TRUE;
+    return s_tickBitmap;
 }
 
-void wxPropertyModule::OnExit()
+static wxBitmap *GetCrossBitmap()
 {
-    if (gs_tickBitmap)
-        delete gs_tickBitmap;
-    if (gs_crossBitmap)
-        delete gs_crossBitmap;
+    static wxBitmap* s_crossBitmap = (wxBitmap *) NULL;
+    static bool s_loaded = FALSE;
+
+    if ( !s_loaded )
+    {
+        s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
+
+        #if defined(__WXMSW__) || defined(__WXOS2__)
+            s_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
+        #else // XPMs
+            s_crossBitmap =  new wxBitmap( cross_xpm );
+        #endif // BMPs/XPMs
+    }
+
+    return s_crossBitmap;
 }
 
