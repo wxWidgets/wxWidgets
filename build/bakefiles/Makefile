@@ -7,472 +7,933 @@ BAKEFILE = bakefile -v
 CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
-MINGW_ALL = ../makefile.gcc ../../samples/makefile.gcc ../../samples/db/makefile.gcc ../../samples/dnd/makefile.gcc ../../samples/ipc/makefile.gcc ../../samples/mdi/makefile.gcc ../../samples/mfc/makefile.gcc ../../samples/png/makefile.gcc ../../samples/tab/makefile.gcc ../../samples/exec/makefile.gcc ../../samples/font/makefile.gcc ../../samples/help/makefile.gcc ../../samples/grid/makefile.gcc ../../samples/html/makefile.gcc ../../samples/html/zip/makefile.gcc ../../samples/html/help/makefile.gcc ../../samples/html/test/makefile.gcc ../../samples/html/about/makefile.gcc ../../samples/html/widget/makefile.gcc ../../samples/html/printing/makefile.gcc ../../samples/html/virtual/makefile.gcc ../../samples/html/helpview/makefile.gcc ../../samples/menu/makefile.gcc ../../samples/text/makefile.gcc ../../samples/console/makefile.gcc ../../samples/treectrl/makefile.gcc ../../samples/listctrl/makefile.gcc ../../samples/joytest/makefile.gcc ../../samples/regtest/makefile.gcc ../../samples/dialogs/makefile.gcc ../../samples/nativdlg/makefile.gcc ../../samples/display/makefile.gcc ../../samples/notebook/makefile.gcc ../../samples/caret/makefile.gcc ../../samples/erase/makefile.gcc ../../samples/event/makefile.gcc ../../samples/image/makefile.gcc ../../samples/sashtest/makefile.gcc ../../samples/docview/makefile.gcc ../../samples/typetest/makefile.gcc ../../samples/drawing/makefile.gcc ../../samples/splitter/makefile.gcc ../../samples/listbox/makefile.gcc ../../samples/multimon/makefile.gcc ../../samples/dynamic/makefile.gcc ../../samples/checklst/makefile.gcc ../../samples/taskbar/makefile.gcc ../../samples/dragimag/makefile.gcc ../../samples/sockets/makefile.gcc ../../samples/calendar/makefile.gcc ../../samples/minimal/makefile.gcc ../../samples/access/makefile.gcc ../../samples/statbar/makefile.gcc ../../samples/config/makefile.gcc ../../samples/dialup/makefile.gcc ../../samples/controls/makefile.gcc ../../samples/richedit/makefile.gcc ../../samples/newgrid/makefile.gcc ../../samples/toolbar/makefile.gcc ../../samples/htlbox/makefile.gcc ../../samples/layout/makefile.gcc ../../samples/minifram/makefile.gcc ../../samples/mobile/makefile.gcc ../../samples/opengl/makefile.gcc ../../samples/scroll/makefile.gcc ../../samples/rotate/makefile.gcc ../../samples/shaped/makefile.gcc ../../samples/thread/makefile.gcc ../../samples/wizard/makefile.gcc ../../samples/printing/makefile.gcc ../../samples/oleauto/makefile.gcc ../../samples/wxtest/makefile.gcc ../../samples/artprov/makefile.gcc ../../samples/propsize/makefile.gcc ../../samples/ownerdrw/makefile.gcc ../../samples/vscroll/makefile.gcc ../../samples/validate/makefile.gcc ../../samples/widgets/makefile.gcc ../../samples/keyboard/makefile.gcc ../../samples/docvwmdi/makefile.gcc ../../samples/scrollsub/makefile.gcc ../../samples/memcheck/makefile.gcc ../../samples/internat/makefile.gcc ../../contrib/build/fl/makefile.gcc ../../contrib/build/stc/makefile.gcc ../../contrib/build/xrc/makefile.gcc ../../contrib/build/gizmos/makefile.gcc ../../contrib/build/animate/makefile.gcc ../../contrib/samples/xrc/makefile.gcc ../../contrib/samples/animate/makefile.gcc
-MSVC_ALL = ../makefile.vc ../../samples/makefile.vc ../../samples/db/makefile.vc ../../samples/dnd/makefile.vc ../../samples/ipc/makefile.vc ../../samples/mdi/makefile.vc ../../samples/mfc/makefile.vc ../../samples/png/makefile.vc ../../samples/tab/makefile.vc ../../samples/exec/makefile.vc ../../samples/font/makefile.vc ../../samples/help/makefile.vc ../../samples/grid/makefile.vc ../../samples/html/makefile.vc ../../samples/html/zip/makefile.vc ../../samples/html/help/makefile.vc ../../samples/html/test/makefile.vc ../../samples/html/about/makefile.vc ../../samples/html/widget/makefile.vc ../../samples/html/printing/makefile.vc ../../samples/html/virtual/makefile.vc ../../samples/html/helpview/makefile.vc ../../samples/menu/makefile.vc ../../samples/text/makefile.vc ../../samples/console/makefile.vc ../../samples/treectrl/makefile.vc ../../samples/listctrl/makefile.vc ../../samples/joytest/makefile.vc ../../samples/regtest/makefile.vc ../../samples/dialogs/makefile.vc ../../samples/nativdlg/makefile.vc ../../samples/display/makefile.vc ../../samples/notebook/makefile.vc ../../samples/caret/makefile.vc ../../samples/erase/makefile.vc ../../samples/event/makefile.vc ../../samples/image/makefile.vc ../../samples/sashtest/makefile.vc ../../samples/docview/makefile.vc ../../samples/typetest/makefile.vc ../../samples/drawing/makefile.vc ../../samples/splitter/makefile.vc ../../samples/listbox/makefile.vc ../../samples/multimon/makefile.vc ../../samples/dynamic/makefile.vc ../../samples/checklst/makefile.vc ../../samples/taskbar/makefile.vc ../../samples/dragimag/makefile.vc ../../samples/sockets/makefile.vc ../../samples/calendar/makefile.vc ../../samples/minimal/makefile.vc ../../samples/access/makefile.vc ../../samples/statbar/makefile.vc ../../samples/config/makefile.vc ../../samples/dialup/makefile.vc ../../samples/controls/makefile.vc ../../samples/richedit/makefile.vc ../../samples/newgrid/makefile.vc ../../samples/toolbar/makefile.vc ../../samples/htlbox/makefile.vc ../../samples/layout/makefile.vc ../../samples/minifram/makefile.vc ../../samples/mobile/makefile.vc ../../samples/opengl/makefile.vc ../../samples/scroll/makefile.vc ../../samples/rotate/makefile.vc ../../samples/shaped/makefile.vc ../../samples/thread/makefile.vc ../../samples/wizard/makefile.vc ../../samples/printing/makefile.vc ../../samples/oleauto/makefile.vc ../../samples/wxtest/makefile.vc ../../samples/artprov/makefile.vc ../../samples/propsize/makefile.vc ../../samples/ownerdrw/makefile.vc ../../samples/vscroll/makefile.vc ../../samples/validate/makefile.vc ../../samples/widgets/makefile.vc ../../samples/keyboard/makefile.vc ../../samples/docvwmdi/makefile.vc ../../samples/scrollsub/makefile.vc ../../samples/memcheck/makefile.vc ../../samples/internat/makefile.vc ../../contrib/build/fl/makefile.vc ../../contrib/build/stc/makefile.vc ../../contrib/build/xrc/makefile.vc ../../contrib/build/gizmos/makefile.vc ../../contrib/build/animate/makefile.vc ../../contrib/samples/xrc/makefile.vc ../../contrib/samples/animate/makefile.vc
-AUTOCONF_ALL = ../../configure ../../Makefile.in ../../samples/Makefile.in ../../samples/db/Makefile.in ../../samples/dnd/Makefile.in ../../samples/ipc/Makefile.in ../../samples/mdi/Makefile.in ../../samples/mfc/Makefile.in ../../samples/png/Makefile.in ../../samples/tab/Makefile.in ../../samples/exec/Makefile.in ../../samples/font/Makefile.in ../../samples/help/Makefile.in ../../samples/grid/Makefile.in ../../samples/html/Makefile.in ../../samples/html/zip/Makefile.in ../../samples/html/help/Makefile.in ../../samples/html/test/Makefile.in ../../samples/html/about/Makefile.in ../../samples/html/widget/Makefile.in ../../samples/html/printing/Makefile.in ../../samples/html/virtual/Makefile.in ../../samples/html/helpview/Makefile.in ../../samples/menu/Makefile.in ../../samples/text/Makefile.in ../../samples/console/Makefile.in ../../samples/treectrl/Makefile.in ../../samples/listctrl/Makefile.in ../../samples/joytest/Makefile.in ../../samples/regtest/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/nativdlg/Makefile.in ../../samples/display/Makefile.in ../../samples/notebook/Makefile.in ../../samples/caret/Makefile.in ../../samples/erase/Makefile.in ../../samples/event/Makefile.in ../../samples/image/Makefile.in ../../samples/sashtest/Makefile.in ../../samples/docview/Makefile.in ../../samples/typetest/Makefile.in ../../samples/drawing/Makefile.in ../../samples/splitter/Makefile.in ../../samples/listbox/Makefile.in ../../samples/multimon/Makefile.in ../../samples/dynamic/Makefile.in ../../samples/checklst/Makefile.in ../../samples/taskbar/Makefile.in ../../samples/dragimag/Makefile.in ../../samples/sockets/Makefile.in ../../samples/calendar/Makefile.in ../../samples/minimal/Makefile.in ../../samples/access/Makefile.in ../../samples/statbar/Makefile.in ../../samples/config/Makefile.in ../../samples/dialup/Makefile.in ../../samples/controls/Makefile.in ../../samples/richedit/Makefile.in ../../samples/newgrid/Makefile.in ../../samples/toolbar/Makefile.in ../../samples/htlbox/Makefile.in ../../samples/layout/Makefile.in ../../samples/minifram/Makefile.in ../../samples/mobile/Makefile.in ../../samples/opengl/Makefile.in ../../samples/scroll/Makefile.in ../../samples/rotate/Makefile.in ../../samples/shaped/Makefile.in ../../samples/thread/Makefile.in ../../samples/wizard/Makefile.in ../../samples/printing/Makefile.in ../../samples/oleauto/Makefile.in ../../samples/wxtest/Makefile.in ../../samples/artprov/Makefile.in ../../samples/propsize/Makefile.in ../../samples/ownerdrw/Makefile.in ../../samples/vscroll/Makefile.in ../../samples/validate/Makefile.in ../../samples/widgets/Makefile.in ../../samples/keyboard/Makefile.in ../../samples/docvwmdi/Makefile.in ../../samples/scrollsub/Makefile.in ../../samples/memcheck/Makefile.in ../../samples/internat/Makefile.in ../../contrib/src/fl/Makefile.in ../../contrib/src/stc/Makefile.in ../../contrib/src/xrc/Makefile.in ../../contrib/src/gizmos/Makefile.in ../../contrib/src/animate/Makefile.in ../../contrib/samples/xrc/Makefile.in ../../contrib/samples/animate/Makefile.in
-BORLAND_ALL = ../makefile.bcc ../../samples/makefile.bcc ../../samples/db/makefile.bcc ../../samples/dnd/makefile.bcc ../../samples/ipc/makefile.bcc ../../samples/mdi/makefile.bcc ../../samples/mfc/makefile.bcc ../../samples/png/makefile.bcc ../../samples/tab/makefile.bcc ../../samples/exec/makefile.bcc ../../samples/font/makefile.bcc ../../samples/help/makefile.bcc ../../samples/grid/makefile.bcc ../../samples/html/makefile.bcc ../../samples/html/zip/makefile.bcc ../../samples/html/help/makefile.bcc ../../samples/html/test/makefile.bcc ../../samples/html/about/makefile.bcc ../../samples/html/widget/makefile.bcc ../../samples/html/printing/makefile.bcc ../../samples/html/virtual/makefile.bcc ../../samples/html/helpview/makefile.bcc ../../samples/menu/makefile.bcc ../../samples/text/makefile.bcc ../../samples/console/makefile.bcc ../../samples/treectrl/makefile.bcc ../../samples/listctrl/makefile.bcc ../../samples/joytest/makefile.bcc ../../samples/regtest/makefile.bcc ../../samples/dialogs/makefile.bcc ../../samples/nativdlg/makefile.bcc ../../samples/display/makefile.bcc ../../samples/notebook/makefile.bcc ../../samples/caret/makefile.bcc ../../samples/erase/makefile.bcc ../../samples/event/makefile.bcc ../../samples/image/makefile.bcc ../../samples/sashtest/makefile.bcc ../../samples/docview/makefile.bcc ../../samples/typetest/makefile.bcc ../../samples/drawing/makefile.bcc ../../samples/splitter/makefile.bcc ../../samples/listbox/makefile.bcc ../../samples/multimon/makefile.bcc ../../samples/dynamic/makefile.bcc ../../samples/checklst/makefile.bcc ../../samples/taskbar/makefile.bcc ../../samples/dragimag/makefile.bcc ../../samples/sockets/makefile.bcc ../../samples/calendar/makefile.bcc ../../samples/minimal/makefile.bcc ../../samples/access/makefile.bcc ../../samples/statbar/makefile.bcc ../../samples/config/makefile.bcc ../../samples/dialup/makefile.bcc ../../samples/controls/makefile.bcc ../../samples/richedit/makefile.bcc ../../samples/newgrid/makefile.bcc ../../samples/toolbar/makefile.bcc ../../samples/htlbox/makefile.bcc ../../samples/layout/makefile.bcc ../../samples/minifram/makefile.bcc ../../samples/mobile/makefile.bcc ../../samples/opengl/makefile.bcc ../../samples/scroll/makefile.bcc ../../samples/rotate/makefile.bcc ../../samples/shaped/makefile.bcc ../../samples/thread/makefile.bcc ../../samples/wizard/makefile.bcc ../../samples/printing/makefile.bcc ../../samples/oleauto/makefile.bcc ../../samples/wxtest/makefile.bcc ../../samples/artprov/makefile.bcc ../../samples/propsize/makefile.bcc ../../samples/ownerdrw/makefile.bcc ../../samples/vscroll/makefile.bcc ../../samples/validate/makefile.bcc ../../samples/widgets/makefile.bcc ../../samples/keyboard/makefile.bcc ../../samples/docvwmdi/makefile.bcc ../../samples/scrollsub/makefile.bcc ../../samples/memcheck/makefile.bcc ../../samples/internat/makefile.bcc ../../contrib/build/fl/makefile.bcc ../../contrib/build/stc/makefile.bcc ../../contrib/build/xrc/makefile.bcc ../../contrib/build/gizmos/makefile.bcc ../../contrib/build/animate/makefile.bcc ../../contrib/samples/xrc/makefile.bcc ../../contrib/samples/animate/makefile.bcc
-WATCOM_ALL = ../makefile.wat ../../samples/makefile.wat ../../samples/db/makefile.wat ../../samples/dnd/makefile.wat ../../samples/ipc/makefile.wat ../../samples/mdi/makefile.wat ../../samples/mfc/makefile.wat ../../samples/png/makefile.wat ../../samples/tab/makefile.wat ../../samples/exec/makefile.wat ../../samples/font/makefile.wat ../../samples/help/makefile.wat ../../samples/grid/makefile.wat ../../samples/html/makefile.wat ../../samples/html/zip/makefile.wat ../../samples/html/help/makefile.wat ../../samples/html/test/makefile.wat ../../samples/html/about/makefile.wat ../../samples/html/widget/makefile.wat ../../samples/html/printing/makefile.wat ../../samples/html/virtual/makefile.wat ../../samples/html/helpview/makefile.wat ../../samples/menu/makefile.wat ../../samples/text/makefile.wat ../../samples/console/makefile.wat ../../samples/treectrl/makefile.wat ../../samples/listctrl/makefile.wat ../../samples/joytest/makefile.wat ../../samples/regtest/makefile.wat ../../samples/dialogs/makefile.wat ../../samples/nativdlg/makefile.wat ../../samples/display/makefile.wat ../../samples/notebook/makefile.wat ../../samples/caret/makefile.wat ../../samples/erase/makefile.wat ../../samples/event/makefile.wat ../../samples/image/makefile.wat ../../samples/sashtest/makefile.wat ../../samples/docview/makefile.wat ../../samples/typetest/makefile.wat ../../samples/drawing/makefile.wat ../../samples/splitter/makefile.wat ../../samples/listbox/makefile.wat ../../samples/multimon/makefile.wat ../../samples/dynamic/makefile.wat ../../samples/checklst/makefile.wat ../../samples/taskbar/makefile.wat ../../samples/dragimag/makefile.wat ../../samples/sockets/makefile.wat ../../samples/calendar/makefile.wat ../../samples/minimal/makefile.wat ../../samples/access/makefile.wat ../../samples/statbar/makefile.wat ../../samples/config/makefile.wat ../../samples/dialup/makefile.wat ../../samples/controls/makefile.wat ../../samples/richedit/makefile.wat ../../samples/newgrid/makefile.wat ../../samples/toolbar/makefile.wat ../../samples/htlbox/makefile.wat ../../samples/layout/makefile.wat ../../samples/minifram/makefile.wat ../../samples/mobile/makefile.wat ../../samples/opengl/makefile.wat ../../samples/scroll/makefile.wat ../../samples/rotate/makefile.wat ../../samples/shaped/makefile.wat ../../samples/thread/makefile.wat ../../samples/wizard/makefile.wat ../../samples/printing/makefile.wat ../../samples/oleauto/makefile.wat ../../samples/wxtest/makefile.wat ../../samples/artprov/makefile.wat ../../samples/propsize/makefile.wat ../../samples/ownerdrw/makefile.wat ../../samples/vscroll/makefile.wat ../../samples/validate/makefile.wat ../../samples/widgets/makefile.wat ../../samples/keyboard/makefile.wat ../../samples/docvwmdi/makefile.wat ../../samples/scrollsub/makefile.wat ../../samples/memcheck/makefile.wat ../../samples/internat/makefile.wat ../../contrib/build/fl/makefile.wat ../../contrib/build/stc/makefile.wat ../../contrib/build/xrc/makefile.wat ../../contrib/build/gizmos/makefile.wat ../../contrib/build/animate/makefile.wat ../../contrib/samples/xrc/makefile.wat ../../contrib/samples/animate/makefile.wat
-all: mingw msvc autoconf borland watcom
+AUTOCONF_ALL = \
+	../../configure \
+	../../Makefile.in \
+	../../samples/Makefile.in \
+	../../samples/access/Makefile.in \
+	../../samples/artprov/Makefile.in \
+	../../samples/calendar/Makefile.in \
+	../../samples/caret/Makefile.in \
+	../../samples/checklst/Makefile.in \
+	../../samples/config/Makefile.in \
+	../../samples/console/Makefile.in \
+	../../samples/controls/Makefile.in \
+	../../samples/db/Makefile.in \
+	../../samples/dialogs/Makefile.in \
+	../../samples/dialup/Makefile.in \
+	../../samples/display/Makefile.in \
+	../../samples/dnd/Makefile.in \
+	../../samples/docview/Makefile.in \
+	../../samples/docvwmdi/Makefile.in \
+	../../samples/dragimag/Makefile.in \
+	../../samples/drawing/Makefile.in \
+	../../samples/dynamic/Makefile.in \
+	../../samples/erase/Makefile.in \
+	../../samples/event/Makefile.in \
+	../../samples/exec/Makefile.in \
+	../../samples/font/Makefile.in \
+	../../samples/grid/Makefile.in \
+	../../samples/help/Makefile.in \
+	../../samples/htlbox/Makefile.in \
+	../../samples/html/Makefile.in \
+	../../samples/html/about/Makefile.in \
+	../../samples/html/help/Makefile.in \
+	../../samples/html/helpview/Makefile.in \
+	../../samples/html/printing/Makefile.in \
+	../../samples/html/test/Makefile.in \
+	../../samples/html/virtual/Makefile.in \
+	../../samples/html/widget/Makefile.in \
+	../../samples/html/zip/Makefile.in \
+	../../samples/image/Makefile.in \
+	../../samples/internat/Makefile.in \
+	../../samples/ipc/Makefile.in \
+	../../samples/joytest/Makefile.in \
+	../../samples/keyboard/Makefile.in \
+	../../samples/layout/Makefile.in \
+	../../samples/listbox/Makefile.in \
+	../../samples/listctrl/Makefile.in \
+	../../samples/mdi/Makefile.in \
+	../../samples/memcheck/Makefile.in \
+	../../samples/menu/Makefile.in \
+	../../samples/mfc/Makefile.in \
+	../../samples/minifram/Makefile.in \
+	../../samples/minimal/Makefile.in \
+	../../samples/mobile/Makefile.in \
+	../../samples/multimon/Makefile.in \
+	../../samples/nativdlg/Makefile.in \
+	../../samples/newgrid/Makefile.in \
+	../../samples/notebook/Makefile.in \
+	../../samples/oleauto/Makefile.in \
+	../../samples/opengl/Makefile.in \
+	../../samples/ownerdrw/Makefile.in \
+	../../samples/png/Makefile.in \
+	../../samples/printing/Makefile.in \
+	../../samples/propsize/Makefile.in \
+	../../samples/regtest/Makefile.in \
+	../../samples/richedit/Makefile.in \
+	../../samples/rotate/Makefile.in \
+	../../samples/sashtest/Makefile.in \
+	../../samples/scroll/Makefile.in \
+	../../samples/scrollsub/Makefile.in \
+	../../samples/shaped/Makefile.in \
+	../../samples/sockets/Makefile.in \
+	../../samples/splitter/Makefile.in \
+	../../samples/statbar/Makefile.in \
+	../../samples/tab/Makefile.in \
+	../../samples/taskbar/Makefile.in \
+	../../samples/text/Makefile.in \
+	../../samples/thread/Makefile.in \
+	../../samples/toolbar/Makefile.in \
+	../../samples/treectrl/Makefile.in \
+	../../samples/typetest/Makefile.in \
+	../../samples/validate/Makefile.in \
+	../../samples/vscroll/Makefile.in \
+	../../samples/widgets/Makefile.in \
+	../../samples/wizard/Makefile.in \
+	../../samples/wxtest/Makefile.in \
+	../../contrib/src/animate/Makefile.in \
+	../../contrib/src/fl/Makefile.in \
+	../../contrib/src/gizmos/Makefile.in \
+	../../contrib/src/ogl/Makefile.in \
+	../../contrib/src/stc/Makefile.in \
+	../../contrib/src/xrc/Makefile.in \
+	../../contrib/samples/animate/Makefile.in \
+	../../contrib/samples/xrc/Makefile.in
+BORLAND_ALL = \
+	../makefile.bcc \
+	../../samples/makefile.bcc \
+	../../samples/access/makefile.bcc \
+	../../samples/artprov/makefile.bcc \
+	../../samples/calendar/makefile.bcc \
+	../../samples/caret/makefile.bcc \
+	../../samples/checklst/makefile.bcc \
+	../../samples/config/makefile.bcc \
+	../../samples/console/makefile.bcc \
+	../../samples/controls/makefile.bcc \
+	../../samples/db/makefile.bcc \
+	../../samples/dialogs/makefile.bcc \
+	../../samples/dialup/makefile.bcc \
+	../../samples/display/makefile.bcc \
+	../../samples/dnd/makefile.bcc \
+	../../samples/docview/makefile.bcc \
+	../../samples/docvwmdi/makefile.bcc \
+	../../samples/dragimag/makefile.bcc \
+	../../samples/drawing/makefile.bcc \
+	../../samples/dynamic/makefile.bcc \
+	../../samples/erase/makefile.bcc \
+	../../samples/event/makefile.bcc \
+	../../samples/exec/makefile.bcc \
+	../../samples/font/makefile.bcc \
+	../../samples/grid/makefile.bcc \
+	../../samples/help/makefile.bcc \
+	../../samples/htlbox/makefile.bcc \
+	../../samples/html/makefile.bcc \
+	../../samples/html/about/makefile.bcc \
+	../../samples/html/help/makefile.bcc \
+	../../samples/html/helpview/makefile.bcc \
+	../../samples/html/printing/makefile.bcc \
+	../../samples/html/test/makefile.bcc \
+	../../samples/html/virtual/makefile.bcc \
+	../../samples/html/widget/makefile.bcc \
+	../../samples/html/zip/makefile.bcc \
+	../../samples/image/makefile.bcc \
+	../../samples/internat/makefile.bcc \
+	../../samples/ipc/makefile.bcc \
+	../../samples/joytest/makefile.bcc \
+	../../samples/keyboard/makefile.bcc \
+	../../samples/layout/makefile.bcc \
+	../../samples/listbox/makefile.bcc \
+	../../samples/listctrl/makefile.bcc \
+	../../samples/mdi/makefile.bcc \
+	../../samples/memcheck/makefile.bcc \
+	../../samples/menu/makefile.bcc \
+	../../samples/mfc/makefile.bcc \
+	../../samples/minifram/makefile.bcc \
+	../../samples/minimal/makefile.bcc \
+	../../samples/mobile/makefile.bcc \
+	../../samples/multimon/makefile.bcc \
+	../../samples/nativdlg/makefile.bcc \
+	../../samples/newgrid/makefile.bcc \
+	../../samples/notebook/makefile.bcc \
+	../../samples/oleauto/makefile.bcc \
+	../../samples/opengl/makefile.bcc \
+	../../samples/ownerdrw/makefile.bcc \
+	../../samples/png/makefile.bcc \
+	../../samples/printing/makefile.bcc \
+	../../samples/propsize/makefile.bcc \
+	../../samples/regtest/makefile.bcc \
+	../../samples/richedit/makefile.bcc \
+	../../samples/rotate/makefile.bcc \
+	../../samples/sashtest/makefile.bcc \
+	../../samples/scroll/makefile.bcc \
+	../../samples/scrollsub/makefile.bcc \
+	../../samples/shaped/makefile.bcc \
+	../../samples/sockets/makefile.bcc \
+	../../samples/splitter/makefile.bcc \
+	../../samples/statbar/makefile.bcc \
+	../../samples/tab/makefile.bcc \
+	../../samples/taskbar/makefile.bcc \
+	../../samples/text/makefile.bcc \
+	../../samples/thread/makefile.bcc \
+	../../samples/toolbar/makefile.bcc \
+	../../samples/treectrl/makefile.bcc \
+	../../samples/typetest/makefile.bcc \
+	../../samples/validate/makefile.bcc \
+	../../samples/vscroll/makefile.bcc \
+	../../samples/widgets/makefile.bcc \
+	../../samples/wizard/makefile.bcc \
+	../../samples/wxtest/makefile.bcc \
+	../../contrib/build/animate/makefile.bcc \
+	../../contrib/build/fl/makefile.bcc \
+	../../contrib/build/gizmos/makefile.bcc \
+	../../contrib/build/ogl/makefile.bcc \
+	../../contrib/build/stc/makefile.bcc \
+	../../contrib/build/xrc/makefile.bcc \
+	../../contrib/samples/animate/makefile.bcc \
+	../../contrib/samples/xrc/makefile.bcc
+MINGW_ALL = \
+	../makefile.gcc \
+	../../samples/makefile.gcc \
+	../../samples/access/makefile.gcc \
+	../../samples/artprov/makefile.gcc \
+	../../samples/calendar/makefile.gcc \
+	../../samples/caret/makefile.gcc \
+	../../samples/checklst/makefile.gcc \
+	../../samples/config/makefile.gcc \
+	../../samples/console/makefile.gcc \
+	../../samples/controls/makefile.gcc \
+	../../samples/db/makefile.gcc \
+	../../samples/dialogs/makefile.gcc \
+	../../samples/dialup/makefile.gcc \
+	../../samples/display/makefile.gcc \
+	../../samples/dnd/makefile.gcc \
+	../../samples/docview/makefile.gcc \
+	../../samples/docvwmdi/makefile.gcc \
+	../../samples/dragimag/makefile.gcc \
+	../../samples/drawing/makefile.gcc \
+	../../samples/dynamic/makefile.gcc \
+	../../samples/erase/makefile.gcc \
+	../../samples/event/makefile.gcc \
+	../../samples/exec/makefile.gcc \
+	../../samples/font/makefile.gcc \
+	../../samples/grid/makefile.gcc \
+	../../samples/help/makefile.gcc \
+	../../samples/htlbox/makefile.gcc \
+	../../samples/html/makefile.gcc \
+	../../samples/html/about/makefile.gcc \
+	../../samples/html/help/makefile.gcc \
+	../../samples/html/helpview/makefile.gcc \
+	../../samples/html/printing/makefile.gcc \
+	../../samples/html/test/makefile.gcc \
+	../../samples/html/virtual/makefile.gcc \
+	../../samples/html/widget/makefile.gcc \
+	../../samples/html/zip/makefile.gcc \
+	../../samples/image/makefile.gcc \
+	../../samples/internat/makefile.gcc \
+	../../samples/ipc/makefile.gcc \
+	../../samples/joytest/makefile.gcc \
+	../../samples/keyboard/makefile.gcc \
+	../../samples/layout/makefile.gcc \
+	../../samples/listbox/makefile.gcc \
+	../../samples/listctrl/makefile.gcc \
+	../../samples/mdi/makefile.gcc \
+	../../samples/memcheck/makefile.gcc \
+	../../samples/menu/makefile.gcc \
+	../../samples/mfc/makefile.gcc \
+	../../samples/minifram/makefile.gcc \
+	../../samples/minimal/makefile.gcc \
+	../../samples/mobile/makefile.gcc \
+	../../samples/multimon/makefile.gcc \
+	../../samples/nativdlg/makefile.gcc \
+	../../samples/newgrid/makefile.gcc \
+	../../samples/notebook/makefile.gcc \
+	../../samples/oleauto/makefile.gcc \
+	../../samples/opengl/makefile.gcc \
+	../../samples/ownerdrw/makefile.gcc \
+	../../samples/png/makefile.gcc \
+	../../samples/printing/makefile.gcc \
+	../../samples/propsize/makefile.gcc \
+	../../samples/regtest/makefile.gcc \
+	../../samples/richedit/makefile.gcc \
+	../../samples/rotate/makefile.gcc \
+	../../samples/sashtest/makefile.gcc \
+	../../samples/scroll/makefile.gcc \
+	../../samples/scrollsub/makefile.gcc \
+	../../samples/shaped/makefile.gcc \
+	../../samples/sockets/makefile.gcc \
+	../../samples/splitter/makefile.gcc \
+	../../samples/statbar/makefile.gcc \
+	../../samples/tab/makefile.gcc \
+	../../samples/taskbar/makefile.gcc \
+	../../samples/text/makefile.gcc \
+	../../samples/thread/makefile.gcc \
+	../../samples/toolbar/makefile.gcc \
+	../../samples/treectrl/makefile.gcc \
+	../../samples/typetest/makefile.gcc \
+	../../samples/validate/makefile.gcc \
+	../../samples/vscroll/makefile.gcc \
+	../../samples/widgets/makefile.gcc \
+	../../samples/wizard/makefile.gcc \
+	../../samples/wxtest/makefile.gcc \
+	../../contrib/build/animate/makefile.gcc \
+	../../contrib/build/fl/makefile.gcc \
+	../../contrib/build/gizmos/makefile.gcc \
+	../../contrib/build/ogl/makefile.gcc \
+	../../contrib/build/stc/makefile.gcc \
+	../../contrib/build/xrc/makefile.gcc \
+	../../contrib/samples/animate/makefile.gcc \
+	../../contrib/samples/xrc/makefile.gcc
+MSVC_ALL = \
+	../makefile.vc \
+	../../samples/makefile.vc \
+	../../samples/access/makefile.vc \
+	../../samples/artprov/makefile.vc \
+	../../samples/calendar/makefile.vc \
+	../../samples/caret/makefile.vc \
+	../../samples/checklst/makefile.vc \
+	../../samples/config/makefile.vc \
+	../../samples/console/makefile.vc \
+	../../samples/controls/makefile.vc \
+	../../samples/db/makefile.vc \
+	../../samples/dialogs/makefile.vc \
+	../../samples/dialup/makefile.vc \
+	../../samples/display/makefile.vc \
+	../../samples/dnd/makefile.vc \
+	../../samples/docview/makefile.vc \
+	../../samples/docvwmdi/makefile.vc \
+	../../samples/dragimag/makefile.vc \
+	../../samples/drawing/makefile.vc \
+	../../samples/dynamic/makefile.vc \
+	../../samples/erase/makefile.vc \
+	../../samples/event/makefile.vc \
+	../../samples/exec/makefile.vc \
+	../../samples/font/makefile.vc \
+	../../samples/grid/makefile.vc \
+	../../samples/help/makefile.vc \
+	../../samples/htlbox/makefile.vc \
+	../../samples/html/makefile.vc \
+	../../samples/html/about/makefile.vc \
+	../../samples/html/help/makefile.vc \
+	../../samples/html/helpview/makefile.vc \
+	../../samples/html/printing/makefile.vc \
+	../../samples/html/test/makefile.vc \
+	../../samples/html/virtual/makefile.vc \
+	../../samples/html/widget/makefile.vc \
+	../../samples/html/zip/makefile.vc \
+	../../samples/image/makefile.vc \
+	../../samples/internat/makefile.vc \
+	../../samples/ipc/makefile.vc \
+	../../samples/joytest/makefile.vc \
+	../../samples/keyboard/makefile.vc \
+	../../samples/layout/makefile.vc \
+	../../samples/listbox/makefile.vc \
+	../../samples/listctrl/makefile.vc \
+	../../samples/mdi/makefile.vc \
+	../../samples/memcheck/makefile.vc \
+	../../samples/menu/makefile.vc \
+	../../samples/mfc/makefile.vc \
+	../../samples/minifram/makefile.vc \
+	../../samples/minimal/makefile.vc \
+	../../samples/mobile/makefile.vc \
+	../../samples/multimon/makefile.vc \
+	../../samples/nativdlg/makefile.vc \
+	../../samples/newgrid/makefile.vc \
+	../../samples/notebook/makefile.vc \
+	../../samples/oleauto/makefile.vc \
+	../../samples/opengl/makefile.vc \
+	../../samples/ownerdrw/makefile.vc \
+	../../samples/png/makefile.vc \
+	../../samples/printing/makefile.vc \
+	../../samples/propsize/makefile.vc \
+	../../samples/regtest/makefile.vc \
+	../../samples/richedit/makefile.vc \
+	../../samples/rotate/makefile.vc \
+	../../samples/sashtest/makefile.vc \
+	../../samples/scroll/makefile.vc \
+	../../samples/scrollsub/makefile.vc \
+	../../samples/shaped/makefile.vc \
+	../../samples/sockets/makefile.vc \
+	../../samples/splitter/makefile.vc \
+	../../samples/statbar/makefile.vc \
+	../../samples/tab/makefile.vc \
+	../../samples/taskbar/makefile.vc \
+	../../samples/text/makefile.vc \
+	../../samples/thread/makefile.vc \
+	../../samples/toolbar/makefile.vc \
+	../../samples/treectrl/makefile.vc \
+	../../samples/typetest/makefile.vc \
+	../../samples/validate/makefile.vc \
+	../../samples/vscroll/makefile.vc \
+	../../samples/widgets/makefile.vc \
+	../../samples/wizard/makefile.vc \
+	../../samples/wxtest/makefile.vc \
+	../../contrib/build/animate/makefile.vc \
+	../../contrib/build/fl/makefile.vc \
+	../../contrib/build/gizmos/makefile.vc \
+	../../contrib/build/ogl/makefile.vc \
+	../../contrib/build/stc/makefile.vc \
+	../../contrib/build/xrc/makefile.vc \
+	../../contrib/samples/animate/makefile.vc \
+	../../contrib/samples/xrc/makefile.vc
+WATCOM_ALL = \
+	../makefile.wat \
+	../../samples/makefile.wat \
+	../../samples/access/makefile.wat \
+	../../samples/artprov/makefile.wat \
+	../../samples/calendar/makefile.wat \
+	../../samples/caret/makefile.wat \
+	../../samples/checklst/makefile.wat \
+	../../samples/config/makefile.wat \
+	../../samples/console/makefile.wat \
+	../../samples/controls/makefile.wat \
+	../../samples/db/makefile.wat \
+	../../samples/dialogs/makefile.wat \
+	../../samples/dialup/makefile.wat \
+	../../samples/display/makefile.wat \
+	../../samples/dnd/makefile.wat \
+	../../samples/docview/makefile.wat \
+	../../samples/docvwmdi/makefile.wat \
+	../../samples/dragimag/makefile.wat \
+	../../samples/drawing/makefile.wat \
+	../../samples/dynamic/makefile.wat \
+	../../samples/erase/makefile.wat \
+	../../samples/event/makefile.wat \
+	../../samples/exec/makefile.wat \
+	../../samples/font/makefile.wat \
+	../../samples/grid/makefile.wat \
+	../../samples/help/makefile.wat \
+	../../samples/htlbox/makefile.wat \
+	../../samples/html/makefile.wat \
+	../../samples/html/about/makefile.wat \
+	../../samples/html/help/makefile.wat \
+	../../samples/html/helpview/makefile.wat \
+	../../samples/html/printing/makefile.wat \
+	../../samples/html/test/makefile.wat \
+	../../samples/html/virtual/makefile.wat \
+	../../samples/html/widget/makefile.wat \
+	../../samples/html/zip/makefile.wat \
+	../../samples/image/makefile.wat \
+	../../samples/internat/makefile.wat \
+	../../samples/ipc/makefile.wat \
+	../../samples/joytest/makefile.wat \
+	../../samples/keyboard/makefile.wat \
+	../../samples/layout/makefile.wat \
+	../../samples/listbox/makefile.wat \
+	../../samples/listctrl/makefile.wat \
+	../../samples/mdi/makefile.wat \
+	../../samples/memcheck/makefile.wat \
+	../../samples/menu/makefile.wat \
+	../../samples/mfc/makefile.wat \
+	../../samples/minifram/makefile.wat \
+	../../samples/minimal/makefile.wat \
+	../../samples/mobile/makefile.wat \
+	../../samples/multimon/makefile.wat \
+	../../samples/nativdlg/makefile.wat \
+	../../samples/newgrid/makefile.wat \
+	../../samples/notebook/makefile.wat \
+	../../samples/oleauto/makefile.wat \
+	../../samples/opengl/makefile.wat \
+	../../samples/ownerdrw/makefile.wat \
+	../../samples/png/makefile.wat \
+	../../samples/printing/makefile.wat \
+	../../samples/propsize/makefile.wat \
+	../../samples/regtest/makefile.wat \
+	../../samples/richedit/makefile.wat \
+	../../samples/rotate/makefile.wat \
+	../../samples/sashtest/makefile.wat \
+	../../samples/scroll/makefile.wat \
+	../../samples/scrollsub/makefile.wat \
+	../../samples/shaped/makefile.wat \
+	../../samples/sockets/makefile.wat \
+	../../samples/splitter/makefile.wat \
+	../../samples/statbar/makefile.wat \
+	../../samples/tab/makefile.wat \
+	../../samples/taskbar/makefile.wat \
+	../../samples/text/makefile.wat \
+	../../samples/thread/makefile.wat \
+	../../samples/toolbar/makefile.wat \
+	../../samples/treectrl/makefile.wat \
+	../../samples/typetest/makefile.wat \
+	../../samples/validate/makefile.wat \
+	../../samples/vscroll/makefile.wat \
+	../../samples/widgets/makefile.wat \
+	../../samples/wizard/makefile.wat \
+	../../samples/wxtest/makefile.wat \
+	../../contrib/build/animate/makefile.wat \
+	../../contrib/build/fl/makefile.wat \
+	../../contrib/build/gizmos/makefile.wat \
+	../../contrib/build/ogl/makefile.wat \
+	../../contrib/build/stc/makefile.wat \
+	../../contrib/build/xrc/makefile.wat \
+	../../contrib/samples/animate/makefile.wat \
+	../../contrib/samples/xrc/makefile.wat
+all: autoconf borland mingw msvc watcom
 
-mingw: $(MINGW_ALL)
-msvc: $(MSVC_ALL)
 autoconf: $(AUTOCONF_ALL)
 borland: $(BORLAND_ALL)
+mingw: $(MINGW_ALL)
+msvc: $(MSVC_ALL)
 watcom: $(WATCOM_ALL)
 
 clean:
 	rm -f ../../autoconf_inc.m4
-	rm -f ../makefile.gcc
-	rm -f ../../samples/makefile.gcc
-	rm -f ../../samples/db/makefile.gcc
-	rm -f ../../samples/dnd/makefile.gcc
-	rm -f ../../samples/ipc/makefile.gcc
-	rm -f ../../samples/mdi/makefile.gcc
-	rm -f ../../samples/mfc/makefile.gcc
-	rm -f ../../samples/png/makefile.gcc
-	rm -f ../../samples/tab/makefile.gcc
-	rm -f ../../samples/exec/makefile.gcc
-	rm -f ../../samples/font/makefile.gcc
-	rm -f ../../samples/help/makefile.gcc
-	rm -f ../../samples/grid/makefile.gcc
-	rm -f ../../samples/html/makefile.gcc
-	rm -f ../../samples/html/zip/makefile.gcc
-	rm -f ../../samples/html/help/makefile.gcc
-	rm -f ../../samples/html/test/makefile.gcc
-	rm -f ../../samples/html/about/makefile.gcc
-	rm -f ../../samples/html/widget/makefile.gcc
-	rm -f ../../samples/html/printing/makefile.gcc
-	rm -f ../../samples/html/virtual/makefile.gcc
-	rm -f ../../samples/html/helpview/makefile.gcc
-	rm -f ../../samples/menu/makefile.gcc
-	rm -f ../../samples/text/makefile.gcc
-	rm -f ../../samples/console/makefile.gcc
-	rm -f ../../samples/treectrl/makefile.gcc
-	rm -f ../../samples/listctrl/makefile.gcc
-	rm -f ../../samples/joytest/makefile.gcc
-	rm -f ../../samples/regtest/makefile.gcc
-	rm -f ../../samples/dialogs/makefile.gcc
-	rm -f ../../samples/nativdlg/makefile.gcc
-	rm -f ../../samples/display/makefile.gcc
-	rm -f ../../samples/notebook/makefile.gcc
-	rm -f ../../samples/caret/makefile.gcc
-	rm -f ../../samples/erase/makefile.gcc
-	rm -f ../../samples/event/makefile.gcc
-	rm -f ../../samples/image/makefile.gcc
-	rm -f ../../samples/sashtest/makefile.gcc
-	rm -f ../../samples/docview/makefile.gcc
-	rm -f ../../samples/typetest/makefile.gcc
-	rm -f ../../samples/drawing/makefile.gcc
-	rm -f ../../samples/splitter/makefile.gcc
-	rm -f ../../samples/listbox/makefile.gcc
-	rm -f ../../samples/multimon/makefile.gcc
-	rm -f ../../samples/dynamic/makefile.gcc
-	rm -f ../../samples/checklst/makefile.gcc
-	rm -f ../../samples/taskbar/makefile.gcc
-	rm -f ../../samples/dragimag/makefile.gcc
-	rm -f ../../samples/sockets/makefile.gcc
-	rm -f ../../samples/calendar/makefile.gcc
-	rm -f ../../samples/minimal/makefile.gcc
-	rm -f ../../samples/access/makefile.gcc
-	rm -f ../../samples/statbar/makefile.gcc
-	rm -f ../../samples/config/makefile.gcc
-	rm -f ../../samples/dialup/makefile.gcc
-	rm -f ../../samples/controls/makefile.gcc
-	rm -f ../../samples/richedit/makefile.gcc
-	rm -f ../../samples/newgrid/makefile.gcc
-	rm -f ../../samples/toolbar/makefile.gcc
-	rm -f ../../samples/htlbox/makefile.gcc
-	rm -f ../../samples/layout/makefile.gcc
-	rm -f ../../samples/minifram/makefile.gcc
-	rm -f ../../samples/mobile/makefile.gcc
-	rm -f ../../samples/opengl/makefile.gcc
-	rm -f ../../samples/scroll/makefile.gcc
-	rm -f ../../samples/rotate/makefile.gcc
-	rm -f ../../samples/shaped/makefile.gcc
-	rm -f ../../samples/thread/makefile.gcc
-	rm -f ../../samples/wizard/makefile.gcc
-	rm -f ../../samples/printing/makefile.gcc
-	rm -f ../../samples/oleauto/makefile.gcc
-	rm -f ../../samples/wxtest/makefile.gcc
-	rm -f ../../samples/artprov/makefile.gcc
-	rm -f ../../samples/propsize/makefile.gcc
-	rm -f ../../samples/ownerdrw/makefile.gcc
-	rm -f ../../samples/vscroll/makefile.gcc
-	rm -f ../../samples/validate/makefile.gcc
-	rm -f ../../samples/widgets/makefile.gcc
-	rm -f ../../samples/keyboard/makefile.gcc
-	rm -f ../../samples/docvwmdi/makefile.gcc
-	rm -f ../../samples/scrollsub/makefile.gcc
-	rm -f ../../samples/memcheck/makefile.gcc
-	rm -f ../../samples/internat/makefile.gcc
-	rm -f ../../contrib/build/fl/makefile.gcc
-	rm -f ../../contrib/build/stc/makefile.gcc
-	rm -f ../../contrib/build/xrc/makefile.gcc
-	rm -f ../../contrib/build/gizmos/makefile.gcc
-	rm -f ../../contrib/build/animate/makefile.gcc
-	rm -f ../../contrib/samples/xrc/makefile.gcc
-	rm -f ../../contrib/samples/animate/makefile.gcc
-	rm -f ../makefile.vc
-	rm -f ../../samples/makefile.vc
-	rm -f ../../samples/db/makefile.vc
-	rm -f ../../samples/dnd/makefile.vc
-	rm -f ../../samples/ipc/makefile.vc
-	rm -f ../../samples/mdi/makefile.vc
-	rm -f ../../samples/mfc/makefile.vc
-	rm -f ../../samples/png/makefile.vc
-	rm -f ../../samples/tab/makefile.vc
-	rm -f ../../samples/exec/makefile.vc
-	rm -f ../../samples/font/makefile.vc
-	rm -f ../../samples/help/makefile.vc
-	rm -f ../../samples/grid/makefile.vc
-	rm -f ../../samples/html/makefile.vc
-	rm -f ../../samples/html/zip/makefile.vc
-	rm -f ../../samples/html/help/makefile.vc
-	rm -f ../../samples/html/test/makefile.vc
-	rm -f ../../samples/html/about/makefile.vc
-	rm -f ../../samples/html/widget/makefile.vc
-	rm -f ../../samples/html/printing/makefile.vc
-	rm -f ../../samples/html/virtual/makefile.vc
-	rm -f ../../samples/html/helpview/makefile.vc
-	rm -f ../../samples/menu/makefile.vc
-	rm -f ../../samples/text/makefile.vc
-	rm -f ../../samples/console/makefile.vc
-	rm -f ../../samples/treectrl/makefile.vc
-	rm -f ../../samples/listctrl/makefile.vc
-	rm -f ../../samples/joytest/makefile.vc
-	rm -f ../../samples/regtest/makefile.vc
-	rm -f ../../samples/dialogs/makefile.vc
-	rm -f ../../samples/nativdlg/makefile.vc
-	rm -f ../../samples/display/makefile.vc
-	rm -f ../../samples/notebook/makefile.vc
-	rm -f ../../samples/caret/makefile.vc
-	rm -f ../../samples/erase/makefile.vc
-	rm -f ../../samples/event/makefile.vc
-	rm -f ../../samples/image/makefile.vc
-	rm -f ../../samples/sashtest/makefile.vc
-	rm -f ../../samples/docview/makefile.vc
-	rm -f ../../samples/typetest/makefile.vc
-	rm -f ../../samples/drawing/makefile.vc
-	rm -f ../../samples/splitter/makefile.vc
-	rm -f ../../samples/listbox/makefile.vc
-	rm -f ../../samples/multimon/makefile.vc
-	rm -f ../../samples/dynamic/makefile.vc
-	rm -f ../../samples/checklst/makefile.vc
-	rm -f ../../samples/taskbar/makefile.vc
-	rm -f ../../samples/dragimag/makefile.vc
-	rm -f ../../samples/sockets/makefile.vc
-	rm -f ../../samples/calendar/makefile.vc
-	rm -f ../../samples/minimal/makefile.vc
-	rm -f ../../samples/access/makefile.vc
-	rm -f ../../samples/statbar/makefile.vc
-	rm -f ../../samples/config/makefile.vc
-	rm -f ../../samples/dialup/makefile.vc
-	rm -f ../../samples/controls/makefile.vc
-	rm -f ../../samples/richedit/makefile.vc
-	rm -f ../../samples/newgrid/makefile.vc
-	rm -f ../../samples/toolbar/makefile.vc
-	rm -f ../../samples/htlbox/makefile.vc
-	rm -f ../../samples/layout/makefile.vc
-	rm -f ../../samples/minifram/makefile.vc
-	rm -f ../../samples/mobile/makefile.vc
-	rm -f ../../samples/opengl/makefile.vc
-	rm -f ../../samples/scroll/makefile.vc
-	rm -f ../../samples/rotate/makefile.vc
-	rm -f ../../samples/shaped/makefile.vc
-	rm -f ../../samples/thread/makefile.vc
-	rm -f ../../samples/wizard/makefile.vc
-	rm -f ../../samples/printing/makefile.vc
-	rm -f ../../samples/oleauto/makefile.vc
-	rm -f ../../samples/wxtest/makefile.vc
-	rm -f ../../samples/artprov/makefile.vc
-	rm -f ../../samples/propsize/makefile.vc
-	rm -f ../../samples/ownerdrw/makefile.vc
-	rm -f ../../samples/vscroll/makefile.vc
-	rm -f ../../samples/validate/makefile.vc
-	rm -f ../../samples/widgets/makefile.vc
-	rm -f ../../samples/keyboard/makefile.vc
-	rm -f ../../samples/docvwmdi/makefile.vc
-	rm -f ../../samples/scrollsub/makefile.vc
-	rm -f ../../samples/memcheck/makefile.vc
-	rm -f ../../samples/internat/makefile.vc
-	rm -f ../../contrib/build/fl/makefile.vc
-	rm -f ../../contrib/build/stc/makefile.vc
-	rm -f ../../contrib/build/xrc/makefile.vc
-	rm -f ../../contrib/build/gizmos/makefile.vc
-	rm -f ../../contrib/build/animate/makefile.vc
-	rm -f ../../contrib/samples/xrc/makefile.vc
-	rm -f ../../contrib/samples/animate/makefile.vc
-	rm -f ../../configure
 	rm -f ../../Makefile.in
-	rm -f ../../samples/Makefile.in
-	rm -f ../../samples/db/Makefile.in
-	rm -f ../../samples/dnd/Makefile.in
-	rm -f ../../samples/ipc/Makefile.in
-	rm -f ../../samples/mdi/Makefile.in
-	rm -f ../../samples/mfc/Makefile.in
-	rm -f ../../samples/png/Makefile.in
-	rm -f ../../samples/tab/Makefile.in
-	rm -f ../../samples/exec/Makefile.in
-	rm -f ../../samples/font/Makefile.in
-	rm -f ../../samples/help/Makefile.in
-	rm -f ../../samples/grid/Makefile.in
-	rm -f ../../samples/html/Makefile.in
-	rm -f ../../samples/html/zip/Makefile.in
-	rm -f ../../samples/html/help/Makefile.in
-	rm -f ../../samples/html/test/Makefile.in
-	rm -f ../../samples/html/about/Makefile.in
-	rm -f ../../samples/html/widget/Makefile.in
-	rm -f ../../samples/html/printing/Makefile.in
-	rm -f ../../samples/html/virtual/Makefile.in
-	rm -f ../../samples/html/helpview/Makefile.in
-	rm -f ../../samples/menu/Makefile.in
-	rm -f ../../samples/text/Makefile.in
-	rm -f ../../samples/console/Makefile.in
-	rm -f ../../samples/treectrl/Makefile.in
-	rm -f ../../samples/listctrl/Makefile.in
-	rm -f ../../samples/joytest/Makefile.in
-	rm -f ../../samples/regtest/Makefile.in
-	rm -f ../../samples/dialogs/Makefile.in
-	rm -f ../../samples/nativdlg/Makefile.in
-	rm -f ../../samples/display/Makefile.in
-	rm -f ../../samples/notebook/Makefile.in
-	rm -f ../../samples/caret/Makefile.in
-	rm -f ../../samples/erase/Makefile.in
-	rm -f ../../samples/event/Makefile.in
-	rm -f ../../samples/image/Makefile.in
-	rm -f ../../samples/sashtest/Makefile.in
-	rm -f ../../samples/docview/Makefile.in
-	rm -f ../../samples/typetest/Makefile.in
-	rm -f ../../samples/drawing/Makefile.in
-	rm -f ../../samples/splitter/Makefile.in
-	rm -f ../../samples/listbox/Makefile.in
-	rm -f ../../samples/multimon/Makefile.in
-	rm -f ../../samples/dynamic/Makefile.in
-	rm -f ../../samples/checklst/Makefile.in
-	rm -f ../../samples/taskbar/Makefile.in
-	rm -f ../../samples/dragimag/Makefile.in
-	rm -f ../../samples/sockets/Makefile.in
-	rm -f ../../samples/calendar/Makefile.in
-	rm -f ../../samples/minimal/Makefile.in
-	rm -f ../../samples/access/Makefile.in
-	rm -f ../../samples/statbar/Makefile.in
-	rm -f ../../samples/config/Makefile.in
-	rm -f ../../samples/dialup/Makefile.in
-	rm -f ../../samples/controls/Makefile.in
-	rm -f ../../samples/richedit/Makefile.in
-	rm -f ../../samples/newgrid/Makefile.in
-	rm -f ../../samples/toolbar/Makefile.in
-	rm -f ../../samples/htlbox/Makefile.in
-	rm -f ../../samples/layout/Makefile.in
-	rm -f ../../samples/minifram/Makefile.in
-	rm -f ../../samples/mobile/Makefile.in
-	rm -f ../../samples/opengl/Makefile.in
-	rm -f ../../samples/scroll/Makefile.in
-	rm -f ../../samples/rotate/Makefile.in
-	rm -f ../../samples/shaped/Makefile.in
-	rm -f ../../samples/thread/Makefile.in
-	rm -f ../../samples/wizard/Makefile.in
-	rm -f ../../samples/printing/Makefile.in
-	rm -f ../../samples/oleauto/Makefile.in
-	rm -f ../../samples/wxtest/Makefile.in
-	rm -f ../../samples/artprov/Makefile.in
-	rm -f ../../samples/propsize/Makefile.in
-	rm -f ../../samples/ownerdrw/Makefile.in
-	rm -f ../../samples/vscroll/Makefile.in
-	rm -f ../../samples/validate/Makefile.in
-	rm -f ../../samples/widgets/Makefile.in
-	rm -f ../../samples/keyboard/Makefile.in
-	rm -f ../../samples/docvwmdi/Makefile.in
-	rm -f ../../samples/scrollsub/Makefile.in
-	rm -f ../../samples/memcheck/Makefile.in
-	rm -f ../../samples/internat/Makefile.in
+	rm -f ../../configure
+	rm -f ../../contrib/build/animate/makefile.bcc
+	rm -f ../../contrib/build/animate/makefile.gcc
+	rm -f ../../contrib/build/animate/makefile.vc
+	rm -f ../../contrib/build/animate/makefile.wat
+	rm -f ../../contrib/build/fl/makefile.bcc
+	rm -f ../../contrib/build/fl/makefile.gcc
+	rm -f ../../contrib/build/fl/makefile.vc
+	rm -f ../../contrib/build/fl/makefile.wat
+	rm -f ../../contrib/build/gizmos/makefile.bcc
+	rm -f ../../contrib/build/gizmos/makefile.gcc
+	rm -f ../../contrib/build/gizmos/makefile.vc
+	rm -f ../../contrib/build/gizmos/makefile.wat
+	rm -f ../../contrib/build/ogl/makefile.bcc
+	rm -f ../../contrib/build/ogl/makefile.gcc
+	rm -f ../../contrib/build/ogl/makefile.vc
+	rm -f ../../contrib/build/ogl/makefile.wat
+	rm -f ../../contrib/build/stc/makefile.bcc
+	rm -f ../../contrib/build/stc/makefile.gcc
+	rm -f ../../contrib/build/stc/makefile.vc
+	rm -f ../../contrib/build/stc/makefile.wat
+	rm -f ../../contrib/build/xrc/makefile.bcc
+	rm -f ../../contrib/build/xrc/makefile.gcc
+	rm -f ../../contrib/build/xrc/makefile.vc
+	rm -f ../../contrib/build/xrc/makefile.wat
+	rm -f ../../contrib/samples/animate/Makefile.in
+	rm -f ../../contrib/samples/animate/makefile.bcc
+	rm -f ../../contrib/samples/animate/makefile.gcc
+	rm -f ../../contrib/samples/animate/makefile.vc
+	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../contrib/samples/xrc/Makefile.in
+	rm -f ../../contrib/samples/xrc/makefile.bcc
+	rm -f ../../contrib/samples/xrc/makefile.gcc
+	rm -f ../../contrib/samples/xrc/makefile.vc
+	rm -f ../../contrib/samples/xrc/makefile.wat
+	rm -f ../../contrib/src/animate/Makefile.in
 	rm -f ../../contrib/src/fl/Makefile.in
+	rm -f ../../contrib/src/gizmos/Makefile.in
+	rm -f ../../contrib/src/ogl/Makefile.in
 	rm -f ../../contrib/src/stc/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
-	rm -f ../../contrib/src/gizmos/Makefile.in
-	rm -f ../../contrib/src/animate/Makefile.in
-	rm -f ../../contrib/samples/xrc/Makefile.in
-	rm -f ../../contrib/samples/animate/Makefile.in
-	rm -f ../makefile.bcc
-	rm -f ../../samples/makefile.bcc
-	rm -f ../../samples/db/makefile.bcc
-	rm -f ../../samples/dnd/makefile.bcc
-	rm -f ../../samples/ipc/makefile.bcc
-	rm -f ../../samples/mdi/makefile.bcc
-	rm -f ../../samples/mfc/makefile.bcc
-	rm -f ../../samples/png/makefile.bcc
-	rm -f ../../samples/tab/makefile.bcc
-	rm -f ../../samples/exec/makefile.bcc
-	rm -f ../../samples/font/makefile.bcc
-	rm -f ../../samples/help/makefile.bcc
-	rm -f ../../samples/grid/makefile.bcc
-	rm -f ../../samples/html/makefile.bcc
-	rm -f ../../samples/html/zip/makefile.bcc
-	rm -f ../../samples/html/help/makefile.bcc
-	rm -f ../../samples/html/test/makefile.bcc
-	rm -f ../../samples/html/about/makefile.bcc
-	rm -f ../../samples/html/widget/makefile.bcc
-	rm -f ../../samples/html/printing/makefile.bcc
-	rm -f ../../samples/html/virtual/makefile.bcc
-	rm -f ../../samples/html/helpview/makefile.bcc
-	rm -f ../../samples/menu/makefile.bcc
-	rm -f ../../samples/text/makefile.bcc
-	rm -f ../../samples/console/makefile.bcc
-	rm -f ../../samples/treectrl/makefile.bcc
-	rm -f ../../samples/listctrl/makefile.bcc
-	rm -f ../../samples/joytest/makefile.bcc
-	rm -f ../../samples/regtest/makefile.bcc
-	rm -f ../../samples/dialogs/makefile.bcc
-	rm -f ../../samples/nativdlg/makefile.bcc
-	rm -f ../../samples/display/makefile.bcc
-	rm -f ../../samples/notebook/makefile.bcc
-	rm -f ../../samples/caret/makefile.bcc
-	rm -f ../../samples/erase/makefile.bcc
-	rm -f ../../samples/event/makefile.bcc
-	rm -f ../../samples/image/makefile.bcc
-	rm -f ../../samples/sashtest/makefile.bcc
-	rm -f ../../samples/docview/makefile.bcc
-	rm -f ../../samples/typetest/makefile.bcc
-	rm -f ../../samples/drawing/makefile.bcc
-	rm -f ../../samples/splitter/makefile.bcc
-	rm -f ../../samples/listbox/makefile.bcc
-	rm -f ../../samples/multimon/makefile.bcc
-	rm -f ../../samples/dynamic/makefile.bcc
-	rm -f ../../samples/checklst/makefile.bcc
-	rm -f ../../samples/taskbar/makefile.bcc
-	rm -f ../../samples/dragimag/makefile.bcc
-	rm -f ../../samples/sockets/makefile.bcc
-	rm -f ../../samples/calendar/makefile.bcc
-	rm -f ../../samples/minimal/makefile.bcc
+	rm -f ../../samples/Makefile.in
+	rm -f ../../samples/access/Makefile.in
 	rm -f ../../samples/access/makefile.bcc
-	rm -f ../../samples/statbar/makefile.bcc
-	rm -f ../../samples/config/makefile.bcc
-	rm -f ../../samples/dialup/makefile.bcc
-	rm -f ../../samples/controls/makefile.bcc
-	rm -f ../../samples/richedit/makefile.bcc
-	rm -f ../../samples/newgrid/makefile.bcc
-	rm -f ../../samples/toolbar/makefile.bcc
-	rm -f ../../samples/htlbox/makefile.bcc
-	rm -f ../../samples/layout/makefile.bcc
-	rm -f ../../samples/minifram/makefile.bcc
-	rm -f ../../samples/mobile/makefile.bcc
-	rm -f ../../samples/opengl/makefile.bcc
-	rm -f ../../samples/scroll/makefile.bcc
-	rm -f ../../samples/rotate/makefile.bcc
-	rm -f ../../samples/shaped/makefile.bcc
-	rm -f ../../samples/thread/makefile.bcc
-	rm -f ../../samples/wizard/makefile.bcc
-	rm -f ../../samples/printing/makefile.bcc
-	rm -f ../../samples/oleauto/makefile.bcc
-	rm -f ../../samples/wxtest/makefile.bcc
-	rm -f ../../samples/artprov/makefile.bcc
-	rm -f ../../samples/propsize/makefile.bcc
-	rm -f ../../samples/ownerdrw/makefile.bcc
-	rm -f ../../samples/vscroll/makefile.bcc
-	rm -f ../../samples/validate/makefile.bcc
-	rm -f ../../samples/widgets/makefile.bcc
-	rm -f ../../samples/keyboard/makefile.bcc
-	rm -f ../../samples/docvwmdi/makefile.bcc
-	rm -f ../../samples/scrollsub/makefile.bcc
-	rm -f ../../samples/memcheck/makefile.bcc
-	rm -f ../../samples/internat/makefile.bcc
-	rm -f ../../contrib/build/fl/makefile.bcc
-	rm -f ../../contrib/build/stc/makefile.bcc
-	rm -f ../../contrib/build/xrc/makefile.bcc
-	rm -f ../../contrib/build/gizmos/makefile.bcc
-	rm -f ../../contrib/build/animate/makefile.bcc
-	rm -f ../../contrib/samples/xrc/makefile.bcc
-	rm -f ../../contrib/samples/animate/makefile.bcc
-	rm -f ../makefile.wat
-	rm -f ../../samples/makefile.wat
-	rm -f ../../samples/db/makefile.wat
-	rm -f ../../samples/dnd/makefile.wat
-	rm -f ../../samples/ipc/makefile.wat
-	rm -f ../../samples/mdi/makefile.wat
-	rm -f ../../samples/mfc/makefile.wat
-	rm -f ../../samples/png/makefile.wat
-	rm -f ../../samples/tab/makefile.wat
-	rm -f ../../samples/exec/makefile.wat
-	rm -f ../../samples/font/makefile.wat
-	rm -f ../../samples/help/makefile.wat
-	rm -f ../../samples/grid/makefile.wat
-	rm -f ../../samples/html/makefile.wat
-	rm -f ../../samples/html/zip/makefile.wat
-	rm -f ../../samples/html/help/makefile.wat
-	rm -f ../../samples/html/test/makefile.wat
-	rm -f ../../samples/html/about/makefile.wat
-	rm -f ../../samples/html/widget/makefile.wat
-	rm -f ../../samples/html/printing/makefile.wat
-	rm -f ../../samples/html/virtual/makefile.wat
-	rm -f ../../samples/html/helpview/makefile.wat
-	rm -f ../../samples/menu/makefile.wat
-	rm -f ../../samples/text/makefile.wat
-	rm -f ../../samples/console/makefile.wat
-	rm -f ../../samples/treectrl/makefile.wat
-	rm -f ../../samples/listctrl/makefile.wat
-	rm -f ../../samples/joytest/makefile.wat
-	rm -f ../../samples/regtest/makefile.wat
-	rm -f ../../samples/dialogs/makefile.wat
-	rm -f ../../samples/nativdlg/makefile.wat
-	rm -f ../../samples/display/makefile.wat
-	rm -f ../../samples/notebook/makefile.wat
-	rm -f ../../samples/caret/makefile.wat
-	rm -f ../../samples/erase/makefile.wat
-	rm -f ../../samples/event/makefile.wat
-	rm -f ../../samples/image/makefile.wat
-	rm -f ../../samples/sashtest/makefile.wat
-	rm -f ../../samples/docview/makefile.wat
-	rm -f ../../samples/typetest/makefile.wat
-	rm -f ../../samples/drawing/makefile.wat
-	rm -f ../../samples/splitter/makefile.wat
-	rm -f ../../samples/listbox/makefile.wat
-	rm -f ../../samples/multimon/makefile.wat
-	rm -f ../../samples/dynamic/makefile.wat
-	rm -f ../../samples/checklst/makefile.wat
-	rm -f ../../samples/taskbar/makefile.wat
-	rm -f ../../samples/dragimag/makefile.wat
-	rm -f ../../samples/sockets/makefile.wat
-	rm -f ../../samples/calendar/makefile.wat
-	rm -f ../../samples/minimal/makefile.wat
+	rm -f ../../samples/access/makefile.gcc
+	rm -f ../../samples/access/makefile.vc
 	rm -f ../../samples/access/makefile.wat
-	rm -f ../../samples/statbar/makefile.wat
-	rm -f ../../samples/config/makefile.wat
-	rm -f ../../samples/dialup/makefile.wat
-	rm -f ../../samples/controls/makefile.wat
-	rm -f ../../samples/richedit/makefile.wat
-	rm -f ../../samples/newgrid/makefile.wat
-	rm -f ../../samples/toolbar/makefile.wat
-	rm -f ../../samples/htlbox/makefile.wat
-	rm -f ../../samples/layout/makefile.wat
-	rm -f ../../samples/minifram/makefile.wat
-	rm -f ../../samples/mobile/makefile.wat
-	rm -f ../../samples/opengl/makefile.wat
-	rm -f ../../samples/scroll/makefile.wat
-	rm -f ../../samples/rotate/makefile.wat
-	rm -f ../../samples/shaped/makefile.wat
-	rm -f ../../samples/thread/makefile.wat
-	rm -f ../../samples/wizard/makefile.wat
-	rm -f ../../samples/printing/makefile.wat
-	rm -f ../../samples/oleauto/makefile.wat
-	rm -f ../../samples/wxtest/makefile.wat
+	rm -f ../../samples/artprov/Makefile.in
+	rm -f ../../samples/artprov/makefile.bcc
+	rm -f ../../samples/artprov/makefile.gcc
+	rm -f ../../samples/artprov/makefile.vc
 	rm -f ../../samples/artprov/makefile.wat
-	rm -f ../../samples/propsize/makefile.wat
-	rm -f ../../samples/ownerdrw/makefile.wat
-	rm -f ../../samples/vscroll/makefile.wat
-	rm -f ../../samples/validate/makefile.wat
-	rm -f ../../samples/widgets/makefile.wat
-	rm -f ../../samples/keyboard/makefile.wat
+	rm -f ../../samples/calendar/Makefile.in
+	rm -f ../../samples/calendar/makefile.bcc
+	rm -f ../../samples/calendar/makefile.gcc
+	rm -f ../../samples/calendar/makefile.vc
+	rm -f ../../samples/calendar/makefile.wat
+	rm -f ../../samples/caret/Makefile.in
+	rm -f ../../samples/caret/makefile.bcc
+	rm -f ../../samples/caret/makefile.gcc
+	rm -f ../../samples/caret/makefile.vc
+	rm -f ../../samples/caret/makefile.wat
+	rm -f ../../samples/checklst/Makefile.in
+	rm -f ../../samples/checklst/makefile.bcc
+	rm -f ../../samples/checklst/makefile.gcc
+	rm -f ../../samples/checklst/makefile.vc
+	rm -f ../../samples/checklst/makefile.wat
+	rm -f ../../samples/config/Makefile.in
+	rm -f ../../samples/config/makefile.bcc
+	rm -f ../../samples/config/makefile.gcc
+	rm -f ../../samples/config/makefile.vc
+	rm -f ../../samples/config/makefile.wat
+	rm -f ../../samples/console/Makefile.in
+	rm -f ../../samples/console/makefile.bcc
+	rm -f ../../samples/console/makefile.gcc
+	rm -f ../../samples/console/makefile.vc
+	rm -f ../../samples/console/makefile.wat
+	rm -f ../../samples/controls/Makefile.in
+	rm -f ../../samples/controls/makefile.bcc
+	rm -f ../../samples/controls/makefile.gcc
+	rm -f ../../samples/controls/makefile.vc
+	rm -f ../../samples/controls/makefile.wat
+	rm -f ../../samples/db/Makefile.in
+	rm -f ../../samples/db/makefile.bcc
+	rm -f ../../samples/db/makefile.gcc
+	rm -f ../../samples/db/makefile.vc
+	rm -f ../../samples/db/makefile.wat
+	rm -f ../../samples/dialogs/Makefile.in
+	rm -f ../../samples/dialogs/makefile.bcc
+	rm -f ../../samples/dialogs/makefile.gcc
+	rm -f ../../samples/dialogs/makefile.vc
+	rm -f ../../samples/dialogs/makefile.wat
+	rm -f ../../samples/dialup/Makefile.in
+	rm -f ../../samples/dialup/makefile.bcc
+	rm -f ../../samples/dialup/makefile.gcc
+	rm -f ../../samples/dialup/makefile.vc
+	rm -f ../../samples/dialup/makefile.wat
+	rm -f ../../samples/display/Makefile.in
+	rm -f ../../samples/display/makefile.bcc
+	rm -f ../../samples/display/makefile.gcc
+	rm -f ../../samples/display/makefile.vc
+	rm -f ../../samples/display/makefile.wat
+	rm -f ../../samples/dnd/Makefile.in
+	rm -f ../../samples/dnd/makefile.bcc
+	rm -f ../../samples/dnd/makefile.gcc
+	rm -f ../../samples/dnd/makefile.vc
+	rm -f ../../samples/dnd/makefile.wat
+	rm -f ../../samples/docview/Makefile.in
+	rm -f ../../samples/docview/makefile.bcc
+	rm -f ../../samples/docview/makefile.gcc
+	rm -f ../../samples/docview/makefile.vc
+	rm -f ../../samples/docview/makefile.wat
+	rm -f ../../samples/docvwmdi/Makefile.in
+	rm -f ../../samples/docvwmdi/makefile.bcc
+	rm -f ../../samples/docvwmdi/makefile.gcc
+	rm -f ../../samples/docvwmdi/makefile.vc
 	rm -f ../../samples/docvwmdi/makefile.wat
-	rm -f ../../samples/scrollsub/makefile.wat
-	rm -f ../../samples/memcheck/makefile.wat
+	rm -f ../../samples/dragimag/Makefile.in
+	rm -f ../../samples/dragimag/makefile.bcc
+	rm -f ../../samples/dragimag/makefile.gcc
+	rm -f ../../samples/dragimag/makefile.vc
+	rm -f ../../samples/dragimag/makefile.wat
+	rm -f ../../samples/drawing/Makefile.in
+	rm -f ../../samples/drawing/makefile.bcc
+	rm -f ../../samples/drawing/makefile.gcc
+	rm -f ../../samples/drawing/makefile.vc
+	rm -f ../../samples/drawing/makefile.wat
+	rm -f ../../samples/dynamic/Makefile.in
+	rm -f ../../samples/dynamic/makefile.bcc
+	rm -f ../../samples/dynamic/makefile.gcc
+	rm -f ../../samples/dynamic/makefile.vc
+	rm -f ../../samples/dynamic/makefile.wat
+	rm -f ../../samples/erase/Makefile.in
+	rm -f ../../samples/erase/makefile.bcc
+	rm -f ../../samples/erase/makefile.gcc
+	rm -f ../../samples/erase/makefile.vc
+	rm -f ../../samples/erase/makefile.wat
+	rm -f ../../samples/event/Makefile.in
+	rm -f ../../samples/event/makefile.bcc
+	rm -f ../../samples/event/makefile.gcc
+	rm -f ../../samples/event/makefile.vc
+	rm -f ../../samples/event/makefile.wat
+	rm -f ../../samples/exec/Makefile.in
+	rm -f ../../samples/exec/makefile.bcc
+	rm -f ../../samples/exec/makefile.gcc
+	rm -f ../../samples/exec/makefile.vc
+	rm -f ../../samples/exec/makefile.wat
+	rm -f ../../samples/font/Makefile.in
+	rm -f ../../samples/font/makefile.bcc
+	rm -f ../../samples/font/makefile.gcc
+	rm -f ../../samples/font/makefile.vc
+	rm -f ../../samples/font/makefile.wat
+	rm -f ../../samples/grid/Makefile.in
+	rm -f ../../samples/grid/makefile.bcc
+	rm -f ../../samples/grid/makefile.gcc
+	rm -f ../../samples/grid/makefile.vc
+	rm -f ../../samples/grid/makefile.wat
+	rm -f ../../samples/help/Makefile.in
+	rm -f ../../samples/help/makefile.bcc
+	rm -f ../../samples/help/makefile.gcc
+	rm -f ../../samples/help/makefile.vc
+	rm -f ../../samples/help/makefile.wat
+	rm -f ../../samples/htlbox/Makefile.in
+	rm -f ../../samples/htlbox/makefile.bcc
+	rm -f ../../samples/htlbox/makefile.gcc
+	rm -f ../../samples/htlbox/makefile.vc
+	rm -f ../../samples/htlbox/makefile.wat
+	rm -f ../../samples/html/Makefile.in
+	rm -f ../../samples/html/about/Makefile.in
+	rm -f ../../samples/html/about/makefile.bcc
+	rm -f ../../samples/html/about/makefile.gcc
+	rm -f ../../samples/html/about/makefile.vc
+	rm -f ../../samples/html/about/makefile.wat
+	rm -f ../../samples/html/help/Makefile.in
+	rm -f ../../samples/html/help/makefile.bcc
+	rm -f ../../samples/html/help/makefile.gcc
+	rm -f ../../samples/html/help/makefile.vc
+	rm -f ../../samples/html/help/makefile.wat
+	rm -f ../../samples/html/helpview/Makefile.in
+	rm -f ../../samples/html/helpview/makefile.bcc
+	rm -f ../../samples/html/helpview/makefile.gcc
+	rm -f ../../samples/html/helpview/makefile.vc
+	rm -f ../../samples/html/helpview/makefile.wat
+	rm -f ../../samples/html/makefile.bcc
+	rm -f ../../samples/html/makefile.gcc
+	rm -f ../../samples/html/makefile.vc
+	rm -f ../../samples/html/makefile.wat
+	rm -f ../../samples/html/printing/Makefile.in
+	rm -f ../../samples/html/printing/makefile.bcc
+	rm -f ../../samples/html/printing/makefile.gcc
+	rm -f ../../samples/html/printing/makefile.vc
+	rm -f ../../samples/html/printing/makefile.wat
+	rm -f ../../samples/html/test/Makefile.in
+	rm -f ../../samples/html/test/makefile.bcc
+	rm -f ../../samples/html/test/makefile.gcc
+	rm -f ../../samples/html/test/makefile.vc
+	rm -f ../../samples/html/test/makefile.wat
+	rm -f ../../samples/html/virtual/Makefile.in
+	rm -f ../../samples/html/virtual/makefile.bcc
+	rm -f ../../samples/html/virtual/makefile.gcc
+	rm -f ../../samples/html/virtual/makefile.vc
+	rm -f ../../samples/html/virtual/makefile.wat
+	rm -f ../../samples/html/widget/Makefile.in
+	rm -f ../../samples/html/widget/makefile.bcc
+	rm -f ../../samples/html/widget/makefile.gcc
+	rm -f ../../samples/html/widget/makefile.vc
+	rm -f ../../samples/html/widget/makefile.wat
+	rm -f ../../samples/html/zip/Makefile.in
+	rm -f ../../samples/html/zip/makefile.bcc
+	rm -f ../../samples/html/zip/makefile.gcc
+	rm -f ../../samples/html/zip/makefile.vc
+	rm -f ../../samples/html/zip/makefile.wat
+	rm -f ../../samples/image/Makefile.in
+	rm -f ../../samples/image/makefile.bcc
+	rm -f ../../samples/image/makefile.gcc
+	rm -f ../../samples/image/makefile.vc
+	rm -f ../../samples/image/makefile.wat
+	rm -f ../../samples/internat/Makefile.in
+	rm -f ../../samples/internat/makefile.bcc
+	rm -f ../../samples/internat/makefile.gcc
+	rm -f ../../samples/internat/makefile.vc
 	rm -f ../../samples/internat/makefile.wat
-	rm -f ../../contrib/build/fl/makefile.wat
-	rm -f ../../contrib/build/stc/makefile.wat
-	rm -f ../../contrib/build/xrc/makefile.wat
-	rm -f ../../contrib/build/gizmos/makefile.wat
-	rm -f ../../contrib/build/animate/makefile.wat
-	rm -f ../../contrib/samples/xrc/makefile.wat
-	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../samples/ipc/Makefile.in
+	rm -f ../../samples/ipc/makefile.bcc
+	rm -f ../../samples/ipc/makefile.gcc
+	rm -f ../../samples/ipc/makefile.vc
+	rm -f ../../samples/ipc/makefile.wat
+	rm -f ../../samples/joytest/Makefile.in
+	rm -f ../../samples/joytest/makefile.bcc
+	rm -f ../../samples/joytest/makefile.gcc
+	rm -f ../../samples/joytest/makefile.vc
+	rm -f ../../samples/joytest/makefile.wat
+	rm -f ../../samples/keyboard/Makefile.in
+	rm -f ../../samples/keyboard/makefile.bcc
+	rm -f ../../samples/keyboard/makefile.gcc
+	rm -f ../../samples/keyboard/makefile.vc
+	rm -f ../../samples/keyboard/makefile.wat
+	rm -f ../../samples/layout/Makefile.in
+	rm -f ../../samples/layout/makefile.bcc
+	rm -f ../../samples/layout/makefile.gcc
+	rm -f ../../samples/layout/makefile.vc
+	rm -f ../../samples/layout/makefile.wat
+	rm -f ../../samples/listbox/Makefile.in
+	rm -f ../../samples/listbox/makefile.bcc
+	rm -f ../../samples/listbox/makefile.gcc
+	rm -f ../../samples/listbox/makefile.vc
+	rm -f ../../samples/listbox/makefile.wat
+	rm -f ../../samples/listctrl/Makefile.in
+	rm -f ../../samples/listctrl/makefile.bcc
+	rm -f ../../samples/listctrl/makefile.gcc
+	rm -f ../../samples/listctrl/makefile.vc
+	rm -f ../../samples/listctrl/makefile.wat
+	rm -f ../../samples/makefile.bcc
+	rm -f ../../samples/makefile.gcc
+	rm -f ../../samples/makefile.vc
+	rm -f ../../samples/makefile.wat
+	rm -f ../../samples/mdi/Makefile.in
+	rm -f ../../samples/mdi/makefile.bcc
+	rm -f ../../samples/mdi/makefile.gcc
+	rm -f ../../samples/mdi/makefile.vc
+	rm -f ../../samples/mdi/makefile.wat
+	rm -f ../../samples/memcheck/Makefile.in
+	rm -f ../../samples/memcheck/makefile.bcc
+	rm -f ../../samples/memcheck/makefile.gcc
+	rm -f ../../samples/memcheck/makefile.vc
+	rm -f ../../samples/memcheck/makefile.wat
+	rm -f ../../samples/menu/Makefile.in
+	rm -f ../../samples/menu/makefile.bcc
+	rm -f ../../samples/menu/makefile.gcc
+	rm -f ../../samples/menu/makefile.vc
+	rm -f ../../samples/menu/makefile.wat
+	rm -f ../../samples/mfc/Makefile.in
+	rm -f ../../samples/mfc/makefile.bcc
+	rm -f ../../samples/mfc/makefile.gcc
+	rm -f ../../samples/mfc/makefile.vc
+	rm -f ../../samples/mfc/makefile.wat
+	rm -f ../../samples/minifram/Makefile.in
+	rm -f ../../samples/minifram/makefile.bcc
+	rm -f ../../samples/minifram/makefile.gcc
+	rm -f ../../samples/minifram/makefile.vc
+	rm -f ../../samples/minifram/makefile.wat
+	rm -f ../../samples/minimal/Makefile.in
+	rm -f ../../samples/minimal/makefile.bcc
+	rm -f ../../samples/minimal/makefile.gcc
+	rm -f ../../samples/minimal/makefile.vc
+	rm -f ../../samples/minimal/makefile.wat
+	rm -f ../../samples/mobile/Makefile.in
+	rm -f ../../samples/mobile/makefile.bcc
+	rm -f ../../samples/mobile/makefile.gcc
+	rm -f ../../samples/mobile/makefile.vc
+	rm -f ../../samples/mobile/makefile.wat
+	rm -f ../../samples/multimon/Makefile.in
+	rm -f ../../samples/multimon/makefile.bcc
+	rm -f ../../samples/multimon/makefile.gcc
+	rm -f ../../samples/multimon/makefile.vc
+	rm -f ../../samples/multimon/makefile.wat
+	rm -f ../../samples/nativdlg/Makefile.in
+	rm -f ../../samples/nativdlg/makefile.bcc
+	rm -f ../../samples/nativdlg/makefile.gcc
+	rm -f ../../samples/nativdlg/makefile.vc
+	rm -f ../../samples/nativdlg/makefile.wat
+	rm -f ../../samples/newgrid/Makefile.in
+	rm -f ../../samples/newgrid/makefile.bcc
+	rm -f ../../samples/newgrid/makefile.gcc
+	rm -f ../../samples/newgrid/makefile.vc
+	rm -f ../../samples/newgrid/makefile.wat
+	rm -f ../../samples/notebook/Makefile.in
+	rm -f ../../samples/notebook/makefile.bcc
+	rm -f ../../samples/notebook/makefile.gcc
+	rm -f ../../samples/notebook/makefile.vc
+	rm -f ../../samples/notebook/makefile.wat
+	rm -f ../../samples/oleauto/Makefile.in
+	rm -f ../../samples/oleauto/makefile.bcc
+	rm -f ../../samples/oleauto/makefile.gcc
+	rm -f ../../samples/oleauto/makefile.vc
+	rm -f ../../samples/oleauto/makefile.wat
+	rm -f ../../samples/opengl/Makefile.in
+	rm -f ../../samples/opengl/makefile.bcc
+	rm -f ../../samples/opengl/makefile.gcc
+	rm -f ../../samples/opengl/makefile.vc
+	rm -f ../../samples/opengl/makefile.wat
+	rm -f ../../samples/ownerdrw/Makefile.in
+	rm -f ../../samples/ownerdrw/makefile.bcc
+	rm -f ../../samples/ownerdrw/makefile.gcc
+	rm -f ../../samples/ownerdrw/makefile.vc
+	rm -f ../../samples/ownerdrw/makefile.wat
+	rm -f ../../samples/png/Makefile.in
+	rm -f ../../samples/png/makefile.bcc
+	rm -f ../../samples/png/makefile.gcc
+	rm -f ../../samples/png/makefile.vc
+	rm -f ../../samples/png/makefile.wat
+	rm -f ../../samples/printing/Makefile.in
+	rm -f ../../samples/printing/makefile.bcc
+	rm -f ../../samples/printing/makefile.gcc
+	rm -f ../../samples/printing/makefile.vc
+	rm -f ../../samples/printing/makefile.wat
+	rm -f ../../samples/propsize/Makefile.in
+	rm -f ../../samples/propsize/makefile.bcc
+	rm -f ../../samples/propsize/makefile.gcc
+	rm -f ../../samples/propsize/makefile.vc
+	rm -f ../../samples/propsize/makefile.wat
+	rm -f ../../samples/regtest/Makefile.in
+	rm -f ../../samples/regtest/makefile.bcc
+	rm -f ../../samples/regtest/makefile.gcc
+	rm -f ../../samples/regtest/makefile.vc
+	rm -f ../../samples/regtest/makefile.wat
+	rm -f ../../samples/richedit/Makefile.in
+	rm -f ../../samples/richedit/makefile.bcc
+	rm -f ../../samples/richedit/makefile.gcc
+	rm -f ../../samples/richedit/makefile.vc
+	rm -f ../../samples/richedit/makefile.wat
+	rm -f ../../samples/rotate/Makefile.in
+	rm -f ../../samples/rotate/makefile.bcc
+	rm -f ../../samples/rotate/makefile.gcc
+	rm -f ../../samples/rotate/makefile.vc
+	rm -f ../../samples/rotate/makefile.wat
+	rm -f ../../samples/sashtest/Makefile.in
+	rm -f ../../samples/sashtest/makefile.bcc
+	rm -f ../../samples/sashtest/makefile.gcc
+	rm -f ../../samples/sashtest/makefile.vc
+	rm -f ../../samples/sashtest/makefile.wat
+	rm -f ../../samples/scroll/Makefile.in
+	rm -f ../../samples/scroll/makefile.bcc
+	rm -f ../../samples/scroll/makefile.gcc
+	rm -f ../../samples/scroll/makefile.vc
+	rm -f ../../samples/scroll/makefile.wat
+	rm -f ../../samples/scrollsub/Makefile.in
+	rm -f ../../samples/scrollsub/makefile.bcc
+	rm -f ../../samples/scrollsub/makefile.gcc
+	rm -f ../../samples/scrollsub/makefile.vc
+	rm -f ../../samples/scrollsub/makefile.wat
+	rm -f ../../samples/shaped/Makefile.in
+	rm -f ../../samples/shaped/makefile.bcc
+	rm -f ../../samples/shaped/makefile.gcc
+	rm -f ../../samples/shaped/makefile.vc
+	rm -f ../../samples/shaped/makefile.wat
+	rm -f ../../samples/sockets/Makefile.in
+	rm -f ../../samples/sockets/makefile.bcc
+	rm -f ../../samples/sockets/makefile.gcc
+	rm -f ../../samples/sockets/makefile.vc
+	rm -f ../../samples/sockets/makefile.wat
+	rm -f ../../samples/splitter/Makefile.in
+	rm -f ../../samples/splitter/makefile.bcc
+	rm -f ../../samples/splitter/makefile.gcc
+	rm -f ../../samples/splitter/makefile.vc
+	rm -f ../../samples/splitter/makefile.wat
+	rm -f ../../samples/statbar/Makefile.in
+	rm -f ../../samples/statbar/makefile.bcc
+	rm -f ../../samples/statbar/makefile.gcc
+	rm -f ../../samples/statbar/makefile.vc
+	rm -f ../../samples/statbar/makefile.wat
+	rm -f ../../samples/tab/Makefile.in
+	rm -f ../../samples/tab/makefile.bcc
+	rm -f ../../samples/tab/makefile.gcc
+	rm -f ../../samples/tab/makefile.vc
+	rm -f ../../samples/tab/makefile.wat
+	rm -f ../../samples/taskbar/Makefile.in
+	rm -f ../../samples/taskbar/makefile.bcc
+	rm -f ../../samples/taskbar/makefile.gcc
+	rm -f ../../samples/taskbar/makefile.vc
+	rm -f ../../samples/taskbar/makefile.wat
+	rm -f ../../samples/text/Makefile.in
+	rm -f ../../samples/text/makefile.bcc
+	rm -f ../../samples/text/makefile.gcc
+	rm -f ../../samples/text/makefile.vc
+	rm -f ../../samples/text/makefile.wat
+	rm -f ../../samples/thread/Makefile.in
+	rm -f ../../samples/thread/makefile.bcc
+	rm -f ../../samples/thread/makefile.gcc
+	rm -f ../../samples/thread/makefile.vc
+	rm -f ../../samples/thread/makefile.wat
+	rm -f ../../samples/toolbar/Makefile.in
+	rm -f ../../samples/toolbar/makefile.bcc
+	rm -f ../../samples/toolbar/makefile.gcc
+	rm -f ../../samples/toolbar/makefile.vc
+	rm -f ../../samples/toolbar/makefile.wat
+	rm -f ../../samples/treectrl/Makefile.in
+	rm -f ../../samples/treectrl/makefile.bcc
+	rm -f ../../samples/treectrl/makefile.gcc
+	rm -f ../../samples/treectrl/makefile.vc
+	rm -f ../../samples/treectrl/makefile.wat
+	rm -f ../../samples/typetest/Makefile.in
+	rm -f ../../samples/typetest/makefile.bcc
+	rm -f ../../samples/typetest/makefile.gcc
+	rm -f ../../samples/typetest/makefile.vc
+	rm -f ../../samples/typetest/makefile.wat
+	rm -f ../../samples/validate/Makefile.in
+	rm -f ../../samples/validate/makefile.bcc
+	rm -f ../../samples/validate/makefile.gcc
+	rm -f ../../samples/validate/makefile.vc
+	rm -f ../../samples/validate/makefile.wat
+	rm -f ../../samples/vscroll/Makefile.in
+	rm -f ../../samples/vscroll/makefile.bcc
+	rm -f ../../samples/vscroll/makefile.gcc
+	rm -f ../../samples/vscroll/makefile.vc
+	rm -f ../../samples/vscroll/makefile.wat
+	rm -f ../../samples/widgets/Makefile.in
+	rm -f ../../samples/widgets/makefile.bcc
+	rm -f ../../samples/widgets/makefile.gcc
+	rm -f ../../samples/widgets/makefile.vc
+	rm -f ../../samples/widgets/makefile.wat
+	rm -f ../../samples/wizard/Makefile.in
+	rm -f ../../samples/wizard/makefile.bcc
+	rm -f ../../samples/wizard/makefile.gcc
+	rm -f ../../samples/wizard/makefile.vc
+	rm -f ../../samples/wizard/makefile.wat
+	rm -f ../../samples/wxtest/Makefile.in
+	rm -f ../../samples/wxtest/makefile.bcc
+	rm -f ../../samples/wxtest/makefile.gcc
+	rm -f ../../samples/wxtest/makefile.vc
+	rm -f ../../samples/wxtest/makefile.wat
+	rm -f ../makefile.bcc
+	rm -f ../makefile.gcc
+	rm -f ../makefile.vc
+	rm -f ../makefile.wat
 
 
 ../../autoconf_inc.m4: ../../Makefile.in
@@ -488,1397 +949,6 @@ Makefile: regenMakefile.py
 	@echo
 	@exit 1
 
-../../Makefile.in: $(MDEPS) wx.bkl
-	$(BAKEFILE) -fautoconf -o$@  wx.bkl
-	touch $@
-../makefile.bcc: $(MDEPS) wx.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=config.bcc wx.bkl
-	touch $@
-../makefile.vc: $(MDEPS) wx.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=config.vc wx.bkl
-	touch $@
-../makefile.gcc: $(MDEPS) wx.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=config.gcc wx.bkl
-	touch $@
-../makefile.wat: $(MDEPS) wx.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=config.wat wx.bkl
-	touch $@
-
-../../samples/Makefile.in: ../../samples/samples.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/samples.bkl
-	touch $@
-../../samples/makefile.bcc: ../../samples/samples.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../build/config.bcc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
-	touch $@
-../../samples/makefile.vc: ../../samples/samples.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../build/config.vc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
-	touch $@
-../../samples/makefile.gcc: ../../samples/samples.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../build/config.gcc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
-	touch $@
-../../samples/makefile.wat: ../../samples/samples.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../build/config.wat -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
-	touch $@
-
-../../samples/db/Makefile.in: $(SDEPS) ../../samples/db/db.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/db/db.bkl
-	touch $@
-../../samples/db/makefile.bcc: $(SDEPS) ../../samples/db/db.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
-	touch $@
-../../samples/db/makefile.vc: $(SDEPS) ../../samples/db/db.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
-	touch $@
-../../samples/db/makefile.gcc: $(SDEPS) ../../samples/db/db.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
-	touch $@
-../../samples/db/makefile.wat: $(SDEPS) ../../samples/db/db.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
-	touch $@
-
-../../samples/dnd/Makefile.in: $(SDEPS) ../../samples/dnd/dnd.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dnd/dnd.bkl
-	touch $@
-../../samples/dnd/makefile.bcc: $(SDEPS) ../../samples/dnd/dnd.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
-	touch $@
-../../samples/dnd/makefile.vc: $(SDEPS) ../../samples/dnd/dnd.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
-	touch $@
-../../samples/dnd/makefile.gcc: $(SDEPS) ../../samples/dnd/dnd.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
-	touch $@
-../../samples/dnd/makefile.wat: $(SDEPS) ../../samples/dnd/dnd.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
-	touch $@
-
-../../samples/ipc/Makefile.in: $(SDEPS) ../../samples/ipc/ipc.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/ipc/ipc.bkl
-	touch $@
-../../samples/ipc/makefile.bcc: $(SDEPS) ../../samples/ipc/ipc.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
-	touch $@
-../../samples/ipc/makefile.vc: $(SDEPS) ../../samples/ipc/ipc.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
-	touch $@
-../../samples/ipc/makefile.gcc: $(SDEPS) ../../samples/ipc/ipc.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
-	touch $@
-../../samples/ipc/makefile.wat: $(SDEPS) ../../samples/ipc/ipc.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
-	touch $@
-
-../../samples/mdi/Makefile.in: $(SDEPS) ../../samples/mdi/mdi.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mdi/mdi.bkl
-	touch $@
-../../samples/mdi/makefile.bcc: $(SDEPS) ../../samples/mdi/mdi.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
-	touch $@
-../../samples/mdi/makefile.vc: $(SDEPS) ../../samples/mdi/mdi.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
-	touch $@
-../../samples/mdi/makefile.gcc: $(SDEPS) ../../samples/mdi/mdi.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
-	touch $@
-../../samples/mdi/makefile.wat: $(SDEPS) ../../samples/mdi/mdi.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
-	touch $@
-
-../../samples/mfc/Makefile.in: $(SDEPS) ../../samples/mfc/mfc.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mfc/mfc.bkl
-	touch $@
-../../samples/mfc/makefile.bcc: $(SDEPS) ../../samples/mfc/mfc.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
-	touch $@
-../../samples/mfc/makefile.vc: $(SDEPS) ../../samples/mfc/mfc.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
-	touch $@
-../../samples/mfc/makefile.gcc: $(SDEPS) ../../samples/mfc/mfc.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
-	touch $@
-../../samples/mfc/makefile.wat: $(SDEPS) ../../samples/mfc/mfc.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
-	touch $@
-
-../../samples/png/Makefile.in: $(SDEPS) ../../samples/png/png.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/png/png.bkl
-	touch $@
-../../samples/png/makefile.bcc: $(SDEPS) ../../samples/png/png.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
-	touch $@
-../../samples/png/makefile.vc: $(SDEPS) ../../samples/png/png.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
-	touch $@
-../../samples/png/makefile.gcc: $(SDEPS) ../../samples/png/png.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
-	touch $@
-../../samples/png/makefile.wat: $(SDEPS) ../../samples/png/png.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
-	touch $@
-
-../../samples/tab/Makefile.in: $(SDEPS) ../../samples/tab/tab.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/tab/tab.bkl
-	touch $@
-../../samples/tab/makefile.bcc: $(SDEPS) ../../samples/tab/tab.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
-	touch $@
-../../samples/tab/makefile.vc: $(SDEPS) ../../samples/tab/tab.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
-	touch $@
-../../samples/tab/makefile.gcc: $(SDEPS) ../../samples/tab/tab.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
-	touch $@
-../../samples/tab/makefile.wat: $(SDEPS) ../../samples/tab/tab.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
-	touch $@
-
-../../samples/exec/Makefile.in: $(SDEPS) ../../samples/exec/exec.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/exec/exec.bkl
-	touch $@
-../../samples/exec/makefile.bcc: $(SDEPS) ../../samples/exec/exec.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
-	touch $@
-../../samples/exec/makefile.vc: $(SDEPS) ../../samples/exec/exec.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
-	touch $@
-../../samples/exec/makefile.gcc: $(SDEPS) ../../samples/exec/exec.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
-	touch $@
-../../samples/exec/makefile.wat: $(SDEPS) ../../samples/exec/exec.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
-	touch $@
-
-../../samples/font/Makefile.in: $(SDEPS) ../../samples/font/font.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/font/font.bkl
-	touch $@
-../../samples/font/makefile.bcc: $(SDEPS) ../../samples/font/font.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
-	touch $@
-../../samples/font/makefile.vc: $(SDEPS) ../../samples/font/font.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
-	touch $@
-../../samples/font/makefile.gcc: $(SDEPS) ../../samples/font/font.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
-	touch $@
-../../samples/font/makefile.wat: $(SDEPS) ../../samples/font/font.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
-	touch $@
-
-../../samples/help/Makefile.in: $(SDEPS) ../../samples/help/help.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/help/help.bkl
-	touch $@
-../../samples/help/makefile.bcc: $(SDEPS) ../../samples/help/help.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
-	touch $@
-../../samples/help/makefile.vc: $(SDEPS) ../../samples/help/help.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
-	touch $@
-../../samples/help/makefile.gcc: $(SDEPS) ../../samples/help/help.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
-	touch $@
-../../samples/help/makefile.wat: $(SDEPS) ../../samples/help/help.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
-	touch $@
-
-../../samples/grid/Makefile.in: $(SDEPS) ../../samples/grid/grid.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/grid/grid.bkl
-	touch $@
-../../samples/grid/makefile.bcc: $(SDEPS) ../../samples/grid/grid.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
-	touch $@
-../../samples/grid/makefile.vc: $(SDEPS) ../../samples/grid/grid.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
-	touch $@
-../../samples/grid/makefile.gcc: $(SDEPS) ../../samples/grid/grid.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
-	touch $@
-../../samples/grid/makefile.wat: $(SDEPS) ../../samples/grid/grid.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
-	touch $@
-
-../../samples/html/Makefile.in: $(SDEPS) ../../samples/html/html_samples.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/html_samples.bkl
-	touch $@
-../../samples/html/makefile.bcc: $(SDEPS) ../../samples/html/html_samples.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
-	touch $@
-../../samples/html/makefile.vc: $(SDEPS) ../../samples/html/html_samples.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
-	touch $@
-../../samples/html/makefile.gcc: $(SDEPS) ../../samples/html/html_samples.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
-	touch $@
-../../samples/html/makefile.wat: $(SDEPS) ../../samples/html/html_samples.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
-	touch $@
-
-../../samples/html/zip/Makefile.in: $(SDEPS) ../../samples/html/zip/zip.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/zip/zip.bkl
-	touch $@
-../../samples/html/zip/makefile.bcc: $(SDEPS) ../../samples/html/zip/zip.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
-	touch $@
-../../samples/html/zip/makefile.vc: $(SDEPS) ../../samples/html/zip/zip.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
-	touch $@
-../../samples/html/zip/makefile.gcc: $(SDEPS) ../../samples/html/zip/zip.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
-	touch $@
-../../samples/html/zip/makefile.wat: $(SDEPS) ../../samples/html/zip/zip.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
-	touch $@
-
-../../samples/html/help/Makefile.in: $(SDEPS) ../../samples/html/help/help.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/help/help.bkl
-	touch $@
-../../samples/html/help/makefile.bcc: $(SDEPS) ../../samples/html/help/help.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
-	touch $@
-../../samples/html/help/makefile.vc: $(SDEPS) ../../samples/html/help/help.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
-	touch $@
-../../samples/html/help/makefile.gcc: $(SDEPS) ../../samples/html/help/help.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
-	touch $@
-../../samples/html/help/makefile.wat: $(SDEPS) ../../samples/html/help/help.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
-	touch $@
-
-../../samples/html/test/Makefile.in: $(SDEPS) ../../samples/html/test/test.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/test/test.bkl
-	touch $@
-../../samples/html/test/makefile.bcc: $(SDEPS) ../../samples/html/test/test.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
-	touch $@
-../../samples/html/test/makefile.vc: $(SDEPS) ../../samples/html/test/test.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
-	touch $@
-../../samples/html/test/makefile.gcc: $(SDEPS) ../../samples/html/test/test.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
-	touch $@
-../../samples/html/test/makefile.wat: $(SDEPS) ../../samples/html/test/test.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
-	touch $@
-
-../../samples/html/about/Makefile.in: $(SDEPS) ../../samples/html/about/about.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/about/about.bkl
-	touch $@
-../../samples/html/about/makefile.bcc: $(SDEPS) ../../samples/html/about/about.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
-	touch $@
-../../samples/html/about/makefile.vc: $(SDEPS) ../../samples/html/about/about.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
-	touch $@
-../../samples/html/about/makefile.gcc: $(SDEPS) ../../samples/html/about/about.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
-	touch $@
-../../samples/html/about/makefile.wat: $(SDEPS) ../../samples/html/about/about.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
-	touch $@
-
-../../samples/html/widget/Makefile.in: $(SDEPS) ../../samples/html/widget/widget.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/widget/widget.bkl
-	touch $@
-../../samples/html/widget/makefile.bcc: $(SDEPS) ../../samples/html/widget/widget.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
-	touch $@
-../../samples/html/widget/makefile.vc: $(SDEPS) ../../samples/html/widget/widget.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
-	touch $@
-../../samples/html/widget/makefile.gcc: $(SDEPS) ../../samples/html/widget/widget.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
-	touch $@
-../../samples/html/widget/makefile.wat: $(SDEPS) ../../samples/html/widget/widget.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
-	touch $@
-
-../../samples/html/printing/Makefile.in: $(SDEPS) ../../samples/html/printing/printing.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/printing/printing.bkl
-	touch $@
-../../samples/html/printing/makefile.bcc: $(SDEPS) ../../samples/html/printing/printing.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
-	touch $@
-../../samples/html/printing/makefile.vc: $(SDEPS) ../../samples/html/printing/printing.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
-	touch $@
-../../samples/html/printing/makefile.gcc: $(SDEPS) ../../samples/html/printing/printing.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
-	touch $@
-../../samples/html/printing/makefile.wat: $(SDEPS) ../../samples/html/printing/printing.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
-	touch $@
-
-../../samples/html/virtual/Makefile.in: $(SDEPS) ../../samples/html/virtual/virtual.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/virtual/virtual.bkl
-	touch $@
-../../samples/html/virtual/makefile.bcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
-	touch $@
-../../samples/html/virtual/makefile.vc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
-	touch $@
-../../samples/html/virtual/makefile.gcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
-	touch $@
-../../samples/html/virtual/makefile.wat: $(SDEPS) ../../samples/html/virtual/virtual.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
-	touch $@
-
-../../samples/html/helpview/Makefile.in: $(SDEPS) ../../samples/html/helpview/helpview.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/helpview/helpview.bkl
-	touch $@
-../../samples/html/helpview/makefile.bcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
-	touch $@
-../../samples/html/helpview/makefile.vc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
-	touch $@
-../../samples/html/helpview/makefile.gcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
-	touch $@
-../../samples/html/helpview/makefile.wat: $(SDEPS) ../../samples/html/helpview/helpview.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
-	touch $@
-
-../../samples/menu/Makefile.in: $(SDEPS) ../../samples/menu/menu.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/menu/menu.bkl
-	touch $@
-../../samples/menu/makefile.bcc: $(SDEPS) ../../samples/menu/menu.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
-	touch $@
-../../samples/menu/makefile.vc: $(SDEPS) ../../samples/menu/menu.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
-	touch $@
-../../samples/menu/makefile.gcc: $(SDEPS) ../../samples/menu/menu.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
-	touch $@
-../../samples/menu/makefile.wat: $(SDEPS) ../../samples/menu/menu.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
-	touch $@
-
-../../samples/text/Makefile.in: $(SDEPS) ../../samples/text/text.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/text/text.bkl
-	touch $@
-../../samples/text/makefile.bcc: $(SDEPS) ../../samples/text/text.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
-	touch $@
-../../samples/text/makefile.vc: $(SDEPS) ../../samples/text/text.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
-	touch $@
-../../samples/text/makefile.gcc: $(SDEPS) ../../samples/text/text.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
-	touch $@
-../../samples/text/makefile.wat: $(SDEPS) ../../samples/text/text.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
-	touch $@
-
-../../samples/console/Makefile.in: $(SDEPS) ../../samples/console/console.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/console/console.bkl
-	touch $@
-../../samples/console/makefile.bcc: $(SDEPS) ../../samples/console/console.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
-	touch $@
-../../samples/console/makefile.vc: $(SDEPS) ../../samples/console/console.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
-	touch $@
-../../samples/console/makefile.gcc: $(SDEPS) ../../samples/console/console.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
-	touch $@
-../../samples/console/makefile.wat: $(SDEPS) ../../samples/console/console.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
-	touch $@
-
-../../samples/treectrl/Makefile.in: $(SDEPS) ../../samples/treectrl/treectrl.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/treectrl/treectrl.bkl
-	touch $@
-../../samples/treectrl/makefile.bcc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
-	touch $@
-../../samples/treectrl/makefile.vc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
-	touch $@
-../../samples/treectrl/makefile.gcc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
-	touch $@
-../../samples/treectrl/makefile.wat: $(SDEPS) ../../samples/treectrl/treectrl.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
-	touch $@
-
-../../samples/listctrl/Makefile.in: $(SDEPS) ../../samples/listctrl/listctrl.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/listctrl/listctrl.bkl
-	touch $@
-../../samples/listctrl/makefile.bcc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
-	touch $@
-../../samples/listctrl/makefile.vc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
-	touch $@
-../../samples/listctrl/makefile.gcc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
-	touch $@
-../../samples/listctrl/makefile.wat: $(SDEPS) ../../samples/listctrl/listctrl.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
-	touch $@
-
-../../samples/joytest/Makefile.in: $(SDEPS) ../../samples/joytest/joytest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/joytest/joytest.bkl
-	touch $@
-../../samples/joytest/makefile.bcc: $(SDEPS) ../../samples/joytest/joytest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
-	touch $@
-../../samples/joytest/makefile.vc: $(SDEPS) ../../samples/joytest/joytest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
-	touch $@
-../../samples/joytest/makefile.gcc: $(SDEPS) ../../samples/joytest/joytest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
-	touch $@
-../../samples/joytest/makefile.wat: $(SDEPS) ../../samples/joytest/joytest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
-	touch $@
-
-../../samples/regtest/Makefile.in: $(SDEPS) ../../samples/regtest/regtest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/regtest/regtest.bkl
-	touch $@
-../../samples/regtest/makefile.bcc: $(SDEPS) ../../samples/regtest/regtest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
-	touch $@
-../../samples/regtest/makefile.vc: $(SDEPS) ../../samples/regtest/regtest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
-	touch $@
-../../samples/regtest/makefile.gcc: $(SDEPS) ../../samples/regtest/regtest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
-	touch $@
-../../samples/regtest/makefile.wat: $(SDEPS) ../../samples/regtest/regtest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
-	touch $@
-
-../../samples/dialogs/Makefile.in: $(SDEPS) ../../samples/dialogs/dialogs.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dialogs/dialogs.bkl
-	touch $@
-../../samples/dialogs/makefile.bcc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
-	touch $@
-../../samples/dialogs/makefile.vc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
-	touch $@
-../../samples/dialogs/makefile.gcc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
-	touch $@
-../../samples/dialogs/makefile.wat: $(SDEPS) ../../samples/dialogs/dialogs.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
-	touch $@
-
-../../samples/nativdlg/Makefile.in: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-../../samples/nativdlg/makefile.bcc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-../../samples/nativdlg/makefile.vc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-../../samples/nativdlg/makefile.gcc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-../../samples/nativdlg/makefile.wat: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-
-../../samples/display/Makefile.in: $(SDEPS) ../../samples/display/display.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/display/display.bkl
-	touch $@
-../../samples/display/makefile.bcc: $(SDEPS) ../../samples/display/display.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
-	touch $@
-../../samples/display/makefile.vc: $(SDEPS) ../../samples/display/display.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
-	touch $@
-../../samples/display/makefile.gcc: $(SDEPS) ../../samples/display/display.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
-	touch $@
-../../samples/display/makefile.wat: $(SDEPS) ../../samples/display/display.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
-	touch $@
-
-../../samples/notebook/Makefile.in: $(SDEPS) ../../samples/notebook/notebook.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/notebook/notebook.bkl
-	touch $@
-../../samples/notebook/makefile.bcc: $(SDEPS) ../../samples/notebook/notebook.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
-	touch $@
-../../samples/notebook/makefile.vc: $(SDEPS) ../../samples/notebook/notebook.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
-	touch $@
-../../samples/notebook/makefile.gcc: $(SDEPS) ../../samples/notebook/notebook.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
-	touch $@
-../../samples/notebook/makefile.wat: $(SDEPS) ../../samples/notebook/notebook.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
-	touch $@
-
-../../samples/caret/Makefile.in: $(SDEPS) ../../samples/caret/caret.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/caret/caret.bkl
-	touch $@
-../../samples/caret/makefile.bcc: $(SDEPS) ../../samples/caret/caret.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
-	touch $@
-../../samples/caret/makefile.vc: $(SDEPS) ../../samples/caret/caret.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
-	touch $@
-../../samples/caret/makefile.gcc: $(SDEPS) ../../samples/caret/caret.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
-	touch $@
-../../samples/caret/makefile.wat: $(SDEPS) ../../samples/caret/caret.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
-	touch $@
-
-../../samples/erase/Makefile.in: $(SDEPS) ../../samples/erase/erase.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/erase/erase.bkl
-	touch $@
-../../samples/erase/makefile.bcc: $(SDEPS) ../../samples/erase/erase.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
-	touch $@
-../../samples/erase/makefile.vc: $(SDEPS) ../../samples/erase/erase.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
-	touch $@
-../../samples/erase/makefile.gcc: $(SDEPS) ../../samples/erase/erase.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
-	touch $@
-../../samples/erase/makefile.wat: $(SDEPS) ../../samples/erase/erase.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
-	touch $@
-
-../../samples/event/Makefile.in: $(SDEPS) ../../samples/event/event.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/event/event.bkl
-	touch $@
-../../samples/event/makefile.bcc: $(SDEPS) ../../samples/event/event.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
-	touch $@
-../../samples/event/makefile.vc: $(SDEPS) ../../samples/event/event.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
-	touch $@
-../../samples/event/makefile.gcc: $(SDEPS) ../../samples/event/event.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
-	touch $@
-../../samples/event/makefile.wat: $(SDEPS) ../../samples/event/event.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
-	touch $@
-
-../../samples/image/Makefile.in: $(SDEPS) ../../samples/image/image.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/image/image.bkl
-	touch $@
-../../samples/image/makefile.bcc: $(SDEPS) ../../samples/image/image.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
-	touch $@
-../../samples/image/makefile.vc: $(SDEPS) ../../samples/image/image.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
-	touch $@
-../../samples/image/makefile.gcc: $(SDEPS) ../../samples/image/image.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
-	touch $@
-../../samples/image/makefile.wat: $(SDEPS) ../../samples/image/image.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
-	touch $@
-
-../../samples/sashtest/Makefile.in: $(SDEPS) ../../samples/sashtest/sashtest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/sashtest/sashtest.bkl
-	touch $@
-../../samples/sashtest/makefile.bcc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
-	touch $@
-../../samples/sashtest/makefile.vc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
-	touch $@
-../../samples/sashtest/makefile.gcc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
-	touch $@
-../../samples/sashtest/makefile.wat: $(SDEPS) ../../samples/sashtest/sashtest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
-	touch $@
-
-../../samples/docview/Makefile.in: $(SDEPS) ../../samples/docview/docview.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/docview/docview.bkl
-	touch $@
-../../samples/docview/makefile.bcc: $(SDEPS) ../../samples/docview/docview.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
-	touch $@
-../../samples/docview/makefile.vc: $(SDEPS) ../../samples/docview/docview.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
-	touch $@
-../../samples/docview/makefile.gcc: $(SDEPS) ../../samples/docview/docview.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
-	touch $@
-../../samples/docview/makefile.wat: $(SDEPS) ../../samples/docview/docview.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
-	touch $@
-
-../../samples/typetest/Makefile.in: $(SDEPS) ../../samples/typetest/typetest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/typetest/typetest.bkl
-	touch $@
-../../samples/typetest/makefile.bcc: $(SDEPS) ../../samples/typetest/typetest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
-	touch $@
-../../samples/typetest/makefile.vc: $(SDEPS) ../../samples/typetest/typetest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
-	touch $@
-../../samples/typetest/makefile.gcc: $(SDEPS) ../../samples/typetest/typetest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
-	touch $@
-../../samples/typetest/makefile.wat: $(SDEPS) ../../samples/typetest/typetest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
-	touch $@
-
-../../samples/drawing/Makefile.in: $(SDEPS) ../../samples/drawing/drawing.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/drawing/drawing.bkl
-	touch $@
-../../samples/drawing/makefile.bcc: $(SDEPS) ../../samples/drawing/drawing.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
-	touch $@
-../../samples/drawing/makefile.vc: $(SDEPS) ../../samples/drawing/drawing.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
-	touch $@
-../../samples/drawing/makefile.gcc: $(SDEPS) ../../samples/drawing/drawing.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
-	touch $@
-../../samples/drawing/makefile.wat: $(SDEPS) ../../samples/drawing/drawing.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
-	touch $@
-
-../../samples/splitter/Makefile.in: $(SDEPS) ../../samples/splitter/splitter.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/splitter/splitter.bkl
-	touch $@
-../../samples/splitter/makefile.bcc: $(SDEPS) ../../samples/splitter/splitter.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
-	touch $@
-../../samples/splitter/makefile.vc: $(SDEPS) ../../samples/splitter/splitter.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
-	touch $@
-../../samples/splitter/makefile.gcc: $(SDEPS) ../../samples/splitter/splitter.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
-	touch $@
-../../samples/splitter/makefile.wat: $(SDEPS) ../../samples/splitter/splitter.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
-	touch $@
-
-../../samples/listbox/Makefile.in: $(SDEPS) ../../samples/listbox/listbox.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/listbox/listbox.bkl
-	touch $@
-../../samples/listbox/makefile.bcc: $(SDEPS) ../../samples/listbox/listbox.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
-	touch $@
-../../samples/listbox/makefile.vc: $(SDEPS) ../../samples/listbox/listbox.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
-	touch $@
-../../samples/listbox/makefile.gcc: $(SDEPS) ../../samples/listbox/listbox.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
-	touch $@
-../../samples/listbox/makefile.wat: $(SDEPS) ../../samples/listbox/listbox.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
-	touch $@
-
-../../samples/multimon/Makefile.in: $(SDEPS) ../../samples/multimon/multimon.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/multimon/multimon.bkl
-	touch $@
-../../samples/multimon/makefile.bcc: $(SDEPS) ../../samples/multimon/multimon.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
-	touch $@
-../../samples/multimon/makefile.vc: $(SDEPS) ../../samples/multimon/multimon.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
-	touch $@
-../../samples/multimon/makefile.gcc: $(SDEPS) ../../samples/multimon/multimon.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
-	touch $@
-../../samples/multimon/makefile.wat: $(SDEPS) ../../samples/multimon/multimon.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
-	touch $@
-
-../../samples/dynamic/Makefile.in: $(SDEPS) ../../samples/dynamic/dynamic.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dynamic/dynamic.bkl
-	touch $@
-../../samples/dynamic/makefile.bcc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
-	touch $@
-../../samples/dynamic/makefile.vc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
-	touch $@
-../../samples/dynamic/makefile.gcc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
-	touch $@
-../../samples/dynamic/makefile.wat: $(SDEPS) ../../samples/dynamic/dynamic.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
-	touch $@
-
-../../samples/checklst/Makefile.in: $(SDEPS) ../../samples/checklst/checklst.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/checklst/checklst.bkl
-	touch $@
-../../samples/checklst/makefile.bcc: $(SDEPS) ../../samples/checklst/checklst.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
-	touch $@
-../../samples/checklst/makefile.vc: $(SDEPS) ../../samples/checklst/checklst.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
-	touch $@
-../../samples/checklst/makefile.gcc: $(SDEPS) ../../samples/checklst/checklst.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
-	touch $@
-../../samples/checklst/makefile.wat: $(SDEPS) ../../samples/checklst/checklst.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
-	touch $@
-
-../../samples/taskbar/Makefile.in: $(SDEPS) ../../samples/taskbar/taskbar.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/taskbar/taskbar.bkl
-	touch $@
-../../samples/taskbar/makefile.bcc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
-	touch $@
-../../samples/taskbar/makefile.vc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
-	touch $@
-../../samples/taskbar/makefile.gcc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
-	touch $@
-../../samples/taskbar/makefile.wat: $(SDEPS) ../../samples/taskbar/taskbar.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
-	touch $@
-
-../../samples/dragimag/Makefile.in: $(SDEPS) ../../samples/dragimag/dragimag.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dragimag/dragimag.bkl
-	touch $@
-../../samples/dragimag/makefile.bcc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
-	touch $@
-../../samples/dragimag/makefile.vc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
-	touch $@
-../../samples/dragimag/makefile.gcc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
-	touch $@
-../../samples/dragimag/makefile.wat: $(SDEPS) ../../samples/dragimag/dragimag.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
-	touch $@
-
-../../samples/sockets/Makefile.in: $(SDEPS) ../../samples/sockets/sockets.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/sockets/sockets.bkl
-	touch $@
-../../samples/sockets/makefile.bcc: $(SDEPS) ../../samples/sockets/sockets.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
-	touch $@
-../../samples/sockets/makefile.vc: $(SDEPS) ../../samples/sockets/sockets.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
-	touch $@
-../../samples/sockets/makefile.gcc: $(SDEPS) ../../samples/sockets/sockets.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
-	touch $@
-../../samples/sockets/makefile.wat: $(SDEPS) ../../samples/sockets/sockets.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
-	touch $@
-
-../../samples/calendar/Makefile.in: $(SDEPS) ../../samples/calendar/calendar.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/calendar/calendar.bkl
-	touch $@
-../../samples/calendar/makefile.bcc: $(SDEPS) ../../samples/calendar/calendar.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
-	touch $@
-../../samples/calendar/makefile.vc: $(SDEPS) ../../samples/calendar/calendar.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
-	touch $@
-../../samples/calendar/makefile.gcc: $(SDEPS) ../../samples/calendar/calendar.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
-	touch $@
-../../samples/calendar/makefile.wat: $(SDEPS) ../../samples/calendar/calendar.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
-	touch $@
-
-../../samples/minimal/Makefile.in: $(SDEPS) ../../samples/minimal/minimal.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/minimal/minimal.bkl
-	touch $@
-../../samples/minimal/makefile.bcc: $(SDEPS) ../../samples/minimal/minimal.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
-	touch $@
-../../samples/minimal/makefile.vc: $(SDEPS) ../../samples/minimal/minimal.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
-	touch $@
-../../samples/minimal/makefile.gcc: $(SDEPS) ../../samples/minimal/minimal.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
-	touch $@
-../../samples/minimal/makefile.wat: $(SDEPS) ../../samples/minimal/minimal.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
-	touch $@
-
-../../samples/access/Makefile.in: $(SDEPS) ../../samples/access/access.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/access/access.bkl
-	touch $@
-../../samples/access/makefile.bcc: $(SDEPS) ../../samples/access/access.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
-	touch $@
-../../samples/access/makefile.vc: $(SDEPS) ../../samples/access/access.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
-	touch $@
-../../samples/access/makefile.gcc: $(SDEPS) ../../samples/access/access.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
-	touch $@
-../../samples/access/makefile.wat: $(SDEPS) ../../samples/access/access.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
-	touch $@
-
-../../samples/statbar/Makefile.in: $(SDEPS) ../../samples/statbar/statbar.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/statbar/statbar.bkl
-	touch $@
-../../samples/statbar/makefile.bcc: $(SDEPS) ../../samples/statbar/statbar.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
-	touch $@
-../../samples/statbar/makefile.vc: $(SDEPS) ../../samples/statbar/statbar.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
-	touch $@
-../../samples/statbar/makefile.gcc: $(SDEPS) ../../samples/statbar/statbar.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
-	touch $@
-../../samples/statbar/makefile.wat: $(SDEPS) ../../samples/statbar/statbar.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
-	touch $@
-
-../../samples/config/Makefile.in: $(SDEPS) ../../samples/config/config.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/config/config.bkl
-	touch $@
-../../samples/config/makefile.bcc: $(SDEPS) ../../samples/config/config.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
-	touch $@
-../../samples/config/makefile.vc: $(SDEPS) ../../samples/config/config.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
-	touch $@
-../../samples/config/makefile.gcc: $(SDEPS) ../../samples/config/config.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
-	touch $@
-../../samples/config/makefile.wat: $(SDEPS) ../../samples/config/config.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
-	touch $@
-
-../../samples/dialup/Makefile.in: $(SDEPS) ../../samples/dialup/dialup.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dialup/dialup.bkl
-	touch $@
-../../samples/dialup/makefile.bcc: $(SDEPS) ../../samples/dialup/dialup.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
-	touch $@
-../../samples/dialup/makefile.vc: $(SDEPS) ../../samples/dialup/dialup.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
-	touch $@
-../../samples/dialup/makefile.gcc: $(SDEPS) ../../samples/dialup/dialup.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
-	touch $@
-../../samples/dialup/makefile.wat: $(SDEPS) ../../samples/dialup/dialup.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
-	touch $@
-
-../../samples/controls/Makefile.in: $(SDEPS) ../../samples/controls/controls.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/controls/controls.bkl
-	touch $@
-../../samples/controls/makefile.bcc: $(SDEPS) ../../samples/controls/controls.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
-	touch $@
-../../samples/controls/makefile.vc: $(SDEPS) ../../samples/controls/controls.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
-	touch $@
-../../samples/controls/makefile.gcc: $(SDEPS) ../../samples/controls/controls.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
-	touch $@
-../../samples/controls/makefile.wat: $(SDEPS) ../../samples/controls/controls.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
-	touch $@
-
-../../samples/richedit/Makefile.in: $(SDEPS) ../../samples/richedit/richedit.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/richedit/richedit.bkl
-	touch $@
-../../samples/richedit/makefile.bcc: $(SDEPS) ../../samples/richedit/richedit.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
-	touch $@
-../../samples/richedit/makefile.vc: $(SDEPS) ../../samples/richedit/richedit.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
-	touch $@
-../../samples/richedit/makefile.gcc: $(SDEPS) ../../samples/richedit/richedit.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
-	touch $@
-../../samples/richedit/makefile.wat: $(SDEPS) ../../samples/richedit/richedit.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
-	touch $@
-
-../../samples/newgrid/Makefile.in: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.bcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.vc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.gcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.wat: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
-	touch $@
-
-../../samples/toolbar/Makefile.in: $(SDEPS) ../../samples/toolbar/toolbar.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/toolbar/toolbar.bkl
-	touch $@
-../../samples/toolbar/makefile.bcc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
-	touch $@
-../../samples/toolbar/makefile.vc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
-	touch $@
-../../samples/toolbar/makefile.gcc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
-	touch $@
-../../samples/toolbar/makefile.wat: $(SDEPS) ../../samples/toolbar/toolbar.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
-	touch $@
-
-../../samples/htlbox/Makefile.in: $(SDEPS) ../../samples/htlbox/htlbox.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/htlbox/htlbox.bkl
-	touch $@
-../../samples/htlbox/makefile.bcc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
-	touch $@
-../../samples/htlbox/makefile.vc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
-	touch $@
-../../samples/htlbox/makefile.gcc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
-	touch $@
-../../samples/htlbox/makefile.wat: $(SDEPS) ../../samples/htlbox/htlbox.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
-	touch $@
-
-../../samples/layout/Makefile.in: $(SDEPS) ../../samples/layout/layout.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/layout/layout.bkl
-	touch $@
-../../samples/layout/makefile.bcc: $(SDEPS) ../../samples/layout/layout.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
-	touch $@
-../../samples/layout/makefile.vc: $(SDEPS) ../../samples/layout/layout.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
-	touch $@
-../../samples/layout/makefile.gcc: $(SDEPS) ../../samples/layout/layout.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
-	touch $@
-../../samples/layout/makefile.wat: $(SDEPS) ../../samples/layout/layout.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
-	touch $@
-
-../../samples/minifram/Makefile.in: $(SDEPS) ../../samples/minifram/minifram.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/minifram/minifram.bkl
-	touch $@
-../../samples/minifram/makefile.bcc: $(SDEPS) ../../samples/minifram/minifram.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
-	touch $@
-../../samples/minifram/makefile.vc: $(SDEPS) ../../samples/minifram/minifram.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
-	touch $@
-../../samples/minifram/makefile.gcc: $(SDEPS) ../../samples/minifram/minifram.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
-	touch $@
-../../samples/minifram/makefile.wat: $(SDEPS) ../../samples/minifram/minifram.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
-	touch $@
-
-../../samples/mobile/Makefile.in: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/mobile.bkl
-	touch $@
-../../samples/mobile/makefile.bcc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
-	touch $@
-../../samples/mobile/makefile.vc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
-	touch $@
-../../samples/mobile/makefile.gcc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
-	touch $@
-../../samples/mobile/makefile.wat: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
-	touch $@
-
-../../samples/opengl/Makefile.in: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/opengl.bkl
-	touch $@
-../../samples/opengl/makefile.bcc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
-	touch $@
-../../samples/opengl/makefile.vc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
-	touch $@
-../../samples/opengl/makefile.gcc: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
-	touch $@
-../../samples/opengl/makefile.wat: $(SDEPS) ../../samples/opengl/opengl.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
-	touch $@
-
-../../samples/scroll/Makefile.in: $(SDEPS) ../../samples/scroll/scroll.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/scroll/scroll.bkl
-	touch $@
-../../samples/scroll/makefile.bcc: $(SDEPS) ../../samples/scroll/scroll.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
-	touch $@
-../../samples/scroll/makefile.vc: $(SDEPS) ../../samples/scroll/scroll.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
-	touch $@
-../../samples/scroll/makefile.gcc: $(SDEPS) ../../samples/scroll/scroll.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
-	touch $@
-../../samples/scroll/makefile.wat: $(SDEPS) ../../samples/scroll/scroll.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
-	touch $@
-
-../../samples/rotate/Makefile.in: $(SDEPS) ../../samples/rotate/rotate.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/rotate/rotate.bkl
-	touch $@
-../../samples/rotate/makefile.bcc: $(SDEPS) ../../samples/rotate/rotate.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
-	touch $@
-../../samples/rotate/makefile.vc: $(SDEPS) ../../samples/rotate/rotate.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
-	touch $@
-../../samples/rotate/makefile.gcc: $(SDEPS) ../../samples/rotate/rotate.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
-	touch $@
-../../samples/rotate/makefile.wat: $(SDEPS) ../../samples/rotate/rotate.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
-	touch $@
-
-../../samples/shaped/Makefile.in: $(SDEPS) ../../samples/shaped/shaped.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/shaped/shaped.bkl
-	touch $@
-../../samples/shaped/makefile.bcc: $(SDEPS) ../../samples/shaped/shaped.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
-	touch $@
-../../samples/shaped/makefile.vc: $(SDEPS) ../../samples/shaped/shaped.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
-	touch $@
-../../samples/shaped/makefile.gcc: $(SDEPS) ../../samples/shaped/shaped.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
-	touch $@
-../../samples/shaped/makefile.wat: $(SDEPS) ../../samples/shaped/shaped.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
-	touch $@
-
-../../samples/thread/Makefile.in: $(SDEPS) ../../samples/thread/thread.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/thread/thread.bkl
-	touch $@
-../../samples/thread/makefile.bcc: $(SDEPS) ../../samples/thread/thread.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
-	touch $@
-../../samples/thread/makefile.vc: $(SDEPS) ../../samples/thread/thread.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
-	touch $@
-../../samples/thread/makefile.gcc: $(SDEPS) ../../samples/thread/thread.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
-	touch $@
-../../samples/thread/makefile.wat: $(SDEPS) ../../samples/thread/thread.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
-	touch $@
-
-../../samples/wizard/Makefile.in: $(SDEPS) ../../samples/wizard/wizard.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/wizard/wizard.bkl
-	touch $@
-../../samples/wizard/makefile.bcc: $(SDEPS) ../../samples/wizard/wizard.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
-	touch $@
-../../samples/wizard/makefile.vc: $(SDEPS) ../../samples/wizard/wizard.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
-	touch $@
-../../samples/wizard/makefile.gcc: $(SDEPS) ../../samples/wizard/wizard.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
-	touch $@
-../../samples/wizard/makefile.wat: $(SDEPS) ../../samples/wizard/wizard.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
-	touch $@
-
-../../samples/printing/Makefile.in: $(SDEPS) ../../samples/printing/printing.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/printing/printing.bkl
-	touch $@
-../../samples/printing/makefile.bcc: $(SDEPS) ../../samples/printing/printing.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
-	touch $@
-../../samples/printing/makefile.vc: $(SDEPS) ../../samples/printing/printing.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
-	touch $@
-../../samples/printing/makefile.gcc: $(SDEPS) ../../samples/printing/printing.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
-	touch $@
-../../samples/printing/makefile.wat: $(SDEPS) ../../samples/printing/printing.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
-	touch $@
-
-../../samples/oleauto/Makefile.in: $(SDEPS) ../../samples/oleauto/oleauto.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/oleauto/oleauto.bkl
-	touch $@
-../../samples/oleauto/makefile.bcc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
-	touch $@
-../../samples/oleauto/makefile.vc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
-	touch $@
-../../samples/oleauto/makefile.gcc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
-	touch $@
-../../samples/oleauto/makefile.wat: $(SDEPS) ../../samples/oleauto/oleauto.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
-	touch $@
-
-../../samples/wxtest/Makefile.in: $(SDEPS) ../../samples/wxtest/wxtest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/wxtest/wxtest.bkl
-	touch $@
-../../samples/wxtest/makefile.bcc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
-	touch $@
-../../samples/wxtest/makefile.vc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
-	touch $@
-../../samples/wxtest/makefile.gcc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
-	touch $@
-../../samples/wxtest/makefile.wat: $(SDEPS) ../../samples/wxtest/wxtest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
-	touch $@
-
-../../samples/artprov/Makefile.in: $(SDEPS) ../../samples/artprov/artprov.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/artprov/artprov.bkl
-	touch $@
-../../samples/artprov/makefile.bcc: $(SDEPS) ../../samples/artprov/artprov.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
-	touch $@
-../../samples/artprov/makefile.vc: $(SDEPS) ../../samples/artprov/artprov.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
-	touch $@
-../../samples/artprov/makefile.gcc: $(SDEPS) ../../samples/artprov/artprov.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
-	touch $@
-../../samples/artprov/makefile.wat: $(SDEPS) ../../samples/artprov/artprov.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
-	touch $@
-
-../../samples/propsize/Makefile.in: $(SDEPS) ../../samples/propsize/propsize.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/propsize/propsize.bkl
-	touch $@
-../../samples/propsize/makefile.bcc: $(SDEPS) ../../samples/propsize/propsize.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
-	touch $@
-../../samples/propsize/makefile.vc: $(SDEPS) ../../samples/propsize/propsize.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
-	touch $@
-../../samples/propsize/makefile.gcc: $(SDEPS) ../../samples/propsize/propsize.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
-	touch $@
-../../samples/propsize/makefile.wat: $(SDEPS) ../../samples/propsize/propsize.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
-	touch $@
-
-../../samples/ownerdrw/Makefile.in: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/ownerdrw/ownerdrw.bkl
-	touch $@
-../../samples/ownerdrw/makefile.bcc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
-	touch $@
-../../samples/ownerdrw/makefile.vc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
-	touch $@
-../../samples/ownerdrw/makefile.gcc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
-	touch $@
-../../samples/ownerdrw/makefile.wat: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
-	touch $@
-
-../../samples/vscroll/Makefile.in: $(SDEPS) ../../samples/vscroll/vscroll.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/vscroll/vscroll.bkl
-	touch $@
-../../samples/vscroll/makefile.bcc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
-	touch $@
-../../samples/vscroll/makefile.vc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
-	touch $@
-../../samples/vscroll/makefile.gcc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
-	touch $@
-../../samples/vscroll/makefile.wat: $(SDEPS) ../../samples/vscroll/vscroll.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
-	touch $@
-
-../../samples/validate/Makefile.in: $(SDEPS) ../../samples/validate/validate.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/validate/validate.bkl
-	touch $@
-../../samples/validate/makefile.bcc: $(SDEPS) ../../samples/validate/validate.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
-	touch $@
-../../samples/validate/makefile.vc: $(SDEPS) ../../samples/validate/validate.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
-	touch $@
-../../samples/validate/makefile.gcc: $(SDEPS) ../../samples/validate/validate.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
-	touch $@
-../../samples/validate/makefile.wat: $(SDEPS) ../../samples/validate/validate.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
-	touch $@
-
-../../samples/widgets/Makefile.in: $(SDEPS) ../../samples/widgets/widgets.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/widgets/widgets.bkl
-	touch $@
-../../samples/widgets/makefile.bcc: $(SDEPS) ../../samples/widgets/widgets.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
-	touch $@
-../../samples/widgets/makefile.vc: $(SDEPS) ../../samples/widgets/widgets.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
-	touch $@
-../../samples/widgets/makefile.gcc: $(SDEPS) ../../samples/widgets/widgets.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
-	touch $@
-../../samples/widgets/makefile.wat: $(SDEPS) ../../samples/widgets/widgets.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
-	touch $@
-
-../../samples/keyboard/Makefile.in: $(SDEPS) ../../samples/keyboard/keyboard.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/keyboard/keyboard.bkl
-	touch $@
-../../samples/keyboard/makefile.bcc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
-	touch $@
-../../samples/keyboard/makefile.vc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
-	touch $@
-../../samples/keyboard/makefile.gcc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
-	touch $@
-../../samples/keyboard/makefile.wat: $(SDEPS) ../../samples/keyboard/keyboard.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
-	touch $@
-
-../../samples/docvwmdi/Makefile.in: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/docvwmdi/docvwmdi.bkl
-	touch $@
-../../samples/docvwmdi/makefile.bcc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
-	touch $@
-../../samples/docvwmdi/makefile.vc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
-	touch $@
-../../samples/docvwmdi/makefile.gcc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
-	touch $@
-../../samples/docvwmdi/makefile.wat: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
-	touch $@
-
-../../samples/scrollsub/Makefile.in: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/scrollsub/scrollsub.bkl
-	touch $@
-../../samples/scrollsub/makefile.bcc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
-	touch $@
-../../samples/scrollsub/makefile.vc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
-	touch $@
-../../samples/scrollsub/makefile.gcc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
-	touch $@
-../../samples/scrollsub/makefile.wat: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
-	touch $@
-
-../../samples/memcheck/Makefile.in: $(SDEPS) ../../samples/memcheck/memcheck.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/memcheck/memcheck.bkl
-	touch $@
-../../samples/memcheck/makefile.bcc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
-	touch $@
-../../samples/memcheck/makefile.vc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
-	touch $@
-../../samples/memcheck/makefile.gcc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
-	touch $@
-../../samples/memcheck/makefile.wat: $(SDEPS) ../../samples/memcheck/memcheck.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
-	touch $@
-
-../../samples/internat/Makefile.in: $(SDEPS) ../../samples/internat/internat.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/internat/internat.bkl
-	touch $@
-../../samples/internat/makefile.bcc: $(SDEPS) ../../samples/internat/internat.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
-	touch $@
-../../samples/internat/makefile.vc: $(SDEPS) ../../samples/internat/internat.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
-	touch $@
-../../samples/internat/makefile.gcc: $(SDEPS) ../../samples/internat/internat.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
-	touch $@
-../../samples/internat/makefile.wat: $(SDEPS) ../../samples/internat/internat.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
-	touch $@
-
-../../contrib/src/fl/Makefile.in: $(CDEPS) ../../contrib/build/fl/fl.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/fl/fl.bkl
-	touch $@
-../../contrib/build/fl/makefile.bcc: $(CDEPS) ../../contrib/build/fl/fl.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
-	touch $@
-../../contrib/build/fl/makefile.vc: $(CDEPS) ../../contrib/build/fl/fl.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
-	touch $@
-../../contrib/build/fl/makefile.gcc: $(CDEPS) ../../contrib/build/fl/fl.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
-	touch $@
-../../contrib/build/fl/makefile.wat: $(CDEPS) ../../contrib/build/fl/fl.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
-	touch $@
-
-../../contrib/src/stc/Makefile.in: $(CDEPS) ../../contrib/build/stc/stc.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/stc/stc.bkl
-	touch $@
-../../contrib/build/stc/makefile.bcc: $(CDEPS) ../../contrib/build/stc/stc.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
-	touch $@
-../../contrib/build/stc/makefile.vc: $(CDEPS) ../../contrib/build/stc/stc.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
-	touch $@
-../../contrib/build/stc/makefile.gcc: $(CDEPS) ../../contrib/build/stc/stc.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
-	touch $@
-../../contrib/build/stc/makefile.wat: $(CDEPS) ../../contrib/build/stc/stc.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
-	touch $@
-
-../../contrib/src/xrc/Makefile.in: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/xrc/xrc.bkl
-	touch $@
-../../contrib/build/xrc/makefile.bcc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
-	touch $@
-../../contrib/build/xrc/makefile.vc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
-	touch $@
-../../contrib/build/xrc/makefile.gcc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
-	touch $@
-../../contrib/build/xrc/makefile.wat: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
-	touch $@
-
-../../contrib/src/gizmos/Makefile.in: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/gizmos/gizmos.bkl
-	touch $@
-../../contrib/build/gizmos/makefile.bcc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
-	touch $@
-../../contrib/build/gizmos/makefile.vc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
-	touch $@
-../../contrib/build/gizmos/makefile.gcc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
-	touch $@
-../../contrib/build/gizmos/makefile.wat: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
-	touch $@
 
 ../../contrib/src/animate/Makefile.in: $(CDEPS) ../../contrib/build/animate/animate.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/animate/animate.bkl
@@ -1896,6 +966,109 @@ Makefile: regenMakefile.py
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/animate -DWXTOPDIR=../../../ ../../contrib/build/animate/animate.bkl
 	touch $@
 
+
+../../contrib/src/fl/Makefile.in: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/fl/fl.bkl
+	touch $@
+../../contrib/build/fl/makefile.bcc: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
+	touch $@
+../../contrib/build/fl/makefile.vc: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
+	touch $@
+../../contrib/build/fl/makefile.gcc: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
+	touch $@
+../../contrib/build/fl/makefile.wat: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
+	touch $@
+
+
+../../contrib/src/gizmos/Makefile.in: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
+../../contrib/build/gizmos/makefile.bcc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
+../../contrib/build/gizmos/makefile.vc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
+../../contrib/build/gizmos/makefile.gcc: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
+../../contrib/build/gizmos/makefile.wat: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
+
+
+../../contrib/src/ogl/Makefile.in: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/ogl/ogl.bkl
+	touch $@
+../../contrib/build/ogl/makefile.bcc: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+../../contrib/build/ogl/makefile.vc: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+../../contrib/build/ogl/makefile.gcc: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+../../contrib/build/ogl/makefile.wat: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+
+
+../../contrib/src/stc/Makefile.in: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/stc/stc.bkl
+	touch $@
+../../contrib/build/stc/makefile.bcc: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
+	touch $@
+../../contrib/build/stc/makefile.vc: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
+	touch $@
+../../contrib/build/stc/makefile.gcc: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
+	touch $@
+../../contrib/build/stc/makefile.wat: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
+	touch $@
+
+
+../../contrib/src/xrc/Makefile.in: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/xrc/xrc.bkl
+	touch $@
+../../contrib/build/xrc/makefile.bcc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch $@
+../../contrib/build/xrc/makefile.vc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch $@
+../../contrib/build/xrc/makefile.gcc: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch $@
+../../contrib/build/xrc/makefile.wat: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch $@
+
+
+../../contrib/samples/animate/Makefile.in: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/animate/anitest.bkl
+	touch $@
+../../contrib/samples/animate/makefile.bcc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+../../contrib/samples/animate/makefile.vc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+../../contrib/samples/animate/makefile.gcc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+../../contrib/samples/animate/makefile.wat: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+
+
 ../../contrib/samples/xrc/Makefile.in: $(SDEPS) ../../contrib/samples/xrc/xrcdemo.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/xrc/xrcdemo.bkl
 	touch $@
@@ -1912,18 +1085,1413 @@ Makefile: regenMakefile.py
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/xrc/xrcdemo.bkl
 	touch $@
 
-../../contrib/samples/animate/Makefile.in: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/animate/anitest.bkl
+
+../../samples/access/Makefile.in: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/access/access.bkl
 	touch $@
-../../contrib/samples/animate/makefile.bcc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
-	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+../../samples/access/makefile.bcc: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
 	touch $@
-../../contrib/samples/animate/makefile.vc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+../../samples/access/makefile.vc: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
 	touch $@
-../../contrib/samples/animate/makefile.gcc: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
-	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+../../samples/access/makefile.gcc: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
 	touch $@
-../../contrib/samples/animate/makefile.wat: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+../../samples/access/makefile.wat: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
+	touch $@
+
+
+../../samples/artprov/Makefile.in: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/artprov/artprov.bkl
+	touch $@
+../../samples/artprov/makefile.bcc: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch $@
+../../samples/artprov/makefile.vc: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch $@
+../../samples/artprov/makefile.gcc: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch $@
+../../samples/artprov/makefile.wat: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch $@
+
+
+../../samples/calendar/Makefile.in: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/calendar/calendar.bkl
+	touch $@
+../../samples/calendar/makefile.bcc: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch $@
+../../samples/calendar/makefile.vc: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch $@
+../../samples/calendar/makefile.gcc: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch $@
+../../samples/calendar/makefile.wat: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch $@
+
+
+../../samples/caret/Makefile.in: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/caret/caret.bkl
+	touch $@
+../../samples/caret/makefile.bcc: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch $@
+../../samples/caret/makefile.vc: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch $@
+../../samples/caret/makefile.gcc: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch $@
+../../samples/caret/makefile.wat: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch $@
+
+
+../../samples/checklst/Makefile.in: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/checklst/checklst.bkl
+	touch $@
+../../samples/checklst/makefile.bcc: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch $@
+../../samples/checklst/makefile.vc: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch $@
+../../samples/checklst/makefile.gcc: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch $@
+../../samples/checklst/makefile.wat: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch $@
+
+
+../../samples/config/Makefile.in: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/config/config.bkl
+	touch $@
+../../samples/config/makefile.bcc: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch $@
+../../samples/config/makefile.vc: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch $@
+../../samples/config/makefile.gcc: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch $@
+../../samples/config/makefile.wat: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch $@
+
+
+../../samples/console/Makefile.in: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/console/console.bkl
+	touch $@
+../../samples/console/makefile.bcc: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch $@
+../../samples/console/makefile.vc: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch $@
+../../samples/console/makefile.gcc: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch $@
+../../samples/console/makefile.wat: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch $@
+
+
+../../samples/controls/Makefile.in: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/controls/controls.bkl
+	touch $@
+../../samples/controls/makefile.bcc: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch $@
+../../samples/controls/makefile.vc: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch $@
+../../samples/controls/makefile.gcc: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch $@
+../../samples/controls/makefile.wat: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch $@
+
+
+../../samples/db/Makefile.in: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/db/db.bkl
+	touch $@
+../../samples/db/makefile.bcc: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch $@
+../../samples/db/makefile.vc: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch $@
+../../samples/db/makefile.gcc: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch $@
+../../samples/db/makefile.wat: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch $@
+
+
+../../samples/dialogs/Makefile.in: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dialogs/dialogs.bkl
+	touch $@
+../../samples/dialogs/makefile.bcc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch $@
+../../samples/dialogs/makefile.vc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch $@
+../../samples/dialogs/makefile.gcc: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch $@
+../../samples/dialogs/makefile.wat: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch $@
+
+
+../../samples/dialup/Makefile.in: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dialup/dialup.bkl
+	touch $@
+../../samples/dialup/makefile.bcc: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch $@
+../../samples/dialup/makefile.vc: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch $@
+../../samples/dialup/makefile.gcc: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch $@
+../../samples/dialup/makefile.wat: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch $@
+
+
+../../samples/display/Makefile.in: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/display/display.bkl
+	touch $@
+../../samples/display/makefile.bcc: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch $@
+../../samples/display/makefile.vc: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch $@
+../../samples/display/makefile.gcc: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch $@
+../../samples/display/makefile.wat: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch $@
+
+
+../../samples/dnd/Makefile.in: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dnd/dnd.bkl
+	touch $@
+../../samples/dnd/makefile.bcc: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch $@
+../../samples/dnd/makefile.vc: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch $@
+../../samples/dnd/makefile.gcc: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch $@
+../../samples/dnd/makefile.wat: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch $@
+
+
+../../samples/docview/Makefile.in: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/docview/docview.bkl
+	touch $@
+../../samples/docview/makefile.bcc: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch $@
+../../samples/docview/makefile.vc: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch $@
+../../samples/docview/makefile.gcc: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch $@
+../../samples/docview/makefile.wat: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch $@
+
+
+../../samples/docvwmdi/Makefile.in: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+../../samples/docvwmdi/makefile.bcc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+../../samples/docvwmdi/makefile.vc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+../../samples/docvwmdi/makefile.gcc: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+../../samples/docvwmdi/makefile.wat: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+
+
+../../samples/dragimag/Makefile.in: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dragimag/dragimag.bkl
+	touch $@
+../../samples/dragimag/makefile.bcc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch $@
+../../samples/dragimag/makefile.vc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch $@
+../../samples/dragimag/makefile.gcc: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch $@
+../../samples/dragimag/makefile.wat: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch $@
+
+
+../../samples/drawing/Makefile.in: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/drawing/drawing.bkl
+	touch $@
+../../samples/drawing/makefile.bcc: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch $@
+../../samples/drawing/makefile.vc: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch $@
+../../samples/drawing/makefile.gcc: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch $@
+../../samples/drawing/makefile.wat: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch $@
+
+
+../../samples/dynamic/Makefile.in: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/dynamic/dynamic.bkl
+	touch $@
+../../samples/dynamic/makefile.bcc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch $@
+../../samples/dynamic/makefile.vc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch $@
+../../samples/dynamic/makefile.gcc: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch $@
+../../samples/dynamic/makefile.wat: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch $@
+
+
+../../samples/erase/Makefile.in: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/erase/erase.bkl
+	touch $@
+../../samples/erase/makefile.bcc: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch $@
+../../samples/erase/makefile.vc: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch $@
+../../samples/erase/makefile.gcc: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch $@
+../../samples/erase/makefile.wat: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch $@
+
+
+../../samples/event/Makefile.in: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/event/event.bkl
+	touch $@
+../../samples/event/makefile.bcc: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch $@
+../../samples/event/makefile.vc: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch $@
+../../samples/event/makefile.gcc: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch $@
+../../samples/event/makefile.wat: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch $@
+
+
+../../samples/exec/Makefile.in: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/exec/exec.bkl
+	touch $@
+../../samples/exec/makefile.bcc: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch $@
+../../samples/exec/makefile.vc: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch $@
+../../samples/exec/makefile.gcc: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch $@
+../../samples/exec/makefile.wat: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch $@
+
+
+../../samples/font/Makefile.in: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/font/font.bkl
+	touch $@
+../../samples/font/makefile.bcc: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch $@
+../../samples/font/makefile.vc: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch $@
+../../samples/font/makefile.gcc: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch $@
+../../samples/font/makefile.wat: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch $@
+
+
+../../samples/grid/Makefile.in: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/grid/grid.bkl
+	touch $@
+../../samples/grid/makefile.bcc: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+../../samples/grid/makefile.vc: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+../../samples/grid/makefile.gcc: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+../../samples/grid/makefile.wat: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+
+
+../../samples/help/Makefile.in: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/help/help.bkl
+	touch $@
+../../samples/help/makefile.bcc: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch $@
+../../samples/help/makefile.vc: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch $@
+../../samples/help/makefile.gcc: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch $@
+../../samples/help/makefile.wat: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch $@
+
+
+../../samples/htlbox/Makefile.in: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/htlbox/htlbox.bkl
+	touch $@
+../../samples/htlbox/makefile.bcc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch $@
+../../samples/htlbox/makefile.vc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch $@
+../../samples/htlbox/makefile.gcc: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch $@
+../../samples/htlbox/makefile.wat: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch $@
+
+
+../../samples/html/about/Makefile.in: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.bcc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.vc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.gcc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.wat: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+
+
+../../samples/html/help/Makefile.in: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.bcc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.vc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.gcc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.wat: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+
+
+../../samples/html/helpview/Makefile.in: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.bcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.vc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.gcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.wat: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+
+
+../../samples/html/Makefile.in: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.bcc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.vc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.gcc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.wat: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+
+
+../../samples/html/printing/Makefile.in: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.bcc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.vc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.gcc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.wat: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+
+
+../../samples/html/test/Makefile.in: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.bcc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.vc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.gcc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.wat: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+
+
+../../samples/html/virtual/Makefile.in: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.bcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.vc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.gcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.wat: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+
+
+../../samples/html/widget/Makefile.in: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.bcc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.vc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.gcc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.wat: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+
+
+../../samples/html/zip/Makefile.in: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.bcc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.vc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.gcc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.wat: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+
+
+../../samples/image/Makefile.in: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/image/image.bkl
+	touch $@
+../../samples/image/makefile.bcc: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch $@
+../../samples/image/makefile.vc: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch $@
+../../samples/image/makefile.gcc: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch $@
+../../samples/image/makefile.wat: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch $@
+
+
+../../samples/internat/Makefile.in: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/internat/internat.bkl
+	touch $@
+../../samples/internat/makefile.bcc: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch $@
+../../samples/internat/makefile.vc: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch $@
+../../samples/internat/makefile.gcc: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch $@
+../../samples/internat/makefile.wat: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch $@
+
+
+../../samples/ipc/Makefile.in: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/ipc/ipc.bkl
+	touch $@
+../../samples/ipc/makefile.bcc: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch $@
+../../samples/ipc/makefile.vc: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch $@
+../../samples/ipc/makefile.gcc: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch $@
+../../samples/ipc/makefile.wat: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch $@
+
+
+../../samples/joytest/Makefile.in: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/joytest/joytest.bkl
+	touch $@
+../../samples/joytest/makefile.bcc: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch $@
+../../samples/joytest/makefile.vc: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch $@
+../../samples/joytest/makefile.gcc: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch $@
+../../samples/joytest/makefile.wat: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch $@
+
+
+../../samples/keyboard/Makefile.in: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/keyboard/keyboard.bkl
+	touch $@
+../../samples/keyboard/makefile.bcc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch $@
+../../samples/keyboard/makefile.vc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch $@
+../../samples/keyboard/makefile.gcc: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch $@
+../../samples/keyboard/makefile.wat: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch $@
+
+
+../../samples/layout/Makefile.in: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/layout/layout.bkl
+	touch $@
+../../samples/layout/makefile.bcc: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch $@
+../../samples/layout/makefile.vc: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch $@
+../../samples/layout/makefile.gcc: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch $@
+../../samples/layout/makefile.wat: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch $@
+
+
+../../samples/listbox/Makefile.in: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/listbox/listbox.bkl
+	touch $@
+../../samples/listbox/makefile.bcc: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch $@
+../../samples/listbox/makefile.vc: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch $@
+../../samples/listbox/makefile.gcc: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch $@
+../../samples/listbox/makefile.wat: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch $@
+
+
+../../samples/listctrl/Makefile.in: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/listctrl/listctrl.bkl
+	touch $@
+../../samples/listctrl/makefile.bcc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch $@
+../../samples/listctrl/makefile.vc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch $@
+../../samples/listctrl/makefile.gcc: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch $@
+../../samples/listctrl/makefile.wat: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch $@
+
+
+../../samples/mdi/Makefile.in: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mdi/mdi.bkl
+	touch $@
+../../samples/mdi/makefile.bcc: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch $@
+../../samples/mdi/makefile.vc: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch $@
+../../samples/mdi/makefile.gcc: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch $@
+../../samples/mdi/makefile.wat: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch $@
+
+
+../../samples/memcheck/Makefile.in: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/memcheck/memcheck.bkl
+	touch $@
+../../samples/memcheck/makefile.bcc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch $@
+../../samples/memcheck/makefile.vc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch $@
+../../samples/memcheck/makefile.gcc: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch $@
+../../samples/memcheck/makefile.wat: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch $@
+
+
+../../samples/menu/Makefile.in: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/menu/menu.bkl
+	touch $@
+../../samples/menu/makefile.bcc: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch $@
+../../samples/menu/makefile.vc: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch $@
+../../samples/menu/makefile.gcc: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch $@
+../../samples/menu/makefile.wat: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch $@
+
+
+../../samples/mfc/Makefile.in: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mfc/mfc.bkl
+	touch $@
+../../samples/mfc/makefile.bcc: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch $@
+../../samples/mfc/makefile.vc: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch $@
+../../samples/mfc/makefile.gcc: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch $@
+../../samples/mfc/makefile.wat: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch $@
+
+
+../../samples/minifram/Makefile.in: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/minifram/minifram.bkl
+	touch $@
+../../samples/minifram/makefile.bcc: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch $@
+../../samples/minifram/makefile.vc: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch $@
+../../samples/minifram/makefile.gcc: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch $@
+../../samples/minifram/makefile.wat: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch $@
+
+
+../../samples/minimal/Makefile.in: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/minimal/minimal.bkl
+	touch $@
+../../samples/minimal/makefile.bcc: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch $@
+../../samples/minimal/makefile.vc: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch $@
+../../samples/minimal/makefile.gcc: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch $@
+../../samples/minimal/makefile.wat: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch $@
+
+
+../../samples/mobile/Makefile.in: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/mobile.bkl
+	touch $@
+../../samples/mobile/makefile.bcc: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch $@
+../../samples/mobile/makefile.vc: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch $@
+../../samples/mobile/makefile.gcc: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch $@
+../../samples/mobile/makefile.wat: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch $@
+
+
+../../samples/multimon/Makefile.in: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/multimon/multimon.bkl
+	touch $@
+../../samples/multimon/makefile.bcc: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch $@
+../../samples/multimon/makefile.vc: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch $@
+../../samples/multimon/makefile.gcc: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch $@
+../../samples/multimon/makefile.wat: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch $@
+
+
+../../samples/nativdlg/Makefile.in: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+../../samples/nativdlg/makefile.bcc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+../../samples/nativdlg/makefile.vc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+../../samples/nativdlg/makefile.gcc: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+../../samples/nativdlg/makefile.wat: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+
+
+../../samples/newgrid/Makefile.in: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/newgrid/newgrid.bkl
+	touch $@
+../../samples/newgrid/makefile.bcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch $@
+../../samples/newgrid/makefile.vc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch $@
+../../samples/newgrid/makefile.gcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch $@
+../../samples/newgrid/makefile.wat: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch $@
+
+
+../../samples/notebook/Makefile.in: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/notebook/notebook.bkl
+	touch $@
+../../samples/notebook/makefile.bcc: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch $@
+../../samples/notebook/makefile.vc: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch $@
+../../samples/notebook/makefile.gcc: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch $@
+../../samples/notebook/makefile.wat: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch $@
+
+
+../../samples/oleauto/Makefile.in: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/oleauto/oleauto.bkl
+	touch $@
+../../samples/oleauto/makefile.bcc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch $@
+../../samples/oleauto/makefile.vc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch $@
+../../samples/oleauto/makefile.gcc: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch $@
+../../samples/oleauto/makefile.wat: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch $@
+
+
+../../samples/opengl/Makefile.in: $(SDEPS) ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/opengl/opengl.bkl
+	touch $@
+../../samples/opengl/makefile.bcc: $(SDEPS) ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+	touch $@
+../../samples/opengl/makefile.vc: $(SDEPS) ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+	touch $@
+../../samples/opengl/makefile.gcc: $(SDEPS) ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+	touch $@
+../../samples/opengl/makefile.wat: $(SDEPS) ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+	touch $@
+
+
+../../samples/ownerdrw/Makefile.in: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
+../../samples/ownerdrw/makefile.bcc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
+../../samples/ownerdrw/makefile.vc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
+../../samples/ownerdrw/makefile.gcc: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
+../../samples/ownerdrw/makefile.wat: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
+
+
+../../samples/png/Makefile.in: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/png/png.bkl
+	touch $@
+../../samples/png/makefile.bcc: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch $@
+../../samples/png/makefile.vc: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch $@
+../../samples/png/makefile.gcc: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch $@
+../../samples/png/makefile.wat: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch $@
+
+
+../../samples/printing/Makefile.in: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/printing/printing.bkl
+	touch $@
+../../samples/printing/makefile.bcc: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch $@
+../../samples/printing/makefile.vc: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch $@
+../../samples/printing/makefile.gcc: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch $@
+../../samples/printing/makefile.wat: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch $@
+
+
+../../samples/propsize/Makefile.in: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/propsize/propsize.bkl
+	touch $@
+../../samples/propsize/makefile.bcc: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch $@
+../../samples/propsize/makefile.vc: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch $@
+../../samples/propsize/makefile.gcc: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch $@
+../../samples/propsize/makefile.wat: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch $@
+
+
+../../samples/regtest/Makefile.in: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/regtest/regtest.bkl
+	touch $@
+../../samples/regtest/makefile.bcc: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch $@
+../../samples/regtest/makefile.vc: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch $@
+../../samples/regtest/makefile.gcc: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch $@
+../../samples/regtest/makefile.wat: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch $@
+
+
+../../samples/richedit/Makefile.in: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/richedit/richedit.bkl
+	touch $@
+../../samples/richedit/makefile.bcc: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch $@
+../../samples/richedit/makefile.vc: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch $@
+../../samples/richedit/makefile.gcc: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch $@
+../../samples/richedit/makefile.wat: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch $@
+
+
+../../samples/rotate/Makefile.in: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/rotate/rotate.bkl
+	touch $@
+../../samples/rotate/makefile.bcc: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch $@
+../../samples/rotate/makefile.vc: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch $@
+../../samples/rotate/makefile.gcc: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch $@
+../../samples/rotate/makefile.wat: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch $@
+
+
+../../samples/Makefile.in: ../../samples/samples.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/samples.bkl
+	touch $@
+../../samples/makefile.bcc: ../../samples/samples.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../build/config.bcc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
+	touch $@
+../../samples/makefile.vc: ../../samples/samples.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../build/config.vc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
+	touch $@
+../../samples/makefile.gcc: ../../samples/samples.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../build/config.gcc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
+	touch $@
+../../samples/makefile.wat: ../../samples/samples.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../build/config.wat -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
+	touch $@
+
+
+../../samples/sashtest/Makefile.in: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/sashtest/sashtest.bkl
+	touch $@
+../../samples/sashtest/makefile.bcc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch $@
+../../samples/sashtest/makefile.vc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch $@
+../../samples/sashtest/makefile.gcc: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch $@
+../../samples/sashtest/makefile.wat: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch $@
+
+
+../../samples/scroll/Makefile.in: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/scroll/scroll.bkl
+	touch $@
+../../samples/scroll/makefile.bcc: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch $@
+../../samples/scroll/makefile.vc: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch $@
+../../samples/scroll/makefile.gcc: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch $@
+../../samples/scroll/makefile.wat: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch $@
+
+
+../../samples/scrollsub/Makefile.in: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/scrollsub/scrollsub.bkl
+	touch $@
+../../samples/scrollsub/makefile.bcc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch $@
+../../samples/scrollsub/makefile.vc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch $@
+../../samples/scrollsub/makefile.gcc: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch $@
+../../samples/scrollsub/makefile.wat: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch $@
+
+
+../../samples/shaped/Makefile.in: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/shaped/shaped.bkl
+	touch $@
+../../samples/shaped/makefile.bcc: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch $@
+../../samples/shaped/makefile.vc: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch $@
+../../samples/shaped/makefile.gcc: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch $@
+../../samples/shaped/makefile.wat: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch $@
+
+
+../../samples/sockets/Makefile.in: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/sockets/sockets.bkl
+	touch $@
+../../samples/sockets/makefile.bcc: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch $@
+../../samples/sockets/makefile.vc: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch $@
+../../samples/sockets/makefile.gcc: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch $@
+../../samples/sockets/makefile.wat: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch $@
+
+
+../../samples/splitter/Makefile.in: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/splitter/splitter.bkl
+	touch $@
+../../samples/splitter/makefile.bcc: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch $@
+../../samples/splitter/makefile.vc: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch $@
+../../samples/splitter/makefile.gcc: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch $@
+../../samples/splitter/makefile.wat: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch $@
+
+
+../../samples/statbar/Makefile.in: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/statbar/statbar.bkl
+	touch $@
+../../samples/statbar/makefile.bcc: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch $@
+../../samples/statbar/makefile.vc: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch $@
+../../samples/statbar/makefile.gcc: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch $@
+../../samples/statbar/makefile.wat: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch $@
+
+
+../../samples/tab/Makefile.in: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/tab/tab.bkl
+	touch $@
+../../samples/tab/makefile.bcc: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch $@
+../../samples/tab/makefile.vc: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch $@
+../../samples/tab/makefile.gcc: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch $@
+../../samples/tab/makefile.wat: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch $@
+
+
+../../samples/taskbar/Makefile.in: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/taskbar/taskbar.bkl
+	touch $@
+../../samples/taskbar/makefile.bcc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch $@
+../../samples/taskbar/makefile.vc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch $@
+../../samples/taskbar/makefile.gcc: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch $@
+../../samples/taskbar/makefile.wat: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch $@
+
+
+../../samples/text/Makefile.in: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/text/text.bkl
+	touch $@
+../../samples/text/makefile.bcc: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch $@
+../../samples/text/makefile.vc: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch $@
+../../samples/text/makefile.gcc: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch $@
+../../samples/text/makefile.wat: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch $@
+
+
+../../samples/thread/Makefile.in: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/thread/thread.bkl
+	touch $@
+../../samples/thread/makefile.bcc: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch $@
+../../samples/thread/makefile.vc: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch $@
+../../samples/thread/makefile.gcc: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch $@
+../../samples/thread/makefile.wat: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch $@
+
+
+../../samples/toolbar/Makefile.in: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/toolbar/toolbar.bkl
+	touch $@
+../../samples/toolbar/makefile.bcc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch $@
+../../samples/toolbar/makefile.vc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch $@
+../../samples/toolbar/makefile.gcc: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch $@
+../../samples/toolbar/makefile.wat: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch $@
+
+
+../../samples/treectrl/Makefile.in: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/treectrl/treectrl.bkl
+	touch $@
+../../samples/treectrl/makefile.bcc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch $@
+../../samples/treectrl/makefile.vc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch $@
+../../samples/treectrl/makefile.gcc: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch $@
+../../samples/treectrl/makefile.wat: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch $@
+
+
+../../samples/typetest/Makefile.in: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/typetest/typetest.bkl
+	touch $@
+../../samples/typetest/makefile.bcc: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch $@
+../../samples/typetest/makefile.vc: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch $@
+../../samples/typetest/makefile.gcc: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch $@
+../../samples/typetest/makefile.wat: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch $@
+
+
+../../samples/validate/Makefile.in: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/validate/validate.bkl
+	touch $@
+../../samples/validate/makefile.bcc: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch $@
+../../samples/validate/makefile.vc: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch $@
+../../samples/validate/makefile.gcc: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch $@
+../../samples/validate/makefile.wat: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch $@
+
+
+../../samples/vscroll/Makefile.in: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/vscroll/vscroll.bkl
+	touch $@
+../../samples/vscroll/makefile.bcc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch $@
+../../samples/vscroll/makefile.vc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch $@
+../../samples/vscroll/makefile.gcc: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch $@
+../../samples/vscroll/makefile.wat: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch $@
+
+
+../../samples/widgets/Makefile.in: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/widgets/widgets.bkl
+	touch $@
+../../samples/widgets/makefile.bcc: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch $@
+../../samples/widgets/makefile.vc: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch $@
+../../samples/widgets/makefile.gcc: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch $@
+../../samples/widgets/makefile.wat: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch $@
+
+
+../../samples/wizard/Makefile.in: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/wizard/wizard.bkl
+	touch $@
+../../samples/wizard/makefile.bcc: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch $@
+../../samples/wizard/makefile.vc: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch $@
+../../samples/wizard/makefile.gcc: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch $@
+../../samples/wizard/makefile.wat: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch $@
+
+
+../../samples/wxtest/Makefile.in: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/wxtest/wxtest.bkl
+	touch $@
+../../samples/wxtest/makefile.bcc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch $@
+../../samples/wxtest/makefile.vc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch $@
+../../samples/wxtest/makefile.gcc: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch $@
+../../samples/wxtest/makefile.wat: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch $@
+
+
+../../Makefile.in: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fautoconf -o$@  wx.bkl
+	touch $@
+../makefile.bcc: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=config.bcc wx.bkl
+	touch $@
+../makefile.vc: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=config.vc wx.bkl
+	touch $@
+../makefile.gcc: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=config.gcc wx.bkl
+	touch $@
+../makefile.wat: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=config.wat wx.bkl
 	touch $@

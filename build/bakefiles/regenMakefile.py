@@ -7,7 +7,7 @@
 # $Id$
 #
 
-import string, os.path
+import string, os.path, copy
 
 file = open('Makefile', 'wt')
 file.write("""
@@ -21,18 +21,22 @@ SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
 """)
 
-lines = []
+lines = {}
 all = {}
 all['autoconf'] = ['../../configure']
+
+linesCur = None
 
 def addMakefile(bake, makedirs, deps=[], args={}):
     """Adds rules to regenerate native makefile in directory 'makedir' from
        bakefiles 'bake'. 'deps' contains additional dependencies (bakefiles
        other than 'bake'."""
     print 'adding %s...' % bake
-    lines.append('')
+    global linesCur
+    linesCur = ['\n']
 
     def add(bake, makedirs, make, dep, format, args={}):
+        global linesCur
         a = ''
         if 'all' in args: a += ' %s' % args['all']
         if format in args: a += ' %s' % args[format]
@@ -43,9 +47,9 @@ def addMakefile(bake, makedirs, deps=[], args={}):
         else:
             makedir = makedirs['all']
         tfile = '%s/%s' % (makedir, make)
-        lines.append('%s: %s' % (tfile, dep))
-        lines.append('\t$(BAKEFILE) -f%s -o$@ %s %s' % (format, a, bake))
-        lines.append('\ttouch $@')
+        linesCur.append('%s: %s' % (tfile, dep))
+        linesCur.append('\t$(BAKEFILE) -f%s -o$@ %s %s' % (format, a, bake))
+        linesCur.append('\ttouch $@')
         if format not in all: all[format] = []
         all[format].append(tfile)
 
@@ -56,6 +60,8 @@ def addMakefile(bake, makedirs, deps=[], args={}):
     add(bake, makedirs, 'makefile.vc', dep, 'msvc', args)
     add(bake, makedirs, 'makefile.gcc', dep, 'mingw', args)
     add(bake, makedirs, 'makefile.wat', dep, 'watcom', args)
+    
+    lines[bake] = linesCur
 
 
 
@@ -89,6 +95,7 @@ SAMPLES_DIR = 2
 def onSubmakefile(type, dirname, names):
     bakes = [x for x in names if x.endswith('.bkl')]
     if len(bakes) == 0: return
+    bakes.sort()
     dirname = dirname.replace(os.sep, '/')
     depth = dirname.count('/') - 2
     if depth <= 0: return
@@ -131,19 +138,24 @@ os.path.walk(os.path.join('..','..','contrib','samples'),
 
 
 cleanCmds = ''
-for f in all:
+allK = all.keys()
+allK.sort()
+cleanList = []
+for f in allK:
     for i in all[f]:
-        cleanCmds += '\trm -f %s\n' % i
+        cleanList.append('\trm -f %s\n' % i)
+    cleanList.sort()
+    cleanCmds = ''.join(cleanList)
 
-for f in all:
+for f in allK:
     var = '%s_ALL' % f.upper()
-    file.write('%s = %s\n' % (var,' '.join(all[f])))
+    file.write('%s = \\\n\t%s\n' % (var,' \\\n\t'.join(all[f])))
 
 file.write('all:')
-for f in all:
+for f in allK:
     file.write(' %s' % f)
 file.write('\n\n')
-for f in all:
+for f in allK:
     file.write('%s: $(%s_ALL)\n' % (f, f.upper()))
 
 file.write("""
@@ -164,6 +176,9 @@ Makefile: regenMakefile.py
 \t@echo
 \t@exit 1
 """ % cleanCmds)
-for l in lines:
-    file.write('%s\n' % l)
+linesK = lines.keys()
+linesK.sort()
+for lk in linesK:
+    for l in lines[lk]:
+        file.write('%s\n' % l)
 file.close()
