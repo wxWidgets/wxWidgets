@@ -220,6 +220,9 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             {
                 // create the palette-like window
                 *exflags |= WS_EX_TOOLWINDOW;
+
+                // tool windows shouldn't appear on the taskbar (as documented)
+                style |= wxFRAME_NO_TASKBAR;
             }
 
             // We have to solve 2 different problems here:
