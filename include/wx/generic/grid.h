@@ -1006,8 +1006,7 @@ public:
     void SetRowHeight( int row, int height )
         { SetRowSize( row, height ); }
 
-    int GetRowHeight( int row )
-        { return GetRowSize( row ); }
+    // GetRowHeight() is below
 
     int GetViewHeight() // returned num whole rows visible
         { return 0; }
@@ -1153,13 +1152,36 @@ protected:
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
 
+    // NB: *never* access m_row/col arrays directly because they are created
+    //     on demand, *always* use accessor functions instead!
+
+    // init the m_rowHeights/Bottoms arrays with default values
+    void InitRowHeights();
+
     int        m_defaultRowHeight;
     wxArrayInt m_rowHeights;
     wxArrayInt m_rowBottoms;
 
+    // init the m_colWidths/Rights arrays
+    void InitColWidths();
+
     int        m_defaultColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
+
+    // get the col/row coords
+    int GetColWidth(int col) const;
+    int GetColLeft(int col) const;
+    int GetColRight(int col) const;
+
+    // this function must be public for compatibility...
+public:
+    int GetRowHeight(int row) const;
+protected:
+
+    int GetRowTop(int row) const;
+    int GetRowBottom(int row) const;
+
     int m_rowLabelWidth;
     int m_colLabelHeight;
 

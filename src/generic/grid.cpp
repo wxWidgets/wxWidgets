@@ -2149,8 +2149,6 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
 
 void wxGrid::Init()
 {
-    int i;
-
     if ( m_numRows <= 0 )
         m_numRows = WXGRID_DEFAULT_NUMBER_ROWS;
 
@@ -2194,26 +2192,6 @@ void wxGrid::Init()
     m_defaultRowHeight += 4;
 #endif
 
-    m_rowHeights.Alloc( m_numRows );
-    m_rowBottoms.Alloc( m_numRows );
-    int rowBottom = 0;
-    for ( i = 0;  i < m_numRows;  i++ )
-    {
-        m_rowHeights.Add( m_defaultRowHeight );
-        rowBottom += m_defaultRowHeight;
-        m_rowBottoms.Add( rowBottom );
-    }
-
-    m_colWidths.Alloc( m_numCols );
-    m_colRights.Alloc( m_numCols );
-    int colRight = 0;
-    for ( i = 0;  i < m_numCols;  i++ )
-    {
-        m_colWidths.Add( m_defaultColWidth );
-        colRight += m_defaultColWidth;
-        m_colRights.Add( colRight );
-    }
-
     // Set default cell attributes
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxLEFT, wxTOP);
@@ -2251,9 +2229,84 @@ void wxGrid::Init()
 
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
-
 }
 
+// ----------------------------------------------------------------------------
+// the idea is to call these functions only when necessary because they create
+// quite big arrays which eat memory mostly unnecessary - in particular, if
+// default widths/heights are used for all rows/columns, we may not use these
+// arrays at all
+//
+// with some extra code, it should be possible to only store the
+// widths/heights different from default ones but this will be done later...
+// ----------------------------------------------------------------------------
+
+void wxGrid::InitRowHeights()
+{
+    m_rowHeights.Empty();
+    m_rowBottoms.Empty();
+
+    m_rowHeights.Alloc( m_numRows );
+    m_rowBottoms.Alloc( m_numRows );
+
+    int rowBottom = 0;
+    for ( int i = 0;  i < m_numRows;  i++ )
+    {
+        m_rowHeights.Add( m_defaultRowHeight );
+        rowBottom += m_defaultRowHeight;
+        m_rowBottoms.Add( rowBottom );
+    }
+}
+
+void wxGrid::InitColWidths()
+{
+    m_colWidths.Empty();
+    m_colRights.Empty();
+
+    m_colWidths.Alloc( m_numCols );
+    m_colRights.Alloc( m_numCols );
+    int colRight = 0;
+    for ( int i = 0;  i < m_numCols;  i++ )
+    {
+        m_colWidths.Add( m_defaultColWidth );
+        colRight += m_defaultColWidth;
+        m_colRights.Add( colRight );
+    }
+}
+
+int wxGrid::GetColWidth(int col) const
+{
+    return m_colWidths.IsEmpty() ? m_defaultColWidth : m_colWidths[col];
+}
+
+int wxGrid::GetColLeft(int col) const
+{
+    return m_colRights.IsEmpty() ? col * m_defaultColWidth
+                                 : m_colRights[col] - m_colWidths[col];
+}
+
+int wxGrid::GetColRight(int col) const
+{
+    return m_colRights.IsEmpty() ? (col + 1) * m_defaultColWidth
+                                 : m_colRights[col];
+}
+
+int wxGrid::GetRowHeight(int row) const
+{
+    return m_rowHeights.IsEmpty() ? m_defaultRowHeight : m_rowHeights[row];
+}
+
+int wxGrid::GetRowTop(int row) const
+{
+    return m_rowBottoms.IsEmpty() ? row * m_defaultRowHeight
+                                  : m_rowBottoms[row] - m_rowHeights[row];
+}
+
+int wxGrid::GetRowBottom(int row) const
+{
+    return m_rowBottoms.IsEmpty() ? (row + 1) * m_defaultRowHeight
+                                  : m_rowBottoms[row];
+}
 
 void wxGrid::CalcDimensions()
 {
@@ -2262,8 +2315,8 @@ void wxGrid::CalcDimensions()
 
     if ( m_numRows > 0  &&  m_numCols > 0 )
     {
-        int right = m_colRights[ m_numCols-1 ] + 50;
-        int bottom = m_rowBottoms[ m_numRows-1 ] + 50;
+        int right = GetColRight( m_numCols-1 ) + 50;
+        int bottom = GetRowBottom( m_numRows-1 ) + 50;
 
         // TODO: restore the scroll position that we had before sizing
         //
@@ -2301,6 +2354,18 @@ void wxGrid::CalcWindowSizes()
 bool wxGrid::Redimension( wxGridTableMessage& msg )
 {
     int i;
+
+    // if we were using the default widths/heights so far, we must change them
+    // now
+    if ( m_colWidths.IsEmpty() )
+    {
+        InitColWidths();
+    }
+
+    if ( m_rowHeights.IsEmpty() )
+    {
+        InitRowHeights();
+    }
 
     switch ( msg.GetId() )
     {
@@ -2507,13 +2572,13 @@ void wxGrid::CalcRowLabelsExposed( wxRegion& reg )
         // find the row labels within these bounds
         //
         int row;
-        int rowTop;
         for ( row = 0;  row < m_numRows;  row++ )
         {
-            if ( m_rowBottoms[row] < top ) continue;
+            if ( GetRowBottom(row) < top )
+                continue;
 
-            rowTop = m_rowBottoms[row] - m_rowHeights[row];
-            if ( rowTop > bottom ) break;
+            if ( GetRowTop(top) > bottom )
+                break;
 
             m_rowLabelsExposed.Add( row );
         }
@@ -2556,13 +2621,13 @@ void wxGrid::CalcColLabelsExposed( wxRegion& reg )
         // find the cells within these bounds
         //
         int col;
-        int colLeft;
         for ( col = 0;  col < m_numCols;  col++ )
         {
-            if ( m_colRights[col] < left ) continue;
+            if ( GetColRight(col) < left )
+                continue;
 
-            colLeft = m_colRights[col] - m_colWidths[col];
-            if ( colLeft > right ) break;
+            if ( GetColLeft(col) > right )
+                break;
 
             m_colLabelsExposed.Add( col );
         }
@@ -2608,29 +2673,31 @@ void wxGrid::CalcCellsExposed( wxRegion& reg )
         // find the cells within these bounds
         //
         int row, col;
-        int colLeft, rowTop;
         for ( row = 0;  row < m_numRows;  row++ )
         {
-            if ( m_rowBottoms[row] <= top ) continue;
+            if ( GetRowBottom(row) <= top )
+                continue;
 
-            rowTop = m_rowBottoms[row] - m_rowHeights[row];
-            if ( rowTop > bottom ) break;
+            if ( GetRowTop(row) > bottom )
+                break;
 
             m_rowsExposed.Add( row );
 
             for ( col = 0;  col < m_numCols;  col++ )
             {
-                if ( m_colRights[col] <= left ) continue;
+                if ( GetColRight(col) <= left )
+                    continue;
 
-                colLeft = m_colRights[col] - m_colWidths[col];
-                if ( colLeft > right ) break;
+                if ( GetColLeft(col) > right )
+                    break;
 
-                if ( m_colsExposed.Index( col ) == wxNOT_FOUND ) m_colsExposed.Add( col );
+                if ( m_colsExposed.Index( col ) == wxNOT_FOUND )
+                    m_colsExposed.Add( col );
                 m_cellsExposed.Add( wxGridCellCoords( row, col ) );
             }
         }
 
-        iter++ ;
+        iter++;
     }
 }
 
@@ -2657,10 +2724,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    y = wxMax( y,
-                               m_rowBottoms[m_dragRowOrCol] -
-                               m_rowHeights[m_dragRowOrCol] +
-                               WXGRID_MIN_ROW_HEIGHT );
+                    y = wxMax( y, GetRowTop(m_dragRowOrCol) + WXGRID_MIN_ROW_HEIGHT );
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -2823,10 +2887,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    x = wxMax( x,
-                               m_colRights[m_dragRowOrCol] -
-                               m_colWidths[m_dragRowOrCol] +
-                               WXGRID_MIN_COL_WIDTH );
+                    x = wxMax( x, GetColLeft(m_dragRowOrCol) + WXGRID_MIN_COL_WIDTH );
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -3134,10 +3195,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-            y = wxMax( y,
-                    m_rowBottoms[m_dragRowOrCol] -
-                    m_rowHeights[m_dragRowOrCol] +
-                    WXGRID_MIN_ROW_HEIGHT );
+            y = wxMax( y, GetRowTop(m_dragRowOrCol) + WXGRID_MIN_ROW_HEIGHT );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -3154,9 +3212,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-            x = wxMax( x,
-                    m_colRights[m_dragRowOrCol] -
-                    m_colWidths[m_dragRowOrCol] + WXGRID_MIN_COL_WIDTH );
+            x = wxMax( x, GetColLeft(m_dragRowOrCol) + WXGRID_MIN_COL_WIDTH );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -3386,7 +3442,7 @@ void wxGrid::DoEndDragResizeRow()
         dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
         HideCellEditControl();
 
-        int rowTop = m_rowBottoms[m_dragRowOrCol] - m_rowHeights[m_dragRowOrCol];
+        int rowTop = GetRowTop(m_dragRowOrCol);
         SetRowSize( m_dragRowOrCol,
                     wxMax( m_dragLastPos - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
 
@@ -3424,7 +3480,7 @@ void wxGrid::DoEndDragResizeCol()
         dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
         HideCellEditControl();
 
-        int colLeft = m_colRights[m_dragRowOrCol] - m_colWidths[m_dragRowOrCol];
+        int colLeft = GetColLeft(m_dragRowOrCol);
         SetColSize( m_dragRowOrCol,
                     wxMax( m_dragLastPos - colLeft, WXGRID_MIN_COL_WIDTH ) );
 
@@ -4106,7 +4162,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     int row = coords.GetRow();
     int col = coords.GetCol();
 
-    if ( m_colWidths[col] <= 0 || m_rowHeights[row] <= 0 )
+    if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
         return;
 
     // we draw the cell border ourselves
@@ -4120,10 +4176,10 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     bool isCurrent = coords == m_currentCellCoords;
 
     wxRect rect;
-    rect.x = m_colRights[col] - m_colWidths[col];
-    rect.y = m_rowBottoms[row] - m_rowHeights[row];
-    rect.width = m_colWidths[col] - 1;
-    rect.height = m_rowHeights[row] - 1;
+    rect.x = GetColLeft(col);
+    rect.y = GetRowTop(row);
+    rect.width = GetColWidth(col) - 1;
+    rect.height = GetRowHeight(row) - 1;
 
     // if the editor is shown, we should use it and not the renderer
     if ( isCurrent && IsCellEditControlEnabled() )
@@ -4145,14 +4201,14 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 
-    if ( m_colWidths[col] <= 0 || m_rowHeights[row] <= 0 )
+    if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
         return;
 
     wxRect rect;
-    rect.x = m_colRights[col] - m_colWidths[col];
-    rect.y = m_rowBottoms[row] - m_rowHeights[row];
-    rect.width = m_colWidths[col] - 1;
-    rect.height = m_rowHeights[row] - 1;
+    rect.x = GetColLeft(col);
+    rect.y = GetRowTop(row);
+    rect.width = GetColWidth(col) - 1;
+    rect.height = GetRowHeight(row) - 1;
 
     // hmmm... what could we do here to show that the cell is disabled?
     // for now, I just draw a thinner border than for the other ones, but
@@ -4186,22 +4242,22 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 {
-    if ( m_colWidths[coords.GetCol()] <=0  ||
-         m_rowHeights[coords.GetRow()] <= 0 ) return;
-
-    dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
     int row = coords.GetRow();
     int col = coords.GetCol();
+    if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+        return;
+
+    dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
 
     // right hand border
     //
-    dc.DrawLine( m_colRights[col], m_rowBottoms[row] - m_rowHeights[row],
-                 m_colRights[col], m_rowBottoms[row] );
+    dc.DrawLine( GetColRight(col), GetRowTop(row),
+                 GetColRight(col), GetRowBottom(row) );
 
     // bottom border
     //
-    dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row],
-                 m_colRights[col], m_rowBottoms[row] );
+    dc.DrawLine( GetColLeft(col), GetRowBottom(row),
+                 GetColRight(col), GetRowBottom(row) );
 }
 
 void wxGrid::DrawHighlight(wxDC& dc)
@@ -4254,8 +4310,8 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
 
     // avoid drawing grid lines past the last row and col
     //
-    right = wxMin( right, m_colRights[m_numCols-1] );
-    bottom = wxMin( bottom, m_rowBottoms[m_numRows-1] );
+    right = wxMin( right, GetColRight(m_numCols - 1) );
+    bottom = wxMin( bottom, GetRowBottom(m_numRows - 1) );
 
     dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
 
@@ -4264,13 +4320,16 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     int i;
     for ( i = 0; i < m_numRows; i++ )
     {
-        if ( m_rowBottoms[i]-1 > bottom )
+        int bottom = GetRowBottom(i) - 1;
+
+        if ( bottom > bottom )
         {
             break;
         }
-        else if ( m_rowBottoms[i]-1 >= top )
+
+        if ( bottom >= top )
         {
-            dc.DrawLine( left, m_rowBottoms[i]-1, right, m_rowBottoms[i]-1 );
+            dc.DrawLine( left, bottom, right, bottom );
         }
     }
 
@@ -4279,13 +4338,15 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     //
     for ( i = 0; i < m_numCols; i++ )
     {
-        if ( m_colRights[i]-1 > right )
+        int colRight = GetColRight(i) - 1;
+        if ( colRight > right )
         {
             break;
         }
-        else if ( m_colRights[i]-1 >= left )
+
+        if ( colRight >= left )
         {
-            dc.DrawLine( m_colRights[i]-1, top, m_colRights[i]-1, bottom );
+            dc.DrawLine( colRight, top, colRight, bottom );
         }
     }
 }
@@ -4307,19 +4368,20 @@ void wxGrid::DrawRowLabels( wxDC& dc )
 
 void wxGrid::DrawRowLabel( wxDC& dc, int row )
 {
-    if ( m_rowHeights[row] <= 0 ) return;
+    if ( GetRowHeight(row) <= 0 )
+        return;
 
-    int rowTop = m_rowBottoms[row] - m_rowHeights[row];
+    int rowTop = GetRowTop(row),
+        rowBottom = GetRowBottom(row) - 1;
 
     dc.SetPen( *wxBLACK_PEN );
     dc.DrawLine( m_rowLabelWidth-1, rowTop,
-                 m_rowLabelWidth-1, m_rowBottoms[row]-1 );
+                 m_rowLabelWidth-1, rowBottom );
 
-    dc.DrawLine( 0, m_rowBottoms[row]-1,
-                 m_rowLabelWidth-1, m_rowBottoms[row]-1 );
+    dc.DrawLine( 0, rowBottom, m_rowLabelWidth-1, rowBottom );
 
     dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( 0, rowTop, 0, m_rowBottoms[row]-1 );
+    dc.DrawLine( 0, rowTop, 0, rowBottom );
     dc.DrawLine( 0, rowTop, m_rowLabelWidth-1, rowTop );
 
     dc.SetBackgroundMode( wxTRANSPARENT );
@@ -4331,9 +4393,9 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     wxRect rect;
     rect.SetX( 2 );
-    rect.SetY( m_rowBottoms[row] - m_rowHeights[row] + 2 );
+    rect.SetY( GetRowTop(row) + 2 );
     rect.SetWidth( m_rowLabelWidth - 4 );
-    rect.SetHeight( m_rowHeights[row] - 4 );
+    rect.SetHeight( GetRowHeight(row) - 4 );
     DrawTextRectangle( dc, GetRowLabelValue( row ), rect, hAlign, vAlign );
 }
 
@@ -4354,20 +4416,22 @@ void wxGrid::DrawColLabels( wxDC& dc )
 
 void wxGrid::DrawColLabel( wxDC& dc, int col )
 {
-    if ( m_colWidths[col] <= 0 ) return;
+    if ( GetColWidth(col) <= 0 )
+        return;
 
-    int colLeft = m_colRights[col] - m_colWidths[col];
+    int colLeft = GetColLeft(col),
+        colRight = GetColRight(col) - 1;
 
     dc.SetPen( *wxBLACK_PEN );
-    dc.DrawLine( m_colRights[col]-1, 0,
-                 m_colRights[col]-1, m_colLabelHeight-1 );
+    dc.DrawLine( colRight, 0,
+                 colRight, m_colLabelHeight-1 );
 
     dc.DrawLine( colLeft, m_colLabelHeight-1,
-                 m_colRights[col]-1, m_colLabelHeight-1 );
+                 colRight, m_colLabelHeight-1 );
 
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( colLeft, 0, colLeft, m_colLabelHeight-1 );
-    dc.DrawLine( colLeft, 0, m_colRights[col]-1, 0 );
+    dc.DrawLine( colLeft, 0, colRight, 0 );
 
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
@@ -4381,9 +4445,9 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     GetColLabelAlignment( &hAlign, &vAlign );
 
     wxRect rect;
-    rect.SetX( m_colRights[col] - m_colWidths[col] + 2 );
+    rect.SetX( colLeft + 2 );
     rect.SetY( 2 );
-    rect.SetWidth( m_colWidths[col] - 4 );
+    rect.SetWidth( GetColWidth(col) - 4 );
     rect.SetHeight( m_colLabelHeight - 4 );
     DrawTextRectangle( dc, GetColLabelValue( col ), rect, hAlign, vAlign );
 }
@@ -4748,7 +4812,8 @@ int wxGrid::YToRow( int y )
 
     for ( i = 0;  i < m_numRows;  i++ )
     {
-        if ( y < m_rowBottoms[i] ) return i;
+        if ( y < GetRowBottom(i) )
+            return i;
     }
 
     return m_numRows; //-1;
@@ -4761,7 +4826,8 @@ int wxGrid::XToCol( int x )
 
     for ( i = 0;  i < m_numCols;  i++ )
     {
-        if ( x < m_colRights[i] ) return i;
+        if ( x < GetColRight(i) )
+            return i;
     }
 
     return m_numCols; //-1;
@@ -4777,12 +4843,11 @@ int wxGrid::YToEdgeOfRow( int y )
 
     for ( i = 0;  i < m_numRows;  i++ )
     {
-        if ( m_rowHeights[i] > WXGRID_LABEL_EDGE_ZONE )
+        if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
         {
-            d = abs( y - m_rowBottoms[i] );
-            {
-                if ( d < WXGRID_LABEL_EDGE_ZONE ) return i;
-            }
+            d = abs( y - GetRowBottom(i) );
+            if ( d < WXGRID_LABEL_EDGE_ZONE )
+                return i;
         }
     }
 
@@ -4799,12 +4864,11 @@ int wxGrid::XToEdgeOfCol( int x )
 
     for ( i = 0;  i < m_numCols;  i++ )
     {
-        if ( m_colWidths[i] > WXGRID_LABEL_EDGE_ZONE )
+        if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
         {
-            d = abs( x - m_colRights[i] );
-            {
-                if ( d < WXGRID_LABEL_EDGE_ZONE ) return i;
-            }
+            d = abs( x - GetColRight(i) );
+            if ( d < WXGRID_LABEL_EDGE_ZONE )
+                return i;
         }
     }
 
@@ -4819,10 +4883,10 @@ wxRect wxGrid::CellToRect( int row, int col )
     if ( row >= 0  &&  row < m_numRows  &&
          col >= 0  &&  col < m_numCols )
     {
-        rect.x = m_colRights[col] - m_colWidths[col];
-        rect.y = m_rowBottoms[row] - m_rowHeights[row];
-        rect.width = m_colWidths[col];
-        rect.height = m_rowHeights[ row ];
+        rect.x = GetColLeft(col);
+        rect.y = GetRowTop(row);
+        rect.width = GetColWidth(col);
+        rect.height = GetRowHeight(row);
     }
 
     return rect;
@@ -4897,10 +4961,12 @@ void wxGrid::MakeCellVisible( int row, int col )
             ypos = r.GetTop();
             for ( i = row-1;  i >= 0;  i-- )
             {
-                if ( h + m_rowHeights[i] > ch ) break;
+                int rowHeight = GetRowHeight(i);
+                if ( h + rowHeight > ch )
+                    break;
 
-                h += m_rowHeights[i];
-                ypos -= m_rowHeights[i];
+                h += rowHeight;
+                ypos -= rowHeight;
             }
 
             // we divide it later by GRID_SCROLL_LINE, make sure that we don't
@@ -4919,10 +4985,12 @@ void wxGrid::MakeCellVisible( int row, int col )
             xpos = r.GetLeft();
             for ( i = col-1;  i >= 0;  i-- )
             {
-                if ( w + m_colWidths[i] > cw ) break;
+                int colWidth = GetColWidth(i);
+                if ( w + colWidth > cw )
+                    break;
 
-                w += m_colWidths[i];
-                xpos -= m_colWidths[i];
+                w += colWidth;
+                xpos -= colWidth;
             }
 
             // see comment for ypos above
@@ -5028,7 +5096,7 @@ bool wxGrid::MovePageUp()
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
 
-        int y = m_rowBottoms[ row ] - m_rowHeights[ row ];
+        int y = GetRowTop(row);
         int newRow = YToRow( y - ch + 1 );
         if ( newRow == -1 )
         {
@@ -5058,7 +5126,7 @@ bool wxGrid::MovePageDown()
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
 
-        int y = m_rowBottoms[ row ] - m_rowHeights[ row ];
+        int y = GetRowTop(row);
         int newRow = YToRow( y + ch );
         if ( newRow == -1 )
         {
@@ -5550,7 +5618,7 @@ int wxGrid::GetRowSize( int row )
 {
     wxCHECK_MSG( row >= 0 && row < m_numRows, 0, _T("invalid row index") );
 
-    return m_rowHeights[row];
+    return GetRowHeight(row);
 }
 
 int wxGrid::GetDefaultColSize()
@@ -5562,7 +5630,7 @@ int wxGrid::GetColSize( int col )
 {
     wxCHECK_MSG( col >= 0 && col < m_numCols, 0, _T("invalid column index") );
 
-    return m_colWidths[col];
+    return GetColWidth(col);
 }
 
 // ============================================================================
@@ -5923,14 +5991,8 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 
     if ( resizeExistingRows )
     {
-        int row;
-        int bottom = 0;
-        for ( row = 0;  row < m_numRows;  row++ )
-        {
-            m_rowHeights[row] = m_defaultRowHeight;
-            bottom += m_defaultRowHeight;
-            m_rowBottoms[row] = bottom;
-        }
+        InitRowHeights();
+
         CalcDimensions();
     }
 }
@@ -5939,12 +6001,17 @@ void wxGrid::SetRowSize( int row, int height )
 {
     wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
 
-    int i;
+    if ( m_rowHeights.IsEmpty() )
+    {
+        // need to really create the array
+        InitRowHeights();
+    }
 
     int h = wxMax( 0, height );
     int diff = h - m_rowHeights[row];
 
     m_rowHeights[row] = h;
+    int i;
     for ( i = row;  i < m_numRows;  i++ )
     {
         m_rowBottoms[i] += diff;
@@ -5958,14 +6025,8 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
     if ( resizeExistingCols )
     {
-        int col;
-        int right = 0;
-        for ( col = 0;  col < m_numCols;  col++ )
-        {
-            m_colWidths[col] = m_defaultColWidth;
-            right += m_defaultColWidth;
-            m_colRights[col] = right;
-        }
+        InitColWidths();
+
         CalcDimensions();
     }
 }
@@ -5974,12 +6035,17 @@ void wxGrid::SetColSize( int col, int width )
 {
     wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
 
-    int i;
+    if ( m_colWidths.IsEmpty() )
+    {
+        // need to really create the array
+        InitColWidths();
+    }
 
     int w = wxMax( 0, width );
     int diff = w - m_colWidths[col];
     m_colWidths[col] = w;
 
+    int i;
     for ( i = col;  i < m_numCols;  i++ )
     {
         m_colRights[i] += diff;
