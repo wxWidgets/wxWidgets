@@ -36,6 +36,21 @@ WX_DECLARE_LIST(wxMenu, wxMenuList);
 WX_DECLARE_LIST(wxMenuItem, wxMenuItemList);
 
 // ----------------------------------------------------------------------------
+// conditional compilation
+// ----------------------------------------------------------------------------
+
+// having callbacks in menus is a wxWin 1.6x feature which should be replaced
+// with event tables in wxWin 2.xx code - however provide it because many
+// people like it a lot by default
+#ifndef wxUSE_MENU_CALLBACK
+    #if WXWIN_COMPATIBILITY_2
+        #define wxUSE_MENU_CALLBACK 1
+    #else
+        #define wxUSE_MENU_CALLBACK 0
+    #endif // WXWIN_COMPATIBILITY_2
+#endif // !defined(wxUSE_MENU_CALLBACK)
+
+// ----------------------------------------------------------------------------
 // wxMenu
 // ----------------------------------------------------------------------------
 
@@ -177,10 +192,13 @@ public:
     wxList& GetItems() const { return (wxList &)m_items; }
 #endif // WXWIN_COMPATIBILITY
 
+#if wxUSE_MENU_CALLBACK
     // wxWin 1.6x compatible menu event handling
     wxFunction GetCallback() const { return m_callback; }
     void Callback(const wxFunction func) { m_callback = func; }
+
     wxFunction m_callback;
+#endif // wxUSE_MENU_CALLBACK
 
     // unlike FindItem(), this function doesn't recurse but only looks through
     // our direct children and also may return the index of the found child if

@@ -469,11 +469,13 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     event.SetEventObject( menu );
     event.SetInt(id );
 
+#if wxUSE_MENU_CALLBACK
     if (menu->GetCallback())
     {
         (void) (*(menu->GetCallback())) (*menu, event);
         return;
     }
+#endif // wxUSE_MENU_CALLBACK
 
     if (menu->GetEventHandler()->ProcessEvent(event))
         return;
