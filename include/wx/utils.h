@@ -80,16 +80,6 @@ WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 // Sound the bell
 WXDLLIMPEXP_BASE void wxBell();
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
-	// Get the state of a key (true if pressed, false if not)
-	// This is generally most useful getting the state of
-	// Caps Lock, Num Lock and Scroll Lock...
-
-	// Note - There is a X11/GTK version which will be here
-	// soon
-	WXDLLIMPEXP_BASE bool wxGetKeyState(wxKeyCode key);
-#endif
-
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 
@@ -107,6 +97,16 @@ WXDLLIMPEXP_BASE wxString wxGetDataDir();
 
 
 #if wxUSE_GUI
+#if defined(__WXMSW__) || defined(__WXMAC__)
+	// Get the state of a key (true if pressed, false if not)
+	// This is generally most useful getting the state of
+	// Caps Lock, Num Lock and Scroll Lock...
+
+	// Note - There is a X11/GTK version which will be here
+	// soon
+	WXDLLEXPORT bool wxGetKeyState(wxKeyCode key);
+#endif
+
 // Don't synthesize KeyUp events holding down a key and producing
 // KeyDown events with autorepeat. On by default and always on
 // in wxMSW.
