@@ -156,8 +156,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     // miscelaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, _T("_999999"));
     m_FoldingMargin = 16;
-    SetMarginWidth (m_LineNrID,
-                    g_CommonPrefs.lineNumberEnable? m_LineNrMargin: 0);
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
 
@@ -408,8 +406,7 @@ bool Edit::InitializePrefs (const wxString &name) {
     SetMarginType (m_LineNrID, wxSTC_MARGIN_NUMBER);
     StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (_T("DARK GREY")));
     StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (_T("WHITE")));
-    SetMarginWidth (m_LineNrID,
-                    g_CommonPrefs.lineNumberEnable? m_LineNrMargin: 0);
+    SetMarginWidth (m_LineNrID, 0); // start out not visible
 
     // default fonts for all styles!
     int Nr;
