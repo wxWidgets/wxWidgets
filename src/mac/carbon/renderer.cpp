@@ -147,7 +147,51 @@ wxRendererMac::DrawHeaderButton(wxWindow *win,
 
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
-    if (major >= 10) 
+#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
+    if ( HIThemeDrawButton != 0 )
+    {
+        HIRect headerRect = CGRectMake( x , y , w , h );
+        if ( dc.IsKindOf( CLASSINFO( wxPaintDC ) ) == false )
+        {
+            Rect r = { (short) headerRect.origin.y , (short) headerRect.origin.x , 
+                (short) (headerRect.origin.y + headerRect.size.height) , (short) (headerRect.origin.x + headerRect.size.width) } ;
+            RgnHandle updateRgn = NewRgn() ;
+            RectRgn( updateRgn , &r ) ;
+            HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle() , updateRgn , true ) ;
+            DisposeRgn( updateRgn ) ;
+        }
+        else
+        {
+            CGContextRef cgContext ;
+#if wxMAC_USE_CORE_GRAPHICS
+            cgContext = dynamic_cast<wxMacCGContext*>(dc.GetGraphicContext())->GetNativeContext() ;
+#else
+            Rect bounds ;
+            GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
+            QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+            CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
+            CGContextScaleCTM( cgContext , 1 , -1 ) ;
+#endif
+            {
+                HIThemeButtonDrawInfo drawInfo ;
+                HIRect labelRect ;
+                memset( &drawInfo , 0 , sizeof(drawInfo) ) ;
+                drawInfo.version = 0 ;
+                drawInfo.state = kThemeStateActive ;
+                drawInfo.kind = kThemeListHeaderButton ;
+                drawInfo.value = 0 ;
+                drawInfo.adornment = kThemeAdornmentNone ;
+                HIThemeDrawButton( &headerRect , &drawInfo , cgContext , kHIThemeOrientationNormal , &labelRect ) ;    
+            }
+#if wxMAC_USE_CORE_GRAPHICS
+#else
+            QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+#endif
+        }
+    }
+    else
+#endif
+    if ( major >= 10 )
     {
         dc.SetPen( wxPen( wxColour( 0xC5 , 0xC5 , 0xC5 ) , 1 , wxSOLID ) );
         dc.DrawRectangle( x, y+CORNER, 1, h-CORNER );  				// left
@@ -243,8 +287,8 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
                                 wxOrientation orient,
                                 int WXUNUSED(flags))
 {
-#if ( TARGET_API_MAC_OSX == 1 ) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
-    if ( UMAGetSystemVersion() >= 0x1030 )
+#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
+    if ( HIThemeDrawPaneSplitter != 0 )
     {
         bool hasMetal = win->MacGetTopLevelWindow()->MacGetMetalAppearance() ;
         SInt32 height ;
@@ -254,7 +298,9 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
             splitterRect = CGRectMake( position , 0 , height, size.y);
         else
             splitterRect = CGRectMake( 0 , position , size.x , height );
+#if !wxMAC_USE_CORE_GRAPHICS
         HIViewConvertRect( &splitterRect , (HIViewRef) win->GetHandle() , (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() ) ;
+#endif
 
         // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
         // strange redraw errors occur if we don't do this
@@ -270,22 +316,25 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
         }
         else
         {
-#if wxMAC_USE_CORE_GRAPHICS
-#else
             CGContextRef cgContext ;
+#if wxMAC_USE_CORE_GRAPHICS
+            cgContext = dynamic_cast<wxMacCGContext*>(dc.GetGraphicContext())->GetNativeContext() ;
+#else
             Rect bounds ;
             GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
             QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
             CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
             CGContextScaleCTM( cgContext , 1 , -1 ) ;
+#endif
 
-            {
-                HIThemeSplitterDrawInfo drawInfo ;
-                drawInfo.version = 0 ;
-                drawInfo.state = kThemeStateActive ;
-                drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone ;
-                HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;    
-            }
+            HIThemeSplitterDrawInfo drawInfo ;
+            drawInfo.version = 0 ;
+            drawInfo.state = kThemeStateActive ;
+            drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone ;
+            HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;    
+
+#if wxMAC_USE_CORE_GRAPHICS
+#else
             QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
 #endif
         }
@@ -293,14 +342,6 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
     else
 #endif
     {
-#if 0
-        dc.SetPen(*wxLIGHT_GREY_PEN);
-        dc.SetBrush(*wxWHITE_BRUSH);
-        if ( orient == wxVERTICAL )
-            dc.DrawRectangle(position, 0, 7, size.y);
-        else
-            dc.DrawRectangle(0, position, size.x, 7);
-#else
         // Do the gradient fill:
         static int grayValues[] = 
         {
@@ -327,7 +368,6 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
                 dc.DrawRectangle( 0, position+i, size.x, 1 );
             }
         }
-#endif
     }
 }
 
