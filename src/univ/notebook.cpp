@@ -84,7 +84,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     SetBestSize(size);
 
-    //CreateInputHandler(wxINP_HANDLER_NOTEBOOK);
+    CreateInputHandler(wxINP_HANDLER_NOTEBOOK);
 
     return TRUE;
 }
@@ -166,6 +166,12 @@ int wxNotebook::SetSelection(int nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
+    if ( nPage == m_sel )
+    {
+        // don't do anything if there is nothing to do
+        return m_sel;
+    }
+
     if ( m_sel != -1 )
     {
         RefreshTab(m_sel);
@@ -179,6 +185,7 @@ int wxNotebook::SetSelection(int nPage)
     {
         RefreshTab(m_sel);
 
+        m_pages[m_sel]->SetSize(GetPageRect());
         m_pages[m_sel]->Show();
     }
 
@@ -187,6 +194,12 @@ int wxNotebook::SetSelection(int nPage)
 
 void wxNotebook::ChangePage(int nPage)
 {
+    if ( nPage == m_sel )
+    {
+        // nothing to do
+        return;
+    }
+
     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
     event.SetSelection(nPage);
     event.SetOldSelection(m_sel);
@@ -308,7 +321,15 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 
 void wxNotebook::RefreshTab(int page)
 {
+    wxCHECK_RET( IS_VALID_PAGE(page), _T("invalid notebook page") );
+
     wxRect r = GetTabRect(page);
+    if ( (size_t)page == m_sel )
+    {
+        const wxSize indent = GetRenderer()->GetTabIndent();
+        r.Inflate(2*indent.x, indent.y);
+    }
+
     Refresh(TRUE, &r);
 }
 
@@ -332,6 +353,15 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
 #endif
     }
 
+    int flags = 0;
+    if ( n == m_sel )
+    {
+        flags |= wxCONTROL_SELECTED;
+
+        if ( wxTheApp->IsActive() )
+            flags |= wxCONTROL_FOCUSED;
+    }
+
     GetRenderer()->DrawTab
                    (
                      dc,
@@ -339,7 +369,7 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
                      GetTabOrientation(),
                      m_titles[n],
                      bmp,
-                     n == m_sel ? wxCONTROL_FOCUSED | wxCONTROL_SELECTED : 0,
+                     flags,
                      m_accels[n]
                    );
 }
@@ -373,7 +403,7 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
         }
         else // not selected tab
         {
-            if ( rectUpdate.Intersects(rect) )
+            //if ( rectUpdate.Intersects(rect) )
             {
                 DoDrawTab(dc, rect, n);
             }
@@ -393,6 +423,61 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
 // ----------------------------------------------------------------------------
 // wxNotebook geometry
 // ----------------------------------------------------------------------------
+
+int wxNotebook::HitTest(const wxPoint& pt) const
+{
+    // first check that it is in this window at all
+    if ( !GetClientRect().Inside(pt) )
+    {
+        return -1;
+    }
+
+    wxRect rectTabs = GetAllTabsRect();
+
+    switch ( GetTabOrientation() )
+    {
+        default:
+            wxFAIL_MSG(_T("unknown tab orientation"));
+            // fall through
+
+        case wxTOP:
+            if ( pt.y > rectTabs.GetBottom() )
+                return -1;
+            break;
+
+        case wxBOTTOM:
+            if ( pt.y < rectTabs.y )
+                return -1;
+            break;
+
+        case wxLEFT:
+            if ( pt.x > rectTabs.GetRight() )
+                return -1;
+            break;
+
+        case wxRIGHT:
+            if ( pt.x < rectTabs.x )
+                return -1;
+            break;
+    }
+
+    size_t count = GetPageCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        GetTabSize(n, &rectTabs.width, &rectTabs.height);
+
+        if ( rectTabs.Inside(pt) )
+            return n;
+
+        // move the rectTabs to the next tab
+        if ( IsVertical() )
+            rectTabs.y += rectTabs.height;
+        else
+            rectTabs.x += rectTabs.width;
+    }
+
+    return -1;
+}
 
 bool wxNotebook::IsVertical() const
 {
@@ -609,12 +694,11 @@ void wxNotebook::SetPadding(const wxSize& padding)
 
 void wxNotebook::Relayout()
 {
-    wxRect rectPage = GetPageRect();
-
-    size_t count = GetPageCount();
-    for ( size_t n = 0; n < count; n++ )
+    if ( m_sel != -1 )
     {
-        m_pages[n]->SetSize(rectPage);
+        wxRect rectPage = GetPageRect();
+
+        m_pages[m_sel]->SetSize(rectPage);
     }
 }
 
@@ -725,9 +809,67 @@ bool wxNotebook::PerformAction(const wxControlAction& action,
         ChangePage(GetNextPage(TRUE));
     else if ( action == wxACTION_NOTEBOOK_PREV )
         ChangePage(GetNextPage(FALSE));
+    else if ( action == wxACTION_NOTEBOOK_GOTO )
+        ChangePage((int)numArg);
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxStdNotebookInputHandler
+// ----------------------------------------------------------------------------
+
+wxStdNotebookInputHandler::wxStdNotebookInputHandler(wxInputHandler *inphand)
+                         : wxStdInputHandler(inphand)
+{
+}
+
+bool wxStdNotebookInputHandler::HandleKey(wxControl *control,
+                                          const wxKeyEvent& event,
+                                          bool pressed)
+{
+    return wxStdInputHandler::HandleKey(control, event, pressed);
+}
+
+bool wxStdNotebookInputHandler::HandleMouse(wxControl *control,
+                                            const wxMouseEvent& event)
+{
+    if ( event.ButtonDown(1) )
+    {
+        wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+        int page = notebook->HitTest(event.GetPosition());
+        if ( page != -1 )
+        {
+            control->PerformAction(wxACTION_NOTEBOOK_GOTO, page);
+
+            return FALSE;
+        }
+    }
+
+    return wxStdInputHandler::HandleMouse(control, event);
+}
+
+bool wxStdNotebookInputHandler::HandleMouseMove(wxControl *control,
+                                                const wxMouseEvent& event)
+{
+    return wxStdInputHandler::HandleMouseMove(control, event);
+}
+
+bool wxStdNotebookInputHandler::HandleFocus(wxControl *control,
+                                            const wxFocusEvent& event)
+{
+    // buttons change appearance when they get/lose focus, so return TRUE to
+    // refresh
+    return TRUE;
+}
+
+bool wxStdNotebookInputHandler::HandleActivation(wxControl *control,
+                                                 bool activated)
+{
+    // the default button changes appearance when the app is [de]activated, so
+    // return TRUE to refresh
     return TRUE;
 }
 

@@ -38,6 +38,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/notebook.h"
 #include "wx/spinbutt.h"
 
 #include "wx/univ/renderer.h"
@@ -532,6 +533,10 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_SPINBTN )
             handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_SPINBTN
+#if wxUSE_NOTEBOOK
+        else if ( control == wxINP_HANDLER_NOTEBOOK )
+            handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_NOTEBOOK
         else
             handler = GetDefaultInputHandler();
 

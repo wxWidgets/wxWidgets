@@ -39,6 +39,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/notebook.h"
 #include "wx/spinbutt.h"
 
 #include "wx/univ/renderer.h"
@@ -839,6 +840,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_SPINBTN )
             handler = new wxStdSpinButtonInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_SPINBTN
+#if wxUSE_NOTEBOOK
+        else if ( control == wxINP_HANDLER_NOTEBOOK )
+            handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_NOTEBOOK
         else
             handler = GetDefaultInputHandler();
 
@@ -1782,10 +1787,9 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
 
     // the current tab is drawn indented (to the top for default case) and
     // bigger than the other ones
+    const wxSize indent = GetTabIndent();
     if ( flags & wxCONTROL_SELECTED )
     {
-        const wxSize indent = GetTabIndent();
-
         switch ( dir )
         {
             default:
@@ -1836,9 +1840,13 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
 
             if ( flags & wxCONTROL_SELECTED )
             {
-                // overwrite the part of the border below this tab
                 dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the border below this tab
                 dc.DrawLine(x + 1, y2, x2 - 1, y2);
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(x + 1, y2, x + 1, y + CUTOFF + indent.y - 1);
             }
             break;
 

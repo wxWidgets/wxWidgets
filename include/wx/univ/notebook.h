@@ -100,6 +100,12 @@ public:
     // bottom) as usual
     bool IsVertical() const;
 
+    // hit testing
+    // -----------
+
+    // return the tab at this position or -1 if none
+    int HitTest(const wxPoint& pt) const;
+
 protected:
     virtual wxNotebookPage *DoRemovePage(int nPage);
 
@@ -197,6 +203,26 @@ protected:
     wxSize m_sizePad;
 
     DECLARE_DYNAMIC_CLASS(wxNotebook)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdNotebookInputHandler: translates SPACE and ENTER keys and the left mouse
+// click into button press/release actions
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdNotebookInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdNotebookInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleActivation(wxControl *control, bool activated);
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_
