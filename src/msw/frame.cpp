@@ -665,7 +665,7 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
 
   // Keep this in wxFrame because it saves recoding this function
   // in wxTinyFrame
-#if wxUSE_ITSY_BITSY
+#if wxUSE_ITSY_BITSY && !defined(__WIN32__)
   if (style & wxTINY_CAPTION_VERT)
     msflags |= IBS_VERTCAPTION;
   if (style & wxTINY_CAPTION_HORIZ)
