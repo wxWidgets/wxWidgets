@@ -309,6 +309,14 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     else if (pid == 0) {
         // we're in child
         close(end_proc_detect[0]); // close reading side
+	// These three lines close the open file descriptors to
+	// to avoid any input/output which might block the process
+	// or irritate the user. If one wants proper IO for the sub-
+	// process, the "right thing to do" is to start an xterm executing
+	// it.
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 
 #ifdef _AIX
         execvp ((const char *)*argv, (const char **)argv);
