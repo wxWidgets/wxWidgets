@@ -105,18 +105,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="BASE_MAC_SRC" hints="files">
-    src/mac/dirmac.cpp
-    src/mac/mimetmac.cpp
+    src/mac/carbon/dirmac.cpp
+    src/mac/carbon/mimetmac.cpp
     src/unix/baseunix.cpp
-    src/mac/utilsexc.cpp
-    src/mac/thread.cpp
-    src/mac/macnotfy.cpp
-    src/mac/morefilex/MoreFilesX.c
+    src/mac/carbon/utilsexc.cpp
+    src/mac/carbon/thread.cpp
+    src/mac/carbon/macnotfy.cpp
+    src/mac/carbon/morefilex/MoreFilesX.c
 </set>
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
-    src/mac/utils.cpp
-    src/mac/uma.cpp
+    src/mac/carbon/utils.cpp
+    src/mac/carbon/uma.cpp
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
@@ -1526,77 +1526,77 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MAC_LOWLEVEL_HDR" hints="files">
 </set>
 <set var="MAC_SRC" hints="files">
-    src/mac/accel.cpp
-    src/mac/aga.cpp
-    src/mac/app.cpp
-    src/mac/bitmap.cpp
-    src/mac/bmpbuttn.cpp
-    src/mac/brush.cpp
-    src/mac/button.cpp
-    src/mac/checkbox.cpp
-    src/mac/checklst.cpp
-    src/mac/choice.cpp
-    src/mac/clipbrd.cpp
-    src/mac/colordlg.cpp
-    src/mac/colour.cpp
-    src/mac/combobox.cpp
-    src/mac/control.cpp
-    src/mac/cursor.cpp
-    src/mac/data.cpp
-    src/mac/dataobj.cpp
-    src/mac/dc.cpp
-    src/mac/dcclient.cpp
-    src/mac/dcmemory.cpp
-    src/mac/dcprint.cpp
-    src/mac/dcscreen.cpp
-    src/mac/dialog.cpp
-    src/mac/dirdlg.cpp
-    src/mac/display.cpp
-    src/mac/dnd.cpp
-    src/mac/filedlg.cpp
-    src/mac/font.cpp
-    src/mac/fontdlg.cpp
-    src/mac/fontenum.cpp
-    src/mac/fontutil.cpp
-    src/mac/frame.cpp
-    src/mac/gauge.cpp
-    src/mac/gdiobj.cpp
-    src/mac/gsockosx.c
-    src/mac/icon.cpp
-    src/mac/listbox.cpp
-    src/mac/mdi.cpp
-    src/mac/menu.cpp
-    src/mac/menuitem.cpp
-    src/mac/metafile.cpp
-    src/mac/minifram.cpp
-    src/mac/msgdlg.cpp
-    src/mac/notebmac.cpp
-    src/mac/palette.cpp
-    src/mac/pen.cpp
-    src/mac/pnghand.cpp
-    src/mac/printdlg.cpp
-    src/mac/printmac.cpp
-    src/mac/radiobox.cpp
-    src/mac/radiobut.cpp
-    src/mac/region.cpp
-    src/mac/renderer.cpp
-    src/mac/scrolbar.cpp
-    src/mac/settings.cpp
-    src/mac/slider.cpp
-    src/mac/spinbutt.cpp
-    src/mac/statbmp.cpp
-    src/mac/statbox.cpp
-    src/mac/statbrma.cpp
-    src/mac/statlmac.cpp
-    src/mac/stattext.cpp
-    src/mac/tabctrl.cpp
-    src/mac/textctrl.cpp
-    src/mac/timer.cpp
-    src/mac/tglbtn.cpp
-    src/mac/toolbar.cpp
-    src/mac/tooltip.cpp
-    src/mac/toplevel.cpp
-    src/mac/window.cpp
+    src/mac/carbon/accel.cpp
+    src/mac/carbon/aga.cpp
+    src/mac/carbon/app.cpp
+    src/mac/carbon/bitmap.cpp
+    src/mac/carbon/bmpbuttn.cpp
+    src/mac/carbon/brush.cpp
+    src/mac/carbon/button.cpp
+    src/mac/carbon/checkbox.cpp
+    src/mac/carbon/checklst.cpp
+    src/mac/carbon/choice.cpp
+    src/mac/carbon/clipbrd.cpp
+    src/mac/carbon/colordlg.cpp
+    src/mac/carbon/colour.cpp
+    src/mac/carbon/combobox.cpp
+    src/mac/carbon/control.cpp
+    src/mac/carbon/cursor.cpp
+    src/mac/carbon/data.cpp
+    src/mac/carbon/dataobj.cpp
+    src/mac/carbon/dc.cpp
+    src/mac/carbon/dcclient.cpp
+    src/mac/carbon/dcmemory.cpp
+    src/mac/carbon/dcprint.cpp
+    src/mac/carbon/dcscreen.cpp
+    src/mac/carbon/dialog.cpp
+    src/mac/carbon/dirdlg.cpp
+    src/mac/carbon/display.cpp
+    src/mac/carbon/dnd.cpp
+    src/mac/carbon/filedlg.cpp
+    src/mac/carbon/font.cpp
+    src/mac/carbon/fontdlg.cpp
+    src/mac/carbon/fontenum.cpp
+    src/mac/carbon/fontutil.cpp
+    src/mac/carbon/frame.cpp
+    src/mac/carbon/gauge.cpp
+    src/mac/carbon/gdiobj.cpp
+    src/mac/carbon/gsockosx.c
+    src/mac/carbon/icon.cpp
+    src/mac/carbon/listbox.cpp
+    src/mac/carbon/mdi.cpp
+    src/mac/carbon/menu.cpp
+    src/mac/carbon/menuitem.cpp
+    src/mac/carbon/metafile.cpp
+    src/mac/carbon/minifram.cpp
+    src/mac/carbon/msgdlg.cpp
+    src/mac/carbon/notebmac.cpp
+    src/mac/carbon/palette.cpp
+    src/mac/carbon/pen.cpp
+    src/mac/carbon/pnghand.cpp
+    src/mac/carbon/printdlg.cpp
+    src/mac/carbon/printmac.cpp
+    src/mac/carbon/radiobox.cpp
+    src/mac/carbon/radiobut.cpp
+    src/mac/carbon/region.cpp
+    src/mac/carbon/renderer.cpp
+    src/mac/carbon/scrolbar.cpp
+    src/mac/carbon/settings.cpp
+    src/mac/carbon/slider.cpp
+    src/mac/carbon/spinbutt.cpp
+    src/mac/carbon/statbmp.cpp
+    src/mac/carbon/statbox.cpp
+    src/mac/carbon/statbrma.cpp
+    src/mac/carbon/statlmac.cpp
+    src/mac/carbon/stattext.cpp
+    src/mac/carbon/tabctrl.cpp
+    src/mac/carbon/textctrl.cpp
+    src/mac/carbon/timer.cpp
+    src/mac/carbon/tglbtn.cpp
+    src/mac/carbon/toolbar.cpp
+    src/mac/carbon/tooltip.cpp
+    src/mac/carbon/toplevel.cpp
+    src/mac/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
     src/generic/fdrepdlg.cpp
@@ -1610,86 +1610,86 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/snglinst.cpp
 </set>
 <set var="MAC_HDR" hints="files">
-    wx/mac/accel.h
-    wx/mac/aga.h
-    wx/mac/app.h
-    wx/mac/bitmap.h
-    wx/mac/bmpbuttn.h
-    wx/mac/brush.h
-    wx/mac/button.h
-    wx/mac/checkbox.h
-    wx/mac/checklst.h
-    wx/mac/chkconf.h
-    wx/mac/choice.h
-    wx/mac/clipbrd.h
-    wx/mac/colordlg.h
-    wx/mac/colour.h
-    wx/mac/combobox.h
-    wx/mac/control.h
-    wx/mac/cursor.h
-    wx/mac/dataform.h
-    wx/mac/dataobj.h
-    wx/mac/dataobj2.h
-    wx/mac/dc.h
-    wx/mac/dcclient.h
-    wx/mac/dcmemory.h
-    wx/mac/dcprint.h
-    wx/mac/dcscreen.h
-    wx/mac/dialog.h
-    wx/mac/dirdlg.h
-    wx/mac/display.h
-    wx/mac/dnd.h
-    wx/mac/filedlg.h
-    wx/mac/font.h
-    wx/mac/fontdlg.h
-    wx/mac/frame.h
-    wx/mac/gauge.h
-    wx/mac/gdiobj.h
-    wx/mac/gsockmac.h
-    wx/mac/helpxxxx.h
-    wx/mac/icon.h
-    wx/mac/imaglist.h
-    wx/mac/listbox.h
-    wx/mac/listctrl.h
-    wx/mac/macnotfy.h
-    wx/mac/macsock.h
-    wx/mac/mdi.h
-    wx/mac/menu.h
-    wx/mac/menuitem.h
-    wx/mac/metafile.h
-    wx/mac/mimetype.h
-    wx/mac/minifram.h
-    wx/mac/msgdlg.h
-    wx/mac/notebook.h
-    wx/mac/palette.h
-    wx/mac/pen.h
-    wx/mac/pnghand.h
-    wx/mac/pngread.h
-    wx/mac/printdlg.h
-    wx/mac/printmac.h
-    wx/mac/private.h
-    wx/mac/radiobox.h
-    wx/mac/radiobut.h
-    wx/mac/region.h
-    wx/mac/scrolbar.h
-    wx/mac/slider.h
-    wx/mac/spinbutt.h
-    wx/mac/spinctrl.h
-    wx/mac/statbmp.h
-    wx/mac/statbox.h
-    wx/mac/statline.h
-    wx/mac/stattext.h
-    wx/mac/statusbr.h
-    wx/mac/tabctrl.h
-    wx/mac/textctrl.h
-    wx/mac/timer.h
-    wx/mac/tglbtn.h
-    wx/mac/toolbar.h
-    wx/mac/tooltip.h
-    wx/mac/toplevel.h
-    wx/mac/treectrl.h
-    wx/mac/uma.h
-    wx/mac/window.h
+    wx/mac/carbon/accel.h
+    wx/mac/carbon/aga.h
+    wx/mac/carbon/app.h
+    wx/mac/carbon/bitmap.h
+    wx/mac/carbon/bmpbuttn.h
+    wx/mac/carbon/brush.h
+    wx/mac/carbon/button.h
+    wx/mac/carbon/checkbox.h
+    wx/mac/carbon/checklst.h
+    wx/mac/carbon/chkconf.h
+    wx/mac/carbon/choice.h
+    wx/mac/carbon/clipbrd.h
+    wx/mac/carbon/colordlg.h
+    wx/mac/carbon/colour.h
+    wx/mac/carbon/combobox.h
+    wx/mac/carbon/control.h
+    wx/mac/carbon/cursor.h
+    wx/mac/carbon/dataform.h
+    wx/mac/carbon/dataobj.h
+    wx/mac/carbon/dataobj2.h
+    wx/mac/carbon/dc.h
+    wx/mac/carbon/dcclient.h
+    wx/mac/carbon/dcmemory.h
+    wx/mac/carbon/dcprint.h
+    wx/mac/carbon/dcscreen.h
+    wx/mac/carbon/dialog.h
+    wx/mac/carbon/dirdlg.h
+    wx/mac/carbon/display.h
+    wx/mac/carbon/dnd.h
+    wx/mac/carbon/filedlg.h
+    wx/mac/carbon/font.h
+    wx/mac/carbon/fontdlg.h
+    wx/mac/carbon/frame.h
+    wx/mac/carbon/gauge.h
+    wx/mac/carbon/gdiobj.h
+    wx/mac/carbon/gsockmac.h
+    wx/mac/carbon/helpxxxx.h
+    wx/mac/carbon/icon.h
+    wx/mac/carbon/imaglist.h
+    wx/mac/carbon/listbox.h
+    wx/mac/carbon/listctrl.h
+    wx/mac/carbon/macnotfy.h
+    wx/mac/carbon/macsock.h
+    wx/mac/carbon/mdi.h
+    wx/mac/carbon/menu.h
+    wx/mac/carbon/menuitem.h
+    wx/mac/carbon/metafile.h
+    wx/mac/carbon/mimetype.h
+    wx/mac/carbon/minifram.h
+    wx/mac/carbon/msgdlg.h
+    wx/mac/carbon/notebook.h
+    wx/mac/carbon/palette.h
+    wx/mac/carbon/pen.h
+    wx/mac/carbon/pnghand.h
+    wx/mac/carbon/pngread.h
+    wx/mac/carbon/printdlg.h
+    wx/mac/carbon/printmac.h
+    wx/mac/carbon/private.h
+    wx/mac/carbon/radiobox.h
+    wx/mac/carbon/radiobut.h
+    wx/mac/carbon/region.h
+    wx/mac/carbon/scrolbar.h
+    wx/mac/carbon/slider.h
+    wx/mac/carbon/spinbutt.h
+    wx/mac/carbon/spinctrl.h
+    wx/mac/carbon/statbmp.h
+    wx/mac/carbon/statbox.h
+    wx/mac/carbon/statline.h
+    wx/mac/carbon/stattext.h
+    wx/mac/carbon/statusbr.h
+    wx/mac/carbon/tabctrl.h
+    wx/mac/carbon/textctrl.h
+    wx/mac/carbon/timer.h
+    wx/mac/carbon/tglbtn.h
+    wx/mac/carbon/toolbar.h
+    wx/mac/carbon/tooltip.h
+    wx/mac/carbon/toplevel.h
+    wx/mac/carbon/treectrl.h
+    wx/mac/carbon/uma.h
+    wx/mac/carbon/window.h
     <!-- Generic implementations used by wxMac: -->
     wx/generic/caret.h
     wx/generic/fdrepdlg.h
@@ -1787,7 +1787,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tabg.cpp
     src/generic/timer.cpp
     <!-- wxMac stuff used by wxCocoa: -->
-    src/mac/gsockosx.c
+    src/mac/carbon/gsockosx.c
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h
@@ -2023,12 +2023,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_MAC_SRC" hints="files">
-    src/mac/joystick.cpp
-    src/mac/sound.cpp
+    src/mac/carbon/joystick.cpp
+    src/mac/carbon/sound.cpp
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
-    wx/mac/joystick.h
-    wx/mac/sound.h
+    wx/mac/carbon/joystick.h
+    wx/mac/carbon/sound.h
 </set>
 
 <set var="ADVANCED_OS2_SRC" hints="files">
@@ -2134,7 +2134,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="OPENGL_SRC" hints="files">
-    <if cond="TOOLKIT=='MAC'">src/mac/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='MAC'">src/mac/carbon/glcanvas.cpp</if>
     <if cond="TOOLKIT=='GTK'">src/gtk/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp</if>
@@ -2143,7 +2143,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="OPENGL_HDR" hints="files">
-    <if cond="TOOLKIT=='MAC'">wx/mac/glcanvas.h</if>
+    <if cond="TOOLKIT=='MAC'">wx/mac/carbon/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK'">wx/gtk/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h</if>
