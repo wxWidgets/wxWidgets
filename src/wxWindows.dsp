@@ -401,6 +401,10 @@ SOURCE=.\common\dcbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\debugrpt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\dircmn.cpp
 # End Source File
 # Begin Source File
@@ -915,6 +919,10 @@ SOURCE=.\generic\choicdgg.cpp
 # Begin Source File
 
 SOURCE=.\generic\datectlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\dbgrptg.cpp
 # End Source File
 # Begin Source File
 
@@ -2136,6 +2144,10 @@ SOURCE=..\include\wx\dde.h
 # Begin Source File
 
 SOURCE=..\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
 

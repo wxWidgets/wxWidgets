@@ -236,6 +236,7 @@ ALL_BASE_HEADERS =  \
 	wx/datstrm.h \
 	wx/dde.h \
 	wx/debug.h \
+	wx/debugrpt.h \
 	wx/defs.h \
 	wx/dir.h \
 	wx/dlimpexp.h \
@@ -350,6 +351,7 @@ ALL_BASE_SOURCES =  \
 	src/common/config.cpp \
 	src/common/datetime.cpp \
 	src/common/datstrm.cpp \
+	src/common/debugrpt.cpp \
 	src/common/dircmn.cpp \
 	src/common/dynarray.cpp \
 	src/common/dynlib.cpp \
@@ -482,6 +484,7 @@ MONODLL_OBJECTS =  \
 	monodll_config.o \
 	monodll_datetime.o \
 	monodll_datstrm.o \
+	monodll_debugrpt.o \
 	monodll_dircmn.o \
 	monodll_dynarray.o \
 	monodll_dynlib.o \
@@ -569,6 +572,7 @@ MONOLIB_OBJECTS =  \
 	monolib_config.o \
 	monolib_datetime.o \
 	monolib_datstrm.o \
+	monolib_debugrpt.o \
 	monolib_dircmn.o \
 	monolib_dynarray.o \
 	monolib_dynlib.o \
@@ -658,6 +662,7 @@ BASEDLL_OBJECTS =  \
 	basedll_config.o \
 	basedll_datetime.o \
 	basedll_datstrm.o \
+	basedll_debugrpt.o \
 	basedll_dircmn.o \
 	basedll_dynarray.o \
 	basedll_dynlib.o \
@@ -730,6 +735,7 @@ BASELIB_OBJECTS =  \
 	baselib_config.o \
 	baselib_datetime.o \
 	baselib_datstrm.o \
+	baselib_debugrpt.o \
 	baselib_dircmn.o \
 	baselib_dynarray.o \
 	baselib_dynlib.o \
@@ -2784,6 +2790,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_dcpsg.o \
+	monodll_dbgrptg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
 	monodll_listbkg.o \
@@ -2932,6 +2939,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_dcpsg.o \
+	monodll_dbgrptg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
 	monodll_listbkg.o \
@@ -4236,6 +4244,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_dcpsg.o \
+	monolib_dbgrptg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
 	monolib_listbkg.o \
@@ -4384,6 +4393,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_dcpsg.o \
+	monolib_dbgrptg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
 	monolib_listbkg.o \
@@ -5916,6 +5926,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_dcpsg.o \
+	coredll_dbgrptg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
 	coredll_listbkg.o \
@@ -6064,6 +6075,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_dcpsg.o \
+	coredll_dbgrptg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
 	coredll_listbkg.o \
@@ -7108,6 +7120,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_dcpsg.o \
+	corelib_dbgrptg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
 	corelib_listbkg.o \
@@ -7256,6 +7269,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_dcpsg.o \
+	corelib_dbgrptg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
 	corelib_listbkg.o \
@@ -9895,6 +9909,9 @@ monodll_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONODLL_ODEP)
 
 monodll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
+
+monodll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
 
 monodll_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
@@ -13118,6 +13135,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
+@COND_USE_GUI_1@monodll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
+
 @COND_USE_GUI_1@monodll_dirctrlg.o: $(srcdir)/src/generic/dirctrlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dirctrlg.cpp
 
@@ -13321,6 +13341,9 @@ monolib_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONOLIB_ODEP)
 
 monolib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
+
+monolib_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
 
 monolib_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
@@ -16544,6 +16567,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
+@COND_USE_GUI_1@monolib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
+
 @COND_USE_GUI_1@monolib_dirctrlg.o: $(srcdir)/src/generic/dirctrlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dirctrlg.cpp
 
@@ -16750,6 +16776,9 @@ basedll_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASEDLL_ODEP)
 
 basedll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
+
+basedll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
 
 basedll_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
@@ -17293,6 +17322,9 @@ baselib_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASELIB_ODEP)
 
 baselib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
+
+baselib_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
 
 baselib_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
@@ -20366,6 +20398,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
+@COND_USE_GUI_1@coredll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
+
 @COND_USE_GUI_1@coredll_dirctrlg.o: $(srcdir)/src/generic/dirctrlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dirctrlg.cpp
 
@@ -22862,6 +22897,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
+@COND_USE_GUI_1@corelib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
+
 @COND_USE_GUI_1@corelib_dirctrlg.o: $(srcdir)/src/generic/dirctrlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dirctrlg.cpp
 
@@ -24408,6 +24446,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
 	cp $(SAMPDIR)/listctrl/bitmaps/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
 
+	mkdir $(DISTDIR)/samples/mediaplayer
+	cp $(SAMPDIR)/mediaplayer/Makefile.in $(DISTDIR)/samples/mediaplayer
+	cp $(SAMPDIR)/mediaplayer/*.cpp $(DISTDIR)/samples/mediaplayer
+
 	mkdir $(DISTDIR)/samples/mdi
 	mkdir $(DISTDIR)/samples/mdi/bitmaps
 	cp $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
@@ -24494,6 +24536,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/png/*.cpp $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.h $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.png $(DISTDIR)/samples/png
+
+	mkdir $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/Makefile.in $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/makefile.unx $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/*.cpp $(DISTDIR)/samples/popup
 
 	mkdir $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
@@ -24638,6 +24685,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
 
+	mkdir $(DISTDIR)/samples/vscroll
+	cp $(SAMPDIR)/vscroll/Makefile.in $(DISTDIR)/samples/vscroll
+	cp $(SAMPDIR)/vscroll/*.cpp $(DISTDIR)/samples/vscroll
+
 	mkdir $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/makefile.unx $(DISTDIR)/samples/wizard
@@ -24651,6 +24702,17 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
 	cp $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
 	cp $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
+
+	mkdir $(DISTDIR)/samples/xrc
+	mkdir $(DISTDIR)/samples/xrc/rc
+	cp $(SAMPDIR)/xrc/Makefile.in $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.cpp $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.h $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.rc $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/widgets/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils

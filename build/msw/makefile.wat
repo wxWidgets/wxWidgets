@@ -348,6 +348,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_dcpsg.obj &
+	$(OBJS)\monodll_dbgrptg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_listbkg.obj &
@@ -546,6 +547,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_dcpsg.obj &
+	$(OBJS)\monodll_dbgrptg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_listbkg.obj &
@@ -864,6 +866,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_dcpsg.obj &
+	$(OBJS)\monolib_dbgrptg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_listbkg.obj &
@@ -1062,6 +1065,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_dcpsg.obj &
+	$(OBJS)\monolib_dbgrptg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_listbkg.obj &
@@ -1335,6 +1339,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_choicdgg.obj &
 	$(OBJS)\coredll_choicbkg.obj &
 	$(OBJS)\coredll_dcpsg.obj &
+	$(OBJS)\coredll_dbgrptg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_listbkg.obj &
@@ -1533,6 +1538,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_choicdgg.obj &
 	$(OBJS)\coredll_choicbkg.obj &
 	$(OBJS)\coredll_dcpsg.obj &
+	$(OBJS)\coredll_dbgrptg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_listbkg.obj &
@@ -1740,6 +1746,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_choicdgg.obj &
 	$(OBJS)\corelib_choicbkg.obj &
 	$(OBJS)\corelib_dcpsg.obj &
+	$(OBJS)\corelib_dbgrptg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_listbkg.obj &
@@ -1938,6 +1945,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_choicdgg.obj &
 	$(OBJS)\corelib_choicbkg.obj &
 	$(OBJS)\corelib_dcpsg.obj &
+	$(OBJS)\corelib_dbgrptg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_listbkg.obj &
@@ -2481,6 +2489,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_config.obj &
 	$(OBJS)\monodll_datetime.obj &
 	$(OBJS)\monodll_datstrm.obj &
+	$(OBJS)\monodll_debugrpt.obj &
 	$(OBJS)\monodll_dircmn.obj &
 	$(OBJS)\monodll_dynarray.obj &
 	$(OBJS)\monodll_dynlib.obj &
@@ -2588,6 +2597,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_config.obj &
 	$(OBJS)\monolib_datetime.obj &
 	$(OBJS)\monolib_datstrm.obj &
+	$(OBJS)\monolib_debugrpt.obj &
 	$(OBJS)\monolib_dircmn.obj &
 	$(OBJS)\monolib_dynarray.obj &
 	$(OBJS)\monolib_dynlib.obj &
@@ -2695,6 +2705,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_config.obj &
 	$(OBJS)\basedll_datetime.obj &
 	$(OBJS)\basedll_datstrm.obj &
+	$(OBJS)\basedll_debugrpt.obj &
 	$(OBJS)\basedll_dircmn.obj &
 	$(OBJS)\basedll_dynarray.obj &
 	$(OBJS)\basedll_dynlib.obj &
@@ -2787,6 +2798,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_config.obj &
 	$(OBJS)\baselib_datetime.obj &
 	$(OBJS)\baselib_datstrm.obj &
+	$(OBJS)\baselib_debugrpt.obj &
 	$(OBJS)\baselib_dircmn.obj &
 	$(OBJS)\baselib_dynarray.obj &
 	$(OBJS)\baselib_dynlib.obj &
@@ -4099,6 +4111,9 @@ $(OBJS)\monodll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
@@ -5684,6 +5699,11 @@ $(OBJS)\monodll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -5870,6 +5890,9 @@ $(OBJS)\monolib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
@@ -7455,6 +7478,11 @@ $(OBJS)\monolib_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -7644,6 +7672,9 @@ $(OBJS)\basedll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
@@ -7878,6 +7909,9 @@ $(OBJS)\baselib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
@@ -9319,6 +9353,11 @@ $(OBJS)\coredll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -10549,6 +10588,11 @@ $(OBJS)\corelib_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
