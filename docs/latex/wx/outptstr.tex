@@ -18,11 +18,13 @@ wxOutputStream is an abstract base class which may not be used directly.
 % -----------
 % ctor & dtor
 % -----------
+
 \membersection{wxOutputStream::wxOutputStream}
 
 \func{}{wxOutputStream}{\void}
 
 Creates a dummy wxOutputStream object.
+
 
 \membersection{wxOutputStream::\destruct{wxOutputStream}}
 
@@ -30,11 +32,15 @@ Creates a dummy wxOutputStream object.
 
 Destructor.
 
-\membersection{wxOutputStream::LastWrite}
+
+\membersection{wxOutputStream::LastWrite}\label{wxoutputstreamlastwrite}
 
 \constfunc{size\_t}{LastWrite}{\void}
 
-Returns the number of bytes written during the last Write().
+Returns the number of bytes written during the last 
+\helpref{Write()}{wxoutputstreamwrite}. It may return $0$ even if there is no
+error on the stream if it is only temporarily impossible to write to it.
+
 
 \membersection{wxOutputStream::PutC}
 
@@ -42,6 +48,7 @@ Returns the number of bytes written during the last Write().
 
 Puts the specified character in the output queue and increments the
 stream position.
+
 
 \membersection{wxOutputStream::SeekO}\label{wxoutputstreamseeko}
 
@@ -59,18 +66,24 @@ Changes the stream current position.
 
 The new stream position or wxInvalidOffset on error.
 
+
 \membersection{wxOutputStream::TellO}
 
 \constfunc{off\_t}{TellO}{\void}
 
 Returns the current stream position.
 
-\membersection{wxOutputStream::Write}
+
+\membersection{wxOutputStream::Write}\label{wxoutputstreamwrite}
 
 \func{wxOutputStream\&}{Write}{\param{const void *}{buffer}, \param{size\_t}{ size}}
 
-Writes the specified amount of bytes using the data of {\it buffer}. 
-{\it WARNING!} The buffer absolutely needs to have at least the specified size.
+Writes up to the specified amount of bytes using the data of {\it buffer}. Note
+that not all data can always be written so you must check the number of bytes
+really written to the stream using \helpref{LastWrite()}{wxoutputstreamlastwrite} 
+when this function returns. In some cases (for example a write end of a pipe
+which is currently full) it is even possible that there is no errors and zero
+bytes have been written.
 
 This function returns a reference on the current object, so the user can test
 any states of the stream right away.
