@@ -1126,6 +1126,8 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
 {
     wxGenericTreeItem *item = itemId.m_pItem;
 
+    wxCHECK_RET( item, _T("invalid item in wxTreeCtrl::Expand") );
+
     if ( !item->HasPlus() )
         return;
 
@@ -1136,7 +1138,6 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
     event.m_item = item;
     event.SetEventObject( this );
 
-//  if ( ProcessEvent( event ) && event.m_code )  TODO: Was this a typo ?
     if ( ProcessEvent( event ) && !event.IsAllowed() )
     {
         // cancelled by program
@@ -1150,6 +1151,22 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
 
     event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
     ProcessEvent( event );
+}
+
+void wxTreeCtrl::ExpandAll(const wxTreeItemId& item)
+{
+    Expand(item);
+    if ( IsExpanded(item) )
+    {
+        long cookie;
+        wxTreeItemId child = GetFirstChild(item, cookie);
+        while ( child.IsOk() )
+        {
+            ExpandAll(child);
+
+            child = GetNextChild(item, cookie);
+        }
+    }
 }
 
 void wxTreeCtrl::Collapse(const wxTreeItemId& itemId)
@@ -1866,7 +1883,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
 
     // + : Expand
     // - : Collaspe
-    // * : Toggle Expand/Collapse
+    // * : Expand all/Collapse all
     // ' ' | return : activate
     // up    : go up (not last children!)
     // down  : go down
@@ -1884,17 +1901,22 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
             }
             break;
 
+        case '*':
+        case WXK_MULTIPLY:
+            if ( !IsExpanded(m_current) )
+            {
+                // expand all
+                ExpandAll(m_current);
+                break;
+            }
+            //else: fall through to Collapse() it
+
         case '-':
         case WXK_SUBTRACT:
             if (IsExpanded(m_current))
             {
                 Collapse(m_current);
             }
-            break;
-
-        case '*':
-        case WXK_MULTIPLY:
-            Toggle(m_current);
             break;
 
         case ' ':

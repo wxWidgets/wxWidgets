@@ -197,16 +197,6 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info) const
     if (info == NULL)
         return FALSE;
 
-    // For some reason, when making/using a DLL, static data has to be included
-    // in both the DLL and the application. This can lead to duplicate
-    // wxClassInfo objects, so we have to test the name instead of the pointers.
-    // PROBABLY NO LONGER TRUE now I've done DLL creation right.
-    /*
-#if WXMAKINGDLL
-if (GetClassName() && info->GetClassName() && (wxStrcmp(GetClassName(), info->GetClassName()) == 0))
-return TRUE;
-#else
-     */
     if (this == info)
         return TRUE;
 
