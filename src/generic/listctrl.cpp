@@ -571,12 +571,17 @@ public:
     void ReverseHighlight( size_t line )
         { HighlightLine(line, !IsHighlighted(line)); RefreshLine(line); }
 
+    // return true if the line is highlighted
+    bool IsHighlighted(size_t line) const;
+
     // refresh one or several lines at once
     void RefreshLine( size_t line );
     void RefreshLines( size_t lineFrom, size_t lineTo );
 
-    // return true if the line is highlighted
-    bool IsHighlighted(size_t line) const;
+    // refresh all lines below the given one: the difference with
+    // RefreshLines() is that the index here might not be a valid one (happens
+    // when the last line is deleted)
+    void RefreshAfter( size_t lineFrom );
 
     // the methods which are forwarded to wxListLineData itself in list/icon
     // modes but are here because the lines don't store their positions in the
@@ -2340,6 +2345,8 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
     // we suppose that they are ordered by caller
     wxASSERT_MSG( lineFrom <= lineTo, _T("indices in disorder") );
 
+    wxASSERT_MSG( lineTo < GetItemCount(), _T("invalid line range") );
+
     if ( HasFlag(wxLC_REPORT) )
     {
         size_t visibleFrom, visibleTo;
@@ -2366,6 +2373,36 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
         {
             RefreshLine(line);
         }
+    }
+}
+
+void wxListMainWindow::RefreshAfter( size_t lineFrom )
+{
+    if ( HasFlag(wxLC_REPORT) )
+    {
+        size_t visibleFrom;
+        GetVisibleLinesRange(&visibleFrom, NULL);
+
+        if ( lineFrom < visibleFrom )
+            lineFrom = visibleFrom;
+
+        wxRect rect;
+        rect.x = 0;
+        rect.y = GetLineY(lineFrom);
+
+        wxSize size = GetClientSize();
+        rect.width = size.x;
+        // refresh till the bottom of the window
+        rect.height = size.y - rect.y;
+
+        CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+        RefreshRect( rect );
+    
+    }
+    else // !report
+    {
+        // TODO: how to do it more efficiently?
+        m_dirty = TRUE;
     }
 }
 
@@ -3702,14 +3739,8 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     if ( InReportView() )
     {
-        if ( m_lineTo == GetItemCount() - 1 )
-        {
-            m_lineTo--;
-        }
+        ResetVisibleLinesRange();
     }
-
-    // refresh before removing the line
-    RefreshLines(index, GetItemCount() - 1);
 
     if ( IsVirtual() )
     {
@@ -3721,6 +3752,8 @@ void wxListMainWindow::DeleteItem( long lindex )
     {
         m_lines.RemoveAt( index );
     }
+
+    RefreshAfter(index);
 }
 
 void wxListMainWindow::DeleteColumn( int col )
@@ -3758,6 +3791,11 @@ void wxListMainWindow::DeleteAllItems()
     {
         m_countVirt = 0;
 
+        ResetVisibleLinesRange();
+    }
+
+    if ( InReportView() )
+    {
         ResetVisibleLinesRange();
     }
 
@@ -4001,6 +4039,9 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         if ( m_lineTo >= count )
             m_lineTo = count - 1;
     }
+
+    wxASSERT_MSG( m_lineFrom <= m_lineTo && m_lineTo < GetItemCount(),
+                  _T("GetVisibleLinesRange() returns incorrect result") );
 
     if ( from )
         *from = m_lineFrom;
