@@ -138,7 +138,7 @@ typedef struct
 } unz_s;
 
 #if defined (__VISAGECPP__)
-// VA always requires prototypes
+/* VA always requires prototypes */
 int unzlocal_CheckCurrentFileCoherencyHeader (unz_s*, uInt*, uLong*, uInt*);
 #endif
 
@@ -1310,7 +1310,7 @@ extern int ZEXPORT unzGetGlobalComment (file, szComment, uSizeBuf)
 
 #else
 
-// the file shouldn't be empty, som compilers don't like it
+/* the file shouldn't be empty, som compilers don't like it */
 static const int dummyVariableInUnzip = 17;
 
-#endif // wxUSE_ZLIB && wxUSE_ZIPSTREAM
+#endif /* wxUSE_ZLIB && wxUSE_ZIPSTREAM */
