@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!--
+Presents for building wxWidgets applications.
+
+FIXME: docs
+-->
+
+
+<makefile>
+    
+    <!-- this is just a wrapper that includes the real implementation: -->
+
+    <set var="__wx_included_impl">0</set>
+
+    <if cond="FORMAT in ['autoconf','gnu']">
+        <include file="wx_unix.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+        <include file="wx_win32.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="__wx_included_impl=='0'">
+        <error>This format is not (yet) supported by wx preset.</error>
+    </if>
+
+</makefile>

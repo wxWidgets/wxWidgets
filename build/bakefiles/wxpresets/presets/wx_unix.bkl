@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!--
+Presents for building wxWidgets applications using Autoconf or GNU toosets.
+See wx.bkl for platform-independent notes.
+
+Usage:
+    Options WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS are defined.
+    
+
+Format-specific notes:
+
+* autoconf:
+        Beware that you have to use AM_OPTIONS_WXCONFIG and
+        AM_PATH_WXCONFIG in your configure.in!
+
+-->
+
+
+<makefile>
+
+    <!-- ============================================================== -->
+    <!--                           Autoconf                             -->
+    <!-- ============================================================== -->
+    
+    <if cond="FORMAT=='autoconf'">
+        <!-- Autoconf backend is simplicity itself thanks to wx-config... -->
+        <option name="WX_CFLAGS"/>
+        <option name="WX_CXXFLAGS"/>
+        <option name="WX_CPPFLAGS"/>
+        <option name="WX_LIBS"/>
+    </if>
+    
+    <!-- ============================================================== -->
+    <!--                   GNU makefiles for Unix                       -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT=='gnu'">
+        <option name="WX_CONFIG">
+            <default-value>wx-config</default-value>
+            <description>Location and arguments of wx-config script</description>
+        </option>
+        <option name="WX_CFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cflags`</default-value>
+            <description>C flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_CXXFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cxxflags`</default-value>
+            <description>C++ flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_CPPFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cppflags`</default-value>
+            <description>C preprocessor flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_LIBS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --libs`</default-value>
+            <description>wxWidgets libraries to link against</description>
+        </option>
+
+        <!-- we need this but the trick used in default-values above
+             prevents bakefile from detecting it: -->
+        <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG</set>
+    </if>
+    
+    <!-- ============================================================== -->
+    <!--                          Common code                           -->
+    <!-- ============================================================== -->
+    
+    <if cond="FORMAT not in ['gnu','autoconf']">
+        <error>
+            Don't include presets/wx_unix.bkl directly, use presets/wx.bkl.
+        </error>
+    </if>
+    
+    <template id="wx">
+        <cxxflags>$(WX_CXXFLAGS)</cxxflags>
+        <cflags>$(WX_CFLAGS)</cflags>
+        <ldlibs>$(WX_LIBS)</ldlibs>
+    </template>
+
+    <!-- not used together with wx-config: -->
+    <define-tag name="wx-lib" rules="exe,dll,module"/>
+
+</makefile>
