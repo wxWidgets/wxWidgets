@@ -51,6 +51,7 @@ All:
 - Various changes to how wxListCtrl and wxTreeCtrl react to right
   mouse clicks and left mouse click for starting a drag operation.
 - "Alt" key (VK_MENU) now results in WXK_ALT keyboard event, not WXK_MENU
+- wxFFile::ReadAll() now takes an optional wxMBConv parameter
 
 
 All (GUI):

@@ -103,7 +103,7 @@ bool wxFFile::Close()
 // read/write
 // ----------------------------------------------------------------------------
 
-bool wxFFile::ReadAll(wxString *str)
+bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
 {
     wxCHECK_MSG( str, false, wxT("invalid parameter") );
     wxCHECK_MSG( IsOpened(), false, wxT("can't read from closed file") );
@@ -113,25 +113,17 @@ bool wxFFile::ReadAll(wxString *str)
 
     clearerr(m_fp);
 
-    str->Empty();
-    str->Alloc(length);
-
-    wxChar buf[1024];
-    static const size_t nSize = WXSIZEOF(buf) - 1; // -1 for trailing '\0'
-    while ( !Eof() )
+    const size_t fileLen = Length();
+    wxCharBuffer buf(fileLen + 1);
+    if ( (fread(buf.data(), sizeof(char), fileLen, m_fp) < fileLen) || Error() ) 
     {
-        size_t nRead = fread(buf, sizeof(wxChar), nSize, m_fp);
-        if ( (nRead < nSize) && Error() )
-        {
-            wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
+        wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
 
-            return false;
-        }
-        //else: just EOF
-
-        buf[nRead] = 0;
-        *str += buf;
+        return false;
     }
+
+    buf.data()[fileLen] = 0;
+    *str = wxString(buf, conv);
 
     return true;
 }

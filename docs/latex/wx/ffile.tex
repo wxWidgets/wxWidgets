@@ -208,6 +208,24 @@ Reads the specified number of bytes into a buffer, returning the actual number r
 The number of bytes read.
 
 
+\membersection{wxFFile::ReadAll}\label{wxffilereadall}
+
+\func{bool}{ReadAll}{\param{wxString *}{ str}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+
+Reads the entire contents of the file into a string.
+
+\wxheading{Parameters}
+
+\docparam{str}{String to read data into.}
+
+\docparam{conv}{Conversion object to use in Unicode build; by default supposes
+that file contents is encoded in UTF-8.}
+
+\wxheading{Return value}
+
+\true if file was read successfully, \false otherwise.
+
+
 \membersection{wxFFile::Seek}\label{wxffileseek}
 
 \func{bool}{Seek}{\param{wxFileOffset }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}

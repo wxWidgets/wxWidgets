@@ -60,7 +60,7 @@ public:
 
   // read/write (unbuffered)
     // read all data from the file into a string (useful for text files)
-  bool ReadAll(wxString *str);
+  bool ReadAll(wxString *str, wxMBConv& conv = wxConvUTF8);
     // returns number of bytes read - use Eof() and Error() to see if an error
     // occured or not
   size_t Read(void *pBuf, size_t nCount);
