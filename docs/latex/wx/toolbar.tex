@@ -62,6 +62,13 @@ window is passed and the tool id is retrieved from the wxCommandEvent.
 This is because the id may be -1 when the mouse moves off a tool, and -1 is not
 allowed as an identifier in the event system.
 
+Note that tool commands (and UI update events for tools) are first sent to
+the focus window within the frame that contains the toolbar. If no window within the frame has the focus,
+then the events are sent directly to the toolbar (and up the hierarchy to the
+frame, depending on where the application has put its event handlers). This allows command and UI update
+handling to be processed by specific windows and controls, and not necessarily
+by the application frame.
+
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_TOOL(id, func)}}{Process a wxEVT\_COMMAND\_TOOL\_CLICKED event

@@ -65,6 +65,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
+
+    EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
+    EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
+    EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
+    EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
+    EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
+
+    EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
+    EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
+    EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
+    EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
+    EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
 
 #ifndef NO_TEXT_WINDOW_STREAM
@@ -931,3 +943,52 @@ void wxTextCtrl::ApplyWidgetStyle()
     }
 }
 
+void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
+{
+    Cut();
+}
+
+void wxTextCtrl::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    Copy();
+}
+
+void wxTextCtrl::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    Paste();
+}
+
+void wxTextCtrl::OnUndo(wxCommandEvent& WXUNUSED(event))
+{
+    Undo();
+}
+
+void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
+{
+    Redo();
+}
+
+void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCut() );
+}
+
+void wxTextCtrl::OnUpdateCopy(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCopy() );
+}
+
+void wxTextCtrl::OnUpdatePaste(wxUpdateUIEvent& event)
+{
+    event.Enable( CanPaste() );
+}
+
+void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanUndo() );
+}
+
+void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanRedo() );
+}

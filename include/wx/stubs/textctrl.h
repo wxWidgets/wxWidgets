@@ -141,7 +141,18 @@ public:
   void OnDropFiles(wxDropFilesEvent& event);
 //  void OnChar(wxKeyEvent& event); // Process 'enter' if required
 //  void OnEraseBackground(wxEraseEvent& event);
-  
+  void OnCut(wxCommandEvent& event);
+  void OnCopy(wxCommandEvent& event);
+  void OnPaste(wxCommandEvent& event);
+  void OnUndo(wxCommandEvent& event);
+  void OnRedo(wxCommandEvent& event);
+
+  void OnUpdateCut(wxUpdateUIEvent& event);
+  void OnUpdateCopy(wxUpdateUIEvent& event);
+  void OnUpdatePaste(wxUpdateUIEvent& event);
+  void OnUpdateUndo(wxUpdateUIEvent& event);
+  void OnUpdateRedo(wxUpdateUIEvent& event);
+
   // Implementation
   // --------------
   virtual void Command(wxCommandEvent& event);

@@ -555,3 +555,26 @@ bool wxEvtHandler::OnClose()
 }
 #endif // WXWIN_COMPATIBILITY
 
+// Find a window with the focus, that is also a descendant of the given window.
+// This is used to determine the window to initially send commands to.
+wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
+{
+    // Process events starting with the window with the focus, if any.
+    wxWindow* focusWin = wxWindow::FindFocus();
+    wxWindow* win = focusWin;
+
+    // Check if this is a descendant of this frame.
+    // If not, win will be set to NULL.
+    while (win)
+    {
+        if (win == ancestor)
+            break;
+        else
+            win = win->GetParent();
+    }
+    if (win == (wxWindow*) NULL)
+        focusWin = (wxWindow*) NULL;
+
+    return focusWin;
+}
+

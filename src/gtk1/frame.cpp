@@ -654,7 +654,13 @@ void wxFrame::Command( int id )
     {
         bar->Check(id,!bar->Checked(id)) ;
     }
-    GetEventHandler()->ProcessEvent(commandEvent);
+
+    // Process events starting with the window with the focus, if any.
+    wxWindow* focusWin = wxFindFocusDescendant(this);
+
+    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler();
+
+    evtHandler->ProcessEvent(commandEvent);
 }
 
 void wxFrame::SetStatusText(const wxString& text, int number)

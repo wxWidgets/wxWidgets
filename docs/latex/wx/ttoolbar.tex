@@ -13,8 +13,7 @@ Instead of supplying one toolbar class with a number
 of different implementations depending on platform, wxWindows separates
 out the classes. This is because there are a number of different toolbar
 styles that you may wish to use simultaneously, and also, future
-toolbar implementations will emerge (for example, using the
-new-style Windows `coolbar' as seen in Microsoft applications) which
+toolbar implementations will emerge which
 cannot all be shoe-horned into the one class.
 
 For each platform, the symbol {\bf wxToolBar} is defined to be one of the
@@ -26,7 +25,7 @@ The following is a summary of the toolbar classes and their differences.
 \item {\bf wxToolBarBase.} This is a base class with pure virtual functions,
 and should not be used directly.
 \item {\bf wxToolBarSimple.} A simple toolbar class written entirely with generic wxWindows
-functionality. A simply 3D effect for buttons is possible, but it is not consistent
+functionality. A simple 3D effect for buttons is possible, but it is not consistent
 with the Windows look and feel. This toolbar can scroll, and you can have arbitrary
 numbers of rows and columns.
 \item {\bf wxToolBarMSW.} This class implements an old-style Windows toolbar, only on
@@ -39,7 +38,8 @@ CreateTools must be called after the tools have been added.
 No absolute positioning is supported but you can specify the number
 of rows, and add tool separators with {\bf AddSeparator}.
 Tooltips are supported. {\bf OnRightClick} is not supported. This is the default wxToolBar
-on Windows 95, Windows NT 4 and above.
+on Windows 95, Windows NT 4 and above. With the style wxTB\_FLAT, the flat toolbar
+look is used, with a border that is highlit when the cursor moves over the buttons.
 \end{itemize}
 
 A toolbar might appear as a single row of images under
@@ -61,8 +61,6 @@ as the demo shows, before adding tools to the button bar. Don't supply more than
 one bitmap for each tool, because the toolbar generates all three images (normal,
 depressed and checked) from the single bitmap you give it.
 
-To intercept
-
 \subsection{Using the toolbar library}
 
 Include {\tt "wx/toolbar.h"}, or if using a class directly, one of:
@@ -74,7 +72,9 @@ Include {\tt "wx/toolbar.h"}, or if using a class directly, one of:
 \end{itemize}
 
 Example of toolbar use are given in the sample program ``toolbar''. The
-source is given below.
+source is given below. In fact it's out of date because recommended
+practise is to use event handlers (using EVT\_MENU or EVT\_TOOL) instead of
+overriding OnLeftClick.
 
 {\small
 \begin{verbatim}

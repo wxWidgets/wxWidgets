@@ -134,7 +134,9 @@ recursively applied to the parent window's event handler. If this returns TRUE, 
 
 Note that your application may wish to override ProcessEvent to redirect processing of
 events. This is done in the document/view framework, for example, to allow event handlers
-to be defined in the document or view.
+to be defined in the document or view. To test for command events (which will probably
+be the only events you wish to redirect), you may use wxEvent::IsCommandEvent for
+efficiency, instead of using the slower run-time type system.
 
 As mentioned above, only command events are recursively applied to the parents event
 handler. As this quite often causes confusion for users, here is a list of system
@@ -164,7 +166,21 @@ In some cases, it might be desired by the programmer to get a certain number
 of system events in a parent window, for example all key events sent to, but not
 used by, the native controls in a dialog. In this case, a special event handler
 will have to be written that will override ProcessEvent() in order to pass
-all events (or any selection of them) to the parent window. See next section.
+all events (or any selection of them) to the parent window.
+
+\subsection{Redirection of command events to the window with the focus}
+
+The usual upward search through the window hierarchy for command event
+handlers does not always meet an application's requirements. Say you have two
+wxTextCtrl windows in a frame, plus a toolbar with Cut, Copy and Paste
+buttons. To avoid the need to define event handlers in the frame
+and redirect them explicitly to the window with the focus, command events
+are sent to the window with the focus first, for
+menu and toolbar command and UI update events only. This means that
+each window can handle its own commands and UI updates independently. In
+fact wxTextCtrl can handle Cut, Copy, Paste, Undo and Redo commands and UI update
+requests, so no extra coding is required to support them in your menus and
+toolbars.
 
 \subsection{Pluggable event handlers}
 

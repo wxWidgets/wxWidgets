@@ -16,8 +16,8 @@
     #pragma interface "textctrl.h"
 #endif
 
-#include "wx/ioswrap.h"
 #include "wx/control.h"
+#include "wx/ioswrap.h"
 
 // TODO Some platforms/compilers don't like inheritance from streambuf.
 #if (defined(__BORLANDC__) && !defined(__WIN32__)) || defined(__MWERKS__)
@@ -132,6 +132,18 @@ public:
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event);
     //  void OnEraseBackground(wxEraseEvent& event);
+
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+    void OnUndo(wxCommandEvent& event);
+    void OnRedo(wxCommandEvent& event);
+
+    void OnUpdateCut(wxUpdateUIEvent& event);
+    void OnUpdateCopy(wxUpdateUIEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
 
     virtual void Command(wxCommandEvent& event);
 

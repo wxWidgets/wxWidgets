@@ -153,7 +153,7 @@ public:
 
     // Query app for menu item updates (called from OnIdle)
     void DoMenuUpdates();
-    void DoMenuUpdates(wxMenu* menu);
+    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 
     WXHMENU GetWinMenu() const ;
 

@@ -916,7 +916,12 @@ void wxFrame::ProcessCommand(int id)
   {
     bar->Check(id,!bar->Checked(id)) ;
   }
-  GetEventHandler()->ProcessEvent(commandEvent);
+
+  // Process events starting with the window with the focus, if any.
+  wxWindow* focusWin = wxFindFocusDescendant(this);
+
+  wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler();
+  evtHandler->ProcessEvent(commandEvent);
 }
 
 // Checks if there is a toolbar, and returns the first free client position

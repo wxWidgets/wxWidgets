@@ -105,7 +105,7 @@ public:
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual wxPoint GetClientAreaOrigin() const;
     void DoMenuUpdates();
-    void DoMenuUpdates(wxMenu* menu);
+    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
     virtual void OnInternalIdle();
 
     wxMenuBar    *m_frameMenuBar;

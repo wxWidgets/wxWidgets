@@ -145,7 +145,7 @@ public:
 
     // Query app for menu item updates (called from OnIdle)
     void DoMenuUpdates();
-    void DoMenuUpdates(wxMenu* menu);
+    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 
     // Checks if there is a toolbar, and returns the first free client position
     virtual wxPoint GetClientAreaOrigin() const;

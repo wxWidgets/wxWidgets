@@ -52,6 +52,10 @@ wxTextCtrl header file.
 
 \wxheading{Event handling}
 
+The following commands are processed by default event handlers in wxTextCtrl: wxID\_CUT, wxID\_COPY,
+wxID\_PASTE, wxID\_UNDO, wxID\_REDO. The associated UI update events are also processed
+automatically, when the control has the focus.
+
 To process input from a text control, use these event handler macros to direct input to member
 functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument.
 

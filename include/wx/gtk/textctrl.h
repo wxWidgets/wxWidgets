@@ -118,6 +118,18 @@ class wxTextCtrl: public wxControl
 
     void OnChar( wxKeyEvent &event );
 
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+    void OnUndo(wxCommandEvent& event);
+    void OnRedo(wxCommandEvent& event);
+
+    void OnUpdateCut(wxUpdateUIEvent& event);
+    void OnUpdateCopy(wxUpdateUIEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
+
 #ifndef NO_TEXT_WINDOW_STREAM
     int overflow(int i);
     int sync();

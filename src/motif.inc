@@ -27,6 +27,7 @@ LIB_CPP_SRC=\
  common/image.cpp \
  common/imagjpeg.cpp \
  common/imagpng.cpp \
+ common/imaggif.cpp \
  common/intl.cpp \
  common/ipcbase.cpp \
  common/layout.cpp \

@@ -1427,5 +1427,13 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_UPDATE_UI(id, func) \
  { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },\
 
+/*
+ * Helper functions
+ */
+
+// Find a window with the focus, that is also a descendant of the given window.
+// This is used to determine the window to initially send commands to.
+wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
+
 #endif
         // _WX_EVENTH__

@@ -383,7 +383,15 @@ A menu bar is a series of menus accessible from the top of a frame.
 \wxheading{Event handling}
 
 To respond to a menu selection, provide a handler for EVT\_MENU, in the frame
-that contains the menu bar.
+that contains the menu bar. If you have a toolbar which uses the same identifiers
+as your EVT\_MENU entries, events from the toolbar will also be processed by your
+EVT\_MENU event handlers.
+
+Note that menu commands (and UI update events for menus) are first sent to
+the focus window within the frame. If no window within the frame has the focus,
+then the events are sent directly to the frame. This allows command and UI update
+handling to be processed by specific windows and controls, and not necessarily
+by the application frame.
 
 \wxheading{See also}
 

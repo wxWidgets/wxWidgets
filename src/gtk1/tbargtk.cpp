@@ -12,6 +12,7 @@
 #endif
 
 #include "wx/toolbar.h"
+#include "wx/frame.h"
 
 #include "glib.h"
 #include "gdk/gdk.h"
@@ -167,6 +168,28 @@ bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
     event.SetEventObject(this);
     event.SetInt( toolIndex );
     event.SetExtraLong((long) toggleDown);
+
+    // First try sending the command to a window that has the focus, within a frame that
+    // also contains this toolbar.
+    wxFrame* frame = (wxFrame*) NULL;
+    wxWindow* win = this;
+    wxWindow* focusWin = (wxWindow*) NULL;
+
+    while (win)
+    {
+        if (win->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            frame = (wxFrame*) win;
+            break;
+        }
+        else
+            win = win->GetParent();
+    }
+    if (frame)
+        focusWin = wxFindFocusDescendant(frame);
+
+    if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
+        return TRUE;
 
     GetEventHandler()->ProcessEvent(event);
 
