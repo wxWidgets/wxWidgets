@@ -58,13 +58,15 @@ IMPLEMENT_APP    (MyApp)
 IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
+#if wxUSE_TIMEDATE
     EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
+#endif // wxUSE_TIMEDATE
     EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
     EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
-#endif
+#endif // wxUSE_UNICODE
     EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
     EVT_MENU(TYPES_STREAM2, MyApp::DoStreamDemo2)
     EVT_MENU(TYPES_STREAM3, MyApp::DoStreamDemo3)
@@ -90,13 +92,15 @@ bool MyApp::OnInit()
     file_menu->Append(TYPES_QUIT, "E&xit\tAlt-X");
 
     wxMenu *test_menu = new wxMenu;
+#if wxUSE_TIMEDATE
     test_menu->Append(TYPES_DATE, "&Date test");
+#endif // wxUSE_TIMEDATE
     test_menu->Append(TYPES_TIME, "&Time test");
     test_menu->Append(TYPES_VARIANT, "&Variant test");
     test_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
 #if wxUSE_UNICODE
     test_menu->Append(TYPES_UNICODE, "&Unicode test");
-#endif
+#endif // wxUSE_UNICODE
     test_menu->Append(TYPES_STREAM, "&Stream test");
     test_menu->Append(TYPES_STREAM2, "&Stream seek test");
     test_menu->Append(TYPES_STREAM3, "&Stream error test");
@@ -857,6 +861,8 @@ void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl << "It is now " << (wxString) now << "\n";
 }
 
+#if wxUSE_TIMEDATE
+
 void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
@@ -997,6 +1003,8 @@ void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl << "The first date of this year is " << v4.GetYearStart() << "\n";
     textCtrl << "The last date of this year is " << v4.GetYearEnd() << "\n";
 }
+
+#endif // wxUSE_TIMEDATE
 
 void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 {

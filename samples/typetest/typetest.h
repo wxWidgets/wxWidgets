@@ -25,7 +25,9 @@ public:
     bool OnInit();
     int OnExit() { delete m_mimeDatabase; return wxApp::OnExit(); }
 
+#if wxUSE_TIMEDATE
     void DoDateDemo(wxCommandEvent& event);
+#endif // wxUSE_TIMEDATE
     void DoTimeDemo(wxCommandEvent& event);
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
@@ -36,7 +38,7 @@ public:
     void DoStreamDemo5(wxCommandEvent& event);
 #if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
-#endif
+#endif // wxUSE_UNICODE
     void DoMIMEDemo(wxCommandEvent& event);
 
     wxTextCtrl* GetTextCtrl() const { return m_textCtrl; }
