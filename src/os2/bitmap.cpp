@@ -1024,7 +1024,7 @@ HBITMAP wxInvertMask(
                 ,hPSSrc
                 ,4L
                 ,vPoint
-                ,ROP_SRCCOPY
+                ,ROP_SRCINVERT
                 ,BBO_IGNORE
                );
 
