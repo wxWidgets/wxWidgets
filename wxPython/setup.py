@@ -435,7 +435,7 @@ if BUILD_STC:
     if os.name == 'nt':
         STC_H = opj(WXDIR, 'contrib', 'include/wx/stc')
     else:
-        STC_H = opj(WXPREFIX, 'include/wx/stc')
+        STC_H = opj(WXPREFIX, 'include/wx-%d.%d/wx/stc' % (VER_MAJOR, VER_MINOR))
 
 ## NOTE: need to add something like this to the stc.bkl...
 
@@ -671,8 +671,9 @@ else:
               glob.glob(opj("src/_*.py")) + \
               glob.glob(opj("src/*.swg"))
 
-    HEADERS = zip(h_files, ["/include/wx/wxPython"]*len(h_files)) + \
-              zip(i_files, ["/include/wx/wxPython/i_files"]*len(i_files))
+    HEADERS = zip(h_files, ["/wxPython"]*len(h_files)) + \
+              zip(i_files, ["/wxPython/i_files"]*len(i_files))
+
 
 #----------------------------------------------------------------------
 # Do the Setup/Build/Install/Whatever

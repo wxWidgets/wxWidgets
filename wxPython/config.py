@@ -38,7 +38,7 @@ import distutils.command.clean
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 2
-VER_SUBREL       = 2      # wxPython release num for x.y.z release of wxWidgets
+VER_SUBREL       = 3      # wxPython release num for x.y.z release of wxWidgets
 VER_FLAGS        = "p"     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
@@ -246,42 +246,35 @@ sys.argv = filter(None, sys.argv)
 #----------------------------------------------------------------------
 
 def Verify_WX_CONFIG():
-    """ Called below for the builds that need wx-config,
-        if WX_CONFIG is not set then tries to select the specific
-        wx*-config script based on build options.  If not found
-        then it defaults to 'wx-config'.
+    """ Called below for the builds that need wx-config, if WX_CONFIG
+        is not set then determins the flags needed based on build
+        options and searches for wx-config on the PATH.  
     """
     # if WX_CONFIG hasn't been set to an explicit value then construct one.
     global WX_CONFIG
     if WX_CONFIG is None:
-        if debug:             # TODO: Fix this.  wxPython's --debug shouldn't be tied to wxWidgets...
-            df = 'd'
-        else:
-            df = ''
-        if UNICODE:
-            uf = 'u'
-        else:
-            uf = ''
-        ver2 = "%s.%s" % (VER_MAJOR, VER_MINOR)
         port = WXPORT
         if port == "x11":
             port = "x11univ"
-        WX_CONFIG = 'wx%s%s%s-%s-config' % (port, uf, df, ver2)
+        flags =  ' --toolkit=%s' % port
+        flags += ' --unicode=%s' % (UNICODE and 'yes' or 'no')
+        flags += ' --version=%s.%s' % (VER_MAJOR, VER_MINOR)
 
         searchpath = os.environ["PATH"]
         for p in searchpath.split(':'):
-            fp = os.path.join(p, WX_CONFIG)
+            fp = os.path.join(p, 'wx-config')
             if os.path.exists(fp) and os.access(fp, os.X_OK):
                 # success
                 msg("Found wx-config: " + fp)
-                WX_CONFIG = fp
+                msg("    Using flags: " + flags)
+                WX_CONFIG = fp + flags
                 break
         else:
-            msg("WX_CONFIG not specified and %s not found on $PATH "
-                  "defaulting to \"wx-config\"" % WX_CONFIG)
-            WX_CONFIG = 'wx-config'
+            msg("ERROR: WX_CONFIG not specified and wx-config not found on the $PATH")
+            # should we exit?
 
-
+        # TODO:  exeucte WX_CONFIG --list and verify a matching config is found
+        
 
 def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
              swig_deps=[], add_under=False):
@@ -428,7 +421,10 @@ class wx_install_headers(distutils.command.install_headers.install_headers):
         if root is None or WXPREFIX.startswith(root):
             root = ''
         for header, location in headers:
-            install_dir = os.path.normpath(root + WXPREFIX + location)
+            install_dir = os.path.normpath(root +
+                                           WXPREFIX +
+                                           '/include/wx-%d.%d/wx' % (VER_MAJOR, VER_MINOR) +
+                                           location)
             self.mkpath(install_dir)
             (out, _) = self.copy_file(header, install_dir)
             self.outfiles.append(out)
