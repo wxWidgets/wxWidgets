@@ -173,6 +173,7 @@ bool wxDropTarget::GetData()
     {
       UInt16 items ;
       OSErr result;
+      bool firstFileAdded = false ;
       CountDragItems((DragReference)m_currentDrag, &items);
       for (UInt16 index = 1; index <= items; ++index) 
       {
@@ -195,7 +196,11 @@ bool wxDropTarget::GetData()
                   Ptr theData ;
                   GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
           			  if ( theType == 'TEXT' )
+      			  {
+      			  	// this increment is only valid for allocating, on the next GetFlavorData
+      			  	// call it is reset again to the original value
           			    dataSize++ ;
+      			  }
                   theData = new char[dataSize];
                   GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
                   if( theType == 'TEXT' )
@@ -203,7 +208,7 @@ bool wxDropTarget::GetData()
                     theData[dataSize]=0 ;       
                     if ( wxApp::s_macDefaultEncodingIsPC )
                     {
-                      wxMacConvertToPC((char*)theData) ;
+                      wxMacConvertToPC((char*)theData,(char*)theData,dataSize) ;
                     }
                     m_dataObject->SetData( format, dataSize, theData );
                   }
@@ -211,7 +216,13 @@ bool wxDropTarget::GetData()
                   {
                     HFSFlavor* theFile = (HFSFlavor*) theData ;
                     wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                    ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    if (  firstFileAdded )
+                    	((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    else
+                    {
+                    	((wxFileDataObject*)m_dataObject)->SetData( 0 , name.c_str() ) ;
+                    	firstFileAdded = true ;	
+                    }
                   }
                   else
                   {
