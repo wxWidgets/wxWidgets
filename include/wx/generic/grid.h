@@ -12,7 +12,7 @@
 #include "wx/defs.h"
 
 #if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
-#include "gridg.h"
+#include "wx/generic/gridg.h"
 #else
 
 #ifndef __WXGRID_H__
@@ -649,7 +649,7 @@ private:
         Unset = -1,
         ReadWrite,
         ReadOnly
-    }; 
+    };
 
     // the common part of all ctors
     void Init()
@@ -1080,7 +1080,7 @@ public:
     void DrawTextRectangle( wxDC& dc, const wxString&, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP );
- 
+
     void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP );
