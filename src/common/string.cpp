@@ -201,7 +201,8 @@ extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
     int iLen = s.PrintfV(format, argptr);
     if ( iLen != -1 )
     {
-        wxStrncpy(buf, s.c_str(), iLen);
+        wxStrncpy(buf, s.c_str(), len);
+        buf[len-1] = wxT('\0');
     }
 
     return iLen;

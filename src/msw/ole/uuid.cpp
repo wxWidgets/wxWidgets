@@ -29,6 +29,9 @@
 #if wxUSE_DRAG_AND_DROP
 
 // standard headers
+#if wxCHECK_W32API_VERSION( 1, 0 )
+    #include <windows.h>
+#endif
 #include  <rpc.h>                       // UUID related functions
 
 #include  "wx/msw/ole/uuid.h"
