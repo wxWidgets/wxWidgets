@@ -2024,8 +2024,6 @@ wxArrayString::~wxArrayString()
 // pre-allocates memory (frees the previous data!)
 void wxArrayString::Alloc(size_t nSize)
 {
-  wxASSERT( nSize > 0 );
-
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
     Free();
