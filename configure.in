@@ -2533,11 +2533,7 @@ if test "$wxUSE_STATLINE" = "yes"; then
     if test "$wxUSE_WINE" = 1 ; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
     else
-        if test "$wxUSE_MOTIF" = 1 ; then
-            AC_MSG_WARN([wxStaticLine is not supported under Motif])
-	else
-            AC_DEFINE(wxUSE_STATLINE)
-	fi
+	AC_DEFINE(wxUSE_STATLINE)
     fi
 fi
 
