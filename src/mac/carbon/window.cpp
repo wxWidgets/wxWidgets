@@ -1423,7 +1423,13 @@ void wxWindowMac::Update()
 {
     wxTopLevelWindowMac* win = MacGetTopLevelWindow(  ) ;
     if ( win )
+    {
       win->MacUpdate( 0 ) ;
+	    if ( QDIsPortBuffered( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) ) )
+	    {
+				QDFlushPortBuffer( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) , NULL ) ;
+	    }
+	  }
 }
 
 wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const 
