@@ -1314,6 +1314,9 @@ wxString FilterIn(const wxString& str)
 // quote the string before writing it to file
 wxString FilterOut(const wxString& str)
 {
+   if(str.IsEmpty())
+      return str;
+   
   wxString strResult;
   strResult.Alloc(str.Len());
 

@@ -654,6 +654,7 @@ DEFAULT_USE_PROFILE=0
 DEFAULT_USE_DEBUG_FLAG=0
 DEFAULT_USE_DEBUG_INFO=0
 DEFAULT_USE_MEM_TRACING=0
+DEFAULT_USE_DMALLOC=0
 
 DEFAULT_USE_ZLIB=1
 DEFAULT_USE_GDK_IMLIB=1
@@ -735,6 +736,10 @@ USE_DEBUG_INFO)
 AC_OVERRIDES(mem_tracing,mem_tracing,
 **--with-mem_traing       create code with memory tracing,
 USE_MEM_TRACING)
+
+AC_OVERRIDES(dmalloc,dmalloc,
+**--with-dmalloc           use dmalloc memory debug library (www.letters.com/dmalloc/),
+USE_DMALLOC)
 
 AC_OVERRIDES(profile,profile,
 **--with-profile          create code with profiling information included,
@@ -1041,6 +1046,12 @@ if test "$USE_MEM_TRACING" = 1 ; then
   AC_DEFINE_UNQUOTED(USE_MEMORY_TRACING,$USE_MEM_TRACING)
   dnl AC_DEFINE_UNQUOTED(USE_GLOBAL_MEMORY_OPERATORS,$USE_MEM_TRACING)
 fi
+
+EXTRA_LINK=
+if test "$USE_DMALLOC" = 1 ; then
+  EXTRA_LINK="$EXTRA_LINK -ldmalloc"
+fi
+AC_SUBST(EXTRA_LINK)
 
 PROFILE=
 if test "$USE_PROFILE" = 1 ; then

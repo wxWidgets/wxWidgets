@@ -88,6 +88,7 @@ OPENGL_LIBRARY = @OPENGL_LIBRARY@
 OPENGL_LINK = @OPENGL_LINK@
 
 THREADS_LINK = @THREADS_LINK@
+EXTRA_LINK = @EXTRA_LINK@
 
 # INCLUDES
 WX_INCLUDES = \
@@ -116,7 +117,8 @@ LINK_LIBS= \
   $(GUI_TK_LIBS) \
   $(X_EXTRA_LIBS) \
   $(X_PRE_LIBS) \
-  $(THREADS_LINK)
+  $(THREADS_LINK) \
+  $(EXTRA_LINK)
   
 # Don't include $(OPENGL_LIBS) in LINK_LIBS; they
 # can be conveniently added to BIN_LINK in Makefile.in.

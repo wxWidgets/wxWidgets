@@ -120,7 +120,7 @@ public:
     { return m_parent; }
   wxWindow *GetGrandParent(void) const
     { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
-  void wxWindow::SetParent( wxWindow *p ) 
+  void SetParent( wxWindow *p ) 
     { m_parent = p; }
 
   wxEvtHandler *GetEventHandler();
