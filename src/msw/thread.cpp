@@ -887,8 +887,10 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
                     break;
 
                 case WAIT_OBJECT_0 + 1:
-                    // new message arrived, process it
-                    if ( !wxTheApp->DoMessage() )
+                    // new message arrived (or maybe not... sometimes the queue
+                    // is empty, hence call Pending() to be sure and not hang
+                    // forever in DoMessage(), process it
+                    if ( wxTheApp->Pending() && !wxTheApp->DoMessage() )
                     {
                         // WM_QUIT received: kill the thread
                         Kill();

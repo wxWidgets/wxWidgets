@@ -206,9 +206,9 @@ wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
 - fixed bug in wxIniConfig::DeleteEntry() (Parinya Thipchart)
+- fixed hang (sometimes) in wxThread::Delete() (Carl-Friedrich Braun)
 - wxLongLong formatting with MinGW corrected
-- wxFileDialog now returns correct filter index for multiple-file
-  dialogs
+- wxFileDialog now returns correct filter index for multiple-file dialogs
 
 wxGTK:
 
