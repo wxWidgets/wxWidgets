@@ -44,6 +44,7 @@ Description: wxBase library (development) - non-GUI support classes of wxWindows
 Package: libwxbase=V-dbg
 Architecture: any
 Section: devel
+Priority: extra
 Depends: wxwin=V-headers (= ${Source-Version}), libc6-dev
 Conflicts: libwxbase-dbg
 Replaces: libwxbase-dbg
@@ -97,6 +98,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
 Package: libwxgtk=V-dbg
 Architecture: any
 Section: devel
+Priority: extra
 Depends: wxwin=V-headers (= ${Source-Version}), libc6-dev
 Conflicts: libwxgtk-dbg
 Replaces: libwxgtk-dbg
