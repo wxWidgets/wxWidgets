@@ -131,7 +131,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_thread.o \
 	$(OBJS)\basedll_utils.o \
 	$(OBJS)\basedll_utilsexc.o \
-	$(OBJS)\basedll_bookctrl.o \
 	$(OBJS)\basedll_event.o \
 	$(OBJS)\basedll_fs_mem.o \
 	$(OBJS)\basedll_msgout.o \
@@ -212,7 +211,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_thread.o \
 	$(OBJS)\baselib_utils.o \
 	$(OBJS)\baselib_utilsexc.o \
-	$(OBJS)\baselib_bookctrl.o \
 	$(OBJS)\baselib_event.o \
 	$(OBJS)\baselib_fs_mem.o \
 	$(OBJS)\baselib_msgout.o \
@@ -234,7 +232,6 @@ COREDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.o \
-	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_event.o \
 	$(OBJS)\coredll_fs_mem.o \
 	$(OBJS)\coredll_msgout.o \
@@ -255,7 +252,6 @@ CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-I..\..\src\expat\lib -DwxUSE_BASE=0 $(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.o \
-	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_event.o \
 	$(OBJS)\corelib_fs_mem.o \
 	$(OBJS)\corelib_msgout.o \
@@ -435,7 +431,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_thread.o \
 	$(OBJS)\monodll_utils.o \
 	$(OBJS)\monodll_utilsexc.o \
-	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_event.o \
 	$(OBJS)\monodll_fs_mem.o \
 	$(OBJS)\monodll_msgout.o \
@@ -529,7 +524,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_thread.o \
 	$(OBJS)\monolib_utils.o \
 	$(OBJS)\monolib_utilsexc.o \
-	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_event.o \
 	$(OBJS)\monolib_fs_mem.o \
 	$(OBJS)\monolib_msgout.o \
@@ -982,6 +976,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
 	$(OBJS)\monolib_bmpbase.o \
+	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
@@ -1053,6 +1048,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
+	$(OBJS)\monolib_listbook.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
@@ -1176,6 +1172,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artprov.o \
 	$(OBJS)\monolib_artstd.o \
 	$(OBJS)\monolib_bmpbase.o \
+	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
@@ -1247,6 +1244,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
+	$(OBJS)\monolib_listbook.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
@@ -1367,6 +1365,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
 	$(OBJS)\coredll_bmpbase.o \
+	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
@@ -1438,6 +1437,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
+	$(OBJS)\coredll_listbook.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
@@ -1561,6 +1561,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artprov.o \
 	$(OBJS)\coredll_artstd.o \
 	$(OBJS)\coredll_bmpbase.o \
+	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
@@ -1632,6 +1633,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
+	$(OBJS)\coredll_listbook.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
@@ -1752,6 +1754,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
 	$(OBJS)\corelib_bmpbase.o \
+	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
@@ -1823,6 +1826,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
+	$(OBJS)\corelib_listbook.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
@@ -1946,6 +1950,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artprov.o \
 	$(OBJS)\corelib_artstd.o \
 	$(OBJS)\corelib_bmpbase.o \
+	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
@@ -2017,6 +2022,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
+	$(OBJS)\corelib_listbook.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
@@ -2137,6 +2143,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
 	$(OBJS)\monodll_bmpbase.o \
+	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
@@ -2208,6 +2215,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
+	$(OBJS)\monodll_listbook.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
@@ -2331,6 +2339,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artprov.o \
 	$(OBJS)\monodll_artstd.o \
 	$(OBJS)\monodll_bmpbase.o \
+	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
@@ -2402,6 +2411,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
+	$(OBJS)\monodll_listbook.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
@@ -2782,9 +2792,6 @@ $(OBJS)\basedll_appbase.o: ..\..\src\common\appbase.cpp
 $(OBJS)\basedll_basemsw.o: ..\..\src\msw\basemsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-$(OBJS)\basedll_bookctrl.o: ..\..\src\common\bookctrl.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 $(OBJS)\basedll_clntdata.o: ..\..\src\common\clntdata.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -2990,9 +2997,6 @@ $(OBJS)\baselib_appbase.o: ..\..\src\common\appbase.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_basemsw.o: ..\..\src\msw\basemsw.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-$(OBJS)\baselib_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_clntdata.o: ..\..\src\common\clntdata.cpp
@@ -3267,8 +3271,10 @@ $(OBJS)\coredll_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 endif
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_brush.o: ..\..\src\msw\brush.cpp
@@ -3841,6 +3847,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_lboxcmn.o: ..\..\src\common\lboxcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_listbook.o: ..\..\src\generic\listbook.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -4479,8 +4490,10 @@ $(OBJS)\corelib_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 endif
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_brush.o: ..\..\src\msw\brush.cpp
@@ -5053,6 +5066,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_lboxcmn.o: ..\..\src\common\lboxcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_listbook.o: ..\..\src\generic\listbook.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -5859,8 +5877,10 @@ $(OBJS)\monodll_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 endif
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_brush.o: ..\..\src\msw\brush.cpp
@@ -6597,6 +6617,11 @@ endif
 
 $(OBJS)\monodll_list.o: ..\..\src\common\list.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_listbook.o: ..\..\src\generic\listbook.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -7410,8 +7435,10 @@ $(OBJS)\monolib_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 endif
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_brush.o: ..\..\src\msw\brush.cpp
@@ -8148,6 +8175,11 @@ endif
 
 $(OBJS)\monolib_list.o: ..\..\src\common\list.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_listbook.o: ..\..\src\generic\listbook.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)

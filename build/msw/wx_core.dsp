@@ -4275,6 +4275,10 @@ SOURCE=..\..\src\generic\imaglist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\listbook.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\listctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 Debug"

@@ -456,10 +456,6 @@ SOURCE=..\..\src\common\appbase.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\bookctrl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\clntdata.cpp
 # End Source File
 # Begin Source File
