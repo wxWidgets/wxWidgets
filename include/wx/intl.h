@@ -465,8 +465,8 @@ public:
     //
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
-    const wxMB2WXbuf GetString(const wxChar *szOrigString,
-                               const wxChar *szDomain = (const wxChar *) NULL) const;
+    const wxChar *GetString(const wxChar *szOrigString,
+                            const wxChar *szDomain = (const wxChar *) NULL) const;
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
@@ -507,13 +507,13 @@ private:
 extern WXDLLEXPORT wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
-inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
+inline const wxChar *wxGetTranslation(const wxChar *sz)
 {
     wxLocale *pLoc = wxGetLocale();
     if (pLoc)
         return pLoc->GetString(sz);
     else
-        return (const wxMB2WXbuf)sz;
+        return sz;
 }
 
 #else // !wxUSE_INTL

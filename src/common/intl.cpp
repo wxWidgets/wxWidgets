@@ -53,6 +53,7 @@
 #include "wx/module.h"
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
+#include "wx/hashmap.h"
 
 #ifdef __WIN32__
     #include "wx/msw/private.h"
@@ -69,30 +70,8 @@
 // ----------------------------------------------------------------------------
 
 // this should *not* be wxChar, this type must have exactly 8 bits!
-typedef unsigned char size_t8;
-
-#ifdef __WXMSW__
-    #if defined(__WIN16__)
-        typedef unsigned long size_t32;
-    #elif defined(__WIN32__)
-        typedef unsigned int size_t32;
-    #else
-        // Win64 will have different type sizes
-        #error "Please define a 32 bit type"
-    #endif
-#else // !Windows
-    // SIZEOF_XXX are defined by configure
-    #if defined(SIZEOF_INT) && (SIZEOF_INT == 4)
-        typedef unsigned int size_t32;
-    #elif defined(SIZEOF_LONG) && (SIZEOF_LONG == 4)
-        typedef unsigned long size_t32;
-    #else
-        // assume sizeof(int) == 4 - what else can we do
-        wxCOMPILE_TIME_ASSERT( sizeof(int) == 4, IntMustBeExactly4Bytes);
-
-        typedef unsigned int size_t32;
-    #endif
-#endif // Win/!Win
+typedef wxUint8 size_t8;
+typedef wxUint32 size_t32;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -161,8 +140,73 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 
 #endif // __UNIX__
 
+
 // ----------------------------------------------------------------------------
-// wxMsgCatalog corresponds to one disk-file message catalog.
+// wxMsgCatalogFile corresponds to one disk-file message catalog.
+//
+// This is a "low-level" class and is used only by wxMsgCatalog
+// ----------------------------------------------------------------------------
+
+WX_DECLARE_STRING_HASH_MAP(wxString, wxMessagesHash)
+
+class wxMsgCatalogFile
+{
+public:
+    // ctor & dtor
+    wxMsgCatalogFile();
+   ~wxMsgCatalogFile();
+
+    // load the catalog from disk (szDirPrefix corresponds to language)
+    bool Load(const wxChar *szDirPrefix, const wxChar *szName);
+
+    // fills the hash with string-translation pairs
+    void FillHash(wxMessagesHash& hash, bool convertEncoding) const;
+
+private:
+    // this implementation is binary compatible with GNU gettext() version 0.10
+
+    // an entry in the string table
+    struct wxMsgTableEntry
+    {
+      size_t32   nLen;           // length of the string
+      size_t32   ofsString;      // pointer to the string
+    };
+
+    // header of a .mo file
+    struct wxMsgCatalogHeader
+    {
+      size_t32  magic,          // offset +00:  magic id
+                revision,       //        +04:  revision
+                numStrings;     //        +08:  number of strings in the file
+      size_t32  ofsOrigTable,   //        +0C:  start of original string table
+                ofsTransTable;  //        +10:  start of translated string table
+      size_t32  nHashSize,      //        +14:  hash table size
+                ofsHashTable;   //        +18:  offset of hash table start
+    };
+
+    // all data is stored here, NULL if no data loaded
+    size_t8 *m_pData;
+
+    // data description
+    size_t32          m_numStrings;   // number of strings in this domain
+    wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
+                     *m_pTransTable;  //            translated
+
+    const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
+      { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
+      
+    wxString GetCharset() const;
+
+    // utility functions
+      // big<->little endian
+    inline size_t32 Swap(size_t32 ui) const;
+
+    bool          m_bSwapped;   // wrong endianness?
+};
+
+
+// ----------------------------------------------------------------------------
+// wxMsgCatalog corresponds to one loaded message catalog.
 //
 // This is a "low-level" class and is used only by wxLocale (that's why
 // it's designed to be stored in a linked list)
@@ -171,74 +215,21 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 class wxMsgCatalog
 {
 public:
-  // ctor & dtor
-  wxMsgCatalog();
- ~wxMsgCatalog();
+    // load the catalog from disk (szDirPrefix corresponds to language)
+    bool Load(const wxChar *szDirPrefix, const wxChar *szName, bool bConvertEncoding = FALSE);
 
-  // load the catalog from disk (szDirPrefix corresponds to language)
-  bool Load(const wxChar *szDirPrefix, const wxChar *szName, bool bConvertEncoding = FALSE);
-  bool IsLoaded() const { return m_pData != NULL; }
+    // get name of the catalog
+    wxString GetName() const { return m_name; }
 
-  // get name of the catalog
-  const wxChar *GetName() const { return m_pszName; }
+    // get the translated string: returns NULL if not found
+    const wxChar *GetString(const wxChar *sz) const;
 
-  // get the translated string: returns NULL if not found
-  const char *GetString(const char *sz) const;
-
-  // public variable pointing to the next element in a linked list (or NULL)
-  wxMsgCatalog *m_pNext;
+    // public variable pointing to the next element in a linked list (or NULL)
+    wxMsgCatalog *m_pNext;
 
 private:
-  // this implementation is binary compatible with GNU gettext() version 0.10
-
-  // an entry in the string table
-  struct wxMsgTableEntry
-  {
-    size_t32   nLen;           // length of the string
-    size_t32   ofsString;      // pointer to the string
-  };
-
-  // header of a .mo file
-  struct wxMsgCatalogHeader
-  {
-    size_t32  magic,          // offset +00:  magic id
-              revision,       //        +04:  revision
-              numStrings;     //        +08:  number of strings in the file
-    size_t32  ofsOrigTable,   //        +0C:  start of original string table
-              ofsTransTable;  //        +10:  start of translated string table
-    size_t32  nHashSize,      //        +14:  hash table size
-              ofsHashTable;   //        +18:  offset of hash table start
-  };
-
-  // all data is stored here, NULL if no data loaded
-  size_t8 *m_pData;
-
-  // data description
-  size_t32          m_numStrings,   // number of strings in this domain
-                    m_nHashSize;    // number of entries in hash table
-  size_t32         *m_pHashTable;   // pointer to hash table
-  wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
-                   *m_pTransTable;  //            translated
-
-  const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
-    { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
-
-  // convert encoding to platform native one, if neccessary
-  void ConvertEncoding();
-
-  // utility functions
-    // calculate the hash value of given string
-  static size_t32 GetHash(const char *sz);
-    // big<->little endian
-  inline size_t32 Swap(size_t32 ui) const;
-
-  // internal state
-  bool HasHashTable() const // true if hash table is present
-    { return m_nHashSize > 2 && m_pHashTable != NULL; }
-
-  bool          m_bSwapped;   // wrong endianness?
-
-  wxChar       *m_pszName;    // name of the domain
+    wxMessagesHash  m_messages; // all messages in the catalog
+    wxString        m_name;     // name of the domain
 };
 
 // ----------------------------------------------------------------------------
@@ -253,48 +244,25 @@ static wxArrayString s_searchPrefixes;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxMsgCatalog class
+// wxMsgCatalogFile class
 // ----------------------------------------------------------------------------
 
-// calculate hash value using the so called hashpjw function by P.J. Weinberger
-// [see Aho/Sethi/Ullman, COMPILERS: Principles, Techniques and Tools]
-size_t32 wxMsgCatalog::GetHash(const char *sz)
-{
-  #define HASHWORDBITS 32     // the length of size_t32
-
-  size_t32 hval = 0;
-  size_t32 g;
-  while ( *sz != '\0' ) {
-    hval <<= 4;
-    hval += (size_t32)*sz++;
-    g = hval & ((size_t32)0xf << (HASHWORDBITS - 4));
-    if ( g != 0 ) {
-      hval ^= g >> (HASHWORDBITS - 8);
-      hval ^= g;
-    }
-  }
-
-  return hval;
-}
-
 // swap the 2 halves of 32 bit integer if needed
-size_t32 wxMsgCatalog::Swap(size_t32 ui) const
+size_t32 wxMsgCatalogFile::Swap(size_t32 ui) const
 {
   return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
                       ((ui >> 8) & 0xff00) | (ui >> 24)
                     : ui;
 }
 
-wxMsgCatalog::wxMsgCatalog()
+wxMsgCatalogFile::wxMsgCatalogFile()
 {
-  m_pData   = NULL;
-  m_pszName = NULL;
+  m_pData = NULL;
 }
 
-wxMsgCatalog::~wxMsgCatalog()
+wxMsgCatalogFile::~wxMsgCatalogFile()
 {
   wxDELETEA(m_pData);
-  wxDELETEA(m_pszName);
 }
 
 // return all directories to search for given prefix
@@ -352,7 +320,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool bConvertEncoding)
+bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0)
 {
    /* We need to handle locales like  de_AT.iso-8859-1
       For this we first chop off the .CHARSET specifier and ignore it.
@@ -439,114 +407,152 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
   m_pTransTable = (wxMsgTableEntry *)(m_pData +
                    Swap(pHeader->ofsTransTable));
 
-  m_nHashSize   = Swap(pHeader->nHashSize);
-  m_pHashTable  = (size_t32 *)(m_pData + Swap(pHeader->ofsHashTable));
-
-  m_pszName = new wxChar[wxStrlen(szName) + 1];
-  wxStrcpy(m_pszName, szName);
-
-  if (bConvertEncoding)
-      ConvertEncoding();
-
   // everything is fine
   return TRUE;
 }
 
-// search for a string
-const char *wxMsgCatalog::GetString(const char *szOrig) const
+void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) const
 {
-  if ( szOrig == NULL )
-    return NULL;
+    wxString charset = GetCharset();
 
-  if ( HasHashTable() ) {   // use hash table for lookup if possible
-    size_t32 nHashVal = GetHash(szOrig);
-    size_t32 nIndex   = nHashVal % m_nHashSize;
+#if wxUSE_WCHAR_T
+    wxCSConv *csConv = NULL;
+    if ( !!charset )
+        csConv = new wxCSConv(charset);
 
-    size_t32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
+    wxMBConv& inputConv = csConv ? *csConv : *wxConvCurrent;
 
-    for ( ;; ) {
-      size_t32 nStr = Swap(m_pHashTable[nIndex]);
-      if ( nStr == 0 )
-        return NULL;
+    for (size_t i = 0; i < m_numStrings; i++)
+    {
+        wxString key(StringAtOfs(m_pOrigTable, i), inputConv);
 
-      if ( strcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 ) {
-        // work around for BC++ 5.5 bug: without a temp var, the optimizer
-        // breaks the code and the return value is incorrect
-        const char *tmp = StringAtOfs(m_pTransTable, nStr - 1);
-        return tmp;
-      }
-
-      if ( nIndex >= m_nHashSize - nIncr)
-        nIndex -= m_nHashSize - nIncr;
-      else
-        nIndex += nIncr;
+    #if wxUSE_UNICODE
+        hash[key] = wxString(StringAtOfs(m_pTransTable, i), inputConv);
+    #else
+        if ( convertEncoding )
+            hash[key] = 
+                wxString(inputConv.cMB2WC(StringAtOfs(m_pTransTable, i)),
+                         wxConvLocal);
+        else
+            hash[key] = StringAtOfs(m_pTransTable, i);
+    #endif
     }
-  }
-  else {                    // no hash table: use default binary search
-    size_t32 bottom = 0,
-           top    = m_numStrings,
-           current;
-    while ( bottom < top ) {
-      current = (bottom + top) / 2;
-      int res = strcmp(szOrig, StringAtOfs(m_pOrigTable, current));
-      if ( res < 0 )
-        top = current;
-      else if ( res > 0 )
-        bottom = current + 1;
-      else {   // found!
-        // work around the same BC++ 5.5 bug as above
-        const char *tmp = StringAtOfs(m_pTransTable, current);
-        return tmp;
-      }
-    }
-  }
 
-  // not found
-  return NULL;
+    delete csConv;
+#else // !wxUSE_WCHAR_T
+    #if wxUSE_FONTMAP
+    if ( convertEncoding )
+    {
+        wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
+        if ( enc == wxFONTENCODING_SYSTEM )
+        {
+            convertEncoding = FALSE; // unknown encoding
+        }
+        else
+        {
+            wxFontEncoding targetEnc = wxLocale::GetSystemEncoding();
+            if (targetEnc == wxFONTENCODING_SYSTEM)
+            {
+                wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
+                if (a[0] == enc)
+                    // no conversion needed, locale uses native encoding
+                    convertEncoding = FALSE; 
+                if (a.GetCount() == 0)
+                    // we don't know common equiv. under this platform
+                    convertEncoding = FALSE;
+                targetEnc = a[0];
+            }
+        }
+
+        if ( convertEncoding )
+        {
+            wxEncodingConverter converter;
+            converter.Init(enc, targetEnc);
+
+            for (size_t i = 0; i < m_numStrings; i++)
+            {
+                wxString key(StringAtOfs(m_pOrigTable, i));
+                hash[key] = 
+                    converter.Convert(wxString(StringAtOfs(m_pTransTable, i)));
+            }
+        }
+    }
+
+    if ( !convertEncoding )
+    #else // !wxUSE_FONTMAP
+    {
+        for (size_t i = 0; i < m_numStrings; i++)
+        {
+            wxString key(StringAtOfs(m_pOrigTable, i));
+            hash[key] = StringAtOfs(m_pTransTable, i);
+        }
+    }
+    #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 }
 
-void wxMsgCatalog::ConvertEncoding()
+wxString wxMsgCatalogFile::GetCharset() const
 {
     // first, find encoding header:
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
-    if ( hdr == NULL || hdr[0] != 0 ) {
+    if ( hdr == NULL || hdr[0] != 0 ) 
+    {
         // not supported by this catalog, does not have correct header
-        return;
+        return wxEmptyString;
     }
 
     wxString header(StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find(wxT("Content-Type: text/plain; charset="));
-    if (pos == wxNOT_FOUND)
-        return; // incorrectly filled Content-Type header
-    size_t n = pos + 34; /*strlen("Content-Type: text/plain; charset=")*/
-    while (header[n] != wxT('\n'))
-        charset << header[n++];
-
-#if wxUSE_FONTMAP
-    wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
-    if ( enc == wxFONTENCODING_SYSTEM )
-        return; // unknown encoding
-
-    wxFontEncoding targetEnc = wxLocale::GetSystemEncoding();
-    if (targetEnc == wxFONTENCODING_SYSTEM)
+    if ( pos == wxNOT_FOUND )
     {
-        wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
-        if (a[0] == enc)
-            return; // no conversion needed, locale uses native encoding
-        if (a.GetCount() == 0)
-            return; // we don't know common equiv. under this platform
-        targetEnc = a[0];
+        // incorrectly filled Content-Type header
+        return wxEmptyString; 
     }
 
-    wxEncodingConverter converter;
-    converter.Init(enc, targetEnc);
-
-    for (size_t i = 0; i < m_numStrings; i++)
-        converter.Convert((char*)StringAtOfs(m_pTransTable, i));
-#endif // wxUSE_FONTMAP
+    size_t n = pos + 34; /*strlen("Content-Type: text/plain; charset=")*/
+    while ( header[n] != wxT('\n') )
+        charset << header[n++];
+    
+    if ( charset == wxT("CHARSET") )
+    {
+        // "CHARSET" is not valid charset, but lazy translator
+        return wxEmptyString;
+    }
+        
+    return charset;
 }
 
+// ----------------------------------------------------------------------------
+// wxMsgCatalog class
+// ----------------------------------------------------------------------------
+
+bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName, 
+                        bool bConvertEncoding = FALSE)
+{
+    wxMsgCatalogFile file;
+    
+    m_name = szName;
+    
+    if ( file.Load(szDirPrefix, szName) )
+    {
+        file.FillHash(m_messages, bConvertEncoding);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+const wxChar *wxMsgCatalog::GetString(const wxChar *sz) const
+{
+    wxMessagesHash::const_iterator i = m_messages.find(sz);
+    if ( i != m_messages.end() )
+    {
+        return i->second.c_str();
+    }
+    else
+        return NULL;
+}
 
 // ----------------------------------------------------------------------------
 // wxLocale
@@ -1377,77 +1383,72 @@ wxLocale::~wxLocale()
 }
 
 // get the translation of given string in current locale
-const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
-                                     const wxChar *szDomain) const
+const wxChar *wxLocale::GetString(const wxChar *szOrigString,
+                                  const wxChar *szDomain) const
 {
-  if ( wxIsEmpty(szOrigString) )
-    return _T("");
+    if ( wxIsEmpty(szOrigString) )
+        return _T("");
 
-  const char *pszTrans = NULL;
-#if wxUSE_UNICODE
-  const wxWX2MBbuf szOrgString = wxConvCurrent->cWX2MB(szOrigString);
-#else // ANSI
-  #define szOrgString szOrigString
-#endif // Unicode/ANSI
+    const wxChar *pszTrans = NULL;
+    wxMsgCatalog *pMsgCat;
 
-  wxMsgCatalog *pMsgCat;
-  if ( szDomain != NULL ) {
-    pMsgCat = FindCatalog(szDomain);
+    if ( szDomain != NULL ) 
+    {
+        pMsgCat = FindCatalog(szDomain);
 
-    // does the catalog exist?
-    if ( pMsgCat != NULL )
-      pszTrans = pMsgCat->GetString(szOrgString);
-  }
-  else {
-    // search in all domains
-    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
-      pszTrans = pMsgCat->GetString(szOrgString);
-      if ( pszTrans != NULL )   // take the first found
-        break;
+        // does the catalog exist?
+        if ( pMsgCat != NULL )
+            pszTrans = pMsgCat->GetString(szOrigString);
     }
-  }
+    else 
+    {
+        // search in all domains
+        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) 
+        {
+            pszTrans = pMsgCat->GetString(szOrigString);
+            if ( pszTrans != NULL )   // take the first found
+                break;
+        }
+    }
 
-  if ( pszTrans == NULL ) {
+    if ( pszTrans == NULL ) 
+    {
 #ifdef __WXDEBUG__
-    if ( !NoTransErr::Suppress() ) {
-      NoTransErr noTransErr;
+        if ( !NoTransErr::Suppress() ) 
+        {
+            NoTransErr noTransErr;
 
-      if ( szDomain != NULL )
-      {
-        wxLogDebug(_T("string '%s' not found in domain '%s' for locale '%s'."),
-                     szOrigString, szDomain, m_strLocale.c_str());
-      }
-      else
-      {
-        wxLogDebug(_T("string '%s' not found in locale '%s'."),
-                   szOrigString, m_strLocale.c_str());
-      }
-    }
+            if ( szDomain != NULL )
+            {
+                wxLogDebug(_T("string '%s' not found in domain '%s' for locale '%s'."),
+                             szOrigString, szDomain, m_strLocale.c_str());
+            }
+            else
+            {
+                wxLogDebug(_T("string '%s' not found in locale '%s'."),
+                           szOrigString, m_strLocale.c_str());
+            }
+        }
 #endif // __WXDEBUG__
 
-    return (wxMB2WXbuf)(szOrigString);
-  }
+        return szOrigString;
+    }
 
-  // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something, a macro
-  // similar to wxConvertMB2WX could be written for that
-
-  return wxConvertMB2WX(pszTrans);
-
-  // undo the hack from the beginning of this function
-  #undef szOrgString
+    return pszTrans;
 }
 
 // find catalog by name in a linked list, return NULL if !found
 wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {
-// linear search in the linked list
-  wxMsgCatalog *pMsgCat;
-  for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
-    if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )
-      return pMsgCat;
-  }
+    // linear search in the linked list
+    wxMsgCatalog *pMsgCat;
+    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) 
+    {
+        if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )
+          return pMsgCat;
+    }
 
-  return NULL;
+    return NULL;
 }
 
 // check if the given catalog is loaded
