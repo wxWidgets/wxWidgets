@@ -3673,8 +3673,8 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     wxRect rect;
     rect.x = m_colRights[col] - m_colWidths[col];
     rect.y = m_rowBottoms[row] - m_rowHeights[row];
-    rect.width = m_colWidths[col];
-    rect.height = m_rowHeights[row];
+    rect.width = m_colWidths[col]-1;
+    rect.height = m_rowHeights[row]-1;
 
     wxGridCellAttr* attr = GetCellAttr(row, col);
     attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
