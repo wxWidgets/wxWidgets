@@ -483,12 +483,12 @@ public:
 
 wxRIRefData::~wxRIRefData()
 {
-    delete m_rects;
+    delete [] m_rects;
 }
 
 void wxRIRefData::CreateRects( const wxRegion& region )
 {
-    delete m_rects;
+    delete [] m_rects;
 
     Init();
     

@@ -434,13 +434,13 @@ public:
 
 wxRIRefData::~wxRIRefData()
 {
-    delete m_rects;
+    delete [] m_rects;
 }
 
 void wxRIRefData::CreateRects( const wxRegion& region )
 {
     if (m_rects)
-      delete m_rects;
+      delete [] m_rects;
 
     m_rects = 0;
     m_numRects = 0;
