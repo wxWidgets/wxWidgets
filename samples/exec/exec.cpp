@@ -165,7 +165,16 @@ protected:
 
     void OnClose(wxCloseEvent& event);
 
-    void DoSend() { m_out.WriteString(m_textIn->GetValue() + '\n'); DoGet(); }
+    void OnProcessTerm(wxProcessEvent& event);
+
+    void DoSend()
+    {
+        m_out.WriteString(m_textIn->GetValue() + '\n');
+        m_textIn->Clear();
+
+        DoGet();
+    }
+
     void DoGet();
 
 private:
@@ -303,6 +312,8 @@ BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_TEXT_ENTER(-1, MyPipeFrame::OnTextEnter)
 
     EVT_CLOSE(MyPipeFrame::OnClose)
+
+    EVT_END_PROCESS(-1, MyPipeFrame::OnProcessTerm)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -984,25 +995,29 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
              m_in(*process->GetInputStream()),
              m_out(*process->GetOutputStream())
 {
-    m_textIn = new wxTextCtrl(this, -1, _T(""),
+    m_process->SetNextHandler(this);
+
+    wxPanel *panel = new wxPanel(this, -1);
+
+    m_textIn = new wxTextCtrl(panel, -1, _T(""),
                               wxDefaultPosition, wxDefaultSize,
                               wxTE_PROCESS_ENTER);
-    m_textOut = new wxTextCtrl(this, -1, _T(""));
+    m_textOut = new wxTextCtrl(panel, -1, _T(""));
     m_textOut->SetEditable(FALSE);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(m_textIn, 0, wxGROW | wxALL, 5);
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxButton(this, Exec_Btn_Send, _T("&Send")), 0,
+    sizerBtns->Add(new wxButton(panel, Exec_Btn_Send, _T("&Send")), 0,
                    wxALL, 10);
-    sizerBtns->Add(new wxButton(this, Exec_Btn_Get, _T("&Get")), 0,
+    sizerBtns->Add(new wxButton(panel, Exec_Btn_Get, _T("&Get")), 0,
                    wxALL, 10);
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
     sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
 
-    SetSizer(sizerTop);
+    panel->SetSizer(sizerTop);
     sizerTop->Fit(this);
 
     Show();
@@ -1010,13 +1025,40 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
 
 void MyPipeFrame::DoGet()
 {
+    // we don't have any way to be notified when any input appears on the
+    // stream so we have to poll it :-(
+    //
+    // NB: this really must be done because otherwise the other program might
+    //     not have enough time to receive or process our data and we'd read
+    //     an empty string
+    while ( !m_process->IsInputAvailable() && m_process->IsInputOpened() )
+        ;
+
     m_textOut->SetValue(m_in.ReadLine());
 }
 
 void MyPipeFrame::OnClose(wxCloseEvent& event)
 {
-    m_process->CloseOutput();
+    if ( m_process )
+    {
+        // we're not interested in getting the process termination notification
+        // if we are closing it ourselves
+        wxProcess *process = m_process;
+        m_process = NULL;
+        process->SetNextHandler(NULL);
+
+        process->CloseOutput();
+    }
 
     event.Skip();
 }
 
+void MyPipeFrame::OnProcessTerm(wxProcessEvent& event)
+{
+    delete m_process;
+    m_process = NULL;
+
+    wxLogWarning(_T("The other process has terminated, closing"));
+
+    Close();
+}
