@@ -247,7 +247,7 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
-    cflags = os.popen(WX_CONFIG + ' --cflags', 'r').read()[:-1] + ' ' + \
+    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + \
              os.popen('gtk-config --cflags', 'r').read()[:-1]
     cflags = string.split(cflags)
 
