@@ -482,8 +482,14 @@ public:
 
     int GetOrientation() const { return (int) m_extraLong ; }
     int GetPosition() const { return m_commandInt ; }
+    bool IsScrolling() const { return m_isScrolling; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
+    void SetScrolling(bool isScrolling) { m_isScrolling = isScrolling; }
+
+    void CopyObject(wxObject& obj) const;
+public:
+    bool m_isScrolling;
 };
 
 // ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
@@ -513,13 +519,16 @@ public:
 
     int GetOrientation() const { return (int) m_extraLong ; }
     int GetPosition() const { return m_commandInt ; }
+    bool IsScrolling() const { return m_isScrolling; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
+    void SetScrolling(bool isScrolling) { m_isScrolling = isScrolling; }
 
     void CopyObject(wxObject& object_dest) const;
 public:
     int               m_commandInt;    // Additional information
     long              m_extraLong;
+    bool              m_isScrolling;
 };
 
 // Mouse event class

@@ -205,6 +205,16 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
 {
     m_extraLong = orient;
     m_commandInt = pos;
+    m_isScrolling = TRUE;
+}
+
+void wxScrollEvent::CopyObject(wxObject& obj_d) const
+{
+    wxScrollEvent *obj = (wxScrollEvent*)&obj_d;
+
+    wxCommandEvent::CopyObject(obj_d);
+
+    obj->m_isScrolling  = m_isScrolling;
 }
 
 /*
@@ -218,6 +228,7 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_eventType = commandType;
     m_extraLong = orient;
     m_commandInt = pos;
+    m_isScrolling = TRUE;
 }
 
 void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
@@ -228,6 +239,7 @@ void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
 
     obj->m_extraLong    = m_extraLong;
     obj->m_commandInt   = m_commandInt;
+    obj->m_isScrolling  = m_isScrolling;
 }
 
 /*
