@@ -836,6 +836,7 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
 void MyTreeCtrl::name(wxTreeEvent& event)                        \
 {                                                                \
     wxLogMessage(wxT(#name));                                    \
+    SetLastItem(wxTreeItemId());                                 \
     event.Skip();                                                \
 }
 
