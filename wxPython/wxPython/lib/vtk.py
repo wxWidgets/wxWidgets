@@ -11,7 +11,7 @@ http://public.kitware.com/cgi-bin/cvsweb.cgi/VTK/Wrapping/Python/vtk/wx/
 
 print __doc__
 
-"""
+'''
 #----------------------------------------------------------------------
 # Name:        wxPython.lib.vtk
 # Purpose:     Provides a wrapper around the vtkRenderWindow from the
@@ -52,14 +52,14 @@ def debug(msg):
 
 
 class wxVTKRenderWindowBase(wxWindow):
-    '''
+    """
     A base class that enables one to embed a vtkRenderWindow into
     a wxPython widget.  This class embeds the RenderWindow correctly
     under different platforms.  Provided are some empty methods that
     can be overloaded to provide a user defined interaction behaviour.
     The event handling functions have names that are similar to the
     ones in the vtkInteractorStyle class included with VTK.
-    '''
+    """
 
     def __init__(self, parent, id, position=wxDefaultPosition,
                  size=wxDefaultSize, style=0):
@@ -566,4 +566,4 @@ class wxVTKRenderWindow(wxVTKRenderWindowBase):
                 self._PickedAssembly.SetProperty(self._PickedProperty)
 
             self.Render()
-"""
+'''
