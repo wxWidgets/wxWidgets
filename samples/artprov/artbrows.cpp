@@ -183,10 +183,12 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
 {
+
     const wxChar *data = (const wxChar*)event.GetData();
     wxBitmap bmp = wxArtProvider::GetBitmap(data, m_client);
-    m_canvas->SetBitmap(bmp);
     m_canvas->SetSize(bmp.GetWidth(), bmp.GetHeight());
+    m_canvas->SetBitmap(bmp);
+    Refresh();
 }
 
 void wxArtBrowserDialog::OnChooseClient(wxCommandEvent &event)
