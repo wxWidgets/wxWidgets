@@ -363,6 +363,20 @@ wxFontEncoding
 wxFontMapperBase::CharsetToEncoding(const wxString& charset,
                                     bool WXUNUSED(interactive))
 {
+    int enc = NonInteractiveCharsetToEncoding(charset);
+    if ( enc == wxFONTENCODING_UNKNOWN )
+    {
+        // we should return wxFONTENCODING_SYSTEM from here for unknown
+        // encodings
+        enc = wxFONTENCODING_SYSTEM;
+    }
+
+    return (wxFontEncoding)enc;
+}
+
+int
+wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
+{
     wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
 
     // we're going to modify it, make a copy
@@ -382,7 +396,7 @@ wxFontMapperBase::CharsetToEncoding(const wxString& charset,
             if ( value == wxFONTENCODING_UNKNOWN )
             {
                 // don't try to find it, in particular don't ask the user
-                return wxFONTENCODING_SYSTEM;
+                return value;
             }
 
             if ( value >= 0 && value <= wxFONTENCODING_MAX )

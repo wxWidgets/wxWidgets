@@ -141,6 +141,13 @@ protected:
     wxString m_configRootPath;
 #endif // wxUSE_CONFIG
 
+    // the real implementation of the base class version of CharsetToEncoding()
+    //
+    // returns wxFONTENCODING_UNKNOWN if encoding is unknown and we shouldn't
+    // ask the user about it, wxFONTENCODING_SYSTEM if it is unknown but we
+    // should/could ask the user
+    int NonInteractiveCharsetToEncoding(const wxString& charset);
+
 private:
     // the global fontmapper object or NULL
     static wxFontMapper *sm_instance;

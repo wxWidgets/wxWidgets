@@ -108,11 +108,16 @@ wxFontEncoding
 wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
 {
     // try the ways not needing the users intervention first
-    wxFontEncoding
-        encoding = wxFontMapperBase::CharsetToEncoding(charset, interactive);
+    int encoding = wxFontMapperBase::NonInteractiveCharsetToEncoding(charset);
 
     // if we failed to find the encoding, ask the user -- unless disabled
-    if ( (encoding == wxFONTENCODING_SYSTEM) && interactive )
+    if ( encoding == wxFONTENCODING_UNKNOWN )
+    {
+        // this is the special value which disables asking the user (he had
+        // chosen to suppress this the last time)
+        encoding = wxFONTENCODING_SYSTEM;
+    }
+    else if ( (encoding == wxFONTENCODING_SYSTEM) && interactive )
     {
         // prepare the dialog data
 
@@ -171,7 +176,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
 #endif // wxUSE_CONFIG
     }
 
-    return encoding;
+    return (wxFontEncoding)encoding;
 }
 
 // ----------------------------------------------------------------------------
