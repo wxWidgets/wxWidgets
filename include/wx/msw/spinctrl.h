@@ -59,6 +59,9 @@ public:
     // because the base class already has one returning int!)
     void SetValue(const wxString& text);
 
+    // another wxTextCtrl-like method
+    void SetSelection(long from, long to);
+
     // implementation only from now on
     // -------------------------------
 

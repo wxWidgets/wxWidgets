@@ -352,6 +352,18 @@ int wxSpinCtrl::GetValue() const
     return n;
 }
 
+void wxSpinCtrl::SetSelection(long from, long to)
+{
+    // if from and to are both -1, it means (in wxWindows) that all text should
+    // be selected - translate into Windows convention
+    if ( (from == -1) && (to == -1) )
+    {
+        from = 0;
+    }
+
+    ::SendMessage((HWND)m_hwndBuddy, EM_SETSEL, (WPARAM)from, (LPARAM)to);
+}
+
 // ----------------------------------------------------------------------------
 // forward some methods to subcontrols
 // ----------------------------------------------------------------------------
