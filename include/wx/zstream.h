@@ -17,7 +17,7 @@
 
 #include <wx/stream.h>
 
-class wxZlibInputStream: public wxFilterInputStream {
+class WXDLLEXPORT wxZlibInputStream: public wxFilterInputStream {
  public:
   wxZlibInputStream(wxInputStream& stream);
   virtual ~wxZlibInputStream();
@@ -31,7 +31,7 @@ class wxZlibInputStream: public wxFilterInputStream {
   struct z_stream_s *m_inflate;
 };
 
-class wxZlibOutputStream: public wxFilterOutputStream {
+class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
  public:
   wxZlibOutputStream(wxOutputStream& stream);
   virtual ~wxZlibOutputStream();
