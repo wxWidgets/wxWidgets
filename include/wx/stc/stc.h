@@ -1456,7 +1456,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxPySTCNameStr);
-    %name(PreStyledTextCtrl) wxStyledTextCtrl();
+    %RenameCtor(PreStyledTextCtrl,  wxStyledTextCtrl());
 
 #else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id=wxID_ANY,
