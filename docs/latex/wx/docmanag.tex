@@ -114,6 +114,12 @@ Adds a file to the file history list, if we have a pointer to an appropriate fil
 
 Adds the template to the document manager's template list.
 
+\membersection{wxDocManager::CloseDocuments}
+
+\func{bool}{CloseDocuments}{\param{bool }{force = TRUE}}
+
+Closes all currentled opened documents.
+
 \membersection{wxDocManager::CreateDocument}
 
 \func{wxDocument*}{CreateDocument}{\param{const wxString\& }{path}, \param{long}{ flags}}
@@ -284,6 +290,12 @@ from \helpref{Initialize}{wxdocmanagerinitialize}.
 
 Closes and deletes the currently active document.
 
+\membersection{wxDocManager::OnFileCloseAll}
+
+\func{void}{OnFileCloseAll}{\void}
+
+Closes and deletes all the currently opened documents.
+
 \membersection{wxDocManager::OnFileNew}
 
 \func{void}{OnFileNew}{\void}
@@ -318,6 +330,7 @@ with the following predefined menu item identifiers:
 \begin{itemize}\itemsep=0pt
 \item wxID\_OPEN Creates a new document and opens a file into it.
 \item wxID\_CLOSE Closes the current document.
+\item wxID\_CLOSE\_ALL Closes all documents.
 \item wxID\_NEW Creates a new document.
 \item wxID\_SAVE Saves the document.
 \item wxID\_SAVE\_AS Saves the document into a specified filename.

@@ -1186,6 +1186,7 @@ enum wxBorder
 #define wxID_HELP_COMMANDS      5015
 #define wxID_HELP_PROCEDURES    5016
 #define wxID_HELP_CONTEXT       5017
+#define wxID_CLOSE_ALL          5018
 
 #define wxID_CUT                5030
 #define wxID_COPY               5031

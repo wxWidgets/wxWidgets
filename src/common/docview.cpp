@@ -698,6 +698,7 @@ bool wxDocTemplate::FileMatchesTemplate(const wxString& path)
 BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_OPEN, wxDocManager::OnFileOpen)
     EVT_MENU(wxID_CLOSE, wxDocManager::OnFileClose)
+    EVT_MENU(wxID_CLOSE_ALL, wxDocManager::OnFileCloseAll)
     EVT_MENU(wxID_REVERT, wxDocManager::OnFileRevert)
     EVT_MENU(wxID_NEW, wxDocManager::OnFileNew)
     EVT_MENU(wxID_SAVE, wxDocManager::OnFileSave)
@@ -707,6 +708,7 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
 
     EVT_UPDATE_UI(wxID_OPEN, wxDocManager::OnUpdateFileOpen)
     EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateFileClose)
+    EVT_UPDATE_UI(wxID_CLOSE_ALL, wxDocManager::OnUpdateFileClose)
     EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateFileRevert)
     EVT_UPDATE_UI(wxID_NEW, wxDocManager::OnUpdateFileNew)
     EVT_UPDATE_UI(wxID_SAVE, wxDocManager::OnUpdateFileSave)
@@ -747,7 +749,7 @@ wxDocManager::~wxDocManager()
     sm_docManager = (wxDocManager*) NULL;
 }
 
-bool wxDocManager::Clear(bool force)
+bool wxDocManager::CloseDocuments(bool force)
 {
     wxNode *node = m_docs.First();
     while (node)
@@ -771,7 +773,15 @@ bool wxDocManager::Clear(bool force)
         // delete another.
         node = next;
     }
-    node = m_templates.First();
+    return TRUE;
+}
+
+bool wxDocManager::Clear(bool force)
+{
+    if (!CloseDocuments(force))
+        return FALSE;
+
+    wxNode *node = m_templates.First();
     while (node)
     {
         wxDocTemplate *templ = (wxDocTemplate*) node->Data();
@@ -804,6 +814,11 @@ void wxDocManager::OnFileClose(wxCommandEvent& WXUNUSED(event))
         if (m_docs.Member(doc))
             delete doc;
     }
+}
+
+void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
+{
+    CloseDocuments(FALSE);
 }
 
 void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))

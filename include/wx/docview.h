@@ -300,6 +300,7 @@ public:
 
     // Handlers for common user commands
     void OnFileClose(wxCommandEvent& event);
+    void OnFileCloseAll(wxCommandEvent& event);
     void OnFileNew(wxCommandEvent& event);
     void OnFileOpen(wxCommandEvent& event);
     void OnFileRevert(wxCommandEvent& event);
@@ -359,6 +360,9 @@ public:
     // Add and remove a document from the manager's list
     void AddDocument(wxDocument *doc);
     void RemoveDocument(wxDocument *doc);
+
+    // closes all currently open documents
+    bool CloseDocuments(bool force = TRUE);
 
     // Clear remaining documents and templates
     bool Clear(bool force = TRUE);
