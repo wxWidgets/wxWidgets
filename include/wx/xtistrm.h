@@ -251,8 +251,8 @@ class wxRuntimeDepersister : public wxDepersister
     struct wxRuntimeDepersisterInternal ;
     wxRuntimeDepersisterInternal * m_data ;
 public :
-    wxRuntimeDepersister() ;
-    ~wxRuntimeDepersister() ;
+    wxRuntimeDepersister();
+    virtual ~wxRuntimeDepersister();
 
     // returns the object having the corresponding ID fully constructed 
     wxObject *GetObject(int objectID) ;
@@ -327,8 +327,8 @@ private :
     wxTextOutputStream *m_fp;
     wxString ValueAsCode( const wxxVariant &param ) ;
 public:
-    wxCodeDepersister(wxTextOutputStream *out) ;
-    ~wxCodeDepersister() ;
+    wxCodeDepersister(wxTextOutputStream *out);
+    virtual ~wxCodeDepersister();
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo ,
