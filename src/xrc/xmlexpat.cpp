@@ -33,7 +33,7 @@
 
      - handle unknown encodings
      - process all elements, including CDATA
-     - XML resources should automatically select desired encoding besed on
+     - XML resources should automatically select desired encoding based on
        runtime environment (?) (would need BIN and BINZ formats modification,
        too)
 
@@ -44,7 +44,7 @@
 inline static wxString CharToString(const char *s, size_t len = wxSTRING_MAXLEN)
 {
 #if wxUSE_UNICODE
-    return wxString(s, wxMBConvUTF8, len);
+    return wxString(s, wxConvUTF8, len);
 #else
     return wxString(s, len);
 #endif

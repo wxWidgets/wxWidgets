@@ -31,7 +31,7 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str)
 {
     if (str.IsEmpty()) return;
 #if wxUSE_UNICODE
-    char *buf = str.mb_str(wxMBConvUTF8);
+    const char *buf = str.mb_str(wxConvUTF8);
     stream.Write(buf, strlen(buf));
 #else
     stream.Write(str.mb_str(), str.Len());        

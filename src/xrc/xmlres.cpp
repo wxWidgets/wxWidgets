@@ -83,8 +83,8 @@ bool wxXmlResource::Load(const wxString& filemask)
     while (!!fnd)
     {
 #if wxUSE_FILESYSTEM
-        if (filemask.Lower().Matches("*.zip") ||
-            filemask.Lower().Matches("*.rsc"))
+        if (filemask.Lower().Matches(wxT("*.zip")) ||
+            filemask.Lower().Matches(wxT("*.rsc")))
         {
             rt = rt && Load(fnd + wxT("#zip:*.xmb"));
             rt = rt && Load(fnd + wxT("#zip:*.xrc"));
@@ -569,7 +569,7 @@ int wxXmlResourceHandler::GetID()
     stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
     stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
 #undef stdID
-    else return XMLID(sid.c_str());
+    else return wxXmlResource::GetXMLID(sid);
 }
 
 
@@ -618,7 +618,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
     {
-        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.mb_str());
+        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.c_str());
         return wxNullBitmap;
     }
     wxImage img(*(fsfile->GetStream()));
@@ -628,7 +628,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
 #endif
     if (!img.Ok())
     {
-        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.mb_str());
+        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.c_str());
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
@@ -708,7 +708,7 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
     if (!s.BeforeFirst(wxT(',')).ToLong(&sx) ||
         !s.AfterLast(wxT(',')).ToLong(&sy))
     {
-        wxLogError(_("Cannot parse coordinates from '%s'."), s.mb_str());
+        wxLogError(_("Cannot parse coordinates from '%s'."), s.c_str());
         return wxDefaultSize;
     }
 
@@ -749,7 +749,7 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
 
     if (!s.ToLong(&sx))
     {
-        wxLogError(_("Cannot parse dimension from '%s'."), s.mb_str());
+        wxLogError(_("Cannot parse dimension from '%s'."), s.c_str());
         return defaultv;
     }
 
@@ -775,7 +775,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxXmlNode *font_node = GetParamNode(param);
     if (font_node == NULL)
     {
-        wxLogError(_("Cannot find font node '%s'."), param.mb_str());
+        wxLogError(_("Cannot find font node '%s'."), param.c_str());
         return wxNullFont;
     }
 
@@ -904,26 +904,26 @@ void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *
 struct XMLID_record
 {
     int id;
-    char *key;
+    wxChar *key;
     XMLID_record *next;
 };
 
 static XMLID_record *XMLID_Records[XMLID_TABLE_SIZE] = {NULL};
 
-/*static*/ int wxXmlResource::GetXMLID(const char *str_id)
+/*static*/ int wxXmlResource::GetXMLID(const wxChar *str_id)
 {
     static int XMLID_LastID = wxID_HIGHEST;
 
     int index = 0;
 
-    for (const char *c = str_id; *c != '\0'; c++) index += (int)*c;
+    for (const wxChar *c = str_id; *c != wxT('\0'); c++) index += (int)*c;
     index %= XMLID_TABLE_SIZE;
 
     XMLID_record *oldrec = NULL;
     int matchcnt = 0;
     for (XMLID_record *rec = XMLID_Records[index]; rec; rec = rec->next)
     {
-        if (strcmp(rec->key, str_id) == 0)
+        if (wxStrcmp(rec->key, str_id) == 0)
         {
             return rec->id;
         }
@@ -935,7 +935,7 @@ static XMLID_record *XMLID_Records[XMLID_TABLE_SIZE] = {NULL};
                               &XMLID_Records[index] : &oldrec->next;
     *rec_var = new XMLID_record;
     (*rec_var)->id = ++XMLID_LastID;
-    (*rec_var)->key = strdup(str_id);
+    (*rec_var)->key = wxStrdup(str_id);
     (*rec_var)->next = NULL;
 
     return (*rec_var)->id;
@@ -947,7 +947,7 @@ static void CleanXMLID_Record(XMLID_record *rec)
     if (rec)
     {
         CleanXMLID_Record(rec->next);
-        free (rec->key);
+        free(rec->key);
         delete rec;
     }
 }

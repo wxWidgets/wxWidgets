@@ -154,7 +154,7 @@ public:
     // Returns numeric ID that is equivalent to string id used in XML
     // resource. To be used in event tables
     // Macro XMLID is provided for convenience
-    static int GetXMLID(const char *str_id);
+    static int GetXMLID(const wxChar *str_id);
 
     // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
     long GetVersion() const { return m_version; }
