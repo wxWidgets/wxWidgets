@@ -46,6 +46,7 @@
     #include "wx/listbox.h"
     #include "wx/button.h"
     #include "wx/msgdlg.h"
+    #include "wx/settings.h"
 
     #include <stdio.h>
 #endif

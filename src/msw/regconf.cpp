@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
   #include  "wx/string.h"
+  #include  "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/event.h"
