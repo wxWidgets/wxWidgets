@@ -3927,35 +3927,38 @@ void wxWindowGTK::WarpPointer( int x, int y )
 
 void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 {
-    if (!m_widget) return;
-    if (!m_widget->window) return;
+    if (!m_widget)
+        return;
+    if (!m_widget->window)
+        return;
 
 #ifndef __WXGTK20__
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    wxRect myRect(0,0,0,0);
+    wxRect myRect;
     if (m_wxwindow && rect)
     {
         myRect.SetSize(wxSize( m_wxwindow->allocation.width,
                                m_wxwindow->allocation.height));
-        myRect.Intersect(*rect);
-        if (!myRect.width || !myRect.height)
+        if ( myRect.Intersect(*rect).IsEmpty() )
+        {
             // nothing to do, rectangle is empty
             return;
+        }
+
         rect = &myRect;
     }
 
+    // schedule the area for later updating in GtkUpdate()
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
         if (rect)
         {
-            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
             m_clearRegion.Union( rect->x, rect->y, rect->width, rect->height );
         }
         else
         {
-            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
             m_clearRegion.Clear();
             m_clearRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
         }
@@ -3965,7 +3968,6 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     {
         if (m_wxwindow)
         {
-            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
             m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
         }
         else
@@ -3982,7 +3984,6 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     {
         if (m_wxwindow)
         {
-            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
             m_updateRegion.Clear();
             m_updateRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
         }
@@ -3991,24 +3992,27 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
         }
     }
-#else
+#else // GTK+ 2
     if (m_wxwindow)
     {
+        GdkRectangle gdk_rect,
+                    *p;
         if (rect)
         {
-            GdkRectangle gdk_rect;
             gdk_rect.x = rect->x;
             gdk_rect.y = rect->y;
             gdk_rect.width = rect->width;
             gdk_rect.height = rect->height;
-            gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, &gdk_rect, TRUE );
+            p = &gdk_rect;
         }
-        else
+        else // invalidate everything
         {
-            gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, NULL, TRUE );
+            p = NULL;
         }
+
+        gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, p, TRUE );
     }
-#endif
+#endif // GTK+ 1/2
 }
 
 void wxWindowGTK::Update()
@@ -4031,6 +4035,16 @@ void wxWindowGTK::GtkUpdate()
     if (!m_updateRegion.IsEmpty())
         GtkSendPaintEvents();
 #endif
+
+    // for consistency with other platforms (and also because it's convenient
+    // to be able to update an entire TLW by calling Update() only once), we
+    // should also update all our children here
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        node->GetData()->GtkUpdate();
+    }
 }
 
 void wxWindowGTK::GtkSendPaintEvents()
