@@ -104,6 +104,11 @@ Unix:
 - wxTaskBarIcon now supports freedesktop.org System Tray protocol
 - security fixes to wxSingleInstanceChecker
 
+wxGTK:
+
+- fixed wrong colour of tooltips under some themes
+
+
 
 2.5.2
 -----
