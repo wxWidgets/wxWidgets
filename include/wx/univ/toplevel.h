@@ -28,7 +28,7 @@ enum
     wxTOPLEVEL_ACTIVE          = 0x00000001,
     wxTOPLEVEL_MAXIMIZED       = 0x00000002,
     wxTOPLEVEL_TITLEBAR        = 0x00000004,
-    wxTOPLEVEL_ICON            = 0x00000009,
+    wxTOPLEVEL_ICON            = 0x00000008,
     wxTOPLEVEL_RESIZEABLE      = 0x00000010,
     wxTOPLEVEL_BORDER          = 0x00000020,
     wxTOPLEVEL_BUTTON_CLOSE    = 0x01000000,
@@ -50,11 +50,11 @@ enum
     wxHT_TOPLEVEL_BORDER_S        = 0x00000020,
     wxHT_TOPLEVEL_BORDER_E        = 0x00000040,
     wxHT_TOPLEVEL_BORDER_W        = 0x00000080,
-    wxHT_TOPLEVEL_ANY_BORDER      = 0x000000F0,
     wxHT_TOPLEVEL_BORDER_NE       = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_E,
     wxHT_TOPLEVEL_BORDER_SE       = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_E,
     wxHT_TOPLEVEL_BORDER_NW       = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_W,
     wxHT_TOPLEVEL_BORDER_SW       = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_W,
+    wxHT_TOPLEVEL_ANY_BORDER      = 0x000000F0,
 
     wxHT_TOPLEVEL_BUTTON_CLOSE    = /*0x01000000*/ wxTOPLEVEL_BUTTON_CLOSE,
     wxHT_TOPLEVEL_BUTTON_MAXIMIZE = /*0x02000000*/ wxTOPLEVEL_BUTTON_MAXIMIZE,
@@ -172,6 +172,8 @@ private:
     wxTopLevelWindow *m_winCapture;
     long              m_winHitTest;
     long              m_winPressed;
+    bool              m_borderCursorOn;
+    wxCursor          m_origCursor;
 };
 
 #endif // __WX_UNIV_TOPLEVEL_H__
