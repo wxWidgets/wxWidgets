@@ -1885,7 +1885,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/pen.mm
     src/cocoa/radiobox.mm
     src/cocoa/radiobut.mm
-    src/cocoa/region.cpp
+    src/cocoa/region.mm
     src/cocoa/settings.cpp
     src/cocoa/slider.mm
     src/cocoa/spinbutt.mm
@@ -1911,6 +1911,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
     src/generic/paletteg.cpp
+    src/generic/regiong.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
     src/generic/timer.cpp
@@ -1986,6 +1987,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/paletteg.h
+    wx/generic/region.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
 </set>
