@@ -82,6 +82,8 @@
     IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
 
 #ifdef __WXMAC__
+    #include "wx/mac/uma.h"
+    
     #define mm2pt            2.83464566929
     #define pt2mm            0.352777777778
 #endif // Mac
@@ -179,6 +181,36 @@ wxPrintData::wxPrintData()
 #if TARGET_CARBON
     m_macPageFormat = kPMNoPageFormat;
     m_macPrintSettings = kPMNoPrintSettings;
+    
+  #if PM_USE_SESSION_APIS
+    PMPrintSession macPrintSession = kPMNoReference;
+    OSStatus       err;
+    
+	err = ::UMAPrOpen(&macPrintSession) ;
+	if ( err == noErr )
+	{  
+		err = PMCreatePageFormat(&m_macPageFormat);
+		
+		//  Note that PMPageFormat is not session-specific, but calling
+		//  PMSessionDefaultPageFormat assigns values specific to the printer
+		//  associated with the current printing session.
+		if ((err == noErr) && (m_macPageFormat != kPMNoPageFormat))
+		{
+	    	err = PMSessionDefaultPageFormat(macPrintSession, m_macPageFormat);
+		}
+
+		err = PMCreatePrintSettings(&m_macPrintSettings);
+
+		//  Note that PMPrintSettings is not session-specific, but calling
+		//  PMSessionDefaultPrintSettings assigns values specific to the printer
+		//  associated with the current printing session.
+		if ((err == noErr) && (m_macPrintSettings != kPMNoPrintSettings))
+		{
+	    	err = PMSessionDefaultPrintSettings(macPrintSession, m_macPrintSettings);
+		}
+	}
+	::UMAPrClose(&macPrintSession) ;
+  #endif
 #else
     m_macPrintInfo = (THPrint) NewHandleClear( sizeof( TPrint ) );
     (**m_macPrintInfo).iPrVersion = 0;                    // something invalid
@@ -226,7 +258,7 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
     m_devNames = (void*) NULL;
 #elif defined( __WXMAC__ )
 #if TARGET_CARBON
-    m_macPageFormat = kPMNoPageFormat;
+    m_macPageFormat    = kPMNoPageFormat;
     m_macPrintSettings = kPMNoPrintSettings;
 #else
     m_macPrintInfo = NULL;
@@ -265,6 +297,7 @@ wxPrintData::~wxPrintData()
   #endif
         m_macPrintSettings = kPMNoPrintSettings;
     }
+    
 #else
     wxASSERT( m_macPrintInfo );
     // we should perhaps delete
