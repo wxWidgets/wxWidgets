@@ -52,6 +52,8 @@ public:
     virtual void SetRange(int minValue, int maxValue) = 0;
     virtual int GetMin() const = 0;
     virtual int GetMax() const = 0;
+    void SetMin( int minValue ) { SetRange( minValue , GetMax() ) ; }
+    void SetMax( int maxValue ) { SetRange( GetMin() , maxValue ) ; }
 
     // the line/page size is the increment by which the slider moves when
     // cursor arrow key/page up or down are pressed (clicking the mouse is like

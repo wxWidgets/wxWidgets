@@ -538,130 +538,58 @@ private :
 } ;
 
 
-template <class Klass, typename valueType, typename retType> void wxSetterFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*setter)( valueType ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    if ( variantValue.HasData<valueType>() )
-        (obj->*(setter))(variantValue.Get<valueType>()) ;
-    else
-        (obj->*(setter))(*variantValue.Get<valueType*>()) ;
-}
 
-template <class Klass, typename valueType, typename retType> void wxSetterFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*setter)( valueType& ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    if ( variantValue.HasData<valueType>() )
-        (obj->*(setter))(variantValue.Get<valueType>()) ;
-    else
-        (obj->*(setter))(*variantValue.Get<valueType*>()) ;
-}
-
-template <class Klass, typename valueType, typename retType> void wxSetterFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*setter)( const valueType& ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    if ( variantValue.HasData<valueType>() )
-        (obj->*(setter))(variantValue.Get<valueType>()) ;
-    else
-        (obj->*(setter))(*variantValue.Get<valueType*>()) ;
-}
-
-template <class Klass, typename valueType, typename retType> void wxAdderFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*adder)( valueType ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    (obj->*(adder))(variantValue.Get<valueType>()) ;
-}
-
-template <class Klass, typename valueType, typename retType> void wxAdderFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*adder)( valueType& ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    (obj->*(adder))(variantValue.Get<valueType>()) ;
-}
-
-template <class Klass, typename valueType, typename retType> void wxAdderFunc( wxObject *object , const wxxVariant &variantValue , retType(Klass::*adder)( const valueType& ) )
-{
-    Klass *obj = dynamic_cast<Klass*>(object);
-    (obj->*(adder))(variantValue.Get<valueType>()) ;
-}
-
-/*
-template <class Klass, typename valueType> void wxxGetterFunc( const wxObject *object , wxxVariant &result, valueType& (Klass::*getter)() const )
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    result = wxxVariant((obj->*(getter))()) ;
-}
-*/
-
-template <class Klass, typename valueType> void wxGetterFunc( const wxObject *object , wxxVariant &result, valueType(Klass::*getter)() const )
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    result = wxxVariant((obj->*(getter))()) ;
-}
-
-template <class Klass, typename valueType> void wxGetterFunc( const wxObject *object , wxxVariant &result, const valueType&(Klass::*getter)() const)
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    result = wxxVariant((obj->*(getter))()) ;
-}
-
-template <class Klass, typename valueType> void wxCollectionGetterFunc( const wxObject *object , wxxVariantArray &result, valueType& (Klass::*getter)() const )
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    wxCollectionToVariantArray( (obj->*(getter))() , result ) ;
-}
-
-template <class Klass, typename valueType> void wxCollectionGetterFunc( const wxObject *object , wxxVariantArray &result, valueType(Klass::*getter)() const )
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    wxCollectionToVariantArray( (obj->*(getter))() , result ) ;
-}
-
-template <class Klass, typename valueType> void wxCollectionGetterFunc( const wxObject *object , wxxVariantArray &result, const valueType&(Klass::*getter)() const)
-{
-    const Klass *obj = dynamic_cast<const Klass*>(object);
-    wxCollectionToVariantArray( (obj->*(getter))() , result ) ;
-}
-
-#define WX_SETTER( property , settermethod ) \
+#define WX_SETTER( property, Klass, valueType, setterMethod ) \
     class wxSetter##property : public wxSetter \
     { \
     public: \
-        wxSetter##property() : wxSetter( #settermethod ) {} \
+        wxSetter##property() : wxSetter( #setterMethod ) {} \
         void Set( wxObject *object, const wxxVariant &variantValue ) const \
         { \
-        wxSetterFunc( object , variantValue , &class_t::settermethod ) ; \
+            Klass *obj = dynamic_cast<Klass*>(object) ;  \
+            if ( variantValue.HasData<valueType>() ) \
+                obj->setterMethod(variantValue.Get<valueType>()) ; \
+            else \
+                obj->setterMethod(*variantValue.Get<valueType*>()) ; \
         } \
     } ;
 
-#define WX_GETTER( property , gettermethod ) \
+#define WX_GETTER( property, Klass, valueType , gettermethod ) \
     class wxGetter##property : public wxGetter \
     { \
     public : \
         wxGetter##property() : wxGetter( #gettermethod ) {} \
         void Get( const wxObject *object , wxxVariant &result) const \
         { \
-            wxGetterFunc( object , result , &class_t::gettermethod ) ; \
+            const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
+            result = wxxVariant( obj->gettermethod() ) ; \
         } \
     } ;
 
-#define WX_ADDER( property , addermethod ) \
+#define WX_ADDER( property, Klass, valueType , addermethod ) \
     class wxAdder##property : public wxAdder \
     { \
     public: \
         wxAdder##property() : wxAdder( #addermethod ) {} \
         void Add( wxObject *object, const wxxVariant &variantValue ) const \
         { \
-        wxAdderFunc( object , variantValue , &class_t::addermethod ) ; \
+            Klass *obj = dynamic_cast<Klass*>(object) ;  \
+            if ( variantValue.HasData<valueType>() ) \
+                obj->addermethod(variantValue.Get<valueType>()) ; \
+            else \
+                obj->addermethod(*variantValue.Get<valueType*>()) ; \
         } \
     } ;
 
-#define WX_COLLECTION_GETTER( property , gettermethod ) \
+#define WX_COLLECTION_GETTER( property, Klass, valueType , gettermethod ) \
     class wxCollectionGetter##property : public wxCollectionGetter \
     { \
     public : \
         wxCollectionGetter##property() : wxCollectionGetter( #gettermethod ) {} \
         void Get( const wxObject *object , wxxVariantArray &result) const \
         { \
-            wxCollectionGetterFunc( object , result , &class_t::gettermethod ) ; \
+            const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
+            wxCollectionToVariantArray( obj->gettermethod() , result ) ; \
         } \
     } ;
 
@@ -819,29 +747,29 @@ private :
 
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
-    WX_SETTER( name , setter ) \
+    WX_SETTER( name , class_t , type , setter ) \
     static wxSetter##name _setter##name ; \
-    WX_GETTER( name , getter ) \
+    WX_GETTER( name , class_t , type , getter ) \
     static wxGetter##name _getter##name ; \
 	static wxPropertyAccessor _accessor##name( &_setter##name , &_getter##name , NULL , NULL ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_READONLY_PROPERTY( name , type , getter ,defaultValue ) \
-    WX_GETTER( name , getter ) \
+    WX_GETTER( name , class_t , type , getter ) \
     static wxGetter##name _getter##name ; \
 	static wxPropertyAccessor _accessor##name( NULL , &_getter##name , NULL , NULL ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_COLLECTION( name , colltype , addelemtype , adder , getter ) \
-    WX_ADDER( name , adder ) \
+    WX_ADDER( name , class_t , addelemtype , adder ) \
     static wxAdder##name _adder##name ; \
-    WX_COLLECTION_GETTER( name , getter ) \
+    WX_COLLECTION_GETTER( name , class_t , colltype , getter ) \
     static wxCollectionGetter##name _collectionGetter##name ; \
 	static wxPropertyAccessor _accessor##name( NULL , NULL ,&_adder##name , &_collectionGetter##name ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name  ) ;
 
 #define WX_READONLY_PROPERTY_COLLECTION( name , colltype , addelemtype , getter ) \
-    WX_COLLECTION_GETTER( name , getter ) \
+    WX_COLLECTION_GETTER( name , class_t , colltype , getter ) \
     static wxCollectionGetter##name _collectionGetter##name ; \
 	static wxPropertyAccessor _accessor##name( NULL , NULL , NULL , &_collectionGetter##name ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name  ) ;
@@ -1101,7 +1029,60 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
 	const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 } ; \
 	const int klass::sm_constructorPropertiesCount##klass = 6;
 
+// 7 params
 
+template<typename Class,
+         typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+struct wxConstructorBridge_7 : public wxConstructorBridge
+{
+    void Create(wxObject *o, wxxVariant *args)
+    {
+        Class *obj = dynamic_cast<Class*>(o);
+        obj->Create(
+                    args[0].Get<T0>() ,
+                    args[1].Get<T1>() ,
+                    args[2].Get<T2>() ,
+                    args[3].Get<T3>() ,
+                    args[4].Get<T4>() ,
+                    args[5].Get<T5>() ,
+                    args[6].Get<T6>()
+                  );
+    }
+};
+
+#define WX_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
+	wxConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass ; \
+	wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 , #v6} ; \
+	const int klass::sm_constructorPropertiesCount##klass = 7;
+
+// 8 params
+
+template<typename Class,
+         typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+struct wxConstructorBridge_8 : public wxConstructorBridge
+{
+    void Create(wxObject *o, wxxVariant *args)
+    {
+        Class *obj = dynamic_cast<Class*>(o);
+        obj->Create(
+                    args[0].Get<T0>() ,
+                    args[1].Get<T1>() ,
+                    args[2].Get<T2>() ,
+                    args[3].Get<T3>() ,
+                    args[4].Get<T4>() ,
+                    args[5].Get<T5>() ,
+                    args[6].Get<T6>() ,
+                    args[7].Get<T7>()
+                  );
+    }
+};
+
+#define WX_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
+	wxConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass ; \
+	wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 , #v6 , #v7} ; \
+	const int klass::sm_constructorPropertiesCount##klass = 8;
 // ----------------------------------------------------------------------------
 // wxClassInfo
 // ----------------------------------------------------------------------------

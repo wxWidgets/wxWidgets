@@ -229,13 +229,6 @@ public:
         return wxSize(w, h);
     }
 
-// the following are just helper functions to help some compiler with the extended rtti inf
-    void SetWindowPosition( const wxPoint &pt) { SetPosition( pt ) ; }
-    wxPoint GetWindowPosition() const { return GetPosition() ; }
-
-    void SetWindowSize( const wxSize &sz ) { SetSize( sz ) ; }
-    wxSize GetWindowSize() const { return GetSize() ; }
-
     wxRect GetRect() const
     {
         int x, y, w, h;
@@ -645,9 +638,6 @@ public:
     virtual bool SetFont( const wxFont &font ) = 0;
     const wxFont& GetFont() const { return m_font; }
     wxFont& GetFont() { return m_font; }
-
-    // for resolving RTTI conflicts
-    wxFont GetWindowFont() const { return GetFont() ; }
 
 #if wxUSE_CARET
         // associate a caret with the window

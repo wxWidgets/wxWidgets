@@ -69,6 +69,8 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
     virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
+    // rtti needs a function with just one signature
+    void SetSelectionLine(int n) { SetSelection( n ) ; }
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
