@@ -523,13 +523,21 @@ class XML_Tree(wxTreeCtrl):
             # Find position
             for i in range(notebook.GetPageCount()):
                 if notebook.GetPage(i) == obj:
-                    if notebook.GetSelection() != i: notebook.SetSelection(i)
+                    if notebook.GetSelection() != i:
+                        notebook.SetSelection(i)
+                        # Remove highlight - otherwise highlight window won't be visible
+                        if g.testWin.highLight:
+                            g.testWin.highLight.Remove()
                     break
         # Find first ancestor which is a wxWindow (not a sizer)
         winParent = itemParent
         while self.GetPyData(winParent).isSizer:
             winParent = self.GetItemParent(winParent)
-        parentPos = self.FindNodePos(winParent)
+        # Notebook children are layed out in a little strange way
+        if self.GetPyData(itemParent).treeObject().__class__ == xxxNotebook:
+            parentPos = wxPoint(0,0)
+        else:
+            parentPos = self.FindNodePos(winParent)
         # Position (-1,-1) is really (0,0)
         pos = obj.GetPosition()
         if pos == (-1,-1): pos = (0,0)
@@ -559,6 +567,9 @@ class XML_Tree(wxTreeCtrl):
         return child
 
     def OnSelChanged(self, evt):
+        self.ChangeSelection(evt.GetItem())
+
+    def ChangeSelection(self, item):
         # Apply changes
         # !!! problem with wxGTK - GetOldItem is Ok if nothing selected
         #oldItem = evt.GetOldItem()
@@ -577,7 +588,7 @@ class XML_Tree(wxTreeCtrl):
                 status = 'Changes were applied'
         g.frame.SetStatusText(status)
         # Generate view
-        self.selection = evt.GetItem()
+        self.selection = item
         if not self.selection.IsOk():
             self.selection = None
             return
@@ -753,7 +764,6 @@ class XML_Tree(wxTreeCtrl):
                 testWin.panel = testWin
                 testWin.CreateStatusBar()
                 testWin.SetClientSize(testWin.GetBestSize())
-                testWin.panel = testWin
                 testWin.SetPosition(pos)
                 testWin.Show(True)
             elif xxx.__class__ == xxxPanel:

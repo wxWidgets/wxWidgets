@@ -79,6 +79,11 @@ class ScrolledMessageDialog(wxDialog):
 
 ################################################################################
 
+# Event handler for using during location
+class Locator(wxEvtHandler):
+    def ProcessEvent(self, evt):
+        print evt
+
 class Frame(wxFrame):
     def __init__(self, pos, size):
         wxFrame.__init__(self, None, -1, '', pos, size)
@@ -119,8 +124,8 @@ class Frame(wxFrame):
         self.ID_DELETE = wxNewId()
         menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
 #        menu.AppendSeparator()
-        ID_SELECT = wxNewId()
-#        menu.Append(ID_SELECT, '&Select', 'Select object')
+        self.ID_LOCATE = wxNewId()
+        menu.Append(self.ID_LOCATE, '&Locate\tCtrl-L', 'Locate control in test window and select it')
         menuBar.Append(menu, '&Edit')
 
         menu = wxMenu()
@@ -133,7 +138,7 @@ class Frame(wxFrame):
         menu.Check(self.ID_SHOW_TOOLS, conf.showTools)
         menu.AppendSeparator()
         self.ID_TEST = wxNewId()
-        menu.Append(self.ID_TEST, '&Test\tF5', 'Test window')
+        menu.Append(self.ID_TEST, '&Test\tF5', 'Show test window')
         self.ID_REFRESH = wxNewId()
         menu.Append(self.ID_REFRESH, '&Refresh\tCtrl-R', 'Refresh test window')
         self.ID_AUTO_REFRESH = wxNewId()
@@ -194,7 +199,7 @@ class Frame(wxFrame):
         EVT_MENU(self, wxID_COPY, self.OnCopy)
         EVT_MENU(self, wxID_PASTE, self.OnPaste)
         EVT_MENU(self, self.ID_DELETE, self.OnCutDelete)
-        EVT_MENU(self, ID_SELECT, self.OnSelect)
+        EVT_MENU(self, self.ID_LOCATE, self.OnLocate)
         # View
         EVT_MENU(self, self.ID_EMBED_PANEL, self.OnEmbedPanel)
         EVT_MENU(self, self.ID_SHOW_TOOLS, self.OnShowTools)
@@ -271,7 +276,6 @@ class Frame(wxFrame):
         # Other events
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
-        EVT_LEFT_DOWN(self, self.OnLeftDown)
         EVT_KEY_DOWN(self, tools.OnKeyDown)
         EVT_KEY_UP(self, tools.OnKeyUp)
     
@@ -321,8 +325,8 @@ class Frame(wxFrame):
         if evt.GetId() == wxID_SAVEAS or not self.dataFile:
             if self.dataFile: defaultName = ''
             else: defaultName = 'UNTITLED.xrc'
-            dlg = wxFileDialog(self, 'Save As', os.path.dirname(self.dataFile),
-                               defaultName, '*.xrc',
+            dirname = os.path.dirname(self.dataFile)
+            dlg = wxFileDialog(self, 'Save As', dirname, defaultName, '*.xrc',
                                wxSAVE | wxOVERWRITE_PROMPT | wxCHANGE_DIR)
             if dlg.ShowModal() == wxID_OK:
                 path = dlg.GetPath()
@@ -529,17 +533,6 @@ class Frame(wxFrame):
             panel.pages[0].box.SetLabel(xxx.panelName())
         dlg.Destroy()
 
-    def OnSelect(self, evt):
-        print >> sys.stderr, 'Xperimental function!'
-        wxYield()
-        self.SetCursor(wxCROSS_CURSOR)
-        self.CaptureMouse()
-
-    def OnLeftDown(self, evt):
-        pos = evt.GetPosition()
-        self.SetCursor(wxNullCursor)
-        self.ReleaseMouse()
-
     def OnEmbedPanel(self, evt):
         conf.embedPanel = evt.IsChecked()
         if conf.embedPanel:
@@ -586,6 +579,44 @@ class Frame(wxFrame):
     def OnTest(self, evt):
         if not tree.selection: return   # key pressed event
         tree.ShowTestWindow(tree.selection)
+
+    # Find object by relative position
+    def FindObject(self, item, obj):
+        # We simply perform depth-first traversal, sinse it's too much
+        # hassle to deal with all sizer/window combinations
+        w = tree.FindNodeObject(item)
+        if w == obj:
+            return item
+        if tree.ItemHasChildren(item):
+            child = tree.GetFirstChild(item)[0]
+            while child:
+                found = self.FindObject(child, obj)
+                if found: return found
+                child = tree.GetNextSibling(child)
+        return None
+
+    def OnTestWinLeftDown(self, evt):
+        pos = evt.GetPosition()
+        self.SetHandler(g.testWin)
+        g.testWin.Disconnect(wxID_ANY, wxID_ANY, wxEVT_LEFT_DOWN)
+        item = self.FindObject(g.testWin.item, evt.GetEventObject())
+        if item:
+            tree.SelectItem(item)
+
+    def SetHandler(self, w, h=None):
+        if h:
+            w.SetEventHandler(h)
+            w.SetCursor(wxCROSS_CURSOR)
+        else:
+            w.SetEventHandler(w)
+            w.SetCursor(wxNullCursor)
+        for ch in w.GetChildren():
+            self.SetHandler(ch, h)
+
+    def OnLocate(self, evt):
+        if g.testWin:
+            self.SetHandler(g.testWin, g.testWin)
+            g.testWin.Connect(wxID_ANY, wxID_ANY, wxEVT_LEFT_DOWN, self.OnTestWinLeftDown)
 
     def OnRefresh(self, evt):
         # If modified, apply first
@@ -877,10 +908,10 @@ Homepage: http://xrced.sourceforge.net\
             # Set encoding global variable
             if dom.encoding: g.currentEncoding = dom.encoding
             # Change dir
+            self.dataFile = path = os.path.abspath(path)
             dir = os.path.dirname(path)
             if dir: os.chdir(dir)
             tree.SetData(dom)
-            self.dataFile = path
             self.SetTitle(progname + ': ' + os.path.basename(path))
         except:
             # Nice exception printing
