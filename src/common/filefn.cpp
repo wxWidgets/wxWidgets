@@ -67,7 +67,6 @@
 #endif
 
 #ifdef __OS2__
-    #include <direct.h>
     #include <process.h>
 #endif
 #ifdef __WINDOWS__
@@ -1079,8 +1078,10 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__OS2__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
+#if (!(defined(__WXMSW__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
+#elif defined(__WXPM__)
+    if (::DosCreateDir((PSZ)dir, NULL)) != 0) // enhance for EAB's??
 #else  // !MSW and !OS/2 VAC++
     if ( wxMkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
@@ -1100,6 +1101,8 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
   return FALSE; //to be changed since rmdir exists in VMS7.x
 #elif defined( __WXMAC__ )
   return (rmdir(wxUnix2MacFilename( dir )) == 0);
+#elif defined(__WXPM__)
+  return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #else
 
 #ifdef __SALFORDC__
@@ -1673,6 +1676,13 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
     strcpy( buf , res ) ;
     if (0) {
+#elif(__VISAGECPP__)
+    APIRET rc;
+    rc = ::DosQueryCurrentDir( 0 // current drive
+                              ,buf
+                              ,(PULONG)&sz
+                             );
+    if (rc != 0) {
 #else
   if (getcwd(buf, sz) == NULL) {
 #endif
@@ -1702,8 +1712,10 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#if defined( __UNIX__ ) || defined( __WXMAC__ ) || defined(__WXPM__)
+#if defined( __UNIX__ ) || defined( __WXMAC__ )
   return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+#elif defined(__WXPM__)
+  return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__

@@ -62,7 +62,6 @@
     #endif
 #elif (defined(__WXPM__))
     #include <io.h>
-    #include <direct.h>
     #define   W_OK        2
     #define   R_OK        4
 #elif (defined(__WXSTUBS__))
@@ -470,7 +469,7 @@ bool wxTempFile::Open(const wxString& strName)
     // OS/2 supports that have them (HPFS, FAT32) and security (HPFS386)
     static const wxChar *szMktempSuffix = wxT("XXX");
     m_strTemp << strName << szMktempSuffix;
-    mkdir(m_strTemp.GetWriteBuf(MAX_PATH));
+    ::DosCreateDir(m_strTemp.GetWriteBuf(MAX_PATH), NULL);
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);
