@@ -150,7 +150,7 @@ protected:
 #if defined(__WXMSW__)
     #include "wx/msw/display.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/display.h"
+    #include "wx/unix/displayx11.h"
 #elif defined(__WXGTK__)
     #include "wx/unix/displayx11.h"
 #elif defined(__WXMAC__)
