@@ -148,15 +148,6 @@ wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is u
 
 Deletes all items and all columns.
 
-\membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
-
-\func{bool}{DeleteItem}{\param{long }{item}}
-
-Deletes the specified item. This function sends the
-{\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
-
-See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
-
 \membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
@@ -180,6 +171,15 @@ from the control would be too slow then (unlike \helpref{DeleteItem}{wxlistctrld
 \func{bool}{DeleteColumn}{\param{int }{col}}
 
 Deletes a column.
+
+\membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
+
+\func{bool}{DeleteItem}{\param{long }{item}}
+
+Deletes the specified item. This function sends the
+{\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
+
+See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
 
 \membersection{wxListCtrl::EditLabel}\label{wxlistctrledit}
 
