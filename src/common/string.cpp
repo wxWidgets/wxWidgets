@@ -13,6 +13,12 @@
   #pragma implementation "string.h"
 #endif
 
+#ifdef __WXPM__
+#define LINKAGECPP _Optlink
+#else
+#define LINKAGECPP
+#endif
+
 /*
  * About ref counting:
  *  1) all empty strings use g_strEmpty, nRefs = -1 (set in Init())
@@ -864,8 +870,8 @@ wxString& wxString::MakeLower()
 wxString& wxString::Trim(bool bFromRight)
 {
   // first check if we're going to modify the string at all
-  if ( !IsEmpty() && 
-       ( 
+  if ( !IsEmpty() &&
+       (
         (bFromRight && wxIsspace(GetChar(Len() - 1))) ||
         (!bFromRight && wxIsspace(GetChar(0u)))
        )
@@ -1685,7 +1691,12 @@ void wxArrayString::Grow()
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
+#if defined(__VISAGECPP__)
+      int                           array_size = ARRAY_DEFAULT_INITIAL_SIZE;
+      wxASSERT( array_size != 0 );
+#else
       wxASSERT( ARRAY_DEFAULT_INITIAL_SIZE != 0 );
+#endif
 
       // add 50% but not too much
       size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
@@ -1762,7 +1773,7 @@ void wxArrayString::Shrink()
   // only do it if we have some memory to free
   if( m_nCount < m_nSize ) {
     // allocates exactly as much memory as we need
-    wxChar **pNew = new wxChar *[m_nCount];              
+    wxChar **pNew = new wxChar *[m_nCount];
 
     // copy data to new location
     memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
@@ -1880,7 +1891,7 @@ static wxArrayString::CompareFunction gs_compareFunction = NULL;
 static bool gs_sortAscending = TRUE;
 
 // function which is called by quick sort
-static int wxStringCompareFunction(const void *first, const void *second)
+static int LINKAGEMODE wxStringCompareFunction(const void *first, const void *second)
 {
   wxString *strFirst = (wxString *)first;
   wxString *strSecond = (wxString *)second;

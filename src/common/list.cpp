@@ -604,7 +604,7 @@ bool wxStringList::Member(const wxChar *s) const
     return FALSE;
 }
 
-static int
+static int LINKAGEMODE
 wx_comparestrings(const void *arg1, const void *arg2)
 {
   wxChar **s1 = (wxChar **) arg1;

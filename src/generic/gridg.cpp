@@ -49,6 +49,13 @@
 #define wxUSE_DOUBLE_BUFFERING  1
 #endif
 
+#ifdef __WXPM__
+#define wxIPE_ADJUST            -1
+#define wxIPE_STYLE             wxNO_BORDER
+#define wxIPE_HIGHLIGHT         1
+#define wxUSE_DOUBLE_BUFFERING  1
+#endif
+
 #ifdef __WXGTK__
 #define wxIPE_ADJUST            -1
 #define wxIPE_STYLE             wxNO_BORDER
@@ -1518,8 +1525,16 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
       m_inPlaceTextItem->Show(TRUE);
       m_inPlaceTextItem->SetFocus();
-      if (wxIPE_HIGHLIGHT)
+#if defined(__VISAGECPP__)
+      {
+          int                       highlight = wxIPE_HIGHLIGHT;
+          if (highlight != 0)
+              HighlightCell(dc, TRUE);
+      }
+#else
+      if (wxIPE_HIGHLIGHT != 0)
           HighlightCell(dc, TRUE);
+#endif
     }
   else
     {

@@ -89,7 +89,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
         s = url.GetInputStream();
         content = url.GetProtocol().GetContentType();
         if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
-        if (s) 
+        if (s)
 	{
             wxChar buf[256];
 
@@ -98,20 +98,25 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
             m_Cache.Put(right, info);
 
             {   // ok, now copy it:
+#if defined(__VISAGECPP__)
+// VA thinks this is an ambiguous call
+                wxFileOutputStream sout((wxString)buf);
+#else
                 wxFileOutputStream sout(buf);
+#endif
                 s -> Read(sout); // copy the stream
             }
             delete s;
         }
         else
-	{ 
-	    return (wxFSFile*) NULL; // we can't open the URL
-	}
+        {
+            return (wxFSFile*) NULL; // we can't open the URL
+        }
     }
 
     // Load item from cache:
     s = new wxFileInputStream(info->GetTemp());
-    if (s) 
+    if (s)
     {
         return new wxFSFile(s,
                             right,
@@ -129,7 +134,7 @@ wxInternetFSHandler::~wxInternetFSHandler()
     wxInetCacheNode *n2;
 
     m_Cache.BeginFind();
-    while ((n = m_Cache.Next()) != NULL) 
+    while ((n = m_Cache.Next()) != NULL)
     {
         n2 = (wxInetCacheNode*) n->GetData();
         wxRemoveFile(n2->GetTemp());

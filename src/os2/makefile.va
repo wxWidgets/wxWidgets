@@ -57,11 +57,13 @@ $(CPPFLAGS) /Fo$@ /Tp $<
 <<
 
 {..\os2}.cpp{..\os2\$D}.obj:
+    @echo $<
     icc @<<
 $(CPPFLAGS) /Fo$@ /Tp $<
 <<
 
 {..\html}.cpp{..\html\$D}.obj:
+    @echo $<
     icc @<<
 $(CPPFLAGS) /Fo$@ /Tp $<
 <<
@@ -181,80 +183,7 @@ COMMONOBJS = \
 
 
 OS2OBJS = \
-  ..\os2\$D\accel.obj \
-  ..\os2\$D\app.obj \
-  ..\os2\$D\bitmap.obj \
-  ..\os2\$D\bmpbuttn.obj \
-  ..\os2\$D\brush.obj \
-  ..\os2\$D\button.obj \
-  ..\os2\$D\checkbox.obj \
-  ..\os2\$D\checklst.obj \
-  ..\os2\$D\choice.obj \
-  ..\os2\$D\clipbrd.obj \
-  ..\os2\$D\dcprint.obj \
-  ..\os2\$D\dcscreen.obj \
-  ..\os2\$D\dde.obj \
-  ..\os2\$D\dialog.obj \
-  ..\os2\$D\dib.obj \
-  ..\os2\$D\dibutils.obj \
-  ..\os2\$D\dirdlg.obj \
-  ..\os2\$D\filedlg.obj \
-  ..\os2\$D\font.obj \
-  ..\os2\$D\fontdlg.obj \
-  ..\os2\$D\frame.obj \
-  ..\os2\$D\gauge.obj \
-  ..\os2\$D\gdiobj.obj \
-  ..\os2\$D\helpwin.obj \
-  ..\os2\$D\icon.obj \
-  ..\os2\$D\iniconf.obj \
-  ..\os2\$D\joystick.obj \
-  ..\os2\$D\imaglist.obj \
-  ..\os2\$D\listbox.obj \
-  ..\os2\$D\listctrl.obj \
-  ..\os2\$D\main.obj \
-  ..\os2\$D\mdi.obj \
-  ..\os2\$D\menu.obj \
-  ..\os2\$D\menuitem.obj \
-  ..\os2\$D\metafile.obj \
-  ..\os2\$D\minifram.obj \
-  ..\os2\$D\msgdlg.obj \
-  ..\os2\$D\nativdlg.obj \
-  ..\os2\$D\notebook.obj \
-  ..\os2\$D\ownerdrw.obj \
-  ..\os2\$D\palette.obj \
-  ..\os2\$D\pen.obj \
-  ..\os2\$D\penwin.obj \
-  ..\os2\$D\pnghand.obj \
-  ..\os2\$D\printdlg.obj \
-  ..\os2\$D\printwin.obj \
-  ..\os2\$D\radiobox.obj \
-  ..\os2\$D\radiobut.obj \
-  ..\os2\$D\region.obj \
-  ..\os2\$D\registry.obj \
-  ..\os2\$D\regconf.obj \
-  ..\os2\$D\scrolbar.obj \
-  ..\os2\$D\settings.obj \
-  ..\os2\$D\slidrmsw.obj \
-  ..\os2\$D\slider95.obj \
-  ..\os2\$D\spinbutt.obj \
-  ..\os2\$D\statbmp.obj \
-  ..\os2\$D\statbox.obj \
-  ..\os2\$D\statusbr.obj \
-  ..\os2\$D\stattext.obj \
-  ..\os2\$D\tabctrl.obj \
-  ..\os2\$D\taskbar.obj \
-  ..\os2\$D\tbarmsw.obj \
-  ..\os2\$D\textctrl.obj \
-  ..\os2\$D\thread.obj \
-  ..\os2\$D\timer.obj \
-  ..\os2\$D\toolbar.obj \
-  ..\os2\$D\tooltip.obj \
-  ..\os2\$D\treectrl.obj \
-  ..\os2\$D\utils.obj \
-  ..\os2\$D\utilsexc.obj \
-  ..\os2\$D\wave.obj \
   ..\os2\$D\window.obj \
-  ..\os2\$D\xpmhand.obj \
 
 HTMLOBJS = \
   ..\html\$D\htmlcell.obj \

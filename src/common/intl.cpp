@@ -76,7 +76,11 @@ typedef unsigned char size_t8;
         public:
             IntSizeChecker()
             {
-                wxASSERT_MSG( sizeof(int) == 4,
+                // Asserting a sizeof directly causes some compilers to
+                // issue a "using constant in a conditional expression" warning
+                size_t                   intsize = sizeof(int);
+
+                wxASSERT_MSG( intsize == 4,
                               "size_t32 is incorrectly defined!" );
             }
         } intsizechecker;

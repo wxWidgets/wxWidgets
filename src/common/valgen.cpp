@@ -4,7 +4,7 @@
 // Author:      Kevin Smith
 // Modified by:
 // Created:     Jan 22 1999
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) 1999 Kevin Smith
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
-  else 
+  else
 #endif
 #if wxUSE_RADIOBOX
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxRadioBox)) )
@@ -147,7 +147,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
-  else 
+  else
 #endif
 #if wxUSE_SCROLLBAR
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxScrollBar)) )
@@ -165,7 +165,7 @@ bool wxGenericValidator::TransferToWindow(void)
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinButton)) )
   {
     wxSpinButton* pControl = (wxSpinButton*) m_validatorWindow;
-	if (m_pInt)
+    if (m_pInt)
     {
       pControl->SetValue(*m_pInt) ;
       return TRUE;
@@ -182,7 +182,7 @@ bool wxGenericValidator::TransferToWindow(void)
       pControl->SetLabel(*m_pString) ;
       return TRUE;
     }
-  } else 
+  } else
 #if wxUSE_COMBOBOX
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
   {
@@ -288,7 +288,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pBool = pControl->GetValue() ;
       return TRUE;
     }
-  } else 
+  } else
 #endif
 #if wxUSE_RADIOBTN
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxRadioButton)) )
@@ -311,7 +311,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pInt = pControl->GetValue() ;
       return TRUE;
     }
-  } else 
+  } else
 #endif
 #if wxUSE_RADIOBOX
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxRadioBox)) )
@@ -322,7 +322,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pInt = pControl->GetSelection() ;
       return TRUE;
     }
-  } else 
+  } else
 #endif
 #if wxUSE_SCROLLBAR
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxScrollBar)) )
@@ -358,7 +358,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   }
-  else 
+  else
 #if wxUSE_COMBOBOX
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
   {
@@ -368,7 +368,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pString = pControl->GetValue() ;
       return TRUE;
     }
-  } else 
+  } else
 #endif
 #if wxUSE_CHOICE
  if (m_validatorWindow->IsKindOf(CLASSINFO(wxChoice)) )
@@ -379,7 +379,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pInt = pControl->GetSelection() ;
       return TRUE;
     }
-  } else 
+  } else
 #endif
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
@@ -389,7 +389,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pString = pControl->GetLabel() ;
       return TRUE;
     }
-  } else 
+  } else
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
   {
     wxTextCtrl* pControl = (wxTextCtrl*) m_validatorWindow;
@@ -459,4 +459,4 @@ void wxGenericValidator::Initialize()
 
 #endif
   // wxUSE_VALIDATORS
-  
+

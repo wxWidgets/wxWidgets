@@ -183,7 +183,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxTE_MULTILINE | wxTE_READONLY | wxSUNKEN_BORDER);
     m_text->SetFont(wxFont(14, wxROMAN, wxNORMAL, wxNORMAL));
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     wxIcon icon("wxICON_TIP");
 #else
     #include "wx/generic/tip.xpm"

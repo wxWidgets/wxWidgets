@@ -541,7 +541,7 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
     // don't try to set invalid cursor, always fall back to the default
     const wxCursor& cursorOk = cursor.Ok() ? cursor : *wxSTANDARD_CURSOR;
 
-    if ( cursorOk == m_cursor )
+    if ( (wxCursor&)cursorOk == m_cursor )
     {
         // no change
         return FALSE;
@@ -557,7 +557,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     // don't try to set invalid font, always fall back to the default
     const wxFont& fontOk = font.Ok() ? font : *wxSWISS_FONT;
 
-    if ( fontOk == m_font )
+    if ( (wxFont&)fontOk == m_font )
     {
         // no change
         return FALSE;

@@ -191,7 +191,8 @@ bool wxResourceTable::DeleteResource(const wxString& name)
     // parent's child list.
     BeginFind();
     wxNode *node = (wxNode *) NULL;
-    while ((node = Next()))
+    node = Next();
+    while (node != NULL)
     {
       wxItemResource *parent = (wxItemResource *)node->Data();
       if (parent->GetChildren().Member(item))
@@ -199,6 +200,7 @@ bool wxResourceTable::DeleteResource(const wxString& name)
         parent->GetChildren().DeleteObject(item);
         break;
       }
+      node = Next();
     }
 
     delete item;
@@ -1528,7 +1530,7 @@ static bool wxEatWhiteSpace(FILE *fd)
          default:
             ungetc(ch, fd);
             return TRUE;
-            
+
          }
       }
    return FALSE;
@@ -2041,7 +2043,8 @@ long wxParseWindowStyle(const wxString& bitListString)
   int i = 0;
   wxChar *word;
   long bitList = 0;
-  while ((word = wxResourceParseWord(WXSTRINGCAST bitListString, &i)))
+  word = wxResourceParseWord(WXSTRINGCAST bitListString, &i);
+  while (word != NULL)
   {
     bool found = FALSE;
     int j;
@@ -2057,6 +2060,7 @@ long wxParseWindowStyle(const wxString& bitListString)
       wxLogWarning(_("Unrecognized style %s whilst parsing resource."), word);
       return 0;
     }
+    word = wxResourceParseWord(WXSTRINGCAST bitListString, &i);
   }
   return bitList;
 }
@@ -2605,7 +2609,7 @@ bool wxEatWhiteSpaceString(char *s)
          default:
             ungetc_string();
             return TRUE;
-            
+
          }
       }
    return FALSE;

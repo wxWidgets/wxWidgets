@@ -256,6 +256,9 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #ifdef __WXMSW__
   else return NULL;
 #endif
+#ifdef __WXPM__
+  else return NULL;
+#endif
 
 // TODO for other implementations. This should really go into
 // platform-specific directories.
