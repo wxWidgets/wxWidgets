@@ -214,11 +214,13 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         modified = true;
     }
 
-    sbMax    = wMain.GetID()->GetScrollRange(wxHORIZONTAL);
-    sbThumb  = wMain.GetID()->GetScrollThumb(wxHORIZONTAL);
-    if ((sbMax != H_SCROLL_MAX) || (sbThumb != H_SCROLL_STEP)) {
-        wMain.GetID()->SetScrollbar(wxHORIZONTAL, 0, H_SCROLL_STEP, H_SCROLL_MAX);
-        modified = true;
+    if (horizontalScrollBarVisible) {
+        sbMax    = wMain.GetID()->GetScrollRange(wxHORIZONTAL);
+        sbThumb  = wMain.GetID()->GetScrollThumb(wxHORIZONTAL);
+        if ((sbMax != H_SCROLL_MAX) || (sbThumb != H_SCROLL_STEP)) {
+            wMain.GetID()->SetScrollbar(wxHORIZONTAL, 0, H_SCROLL_STEP, H_SCROLL_MAX);
+            modified = true;
+        }
     }
     return modified;
 }
