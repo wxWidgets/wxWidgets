@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -32,16 +32,10 @@
 
 #include <windows.h>
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
-#include <commctrl.h>
-#endif
-
-#ifndef __TWIN32__
-#ifdef __GNUWIN32__
-#ifndef wxUSE_NORLANDER_HEADERS
-#include "wx/msw/gnuwin32/extra.h"
-#endif
-#endif
+#if !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
+    #include <commctrl.h>
+#else
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 #include "wx/msw/dib.h"

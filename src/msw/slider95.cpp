@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,8 +31,8 @@
 #include "wx/msw/slider95.h"
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
-#include <commctrl.h>
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
+    #include <commctrl.h>
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)

@@ -138,9 +138,13 @@
 // we are setting this define because of the complex check
 // using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
 #if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
-#ifndef wxUSE_NORLANDER_HEADERS
-#   define wxUSE_NORLANDER_HEADERS 1
-#endif
+    #ifndef wxUSE_NORLANDER_HEADERS
+        #define wxUSE_NORLANDER_HEADERS 1
+    #endif
+#else
+    #ifndef wxUSE_NORLANDER_HEADERS
+        #define wxUSE_NORLANDER_HEADERS 0
+    #endif
 #endif
 
 // "old" GNUWIN32 is the one without Norlander's headers: it lacks the standard

@@ -47,13 +47,11 @@
 #include "wx/treectrl.h"
 #include "wx/settings.h"
 
-#ifdef __GNUWIN32__
-#ifndef wxUSE_NORLANDER_HEADERS
-#include "wx/msw/gnuwin32/extra.h"
-#endif
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
     #include <commctrl.h>
 #endif
 
@@ -327,13 +325,14 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
 
-#if !defined( __GNUWIN32__ ) && !defined( __BORLANDC__ ) && !defined( __WATCOMC__ ) && !defined(wxUSE_NORLANDER_HEADERS)
+#if !defined( __GNUWIN32_OLD__ ) && \
+    !defined( __BORLANDC__ ) && \
+    !defined( __WATCOMC__ ) && \
+    (!defined(__VISUALC__) || (__VISUALC__ > 1010))
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
-#if !defined(__VISUALC__) || (__VISUALC__ > 1010)
     if ( m_windowStyle & wxTR_MULTIPLE )
         wstyle |= TVS_CHECKBOXES;
-#endif
 #endif
 
     // Create the tree control.

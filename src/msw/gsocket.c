@@ -46,7 +46,11 @@
 #include <ctype.h>
 #include <winsock.h>
 
+/* if we use configure for MSW SOCKLEN_T will be already defined */
+#ifndef SOCKLEN_T
 #define SOCKLEN_T  int
+#endif
+
 #define CLASSNAME  "_GSocket_Internal_Window_Class"
 #define WINDOWNAME "_GSocket_Internal_Window_Name"
 

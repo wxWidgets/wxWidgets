@@ -27,8 +27,7 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WIN95__) && \
-    (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
+#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

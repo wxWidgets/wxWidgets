@@ -125,7 +125,7 @@ public:
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
 
-#if defined( __GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+#if defined( __GNUWIN32_OLD__ )
   bool  GetKeyInfo(size_t *pnSubKeys,      // number of subkeys
                    size_t *pnMaxKeyLen,    // max len of subkey name
                    size_t *pnValues,       // number of values

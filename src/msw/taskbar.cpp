@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////
 // File:        taskbar.cpp
-// Purpose:	    Implements wxTaskBarIcon class for manipulating icons on
+// Purpose:     Implements wxTaskBarIcon class for manipulating icons on
 //              the Windows task bar.
 // Author:      Julian Smart
 // Modified by:
 // Created:     24/3/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -40,19 +40,17 @@
 #include "wx/msw/private.h"
 
 #ifndef __TWIN32__
-#ifdef __GNUWIN32__
-#ifndef wxUSE_NORLANDER_HEADERS
-#include "wx/msw/gnuwin32/extra.h"
-#endif
-#endif
+    #ifdef __GNUWIN32_OLD__
+        #include "wx/msw/gnuwin32/extra.h"
+    #endif
 #endif
 
 #ifdef __SALFORDC__
-#include <shellapi.h>
+    #include <shellapi.h>
 #endif
 
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
-				     UINT wParam, LONG lParam );
+                                     UINT wParam, LONG lParam );
 
 wxChar *wxTaskBarWindowClass = wxT("wxTaskBarWindowClass");
 
@@ -111,20 +109,20 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     NOTIFYICONDATA notifyData;
 
     memset(&notifyData, 0, sizeof(notifyData));
-	notifyData.cbSize = sizeof(notifyData);
-	notifyData.hWnd = (HWND) m_hWnd;
-	notifyData.uCallbackMessage = sm_taskbarMsg;
-	notifyData.uFlags = NIF_MESSAGE ;
-	if (icon.Ok())
+        notifyData.cbSize = sizeof(notifyData);
+        notifyData.hWnd = (HWND) m_hWnd;
+        notifyData.uCallbackMessage = sm_taskbarMsg;
+        notifyData.uFlags = NIF_MESSAGE ;
+        if (icon.Ok())
     {
-		notifyData.uFlags |= NIF_ICON;
-	    notifyData.hIcon = (HICON) icon.GetHICON();
+                notifyData.uFlags |= NIF_ICON;
+            notifyData.hIcon = (HICON) icon.GetHICON();
     }
 
     if (((const wxChar*) tooltip != NULL) && (tooltip != wxT("")))
     {
         notifyData.uFlags |= NIF_TIP ;
-		lstrcpyn(notifyData.szTip, WXSTRINGCAST tooltip, sizeof(notifyData.szTip));
+                lstrcpyn(notifyData.szTip, WXSTRINGCAST tooltip, sizeof(notifyData.szTip));
     }
 
     notifyData.uID = 99;
@@ -146,11 +144,11 @@ bool wxTaskBarIcon::RemoveIcon(void)
     NOTIFYICONDATA notifyData;
 
     memset(&notifyData, 0, sizeof(notifyData));
-	notifyData.cbSize = sizeof(notifyData);
-	notifyData.hWnd = (HWND) m_hWnd;
-	notifyData.uCallbackMessage = sm_taskbarMsg;
-	notifyData.uFlags = NIF_MESSAGE;
-	notifyData.hIcon = 0 ; // hIcon;
+        notifyData.cbSize = sizeof(notifyData);
+        notifyData.hWnd = (HWND) m_hWnd;
+        notifyData.uCallbackMessage = sm_taskbarMsg;
+        notifyData.uFlags = NIF_MESSAGE;
+        notifyData.hIcon = 0 ; // hIcon;
     notifyData.uID = 99;
     m_iconAdded = FALSE;
 
@@ -265,8 +263,8 @@ bool wxTaskBarIcon::RegisterWindowClass()
     // Also register the taskbar message here
     sm_taskbarMsg = ::RegisterWindowMessage(wxT("wxTaskBarIconMessage"));
 
-    WNDCLASS	wc;
-    bool	rc;
+    WNDCLASS        wc;
+    bool        rc;
 
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -318,37 +316,37 @@ long wxTaskBarIcon::WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wPar
 
     switch (lParam)
     {
-	case WM_LBUTTONDOWN:
+        case WM_LBUTTONDOWN:
             eventType = wxEVT_TASKBAR_LEFT_DOWN;
             break;
 
-	case WM_LBUTTONUP:
+        case WM_LBUTTONUP:
             eventType = wxEVT_TASKBAR_LEFT_UP;
             break;
 
-	case WM_RBUTTONDOWN:
+        case WM_RBUTTONDOWN:
             eventType = wxEVT_TASKBAR_RIGHT_DOWN;
             break;
 
-	case WM_RBUTTONUP:
+        case WM_RBUTTONUP:
             eventType = wxEVT_TASKBAR_RIGHT_UP;
             break;
 
-	case WM_LBUTTONDBLCLK:
+        case WM_LBUTTONDBLCLK:
             eventType = wxEVT_TASKBAR_LEFT_DCLICK;
             break;
 
-	case WM_RBUTTONDBLCLK:
+        case WM_RBUTTONDBLCLK:
             eventType = wxEVT_TASKBAR_RIGHT_DCLICK;
             break;
 
-	case WM_MOUSEMOVE:
+        case WM_MOUSEMOVE:
             eventType = wxEVT_TASKBAR_MOVE;
             break;
 
-	default:
+        default:
             break;
-	}
+        }
 
     if (eventType) {
         wxEvent event;
@@ -361,7 +359,7 @@ long wxTaskBarIcon::WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wPar
 }
 
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
-				     UINT wParam, LONG lParam )
+                                     UINT wParam, LONG lParam )
 {
     wxTaskBarIcon* obj = wxTaskBarIcon::FindObjectForHWND((WXHWND) hWnd);
     if (obj)

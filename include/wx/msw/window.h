@@ -52,8 +52,6 @@ enum
 
 class WXDLLEXPORT wxWindow : public wxWindowBase
 {
-    DECLARE_DYNAMIC_CLASS(wxWindow);
-
 public:
     wxWindow() { Init(); }
 
@@ -425,6 +423,10 @@ private:
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #endif // __WIN95__
 
+    // the helper functions used by HandleChar/KeyXXX methods
+    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
+
+    DECLARE_DYNAMIC_CLASS(wxWindow);
     DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
 };

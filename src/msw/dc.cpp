@@ -48,9 +48,6 @@
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
 #if wxUSE_COMMON_DIALOGS
-#if wxUSE_NORLANDER_HEADERS
-    #include <windows.h>
-#endif
     #include <commdlg.h>
 #endif
 

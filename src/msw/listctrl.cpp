@@ -40,7 +40,7 @@
 
 #include "wx/msw/private.h"
 
-#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+#ifdef __GNUWIN32_OLD__
     #include "wx/msw/gnuwin32/extra.h"
 #else
     #include <commctrl.h>
@@ -554,13 +554,13 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 // visible area of the list control (list or report view)
 // or the total number of items in the list control (icon
 // or small icon view)
-int wxListCtrl::GetCountPerPage(void) const
+int wxListCtrl::GetCountPerPage() const
 {
     return ListView_GetCountPerPage(GetHwnd());
 }
 
 // Gets the edit control for editing labels.
-wxTextCtrl* wxListCtrl::GetEditControl(void) const
+wxTextCtrl* wxListCtrl::GetEditControl() const
 {
     return m_textCtrl;
 }
@@ -787,7 +787,7 @@ bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
 }
 
 // Gets the number of items in the list control
-int wxListCtrl::GetItemCount(void) const
+int wxListCtrl::GetItemCount() const
 {
     return ListView_GetItemCount(GetHwnd());
 }
@@ -801,13 +801,13 @@ int wxListCtrl::GetItemSpacing(bool isSmall) const
 }
 
 // Gets the number of selected items in the list control
-int wxListCtrl::GetSelectedItemCount(void) const
+int wxListCtrl::GetSelectedItemCount() const
 {
     return ListView_GetSelectedCount(GetHwnd());
 }
 
 // Gets the text colour of the listview
-wxColour wxListCtrl::GetTextColour(void) const
+wxColour wxListCtrl::GetTextColour() const
 {
     COLORREF ref = ListView_GetTextColor(GetHwnd());
     wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
@@ -822,7 +822,7 @@ void wxListCtrl::SetTextColour(const wxColour& col)
 
 // Gets the index of the topmost visible item when in
 // list or report view
-long wxListCtrl::GetTopItem(void) const
+long wxListCtrl::GetTopItem() const
 {
     return (long) ListView_GetTopIndex(GetHwnd());
 }

@@ -79,7 +79,7 @@
 
 #include <string.h>
 
-#if !defined(__GNUWIN32__)|| defined(wxUSE_NORLANDER_HEADERS)
+#ifndef __GNUWIN32_OLD__
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif
@@ -88,15 +88,13 @@
     #include <windowsx.h>
 #endif
 
-#if ( defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__ ) || defined(wxUSE_NORLANDER_HEADERS)
-    #include <commctrl.h>
-#endif
-
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32__
-        #ifndef wxUSE_NORLANDER_HEADERS
-            #include "wx/msw/gnuwin32/extra.h"
-        #endif
+#if !defined(__GNUWIN32_OLD__) && !defined(__TWIN32__)
+    #ifndef __WIN95__
+        #include <commctrl.h>
+    #endif
+#else // broken compiler
+    #ifndef __TWIN32__
+        #include "wx/msw/gnuwin32/extra.h"
     #endif
 #endif
 
@@ -130,6 +128,10 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // this magical function is used to translate VK_APPS key presses to right
 // mouse clicks
 static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
+
+// get the current state of SHIFT/CTRL keys
+static inline bool IsShiftDown() { return GetKeyState(VK_SHIFT)& 0x100 != 0; }
+static inline bool IsCtrlDown() { return GetKeyState(VK_CONTROL)& 0x100 != 0; }
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -1480,8 +1482,8 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         if ( bProcess )
         {
-            bool bCtrlDown = (::GetKeyState(VK_CONTROL) & 0x100) != 0;
-            bool bShiftDown = (::GetKeyState(VK_SHIFT) & 0x100) != 0;
+            bool bCtrlDown = IsCtrlDown();
+            bool bShiftDown = IsShiftDown();
 
             // WM_GETDLGCODE: ask the control if it wants the key for itself,
             // don't process it if it's the case (except for Ctrl-Tab/Enter
@@ -1596,8 +1598,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             // don't process system keys here
             if ( !(HIWORD(msg->lParam) & KF_ALTDOWN) )
             {
-                if ( (msg->wParam == VK_TAB) &&
-                     (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
+                if ( (msg->wParam == VK_TAB) && IsCtrlDown() )
                 {
                     // find the first notebook parent and change its page
                     wxWindow *win = this;
@@ -1610,7 +1611,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
                     if ( nbook )
                     {
-                        bool forward = !(::GetKeyState(VK_SHIFT) & 0x100);
+                        bool forward = !IsShiftDown();
 
                         nbook->AdvanceSelection(forward);
                     }
@@ -3149,12 +3150,43 @@ bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
 // keyboard handling
 // ---------------------------------------------------------------------------
 
+// create the key event of the given type for the given key - used by
+// HandleChar and HandleKeyDown/Up
+wxKeyEvent wxWindow::CreateKeyEvent(wxEventType evType,
+                                    int id,
+                                    WXLPARAM lParam) const
+{
+    wxKeyEvent event(evType);
+    event.SetId(GetId());
+    event.m_shiftDown = IsShiftDown();
+    event.m_controlDown = IsCtrlDown();
+    event.m_altDown = (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN;
+
+    event.m_eventObject = (wxWindow *)this; // const_cast
+    event.m_keyCode = id;
+    event.SetTimestamp(s_currentMsg.time);
+
+    // translate the position to client coords
+    POINT pt;
+    GetCursorPos(&pt);
+    RECT rect;
+    GetWindowRect(GetHwnd(),&rect);
+    pt.x -= rect.left;
+    pt.y -= rect.top;
+
+    event.m_x = pt.x;
+    event.m_y = pt.y;
+
+    return event;
+}
+
 // isASCII is TRUE only when we're called from WM_CHAR handler and not from
 // WM_KEYDOWN one
 bool wxWindow::HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
+    bool ctrlDown = FALSE;
+
     int id;
-    bool tempControlDown = FALSE;
     if ( isASCII )
     {
         // If 1 -> 26, translate to CTRL plus a letter.
@@ -3163,142 +3195,86 @@ bool wxWindow::HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
         {
             switch (id)
             {
-            case 13:
-                {
+                case 13:
                     id = WXK_RETURN;
                     break;
-                }
-            case 8:
-                {
+
+                case 8:
                     id = WXK_BACK;
                     break;
-                }
-            case 9:
-                {
+
+                case 9:
                     id = WXK_TAB;
                     break;
-                }
-            default:
-                {
-                    tempControlDown = TRUE;
+
+                default:
+                    ctrlDown = TRUE;
                     id = id + 96;
-                }
             }
         }
     }
-    else if ( (id = wxCharCodeMSWToWX(wParam)) == 0 ) {
+    else if ( (id = wxCharCodeMSWToWX(wParam)) == 0 )
+    {
         // it's ASCII and will be processed here only when called from
-        // WM_CHAR (i.e. when isASCII = TRUE)
+        // WM_CHAR (i.e. when isASCII = TRUE), don't process it now
         id = -1;
     }
 
     if ( id != -1 )
     {
-        wxKeyEvent event(wxEVT_CHAR);
-        event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
-        event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
-        if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
-            event.m_altDown = TRUE;
-
-        event.m_eventObject = this;
-        event.m_keyCode = id;
-        event.SetTimestamp(s_currentMsg.time);
-
-        POINT pt;
-        GetCursorPos(&pt);
-        RECT rect;
-        GetWindowRect(GetHwnd(),&rect);
-        pt.x -= rect.left;
-        pt.y -= rect.top;
-
-        event.m_x = pt.x; event.m_y = pt.y;
+        wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam));
+        if ( ctrlDown )
+        {
+            event.m_controlDown = TRUE;
+        }
 
         if ( GetEventHandler()->ProcessEvent(event) )
             return TRUE;
-        else
-            return FALSE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 bool wxWindow::HandleKeyDown(WXWORD wParam, WXLPARAM lParam)
 {
-    int id;
+    int id = wxCharCodeMSWToWX(wParam);
 
-    if ( (id = wxCharCodeMSWToWX(wParam)) == 0 ) {
+    if ( !id )
+    {
+        // normal ASCII char
         id = wParam;
     }
 
-    if ( id != -1 )
+    if ( id != -1 ) // VZ: does this ever happen (FIXME)?
     {
-        wxKeyEvent event(wxEVT_KEY_DOWN);
-        event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
-        event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
-        if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
-            event.m_altDown = TRUE;
-
-        event.m_eventObject = this;
-        event.m_keyCode = id;
-        event.SetTimestamp(s_currentMsg.time);
-
-        POINT pt;
-        GetCursorPos(&pt);
-        RECT rect;
-        GetWindowRect(GetHwnd(),&rect);
-        pt.x -= rect.left;
-        pt.y -= rect.top;
-
-        event.m_x = pt.x; event.m_y = pt.y;
-
+        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_DOWN, id, lParam));
         if ( GetEventHandler()->ProcessEvent(event) )
         {
             return TRUE;
         }
-        else return FALSE;
     }
-    else
-    {
-        return FALSE;
-    }
+
+    return FALSE;
 }
 
 bool wxWindow::HandleKeyUp(WXWORD wParam, WXLPARAM lParam)
 {
-    int id;
+    int id = wxCharCodeMSWToWX(wParam);
 
-    if ( (id = wxCharCodeMSWToWX(wParam)) == 0 ) {
+    if ( !id )
+    {
+        // normal ASCII char
         id = wParam;
     }
 
-    if ( id != -1 )
+    if ( id != -1 ) // VZ: does this ever happen (FIXME)?
     {
-        wxKeyEvent event(wxEVT_KEY_UP);
-        event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
-        event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
-        if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
-            event.m_altDown = TRUE;
-
-        event.m_eventObject = this;
-        event.m_keyCode = id;
-        event.SetTimestamp(s_currentMsg.time);
-
-        POINT pt;
-        GetCursorPos(&pt);
-        RECT rect;
-        GetWindowRect(GetHwnd(),&rect);
-        pt.x -= rect.left;
-        pt.y -= rect.top;
-
-        event.m_x = pt.x; event.m_y = pt.y;
-
+        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_UP, id, lParam));
         if ( GetEventHandler()->ProcessEvent(event) )
             return TRUE;
-        else
-            return FALSE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------
@@ -3716,7 +3692,7 @@ void wxSetKeyboardHook(bool doIt)
         UnhookWindowsHookEx(wxTheKeyboardHook);
         // avoids mingw warning about statement with no effect (FreeProcInstance
         // doesn't do anything under Win32)
-#ifndef __GNUWIN32__
+#ifndef __GNUC__
         FreeProcInstance(wxTheKeyboardHookProc);
 #endif
     }
@@ -3737,8 +3713,8 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
             event.m_eventObject = NULL;
             event.m_keyCode = id;
-            event.m_shiftDown = ::GetKeyState(VK_SHIFT) & 0x100 != 0;
-            event.m_controlDown = ::GetKeyState(VK_CONTROL) & 0x100 != 0;
+            event.m_shiftDown = IsShiftDown();
+            event.m_controlDown = IsCtrlDown();
             event.SetTimestamp(s_currentMsg.time);
 
             wxWindow *win = wxGetActiveWindow();

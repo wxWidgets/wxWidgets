@@ -71,14 +71,13 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-// OLE is used for drag-and-drop, clipboard, OLE Automation...
-#ifndef wxUSE_NORLANDER_HEADERS
-#if defined(__GNUWIN32__) || defined(__SC__) || defined(__SALFORDC__)
+// OLE is used for drag-and-drop, clipboard, OLE Automation..., but some
+// compilers don't support it (missing headers, libs, ...)
+#if defined(__GNUWIN32_OLD__) || defined(__SC__) || defined(__SALFORDC__)
     #undef wxUSE_OLE
 
     #define  wxUSE_OLE 0
 #endif // broken compilers
-#endif
 
 #if wxUSE_OLE
     #include <ole2.h>
@@ -87,7 +86,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
     #include <commctrl.h>
 #endif
 

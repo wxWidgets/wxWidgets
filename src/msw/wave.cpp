@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,16 +31,10 @@
 #include <windows.h>
 #include <windowsx.h>
 
-#if !defined( __GNUWIN32__ ) || defined(wxUSE_NORLANDER_HEADERS)
-#include <mmsystem.h>
-#endif
-
-#ifndef __TWIN32__
-#ifdef __GNUWIN32__
-#ifndef wxUSE_NORLANDER_HEADERS
-#include "wx/msw/gnuwin32/extra.h"
-#endif
-#endif
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
+#else
+    #include <mmsystem.h>
 #endif
 
 wxWave::wxWave()

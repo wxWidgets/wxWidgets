@@ -41,15 +41,13 @@
 #include  <windowsx.h>  // for SetWindowFont
 
 #ifndef __TWIN32__
-#ifdef __GNUWIN32__
-#ifndef wxUSE_NORLANDER_HEADERS
-  #include "wx/msw/gnuwin32/extra.h"
-#endif
-#endif
+    #ifdef __GNUWIN32_OLD__
+        #include "wx/msw/gnuwin32/extra.h"
+    #endif
 #endif
 
-#if !defined(__GNUWIN32__) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
-  #include <commctrl.h>
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
+    #include <commctrl.h>
 #endif
 
 // ----------------------------------------------------------------------------

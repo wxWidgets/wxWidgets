@@ -24,10 +24,8 @@
 #include <winuser.h>
 #endif
 
-#ifndef __TWIN32__
-#if defined (__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
-#include "wx/msw/gnuwin32/extra.h"
-#endif
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 #include "wx/wxchar.h"
