@@ -1675,7 +1675,7 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
         for (i = 0; i < column+1; ++i) {
             x += theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
         }
-        for (i = column+1; i < theCtrl->GetColumnCount(); ++i) {
+        for (i = column+1; i < (int)theCtrl->GetColumnCount(); ++i) {
             int w = theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
             if (point.x >= x && point.x < x+w) {
                 flags ^= wxTREE_HITTEST_ONITEMRIGHT;
