@@ -87,12 +87,14 @@ void wxExit()
 // wxYield
 //-----------------------------------------------------------------------------
 
+// not static because used by textctrl.cpp
+//
+// MT-FIXME
+bool wxIsInsideYield = FALSE;
+
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    // MT-FIXME
-    static bool s_inYield = FALSE;
-
-    if ( s_inYield )
+    if ( wxIsInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -110,7 +112,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 #endif // wxUSE_THREADS
 
-    s_inYield = TRUE;
+    wxIsInsideYield = TRUE;
 
     if (!g_isIdle)
     {
@@ -139,7 +141,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // let the logs be flashed again
     wxLog::Resume();
 
-    s_inYield = FALSE;
+    wxIsInsideYield = FALSE;
 
     return TRUE;
 }
