@@ -33,9 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.11  1999/06/22 07:03:29  RD
- * wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
- * Lots of changes, see the README.txt for details...
+ * Revision 1.12  1999/06/28 03:10:35  RD
+ * Final tweaks for 2.1b1
  *
  ************************************************************************/
 
@@ -1558,6 +1557,9 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxPD_AUTO_HIDE", PyInt_FromLong((long) wxPD_AUTO_HIDE));
 	 PyDict_SetItemString(d,"wxPD_APP_MODAL", PyInt_FromLong((long) wxPD_APP_MODAL));
 	 PyDict_SetItemString(d,"wxPD_CAN_ABORT", PyInt_FromLong((long) wxPD_CAN_ABORT));
+	 PyDict_SetItemString(d,"wxPD_ELAPSED_TIME", PyInt_FromLong((long) wxPD_ELAPSED_TIME));
+	 PyDict_SetItemString(d,"wxPD_ESTIMATED_TIME", PyInt_FromLong((long) wxPD_ESTIMATED_TIME));
+	 PyDict_SetItemString(d,"wxPD_REMAINING_TIME", PyInt_FromLong((long) wxPD_REMAINING_TIME));
 	 PyDict_SetItemString(d,"wxNO_DEFAULT", PyInt_FromLong((long) wxNO_DEFAULT));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));

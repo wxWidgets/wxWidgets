@@ -812,12 +812,12 @@ end
 remarked item: End Block
 end
 item: Install File
-  Source=c:\WINNT\System32\Msvcirt.dll
+  Source=d:\WINNT\System32\Msvcirt.dll
   Destination=%SYS%\Msvcirt.dll
   Flags=0000001010000011
 end
 item: Install File
-  Source=c:\WINNT\System32\Msvcrt.dll
+  Source=d:\WINNT\System32\Msvcrt.dll
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
 end

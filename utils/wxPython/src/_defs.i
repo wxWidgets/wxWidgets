@@ -399,6 +399,9 @@ enum {
     wxPD_AUTO_HIDE,
     wxPD_APP_MODAL,
     wxPD_CAN_ABORT,
+    wxPD_ELAPSED_TIME,
+    wxPD_ESTIMATED_TIME,
+    wxPD_REMAINING_TIME,
 
     wxNO_DEFAULT,
 };

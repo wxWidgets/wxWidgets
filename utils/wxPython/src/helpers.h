@@ -146,8 +146,7 @@ private:
 // with looking up and invoking Python callback methods from C++ virtual
 // method redirections.  For all classes which have virtuals which should be
 // overridable in wxPython, a new subclass is created that contains a
-// wxPyCallbackList.  This list is used to hold references to the Python
-// methods.
+// wxPyCallbackHelper.
 //---------------------------------------------------------------------------
 
 class wxPyCallbackHelper {

@@ -260,9 +260,8 @@ class TestFrame(wxFrame):
 
         self.sizer = sizerFunc(self)
         self.CreateStatusBar()
-
+        self.SetStatusText("Resize this frame to see how the sizers respond...")
         self.sizer.FitWindow(self)
-
 
 
     def OnSize(self, event):

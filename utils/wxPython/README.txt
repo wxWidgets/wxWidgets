@@ -23,6 +23,7 @@ the help file.  To help you save disk space I'm now using Microsoft's
 HTML Help format.  If your system doesn't know what to do with the help
 file, you can install the HTML Help Viewer as part of IE 4+, NT
 Service Pack 4+, or the HTML Workshop at
+
 http://msdn.microsoft.com/workshop/author/htmlhelp/download.asp.
 
 
