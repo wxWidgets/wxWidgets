@@ -33,7 +33,7 @@ enum
 //WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 extern const wxChar* wxStaticPictureNameStr;
 
-class /*WXDLLEXPORT*/ wxStaticPicture : public wxControl
+class WXDLLIMPEXP_GIZMOS wxStaticPicture : public wxControl
 {
     DECLARE_DYNAMIC_CLASS(wxStaticPicture)
 
