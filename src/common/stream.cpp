@@ -613,9 +613,21 @@ off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
 
 off_t wxStreamBuffer::Tell() const
 {
-    off_t pos = m_stream->OnSysTell();
-    if ( pos == wxInvalidOffset )
-        return wxInvalidOffset;
+    off_t pos;
+
+    // only ask the stream for position if we have a real stream and not a
+    // dummy one which we created ourselves, otherwise we'd call
+    // wxStream::OnSysTell() which would always return wxInvalidOffset
+    if ( !m_destroystream )
+    {
+        pos = m_stream->OnSysTell();
+        if ( pos == wxInvalidOffset )
+            return wxInvalidOffset;
+    }
+    else // no associated stream
+    {
+        pos = 0;
+    }
 
     pos += GetIntPosition();
 
