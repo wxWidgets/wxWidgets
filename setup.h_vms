@@ -122,6 +122,10 @@
 #define wxUSE_OWNER_DRAWN 1
 #endif
 
+#if defined(__WXPM__)
+#define wxUSE_OWNER_DRAWN 1
+#endif
+
 /* enable rich edit under Win32 */
 #if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
@@ -888,9 +892,6 @@
  * present */
 #define WX_GMTOFF_IN_TM
 
-/* iconv()'s 2nd argument is char ** and not const char ** */
-#define WX_ICONV_TAKES_CHAR 1
-
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS
 
@@ -1053,8 +1054,11 @@
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
 
-/* Define if you have the <iconv.h> header file.  */
+/* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
+
+/* Define as "const" if the declaration of iconv() needs const.  */
+#undef ICONV_CONST
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
