@@ -120,15 +120,15 @@ EOF
 wxconfig_schema="host toolkit widgetset chartype debugtype flavour version linkage"
 
 # Options that are expected to generate some output.
-wxconfig_output_options="prefix exec_prefix                     \
-                         list                                   \
-                         release version version_full           \
-                         basename                               \
-                         cppflags cflags cxxflags               \
-                         rezflags                               \
-                         libs                                   \
-                         linkdeps                               \
-                         cc cxx ld                              \
+wxconfig_output_options="prefix exec_prefix
+                         list
+                         release version version_full
+                         basename
+                         cppflags cflags cxxflags
+                         rezflags
+                         libs
+                         linkdeps
+                         cc cxx ld
                          gl_libs"
 
 # Options that permit the user to supply hints that may affect the output.
@@ -182,7 +182,7 @@ remove_field()
     shift
     if [ -n "$_remf_value" ]; then
         for _remf_item; do
-            [ "x$_remf_item" = "x$_remf_value" ] ||                 \
+            [ "x$_remf_item" = "x$_remf_value" ] ||
                 _remf_list="${_remf_list:+$_remf_list }$_remf_item"
         done
         echo "$_remf_list"
@@ -224,16 +224,17 @@ validate_arg()
 # in any case.
 check_yesno_option()
 {
-    eval "case \${yesno_option_$1-\${flag_option_$1-unset}} in              \
-            unset)                          ;;                              \
-            y*|Y*)  input_option_$2=\"$3\"  ;;                              \
-            n*|N*)  input_option_$2=\"$4\"  ;;                              \
-            *)                                                              \
-                decho;                                                      \
-                decho \" *** Error: Invalid request '--$1=\$yesno_option_$1'\"; \
-                decho \" Valid arguments for --$1 are: [ yes, no ]\";       \
-                decho;                                                      \
-                exit 1                      ;;                              \
+    eval "case \${yesno_option_$1-\${flag_option_$1-unset}} in
+            unset)                          ;;
+            y*|Y*)  input_option_$2=\"$3\"  ;;
+            n*|N*)  input_option_$2=\"$4\"  ;;
+            *)
+                decho
+                decho \" *** Error: Invalid request '--$1=\$yesno_option_$1'\"
+                decho \" Valid arguments for --$1 are: [ yes, no ]\"
+                decho
+                exit 1
+                ;;
          esac"
 }
 
@@ -261,8 +262,8 @@ for arg; do
     --*=*)
         _name=$(option_name $arg)
         _value=$(option_value $arg)
-        if validate_arg wxconfig input "$_name" "$_value"       \
-        || validate_arg wxconfig yesno "$_name" "$_value";      \
+        if validate_arg wxconfig input "$_name" "$_value" ||
+           validate_arg wxconfig yesno "$_name" "$_value"
         then
             continue
         fi
@@ -270,8 +271,8 @@ for arg; do
 
     --*)
         _name=$(option_name $arg)
-        if validate_arg wxconfig flag   "$_name" yes            \
-        || validate_arg wxconfig output "$_name" yes;
+        if validate_arg wxconfig flag   "$_name" yes ||
+           validate_arg wxconfig output "$_name" yes
         then
             continue
         fi
@@ -525,9 +526,9 @@ do_find_best_delegate()
 
             [ "x$WXDEBUG" != "xfindprogress" ] || printf "." 1>&2
 
-            [ $_still_eligible -gt 1 ] && [ $# -gt 1 ] &&       \
-            do_find_best_delegate $(remove_field $i $*)
-           );
+            [ $_still_eligible -gt 1 ] && [ $# -gt 1 ] &&
+                do_find_best_delegate $(remove_field $i $*)
+           )
         then
 
             return
@@ -554,7 +555,7 @@ do_find_best_delegate()
 find_best_delegate()
 {
     for _fbdi in $wxconfig_schema; do
-        is_set input_option_$_fbdi ||                                       \
+        is_set input_option_$_fbdi ||
             _unbound_options="${_unbound_options:+$_unbound_options }$_fbdi"
     done
     do_find_best_delegate $_unbound_options
@@ -578,9 +579,13 @@ get_legacy_mask()
 # Returns a list of configs installed by wx2.4 releases.
 find_legacy_configs()
 {
-    cd "$prefix/bin" 2> /dev/null &&                        \
-        ls wx*-2.4-config 2> /dev/null | grep -v ^wxbase;   \
-        ls wx*-2.4-config 2> /dev/null | grep ^wxbase
+  (
+    cd "$prefix/bin" &&
+      {
+        ls wx*-2.4-config | grep -v ^wxbase
+        ls wx*-2.4-config | grep ^wxbase
+      }
+  ) 2> /dev/null
 }
 
 # find_best_legacy_config
@@ -909,7 +914,7 @@ if [ -n "$input_option_utility" ]; then
 
     for _util in "${input_option_utility}-@WX_RELEASE@@WX_FLAVOUR@" \
                  "${input_option_utility}-@WX_RELEASE@"             \
-                 "${input_option_utility}";
+                 "${input_option_utility}"
     do
         for p in ${_user_prefix:+$_user_prefix/bin} $bindir $PATH; do
 
@@ -955,7 +960,7 @@ lib_flags_for()
     _all_libs=''
     _wxlibs=''
 
-    ! is_cross || _target="-${target}"
+    is_cross && _target="-${target}"
 
     for lib; do
 
@@ -1017,7 +1022,7 @@ link_deps_for()
 {
     _wxlibs=''
 
-    ! is_cross || _target="-${target}"
+    is_cross && _target="-${target}"
 
     for lib; do
         if match_field "$lib" @CORE_BASE_LIBS@ ; then
@@ -1123,9 +1128,10 @@ _cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflag
 
 if [ -n "$output_option_libs" ]; then
 
-    is_cross && [ "x$libdir" = "x/usr/${target}/lib" ]                      \
-    || [ "x$libdir" = "x/usr/lib" ]                                         \
-    || _ldflags="-L$libdir"
+    is_cross                                    &&
+        [ "x$libdir" = "x/usr/${target}/lib" ]  ||
+        [ "x$libdir" = "x/usr/lib" ]            ||
+        _ldflags="-L$libdir"
 
     is_installed || [ -n "$flag_option_no_rpath" ] || _rpath="@WXCONFIG_RPATH@"
 
