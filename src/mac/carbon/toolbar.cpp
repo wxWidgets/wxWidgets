@@ -170,7 +170,7 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 
                 ControlPartCode pc = kControlNoPart ;
                 if ( CGRectContainsPoint( rect , pt ) )
-                    pc = kControlButtonPart ;
+                    pc = kControlIconPart ;
                 cEvent.SetParameter( kEventParamControlPart , typeControlPartCode, pc ) ;
                 result = noErr ;
             }
