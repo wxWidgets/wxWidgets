@@ -1017,7 +1017,7 @@ bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
 
-    wxWindowList::Node* node = wxTopLevelWindows.First();
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
     while (node)
     {
         wxWindow* win = node->GetData();
