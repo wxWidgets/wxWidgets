@@ -264,6 +264,11 @@ void wxGLCanvas::SetViewport()
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
 {
+  MacUpdateView() ;
+}
+
+void wxGLCanvas::MacUpdateView()
+{
   if (m_glContext)
   {
     UpdateContext();
@@ -275,6 +280,18 @@ void wxGLCanvas::OnSize(wxSizeEvent& event)
     glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 15.0 );
     glMatrixMode(GL_MODELVIEW);
   }
+}
+
+void wxGLCanvas::MacSuperChangedPosition()
+{
+  MacUpdateView() ;
+  wxWindow::MacSuperChangedPosition() ;
+}
+
+void wxGLCanvas::MacTopLevelWindowChangedPosition()
+{
+  MacUpdateView() ;
+  wxWindow::MacTopLevelWindowChangedPosition() ;
 }
 
 void wxGLCanvas::SetCurrent()

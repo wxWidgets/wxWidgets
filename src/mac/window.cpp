@@ -617,6 +617,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 			  	frame->PositionStatusBar();
   				frame->PositionToolBar();
 			}
+			if ( doMove )
+				wxWindowMac::MacTopLevelWindowChangedPosition() ; // like this only children will be notified
 		}
 		else
 		{
@@ -2190,6 +2192,19 @@ void wxWindowMac::MacSuperChangedPosition()
 	{
 		wxWindowMac *child = (wxWindowMac *)node->Data();
 		child->MacSuperChangedPosition() ;
+		node = node->Next();
+	}
+}
+
+void wxWindowMac::MacTopLevelWindowChangedPosition() 
+{
+	// only screen-absolute structures have to be moved i.e. glcanvas
+
+	wxNode *node = GetChildren().First();
+	while ( node )
+	{
+		wxWindowMac *child = (wxWindowMac *)node->Data();
+		child->MacTopLevelWindowChangedPosition() ;
 		node = node->Next();
 	}
 }
