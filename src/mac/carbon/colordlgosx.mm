@@ -2,11 +2,11 @@
 // Name:        colordlg.cpp
 // Purpose:     wxColourDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
-// Author:      Stefan Csomor
+// Author:      Ryan Norton
 // Modified by:
-// Created:     1998-01-01
+// Created:     2004-11-16
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// Copyright:   (c) Ryan Norton
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -127,8 +127,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     if(m_colourData.m_dataColour.Ok())
         [[NSColorPanel sharedColorPanel] setColor:
             [NSColor colorWithCalibratedRed:m_colourData.m_dataColour.Red() / 255.0
-                                        green:m_colourData.m_dataColour.Red() / 255.0
-                                        blue:m_colourData.m_dataColour.Red() / 255.0
+                                        green:m_colourData.m_dataColour.Green() / 255.0
+                                        blue:m_colourData.m_dataColour.Blue() / 255.0
                                         alpha:1.0]
         ];
     else

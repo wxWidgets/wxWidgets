@@ -219,8 +219,8 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
     if(m_fontData.m_fontColour.Ok())
         [[NSColorPanel sharedColorPanel] setColor:
             [NSColor colorWithCalibratedRed:m_fontData.m_fontColour.Red() / 255.0
-                                        green:m_fontData.m_fontColour.Red() / 255.0
-                                        blue:m_fontData.m_fontColour.Red() / 255.0
+                                        green:m_fontData.m_fontColour.Green() / 255.0
+                                        blue:m_fontData.m_fontColour.Blue() / 255.0
                                         alpha:1.0]
         ];
     else
