@@ -599,14 +599,14 @@ typedef float wxFloat32 ;
 #else
 #define wxUINT64_SWAP_ALWAYS(val) \
    ((wxUint64) ( \
-    ((wxLongLong(val) & wxLongLong(0L, 0x000000ffU)) << 56) | \
-    ((wxLongLong(val) & wxLongLong(0L, 0x0000ff00U)) << 40) | \
-    ((wxLongLong(val) & wxLongLong(0L, 0x00ff0000U)) << 24) | \
-    ((wxLongLong(val) & wxLongLong(0L, 0xff000000U)) <<  8) | \
-    ((wxLongLong(val) & wxLongLong(0x000000ffL, 0U)) >>  8) | \
-    ((wxLongLong(val) & wxLongLong(0x0000ff00L, 0U)) >> 24) | \
-    ((wxLongLong(val) & wxLongLong(0x00ff0000L, 0U)) >> 40) | \
-    ((wxLongLong(val) & wxLongLong(0xff000000L, 0U)) >> 56)))
+    ((wxULongLong(val) & wxULongLong(0L, 0x000000ffU)) << 56) | \
+    ((wxULongLong(val) & wxULongLong(0L, 0x0000ff00U)) << 40) | \
+    ((wxULongLong(val) & wxULongLong(0L, 0x00ff0000U)) << 24) | \
+    ((wxULongLong(val) & wxULongLong(0L, 0xff000000U)) <<  8) | \
+    ((wxULongLong(val) & wxULongLong(0x000000ffL, 0U)) >>  8) | \
+    ((wxULongLong(val) & wxULongLong(0x0000ff00L, 0U)) >> 24) | \
+    ((wxULongLong(val) & wxULongLong(0x00ff0000L, 0U)) >> 40) | \
+    ((wxULongLong(val) & wxULongLong(0xff000000L, 0U)) >> 56)))
 
 #define wxINT64_SWAP_ALWAYS(val) \
    ((wxInt64) ( \
