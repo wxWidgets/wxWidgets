@@ -71,13 +71,22 @@ void wxHTTP::SetProxyMode(bool on)
   m_proxy_mode = on;
 }
 
-wxHTTP::wxHeaderIterator wxHTTP::FindHeader(const wxString& header) const
+wxHTTP::wxHeaderIterator wxHTTP::FindHeader(const wxString& header)
 {
-    // we can't convert between const_iterator to iterator otherwise...
-    wxStringToStringHashMap& headers = (wxStringToStringHashMap&)m_headers;
+    wxHeaderIterator it = m_headers.begin();
+    for ( wxHeaderIterator en = m_headers.end(); it != en; ++it )
+    {
+        if ( wxStricmp(it->first, header) == 0 )
+            break;
+    }
 
-    wxHeaderIterator it = headers.begin();
-    for ( wxHeaderIterator en = headers.end(); it != en; ++it )
+    return it;
+}
+
+wxHTTP::wxHeaderConstIterator wxHTTP::FindHeader(const wxString& header) const
+{
+    wxHeaderConstIterator it = m_headers.begin();
+    for ( wxHeaderConstIterator en = m_headers.end(); it != en; ++it )
     {
         if ( wxStricmp(it->first, header) == 0 )
             break;
@@ -102,7 +111,7 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 
 wxString wxHTTP::GetHeader(const wxString& header) const
 {
-    wxHeaderIterator it = FindHeader(header);
+    wxHeaderConstIterator it = FindHeader(header);
 
     return it == m_headers.end() ? wxGetEmptyString() : it->second;
 }

@@ -21,6 +21,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/event.h"
+#include "wx/hashmap.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -33,11 +34,13 @@ class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxXVisualInfo;
-class wxPerDisplayDataMap;
+class WXDLLEXPORT wxPerDisplayData;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for Motif - see wxAppBase for more details
 // ----------------------------------------------------------------------------
+
+WX_DECLARE_VOIDPTR_HASH_MAP( wxPerDisplayData*, wxPerDisplayDataMap );
 
 class WXDLLEXPORT wxApp : public wxAppBase
 {

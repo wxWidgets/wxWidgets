@@ -52,13 +52,15 @@ protected:
   };
 
   typedef wxStringToStringHashMap::iterator wxHeaderIterator;
+  typedef wxStringToStringHashMap::const_iterator wxHeaderConstIterator;
 
   bool BuildRequest(const wxString& path, wxHTTP_Req req);
   void SendHeaders();
   bool ParseHeaders();
 
   // find the header in m_headers
-  wxHeaderIterator FindHeader(const wxString& header) const;
+  wxHeaderIterator FindHeader(const wxString& header);
+  wxHeaderConstIterator FindHeader(const wxString& header) const;
 
   // deletes the header value strings
   void ClearHeaders();

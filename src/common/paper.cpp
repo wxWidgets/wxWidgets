@@ -33,7 +33,6 @@
 
 #include "wx/paper.h"
 #include "wx/module.h"
-#include "wx/hashmap.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -84,7 +83,6 @@ wxSize wxPrintPaperType::GetSizeDeviceUnits() const
  * Print paper database for PostScript
  */
 
-WX_DECLARE_STRING_HASH_MAP(wxPrintPaperType*, wxStringToPrintPaperTypeHashMap);
 WX_DECLARE_LIST(wxPrintPaperType, wxPrintPaperTypeList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxPrintPaperTypeList);

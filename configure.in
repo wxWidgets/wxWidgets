@@ -1800,6 +1800,31 @@ if test "$wxUSE_STL" = "yes"; then
                     AC_DEFINE(HAVE_STD_STRING_COMPARE)],
                    [AC_MSG_RESULT(no)])
 
+    dnl check for hash_map and hash_set headers
+    AC_CHECK_HEADER([hash_map],
+                    [AC_MSG_CHECKING([for hash_map and hash_set])
+                     AC_TRY_COMPILE([#include <hash_map>
+                                     #include <hash_set>],
+                                    [std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
+                                     std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;],
+                                    [AC_MSG_RESULT(yes)
+                                     AC_DEFINE(HAVE_HASH_MAP)
+                                     AC_DEFINE(HAVE_STD_HASH_MAP)],
+                                    [AC_MSG_RESULT(no)])
+                     ])
+
+    AC_CHECK_HEADER([ext/hash_map],
+                    [AC_MSG_CHECKING([for hash_map and hash_set])
+                     AC_TRY_COMPILE([#include <ext/hash_map>
+                                     #include <ext/hash_set>],
+                                    [__gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
+                                     __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;],
+                                    [AC_MSG_RESULT(yes)
+                                     AC_DEFINE(HAVE_EXT_HASH_MAP)
+                                     AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)],
+                                    [AC_MSG_RESULT(no)])
+                     ])
+
     AC_LANG_POP
 fi
 

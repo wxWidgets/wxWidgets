@@ -24,6 +24,7 @@
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/fontenc.h"
+#include "wx/hashmap.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -439,7 +440,7 @@ public:
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 
-class WXDLLEXPORT wxStringToColourHashMap;
+WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
 
 class WXDLLEXPORT wxColourDatabase
 {

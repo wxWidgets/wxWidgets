@@ -23,12 +23,14 @@
 #if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_STREAMS
 
 #include "wx/filesys.h"
+#include "wx/hashmap.h"
 
-class WXDLLIMPEXP_BASE wxLongToLongHashMap;
+WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
+                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
 
-//--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // wxZipFSHandler
-//--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
 {

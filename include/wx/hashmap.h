@@ -18,6 +18,30 @@
 
 #include "wx/string.h"
 
+#if (defined(HAVE_EXT_HASH_MAP) || defined(HAVE_HASH_MAP)) \
+    && (defined(HAVE_GNU_CXX_HASH_MAP) || defined(HAVE_STD_HASH_MAP))
+    #define HAVE_STL_HASH_MAP
+#endif
+
+#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+
+#if defined(HAVE_EXT_HASH_MAP)
+    #include <ext/hash_map>
+#elif defined(HAVE_HASH_MAP)
+    #include <hash_map>
+#endif
+
+#if defined(HAVE_GNU_CXX_HASH_MAP)
+    #define WX_HASH_MAP_NAMESPACE __gnu_cxx
+#elif defined(HAVE_STD_HASH_MAP)
+    #define WX_HASH_MAP_NAMESPACE std
+#endif
+
+#define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
+    typedef WX_HASH_MAP_NAMESPACE::hash_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME;
+
+#else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+
 #include <stddef.h>             // for ptrdiff_t
 
 #ifdef __WXWINCE__
@@ -408,6 +432,8 @@ inline bool grow_lf70( size_t buckets, size_t items )
     return float(items)/float(buckets) >= 0.85;
 }
 
+#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+
 // ----------------------------------------------------------------------------
 // hashing and comparison functors
 // ----------------------------------------------------------------------------
@@ -415,6 +441,31 @@ inline bool grow_lf70( size_t buckets, size_t items )
 // NB: implementation detail: all of these classes must have dummy assignment
 //     operators to suppress warnings about "statement with no effect" from gcc
 //     in the hash table class assignment operator (where they're assigned)
+
+#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+
+// integer types
+class WXDLLIMPEXP_BASE wxIntegerHash
+{
+    WX_HASH_MAP_NAMESPACE::hash<long> longHash;
+    WX_HASH_MAP_NAMESPACE::hash<unsigned long> ulongHash;
+    WX_HASH_MAP_NAMESPACE::hash<int> intHash;
+    WX_HASH_MAP_NAMESPACE::hash<unsigned int> uintHash;
+    WX_HASH_MAP_NAMESPACE::hash<short> shortHash;
+    WX_HASH_MAP_NAMESPACE::hash<unsigned short> ushortHash;
+public:
+    wxIntegerHash() { }
+    size_t operator()( long x ) const { return longHash( x ); }
+    size_t operator()( unsigned long x ) const { return ulongHash( x ); }
+    size_t operator()( int x ) const { return intHash( x ); }
+    size_t operator()( unsigned int x ) const { return uintHash( x ); }
+    size_t operator()( short x ) const { return shortHash( x ); }
+    size_t operator()( unsigned short x ) const { return ushortHash( x ); }
+
+    wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
+};
+
+#else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
 // integer types
 class WXDLLIMPEXP_BASE wxIntegerHash
@@ -430,6 +481,8 @@ public:
 
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
+
+#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
 class WXDLLIMPEXP_BASE wxIntegerEqual
 {
@@ -453,7 +506,11 @@ public:
 
     // TODO: this might not work well on architectures with 64 bit pointers but
     //       32 bit longs, we should use % ULONG_MAX there
+#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+    size_t operator()( const void* k ) const { return (size_t)k; }
+#else
     unsigned long operator()( const void* k ) const { return (unsigned long)wxPtrToULong(k); }
+#endif
 
     wxPointerHash& operator=(const wxPointerHash&) { return *this; }
 };
@@ -502,6 +559,8 @@ public:
     wxStringEqual& operator=(const wxStringEqual&) { return *this; }
 };
 
+#if !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
 _WX_DECLARE_PAIR( KEY_T, VALUE_T, CLASSNAME##_wxImplementation_Pair, CLASSEXP ) \
 _WX_DECLARE_HASH_MAP_KEY_EX( KEY_T, CLASSNAME##_wxImplementation_Pair, CLASSNAME##_wxImplementation_KeyEx, CLASSEXP ) \
@@ -542,6 +601,8 @@ public: \
     size_type count( const const_key_type& key ) \
         { return GetNode( key ) ? 1 : 0; } \
 }
+
+#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME) \

@@ -20,6 +20,7 @@
 #include "wx/event.h"
 #include "wx/cmndata.h"
 #include "wx/intl.h"
+#include "wx/hashmap.h"
 
 /*
  * Paper type: see defs.h for wxPaperSize enum.
@@ -69,7 +70,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
 };
 
-class WXDLLEXPORT wxStringToPrintPaperTypeHashMap;
+WX_DECLARE_STRING_HASH_MAP(wxPrintPaperType*, wxStringToPrintPaperTypeHashMap);
+
 class WXDLLEXPORT wxPrintPaperTypeList;
 
 class WXDLLEXPORT wxPrintPaperDatabase

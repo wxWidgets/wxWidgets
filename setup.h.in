@@ -173,9 +173,25 @@
  */
 #undef HAVE_STD_WSTRING
 /*
- * Define if your compiler has compilant std::string::compare
+ * Define if your compiler has compliant std::string::compare
  */
 #undef HAVE_STD_STRING_COMPARE
+/*
+ * Define if your compiler has <hash_map>
+ */
+#undef HAVE_HASH_MAP
+/*
+ * Define if your compiler has <ext/hash_map>
+ */
+#undef HAVE_EXT_HASH_MAP
+/*
+ * Define if your compiler has std::hash_map/hash_set
+ */
+#undef HAVE_STD_HASH_MAP
+/*
+ * Define if your compiler has __gnu_cxx::hash_map/hash_set
+ */
+#undef HAVE_GNU_CXX_HASH_MAP
 
 /*
  * use STL for containers and wxString

@@ -14,6 +14,19 @@
 
 #include "wx/hashmap.h"
 
+#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+
+#if defined(HAVE_EXT_HASH_MAP)
+    #include <ext/hash_set>
+#elif defined(HAVE_HASH_MAP)
+    #include <hash_set>
+#endif
+
+#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )\
+    typedef WX_HASH_MAP_NAMESPACE::hash_set< KEY_T, HASH_T, KEY_EQ_T > CLASSNAME;
+
+#else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+
 // this is a complex way of defining an easily inlineable identity function...
 #define _WX_DECLARE_HASH_SET_KEY_EX( KEY_T, CLASSNAME, CLASSEXP )            \
 CLASSEXP CLASSNAME                                                           \
@@ -67,6 +80,8 @@ public:                                                                      \
     size_type count( const const_key_type& key )                             \
         { return GetNode( key ) ? 1 : 0; }                                   \
 }
+
+#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \

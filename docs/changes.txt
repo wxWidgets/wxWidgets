@@ -103,6 +103,9 @@ All:
 - wxDynamicCast() now uses static_cast<wxObject *> internally and so using it
   with anything not deriving from wxObject will fail at compile time (instead
   of run-time) now
+- when wxUSE_STL == 1 and STL provides quasi-standard hash_map/hash_set,
+  wxHashMap/wxHashSet are just typedefs for them. This makes impossible
+  to forward declare these classes.
 
 All (GUI):
 
