@@ -2321,8 +2321,14 @@ fi
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
 
-dnl check for MT-safe version of strtok
+dnl check for MT-safe version of strtok (on DEC Alpha, it's ok for C compiler
+dnl but not for C++ one - hence change language)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
 AC_CHECK_FUNCS(strtok_r)
+
+AC_LANG_RESTORE
 
 dnl check for inet_addr and inet_aton (these may live either in libc, or in
 dnl libnsl or libresolv)
