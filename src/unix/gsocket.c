@@ -1641,4 +1641,5 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
-// vi:sts=4:sw=4:et
+/* vi:sts=4:sw=4:et */
+
