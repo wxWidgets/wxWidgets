@@ -224,8 +224,8 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
     m_textMax = new wxTextCtrl(this, SpinBtnPage_MaxText, _T(""));
     sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
-    m_textMin->SetValue(wxString::Format(_T("%lu"), m_min));
-    m_textMax->SetValue(wxString::Format(_T("%lu"), m_max));
+    m_textMin->SetValue( wxString::Format(_T("%d"), m_min) );
+    m_textMax->SetValue( wxString::Format(_T("%d"), m_max) );
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -405,14 +405,14 @@ void SpinBtnWidgetsPage::OnSpinBtn(wxCommandEvent& event)
 
 void SpinBtnWidgetsPage::OnSpinBtnUp(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Spin button value incremented, will be %d (was %d)"),
-                 event.GetInt(), m_spinbtn->GetValue());
+    wxLogMessage( _T("Spin button value incremented, will be %ld (was %d)"),
+                  event.GetInt(), m_spinbtn->GetValue() );
 }
 
 void SpinBtnWidgetsPage::OnSpinBtnDown(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Spin button value decremented, will be %d (was %d)"),
-                 event.GetInt(), m_spinbtn->GetValue());
+    wxLogMessage( _T("Spin button value decremented, will be %ld (was %d)"),
+                  event.GetInt(), m_spinbtn->GetValue() );
 }
 
 void SpinBtnWidgetsPage::OnSpinCtrl(wxCommandEvent& event)

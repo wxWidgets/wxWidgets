@@ -604,7 +604,7 @@ void TextWidgetsPage::OnIdle(wxIdleEvent& WXUNUSED(event))
     if ( m_textLineLast )
     {
         m_textLineLast->SetValue(
-                wxString::Format(_T("%ld"), m_text->GetNumberOfLines()));
+                wxString::Format(_T("%d"), m_text->GetNumberOfLines()) );
     }
 
     if ( m_textSelFrom && m_textSelTo )
@@ -699,7 +699,7 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
         else
         {
             long elapsed = sw.Time();
-            wxLogMessage(_T("Loaded file '%s' in %u.%us"),
+            wxLogMessage(_T("Loaded file '%s' in %lu.%us"),
                          filename.c_str(), elapsed / 1000, elapsed % 1000);
         }
     }

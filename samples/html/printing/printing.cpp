@@ -77,7 +77,6 @@ enum
 {
     // menu items
     Minimal_Quit = 1,
-    Minimal_About,
     Minimal_Print,
     Minimal_Preview,
     Minimal_PageSetup,
@@ -95,7 +94,7 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit, MyFrame::OnQuit)
-    EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(Minimal_Print, MyFrame::OnPrint)
     EVT_MENU(Minimal_Preview, MyFrame::OnPreview)
     EVT_MENU(Minimal_PageSetup, MyFrame::OnPageSetup)
@@ -163,7 +162,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Minimal_Print, "Print...");
     menuFile->Append(Minimal_Preview, "Preview...");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_About, "&About");
+    menuFile->Append(wxID_ABOUT, "&About");
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, "&Exit");
 

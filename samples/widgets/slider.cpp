@@ -231,8 +231,8 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     m_textMax = new wxTextCtrl(this, SliderPage_MaxText, _T(""));
     sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
-    m_textMin->SetValue(wxString::Format(_T("%lu"), m_min));
-    m_textMax->SetValue(wxString::Format(_T("%lu"), m_max));
+    m_textMin->SetValue( wxString::Format(_T("%d"), m_min) );
+    m_textMax->SetValue( wxString::Format(_T("%d"), m_max) );
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -449,7 +449,7 @@ void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 
 void SliderWidgetsPage::OnUpdateUICurValueText(wxUpdateUIEvent& event)
 {
-    event.SetText( wxString::Format(_T("%d"), m_slider->GetValue()));
+    event.SetText( wxString::Format(_T("%d"), m_slider->GetValue()) );
 }
 
 void SliderWidgetsPage::OnUpdateUIOtherSide(wxUpdateUIEvent& event)
@@ -459,10 +459,10 @@ void SliderWidgetsPage::OnUpdateUIOtherSide(wxUpdateUIEvent& event)
 
 void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 {
-    int value = event.GetInt();
+    long value = event.GetInt();
 
     wxASSERT_MSG( value == m_slider->GetValue(),
-                  wxT("slider value should be the same") );
+        wxT("slider value should be the same") );
 
     wxEventType eventType = event.GetEventType();
 

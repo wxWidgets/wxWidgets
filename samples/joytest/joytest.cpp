@@ -21,7 +21,11 @@
 #endif
 
 #if !wxUSE_JOYSTICK
-#error You must set wxUSE_JOYSTICK to 1 in setup.h!
+#   error You must set wxUSE_JOYSTICK to 1 in setup.h
+#endif
+
+#if !wxUSE_STATUSBAR
+#   error You must set wxUSE_STATUSBAR to 1 in setup.h
 #endif
 
 #include "wx/wave.h"
@@ -40,57 +44,55 @@ long ypos = -1;
 int winNumber = 1;
 
 // Initialise this in OnInit, not statically
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
-  wxJoystick stick(wxJOYSTICK1);
-  if (!stick.IsOk())
-  {
-    wxMessageBox("No joystick detected!");
-    return FALSE;
-  }
+    wxJoystick stick(wxJOYSTICK1);
+    if (!stick.IsOk())
+    {
+        wxMessageBox("No joystick detected!");
+        return FALSE;
+    }
+
 #if wxUSE_WAVE
-  m_fire.Create("gun.wav");
+    m_fire.Create("gun.wav");
 #endif // wxUSE_WAVE
 
-  m_maxX = stick.GetXMax();
-  m_maxY = stick.GetYMax();
+    m_maxX = stick.GetXMax();
+    m_maxY = stick.GetYMax();
 
-  // Create the main frame window
+    // Create the main frame window
 
-  frame = new MyFrame(NULL, "Joystick Demo", wxPoint(0, 0), wxSize(500, 400),
-   wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+    frame = new MyFrame(NULL, "Joystick Demo", wxDefaultPosition,
+        wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon("joyicon"));
+    frame->SetIcon(wxIcon("joyicon"));
 #endif
 #ifdef __X__
-  frame->SetIcon(wxIcon("joyicon.xbm"));
+    frame->SetIcon(wxIcon("joyicon.xbm"));
 #endif
 
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(JOYTEST_QUIT, "&Exit");
+    file_menu->Append(JOYTEST_QUIT, "&Exit");
 
-  wxMenu *help_menu = new wxMenu;
-  help_menu->Append(JOYTEST_ABOUT, "&About");
+    wxMenuBar *menu_bar = new wxMenuBar;
 
-  wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, "&File");
 
-  menu_bar->Append(file_menu, "&File");
-  menu_bar->Append(help_menu, "&Help");
+    // Associate the menu bar with the frame
+    frame->SetMenuBar(menu_bar);
 
-  // Associate the menu bar with the frame
-  frame->SetMenuBar(menu_bar);
+    frame->CreateStatusBar();
 
-  frame->CreateStatusBar();
+    frame->CenterOnScreen();
+    frame->Show(TRUE);
 
-  frame->Show(TRUE);
+    SetTopWindow(frame);
 
-  SetTopWindow(frame);
-
-  return TRUE;
+    return TRUE;
 }
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
@@ -99,13 +101,13 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
- wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
+    wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
 {
     wxJoystick joystick(wxJOYSTICK1);
     joystick.SetCapture(this);
 }
 
-MyCanvas::~MyCanvas(void)
+MyCanvas::~MyCanvas()
 {
     wxJoystick joystick(wxJOYSTICK1);
     joystick.ReleaseCapture();
@@ -113,62 +115,65 @@ MyCanvas::~MyCanvas(void)
 
 void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 {
-  wxClientDC dc(this);
+    wxClientDC dc(this);
 
-  wxPoint pt(event.GetPosition());
+    wxPoint pt(event.GetPosition());
 
-  // Scale to canvas size
-  int cw, ch;
-  GetSize(&cw, &ch);
+    // Scale to canvas size
+    int cw, ch;
+    GetSize(&cw, &ch);
 
-  pt.x = (long) (((double)pt.x/(double)wxGetApp().m_maxX) * cw);
-  pt.y = (long) (((double)pt.y/(double)wxGetApp().m_maxY) * ch);
+    pt.x = (long) (((double)pt.x/(double)wxGetApp().m_maxX) * cw);
+    pt.y = (long) (((double)pt.y/(double)wxGetApp().m_maxY) * ch);
 
-  if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
-  {
-    dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(xpos, ypos, pt.x, pt.y);
-  }
-  xpos = pt.x;
-  ypos = pt.y;
+    if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
+    {
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawLine(xpos, ypos, pt.x, pt.y);
+    }
 
-  char buf[100];
-  if (event.ButtonDown())
-    sprintf(buf, "Joystick (%d, %d) Fire!", pt.x, pt.y);
-  else
-    sprintf(buf, "Joystick (%d, %d)", pt.x, pt.y);
-  frame->SetStatusText(buf);
+    xpos = pt.x;
+    ypos = pt.y;
+
+    char buf[100];
+    if (event.ButtonDown())
+        sprintf(buf, "Joystick (%d, %d) Fire!", pt.x, pt.y);
+    else
+        sprintf(buf, "Joystick (%d, %d)", pt.x, pt.y);
+
+    frame->SetStatusText(buf);
 
 #if wxUSE_WAVE
-  if (event.ButtonDown() && wxGetApp().m_fire.IsOk())
-  {
-    wxGetApp().m_fire.Play();
-  }
+    if (event.ButtonDown() && wxGetApp().m_fire.IsOk())
+    {
+        wxGetApp().m_fire.Play();
+    }
 #endif // wxUSE_WAVE
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-  EVT_MENU(JOYTEST_QUIT, MyFrame::OnQuit)
+    EVT_MENU(JOYTEST_QUIT, MyFrame::OnQuit)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,
-const long style):
-  wxFrame(parent, -1, title, pos, size, style)
+MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
+    const wxSize& size, const long style)
+    : wxFrame(parent, -1, title, pos, size, style)
 {
-  canvas = new MyCanvas(this);
+    canvas = new MyCanvas(this);
 }
 
-MyFrame::~MyFrame(void)
+MyFrame::~MyFrame()
 {
+    // Empty
 }
 
 void MyFrame::OnQuit(wxCommandEvent& event)
 {
-      Close(TRUE);
+    Close(TRUE);
 }
 
 void MyFrame::OnActivate(wxActivateEvent& event)
 {
-  if (event.GetActive() && canvas)
-    canvas->SetFocus();
+    if (event.GetActive() && canvas)
+        canvas->SetFocus();
 }

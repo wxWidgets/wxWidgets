@@ -199,7 +199,7 @@ void MyApp::OnConnected(wxDialUpEvent& event)
         msg = event.IsConnectedEvent() ? wxT("Successfully connected")
                                        : wxT("Dialing failed");
 
-        wxLogStatus(wxT(""));
+        wxLogStatus(wxEmptyString);
     }
     else
     {

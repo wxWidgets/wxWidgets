@@ -494,10 +494,10 @@ void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
 
 void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
 {
-    int sel = event.GetInt();
+    long sel = event.GetInt();
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
-    wxLogMessage(_T("Combobox item %d selected"), sel);
+    wxLogMessage(_T("Combobox item %ld selected"), sel);
 }
 
 void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)

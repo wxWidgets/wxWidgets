@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        propsize.cpp
-// Purpose:     Minimal wxWindows sample
+// Purpose:     wxWindows propsize sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
+// License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -86,7 +86,6 @@ enum
 {
     // menu items
     Minimal_Quit = 1,
-    Minimal_About
 };
 
 // ----------------------------------------------------------------------------
@@ -98,7 +97,7 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -148,7 +147,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
-    menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(wxID_ABOUT, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
@@ -166,60 +165,62 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // wxUSE_STATUSBAR
 
 #define AddLine(orient) \
-     Add( new wxStaticLine( this, -1, wxDefaultPosition, wxSize(2,2), orient), \
-     0, wxEXPAND)
+    Add( new wxStaticLine( this, -1, wxDefaultPosition, wxSize(2,2), orient), \
+    0, wxEXPAND)
+
 #define AddButton(label,align) Add( \
-     new wxButton( this, -1, label, wxDefaultPosition, wxSize(100,50)), \
-     1, wxSHAPED | align)
+    new wxButton( this, -1, label, wxDefaultPosition, wxSize(100,50)), \
+    1, wxSHAPED | align)
 
-  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-  // top row -- top-aligned
-  wxBoxSizer *hsizer1 = new wxBoxSizer( wxHORIZONTAL );
-  hsizer1->AddButton( "one", wxALIGN_LEFT | wxALIGN_TOP);
-  hsizer1->AddLine(wxVERTICAL);
-  hsizer1->AddButton( "two", wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP);
-  hsizer1->AddLine(wxVERTICAL);
-  hsizer1->AddButton( "three", wxALIGN_RIGHT | wxALIGN_TOP);
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    // top row -- top-aligned
+    wxBoxSizer *hsizer1 = new wxBoxSizer( wxHORIZONTAL );
+    hsizer1->AddButton( "one", wxALIGN_LEFT | wxALIGN_TOP);
+    hsizer1->AddLine(wxVERTICAL);
+    hsizer1->AddButton( "two", wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP);
+    hsizer1->AddLine(wxVERTICAL);
+    hsizer1->AddButton( "three", wxALIGN_RIGHT | wxALIGN_TOP);
 
-  topsizer->Add(hsizer1, 1, wxEXPAND);
-  topsizer->AddLine(wxHORIZONTAL);
+    topsizer->Add(hsizer1, 1, wxEXPAND);
+    topsizer->AddLine(wxHORIZONTAL);
 
-  wxBoxSizer *hsizer2 = new wxBoxSizer( wxHORIZONTAL );
-  hsizer2->AddButton( "four", wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
-  hsizer2->AddLine(wxVERTICAL);
-  // sizer that preserves it's shape
-  wxBoxSizer *vsizer = new wxBoxSizer( wxVERTICAL );
-  vsizer->Add(
-     new wxButton( this, -1, "up", wxDefaultPosition, wxSize(100,25)), \
-     1, wxEXPAND);
-  vsizer->Add(
-     new wxButton( this, -1, "down", wxDefaultPosition, wxSize(100,25)), \
-     1, wxEXPAND);
-  hsizer2->Add(vsizer, 1, wxSHAPED | wxALIGN_CENTER);
-  hsizer2->AddLine(wxVERTICAL);
-  hsizer2->AddButton( "six", wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
+    wxBoxSizer *hsizer2 = new wxBoxSizer( wxHORIZONTAL );
+    hsizer2->AddButton( "four", wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    hsizer2->AddLine(wxVERTICAL);
+    // sizer that preserves it's shape
+    wxBoxSizer *vsizer = new wxBoxSizer( wxVERTICAL );
+    vsizer->Add(
+        new wxButton( this, -1, "up", wxDefaultPosition, wxSize(100,25) ),
+        1, wxEXPAND);
 
-  topsizer->Add(hsizer2, 1, wxEXPAND);
-  topsizer->AddLine(wxHORIZONTAL);
+    vsizer->Add(
+        new wxButton( this, -1, "down", wxDefaultPosition, wxSize(100,25) ),
+        1, wxEXPAND);
 
-  wxBoxSizer *hsizer3 = new wxBoxSizer( wxHORIZONTAL );
-  hsizer3->AddButton( "seven", wxALIGN_LEFT | wxALIGN_BOTTOM);
-  hsizer3->AddLine(wxVERTICAL);
-  hsizer3->AddButton( "eight", wxALIGN_CENTER_HORIZONTAL | wxALIGN_BOTTOM);
-  hsizer3->AddLine(wxVERTICAL);
-  // wxEXPAND should have no effect
-  hsizer3->AddButton( "nine", wxEXPAND | wxALIGN_RIGHT | wxALIGN_BOTTOM);
+    hsizer2->Add(vsizer, 1, wxSHAPED | wxALIGN_CENTER);
+    hsizer2->AddLine(wxVERTICAL);
+    hsizer2->AddButton( "six", wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
 
-  topsizer->Add(hsizer3, 1, wxEXPAND);
+    topsizer->Add(hsizer2, 1, wxEXPAND);
+    topsizer->AddLine(wxHORIZONTAL);
 
-  // set frame to minimum size
-  topsizer->Fit( this );
+    wxBoxSizer *hsizer3 = new wxBoxSizer( wxHORIZONTAL );
+    hsizer3->AddButton( "seven", wxALIGN_LEFT | wxALIGN_BOTTOM);
+    hsizer3->AddLine(wxVERTICAL);
+    hsizer3->AddButton( "eight", wxALIGN_CENTER_HORIZONTAL | wxALIGN_BOTTOM);
+    hsizer3->AddLine(wxVERTICAL);
+    // wxEXPAND should have no effect
+    hsizer3->AddButton( "nine", wxEXPAND | wxALIGN_RIGHT | wxALIGN_BOTTOM);
 
-  // don't allow frame to get smaller than what the sizers tell ye
-  // topsizer->SetSizeHints( this );
+    topsizer->Add(hsizer3, 1, wxEXPAND);
 
-  SetSizer( topsizer );
-  SetAutoLayout( TRUE );
+    // set frame to minimum size
+    topsizer->Fit( this );
+
+    // don't allow frame to get smaller than what the sizers tell ye
+    // topsizer->SetSizeHints( this );
+
+    SetSizer( topsizer );
 }
 
 

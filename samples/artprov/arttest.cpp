@@ -195,7 +195,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     msg.Printf( _T("This is the about dialog of wxArtProvider sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About wxArtProvider sample"),
+        wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnBrowser(wxCommandEvent& WXUNUSED(event))

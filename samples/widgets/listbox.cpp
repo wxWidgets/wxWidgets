@@ -491,20 +491,20 @@ void ListboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 
 void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
 {
-    int sel = event.GetInt();
+    long sel = event.GetInt();
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
-    wxLogMessage(_T("Listbox item %d selected"), sel);
+    wxLogMessage(_T("Listbox item %ld selected"), sel);
 }
 
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Listbox item %d double clicked"), event.GetInt());
+    wxLogMessage( _T("Listbox item %ld double clicked"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckListbox(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Listbox item %d toggled"), event.GetInt());
+    wxLogMessage( _T("Listbox item %ld toggled"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)

@@ -103,7 +103,6 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
    
     // event handlers (these functions should _not_ be virtual)
       void OnQuit(wxCommandEvent& event);
-      void OnAbout(wxCommandEvent& event);
       void OnBack(wxCommandEvent& event);
       void OnForward(wxCommandEvent& event);
 
@@ -121,7 +120,6 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
    {
     // menu items
    Minimal_Quit = 1,
-   Minimal_About,
    Minimal_Back,
    Minimal_Forward,
    
@@ -138,7 +136,6 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
 // simple menu events like this the static method is much simpler.
    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-   EVT_MENU(Minimal_About, MyFrame::OnAbout)
    EVT_MENU(Minimal_Back, MyFrame::OnBack)
    EVT_MENU(Minimal_Forward, MyFrame::OnForward)
    END_EVENT_TABLE()
@@ -164,13 +161,13 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
-   
+
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
       frame->Show(TRUE);
       SetTopWindow(frame);
       wxFileSystem::AddHandler(new MyVFS);
-   
+
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
     // application would exit immediately.
@@ -219,12 +216,6 @@ wxHtmlWindow *html;
     // TRUE is to force the frame to close
       Close(TRUE);
    }
-
-   void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
-   {
-   }
-
-
 
    void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))
    {

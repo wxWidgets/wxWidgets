@@ -12,8 +12,8 @@
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
-    bool OnInit(void);
+public:
+    bool OnInit();
 
     // Joystick max values
     int     m_maxX;
@@ -28,9 +28,9 @@ DECLARE_APP(MyApp)
 
 class MyCanvas: public wxScrolledWindow
 {
-  public:
+public:
     MyCanvas(wxWindow *parent, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
-    ~MyCanvas(void);
+    ~MyCanvas();
     void OnJoystickEvent(wxJoystickEvent& event);
 
     DECLARE_EVENT_TABLE()
@@ -38,10 +38,11 @@ class MyCanvas: public wxScrolledWindow
 
 class MyFrame: public wxFrame
 {
-  public:
+public:
     MyCanvas *canvas;
-    MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
-    ~MyFrame(void);
+    MyFrame(wxFrame *parent, const wxString& title,
+        const wxPoint& pos, const wxSize& size, const long style);
+    ~MyFrame();
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 
@@ -49,4 +50,3 @@ DECLARE_EVENT_TABLE()
 };
 
 #define JOYTEST_QUIT        1
-#define JOYTEST_ABOUT       2

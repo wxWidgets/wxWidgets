@@ -122,7 +122,7 @@ private:
     void DoAsyncExec(const wxString& cmd);
 
     // the PID of the last process we launched asynchronously
-    int m_pidLast;
+    long m_pidLast;
 
     // last command we executed
     wxString m_cmdLast;
@@ -505,16 +505,16 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
     if ( sig == 0 )
     {
         if ( wxProcess::Exists(pid) )
-            wxLogStatus(_T("Process %d is running."), pid);
+            wxLogStatus(_T("Process %ld is running."), pid);
         else
-            wxLogStatus(_T("No process with pid = %d."), pid);
+            wxLogStatus(_T("No process with pid = %ld."), pid);
     }
     else // not SIGNONE
     {
         wxKillError rc = wxProcess::Kill(pid, (wxSignal)sig);
         if ( rc == wxKILL_OK )
         {
-            wxLogStatus(_T("Process %d killed with signal %d."), pid, sig);
+            wxLogStatus(_T("Process %ld killed with signal %d."), pid, sig);
         }
         else
         {
@@ -527,7 +527,7 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
                 _T("unspecified error"),
             };
 
-            wxLogStatus(_T("Failed to kill process %d with signal %d: %s"),
+            wxLogStatus(_T("Failed to kill process %ld with signal %d: %s"),
                         pid, sig, errorText[rc]);
         }
     }
@@ -543,13 +543,14 @@ void MyFrame::DoAsyncExec(const wxString& cmd)
     m_pidLast = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( !m_pidLast )
     {
-        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+        wxLogError( _T("Execution of '%s' failed."), cmd.c_str() );
 
         delete process;
     }
     else
     {
-        wxLogStatus(_T("Process %ld (%s) launched."), m_pidLast, cmd.c_str());
+        wxLogStatus( _T("Process %ld (%s) launched."),
+            m_pidLast, cmd.c_str() );
 
         m_cmdLast = cmd;
     }
@@ -564,12 +565,13 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
     if ( !cmd )
         return;
 
-    wxLogStatus(_T("'%s' is running please wait..."), cmd.c_str());
+    wxLogStatus( _T("'%s' is running please wait..."), cmd.c_str() );
 
     int code = wxExecute(cmd, wxEXEC_SYNC);
 
     wxLogStatus(_T("Process '%s' terminated with exit code %d."),
-                cmd.c_str(), code);
+        cmd.c_str(), code);
+
     m_cmdLast = cmd;
 }
 
@@ -676,10 +678,10 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
 
     // always execute the filter asynchronously
     MyPipedProcess2 *process = new MyPipedProcess2(this, cmd, input);
-    int pid = wxExecute(cmd, wxEXEC_ASYNC, process);
+    long pid = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( pid )
     {
-        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
+        wxLogStatus( _T("Process %ld (%s) launched."), pid, cmd.c_str() );
 
         m_running.Add(process);
     }

@@ -223,7 +223,7 @@ void *MyThread::Entry()
 {
     wxString text;
 
-    text.Printf(wxT("Thread 0x%x started (priority = %d).\n"),
+    text.Printf(wxT("Thread 0x%x started (priority = %u).\n"),
                 GetId(), GetPriority());
     WriteText(text);
     // wxLogMessage(text); -- test wxLog thread safeness

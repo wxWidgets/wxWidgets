@@ -88,8 +88,7 @@ private:
 enum
 {
     // menu items
-    Minimal_Quit = 1,
-    Minimal_About
+    ID_MENU_QUIT = 1,
 };
 
 
@@ -101,7 +100,7 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
+    MyFrame *frame = new MyFrame(_T("Erase sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     frame->Show(TRUE);
@@ -114,26 +113,22 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_MENU(ID_MENU_QUIT,  MyFrame::OnQuit)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
-#ifdef __WXMAC__
-    wxApp::s_macAboutMenuItemId = Minimal_About;
-#endif
-
     SetIcon(wxICON(mondrian));
 
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+    helpMenu->Append(wxID_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
 
-    menuFile->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(ID_MENU_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, _T("&File"));

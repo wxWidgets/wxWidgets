@@ -209,7 +209,7 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
                                             _T("Set &range"),
                                             GaugePage_RangeText,
                                             &m_textRange);
-    m_textRange->SetValue(wxString::Format(_T("%lu"), m_range));
+    m_textRange->SetValue( wxString::Format(_T("%lu"), m_range) );
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, GaugePage_Progress, _T("Simulate &progress"));
