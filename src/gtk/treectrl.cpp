@@ -6,7 +6,7 @@
 // Created:     07/05/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Denis Pershin
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -110,7 +110,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     y = 0;
 
   m_needParent = TRUE;
-  
+
 printf("precreate\n");
   PreCreation( parent, id, pos, size, style, name );
 
@@ -135,14 +135,14 @@ printf("5\n");
 printf("Robert's new insertion code :-)\n");
   m_parent->AddChild( this );
   (m_parent->m_insertCallback)( m_parent, this );
-  
+
 printf("postcreate\n");
   PostCreation();
 
   gtk_widget_realize(GTK_WIDGET(m_tree));
 
   Show(TRUE);
-  
+
   return TRUE;
 }
 
@@ -348,6 +348,16 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) co
   return GTK_TREE_ITEM(g_list_nth(GTK_TREE(parent)->children, cookie)->data);
 }
 
+wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
+{
+  GtkTreeItem *p = (GtkTreeItem *)item;
+  GtkWidget *parent = GTK_WIDGET(p)->parent;
+
+  wxCHECK_MSG( GTK_IS_TREE(parent), NULL, "invalid tree item" );
+
+  return GTK_TREE_ITEM(g_list_last(GTK_TREE(parent)->children)->data);
+}
+
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const {
   GtkTreeItem *p = (GtkTreeItem *)item;
   GtkWidget *parent = GTK_WIDGET(p)->parent;
@@ -469,13 +479,13 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
 
 wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
                         const wxString& text, int image, int selectedImage,
-											  wxTreeItemData *data) {
+                        wxTreeItemData *data) {
   return p_InsertItem(parent, text, image, selectedImage, data);
 }
 
 wxTreeItemId wxTreeCtrl::p_InsertItem(GtkTreeItem *p,
                         const wxString& text, int image, int selectedImage,
-											  wxTreeItemData *data) {
+                        wxTreeItemData *data) {
   GtkTreeItem *item;
 
 printf("begin insert\n");
@@ -719,7 +729,7 @@ long wxTreeCtrl::GetChild(long item) const {
 
   if (next != NULL)
     return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
-  
+
   return (-1);
 }
 
@@ -732,7 +742,7 @@ long wxTreeCtrl::GetFirstVisibleItem(void) const {
 
   if (next != NULL)
     return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
-  
+
   return (-1);
 }
 
@@ -747,7 +757,7 @@ long wxTreeCtrl::GetNextVisibleItem(long item) const {
 
   if (next != NULL)
     return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
-  
+
   return (-1);
 }
 

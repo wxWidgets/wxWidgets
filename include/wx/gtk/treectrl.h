@@ -264,8 +264,10 @@ public:
 
         // get the first child of this item
     wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& cookie) const;
-        // get the next child
+        // get the next child (after GetFirstChild or GetNextChild)
     wxTreeItemId GetNextChild(const wxTreeItemId& item, long& cookie) const;
+        // get the last child of this item - this method doesn't use cookies
+    wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
 
         // get the next sibling of this item
     wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;

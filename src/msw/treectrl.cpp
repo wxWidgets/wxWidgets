@@ -457,6 +457,22 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
     return l;
 }
 
+wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
+{
+    // can this be done more efficiently?
+    long cookie;
+
+    wxTreeItemId childLast,
+    child = GetFirstChild(last, cookie);
+    while ( child.IsOk() )
+    {
+        childLast = child;
+        child = GetNextChild(last, cookie);
+    }
+
+    return childLast;
+}
+
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 {
     return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
