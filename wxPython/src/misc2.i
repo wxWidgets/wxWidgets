@@ -539,7 +539,7 @@ public:
     bool IsOneShot();
     bool IsRunning();
     void SetOwner(wxEvtHandler *owner, int id = -1);
-    void Start(int milliseconds=-1, int oneShot=FALSE);
+    bool Start(int milliseconds=-1, int oneShot=FALSE);
     void Stop();
 };
 
