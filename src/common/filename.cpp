@@ -34,7 +34,7 @@
                 (although :filename works as well).
                 Since the volume is just part of the file path, it is not
                 treated like a separate entity as it is done under DOS and
-                VMS, it is just treated as another dir. 
+                VMS, it is just treated as another dir.
 
    wxPATH_VMS:  VMS native format, absolute file names have the form
                     <device>:[dir1.dir2.dir3]file.txt
@@ -237,13 +237,13 @@ void wxFileName::Assign(const wxString& volume,
 {
     wxPathFormat my_format = GetFormat( format );
     wxString my_path = path;
-    
+
     m_dirs.Clear();
-    
+
     if (!my_path.empty())
     {
         // 1) Determine if the path is relative or absolute.
-        
+
         switch (my_format)
         {
             case wxPATH_MAC:
@@ -251,7 +251,7 @@ void wxFileName::Assign(const wxString& volume,
                 // We then remove a leading ":". The reason is in our
                 // storage form for relative paths:
                 // ":dir:file.txt" actually means "./dir/file.txt" in
-                // DOS notation and should get stored as 
+                // DOS notation and should get stored as
                 // (relative) (dir) (file.txt)
                 // "::dir:file.txt" actually means "../dir/file.txt"
                 // stored as (relative) (..) (dir) (file.txt)
@@ -275,11 +275,11 @@ void wxFileName::Assign(const wxString& volume,
                 wxFAIL_MSG( wxT("error") );
                 break;
         }
-        
+
         // 2) Break up the path into its members. If the original path
         //    was just "/" or "\\", m_dirs will be empty. We know from
         //    the m_relative field, if this means "nothing" or "root dir".
-        
+
         wxStringTokenizer tn( my_path, GetPathSeparators(my_format) );
 
         while ( tn.HasMoreTokens() )
@@ -523,7 +523,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     #ifndef __WATCOMC__
         ::DosCreateDir(wxStringBuffer(path, MAX_PATH), NULL);
     #endif
-    
+
 #else // !Windows, !OS/2
     if ( dir.empty() )
     {
@@ -628,7 +628,16 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     {
         // open the file - of course, there is a race condition here, this is
         // why we always prefer using mkstemp()...
-        if ( !fileTemp->Open(path, wxFile::write_excl, wxS_IRUSR | wxS_IWUSR) )
+        //
+        // NB: GetTempFileName() under Windows creates the file, so using
+        //     write_excl there would fail
+        if ( !fileTemp->Open(path,
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+                             wxFile::write,
+#else
+                             wxFile::write_excl,
+#endif
+                             wxS_IRUSR | wxS_IWUSR) )
         {
             // FIXME: If !ok here should we loop and try again with another
             //        file name?  That is the standard recourse if open(O_EXCL)
@@ -870,7 +879,7 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     {
         m_dirs.Insert(wxT(".."), 0u);
     }
-    
+
     m_relative = TRUE;
 
     // we were modified
@@ -1037,7 +1046,7 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
          if (!m_relative)
              fullpath += wxFILE_SEP_PATH_UNIX;
     }
-    
+
     // then concatenate all the path components using the path separator
     size_t dirCount = m_dirs.GetCount();
     if ( dirCount )
@@ -1123,7 +1132,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
             // else ignore
         }
     }
-    
+
     // the leading character
     if ( format == wxPATH_MAC && m_relative )
     {
@@ -1139,7 +1148,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
          if (!m_relative)
              fullpath += wxFILE_SEP_PATH_UNIX;
     }
-    
+
     // then concatenate all the path components using the path separator
     size_t dirCount = m_dirs.GetCount();
     if ( dirCount )
