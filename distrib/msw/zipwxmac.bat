@@ -31,19 +31,19 @@ echo Zipping wxMac distribution
 cd %src%
 copy %src%\include\wx\mac\setup0.h %src%\include\wx\setup.h
 
-zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
+zip -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 erase /Y %src%\include\wx\setup.h
 
@@ -51,14 +51,14 @@ if direxist %dest%\wxMac-%version% erase /sxyz %dest%\wxMac-%version%
 
 mkdir %dest%\wxMac-%version%
 cd %dest%\wxMac-%version%
-unzip32 ..\wxMac-%version%.zip
+unzip ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /SXY docs\html\dialoged docs\html\tex2rtf
 
 cd %dest%
 
 erase wxMac-%version%.zip
-zip32 -r wxMac-%version%.zip wxMac-%version%/*
+zip -r wxMac-%version%.zip wxMac-%version%/*
 
 erase /sxyz %dest%\wxMac-%version%
 

@@ -13,7 +13,7 @@ inkey /W4 `Press any key to continue...` %%input
 
 erase %dest\stc.zip
 cd %src
-zip32 -@ %dest\stc.zip < %src\distrib\msw\stc.rsp
+zip -@ %dest\stc.zip < %src\distrib\msw\stc.rsp
 
 cd %dest
 

@@ -6,6 +6,8 @@ lib/watcom/*.txt
 lib/watcom/*.lib
 lib/watcom/*.bat
 lib/bcc16/*.lib
+lib/_sc/*.txt
+lib/_sc/*.def
 
 docs/licence.txt
 docs/msw/*.txt
