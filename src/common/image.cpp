@@ -409,9 +409,36 @@ void wxImage::Paste( const wxImage &image, int x, int y )
             source_data += source_step;
             target_data += target_step;
         }
+        return;
     }
-    else
+    
+    if (!HasMask() && image.HasMask())
     {
+        unsigned char r = image.GetMaskRed();
+        unsigned char g = image.GetMaskGreen();
+        unsigned char b = image.GetMaskBlue();
+        
+        width *= 3;
+        unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
+        int source_step = image.GetWidth()*3;
+
+        unsigned char* target_data = GetData() + (x+xx)*3 + (y+yy)*3*M_IMGDATA->m_width;
+        int target_step = M_IMGDATA->m_width*3;
+        
+        for (int j = 0; j < height; j++)
+        {
+            for (int i = 0; i < width; i+=3)
+            {
+                if ((source_data[i]   != r) && 
+                    (source_data[i+1] != g) && 
+                    (source_data[i+2] != b))
+                {
+                    memcpy( target_data+i, source_data+i, 3 );
+                }
+            } 
+            source_data += source_step;
+            target_data += target_step;
+        }
     }
 }
 
