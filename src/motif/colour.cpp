@@ -37,26 +37,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 wxColour::wxColour ()
 {
     m_isInit = FALSE;
-    m_red = m_blue = m_green = 0;
-    m_pixel = -1;
-}
-
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
-{
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
+    m_red =
+    m_blue =
+    m_green = 0;
     m_pixel = -1;
 }
 
 wxColour::wxColour (const wxColour& col)
 {
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-    m_pixel = col.m_pixel;
+    *this = col;
 }
 
 wxColour& wxColour::operator =(const wxColour& col)
@@ -69,24 +58,9 @@ wxColour& wxColour::operator =(const wxColour& col)
     return *this;
 }
 
-void wxColour::InitFromName(const wxString& col)
+void wxColour::InitFromName(const wxString& name)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
-    {
-        m_red = the_colour->Red ();
-        m_green = the_colour->Green ();
-        m_blue = the_colour->Blue ();
-        m_pixel = the_colour->m_pixel;
-        m_isInit = TRUE;
-    }
-    else
-    {
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-        m_isInit = FALSE;
-    }
+    *this = wxTheColourDatabase->Find(name);
 }
 
 wxColour::~wxColour ()

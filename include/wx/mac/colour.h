@@ -25,19 +25,17 @@ class WXDLLEXPORT wxColour: public wxObject
 public:
   // ctors
     // default
-  wxColour();
+  wxColour() { Init(); }
     // from RGB
-  wxColour( unsigned char red, unsigned char green, unsigned char blue );
+  wxColour( unsigned char red, unsigned char green, unsigned char blue )
+      { Set(red, green, blue); }
   wxColour( unsigned long colRGB )
-      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
       { Set(colRGB); }
   
     // implicit conversion from the colour name
   wxColour( const wxString &colourName )
-      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
       { InitFromName(colourName); }
   wxColour( const wxChar *colourName )
-      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
       { InitFromName(colourName); }
 
     // copy ctors and assignment operators
@@ -85,6 +83,8 @@ private:
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
+
+  void Init();
 
 public:
   WXCOLORREF m_pixel ;

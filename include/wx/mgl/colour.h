@@ -25,7 +25,8 @@ public:
       // default
     wxColour();
       // from RGB
-    wxColour(unsigned char red, unsigned char green, unsigned char blue);
+    wxColour(unsigned char red, unsigned char green, unsigned char blue)
+        { Set(red, green, blue); }
     wxColour(unsigned long colRGB) { Set(colRGB); }
 
       // implicit conversion from the colour name
@@ -74,7 +75,8 @@ private:
     unsigned char m_blue;
     unsigned char m_green;
 
-    // helper func
+    // ctors helpers
+    void Init();
     void InitFromName(const wxString& colourName);
 
 private:

@@ -304,14 +304,14 @@ void wxGenericColourDialog::InitializeColours(void)
 
     for (i = 0; i < WXSIZEOF(wxColourDialogNames); i++)
     {
-        wxColour *col = wxTheColourDatabase->FindColour(wxColourDialogNames[i]);
-        if (col)
-            standardColours[i].Set(col->Red(), col->Green(), col->Blue());
+        wxColour col = wxTheColourDatabase->Find(wxColourDialogNames[i]);
+        if (col.Ok())
+            standardColours[i].Set(col.Red(), col.Green(), col.Blue());
         else
             standardColours[i].Set(0, 0, 0);
     }
 
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < WXSIZEOF(customColours); i++)
     {
         customColours[i] = colourData.GetCustomColour(i);
     }
@@ -333,7 +333,7 @@ void wxGenericColourDialog::InitializeColours(void)
         }
         if ( !initColourFound )
         {
-            for ( i = 0; i < 16; i++ )
+            for ( i = 0; i < WXSIZEOF(customColours); i++ )
             {
                 if ( customColours[i] == curr )
                 {

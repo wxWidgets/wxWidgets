@@ -138,28 +138,32 @@ void wxGLContext::SetCurrent()
 
 void wxGLContext::SetColour(const wxChar *colour)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour(colour);
-    if(the_colour) {
-	GLboolean b;
-	glGetBooleanv(GL_RGBA_MODE, &b);
-	if(b) {
-	    glColor3ub(the_colour->Red(),
-		       the_colour->Green(),
-		       the_colour->Blue());
-	} else {
+    wxColour the_colour = wxTheColourDatabase->Find(colour);
+    if(the_colour.Ok())
+    {
+        GLboolean b;
+        glGetBooleanv(GL_RGBA_MODE, &b);
+        if(b)
+        {
+            glColor3ub(the_colour.Red(),
+                    the_colour.Green(),
+                    the_colour.Blue());
+        }
+        else
+        {
 #ifdef __WXMOTIF__
-            the_colour->AllocColour(m_window->GetXDisplay());
+            the_colour.AllocColour(m_window->GetXDisplay());
 #else
-            the_colour->CalcPixel(wxTheApp->GetMainColormap(wxGetDisplay()));
+            the_colour.CalcPixel(wxTheApp->GetMainColormap(wxGetDisplay()));
 #endif
-	    GLint pix = (GLint)the_colour->GetPixel();
-	    if(pix == -1)
+            GLint pix = (GLint)the_colour.GetPixel();
+            if(pix == -1)
             {
                 wxLogError(wxT("wxGLCanvas: cannot allocate color\n"));
-		return;
+                return;
             }
-	    glIndexi(pix);
-	}
+            glIndexi(pix);
+        }
     }
 }
 

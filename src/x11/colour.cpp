@@ -155,34 +155,46 @@ wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
     M_COLDATA->m_color.pixel = 0;
 }
 
+/* static */
+wxColour wxColour::CreateByName(const wxString& name)
+{
+    wxColour col;
+
+    Display *dpy = wxGlobalDisplay();
+    WXColormap colormap = wxTheApp->GetMainColormap( dpy );
+    XColor xcol;
+    if ( XParseColor( dpy, (Colormap)colormap, name.mb_str(), &xcol ) )
+    {
+        wxColourRefData *refData = new wxColourRefData;
+        refData->m_colormap = colormap;
+        refData->m_color = xcol;
+        col.m_refData = refData;
+    }
+
+    return col;
+}
+
 void wxColour::InitFromName( const wxString &colourName )
 {
-    wxColour* col;
-    if ( (wxTheColourDatabase) && (col = wxTheColourDatabase->FindColourNoAdd(colourName)) )
+    // check the cache first
+    wxColour col;
+    if ( wxTheColourDatabase )
     {
-        UnRef();
-        if (col) Ref( *col );
+        col = wxTheColourDatabase->Find(colourName);
+    }
+
+    if ( !col.Ok() )
+    {
+        col = CreateByName(colourName);
+    }
+
+    if ( col.Ok() )
+    {
+        *this = col;
     }
     else
     {
-        m_refData = new wxColourRefData();
-        
-        M_COLDATA->m_colormap = wxTheApp->GetMainColormap( wxGlobalDisplay() );
-        
-        if (!XParseColor( wxGlobalDisplay(), (Colormap) M_COLDATA->m_colormap, colourName.mb_str(), &M_COLDATA->m_color ))
-        {
-            // VZ: asserts are good in general but this one is triggered by
-            //     calling wxColourDatabase::FindColour() with an
-            //     unrecognized colour name and this can't be avoided from the
-            //     user code, so don't give it here
-            //
-            //     a better solution would be to changed code in FindColour()
-
-            //wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
-
-            delete m_refData;
-            m_refData = (wxObjectRefData *) NULL;
-        }
+        wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
     }
 }
 

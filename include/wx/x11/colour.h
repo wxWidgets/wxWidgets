@@ -53,6 +53,9 @@ public:
     wxColour( const wxChar *colourName ) { InitFromName( wxString(colourName) ); }
 #endif
 
+    // Get colour from name or wxNullColour
+    static wxColour CreateByName(const wxString& name);
+
     wxColour( const wxColour& col ) { Ref(col); }
     wxColour& operator = ( const wxColour& col ) { Ref(col); return *this; }
 

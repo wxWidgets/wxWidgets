@@ -28,7 +28,8 @@ public:
     // default
     wxColour();
     // from RGB
-    wxColour( unsigned char red, unsigned char green, unsigned char blue );
+    wxColour( unsigned char red, unsigned char green, unsigned char blue )
+        { Set(red, green, blue); }
     wxColour( unsigned long colRGB ) { Set(colRGB); }
     
     // implicit conversion from the colour name

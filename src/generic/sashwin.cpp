@@ -677,11 +677,11 @@ void wxSashWindow::InitColours()
     m_lightShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
     m_hilightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT);
 #else
-    m_faceColour = *(wxTheColourDatabase->FindColour("LIGHT GREY"));
-    m_mediumShadowColour = *(wxTheColourDatabase->FindColour("GREY"));
-    m_darkShadowColour = *(wxTheColourDatabase->FindColour("BLACK"));
-    m_lightShadowColour = *(wxTheColourDatabase->FindColour("LIGHT GREY"));
-    m_hilightColour = *(wxTheColourDatabase->FindColour("WHITE"));
+    m_faceColour = wxTheColourDatabase->Find("LIGHT GREY");
+    m_mediumShadowColour = wxTheColourDatabase->Find("GREY");
+    m_darkShadowColour = wxTheColourDatabase->Find("BLACK");
+    m_lightShadowColour = wxTheColourDatabase->Find("LIGHT GREY");
+    m_hilightColour = wxTheColourDatabase->Find("WHITE");
 #endif
 }
 

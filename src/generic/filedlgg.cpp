@@ -343,8 +343,9 @@ void wxFileData::MakeItem( wxListItem &item )
 
     if (IsLink())
     {
-        wxColour *dg = wxTheColourDatabase->FindColour( _T("MEDIUM GREY") );
-        item.SetTextColour(*dg);
+        wxColour dg = wxTheColourDatabase->Find( _T("MEDIUM GREY") );
+        if ( dg.Ok() )
+            item.SetTextColour(dg);
     }
     item.m_data = (long)this;
 }

@@ -33,21 +33,13 @@ static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green 
     col->green = (green << 8) + green;
 }
 
-wxColour::wxColour ()
+void wxColour::Init()
 {
     m_isInit = FALSE;
-    m_red = m_blue = m_green = 0;
+    m_red =
+    m_blue =
+    m_green = 0;
     
-    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
-}
-
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
-{
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
-
     wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
@@ -84,25 +76,17 @@ wxColour& wxColour::operator =(const wxColour& col)
     return *this;
 }
 
-void wxColour::InitFromName(const wxString& col)
+void wxColour::InitFromName(const wxString& name)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
+    wxColour col = wxTheColourDatabase->Find(name);
+    if ( col.Ok() )
     {
-        m_red = the_colour->Red ();
-        m_green = the_colour->Green ();
-        m_blue = the_colour->Blue ();
-        m_isInit = TRUE;
+        *this = col;
     }
     else
     {
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-        m_isInit = FALSE;
+        Init();
     }
-
-    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
 wxColour::~wxColour ()

@@ -97,15 +97,12 @@ void wxGLContext::Update()
 
 void wxGLContext::SetColour(const wxChar *colour)
 {
-    float r = 0.0;
-    float g = 0.0;
-    float b = 0.0;
-    wxColour *col = wxTheColourDatabase->FindColour(colour);
-    if (col)
+    wxColour col = wxTheColourDatabase->Find(colour);
+    if (col.Ok())
     {
-        r = (float)(col->Red()/256.0);
-        g = (float)(col->Green()/256.0);
-        b = (float)(col->Blue()/256.0);
+        float r = (float)(col.Red()/256.0);
+        float g = (float)(col.Green()/256.0);
+        float b = (float)(col.Blue()/256.0);
         glColor3f( r, g, b);
     }
 }

@@ -339,11 +339,11 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   m_previewer->SetFont(dialogFont);
   if (colourChoice->GetStringSelection() != wxT(""))
   {
-    wxColour *col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
-    if (col)
+    wxColour col = wxTheColourDatabase->Find(colourChoice->GetStringSelection());
+    if (col.Ok())
     {
-      m_fontData.m_fontColour = *col;
-      m_previewer->SetForegroundColour(*col);
+      m_fontData.m_fontColour = col;
+      m_previewer->SetForegroundColour(col);
     }
   }
   m_previewer->Refresh();
