@@ -1052,11 +1052,11 @@ public:
     void     EndBatch()
     {
         if ( m_batchCount > 0 )
-	{
-	    m_batchCount--;
-	    if ( !m_batchCount )
-	        Refresh();
-	}
+        {
+            m_batchCount--;
+            if ( !m_batchCount )
+                Refresh();
+        }
     }
 
     int      GetBatchCount() { return m_batchCount; }
@@ -1713,6 +1713,7 @@ protected:
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
+    void OnKeyUp( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
 
 

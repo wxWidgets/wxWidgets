@@ -182,6 +182,7 @@ private:
     void OnPaint( wxPaintEvent &event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& );
+    void OnKeyUp( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
 
 
@@ -2987,6 +2988,7 @@ BEGIN_EVENT_TABLE( wxGridWindow, wxPanel )
     EVT_PAINT( wxGridWindow::OnPaint )
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridWindow::OnKeyDown )
+    EVT_KEY_UP( wxGridWindow::OnKeyUp )
     EVT_ERASE_BACKGROUND( wxGridWindow::OnEraseBackground )
 END_EVENT_TABLE()
 
@@ -3037,10 +3039,15 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-// This seems to be required for wxMotif otherwise the mouse
+// This seems to be required for wxMotif/wxGTK otherwise the mouse
 // cursor must be in the cell edit control to get key events
 //
 void wxGridWindow::OnKeyDown( wxKeyEvent& event )
+{
+    if ( !m_owner->ProcessEvent( event ) ) event.Skip();
+}
+
+void wxGridWindow::OnKeyUp( wxKeyEvent& event )
 {
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
@@ -3060,6 +3067,7 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
+    EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
 END_EVENT_TABLE()
 
@@ -5146,24 +5154,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
         // try local handlers
         //
-        if ( !event.ShiftDown() && 
-             m_selectingKeyboard != wxGridNoCellCoords )
-        {
-            if ( m_selectingTopLeft != wxGridNoCellCoords &&
-                 m_selectingBottomRight != wxGridNoCellCoords )
-                m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
-                                          m_selectingTopLeft.GetCol(),
-                                          m_selectingBottomRight.GetRow(),
-                                          m_selectingBottomRight.GetCol(),
-                                          event.ControlDown(),
-                                          event.ShiftDown(),
-                                          event.AltDown(),
-                                          event.MetaDown() );
-            m_selectingTopLeft = wxGridNoCellCoords;
-            m_selectingBottomRight = wxGridNoCellCoords;
-            m_selectingKeyboard = wxGridNoCellCoords;
-        }
-
         switch ( event.KeyCode() )
         {
             case WXK_UP:
@@ -5319,12 +5309,40 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     m_inOnKeyDown = FALSE;
 }
 
+void wxGrid::OnKeyUp( wxKeyEvent& event )
+{
+    // try local handlers
+    //
+    if ( event.KeyCode() == WXK_SHIFT )
+    {
+        if ( m_selectingTopLeft != wxGridNoCellCoords &&
+             m_selectingBottomRight != wxGridNoCellCoords )
+            m_selection->SelectBlock( m_selectingTopLeft.GetRow(),
+                                      m_selectingTopLeft.GetCol(),
+                                      m_selectingBottomRight.GetRow(),
+                                      m_selectingBottomRight.GetCol(),
+                                      event.ControlDown(),
+                                      event.ShiftDown(),
+                                      event.AltDown(),
+                                      event.MetaDown() );
+        m_selectingTopLeft = wxGridNoCellCoords;
+        m_selectingBottomRight = wxGridNoCellCoords;
+        m_selectingKeyboard = wxGridNoCellCoords;
+    }
+}
+
 void wxGrid::OnEraseBackground(wxEraseEvent&)
 {
 }
 
 void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
+    if ( SendEvent( wxEVT_GRID_SELECT_CELL, coords.GetRow(), coords.GetCol() ) )
+    {
+        // the event has been intercepted - do nothing
+        return;
+    }
+
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
         HideCellEditControl();
