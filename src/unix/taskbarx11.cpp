@@ -34,6 +34,7 @@
 #include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/statbmp.h"
+#include "wx/sizer.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -188,6 +189,15 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     wxBitmap bmp;
     bmp.CopyFromIcon(icon);
     wxTaskBarIconArea *area = new wxTaskBarIconArea(this, m_iconWnd, bmp);
+
+    // make a sizer to keep the icon centered, in case it is smaller than the
+    // alotted space.
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(0,0,1);
+    sizer->Add(area, 0, wxALIGN_CENTER);
+    sizer->Add(0,0,1);
+    m_iconWnd->SetSizer(sizer);
+    
     m_iconWnd->SetClientSize(area->GetSize());
 #if wxUSE_TOOLTIPS
     if (!tooltip.empty())
