@@ -23,14 +23,15 @@
 #if wxUSE_STATTEXT
 
 #ifndef WX_PRECOMP
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/brush.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/brush.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/stattext.h"
 #include "wx/msw/private.h"
-#include <stdio.h>
 
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxStaticTextStyle )
