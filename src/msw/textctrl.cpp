@@ -1655,6 +1655,8 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
+#if wxUSE_RICHEDIT
+
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
     if ( !IsRich() )
@@ -1800,6 +1802,8 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
 
     return TRUE;
 }
+
+#endif
 
 // ----------------------------------------------------------------------------
 // wxRichEditModule
