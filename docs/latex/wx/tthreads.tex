@@ -24,8 +24,9 @@ new thread for each new client), but in others it might be a very poor choice
 (example: launching a separate thread when doing a long computation to show a
 progress dialog). Other implementation choices are available: for the progress
 dialog example it is far better to do the calculations in the 
-\helpref{idle handler}{wxidleevent} or call \helpref{wxYield()}{wxyield} 
-periodically to update the screen.
+\helpref{idle handler}{wxidleevent} or even simply do everything at once
+but call \helpref{wxWindow::Update()}{wxwindowupdate} periodically to update
+the screen.
 
 If you do decide to use threads in your application, it is strongly recommended
 that no more than one thread calls GUI functions. The thread sample shows that
@@ -37,10 +38,16 @@ more robust and will undoubtedly save you countless problems (example: under
 Win32 a thread can only access GDI objects such as pens, brushes, \&c created by
 itself and not by the other threads).
 
-For communication between threads, use 
+For communication between secondar threads and the main thread, use may use 
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}
 or its short version \helpref{wxPostEvent}{wxpostevent}. These functions
 have thread safe implementation so that they can be used as they are for
-sending event from one thread to another.
+sending event from one thread to another. However there is no built in method
+to send messages to the worker threads and you will need to use the available
+synchronization classes to implement the solution which suits your needs
+yourself. In particular, please notice that it is \emph{not} enough to derive
+your class from \helpref{wxThread}{wxthread} and 
+\helpref{wxEvtHandler}{wxevthandler} to send messages to it: in fact, this does
+\emph{not} work at all.
 
 
