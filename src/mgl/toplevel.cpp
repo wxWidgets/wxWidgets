@@ -164,11 +164,11 @@ bool wxTopLevelWindowMGL::IsMaximized() const
 
 void wxTopLevelWindowMGL::Restore()
 {
-    if ( m_isIconized )
+    if ( IsIconized() )
     {
         Iconize(FALSE);
     }
-    if ( m_isMaximized )
+    if ( IsMaximized() )
     {
         Maximize(FALSE);
     }

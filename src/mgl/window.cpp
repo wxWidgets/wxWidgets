@@ -64,9 +64,14 @@ winmng_t *g_winMng = NULL;
 MGLDevCtx *g_displayDC = NULL;
 
 // the window that has keyboard focus: 
-static wxWindowMGL *g_focusedWindow = NULL;
+static wxWindowMGL *gs_focusedWindow = NULL;
 // the window that is currently under mouse cursor:
-static wxWindowMGL *g_windowUnderMouse = NULL;
+static wxWindowMGL *gs_windowUnderMouse = NULL;
+// the window that has mouse capture
+static wxWindowMGL *gs_mouseCapture = NULL;
+// the frame that is currently active (i.e. its child has focus). It is
+// used to generate wxActivateEvents
+static wxWindowMGL *gs_activeFrame = NULL;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -159,6 +164,15 @@ void wxDestroyMGL_WM()
     }
 }
 
+// Returns toplevel grandparent of given window:
+static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
+{
+    wxWindowMGL *p = win;
+    while (p && !p->IsTopLevel())
+         p = p->GetParent();
+    return p;
+}
+
 // ---------------------------------------------------------------------------
 // MGL_WM hooks:
 // ---------------------------------------------------------------------------
@@ -223,25 +237,44 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
             break;
 
         case EVT_MOUSEMOVE:
-            if ( win != g_windowUnderMouse )
+            if ( !gs_mouseCapture )
             {
-                if ( g_windowUnderMouse )
+                if ( win != gs_windowUnderMouse )
                 {
-                    wxMouseEvent event2(event);
-                    MGL_wmCoordGlobalToLocal(g_windowUnderMouse->GetHandle(), 
-                                             e->where_x, e->where_y, 
-                                             &event2.m_x, &event2.m_y);
+                    if ( gs_windowUnderMouse )
+                    {
+                        wxMouseEvent event2(event);
+                        MGL_wmCoordGlobalToLocal(gs_windowUnderMouse->GetHandle(), 
+                                                 e->where_x, e->where_y, 
+                                                 &event2.m_x, &event2.m_y);
 
-                    event2.SetEventObject(g_windowUnderMouse);
-                    event2.SetEventType(wxEVT_LEAVE_WINDOW);
-                    g_windowUnderMouse->GetEventHandler()->ProcessEvent(event2);
+                        event2.SetEventObject(gs_windowUnderMouse);
+                        event2.SetEventType(wxEVT_LEAVE_WINDOW);
+                        gs_windowUnderMouse->GetEventHandler()->ProcessEvent(event2);
+                    }
+
+                    wxMouseEvent event3(event);
+                    event3.SetEventType(wxEVT_ENTER_WINDOW);
+                    win->GetEventHandler()->ProcessEvent(event3);
+
+                    gs_windowUnderMouse = win;
                 }
-                
-                wxMouseEvent event3(event);
-                event3.SetEventType(wxEVT_ENTER_WINDOW);
-                win->GetEventHandler()->ProcessEvent(event3);
-                
-                g_windowUnderMouse = win;
+            }
+            else // gs_mouseCapture
+            {
+                bool inside = (where.x >= 0 && 
+                               where.y >= 0 &&
+                               where.x < win->GetSize().x &&
+                               where.y < win->GetSize().y);
+                if ( (inside && gs_windowUnderMouse != win) ||
+                     (!inside && gs_windowUnderMouse == win) )
+                {
+                    wxMouseEvent evt(inside ? 
+                                     wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW);
+                    evt.SetEventObject(win);
+                    win->GetEventHandler()->ProcessEvent(evt);
+                    gs_windowUnderMouse = inside ? win : NULL;
+                }
             }
             
             type = wxEVT_MOTION;
@@ -497,10 +530,14 @@ wxWindowMGL::~wxWindowMGL()
 {
     m_isBeingDeleted = TRUE;
 
-    if ( g_focusedWindow == this )
+    if ( gs_mouseCapture == this )
+        ReleaseMouse();
+    if (gs_activeFrame == this)
+        gs_activeFrame = NULL;
+    if ( gs_focusedWindow == this )
         KillFocus();
-    if ( g_windowUnderMouse == this )
-        g_windowUnderMouse = NULL;
+    if ( gs_windowUnderMouse == this )
+        gs_windowUnderMouse = NULL;
 
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we'd do it the other way around, children wouldn't be able
@@ -538,6 +575,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
     h = HeightDefault(size.y);
     
     long mgl_style = 0;
+    window_t *wnd_parent = parent ? parent->GetHandle() : NULL;
 
     if ( !(style & wxNO_FULL_REPAINT_ON_RESIZE) )
     {
@@ -549,14 +587,13 @@ bool wxWindowMGL::Create(wxWindow *parent,
     }
     if ( style & wxPOPUP_WINDOW )
     {
-        mgl_style |=  MGL_WM_ALWAYS_ON_TOP;
+        mgl_style |= MGL_WM_ALWAYS_ON_TOP;
         // it is created hidden as other top level windows
         m_isShown = FALSE;
+        wnd_parent = NULL;
     }
 
-    m_wnd = MGL_wmCreateWindow(g_winMng,
-                               parent ? parent->GetHandle() : NULL,
-                               x, y, w, h);
+    m_wnd = MGL_wmCreateWindow(g_winMng, wnd_parent, x, y, w, h);
 
     MGL_wmSetWindowFlags(m_wnd, mgl_style);
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
@@ -576,26 +613,34 @@ bool wxWindowMGL::Create(wxWindow *parent,
 
 void wxWindowMGL::SetFocus()
 {
-    if (g_focusedWindow)
-        g_focusedWindow->KillFocus();
+    if ( gs_focusedWindow )
+        gs_focusedWindow->KillFocus();
     
-    g_focusedWindow = this;
+    gs_focusedWindow = this;
     
     MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT, wxMGL_CAPTURE_KEYB);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = GetCaret();
-    if (caret)
+    if ( caret )
         caret->OnSetFocus();
 #endif // wxUSE_CARET
 
-    if ( IsTopLevel() )
+    wxWindowMGL *active = wxGetTopLevelParent(this);
+    if ( active != gs_activeFrame )
     {
-        // FIXME_MGL - this is wrong, see wxGTK!
-        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
-        event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        if ( gs_activeFrame )
+        {
+            wxActivateEvent event(wxEVT_ACTIVATE, FALSE, gs_activeFrame->GetId());
+            event.SetEventObject(gs_activeFrame);
+            gs_activeFrame->GetEventHandler()->ProcessEvent(event);
+        }
+
+        gs_activeFrame = active;
+        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, gs_activeFrame->GetId());
+        event.SetEventObject(gs_activeFrame);
+        gs_activeFrame->GetEventHandler()->ProcessEvent(event);
     }
     
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
@@ -605,8 +650,8 @@ void wxWindowMGL::SetFocus()
 
 void wxWindowMGL::KillFocus()
 {
-    if ( g_focusedWindow != this ) return;
-    g_focusedWindow = NULL;
+    if ( gs_focusedWindow != this ) return;
+    gs_focusedWindow = NULL;
 
     if ( m_isBeingDeleted ) return;
     
@@ -638,7 +683,7 @@ void wxWindowMGL::KillFocus()
 // ----------------------------------------------------------------------------
 wxWindow *wxWindowBase::FindFocus()
 {
-    return (wxWindow*)g_focusedWindow;
+    return (wxWindow*)gs_focusedWindow;
 }
 
 bool wxWindowMGL::Show(bool show)
@@ -664,22 +709,24 @@ void wxWindowMGL::Lower()
 
 void wxWindowMGL::CaptureMouse()
 {
+    if ( gs_mouseCapture )
+        MGL_wmUncaptureEvents(gs_mouseCapture->m_wnd, wxMGL_CAPTURE_MOUSE);
+
+    gs_mouseCapture = this;
     MGL_wmCaptureEvents(m_wnd, EVT_MOUSEEVT, wxMGL_CAPTURE_MOUSE);
 }
 
 void wxWindowMGL::ReleaseMouse()
 {
+    wxASSERT_MSG( gs_mouseCapture == this, wxT("attempt to release mouse, but this window hasn't captured it") )
+    
     MGL_wmUncaptureEvents(m_wnd, wxMGL_CAPTURE_MOUSE);
+    gs_mouseCapture = NULL;
 }
 
 /* static */ wxWindow *wxWindowBase::GetCapture()
 {
-    for (captureentry_t *c = g_winMng->capturedEvents; c; c = c->next)
-    {
-        if ( c->id == wxMGL_CAPTURE_MOUSE )
-            return (wxWindow*)c->wnd->userData;
-    }
-    return NULL;
+    return (wxWindow*)gs_mouseCapture;
 }
 
 bool wxWindowMGL::SetCursor(const wxCursor& cursor)

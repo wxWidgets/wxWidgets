@@ -27,7 +27,7 @@ public:
         return wxPopupWindowBase::Create(parent) &&
                wxWindow::Create(parent, -1,
                                 wxDefaultPosition, wxDefaultSize,
-                                flags & wxBORDER_MASK);
+                                (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
     }
 };
 
