@@ -24,6 +24,8 @@
         <!-- link against base and core libs in multilib build: --> 
         <sys-lib>$(WXLIBGLDEP_CORE)</sys-lib>
         <sys-lib>$(WXLIBGLDEP_BASE)</sys-lib>
+        <depends>basedll</depends>
+        <depends>coredll</depends>
         <!-- link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
 

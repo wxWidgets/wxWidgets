@@ -147,7 +147,7 @@ __SETUP_H_SUBDIR_FILENAMES = univ
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIBGLDEP_BASE_p =
 !ifeq MONOLITHIC 0
@@ -9675,7 +9675,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid.
 !ifeq SHARED 1
 !ifeq USE_GUI 1
 !ifeq USE_OPENGL 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_wat$(VENDORTAG).dll :  $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_wat$(VENDORTAG).dll :  $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname) $(__coredll___depname)
 	@%create $(OBJS)\gldll.lbc
 	@%append $(OBJS)\gldll.lbc option quiet
 	@%append $(OBJS)\gldll.lbc name $^@

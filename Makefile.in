@@ -11056,7 +11056,7 @@ dbgridlib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__gldll_PCH_DEP)  $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__gldll_PCH_DEP)  $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname) $(__coredll___depname)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(SHARED_LD_CXX) $@ $(GLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gldll___macinstnamecmd) $(__gldll___importlib) $(__gldll___soname_flags) $(dll___macver) $(EXTRALIBS_OPENGL)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(__gldll___so_symlinks_cmd)
 

@@ -866,7 +866,7 @@ ifeq ($(WXUNIV),1)
 __SETUP_H_SUBDIR_FILENAMES = univ
 endif
 ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
@@ -9539,7 +9539,7 @@ endif
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_OPENGL),1)
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll: $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll: $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a $(__basedll___depname) $(__coredll___depname)
 	$(CXX) -shared -o $@ $(GLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) -lopengl32 -lglu32
 endif
 endif
