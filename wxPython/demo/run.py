@@ -47,7 +47,8 @@ class RunDemoApp(wxApp):
         # its own top-level window
         if win:
             # so set the frame to a good size for showing stuff
-            frame.SetSize((600, 450))
+            frame.SetSize((640, 480))
+            win.SetFocus()
 
         else:
             # otherwise the demo made its own frame, so just put a

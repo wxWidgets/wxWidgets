@@ -141,14 +141,14 @@ class PythonSTC(wxStyledTextCtrl):
             styleBefore = self.GetStyleAt(caretPos - 1)
 
         # check before
-        if charBefore and charBefore in "[]{}()" and ord(styleBefore) == 10:
+        if charBefore and charBefore in "[]{}()" and ord(styleBefore) == SCE_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # check after
         if braceAtCaret < 0:
             charAfter = self.GetCharAt(caretPos)
             styleAfter = self.GetStyleAt(caretPos)
-            if charAfter and charAfter in "[]{}()" and ord(styleAfter) == 10:
+            if charAfter and charAfter in "[]{}()" and ord(styleAfter) == SCE_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:
