@@ -149,6 +149,13 @@
         <if cond="BUILD=='debug'">off</if>
         <if cond="BUILD=='release'">speed</if>
     </set>
+
+    <set var="DEBUG_DEFINE">
+        <if cond="FORMAT!='autoconf' and BUILD=='debug'">__WXDEBUG__</if>
+    </set>
+    <set var="UNICODE_DEFINE">
+        <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
+    </set>
     
     <template id="anylib">
         <depends cond="FORMAT!='autoconf' and BUILDING_LIB=='1'">setup.h</depends>
@@ -157,7 +164,8 @@
         
         <debug-info>$(DEBUGFLAG)</debug-info>
         <optimize>$(OPTIMIZEFLAG)</optimize>
-        <threading>multi</threading>        
+        <threading>multi</threading>
+        <runtime-libs>dynamic</runtime-libs>
     </template>
 
     <template id="3rdparty_lib" template="anylib">
@@ -186,6 +194,8 @@
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
+        <define>$(UNICODE_DEFINE)</define>
         <include>$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>        
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
@@ -198,7 +208,6 @@
     </template>
 
     <template id="wx_append">
-        <ldlibs>$(EXTRALIBS)</ldlibs>
         <!-- link against builtin 3rd party libs, if needed: -->
         <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_JPEG)</sys-lib>
@@ -206,6 +215,15 @@
         <sys-lib>$(LIB_ZLIB)</sys-lib>
         <sys-lib>$(LIB_ODBC)</sys-lib>
         <sys-lib>$(LIB_REGEX)</sys-lib>
+        
+        <ldlibs>$(EXTRALIBS)</ldlibs>
+
+        <!-- system libraries on windows: -->
+        <if cond="FORMAT!='autoconf'">
+            <if cond="COMPILER=='bcc'">
+                <sys-lib>import32</sys-lib>
+            </if>
+        </if>        
     </template>
 
     <template id="wx_lib_b" template="wx,anylib">
@@ -224,7 +242,14 @@
     </template>
 
     <template id="wx_lib" template="wx_lib_b"/>
-    <template id="wx_dll" template="wx_dll_b" template_append="wx_append"/>
+    <template id="wx_dll" template="wx_dll_b" template_append="wx_append">
+        <depends>wxtiff</depends>
+        <depends>wxjpeg</depends>
+        <depends>wxpng</depends>
+        <depends>wxzlib</depends>
+        <depends cond="FORMAT=='autoconf'">wxodbc</depends>
+        <depends>wxregex</depends>
+    </template>
     
     <!-- =============================================================== -->
     <!--               Support for wxWindows samples and contrib:        -->
