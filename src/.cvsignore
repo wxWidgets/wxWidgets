@@ -8,4 +8,4 @@ Makefile.in
 make.env
 makeprog.env
 makelib.env
-makemac?Data
+wxWindowsM*Data

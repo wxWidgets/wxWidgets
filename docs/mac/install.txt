@@ -49,11 +49,11 @@ arguments of configure when configuring wxMac.
 Project Files
 -------------
 
-There are always the makemac.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
+There are always the makemac.mcp or *M5.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
 
-In order to build the library (and then the samples) you need to make the following
-projects (for 5.3)
-:src:makemac.mcp
+In order to build the library (and then the samples) you need to make the
+following projects (for 5.3)
+:src:wxWindowsM5.mcp
 :src:png:makemac.mcp
 :src:tif:makemac.mcp
 :src:jpeg:makemac.mcp
