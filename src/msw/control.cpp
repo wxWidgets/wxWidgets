@@ -206,6 +206,26 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }
 
+// This is a helper for all wxControls made with UPDOWN native control.
+// In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
+// WinCE of Smartphones this happens also for native wxTextCtrl,
+// wxChoice and others.
+wxSize wxControl::GetBestSpinerSize(const bool is_vertical) const
+{
+    if (is_vertical)
+    {
+        // vertical control
+        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
+                      2*GetSystemMetrics(SM_CYVSCROLL));
+    }
+    else
+    {
+        // horizontal control
+        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
+                      GetSystemMetrics(SM_CYHSCROLL));
+    }
+}
+
 /* static */ wxVisualAttributes
 wxControl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
@@ -234,25 +254,6 @@ wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(varian
     attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
     return attrs;
-}
-
-// This is a helper for all wxControls derived from UPDOWN native control.
-// In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
-// Smartphones this happens also for native wxTextCtrl, wxChoice and others.
-wxSize wxControl::GetBestSpinerSize(bool is_vertical)
-{
-    if (is_vertical)
-    {
-        // vertical control
-        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
-                      2*GetSystemMetrics(SM_CYVSCROLL));
-    }
-    else
-    {
-        // horizontal control
-        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
-                      GetSystemMetrics(SM_CYHSCROLL));
-    }
 }
 
 // ----------------------------------------------------------------------------

@@ -19,6 +19,8 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
+#if wxUSE_SPINBTN
+
 class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
 {
 public:
@@ -26,7 +28,7 @@ public:
     wxSpinButton() { }
 
     wxSpinButton(wxWindow *parent,
-                 wxWindowID id = -1,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
@@ -38,7 +40,7 @@ public:
     virtual ~wxSpinButton();
 
     bool Create(wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
@@ -57,7 +59,7 @@ public:
                              WXWORD pos, WXHWND control);
 
     // a wxSpinButton can't do anything useful with focus, only wxSpinCtrl can
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
    virtual wxSize DoGetBestSize() const;
@@ -66,5 +68,6 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton)
 };
 
-#endif
-    // _WX_SPINBUTT_H_
+#endif // wxUSE_SPINBTN
+
+#endif // _WX_SPINBUTT_H_
