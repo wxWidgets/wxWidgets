@@ -138,8 +138,13 @@ wxRect wxRect::operator+(const wxRect& rect) const
 
 wxRect& wxRect::Union(const wxRect& rect)
 {
-    // ignore empty rectangles
-    if ( rect.width && rect.height )
+    // ignore empty rectangles: union with an empty rectangle shouldn't extend
+    // this one to (0, 0)
+    if ( !width || !height )
+    {
+        *this = rect;
+    }
+    else if ( rect.width && rect.height )
     {
         int x1 = wxMin(x, rect.x);
         int y1 = wxMin(y, rect.y);
@@ -151,6 +156,7 @@ wxRect& wxRect::Union(const wxRect& rect)
         width = x2 - x1;
         height = y2 - y1;
     }
+    //else: we're not empty and rect is empty
 
     return *this;
 }
