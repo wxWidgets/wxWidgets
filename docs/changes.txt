@@ -38,6 +38,9 @@ wxMSW:
 - wxToolBar::DeleteTool() in presence of toolbar controls fixed
 - wxDC::DeviceToLogical[XY] fixed (Chuck Messenger)
 
+wxGTK:
+
+- fixed configure bug: it didn't define HAVE_VSNPRINTF properly always
 wxHTML:
 
 - fixed bug in parsing tags with whitespaces around '=' in tags,

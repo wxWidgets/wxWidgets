@@ -2277,6 +2277,11 @@ dnl end...
 dnl if we fail to find vsnprintf, also try for _vsnprintf as that is what
 dnl we'll find under MSW if it exists.
 
+dnl final note: AC_TRY_COMPILE will only be executed if there is nothing in
+dnl the cache so we have to do AC_DEFINE(HAVE_VSNPRINTF) below and not inside
+dnl it or the symbol wouldn't be defined for the 2nd and subsequent configure
+dnl runs
+
 dnl check for vsnprintf() - a safe version of vsprintf()
 AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
 [
@@ -2299,7 +2304,6 @@ AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
                     vsnprintf(s, 42, fmt, argp);
                     va_end(argp);
                  ], [
-                    AC_DEFINE(HAVE_VSNPRINTF)
                     wx_cv_func_vsnprintf=yes
                  ], [
                     AC_TRY_COMPILE([
@@ -2321,14 +2325,18 @@ AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
                                       _vsnprintf(s, 42, fmt, argp);
                                       va_end(argp);
                                    ], [
-                                      AC_DEFINE(HAVE_VSNPRINTF)
                                       wx_cv_func_vsnprintf=yes
                                    ], [
-                                      AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
                                       wx_cv_func_vsnprintf=no
                                    ])
                  ])
 ])
+
+if test "$wx_cv_func_vsnprintf" = yes; then
+    AC_DEFINE(HAVE_VSNPRINTF)
+else
+    AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
+fi
 
 dnl check for vsscanf()
 AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
@@ -2350,12 +2358,15 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
                     vsscanf("42", fmt, argp);
                     va_end(argp);
                 ], [
-                    AC_DEFINE(HAVE_VSSCANF)
                     wx_cv_func_vsscanf=yes
                 ], [
                     wx_cv_func_vsscanf=no
                 ])
 ])
+
+if test "$wx_cv_func_vsscanf" = yes; then
+    AC_DEFINE(HAVE_VSSCANF)
+fi
 
 AC_LANG_RESTORE
 
