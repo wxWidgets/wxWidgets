@@ -114,6 +114,14 @@ Default constructor.
 
 Destructor.
 
+\membersection{wxLayoutAlgorithm::LayoutFrame}\label{wxlayoutalgorithmlayoutframe}
+
+\constfunc{bool}{LayoutFrame}{\param{wxFrame* }{frame}, \param{wxWindow*}{ mainWindow = NULL}}
+
+Lays out the children of a normal frame. {\it mainWindow} is set to occupy the remaining space.
+
+This function simply calls \helpref{wxLayoutAlgorithm::LayoutWindow}{wxlayoutalgorithmlayoutwindow}.
+
 \membersection{wxLayoutAlgorithm::LayoutMDIFrame}\label{wxlayoutalgorithmlayoutmdiframe}
 
 \constfunc{bool}{LayoutMDIFrame}{\param{wxMDIParentFrame* }{frame}, \param{wxRect*}{ rect = NULL}}
@@ -123,11 +131,11 @@ given rectangle will be used as a starting point instead of the frame's client a
 
 The MDI client window is set to occupy the remaining space.
 
-\membersection{wxLayoutAlgorithm::LayoutFrame}\label{wxlayoutalgorithmlayoutframe}
+\membersection{wxLayoutAlgorithm::LayoutWindow}\label{wxlayoutalgorithmlayoutwindow}
 
-\constfunc{bool}{LayoutFrame}{\param{wxFrame* }{frame}, \param{wxWindow*}{ mainWindow = NULL}}
+\constfunc{bool}{LayoutWindow}{\param{wxWindow* }{parent}, \param{wxWindow*}{ mainWindow = NULL}}
 
-Lays out the children of a normal frame.
+Lays out the children of a normal frame or other window.
 
 {\it mainWindow} is set to occupy the remaining space.
 

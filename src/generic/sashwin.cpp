@@ -32,6 +32,7 @@
 #include "wx/string.h"
 #include "wx/dcscreen.h"
 #include "wx/sashwin.h"
+#include "wx/laywin.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSashWindow, wxWindow)
@@ -533,7 +534,7 @@ void wxSashWindow::SizeWindows()
     int cw, ch;
     GetClientSize(&cw, &ch);
 
-    if (GetChildren().Number() > 0)
+    if (GetChildren().Number() == 1)
     {
         wxWindow* child = (wxWindow*) (GetChildren().First()->Data());
 
@@ -573,6 +574,16 @@ void wxSashWindow::SizeWindows()
         height -= 2*m_extraBorderSize;
 
         child->SetSize(x, y, width, height);
+    }
+    else if (GetChildren().Number() > 1)
+    {
+        // Perhaps multiple children are themselves sash windows.
+        // TODO: this doesn't really work because the subwindows sizes/positions
+        // must be set to leave a gap for the parent's sash (hit-test and decorations).
+        // Perhaps we can allow for this within LayoutWindow, testing whether the parent
+        // is a sash window, and if so, allowing some space for the edges.
+        wxLayoutAlgorithm layout;
+        layout.LayoutWindow(this);
     }
 
     wxClientDC dc(this);

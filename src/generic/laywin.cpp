@@ -199,18 +199,41 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
     return TRUE;
 }
 
-// Layout algorithm for normal frame. mainWindow gets what's left over.
-bool wxLayoutAlgorithm::LayoutFrame(wxFrame* frame, wxWindow* mainWindow)
+// Layout algorithm for any window. mainWindow gets what's left over.
+bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
 {
-    int cw, ch;
-    frame->GetClientSize(& cw, & ch);
+    // Test if the parent is a sash window, and if so,
+    // reduce the available space to allow space for any active edges.
 
-    wxRect rect(0, 0, cw, ch);
+    int leftMargin = 0, rightMargin = 0, topMargin = 0, bottomMargin = 0;
+    if (parent->IsKindOf(CLASSINFO(wxSashWindow)))
+    {
+        wxSashWindow* sashWindow = (wxSashWindow*) parent;
+
+        leftMargin = sashWindow->GetExtraBorderSize();
+        rightMargin = sashWindow->GetExtraBorderSize();
+        topMargin = sashWindow->GetExtraBorderSize();
+        bottomMargin = sashWindow->GetExtraBorderSize();
+
+        if (sashWindow->GetSashVisible(wxSASH_LEFT))
+            leftMargin += sashWindow->GetDefaultBorderSize();
+        if (sashWindow->GetSashVisible(wxSASH_RIGHT))
+            rightMargin += sashWindow->GetDefaultBorderSize();
+        if (sashWindow->GetSashVisible(wxSASH_TOP))
+            topMargin += sashWindow->GetDefaultBorderSize();
+        if (sashWindow->GetSashVisible(wxSASH_BOTTOM))
+            bottomMargin += sashWindow->GetDefaultBorderSize();
+    }
+
+    int cw, ch;
+    parent->GetClientSize(& cw, & ch);
+
+    wxRect rect(leftMargin, topMargin, cw - leftMargin - rightMargin, ch - topMargin - bottomMargin);
 
     wxCalculateLayoutEvent event;
     event.SetRect(rect);
 
-    wxNode* node = frame->GetChildren().First();
+    wxNode* node = parent->GetChildren().First();
     while (node)
     {
         wxWindow* win = (wxWindow*) node->Data();

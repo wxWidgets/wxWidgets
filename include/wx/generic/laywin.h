@@ -173,8 +173,15 @@ public:
     // The MDI client window is sized to whatever's left over.
     bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = (wxRect*) NULL);
 
-    // mainWindow is sized to whatever's left over.
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = (wxWindow*) NULL);
+    // mainWindow is sized to whatever's left over. This function for backward
+    // compatibility; use LayoutWindow.
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = (wxWindow*) NULL)
+    {
+        return LayoutWindow(frame, mainWindow);
+    }
+
+    // mainWindow is sized to whatever's left over. This function for backward
+    bool LayoutWindow(wxWindow* frame, wxWindow* mainWindow = (wxWindow*) NULL);
 };
 
 #endif
