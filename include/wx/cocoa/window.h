@@ -72,6 +72,7 @@ protected:
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     WX_NSView m_dummyNSView;
+    bool m_isInPaint;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

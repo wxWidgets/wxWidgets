@@ -33,6 +33,7 @@ void wxWindowCocoa::Init()
     m_cocoaNSView = NULL;
     m_dummyNSView = NULL;
     m_isBeingDeleted = FALSE;
+    m_isInPaint = FALSE;
 }
 
 // Constructor
@@ -120,10 +121,21 @@ void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 {
     wxLogDebug("Cocoa_drawRect");
+    // Recursion can happen if the event loop runs from within the paint
+    // handler.  For instance, if an assertion dialog is shown.
+    // FIXME: This seems less than ideal.
+    if(m_isInPaint)
+    {
+        wxLogDebug("Paint event recursion!");
+        return false;
+    }
     //FIXME: should probably turn that rect into the update region
+    m_isInPaint = TRUE;
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(event);
+    bool ret = GetEventHandler()->ProcessEvent(event);
+    m_isInPaint = FALSE;
+    return ret;
 }
 
 void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
