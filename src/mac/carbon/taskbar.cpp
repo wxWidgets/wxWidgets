@@ -28,6 +28,12 @@
 
 #endif
 
+//
+//TODO:  Implement  Apple Software Guidelines - show the top window it it's not shown,
+//and force it to be unminimized - and all unminimized windows should be brought to 
+//the front
+//http://developer.apple.com/documentation/MacOSX/Conceptual/AppleSWDesign/MacOSXEnvironment/chapter_6_section_4.html
+//TODO:
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
 pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
@@ -40,6 +46,11 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
             
     if (eventClass == kEventClassCommand && eventKind == kEventCommandProcess) 
     {
+    //TODO:
+    //TODO:	This is a complete copy of 
+    //static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+    //FIND A WAY TO EXTERN THIS AND USE THAT HERE INSTEAD!!
+    //TODO:
 	MenuRef hMenu = MAC_WXHMENU(pTB->GetCurrentMenu()->GetHMenu());
     OSStatus result = eventNotHandledErr ;
 
@@ -150,7 +161,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     
     return true;
     #else
-    //TODO: Educated guess
+    //TODO: (IT WORKS!)  Make work without mask - mayby by using a wxDC?
     
 	CGImageRef pImage;
 	//create the icon from the bitmap and mask bitmap contained within
@@ -169,19 +180,16 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     if (pImage != NULL)
         CGImageRelease(pImage);
 
-        m_iconAdded = true;
-	return true;
+	return m_iconAdded = err == noErr;
     #endif
 }
 	
 bool wxTaskBarIcon::RemoveIcon()
 {
-	//TODO:  Not tested
 	OSStatus err = RestoreApplicationDockTileImage();
 	wxASSERT(err == 0);
-        m_iconAdded = false;
 
-	return true;
+	return !(m_iconAdded = !(err == noErr));
 }
 	
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
@@ -208,7 +216,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 					 &hMenu);
 	wxASSERT(err == 0);
 	
-	return true;
+	return err == noErr;
 }
 
 #endif //wxHAS_TASK_BAR_ICON
