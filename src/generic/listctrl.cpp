@@ -25,6 +25,11 @@
 #include "wx/generic/imaglist.h"
 #include "wx/dynarray.h"
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#include "wx/gtk/win_gtk.h"
+#endif
+
 #ifndef wxUSE_GENERIC_LIST_EXTENSIONS
 #define wxUSE_GENERIC_LIST_EXTENSIONS 1
 #endif
@@ -1190,6 +1195,15 @@ wxListHeaderWindow::~wxListHeaderWindow( void )
 
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
+#ifdef __WXGTK__
+    GtkStateType state = GTK_STATE_NORMAL;
+    if (!m_parent->IsEnabled()) state = GTK_STATE_INSENSITIVE;
+    
+    x = dc->XLOG2DEV( x );
+    
+	gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
+		(GdkRectangle*) NULL, m_wxwindow, "button", x, y, w+1, h+1);
+#else
     const int m_corner = 1;
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
@@ -1209,6 +1223,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawRectangle( x, y, 1, h );              // left (outer)
     dc->DrawLine( x, y+h-1, x+1, y+h-1 );
     dc->DrawLine( x+w-1, y, x+w-1, y+1 );
+#endif
 }
 
 // shift the DC origin to match the position of the main window horz
