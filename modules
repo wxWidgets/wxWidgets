@@ -106,4 +106,4 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       wxWindows/testconf
 
 
-wxStudio wxWindows/utils/wxStudio
+wxStudio wxStudio
