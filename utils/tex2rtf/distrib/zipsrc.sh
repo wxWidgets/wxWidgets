@@ -1,34 +1,29 @@
 #!/bin/sh
 # Zip up Tex2RTF source
 
-expandlines()
-{
-    toexpand=$1
-    outputfile=$2
-
-    rm -f $outputfile
-    touch $outputfile
-    for line in `cat $toexpand` ; do
-      if [ $line != "" ]; then
-        ls $line >> $outputfile
-      fi
-    done
-}
+VERSION=-$1
+if [ "$VERSION" = "-" ] ; then
+  VERSION=""
+fi
 
 TEX2RTFDIR=`pwd`/..
 
-rm -f $TEX2RTFDIR/deliver/tex2rtf-source.zip
-rm -f $TEX2RTFDIR/deliver/tex2rtf-source.tar.gz
+rm -f $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.zip
+rm -f $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.tar.gz
+
+mkdir $TEX2RTFDIR/tex2rtf$VERSION-source
+
+cd $TEX2RTFDIR
+tar -c `cat $TEX2RTFDIR/distrib/src.rsp` | (cd tex2rtf$VERSION-source ; tar -x)
 
 # Make a zip archive
-cd $TEX2RTFDIR
-expandlines $TEX2RTFDIR/distrib/src.rsp temp.txt
-zip -@ $TEX2RTFDIR/deliver/tex2rtf-source.zip < temp.txt
-rm temp.txt
+zip -9 -r $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.zip tex2rtf$VERSION-source
 
 # Now make a tar archive
-ls `cat $TEX2RTFDIR/distrib/src.rsp` > /tmp/tex2rtf.txt
-tar cvf $TEX2RTFDIR/deliver/tex2rtf-source.tar -T /tmp/tex2rtf.txt
-gzip $TEX2RTFDIR/deliver/tex2rtf-source.tar
-rm /tmp/tex2rtf.txt
+tar cf $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.tar tex2rtf$VERSION-source
+gzip -9 $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.tar
+tar cf $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.tar tex2rtf$VERSION-source
+bzip2 -9 $TEX2RTFDIR/deliver/tex2rtf$VERSION-source.tar
 
+
+rm -rf $TEX2RTFDIR/tex2rtf$VERSION-source

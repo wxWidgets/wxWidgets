@@ -9,3 +9,4 @@ TEX2RTFBIN=$WXWIN/utils/tex2rtf/deliver/tex2rtf
 DESTDIR=$WXWIN/utils/tex2rtf/deliver
 
 $WXWIN/utils/tex2rtf/distrib/maketarball.sh $WXWIN $TEX2RTFBIN $DESTDIR $VERSION
+sh zipsrc.sh $VERSION
