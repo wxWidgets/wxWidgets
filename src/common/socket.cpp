@@ -147,7 +147,7 @@ int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 #elif defined(__WXXT__) || defined(__WXMOTIF__)
 #define PROCESS_EVENTS() XtAppProcessEvent(wxAPP_CONTEXT, XtIMAll)
 #elif defined(__WXGTK__)
-#define PROCESS_EVENTS() gtk_main_iteration()
+#define PROCESS_EVENTS() wxYield()
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,8 @@ int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 // --------------------------------------------------------------
 // Module
 // --------------------------------------------------------------
-class wxSocketModule: public wxModule {
+class wxSocketModule: public wxModule 
+{
   DECLARE_DYNAMIC_CLASS(wxSocketModule)
 public:
   wxSocketModule() {}
@@ -177,24 +178,28 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 #endif
 
-class wxSockWakeUp : public wxTimer {
+class wxSockWakeUp : public wxTimer 
+{
 public:
   int *my_id;
   int n_val;
   wxSocketBase *sock;
 
-  wxSockWakeUp(wxSocketBase *_sock, int *id, int new_val) {
+  wxSockWakeUp(wxSocketBase *_sock, int *id, int new_val) 
+  {
     my_id = id; n_val = new_val;
     sock = _sock;
   }
-  virtual void Notify() {
+  virtual void Notify() 
+  {
     *my_id = n_val;
     if (sock) sock->Notify(FALSE);
   }
 };
 
 /// Socket request
-class SockRequest : public wxObject {
+class SockRequest : public wxObject 
+{
 public:
   char *buffer;
   size_t size, nbytes;
@@ -222,7 +227,7 @@ wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
   m_cbkon(FALSE),
   m_unread(NULL), m_unrd_size(0),
   m_processing(FALSE),
-  m_timeout(3600), m_wantbuf(0)
+  m_timeout(1), m_wantbuf(0)
 {
   m_internal = new wxSockInternal;
 #if defined(__WXXT__) || defined(__WXMOTIF__) || defined(__WXGTK__)
@@ -245,7 +250,7 @@ wxSocketBase::wxSocketBase() :
   m_cbkon(FALSE),
   m_unread(NULL), m_unrd_size(0),
   m_processing(FALSE),
-  m_timeout(3600), m_wantbuf(0)
+  m_timeout(1), m_wantbuf(0)
 {
   m_internal = new wxSockInternal;
 #if defined(__WXXT__) || defined(__WXMOTIF__) || defined(__WXGTK__)
@@ -469,13 +474,12 @@ void wxSocketBase::Discard()
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  int len_addr = sizeof(my_addr);
+  uint len_addr = sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
 
-  if (getpeername(m_fd, (struct sockaddr *)&my_addr,
-    &len_addr) < 0)
+  if (getpeername(m_fd, (struct sockaddr *)&my_addr, &len_addr) < 0)
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);
@@ -485,13 +489,12 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  int len_addr = sizeof(my_addr);
+  uint len_addr = sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
 
-  if (getsockname(m_fd, (struct sockaddr *)&my_addr,
-    &len_addr) < 0)
+  if (getsockname(m_fd, (struct sockaddr *)&my_addr, &len_addr) < 0)
 
     return FALSE;
 
@@ -502,6 +505,7 @@ bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 // --------------------------------------------------------------
 // --------- wxSocketBase wait functions ------------------------
 // --------------------------------------------------------------
+
 void wxSocketBase::SaveState()
 {
   wxSockState *state = new wxSockState;
@@ -543,7 +547,7 @@ void wxSocketBase::RestoreState()
 // --------------------------------------------------------------
 // --------- wxSocketBase wait functions ------------------------
 // --------------------------------------------------------------
-//
+
 bool wxSocketBase::_Wait(long seconds, long microseconds, int type)
 {
   if ((!m_connected && !m_connecting) || m_fd < 0)
@@ -698,7 +702,8 @@ Notify_value wx_sock_write_xview (Notify_client client, int fd)
 
 wxSocketBase::wxRequestNotify wxSocketBase::EventToNotify(wxRequestEvent evt)
 {
-  switch (evt) {
+  switch (evt) 
+  {
   case EVT_READ:
     return REQ_READ;
   case EVT_PEEK:
@@ -718,7 +723,8 @@ wxSocketBase::wxRequestNotify wxSocketBase::EventToNotify(wxRequestEvent evt)
 void wxSocketBase::SetFlags(wxSockFlags _flags)
 {
   m_flags = _flags;
-  if (_flags & SPEED) {
+  if (_flags & SPEED) 
+  {
     unsigned long flag = 0;
     ioctl(m_fd, FIONBIO, &flag);
 
@@ -726,7 +732,9 @@ void wxSocketBase::SetFlags(wxSockFlags _flags)
     m_flags = (wxSockFlags)(m_flags & ~WAITALL);
 
     Notify(FALSE);
-  } else {
+  } 
+  else 
+  {
     unsigned long flag = 1;
     ioctl(m_fd, FIONBIO, &flag);
   }
@@ -735,13 +743,20 @@ void wxSocketBase::SetFlags(wxSockFlags _flags)
 void wxSocketBase::SetNotify(wxRequestNotify flags)
 {
   wxRequestNotify old_needed_req = m_neededreq;
-  if (flags & REQ_ACCEPT) {
+  if (flags & REQ_ACCEPT) 
+  {
     /* Check if server */
     if (!(GetClassInfo()->IsKindOf(CLASSINFO(wxSocketServer))))
       flags &= ~REQ_ACCEPT;
   }
   m_neededreq = flags;
-  if (m_cbkon && old_needed_req != flags)
+
+/*
+  if (m_cbkon && old_needed_req != flags)    seems to be wrong, Robert Roebling
+    SetupCallbacks();
+*/
+
+  if ((!m_cbkon) || (old_needed_req != flags))
     SetupCallbacks();
 }
 
@@ -766,7 +781,7 @@ void wxSocketBase::SetupCallbacks()
   }
   if (m_neededreq & (REQ_CONNECT | REQ_WRITE)) {
 #ifdef __WXGTK__
-    m_internal->sock_inputid = gdk_input_add(m_fd, GDK_INPUT_WRITE,
+    m_internal->sock_outputid = gdk_input_add(m_fd, GDK_INPUT_WRITE,
                                              wx_socket_write, (gpointer)this);
 #else
     m_internal->sock_outputid = XtAppAddInput (wxAPP_CONTEXT, m_fd,
@@ -802,6 +817,7 @@ void wxSocketBase::DestroyCallbacks()
 {
   if (!m_cbkon || !m_handler)
     return;
+    
   m_cbkon = FALSE;
   m_processing = FALSE;
 #if defined(__WXMOTIF__) || defined(__WXXT__)
@@ -846,9 +862,11 @@ void wxSocketBase::OnRequest(wxRequestEvent req_evt)
   if (req_evt <= EVT_WRITE && DoRequests(req_evt))
     return;
 
-  if (m_waitflags & 0xF0) {
+  if (m_waitflags & 0xF0) 
+  {
     // Wake up
-    if ((m_waitflags & 0x0F) == req_evt) {
+    if ((m_waitflags & 0x0F) == req_evt) 
+    {
       m_waitflags = 0x80;
 #ifndef __WXGTK__
       DestroyCallbacks();  // I disable it to prevent infinite loop on X11.
@@ -857,7 +875,8 @@ void wxSocketBase::OnRequest(wxRequestEvent req_evt)
     return;
   }
 
-  if (req_evt == EVT_LOST) {
+  if (req_evt == EVT_LOST) 
+  {
     m_connected = FALSE;
     Close();
   }
@@ -891,6 +910,7 @@ void wxSocketBase::OldOnNotify(wxRequestEvent evt)
 // --------------------------------------------------------------
 // --------- wxSocketBase functions [Callback, CallbackData] ----
 // --------------------------------------------------------------
+
 wxSocketBase::wxSockCbk wxSocketBase::Callback(wxSocketBase::wxSockCbk _cbk)
 {
   wxSockCbk old_cbk = m_cbk;
@@ -916,6 +936,7 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
 // --------------------------------------------------------------
 // --------- wxSocketBase pushback library ----------------------
 // --------------------------------------------------------------
+
 void wxSocketBase::CreatePushbackAfter(const char *buffer, size_t size)
 {
   char *curr_pos;
@@ -979,7 +1000,8 @@ bool wxSocketBase::DoRequests(wxRequestEvent req_flag)
 
   delete node;
 
-  switch (req->type) {
+  switch (req->type) 
+  {
   case EVT_READ:
   case EVT_PEEK:
     ret = recv(m_fd, req->buffer, req->size,
@@ -1088,9 +1110,12 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
   buf_timed_out = FALSE;
 
   s_wake.Start(m_timeout*1000, TRUE);
-  if (m_flags & NOWAIT) {
+  if (m_flags & NOWAIT) 
+  {
     DoRequests(evt);
-  } else {
+  } 
+  else 
+  {
     while (!buf->done && !buf_timed_out)
       PROCESS_EVENTS();
   }

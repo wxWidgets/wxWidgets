@@ -50,6 +50,9 @@ const wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED =         wxEVT_FIRST + 15;
 const wxEventType wxEVT_COMMAND_TOOL_RCLICKED =             wxEVT_FIRST + 16;
 const wxEventType wxEVT_COMMAND_TOOL_ENTER =                wxEVT_FIRST + 17;
 
+/* Sockets send events, too */
+const wxEventType wxEVT_SOCKET =                            wxEVT_FIRST + 50;
+
 /* Mouse event types */
 const wxEventType wxEVT_LEFT_DOWN =                         wxEVT_FIRST + 100;
 const wxEventType wxEVT_LEFT_UP =                           wxEVT_FIRST + 101;
@@ -66,7 +69,7 @@ const wxEventType wxEVT_RIGHT_DCLICK =                      wxEVT_FIRST + 111;
 const wxEventType wxEVT_SET_FOCUS =                         wxEVT_FIRST + 112;
 const wxEventType wxEVT_KILL_FOCUS =                        wxEVT_FIRST + 113;
 
- // Non-client mouse events
+ /* Non-client mouse events */
 const wxEventType wxEVT_NC_LEFT_DOWN =                      wxEVT_FIRST + 200;
 const wxEventType wxEVT_NC_LEFT_UP =                        wxEVT_FIRST + 201;
 const wxEventType wxEVT_NC_MIDDLE_DOWN =                    wxEVT_FIRST + 202;
@@ -139,8 +142,7 @@ const wxEventType wxEVT_UPDATE_UI =                         wxEVT_FIRST + 439;
 const wxEventType wxEVT_END_PROCESS =                       wxEVT_FIRST + 440;
 
  /* Generic command events */
- // Note: a click is a higher-level event
- // than button down/up
+ /* Note: a click is a higher-level event than button down/up */
 const wxEventType wxEVT_COMMAND_LEFT_CLICK =                wxEVT_FIRST + 500;
 const wxEventType wxEVT_COMMAND_LEFT_DCLICK =               wxEVT_FIRST + 501;
 const wxEventType wxEVT_COMMAND_RIGHT_CLICK =               wxEVT_FIRST + 502;
@@ -189,7 +191,7 @@ const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED =           wxEVT_FIRST + 800;
 const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING =          wxEVT_FIRST + 801;
 
 #if defined(__BORLANDC__) && defined(__WIN16__)
-// For 16-bit BC++, these 2 are identical (truncated)
+/* For 16-bit BC++, these 2 are identical (truncated) */
 const wxEventType wxEVT_COMMAND_NB_PAGE_CHANGED =     wxEVT_FIRST + 802;
 const wxEventType wxEVT_COMMAND_NB_PAGE_CHANGING =    wxEVT_FIRST + 803;
 #else
@@ -199,7 +201,7 @@ const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
 
 const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
 
-// Compatibility
+/* Compatibility */
 
 #if WXWIN_COMPATIBILITY
 

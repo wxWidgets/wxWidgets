@@ -69,13 +69,13 @@ public:
 };
 
 // ID for the menu quit command
-const SKDEMO_QUIT    = 101;
-const SKDEMO_CONNECT = 102;
-const SKDEMO_TEST1   = 103;
-const SKDEMO_TEST2   = 104;
-const SKDEMO_CLOSE   = 105;
-const SKDEMO_TEST3   = 106;
-const ID_TEST_CLOSE  = 107;
+const int SKDEMO_QUIT    = 101;
+const int SKDEMO_CONNECT = 102;
+const int SKDEMO_TEST1   = 103;
+const int SKDEMO_TEST2   = 104;
+const int SKDEMO_CLOSE   = 105;
+const int SKDEMO_TEST3   = 106;
+const int ID_TEST_CLOSE  = 107;
 
 IMPLEMENT_APP(MyApp)
 
@@ -219,18 +219,20 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   if (!sock->IsConnected())
     return;
 
-  wxDialog *dlgbox = new wxDialog(this, -1, "Test 1", wxDefaultPosition, wxSize(410, 270));
+  wxDialog *dlgbox = new wxDialog(this, -1, "Test 1", wxDefaultPosition, wxSize(414, 250));
   wxTextCtrl *text_win = new wxTextCtrl(dlgbox, -1, "",
                                         wxPoint(0, 0), wxSize(400, 200),
 					wxTE_MULTILINE);
   (void)new wxButton(dlgbox, ID_TEST_CLOSE, "Close",
-                     wxPoint(100, 210), wxSize(100, 40));
+                     wxPoint(100, 210), wxSize(100, -1));
   char *buf, *buf2;
 
   dlgbox->Layout();
   dlgbox->Show(TRUE);
 
   text_win->WriteText("Initializing test 1 ...\n");
+  
+  wxYield();
   
   /* Init */
   buf = copystring("Salut ! Salut ! Salut ! Salut Toto\n");
