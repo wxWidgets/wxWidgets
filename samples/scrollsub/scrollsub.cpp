@@ -286,6 +286,9 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *r
     (void)new wxTextCtrl( this, -1, "Text I", wxPoint(0,100), wxSize(100,25) );
     (void)new wxTextCtrl( this, -1, "Text II", wxPoint(200,100), wxSize(100,25) );
 
+    (void)new wxComboBox( this, -1, "ComboBox I", wxPoint(0,150), wxSize(100,25), 0, NULL );
+    (void)new wxComboBox( this, -1, "ComboBox II", wxPoint(200,150), wxSize(100,25), 0, NULL );
+
     SetBackgroundColour( wxT("WHEAT") );
 
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
