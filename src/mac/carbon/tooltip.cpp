@@ -11,7 +11,7 @@
     #pragma implementation "tooltip.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_TOOLTIPS
 
@@ -52,21 +52,20 @@ class wxMacToolTip
 		wxMacToolTipTimer* m_timer ;
 } ;
 
-class wxMacToolTipTimer : wxTimer
+class wxMacToolTipTimer : public wxTimer
 {
 public:
-	wxMacToolTipTimer() {} ;
-	wxMacToolTipTimer(wxMacToolTip* tip, int iMilliseconds) ;
+    wxMacToolTipTimer() {} ;
+    wxMacToolTipTimer(wxMacToolTip* tip, int iMilliseconds) ;
     virtual ~wxMacToolTipTimer() {} ;
-	void Notify()
-	{
-		if ( m_mark == m_tip->GetMark() )
-			m_tip->Draw() ;
-
-	}
+    void Notify()
+    {
+        if ( m_mark == m_tip->GetMark() )
+            m_tip->Draw() ;    
+    }
 protected:
-	wxMacToolTip* 	m_tip;
-	long			m_mark ;
+    wxMacToolTip* 	m_tip;
+    long		m_mark ;
 };
 
 //-----------------------------------------------------------------------------
