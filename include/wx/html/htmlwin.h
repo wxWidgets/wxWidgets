@@ -196,6 +196,12 @@ public:
     void SelectWord(const wxPoint& pos);
     void SelectLine(const wxPoint& pos);
     void SelectAll();
+    
+    // Convert selection to text:
+    wxString SelectionToText() { return DoSelectionToText(m_selection); }
+
+    // Converts current page to text:
+    wxString ToText();
 #endif
 
     virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
@@ -252,12 +258,6 @@ protected:
     bool CopySelection(ClipboardType t = Secondary);
 
 #if wxUSE_CLIPBOARD
-    // Convert selection to text:
-    wxString SelectionToText() { return DoSelectionToText(m_selection); }
-
-    // Converts current page to text:
-    wxString ToText();
-
     // Automatic scrolling during selection:
     void StopAutoScrolling();
 #endif // wxUSE_CLIPBOARD
