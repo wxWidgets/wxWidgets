@@ -15,7 +15,7 @@ class wxScrolledPanel( wxScrolledWindow ):
     """
 wxScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
 providing automatic scrollbar and scrolling behavior and the tab traversal
-mangement that wxScrolledWindow lacks.  This code was based on the original
+management that wxScrolledWindow lacks.  This code was based on the original
 demo code showing how to do this, but is now available for general use
 as a proper class (and the demo is now converted to just use it.)
 """

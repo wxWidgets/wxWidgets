@@ -11,8 +11,8 @@
 """
 This module provides a useful debugging framework that supports
 showing nesting of function calls and allows a program to contain
-lots of dbg() print statements that can easily be turned off
-once the code has been debugged.  It also supports the ability to
+lots of debugging print statements that can easily be turned on
+or off to debug the code.  It also supports the ability to
 have each function indent the debugging statements contained
 within it, including those of any other function called within
 its scope, thus allowing you to see in what order functions are
@@ -24,11 +24,16 @@ not entirely clear, and because wxPython programs can't be run
 from inside other debugging environments that have their own
 message loops.
 
-the dbg() function this module provides takes a set of positional
+This module defines a Logger class, responsible for managing
+debugging output.  Each Logger instance can be given a name
+at construction; if this is done, '<name>:' will precede each
+logging output made by that Logger instance.
+
+The log() function this class provides takes a set of positional
 arguments that are printed in order if debugging is enabled
 (just like print does), followed by a set of keyword arguments
-that control the behavior of the dbg() function itself on subsequent
-calls:
+that control the behavior of the log() function itself on subsequent
+calls.  The current keyword arguments are:
 
 indent
     When set to a value of 1, this increments the current
@@ -43,6 +48,16 @@ enable
     When set to a value of 0, dbg output is turned off.  (dbg
     output is off by default.)
 
+suspend
+    When set to a value of 1, this increments the current
+    "suspension" level.  This makes it possible for a function
+    to temporarily suspend its and any of its dependents'
+    potential outputs that use the same Logger instance.
+    When set to a value of 0, the suspension level is
+    decremented.  When the value goes back to 0, potential
+    logging is resumed (actual output depends on the
+    "enable" status of the Logger instance in question.)
+
 wxlog
     When set to a value of 1, the output will be sent to the
     active wxLog target.
@@ -55,40 +70,45 @@ stream
     be restored (if stacked.)  If set to None without previously
     changing it will result in no action being taken.
 
+You can also call the log function implicitly on the Logger
+instance, ie. you can type:
+    from wxPython.tools.dbg import Logger
+    dbg = Logger()
+    dbg('something to print')
 
 Using this fairly simple mechanism, it is possible to get fairly
 useful debugging output in a program.  Consider the following
 code example:
 
 >>> d = {1:'a', 2:'dictionary', 3:'of', 4:'words'}
->>> logger = dbg.Logger()
->>> dbg = logger.dbg
+>>> dbg = dbg.Logger('module')
 >>> dbg(enable=1)
+module: dbg enabled
 >>> def foo(d):
-        dbg('foo', indent=1)
->>>     bar(d)
->>>     dbg('end of foo', indent=0)
->>>
+...     dbg('foo', indent=1)
+...     bar(d)
+...     dbg('end of foo', indent=0)
+...
 >>> def bar(d):
->>>     dbg('bar', indent=1)
->>>     dbg('contents of d:', indent=1)
->>>     l = d.items()
->>>     l.sort()
->>>     for key, value in l:
->>>         dbg('%d =' % key, value)
->>>     dbg(indent=0)
->>>     dbg('end of bar', indent=0)
->>>
+...     dbg('bar', indent=1)
+...     dbg('contents of d:', indent=1)
+...     l = d.items()
+...     l.sort()
+...     for key, value in l:
+...         dbg('%d =' % key, value)
+...     dbg(indent=0)
+...     dbg('end of bar', indent=0)
+...
 >>> foo(d)
-foo
-   bar
-      contents of d:
-         1 = a
-         2 = dictionary
-         3 = of
-         4 = words
-      end of bar
-   end of foo
+module: foo
+   module: bar
+      module: contents of d:
+         module: 1 = a
+         module: 2 = dictionary
+         module: 3 = of
+         module: 4 = words
+      module: end of bar
+   module: end of foo
 >>>
 
 """
