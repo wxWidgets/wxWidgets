@@ -120,10 +120,7 @@ bool WXDLLEXPORT wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y
 // wxMetafileDataObject is a specialization of wxDataObject for metafile data
 // ----------------------------------------------------------------------------
 
-// TODO: implement OLE side of things. At present, it's just for clipboard
-// use.
-
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
 class WXDLLEXPORT wxMetafileDataObject : public wxDataObject
 {
 public:

@@ -25,31 +25,6 @@
 #include "wx/module.h"
 #include "wx/dataobj.h"     // for wxDataFormat
 
-// These functions superceded by wxClipboard, but retained in order to
-// implement wxClipboard, and for compatibility.
-
-// open/close the clipboard
-WXDLLEXPORT bool wxOpenClipboard();
-WXDLLEXPORT bool wxIsClipboardOpened();
-#define wxClipboardOpen wxIsClipboardOpened
-WXDLLEXPORT bool wxCloseClipboard();
-
-// get/set data
-WXDLLEXPORT bool wxEmptyClipboard();
-WXDLLEXPORT bool wxSetClipboardData(wxDataFormat dataFormat,
-                                    const void *data,
-                                    int width = 0, int height = 0);
-WXDLLEXPORT void* wxGetClipboardData(wxDataFormat dataFormat,
-                                     long *len = NULL);
-
-// clipboard formats
-WXDLLEXPORT bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
-WXDLLEXPORT wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat);
-WXDLLEXPORT int  wxRegisterClipboardFormat(wxChar *formatName);
-WXDLLEXPORT bool wxGetClipboardFormatName(wxDataFormat dataFormat,
-                                          wxChar *formatName,
-                                          int maxCount);
-
 //-----------------------------------------------------------------------------
 // wxClipboard
 //-----------------------------------------------------------------------------
@@ -96,7 +71,8 @@ public:
     void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
 
 private:
-    bool m_clearOnExit;
+    wxDataObject     *m_data;
+    bool              m_open;
 };
 
 #endif // wxUSE_CLIPBOARD
