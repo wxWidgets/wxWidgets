@@ -873,10 +873,11 @@ struct XMLID_record
 };
 
 static XMLID_record *XMLID_Records[XMLID_TABLE_SIZE] = {NULL};
-static int XMLID_LastID = wxID_HIGHEST;
 
 /*static*/ int wxXmlResource::GetXMLID(const char *str_id)
 {
+    static int XMLID_LastID = wxID_HIGHEST;
+    
     int index = 0;
     
     for (const char *c = str_id; *c != '\0'; c++) index += (int)*c;
