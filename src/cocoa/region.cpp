@@ -45,6 +45,11 @@ void wxRegion::Clear()
     UnRef();
 }
 
+bool wxRegion::Offset(wxCoord x, wxCoord y)
+{
+    return false;
+}
+
 bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 {
     return false;
