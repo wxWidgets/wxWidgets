@@ -4174,10 +4174,6 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 if test "x$GCC" != "xyes"; then
                     dnl see http://docs.hp.com/hpux/onlinedocs/2213/threads.htm
                     flag="$flag -D_RWSTD_MULTI_THREAD"
-
-                    dnl we also need -lcma for user threads (-lpthread is for
-                    dnl kernel threads only) according to Ian Brown
-                    LIBS="$LIBS -lcma"
                 fi
                 ;;
             *solaris* | alpha*-osf*)
