@@ -722,13 +722,13 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    int height = (int)dbuf[1];
    if (width > 32767)
      {
-	fprintf(stderr, "IMLIB ERROR: Image width > 32767 pixels for file\n");
+	wxLogError( "Image width > 32767 pixels for file\n" );
 	fclose(file);
 	return FALSE;
      }
    if (height > 32767)
      {
-	fprintf(stderr, "IMLIB ERROR: Image height > 32767 pixels for file\n");
+	wxLogError( "Image height > 32767 pixels for file\n" );
 	fclose(file);
 	return FALSE;
      }
@@ -738,7 +738,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    bpp = (int)word;
    if (bpp != 1 && bpp != 4 && bpp != 8 && bpp && 16 && bpp != 24 && bpp != 32)
      {
-	fprintf(stderr, "IMLIB ERROR: unknown bitdepth in file\n");
+	wxLogError( "unknown bitdepth in file\n" );
 	fclose(file);
 	return FALSE;
      }
@@ -746,7 +746,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    comp = (int)dbuf[0];
    if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
      {
-	fprintf(stderr, "IMLIB ERROR: unknown encoding in Windows BMP file\n");
+        wxLogError( "unknown encoding in Windows BMP file\n" );
 	fclose(file);
 	return FALSE;
      }
@@ -757,7 +757,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    /* some more sanity checks */
    if (((comp == BI_RLE4) && (bpp != 4)) || ((comp == BI_RLE8) && (bpp != 8)) || ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
      {
-	fprintf(stderr, "IMLIB ERROR: encoding of BMP doesn't match bitdepth\n");
+        wxLogError( "encoding of BMP doesn't match bitdepth\n" );
 	fclose(file);
 	return FALSE;
      }
@@ -767,7 +767,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 
 	if (!cmap)
 	  {
-	     fprintf(stderr, "IMLIB ERROR: Cannot allocate RAM for color map in BMP file\n");
+	     wxLogError( "Cannot allocate RAM for color map in BMP file\n" );
 	     fclose(file);
 	     return FALSE;
 	  }
@@ -779,7 +779,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
    ptr = image->GetData();
    if (!ptr)
      {
-	fprintf(stderr, "IMLIB ERROR: Cannot allocate RAM for RGB data in file\n");
+        wxLogError( "Cannot allocate RAM for RGB data in file\n" );
 	fclose(file);
 	if (cmap)
 	   free(cmap);
@@ -894,7 +894,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 		    {
 		       if (comp == BI_RLE4)
 			 {
-			    fprintf(stderr, "can't deal with 4bit encoded yet.\n");
+			    wxLogError( "can't deal with 4bit encoded yet.\n");
 			    image->Destroy();
 			    free(cmap);
 			    return FALSE;
@@ -1296,6 +1296,9 @@ wxBitmap wxImage::ConvertToBitmap() const
     GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
+    
+    bitmap.SetDepth( bpp );
+    
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
 

@@ -14,7 +14,7 @@
 
 #include "wx/combobox.h"
 
-#ifdef wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX
 
 #include <wx/intl.h>
 

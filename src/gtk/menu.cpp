@@ -15,6 +15,7 @@
 #include "wx/menu.h"
 #include "wx/log.h"
 #include "wx/intl.h"
+#include "wx/app.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -160,6 +161,8 @@ bool wxMenuBar::Enabled( int id ) const
 
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
+    wxYield();
+
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */

@@ -13,7 +13,7 @@
 
 #include "wx/clipbrd.h"
 
-#ifdef wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 
 #include "glib.h"
 #include "gdk/gdk.h"

@@ -322,7 +322,7 @@ void wxThread::Exit(void *status)
     pthread_exit(status);
 }
 
-void wxThread::TestDestroy()
+bool wxThread::TestDestroy()
 {
     if (p_internal->state == STATE_PAUSING) 
     {
@@ -334,6 +334,8 @@ void wxThread::TestDestroy()
         }
     }
     pthread_testcancel();
+    
+    return TRUE; /* what is this for? */
 }
 
 bool wxThread::IsMain()
@@ -374,6 +376,16 @@ void wxThread::OnExit()
 //--------------------------------------------------------------------
 // wxThreadModule 
 //--------------------------------------------------------------------
+
+class wxThreadModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxThreadModule)
+};
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 

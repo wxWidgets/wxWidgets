@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX
 
 #include "wx/object.h"
 #include "wx/control.h"

@@ -21,7 +21,7 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
 #endif
 #include "wx/menu.h"
@@ -1167,7 +1167,7 @@ wxWindow::wxWindow()
     m_isShown = FALSE;
     m_isEnabled = TRUE;
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
     m_dropTarget = (wxDropTarget*) NULL;
 #endif
     m_resizing = FALSE;
@@ -1335,7 +1335,7 @@ wxWindow::~wxWindow()
 {
     m_hasVMT = FALSE;
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
     if (m_dropTarget) delete m_dropTarget;
 #endif
 
@@ -1456,7 +1456,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
     m_isShown = FALSE;
     m_isEnabled = TRUE;
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
     m_dropTarget = (wxDropTarget *) NULL;
 #endif
     m_resizing = FALSE;
@@ -2495,7 +2495,7 @@ bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
     return TRUE;
 }
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {

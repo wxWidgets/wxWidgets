@@ -106,6 +106,8 @@ private:
     wxMutex *m_mutex;
 };
 
+#ifdef __WXMSW__
+
 // ----------------------------------------------------------------------------
 // Critical section: this is the same as mutex but is only visible to the
 // threads of the same process. For the platforms which don't have native
@@ -145,6 +147,8 @@ public:
 private:
     wxCriticalSection *m_critsect;
 };
+
+#endif
 
 // ----------------------------------------------------------------------------
 // Condition handler.

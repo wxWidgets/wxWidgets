@@ -414,6 +414,16 @@ void wxThread::OnExit()
 // wxThreadModule 
 //--------------------------------------------------------------------
 
+class wxThreadModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxThreadModule)
+};
+
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
 bool wxThreadModule::OnInit() 

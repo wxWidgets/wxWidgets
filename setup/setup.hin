@@ -42,22 +42,22 @@
 /*
  * Use zlib
  */
-#undef wxUSE_ZLIB
+#define wxUSE_ZLIB 0
 /*
  * Use libpng
  */
-#undef wxUSE_LIBPNG
+#define wxUSE_LIBPNG 0
 /*
  * Use iODBC
  */
-#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
 /*
  * Use Threads
  */
-#undef wxUSE_THREADS
+#define wxUSE_THREADS 0
 
 //------------------------------------------------------------------------
-// GUI control options
+// GUI control options (allways enabled in wxGTK)
 //------------------------------------------------------------------------
 
 /*
@@ -84,23 +84,28 @@
 /*
  * Use time and date classes
  */
-#undef wxUSE_TIMEDATE
+#define wxUSE_TIMEDATE 0
 /*
  * Use config system
  */
-#undef wxUSE_CONFIG
+#define wxUSE_CONFIG 0
 /*
  * Use intl system
  */
-#undef wxUSE_INTL
+#define wxUSE_INTL 0
 /*
  * Use streams
  */
-#undef wxUSE_STREAMS
+#define wxUSE_STREAMS 0
 /*
  * Use class serialization
  */
-#undef wxUSE_SERIAL
+#define wxUSE_SERIAL 0
+/*
+ * Use standard C++ streams if 1. If 0, use wxWin
+ * streams implementation.
+ */
+#define wxUSE_STD_IOSTREAM  1
 
 //------------------------------------------------------------------------
 // PS options
@@ -110,12 +115,12 @@
  * Use font metric files in GetTextExtent for wxPostScriptDC
  * Use consistent PostScript fonts for AFM and printing (!)
  */
-#undef wxUSE_AFM_FOR_POSTSCRIPT
-#undef WX_NORMALIZED_PS_FONTS
+#define wxUSE_AFM_FOR_POSTSCRIPT 0
+#define WX_NORMALIZED_PS_FONTS 0
 /*
  * Use PostScript device context
  */
-#undef wxUSE_POSTSCRIPT
+#define wxUSE_POSTSCRIPT 0
 
 //------------------------------------------------------------------------
 // wxString options
@@ -124,7 +129,7 @@
 /*
  * Compile wxString with wide character (Unicode) support?
  */
-#undef wxUSE_UNICODE
+#define wxUSE_UNICODE 0
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
@@ -133,7 +138,7 @@
  * have libc 5 (you should enable this for libc6 where wcsrtombs() is
  * thread-safe version of wcstombs()). 
  */
-#undef wxUSE_WCSRTOMBS
+#define wxUSE_WCSRTOMBS 0
 
 //------------------------------------------------------------------------
 // misc options
@@ -142,19 +147,19 @@
 /*
  * Use Interprocess communication
  */
-#undef wxUSE_IPC
+#define wxUSE_IPC 0
 /*
  * Use wxGetResource & wxWriteResource (change .Xdefaults)
  */
-#undef wxUSE_RESOURCES
+#define wxUSE_RESOURCES 0
 /*
  * Use clipboard
  */
-#undef wxUSE_CLIPBOARD
+#define wxUSE_CLIPBOARD 0
 /*
  * Use dnd
  */
-#undef wxUSE_DRAG_AND_DROP
+#define wxUSE_DRAG_AND_DROP 0
  
 //------------------------------------------------------------------------
 // architecture options
@@ -163,15 +168,15 @@
 /*
  * Use the mdi architecture
  */
-#undef wxUSE_MDI_ARCHITECTURE
+#define wxUSE_MDI_ARCHITECTURE 0
 /*
  * Use the document/view architecture
  */
-#undef wxUSE_DOC_VIEW_ARCHITECTURE
+#define wxUSE_DOC_VIEW_ARCHITECTURE 0
 /*
  * Use the print/preview architecture
  */
-#undef wxUSE_PRINTING_ARCHITECTURE
+#define wxUSE_PRINTING_ARCHITECTURE 0
 
 //------------------------------------------------------------------------
 // Prolog and wxWindows' resource system options
@@ -180,15 +185,15 @@
 /*
  * Use Prolog IO
  */
-#undef wxUSE_PROLOGIO
+#define wxUSE_PROLOGIO 0
 /*
  * Use Remote Procedure Call (Needs wxUSE_IPC and wxUSE_PROLOGIO)
  */
-#undef wxUSE_RPC
+#define wxUSE_RPC 0
 /*
  * Use wxWindows resource loading (.wxr-files) (Needs wxUSE_PROLOGIO 1)
  */
-#undef wxUSE_WX_RESOURCES
+#define wxUSE_WX_RESOURCES 0
 
 //------------------------------------------------------------------------
 // the rest
@@ -197,15 +202,15 @@
 /*
  * Use wxWindows help facility (needs wxUSE_IPC 1)
  */
-#undef wxUSE_HELP
+#define wxUSE_HELP 0
 /*
  * Use iostream.h rather than iostream
  */
-#undef wxUSE_IOSTREAMH
+#define wxUSE_IOSTREAMH 0
 /*
  * Use Apple Ieee-double converter
  */
-#undef wxUSE_APPLE_IEEE
+#define wxUSE_APPLE_IEEE 0
 /* Compatibility with 1.66 API.
    Level 0: no backward compatibility, all new features
    Level 1: wxDC, OnSize (etc.) compatibility, but
@@ -214,18 +219,18 @@
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
-#undef WXDEBUG
+#define WXDEBUG 0
 /*
  * Enables debugging version of wxObject::new and wxObject::delete (IF WXDEBUG)
  * WARNING: this code may not work with all architectures, especially
  * if alignment is an issue.
  */
-#undef wxUSE_MEMORY_TRACING
+#define wxUSE_MEMORY_TRACING 0
 /*
  * Enable debugging version of global memory operators new and delete
  * Disable it, If this causes problems (e.g. link errors)
  */
-#undef wxUSE_GLOBAL_MEMORY_OPERATORS
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 /*
  * Matthews garbage collection (used for MrEd?)
  */

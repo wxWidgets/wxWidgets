@@ -13,7 +13,7 @@
 
 #include "wx/dnd.h"
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 #include "wx/window.h"
 #include "wx/app.h"

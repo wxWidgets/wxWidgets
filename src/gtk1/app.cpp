@@ -19,12 +19,12 @@
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
-#ifdef wxUSE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
 #include "wx/module.h"
 #include "wx/image.h"
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
 #include "wx/thread.h"
 #endif
 #include "unistd.h"
@@ -146,11 +146,11 @@ END_EVENT_TABLE()
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
     wxMutexGuiLeave();
 #endif
     usleep(10000);
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
     wxMutexGuiEnter();
 #endif
     return TRUE;
@@ -337,7 +337,7 @@ void wxApp::CommonInit(void)
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
-#ifdef wxUSE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxTheResourceCache = new wxResourceCache(wxKEY_STRING);
   
   wxInitializeResourceSystem();
@@ -354,7 +354,7 @@ void wxApp::CommonCleanUp(void)
     wxDELETE(wxTheFontNameDirectory);
     wxDeleteStockObjects();
 
-#ifdef wxUSE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
     wxFlushResources();
 
     wxDELETE(wxTheResourceCache);

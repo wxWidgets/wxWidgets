@@ -14,6 +14,11 @@
 #pragma interface
 #endif
 
+
+#include "wx/defs.h"
+
+#if wxUSE_POSTSCRIPT
+
 #include "wx/postscrp.h"
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
@@ -1665,3 +1670,5 @@ void wxPostScriptDC::GetSizeMM(long *width, long *height) const
     }
 }
 
+#endif
+  // wxUSE_POSTSCRIPT

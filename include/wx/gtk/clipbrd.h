@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 
 #include "wx/object.h"
 #include "wx/list.h"

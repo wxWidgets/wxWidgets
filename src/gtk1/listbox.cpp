@@ -18,6 +18,10 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 
+#if wxUSE_DRAG_AND_DROP
+#include "wx/dnd.h"
+#endif
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -319,7 +323,7 @@ void wxListBox::AppendCommon( const wxString &item )
 
     ConnectWidget( list_item );
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 #ifndef NEW_GTK_DND_CODE
     if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
 #endif
@@ -652,7 +656,7 @@ int wxListBox::GetIndex( GtkWidget *item ) const
     return -1;
 }
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );

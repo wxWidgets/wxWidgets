@@ -24,11 +24,16 @@
 #include <windows.h>
 #endif
 
+
 #ifdef __WXGTK__
 extern "C" {
-#include <../iodbc/postgres/isqlext.h>
-#include <../iodbc/postgres/odbc_funcs.h>
-#include <../iodbc/postgres/odbc_types.h>
+#include <../iodbc/isql.h>
+#include <../iodbc/isqlext.h>
+#include <../iodbc/odbc_funcs.h>
+#include <../iodbc/odbc_types.h>
+typedef float   SFLOAT;
+typedef double  SDOUBLE;
+#define ULONG UDWORD
 }
 #else
 #include <sqlext.h>

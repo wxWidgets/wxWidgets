@@ -42,11 +42,11 @@ class wxDC;
 class wxClientData;
 class wxVoidClientData;
 class wxWindow;
-#ifdef wxUSE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 class wxResourceTable;
 class wxItemResource;
 #endif
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 class wxDropTarget;
 #endif
 
@@ -290,7 +290,7 @@ public:
 
   virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
 #endif
@@ -335,7 +335,7 @@ public:
   int                  m_retCode;
   wxEvtHandler        *m_eventHandler;
   wxValidator         *m_windowValidator;
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
   wxDropTarget        *m_dropTarget;
 #endif
   wxWindowID           m_windowId;

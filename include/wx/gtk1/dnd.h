@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 #include "wx/object.h"
 #include "wx/string.h"

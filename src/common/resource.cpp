@@ -53,6 +53,10 @@
 #include "wx/intl.h"
 #endif
 
+#if wxUSE_RADIOBUTTON
+#include "wx/radiobut.h"
+#endif
+
 #if wxUSE_SCROLLBAR
 #include "wx/scrolbar.h"
 #endif

@@ -16,11 +16,13 @@
 #endif
 
 #include "wx/dc.h"
+
+#if wxUSE_POSTSCRIPT
+
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include <fstream.h>
 
-#if wxUSE_POSTSCRIPT
 
 //-----------------------------------------------------------------------------
 // classes
