@@ -484,6 +484,7 @@ void MyFrame::OnToggleImages(wxCommandEvent& event)
 
 void MyFrame::OnToggleButtons(wxCommandEvent& event)
 {
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if ( wxGetApp().ShowButtons() )
     {
         m_treeCtrl->CreateButtonsImageList(-1);
@@ -494,6 +495,7 @@ void MyFrame::OnToggleButtons(wxCommandEvent& event)
         m_treeCtrl->CreateButtonsImageList(15);
         wxGetApp().SetShowButtons(TRUE);
     }
+#endif
 }
 
 void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
@@ -632,6 +634,7 @@ void MyTreeCtrl::CreateImageList(int size)
 
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if ( size == -1 )
     {
         SetButtonsImageList(NULL);
@@ -672,6 +675,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
 #endif // MSW/!MSW
 
     AssignButtonsImageList(images);
+#endif
 }
 
 MyTreeCtrl::~MyTreeCtrl()
