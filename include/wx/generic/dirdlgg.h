@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlgg.h
+// Name:        wx/generic/dirdlgg.h
 // Purpose:     wxGenericDirCtrl class
 //              Builds on wxDirCtrl class written by Robert Roebling for the
 //              wxFile application, modified by Harm van der Heijden.
@@ -23,11 +23,21 @@ class WXDLLEXPORT wxGenericDirCtrl;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTreeEvent;
 
+// we may be included directly as well as from wx/dirdlg.h (FIXME)
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
+#ifndef wxDD_DEFAULT_STYLE
+    #define wxDD_DEFAULT_STYLE \
+        (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+#endif
+
+#include "wx/dialog.h"
+
 //-----------------------------------------------------------------------------
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericDirDialog: public wxDialog
+class WXDLLEXPORT wxGenericDirDialog : public wxDialog
 {
 public:
     wxGenericDirDialog() : wxDialog() { }
@@ -41,18 +51,19 @@ public:
                        const wxString& name = wxDirDialogNameStr);
 
     //// Accessors
-    inline void SetMessage(const wxString& message) { m_message = message; }
+    void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path);
-    inline void SetStyle(long style) { m_dialogStyle = style; }
+    void SetStyle(long style) { m_dialogStyle = style; }
 
-    inline wxString GetMessage(void) const { return m_message; }
-    wxString GetPath(void) const;
-    inline long GetStyle(void) const { return m_dialogStyle; }
-
-    wxTextCtrl* GetInputCtrl() const { return m_input; }
+    wxString GetMessage() const { return m_message; }
+    wxString GetPath() const;
+    long GetStyle() const { return m_dialogStyle; }
 
     //// Overrides
-    int ShowModal();
+    virtual int ShowModal();
+
+    // this one is specific to wxGenericDirDialog
+    wxTextCtrl* GetInputCtrl() const { return m_input; }
 
 protected:
     //// Event handlers
