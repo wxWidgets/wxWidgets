@@ -30,7 +30,7 @@
 wxMemoryInputStream::wxMemoryInputStream(const char *data, size_t len)
   : wxInputStream()
 {
-  m_i_streambuf->SetBufferIO((char *)data, data+len);
+  m_i_streambuf->SetBufferIO((char*) data, (char*) (data+len));
   m_i_streambuf->Fixed(TRUE);
 }
 
