@@ -19,17 +19,12 @@ First steps
 - Prerequisites: Motif 1.2 or above, or Lesstif
   (not yet tested). Motif 2.0 and above may also be suitable.
 
-- Download the appropriate .tgz archive, or alternatively the files
-  wx2_x_y_gen.zip and wx2_x_y_mot.zip. Download documentation in a
-  preferred format, such as wx2_x_y_htm.zip or wx2_x_y_pdf.zip.
+- Download wxMotif-x.y.z.tgz, where x.y.z is the version number.
+  Download documentation in a preferred format, such as
+  wxWindows-HTML.zip or wxWindows-PDF.zip.
 
 - Make a directory such as ~/wx and unarchive the files into this
-  directory. If using the zip archives, use the -a option if available
-  to convert the ASCII files to Unix format. Don't worry about files being
-  overwritten: they should be identical anyway.
-
-  (See http://www.cdrom.com/pub/infozip/ if you don't have zip/unzip
-  already installed. Zip isn't the same as gzip!)
+  directory.
 
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles. You also need

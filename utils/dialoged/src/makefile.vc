@@ -84,6 +84,7 @@ DOCSOURCES=$(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\body.tex\
  $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\tech.tex
 
 html: $(DOCDIR)\html\dialoged\dlged.htm
+htmlhelp: $(DOCDIR)\htmlhelp\dialoged.chm
 hlp: $(DOCDIR)\winhelp\dialoged.hlp
 pdfrtf: $(DOCDIR)\pdf\dialoged.rtf
 ps: $(DOCDIR)\ps\dialoged.ps
@@ -110,10 +111,17 @@ $(DOCDIR)\pdf\dialoged.rtf: $(DOCSOURCES)
 $(DOCDIR)\html\dialoged\dlged.htm:         $(DOCSOURCES)
         cd $(LOCALDOCDIR)
         -mkdir $(DOCDIR)\html\dialoged
+        -copy *.gif $(DOCDIR)\html\dialoged
         -start /w tex2rtf $(LOCALDOCDIR)\dialoged.tex $(DOCDIR)\html\dialoged\dlged.htm -twice -html
         -erase $(DOCDIR)\html\dialoged\*.con
         -erase $(DOCDIR)\html\dialoged\*.ref
         cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\dialoged.chm : $(DOCDIR)\html\dialoged\dlged.htm $(DOCDIR)\html\dialoged\dlged.hhp
+	cd $(DOCDIR)\html\dialoged
+	-hhc dlged.hhp
+    move $(DOCDIR)\html\dialoged\dlged.chm $(DOCDIR)\htmlhelp\dialoged.chm
+	cd $(THISDIR)
 
 $(LOCALDOCDIR)\dialoged.dvi:	$(DOCSOURCES)
 	cd $(LOCALDOCDIR)

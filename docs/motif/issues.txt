@@ -5,6 +5,8 @@ Last updated 19/3/2000.
 
 See also: todo.txt.
 
+- Sockets not yet working since idle wake-up not implemented.
+
 - wxTextCtrl doesn't work as a stream buffer in Linux/gcc.
 
 - No wxSpinButton.
@@ -21,8 +23,8 @@ See also: todo.txt.
   e.g. wxScrolledWindows, so maybe have wxSystemSettings value for
   scrollbar colour, and/or ability to set scrollbar colour independently.
 
-- wxFrame can accept events, but apps cannot draw into it for some reason,
-  so the rotate sample won't work. Workaround: use an embedded wxWindow.
+- wxFrame can accept events, but apps cannot draw into it for
+  Workaround: use an embedded wxWindow.
 
 - In Life! sample, text above slider isn't legible.
 

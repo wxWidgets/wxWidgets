@@ -1,3 +1,6 @@
+Using and modifying the BC++ IDE files
+======================================
+
 Readme for wxWindows 2.0 Ide-files
 First release Feb. 1999, detlev@reymann-online.de
 

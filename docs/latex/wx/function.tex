@@ -28,7 +28,7 @@ wxWindows 2.2.
 
 \membersection{wxCHECK\_VERSION}\label{wxcheckversion}
 
-\func{bool}{wxCHECK\_VERSION}{\param{major, minor, release}}
+\func{bool}{wxCHECK\_VERSION}{\param{}{major, minor, release}}
 
 This is a macro which evaluates to true if the current wxWindows version is at
 least major.minor.release.
@@ -37,7 +37,7 @@ For example, to test if the program is compiled with wxWindows 2.2 or higher,
 the following can be done:
 
 \begin{verbatim}
-wxString s;
+    wxString s;
 #if wxCHECK_VERSION(2, 2, 0)
     if ( s.StartsWith("foo") )
 #else // replacement code for old version

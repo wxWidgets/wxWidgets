@@ -299,7 +299,7 @@ some samples) you need to compile them with bc32.ide.
 Note (3): the debug version of the wxWindows library is about 40 MB, and the
 release version is around 5 MB.
 
-See also the file bc_ide.txt for further instructions and details
+See also the file docs/tech/tn0007.txt for further instructions and details
 of how to create your own project files.
 
 Borland C++Builder compilation
@@ -324,6 +324,10 @@ two wx source files in the debugger, include them explicitly in your BCB
 project and they will get linked in in preference to any files in the
 lib; just make sure that your include path finds all the wx include
 files.
+
+NOTE: these instructions are a work in progress. For alternative
+and more detailed instructions on using the C++Builder
+IDE with wxWindows, see the file docs/tech/tn0004.txt.
 
 Watcom C++ 10.6/11 compilation
 ---------------------------

@@ -132,7 +132,7 @@ DOCSOURCES=$(LOCALDOCDIR)\ogl.tex \
  $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
 
 html: $(DOCDIR)\html\ogl\ogl.htm
-htmlhelp: $(DOCDIR)\html\ogl\ogl.chm
+htmlhelp: $(DOCDIR)\htmlhelp\ogl.chm
 hlp: $(DOCDIR)\winhelp\ogl.hlp
 pdfrtf: $(DOCDIR)\pdf\ogl.rtf
 ps: $(DOCDIR)\ps\ogl.ps
@@ -166,16 +166,15 @@ $(DOCDIR)\html\ogl\ogl.htm:         $(DOCSOURCES)
         copy *.gif $(DOCDIR)\html\ogl
         -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\ogl.tex $(DOCDIR)\html\ogl\ogl.htm -twice -html
         -erase $(DOCDIR)\html\ogl\*.con
-	-erase *.con
+        -erase *.con
         -erase $(DOCDIR)\html\ogl\*.ref
         cd $(THISDIR)
 
-
-$(DOCDIR)\html\ogl\ogl.chm: $(DOCDIR)\html\ogl\ogl.htm $(DOCDIR)\html\ogl\ogl.hhp
+$(DOCDIR)\htmlhelp\ogl.chm: $(DOCDIR)\html\ogl\ogl.htm $(DOCDIR)\html\ogl\ogl.hhp
 	cd $(DOCDIR)\html\ogl
 	-hhc ogl.hhp
+    move ogl.chm $(DOCDIR)\htmlhelp\ogl.chm
 	cd $(THISDIR)
-
 
 $(LOCALDOCDIR)\ogl.dvi:	$(DOCSOURCES)
 	cd $(LOCALDOCDIR)
@@ -192,5 +191,4 @@ $(WXDIR)\docs\ps\ogl.ps:	$(LOCALDOCDIR)\ogl.dvi
         -dvips32 -o ogl.ps ogl
         move ogl.ps $(WXDIR)\docs\ps\ogl.ps
         cd $(THISDIR)
-
 
