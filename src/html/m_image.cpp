@@ -445,12 +445,12 @@ TAG_HANDLER_BEGIN(IMG, "IMG, MAP, AREA")
 			{
 				cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords );
 			}
-			if (cel && tag.HasParam("HREF"))
+			if (cel != NULL && tag.HasParam("HREF"))
 			{
 				wxString tmp = tag.GetParam("HREF");
 				cel->SetLink( tmp );
 			}
-			m_WParser->GetContainer()->InsertCell( cel );
+			if (cel != NULL) m_WParser->GetContainer()->InsertCell( cel );
 		}
 	}
 
