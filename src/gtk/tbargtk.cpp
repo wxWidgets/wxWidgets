@@ -143,18 +143,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
                                   wxToolBarTool *tool )
 {
-    if (g_isIdle) 
+    if (g_isIdle)
         wxapp_install_idle_handler();
 
     wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
-    
+
     if (tbar->m_blockEvent) return;
 
     if (g_blockEventsOnDrag) return;
     if (!tool->IsEnabled()) return;
 
     if (tool->CanBeToggled())
-    { 
+    {
         tool->Toggle();
 
         wxBitmap bitmap = tool->GetBitmap();
@@ -182,22 +182,22 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 // "enter_notify_event" / "leave_notify_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget), 
+static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
                                        GdkEventCrossing *gdk_event,
                                        wxToolBarTool *tool )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (g_blockEventsOnDrag) return TRUE;
-    
+
     wxToolBar *tb = (wxToolBar *)tool->GetToolBar();
-    
+
     // emit the event
     if( gdk_event->type == GDK_ENTER_NOTIFY )
         tb->OnMouseEnter( tool->GetId() );
     else
         tb->OnMouseEnter( -1 );
-  
+
     return FALSE;
 }
 
@@ -298,8 +298,11 @@ bool wxToolBar::Create( wxWindow *parent,
             gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
     }
     else
-    {     
-        m_widget = GTK_WIDGET(m_toolbar);
+    {
+        m_widget = gtk_event_box_new();
+        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
+        ConnectWidget( m_widget );
+        gtk_widget_show(GTK_WIDGET(m_toolbar));
     }
 
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
@@ -312,13 +315,13 @@ bool wxToolBar::Create( wxWindow *parent,
 
 
     m_fg = new GdkColor;
-    m_fg->red = 0; 
-    m_fg->green = 0; 
+    m_fg->red = 0;
+    m_fg->green = 0;
     m_fg->blue = 0;
     wxColour fg(0,0,0);
     fg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
     m_fg->pixel = fg.GetPixel();
-    
+
     m_bg = new GdkColor;
     m_bg->red = 65535;
     m_bg->green = 65535;
@@ -326,12 +329,12 @@ bool wxToolBar::Create( wxWindow *parent,
     wxColour bg(255,255,196);
     bg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
     m_bg->pixel = bg.GetPixel();
-    
+
     gtk_tooltips_force_window( GTK_TOOLBAR(m_toolbar)->tooltips );
 
-    GtkStyle *g_style = 
+    GtkStyle *g_style =
         gtk_style_copy(
-                gtk_widget_get_style( 
+                gtk_widget_get_style(
                     GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
 
     g_style->bg[GTK_STATE_NORMAL] = *m_bg;
@@ -373,7 +376,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
     // we have inserted a space before all the tools
     if (m_xMargin > 1) pos++;
-    
+
     if ( tool->IsButton() )
     {
         wxBitmap bitmap = tool->GetNormalBitmap();
@@ -386,18 +389,18 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
         wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
                      wxT("wxToolBar::Add needs a wxBitmap") );
-      
+
         GtkWidget *tool_pixmap = (GtkWidget *)NULL;
-      
+
         GdkPixmap *pixmap = bitmap.GetPixmap();
 
         GdkBitmap *mask = (GdkBitmap *)NULL;
         if ( bitmap.GetMask() )
           mask = bitmap.GetMask()->GetBitmap();
-        
+
         tool_pixmap = gtk_pixmap_new( pixmap, mask );
         gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
-        
+
         gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
         tool->m_pixmap = tool_pixmap;
@@ -462,11 +465,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 }
 
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                    "enter_notify_event", 
+                                    "enter_notify_event",
                                     GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
                                     (gpointer)tool );
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                    "leave_notify_event", 
+                                    "leave_notify_event",
                                     GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
                                     (gpointer)tool );
             }
@@ -532,7 +535,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
     }
 }
 
-void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle ) 
+void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
@@ -553,7 +556,7 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
         m_blockEvent = TRUE;
 
         gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(item), toggle );
-        
+
         m_blockEvent = FALSE;
     }
 }
@@ -582,9 +585,9 @@ void wxToolBar::SetMargins( int x, int y )
 {
     wxCHECK_RET( GetToolsCount() == 0,
                  wxT("wxToolBar::SetMargins must be called before adding tools.") );
-    
+
     if (x > 1) gtk_toolbar_append_space( m_toolbar );  // oh well
-    
+
     m_xMargin = x;
     m_yMargin = y;
 }
