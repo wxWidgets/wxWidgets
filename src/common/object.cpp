@@ -193,7 +193,11 @@ void wxObject::operator delete[] (void * buf)
  * Class info: provides run-time class type information.
  */
 
-wxClassInfo::wxClassInfo(wxChar *cName, wxChar *baseName1, wxChar *baseName2, int sz, wxObjectConstructorFn constr)
+wxClassInfo::wxClassInfo(const wxChar *cName,
+                         const wxChar *baseName1,
+                         const wxChar *baseName2,
+                         int sz,
+                         wxObjectConstructorFn constr)
 {
     m_className = cName;
     m_baseClassName1 = baseName1;
@@ -217,21 +221,23 @@ wxObject *wxClassInfo::CreateObject()
         return (wxObject *) NULL;
 }
 
-wxClassInfo *wxClassInfo::FindClass(wxChar *c)
+wxClassInfo *wxClassInfo::FindClass(const wxChar *c)
 {
     wxClassInfo *p = sm_first;
     while (p)
     {
-        if (p && p->GetClassName() && wxStrcmp(p->GetClassName(), c) == 0)
-            return p;
+        if ( wxStrcmp(p->GetClassName(), c) == 0 )
+            break;
+
         p = p->m_next;
     }
-    return (wxClassInfo *) NULL;
+
+    return p;
 }
 
 // Climb upwards through inheritance hierarchy.
 // Dual inheritance is catered for.
-bool wxClassInfo::IsKindOf(wxClassInfo *info) const
+bool wxClassInfo::IsKindOf(const wxClassInfo *info) const
 {
     if (info == NULL)
         return FALSE;

@@ -166,7 +166,7 @@ void wxLibrary::PrepareClasses(wxClassInfo *first)
     {
         if (info->m_className)
             classTable.Put(info->m_className, (wxObject *)info);
-        info = info->GetNext();
+        info = (wxClassInfo *)info->GetNext();
     }
 
     // Set base pointers for each wxClassInfo
