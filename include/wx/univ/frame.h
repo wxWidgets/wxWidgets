@@ -57,6 +57,11 @@ protected:
     virtual void PositionMenuBar();
 #endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
+    // override to update statusbar position when the frame size changes
+    virtual void PositionStatusBar();
+#endif // wxUSE_MENUS
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };

@@ -31,6 +31,7 @@
     #include "wx/menu.h"
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
 // ============================================================================
@@ -68,6 +69,9 @@ void wxFrame::OnSize(wxSizeEvent& event)
 #if wxUSE_MENUS
     PositionMenuBar();
 #endif // wxUSE_MENUS
+#if wxUSE_STATUSBAR
+    PositionStatusBar();
+#endif // wxUSE_STATUSBAR
 
     event.Skip();
 }
@@ -88,6 +92,20 @@ void wxFrame::PositionMenuBar()
 
 #endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
+
+void wxFrame::PositionStatusBar()
+{
+    if ( m_frameStatusBar )
+    {
+        wxCoord heightBar = m_frameStatusBar->GetSize().y;
+        m_frameStatusBar->SetSize(0, GetClientSize().y,
+                                  GetClientSize().x, heightBar);
+    }
+}
+
+#endif // wxUSE_STATUSBAR
+
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxFrameBase::GetClientAreaOrigin();
@@ -105,12 +123,20 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 void wxFrame::DoGetClientSize(int *width, int *height) const
 {
     wxFrameBase::DoGetClientSize(width, height);
+
 #if wxUSE_MENUS
     if ( m_frameMenuBar && height )
     {
         (*height) -= m_frameMenuBar->GetSize().y;
     }
 #endif // wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
+    if ( m_frameStatusBar && height )
+    {
+        (*height) -= m_frameStatusBar->GetSize().y;
+    }
+#endif // wxUSE_STATUSBAR
 }
 
 void wxFrame::DoSetClientSize(int width, int height)
@@ -121,6 +147,14 @@ void wxFrame::DoSetClientSize(int width, int height)
         height += m_frameMenuBar->GetSize().y;
     }
 #endif // wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
+    if ( m_frameStatusBar )
+    {
+        height += m_frameStatusBar->GetSize().y;
+    }
+#endif // wxUSE_STATUSBAR
+
     wxFrameBase::DoSetClientSize(width, height);
 }
 
