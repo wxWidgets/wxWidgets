@@ -29,7 +29,7 @@
 
 // include standard Windows headers
 #ifdef __WXMSW__
-//    #include <windows.h>
+    #include <windows.h>
     #include "wx/msw/winundef.h"
 #endif
 
