@@ -16,6 +16,8 @@ from   wxPython.wx import *
 from   wxPython.lib.splashscreen import SplashScreen
 from   wxPython.html import wxHtmlWindow
 
+import images
+
 #---------------------------------------------------------------------------
 
 
@@ -75,10 +77,10 @@ class wxPythonDemo(wxFrame):
         self.cwd = os.getcwd()
         self.curOverview = ""
 
-        if wxPlatform == '__WXMSW__':
-            icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
-            self.SetIcon(icon)
+        icon = wxIconFromXPMData(images.getMondrianData())
+        self.SetIcon(icon)
 
+        if wxPlatform == '__WXMSW__':
             # setup a taskbar icon, and catch some events from it
             self.tbicon = wxTaskBarIcon()
             self.tbicon.SetIcon(icon, "wxPython Demo")

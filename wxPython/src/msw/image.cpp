@@ -121,10 +121,6 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
         return new wxImage(bitmap);
     }
-
-    void wxImage_AddHandler(wxImageHandler *handler) {
-        wxImage::AddHandler(handler);
-    }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -280,32 +276,6 @@ static PyObject *_wrap_wxImageFromBitmap(PyObject *self, PyObject *args, PyObjec
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxImage_AddHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxImageHandler * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "handler", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_AddHandler",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageHandler_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_AddHandler. Expected _wxImageHandler_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxImage_AddHandler(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -1210,13 +1180,54 @@ static PyObject *_wrap_wxImage_GetBlue(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+static PyObject *_wrap_wxImage_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_CanRead",_kwnames,&_obj0)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxImage::CanRead(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 #define wxImage_LoadFile(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LoadFile(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxImage_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxImage * _arg0;
     wxString * _arg1;
-    long  _arg2 = (long ) wxBITMAP_TYPE_PNG;
+    long  _arg2 = (long ) wxBITMAP_TYPE_ANY;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","name","type", NULL };
@@ -2069,7 +2080,103 @@ static PyObject *_wrap_wxImage_CountColours(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static PyObject *_wrap_wxImage_AddHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImageHandler * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "handler", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_AddHandler",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_AddHandler. Expected _wxImageHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxImage::AddHandler(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxImage_InsertHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImageHandler * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "handler", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_InsertHandler",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_InsertHandler. Expected _wxImageHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxImage::InsertHandler(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxImage_RemoveHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_RemoveHandler",_kwnames,&_obj0)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxImage::RemoveHandler(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static PyMethodDef imagecMethods[] = {
+	 { "wxImage_RemoveHandler", (PyCFunction) _wrap_wxImage_RemoveHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_InsertHandler", (PyCFunction) _wrap_wxImage_InsertHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_AddHandler", (PyCFunction) _wrap_wxImage_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_CountColours", (PyCFunction) _wrap_wxImage_CountColours, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Replace", (PyCFunction) _wrap_wxImage_Replace, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Mirror", (PyCFunction) _wrap_wxImage_Mirror, METH_VARARGS | METH_KEYWORDS },
@@ -2093,6 +2200,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_SaveFile", (PyCFunction) _wrap_wxImage_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_LoadMimeFile", (PyCFunction) _wrap_wxImage_LoadMimeFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_LoadFile", (PyCFunction) _wrap_wxImage_LoadFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_CanRead", (PyCFunction) _wrap_wxImage_CanRead, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetBlue", (PyCFunction) _wrap_wxImage_GetBlue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetGreen", (PyCFunction) _wrap_wxImage_GetGreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetRed", (PyCFunction) _wrap_wxImage_GetRed, METH_VARARGS | METH_KEYWORDS },
@@ -2120,7 +2228,6 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageHandler_GetExtension", (PyCFunction) _wrap_wxImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetName", (PyCFunction) _wrap_wxImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInitAllImageHandlers", (PyCFunction) _wrap_wxInitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
-	 { "wxImage_AddHandler", (PyCFunction) _wrap_wxImage_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromMime", (PyCFunction) _wrap_wxImageFromMime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEmptyImage", (PyCFunction) _wrap_wxEmptyImage, METH_VARARGS | METH_KEYWORDS },

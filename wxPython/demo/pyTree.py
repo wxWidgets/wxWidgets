@@ -24,7 +24,7 @@ beautifully documented...
 """
 
 from wxPython import wx
-import string # Don't use it, but it's fun expanding :-)
+import sys, string # Don't use it, but it's fun expanding :-)
 
 #----------------------------------------------------------------------
 
@@ -161,7 +161,8 @@ def runTest(frame, nb, log):
     This method is used by the wxPython Demo Framework for integrating
     this demo with the rest.
     """
-    thisModule = __import__(__name__, globals())
+    #thisModule = __import__(__name__, globals())
+    thisModule = sys.modules[__name__]
     win = wx.wxFrame(frame, -1, "PyTreeItemData Test")
     split = wx.wxSplitterWindow(win, -1)
     tree = pyTree(split, -1, thisModule)

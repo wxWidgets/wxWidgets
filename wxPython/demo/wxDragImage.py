@@ -1,6 +1,8 @@
 
 from wxPython.wx import *
 
+import images
+
 #----------------------------------------------------------------------
 
 class DragShape:
@@ -47,14 +49,14 @@ class DragCanvas(wxScrolledWindow):
         self.dragShape = None
 
         self.SetCursor(wxStockCursor(wxCURSOR_ARROW))
-        self.bg_bmp = wxBitmap('bitmaps/backgrnd.png', wxBITMAP_TYPE_PNG)
+        self.bg_bmp = images.getBackgroundBitmap()
 
 
         # Make a shape from an image and mask.  This one will demo
         # dragging outside the window
-        bmp = wxBitmap('bitmaps/test_image.png', wxBITMAP_TYPE_PNG)
-        mask = wxMaskColour(bmp, wxWHITE)
-        bmp.SetMask(mask)
+        bmp = images.getTestStarBitmap()
+        #mask = wxMaskColour(bmp, wxWHITE)
+        #bmp.SetMask(mask)
         shape = DragShape(bmp)
         shape.pos = wxPoint(5, 5)
         shape.fullscreen = true
@@ -84,8 +86,9 @@ class DragCanvas(wxScrolledWindow):
 
         # Make some shapes from some playing card images.
         x = 200
-        for card in ['01c.gif', '10s.gif', '12h.gif', '13d.gif']:
-            bmp = wxBitmap('bitmaps/'+card, wxBITMAP_TYPE_GIF)
+        for card in ['_01c_', '_12h_', '_13d_', '_10s_']:
+            bmpFunc = getattr(images, "get%sBitmap" % card)
+            bmp = bmpFunc()
             shape = DragShape(bmp)
             shape.pos = wxPoint(x, 5)
             self.shapes.append(shape)

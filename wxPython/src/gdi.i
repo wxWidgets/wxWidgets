@@ -105,17 +105,59 @@ public:
 };
 
 
+// Declarations of some alternate "constructors"
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
+%new wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings);
+%new wxBitmap* wxBitmapFromIcon(const wxIcon& icon);
 
 #ifdef __WXMSW__
 %new wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                 int width, int height, int depth = 1);
 #endif
 
-%{                              // Alternate 'constructor'
+
+
+%{ // Implementations of some alternate "constructors"
+
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
         return new wxBitmap(width, height, depth);
     }
+
+    static char** ConvertListOfStrings(PyObject* listOfStrings) {
+        char**    cArray = NULL;
+        int       count;
+
+        if (!PyList_Check(listOfStrings)) {
+            PyErr_SetString(PyExc_TypeError, "Expected a list of strings.");
+            return NULL;
+        }
+        count = PyList_Size(listOfStrings);
+        cArray = new char*[count];
+
+        for(int x=0; x<count; x++) {
+            // TODO: Need some validation and error checking here
+            cArray[x] = PyString_AsString(PyList_GET_ITEM(listOfStrings, x));
+        }
+        return cArray;
+    }
+
+    wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings) {
+        char**    cArray = NULL;
+        wxBitmap* bmp;
+
+        cArray = ConvertListOfStrings(listOfStrings);
+        if (! cArray)
+            return NULL;
+        bmp = new wxBitmap(cArray);
+        delete [] cArray;
+        return bmp;
+    }
+
+
+    wxBitmap* wxBitmapFromIcon(const wxIcon& icon) {
+        return new wxBitmap(icon);
+    }
+
 
 #ifdef __WXMSW__
     wxBitmap* wxBitmapFromData(PyObject* data, long type,
@@ -136,6 +178,8 @@ class wxMask {
 public:
     wxMask(const wxBitmap& bitmap);
     //~wxMask();
+
+    %addmethods { void Destroy() { delete self; } }
 };
 
 %new wxMask* wxMaskColour(const wxBitmap& bitmap, const wxColour& colour);
@@ -174,6 +218,8 @@ public:
 #ifdef __WXMSW__
     void SetSize(const wxSize& size);
 #endif
+    void CopyFromBitmap(const wxBitmap& bmp);
+
     %pragma(python) addtoclass = "
     def __del__(self,gdic=gdic):
         try:
@@ -182,9 +228,30 @@ public:
         except:
             pass
 "
-
 };
 
+
+// Declarations of some alternate "constructors"
+%new wxIcon* wxEmptyIcon();
+%new wxIcon* wxIconFromXPMData(PyObject* listOfStrings);
+
+%{ // Implementations of some alternate "constructors"
+    wxIcon* wxEmptyIcon() {
+        return new wxIcon();
+    }
+
+    wxIcon* wxIconFromXPMData(PyObject* listOfStrings) {
+        char**  cArray = NULL;
+        wxIcon* icon;
+
+        cArray = ConvertListOfStrings(listOfStrings);
+        if (! cArray)
+            return NULL;
+        icon = new wxIcon(cArray);
+        delete [] cArray;
+        return icon;
+    }
+%}
 
 //---------------------------------------------------------------------------
 

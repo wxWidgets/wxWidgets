@@ -211,6 +211,7 @@ class GridEditorTest(wxGrid):
         self.SetColSize(1, 150)
         self.SetColSize(2, 150)
 
+
 #---------------------------------------------------------------------------
 
 class TestFrame(wxFrame):

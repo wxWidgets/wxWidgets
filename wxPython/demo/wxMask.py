@@ -26,19 +26,21 @@ logicList = [
     ('wxXOR', wxXOR),
 ]
 
+import images
+
 class TestMaskWindow(wxScrolledWindow):
     def __init__(self, parent):
         wxScrolledWindow.__init__(self, parent, -1)
         self.SetBackgroundColour(wxColour(0,128,0))
 
         # A reference bitmap that we won't mask
-        self.bmp_nomask  = wxBitmap('bitmaps/test_image.png', wxBITMAP_TYPE_PNG)
+        self.bmp_nomask  = images.getTestStar2Bitmap()
 
         # One that we will
-        self.bmp_withmask  = wxBitmap('bitmaps/test_image.png', wxBITMAP_TYPE_PNG)
+        self.bmp_withmask  = images.getTestStar2Bitmap()
 
         # this mask comes from a monochrome bitmap
-        self.bmp_themask = wxBitmap('bitmaps/test_mask.bmp',  wxBITMAP_TYPE_BMP)
+        self.bmp_themask = images.getTestMaskBitmap()
         self.bmp_themask.SetDepth(1)
         mask = wxMask(self.bmp_themask)
 
@@ -47,7 +49,7 @@ class TestMaskWindow(wxScrolledWindow):
 
         # Now we'll create a mask in a bit of an easier way, by picking a
         # colour in the image that is to be the transparent colour.
-        self.bmp_withcolourmask  = wxBitmap('bitmaps/test_image.png', wxBITMAP_TYPE_PNG)
+        self.bmp_withcolourmask  = images.getTestStar2Bitmap()
         mask = wxMaskColour(self.bmp_withcolourmask, wxWHITE)
         self.bmp_withcolourmask.SetMask(mask)
 

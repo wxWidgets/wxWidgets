@@ -106,7 +106,8 @@ public:
     unsigned char GetGreen( int x, int y );
     unsigned char GetBlue( int x, int y );
 
-    bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+    static bool CanRead( const wxString& name );
+    bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     %name(LoadMimeFile)bool LoadFile( const wxString& name, const wxString& mimetype );
 
     bool SaveFile( const wxString& name, int type );
@@ -163,6 +164,9 @@ public:
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
     // TODO: unsigned long ComputeHistogram( wxHashTable &h );
 
+    static void AddHandler( wxImageHandler *handler );
+    static void InsertHandler( wxImageHandler *handler );
+    static bool RemoveHandler( const wxString& name );
 };
 
 // Alternate constructors
@@ -188,13 +192,6 @@ public:
     }
 %}
 
-// Static Methods
-void wxImage_AddHandler(wxImageHandler *handler);
-%{
-    void wxImage_AddHandler(wxImageHandler *handler) {
-        wxImage::AddHandler(handler);
-    }
-%}
 
 void wxInitAllImageHandlers();
 

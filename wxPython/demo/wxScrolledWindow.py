@@ -1,6 +1,8 @@
 
 from wxPython.wx import *
 
+import images
+
 #---------------------------------------------------------------------------
 
 class MyCanvas(wxScrolledWindow):
@@ -20,7 +22,7 @@ class MyCanvas(wxScrolledWindow):
 
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
-        bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
+        bmp = images.getTest2Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         self.bmp = bmp

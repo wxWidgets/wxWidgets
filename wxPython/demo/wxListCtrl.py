@@ -57,6 +57,7 @@ musicdata = {
 39: ("Yes", "Rhythm Of Love", "Rock"),
 }
 
+import images
 
 class TestListCtrlPanel(wxPanel):
     def __init__(self, parent, log):
@@ -66,7 +67,7 @@ class TestListCtrlPanel(wxPanel):
         tID = wxNewId()
 
         self.il = wxImageList(16, 16)
-        bmp = wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP)
+        bmp = images.getSmilesBitmap()
         idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
 
         self.list = wxListCtrl(self, tID,

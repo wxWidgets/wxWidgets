@@ -1,6 +1,8 @@
 
 from wxPython.wx import *
 
+import images
+
 #---------------------------------------------------------------------------
 
 class TestToolBar(wxFrame):
@@ -20,31 +22,30 @@ class TestToolBar(wxFrame):
 
         self.CreateStatusBar()
 
-        tb.AddSimpleTool(10, wxBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
-                         "New", "Long help for 'New'")
+        tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddSimpleTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
-                         "Open", "Long help for 'Open'")
+        tb.AddSimpleTool(20, images.getOpenBitmap(), "Open")
         EVT_TOOL(self, 20, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddSimpleTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
-                         "Copy", "Long help for 'Copy'")
+        tb.AddSimpleTool(30, images.getCopyBitmap(), "Copy")
         EVT_TOOL(self, 30, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddSimpleTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
-                         "Paste", "Long help for 'Paste'")
+        tb.AddSimpleTool(40, images.getPasteBitmap(), "Paste")
         EVT_TOOL(self, 40, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
         tb.AddSeparator()
 
-        tool = tb.AddTool(50, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
+        tool = tb.AddTool(50, images.getTog1Bitmap(),
                           shortHelpString="Toggle this", isToggle=true)
         EVT_TOOL(self, 50, self.OnToolClick)
 
-        tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                   wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
+        tb.AddTool(60, images.getTog1Bitmap(), images.getTog2Bitmap(),
                    shortHelpString="Toggle with 2 bitmaps", isToggle=true)
         EVT_TOOL(self, 60, self.OnToolClick)
 

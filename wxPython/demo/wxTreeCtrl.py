@@ -31,12 +31,13 @@ class TestTreeCtrlPanel(wxPanel):
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
+        #import images
         #il = wxImageList(16, 16)
-        #idx1 = il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
-        #idx2 = il.Add(wxBitmap('bitmaps/open.bmp', wxBITMAP_TYPE_BMP))
-        #idx3 = il.Add(wxBitmap('bitmaps/new.bmp', wxBITMAP_TYPE_BMP))
-        #idx4 = il.Add(wxBitmap('bitmaps/copy.bmp', wxBITMAP_TYPE_BMP))
-        #idx5 = il.Add(wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP))
+        #idx1 = il.Add(images.getSmilesBitmap())
+        #idx2 = il.Add(images.getOpenBitmap())
+        #idx3 = il.Add(images.getNewBitmap())
+        #idx4 = il.Add(images.getCopyBitmap())
+        #idx5 = il.Add(images.getPasteBitmap())
 
         #self.tree.SetImageList(il)
         #self.il = il

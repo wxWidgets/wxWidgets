@@ -4,7 +4,7 @@
 #
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
-# Version       0.9 
+# Version       0.9
 # Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
 from wxPython.wx           import *
 from wxPython.lib.calendar import wxCalendar, Month, PrtCalDraw, CalenDlg
 
+import images
 import os
-dir_path = os.getcwd()
 
 
 # highlighted days in month
@@ -107,7 +107,7 @@ class TestPanel(wxPanel):
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
 
         mID = NewId()
-        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
+        bmp = images.getCalendarBitmap()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 80))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestDlg)
 
@@ -116,14 +116,12 @@ class TestPanel(wxPanel):
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
 
         mID = NewId()
-        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestFrame)
 
         wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
 
         mID = NewId()
-        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 280))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.OnPreview)
 
@@ -316,26 +314,24 @@ class CalendFrame(wxFrame):
     def MakeToolMenu(self):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
-        bmp_path = 'bitmaps/'
-
         mID = NewId()
-        SetToolPath(self, tb, mID, bmp_path + 'DbDec.bmp', 'Dec Year')
+        SetToolPath(self, tb, mID, images.getDbDecBitmap(), 'Dec Year')
         EVT_TOOL(self, mID, self.OnDecYear)
 
         mID = NewId()
-        SetToolPath(self, tb, mID, bmp_path + 'Dec.bmp', 'Dec Month')
+        SetToolPath(self, tb, mID, images.getDecBitmap(), 'Dec Month')
         EVT_TOOL(self, mID, self.OnDecMonth)
 
         mID = NewId()
-        SetToolPath(self, tb, mID, bmp_path + 'Pt.bmp', 'Current Month')
+        SetToolPath(self, tb, mID, images.getPtBitmap(), 'Current Month')
         EVT_TOOL(self, mID, self.OnCurrent)
 
         mID = NewId()
-        SetToolPath(self, tb, mID, bmp_path + 'Inc.bmp', 'Inc Month')
+        SetToolPath(self, tb, mID, images.getIncBitmap(), 'Inc Month')
         EVT_TOOL(self, mID, self.OnIncMonth)
 
         mID = NewId()
-        SetToolPath(self, tb, mID, bmp_path + 'DbInc.bmp', 'Inc Year')
+        SetToolPath(self, tb, mID, images.getDbIncBitmap(), 'Inc Year')
         EVT_TOOL(self, mID, self.OnIncYear)
 
         tb.Realize()
@@ -518,9 +514,7 @@ class PrintCalend:
         self.ptheight = height
 
 def SetToolPath(self, tb, id, bmp, title):
-    global dir_path
-    tb.AddSimpleTool(id, wxBitmap(os.path.join(dir_path, bmp), wxBITMAP_TYPE_BMP),
-                     title, title)
+    tb.AddSimpleTool(id, bmp, title, title)
 
 class SetPrintout(wxPrintout):
     def __init__(self, canvas):
