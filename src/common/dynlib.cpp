@@ -391,17 +391,39 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     
 
 /*static*/
-wxString wxDynamicLibrary::CanonicalizeName(const wxString& name,
-                                            wxDynamicLibraryCategory cat)
-{
+wxString
+wxDynamicLibrary::CanonicalizeName(const wxString& name,
+                                   wxDynamicLibraryCategory
 #ifdef __UNIX__
-    if ( cat == wxDL_MODULE )
-        return name + GetDllExt();
-    else
-        return wxString(_T("lib")) + name + GetDllExt();
-#else
-    return name + GetDllExt();
-#endif
+                                        cat
+#else // !__UNIX__
+                                        WXUNUSED(cat)
+#endif // __UNIX__/!__UNIX__
+                                   )
+{
+    wxString nameCanonic;
+
+    // under Unix the library names usualyl start with "lib" prefix, add it
+#ifdef __UNIX__
+    switch ( cat )
+    {
+        default:
+            wxFAIL_MSG( _T("unknown wxDynamicLibraryCategory value") );
+            // fall through
+
+        case wxDL_MODULE:
+            // don't do anything for modules, their names are arbitrary
+            break;
+
+        case wxDL_LIBRARY:
+            // library names should start with "lib" under Unix
+            nameCanonic = _T("lib");
+            break;
+    }
+#endif // __UNIX__
+
+    nameCanonic << name << GetDllExt();
+    return nameCanonic;
 }
 
 /*static*/
@@ -440,6 +462,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         #define wxDLLVER(x,y,z) #x #y #z
     #endif
 #endif
+
     suffix << wxString::FromAscii(wxDLLVER(wxMAJOR_VERSION, wxMINOR_VERSION,
                                            wxRELEASE_NUMBER));
 #undef wxDLLVER
