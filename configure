@@ -18234,19 +18234,23 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
         echo "configure: warning: Popup window not yet supported under Mac OS X... disabled" 1>&2
     else
-        cat >> confdefs.h <<\EOF
+        if test "$wxUSE_MOTIF" = 1; then
+            echo "configure: warning: wxPopupWindow not yet supported under Motif... disabled" 1>&2
+        else
+            cat >> confdefs.h <<\EOF
 #define wxUSE_POPUPWIN 1
 EOF
 
 
-        if test "$wxUSE_TIPWINDOW" = "yes"; then
-            cat >> confdefs.h <<\EOF
+            if test "$wxUSE_TIPWINDOW" = "yes"; then
+                cat >> confdefs.h <<\EOF
 #define wxUSE_TIPWINDOW 1
 EOF
 
-        fi
+            fi
 
-        USES_CONTROLS=1
+            USES_CONTROLS=1
+        fi
     fi
 fi
 
@@ -18641,7 +18645,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18645: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18649: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
