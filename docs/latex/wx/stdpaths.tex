@@ -9,7 +9,7 @@
 %% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxStandardPaths}}\label{wxstandardsaths}
+\section{\class{wxStandardPaths}}\label{wxstandardpaths}
 
 wxStandardPaths returns the standard locations in the file system and should be
 used by the programs to find their data files in a portable way.
@@ -20,27 +20,25 @@ so to use wxStandardPaths simply call its methods directly.
 
 In the description of the methods below, the example return values are given
 for the Unix, Windows and Mac OS X systems, however please note that these are
-just the examples and the actual values may differ. Most importantly:
-\begin{itemize}
-    \item Unix: \texttt{/usr} should in general be replaced by the
-        program installation prefix which is by default \texttt{/usr/local} but
-        may be any other path as well.
-    \item Windows: the system administrator may change the standard
-        directories locations, i.e. the Windows directory may be named
-        \texttt{W:$\backslash$Win2003} instead of default
-        \texttt{C:$\backslash$Windows}
-\end{itemize}
+just the examples and the actual values may differ. For example, under Windows:
+the system administrator may change the standard directories locations, i.e.
+the Windows directory may be named \texttt{W:$\backslash$Win2003} instead of
+the default \texttt{C:$\backslash$Windows}.
 
 The strings \texttt{\textit{appname}} and \texttt{\textit{username}} should be
 replaced with the value returned by \helpref{wxApp::GetAppName}{wxappgetappname} 
-and the name of the currently logged in user, respectively.
+and the name of the currently logged in user, respectively. The string 
+\texttt{\textit{prefix}} is only used under Unix and is \texttt{/usr/local} by
+default but may be changed using \helpref{SetInstallPrefix}{wxstandardpathssetinstallprefix}.
 
 The directories returned by the methods of this class may or may not exist. If
 they don't exist, it's up to the caller to create them, wxStandardPaths doesn't
 do it.
 
-Finally note that under Mac, these functions only work for the bundled
-applications.
+Finally note that these functions only work with standardly packaged
+applications. I.e. under Unix you should follow the standard installation
+conventions and under Mac you should create your application bundle according
+to the Apple guidelines. Again, this class doesn't help you to do it.
 
 \wxheading{Derived from}
 
@@ -54,7 +52,7 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxStandardPaths::GetConfigDir}\label{wxstandardsathsgetconfigdir}
+\membersection{wxStandardPaths::GetConfigDir}\label{wxstandardpathsgetconfigdir}
 
 \func{static wxString}{GetConfigDir}{\void}
 
@@ -72,7 +70,7 @@ Example return values:
 \helpref{wxFileConfig}{wxfileconfig}
 
 
-\membersection{wxStandardPaths::GetDataDir}\label{wxstandardsathsgetdatadir}
+\membersection{wxStandardPaths::GetDataDir}\label{wxstandardpathsgetdatadir}
 
 \func{static wxString}{GetDataDir}{\void}
 
@@ -81,28 +79,43 @@ data files.
 
 Example return values:
 \begin{itemize}
-    \item Unix: \texttt{/usr/share/\textit{appname}}
+    \item Unix: \texttt{\textit{prefix}/share/\textit{appname}}
     \item Windows: \texttt{C:$\backslash$Program Files$\backslash$\textit{appname}}
-    \item Mac: \texttt{\textit{appname}.app/Contents} bundle subdirectory
+    \item Mac: \texttt{\textit{appname}.app/Contents/SharedSupport} bundle subdirectory
 \end{itemize}
 
 \wxheading{See also}
 
-\helpref{GetLocalDataDir}{wxstandardsathsgetlocaldatadir}
+\helpref{GetLocalDataDir}{wxstandardpathsgetlocaldatadir}
 
 
-\membersection{wxStandardPaths::GetLocalDataDir}\label{wxstandardsathsgetlocaldatadir}
+\membersection{wxStandardPaths::GetInstallPrefix}\label{wxstandardpathsgetinstallprefix}
+
+\func{static wxString}{GetInstallPrefix}{\void}
+
+\textbf{Note: } This function is only available under Unix.
+
+Return the program installation prefix, e.g. \texttt{/usr}, \texttt{/opt} or 
+\texttt{/home/zeitlin}.
+
+If the prefix had been previously by 
+\helpref{SetInstallPrefix}{wxstandardpathssetinstallprefix}, returns that
+value, otherwise tries to determine it automatically (Linux only right
+now) and finally returns the default \texttt{/usr/local} value if it failed.
+
+
+\membersection{wxStandardPaths::GetLocalDataDir}\label{wxstandardpathsgetlocaldatadir}
 
 \func{static wxString}{GetLocalDataDir}{\void}
 
 Return the location for application data files which are host-specific and
 can't, or shouldn't, be shared with the other machines.
 
-This is the same as \helpref{GetDataDir()}{wxstandardsathsgetdatadir} except
+This is the same as \helpref{GetDataDir()}{wxstandardpathsgetdatadir} except
 under Unix where it returns \texttt{/etc/\textit{appname}}.
 
 
-\membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardsathsgetpluginsdir}
+\membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardpathsgetpluginsdir}
 
 \func{static wxString}{GetPluginsDir}{\void}
 
@@ -110,9 +123,9 @@ Return the directory where the loadable modules (plugins) live.
 
 Example return values:
 \begin{itemize}
-    \item Unix: \texttt{/usr/lib/\textit{appname}}
+    \item Unix: \texttt{\textit{prefix}/lib/\textit{appname}}
     \item Windows: the directory of the executable file
-    \item Mac: \texttt{\textit{appname}.app/Contents/Plugins} bundle subdirectory
+    \item Mac: \texttt{\textit{appname}.app/Contents/PlugIns} bundle subdirectory
 \end{itemize}
 
 \wxheading{See also}
@@ -120,7 +133,7 @@ Example return values:
 \helpref{wxDynamicLibrary}{wxdynamiclibrary}
 
 
-\membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardsathsgetuserconfigdir}
+\membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardpathsgetuserconfigdir}
 
 \func{static wxString}{GetUserConfigDir}{\void}
 
@@ -132,11 +145,11 @@ Return the directory for the user config files:
 \end{itemize}
 
 Only use this method if you have a single configuration file to put in this
-directory, otherwise \helpref{GetUserDataDir()}{wxstandardsathsgetuserdatadir} is
+directory, otherwise \helpref{GetUserDataDir()}{wxstandardpathsgetuserdatadir} is
 more appropriate.
 
 
-\membersection{wxStandardPaths::GetUserDataDir}\label{wxstandardsathsgetuserdatadir}
+\membersection{wxStandardPaths::GetUserDataDir}\label{wxstandardpathsgetuserdatadir}
 
 \func{static wxString}{GetUserDataDir}{\void}
 
@@ -144,19 +157,35 @@ Return the directory for the user-dependent application data files:
 \begin{itemize}
     \item Unix: \texttt{\verb|~|/.\textit{appname}}
     \item Windows: \texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}$\backslash$Application Data$\backslash$\textit{appname}}
-    \item Mac: \texttt{\verb|~|/Library/\textit{appname}}
+    \item Mac: \texttt{\verb|~|/Library/Application Support/\textit{appname}}
 \end{itemize}
 
 
-\membersection{wxStandardPaths::GetUserLocalDataDir}\label{wxstandardsathsgetuserlocaldatadir}
+\membersection{wxStandardPaths::GetUserLocalDataDir}\label{wxstandardpathsgetuserlocaldatadir}
 
 \func{static wxString}{GetUserLocalDataDir}{\void}
 
 Return the directory for user data files which shouldn't be shared with
 the other machines.
 
-This is the same as \helpref{GetUserDataDir()}{wxstandardsathsgetuserdatadir} for
+This is the same as \helpref{GetUserDataDir()}{wxstandardpathsgetuserdatadir} for
 all platforms except Windows where it returns 
 \texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}$\backslash$Local Settings$\backslash$Application Data$\backslash$\textit{appname}}
+
+
+\membersection{wxStandardPaths::SetInstallPrefix}\label{wxstandardpathssetinstallprefix}
+
+\func{static void}{SetInstallPrefix}{\param{const wxString\& }{prefix}}
+
+\textbf{Note: } This function is only available under Unix.
+
+Lets wxStandardPaths know about the real program installation prefix on a Unix
+system. By default, the value returned by 
+\helpref{GetInstallPrefix}{wxstandardpathsgetinstallprefix} is used.
+
+Although under Linux systems the program prefix may usually be determined
+automatically, portable programs should call this function. Usually the prefix
+is set during program configuration if using GNU autotools and so it is enough
+to pass its value defined in \texttt{config.h} to this function.
 
 

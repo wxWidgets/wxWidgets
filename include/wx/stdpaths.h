@@ -19,6 +19,23 @@
 class WXDLLIMPEXP_BASE wxStandardPaths
 {
 public:
+#ifdef __UNIX_LIKE__
+    // set the program installation directory which is /usr/local by default
+    //
+    // under some systems (currently only Linux) the program directory can be
+    // determined automatically but for portable programs you should always set
+    // it explicitely
+    static void SetInstallPrefix(const wxString& prefix);
+
+    // get the program installation prefix
+    //
+    // if the prefix had been previously by SetInstallPrefix, returns that
+    // value, otherwise tries to determine it automatically (Linux only right
+    // now) and returns /usr/local if it failed
+    static wxString GetInstallPrefix();
+#endif // __UNIX_LIKE__
+
+
     // return the directory with system config files:
     // /etc under Unix, c:\Windows under Windows, /Library/Preferences for Mac
     static wxString GetConfigDir();
@@ -34,8 +51,8 @@ public:
     // return the location of the applications global, i.e. not user-specific,
     // data files
     //
-    // /usr/share/appname under Unix, c:\Program Files\appname under Windows,
-    // Contents app bundle directory under Mac
+    // prefix/share/appname under Unix, c:\Program Files\appname under Windows,
+    // appname.app/Contents/SharedSupport app bundle directory under Mac
     static wxString GetDataDir();
 
     // return the location for application data files which are host-specific
@@ -47,7 +64,7 @@ public:
     //
     // $HOME/.appname under Unix,
     // c:\Documents and Settings\username\Application Data\appname under Windows
-    // and ~/Library/appname under Mac
+    // and ~/Library/Application Support/appname under Mac
     static wxString GetUserDataDir();
 
     // return the directory for user data files which shouldn't be shared with
@@ -59,7 +76,7 @@ public:
 
     // return the directory where the loadable modules (plugins) live
     //
-    // /usr/lib/appname under Unix, program directory under Windows and
+    // prefix/lib/appname under Unix, program directory under Windows and
     // Contents/Plugins app bundle subdirectory under Mac
     static wxString GetPluginsDir();
 };
