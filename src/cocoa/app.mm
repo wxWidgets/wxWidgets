@@ -32,6 +32,7 @@
 
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/mbarman.h"
 
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
@@ -63,6 +64,8 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 - (void)doIdle: (id)data
 {
     wxASSERT(wxTheApp);
+    wxASSERT(wxMenuBarManager::GetInstance());
+    wxMenuBarManager::GetInstance()->CocoaInternalIdle();
     wxLogDebug("doIdle called");
 #ifdef __WXDEBUG__
     if(wxTheApp->IsInAssert())
@@ -168,6 +171,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 void wxApp::CleanUp()
 {
     wxDC::CocoaShutdownTextSystem();
+    wxMenuBarManager::DestroyInstance();
 
     wxAppBase::CleanUp();
 }
@@ -220,6 +224,9 @@ bool wxApp::OnInitGui()
 
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
+
+    wxMenuBarManager::CreateInstance();
+
     wxDC::CocoaInitializeTextSystem();
 //    [ m_cocoaApp setDelegate:m_cocoaApp ];
     #if 0
