@@ -6,7 +6,7 @@
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWidgets license
+// License:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

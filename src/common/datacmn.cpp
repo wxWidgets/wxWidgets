@@ -6,7 +6,7 @@
 // Created:     10.04.03 (from src/*/data.cpp files)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997-2002 wxWidgets development team
-// License:     wxWidgets license
+// License:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
