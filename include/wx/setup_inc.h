@@ -559,11 +559,7 @@
 // Default is 1 for the platforms where native status bar is supported.
 //
 // Recommended setting: 1 (there is no advantage in using the generic one)
-#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        1
-#else
-#define wxUSE_NATIVE_STATUSBAR        0
-#endif
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless

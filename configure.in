@@ -5622,6 +5622,8 @@ if test "$wxUSE_STATLINE" = "yes"; then
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
+    dnl this will get undefined in wx/chkconf.h if it's not supported
+    AC_DEFINE(wxUSE_NATIVE_STATUSBAR)
     AC_DEFINE(wxUSE_STATUSBAR)
     USES_CONTROLS=1
 

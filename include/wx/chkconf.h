@@ -1011,6 +1011,16 @@
 #   endif
 #endif /* wxUSE_CHOICEBOOK */
 
+/* don't attempt to use native status bar on the platforms not having it */
+#ifndef wxUSE_NATIVE_STATUSBAR
+#   define wxUSE_NATIVE_STATUSBAR 0
+#elif wxUSE_NATIVE_STATUSBAR
+#   if defined(__WXUNIVERSAL__) || !(defined(__WXMSW__) || !defined(__WXMAC__))
+#       undef wxUSE_NATIVE_STATUSBAR
+#       define wxUSE_NATIVE_STATUSBAR 0
+#   endif
+#endif
+
 /* wxUniv-specific dependencies */
 #if defined(__WXUNIVERSAL__)
 #   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
