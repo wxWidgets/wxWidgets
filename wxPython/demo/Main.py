@@ -23,6 +23,7 @@ import images
 
 _treeList = [
     ('New since last release', ['ColourSelect', 'ImageBrowser', 'infoframe',
+                                'ColourDB',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),

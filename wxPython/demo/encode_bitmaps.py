@@ -46,7 +46,8 @@ command_lines = [
 
     "-a -n Smiles bmp_source/smiles.bmp images.py",
 
-    #"-a -n  bmp_source/ images.py",
+    "-a -n GridBG bmp_source/GridBG.gif images.py",
+
     ]
 
 
