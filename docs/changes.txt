@@ -258,7 +258,7 @@ Unix:
   builds of wxWidgets and to return flags/libs for selected libraries only
 - wx-config has new --version-full option
 
-wxMAC:
+wxMac:
 
 - Fixed MLTE text control GetLineText and GetLineLength on OSX (RN)
 - Added OSX wxTaskBarIcon implementation for the OSX Dock (RN)
@@ -306,6 +306,7 @@ wxMSW:
 - don't send duplicate EVT_COMBOBOX events whenever selection changes any more
 - implemented support for selecting printer bin (Steven Van Ingelgem)
 - fixed wxListCtrl::SetSingleStyle() which was broken since a few releases
+- fixed print setup problem (always uses default printer) in Unicode build
 
 wxUniv/X11:
 
