@@ -343,7 +343,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
 //  Then why do you translate at all? Just use _T() and not _(). RR.
 
   wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-               szName.c_str, searchPath.c_str());
+               szName.c_str(), searchPath.c_str());
 
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
