@@ -160,6 +160,8 @@ DATA_FILES = []
 
 force = '--force' in sys.argv or '-f' in sys.argv
 debug = '--debug' in sys.argv or '-g' in sys.argv
+cleaning = 'clean' in sys.argv
+
 
 # change the PORT default for wxMac
 if sys.platform[:6] == "darwin":
@@ -254,7 +256,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
 
         sources.append(cpp_file)
 
-        if USE_SWIG:
+        if not cleaning and USE_SWIG:
             for dep in swig_deps:
                 if newer(dep, py_file) or newer(dep, cpp_file):
                     force = 1
