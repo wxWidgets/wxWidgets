@@ -42,6 +42,7 @@
 #include "wx/window.h"
 #include "wx/utils.h"
 #include "wx/list.h"
+#include "wx/debug.h"
 #include "wx/prop.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyValue, wxObject)
@@ -548,6 +549,8 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     }
     case wxPropertyValueStringPtr:
     {
+      wxFAIL_MSG( "wxPropertyValue::WritePropertyType( wxPropertyValueStringPtr ) not implemented" );
+      /*
       int i;
       int len = strlen(*(m_value.stringPtr));
       for (i = 0; i < len; i++)
@@ -555,6 +558,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
         char ch = *(m_value.stringPtr)[i];
 
       }
+      */
       break;
     }
     case wxPropertyValueList:
@@ -828,7 +832,7 @@ wxProperty::wxProperty(wxString nm, wxString role, wxPropertyValidator *ed):m_na
 }
 
 wxProperty::wxProperty(wxString nm, const wxPropertyValue& val, wxString role, wxPropertyValidator *ed):
-  m_name(nm), m_value(val), m_propertyRole(role)
+  m_value(val), m_name(nm), m_propertyRole(role)
 {
   m_propertyValidator = ed;
   m_propertyWindow = NULL;
@@ -1032,7 +1036,7 @@ void wxPropertyValidatorRegistry::ClearRegistry(void)
 {
   BeginFind();
   wxNode *node;
-  while (node = Next())
+  while ((node = Next()))
   {
     delete (wxPropertyValidator *)node->Data();
   }

@@ -36,7 +36,7 @@ while test $# -gt 0; do
       echo $exec_prefix
       ;;
     --version)
-      echo 1.99
+      echo 2.01
       ;;
     --cflags)
       if test @includedir@ != /usr/include ; then
@@ -47,7 +47,7 @@ while test $# -gt 0; do
 
       ;;
     --libs)
-      echo -L@libdir@ -lwx_gtk_1_0 @DL_LIBRARY@ @GUI_TK_LIBRARY@ @THREADS_LINK@ @EXTRA_LINK@
+      echo -L@libdir@ -lwx_gtk2 @DL_LIBRARY@ @GUI_TK_LIBRARY@ @THREADS_LINK@ @EXTRA_LINK@
       ;;
     *)
       echo "${usage}" 1>&2

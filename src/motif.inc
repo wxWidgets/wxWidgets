@@ -2,7 +2,7 @@
 NONE =
 
 # define library name
-LIB_TARGET=wx_motif
+LIB_TARGET=wx_motif2
 LIB_MAJOR=0
 LIB_MINOR=1
 
@@ -141,6 +141,9 @@ LIB_CPP_SRC=\
  generic/panelg.cpp \
  generic/printps.cpp \
  generic/prntdlgg.cpp \
+ generic/prop.cpp \
+ generic/propform.cpp \
+ generic/proplist.cpp \
  generic/sashwin.cpp \
  generic/scrolwin.cpp \
  generic/splitter.cpp \

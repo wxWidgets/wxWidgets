@@ -2,9 +2,9 @@
 NONE =
 
 # define library name
-LIB_TARGET=wx_gtk_1_0
-LIB_MAJOR=1
-LIB_MINOR=99
+LIB_TARGET=wx_gtk2
+LIB_MAJOR=0
+LIB_MINOR=1
 
 # define library sources
 
@@ -133,6 +133,9 @@ LIB_CPP_SRC=\
  generic/panelg.cpp \
  generic/printps.cpp \
  generic/prntdlgg.cpp \
+ generic/prop.cpp \
+ generic/propform.cpp \
+ generic/proplist.cpp \
  generic/sashwin.cpp \
  generic/scrolwin.cpp \
  generic/splitter.cpp \

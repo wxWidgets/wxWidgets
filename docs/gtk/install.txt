@@ -4,10 +4,9 @@
 If you compile wxWindows on Unix for the first time and don't 
 like to read install instructions just do (in the base dir):
 
+./configure
 make
-su (PASSWORD)
 make install
-ldconfig
 
 Now create your super-application myfoo.app and compile anywhere 
 with
@@ -47,7 +46,7 @@ You can get the newest version of the GTK+ from the GTK homepage
 at
   http://www.gtk.org
   
-We also mirror GTK+ 1.0.6 at our ftp site. You'll find information
+We also mirror GTK+ 1.0.6 at my ftp site. You'll find information
 about downloading at my homepage.
   
 * Additional libraries
@@ -75,11 +74,12 @@ You can enable thread support by running
 ./configure "--with-threads"
 make clean
 make
+make install
   
 NB: I included thread support in wxWindows/Gtk, as this 
 problem will disappear in the near future when all major 
 Linux Variants have moved to glibc 2. Also, the Linux
-Base Standard will include glibc 2.
+Base Standard will include glibc 2 and Posic threads.
 
 * Create your configuration
 -----------------------------
@@ -137,14 +137,12 @@ toolkit. You must do this by running configure with either of:
 
         --with-gtk               Use the GIMP ToolKit (GTK)
 	
-	--with-qt                Use Qt from TrollTec
-	
 	--with-motif             Use either Motif or Lesstif
 	                         Configure will look for both. 
 
 The following options handle the kind of library you want to build.
 
-	--without-threads       Compile without thread support.
+	--with-threads          Compile without thread support.
 
 	--without-shared        Do not create shared libraries.
 
@@ -154,7 +152,6 @@ The following options handle the kind of library you want to build.
 				files. Currently broken, I think.
 				
 	--with-mem_tracing      Add built-in memory tracing. 
-	                        This doesn't work well with gcc.
 				
 	--with-dmalloc          Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
@@ -180,14 +177,14 @@ options (in contrast to what configure tells you).
 The following must be done in the base directory (e.g. ~/wxGTK
 or ~/wxWin or whatever)
 
-Now the makefiles are created and you can compile everything 
-by typing:
+Now the makefiles are created (by configure) and you can compile 
+the library by typing:
 
 	make
 
-make yourself some coffee, as it will try to compile ALL the 
-files in this distribution. During compilation, you'll get
-a few warning messages.
+make yourself some coffee, as it will take some time. On an old
+386SX possibly week. During compilation, you'll get a few 
+warning messages.
 
 if you want to be more selective:
 
@@ -215,6 +212,7 @@ The "global" binaries and libraries will be placed in:
 	(basedir of that application)/$(OSTYPE).
 
 This is also the place where all the object-files will go.
+(Currently there arent any global binaries).
 
 If you want to conserve disk space by removing unnecessary
 object-files:
