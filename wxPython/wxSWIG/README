@@ -1,0 +1,381 @@
+SWIG (Simplified Wrapper and Interface Generator)
+Version 1.1 (Maintenance)
+
+Copyright (C) 1995-1999
+University of Utah and the Regents of the University of California
+
+August 8, 1999
+
+1. Introduction
+---------------
+SWIG is a compiler that attempts to make it easy to integrate C, C++,
+or Objective-C code with scripting languages including Perl, Tcl, and
+Python.  In a nutshell, you give it a bunch of ANSI C/C++ declarations
+and it generates an interface between C and your favorite scripting
+language.  However, this is only scratching the surface of what SWIG
+can do--some of its more advanced features include automatic
+documentation generation, module and library management, extensive
+customization options, and more.
+
+SWIG is entirely the product of users who have used the system and
+suggested new ideas.  There are far too many people to thank
+individually, but without this support, SWIG would be not be nearly as
+powerful or fun to use as it is now. Many thanks!
+
+2.   Currently Supported Languages
+----------------------------------
+
+To use SWIG, you will need at least one of the following scripting
+languages :
+
+        Tcl7.3, Tk3.6  (and all newer versions)
+	Tcl8.0, Tk8.0  (somewhat experimental)
+        Python1.3 (or newer)
+        Perl5.003 (or newer)
+	Perl4
+	FSF Guile 1.0 (experimental)
+
+If you don't have any of these, SWIG will still compile, but it won't
+be particularly useful.  Note : it is not necessary to have *all* of
+these languages installed to use SWIG--only the scripting languages you
+want to use.
+
+3.   Installation (Unix)
+------------------------
+
+To compile and use SWIG, you will need the following on your machine:
+
+        A C++ compiler  (ie. g++)
+        An ANSI C compiler (ie. gcc)
+        yacc or bison (only needed if you are going to rebuild the SWIG parser)
+
+To compile and install SWIG, type the following :
+
+        ./configure
+        make
+	make runtime      (optional. see below)
+        make install
+
+The configuration script will attempt to locate various packages on
+your machine, including Tcl, Perl5, and Python.   Don't panic if
+you get 'not found' messages--SWIG does not need these packages
+to compile or run.   The configure script is actually looking for 
+these packages so that you can try out the SWIG examples contained
+in the 'Examples' directory without having to hack Makefiles.
+See the Examples section below for more details. 
+
+The 'make runtime' option is an optional step that can be used to
+build the SWIG runtime libraries.  These libraries are only used with
+larger packages and are not necessary for learning SWIG or trying
+the examples (please refer to the "Advanced topics" section of the
+SWIG Users manual for more details about this).
+
+Typing 'make test' will run a rather extensive series of tests
+and can be run before running 'make install' (if you are paranoid).
+
+There are a number of configuration options that you can give to
+'configure' :
+
+        --prefix=/usr/local     
+
+          Set the installation prefix.  SWIG installs into
+          /usr/local by default.
+
+        --exec_prefix=/usr/local
+
+          Set the prefix used to install platform specific
+          files (binaries and libraries).  Use this if the
+          location is different than that given with --prefix.
+
+        --with-lang={TCL,TCL8,PYTHON,PERL5,PERL4,GUILE}
+
+          This lets you choose the default SWIG target language.
+          By default, SWIG chooses TCL, but you can select
+          another as shown :
+
+                ./configure --with-lang=PYTHON
+
+        --with-doc={ASCII,LATEX,HTML,NODOC}
+
+          This lets you choose the default SWIG documentation
+          method.  By default, SWIG chooses ASCII.
+
+
+4.   Site specific installation
+-------------------------------
+
+While not required for compiling SWIG, the configuration script looks
+for various packages in order to create a makefile for compiling the
+examples.  This makefile is also installed with the SWIG package.
+The following configuration options can be used to set the location
+of various packages.
+
+--with-tcl=pathname          - Set root directory of Tcl installation.
+                               SWIG will use $pathname/include and
+                               $pathname/lib.
+
+--with-tclincl=pathname      - Set exact location of Tcl include files
+
+--with-tcllib=pathname       - Set exact location of Tcl library files
+
+--with-itcl=pathname         - Same as above but for [incr Tcl]
+
+--with-itclincl=pathname     - Location of [incr Tcl] include files
+
+--with-itcllib=pathname      - Location of [incr Tcl] libraries
+
+--with-py=pathname           - Set package location of Python. This is usually
+                               something like /usr/local.  configure will attempt
+                               to locate the appropriate include and library files.
+
+--with-pyincl=pathname       - Set location of Python include files 
+                               (for example, /usr/local/include)
+
+--with-pylib=pathname        - Set location of Python library files
+                               (for example, /usr/local/lib)
+
+--with-perl5=executable      - Specify your perl5 executable.  SWIG will figure
+                               out where files are by running this version of 
+                               Perl and grabbing its configuration data.
+
+
+Other options :
+
+--without-yacc               - Try to compile SWIG using a pregenerated YACC
+                               file generated by Berkeley YACC (byacc). Only recommended
+                               if you get compiler errors when trying to compile parser.y
+                               or parser.cxx.
+
+Changing the C++ compiler:
+
+By default, SWIG will look for g++.  You can change the C++ compile as follows :
+
+        env CXX=CC configure --prefix=/usr/local ... etc...
+
+   or
+
+        setenv CXX=CC
+        ./configure ... etc ...
+
+SWIG has been successfully compiled and tested under g++, the SGI C++
+compiler, and the SunPro C++ compiler.  
+
+5.  Testing
+-----------
+The SWIG parser and language modules can be tested by typing 'make test'.
+Be forewarned, this runs a large collection of tests on all of SWIG's
+language modules and documentation methods.  The tests may take 5-10
+minutes to run, but a report of errors will be written to 'test.log'.
+If this exists, it will contain error messages for failed tests. If
+the file is missing, it means all tests were considered successful.
+
+The testing process requires approximately 30-40 Mbytes of disk space.
+After testing, you may wish to type 'make testclean' which will
+return the testing directory to its original state.
+
+Note : The testing procedure requires both 'sh' and 'perl'.  If you
+don't have these installed, some of the tests won't work.
+
+6. Installation for Windows 95 and NT
+-------------------------------------
+
+The Win directory contains makefiles for Microsoft Visual C++ 4.x/5.x and
+Borland C++.  See the README.txt file in the Win directory for specific
+build instructions.  Many thanks to Kevin Butler (butler@cs.byu.edu)
+and Pier Giorgio Esposito for supplying these Makefiles.
+
+7. Installation for Macintosh
+-----------------------------
+
+A Macintosh version of SWIG is available separately as a PowerPC
+executable.  A source version is also available, but is somewhat
+complicated to build due to dependencies on other packages 
+including Tcl 8.0.   Please refer to the SWIG homepage for more
+information.
+
+8.  Examples
+------------
+
+The 'Examples' directory contains examples for all of the supported
+scripting languages. All of the examples rely on the file
+'Makefile.template' located in the top-level directory.  This makefile
+is created by 'configure', but the configuration process is not
+foolproof.  To check this Makefile type
+
+      make testbuild
+
+This will attempt to build various kinds of extensions and report its
+success or failure.  If this fails, you may need to edit the file
+'Makefile.template' by hand.  This usually isn't difficult--just
+follow the instructions contained within the file.  Once the 'make
+testbuild' works for the language you are interested in using, you
+should be able to build the examples.
+
+The examples will not compile properly if you have not installed SWIG.
+If you would like to try the examples before installation, set the
+SWIG_LIB environment variable as follows :
+
+      setenv SWIG_LIB ${pathname}/SWIG1.1/swig_lib
+
+Where ${pathname} the location of the SWIG source.
+
+*** NOTE *** If you are replacing an older version of SWIG with a new
+one, the examples may not compile correctly unless you set the
+above environment variable or do a 'make install' first.
+
+9.   Resources
+--------------
+
+Up-to-date SWIG related information can be found at
+
+        http://www.swig.org
+
+SWIG source code and software updates are also available via anonymous
+ftp at
+
+        ftp://ftp.swig.org
+
+
+You can join the SWIG mailing list by going to the following location:
+
+        http://www.cs.uchicago.edu/mailman/listinfo/swig 
+
+The SWIG mailing list is a forum for discussing various applications
+of SWIG, installation problems, ideas for system improvements and
+future work.
+
+*** NEWSFLASH ***  SWIG development has moved to the Univerity of
+Chicago.  Developer information can be found at 
+
+        http://swig.cs.uchicago.edu
+
+10.  Installation Problems
+-------------------------
+
+As far as I know the installation works on the following platforms :
+
+        - SunOS 4.1.3
+        - Solaris
+        - Irix 5.3
+        - Irix 6.2
+        - HPUX
+        - AIX 4.1
+        - Linux
+        - MkLinux
+        - MachTen
+        - UNICOS
+        - Windows 95
+        - Windows NT 4.0
+        - MacOS System 7.5.3
+
+SWIG development takes place primarily on Linux and Solaris 2.6.  I've
+tested most of the examples on these platforms.  I have also tested
+SWIG under Win95 and MacOS, but that is still somewhat experimental.
+
+If you've tried everything and can't get SWIG to compile, please send
+me e-mail at beazley@cs.uchicago.edu, and we'll try to figure it out.
+I try to answer all e-mail that I receive.  However, occasionally I
+receive messages with bad return addresses and can't respond.  If you
+don't hear back within a few days, try sending a message to
+'swig@cs.uchicago.edu'.
+
+11.  Documentation
+-----------------
+
+Over 300 pages of documentation describing almost every aspect of SWIG
+is available in the Doc directory.  Don't let the amount of
+documentation scare you--SWIG is easy enough to use that you can
+probably start using it by only looking at a few simple examples.
+However, at some point you will probably want to know more so I hope
+that the manual will come in useful.  Besides, I hate black boxes...
+
+The documentation is distributed in Adobe PDF format and can be viewed
+using the Adobe Acrobat Reader.  Acrobat is available for virtually
+all machines and can be freely obtained from Adobe at www.adobe.com.
+Postscript and HTML versions of the manual are also available from the
+SWIG FTP site.
+
+12.  Incompatibilities
+---------------------
+
+This release should be mostly compatible with SWIG 1.0
+(Final). However, the SWIG documentation system has been completely
+rewritten and the C API has been changed greatly.  It is unlikely that
+any custom SWIG language modules written in C++ for 1.0 will work with
+1.1.  While porting to 1.1 is not that difficult, there are a number
+of important changes.  See the file 'Doc/Porting' for a list of
+changes to the C++ API and how to convert an older SWIG module to work
+with 1.1.
+
+13.  Bug Reports
+----------------
+
+Bug reports should be submitted to the online bug-tracking system
+which is available at :
+
+   http://swig.cs.uchicago.edu/cgi-bin/swig
+
+Before submitting a bug, please check this site to see if it has
+already been reported.  If not, provide as much information as
+possible including the SWIG version number, operating system, and
+compiler being used.  Note : I tend to fix bugs in batches and may
+only respond to a bug report when it has actually been fixed---posting
+to the mailing list is often a better way to get an immediate response
+to a problem.
+
+14.  Legal Stuff
+---------------
+SWIG is completely free and non-proprietary.  You can do whatever you
+want with it (including distribution), provided that you follow these
+rules, 1) Keep all of the copyright notices intact, 2) don't claim
+that you wrote it, and 3) Don't sue anyone if it breaks.  Otherwise,
+have fun.
+
+15.  Disclaimer
+----------------
+
+While I believe that SWIG is reasonably stable, I'm always tinkering
+with it and trying to make it better.  There may be a few bugs hiding
+around so if you experience any problems let me know.  If you think
+that SWIG is missing some capability that would be useful to have
+have, post a message on the SWIG mailing list.  Most of the previous
+suggestions have already been incorporated into this release.
+
+16.  Acknowledgments
+---------------------
+
+SWIG would not be possible without the contributions of people who
+tried out the beta versions and offered feedback and bug reports.
+While there are far too many people to list at point, I'd like to
+especially acknowledge the following individuals and organizations
+for supporting SWIG and making major contributions :
+
+David Ascher, Erik Bierwagen, Kurtis Bleeker, John Buckman, Kevin
+Butler, Pier Giorgio Esposito, David Fletcher, Mark Hammond, Mark
+Harrison, Brad Holian, Gary Holt, Chris Johnson, Peter Lomdahl, Mark
+Lutz, Chris Myers, Paul Saxe, John Schmidt, Tom Schwaller, Peter-Pike
+Sloan, Patrick Tullmann, Larry Virden, Tser-Yuan Yang, Shujia Zhou.
+
+and 
+
+Los Alamos National Laboratory
+Lawrence Livermore National Laboratory
+Cornell Theory Center
+University of Utah
+The Scientific Computing and Imaging Group (University of Utah)
+
+(My apologies to anyone I missed...)
+
+If you find SWIG to be useful, I'd like to know about it.
+
+Enjoy!
+
+Dave Beazley
+Department of Computer Science
+University of Chicago
+Chicago, IL  60637
+beazley@cs.uchicago.edu
+
+
+
+

@@ -1,0 +1,105 @@
+#######################################################################
+# $Header$
+# Simplified Wrapper and Interface Generator (SWIG)
+#
+# Makefile for version 1.0 Final
+# Dave Beazley
+# August 1, 1996
+#
+# This makefile is now mostly constructed by ./configure.
+#
+# $Log$
+# Revision 1.1  2002/04/29 19:56:47  RD
+# Since I have made several changes to SWIG over the years to accomodate
+# special cases and other things in wxPython, and since I plan on making
+# several more, I've decided to put the SWIG sources in wxPython's CVS
+# instead of relying on maintaining patches.  This effectivly becomes a
+# fork of an obsolete version of SWIG, :-( but since SWIG 1.3 still
+# doesn't have some things I rely on in 1.1, not to mention that my
+# custom patches would all have to be redone, I felt that this is the
+# easier road to take.
+#
+# Revision 1.2  1999/08/17 03:31:30  beazley
+# Minor cleanup. Removed Perl4
+#
+# Revision 1.1.1.1  1999/02/28 02:00:50  beazley
+# Swig1.1
+#
+# Revision 1.1  1996/08/12 01:55:02  dmb
+# Initial revision
+#
+#######################################################################
+
+#.KEEP_STATE:
+
+
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+# Set your C++ compiler here.   g++ works on most machines,
+# but you might have to change it depending on your installation.
+#
+CC      = @CXX@
+
+#
+# Set the prefix below to indicate where you want SWIG to install its
+# files.   Normally this is /usr/local
+#
+
+prefix     = @prefix@
+
+# Location of the SWIG library.  Is normally put in /usr/local/lib/swig_lib
+# The SWIG library contains configuration files and library modules
+# so you should install it someplace where it can be easily accessed.
+
+SWIG_LIB = $(prefix)/lib/swig_lib
+
+########################################################################
+# Normally, you shouldn't have to change anything below this point     #
+########################################################################
+
+WRAPOBJS = swigmain.o tcl.o tcl8.o perl5.o python.o pycpp.o guile.o debug.o
+WRAPSRCS = swigmain.cxx tcl.cxx tcl8.cxx perl5.cxx python.cxx pycpp.cxx guile.cxx debug.cxx
+WRAPHEADERS = ../Include/swig.h swigtcl.h perl5.h python.h guile.h debug.h wrap.h
+
+TARGET  = ../wxswig
+##-DSWIG_LIB='"$(SWIG_LIB)"'
+CFLAGS  = @CFLAGS@ -DSWIG_CC='"$(CC)"' @DEFS@
+INCLUDE = -I../Include -I../SWIG
+LIBS    = -L.. -lswig
+SHELL  = /bin/sh
+
+#
+#
+#
+# Rules for creation of a .o file from .cxx
+.SUFFIXES: .cxx
+.cxx.o:
+	$(CC) $(INCLUDE) $(CFLAGS) -c -o $*.o $<
+
+all:    $(TARGET)
+
+$(TARGET): $(WRAPOBJS) $(WRAPHEADERS) ../libswig.a
+	$(CC) $(INCLUDE) $(WRAPOBJS) $(LIBS) -o $(TARGET)
+
+swigmain.o: swigmain.cxx
+tcl.o: tcl.cxx
+perl5.o: perl5.cxx
+python.o: python.cxx
+pycpp.o: pycpp.cxx
+guile.o: guile.cxx
+
+Makefile:	$(srcdir)/Makefile.in ../config.status
+		(cd ..; CONFIG_FILES=Modules/Makefile $(SHELL) config.status)
+
+.PRECIOUS:	Makefile
+
+clean::
+	rm -f *.o $(TARGET)
+
+nuke::
+	rm -f Makefile *~ #* core a.out
+
+wc::
+	wc $(WRAPSRCS) *.h
+

@@ -1,0 +1,99 @@
+# Modified for use with Microsoft Developer Studio V6.0
+# Bob Techentin, February 10, 1999
+#
+# Makefile for producing SWIG runtime libraries.
+#
+# The SWIG runtime library consists of the pointer-type checker
+# and other support functions.  Multi-file SWIG modules
+# generally link with these libraries.
+#
+# The Windows version of the runtime libraries are static.
+# Note the "-" command prefix ignores errors during compiles
+# and links, because you might not have all languages.
+
+!include <..\make_win.in>
+
+SWIG_RUNTIME = $(prefix)/lib
+dSWIG_RUNTIME = $(dprefix)\lib
+
+AR = lib.exe
+
+
+all:	tcl_lib tcl8_lib py_lib perl_lib
+
+
+install:
+	@echo "Installing runtime libraries"
+	@if not exist $(dSWIG_RUNTIME) mkdir $(dSWIG_RUNTIME)
+	if exist swigtcl.lib copy swigtcl.lib $(dSWIG_RUNTIME)
+	if exist swigtcl8.lib copy swigtcl8.lib $(dSWIG_RUNTIME)
+	if exist swigpy.lib copy swigpy.lib $(dSWIG_RUNTIME)
+	if exist swigpl.lib copy swigpl.lib $(dSWIG_RUNTIME)
+
+install95:
+	@echo "Installing runtime libraries"
+	@if not exist $(dSWIG_RUNTIME) mkdir $(dSWIG_RUNTIME)
+	if exist swigtcl.lib copy swigtcl.lib $(dSWIG_RUNTIME) /Y
+	if exist swigtcl8.lib copy swigtcl8.lib $(dSWIG_RUNTIME) /Y
+	if exist swigpy.lib copy swigpy.lib $(dSWIG_RUNTIME) /Y
+	if exist swigpl.lib copy swigpl.lib $(dSWIG_RUNTIME) /Y
+
+clean::
+	del /f *.obj
+	del /f *.lib
+	del /f *.c
+	del /f *.swg
+	del /f core
+
+# ----------------------------------------------------------------------
+# Tcl runtime library
+# ----------------------------------------------------------------------
+
+TCL_INCLUDE = -Ic:\apps\TclPro1.1\include
+
+# Tcl 7.x library
+
+tcl_lib:
+	-..\swig.exe -tcl -co -o libtcl.c -I..\swig_lib swigtcl.swg
+	-$(CC) -c -DSWIG_GLOBAL libtcl.c
+	-$(AR) /out:swigtcl.lib libtcl.obj
+
+tcl8_lib:
+	-..\swig.exe -tcl -co -o libtcl8.c -I..\swig_lib swigtcl8.swg
+	-$(CC) -c -DSWIG_GLOBAL $(TCL_INCLUDE) libtcl8.c
+	-$(AR) /out:swigtcl8.lib libtcl8.obj
+
+# ----------------------------------------------------------------------
+# Python run-time library
+# ----------------------------------------------------------------------
+
+PYTHON_INCLUDE = -Ic:\apps\python-1.5\Include -Ic:\apps\python-1.5 -Ic:\apps\python-1.5\PC
+
+# Python library
+
+py_lib:
+	-..\swig.exe -python -co -o libpy.c -I../swig_lib python.swg
+	-$(CC) -c -DSWIG_GLOBAL $(PYTHON_INCLUDE) libpy.c
+	-$(AR) /out:swigpy.lib libpy.obj
+
+# ----------------------------------------------------------------------
+# Perl run-time library
+# ----------------------------------------------------------------------
+
+# These are for Perl5.004
+PERL_INCLUDE = -Ic:\apps\perl\lib\CORE
+PERLFLAGS    = /DWIN32 /DMSWIN32 /DWIN32IO_IS_STDIO
+
+# Uncomment the following if you are using ActiveWare Perl for Win32
+#PERL_INCLUDE =-Id:\perl315 -Id:\perl315\inc
+#PERLFLAGS    = /DWIN32 /DMSWIN32 /DPERL_OBJECT
+
+# Perl library
+
+perl_lib:
+	-del /f libperl.c libperl.swg
+	-..\swig.exe -perl5 -co -o libperl.swg -I..\swig_lib perl5.swg
+	-copy perlrun.h+libperl.swg libperl.c
+	-$(CC) -c -Dexplicit= -Dbool=char -DSWIG_GLOBAL $(PERFLAGS) $(PERL_INCLUDE) libperl.c
+	-$(AR) /out:swigpl.lib libperl.obj
+

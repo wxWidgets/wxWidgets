@@ -1,0 +1,19 @@
+
+This directory contains a copy of SWIG 1.1p5-883 that has been heavily
+patched to do some things specific for wxPython.  You do not need to
+build this version of SWIG if you do not plan on making any changes to
+wxPython's *.i files.  However, if you set USE_SWIG=1 in setup.py then
+you *will* need to build this version of SWIG.  To do so, just run:
+
+    Unix:
+	  configure
+	  make
+
+    Win32:
+	  nmake -f makefile.vc
+
+The executable created *does not* need to be installed as wxPython's
+setup.py expects to find it here in this directory.  Also, the name of
+the executable has been renamed to wxswig to simplify having both
+versions of SWIG on the system.
+
