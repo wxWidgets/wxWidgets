@@ -2104,11 +2104,11 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
     {
         // We must finish regardless of success, otherwise we'll get focus problems
         Finish();
-    
+
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
     }
-        
+
     event.Skip();
 }
 
@@ -2846,11 +2846,11 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
     // let owner know that the edit was cancelled
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
-    
+
     // These only exist for wxTreeCtrl, which should probably be changed
     // le.m_editCancelled = TRUE;
     // le.m_label = wxEmptyString;
-    
+
     le.SetEventObject( GetParent() );
     le.m_itemIndex = itemEdit;
 
@@ -4549,11 +4549,24 @@ wxGenericListCtrl::~wxGenericListCtrl()
 
 void wxGenericListCtrl::CalculateAndSetHeaderHeight()
 {
-    // we use the letter "H" for calculating the needed space, basing on the current font
-    int w, h;
-    m_headerWin->GetTextExtent(wxT("H"), &w, &h);
-    m_headerHeight = h + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
-    m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
+    if ( m_headerWin )
+    {
+        // we use 'g' to get the descent, too
+        int w, h, d;
+        m_headerWin->GetTextExtent(wxT("Hg"), &w, &h, &d);
+        h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
+
+        // only update if there is not enough space
+        if ( h > m_headerHeight )
+        {
+            m_headerHeight = h;
+
+            m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
+
+            if ( HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER) )
+                ResizeReportView(TRUE);
+        }
+    }
 }
 
 void wxGenericListCtrl::CreateHeaderWindow()
@@ -5148,7 +5161,7 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
 void wxGenericListCtrl::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
-    
+
     // do it only if needed
     if ( !m_mainWin->m_dirty )
         return;
