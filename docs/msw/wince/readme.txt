@@ -86,6 +86,10 @@ To compile using the emulator on eVC++4:
 - Open samples/minimal/minimal.vcw with eVC++, select the
   WIN32 (WCE emulator) Debug configuration, and compile.
 
+Note: compiles for the different SDKs (Smartphone, PPC, .Net)
+use the same directory and library names, so for the moment
+these builds cannot co-exist simultaneously.
+
 Status
 ======
 
