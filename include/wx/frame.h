@@ -179,7 +179,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_2
     // call this to simulate a menu command
-    bool Command(int winid) { return ProcessCommand(winid); }
+    wxDEPRECATED( bool Command(int winid) );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:

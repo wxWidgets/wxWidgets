@@ -392,7 +392,7 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
     wxString str = GetParam(par);
 
-    if (str.IsEmpty()) return false;
+    if (str.empty()) return false;
     if (str.GetChar(0) == wxT('#'))
     {
         unsigned long tmp;
@@ -494,5 +494,14 @@ wxHtmlTag *wxHtmlTag::GetNextTag() const
         cur = cur->m_Parent;
     return cur->m_Next;
 }
+
+#if WXWIN_COMPATIBILITY_2_2
+
+bool wxHtmlTag::IsEnding() const
+{
+    return false;
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
 
 #endif

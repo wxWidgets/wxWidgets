@@ -201,21 +201,21 @@ public:
     // usage and loading time.
     //
     void SetItemHasChildren( const wxTreeItemId& rItem
-                            ,bool                bHas = TRUE
+                            ,bool                bHas = true
                            );
 
     //
     // The item will be shown in bold
     //
     void SetItemBold( const wxTreeItemId& rItem
-                     ,bool                bBold = TRUE
+                     ,bool                bBold = true
                     );
 
     //
     // The item will be shown with a drop highlight
     //
     void SetItemDropHighlight( const wxTreeItemId& rItem
-                              ,bool                bHighlight = TRUE
+                              ,bool                bHighlight = true
                              );
 
     //
@@ -254,11 +254,11 @@ public:
     //
 
     //
-    // If 'recursively' is FALSE, only immediate children count, otherwise
+    // If 'bRecursively' is false, only immediate children count, otherwise
     // the returned number is the number of all items in this branch
     //
     size_t GetChildrenCount( const wxTreeItemId& rItem
-                            ,bool                bRecursively = TRUE
+                            ,bool                bRecursively = true
                            ) const;
 
     //
@@ -287,12 +287,11 @@ public:
     wxTreeItemId GetItemParent(const wxTreeItemId& rItem) const;
 
 #if WXWIN_COMPATIBILITY_2_2
-    // deprecated:  Use GetItemParent instead.
-    wxTreeItemId GetParent(const wxTreeItemId& rItem) const
-    	{ return GetItemParent(rItem); }
+        // deprecated:  Use GetItemParent instead.
+    wxDEPRECATED( wxTreeItemId GetParent(const wxTreeItemId& item) const);
 
-    	// Expose the base class method hidden by the one above.
-    wxWindow* GetParent(void) const { return wxControl::GetParent(); }
+        // Expose the base class method hidden by the one above. Not deprecatable.
+    wxWindow *GetParent() const { return wxControl::GetParent(); }
 #endif  // WXWIN_COMPATIBILITY_2_2
 
         // for this enumeration function you must pass in a "cookie" parameter
@@ -474,7 +473,7 @@ public:
     // End editing and accept or discard the changes to item label
     //
     void EndEditLabel( const wxTreeItemId& rItem
-                      ,bool                bDiscardChanges = FALSE
+                      ,bool                bDiscardChanges = false
                      );
 
     //
@@ -523,7 +522,7 @@ public:
     //
     bool GetBoundingRect( const wxTreeItemId& rItem
                          ,wxRect&             rRect
-                         ,bool                bTextOnly = FALSE
+                         ,bool                bTextOnly = false
                         ) const;
 
     //
@@ -618,7 +617,7 @@ public:
     //
     bool IsItemChecked(const wxTreeItemId& rItem) const;
     void SetItemCheck( const wxTreeItemId& rItem
-                      ,bool                bCheck = TRUE
+                      ,bool                bCheck = true
                      );
 
 protected:
@@ -692,7 +691,7 @@ private:
     wxMapTreeAttr                   m_vAttrs;
 
     //
-    // TRUE if the hash above is not empty
+    // true if the hash above is not empty
     //
     bool                            m_bHasAnyAttr;
 

@@ -760,7 +760,7 @@ void wxGenericTreeCtrl::Init()
 
     m_lastOnSame = false;
 
-#ifdef __WXMAC_CARBON__ 
+#ifdef __WXMAC_CARBON__
     m_normalFont.MacCreateThemeFont( kThemeViewsFont ) ;
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -1586,7 +1586,7 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
 
     if (item == m_select_me)
         m_select_me = NULL;
-    
+
     delete item;
 }
 
@@ -3560,5 +3560,14 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attr;
 #endif
 }
+
+#if WXWIN_COMPATIBILITY_2_2
+
+wxTreeItemId wxGenericTreeCtrl::GetParent(const wxTreeItemId& item) const
+{
+    return GetItemParent( item );
+}
+
+#endif  // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_TREECTRL

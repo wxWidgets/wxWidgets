@@ -3069,5 +3069,14 @@ int wxTreeCtrl::GetState(const wxTreeItemId& node)
     return STATEIMAGEMASKTOINDEX(tvi.state);
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
+wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
+{
+    return GetItemParent( item );
+}
+
+#endif  // WXWIN_COMPATIBILITY_2_2
+
 #endif // wxUSE_TREECTRL
 

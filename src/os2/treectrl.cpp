@@ -160,16 +160,16 @@ public:
 
     //
     // Do traverse the tree: visit all items (recursively by default) under the
-    // given one; return TRUE if all items were traversed or FALSE if the
-    // traversal was aborted because OnVisit returned FALSE
+    // given one; return true if all items were traversed or false if the
+    // traversal was aborted because OnVisit returned false
     //
     bool DoTraverse( const wxTreeItemId& rRoot
-                    ,bool                bRecursively = TRUE
+                    ,bool                bRecursively = true
                    );
 
     //
     // Override this function to do whatever is needed for each item, return
-    // FALSE to stop traversing
+    // false to stop traversing
     //
     virtual bool OnVisit(const wxTreeItemId& rItem) = 0;
 
@@ -208,7 +208,7 @@ public:
         //
         if ((GetTree()->GetRootItem() == rItem) && (GetTree()->GetWindowStyle() & wxTR_HIDE_ROOT))
         {
-            return TRUE;
+            return true;
         }
         PMYRECORD                   pRecord = FindOS2TreeRecordByID( GetTree()->GetHWND()
                                                                     ,rItem.m_pItem
@@ -217,7 +217,7 @@ public:
         {
             m_aSelections.Add(rItem);
         }
-        return TRUE;
+        return true;
     }
 
     size_t GetCount(void) const { return m_aSelections.GetCount(); }
@@ -245,7 +245,7 @@ public:
     virtual bool OnVisit(const wxTreeItemId& WXUNUSED(rItem))
     {
         m_nCount++;
-        return TRUE;
+        return true;
     }
 
     size_t GetCount(void) const { return m_nCount; }
@@ -306,7 +306,7 @@ bool wxTreeTraversal::DoTraverse (
 )
 {
     if (!OnVisit(rRoot))
-        return FALSE;
+        return false;
 
     return Traverse( rRoot
                     ,bRecursively
@@ -327,15 +327,15 @@ bool wxTreeTraversal::Traverse (
         //
         // Depth first traversal
         //
-        if (bRecursively && !Traverse(vChild, TRUE))
-            return FALSE;
+        if (bRecursively && !Traverse(vChild, true))
+            return false;
         if (!OnVisit(vChild))
-            return FALSE;
+            return false;
         vChild = m_pTree->GetNextChild( rRoot
                                        ,lCookie
                                       );
     }
-    return TRUE;
+    return true;
 } // end of wxTreeTraversal::Traverse
 
 // ----------------------------------------------------------------------------
@@ -382,7 +382,7 @@ bool wxTreeCtrl::Create (
                        ,rValidator
                        ,rsName
                       ))
-        return FALSE;
+        return false;
 
     DWORD                           dwStyle = WS_VISIBLE | WS_TABSTOP;
 
@@ -393,7 +393,7 @@ bool wxTreeCtrl::Create (
     if (!OS2CreateControl( "CONTAINER"
                           ,dwStyle
                          ))
-        return FALSE;
+        return false;
 
     //
     // Now set the display attributes to show a TREE/ICON view of the
@@ -426,7 +426,7 @@ bool wxTreeCtrl::Create (
             ,rSize.x
             ,rSize.y
            );
-    return TRUE;
+    return true;
 } // end of wxTreeCtrl::Create
 
 wxTreeCtrl::~wxTreeCtrl ()
@@ -474,9 +474,9 @@ bool wxTreeCtrl::DoGetItem (
     if (!pRecord)
     {
         wxLogLastError(wxT("Item not obtained"));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 } // end of wxTreeCtrl::DoGetItem
 
 void wxTreeCtrl::DoSetItem (
@@ -617,13 +617,13 @@ bool wxTreeCtrl::SetBackgroundColour (
     ULONG                           ulColor = wxColourToRGB(rColour);
 
     if ( !wxWindowBase::SetBackgroundColour(rColour) )
-        return FALSE;
+        return false;
     ::WinSetPresParam( GetHWND()
                       ,PP_BACKGROUNDCOLOR
                       ,sizeof(ULONG)
                       ,&ulColor
                      );
-    return TRUE;
+    return true;
 } // end of wxTreeCtrl::SetBackgroundColour
 
 bool wxTreeCtrl::SetForegroundColour (
@@ -633,13 +633,13 @@ bool wxTreeCtrl::SetForegroundColour (
     ULONG                           ulColor = wxColourToRGB(rColour);
 
     if (!wxWindowBase::SetForegroundColour(rColour))
-        return FALSE;
+        return false;
     ::WinSetPresParam( GetHWND()
                       ,PP_FOREGROUNDCOLOR
                       ,sizeof(ULONG)
                       ,&ulColor
                      );
-    return TRUE;
+    return true;
 } // end of wxTreeCtrl::SetForegroundColour
 
 // ----------------------------------------------------------------------------
@@ -881,7 +881,7 @@ bool wxTreeCtrl::HasIndirectData (
   const wxTreeItemId&               WXUNUSED(rItem)
 ) const
 {
-    return FALSE;
+    return false;
 } // end of wxTreeCtrl::HasIndirectData
 
 // Irreleveant under OS/2 --- item either has child records or it doesn't.
@@ -1110,7 +1110,7 @@ bool wxTreeCtrl::IsBold (
   const wxTreeItemId&               rItem
 ) const
 {
-    return FALSE;
+    return false;
 } // end of wxTreeCtrl::IsBold
 
 // ----------------------------------------------------------------------------
@@ -1923,12 +1923,12 @@ bool wxTreeCtrl::GetBoundingRect (
                       ,MPFROMP(&vRectRecord)
                       ,MPFROMP(&vQuery)
                      ))
-        return FALSE;
+        return false;
     rRect.SetLeft(vRectRecord.xLeft);
     rRect.SetTop(vRectRecord.yTop);
     rRect.SetRight(vRectRecord.xRight);
     rRect.SetBottom(vRectRecord.yBottom);
-    return TRUE;
+    return true;
 } // end of wxTreeCtrl::GetBoundingRect
 
 // ----------------------------------------------------------------------------
@@ -1989,7 +1989,7 @@ bool wxTreeCtrl::OS2Command (
 
         vEvent.SetEventObject( this );
         ProcessCommand(vEvent);
-        return TRUE;
+        return true;
     }
     else if (uCmd == CN_KILLFOCUS)
     {
@@ -1998,10 +1998,10 @@ bool wxTreeCtrl::OS2Command (
                                           );
         vEvent.SetEventObject( this );
         ProcessCommand(vEvent);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 } // end of wxTreeCtrl::OS2Command
 
 //
@@ -2013,7 +2013,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
 , WXLPARAM                          lParam
 )
 {
-    bool                            bProcessed = FALSE;
+    bool                            bProcessed = false;
     MRESULT                         mRc = 0;
     wxTreeEvent                     vEvent( wxEVT_NULL
                                            ,m_windowId
@@ -2095,5 +2095,14 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                                       );
     return mRc;
 } // end of wxTreeCtrl::OS2WindowProc
+
+#if WXWIN_COMPATIBILITY_2_2
+
+wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
+{
+    return GetItemParent( item );
+}
+
+#endif  // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_TREECTRL

@@ -118,7 +118,7 @@ public:
 #if WXWIN_COMPATIBILITY_2_2
     // return true if this is ending tag (</something>) or false
     // if it isn't (<something>)
-    inline bool IsEnding() const {return false;}
+    wxDEPRECATED( bool IsEnding() const );
 #endif
 
     // return true if this there is matching ending tag
