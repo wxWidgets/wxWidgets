@@ -219,7 +219,7 @@ public:
         return wxPoint(w, h);
     }
 
-	void SetPosition( const wxPoint& pt ) { Move( pt ) ; }
+    void SetPosition( const wxPoint& pt ) { Move( pt ) ; }
 
     void GetSize( int *w, int *h ) const { DoGetSize(w, h); }
     wxSize GetSize() const
@@ -778,7 +778,7 @@ public:
     void SetToolTip( wxToolTip *tip ) { DoSetToolTip(tip); }
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
-	wxString GetToolTipText() const ;
+    wxString GetToolTipText() const ;
 #endif // wxUSE_TOOLTIPS
 
     // drag and drop
