@@ -412,8 +412,8 @@ wxListCtrl::~wxListCtrl()
 
     if ( m_textCtrl )
     {
-        m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND(0);
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
@@ -1315,8 +1315,8 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     // [re]create the text control wrapping the HWND we got
     if ( m_textCtrl )
     {
-        m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND(0);
         delete m_textCtrl;
     }
 
@@ -2163,8 +2163,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 // EDIT control will be deleted by the list control itself so
                 // prevent us from deleting it as well
-                m_textCtrl->SetHWND(0);
                 m_textCtrl->UnsubclassWin();
+                m_textCtrl->SetHWND(0);
                 delete m_textCtrl;
                 m_textCtrl = NULL;
             }
