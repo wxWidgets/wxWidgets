@@ -325,7 +325,7 @@ void wxTrap()
 {
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     DebugBreak();
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
 #if __powerc
     Debugger();
 #else
