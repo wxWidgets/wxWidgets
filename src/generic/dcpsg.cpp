@@ -1226,10 +1226,6 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCoord by = y + size - text_descent; // baseline
     fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
 
-    /* I don't know how to write char to a stream, so I use a mini string */
-    char tmpbuf[2];
-    tmpbuf[1] = 0;
-
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
@@ -1241,8 +1237,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
         {
             /* Cope with special characters */
             fprintf( m_pstream, "\\" );
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
         else if ( c >= 128 )
         {
@@ -1251,8 +1246,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
         }
         else
         {
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
     }
 
@@ -1349,10 +1343,6 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         if (buffer[i] == ',') buffer[i] = '.';
     fprintf(m_pstream, buffer);
 
-    /* I don't know how to write char to a stream, so I use a mini string */
-    char tmpbuf[2];
-    tmpbuf[1] = 0;
-
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
@@ -1363,8 +1353,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         {
             /* Cope with special characters */
             fprintf( m_pstream, "\\" );
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
         else if ( c >= 128 )
         {
@@ -1373,8 +1362,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         }
         else
         {
-            tmpbuf[0] = (char) c;
-            fprintf( m_pstream, tmpbuf );
+            fputc(c, m_pstream);
         }
     }
 
