@@ -164,7 +164,7 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1310)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 0
-#elif defined(__DMC__)
+#elif defined(__DMC__) || defined(__WATCOMC__)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 1
 #endif /* compilers not supporting iostream.h */
