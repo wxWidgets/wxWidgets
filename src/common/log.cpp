@@ -239,7 +239,14 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const char *szFormat, ...)
 wxLog::wxLog()
 {
   m_bHasMessages = FALSE;
-  m_bVerbose     = FALSE;
+
+  // enable verbose messages by default in the debug builds
+#ifdef __WXDEBUG__
+  m_bVerbose = TRUE;
+#else // release
+  m_bVerbose = FALSE;
+#endif // debug/release
+
   m_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
 }
 
