@@ -35,6 +35,9 @@
   #include "wx/defs.h"
   #include "wx/string.h"
   #include "wx/intl.h"
+#if wxUSE_THREADS
+  #include <wx/thread.h>
+#endif
 #endif
 
 #include <ctype.h>
@@ -289,26 +292,6 @@ wxString::wxString(const wchar_t *pwz)
   }
 }
 
-#endif
-
-// ---------------------------------------------------------------------------
-// multibyte<->Unicode conversion
-// ---------------------------------------------------------------------------
-
-#if wxUSE_UNICODE
-const wxCharBuffer& mb_str(wxMBConv& conv) const
-{
-  size_t nLen = conv.WC2MB((char *) NULL, m_pchData, 0);
-  wxCharBuffer buf(nLen);
-  conv.WC2MB(buf, m_pchData, nLen);
-}
-#else
-const wxWCharBuffer& wc_str(wxMBConv& conv) const
-{
-  size_t nLen = conv.MB2WC((wchar_t *) NULL, m_pchData, 0);
-  wxCharBuffer buf(nLen);
-  conv.MB2WC(buf, m_pchData, nLen);
-}
 #endif
 
 // ---------------------------------------------------------------------------
@@ -1728,8 +1711,6 @@ void wxArrayString::Remove(const wxChar *sz)
 // we can only sort one array at a time with the quick-sort based
 // implementation
 #if wxUSE_THREADS
-  #include <wx/thread.h>
-
   // need a critical section to protect access to gs_compareFunction and
   // gs_sortAscending variables
   static wxCriticalSection *gs_critsectStringSort = NULL;
@@ -1813,12 +1794,12 @@ WXDLLEXPORT_DATA(wxMBConv) wxConv_libc;
 // standard libc conversion
 // ----------------------------------------------------------------------------
 
-size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   return wxMB2WC(buf, psz, n);
 }
 
-size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   return wxWC2MB(buf, psz, n);
 }
@@ -1829,19 +1810,21 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
 class wxMBConv_UTF7
 {
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
-}
+public:
+  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
 
-WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
+// WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
+WXDLLEXPORT_DATA(wxMBConv) wxConv_UTF7;
 
 // TODO: write actual implementations of UTF-7 here
-size_t wxMBConv_UTF7::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxMBConv_UTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   return 0;
 }
 
-size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   return 0;
 }
@@ -1852,19 +1835,21 @@ size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
 class wxMBConv_UTF8
 {
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
-}
+public:
+  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
+};
 
-WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
+// WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
+WXDLLEXPORT_DATA(wxMBConv) wxConv_UTF8;
 
 // TODO: write actual implementations of UTF-8 here
-size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   return wxMB2WC(buf, psz, n);
 }
 
-size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   return wxWC2MB(buf, psz, n);
 }
@@ -1879,7 +1864,7 @@ wxCSConv::wxCSConv(const wxChar *charset)
   data = (wxChar *) NULL;
 }
 
-size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
   if (buf && !data) {
     // latin-1 (direct)
@@ -1889,7 +1874,7 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n)
   return n;
 }
 
-size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
   if (buf && !data) {
     // latin-1 (direct)
