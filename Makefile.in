@@ -3309,6 +3309,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
+	monodll_gsockmot.o \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_main.o \
@@ -3431,6 +3432,7 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
 	monodll_gsocket.o \
+	monodll_gsockpm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
 	monodll_iniconf.o \
@@ -3696,6 +3698,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
+	monolib_gsockmot.o \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_main.o \
@@ -3818,6 +3821,7 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
 	monolib_gsocket.o \
+	monolib_gsockpm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
 	monolib_iniconf.o \
@@ -4083,6 +4087,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
+	coredll_gsockmot.o \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_main.o \
@@ -4205,6 +4210,7 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
 	coredll_gsocket.o \
+	coredll_gsockpm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
 	coredll_iniconf.o \
@@ -4470,6 +4476,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
+	corelib_gsockmot.o \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_main.o \
@@ -4592,6 +4599,7 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
 	corelib_gsocket.o \
+	corelib_gsockpm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
 	corelib_iniconf.o \
@@ -4682,6 +4690,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_gdiobj.o \
+	monodll_gsockgtk.o \
 	monodll_icon.o \
 	monodll_main.o \
 	monodll_pen.o \
@@ -4764,6 +4773,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontutil.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_gsockmsw.o \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
@@ -4811,6 +4821,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_gdiobj.o \
+	monodll_gsockx11.o \
 	monodll_icon.o \
 	monodll_main.o \
 	monodll_minifram.o \
@@ -4851,6 +4862,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_gdiobj.o \
+	coredll_gsockgtk.o \
 	coredll_icon.o \
 	coredll_main.o \
 	coredll_pen.o \
@@ -4933,6 +4945,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_fontutil.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_gsockmsw.o \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
@@ -4980,6 +4993,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_gdiobj.o \
+	coredll_gsockx11.o \
 	coredll_icon.o \
 	coredll_main.o \
 	coredll_minifram.o \
@@ -5020,6 +5034,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_gdiobj.o \
+	monolib_gsockgtk.o \
 	monolib_icon.o \
 	monolib_main.o \
 	monolib_pen.o \
@@ -5102,6 +5117,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	monolib_fontutil.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_gsockmsw.o \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
@@ -5149,6 +5165,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_gdiobj.o \
+	monolib_gsockx11.o \
 	monolib_icon.o \
 	monolib_main.o \
 	monolib_minifram.o \
@@ -5189,6 +5206,7 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_gdiobj.o \
+	corelib_gsockgtk.o \
 	corelib_icon.o \
 	corelib_main.o \
 	corelib_pen.o \
@@ -5271,6 +5289,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_fontutil.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_gsockmsw.o \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
@@ -5318,6 +5337,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_gdiobj.o \
+	corelib_gsockx11.o \
 	corelib_icon.o \
 	corelib_main.o \
 	corelib_minifram.o \
@@ -5428,23 +5448,19 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS)
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = \
-@COND_PLATFORM_WIN32_1@	monodll_gsocket.o monodll_gsockmsw.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_gsocket.o monolib_gsockmsw.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= netdll_gsocket.o netdll_gsockmsw.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= netlib_gsocket.o netlib_gsockmsw.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_TOOLKIT_GTK@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
@@ -7716,6 +7732,21 @@ coredll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 coredll_gsocket.o: $(srcdir)/src/os2/gsocket.c
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
+@COND_TOOLKIT_GTK_USE_GUI_1@coredll_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
+coredll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
+coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_gsockx11.o: $(srcdir)/src/x11/gsockx11.c
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
 coredll_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -9769,6 +9800,21 @@ corelib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 corelib_gsocket.o: $(srcdir)/src/os2/gsocket.c
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@corelib_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+corelib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_gsockx11.o: $(srcdir)/src/x11/gsockx11.c
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
 corelib_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -12337,8 +12383,20 @@ monodll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 @COND_PLATFORM_WIN32_1@monodll_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
-monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+monodll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
+	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_gsockx11.o: $(srcdir)/src/x11/gsockx11.c
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 monodll_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14853,8 +14911,20 @@ monolib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 @COND_PLATFORM_WIN32_1@monolib_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
-monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+monolib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c
+	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_gsockx11.o: $(srcdir)/src/x11/gsockx11.c
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 monolib_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -16273,9 +16343,6 @@ netdll_ftp.o: $(srcdir)/src/common/ftp.cpp
 @COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
-netdll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
-	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
-
 netdll_http.o: $(srcdir)/src/common/http.cpp
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
 
@@ -16325,9 +16392,6 @@ netlib_ftp.o: $(srcdir)/src/common/ftp.cpp
 
 @COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
-
-netlib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
-	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
 netlib_http.o: $(srcdir)/src/common/http.cpp
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<

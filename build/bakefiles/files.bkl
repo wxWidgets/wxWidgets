@@ -281,7 +281,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="NET_WIN32_SRC" hints="files">
     src/msw/gsocket.c
-    src/msw/gsockmsw.c
 </set>
 <set var="NET_WIN32_HDR" hints="files">
     wx/msw/gsockmsw.h
@@ -643,7 +642,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
     src/gtk/gdiobj.cpp
-    <!-- src/gtk/gsockgtk.c FIXME -->
+    src/gtk/gsockgtk.c
     src/gtk/icon.cpp
     src/gtk/main.cpp
     src/gtk/pen.cpp
@@ -821,7 +820,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/frame.cpp
     src/motif/gauge.cpp
     src/motif/gdiobj.cpp
-    <!-- src/motif/gsockmot.c FIXME -->
+    src/motif/gsockmot.c
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -950,7 +949,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
-    <!-- src/x11/gsockx11.c FIXME -->
+    src/x11/gsockx11.c
     src/x11/icon.cpp
     src/x11/main.cpp
     src/x11/minifram.cpp
@@ -1031,6 +1030,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
+    src/msw/gsockmsw.c
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/icon.cpp
@@ -1348,7 +1348,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/gdiimage.cpp
     src/os2/gdiobj.cpp
     src/os2/gsocket.c
-    <!-- src/os2/gsockpm.c FIXME -->
+    src/os2/gsockpm.c
     src/os2/helpwin.cpp
     src/os2/icon.cpp
     src/os2/iniconf.cpp

@@ -336,11 +336,6 @@ SOURCE=..\..\src\msw\dummy.cpp
 SOURCE=..\..\src\msw\gsocket.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\gsockmsw.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
 # End Group
 # End Target
 # End Project

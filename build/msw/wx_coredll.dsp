@@ -4256,6 +4256,11 @@ SOURCE=..\..\src\msw\gdiobj.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\gsockmsw.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\helpchm.cpp
 # End Source File
 # Begin Source File
