@@ -784,6 +784,10 @@
  * Use MS HTML Help controller (win32)
  */
 #define wxUSE_MS_HTML_HELP 0
+/*
+ * Use MS HTML Help via libmspack (Unix)
+ */
+#define wxUSE_LIBMSPACK 0
 
 /*
  * Use iostream.h rather than iostream

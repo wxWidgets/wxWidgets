@@ -148,6 +148,7 @@
         <sources>$(HTML_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
         <msvc-headers>$(HTML_HDR)</msvc-headers>
     </dll>
     

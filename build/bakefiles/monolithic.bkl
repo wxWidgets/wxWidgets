@@ -17,6 +17,7 @@
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+        <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
         <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
     </dll>

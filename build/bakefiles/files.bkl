@@ -2044,6 +2044,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">
         src/msw/helpbest.cpp
     </if>
+    <if cond="PLATFORM_UNIX=='1'">
+        src/html/chm.cpp
+    </if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        src/html/chm.cpp
+    </if>
 </set>
 <set var="HTML_SRC" hints="files">
     $(HTML_SRC_PLATFORM)

@@ -403,6 +403,19 @@
 #   endif
 #endif /* !defined(wxUSE_HTML) */
 
+#ifndef wxUSE_LIBMSPACK
+#   ifndef __UNIX__
+        /* set to 0 on platforms that don't have libmspack */
+#       define wxUSE_LIBMSPACK 0
+#   else
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_LIBMSPACK must be defined."
+#       else
+#           define wxUSE_LIBMSPACK 0
+#       endif
+#   endif
+#endif /* !defined(wxUSE_LIBMSPACK) */
+
 #ifndef wxUSE_ICO_CUR
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ICO_CUR must be defined."

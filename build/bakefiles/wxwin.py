@@ -41,6 +41,7 @@ LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'dbgrid']
 EXTRALIBS = {
     'gl' : '$(EXTRALIBS_OPENGL)',
     'xml' : '$(EXTRALIBS_XML)',
+    'html' : '$(EXTRALIBS_HTML)',
     'odbc' : '$(EXTRALIBS_ODBC)',
 }
 

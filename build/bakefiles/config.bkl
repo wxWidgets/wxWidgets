@@ -173,6 +173,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
+        <option name="EXTRALIBS_HTML"/>
         <option name="EXTRALIBS_ODBC"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
@@ -210,6 +211,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRACFLAGS"/>
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
+        <set var="EXTRALIBS_HTML"/>
         <set var="EXTRALIBS_ODBC"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
