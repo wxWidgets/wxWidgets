@@ -11,21 +11,19 @@ xrced -- Simple resource editor for XRC format used by wxWindows/wxPython
 
 Usage:
 
-    xrced [ -h ] [ -v ] [ XRC-file ]
+    xrced [ -h ] [ -i ] [ -v ] [ XRC-file ]
 
 Options:
 
-    -h          Print short usage info.
+    -h          output short usage info and exit
 
-    -v          Print version info.
+    -i          use international character set instead of translations
+
+    -v          output version info and exit
 """
 
 
 from globals import *
-
-# Additional wx modules
-from wxPython.xrc import *
-from wxPython.html import wxHtmlWindow
 import os, sys, getopt, re, traceback
 
 # Local modules
@@ -917,14 +915,14 @@ Homepage: http://xrced.sourceforge.net\
 ################################################################################
 
 def usage():
-    print >> sys.stderr, 'usage: xrced [-dvh] [file]'
+    print >> sys.stderr, 'usage: xrced [-dhlv] [file]'
 
 class App(wxApp):
     def OnInit(self):
         global debug
         # Process comand-line
         try:
-            opts, args = getopt.getopt(sys.argv[1:], 'dvh')
+            opts, args = getopt.getopt(sys.argv[1:], 'dhiv')
         except getopt.GetoptError:
             if wxPlatform != '__WXMAC__': # macs have some extra parameters
                 print >> sys.stderr, 'Unknown option'
@@ -936,6 +934,8 @@ class App(wxApp):
                 sys.exit(0)
             elif o == '-d':
                 debug = True
+            elif o == '-i':
+                g.xmlFlags &= ~wxXRC_USE_LOCALE
             elif o == '-v':
                 print 'XRCed version', version
                 sys.exit(0)
@@ -990,7 +990,7 @@ class App(wxApp):
         wc.WriteInt('sashPos', conf.sashPos)
         wc.WriteInt('panelWidth', conf.panelWidth)
         wc.WriteInt('panelHeight', conf.panelHeight)
-        wc.WriteInt('nopanic', 1)
+        wc.WriteInt('nopanic', True)
         wc.Flush()
 
 def main():

@@ -7,6 +7,8 @@ Dealing with non-specified required values (set to defaults, if exist).
 
 Added 'minsize' parameter of sizeritem.
 
+Added '-i' option to turn off translations and use international characters.
+
 0.0.9-5
 -------
 

@@ -5,6 +5,7 @@
 # RCS-ID:       $Id$
 
 from wxPython.wx import *
+from wxPython.xrc import *
 
 # Global constants
 
@@ -28,5 +29,6 @@ class Globals:
     testWin = None
     testWinPos = wxDefaultPosition
     currentXXX = None
+    xmlFlags = wxXRC_USE_LOCALE | wxXRC_NO_SUBCLASSING
 
 g = Globals()
