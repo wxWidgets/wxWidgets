@@ -375,6 +375,15 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     // FIXME: what are all these hardcoded 4, 8 and 11s really?
     x += image_w;
     w -= image_w + 4;
+#ifdef __WXMAC__
+    // edit control height
+    if ( h > 22 - 8 )
+    {
+        int diff = h - ( 22 - 8 ) ;
+        h -= diff ;
+        y += diff / 2 ;
+    }
+#endif
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
                  wxPoint(x - 4, y - 4), wxSize(w + 11, h + 8));
