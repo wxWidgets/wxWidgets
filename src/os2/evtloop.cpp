@@ -296,7 +296,7 @@ int wxEventLoop::Run()
         while ( !Pending() && m_impl->SendIdleMessage() )
 	{
 	    wxTheApp->HandleSockets();
-	    wxUsleep(10);
+	    wxMilliSleep(10);
 	}
 
         wxTheApp->HandleSockets();
@@ -309,7 +309,7 @@ int wxEventLoop::Run()
 	    }
 	}
         else
-            wxUsleep(10);
+            wxMilliSleep(10);
     }
 
     return m_impl->GetExitCode();

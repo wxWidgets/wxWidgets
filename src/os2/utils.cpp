@@ -260,11 +260,18 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 #endif
 }
 
-void wxUsleep(
+void wxMilliSleep(
   unsigned long                     ulMilliseconds
 )
 {
     ::DosSleep(ulMilliseconds);
+}
+
+void wxMicroSleep(
+  unsigned long                     ulMicroseconds
+)
+{
+    ::DosSleep(ulMicroseconds/1000);
 }
 
 void wxSleep(
