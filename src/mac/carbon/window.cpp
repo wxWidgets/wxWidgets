@@ -2274,8 +2274,18 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         
 
     {
+
         int width , height ;
         GetClientSize( &width , &height ) ;
+#if TARGET_API_MAC_OSX
+        HIRect scrollrect = CGRectMake( MacGetLeftBorderSize() , MacGetTopBorderSize() , width , height ) ;
+        if ( rect ) 
+        {
+            HIRect scrollarea = CGRectMake( rect->x , rect->y , rect->width , rect->height) ;
+            scrollrect = CGRectIntersection( scrollrect , scrollarea ) ;
+        }
+        HIViewScrollRect ( (ControlRef) m_macControl , &scrollrect , dx ,dy ) ;
+#else
 
         wxPoint pos;
         pos.x = pos.y = 0; 
@@ -2283,20 +2293,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         Rect scrollrect;
         RgnHandle updateRgn = NewRgn() ;
 
-#if TARGET_API_MAC_OSX
-        // if there is already a pending redraw event, we first must flush that, as we don't have
-        // means to retrieve the dirty region of a HIView
-        if ( HIViewGetNeedsDisplay( (ControlRef) m_macControl ) )
-            Update() ;
-#endif
-        {
+       {
             wxClientDC dc(this) ;
             wxMacPortSetter helper(&dc) ;
         
             GetControlBounds( (ControlRef) m_macControl, &scrollrect);
-#if TARGET_API_MAC_OSX
-            GetParent()->MacWindowToRootWindow( &scrollrect.left , &scrollrect.top ) ;
-#endif
             scrollrect.top += MacGetTopBorderSize() ;
             scrollrect.left += MacGetLeftBorderSize() ;
             scrollrect.bottom = scrollrect.top + height ;
@@ -2311,11 +2312,6 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
         }
         // ScrollWindowRect( (WindowRef) MacGetTopLevelWindowRef() , &scrollrect , dx , dy ,  kScrollWindowInvalidate, updateRgn ) ;
-#if TARGET_API_MAC_OSX
-        HIViewConvertRegion( updateRgn , (ControlRef) MacGetTopLevelWindow()->GetHandle() , (ControlRef) m_macControl ) ;
-        HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , updateRgn , true ) ;
-#else
-        // TODO TEST
 #endif
     }
 
