@@ -534,7 +534,7 @@ void wxFileCtrl::Update()
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
         InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 65 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
-        InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 120 );
+        InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, 110 );
     }
     wxFileData *fd = (wxFileData *) NULL;
     wxListItem item;
