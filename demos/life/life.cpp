@@ -625,24 +625,79 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
     if (!event.LeftIsDown())
     {
         m_status = MOUSE_NOACTION;
+        return;
     }
-    else
+
+    // button just pressed?
+    if (m_status == MOUSE_NOACTION)
     {
-        bool alive = m_life->IsAlive(i, j);
-
-        // if just pressed, update status
-        if (m_status == MOUSE_NOACTION)
-            m_status = (alive? MOUSE_ERASING : MOUSE_DRAWING);
-
-        // toggle cell and refresh if needed
-        if (((m_status == MOUSE_ERASING) && alive) ||
-            ((m_status == MOUSE_DRAWING) && !alive))
-        {
-            m_life->SetCell(i, j, !alive);
-            DrawCell(i, j, !alive);
-            GET_FRAME()->UpdateInfoText();
-        }
+        // yes, update status and toggle this cell
+        m_status = (m_life->IsAlive(i, j)? MOUSE_ERASING : MOUSE_DRAWING);
+            
+        m_mi = i;
+        m_mj = j;
+        m_life->SetCell(i, j, m_status == MOUSE_DRAWING);
+        DrawCell(i, j, m_status == MOUSE_DRAWING);
     }
+    else if ((m_mi != i) || (m_mj != j))
+    {
+        // draw a line of cells using Bresenham's algorithm
+        wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
+        di = i - m_mi;
+        ai = abs(di) << 1;
+        si = (di < 0)? -1 : 1;
+        dj = j - m_mj;
+        aj = abs(dj) << 1;
+        sj = (dj < 0)? -1 : 1;
+
+        ii = m_mi;
+        jj = m_mj;
+  
+        if (ai > aj)
+        {
+            // iterate over i
+            d = aj - (ai >> 1);        
+               
+            while (ii != i)
+            {
+                m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
+                DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+                if (d >= 0)
+                {
+                    jj += sj;
+                    d  -= ai;   
+                }
+                ii += si;
+                d  += aj;
+            }
+        }
+        else
+        {
+            // iterate over j
+            d = ai - (aj >> 1);
+
+            while (jj != j)
+            {
+                m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
+                DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+                if (d >= 0)
+                {
+                    ii += si;
+                    d  -= aj;   
+                }
+                jj += sj;
+                d  += ai;
+            }
+        }
+
+        // last cell
+        m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
+        DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+        m_mi = ii;
+        m_mj = jj;
+    }
+
+    GET_FRAME()->UpdateInfoText();
 }
 
 void LifeCanvas::OnSize(wxSizeEvent& event)

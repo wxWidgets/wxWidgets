@@ -91,6 +91,7 @@ private:
     wxInt32      m_viewportH;       // number of visible cells (h)
     int          m_thumbX;          // horiz. scrollbar thumb position 
     int          m_thumbY;          // vert. scrollbar thumb position 
+    wxInt32      m_mi, m_mj;        // last mouse position 
 };
 
 // --------------------------------------------------------------------------
