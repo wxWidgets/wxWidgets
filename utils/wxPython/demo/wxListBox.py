@@ -37,6 +37,7 @@ class TestListBox(wxPanel):
 
     def EvtListBoxDClick(self, event):
         self.log.WriteText('EvtListBoxDClick: %s\n' % self.lb1.GetSelection())
+        self.lb1.Delete(self.lb1.GetSelection())
 
     def EvtMultiListBox(self, event):
         self.log.WriteText('EvtMultiListBox: %s\n' % str(self.lb2.GetSelections()))
