@@ -254,7 +254,7 @@ enum wxTypeKind
     wxT_SET, // must be wxSet<> template
     wxT_ENUM,
     wxT_CUSTOM, // user defined type (e.g. wxPoint)
-    
+
     wxT_LAST_SIMPLE_TYPE_KIND = wxT_CUSTOM ,
 
     wxT_OBJECT_PTR, // object reference
@@ -262,7 +262,7 @@ enum wxTypeKind
     wxT_COLLECTION , // collection
 
     wxT_DELEGATE , // for connecting against an event source
-    
+
     wxT_LAST_TYPE_KIND = wxT_DELEGATE // sentinel for bad data, asserts, debugging
 };
 
@@ -517,7 +517,7 @@ public :
 #endif
     wxPropertyAccessor() { m_setterName = NULL ; m_getterName = NULL ; m_adderName = NULL ;}
     virtual ~wxPropertyAccessor() {}
-    
+
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
 
@@ -525,11 +525,11 @@ public :
     virtual wxxVariant GetProperty(const wxObject *object) const = 0 ;
 
     // Adding an element to a collection property
-    virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const 
+    virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const
     { wxASSERT_MSG(0,wxT("Collection Operation called on non Collection Property")) ; }
 
     // Getting a collection property
-    virtual wxxVariantArray GetPropertyCollection( const wxObject *obj) const 
+    virtual wxxVariantArray GetPropertyCollection( const wxObject *obj) const
     { wxASSERT_MSG(0,wxT("Collection Operation called on non Collection Property")) ; return wxxVariantArray() ; }
 
     virtual bool HasSetter() const = 0 ;
@@ -552,7 +552,7 @@ class WXDLLIMPEXP_BASE wxGenericPropertyAccessor : public wxPropertyAccessor
 {
 public :
     wxGenericPropertyAccessor( const wxChar* propertyName ) ;
-    ~wxGenericPropertyAccessor() ; 
+    ~wxGenericPropertyAccessor() ;
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const ;
     virtual wxxVariant GetProperty(const wxObject *object) const ;
 
@@ -723,7 +723,7 @@ public:
    }
 
     // gets the property this accessor is responsible for from an object
-    wxxVariantArray GetPropertyCollection(const wxObject *o) const 
+    wxxVariantArray GetPropertyCollection(const wxObject *o) const
     {
         const Klass *obj = dynamic_cast<const Klass*>(o);
 
@@ -843,19 +843,19 @@ private :
         return first ; }
 
 
-#if WX_XTI_TEMPLATE_FIX 
+#if WX_XTI_TEMPLATE_FIX
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_PROPERTY_COLLECTION( name , colltype , addelemtype , adder , getter ) \
-	static wxPropertyCollectionAccessorT<class_t , colltype , addelemtype > _accessor##name( &adder , &getter , #adder , #getter ) ; \
-	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name ) ;
+        static wxPropertyCollectionAccessorT<class_t , colltype , addelemtype > _accessor##name( &adder , &getter , #adder , #getter ) ; \
+        static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name ) ;
 
 #define WX_READONLY_PROPERTY_COLLECTION( name , colltype , addelemtype , getter ) \
-	static wxPropertyCollectionAccessorT<class_t , colltype , addelemtype > _accessor##name( NULL , &getter , #adder , #getter ) ; \
-	static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name ) ;
+        static wxPropertyCollectionAccessorT<class_t , colltype , addelemtype > _accessor##name( NULL , &getter , "" , #getter ) ; \
+        static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (colltype*) NULL ) ,wxGetTypeInfo( (addelemtype*) NULL ) ,&_accessor##name ) ;
 
 #define WX_PROPERTY_SET_RET_BOOL( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetRetBool*)NULL , &setter , &getter , #setter , #getter ) ; \
@@ -1248,7 +1248,7 @@ public:
     wxDEPRECATED( static void     CleanUpClasses() );
 #endif
     static void     CleanUp();
- 
+
     // returns the first property
     const wxPropertyInfo* GetFirstProperty() const { return m_firstProperty ; }
 
@@ -1332,7 +1332,7 @@ private:
 
     // InitializeClasses() helper
     static wxClassInfo *GetBaseByName(const wxChar *name) ;
-    
+
 protected:
     // registers the class
     void Register();
