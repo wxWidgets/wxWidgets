@@ -75,14 +75,14 @@ public:
 // --------------------------------------------------------------------------
 
 // A struct used to pass cell coordinates around
-struct Cell
+struct LifeCell
 {
     wxInt32 i;
     wxInt32 j;
 };       
 
 // A private class that contains data about a block of cells
-class CellBox;
+class LifeCellBox;
 
 // A class that models a Life game instance
 class Life
@@ -105,11 +105,11 @@ public:
     bool NextTic();
 
     // navigation
-    Cell FindNorth();
-    Cell FindSouth();
-    Cell FindWest();
-    Cell FindEast();
-    Cell FindCenter();
+    LifeCell FindNorth();
+    LifeCell FindSouth();
+    LifeCell FindWest();
+    LifeCell FindEast();
+    LifeCell FindCenter();
 
     // The following functions find cells within a given viewport; either
     // all alive cells, or only those cells which have changed since last
@@ -132,13 +132,13 @@ public:
     void BeginFind(wxInt32 x0, wxInt32 y0,
                    wxInt32 x1, wxInt32 y1,
                    bool changed);
-    bool FindMore(Cell *cells[], size_t *ncells);
+    bool FindMore(LifeCell *cells[], size_t *ncells);
 
 private:
     // cellbox-related
-    CellBox *CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv);
-    CellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = TRUE);
-    void KillBox(CellBox *c);
+    LifeCellBox *CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv);
+    LifeCellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = TRUE);
+    void KillBox(LifeCellBox *c);
 
     // helper for BeginFind & FindMore
     void DoLine(wxInt32 x, wxInt32 y, wxUint32 alive, wxUint32 old = 0);
@@ -150,13 +150,13 @@ private:
     wxString   m_description;   // description
 
     // pattern data
-    CellBox   *m_head;          // list of alive boxes
-    CellBox   *m_available;     // list of reusable dead boxes
-    CellBox  **m_boxes;         // hash table of alive boxes
+    LifeCellBox   *m_head;          // list of alive boxes
+    LifeCellBox   *m_available;     // list of reusable dead boxes
+    LifeCellBox  **m_boxes;         // hash table of alive boxes
     wxUint32   m_numcells;      // population (number of alive cells)
 
     // state vars for BeginFind & FindMore
-    Cell      *m_cells;         // array of cells
+    LifeCell  *m_cells;         // array of cells
     size_t     m_ncells;        // number of valid entries in m_cells
     wxInt32    m_x, m_y,        // counters and search mode
                m_x0, m_y0,
