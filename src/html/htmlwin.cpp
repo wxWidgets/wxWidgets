@@ -127,9 +127,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 {
     wxFSFile *f;
     bool rt_val;
-
+    bool needs_refresh = FALSE;
+    
     SetCursor(*wxHOURGLASS_CURSOR);
-    wxYield();
+    wxYield(); Refresh(FALSE);
 
     m_tmpCanDrawLocks++;
     if (m_HistoryOn && (m_HistoryPos != -1)) { // store scroll position into history item
@@ -138,20 +139,36 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         m_History[m_HistoryPos].SetPos(y);
     }
 
-    if (location[0] == '#') { // local anchor
+    if (location[0] == wxT('#')) { // local anchor
         wxString anch = location.Mid(1) /*1 to end*/;
         m_tmpCanDrawLocks--;
         rt_val = ScrollToAnchor(anch);
+        m_tmpCanDrawLocks++;
+    }
+    else if (location.Find(wxT('#')) != wxNOT_FOUND && location.BeforeFirst(wxT('#')) == m_OpenedPage) {
+        wxString anch = location.AfterFirst(wxT('#'));
+        m_tmpCanDrawLocks--;
+        rt_val = ScrollToAnchor(anch);
+        m_tmpCanDrawLocks++;
+    }
+    else if (location.Find(wxT('#')) != wxNOT_FOUND && 
+             (m_FS -> GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage) {
+        wxString anch = location.AfterFirst(wxT('#'));
+        m_tmpCanDrawLocks--;
+        rt_val = ScrollToAnchor(anch);
+        m_tmpCanDrawLocks++;
     }
 
     else {
+        needs_refresh = TRUE;
         // load&display it:
         if (m_RelatedStatusBar != -1) {
             m_RelatedFrame -> SetStatusText(_("Connecting..."), m_RelatedStatusBar);
-            Refresh();
+            Refresh(FALSE);
         }
 
         f = m_FS -> OpenFile(location);
+        
         if (f == NULL) {
             wxString err;
 
@@ -169,7 +186,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             if (m_RelatedStatusBar != -1) {
                 wxString msg = _("Loading : ") + location;
                 m_RelatedFrame -> SetStatusText(msg, m_RelatedStatusBar);
-                Refresh();
+                Refresh(FALSE);
             }
 
             node = m_Filters.GetFirst();
@@ -190,9 +207,8 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             rt_val = SetPage(src);
             m_OpenedPage = f -> GetLocation();
             if (f -> GetAnchor() != wxEmptyString) {
-//                m_tmpCanDrawLocks--;
+                wxYield();
                 ScrollToAnchor(f -> GetAnchor());
-//                m_tmpCanDrawLocks++;
             }
 
             delete f;
@@ -213,10 +229,15 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     if (m_OpenedPageTitle == wxEmptyString)
         OnSetTitle(wxFileNameFromPath(m_OpenedPage));
     SetCursor(*wxSTANDARD_CURSOR);
-    
-    wxYield();
-    m_tmpCanDrawLocks--;
-    Refresh();
+
+    if (needs_refresh) {    
+        wxYield();
+        m_tmpCanDrawLocks--;
+        Refresh();
+    }
+    else
+        m_tmpCanDrawLocks--;
+
     return rt_val;
 }
 
@@ -268,11 +289,6 @@ void wxHtmlWindow::CreateLayout()
     }
 
     else {
-        GetClientSize(&ClientWidth, &ClientHeight);
-#ifndef __WXMSW__
-        // VS : this looks extremely ugly under windoze, better fix needed!
-        SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, ClientHeight * 2); // always on
-#endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
         if (ClientHeight < m_Cell -> GetHeight() + GetCharHeight()) {
@@ -356,7 +372,7 @@ bool wxHtmlWindow::HistoryBack()
     m_HistoryOn = FALSE;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
-    else LoadPage(l + "#" + a);
+    else LoadPage(l + wxT("#") + a);
     m_HistoryOn = TRUE;
     wxYield();
     m_tmpCanDrawLocks--;
@@ -382,7 +398,7 @@ bool wxHtmlWindow::HistoryForward()
     m_HistoryOn = FALSE;
     m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
-    else LoadPage(l + "#" + a);
+    else LoadPage(l + wxT("#") + a);
     m_HistoryOn = TRUE;
     wxYield();
     m_tmpCanDrawLocks--;
@@ -437,6 +453,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     int v_y, v_h;
 
     if (m_tmpCanDrawLocks > 0) return;
+    
     dc.SetMapMode(wxMM_TEXT);
 #if 0
 /* VS - I don't think this is neccessary any longer 
@@ -464,42 +481,6 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
     wxScrolledWindow::OnSize(event);
     CreateLayout();
 }
-
-
-
-void wxHtmlWindow::OnKeyDown(wxKeyEvent& event)
-{
-    int dummy;
-    int sty, szy, cliy;
-
-    ViewStart(&dummy, &sty);
-    GetClientSize(&dummy, &cliy); cliy /= wxHTML_SCROLL_STEP;
-    GetVirtualSize(&dummy, &szy); szy /= wxHTML_SCROLL_STEP;
-
-    switch (event.KeyCode()) {
-        case WXK_PAGEUP :
-        case WXK_PRIOR :
-                Scroll(-1, sty - (5 * cliy / 6));
-                break;
-        case WXK_PAGEDOWN :
-        case WXK_NEXT :
-                Scroll(-1, sty + (5 * cliy / 6));
-                break;
-        case WXK_HOME :
-                Scroll(-1, 0);
-                break;
-        case WXK_END :
-                Scroll(-1, szy - cliy);
-                break;
-        case WXK_UP :
-                Scroll(-1, sty - 1);
-                break;
-        case WXK_DOWN :
-                Scroll(-1, sty + 1);
-                break;
-    }
-}
-
 
 
 void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
@@ -561,7 +542,6 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_LEFT_DOWN(wxHtmlWindow::OnMouseEvent)
     EVT_MOTION(wxHtmlWindow::OnMouseEvent)
     EVT_IDLE(wxHtmlWindow::OnIdle)
-    EVT_KEY_DOWN(wxHtmlWindow::OnKeyDown)
 END_EVENT_TABLE()
 
 
