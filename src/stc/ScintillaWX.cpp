@@ -750,12 +750,12 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 void ScintillaWX::DoAddChar(int key) {
 #if wxUSE_UNICODE
     wxChar wszChars[2];
-    wszChars[0] = key;
+    wszChars[0] = (wxChar)key;
     wszChars[1] = 0;
     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(wszChars);
     AddCharUTF((char*)buf.data(), strlen(buf));
 #else
-    AddChar(key);
+    AddChar((char)key);
 #endif
 }
 
