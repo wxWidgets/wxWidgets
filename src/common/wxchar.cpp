@@ -1389,7 +1389,7 @@ int isascii( int c )
 }
 #endif
 
-#if defined(__WXWINCE__)
+#if defined(__WXWINCE__) && (_WIN32_WCE <= 211)
 #if (_WIN32_WCE < 300)
 void *calloc( size_t num, size_t size )
 {
@@ -1399,12 +1399,10 @@ void *calloc( size_t num, size_t size )
 }
 #endif
 
-#if (_WIN32_WCE <= 211)
 int isspace(int c)
 {
     return (c == ' ');
 }
-#endif
 
 #endif
 

@@ -49,6 +49,7 @@
 #include <windowsx.h>
 #include <tchar.h>
 #include <ole2.h>
+#include <shellapi.h>
 #include <commctrl.h>
 #include <aygshell.h>
 

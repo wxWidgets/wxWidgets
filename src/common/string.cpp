@@ -2325,12 +2325,12 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 
 #endif // !wxUSE_STL
 
-int wxStringSortAscending(wxString* s1, wxString* s2)
+int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
 {
     return wxStrcmp(s1->c_str(), s2->c_str());
 }
 
-int wxStringSortDescending(wxString* s1, wxString* s2)
+int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
 {
     return -wxStrcmp(s1->c_str(), s2->c_str());
 }

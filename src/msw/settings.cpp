@@ -40,6 +40,10 @@
 #include "wx/module.h"
 #include "wx/fontutil.h"
 
+#ifdef __WXWINCE__ // for SM_CXCURSOR and SM_CYCURSOR
+#include "wx/msw/wince/missing.h"
+#endif // __WXWINCE__
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -250,6 +254,7 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
+#ifdef __WXWINCE__
     // this one is special: we don't get it from GetStockObject()
     if ( index == wxSYS_ICONTITLE_FONT )
     {
@@ -257,6 +262,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 0);
         return wxCreateFontFromLogFont(&lf);
     }
+#endif // __WXWINCE__
 
     // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often - this is why we cache this particular font

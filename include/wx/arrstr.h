@@ -15,8 +15,8 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-WXDLLIMPEXP_BASE int wxStringSortAscending(wxString*, wxString*);
-WXDLLIMPEXP_BASE int wxStringSortDescending(wxString*, wxString*);
+WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortAscending(wxString*, wxString*);
+WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortDescending(wxString*, wxString*);
 
 #if wxUSE_STL
 

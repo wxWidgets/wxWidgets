@@ -361,7 +361,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
-static int LINKAGEMODE wxDirCtrlStringCompareFunction(wxString* strFirst, wxString* strSecond)
+static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(wxString* strFirst, wxString* strSecond)
 {
     return strFirst->CmpNoCase(*strSecond);
 }

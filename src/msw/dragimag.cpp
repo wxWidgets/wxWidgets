@@ -51,6 +51,10 @@
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"
 
+#ifdef __WXWINCE__  // for SM_CXCURSOR and SM_CYCURSOR
+#include "wx/msw/wince/missing.h"
+#endif // __WXWINCE__
+
 #if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
 #include <commctrl.h>
 #endif

@@ -12,7 +12,7 @@
 #ifndef _WX_CE_MISSING_H_
 #define _WX_CE_MISSING_H_
 
-BOOL IsIconic( HWND hWnd )
+inline BOOL IsIconic( HWND hWnd )
 {
     // Probably not right...
 #if 0
@@ -22,6 +22,10 @@ BOOL IsIconic( HWND hWnd )
     return FALSE;
 }
 
+#ifdef WIN32_PLATFORM_PSPC
+#define SM_CXCURSOR             13
+#define SM_CYCURSOR             14
+#endif
 
 /*
 Most of these are in MSVC++6.0   <wx\wince\winuser.h>

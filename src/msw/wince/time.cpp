@@ -173,7 +173,7 @@ time_t __cdecl time(time_t *t)
 ////////////////////////////////////////////////////////////////////////
 time_t __cdecl mktime(struct tm *t)
 {
-	return (common_tm_to_time(t->tm_mday, t->tm_mon, t->tm_year, t->tm_hour, t->tm_min, t->tm_sec)) ;
+	return (common_tm_to_time(t->tm_mday, t->tm_mon+1, t->tm_year+1900, t->tm_hour, t->tm_min, t->tm_sec)) ;
 }
 
 
