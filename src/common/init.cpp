@@ -112,6 +112,15 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// suppress warnings about unused variables
+static inline void Use(void *) { }
+
+#define WX_SUPPRESS_UNUSED_WARN(x) Use(&x)
+
+// ----------------------------------------------------------------------------
 // initialization data
 // ----------------------------------------------------------------------------
 
@@ -379,6 +388,8 @@ int wxEntryReal(int& argc, wxChar **argv)
     // if wxEntryStart succeeded, we must call wxEntryCleanup even if the code
     // below returns or throws
     wxCleanupOnExit cleanupOnExit;
+
+    WX_SUPPRESS_UNUSED_WARN(cleanupOnExit);
 
     // app initialization
     if ( !wxTheApp->OnInit() )
