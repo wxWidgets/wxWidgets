@@ -16,48 +16,29 @@ class TestPanel(wx.Panel):
 
         lb = wx.CheckListBox(self, -1, (80, 50), wx.DefaultSize, sampleList)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, lb)
-        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, lb)
+        self.Bind(wx.EVT_CHECKLISTBOX, self.EvtCheckListBox, lb)
         lb.SetSelection(0)
         self.lb = lb
 
         pos = lb.GetPosition().x + lb.GetSize().width + 25
         btn = wx.Button(self, -1, "Test SetString", (pos, 50))
         self.Bind(wx.EVT_BUTTON, self.OnTestButton, btn)
-        self.Bind(wx.EVT_RIGHT_UP, self.OnDoPopup)
 
     def EvtListBox(self, event):
         self.log.WriteText('EvtListBox: %s\n' % event.GetString())
 
-    def EvtListBoxDClick(self, event):
-        self.log.WriteText('EvtListBoxDClick:\n')
+    def EvtCheckListBox(self, event):
+        index = event.GetSelection()
+        label = self.lb.GetString(index)
+        status = 'un'
+        if self.lb.IsChecked(index):
+            status = ''
+        self.log.WriteText('Box %s is %schecked \n' % (label, status))
+        self.lb.SetSelection(index)    # so that (un)checking also selects (moves the highlight)
+        
 
     def OnTestButton(self, evt):
         self.lb.SetString(4, "FUBAR")
-
-
-    def OnDoPopup(self, evt):
-        menu = wx.Menu()
-        # Make this first item bold
-        item = wx.MenuItem(menu, wx.NewId(), "If supported, this is bold")
-        df = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
-
-        nf = wx.Font(
-                df.GetPointSize(), df.GetFamily(), df.GetStyle(), 
-                wx.BOLD, False, df.GetFaceName()
-                )
-
-        item.SetFont(nf)
-        menu.AppendItem(item)
-
-        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &1"))
-        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &2"))
-        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &3"))
-        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &4"))
-
-        self.PopupMenu(menu, evt.GetPosition())
-        menu.Destroy()
-        evt.Skip()
-
 
 #----------------------------------------------------------------------
 
