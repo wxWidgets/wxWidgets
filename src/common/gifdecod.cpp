@@ -280,7 +280,7 @@ bool wxGIFDecoder::GoFrame(int which)
     {
         m_pimage = m_pfirst;
 
-        for (i = 1; i < which; i++)
+        for (i = 0; i < which; i++)
             m_pimage = m_pimage->next;
 
         return TRUE;
