@@ -113,3 +113,58 @@ words at the bottom.
 
 ============================
 
+wxWindows: Write it once and for all.
+
+Matt Gregory <msgregory@earthlink.net>
+
+============================
+
+
+At front:
+
+    Need an API?
+      <wxWindows>
+   and get THE API
+
+       C++, Python, Basic, Lua ...
+
+At back
+
+    <windows> OR <linux> OR <mac> ?
+                <wxWindows>  is
+    <windows> AND <linux> AND <mac>
+
+where <xxxxx> is the respective logo
+
+Manuel Martin <mmartin@ceyd.es>
+
+============================
+
+
+Kevin Ollivier wrote:
+How about this for a t-shirt slogan?
+
+One API to rule them all, one API to hide them
+One API to bridge them all and in the compiler bind them.
+
+wxWindows
+
+How about "and in the linker bind them"? That's where the local libraries 
+get bound to the wxWindows code anyway.
+
+============================
+
+Hugh Gibson wrote:
+> > Perhaps a head shot of a Maori with full face tattoo and the
+> > slogan "Go native"?
+>
+> Perhaps the "tattoos" could be various representations of a common
+> window control in different operating systems to emphasise the
+> native look and feel.
+
+Nice idea. But I wonder where you'll find some volunteer willing to 
+have his face tattooed with win32 common controls ;-)
+
+============================
+
+
