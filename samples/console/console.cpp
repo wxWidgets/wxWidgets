@@ -304,7 +304,7 @@ struct Date
         wxString s;
         s.Printf("%02d-%s-%4d%s",
                  day,
-                 wxDateTime::GetMonthName(month, TRUE).c_str(),
+                 wxDateTime::GetMonthName(month, wxDateTime::Name_Abbr).c_str(),
                  abs(wxDateTime::ConvertYearToBC(year)),
                  year > 0 ? "AD" : "BC");
         return s;
@@ -344,7 +344,7 @@ static void TestTimeStatic()
 
     wxDateTime::Month month = wxDateTime::GetCurrentMonth();
     printf("Current month is '%s' ('%s') and it has %d days\n",
-           wxDateTime::GetMonthName(month, TRUE).c_str(),
+           wxDateTime::GetMonthName(month, wxDateTime::Name_Abbr).c_str(),
            wxDateTime::GetMonthName(month).c_str(),
            wxDateTime::GetNumberOfDays(month));
 
@@ -822,7 +822,7 @@ static void TestTimeFormat()
 
     static const char *formatTestFormats[] =
     {
-        "%c",
+        "---> %c",
         "Date is %A, %d of %B, in year %Y",
         "Date is %x, time is %X",
         "Time is %H:%M:%S or %I:%M:%S %p",
@@ -849,7 +849,30 @@ static void TestTimeFormat()
         wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d].DT();
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
-            printf("%s\n", dt.Format(formatTestFormats[n]).c_str());
+            wxString s = dt.Format(formatTestFormats[n]);
+            printf("%s", s.c_str());
+
+            // convert back
+            wxDateTime dt2;
+            const wxChar *result = dt2.ParseFormat(s, formatTestFormats[n]);
+            if ( !result )
+            {
+                puts(" (ERROR: conversion back failed)");
+            }
+            else if ( *result )
+            {
+                // should have parsed the entire string
+                puts(" (ERROR: conversion back stopped too soon)");
+            }
+            else if ( dt2 != dt )
+            {
+                printf(" (ERROR: got back '%s' instead of '%s')\n",
+                       dt2.Format().c_str(), dt.Format().c_str());
+            }
+            else
+            {
+                puts(" (ok)");
+            }
         }
     }
 }
@@ -1270,6 +1293,19 @@ static void TestStringSub()
     puts("");
 }
 
+static void TestStringFormat()
+{
+    puts("*** Testing wxString formatting ***");
+
+    wxString s;
+    s.Printf("%03d", 18);
+
+    printf("Number 18: %s\n", wxString::Format("%03d", 18).c_str());
+    printf("Number 18: %s\n", s.c_str());
+
+    puts("");
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -1289,7 +1325,11 @@ int main(int argc, char **argv)
         TestPChar();
         TestString();
     }
-    TestStringSub();
+    if ( 0 )
+    {
+        TestStringSub();
+    }
+    TestStringFormat();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS

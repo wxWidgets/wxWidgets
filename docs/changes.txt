@@ -33,6 +33,7 @@ all (GUI):
 - wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
 
 - TIFF support added (libtiff required and included in the distribution)
+- PCX files can now be written (24 bit only so far)
 
 wxMSW:
 
@@ -45,6 +46,10 @@ wxGTK:
 - wxFontMapper endless recursion bug (on some systems) fixed
 - wxGTK synthesizes wxActivateEvents
 - UpdateUI handlers may be used with wxTextCtrl
+
+wxMotif:
+
+- wxMenu::Enable) works
 
 NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
 change log.

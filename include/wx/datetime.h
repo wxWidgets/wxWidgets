@@ -108,6 +108,9 @@ public:
         // data in this format
     typedef unsigned short wxDateTime_t;
 
+    // constants
+    // ------------------------------------------------------------------------
+
         // the timezones
     enum TZ
     {
@@ -344,6 +347,13 @@ public:
         Inv_Year = SHRT_MIN    // should hold in wxDateTime_t
     };
 
+        // flags for GetWeekDayName and GetMonthName
+    enum NameFlags
+    {
+        Name_Full = 0x01,       // return full name
+        Name_Abbr = 0x02        // return abbreviated name
+    };
+
     // helper classes
     // ------------------------------------------------------------------------
 
@@ -453,11 +463,16 @@ public:
 
         // get the full (default) or abbreviated month name in the current
         // locale, returns empty string on error
-    static wxString GetMonthName(Month month, bool abbr = FALSE);
+    static wxString GetMonthName(Month month,
+                                 NameFlags flags = Name_Full);
 
         // get the full (default) or abbreviated weekday name in the current
         // locale, returns empty string on error
-    static wxString GetWeekDayName(WeekDay weekday, bool abbr = FALSE);
+    static wxString GetWeekDayName(WeekDay weekday,
+                                   NameFlags flags = Name_Full);
+
+        // get the AM and PM strings in the current locale (may be empty)
+    static void GetAmPmStrings(wxString *am, wxString *pm);
 
         // return TRUE if the given country uses DST for this year
     static bool IsDSTApplicable(int year = Inv_Year,
@@ -621,6 +636,9 @@ public:
         // given (or current) year
     wxDateTime& SetToLastMonthDay(Month month = Inv_Month,
                                   int year = Inv_Year);
+
+        // sets to the given year day (1..365 or 366)
+    wxDateTime& SetToYearDay(wxDateTime_t yday);
 
         // The definitions below were taken verbatim from
         //
@@ -815,9 +833,13 @@ public:
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
     const wxChar *ParseRfc822Date(const wxChar* date);
-        // parse a date/time in the given format (see strptime(3))
+        // parse a date/time in the given format (see strptime(3)), fill in
+        // the missing (in the string) fields with the values of dateDef (by
+        // default, they will not change if they had valid values or will
+        // default to Today() otherwise)
     const wxChar *ParseFormat(const wxChar *date,
-                              const wxChar *format = _T("%c"));
+                              const wxChar *format = _T("%c"),
+                              const wxDateTime& dateDef = ms_InvDateTime);
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
     const wxChar *ParseDateTime(const wxChar *datetime);
