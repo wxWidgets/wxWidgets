@@ -163,7 +163,6 @@ XMLCTRL = XRCCTRL
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
-    wxXmlInitXmlModule();
     wxXmlInitResourceModule();
     wxXmlResource::Get()->InitAllHandlers();
 
