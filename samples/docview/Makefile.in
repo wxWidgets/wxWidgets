@@ -7,11 +7,15 @@
 #
 # "%W% %G%"
 #
-# Makefile for layout example (UNIX).
+# Makefile for docview example (UNIX).
 
-PROGRAM=layout
+top_srcdir = @top_srcdir@
+top_builddir = ../..
 
-OBJECTS=$(PROGRAM).o
+PROGRAM=docview
+
+OBJECTS=$(PROGRAM).o doc.o view.o
 
 include ../../src/makeprog.env
+
 

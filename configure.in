@@ -2703,6 +2703,19 @@ AC_OUTPUT([
             samples/checklst/Makefile
             samples/config/Makefile
             samples/controls/Makefile
+	    samples/dialogs/Makefile
+	    samples/docview/Makefile
+	    samples/docvwmdi/Makefile
+	    samples/dnd/Makefile
+	    samples/drawing/Makefile
+	    samples/dynamic/Makefile
+	    samples/image/Makefile
+	    samples/layout/Makefile
+	    samples/listctrl/Makefile
+	    samples/mdi/Makefile
+	    samples/minifram/Makefile
+	    samples/minimal/Makefile
+	    samples/notebook/Makefile
             samples/printing/Makefile
           ],
           [

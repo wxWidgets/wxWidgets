@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for dialogs example (UNIX).
+# Makefile for dynamic example (UNIX).
 
-PROGRAM=dialogs
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=dynamic
 
 OBJECTS=$(PROGRAM).o
 

@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for mdi example (UNIX).
+# Makefile for image example (UNIX).
 
-PROGRAM=mdi
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=image
 
 OBJECTS=$(PROGRAM).o
 
