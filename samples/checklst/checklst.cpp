@@ -126,7 +126,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     SetMenuBar(menu_bar);
 
     // make a panel with some controls
-    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0),
+    wxPanel *panel = new wxScrolledWindow(this, -1, wxPoint(0, 0),
                                  wxSize(400, 200), wxTAB_TRAVERSAL);
 
     // check list box
@@ -184,15 +184,11 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     mainsizer->Add( bottomsizer, 0, wxCENTER );
   
     // tell frame to make use of sizer (or constraints, if any)
-    SetAutoLayout( TRUE );
+    panel->SetAutoLayout( TRUE );
+    panel->SetSizer( mainsizer );
 
-    // set frame to minimum size
-    mainsizer->Fit( this );  
-  
     // don't allow frame to get smaller than what the sizers tell ye
     mainsizer->SetSizeHints( this );  
-  
-    SetSizer( mainsizer );
 
   
     Show(TRUE);
