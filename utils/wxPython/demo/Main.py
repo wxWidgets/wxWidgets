@@ -23,7 +23,8 @@ _treeList = [
 
     ('Miscellaneous Windows', ['wxGrid', 'wxSashWindow',
                                'wxScrolledWindow', 'wxSplitterWindow',
-                               'wxStatusBar', 'wxToolBar', 'wxNotebook']),
+                               'wxStatusBar', 'wxToolBar', 'wxNotebook',
+                               'wxHtmlWindow']),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
                         'wxSingleChoiceDialog', 'wxTextEntryDialog',
@@ -71,34 +72,42 @@ class wxPythonDemo(wxFrame):
         # Make a File menu
         self.mainmenu = wxMenuBar()
         menu = wxMenu()
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'E&xit', 'Get the heck outta here!')
         EVT_MENU(self, mID, self.OnFileExit)
         self.mainmenu.Append(menu, '&File')
 
+        # Make a Demo menu
+        menu = wxMenu()
+        for item in _treeList:
+            submenu = wxMenu()
+            for childItem in item[1]:
+                mID = wxNewId()
+                submenu.Append(mID, childItem)
+                EVT_MENU(self, mID, self.OnDemoMenu)
+            menu.AppendMenu(wxNewId(), item[0], submenu)
+        self.mainmenu.Append(menu, '&Demo')
+
+
         # Make a Help menu
-        mID = NewId()
+        mID = wxNewId()
         menu = wxMenu()
         menu.Append(mID, '&About', 'wxPython RULES!!!')
         EVT_MENU(self, mID, self.OnHelpAbout)
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
 
-        selectedDemo = None
-        selectedDemoName = "Nada"
-        if len(sys.argv) == 2:
-            selectedDemoName = sys.argv[1]
 
         # Create a TreeCtrl
-        tID = NewId()
+        tID = wxNewId()
+        self.treeMap = {}
         self.tree = wxTreeCtrl(splitter, tID)
         root = self.tree.AddRoot("Overview")
         for item in _treeList:
             child = self.tree.AppendItem(root, item[0])
             for childItem in item[1]:
                 theDemo = self.tree.AppendItem(child, childItem)
-                if childItem == selectedDemoName:
-                    selectedDemo = theDemo
+                self.treeMap[childItem] = theDemo
 
         self.tree.Expand(root)
         EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
@@ -142,9 +151,16 @@ class wxPythonDemo(wxFrame):
         # select initial items
         self.nb.SetSelection(0)
         self.tree.SelectItem(root)
-        if selectedDemo:
-            self.tree.SelectItem(selectedDemo)
-            self.tree.EnsureVisible(selectedDemo)
+
+        if len(sys.argv) == 2:
+            try:
+                selectedDemo = self.treeMap[sys.argv[1]]
+            except:
+                selectedDemo = None
+            if selectedDemo:
+                self.tree.SelectItem(selectedDemo)
+                self.tree.EnsureVisible(selectedDemo)
+
 
     #---------------------------------------------
     def WriteText(self, text):
@@ -242,13 +258,14 @@ class wxPythonDemo(wxFrame):
 
 
     def OnHelpAbout(self, event):
-        about = wxMessageDialog(self,
-                                "wxPython is a Python extension module that\n"
-                                "encapsulates the wxWindows GUI classes.\n\n"
-                                "This demo shows off some of the capabilities\n"
-                                "of wxPython.\n\n"
-                                "          Developed by Robin Dunn",
-                               "About wxPython", wxOK)
+        #about = wxMessageDialog(self,
+        #                        "wxPython is a Python extension module that\n"
+        #                        "encapsulates the wxWindows GUI classes.\n\n"
+        #                        "This demo shows off some of the capabilities\n"
+        #                        "of wxPython.\n\n"
+        #                        "          Developed by Robin Dunn",
+        #                       "About wxPython", wxOK)
+        about = MyAboutBox(self)
         about.ShowModal()
         about.Destroy()
 
@@ -265,6 +282,56 @@ class wxPythonDemo(wxFrame):
             self.otherWin.Raise()
             self.window = self.otherWin
             self.otherWin = None
+
+    #---------------------------------------------
+    def OnDemoMenu(self, event):
+        print event.GetId(), self.mainmenu.GetLabel(event.GetId())
+        try:
+            selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
+        except:
+            selectedDemo = None
+        if selectedDemo:
+            self.tree.SelectItem(selectedDemo)
+            self.tree.EnsureVisible(selectedDemo)
+
+
+
+#---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+
+class MyAboutBox(wxDialog):
+    text = '''
+<html>
+<body bgcolor="#AC76DE">
+<center><table bgcolor="#458154" width="100%%" cellspacing="0" cellpadding="0" border="1">
+<tr>
+    <td align="center"><h1>wxPython %s</h1></td>
+</tr>
+</table>
+
+<p><b>wxPython</b> is a Python extension module that
+encapsulates the wxWindows GUI classes.</p>
+
+<p>This demo shows off some of the capabilities
+of <b>wxPython</b>.  Select items from the menu or tree control,
+sit back and enjoy.  Be sure to take a peek at the source code for each
+demo item so you can learn how to use the classes yourself.</p>
+
+<p><b>wxPython</b> is brought to you by <b>Robin Dunn</b> and<br>
+<b>Total Control Software</b>, copyright 1999.</p>
+
+<p><font size="-1">Please see <i>license.txt</i> for licensing information.</font></p>
+</center>
+</body>
+</html>
+'''
+    def __init__(self, parent):
+        from wxPython.html import *
+        wxDialog.__init__(self, parent, -1, 'About wxPython')
+        self.html = wxHtmlWindow(self, -1, wxPoint(5,5), wxSize(400, 350))
+        self.html.SetPage(self.text % wx.__version__)
+        wxButton(self, wxID_OK, 'OK', wxPoint(5, 365)).SetDefault()
+        self.Fit()
 
 
 #---------------------------------------------------------------------------
