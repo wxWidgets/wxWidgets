@@ -71,7 +71,7 @@
 /*  non Unix compilers which do have wchar.h (but not tchar.h which is included */
 /*  below and which includes wchar.h anyhow). */
 /*  Actually MinGW has tchar.h, but it does not include wchar.h */
-#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__)
+#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
     #endif
@@ -701,6 +701,10 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
             #define HAVE_WCSRTOMBS 1
             #define HAVE_VSWPRINTF 1
         #endif
+        #if defined(__WATCOMC__)
+            #define wxVsnprintf_    _vsnwprintf
+            #define wxSnprintf_     _snwprintf
+        #endif
         #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
@@ -710,7 +714,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     #else /*  ASCII */
         /*  all versions of CodeWarrior supported by wxWindows apparently have */
         /*  vsnprintf() */
-        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__)
+        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
             /*  assume we have snprintf() too if we have vsnprintf() */
             #define wxVsnprintf_    vsnprintf
             #define wxSnprintf_     snprintf
