@@ -41,7 +41,7 @@ bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, 
 #include "wx/wfstream.h"
 #endif
 #endif
-#include <math.h>
+#include "wx/math.h"
 
 //-----------------------------------------------------------------------------
 // wxMask

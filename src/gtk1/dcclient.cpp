@@ -27,7 +27,7 @@
 
 #include "wx/gtk/win_gtk.h"
 
-#include <math.h>               // for floating-point functions
+#include "wx/math.h" // for floating-point functions
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>

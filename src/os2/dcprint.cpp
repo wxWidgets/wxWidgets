@@ -19,6 +19,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/app.h"
+#include "wx/math.h"
 #endif
 
 #include "wx/string.h"
@@ -26,7 +27,6 @@
 #include "wx/window.h"
 #include "wx/os2/private.h"
 #include "wx/dcprint.h"
-#include "math.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
 

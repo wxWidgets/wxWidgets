@@ -23,11 +23,11 @@
 #include "wx/dialog.h"
 #include "wx/app.h"
 #include "wx/msgdlg.h"
+#include "wx/math.h"
 #endif
 
 #include "wx/os2/private.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

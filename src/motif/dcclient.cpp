@@ -49,8 +49,7 @@
 #include "wx/app.h"
 #include "wx/image.h"
 #include "wx/log.h"
-
-#include <math.h>
+#include "wx/math.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

@@ -56,7 +56,7 @@
     #include "wx/thread.h"
 #endif
 
-#include <math.h>
+#include "wx/math.h"
 #include <ctype.h>
 
 #include "wx/gtk/private.h"

@@ -18,6 +18,7 @@
 #include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
+#include "wx/math.h"
 #endif
 
 #include "wx/fontdlg.h"
@@ -29,7 +30,6 @@
 #include "wx/os2/private.h"
 #include "wx/cmndata.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -37,7 +37,8 @@
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
 #endif
-#include <math.h>
+
+#include "wx/math.h"
 
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 

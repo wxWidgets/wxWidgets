@@ -40,7 +40,7 @@
 #else
 #include <DriverServices.h>
 #include <Multiprocessing.h>
-#include <math.h>
+#include "wx/math.h"
 #endif
 #include "wx/mac/uma.h"
 #endif

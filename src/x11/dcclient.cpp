@@ -23,7 +23,7 @@
 
 #include "wx/x11/private.h"
 
-#include <math.h>
+#include "wx/math.h"
 
 #if wxUSE_UNICODE
 #include "glib.h"

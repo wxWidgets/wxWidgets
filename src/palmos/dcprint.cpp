@@ -33,6 +33,7 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -44,7 +45,6 @@
 #endif
 
 #include "wx/dcprint.h"
-#include "math.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

@@ -25,7 +25,7 @@
 
 #include "wx/dcprint.h"
 #include "wx/msgdlg.h"
-#include <math.h>
+#include "wx/math.h"
 #include "wx/mac/uma.h"
 #include "wx/mac/private/print.h"
 

@@ -21,9 +21,7 @@
 #if wxUSE_SPINBTN
 
 #include "wx/utils.h"
-
-#include <math.h>
-
+#include "wx/math.h"
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

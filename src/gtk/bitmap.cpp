@@ -39,7 +39,7 @@
     #include <gdk/gdkrgb.h>
 #endif // GTK+ 2.0/1.2
 
-#include <math.h>
+#include "wx/math.h"
 
 extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,

@@ -26,7 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-#include <math.h>               // for fabs
+#include "wx/math.h"
 
 #include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>

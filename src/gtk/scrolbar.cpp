@@ -20,9 +20,7 @@
 #include "wx/scrolbar.h"
 
 #include "wx/utils.h"
-
-#include <math.h>
-
+#include "wx/math.h"
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

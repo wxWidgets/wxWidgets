@@ -23,6 +23,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/math.h"
 #endif
 
 #define INCL_PM
@@ -30,7 +31,6 @@
 
 #include "wx/os2/private.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

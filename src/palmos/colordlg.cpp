@@ -40,6 +40,7 @@
     #include "wx/frame.h"
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
+    #include "wx/math.h"
 #endif
 
 #if wxUSE_COLOURDLG && !defined(__SMARTPHONE__)
@@ -48,7 +49,6 @@
 #include "wx/colordlg.h"
 #include "wx/cmndata.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

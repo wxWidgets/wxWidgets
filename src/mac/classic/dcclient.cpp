@@ -18,7 +18,7 @@
 #include "wx/region.h"
 #include "wx/window.h"
 #include "wx/toplevel.h"
-#include <math.h>
+#include "wx/math.h"
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------

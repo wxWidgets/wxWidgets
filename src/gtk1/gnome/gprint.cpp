@@ -22,8 +22,7 @@
 
 #if wxUSE_LIBGNOMEPRINT
 
-#include "math.h"
-
+#include "wx/math.h"
 #include "wx/fontutil.h"
 #include "wx/printdlg.h"
 #include "wx/gtk/private.h"
