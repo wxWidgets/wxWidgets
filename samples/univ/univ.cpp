@@ -50,6 +50,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/gauge.h"
 #include "wx/imaglist.h"
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
@@ -64,11 +65,12 @@
 //#define TEST_CHECKBOX
 //#define TEST_CHECKLISTBOX
 //#define TEST_COMBO
+#define TEST_GAUGE
 //#define TEST_LISTBOX
 //#define TEST_NOTEBOOK
 //#define TEST_RADIO
 //#define TEST_SCROLL
-#define TEST_SLIDER
+//#define TEST_SLIDER
 //#define TEST_SPIN
 //#define TEST_STATIC_BMP
 //#define TEST_STATIC_BOX
@@ -149,6 +151,11 @@ private:
 #ifdef TEST_NOTEBOOK
     wxImageList *m_imagelist;
 #endif // TEST_NOTEBOOK
+
+#ifdef TEST_GAUGE
+    wxGauge *m_gaugeHorz,
+            *m_gaugeVert;
+#endif // TEST_GAUGE
 
 #ifdef TEST_SPIN
     wxTextCtrl *m_textSpin1,
@@ -390,7 +397,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     static const int style = 0;
 #endif
 
-    wxSlider *slider = new wxSlider(this, -1, 83, 0, 10,
+    wxSlider *slider = new wxSlider(this, -1, 3, 0, 10,
                                     wxPoint(10, 30), wxDefaultSize,
                                     wxSL_HORIZONTAL
                                     | wxSL_BOTTOM
@@ -398,7 +405,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                     | style);
     slider->SetValue(17);
 
-    (void)new wxSlider(this, -1, 50, 0, 10, wxPoint(10, 80), wxDefaultSize,
+    (void)new wxSlider(this, -1, 5, 0, 10, wxPoint(10, 80), wxDefaultSize,
                        wxSL_HORIZONTAL | style);
 
     (void)new wxSlider(this, -1, 10, 0, 10, wxPoint(10, 130), wxDefaultSize,
@@ -406,7 +413,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     (void)new wxSlider(this, -1, 0, 0, 10, wxPoint(160, 30), wxDefaultSize,
                        wxSL_VERTICAL | wxSL_LEFT | wxSL_LABELS | style);
-    (void)new wxSlider(this, -1, 50, 0, 10, wxPoint(210, 30), wxDefaultSize,
+    (void)new wxSlider(this, -1, 5, 0, 10, wxPoint(210, 30), wxDefaultSize,
                        wxSL_VERTICAL | style);
     (void)new wxSlider(this, -1, 10, 0, 10, wxPoint(260, 30), wxDefaultSize,
                        wxSL_VERTICAL | wxSL_RIGHT | wxSL_LABELS | style);
@@ -440,6 +447,17 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
 #endif // TEST_BMP_BUTTON
+
+#ifdef TEST_GAUGE
+    m_gaugeHorz = new wxGauge(this, -1, 100, wxPoint(10, 10), wxSize(200, 30),
+                              wxGA_HORIZONTAL);
+    m_gaugeHorz->SetForegroundColour(wxColour(0x800000));
+    m_gaugeHorz->SetValue(75);
+    m_gaugeVert = new wxGauge(this, -1, 100, wxPoint(10, 50), wxSize(30, 100),
+                              wxGA_VERTICAL | wxGA_SMOOTH);
+    m_gaugeVert->SetValue(17);
+    m_gaugeVert->SetForegroundColour(wxColour(0x7f7f7f));
+#endif // TEST_GAUGE
 
 #ifdef TEST_LISTBOX
     wxListBox *lbox = new wxListBox(this, -1, wxPoint(600, 80), wxDefaultSize,

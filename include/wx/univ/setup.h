@@ -76,7 +76,7 @@
 #define wxUSE_CHECKLISTBOX 1
 #define wxUSE_CHOICE       0
 #define wxUSE_COMBOBOX     1
-#define wxUSE_GAUGE        0
+#define wxUSE_GAUGE        1
 #define wxUSE_LISTBOX      1
 #define wxUSE_LISTCTRL     0
 #define wxUSE_RADIOBOX     1

@@ -596,6 +596,9 @@ public:
     void DrawBitmap(const wxBitmap& bitmap);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
+#if wxUSE_GAUGE
+    void DrawProgressBar(const wxGauge *gauge);
+#endif // wxUSE_GAUGE
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }
@@ -613,6 +616,7 @@ public:
                            int alignment = wxALIGN_CENTRE |
                                            wxALIGN_CENTRE_VERTICAL,
                            wxStretch stretch = wxSTRETCH_NOT);
+
 private:
     // common part of DrawItems() and DrawCheckItems()
     void DoDrawItems(const wxListBox *listbox,

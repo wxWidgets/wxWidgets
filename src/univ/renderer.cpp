@@ -744,3 +744,93 @@ void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
 
 #endif // wxUSE_CHECKLISTBOX
 
+#if wxUSE_GAUGE
+
+void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
+{
+    // draw background
+    m_dc.SetBrush(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
+    m_dc.SetPen(*wxTRANSPARENT_PEN);
+    m_dc.DrawRectangle(m_rect);
+
+    int max = gauge->GetRange();
+    if ( !max )
+    {
+        // nothing to draw
+        return;
+    }
+
+    // calc the filled rect
+    wxRect rect = m_rect;
+    rect.Deflate(1);
+    int pos = gauge->GetValue();
+    int left = max - pos;
+
+    if ( gauge->IsVertical() )
+    {
+        // vert bars grow from bottom to top
+        wxCoord dy = ((rect.height - 1) * left) / max;
+        rect.y += dy;
+        rect.height -= dy;
+    }
+    else // horizontal
+    {
+        // grow from left to right
+        rect.width -= ((rect.width - 1) * left) / max;
+    }
+
+    m_dc.SetBrush(wxBrush(m_window->GetForegroundColour(), wxSOLID));
+
+    if ( gauge->IsSmooth() )
+    {
+        m_dc.DrawRectangle(rect);
+    }
+    else // discrete
+    {
+        int steps = pos / gauge->GetStep();
+        if ( steps == 0 )
+        {
+            // nothing to draw
+            return;
+        }
+
+        wxCoord *p, sizeOneSegment, dx, dy;
+        if ( gauge->IsVertical() )
+        {
+            // draw from bottom to top
+            rect.y += rect.height - 1;
+            p = &rect.y;
+            rect.height /= steps;
+            sizeOneSegment = -rect.height;
+            rect.y -= rect.height;
+
+            dy = 1;
+            dx = 0;
+        }
+        else // horizontal
+        {
+            // don't leave 2 empty pixels in the beginning
+            rect.x--;
+
+            p = &rect.x;
+            rect.width /= steps;
+            sizeOneSegment = rect.width;
+
+            dy = 0;
+            dx = 1;
+        }
+
+        for ( int step = 0; step < steps; step++ )
+        {
+            wxRect rectSegment = rect;
+            rectSegment.Deflate(dx, dy);
+
+            m_dc.DrawRectangle(rectSegment);
+
+            *p += sizeOneSegment;
+        }
+    }
+}
+
+#endif // wxUSE_GAUGE
+
