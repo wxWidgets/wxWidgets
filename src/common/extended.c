@@ -1,7 +1,7 @@
 #include "wx/setup.h"
 #include <math.h>
 
-#if USE_APPLE_IEEE
+#if wxUSE_APPLE_IEEE
 
 /*
  * C O N V E R T   T O	 I E E E   E X T E N D E D
@@ -176,4 +176,4 @@ double ConvertFromIeeeExtended(const unsigned char *bytes)
 		return f;
 }
 
-#endif
+#endif // wxUSE_APPLE_IEEE
