@@ -112,6 +112,7 @@ _treeList = [
         'StaticBitmap',
         'StaticText',
         'StatusBar',
+        'StockButtons',
         'TextCtrl',
         'ToggleButton',
         'ToolBar',
