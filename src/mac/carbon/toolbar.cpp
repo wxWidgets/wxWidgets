@@ -149,7 +149,11 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 wxToolBarTool* tbartool = (wxToolBarTool*)data ;
                 if ( tbartool->CanBeToggled() )
                 {
+#ifdef __WXMAC_OSX__
+                    ((wxToolBar*)tbartool->GetToolBar())->ToggleTool(tbartool->GetId(), !tbartool->IsToggled() );
+#else
                     ((wxToolBar*)tbartool->GetToolBar())->ToggleTool(tbartool->GetId(), GetControl32BitValue((ControlRef)tbartool->GetControlHandle()));
+#endif
                 }
                 ((wxToolBar*)tbartool->GetToolBar())->OnLeftClick( tbartool->GetId() , tbartool -> IsToggled() ) ;
                 result = noErr; 
