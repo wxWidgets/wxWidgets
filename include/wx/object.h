@@ -155,7 +155,7 @@ WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
     // Single inheritance with one base class
 
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename)                 \
- wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name()          \
+ wxObject* wxConstructorFor##name()                             \
   { return new name; }                                          \
  wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename),   \
             0, (int) sizeof(name),                              \
@@ -164,7 +164,7 @@ WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
     // Multiple inheritance with two base classes
 
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)    \
- wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name()          \
+ wxObject* wxConstructorFor##name()                             \
   { return new name; }                                          \
  wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename1),  \
             wxT(#basename2), (int) sizeof(name),                \
