@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_FILENAME
+    #define TEST_ARRAYS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -115,6 +115,7 @@ class Bar // Foo is already taken in the hash test
 {
 public:
     Bar(const wxString& name) : m_name(name) { ms_bars++; }
+    Bar(const Bar& bar) : m_name(bar.m_name) { ms_bars++; }
    ~Bar() { ms_bars--; }
 
    static size_t GetNumber() { return ms_bars; }
@@ -5083,6 +5084,8 @@ static void TestSemaphore()
 
 #include "wx/dynarray.h"
 
+typedef unsigned short ushort;
+
 #define DefineCompare(name, T)                                                \
                                                                               \
 int wxCMPFUNC_CONV name ## CompareValues(T first, T second)                   \
@@ -5100,14 +5103,14 @@ int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
     return *second - *first;                                                  \
 }                                                                             \
 
-DefineCompare(Short, short);
+DefineCompare(UShort, ushort);
 DefineCompare(Int, int);
 
 // test compilation of all macros
-WX_DEFINE_ARRAY(short, wxArrayShort);
-WX_DEFINE_SORTED_ARRAY(short, wxSortedArrayShortNoCmp);
-WX_DEFINE_SORTED_ARRAY_CMP(short, ShortCompareValues, wxSortedArrayShort);
-WX_DEFINE_SORTED_ARRAY_CMP(int, IntCompareValues, wxSortedArrayInt);
+WX_DEFINE_ARRAY_SHORT(ushort, wxArrayUShort);
+WX_DEFINE_SORTED_ARRAY_SHORT(ushort, wxSortedArrayUShortNoCmp);
+WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, UShortCompareValues, wxSortedArrayUShort);
+WX_DEFINE_SORTED_ARRAY_CMP_INT(int, IntCompareValues, wxSortedArrayInt);
 
 WX_DECLARE_OBJARRAY(Bar, ArrayBars);
 #include "wx/arrimpl.cpp"
@@ -5185,7 +5188,7 @@ static void TestArrayOf ## name ## s()                                        \
     PrintArray("b", b);                                                       \
 }
 
-TestArrayOf(Short);
+TestArrayOf(UShort);
 TestArrayOf(Int);
 
 static void TestArrayOfObjects()
@@ -5761,7 +5764,7 @@ int main(int argc, char **argv)
         PrintArray("a1", a1);
 
         TestArrayOfObjects();
-        TestArrayOfShorts();
+        TestArrayOfUShorts();
     }
 
     TestArrayOfInts();
