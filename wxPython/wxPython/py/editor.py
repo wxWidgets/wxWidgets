@@ -4,7 +4,7 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 
 from buffer import Buffer
 import crust
@@ -25,8 +25,8 @@ class EditorFrame(frame.Frame):
     """Frame containing one editor."""
 
     def __init__(self, parent=None, id=-1, title='PyAlaCarte',
-                 pos=wx.wxDefaultPosition, size=(800, 600), 
-                 style=wx.wxDEFAULT_FRAME_STYLE, filename=None):
+                 pos=wx.DefaultPosition, size=(800, 600), 
+                 style=wx.DEFAULT_FRAME_STYLE, filename=None):
         """Create EditorFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
         self.buffers = {}
@@ -55,8 +55,8 @@ class EditorFrame(frame.Frame):
         """Display an About window."""
         title = 'About PyAlaCarte'
         text = 'Another fine, flaky program.'
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
@@ -141,11 +141,11 @@ class EditorFrame(frame.Frame):
         """Create new buffer."""
         self.bufferDestroy()
         buffer = Buffer()
-        self.panel = panel = wx.wxPanel(parent=self, id=-1)
+        self.panel = panel = wx.Panel(parent=self, id=-1)
         editor = Editor(parent=panel)
         panel.editor = editor
-        sizer = wx.wxBoxSizer(wx.wxVERTICAL)
-        sizer.Add(editor.window, 1, wx.wxEXPAND)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(editor.window, 1, wx.EXPAND)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
         sizer.Layout()
@@ -255,8 +255,8 @@ class EditorNotebookFrame(EditorFrame):
     """Frame containing one or more editors in a notebook."""
 
     def __init__(self, parent=None, id=-1, title='PyAlaMode',
-                 pos=wx.wxDefaultPosition, size=(800, 600), 
-                 style=wx.wxDEFAULT_FRAME_STYLE, filename=None):
+                 pos=wx.DefaultPosition, size=(800, 600), 
+                 style=wx.DEFAULT_FRAME_STYLE, filename=None):
         """Create EditorNotebookFrame instance."""
         self.notebook = None
         EditorFrame.__init__(self, parent, id, title, pos,
@@ -270,7 +270,7 @@ class EditorNotebookFrame(EditorFrame):
 
         Called automatically by base class during init."""
         self.notebook = EditorNotebook(parent=self)
-        intro = 'PyCrust %s' % version.VERSION
+        intro = 'Py %s' % version.VERSION
         import imp
         module = imp.new_module('__main__')
         import __builtin__
@@ -284,7 +284,7 @@ class EditorNotebookFrame(EditorFrame):
         self.shell.setStatusText = self.SetStatusText
         # Fix a problem with the sash shrinking to nothing.
         self.crust.filling.SetSashPosition(200)
-        self.notebook.AddPage(page=self.crust, text='PyCrust', select=True)
+        self.notebook.AddPage(page=self.crust, text='*Shell*', select=True)
         self.setEditor(self.crust.editor)
         self.crust.editor.SetFocus()
 
@@ -296,8 +296,8 @@ class EditorNotebookFrame(EditorFrame):
         """Display an About window."""
         title = 'About PyAlaMode'
         text = 'Another fine, flaky program.'
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
@@ -317,11 +317,11 @@ class EditorNotebookFrame(EditorFrame):
     def bufferCreate(self, filename=None):
         """Create new buffer."""
         buffer = Buffer()
-        panel = wx.wxPanel(parent=self.notebook, id=-1)
+        panel = wx.Panel(parent=self.notebook, id=-1)
         editor = Editor(parent=panel)
         panel.editor = editor
-        sizer = wx.wxBoxSizer(wx.wxVERTICAL)
-        sizer.Add(editor.window, 1, wx.wxEXPAND)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(editor.window, 1, wx.EXPAND)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
         sizer.Layout()
@@ -359,12 +359,12 @@ class EditorNotebookFrame(EditorFrame):
         return cancel
 
 
-class EditorNotebook(wx.wxNotebook):
+class EditorNotebook(wx.Notebook):
     """A notebook containing a page for each editor."""
 
     def __init__(self, parent):
         """Create EditorNotebook instance."""
-        wx.wxNotebook.__init__(self, parent, id=-1)
+        wx.Notebook.__init__(self, parent, id=-1)
         wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(),
                                       self.OnPageChanging)
         wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
@@ -430,8 +430,8 @@ class EditorShellNotebookFrame(EditorNotebookFrame):
     """Frame containing a notebook containing EditorShellNotebooks."""
 
     def __init__(self, parent=None, id=-1, title='PyAlaModeTest',
-                 pos=wx.wxDefaultPosition, size=(600, 400), 
-                 style=wx.wxDEFAULT_FRAME_STYLE,
+                 pos=wx.DefaultPosition, size=(600, 400), 
+                 style=wx.DEFAULT_FRAME_STYLE,
                  filename=None, singlefile=False):
         """Create EditorShellNotebookFrame instance."""
         self._singlefile = singlefile
@@ -449,8 +449,8 @@ class EditorShellNotebookFrame(EditorNotebookFrame):
         """Display an About window."""
         title = 'About PyAlaModePlus'
         text = 'Another fine, flaky program.'
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
@@ -515,16 +515,16 @@ class EditorShellNotebookFrame(EditorNotebookFrame):
         return cancel
 
 
-class EditorShellNotebook(wx.wxNotebook):
+class EditorShellNotebook(wx.Notebook):
     """A notebook containing an editor page and a shell page."""
 
     def __init__(self, parent, filename=None):
         """Create EditorShellNotebook instance."""
-        wx.wxNotebook.__init__(self, parent, id=-1)
+        wx.Notebook.__init__(self, parent, id=-1)
         usePanels = True
         if usePanels:
-            editorparent = editorpanel = wx.wxPanel(self, -1)
-            shellparent = shellpanel = wx.wxPanel(self, -1)
+            editorparent = editorpanel = wx.Panel(self, -1)
+            shellparent = shellpanel = wx.Panel(self, -1)
         else:
             editorparent = self
             shellparent = self
@@ -533,18 +533,18 @@ class EditorShellNotebook(wx.wxNotebook):
         self.buffer.addEditor(self.editor)
         self.buffer.open(filename)
         self.shell = Shell(parent=shellparent, locals=self.buffer.interp.locals,
-                           style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER)
+                           style=wx.CLIP_CHILDREN | wx.SUNKEN_BORDER)
         self.buffer.interp.locals.clear()
         if usePanels:
             self.AddPage(page=editorpanel, text='Editor', select=True)
             self.AddPage(page=shellpanel, text='Shell')
             # Setup sizers
-            editorsizer = wx.wxBoxSizer(wx.wxVERTICAL)
-            editorsizer.Add(self.editor.window, 1, wx.wxEXPAND)
+            editorsizer = wx.BoxSizer(wx.VERTICAL)
+            editorsizer.Add(self.editor.window, 1, wx.EXPAND)
             editorpanel.SetSizer(editorsizer)
             editorpanel.SetAutoLayout(True)
-            shellsizer = wx.wxBoxSizer(wx.wxVERTICAL)
-            shellsizer.Add(self.shell, 1, wx.wxEXPAND)
+            shellsizer = wx.BoxSizer(wx.VERTICAL)
+            shellsizer.Add(self.shell, 1, wx.EXPAND)
             shellpanel.SetSizer(shellsizer)
             shellpanel.SetAutoLayout(True)
         else:
@@ -563,7 +563,7 @@ class EditorShellNotebook(wx.wxNotebook):
         event.Skip()
 
     def SetFocus(self):
-        wx.wxNotebook.SetFocus(self)
+        wx.Notebook.SetFocus(self)
         selection = self.GetSelection()
         if selection == 0:
             self.editor.setFocus()
@@ -574,9 +574,9 @@ class EditorShellNotebook(wx.wxNotebook):
 class Editor:
     """Editor having an EditWindow."""
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize,
-                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER):
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
+                 style=wx.CLIP_CHILDREN | wx.SUNKEN_BORDER):
         """Create Editor instance."""
         self.window = EditWindow(self, parent, id, pos, size, style)
         self.id = self.window.GetId()
@@ -732,9 +732,9 @@ class Editor:
 class EditWindow(editwindow.EditWindow):
     """EditWindow based on StyledTextCtrl."""
 
-    def __init__(self, editor, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize,
-                 style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER):
+    def __init__(self, editor, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
+                 style=wx.CLIP_CHILDREN | wx.SUNKEN_BORDER):
         """Create EditWindow instance."""
         editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         self.editor = editor
@@ -746,7 +746,7 @@ class DialogResults:
     def __init__(self, returned):
         """Create wrapper for results returned by dialog."""
         self.returned = returned
-        self.positive = returned in (wx.wxID_OK, wx.wxID_YES)
+        self.positive = returned in (wx.ID_OK, wx.ID_YES)
         self.text = self._asString()
         
 
@@ -755,22 +755,22 @@ class DialogResults:
 
     def _asString(self):
         returned = self.returned
-        if returned == wx.wxID_OK:
+        if returned == wx.ID_OK:
             return "Ok"
-        elif returned == wx.wxID_CANCEL:
+        elif returned == wx.ID_CANCEL:
             return "Cancel"
-        elif returned == wx.wxID_YES:
+        elif returned == wx.ID_YES:
             return "Yes"
-        elif returned == wx.wxID_NO:
+        elif returned == wx.ID_NO:
             return "No"
 
 
 def fileDialog(parent=None, title='Open', directory='', filename='',
                wildcard='All Files (*.*)|*.*',
-               style=wx.wxOPEN | wx.wxMULTIPLE):
+               style=wx.OPEN | wx.MULTIPLE):
     """File dialog wrapper function."""
-    dialog = wx.wxFileDialog(parent, title, directory, filename,
-                             wildcard, style)
+    dialog = wx.FileDialog(parent, title, directory, filename,
+                           wildcard, style)
     result = DialogResults(dialog.ShowModal())
     if result.positive:
         result.paths = dialog.GetPaths()
@@ -781,10 +781,10 @@ def fileDialog(parent=None, title='Open', directory='', filename='',
 
 
 def openSingle(parent=None, title='Open', directory='', filename='',
-               wildcard='All Files (*.*)|*.*', style=wx.wxOPEN):
+               wildcard='All Files (*.*)|*.*', style=wx.OPEN):
     """File dialog wrapper function."""
-    dialog = wx.wxFileDialog(parent, title, directory, filename,
-                             wildcard, style)
+    dialog = wx.FileDialog(parent, title, directory, filename,
+                           wildcard, style)
     result = DialogResults(dialog.ShowModal())
     if result.positive:
         result.path = dialog.GetPath()
@@ -796,17 +796,17 @@ def openSingle(parent=None, title='Open', directory='', filename='',
 
 def openMultiple(parent=None, title='Open', directory='', filename='',
                  wildcard='All Files (*.*)|*.*',
-                 style=wx.wxOPEN | wx.wxMULTIPLE):
+                 style=wx.OPEN | wx.MULTIPLE):
     """File dialog wrapper function."""
     return fileDialog(parent, title, directory, filename, wildcard, style)
 
 
 def saveSingle(parent=None, title='Save', directory='', filename='',
                wildcard='All Files (*.*)|*.*',
-               style=wx.wxSAVE | wx.wxHIDE_READONLY | wx.wxOVERWRITE_PROMPT):
+               style=wx.SAVE | wx.HIDE_READONLY | wx.OVERWRITE_PROMPT):
     """File dialog wrapper function."""
-    dialog = wx.wxFileDialog(parent, title, directory, filename,
-                             wildcard, style)
+    dialog = wx.FileDialog(parent, title, directory, filename,
+                           wildcard, style)
     result = DialogResults(dialog.ShowModal())
     if result.positive:
         result.path = dialog.GetPath()
@@ -817,9 +817,9 @@ def saveSingle(parent=None, title='Save', directory='', filename='',
 
 
 def directory(parent=None, message='Choose a directory', path='', style=0,
-              pos=wx.wxDefaultPosition, size=wx.wxDefaultSize):
+              pos=wx.DefaultPosition, size=wx.DefaultSize):
     """Dir dialog wrapper function."""
-    dialog = wx.wxDirDialog(parent, message, path, style, pos, size)
+    dialog = wx.DirDialog(parent, message, path, style, pos, size)
     result = DialogResults(dialog.ShowModal())
     if result.positive:
         result.path = dialog.GetPath()
@@ -830,10 +830,10 @@ def directory(parent=None, message='Choose a directory', path='', style=0,
 
 
 def messageDialog(parent=None, message='', title='Message box',
-                  style=wx.wxYES_NO | wx.wxCANCEL | wx.wxCENTRE | wx.wxICON_QUESTION,
-                  pos=wx.wxDefaultPosition):
+                  style=wx.YES_NO | wx.CANCEL | wx.CENTRE | wx.ICON_QUESTION,
+                  pos=wx.DefaultPosition):
     """Message dialog wrapper function."""
-    dialog = wx.wxMessageDialog(parent, message, title, style, pos)
+    dialog = wx.MessageDialog(parent, message, title, style, pos)
     result = DialogResults(dialog.ShowModal())
     dialog.Destroy()
     return result

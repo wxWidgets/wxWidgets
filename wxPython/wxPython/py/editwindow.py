@@ -4,8 +4,8 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
-from wxPython import stc
+import wx
+from wx import stc
 
 import keyword
 import os
@@ -21,7 +21,7 @@ except NameError:
     True = 1==1
     False = 1==0
 
-if wx.wxPlatform == '__WXMSW__':
+if wx.Platform == '__WXMSW__':
     FACES = { 'times'  : 'Times New Roman',
               'mono'   : 'Courier New',
               'helv'   : 'Lucida Console',
@@ -42,15 +42,15 @@ else:  # GTK
             }
 
 
-class EditWindow(stc.wxStyledTextCtrl):
+class EditWindow(stc.StyledTextCtrl):
     """EditWindow based on StyledTextCtrl."""
 
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN | wx.wxSUNKEN_BORDER):
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.CLIP_CHILDREN | wx.SUNKEN_BORDER):
         """Create EditWindow instance."""
-        stc.wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
+        stc.StyledTextCtrl.__init__(self, parent, id, pos, size, style)
         self.__config()
         stc.EVT_STC_UPDATEUI(self, id, self.OnUpdateUI)
         dispatcher.connect(receiver=self._fontsizer, signal='FontIncrease')
@@ -70,10 +70,10 @@ class EditWindow(stc.wxStyledTextCtrl):
 
     def __config(self):
         """Configure shell based on user preferences."""
-        self.SetMarginType(1, stc.wxSTC_MARGIN_NUMBER)
+        self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
         self.SetMarginWidth(1, 40)
 
-        self.SetLexer(stc.wxSTC_LEX_PYTHON)
+        self.SetLexer(stc.STC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
         self.setStyles(FACES)
@@ -91,7 +91,7 @@ class EditWindow(stc.wxStyledTextCtrl):
         self.AutoCompStops(' .,;:([)]}\'"\\<>%^&+-=*/|`')
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = True
-        self.CallTipSetBackground(wx.wxColour(255, 255, 232))
+        self.CallTipSetBackground(wx.Colour(255, 255, 232))
         self.SetWrapMode(False)
         try:
             self.SetEndAtLastLine(False)
@@ -102,50 +102,50 @@ class EditWindow(stc.wxStyledTextCtrl):
         """Configure font size, typeface and color for lexer."""
 
         # Default style
-        self.StyleSetSpec(stc.wxSTC_STYLE_DEFAULT,
+        self.StyleSetSpec(stc.STC_STYLE_DEFAULT,
                           "face:%(mono)s,size:%(size)d,back:%(backcol)s" % \
                           faces)
 
         self.StyleClearAll()
 
         # Built in styles
-        self.StyleSetSpec(stc.wxSTC_STYLE_LINENUMBER,
+        self.StyleSetSpec(stc.STC_STYLE_LINENUMBER,
                           "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
-        self.StyleSetSpec(stc.wxSTC_STYLE_CONTROLCHAR,
+        self.StyleSetSpec(stc.STC_STYLE_CONTROLCHAR,
                           "face:%(mono)s" % faces)
-        self.StyleSetSpec(stc.wxSTC_STYLE_BRACELIGHT,
+        self.StyleSetSpec(stc.STC_STYLE_BRACELIGHT,
                           "fore:#0000FF,back:#FFFF88")
-        self.StyleSetSpec(stc.wxSTC_STYLE_BRACEBAD,
+        self.StyleSetSpec(stc.STC_STYLE_BRACEBAD,
                           "fore:#FF0000,back:#FFFF88")
 
         # Python styles
-        self.StyleSetSpec(stc.wxSTC_P_DEFAULT,
+        self.StyleSetSpec(stc.STC_P_DEFAULT,
                           "face:%(mono)s" % faces)
-        self.StyleSetSpec(stc.wxSTC_P_COMMENTLINE,
+        self.StyleSetSpec(stc.STC_P_COMMENTLINE,
                           "fore:#007F00,face:%(mono)s" % faces)
-        self.StyleSetSpec(stc.wxSTC_P_NUMBER,
+        self.StyleSetSpec(stc.STC_P_NUMBER,
                           "")
-        self.StyleSetSpec(stc.wxSTC_P_STRING,
+        self.StyleSetSpec(stc.STC_P_STRING,
                           "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(stc.wxSTC_P_CHARACTER,
+        self.StyleSetSpec(stc.STC_P_CHARACTER,
                           "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(stc.wxSTC_P_WORD,
+        self.StyleSetSpec(stc.STC_P_WORD,
                           "fore:#00007F,bold")
-        self.StyleSetSpec(stc.wxSTC_P_TRIPLE,
+        self.StyleSetSpec(stc.STC_P_TRIPLE,
                           "fore:#7F0000")
-        self.StyleSetSpec(stc.wxSTC_P_TRIPLEDOUBLE,
+        self.StyleSetSpec(stc.STC_P_TRIPLEDOUBLE,
                           "fore:#000033,back:#FFFFE8")
-        self.StyleSetSpec(stc.wxSTC_P_CLASSNAME,
+        self.StyleSetSpec(stc.STC_P_CLASSNAME,
                           "fore:#0000FF,bold")
-        self.StyleSetSpec(stc.wxSTC_P_DEFNAME,
+        self.StyleSetSpec(stc.STC_P_DEFNAME,
                           "fore:#007F7F,bold")
-        self.StyleSetSpec(stc.wxSTC_P_OPERATOR,
+        self.StyleSetSpec(stc.STC_P_OPERATOR,
                           "")
-        self.StyleSetSpec(stc.wxSTC_P_IDENTIFIER,
+        self.StyleSetSpec(stc.STC_P_IDENTIFIER,
                           "")
-        self.StyleSetSpec(stc.wxSTC_P_COMMENTBLOCK,
+        self.StyleSetSpec(stc.STC_P_COMMENTBLOCK,
                           "fore:#7F7F7F")
-        self.StyleSetSpec(stc.wxSTC_P_STRINGEOL,
+        self.StyleSetSpec(stc.STC_P_STRINGEOL,
                           "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
 
     def OnUpdateUI(self, event):
@@ -163,7 +163,7 @@ class EditWindow(stc.wxStyledTextCtrl):
 
         # Check before.
         if charBefore and chr(charBefore) in '[]{}()' \
-        and styleBefore == stc.wxSTC_P_OPERATOR:
+        and styleBefore == stc.STC_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # Check after.
@@ -171,7 +171,7 @@ class EditWindow(stc.wxStyledTextCtrl):
             charAfter = self.GetCharAt(caretPos)
             styleAfter = self.GetStyleAt(caretPos)
             if charAfter and chr(charAfter) in '[]{}()' \
-            and styleAfter == stc.wxSTC_P_OPERATOR:
+            and styleAfter == stc.STC_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:

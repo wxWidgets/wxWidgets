@@ -1,10 +1,10 @@
-"""PyCrust Crust combines the shell and filling into one control."""
+"""Crust combines the shell and filling into one control."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 
 import os
 import sys
@@ -22,26 +22,26 @@ except NameError:
     False = 1==0
 
 
-class Crust(wx.wxSplitterWindow):
-    """PyCrust Crust based on wxSplitterWindow."""
+class Crust(wx.SplitterWindow):
+    """Crust based on SplitterWindow."""
 
-    name = 'PyCrust Crust'
+    name = 'Crust'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
-                 size=wx.wxDefaultSize, style=wx.wxSP_3D,
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition, 
+                 size=wx.DefaultSize, style=wx.SP_3D,
                  name='Crust Window', rootObject=None, rootLabel=None,
                  rootIsNamespace=True, intro='', locals=None, 
                  InterpClass=None, *args, **kwds):
-        """Create a PyCrust Crust instance."""
-        wx.wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
+        """Create Crust instance."""
+        wx.SplitterWindow.__init__(self, parent, id, pos, size, style, name)
         self.shell = Shell(parent=self, introText=intro, 
                            locals=locals, InterpClass=InterpClass, 
                            *args, **kwds)
         self.editor = self.shell
         if rootObject is None:
             rootObject = self.shell.interp.locals
-        self.notebook = wx.wxNotebook(parent=self, id=-1)
+        self.notebook = wx.Notebook(parent=self, id=-1)
         self.shell.interp.locals['notebook'] = self.notebook
         self.filling = Filling(parent=self.notebook, 
                                rootObject=rootObject, 
@@ -74,13 +74,13 @@ class Crust(wx.wxSplitterWindow):
         self.SetMinimumPaneSize(1)
 
 
-class Calltip(wx.wxTextCtrl):
+class Calltip(wx.TextCtrl):
     """Text control containing the most recent shell calltip."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.wxTE_MULTILINE | wx.wxTE_READONLY | wx.wxTE_RICH2
-        wx.wxTextCtrl.__init__(self, parent=parent, id=id, style=style)
-        self.SetBackgroundColour(wx.wxColour(255, 255, 232))
+        style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2
+        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
+        self.SetBackgroundColour(wx.Colour(255, 255, 232))
         dispatcher.connect(receiver=self.display, signal='Shell.calltip')
 
     def display(self, calltip):
@@ -88,13 +88,13 @@ class Calltip(wx.wxTextCtrl):
         self.SetValue(calltip)
 
 
-class SessionListing(wx.wxTextCtrl):
+class SessionListing(wx.TextCtrl):
     """Text control containing all commands for session."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.wxTE_MULTILINE | wx.wxTE_READONLY | \
-                wx.wxTE_RICH2 | wx.wxTE_DONTWRAP
-        wx.wxTextCtrl.__init__(self, parent=parent, id=id, style=style)
+        style = wx.TE_MULTILINE | wx.TE_READONLY | \
+                wx.TE_RICH2 | wx.TE_DONTWRAP
+        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
         dispatcher.connect(receiver=self.push, signal='Interpreter.push')
 
     def push(self, command, more):
@@ -107,13 +107,13 @@ class SessionListing(wx.wxTextCtrl):
             self.AppendText(command + '\n')
 
 
-class DispatcherListing(wx.wxTextCtrl):
+class DispatcherListing(wx.TextCtrl):
     """Text control containing all dispatches for session."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.wxTE_MULTILINE | wx.wxTE_READONLY | \
-                wx.wxTE_RICH2 | wx.wxTE_DONTWRAP
-        wx.wxTextCtrl.__init__(self, parent=parent, id=id, style=style)
+        style = wx.TE_MULTILINE | wx.TE_READONLY | \
+                wx.TE_RICH2 | wx.TE_DONTWRAP
+        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
         dispatcher.connect(receiver=self.spy)
 
     def spy(self, signal, sender):
@@ -129,15 +129,15 @@ class DispatcherListing(wx.wxTextCtrl):
 class CrustFrame(frame.Frame):
     """Frame containing all the PyCrust components."""
 
-    name = 'PyCrust Frame'
+    name = 'CrustFrame'
     revision = __revision__
 
     def __init__(self, parent=None, id=-1, title='PyCrust',
-                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize,
-                 style=wx.wxDEFAULT_FRAME_STYLE,
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=wx.DEFAULT_FRAME_STYLE,
                  rootObject=None, rootLabel=None, rootIsNamespace=True,
                  locals=None, InterpClass=None, *args, **kwds):
-        """Create a PyCrust CrustFrame instance."""
+        """Create CrustFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
         intro = 'PyCrust %s - The Flakiest Python Shell' % VERSION
         intro += '\nSponsored by Orbtech - '
@@ -176,7 +176,7 @@ class CrustFrame(frame.Frame):
                'Python Version: %s\n' % sys.version.split()[0] + \
                'wxPython Version: %s\n' % wx.__version__ + \
                'Platform: %s\n' % sys.platform
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()

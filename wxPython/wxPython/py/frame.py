@@ -4,7 +4,7 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 from version import VERSION
 
 try:
@@ -13,49 +13,49 @@ except NameError:
     True = 1==1
     False = 1==0
 
-ID_NEW = wx.wxID_NEW
-ID_OPEN = wx.wxID_OPEN
-ID_REVERT = wx.wxID_REVERT
-ID_CLOSE = wx.wxID_CLOSE
-ID_SAVE = wx.wxID_SAVE
-ID_SAVEAS = wx.wxID_SAVEAS
-ID_PRINT = wx.wxID_PRINT
-ID_EXIT = wx.wxID_EXIT
-ID_UNDO = wx.wxID_UNDO
-ID_REDO = wx.wxID_REDO
-ID_CUT = wx.wxID_CUT
-ID_COPY = wx.wxID_COPY
-ID_PASTE = wx.wxID_PASTE
-ID_CLEAR = wx.wxID_CLEAR
-ID_SELECTALL = wx.wxID_SELECTALL
-ID_ABOUT = wx.wxID_ABOUT
-ID_AUTOCOMP = wx.wxNewId()
-ID_AUTOCOMP_SHOW = wx.wxNewId()
-ID_AUTOCOMP_MAGIC = wx.wxNewId()
-ID_AUTOCOMP_SINGLE = wx.wxNewId()
-ID_AUTOCOMP_DOUBLE = wx.wxNewId()
-ID_CALLTIPS = wx.wxNewId()
-ID_CALLTIPS_SHOW = wx.wxNewId()
-ID_COPY_PLUS = wx.wxNewId()
-ID_NAMESPACE = wx.wxNewId()
-ID_PASTE_PLUS = wx.wxNewId()
-ID_WRAP = wx.wxNewId()
+ID_NEW = wx.ID_NEW
+ID_OPEN = wx.ID_OPEN
+ID_REVERT = wx.ID_REVERT
+ID_CLOSE = wx.ID_CLOSE
+ID_SAVE = wx.ID_SAVE
+ID_SAVEAS = wx.ID_SAVEAS
+ID_PRINT = wx.ID_PRINT
+ID_EXIT = wx.ID_EXIT
+ID_UNDO = wx.ID_UNDO
+ID_REDO = wx.ID_REDO
+ID_CUT = wx.ID_CUT
+ID_COPY = wx.ID_COPY
+ID_PASTE = wx.ID_PASTE
+ID_CLEAR = wx.ID_CLEAR
+ID_SELECTALL = wx.ID_SELECTALL
+ID_ABOUT = wx.ID_ABOUT
+ID_AUTOCOMP = wx.NewId()
+ID_AUTOCOMP_SHOW = wx.NewId()
+ID_AUTOCOMP_MAGIC = wx.NewId()
+ID_AUTOCOMP_SINGLE = wx.NewId()
+ID_AUTOCOMP_DOUBLE = wx.NewId()
+ID_CALLTIPS = wx.NewId()
+ID_CALLTIPS_SHOW = wx.NewId()
+ID_COPY_PLUS = wx.NewId()
+ID_NAMESPACE = wx.NewId()
+ID_PASTE_PLUS = wx.NewId()
+ID_WRAP = wx.NewId()
 
 
-class Frame(wx.wxFrame):
+class Frame(wx.Frame):
     """Frame with standard menu items."""
 
     revision = __revision__
 
     def __init__(self, parent=None, id=-1, title='Editor',
-                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize, 
-                 style=wx.wxDEFAULT_FRAME_STYLE):
+                 pos=wx.DefaultPosition, size=wx.DefaultSize, 
+                 style=wx.DEFAULT_FRAME_STYLE):
         """Create a Frame instance."""
-        wx.wxFrame.__init__(self, parent, id, title, pos, size, style)
+        wx.Frame.__init__(self, parent, id, title, pos, size, style)
         self.CreateStatusBar()
         self.SetStatusText('Frame')
         import images
-        self.SetIcon(images.getPyCrustIcon())
+        self.SetIcon(images.getPyIcon())
         self.__createMenus()
         wx.EVT_CLOSE(self, self.OnClose)
 
@@ -64,7 +64,7 @@ class Frame(wx.wxFrame):
         self.Destroy()
 
     def __createMenus(self):
-        m = self.fileMenu = wx.wxMenu()
+        m = self.fileMenu = wx.Menu()
         m.Append(ID_NEW, '&New \tCtrl+N',
                  'New file')
         m.Append(ID_OPEN, '&Open... \tCtrl+O',
@@ -88,7 +88,7 @@ class Frame(wx.wxFrame):
         m.AppendSeparator()
         m.Append(ID_EXIT, 'E&xit', 'Exit Program')
 
-        m = self.editMenu = wx.wxMenu()
+        m = self.editMenu = wx.Menu()
         m.Append(ID_UNDO, '&Undo \tCtrl+Z',
                  'Undo the last action')
         m.Append(ID_REDO, '&Redo \tCtrl+Y',
@@ -109,7 +109,7 @@ class Frame(wx.wxFrame):
         m.Append(ID_SELECTALL, 'Select A&ll \tCtrl+A',
                  'Select all text')
 
-        m = self.autocompMenu = wx.wxMenu()
+        m = self.autocompMenu = wx.Menu()
         m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion',
                  'Show auto completion list', 1)
         m.Append(ID_AUTOCOMP_MAGIC, 'Include Magic Attributes',
@@ -120,11 +120,11 @@ class Frame(wx.wxFrame):
         m.Append(ID_AUTOCOMP_DOUBLE, 'Include Double Underscores',
                  'Include attibutes prefixed by a double underscore', 1)
 
-        m = self.calltipsMenu = wx.wxMenu()
+        m = self.calltipsMenu = wx.Menu()
         m.Append(ID_CALLTIPS_SHOW, 'Show Call Tips',
                  'Show call tips with argument signature and docstring', 1)
 
-        m = self.optionsMenu = wx.wxMenu()
+        m = self.optionsMenu = wx.Menu()
         m.AppendMenu(ID_AUTOCOMP, '&Auto Completion', self.autocompMenu,
                      'Auto Completion Options')
         m.AppendMenu(ID_CALLTIPS, '&Call Tips', self.calltipsMenu,
@@ -132,11 +132,11 @@ class Frame(wx.wxFrame):
         m.Append(ID_WRAP, '&Wrap Lines',
                  'Wrap lines at right edge', 1)
 
-        m = self.helpMenu = wx.wxMenu()
+        m = self.helpMenu = wx.Menu()
         m.AppendSeparator()
         m.Append(ID_ABOUT, '&About...', 'About this program')
 
-        b = self.menuBar = wx.wxMenuBar()
+        b = self.menuBar = wx.MenuBar()
         b.Append(self.fileMenu, '&File')
         b.Append(self.editMenu, '&Edit')
         b.Append(self.optionsMenu, '&Options')
@@ -221,77 +221,77 @@ class Frame(wx.wxFrame):
         self.Close(False)
 
     def OnUndo(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Undo()
 
     def OnRedo(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Redo()
 
     def OnCut(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Cut()
 
     def OnCopy(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Copy()
 
     def OnCopyPlus(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.CopyWithPrompts()
 
     def OnPaste(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Paste()
 
     def OnPastePlus(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.PasteAndRun()
 
     def OnClear(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.Clear()
 
     def OnSelectAll(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.SelectAll()
 
     def OnAbout(self, event):
         """Display an About window."""
         title = 'About'
         text = 'Your message here.'
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
     def OnAutoCompleteShow(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.autoComplete = event.IsChecked()
 
     def OnAutoCompleteMagic(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.autoCompleteIncludeMagic = event.IsChecked()
 
     def OnAutoCompleteSingle(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.autoCompleteIncludeSingle = event.IsChecked()
 
     def OnAutoCompleteDouble(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.autoCompleteIncludeDouble = event.IsChecked()
 
     def OnCallTipsShow(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.autoCallTip = event.IsChecked()
 
     def OnWrap(self, event):
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         win.SetWrapMode(event.IsChecked())
 
     def OnUpdateMenu(self, event):
         """Update menu items based on current status and context."""
-        win = wx.wxWindow_FindFocus()
+        win = wx.Window_FindFocus()
         id = event.GetId()
         event.Enable(True)
         try:

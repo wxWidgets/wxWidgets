@@ -15,9 +15,8 @@ import interpreter
 import introspect
 import pseudo
 import shell
-
 import sys
-from wxPython import wx
+import wx
 
 try:
     True

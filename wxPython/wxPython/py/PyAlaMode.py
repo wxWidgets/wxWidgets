@@ -4,7 +4,7 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 
 import os
 import sys
@@ -17,15 +17,15 @@ except NameError:
     True = 1==1
     False = 1==0
 
-class App(wx.wxApp):
+class App(wx.App):
     """PyAlaMode standalone application."""
 
     def __init__(self, filename=None):
         self.filename = filename
-        wx.wxApp.__init__(self, redirect=False)
+        wx.App.__init__(self, redirect=False)
 
     def OnInit(self):
-        wx.wxInitAllImageHandlers()
+        wx.InitAllImageHandlers()
         self.frame = editor.EditorNotebookFrame(filename=self.filename)
         self.frame.Show()
         self.SetTopWindow(self.frame)

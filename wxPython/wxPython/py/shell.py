@@ -1,8 +1,6 @@
-"""The PyCrust Shell is an interactive text control in which a user
-types in commands to be sent to the interpreter. This particular shell
-is based on wxPython's wxStyledTextCtrl. The latest files are always
-available at the SourceForge project page at
-http://sourceforge.net/projects/pycrust/.
+"""Shell is an interactive text control in which a user types in
+commands to be sent to the interpreter.  This particular shell is
+based on wxPython's wxStyledTextCtrl.
 
 Sponsored by Orbtech - Your source for Python programming expertise."""
 
@@ -12,6 +10,8 @@ __revision__ = "$Revision$"[11:-2]
 
 from wxd.d_wx import wx
 from wxd.d_stc import stc
+
+import wx
 
 import keyword
 import os
@@ -40,18 +40,18 @@ NAVKEYS = (wx.WXK_END, wx.WXK_LEFT, wx.WXK_RIGHT,
 
 
 class ShellFrame(frame.Frame):
-    """Frame containing the PyCrust shell component."""
+    """Frame containing the shell component."""
 
-    name = 'PyCrust Shell Frame'
+    name = 'Shell Frame'
     revision = __revision__
 
     def __init__(self, parent=None, id=-1, title='PyShell',
-                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize,
-                 style=wx.wxDEFAULT_FRAME_STYLE, locals=None,
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=wx.DEFAULT_FRAME_STYLE, locals=None,
                  InterpClass=None, *args, **kwds):
-        """Create a PyCrust ShellFrame instance."""
+        """Create ShellFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
-        intro = 'PyCrust %s - The Flakiest Python Shell' % VERSION
+        intro = 'PyShell %s - The Flakiest Python Shell' % VERSION
         intro += '\nSponsored by Orbtech - ' + \
                  'Your source for Python programming expertise.'
         self.SetStatusText(intro.replace('\n', ', '))
@@ -81,10 +81,10 @@ class ShellFrame(frame.Frame):
                'Shell Revision: %s\n' % self.shell.revision + \
                'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
                'Python Version: %s\n' % sys.version.split()[0] + \
-               'wxPython Version: %s\n' % wx.__version__ + \
+               'wxPython Version: %s\n' % wx.VERSION_STRING + \
                'Platform: %s\n' % sys.platform
-        dialog = wx.wxMessageDialog(self, text, title,
-                                    wx.wxOK | wx.wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title,
+                                  wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
 
@@ -95,7 +95,7 @@ class ShellFacade:
     This is a semi-transparent facade, in that all attributes of other
     are accessible, even though only some are visible to the user."""
 
-    name = 'PyCrust Shell Interface'
+    name = 'Shell Interface'
     revision = __revision__
 
     def __init__(self, other):
@@ -174,15 +174,15 @@ Ctrl+=            Default font size.
 
 
 class Shell(editwindow.EditWindow):
-    """PyCrust Shell based on StyledTextCtrl."""
+    """Shell based on StyledTextCtrl."""
 
-    name = 'PyCrust Shell'
+    name = 'Shell'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN,
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.CLIP_CHILDREN,
                  introText='', locals=None, InterpClass=None, *args, **kwds):
-        """Create a PyCrust Shell instance."""
+        """Create Shell instance."""
         editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         self.wrap()
         if locals is None:
@@ -240,7 +240,7 @@ class Shell(editwindow.EditWindow):
         # Do this last so the user has complete control over their
         # environment.  They can override anything they want.
         self.execStartupScript(self.interp.startupScript)
-        wx.wxCallAfter(self.ScrollToLine, 0)
+        wx.CallAfter(self.ScrollToLine, 0)
 
     def destroy(self):
         del self.interp
@@ -299,17 +299,17 @@ class Shell(editwindow.EditWindow):
             self.push('')
 
     def about(self):
-        """Display information about PyCrust."""
+        """Display information about Py."""
         text = """
 Author: %r
-PyCrust Version: %s
-Shell Revision: %s
-Interpreter Revision: %s
+Py Version: %s
+Py Shell Revision: %s
+Py Interpreter Revision: %s
 Python Version: %s
 wxPython Version: %s
 Platform: %s""" % \
         (__author__, VERSION, self.revision, self.interp.revision,
-         sys.version.split()[0], wx.__version__, sys.platform)
+         sys.version.split()[0], wx.VERSION_STRING, sys.platform)
         self.write(text.strip())
 
     def OnChar(self, event):
@@ -673,7 +673,7 @@ Platform: %s""" % \
     def push(self, command):
         """Send command to the interpreter for execution."""
         self.write(os.linesep)
-        busy = wx.wxBusyCursor()
+        busy = wx.BusyCursor()
         self.waiting = True
         self.more = self.interp.push(command)
         self.waiting = False
@@ -751,7 +751,7 @@ Platform: %s""" % \
         self.prompt()
         try:
             while not reader.input:
-                wx.wxYieldIfNeeded()
+                wx.YieldIfNeeded()
             input = reader.input
         finally:
             reader.input = ''
@@ -774,10 +774,10 @@ Platform: %s""" % \
 
     def ask(self, prompt='Please enter your response:'):
         """Get response from the user using a dialog box."""
-        dialog = wx.wxTextEntryDialog(None, prompt,
-                                      'Input Dialog (Raw)', '')
+        dialog = wx.TextEntryDialog(None, prompt,
+                                    'Input Dialog (Raw)', '')
         try:
-            if dialog.ShowModal() == wx.wxID_OK:
+            if dialog.ShowModal() == wx.ID_OK:
                 text = dialog.GetValue()
                 return text
         finally:
@@ -931,14 +931,14 @@ Platform: %s""" % \
             command = command.replace(os.linesep + ps2, os.linesep)
             command = command.replace(os.linesep + ps1, os.linesep)
             command = self.lstripPrompt(text=command)
-            data = wx.wxTextDataObject(command)
+            data = wx.TextDataObject(command)
             self._clip(data)
 
     def CopyWithPrompts(self):
         """Copy selection, including prompts, and place it on the clipboard."""
         if self.CanCopy():
             command = self.GetSelectedText()
-            data = wx.wxTextDataObject(command)
+            data = wx.TextDataObject(command)
             self._clip(data)
 
     def CopyWithPromptsPrefixed(self):
@@ -949,23 +949,23 @@ Platform: %s""" % \
             spaces = ' ' * 4
             command = spaces + command.replace(os.linesep,
                                                os.linesep + spaces)
-            data = wx.wxTextDataObject(command)
+            data = wx.TextDataObject(command)
             self._clip(data)
 
     def _clip(self, data):
-        if wx.wxTheClipboard.Open():
-            wx.wxTheClipboard.UsePrimarySelection(False)
-            wx.wxTheClipboard.SetData(data)
-            wx.wxTheClipboard.Flush()
-            wx.wxTheClipboard.Close()
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.UsePrimarySelection(False)
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Flush()
+            wx.TheClipboard.Close()
 
     def Paste(self):
         """Replace selection with clipboard contents."""
-        if self.CanPaste() and wx.wxTheClipboard.Open():
+        if self.CanPaste() and wx.TheClipboard.Open():
             ps2 = str(sys.ps2)
-            if wx.wxTheClipboard.IsSupported(wx.wxDataFormat(wx.wxDF_TEXT)):
-                data = wx.wxTextDataObject()
-                if wx.wxTheClipboard.GetData(data):
+            if wx.TheClipboard.IsSupported(wx.DataFormat(wx.DF_TEXT)):
+                data = wx.TextDataObject()
+                if wx.TheClipboard.GetData(data):
                     self.ReplaceSelection('')
                     command = data.GetText()
                     command = command.rstrip()
@@ -975,16 +975,16 @@ Platform: %s""" % \
                     command = command.replace(os.linesep, '\n')
                     command = command.replace('\n', os.linesep + ps2)
                     self.write(command)
-            wx.wxTheClipboard.Close()
+            wx.TheClipboard.Close()
 
     def PasteAndRun(self):
         """Replace selection with clipboard contents, run commands."""
-        if wx.wxTheClipboard.Open():
+        if wx.TheClipboard.Open():
             ps1 = str(sys.ps1)
             ps2 = str(sys.ps2)
-            if wx.wxTheClipboard.IsSupported(wx.wxDataFormat(wx.wxDF_TEXT)):
-                data = wx.wxTextDataObject()
-                if wx.wxTheClipboard.GetData(data):
+            if wx.TheClipboard.IsSupported(wx.DataFormat(wx.DF_TEXT)):
+                data = wx.TextDataObject()
+                if wx.TheClipboard.GetData(data):
                     endpos = self.GetTextLength()
                     self.SetCurrentPos(endpos)
                     startpos = self.promptPosEnd
@@ -1022,14 +1022,14 @@ Platform: %s""" % \
                         command = command.replace('\n', os.linesep + ps2)
                         self.write(command)
                         self.processLine()
-            wx.wxTheClipboard.Close()
+            wx.TheClipboard.Close()
 
     def wrap(self, wrap=True):
         """Sets whether text is word wrapped."""
         try:
             self.SetWrapMode(wrap)
         except AttributeError:
-            return 'Wrapping is not available in this version of PyCrust.'
+            return 'Wrapping is not available in this version.'
 
     def zoom(self, points=0):
         """Set the zoom level.

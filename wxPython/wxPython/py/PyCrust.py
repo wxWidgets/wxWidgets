@@ -11,7 +11,7 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 
 try:
     True
@@ -20,12 +20,12 @@ except NameError:
     False = 1==0
 
 
-class App(wx.wxApp):
+class App(wx.App):
     """PyCrust standalone application."""
 
     def OnInit(self):
-        from wxPython import wx
-        wx.wxInitAllImageHandlers()
+        import wx
+        wx.InitAllImageHandlers()
         locals = __main__.__dict__
         from crust import CrustFrame
         self.frame = CrustFrame(locals=locals)

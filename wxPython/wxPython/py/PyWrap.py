@@ -7,7 +7,7 @@ __revision__ = "$Revision$"[11:-2]
 
 import os
 import sys
-from wxPython import wx
+import wx
 from crust import CrustFrame as Frame
 
 try:
@@ -18,7 +18,7 @@ except NameError:
 
 
 def wrap(app):
-    wx.wxInitAllImageHandlers()
+    wx.InitAllImageHandlers()
     frame = Frame()
     frame.SetSize((750, 525))
     frame.Show(True)
@@ -41,7 +41,7 @@ def main(modulename=None):
     d = module.__dict__
     for item in d.keys():
         try:
-            if issubclass(d[item], wx.wxApp):
+            if issubclass(d[item], wx.App):
                 App = d[item]
         except (NameError, TypeError):
             pass
@@ -53,4 +53,4 @@ def main(modulename=None):
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()

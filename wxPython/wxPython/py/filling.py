@@ -1,11 +1,11 @@
-"""PyCrust Filling is the gui tree control through which a user can
-navigate the local namespace or any object."""
+"""Filling is the gui tree control through which a user can navigate
+the local namespace or any object."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
+import wx
 
 import dispatcher
 import editwindow
@@ -40,18 +40,18 @@ except AttributeError:
     pass
 
 
-class FillingTree(wx.wxTreeCtrl):
-    """PyCrust FillingTree based on wxTreeCtrl."""
+class FillingTree(wx.TreeCtrl):
+    """FillingTree based on TreeCtrl."""
     
-    name = 'PyCrust Filling Tree'
+    name = 'Filling Tree'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxTR_DEFAULT_STYLE,
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.TR_DEFAULT_STYLE,
                  rootObject=None, rootLabel=None, rootIsNamespace=False,
                  static=False):
-        """Create a PyCrust FillingTree instance."""
-        wx.wxTreeCtrl.__init__(self, parent, id, pos, size, style)
+        """Create FillingTree instance."""
+        wx.TreeCtrl.__init__(self, parent, id, pos, size, style)
         self.rootIsNamespace = rootIsNamespace
         import __main__
         if rootObject is None:
@@ -61,7 +61,7 @@ class FillingTree(wx.wxTreeCtrl):
             rootLabel = 'locals()'
         if not rootLabel:
             rootLabel = 'Ingredients'
-        rootData = wx.wxTreeItemData(rootObject)
+        rootData = wx.TreeItemData(rootObject)
         self.item = self.root = self.AddRoot(rootLabel, -1, -1, rootData)
         self.SetItemHasChildren(self.root, self.objHasChildren(rootObject))
         wx.EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
@@ -77,7 +77,7 @@ class FillingTree(wx.wxTreeCtrl):
 
     def OnItemExpanding(self, event):
         """Add children to the item."""
-        busy = wx.wxBusyCursor()
+        busy = wx.BusyCursor()
         item = event.GetItem()
         if self.IsExpanded(item):
             return
@@ -86,7 +86,7 @@ class FillingTree(wx.wxTreeCtrl):
 
     def OnItemCollapsed(self, event):
         """Remove all children from the item."""
-        busy = wx.wxBusyCursor()
+        busy = wx.BusyCursor()
         item = event.GetItem()
 #        self.CollapseAndReset(item)
 #        self.DeleteChildren(item)
@@ -94,7 +94,7 @@ class FillingTree(wx.wxTreeCtrl):
 
     def OnSelChanged(self, event):
         """Display information about the item."""
-        busy = wx.wxBusyCursor()
+        busy = wx.BusyCursor()
         self.item = event.GetItem()
         self.display()
 
@@ -116,7 +116,7 @@ class FillingTree(wx.wxTreeCtrl):
 
     def objGetChildren(self, obj):
         """Return dictionary with attributes or contents of object."""
-        busy = wx.wxBusyCursor()
+        busy = wx.BusyCursor()
         otype = type(obj)
         if otype is types.DictType \
         or str(otype)[17:23] == 'BTrees' and hasattr(obj, 'keys'):
@@ -156,7 +156,7 @@ class FillingTree(wx.wxTreeCtrl):
                  or (item == self.root and not self.rootIsNamespace)):
                 itemtext = repr(key)
             child = children[key]
-            data = wx.wxTreeItemData(child)
+            data = wx.TreeItemData(child)
             branch = self.AppendItem(parent=item, text=itemtext, data=data)
             self.SetItemHasChildren(branch, self.objHasChildren(child))
 
@@ -166,7 +166,7 @@ class FillingTree(wx.wxTreeCtrl):
             self.addChildren(item)
         self.setText('')
         obj = self.GetPyData(item)
-        if wx.wxPlatform == '__WXMSW__':
+        if wx.Platform == '__WXMSW__':
             if obj is None: # Windows bug fix.
                 return
         self.SetItemHasChildren(item, self.objHasChildren(obj))
@@ -248,13 +248,13 @@ class FillingTree(wx.wxTreeCtrl):
 class FillingText(editwindow.EditWindow):
     """FillingText based on StyledTextCtrl."""
 
-    name = 'PyFilling Text'
+    name = 'Filling Text'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN,
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.CLIP_CHILDREN,
                  static=False):
-        """Create a FillingText instance."""
+        """Create FillingText instance."""
         editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         # Configure various defaults and user preferences.
         self.SetReadOnly(True)
@@ -273,18 +273,18 @@ class FillingText(editwindow.EditWindow):
         self.SetReadOnly(True)
 
 
-class Filling(wx.wxSplitterWindow):
+class Filling(wx.SplitterWindow):
     """Filling based on wxSplitterWindow."""
 
-    name = 'PyFilling'
+    name = 'Filling'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxSP_3D,
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.SP_3D,
                  name='Filling Window', rootObject=None,
                  rootLabel=None, rootIsNamespace=False, static=False):
         """Create a Filling instance."""
-        wx.wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
+        wx.SplitterWindow.__init__(self, parent, id, pos, size, style, name)
         self.tree = FillingTree(parent=self, rootObject=rootObject,
                                 rootLabel=rootLabel,
                                 rootIsNamespace=rootIsNamespace,
@@ -299,23 +299,23 @@ class Filling(wx.wxSplitterWindow):
         self.tree.display()
 
 
-class FillingFrame(wx.wxFrame):
+class FillingFrame(wx.Frame):
     """Frame containing the namespace tree component."""
 
-    name = 'PyFilling Frame'
+    name = 'Filling Frame'
     revision = __revision__
 
     def __init__(self, parent=None, id=-1, title='PyFilling',
-                 pos=wx.wxDefaultPosition, size=(600, 400),
-                 style=wx.wxDEFAULT_FRAME_STYLE, rootObject=None,
+                 pos=wx.DefaultPosition, size=(600, 400),
+                 style=wx.DEFAULT_FRAME_STYLE, rootObject=None,
                  rootLabel=None, rootIsNamespace=False, static=False):
-        """Create a FillingFrame instance."""
-        wx.wxFrame.__init__(self, parent, id, title, pos, size, style)
+        """Create FillingFrame instance."""
+        wx.Frame.__init__(self, parent, id, title, pos, size, style)
         intro = 'PyFilling - The Tastiest Namespace Inspector'
         self.CreateStatusBar()
         self.SetStatusText(intro)
         import images
-        self.SetIcon(images.getPyCrustIcon())
+        self.SetIcon(images.getPyIcon())
         self.filling = Filling(parent=self, rootObject=rootObject,
                                rootLabel=rootLabel,
                                rootIsNamespace=rootIsNamespace,
@@ -324,11 +324,11 @@ class FillingFrame(wx.wxFrame):
         self.filling.tree.setStatusText = self.SetStatusText
 
 
-class App(wx.wxApp):
+class App(wx.App):
     """PyFilling standalone application."""
 
     def OnInit(self):
-        wx.wxInitAllImageHandlers()
+        wx.InitAllImageHandlers()
         self.fillingFrame = FillingFrame()
         self.fillingFrame.Show(True)
         self.SetTopWindow(self.fillingFrame)
