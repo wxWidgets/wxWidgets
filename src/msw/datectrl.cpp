@@ -58,6 +58,8 @@ typedef struct tagNMDATETIMECHANGE
     #define DateTime_SetSystemtime DateTime_SetSystemTime
 #endif
 
+IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl)
+
 // ============================================================================
 // implementation
 // ============================================================================

@@ -102,8 +102,7 @@ public:
         }
 
     private:
-        DECLARE_DYNAMIC_CLASS(wxDatePickerCtrl)
-        DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
+        DECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl)
     };
 #endif
 

@@ -36,6 +36,8 @@
 #define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl)
+
 // ============================================================================
 // implementation
 // ============================================================================

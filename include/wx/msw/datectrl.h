@@ -61,7 +61,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 
-    DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl)
 };
 
 #endif // _WX_MSW_DATECTRL_H_

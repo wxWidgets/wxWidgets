@@ -65,7 +65,8 @@ private:
 
     void Init() { m_dt = wxDateTime::Today(); }
 
-    DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl)
 };
 
 #endif // _WX_PALMOS_DATECTRL_H_
