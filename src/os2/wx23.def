@@ -6690,8 +6690,8 @@ EXPORTS
       __vft10wxBusyInfo8wxObject
       ;wxInfoFrame::wxInfoFrame(wxWindow*,const wxString&)
       __ct__11wxInfoFrameFP8wxWindowRC8wxString
-      ;wxBusyInfo::wxBusyInfo(const wxString&)
-      __ct__10wxBusyInfoFRC8wxString
+      ;wxBusyInfo::wxBusyInfo(const wxString&,wxWindow*)
+      __ct__10wxBusyInfoFRC8wxStringP8wxWindow
   ;From object file:  ..\generic\calctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxCalendarCtrl::OnMonthChange(wxCommandEvent&)
