@@ -46,8 +46,11 @@ public:
     virtual int GetValue() const ;
     virtual void SetValue(int);
 
-    void GetSize(int *x, int *y) const ;
-    void GetPosition(int *x, int *y) const ;
+    virtual void DoGetSize(int *width, int *height) const;
+
+    void GetSize(int *w, int *h) const;
+
+    void GetPosition(int *x, int *y) const;
 
     bool Show(bool show);
 
