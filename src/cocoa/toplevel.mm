@@ -102,19 +102,30 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     if(style & wxFRAME_TOOL_WINDOW)
         cocoaStyle |= NSUtilityWindowMask;
 
-    wxPoint realpos = pos;
-    wxSize realsize = size;
-    // FIXME: this is lame
-    if(realpos.x==-1)
-        realpos.x=100;
-    if(realpos.y==-1)
-        realpos.y=100;
-    if(realsize.x==-1)
-        realsize.x=200;
-    if(realsize.y==-1)
-        realsize.y=200;
+    // Create frame and check and handle default position and size
+    int realx,
+        realy;
+    
+    // WX has no set default position - the carbon port caps the low
+    // end at 20, 50.  Here we do the same, except instead of setting
+    // it to 20 and 50, we set it to 100 and 100 if the values are too low
+    if (pos.x < 20)
+        realx = 100;
+    else
+        realx = pos.x;
+        
+    if (pos.y < 50)
+        realy = 100;
+    else
+        realy = pos.y;
+
+    int realw = WidthDefault(size.x);
+    int realh = HeightDefault(size.y);
+
     // NOTE: y-origin needs to be flipped.
-    NSRect cocoaRect = [NSWindow contentRectForFrameRect:NSMakeRect(realpos.x,realpos.y,realsize.x,realsize.y) styleMask:cocoaStyle];
+    NSRect cocoaRect = [NSWindow
+                        contentRectForFrameRect:NSMakeRect(realx,realy,realw,realh) 
+                        styleMask:cocoaStyle];
 
     m_cocoaNSWindow = NULL;
     m_cocoaNSView = NULL;
