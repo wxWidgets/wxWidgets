@@ -26,45 +26,14 @@
 
 // include the wx definitions
 #ifdef WX_PRECOMP
+
+#ifdef __WXMSW__
+#include <windows.h>
+#include "wx/msw/winundef.h"
+#endif
+
 #include "wx/wx.h"
 
-// Comment this out if you don't mind slower compilation of the wxWindows
-// library
-#if !defined(__WXMAC__) && !defined(__SALFORDC__)
-#include <windows.h>
-#endif
-
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
-#ifdef GetClassName
-#undef GetClassName
-#endif
-
-#ifdef DrawText
-#undef DrawText
-#endif
-
-#ifdef GetCharWidth
-#undef GetCharWidth
-#endif
-
-#ifdef StartDoc
-#undef StartDoc
-#endif
-
-#ifdef FindWindow
-#undef FindWindow
-#endif
-
-#ifdef FindResource
-#undef FindResource
-#endif
-
-#ifdef LoadAccelerators
-#undef LoadAccelerators
-#endif
 
 #endif // WX_PRECOMP
 
