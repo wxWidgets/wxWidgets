@@ -143,11 +143,11 @@ samples/newgrid/NewgridVC.dsw
 samples/notebook/NotebookVC.dsp
 samples/notebook/NotebookVC.dsw
 
-samples/oleauto/OleautoVC.dsp
-samples/oleauto/OleautoVC.dsw
-
 samples/ownerdrw/OwnerDrwVC.dsp
 samples/ownerdrw/OwnerDrwVC.dsw
+
+samples/oleauto/OleautoVC.dsp
+samples/oleauto/OleautoVC.dsw
 
 samples/plot/PlotVC.dsp
 samples/plot/PlotVC.dsw
@@ -259,6 +259,9 @@ utils/tex2rtf/src/Tex2RTFVC.dsw
 
 utils/hhp2cached/hhp2cachedVC.dsp
 utils/hhp2cached/hhp2cachedVC.dsw
+
+utils/helpgen/src/HelpGenVC.dsp
+utils/helpgen/src/HelpGenVC.dsw
 
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw

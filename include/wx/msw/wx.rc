@@ -145,3 +145,7 @@ plot_enl_bmp            BITMAP  "wx/msw/plot_enl.bmp"
 plot_shr_bmp            BITMAP  "wx/msw/plot_shr.bmp"
 plot_zin_bmp            BITMAP  "wx/msw/plot_zin.bmp"
 plot_zot_bmp            BITMAP  "wx/msw/plot_zot.bmp"
+
+// For obtaining the RGB values of standard colours
+wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
+

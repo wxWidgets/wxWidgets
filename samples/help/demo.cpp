@@ -40,7 +40,7 @@
 #define USE_HTML_HELP 1
 
 // Use old-style HTML help if 1
-#define USE_OLD_HTML_HELP 0
+#define USE_OLD_HTML_HELP 1
 
 #if !wxUSE_HTML
 #undef USE_HTML_HELP

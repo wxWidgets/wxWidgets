@@ -479,9 +479,10 @@ bool wxToolBar::Realize()
     ::DeleteDC(memoryDC);
     ::DeleteDC(memoryDC2);
 
+#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
+
     // Map to system colours
     wxMapBitmap(hBitmap, totalBitmapWidth, totalBitmapHeight);
-#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     int bitmapId = 0;
 
@@ -1009,8 +1010,6 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // private functions
 // ----------------------------------------------------------------------------
 
-#if !USE_BITMAP_MASKS
-
 // These are the default colors used to map the bitmap colors to the current
 // system colors. Note that they are in BGR format because this is what Windows
 // wants (and not RGB)
@@ -1022,24 +1021,70 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 #define BGR_BACKGROUNDSEL   (RGB(000,000,255))  // blue
 #define BGR_BACKGROUND      (RGB(255,000,255))  // magenta
 
+static bool sg_coloursInit = FALSE;
+static long sg_stdColours[6];
+
 void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 {
-  COLORMAP ColorMap[] =
-  {
-    {BGR_BUTTONTEXT,    COLOR_BTNTEXT},     // black
-    {BGR_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
-    {BGR_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
-    {BGR_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
-/*    {BGR_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue */
-    {BGR_BACKGROUND,    COLOR_WINDOW}       // magenta
-  };
+    if (!sg_coloursInit)
+    {
+        // When a bitmap is loaded, the RGB values can change. So we need to have a
+        // reference bitmap which can tell us what the RGB values change to.
+        wxBitmap stdColourBitmap("wxBITMAP_STD_COLOURS", wxBITMAP_TYPE_RESOURCE);
+        if (stdColourBitmap.Ok())
+        {
+            wxMemoryDC memDC;
+            memDC.SelectObject(stdColourBitmap);
 
-  int NUM_MAPS = (sizeof(ColorMap)/sizeof(COLORMAP));
-  int n;
-  for ( n = 0; n < NUM_MAPS; n++)
-  {
-    ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
-  }
+            int i = 0;
+            wxColour colour;
+            for (i = 0; i < 6; i++)
+            {
+                memDC.GetPixel(i, 0, & colour);
+                sg_stdColours[i] = RGB(colour.Red(), colour.Green(), colour.Blue());
+            }
+            sg_coloursInit = TRUE;
+            memDC.SelectObject(wxNullBitmap);
+        }
+        else
+        {
+            sg_stdColours[0] = RGB(000,000,000) ;
+            sg_stdColours[1] = RGB(128,128,128) ;
+            sg_stdColours[2] = RGB(192,192,192) ;
+            sg_stdColours[3] = RGB(255,255,255) ;
+            sg_stdColours[4] = RGB(000,000,255) ;
+            sg_stdColours[5] = RGB(255,000,255) ;
+            sg_coloursInit = TRUE;
+        }
+    }
+
+    COLORMAP ColorMap[5];
+    
+    ColorMap[0].from = sg_stdColours[0]; ColorMap[0].to = COLOR_BTNTEXT;      // black        (0, 0 0)
+    ColorMap[1].from = sg_stdColours[1]; ColorMap[1].to = COLOR_BTNSHADOW;    // dark grey    (128, 128, 128)
+    ColorMap[2].from = sg_stdColours[2]; ColorMap[2].to = COLOR_BTNFACE;      // bright grey  (192, 192, 192)
+    ColorMap[3].from = sg_stdColours[3]; ColorMap[3].to = COLOR_BTNHIGHLIGHT; // white        (255, 255, 255)
+    //  ColorMap[4].from = sg_stdColours[4]; ColorMap[4].to = COLOR_HIGHLIGHT;  // blue         (0, 0, 255)
+    ColorMap[4].from = sg_stdColours[5]; ColorMap[4].to = COLOR_WINDOW;       // magenta      (255, 0, 255)
+
+#if 0
+    {
+        {BGR_BUTTONTEXT,    COLOR_BTNTEXT},     // black
+        {BGR_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
+        {BGR_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
+        {BGR_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
+        /*    {BGR_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue */
+        {BGR_BACKGROUND,    COLOR_WINDOW}       // magenta
+    };
+#endif
+    
+    int NUM_MAPS = (sizeof(ColorMap)/sizeof(COLORMAP));
+    int n;
+    for ( n = 0; n < NUM_MAPS; n++)
+    {
+        ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
+    }
+    
 
   HBITMAP hbmOld;
   HDC hdcMem = CreateCompatibleDC(NULL);
@@ -1077,8 +1122,6 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
   }
 
 }
-
-#endif // USE_BITMAP_MASKS
 
 // Some experiments...
 #if 0
