@@ -2230,7 +2230,7 @@ wxAccStatus wxWindowAccessible::GetLocation(wxRect& rect, int elementId)
     {
         if (elementId <= (int) GetWindow()->GetChildren().GetCount())
         {
-            win = (wxWindow*) GetWindow()->GetChildren().Nth(elementId-1)->GetData();
+            win = GetWindow()->GetChildren().Item(elementId-1)->GetData();
         }
         else
             return wxACC_FAIL;
@@ -2278,7 +2278,8 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
     case wxNAVDIR_DOWN:
     case wxNAVDIR_NEXT:
         {
-            wxWindowList::compatibility_iterator node = NULL;
+            wxWindowList::compatibility_iterator node =
+                wxWindowList::compatibility_iterator();
             if (fromId == 0)
             {
                 // Can't navigate to sibling of this window
@@ -2296,7 +2297,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
 
             if (node && node->GetNext())
             {
-                wxWindow* nextWindow = (wxWindow*) node->GetNext()->Data();
+                wxWindow* nextWindow = node->GetNext()->GetData();
                 *toObject = nextWindow->GetOrCreateAccessible();
                 return wxACC_OK;
             }
@@ -2307,7 +2308,8 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
     case wxNAVDIR_UP:
     case wxNAVDIR_PREVIOUS:
         {
-            wxWindowList::compatibility_iterator node = NULL;
+            wxWindowList::compatibility_iterator node =
+                wxWindowList::compatibility_iterator();
             if (fromId == 0)
             {
                 // Can't navigate to sibling of this window
@@ -2325,7 +2327,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
 
             if (node && node->GetPrevious())
             {
-                wxWindow* previousWindow = (wxWindow*) node->GetPrevious()->Data();
+                wxWindow* previousWindow = node->GetPrevious()->GetData();
                 *toObject = previousWindow->GetOrCreateAccessible();
                 return wxACC_OK;
             }
@@ -2398,7 +2400,7 @@ wxAccStatus wxWindowAccessible::GetChild(int childId, wxAccessible** child)
     if (childId > (int) GetWindow()->GetChildren().GetCount())
         return wxACC_FAIL;
 
-    wxWindow* childWindow = (wxWindow*) GetWindow()->GetChildren().Nth(childId-1)->GetData();
+    wxWindow* childWindow = GetWindow()->GetChildren().Item(childId-1)->GetData();
     *child = childWindow->GetOrCreateAccessible();
     if (*child)
         return wxACC_OK;
