@@ -64,7 +64,7 @@ wxCursor::wxCursor( int cursorId )
     GdkCursorType gdk_cur = GDK_LEFT_PTR;
     switch (cursorId)
     {
-        case wxCURSOR_DEFAULT:          gdk_cur = GDK_X_CURSOR; break;
+        case wxCURSOR_DEFAULT:          gdk_cur = GDK_ARROW; break;
         case wxCURSOR_HAND:             gdk_cur = GDK_HAND1; break;
         case wxCURSOR_CROSS:            gdk_cur = GDK_CROSSHAIR; break;
         case wxCURSOR_SIZEWE:           gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
