@@ -992,11 +992,7 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   DEFAULT_wxUSE_SPINCTRL=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
-  DEFAULT_wxUSE_FINDREPLDLG=no
-  DEFAULT_wxUSE_FONTDLG=no
-  DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_PROGRESSDLG=no
-  DEFAULT_wxUSE_WIZARDDLG=no
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
