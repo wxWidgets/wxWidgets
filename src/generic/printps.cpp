@@ -153,8 +153,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     int logPPIPrinterX = 0;
     int logPPIPrinterY = 0;
 
-    logPPIScreenX = 100;
-    logPPIScreenY = 100;
+    logPPIScreenX = 75;
+    logPPIScreenY = 75;
 
     /*
     // Correct values for X/PostScript?
@@ -348,7 +348,7 @@ void wxPostScriptPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        m_previewPrintout->SetPPIScreen(100, 100);
+        m_previewPrintout->SetPPIScreen(75, 75);
         //      m_previewPrintout->SetPPIPrinter(100, 100);
         m_previewPrintout->SetPPIPrinter(wxPostScriptDC::GetResolution(), wxPostScriptDC::GetResolution()); 
 
