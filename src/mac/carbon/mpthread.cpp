@@ -35,16 +35,15 @@
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
+#if TARGET_API_MAC_OSX
 #include <CoreServices/CoreServices.h>
+#else
+#include <DriverServices.h>
+#include <Multiprocessing.h>
+#include <math.h>
+#endif
 #include "wx/mac/uma.h"
 #endif
-
-// trace mask for wxThread operations
-#define TRACE_THREADS   _T("thread")
-
-// you can get additional debugging messages for the semaphore operations
-#define TRACE_SEMA      _T("semaphore")
-
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1149,16 +1148,9 @@ wxThreadError wxThread::Resume()
     switch ( state )
     {
         case STATE_PAUSED:
-            wxLogTrace(TRACE_THREADS, _T("Thread %ld suspended, resuming."),
-                       GetId());
-
             m_internal->Resume();
-
             return wxTHREAD_NO_ERROR;
-
         case STATE_EXITED:
-            wxLogTrace(TRACE_THREADS, _T("Thread %ld exited, won't resume."),
-                       GetId());
             return wxTHREAD_NO_ERROR;
 
         default:
@@ -1428,7 +1420,7 @@ bool wxThreadModule::OnInit()
     
 	if ( !hasThreadManager )
     {
-		wxMessageBox( "Error" , "MP Thread Support is not available on this System" , wxOK ) ;
+		wxMessageBox( wxT("Error") , wxT("MP Thread Support is not available on this System" ), wxOK ) ;
 		return FALSE ;
     }
 	
