@@ -59,6 +59,11 @@ struct WXDLLEXPORT wxNativeFontInfo
     wxString GetXFontName() const;
 #elif defined(__WXMSW__)
     LOGFONT      lf;
+#elif defined(__WXPM__)
+    // OS/2 native structures that define a font
+    FATTRS       fa;
+    FONTMETRICS  fm;
+    FACENAMEDESC fn;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports

@@ -195,8 +195,18 @@ WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 WXDLLEXPORT void   wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
 WXDLLEXPORT void   wxFillLogFont( LOGFONT*      pLogFont
                                  ,PFACENAMEDESC pFaceName
-                                 ,const wxFont* pFont
+                                 ,HPS           hPS
+                                 ,long*         pflId
+                                 ,wxString&     sFaceName
+                                 ,wxFont*       pFont
                                 );
+WXDLLEXPORT wxFontEncoding wxGetFontEncFromCharSet(int nCharSet);
+WXDLLEXPORT void   wxOS2SelectMatchingFontByName( PFATTRS       vFattrs
+                                                 ,PFACENAMEDESC pFaceName
+                                                 ,PFONTMETRICS  pFM
+                                                 ,int           nNumFonts
+                                                 ,const wxFont* pFont
+                                                );
 WXDLLEXPORT wxFont wxCreateFontFromLogFont( LOGFONT*      pLogFont
                                            ,PFONTMETRICS  pFM
                                            ,PFACENAMEDESC pFace

@@ -170,6 +170,58 @@ bool wxGetNativeFontEncoding(
     return TRUE;
 } // end of wxGetNativeFontEncoding
 
+wxFontEncoding wxGetFontEncFromCharSet(
+  int                               nCharSet
+)
+{
+    wxFontEncoding                  eFontEncoding;
+
+    switch (nCharSet)
+    {
+        default:
+        case 1250:
+            eFontEncoding = wxFONTENCODING_CP1250;
+            break;
+
+        case 1252:
+            eFontEncoding = wxFONTENCODING_CP1252;
+            break;
+
+        case 921:
+            eFontEncoding = wxFONTENCODING_ISO8859_4;
+            break;
+
+        case 1251:
+            eFontEncoding = wxFONTENCODING_CP1251;
+            break;
+
+        case 864:
+            eFontEncoding = wxFONTENCODING_ISO8859_6;
+            break;
+
+        case 869:
+            eFontEncoding = wxFONTENCODING_ISO8859_7;
+            break;
+
+        case 862:
+            eFontEncoding = wxFONTENCODING_ISO8859_8;
+            break;
+
+        case 857:
+            eFontEncoding = wxFONTENCODING_ISO8859_9;
+            break;
+
+        case 874:
+            eFontEncoding = wxFONTENCODING_ISO8859_11;
+            break;
+
+        case 437:
+            eFontEncoding = wxFONTENCODING_CP437;
+            break;
+    }
+    return eFontEncoding;
+} // end of wxGetNativeFontEncoding
+
 bool wxTestFontEncoding(
   const wxNativeEncodingInfo&       rInfo
 )
@@ -207,77 +259,249 @@ bool wxTestFontEncoding(
 // ----------------------------------------------------------------------------
 
 void wxFillLogFont(
-  LOGFONT*                          pLogFont // OS2 GPI FATTRS
+  LOGFONT*                          pFattrs  // OS2 GPI FATTRS
 , PFACENAMEDESC                     pFaceName
+, HPS                               hPS
+, long*                             pflId
+, wxString&                         sFaceName
+, wxFont*                           pFont
+)
+{
+    LONG                            lNumFonts = 0L;       // For system font count
+    ERRORID                         vError;               // For logging API errors
+    LONG                            lTemp;
+    bool                            bInternalPS = FALSE;  // if we have to create one
+    PFONTMETRICS                    pFM = NULL;
+
+    //
+    // Initial house cleaning to free data buffers and ensure we have a
+    // functional PS to work with
+    //
+    if (!hPS)
+    {
+        hPS = ::WinGetPS(HWND_DESKTOP);
+        bInternalPS = TRUE;
+    }
+
+    //
+    // Determine the number of fonts.
+    //
+    lNumFonts = ::GpiQueryFonts( hPS
+                                ,QF_PUBLIC
+                                ,NULL
+                                ,&lTemp
+                                ,(LONG) sizeof(FONTMETRICS)
+                                ,NULL
+                               );
+
+    //
+    // Allocate space for the font metrics.
+    //
+    pFM = new FONTMETRICS[lNumFonts + 1];
+
+    //
+    // Retrieve the font metrics.
+    //
+    lTemp = lNumFonts;
+    lTemp = ::GpiQueryFonts( hPS
+                            ,QF_PUBLIC
+                            ,NULL
+                            ,&lTemp
+                            ,(LONG) sizeof(FONTMETRICS)
+                            ,pFM
+                           );
+    pFont->SetFM( pFM
+                 ,(int)lNumFonts
+                );
+
+    wxString                        sVals;
+
+    for (int i = 0; i < lNumFonts; i++)
+    {
+         sVals << "Face: " << pFM[i].szFacename
+               << "Family: " << pFM[i].szFamilyname
+               << " PointSize: " << pFM[i].lEmHeight
+               << " Height: " << pFM[i].lXHeight
+               ;
+         sVals = "";
+    }
+
+    //
+    // Initialize FATTR and FACENAMEDESC
+    //
+    pFattrs->usRecordLength = sizeof(FATTRS);
+    pFattrs->fsFontUse = FATTR_FONTUSE_OUTLINE |       // only outline fonts allowed
+                          FATTR_FONTUSE_TRANSFORMABLE;  // may be transformed
+    pFattrs->fsType = 0;
+    pFattrs->lMaxBaselineExt = pFattrs->lAveCharWidth = 0;
+    pFattrs->idRegistry = 0;
+    pFattrs->lMatch = 0;
+
+    pFaceName->usSize = sizeof(FACENAMEDESC);
+    pFaceName->usWidthClass = FWIDTH_NORMAL;
+    pFaceName->usReserved = 0;
+    pFaceName->flOptions = 0;
+
+    //
+    // This does the actual selection of fonts
+    //
+    wxOS2SelectMatchingFontByName( pFattrs
+                                  ,pFaceName
+                                  ,pFM
+                                  ,(int)lNumFonts
+                                  ,pFont
+                                 );
+    //
+    // We should now have the correct FATTRS set with the selected
+    // font, so now we need to generate an ID
+    //
+    long                            lNumLids = ::GpiQueryNumberSetIds(hPS);
+    long                            lGpiError;
+
+    if(lNumLids )
+    {
+        long                        alTypes[255];
+        STR8                        azNames[255];
+        long                        alIds[255];
+
+        if(!::GpiQuerySetIds( hPS
+                             ,lNumLids
+                             ,alTypes
+                             ,azNames
+                             ,alIds
+                            ))
+        {
+            if (bInternalPS)
+                ::WinReleasePS(hPS);
+            return;
+        }
+
+        for(unsigned long LCNum = 0; LCNum < lNumLids; LCNum++)
+            if(alIds[LCNum] == *pflId)
+               ++*pflId;
+        if(*pflId > 254)  // wow, no id available!
+        {
+            if (bInternalPS)
+               ::WinReleasePS(hPS);
+           return;
+        }
+    }
+
+    //
+    // Release and delete the current font
+    //
+    ::GpiSetCharSet(hPS, LCID_DEFAULT);/* release the font before deleting */
+    ::GpiDeleteSetId(hPS, 1L);         /* delete the logical font          */
+
+    //
+    // Now build a facestring
+    //
+    char                            zFacename[128];
+
+    strcpy(zFacename, pFattrs->szFacename);
+
+    if(::GpiQueryFaceString( hPS
+                            ,zFacename
+                            ,pFaceName
+                            ,FACESIZE
+                            ,pFattrs->szFacename
+                           ) == GPI_ERROR)
+    {
+        vError = ::WinGetLastError(vHabmain);
+    }
+    sFaceName = zFacename;
+
+    //
+    // That's it, we now have everything we need to actually create the font
+    //
+} // end of wxFillLogFont
+
+void wxOS2SelectMatchingFontByName(
+  PFATTRS                           pFattrs
+, PFACENAMEDESC                     pFaceName
+, PFONTMETRICS                      pFM
+, int                               nNumFonts
 , const wxFont*                     pFont
 )
 {
-    wxString                        sFace;
-    USHORT                          uWeight;
-    int                             nItalic;
+    int                             i;
+    int                             nDiff0;
+    int                             nPointSize;
+    int                             nDiff;
+    int                             nIs;
+    int                             nIndex;
+    int                             nMinDiff;
+    int                             nMinDiff0;
+    int                             nApirc;
+    int                             anDiff[16];
+    int                             anMinDiff[16];
+    STR8                            zFn;
+    char                            zFontFaceName[FACESIZE];
+    wxString                        sFaceName;
+    USHORT                          usWeightClass;
+    int                             fsSelection = 0;
 
-    pLogFont->fsSelection = 0;
-    pLogFont->fsSelection = FATTR_SEL_OUTLINE; // we will alway use only outlines
-    pFaceName->usWeightClass = 0;
-    pFaceName->flOptions = 0;
+    nMinDiff0 = 0xf000;
+    for(i = 0;i < 16; i++)
+        anMinDiff[i] = nMinDiff0;
+
     switch (pFont->GetFamily())
     {
         case wxSCRIPT:
-            sFace = _T("Script");
+            sFaceName = wxT("Script");
             break;
 
         case wxDECORATIVE:
         case wxROMAN:
-            sFace = _T("Times New Roman");
+            sFaceName = wxT("Times New Roman");
             break;
 
         case wxTELETYPE:
         case wxMODERN:
-            sFace = _T("Courier New");
+            sFaceName = wxT("Courier") ;
             break;
 
         case wxSWISS:
-            sFace = _T("WarpSans");
+            sFaceName = wxT("WarpSans") ;
             break;
 
         case wxDEFAULT:
         default:
-            sFace = _T("Helv");
+            sFaceName = wxT("Helv") ;
     }
 
     switch (pFont->GetWeight())
     {
         default:
             wxFAIL_MSG(_T("unknown font weight"));
-            uWeight = FWEIGHT_DONT_CARE;
+            // fall through
+            usWeightClass = FWEIGHT_DONT_CARE;
             break;
 
         case wxNORMAL:
-            uWeight = FWEIGHT_NORMAL;
+            usWeightClass = FWEIGHT_NORMAL;
             break;
 
         case wxLIGHT:
-            uWeight = FWEIGHT_LIGHT;
+            usWeightClass = FWEIGHT_LIGHT;
             break;
 
         case wxBOLD:
-            uWeight = FWEIGHT_BOLD;
-            pLogFont->fsSelection |= FATTR_SEL_BOLD;
+            usWeightClass = FWEIGHT_BOLD;
             break;
 
-        case wxFONTWEIGHT_MAX:
-            uWeight = FWEIGHT_ULTRA_BOLD;
-            pLogFont->fsSelection |= FATTR_SEL_BOLD;
+         case wxFONTWEIGHT_MAX:
+            usWeightClass = FWEIGHT_ULTRA_BOLD;
             break;
     }
-    pFaceName->usWeightClass |= uWeight;
+    pFaceName->usWeightClass = usWeightClass;
 
     switch (pFont->GetStyle())
     {
         case wxITALIC:
         case wxSLANT:
-            nItalic = FTYPE_ITALIC;
-            pLogFont->fsSelection |= FATTR_SEL_ITALIC;
+            fsSelection = FM_SEL_ITALIC;
+            pFaceName->flOptions = FTYPE_ITALIC;
             break;
 
         default:
@@ -285,81 +509,120 @@ void wxFillLogFont(
             // fall through
 
         case wxNORMAL:
-            nItalic = 0;
+            fsSelection  = 0;
             break;
     }
-    pFaceName->flOptions |= nItalic;
-    if(pFont->GetUnderlined())
-        pLogFont->fsSelection |= FATTR_SEL_UNDERSCORE;
+
+    wxStrncpy(zFontFaceName, sFaceName.c_str(), WXSIZEOF(zFontFaceName));
+    nPointSize = pFont->GetPointSize();
 
     //
-    // In PM a font's height is expressed in points.  A point equals
-    // approximately 1/72 of an inch.  We'll assume for now that,
-    // like Windows, that fonts are 96 dpi.
+    // Matching logic to find the right FM struct
     //
-    DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
-    HDC                             hDC = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
-    LONG                            lStart = CAPS_FAMILY;
-    LONG                            lCount = CAPS_VERTICAL_RESOLUTION;
-    LONG                            alArray[CAPS_VERTICAL_RESOLUTION];
-    LONG                            lRes;
-    int                             nPpInch;
-
-
-    ::DevQueryCaps(hDC, lStart, lCount, alArray);
-    lRes = alArray[CAPS_VERTICAL_RESOLUTION-1];
-    if (lRes > 0)
-        nPpInch = (int)(lRes/39.6); // lres is in pixels per meter
-    else
-        nPpInch = 96;
-
-    int                             nHeight = (pFont->GetPointSize() * nPpInch/72);
-    wxString                        sFacename = pFont->GetFaceName();
-
-    if (!!sFacename)
+    nIndex = 0;
+    for(i = 0, nIs = 0; i < nNumFonts; i++)
     {
-        sFace = sFacename;
-    }
-    //else: ff_face is a reasonable default facename for this font family
+        int                         nEmHeight = 0;
+        int                         nXHeight = 0;
 
-    //
-    // Deal with encoding now
-    //
-    wxNativeEncodingInfo            vInfo;
-    wxFontEncoding                  vEncoding = pFont->GetEncoding();
-
-    if (!wxGetNativeFontEncoding( vEncoding
-                                 ,&vInfo
-                                ))
-    {
-#if wxUSE_FONTMAP
-        if (!wxTheFontMapper->GetAltForEncoding(vEncoding, &vInfo))
-#endif // wxUSE_FONTMAP
+        anDiff[0] = wxGpiStrcmp(pFM[i].szFamilyname, zFontFaceName);
+        anDiff[1] = abs(pFM[i].lEmHeight - nPointSize);
+        anDiff[2] = abs(pFM[i].usWeightClass -  usWeightClass);
+        anDiff[3] = abs((pFM[i].fsSelection & 0x2f) -  fsSelection);
+        if(anDiff[0] == 0)
         {
-            //
-            // Unsupported encoding, replace with the default
-            //
-            vInfo.charset = 850;
+            nEmHeight = (int)pFM[i].lEmHeight;
+            nXHeight  =(int)pFM[i].lXHeight;
+            if( (nIs & 0x01) == 0)
+            {
+                nIs = 1;
+                nIndex = i;
+                anMinDiff[1] = anDiff[1];
+                anMinDiff[2] = anDiff[2];
+                anMinDiff[3] = anDiff[3];
+            }
+            else if(anDiff[3] < anMinDiff[3])
+            {
+                nIndex = i;
+                anMinDiff[3] = anDiff[3];
+            }
+            else if(anDiff[2] < anMinDiff[2])
+            {
+                nIndex = i;
+                anMinDiff[2] = anDiff[2];
+            }
+            else if(anDiff[1] < anMinDiff[1])
+            {
+                nIndex = i;
+                anMinDiff[1] = anDiff[1];
+            }
+            anMinDiff[0] = 0;
+        }
+        else if(anDiff[0] < anMinDiff[0])
+        {
+              nIs = 2;
+              nIndex = i;
+              anMinDiff[3] = anDiff[3];
+              anMinDiff[2] = anDiff[2];
+              anMinDiff[1] = anDiff[1];
+              anMinDiff[0] = anDiff[0];
+        }
+        else if(anDiff[0] == anMinDiff[0])
+        {
+            if(anDiff[3] < anMinDiff[3])
+            {
+                nIndex = i;
+                anMinDiff[3] = anDiff[3];
+                nIs = 2;
+            }
+            else if(anDiff[2] < anMinDiff[2])
+            {
+                nIndex = i;
+                anMinDiff[2] = anDiff[2];
+                nIs = 2;
+            }
+            else if(anDiff[1] < anMinDiff[1])
+            {
+                nIndex = i;
+                anMinDiff[1] = anDiff[1];
+                nIs = 2;
+            }
         }
     }
 
-    if (!vInfo.facename.IsEmpty() )
+    //
+    // Fill in the FATTRS with the best match from FONTMETRICS
+    //
+    pFattrs->usRecordLength = sizeof(FATTRS);            // sets size of structure
+    pFattrs->fsSelection    = pFM[nIndex].fsSelection; // uses default selection
+    pFattrs->lMatch         = pFM[nIndex].lMatch;      // force match
+    pFattrs->idRegistry     = pFM[nIndex].idRegistry;  // uses default registry
+    pFattrs->usCodePage     = pFM[nIndex].usCodePage;  // code-page
+    if(pFM[nIndex].lMatch)
     {
-        //
-        // The facename determined by the encoding overrides everything else
-        //
-        sFace = vInfo.facename;
+        pFattrs->lMaxBaselineExt = pFM[nIndex].lMaxBaselineExt; // requested font height
+        pFattrs->lAveCharWidth   = pFM[nIndex].lAveCharWidth ;  // requested font width
     }
+    else
+    {
+        pFattrs->lMaxBaselineExt = 0;
+        pFattrs->lAveCharWidth   = 0;
+    }
+    pFattrs->fsType    = 0;// pfm->fsType;              /* uses default type       */
+    pFattrs->fsFontUse = 0;
 
-    //
-    // Transfer all the data to LOGFONT
-    //
-    pLogFont->usRecordLength = sizeof(FATTRS);
-    wxStrcpy(pLogFont->szFacename, sFace.c_str());
-    pLogFont->usCodePage = vInfo.charset;
-    pLogFont->fsFontUse |= FATTR_FONTUSE_OUTLINE |
-                           FATTR_FONTUSE_TRANSFORMABLE;
-} // end of wxFillLogFont
+    wxStrcpy(pFattrs->szFacename, pFM[nIndex].szFacename);
+    // Debug
+    strcpy(zFontFaceName, pFM[nIndex].szFacename);
+    strcpy(zFontFaceName, pFattrs->szFacename);
+
+    if(usWeightClass >= FWEIGHT_BOLD)
+        pFattrs->fsSelection |= FATTR_SEL_BOLD;
+    if(pFont->GetUnderlined())
+        pFattrs->fsSelection |= FATTR_SEL_UNDERSCORE;
+    if(fsSelection & FM_SEL_ITALIC)
+        pFattrs->fsSelection |= FATTR_SEL_ITALIC;
+} // end of wxOS2SelectMatchingFontByName
 
 wxFont wxCreateFontFromLogFont(
   const LOGFONT*                    pLogFont

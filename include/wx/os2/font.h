@@ -40,10 +40,29 @@ public:
     {
         Init();
 
-        (void)Create(nSize, nFamily, nStyle, nWeight, bUnderlined, rsFace, vEncoding);
+        (void)Create( nSize
+                     ,nFamily
+                     ,nStyle
+                     ,nWeight
+                     ,bUnderlined
+                     ,rsFace
+                     ,vEncoding
+                    );
     }
 
-    wxFont(const wxNativeFontInfo& rInfo);
+    wxFont( const wxNativeFontInfo& rInfo
+           ,WXHFONT                 hFont = 0
+          )
+
+    {
+        Init();
+
+        (void)Create( rInfo
+                     ,hFont
+                    );
+    }
+
+    wxFont(const wxString& rsFontDesc);
 
     bool Create( int             nSize
                 ,int             nFamily
@@ -52,6 +71,9 @@ public:
                 ,bool            bUnderlined = FALSE
                 ,const wxString& rsFace = wxEmptyString
                 ,wxFontEncoding  vEncoding = wxFONTENCODING_DEFAULT
+               );
+    bool Create( const wxNativeFontInfo& rInfo
+                ,WXHFONT                 hFont = 0
                );
 
     virtual ~wxFont();
@@ -64,14 +86,14 @@ public:
     //
     // Implement base class pure virtuals
     //
-    virtual int            GetPointSize(void) const;
-    virtual int            GetFamily(void) const;
-    virtual int            GetStyle(void) const;
-    virtual int            GetWeight(void) const;
-    virtual bool           GetUnderlined(void) const;
-    virtual wxString       GetFaceName(void) const;
-    virtual wxFontEncoding GetEncoding(void) const;
-    virtual HPS            GetPS(void) const;
+    virtual int               GetPointSize(void) const;
+    virtual int               GetFamily(void) const;
+    virtual int               GetStyle(void) const;
+    virtual int               GetWeight(void) const;
+    virtual bool              GetUnderlined(void) const;
+    virtual wxString          GetFaceName(void) const;
+    virtual wxFontEncoding    GetEncoding(void) const;
+    virtual wxNativeFontInfo* GetNativeFontInfo() const;
 
     virtual void SetPointSize(int nPointSize);
     virtual void SetFamily(int nFamily);
@@ -80,16 +102,18 @@ public:
     virtual void SetFaceName(const wxString& rsFaceName);
     virtual void SetUnderlined(bool bUnderlined);
     virtual void SetEncoding(wxFontEncoding vEncoding);
-    virtual void SetPS(HPS hPS);
-    virtual void SetFM( PFONTMETRICS pFM
-                       ,int          nNumFonts
-                      );
+    virtual void SetNativeFontInfo(const wxNativeFontInfo& rInfo);
 
+    //
+    // For internal use only!
+    //
+    void SetFM( PFONTMETRICS pFM
+               ,int          nNumFonts
+              );
     //
     // Implementation only from now on
     // -------------------------------
     //
-    int              GetFontId(void) const;
     virtual bool     IsFree(void) const;
     virtual bool     RealizeResource(void);
     virtual WXHANDLE GetResourceHandle(void);
@@ -104,8 +128,6 @@ protected:
     void Unshare(void);
 
 private:
-    void OS2SelectMatchingFontByName(void);
-
     DECLARE_DYNAMIC_CLASS(wxFont)
 }; // end of wxFont
 
