@@ -254,6 +254,15 @@ done
 new revision: 1.54; previous revision: 1.53
 done
 
+35. [ 882201 ] wxXPMDecoder doesn't always patch magenta
+
+Checking in xpmdecod.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/xpmdecod.cpp,v  <--  xpmdecod.cpp
+new revision: 1.32; previous revision: 1.31
+done
+
+=======
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
