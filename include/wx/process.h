@@ -24,6 +24,16 @@
 
 #include "wx/utils.h"       // for wxSignal
 
+// the wxProcess creation flags
+enum
+{
+    // no redirection
+    wxPROCESS_DEFAULT = 0,
+
+    // redirect the IO of the child process
+    wxPROCESS_REDIRECT = 1
+};
+
 // ----------------------------------------------------------------------------
 // A wxProcess object should be passed to wxExecute - than its OnTerminate()
 // function will be called when the process terminates.
@@ -32,10 +42,27 @@
 class WXDLLEXPORT wxProcess : public wxEvtHandler
 {
 public:
+    // kill the process with the given PID
+    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
+
+    // test if the given process exists
+    static bool Exists(int pid);
+
+    // this function replaces the standard popen() one: it launches a process
+    // asynchronously and allows the caller to get the streams connected to its
+    // std{in|out|err}
+    //
+    // on error NULL is returned, in any case the process object will be
+    // deleted automatically when the process terminates and should *not* be
+    // deleted by the caller
+    static wxProcess *Open(const wxString& cmd);
+
+
+    // ctors
     wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1)
-        { Init(parent, id, FALSE); }
-    wxProcess(wxEvtHandler *parent, bool redirect)
-        { Init(parent, -1, redirect); }
+        { Init(parent, id, wxPROCESS_DEFAULT); }
+
+    wxProcess(int flags) { Init(NULL, -1, flags); }
 
     virtual ~wxProcess();
 
@@ -62,23 +89,30 @@ public:
     void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
 
     // implementation only (for wxExecute)
-    void SetPipeStreams(wxInputStream *inStream,
-                        wxOutputStream *outStream,
+    //
+    // NB: the streams passed here should correspond to the child process
+    //     stdout, stdin and stderr and here the normal naming convention is
+    //     used unlike elsewhere in this class
+    void SetPipeStreams(wxInputStream *outStream,
+                        wxOutputStream *inStream,
                         wxInputStream *errStream);
 #endif // wxUSE_STREAMS
 
-    // kill the process with the given PID
-    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
-
-    // test if the given process exists
-    static bool Exists(int pid);
+    // for backwards compatibility only, don't use
+#if WXWIN_COMPATIBILITY_2_2
+    wxProcess(wxEvtHandler *parent, bool redirect)
+        { Init(parent, -1, redirect ? wxPROCESS_REDIRECT : wxPROCESS_DEFAULT); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
-    void Init(wxEvtHandler *parent, int id, bool redirect);
+    void Init(wxEvtHandler *parent, int id, int flags);
 
     int m_id;
 
 #if wxUSE_STREAMS
+    // these streams are connected to stdout, stderr and stdin of the child
+    // process respectively (yes, m_inputStream corresponds to stdout -- very
+    // confusing but too late to change now)
     wxInputStream  *m_inputStream,
                    *m_errorStream;
     wxOutputStream *m_outputStream;

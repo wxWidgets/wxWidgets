@@ -47,19 +47,33 @@ IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 // wxProcess creation
 // ----------------------------------------------------------------------------
 
-void wxProcess::Init(wxEvtHandler *parent, int id, bool redirect)
+void wxProcess::Init(wxEvtHandler *parent, int id, int flags)
 {
     if ( parent )
         SetNextHandler(parent);
 
     m_id         = id;
-    m_redirect   = redirect;
+    m_redirect   = (flags & wxPROCESS_REDIRECT) != 0;
 
 #if wxUSE_STREAMS
     m_inputStream  = NULL;
     m_errorStream  = NULL;
     m_outputStream = NULL;
 #endif // wxUSE_STREAMS
+}
+
+/* static */
+wxProcess *wxProcess::Open(const wxString& cmd)
+{
+    wxProcess *process = new wxProcess(wxPROCESS_REDIRECT);
+    if ( !wxExecute(cmd, wxEXEC_ASYNC, process) )
+    {
+        // couldn't launch the process
+        delete process;
+        return NULL;
+    }
+
+    return process;
 }
 
 // ----------------------------------------------------------------------------

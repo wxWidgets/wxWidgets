@@ -45,6 +45,8 @@ for explicit destruction.}
 
 \func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{int}{ id = -1}}
 
+\func{}{wxProcess}{\param{int }{flags}}
+
 Constructs a process object. {\it id} is only used in the case you want to
 use wxWindows events. It identifies this object, or another window that will
 receive the event.
@@ -53,11 +55,19 @@ If the {\it parent} parameter is different from NULL, it will receive
 a wxEVT\_END\_PROCESS notification event (you should insert EVT\_END\_PROCESS
 macro in the event table of the parent to handle it) with the given {\it id}.
 
+The second constructor creates an object without any associated parent (and
+hence no id neither) but allows to specify the {\it flags} which can have the
+value of {\tt wxPROCESS\_DEFAULT} or {\tt wxPROCESS\_REDIRECT}. Specifying the
+former value has no particular effect while using the latter one is equivalent
+to calling \helpref{Redirect}{wxprocessredirect}.
+
 \wxheading{Parameters}
 
 \docparam{parent}{The event handler parent.}
 
 \docparam{id}{id of an event.}
+
+\docparam{flags}{either {\tt wxPROCESS\_DEFAULT} or {\tt wxPROCESS\_REDIRECT}}
 
 \membersection{wxProcess::\destruct{wxProcess}}
 
@@ -183,6 +193,33 @@ It raises a wxWindows event when it isn't overridden.
 \docparam{pid}{The pid of the process which has just terminated.}
 
 \docparam{status}{The exit code of the process.}
+
+\membersection{wxProcess::Open}\label{wxprocessopen}
+
+\func{static wxProcess *}{Open}{\param{const wxString\& }{cmd}}
+
+This static method replaces the standard {\tt popen()} function: it launches
+the process specified by the {\it cmd} parameter and returns the wxProcess
+object which can be used to retrieve the streams connected to the standard
+input, output and error output of the child process.
+
+If the process couldn't be launched, {\tt NULL} is returned. Note that in any
+case the returned pointer should {\bf not} be deleted, rather the process
+object will be destroyed automatically when the child process terminates. This
+does mean that the child process should be told to quit before the main program
+exits to avoid memory leaks.
+
+\wxheading{Parameters}
+
+\docparam{cmd}{The command to execute, including optional arguments.}
+
+\wxheading{Return value}
+
+A pointer to new wxProcess object or {\tt NULL} on error.
+
+\wxheading{See also}
+
+\helpref{wxExecute}{wxexecute}
 
 \membersection{wxProcess::Redirect}\label{wxprocessredirect}
 
