@@ -83,8 +83,9 @@ class wxDynamicSashReparentEvent : public wxEvent {
 public:
     wxDynamicSashReparentEvent();
     wxDynamicSashReparentEvent(wxObject *object);
+    wxDynamicSashReparentEvent(const wxDynamicSashReparentEvent& evt);
 
-    virtual wxEvent* Clone() const { return NULL; }
+    virtual wxEvent* Clone() const { return new wxDynamicSashReparentEvent(*this); }
 
     DECLARE_DYNAMIC_CLASS(wxDynamicSashReparentEvent);
 };
@@ -1237,6 +1238,11 @@ wxDynamicSashReparentEvent::wxDynamicSashReparentEvent() {
 wxDynamicSashReparentEvent::wxDynamicSashReparentEvent(wxObject *object) {
     m_eventObject = object;
     m_eventType = wxEVT_DYNAMIC_SASH_REPARENT;
+}
+
+wxDynamicSashReparentEvent::wxDynamicSashReparentEvent(const wxDynamicSashReparentEvent& evt)
+    : wxEvent(evt)
+{
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxDynamicSashReparentEvent, wxEvent)
