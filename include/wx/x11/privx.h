@@ -65,5 +65,23 @@ wxString wxGetXEventName(XEvent& event);
 // Is the window visible?
 bool wxWindowIsVisible(Window win);
 
+#if wxUSE_NANOX
+#define XEventGetWindow(event) event->general.wid
+#define XConfigureEventGetWidth(event) ((int) event->update.width)
+#define XConfigureEventGetHeight(event) ((int) event->update.height)
+#define XExposeEventGetX(event) event->exposure.x
+#define XExposeEventGetY(event) event->exposure.y
+#define XExposeEventGetWidth(event) event->exposure.width
+#define XExposeEventGetHeight(event) event->exposure.height
+#else
+#define XEventGetWindow(event) event->xany.window
+#define XConfigureEventGetWidth(event) event->xconfigure.width
+#define XConfigureEventGetHeight(event) event->xconfigure.height
+#define XExposeEventGetX(event) event->xexpose.x
+#define XExposeEventGetY(event) event->xexpose.y
+#define XExposeEventGetWidth(event) event->xexpose.width
+#define XExposeEventGetHeight(event) event->xexpose.height
+#endif
+
 #endif
 // _WX_PRIVX_H_

@@ -10,14 +10,20 @@
 
 #include "wx/x11/nanox/X11/Xlib.h"
 
-Colormap DefaultColormapOfScreen(Screen /* screen */)
+/* Expands to some compatibility functions (see XtoNX.h) */
+
+STATIC_FUNCTIONS
+
+Colormap DefaultColormapOfScreen(Screen* /* screen */)
 {
-    static Colormap s_globalColormap;
+    static GR_PALETTE* s_globalColormap = 0;
     static bool s_init = FALSE;
 
     if (!s_init)
     {
-        GrGetSystemPalette(& s_globalColormap);
+        s_globalColormap = (GR_PALETTE*) malloc(sizeof(GR_PALETTE));
+       
+        GrGetSystemPalette(s_globalColormap);
         s_init = TRUE;
     }
 
@@ -168,6 +174,69 @@ Status XGetWindowAttributes(Display* display, Window w,
     window_attributes->screen = NULL;
 
     return 1;
+}
+
+static XErrorHandler* g_ErrorHandler = NULL;
+
+static void DefaultNanoXErrorHandler(GR_EVENT_ERROR* ep)
+{
+    if (g_ErrorHandler)
+    {
+        XErrorEvent errEvent;
+        errEvent.type = ep->type;
+        errEvent.display = wxGlobalDisplay();
+        errEvent.resourceid = ep->id;
+        errEvent.serial = 0;
+        errEvent.error_code = ep->code;
+        errEvent.request_code = 0;
+        errEvent.minor_code = 0;
+        (*g_ErrorHandler)(wxGlobalDisplay(), & errEvent);
+    }
+}
+
+XErrorHandler XSetErrorHandler (XErrorHandler handler)
+{
+    XErrorHandler oldHandler = g_ErrorHandler;
+    g_errorHandler = handler;
+    return oldHandler;
+}
+
+Screen *XScreenOfDisplay(Display*		/* display */,
+                         int /* screen_number */)
+{
+    static Screen s_screen;
+    /* TODO: fill in the members. See Xlib.h */
+    return & s_screen;
+}
+
+int DisplayWidth(Display* /* display */, int /* screen */)
+{
+    return _display.display_width;
+}
+
+int DisplayHeight(Display* /* display */, int /* screen */)
+{
+    return _display.display_height;
+}
+
+int DefaultDepth(Display* /* display */, int /* screen */)
+{
+    return _display.display_bpp;
+}
+
+int XAllocColor(Display* /* display */, Colormap /* cmap */,
+                XColor* color)
+{
+    GR_PIXELVAL pixel;
+    GrFindColor(color, & pixel);
+    return pixel;
+}
+
+int XParseColor(Display* /* display */, Colormap /* cmap */,
+                const char* cname, XColor* color)
+{
+    /* TODO */
+    return 0;
 }
 
 #endif

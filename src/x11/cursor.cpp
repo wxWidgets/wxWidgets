@@ -20,7 +20,10 @@
 #include "wx/utils.h"
 
 #include "wx/x11/private.h"
+
+#if !wxUSE_NANOX
 #include <X11/cursorfont.h>
+#endif
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -64,6 +67,13 @@ wxCursor::wxCursor( int cursorId )
 {
     m_refData = new wxCursorRefData();
 
+#if wxUSE_NANOX
+    // TODO Create some standard cursors from bitmaps.
+    
+    
+#else
+    // !wxUSE_NANOX
+    
     M_CURSORDATA->m_display = wxGlobalDisplay();
     wxASSERT_MSG( M_CURSORDATA->m_display, wxT("No display") );
     
@@ -108,6 +118,7 @@ wxCursor::wxCursor( int cursorId )
     }
 
     M_CURSORDATA->m_cursor = (WXCursor) XCreateFontCursor( (Display*) M_CURSORDATA->m_display, x_cur );
+#endif
 }
 
 wxCursor::wxCursor(const char bits[], int width, int  height,

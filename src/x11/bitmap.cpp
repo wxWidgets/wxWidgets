@@ -18,8 +18,17 @@
 #include "wx/log.h"
 #include "wx/image.h"
 #include "wx/app.h"
+#if wxUSE_NANOX
+#include "wx/dcmemory.h"
+#endif
 
 #include "wx/x11/private.h"
+
+/* No point in using libXPM for NanoX */
+#if wxUSE_NANOX
+#undef wxHAVE_LIB_XPM
+#define wxHAVE_LIB_XPM 0
+#endif
 
 #if wxUSE_XPM
 #if wxHAVE_LIB_XPM
@@ -70,6 +79,7 @@ wxMask::~wxMask()
 bool wxMask::Create( const wxBitmap& bitmap,
                      const wxColour& colour )
 {
+#if !wxUSE_NANOX
     if (m_bitmap)
     {
         XFreePixmap( (Display*) m_display, (Pixmap) m_bitmap );
@@ -167,6 +177,10 @@ bool wxMask::Create( const wxBitmap& bitmap,
     XFreeGC( xdisplay, gc );
 
     return TRUE;
+#else
+    return FALSE;
+#endif
+    // wxUSE_NANOX
 }
 
 bool wxMask::Create( const wxBitmap& bitmap, int paletteIndex )
@@ -183,6 +197,7 @@ bool wxMask::Create( const wxBitmap& bitmap, int paletteIndex )
 
 bool wxMask::Create( const wxBitmap& bitmap )
 {
+#if !wxUSE_NANOX
     if (m_bitmap)
     {
         XFreePixmap( (Display*) m_display, (Pixmap) m_bitmap );
@@ -210,6 +225,10 @@ bool wxMask::Create( const wxBitmap& bitmap )
     XFreeGC( (Display*) m_display, gc );
 
     return TRUE;
+#else
+    return FALSE;
+#endif
+    // wxUSE_NANOX
 }
 
 //-----------------------------------------------------------------------------
@@ -291,6 +310,13 @@ bool wxBitmap::Create( int width, int height, int depth )
     M_BMPDATA->m_mask = (wxMask *) NULL;
     M_BMPDATA->m_width = width;
     M_BMPDATA->m_height = height;
+
+#if wxUSE_NANOX
+    M_BMPDATA->m_bitmap = (WXPixmap) GrNewPixmap(width, height, NULL);
+    M_BMPDATA->m_bpp = bpp;
+
+    wxASSERT_MSG( M_BMPDATA->m_bitmap, wxT("Bitmap creation failed") );
+#else
     if (depth == 1)
     {
         M_BMPDATA->m_bitmap = (WXPixmap) XCreatePixmap( (Display*) M_BMPDATA->m_display, xroot, width, height, 1 );
@@ -307,7 +333,7 @@ bool wxBitmap::Create( int width, int height, int depth )
         
         M_BMPDATA->m_bpp = depth;
     }
-
+#endif
     return Ok();
 }
 
@@ -387,6 +413,60 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
+#if wxUSE_NANOX
+    if (!image.Ok())
+    {
+        wxASSERT_MSG(image.Ok(), "Invalid wxImage passed to wxBitmap::CreateFromImage.");
+        return FALSE;
+    }
+    
+    int w = image.GetWidth();
+    int h = image.GetHeight();
+    
+    if (!Create(w, h, depth))
+        return FALSE;
+
+    wxMemoryDC memDC;
+    memDC.SelectObject(*this);
+
+    // Warning: this is very inefficient.
+    wxPen pen;
+    pen.SetStyle(wxSOLID);
+    pen.SetWidth(1);
+    
+    int i, j;
+    for (i = 0; i < w; i++)
+    {
+        for (j = 0; j < h; j++)
+        {
+            unsigned char red = image.GetRed(i, j);
+            unsigned char green = image.GetGreen(i, j);
+            unsigned char blue = image.GetBlue(i, j);
+            wxColour colour(red, green, blue);
+
+            pen.SetColour(colour);
+            memDC.SetPen(pen);
+            memDC.DrawPoint(i, j);
+            
+#if 0
+            if (hasMask)
+            {
+                // scan the bitmap for the transparent colour and set the corresponding
+                // pixels in the mask to BLACK and the rest to WHITE
+                if (maskR == red && maskG == green && maskB == blue)
+                    ::SetPixel(hMaskDC, i, j, PALETTERGB(0, 0, 0));
+                else
+                    ::SetPixel(hMaskDC, i, j, PALETTERGB(255, 255, 255));
+            }
+#endif
+        }
+    }
+    memDC.SelectObject(wxNullBitmap);
+    
+    return TRUE;
+#else
+    // !wxUSE_NANOX
+    
     UnRef();
 
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
@@ -634,6 +714,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
 
     return TRUE;
+#endif
+    // wxUSE_NANOX
 }
 
 static void wxCalcPrecAndShift( unsigned long mask, int *shift, int *prec )
@@ -667,7 +749,37 @@ wxImage wxBitmap::ConvertToImage() const
     Visual* xvisual = DefaultVisual( xdisplay, xscreen );
     
     int bpp = DefaultDepth( xdisplay, xscreen );
+
+#if wxUSE_NANOX
+    int w = image.GetWidth();
+    int h = image.GetHeight();
     
+    wxMemoryDC memDC;
+    memDC.SelectObject(*this);
+
+    wxColour pixelCol;
+
+    // Warning: this is very inefficient.
+    int i, j;
+    for (i = 0; i < w; i++)
+    {
+        for (j = 0; j < h; j++)
+        {
+            memDC.GetPixel(i, j, & pixelCol);
+
+            // TODO: make wxColour accessors more efficient
+            // by inlining, if possible
+            image.SetRGB(i, j,
+                         pixelCol.Red(), pixelCol.Green(),
+                         pixelCol.Blue());
+        }
+    }
+    memDC.SelectObject(wxNullBitmap);
+
+    return image;
+    
+#else
+    // !wxUSE_NANOX
     XImage *x_image = NULL;
     if (GetPixmap())
     {
@@ -820,8 +932,9 @@ wxImage wxBitmap::ConvertToImage() const
 
     XDestroyImage( x_image );
     if (x_image_mask) XDestroyImage( x_image_mask );
-
     return image;
+#endif
+    // wxUSE_NANOX
 }
 
 wxBitmap::wxBitmap( const wxBitmap& bmp )
@@ -836,6 +949,7 @@ wxBitmap::wxBitmap( const wxString &filename, int type )
 
 wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth) )
 {
+#if !wxUSE_NANOX
     m_refData = new wxBitmapRefData();
 
     M_BMPDATA->m_display = wxGlobalDisplay();
@@ -850,7 +964,7 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
     M_BMPDATA->m_width = width;
     M_BMPDATA->m_height = height;
     M_BMPDATA->m_bpp = 1;
-
+#endif
     wxCHECK_RET( M_BMPDATA->m_bitmap, wxT("couldn't create bitmap") );
 }
 
@@ -1040,7 +1154,7 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
 	wxFileInputStream stream(name);
 	if (stream.Ok())
 	{
-            wxImage image(decoder.Read(stream));
+            wxImage image(decoder.ReadFile(stream));
 	    if (image.Ok())
 		return CreateFromImage(image);
 	    else

@@ -72,7 +72,10 @@ XErrorHandlerFunc gs_pfnXErrorHandler = 0;
 static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 {
     // just forward to the default handler for now
-    return gs_pfnXErrorHandler(dpy, xevent);
+    if (gs_pfnXErrorHandler)
+        return gs_pfnXErrorHandler(dpy, xevent);
+    else
+        return 0;
 }
 #endif // __WXDEBUG__
 
@@ -230,11 +233,11 @@ int wxEntryStart( int& argc, char *argv[] )
         g_newArgc ++;
     }
 
-    Display* xdisplay;
+    Display* xdisplay = NULL;
     if (displayName.IsEmpty())
         xdisplay = XOpenDisplay(NULL);
     else
-        xdisplay = XOpenDisplay(displayName);
+        xdisplay = XOpenDisplay(displayName.c_str());
 
     if (!xdisplay)
     {
@@ -406,7 +409,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     XEvent* event = (XEvent*) _event;
 
     wxWindow* win = NULL;
-    Window window = event->xany.window;
+    Window window = XEventGetWindow(event);
     Window actualWindow = window;
     
     // Find the first wxWindow that corresponds to this event window
@@ -464,10 +467,13 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         }
         case ConfigureNotify:
         {
-            // Not clear if this is the same in NanoX
-            if (win)
+            if (win
+#if wxUSE_NANOX
+                && (event->update.utype == GR_UPDATE_SIZE)
+#endif
+                )
             {
-                wxSizeEvent sizeEvent( wxSize(event->xconfigure.width,event->xconfigure.height), win->GetId() );
+                wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                 sizeEvent.SetEventObject( win );
                 
                 win->GetEventHandler()->ProcessEvent( sizeEvent );
@@ -539,12 +545,12 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (win)
             {
-                win->GetUpdateRegion().Union( event->xexpose.x, event->xexpose.y,
-                                              event->xexpose.width, event->xexpose.height);
+                win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                              XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
-                win->GetClearRegion().Union( event->xexpose.x, event->xexpose.y,
-                                             event->xexpose.width, event->xexpose.height);
-                
+                win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                              XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+                                              
                 if (event->xexpose.count == 0)
                 {
                     // Only erase background, paint in idle time.
@@ -554,6 +560,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             return;
         }
+#if !wxUSE_NANOX
         case GraphicsExpose:
         {
             if (win)
@@ -577,6 +584,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             return;
         }
+#endif
         case EnterNotify:
         case LeaveNotify:
         case ButtonPress:
@@ -630,12 +638,14 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 }
                 break;
             }
-        case DestroyNotify:
+#ifndef wxUSE_NANOX
+         case DestroyNotify:
             {
                 // Do we want to process this (for top-level windows)?
                 // But we want to be able to veto closes, anyway
                 break;
             }
+#endif
         default:
         {
 #ifdef __WXDEBUG__
@@ -823,9 +833,19 @@ Window wxGetWindowParent(Window window)
     return (Window) 0;
 
     Window parent, root = 0;
+#if wxUSE_NANOX
+    int noChildren = 0;
+#else
     unsigned int noChildren = 0;
+#endif
     Window* children = NULL;
-    int res = XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
+
+    // #define XQueryTree(d,w,r,p,c,nc)		GrQueryTree(w,p,c,nc)
+    int res = 1;
+#if !wxUSE_NANOX
+    res =
+#endif
+        XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
 			 & children, & noChildren);
     if (children)
         XFree(children);

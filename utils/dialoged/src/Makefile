@@ -17,6 +17,8 @@ program_dir = utils/dialoged/src
 PROGRAM=DialogEd
 
 OBJECTS = dialoged.o dlghndlr.o edlist.o edtree.o reseditr.o reswrite.o symbtabl.o winprop.o winstyle.o
+DEPFILES= dialoged.d dlghndlr.d edlist.d edtree.d reseditr.d reswrite.d symbtabl.d winprop.d winstyle.d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

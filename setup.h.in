@@ -1,4 +1,4 @@
-/* This define (__WX_SETUP_H__) is used both to insure setup.h is included
+/* This define (__WX_SETUP_H__) is used both to ensure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
 #define __WX_SETUP_H__
@@ -84,6 +84,9 @@
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
 #undef __EMX__
+
+/* NanoX (with wxX11) */
+#define wxUSE_NANOX 0
 
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__

@@ -122,7 +122,7 @@ public:
     
 protected:
     bool CreateFromXpm(const char **bits);
-    bool CreateFromImage(const wxImage& image, int depth);
+    bool CreateFromImage(const wxImage& image, int depth = -1);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
