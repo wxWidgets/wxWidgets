@@ -72,6 +72,7 @@ cp `cygpath $WXWIN_OLD/docs/htmlhelp`/*.chm $WXDIR/docs/htmlhelp
 
 echo "Building wxPython and installers..."
 cd $WXDIR/wxPython
+mkdir -p dist
 
 for ver in $PYVER; do
     echo $ver
