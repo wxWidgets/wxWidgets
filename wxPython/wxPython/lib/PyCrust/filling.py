@@ -50,11 +50,13 @@ class FillingTree(wxTreeCtrl):
         """Return a dictionary with the attributes or contents of object."""
         dict = {}
         objtype = type(object)
-        if objtype is types.DictType:
+        if (objtype is types.DictType) \
+        or str(objtype)[17:23] == 'BTrees' and hasattr(object, 'keys'):
             dict = object
         elif (objtype in (types.ClassType, \
                           types.InstanceType, \
-                          types.ModuleType)):
+                          types.ModuleType)) \
+        or str(objtype)[1:10] == 'extension':
             for key in introspect.getAttributeNames(object):
                 # Believe it or not, some attributes can disappear, such as
                 # the exc_traceback attribute of the sys module. So this is
@@ -74,7 +76,10 @@ class FillingTree(wxTreeCtrl):
         if not children:
             return
         list = children.keys()
-        list.sort(lambda x, y: cmp(x.lower(), y.lower()))
+        try:
+            list.sort(lambda x, y: cmp(x.lower(), y.lower()))
+        except:
+            pass
         for item in list:
             itemtext = str(item)
             # Show string dictionary items with single quotes, except for
@@ -101,7 +106,7 @@ class FillingTree(wxTreeCtrl):
         object = self.GetPyData(item)
         text = ''
         text += self.getFullName(item)
-        text += '\n\nType: ' + str(type(object))[7:-2]
+        text += '\n\nType: ' + str(type(object))
         value = str(object)
         if type(object) is types.StringType:
             value = repr(value)
@@ -133,9 +138,11 @@ class FillingTree(wxTreeCtrl):
         name = self.GetItemText(item)
         # Apply dictionary syntax to dictionary items, except the root
         # and first level children of a namepace.
-        if type(parentobject) is types.DictType \
+        if (type(parentobject) is types.DictType \
+            or str(type(parentobject))[17:23] == 'BTrees' \
+            and hasattr(parentobject, 'keys')) \
         and ((item != self.root and parent != self.root) \
-        or (parent == self.root and not self.rootIsNamespace)):
+            or (parent == self.root and not self.rootIsNamespace)):
             name = '[' + name + ']'
         # Apply dot syntax to multipart names.
         if partial:

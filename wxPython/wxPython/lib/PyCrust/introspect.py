@@ -93,59 +93,70 @@ def getCallTip(command='', locals=None):
     
     The call tip information will be based on the locals namespace."""
 
+    calltip = ('', '', '')
     # Get the proper chunk of code from the command.
     root = getRoot(command, terminator='(')
     try:
         object = eval(root, locals)
     except:
-        return ''
-    dropSelf = 0
-    if hasattr(object, '__name__'):  # Make sure this is a useable object.
-        # Switch to the object that has the information we need.
-        if inspect.ismethod(object) or hasattr(object, 'im_func'):
-            # Get the function from the object otherwise inspect.getargspec()
-            # complains that the object isn't a Python function.
-            object = object.im_func
-            dropSelf = 1
-        elif inspect.isclass(object):
-            # Get the __init__ method function for the class.
-            constructor = getConstructor(object)
-            if constructor is not None:
-                object = constructor
-                dropSelf = 1
-        name = object.__name__
-        tip1 = ''
-        if inspect.isbuiltin(object):
-            # Builtin functions don't have an argspec that we can get.
-            pass
-        elif inspect.isfunction(object):
-            # tip1 is a string like: "getCallTip(command='', locals=None)"
-            argspec = apply(inspect.formatargspec, inspect.getargspec(object))
-            if dropSelf:
-                # The first parameter to a method is a reference to the
-                # instance, usually coded as "self", and is passed
-                # automatically by Python and therefore we want to drop it.
-                temp = argspec.split(',')
-                if len(temp) == 1:  # No other arguments.
-                    argspec = '()'
-                else:  # Drop the first argument.
-                    argspec = '(' + ','.join(temp[1:]).lstrip()
-            tip1 = name + argspec
-        doc = inspect.getdoc(object)
-        if doc:
-            # tip2 is the first separated line of the docstring, like:
-            # "Return call tip text for a command."
-            # tip3 is the rest of the docstring, like:
-            # "The call tip information will be based on ... <snip>
-            docpieces = doc.split('\n\n')
-            tip2 = docpieces[0]
-            tip3 = '\n\n'.join(docpieces[1:])
-            tip = '%s\n\n%s\n\n%s' % (tip1, tip2, tip3)
-        else:
-            tip = tip1
-        return tip.strip()
+        return calltip
+    name = ''
+    dropSelf = 1
+    # Switch to the object that has the information we need.
+    if inspect.isbuiltin(object):
+        # Builtin functions don't have an argspec that we can get.
+        pass
+    elif inspect.ismethod(object) or hasattr(object, 'im_func'):
+        # Get the function from the object otherwise inspect.getargspec()
+        # complains that the object isn't a Python function.
+        object = object.im_func
+    elif inspect.isclass(object):
+        # Get the __init__ method function for the class.
+        constructor = getConstructor(object)
+        if constructor is not None:
+            object = constructor
+    elif callable(object):
+        # Get the __call__ method instead.
+        try:
+            object = object.__call__.im_func
+        except:
+            dropSelf = 0
     else:
-        return ''
+        dropSelf = 0
+    if hasattr(object, '__name__'):
+        name = object.__name__
+    tip1 = ''
+    argspec = ''
+    if inspect.isbuiltin(object):
+        # Builtin functions don't have an argspec that we can get.
+        pass
+    elif inspect.isfunction(object):
+        # tip1 is a string like: "getCallTip(command='', locals=None)"
+        argspec = apply(inspect.formatargspec, inspect.getargspec(object))
+        if dropSelf:
+            # The first parameter to a method is a reference to the
+            # instance, usually coded as "self", and is passed
+            # automatically by Python and therefore we want to drop it.
+            temp = argspec.split(',')
+            if len(temp) == 1:  # No other arguments.
+                argspec = '()'
+            else:  # Drop the first argument.
+                argspec = '(' + ','.join(temp[1:]).lstrip()
+        tip1 = name + argspec
+    doc = inspect.getdoc(object)
+    if doc:
+        # tip2 is the first separated line of the docstring, like:
+        # "Return call tip text for a command."
+        # tip3 is the rest of the docstring, like:
+        # "The call tip information will be based on ... <snip>
+        docpieces = doc.split('\n\n')
+        tip2 = docpieces[0]
+        tip3 = '\n\n'.join(docpieces[1:])
+        tip = '%s\n\n%s\n\n%s' % (tip1, tip2, tip3)
+    else:
+        tip = tip1
+    calltip = (name, argspec[1:-1], tip.strip())
+    return calltip
 
 def getConstructor(object):
     """Return constructor for class object, or None if there isn't one."""
