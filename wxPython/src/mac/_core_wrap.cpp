@@ -2757,7 +2757,21 @@ static PyObject *wxMenu_GetMenuItems(wxMenu *self){
             wxMenuItemList& list = self->GetMenuItems();
             return wxPy_ConvertList(&list);
         }
+static void wxMenuItem_SetFont(wxMenuItem *self,wxFont const &font){}
+static wxFont wxMenuItem_GetFont(wxMenuItem *self){ return wxNullFont; }
+static void wxMenuItem_SetTextColour(wxMenuItem *self,wxColour const &colText){}
+static wxColour wxMenuItem_GetTextColour(wxMenuItem *self){ return wxNullColour; }
+static void wxMenuItem_SetBackgroundColour(wxMenuItem *self,wxColour const &colBack){}
+static wxColour wxMenuItem_GetBackgroundColour(wxMenuItem *self){ return wxNullColour; }
+static void wxMenuItem_SetBitmaps(wxMenuItem *self,wxBitmap const &bmpChecked,wxBitmap const &bmpUnchecked=wxNullBitmap){}
+static void wxMenuItem_SetDisabledBitmap(wxMenuItem *self,wxBitmap const &bmpDisabled){}
+static wxBitmap const &wxMenuItem_GetDisabledBitmap(wxMenuItem const *self){ return wxNullBitmap; }
+static void wxMenuItem_SetMarginWidth(wxMenuItem *self,int nWidth){}
+static int wxMenuItem_GetMarginWidth(wxMenuItem *self){ return 0; }
 static int MenuItem_GetDefaultMarginWidth(){ return 0; }
+static bool wxMenuItem_IsOwnerDrawn(wxMenuItem *self){ return false; }
+static void wxMenuItem_SetOwnerDrawn(wxMenuItem *self,bool ownerDrawn=true){}
+static void wxMenuItem_ResetOwnerDrawn(wxMenuItem *self){}
  static const wxString wxPyControlNameStr(wxControlNameStr); 
 static int wxItemContainer_Append(wxItemContainer *self,wxString const &item,PyObject *clientData=NULL){
             if (clientData) {
@@ -36162,6 +36176,369 @@ static PyObject *_wrap_MenuItem_SetAccel(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_MenuItem_SetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxFont *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "font", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetFont",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxFont, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxFont");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetFont(arg1,(wxFont const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxFont result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetFont",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxMenuItem_GetFont(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxFont * resultptr;
+        resultptr = new wxFont((wxFont &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxColour *arg2 = 0 ;
+    wxColour temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colText", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetTextColour",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetTextColour(arg1,(wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxColour result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetTextColour",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxMenuItem_GetTextColour(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxColour * resultptr;
+        resultptr = new wxColour((wxColour &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxColour *arg2 = 0 ;
+    wxColour temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colBack", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetBackgroundColour",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetBackgroundColour(arg1,(wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxColour result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetBackgroundColour",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxMenuItem_GetBackgroundColour(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxColour * resultptr;
+        resultptr = new wxColour((wxColour &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetBitmaps(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxBitmap *arg2 = 0 ;
+    wxBitmap const &arg3_defvalue = wxNullBitmap ;
+    wxBitmap *arg3 = (wxBitmap *) &arg3_defvalue ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bmpChecked",(char *) "bmpUnchecked", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:MenuItem_SetBitmaps",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxBitmap");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+            if (SWIG_arg_fail(3)) SWIG_fail;
+            if (arg3 == NULL) {
+                SWIG_null_ref("wxBitmap");
+            }
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetBitmaps(arg1,(wxBitmap const &)*arg2,(wxBitmap const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetDisabledBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxBitmap *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bmpDisabled", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetDisabledBitmap",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxBitmap");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetDisabledBitmap(arg1,(wxBitmap const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetDisabledBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetDisabledBitmap",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxBitmap const &_result_ref = wxMenuItem_GetDisabledBitmap((wxMenuItem const *)arg1);
+            result = (wxBitmap *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxBitmap* resultptr = new wxBitmap(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "nWidth", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetMarginWidth",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetMarginWidth(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetMarginWidth",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)wxMenuItem_GetMarginWidth(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_MenuItem_GetDefaultMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
@@ -36180,6 +36557,92 @@ static PyObject *_wrap_MenuItem_GetDefaultMarginWidth(PyObject *, PyObject *args
     {
         resultobj = SWIG_From_int((int)(result)); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_IsOwnerDrawn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_IsOwnerDrawn",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxMenuItem_IsOwnerDrawn(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_SetOwnerDrawn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    bool arg2 = (bool) true ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "ownerDrawn", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:MenuItem_SetOwnerDrawn",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_SetOwnerDrawn(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_ResetOwnerDrawn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_ResetOwnerDrawn",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMenuItem_ResetOwnerDrawn(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -45294,7 +45757,21 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuItem_GetHelp", (PyCFunction) _wrap_MenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetAccel", (PyCFunction) _wrap_MenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetAccel", (PyCFunction) _wrap_MenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetFont", (PyCFunction) _wrap_MenuItem_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetFont", (PyCFunction) _wrap_MenuItem_GetFont, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetTextColour", (PyCFunction) _wrap_MenuItem_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetTextColour", (PyCFunction) _wrap_MenuItem_GetTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetBackgroundColour", (PyCFunction) _wrap_MenuItem_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetBackgroundColour", (PyCFunction) _wrap_MenuItem_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetBitmaps", (PyCFunction) _wrap_MenuItem_SetBitmaps, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetDisabledBitmap", (PyCFunction) _wrap_MenuItem_SetDisabledBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetDisabledBitmap", (PyCFunction) _wrap_MenuItem_GetDisabledBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetMarginWidth", (PyCFunction) _wrap_MenuItem_SetMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetMarginWidth", (PyCFunction) _wrap_MenuItem_GetMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetDefaultMarginWidth", (PyCFunction) _wrap_MenuItem_GetDefaultMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_IsOwnerDrawn", (PyCFunction) _wrap_MenuItem_IsOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetOwnerDrawn", (PyCFunction) _wrap_MenuItem_SetOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_ResetOwnerDrawn", (PyCFunction) _wrap_MenuItem_ResetOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetBitmap", (PyCFunction) _wrap_MenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetBitmap", (PyCFunction) _wrap_MenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_swigregister", MenuItem_swigregister, METH_VARARGS, NULL},

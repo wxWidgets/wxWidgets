@@ -8709,11 +8709,67 @@ class MenuItem(Object):
         """SetAccel(self, AcceleratorEntry accel)"""
         return _core_.MenuItem_SetAccel(*args, **kwargs)
 
+    def SetFont(*args, **kwargs):
+        """SetFont(self, Font font)"""
+        return _core_.MenuItem_SetFont(*args, **kwargs)
+
+    def GetFont(*args, **kwargs):
+        """GetFont(self) -> Font"""
+        return _core_.MenuItem_GetFont(*args, **kwargs)
+
+    def SetTextColour(*args, **kwargs):
+        """SetTextColour(self, Colour colText)"""
+        return _core_.MenuItem_SetTextColour(*args, **kwargs)
+
+    def GetTextColour(*args, **kwargs):
+        """GetTextColour(self) -> Colour"""
+        return _core_.MenuItem_GetTextColour(*args, **kwargs)
+
+    def SetBackgroundColour(*args, **kwargs):
+        """SetBackgroundColour(self, Colour colBack)"""
+        return _core_.MenuItem_SetBackgroundColour(*args, **kwargs)
+
+    def GetBackgroundColour(*args, **kwargs):
+        """GetBackgroundColour(self) -> Colour"""
+        return _core_.MenuItem_GetBackgroundColour(*args, **kwargs)
+
+    def SetBitmaps(*args, **kwargs):
+        """SetBitmaps(self, Bitmap bmpChecked, Bitmap bmpUnchecked=wxNullBitmap)"""
+        return _core_.MenuItem_SetBitmaps(*args, **kwargs)
+
+    def SetDisabledBitmap(*args, **kwargs):
+        """SetDisabledBitmap(self, Bitmap bmpDisabled)"""
+        return _core_.MenuItem_SetDisabledBitmap(*args, **kwargs)
+
+    def GetDisabledBitmap(*args, **kwargs):
+        """GetDisabledBitmap(self) -> Bitmap"""
+        return _core_.MenuItem_GetDisabledBitmap(*args, **kwargs)
+
+    def SetMarginWidth(*args, **kwargs):
+        """SetMarginWidth(self, int nWidth)"""
+        return _core_.MenuItem_SetMarginWidth(*args, **kwargs)
+
+    def GetMarginWidth(*args, **kwargs):
+        """GetMarginWidth(self) -> int"""
+        return _core_.MenuItem_GetMarginWidth(*args, **kwargs)
+
     def GetDefaultMarginWidth(*args, **kwargs):
         """GetDefaultMarginWidth() -> int"""
         return _core_.MenuItem_GetDefaultMarginWidth(*args, **kwargs)
 
     GetDefaultMarginWidth = staticmethod(GetDefaultMarginWidth)
+    def IsOwnerDrawn(*args, **kwargs):
+        """IsOwnerDrawn(self) -> bool"""
+        return _core_.MenuItem_IsOwnerDrawn(*args, **kwargs)
+
+    def SetOwnerDrawn(*args, **kwargs):
+        """SetOwnerDrawn(self, bool ownerDrawn=True)"""
+        return _core_.MenuItem_SetOwnerDrawn(*args, **kwargs)
+
+    def ResetOwnerDrawn(*args, **kwargs):
+        """ResetOwnerDrawn(self)"""
+        return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
+
     def SetBitmap(*args, **kwargs):
         """SetBitmap(self, Bitmap bitmap)"""
         return _core_.MenuItem_SetBitmap(*args, **kwargs)
