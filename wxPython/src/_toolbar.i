@@ -405,6 +405,9 @@ public:
               const wxString& name = wxPyToolBarNameStr);
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

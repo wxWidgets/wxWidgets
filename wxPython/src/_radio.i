@@ -86,6 +86,8 @@ public:
     }
 #endif
         
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
     
 
@@ -117,6 +119,9 @@ public:
 
     bool GetValue();
     void SetValue(bool value);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

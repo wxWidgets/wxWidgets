@@ -78,6 +78,9 @@ public:
     void SetValue(bool value);
     bool GetValue() const ;
     void SetLabel(const wxString& label);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

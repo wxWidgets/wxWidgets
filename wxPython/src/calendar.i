@@ -399,6 +399,9 @@ are:
     DocDeclStr(
         wxControl*, GetYearControl() const,
         "Get the currently shown control for year.");
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

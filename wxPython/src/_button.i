@@ -99,6 +99,9 @@ public:
     DocDeclStr(
         static wxSize , GetDefaultSize(),
         "Returns the default button size for this platform.");   
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

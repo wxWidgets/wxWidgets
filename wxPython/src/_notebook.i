@@ -115,6 +115,9 @@ public:
 
     // cycle thru the pages
     void AdvanceSelection(bool forward = True);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 
@@ -202,6 +205,9 @@ public:
     // Windows only: attempts to apply the UX theme page background to this page
   void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
 #endif
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

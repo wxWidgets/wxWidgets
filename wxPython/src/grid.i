@@ -1938,6 +1938,8 @@ public:
     wxWindow* GetGridCornerLabelWindow();
 
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

@@ -334,6 +334,9 @@ unsplit even if minimum size is non-zero.");
 
     void SetNeedUpdating(bool needUpdating);
     bool GetNeedUpdating() const;
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

@@ -150,6 +150,8 @@ state to wx.CHK_UNDETERMINED.");
         "Returns whether or not the user can set the CheckBox to the third
 state.");
     
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

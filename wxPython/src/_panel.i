@@ -45,6 +45,8 @@ public:
 
     void InitDialog();
 
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------
@@ -156,6 +158,9 @@ public:
     void SetTargetRect(const wxRect& rect);
     wxRect GetTargetRect() const;
 #endif
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
     

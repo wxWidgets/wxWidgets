@@ -31,7 +31,7 @@ struct wxVisualAttributes
 {
     %extend {
         wxVisualAttributes() { return new wxVisualAttributes; }
-        ~wxVisualAttributes() {}
+        ~wxVisualAttributes() { delete self; }
     }
     
     // the font used for control label/text inside it
@@ -1190,7 +1190,7 @@ exposed.");
 
 
     DocDeclStr(
-        wxVisualAttributes , GetDefaultAttributes() const,
+        virtual wxVisualAttributes , GetDefaultAttributes() const,
         "Get the default attributes for an instance of this class.  This
 is useful if you want to use the same font or colour in your own
 control as in a standard control -- which is a much better idea

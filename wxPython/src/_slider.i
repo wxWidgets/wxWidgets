@@ -83,6 +83,9 @@ public:
     virtual int GetSelStart() const;
     virtual void SetSelection(int min, int max);
 
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

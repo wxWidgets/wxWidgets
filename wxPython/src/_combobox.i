@@ -166,6 +166,8 @@ public:
         virtual void , Remove(long from, long to),
         "Removes the text between the two positions in the combobox text field.");
     
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

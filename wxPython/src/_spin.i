@@ -68,6 +68,9 @@ public:
 
     // is this spin button vertically oriented?
     bool IsVertical() const;
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 
@@ -110,6 +113,9 @@ public:
     virtual int GetMin() const;
     virtual int GetMax() const;
     void SetSelection(long from, long to);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

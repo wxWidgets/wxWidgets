@@ -903,6 +903,9 @@ public:
     void base_OnCellClicked(wxHtmlCell *cell,
                             wxCoord x, wxCoord y,
                             const wxMouseEvent& event);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

@@ -74,6 +74,9 @@ public:
     // get the dimensions of the horizontal and vertical borders
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 

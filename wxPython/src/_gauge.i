@@ -65,6 +65,10 @@ public:
     virtual int GetShadowWidth() const;
     virtual void SetBezelFace(int w);
     virtual int GetBezelFace() const;
+
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------

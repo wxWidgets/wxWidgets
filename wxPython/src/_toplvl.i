@@ -247,6 +247,9 @@ public:
     // send wxUpdateUIEvents for all menu items in the menubar,
     // or just for menu if non-NULL
     void DoMenuUpdates(wxMenu* menu = NULL);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------
@@ -299,6 +302,9 @@ public:
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 //---------------------------------------------------------------------------
