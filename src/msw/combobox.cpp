@@ -38,11 +38,14 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
   if (param == CBN_SELCHANGE)
   {
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId);
-    event.SetInt(GetSelection());
-    event.SetEventObject(this);
-    event.SetString(GetStringSelection());
-    ProcessCommand(event);
+    if (GetSelection() > -1)
+    {
+        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId);
+        event.SetInt(GetSelection());
+        event.SetEventObject(this);
+        event.SetString(GetStringSelection());
+        ProcessCommand(event);
+    }
 
     return TRUE;
   }

@@ -620,7 +620,6 @@ int wxEntry(WXHINSTANCE hInstance,
 #else
     #undef  CATCH_PROGRAM_EXCEPTIONS
 #endif
-
         wxhInstance = (HINSTANCE) hInstance;
 
         if (!wxApp::Initialize())
