@@ -64,31 +64,21 @@ wxDC::~wxDC(void)
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    NSGraphicsContext *context = [NSGraphicsContext currentContext];
-    [context saveGraphicsState];
-
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,width,height)];
     [m_textForegroundColour.GetNSColor() set];
     [bezpath stroke];
     [m_brush.GetNSColor() set];
     [bezpath fill];
-
-    [context restoreGraphicsState];
 }
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    NSGraphicsContext *context = [NSGraphicsContext currentContext];
-    [context saveGraphicsState];
-
     NSBezierPath *bezpath = [NSBezierPath bezierPath];
     [bezpath moveToPoint:NSMakePoint(x1,y1)];
     [bezpath lineToPoint:NSMakePoint(x2,y2)];
 
     [m_textForegroundColour.GetNSColor() set];
     [bezpath stroke];
-
-    [context restoreGraphicsState];
 }
 
 void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, wxFont *theFont) const
