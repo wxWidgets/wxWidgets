@@ -93,65 +93,83 @@ wxBitmapRefData::~wxBitmapRefData()
 
 wxList wxBitmap::sm_handlers;
 
-wxBitmap::wxBitmap()
+// this function should be called from all wxBitmap ctors
+void wxBitmap::Init()
 {
-  if ( wxTheBitmapList )
-    wxTheBitmapList->AddBitmap(this);
-}
+    // m_refData = NULL; done in the base class ctor
 
-wxBitmap::wxBitmap(const wxIcon& icon)
-{
     if ( wxTheBitmapList )
         wxTheBitmapList->AddBitmap(this);
+}
+
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+{
+    UnRef();
 
     if ( !icon.Ok() )
-        return;
+        return FALSE;
 
     int width = icon.GetWidth(),
         height = icon.GetHeight();
 
-    HDC hdc = ::CreateCompatibleDC(NULL);   // screen DC
-    HBITMAP hbitmap = ::CreateCompatibleBitmap(hdc, width, height);
+    HICON hicon = (HICON) icon.GetHICON();
+
+    // GetIconInfo() doesn't exist under Win16 and I don't know any other way
+    // to create a bitmap from icon there - but using this way we won't have
+    // the mask (FIXME)
+#ifdef __WIN16__
+    // copy the icon to the bitmap
+    HDC hdcScreen = ::GetDC((HWND)NULL);
+    HDC hdc = ::CreateCompatibleDC(hdcScreen);
+    HBITMAP hbitmap = ::CreateCompatibleBitmap(hdcScreen, width, height);
     HBITMAP hbmpOld = (HBITMAP)::SelectObject(hdc, hbitmap);
 
-    HICON hicon = (HICON) icon.GetHICON();
-#if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
-    ::DrawIconEx(hdc, 0, 0, hicon, width, height, 0, 0, DI_NORMAL);
-#else
     ::DrawIcon(hdc, 0, 0, hicon);
-#endif
 
     ::SelectObject(hdc, hbmpOld);
     ::DeleteDC(hdc);
+    ::ReleaseDC((HWND)NULL, hdcScreen);
+#else // Win32
+    ICONINFO iconInfo;
+    if ( !GetIconInfo(hicon, &iconInfo) )
+    {
+        wxLogLastError("GetIconInfo");
+
+        return FALSE;
+    }
+
+    HBITMAP hbitmap = iconInfo.hbmColor;
+
+    wxBitmap bmpMask(width, height, 1);
+    bmpMask.SetHBITMAP((WXHBITMAP)iconInfo.hbmMask);
+
+    SetMask(new wxMask(bmpMask));
+#endif // Win16/32
 
     m_refData = new wxBitmapRefData;
+
     M_BITMAPDATA->m_width = width;
     M_BITMAPDATA->m_height = height;
     M_BITMAPDATA->m_depth = wxDisplayDepth();
-    M_BITMAPDATA->m_numColors = 0;
 
     M_BITMAPDATA->m_hBitmap = (WXHBITMAP)hbitmap;
     M_BITMAPDATA->m_ok = TRUE;
-}
 
-wxBitmap::wxBitmap(const wxBitmap& bitmap)
-{
-    Ref(bitmap);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
+    return TRUE;
 }
 
 wxBitmap::~wxBitmap()
 {
     if (wxTheBitmapList)
         wxTheBitmapList->DeleteObject(this);
+
+    delete GetMask();
 }
 
 bool wxBitmap::FreeResource(bool WXUNUSED(force))
 {
   if ( !M_BITMAPDATA )
-  return FALSE;
+    return FALSE;
 
   wxASSERT_MSG( !M_BITMAPDATA->m_selectedInto,
                 wxT("freeing bitmap still selected into wxMemoryDC") );
@@ -175,54 +193,52 @@ bool wxBitmap::FreeResource(bool WXUNUSED(force))
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
-  m_refData = new wxBitmapRefData;
+    Init();
 
-  M_BITMAPDATA->m_width = the_width ;
-  M_BITMAPDATA->m_height = the_height ;
-  M_BITMAPDATA->m_depth = no_bits ;
-  M_BITMAPDATA->m_numColors = 0;
+    m_refData = new wxBitmapRefData;
 
-  M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(the_width, the_height, 1, no_bits, bits);
+    M_BITMAPDATA->m_width = the_width ;
+    M_BITMAPDATA->m_height = the_height ;
+    M_BITMAPDATA->m_depth = no_bits ;
+    M_BITMAPDATA->m_numColors = 0;
 
-  if (M_BITMAPDATA->m_hBitmap)
-    M_BITMAPDATA->m_ok = TRUE;
-  else
-    M_BITMAPDATA->m_ok = FALSE;
+    M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateBitmap(the_width, the_height, 1, no_bits, bits);
 
-  M_BITMAPDATA->m_selectedInto = NULL;
+    if (M_BITMAPDATA->m_hBitmap)
+        M_BITMAPDATA->m_ok = TRUE;
+    else
+        M_BITMAPDATA->m_ok = FALSE;
 
-  if ( wxTheBitmapList )
-    wxTheBitmapList->AddBitmap(this);
+    M_BITMAPDATA->m_selectedInto = NULL;
 }
 
 // Create from XPM data
 wxBitmap::wxBitmap(char **data, wxControl *WXUNUSED(anItem))
 {
-  (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+    Init();
+
+    (void)Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
 {
-  (void)Create(w, h, d);
+    Init();
 
-  if ( wxTheBitmapList )
-    wxTheBitmapList->AddBitmap(this);
+    (void)Create(w, h, d);
 }
 
 wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
 {
-  (void) Create(data, type, width, height, depth);
+    Init();
 
-  if ( wxTheBitmapList )
-    wxTheBitmapList->AddBitmap(this);
+    (void) Create(data, type, width, height, depth);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, long type)
 {
-  LoadFile(filename, (int)type);
+    Init();
 
-  if ( wxTheBitmapList )
-    wxTheBitmapList->AddBitmap(this);
+    LoadFile(filename, (int)type);
 }
 
 bool wxBitmap::Create(int w, int h, int d)

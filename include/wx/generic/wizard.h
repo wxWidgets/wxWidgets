@@ -27,6 +27,7 @@ public:
     // implement base class pure virtuals
     virtual bool RunWizard(wxWizardPage *firstPage);
     virtual wxWizardPage *GetCurrentPage() const;
+    virtual wxSize GetPageSize() const;
 
     // implementation only from now on
     // -------------------------------

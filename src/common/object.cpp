@@ -355,13 +355,15 @@ void wxObject::Ref(const wxObject& clone)
 
 void wxObject::UnRef()
 {
-    if (m_refData) {
-        assert(m_refData->m_count > 0);
-        --(m_refData->m_count);
-        if (m_refData->m_count == 0)
+    if ( m_refData )
+    {
+        wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
+
+        if ( !--m_refData->m_count )
             delete m_refData;
+
+        m_refData = (wxObjectRefData *) NULL;
     }
-    m_refData = (wxObjectRefData *) NULL;
 }
 
 /*
