@@ -723,19 +723,37 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 {
     wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
-    // position it in the centre (ignoring alignment - TODO)
-    static const wxCoord checkSize = 16;
+    // between checkmark and box
+    static const wxCoord margin = 4;
 
+    // get checkbox size
+    static wxCoord s_checkSize = 0;
+    if ( s_checkSize == 0 )
+    {
+        // compute it only once (no locks for MT safeness in GUI thread...)
+        wxCheckBox *checkbox = new wxCheckBox(&grid, -1, wxEmptyString);
+        wxSize size = checkbox->GetBestSize();
+        s_checkSize = size.y + margin;
+
+        // FIXME wxGTK::wxCheckBox::GetBestSize() is really weird...
+#ifdef __WXGTK__
+        s_checkSize -= size.y / 2;
+#endif
+
+        delete checkbox;
+    }
+
+    // draw a check mark in the centre (ignoring alignment - TODO)
     wxRect rectMark;
-    rectMark.x = rect.x + rect.width/2 - checkSize/2;
-    rectMark.y = rect.y + rect.height/2 - checkSize/2;
-    rectMark.width = rectMark.height = checkSize;
+    rectMark.x = rect.x + rect.width/2 - s_checkSize/2;
+    rectMark.y = rect.y + rect.height/2 - s_checkSize/2;
+    rectMark.width = rectMark.height = s_checkSize;
 
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
     dc.DrawRectangle(rectMark);
 
-    rectMark.Inflate(-4);
+    rectMark.Inflate(-margin);
 
     if ( !!grid.GetTable()->GetValue(row, col) ) // FIXME-DATA
     {
