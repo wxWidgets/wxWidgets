@@ -1,4 +1,4 @@
-wxWindows 2.3.0
+wxWindows 2.3.1
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
@@ -182,9 +182,6 @@ the Independent JPEG Group". See src/jpeg/README for details.
 Documentation
 -------------
 
-See docs/bugs.txt for a bug list: this file is new and will initially
-  be edited by hand, later generated from a web-based bug database.
-
 See docs/html/index.htm for an HTML index of the major documents.
 
 See docs/changes.txt for a summary of changes to wxWindows 2.
@@ -215,7 +212,7 @@ front-end and hundreds of MB of compilers, utilities and other
 material may be ordered from the CD-ROM page: see the wxWindows
 web site.
 
-Good luck!
+Have fun!
 
-The wxWindows Team, 12th May, 2001
+The wxWindows Team, 10th June, 2001
 

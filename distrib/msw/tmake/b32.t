@@ -159,7 +159,7 @@ default:	wx
 
 wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
-all:	all_libs all_execs
+all:	wx
 
 !if "$(DLL)" == "0"
 
@@ -189,7 +189,8 @@ wxb32
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
-version.res
+
+#version.res
 
 $(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
 

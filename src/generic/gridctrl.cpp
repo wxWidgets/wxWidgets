@@ -115,7 +115,7 @@ wxSize wxGridCellDateTimeRenderer::GetBestSize(wxGrid& grid,
 }
 
 void wxGridCellDateTimeRenderer::SetParameters(const wxString& params){
-    if(params)
+    if (!params.IsEmpty())
         m_oformat=params;
 }
 
@@ -128,7 +128,7 @@ void wxGridCellDateTimeRenderer::SetParameters(const wxString& params){
 
 wxGridCellEnumRenderer::wxGridCellEnumRenderer(const wxString& choices)
 {
-    if(choices)
+    if (!choices.IsEmpty())
         SetParameters(choices);
 }
 
@@ -215,7 +215,7 @@ void wxGridCellEnumRenderer::SetParameters(const wxString& params)
 wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString& choices)
                     : wxGridCellChoiceEditor()
 {
-    if(choices)
+    if (!choices.IsEmpty())
         SetParameters(choices);
 }
 
@@ -363,7 +363,7 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
                                               wxDC& dc,
                                               int row, int col)
 {
-    int x,y, height , width = grid.GetColSize(col) -10;
+    wxCoord x,y, height , width = grid.GetColSize(col) -10;
     int count = 250; //Limit iterations..
 
     wxRect rect(0,0,width,10);

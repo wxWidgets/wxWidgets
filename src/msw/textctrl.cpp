@@ -1313,6 +1313,10 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     }
 
 #if wxUSE_RICHEDIT2
+#ifndef CFM_BACKCOLOR
+#define CFM_BACKCOLOR 0x04000000
+#endif
+
     if ( wxRichEditModule::GetLoadedVersion() > 1 && style.HasBackgroundColour() )
     {
         cf.dwMask |= CFM_BACKCOLOR;

@@ -560,6 +560,10 @@ SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\gridctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\gridsel.cpp
 # End Source File
 # Begin Source File
@@ -1064,6 +1068,10 @@ SOURCE=.\msw\slider95.cpp
 # Begin Source File
 
 SOURCE=.\msw\slidrmsw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 

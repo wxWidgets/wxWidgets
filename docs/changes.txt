@@ -4,16 +4,58 @@ wxWindows 2 Change Log
 2.3.1
 -----
 
+wxBase:
+
+- Fixes for gcc 3.0
+- Fixed new charset detection code (langinfo.h not included in intl.cpp;
+  langinfo.h not neccessary in strconv.cpp)
+- ODBC Informix fixes (submitted by Roger Gammans)
+- Added wxDir::Traverse
+
 All (GUI):
 
 - Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the
   user code can get access to the edit control when it is created, (to
-  push on a custom event handler for example.)
+  push on a custom event handler for example)
 - Added wxTextAttr class and SetStyle, SetDefaultStyle and
-  GetDefaultStyle methods to wxTextCtrl.
+  GetDefaultStyle methods to wxTextCtrl
+- Added wxSingleInstanceChecker
+- Improvements to Tex2RTF
+- Added Paul and Roger Gammans' grid controls
+- Bug in wxDocument::Save logic corrected, whereby Save didn't save when not
+  first-time saved
+- Fixed memory leak in textcmn.cpp
+- Various wxXML enhancements
+- Removed wxCLIP_CHILDREN style from wxSplitterWindow
+- Fixed memory leak in DoPrint, htmprint.cpp
+- Fixed calendar sample bug with using wxCommandEvent::GetInt()
+  instead of GetId()
 
+wxMSW:
 
+- Fixed wxApp::ProcessMessage so controls don't lose their
+  accelerators when the accelerators are redefined elsewhere
+- Accelerators consisting of simple keystrokes (without control,
+  alt or shift) are now possible
+- Compile fixes for Watcom C++ added
+- Compile fixes for Cygwin 1.0 added
+- Replaced wxYield() call in PopupMenu() by a much safer
+  wxYieldForCommandsOnly() - fixes tree ctrl bug
+- Enter processing in wxSpinCtrl fixed
+- Fixed bug in determining the best listbox size
+- Fix for wxFrame's last focus bug
+- We now send iconize events
+- Fixed wxFrame::SetClientSize() with toolbar bug
+- Added mousewheel processing
 
+wxGTK:
+
+- Fixed slider rounding bug
+- Added code to set wxFont's default encoding to
+  wxLocale::GetSystemEncoding()
+- We now send iconize events
+- Fix for discrepancies between wxNotebookEvent and wxNotebook
+  GetSelection() results
 
 2.3.0
 -----
@@ -48,7 +90,6 @@ All (GUI):
 - ODBC experimental BLOB support added, but not completely tested
 - ODBC NULL column support completed (Roger/Paul Gammans)
 - ODBC All "char *" and char arrays removed and replaced with wxString use
-
 
 wxMSW:
 
