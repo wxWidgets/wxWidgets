@@ -1081,6 +1081,7 @@ void wxApp::MacDoOneEvent()
 #if wxUSE_THREADS
             if (g_numberOfThreads)
             {
+                YieldToAnyThread() ;
                 sleepTime = kEventDurationNoWait;
             }
             else
