@@ -12,9 +12,6 @@
 #ifndef _WX_COCOA_APP_H_
 #define _WX_COCOA_APP_H_
 
-// entrypoint
-int WXDLLEXPORT wxEntry( int argc, char *argv[] );
-
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
 class WXDLLEXPORT wxApp: public wxAppBase
