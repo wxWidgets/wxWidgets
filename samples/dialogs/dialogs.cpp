@@ -502,7 +502,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
-                        "_T(", ")", wxFileSelectorDefaultWildcardStr,
+                        _T(""), _T(""), wxFileSelectorDefaultWildcardStr,
                         wxMULTIPLE);
 
     if (dialog.ShowModal() == wxID_OK)
