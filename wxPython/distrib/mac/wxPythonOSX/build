@@ -246,11 +246,11 @@ if [ -z "$skipinstall" ]; then
     cp $WXDIR/bld/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
 
 
-    # install the wxPython headers
-    cd $WXDIR/wxPython
-    cp -R include $INSTALLROOT$PREFIX
-    mkdir -p      $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
-    cp src/*.i    $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
+#     # install the wxPython headers
+#     cd $WXDIR/wxPython
+#     cp -R include $INSTALLROOT$PREFIX
+#     mkdir -p      $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
+#     cp src/*.i    $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
 
 
     # Set premissions for files in $INSTALLROOT 
@@ -361,10 +361,8 @@ package before you can use any of the items below.
 
 
 
-   Docs/wxDocs          A folder containing the wxWidgets documentation
-                        bundled in .zip files, and a small wxPython
-                        application that can be used to view the docs.
-                        Just run viewer.pyw.
+   Docs/wxDocsViewer    An application that allows you to view the 
+                        wxWidgets documentation.
 
    Docs/licence         License files.
 
@@ -386,13 +384,30 @@ EOF
 
 
     # wxDocs
-    pushd $DMGDIR/root/Docs
+    pushd $BUILDROOT
     tar xzvf $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz
-    mv wxPython-$VERSION/docs  wxDocs
-    rm -r wxPython-$VERSION
-    mv wxDocs/viewdocs.py wxDocs/viewdocs.pyw
+    popd
+
+    # Make an app to launch viewdocs.py
+    $PYTHONW $PROGDIR/../buildapp.py \
+ 	--builddir=$DMGDIR/root/Docs \
+ 	--name=wxDocsViewer \
+ 	--mainprogram=$BUILDROOT/wxPython-$VERSION/docs/viewdocs.py \
+ 	--iconfile=$PROGDIR/Info.icns \
+ 	build
+
+    cp $BUILDROOT/wxPython-$VERSION/docs/*.zip $DMGDIR/root/Docs/wxDocsViewer.app/Contents/Resources
+
+    cat > "$DMGDIR/root/Docs/README 1st.txt" <<EOF
+
+The wxDocsViewer application needs to be copied to your Desktop (or
+someplace else you have write access to) before you can run it, so it
+can cache some indexes within its bundle.
+
+EOF
 
     # license files, docs, etc.
+    pushd $DMGDIR/root/Docs
     cp -pR $SRCROOT/wxPython/licence   .
     cp -pR $SRCROOT/wxPython/docs      .
     rm -rf docs/bin
