@@ -28,7 +28,10 @@
 #endif
 
 #include "wx/log.h"
+#include "wx/process.h"
+
 #include "wx/msw/private.h"
+
 #include <windows.h>
 
 #include <ctype.h>
@@ -96,7 +99,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
   if (message == wxEXECUTE_WIN_MESSAGE) {
     DestroyWindow(hWnd);
     if (data->handler)
-      data->handler->OnTerminate((int)data->process);
+      data->handler->OnTerminate((int)data->process, -1);
 
     if (data->state)
       data->state = 0;
