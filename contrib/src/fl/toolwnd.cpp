@@ -385,7 +385,10 @@ void wxToolWindow::SetHintCursor( int type )
         }
 
         if (mMouseCaptured)
+        {
+            mMouseCaptured = false;
             ReleaseMouse();
+        }
     }
 
     if ( !mMouseCaptured )
