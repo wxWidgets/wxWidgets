@@ -104,8 +104,11 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
 
     if( size > 0 )
     {
-        wxUint32* data = new wxUint32[size];
-        wxUint32* ptr = data;
+//       The code below is correct for 64-bit machines also.
+//       wxUint32* data = new wxUint32[size];
+//       wxUint32* ptr = data;
+        unsigned long* data = new unsigned long[size];
+        unsigned long* ptr = data;
 
         for( i = 0; i < max; ++i )
         {
