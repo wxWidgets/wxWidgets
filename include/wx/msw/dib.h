@@ -191,11 +191,6 @@ inline wxDIB::~wxDIB()
 //     wxFreeDIB), from dib.cpp and from dataobj.cpp - surely there is some
 //     redundancy between them? (FIXME)
 
-// defined in bitmap.cpp
-extern bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
-                       HPALETTE hPal, LPBITMAPINFO* lpDIBHeader);
-extern void wxFreeDIB(LPBITMAPINFO lpDIBHeader);
-
 // defined in ole/dataobj.cpp
 extern WXDLLEXPORT size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap);
 extern WXDLLEXPORT wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
