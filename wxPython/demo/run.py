@@ -93,8 +93,8 @@ class RunDemoApp(wx.App):
                 p = wx.Panel(frame, -1)
                 b = wx.Button(p, -1, " Exit ", (10,10))
                 p.Fit()
-                frame.SetClientSize(p.GetSize())
-                #frame.SetSize((200, 100))
+                #frame.SetClientSize(p.GetSize())
+                frame.SetSize((200, 100))
                 frame.Bind(wx.EVT_BUTTON, self.OnButton, b)
             else:
                 # It was probably a dialog or something that is already
@@ -119,7 +119,8 @@ class RunDemoApp(wx.App):
             # Hook the close event of the test window so that we close
             # the shell at the same time
             def CloseShell(evt):
-                shell.Close()
+                if shell:
+                    shell.Close()
                 evt.Skip()
             frame.Bind(wx.EVT_CLOSE, CloseShell)
                     
