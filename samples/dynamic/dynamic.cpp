@@ -60,8 +60,8 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, "Dynamic wxWindows App", 50, 50, 450, 340);
 
-  frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)MyFrame::OnQuit );
-  frame->Connect( DYNAMIC_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)MyFrame::OnAbout );
+  frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnQuit );
+  frame->Connect( DYNAMIC_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnAbout );
 
   // Give it an icon
 #ifdef __WXMSW__

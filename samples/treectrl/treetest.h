@@ -54,7 +54,7 @@ public:
   void OnItemCollapsing(wxTreeEvent& event);
   void OnSelChanged(wxTreeEvent& event);
   void OnSelChanging(wxTreeEvent& event);
-  void OnTreeKeyDown(wxTreeEvent& event);
+  void OnTreeKeyDown(wxKeyEvent& event);
 
   void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
 

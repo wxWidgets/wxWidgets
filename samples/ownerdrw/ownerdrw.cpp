@@ -241,6 +241,8 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, char *title, int x, int y, int 
     
   }
 
+  delete[] astrChoices;
+
   // create the status line
   const int widths[] = { -1, 60 };
   CreateStatusBar(2);
