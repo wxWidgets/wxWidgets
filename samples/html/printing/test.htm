@@ -1,126 +1,186 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [en] (X11; I; Linux 2.0.35 i686) [Netscape]">
+  <TITLE>wxWindows Roadmap</TITLE>
 </HEAD>
-<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000FF" VLINK="#FF0000" ALINK="#000088">
-This is - - default text, now switching to
+
+<BODY>
+
+<a name="top"></a>
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table width=100% border=4 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#660000">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+wxWindows Roadmap
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
 <CENTER>
-<P>center, now still ctr, now exiting</CENTER>
+<a href="#schedule">Schedule</a> | <a href="#todo">To-Do List</a>
+</CENTER>
 
-<P>exited!.<A HREF="#downtown">[link to down]</A>
-<P>Hello, this *is* default charset (helvetica, probably) and it is displayed
-with one&nbsp; <FONT COLOR="#FF0000">COLOR CHANGE</FONT>. Of course we
-can have as many color changes as we can, what about this <FONT COLOR="#FF0000">M</FONT><FONT COLOR="#FFFF00">A</FONT><FONT COLOR="#33FF33">D</FONT><B><FONT COLOR="#FFFFFF"><FONT SIZE=+1>N</FONT></FONT></B>E<FONT COLOR="#999999">S</FONT><FONT COLOR="#CC33CC">S?</FONT>
-<P><FONT COLOR="#000000">There was a space above.</FONT>
-<BR>
-<HR WIDTH="100%">This was a line. <TT>(BTW we are in <B>fixed</B> font
-/ <I><U>typewriter</U> font</I> right now :-)</TT>
-<BR>This is in <B>BOLD</B> face. This is <I>ITALIC.</I> This is <B><I><U>E
-V E R Y T H I N G</U></I></B>.
-<BR>&nbsp;
-<BR>&nbsp;
-<BR>
-<BR>
-<BR>
-<CENTER>
-<P>Right now, <FONT COLOR="#0000FF"><FONT SIZE=+4>centered REALLY Big Text</FONT></FONT>,
-how do you like (space) it?</CENTER>
+<P>
 
-<DIV ALIGN=right>RIGHT: <FONT SIZE=-2>text-2, </FONT><FONT SIZE=-1>text-1,
-</FONT>text+0,
-<FONT SIZE=+1>text+1,
-</FONT><FONT COLOR="#FF0000"><FONT SIZE=+2>text+2,
-</FONT></FONT><FONT SIZE=+3>text+3,
-</FONT><FONT SIZE=+4>text+4</FONT>
-<BR><U><FONT SIZE=+1>we are right now</FONT></U></DIV>
+This page represents current thinking about where wxWindows is going in the near, 
+medium and long-term. It also serves as a schedule for new releases so
+that both developers and users can know what to expect when, at least approximately.<P>
 
-<CENTER><U><FONT SIZE=+1>we are center now</FONT></U></CENTER>
-<U><FONT SIZE=+1>we are left now.</FONT></U>
-<P><I><FONT COLOR="#3366FF">Blue italic text is displayed there....</FONT></I>
-<H1>
+Note (1): as the wxWindows effort is voluntary, these are not hard-and-fast deadlines:
+but we will endeavour to follow them as closely as possible.<P>
 
-<HR ALIGN=LEFT SIZE=10 WIDTH="50%">This is heading one.</H1>
-this is normal
-<CENTER>
-<H1>
-This is <FONT COLOR="#33FF33">CENTERED</FONT> heading one</H1></CENTER>
-<IMG SRC="pic.png" ALT="Testing image image" >and this is text......
-<BR>&nbsp;
-<UL>
-<LI>
-item 1</LI>
+Note (2): the releases described are for wxGTK, wxMSW and wxMotif ports. wxMac currently follows
+its own development path. Also, minor snapshot releases for specific platforms may be
+available at dates convenient to the developers.<P>
 
-<LI>
-item 2</LI>
+<HR> <FONT SIZE=+2><I><B><a name="schedule">Schedule</a></B></I></FONT> <HR>
+<P>
 
-<UL>
-<LI>
-nested item</LI>
+<H4>Release 2.1.10</H4>
 
-<LI>
-nested item 2</LI>
-</UL>
+<ul>
+<li>Release date: October 3rd, 1999
+<li>This beta is intended to be the last stable snapshot before wxWindows
+is split into base and GUI libraries.
+<li>New wxGrid in beta.
+</ul>
 
-<LI>
-item 3</LI>
-</UL>
+<P>
 
-<OL>
-<LI>
-item one</LI>
+<H2>Release 2.1.11 (final)</H2>
 
-<LI>
-item two</LI>
+<ul>
+<li>Release date: November 7th, 1999
+<li>Splits wxWindows into base and GUI libraries. Most, but not all makefiles
+are expected to support this: for the rest, the makefiles will build a valid
+combined base/GUI library for GUI applications only.
+<li>New wxGrid.
+<li>wxSocket working.
+<li>wxHTML printing (possibly).
+<li>Animation classes (possibly).
+<li>PCX writing capability (possibly).
+<li>wxImage handlers in separate .h and .cpp files.
+<li>Rewritten timer.cpp, possible wxChrono class.
+<li>Bug tracking system in place.
+</ul>
 
-<OL>
-<LI>
-nsted item</LI>
-</OL>
+<P>
 
-<LI>
-last numbered item</LI>
-</OL>
+<H4>Release 2.1.12</H4>
 
-<H1>
-Heading 1</H1>
-<I>Italic text now...</I>
-<H2>
-<I>Heading 2</I></H2>
-<I>and now?</I>
-<H3>
-Heading 3</H3>
+<ul>
+<li>Release date: January 9th, 2000
+<li>Miscellaneous fixes and small enhancements.
+</ul>
 
-<H4>
-Heading 4</H4>
+<P>
 
-<H5>
-Heading 5</H5>
+<H4>Release 2.1.13</H4>
 
-<H6>
-Heading 6</H6>
-And this is normal text, once again :-)
-<P>And yes, we're in <FONT SIZE=+4>HTML DOCUMENT, </FONT><FONT SIZE=+1>so
-what about some nice <A HREF="fft.html">hypertext link</A>??</FONT>
-<P>hello?
-<CENTER>
-<P>This is&nbsp;<A NAME="downtown"></A>centered paragraph</CENTER>
+<ul>
+<li>Release date: March 5th, 2000
+<li>Miscellaneous fixes and small enhancements.
+<li>wxDateTime class in beta.
+</ul>
 
-<P>Now, you will see some PRE text:
-<PRE>// This is sample C++ code:
+<P>
 
-void main(int argc, char *argv[])
-{
-&nbsp;&nbsp;&nbsp; printf("Go away, man!\n");
-&nbsp;&nbsp;&nbsp; i = 666;
-&nbsp;&nbsp;&nbsp; printf("\n\n\nCRASH\n&nbsp; DOWN NOW. . .&nbsp; \n");
-}</PRE>
+<H4>Release 2.2.0</H4>
 
-<H3>
-WWW</H3>
-<A HREF="http://www.kde.org">This is WWW link to KDE site!</A>
-<BR><A HREF="http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/index.html">(one
-folder up)</A>
+<ul>
+<li>Release date: May 7th, 2000
+<li>Unicode compilation starting to work in wxGTK and wxMSW.
+</ul>
+
+<P>
+
+<H2>Release 2.2.x (final)</H2>
+
+<ul>
+<li>Release date: c. July 2nd, 2000
+<li>Unicode compilation working in wxGTK and wxMSW.
+<li>wxDateTime class.
+</ul>
+
+<P>
+
+<H2>Release 2.3.x (final)</H2>
+
+<ul>
+<li>Release date: unknown
+<li>WinCE port available.
+</ul>
+
+<P>
+
+<HR> <FONT SIZE=+2><I><B><a name="todo">To-Do List</a></B></I></FONT> <HR>
+
+<P>
+
+Developers: please feel free to add to these, and delete them when they are done.
+
+<P>
+
+<B><I>General</I></B><P>
+
+<ul>
+<li>wxHTML printing. When finished, this will allow an application to generate
+printed reports with very little effort.
+<li>wxSocket.
+<li>Split library into several, for base (classes and functions usable by console and GUI
+applications), console (classes and functions usable by console application only)
+and GUI (classes and functions usable by GUI application only).
+<li>Extend and unify drag and drop handling (e.g. we need to specify multiple drop targets
+that can handle multiple formats).
+<li>Expand the number of controls that can be specified in a WXR file.
+<li>Rewrite Dialog Editor.
+<li>PCX writing code.
+<li>GIF animation code.
+<li>Tidying of timer code, addition of wxChrono class.
+<li>wxDateTime class.
+<li>MGL port (see Backroom/Future Ports page).
+<li>Rotated text support.
+<li>FreeType support.
+<li>Support for 'skins', perhaps using a set of alternative control and window classes
+written generically in wxWindows.
+<li>Book, tutorial.
+<li>More examples.
+</ul>
+
+<P>
+
+<B><I>wxMSW</I></B><P>
+
+<ul>
+<li>Windows CE port.
+<li>Cure bug whereby in a panel within another panel, all buttons become
+default buttons (heavy black border).
+<li>Write a RC->WXR converter.
+</ul>
+
+<P>
+
+<B><I>wxGTK</I></B><P>
+
+<ul>
+<li>GNOME/KDE integration libraries.
+</ul>
+
+<P>
+
+<B><I>wxMotif</I></B><P>
+
+<ul>
+<li>Allow wxSystemSettings to be configurable, perhaps via a control
+panel application.
+</ul>
+
+
 </BODY>
 </HTML>
+

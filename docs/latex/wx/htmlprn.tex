@@ -1,63 +1,14 @@
-\membersection{Printing}\label{printing}
+\membersection{HTML Printing}\label{printing}
 
-The wxHTML library provides printing facilities. 
+The wxHTML library provides printing facilities with several levels of complexity. 
 
-You can redirect output displayed by \helpref{wxHtmlWindow}{wxhtmlwindow}
-to the printer DC using this (or similar) code (see {\bf printing} sample for
-more details) :
+The easiest way to print an HTML document is to use 
+\helpref{wxHtmlEasyPrinting class}{wxhtmleasyprinting}. It lets you print HTML documents with only one 
+command and you don't have to care about wxPrintouts etc. at all. It is only simple wrapper around 
+\helpref{wxHtmlPrintout}{wxhtmlprintout}, normal wxWindows printout class.
 
-\begin{verbatim}
-//
-//  This method prints page number one to dc:
-//
 
-void MyPrintout::DrawPageOne(wxDC *dc)
-{
-  int leftMargin = 20;
-  int topMargin = 50;
-         // You must compute the margins there. 
-	 // Caution! These values are NOT in printer DC's units.
-	 // These values are in screen pixels.
-	 // (see bellow)
-
-  // Here we obtain internal cell representation of HTML document:
-  // (html is our pointer to wxHtmlWindow object)
-  wxHtmlContainerCell *cell = html -> GetInternalRepresentation();
-
-  // Now we have to check in case our real page size is reduced
-  // (e.g. because we're drawing to a print preview memory DC)
-  int pageWidth, pageHeight;
-  int w, h;
-  dc->GetSize(&w, &h);                        // DC size
-  GetPageSizePixels(&pageWidth, &pageHeight); // real size
-
-  // Now we must scale it. This equation will map wxHtmlWindow
-  // to page in this way:
-  // |--this is whole page as printed---------|
-  // |        |                      |        |
-  // |        |                      |        |
-  // |-margin-|-----wxHtmlWindow-----|-margin-|
-  //
-  // So page width is 2*leftMargin + [wxHtmlWindow size]
-  // (measured in screen pixels).
-  // We will scale the printer DC so that wxHtmlWindow's content
-  // spreads from left to right:
-  float scale = (float)(
-                  (float)(pageWidth) /
-                  (float)(2 * leftMargin + cell -> GetMaxLineWidth()));
-
-  // If printer pageWidth == current DC width, then this doesn't
-  // change. But w might be the preview bitmap width, so scale down.
-  float overallScale = scale * (float)(w/(float)pageWidth);
-
-  // Set the user scale so that our computations take effect:
-  dc->SetUserScale(overallScale, overallScale);
-  dc->SetBackgroundMode(wxTRANSPARENT);
-
-  // And this is - finally - HTML stuff:
-  cell -> Draw(*dc, leftMargin, topMargin, 0, cell -> GetHeight());
-}
-\end{verbatim}
-
-(Thanks to Julian Smart for sample)
+And finally there is low level class \helpref{wxHtmlDCRenderer}{wxhtmldcrenderer} which you can use to 
+render HTML into rectangular area on any DC. It supports rendering into multiple rectangles with same 
+width. (Most common use is placing one rectangle on each page or printing into two columns.)
 

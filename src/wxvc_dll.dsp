@@ -571,6 +571,10 @@ SOURCE=.\html\htmlwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\htmprint.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\winpars.cpp
 # End Source File
 # Begin Source File

@@ -1,312 +1,244 @@
-/*
- * File:	printing.cc
- * Purpose:	Printing demo for wxWindows class library
- * Author:	Julian Smart
- *          modified by Vaclav Slavik (wxHTML stuffs)
- * Created:	1995
- * Updated:	
- * Copyright:   (c) 1995, AIAI, University of Edinburgh
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        printimg.cpp
+// Purpose:     wxHtmlEasyPrinting testing example
+/////////////////////////////////////////////////////////////////////////////
 
-/* static const char sccsid[] = "%W% %G%"; */
-
-#ifdef __GNUG__
-#pragma implementation
-#endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
+// for all others, include the necessary headers (this file is usually all you
+// need because it includes almost all "standard" wxWindows headers
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include <wx/wx.h>
 #endif
 
-#if !wxUSE_PRINTING_ARCHITECTURE
-#error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h to compile this demo.
-#endif
+#include <wx/image.h>
+#include <wx/html/htmlwin.h>
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-// However, you'll also need to edit src/msw/makefile.nt.
-
-//!!! DON'T DO THAT! This is wxHTML sample now
-#define wxTEST_POSTSCRIPT_IN_MSW 0
-
-#include <ctype.h>
-#include "wx/metafile.h"
-#include "wx/print.h"
-#include "wx/printdlg.h"
-
-#include "wx/accel.h"
-
-#if wxTEST_POSTSCRIPT_IN_MSW
-#include "wx/generic/printps.h"
-#include "wx/generic/prntdlgg.h"
-#endif
-
-#include <wx/wxhtml.h>
-#include <wx/wfstream.h>
-#include "printing.h"
-
-#ifndef __WXMSW__
-#include "mondrian.xpm"
-#endif
-
-// Global print data, to remember settings during the session
-wxPrintData *g_printData = (wxPrintData*) NULL ;
-
-// Global page setup data
-wxPageSetupData* g_pageSetupData = (wxPageSetupData*) NULL;
+#include <wx/html/htmprint.h>
 
 
-// Declare a frame
-MyFrame   *frame = (MyFrame *) NULL;
-wxHtmlWindow *html = NULL;
-int orientation = wxPORTRAIT;
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
 
-// Main proc
-IMPLEMENT_APP(MyApp)
-
-
-MyApp::MyApp()
+// Define a new application type, each program should derive a class from wxApp
+class MyApp : public wxApp
 {
-}
+    public:
+        // override base class virtuals
+        // ----------------------------
 
-// The `main program' equivalent, creating the windows and returning the
-// main frame
-bool MyApp::OnInit(void)
+        // this one is called on application startup and is a good place for the app
+        // initialization (doing it here and not in the ctor allows to have an error
+        // return: if OnInit() returns false, the application terminates)
+
+        virtual bool OnInit();
+};
+
+// Define a new frame type: this is going to be our main frame
+class MyFrame : public wxFrame
 {
-    g_printData = new wxPrintData;
-    g_pageSetupData = new wxPageSetupDialogData;
+    public:
+        // ctor(s)
 
-  // Create the main frame window
-  frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows Printing Demo", wxPoint(0, 0), wxSize(600, 400));
+        MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-  // Give it a status line
-  frame->CreateStatusBar(2);
+        // event handlers (these functions should _not_ be virtual)
+        void OnQuit(wxCommandEvent& event);
+        void OnAbout(wxCommandEvent& event);
 
-  // Load icon and bitmap
-  frame->SetIcon( wxICON( mondrian) );
+        void OnPrintSetup(wxCommandEvent& event);
+        void OnPageSetup(wxCommandEvent& event);
+        void OnPrint(wxCommandEvent& event);
+        void OnPreview(wxCommandEvent& event);
+        void OnOpen(wxCommandEvent& event);
+        
 
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    private:
+        wxHtmlWindow *m_Html;
+        wxHtmlEasyPrinting *m_Prn;
+        wxString m_Name;
+        // any class wishing to process wxWindows events must use this macro
+        DECLARE_EVENT_TABLE()
+};
 
-  file_menu->Append(WXPRINT_PRINT, "&Print...",              "Print");
-  file_menu->Append(WXPRINT_PRINT_SETUP, "Print &Setup...",              "Setup printer properties");
-  file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",              "Page setup");
-  file_menu->Append(WXPRINT_PREVIEW, "Print Pre&view",              "Preview");
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-    // Accelerators
-    wxAcceleratorEntry entries[1];
-    entries[0].Set(wxACCEL_CTRL, (int) 'V', WXPRINT_PREVIEW);
-    wxAcceleratorTable accel(1, entries);
-    frame->SetAcceleratorTable(accel);
-    
-  file_menu->AppendSeparator();
-  file_menu->Append(WXPRINT_QUIT, "E&xit",                "Exit program");
-
-  wxMenu *help_menu = new wxMenu;
-  help_menu->Append(WXPRINT_ABOUT, "&About",              "About this demo");
-
-  wxMenuBar *menu_bar = new wxMenuBar;
-
-  menu_bar->Append(file_menu, "&File");
-  menu_bar->Append(help_menu, "&Help");
-
-  // Associate the menu bar with the frame
-  frame->SetMenuBar(menu_bar);
-
-  frame->Centre(wxBOTH);
-  frame->Show(TRUE);
-
-  frame->SetStatusText("Printing demo");
-
-  SetTopWindow(frame);
-
-  return TRUE;
-}
-
-int MyApp::OnExit()
+// IDs for the controls and the menu commands
+enum
 {
-    delete g_printData;
-    delete g_pageSetupData;
-  return 1;
-}
+    // menu items
+    Minimal_Quit = 1,
+    Minimal_About,
+    Minimal_Print,
+    Minimal_Preview,
+    Minimal_PageSetup,
+    Minimal_PrintSetup,
+    Minimal_Open
 
+};
+
+// ----------------------------------------------------------------------------
+// event tables and other macros for wxWindows
+// ----------------------------------------------------------------------------
+
+// the event tables connect the wxWindows events with the functions (event
+// handlers) which process them. It can be also done at run-time, but for the
+// simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(WXPRINT_QUIT, MyFrame::OnExit)
-    EVT_MENU(WXPRINT_PRINT, MyFrame::OnPrint)
-    EVT_MENU(WXPRINT_PREVIEW, MyFrame::OnPrintPreview)
-    EVT_MENU(WXPRINT_PRINT_SETUP, MyFrame::OnPrintSetup)
-    EVT_MENU(WXPRINT_PAGE_SETUP, MyFrame::OnPageSetup)
-    EVT_MENU(WXPRINT_ABOUT, MyFrame::OnPrintAbout)
+    EVT_MENU(Minimal_Quit, MyFrame::OnQuit)
+    EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_MENU(Minimal_Print, MyFrame::OnPrint)
+    EVT_MENU(Minimal_Preview, MyFrame::OnPreview)
+    EVT_MENU(Minimal_PageSetup, MyFrame::OnPageSetup)
+    EVT_MENU(Minimal_PrintSetup, MyFrame::OnPrintSetup)
+    EVT_MENU(Minimal_Open, MyFrame::OnOpen)
 END_EVENT_TABLE()
 
-// Define my frame constructor
-MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(frame, -1, title, pos, size)
+// Create a new application object: this macro will allow wxWindows to create
+// the application object during program execution (it's better than using a
+// static object for many reasons) and also declares the accessor function
+// wxGetApp() which will return the reference of the right type (i.e. MyApp and
+// not wxApp)
+IMPLEMENT_APP(MyApp)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// the application class
+// ----------------------------------------------------------------------------
+// `Main program' equivalent: the program execution "starts" here
+bool MyApp::OnInit()
 {
-  html = new wxHtmlWindow(this);
-  html -> LoadPage("test.htm");
+#if wxUSE_LIBPNG
+    wxImage::AddHandler(new wxPNGHandler);
+#endif
+#if wxUSE_LIBJPEG
+    wxImage::AddHandler(new wxJPEGHandler);
+#endif
+#if wxUSE_GIF
+    wxImage::AddHandler(new wxGIFHandler);
+#endif
+
+    MyFrame *frame = new MyFrame("Printing test",
+                                 wxPoint(150, 50), wxSize(640, 480));
+
+    // Show it and tell the application that it's our main window
+    // @@@ what does it do exactly, in fact? is it necessary here?
+    frame->Show(TRUE);
+    SetTopWindow(frame);
+
+
+    // success: wxApp::OnRun() will be called which will enter the main message
+    // loop and the application will run. If we returned FALSE here, the
+    // application would exit immediately.
+    return TRUE;
 }
 
-void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+// ----------------------------------------------------------------------------
+// main frame
+// ----------------------------------------------------------------------------
+
+
+// frame constructor
+MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
+        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
-      Close(TRUE);
+    // create a menu bar
+    wxMenu *menuFile = new wxMenu;
+    wxMenu *menuNav = new wxMenu;
+
+    menuFile->Append(Minimal_Open, "Open...\tCtrl-O");
+    menuFile->AppendSeparator();
+    menuFile->Append(Minimal_PageSetup, "Page Setup");
+    menuFile->Append(Minimal_PrintSetup, "Printer Setup");
+    menuFile->Append(Minimal_Print, "Print...");
+    menuFile->Append(Minimal_Preview, "Preview...");
+    menuFile->AppendSeparator();
+    menuFile->Append(Minimal_About, "&About");
+    menuFile->AppendSeparator();
+    menuFile->Append(Minimal_Quit, "&Exit");
+
+    // now append the freshly created menu to the menu bar...
+    wxMenuBar *menuBar = new wxMenuBar;
+    menuBar->Append(menuFile, "&File");
+
+    // ... and attach this menu bar to the frame
+    SetMenuBar(menuBar);
+
+    CreateStatusBar(1);
+
+    m_Html = new wxHtmlWindow(this);
+    m_Html -> SetRelatedFrame(this, "HTML : %s");
+    m_Html -> SetRelatedStatusBar(0);
+    m_Name = "test.htm";
+    m_Html -> LoadPage(m_Name);
+    
+    m_Prn = new wxHtmlEasyPrinting("Easy Printing Demo", this);
+    m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
 }
 
-void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
+
+// event handlers
+
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-      wxPrinter printer;
-      MyPrintout printout("My printout");
-      if (!printer.Print(this, &printout, TRUE))
-        wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+    delete m_Prn;    
+    // TRUE is to force the frame to close
+    Close(TRUE);
 }
 
-void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
-{
-      wxPrintData printData;
-      printData.SetOrientation(orientation);
 
-      // Pass two printout objects: for preview, and possible printing.
-      wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, & printData);
-      if (!preview->Ok())
-      {
-        delete preview;
-        wxMessageBox("There was a problem previewing.\nPerhaps your current printer is not set correctly?", "Previewing", wxOK);
-        return;
-      }
-      
-      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
-      frame->Centre(wxBOTH);
-      frame->Initialize();
-      frame->Show(TRUE);
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox("HTML printing sample\n\n(c) Vaclav Slavik, 1999");
 }
+
 
 void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
-    wxPrintDialogData printDialogData(* g_printData);
-    wxPrintDialog printerDialog(this, & printDialogData);
-    
-    printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
-    printerDialog.ShowModal();
-
-    (*g_printData) = printerDialog.GetPrintDialogData().GetPrintData();
+    m_Prn -> PrinterSetup();
 }
+
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    (*g_pageSetupData) = * g_printData;
-
-    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
-    pageSetupDialog.ShowModal();
-    
-    (*g_printData) = pageSetupDialog.GetPageSetupData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupData();
+    m_Prn -> PageSetup();
 }
 
 
-
-void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-      (void)wxMessageBox("wxWindows printing demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk\n\nModified by Vaclav Slavik to show wxHtml features",
-            "About wxWindows printing demo", wxOK|wxCENTRE);
+    m_Prn -> PrintFile(m_Name);
 }
 
 
-bool MyPrintout::OnPrintPage(int page)
+void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
-  wxDC *dc = GetDC();
-  if (dc)
-  {
-    if (page == 1)
-      DrawPageOne(dc);
-
-    return TRUE;
-  }
-  else
-    return FALSE;
+    m_Prn -> PreviewFile(m_Name);
 }
 
-bool MyPrintout::OnBeginDocument(int startPage, int endPage)
+
+void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-  if (!wxPrintout::OnBeginDocument(startPage, endPage))
-    return FALSE;
+    wxFileDialog dialog(this, "Open HTML page", "", "", "*.htm", 0);
 
-  return TRUE;
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        m_Name = dialog.GetPath();
+        m_Html -> LoadPage(m_Name);
+	m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
+    } 
 }
-
-void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
-{
-  *minPage = 1;
-  *maxPage = 1;
-  *selPageFrom = 1;
-  *selPageTo = 1;
-}
-
-bool MyPrintout::HasPage(int pageNum)
-{
-  return (pageNum == 1);
-}
-
-
-void MyPrintout::DrawPageOne(wxDC *dc)
-{
-  int leftMargin = 20;
-  int topMargin = 40;
-
-/* You might use THIS code to set the printer DC to ROUGHLY reflect
- * the screen text size. This page also draws lines of actual length 5cm
- * on the page.
- */
-  // Get the logical pixels per inch of screen and printer
-  int ppiScreenX, ppiScreenY;
-  GetPPIScreen(&ppiScreenX, &ppiScreenY);
-  int ppiPrinterX, ppiPrinterY;
-  GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
-
-  // Here we obtain internal cell representation of HTML document:
-  wxHtmlContainerCell *cell = html -> GetInternalRepresentation();
-
-  // Now we have to check in case our real page size is reduced
-  // (e.g. because we're drawing to a print preview memory DC)
-  int pageWidth, pageHeight;
-  int w, h;
-  dc->GetSize(&w, &h);
-  GetPageSizePixels(&pageWidth, &pageHeight);
-
-  // Now we must scale it somehow. The best would be to suppose that html window
-  // width is equal to page width:
-
-  float scale = (float)((float)(pageWidth - 0 * leftMargin)/((float)cell -> GetMaxLineWidth() + 2 * leftMargin));
-
-  // If printer pageWidth == current DC width, then this doesn't
-  // change. But w might be the preview bitmap width, so scale down.
-  float overallScale = scale * (float)(w/(float)pageWidth);
-  dc->SetUserScale(overallScale, overallScale);
-
-  // Calculate conversion factor for converting millimetres into
-  // logical units.
-  // There are approx. 25.1 mm to the inch. There are ppi
-  // device units to the inch. Therefore 1 mm corresponds to
-  // ppi/25.1 device units. We also divide by the
-  // screen-to-printer scaling factor, because we need to
-  // unscale to pass logical units to DrawLine.
-
-  dc->SetBackgroundMode(wxTRANSPARENT);
-
-  // TESTING
-
-  int pageWidthMM, pageHeightMM;
-  GetPageSizeMM(&pageWidthMM, &pageHeightMM);
-
-
-  // This is all the printing :
-  cell -> Draw(*dc, leftMargin, topMargin, 0, cell -> GetHeight());
-}
-
 
 

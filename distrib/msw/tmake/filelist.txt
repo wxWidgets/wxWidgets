@@ -413,6 +413,7 @@ m_list.cpp	H
 m_pre.cpp	H
 m_tables.cpp	H
 search.cpp	H
+htmprint.cpp	H
 
 arrimpl.cpp	W
 listimpl.cpp	W
@@ -846,6 +847,7 @@ htmltag.h	L
 htmlwin.h	L
 winpars.h	L
 m_templ.h	L
+htmprint.h	L
 
 caret.h	N
 choicdgg.h	N
