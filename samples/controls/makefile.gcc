@@ -112,10 +112,10 @@ ifeq ($(BUILD),release)
 __OPTIMIZEFLAG_2 = -O2
 endif
 ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 endif
 ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p_1 = --define wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = --define _UNICODE
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
@@ -145,7 +145,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\controls.exe
+all: $(OBJS)\controls.exe data
 
 $(OBJS)\controls_controls.o: ./controls.cpp
 	$(CXX) -c -o $@ $(CONTROLS_CXXFLAGS) $<
@@ -160,4 +160,8 @@ clean:
 $(OBJS)\controls.exe: $(CONTROLS_OBJECTS) $(OBJS)\controls_controls_rc.o
 	$(CXX) -o $@ $(CONTROLS_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
-.PHONY: all clean
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %%f in (test2.bmp) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
+.PHONY: all clean data

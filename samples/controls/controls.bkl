@@ -9,5 +9,11 @@
         <wx-lib>base</wx-lib>
         <win32-res>controls.rc</win32-res>
     </exe>
+    
+    <wx-data id="data">
+        <files>
+            test2.bmp
+        </files>
+    </wx-data>
 
 </makefile>

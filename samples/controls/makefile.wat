@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -178,7 +178,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\controls.exe
+all : .SYMBOLIC $(OBJS)\controls.exe data
 
 $(OBJS)\controls_controls.obj :  .AUTODEPEND .\controls.cpp
 	$(CXX) -zq -fo=$^@ $(CONTROLS_CXXFLAGS) $<
@@ -203,3 +203,7 @@ $(OBJS)\controls.exe :  $(CONTROLS_OBJECTS) $(OBJS)\controls_controls.res
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\controls.lbc library %i
 	@%append $(OBJS)\controls.lbc option resource=$(OBJS)\controls_controls.res
 	wlink @$(OBJS)\controls.lbc
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (test2.bmp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)

@@ -97,7 +97,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: controls$(EXEEXT) $(__controls_bundle___depname)
+all: controls$(EXEEXT) $(__controls_bundle___depname) data
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -140,6 +140,14 @@ controls_controls.o: $(srcdir)/controls.cpp
 controls_controls_rc.o: $(srcdir)/controls.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
+data: 
+	@mkdir -p .
+	@for f in test2.bmp; do \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/$$f . ; \
+	fi; \
+	done
+
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
@@ -153,4 +161,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean controls_bundle distclean install uninstall
+.PHONY: all clean controls_bundle data distclean install uninstall
