@@ -24,6 +24,13 @@ access from non-GUI threads.
 wxPyOnDemandOutputWindow is now thread safe if non-GUI threads use
 print, sys.stdout.write, etc.
 
+Added CreateTextSizer and CreateButtonSizer to wxDialog
+
+
+Added wxPython/lib/infoframe.py from Chris Fama.  It contains a class
+that can be used in place of wxPyOnDemandOutputWindow.
+
+
 
 
 
