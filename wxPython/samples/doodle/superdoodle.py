@@ -109,7 +109,7 @@ class DoodleFrame(wxFrame):
     wildcard = "Doodle files (*.ddl)|*.ddl|All files (*.*)|*.*"
 
     def OnMenuOpen(self, event):
-        dlg = wxFileDialog(self, "Open doodle file...",
+        dlg = wxFileDialog(self, "Open doodle file...", os.getcwd(),
                            style=wxOPEN, wildcard = self.wildcard)
         if dlg.ShowModal() == wxID_OK:
             self.filename = dlg.GetPath()
@@ -126,7 +126,7 @@ class DoodleFrame(wxFrame):
 
 
     def OnMenuSaveAs(self, event):
-        dlg = wxFileDialog(self, "Save doodle as...",
+        dlg = wxFileDialog(self, "Save doodle as...", os.getcwd(),
                            style=wxSAVE | wxOVERWRITE_PROMPT,
                            wildcard = self.wildcard)
         if dlg.ShowModal() == wxID_OK:

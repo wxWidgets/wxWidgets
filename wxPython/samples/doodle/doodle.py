@@ -195,18 +195,9 @@ class DoodleFrame(wxFrame):
 
 #----------------------------------------------------------------------
 
-
-class DoodleApp(wxApp):
-    def OnInit(self):
-        frame = DoodleFrame(None)
-        frame.Show(true)
-        self.SetTopWindow(frame)
-        return true
-
-
-#----------------------------------------------------------------------
-
 if __name__ == '__main__':
-    app = DoodleApp(0)
+    app = wxPySimpleApp()
+    frame = DoodleFrame(None)
+    frame.Show(true)
     app.MainLoop()
 
