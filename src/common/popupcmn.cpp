@@ -229,7 +229,7 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return FALSE;
 }
 
-#if wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
 // ----------------------------------------------------------------------------
 // wxPopupComboWindow
@@ -272,7 +272,7 @@ void wxPopupComboWindow::OnDismiss()
     m_combo->OnDismiss();
 }
 
-#endif // wxUSE_COMBOBOX
+#endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
 // ----------------------------------------------------------------------------
 // wxPopupWindowHandler
@@ -300,6 +300,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
             m_popup->DismissAndNotify();
             break;
 
+#ifdef __WXUNIVERSAL__
         case wxHT_WINDOW_HORZ_SCROLLBAR:
             sbar = win->GetScrollbar(wxHORIZONTAL);
             break;
@@ -307,6 +308,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
         case wxHT_WINDOW_VERT_SCROLLBAR:
             sbar = win->GetScrollbar(wxVERTICAL);
             break;
+#endif
 
         default:
             // forgot to update the switch after adding a new hit test code?
