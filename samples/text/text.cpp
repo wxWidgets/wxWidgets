@@ -1169,8 +1169,9 @@ void MyFrame::OnFileSave(wxCommandEvent& event)
 #if wxUSE_FILE
         // verify that the fil length is correct (it wasn't under Win95)
         wxFile file(wxT("dummy.txt"));
-        wxLogStatus(this, _T("Successfully saved file (text len = %ld, file size = %ld)"),
-                    m_panel->m_textrich->GetValue().length(),
+        wxLogStatus(this,
+                    _T("Successfully saved file (text len = %lu, file size = %ld)"),
+                    (unsigned long)m_panel->m_textrich->GetValue().length(),
                     file.Length());
 #endif
     }
