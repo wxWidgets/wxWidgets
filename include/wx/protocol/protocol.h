@@ -53,7 +53,7 @@ protected:
 
   friend class wxURL;
 public:
-  wxProtoInfo(const char *name, const char *serv_name, const bool need_host1,
+  wxProtoInfo(const wxChar *name, const wxChar *serv_name, const bool need_host1,
               wxClassInfo *info);
 };
 
