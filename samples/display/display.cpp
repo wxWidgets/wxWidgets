@@ -24,6 +24,10 @@
     #pragma hdrstop
 #endif
 
+#if !wxUSE_DISPLAY
+    #error "To compile this sample you must build the library with wxUSE_DISPLAY set to 1"
+#endif
+
 // for all others, include the necessary headers explicitly
 #ifndef WX_PRECOMP
     #include "wx/app.h"
