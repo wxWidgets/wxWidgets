@@ -149,7 +149,7 @@ void wxApp::CleanUp()
     wxTheColourDatabase = NULL;
 
     wxDeleteStockObjects();
-    
+
     wxDeleteStockLists();
 
     delete wxTheApp;
@@ -264,11 +264,11 @@ int wxEntryStart( int& argc, char *argv[] )
     {
         XSynchronize(xdisplay, True);
     }
-    
+
     wxApp::ms_display = (WXDisplay*) xdisplay;
-    
+
     XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
-        
+
     wxSetDetectableAutoRepeat( TRUE );
 
     if (!wxApp::Initialize())
@@ -432,22 +432,22 @@ struct wxExposeInfo
 static Bool expose_predicate (Display *display, XEvent *xevent, XPointer arg)
 {
     wxExposeInfo *info = (wxExposeInfo*) arg;
-    
+
     if (info->found_non_matching)
        return FALSE;
-    
+
     if (xevent->xany.type != Expose)
     {
         info->found_non_matching = TRUE;
         return FALSE;
     }
-    
+
     if (xevent->xexpose.window != info->window)
     {
         info->found_non_matching = TRUE;
         return FALSE;
     }
-    
+
     return TRUE;
 }
 #endif
@@ -463,14 +463,16 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
     wxWindow* win = NULL;
     Window window = XEventGetWindow(event);
+#if 0
     Window actualWindow = window;
+#endif
 
     // Find the first wxWindow that corresponds to this event window
     // Because we're receiving events after a window
     // has been destroyed, assume a 1:1 match between
     // Window and wxWindow, so if it's not in the table,
     // it must have been destroyed.
-    
+
     win = wxGetWindowFromTable(window);
     if (!win)
     {
@@ -484,7 +486,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #ifdef __WXDEBUG__
     wxString windowClass = win->GetClassInfo()->GetClassName();
 #endif
-    
+
     switch (event->type)
     {
         case Expose:
@@ -519,7 +521,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
                                                   tmp_event.xexpose.width, tmp_event.xexpose.height );
-                                              
+
                     win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
                                                  tmp_event.xexpose.width, tmp_event.xexpose.height );
                 }
@@ -529,9 +531,9 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 // rectangles.
                 win->GetUpdateRegion() = win->GetUpdateRegion().GetBox();
                 win->GetClearRegion() = win->GetClearRegion().GetBox();
-                
+
                 // If we only have one X11 window, always indicate
-                // that borders might have to be redrawn.                
+                // that borders might have to be redrawn.
                 if (win->GetMainWindow() == win->GetClientWindow())
                     win->NeedUpdateNcAreaInIdle();
 
@@ -542,20 +544,20 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
             return TRUE;
         }
-        
+
 #if !wxUSE_NANOX
         case GraphicsExpose:
         {
             // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
             //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
             //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                    
+
             win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                           event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                                             
+
             win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                          event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                                              
+
             if (event->xgraphicsexpose.count == 0)
             {
                 // Only erase background, paint in idle time.
@@ -574,17 +576,17 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
             wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
             wxTranslateKeyEvent(keyEvent, win, window, event);
-                    
+
             // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
-        
+
             // We didn't process wxEVT_KEY_DOWN, so send wxEVT_CHAR
             if (win->GetEventHandler()->ProcessEvent( keyEvent ))
                 return TRUE;
-                
+
             keyEvent.SetEventType(wxEVT_CHAR);
             if (win->GetEventHandler()->ProcessEvent( keyEvent ))
                 return TRUE;
-            
+
             if ( (keyEvent.m_keyCode == WXK_TAB) &&
                  win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
             {
@@ -607,7 +609,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
             wxKeyEvent keyEvent(wxEVT_KEY_UP);
             wxTranslateKeyEvent(keyEvent, win, window, event);
-        
+
             return win->GetEventHandler()->ProcessEvent( keyEvent );
         }
         case ConfigureNotify:
@@ -622,7 +624,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     tlw->SetConfigureGeometry( XConfigureEventGetX(event), XConfigureEventGetY(event),
                         XConfigureEventGetWidth(event), XConfigureEventGetHeight(event) );
                 }
-                
+
                 if (win->IsTopLevel() && win->IsShown())
                 {
                     wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;
@@ -632,7 +634,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                     sizeEvent.SetEventObject( win );
-                
+
                     return win->GetEventHandler()->ProcessEvent( sizeEvent );
                 }
             }
@@ -682,14 +684,14 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         case ResizeRequest:
         {
             printf( "resize request from %s\n", win->GetName().c_str() );
-            
+
             Display *disp = (Display*) wxGetDisplay();
             XEvent report;
-            
+
             //  to avoid flicker
             report = * event;
             while( XCheckTypedWindowEvent (disp, actualWindow, ResizeRequest, &report));
-            
+
             wxSize sz = win->GetSize();
             wxSizeEvent sizeEvent(sz, win->GetId());
             sizeEvent.SetEventObject(win);
@@ -718,7 +720,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (!win->IsEnabled())
                 return FALSE;
-                
+
             // Here we check if the top level window is
             // disabled, which is one aspect of modality.
             wxWindow *tlw = win;
@@ -726,7 +728,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 tlw = tlw->GetParent();
             if (tlw && !tlw->IsEnabled())
                 return FALSE;
-                
+
             if (event->type == ButtonPress)
             {
                 if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
@@ -735,11 +737,11 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     // and not here. TODO.
                     g_prevFocus = wxWindow::FindFocus();
                     g_nextFocus = win;
-                    
+
                     win->SetFocus();
                 }
             }
-            
+
 #if !wxUSE_NANOX
             if (event->type == LeaveNotify || event->type == EnterNotify)
             {
@@ -760,12 +762,12 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
                 {
                     // wxLogDebug( "FocusIn from %s of type %s", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-                    
+
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_prevFocus );
                     g_prevFocus = NULL;
-                    
+
                     return win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
                 return FALSE;
@@ -779,7 +781,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
                 {
                     // wxLogDebug( "FocusOut from %s of type %s", win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-                    
+
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_nextFocus );
@@ -916,7 +918,7 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
         node = node->Next();
     }
-    
+
     return needMore;
 }
 
@@ -945,10 +947,10 @@ bool wxApp::OnInitGui()
     // now we don't want to try popping up a dialog
     // for error messages.
     delete wxLog::SetActiveTarget(new wxLogStderr);
-    
+
     if (!wxAppBase::OnInitGui())
     return FALSE;
-    
+
     GetMainColormap( wxApp::GetDisplay() );
 
     m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
@@ -975,7 +977,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 Window wxGetWindowParent(Window window)
 {
     wxASSERT_MSG( window, "invalid window" );
-    
+
     return (Window) 0;
 
     Window parent, root = 0;
@@ -1066,7 +1068,7 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
 {
     // While the GUI isn't working that well, just print out the
     // message.
-#if 0    
+#if 0
     wxAppBase::OnAssert(file, line, msg);
 #else
     wxString msg2;
