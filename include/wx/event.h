@@ -1859,7 +1859,7 @@ class WXDLLIMPEXP_CORE wxNavigationKeyEvent : public wxEvent
 public:
     wxNavigationKeyEvent()
         : wxEvent(0, wxEVT_NAVIGATION_KEY),
-          m_flags(IsForward),    // defaults are for TAB
+          m_flags(IsForward | FromTab),    // defaults are for TAB
           m_focus((wxWindow *)NULL)
         {
             m_propagationLevel = wxEVENT_PROPAGATE_NONE;
@@ -1884,6 +1884,13 @@ public:
     void SetWindowChange(bool bIs)
         { if ( bIs ) m_flags |= WinChange; else m_flags &= ~WinChange; }
 
+    // Set to true under MSW if the event was generated using the tab key.
+    // This is required for proper navogation over radio buttons
+    bool IsFromTab() const
+        { return (m_flags & FromTab) != 0; }
+    void SetFromTab(bool bIs)
+        { if ( bIs ) m_flags |= FromTab; else m_flags &= ~FromTab; }
+
     // the child which has the focus currently (may be NULL - use
     // wxWindow::FindFocus then)
     wxWindow* GetCurrentFocus() const { return m_focus; }
@@ -1898,7 +1905,8 @@ public:
     {
         IsBackward = 0x0000,
         IsForward = 0x0001,
-        WinChange = 0x0002
+        WinChange = 0x0002,
+        FromTab = 0x0004
     };
 
     long m_flags;

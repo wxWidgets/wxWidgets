@@ -1828,7 +1828,8 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             }
 
             bool bForward = true,
-                 bWindowChange = false;
+                 bWindowChange = false,
+                 bFromTab = false;
 
             // should we process this message specially?
             bool bProcess = true;
@@ -1842,6 +1843,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         // Ctrl-Tab cycles thru notebook pages
                         bWindowChange = bCtrlDown;
                         bForward = !bShiftDown;
+                        bFromTab = true;
                     }
                     break;
 
@@ -1966,6 +1968,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 wxNavigationKeyEvent event;
                 event.SetDirection(bForward);
                 event.SetWindowChange(bWindowChange);
+                event.SetFromTab(bFromTab);
                 event.SetEventObject(this);
 
                 if ( GetEventHandler()->ProcessEvent(event) )
