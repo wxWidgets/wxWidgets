@@ -90,6 +90,15 @@ public:
     // and now for something different: this function is called in case of a
     // crash (e.g. dereferencing null pointer, division by 0, ...)
     virtual void OnFatalException();
+
+#ifdef __WXDEBUG__
+    // in debug mode, you can override this function to do something different
+    // (e.g. log the assert to file) whenever an assertion fails
+    virtual void OnAssert(const wxChar *file,
+                          int line,
+                          const wxChar *cond,
+                          const wxChar *msg);
+#endif // __WXDEBUG__
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -117,6 +126,11 @@ public:
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
     virtual bool ProcessEvent(wxEvent& event);
+
+#ifdef __WXDEBUG__
+    // show how an assert failure message box looks like
+    void OnShowAssert(wxCommandEvent& event);
+#endif // __WXDEBUG__
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -170,7 +184,10 @@ enum
     Except_Crash,
 #if wxUSE_ON_FATAL_EXCEPTION
     Except_HandleCrash,
-#endif
+#endif // wxUSE_ON_FATAL_EXCEPTION
+#ifdef __WXDEBUG__
+    Except_ShowAssert,
+#endif // __WXDEBUG__
     Except_Dialog,
 
     Except_Quit = wxID_EXIT,
@@ -195,7 +212,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_Crash, MyFrame::OnCrash)
 #if wxUSE_ON_FATAL_EXCEPTION
     EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
-#endif
+#endif // wxUSE_ON_FATAL_EXCEPTION
+#ifdef __WXDEBUG__
+    EVT_MENU(Except_ShowAssert, MyFrame::OnShowAssert)
+#endif // __WXDEBUG__
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -277,6 +297,19 @@ void MyApp::OnFatalException()
                  _T("wxExcept Sample"), wxOK | wxICON_ERROR);
 }
 
+#ifdef __WXDEBUG__
+
+void MyApp::OnAssert(const wxChar *file,
+                     int line,
+                     const wxChar *cond,
+                     const wxChar *msg)
+{
+    // we don't have anything special to do here
+    wxApp::OnAssert(file, line, cond, msg);
+}
+
+#endif // __WXDEBUG__
+
 // ============================================================================
 // MyFrame implementation
 // ============================================================================
@@ -304,7 +337,11 @@ MyFrame::MyFrame()
 #if wxUSE_ON_FATAL_EXCEPTION
     menuFile->AppendCheckItem(Except_HandleCrash, _T("&Handle crashes\tCtrl-H"));
     menuFile->AppendSeparator();
-#endif
+#endif // wxUSE_ON_FATAL_EXCEPTION
+#ifdef __WXDEBUG__
+    menuFile->Append(Except_ShowAssert, _T("Provoke &assert failure\tCtrl-A"));
+    menuFile->AppendSeparator();
+#endif // __WXDEBUG__
     menuFile->Append(Except_Quit, _T("E&xit\tCtrl-Q"), _T("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
@@ -395,7 +432,18 @@ void MyFrame::OnHandleCrash(wxCommandEvent& event)
     wxHandleFatalExceptions(event.IsChecked());
 }
 
-#endif
+#endif // wxUSE_ON_FATAL_EXCEPTION
+
+#ifdef __WXDEBUG__
+
+void MyFrame::OnShowAssert(wxCommandEvent& WXUNUSED(event))
+{
+    // provoke an assert from wxArrayString
+    wxArrayString arr;
+    arr[0];
+}
+
+#endif // __WXDEBUG__
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
