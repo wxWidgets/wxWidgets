@@ -5,8 +5,6 @@
 #ifndef __GTKSETUPH__
 #define __GTKSETUPH__
 
-#define USING_CONFIGURE
-
 #ifdef __GNUG__
     #pragma interface
 #endif
