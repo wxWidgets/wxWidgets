@@ -36,8 +36,9 @@ class wxIcon: public wxBitmap
 public:
 
   wxIcon(void);
-  wxIcon(const wxIcon& icon);
-  wxIcon(const wxIcon* icon);
+  wxIcon( const wxIcon& icon);
+  wxIcon( const wxIcon* icon);
+  wxIcon( const char **bits, int width=-1, int height=-1 );
   wxIcon( char **bits, int width=-1, int height=-1 );
 
   wxIcon& operator = (const wxIcon& icon);

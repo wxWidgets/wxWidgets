@@ -103,10 +103,6 @@ gtk_myfixed_init (GtkMyFixed *myfixed)
 {
   GTK_WIDGET_UNSET_FLAGS (myfixed, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (myfixed, GTK_BASIC);
-  
-#if (GTK_MINOR_VERSION == 1)
-  gtk_container_set_resize_mode( GTK_CONTAINER(myfixed), GTK_RESIZE_PARENT );
-#endif
 
   myfixed->children = NULL;
 }
@@ -173,7 +169,7 @@ gtk_myfixed_move (GtkMyFixed       *myfixed,
 
       if (child->widget == widget)
         {
-	  if ((child->x == x) && (child->y == y)) return;
+/*	  if ((child->x == x) && (child->y == y)) return; */
 	  
           child->x = x;
           child->y = y;

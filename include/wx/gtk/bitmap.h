@@ -62,6 +62,7 @@ public:
   wxBitmap( int width, int height, int depth = -1 );
   wxBitmap( const char bits[], int width, int height, int depth = 1 );
   wxBitmap( const wxImage &image );
+  wxBitmap( const char **bits );
   wxBitmap( char **bits );
   wxBitmap( const wxBitmap& bmp );
   wxBitmap( const wxBitmap* bmp );

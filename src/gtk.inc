@@ -48,7 +48,6 @@ LIB_CPP_SRC=\
  common/framecmn.cpp \
  common/stream.cpp \
  common/datstrm.cpp \
- common/wfstream.cpp \
  common/mstream.cpp \
  common/zstream.cpp \
  common/objstrm.cpp \

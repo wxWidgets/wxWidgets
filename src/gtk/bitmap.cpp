@@ -117,6 +117,29 @@ wxBitmap::wxBitmap( int width, int height, int depth )
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
+wxBitmap::wxBitmap( const char **bits )
+{
+    wxCHECK_RET( bits != NULL, "invalid bitmap data" )
+  
+    m_refData = new wxBitmapRefData();
+
+    GdkBitmap *mask = (GdkBitmap*) NULL;
+    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+  
+    M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( parent, &mask, NULL, (gchar **) bits );
+    
+    if (mask)
+    {
+        M_BMPDATA->m_mask = new wxMask();
+        M_BMPDATA->m_mask->m_bitmap = mask;
+    }
+  
+    gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+  
+    M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;  // ?
+    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+}
+  
 wxBitmap::wxBitmap( char **bits )
 {
     wxCHECK_RET( bits != NULL, "invalid bitmap data" )

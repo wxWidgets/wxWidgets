@@ -42,15 +42,20 @@ extern wxList wxPendingDelete;
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
     if (!win->HasVMT()) return;
-
+    
 /*
     printf( "OnFrameResize from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
-
-    win->GtkOnSize( alloc->x, alloc->y, alloc->width, alloc->height );
+    
+   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+   {
+       win->m_sizeSet = FALSE;
+       win->m_width = alloc->width;
+       win->m_height = alloc->height;
+   }
 }
 
 //-----------------------------------------------------------------------------
@@ -132,6 +137,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
   
     m_widget = gtk_window_new( win_type );
+    
     if ((size.x != -1) && (size.y != -1))
         gtk_widget_set_usize( m_widget, m_width, m_height );
     if ((pos.x != -1) && (pos.y != -1))
@@ -180,9 +186,11 @@ bool wxFrame::Show( bool show )
   
     if (show)
     {
+/*
         wxSizeEvent event( wxSize(m_width,m_height), GetId() );
         m_sizeSet = FALSE;
-        ProcessEvent( event );
+        GetEventHandler()->ProcessEvent( event );
+*/
     }
     return wxWindow::Show( show );
 }
@@ -279,7 +287,7 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
 
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
 
     m_resizing = FALSE;
 }
@@ -342,8 +350,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     // m_x = x;
     // m_y = y;
 
-    if ((m_height == height) && (m_width == width) &&
-        (m_sizeSet)) return;
+    if (m_resizing) return;
+    m_resizing = TRUE;
+    
     if (!m_wxwindow) return;
   
     m_width = width;
@@ -354,8 +363,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
 
-    gtk_widget_set_usize( m_widget, m_width, m_height );
-
+//    gtk_widget_set_usize( m_widget, m_width, m_height );
+    
     // This emulates the new wxMSW behaviour
 
     if (m_frameMenuBar)
@@ -390,12 +399,22 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, 0, m_height-wxSTATUS_HEIGHT );
         gtk_widget_set_usize( m_frameStatusBar->m_widget, m_width, wxSTATUS_HEIGHT );
     }
-
+    
     m_sizeSet = TRUE;
     
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
+    
+    m_resizing = FALSE;
+}
+
+void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
+{
+    if (!m_sizeSet)
+        GtkOnSize( m_x, m_y, m_width, m_height );
+  
+    DoMenuUpdates();
 }
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )

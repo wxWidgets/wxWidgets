@@ -19,8 +19,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxIcon,wxBitmap)
 
+wxIcon::wxIcon( const char **bits, int WXUNUSED(width), int WXUNUSED(height) ) : 
+    wxBitmap( bits ) 
+{
+}
+    
 wxIcon::wxIcon( char **bits, int WXUNUSED(width), int WXUNUSED(height) ) : 
-  wxBitmap( bits ) 
+    wxBitmap( bits ) 
 {
 }
     
@@ -28,20 +33,20 @@ wxIcon::wxIcon() :  wxBitmap()
 {  
 }
 
-wxIcon::wxIcon(const wxIcon& icon) : wxBitmap()
+wxIcon::wxIcon( const wxIcon& icon ) : wxBitmap()
 { 
-  Ref(icon); 
+    Ref(icon); 
 }
 
-wxIcon::wxIcon(const wxIcon* icon) : wxBitmap()
+wxIcon::wxIcon( const wxIcon* icon ) : wxBitmap()
 { 
-  if (icon) Ref(*icon); 
+    if (icon) Ref(*icon); 
 }
 
-wxIcon& wxIcon::operator = (const wxIcon& icon) 
+wxIcon& wxIcon::operator = ( const wxIcon& icon )
 { 
-  if (*this == icon) return (*this); 
-  Ref(icon); 
-  return *this; 
+    if (*this == icon) return (*this); 
+    Ref(icon); 
+    return *this; 
 }
 

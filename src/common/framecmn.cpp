@@ -17,17 +17,14 @@
 
 #include "wx/frame.h"
 #include "wx/menu.h"
+#include "wx/menuitem.h"
 
-// wxGTK is a special case because it doesn't use the generic wxMenuItem
-// class, but it's own (already defined in wx/menu.h) one
 #ifndef __WXGTK__
-  #include "wx/menuitem.h"
-#endif //WXGTK
-
 void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
   DoMenuUpdates();
 }
+#endif
 
 // update all menus
 void wxFrame::DoMenuUpdates()

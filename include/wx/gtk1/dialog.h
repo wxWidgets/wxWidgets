@@ -62,7 +62,8 @@ public:
   void OnApply( wxCommandEvent &event );
   void OnCancel( wxCommandEvent &event );
   void OnOK( wxCommandEvent &event );
-  void OnPaint(wxPaintEvent& event);
+  void OnPaint( wxPaintEvent& event );
+  void OnSize( wxSizeEvent &event );
 /*
   void OnCharHook( wxKeyEvent& event );
 */
@@ -92,6 +93,8 @@ public:
   virtual void Restore() { }
     
 // implementation
+  
+  virtual void GtkOnSize( int x, int y, int width, int height );
   
   bool       m_modalShowing;
   wxString   m_title;

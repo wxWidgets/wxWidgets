@@ -30,6 +30,11 @@
 #include <netdb.h>
 #include <signal.h>
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xresource.h>
+
+#include "gdk/gdkx.h"        // GDK_DISPLAY
 
 #ifdef __SVR4__
   #include <sys/systeminfo.h>
@@ -50,42 +55,45 @@ extern "C"
 
 void wxBell(void)
 {
-  gdk_beep();
-};
+    gdk_beep();
+}
 
 void wxSleep(int nSecs)
 {
-  sleep(nSecs);
-};
+    sleep(nSecs);
+}
 
 int wxKill(long pid, int sig)
 {
-  return kill(pid, sig);
-};
+    return kill(pid, sig);
+}
 
 void wxDisplaySize( int *width, int *height )
 {
-  if (width) *width = gdk_screen_width();
-  if (height) *height = gdk_screen_height();
+    if (width) *width = gdk_screen_width();
+    if (height) *height = gdk_screen_height();
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-  wxFAIL_MSG( "GetMousePosition not yet implemented" );
-  if (x) *x = 0;
-  if (y) *y = 0;
-};
+    Window       dumw;
+    int          dumi;
+    unsigned int dumu;
+    
+    XQueryPointer( GDK_DISPLAY(),GDK_ROOT_WINDOW(),
+                   &dumw,&dumw,x,y,&dumi,&dumi,&dumu );
+}
 
 bool wxColourDisplay(void)
 {
-  wxFAIL_MSG( "wxColourDisplay always returns TRUE" );
-  return TRUE;
+    wxFAIL_MSG( "wxColourDisplay always returns TRUE" );
+    return TRUE;
 }
 
 int wxDisplayDepth(void)
 {
-  wxFAIL_MSG( "wxDisplayDepth always returns 8" );
-  return 8;
+    wxFAIL_MSG( "wxDisplayDepth always returns 8" );
+    return 8;
 }
 
 //------------------------------------------------------------------------
@@ -94,34 +102,40 @@ int wxDisplayDepth(void)
 
 const char* wxGetHomeDir( wxString *home  )
 {
-  *home = wxGetUserHome( wxString() );
-  if (home->IsNull()) *home = "/";
-  return *home;
-};
+    *home = wxGetUserHome( wxString() );
+    if (home->IsNull()) *home = "/";
+    return *home;
+}
 
 char *wxGetUserHome( const wxString &user )
 {
-  struct passwd *who = (struct passwd *) NULL;
+    struct passwd *who = (struct passwd *) NULL;
 
-  if (user.IsNull() || (user== ""))
-  {
+    if (user.IsNull() || (user== ""))
+    {
         register char *ptr;
 
         if ((ptr = getenv("HOME")) != NULL)
+	{
             return ptr;
-        if ((ptr = getenv("USER")) != NULL
-        || (ptr = getenv("LOGNAME")) != NULL) {
+	}
+        if ((ptr = getenv("USER")) != NULL || (ptr = getenv("LOGNAME")) != NULL) 
+	{
             who = getpwnam(ptr);
         }
         // We now make sure the the user exists!
         if (who == NULL)
+	{
             who = getpwuid(getuid());
-  }
-  else
-    who = getpwnam (user);
+	}
+    }
+    else
+    {
+      who = getpwnam (user);
+    }
 
-  return who ? who->pw_dir : (char*)NULL;
-};
+    return who ? who->pw_dir : (char*)NULL;
+}
 
 //------------------------------------------------------------------------
 // id routines
@@ -147,15 +161,15 @@ bool wxGetHostName(char *buf, int sz)
     // strncpy(buf, (h=gethostbyname(name))!=NULL ? h->h_name : name, sz-1);
     if((unsigned)sz > strlen(name)+strlen(domain)+1)
     {
-       strcpy(buf, name);
-       if(strcmp(domain,"(none)") == 0) // standalone machine
-       {
-         strcat(buf,".");
-         strcat(buf,domain);
-       }
+        strcpy(buf, name);
+        if(strcmp(domain,"(none)") == 0) // standalone machine
+        {
+            strcat(buf,".");
+            strcat(buf,domain);
+        }
     }
     else
-       return FALSE;
+        return FALSE;
     return TRUE;
 #endif
 }
@@ -223,10 +237,10 @@ void wxFatalError( const wxString &msg, const wxString &title )
 
 bool wxDirExists( const wxString& dir )
 {
-  char buf[500];
-  strcpy( buf, WXSTRINGCAST(dir) );
-  struct stat sbuf;
-  return ((stat(buf, &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE);
+    char buf[500];
+    strcpy( buf, WXSTRINGCAST(dir) );
+    struct stat sbuf;
+    return ((stat(buf, &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE);
 };
 
 //------------------------------------------------------------------------

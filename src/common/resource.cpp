@@ -2249,7 +2249,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
                          "Forgot to use wxResourceLoadIconData?"), (const char*) name);
           return (wxIcon *) NULL;
         }
-        return wxIcon((char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3());
+        return wxIcon((const char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3());
 #else
         wxLogWarning(_("No XBM facility available!"));
 #endif
