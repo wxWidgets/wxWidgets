@@ -451,6 +451,106 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
     return ret;
 }
 
+// ----------------------------------------------------------------------------
+// wxStreamTempBuffer
+// ----------------------------------------------------------------------------
+
+/*
+   Extract of a mail to wx-users to give the context of the problem we are
+   trying to solve here:
+
+    MC> If I run the command:
+    MC>    find . -name "*.h" -exec grep linux {} \;
+    MC> in the exec sample synchronously from the 'Capture command output'
+    MC> menu, wxExecute never returns.  I have to xkill it.  Has anyone
+    MC> else encountered this?
+
+     Yes, I can reproduce it too.
+
+     I even think I understand why it happens: before launching the external
+    command we set up a pipe with a valid file descriptor on the reading side
+    when the output is redirected. So the subprocess happily writes to it ...
+    until the pipe buffer (which is usually quite big on Unix, I think the
+    default is 4Mb) is full. Then the writing process stops and waits until we
+    read some data from the pipe to be able to continue writing to it but we
+    never do it because we wait until it terminates to start reading and so we
+    have a classical deadlock.
+
+   Here is the fix: we now read the output as soon as it appears into a temp
+   buffer (wxStreamTempBuffer object) and later just stuff it back into the
+   stream when the process terminates. See supporting code in wxExecute()
+   itself as well.   
+*/
+
+class wxStreamTempBuffer
+{
+public:
+    wxStreamTempBuffer();
+
+    // call to associate a stream with this buffer, otherwise nothing happens
+    // at all
+    void Init(wxInputStream *stream);
+
+    // check for input on our stream and cache it in our buffer if any
+    void Update();
+
+    ~wxStreamTempBuffer();
+
+private:
+    // the stream we're buffering, if NULL we don't do anything at all
+    wxInputStream *m_stream;
+
+    // the buffer of size m_size (NULL if m_size == 0)
+    void *m_buffer;
+
+    // the size of the buffer
+    size_t m_size;
+};
+
+wxStreamTempBuffer::wxStreamTempBuffer()
+{
+    m_stream = NULL; 
+    m_buffer = NULL;
+    m_size = 0;
+}
+
+void wxStreamTempBuffer::Init(wxInputStream *stream)
+{
+    m_stream = stream;
+}
+
+void wxStreamTempBuffer::Update()
+{
+    if ( m_stream && !m_stream->Eof() )
+    {
+        // realloc in blocks of 1Kb - surely not the best strategy but which
+        // one is?
+        static const size_t incSize = 1024;
+
+        void *buf = realloc(m_buffer, m_size + incSize);
+        if ( !buf )
+        {
+            // don't read any more, we don't have enough memory to do it
+            m_stream = NULL;
+        }
+        else // got memory for the buffer
+        {
+            m_buffer = buf;
+            m_stream->Read((char *)m_buffer + m_size, incSize);
+            m_size += incSize;
+        }
+    }
+}
+
+wxStreamTempBuffer::~wxStreamTempBuffer()
+{
+    if ( m_buffer )
+    {
+        m_stream->Ungetch(m_buffer, m_size);
+        free(m_buffer);
+    }
+}
+
 #endif // wxUSE_STREAMS
 
 long wxExecute(wxChar **argv,
@@ -619,15 +719,22 @@ long wxExecute(wxChar **argv,
         ARGS_CLEANUP;
 
         // pipe initialization: construction of the wxStreams
+#if wxUSE_STREAMS
+        wxStreamTempBuffer bufIn, bufErr;
+#endif // wxUSE_STREAMS
+
         if ( process && process->IsRedirected() )
         {
 #if wxUSE_STREAMS
-            // These two streams are relative to this process.
+            // in/out for subprocess correspond to our out/in
             wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
             wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
             wxInputStream *errStream = new wxProcessFileInputStream(pipeErr[0]);
 
             process->SetPipeStreams(inStream, outStream, errStream);
+
+            bufIn.Init(inStream);
+            bufErr.Init(inStream);
 #endif // wxUSE_STREAMS
 
             close(pipeIn[0]); // close reading side
@@ -653,9 +760,19 @@ long wxExecute(wxChar **argv,
             wxBusyCursor bc;
             wxWindowDisabler wd;
 
-            // it will be set to 0 from GTK_EndProcessDetector
-            while (data->pid != 0)
+            // data->pid will be set to 0 from GTK_EndProcessDetector when the
+            // process terminates
+            while ( data->pid != 0 )
+            {
+#if wxUSE_STREAMS
+                bufIn.Update();
+                bufErr.Update();
+#endif // wxUSE_STREAMS
+
+                // give GTK+ a chance to call GTK_EndProcessDetector here and
+                // also repaint the GUI
                 wxYield();
+            }
 
             int exitcode = data->exitcode;
 

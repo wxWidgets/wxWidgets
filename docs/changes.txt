@@ -19,6 +19,7 @@ All (GUI):
 - wxFindReplaceDialog added (based on work of Markus Greither)
 - wxTextCtrl::SetMaxLength() added (wxMSW/wxGTK)
 - polygon support in wxRegion (Klaas Holwerda)
+- fixed bug with using wxExecute() to capture huge amounts of output
 
 wxHTML:
 
