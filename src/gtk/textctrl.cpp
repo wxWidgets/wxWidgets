@@ -94,31 +94,11 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
 
-#if wxUSE_STD_IOSTREAM
-wxTextCtrl::wxTextCtrl() : streambuf()
-{
-    if (allocate()) setp(base(),ebuf());
-
-    m_modified = FALSE;
-}
-#else
 wxTextCtrl::wxTextCtrl()
 {
     m_modified = FALSE;
 }
-#endif
 
-#if wxUSE_STD_IOSTREAM
-wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
-      const wxPoint &pos, const wxSize &size,
-      int style, const wxValidator& validator, const wxString &name ) : streambuf()
-{
-    if (allocate()) setp(base(),ebuf());
-
-    m_modified = FALSE;
-    Create( parent, id, value, pos, size, style, validator, name );
-}
-#else
 wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxValidator& validator, const wxString &name )
@@ -126,7 +106,6 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
     m_modified = FALSE;
     Create( parent, id, value, pos, size, style, validator, name );
 }
-#endif
 
 bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
@@ -438,108 +417,6 @@ void wxTextCtrl::AppendText( const wxString &text )
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
-bool wxTextCtrl::LoadFile( const wxString &file )
-{
-    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
-
-    if (!wxFileExists(file)) return FALSE;
-
-    Clear();
-
-    FILE *fp = (FILE*) NULL;
-    struct stat statb;
-
-    if ((stat (FNSTRINGCAST file.fn_str(), &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
-        !(fp = fopen (FNSTRINGCAST file.fn_str(), "r")))
-    {
-        return FALSE;
-    }
-    else
-    {
-        gint len = statb.st_size;
-        char *text;
-        if (!(text = (char*)malloc ((unsigned) (len + 1))))
-        {
-            fclose (fp);
-            return FALSE;
-        }
-        if (fread (text, sizeof (char), len, fp) != (size_t) len)
-        {
-        }
-        fclose (fp);
-
-        text[len] = 0;
-
-        gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-          GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
-        if (m_windowStyle & wxTE_MULTILINE)
-        {
-            gint pos = 0;
-            gtk_editable_insert_text( GTK_EDITABLE(m_text), text, len, &pos );
-        }
-        else
-        {
-            gtk_entry_set_text( GTK_ENTRY(m_text), text );
-        }
-
-        gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-          GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
-        free (text);
-        m_modified = FALSE;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-bool wxTextCtrl::SaveFile( const wxString &file )
-{
-    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
-
-    if (file == _T("")) return FALSE;
-
-    FILE *fp;
-
-    if (!(fp = fopen (FNSTRINGCAST file.fn_str(), "w")))
-    {
-        return FALSE;
-    }
-    else
-    {
-      char *text = (char*) NULL;
-      gint len = 0;
-
-      if (m_windowStyle & wxTE_MULTILINE)
-      {
-          len = gtk_text_get_length( GTK_TEXT(m_text) );
-          text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-      }
-      else
-      {
-          text = gtk_entry_get_text( GTK_ENTRY(m_text) );
-      }
-
-      if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
-      {
-          // Did not write whole file
-      }
-
-      // Make sure newline terminates the file
-      if (text[len - 1] != '\n')
-          fputc ('\n', fp);
-
-      fclose (fp);
-
-      if (m_windowStyle & wxTE_MULTILINE) g_free( text );
-
-      m_modified = FALSE;
-      return TRUE;
-    }
-
-    return TRUE;
-}
-
 wxString wxTextCtrl::GetLineText( long lineNo ) const
 {
   if (m_windowStyle & wxTE_MULTILINE)
@@ -580,7 +457,7 @@ void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
     wxFAIL_MSG( _T("wxTextCtrl::OnDropFiles not implemented") );
 }
 
-long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
+bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 {
     if ( m_windowStyle & wxTE_MULTILINE )
     {
@@ -725,6 +602,11 @@ void wxTextCtrl::SetEditable( bool editable )
         gtk_text_set_editable( GTK_TEXT(m_text), editable );
     else
         gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
+}
+
+void wxTextCtrl::DiscardEdits()
+{
+    m_modified = FALSE;
 }
 
 void wxTextCtrl::SetSelection( long from, long to )
@@ -911,6 +793,11 @@ bool wxTextCtrl::IsEditable() const
     wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
 
     return GTK_EDITABLE(m_text)->editable;
+}
+
+bool wxTextCtrl::IsModified() const
+{
+    return m_modified;
 }
 
 void wxTextCtrl::Clear()

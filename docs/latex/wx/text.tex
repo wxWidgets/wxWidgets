@@ -390,7 +390,7 @@ Pastes text from the clipboard to the text item.
 
 \membersection{wxTextCtrl::PositionToXY}\label{wxtextctrlpositiontoxy}
 
-\constfunc{long}{PositionToXY}{\param{long }{pos}, \param{long *}{x}, \param{long *}{y}}
+\constfunc{bool}{PositionToXY}{\param{long }{pos}, \param{long *}{x}, \param{long *}{y}}
 
 Converts given position to a zero-based column, line number pair.
 
@@ -404,7 +404,7 @@ Converts given position to a zero-based column, line number pair.
 
 \wxheading{Return value}
 
-Non-zero on success, zero on failure (most likely due to a too large position
+TRUE on success, FALSE on failure (most likely due to a too large position
 parameter).
 
 \wxheading{See also}

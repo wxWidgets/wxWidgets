@@ -31,6 +31,8 @@
 #if wxUSE_FILE
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/ffile.h"

@@ -36,6 +36,8 @@
     #endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 #endif
 
+class WXDLLEXPORT wxTextCtrl;
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -100,7 +102,7 @@ public:
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
     virtual long XYToPosition(long x, long y) const = 0;
-    virtual void PositionToXY(long pos, long *x, long *y) const = 0;
+    virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
 
     virtual void ShowPosition(long pos) = 0;
 

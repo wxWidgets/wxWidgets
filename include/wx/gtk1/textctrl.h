@@ -62,10 +62,6 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
-    // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file);
-    virtual bool SaveFile(const wxString& file);
-
     // clears the dirty flag
     virtual void DiscardEdits();
 
@@ -78,7 +74,7 @@ public:
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
     virtual long XYToPosition(long x, long y) const;
-    virtual void PositionToXY(long pos, long *x, long *y) const;
+    virtual bool PositionToXY(long pos, long *x, long *y) const;
 
     virtual void ShowPosition(long pos);
 
@@ -131,6 +127,8 @@ public:
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
     void CalculateScrollbar();
+
+    void SetModified() { m_modified = TRUE; }
 
 private:
     bool        m_modified;

@@ -603,17 +603,41 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     return (long)(x + charIndex);
 }
 
-void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
+bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
     HWND hWnd = GetHwnd();
 
     // This gets the line number containing the character
-    int lineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, (LPARAM)0);
+    int lineNo;
+#if wxUSE_RICHEDIT
+    if ( m_isRich )
+    {
+        lineNo = (int)SendMessage(hWnd, EM_EXLINEFROMCHAR, 0, (LPARAM)pos);
+    }
+    else
+#endif // wxUSE_RICHEDIT
+        lineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, 0);
+
+    if ( lineNo == -1 )
+    {
+        // no such line
+        return FALSE;
+    }
+
     // This gets the char index for the _beginning_ of this line
     int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)lineNo, (LPARAM)0);
+    if ( charIndex == -1 )
+    {
+        return FALSE;
+    }
+
     // The X position must therefore be the different between pos and charIndex
-    *x = (long)(pos - charIndex);
-    *y = (long)lineNo;
+    if ( x )
+        *x = (long)(pos - charIndex);
+    if ( y )
+        *y = (long)lineNo;
+
+    return TRUE;
 }
 
 void wxTextCtrl::ShowPosition(long pos)

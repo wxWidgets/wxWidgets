@@ -41,6 +41,7 @@ libwx_gtk_la_SOURCES = \
  dynarray.cpp \
  dynlib.cpp \
  event.cpp \
+ ffile.cpp \
  file.cpp \
  fileconf.cpp \
  filefn.cpp \
@@ -88,6 +89,7 @@ libwx_gtk_la_SOURCES = \
  string.cpp \
  tbarbase.cpp \
  tbarsmpl.cpp \
+ textcmn.cpp \
  textfile.cpp \
  txtstrm.cpp \
  time.cpp \
