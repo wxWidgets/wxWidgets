@@ -1853,6 +1853,7 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
 
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
+#if __WXMAC_CARBON__
 //#ifdef __DARWIN__
 //	wxHIDKeyboard keyboard;
 //	return keyboard.IsActive(key);
@@ -1862,11 +1863,11 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 //a known apple bug prevents the system from determining led
 //states with GetKeys... can only determine caps lock led
    return !!(GetCurrentKeyModifiers() & wxKeyCodeToMacModifier(key)); 
-//else
-//  KeyMapByteArray keymap; 
-//  GetKeys((BigEndianLong*)keymap);
-//  return !!(BitTst(keymap, (sizeof(KeyMapByteArray)*8) - iKey));
-//#endif
+#else
+	KeyMap keymap; 
+	GetKeys(keymap);
+	return !!(BitTst(keymap, (sizeof(KeyMap)*8) - key));
+#endif
 }
 
 #if !TARGET_CARBON
