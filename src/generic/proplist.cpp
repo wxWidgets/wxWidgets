@@ -1027,9 +1027,9 @@ bool wxRealListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
   float val = 0.0;
   if (!StringToFloat(WXSTRINGCAST value, &val))
   {
-    char buf[200];
-    sprintf(buf, "Value %s is not a valid real number!", value.GetData());
-    wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxChar buf[200];
+    wxSprintf(buf, _T("Value %s is not a valid real number!"), value.GetData());
+    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
 
@@ -1051,11 +1051,11 @@ bool wxRealListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
   if (!view->GetValueText())
     return FALSE;
 
-  if (strlen(view->GetValueText()->GetValue()) == 0)
+  if (wxStrlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
 
   wxString value(view->GetValueText()->GetValue());
-  float f = (float)atof(value.GetData());
+  float f = (float)wxAtof(value.GetData());
   property->GetValue() = f;
   return TRUE;
 }
@@ -1090,16 +1090,16 @@ bool wxIntegerListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxProp
   long val = 0;
   if (!StringToLong(WXSTRINGCAST value, &val))
   {
-    char buf[200];
-    sprintf(buf, "Value %s is not a valid integer!", value.GetData());
-    wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxChar buf[200];
+    wxSprintf(buf, _T("Value %s is not a valid integer!"), value.GetData());
+    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   if (val < m_integerMin || val > m_integerMax)
   {
-    char buf[200];
-    sprintf(buf, "Value must be an integer between %ld and %ld!", m_integerMin, m_integerMax);
-    wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxChar buf[200];
+    wxSprintf(buf, _T("Value must be an integer between %ld and %ld!"), m_integerMin, m_integerMax);
+    wxMessageBox(buf, _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1113,11 +1113,11 @@ bool wxIntegerListValidator::OnRetrieveValue(wxProperty *property, wxPropertyLis
   if (!view->GetValueText())
     return FALSE;
 
-  if (strlen(view->GetValueText()->GetValue()) == 0)
+  if (wxStrlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
 
   wxString value(view->GetValueText()->GetValue());
-  long val = (long)atoi(value.GetData());
+  long val = (long)wxAtoi(value.GetData());
   property->GetValue() = (long)val;
   return TRUE;
 }
@@ -1145,9 +1145,9 @@ bool wxBoolListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
   if (!view->GetValueText())
     return FALSE;
   wxString value(view->GetValueText()->GetValue());
-  if (value != "True" && value != "False")
+  if (value != _T("True") && value != _T("False"))
   {
-    wxMessageBox("Value must be True or False!", "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxMessageBox(_T("Value must be True or False!"), _T("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1161,12 +1161,12 @@ bool wxBoolListValidator::OnRetrieveValue(wxProperty *property, wxPropertyListVi
   if (!view->GetValueText())
     return FALSE;
 
-  if (strlen(view->GetValueText()->GetValue()) == 0)
+  if (wxStrlen(view->GetValueText()->GetValue()) == 0)
     return FALSE;
 
   wxString value(view->GetValueText()->GetValue());
   bool boolValue = FALSE;
-  if (value == "True")
+  if (value == _T("True"))
     boolValue = TRUE;
   else
     boolValue = FALSE;
@@ -1209,9 +1209,9 @@ bool wxBoolListValidator::OnPrepareDetailControls(wxProperty *WXUNUSED(property)
     view->ShowListBoxControl(TRUE);
     view->GetValueList()->Enable(TRUE);
 
-    view->GetValueList()->Append("True");
-    view->GetValueList()->Append("False");
-    char *currentString = copystring(view->GetValueText()->GetValue());
+    view->GetValueList()->Append(_T("True"));
+    view->GetValueList()->Append(_T("False"));
+    wxChar *currentString = copystring(view->GetValueText()->GetValue());
     view->GetValueList()->SetStringSelection(currentString);
     delete[] currentString;
   }
@@ -1346,11 +1346,11 @@ bool wxStringListValidator::OnPrepareDetailControls(wxProperty *property, wxProp
     wxNode *node = m_strings->First();
     while (node)
     {
-      char *s = (char *)node->Data();
+      wxChar *s = (wxChar *)node->Data();
       view->GetValueList()->Append(s);
       node = node->Next();
     }
-    char *currentString = property->GetValue().StringValue();
+    wxChar *currentString = property->GetValue().StringValue();
     view->GetValueList()->SetStringSelection(currentString);
   }
   return TRUE;
@@ -1382,17 +1382,17 @@ bool wxStringListValidator::OnDoubleClick(wxProperty *property, wxPropertyListVi
     return FALSE;
 
   wxNode *node = m_strings->First();
-  char *currentString = property->GetValue().StringValue();
+  wxChar *currentString = property->GetValue().StringValue();
   while (node)
   {
-    char *s = (char *)node->Data();
-    if (strcmp(s, currentString) == 0)
+    wxChar *s = (wxChar *)node->Data();
+    if (wxStrcmp(s, currentString) == 0)
     {
-      char *nextString = NULL;
+      wxChar *nextString = NULL;
       if (node->Next())
-        nextString = (char *)node->Next()->Data();
+        nextString = (wxChar *)node->Next()->Data();
       else
-        nextString = (char *)m_strings->First()->Data();
+        nextString = (wxChar *)m_strings->First()->Data();
       property->GetValue() = wxString(nextString);
       view->DisplayProperty(property);
       view->UpdatePropertyDisplayInList(property);
@@ -1564,7 +1564,7 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
   if (!view->GetValueText())
     return;
 
-  char *s = property->GetValue().StringValue();
+  wxChar *s = property->GetValue().StringValue();
   int r = 0;
   int g = 0;
   int b = 0;
@@ -1593,7 +1593,7 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
     wxColourData retData = dialog.GetColourData();
     col = retData.GetColour();
 
-    char buf[7];
+    wxChar buf[7];
     wxDecToHex(col.Red(), buf);
     wxDecToHex(col.Green(), buf+2);
     wxDecToHex(col.Blue(), buf+4);
@@ -1670,13 +1670,13 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
   wxPropertyValue *expr = property->GetValue().GetFirst();
   while (expr)
   {
-    char *s = expr->StringValue();
+    wxChar *s = expr->StringValue();
     if (s)
       stringList->Add(s);
     expr = expr->GetNext();
   }
 
-  wxString title("Editing ");
+  wxString title(_T("Editing "));
   title += property->GetName();
 
   if (EditStringList(parentWindow, stringList, title.GetData()))
@@ -1686,7 +1686,7 @@ void wxListOfStringsListValidator::OnEdit(wxProperty *property, wxPropertyListVi
     wxNode *node = stringList->First();
     while (node)
     {
-      char *s = (char *)node->Data();
+      wxChar *s = (wxChar *)node->Data();
       oldValue.Append(new wxPropertyValue(s));
 
       node = node->Next();
@@ -1768,7 +1768,7 @@ class wxPropertyStringListEditorText: public wxTextCtrl
 bool wxPropertyStringListEditorDialog::sm_dialogCancelled = FALSE;
 
 // Edit the string list.
-bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList *stringList, const char *title)
+bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList *stringList, const wxChar *title)
 {
   int largeButtonWidth = 60;
   int largeButtonHeight = 25;
@@ -1884,7 +1884,7 @@ void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
     return;
 
   m_listBox->Delete(sel);
-  delete[] (char *)node->Data();
+  delete[] (wxChar *)node->Data();
   delete node;
   m_currentSelection = -1;
   m_stringText->SetValue("");
@@ -1894,9 +1894,9 @@ void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
 
-  char *initialText = "";
+  wxChar *initialText = _T("");
   wxNode *node = m_stringList->Add(initialText);
-  m_listBox->Append(initialText, (char *)node);
+  m_listBox->Append(initialText, (wxChar *)node);
   m_currentSelection = m_stringList->Number() - 1;
   m_listBox->SetSelection(m_currentSelection);
   ShowCurrentSelection();

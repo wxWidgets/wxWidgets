@@ -343,11 +343,11 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   fontWeight = wxFontWeightStringToInt(WXSTRINGCAST weightChoice->GetStringSelection());
   int fontStyle = 0;
   fontStyle = wxFontStyleStringToInt(WXSTRINGCAST styleChoice->GetStringSelection());
-  int fontSize = atoi(pointSizeChoice->GetStringSelection());
+  int fontSize = wxAtoi(pointSizeChoice->GetStringSelection());
   int fontUnderline = underLineCheckBox->GetValue();
 
   dialogFont = wxFont(fontSize, fontFamily, fontStyle, fontWeight, (fontUnderline != 0));
-  if (colourChoice->GetStringSelection() != "")
+  if (colourChoice->GetStringSelection() != _T(""))
   {
     wxColour *col = (wxColour*) NULL;
     col = wxTheColourDatabase->FindColour(colourChoice->GetStringSelection());
@@ -361,94 +361,94 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   PaintFont(dc);
 }
 
-char *wxFontWeightIntToString(int weight)
+wxChar *wxFontWeightIntToString(int weight)
 {
   switch (weight)
   {
     case wxLIGHT:
-      return "Light";
+      return _T("Light");
     case wxBOLD:
-      return "Bold";
+      return _T("Bold");
     case wxNORMAL:
     default:
-      return "Normal";
+      return _T("Normal");
   }
-  return "Normal";
+  return _T("Normal");
 }
 
-char *wxFontStyleIntToString(int style)
+wxChar *wxFontStyleIntToString(int style)
 {
   switch (style)
   {
     case wxITALIC:
-      return "Italic";
+      return _T("Italic");
     case wxSLANT:
-      return "Slant";
+      return _T("Slant");
     case wxNORMAL:
     default:
-      return "Normal";
+      return _T("Normal");
   }
-  return "Normal";
+  return _T("Normal");
 }
 
-char *wxFontFamilyIntToString(int family)
+wxChar *wxFontFamilyIntToString(int family)
 {
   switch (family)
   {
     case wxROMAN:
-      return "Roman";
+      return _T("Roman");
     case wxDECORATIVE:
-      return "Decorative";
+      return _T("Decorative");
     case wxMODERN:
-      return "Modern";
+      return _T("Modern");
     case wxSCRIPT:
-      return "Script";
+      return _T("Script");
     case wxTELETYPE:
-      return "Teletype";
+      return _T("Teletype");
     case wxSWISS:
     default:
-      return "Swiss";
+      return _T("Swiss");
   }
-  return "Swiss";
+  return _T("Swiss");
 }
 
-int wxFontFamilyStringToInt(char *family)
+int wxFontFamilyStringToInt(wxChar *family)
 {
   if (!family)
     return wxSWISS;
     
-  if (strcmp(family, "Roman") == 0)
+  if (wxStrcmp(family, _T("Roman")) == 0)
     return wxROMAN;
-  else if (strcmp(family, "Decorative") == 0)
+  else if (wxStrcmp(family, _T("Decorative")) == 0)
     return wxDECORATIVE;
-  else if (strcmp(family, "Modern") == 0)
+  else if (wxStrcmp(family, _T("Modern")) == 0)
     return wxMODERN;
-  else if (strcmp(family, "Script") == 0)
+  else if (wxStrcmp(family, _T("Script")) == 0)
     return wxSCRIPT;
-  else if (strcmp(family, "Teletype") == 0)
+  else if (wxStrcmp(family, _T("Teletype")) == 0)
     return wxTELETYPE;
   else return wxSWISS;
 }
 
-int wxFontStyleStringToInt(char *style)
+int wxFontStyleStringToInt(wxChar *style)
 {
   if (!style)
     return wxNORMAL;
-  if (strcmp(style, "Italic") == 0)
+  if (wxStrcmp(style, _T("Italic")) == 0)
     return wxITALIC;
-  else if (strcmp(style, "Slant") == 0)
+  else if (wxStrcmp(style, _T("Slant")) == 0)
     return wxSLANT;
   else
     return wxNORMAL;
 }
 
-int wxFontWeightStringToInt(char *weight)
+int wxFontWeightStringToInt(wxChar *weight)
 {
   if (!weight)
     return wxNORMAL;
-  if (strcmp(weight, "Bold") == 0)
+  if (wxStrcmp(weight, _T("Bold")) == 0)
     return wxBOLD;
-  else if (strcmp(weight, "Light") == 0)
+  else if (wxStrcmp(weight, _T("Light")) == 0)
     return wxLIGHT;
   else
     return wxNORMAL;

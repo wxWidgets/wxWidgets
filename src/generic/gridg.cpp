@@ -1512,7 +1512,7 @@ void wxGenericGrid::DrawCellText(void)
   if (!cell)
     return;
 
-  static char szEdit[300];
+  static wxChar szEdit[300];
 
   wxClientDC dc(this);
   dc.BeginDrawing();
@@ -1522,7 +1522,7 @@ void wxGenericGrid::DrawCellText(void)
   dc.SetBackgroundMode(wxTRANSPARENT);
   dc.SetBrush(cell->GetBackgroundBrush());
 
-  strcpy(szEdit, m_textItem->GetValue());
+  wxStrcpy(szEdit, m_textItem->GetValue());
 
   wxRect rect;
   rect = m_currentRect;
@@ -1531,7 +1531,7 @@ void wxGenericGrid::DrawCellText(void)
   rect.width -= 5;
   rect.height -= 4;
 
-  DrawTextRect(& dc, "                                    ", &rect, wxLEFT);
+  DrawTextRect(& dc, _T("                                    "), &rect, wxLEFT);
   DrawTextRect(& dc, szEdit, &rect, cell->GetAlignment());
 
   dc.DestroyClippingRegion();

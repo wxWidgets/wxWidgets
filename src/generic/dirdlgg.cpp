@@ -220,15 +220,15 @@ void wxDirCtrl::SetupSections()
 
   m_paths.Clear();
   m_names.Clear();
-  ADD_SECTION("/", _("The Computer") )
+  ADD_SECTION(_T("/"), _("The Computer") )
   wxGetHomeDir(&home);
   ADD_SECTION(home, _("My Home") )
-  ADD_SECTION("/mnt", _("Mounted Devices") )
-  ADD_SECTION("/usr", _("User") )
-  ADD_SECTION("/usr/local", _("User Local") )
-  ADD_SECTION("/var", _("Variables") )
-  ADD_SECTION("/etc", _("Etcetera") )
-  ADD_SECTION("/tmp", _("Temporary") )
+  ADD_SECTION(_T("/mnt"), _("Mounted Devices") )
+  ADD_SECTION(_T("/usr"), _("User") )
+  ADD_SECTION(_T("/usr/local"), _("User Local") )
+  ADD_SECTION(_T("/var"), _("Variables") )
+  ADD_SECTION(_T("/etc"), _("Etcetera") )
+  ADD_SECTION(_T("/tmp"), _("Temporary") )
 }
 #undef ADD_SECTION
 

@@ -45,17 +45,17 @@ IMPLEMENT_CLASS(wxTextEntryDialog, wxDialog)
 #endif
 
 // Split message, using constraints to position controls
-static void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+static void wxSplitMessage2(const wxChar *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
 {
-  char *copyMessage = copystring(message);
+  wxChar *copyMessage = copystring(message);
   size_t i = 0;
-  size_t len = strlen(copyMessage);
-  char *currentMessage = copyMessage;
+  size_t len = wxStrlen(copyMessage);
+  wxChar *currentMessage = copyMessage;
 
 //  wxWindow *lastWindow = parent;
 
   while (i < len) {
-    while ((i < len) && (copyMessage[i] != '\n')) i++;
+    while ((i < len) && (copyMessage[i] != _T('\n'))) i++;
     if (i < len) copyMessage[i] = 0;
     wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
 

@@ -2063,7 +2063,7 @@ void wxListMainWindow::DeleteItem( long index )
 void wxListMainWindow::DeleteColumn( int col )
 {
     wxCHECK_RET( col < (int)m_columns.GetCount(),
-               "attempting to delete inexistent column in wxListView" );
+               _T("attempting to delete inexistent column in wxListView") );
 
     m_dirty = TRUE;
     wxNode *node = m_columns.Nth( col );

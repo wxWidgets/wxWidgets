@@ -234,7 +234,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         wxString f = wxFileSelector(_("PostScript file"),
             wxPathOnly(wxThePrintSetupData->GetPrinterFile()),
             wxFileNameFromPath(wxThePrintSetupData->GetPrinterFile()),
-            "ps", "*.ps", 0, this);
+            _T("ps"), _T("*.ps"), 0, this);
         if ( f.IsEmpty() )
             return;
 
@@ -325,8 +325,8 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
     {
         if (m_printDialogData.GetEnablePageNumbers())
         {
-           if(m_fromText) m_printDialogData.SetFromPage(atoi(m_fromText->GetValue()));
-           if(m_toText)   m_printDialogData.SetToPage(atoi(m_toText->GetValue()));
+           if(m_fromText) m_printDialogData.SetFromPage(wxAtoi(m_fromText->GetValue()));
+           if(m_toText)   m_printDialogData.SetToPage(wxAtoi(m_toText->GetValue()));
         }
         if(m_rangeRadioBox)
         {
@@ -341,7 +341,7 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
         m_printDialogData.SetFromPage(1);
         m_printDialogData.SetToPage(32000);
     }
-    m_printDialogData.SetNoCopies(atoi(m_noCopiesText->GetValue()));
+    m_printDialogData.SetNoCopies(wxAtoi(m_noCopiesText->GetValue()));
     m_printDialogData.SetPrintToFile(m_printToFileCheckBox->GetValue());
 
     return TRUE;
@@ -690,9 +690,9 @@ bool wxGenericPageSetupDialog::TransferDataToWindow()
 bool wxGenericPageSetupDialog::TransferDataFromWindow()
 {
     if (m_marginLeftText && m_marginTopText)
-        m_pageData.SetMarginTopLeft(wxPoint(atoi((const char *)m_marginLeftText->GetValue()),atoi((const char *)m_marginTopText->GetValue())));
+        m_pageData.SetMarginTopLeft(wxPoint(wxAtoi((const wxChar *)m_marginLeftText->GetValue()),wxAtoi((const wxChar *)m_marginTopText->GetValue())));
     if (m_marginRightText && m_marginBottomText)
-        m_pageData.SetMarginBottomRight(wxPoint(atoi((const char *)m_marginRightText->GetValue()),atoi((const char *)m_marginBottomText->GetValue())));
+        m_pageData.SetMarginBottomRight(wxPoint(wxAtoi((const wxChar *)m_marginRightText->GetValue()),wxAtoi((const wxChar *)m_marginBottomText->GetValue())));
 
     if (m_orientationRadioBox)
     {

@@ -96,7 +96,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
       file = ifile;
       if(! wxIsAbsolutePath(file))
       {
-         char* f = wxGetWorkingDirectory();
+         wxChar* f = wxGetWorkingDirectory();
          file = f;
          delete[] f; // wxGetWorkingDirectory returns new memory
          file << WXEXTHELP_SEPARATOR << ifile;
@@ -118,8 +118,8 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
          else
          {
             newfile = WXEXTHELP_SEPARATOR;
-            const char *cptr = wxGetLocale()->GetName().c_str();
-            while(*cptr && *cptr != '_')
+            const wxChar *cptr = wxGetLocale()->GetName().c_str();
+            while(*cptr && *cptr != _T('_'))
                newfile << *(cptr++);
             if(wxDirExists(newfile))
                file = newfile;
@@ -141,7 +141,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
    m_MapList = new wxList;
    m_NumOfEntries = 0;
    
-   FILE *input = fopen(mapFile.c_str(),"rt");
+   FILE *input = fopen(mapFile.fn_str(),"rt");
    if(! input)
       return FALSE;
    do

@@ -39,17 +39,17 @@
 // New dialog box implementations
 
 // Split message, using constraints to position controls
-void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+void wxSplitMessage2(const wxChar *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
 {
-  char *copyMessage = copystring(message);
+  wxChar *copyMessage = copystring(message);
   size_t i = 0;
-  size_t len = strlen(copyMessage);
-  char *currentMessage = copyMessage;
+  size_t len = wxStrlen(copyMessage);
+  wxChar *currentMessage = copyMessage;
 
 //  wxWindow *lastWindow = parent;
 
   while (i < len) {
-    while ((i < len) && (copyMessage[i] != '\n')) i++;
+    while ((i < len) && (copyMessage[i] != _T('\n'))) i++;
     if (i < len) copyMessage[i] = 0;
     wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
 
@@ -99,7 +99,7 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     topSizer->SetBorder(10, 10);
 
     wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
-    messageSizer->SetName("messageSizer");
+    messageSizer->SetName(_T("messageSizer"));
 
 //    bool centre = ((style & wxCENTRE) == wxCENTRE);
 
@@ -110,7 +110,7 @@ wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString&
     wxSpacingSizer *spacingSizer = new wxSpacingSizer(topSizer, wxBelow, messageSizer, 20);
 
     wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
-    buttonSizer->SetName("buttonSizer");
+    buttonSizer->SetName(_T("buttonSizer"));
     buttonSizer->SetSpacing(12,0);
 
     // Specify constraints for the button sizer

@@ -66,23 +66,23 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    {
       wxString lockfile;
       wxGetHomeDir(&lockfile);
-      lockfile << WXEXTHELP_SEPARATOR << ".netscape/lock";
+      lockfile << WXEXTHELP_SEPARATOR << _T(".netscape/lock");
       struct stat statbuf;
-      if(lstat(lockfile.c_str(), &statbuf) == 0)
+      if(lstat(lockfile.fn_str(), &statbuf) == 0)
       // cannot use wxFileExists, because it's a link pointing to a
       // non-existing location      if(wxFileExists(lockfile))
       {
          long success;
-         command << m_BrowserName << " -remote openURL("
-                 << "file://" << m_MapFile
-                 << WXEXTHELP_SEPARATOR << relativeURL << ")"; 
+         command << m_BrowserName << _T(" -remote openURL(")
+                 << _T("file://") << m_MapFile
+                 << WXEXTHELP_SEPARATOR << relativeURL << _T(")"); 
          success = wxExecute(command);
          if(success != 0 ) // returns PID on success
             return TRUE;
       }
    }
    command = m_BrowserName;
-   command << " file://"
+   command << _T(" file://")
            << m_MapFile << WXEXTHELP_SEPARATOR << relativeURL; 
    return wxExecute(command) != 0; 
 }

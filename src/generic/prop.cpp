@@ -63,7 +63,7 @@ wxPropertyValue::wxPropertyValue(const wxPropertyValue& copyFrom)
   Copy((wxPropertyValue& )copyFrom);
 }
 
-wxPropertyValue::wxPropertyValue(const char *val)
+wxPropertyValue::wxPropertyValue(const wxChar *val)
 {
   m_modifiedFlag = FALSE;
   m_type = wxPropertyValueString;
@@ -79,7 +79,7 @@ wxPropertyValue::wxPropertyValue(const wxString& val)
   m_modifiedFlag = FALSE;
   m_type = wxPropertyValueString;
 
-  m_value.string = copystring((const char *)val);
+  m_value.string = copystring((const wxChar *)val);
   m_clientData = NULL;
   m_next = NULL;
   m_last = NULL;
@@ -122,7 +122,7 @@ wxPropertyValue::wxPropertyValue(double the_real)
 }
 
 // Pointer versions: we have a pointer to the real C++ value.
-wxPropertyValue::wxPropertyValue(char **val)
+wxPropertyValue::wxPropertyValue(wxChar **val)
 {
   m_modifiedFlag = FALSE;
   m_type = wxPropertyValueStringPtr;
@@ -382,7 +382,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       return ;
     case wxPropertyValueStringPtr:
     {
-      char** s = copyFrom.StringValuePtr();
+      wxChar** s = copyFrom.StringValuePtr();
       (*this) = s;
       return ;
     }
@@ -515,7 +515,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     case wxPropertyValueReal:
     {
       float f = m_value.real;
-      sprintf(wxBuffer, "%.6g", (double)f);
+      wxSprintf(wxBuffer, _T("%.6g"), (double)f);
       stream << wxBuffer;
       break;
     }
@@ -527,7 +527,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
       if (fabs(f) < 0.00001)
         f = 0.0;
 */
-      sprintf(wxBuffer, "%.6g", f);
+      wxSprintf(wxBuffer, _T("%.6g"), f);
       stream << wxBuffer;
       break;
     }
@@ -535,10 +535,11 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     {
 //      stream << "\"";
       int i;
-      int len = strlen(m_value.string);
+      wxWX2MBbuf strbuf = wxConv_libc.cWX2MB(m_value.string);
+      int len = strlen(strbuf);
       for (i = 0; i < len; i++)
       {
-        char ch = m_value.string[i];
+        char ch = strbuf[i];
 //        if (ch == '"' || ch == '\\')
 //          stream << "\\";
         stream << ch;
@@ -549,7 +550,7 @@ void wxPropertyValue::WritePropertyType(ostream& stream)    // Write as any othe
     }
     case wxPropertyValueStringPtr:
     {
-      wxFAIL_MSG( "wxPropertyValue::WritePropertyType( wxPropertyValueStringPtr ) not implemented" );
+      wxFAIL_MSG( _T("wxPropertyValue::WritePropertyType( wxPropertyValueStringPtr ) not implemented") );
       /*
       int i;
       int len = strlen(*(m_value.stringPtr));
@@ -607,7 +608,7 @@ void wxPropertyValue::operator=(const wxPropertyValue& val)
 // void wxPropertyValue::operator=(const char *val)
 void wxPropertyValue::operator=(const wxString& val1)
 {
-  const char *val = (const char *)val1;
+  const wxChar *val = (const wxChar *)val1;
 
   m_modifiedFlag = TRUE;
   if (m_type == wxPropertyValueNull)
@@ -689,13 +690,13 @@ void wxPropertyValue::operator=(const float val)
   m_next = NULL;
 }
 
-void wxPropertyValue::operator=(const char **val)
+void wxPropertyValue::operator=(const wxChar **val)
 {
   m_modifiedFlag = TRUE;
   m_type = wxPropertyValueStringPtr;
 
   if (val)
-    m_value.stringPtr = (char **)val;
+    m_value.stringPtr = (wxChar **)val;
   else
     m_value.stringPtr = NULL;
   m_clientData = NULL;
@@ -787,7 +788,7 @@ bool *wxPropertyValue::BoolValuePtr(void) const
   return m_value.boolPtr;
 }
 
-char *wxPropertyValue::StringValue(void) const {
+wxChar *wxPropertyValue::StringValue(void) const {
     if (m_type == wxPropertyValueString)
       return m_value.string;
     else if (m_type == wxPropertyValueStringPtr)
@@ -795,7 +796,7 @@ char *wxPropertyValue::StringValue(void) const {
     else return NULL;
   }
 
-char **wxPropertyValue::StringValuePtr(void) const
+wxChar **wxPropertyValue::StringValuePtr(void) const
 {
   return m_value.stringPtr;
 }
@@ -968,13 +969,13 @@ void wxPropertySheet::UpdateAllViews( wxPropertyView *WXUNUSED(thisView) )
 // Add a property
 void wxPropertySheet::AddProperty(wxProperty *property)
 {
-  m_properties.Append((const char*) property->GetName(), property);
+  m_properties.Append((const wxChar*) property->GetName(), property);
 }
 
 // Get property by name
 wxProperty *wxPropertySheet::GetProperty(const wxString& name) const
 {
-  wxNode *node = m_properties.Find((const char*) name);
+  wxNode *node = m_properties.Find((const wxChar*) name);
   if (!node)
     return NULL;
   else
@@ -1052,12 +1053,12 @@ wxPropertyValidatorRegistry::~wxPropertyValidatorRegistry(void)
 
 void wxPropertyValidatorRegistry::RegisterValidator(const wxString& typeName, wxPropertyValidator *validator)
 {
-  Put((const char*) typeName, validator);
+  Put((const wxChar*) typeName, validator);
 }
 
 wxPropertyValidator *wxPropertyValidatorRegistry::GetValidator(const wxString& typeName)
 {
-  return (wxPropertyValidator *)Get((const char*) typeName);
+  return (wxPropertyValidator *)Get((const wxChar*) typeName);
 }
 
 void wxPropertyValidatorRegistry::ClearRegistry(void)
@@ -1086,66 +1087,64 @@ wxPropertyValidator::wxPropertyValidator(long flags)
 wxPropertyValidator::~wxPropertyValidator(void)
 {}
 
-bool wxPropertyValidator::StringToFloat (char *s, float *number) {
+bool wxPropertyValidator::StringToFloat (wxChar *s, float *number) {
 	double num;
 	bool ok = StringToDouble (s, &num);
 	*number = (float) num;
 	return ok;
 }
 
-bool wxPropertyValidator::StringToDouble (char *s, double *number) {
+bool wxPropertyValidator::StringToDouble (wxChar *s, double *number) {
     bool ok = TRUE;
-    char *value_ptr;
-    *number = strtod (s, &value_ptr);
+    wxChar *value_ptr;
+    *number = wxStrtod (s, &value_ptr);
     if (value_ptr) {
-		int len = strlen (value_ptr);
+		int len = wxStrlen (value_ptr);
 		for (int i = 0; i < len; i++) {
-			ok = (isspace (value_ptr[i]) != 0);
+			ok = (wxIsspace (value_ptr[i]) != 0);
 			if (!ok) return FALSE;
 		}
     }
     return ok;
 }
 
-bool wxPropertyValidator::StringToInt (char *s, int *number) {
+bool wxPropertyValidator::StringToInt (wxChar *s, int *number) {
 	long num;
 	bool ok = StringToLong (s, &num);
 	*number = (int) num;
 	return ok;
 }
 
-bool wxPropertyValidator::StringToLong (char *s, long *number) {
+bool wxPropertyValidator::StringToLong (wxChar *s, long *number) {
     bool ok = TRUE;
-    char *value_ptr;
-    *number = strtol (s, &value_ptr, 10);
+    wxChar *value_ptr;
+    *number = wxStrtol (s, &value_ptr, 10);
     if (value_ptr) {
-		int len = strlen (value_ptr);
+		int len = wxStrlen (value_ptr);
 		for (int i = 0; i < len; i++) {
-			ok = (isspace (value_ptr[i]) != 0);
+			ok = (wxIsspace (value_ptr[i]) != 0);
 			if (!ok) return FALSE;
 		}
     }
     return ok;
 }
 
-char *wxPropertyValidator::FloatToString (float number) {
-	static char buf[20];
-	sprintf (buf, "%.6g", number);
+wxChar *wxPropertyValidator::FloatToString (float number) {
+	static wxChar buf[20];
+	wxSprintf (buf, _T("%.6g"), number);
 	return buf;
 }
 
-char *wxPropertyValidator::DoubleToString (double number) {
-	static char buf[20];
-	sprintf (buf, "%.6g", number);
+wxChar *wxPropertyValidator::DoubleToString (double number) {
+	static wxChar buf[20];
+	wxSprintf (buf, _T("%.6g"), number);
 	return buf;
 }
 
-char *wxPropertyValidator::IntToString (int number) {
+wxChar *wxPropertyValidator::IntToString (int number) {
 	return ::IntToString (number);
 }
 
-char *wxPropertyValidator::LongToString (long number) {
+wxChar *wxPropertyValidator::LongToString (long number) {
 	return ::LongToString (number);
   }
-
-

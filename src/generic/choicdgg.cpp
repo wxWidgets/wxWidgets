@@ -34,17 +34,17 @@
 #include "wx/generic/choicdgg.h"
 
 // Split message, using constraints to position controls
-static void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+static void wxSplitMessage2(const wxChar *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
 {
-  char *copyMessage = copystring(message);
+  wxChar *copyMessage = copystring(message);
   size_t i = 0;
-  size_t len = strlen(copyMessage);
-  char *currentMessage = copyMessage;
+  size_t len = wxStrlen(copyMessage);
+  wxChar *currentMessage = copyMessage;
 
 //  wxWindow *lastWindow = parent;
 
   while (i < len) {
-    while ((i < len) && (copyMessage[i] != '\n')) i++;
+    while ((i < len) && (copyMessage[i] != _T('\n'))) i++;
     if (i < len) copyMessage[i] = 0;
     wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
 
@@ -114,7 +114,7 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, in
 
 // Overloaded for backward compatibility
 int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, int n, 
-                            char *choices[], wxWindow *parent,
+                            wxChar *choices[], wxWindow *parent,
 			    int x, int y, bool centre, 
 			    int width, int height )
 {
@@ -130,10 +130,10 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, in
 	return ans;
 }
 
-char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
-                             const wxString *choices, char **client_data, wxWindow *parent,
-			     int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
-			     int WXUNUSED(width), int WXUNUSED(height) )
+wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
+			       const wxString *choices, wxChar **client_data, wxWindow *parent,
+			       int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
+			       int WXUNUSED(width), int WXUNUSED(height) )
 {
 	wxSingleChoiceDialog dialog(parent, message, caption, n, choices, client_data);
 	if ( dialog.ShowModal() == wxID_OK )
@@ -145,10 +145,10 @@ char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, i
 }
 
 // Overloaded for backward compatibility
-char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n, 
-                             char *choices[], char **client_data, wxWindow *parent,
-			     int x, int y, bool centre, 
-			     int width, int height )
+wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n, 
+			       wxChar *choices[], wxChar **client_data, wxWindow *parent,
+			       int x, int y, bool centre, 
+			       int width, int height )
 {
 	wxString *strings = new wxString[n];
 	int i;
@@ -156,7 +156,7 @@ char *wxGetSingleChoiceData( const wxString& message, const wxString& caption, i
 	{
 		strings[i] = choices[i];
 	}
-	char *data = wxGetSingleChoiceData(message, caption, n, (const wxString *)strings, client_data, parent,
+	wxChar *data = wxGetSingleChoiceData(message, caption, n, (const wxString *)strings, client_data, parent,
 		x, y, centre, width, height);
 	delete[] strings;
 	return data;
@@ -202,21 +202,21 @@ IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 #endif
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        int n, const wxString *choices, char **clientData, long style, const wxPoint& pos):
+        int n, const wxString *choices, wxChar **clientData, long style, const wxPoint& pos):
 	  wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
         Create(parent, message, caption, n, choices, clientData, style);
 }
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, char **clientData, long style, const wxPoint& pos):
+        const wxStringList& choices, wxChar **clientData, long style, const wxPoint& pos):
 	  wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
         Create(parent, message, caption, choices, clientData, style);
 }
 
 bool wxSingleChoiceDialog::Create(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, char **clientData, long style, const wxPoint& pos)
+        const wxStringList& choices, wxChar **clientData, long style, const wxPoint& pos)
 {
 	wxString *strings = new wxString[choices.Number()];
 	int i;
@@ -231,12 +231,12 @@ bool wxSingleChoiceDialog::Create(wxWindow *parent, const wxString& message, con
 
 bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& message, 
                                    const wxString& WXUNUSED(caption), int n, 
-			           const wxString *choices, char **clientData, long style,
+			           const wxString *choices, wxChar **clientData, long style,
 				   const wxPoint& WXUNUSED(pos) )
 {
 	m_dialogStyle = style;
 	m_selection = 0;
-	m_stringSelection = "";
+	m_stringSelection = _T("");
 	m_clientData = NULL;
 
 	wxBeginBusyCursor();
@@ -245,7 +245,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 	topSizer->SetBorder(10, 10);
 
 	wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
-	messageSizer->SetName("messageSizer");
+	messageSizer->SetName(_T("messageSizer"));
 
 //    bool centre = ((style & wxCENTRE) == wxCENTRE);
 
@@ -269,7 +269,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 
 	wxRowColSizer *listBoxSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
 	listBoxSizer->AddSizerChild(listBox);
-	listBoxSizer->SetName("listBoxSizer");
+	listBoxSizer->SetName(_T("listBoxSizer"));
 
 	// Create constraints for the text sizer
 	wxLayoutConstraints *textC = new wxLayoutConstraints;
@@ -279,11 +279,11 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 
 	// Insert another spacer
 	wxSpacingSizer *spacingSizer2 = new wxSpacingSizer(topSizer, wxBelow, listBoxSizer, 10);
-	spacingSizer->SetName("spacingSizer2");
+	spacingSizer->SetName(_T("spacingSizer2"));
 
 	// Insert a sizer for the buttons
 	wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
-	buttonSizer->SetName("buttonSizer");
+	buttonSizer->SetName(_T("buttonSizer"));
 	buttonSizer->SetSpacing(12,0);
 
   	// Specify constraints for the button sizer
@@ -339,7 +339,7 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 	{
 		m_selection = listBox->GetSelection();
 		m_stringSelection = listBox->GetStringSelection();
-		m_clientData = (char*)listBox->GetClientData(m_selection);
+		m_clientData = (wxChar*)listBox->GetClientData(m_selection);
 	}
 
 	EndModal(wxID_OK);
@@ -352,7 +352,7 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 	{
 		m_selection = listBox->GetSelection();
 		m_stringSelection = listBox->GetStringSelection();
-		m_clientData = (char*)listBox->GetClientData(m_selection);
+		m_clientData = (wxChar*)listBox->GetClientData(m_selection);
 	}
 
 	EndModal(wxID_OK);
