@@ -561,24 +561,30 @@ bool wxNotebook::InsertPage(int nPage,
     return TRUE;
 }
 
-// Hit test
-int wxNotebook::HitTest(const wxPoint& pt, long& flags)
+int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
     TC_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = pt.x;
     hitTestInfo.pt.y = pt.y;
-    int item = TabCtrl_HitTest( (HWND) GetHWND(), & hitTestInfo ) ;
-    flags = 0;
+    int item = TabCtrl_HitTest(GetHwnd(), &hitTestInfo);
 
-    if ((hitTestInfo.flags & TCHT_NOWHERE) == TCHT_NOWHERE)
-        flags |= wxNB_HITTEST_NOWHERE;
-    if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
-        flags |= wxNB_HITTEST_ONICON;
-    if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
-        flags |= wxNB_HITTEST_ONLABEL;
+    if ( flags )
+    {
+        *flags = 0;
+
+        if ((hitTestInfo.flags & TCHT_NOWHERE) == TCHT_NOWHERE)
+            *flags |= wxNB_HITTEST_NOWHERE;
+        if ((hitTestInfo.flags & TCHT_ONITEM) == TCHT_ONITEM)
+            *flags |= wxNB_HITTEST_ONITEM;
+        if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
+            *flags |= wxNB_HITTEST_ONICON;
+        if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
+            *flags |= wxNB_HITTEST_ONLABEL;
+    }
 
     return item;
 }
+
 
 // ----------------------------------------------------------------------------
 // wxNotebook callbacks

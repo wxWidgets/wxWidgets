@@ -29,6 +29,19 @@
 #include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// wxNotebook hit results
+enum
+{
+    wxNB_HITTEST_NOWHERE = 1,   // not on tab
+    wxNB_HITTEST_ONICON  = 2,   // on icon
+    wxNB_HITTEST_ONLABEL = 4,   // on label
+    wxNB_HITTEST_ONITEM  = wxNB_HITTEST_ONICON | wxNB_HITTEST_ONLABEL
+};
+
+// ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
 
@@ -143,6 +156,13 @@ public:
     //
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
     virtual int SetSelection(int nPage) = 0;
+
+    // hit test, returns which tab is hit and, optionally, where (icon, label)
+    // (not implemented on all platforms)
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const
+    {
+        return wxNOT_FOUND;
+    }
 
     // cycle thru the tabs
     void AdvanceSelection(bool forward = TRUE)

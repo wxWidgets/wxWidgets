@@ -585,8 +585,11 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
 // wxNotebook geometry
 // ----------------------------------------------------------------------------
 
-int wxNotebook::HitTest(const wxPoint& pt) const
+int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
+    if ( flags )
+        *flags = wxNB_HITTEST_NOWHERE;
+
     // first check that it is in this window at all
     if ( !GetClientRect().Inside(pt) )
     {
@@ -627,7 +630,15 @@ int wxNotebook::HitTest(const wxPoint& pt) const
         GetTabSize(n, &rectTabs.width, &rectTabs.height);
 
         if ( rectTabs.Inside(pt) )
+        {
+            if ( flags )
+            {
+                // TODO: be more precise
+                *flags = wxNB_HITTEST_ONITEM;
+            }
+
             return n;
+        }
 
         // move the rectTabs to the next tab
         if ( IsVertical() )

@@ -105,8 +105,7 @@ public:
     // hit testing
     // -----------
 
-    // return the tab at this position or -1 if none
-    int HitTest(const wxPoint& pt) const;
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
     // input handling
     // --------------

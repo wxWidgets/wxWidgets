@@ -27,15 +27,6 @@
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-/*
- * Flags returned by HitTest
- */
-
-#define wxNB_HITTEST_NOWHERE           1
-#define wxNB_HITTEST_ONICON            2
-#define wxNB_HITTEST_ONLABEL           4
-#define wxNB_HITTEST_ONITEM            6
-
 class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
 public:
@@ -103,6 +94,7 @@ public:
   // ----------
     // remove all pages
   bool DeleteAllPages();
+
     // inserts a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
   bool InsertPage(int nPage,
@@ -118,9 +110,10 @@ public:
     // Windows only: attempts to apply the UX theme page background to this page
   void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
 
-  // Hit test
-  int HitTest(const wxPoint& pt, long& flags);
-  // calculate the size of the notebook from the size of its page
+    // hit test
+  virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
+
+    // calculate the size of the notebook from the size of its page
   virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
   // callbacks

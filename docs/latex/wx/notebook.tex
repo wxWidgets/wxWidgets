@@ -197,6 +197,36 @@ the platform and so\rtfsp
 \helpref{wxNotebookEvent::GetSelection}{wxnotebookeventgetselection} should be
 used instead in this case.
 
+\membersection{wxNotebook::HitTest}\label{wxnotebookhittest}
+
+\func{int}{HitTest}{\param{const wxPoint\&}{ pt}, \param{long}{ *flags = {\tt NULL}}}
+
+Returns the index of the tab at the specified position or {\tt wxNOT\_FOUND} 
+if none. If {\it flags} parameter is non {\tt NULL}, the position of the point
+inside the tab is returned as well.
+
+{\bf NB: } This method is currently only implemented under wxMSW and wxUniv.
+
+\wxheading{Parameters}
+
+\docparam{pt}{Specifies the point for the hit test.}
+
+\docparam{flags}{Return value for detailed information. One of the following values:
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxNB\_HITTEST\_NOWHERE}}{There was no tab under this point.}
+\twocolitem{{\bf wxNB\_HITTEST\_ONICON}}{The point was over an icon (currently wxMSW only).}
+\twocolitem{{\bf wxNB\_HITTEST\_ONLABEL}}{The point was over a label (currently wxMSW only).}
+\twocolitem{{\bf wxNB\_HITTEST\_ONITEM}}{The point was over an item, but not on the label or icon.}
+\end{twocollist}
+}
+
+\wxheading{Return value}
+
+Returns the zero-based tab index or {\tt wxNOT\_FOUND} if there is no tab is at
+the specified position.
+
+
 \membersection{wxNotebook::InsertPage}\label{wxnotebookinsertpage}
 
 \func{bool}{InsertPage}{\param{int}{ index}, \param{wxNotebookPage*}{ page},
