@@ -167,6 +167,7 @@ All (GUI):
 - added wxTextCtrl::EmulateKeyPress()
 - Added wxMouseCaptureChangedEvent
 - Added custom character filtering to wxTextValidator
+- wxTreeCtrl now supports incremental keyboard search
 
 wxMSW:
 

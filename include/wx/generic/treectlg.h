@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.h
+// Name:        wx/generic/treectlg.h
 // Purpose:     wxTreeCtrl class
 // Author:      Robert Roebling
 // Modified by:
@@ -31,6 +31,7 @@ class WXDLLEXPORT wxGenericTreeItem;
 class WXDLLEXPORT wxTreeItemData;
 
 class WXDLLEXPORT wxTreeRenameTimer;
+class WXDLLEXPORT wxTreeFindTimer;
 class WXDLLEXPORT wxTreeTextCtrl;
 
 // -----------------------------------------------------------------------------
@@ -341,21 +342,19 @@ public:
     void OnIdle( wxIdleEvent &event );
 
     // implementation helpers
-    void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
-
-    void DrawBorder(const wxTreeItemId& item);
-    void DrawLine(const wxTreeItemId& item, bool below);
-
 protected:
     friend class wxGenericTreeItem;
     friend class wxTreeRenameTimer;
+    friend class wxTreeFindTimer;
     friend class wxTreeTextCtrl;
 
     wxFont               m_normalFont;
     wxFont               m_boldFont;
 
     wxGenericTreeItem   *m_anchor;
-    wxGenericTreeItem   *m_current, *m_key_current, *m_currentEdit;
+    wxGenericTreeItem   *m_current,
+                        *m_key_current,
+                        *m_currentEdit;
     unsigned short       m_indent;
     unsigned short       m_spacing;
     int                  m_lineHeight;
@@ -382,23 +381,37 @@ protected:
 
     wxTimer             *m_renameTimer;
     wxString             m_renameRes;
-    
-    wxBitmap            *m_arrowRight,*m_arrowDown;
+
+    wxBitmap            *m_arrowRight,
+                        *m_arrowDown;
+
+    // incremental search data
+    wxString             m_findPrefix;
+    wxTimer             *m_findTimer;
 
     // the common part of all ctors
     void Init();
 
     // misc helpers
+    void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
+
+    void DrawBorder(const wxTreeItemId& item);
+    void DrawLine(const wxTreeItemId& item, bool below);
+    void DrawDropEffect(wxGenericTreeItem *item);
+
     wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                               size_t previous,
                               const wxString& text,
                               int image, int selectedImage,
                               wxTreeItemData *data);
+
+    // find the first item starting with the given prefix after the given item
+    wxTreeItemId FindItem(const wxTreeItemId& id, const wxString& prefix) const;
+
     bool HasButtons(void) const
         { return (m_imageListButtons != NULL)
               || HasFlag(wxTR_TWIST_BUTTONS|wxTR_HAS_BUTTONS); }
 
-protected:
     void CalculateLineHeight();
     int  GetLineHeight(wxGenericTreeItem *item) const;
     void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
@@ -425,8 +438,6 @@ protected:
     bool TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     void UnselectAllChildren( wxGenericTreeItem *item );
-
-    void DrawDropEffect(wxGenericTreeItem *item);
 
 private:
     DECLARE_EVENT_TABLE()

@@ -45,7 +45,6 @@
 class WXDLLEXPORT wxGenericTreeItem;
 
 WX_DEFINE_EXPORTED_ARRAY(wxGenericTreeItem *, wxArrayGenericTreeItems);
-//WX_DEFINE_OBJARRAY(wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
 // constants
@@ -53,7 +52,7 @@ WX_DEFINE_EXPORTED_ARRAY(wxGenericTreeItem *, wxArrayGenericTreeItems);
 
 static const int NO_IMAGE = -1;
 
-#define PIXELS_PER_UNIT 10
+static const int PIXELS_PER_UNIT = 10;
 
 // ----------------------------------------------------------------------------
 // Aqua arrows
@@ -111,12 +110,16 @@ static const char *aqua_arrow_down[] = {
 class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
 {
 public:
+    // start editing the current item after half a second (if the mouse hasn't
+    // been clicked/moved)
+    static const int DELAY = 500;
+
     wxTreeRenameTimer( wxGenericTreeCtrl *owner );
 
-    void Notify();
+    virtual void Notify();
 
 private:
-    wxGenericTreeCtrl   *m_owner;
+    wxGenericTreeCtrl *m_owner;
 };
 
 // control used for in-place edit
@@ -147,6 +150,22 @@ private:
     bool                m_finished;
 
     DECLARE_EVENT_TABLE()
+};
+
+// timer used to clear wxGenericTreeCtrl::m_findPrefix if no key was pressed
+// for a sufficiently long time
+class WXDLLEXPORT wxTreeFindTimer : public wxTimer
+{
+public:
+    // reset the current prefix after half a second of inactivity
+    static const int DELAY = 500;
+
+    wxTreeFindTimer( wxGenericTreeCtrl *owner ) { m_owner = owner; }
+
+    virtual void Notify() { m_owner->m_findPrefix.clear(); }
+
+private:
+    wxGenericTreeCtrl *m_owner;
 };
 
 // a tree item
@@ -694,7 +713,9 @@ void wxGenericTreeCtrl::Init()
     m_isDragging = FALSE;
     m_dropTarget = m_oldSelection = (wxGenericTreeItem *)NULL;
 
-    m_renameTimer = new wxTreeRenameTimer( this );
+    m_renameTimer = NULL;
+    m_findTimer = NULL;
+
     m_lastOnSame = FALSE;
 
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -768,15 +789,20 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
     delete m_hilightBrush;
     delete m_hilightUnfocusedBrush;
 
-    if (m_arrowRight) delete m_arrowRight;
-    if (m_arrowDown) delete m_arrowDown;
+    delete m_arrowRight;
+    delete m_arrowDown;
 
     DeleteAllItems();
 
     delete m_renameTimer;
-    if (m_ownsImageListNormal) delete m_imageListNormal;
-    if (m_ownsImageListState) delete m_imageListState;
-    if (m_ownsImageListButtons) delete m_imageListButtons;
+    delete m_findTimer;
+
+    if (m_ownsImageListNormal)
+        delete m_imageListNormal;
+    if (m_ownsImageListState)
+        delete m_imageListState;
+    if (m_ownsImageListButtons)
+        delete m_imageListButtons;
 }
 
 // -----------------------------------------------------------------------------
@@ -1158,6 +1184,25 @@ wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
     wxFAIL_MSG(wxT("not implemented"));
 
     return wxTreeItemId();
+}
+
+// find the first item starting with the given prefix after the given item
+wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
+                                         const wxString& prefixOrig) const
+{
+    // match is case insensitive as this is more convenient to the user: having
+    // to press Shift-letter to go to the item starting with a capital letter
+    // would be too bothersome
+    wxString prefix = prefixOrig.Lower();
+
+    wxTreeItemId id = idParent;
+
+    while ( id.IsOk() && !GetItemText(id).Lower().StartsWith(prefix) )
+    {
+        id = GetNext(id);
+    }
+
+    return id;
 }
 
 // -----------------------------------------------------------------------------
@@ -1572,8 +1617,8 @@ void wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeI
 }
 
 void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
-                            bool unselect_others,
-                            bool extended_select)
+                                   bool unselect_others,
+                                   bool extended_select)
 {
     wxCHECK_RET( itemId.IsOk(), wxT("invalid tree item") );
 
@@ -1655,7 +1700,7 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 }
 
 void wxGenericTreeCtrl::FillArray(wxGenericTreeItem *item,
-                           wxArrayTreeItemIds &array) const
+                                  wxArrayTreeItemIds &array) const
 {
     if ( item->IsSelected() )
         array.Add(wxTreeItemId(item));
@@ -2363,7 +2408,9 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     // right : open if parent and go next
     // home  : go to root
     // end   : go to last item without opening parents
-    switch (event.KeyCode())
+    // alnum : start or continue searching for the item with this prefix
+    int keyCode = event.KeyCode();
+    switch ( keyCode )
     {
         case '+':
         case WXK_ADD:
@@ -2423,7 +2470,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                             // otherwise we return to where we came from
                             SelectItem( prev, unselect_others, extended_select );
                             m_key_current= (wxGenericTreeItem*) prev.m_pItem;
-                            EnsureVisible( prev );
                             break;
                         }
                     }
@@ -2441,7 +2487,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                     SelectItem( prev, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) prev.m_pItem;
-                    EnsureVisible( prev );
                 }
             }
             break;
@@ -2457,7 +2502,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 }
                 if (prev)
                 {
-                    EnsureVisible( prev );
                     SelectItem( prev, unselect_others, extended_select );
                 }
             }
@@ -2477,7 +2521,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     wxTreeItemId child = GetFirstChild( m_key_current, cookie );
                     SelectItem( child, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) child.m_pItem;
-                    EnsureVisible( child );
                 }
                 else
                 {
@@ -2495,7 +2538,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     {
                         SelectItem( next, unselect_others, extended_select );
                         m_key_current=(wxGenericTreeItem*) next.m_pItem;
-                        EnsureVisible( next );
                     }
                 }
             }
@@ -2521,7 +2563,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                 if ( last.IsOk() )
                 {
-                    EnsureVisible( last );
                     SelectItem( last, unselect_others, extended_select );
                 }
             }
@@ -2531,20 +2572,53 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
         case WXK_HOME:
             {
                 wxTreeItemId prev = GetRootItem();
-                if (!prev) break;
-                if (HasFlag(wxTR_HIDE_ROOT))
+                if (!prev)
+                    break;
+
+                if ( HasFlag(wxTR_HIDE_ROOT) )
                 {
                     long dummy;
                     prev = GetFirstChild(prev, dummy);
-                    if (!prev) break;
+                    if (!prev)
+                        break;
                 }
-                EnsureVisible( prev );
+
                 SelectItem( prev, unselect_others, extended_select );
             }
             break;
 
         default:
-            event.Skip();
+            // do not use wxIsalnum() here
+            if ( !event.HasModifiers() && isalnum(keyCode) )
+            {
+                // find the next item starting with the given prefix
+                char ch = (char)keyCode;
+
+                wxTreeItemId id = FindItem(m_current, m_findPrefix + ch);
+                if ( !id.IsOk() )
+                {
+                    // no such item
+                    break;
+                }
+
+                SelectItem(id);
+
+                m_findPrefix += ch;
+
+                // also start the timer to reset the current prefix if the user
+                // doesn't press any more alnum keys soon -- we wouldn't want
+                // to use this prefix for a new item search
+                if ( !m_findTimer )
+                {
+                    m_findTimer = new wxTreeFindTimer(this);
+                }
+
+                m_findTimer->Start(wxTreeFindTimer::DELAY, wxTIMER_ONE_SHOT);
+            }
+            else
+            {
+                event.Skip();
+            }
     }
 }
 
@@ -2815,10 +2889,17 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                      (flags & wxTREE_HITTEST_ONITEMLABEL) &&
                      HasFlag(wxTR_EDIT_LABELS) )
                 {
-                    if ( m_renameTimer->IsRunning() )
-                        m_renameTimer->Stop();
+                    if ( m_renameTimer )
+                    {
+                        if ( m_renameTimer->IsRunning() )
+                            m_renameTimer->Stop();
+                    }
+                    else
+                    {
+                        m_renameTimer = new wxTreeRenameTimer( this );
+                    }
 
-                    m_renameTimer->Start( 100, TRUE );
+                    m_renameTimer->Start( wxTreeRenameTimer::DELAY, TRUE );
                 }
 
                 m_lastOnSame = FALSE;
@@ -2858,7 +2939,9 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             if ( event.LeftDClick() )
             {
                 // double clicking should not start editing the item label
-                m_renameTimer->Stop();
+                if ( m_renameTimer )
+                    m_renameTimer->Stop();
+
                 m_lastOnSame = FALSE;
 
                 // send activate event first
