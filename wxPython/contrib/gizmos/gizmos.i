@@ -56,12 +56,12 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 //---------------------------------------------------------------------------
 
 enum {
-    wxEVT_DYNAMIC_SASH_SPLIT,
-    wxEVT_DYNAMIC_SASH_UNIFY,
-
     wxDS_MANAGE_SCROLLBARS,
     wxDS_DRAG_CORNER,
 };
+
+%constant wxEventType wxEVT_DYNAMIC_SASH_SPLIT;
+%constant wxEventType wxEVT_DYNAMIC_SASH_UNIFY;
 
 
 /*
