@@ -254,7 +254,7 @@ private:
     void ResizeReportView(bool showHeader);
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
+    DECLARE_DYNAMIC_CLASS(wxGenericListCtrl)
 };
 
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)

@@ -95,7 +95,7 @@ public:
     virtual void HandleAction( const wxString &fn );
 
     virtual void UpdateControls();
-    
+
 private:
     // Don't use this implementation at all :-)
     bool m_bypassGenericImpl;
@@ -139,7 +139,7 @@ public:
           :wxGenericFileDialog(parent, message, defaultDir, defaultFile, wildCard, style, pos)
      {
      }
-     
+
 private:
      DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
@@ -294,7 +294,7 @@ protected:
     wxFileData::fileListFieldType m_sort_field;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileCtrl);
+    DECLARE_DYNAMIC_CLASS(wxFileCtrl)
     DECLARE_EVENT_TABLE()
 };
 
