@@ -1533,7 +1533,14 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
         height = 0;
 
     // if our parent had prepared a defer window handle for us, use it
-    HDWP hdwp = m_parent ? (HDWP)m_parent->m_hDWP : NULL;
+    wxWindowMSW *parent =
+#ifdef __WXUNIVERSAL__
+                          wxDynamicCast(m_parent, wxWindowMSW)
+#else
+                          m_parent
+#endif
+                          ;
+    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
     if ( hdwp )
     {
         hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
@@ -1545,7 +1552,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
         }
 
         // hdwp must be updated as it may have been changed
-        m_parent->m_hDWP = (WXHANDLE)hdwp;
+        parent->m_hDWP = (WXHANDLE)hdwp;
     }
 
     // otherwise (or if deferring failed) move the window in place immediately
