@@ -148,6 +148,15 @@ echo Re-tarring wxMac in a subdirectory...
 cd $WXDEST
 mkdir wxMac-${WXVER}
 cd wxMac-${WXVER}
+
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+fi
+
 $TAR xf ../wxMac-${WXVER}.tar
 rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
@@ -188,6 +197,8 @@ echo Re-tarring wxAll in a subdirectory...
 cd $WXDEST
 mkdir wxWindows-${WXVER}
 
+cd wxWindows-${WXVER}
+
 # If we have the full set of VC++ project files,
 # get them
 if [ -f $WXDEST/extra/wxWindows-${WXVER}-VC.zip ]; then
@@ -196,7 +207,14 @@ else
   echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-VC.zip"
 fi
 
-cd wxWindows-${WXVER}
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+fi
+
 $TAR xf ../wxAll-${WXVER}.tar
 
 # Translate all .dsp and .dsw files to DOS format

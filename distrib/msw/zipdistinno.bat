@@ -181,6 +181,12 @@ call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTB.zip wxWindows-%versio
 zip32 -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTMLHelp.zip wxWindows-%version% %dest%
 
+Rem Add Linuxy docs to a separate archive to be transported to Linux for the
+Rem Linux-based releases
+zip32 -@ %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_html.rsp
+zip32 -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_pdf.rsp
+zip32 -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_htb.rsp
+
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
 zip32 -@ %dest\wxWindows-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
@@ -192,15 +198,19 @@ call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Univ.zip wxWindows-%versi
 
 rem VC++ project files
 zip32 -@ %dest\wxWindows-%version%-VC.zip < %src\distrib\msw\vc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
 
 rem BC++ project files
 zip32 -@ %dest\wxWindows-%version%-BC.zip < %src\distrib\msw\bc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
 
 rem CodeWarrior project files
 zip32 -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
+
+rem Put all archives for transit to Linux in a zip file
+erase %dest\wxWindows-%version%-LinuxTransit.zip
+zip32 %dest\wxWindows-%version%-LinuxTransit.zip %dest\wxWindows-%version%-LinuxDocs.zip %dest\wxWindows-%version%-VC.zip %dest\wxWindows-%version%-CW-Mac.zip
 
 rem Dialog Editor source and binary
 Rem erase %dest\dialoged-source.zip
@@ -244,8 +254,8 @@ cd %dest
 rem Unzip the Windows files into 'wxWindows-%version%'
 
 unzip32 -o wxWindows-%version%-win.zip
-unzip32 -o wxWindows-%version%-VC.zip
-unzip32 -o wxWindows-%version%-BC.zip
+unzip32 -o wxWindows-%version%-VC.zip -d wxWindows-%version
+unzip32 -o wxWindows-%version%-BC.zip -d wxWindows-%version
 unzip32 -o wxWindows-%version%-HTMLHelp.zip
 unzip32 -o wxWindows-%version%-ExtraDoc.zip
 Rem Need Word file, for Remstar DB classes
