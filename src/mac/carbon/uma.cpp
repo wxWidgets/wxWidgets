@@ -794,30 +794,14 @@ Rect* UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds)
     
     GetControlBounds( theControl , bounds ) ;
 #if TARGET_API_MAC_OSX
-    if ( win != NULL && win->MacGetTopLevelWindow() != NULL )   
-    {
-        wxWindow* parent = win->GetParent() ;
-        if ( parent )
-        {
-            // the parent controls 'origin' expressed in its own
-            // window coordinates (explanation in window.cpp)
-            int x , y ;
-            x = 0 ;
-            y = 0 ;
-            
-            if ( !parent->IsTopLevel() )
-            {
-                x += parent->MacGetLeftBorderSize() ;
-                y += parent->MacGetTopBorderSize() ;
-            }
-            
-            parent->MacWindowToRootWindow( &x , & y ) ;
-            bounds->left += x ;
-            bounds->right += x ;
-            bounds->top += y ;
-            bounds->bottom += y ;
-        }
-    }
+    WindowRef tlwref = GetControlOwner( theControl ) ;
+    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
+
+    HIPoint hiPoint = CGPointMake(  0 , 0 ) ;
+
+    HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl  ) ;
+    OffsetRect( bounds , hiPoint.x , hiPoint.y ) ;
 #endif
     return bounds ;
 }
