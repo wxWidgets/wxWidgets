@@ -66,8 +66,8 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
-2.5.1
------
+2.5.1/2.5.2
+-----------
 
 All:
 
@@ -130,6 +130,8 @@ wxMSW:
 - wxComboBox::GetValue within a wxEVT_COMMAND_TEXT_UPDATED event
   should now pass the correct value even if the handler for
   wxEVT_COMMAND_COMBOBOX_SELECTED changed the selection
+- wxFileDialog now returns correct filter index for multiple-file
+  dialogs
 
 wxGTK:
 
