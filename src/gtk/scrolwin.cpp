@@ -276,13 +276,13 @@ bool wxScrolledWindow::Create(wxWindow *parent,
     m_vAdjust->upper = 1.0;
     m_vAdjust->value = 0.0;
     m_vAdjust->step_increment = 1.0;
-    m_vAdjust->page_increment = 1.0;
+    m_vAdjust->page_increment = 2.0;
     gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
     m_hAdjust->lower = 0.0;
     m_hAdjust->upper = 1.0;
     m_hAdjust->value = 0.0;
     m_hAdjust->step_increment = 1.0;
-    m_hAdjust->page_increment = 1.0;
+    m_hAdjust->page_increment = 2.0;
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
 
     // Handlers for new scrollbar values
@@ -370,14 +370,52 @@ void wxScrolledWindow::AdjustScrollbars()
     m_targetWindow->GetClientSize( &w, &h );
 
     if (m_xScrollPixelsPerLine == 0)
+    {
+        m_hAdjust->upper = 1.0;
         m_hAdjust->page_size = 1.0;
+    }
     else
+    {
         m_hAdjust->page_size = (w / m_xScrollPixelsPerLine);
 
+        int max = (int)(m_hAdjust->upper - m_hAdjust->page_size + 0.5);
+        if (max < 0) max = 0;
+        
+        int x_pos = m_xScrollPosition;
+        if (x_pos > max) x_pos = max;
+        if (x_pos < 0) x_pos = 0;
+
+        int old_x = m_xScrollPosition;
+        m_xScrollPosition = x_pos;
+        m_hAdjust->value = x_pos;
+
+        if (x_pos != old_x)
+            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+    }
+
     if (m_yScrollPixelsPerLine == 0)
+    {
+        m_vAdjust->upper = 1.0;
         m_vAdjust->page_size = 1.0;
+    }
     else
+    {
         m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
+
+        int max = (int)(m_vAdjust->upper - m_vAdjust->page_size + 0.5);
+        if (max < 0) max = 0;
+        
+        int y_pos = m_yScrollPosition;
+        if (y_pos > max) y_pos = max;
+        if (y_pos < 0) y_pos = 0;
+
+        int old_y = m_yScrollPosition;
+        m_yScrollPosition = y_pos;
+        m_vAdjust->value = y_pos;
+
+        if (y_pos != old_y)
+            m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+    }
 
     m_xScrollLinesPerPage = (int)(m_hAdjust->page_size + 0.5);
     m_yScrollLinesPerPage = (int)(m_vAdjust->page_size + 0.5);
