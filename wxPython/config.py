@@ -754,8 +754,10 @@ if FULL_DOCS:
     
 
 swig_deps = [ opj(WXPY_SRC, 'src/my_typemaps.i'),
+              opj(WXPY_SRC, 'src/my_fragments.i'),
               opj(WXPY_SRC, 'src/common.swg'),
               opj(WXPY_SRC, 'src/pyrun.swg'),
+              opj(WXPY_SRC, 'src/python.swg'),
               ]
 
 depends = [ #'include/wx/wxPython/wxPython.h',
