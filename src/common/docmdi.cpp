@@ -87,14 +87,36 @@ BEGIN_EVENT_TABLE(wxDocMDIChildFrame, wxMDIChildFrame)
     EVT_CLOSE(wxDocMDIChildFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
+void wxDocMDIChildFrame::Init()
+{
+    m_childDocument = (wxDocument*)  NULL;
+    m_childView = (wxView*) NULL;
+}
+
+wxDocMDIChildFrame::wxDocMDIChildFrame()
+{
+    Init();
+}
+
 wxDocMDIChildFrame::wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID  id,
-  const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-    wxMDIChildFrame(frame, id, title, pos, size, style, name)
+  const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+{
+    Init();
+    Create(doc, view, frame, id, title, pos, size, style, name);
+}
+
+bool wxDocMDIChildFrame::Create(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID  id,
+  const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 {
   m_childDocument = doc;
   m_childView = view;
+    if (wxMDIChildFrame::Create(frame, id, title, pos, size, style, name)) {
   if (view)
     view->SetFrame(this);
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 wxDocMDIChildFrame::~wxDocMDIChildFrame(void)

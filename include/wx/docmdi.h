@@ -59,10 +59,21 @@ private:
 class WXDLLEXPORT wxDocMDIChildFrame: public wxMDIChildFrame
 {
 public:
+    wxDocMDIChildFrame();
     wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
         long type = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
     ~wxDocMDIChildFrame();
+
+    bool Create(wxDocument *doc,
+                wxView *view,
+                wxMDIParentFrame *frame,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long type = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
@@ -77,6 +88,7 @@ public:
     bool Destroy() { m_childView = (wxView *)NULL; return wxMDIChildFrame::Destroy(); }
     
 protected:
+    void Init();
     wxDocument*       m_childDocument;
     wxView*           m_childView;
 
