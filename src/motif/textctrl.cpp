@@ -423,7 +423,7 @@ bool wxTextCtrl::IsModified() const
 // Makes modified or unmodified
 void wxTextCtrl::MarkDirty()
 {
-    m_modified = FALSE;
+    m_modified = TRUE;
 }
 
 void wxTextCtrl::DiscardEdits()
