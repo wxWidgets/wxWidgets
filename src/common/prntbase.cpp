@@ -43,6 +43,7 @@
 #include "wx/prntbase.h"
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
+#include "wx/print.h"
 #include "wx/module.h"
 
 #include <stdlib.h>
@@ -57,26 +58,74 @@
     #endif
 #endif // __WXMSW__
 
-IMPLEMENT_CLASS(wxPrinterBase, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxPrintout, wxObject)
-IMPLEMENT_CLASS(wxPreviewCanvas, wxWindow)
-IMPLEMENT_CLASS(wxPreviewControlBar, wxWindow)
-IMPLEMENT_CLASS(wxPreviewFrame, wxFrame)
 IMPLEMENT_CLASS(wxPrintPreviewBase, wxObject)
 
-BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
-    EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
-END_EVENT_TABLE()
+//----------------------------------------------------------------------------
+// wxPrintFactory
+//----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
-    EVT_PAINT(wxPreviewCanvas::OnPaint)
-    EVT_CHAR(wxPreviewCanvas::OnChar)
-    EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
-END_EVENT_TABLE()
+wxPrintFactory *wxPrintFactory::m_factory = NULL;
+    
+void wxPrintFactory::SetPrintFactory( wxPrintFactory *factory )
+{ 
+    if (wxPrintFactory::m_factory) 
+        delete wxPrintFactory::m_factory;
+        
+    wxPrintFactory::m_factory = factory; 
+}
 
-/*
-* Printer
-*/
+wxPrintFactory *wxPrintFactory::GetFactory()
+{
+    if (!wxPrintFactory::m_factory)
+      wxPrintFactory::m_factory = new wxNativePrintFactory;
+
+    return wxPrintFactory::m_factory;
+}
+
+//----------------------------------------------------------------------------
+// wxNativePrintFactory
+//----------------------------------------------------------------------------
+
+wxPrinterBase *wxNativePrintFactory::CreatePrinter( wxPrintDialogData *data )
+{ 
+#if defined(__WXMSW__)
+    return new wxWindowsPrinter( data );
+#elif defined(__WXMAC__)
+    return new wxMacPrinter( data );
+#else
+    return new wxPostScriptPrinter( data );
+#endif
+};
+
+wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview, 
+    wxPrintout *printout, wxPrintDialogData *data )
+{
+#if defined(__WXMSW__)
+    return new wxWindowsPrintPreview( preview, printout, data );
+#elif defined(__WXMAC__)
+    return new wxMacPrintPreview( preview, printout, data );
+#else
+    return new wxPostScriptPrintPreview( preview, printout, data );
+#endif
+}
+
+wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview, 
+    wxPrintout *printout, wxPrintData *data )
+{
+#if defined(__WXMSW__)
+    return new wxWindowsPrintPreview( preview, printout, data );
+#elif defined(__WXMAC__)
+    return new wxMacPrintPreview( preview, printout, data );
+#else
+    return new wxPostScriptPrintPreview( preview, printout, data );
+#endif
+}
+
+//----------------------------------------------------------------------------
+// wxPrinterBase
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPrinterBase, wxObject)
 
 wxPrinterBase::wxPrinterBase(wxPrintDialogData *data)
 {
@@ -94,14 +143,6 @@ wxPrinterError wxPrinterBase::sm_lastError = wxPRINTER_NO_ERROR;
 
 wxPrinterBase::~wxPrinterBase()
 {
-}
-
-void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
-{
-    wxPrinterBase::sm_abortIt = true;
-    wxPrinterBase::sm_abortWindow->Show(false);
-    wxPrinterBase::sm_abortWindow->Close(true);
-    wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 }
 
 wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
@@ -126,9 +167,68 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
     wxMessageBox(message, _("Printing Error"), wxOK, parent);
 }
 
-/*
-* Printout class
-*/
+//----------------------------------------------------------------------------
+// wxPrinter
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPrinter, wxPrinterBase)
+
+wxPrinter::wxPrinter(wxPrintDialogData *data)
+{
+    m_pimpl = wxPrintFactory::GetFactory()->CreatePrinter( data );
+}
+
+wxPrinter::~wxPrinter()
+{
+    delete m_pimpl;
+}
+
+wxWindow *wxPrinter::CreateAbortWindow(wxWindow *parent, wxPrintout *printout)
+{
+    return m_pimpl->CreateAbortWindow( parent, printout );
+}
+
+void wxPrinter::ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message)
+{
+    m_pimpl->ReportError( parent, printout, message );
+}
+
+bool wxPrinter::Setup(wxWindow *parent)
+{
+    return m_pimpl->Setup( parent );
+}
+
+bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+{
+    return m_pimpl->Print( parent, printout, prompt );
+}
+
+wxDC* wxPrinter::PrintDialog(wxWindow *parent)
+{
+    return m_pimpl->PrintDialog( parent );
+}
+
+//----------------------------------------------------------------------------
+// wxPrintAbortDialog
+//----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
+    EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
+END_EVENT_TABLE()
+
+void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
+{
+    wxPrinterBase::sm_abortIt = true;
+    wxPrinterBase::sm_abortWindow->Show(false);
+    wxPrinterBase::sm_abortWindow->Close(true);
+    wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
+}
+
+//----------------------------------------------------------------------------
+// wxPrintout
+//----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxPrintout, wxObject)
 
 wxPrintout::wxPrintout(const wxString& title)
 {
@@ -180,9 +280,17 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
     *toPage = 1;
 }
 
-/*
-* Preview canvas
-*/
+//----------------------------------------------------------------------------
+// wxPreviewCanvas
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPreviewCanvas, wxWindow)
+
+BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
+    EVT_PAINT(wxPreviewCanvas::OnPaint)
+    EVT_CHAR(wxPreviewCanvas::OnChar)
+    EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
+END_EVENT_TABLE()
 
 // VZ: the current code doesn't refresh properly without
 //     wxFULL_REPAINT_ON_RESIZE, this must be fixed as otherwise we have
@@ -284,9 +392,11 @@ void wxPreviewCanvas::OnChar(wxKeyEvent &event)
     }
 }
 
-/*
-* Preview control bar
-*/
+//----------------------------------------------------------------------------
+// wxPreviewControlBar
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPreviewControlBar, wxWindow)
 
 BEGIN_EVENT_TABLE(wxPreviewControlBar, wxPanel)
     EVT_BUTTON(wxID_PREVIEW_CLOSE,    wxPreviewControlBar::OnWindowClose)
@@ -533,6 +643,8 @@ int wxPreviewControlBar::GetZoomControl()
 * Preview frame
 */
 
+IMPLEMENT_CLASS(wxPreviewFrame, wxFrame)
+
 BEGIN_EVENT_TABLE(wxPreviewFrame, wxFrame)
     EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
 END_EVENT_TABLE()
@@ -701,6 +813,23 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
     }
     return true;
 }
+
+int wxPrintPreviewBase::GetCurrentPage() const 
+    { return m_currentPage; };
+void wxPrintPreviewBase::SetPrintout(wxPrintout *printout) 
+    { m_previewPrintout = printout; };
+wxPrintout *wxPrintPreviewBase::GetPrintout() const 
+    { return m_previewPrintout; };
+wxPrintout *wxPrintPreviewBase::GetPrintoutForPrinting() const 
+    { return m_printPrintout; };
+void wxPrintPreviewBase::SetFrame(wxFrame *frame) 
+    { m_previewFrame = frame; };
+void wxPrintPreviewBase::SetCanvas(wxPreviewCanvas *canvas) 
+    { m_previewCanvas = canvas; };
+wxFrame *wxPrintPreviewBase::GetFrame() const 
+    { return m_previewFrame; }
+wxPreviewCanvas *wxPrintPreviewBase::GetCanvas() const 
+    { return m_previewCanvas; }
 
 bool wxPrintPreviewBase::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
 {
@@ -908,5 +1037,160 @@ void wxPrintPreviewBase::SetZoom(int percent)
         m_previewCanvas->SetFocus();
     }
 }
+
+wxPrintDialogData& wxPrintPreviewBase::GetPrintDialogData() 
+{ 
+    return m_printDialogData;
+}
+
+int wxPrintPreviewBase::GetZoom() const 
+{ return m_currentZoom; }
+int wxPrintPreviewBase::GetMaxPage() const 
+{ return m_maxPage; }
+int wxPrintPreviewBase::GetMinPage() const 
+{ return m_minPage; }
+bool wxPrintPreviewBase::Ok() const 
+{ return m_isOk; }
+void wxPrintPreviewBase::SetOk(bool ok) 
+{ m_isOk = ok; }
+//----------------------------------------------------------------------------
+// wxPrintPreview
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
+
+wxPrintPreview::wxPrintPreview(wxPrintout *printout,
+                   wxPrintout *printoutForPrinting,
+                   wxPrintDialogData *data) :
+    wxPrintPreviewBase( printout, printoutForPrinting, data )
+{
+    m_pimpl = wxPrintFactory::GetFactory()->
+        CreatePrintPreview( printout, printoutForPrinting, data );
+}
+
+wxPrintPreview::wxPrintPreview(wxPrintout *printout,
+                   wxPrintout *printoutForPrinting,
+                   wxPrintData *data ) :
+    wxPrintPreviewBase( printout, printoutForPrinting, data )
+{
+    m_pimpl = wxPrintFactory::GetFactory()->
+        CreatePrintPreview( printout, printoutForPrinting, data );
+}
+
+wxPrintPreview::~wxPrintPreview()
+{
+    delete m_pimpl;
+    
+    // don't delete twice
+    m_printPrintout = NULL;
+    m_previewPrintout = NULL;
+    m_previewBitmap = NULL;
+}
+
+bool wxPrintPreview::SetCurrentPage(int pageNum)
+{
+    return m_pimpl->SetCurrentPage( pageNum );
+}
+
+int wxPrintPreview::GetCurrentPage() const 
+{ 
+    return m_pimpl->GetCurrentPage();
+}
+
+void wxPrintPreview::SetPrintout(wxPrintout *printout) 
+{ 
+    m_pimpl->SetPrintout( printout );
+}
+
+wxPrintout *wxPrintPreview::GetPrintout() const 
+{ 
+    return m_pimpl->GetPrintout();
+}
+
+wxPrintout *wxPrintPreview::GetPrintoutForPrinting() const 
+{ 
+    return m_pimpl->GetPrintoutForPrinting();
+}
+
+void wxPrintPreview::SetFrame(wxFrame *frame) 
+{ 
+    m_pimpl->SetFrame( frame );
+}
+
+void wxPrintPreview::SetCanvas(wxPreviewCanvas *canvas) 
+{ 
+    m_pimpl->SetCanvas( canvas );
+}
+
+wxFrame *wxPrintPreview::GetFrame() const 
+{
+    return m_pimpl->GetFrame();
+}
+
+wxPreviewCanvas *wxPrintPreview::GetCanvas() const 
+{ 
+    return m_pimpl->GetCanvas();
+}
+
+bool wxPrintPreview::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
+{
+    return m_pimpl->PaintPage( canvas, dc );
+}
+
+bool wxPrintPreview::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
+{
+    return m_pimpl->DrawBlankPage( canvas, dc );
+}
+
+void wxPrintPreview::AdjustScrollbars(wxPreviewCanvas *canvas)
+{
+    m_pimpl->AdjustScrollbars( canvas );
+}
+
+bool wxPrintPreview::RenderPage(int pageNum)
+{
+    return m_pimpl->RenderPage( pageNum );
+}
+
+void wxPrintPreview::SetZoom(int percent)
+{
+    m_pimpl->SetZoom( percent );
+}
+
+wxPrintDialogData& wxPrintPreview::GetPrintDialogData()
+{
+    return m_pimpl->GetPrintDialogData();
+}
+
+int wxPrintPreview::GetMaxPage() const
+{
+    return m_pimpl->GetMaxPage();
+}
+
+int wxPrintPreview::GetMinPage() const
+{
+    return m_pimpl->GetMinPage();
+}
+
+bool wxPrintPreview::Ok() const
+{
+    return m_pimpl->Ok();
+}
+
+void wxPrintPreview::SetOk(bool ok)
+{
+    m_pimpl->SetOk( ok );
+}
+
+bool wxPrintPreview::Print(bool interactive)
+{
+    return m_pimpl->Print( interactive );
+}
+
+void wxPrintPreview::DetermineScaling()
+{
+    m_pimpl->DetermineScaling();
+}
+
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
