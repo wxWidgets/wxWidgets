@@ -83,6 +83,7 @@ class pyTree(wx.wxTreeCtrl):
         wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
         wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         self.output = None
+        self.Expand(self.root)
 
 
     def SetOutput(self, output):
@@ -111,6 +112,8 @@ class pyTree(wx.wxTreeCtrl):
         will again figure out what the offspring is.
         """
         item = event.GetItem()
+        if self.IsExpanded(item):  # This event can happen twice in the self.Expand call
+            return
         obj = self.GetPyData( item )
         lst = dir(obj)
         for key in lst:
@@ -186,7 +189,7 @@ if __name__ == '__main__':
         def __init__(self):
             """Make a splitter window; left a tree, right a textctrl. Wow."""
             import __main__
-            wx.wxFrame.__init__(self, wx.NULL, -1, "PyTreeItemData Test",
+            wx.wxFrame.__init__(self, None, -1, "PyTreeItemData Test",
                                 wx.wxDefaultPosition, wx.wxSize(800,500))
             split = wx.wxSplitterWindow(self, -1)
             tree = pyTree(split, -1, __main__)

@@ -87,7 +87,7 @@ if __name__ == "__main__":
         def OnInit(self):
 
             # Create an instance of our customized Frame class
-            frame = MyFrame(NULL, -1, "This is a test")
+            frame = MyFrame(None, -1, "This is a test")
             frame.Show(true)
 
             # Tell wxWindows that this is our main window

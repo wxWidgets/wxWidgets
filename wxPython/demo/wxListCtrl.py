@@ -241,29 +241,4 @@ def runTest(frame, nb, log):
 overview = """\
 A list control presents lists in a number of formats: list view, report view, icon view and small icon view. Elements are numbered from zero.
 
-wxListCtrl()
-------------------------
-
-Default constructor.
-
-wxListCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = "listCtrl")
-
-Constructor, creating and showing a list control.
-
-Parameters
--------------------
-
-parent = Parent window. Must not be NULL.
-
-id = Window identifier. A value of -1 indicates a default value.
-
-pos = Window position.
-
-size = Window size. If the default size (-1, -1) is specified then the window is sized appropriately.
-
-style = Window style. See wxListCtrl.
-
-validator = Window validator.
-
-name = Window name.
 """

@@ -1,0 +1,37 @@
+*** SWIG\cplus.cxx.orig	Fri May 18 13:03:34 2001
+--- SWIG\cplus.cxx	Fri May 18 13:07:42 2001
+***************
+*** 839,845 ****
+  
+    if (name) {
+      if (strlen(name)) {
+!       if (strlen(ctype) > 0) {
+  	sprintf(temp,"%s %s", ctype, name);
+  	typeeq_derived(temp,name);       // Map "struct foo" to "foo"
+  	typeeq_derived(name,temp);       // Map "foo" to "struct foo"
+--- 839,845 ----
+  
+    if (name) {
+      if (strlen(name)) {
+!       if (strlen(ctype) > 0 && strcmp(ctype, "class") != 0) {
+  	sprintf(temp,"%s %s", ctype, name);
+  	typeeq_derived(temp,name);       // Map "struct foo" to "foo"
+  	typeeq_derived(name,temp);       // Map "foo" to "struct foo"
+***************
+*** 1092,1098 ****
+  
+        // Make a type-equivalence allowing derived classes to be used in functions of the
+  
+!       if (strlen(current_class->classtype) > 0) {
+  	temp1 = "";
+  	temp1 << current_class->classtype << " " << current_class->classname;
+  	temp2 = "";
+--- 1092,1099 ----
+  
+        // Make a type-equivalence allowing derived classes to be used in functions of the
+  
+!       if (strlen(current_class->classtype) > 0 &&
+!           strcmp(current_class->classtype, "class") != 0) {
+  	temp1 = "";
+  	temp1 << current_class->classtype << " " << current_class->classname;
+  	temp2 = "";

@@ -117,7 +117,7 @@ void __wxPreStart()
 
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
-    wxPyEventThreadState = PyThreadState_New(PyThreadState_Get()->interp);
+    wxPyEventThreadState = PyThreadState_Get(); // PyThreadState_New(PyThreadState_Get()->interp);
 #endif
 
     // Bail out if there is already windows created.  This means that the
@@ -305,7 +305,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source) {
             wxString msg("wxPython class not found for ");
             msg += source->GetClassInfo()->GetClassName();
             PyErr_SetString(PyExc_NameError, msg.c_str());
-            return NULL;
+            target = NULL;
         }
     } else {  // source was NULL so return None.
         Py_INCREF(Py_None); target = Py_None;

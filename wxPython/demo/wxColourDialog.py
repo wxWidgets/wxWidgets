@@ -27,11 +27,5 @@ def runTest(frame, nb, log):
 overview = """\
 This class represents the colour chooser dialog.
 
-wxColourDialog()
-------------------------------
-
-wxColourDialog(wxWindow* parent, wxColourData* data = NULL)
-
-Constructor. Pass a parent window, and optionally a pointer to a block of colour data, which will be copied to the colour dialog's colour data.
 
 """

@@ -30,6 +30,11 @@ elseiff "%1" == "d" then
 	shift
 	set CMD=del wxPython\*.pyd
 
+rem touch all the *.i files so swig will regenerate
+elseiff "%1" == "t" then
+	shift
+	set CMD=touch src\*.i & touch contrib\glcanvas\*.i & touch contrib\ogl\*.i & touch contrib\stc\*.i
+
 rem "i" --> install
 elseiff "%1" == "i" then
 	shift

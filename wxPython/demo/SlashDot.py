@@ -352,7 +352,7 @@ class AppFrame(wxFrame):
 if __name__ == '__main__':
     class MyApp(wxApp):
         def OnInit(self):
-            frame = AppFrame(NULL, -1, "Slashdot Breaking News")
+            frame = AppFrame(None, -1, "Slashdot Breaking News")
             frame.Show(true)
             self.SetTopWindow(frame)
             return true
@@ -366,7 +366,7 @@ if __name__ == '__main__':
 # if running as part of the Demo Framework...
 
 def runTest(frame, nb, log):
-    win = AppFrame(NULL, -1, "Slashdot Breaking News")
+    win = AppFrame(None, -1, "Slashdot Breaking News")
     frame.otherWin = win
     win.Show(true)
 

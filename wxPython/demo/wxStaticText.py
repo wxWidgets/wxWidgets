@@ -43,31 +43,6 @@ def runTest(frame, nb, log):
 overview = '''\
 A static text control displays one or more lines of read-only text.
 
-wxStaticText()
--------------------------
-
-Default constructor.
-
-wxStaticText(wxWindow* parent, wxWindowID id, const wxString& label = "", const wxPoint& pos, const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "staticText")
-
-Constructor, creating and showing a text control.
-
-Parameters
--------------------
-
-parent = Parent window. Should not be NULL.
-
-id = Control identifier. A value of -1 denotes a default value.
-
-label = Text label.
-
-pos = Window position.
-
-size = Window size.
-
-style = Window style. See wxStaticText.
-
-name = Window name.
 '''
 
 #---------------------------------------------------------------------------

@@ -60,25 +60,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/clipbrd.h>
 #include <wx/dnd.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {
-        target = o;
-    } else if (target == Py_None) {
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -370,6 +351,7 @@ static PyObject *_wrap_wxCustomDataFormat(PyObject *self, PyObject *args, PyObje
         _result = (wxDataFormat *)wxCustomDataFormat(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataFormat_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -428,6 +410,7 @@ static PyObject *_wrap_wxIsDragResultOk(PyObject *self, PyObject *args, PyObject
         _result = (bool )wxIsDragResultOk(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -448,6 +431,7 @@ static PyObject *_wrap_new_wxDataFormat(PyObject *self, PyObject *args, PyObject
         _result = (wxDataFormat *)new_wxDataFormat(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataFormat_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -480,6 +464,7 @@ static PyObject *_wrap_delete_wxDataFormat(PyObject *self, PyObject *args, PyObj
         delete_wxDataFormat(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -508,6 +493,7 @@ static PyObject *_wrap_wxDataFormat_SetType(PyObject *self, PyObject *args, PyOb
         wxDataFormat_SetType(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -536,6 +522,7 @@ static PyObject *_wrap_wxDataFormat_GetType(PyObject *self, PyObject *args, PyOb
         _result = (wxDataFormatId )wxDataFormat_GetType(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -563,6 +550,7 @@ static PyObject *_wrap_wxDataFormat_GetId(PyObject *self, PyObject *args, PyObje
         _result = new wxString (wxDataFormat_GetId(_arg0));
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
@@ -595,6 +583,7 @@ static PyObject *_wrap_wxDataFormat_SetId(PyObject *self, PyObject *args, PyObje
         wxDataFormat_SetId(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -622,6 +611,7 @@ static PyObject *_wrap_delete_wxDataObject(PyObject *self, PyObject *args, PyObj
         delete_wxDataObject(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -652,6 +642,7 @@ static PyObject *_wrap_wxDataObject_GetPreferredFormat(PyObject *self, PyObject 
         _result = new wxDataFormat (wxDataObject_GetPreferredFormat(_arg0,_arg1));
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxDataFormat_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -681,6 +672,7 @@ static PyObject *_wrap_wxDataObject_GetFormatCount(PyObject *self, PyObject *arg
         _result = (size_t )wxDataObject_GetFormatCount(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -717,6 +709,7 @@ static PyObject *_wrap_wxDataObject_GetAllFormats(PyObject *self, PyObject *args
         wxDataObject_GetAllFormats(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -754,6 +747,7 @@ static PyObject *_wrap_wxDataObject_GetDataSize(PyObject *self, PyObject *args, 
         _result = (size_t )wxDataObject_GetDataSize(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -799,6 +793,7 @@ static PyObject *_wrap_wxDataObject_GetDataHere(PyObject *self, PyObject *args, 
         _result = (bool )wxDataObject_GetDataHere(_arg0,*_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -845,6 +840,7 @@ static PyObject *_wrap_wxDataObject_SetData(PyObject *self, PyObject *args, PyOb
         _result = (bool )wxDataObject_SetData(_arg0,*_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -881,6 +877,7 @@ static PyObject *_wrap_wxDataObject_IsSupportedFormat(PyObject *self, PyObject *
         _result = (bool )wxDataObject_IsSupportedFormat(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -917,6 +914,7 @@ static PyObject *_wrap_new_wxDataObjectSimple(PyObject *self, PyObject *args, Py
         _result = (wxDataObjectSimple *)new_wxDataObjectSimple(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataObjectSimple_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -952,6 +950,7 @@ static PyObject *_wrap_wxDataObjectSimple_GetFormat(PyObject *self, PyObject *ar
     _result = (wxDataFormat *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataFormat_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -993,6 +992,7 @@ static PyObject *_wrap_wxDataObjectSimple_SetFormat(PyObject *self, PyObject *ar
         wxDataObjectSimple_SetFormat(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1038,6 +1038,7 @@ static PyObject *_wrap_new_wxPyDataObjectSimple(PyObject *self, PyObject *args, 
         _result = (wxPyDataObjectSimple *)new_wxPyDataObjectSimple(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyDataObjectSimple_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1080,6 +1081,7 @@ static PyObject *_wrap_wxPyDataObjectSimple__setSelf(PyObject *self, PyObject *a
         wxPyDataObjectSimple__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1108,6 +1110,7 @@ static PyObject *_wrap_new_wxDataObjectComposite(PyObject *self, PyObject *args,
         _result = (wxDataObjectComposite *)new_wxDataObjectComposite();
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataObjectComposite_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1150,6 +1153,7 @@ static PyObject *_wrap_wxDataObjectComposite_Add(PyObject *self, PyObject *args,
         wxDataObjectComposite_Add(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1207,6 +1211,7 @@ static PyObject *_wrap_new_wxTextDataObject(PyObject *self, PyObject *args, PyOb
         _result = (wxTextDataObject *)new_wxTextDataObject(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1244,6 +1249,7 @@ static PyObject *_wrap_wxTextDataObject_GetTextLength(PyObject *self, PyObject *
         _result = (size_t )wxTextDataObject_GetTextLength(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -1271,6 +1277,7 @@ static PyObject *_wrap_wxTextDataObject_GetText(PyObject *self, PyObject *args, 
         _result = new wxString (wxTextDataObject_GetText(_arg0));
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }{
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
@@ -1322,6 +1329,7 @@ static PyObject *_wrap_wxTextDataObject_SetText(PyObject *self, PyObject *args, 
         wxTextDataObject_SetText(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
@@ -1391,6 +1399,7 @@ static PyObject *_wrap_new_wxPyTextDataObject(PyObject *self, PyObject *args, Py
         _result = (wxPyTextDataObject *)new_wxPyTextDataObject(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyTextDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1437,6 +1446,7 @@ static PyObject *_wrap_wxPyTextDataObject__setSelf(PyObject *self, PyObject *arg
         wxPyTextDataObject__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1482,6 +1492,7 @@ static PyObject *_wrap_new_wxBitmapDataObject(PyObject *self, PyObject *args, Py
         _result = (wxBitmapDataObject *)new_wxBitmapDataObject(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmapDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1516,6 +1527,7 @@ static PyObject *_wrap_wxBitmapDataObject_GetBitmap(PyObject *self, PyObject *ar
         _result = new wxBitmap (wxBitmapDataObject_GetBitmap(_arg0));
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1552,6 +1564,7 @@ static PyObject *_wrap_wxBitmapDataObject_SetBitmap(PyObject *self, PyObject *ar
         wxBitmapDataObject_SetBitmap(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1605,6 +1618,7 @@ static PyObject *_wrap_new_wxPyBitmapDataObject(PyObject *self, PyObject *args, 
         _result = (wxPyBitmapDataObject *)new_wxPyBitmapDataObject(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyBitmapDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1647,6 +1661,7 @@ static PyObject *_wrap_wxPyBitmapDataObject__setSelf(PyObject *self, PyObject *a
         wxPyBitmapDataObject__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1683,6 +1698,7 @@ static PyObject *_wrap_new_wxFileDataObject(PyObject *self, PyObject *args, PyOb
         _result = (wxFileDataObject *)new_wxFileDataObject();
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1722,6 +1738,7 @@ static PyObject *_wrap_wxFileDataObject_GetFilenames(PyObject *self, PyObject *a
         _result = (PyObject *)wxFileDataObject_GetFilenames(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }{
   _resultobj = _result;
 }
@@ -1770,6 +1787,7 @@ static PyObject *_wrap_wxFileDataObject_AddFile(PyObject *self, PyObject *args, 
         wxFileDataObject_AddFile(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
@@ -1819,6 +1837,7 @@ static PyObject *_wrap_new_wxCustomDataObject(PyObject *self, PyObject *args, Py
         _result = (wxCustomDataObject *)new_wxCustomDataObject(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCustomDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1860,6 +1879,7 @@ static PyObject *_wrap_wxCustomDataObject_TakeData(PyObject *self, PyObject *arg
         wxCustomDataObject_TakeData(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1898,6 +1918,7 @@ static PyObject *_wrap_wxCustomDataObject_SetData(PyObject *self, PyObject *args
         _result = (bool )wxCustomDataObject_SetData(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -1925,6 +1946,7 @@ static PyObject *_wrap_wxCustomDataObject_GetSize(PyObject *self, PyObject *args
         _result = (size_t )wxCustomDataObject_GetSize(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -1954,6 +1976,7 @@ static PyObject *_wrap_wxCustomDataObject_GetData(PyObject *self, PyObject *args
         _result = (PyObject *)wxCustomDataObject_GetData(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }{
   _resultobj = _result;
 }
@@ -1983,6 +2006,7 @@ static PyObject *_wrap_new_wxClipboard(PyObject *self, PyObject *args, PyObject 
         _result = (wxClipboard *)new_wxClipboard();
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxClipboard_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2016,6 +2040,7 @@ static PyObject *_wrap_wxClipboard_Open(PyObject *self, PyObject *args, PyObject
         _result = (bool )wxClipboard_Open(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2042,6 +2067,7 @@ static PyObject *_wrap_wxClipboard_Close(PyObject *self, PyObject *args, PyObjec
         wxClipboard_Close(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2070,6 +2096,7 @@ static PyObject *_wrap_wxClipboard_IsOpened(PyObject *self, PyObject *args, PyOb
         _result = (bool )wxClipboard_IsOpened(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2106,6 +2133,7 @@ static PyObject *_wrap_wxClipboard_AddData(PyObject *self, PyObject *args, PyObj
         _result = (bool )wxClipboard_AddData(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2142,6 +2170,7 @@ static PyObject *_wrap_wxClipboard_SetData(PyObject *self, PyObject *args, PyObj
         _result = (bool )wxClipboard_SetData(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2178,6 +2207,7 @@ static PyObject *_wrap_wxClipboard_IsSupported(PyObject *self, PyObject *args, P
         _result = (bool )wxClipboard_IsSupported(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2214,6 +2244,7 @@ static PyObject *_wrap_wxClipboard_GetData(PyObject *self, PyObject *args, PyObj
         _result = (bool )wxClipboard_GetData(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2240,6 +2271,7 @@ static PyObject *_wrap_wxClipboard_Clear(PyObject *self, PyObject *args, PyObjec
         wxClipboard_Clear(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2268,6 +2300,7 @@ static PyObject *_wrap_wxClipboard_Flush(PyObject *self, PyObject *args, PyObjec
         _result = (bool )wxClipboard_Flush(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2295,6 +2328,7 @@ static PyObject *_wrap_wxClipboard_UsePrimarySelection(PyObject *self, PyObject 
         wxClipboard_UsePrimarySelection(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2351,6 +2385,7 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
         _result = (wxPyDropSource *)new_wxDropSource(_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyDropSource_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2394,6 +2429,7 @@ static PyObject *_wrap_wxDropSource__setSelf(PyObject *self, PyObject *args, PyO
         wxDropSource__setSelf(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2421,6 +2457,7 @@ static PyObject *_wrap_delete_wxDropSource(PyObject *self, PyObject *args, PyObj
         delete_wxPyDropSource(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2457,6 +2494,7 @@ static PyObject *_wrap_wxDropSource_SetData(PyObject *self, PyObject *args, PyOb
         wxDropSource_SetData(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2486,6 +2524,7 @@ static PyObject *_wrap_wxDropSource_GetDataObject(PyObject *self, PyObject *args
         _result = (wxDataObject *)wxDropSource_GetDataObject(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2528,6 +2567,7 @@ static PyObject *_wrap_wxDropSource_SetCursor(PyObject *self, PyObject *args, Py
         wxDropSource_SetCursor(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2557,6 +2597,7 @@ static PyObject *_wrap_wxDropSource_DoDragDrop(PyObject *self, PyObject *args, P
         _result = (wxDragResult )wxDropSource_DoDragDrop(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2585,6 +2626,7 @@ static PyObject *_wrap_wxDropSource_base_GiveFeedback(PyObject *self, PyObject *
         _result = (bool )wxDropSource_base_GiveFeedback(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2621,6 +2663,7 @@ static PyObject *_wrap_new_wxPyDropTarget(PyObject *self, PyObject *args, PyObje
         _result = (wxPyDropTarget *)new_wxPyDropTarget(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyDropTarget_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2663,6 +2706,7 @@ static PyObject *_wrap_wxPyDropTarget__setSelf(PyObject *self, PyObject *args, P
         wxPyDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2690,6 +2734,7 @@ static PyObject *_wrap_delete_wxPyDropTarget(PyObject *self, PyObject *args, PyO
         delete_wxPyDropTarget(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2719,6 +2764,7 @@ static PyObject *_wrap_wxPyDropTarget_GetDataObject(PyObject *self, PyObject *ar
         _result = (wxDataObject *)wxPyDropTarget_GetDataObject(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDataObject_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2760,6 +2806,7 @@ static PyObject *_wrap_wxPyDropTarget_SetDataObject(PyObject *self, PyObject *ar
         wxPyDropTarget_SetDataObject(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2791,6 +2838,7 @@ static PyObject *_wrap_wxPyDropTarget_base_OnEnter(PyObject *self, PyObject *arg
         _result = (wxDragResult )wxPyDropTarget_base_OnEnter(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2821,6 +2869,7 @@ static PyObject *_wrap_wxPyDropTarget_base_OnDragOver(PyObject *self, PyObject *
         _result = (wxDragResult )wxPyDropTarget_base_OnDragOver(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2847,6 +2896,7 @@ static PyObject *_wrap_wxPyDropTarget_base_OnLeave(PyObject *self, PyObject *arg
         wxPyDropTarget_base_OnLeave(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2877,6 +2927,7 @@ static PyObject *_wrap_wxPyDropTarget_base_OnDrop(PyObject *self, PyObject *args
         _result = (bool )wxPyDropTarget_base_OnDrop(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2904,6 +2955,7 @@ static PyObject *_wrap_wxPyDropTarget_GetData(PyObject *self, PyObject *args, Py
         _result = (bool )wxPyDropTarget_GetData(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2939,6 +2991,7 @@ static PyObject *_wrap_new_wxTextDropTarget(PyObject *self, PyObject *args, PyOb
         _result = (wxPyTextDropTarget *)new_wxTextDropTarget();
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyTextDropTarget_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -2981,6 +3034,7 @@ static PyObject *_wrap_wxTextDropTarget__setSelf(PyObject *self, PyObject *args,
         wxTextDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3012,6 +3066,7 @@ static PyObject *_wrap_wxTextDropTarget_base_OnEnter(PyObject *self, PyObject *a
         _result = (wxDragResult )wxTextDropTarget_base_OnEnter(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3042,6 +3097,7 @@ static PyObject *_wrap_wxTextDropTarget_base_OnDragOver(PyObject *self, PyObject
         _result = (wxDragResult )wxTextDropTarget_base_OnDragOver(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3068,6 +3124,7 @@ static PyObject *_wrap_wxTextDropTarget_base_OnLeave(PyObject *self, PyObject *a
         wxTextDropTarget_base_OnLeave(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3098,6 +3155,7 @@ static PyObject *_wrap_wxTextDropTarget_base_OnDrop(PyObject *self, PyObject *ar
         _result = (bool )wxTextDropTarget_base_OnDrop(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3128,6 +3186,7 @@ static PyObject *_wrap_wxTextDropTarget_base_OnData(PyObject *self, PyObject *ar
         _result = (wxDragResult )wxTextDropTarget_base_OnData(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3163,6 +3222,7 @@ static PyObject *_wrap_new_wxFileDropTarget(PyObject *self, PyObject *args, PyOb
         _result = (wxPyFileDropTarget *)new_wxFileDropTarget();
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyFileDropTarget_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -3205,6 +3265,7 @@ static PyObject *_wrap_wxFileDropTarget__setSelf(PyObject *self, PyObject *args,
         wxFileDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3236,6 +3297,7 @@ static PyObject *_wrap_wxFileDropTarget_base_OnEnter(PyObject *self, PyObject *a
         _result = (wxDragResult )wxFileDropTarget_base_OnEnter(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3266,6 +3328,7 @@ static PyObject *_wrap_wxFileDropTarget_base_OnDragOver(PyObject *self, PyObject
         _result = (wxDragResult )wxFileDropTarget_base_OnDragOver(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3292,6 +3355,7 @@ static PyObject *_wrap_wxFileDropTarget_base_OnLeave(PyObject *self, PyObject *a
         wxFileDropTarget_base_OnLeave(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3322,6 +3386,7 @@ static PyObject *_wrap_wxFileDropTarget_base_OnDrop(PyObject *self, PyObject *ar
         _result = (bool )wxFileDropTarget_base_OnDrop(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3352,6 +3417,7 @@ static PyObject *_wrap_wxFileDropTarget_base_OnData(PyObject *self, PyObject *ar
         _result = (wxDragResult )wxFileDropTarget_base_OnData(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -3451,12 +3517,8 @@ static PyMethodDef clip_dndcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
     { "_signed_long","_long",0},
-    { "_wxPyBitmapDataObject","_class_wxPyBitmapDataObject",0},
-    { "_wxBitmapDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
     { "_wxBitmapDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
-    { "_wxBitmapDataObject","_class_wxBitmapDataObject",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -3466,64 +3528,25 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxCustomDataObject","_wxCustomDataObject",0},
-    { "_class_wxRegionIterator","_wxRegionIterator",0},
-    { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
-    { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
-    { "_wxCursor","_class_wxCursor",0},
-    { "_wxMask","_class_wxMask",0},
-    { "_wxPen","_class_wxPen",0},
     { "_byte","_unsigned_char",0},
-    { "_wxDataObject","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
     { "_wxDataObject","_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObject},
     { "_wxDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObject},
     { "_wxDataObject","_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObject},
     { "_wxDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxTextDataObject",SwigwxTextDataObjectTowxDataObject},
     { "_wxDataObject","_wxTextDataObject",SwigwxTextDataObjectTowxDataObject},
-    { "_wxDataObject","_class_wxDataObjectComposite",SwigwxDataObjectCompositeTowxDataObject},
     { "_wxDataObject","_wxDataObjectComposite",SwigwxDataObjectCompositeTowxDataObject},
-    { "_wxDataObject","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
     { "_wxDataObject","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
-    { "_wxDataObject","_class_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
     { "_wxDataObject","_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
-    { "_wxDataObject","_class_wxDataObject",0},
-    { "_wxColourDatabase","_class_wxColourDatabase",0},
-    { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
-    { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxImageList","_class_wxImageList",0},
-    { "_wxDataObjectSimple","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
-    { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
-    { "_class_wxClipboard","_wxClipboard",0},
-    { "_wxGDIObject","_class_wxGDIObject",0},
-    { "_wxDC","_class_wxDC",0},
-    { "_class_wxBitmapDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
-    { "_class_wxBitmapDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
-    { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
-    { "_class_wxObject","_class_wxClipboard",SwigwxClipboardTowxObject},
-    { "_class_wxObject","_wxClipboard",SwigwxClipboardTowxObject},
-    { "_class_wxObject","_wxObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -3531,49 +3554,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_class_wxMask","_wxMask",0},
-    { "_wxTextDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
     { "_wxTextDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
-    { "_wxTextDataObject","_class_wxTextDataObject",0},
-    { "_wxColour","_class_wxColour",0},
-    { "_class_wxFileDataObject","_wxFileDataObject",0},
-    { "_class_wxDataObject","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxTextDataObject",SwigwxTextDataObjectTowxDataObject},
-    { "_class_wxDataObject","_wxTextDataObject",SwigwxTextDataObjectTowxDataObject},
-    { "_class_wxDataObject","_class_wxDataObjectComposite",SwigwxDataObjectCompositeTowxDataObject},
-    { "_class_wxDataObject","_wxDataObjectComposite",SwigwxDataObjectCompositeTowxDataObject},
-    { "_class_wxDataObject","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
-    { "_class_wxDataObject","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
-    { "_class_wxDataObject","_class_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
-    { "_class_wxDataObject","_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
-    { "_class_wxDataObject","_wxDataObject",0},
-    { "_wxBrush","_class_wxBrush",0},
-    { "_wxDataFormat","_class_wxDataFormat",0},
-    { "_class_wxDataObjectSimple","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxBitmapDataObject",SwigwxBitmapDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -3582,86 +3563,30 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_wxRect","_class_wxRect",0},
-    { "_wxPoint","_class_wxPoint",0},
     { "_char","_wxChar",0},
-    { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxPenList","_class_wxPenList",0},
-    { "_wxWindowDC","_class_wxWindowDC",0},
-    { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
-    { "_wxDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
-    { "_wxDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
-    { "_wxDropTarget","_class_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
-    { "_wxDropTarget","_class_wxDropTarget",0},
-    { "_class_wxColourDatabase","_wxColourDatabase",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
-    { "_class_wxRegion","_wxRegion",0},
-    { "_class_wxDataFormat","_wxDataFormat",0},
-    { "_wxFont","_class_wxFont",0},
-    { "_class_wxPyDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
-    { "_class_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
-    { "_class_wxPyDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
-    { "_class_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
-    { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxRect","_wxRect",0},
-    { "_class_wxDC","_wxDC",0},
-    { "_class_wxBrushList","_wxBrushList",0},
-    { "_class_wxPenList","_wxPenList",0},
-    { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
-    { "_wxMetaFileDC","_class_wxMetaFileDC",0},
-    { "_class_wxTextDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
-    { "_class_wxTextDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
-    { "_class_wxTextDataObject","_wxTextDataObject",0},
-    { "_wxScreenDC","_class_wxScreenDC",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
-    { "_class_wxDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_class_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_wxDropTarget",0},
-    { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxFont","_wxFont",0},
-    { "_wxClipboard","_class_wxClipboard",0},
-    { "_wxBusyInfo","_class_wxBusyInfo",0},
-    { "_wxFontList","_class_wxFontList",0},
-    { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
-    { "_wxClientDC","_class_wxClientDC",0},
-    { "_wxObject","_class_wxClipboard",SwigwxClipboardTowxObject},
     { "_wxObject","_wxClipboard",SwigwxClipboardTowxObject},
-    { "_wxObject","_class_wxObject",0},
-    { "_class_wxPoint","_wxPoint",0},
-    { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxMemoryDC","_class_wxMemoryDC",0},
-    { "_wxPyTextDataObject","_class_wxPyTextDataObject",0},
-    { "_wxPaintDC","_class_wxPaintDC",0},
-    { "_class_wxWindowDC","_wxWindowDC",0},
-    { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
-    { "_class_wxCursor","_wxCursor",0},
-    { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
     { "_unsigned_char","_byte",0},
-    { "_class_wxMetaFileDC","_wxMetaFileDC",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_time_t",0},
@@ -3669,14 +3594,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxIcon","_class_wxIcon",0},
-    { "_class_wxPen","_wxPen",0},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxPyDataObjectSimple","_wxPyDataObjectSimple",0},
-    { "_class_wxPyDropSource","_wxPyDropSource",0},
-    { "_class_wxImageList","_wxImageList",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -3686,7 +3606,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
-    { "_class_wxGDIObject","_wxGDIObject",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},
@@ -3703,16 +3622,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxSize","_class_wxSize",0},
-    { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
-    { "_class_wxPaintDC","_wxPaintDC",0},
-    { "_class_wxPyFileDropTarget","_wxPyFileDropTarget",0},
-    { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
-    { "_class_wxIcon","_wxIcon",0},
-    { "_class_wxColour","_wxColour",0},
-    { "_class_wxScreenDC","_wxScreenDC",0},
-    { "_wxPalette","_class_wxPalette",0},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -3722,25 +3631,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
-    { "_wxRegion","_class_wxRegion",0},
-    { "_wxPyDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
-    { "_wxPyDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
-    { "_wxPyDropTarget","_class_wxPyDropTarget",0},
-    { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxFontList","_wxFontList",0},
-    { "_class_wxClientDC","_wxClientDC",0},
-    { "_wxBrushList","_class_wxBrushList",0},
-    { "_wxCustomDataObject","_class_wxCustomDataObject",0},
-    { "_class_wxSize","_wxSize",0},
-    { "_class_wxBitmap","_wxBitmap",0},
-    { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
-    { "_class_wxPalette","_wxPalette",0},
-    { "_wxFileDataObject","_class_wxFileDataObject",0},
-    { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

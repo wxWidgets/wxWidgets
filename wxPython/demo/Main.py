@@ -23,7 +23,7 @@ import images
 
 _treeList = [
     ('New since last release', ['ColourSelect', 'ImageBrowser', 'infoframe',
-                                'ColourDB', 'wxToggleButton', 'OOR',
+                                'ColourDB', 'wxToggleButton', 'OOR', 'wxWave',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -53,7 +53,7 @@ _treeList = [
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage', "wxProcess", "FancyText", "OOR",
+                        'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',

@@ -87,31 +87,4 @@ def runTest(frame, nb, log):
 overview = """\
 A checkbox is a labelled box which is either on (checkmark is visible) or off (no checkmark).
 
-wxCheckBox()
------------------------
-
-Default constructor.
-
-wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& val, const wxString& name = "checkBox")
-
-Constructor, creating and showing a checkbox.
-
-Parameters
--------------------
-
-parent = Parent window. Must not be NULL.
-
-id = Checkbox identifier. A value of -1 indicates a default value.
-
-label = Text to be displayed next to the checkbox.
-
-pos = Checkbox position. If the position (-1, -1) is specified then a default position is chosen.
-
-size = Checkbox size. If the default size (-1, -1) is specified then a default size is chosen.
-
-style = Window style. See wxCheckBox.
-
-validator = Window validator.
-
-name = Window name.
 """

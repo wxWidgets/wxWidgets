@@ -179,28 +179,31 @@ output values.
 %}
 #endif
 
+
+// I don't use this anywhere, get rid of it...
+
 // Helper function for List output
+//  static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+//      PyObject*   o2;
+//      if (!target) {
+//          target = o;
+//      } else if (target == Py_None) {
+//          Py_DECREF(Py_None);
+//          target = o;
+//      } else {
+//          if (!PyList_Check(target)) {
+//              o2 = target;
+//              target = PyList_New(0);
+//              PyList_Append(target, o2);
+//  	    Py_XDECREF(o2);
+//          }
+//          PyList_Append(target,o);
+//  	Py_XDECREF(o);
+//      }
+//      return target;
+//  }
 
 %{
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {
-        target = o;
-    } else if (target == Py_None) {
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 %}
 
 // Force the argument to be ignored.

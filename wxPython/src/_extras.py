@@ -655,17 +655,9 @@ class wxTimer(wxPyTimer):
             self.SetOwner(evtHandler, id)
 
 #----------------------------------------------------------------------
-# Some wxWin methods can take "NULL" as parameters, but the shadow classes
-# expect an object with the SWIG pointer as a 'this' member.  This class
-# and instance fools the shadow into passing the NULL pointer.
 
-## NOTE:  This is not needed anymore as None can be passed instead and
-#         will be interpreted as NULL.
-
-class _NullObj:
-    this = 'NULL'       # SWIG converts this to (void*)0
-
-NULL = _NullObj()
+NULL = None  # For backwards compatibility only.  You should really be
+             # using None now.
 
 
 #----------------------------------------------------------------------

@@ -25,7 +25,7 @@ command_lines = [
     "-a -n TestMask bmp_source/testmask.bmp images.py",
 
     "-a -n Test2 bmp_source/test2.bmp images.py",
-    "-a -n Robin bmp_source/robin.jpg images.py",
+#    "-a -n Robin bmp_source/robin.jpg images.py",
 
     "-a -n Bulb1 bmp_source/lb1.bmp images.py",
     "-a -n Bulb2 bmp_source/lb2.bmp images.py",

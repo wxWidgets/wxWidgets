@@ -626,6 +626,29 @@ class wxJoystick(wxJoystickPtr):
 
 
 
+class wxWavePtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxWave(self)
+    def IsOk(self, *_args, **_kwargs):
+        val = apply(misc2c.wxWave_IsOk,(self,) + _args, _kwargs)
+        return val
+    def Play(self, *_args, **_kwargs):
+        val = apply(misc2c.wxWave_Play,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxWave instance at %s>" % (self.this,)
+class wxWave(wxWavePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxWave,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -686,6 +709,16 @@ wxBeginBusyCursor = misc2c.wxBeginBusyCursor
 def wxGetActiveWindow(*_args, **_kwargs):
     val = apply(misc2c.wxGetActiveWindow,_args,_kwargs)
     return val
+
+def wxGenericFindWindowAtPoint(*_args, **_kwargs):
+    val = apply(misc2c.wxGenericFindWindowAtPoint,_args,_kwargs)
+    return val
+
+def wxFindWindowAtPoint(*_args, **_kwargs):
+    val = apply(misc2c.wxFindWindowAtPoint,_args,_kwargs)
+    return val
+
+wxCheckForInterrupt = misc2c.wxCheckForInterrupt
 
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
 
@@ -797,6 +830,11 @@ wxLogStatusFrame = misc2c.wxLogStatusFrame
 wxLogSysError = misc2c.wxLogSysError
 
 wxExecute = misc2c.wxExecute
+
+def wxWaveData(*_args, **_kwargs):
+    val = apply(misc2c.wxWaveData,_args,_kwargs)
+    if val: val = wxWavePtr(val); val.thisown = 1
+    return val
 
 wxLog_IsEnabled = misc2c.wxLog_IsEnabled
 

@@ -109,6 +109,9 @@ list for a while.  The above OOR modification made this easier.
 
 Fixed the __cmp__ methods for wxPoiunt and others.
 
+Added wxWave.
+
+
 
 
 2.2.6

@@ -18,6 +18,7 @@
     wxPy_BEGIN_ALLOW_THREADS;
     $function
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }
 
 //----------------------------------------------------------------------

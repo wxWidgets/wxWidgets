@@ -103,7 +103,7 @@ class MyApp(wxApp):
 
 
     def OnInit(self):
-        frame = MyFrame(NULL, -1, "This is a test")
+        frame = MyFrame(None, -1, "This is a test")
         frame.Show(true)
         self.SetTopWindow(frame)
 

@@ -553,7 +553,7 @@ if __name__ == '__main__':
 
     class MainFrame(wxFrame):
         def __init__(self):
-            wxFrame.__init__(self, NULL, -1, "Testing...")
+            wxFrame.__init__(self, None, -1, "Testing...")
 
 	    self.CreateStatusBar()
 	    mainmenu = wxMenuBar()

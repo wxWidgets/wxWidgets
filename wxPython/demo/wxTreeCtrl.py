@@ -176,29 +176,4 @@ def runTest(frame, nb, log):
 overview = """\
 A tree control presents information as a hierarchy, with items that may be expanded to show further items. Items in a tree control are referenced by wxTreeItemId handles.
 
-wxTreeCtrl()
--------------------------
-
-Default constructor.
-
-wxTreeCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = "listCtrl")
-
-Constructor, creating and showing a tree control.
-
-Parameters
--------------------
-
-parent = Parent window. Must not be NULL.
-
-id = Window identifier. A value of -1 indicates a default value.
-
-pos = Window position.
-
-size = Window size. If the default size (-1, -1) is specified then the window is sized appropriately.
-
-style = Window style. See wxTreeCtrl.
-
-validator = Window validator.
-
-name = Window name.
 """

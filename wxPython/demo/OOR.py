@@ -27,7 +27,7 @@ class TestPanel(wxPanel):
         btns.Add(self.btn2)
         btns.Add(50, -1, 1, wxEXPAND)
 
-        sizer.Add(btns, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 5)
+        sizer.Add(btns, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 25)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(true)

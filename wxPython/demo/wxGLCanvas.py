@@ -233,7 +233,7 @@ overview = """\
 def _test():
     class MyApp(wxApp):
         def OnInit(self):
-            frame = wxFrame(NULL, -1, "GL Demos", wxDefaultPosition, wxSize(600,300))
+            frame = wxFrame(None, -1, "GL Demos", wxDefaultPosition, wxSize(600,300))
             #win = ConeCanvas(frame)
             MySplitter(frame)
             frame.Show(TRUE)

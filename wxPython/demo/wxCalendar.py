@@ -419,7 +419,7 @@ class PrintCalend:
         pdd.SetPrintData(self.printData)
         printer = wxPrinter(pdd)
         printout = SetPrintout(self)
-        frame = wxFrame(NULL, -1, "Test")
+        frame = wxFrame(None, -1, "Test")
         if not printer.Print(frame, printout):
             wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK)
         else:
@@ -594,7 +594,7 @@ class SetPrintout(wxPrintout):
 
 class MyApp(wxApp):
     def OnInit(self):
-        frame = CalendFrame(NULL, -1, "Test Calendar")
+        frame = CalendFrame(None, -1, "Test Calendar")
         frame.Show(true)
         self.SetTopWindow(frame)
         return true
