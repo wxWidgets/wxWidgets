@@ -32,7 +32,7 @@
     // N.B. BC++ doesn't have istream.h, ostream.h
 #   include <iostream.h>
 #else
-#   include <ostream>
+#   include <iostream>
 #   if defined(__VISUALC__) || defined(__MWERKS__)
         using namespace std;
 #   endif
