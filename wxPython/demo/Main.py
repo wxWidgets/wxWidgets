@@ -248,12 +248,6 @@ _treeList = [
     ('Check out the samples dir too', [
         ]),
 
-    #~ ('Cool Contribs', [
-        #~ 'pyTree',
-        #~ 'hangman',
-        #'SlashDot',
-        #~ 'XMLtreeview'
-        #~ ]),
 ]
 
 
@@ -388,24 +382,8 @@ class wxPythonDemo(wxFrame):
         self.nb = wxNotebook(splitter2, -1, style=wxCLIP_CHILDREN)
 
         # Set up a wxHtmlWindow on the Overview Notebook page
-        # we put it in a panel first because there seems to be a
-        # refresh bug of some sort (wxGTK) when it is directly in
-        # the notebook...
-        if 0:  # the old way
-            self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
-            self.nb.AddPage(self.ovr, self.overviewText)
-
-        else:  # hopefully I can remove this hacky code soon, see bug #216861
-            panel = wxPanel(self.nb, -1, style=wxCLIP_CHILDREN)
-            self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
-            self.nb.AddPage(panel, self.overviewText)
-
-            def OnOvrSize(evt, ovr=self.ovr):
-                ovr.SetSize(evt.GetSize())
-
-            EVT_SIZE(panel, OnOvrSize)
-            EVT_ERASE_BACKGROUND(panel, EmptyHandler)
-
+        self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
+        self.nb.AddPage(self.ovr, self.overviewText)
 
         self.SetOverview(self.overviewText, overview)
 
@@ -485,7 +463,7 @@ class wxPythonDemo(wxFrame):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
         if item == self.tree.GetSelection():
-            self.SetOverview(self.tree.GetItemText(item), self.curOverview)
+            self.SetOverview(self.tree.GetItemText(item)+" Overview", self.curOverview)
         event.Skip()
 
     #---------------------------------------------
