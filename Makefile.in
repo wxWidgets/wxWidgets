@@ -41,6 +41,7 @@ VP6 = @top_srcdir@/src/png
 VP7 = @top_srcdir@/src/jpeg
 VP8 = @top_srcdir@/src/tiff
 VP9 = @top_srcdir@/src/zlib
+VPA = @top_srcdir@/src/regex
 VP10 = @top_srcdir@/src/iodbc
 VP11 = @top_srcdir@/src/msw/ole
 VP12 = $(FTVP01)@PATH_IFS@$(FTVP02)@PATH_IFS@$(FTVP03)@PATH_IFS@$(FTVP04)@PATH_IFS@$(FTVP05)@PATH_IFS@$(FTVP06)@PATH_IFS@$(FTVP07)@PATH_IFS@$(FTVP08)@PATH_IFS@
@@ -49,7 +50,7 @@ VP13 = $(FTVP09)@PATH_IFS@$(FTVP10)@PATH_IFS@$(FTVP11)@PATH_IFS@$(FTVP12)@PATH_I
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
-VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)@PATH_IFS@$(VP12)@PATH_IFS@$(VP13) # ':' for autoconf
+VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VPA)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)@PATH_IFS@$(VP12)@PATH_IFS@$(VP13) # ':' for autoconf
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -169,7 +170,13 @@ DEPFILES = @ALL_DEPFILES@
 
 # the object files of sublibraries (we assume that they don't change [often],
 # so we don't generate these lists with tmake but embed them here)
-ZLIBOBJS    = \
+REGEXOBJS = \
+		regcomp.o \
+		regexec.o \
+		regerror.o \
+		regfree.o
+
+ZLIBOBJS = \
 		adler32.o \
 		compress.o \
 		crc32.o \
@@ -185,7 +192,7 @@ ZLIBOBJS    = \
 		infutil.o \
 		inffast.o
 
-PNGOBJS     = \
+PNGOBJS = \
 		png.o \
 		pngread.o \
 		pngrtran.o \
@@ -221,7 +228,7 @@ FREETYPEOBJS = \
 		type1z.o \
 		winfnt.o
 
-JPEGOBJS    = \
+JPEGOBJS = \
 		jcomapi.o \
 		jutils.o \
 		jerror.o \
@@ -269,7 +276,7 @@ JPEGOBJS    = \
 		jquant2.o \
 		jdmerge.o
 
-TIFFOBJS	= \
+TIFFOBJS = \
 		tif_aux.o \
 		tif_close.o \
 		tif_codec.o \

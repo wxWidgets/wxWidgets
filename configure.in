@@ -2083,6 +2083,9 @@ else
     dnl this may be (almost) unneccesary for wxBase now we use TOOLKIT_NAME
     TOOLKIT_DIR="base"
 
+    dnl well, we have to set it to something...
+    TOOLKIT_VPATH="."
+
     dnl the base name of the library and wxXXX-config files
     if test "$wxUSE_DEBUG_FLAG" = "yes"; then
         TOOLKIT_NAME="${TOOLKIT_DIR}d"
@@ -2095,6 +2098,12 @@ else
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(BASE_OBJS) \$(BASE_UNIX_OBJS)"
     ALL_DEPFILES="\$(BASE_DEPS) \$(BASE_UNIX_DEPS)"
+
+    dnl REGEX_INCLUDE is only set if we want regex support and if we use our
+    dnl own sources and not the system library
+    if test "x$REGEX_INCLUDE" != "x" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(REGEXOBJS)"
+    fi
 
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
