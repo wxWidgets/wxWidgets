@@ -2,7 +2,7 @@
 // Name:        notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
@@ -33,12 +33,6 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
 
-static bool constantsSet = false ;
-
-short kwxMacTabLeftMargin = 0 ;
-short kwxMacTabTopMargin = 0 ;
-short kwxMacTabRightMargin = 0 ;
-short kwxMacTabBottomMargin = 0 ;
 
 // ----------------------------------------------------------------------------
 // event table
@@ -65,6 +59,78 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // implementation
 // ============================================================================
 
+// The Appearance Manager docs show using tab controls in either edge to edge
+// mode, or inset.  I think edge to edge conforms better to the other ports,
+// and inset mode is better accomplished with space around the wxNotebook rather
+// than within it.    --Robin
+#define wxMAC_EDGE_TO_EDGE 1
+
+static inline int wxMacTabMargin(long nbStyle, long side)
+{
+    static int tabMargin = -1;
+    static int otherMargin = -1;
+
+    if ( tabMargin == -1)
+    {
+        if ( UMAHasAquaLayout() )
+        {
+            tabMargin = 26;    // From Appearance Manager docs for small tab control dimensions
+#if wxMAC_EDGE_TO_EDGE
+            otherMargin = 0;
+#else
+            otherMargin = 20;
+#endif
+        }
+        else
+        {
+            tabMargin = 30;
+#if wxMAC_EDGE_TO_EDGE
+            otherMargin = 0;
+#else
+            otherMargin = 16;
+#endif
+        }
+    }
+
+    // If the style matches the side asked for then return the tab margin,
+    // but we have to special case wxNB_TOP since it is zero...
+    if ( side == wxNB_TOP)
+    {
+        if ( nbStyle != 0 && nbStyle & wxNB_LEFT|wxNB_RIGHT|wxNB_BOTTOM)
+        {
+            return otherMargin;
+        }
+        else
+        {
+            return tabMargin;
+        }
+    }
+    else if ( nbStyle & side)
+        return tabMargin;
+    else
+        return otherMargin;
+}
+
+static inline int wxMacTabLeftMargin(long style)
+{
+    return wxMacTabMargin(style, wxNB_LEFT);
+}
+
+static inline int wxMacTabTopMargin(long style)
+{
+    return wxMacTabMargin(style, wxNB_TOP);
+}
+
+static inline int wxMacTabRightMargin(long style)
+{
+    return wxMacTabMargin(style, wxNB_RIGHT);
+}
+
+static inline int wxMacTabBottomMargin(long style)
+{
+    return wxMacTabMargin(style, wxNB_BOTTOM);
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook construction
 // ----------------------------------------------------------------------------
@@ -72,31 +138,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
-    if ( !constantsSet )
-    {
-        if ( UMAHasAquaLayout() )
-        {
-            // I got these values for Mac OS X from the Appearance mgr docs. (Mark Newsam)
-            kwxMacTabLeftMargin = 20 ;
-            kwxMacTabTopMargin = 38 ;
-            kwxMacTabRightMargin = 20 ;
-            kwxMacTabBottomMargin = 12 ;
-        }
-        else
-        {
-            kwxMacTabLeftMargin = 16 ;
-            kwxMacTabTopMargin = 30 ;
-            kwxMacTabRightMargin = 16 ;
-            kwxMacTabBottomMargin = 16 ;
-        }
-        constantsSet = true ;
-    }
     if ( UMAHasAquaLayout() )
     {
+        // Should these depend on wxMAC_EDGE_TO_EDGE too?
         m_macHorizontalBorder = 7;
         m_macVerticalBorder = 8;
     }
-    
+
     m_nSelection = -1;
 }
 
@@ -115,7 +163,7 @@ wxNotebook::wxNotebook(wxWindow *parent,
                        const wxString& name)
 {
     Init();
-    
+
     Create(parent, id, pos, size, style, name);
 }
 
@@ -129,9 +177,9 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     Rect bounds ;
     Str255 title ;
-    
+
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
-    
+
     int tabstyle = kControlTabSmallNorthProc ;
     if ( HasFlag(wxNB_LEFT) )
         tabstyle = kControlTabSmallWestProc ;
@@ -139,11 +187,11 @@ bool wxNotebook::Create(wxWindow *parent,
         tabstyle = kControlTabSmallEastProc ;
     else if ( HasFlag( wxNB_BOTTOM ) )
         tabstyle = kControlTabSmallSouthProc ;
-    
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+
+
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1,
         tabstyle , (long) this ) ;
-    
+
     MacPostControlCreate() ;
     return TRUE ;
 }
@@ -157,16 +205,16 @@ wxNotebook::~wxNotebook()
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage)
 {
     wxSize sizeTotal = sizePage;
-    
+
     int major,minor;
     wxGetOsVersion( &major, &minor );
-    
+
     // Mac has large notebook borders. Aqua even more so.
-    
+
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
     {
         sizeTotal.x += 90;
-        
+
         if (major >= 10)
             sizeTotal.y += 28;
         else
@@ -185,7 +233,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage)
             sizeTotal.y += 44;
         }
     }
-    
+
     return sizeTotal;
 }
 
@@ -210,12 +258,12 @@ void wxNotebook::SetPageSize(const wxSize& size)
 
 int wxNotebook::SetSelection(int nPage)
 {
-    if( !IS_VALID_PAGE(nPage) ) 
+    if( !IS_VALID_PAGE(nPage) )
         return m_nSelection ;
-    
+
     ChangePage(m_nSelection, nPage);
     SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
-    
+
     Refresh();
     return m_nSelection;
 }
@@ -223,18 +271,18 @@ int wxNotebook::SetSelection(int nPage)
 bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
-    
+
     wxNotebookPage *page = m_pages[nPage];
     page->SetLabel(strText);
     MacSetupTabs();
-    
+
     return true;
 }
 
 wxString wxNotebook::GetPageText(int nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
-    
+
     wxNotebookPage *page = m_pages[nPage];
     return page->GetLabel();
 }
@@ -242,27 +290,27 @@ wxString wxNotebook::GetPageText(int nPage) const
 int wxNotebook::GetPageImage(int nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
-    
+
     return m_images[nPage];
 }
 
 bool wxNotebook::SetPageImage(int nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
-    
+
     wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), FALSE,
         _T("invalid image index in SetPageImage()") );
-    
+
     if ( nImage != m_images[nPage] )
     {
         // if the item didn't have an icon before or, on the contrary, did have
         // it but has lost it now, its size will change - but if the icon just
         // changes, it won't
         m_images[nPage] = nImage;
-        
+
         MacSetupTabs() ;
     }
-    
+
     return TRUE;
 }
 
@@ -276,9 +324,9 @@ wxNotebookPage* wxNotebook::DoRemovePage(int nPage)
     wxCHECK( IS_VALID_PAGE(nPage), NULL );
     wxNotebookPage* page = m_pages[nPage] ;
     m_pages.RemoveAt(nPage);
-    
+
     MacSetupTabs();
-    
+
     if(m_nSelection >= GetPageCount()) {
         m_nSelection = GetPageCount() - 1;
     }
@@ -292,10 +340,10 @@ wxNotebookPage* wxNotebook::DoRemovePage(int nPage)
 bool wxNotebook::DeleteAllPages()
 {
     // TODO: delete native widget pages
-    
+
     WX_CLEAR_ARRAY(m_pages) ;
     MacSetupTabs();
-    
+
     return TRUE;
 }
 
@@ -309,16 +357,16 @@ bool wxNotebook::InsertPage(int nPage,
 {
     wxASSERT( pPage != NULL );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
-    
+
     pPage->SetLabel(strText);
-    
+
     // save the pointer to the page
     m_pages.Insert(pPage, nPage);
-    
+
     m_images.Insert(imageId, nPage);
-    
+
     MacSetupTabs();
-    
+
     if ( bSelect ) {
         m_nSelection = nPage;
     }
@@ -330,16 +378,17 @@ bool wxNotebook::InsertPage(int nPage,
     }
     // don't show pages by default (we'll need to adjust their size first)
     pPage->Show( false ) ;
-    
+
     int h, w;
     GetSize(&w, &h);
-    pPage->SetSize(kwxMacTabLeftMargin, kwxMacTabTopMargin,
-        w - kwxMacTabLeftMargin - kwxMacTabRightMargin,
-        h - kwxMacTabTopMargin - kwxMacTabBottomMargin );
+    pPage->SetSize(wxMacTabLeftMargin(GetWindowStyle()) + m_macHorizontalBorder,
+                   wxMacTabTopMargin(GetWindowStyle()) + m_macVerticalBorder,
+                   w - wxMacTabLeftMargin(GetWindowStyle()) - wxMacTabRightMargin(GetWindowStyle()) - 2*m_macHorizontalBorder,
+                   h - wxMacTabTopMargin(GetWindowStyle()) - wxMacTabBottomMargin(GetWindowStyle()) - 2*m_macVerticalBorder);
     if ( pPage->GetAutoLayout() ) {
         pPage->Layout();
     }
-    
+
     return true;
 }
 
@@ -351,10 +400,10 @@ bool wxNotebook::InsertPage(int nPage,
 void wxNotebook::MacSetupTabs()
 {
     SetControl32BitMaximum( (ControlHandle) m_macControl , GetPageCount() ) ;
-    
+
     wxNotebookPage *page;
     ControlTabInfoRec info;
-    
+
     for(int ii = 0; ii < GetPageCount(); ii++)
     {
         page = m_pages[ii];
@@ -371,9 +420,9 @@ void wxNotebook::MacSetupTabs()
             // tab controls only support very specific types of images, therefore we are doing an odyssee
             // accross the icon worlds (even Apple DTS did not find a shorter path)
             // in order not to pollute the icon registry we put every icon into (OSType) 1 and immediately
-            // afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we 
+            // afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we
             // unregister it) in case this will ever lead to having the same icon everywhere add some kind
-            // of static counter 
+            // of static counter
             ControlButtonContentInfo info ;
             wxMacCreateBitmapButton( &info , *GetImageList()->GetBitmap( GetPageImage(ii ) ) , kControlContentPictHandle) ;
             IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
@@ -411,22 +460,23 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     int nSel = m_nSelection;
     m_nSelection = -1;
     SetSelection(nSel);
-    
+
     // fit the notebook page to the tab control's display area
     int w, h;
     GetSize(&w, &h);
-    
+
     unsigned int nCount = m_pages.Count();
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_pages[nPage];
-        pPage->SetSize(kwxMacTabLeftMargin, kwxMacTabTopMargin,
-            w - kwxMacTabLeftMargin - kwxMacTabRightMargin,
-            h - kwxMacTabTopMargin - kwxMacTabBottomMargin );
+        pPage->SetSize(wxMacTabLeftMargin(GetWindowStyle()) + m_macHorizontalBorder,
+                       wxMacTabTopMargin(GetWindowStyle()) + m_macVerticalBorder,
+                       w - wxMacTabLeftMargin(GetWindowStyle()) - wxMacTabRightMargin(GetWindowStyle()) - 2*m_macHorizontalBorder,
+                       h - wxMacTabTopMargin(GetWindowStyle()) - wxMacTabBottomMargin(GetWindowStyle()) - 2*m_macVerticalBorder);
         if ( pPage->GetAutoLayout() ) {
             pPage->Layout();
         }
     }
-    
+
     // Processing continues to next OnSize
     event.Skip();
 }
@@ -436,7 +486,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
     // is it our tab control?
     if ( event.GetEventObject() == this )
         ChangePage(event.GetOldSelection(), event.GetSelection());
-    
+
     // we want to give others a chance to process this message as well
     event.Skip();
 }
@@ -446,7 +496,7 @@ void wxNotebook::OnSetFocus(wxFocusEvent& event)
     // set focus to the currently selected page if any
     if ( m_nSelection != -1 )
         m_pages[m_nSelection]->SetFocus();
-    
+
     event.Skip();
 }
 
@@ -504,16 +554,16 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
         pPage->SetFocus();
         return;
     }
-    
+
     // Hide previous page
     if ( nOldSel != -1 ) {
         m_pages[nOldSel]->Show(FALSE);
     }
-    
+
     wxNotebookPage *pPage = m_pages[nSel];
     pPage->Show(TRUE);
     pPage->SetFocus();
-    
+
     m_nSelection = nSel;
 }
 
@@ -525,38 +575,38 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
         event.Skip() ;
         return ;
     }
-    
+
     if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
     {
         int x = event.m_x ;
         int y = event.m_y ;
-        
+
         MacClientToRootWindow( &x , &y ) ;
-        
+
         ControlHandle   control ;
         Point       localwhere ;
         SInt16      controlpart ;
-        
+
         localwhere.h = x ;
         localwhere.v = y ;
-        
+
         short modifiers = 0;
-        
+
         if ( !event.m_leftDown && !event.m_rightDown )
             modifiers  |= btnState ;
-        
+
         if ( event.m_shiftDown )
             modifiers |= shiftKey ;
-        
+
         if ( event.m_controlDown )
             modifiers |= controlKey ;
-        
+
         if ( event.m_altDown )
             modifiers |= optionKey ;
-        
+
         if ( event.m_metaDown )
             modifiers |= cmdKey ;
-        
+
         control = (ControlHandle) m_macControl ;
         if ( control && ::IsControlActive( control ) )
         {
@@ -565,17 +615,17 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
                     ::GetControl32BitValue(control) - 1, m_nSelection);
                 changing.SetEventObject(this);
                 ProcessEvent(changing);
-                
+
                 if(changing.IsAllowed())
                 {
                     controlpart = ::HandleControlClick(control, localwhere, modifiers,
                         (ControlActionUPP) -1);
                     wxTheApp->s_lastMouseDown = 0 ;
-                    
+
                     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
                         ::GetControl32BitValue(control) - 1, m_nSelection);
                     event.SetEventObject(this);
-                    
+
                     ProcessEvent(event);
                 }
             }
@@ -584,12 +634,12 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
 }
 
 
-void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 {
 #if 0
     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControl32BitValue((ControlHandle)m_macControl) - 1, m_nSelection);
     event.SetEventObject(this);
-    
+
     ProcessEvent(event);
 #endif
 }
