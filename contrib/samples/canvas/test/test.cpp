@@ -647,13 +647,13 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 // the event tables connect the wxWindows events with the functions (event
 // handlers) which process them.
-BEGIN_EVENT_TABLE(MyCanvas,wxCanvas)
+BEGIN_EVENT_TABLE(MyCanvas,wxVectorCanvas)
     EVT_MOUSE_EVENTS (MyCanvas::OnMouseEvent)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxCanvasAdmin* admin, MySplitterWindow *parent, wxWindowID id,
     const wxPoint &position, const wxSize& size, long style ) :
-    wxCanvas( admin, parent, id, position, size, style )
+    wxVectorCanvas( admin, parent, id, position, size, style )
 {
     m_parent=parent;
 }
@@ -708,7 +708,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
     }
     else
     {
-        wxCanvas::OnMouse(event);
+        wxVectorCanvas::OnMouse(event);
     }
 }
 

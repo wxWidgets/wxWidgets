@@ -28,8 +28,6 @@
 // decls
 //----------------------------------------------------------------------------
 
-#define IMAGE_CANVAS 0
-
 class wxCanvas;
 class wxCanvasAdmin;
 
@@ -584,7 +582,7 @@ private:
 // The area of the drawing in world coordinates that is visible on the canvas
 // can be set. Parts of this area can be zoomed into resulting in scroll bars
 // to be displayed.
-class wxCanvas: public wxWindow
+class wxCanvas: public wxScrolledWindow
 {
 public:
     // constructors and destructors
@@ -593,9 +591,6 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxScrolledWindowStyle );
     virtual ~wxCanvas();
-
-    //intercept scroll events
-    virtual void OnScroll(wxScrollWinEvent& event);
 
     //background colour for the canvas
     virtual  void SetColour( const wxColour& background );
@@ -613,16 +608,12 @@ public:
     //allow canvas activety
     virtual void Thaw();
 
-#if IMAGE_CANVAS
-    inline wxImage *GetBuffer()  { return &m_buffer; }
-#else
     //get the buffer that is used for rendering in general
     inline wxBitmap *GetBuffer() { return &m_buffer; }
     //get the DC that is used for rendering
     inline wxDC *GetDC()   { return m_renderDC; }
     //set the DC that is used for rendering
     inline void  SetDC(wxDC* dc)   { m_renderDC=dc; }
-#endif
 
     inline int GetBufferWidth()  { return m_buffer.GetWidth(); }
     inline int GetBufferHeight() { return m_buffer.GetHeight(); }
@@ -649,11 +640,81 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL );
 
+    //get y axis orientation
+    virtual bool GetYaxis() { return FALSE; }
+    
+    //get the visible part in world coordinates
+    virtual double GetMinX() const;
+    virtual double GetMinY() const;
+    virtual double GetMaxX() const;
+    virtual double GetMaxY() const;
+
+    //convert from window to virtual coordinates
+    virtual double DeviceToLogicalX(int x) const;
+    virtual double DeviceToLogicalY(int y) const;
+    virtual double DeviceToLogicalXRel(int x) const;
+    virtual double DeviceToLogicalYRel(int y) const;
+    virtual int LogicalToDeviceX(double x) const;
+    virtual int LogicalToDeviceY(double y) const;
+    virtual int LogicalToDeviceXRel(double x) const;
+    virtual int LogicalToDeviceYRel(double y) const;
+
+protected:
+    wxBitmap         m_buffer;
+
+    //always available and m_buffer selected
+    wxDC*            m_renderDC;
+    
+    bool             m_needUpdate;
+    wxList           m_updateRects;
+    wxCanvasObjectGroup* m_root;
+
+    wxColour         m_background;
+    bool             m_frozen;
+    wxCanvasObject  *m_lastMouse;
+    wxCanvasObject  *m_captureMouse;
+
+    int              m_oldDeviceX,m_oldDeviceY;
+
+    wxCanvasAdmin*   m_admin;
+    
+private:
+    int              m_bufferX,m_bufferY;
+
+protected:
+    void OnMouse( wxMouseEvent &event );
+    void OnPaint( wxPaintEvent &event );
+    void OnSize( wxSizeEvent &event );
+    void OnIdle( wxIdleEvent &event );
+    void OnSetFocus( wxFocusEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    void OnEraseBackground( wxEraseEvent &event );
+
+private:
+    DECLARE_CLASS(wxCanvas)
+    DECLARE_EVENT_TABLE()
+};
+
+
+
+class wxVectorCanvas: public wxCanvas
+{
+public:
+    // constructors and destructors
+    wxVectorCanvas( wxCanvasAdmin* admin ,wxWindow *parent, wxWindowID id = -1,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxScrolledWindowStyle );
+
+    //scroll the window in device coordinates
+    virtual void ScrollWindow( int dx, int dy,
+                               const wxRect* rect = (wxRect *) NULL );
+
     //set if the Yaxis goes up or down
-    void SetYaxis(bool up){m_yaxis=up;}
+    void SetYaxis(bool up) { m_yaxis=up; }
 
     //get currently used Yaxis setting
-    bool GetYaxis(){return m_yaxis;}
+    virtual bool GetYaxis() { return m_yaxis; }
 
     //to set the total area in world coordinates that can be scrolled.
     // when totaly zoomed out (SetMappingScroll same size as given here),
@@ -678,34 +739,23 @@ public:
     wxTransformMatrix   GetMappingMatrix();
 
     //get minimum X of the visible part in world coordinates
-    inline double GetMinX(){return m_virt_minX;};
-    //get minimum Y of the visible part in world coordinates
-    inline double GetMinY(){return m_virt_minY;};
-    //get maximum X of the visible part in world coordinates
-    inline double GetMaxX(){return m_virt_maxX;};
-    //get maximum Y of the visible part in world coordinates
-    inline double GetMaxY(){return m_virt_maxY;};
-
-
-    //convert from window to virtual coordinates
-    double DeviceToLogicalX(int x) const;
-    //convert from window to virtual coordinates
-    double DeviceToLogicalY(int y) const;
-    //convert from window to virtual coordinates relatif
-    double DeviceToLogicalXRel(int x) const;
-    //convert from window to virtual coordinates relatif
-    double DeviceToLogicalYRel(int y) const;
-    //convert from virtual to window coordinates
-    int LogicalToDeviceX(double x) const;
-    //convert from virtual to window coordinates
-    int LogicalToDeviceY(double y) const;
-    //convert from virtual to window coordinates relatif
-    int LogicalToDeviceXRel(double x) const;
-    //convert from virtual to window coordinates relatif
-    int LogicalToDeviceYRel(double y) const;
+    virtual double GetMinX() const;
+    virtual double GetMinY() const;
+    virtual double GetMaxX() const;
+    virtual double GetMaxY() const;
+    
+    //convert from window to virtual coordinates and back
+    virtual double DeviceToLogicalX(int x) const;
+    virtual double DeviceToLogicalY(int y) const;
+    virtual double DeviceToLogicalXRel(int x) const;
+    virtual double DeviceToLogicalYRel(int y) const;
+    virtual int LogicalToDeviceX(double x) const;
+    virtual int LogicalToDeviceY(double y) const;
+    virtual int LogicalToDeviceXRel(double x) const;
+    virtual int LogicalToDeviceYRel(double y) const;
 
 protected:
-
+    // up or down
     bool m_yaxis;
 
     // holds the matrix for mapping from virtual to screen coordinates
@@ -727,44 +777,15 @@ protected:
     bool m_scrolled;
 
 private:
-#if IMAGE_CANVAS
-    wxImage          m_buffer;
-#else
-    wxBitmap         m_buffer;
-
-    //always available and m_buffer selected
-    wxDC*            m_renderDC;
-#endif
-    bool             m_needUpdate;
-    wxList           m_updateRects;
-    wxCanvasObjectGroup* m_root;
-
-    wxColour         m_background;
-    bool             m_frozen;
-    wxCanvasObject  *m_lastMouse;
-    wxCanvasObject  *m_captureMouse;
-
-    int              m_oldDeviceX,m_oldDeviceY;
-
-    wxCanvasAdmin*   m_admin;
-
-protected:
-
-    void OnMouse( wxMouseEvent &event );
-
-private:
+    void OnScroll(wxScrollWinEvent& event);
     void OnChar( wxKeyEvent &event );
-    void OnPaint( wxPaintEvent &event );
     void OnSize( wxSizeEvent &event );
-    void OnIdle( wxIdleEvent &event );
-    void OnSetFocus( wxFocusEvent &event );
-    void OnKillFocus( wxFocusEvent &event );
-    void OnEraseBackground( wxEraseEvent &event );
 
 private:
-    DECLARE_CLASS(wxCanvas)
+    DECLARE_CLASS(wxVectorCanvas)
     DECLARE_EVENT_TABLE()
 };
+
 
 
 //:defenition

@@ -55,8 +55,7 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_admin = new wxCanvasAdmin;
     wxCanvas *canvas = new wxCanvas( m_admin, this, -1 );
     
-    canvas->SetScroll( 0, 0, 400, 600 );
-    canvas->SetMappingScroll( 0, 0, 400, 600, FALSE );
+    canvas->SetScrollbars( 10, 10, 40, 40 );
     
     // The wxCanvasAdmin need to know about all Admin wxCanvas objects.
     m_admin->Append( canvas );
@@ -76,6 +75,11 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_smile1 = new wxCanvasImage( image, 0,70,32,32 );
     root->Append( m_smile1 );
 
+    wxCanvasRect *rect = new wxCanvasRect( 20,20,100,100 );
+    rect->SetBrush( *wxRED_BRUSH );
+    root->Append( rect );
+    
+/*
     int i;
     for (i = 10; i < 300; i+=10)
     {
@@ -83,16 +87,19 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
         r->SetBrush( *wxRED_BRUSH );
         root->Append( r );
     }
+*/
     
     m_smile2 = new wxCanvasImage( image, 0,110,32,32 );
     root->Append( m_smile2 );
 
+/*
     for (i = 15; i < 300; i+=10)
     {
         wxCanvasRect *r = new wxCanvasRect( i,50,3,140 );
         r->SetBrush( *wxRED_BRUSH );
         root->Append( r );
     }
+*/
     
     // This will call all object and children recursivly so
     // all know what their wxCanvasAdmin is. Call at the end.

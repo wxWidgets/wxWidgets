@@ -64,7 +64,7 @@ class MySplitterWindow : public wxSplitterWindow
 {
 public:
   MySplitterWindow(wxFrame *parent, wxWindowID id)
-    : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE)
+    : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSP_3D )
   {
     m_frame = parent;
   }
@@ -163,7 +163,7 @@ enum
 #define CANVAS1             102
 #define CANVAS2             103
 
-class MyCanvas: public wxCanvas
+class MyCanvas: public wxVectorCanvas
 {
 public:
     MyCanvas( wxCanvasAdmin* admin, MySplitterWindow *parent, wxWindowID id = -1,
