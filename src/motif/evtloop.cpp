@@ -355,7 +355,7 @@ bool wxDoEventLoopIteration( wxEventLoop& evtLoop )
         // leave the main loop to give other threads a chance to
         // perform their GUI work
         wxMutexGuiLeave();
-        wxUsleep(20);
+        wxMilliSleep(20);
         wxMutexGuiEnter();
     }
 #endif
