@@ -1966,7 +1966,7 @@ else
     DISTDIR="wxBase"
 
     dnl Apple MAC OS X specific extras
-    if test "$USE_UNIX" = 1 ; then
+    if test "$USE_UNIX" = 1 -a "$USE_MAX" = 1; then
 	ALL_OBJECTS="${ALL_OBJECTS} dl_macosx.o"
 	ALL_DEPFILES="${ALL_DEPFILES} dl_macosx.d"
     fi
