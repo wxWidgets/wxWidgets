@@ -1,2 +1,0 @@
-appicon ICON   "rc/appicon.ico"
-#include "wx/msw/wx.rc"
