@@ -557,7 +557,7 @@ CREATE_INSTALLED_LINKS:  $(libdir)/@WX_LIBRARY_NAME_SHARED@
 	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK2@
 	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK3@
 	
-$(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
+$(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
 parser.o:    parser.c lexer.c
 	$(CCLEX) -c $(CFLAGS) $(PICFLAGS) -o $@ parser.c
@@ -582,7 +582,7 @@ lexer.c:	$(COMMDIR)/lexer.l
 
 -include $(DEPFILES)
 
-preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top_builddir)/setup.h
+preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	@echo " "
 	@echo " Installing wxWindows..."
 	@echo " "
@@ -599,7 +599,7 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	$(INSTALL) -d $(libdir)/wx/include
 	$(INSTALL) -d $(libdir)/wx/include/wx
 	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@
-	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
+	$(INSTALL_DATA) $(top_builddir)/include/wx/@TOOLKIT_DIR@/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
 	$(INSTALL) -d $(datadir)/wx
 	$(INSTALL) -d $(datadir)/wx/afm
@@ -673,6 +673,7 @@ ALL_DIST:
 	mkdir _dist_dir
 	mkdir $(DISTDIR)
 	cp $(WXDIR)/wx$(TOOLKIT).spec $(DISTDIR)
+	cp $(WXDIR)/configure.in $(DISTDIR)
 	cp $(WXDIR)/configure $(DISTDIR)
 	cp $(WXDIR)/config.sub $(DISTDIR)
 	cp $(WXDIR)/config.guess $(DISTDIR)
