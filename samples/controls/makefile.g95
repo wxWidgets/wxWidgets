@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile for minimal example (UNIX).
+# Makefile for controls example (UNIX).
 
 WXDIR = ../..
 
@@ -15,23 +15,23 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/makeg95.env
 
-OBJECTS = $(OBJDIR)/minimal.$(OBJSUFF) $(OBJDIR)/minimal_resources.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/controls.$(OBJSUFF) $(OBJDIR)/controls_resources.$(OBJSUFF)
 
-all:    $(OBJDIR) minimal$(GUISUFFIX)$(EXESUFF)
+all:    $(OBJDIR) controls$(GUISUFFIX)$(EXESUFF)
 
 wx:
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-minimal$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o minimal$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+controls$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o controls$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
 
-$(OBJDIR)/minimal.$(OBJSUFF):	minimal.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ minimal.$(SRCSUFF)
+$(OBJDIR)/controls.$(OBJSUFF):	controls.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ controls.$(SRCSUFF)
 
-$(OBJDIR)/minimal_resources.o:  minimal.rc
-	$(RESCOMP) -i minimal.rc -o $(OBJDIR)/minimal_resources.o $(RESFLAGS)
+$(OBJDIR)/controls_resources.o:  controls.rc
+	$(RESCOMP) -i controls.rc -o $(OBJDIR)/controls_resources.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) minimal$(GUISUFFIX).exe core *.rsc *.res
+	rm -f $(OBJECTS) controls$(GUISUFFIX).exe core *.rsc *.res

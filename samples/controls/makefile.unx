@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile for minimal example (UNIX).
+# Makefile for controls example (UNIX).
 
 WXDIR = ../..
 
@@ -15,11 +15,11 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/make.env
 
-OBJECTS = $(OBJDIR)/minimal.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/controls.$(OBJSUFF)
 
 .SUFFIXES:
 
-all:    $(OBJDIR) minimal$(GUISUFFIX)
+all:    $(OBJDIR) controls$(GUISUFFIX)
 
 wx:
 
@@ -39,11 +39,11 @@ hp:
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-minimal$(GUISUFFIX):	$(OBJDIR)/minimal.$(OBJSUFF) $(WXLIB)
-	$(CC) $(LDFLAGS) -o minimal$(GUISUFFIX) $(OBJDIR)/minimal.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+controls$(GUISUFFIX):	$(OBJDIR)/controls.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o controls$(GUISUFFIX) $(OBJDIR)/controls.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
 
-$(OBJDIR)/minimal.$(OBJSUFF):	minimal.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ minimal.$(SRCSUFF)
+$(OBJDIR)/controls.$(OBJSUFF):	controls.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ controls.$(SRCSUFF)
 
 clean_motif:
 	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
@@ -55,4 +55,4 @@ clean_hp:
 	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
 
 cleanany:
-	rm -f $(OBJECTS) minimal$(GUISUFFIX) core
+	rm -f $(OBJECTS) controls$(GUISUFFIX) core

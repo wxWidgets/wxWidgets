@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example (DOS).
+# Makefile : Builds controls example (DOS).
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
@@ -15,17 +15,17 @@ WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makemsc.env
 
-THISDIR = $(WXDIR)\samples\minimal
+THISDIR = $(WXDIR)\samples\controls
 
 !ifndef FINAL
 FINAL=0
 !endif
 
 HEADERS =
-SOURCES = minimal.$(SRCSUFF)
-OBJECTS = minimal.obj
+SOURCES = controls.$(SRCSUFF)
+OBJECTS = controls.obj
 
-all:    minimal.exe
+all:    controls.exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -37,24 +37,24 @@ wxclean:
         nmake -f makefile.dos clean
         cd $(THISDIR)
 
-minimal.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) minimal.obj minimal.def minimal.res
+controls.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) controls.obj controls.def controls.res
         link $(LINKFLAGS) @<<
-minimal.obj $(WXDIR)\src\msw\dummy.obj,
-minimal,
+controls.obj $(WXDIR)\src\msw\dummy.obj,
+controls,
 NUL,
 $(LIBS),
-minimal.def
+controls.def
 ;
 <<
-        rc -K minimal.res
+        rc -K controls.res
 
-minimal.obj:      minimal.$(SRCSUFF)
+controls.obj:      controls.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-minimal.res :      minimal.rc $(WXDIR)\include\wx\msw\wx.rc
-    rc -r /i$(WXDIR)\include minimal
+controls.res :      controls.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include controls
 
 clean:
         -erase *.obj

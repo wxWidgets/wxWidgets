@@ -1,4 +1,5 @@
-# Symantec C++ makefile for minimal example
+;    Last change:  JS   10 Jul 98   11:33 am
+# Symantec C++ makefile for controls example
 # NOTE that peripheral libraries are now dealt in main wxWindows makefile.
 
 WXDIR = $(WXWIN)
@@ -24,7 +25,7 @@ LIBS=$(WXLIB) libw.lib commdlg.lib shell.lib
 .rc.res:
 	*$(RC) -r -I$(INCLUDE) $<
 
-minimal.exe: minimal.obj minimal.def minimal.res
+controls.exe: controls.obj controls.def controls.res
 	*$(CC) $(LDFLAGS) -o$@ $** $(LIBS)
 
 clean:

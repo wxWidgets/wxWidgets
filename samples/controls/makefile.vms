@@ -19,11 +19,11 @@ APPINCS =
 #************************************************************************
 
 # Name of main module
-MAIN = minimal
+MAIN = controls
 
 # Object modules of the application.
-OBJS = minimal.obj
-OBJLIST =minimal.obj
+OBJS = controls.obj
+OBJLIST =controls.obj
 
 .include [--.src]makevms.env
 

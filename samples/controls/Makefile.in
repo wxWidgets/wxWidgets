@@ -10,11 +10,11 @@ RULE=bin
 BIN_TARGET=test
 # define library sources
 BIN_SRC=\
-minimal.cpp
+controls.cpp
 
 #define library objects
 BIN_OBJ=\
-minimal.o
+controls.o
 
 # additional things needed to link
 BIN_LINK=

@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example (DOS).
+# Makefile : Builds controls example (DOS).
 
 !if "$(BCCDIR)" == ""
 !error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
@@ -20,7 +20,7 @@
 WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makebcc.env
 
-THISDIR = $(WXDIR)\samples\minimal
+THISDIR = $(WXDIR)\samples\controls
 WXLIB = $(WXDIR)\lib\wx.lib
 LIBS=$(WXLIB) mathwl cwl import
 INC=-I$(WXDIR)\include\base -I$(WXDIR)\include\msw
@@ -41,29 +41,29 @@ DEBUG_FLAGS=
 !endif
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
-OBJECTS = minimal.obj
+OBJECTS = controls.obj
 
-minimal:    minimal.exe
+controls:    controls.exe
 
-all:    minimal.exe
+all:    controls.exe
 
-minimal.exe:    $(WXLIB) minimal.obj minimal.def minimal.res
+controls.exe:    $(WXLIB) controls.obj controls.def controls.res
         tlink $(LINKFLAGS) @&&!
-c0wl.obj minimal.obj
-minimal
+c0wl.obj controls.obj
+controls
 nul
 $(LIBS)
-minimal.def
+controls.def
 !
-        rc -31 -K minimal.res
+        rc -31 -K controls.res
 
 .$(SRCSUFF).obj:
 	bcc $(CPPFLAGS) -c {$< }
 
-minimal.obj:      minimal.$(SRCSUFF)
+controls.obj:      controls.$(SRCSUFF)
 
-minimal.res :      minimal.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa minimal
+controls.res :      controls.rc $(WXDIR)\include\msw\wx.rc
+    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa controls
 
 clean:
         -erase *.obj

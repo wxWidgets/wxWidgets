@@ -199,7 +199,8 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 
 void MyPanel::OnListBoxButtons( wxCommandEvent &WXUNUSED(event) )
 {
-  m_notebook->DeletePage( 1 );
+	if (m_notebook->GetPageCount() > 1)
+		m_notebook->DeletePage( 1 );
 }
 
 //----------------------------------------------------------------------

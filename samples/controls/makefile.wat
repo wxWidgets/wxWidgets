@@ -10,7 +10,7 @@ WXDIR = ..\..
 !include $(WXDIR)\src\makewat.env
 
 WXLIB = $(WXDIR)\lib
-NAME = minimal
+NAME = controls
 LNK = $(name).lnk
 OBJS = $(name).obj 
 
