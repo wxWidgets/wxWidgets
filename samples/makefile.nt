@@ -56,19 +56,19 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\internat
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\ownerdrw
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\checklst
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\dnd
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\joytest
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\regtest
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\regtest
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\checklst
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\samples\hello
 #        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
