@@ -39,14 +39,14 @@ void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
 
 void wxControl::SetLabel( const wxString &label )
 {
-    m_label = "";
-    for ( const char *pc = label; *pc != '\0'; pc++ ) 
+    m_label = _T("");
+    for ( const wxChar *pc = label; *pc != _T('\0'); pc++ ) 
     {
-        if ( *pc == '&' ) 
+        if ( *pc == _T('&') ) 
 	{
             pc++; // skip it
 #if 0 // it would be unused anyhow for now - kbd interface not done yet
-            if ( *pc != '&' ) m_chAccel = *pc;
+            if ( *pc != _T('&') ) m_chAccel = *pc;
 #endif
         }
         m_label << *pc;

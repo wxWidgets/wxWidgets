@@ -71,10 +71,10 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   
     SetValidator( validator );
 
-    m_widget = gtk_button_new_with_label( m_label );
+    m_widget = gtk_button_new_with_label( m_label.mbc_str() );
     SetLabel(label);
 
-    if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label );
+    if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label.mbc_str() );
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );
 
@@ -106,16 +106,16 @@ void wxButton::SetDefault(void)
 
 void wxButton::SetLabel( const wxString &label )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid button" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
   
     wxControl::SetLabel( label );
   
-    gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel() );
+    gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel().mbc_str() );
 }
 
 void wxButton::Enable( bool enable )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid button" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid button") );
   
     wxControl::Enable( enable );
   
@@ -128,5 +128,3 @@ void wxButton::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
     gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
-
-

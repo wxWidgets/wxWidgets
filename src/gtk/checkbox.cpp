@@ -81,7 +81,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         //     left of it
         m_widgetCheckbox = gtk_check_button_new();
 
-        m_widgetLabel = gtk_label_new(m_label);
+        m_widgetLabel = gtk_label_new(m_label.mbc_str());
         gtk_misc_set_alignment(GTK_MISC(m_widgetLabel), 0.0, 0.5);
 
         m_widget = gtk_hbox_new(FALSE, 0);
@@ -94,7 +94,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     }
     else
     {
-        m_widgetCheckbox = gtk_check_button_new_with_label( m_label );
+        m_widgetCheckbox = gtk_check_button_new_with_label( m_label.mbc_str() );
         m_widgetLabel = GTK_BUTTON( m_widgetCheckbox )->child;
         m_widget = m_widgetCheckbox;
     }
@@ -103,7 +103,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     if (newSize.x == -1)
     {
         newSize.x = 25 + gdk_string_measure( m_widgetCheckbox->style->font,
-                                             m_label );
+                                             m_label.mbc_str() );
     }
     if (newSize.y == -1)
         newSize.y = 26;
@@ -135,7 +135,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 
 void wxCheckBox::SetValue( bool state )
 {
-    wxCHECK_RET( m_widgetCheckbox != NULL, "invalid checkbox" );
+    wxCHECK_RET( m_widgetCheckbox != NULL, _T("invalid checkbox") );
 
     if ( state == GetValue() )
         return;
@@ -149,23 +149,23 @@ void wxCheckBox::SetValue( bool state )
 
 bool wxCheckBox::GetValue() const
 {
-    wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, "invalid checkbox" );
+    wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, _T("invalid checkbox") );
 
     return GTK_TOGGLE_BUTTON(m_widgetCheckbox)->active;
 }
 
 void wxCheckBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widgetLabel != NULL, "invalid checkbox" );
+    wxCHECK_RET( m_widgetLabel != NULL, _T("invalid checkbox") );
 
     wxControl::SetLabel( label );
 
-    gtk_label_set( GTK_LABEL(m_widgetLabel), GetLabel() );
+    gtk_label_set( GTK_LABEL(m_widgetLabel), GetLabel().mbc_str() );
 }
 
 void wxCheckBox::Enable( bool enable )
 {
-    wxCHECK_RET( m_widgetLabel != NULL, "invalid checkbox" );
+    wxCHECK_RET( m_widgetLabel != NULL, _T("invalid checkbox") );
 
     wxControl::Enable( enable );
 
