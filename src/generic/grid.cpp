@@ -457,7 +457,6 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     }
 
     dc.SetPen( *wxTRANSPARENT_PEN );
-
     dc.DrawRectangle(rect);
 }
 
@@ -1609,7 +1608,6 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
     m_colLabelWin = colLblWin;
-
     SetBackgroundColour( "WHITE" );
 }
 
@@ -1901,7 +1899,7 @@ void wxGrid::Init()
     //
     m_cellEditCtrl = new wxGridTextCtrl( m_gridWin,
                                          this,
-                                         TRUE,
+                                         FALSE,
                                          wxGRID_CELLCTRL,
                                          "",
                                          wxPoint(1,1),
@@ -1912,7 +1910,7 @@ void wxGrid::Init()
                                          );
 
     m_cellEditCtrl->Show( FALSE );
-    m_cellEditCtrlEnabled = TRUE;
+    m_cellEditCtrlEnabled = FALSE;
     m_editCtrlType = wxGRID_TEXTCTRL;
 }
 
@@ -2806,6 +2804,16 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         if ( event.LeftDown() )
         {
+            if ( event.AltDown() )
+            {
+                MakeCellVisible( coords );
+                SetCurrentCell( coords );
+                EnableCellEditControl( TRUE );
+            }
+            else
+            {
+                EnableCellEditControl( FALSE );
+            }
             if ( event.ShiftDown() )
             {
                 SelectBlock( m_currentCellCoords, coords );
@@ -2829,6 +2837,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.LeftDClick() )
         {
+            EnableCellEditControl( FALSE );
             if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
             {
                 SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
@@ -2884,6 +2893,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.RightDown() )
         {
+            EnableCellEditControl( FALSE );
             if ( !SendEvent( EVT_GRID_CELL_RIGHT_CLICK,
                              coords.GetRow(),
                              coords.GetCol(),
@@ -2898,6 +2908,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.RightDClick() )
         {
+            EnableCellEditControl( FALSE );
             if ( !SendEvent( EVT_GRID_CELL_RIGHT_DCLICK,
                              coords.GetRow(),
                              coords.GetCol(),
@@ -3542,12 +3553,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             default:
                 // now try the cell edit control
                 //
+                if ( !IsCellEditControlEnabled() )
+                    EnableCellEditControl( TRUE );
                 if ( IsCellEditControlEnabled() )
-                {
-                    event.SetEventObject( m_cellEditCtrl );
-                    m_cellEditCtrl->GetEventHandler()->ProcessEvent( event );
-                }
-                break;
+		{
+		    event.SetEventObject( m_cellEditCtrl );
+		    m_cellEditCtrl->GetEventHandler()->ProcessEvent( event );
+		}
+		break;
         }
     }
 
@@ -3575,7 +3588,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     m_currentCellCoords = coords;
 
     SetEditControlValue();
-
+#if 0
     if ( m_displayed )
     {
         ShowCellEditControl();
@@ -3587,6 +3600,9 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
         }
     }
+#else
+    SelectBlock ( coords, coords );
+#endif
 }
 
 
@@ -3665,8 +3681,8 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // but all the rest is drawn by the cell renderer and hence may be
     // customized
     wxRect rect;
-    rect.x = m_colRights[col] - m_colWidths[col] + 1;
-    rect.y = m_rowBottoms[row] - m_rowHeights[row] + 1;
+    rect.x = m_colRights[col] - m_colWidths[col];
+    rect.y = m_rowBottoms[row] - m_rowHeights[row];
     rect.width = m_colWidths[col] - 1;
     rect.height = m_rowHeights[row] - 1;
 
@@ -3736,13 +3752,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     int i;
     for ( i = 0; i < m_numRows; i++ )
     {
-        if ( m_rowBottoms[i] > bottom )
+        if ( m_rowBottoms[i]-1 > bottom )
         {
             break;
         }
-        else if ( m_rowBottoms[i] >= top )
+        else if ( m_rowBottoms[i]-1 >= top )
         {
-            dc.DrawLine( left, m_rowBottoms[i], right, m_rowBottoms[i] );
+            dc.DrawLine( left, m_rowBottoms[i]-1, right, m_rowBottoms[i]-1 );
         }
     }
 
@@ -3751,13 +3767,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     //
     for ( i = 0; i < m_numCols; i++ )
     {
-        if ( m_colRights[i] > right )
+        if ( m_colRights[i]-1 > right )
         {
             break;
         }
-        else if ( m_colRights[i] >= left )
+        else if ( m_colRights[i]-1 >= left )
         {
-            dc.DrawLine( m_colRights[i], top, m_colRights[i], bottom );
+            dc.DrawLine( m_colRights[i]-1, top, m_colRights[i]-1, bottom );
         }
     }
 }
@@ -4000,27 +4016,30 @@ void wxGrid::EnableEditing( bool edit )
 }
 
 
-#if 0  // disabled for the moment - the cell control is always active
 void wxGrid::EnableCellEditControl( bool enable )
 {
+    if ( m_currentCellCoords == wxGridNoCellCoords )
+        SetCurrentCell( 0, 0 );
     if ( m_cellEditCtrl &&
          enable != m_cellEditCtrlEnabled )
     {
-        m_cellEditCtrlEnabled = enable;
 
-        if ( m_cellEditCtrlEnabled )
+        if ( enable )
         {
+            m_cellEditCtrlEnabled = enable;
             SetEditControlValue();
+                 // requires m_cellEditCtrlEnabled to be already true
             ShowCellEditControl();
         }
         else
         {
             HideCellEditControl();
+                 // requires m_cellEditCtrlEnabled to be still true
             SaveEditControlValue();
+            m_cellEditCtrlEnabled = enable;
         }
     }
 }
-#endif
 
 
 void wxGrid::ShowCellEditControl()
@@ -4124,6 +4143,7 @@ void wxGrid::HideCellEditControl()
     if ( IsCellEditControlEnabled() )
     {
         m_cellEditCtrl->Show( FALSE );
+        SetFocus();
     }
 }
 

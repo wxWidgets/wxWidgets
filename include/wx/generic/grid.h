@@ -679,9 +679,7 @@ public:
     bool IsEditable() { return m_editable; }
     void EnableEditing( bool edit );
 
-#if 0  // at the moment the cell edit control is always active
     void     EnableCellEditControl( bool enable );
-#endif
 
     bool     IsCellEditControlEnabled()
              { return (m_cellEditCtrl && m_cellEditCtrlEnabled); }
