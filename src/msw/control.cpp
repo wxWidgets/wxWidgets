@@ -154,8 +154,13 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     if ( !m_hWnd )
     {
-        wxLogDebug(wxT("Failed to create a control of class '%s'"), classname);
-        wxFAIL_MSG(_T("something is very wrong, CreateWindowEx failed"));
+#ifdef __WXDEBUG__
+        wxFAIL_MSG(wxString::Format
+                   (
+                    _T("CreateWindowEx(\"%s\", flags=%08x, ex=%08x) failed"),
+                    classname, style, exstyle
+                   ));
+#endif // __WXDEBUG__
 
         return false;
     }
