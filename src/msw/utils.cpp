@@ -914,31 +914,43 @@ wxString wxGetOsDescription()
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
 #if defined(__WIN32__) && !defined(__SC__)
-    OSVERSIONINFO info;
-    wxZeroMemory(info);
-
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if ( ::GetVersionEx(&info) )
+    static int ver = -1, major = -1, minor = -1;
+    
+    if ( ver == -1 )
     {
-        if (majorVsn)
-            *majorVsn = info.dwMajorVersion;
-        if (minorVsn)
-            *minorVsn = info.dwMinorVersion;
+        OSVERSIONINFO info;
+        wxZeroMemory(info);
 
-        switch ( info.dwPlatformId )
+        ver = wxWINDOWS;
+        info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        if ( ::GetVersionEx(&info) )
         {
-            case VER_PLATFORM_WIN32s:
-                return wxWIN32S;
+            major = info.dwMajorVersion;
+            minor = info.dwMinorVersion;
 
-            case VER_PLATFORM_WIN32_WINDOWS:
-                return wxWIN95;
+            switch ( info.dwPlatformId )
+            {
+                case VER_PLATFORM_WIN32s:
+                    ver = wxWIN32S;
+                    break;
 
-            case VER_PLATFORM_WIN32_NT:
-                return wxWINDOWS_NT;
+                case VER_PLATFORM_WIN32_WINDOWS:
+                    ver = wxWIN95;
+                    break;
+
+                case VER_PLATFORM_WIN32_NT:
+                    ver = wxWINDOWS_NT;
+                    break;
+            }
         }
     }
 
-    return wxWINDOWS; // error if we get here, return generic value
+    if (majorVsn && major != -1)
+        *majorVsn = major;
+    if (minorVsn && minor != -1)
+        *minorVsn = minor;
+    
+    return ver;
 #else // Win16
     int retValue = wxWINDOWS;
     #ifdef __WINDOWS_386__
