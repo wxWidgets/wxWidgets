@@ -79,6 +79,8 @@ affecting the label.
 wxMSW: Fixed missing EVT_RIGHT_DOWN and EVT_TREE_ITEM_RIGHT_CLICK
 events in a wx.TreeCtrl.
 
+Added wx.GetTopLevelWindows() function which returns a copy of the
+list of top-level windows that currently exist in the application.
 
 
 
