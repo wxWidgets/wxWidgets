@@ -285,6 +285,8 @@
 
 #define wxUSE_DIRECTSHOW    1
 
+#define wxUSE_GSTREAMER     0
+
 #define wxUSE_XRC       1
 
 #if wxUSE_XRC
