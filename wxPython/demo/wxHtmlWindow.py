@@ -68,11 +68,13 @@ class TestHtmlPanel(wxPanel):
         self.cwd = os.path.split(sys.argv[0])[0]
         if not self.cwd:
             self.cwd = os.getcwd()
+        if frame:
+            self.titleBase = frame.GetTitle()
 
         wxHtmlWindow_AddFilter(MyHtmlFilter(log))
 
         self.html = MyHtmlWindow(self, -1, log)
-        self.html.SetRelatedFrame(frame, "wxPython: (A Demonstration) -- %s")
+        self.html.SetRelatedFrame(frame, self.titleBase + " -- %s")
         self.html.SetRelatedStatusBar(0)
 
         self.printer = wxHtmlEasyPrinting()
@@ -119,6 +121,11 @@ class TestHtmlPanel(wxPanel):
 
         self.OnShowDefault(None)
 
+
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
 
 
     def OnShowDefault(self, event):

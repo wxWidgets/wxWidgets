@@ -107,6 +107,12 @@ class TestPanel(wxWindow):
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
 
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
+
+
     def OnDestroy(self, evt):
         if self.ie:
             self.ie.Cleanup()

@@ -80,6 +80,12 @@ class TestPanel(wxWindow):
         EVT_MSHTML_TITLECHANGE(self, -1, self.OnTitleChange)
 
 
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
+
+
     def OnSize(self, evt):
         self.Layout()
 

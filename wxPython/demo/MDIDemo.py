@@ -3,6 +3,9 @@
 from wxPython.wx import *
 from wxScrolledWindow import MyCanvas
 
+import images
+SHOW_BACKGROUND = 1
+
 #----------------------------------------------------------------------
 
 class MyParentFrame(wxMDIParentFrame):
@@ -24,6 +27,10 @@ class MyParentFrame(wxMDIParentFrame):
         EVT_MENU(self, 5000, self.OnNewWindow)
         EVT_MENU(self, 5001, self.OnExit)
 
+        if SHOW_BACKGROUND:
+            self.bg_bmp = images.getGridBGBitmap()
+            EVT_ERASE_BACKGROUND(self.GetClientWindow(), self.OnEraseBackground)
+
 
     def OnExit(self, evt):
         self.Close(true)
@@ -34,6 +41,24 @@ class MyParentFrame(wxMDIParentFrame):
         win = wxMDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
         canvas = MyCanvas(win)
         win.Show(true)
+
+
+    def OnEraseBackground(self, evt):
+        dc = evt.GetDC()
+        if not dc:
+            dc = wxClientDC(self.GetClientWindow())
+
+        # tile the background bitmap
+        sz = self.GetClientSize()
+        w = self.bg_bmp.GetWidth()
+        h = self.bg_bmp.GetHeight()
+        x = 0
+        while x < sz.width:
+            y = 0
+            while y < sz.height:
+                dc.DrawBitmap(self.bg_bmp, x, y)
+                y = y + h
+            x = x + w
 
 
 #----------------------------------------------------------------------

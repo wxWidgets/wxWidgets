@@ -161,7 +161,7 @@ _treeList = [
         ]),
 
     # Images
-    ('Images', [
+    ('Using Images', [
         'Throbber',
         'wxDragImage',
         'wxImage',
