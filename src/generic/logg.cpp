@@ -171,7 +171,7 @@ END_EVENT_TABLE()
 // filename and try to open it, returns TRUE on success (file was opened),
 // FALSE if file couldn't be opened/created and -1 if the file selection
 // dialog was cancelled
-static int OpenLogFile(wxFile& file, wxString *filename = NULL);
+static int OpenLogFile(wxFile& file, wxString *filename = NULL, wxWindow *parent = NULL);
 
 #endif // wxUSE_FILE
 
@@ -542,7 +542,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FILEDLG
     wxString filename;
     wxFile file;
-    int rc = OpenLogFile(file, &filename);
+    int rc = OpenLogFile(file, &filename, this);
     if ( rc == -1 )
     {
         // cancelled
@@ -963,7 +963,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FILEDLG
     wxFile file;
-    int rc = OpenLogFile(file);
+    int rc = OpenLogFile(file, NULL, this);
     if ( rc == -1 )
     {
         // cancelled
@@ -1103,11 +1103,11 @@ wxLogDialog::~wxLogDialog()
 // filename and try to open it, returns TRUE on success (file was opened),
 // FALSE if file couldn't be opened/created and -1 if the file selection
 // dialog was cancelled
-static int OpenLogFile(wxFile& file, wxString *pFilename)
+static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
 {
     // get the file name
     // -----------------
-    wxString filename = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"));
+    wxString filename = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"), parent);
     if ( !filename ) {
         // cancelled
         return -1;
