@@ -276,7 +276,7 @@ void wxFrameBase::OnMenuOpen(wxMenuEvent& WXUNUSED(event))
 void wxFrameBase::OnMenuClose(wxMenuEvent& WXUNUSED(event))
 {
     // do we have real status text to restore?
-    if ( m_oldStatusText.length() > 1 || m_oldStatusText[0u] )
+    if ( !m_oldStatusText.empty() )
     {
         if ( m_statusBarPane >= 0 )
         {
