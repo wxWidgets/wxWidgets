@@ -1554,9 +1554,8 @@ dnl    fi
     UNIXDEPS="\$(UNIX_DEPS)"
     GUIDIST=GTK_DIST
 
-dnl test for XIM support in libgdk
-AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-
+    dnl test for XIM support in libgdk
+    AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
 fi
 
 if test "$wxUSE_WINE" = 1; then
@@ -1736,16 +1735,16 @@ else
     TOOLKIT_DIR="os2"
 fi
 
-dnl the symbol which allows conditional compilation for the given toolkit
-TOOLKIT_DEF="-D__WX${TOOLKIT}__"
+    dnl the symbol which allows conditional compilation for the given toolkit
+    TOOLKIT_DEF="-D__WX${TOOLKIT}__"
 
-dnl the name of the (libtool) library
-WX_LIBRARY="wx_${TOOLKIT_DIR}"
+    dnl the name of the (libtool) library
+    WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(IODBCOBJS)"
     if test "$wxUSE_LIBJPEG" = "yes" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"  
+        ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"
     fi
     if test "$wxUSE_LIBTIFF" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(TIFFOBJS)"
@@ -1757,19 +1756,33 @@ WX_LIBRARY="wx_${TOOLKIT_DIR}"
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
     fi
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
-    ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
+
+    PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
+    RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
+    RPM_SPEC="wx\$(TOOLKIT).spec"
+
+    dnl distribute samples/demos/utils with GUI versions
+    GUIDIST="${GUIDIST} SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST"
+    DISTDIR="wx\$(TOOLKIT)"
 else
     dnl leave all TOOLKIT_XXX vars empty
 
     USE_GUI=0
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(BASE_OBJS)"
-    ALL_DEPFILES="\${BASE_DEPS}"
-    ALL_HEADERS="\${BASE_HEADERS}"
+    ALL_OBJECTS="\$(BASE_OBJS) \${BASE_UNIX_OBJS}"
+    ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
 
     dnl building wxBase only
     WX_LIBRARY="wxbase"
+
+    PORT_FILES="src/files.lst"
+    RPM_FILES="src/rpmfiles.lst"
+    RPM_SPEC="wxBase.spec"
+
+    dnl distribute only wxBase sources/headers
+    GUIDIST="BASE_DIST"
+    DISTDIR="wxBase"
 fi
 
 dnl the name of the (libtool) library
@@ -2056,8 +2069,8 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
                 AC_DEFINE(HAVE_VSSCANF)
                 wx_cv_func_vsscanf=yes
              ],
-             wx_cv_func_vsscanf=no,
-             wx_cv_func_vsscanf=no
+                wx_cv_func_vsscanf=no,
+                wx_cv_func_vsscanf=no
              )
 ])
 
@@ -3272,8 +3285,13 @@ AC_SUBST(UNIXOBJS)
 AC_SUBST(UNIXDEPS)
 AC_SUBST(ALL_OBJECTS)
 AC_SUBST(ALL_DEPFILES)
-AC_SUBST(ALL_HEADERS)
+
+dnl distribution vars
 AC_SUBST(GUIDIST)
+AC_SUBST(PORT_FILES)
+AC_SUBST(DISTDIR)
+AC_SUBST(RPM_SPEC)
+AC_SUBST(RPM_FILES)
 
 dnl additional subdirectories where we will build
 AC_SUBST(SRC_SUBDIRS)
@@ -3297,15 +3315,26 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
-dnl Duh! glcanvas/$(TOOLKIT_DIR) doesn't work for msw because some
-dnl genius called it "win"
-if test "${TOOLKIT_DIR}" = "msw" ; then
-  GL_TOOLKIT_DIR="win"
-else
-  GL_TOOLKIT_DIR="${TOOLKIT_DIR}"
+dnl some more GUI only things
+if test "$wxUSE_GUI" = "yes"; then
+    AC_CACHE_CHECK([glcanvas subdirectory to use], wx_cv_path_glcanvas,
+    [
+        dnl Duh! glcanvas/$(TOOLKIT_DIR) doesn't work for msw because some
+        dnl genius called it "win"
+        if test "${TOOLKIT_DIR}" = "msw" ; then
+          wx_cv_path_glcanvas="win"
+        else
+          wx_cv_path_glcanvas="${TOOLKIT_DIR}"
+        fi
+    ])
+
+    dnl It's needed in glcanvas/Makefile.in so we even have to subst this hack!
+    GL_TOOLKIT_DIR=$wx_cv_PATH_glcanvas
+    AC_SUBST(GL_TOOLKIT_DIR)
+
+    AC_CONFIG_SUBDIRS(demos samples utils)
 fi
-dnl It's needed in glcanvas/Makefile.in so we even have to subst this hack!
-AC_SUBST(GL_TOOLKIT_DIR)
+dnl from wxUSE_GUI
 
 dnl create each of the files in the space separated list from the file.in
 dnl (the original file name may be overriden by appending another name after a
@@ -3316,84 +3345,6 @@ AC_OUTPUT([
             src/makeprog.env
             src/makelib.env
             Makefile
-            demos/Makefile
-            demos/bombs/Makefile
-            demos/dbbrowse/Makefile
-            demos/forty/Makefile
-            demos/fractal/Makefile
-            demos/life/Makefile
-            demos/poem/Makefile
-            samples/Makefile
-            samples/caret/Makefile
-            samples/calendar/Makefile
-            samples/checklst/Makefile
-            samples/config/Makefile
-            samples/controls/Makefile
-            samples/console/Makefile
-            samples/db/Makefile
-            samples/dialogs/Makefile
-            samples/docview/Makefile
-            samples/docvwmdi/Makefile
-            samples/dnd/Makefile
-            samples/drawing/Makefile
-            samples/exec/Makefile
-            samples/font/Makefile
-            samples/grid/Makefile
-            samples/help/Makefile
-            samples/image/Makefile
-            samples/internat/Makefile
-            samples/ipc/Makefile
-            samples/layout/Makefile
-            samples/listctrl/Makefile
-            samples/mdi/Makefile
-            samples/minifram/Makefile
-            samples/minimal/Makefile
-            samples/dialup/Makefile
-            samples/newgrid/Makefile
-            samples/notebook/Makefile
-            samples/png/Makefile
-            samples/printing/Makefile
-            samples/proplist/Makefile
-            samples/propsize/Makefile
-            samples/richedit/Makefile
-            samples/resource/Makefile
-            samples/sashtest/Makefile
-            samples/scroll/Makefile
-            samples/scrollsub/Makefile
-            samples/splitter/Makefile
-            samples/text/Makefile
-            samples/thread/Makefile
-            samples/toolbar/Makefile
-            samples/treectrl/Makefile
-            samples/typetest/Makefile
-            samples/validate/Makefile
-            samples/sockets/Makefile
-            samples/wizard/Makefile
-            samples/html/Makefile
-            samples/html/about/Makefile
-            samples/html/help/Makefile
-            samples/html/printing/Makefile
-            samples/html/helpview/Makefile
-            samples/html/test/Makefile
-            samples/html/zip/Makefile
-            samples/html/virtual/Makefile
-            samples/html/widget/Makefile
-            utils/Makefile
-            utils/wxMMedia2/Makefile
-            utils/wxMMedia2/lib/Makefile
-            utils/wxMMedia2/sample/Makefile
-            utils/glcanvas/Makefile
-            utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
-            utils/ogl/Makefile
-            utils/ogl/src/Makefile
-            utils/makegen/Makefile
-            utils/HelpGen/Makefile
-            utils/HelpGen/src/Makefile
-            utils/tex2rtf/Makefile
-            utils/tex2rtf/src/Makefile
-            utils/hhp2cached/Makefile
-            utils/dialoged/Makefile
-            utils/dialoged/src/Makefile
           ],
           [
             chmod +x wx-config

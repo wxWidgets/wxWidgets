@@ -109,7 +109,7 @@ config.cpp	C	B
 ctrlcmn.cpp	C
 ctrlsub.cpp	C
 datetime.cpp	C	B
-datstrm.cpp	C
+datstrm.cpp	C	B
 db.cpp	C
 dbtable.cpp	C
 dcbase.cpp	C
@@ -163,7 +163,7 @@ mimecmn.cpp	C	32,B
 module.cpp	C	B
 mstream.cpp	C
 object.cpp	C	B
-objstrm.cpp	C
+objstrm.cpp	C	B
 odbc.cpp	C	R,X
 paper.cpp	C
 prntbase.cpp	C
@@ -174,7 +174,7 @@ sckaddr.cpp	C	S
 sckfile.cpp	C	S
 sckipc.cpp	C	S
 sckstrm.cpp	C	S
-serbase.cpp	C
+serbase.cpp	C	B
 sizer.cpp	C
 socket.cpp	C	S
 stream.cpp	C	B
@@ -525,8 +525,8 @@ m_tables.cpp	H
 m_meta.cpp	H
 htmprint.cpp	H
 
-arrimpl.cpp	W
-listimpl.cpp	W
+arrimpl.cpp	W	B
+listimpl.cpp	W	B
 accel.h	W
 app.h	W	B
 bitmap.h	W
@@ -547,8 +547,8 @@ cmndata.h	W
 colordlg.h	W
 colour.h	W
 combobox.h	W
-confbase.h	W
-config.h	W
+confbase.h	W	B
+config.h	W	B
 control.h	W
 ctrlsub.h	W
 cursor.h	W
@@ -556,7 +556,7 @@ dataobj.h	W
 date.h	W	B
 datetime.h	W	B
 datetime.inl	W	B
-datstrm.h	W
+datstrm.h	W	B
 db.h	W
 dbtable.h	W
 dc.h	W
@@ -585,8 +585,8 @@ ffile.h	W	B
 file.h	W	B
 fileconf.h	W	B
 filedlg.h	W
-filefn.h	W
-filesys.h	W
+filefn.h	W	B
+filesys.h	W	B
 font.h	W
 fontdlg.h	W
 fontenum.h	W
@@ -646,7 +646,7 @@ msgdlg.h	W
 mstream.h	W
 notebook.h	W
 object.h	W	B
-objstrm.h	W
+objstrm.h	W	B
 odbc.h	W
 ownerdrw.h	W
 palette.h	W
@@ -672,7 +672,7 @@ sckipc.h	W
 sckstrm.h	W
 scrolbar.h	W
 scrolwin.h	W
-serbase.h	W
+serbase.h	W	B
 settings.h	W
 setup.h	W
 sizer.h	W
@@ -707,7 +707,7 @@ toolbar.h	W
 tooltip.h	W
 treectrl.h	W
 types.h	W
-url.h	W
+url.h	W	B
 utils.h	W	B
 valgen.h	W
 validate.h	W
@@ -1043,10 +1043,10 @@ execute.h	S
 mimetype.h	S	B
 gsockunx.h	S
 
-file.h	P
-ftp.h	P
-http.h	P
-protocol.h	P
+file.h	P	B
+ftp.h	P	B
+http.h	P	B
+protocol.h	P	B
 
 forcelnk.h	L
 helpdata.h	L

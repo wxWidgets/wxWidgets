@@ -8,6 +8,11 @@
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
 //---------------------------------------------------------------------------
+
+#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
+    #error "DBGrid requires the new wxGrid class"
+#endif
+
 class mjDoc;
 //---------------------------------------------------------------------------
 class DBGrid: public wxGrid
