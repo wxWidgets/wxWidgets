@@ -5,6 +5,17 @@
 #
 
 
+import utils
+
+# We use 'CFG' option in places where bakefile doesn't like it, so we must
+# register a substitution function for it that provides additional knowledge
+# about the option (in this case that it does not contain dir separators and
+# so utils.nativePaths() doesn't have to do anything with it):
+def __noopSubst(func, opt):
+    return '$(%s)' % opt.name
+utils.addSubstituteCallback('CFG', __noopSubst)
+
+
 def mk_wxid(id):
     """Creates wxWindows library identifier from bakefile target ID that
        follows this convention: DLLs end with 'dll', static libraries

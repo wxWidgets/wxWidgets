@@ -60,6 +60,15 @@
             Use this to name your customized DLLs differently
         </description>
     </option>
+
+    <option name="CFG">
+        <default-value></default-value>
+        <description>
+            Name of your custom configuration. This affects directory
+            where object files are stored as well as the location of
+            compiled .lib files and setup.h under the lib/ toplevel directory.
+        </description>
+    </option>
         
 
 
@@ -96,7 +105,6 @@
             <if cond="BUILDING_LIB=='0'">.</if>
         </set>
         <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
-        <set var="BUILDDIR">objs_$(COMPILER)</set>
     </if>
 
 </makefile>

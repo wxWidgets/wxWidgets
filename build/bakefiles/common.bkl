@@ -43,8 +43,8 @@
     </set>
 
     <set var="VENDORTAG">
-        <if cond="OFFICIAL_BUILD=='1'"></if>
-        <if cond="OFFICIAL_BUILD=='0'">_$(VENDOR)</if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'"></if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(VENDOR)</if>
     </set>
 
     <set var="WXDEBUGFLAG">
@@ -114,13 +114,29 @@
     
     
     <!-- =============================================================== -->
-    <!--                   Where to store built libraries:               -->
+    <!--             Where to store built libraries and objects:         -->
     <!-- =============================================================== -->
+    
+
+    <if cond="FORMAT!='autoconf'">
+        <set var="WXDLLFLAG">
+            <if cond="SHARED=='1'">dll</if>
+        </set>
+        <set var="CFG_NAME_PART">
+            $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+        </set>
+        <set var="OBJS" make_var="1">objs_$(COMPILER)_$(CFG_NAME_PART)</set>
+        <set var="BUILDDIR">$(OBJS)</set>
+    </if>
+    $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)
     
     <set var="LIBDIRNAME">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
-        <if cond="FORMAT!='autoconf'">$(TOP_SRCDIR)lib$(DIRSEP)$(COMPILER)</if>
+        <if cond="FORMAT!='autoconf'">
+            $(TOP_SRCDIR)lib$(DIRSEP)$(COMPILER)_$(CFG_NAME_PART)
+        </if>
     </set>
+
     
     <!-- =============================================================== -->
     <!--                        Templates for libs:                      -->
