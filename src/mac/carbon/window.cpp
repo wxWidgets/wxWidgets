@@ -149,7 +149,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 // GrafPtr myport = cEvent.GetParameter<GrafPtr>(kEventParamGrafPort,typeGrafPtr) ;
 
 #if 0 
-                // in case we would need a coregraphics compliant background erase first
+              // in case we would need a coregraphics compliant background erase first
                 // now usable to track redraws
                 CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
                 if ( thisWindow->MacIsUserPane() )
@@ -540,6 +540,7 @@ wxWindowMac::~wxWindowMac()
 
 void wxWindowMac::MacInstallEventHandler()
 {
+    wxAssociateControlWithMacControl( (ControlRef) m_macControl , this ) ;
     InstallControlEventHandler( (ControlRef) m_macControl, GetwxMacWindowEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this, 
         (EventHandlerRef *)&m_macControlEventHandler);
@@ -610,7 +611,6 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 {
     wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
 
-    wxAssociateControlWithMacControl( (ControlRef) m_macControl , this ) ;
     ::SetControlReference( (ControlRef) m_macControl , (long) this ) ;
 
     MacInstallEventHandler();
@@ -1068,7 +1068,8 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
     if ( x ) pt.x = *x ;
     if ( y ) pt.y = *y ;
 
-    HIViewConvertPoint( &pt , (ControlRef) m_macControl , (ControlRef) MacGetTopLevelWindow()->GetHandle()  ) ;
+    if ( !IsTopLevel() )
+        HIViewConvertPoint( &pt , (ControlRef) m_macControl , (ControlRef) MacGetTopLevelWindow()->GetHandle()  ) ;
     
     if ( x ) *x = (int) pt.x ;
     if ( y ) *y = (int) pt.y ;
@@ -1100,7 +1101,8 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
     if ( x ) pt.x = *x ;
     if ( y ) pt.y = *y ;
 
-    HIViewConvertPoint( &pt , (ControlRef) MacGetTopLevelWindow()->GetHandle()  , (ControlRef) m_macControl ) ;
+    if ( !IsTopLevel() )
+        HIViewConvertPoint( &pt , (ControlRef) MacGetTopLevelWindow()->GetHandle()  , (ControlRef) m_macControl ) ;
     
     if ( x ) *x = (int) pt.x ;
     if ( y ) *y = (int) pt.y ;
@@ -2390,10 +2392,6 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
  */
 bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time ) 
 {
-    // we let the OS handle root control redraws
-    if ( m_macControl == MacGetTopLevelWindow()->GetHandle() )
-        return false ;
-        
     RgnHandle updatergn = (RgnHandle) updatergnr ;
     bool handled = false ;
     
