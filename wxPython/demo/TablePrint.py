@@ -40,7 +40,7 @@ class TablePanel(wxPanel):
         eval(code)
 
     def ReadData(self):
-        test_file = "TestTable.txt"
+        test_file = "./data/TestTable.txt"
         file = open(test_file,'r',1)
         i = 0
 

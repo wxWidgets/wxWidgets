@@ -6,6 +6,8 @@ import GridSimple
 import wxListCtrl
 import wxScrolledWindow
 
+import sys
+
 #----------------------------------------------------------------------------
 
 class TestNB(wxNotebook):
@@ -85,3 +87,14 @@ This class represents a notebook control, which manages multiple windows with as
 To use the class, create a wxNotebook object and call AddPage or InsertPage, passing a window to be used as the page. Do not explicitly delete the window for a page that is currently managed by wxNotebook.
 
 """
+
+
+if __name__ == "__main__":
+    app = wxPySimpleApp()
+    frame = wxFrame(None, -1, "Test Notebook", size=(600, 400))
+    win = TestNB(frame, -1, sys.stdout)
+    frame.Show(true)
+    app.MainLoop()
+
+
+

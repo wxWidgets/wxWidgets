@@ -17,6 +17,7 @@ class TestPanel(wxPanel):
         sc = wxSpinCtrl(self, -1, "", wxPoint(30, 50), wxSize(80, -1))
         sc.SetRange(1,100)
         sc.SetValue(5)
+        #sc.Enable(false)
 
 
 #----------------------------------------------------------------------
