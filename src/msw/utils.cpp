@@ -94,11 +94,6 @@
     #endif
 #endif
 
-// 260 was taken from windef.h
-#ifndef MAX_PATH
-    #define MAX_PATH  260
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -434,12 +429,8 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     }
     else // fall back to the program directory
     {
-        wxString strPath;
-        ::GetModuleFileName(::GetModuleHandle(NULL),
-                            wxStringBuffer(strPath, MAX_PATH), MAX_PATH);
-
-        // extract the dir name
-        wxSplitPath(strPath, &strDir, NULL, NULL);
+        // extract the directory component of the program file name
+        wxSplitPath(wxGetFullModuleName(), &strDir, NULL, NULL);
     }
 #endif  // UNIX/Win
 

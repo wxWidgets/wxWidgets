@@ -46,6 +46,11 @@ static const double twips2mm = (1/(METRIC_CONVERSION_CONSTANT*1440));
 static const double mm2pt = (METRIC_CONVERSION_CONSTANT*72);
 static const double pt2mm = (1/(METRIC_CONVERSION_CONSTANT*72));
 
+// 260 was taken from windef.h
+#ifndef MAX_PATH
+    #define MAX_PATH  260
+#endif
+
 // ---------------------------------------------------------------------------
 // standard icons from the resources
 // ---------------------------------------------------------------------------
@@ -502,6 +507,23 @@ extern "C"
 }
 
 WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
+
+// return the full name of the program file
+inline wxString wxGetFullModuleName()
+{
+    wxString fullname;
+    if ( !::GetModuleFileName
+            (
+                (HMODULE)wxGetInstance(),
+                wxStringBuffer(fullname, MAX_PATH),
+                MAX_PATH
+            ) )
+    {
+        wxLogLastError(_T("GetModuleFileName"));
+    }
+
+    return fullname;
+}
 
 #if wxUSE_GUI
 

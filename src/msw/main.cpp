@@ -77,15 +77,8 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     }
 
 #ifdef __WXWINCE__
-    // WinCE doesn't insert the program itself, so let's
-    // do it here.
-    wxString programName;
-
-    if ( ::GetModuleFileName( (HMODULE) wxGetInstance(), wxStringBuffer(programName, MAX_PATH), MAX_PATH ) == 0)
-    {
-        wxLogLastError(_T("GetModuleFileName"));
-    }
-    args.Insert(programName, 0);
+    // WinCE doesn't insert the program itself, so do it ourselves.
+    args.Insert(wxGetFullModuleName(), 0);
 #endif
 
     int argc = args.GetCount();
