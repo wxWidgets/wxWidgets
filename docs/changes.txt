@@ -192,7 +192,7 @@ All (GUI):
 
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
 - bug in wxColourDatabase::FindColour() which could led to crashes fixed
-- Added ..._CMD_... variants for wxGrid event table entry macros
+- added ..._CMD_... variants for wxGrid event table entry macros
   taking window identifiers
 
 Generic:
@@ -200,7 +200,7 @@ Generic:
 - file dialog and directory dialog now support drive letters on OS/2
 - fixed scrollbar problem in wxGrid (not showing scrollbars
   when sizing smaller) (Shane Harper)
-- Added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
+- added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
 
 Unix:
 
@@ -215,8 +215,9 @@ wxMSW:
 - fixed hang (sometimes) in wxThread::Delete() (Carl-Friedrich Braun)
 - wxLongLong formatting with MinGW corrected
 - wxFileDialog now returns correct filter index for multiple-file dialogs
-- Fixed a bug in wxSpinCtrl::DoGetBestSize that would make wxSpinCtrl too tall
-- Fixed wxTextCtrl::SetMaxLength for rich edit controls
+- fixed a bug in wxSpinCtrl::DoGetBestSize that would make wxSpinCtrl too tall
+- fixed wxTextCtrl::SetMaxLength for rich edit controls
+- fixed flat style for toolbars under XP, Windows Classic style
 
 wxGTK:
 
@@ -230,12 +231,12 @@ wxOS2:
   CTRL and SHIFT keys. ALT still doesn't work as expected by wxWidgets, though)
 
 wxODBC:
-- Identifying DB VENDOR signatures updated in wxDb::Dbms()
+- identifying DB VENDOR signatures updated in wxDb::Dbms()
 - wxDb::getDbInfo() will no longer return failure if the return code was 
   SQL_SUCCESS_WITH_INFO
-- Attempted to port everything for BLOB support back to 2.4.x.  I think it is
+- attempted to port everything for BLOB support back to 2.4.x.  I think it is
   complete.
-- Table names now prepended to column names when joining tables.  This is only 
+- table names now prepended to column names when joining tables.  This is only 
   if there is not a '.' in the column name already.
 - Null column support fixes (SF #766404)
 
