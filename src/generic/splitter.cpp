@@ -134,10 +134,12 @@ void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     DrawSash(dc);
 }
 
-void wxSplitterWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
+void wxSplitterWindow::OnIdle(wxIdleEvent& event)
 {
     if (m_needUpdating)
         SizeWindows();
+        
+    event.Skip( TRUE );
 }
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
