@@ -895,6 +895,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
     
+	mkdir $(DISTDIR)/samples/plot
+	cp $(SAMPDIR)/plot/Makefile.in $(DISTDIR)/samples/plot
+	cp $(SAMPDIR)/plot/makefile.unx $(DISTDIR)/samples/plot
+	cp $(SAMPDIR)/plot/*.cpp $(DISTDIR)/samples/plot
+    
 	mkdir $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist

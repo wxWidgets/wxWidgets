@@ -16,6 +16,7 @@ AC_OUTPUT([
             console/Makefile
             db/Makefile
             dialogs/Makefile
+            dialup/Makefile
             docview/Makefile
             docvwmdi/Makefile
             dnd/Makefile
@@ -32,9 +33,9 @@ AC_OUTPUT([
             mdi/Makefile
             minifram/Makefile
             minimal/Makefile
-            dialup/Makefile
             newgrid/Makefile
             notebook/Makefile
+            plot/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile

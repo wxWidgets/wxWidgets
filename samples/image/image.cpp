@@ -142,8 +142,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     wxImage image( bitmap );
 
 #if wxUSE_LIBPNG
+    image.LoadFile( dir + wxString("test.png") );
+    my_square = new wxBitmap( image.ConvertToBitmap() );
+    
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
         wxLogError("Can't save file");
+        
+    image = wxImage( 100, 100 );
 
     if ( !image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG ) )
         wxLogError("Can't load PNG image");
@@ -152,6 +157,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #endif // wxUSE_LIBPNG
 
 #if wxUSE_LIBJPEG
+    image = wxImage( 100, 100 );
+
     if ( !image.LoadFile( dir + wxString("horse.jpg") ) )
         wxLogError("Can't load JPG image");
     else
@@ -159,6 +166,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
+    image = wxImage( 100, 100 );
+
     if ( !image.LoadFile( dir + wxString("horse.gif") ) )
         wxLogError("Can't load GIF image");
     else
@@ -166,14 +175,15 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #endif
 
 #if wxUSE_PCX
+    image = wxImage( 100, 100 );
+
     if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
         wxLogError("Can't load PCX image");
     else
         my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
-
-    image.LoadFile( dir + wxString("test.pcx") );
-    my_square = new wxBitmap( image.ConvertToBitmap() );
 #endif
+
+    image = wxImage( 100, 100 );
 
     if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
         wxLogError("Can't load BMP image");
@@ -181,6 +191,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
 
 #if wxUSE_PNM
+    image = wxImage( 100, 100 );
+
     if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
         wxLogError("Can't load PNM image");
     else
@@ -188,6 +200,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #endif
 
 #if wxUSE_LIBTIFF
+    image = wxImage( 100, 100 );
+
     if ( !image.LoadFile( dir + wxString("horse.tif"), wxBITMAP_TYPE_TIF ) )
         wxLogError("Can't load TIFF image");
     else
@@ -199,10 +213,12 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
                                  smile_height, 1 );
 
+#ifndef __WXGTK__
 #if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     // demonstrates XPM automatically using the mask when saving
     if ( m_bmpSmileXpm.Ok() )
         m_bmpSmileXpm.SaveFile("saved.xpm", wxBITMAP_TYPE_XPM);
+#endif
 #endif
 }
 

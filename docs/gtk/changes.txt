@@ -1,6 +1,14 @@
 
 12th January '2000: wxWindows 2.1.14 released
 
+Minor changes to socket code.
+
+Added code for rotating images.
+
+Much work on the new grid class has been done.
+
+wxPlotWindow is now useful and works.
+
 Corrected one more bug in the TIFF handler.
 
 It is now possible to run wxGTK apps in the best visual
@@ -10,6 +18,9 @@ instead of only the default on system that support this
 Added default keyboard handling to wxScrolledWindow.
 
 Fixed slightly overoptimized window colour and style handling.
+This will expose a bug in the GtkPixmap theme, or more exactly
+in ImLib's image cashing so that wxGTK currently doesn't work
+well with pixamp themes.
 
 Fixed bug in drawing code that made GTK pick the wrong pen
 style when using the default.

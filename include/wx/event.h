@@ -253,6 +253,28 @@ extern const wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
 extern const wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
 extern const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 
+/* Plot events */
+extern const wxEventType wxEVT_PLOT_SEL_CHANGING;
+extern const wxEventType wxEVT_PLOT_SEL_CHANGED;
+extern const wxEventType wxEVT_PLOT_CLICKED;
+extern const wxEventType wxEVT_PLOT_DOUBLECLICKED;
+extern const wxEventType wxEVT_PLOT_ZOOM_IN;
+extern const wxEventType wxEVT_PLOT_ZOOM_OUT;
+extern const wxEventType wxEVT_PLOT_VALUE_SEL_CREATING;
+extern const wxEventType wxEVT_PLOT_VALUE_SEL_CREATED;
+extern const wxEventType wxEVT_PLOT_VALUE_SEL_CHANGING;
+extern const wxEventType wxEVT_PLOT_VALUE_SEL_CHANGED;
+extern const wxEventType wxEVT_PLOT_AREA_SEL_CREATING;
+extern const wxEventType wxEVT_PLOT_AREA_SEL_CREATED;
+extern const wxEventType wxEVT_PLOT_AREA_SEL_CHANGING;
+extern const wxEventType wxEVT_PLOT_AREA_SEL_CHANGED;
+extern const wxEventType wxEVT_PLOT_BEGIN_X_LABEL_EDIT;
+extern const wxEventType wxEVT_PLOT_END_X_LABEL_EDIT;
+extern const wxEventType wxEVT_PLOT_BEGIN_Y_LABEL_EDIT;
+extern const wxEventType wxEVT_PLOT_END_Y_LABEL_EDIT;
+extern const wxEventType wxEVT_PLOT_BEGIN_TITLE_EDIT;
+extern const wxEventType wxEVT_PLOT_END_TITLE_EDIT;
+
 extern const wxEventType wxEVT_USER_FIRST;
 
 #else // everybody else
@@ -473,6 +495,28 @@ const wxEventType wxEVT_CALENDAR_MONTH_CHANGED = wxEVT_FIRST + 952;
 const wxEventType wxEVT_CALENDAR_YEAR_CHANGED = wxEVT_FIRST + 953;
 const wxEventType wxEVT_CALENDAR_DOUBLECLICKED = wxEVT_FIRST + 954;
 const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED = wxEVT_FIRST + 955;
+
+/* Plot events */
+const wxEventType wxEVT_PLOT_SEL_CHANGING = wxEVT_FIRST + 1000;
+const wxEventType wxEVT_PLOT_SEL_CHANGED = wxEVT_FIRST + 1001;
+const wxEventType wxEVT_PLOT_CLICKED = wxEVT_FIRST + 1002;
+const wxEventType wxEVT_PLOT_DOUBLECLICKED = wxEVT_FIRST + 1003;
+const wxEventType wxEVT_PLOT_ZOOM_IN = wxEVT_FIRST + 1004;
+const wxEventType wxEVT_PLOT_ZOOM_OUT = wxEVT_FIRST + 1005;
+const wxEventType wxEVT_PLOT_VALUE_SEL_CREATING = wxEVT_FIRST + 1010;
+const wxEventType wxEVT_PLOT_VALUE_SEL_CREATED = wxEVT_FIRST + 1011;
+const wxEventType wxEVT_PLOT_VALUE_SEL_CHANGING = wxEVT_FIRST + 1012;
+const wxEventType wxEVT_PLOT_VALUE_SEL_CHANGED = wxEVT_FIRST + 1013;
+const wxEventType wxEVT_PLOT_AREA_SEL_CREATING = wxEVT_FIRST + 1014;
+const wxEventType wxEVT_PLOT_AREA_SEL_CREATED = wxEVT_FIRST + 1015;
+const wxEventType wxEVT_PLOT_AREA_SEL_CHANGING = wxEVT_FIRST + 1016;
+const wxEventType wxEVT_PLOT_AREA_SEL_CHANGED = wxEVT_FIRST + 1017;
+const wxEventType wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxEVT_FIRST + 1020;
+const wxEventType wxEVT_PLOT_END_X_LABEL_EDIT = wxEVT_FIRST + 1021;
+const wxEventType wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxEVT_FIRST + 1022;
+const wxEventType wxEVT_PLOT_END_Y_LABEL_EDIT = wxEVT_FIRST + 1023;
+const wxEventType wxEVT_PLOT_BEGIN_TITLE_EDIT = wxEVT_FIRST + 1024;
+const wxEventType wxEVT_PLOT_END_TITLE_EDIT = wxEVT_FIRST + 1025;
 
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
