@@ -76,6 +76,7 @@
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1
+#define wxUSE_TIPWINDOW    1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CALENDARCTRL 0
@@ -229,6 +230,7 @@
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1
+#define wxUSE_TIPWINDOW    1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CALENDARCTRL 0

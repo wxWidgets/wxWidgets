@@ -78,6 +78,7 @@
 
 #define wxUSE_CONTROLS     1    // Do not change
 #define wxUSE_POPUPWIN     0    // OS/2 does not use this
+#define wxUSE_TIPWINDOW    0    // hence this is unavailable
 
 // Recommended setting: 1
 #define wxUSE_BUTTON       1    // wxButton

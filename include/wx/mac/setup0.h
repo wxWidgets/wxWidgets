@@ -396,12 +396,21 @@
 // Recommended setting: 1 (don't change except for very special programs)
 #define wxUSE_CONTROLS     1
 
-// wxPopupWindow class is not used currently by wxMSW
+// wxPopupWindow class is a top level transient window. It is currently used
+// to implement wxTipWindow but doesn't work yet under Mac.
+//
+// Default is  0
+//
+// Recommended setting: 0
+#define wxUSE_POPUPWIN     0
+
+// wxTipWindow allows to implement the custom tooltips, it is used by the
+// context help classes. Requires wxUSE_POPUPWIN.
 //
 // Default is 0
 //
 // Recommended setting: 0
-#define wxUSE_POPUPWIN     0
+#define wxUSE_TIPWINDOW    0
 
 // Each of the settings below corresponds to one wxWindows control. They are
 // all switched on by default but may be disabled if you are sure that your
