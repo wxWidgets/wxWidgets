@@ -57,6 +57,12 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase)
 void wxDialogBase::Init()
 {
     m_returnCode = 0;
+
+    // the dialogs have this flag on by default to prevent the events from the
+    // dialog controls from reaching the parent frame which is usually
+    // undesirable and can lead to unexpected and hard to find bugs
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
 #ifdef wxTopLevelWindowNative // FIXME - temporary hack, should be always used!
     m_container.SetContainerWindow(this);
 #endif

@@ -1001,12 +1001,14 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     {
         wxWindow *win = (wxWindow *)this;
 
-        // also, don't propagate events beyond the first top level window: it
-        // doesn't make sense to process dialogs events in the parent frame
-        if ( !win->IsTopLevel() )
+        // honour the requests to stop propagation at this window: this is
+        // used by the dialogs, for example, to prevent processing the events
+        // from the dialog controls in the parent frame which rarely, if ever,
+        // makes sense
+        if ( !(win->GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
         {
             wxWindow *parent = win->GetParent();
-            if (parent && !parent->IsBeingDeleted())
+            if ( parent && !parent->IsBeingDeleted() )
                 return parent->GetEventHandler()->ProcessEvent(event);
         }
     }

@@ -2062,6 +2062,12 @@ bits are:
 \twocolitem{\windowstyle{wxWS\_EX\_VALIDATE\_RECURSIVELY}}{TransferDataTo/FromWindow()
 and Validate() methods will recursively descend into all children of the
 window if it has this style flag set.}
+\twocolitem{\windowstyle{wxWS\_EX\_BLOCK\_EVENTS}}{Normally, the command
+events are propagared upwards to the window parent recursively until a handler
+for them is found. Using this style allows to prevent them from being
+propagated beyond this window. Notice that wxDialog has this style on by
+default for the reasons explained in the 
+\helpref{event processing overview}{eventprocessing}.}
 \end{twocollist}
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}

@@ -970,6 +970,13 @@ enum wxBorder
 // descend into all subwindows
 #define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
 
+// wxCommandEvents and the objects of the derived classes are forwarded to the
+// parent window and so on recursively by default. Using this flag for the
+// given window allows to block this propagation at this window, i.e. prevent
+// the events from being propagated further upwards. The dialogs have this
+// flag on by default.
+#define wxWS_EX_BLOCK_EVENTS            0x00000002
+
 /*
  * wxFrame/wxDialog style flags
  */
