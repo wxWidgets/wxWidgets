@@ -107,12 +107,10 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-  return;
-
   wxPaintDC dc( this );
   PrepareDC( dc );
 
-  dc.DrawText( "Some text", 10, 10 );
+  dc.DrawText( "Some text", 110, 10 );
   
   dc.DrawRectangle( 50, 30, 200, 200 );
 }
