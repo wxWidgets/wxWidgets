@@ -51,23 +51,23 @@ place, then do the same for wxPython.
    rerun the script without having to remember the options I used
    before::
 
-	 mkdir bld
-	 cd bld
-	 ../configure --prefix=/opt/wx/2.5 \
-		      --with-gtk \
-		      --with-opengl \
-		      --disable-monolithic \
-		      --enable-debug \
-		      --enable-geometry \
-		      --enable-sound \
-		      --enable-display \
-		      
+         mkdir bld
+         cd bld
+         ../configure --prefix=/opt/wx/2.5 \
+                      --with-gtk \
+                      --with-opengl \
+                      --disable-monolithic \
+                      --enable-debug \
+                      --enable-geometry \
+                      --enable-sound --with-sdl \
+                      --enable-display \
+                      
 
    On OS X of course you'll want to use --with-mac instead of
    --with-gtk.  For GTK2 and unicode add::
-		    	 
-		      --enable-gtk2 \
-		      --enable-unicode \
+                         
+                      --enable-gtk2 \
+                      --enable-unicode \
 
    Notice that I used a prefix of /opt/wx/2.5.  You can use whatever
    path you want, such as a path in your HOME dir or even one of the
@@ -107,7 +107,7 @@ place, then do the same for wxPython.
    the execute bit on .make first!::
 
          .make
-	 .make install
+         .make install
 
    When it's done you should have an installed set of files under
    /opt/wx/2.5 containing just wxWidgets.  Now to use this version of
@@ -138,24 +138,24 @@ place, then do the same for wxPython.
    run the this command::
 
          cd wxPython
-	 python2.3 setup.py build_ext --inplace --debug
+         python2.3 setup.py build_ext --inplace --debug
 
    If your new wx-config script is not on the PATH, or there is some
    other version of it found first, then you can add this to the
    command line to ensure your new one is used instead::
 
-	 WX_CONFIG=/opt/wx/2.5/bin/wx-config
+         WX_CONFIG=/opt/wx/2.5/bin/wx-config
 
    If you are building with GTK2 then add the following flags to the
    command line::
 
-	 WXPORT=gtk2 UNICODE=1
+         WXPORT=gtk2 UNICODE=1
 
    If you are wanting to have the source files regenerated with swig,
    then you need to turn on the USE_SWIG flag and optionally tell it
    where to find the new swig executable, so add these flags::
 
-	 USE_SWIG=1 SWIG=/opt/swig/bin/swig
+         USE_SWIG=1 SWIG=/opt/swig/bin/swig
 
    If you get errors about wxGLCanvas or being unable to find libGLU
    or something like that then you can add BUILD_GLCANVAS=0 to the
@@ -172,9 +172,9 @@ place, then do the same for wxPython.
    PYTHONPATH to the wxPython dir in the CVS tree.  For example::
 
         export LD_LIBRARY=/opt/wx/2.5/lib
-	export PYTHONPATH=/myprojects/wxWidgets/wxPython
-	cd /myprojects/wxWidgets/wxPython/demo
-	python2.3 demo.py
+        export PYTHONPATH=/myprojects/wxWidgets/wxPython
+        cd /myprojects/wxWidgets/wxPython/demo
+        python2.3 demo.py
 
    OS X NOTE: You need to use "pythonw" on the command line to run
    wxPython applications.  This version of the Python executable is
@@ -233,12 +233,12 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
 1. Set an environment variable to the root of the wxWidgets source
    tree::
 
-	 set WXWIN=e:\projects\wxWidgets
+         set WXWIN=e:\projects\wxWidgets
 
 2. Copy setup0.h to setup.h
 
-	 cd %WXWIN%\include\wx\msw
-	 copy setup0.h setup.h
+         cd %WXWIN%\include\wx\msw
+         copy setup0.h setup.h
 
 
 3. Edit %WXWIN%\include\wx\msw\setup.h and change a few settings.
@@ -246,15 +246,15 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
    of build (debug/hybrid, unicode/ansi). I change a few of the other
    defaults to have these values::
 
-	 wxDIALOG_UNIT_COMPATIBILITY	0
-	 wxUSE_DEBUG_CONTEXT		1
-	 wxUSE_MEMORY_TRACING		1
-	 wxUSE_DIALUP_MANAGER		0
-	 wxUSE_GLCANVAS			1
-	 wxUSE_POSTSCRIPT		1
-	 wxUSE_AFM_FOR_POSTSCRIPT	0
-	 wxUSE_DISPLAY			1
-	 
+         wxDIALOG_UNIT_COMPATIBILITY    0
+         wxUSE_DEBUG_CONTEXT            1
+         wxUSE_MEMORY_TRACING           1
+         wxUSE_DIALUP_MANAGER           0
+         wxUSE_GLCANVAS                 1
+         wxUSE_POSTSCRIPT               1
+         wxUSE_AFM_FOR_POSTSCRIPT       0
+         wxUSE_DISPLAY                  1
+         
 
 4. Make a %WXWIN%\BIN directory and add it to the PATH.  My build
    scripts will copy the wxWidgets DLLs there.
@@ -268,12 +268,12 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
    command-line parameter which controls what kind of build(s) to do.
    Use one of the following::
 
-	 debug		Build debug version
-	 hybrid		Build hybrid version
-	 both		Both debug and hybrid
-	 debug-uni	Build a debug unicode library
-	 hybrid-uni	Hybrid unicode (see the pattern yet? ;-)
-	 both-uni	and finally both unicode libraries
+         debug          Build debug version
+         hybrid         Build hybrid version
+         both           Both debug and hybrid
+         debug-uni      Build a debug unicode library
+         hybrid-uni     Hybrid unicode (see the pattern yet? ;-)
+         both-uni       and finally both unicode libraries
 
    For example::
 
@@ -305,13 +305,13 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
    build for (if you have more than one on your system)::
 
          cd %WXWIN%\wxPython
-	 python setup.py build_ext --inplace 
+         python setup.py build_ext --inplace 
 
    If you are wanting to have the source files regenerated with swig,
    then you need to turn on the USE_SWIG flag and optionally tell it
    where to find the new swig executable, so add these flags::
 
-	 USE_SWIG=1 SWIG=e:\projects\SWIG-cvs\swig.exe
+         USE_SWIG=1 SWIG=e:\projects\SWIG-cvs\swig.exe
 
    If you built a Unicode version of wxWidgets and want to also build
    the Unicode version of wxPython then add this flag::
@@ -333,8 +333,8 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
 9. To run code with the development verison of wxPython, just set the
    PYTHONPATH to the wxPython dir in the CVS tree.  For example::
 
-	set PYTHONPATH=e:\projects\wxWidgets\wxPython
-	cd e:\projects\wxWidgets\wxPython
-	python demo.py
+        set PYTHONPATH=e:\projects\wxWidgets\wxPython
+        cd e:\projects\wxWidgets\wxPython
+        python demo.py
 
 

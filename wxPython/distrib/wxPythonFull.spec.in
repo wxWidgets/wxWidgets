@@ -108,7 +108,7 @@ cd bld
 %endif
 	--enable-geometry \
 	--enable-optimise \
-	--enable-sound \
+	--enable-sound 	--with-sdl \
 	--enable-display \
 %if %{debug_flag}
 	--enable-debug_flag \
@@ -129,12 +129,12 @@ make -C contrib/src/stc
 make -C contrib/src/xrc
 
 
-# Link the contrib header directories in place so we can build all of
-# wxPython without installing wxWindows
-if [ ! -e $WXDIR/include/wx/gizmos ]; then
-	cd $WXDIR/include/wx
-	ln -s ../../contrib/include/wx/* .
-fi
+# # Link the contrib header directories in place so we can build all of
+# # wxPython without installing wxWindows
+# if [ ! -e $WXDIR/include/wx/gizmos ]; then
+# 	cd $WXDIR/include/wx
+# 	ln -s ../../contrib/include/wx/* .
+# fi
 
 
 # Now build wxPython
@@ -144,6 +144,7 @@ cd $WXDIR/wxPython
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
 	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
+	CONTRIBS_INC="$WXDIR/include" \
 	build
 
 
