@@ -5,7 +5,8 @@
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik
+// Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
+//              (c) 2000-2003 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -48,6 +49,10 @@
 #include "wx/module.h"
 #include "wx/strconv.h"
 
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+    #define wxHAVE_WIN32_MB2WC
+#endif // __WIN32__ but !__WXMICROWIN__
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -71,7 +76,7 @@ class wxStrConvModule: public wxModule
 {
 public:
     wxStrConvModule() : wxModule() { }
-    virtual bool OnInit() { return TRUE; }
+    virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
 #if wxUSE_WCHAR_T
@@ -882,47 +887,6 @@ size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 
 // ============================================================================
-// wxCharacterSet and derived classes
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxCharacterSet is the ABC for the classes below
-// ----------------------------------------------------------------------------
-
-class wxCharacterSet
-{
-public:
-    wxCharacterSet() { }
-    virtual ~wxCharacterSet() {}
-
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) = 0;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) = 0;
-    virtual bool usable() const = 0;
-};
-
-// ----------------------------------------------------------------------------
-// ID_CharSet: implementation of wxCharacterSet using an existing wxMBConv
-// ----------------------------------------------------------------------------
-
-class ID_CharSet : public wxCharacterSet
-{
-public:
-    ID_CharSet(wxMBConv *cnv) : work(cnv) {}
-
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
-        { return work ? work->MB2WC(buf,psz,n) : (size_t)-1; }
-
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
-        { return work ? work->WC2MB(buf,psz,n) : (size_t)-1; }
-
-    bool usable() const
-        { return work!=NULL; }
-public:
-    wxMBConv*work;
-};
-
-
-// ============================================================================
 // The classes doing conversion using the iconv_xxx() functions
 // ============================================================================
 
@@ -945,19 +909,19 @@ public:
 #define ICONV_CHAR_CAST(x)  ((ICONV_CONST char **)(x))
 
 // ----------------------------------------------------------------------------
-// IC_CharSet: encapsulates an iconv character set
+// wxMBConv_iconv: encapsulates an iconv character set
 // ----------------------------------------------------------------------------
 
-class IC_CharSet : public wxCharacterSet
+class wxMBConv_iconv : public wxMBConv
 {
 public:
-    IC_CharSet(const wxChar *name);
-    virtual ~IC_CharSet();
+    wxMBConv_iconv(const wxChar *name);
+    virtual ~wxMBConv_iconv();
 
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
 
-    bool usable() const
+    bool IsOk() const
         { return (m2w != (iconv_t)-1) && (w2m != (iconv_t)-1); }
 
 protected:
@@ -967,7 +931,7 @@ protected:
             w2m;
 
 private:
-    // the name (for iconv_open()) of a wide char charset - if none is
+    // the name (for iconv_open()) of a wide char charset -- if none is
     // available on this machine, it will remain NULL
     static const char *ms_wcCharsetName;
 
@@ -976,10 +940,10 @@ private:
     static bool ms_wcNeedsSwap;
 };
 
-const char *IC_CharSet::ms_wcCharsetName = NULL;
-bool IC_CharSet::ms_wcNeedsSwap = FALSE;
+const char *wxMBConv_iconv::ms_wcCharsetName = NULL;
+bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
-IC_CharSet::IC_CharSet(const wxChar *name)
+wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 {
     // Do it the hard way
     char cname[100];
@@ -989,7 +953,7 @@ IC_CharSet::IC_CharSet(const wxChar *name)
     // check for charset that represents wchar_t:
     if (ms_wcCharsetName == NULL)
     {
-        ms_wcNeedsSwap = FALSE;
+        ms_wcNeedsSwap = false;
 
         // try charset with explicit bytesex info (e.g. "UCS-4LE"):
         ms_wcCharsetName = WC_NAME_BEST;
@@ -1066,7 +1030,7 @@ IC_CharSet::IC_CharSet(const wxChar *name)
     }
 }
 
-IC_CharSet::~IC_CharSet()
+wxMBConv_iconv::~wxMBConv_iconv()
 {
     if ( m2w != (iconv_t)-1 )
         iconv_close(m2w);
@@ -1074,7 +1038,7 @@ IC_CharSet::~IC_CharSet()
         iconv_close(w2m);
 }
 
-size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
+size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n)
 {
     size_t inbuf = strlen(psz);
     size_t outbuf = n * SIZEOF_WCHAR_T;
@@ -1131,7 +1095,7 @@ size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
     return res;
 }
 
-size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
+size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n)
 {
     size_t inbuf = wxWcslen(psz) * SIZEOF_WCHAR_T;
     size_t outbuf = n;
@@ -1196,25 +1160,26 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
 #endif // HAVE_ICONV
 
+
 // ============================================================================
 // Win32 conversion classes
 // ============================================================================
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
+#ifdef wxHAVE_WIN32_MB2WC
 
 // from utils.cpp
 extern WXDLLIMPEXP_BASE long wxCharsetToCodepage(const wxChar *charset);
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 
-class CP_CharSet : public wxCharacterSet
+class wxMBConv_win32 : public wxMBConv
 {
 public:
-    CP_CharSet(const wxChar* name)
+    wxMBConv_win32(const wxChar* name)
         {
             m_CodePage = wxCharsetToCodepage(name);
         }
 
-    CP_CharSet(wxFontEncoding encoding)
+    wxMBConv_win32(wxFontEncoding encoding)
         {
             m_CodePage = wxEncodingToCodepage(encoding);
         }
@@ -1254,13 +1219,15 @@ public:
         return len ? (buf ? len : len - 1) : (size_t)-1;
     }
 
-    bool usable() const
+    bool IsOk() const
         { return m_CodePage != -1; }
 
 public:
     long m_CodePage;
 };
-#endif // defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
+
+#endif // wxHAVE_WIN32_MB2WC
+
 
 // ============================================================================
 // wxEncodingConverter based conversion classes
@@ -1268,7 +1235,7 @@ public:
 
 #if wxUSE_FONTMAP
 
-class EC_CharSet : public wxCharacterSet
+class wxMBConv_wxwin : public wxMBConv
 {
 private:
     void Init()
@@ -1280,17 +1247,17 @@ private:
 public:
     // temporarily just use wxEncodingConverter stuff,
     // so that it works while a better implementation is built
-    EC_CharSet(const wxChar* name)
+    wxMBConv_wxwin(const wxChar* name)
     {
         if (name)
-            m_enc = wxFontMapper::Get()->CharsetToEncoding(name, FALSE);
+            m_enc = wxFontMapper::Get()->CharsetToEncoding(name, false);
         else
             m_enc = wxFONTENCODING_SYSTEM;
 
         Init();
     }
 
-    EC_CharSet(wxFontEncoding enc)
+    wxMBConv_wxwin(wxFontEncoding enc)
     {
         m_enc = enc;
 
@@ -1314,7 +1281,7 @@ public:
         return inbuf;
     }
 
-    bool usable() const { return m_ok; }
+    bool IsOk() const { return m_ok; }
 
 public:
     wxFontEncoding m_enc;
@@ -1323,143 +1290,10 @@ public:
     // were we initialized successfully?
     bool m_ok;
 
-    DECLARE_NO_COPY_CLASS(EC_CharSet)
+    DECLARE_NO_COPY_CLASS(wxMBConv_wxwin)
 };
 
 #endif // wxUSE_FONTMAP
-
-// ----------------------------------------------------------------------------
-// the function creating the wxCharacterSet for the specified charset on the
-// current system, trying all possibilities
-//
-// it uses the name if it is given or encoding if name == NULL
-// ----------------------------------------------------------------------------
-
-static wxCharacterSet *
-wxGetCharacterSet(const wxChar *name, wxFontEncoding encoding)
-{
-    // check for the special case of ASCII charset
-    if ( (!name && encoding == wxFONTENCODING_DEFAULT)
-#if wxUSE_FONTMAP
-            || (name && wxFontMapper::Get()->
-                    CharsetToEncoding(name) == wxFONTENCODING_DEFAULT)
-#endif // wxUSE_FONTMAP
-       )
-    {
-        // don't convert at all
-        return NULL;
-    }
-
-    wxCharacterSet *cset = NULL;
-
-    if (name)
-    {
-        if((wxStricmp(name, wxT("UTF8")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-8")) == 0) ||
-            encoding == wxFONTENCODING_UTF8 )
-        {
-            cset = new ID_CharSet(&wxConvUTF8);
-        }
-        else if((wxStricmp(name, wxT("UTF16")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-16")) == 0) ||
-            encoding == wxFONTENCODING_UTF16 )
-        {
-#ifdef WORDS_BIGENDIAN
-            cset = new ID_CharSet(&wxConvUTF16BE);
-#else
-            cset = new ID_CharSet(&wxConvUTF16LE);
-#endif
-        }
-        else if((wxStricmp(name, wxT("UTF16BE")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-16BE")) == 0) ||
-            encoding == wxFONTENCODING_UTF16BE )
-        {
-            cset = new ID_CharSet(&wxConvUTF16BE);
-        }
-        else if((wxStricmp(name, wxT("UTF16LE")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-16LE")) == 0) ||
-            encoding == wxFONTENCODING_UTF16LE )
-        {
-            cset = new ID_CharSet(&wxConvUTF16LE);
-        }
-        else if((wxStricmp(name, wxT("UTF32")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-32")) == 0) ||
-           (wxStricmp(name, wxT("UCS4")) == 0) ||
-           (wxStricmp(name, wxT("UCS-4")) == 0) ||
-            encoding == wxFONTENCODING_UTF32 )
-        {
-#ifdef WORDS_BIGENDIAN
-            cset = new ID_CharSet(&wxConvUTF32BE);
-#else
-            cset = new ID_CharSet(&wxConvUTF32LE);
-#endif
-        }
-        else if((wxStricmp(name, wxT("UTF32BE")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-32BE")) == 0) ||
-           (wxStricmp(name, wxT("UCS4BE")) == 0) ||
-           (wxStricmp(name, wxT("UCS-4BE")) == 0) ||
-            encoding == wxFONTENCODING_UTF32BE )
-        {
-            cset = new ID_CharSet(&wxConvUTF32BE);
-        }
-        else if((wxStricmp(name, wxT("UTF32LE")) == 0)  ||
-           (wxStricmp(name, wxT("UTF-32LE")) == 0) ||
-           (wxStricmp(name, wxT("UCS4LE")) == 0) ||
-           (wxStricmp(name, wxT("UCS-4LE")) == 0) ||
-            encoding == wxFONTENCODING_UTF32 )
-        {
-            cset = new ID_CharSet(&wxConvUTF32LE);
-        }
-#ifdef HAVE_ICONV
-        else
-        {
-            cset = new IC_CharSet(name);
-        }
-#endif // HAVE_ICONV
-    }
-
-    // it can only be NULL in this case
-#ifndef HAVE_ICONV
-    if ( cset )
-#endif // !HAVE_ICONV
-    {
-        if ( cset->usable() )
-            return cset;
-
-        delete cset;
-        cset = NULL;
-    }
-
-#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
-    cset = name ? new CP_CharSet(name) : new CP_CharSet(encoding);
-    if ( cset->usable() )
-        return cset;
-
-    delete cset;
-    cset = NULL;
-#endif // defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
-
-#if wxUSE_FONTMAP
-    cset = name ? new EC_CharSet(name) : new EC_CharSet(encoding);
-    if ( cset->usable() )
-        return cset;
-
-    delete cset;
-    cset = NULL;
-#endif // wxUSE_FONTMAP
-
-    wxLogError(_("Cannot convert from encoding '%s'!"),
-               name ? name
-                    :
-#if wxUSE_FONTMAP
-                     wxFontMapper::GetEncodingDescription(encoding).c_str()
-#else // !wxUSE_FONTMAP
-                     wxString::Format(_T("%s"), encoding).c_str()
-#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
-              );
-
-    return NULL;
-}
 
 // ============================================================================
 // wxCSConv implementation
@@ -1467,24 +1301,58 @@ wxGetCharacterSet(const wxChar *name, wxFontEncoding encoding)
 
 void wxCSConv::Init()
 {
-    m_name = (wxChar *)NULL;
-    m_cset = (wxCharacterSet *) NULL;
-    m_deferred = TRUE;
+    m_name = NULL;
+    m_convReal =  NULL;
+    m_deferred = true;
+}
+
+// find a valid value for the encoding
+void wxCSConv::SetEncoding()
+{
+#if wxUSE_INTL
+    m_encoding = wxLocale::GetSystemEncoding();
+#else
+    m_encoding = wxFONTENCODING_SYSTEM;
+#endif
 }
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
     Init();
-    m_encoding = wxFONTENCODING_DEFAULT;
 
-    SetName(charset);
+    if ( charset )
+    {
+        // not used
+        m_encoding = wxFONTENCODING_SYSTEM;
+
+        SetName(charset);
+    }
+    else // no charset specified
+    {
+        SetEncoding();
+    }
 }
 
 wxCSConv::wxCSConv(wxFontEncoding encoding)
 {
+    if ( encoding == wxFONTENCODING_MAX ||
+            encoding == wxFONTENCODING_DEFAULT )
+    {
+        wxFAIL_MSG( _T("invalid encoding value in wxCSConv ctor") );
+
+        encoding = wxFONTENCODING_SYSTEM;
+    }
+
     Init();
 
-    m_encoding = encoding;
+    if ( encoding == wxFONTENCODING_SYSTEM )
+    {
+        SetEncoding();
+    }
+    else // have valid encoding, use it
+    {
+        m_encoding = encoding;
+    }
 }
 
 wxCSConv::~wxCSConv()
@@ -1514,10 +1382,10 @@ wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
 void wxCSConv::Clear()
 {
     free(m_name);
-    delete m_cset;
+    delete m_convReal;
 
     m_name = NULL;
-    m_cset = NULL;
+    m_convReal = NULL;
 }
 
 void wxCSConv::SetName(const wxChar *charset)
@@ -1525,39 +1393,147 @@ void wxCSConv::SetName(const wxChar *charset)
     if (charset)
     {
         m_name = wxStrdup(charset);
-        m_deferred = TRUE;
+        m_deferred = true;
     }
 }
 
-void wxCSConv::LoadNow()
+static inline bool DoesntNeedConv(wxFontEncoding enc)
+{
+    return enc == wxFONTENCODING_DEFAULT ||
+            enc == wxFONTENCODING_SYSTEM ||
+             enc == wxFONTENCODING_ISO8859_1;
+}
+
+wxMBConv *wxCSConv::DoCreate() const
+{
+#if wxUSE_FONTMAP
+    wxFontMapper * const fontMapper = wxFontMapper::Get();
+
+    wxFontEncoding encFromName = m_name ? fontMapper->CharsetToEncoding(m_name)
+                                        : wxFONTENCODING_SYSTEM;
+#endif // wxUSE_FONTMAP
+
+    // check for the special case of ASCII charset
+    if ( (!m_name && DoesntNeedConv(m_encoding))
+#if wxUSE_FONTMAP
+            || (m_name && DoesntNeedConv(encFromName))
+#endif // wxUSE_FONTMAP
+       )
+    {
+        // don't convert at all
+        return NULL;
+    }
+
+    // we trust OS to do conversion better than we can so try external
+    // conversion methods first
+    //
+    // the full order is:
+    //      1. OS conversion (iconv() under Unix or Win32 API)
+    //      2. hard coded conversions for UTF
+    //      3. wxEncodingConverter as fall back
+
+    // step (1)
+#ifdef HAVE_ICONV
+    if ( m_name )
+    {
+        wxMBConv_iconv *conv = new wxMBConv_iconv(m_name);
+        if ( conv->IsOk() )
+            return conv;
+
+        delete conv;
+    }
+#endif // HAVE_ICONV
+
+#ifdef wxHAVE_WIN32_MB2WC
+    {
+        wxMBConv_win32 *conv = m_name ? new wxMBConv_win32(m_name)
+                                      : new wxMBConv_win32(m_encoding);
+        if ( conv->IsOk() )
+            return conv;
+
+        delete conv;
+    }
+#endif // wxHAVE_WIN32_MB2WC
+
+    // step (2)
+    wxFontEncoding enc = m_encoding;
+#if wxUSE_FONTMAP
+    if ( enc == wxFONTENCODING_SYSTEM )
+        enc = encFromName;
+#endif // wxUSE_FONTMAP
+
+    switch ( enc )
+    {
+        case wxFONTENCODING_UTF7:
+             return new wxMBConvUTF7;
+
+        case wxFONTENCODING_UTF8:
+             return new wxMBConvUTF8;
+
+        case wxFONTENCODING_UTF16:
+             return new wxMBConvUTF16;
+
+        case wxFONTENCODING_UTF16BE:
+             return new wxMBConvUTF16BE;
+
+        case wxFONTENCODING_UTF16LE:
+             return new wxMBConvUTF16LE;
+
+        case wxFONTENCODING_UTF32:
+             return new wxMBConvUTF32;
+
+        case wxFONTENCODING_UTF32BE:
+             return new wxMBConvUTF32BE;
+
+        case wxFONTENCODING_UTF32LE:
+             return new wxMBConvUTF32LE;
+
+        default:
+             // nothing to do but put here to suppress gcc warnings
+             ;
+    }
+
+    // step (3)
+#if wxUSE_FONTMAP
+    {
+        wxMBConv_wxwin *conv = m_name ? new wxMBConv_wxwin(m_name)
+                                      : new wxMBConv_wxwin(m_encoding);
+        if ( conv->IsOk() )
+            return conv;
+
+        delete conv;
+    }
+#endif // wxUSE_FONTMAP
+
+    wxLogError(_("Cannot convert from the charset '%s'!"),
+               m_name ? m_name
+                      :
+#if wxUSE_FONTMAP
+                         wxFontMapper::GetEncodingDescription(m_encoding).c_str()
+#else // !wxUSE_FONTMAP
+                         wxString::Format(_("encoding %s"), m_encoding).c_str()
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+              );
+
+    return NULL;
+}
+
+void wxCSConv::CreateConvIfNeeded() const
 {
     if ( m_deferred )
     {
-        // it would probably be better to make GetSystemEncodingName() always
-        // available (i.e. even when wxUSE_INTL == 0)?
-#if wxUSE_INTL
-        if ( !m_name && m_encoding == wxFONTENCODING_DEFAULT )
-        {
-            wxString name = wxLocale::GetSystemEncodingName();
-            if ( !name.empty() )
-            {
-                SetName(name);
-            }
-        }
-#endif // wxUSE_INTL
-
-        // wxGetCharacterSet() complains about NULL name
-        m_cset = wxGetCharacterSet(m_name, m_encoding);
-        m_deferred = FALSE;
+        wxCSConv *self = (wxCSConv *)this; // const_cast
+        self->m_convReal = DoCreate();
+        self->m_deferred = false;
     }
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    ((wxCSConv *)this)->LoadNow(); // discard constness
+    CreateConvIfNeeded();
 
-    if (m_cset)
-        return m_cset->MB2WC(buf, psz, n);
+    if (m_convReal)
+        return m_convReal->MB2WC(buf, psz, n);
 
     // latin-1 (direct)
     size_t len = strlen(psz);
@@ -1573,10 +1549,10 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-    ((wxCSConv *)this)->LoadNow(); // discard constness
+    CreateConvIfNeeded();
 
-    if (m_cset)
-        return m_cset->WC2MB(buf, psz, n);
+    if (m_convReal)
+        return m_convReal->WC2MB(buf, psz, n);
 
     // latin-1 (direct)
     const size_t len = wxWcslen(psz);

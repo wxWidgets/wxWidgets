@@ -141,19 +141,18 @@ public:
 
 #include "wx/fontenc.h"
 
-class WXDLLIMPEXP_BASE wxCharacterSet;
-
 class WXDLLIMPEXP_BASE wxCSConv : public wxMBConv
 {
 public:
+    // we can be created either from charset name or from an encoding constant
+    // but we can't have both at once
     wxCSConv(const wxChar *charset);
     wxCSConv(wxFontEncoding encoding);
+
     wxCSConv(const wxCSConv& conv);
     virtual ~wxCSConv();
 
     wxCSConv& operator=(const wxCSConv& conv);
-
-    void LoadNow();
 
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
@@ -164,13 +163,23 @@ private:
     // common part of all ctors
     void Init();
 
+    // creates m_convReal if necessary
+    void CreateConvIfNeeded() const;
+
+    // do create m_convReal (unconditionally)
+    wxMBConv *DoCreate() const;
+
+    void SetEncoding();
     void SetName(const wxChar *charset);
+
 
     // note that we can't use wxString here because of compilation
     // dependencies: we're included from wx/string.h
     wxChar *m_name;
-    wxCharacterSet *m_cset;
     wxFontEncoding m_encoding;
+
+    // use CreateConvIfNeeded() before accessing m_convReal!
+    wxMBConv *m_convReal;
     bool m_deferred;
 };
 
@@ -178,6 +187,18 @@ private:
 WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvLocal;
 WXDLLIMPEXP_DATA_BASE(extern wxCSConv) wxConvISO8859_1;
 WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
+
+// ----------------------------------------------------------------------------
+// endianness-dependent conversions
+// ----------------------------------------------------------------------------
+
+#ifdef WORDS_BIGENDIAN
+    typedef wxMBConvUTF16BE wxMBConvUTF16;
+    typedef wxMBConvUTF32BE wxMBConvUTF32;
+#else
+    typedef wxMBConvUTF16LE wxMBConvUTF16;
+    typedef wxMBConvUTF32LE wxMBConvUTF32;
+#endif
 
 // ----------------------------------------------------------------------------
 // filename conversion macros
