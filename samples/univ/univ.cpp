@@ -52,7 +52,7 @@
 
 #include "wx/univ/theme.h"
 
-//#define DEBUG_SCROLL
+#define DEBUG_SCROLL
 //#define DEBUG_LISTBOX
 
 // ----------------------------------------------------------------------------
