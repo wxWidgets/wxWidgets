@@ -523,7 +523,10 @@ public:
     wxDateTime() { }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
+// VA C++ confuses this with wxDateTime(double jdn) thinking it is a duplicate declaration
     inline wxDateTime(time_t timet);
+#endif
         // from broken down time/date (only for standard Unix range)
     inline wxDateTime(const struct tm& tm);
         // from broken down time/date (any range)
@@ -558,8 +561,11 @@ public:
         // set to the current time
     inline wxDateTime& SetToCurrent();
 
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
+// VA C++ confuses this with wxDateTime(double jdn) thinking it is a duplicate declaration
         // set to given time_t value
     inline wxDateTime& Set(time_t timet);
+#endif
 
         // set to given broken down time/date
     wxDateTime& Set(const struct tm& tm);
@@ -763,28 +769,28 @@ public:
     inline time_t GetTicks() const;
 
         // get the year (returns Inv_Year if date is invalid)
-    int GetYear(const TimeZone& tz = Local) const 
+    int GetYear(const TimeZone& tz = Local) const
             { return GetTm(tz).year; }
         // get the month (Inv_Month if date is invalid)
-    Month GetMonth(const TimeZone& tz = Local) const 
+    Month GetMonth(const TimeZone& tz = Local) const
             { return (Month)GetTm(tz).mon; }
         // get the month day (in 1..31 range, 0 if date is invalid)
-    wxDateTime_t GetDay(const TimeZone& tz = Local) const 
+    wxDateTime_t GetDay(const TimeZone& tz = Local) const
             { return GetTm(tz).mday; }
         // get the day of the week (Inv_WeekDay if date is invalid)
-    WeekDay GetWeekDay(const TimeZone& tz = Local) const 
+    WeekDay GetWeekDay(const TimeZone& tz = Local) const
             { return GetTm(tz).GetWeekDay(); }
         // get the hour of the day
-    wxDateTime_t GetHour(const TimeZone& tz = Local) const 
+    wxDateTime_t GetHour(const TimeZone& tz = Local) const
             { return GetTm(tz).hour; }
         // get the minute
-    wxDateTime_t GetMinute(const TimeZone& tz = Local) const 
+    wxDateTime_t GetMinute(const TimeZone& tz = Local) const
             { return GetTm(tz).min; }
         // get the second
-    wxDateTime_t GetSecond(const TimeZone& tz = Local) const 
+    wxDateTime_t GetSecond(const TimeZone& tz = Local) const
             { return GetTm(tz).sec; }
         // get milliseconds
-    wxDateTime_t GetMillisecond(const TimeZone& tz = Local) const 
+    wxDateTime_t GetMillisecond(const TimeZone& tz = Local) const
             { return GetTm(tz).msec; }
 
         // get the day since the year start (1..366, 0 if date is invalid)

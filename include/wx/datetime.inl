@@ -62,6 +62,7 @@ wxDateTime wxDateTime::Today()
     return wxDateTime(*tm);
 }
 
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
 wxDateTime& wxDateTime::Set(time_t timet)
 {
     // assign first to avoid long multiplication overflow!
@@ -70,16 +71,19 @@ wxDateTime& wxDateTime::Set(time_t timet)
 
     return *this;
 }
+#endif
 
 wxDateTime& wxDateTime::SetToCurrent()
 {
     return *this = Now();
 }
 
+#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
 wxDateTime::wxDateTime(time_t timet)
 {
     Set(timet);
 }
+#endif
 
 wxDateTime::wxDateTime(const struct tm& tm)
 {
