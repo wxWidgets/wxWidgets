@@ -76,6 +76,7 @@ public:
 
 private:
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
+    void* m_menu ; // the appropriate menu , may also be a system menu
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
