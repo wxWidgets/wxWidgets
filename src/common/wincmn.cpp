@@ -2439,7 +2439,12 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
     // can't just move the node around
     wxWindow *self = (wxWindow *)this;
     siblings.DeleteObject(self);
-    if ( move == MoveBefore || ((i = i->GetNext()) != siblings.end()) )
+    if ( move == MoveAfter )
+    {
+        i = i->GetNext();
+    }
+
+    if ( i )
     {
         siblings.Insert(i, self);
     }
