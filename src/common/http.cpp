@@ -219,7 +219,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   case wxHTTP_POST:
     request = wxT("POST");
     if ( GetHeader( wxT("Content-Length") ).IsNull() )
-      SetHeader( wxT("Content-Length"), wxString::Format( wxT("%ld"), m_post_buf.Len() ) );
+      SetHeader( wxT("Content-Length"), wxString::Format( wxT("%lu"), (unsigned long)m_post_buf.Len() ) );
     break;
   default:
     return FALSE;
