@@ -332,14 +332,18 @@ be helpful.
 """
 
 
-if __name__ == '__main__':
-    import sys
-    app = wxPySimpleApp()
-    frame = wxFrame(None, -1, "Tester...", size=(640, 480))
-    win = runTest(frame, frame, sys.stdout)
-    frame.Show(true)
-    app.MainLoop()
+## if __name__ == '__main__':
+##     import sys
+##     app = wxPySimpleApp()
+##     frame = wxFrame(None, -1, "Tester...", size=(640, 480))
+##     win = runTest(frame, frame, sys.stdout)
+##     frame.Show(true)
+##     app.MainLoop()
 
+
+if __name__ == '__main__':
+    import run
+    run.main(['', 'wxStyledTextCtrl_2'])
 
 
 

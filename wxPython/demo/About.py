@@ -29,7 +29,7 @@ sit back and enjoy.  Be sure to take a peek at the source code for each
 demo item so you can learn how to use the classes yourself.</p>
 
 <p><b>wxPython</b> is brought to you by <b>Robin Dunn</b> and<br>
-<b>Total Control Software</b>, Copyright (c) 1997-2002.</p>
+<b>Total Control Software,</b> Copyright (c) 1997-2002.</p>
 
 <p>
 <font size="-1">Please see <i>license.txt</i> for licensing information.</font>
@@ -48,6 +48,8 @@ demo item so you can learn how to use the classes yourself.</p>
         html = wxHtmlWindow(self, -1, size=(420, -1))
         py_version = string.split(sys.version)[0]
         html.SetPage(self.text % (wx.__version__, py_version))
+        btn = html.FindWindowById(wxID_OK)
+        btn.SetDefault()
         ir = html.GetInternalRepresentation()
         html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
         self.SetClientSize(html.GetSize())

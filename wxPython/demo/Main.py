@@ -15,7 +15,7 @@ import sys, os, time, string
 from   wxPython.wx import *
 from   wxPython.html import wxHtmlWindow
 
-from wxPython.stc import *
+##from wxPython.stc import *
 
 import images
 
