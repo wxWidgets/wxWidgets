@@ -40,12 +40,17 @@ extern "C"
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxGL")
 
+
+//---------------------------------------------------------------------------
+// static variables
+//---------------------------------------------------------------------------
+int wxGLCanvas::m_glxVersion = 0;
+
 //---------------------------------------------------------------------------
 // global data
 //---------------------------------------------------------------------------
 
 XVisualInfo *g_vi = (XVisualInfo*) NULL;
-
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -65,11 +70,21 @@ wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, const wxPalette& 
     m_widget = win->m_wxwindow;
 
     wxGLCanvas *gc = (wxGLCanvas*) win;
-    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
 
+    if (wxGLCanvas::GetGLXVersion() >= 13)
+      {
+	// GLX >= 1.3
+	GLXFBConfig *fbc = gc->m_fbc;
+	wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGl") );
+	m_glContext = glXCreateNewContext( GDK_DISPLAY(), fbc[0], GLX_RGBA_TYPE, None, GL_TRUE );
+      }
+    else
+      {
+	// GLX <= 1.2
+	XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
     wxCHECK_RET( vi, _T("invalid visual for OpenGl") );
-
     m_glContext = glXCreateContext( GDK_DISPLAY(), vi, None, GL_TRUE );
+      }
 
     wxCHECK_RET( m_glContext, _T("Couldn't create OpenGl context") );
 }
@@ -84,13 +99,25 @@ wxGLContext::wxGLContext(
     m_widget = win->m_wxwindow;
 
     wxGLCanvas *gc = (wxGLCanvas*) win;
-    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
 
+    if (wxGLCanvas::GetGLXVersion() >= 13)
+      {
+	// GLX >= 1.3
+	GLXFBConfig *fbc = gc->m_fbc;
+	wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGl") );
+	m_glContext = glXCreateNewContext( GDK_DISPLAY(), fbc[0], GLX_RGBA_TYPE,
+					   other ? other->m_glContext : None,
+					   GL_TRUE );
+      }
+    else
+      {
+	// GLX <= 1.2
+	XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
     wxCHECK_RET( vi, _T("invalid visual for OpenGl") );
-
     m_glContext = glXCreateContext( GDK_DISPLAY(), vi,
                                     other ? other->m_glContext : None,
                                     GL_TRUE );
+      }
 
     if ( !m_glContext )
     {
@@ -104,6 +131,11 @@ wxGLContext::~wxGLContext()
 
     if (m_glContext == glXGetCurrentContext())
     {
+      if (wxGLCanvas::GetGLXVersion() >= 13)
+	// GLX >= 1.3
+	glXMakeContextCurrent( GDK_DISPLAY(), None, None, NULL);
+      else
+	// GLX <= 1.2
         glXMakeCurrent( GDK_DISPLAY(), None, NULL);
     }
 
@@ -124,6 +156,12 @@ void wxGLContext::SetCurrent()
     if (m_glContext)
     {
         GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
+      
+      if (wxGLCanvas::GetGLXVersion() >= 13)
+	// GLX >= 1.3
+	glXMakeContextCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), GDK_WINDOW_XWINDOW(window), m_glContext );
+      else
+	// GLX <= 1.2
         glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), m_glContext );
     }
 }
@@ -159,7 +197,7 @@ wxPalette wxGLContext::CreateDefaultPalette()
 
 extern "C" {
 static gint
-gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
+gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 {
     if ( !win->m_glContext )
     {
@@ -313,22 +351,49 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_exposed = FALSE;
     m_noExpose = TRUE;
     m_nativeSizeEvent = TRUE;
+    m_fbc = NULL;
+    m_vi = NULL;
+
+    // to be sure the glx version is known
+    wxGLCanvas::QueryGLXVersion();
+
+    if (wxGLCanvas::GetGLXVersion() >= 13)
+      {
+	// GLX >= 1.3 uses a GLXFBConfig 
+	GLXFBConfig * fbc = NULL;
+	if (wxTheApp->m_glFBCInfo != NULL)
+	  {
+	    fbc = (GLXFBConfig *) wxTheApp->m_glFBCInfo;
+	    m_canFreeFBC = FALSE; // owned by wxTheApp - don't free upon destruction
+	  }
+	else
+	  {
+	    fbc = (GLXFBConfig *) wxGLCanvas::ChooseGLFBC(attribList);
+	    m_canFreeFBC = TRUE;
+	  }
+	m_fbc = fbc;  // save for later use
+	wxCHECK_MSG( m_fbc, FALSE, _T("required FBConfig couldn't be found") );
+      }
 
     XVisualInfo *vi = NULL;
     if (wxTheApp->m_glVisualInfo != NULL)
     {
-        vi = (XVisualInfo *) wxTheApp->m_glVisualInfo;
+	vi = (XVisualInfo *)wxTheApp->m_glVisualInfo;
         m_canFreeVi = FALSE; // owned by wxTheApp - don't free upon destruction
     }
     else
     {
+	if (wxGLCanvas::GetGLXVersion() >= 13)
+	  // GLX >= 1.3
+	  vi = glXGetVisualFromFBConfig(GDK_DISPLAY(), m_fbc[0]);
+	else
+	  // GLX <= 1.2
         vi = (XVisualInfo *) ChooseGLVisual(attribList);
         m_canFreeVi = TRUE;
     }
     m_vi = vi;  // save for later use
 
     wxCHECK_MSG( m_vi, FALSE, _T("required visual couldn't be found") );
-
     GdkVisual *visual = gdkx_visual_get( vi->visualid );
     GdkColormap *colormap = gdk_colormap_new( visual, TRUE );
 
@@ -379,80 +444,136 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
 wxGLCanvas::~wxGLCanvas()
 {
-    XVisualInfo *vi = (XVisualInfo *) m_vi;
+  GLXFBConfig * fbc = (GLXFBConfig *) m_fbc;
+  if (fbc && m_canFreeFBC) XFree( fbc );
 
+  XVisualInfo *vi = (XVisualInfo *) m_vi;
     if (vi && m_canFreeVi) XFree( vi );
+  
     delete m_glContext;
 }
 
 void* wxGLCanvas::ChooseGLVisual(int *attribList)
 {
     int data[512];
-    if (!attribList)
-    {
-        // default settings if attriblist = 0
-        data[0] = GLX_RGBA;
-        data[1] = GLX_DOUBLEBUFFER;
-        data[2] = GLX_DEPTH_SIZE;   data[3] = 1;
-        data[4] = GLX_RED_SIZE;     data[5] = 1;
-        data[6] = GLX_GREEN_SIZE;   data[7] = 1;
-        data[8] = GLX_BLUE_SIZE;    data[9] = 1;
-        data[10] = GLX_ALPHA_SIZE;  data[11] = 0;
-        data[12] = None;
+  GetGLAttribListFromWX( attribList, data );
+  attribList = (int*) data;
+  
+  Display *dpy = GDK_DISPLAY();
 
+  return glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
+}
+
+void* wxGLCanvas::ChooseGLFBC(int *attribList)
+{
+  int data[512];
+  GetGLAttribListFromWX( attribList, data );
         attribList = (int*) data;
+
+  int returned;
+  return glXChooseFBConfig( GDK_DISPLAY(), DefaultScreen(GDK_DISPLAY()),
+			    attribList, &returned );
+}
+
+
+void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
+{
+  if (!wx_attribList)
+    {
+      if (wxGLCanvas::GetGLXVersion() >= 13)
+	// leave GLX >= 1.3 choose the default attributes
+	gl_attribList[0] = 0;
+      else
+	{
+	  int i = 0;
+	  // default settings if attriblist = 0
+	  gl_attribList[i++] = GLX_RGBA;
+	  gl_attribList[i++] = GLX_DOUBLEBUFFER;
+	  gl_attribList[i++] = GLX_DEPTH_SIZE;   gl_attribList[i++] = 1;
+	  gl_attribList[i++] = GLX_RED_SIZE;     gl_attribList[i++] = 1;
+	  gl_attribList[i++] = GLX_GREEN_SIZE;   gl_attribList[i++] = 1;
+	  gl_attribList[i++] = GLX_BLUE_SIZE;    gl_attribList[i++] = 1;
+	  gl_attribList[i++] = GLX_ALPHA_SIZE;   gl_attribList[i++] = 0;
+	  gl_attribList[i++] = None;	  
+	}
     }
     else
     {
       int arg=0, p=0;
-
-      while( (attribList[arg]!=0) && (p<510) )
+      while( (wx_attribList[arg]!=0) && (p<510) )
       {
-        switch( attribList[arg++] )
+	  switch( wx_attribList[arg++] )
         {
-          case WX_GL_RGBA: data[p++] = GLX_RGBA; break;
+	    case WX_GL_RGBA:
+	      if (wxGLCanvas::GetGLXVersion() <= 12)
+		// for GLX >= 1.3, GLX_RGBA is useless (setting this flags will crash on most opengl implm)
+		gl_attribList[p++] = GLX_RGBA;
+	      break;
           case WX_GL_BUFFER_SIZE:
-            data[p++]=GLX_BUFFER_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_BUFFER_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_LEVEL:
-            data[p++]=GLX_LEVEL; data[p++]=attribList[arg++]; break;
-          case WX_GL_DOUBLEBUFFER: data[p++] = GLX_DOUBLEBUFFER; break;
-          case WX_GL_STEREO: data[p++] = GLX_STEREO; break;
+	      gl_attribList[p++]=GLX_LEVEL; gl_attribList[p++]=wx_attribList[arg++]; break;
+	    case WX_GL_DOUBLEBUFFER:
+	      if (wxGLCanvas::GetGLXVersion() <= 12)
+		gl_attribList[p++] = GLX_DOUBLEBUFFER;
+	      else
+		// for GLX >= 1.3, GLX_DOUBLEBUFFER format is different (1 <=> True)
+		// it seems this flag is useless for some hardware opengl implementation.
+		// but for Mesa 6.2.1, this flag is used so don't ignore it.
+		gl_attribList[p++] = GLX_DOUBLEBUFFER; gl_attribList[p++]=1;
+	      break;
+	    case WX_GL_STEREO: gl_attribList[p++] = GLX_STEREO; break;
           case WX_GL_AUX_BUFFERS:
-            data[p++]=GLX_AUX_BUFFERS; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_AUX_BUFFERS; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_RED:
-            data[p++]=GLX_RED_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_RED_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_GREEN:
-            data[p++]=GLX_GREEN_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_GREEN_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_BLUE:
-            data[p++]=GLX_BLUE_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_BLUE_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_ALPHA:
-            data[p++]=GLX_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_ALPHA_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_DEPTH_SIZE:
-            data[p++]=GLX_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_DEPTH_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_STENCIL_SIZE:
-            data[p++]=GLX_STENCIL_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_STENCIL_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_ACCUM_RED:
-            data[p++]=GLX_ACCUM_RED_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_ACCUM_RED_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_ACCUM_GREEN:
-            data[p++]=GLX_ACCUM_GREEN_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_ACCUM_GREEN_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_ACCUM_BLUE:
-            data[p++]=GLX_ACCUM_BLUE_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_ACCUM_BLUE_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           case WX_GL_MIN_ACCUM_ALPHA:
-            data[p++]=GLX_ACCUM_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
+	      gl_attribList[p++]=GLX_ACCUM_ALPHA_SIZE; gl_attribList[p++]=wx_attribList[arg++]; break;
           default:
             break;
         }
       }
-      data[p] = 0;
-
-      attribList = (int*) data;
+      gl_attribList[p] = 0;
     }
-
-
-    Display *dpy = GDK_DISPLAY();
-
-    return glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
 }
+
+void wxGLCanvas::QueryGLXVersion()
+{
+  if (m_glxVersion == 0)
+    {
+      // check the GLX version
+      int glxMajorVer, glxMinorVer;
+      bool ok = glXQueryVersion(GDK_DISPLAY(), &glxMajorVer, &glxMinorVer);
+      wxASSERT_MSG( ok, _T("GLX version not found") );
+      if (!ok)
+	m_glxVersion = 10; // 1.0 by default
+      else
+	m_glxVersion = glxMajorVer*10 + glxMinorVer;
+    }
+}
+
+int wxGLCanvas::GetGLXVersion()
+{
+  wxASSERT_MSG( m_glxVersion>0, _T("GLX version has not been initialized with wxGLCanvas::QueryGLXVersion()") );
+  return m_glxVersion;
+}
+
 
 void wxGLCanvas::SwapBuffers()
 {
@@ -501,18 +622,39 @@ IMPLEMENT_CLASS(wxGLApp, wxApp)
 
 wxGLApp::~wxGLApp()
 {
+  if (m_glFBCInfo)
+    XFree(m_glFBCInfo);
     if (m_glVisualInfo)
         XFree(m_glVisualInfo);
 }
 
 bool wxGLApp::InitGLVisual(int *attribList)
 {
+  wxGLCanvas::QueryGLXVersion();
+
+  if (wxGLCanvas::GetGLXVersion() >= 13)
+    {
+      // GLX >= 1.3
+      if (m_glFBCInfo)
+	XFree(m_glFBCInfo);
+      m_glFBCInfo = wxGLCanvas::ChooseGLFBC(attribList);  
+      
+      if (m_glFBCInfo)
+	{
     if (m_glVisualInfo)
         XFree(m_glVisualInfo);
-
+	  m_glVisualInfo = glXGetVisualFromFBConfig(GDK_DISPLAY(), ((GLXFBConfig *)m_glFBCInfo)[0]);
+	}
+      return (m_glFBCInfo != NULL) && (m_glVisualInfo != NULL);
+    }
+  else
+    {
+      // GLX <= 1.2
+      if (m_glVisualInfo)
+	XFree(m_glVisualInfo);
     m_glVisualInfo = wxGLCanvas::ChooseGLVisual(attribList);
-
     return m_glVisualInfo != NULL;
+    }
 }
 
 #endif

@@ -447,6 +447,7 @@ wxApp::wxApp()
 
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
     m_glVisualInfo = (void *) NULL;
+    m_glFBCInfo = (void *) NULL;
 }
 
 wxApp::~wxApp()

@@ -61,8 +61,9 @@ public:
     unsigned char  *m_colorCube;
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
-    // selection; this is actually an XVisualInfo*
-    void           *m_glVisualInfo;
+    // selection.
+    void           *m_glVisualInfo; // this is actually an XVisualInfo*
+    void           *m_glFBCInfo; // this is actually an GLXFBConfig*
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
