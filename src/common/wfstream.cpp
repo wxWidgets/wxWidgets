@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     11/07/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux 
+// Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
   if (ret == wxInvalidOffset) {
     m_lasterror = wxStream_READ_ERR;
     ret = 0;
-  } 
+  }
 
   return ret;
 }
@@ -165,9 +165,11 @@ size_t wxFileOutputStream::GetSize() const
 // ----------------------------------------------------------------------------
 // wxFileStream
 // ----------------------------------------------------------------------------
+
 wxFileStream::wxFileStream(const wxString& fileName)
- : wxFileInputStream(fileName), wxFileOutputStream(*wxFileInputStream::m_file)
+            : wxFileInputStream(fileName)
 {
+    wxFileOutputStream::m_file = wxFileInputStream::m_file;
 }
 
 // ----------------------------------------------------------------------------
@@ -222,7 +224,7 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
   if (ret == wxInvalidOffset) {
     m_lasterror = wxStream_READ_ERR;
     ret = 0;
-  } 
+  }
 
   return ret;
 }
@@ -308,10 +310,13 @@ size_t wxFFileOutputStream::GetSize() const
 // ----------------------------------------------------------------------------
 // wxFFileStream
 // ----------------------------------------------------------------------------
+
 wxFFileStream::wxFFileStream(const wxString& fileName)
- : wxFFileInputStream(fileName), wxFFileOutputStream(*wxFFileInputStream::m_file)
+             : wxFFileInputStream(fileName)
 {
+    wxFFileOutputStream::m_file = wxFFileInputStream::m_file;
 }
+
 #endif
   // wxUSE_STREAMS && wxUSE_FILE
 
