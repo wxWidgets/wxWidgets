@@ -1998,7 +1998,7 @@ public :
   MacDefaultExtensionRecord()
   {
     m_ext[0] = 0 ;
-    m_type = m_creator = NULL ;
+    m_type = m_creator = 0 ;
   }
   MacDefaultExtensionRecord( const MacDefaultExtensionRecord& from )
   {
