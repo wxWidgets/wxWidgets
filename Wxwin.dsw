@@ -3,6 +3,24 @@ Microsoft Developer Studio Workspace File, Format Version 5.00
 
 ###############################################################################
 
+Project: "cube"=.\UTILS\GLCANVAS\SAMPLES\cube\cube.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name glcanvas
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxWin
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "dialoged"=.\UTILS\DIALOGED\SRC\dialoged.dsp - Package Owner=<4>
 
 Package=<5>
@@ -17,6 +35,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name wxWin
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "glcanvas"=.\UTILS\GLCANVAS\WIN\glcanvas.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
