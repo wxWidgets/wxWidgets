@@ -320,16 +320,36 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
     }
     else // notebook still not empty
     {
-        // refresh the selected page and change it if it became invalid
+        // change the selected page if it was deleted or became invalid
+        int selNew;
         if ( m_nSelection == GetPageCount() )
         {
-            m_nSelection--;
+            // last page deleted, make the new last page the new selection
+            selNew = m_nSelection - 1;
+        }
+        else if ( nPage <= m_nSelection )
+        {
+            // we must show another page, even if it has the same index
+            selNew = m_nSelection;
+        }
+        else // nothing changes for the currently selected page
+        {
+            selNew = -1;
+
+            // we still must refresh the current page: this needs to be done
+            // for some unknown reason if the tab control shows the up-down
+            // control (i.e. when there are too many pages) -- otherwise after
+            // deleting a page nothing at all is shown
+            m_pages[m_nSelection]->Refresh();
         }
 
-        // force ChangePage() to really do something
-        int sel = m_nSelection;
-        m_nSelection = -1;
-        SetSelection(sel);
+        if ( selNew != -1 )
+        {
+            // m_nSelection must be always valid so reset it before calling
+            // SetSelection()
+            m_nSelection = -1;
+            SetSelection(selNew);
+        }
     }
 
     return pageRemoved;
