@@ -13,6 +13,7 @@ wxBase:
 - wxCopyFile() respects the file permissions (Roland Scholz)
 - wxFTP::GetFileSize() added (Søren Erland Vestø)
 - wxDateTime::IsSameDate() bug fixed
+- wxZipFSHandler::FindFirst() and FindNext() now correctly list directories
 
 All (GUI):
 
