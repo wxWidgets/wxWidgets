@@ -67,8 +67,13 @@ wxCursorRefData::wxCursorRefData()
 
 void wxCursorRefData::Free()
 {
-    if ( m_hCursor && m_destroyCursor )
-        ::DestroyCursor((HCURSOR)m_hCursor);
+    if ( m_hCursor )
+    {
+        if ( m_destroyCursor )
+            ::DestroyCursor((HCURSOR)m_hCursor);
+
+        m_hCursor = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------

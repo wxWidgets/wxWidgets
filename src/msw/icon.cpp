@@ -62,7 +62,11 @@
 void wxIconRefData::Free()
 {
     if ( m_hIcon )
+    {
         ::DestroyIcon((HICON) m_hIcon);
+
+        m_hIcon = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------
