@@ -1445,7 +1445,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
         wxString cwd;
         wxSplitPath(filename, &cwd, NULL, NULL);
 
-        if ( cwd != wxGetWorkingDirectory() )
+        if ( cwd != wxGetCwd() )
         {
             wxSetWorkingDirectory(cwd);
         }
