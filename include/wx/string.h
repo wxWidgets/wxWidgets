@@ -727,7 +727,7 @@ public:
   size_t Index(wxChar ch)         const { return Find(ch);  }
     // use Truncate
   wxString& Remove(size_t pos) { return Truncate(pos); }
-  wxString& RemoveLast(size_t n = 1) { return Truncate(Len() - n); }
+  wxString& RemoveLast() { return Truncate(Len() - 1); }
 
   wxString& Remove(size_t nStart, size_t nLen) { return erase( nStart, nLen ); }
 
@@ -1012,7 +1012,6 @@ public:
   void Remove(const wxChar *sz);
     // remove item by index
   void Remove(size_t nIndex);
-  void RemoveAt(size_t nIndex) { Remove(nIndex); }
 
   // sorting
     // sort array elements in alphabetical order (or reversed alphabetical
@@ -1057,42 +1056,42 @@ public:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
-//
-inline bool operator==(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) == 0); }
-//
-inline bool operator==(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) == 0); }
-//
-inline bool operator==(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) == 0); }
-//
-inline bool operator!=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) != 0); }
-//
-inline bool operator!=(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) != 0); }
-//
-inline bool operator!=(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) != 0); }
-//
-inline bool operator< (const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) < 0); }
-//
-inline bool operator< (const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) <  0); }
-//
-inline bool operator< (const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) >  0); }
-//
-inline bool operator> (const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) >  0); }
-//
-inline bool operator> (const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) >  0); }
-//
-inline bool operator> (const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) <  0); }
-//
-inline bool operator<=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) <= 0); }
-//
-inline bool operator<=(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) <= 0); }
-//
-inline bool operator<=(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) >= 0); }
-//
-inline bool operator>=(const wxString& s1, const wxString& s2) { return (s1.Cmp(s2) >= 0); }
-//
-inline bool operator>=(const wxString& s1, const wxChar  * s2) { return (s1.Cmp(s2) >= 0); }
-//
-inline bool operator>=(const wxChar  * s1, const wxString& s2) { return (s2.Cmp(s1) <= 0); }
+inline bool operator==(const wxString& s1, const wxString& s2)
+    { return (s1.Len() == s2.Len()) && (s1.Cmp(s2) == 0); }
+inline bool operator==(const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) == 0; }
+inline bool operator==(const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) == 0; }
+inline bool operator!=(const wxString& s1, const wxString& s2)
+    { return (s1.Len() != s2.Len()) || (s1.Cmp(s2) != 0); }
+inline bool operator!=(const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) != 0; }
+inline bool operator!=(const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) != 0; }
+inline bool operator< (const wxString& s1, const wxString& s2)
+    { return s1.Cmp(s2) < 0; }
+inline bool operator< (const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) <  0; }
+inline bool operator< (const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) >  0; }
+inline bool operator> (const wxString& s1, const wxString& s2)
+    { return s1.Cmp(s2) >  0; }
+inline bool operator> (const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) >  0; }
+inline bool operator> (const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) <  0; }
+inline bool operator<=(const wxString& s1, const wxString& s2)
+    { return s1.Cmp(s2) <= 0; }
+inline bool operator<=(const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) <= 0; }
+inline bool operator<=(const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) >= 0; }
+inline bool operator>=(const wxString& s1, const wxString& s2)
+    { return s1.Cmp(s2) >= 0; }
+inline bool operator>=(const wxString& s1, const wxChar  * s2)
+    { return s1.Cmp(s2) >= 0; }
+inline bool operator>=(const wxChar  * s1, const wxString& s2)
+    { return s2.Cmp(s1) <= 0; }
 
 // comparison with char
 inline bool operator==(wxChar c, const wxString& s) { return s.IsSameAs(c); }
@@ -1109,7 +1108,7 @@ inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) != 0); }
 inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const wchar_t *)s1) != 0); }
-#else
+#else // !wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxCharBuffer& s2)
     { return (s1.Cmp((const char *)s2) == 0); }
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2)
@@ -1118,7 +1117,7 @@ inline bool operator!=(const wxString& s1, const wxCharBuffer& s2)
     { return (s1.Cmp((const char *)s2) != 0); }
 inline bool operator!=(const wxCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const char *)s1) != 0); }
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
 wxString WXDLLEXPORT operator+(const wxString& string, wxChar ch);
@@ -1130,12 +1129,12 @@ inline wxString WXDLLEXPORT operator+(const wxString& string, const wxWCharBuffe
     { return string + (const wchar_t *)buf; }
 inline wxString WXDLLEXPORT operator+(const wxWCharBuffer& buf, const wxString& string)
     { return (const wchar_t *)buf + string; }
-#else
+#else // !wxUSE_UNICODE
 inline wxString WXDLLEXPORT operator+(const wxString& string, const wxCharBuffer& buf)
     { return string + (const char *)buf; }
 inline wxString WXDLLEXPORT operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
