@@ -5144,6 +5144,9 @@ bool wxGetKeyState(wxKeyCode key)
 {
     bool bVirtual;
 
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
 //High order with GetAsyncKeyState only available on WIN32
 #ifdef __WIN32__
     //If the requested key is a LED key, return

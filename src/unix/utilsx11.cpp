@@ -764,6 +764,9 @@ KeySym wxCharCodeWXToX(int id)
 
 bool wxGetKeyState(wxKeyCode key)
 {
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
 #if defined(__WXX11__)
     Display *pDisplay = (Display*) wxApp::GetDisplay();
 #elif defined(__WXGTK__)

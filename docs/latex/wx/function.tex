@@ -2660,9 +2660,14 @@ this language feature but still take advantage of it when it is available.
 
 \func{bool}{wxGetKeyState}{\param{wxKeyCode }{key}}
 
-Returns \true if the key parameter is currently pressed on the keyboard, or
-with modifier keys, (caps lock, etc) if the key is active (the led light is
-on).
+For normal keys, returns \true if the specified key is currently down.
+
+For togglable keys (Caps Lock, Num Lock and Scroll Lock), returns
+\true if the key is toggled such that its LED indicator is lit. There is
+currently no way to test whether togglable keys are up or down.
+
+Even though there are virtual key codes defined for mouse buttons, they
+cannot be used with this function currently.
 
 \wxheading{Include files}
 

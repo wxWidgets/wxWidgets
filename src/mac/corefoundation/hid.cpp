@@ -488,6 +488,9 @@ wxHIDKeyboard* wxHIDModule::sm_keyboard;
 
 bool wxGetKeyState (wxKeyCode key)
 {
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
     if (!wxHIDModule::sm_keyboard)
     {
         wxHIDModule::sm_keyboard = new wxHIDKeyboard();

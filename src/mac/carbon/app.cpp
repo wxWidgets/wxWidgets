@@ -1184,6 +1184,9 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
 #ifndef __DARWIN__
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
 //if OS X > 10.2 (i.e. 10.2.x)
 //a known apple bug prevents the system from determining led
 //states with GetKeys... can only determine caps lock led

@@ -1853,6 +1853,9 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
 
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
 #if __WXMAC_CARBON__
 //TODO: Low get map...
    return !!(GetCurrentKeyModifiers() & wxKeyCodeToMacModifier(key)); 
