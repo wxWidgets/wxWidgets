@@ -1124,9 +1124,9 @@ dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(gif,         [  --enable-gif             use gif images (GIF file format)], wxUSE_GIF)
-WX_ARG_ENABLE(pcx,         [  --enable-pcx             use pcx images (PCX file format)], wxUSE_PCX)
-WX_ARG_ENABLE(pnm,         [  --enable-pnm             use pnm images (PNM file format)], wxUSE_PNM)
+WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
+WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
+WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 
 dnl cache the options values before (may be) aborting below
 WX_ARG_CACHE_FLUSH
