@@ -878,10 +878,7 @@ bool wxFrame::HandlePaint()
         }
         else
         {
-            wxPaintEvent event(m_windowId);
-            event.m_eventObject = this;
-
-            return GetEventHandler()->ProcessEvent(event);
+            return wxWindow::HandlePaint();
         }
     }
     else

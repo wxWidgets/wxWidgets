@@ -424,7 +424,23 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
 {
   // is it our tab control?
   if ( event.GetEventObject() == this )
-    ChangePage(event.GetOldSelection(), event.GetSelection());
+  {
+      // don't call ChangePage() here because it will generate redundant
+      // notification events
+      int sel = event.GetOldSelection();
+      if ( sel != -1 )
+        m_aPages[sel]->Show(FALSE);
+      
+      sel = event.GetSelection();
+      if ( sel != -1 )
+      {
+        wxNotebookPage *pPage = m_aPages[sel];
+        pPage->Show(TRUE);
+        pPage->SetFocus();
+      }
+      
+      m_nSelection = sel;
+  }
 
   // we want to give others a chance to process this message as well
   event.Skip();

@@ -153,16 +153,31 @@ wxSize wxButton::GetDefaultSize()
 void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
+    wxButton *btnOldDefault = NULL;
     wxPanel *panel = wxDynamicCast(parent, wxPanel);
     if ( panel )
+    {
+        btnOldDefault = panel->GetDefaultItem();
         panel->SetDefaultItem(this);
+    }
 
     if ( parent )
     {
         SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
     }
 
-    SendMessage(GetHwnd(), BM_SETSTYLE, BS_DEFPUSHBUTTON, 1L);
+    if ( btnOldDefault )
+    {
+        // remove the BS_DEFPUSHBUTTON style from the other button
+        long style = GetWindowLong(GetHwndOf(btnOldDefault), GWL_STYLE);
+        style &= ~BS_DEFPUSHBUTTON;
+        SendMessage(GetHwndOf(btnOldDefault), BM_SETSTYLE, style, 1L);
+    }
+
+    // set this button as the default
+    long style = GetWindowLong(GetHwnd(), GWL_STYLE);
+    style |= BS_DEFPUSHBUTTON;
+    SendMessage(GetHwnd(), BM_SETSTYLE, style, 1L);
 }
 
 // ----------------------------------------------------------------------------
