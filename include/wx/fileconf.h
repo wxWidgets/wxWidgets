@@ -126,8 +126,7 @@ public:
 
 #if wxUSE_STREAMS
     // ctor that takes an input stream.
-  wxFileConfig(wxInputStream &inStream,
-               wxMBConv& conv = wxConvUTF8);
+  wxFileConfig(wxInputStream &inStream, wxMBConv& conv = wxConvUTF8);
 #endif // wxUSE_STREAMS
 
     // dtor will save unsaved data
@@ -198,14 +197,20 @@ private:
   // the same as SetPath("/")
   void SetRootPath();
 
+  // set/test the dirty flag
+  void SetDirty() { m_isDirty = true; }
+  void ResetDirty() { m_isDirty = false; }
+  bool IsDirty() const { return m_isDirty; }
+
+
   // member variables
   // ----------------
-  wxFileConfigLineList *m_linesHead,        // head of the linked list
-                       *m_linesTail;        // tail
+  wxFileConfigLineList *m_linesHead,    // head of the linked list
+                       *m_linesTail;    // tail
 
-  wxString    m_strLocalFile,     // local  file name passed to ctor
-              m_strGlobalFile;    // global
-  wxString    m_strPath;          // current path (not '/' terminated)
+  wxString    m_strLocalFile,           // local  file name passed to ctor
+              m_strGlobalFile;          // global
+  wxString    m_strPath;                // current path (not '/' terminated)
 
   wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group
                     *m_pCurrentGroup;   // the current group
@@ -213,10 +218,12 @@ private:
   wxMBConv   &m_conv;
 
 #ifdef __UNIX__
-  int m_umask;                    // the umask to use for file creation
+  int m_umask;                          // the umask to use for file creation
 #endif // __UNIX__
 
-    DECLARE_NO_COPY_CLASS(wxFileConfig)
+  bool m_isDirty;                       // if true, we have unsaved changes
+
+  DECLARE_NO_COPY_CLASS(wxFileConfig)
 };
 
 #endif

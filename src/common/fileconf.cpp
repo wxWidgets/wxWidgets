@@ -154,8 +154,7 @@ private:
 
   wxString      m_strName,      // entry name
                 m_strValue;     //       value
-  bool          m_bDirty:1,     // changed since last read?
-                m_bImmutable:1, // can be overriden locally?
+  bool          m_bImmutable:1, // can be overriden locally?
                 m_bHasValue:1;  // set after first call to SetValue()
 
   int           m_nLine;        // used if m_pLine == NULL only
@@ -172,7 +171,6 @@ public:
   const wxString& Name()        const { return m_strName;    }
   const wxString& Value()       const { return m_strValue;   }
   wxFileConfigGroup *Group()    const { return m_pParent;    }
-  bool            IsDirty()     const { return m_bDirty;     }
   bool            IsImmutable() const { return m_bImmutable; }
   bool            IsLocal()     const { return m_pLine != 0; }
   int             Line()        const { return m_nLine;      }
@@ -181,7 +179,6 @@ public:
 
   // modify entry attributes
   void SetValue(const wxString& strValue, bool bUser = true);
-  void SetDirty();
   void SetLine(wxFileConfigLineList *pLine);
 
     DECLARE_NO_COPY_CLASS(wxFileConfigEntry)
@@ -199,7 +196,6 @@ private:
   ArrayEntries  m_aEntries;         // entries in this group
   ArrayGroups   m_aSubgroups;       // subgroups
   wxString      m_strName;          // group's name
-  bool          m_bDirty;           // if false => all subgroups are not dirty
   wxFileConfigLineList *m_pLine;    // pointer to our line in the linked list
   wxFileConfigEntry *m_pLastEntry;  // last entry/subgroup of this group in the
   wxFileConfigGroup *m_pLastGroup;  // local file (we insert new ones after it)
@@ -218,7 +214,6 @@ public:
   const wxString& Name()    const { return m_strName; }
   wxFileConfigGroup    *Parent()  const { return m_pParent; }
   wxFileConfig   *Config()  const { return m_pConfig; }
-  bool            IsDirty() const { return m_bDirty;  }
 
   const ArrayEntries& Entries() const { return m_aEntries;   }
   const ArrayGroups&  Groups()  const { return m_aSubgroups; }
@@ -236,8 +231,6 @@ public:
   wxFileConfigGroup *AddSubgroup(const wxString& strName);
   wxFileConfigEntry *AddEntry   (const wxString& strName, int nLine = wxNOT_FOUND);
 
-  // will also recursively set parent's dirty flag
-  void SetDirty();
   void SetLine(wxFileConfigLineList *pLine);
 
   // rename: no checks are done to ensure that the name is unique!
@@ -417,6 +410,8 @@ void wxFileConfig::Init()
             wxLogWarning(_("can't open user configuration file '%s'."),  m_strLocalFile.c_str() );
         }
     }
+
+    m_isDirty = false;
 }
 
 // constructor supports creation of wxFileConfig objects of any type
@@ -913,7 +908,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
                     _T("  Creating group %s"),
                     m_pCurrentGroup->Name().c_str() );
 
-        m_pCurrentGroup->SetDirty();
+        SetDirty();
 
             // this will add a line for this group if it didn't have it before
 
@@ -921,9 +916,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
     }
     else
     {
-            // writing an entry
-            // check that the name is reasonable
-
+        // writing an entry check that the name is reasonable
         if ( strName[0u] == wxCONFIG_IMMUTABLE_PREFIX )
         {
             wxLogError( _("Config entry name cannot start with '%c'."),
@@ -945,6 +938,8 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
                     _T("  Setting value %s"),
                     szValue.c_str() );
         pEntry->SetValue(szValue);
+
+        SetDirty();
     }
 
     return true;
@@ -957,7 +952,7 @@ bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 {
-  if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
+  if ( !IsDirty() || !m_strLocalFile )
     return true;
 
   // set the umask if needed
@@ -990,6 +985,8 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
       return false;
   }
 
+  ResetDirty();
+
 #if defined(__WXMAC__)
   wxFileName(m_strLocalFile).MacSetTypeAndCreator('TEXT', 'ttxt');
 #endif // __WXMAC__
@@ -1018,6 +1015,8 @@ bool wxFileConfig::RenameEntry(const wxString& oldName,
     if ( !m_pCurrentGroup->DeleteEntry(oldName) )
         return false;
 
+    SetDirty();
+
     wxFileConfigEntry *newEntry = m_pCurrentGroup->AddEntry(newName);
     newEntry->SetValue(value);
 
@@ -1038,6 +1037,8 @@ bool wxFileConfig::RenameGroup(const wxString& oldName,
 
     group->Rename(newName);
 
+    SetDirty();
+
     return true;
 }
 
@@ -1056,7 +1057,8 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
     if ( m_pCurrentGroup != m_pRootGroup ) {
       wxFileConfigGroup *pGroup = m_pCurrentGroup;
       SetPath(wxT(".."));  // changes m_pCurrentGroup!
-      m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name());
+      if ( m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name()) )
+          SetDirty();
     }
     //else: never delete the root group
   }
@@ -1068,7 +1070,12 @@ bool wxFileConfig::DeleteGroup(const wxString& key)
 {
   wxConfigPathChanger path(this, key);
 
-  return m_pCurrentGroup->DeleteSubgroupByName(path.Name());
+  if ( !m_pCurrentGroup->DeleteSubgroupByName(path.Name()) )
+      return false;
+
+  SetDirty();
+
+  return true;
 }
 
 bool wxFileConfig::DeleteAll()
@@ -1239,7 +1246,6 @@ wxFileConfigGroup::wxFileConfigGroup(wxFileConfigGroup *pParent,
 {
   m_pConfig = pConfig;
   m_pParent = pParent;
-  m_bDirty  = false;
   m_pLine   = NULL;
 
   m_pLastEntry = NULL;
@@ -1417,8 +1423,6 @@ void wxFileConfigGroup::Rename(const wxString& newName)
     wxCHECK_RET( line, _T("a non root group must have a corresponding line!") );
 
     line->SetText(strFullName);
-
-    SetDirty();
 }
 
 wxString wxFileConfigGroup::GetFullName() const
@@ -1671,8 +1675,6 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
                     pGroup->Name().c_str() );
     }
 
-    SetDirty();
-
     m_aSubgroups.Remove(pGroup);
     delete pGroup;
 
@@ -1720,23 +1722,10 @@ bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
     m_pConfig->LineListRemove(pLine);
   }
 
-  // we must be written back for the changes to be saved
-  SetDirty();
-
   m_aEntries.Remove(pEntry);
   delete pEntry;
 
   return true;
-}
-
-// ----------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------
-void wxFileConfigGroup::SetDirty()
-{
-  m_bDirty = true;
-  if ( Parent() != NULL )             // propagate upwards
-    Parent()->SetDirty();
 }
 
 // ============================================================================
@@ -1757,7 +1746,6 @@ wxFileConfigEntry::wxFileConfigEntry(wxFileConfigGroup *pParent,
   m_nLine   = nLine;
   m_pLine   = NULL;
 
-  m_bDirty =
   m_bHasValue = false;
 
   m_bImmutable = strName[0] == wxCONFIG_IMMUTABLE_PREFIX;
@@ -1791,10 +1779,8 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
         return;
     }
 
-        // do nothing if it's the same value: but don't test for it
-        // if m_bHasValue hadn't been set yet or we'd never write
-        // empty values to the file
-
+    // do nothing if it's the same value: but don't test for it if m_bHasValue
+    // hadn't been set yet or we'd never write empty values to the file
     if ( m_bHasValue && strValue == m_strValue )
         return;
 
@@ -1803,7 +1789,7 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 
     if ( bUser )
     {
-        wxString    strValFiltered;
+        wxString strValFiltered;
 
         if ( Group()->Config()->GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS )
         {
@@ -1829,15 +1815,7 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 
             Group()->SetLastEntry(this);
         }
-
-        SetDirty();
     }
-}
-
-void wxFileConfigEntry::SetDirty()
-{
-  m_bDirty = true;
-  Group()->SetDirty();
 }
 
 // ============================================================================
