@@ -131,10 +131,6 @@ bool wxBitmap::CopyFromIcon(
     if (!rIcon.Ok())
         return(FALSE);
 
-#if WXWIN_COMPATIBILITY_2
-    refData->m_ok = TRUE;
-#endif // WXWIN_COMPATIBILITY_2
-
     return CopyFromIconOrCursor(rIcon);
 }
 
