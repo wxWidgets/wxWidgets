@@ -112,6 +112,9 @@ bool wxWindow::Create(wxWindow *parent,
         m_scrollbarVert = new wxScrollBar(this, -1,
                                           wxDefaultPosition, wxDefaultSize,
                                           wxSB_VERTICAL);
+
+        // and position it
+        PositionScrollbars();
     }
 
     // the colours/fonts are default
@@ -691,6 +694,9 @@ int wxWindow::GetScrollRange(int orient) const
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    // before scrolling it, ensure that we don't have any unpainted areas
+    Update();
+
     wxRect r;
 
     if ( dx )

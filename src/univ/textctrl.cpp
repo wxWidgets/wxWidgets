@@ -19,8 +19,10 @@
         the same location)?
    3. split file into chunks
 +? 4. rewrite Replace() refresh logic to deal with wrapping lines
-   5. cache info found by GetPartOfWrappedLine() - performance must be horrible
++? 5. cache info found by GetPartOfWrappedLine() - performance must be horrible
       with lots of text
+
+   6. backspace refreshes too much (until end of line)
  */
 
 /*
@@ -382,7 +384,7 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
     // the current timestamp used by LayoutLines()
     size_t m_timestamp;
 
-    // invalidate starting rows of all lines after this one
+    // invalidate starting rows of all lines (NOT rows!) after this one
     void InvalidateLinesBelow(wxTextCoord line)
     {
         if ( m_rowFirstInvalid == -1 || m_rowFirstInvalid > line )
@@ -738,6 +740,11 @@ void wxTextCtrl::ReplaceLine(wxTextCoord line, const wxString& text)
         // OPT: we might try not to recalc the unchanged part of line
         wxWrappedLineData& lineData = WData().m_linesData[line];
         size_t rowsOld = lineData.GetExtraRowCount();
+
+        // OPT: we choose to lay it our immediately instead of delaying it
+        //      until it is needed because it allows us to avoid invalidating
+        //      lines further down if the number of rows didn't chnage, but
+        //      maybe we can imporve this even further?
         LayoutLine(line, lineData);
 
         // next, if this is not the last line and if the number of rows in it
@@ -761,8 +768,7 @@ void wxTextCtrl::RemoveLine(wxTextCoord line)
         // that we will recalculate all lines below it anyhow later if needed
         if ( WData().IsValidLine(line) )
         {
-            const wxWrappedLineData& lineData = WData().m_linesData[line];
-            WData().InvalidateLinesBelow(lineData.GetFirstRow());
+            WData().InvalidateLinesBelow(line);
         }
 
         WData().m_linesData.RemoveAt(line);
@@ -776,22 +782,8 @@ void wxTextCtrl::InsertLine(wxTextCoord line, const wxString& text)
     {
         WData().m_linesData.Insert(new wxWrappedLineData, line);
 
-        // if we insert the line in the very beginning, everything must be
-        // recalculated
-        if ( line == 0 )
-        {
-            WData().InvalidateLinesBelow(0);
-        }
-        else
-        {
-            // otherwise recalc everything after the previous line
-            if ( WData().IsValidLine(line) )
-            {
-                const wxWrappedLineData& lineData = WData().m_linesData[line - 1];
-                WData().InvalidateLinesBelow(lineData.GetNextRow());
-            }
-            //else: it will be recalculated anyhow
-        }
+        // invalidate everything below it
+        WData().InvalidateLinesBelow(line);
     }
 }
 
@@ -1035,12 +1027,11 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             if ( !WrapLines() )
             {
                 // refresh only part of the first line
-                RefreshPixelRange(lineStart, startNewText, widthNewText);
-
-                // and refresh the rest below
-                lineStart++;
+                RefreshPixelRange(lineStart++, startNewText, widthNewText);
             }
-            //else: refresh all lines we changed (OPT?)
+            //else: we have to refresh everything as some part of the text
+            //      could be in the previous row before but moved to the next
+            //      one now (due to word wrap)
 
             wxTextCoord lineEnd = GetLines().GetCount() - 1;
             if ( lineStart <= lineEnd )
@@ -2241,6 +2232,14 @@ void wxTextCtrl::OnSize(wxSizeEvent& event)
 
     if ( !IsSingleLine() )
     {
+#if 0
+        // update them immediately because if we are called for the first time,
+        // we need to create them in order for the base class version to
+        // position the scrollbars correctly - if we don't do it now, it won't
+        // happen at all if we don't get more size events
+        UpdateScrollbars();
+#endif // 0
+
         MData().m_updateScrollbarX =
         MData().m_updateScrollbarY = TRUE;
     }
@@ -2278,10 +2277,14 @@ wxRect wxTextCtrl::GetRealTextArea() const
 
         // when we're called for the very first time, the line height might not
         // had been calculated yet, so do get it now
-        wxConstCast(this, wxTextCtrl)->RecalcFontMetrics();
+        wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
+        self->RecalcFontMetrics();
 
         int hLine = GetLineHeight();
         rectText.height = (m_rectText.height / hLine) * hLine;
+
+        // cache the result
+        self->MData().m_rectTextReal = rectText;
     }
 
     return rectText;
@@ -2756,86 +2759,89 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
         *colRowStartOut = 0;
 
     int hLine = GetLineHeight();
-    wxTextCoord rowLast = GetNumberOfLines() - 1;
-    row = y / hLine;
-    if ( IsSingleLine() || !WrapLines() )
+    if ( y < 0 )
     {
-        // in this case row calculation is simple as all lines have the
-        // same height
-        if ( row > rowLast )
-        {
-            // clicking below the text is the same as clicking on the last
-            // line
-            row = rowLast;
+        // and clicking before it is the same as clicking on the first one
+        row = 0;
 
-            res = wxTE_HT_BELOW;
-        }
-        else if ( row < 0 )
-        {
-            // and clicking before it is the same as clicking on the first
-            // one
-            row = 0;
-
-            res = wxTE_HT_BEFORE;
-        }
+        res = wxTE_HT_BEFORE;
     }
-    else // multline control with line wrap
+    else // y >= 0
     {
-        // use binary search to find the line containing this row
-        const wxArrayWrappedLinesData& linesData = WData().m_linesData;
-        size_t lo = 0,
-               hi = linesData.GetCount(),
-               cur;
-        while ( lo < hi )
+        wxTextCoord rowLast = GetNumberOfLines() - 1;
+        row = y / hLine;
+        if ( IsSingleLine() || !WrapLines() )
         {
-            cur = (lo + hi)/2;
-            const wxWrappedLineData& lineData = linesData[cur];
-            if ( !WData().IsValidLine(cur) )
-                LayoutLines(cur);
-            wxTextCoord rowFirst = lineData.GetFirstRow();
-
-            if ( row < rowFirst )
+            // in this case row calculation is simple as all lines have the
+            // same height and so row is the same as line
+            if ( row > rowLast )
             {
-                hi = cur;
-            }
-            else
-            {
-                // our row is after the first row of the cur line: obviously,
-                // if cur is the last line, it contains this row, otherwise we
-                // have to test that it is before the first row of the next
+                // clicking below the text is the same as clicking on the last
                 // line
-                bool found = cur == linesData.GetCount() - 1;
-                if ( found )
-                {
-                    // if the row is beyond the end of text, adjust it to be
-                    // the last one and set res accordingly
-                    if ( (size_t)(row - rowFirst) >= lineData.GetRowCount() )
-                    {
-                        res = wxTE_HT_BELOW;
+                row = rowLast;
 
-                        row = lineData.GetRowCount() + rowFirst - 1;
-                    }
-                }
-                else // not the last row
-                {
-                    const wxWrappedLineData& lineNextData = linesData[cur + 1];
-                    if ( !WData().IsValidLine(cur + 1) )
-                        LayoutLines(cur + 1);
-                    found = row < lineNextData.GetFirstRow();
-                }
+                res = wxTE_HT_BELOW;
+            }
+        }
+        else // multline control with line wrap
+        {
+            // use binary search to find the line containing this row
+            const wxArrayWrappedLinesData& linesData = WData().m_linesData;
+            size_t lo = 0,
+                   hi = linesData.GetCount(),
+                   cur;
+            while ( lo < hi )
+            {
+                cur = (lo + hi)/2;
+                const wxWrappedLineData& lineData = linesData[cur];
+                if ( !WData().IsValidLine(cur) )
+                    LayoutLines(cur);
+                wxTextCoord rowFirst = lineData.GetFirstRow();
 
-                if ( found )
+                if ( row < rowFirst )
                 {
-                    colRowStart = lineData.GetRowStart(row - rowFirst);
-                    rowLen = lineData.GetRowLength(row - rowFirst,
-                                                   GetLines()[cur].length());
-                    row = rowFirst;
-
-                    break;
+                    hi = cur;
                 }
                 else
                 {
-                    lo = cur;
+                    // our row is after the first row of the cur line:
+                    // obviously, if cur is the last line, it contains this
+                    // row, otherwise we have to test that it is before the
+                    // first row of the next line
+                    bool found = cur == linesData.GetCount() - 1;
+                    if ( found )
+                    {
+                        // if the row is beyond the end of text, adjust it to
+                        // be the last one and set res accordingly
+                        if ( (size_t)(row - rowFirst) >= lineData.GetRowCount() )
+                        {
+                            res = wxTE_HT_BELOW;
+
+                            row = lineData.GetRowCount() + rowFirst - 1;
+                        }
+                    }
+                    else // not the last row
+                    {
+                        const wxWrappedLineData&
+                                lineNextData = linesData[cur + 1];
+                        if ( !WData().IsValidLine(cur + 1) )
+                            LayoutLines(cur + 1);
+                        found = row < lineNextData.GetFirstRow();
+                    }
+
+                    if ( found )
+                    {
+                        colRowStart = lineData.GetRowStart(row - rowFirst);
+                        rowLen = lineData.GetRowLength(row - rowFirst,
+                                                       GetLines()[cur].length());
+                        row = cur;
+
+                        break;
+                    }
+                    else
+                    {
+                        lo = cur;
+                    }
                 }
             }
         }
@@ -3159,6 +3165,8 @@ void wxTextCtrl::RecalcFontMetrics()
 
 void wxTextCtrl::RecalcMaxWidth()
 {
+    wxASSERT_MSG( !IsSingleLine(), _T("only used for multiline") );
+
     MData().m_widthMax = -1;
     (void)GetMaxWidth();
 }
@@ -3205,7 +3213,7 @@ void wxTextCtrl::UpdateScrollbars()
     // is our height enough to show all items?
     wxTextCoord nRows = GetRowCount();
     wxCoord lineHeight = GetLineHeight();
-    bool showScrollbarY = !IsSingleLine() && nRows*lineHeight > size.y;
+    bool showScrollbarY = nRows*lineHeight > size.y;
 
     // is our width enough to show the longest line?
     wxCoord charWidth, maxWidth;
@@ -3236,7 +3244,8 @@ void wxTextCtrl::UpdateScrollbars()
         GetViewStart(&x, &y);
         SetScrollbars(charWidth, lineHeight,
                       scrollRangeX, scrollRangeY,
-                      x, y);
+                      x, y,
+                      TRUE /* no refresh */);
 
         MData().m_scrollRangeX = scrollRangeX;
         MData().m_scrollRangeY = scrollRangeY;
@@ -3244,17 +3253,18 @@ void wxTextCtrl::UpdateScrollbars()
         // bring the current position in view
         ShowPosition(-1);
     }
+
+    MData().m_updateScrollbarX =
+    MData().m_updateScrollbarY = FALSE;
 }
 
 void wxTextCtrl::OnIdle(wxIdleEvent& event)
 {
     // notice that single line text control never has scrollbars
-    if ( !IsSingleLine() && (MData().m_updateScrollbarX || MData().m_updateScrollbarY) )
+    if ( !IsSingleLine() &&
+            (MData().m_updateScrollbarX || MData().m_updateScrollbarY) )
     {
         UpdateScrollbars();
-
-        MData().m_updateScrollbarX =
-        MData().m_updateScrollbarY = FALSE;
     }
 
     event.Skip();
@@ -3285,12 +3295,8 @@ void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
         rowLast = lineLast + 1;
     }
 
-    wxCoord bottom = rowLast*h;
-
-    wxCoord yLastVisible = GetRealTextArea().GetBottom() - rect.y;
-    if ( bottom > yLastVisible )
-        bottom = yLastVisible;
-    rect.SetBottom(bottom);
+    // -1 compensates for +1 inside SetBottom
+    rect.SetBottom(rowLast*h - 1);
 
     RefreshTextRect(rect);
 }
@@ -3450,6 +3456,12 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
 
     // account for the text area offset
     rect.Offset(m_rectText.GetPosition());
+
+    // don't refresh outside the text area
+    if ( rect.GetRight() > m_rectText.GetRight() )
+        rect.SetRight(m_rectText.GetRight());
+    if ( rect.GetBottom() > m_rectText.GetBottom() )
+        rect.SetBottom(m_rectText.GetBottom());
 
     wxLogTrace(_T("text"), _T("Refreshing (%d, %d)-(%d, %d)"),
                rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
@@ -3772,18 +3784,21 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     if ( !wxControl::SetFont(font) )
         return FALSE;
 
-    // recreate it, in fact
-    CreateCaret();
-
     // and refresh everything, of course
     InitInsertionPoint();
     ClearSelection();
 
     // update geometry parameters
     UpdateTextRect();
-    UpdateScrollbars();
     RecalcFontMetrics();
-    RecalcMaxWidth();
+    if ( !IsSingleLine() )
+    {
+        UpdateScrollbars();
+        RecalcMaxWidth();
+    }
+
+    // recreate it, in fact
+    CreateCaret();
 
     Refresh();
 

@@ -477,6 +477,10 @@ public:
         // will be repainted
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL ) = 0;
+
+        // repaint all invalid areas of the window immediately
+    virtual void Update() { }
+
         // clear the window entirely
     virtual void Clear() = 0;
 

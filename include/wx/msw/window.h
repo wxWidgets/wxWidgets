@@ -88,6 +88,7 @@ public:
 
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
+    virtual void Update();
     virtual void Clear();
 
     virtual bool SetCursor( const wxCursor &cursor );

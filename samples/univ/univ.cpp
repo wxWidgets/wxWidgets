@@ -386,14 +386,14 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
-#if 1
+#if 0
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
 #else
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
                                       wxPoint(10, 30),
-                                      wxSize(-1, 150),
-                                      wxTE_MULTILINE);
+                                      wxSize(200, 150),
+                                      wxTE_MULTILINE | wxHSCROLL);
 
 #if 0
     // test wxTextCtrl::Replace()
@@ -407,9 +407,11 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                          wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     text->SetFocus();
     //text->SetEditable(FALSE);
+#if 0
     wxSize sizeText = text->GetBestSize();
     sizeText.x = 200;
     text->SetSize(sizeText);
+#endif
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 

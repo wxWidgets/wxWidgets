@@ -1088,6 +1088,14 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
     }
 }
 
+void wxWindowMSW::Update()
+{
+    if ( !::UpdateWindow(GetHwnd()) )
+    {
+        wxLogLastError(_T("UpdateWindow"));
+    }
+}
+
 // ---------------------------------------------------------------------------
 // drag and drop
 // ---------------------------------------------------------------------------
