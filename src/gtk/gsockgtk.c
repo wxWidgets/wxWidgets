@@ -31,7 +31,7 @@ void _GSocket_GDK_Input(gpointer data,
     _GSocket_Detected_Write(socket);
 }
 
-void _GSocket_GUI_Init(GSocket *socket)
+bool _GSocket_GUI_Init(GSocket *socket)
 {
   gint *m_id;
 
@@ -40,6 +40,8 @@ void _GSocket_GUI_Init(GSocket *socket)
 
   m_id[0] = -1;
   m_id[1] = -1;
+
+  return TRUE;
 }
 
 void _GSocket_GUI_Destroy(GSocket *socket)

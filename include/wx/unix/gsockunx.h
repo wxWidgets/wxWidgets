@@ -73,17 +73,18 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
-void _GSocket_Enable(GSocket *socket, GSocketEvent event);
-void _GSocket_Disable(GSocket *socket, GSocketEvent event);
-void _GSocket_Detected_Read(GSocket *socket);
-void _GSocket_Detected_Write(GSocket *socket);
-
-void _GSocket_GUI_Init(GSocket *socket);
+bool _GSocket_GUI_Init(GSocket *socket);
 void _GSocket_GUI_Destroy(GSocket *socket);
+
 void _GSocket_Enable_Events(GSocket *socket);
 void _GSocket_Disable_Events(GSocket *socket);
 void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event);
 void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event);
+
+void _GSocket_Enable(GSocket *socket, GSocketEvent event);
+void _GSocket_Disable(GSocket *socket, GSocketEvent event);
+void _GSocket_Detected_Read(GSocket *socket);
+void _GSocket_Detected_Write(GSocket *socket);
 
 /* GAddress */
 
