@@ -673,18 +673,18 @@ BASELIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_s
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = corelib_gsockmot.o corelib_accel.o corelib_app.o corelib_bmpbuttn.o corelib_bmpmotif.o corelib_button.o corelib_checkbox.o corelib_checklst.o corelib_choice.o corelib_clipbrd.o corelib_colour.o corelib_combobox.o corelib_combobox_native.o corelib_control.o corelib_cursor.o corelib_data.o corelib_dataobj.o corelib_dc.o corelib_dcclient.o corelib_dcmemory.o corelib_dcscreen.o corelib_dialog.o corelib_evtloop.o corelib_filedlg.o corelib_font.o corelib_frame.o corelib_gauge.o corelib_gdiobj.o corelib_glcanvas.o corelib_icon.o corelib_listbox.o corelib_main.o corelib_mdi.o corelib_menu.o corelib_menuitem.o corelib_minifram.o corelib_msgdlg.o corelib_palette.o corelib_radiobox.o corelib_radiobut.o corelib_scrolbar.o corelib_settings.o corelib_slider.o corelib_spinbutt.o corelib_statbmp.o corelib_statbox.o corelib_stattext.o corelib_toolbar.o corelib_textctrl.o corelib_timer.o corelib_toplevel.o corelib_utils.o corelib_window.o corelib_fdrepdlg.o corelib_listctrl.o corelib_imaglist.o corelib_notebook.o corelib_fontdlgg.o corelib_colrdlgg.o corelib_statline.o corelib_tabg.o corelib_dirdlgg.o corelib_prntdlgg.o corelib_statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = corelib_statusbr.o corelib_uxtheme.o corelib_access.o corelib_accel.o corelib_bmpbuttn.o corelib_button.o corelib_checkbox.o corelib_checklst.o corelib_choice.o corelib_colordlg.o corelib_combobox.o corelib_control.o corelib_dialog.o corelib_dragimag.o corelib_fdrepdlg.o corelib_filedlg.o corelib_fontdlg.o corelib_frame.o corelib_gauge95.o corelib_imaglist.o corelib_iniconf.o corelib_listbox.o corelib_listctrl.o corelib_mdi.o corelib_menu.o corelib_menuitem.o corelib_metafile.o corelib_msgdlg.o corelib_nativdlg.o corelib_notebook.o corelib_ownerdrw.o corelib_penwin.o corelib_printdlg.o corelib_printwin.o corelib_radiobox.o corelib_radiobut.o corelib_scrolbar.o corelib_slider95.o corelib_spinbutt.o corelib_spinctrl.o corelib_statbmp.o corelib_statbox.o corelib_statbr95.o corelib_statline.o corelib_stattext.o corelib_tabctrl.o corelib_tbar95.o corelib_textctrl.o corelib_tglbtn.o corelib_treectrl.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_3 = corelib_accel.o corelib_app.o corelib_bitmap.o corelib_bmpbuttn.o corelib_brush.o corelib_button.o corelib_checkbox.o corelib_checklst.o corelib_choice.o corelib_clipbrd.o corelib_colour.o corelib_combobox.o corelib_control.o corelib_cursor.o corelib_data.o corelib_dataobj.o corelib_dc.o corelib_dcclient.o corelib_dcmemory.o corelib_dcprint.o corelib_dcscreen.o corelib_dialog.o corelib_dnd.o corelib_filedlg.o corelib_font.o corelib_fontdlg.o corelib_fontenum.o corelib_fontutil.o corelib_frame.o corelib_gauge.o corelib_gdiimage.o corelib_gdiobj.o corelib_helpwin.o corelib_icon.o corelib_iniconf.o corelib_joystick.o corelib_listbox.o corelib_main.o corelib_menu.o corelib_menuitem.o corelib_metafile.o corelib_mimetype.o corelib_msgdlg.o corelib_nativdlg.o corelib_notebook.o corelib_ownerdrw.o corelib_palette.o corelib_pen.o corelib_print.o corelib_radiobox.o corelib_radiobut.o corelib_region.o corelib_scrolbar.o corelib_settings.o corelib_slider.o corelib_spinbutt.o corelib_spinctrl.o corelib_statbmp.o corelib_statbox.o corelib_statline.o corelib_stattext.o corelib_tabctrl.o corelib_textctrl.o corelib_timer.o corelib_thread.o corelib_toolbar.o corelib_tooltip.o corelib_toplevel.o corelib_wave.o corelib_window.o corelib_gsocket.o corelib_gsockpm.o
-@COND_WXUSE_LIBJPEG_builtin@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_builtin@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_builtin@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_builtin@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_builtin@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_builtin@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
-@COND_WXUSE_LIBJPEG_builtin@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_ODBC_builtin@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
-@COND_WXUSE_LIBPNG_builtin@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-@COND_WXUSE_REGEX_builtin@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
-@COND_WXUSE_LIBTIFF_builtin@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-@COND_WXUSE_ZLIB_builtin@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = 
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS = monodll_fontenum.o monodll_fontutil.o monodll_utilsx11.o monodll_taskbarcmn.o monodll_taskbarx11.o monodll_printps.o monodll_dialup.o monodll_gsockgtk.o monodll_win_gtk.o monodll_app.o monodll_bitmap.o monodll_brush.o monodll_clipbrd.o monodll_colour.o monodll_cursor.o monodll_data.o monodll_dataobj.o monodll_dc.o monodll_dcclient.o monodll_dcmemory.o monodll_dcscreen.o monodll_dnd.o monodll_evtloop.o monodll_font.o monodll_toplevel.o monodll_gdiobj.o monodll_icon.o monodll_main.o monodll_pen.o monodll_popupwin.o monodll_region.o monodll_settings.o monodll_timer.o monodll_tooltip.o monodll_utilsgtk.o monodll_window.o monodll_paletteg.o
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS = 
@@ -788,12 +788,12 @@ BASELIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_s
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__install_htmllib___depname = install_htmllib
 @COND_MONOLITHIC_1_SHARED_1@__install_monodll___depname = install_monodll
 @COND_MONOLITHIC_1_SHARED_0@__install_monolib___depname = install_monolib
-@COND_WXUSE_LIBJPEG_builtin@__install_wxjpeg___depname = install_wxjpeg
-@COND_WXUSE_ODBC_builtin@__install_wxodbc___depname = install_wxodbc
-@COND_WXUSE_LIBPNG_builtin@__install_wxpng___depname = install_wxpng
-@COND_WXUSE_REGEX_builtin@__install_wxregex___depname = install_wxregex
-@COND_WXUSE_LIBTIFF_builtin@__install_wxtiff___depname = install_wxtiff
-@COND_WXUSE_ZLIB_builtin@__install_wxzlib___depname = install_wxzlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__install_wxjpeg___depname = install_wxjpeg
+@COND_WXUSE_ODBC_BUILTIN@__install_wxodbc___depname = install_wxodbc
+@COND_WXUSE_LIBPNG_BUILTIN@__install_wxpng___depname = install_wxpng
+@COND_WXUSE_REGEX_BUILTIN@__install_wxregex___depname = install_wxregex
+@COND_WXUSE_LIBTIFF_BUILTIN@__install_wxtiff___depname = install_wxtiff
+@COND_WXUSE_ZLIB_BUILTIN@__install_wxzlib___depname = install_wxzlib
 @COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_TOOLKIT_MAC@__macos_res_install___depname = macos-res-install
 @COND_MONOLITHIC_1_SHARED_1@__monodll___depname = $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -809,12 +809,12 @@ BASELIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p)   -I$(top_s
 @COND_USE_SOVERLINUX_1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_1_SHARED_0@__monolib___depname = $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
-@COND_WXUSE_LIBJPEG_builtin@__wxjpeg___depname = $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a
-@COND_WXUSE_ODBC_builtin@__wxodbc___depname = $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a
-@COND_WXUSE_LIBPNG_builtin@__wxpng___depname = $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a
-@COND_WXUSE_REGEX_builtin@__wxregex___depname = $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a
-@COND_WXUSE_LIBTIFF_builtin@__wxtiff___depname = $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a
-@COND_WXUSE_ZLIB_builtin@__wxzlib___depname = $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname = $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a
+@COND_WXUSE_ODBC_BUILTIN@__wxodbc___depname = $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBPNG_BUILTIN@__wxpng___depname = $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a
+@COND_WXUSE_REGEX_BUILTIN@__wxregex___depname = $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBTIFF_BUILTIN@__wxtiff___depname = $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a
+@COND_WXUSE_ZLIB_BUILTIN@__wxzlib___depname = $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a
 @COND_PLATFORM_MACOSX_1@dll___macver = -compatibility_version 2.5 -current_version 2.5.0
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .0.$(SO_SUFFIX)
@@ -5901,29 +5901,29 @@ install-wxconfig:
 @COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DIR) $(libdir)
 @COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a $(libdir)
 
-@COND_WXUSE_LIBJPEG_builtin@install_wxjpeg: 
-@COND_WXUSE_LIBJPEG_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBJPEG_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBJPEG_BUILTIN@install_wxjpeg: 
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a $(libdir)
 
-@COND_WXUSE_ODBC_builtin@install_wxodbc: 
-@COND_WXUSE_ODBC_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_ODBC_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_ODBC_BUILTIN@install_wxodbc: 
+@COND_WXUSE_ODBC_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_ODBC_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a $(libdir)
 
-@COND_WXUSE_LIBPNG_builtin@install_wxpng: 
-@COND_WXUSE_LIBPNG_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBPNG_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBPNG_BUILTIN@install_wxpng: 
+@COND_WXUSE_LIBPNG_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_LIBPNG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a $(libdir)
 
-@COND_WXUSE_REGEX_builtin@install_wxregex: 
-@COND_WXUSE_REGEX_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_REGEX_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_REGEX_BUILTIN@install_wxregex: 
+@COND_WXUSE_REGEX_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_REGEX_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a $(libdir)
 
-@COND_WXUSE_LIBTIFF_builtin@install_wxtiff: 
-@COND_WXUSE_LIBTIFF_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBTIFF_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBTIFF_BUILTIN@install_wxtiff: 
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a $(libdir)
 
-@COND_WXUSE_ZLIB_builtin@install_wxzlib: 
-@COND_WXUSE_ZLIB_builtin@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_ZLIB_builtin@	$(INSTALL_DATA) $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_ZLIB_BUILTIN@install_wxzlib: 
+@COND_WXUSE_ZLIB_BUILTIN@	$(INSTALL_DIR) $(libdir)
+@COND_WXUSE_ZLIB_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a $(libdir)
 
 @COND_TOOLKIT_MAC@lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r: 
 @COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc
@@ -10828,10 +10828,10 @@ monolib_zstream.o: $(srcdir)/src/common/zstream.cpp
 
 uninstall: 
 
-@COND_WXUSE_LIBJPEG_builtin@$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a: wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
-@COND_WXUSE_LIBJPEG_builtin@	rm -f $@
-@COND_WXUSE_LIBJPEG_builtin@	$(AR) rcu $@  wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
-@COND_WXUSE_LIBJPEG_builtin@	$(RANLIB) $@
+@COND_WXUSE_LIBJPEG_BUILTIN@$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a: wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
+@COND_WXUSE_LIBJPEG_BUILTIN@	rm -f $@
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(AR) rcu $@  wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(RANLIB) $@
 
 wxjpeg_jcapimin.o: $(srcdir)/src/jpeg/jcapimin.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $<
@@ -10971,10 +10971,10 @@ wxjpeg_jquant2.o: $(srcdir)/src/jpeg/jquant2.c
 wxjpeg_jutils.o: $(srcdir)/src/jpeg/jutils.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $<
 
-@COND_WXUSE_ODBC_builtin@$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a: wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
-@COND_WXUSE_ODBC_builtin@	rm -f $@
-@COND_WXUSE_ODBC_builtin@	$(AR) rcu $@  wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
-@COND_WXUSE_ODBC_builtin@	$(RANLIB) $@
+@COND_WXUSE_ODBC_BUILTIN@$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a: wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
+@COND_WXUSE_ODBC_BUILTIN@	rm -f $@
+@COND_WXUSE_ODBC_BUILTIN@	$(AR) rcu $@  wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
+@COND_WXUSE_ODBC_BUILTIN@	$(RANLIB) $@
 
 wxodbc_catalog.o: $(srcdir)/src/iodbc/catalog.c
 	$(CCC) -c -o $@ $(WXODBC_CFLAGS) $<
@@ -11021,10 +11021,10 @@ wxodbc_prepare.o: $(srcdir)/src/iodbc/prepare.c
 wxodbc_result.o: $(srcdir)/src/iodbc/result.c
 	$(CCC) -c -o $@ $(WXODBC_CFLAGS) $<
 
-@COND_WXUSE_LIBPNG_builtin@$(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a: wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
-@COND_WXUSE_LIBPNG_builtin@	rm -f $@
-@COND_WXUSE_LIBPNG_builtin@	$(AR) rcu $@  wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
-@COND_WXUSE_LIBPNG_builtin@	$(RANLIB) $@
+@COND_WXUSE_LIBPNG_BUILTIN@$(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a: wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
+@COND_WXUSE_LIBPNG_BUILTIN@	rm -f $@
+@COND_WXUSE_LIBPNG_BUILTIN@	$(AR) rcu $@  wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
+@COND_WXUSE_LIBPNG_BUILTIN@	$(RANLIB) $@
 
 wxpng_png.o: $(srcdir)/src/png/png.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $<
@@ -11077,10 +11077,10 @@ wxpng_pngwtran.o: $(srcdir)/src/png/pngwtran.c
 wxpng_pngwutil.o: $(srcdir)/src/png/pngwutil.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $<
 
-@COND_WXUSE_REGEX_builtin@$(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a: wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
-@COND_WXUSE_REGEX_builtin@	rm -f $@
-@COND_WXUSE_REGEX_builtin@	$(AR) rcu $@  wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
-@COND_WXUSE_REGEX_builtin@	$(RANLIB) $@
+@COND_WXUSE_REGEX_BUILTIN@$(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a: wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
+@COND_WXUSE_REGEX_BUILTIN@	rm -f $@
+@COND_WXUSE_REGEX_BUILTIN@	$(AR) rcu $@  wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
+@COND_WXUSE_REGEX_BUILTIN@	$(RANLIB) $@
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $<
@@ -11094,10 +11094,10 @@ wxregex_regexec.o: $(srcdir)/src/regex/regexec.c
 wxregex_regfree.o: $(srcdir)/src/regex/regfree.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $<
 
-@COND_WXUSE_LIBTIFF_builtin@$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a: $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
-@COND_WXUSE_LIBTIFF_builtin@	rm -f $@
-@COND_WXUSE_LIBTIFF_builtin@	$(AR) rcu $@  $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
-@COND_WXUSE_LIBTIFF_builtin@	$(RANLIB) $@
+@COND_WXUSE_LIBTIFF_BUILTIN@$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a: $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
+@COND_WXUSE_LIBTIFF_BUILTIN@	rm -f $@
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(AR) rcu $@  $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(RANLIB) $@
 
 wxtiff_tif_aux.o: $(srcdir)/src/tiff/tif_aux.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
@@ -11204,10 +11204,10 @@ wxtiff_tif_write.o: $(srcdir)/src/tiff/tif_write.c
 wxtiff_tif_zip.o: $(srcdir)/src/tiff/tif_zip.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
-@COND_WXUSE_ZLIB_builtin@$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a: wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
-@COND_WXUSE_ZLIB_builtin@	rm -f $@
-@COND_WXUSE_ZLIB_builtin@	$(AR) rcu $@  wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
-@COND_WXUSE_ZLIB_builtin@	$(RANLIB) $@
+@COND_WXUSE_ZLIB_BUILTIN@$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a: wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
+@COND_WXUSE_ZLIB_BUILTIN@	rm -f $@
+@COND_WXUSE_ZLIB_BUILTIN@	$(AR) rcu $@  wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
+@COND_WXUSE_ZLIB_BUILTIN@	$(RANLIB) $@
 
 wxzlib_adler32.o: $(srcdir)/src/zlib/adler32.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
