@@ -182,6 +182,7 @@ def runTest(frame, nb, log):
         print "GetSelectedText(): ", repr(ed.GetSelectedText())
         print "GetTextRange(25, 35): ", repr(ed.GetTextRange(25, 35))
 
+
         ed.GotoPos(0)
 
     return p
@@ -193,7 +194,7 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-Once again, no docs yet.  <b>Sorry.</b>  But <a href="data/stc.h">this</a>
+Once again, no docs yet.  <b>Sorry.</b>  But <a href="data/stc.h.html">this</a>
 and <a href="http://www.scintilla.org/ScintillaDoc.html">this</a> should
 be helpful.
 </body><html>

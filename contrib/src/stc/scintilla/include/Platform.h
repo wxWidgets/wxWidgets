@@ -1,18 +1,21 @@
 // Scintilla source code edit control
-// Platform.h - interface to platform facilities
-// Also includes some basic utilities
-// Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file Platform.h
+ ** Interface to platform facilities. Also includes some basic utilities.
+ ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-// PLAT_GTK = GTK+ on Linux, PLAT_WIN = Win32 API on Win32 OS
+// PLAT_GTK = GTK+ on Linux or Win32
+// PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
+// PLAT_WIN = Win32 API on Win32 OS
 // PLAT_WX is wxWindows on any supported platform
-// Could also have PLAT_GTKWIN = GTK+ on Win32 OS in future
 
 #define PLAT_GTK 0
+#define PLAT_GTK_WIN32 0
 #define PLAT_WIN 0
 #define PLAT_WX  0
 
@@ -24,6 +27,11 @@
 #undef PLAT_GTK
 #define PLAT_GTK 1
 
+#ifdef _MSC_VER
+#undef PLAT_GTK_WIN32
+#define PLAT_GTK_WIN32 1
+#endif
+
 #else
 #undef PLAT_WIN
 #define PLAT_WIN 1
@@ -34,6 +42,9 @@
 // Include the main header for each platform
 
 #if PLAT_GTK
+#ifdef _MSC_VER
+#pragma warning(disable: 4505 4514 4710 4800)
+#endif
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #endif
@@ -42,7 +53,7 @@
 #define _WIN32_WINNT  0x0400 // Otherwise some required stuff gets ifdef'd out
 // Vassili Bourdo: shut up annoying Visual C++ warnings:
 #ifdef _MSC_VER
-#pragma warning(disable: 4800 4244 4309)
+#pragma warning(disable: 4244 4309 4710 4800)
 #endif
 #include <windows.h>
 #include <commctrl.h>
@@ -80,23 +91,28 @@ typedef wxWindow* WindowID;
 typedef wxMenu* MenuID;
 #endif
 
-// Point is exactly the same as the Win32 POINT and GTK+ GdkPoint so can be used interchangeably
-
+/**
+ * A geometric point class.
+ * Point is exactly the same as the Win32 POINT and GTK+ GdkPoint so can be used interchangeably.
+ */
 class Point {
 public:
 	int x;
 	int y;
-	
+
 	Point(int x_=0, int y_=0) : x(x_), y(y_) {
 	}
 
 	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
-	
+
 	static Point FromLong(long lpoint);
 };
 
-// PRectangle is exactly the same as the Win32 RECT so can be used interchangeably
-// PRectangles contain their top and left sides, but not their right and bottom sides
+/**
+ * A geometric rectangle class.
+ * PRectangle is exactly the same as the Win32 RECT so can be used interchangeably.
+ * PRectangles contain their top and left sides, but not their right and bottom sides.
+ */
 class PRectangle {
 public:
 	int left;
@@ -110,6 +126,10 @@ public:
 
 	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
 
+	bool operator==(PRectangle &rc) {
+		return (rc.left == left) && (rc.right == right) &&
+			(rc.top == top) && (rc.bottom == bottom);
+	}
 	bool Contains(Point pt) {
 		return (pt.x >= left) && (pt.x <= right) &&
 			(pt.y >= top) && (pt.y <= bottom);
@@ -131,6 +151,9 @@ wxRect wxRectFromPRectangle(PRectangle prc);
 PRectangle PRectangleFromwxRect(wxRect rc);
 #endif
 
+/**
+ * A colour class.
+ */
 class Colour {
 	ColourID co;
 public:
@@ -141,15 +164,17 @@ public:
 	unsigned int GetRed();
 	unsigned int GetGreen();
 	unsigned int GetBlue();
-	
+
 	friend class Surface;
 	friend class Palette;
 };
 
-// Colour pairs hold a desired colour and the colour that the graphics engine
-// allocates to approximate the desired colour.
-// To make palette management more automatic, ColourPairs could register at 
-// construction time with a palette management object.
+/**
+ * Colour pairs hold a desired colour and the colour that the graphics engine
+ * allocates to approximate the desired colour.
+ * To make palette management more automatic, ColourPairs could register at
+ * construction time with a palette management object.
+ */
 struct ColourPair {
 	Colour desired;
 	Colour allocated;
@@ -162,6 +187,9 @@ struct ColourPair {
 
 class Window;	// Forward declaration for Palette
 
+/**
+ * Colour palette management.
+ */
 class Palette {
 	int used;
 	enum {numEntries = 100};
@@ -176,22 +204,27 @@ class Palette {
 #endif
 public:
 	bool allowRealization;
-	
+
 	Palette();
 	~Palette();
 
 	void Release();
-	
-	// This method either adds a colour to the list of wanted colours (want==true)
-	// or retrieves the allocated colour back to the ColourPair.
-	// This is one method to make it easier to keep the code for wanting and retrieving in sync.
+
+	/**
+	 * This method either adds a colour to the list of wanted colours (want==true)
+	 * or retrieves the allocated colour back to the ColourPair.
+	 * This is one method to make it easier to keep the code for wanting and retrieving in sync.
+	 */
 	void WantFind(ColourPair &cp, bool want);
 
 	void Allocate(Window &w);
-	
+
 	friend class Surface;
 };
 
+/**
+ * Font management.
+ */
 class Font {
 protected:
 	FontID id;
@@ -214,7 +247,9 @@ public:
 	friend class Surface;
 };
 
-// A surface abstracts a place to draw
+/**
+ * A surface abstracts a place to draw.
+ */
 class Surface {
 private:
 	bool unicodeMode;
@@ -256,7 +291,7 @@ private:
 public:
 	Surface();
 	~Surface();
-	
+
 	void Init();
 	void Init(SurfaceID hdc_);
 	void InitPixMap(int width, int height, Surface *surface_);
@@ -287,7 +322,7 @@ public:
 	int ExternalLeading(Font &font_);
 	int Height(Font &font_);
 	int AverageCharWidth(Font &font_);
-	
+
 	int SetPalette(Palette *pal, bool inBackGround);
 	void SetClip(PRectangle rc);
 	void FlushCachedState();
@@ -297,8 +332,10 @@ public:
 	}
 };
 
-// Class to hide the details of window manipulation
-// Does not own the window which will normally have a longer life than this object
+/**
+ * Class to hide the details of window manipulation.
+ * Does not own the window which will normally have a longer life than this object.
+ */
 class Window {
 	friend class ListBox;
 protected:
@@ -333,6 +370,9 @@ public:
 #endif
 };
 
+/**
+ * Listbox management.
+ */
 class ListBox : public Window {
 #if PLAT_GTK
 	WindowID list;
@@ -360,6 +400,9 @@ public:
 	void Sort();
 };
 
+/**
+ * Menu management.
+ */
 class Menu {
 	MenuID id;
 public:
@@ -370,8 +413,10 @@ public:
 	void Show(Point pt, Window &w);
 };
 
-// Platform class used to retrieve system wide parameters such as double click speed
-// and chrome colour. Not a creatable object, more of a module with several functions.
+/**
+ * Platform class used to retrieve system wide parameters such as double click speed
+ * and chrome colour. Not a creatable object, more of a module with several functions.
+ */
 class Platform {
 	// Private so Platform objects can not be copied
 	Platform(const Platform &) {}
@@ -390,7 +435,7 @@ public:
 	static bool IsKeyDown(int key);
 	static long SendScintilla(
 		WindowID w, unsigned int msg, unsigned long wParam=0, long lParam=0);
-	
+
 	// These are utility functions not really tied to a platform
 	static int Minimum(int a, int b);
 	static int Maximum(int a, int b);
@@ -405,7 +450,15 @@ public:
 		return static_cast<short>(x & 0xffff);
 	}
 	static void DebugPrintf(const char *format, ...);
+	static bool ShowAssertionPopUps(bool assertionPopUps_);
+	static void Assert(const char *c, const char *file, int line);
 	static int Clamp(int val, int minVal, int maxVal);
 };
+
+#ifdef  NDEBUG
+#define PLATFORM_ASSERT(c) ((void)0)
+#else
+#define PLATFORM_ASSERT(c) ((c) ? (void)(0) : Platform::Assert(#c, __FILE__, __LINE__))
+#endif
 
 #endif

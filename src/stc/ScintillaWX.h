@@ -119,9 +119,9 @@ public:
     void DoButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoButtonMove(Point pt);
-    void DoMouseWheel(int rotation, int delta, int linesPerAction);
+    void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown);
     void DoAddChar(char ch);
-    int  DoKeyDown(int key, bool shift, bool ctrl, bool alt);
+    int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed);
     void DoTick() { Tick(); }
 
     bool DoDropText(long x, long y, const wxString& data);

@@ -1,10 +1,12 @@
 // Scintilla source code edit control
-// CallTip.cxx - code for displaying call tips
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file CallTip.cxx
+ ** Code for displaying call tips.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h> 
-#include <string.h> 
+#include <stdlib.h>
+#include <string.h>
 
 #include "Platform.h"
 
@@ -27,6 +29,7 @@ CallTip::CallTip() {
 }
 
 CallTip::~CallTip() {
+	font.Release();
 	wCallTip.Destroy();
 	delete []val;
 	val = 0;
@@ -42,7 +45,7 @@ void CallTip::RefreshColourPalette(Palette &pal, bool want) {
 
 void CallTip::PaintCT(Surface *surfaceWindow) {
 	if (!val)
-		return;
+		return ;
 	PRectangle rcClientPos = wCallTip.GetClientPosition();
 	PRectangle rcClientSize(0, 0, rcClientPos.right - rcClientPos.left,
 	                        rcClientPos.bottom - rcClientPos.top);
@@ -117,7 +120,7 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
                                  const char *faceName, int size) {
 	Surface surfaceMeasure;
 	surfaceMeasure.Init();
-	int deviceHeight = (size * surfaceMeasure.LogPixelsY()) / 72;
+	int deviceHeight = surfaceMeasure.DeviceHeightFont(size);
 	font.Create(faceName, SC_CHARSET_DEFAULT, deviceHeight, false, false);
 	if (val)
 		delete []val;
@@ -146,9 +149,8 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 	int lineHeight = surfaceMeasure.Height(font);
 	// Extra line for border and an empty line at top and bottom
 	int height = lineHeight * numLines - surfaceMeasure.InternalLeading(font) + 2 + 2;
-	return PRectangle(pt.x -5, pt.y + lineHeight + 1, pt.x + width - 5, pt.y + lineHeight + 1 + height);
+	return PRectangle(pt.x -5, pt.y + 1, pt.x + width - 5, pt.y + 1 + height);
 }
-
 
 void CallTip::CallTipCancel() {
 	inCallTipMode = false;

@@ -1,15 +1,19 @@
 // Scintilla source code edit control
-// ContractionState.h - manages visibility of lines for folding
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file ContractionState.h
+ ** Manages visibility of lines for folding.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef CONTRACTIONSTATE_H
 #define CONTRACTIONSTATE_H
 
+/**
+ */
 class OneLine {
 public:
-	int displayLine;	// position within set of visible lines
-	int docLine;		// inverse of displayLine
+	int displayLine;	///< Position within set of visible lines
+	int docLine;		///< Inverse of @a displayLine
 	bool visible;
 	bool expanded;
 	
@@ -17,6 +21,8 @@ public:
 	virtual ~OneLine() {}
 };
 
+/**
+ */
 class ContractionState {
 	void Grow(int sizeNew);
 	enum { growSize = 4000 };
@@ -26,6 +32,7 @@ class ContractionState {
 	int size;
 	mutable bool valid;
 	void MakeValid() const;
+
 public:
 	ContractionState();
 	virtual ~ContractionState();

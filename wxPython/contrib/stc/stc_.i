@@ -39,47 +39,62 @@
 // Python functions to act like the event macros
 
 %pragma(python) code = "
-def EVT_STC_CHANGE(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_CHANGE, fn)
+def EVT_STC_CHANGE(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_CHANGE, func)
 
-def EVT_STC_STYLENEEDED(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_STYLENEEDED, fn)
+def EVT_STC_STYLENEEDED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_STYLENEEDED, func)
 
-def EVT_STC_CHARADDED(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_CHARADDED, fn)
+def EVT_STC_CHARADDED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_CHARADDED, func)
 
-def EVT_STC_UPDATEUI(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_UPDATEUI, fn)
+def EVT_STC_SAVEPOINTREACHED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_SAVEPOINTREACHED, func)
 
-def EVT_STC_SAVEPOINTREACHED(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_SAVEPOINTREACHED, fn)
+def EVT_STC_SAVEPOINTLEFT(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_SAVEPOINTLEFT, func)
 
-def EVT_STC_SAVEPOINTLEFT(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_SAVEPOINTLEFT, fn)
+def EVT_STC_ROMODIFYATTEMPT(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_ROMODIFYATTEMPT, func)
 
-def EVT_STC_ROMODIFYATTEMPT(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_ROMODIFYATTEMPT, fn)
+def EVT_STC_KEY(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_KEY, func)
 
-def EVT_STC_DOUBLECLICK(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_DOUBLECLICK, fn)
+def EVT_STC_DOUBLECLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DOUBLECLICK, func)
 
-def EVT_STC_MODIFIED(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_MODIFIED, fn)
+def EVT_STC_UPDATEUI(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_UPDATEUI, func)
 
-def EVT_STC_KEY(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_KEY, fn)
+def EVT_STC_MODIFIED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_MODIFIED, func)
 
-def EVT_STC_MACRORECORD(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_MACRORECORD, fn)
+def EVT_STC_MACRORECORD(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_MACRORECORD, func)
 
-def EVT_STC_MARGINCLICK(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_MARGINCLICK, fn)
+def EVT_STC_MARGINCLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_MARGINCLICK, func)
 
-def EVT_STC_NEEDSHOWN(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_NEEDSHOWN, fn)
+def EVT_STC_NEEDSHOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_NEEDSHOWN, func)
 
-def EVT_STC_POSCHANGED(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_POSCHANGED, fn)
+def EVT_STC_POSCHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_POSCHANGED, func)
+
+def EVT_STC_PAINTED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_PAINTED, func)
+
+def EVT_STC_USERLISTSELECTION(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_USERLISTSELECTION, func)
+
+def EVT_STC_URIDROPPED(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_URIDROPPED, func)
+
+def EVT_STC_DWELLSTART(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DWELLSTART, func)
+
+def EVT_STC_DWELLEND(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DWELLEND, func)
 
 
 "

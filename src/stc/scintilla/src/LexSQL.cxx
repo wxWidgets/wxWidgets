@@ -1,13 +1,15 @@
-// SciTE - Scintilla based Text Editor
-// LexSQL.cxx - lexer for SQL
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+// Scintilla source code edit control
+/** @file LexSQL.cxx
+ ** Lexer for SQL.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h> 
-#include <string.h> 
-#include <ctype.h> 
-#include <stdio.h> 
-#include <stdarg.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #include "Platform.h"
 
@@ -38,7 +40,7 @@ static void ColouriseSQLDoc(unsigned int startPos, int length,
                             int initStyle, WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
-	
+
 	styler.StartAt(startPos);
 
 	bool fold = styler.GetPropertyInt("fold");
@@ -153,4 +155,4 @@ static void ColouriseSQLDoc(unsigned int startPos, int length,
 	styler.ColourTo(lengthDoc - 1, state);
 }
 
-LexerModule lmSQL(SCLEX_SQL, ColouriseSQLDoc);
+LexerModule lmSQL(SCLEX_SQL, ColouriseSQLDoc, "sql");

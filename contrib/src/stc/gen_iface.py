@@ -12,15 +12,15 @@
 #----------------------------------------------------------------------------
 
 
-import sys, string, re
+import sys, string, re, os
 from fileinput import FileInput
 
 
-IFACE         = './scintilla/include/Scintilla.iface'
-H_TEMPLATE    = './stc.h.in'
-CPP_TEMPLATE  = './stc.cpp.in'
-H_DEST        = '../../include/wx/stc/stc.h'
-CPP_DEST      = './stc.cpp'
+IFACE         = os.path.abspath('./scintilla/include/Scintilla.iface')
+H_TEMPLATE    = os.path.abspath('./stc.h.in')
+CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
+H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
+CPP_DEST      = os.path.abspath('./stc.cpp')
 
 
 # Value prefixes to convert
@@ -215,6 +215,9 @@ methodOverrideMap = {
     'AutoCGetChooseSingle' : ('AutoCompGetChooseSingle', 0, 0, 0),
     'AutoCSetIgnoreCase' : ('AutoCompSetIgnoreCase', 0, 0, 0),
     'AutoCGetIgnoreCase' : ('AutoCompGetIgnoreCase', 0, 0, 0),
+    'AutoCSetAutoHide' : ('AutoCompSetAutoHide', 0, 0, 0),
+    'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0, 0),
+
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0, 0),
     'GetHScrollBar' : ('GetUseHorizontalScrollBar', 0, 0, 0),
@@ -360,6 +363,38 @@ methodOverrideMap = {
     'CallTipSetBack' : ('CallTipSetBackground', 0, 0, 0),
 
 
+    'ReplaceTarget' : (0,
+                       'int %s(const wxString& text);',
+
+                       '''
+                       int %s(const wxString& text) {
+                           return SendMsg(%s, text.Len(), (long)text.c_str());
+                       ''',
+
+                       0),
+
+    'ReplaceTargetRE' : (0,
+                       'int %s(const wxString& text);',
+
+                       '''
+                       int %s(const wxString& text) {
+                           return SendMsg(%s, text.Len(), (long)text.c_str());
+                       ''',
+
+                       0),
+
+    'SearchInTarget' : (0,
+                       'int %s(const wxString& text);',
+
+                       '''
+                       int %s(const wxString& text) {
+                           return SendMsg(%s, text.Len(), (long)text.c_str());
+                       ''',
+
+                       0),
+
+
+
     # Remove all methods that are key commands since they can be
     # executed with CmdKeyExecute
     'LineDown' : (None, 0, 0, 0),
@@ -417,7 +452,7 @@ methodOverrideMap = {
     'SetDocPointer' : (0,
                        'void %s(void* docPointer);',
                        '''void %s(void* docPointer) {
-                           SendMsg(%s, (long)docPointer);''',
+                           SendMsg(%s, 0, (long)docPointer);''',
                        0),
 
     'CreateDocument' : (0,
@@ -684,5 +719,4 @@ if __name__ == '__main__':
     main(sys.argv)
 
 #----------------------------------------------------------------------------
-
 

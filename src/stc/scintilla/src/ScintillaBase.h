@@ -1,17 +1,22 @@
 // Scintilla source code edit control
-// ScintillaBase.h - defines an enhanced subclass of Editor with calltips, autocomplete and context menu
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file ScintillaBase.h
+ ** Defines an enhanced subclass of Editor with calltips, autocomplete and context menu.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef SCINTILLABASE_H
 #define SCINTILLABASE_H
 
+/**
+ */
 class ScintillaBase : public Editor {
 	// Private so ScintillaBase objects can not be copied
 	ScintillaBase(const ScintillaBase &) : Editor() {}
 	ScintillaBase &operator=(const ScintillaBase &) { return *this; }
+
 protected:
-	// Enumeration of commands and child windows
+	/** Enumeration of commands and child windows. */
 	enum {
 		idCallTip=1,
 		idAutoComplete=2,
@@ -30,11 +35,17 @@ protected:
 
 	CallTip ct;
 
+	int listType;			///< 0 is an autocomplete list
+	SString userListSelected;	///< Receives listbox selected string
+	
 #ifdef SCI_LEXER
 	int lexLanguage;
+	LexerModule *lexCurrent;
 	PropSet props;
 	enum {numWordLists=5};
-	WordList *keyWordLists[numWordLists];
+	WordList *keyWordLists[numWordLists+1];
+	void SetLexer(uptr_t wParam);
+	void SetLexerLanguage(const char *languageName);
 	void Colourise(int start, int end);
 #endif
 
@@ -67,7 +78,7 @@ protected:
 	virtual void NotifyStyleToNeeded(int endStyleNeeded);
 public:
 	// Public so scintilla_send_message can use it
-	virtual long WndProc(unsigned int iMessage, unsigned long wParam, long lParam);
+	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 };
 
 #endif

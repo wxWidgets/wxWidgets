@@ -1,6 +1,8 @@
 // Scintilla source code edit control
-// Indicator.cxx - defines the style of indicators which are text decorations such as underlining
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file Indicator.cxx
+ ** Defines the style of indicators which are text decorations such as underlining.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include "Platform.h"

@@ -93,7 +93,6 @@ END_EVENT_TABLE()
 ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     capturedMouse = false;
     wMain = win;
-    wDraw = win;
     stc   = win;
     wheelRotation = 0;
     Initialise();
@@ -170,8 +169,8 @@ bool ScintillaWX::HaveMouseCapture() {
 
 void ScintillaWX::ScrollText(int linesToMove) {
     int dy = vs.lineHeight * (linesToMove);
-    // TODO: calculate the rectangle to refreshed...
     wMain.GetID()->ScrollWindow(0, dy);
+    wMain.GetID()->Update();
 }
 
 void ScintillaWX::SetVerticalScrollPos() {
@@ -261,7 +260,7 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxSTCCallTip(wDraw.GetID(), -1, &ct);
+    ct.wCallTip = new wxSTCCallTip(wMain.GetID(), -1, &ct);
     ct.wDraw = ct.wCallTip;
 }
 
@@ -365,17 +364,27 @@ void ScintillaWX::DoVScroll(int type, int pos) {
 }
 
 
-void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction) {
+void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown) {
     int topLineNew = topLine;
     int lines;
 
-    wheelRotation += rotation;
-    lines = wheelRotation / delta;
-    wheelRotation -= lines * delta;
-    if (lines != 0) {
-        lines *= linesPerAction;
-        topLineNew -= lines;
-        ScrollTo(topLineNew);
+    if (ctrlDown) {  // Zoom the fonts if Ctrl key down
+        if (rotation < 0) {
+            KeyCommand(SCI_ZOOMIN);
+        }
+        else {
+            KeyCommand(SCI_ZOOMOUT);
+        }
+    }
+    else { // otherwise just scroll the window
+        wheelRotation += rotation;
+        lines = wheelRotation / delta;
+        wheelRotation -= lines * delta;
+        if (lines != 0) {
+            lines *= linesPerAction;
+            topLineNew -= lines;
+            ScrollTo(topLineNew);
+        }
     }
 }
 
@@ -387,11 +396,11 @@ void ScintillaWX::DoSize(int width, int height) {
 }
 
 void ScintillaWX::DoLoseFocus(){
-    DropCaret();
+    SetFocusState(false);
 }
 
 void ScintillaWX::DoGainFocus(){
-    ShowCaretAtCurrentPosition();
+    SetFocusState(true);
 }
 
 void ScintillaWX::DoSysColourChange() {
@@ -418,7 +427,7 @@ void ScintillaWX::DoAddChar(char ch) {
     //    AutoCompleteChanged(ch);
 }
 
-int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt) {
+int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
     switch (key) {
         case WXK_DOWN: key = SCK_DOWN; break;
         case WXK_UP: key = SCK_UP; break;
@@ -442,7 +451,7 @@ int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt) {
         case WXK_SHIFT: key = 0; break;
     }
 
-    return KeyDown(key, shift, ctrl, alt);
+    return KeyDown(key, shift, ctrl, alt, consumed);
 }
 
 

@@ -1,6 +1,8 @@
 // Scintilla source code edit control
-// ScintillaBase.cxx - an enhanced subclass of Editor with calltips, autocomplete and context menu
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file ScintillaBase.cxx
+ ** An enhanced subclass of Editor with calltips, autocomplete and context menu.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -15,7 +17,6 @@
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #include "Accessor.h"
-#include "WindowAccessor.h"
 #include "DocumentAccessor.h"
 #include "KeyWords.h"
 #endif
@@ -34,22 +35,25 @@
 #include "ScintillaBase.h"
 
 ScintillaBase::ScintillaBase() {
-#ifdef SCI_LEXER	
+	listType = 0;
+#ifdef SCI_LEXER
 	lexLanguage = SCLEX_CONTAINER;
-	for (int wl=0;wl<numWordLists;wl++)
+	lexCurrent = 0;
+	for (int wl = 0;wl < numWordLists;wl++)
 		keyWordLists[wl] = new WordList;
+	keyWordLists[numWordLists] = 0;
 #endif
 }
 
 ScintillaBase::~ScintillaBase() {
-#ifdef SCI_LEXER	
-	for (int wl=0;wl<numWordLists;wl++)
+#ifdef SCI_LEXER
+	for (int wl = 0;wl < numWordLists;wl++)
 		delete keyWordLists[wl];
 #endif
 }
 
 void ScintillaBase::Finalise() {
-    Editor::Finalise();
+	Editor::Finalise();
 	popup.Destroy();
 }
 
@@ -70,10 +74,12 @@ void ScintillaBase::Command(int cmdId) {
 
 	switch (cmdId) {
 
-	case idAutoComplete: 	// Nothing to do
+	case idAutoComplete:  	// Nothing to do
+
 		break;
 
-	case idCallTip: 	// Nothing to do
+	case idCallTip:  	// Nothing to do
+
 		break;
 
 	case idcmdUndo:
@@ -170,7 +176,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	//Platform::DebugPrintf("AutoComplete %s\n", list);
 	ct.CallTipCancel();
 
-	if (ac.chooseSingle) {
+	if (ac.chooseSingle && (listType == 0)) {
 		if (list && !strchr(list, ac.GetSeparator())) {
 			if (ac.ignoreCase) {
 				SetEmptySelection(currentPos - lenEntered);
@@ -183,13 +189,13 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 				pdoc->InsertString(currentPos, list + lenEntered);
 				SetEmptySelection(currentPos + strlen(list + lenEntered));
 			}
-			return;
+			return ;
 		}
 	}
-	ac.Start(wDraw, idAutoComplete, currentPos, lenEntered);
+	ac.Start(wMain, idAutoComplete, currentPos, lenEntered);
 
 	PRectangle rcClient = GetClientRectangle();
-	Point pt = LocationFromPosition(currentPos-lenEntered);
+	Point pt = LocationFromPosition(currentPos - lenEntered);
 
 	int heightLB = 100;
 	int widthLB = 100;
@@ -200,8 +206,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	}
 	PRectangle rcac;
 	rcac.left = pt.x - 5;
-	if (pt.y >= rcClient.bottom - heightLB && // Wont fit below.
-	    pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
+	if (pt.y >= rcClient.bottom - heightLB &&  // Wont fit below.
+	        pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
 		rcac.top = pt.y - heightLB;
 		if (rcac.top < 0) {
 			heightLB += rcac.top;
@@ -225,8 +231,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	// Make an allowance for large strings in list
 	rcList.left = pt.x - 5;
 	rcList.right = rcList.left + widthLB;
-	if (pt.y >= rcClient.bottom - heightLB && // Wont fit below.
-	    pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
+	if (pt.y >= rcClient.bottom - heightLB &&  // Wont fit below.
+	        pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
 		rcList.top = pt.y - heightAlloced;
 	} else {
 		rcList.top = pt.y + vs.lineHeight;
@@ -236,7 +242,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	ac.Show();
 	if (lenEntered != 0) {
 		AutoCompleteMoveToCurrentWord();
-	}		
+	}
 }
 
 void ScintillaBase::AutoCompleteCancel() {
@@ -278,44 +284,45 @@ void ScintillaBase::AutoCompleteCompleted(char fillUp/*='\0'*/) {
 		ac.lb.GetValue(item, selected, sizeof(selected));
 	}
 	ac.Cancel();
-	
-	if (ac.ignoreCase) {
-		if (currentPos != ac.posStart) {
-			pdoc->DeleteChars(ac.posStart, currentPos - ac.posStart);
-		}
-		SetEmptySelection(ac.posStart - ac.startLen);
-		pdoc->DeleteChars(ac.posStart - ac.startLen, ac.startLen);
-		if (item != -1) {
-			SString piece = selected;
-			if (fillUp)
-				piece += fillUp;
-			pdoc->InsertString(currentPos, piece.c_str());
-			SetEmptySelection(currentPos + piece.length());
-		}
-	} else {
-		if (currentPos != ac.posStart) {
-			pdoc->DeleteChars(ac.posStart, currentPos - ac.posStart);
-		}
-		SetEmptySelection(ac.posStart);
-		if (item != -1) {
-			SString piece = selected + ac.startLen;
-			if (fillUp)
-				piece += fillUp;
-			pdoc->InsertString(currentPos, piece.c_str());
-			SetEmptySelection(currentPos + piece.length());
-		}
+
+	if (listType > 0) {
+		userListSelected = selected;
+		SCNotification scn;
+		scn.nmhdr.code = SCN_USERLISTSELECTION;
+		scn.message = 0;
+		scn.wParam = listType;
+		scn.lParam = 0;
+		scn.text = userListSelected.c_str();
+		NotifyParent(scn);
+		return ;
+	}
+
+	Position firstPos = ac.posStart - ac.startLen;
+	if (currentPos < firstPos)
+		return ;
+	if (currentPos != firstPos) {
+		pdoc->DeleteChars(firstPos, currentPos - firstPos);
+	}
+	SetEmptySelection(ac.posStart);
+	if (item != -1) {
+		SString piece = selected;
+		if (fillUp)
+			piece += fillUp;
+		pdoc->InsertString(firstPos, piece.c_str());
+		SetEmptySelection(firstPos + piece.length());
 	}
 }
 
 void ScintillaBase::ContextMenu(Point pt) {
+	bool writable = !WndProc(SCI_GETREADONLY, 0, 0);
 	popup.CreatePopUp();
-	AddToPopUp("Undo", idcmdUndo, pdoc->CanUndo());
-	AddToPopUp("Redo", idcmdRedo, pdoc->CanRedo());
+	AddToPopUp("Undo", idcmdUndo, writable && pdoc->CanUndo());
+	AddToPopUp("Redo", idcmdRedo, writable && pdoc->CanRedo());
 	AddToPopUp("");
-	AddToPopUp("Cut", idcmdCut, currentPos != anchor);
+	AddToPopUp("Cut", idcmdCut, writable && currentPos != anchor);
 	AddToPopUp("Copy", idcmdCopy, currentPos != anchor);
-	AddToPopUp("Paste", idcmdPaste, WndProc(SCI_CANPASTE, 0, 0));
-	AddToPopUp("Delete", idcmdDelete, currentPos != anchor);
+	AddToPopUp("Paste", idcmdPaste, writable && WndProc(SCI_CANPASTE, 0, 0));
+	AddToPopUp("Delete", idcmdDelete, writable && currentPos != anchor);
 	AddToPopUp("");
 	AddToPopUp("Select All", idcmdSelectAll);
 	popup.Show(pt, wMain);
@@ -333,41 +340,67 @@ void ScintillaBase::ButtonDown(Point pt, unsigned int curTime, bool shift, bool 
 }
 
 #ifdef SCI_LEXER
+void ScintillaBase::SetLexer(uptr_t wParam) {
+	lexLanguage = wParam;
+	lexCurrent = LexerModule::Find(lexLanguage);
+	if (!lexCurrent)
+		lexCurrent = LexerModule::Find(SCLEX_NULL);
+}
+
+void ScintillaBase::SetLexerLanguage(const char *languageName) {
+	lexLanguage = SCLEX_CONTAINER;
+	lexCurrent = LexerModule::Find(languageName);
+	if (!lexCurrent)
+		lexCurrent = LexerModule::Find(SCLEX_NULL);
+	if (lexCurrent)
+		lexLanguage = lexCurrent->GetLanguage();
+}
+
 void ScintillaBase::Colourise(int start, int end) {
-	int lengthDoc = Platform::SendScintilla(wMain.GetID(), SCI_GETLENGTH, 0, 0);
+	int lengthDoc = pdoc->Length();
 	if (end == -1)
 		end = lengthDoc;
 	int len = end - start;
 
+	PLATFORM_ASSERT(len >= 0);
+	PLATFORM_ASSERT(start + len <= lengthDoc);
+
 	//WindowAccessor styler(wMain.GetID(), props);
-	DocumentAccessor styler(pdoc, props);
+	DocumentAccessor styler(pdoc, props, wMain.GetID());
 
 	int styleStart = 0;
 	if (start > 0)
 		styleStart = styler.StyleAt(start - 1);
 	styler.SetCodePage(pdoc->dbcsCodePage);
-	
-	LexerModule::Colourise(start, len, styleStart, lexLanguage, keyWordLists, styler);
-	styler.Flush();
+
+	if (lexCurrent) {	// Should always succeed as null lexer should always be available
+		lexCurrent->Lex(start, len, styleStart, keyWordLists, styler);
+		styler.Flush();
+		if (styler.GetPropertyInt("fold")) {
+			lexCurrent->Fold(start, len, styleStart, keyWordLists, styler);
+			styler.Flush();
+		}
+	}
 }
 #endif
 
 void ScintillaBase::NotifyStyleToNeeded(int endStyleNeeded) {
 #ifdef SCI_LEXER
 	if (lexLanguage != SCLEX_CONTAINER) {
-		int endStyled = Platform::SendScintilla(wMain.GetID(), SCI_GETENDSTYLED, 0, 0);
-		int lineEndStyled = Platform::SendScintilla(wMain.GetID(), SCI_LINEFROMPOSITION, endStyled, 0);
-		endStyled = Platform::SendScintilla(wMain.GetID(), SCI_POSITIONFROMLINE, lineEndStyled, 0);
+		int endStyled = WndProc(SCI_GETENDSTYLED, 0, 0);
+		int lineEndStyled = WndProc(SCI_LINEFROMPOSITION, endStyled, 0);
+		endStyled = WndProc(SCI_POSITIONFROMLINE, lineEndStyled, 0);
 		Colourise(endStyled, endStyleNeeded);
-		return;
+		return ;
 	}
 #endif
 	Editor::NotifyStyleToNeeded(endStyleNeeded);
 }
 
-long ScintillaBase::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
+sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	switch (iMessage) {
 	case SCI_AUTOCSHOW:
+		listType = 0;
 		AutoCompleteStart(wParam, reinterpret_cast<const char *>(lParam));
 		break;
 
@@ -395,15 +428,15 @@ long ScintillaBase::WndProc(unsigned int iMessage, unsigned long wParam, long lP
 	case SCI_AUTOCSTOPS:
 		ac.SetStopChars(reinterpret_cast<char *>(lParam));
 		break;
-		
+
 	case SCI_AUTOCSELECT:
 		ac.Select(reinterpret_cast<char *>(lParam));
 		break;
-	
+
 	case SCI_AUTOCSETCANCELATSTART:
 		ac.cancelAtStartPos = wParam;
 		break;
-	
+
 	case SCI_AUTOCGETCANCELATSTART:
 		return ac.cancelAtStartPos;
 
@@ -417,20 +450,35 @@ long ScintillaBase::WndProc(unsigned int iMessage, unsigned long wParam, long lP
 
 	case SCI_AUTOCGETCHOOSESINGLE:
 		return ac.chooseSingle;
-		
+
 	case SCI_AUTOCSETIGNORECASE:
 		ac.ignoreCase = wParam;
 		break;
-		
+
 	case SCI_AUTOCGETIGNORECASE:
 		return ac.ignoreCase;
-		
+
+	case SCI_USERLISTSHOW:
+		listType = wParam;
+		AutoCompleteStart(0, reinterpret_cast<const char *>(lParam));
+		break;
+
+	case SCI_AUTOCSETAUTOHIDE:
+		ac.autoHide = wParam;
+		break;
+
+	case SCI_AUTOCGETAUTOHIDE:
+		return ac.autoHide;
+
 	case SCI_CALLTIPSHOW: {
 			AutoCompleteCancel();
 			if (!ct.wCallTip.Created()) {
-				PRectangle rc = ct.CallTipStart(currentPos, LocationFromPosition(wParam),
+				Point pt = LocationFromPosition(wParam);
+				pt.y += vs.lineHeight;
+				PRectangle rc = ct.CallTipStart(currentPos, pt,
 				                                reinterpret_cast<char *>(lParam),
-				                                vs.styles[STYLE_DEFAULT].fontName, vs.styles[STYLE_DEFAULT].size);
+				                                vs.styles[STYLE_DEFAULT].fontName,
+				                                vs.styles[STYLE_DEFAULT].sizeZoomed);
 				// If the call-tip window would be out of the client
 				// space, adjust so it displays above the text.
 				PRectangle rcClient = GetClientRectangle();
@@ -441,7 +489,7 @@ long ScintillaBase::WndProc(unsigned int iMessage, unsigned long wParam, long lP
 				}
 				// Now display the window.
 				CreateCallTipWindow(rc);
-				ct.wCallTip.SetPositionRelative(rc, wDraw);
+				ct.wCallTip.SetPositionRelative(rc, wMain);
 				ct.wCallTip.Show();
 			}
 		}
@@ -465,31 +513,37 @@ long ScintillaBase::WndProc(unsigned int iMessage, unsigned long wParam, long lP
 		ct.colourBG = Colour(wParam);
 		InvalidateStyleRedraw();
 		break;
-		
+
 #ifdef SCI_LEXER
 	case SCI_SETLEXER:
+		SetLexer(wParam);
 		lexLanguage = wParam;
 		break;
-		
+
 	case SCI_GETLEXER:
 		return lexLanguage;
-		
+
 	case SCI_COLOURISE:
 		Colourise(wParam, lParam);
 		Redraw();
 		break;
-		
+
 	case SCI_SETPROPERTY:
-		props.Set(reinterpret_cast<const char *>(wParam), 
-			reinterpret_cast<const char *>(lParam));
+		props.Set(reinterpret_cast<const char *>(wParam),
+		          reinterpret_cast<const char *>(lParam));
 		break;
-		
+
 	case SCI_SETKEYWORDS:
 		if (wParam < numWordLists) {
 			keyWordLists[wParam]->Clear();
 			keyWordLists[wParam]->Set(reinterpret_cast<const char *>(lParam));
 		}
 		break;
+
+	case SCI_SETLEXERLANGUAGE:
+		SetLexerLanguage(reinterpret_cast<const char *>(lParam));
+		break;
+
 #endif
 
 	default:

@@ -1,7 +1,13 @@
-// WindowAccessor.h - implementation of BufferAccess and StylingAccess on a Scintilla rapid easy access to contents of a Scintilla
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+// Scintilla source code edit control
+/** @file WindowAccessor.h
+ ** Implementation of BufferAccess and StylingAccess on a Scintilla
+ ** rapid easy access to contents of a Scintilla.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+/**
+ */
 class WindowAccessor : public Accessor {
 	// Private so WindowAccessor objects can not be copied
 	WindowAccessor(const WindowAccessor &source) : Accessor(), props(source.props) {}
@@ -35,6 +41,9 @@ public:
 	int SetLineState(int line, int state);
 	int GetPropertyInt(const char *key, int defaultValue=0) { 
 		return props.GetInt(key, defaultValue); 
+	}
+	char *GetProperties() {
+		return props.ToString();
 	}
 
 	void StartAt(unsigned int start, char chMask=31);

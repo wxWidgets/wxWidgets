@@ -112,6 +112,8 @@ Font::~Font() {
 }
 
 void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic) {
+    // TODO:  what to do about the characterSet?
+
     Release();
     id = new wxFont(size,
                     wxDEFAULT,
@@ -161,13 +163,11 @@ void Surface::Init() {
     Release();
     hdc = new wxMemoryDC();
     hdcOwned = true;
-    // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
 
 void Surface::Init(SurfaceID hdc_) {
     Release();
     hdc = hdc_;
-    // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
 
 void Surface::InitPixMap(int width, int height, Surface *surface_) {
@@ -176,7 +176,6 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     hdcOwned = true;
     bitmap = new wxBitmap(width, height);
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
-    // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
 
 void Surface::PenColour(Colour fore) {
@@ -353,7 +352,7 @@ int Surface::AverageCharWidth(Font &font) {
 }
 
 int Surface::SetPalette(Palette *pal, bool inBackGround) {
-    return 0;  // **** figure out what to do with palettes...
+    return 0;
 }
 
 void Surface::SetClip(PRectangle rc) {
@@ -696,6 +695,36 @@ void Platform::DebugPrintf(const char *format, ...) {
     Platform::DebugDisplay(buffer);
 #endif
 }
+
+
+static bool assertionPopUps = true;
+
+bool Platform::ShowAssertionPopUps(bool assertionPopUps_) {
+	bool ret = assertionPopUps;
+	assertionPopUps = assertionPopUps_;
+	return ret;
+}
+
+void Platform::Assert(const char *c, const char *file, int line) {
+	char buffer[2000];
+	sprintf(buffer, "Assertion [%s] failed at %s %d", c, file, line);
+	if (assertionPopUps) {
+		int idButton = wxMessageBox(buffer, "Assertion failure",
+                                            wxICON_HAND | wxOK);
+//  		if (idButton == IDRETRY) {
+//  			::DebugBreak();
+//  		} else if (idButton == IDIGNORE) {
+//  			// all OK
+//  		} else {
+//  			abort();
+//  		}
+	} else {
+		strcat(buffer, "\r\n");
+		Platform::DebugDisplay(buffer);
+		abort();
+	}
+}
+
 
 int Platform::Clamp(int val, int minVal, int maxVal) {
     if (val > maxVal)

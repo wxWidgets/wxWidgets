@@ -1,13 +1,17 @@
 // Scintilla source code edit control
-// AutoComplete.cxx - defines the auto completion list box
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file AutoComplete.cxx
+ ** Defines the auto completion list box.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "Platform.h"
 
+#include "PropSet.h"
 #include "AutoComplete.h"
 
 AutoComplete::AutoComplete() : 
@@ -17,7 +21,8 @@ AutoComplete::AutoComplete() :
 	chooseSingle(false),
 	posStart(0),
 	startLen(0),
-	cancelAtStartPos(true) {
+	cancelAtStartPos(true),
+	autoHide(true) {
 	stopChars[0] = '\0';
 	fillUpChars[0] = '\0';
 }
@@ -85,7 +90,6 @@ void AutoComplete::SetList(const char *list) {
 		}
 		delete []words;
 	}
-	lb.Sort();
 }
 
 void AutoComplete::Show() {
@@ -113,9 +117,42 @@ void AutoComplete::Move(int delta) {
 }
 
 void AutoComplete::Select(const char *word) {
-	int pos = lb.Find(word);
-	//Platform::DebugPrintf("Autocompleting at <%s> %d\n", wordCurrent, pos);
-	if (pos != -1)
-		lb.Select(pos);
+	int lenWord = strlen(word);
+	int location = -1;
+	const int maxItemLen=1000;
+	char item[maxItemLen];
+	int start = 0; // lower bound of the api array block to search
+	int end = lb.Length() - 1; // upper bound of the api array block to search
+	while ((start <= end) && (location == -1)) { // Binary searching loop
+		int pivot = (start + end) / 2;
+		lb.GetValue(pivot, item, maxItemLen);
+		int cond;
+		if (ignoreCase)
+			cond = CompareNCaseInsensitive(word, item, lenWord);
+		else
+			cond = strncmp(word, item, lenWord);
+		if (!cond) {
+			// Find first match
+			while (pivot > start) {
+				lb.GetValue(pivot-1, item, maxItemLen);
+				if (ignoreCase)
+					cond = CompareNCaseInsensitive(word, item, lenWord);
+				else
+					cond = strncmp(word, item, lenWord);
+				if (0 != cond)
+					break;
+				--pivot;
+			}
+			location = pivot;
+		} else if (cond < 0) {
+			end = pivot - 1;
+		} else if (cond > 0) {
+			start = pivot + 1;
+		}
+	}
+	if (location == -1 && autoHide)
+		Cancel();
+	else
+		lb.Select(location);
 }
 

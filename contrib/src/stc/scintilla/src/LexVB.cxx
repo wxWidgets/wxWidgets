@@ -1,13 +1,15 @@
-// SciTE - Scintilla based Text Editor
-// LexVB.cxx - lexer for Visual Basic and VBScript
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+// Scintilla source code edit control
+/** @file LexVB.cxx
+ ** Lexer for Visual Basic and VBScript.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h> 
-#include <string.h> 
-#include <ctype.h> 
-#include <stdio.h> 
-#include <stdarg.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #include "Platform.h"
 
@@ -43,11 +45,15 @@ static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywor
 		return SCE_C_DEFAULT;
 }
 
+static bool IsVBComment(Accessor &styler, int pos, int len) {
+	return len>0 && styler[pos]=='\'';
+}
+
 static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
                            WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
-	
+
 	styler.StartAt(startPos);
 
 	int visibleChars = 0;
@@ -73,7 +79,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			}
 			visibleChars = 0;
 		}
-		if (!isspace(ch))
+		if (!isspacechar(ch))
 			visibleChars++;
 
 		if (state == SCE_C_DEFAULT) {
@@ -136,4 +142,56 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 	styler.ColourTo(lengthDoc, state);
 }
 
-LexerModule lmVB(SCLEX_VB, ColouriseVBDoc);
+static void FoldVBDoc(unsigned int startPos, int length, int initStyle,
+						   WordList *[], Accessor &styler) {
+	int lengthDoc = startPos + length;
+
+	// Backtrack to previous line in case need to fix its fold status
+	int lineCurrent = styler.GetLine(startPos);
+	if (startPos > 0) {
+		if (lineCurrent > 0) {
+			lineCurrent--;
+			startPos = styler.LineStart(lineCurrent);
+			if (startPos == 0)
+				initStyle = SCE_P_DEFAULT;
+			else
+				initStyle = styler.StyleAt(startPos-1);
+		}
+	}
+	int state = initStyle & 31;
+	int spaceFlags = 0;
+	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsVBComment);
+	if ((state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE))
+		indentCurrent |= SC_FOLDLEVELWHITEFLAG;
+	char chNext = styler[startPos];
+	for (int i = startPos; i < lengthDoc; i++) {
+		char ch = chNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+		int style = styler.StyleAt(i) & 31;
+
+		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc)) {
+			int lev = indentCurrent;
+			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsVBComment);
+			if ((style == SCE_P_TRIPLE) || (style== SCE_P_TRIPLEDOUBLE))
+				indentNext |= SC_FOLDLEVELWHITEFLAG;
+			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
+				// Only non whitespace lines can be headers
+				if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK)) {
+					lev |= SC_FOLDLEVELHEADERFLAG;
+				} else if (indentNext & SC_FOLDLEVELWHITEFLAG) {
+					// Line after is blank so check the next - maybe should continue further?
+					int spaceFlags2 = 0;
+					int indentNext2 = styler.IndentAmount(lineCurrent + 2, &spaceFlags2, IsVBComment);
+					if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext2 & SC_FOLDLEVELNUMBERMASK)) {
+						lev |= SC_FOLDLEVELHEADERFLAG;
+					}
+				}
+			}
+			indentCurrent = indentNext;
+			styler.SetLevel(lineCurrent, lev);
+			lineCurrent++;
+		}
+	}
+}
+
+LexerModule lmVB(SCLEX_VB, ColouriseVBDoc, "vb", FoldVBDoc);

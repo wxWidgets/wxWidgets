@@ -1,6 +1,8 @@
 // Scintilla source code edit control
-// KeyMap.cxx  - defines a mapping between keystrokes and commands
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+/** @file KeyMap.cxx 
+ ** Defines a mapping between keystrokes and commands.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include "Platform.h"
@@ -71,10 +73,14 @@ KeyToCommand KeyMap::MapDefault[] = {
     {SCK_LEFT,		SCI_SHIFT,	SCI_CHARLEFTEXTEND},
     {SCK_LEFT,		SCI_CTRL,	SCI_WORDLEFT},
     {SCK_LEFT,		SCI_CSHIFT,	SCI_WORDLEFTEXTEND},
+    {SCK_LEFT,		SCI_ALT,		SCI_WORDPARTLEFT},
+    {SCK_LEFT,		SCI_ASHIFT,	SCI_WORDPARTLEFTEXTEND},
     {SCK_RIGHT,		SCI_NORM,	SCI_CHARRIGHT},
     {SCK_RIGHT,		SCI_SHIFT,	SCI_CHARRIGHTEXTEND},
     {SCK_RIGHT,		SCI_CTRL,	SCI_WORDRIGHT},
     {SCK_RIGHT,		SCI_CSHIFT,	SCI_WORDRIGHTEXTEND},
+    {SCK_RIGHT,		SCI_ALT,		SCI_WORDPARTRIGHT},
+    {SCK_RIGHT,		SCI_ASHIFT,	SCI_WORDPARTRIGHTEXTEND},
     {SCK_HOME, 		SCI_NORM, 	SCI_VCHOME},
     {SCK_HOME, 		SCI_SHIFT, 	SCI_VCHOMEEXTEND},
     {SCK_HOME, 		SCI_CTRL, 	SCI_DOCUMENTSTART},
@@ -90,6 +96,7 @@ KeyToCommand KeyMap::MapDefault[] = {
     {SCK_DELETE, 	SCI_NORM,	SCI_CLEAR},
     {SCK_DELETE, 	SCI_SHIFT,	SCI_CUT},
     {SCK_DELETE, 	SCI_CTRL,	SCI_DELWORDRIGHT},
+    {SCK_DELETE,	SCI_CSHIFT,	SCI_DELLINERIGHT},
     {SCK_INSERT, 		SCI_NORM,	SCI_EDITTOGGLEOVERTYPE},
     {SCK_INSERT, 		SCI_SHIFT,	SCI_PASTE},
     {SCK_INSERT, 		SCI_CTRL,	SCI_COPY},
@@ -98,6 +105,7 @@ KeyToCommand KeyMap::MapDefault[] = {
     {SCK_BACK,		SCI_SHIFT, 	SCI_DELETEBACK},
     {SCK_BACK,		SCI_CTRL, 	SCI_DELWORDLEFT},
     {SCK_BACK, 		SCI_ALT,	SCI_UNDO},
+    {SCK_BACK,		SCI_CSHIFT,	SCI_DELLINELEFT},    
     {'Z', 			SCI_CTRL,	SCI_UNDO},
     {'Y', 			SCI_CTRL,	SCI_REDO},
     {'X', 			SCI_CTRL,	SCI_CUT},

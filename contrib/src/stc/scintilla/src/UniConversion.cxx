@@ -1,5 +1,8 @@
-// UniConversion.h - functions to handle UFT-8 and UCS-2 strings
-// Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
+// Scintilla source code edit control
+/** @file UniConversion.cxx
+ ** Functions to handle UFT-8 and UCS-2 strings.
+ **/
+// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
