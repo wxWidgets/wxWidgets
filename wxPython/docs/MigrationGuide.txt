@@ -148,8 +148,8 @@ assignment statements like this::
 
 Don't let the "core" in the name bother you.  That and some other
 modules are implementation details, and everything that was in the
-wxPython.wx before will still be in the wx package namespace after
-this change.  So from your code you would use it as wx.Window.
+wxPython.wx module before will still be in the wx package namespace
+after this change.  So from your code you would use it as wx.Window.
 
 A few notes about how all of this was accomplished might be
 interesting...  SWIG is now run twice for each module that it is
@@ -165,6 +165,34 @@ uses the %rename directives that were generated in the first step.
 Not every name is handled correctly (but the bulk of them are) and so
 some work has to be done by hand, especially for the reverse-renamers.
 So expect a few flaws here and there until everything gets sorted out.
+
+In summary, the wx package and names without the "wx" prefix are now
+the official form of the wxPython classes.  For example::
+
+    import wx
+
+    class MyFrame(wx.Frame):
+        def __init__(self, parent, title):
+	    wx.Frame.__init__(self, parent, -1, title)
+	    p = wx.Panel(self, -1)
+	    b = wx.Button(p, -1, "Do It", (10,10))
+	    self.Bind(wx.EVT_BUTTON, self.JustDoIt, b)
+
+	def JustDoIt(self, evt):
+	    print "It's done!"
+
+    app = wx.PySimpleApp()
+    f = MyFrame(None, "What's up?")
+    f.Show()
+    app.MainLoop()
+
+You shouldn't need to migrate all your modules over to use the new
+package and names right away as there are modules in place that try to
+provide as much backwards compatibility of the names as possible.  If
+you rewrote the above sample using "from wxPython.wx import *", the
+old wxNames, and the old style of event binding it will still work
+just fine.
+
 
 
 
@@ -184,9 +212,9 @@ name.  For example in wx.Window we have these Python methods::
 
 
 For various reasons the new *Type A* methods in wx.DC were never added
-and the existing *Type B* methods renamed.  Now that lots of other
-things are also changing in wxPython that it has been decided that it
-is a good time to also do the method renaming in wx.DC too, in order
+and the existing *Type B* methods were never renamed.  Now that lots
+of other things are also changing in wxPython it has been decided that
+it is a good time to also do the method renaming in wx.DC too in order
 to be consistent with the rest of the library.  The methods in wx.DC
 that are affected are listed here::
 
@@ -250,15 +278,17 @@ that are affected are listed here::
 	
 If you have code that draws on a DC you **will** get errors because of
 these changes, but it should be easy to fix the code.  You can either
-change the name of the *Type B* method called as shown above, or just
-add parentheses around the parameters as needed to turn them into
-tuples and let the SWIG typemaps turn them into the wx.Point or
-wx.Size object that is expected.  For example, if you had this code
-before::
+change the name of the *Type B* method called to the names shown
+above, or just add parentheses around the parameters as needed to turn
+them into tuples and let the SWIG typemaps turn them into the wx.Point
+or wx.Size object that is expected.  Then you will be calling the new
+*Type A* method.  For example, if you had this code before::
 
     dc.DrawRectangle(x, y, width, height)
 
-You could just change it like this::
+You could either continue to use the *Type B* method bu changing the
+name to DrawRectabgleXY, or just change it to the new *Type A* by
+adding some parentheses like this::
 
     dc.DrawRectangle((x, y), (width, height))
 
@@ -266,7 +296,7 @@ Or if you were already using a point and size::
 
     dc.DrawRectangle(p.x, p.y, s.width, s.height)
 
-Then you can just change it like this::
+Then you can just simplify it like this::
 
     dc.DrawRectangle(p, s)
 
@@ -320,13 +350,14 @@ Sizers
 The hack allowing the old "option" keyword parameter has been
 removed.  If you use keyworkd args with wxSizer Add, Insert, or
 Prepend then you will need to use the "proportion" name instead of
-"option".
+"option".  
 
 When adding a spacer to a sizer you now need to use a wxSize or a
 2-integer sequence instead of separate width and height parameters.
 
 The wxGridBagSizer class (very similar to the RowColSizer in the
-library) has been added to C++ and wrapped for wxPython.
+library) has been added to C++ and wrapped for wxPython.  It can also
+be used from XRC.
 
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
@@ -354,7 +385,7 @@ wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
 wxDefaultPosition and wxDefaultSize objects instead.
 
 Similarly, the wxSystemSettings backwards compatibiility aliases for
-GetSystemColour, GetSystemFont and GetSystemMetric Have also gone into
+GetSystemColour, GetSystemFont and GetSystemMetric have also gone into
 the bit-bucket.  Use GetColour, GetFont and GetMetric instead.
 
 
