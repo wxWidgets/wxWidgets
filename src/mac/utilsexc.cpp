@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+//#pragma implementation
 #endif
 
 #include "wx/log.h"
@@ -19,7 +19,9 @@
 #include "wx/unix/execute.h"
 #include <unistd.h>
 #include <sys/wait.h>
+extern "C" {
 #include <mach/mach.h>
+}
 #include <CoreFoundation/CFMachPort.h>
 #endif
 
