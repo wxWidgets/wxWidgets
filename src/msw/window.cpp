@@ -1523,7 +1523,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     // otherwise (or if deferring failed) move the window in place immediately
     if ( !hdwp )
     {
-        if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+        if ( !::MoveWindow(GetHwnd(), x, y, width, height, IsShown()) )
         {
             wxLogLastError(wxT("MoveWindow"));
         }
