@@ -661,10 +661,6 @@ SOURCE=.\generic\fdrepdlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\filedlgg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\fontdlgg.cpp
 # End Source File
 # Begin Source File
@@ -957,6 +953,10 @@ SOURCE=.\msw\dir.cpp
 # Begin Source File
 
 SOURCE=.\msw\evtloop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\filedlg.cpp
 # End Source File
 # Begin Source File
 

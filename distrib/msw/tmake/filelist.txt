@@ -294,7 +294,9 @@ enhmeta.cpp	MSW	Win32Only
 helpbest.cpp	MSW	Win32Only
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
-filedlg.cpp	MSW
+# FIXME: the generic implementation doesn't work under MSW, so we must
+#        the native dialog under MSW
+filedlg.cpp	MSW	LowLevel
 font.cpp	MSW	LowLevel
 fontdlg.cpp	MSW
 fontenum.cpp	MSW	LowLevel
