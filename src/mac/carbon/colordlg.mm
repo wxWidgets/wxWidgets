@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 // ============================================================================
 
 //Mac OSX 10.2+ only
-#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX && defined( __WXMAC_OSX__ ) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
 // Cocoa headers
 #include "wx/cocoa/autorelease.h"
@@ -189,56 +189,6 @@ int wxColourDialog::ShowModal()
     //Return ID_OK - there are no "apply" buttons or the like
     //on either the font or color panel
     return wxID_OK;
-}
-
-#else
-#include "wx/mac/private.h"
-#ifndef __DARWIN__
-#include <ColorPicker.h>
-#endif
-
-/*
- * wxColourDialog
- */
-
-wxColourDialog::wxColourDialog()
-{
-    m_dialogParent = NULL;
-}
-
-wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
-{
-    Create(parent, data);
-}
-
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
-{
-    m_dialogParent = parent;
-  
-    if (data)
-        m_colourData = *data;
-    return TRUE;
-}
-
-
-int wxColourDialog::ShowModal()
-{
-    Point where ;
-    RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) , newColor ;
-    
-    where.h = where.v = -1;
-
-    if (GetColor( where, "\pSelect a new palette color.", &currentColor, &newColor ))
-    {
-        m_colourData.m_dataColour.Set( (WXCOLORREF*) &newColor ) ;
-        return wxID_OK;
-    }
-    else
-    {
-        return wxID_CANCEL;
-    }
-
-    return wxID_CANCEL;
 }
 
 #endif //use native font dialog

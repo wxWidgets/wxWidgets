@@ -15,6 +15,10 @@
 #endif
 
 #include "wx/mac/colordlg.h"
+#include "wx/fontdlg.h"
+
+
+#if !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
@@ -68,3 +72,4 @@ int wxColourDialog::ShowModal()
     return wxID_CANCEL;
 }
 
+#endif

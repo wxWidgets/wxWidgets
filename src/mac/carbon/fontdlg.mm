@@ -44,7 +44,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 // ============================================================================
 
 //Mac OSX 10.2+ only
-#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX && defined( __WXMAC_OSX__ ) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
 // Cocoa headers
 #include "wx/cocoa/autorelease.h"
@@ -378,50 +378,6 @@ int wxFontDialog::ShowModal()
 bool wxFontDialog::IsShown() const
 {
     return false;
-}
-
-#else
-   //10.2+ only
-   
-// ---------------------------------------------------------------------------
-// wxFontDialog stub for mac OS's without a native font dialog
-// ---------------------------------------------------------------------------
-
-wxFontDialog::wxFontDialog()
-{
-    m_dialogParent = NULL;
-}
-
-wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
-{
-    Create(parent, data);
-}
-
-void wxFontDialog::SetData(wxFontData& fontdata)
-{
-    m_fontData = fontdata;
-}
-
-bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
-{
-    m_dialogParent = parent;
-
-    m_fontData = data;
-
-    // TODO: you may need to do dialog creation here, unless it's
-    // done in ShowModal.
-    return TRUE;
-}
-
-bool wxFontDialog::IsShown() const
-{
-    return false;
-}
-
-int wxFontDialog::ShowModal()
-{
-    // TODO: show (maybe create) the dialog
-    return wxID_CANCEL;
 }
 
 #endif // 10.2+

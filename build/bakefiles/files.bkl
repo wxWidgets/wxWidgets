@@ -1668,6 +1668,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/snglinst.cpp
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
+    <!-- Native color/font dialogs -->
+    src/mac/carbon/fontdlg.mm
+    src/mac/carbon/colordlg.mm
 </if>
 </set>
 
