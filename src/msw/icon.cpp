@@ -143,6 +143,9 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
         // we created the mask, now delete it
         delete mask;
     }
+
+    // delete the inverted mask bitmap we created as well
+    ::DeleteObject(iconInfo.hbmMask);
 #else // Win16
     // there are some functions in curico.cpp which probably could be used
     // here...
