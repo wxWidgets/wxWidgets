@@ -403,13 +403,15 @@ int wxEntryReal(int& argc, wxChar **argv)
             return -1;
         }
 
+        // ensure that OnExit() is called if OnInit() had succeeded
+        class CallOnExit
+        {
+        public:
+            ~CallOnExit() { wxTheApp->OnExit(); }
+        } callOnExit;
+
         // app execution
-        int retValue = wxTheApp->OnRun();
-
-        // app clean up
-        wxTheApp->OnExit();
-
-        return retValue;
+        return wxTheApp->OnRun();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
