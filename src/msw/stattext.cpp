@@ -96,73 +96,79 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int x1 = x;
-  int y1 = y;
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
 
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
+    int x1 = x;
+    int y1 = y;
 
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
+    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        x1 = currentX;
+    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        y1 = currentY;
 
-  int actualWidth = width;
-  int actualHeight = height;
+    AdjustForParentClientOrigin(x1, y1, sizeFlags);
 
-  int current_width;
-  int cyf;
+    int actualWidth = width;
+    int actualHeight = height;
 
-  wxString text(wxGetWindowText(GetHWND()));
-  GetTextExtent(text, &current_width, &cyf, NULL, NULL, & GetFont());
+    wxString text(wxGetWindowText(GetHWND()));
 
-  int ww, hh;
-  GetSize(&ww, &hh);
+    int widthTextMax = 0, widthLine,
+        heightTextTotal = 0, heightLine;
 
-  // If we're prepared to use the existing width, then...
-  if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
-    actualWidth = ww;
-  else if (width == -1)
-  {
-    int cx;
-    int cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
-    actualWidth = (int)(current_width + cx) ;
-  }
+    wxString curLine;
+    for ( const char *pc = text; ; pc++ ) {
+        if ( *pc == '\n' || *pc == '\0' ) {
+            GetTextExtent(curLine, &widthLine, &heightLine);
+            if ( width > widthTextMax )
+                widthTextMax = widthLine;
+            heightTextTotal += heightLine;
 
-  // If we're prepared to use the existing height, then...
-  if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
-    actualHeight = hh;
-  else if (height == -1)
-  {
-    actualHeight = (int)(cyf) ;
-  }
+            if ( *pc == '\n' ) {
+               curLine.Empty();
+            }
+            else {
+               // the end of string
+               break;
+            }
+        }
+        else {
+            curLine += *pc;
+        }
+    }
 
-  MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
+    int ww, hh;
+    GetSize(&ww, &hh);
+
+    // If we're prepared to use the existing width, then...
+    if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
+    {
+        actualWidth = ww;
+    }
+    else if (width == -1)
+    {
+        actualWidth = widthTextMax;
+    }
+    
+    // If we're prepared to use the existing height, then...
+    if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
+    {
+        actualHeight = hh;
+    }
+    else if (height == -1)
+    {
+        actualHeight = heightTextTotal;
+    }
+    
+    MoveWindow(GetHwnd(), x1, y1, actualWidth, actualHeight, TRUE);
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-  wxWindow *parent = GetParent();
+    SetWindowText(GetHwnd(), label);
 
-  RECT rect;
-  GetWindowRect((HWND) GetHWND(), &rect);
-
-  // Since we now have the absolute screen coords, if there's a parent we must
-  // subtract its top left corner
-  POINT point;
-  point.x = rect.left;
-  point.y = rect.top;
-  if (parent)
-  {
-    ::ScreenToClient((HWND) parent->GetHWND(), &point);
-  }
-
-  int w, h;
-  GetTextExtent(label, &w, &h, NULL, NULL, & GetFont());
-  MoveWindow((HWND) GetHWND(), point.x, point.y, (int)(w + 10), (int)h, TRUE);
-  SetWindowText((HWND) GetHWND(), (const wxChar *)label);
+    DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
 }
 
 WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
