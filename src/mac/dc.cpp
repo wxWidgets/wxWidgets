@@ -15,6 +15,7 @@
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
+#include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"
 #include "wx/log.h"
@@ -56,12 +57,12 @@ wxMacPortSetter::~wxMacPortSetter()
 {
 	m_dc->MacCleanupPort(&m_ph) ;
 }
-wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) 
+wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
 {
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
     GetClip( m_formerClip ) ;
-    
+
     if ( win )
     {
 #if 0
@@ -72,8 +73,8 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         wxWindow *parent = win->GetParent() ;
         parent->MacWindowToRootWindow( &x,&y ) ;
         wxSize size = parent->GetSize() ;
-        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
-      	  size.x - parent->MacGetRightBorderSize(), 
+        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() ,
+      	  size.x - parent->MacGetRightBorderSize(),
       	  size.y - parent->MacGetBottomBorderSize()) ;
         CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , m_newClip ) ;
     	SectRgn( m_newClip , insidergn , m_newClip ) ;
@@ -89,7 +90,7 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         SetClip( m_newClip ) ;
 	}
 }
-wxMacWindowClipper::~wxMacWindowClipper() 
+wxMacWindowClipper::~wxMacWindowClipper()
 {
     SetClip( m_formerClip ) ;
 	DisposeRgn( m_newClip ) ;
@@ -1276,13 +1277,13 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     int iAngle = int( angle );
     int drawX = XLOG2DEVMAC(x) ;
     int drawY = YLOG2DEVMAC(y) ;
-    
+
     ATSUTextMeasurement textBefore ;
     ATSUTextMeasurement textAfter ;
     ATSUTextMeasurement ascent ;
     ATSUTextMeasurement descent ;
-    
-    
+
+
     if ( abs(iAngle) > 0 )
     {
         Fixed atsuAngle = IntToFixed( iAngle ) ;
@@ -1303,7 +1304,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     }
 	status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
 					&textBefore , &textAfter, &ascent , &descent );
-    
+
     drawX += sin(angle/RAD2DEG) * FixedToInt(ascent) ;
     drawY += cos(angle/RAD2DEG) * FixedToInt(ascent) ;
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
@@ -1472,7 +1473,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 	MacInstallFont() ;
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
-#if TARGET_CARBON	
+#if TARGET_CARBON
 	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
 	if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
 	    useGetThemeText = false ;
@@ -1491,7 +1492,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 		macText = wxMacMakeMacStringFromPC( string ) ;
 		text = macText ;
 		length = macText.Length() ;
-	} 
+	}
 	else
 	{
 		text = string ;
@@ -1535,7 +1536,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 			}
 			i++ ;
 		}
-				
+
 #if TARGET_CARBON
         if ( useGetThemeText )
         {
@@ -1761,7 +1762,7 @@ Pattern gHatchPatterns[] =
      { { 0x10 , 0x10 , 0x10 , 0xFF , 0x10 , 0x10 , 0x10 , 0x10 } },
      { { 0x00 , 0x00 , 0x00 , 0xFF , 0x00 , 0x00 , 0x00 , 0x00 } },
      { { 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 } },
-     { { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } } 
+     { { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } }
 } ;
 static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
 {
@@ -1853,7 +1854,7 @@ void wxDC::MacInstallPen() const
 	                wxDash* dash ;
                     m_pen.GetDashes(&dash) ;
 	                // right now we don't allocate larger pixmaps
-	                // int number = 
+	                // int number =
 	                m_pen.GetDashes(&dash) ;
 	                for ( int i = 0 ; i < 8 ; ++i )
 	                {
