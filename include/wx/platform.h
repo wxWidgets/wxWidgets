@@ -34,6 +34,7 @@
 #        define __WXMAC_OSX__
 #        define __WXMAC_CARBON__
 #        ifdef __WXMAC_XCODE__
+#            include <unistd.h>
 #            include "wx/mac/carbon/config_xcode.h"
 #        endif
 #    else
