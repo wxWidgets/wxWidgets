@@ -15,10 +15,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/unix/utilsx11.h"
+#include "wx/x11/privx.h"
 #include "wx/iconbndl.h"
 #include "wx/image.h"
 #include "wx/icon.h"
 #include "wx/log.h"
+#include "wx/utils.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -508,7 +510,7 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
 
 bool wxGetKeyState(wxKeyCode key)
 {
-  Display *pDisplay = wxApp::GetDisplay();
+  Display *pDisplay = (Display*) wxGetDisplay();
   int iKey = wxCharCodeWXToX(key);
   int          iKeyMask = 0;
   Window       wDummy1, wDummy2;

@@ -1189,5 +1189,4 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
 }
 
-
 #endif // wxUSE_BASE
