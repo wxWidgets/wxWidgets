@@ -33,9 +33,9 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-#if wxUSE_GUI			// See 'dirty hack' below.
-    #include "wx/frame.h"
-#endif
+    #if wxUSE_GUI // See 'dirty hack' below.
+        #include "wx/frame.h"
+    #endif
 #endif
 
 #ifdef __WIN32__
@@ -262,7 +262,7 @@ private:
 // thread function for the thread monitoring the process termination
 static DWORD __stdcall wxExecuteThread(void *arg)
 {
-    wxExecuteData *data = (wxExecuteData*)arg;
+    wxExecuteData * const data = (wxExecuteData *)arg;
 
     if ( ::WaitForSingleObject(data->hProcess, INFINITE) != WAIT_OBJECT_0 )
     {
@@ -293,7 +293,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
     {
         DestroyWindow(hWnd);    // we don't need it any more
 
-        wxExecuteData *data = (wxExecuteData *)lParam;
+        wxExecuteData * const data = (wxExecuteData *)lParam;
         if ( data->handler )
         {
             data->handler->OnTerminate((int)data->dwProcessId,
@@ -316,7 +316,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
     }
     else
     {
-        return DefWindowProc(hWnd, message, wParam, lParam);
+        return ::DefWindowProc(hWnd, message, wParam, lParam);
     }
 }
 
@@ -899,8 +899,15 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
             // real async IO which we don't have for the moment
             ::Sleep(50);
 
+#if wxUSE_GUI
             // repaint the GUI
             wxYield();
+#else // !GUI
+            // dispatch the messages to the hidden window so that it could
+            // process the wxWM_PROC_TERMINATED notification
+            MSG msg;
+            ::PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE);
+#endif // GUI/!GUI
         }
 
 #if wxUSE_GUI
