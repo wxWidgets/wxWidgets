@@ -814,6 +814,8 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
             IconizeChildFrames(true);
             break;
     }
+#else
+    wxUnusedVar(id);
 #endif // !__WXWINCE__
 
     if ( !m_iconized )
