@@ -21,6 +21,11 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
 
+// forward declaration of private implementation classes
+
+class wxComboBoxText ;
+class wxComboBoxChoice ;
+
 // Combobox item
 class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
 {
@@ -128,8 +133,8 @@ protected:
     void FreeData();
 
     // the subcontrols
-    wxTextCtrl*     m_text;
-    wxChoice*       m_choice;
+    wxComboBoxText*     m_text;
+    wxComboBoxChoice*   m_choice;
 };
 
 #endif
