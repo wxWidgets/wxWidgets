@@ -424,7 +424,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-#if !defined(__WXGTK__) && !defined(__WXX11__)
+#if defined(__WXMSW__) || defined(__WXMAC__)
 
 %{
 #include <wx/metafile.h>
