@@ -575,6 +575,18 @@ void wxDialog::DoShowModal()
 
 bool wxDialog::Show(bool show)
 {
+    // The following is required when the parent has been disabled,
+    // (modal dialogs, or modeless dialogs with disabling such as wxProgressDialog).
+    // Otherwise the parent disappears behind other windows when the dialog is hidden.
+    if (!show)
+    {
+        HWND hwndParent = GetParent() ? (HWND) GetParent()->GetHWND() : (HWND)NULL;
+        if ( hwndParent )
+        {
+            ::BringWindowToTop(hwndParent);
+        }
+    }
+
     if ( !wxDialogBase::Show(show) )
     {
         // nothing to do
@@ -619,12 +631,6 @@ int wxDialog::ShowModal()
 void wxDialog::EndModal(int retCode)
 {
     SetReturnCode(retCode);
-
-    HWND hwndParent = GetParent() ? (HWND) GetParent()->GetHWND() : (HWND)NULL;
-    if ( hwndParent )
-    {
-        ::BringWindowToTop(hwndParent);
-    }
 
     Show(FALSE);
 }
