@@ -889,16 +889,16 @@ static bool memSectionOk = false;
 class MemoryCriticalSection : public wxCriticalSection
 {
 public:
-	MemoryCriticalSection() {
-		memSectionOk = true;
-	}
+    MemoryCriticalSection() {
+        memSectionOk = true;
+    }
 };
 
 class MemoryCriticalSectionLocker
 {
 public:
     inline MemoryCriticalSectionLocker(wxCriticalSection& critsect)
-	: m_critsect(critsect), m_locked(memSectionOk) { if(m_locked) m_critsect.Enter(); }
+    : m_critsect(critsect), m_locked(memSectionOk) { if(m_locked) m_critsect.Enter(); }
     inline ~MemoryCriticalSectionLocker() { if(m_locked) m_critsect.Leave(); }
 
 private:
@@ -907,7 +907,7 @@ private:
     MemoryCriticalSectionLocker& operator=(const MemoryCriticalSectionLocker&);
 
     wxCriticalSection& m_critsect;
-	bool	m_locked;
+    bool m_locked;
 };
 
 MemoryCriticalSection &GetMemLocker()
