@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  G:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  G:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -960,8 +960,6 @@ EXPORTS
       __ct__13wxFileHistoryFi
       ;wxDocTemplate::sm_classwxDocTemplate
       sm_classwxDocTemplate__13wxDocTemplate
-      ;wxDocManager::SelectDocumentType(wxDocTemplate**,int)
-      SelectDocumentType__12wxDocManagerFPP13wxDocTemplatei
       ;wxFileHistory::RemoveFileFromHistory(int)
       RemoveFileFromHistory__13wxFileHistoryFi
       ;wxFileHistory::Load(wxConfigBase&)
@@ -1063,6 +1061,10 @@ EXPORTS
       ;wxDocManager::wxDocManager(long,unsigned long)
       __ct__12wxDocManagerFlUl
       __vft18wxCommandProcessor8wxObject
+      ;wxDocManager::SelectViewType(wxDocTemplate**,int,unsigned long)
+      SelectViewType__12wxDocManagerFPP13wxDocTemplateiUl
+      ;wxDocManager::SelectDocumentType(wxDocTemplate**,int,unsigned long)
+      SelectDocumentType__12wxDocManagerFPP13wxDocTemplateiUl
       ;wxDocManager::OnUpdatePrint(wxUpdateUIEvent&)
       OnUpdatePrint__12wxDocManagerFR15wxUpdateUIEvent
       ;wxDocManager::OnPrintSetup(wxCommandEvent&)
@@ -1085,8 +1087,6 @@ EXPORTS
       sm_eventTableEntries__16wxDocParentFrame
       ;wxDocChildFrame::sm_classwxDocChildFrame
       sm_classwxDocChildFrame__15wxDocChildFrame
-      ;wxDocManager::SelectViewType(wxDocTemplate**,int)
-      SelectViewType__12wxDocManagerFPP13wxDocTemplatei
       ;wxDocPrintout::GetPageInfo(int*,int*,int*,int*)
       GetPageInfo__13wxDocPrintoutFPiN31
       ;wxDocManager::FileHistoryRemoveMenu(wxMenu*)
@@ -1250,6 +1250,18 @@ EXPORTS
       ;wxLibraries::LoadLibrary(const wxString&)
       LoadLibrary__11wxLibrariesFRC8wxString
       wxTheLibraries
+  ;From object file:  ..\common\effects.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxEffects::sm_classwxEffects
+      sm_classwxEffects__9wxEffects
+      ;wxEffects::wxEffects(const wxColour&,const wxColour&,const wxColour&,const wxColour&,const wxColour&)
+      __ct__9wxEffectsFRC8wxColourN41
+      ;wxEffects::DrawSunkenEdge(wxDC&,const wxRect&,int)
+      DrawSunkenEdge__9wxEffectsFR4wxDCRC6wxRecti
+      ;wxEffects::TileBitmap(const wxRect&,wxDC&,wxBitmap&)
+      TileBitmap__9wxEffectsFRC6wxRectR4wxDCR8wxBitmap
+      ;wxEffects::wxEffects()
+      __ct__9wxEffectsFv
   ;From object file:  ..\common\encconv.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxEncodingConverter::GetAllEquivalents(wxFontEncoding)
@@ -1274,6 +1286,14 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxEvent::CopyObject(wxObject&) const
       CopyObject__7wxEventCFR8wxObject
+      wxEVT_SETTING_CHANGED
+      wxEVT_SCROLLWIN_TOP
+      wxEVT_NC_LEFT_UP
+      wxEVT_MOUSE_CAPTURE_CHANGED
+      wxEVT_FIRST
+      wxEVT_COMMAND_TREE_END_LABEL_EDIT
+      wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT
+      wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
       ;wxNavigationKeyEvent::sm_classwxNavigationKeyEvent
       sm_classwxNavigationKeyEvent__20wxNavigationKeyEvent
       ;wxInitDialogEvent::sm_classwxInitDialogEvent
@@ -1293,6 +1313,8 @@ EXPORTS
       CopyObject__12wxCloseEventCFR8wxObject
       ;wxCommandEvent::wxCommandEvent(int,int)
       __ct__14wxCommandEventFiT1
+      wxEVT_MAXIMIZE
+      wxEVT_ACTIVATE
       ;wxScrollWinEvent::wxScrollWinEvent(int,int,int)
       __ct__16wxScrollWinEventFiN21
       ;wxMouseEvent::ButtonUp(int) const
@@ -1301,6 +1323,11 @@ EXPORTS
       ButtonDown__12wxMouseEventCFi
       ;wxConstructorForwxEraseEvent()
       wxConstructorForwxEraseEvent__Fv
+      wxEVT_SET_CURSOR
+      wxEVT_SCROLLWIN_LINEDOWN
+      wxEVT_MENU_CHAR
+      wxEVT_END_SESSION
+      wxEVT_COMMAND_ENTER
       ;wxConstructorForwxShowEvent()
       wxConstructorForwxShowEvent__Fv
       ;wxConstructorForwxPaletteChangedEvent()
@@ -1319,8 +1346,37 @@ EXPORTS
       __ct__20wxWindowDestroyEventFP8wxWindow
       ;wxFindFocusDescendant(wxWindow*)
       wxFindFocusDescendant__FP8wxWindow
-      ;wxEvtHandler::Connect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
-      Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
+      wxEVT_WIZARD_PAGE_CHANGING
+      wxEVT_RIGHT_DCLICK
+      wxEVT_ENTER_WINDOW
+      wxEVT_COMMAND_TREE_ITEM_COLLAPSING
+      wxEVT_COMMAND_TREE_GET_INFO
+      wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
+      wxEVT_COMMAND_LEFT_CLICK
+      wxEVT_CHAR_HOOK
+      ;wxEventTableEntry::wxEventTableEntry(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
+      __ct__17wxEventTableEntryFiN21M8wxObjectFR7wxEvent_vP8wxObject
+      wxEVT_SOCKET
+      wxEVT_SCROLLWIN_PAGEUP
+      wxEVT_MIDDLE_UP
+      wxEVT_MENU_INIT
+      wxEVT_HELP
+      wxEVT_ERASE_BACKGROUND
+      wxEVT_DETAILED_HELP
+      wxEVT_COMMAND_VLBOX_SELECTED
+      wxEVT_COMMAND_TREE_ITEM_EXPANDED
+      wxEVT_COMMAND_TOOL_RCLICKED
+      wxEVT_COMMAND_TAB_SEL_CHANGED
+      wxEVT_COMMAND_SPLITTER_UNSPLIT
+      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+      wxEVT_COMMAND_LIST_ITEM_DESELECTED
+      wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+      wxEVT_COMMAND_CHOICE_SELECTED
+      wxEVT_COMMAND_CHECKBOX_CLICKED
+      wxEVT_CALENDAR_YEAR_CHANGED
+      wxEVT_CALENDAR_MONTH_CHANGED
+      wxEVT_CALENDAR_DOUBLECLICKED
+      wxEVT_ACTIVATE_APP
       ;wxWindowDestroyEvent::sm_classwxWindowDestroyEvent
       sm_classwxWindowDestroyEvent__20wxWindowDestroyEvent
       ;wxSysColourChangedEvent::sm_classwxSysColourChangedEvent
@@ -1344,14 +1400,31 @@ EXPORTS
       CopyObject__16wxScrollWinEventCFR8wxObject
       ;wxMouseEvent::CopyObject(wxObject&) const
       CopyObject__12wxMouseEventCFR8wxObject
+      ;wxEvtHandler::Connect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
+      Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
       ;wxEvtHandler::AddPendingEvent(wxEvent&)
       AddPendingEvent__12wxEvtHandlerFR7wxEvent
       ;wxMouseEvent::Button(int) const
       Button__12wxMouseEventCFi
+      wxEVT_SCROLL_THUMBRELEASE
+      wxEVT_SCROLLWIN_THUMBRELEASE
+      wxEVT_QUERY_NEW_PALETTE
+      wxEVT_NAVIGATION_KEY
+      wxEVT_MOVE
+      wxEVT_MEASURE_ITEM
+      wxEVT_JOY_MOVE
+      wxEVT_DRAW_ITEM
+      wxEVT_COMMAND_LIST_INSERT_ITEM
       ;wxKeyEvent::wxKeyEvent(int)
       __ct__10wxKeyEventFi
       ;wxEvtHandler::wxEvtHandler()
       __ct__12wxEvtHandlerFv
+      wxEVT_POWER
+      wxEVT_NC_LEFT_DOWN
+      wxEVT_MOTION
+      wxEVT_KEY_DOWN
+      wxEVT_JOY_BUTTON_DOWN
+      wxEVT_COMMAND_TEXT_ENTER
       ;wxConstructorForwxWindowCreateEvent()
       wxConstructorForwxWindowCreateEvent__Fv
       ;wxConstructorForwxUpdateUIEvent()
@@ -1366,8 +1439,32 @@ EXPORTS
       __dt__12wxEvtHandlerFv
       ;wxEvtHandler::GetEventTable() const
       GetEventTable__12wxEvtHandlerCFv
+      wxEVT_NC_LEAVE_WINDOW
+      wxEVT_END_PROCESS
+      wxEVT_DROP_FILES
+      wxEVT_COMMAND_TREE_SEL_CHANGING
+      wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
+      wxEVT_COMMAND_TAB_SEL_CHANGING
+      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
+      wxEVT_COMMAND_RIGHT_CLICK
+      wxEVT_COMMAND_LIST_SET_INFO
+      wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
+      wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
+      wxEVT_COMMAND_KILL_FOCUS
       ;wxEvtHandler::Disconnect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
       Disconnect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
+      wxEVT_WIZARD_CANCEL
+      wxEVT_SYS_COLOUR_CHANGED
+      wxEVT_SCROLL_TOP
+      wxEVT_SCROLL_PAGEUP
+      wxEVT_SCROLLWIN_LINEUP
+      wxEVT_DIALUP_DISCONNECTED
+      wxEVT_COMMAND_TREE_ITEM_ACTIVATED
+      wxEVT_COMMAND_SPINCTRL_UPDATED
+      wxEVT_COMMAND_SLIDER_UPDATED
+      wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
+      wxEVT_COMMAND_BUTTON_CLICKED
+      wxEVT_CALENDAR_DAY_CHANGED
       ;wxSizeEvent::sm_classwxSizeEvent
       sm_classwxSizeEvent__11wxSizeEvent
       ;wxPaletteChangedEvent::sm_classwxPaletteChangedEvent
@@ -1395,8 +1492,20 @@ EXPORTS
       CopyObject__11wxMenuEventCFR8wxObject
       ;wxIdleEvent::CopyObject(wxObject&) const
       CopyObject__11wxIdleEventCFR8wxObject
+      wxEVT_SIZE
+      wxEVT_SCROLL_BOTTOM
+      wxEVT_SCROLLWIN_BOTTOM
       ;wxConstructorForwxCommandEvent()
       wxConstructorForwxCommandEvent__Fv
+      wxEVT_TIMER
+      wxEVT_SCROLL_LINEDOWN
+      wxEVT_RIGHT_DOWN
+      wxEVT_QUERY_END_SESSION
+      wxEVT_NC_RIGHT_DOWN
+      wxEVT_NC_MOTION
+      wxEVT_LEFT_DOWN
+      wxEVT_COMMAND_TOOL_ENTER
+      wxEVT_COMMAND_LIST_KEY_DOWN
       ;wxConstructorForwxScrollWinEvent()
       wxConstructorForwxScrollWinEvent__Fv
       ;wxConstructorForwxPaintEvent()
@@ -1407,8 +1516,30 @@ EXPORTS
       wxConstructorForwxCloseEvent__Fv
       ;wxEvtHandler::sm_classwxEvtHandler
       sm_classwxEvtHandler__12wxEvtHandler
+      wxEVT_LEAVE_WINDOW
+      wxEVT_NC_RIGHT_DCLICK
+      wxEVT_KILL_FOCUS
+      wxEVT_COMMAND_RIGHT_DCLICK
+      wxEVT_CLOSE_WINDOW
       ;wxCommandEvent::CopyObject(wxObject&) const
       CopyObject__14wxCommandEventCFR8wxObject
+      wxEVT_WIZARD_PAGE_CHANGED
+      wxEVT_SCROLL_LINEUP
+      wxEVT_PAINT
+      wxEVT_NULL
+      wxEVT_NC_RIGHT_UP
+      wxEVT_NC_PAINT
+      wxEVT_LEFT_UP
+      wxEVT_COMMAND_TREE_ITEM_COLLAPSED
+      wxEVT_COMMAND_TEXT_UPDATED
+      wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
+      wxEVT_COMMAND_RADIOBOX_SELECTED
+      wxEVT_COMMAND_MENU_SELECTED
+      wxEVT_COMMAND_LISTBOX_SELECTED
+      wxEVT_COMMAND_LISTBOX_DOUBLECLICKED
+      wxEVT_COMMAND_COMBOBOX_SELECTED
+      wxEVT_CALENDAR_WEEKDAY_CLICKED
+      wxEVT_CALENDAR_SEL_CHANGED
       ;wxUpdateUIEvent::sm_classwxUpdateUIEvent
       sm_classwxUpdateUIEvent__15wxUpdateUIEvent
       ;wxQueryNewPaletteEvent::sm_classwxQueryNewPaletteEvent
@@ -1444,6 +1575,14 @@ EXPORTS
       CopyObject__10wxKeyEventCFR8wxObject
       ;wxMouseEvent::wxMouseEvent(int)
       __ct__12wxMouseEventFi
+      wxEVT_JOY_ZMOVE
+      wxEVT_IDLE
+      wxEVT_ICONIZE
+      wxEVT_DESTROY
+      wxEVT_CREATE
+      wxEVT_CONTEXT_MENU
+      wxEVT_COMPARE_ITEM
+      wxEVT_COMMAND_LIST_DELETE_ITEM
       ;wxMouseEvent::ButtonIsDown(int) const
       ButtonIsDown__12wxMouseEventCFi
       ;wxMouseEvent::ButtonDClick(int) const
@@ -1451,6 +1590,10 @@ EXPORTS
       ;wxConstructorForwxEvtHandler()
       wxConstructorForwxEvtHandler__Fv
       wxPendingEventsLocker
+      ;wxNewEventType()
+      wxNewEventType__Fv
+      wxEVT_SCROLLWIN_PAGEDOWN
+      wxEVT_PAINT_ICON
       ;wxConstructorForwxSizeEvent()
       wxConstructorForwxSizeEvent__Fv
       ;wxConstructorForwxMoveEvent()
@@ -1470,10 +1613,37 @@ EXPORTS
       ;wxWindowCreateEvent::wxWindowCreateEvent(wxWindow*)
       __ct__19wxWindowCreateEventFP8wxWindow
       wxPendingEvents
+      wxEVT_SHOW
+      wxEVT_SCROLL_THUMBTRACK
+      wxEVT_SCROLLWIN_THUMBTRACK
+      wxEVT_NC_MIDDLE_DCLICK
+      wxEVT_NC_ENTER_WINDOW
+      wxEVT_MIDDLE_DCLICK
+      wxEVT_COMMAND_TREE_SET_INFO
+      wxEVT_COMMAND_TREE_ITEM_EXPANDING
+      wxEVT_COMMAND_TREE_END_DRAG
+      wxEVT_COMMAND_TREE_BEGIN_RDRAG
+      wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+      wxEVT_COMMAND_LIST_GET_INFO
+      wxEVT_COMMAND_LEFT_DCLICK
       ;wxMouseEvent::GetLogicalPosition(const wxDC&) const
       GetLogicalPosition__12wxMouseEventCFRC4wxDC
       ;wxPaletteChangedEvent::CopyObject(wxObject&) const
       CopyObject__21wxPaletteChangedEventCFR8wxObject
+      wxEVT_RIGHT_UP
+      wxEVT_POPUP_MENU_INIT
+      wxEVT_PALETTE_CHANGED
+      wxEVT_NC_MIDDLE_UP
+      wxEVT_MENU_HIGHLIGHT
+      wxEVT_KEY_UP
+      wxEVT_JOY_BUTTON_UP
+      wxEVT_DIALUP_CONNECTED
+      wxEVT_COMMAND_TREE_SEL_CHANGED
+      wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
+      wxEVT_COMMAND_SCROLLBAR_UPDATED
+      wxEVT_COMMAND_RADIOBUTTON_SELECTED
+      wxEVT_COMMAND_LIST_ITEM_SELECTED
+      wxEVT_COMMAND_LIST_END_LABEL_EDIT
       ;wxWindowCreateEvent::sm_classwxWindowCreateEvent
       sm_classwxWindowCreateEvent__19wxWindowCreateEvent
       ;wxShowEvent::sm_classwxShowEvent
@@ -1496,10 +1666,17 @@ EXPORTS
       ProcessThreadEvent__12wxEvtHandlerFR7wxEvent
       ;wxEvent::wxEvent(int)
       __ct__7wxEventFi
+      wxEVT_UPDATE_UI
+      wxEVT_COMMAND_TREE_DELETE_ITEM
       ;wxScrollEvent::wxScrollEvent(int,int,int,int)
       __ct__13wxScrollEventFiN31
       ;wxConstructorForwxIdleEvent()
       wxConstructorForwxIdleEvent__Fv
+      wxEVT_SCROLL_PAGEDOWN
+      wxEVT_NC_MIDDLE_DOWN
+      wxEVT_MIDDLE_DOWN
+      wxEVT_COMMAND_TREE_KEY_DOWN
+      wxEVT_CHAR
       ;wxConstructorForwxWindowDestroyEvent()
       wxConstructorForwxWindowDestroyEvent__Fv
       ;wxConstructorForwxScrollEvent()
@@ -1510,6 +1687,16 @@ EXPORTS
       wxConstructorForwxFocusEvent__Fv
       ;wxEvtHandler::sm_eventTable
       sm_eventTable__12wxEvtHandler
+      wxEVT_LEFT_DCLICK
+      wxEVT_SET_FOCUS
+      wxEVT_NC_LEFT_DCLICK
+      wxEVT_INIT_DIALOG
+      wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
+      wxEVT_COMMAND_TREE_BEGIN_DRAG
+      wxEVT_COMMAND_SET_FOCUS
+      wxEVT_COMMAND_LIST_COL_CLICK
+      wxEVT_COMMAND_LIST_BEGIN_RDRAG
+      wxEVT_COMMAND_LIST_BEGIN_DRAG
   ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
@@ -1773,6 +1960,88 @@ EXPORTS
       wxStripExtension__FR8wxString
       ;wxPathOnly(char*)
       wxPathOnly__FPc
+  ;From object file:  ..\common\filename.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxFileName::Assign(const wxString&,wxPathFormat)
+      Assign__10wxFileNameFRC8wxString12wxPathFormat
+      ;wxFileName::Normalize(wxPathNormalize,const wxString&,wxPathFormat)
+      Normalize__10wxFileNameF15wxPathNormalizeRC8wxString12wxPathFormat
+      ;wxFileName::IsWild(wxPathFormat)
+      IsWild__10wxFileNameF12wxPathFormat
+      ;wxFileName::Assign(const wxString&,const wxString&,const wxString&,wxPathFormat)
+      Assign__10wxFileNameFRC8wxStringN2112wxPathFormat
+      ;wxFileName::Mkdir(int)
+      Mkdir__10wxFileNameFi
+      ;wxFileName::Clear()
+      Clear__10wxFileNameFv
+      ;wxFileName::wxFileExists()
+      wxFileExists__10wxFileNameFv
+      ;wxFileName::GetFullName() const
+      GetFullName__10wxFileNameCFv
+      ;wxFileName::AssignHomeDir()
+      AssignHomeDir__10wxFileNameFv
+      ;wxFileName::AssignCwd()
+      AssignCwd__10wxFileNameFv
+      ;wxFileName::PrependDir(const wxString&)
+      PrependDir__10wxFileNameFRC8wxString
+      ;wxFileName::GetPathSeparators(wxPathFormat)
+      GetPathSeparators__10wxFileNameF12wxPathFormat
+      ;wxFileName::IsPathSeparator(char,wxPathFormat)
+      IsPathSeparator__10wxFileNameFc12wxPathFormat
+      ;wxFileName::IsAbsolute(wxPathFormat)
+      IsAbsolute__10wxFileNameF12wxPathFormat
+      ;wxFileName::GetFullPath(wxPathFormat) const
+      GetFullPath__10wxFileNameCF12wxPathFormat
+      ;wxFileName::Mkdir(const wxString&,int)
+      Mkdir__10wxFileNameFRC8wxStringi
+      ;wxFileName::FileName(const wxString&)
+      FileName__10wxFileNameFRC8wxString
+      ;wxFileName::wxPathExists(const wxString&)
+      wxPathExists__10wxFileNameFRC8wxString
+      ;wxFileName::SetFullName(const wxString&)
+      SetFullName__10wxFileNameFRC8wxString
+      ;wxFileName::SameAs(const wxFileName&,wxPathFormat)
+      SameAs__10wxFileNameFRC10wxFileName12wxPathFormat
+      ;wxFileName::GetPath(unsigned long,wxPathFormat) const
+      GetPath__10wxFileNameCFUl12wxPathFormat
+      ;wxFileName::RemoveDir(int)
+      RemoveDir__10wxFileNameFi
+      ;wxFileName::wxPathExists()
+      wxPathExists__10wxFileNameFv
+      ;wxFileName::SetCwd()
+      SetCwd__10wxFileNameFv
+      ;wxFileName::GetHomeDir()
+      GetHomeDir__10wxFileNameFv
+      ;wxFileName::AppendDir(const wxString&)
+      AppendDir__10wxFileNameFRC8wxString
+      ;wxFileName::IsRelative(wxPathFormat)
+      IsRelative__10wxFileNameF12wxPathFormat
+      ;wxFileName::Rmdir()
+      Rmdir__10wxFileNameFv
+      ;wxFileName::wxFileExists(const wxString&)
+      wxFileExists__10wxFileNameFRC8wxString
+      ;wxFileName::InsertDir(int,const wxString&)
+      InsertDir__10wxFileNameFiRC8wxString
+      ;wxFileName::Assign(const wxString&,const wxString&,wxPathFormat)
+      Assign__10wxFileNameFRC8wxStringT112wxPathFormat
+      ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxPathFormat)
+      SplitPath__10wxFileNameFRC8wxStringP8wxStringN2212wxPathFormat
+      ;wxFileName::IsCaseSensitive(wxPathFormat)
+      IsCaseSensitive__10wxFileNameF12wxPathFormat
+      ;wxFileName::GetFormat(wxPathFormat)
+      GetFormat__10wxFileNameF12wxPathFormat
+      ;wxFileName::Assign(const wxFileName&)
+      Assign__10wxFileNameFRC10wxFileName
+      ;wxFileName::GetCwd()
+      GetCwd__10wxFileNameFv
+      ;wxFileName::DirName(const wxString&)
+      DirName__10wxFileNameFRC8wxString
+      ;wxFileName::SetCwd(const wxString&)
+      SetCwd__10wxFileNameFRC8wxString
+      ;wxFileName::Rmdir(const wxString&)
+      Rmdir__10wxFileNameFRC8wxString
+      ;wxFileName::AssignTempFileName(const wxString&)
+      AssignTempFileName__10wxFileNameFRC8wxString
   ;From object file:  ..\common\filesys.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft19wxFileSystemHandler8wxObject
@@ -1825,18 +2094,33 @@ EXPORTS
       OpenFile__12wxFileSystemFRC8wxString
   ;From object file:  ..\common\fontcmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxFontBase::GetNativeFontInfo() const
+      GetNativeFontInfo__10wxFontBaseCFv
+      ;wxFontBase::New(const wxNativeFontInfo&)
+      New__10wxFontBaseFRC16wxNativeFontInfo
+      ;wxFontBase::New(const wxString&)
+      New__10wxFontBaseFRC8wxString
+      ;wxNativeFontInfo::FromString(const wxString&)
+      FromString__16wxNativeFontInfoFRC8wxString
       ;wxFont::operator=(const wxFont&)
       __as__6wxFontFRC6wxFont
-      ;wxFontBase::GetStyleString() const
-      GetStyleString__10wxFontBaseCFv
+      ;wxFontBase::GetNativeFontInfoDesc() const
+      GetNativeFontInfoDesc__10wxFontBaseCFv
       ;wxFontBase::GetWeightString() const
       GetWeightString__10wxFontBaseCFv
+      ;wxFontBase::GetStyleString() const
+      GetStyleString__10wxFontBaseCFv
+      ;wxFontBase::SetNativeFontInfo(const wxNativeFontInfo&)
+      SetNativeFontInfo__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::ms_encodingDefault
       ms_encodingDefault__10wxFontBase
       ;wxFontBase::operator==(const wxFont&) const
       __eq__10wxFontBaseCFRC6wxFont
+      __vft10wxFontBase8wxObject
       ;wxFontBase::operator!=(const wxFont&) const
       __ne__10wxFontBaseCFRC6wxFont
+      ;wxNativeFontInfo::ToString() const
+      ToString__16wxNativeFontInfoCFv
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
@@ -1991,12 +2275,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxFTP::g_proto_wxFTP
       g_proto_wxFTP__5wxFTP
+      ;wxFTP::GetResult()
+      GetResult__5wxFTPFv
       ;wxFTP::Abort()
       Abort__5wxFTPFv
-      ;wxFTP::GetResult(char)
-      GetResult__5wxFTPFc
-      ;wxFTP::GetList(const wxString&)
-      GetList__5wxFTPFRC8wxString
       ;wxFTP::GetInputStream(const wxString&)
       GetInputStream__5wxFTPFRC8wxString
       ;wxFTP::Connect(wxSockAddress&,unsigned long)
@@ -2008,30 +2290,38 @@ EXPORTS
       Close__5wxFTPFv
       ;wxFTP::MkDir(const wxString&)
       MkDir__5wxFTPFRC8wxString
+      ;wxFTP::wxFileExists(const wxString&)
+      wxFileExists__5wxFTPFRC8wxString
       ;wxFTP::Rename(const wxString&,const wxString&)
       Rename__5wxFTPFRC8wxStringT1
       ;wxFTP::wxFTP()
       __ct__5wxFTPFv
       ;wxFTP::GetPort()
       GetPort__5wxFTPFv
-      ;wxFTP::Connect(const wxString&)
-      Connect__5wxFTPFRC8wxString
+      ;wxFTP::SendCommand(const wxString&)
+      SendCommand__5wxFTPFRC8wxString
       ;wxFTP::RmFile(const wxString&)
       RmFile__5wxFTPFRC8wxString
       ;wxFTP::RmDir(const wxString&)
       RmDir__5wxFTPFRC8wxString
+      ;wxFTP::GetFileSize(const wxString&)
+      GetFileSize__5wxFTPFRC8wxString
+      ;wxFTP::Connect(const wxString&)
+      Connect__5wxFTPFRC8wxString
       ;wxFTP::ChDir(const wxString&)
       ChDir__5wxFTPFRC8wxString
+      ;wxFTP::SetTransferMode(wxFTP::TransferMode)
+      SetTransferMode__5wxFTPFQ2_5wxFTP12TransferMode
       ;wxConstructorForwxFTP()
       wxConstructorForwxFTP__Fv
       ;wxFTP::Pwd()
       Pwd__5wxFTPFv
-      ;wxFTP::SendCommand(const wxString&,char)
-      SendCommand__5wxFTPFRC8wxStringc
+      ;wxFTP::DoSimpleCommand(const char*,const wxString&)
+      DoSimpleCommand__5wxFTPFPCcRC8wxString
       ;wxFTP::GetOutputStream(const wxString&)
       GetOutputStream__5wxFTPFRC8wxString
-      ;wxFTP::GetList(wxArrayString&,const wxString&)
-      GetList__5wxFTPFR13wxArrayStringRC8wxString
+      ;wxFTP::GetList(wxArrayString&,const wxString&,unsigned long)
+      GetList__5wxFTPFR13wxArrayStringRC8wxStringUl
       ;wxFTP::sm_classwxFTP
       sm_classwxFTP__5wxFTP
   ;From object file:  ..\common\gdicmn.cpp
@@ -2584,12 +2874,24 @@ EXPORTS
   ;From object file:  ..\common\imagtiff.cpp
   ;From object file:  ..\common\intl.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxLocale::Init(int,int)
+      Init__8wxLocaleFiT1
+      ;wxLanguageInfoArray::Insert(const wxLanguageInfo&,unsigned int)
+      Insert__19wxLanguageInfoArrayFRC14wxLanguageInfoUi
       ;wxMsgCatalog::wxMsgCatalog()
       __ct__12wxMsgCatalogFv
       ;wxLocale::~wxLocale()
       __dt__8wxLocaleFv
+      ;wxLanguageInfoArray::Index(const wxLanguageInfo&,unsigned long) const
+      Index__19wxLanguageInfoArrayCFRC14wxLanguageInfoUl
+      ;wxLanguageInfoArray::wxLanguageInfoArray(const wxLanguageInfoArray&)
+      __ct__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
       ;wxMsgCatalog::~wxMsgCatalog()
       __dt__12wxMsgCatalogFv
+      ;wxLocale::GetSysName() const
+      GetSysName__8wxLocaleCFv
+      ;wxLanguageInfoArray::DoEmpty()
+      DoEmpty__19wxLanguageInfoArrayFv
       ;wxMsgCatalog::ConvertEncoding()
       ConvertEncoding__12wxMsgCatalogFv
       ;wxLocale::AddCatalog(const char*)
@@ -2598,6 +2900,12 @@ EXPORTS
       Load__12wxMsgCatalogFPCcT1Ul
       ;wxLocale::wxLocale()
       __ct__8wxLocaleFv
+      ;wxLocale::InitLanguagesDB()
+      InitLanguagesDB__8wxLocaleFv
+      ;wxLanguageInfoArray::Add(const wxLanguageInfo&)
+      Add__19wxLanguageInfoArrayFRC14wxLanguageInfo
+      ;wxLocale::AddLanguage(const wxLanguageInfo&)
+      AddLanguage__8wxLocaleFRC14wxLanguageInfo
       ;wxLocale::Init(const char*,const char*,const char*,unsigned long,unsigned long)
       Init__8wxLocaleFPCcN21UlT4
       ;wxLocale::GetString(const char*,const char*) const
@@ -2606,10 +2914,20 @@ EXPORTS
       wxGetLocale__Fv
       ;NoTransErr::ms_suppressCount
       ms_suppressCount__10NoTransErr
+      ;wxLanguageInfoArray::~wxLanguageInfoArray()
+      __dt__19wxLanguageInfoArrayFv
+      ;wxLocale::GetSystemLanguage() const
+      GetSystemLanguage__8wxLocaleCFv
       ;wxMsgCatalog::GetString(const char*) const
       GetString__12wxMsgCatalogCFPCc
       ;wxLocale::FindCatalog(const char*) const
       FindCatalog__8wxLocaleCFPCc
+      ;wxLanguageInfoArray::RemoveAt(unsigned int)
+      RemoveAt__19wxLanguageInfoArrayFUi
+      ;wxLanguageInfoArray::operator=(const wxLanguageInfoArray&)
+      __as__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
+      ;wxLanguageInfoArray::DoCopy(const wxLanguageInfoArray&)
+      DoCopy__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
       ;wxLocale::AddCatalogLookupPathPrefix(const wxString&)
       AddCatalogLookupPathPrefix__8wxLocaleFRC8wxString
       ;wxLocale::IsLoaded(const char*) const
@@ -3162,6 +3480,8 @@ EXPORTS
       Insert__13wxMenuBarBaseFUiP6wxMenuRC8wxString
   ;From object file:  ..\common\mimecmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxFileType::GetIcon(wxIcon*,wxString*,int*) const
+      GetIcon__10wxFileTypeCFP6wxIconP8wxStringPi
       ;wxArrayFileTypeInfo::Add(const wxFileTypeInfo&)
       Add__19wxArrayFileTypeInfoFRC14wxFileTypeInfo
       ;wxFileType::GetPrintCommand(wxString*,const wxFileType::MessageParameters&) const
@@ -3170,6 +3490,8 @@ EXPORTS
       GetFileTypeFromMimeType__18wxMimeTypesManagerFRC8wxString
       ;wxMimeTypesManager::EnumAllFileTypes(wxArrayString&)
       EnumAllFileTypes__18wxMimeTypesManagerFR13wxArrayString
+      ;wxMimeTypesManager::Associate(const wxFileTypeInfo&)
+      Associate__18wxMimeTypesManagerFRC14wxFileTypeInfo
       ;wxFileTypeInfo::wxFileTypeInfo(const char*,const char*,const char*,const char*,...)
       __ct__14wxFileTypeInfoFPCcN31e
       ;wxArrayFileTypeInfo::DoCopy(const wxArrayFileTypeInfo&)
@@ -3187,12 +3509,12 @@ EXPORTS
       __dt__19wxArrayFileTypeInfoFv
       ;wxFileType::wxFileType()
       __ct__10wxFileTypeFv
-      ;wxFileType::GetIcon(wxIcon*) const
-      GetIcon__10wxFileTypeCFP6wxIcon
       ;wxMimeTypesManager::EnsureImpl()
       EnsureImpl__18wxMimeTypesManagerFv
       ;wxArrayFileTypeInfo::wxArrayFileTypeInfo(const wxArrayFileTypeInfo&)
       __ct__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
+      ;wxFileType::wxFileType(const wxFileTypeInfo&)
+      __ct__10wxFileTypeFRC14wxFileTypeInfo
       ;wxFileType::GetDescription(wxString*) const
       GetDescription__10wxFileTypeCFP8wxString
       ;wxArrayFileTypeInfo::Index(const wxFileTypeInfo&,unsigned long) const
@@ -3213,12 +3535,14 @@ EXPORTS
       RemoveAt__19wxArrayFileTypeInfoFUi
       ;wxMimeTypeCmnModule::sm_classwxMimeTypeCmnModule
       sm_classwxMimeTypeCmnModule__19wxMimeTypeCmnModule
-      ;wxMimeTypesManager::wxMimeTypesManager()
-      __ct__18wxMimeTypesManagerFv
+      ;wxFileType::Unassociate()
+      Unassociate__10wxFileTypeFv
       ;wxConstructorForwxMimeTypeCmnModule()
       wxConstructorForwxMimeTypeCmnModule__Fv
       ;wxMimeTypesManager::~wxMimeTypesManager()
       __dt__18wxMimeTypesManagerFv
+      ;wxMimeTypesManager::wxMimeTypesManager()
+      __ct__18wxMimeTypesManagerFv
       ;wxArrayFileTypeInfo::operator=(const wxArrayFileTypeInfo&)
       __as__19wxArrayFileTypeInfoFRC19wxArrayFileTypeInfo
       ;wxFileType::GetOpenCommand(wxString*,const wxFileType::MessageParameters&) const
@@ -3227,6 +3551,8 @@ EXPORTS
       GetMimeType__10wxFileTypeCFP8wxString
       ;wxMimeTypesManager::GetFileTypeFromExtension(const wxString&)
       GetFileTypeFromExtension__18wxMimeTypesManagerFRC8wxString
+      ;wxFileType::GetAllCommands(wxArrayString*,wxArrayString*,const wxFileType::MessageParameters&) const
+      GetAllCommands__10wxFileTypeCFP13wxArrayStringT1RCQ2_10wxFileType17MessageParameters
   ;From object file:  ..\common\module.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxModule::sm_classwxModule
@@ -6364,6 +6690,112 @@ EXPORTS
       DoDrawText__14wxPostScriptDCFRC8wxStringiT2
       ;wxPostScriptDC::ms_PSScaleFactor
       ms_PSScaleFactor__14wxPostScriptDC
+  ;From object file:  ..\generic\dirctrlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGenericDirDialog::OnOK(wxCommandEvent&)
+      OnOK__18wxGenericDirDialogFR14wxCommandEvent
+      ;wxGenericDirCtrl::sm_eventTableEntries
+      sm_eventTableEntries__16wxGenericDirCtrl
+      ;wxGenericDirCtrl::sm_classwxGenericDirCtrl
+      sm_classwxGenericDirCtrl__16wxGenericDirCtrl
+      ;wxDirFilterListCtrl::sm_classwxDirFilterListCtrl
+      sm_classwxDirFilterListCtrl__19wxDirFilterListCtrl
+      __vft19wxDirFilterListCtrl8wxObject
+      __vft16wxGenericDirCtrl8wxObject
+      ;wxGenericDirDialog::OnTreeSelected(wxTreeEvent&)
+      OnTreeSelected__18wxGenericDirDialogFR11wxTreeEvent
+      ;wxDirFilterListCtrl::Init()
+      Init__19wxDirFilterListCtrlFv
+      ;wxConstructorForwxGenericDirCtrl()
+      wxConstructorForwxGenericDirCtrl__Fv
+      ;wxGenericDirCtrl::wxGenericDirCtrl()
+      __ct__16wxGenericDirCtrlFv
+      ;wxGenericDirCtrl::ExpandPath(const wxString&)
+      ExpandPath__16wxGenericDirCtrlFRC8wxString
+      ;wxDirFilterListCtrl::Create(wxGenericDirCtrl*,const int,const wxPoint&,const wxSize&,long)
+      Create__19wxDirFilterListCtrlFP16wxGenericDirCtrlCiRC7wxPointRC6wxSizel
+      ;wxGenericDirCtrl::sm_eventTable
+      sm_eventTable__16wxGenericDirCtrl
+      ;wxGenericDirCtrl::OnSize(wxSizeEvent&)
+      OnSize__16wxGenericDirCtrlFR11wxSizeEvent
+      ;wxGenericDirCtrl::OnEndEditItem(wxTreeEvent&)
+      OnEndEditItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxGenericDirCtrl::Init()
+      Init__16wxGenericDirCtrlFv
+      ;wxDirItemDataEx::~wxDirItemDataEx()
+      __dt__15wxDirItemDataExFv
+      ;wxGenericDirCtrl::ParseFilter(const wxString&,wxArrayString&,wxArrayString&)
+      ParseFilter__16wxGenericDirCtrlFRC8wxStringR13wxArrayStringT2
+      ;wxDirFilterListCtrl::GetEventTable() const
+      GetEventTable__19wxDirFilterListCtrlCFv
+      ;wxGenericDirCtrl::ExpandDir(wxTreeItemId)
+      ExpandDir__16wxGenericDirCtrlF12wxTreeItemId
+      ;wxDirFilterListCtrl::sm_eventTableEntries
+      sm_eventTableEntries__19wxDirFilterListCtrl
+      ;wxDirFilterListCtrl::OnSelFilter(wxCommandEvent&)
+      OnSelFilter__19wxDirFilterListCtrlFR14wxCommandEvent
+      ;wxGenericDirCtrl::SetFilterIndex(int)
+      SetFilterIndex__16wxGenericDirCtrlFi
+      ;wxDirFilterListCtrl::FillFilterList(const wxString&,int)
+      FillFilterList__19wxDirFilterListCtrlFRC8wxStringi
+      ;wxGenericDirCtrl::SetupSections()
+      SetupSections__16wxGenericDirCtrlFv
+      ;wxGenericDirDialog::GetPath() const
+      GetPath__18wxGenericDirDialogCFv
+      ;wxGenericDirDialog::GetEventTable() const
+      GetEventTable__18wxGenericDirDialogCFv
+      ;wxDirItemDataEx::SetNewDirName(wxString)
+      SetNewDirName__15wxDirItemDataExF8wxString
+      ;wxDirItemDataEx::wxDirItemDataEx(const wxString&,const wxString&,unsigned long)
+      __ct__15wxDirItemDataExFRC8wxStringT1Ul
+      __vft18wxGenericDirDialog8wxObject
+      ;wxGenericDirDialog::OnNew(wxCommandEvent&)
+      OnNew__18wxGenericDirDialogFR14wxCommandEvent
+      ;wxGenericDirCtrl::OnCollapseItem(wxTreeEvent&)
+      OnCollapseItem__16wxGenericDirCtrlFR11wxTreeEvent
+      __vft15wxDirItemDataEx12wxClientData
+      ;wxGenericDirCtrl::GetPath() const
+      GetPath__16wxGenericDirCtrlCFv
+      ;wxGenericDirDialog::wxGenericDirDialog(wxWindow*,const wxString&,const wxString&,long,const wxPoint&,const wxSize&,const wxString&)
+      __ct__18wxGenericDirDialogFP8wxWindowRC8wxStringT2lRC7wxPointRC6wxSizeT2
+      ;wxGenericDirDialog::ShowModal()
+      ShowModal__18wxGenericDirDialogFv
+      ;wxGenericDirCtrl::GetFilePath() const
+      GetFilePath__16wxGenericDirCtrlCFv
+      ;wxGenericDirCtrl::Create(wxWindow*,const int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&,int,const wxString&)
+      Create__16wxGenericDirCtrlFP8wxWindowCiRC8wxStringRC7wxPointRC6wxSizelT3iT3
+      ;wxGenericDirDialog::sm_eventTable
+      sm_eventTable__18wxGenericDirDialog
+      ;wxGenericDirDialog::sm_eventTableEntries
+      sm_eventTableEntries__18wxGenericDirDialog
+      ;wxGenericDirDialog::SetPath(const wxString&)
+      SetPath__18wxGenericDirDialogFRC8wxString
+      ;wxGenericDirCtrl::SetPath(const wxString&)
+      SetPath__16wxGenericDirCtrlFRC8wxString
+      ;wxGenericDirCtrl::SetFilter(const wxString&)
+      SetFilter__16wxGenericDirCtrlFRC8wxString
+      ;wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent&)
+      OnBeginEditItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxDirFilterListCtrl::sm_eventTable
+      sm_eventTable__19wxDirFilterListCtrl
+      ;wxGenericDirDialog::OnTreeKeyDown(wxTreeEvent&)
+      OnTreeKeyDown__18wxGenericDirDialogFR11wxTreeEvent
+      ;wxGenericDirCtrl::OnExpandItem(wxTreeEvent&)
+      OnExpandItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxGenericDirDialog::OnCloseWindow(wxCloseEvent&)
+      OnCloseWindow__18wxGenericDirDialogFR12wxCloseEvent
+      ;wxGenericDirCtrl::FindChild(wxTreeItemId,const wxString&,unsigned long&)
+      FindChild__16wxGenericDirCtrlF12wxTreeItemIdRC8wxStringRUl
+      ;wxGenericDirCtrl::AddSection(const wxString&,const wxString&,int)
+      AddSection__16wxGenericDirCtrlFRC8wxStringT1i
+      ;wxGenericDirCtrl::GetEventTable() const
+      GetEventTable__16wxGenericDirCtrlCFv
+      ;wxGenericDirCtrl::~wxGenericDirCtrl()
+      __dt__16wxGenericDirCtrlFv
+      ;wxGenericDirCtrl::DoResize()
+      DoResize__16wxGenericDirCtrlFv
+      ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
+      ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericDragImage::Create(const wxBitmap&,const wxCursor&,const wxPoint&)
@@ -6835,12 +7267,14 @@ EXPORTS
       sm_classwxSashLayoutWindow__18wxSashLayoutWindow
       ;wxCalculateLayoutEvent::sm_classwxCalculateLayoutEvent
       sm_classwxCalculateLayoutEvent__22wxCalculateLayoutEvent
+      wxEVT_CALCULATE_LAYOUT
       ;wxConstructorForwxQueryLayoutInfoEvent()
       wxConstructorForwxQueryLayoutInfoEvent__Fv
-      ;wxSashLayoutWindow::sm_eventTableEntries
-      sm_eventTableEntries__18wxSashLayoutWindow
+      wxEVT_QUERY_LAYOUT_INFO
       ;wxSashLayoutWindow::sm_eventTable
       sm_eventTable__18wxSashLayoutWindow
+      ;wxSashLayoutWindow::sm_eventTableEntries
+      sm_eventTableEntries__18wxSashLayoutWindow
   ;From object file:  ..\generic\listctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxListItemData::SetData(long)
@@ -7475,177 +7909,6 @@ EXPORTS
       SetFocusToChild__7wxPanelFv
       ;wxSetFocusToChild(wxWindow*,wxWindow**)
       wxSetFocusToChild__FP8wxWindowPP8wxWindow
-  ;From object file:  ..\generic\plot.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxPlotXAxisArea::OnMouse(wxMouseEvent&)
-      OnMouse__15wxPlotXAxisAreaFR12wxMouseEvent
-      __vft15wxPlotXAxisArea8wxObject
-      __vft12wxPlotWindow8wxObject
-      ;wxPlotWindow::OnShrink(wxCommandEvent&)
-      OnShrink__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotWindow::OnEnlarge(wxCommandEvent&)
-      OnEnlarge__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotCurve::sm_classwxPlotCurve
-      sm_classwxPlotCurve__11wxPlotCurve
-      ;wxPlotYAxisArea::sm_eventTable
-      sm_eventTable__15wxPlotYAxisArea
-      ;wxPlotOnOffCurve::sm_classwxPlotOnOffCurve
-      sm_classwxPlotOnOffCurve__16wxPlotOnOffCurve
-      ;wxArrayPlotOnOff::~wxArrayPlotOnOff()
-      __dt__16wxArrayPlotOnOffFv
-      ;wxPlotWindow::RedrawYAxis()
-      RedrawYAxis__12wxPlotWindowFv
-      ;wxPlotOnOffCurve::DrawOffLine(wxDC&,int,int,int)
-      DrawOffLine__16wxPlotOnOffCurveFR4wxDCiN22
-      ;wxPlotArea::DeleteCurve(wxPlotCurve*,int,int)
-      DeleteCurve__10wxPlotAreaFP11wxPlotCurveiT2
-      ;wxArrayPlotOnOff::Add(const wxPlotOnOff&)
-      Add__16wxArrayPlotOnOffFRC11wxPlotOnOff
-      ;wxPlotXAxisArea::wxPlotXAxisArea(wxPlotWindow*)
-      __ct__15wxPlotXAxisAreaFP12wxPlotWindow
-      ;wxPlotArea::OnPaint(wxPaintEvent&)
-      OnPaint__10wxPlotAreaFR12wxPaintEvent
-      __vft15wxPlotYAxisArea8wxObject
-      ;wxPlotOnOffCurve::wxPlotOnOffCurve(int)
-      __ct__16wxPlotOnOffCurveFi
-      ;wxPlotYAxisArea::sm_classwxPlotYAxisArea
-      sm_classwxPlotYAxisArea__15wxPlotYAxisArea
-      ;wxPlotOnOffCurve::GetOn(unsigned int)
-      GetOn__16wxPlotOnOffCurveFUi
-      ;wxPlotOnOffCurve::GetClientData(unsigned int)
-      GetClientData__16wxPlotOnOffCurveFUi
-      ;wxPlotWindow::Delete(wxPlotCurve*)
-      Delete__12wxPlotWindowFP11wxPlotCurve
-      ;wxConstructorForwxPlotArea()
-      wxConstructorForwxPlotArea__Fv
-      ;wxConstructorForwxPlotWindow()
-      wxConstructorForwxPlotWindow__Fv
-      ;wxPlotWindow::GetEventTable() const
-      GetEventTable__12wxPlotWindowCFv
-      ;wxPlotWindow::GetCount()
-      GetCount__12wxPlotWindowFv
-      ;wxPlotArea::DrawCurve(wxDC*,wxPlotCurve*,int,int)
-      DrawCurve__10wxPlotAreaFP4wxDCP11wxPlotCurveiT3
-      ;wxArrayPlotOnOff::Index(const wxPlotOnOff&,unsigned long) const
-      Index__16wxArrayPlotOnOffCFRC11wxPlotOnOffUl
-      __vft16wxPlotOnOffCurve8wxObject
-      ;wxPlotWindow::OnZoomIn(wxCommandEvent&)
-      OnZoomIn__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotXAxisArea::OnPaint(wxPaintEvent&)
-      OnPaint__15wxPlotXAxisAreaFR12wxPaintEvent
-      ;wxArrayPlotOnOff::RemoveAt(unsigned int)
-      RemoveAt__16wxArrayPlotOnOffFUi
-      ;wxPlotYAxisArea::sm_eventTableEntries
-      sm_eventTableEntries__15wxPlotYAxisArea
-      ;wxPlotArea::sm_eventTableEntries
-      sm_eventTableEntries__10wxPlotArea
-      ;wxPlotEvent::wxPlotEvent(int,int)
-      __ct__11wxPlotEventFiT1
-      ;wxPlotWindow::SetCurrent(wxPlotCurve*)
-      SetCurrent__12wxPlotWindowFP11wxPlotCurve
-      ;wxPlotWindow::GetOnOffCurveAt(unsigned int)
-      GetOnOffCurveAt__12wxPlotWindowFUi
-      ;wxPlotOnOffCurve::GetOff(unsigned int)
-      GetOff__16wxPlotOnOffCurveFUi
-      ;wxPlotOnOffCurve::GetAt(unsigned int)
-      GetAt__16wxPlotOnOffCurveFUi
-      ;wxPlotWindow::GetAt(unsigned int)
-      GetAt__12wxPlotWindowFUi
-      ;wxPlotWindow::Delete(wxPlotOnOffCurve*)
-      Delete__12wxPlotWindowFP16wxPlotOnOffCurve
-      ;wxArrayPlotOnOff::wxArrayPlotOnOff(const wxArrayPlotOnOff&)
-      __ct__16wxArrayPlotOnOffFRC16wxArrayPlotOnOff
-      ;wxConstructorForwxPlotYAxisArea()
-      wxConstructorForwxPlotYAxisArea__Fv
-      ;wxPlotWindow::RedrawXAxis()
-      RedrawXAxis__12wxPlotWindowFv
-      ;wxPlotWindow::GetOnOffCurveCount()
-      GetOnOffCurveCount__12wxPlotWindowFv
-      ;wxPlotYAxisArea::GetEventTable() const
-      GetEventTable__15wxPlotYAxisAreaCFv
-      ;wxPlotOnOffCurve::GetCount()
-      GetCount__16wxPlotOnOffCurveFv
-      ;wxPlotOnOffCurve::Add(int,int,void*)
-      Add__16wxPlotOnOffCurveFiT1Pv
-      ;wxPlotWindow::sm_eventTableEntries
-      sm_eventTableEntries__12wxPlotWindow
-      ;wxPlotArea::ScrollWindow(int,int,const wxRect*)
-      ScrollWindow__10wxPlotAreaFiT1PC6wxRect
-      ;wxPlotYAxisArea::OnPaint(wxPaintEvent&)
-      OnPaint__15wxPlotYAxisAreaFR12wxPaintEvent
-      ;wxPlotWindow::OnMoveUp(wxCommandEvent&)
-      OnMoveUp__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotWindow::OnMoveDown(wxCommandEvent&)
-      OnMoveDown__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotWindow::Enlarge(wxPlotCurve*,double)
-      Enlarge__12wxPlotWindowFP11wxPlotCurved
-      ;wxPlotWindow::Add(wxPlotCurve*)
-      Add__12wxPlotWindowFP11wxPlotCurve
-      ;wxPlotXAxisArea::sm_eventTableEntries
-      sm_eventTableEntries__15wxPlotXAxisArea
-      ;wxPlotXAxisArea::sm_classwxPlotXAxisArea
-      sm_classwxPlotXAxisArea__15wxPlotXAxisArea
-      ;wxPlotWindow::Add(wxPlotOnOffCurve*)
-      Add__12wxPlotWindowFP16wxPlotOnOffCurve
-      ;wxArrayPlotOnOff::DoEmpty()
-      DoEmpty__16wxArrayPlotOnOffFv
-      ;wxConstructorForwxPlotXAxisArea()
-      wxConstructorForwxPlotXAxisArea__Fv
-      ;wxPlotWindow::~wxPlotWindow()
-      __dt__12wxPlotWindowFv
-      ;wxPlotCurve::wxPlotCurve(int,double,double)
-      __ct__11wxPlotCurveFidT2
-      ;wxPlotXAxisArea::GetEventTable() const
-      GetEventTable__15wxPlotXAxisAreaCFv
-      ;wxPlotArea::GetEventTable() const
-      GetEventTable__10wxPlotAreaCFv
-      ;wxPlotArea::wxPlotArea(wxPlotWindow*)
-      __ct__10wxPlotAreaFP12wxPlotWindow
-      ;wxPlotWindow::sm_eventTable
-      sm_eventTable__12wxPlotWindow
-      ;wxPlotArea::DrawOnOffCurve(wxDC*,wxPlotOnOffCurve*,int,int)
-      DrawOnOffCurve__10wxPlotAreaFP4wxDCP16wxPlotOnOffCurveiT3
-      ;wxPlotArea::OnMouse(wxMouseEvent&)
-      OnMouse__10wxPlotAreaFR12wxMouseEvent
-      __vft10wxPlotArea8wxObject
-      ;wxPlotWindow::SetZoom(double)
-      SetZoom__12wxPlotWindowFd
-      ;wxPlotWindow::SetUnitsPerValue(double)
-      SetUnitsPerValue__12wxPlotWindowFd
-      ;wxPlotWindow::OnZoomOut(wxCommandEvent&)
-      OnZoomOut__12wxPlotWindowFR14wxCommandEvent
-      ;wxPlotWindow::OnScroll2(wxScrollWinEvent&)
-      OnScroll2__12wxPlotWindowFR16wxScrollWinEvent
-      ;wxPlotYAxisArea::OnMouse(wxMouseEvent&)
-      OnMouse__15wxPlotYAxisAreaFR12wxMouseEvent
-      ;wxArrayPlotOnOff::Insert(const wxPlotOnOff&,unsigned int)
-      Insert__16wxArrayPlotOnOffFRC11wxPlotOnOffUi
-      ;wxPlotXAxisArea::sm_eventTable
-      sm_eventTable__15wxPlotXAxisArea
-      ;wxPlotArea::sm_eventTable
-      sm_eventTable__10wxPlotArea
-      ;wxPlotArea::sm_classwxPlotArea
-      sm_classwxPlotArea__10wxPlotArea
-      ;wxPlotWindow::Move(wxPlotCurve*,int)
-      Move__12wxPlotWindowFP11wxPlotCurvei
-      ;wxArrayPlotOnOff::DoCopy(const wxArrayPlotOnOff&)
-      DoCopy__16wxArrayPlotOnOffFRC16wxArrayPlotOnOff
-      ;wxPlotWindow::wxPlotWindow(wxWindow*,int,const wxPoint&,const wxSize&,int)
-      __ct__12wxPlotWindowFP8wxWindowiRC7wxPointRC6wxSizeT2
-      ;wxArrayPlotOnOff::operator=(const wxArrayPlotOnOff&)
-      __as__16wxArrayPlotOnOffFRC16wxArrayPlotOnOff
-      ;wxPlotWindow::ResetScrollbar()
-      ResetScrollbar__12wxPlotWindowFv
-      ;wxPlotWindow::RedrawEverything()
-      RedrawEverything__12wxPlotWindowFv
-      ;wxPlotWindow::GetCurrent()
-      GetCurrent__12wxPlotWindowFv
-      ;wxPlotOnOffCurve::DrawOnLine(wxDC&,int,int,int,void*)
-      DrawOnLine__16wxPlotOnOffCurveFR4wxDCiN22Pv
-      ;wxPlotYAxisArea::wxPlotYAxisArea(wxPlotWindow*)
-      __ct__15wxPlotYAxisAreaFP12wxPlotWindow
-      ;wxPlotWindow::sm_classwxPlotWindow
-      sm_classwxPlotWindow__12wxPlotWindow
   ;From object file:  ..\generic\printps.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout*,wxPrintout*,wxPrintDialogData*)
@@ -9972,11 +10235,9 @@ EXPORTS
       SendIdleEvents__5wxAppFP8wxWindow
   ;From object file:  ..\os2\bitmap.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxBitmap::wxBitmap(char**,wxControl*)
-      __ct__8wxBitmapFPPcP9wxControl
-      __vft6wxMask8wxObject
       ;wxBitmapHandler::Create(wxGDIImage*,void*,long,int,int,int)
       Create__15wxBitmapHandlerFP10wxGDIImagePvliN24
+      __vft6wxMask8wxObject
       ;wxBitmap::wxBitmap(int,int,int)
       __ct__8wxBitmapFiN21
       ;wxBitmap::SaveFile(const wxString&,int,const wxPalette*)
@@ -10001,6 +10262,8 @@ EXPORTS
       __ct__8wxBitmapFRC8wxStringl
       ;wxMask::wxMask(const wxBitmap&)
       __ct__6wxMaskFRC8wxBitmap
+      ;wxBitmap::GetSubBitmap(const wxRect&) const
+      GetSubBitmap__8wxBitmapCFRC6wxRect
       ;wxMask::Create(const wxBitmap&)
       Create__6wxMaskFRC8wxBitmap
       ;wxBitmapHandler::Create(wxBitmap*,void*,long,int,int,int)
@@ -10016,6 +10279,8 @@ EXPORTS
       CopyFromCursor__8wxBitmapFRC8wxCursor
       ;wxMask::wxMask()
       __ct__6wxMaskFv
+      ;wxBitmap::wxBitmap(const char**)
+      __ct__8wxBitmapFPPCc
       ;wxMask::sm_classwxMask
       sm_classwxMask__6wxMask
       __vft8wxBitmap8wxObject
@@ -10054,6 +10319,8 @@ EXPORTS
       wxConstructorForwxBitmap__Fv
       ;wxConstructorForwxMask()
       wxConstructorForwxMask__Fv
+      ;wxBitmap::wxBitmap(char**)
+      __ct__8wxBitmapFPPc
       ;wxBitmap::SetMask(wxMask*)
       SetMask__8wxBitmapFP6wxMask
   ;From object file:  ..\os2\bmpbuttn.cpp
@@ -10079,6 +10346,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxBrush::FreeResource(unsigned long)
       FreeResource__7wxBrushFUl
+      ;wxBrush::SetPS(unsigned long)
+      SetPS__7wxBrushFUl
       ;wxBrush::SetStyle(int)
       SetStyle__7wxBrushFi
       ;wxBrush::GetResourceHandle()
@@ -10499,6 +10768,7 @@ EXPORTS
       wxBuffer
       wxBLACK_DASHED_PEN
       g_globalCursor
+      wxNullNativeFontInfo
       wxBLUE_BRUSH
       wxLIGHT_GREY_BRUSH
       wxBLACK_BRUSH
@@ -10908,6 +11178,32 @@ EXPORTS
       wxModelessWindows
       ;wxDialog::sm_eventTable
       sm_eventTable__8wxDialog
+  ;From object file:  ..\os2\dir.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDirData::~wxDirData()
+      __dt__9wxDirDataFv
+      ;wxDirData::Read(wxString*)
+      Read__9wxDirDataFP8wxString
+      ;wxDir::IsOpened() const
+      IsOpened__5wxDirCFv
+      ;wxDir::~wxDir()
+      __dt__5wxDirFv
+      ;wxDirData::Rewind()
+      Rewind__9wxDirDataFv
+      ;wxDir::Exists(const wxString&)
+      Exists__5wxDirFRC8wxString
+      ;wxDir::wxDir(const wxString&)
+      __ct__5wxDirFRC8wxString
+      ;wxDir::GetNext(wxString*) const
+      GetNext__5wxDirCFP8wxString
+      ;wxDir::GetFirst(wxString*,const wxString&,int) const
+      GetFirst__5wxDirCFP8wxStringRC8wxStringi
+      ;wxDirData::Close()
+      Close__9wxDirDataFv
+      ;wxDirData::wxDirData(const wxString&)
+      __ct__9wxDirDataFRC8wxString
+      ;wxDir::Open(const wxString&)
+      Open__5wxDirFRC8wxString
   ;From object file:  ..\os2\dirdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDirDialog::sm_classwxDirDialog
@@ -11068,10 +11364,10 @@ EXPORTS
       ToString__20wxNativeEncodingInfoCFv
       ;wxTestFontEncoding(const wxNativeEncodingInfo&)
       wxTestFontEncoding__FRC20wxNativeEncodingInfo
-      ;wxGetNativeFontEncoding(wxFontEncoding,wxNativeEncodingInfo*)
-      wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
       ;wxCreateFontFromLogFont(const _FATTRS*,_FONTMETRICS* const,_FACENAMEDESC*)
       wxCreateFontFromLogFont__FPC7_FATTRSCP12_FONTMETRICSP13_FACENAMEDESC
+      ;wxGetNativeFontEncoding(wxFontEncoding,wxNativeEncodingInfo*)
+      wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
       ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,const wxFont*)
       wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPC6wxFont
       ;wxGpiStrcmp(char*,char*)
@@ -11354,11 +11650,15 @@ EXPORTS
       __ct__6wxIconFRC8wxStringliT3
       ;wxIcon::LoadFile(const wxString&,long,int,int)
       LoadFile__6wxIconFRC8wxStringliT3
+      ;wxIcon::CopyFromBitmap(const wxBitmap&)
+      CopyFromBitmap__6wxIconFRC8wxBitmap
       ;wxIcon::~wxIcon()
       __dt__6wxIconFv
       __vft6wxIcon8wxObject
       ;wxIcon::wxIcon()
       __ct__6wxIconFv
+      ;wxIcon::CreateIconFromXpm(const char**)
+      CreateIconFromXpm__6wxIconFPPCc
   ;From object file:  ..\os2\iniconf.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxIniConfig::GetNextGroup(wxString&,long&) const
@@ -11981,6 +12281,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxPalette::FreeResource(unsigned long)
       FreeResource__9wxPaletteFUl
+      ;wxPalette::SetPS(unsigned long)
+      SetPS__9wxPaletteFUl
       ;wxPalette::sm_classwxPalette
       sm_classwxPalette__9wxPalette
       __vft16wxPaletteRefData15wxObjectRefData
@@ -12296,6 +12598,8 @@ EXPORTS
       ;wxRegion::wxRegion(unsigned long)
       __ct__8wxRegionFUl
       __vft16wxRegionIterator8wxObject
+      ;wxRegion::SetPS(unsigned long)
+      SetPS__8wxRegionFUl
       ;wxRegion::wxRegion(int,int,int,int)
       __ct__8wxRegionFiN31
       ;wxRegion::Empty() const
@@ -13341,3 +13645,21 @@ EXPORTS
       sm_eventTableEntries__8wxWindow
       ;wxWindow::SetTitle(const wxString&)
       SetTitle__8wxWindowFRC8wxString
+  ;From object file:  ..\os2\xpmhand.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxXPMDataHandler::Create(wxBitmap*,void*,long,int,int,int)
+      Create__16wxXPMDataHandlerFP8wxBitmapPvliN24
+      __vft16wxXPMDataHandler8wxObject
+      ;wxConstructorForwxXPMFileHandler()
+      wxConstructorForwxXPMFileHandler__Fv
+      __vft16wxXPMFileHandler8wxObject
+      ;wxConstructorForwxXPMDataHandler()
+      wxConstructorForwxXPMDataHandler__Fv
+      ;wxXPMFileHandler::LoadFile(wxBitmap*,const wxString&,long,int,int)
+      LoadFile__16wxXPMFileHandlerFP8wxBitmapRC8wxStringliT4
+      ;wxXPMFileHandler::SaveFile(wxBitmap*,const wxString&,int,const wxPalette*)
+      SaveFile__16wxXPMFileHandlerFP8wxBitmapRC8wxStringiPC9wxPalette
+      ;wxXPMDataHandler::sm_classwxXPMDataHandler
+      sm_classwxXPMDataHandler__16wxXPMDataHandler
+      ;wxXPMFileHandler::sm_classwxXPMFileHandler
+      sm_classwxXPMFileHandler__16wxXPMFileHandler
