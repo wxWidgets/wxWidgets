@@ -64,6 +64,10 @@ All (GUI):
   generated at all, so you must call event.Skip() in your OnKeyDown() if
   you want to get OnChar() as well
 
+- in general, the key events sent for the various non ASCII key combinations
+  have been changed to make them consistent over all supported platforms,
+  please see the wxKeyEvent documentation for details
+
 - wxYES_NO is now wxYES | wxNO and the manifest values of both wxYES and wxNO
   have changed (to fix some unfortunate clashes), please check your code to
   ensure that no tests for wxYES or wxNO are broken: for example, the following
