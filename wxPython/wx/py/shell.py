@@ -179,7 +179,8 @@ class Shell(editwindow.EditWindow):
         editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         self.wrap()
         if locals is None:
-            locals = {}
+            import __main__
+            locals = __main__.__dict__
         # Grab these so they can be restored by self.redirect* methods.
         self.stdin = sys.stdin
         self.stdout = sys.stdout

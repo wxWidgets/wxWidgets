@@ -20,9 +20,8 @@ class App(wx.App):
     def OnInit(self):
         import wx
         wx.InitAllImageHandlers()
-        locals = __main__.__dict__
         from crust import CrustFrame
-        self.frame = CrustFrame(locals=locals)
+        self.frame = CrustFrame()
         self.frame.SetSize((800, 600))
         self.frame.Show()
         self.SetTopWindow(self.frame)
