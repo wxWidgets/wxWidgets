@@ -71,10 +71,18 @@ public:
     wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
     virtual wxDC *GetPrintDC();
 
+private:
     wxPrintDialogData m_printDialogData;
     wxDC*             m_printerDC;
     bool              m_destroyDC;
     wxWindow*         m_dialogParent;
+    
+private:
+    bool ConvertToNative( wxPrintDialogData &data );
+    bool ConvertFromNative( wxPrintDialogData &data );
+    
+    // holds MSW handle
+    void*             m_printDlg;
 
 private:
     DECLARE_NO_COPY_CLASS(wxWindowsPrintDialog)

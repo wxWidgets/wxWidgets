@@ -535,41 +535,49 @@ bool wxWindowsPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
     m_printerDC = NULL;
     m_destroyDC = true;
 
+    // MSW handle
+    m_printDlg = NULL;
+    
     if ( data )
         m_printDialogData = *data;
-
-    m_printDialogData.SetOwnerWindow(p);
 
     return true;
 }
 
 wxWindowsPrintDialog::~wxWindowsPrintDialog()
 {
+    PRINTDLG *pd = (PRINTDLG *) m_printDlg;
+    if (pd && pd->hDevMode)
+        GlobalFree(pd->hDevMode);
+    if ( pd )
+        delete pd;
+
     if (m_destroyDC && m_printerDC)
         delete m_printerDC;
 }
 
 int wxWindowsPrintDialog::ShowModal()
 {
-    m_printDialogData.ConvertToNative();
+    ConvertToNative( m_printDialogData );
 
-    PRINTDLG* p = (PRINTDLG *)m_printDialogData.GetNativeData() ;
+    PRINTDLG *pd = (PRINTDLG*) m_printDlg;
+    
     if (m_dialogParent)
-        p->hwndOwner = (HWND) m_dialogParent->GetHWND();
+        pd->hwndOwner = (HWND) m_dialogParent->GetHWND();
     else if (wxTheApp->GetTopWindow())
-        p->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+        pd->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
     else
-        p->hwndOwner = 0;
+        pd->hwndOwner = 0;
 
-    bool ret = (PrintDlg( p ) != 0);
+    bool ret = (PrintDlg( pd ) != 0);
 
-    p->hwndOwner = 0;
+    pd->hwndOwner = 0;
 
-    if ( ret != false && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
+    if ( ret != false && (pd->hDC) )
     {
-        wxPrinterDC *pdc = new wxPrinterDC((WXHDC) ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC);
+        wxPrinterDC *pdc = new wxPrinterDC( (WXHDC) pd->hDC );
         m_printerDC = pdc;
-        m_printDialogData.ConvertFromNative();
+        ConvertFromNative( m_printDialogData );
         return wxID_OK;
     }
     else
@@ -587,6 +595,161 @@ wxDC *wxWindowsPrintDialog::GetPrintDC()
     }
     else
         return (wxDC*) NULL;
+}
+
+bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
+{
+    wxWindowsPrintNativeData *native_data =
+        (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
+    data.GetPrintData().ConvertToNative();
+    
+    PRINTDLG *pd = (PRINTDLG*) m_printDlg;
+
+    // Shouldn't have been defined anywhere
+    if (pd)
+        return false;
+    
+    pd = new PRINTDLG;
+    memset( pd, 0, sizeof(PRINTDLG) );
+    m_printDlg = (void*) pd;
+
+    // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
+#ifdef __GNUWIN32__
+    pd->lStructSize    = 66;
+#else
+    pd->lStructSize    = sizeof(PRINTDLG);
+#endif
+    pd->hwndOwner      = (HWND)NULL;
+    pd->hDevMode       = NULL; // Will be created by PrintDlg
+    pd->hDevNames      = NULL; // Ditto
+
+    pd->Flags          = PD_RETURNDEFAULT;
+    pd->nCopies        = 1;
+    
+    // Pass the devmode data to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+    if (pd->hDevMode)
+        GlobalFree(pd->hDevMode);
+
+    // Pass the devnames data to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+    if (pd->hDevNames)
+        GlobalFree(pd->hDevNames);
+
+    pd->hDevMode = (HGLOBAL)(DWORD) native_data->GetDevMode();
+    native_data->SetDevMode( (void*) NULL);
+
+    // Shouldn't assert; we should be able to test Ok-ness at a higher level
+    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+
+    pd->hDevNames = (HGLOBAL)(DWORD) native_data->GetDevNames();
+    native_data->SetDevNames( (void*) NULL);
+
+
+    pd->hDC = (HDC) NULL;
+    pd->nFromPage = (WORD)data.GetFromPage();
+    pd->nToPage = (WORD)data.GetToPage();
+    pd->nMinPage = (WORD)data.GetMinPage();
+    pd->nMaxPage = (WORD)data.GetMaxPage();
+    pd->nCopies = (WORD)data.GetNoCopies();
+
+    pd->Flags = PD_RETURNDC;
+
+#ifdef __GNUWIN32__
+    pd->lStructSize = 66;
+#else
+    pd->lStructSize = sizeof( PRINTDLG );
+#endif
+
+    pd->hwndOwner=(HWND)NULL;
+//    pd->hDevNames=(HANDLE)NULL;
+    pd->hInstance=(HINSTANCE)NULL;
+    pd->lCustData = (LPARAM) NULL;
+    pd->lpfnPrintHook = NULL;
+    pd->lpfnSetupHook = NULL;
+    pd->lpPrintTemplateName = NULL;
+    pd->lpSetupTemplateName = NULL;
+    pd->hPrintTemplate = (HGLOBAL) NULL;
+    pd->hSetupTemplate = (HGLOBAL) NULL;
+
+    if ( data.GetAllPages() )
+        pd->Flags |= PD_ALLPAGES;
+    if ( data.GetSelection() )
+        pd->Flags |= PD_SELECTION;
+    if ( data.GetCollate() )
+        pd->Flags |= PD_COLLATE;
+    if ( data.GetPrintToFile() )
+        pd->Flags |= PD_PRINTTOFILE;
+    if ( !data.GetEnablePrintToFile() )
+        pd->Flags |= PD_DISABLEPRINTTOFILE;
+    if ( !data.GetEnableSelection() )
+        pd->Flags |= PD_NOSELECTION;
+    if ( !data.GetEnablePageNumbers() )
+        pd->Flags |= PD_NOPAGENUMS;
+    else if ( (!data.GetAllPages()) && (!data.GetSelection()) && (data.GetFromPage() != 0) && (data.GetToPage() != 0))
+        pd->Flags |= PD_PAGENUMS;
+    if ( data.GetEnableHelp() )
+        pd->Flags |= PD_SHOWHELP;
+    if ( data.GetSetupDialog() )
+        pd->Flags |= PD_PRINTSETUP;
+    
+    return true;
+}
+
+bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
+{
+    PRINTDLG *pd = (PRINTDLG*) m_printDlg;
+    if ( pd == NULL )
+        return false;
+
+    wxWindowsPrintNativeData *native_data =
+        (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
+    
+    // Pass the devmode data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevMode)
+    {
+        if (native_data->GetDevMode())
+        {
+            // Make sure we don't leak memory
+            GlobalFree( (HGLOBAL)(DWORD) native_data->GetDevMode() );
+        }
+        native_data->SetDevMode( (void*)(long) pd->hDevMode );
+        pd->hDevMode = NULL;
+    }
+
+    // Pass the devnames data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevNames)
+    {
+        if (native_data->GetDevNames())
+        {
+            // Make sure we don't leak memory
+            GlobalFree((HGLOBAL)(DWORD) native_data->GetDevNames());
+        }
+        native_data->SetDevNames((void*)(long) pd->hDevNames);
+        pd->hDevNames = NULL;
+    }
+
+    // Now convert the DEVMODE object, passed down from the PRINTDLG object,
+    // into wxWidgets form.
+    native_data->TransferTo( data.GetPrintData() );
+
+    data.SetFromPage( pd->nFromPage );
+    data.SetToPage( pd->nToPage );
+    data.SetMinPage( pd->nMinPage );
+    data.SetMaxPage( pd->nMaxPage );
+    data.SetNoCopies( pd->nCopies );
+
+    data.SetAllPages( (((pd->Flags & PD_PAGENUMS) != PD_PAGENUMS) && ((pd->Flags & PD_SELECTION) != PD_SELECTION)) );
+    data.SetSelection( ((pd->Flags & PD_SELECTION) == PD_SELECTION) );
+    data.SetCollate( ((pd->Flags & PD_COLLATE) == PD_COLLATE) );
+    data.SetPrintToFile( ((pd->Flags & PD_PRINTTOFILE) == PD_PRINTTOFILE) );
+    data.EnablePrintToFile( ((pd->Flags & PD_DISABLEPRINTTOFILE) != PD_DISABLEPRINTTOFILE) );
+    data.EnableSelection( ((pd->Flags & PD_NOSELECTION) != PD_NOSELECTION) );
+    data.EnablePageNumbers( ((pd->Flags & PD_NOPAGENUMS) != PD_NOPAGENUMS) );
+    data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
+    data.SetSetupDialog( ((pd->Flags & PD_PRINTSETUP) == PD_PRINTSETUP) );
+    
+    return true;
 }
 
 // ---------------------------------------------------------------------------

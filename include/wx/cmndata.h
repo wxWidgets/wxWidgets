@@ -307,19 +307,9 @@ public:
     void operator=(const wxPrintDialogData& data);
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
-#ifdef __WXMSW__
-    // Convert to/from the PRINTDLG structure
+#if defined(__WXMAC__)
     void ConvertToNative();
     void ConvertFromNative();
-    void SetOwnerWindow(wxWindow* win);
-    void* GetNativeData() const { return m_printDlgData; }
-#elif defined(__WXMAC__)
-    void ConvertToNative();
-    void ConvertFromNative();
-#endif
-
-#ifdef __WXMSW__
-    void*           m_printDlgData;
 #endif
 
 private:
