@@ -963,6 +963,12 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if ( !GtkAppend(item) )
         return FALSE;
 
+    if ( m_style & wxMENU_TEAROFF )
+    {
+        // change the position as the first item is the tear-off marker
+        pos++;
+    }
+
     GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
     gpointer data = g_list_last(menu_shell->children)->data;
     menu_shell->children = g_list_remove(menu_shell->children, data);
