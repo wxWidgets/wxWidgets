@@ -59,31 +59,38 @@ public:
         { Ref(r); return (*this); }
 
     // Modify region
+    // -------------
+
     // Clear current region
-    void Clear(void);
+    void Clear();
+
+    // Move the region
+    bool Offset(wxCoord x, wxCoord y);
 
     // Union rectangle or region with this.
-    inline bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_OR); }
-    inline bool Union(const wxRect& rect) { return Combine(rect, wxRGN_OR); }
-    inline bool Union(const wxRegion& region) { return Combine(region, wxRGN_OR); }
+    bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_OR); }
+    bool Union(const wxRect& rect) { return Combine(rect, wxRGN_OR); }
+    bool Union(const wxRegion& region) { return Combine(region, wxRGN_OR); }
 
     // Intersect rectangle or region with this.
-    inline bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_AND); }
-    inline bool Intersect(const wxRect& rect)  { return Combine(rect, wxRGN_AND); }
-    inline bool Intersect(const wxRegion& region)  { return Combine(region, wxRGN_AND); }
+    bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_AND); }
+    bool Intersect(const wxRect& rect)  { return Combine(rect, wxRGN_AND); }
+    bool Intersect(const wxRegion& region)  { return Combine(region, wxRGN_AND); }
 
     // Subtract rectangle or region from this:
     // Combines the parts of 'this' that are not part of the second region.
-    inline bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_DIFF); }
-    inline bool Subtract(const wxRect& rect)  { return Combine(rect, wxRGN_DIFF); }
-    inline bool Subtract(const wxRegion& region)  { return Combine(region, wxRGN_DIFF); }
+    bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_DIFF); }
+    bool Subtract(const wxRect& rect)  { return Combine(rect, wxRGN_DIFF); }
+    bool Subtract(const wxRegion& region)  { return Combine(region, wxRGN_DIFF); }
 
     // XOR: the union of two combined regions except for any overlapping areas.
-    inline bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_XOR); }
-    inline bool Xor(const wxRect& rect)  { return Combine(rect, wxRGN_XOR); }
-    inline bool Xor(const wxRegion& region)  { return Combine(region, wxRGN_XOR); }
+    bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height) { return Combine(x, y, width, height, wxRGN_XOR); }
+    bool Xor(const wxRect& rect)  { return Combine(rect, wxRGN_XOR); }
+    bool Xor(const wxRegion& region)  { return Combine(region, wxRGN_XOR); }
 
     // Information on region
+    // ---------------------
+
     // Outer bounds of region
     void GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const;
     wxRect GetBox(void) const ;
@@ -110,8 +117,13 @@ public:
     // Get internal region handle
     WXHRGN GetHRGN() const;
 
-    DECLARE_DYNAMIC_CLASS(wxRegion);
+protected:
+    virtual wxObjectRefData *CreateData() const;
+    virtual wxObjectRefData *CloneData(wxObjectRefData *data) const;
+
     friend class WXDLLEXPORT wxRegionIterator;
+
+    DECLARE_DYNAMIC_CLASS(wxRegion)
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject

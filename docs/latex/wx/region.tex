@@ -24,7 +24,7 @@ reference counting, so copying and assignment operations are fast.
 
 Default constructor.
 
-\func{}{wxRegion}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{}{wxRegion}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Constructs a rectangular region with the given position and size.
 
@@ -97,7 +97,7 @@ Returns the outer bounds of the region.
 
 \membersection{wxRegion::Intersect}\label{wxregionintersect}
 
-\func{bool}{Intersect}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{bool}{Intersect}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Finds the intersection of this region and another, rectangular region, specified using position and size.
 
@@ -111,7 +111,7 @@ Finds the intersection of this region and another region.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise.
+{\tt TRUE} if successful, {\tt FALSE} otherwise.
 
 \wxheading{Remarks}
 
@@ -122,7 +122,7 @@ is stored in this region.
 
 \constfunc{bool}{IsEmpty}{\void}
 
-Returns TRUE if the region is empty, FALSE otherwise.
+Returns {\tt TRUE} if the region is empty, {\tt FALSE} otherwise.
 
 \membersection{wxRegion::Subtract}\label{wxregionsubstract}
 
@@ -136,16 +136,27 @@ Subtracts a region from this region.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise.
+{\tt TRUE} if successful, {\tt FALSE} otherwise.
 
 \wxheading{Remarks}
 
 This operation combines the parts of 'this' region that are not part of the second region.
 The result is stored in this region.
 
+\membersection{wxRegion::Offset}\label{wxregionoffset}
+
+\func{bool}{Offset}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
+
+Moves the region by the specified offsets in horizontal and vertical
+directions.
+
+\wxheading{Return value}
+
+{\tt TRUE} if successful, {\tt FALSE} otherwise (the region is unchanged then).
+
 \membersection{wxRegion::Union}\label{wxregionunion}
 
-\func{bool}{Union}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{bool}{Union}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Finds the union of this region and another, rectangular region, specified using position and size.
 
@@ -159,7 +170,7 @@ Finds the union of this region and another region.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise.
+{\tt TRUE} if successful, {\tt FALSE} otherwise.
 
 \wxheading{Remarks}
 
@@ -168,7 +179,7 @@ The result is stored in this region.
 
 \membersection{wxRegion::Xor}\label{wxregionxor}
 
-\func{bool}{Xor}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
+\func{bool}{Xor}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
 Finds the Xor of this region and another, rectangular region, specified using position and size.
 
@@ -182,7 +193,7 @@ Finds the Xor of this region and another region.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise.
+{\tt TRUE} if successful, {\tt FALSE} otherwise.
 
 \wxheading{Remarks}
 
@@ -231,37 +242,37 @@ Creates an iterator object given a region.
 
 \membersection{wxRegionIterator::GetX}
 
-\constfunc{long}{GetX}{\void}
+\constfunc{wxCoord}{GetX}{\void}
 
 Returns the x value for the current region.
 
 \membersection{wxRegionIterator::GetY}
 
-\constfunc{long}{GetY}{\void}
+\constfunc{wxCoord}{GetY}{\void}
 
 Returns the y value for the current region.
 
 \membersection{wxRegionIterator::GetW}
 
-\constfunc{long}{GetW}{\void}
+\constfunc{wxCoord}{GetW}{\void}
 
 An alias for GetWidth.
 
 \membersection{wxRegionIterator::GetWidth}
 
-\constfunc{long}{GetWidth}{\void}
+\constfunc{wxCoord}{GetWidth}{\void}
 
 Returns the width value for the current region.
 
 \membersection{wxRegionIterator::GetH}
 
-\constfunc{long}{GetH}{\void}
+\constfunc{wxCoord}{GetH}{\void}
 
 An alias for GetHeight.
 
 \membersection{wxRegionIterator::GetHeight}
 
-\constfunc{long}{GetWidth}{\void}
+\constfunc{wxCoord}{GetWidth}{\void}
 
 Returns the width value for the current region.
 
@@ -275,7 +286,7 @@ Returns the current rectangle.
 
 \constfunc{bool}{HaveRects}{\void}
 
-Returns TRUE if there are still some rectangles; otherwise returns FALSE.
+Returns {\tt TRUE} if there are still some rectangles; otherwise returns {\tt FALSE}.
 
 \membersection{wxRegionIterator::Reset}
 
@@ -299,7 +310,7 @@ Increment operator. Increments the iterator to the next region.
 
 \constfunc{}{operator bool}{\void}
 
-Returns TRUE if there are still some rectangles; otherwise returns FALSE.
+Returns {\tt TRUE} if there are still some rectangles; otherwise returns {\tt FALSE}.
 
 You can use this to test the iterator object as if it were of type bool.
 

@@ -127,6 +127,16 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
+wxObjectRefData *wxRegion::CreateData() const
+{
+    return new wxRegionRefData;
+}
+
+wxObjectRefData *wxRegion::CloneData(wxObjectRefData *data) const
+{
+    return new wxRegionRefData(*(wxRegionRefData *)data);
+}
+
 //-----------------------------------------------------------------------------
 // Modify region
 //-----------------------------------------------------------------------------
@@ -137,18 +147,30 @@ void wxRegion::Clear()
     UnRef();
 }
 
+bool wxRegion::Offset(wxCoord x, wxCoord y)
+{
+    if ( !x && !y )
+    {
+        // nothing to do
+        return TRUE;
+    }
+
+    AllocExclusive();
+
+    if ( ::OffsetRgn(GetHrgn(), x, y) == ERROR )
+    {
+        wxLogLastError(_T("OffsetRgn"));
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 // Combine rectangle (x, y, w, h) with this.
 bool wxRegion::Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op)
 {
-    // Don't change shared data
-    if (!m_refData) {
-        m_refData = new wxRegionRefData();
-    } else if (m_refData->GetRefCount() > 1) {
-        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-        UnRef();
-        m_refData = new wxRegionRefData(*ref);
-    }
-    // If ref count is 1, that means it's 'ours' anyway so no action.
+    AllocExclusive();
 
     HRGN rectRegion = ::CreateRectRgn(x, y, x + width, y + height);
 
@@ -164,7 +186,11 @@ bool wxRegion::Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRe
             mode = RGN_COPY; break ;
     }
 
-    bool success = (ERROR != ::CombineRgn(M_REGION, M_REGION, rectRegion, mode));
+    bool success = ::CombineRgn(M_REGION, M_REGION, rectRegion, mode) != ERROR;
+    if ( !success )
+    {
+        wxLogLastError(_T("CombineRgn"));
+    }
 
     ::DeleteObject(rectRegion);
 
@@ -177,14 +203,7 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
     if (region.Empty())
         return FALSE;
 
-    // Don't change shared data
-    if (!m_refData) {
-        m_refData = new wxRegionRefData();
-    } else    if (m_refData->GetRefCount() > 1) {
-        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-        UnRef();
-        m_refData = new wxRegionRefData(*ref);
-    }
+    AllocExclusive();
 
     int mode = 0;
     switch (op)
