@@ -20,10 +20,11 @@
     #include "wx/wx.h"
 #endif
 
+// If 1, use a dialog. Otherwise use a frame.
+#define USE_TABBED_DIALOG 1
+
 #include "notebook.h"
 
-// If 1, use a dialog. Otherwise use a frame.
-#define USE_TABBED_DIALOG 0
 #if USE_TABBED_DIALOG
 MyDialog* dialog = (MyDialog *) NULL;
 #else // !USE_TABBED_DIALOG
@@ -37,8 +38,8 @@ bool MyApp::OnInit()
   // Create the main window
 #if USE_TABBED_DIALOG
   dialog = new MyDialog((wxFrame *) NULL, -1, (char *) "Notebook", wxPoint(-1, -1), wxSize(365, 390), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
-
   dialog->ShowModal();
+  delete dialog;
 
   // Quit immediately the dialog has been dismissed
   return FALSE;
