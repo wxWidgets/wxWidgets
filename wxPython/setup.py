@@ -423,9 +423,6 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     WXPLAT = '__WXMAC__'
     GENDIR = 'mac'
 
-    if debug:
-        BUILD_BASE = BUILD_BASE + '-dbg'
-
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
                ('HAVE_CONFIG_H', None),
@@ -472,9 +469,6 @@ elif os.name == 'posix':
         BUILD_BASE = BUILD_BASE + '-' + WXPORT
     else:
         raise SystemExit, "Unknown WXPORT value: " + WXPORT
-
-    if debug:
-        BUILD_BASE = BUILD_BASE + '-dbg'
 
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
