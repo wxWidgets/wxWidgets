@@ -783,6 +783,12 @@ public:
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
 
+    // get the raw key code (platform-dependent)
+    wxUint32 GetRawKeyCode() const { return m_rawCode; }
+
+    // get the raw key flags (platform-dependent)
+    wxUint32 GetRawKeyFlags() const { return m_rawFlags; }
+
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
@@ -826,6 +832,8 @@ public:
         m_altDown = evt.m_altDown;
         m_metaDown = evt.m_metaDown;
         m_scanCode = evt.m_scanCode;
+        m_rawCode = evt.m_rawCode;
+        m_rawFlags = evt.m_rawFlags;
 
         return *this;
     }
@@ -840,6 +848,11 @@ public:
     bool          m_altDown;
     bool          m_metaDown;
     bool          m_scanCode;
+
+    // these fields contain the platform-specific information about the pressed
+    // key
+    wxUint32      m_rawCode;
+    wxUint32      m_rawFlags;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxKeyEvent)

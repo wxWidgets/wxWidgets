@@ -1475,8 +1475,8 @@ enum wxKeyCode
   WXK_MENU,
   WXK_PAUSE,
   WXK_CAPITAL,
-  WXK_PRIOR,  /* Page up */
-  WXK_NEXT,   /* Page down */
+  WXK_PRIOR,  // Page up
+  WXK_NEXT,   // Page down
   WXK_END,
   WXK_HOME,
   WXK_LEFT,

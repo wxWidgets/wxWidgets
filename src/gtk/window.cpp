@@ -1003,6 +1003,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
     event.m_keyCode = key_code;
     event.m_scanCode = gdk_event->keyval;
+    event.m_rawCode = (wxUint32) gdk_event->keyval;
+    event.m_rawFlags = 0;
     event.m_x = x;
     event.m_y = y;
     event.SetEventObject( win );
@@ -1155,6 +1157,8 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
     event.m_keyCode = key_code;
     event.m_scanCode = gdk_event->keyval;
+    event.m_rawCode = (wxUint32) gdk_event->keyval;
+    event.m_rawFlags = 0;
     event.m_x = x;
     event.m_y = y;
     event.SetEventObject( win );

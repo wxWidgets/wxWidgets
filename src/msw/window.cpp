@@ -102,6 +102,10 @@
     #endif
 #endif
 
+// ----------------------------------------------------------------------------
+// standard constants not available with all compilers/headers
+// ----------------------------------------------------------------------------
+
 // This didn't appear in mingw until 2.95.2
 #ifndef SIF_TRACKPOS
 #define SIF_TRACKPOS 16
@@ -117,6 +121,20 @@
     #ifndef SPI_GETWHEELSCROLLLINES
         #define SPI_GETWHEELSCROLLLINES 104
     #endif
+#endif // wxUSE_MOUSEWHEEL
+
+#ifndef VK_OEM_1
+    #define VK_OEM_1        0xBA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
+    #define VK_OEM_2        0xBF
+    #define VK_OEM_3        0xC0
+    #define VK_OEM_4        0xDB
+    #define VK_OEM_5        0xDC
+    #define VK_OEM_6        0xDD
+    #define VK_OEM_7        0xDE
 #endif
 
 // ---------------------------------------------------------------------------
@@ -2464,13 +2482,12 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
         case WM_SYSKEYDOWN:
         case WM_KEYDOWN:
-            m_lastKeydownProcessed = FALSE;
-            // If this has been processed by an event handler,
-            // return 0 now (we've handled it).
-            if ( HandleKeyDown((WORD) wParam, lParam) )
+            // If this has been processed by an event handler, return 0 now
+            // (we've handled it).
+            m_lastKeydownProcessed = HandleKeyDown((WORD) wParam, lParam);
+            if ( m_lastKeydownProcessed )
             {
                 processed = TRUE;
-                m_lastKeydownProcessed = TRUE;
                 break;
             }
 
@@ -2483,8 +2500,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
             switch ( wParam )
             {
-                // avoid duplicate messages to OnChar for these ASCII keys: they
-                // will be translated by TranslateMessage() and received in WM_CHAR
+                // avoid duplicate messages to OnChar for these ASCII keys:
+                // they will be translated by TranslateMessage() and received
+                // in WM_CHAR
                 case VK_ESCAPE:
                 case VK_SPACE:
                 case VK_RETURN:
@@ -2492,9 +2510,22 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 case VK_TAB:
                 case VK_ADD:
                 case VK_SUBTRACT:
-                    // but set processed to FALSE, not TRUE to still pass them to
-                    // the control's default window proc - otherwise built-in
-                    // keyboard handling won't work
+                case VK_MULTIPLY:
+                case VK_DIVIDE:
+                case VK_OEM_1:
+                case VK_OEM_2:
+                case VK_OEM_3:
+                case VK_OEM_4:
+                case VK_OEM_5:
+                case VK_OEM_6:
+                case VK_OEM_7:
+                case VK_OEM_PLUS:
+                case VK_OEM_COMMA:
+                case VK_OEM_MINUS:
+                case VK_OEM_PERIOD:
+                    // but set processed to FALSE, not TRUE to still pass them
+                    // to the control's default window proc - otherwise
+                    // built-in keyboard handling won't work
                     processed = FALSE;
 
                     break;
@@ -2518,7 +2549,19 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 case VK_DOWN:
                 case VK_UP:
                 default:
-                    processed = HandleChar((WORD)wParam, lParam);
+                    if ( m_lastKeydownProcessed )
+                    {
+                        // The key was handled in the EVT_KEY_DOWN and handling
+                        // a key in an EVT_KEY_DOWN handler is meant, by
+                        // design, to prevent EVT_CHARs from happening
+                        m_lastKeydownProcessed = FALSE;
+                        processed = TRUE;
+                    }
+                    else // do generate a CHAR event
+                    {
+                        processed = HandleChar((WORD)wParam, lParam);
+                    }
+
             }
             break;
 
@@ -4006,7 +4049,8 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
 // HandleChar and HandleKeyDown/Up
 wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
                                        int id,
-                                       WXLPARAM lParam) const
+                                       WXLPARAM lParam,
+                                       WXWPARAM wParam) const
 {
     wxKeyEvent event(evType);
     event.SetId(GetId());
@@ -4016,6 +4060,8 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 
     event.m_eventObject = (wxWindow *)this; // const_cast
     event.m_keyCode = id;
+    event.m_rawCode = (wxUint32) wParam;
+    event.m_rawFlags = (wxUint32) lParam;
     event.SetTimestamp(s_currentMsg.time);
 
     // translate the position to client coords
@@ -4036,14 +4082,6 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 // WM_KEYDOWN one
 bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 {
-    if (m_lastKeydownProcessed) {
-        // The key was handled in the EVT_KEY_DOWN.  Handling a key in an
-        // EVT_KEY_DOWN handler is meant, by design, to prevent EVT_CHARs
-        // from happening, so just bail out at this point.
-        m_lastKeydownProcessed = FALSE;
-        return TRUE;
-    }
-
     bool ctrlDown = FALSE;
 
     int id;
@@ -4069,30 +4107,28 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 
                 default:
                     ctrlDown = TRUE;
-                    id = id + 96;
+                    id = id + 'a' - 1;
             }
         }
     }
-    else if ( (id = wxCharCodeMSWToWX(wParam)) == 0 )
+    else // we're called from WM_KEYDOWN
     {
-        // it's ASCII and will be processed here only when called from
-        // WM_CHAR (i.e. when isASCII = TRUE), don't process it now
-        id = -1;
-    }
-
-    if ( id != -1 )
-    {
-        wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam));
-        if ( ctrlDown )
+        id = wxCharCodeMSWToWX(wParam);
+        if ( id == 0 )
         {
-            event.m_controlDown = TRUE;
+            // it's ASCII and will be processed here only when called from
+            // WM_CHAR (i.e. when isASCII = TRUE), don't process it now
+            return FALSE;
         }
-
-        if ( GetEventHandler()->ProcessEvent(event) )
-            return TRUE;
     }
 
-    return FALSE;
+    wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam, wParam));
+    if ( ctrlDown )
+    {
+        event.m_controlDown = TRUE;
+    }
+
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
@@ -4107,7 +4143,7 @@ bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
 
     if ( id != -1 ) // VZ: does this ever happen (FIXME)?
     {
-        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_DOWN, id, lParam));
+        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_DOWN, id, lParam, wParam));
         if ( GetEventHandler()->ProcessEvent(event) )
         {
             return TRUE;
@@ -4129,7 +4165,7 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 
     if ( id != -1 ) // VZ: does this ever happen (FIXME)?
     {
-        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_UP, id, lParam));
+        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_UP, id, lParam, wParam));
         if ( GetEventHandler()->ProcessEvent(event) )
             return TRUE;
     }
@@ -4358,6 +4394,7 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_CONTROL:    id = WXK_CONTROL; break;
         case VK_MENU :      id = WXK_MENU; break;
         case VK_PAUSE:      id = WXK_PAUSE; break;
+        case VK_CAPITAL:    id = WXK_CAPITAL; break;
         case VK_SPACE:      id = WXK_SPACE; break;
         case VK_ESCAPE:     id = WXK_ESCAPE; break;
         case VK_PRIOR:      id = WXK_PRIOR; break;
@@ -4415,6 +4452,19 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_F24:        id = WXK_F24; break;
         case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
         case VK_SCROLL:     id = WXK_SCROLL; break;
+
+        case VK_OEM_1:      id = ';'; break;
+        case VK_OEM_PLUS:   id = '+'; break;
+        case VK_OEM_COMMA:  id = ','; break;
+        case VK_OEM_MINUS:  id = '-'; break;
+        case VK_OEM_PERIOD: id = '.'; break;
+        case VK_OEM_2:      id = '/'; break;
+        case VK_OEM_3:      id = '~'; break;
+        case VK_OEM_4:      id = '['; break;
+        case VK_OEM_5:      id = '\\'; break;
+        case VK_OEM_6:      id = ']'; break;
+        case VK_OEM_7:      id = '\''; break;
+
         default:
             id = 0;
     }

@@ -459,7 +459,8 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
     // the helper functions used by HandleChar/KeyXXX methods
-    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
+    wxKeyEvent CreateKeyEvent(wxEventType evType, int id,
+                              WXLPARAM lParam = 0, WXWPARAM wParam = 0) const;
 
 private:
     // common part of all ctors

@@ -20,5 +20,12 @@
     #undef wxHAS_RADIO_MENU_ITEMS
 #endif
 
+// the raw keyboard codes are generated under wxGTK and wxMSW only
+#if defined(__WXGTK__) || defined(__WXMSW__)
+    #define wxHAS_RAW_KEY_CODES
+#else
+    #undef wxHAS_RAW_KEY_CODES
+#endif
+
 #endif // _WX_FEATURES_H_
 
