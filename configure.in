@@ -255,7 +255,6 @@ case "${host}" in
     AC_DEFINE(__DOS__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MGL=1
-    DEFAULT_DEFAULT_wxUSE_SHARED=0
   ;;
 
   *-pc-os2_emx | *-pc-os2-emx )
@@ -2301,6 +2300,17 @@ fi
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
+    case "${host}" in
+      *-pc-os2_emx | *-pc-os2-emx | \
+      *-pc-msdosdjgpp )
+        dnl only static for now
+        wxUSE_SHARED=no
+        AC_MSG_WARN([Host system doesn't support shared libraries, disabling])
+      ;;
+    esac
+fi
+
+if test "$wxUSE_SHARED" = "yes"; then
 
     dnl install targets
     if test "$wxUSE_OPENGL" = "yes"; then
@@ -2409,11 +2419,6 @@ if test "$wxUSE_SHARED" = "yes"; then
         else
             WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         fi
-      ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        dnl only static for now
-        wxUSE_SHARED=no
       ;;
 
       *-*-beos* )
