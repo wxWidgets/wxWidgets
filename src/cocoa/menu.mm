@@ -128,11 +128,14 @@ bool wxMenuBar::Create(long style)
     return true;
 }
 
-wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
+wxMenuBar::wxMenuBar(size_t n,
+                     wxMenu *menus[],
+                     const wxString titles[],
+                     long style)
 {
     Create(style);
 
-    for(size_t i = 0; i < n; ++i )
+    for ( size_t i = 0; i < n; ++i )
         Append(menus[i], titles[i]);
 }
 
