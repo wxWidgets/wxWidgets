@@ -2,10 +2,10 @@
 // Name:        config.cpp
 // Purpose:     implementation of wxConfig class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     07.04.98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1997 Karsten Ballüder   Ballueder@usa.net  
+// Copyright:   (c) 1997 Karsten Ballüder   Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,13 +128,14 @@ wxConfig::PathChanger::~PathChanger()
 wxString ExpandEnvVars(const wxString& str)
 {
   wxString strResult;
+  strResult.Alloc(str.Len());
 
   // don't change the values the enum elements: they must be equal
   // to the matching [closing] delimiter.
   enum Bracket
-  { 
-    Bracket_None, 
-    Bracket_Normal  = ')', 
+  {
+    Bracket_None,
+    Bracket_Normal  = ')',
     Bracket_Curly   = '}',
 #ifdef  __WXMSW__
     Bracket_Windows = '%'     // yeah, Windows people are a bit strange ;-)
@@ -160,8 +161,8 @@ wxString ExpandEnvVars(const wxString& str)
           }
           else {
             switch ( str[n + 1] ) {
-              case '(': 
-                bracket = Bracket_Normal; 
+              case '(':
+                bracket = Bracket_Normal;
                 n++;                   // skip the bracket
                 break;
 

@@ -221,8 +221,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       }
 
       if ( *pEnd != ']' ) {
-        wxLogError("file '%s': unexpected character at line %d (missing ']'?)",
-                   file.GetName(), n + 1);
+        wxLogError("file '%s': unexpected character %c at line %d.",
+                   file.GetName(), *pEnd, n + 1);
         continue; // skip this line
       }
 
@@ -950,6 +950,7 @@ void wxFileConfig::ConfigEntry::SetDirty()
 wxString FilterIn(const wxString& str)
 {
   wxString strResult;
+  strResult.Alloc(str.Len());
 
   bool bQuoted = !str.IsEmpty() && str[0] == '"';
 
@@ -989,6 +990,7 @@ wxString FilterIn(const wxString& str)
 wxString FilterOut(const wxString& str)
 {
   wxString strResult;
+  strResult.Alloc(str.Len());
 
   // quoting is necessary to preserve spaces in the beginning of the string
   bool bQuote = isspace(str[0]) || str[0] == '"';

@@ -2,7 +2,7 @@
 // Name:        textfile.cpp
 // Purpose:     implementation of wxTextFile class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     03.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -36,7 +36,7 @@
 // ----------------------------------------------------------------------------
 // static variables
 // ----------------------------------------------------------------------------
-  
+
 // default type is the native one
 const wxTextFile::Type wxTextFile::typeDefault = wxTextFile::
 #if   defined(__WXMSW__)
@@ -115,6 +115,7 @@ wxTextFile::Type wxTextFile::GuessType() const
       case Type_Unix: nUnix++; break;   \
       case Type_Dos:  nDos++;  break;   \
       case Type_Mac:  nMac++;  break;   \
+      default: wxFAIL_MSG("unknown line terminator"); \
     }
 
   uint n;
@@ -159,10 +160,12 @@ bool wxTextFile::Read()
 
   wxString str;
   char ch, chLast = '\0';
+  char buf[1024];
+  int n, nRead;
   while ( !m_file.Eof() ) {
-    // @@ should really use a buffer for efficiency
-    if ( m_file.Read(&ch, sizeof(ch)) == ofsInvalid ) {
-      // read error
+    nRead = m_file.Read(buf, WXSIZEOF(buf));
+    if ( nRead == ofsInvalid ) {
+      // read error (error message already given in wxFile::Read)
       m_file.Close();
       return FALSE;
     }
@@ -171,36 +174,39 @@ bool wxTextFile::Read()
       #pragma message("wxTextFile::Read() hasn't been tested with Mac files.")
     #endif
 
-    switch ( ch ) {
-      case '\n':
-        // Dos/Unix line termination
-        m_aLines.Add(str);
-        m_aTypes.Add(chLast == '\r' ? Type_Dos : Type_Unix);
-        str.Empty();
-        chLast = '\n';
-        break;
-
-      case '\r':
-        if ( chLast == '\r' ) {
-          // Mac empty line
-          m_aLines.Add("");
-          m_aTypes.Add(Type_Mac);
-        }
-        else
-          chLast = '\r';
-        break;
-
-      default:
-        if ( chLast == '\r' ) {
-          // Mac line termination
+    for ( n = 0; n < nRead; n++ ) {
+      ch = buf[n];
+      switch ( ch ) {
+        case '\n':
+          // Dos/Unix line termination
           m_aLines.Add(str);
-          m_aTypes.Add(Type_Mac);
-          str = ch;
-        }
-        else {
-          // add to the current line
-          str += ch;
-        }
+          m_aTypes.Add(chLast == '\r' ? Type_Dos : Type_Unix);
+          str.Empty();
+          chLast = '\n';
+          break;
+
+        case '\r':
+          if ( chLast == '\r' ) {
+            // Mac empty line
+            m_aLines.Add("");
+            m_aTypes.Add(Type_Mac);
+          }
+          else
+            chLast = '\r';
+          break;
+
+        default:
+          if ( chLast == '\r' ) {
+            // Mac line termination
+            m_aLines.Add(str);
+            m_aTypes.Add(Type_Mac);
+            str = ch;
+          }
+          else {
+            // add to the current line
+            str += ch;
+          }
+      }
     }
   }
 
@@ -224,7 +230,7 @@ bool wxTextFile::Write(Type typeNew)
 
   uint nCount = m_aLines.Count();
   for ( uint n = 0; n < nCount; n++ ) {
-    fileTmp.Write(m_aLines[n] + 
+    fileTmp.Write(m_aLines[n] +
                   GetEOL(typeNew == Type_None ? m_aTypes[n] : typeNew));
   }
 
