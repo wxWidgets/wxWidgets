@@ -73,7 +73,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
 {
   if ( data )
     printData = *data;
-
+  
   int buttonWidth = 65;
   int buttonHeight = 25;
   int spacing = 5;
@@ -96,28 +96,34 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   
   fromText = (wxTextCtrl*)NULL;
   
-  rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
-    wxPoint(5, yPos), wxSize(-1, -1), 2, choices, 2);
-  rangeRadioBox->SetSelection(1);
-
+  if(printData.GetFromPage() != 0)
+  {
+     rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
+                                    wxPoint(5, yPos), wxSize(-1, -1), 2, choices, 2);
+     rangeRadioBox->SetSelection(1);
+  }
+  
   yPos += 60;
   xPos = 5;
   int staticWidth = 45;
   int textWidth = 40;
   spacing = 10;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, _("From:"), wxPoint(xPos, yPos));
-  xPos += staticWidth;
+  if(printData.GetFromPage() != 0)
+  {
+     (void) new wxStaticText(this, wxPRINTID_STATIC, _("From:"), wxPoint(xPos, yPos));
+     xPos += staticWidth;
 
-  fromText = new wxTextCtrl(this, wxPRINTID_FROM, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
-  xPos += spacing + textWidth;
-
-  (void) new wxStaticText(this, wxPRINTID_STATIC, _("To:"), wxPoint(xPos, yPos));
-  xPos += staticWidth;
-
-  toText = new wxTextCtrl(this, wxPRINTID_TO, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
-  xPos += spacing + textWidth;
-
+     fromText = new wxTextCtrl(this, wxPRINTID_FROM, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
+     xPos += spacing + textWidth;
+     
+     (void) new wxStaticText(this, wxPRINTID_STATIC, _("To:"), wxPoint(xPos, yPos));
+     xPos += staticWidth;
+     
+     toText = new wxTextCtrl(this, wxPRINTID_TO, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
+     xPos += spacing + textWidth;
+  }
+  
   (void) new wxStaticText(this, wxPRINTID_STATIC, _("Copies:"), wxPoint(xPos, yPos));
   xPos += spacing + staticWidth;
 
@@ -218,29 +224,33 @@ void wxGenericPrintDialog::OnSetup(wxCommandEvent& WXUNUSED(event))
 
 bool wxGenericPrintDialog::TransferDataToWindow(void)
 {
-  char buf[10];
-  if (printData.GetEnablePageNumbers())
-  {
-    fromText->Enable(TRUE);
-    toText->Enable(TRUE);
+   char buf[10];
 
-    sprintf(buf, "%d", printData.GetFromPage());
-    fromText->SetValue(buf);
-    sprintf(buf, "%d", printData.GetToPage());
-    toText->SetValue(buf);
-
-    if (printData.GetAllPages())
-      rangeRadioBox->SetSelection(0);
-    else
-      rangeRadioBox->SetSelection(1);
-  }
-  else
-  {
-    fromText->Enable(FALSE);
-    toText->Enable(FALSE);
-    rangeRadioBox->SetSelection(0);
-    rangeRadioBox->wxRadioBox::Enable(1, FALSE);
-  }
+   if(printData.GetFromPage() != 0)
+   {
+      if (printData.GetEnablePageNumbers())
+      {
+         fromText->Enable(TRUE);
+         toText->Enable(TRUE);
+         
+         sprintf(buf, "%d", printData.GetFromPage());
+         fromText->SetValue(buf);
+         sprintf(buf, "%   d", printData.GetFromPage());
+         toText->SetValue(buf);
+         
+         if (printData.GetAllPages())
+            rangeRadioBox->SetSelection(0);
+         else
+            rangeRadioBox->SetSelection(1);
+      }
+      else
+      {
+         fromText->Enable(FALSE);
+         toText->Enable(FALSE);
+         rangeRadioBox->SetSelection(0);
+         rangeRadioBox->wxRadioBox::Enable(1, FALSE);
+      }
+   }
   sprintf(buf, "%d", printData.GetNoCopies());
   noCopiesText->SetValue(buf);
 
@@ -251,17 +261,25 @@ bool wxGenericPrintDialog::TransferDataToWindow(void)
 
 bool wxGenericPrintDialog::TransferDataFromWindow(void)
 {
-  if (printData.GetEnablePageNumbers())
-  {
-    printData.SetFromPage(atoi(fromText->GetValue()));
-    printData.SetToPage(atoi(toText->GetValue()));
-  }
-  if (rangeRadioBox->GetSelection() == 0)
-    printData.SetAllPages(TRUE);
-  else
-    printData.SetAllPages(FALSE);
-  printData.SetNoCopies(atoi(noCopiesText->GetValue()));
-  printData.SetPrintToFile(printToFileCheckBox->GetValue());
+   if(printData.GetFromPage() != -1)
+   {
+      if (printData.GetEnablePageNumbers())
+      {
+         printData.SetFromPage(atoi(fromText->GetValue()));
+         printData.SetToPage(atoi(toText->GetValue()));
+      }
+      if (rangeRadioBox->GetSelection() == 0)
+         printData.SetAllPages(TRUE);
+      else
+         printData.SetAllPages(FALSE);
+   }
+   else
+   { // continuous printing
+      printData.SetFromPage(1);
+      printData.SetToPage(32000);
+   }
+   printData.SetNoCopies(atoi(noCopiesText->GetValue()));
+   printData.SetPrintToFile(printToFileCheckBox->GetValue());
 
   return TRUE;
 }
