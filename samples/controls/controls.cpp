@@ -363,7 +363,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   {
     Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
   };
-  wxImageList *imagelist = new wxImageList(32, 32, FALSE, Image_Max);
+  wxImageList *imagelist = new wxImageList(16, 16, FALSE, Image_Max);
 
   static const char *s_iconNames[Image_Max] =
   {
