@@ -156,15 +156,9 @@ You can get the newest version of the Lesstif from the lesstif homepage at:
 wxWindows/Motif requires a thread library and X libraries known to work with
 threads.  This is the case on all commercial Unix-Variants and all
 Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
-many aspects. As of writing this, these Linux distributions have correct glibc
-2 support:
+many aspects. As of writing this, virtually all Linux distributions have
+correct glibc 2 support.
 
- - RedHat 5.1
- - Debian 2.0 and 3.0
- - Stampede
- - DLD 6.0
- - SuSE 6.0
- 
 You can disable thread support by running 
 
 ./configure --disable-threads
@@ -286,15 +280,19 @@ The following options handle the kind of library you want to build.
 
 	--disable-threads       Compile without thread support. Threads
 	                        support is also required for the
-				socket code to work.
+                            socket code to work.
 
 	--disable-shared        Do not create shared libraries.
 
-	--disable-optimise	Do not optimise the code. Can
+    --enable-monolithic     Build wxWindows as single library instead
+                            of as several smaller libraries (which is
+                            the default since wxWindows 2.5.0).
+
+	--disable-optimise      Do not optimise the code. Can
 	                        sometimes be useful for debugging
-				and is required on some architectures
-				such as Sun with gcc 2.8.X which
-				would otherwise produce segvs.
+                            and is required on some architectures
+                            such as Sun with gcc 2.8.X which
+                            would otherwise produce segvs.
 
 	--enable-profile        Add profiling info to the object 
 				files. Currently broken, I think.
@@ -355,6 +353,10 @@ are
 	--without-libjpeg	Disables JPEG image format code.
 	
 	--without-odbc          Disables ODBC code.
+   
+    --without-libtiff       Disables TIFF image format code.
+ 
+    --without-expat         Disable XML classes based on Expat parser.
 	
 	--disable-threads       Disables threads. Will also
 	                        disable sockets.
@@ -380,6 +382,10 @@ are
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant
 reduction in size.
+
+Please see the output of "./configure --help" for comprehensive list
+of all configurable options.
+
 
 * Compiling
 -----------
@@ -441,6 +447,12 @@ clean:
 
 This is certain to become the standard way unless we decide
 to stick to tmake.
+
+If your application uses only some of wxWindows libraries, you can
+specify required libraries when running wx-config. For example,
+`wx-config --libs=html,core` will only output link command to link
+with libraries required by core GUI classes and wxHTML classes. See
+the manual for more information on the libraries.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need
