@@ -266,6 +266,9 @@ void wxWindowDC::SetUpDC()
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     unsigned long bg_col = m_backgroundBrush.GetColour().GetPixel();
 
+    m_textForegroundColour = *wxBLACK;
+    m_textBackgroundColour = *wxWHITE;
+
     /* m_textGC */
     m_textForegroundColour.CalcPixel( m_cmap );
     XSetForeground( (Display*) m_display, (GC) m_textGC, m_textForegroundColour.GetPixel() );
@@ -1554,6 +1557,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         cx = overall_return.width;
         cy = ascent + descent;
         m_textBackgroundColour.CalcPixel(m_cmap);
+        m_textForegroundColour.CalcPixel(m_cmap);
         XSetForeground ((Display*) m_display, (GC) m_textGC, m_textBackgroundColour.GetPixel());
         XFillRectangle( (Display*) m_display, (Window) m_window,
                     (GC) m_textGC, x, y, cx, cy );
