@@ -403,7 +403,7 @@ public:
   wxString& operator<<(float f);
       // insert a double into string
   wxString& operator<<(double d);
-  
+
   // string comparison
     // case-sensitive comparison: return 0 if =, +1 if > or -1 if <
   int  Cmp(const char *psz) const { return strcmp(c_str(), psz); }
@@ -441,14 +441,18 @@ public:
   wxString AfterLast(char ch) const;
 
     // for compatibility only, use more explicitly named functions above
-  wxString Before(char ch) const { return BeforeLast(ch); } 
-  wxString After(char ch) const { return AfterFirst(ch); } 
+  wxString Before(char ch) const { return BeforeLast(ch); }
+  wxString After(char ch) const { return AfterFirst(ch); }
 
   // case conversion
-      // convert to upper case, return the string itself
+      // convert to upper case in place, return the string itself
   wxString& MakeUpper();
-      // convert to lower case, return the string itself
+      // convert to upper case, return the copy of the string
+  wxString Upper() const { wxString s(*this); return s.MakeUpper(); }
+      // convert to lower case in place, return the string itself
   wxString& MakeLower();
+      // convert to lower case, return the copy of the string
+  wxString Lower() const { wxString s(*this); return s.MakeLower(); }
 
   // trimming/padding whitespace (either side) and truncating
       // remove spaces from left or from right (default) side
