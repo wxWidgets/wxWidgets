@@ -51,6 +51,8 @@ public:
 
     void SetProportion( int proportion );
     int GetProportion();
+    %pythoncode { SetOption = SetProportion}
+    %pythoncode { GetOption = GetProportion}
     
     void SetFlag( int flag );
     int GetFlag();
