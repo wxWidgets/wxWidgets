@@ -496,6 +496,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/imaglist.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
+    wx/generic/numdlgg.h
     wx/generic/notebook.h
     wx/generic/panelg.h
     wx/generic/prntdlgg.h
@@ -514,6 +515,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mdi.h
     wx/menu.h
     wx/msgdlg.h
+    wx/numdlg.h
     wx/palette.h
     wx/panel.h
     wx/pen.h
