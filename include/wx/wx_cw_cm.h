@@ -1,5 +1,9 @@
 #define MSL_USE_PRECOMPILED_HEADERS	0
-
+#if __WXDEBUG__
+    // mac os assert levels
+    #define DEBUG 1
+    #define DEBUG_INTERNAL 1
+#endif
 #if !defined( __MWERKS__ )
     #error "this file is only for builds with Metrowerks CodeWarrior"
 #endif 
