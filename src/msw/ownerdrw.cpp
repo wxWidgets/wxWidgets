@@ -38,6 +38,53 @@
 
 #if wxUSE_OWNER_DRAWN
 
+class wxMSWSystemMenuFontModule : public wxModule
+{
+public:
+
+    virtual bool OnInit()
+    {
+        ms_systemMenuFont = new wxFont;
+
+#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
+        NONCLIENTMETRICS nm;
+        nm.cbSize = sizeof(NONCLIENTMETRICS);
+        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0); 
+
+        ms_systemMenuButtonWidth = nm.iMenuHeight;
+        ms_systemMenuHeight = nm.iMenuHeight;
+
+        // create menu font
+        wxNativeFontInfo info;
+        memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
+        ms_systemMenuFont->Create(info);
+#endif
+
+        return true;
+    }
+
+    virtual void OnExit()
+    {
+        delete ms_systemMenuFont;
+        ms_systemMenuFont = NULL;
+    }
+
+    static wxFont* ms_systemMenuFont;
+    static int ms_systemMenuButtonWidth;   // windows clean install default
+    static int ms_systemMenuHeight;        // windows clean install default
+private:
+    DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
+};
+
+// these static variables are by the wxMSWSystemMenuFontModule object
+// and reflect the system settings returned by the Win32 API's
+// SystemParametersInfo() call.
+
+wxFont* wxMSWSystemMenuFontModule::ms_systemMenuFont = NULL;
+int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;   // windows clean install default
+int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;        // windows clean install default
+
+IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
 // ============================================================================
 // implementation of wxOwnerDrawn class
@@ -49,7 +96,6 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
                            bool bCheckable, bool bMenuItem)
             : m_strName(str)
 {
-#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
     // get the default menu height and font from the system
     NONCLIENTMETRICS nm;
     nm.cbSize = sizeof (NONCLIENTMETRICS);
@@ -60,44 +106,24 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     // menu icons and checkmarks
     if (ms_nDefaultMarginWidth == 0)
     {
-       ms_nDefaultMarginWidth = nm.iMenuWidth;
-       ms_nLastMarginWidth = nm.iMenuWidth;
+       ms_nDefaultMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
+       ms_nLastMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
     }
 
-    if (bMenuItem)
+    if (wxMSWSystemMenuFontModule::ms_systemMenuFont->Ok() && bMenuItem)
     {
-        static wxFont menu_font;
-        if (!menu_font.Ok())
-        {
-            // create menu font
-            wxNativeFontInfo info;
-            memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-            menu_font.Create(info);
-        }
-
-        m_font = menu_font;
+        m_font = *wxMSWSystemMenuFontModule::ms_systemMenuFont;
     }
     else
     {
         m_font = *wxNORMAL_FONT;
     }
-#else
-    // windows clean install default
-    m_nMinHeight = 18;
-    
-    if (ms_nDefaultMarginWidth == 0)
-    {
-        ms_nDefaultMarginWidth = 18;
-        ms_nLastMarginWidth = 18;
-    }
-    if (wxNORMAL_FONT)
-       m_font = *wxNORMAL_FONT;
-#endif
 
     m_bCheckable   = bCheckable;
     m_bOwnerDrawn  = FALSE;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
+    m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
 }
 
 
