@@ -1011,6 +1011,9 @@ public:
     // remove first item matching this value
   void Remove(const wxChar *sz);
     // remove item by index
+  void RemoveAt(size_t nIndex);
+
+  // obsolete, use RemoveAt(), this one is going to disappear!
   void Remove(size_t nIndex);
 
   // sorting

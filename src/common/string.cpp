@@ -2073,9 +2073,9 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 }
 
 // removes item from array (by index)
-void wxArrayString::Remove(size_t nIndex)
+void wxArrayString::RemoveAt(size_t nIndex)
 {
-  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Remove") );
+  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::RemoveAt") );
 
   // release our lock
   Item(nIndex).GetStringData()->Unlock();
