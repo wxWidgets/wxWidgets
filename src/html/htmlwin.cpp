@@ -1313,7 +1313,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
 #if wxUSE_EXTENDED_RTTI
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxHtmlWindow)
+wxBEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 /*
 	TODO PROPERTIES
 		style , wxHW_SCROLLBAR_AUTO
@@ -1321,12 +1321,12 @@ WX_BEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 		url , string
 		htmlcode , string
 */
-WX_END_PROPERTIES_TABLE()
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxHtmlWindow)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxHtmlWindow)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 #endif
