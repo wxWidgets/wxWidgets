@@ -1910,8 +1910,8 @@ HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
         wxLogLastError(wxT("CreateBitmap"));
     }
 
-    ::SelectObject(hdcSrc, hbmpMask);
-    ::SelectObject(hdcDst, hbmpInvMask);
+    HGDIOBJ srcTmp = ::SelectObject(hdcSrc, hbmpMask);
+    HGDIOBJ dstTmp = ::SelectObject(hdcDst, hbmpInvMask);
     if ( !::BitBlt(hdcDst, 0, 0, w, h,
                    hdcSrc, 0, 0,
                    NOTSRCCOPY) )
@@ -1919,6 +1919,10 @@ HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
         wxLogLastError(wxT("BitBlt"));
     }
 
+    // Deselect objects
+    SelectObject(hdcSrc,srcTmp);
+    SelectObject(hdcDst,dstTmp);
+    
     ::DeleteDC(hdcSrc);
     ::DeleteDC(hdcDst);
 
