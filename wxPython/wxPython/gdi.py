@@ -535,7 +535,5 @@ wxTheBrushList = wx.gdi.TheBrushList
 wxTheColourDatabase = wx.gdi.TheColourDatabase
 wxEffects = wx.gdi.Effects
 wxEffectsPtr = wx.gdi.EffectsPtr
-wxColor = wx.gdi.Color
-wxNamedColor = wx.gdi.NamedColor
 
 
