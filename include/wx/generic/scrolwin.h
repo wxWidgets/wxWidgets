@@ -123,7 +123,7 @@ public:
     void OnScroll(wxScrollWinEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
-    void OnKeyDown(wxKeyEvent& event);
+    void OnChar(wxKeyEvent& event);
 
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);

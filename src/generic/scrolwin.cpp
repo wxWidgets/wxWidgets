@@ -58,7 +58,7 @@ BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
     EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
     EVT_SIZE(wxScrolledWindow::OnSize)
     EVT_PAINT(wxScrolledWindow::OnPaint)
-    EVT_KEY_DOWN(wxScrolledWindow::OnKeyDown)
+    EVT_CHAR(wxScrolledWindow::OnChar)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
@@ -613,8 +613,11 @@ void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     OnDraw(dc);
 }
 
-// kbd handling
-void wxScrolledWindow::OnKeyDown(wxKeyEvent& event)
+// kbd handling: notice that we use OnChar() and not OnKeyDown() for
+// compatibility here - if we used OnKeyDown(), the programs which process
+// arrows themselves in their OnChar() would never get the message and like
+// this they always have the priority
+void wxScrolledWindow::OnChar(wxKeyEvent& event)
 {
     if ( !m_xScrollPixelsPerLine || !m_yScrollPixelsPerLine )
     {
