@@ -3324,8 +3324,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_statusbr.o \
 	monodll_tabg.o \
-	monodll_snglinst.o \
-	monodll_webkit.o
+	$(__MAC_OSX_SRC_OBJECTS)
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -3584,6 +3583,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_tbarwce.o \
 	monodll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = \
+@COND_PLATFORM_MACOSX_1@	monodll_snglinst.o monodll_webkit.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_1 =  \
@@ -4759,8 +4760,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_statusbr.o \
 	monolib_tabg.o \
-	monolib_snglinst.o \
-	monolib_webkit.o
+	$(__MAC_OSX_SRC_OBJECTS_1)
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -5019,6 +5019,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbarwce.o \
 	monolib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = \
+@COND_PLATFORM_MACOSX_1@	monolib_snglinst.o monolib_webkit.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_3 =  \
@@ -6388,8 +6390,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_statusbr.o \
 	coredll_tabg.o \
-	coredll_snglinst.o \
-	coredll_webkit.o
+	$(__MAC_OSX_SRC_OBJECTS_2)
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -6648,6 +6649,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbarwce.o \
 	coredll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = \
+@COND_PLATFORM_MACOSX_1@	coredll_snglinst.o coredll_webkit.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_5 =  \
@@ -7573,8 +7576,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_statusbr.o \
 	corelib_tabg.o \
-	corelib_snglinst.o \
-	corelib_webkit.o
+	$(__MAC_OSX_SRC_OBJECTS_3)
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -7833,6 +7835,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbarwce.o \
 	corelib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3)
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = \
+@COND_PLATFORM_MACOSX_1@	corelib_snglinst.o corelib_webkit.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_utilsexc_cf.o
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_7 =  \
@@ -10340,8 +10344,8 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monodll_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13658,8 +13662,8 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monolib_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
