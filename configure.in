@@ -1275,6 +1275,78 @@ dnl needed for making link to setup.h
 AC_PROG_LN_S
 
 dnl ---------------------------------------------------------------------------
+dnl Checks for compiler characteristics
+dnl ---------------------------------------------------------------------------
+
+dnl defines const to be empty if c-compiler does not support const fully
+AC_C_CONST
+dnl defines inline to a sensible value for the c-compiler
+AC_C_INLINE
+
+dnl check the sizes of integral types (give some reasonable default values for
+dnl cross-compiling)
+dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
+AC_CHECK_SIZEOF(char, 1)
+AC_CHECK_SIZEOF(short, 2)
+AC_CHECK_SIZEOF(void *, 4)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+
+case "${host}" in
+    arm-*-linux* )
+        AC_CHECK_SIZEOF(long long, 8)
+    ;;
+    * )
+        AC_CHECK_SIZEOF(long long, 0)
+esac
+
+
+dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
+dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
+dnl Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
+AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
+[
+    AC_TRY_RUN(
+        [
+            #ifdef HAVE_WCHAR_H
+            #  ifdef __CYGWIN__
+            #    include <stddef.h>
+            #  endif
+            #  include <wchar.h>
+            #endif
+            #ifdef HAVE_STDLIB_H
+            #  include <stdlib.h>
+            #endif
+            #include <stdio.h>
+            int main()
+            {
+                FILE *f=fopen("conftestval", "w");
+                if (!f) exit(1);
+                fprintf(f, "%i", sizeof(wchar_t));
+                exit(0);
+            }
+        ],
+        wx_cv_sizeof_wchar_t=`cat conftestval`,
+        wx_cv_sizeof_wchar_t=0,
+        wx_cv_sizeof_wchar_t=4
+    )
+])
+
+AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
+
+dnl check for large file support
+AC_SYS_LARGEFILE
+
+dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
+WX_C_BIGENDIAN
+
+dnl check for iostream (as opposed to iostream.h) standard header
+WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
+
+dnl check whether C++ compiler supports bool built-in type
+WX_CPP_BOOL
+
+dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be
 dnl looked for in all directories of this path
 dnl ---------------------------------------------------------------------------
@@ -2675,75 +2747,6 @@ AC_CACHE_CHECK([for pw_gecos in struct passwd], wx_cv_struct_pw_gecos,
 if test "$wx_cv_struct_pw_gecos" = "yes"; then
     AC_DEFINE(HAVE_PW_GECOS)
 fi
-
-dnl ---------------------------------------------------------------------------
-dnl Checks for compiler characteristics
-dnl ---------------------------------------------------------------------------
-
-dnl defines const to be empty if c-compiler does not support const fully
-AC_C_CONST
-dnl defines inline to a sensible value for the c-compiler
-AC_C_INLINE
-
-dnl check the sizes of integral types (give some reasonable default values for
-dnl cross-compiling)
-dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
-AC_CHECK_SIZEOF(char, 1)
-AC_CHECK_SIZEOF(short, 2)
-AC_CHECK_SIZEOF(void *, 4)
-AC_CHECK_SIZEOF(int, 4)
-AC_CHECK_SIZEOF(long, 4)
-
-case "${host}" in
-    arm-*-linux* )
-        AC_CHECK_SIZEOF(long long, 8)
-    ;;
-    * )
-        AC_CHECK_SIZEOF(long long, 0)
-esac
-
-
-dnl we have to do it ourselves because SGI/Irix's stdio.h does not include
-dnl wchar_t and AC_CHECK_SIZEOF only includes stdio.h
-dnl Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
-AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
-[
-    AC_TRY_RUN(
-        [
-            #ifdef HAVE_WCHAR_H
-            #  ifdef __CYGWIN__
-            #    include <stddef.h>
-            #  endif
-            #  include <wchar.h>
-            #endif
-            #ifdef HAVE_STDLIB_H
-            #  include <stdlib.h>
-            #endif
-            #include <stdio.h>
-            int main()
-            {
-                FILE *f=fopen("conftestval", "w");
-                if (!f) exit(1);
-                fprintf(f, "%i", sizeof(wchar_t));
-                exit(0);
-            }
-        ],
-        wx_cv_sizeof_wchar_t=`cat conftestval`,
-        wx_cv_sizeof_wchar_t=0,
-        wx_cv_sizeof_wchar_t=4
-    )
-])
-
-AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
-
-dnl for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
-WX_C_BIGENDIAN
-
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
-
-dnl check whether C++ compiler supports bool built-in type
-WX_CPP_BOOL
 
 dnl ---------------------------------------------------------------------------
 dnl Check for functions
