@@ -213,13 +213,13 @@ bool wxDropTarget::GetData()
                         {
                             HFSFlavor* theFile = (HFSFlavor*) theData ;
                             wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                            if (  firstFileAdded )
-                                ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
-                            else
+                            if ( !firstFileAdded )
                             {
-                                ((wxFileDataObject*)m_dataObject)->SetData( 0 , name.c_str() ) ;
+                                // reset file list
+                                ((wxFileDataObject*)m_dataObject)->SetData( 0 , "" ) ;
                                 firstFileAdded = true ;    
                             }
+                            ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
                         }
                         else
                         {

@@ -206,7 +206,10 @@ bool wxFileDataObject::SetData(
 {
     m_filenames.Empty();
 
-    AddFile(wxString::FromAscii((char*)pBuf));
+    // only add if this is not an empty string
+    // we can therefore clear the list by just setting an empty string
+    if ( (*(char*)pBuf) != 0 )
+        AddFile(wxString::FromAscii((char*)pBuf));
 
     return TRUE;
 }
