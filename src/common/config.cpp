@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        config.cpp
-// Purpose:     implementation of wxConfig class
+// Purpose:     implementation of wxConfigBase class
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.04.98
@@ -38,7 +38,7 @@
 #include  <wx/textfile.h>
 #include  <wx/config.h>
 
-// we must include (one of) these files for wxConfig::Create
+// we must include (one of) these files for wxConfigBase::Create
 #if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
   #ifdef __WIN32__
     #include  <wx/msw/regconf.h>
@@ -56,39 +56,39 @@
 // global and class static variables
 // ----------------------------------------------------------------------------
 
-wxConfig *wxConfig::ms_pConfig = NULL;
+wxConfigBase *wxConfigBase::ms_pConfig = NULL;
 
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxConfig
+// wxConfigBase
 // ----------------------------------------------------------------------------
 
-wxConfig *wxConfig::Set(wxConfig *pConfig)
+wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 {
-  wxConfig *pOld = ms_pConfig;
+  wxConfigBase *pOld = ms_pConfig;
   ms_pConfig = pConfig;
   return pOld;
 }
 
-wxConfig *wxConfig::Create()
+wxConfigBase *wxConfigBase::Create()
 {
   return ms_pConfig =
-#if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
-  #ifdef __WIN32__
-    new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-  #else  //WIN16
-    #error "Sorry, no wxIniConfig yet..."
-    //new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+  #if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
+    #ifdef __WIN32__
+      new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+    #else  //WIN16
+      #error "Sorry, no wxIniConfig yet..."
+      //new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+    #endif
+  #else // either we're under Unix or wish to use files even under Windows
+    new wxFileConfig(wxTheApp->GetAppName());
   #endif
-#else // either we're under Unix or wish to use files even under Windows
-  new wxFileConfig(wxTheApp->GetAppName());
-#endif
 }
 
-const char *wxConfig::Read(const char *szKey, const char *szDefault) const
+const char *wxConfigBase::Read(const char *szKey, const char *szDefault) const
 {
   static char s_szBuf[1024];
   wxString s;
@@ -102,10 +102,10 @@ const char *wxConfig::Read(const char *szKey, const char *szDefault) const
 // Config::PathChanger
 // ----------------------------------------------------------------------------
 
-wxConfig::PathChanger::PathChanger(const wxConfig *pContainer,
+wxConfigBase::PathChanger::PathChanger(const wxConfigBase *pContainer,
                                  const wxString& strEntry)
 {
-  m_pContainer = (wxConfig *)pContainer;
+  m_pContainer = (wxConfigBase *)pContainer;
   wxString strPath = strEntry.Before(wxCONFIG_PATH_SEPARATOR);
 
   // special case of "/keyname" when there is nothing before "/"
@@ -127,7 +127,7 @@ wxConfig::PathChanger::PathChanger(const wxConfig *pContainer,
   }
 }
 
-wxConfig::PathChanger::~PathChanger()
+wxConfigBase::PathChanger::~PathChanger()
 {
   // only restore path if it was changed
   if ( m_bChanged ) {

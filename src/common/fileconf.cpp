@@ -157,7 +157,8 @@ wxString wxFileConfig::GetLocalFileName(const char *szFile)
   str << szFile;
 
   #ifdef __WXMSW__
-    str << ".ini";
+    if ( strchr(szFile, '.') == NULL )
+      str << ".ini";
   #endif
 
   return str;
@@ -432,13 +433,13 @@ void wxFileConfig::SetPath(const wxString& strPath)
 // enumeration
 // ----------------------------------------------------------------------------
 
-bool wxFileConfig::GetFirstGroup(wxString& str, long& lIndex)
+bool wxFileConfig::GetFirstGroup(wxString& str, long& lIndex) const
 {
   lIndex = 0;
   return GetNextGroup(str, lIndex);
 }
 
-bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex)
+bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex) const
 {
   if ( uint(lIndex) < m_pCurrentGroup->Groups().Count() ) {
     str = m_pCurrentGroup->Groups()[lIndex++]->Name();
@@ -448,13 +449,13 @@ bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex)
     return FALSE;
 }
 
-bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex)
+bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex) const
 {
   lIndex = 0;
   return GetNextEntry(str, lIndex);
 }
 
-bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex)
+bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
 {
   if ( uint(lIndex) < m_pCurrentGroup->Entries().Count() ) {
     str = m_pCurrentGroup->Entries()[lIndex++]->Name();
@@ -648,7 +649,7 @@ bool wxFileConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
     if ( m_pCurrentGroup != m_pRootGroup ) {
       ConfigGroup *pGroup = m_pCurrentGroup;
       SetPath("..");  // changes m_pCurrentGroup!
-      m_pCurrentGroup->DeleteSubgroup(pGroup->Name());
+      m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name());
     }
     //else: never delete the root group
   }
@@ -660,7 +661,7 @@ bool wxFileConfig::DeleteGroup(const char *szKey)
 {
   PathChanger path(this, szKey);
 
-  return m_pCurrentGroup->DeleteSubgroup(path.Name());
+  return m_pCurrentGroup->DeleteSubgroupByName(path.Name());
 }
 
 bool wxFileConfig::DeleteAll()
@@ -1012,9 +1013,16 @@ wxFileConfig::ConfigGroup::AddSubgroup(const wxString& strName)
   delete several of them.
  */
 
-bool wxFileConfig::ConfigGroup::DeleteSubgroup(const char *szName)
+bool wxFileConfig::ConfigGroup::DeleteSubgroupByName(const char *szName)
 {
-  ConfigGroup *pGroup = FindSubgroup(szName);
+  return DeleteSubgroup(FindSubgroup(szName));
+}
+
+// doesn't delete the subgroup itself, but does remove references to it from
+// all other data structures (and normally the returned pointer should be
+// deleted a.s.a.p. because there is nothing much to be done with it anyhow)
+bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
+{
   wxCHECK( pGroup != NULL, FALSE ); // deleting non existing group?
 
   // delete all entries
@@ -1023,6 +1031,12 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(const char *szName)
     LineList *pLine = pGroup->m_aEntries[nEntry]->GetLine();
     if ( pLine != NULL )
       m_pConfig->LineListRemove(pLine);
+  }
+
+  // and subgroups of this sungroup
+  nCount = pGroup->m_aSubgroups.Count();
+  for ( uint nGroup = 0; nGroup < nCount; nGroup++ ) {
+    pGroup->DeleteSubgroup(pGroup->m_aSubgroups[nGroup]);
   }
 
   LineList *pLine = pGroup->m_pLine;
