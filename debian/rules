@@ -20,8 +20,8 @@ package_gtk_lib=libwxgtk$(release)
 package_gtk_dev=libwxgtk$(release)-dev
 package_gtk_dbg=libwxgtk$(release)-dbg
 package_gtk_py=libwxgtk$(release)-python
-package_contrib=wxwin$(release)-contrib
-package_contrib_dev=wxwin$(release)-contrib-dev
+package_gtk_contrib=libwxgtk$(release)-contrib
+package_gtk_contrib_dev=libwxgtk$(release)-contrib-dev
 package_headers=wxwin$(release)-headers
 package_doc=wxwin$(release)-doc
 package_examples=wxwin$(release)-examples
@@ -29,22 +29,27 @@ package_examples=wxwin$(release)-examples
 # Build directories:
 objdir_wxbase_shared=objs_wxbase_sh
 objdir_wxbase_static=objs_wxbase_st
+objdir_wxbase_debug=objs_wxbase_d
 objdir_gtk_shared=objs_gtk_sh
 objdir_gtk_static=objs_gtk_st
+objdir_gtk_debug=objs_gtk_d
 objdir_doc_cruft=objs_doc_con
 objdir_doc=docs/wxWindows-manual.html
 objdir_examples=docs/examples
-objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_gtk_shared) \
-	$(objdir_gtk_static) $(objdir_doc) $(objdir_examples)
+objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
+	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
+	$(objdir_doc) $(objdir_examples)
 
 build_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
-             build-gtk-shared-stamp build-gtk-static-stamp \
+             build-wxbase-debug-stamp build-gtk-shared-stamp \
+             build-gtk-static-stamp build-gtk-debug-stamp \
              build-contrib-shared-stamp build-contrib-static-stamp \
              build-gtk-python-stamp build-examples-stamp build-doc-stamp
 
-install_all=install-wxbase-lib install-wxbase-dev install-gtk-lib \
-            install-gtk-dev install-gtk-contrib install-gtk-contrib-dev \
-            install-gtk-py install-headers install-doc install-examples
+install_all=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
+            install-gtk-lib install-gtk-dev install-gtk-dbg \
+            install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
+            install-headers install-doc install-examples
 
 wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
 		--prefix=$(shell pwd) \
@@ -69,6 +74,10 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 		echo "generating control file $(package_wxbase_dev).$$f"; \
 		cp debian/libwxbase-dev.$$f debian/$(package_wxbase_dev).$$f; \
 	done;
+	@for f in dirs docs links postinst prerm; do \
+		echo "generating control file $(package_wxbase_dbg).$$f"; \
+		cp debian/libwxbase-dbg.$$f debian/$(package_wxbase_dbg).$$f; \
+	done;
 	@for f in dirs docs postinst; do \
 		echo "generating control file $(package_gtk_lib).$$f"; \
 		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
@@ -77,17 +86,21 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
 	done;
+	@for f in dirs docs links postinst prerm; do \
+		echo "generating control file $(package_gtk_dbg).$$f"; \
+		cp debian/libwxgtk-dbg.$$f debian/$(package_gtk_dbg).$$f; \
+	done;
 	@for f in dirs docs files postinst prerm; do \
 		echo "generating control file $(package_gtk_py).$$f"; \
 		cp debian/libwxgtk-python.$$f debian/$(package_gtk_py).$$f; \
 	done;
 	@for f in dirs docs postinst; do \
-		echo "generating control file $(package_contrib).$$f"; \
-		cp debian/wxwin-contrib.$$f debian/$(package_contrib).$$f; \
+		echo "generating control file $(package_gtk_contrib).$$f"; \
+		cp debian/libwxgtk-contrib.$$f debian/$(package_gtk_contrib).$$f; \
 	done;
 	@for f in dirs docs files; do \
-		echo "generating control file $(package_contrib_dev).$$f"; \
-		cp debian/wxwin-contrib-dev.$$f debian/$(package_contrib_dev).$$f; \
+		echo "generating control file $(package_gtk_contrib_dev).$$f"; \
+		cp debian/libwxgtk-contrib-dev.$$f debian/$(package_gtk_contrib_dev).$$f; \
 	done;
 	@for f in dirs docs files; do \
 		echo "generating control file $(package_headers).$$f"; \
@@ -127,6 +140,18 @@ build-wxbase-static-stamp:
 		&& $(MAKE)
 	touch $@
 
+build-wxbase-debug-stamp:
+	dh_testdir
+	mkdir $(objdir_wxbase_debug)
+	cd $(objdir_wxbase_debug) \
+		&& ../configure --prefix=/usr \
+				--disable-gui \
+				--enable-debug \
+				--enable-burnt_name \
+				--with-zlib=sys \
+		&& $(MAKE)
+	touch $@
+
 build-gtk-shared-stamp:
 	dh_testdir
 	mkdir $(objdir_gtk_shared)
@@ -150,6 +175,22 @@ build-gtk-static-stamp:
 				--with-gtk \
 				--with-opengl \
 				--disable-shared \
+				--with-zlib=sys \
+				--with-libjpeg=sys \
+				--with-libpng=sys \
+				--with-libtiff=sys \
+		&& $(MAKE)
+	touch $@
+
+build-gtk-debug-stamp:
+	dh_testdir
+	mkdir $(objdir_gtk_debug)
+	cd $(objdir_gtk_debug) \
+		&& ../configure --prefix=/usr \
+				--with-gtk \
+				--with-opengl \
+				--enable-debug \
+				--enable-burnt_name \
 				--with-zlib=sys \
 				--with-libjpeg=sys \
 				--with-libpng=sys \
@@ -217,11 +258,13 @@ clean: debian/control
 	dh_clean
 	rm -f debian/$(package_wxbase_lib).*
 	rm -f debian/$(package_wxbase_dev).*
+	rm -f debian/$(package_wxbase_dbg).*
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
+	rm -f debian/$(package_gtk_dbg).*
 	rm -f debian/$(package_gtk_py).*
-	rm -f debian/$(package_contrib).*
-	rm -f debian/$(package_contrib_dev).*
+	rm -f debian/$(package_gtk_contrib).*
+	rm -f debian/$(package_gtk_contrib_dev).*
 	rm -f debian/$(package_headers).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
@@ -246,6 +289,15 @@ install-wxbase-dev: build-wxbase-static-stamp install-wxbase-lib
 	dh_movefiles --sourcedir=debian/$(package_wxbase_lib)
 	cp $(objdir_wxbase_static)/lib/*.a debian/$(package_wxbase_dev)/usr/lib
 
+install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
+install-wxbase-dbg: build-wxbase-debug-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cp -a $(objdir_wxbase_debug)/lib/* debian/$(package_wxbase_dbg)/usr/lib
+	cp $(objdir_wxbase_debug)/wxbased-config debian/$(package_wxbase_dbg)/usr/bin/
+
 install-gtk-lib: DH_OPTIONS=-p$(package_gtk_lib)
 install-gtk-lib: build-gtk-shared-stamp
 	dh_testdir
@@ -265,24 +317,33 @@ install-gtk-dev: build-gtk-static-stamp install-gtk-lib
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
 	cp $(objdir_gtk_static)/lib/libwx_gtk*.a debian/$(package_gtk_dev)/usr/lib
 
-install-gtk-contrib: DH_OPTIONS=-p$(package_contrib)
+install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
+install-gtk-dbg: build-gtk-debug-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cp -a $(objdir_gtk_debug)/lib/* debian/$(package_gtk_dbg)/usr/lib
+	cp $(objdir_gtk_debug)/wxgtkd-config debian/$(package_gtk_dbg)/usr/bin/
+
+install-gtk-contrib: DH_OPTIONS=-p$(package_gtk_contrib)
 install-gtk-contrib: build-contrib-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 	cd $(objdir_gtk_shared)/contrib/src \
-		&& $(MAKE) install prefix=`pwd`/../../../debian/$(package_contrib)/usr
+		&& $(MAKE) install prefix=`pwd`/../../../debian/$(package_gtk_contrib)/usr
 
-install-gtk-contrib-dev: DH_OPTIONS=-p$(package_contrib_dev)
+install-gtk-contrib-dev: DH_OPTIONS=-p$(package_gtk_contrib_dev)
 install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-dev
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_movefiles --sourcedir=debian/$(package_contrib)
-	cp $(objdir_gtk_static)/lib/*.a debian/$(package_contrib_dev)/usr/lib
-	rm -f debian/$(package_contrib_dev)/usr/lib/libwx_gtk*.a
+	dh_movefiles --sourcedir=debian/$(package_gtk_contrib)
+	cp $(objdir_gtk_static)/lib/*.a debian/$(package_gtk_contrib_dev)/usr/lib
+	rm -f debian/$(package_gtk_contrib_dev)/usr/lib/libwx_gtk*.a
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
 install-gtk-py: build-gtk-python-stamp
@@ -375,6 +436,9 @@ binary-gtk-dev: control-files-stamp install-gtk-dev install-headers
 	  DH_OPTIONS="-p$(package_gtk_lib) -p$(package_gtk_dev) -p$(package_headers)" \
 	  binary-common
 
+binary-gtk-dbg: control-files-stamp install-gtk-dbg install-headers
+	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg) -p$(package_headers)" binary-common
+
 # libwxbase shared lib package
 binary-wxbase: control-files-stamp install-wxbase-lib install-headers
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_lib) -p$(package_headers)" binary-common
@@ -384,14 +448,18 @@ binary-wxbase-dev: control-files-stamp install-wxbase-dev install-headers
 	  DH_OPTIONS="-p$(package_wxbase_lib) -p$(package_wxbase_dev) -p$(package_headers)" \
 	  binary-common
 
+binary-wxbase-dbg: control-files-stamp install-wxbase-dbg install-headers
+	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_dbg) -p$(package_headers)" binary-common
+
 # docs package
 binary-doc: control-files-stamp install-doc
 	$(MAKE) -f debian/rules DH_OPTIONS=-p$(package_doc) binary-common
 
 
 .PHONY: build clean binary-indep binary-arch binary binary-common binary-gtk \
-        binary-gtk-dev binary-wxbase binary-wxbase-dev binary-doc install \
-	install-wxbase-lib install-wxbase-dev install-gtk-lib install-gtk-dev \
-	install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
-	install-headers install-doc install-examples
+        binary-gtk-dev binary-gtk-dbg binary-wxbase binary-wxbase-dev \
+	binary-wxbase-dbg binary-doc install install-wxbase-lib \
+	install-wxbase-dev install-wxbase-dbg install-gtk-lib install-gtk-dev \
+	install-gtk-dbg install-gtk-contrib install-gtk-contrib-dev \
+	install-gtk-py install-headers install-doc install-examples
 
