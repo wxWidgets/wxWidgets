@@ -1970,6 +1970,14 @@ static PyObject *_wrap_wxListItem_m_width_get(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+static void *SwigwxListEventTowxNotifyEvent(void *ptr) {
+    wxListEvent *src;
+    wxNotifyEvent *dest;
+    src = (wxListEvent *) ptr;
+    dest = (wxNotifyEvent *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxListEventTowxCommandEvent(void *ptr) {
     wxListEvent *src;
     wxCommandEvent *dest;
@@ -3727,8 +3735,8 @@ static PyObject *_wrap_wxListCtrl_HitTest(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxListCtrl_InsertColumnWith(_swigobj,_swigarg0,_swigarg1)  (_swigobj->InsertColumn(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxListCtrl_InsertColumnWith(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxListCtrl_InsertColumnInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->InsertColumn(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl_InsertColumnInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
     wxListCtrl * _arg0;
@@ -3739,25 +3747,25 @@ static PyObject *_wrap_wxListCtrl_InsertColumnWith(PyObject *self, PyObject *arg
     char *_kwnames[] = { "self","col","info", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO:wxListCtrl_InsertColumnWith",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO:wxListCtrl_InsertColumnInfo",_kwnames,&_argo0,&_arg1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_InsertColumnWith. Expected _wxListCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_InsertColumnInfo. Expected _wxListCtrl_p.");
         return NULL;
         }
     }
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
         else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_InsertColumnWith. Expected _wxListItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_InsertColumnInfo. Expected _wxListItem_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxListCtrl_InsertColumnWith(_arg0,_arg1,*_arg2);
+        _result = (long )wxListCtrl_InsertColumnInfo(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("l",_result);
@@ -7565,7 +7573,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_InsertStringItem", (PyCFunction) _wrap_wxListCtrl_InsertStringItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_InsertItem", (PyCFunction) _wrap_wxListCtrl_InsertItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_InsertColumn", (PyCFunction) _wrap_wxListCtrl_InsertColumn, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListCtrl_InsertColumnWith", (PyCFunction) _wrap_wxListCtrl_InsertColumnWith, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_InsertColumnInfo", (PyCFunction) _wrap_wxListCtrl_InsertColumnInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_HitTest", (PyCFunction) _wrap_wxListCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetTopItem", (PyCFunction) _wrap_wxListCtrl_GetTopItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_GetSelectedItemCount", (PyCFunction) _wrap_wxListCtrl_GetSelectedItemCount, METH_VARARGS | METH_KEYWORDS },
@@ -7728,6 +7736,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCursor","_class_wxCursor",0},
     { "_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
+    { "_wxNotifyEvent","_class_wxListEvent",SwigwxListEventTowxNotifyEvent},
+    { "_wxNotifyEvent","_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
     { "_wxPyTreeCtrl","_class_wxPyTreeCtrl",0},
     { "_wxMask","_class_wxMask",0},
@@ -7822,6 +7832,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
     { "_class_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
+    { "_class_wxNotifyEvent","_class_wxListEvent",SwigwxListEventTowxNotifyEvent},
+    { "_class_wxNotifyEvent","_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
     { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
