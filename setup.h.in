@@ -659,10 +659,6 @@
  * Use spline
  */
 #define wxUSE_SPLINES 0
-/*
- * Use wxLibrary class
- */
-#define wxUSE_DYNLIB_CLASS 0
 
 /*
  * Use the mdi architecture
