@@ -235,21 +235,12 @@ public:
     bool IsOk() const { return m_handles[Read] != INVALID_HANDLE_VALUE; }
 
     // return the descriptor for one of the pipe ends
-    HANDLE operator[](Direction which) const
-    {
-        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_handles),
-                      _T("invalid pipe index") );
-
-        return m_handles[which];
-    }
+    HANDLE operator[](Direction which) const { return m_handles[which]; }
 
     // detach a descriptor, meaning that the pipe dtor won't close it, and
     // return it
     HANDLE Detach(Direction which)
     {
-        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_handles),
-                      _T("invalid pipe index") );
-
         HANDLE handle = m_handles[which];
         m_handles[which] = INVALID_HANDLE_VALUE;
 
