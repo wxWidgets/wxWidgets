@@ -233,8 +233,6 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
                                    const wxPoint& WXUNUSED(pos) )
 {
     m_selection = 0;
-    m_clientData = NULL;
-    m_stringSelection = wxT("");
 
     m_dialogStyle = style;
 
@@ -290,7 +288,8 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     m_selection = m_listbox->GetSelection();
     m_stringSelection = m_listbox->GetStringSelection();
-    m_clientData = m_listbox->GetClientData(m_selection);
+    if ( m_listbox->HasClientUntypedData() )
+        SetClientData(m_listbox->GetClientData(m_selection));
 
     EndModal(wxID_OK);
 }
@@ -299,7 +298,8 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 {
     m_selection = m_listbox->GetSelection();
     m_stringSelection = m_listbox->GetStringSelection();
-    m_clientData = m_listbox->GetClientData(m_selection);
+    if ( m_listbox->HasClientUntypedData() )
+        SetClientData(m_listbox->GetClientData(m_selection));
 
     EndModal(wxID_OK);
 }

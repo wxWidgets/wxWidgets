@@ -64,12 +64,9 @@ public:
                 long style = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition);
 
-    void SetSelection(int sel) ;
+    void SetSelection(int sel);
     int GetSelection() const { return m_selection; }
     wxString GetStringSelection() const { return m_stringSelection; }
-
-    // get client data associated with selection
-    void *GetClientData() const { return m_clientData; }
 
     // obsolete function (NB: no need to make it return wxChar, it's untyped)
     char *GetSelectionClientData() const { return (char *)m_clientData; }

@@ -310,14 +310,20 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_widget_show( GTK_WIDGET(m_list) );
 
     wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 100;
-    if (newSize.y == -1) newSize.y = 110;
+    if (newSize.x == -1)
+        newSize.x = 100;
+    if (newSize.y == -1)
+        newSize.y = 110;
     SetSize( newSize.x, newSize.y );
 
     if ( style & wxLB_SORT )
     {
         // this will change DoAppend() behaviour
         m_strings = new wxSortedArrayString;
+    }
+    else
+    {
+        m_strings = (wxSortedArrayString *)NULL;
     }
 
     for (int i = 0; i < n; i++)
