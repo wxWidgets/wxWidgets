@@ -1685,7 +1685,10 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             buf[size] = _T('\0');
         }
 
-        if ( len >= 0 )
+        // vsnprintf() may return either -1 (traditional Unix behaviour) or the
+        // total number of characters which would have been written if the
+        // buffer were large enough
+        if ( len >= 0 && len <= size )
         {
             // ok, there was enough space
             break;
