@@ -113,10 +113,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/mac/utils.cpp
-<<<<<<< files.bkl
-    <!-- src/mac/utilsexc.cpp -->
-=======
->>>>>>> 1.74
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
