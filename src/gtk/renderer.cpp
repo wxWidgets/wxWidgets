@@ -34,6 +34,10 @@
 #include "wx/dc.h"
 #include "wx/renderer.h"
 
+#ifdef __WXGTK20__
+    #include "wx/settings.h"
+#endif // GTK 2.0
+
 // ----------------------------------------------------------------------------
 // wxRendererGTK: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
@@ -97,7 +101,8 @@ void
 wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-    dc.SetBrush(*m_hilightBrush);
+    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
+                        wxSOLID));
     dc.SetPen(*wxBLACK_PEN);
     wxPoint button[3];
 
