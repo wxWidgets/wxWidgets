@@ -55,7 +55,7 @@ public:
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual bool ProcessIdle();
-    virtual bool WakeUpIdle() { CocoaRequestIdle(); }
+    virtual void WakeUpIdle() { CocoaRequestIdle(); }
     
     /* Idle Processing */
     void OnIdle(wxIdleEvent& event);
