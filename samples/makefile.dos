@@ -1,0 +1,160 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds samples for Win95, MSVC++ 16-bit
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+THISDIR=$(WXDIR)\samples
+
+!include $(WXDIR)\src\makemsc.env
+
+all:
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\printing
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dialogs
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\docview
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\docvwmdi
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\grid
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\internat
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dnd
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\sashtest
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(FINAL)" == "0"
+        cd $(WXDIR)\samples\memcheck
+!endif
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\bombs
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\fractal
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\proplist
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dde
+        nmake -f makefile.dos FINAL=$(FINAL)
+#        cd $(WXDIR)\samples\regtest
+#        nmake -f makefile.dos FINAL=$(FINAL)
+
+clean:
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\printing
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\dialogs
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\docview
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\docvwmdi
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\grid
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\internat
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\dnd
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\regtest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\sashtest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\bombs
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\fractal
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\proplist
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\dde
+        nmake -f makefile.dos clean
+
