@@ -1,6 +1,7 @@
 \section{\class{wxFileDropTarget}}\label{wxfiledroptarget}
 
- A drop target which accepts files (dragged from File Manager or Explorer).
+This is a \helpref{drop target}{wxdroptarget} which accepts files (dragged
+from File Manager or Explorer).
 
 \wxheading{Derived from}
 
@@ -32,7 +33,7 @@ appropriately for files, and calls \helpref{wxFileDropTarget::OnDropFiles}{wxfil
 
 \membersection{wxFileDropTarget::OnDropFiles}\label{wxfiledroptargetondropfiles}
 
-\func{virtual bool}{OnDropFiles}{\param{long }{x}, \param{long }{y}, \param{size\_t }{nFiles}, \param{const char * const}{files[]}}
+\func{virtual bool}{OnDropFiles}{\param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxArrayString\& }{filenames}}
 
 Override this function to receive dropped files.
 
@@ -42,14 +43,13 @@ Override this function to receive dropped files.
 
 \docparam{y}{The y coordinate of the mouse.}
 
-\docparam{nFiles}{The number of files being dropped.}
-
-\docparam{files}{An array of filenames.}
+\docparam{filenames}{An array of filenames.}
 
 \wxheading{Return value}
 
 Return TRUE to accept the data, FALSE to veto the operation.
 
-\perlnote{In wxPerl there is just an array reference in place of {\tt nFiles} 
-and {\tt files}.}
+% VZ: this clarification is probably not needed any longer?
+%\perlnote{In wxPerl there is just an array reference in place of {\tt nFiles} 
+%and {\tt files}.}
 
