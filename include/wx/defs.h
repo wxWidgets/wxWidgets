@@ -126,7 +126,7 @@
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
 // so define it ourselves
 #ifdef __DECCXX
-#ifndef VMS
+#ifndef __VMS
 # define __cplusplus
 #endif
 #endif // __DECCXX
