@@ -105,8 +105,6 @@ extern "C" {
 
 #include "wx/ioswrap.h"
 
-#include "wx/ioswrap.h"
-
 /* Need to undef new if including crtdbg.h */
 #  ifdef new
 #  undef new
@@ -456,7 +454,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     if ( path.empty() )
         return FALSE;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__GNUWIN32__)
     // GetDiskFreeSpaceEx() is not available under original Win95, check for
     // it
     typedef BOOL (*GetDiskFreeSpaceEx_t)(LPCTSTR,
