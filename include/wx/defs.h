@@ -133,7 +133,7 @@
 #if defined(__HPUX__) && defined(__GNUG__)
     #define va_list __gnuc_va_list
 #endif // HP-UX
-    
+
 // Mingw32 gcc-2.95 uses new windows headers which are more ms-like
 // we are setting this define because of the complex check
 // using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
@@ -603,7 +603,7 @@ enum wxOrientation
 {
     wxHORIZONTAL              = 0x0004,
     wxVERTICAL                = 0x0008,
-    
+
     wxBOTH                    = (wxVERTICAL | wxHORIZONTAL)
 };
 
@@ -613,15 +613,15 @@ enum wxDirection
     wxRIGHT                   = 0x0020,
     wxUP                      = 0x0040,
     wxDOWN                    = 0x0080,
-    
+
     wxTOP                     = wxUP,
     wxBOTTOM                  = wxDOWN,
-    
+
     wxNORTH                   = wxUP,
     wxSOUTH                   = wxDOWN,
     wxWEST                    = wxLEFT,
     wxEAST                    = wxRIGHT,
-    
+
     wxALL                     = (wxUP | wxDOWN | wxRIGHT | wxLEFT)
 };
 
@@ -845,11 +845,11 @@ enum wxStretch
 /*
  * wxSlider flags
  */
-#define wxSL_HORIZONTAL      wxHORIZONTAL
-#define wxSL_VERTICAL        wxVERTICAL
+#define wxSL_HORIZONTAL      wxHORIZONTAL // 4
+#define wxSL_VERTICAL        wxVERTICAL   // 8
 // The next one is obsolete - use scroll events instead
 #define wxSL_NOTIFY_DRAG     0x0000
-#define wxSL_AUTOTICKS       0x0008
+#define wxSL_AUTOTICKS       0x0010
 // #define wxSL_MANUALTICKS     0x0010
 #define wxSL_LABELS          0x0020
 #define wxSL_LEFT            0x0040
