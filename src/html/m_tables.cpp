@@ -169,17 +169,19 @@ void wxHtmlTableCell::ReallocCols(int cols)
 void wxHtmlTableCell::ReallocRows(int rows)
 {
     m_CellInfo = (cellStruct**) realloc(m_CellInfo, sizeof(cellStruct*) * rows);
-    if (m_NumCols != 0) {
-        int x = rows - 1;
-        m_CellInfo[x] = (cellStruct*) malloc(sizeof(cellStruct) * m_NumCols);
-        for (int i = 0; i < m_NumCols; i++)
-            m_CellInfo[x][i].flag = cellFree;
+    for (int row = m_NumRows; row < rows ; row++) 
+    {
+        if (m_NumCols == 0) 
+            m_CellInfo[row] = NULL;
+        else 
+        {
+            m_CellInfo[row] = (cellStruct*) malloc(sizeof(cellStruct) * m_NumCols);
+            for (int col = 0; col < m_NumCols; col++)
+                m_CellInfo[row][col].flag = cellFree;
+        }
     }
-    else
-        m_CellInfo[rows - 1] = NULL;
     m_NumRows = rows;
 }
-
 
 
 void wxHtmlTableCell::AddRow(const wxHtmlTag& tag)
