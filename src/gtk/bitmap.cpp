@@ -105,17 +105,27 @@ wxBitmap::wxBitmap()
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
     wxCHECK_RET( (width > 0) && (height > 0), _T("invalid bitmap size") )
-    wxCHECK_RET( (depth > 0) || (depth == -1), _T("invalid bitmap depth") )
+    
+    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+    if (depth == -1) depth = gdk_window_get_visual( parent )->depth;
+    
+    wxCHECK_RET( (depth ==  gdk_window_get_visual( parent )->depth) ||
+                 (depth == 1), _T("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
-
-    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
-
     M_BMPDATA->m_mask = (wxMask *) NULL;
-    M_BMPDATA->m_pixmap = gdk_pixmap_new( parent, width, height, depth );
     M_BMPDATA->m_width = width;
     M_BMPDATA->m_height = height;
-    M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
+    if (depth == 1)
+    {
+        M_BMPDATA->m_bitmap = gdk_pixmap_new( parent, width, height, 1 );
+        M_BMPDATA->m_bpp = 1;
+    }
+    else
+    {
+        M_BMPDATA->m_pixmap = gdk_pixmap_new( parent, width, height, depth );
+        M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
+    }
 
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
