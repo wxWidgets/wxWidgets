@@ -30,8 +30,8 @@
 
 #if wxUSE_FILEDLG
 
-#if !defined(__UNIX__) && !defined(__DOS__)
-#error wxFileDialog currently only supports Unix and DOS
+#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__)
+#error wxFileDialog currently only supports Unix, win32 and DOS
 #endif
 
 #include "wx/checkbox.h"
@@ -76,7 +76,9 @@
 #endif
 
 #include <time.h>
+#if defined(__UNIX__) || defined(__DOS__)
 #include <unistd.h>
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -364,7 +366,16 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         m_HashTable.Put(extension, new wxFileIconEntry(newid));
         return newid;
     }
+#ifdef __WIN32__
+    wxBitmap myBitmap (ic.GetWidth(), ic.GetHeight() ) ;
+    wxMemoryDC memDC;
+    memDC.SelectObject( myBitmap );
+    memDC.DrawIcon(ic,0,0);
+    memDC.SelectObject( wxNullBitmap );
+    wxImage img = myBitmap.ConvertToImage();
+#else
     wxImage img = ic.ConvertToImage();
+#endif
     delete ft;
 
     int id = m_ImageList.GetImageCount();
@@ -396,7 +407,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 // ----------------------------------------------------------------------------
 
 static
-int ListCompare( long data1, long data2, long WXUNUSED(data) )
+int ListCompare( long data1, long data2, long WXUNUSED(data))
 {
      wxFileData *fd1 = (wxFileData*)data1 ;
      wxFileData *fd2 = (wxFileData*)data2 ;
@@ -788,7 +799,7 @@ void wxFileCtrl::UpdateFiles()
         }
     }
 
-    SortItems(ListCompare, 0);
+    SortItems((wxListCtrlCompare)ListCompare, 0);
 
     if ( my_style & wxLC_REPORT )
     {
@@ -851,7 +862,7 @@ void wxFileCtrl::MakeDir()
 
     if (id != -1)
     {
-        SortItems( ListCompare, 0 );
+        SortItems( (wxListCtrlCompare) ListCompare, 0 );
         id = FindItem( 0, (long)fd );
         EnsureVisible( id );
         EditLabel( id );
