@@ -64,6 +64,8 @@ public:
 
     virtual bool Show(bool show = TRUE);
 
+    virtual void Raise();
+
     virtual bool IsActive();
 
     virtual void SetTitle( const wxString &title );

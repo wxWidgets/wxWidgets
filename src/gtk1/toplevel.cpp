@@ -742,6 +742,15 @@ bool wxTopLevelWindowGTK::Show( bool show )
     return wxWindow::Show( show );
 }
 
+void wxTopLevelWindowGTK::Raise()
+{
+#ifdef __WXGTK20__
+    gtk_window_present( GTK_WINDOW( m_widget ) );
+#else
+    wxWindow::Raise();
+#endif
+}
+
 void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxFAIL_MSG( wxT("DoMoveWindow called for wxTopLevelWindowGTK") );
