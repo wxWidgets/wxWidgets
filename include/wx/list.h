@@ -116,7 +116,7 @@ private:
 
 #else // if defined( __VISUALC__ )
 
-#define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f ) )
+#define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f )
 #define VC6_WORKAROUND(elT, liT, decl)                                        \
     decl liT;                                                                 \
                                                                               \
