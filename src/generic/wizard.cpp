@@ -102,10 +102,12 @@ bool wxWizardPage::Create(wxWizard *parent,
     if ( resource != NULL )
     {
 #if wxUSE_WX_RESOURCES
-        if ( !LoadFromResource(this, resource) )
+#if 0
+       if ( !LoadFromResource(this, resource) )
         {
             wxFAIL_MSG(wxT("wxWizardPage LoadFromResource failed!!!!"));
         }
+#endif
 #endif // wxUSE_RESOURCES
     }
 
