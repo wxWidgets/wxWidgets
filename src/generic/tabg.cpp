@@ -875,8 +875,8 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
   if (!event.LeftDown())
     return FALSE;
 
-  long x, y;
-  event.Position(&x, &y);
+  wxCoord x, y;
+  event.GetPosition(&x, &y);
 
   wxTabControl *hitControl = (wxTabControl *) NULL;
 
