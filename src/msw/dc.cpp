@@ -787,7 +787,7 @@ wxDC::DoDrawPolyPolygon(int n,
                         int fillStyle)
 {
 #ifdef __WXWINCE__
-    wxDCBase::DoDrawPolyPolygon(n, start, points, xoffset, yoffset, fillStyle);
+    wxDCBase::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
 #else    
     WXMICROWIN_CHECK_HDC
 
