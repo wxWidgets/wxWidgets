@@ -50,6 +50,27 @@
 
 #include "wxinfo.h"
 
+#ifdef __WXGTK__
+#include "start95_dp.xpm"
+#include "start95_pr.xpm"
+#include "bookmarks.xpm"
+#include "class_icon.xpm"
+#include "class_icon1.xpm"
+#include "copy.xpm"
+#include "cut.xpm"
+#include "file_icon.xpm"
+#include "folder_icon.xpm"
+#include "help_icon.xpm"
+#include "new.xpm"
+#include "nextmark.xpm"
+#include "open.xpm"
+#include "paste.xpm"
+#include "prevmark.xpm"
+#include "res_icon.xpm"
+#include "save.xpm"
+#include "saveall.xpm"
+#include "search.xpm"
+#endif
 // ADDED by alex (linker complaints...):
 #ifndef wxDUMMY_OBJ_INCLUDED
 char wxDummyChar=0;
@@ -197,9 +218,9 @@ void StartButton95::OnPaint( wxPaintEvent& event )
     
             mPBmp.LoadFile( "start95_pr_icon", wxBITMAP_TYPE_BMP_RESOURCE );
 #else
-        if ( !mPBmp.Ok() && wxFileExists( "start95_pr.bmp" ) )
+        if ( !mPBmp.Ok() )
     
-            mPBmp.LoadFile( "start95_pr.bmp", wxBITMAP_TYPE_BMP );
+            mPBmp = wxBitmap( start95_pr_xpm);
 #endif
 
         pBmp = &mPBmp;
@@ -212,9 +233,9 @@ void StartButton95::OnPaint( wxPaintEvent& event )
             mDBmp.LoadFile( "start95_dp_icon", wxBITMAP_TYPE_BMP_RESOURCE );
 
 #endif
-        if ( !mDBmp.Ok() && wxFileExists( "start95_dp.bmp" ) )
+        if ( !mDBmp.Ok() )
                                    
-            mDBmp.LoadFile( "start95_dp.bmp", wxBITMAP_TYPE_BMP );
+            mDBmp = wxBitmap(start95_dp_xpm);
 
         pBmp = &mDBmp;
     }
@@ -294,11 +315,8 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     bmp1.LoadFile( "folder_icon", wxBITMAP_TYPE_BMP_RESOURCE );
     bmp2.LoadFile( "class_icon1", wxBITMAP_TYPE_BMP_RESOURCE );
 #else
-    if ( wxFileExists( "folder_icon.bmp" ) )
-        bmp1.LoadFile( "folder_icon.bmp", wxBITMAP_TYPE_BMP );
-
-    if ( wxFileExists( "class_icon1.bmp" ) )
-        bmp2.LoadFile( "class_icon1.bmp", wxBITMAP_TYPE_BMP );
+    bmp1 = wxBitmap( folder_icon_xpm);
+    bmp2 = wxBitmap( class_icon1_xpm );
 #endif
     int idx1 = mImageList.Add( bmp1 );
     int idx2 = mImageList.Add( bmp2 );
@@ -796,30 +814,30 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar4->EnableTool( 4, FALSE );
 
 #else
-    pTBar2->AddTool( 2, "search.bmp" );
+    pTBar2->AddTool( 2, search_xpm );
     //pTBar2->AddSeparator();
-    pTBar2->AddTool( 3, "bookmarks.bmp" );
-    pTBar2->AddTool( 4, "nextmark.bmp" );
-    pTBar2->AddTool( 5, "prevmark.bmp" );
+    pTBar2->AddTool( 3, bookmarks_xpm );
+    pTBar2->AddTool( 4, nextmark_xpm );
+    pTBar2->AddTool( 5, prevmark_xpm );
 
 
     wxDynamicToolBar* pTBar3 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
-    pTBar3->AddTool( 1, "open.bmp", wxBITMAP_TYPE_BMP, " Open " );
-    pTBar3->AddTool( 2, "save.bmp", wxBITMAP_TYPE_BMP, " Save " );
-    pTBar3->AddTool( 3, "saveall.bmp", wxBITMAP_TYPE_BMP, " Save All " );
+    pTBar3->AddTool( 1, wxBitmap(open_xpm), " Open " );
+    pTBar3->AddTool( 2, wxBitmap(save_xpm), " Save " );
+    pTBar3->AddTool( 3, wxBitmap(saveall_xpm), " Save All " );
     //pTBar3->AddSeparator();
-    pTBar3->AddTool( 4, "cut.bmp",   wxBITMAP_TYPE_BMP, " Open " );
-    pTBar3->AddTool( 5, "copy.bmp",  wxBITMAP_TYPE_BMP, " Copy " );
-    pTBar3->AddTool( 6, "paste.bmp", wxBITMAP_TYPE_BMP, " Paste " );
+    pTBar3->AddTool( 4, wxBitmap(cut_xpm), " Open " );
+    pTBar3->AddTool( 5, wxBitmap(copy_xpm), " Copy " );
+    pTBar3->AddTool( 6, wxBitmap(paste_xpm), " Paste " );
 
     wxDynamicToolBar* pTBar4 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
-    pTBar4->AddTool( 1, "bookmarks.bmp", wxBITMAP_TYPE_BMP, "Bookmarks ", TRUE );
-    pTBar4->AddTool( 2, "nextmark.bmp",  wxBITMAP_TYPE_BMP, "Next bookmark ", TRUE );
-    pTBar4->AddTool( 3, "prevmark.bmp",  wxBITMAP_TYPE_BMP, "Prev bookmark ", TRUE );
+    pTBar4->AddTool( 1, wxBitmap(bookmarks_xpm), "Bookmarks ", TRUE );
+    pTBar4->AddTool( 2, wxBitmap(nextmark_xpm), "Next bookmark ", TRUE );
+    pTBar4->AddTool( 3, wxBitmap(prevmark_xpm), "Prev bookmark ", TRUE );
     //pTBar4->AddSeparator();
-    pTBar4->AddTool( 4, "search.bmp", wxBITMAP_TYPE_BMP, "Search ", TRUE );
+    pTBar4->AddTool( 4, wxBitmap(search_xpm),"Search ", TRUE );
 #endif
 
     layout.AddBar( pTBar2,              
@@ -857,7 +875,7 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
         layout.mBorderPen.SetColour( 128,255,128 );
 
         // if so, than make border smaller
-        for( int i = 0; i != MAX_PANES; ++i  )
+        for( int i = 0; i != MAX_PANES; ++i )
         {
             cbDockPane& pane = *layout.GetPane( i );
 
@@ -915,12 +933,12 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
     pMiniTabArea->AddTab( CreateTxtCtrl( helloworld_src, 
                                          pMiniTabArea), "HelloWorld", &wxBitmap("help_icon") );
 #else
-    pMiniTabArea->AddTab( pClassView,    "ClassView",   "class_icon.bmp", wxBITMAP_TYPE_BMP );
-    pMiniTabArea->AddTab( new wxPanel(), "ResourceView","res_icon.bmp"  );
-    pMiniTabArea->AddTab( new wxPanel(), "FileView",    "file_icon.bmp" );
-    pMiniTabArea->AddTab( new wxPanel(), "InfoView",    "help_icon.bmp" );
+    pMiniTabArea->AddTab( pClassView,    "ClassView",   &wxBitmap(class_icon_xpm));
+    pMiniTabArea->AddTab( new wxPanel(), "ResourceView",&wxBitmap(res_icon_xpm)  );
+    pMiniTabArea->AddTab( new wxPanel(), "FileView",    &wxBitmap(file_icon_xpm) );
+    pMiniTabArea->AddTab( new wxPanel(), "InfoView",    &wxBitmap(help_icon_xpm) );
     pMiniTabArea->AddTab( CreateTxtCtrl( helloworld_src, 
-                                         pMiniTabArea), "HelloWorld", "help_icon.bmp" );
+                                         pMiniTabArea), "HelloWorld", &wxBitmap(help_icon_xpm) );
 #endif
     // now create "output" window
 
@@ -934,7 +952,11 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
 
     pTabbedArea->AddTab( CreateTxtCtrl("build",   pTabbedArea), "Build",  "" );
     pTabbedArea->AddTab( CreateTxtCtrl("debug",   pTabbedArea), "Debug",  "" );
+#ifdef __WXMSW__
     pTabbedArea->AddTab( pSheet3,                               "Find in Files!", &wxBitmap("file_icon") );
+#else
+    pTabbedArea->AddTab( pSheet3,                               "Find in Files!", &wxBitmap(file_icon_xpm) );
+#endif
     pTabbedArea->AddTab( CreateTxtCtrl("profile", pTabbedArea), "Profile", "" );
 
     layout.AddBar( new StartButton95(pParent), sizes5, wxTOP,    0, 0,  "Start..." );
@@ -1067,13 +1089,13 @@ void MyFrame::DropInSomeBars( int layoutNo )
 		pToolBar->AddTool( 1005, wxBitmap("copy_icon") );
 		pToolBar->AddTool( 1006, wxBitmap("paste_icon") );
 #else
-		pToolBar->AddTool( 1001, "new.bmp" );
-		pToolBar->AddTool( 1002, "open.bmp" );
-		pToolBar->AddTool( 1003, "save.bmp" );
+		pToolBar->AddTool( 1001, wxBitmap(new_xpm) );
+		pToolBar->AddTool( 1002, wxBitmap(open_xpm) );
+		pToolBar->AddTool( 1003, wxBitmap(save_xpm) );
 
-		pToolBar->AddTool( 1004, "cut.bmp" );
-		pToolBar->AddTool( 1005, "copy.bmp" );
-		pToolBar->AddTool( 1006, "paste.bmp" );
+		pToolBar->AddTool( 1004, wxBitmap(cut_xpm) );
+		pToolBar->AddTool( 1005, wxBitmap(copy_xpm) );
+		pToolBar->AddTool( 1006, wxBitmap(paste_xpm) );
 #endif
 		layout.AddBar( pToolBar,  // bar window (can be NULL)
 					   sizes10, wxTOP,         // alignment ( 0-top,1-bottom, etc)

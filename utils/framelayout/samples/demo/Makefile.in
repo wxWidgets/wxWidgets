@@ -21,7 +21,7 @@ BIN_OBJ=\
 BIN_LINK=-lwx_fl_gtk
 
 # additional things needed to compile
-ADD_COMPILE=-I../../../src
+ADD_COMPILE=-I../../../src -I../../bitmaps
 
 # include the definitions now
 include ../../../../../template.mak
