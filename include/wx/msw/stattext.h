@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.h
+// Name:        wx/msw/stattext.h
 // Purpose:     wxStaticText class
 // Author:      Julian Smart
 // Modified by:
@@ -45,9 +45,11 @@ public:
     virtual bool SetFont( const wxFont &font );
 
 protected:
+    // implement/override some base class virtuals
     virtual void DoSetSize(int x, int y, int w, int h,
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };
