@@ -43,13 +43,15 @@ def main(args=sys.argv):
 
     from wxPython.wx import wxPySimpleApp, wxConfigBase_Get, \
          wxLog_SetActiveTarget, wxLogStderr, \
+         wxLog_SetLogLevel, wxLOG_Error, \
          wxFileSystem_AddHandler, wxZipFSHandler
     import wxPython.html
     from wxPython.htmlhelp import wxHtmlHelpController
 
 
     app = wxPySimpleApp()
-    wxLog_SetActiveTarget(wxLogStderr())
+    #wxLog_SetActiveTarget(wxLogStderr())
+    wxLog_SetLogLevel(wxLOG_Error)
 
     # Set up the default config so the htmlhelp frame can save its preferences
     app.SetVendorName('wxWindows')

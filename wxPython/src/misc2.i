@@ -631,6 +631,10 @@ public:
     static unsigned long GetTraceMask();
     static bool IsAllowedTraceMask(const wxString& mask);
 
+    static void SetLogLevel(unsigned long logLevel);
+    static unsigned long GetLogLevel();
+
+
     // static void TimeStamp(wxString *str);
     %addmethods {
         wxString TimeStamp() {
@@ -697,6 +701,7 @@ void wxLogError(const wxString& msg);
 void wxLogWarning(const wxString& msg);
 void wxLogMessage(const wxString& msg);
 void wxLogInfo(const wxString& msg);
+void wxLogDebug(const wxString& msg);
 void wxLogVerbose(const wxString& msg);
 void wxLogStatus(const wxString& msg);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& msg);
