@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        slider.h
 // Purpose:     wxSlider class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/15/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SLIDER_H_
 #define _WX_SLIDER_H_
-
-#ifdef __GNUG__
-#pragma interface "slider.h"
-#endif
 
 #include "wx/control.h"
 
@@ -51,15 +47,20 @@ public:
 
   virtual int GetValue() const ;
   virtual void SetValue(int);
+
   void GetSize(int *x, int *y) const ;
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   void GetPosition(int *x, int *y) const ;
+
   bool Show(bool show);
 
   void SetRange(int minValue, int maxValue);
 
   inline int GetMin() const { return m_rangeMin; }
   inline int GetMax() const { return m_rangeMax; }
+
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
+
 
   // For trackbars only
   void SetTickFreq(int n, int pos);
@@ -77,14 +78,31 @@ public:
   int GetThumbLength() const ;
   void SetTick(int tickPos) ;
 
+  // IMPLEMENTATION
+  WXHWND GetStaticMin() const { return m_staticMin; }
+  WXHWND GetStaticMax() const { return m_staticMax; }
+  WXHWND GetEditValue() const { return m_staticValue; }
+  virtual bool ContainsHWND(WXHWND hWnd) const;
+
   void Command(wxCommandEvent& event);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+          WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool OS2OnScroll(int orientation, WXWORD wParam,
+                           WXWORD pos, WXHWND control);
+
  protected:
+  WXHWND        m_staticMin;
+  WXHWND        m_staticMax;
+  WXHWND        m_staticValue;
   int           m_rangeMin;
   int           m_rangeMax;
   int           m_pageSize;
   int           m_lineSize;
   int           m_tickFreq;
-DECLARE_EVENT_TABLE()
+
+  virtual void DoSetSize(int x, int y,
+                         int width, int height,
+                         int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

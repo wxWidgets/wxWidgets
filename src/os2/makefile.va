@@ -343,6 +343,14 @@ OS2OBJS = \
   ..\os2\$D\print.obj \
   ..\os2\$D\radiobox.obj \
   ..\os2\$D\radiobut.obj \
+  ..\os2\$D\region.obj \
+  ..\os2\$D\scrolbar.obj \
+  ..\os2\$D\settings.obj \
+  ..\os2\$D\slider.obj \
+  ..\os2\$D\spinbutt.obj \
+  ..\os2\$D\spinctrl.obj \
+  ..\os2\$D\statbmp.obj \
+  ..\os2\$D\statbox.obj \
   ..\os2\$D\window.obj
 
 OS2LIBOBJS1 = \
@@ -401,6 +409,14 @@ OS2LIBOBJS2 = \
   print.obj \
   radiobox.obj \
   radiobut.obj \
+  region.obj \
+  scrolbar.obj \
+  settings.obj \
+  slider.obj \
+  spinbutt.obj \
+  spinctrl.obj \
+  statbmp.obj \
+  statbox.obj \
   window.obj
 
 HTMLOBJS = \
@@ -603,6 +619,14 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\print.obj
   copy ..\os2\$D\radiobox.obj
   copy ..\os2\$D\radiobut.obj
+  copy ..\os2\$D\region.obj
+  copy ..\os2\$D\scrolbar.obj
+  copy ..\os2\$D\settings.obj
+  copy ..\os2\$D\slider.obj
+  copy ..\os2\$D\spinbutt.obj
+  copy ..\os2\$D\spinctrl.obj
+  copy ..\os2\$D\statbmp.obj
+  copy ..\os2\$D\statbox.obj
   copy ..\os2\$D\window.obj
 
 # wxWindows library as DLL

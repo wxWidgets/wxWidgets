@@ -1,24 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settings.h
 // Purpose:     wxSystemSettings class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/15/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SETTINGS_H_
 #define _WX_SETTINGS_H_
 
-#ifdef __GNUG__
-#pragma interface "settings.h"
-#endif
-
 #include "wx/setup.h"
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/colour.h"
 #include "wx/font.h"
 

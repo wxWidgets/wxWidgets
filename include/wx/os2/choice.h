@@ -15,7 +15,7 @@
 WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 
 // Choice item
-class WXDLLEXPORT wxChoice: public wxControl
+class WXDLLEXPORT wxChoice: public wxChoiceBase
 {
   DECLARE_DYNAMIC_CLASS(wxChoice)
 

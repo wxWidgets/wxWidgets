@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scrollbar.h
 // Purpose:     wxScrollBar class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/15/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SCROLBAR_H_
 #define _WX_SCROLBAR_H_
-
-#ifdef __GNUG__
-#pragma interface "scrolbar.h"
-#endif
 
 #include "wx/control.h"
 
@@ -54,12 +50,36 @@ public:
   virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
     bool refresh = TRUE);
 
+#if WXWIN_COMPATIBILITY
+  // Backward compatibility
+  int GetValue() const { return GetThumbPosition(); }
+  void SetValue(int viewStart) { SetThumbPosition(viewStart); }
+  void GetValues(int *viewStart, int *viewLength, int *objectLength,
+          int *pageLength) const ;
+  int GetViewLength() const { return m_viewSize; }
+  int GetObjectLength() const { return m_objectSize; }
+
+  void SetPageSize(int pageLength);
+  void SetObjectLength(int objectLength);
+  void SetViewLength(int viewLength);
+#endif
+
   void Command(wxCommandEvent& event);
 
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+          WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+  virtual bool OS2OnScroll(int orientation, WXWORD wParam,
+                           WXWORD pos, WXHWND control);
+
+#if WXWIN_COMPATIBILITY
+  // Backward compatibility: generate an old-style scroll command
+  void OnScroll(wxScrollEvent& event);
+#endif // WXWIN_COMPATIBILITY
+
 protected:
-    int m_pageSize;
-    int m_viewSize;
-    int m_objectSize;
+  int m_pageSize;
+  int m_viewSize;
+  int m_objectSize;
 
 DECLARE_EVENT_TABLE()
 };

@@ -43,21 +43,35 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
            long style = 0,
            const wxString& name = wxStaticBitmapNameStr);
 
+  virtual void SetIcon(const wxIcon& icon) { SetBitmap(icon); }
   virtual void SetBitmap(const wxBitmap& bitmap);
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
-
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-
-  inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
+  // assert failure is provoked by an attempt to get an icon from bitmap or
+  // vice versa
+  const wxIcon& GetIcon() const
+      { wxASSERT( m_isIcon ); return *m_image.icon; }
+  const wxBitmap& GetBitmap() const
+      { wxASSERT( !m_isIcon ); return *m_image.bitmap; }
 
   // overriden base class virtuals
   virtual bool AcceptsFocus() const { return FALSE; }
 
- protected:
-  wxBitmap m_messageBitmap;
+protected:
+  void Init() { m_isIcon = TRUE; m_image.icon = NULL; }
+  void Free();
 
+  // TRUE if icon/bitmap is valid
+  bool ImageIsOk() const;
+
+  // we can have either an icon or a bitmap
+  bool m_isIcon;
+  union
+  {
+      wxIcon *icon;
+      wxBitmap *bitmap;
+  } m_image;
+
+  virtual wxSize DoGetBestSize();
 };
 
 #endif

@@ -1,32 +1,49 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        spinbutt.cpp
 // Purpose:     wxSpinButton
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/15/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "spinbutt.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
 #endif
 
+// Can't resolve reference to CreateUpDownControl in
+// TWIN32, but could probably use normal CreateWindow instead.
+
+
 #include "wx/spinbutt.h"
+#include "wx/os2/private.h"
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 #endif
 
-wxSpinButton::wxSpinButton()
-{
-	m_min = 0;
-	m_max = 100;
-}
-
-bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+bool wxSpinButton::Create(
+  wxWindow*                         parent
+, wxWindowID                        id
+, const wxPoint&                    pos
+, const wxSize&                     size
+, long                              style
+, const wxString&                   name
+)
 {
     SetName(name);
 
@@ -47,32 +64,95 @@ wxSpinButton::~wxSpinButton()
 {
 }
 
+// ----------------------------------------------------------------------------
+// size calculation
+// ----------------------------------------------------------------------------
+
+wxSize wxSpinButton::DoGetBestSize()
+{
+    // TODO:
+/*
+    if ( (GetWindowStyle() & wxSP_VERTICAL) != 0 )
+    {
+        // vertical control
+        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
+                      2*GetSystemMetrics(SM_CYVSCROLL));
+    }
+    else
+    {
+        // horizontal control
+        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
+                      GetSystemMetrics(SM_CYHSCROLL));
+    }
+*/
+    return wxSize(0, 0);
+}
+
+// ----------------------------------------------------------------------------
 // Attributes
-////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 
 int wxSpinButton::GetValue() const
 {
-	// TODO
+    // TODO
     return 0;
 }
 
 void wxSpinButton::SetValue(int val)
 {
-	// TODO
+    // TODO
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
-	m_min = minVal;
-	m_max = maxVal;
-	// TODO
+    // TODO
 }
 
-// Spin event
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
-  wxScrollEvent(commandType, id)
+bool wxSpinButton::OS2OnScroll(int orientation, WXWORD wParam,
+                               WXWORD pos, WXHWND control)
 {
+    wxCHECK_MSG( control, FALSE, wxT("scrolling what?") )
+// TODO:
+/*
+    if ( wParam != SB_THUMBPOSITION )
+    {
+        // probable SB_ENDSCROLL - we don't react to it
+        return FALSE;
+    }
+
+    wxSpinEvent event(wxEVT_SCROLL_THUMBTRACK, m_windowId);
+    event.SetPosition((short)pos);    // cast is important for negative values!
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+*/
+    return FALSE;
+}
+
+bool wxSpinButton::OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+{
+    // TODO:
+/*
+    LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
+
+    wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
+                                         : wxEVT_SCROLL_LINEDOWN,
+                      m_windowId);
+    event.SetPosition(lpnmud->iPos + lpnmud->iDelta);
+    event.SetEventObject(this);
+
+    bool processed = GetEventHandler()->ProcessEvent(event);
+
+    *result = event.IsAllowed() ? 0 : 1;
+
+    return processed;
+*/
+    return FALSE;
+}
+
+bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
+{
+    // No command messages
+    return FALSE;
 }
 
