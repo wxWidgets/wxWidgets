@@ -217,9 +217,22 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     // systems wait() might be used instead in a loop (until the right pid
     // terminates)
     int status = 0;
-    if ( waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) )
+    int rc;
+
+    do
+       rc = waitpid(pid, &status, 0);
+    while(rc == -1 && ( /* errno == ERESTARTSYS || */ errno == EINTR) );
+    // waitpid() was interrupted, try again
+
+       
+    if( rc == -1 || ! (WIFEXITED(status) || WIFSIGNALED(status)) )
     {
-        wxLogSysError(_("Waiting for subprocess termination failed"));
+       wxLogSysError(_("Waiting for subprocess termination failed"));
+       /* AFAIK, this can only happen if something went wrong within
+          wxGTK, i.e. due to a racecondition or some serious bug.
+          After having fixed the order of statements in
+          GTK_EndProcessDetector(). (KB)
+       */
     }
     else
     {
@@ -229,19 +242,18 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
             proc_data->process->OnTerminate(proc_data->pid,
                                             WEXITSTATUS(status));
         }
-    }
-
-    // clean up
-    if ( proc_data->pid > 0 )
-    {
-        delete proc_data;
-    }
-    else
-    {
-        // wxExecute() will know about it
-        proc_data->exitcode = status;
-
-        proc_data->pid = 0;
+        // clean up
+        if ( proc_data->pid > 0 )
+        {
+           delete proc_data;
+        }
+        else
+        {
+           // wxExecute() will know about it
+           proc_data->exitcode = status;
+           
+           proc_data->pid = 0;
+        }
     }
 }
 
@@ -345,11 +357,8 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     else
     {
 #if wxUSE_GUI
-        // we're in parent
-        close(end_proc_detect[1]); // close writing side
-
         wxEndProcessData *data = new wxEndProcessData;
-        data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
+
 
         ARGS_CLEANUP;
 
@@ -360,6 +369,9 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 
             // sync execution: indicate it by negating the pid
             data->pid = -pid;
+            data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
+            // we're in parent
+            close(end_proc_detect[1]); // close writing side
 
             // it will be set to 0 from GTK_EndProcessDetector
             while (data->pid != 0)
@@ -374,10 +386,13 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
         else
         {
             // async execution, nothing special to do - caller will be
-            // notified about the process terminationif process != NULL, data
+            // notified about the process termination if process != NULL, data
             // will be deleted in GTK_EndProcessDetector
             data->process = process;
             data->pid = pid;
+            data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
+            // we're in parent
+            close(end_proc_detect[1]); // close writing side
 
             return pid;
         }

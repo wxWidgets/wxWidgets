@@ -383,6 +383,13 @@ wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 void
 wxDialUpManagerImpl::SetWellKnownHost(const wxString& hostname, int portno)
 {
+   if(hostname.Length() == 0)
+   {
+      m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
+      m_BeaconPort = 80;
+      return;
+   }
+         
    /// does hostname contain a port number?
    wxString port = hostname.After(wxT(':'));
    if(port.Length())

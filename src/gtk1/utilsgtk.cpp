@@ -110,12 +110,14 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 static void GTK_EndProcessDetector(gpointer data, gint source,
                                    GdkInputCondition WXUNUSED(condition) )
 {
-    wxEndProcessData *proc_data = (wxEndProcessData *)data;
+   wxEndProcessData *proc_data = (wxEndProcessData *)data;
+   close(source);
+   gdk_input_remove(proc_data->tag);
 
-    wxHandleProcessTermination(proc_data);
-
-    close(source);
-    gdk_input_remove(proc_data->tag);
+   // This has to come after gdk_input_remove() or we will
+   // occasionally receive multiple callbacks with corrupt data
+   // pointers. (KB) 
+   wxHandleProcessTermination(proc_data);
 }
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
