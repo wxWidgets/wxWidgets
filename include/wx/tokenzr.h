@@ -47,6 +47,8 @@ public:
 
 protected:
   off_t FindDelims(const wxString& str, const wxString& delims);
+  void EatLeadingDelims(); // AVS - added to fix leading whitespace /
+                           // mult. delims bugs
 protected:
   wxString m_string, m_delims;
   bool m_retdelims;

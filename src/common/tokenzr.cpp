@@ -82,6 +82,16 @@ bool wxStringTokenizer::HasMoreToken()
   return (m_string.Length() != 0);
 }
 
+// AVS - added to fix leading whitespace / mult. delims bugs
+void wxStringTokenizer::EatLeadingDelims() 
+{
+  int pos;
+
+  while ((pos=FindDelims(m_string, m_delims))==0) { // while leading delims
+     m_string = m_string.Mid((size_t)1);     // trim 'em from the left
+  }
+}
+
 wxString wxStringTokenizer::NextToken()
 {
   register off_t pos, pos2;
@@ -89,6 +99,10 @@ wxString wxStringTokenizer::NextToken()
 
   if (m_string.IsNull())
     return m_string;
+
+  if (!m_retdelims)
+    EatLeadingDelims(); // AVS - added to fix leading whitespace /
+                        // mult. delims bugs
 
   pos = FindDelims(m_string, m_delims);
   if (pos == -1) {
