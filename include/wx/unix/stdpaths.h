@@ -41,6 +41,9 @@ public:
     virtual wxString GetLocalDataDir() const;
     virtual wxString GetUserDataDir() const;
     virtual wxString GetPluginsDir() const;
+
+private:
+    wxString m_prefix;
 };
 
 #endif // _WX_UNIX_STDPATHS_H_
