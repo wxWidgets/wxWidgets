@@ -761,7 +761,8 @@ void wxTopLevelWindowGTK::OnInternalIdle()
     // set the focus if not done yet and if we can already do it
     if ( GTK_WIDGET_REALIZED(m_wxwindow) )
     {
-        if ( g_delayedFocus && wxGetTopLevelParent(g_delayedFocus) == this )
+        if ( g_delayedFocus &&
+             wxGetTopLevelParent((wxWindow*)g_delayedFocus) == this )
         {
             g_delayedFocus->SetFocus();
             g_delayedFocus = NULL;

@@ -3263,7 +3263,7 @@ void wxWindowGTK::SetFocus()
         }
     }
 
-    (void)DoSendFocusEvents(this);
+    (void)DoSendFocusEvents((wxWindow*)this);
 }
 
 bool wxWindowGTK::AcceptsFocus() const
@@ -3485,7 +3485,7 @@ void wxWindowGTK::GtkSendPaintEvents()
         while (parent && !parent->IsTopLevel())
             parent = parent->GetParent();
         if (!parent)
-            parent = this;
+            parent = (wxWindow*)this;
     
         wxRegionIterator upd( m_updateRegion );
         while (upd)
