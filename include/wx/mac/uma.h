@@ -245,6 +245,7 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 #define SetListSelectionFlags( list , options ) (**list).selFlags = options
 #define GetListRefCon( list ) (**list).refCon
 */
+#define GetApplicationScript() smSystemScript
 #else
 
 // calls not in carbon
