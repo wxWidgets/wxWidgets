@@ -34,7 +34,7 @@
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
 wxDbConnectInf DbConnectInf;		// Für DBase
 
-#if wxUSE_ODBC
+#if !wxUSE_ODBC
   #error Demo cannot be compiled unless setup.h has wxUSE_ODBC set to 1
 #endif
 
