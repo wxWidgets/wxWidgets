@@ -81,6 +81,8 @@ check the source for this sample to see how to implement them.
         self.SetMenuBar(menuBar)
 
         # Menu events
+        EVT_MENU_HIGHLIGHT_ALL(self, self.OnMenuHighlight)
+
         EVT_MENU(self, 101, self.Menu101)
         EVT_MENU(self, 102, self.Menu102)
         EVT_MENU(self, 103, self.Menu103)
@@ -105,7 +107,18 @@ check the source for this sample to see how to implement them.
         EVT_MENU(self, 503, self.TestRemove)
         EVT_MENU(self, 505, self.TestRemove2)
 
+
     # Methods
+
+    def OnMenuHighlight(self, event):
+        # Show how to get menu item imfo from this event handler
+        id = event.GetMenuId()
+        item = self.GetMenuBar().FindItemById(id)
+        text = item.GetText()
+        help = item.GetHelp()
+        #print text, help
+        event.Skip() # but in this case just call Skip so the default is done
+
 
     def Menu101(self, event):
         self.log.write('Welcome to Mercury\n')

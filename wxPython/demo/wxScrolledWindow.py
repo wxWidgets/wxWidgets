@@ -95,7 +95,7 @@ class MyCanvas(wxScrolledWindow):
 ##         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
 ##         dc.SetTextForeground("BLACK")
 ##         dc.DrawText("TEST this STRING", 10, 200)
-
+##         print dc.GetFullTextExtent("TEST this STRING")
 
         font = wxFont(20, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(font)

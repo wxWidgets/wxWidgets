@@ -9,7 +9,7 @@ text = """\
 Right-click on the panel (or Ctrl-click on the Mac) to show a popup
 menu.  Then look at the code for this sample.  Notice how the
 PopupMenu method is similar to the ShowModal method of a wxDialog in
-that it doesn't retirn until the popup menu has been dismissed.  The
+that it doesn't return until the popup menu has been dismissed.  The
 event handlers for the popup menu items can either be attached to the
 menu itself, or to the window that invokes PopupMenu.
 """
@@ -134,8 +134,8 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>Say something nice here</center></h2>
-
+<h2><center>PopupMenu</center></h2>
+""" + text + """
 </body></html>
 """
 

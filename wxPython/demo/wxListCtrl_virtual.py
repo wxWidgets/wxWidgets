@@ -53,7 +53,7 @@ class TestVirtualList(wxListCtrl):
         return item.GetText()
 
     def OnItemDeselected(self, evt):
-        print evt.m_itemIndex
+        self.log.WriteText("OnItemDeselected: %s" % evt.m_itemIndex)
 
 
     #---------------------------------------------------

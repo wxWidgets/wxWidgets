@@ -29,8 +29,8 @@ class TestTreeCtrlPanel(wxPanel):
         self.log = log
         tID = wxNewId()
 
-        self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS
+        self.tree = MyTreeCtrl(self, tID,
+                               style = wxTR_HAS_BUTTONS
                                | wxTR_EDIT_LABELS
                                #| wxTR_MULTIPLE
                                #| wxTR_HIDE_ROOT

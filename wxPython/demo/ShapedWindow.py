@@ -35,7 +35,7 @@ class TestFrame(wxFrame):
             EVT_WINDOW_CREATE(self, self.SetWindowShape)
         else:
             # On wxMSW and wxMac the window has already been created, so go for it.
-            pass #self.SetWindowShape()
+            self.SetWindowShape()
 
         dc = wxClientDC(self)
         dc.DrawBitmap(self.bmp, 0,0, True)
