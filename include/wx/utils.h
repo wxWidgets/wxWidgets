@@ -25,6 +25,10 @@
 #include "wx/list.h"
 #include "wx/filefn.h"
 
+// need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
+// wxLongLong
+#include "wx/longlong.h"
+
 #ifdef __X__
     #include <dirent.h>
     #include <unistd.h>
@@ -264,10 +268,15 @@ WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
 
 #ifdef __WXMAC__
-WXDLLEXPORT wxString wxMacFindFolder(short 					vRefNum,
-								 OSType 				folderType,
-								 Boolean 				createFolder);
+WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
+                                     OSType folderType,
+                                     Boolean createFolder);
 #endif
+
+// get number of total/free bytes on the disk where path belongs
+WXDLLEXPORT bool wxGetDiskSpace(const wxString& path,
+                                wxLongLong *pTotal = NULL,
+                                wxLongLong *pFree = NULL);
 
 #if wxUSE_GUI // GUI only things from now on
 

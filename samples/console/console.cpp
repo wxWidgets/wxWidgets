@@ -54,11 +54,11 @@
 //#define TEST_FILENAME
 //#define TEST_FTP
 //#define TEST_HASH
-//#define TEST_INFO_FUNCTIONS
+#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
 //#define TEST_LOCALE
 //#define TEST_LOG
-#define TEST_LONGLONG
+//#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_PATHLIST
 //#define TEST_REGCONF
@@ -1366,7 +1366,7 @@ static void TestMimeAssociate()
 
 static void TestDiskInfo()
 {
-    puts("*** Testing wxGetDiskSpace() ***\n");
+    puts("*** Testing wxGetDiskSpace() ***");
 
     for ( ;; )
     {
@@ -1385,9 +1385,9 @@ static void TestDiskInfo()
         }
         else
         {
-            wxPrintf(_T("%s total bytes, %s free bytes on '%s'.\n"),
-                    total.ToString().c_str(),
-                    free.ToString().c_str(),
+            wxPrintf(_T("%sKb total, %sKb free on '%s'.\n"),
+                    (total / 1024).ToString().c_str(),
+                    (free / 1024).ToString().c_str(),
                     pathname);
         }
     }

@@ -449,6 +449,97 @@ bool wxDirExists(const wxString& dir)
 #endif // Win32/16
 }
 
+bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+{
+    if ( path.empty() )
+        return FALSE;
+
+#ifdef __WIN32__
+    // GetDiskFreeSpaceEx() is not available under original Win95, check for
+    // it
+    typedef BOOL (*GetDiskFreeSpaceEx_t)(LPCTSTR,
+                                         PULARGE_INTEGER,
+                                         PULARGE_INTEGER,
+                                         PULARGE_INTEGER);
+
+    GetDiskFreeSpaceEx_t
+        pGetDiskFreeSpaceEx = ::GetProcAddress
+                              (
+                                ::GetModuleHandle(_T("kernel32.dll")),
+#if wxUSE_UNICODE
+                                "GetDiskFreeSpaceExW"
+#else
+                                "GetDiskFreeSpaceExA"
+#endif
+                              );
+
+    if ( pGetDiskFreeSpaceEx )
+    {
+        ULARGE_INTEGER bytesFree, bytesTotal;
+
+        // may pass the path as is, GetDiskFreeSpaceEx() is smart enough
+        if ( !pGetDiskFreeSpaceEx(path,
+                                  &bytesFree,
+                                  &bytesTotal,
+                                  NULL) )
+        {
+            wxLogLastError(_T("GetDiskFreeSpaceEx"));
+
+            return FALSE;
+        }
+
+        if ( pTotal )
+        {
+            *pTotal = wxLongLong(bytesTotal.HighPart, bytesTotal.LowPart);
+        }
+
+        if ( pFree )
+        {
+            *pFree = wxLongLong(bytesFree.HighPart, bytesFree.LowPart);
+        }
+    }
+    else
+#endif // Win32
+    {
+        DWORD lSectorsPerCluster,
+              lBytesPerSector,
+              lNumberOfFreeClusters,
+              lTotalNumberOfClusters;
+
+        // FIXME: this is wrong, we should extract the root drive from path
+        //        instead, but this is the job for wxFileName...
+        if ( !::GetDiskFreeSpace(path,
+                                 &lSectorsPerCluster,
+                                 &lBytesPerSector,
+                                 &lNumberOfFreeClusters,
+                                 &lTotalNumberOfClusters) )
+        {
+            wxLogLastError(_T("GetDiskFreeSpace"));
+
+            return FALSE;
+        }
+
+        // there's a problem with drives larger than 2GB on non Win32!!
+        // let's calculate it, nevertheless....
+        wxLongLong lBytesPerCluster = lSectorsPerCluster;
+        lBytesPerCluster *= lBytesPerSector;
+
+        if ( pTotal )
+        {
+            *pTotal = lBytesPerCluster;
+            *pTotal *= lTotalNumberOfClusters;
+        }
+
+        if ( pFree )
+        {
+            *pFree = lBytesPerCluster;
+            *pFree *= lNumberOfFreeClusters;
+        }
+    }
+
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // env vars
 // ----------------------------------------------------------------------------

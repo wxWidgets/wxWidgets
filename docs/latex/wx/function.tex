@@ -177,6 +177,27 @@ Returns the next file that matches the path passed to \helpref{wxFindFirstFile}{
 
 See \helpref{wxFindFirstFile}{wxfindfirstfile} for an example.
 
+\membersection{::wxGetDiskSpace}\label{wxgetdiskspace}
+
+\func{bool}{wxGetDiskSpace}{\param{const wxString\& }{path}, \path{wxLongLong }{*total = NULL}, \path{wxLongLong }{*free = NULL}}
+
+This function returns the total number of bytes and number of free bytes on
+the disk containing the directory {\it path} (it should exist). Both 
+{\it total} and {\it free} parameters may be {\tt NULL} if the corresponding
+information is not needed.
+
+\wxheading{Returns}
+
+{\tt TRUE} on success, {\tt FALSE} if an error occured (for example, the
+directory doesn't exist).
+
+\wxheading{Portability}
+
+This function is implemented for Win16 (only for drives less than 2Gb), Win32,
+Mac OS and generic Unix provided the system has {\tt statfs()} function.
+
+This function first appeared in wxWindows 2.3.2.
+
 \membersection{::wxGetOSDirectory}\label{wxgetosdirectory}
 
 \func{wxString}{wxGetOSDirectory}{\void}

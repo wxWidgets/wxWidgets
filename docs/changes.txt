@@ -7,7 +7,8 @@ wxWindows 2 Change Log
 wxBase:
 
 - wxRegEx class added
-- more fixes to wxMBConv classes. Conversion to and from wchar_t now works with 
+- wxGetDiskSpace() function added (Jonothan Farr, Markus Fieber)
+- more fixes to wxMBConv classes. Conversion to and from wchar_t now works with
   glibc 2.2 as well as with glibc 2.1. Unix version now checks for iconv()'s
   capabilities at runtime instead of in the configure script.
 

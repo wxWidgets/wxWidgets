@@ -28,6 +28,10 @@
 
 #include "wx/stream.h"
 
+#ifdef HAVE_STATFS
+    #include <sys/vfs.h>
+#endif // HAVE_STATFS
+
 #if wxUSE_GUI
     #include "wx/unix/execute.h"
 #endif
@@ -907,6 +911,34 @@ long wxGetFreeMemory()
 
     // can't find it out
     return -1;
+}
+
+bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+{
+#ifdef HAVE_STATFS
+
+    struct statfs fs;
+    if ( statfs(path, &fs) != 0 )
+    {
+        wxLogSysError("Failed to get file system statistics");
+
+        return FALSE;
+    }
+
+    if ( pTotal )
+    {
+        *pTotal = wxLongLong(fs.f_blocks) * fs.f_bsize;
+    }
+
+    if ( pFree )
+    {
+        *pFree = wxLongLong(fs.f_bavail) * fs.f_bsize;
+    }
+
+    return TRUE;
+#endif // HAVE_STATFS
+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
