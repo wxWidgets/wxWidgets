@@ -86,7 +86,7 @@ gtk_insert_text_callback(GtkEditable *editable,
 //-----------------------------------------------------------------------------
 
 static void
-gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
+gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
 {
     if ( win->IgnoreTextUpdate() )
         return;
@@ -423,9 +423,9 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        /* this moves the cursor pos to behind the inserted text */
-        gint len = GTK_EDITABLE(m_text)->current_pos;
-
+        // After cursor movements, gtk_text_get_point() is wrong by one.
+        gtk_text_set_point( GTK_TEXT(m_text), GTK_EDITABLE(m_text)->current_pos );
+        
         // if we have any special style, use it
         if ( !m_defaultStyle.IsDefault() )
         {
@@ -441,113 +441,73 @@ void wxTextCtrl::WriteText( const wxString &text )
                                 ? m_defaultStyle.GetBackgroundColour().GetColor()
                                 : NULL;
 
-            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
+            GetInsertionPoint();
+            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, -1 );
         }
         else // no style
         {
+            gint len = GTK_EDITABLE(m_text)->current_pos;
             gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
         }
-
-        /* bring editable's cursor uptodate. bug in GTK. */
+        
+        // Bring editable's cursor back uptodate.
         GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else // single line
     {
-        /* this moves the cursor pos to behind the inserted text */
+        // This moves the cursor pos to behind the inserted text.
         gint len = GTK_EDITABLE(m_text)->current_pos;
         gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
 
-        /* bring editable's cursor uptodate. bug in GTK. */
+        // Bring editable's cursor uptodate.
         GTK_EDITABLE(m_text)->current_pos += text.Len();
 
-        /* bring entry's cursor uptodate. bug in GTK. */
+        // Bring entry's cursor uptodate.
         gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
+    
+    m_modified = TRUE;
 }
 
 void wxTextCtrl::AppendText( const wxString &text )
 {
-    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
-
-    if ( text.empty() )
-        return;
-
-#if wxUSE_UNICODE
-    wxWX2MBbuf buf = text.mbc_str();
-    const char *txt = buf;
-    size_t txtlen = strlen(buf);
-#else
-    const char *txt = text;
-    size_t txtlen = text.length();
-#endif
-
-    if (m_windowStyle & wxTE_MULTILINE)
-    {
-        if ( !m_defaultStyle.IsDefault() )
-        {
-            wxFont font = m_defaultStyle.HasFont() ? m_defaultStyle.GetFont()
-                                                   : m_font;
-            GdkFont *fnt = font.Ok() ? font.GetInternalFont() : NULL;
-
-            wxColour col = m_defaultStyle.HasTextColour()
-                                ? m_defaultStyle.GetTextColour()
-                                : m_foregroundColour;
-            GdkColor *colFg = col.Ok() ? col.GetColor() : NULL;
-
-            col = m_defaultStyle.HasBackgroundColour()
-                    ? m_defaultStyle.GetBackgroundColour()
-                    : m_backgroundColour;
-            GdkColor *colBg = col.Ok() ? col.GetColor() : NULL;
-
-            gtk_text_insert( GTK_TEXT(m_text), fnt, colFg, colBg, txt, txtlen );
-        }
-        else // no style
-        {
-            /* we'll insert at the last position */
-            gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-            gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
-        }
-
-        /* bring editable's cursor uptodate. bug in GTK. */
-        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
-    }
-    else // single line
-    {
-        gtk_entry_append_text( GTK_ENTRY(m_text), txt );
-    }
+    SetInsertionPointEnd();
+    WriteText( text );
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
 {
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-
-    if (text)
+    if (m_windowStyle & wxTE_MULTILINE)
     {
-        wxString buf(wxT(""));
-        long i;
-        int currentLine = 0;
-        for (i = 0; currentLine != lineNo && text[i]; i++ )
-          if (text[i] == '\n')
-            currentLine++;
-        // Now get the text
-        int j;
-        for (j = 0; text[i] && text[i] != '\n'; i++, j++ )
-            buf += text[i];
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
 
-        g_free( text );
-        return buf;
+        if (text)
+        {
+            wxString buf(wxT(""));
+            long i;
+            int currentLine = 0;
+            for (i = 0; currentLine != lineNo && text[i]; i++ )
+                if (text[i] == '\n')
+            currentLine++;
+            // Now get the text
+            int j;
+            for (j = 0; text[i] && text[i] != '\n'; i++, j++ )
+                buf += text[i];
+
+            g_free( text );
+            return buf;
+        }
+        else
+        {
+            return wxEmptyString;
+        }
     }
     else
-      return wxEmptyString;
-  }
-  else
-  {
-    if (lineNo == 0) return GetValue();
-    return wxEmptyString;
-  }
+    {
+        if (lineNo == 0) return GetValue();
+        return wxEmptyString;
+    }
 }
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
