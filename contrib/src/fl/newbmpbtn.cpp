@@ -471,8 +471,8 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
     {
 
         destDc.Blit( imgPos.x, imgPos.y,
-                 srcBmp->GetWidth()+1,
-                 srcBmp->GetHeight()+1,
+                 srcBmp->GetWidth(),
+                 srcBmp->GetHeight(),
                  &srcDc, 0,0, wxCOPY,true );
     }
 
