@@ -370,10 +370,8 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         case CF_TIFF:
         case CF_PALETTE:
         case wxDF_DIB:
-            {
-                wxLogError(_("Unsupported clipboard format."));
-                return FALSE;
-            }
+            wxLogError(_("Unsupported clipboard format."));
+            return NULL;
 
         case wxDF_OEMTEXT:
             dataFormat = wxDF_TEXT;

@@ -673,7 +673,8 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
     wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
     if ( !menuOld )
-        return FALSE;
+        return NULL;
+
     m_titles[pos] = title;
 
     if ( IsAttached() )

@@ -659,7 +659,7 @@ HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
         npPal = (LPLOGPALETTE)malloc(sizeof(LOGPALETTE) +
                                 (WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
         if (!npPal)
-            return(FALSE);
+            return NULL;
 
         npPal->palVersion = 0x300;
         npPal->palNumEntries = (WORD)lpInfo->biClrUsed;

@@ -293,7 +293,7 @@ PDIB wxDibReadBitmapInfo(HFILE fh)
     off = _llseek(fh,0L,SEEK_CUR);
 
     if (sizeof(bf) != _lread(fh,(LPSTR)&bf,sizeof(bf)))
-        return FALSE;
+        return NULL;
 
     /*
      *  do we have a RC HEADER?

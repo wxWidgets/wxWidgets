@@ -146,7 +146,7 @@ size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format )
 {
     wxDataObjectSimple *dataObj = GetObject(format);
 
-    wxCHECK_MSG( dataObj, FALSE,
+    wxCHECK_MSG( dataObj, 0,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     return dataObj->GetBufferOffset( format );
@@ -158,7 +158,7 @@ const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
 {
     wxDataObjectSimple *dataObj = GetObject(format);
 
-    wxCHECK_MSG( dataObj, FALSE,
+    wxCHECK_MSG( dataObj, NULL,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     return dataObj->GetSizeFromBuffer( buffer, size, format );
@@ -169,7 +169,7 @@ void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
 {
     wxDataObjectSimple *dataObj = GetObject(format);
 
-    wxCHECK_MSG( dataObj, FALSE,
+    wxCHECK_MSG( dataObj, NULL,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     return dataObj->SetSizeInBuffer( buffer, size, format );
