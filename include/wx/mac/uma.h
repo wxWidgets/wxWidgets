@@ -82,9 +82,9 @@ void			UMADrawMenuBar() ;
 void			UMAShowWatchCursor() ;
 void			UMAShowArrowCursor() ;
 
-#if PM_USE_SESSION_APIS
-OSStatus		UMAPrOpen(PMPrintSession *macPrintPort) ;
-OSStatus		UMAPrClose(PMPrintSession *macPrintPort) ;
+#if TARGET_CARBON && PM_USE_SESSION_APIS
+OSStatus		UMAPrOpen(PMPrintSession *macPrintSession) ;
+OSStatus		UMAPrClose(PMPrintSession *macPrintSession) ;
 #else
 OSStatus		UMAPrOpen() ;
 OSStatus		UMAPrClose() ;

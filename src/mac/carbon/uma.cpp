@@ -289,8 +289,8 @@ void UMAInsertMenu( MenuRef insertMenu , SInt16 afterId )
 
 int gPrOpenCounter = 0 ;
 
-#if PM_USE_SESSION_APIS
-OSStatus UMAPrOpen(PMPrintSession *macPrintPort)
+#if TARGET_CARBON && PM_USE_SESSION_APIS
+OSStatus UMAPrOpen(PMPrintSession *macPrintSession)
 #else
 OSStatus UMAPrOpen()
 #endif
@@ -311,7 +311,7 @@ OSStatus UMAPrOpen()
 	if ( gPrOpenCounter == 1 )
 	{
   #if PM_USE_SESSION_APIS
-	    err = PMCreateSession(macPrintPort) ;
+	    err = PMCreateSession(macPrintSession) ;
   #else
 	    err = PMBegin() ;
   #endif
@@ -321,8 +321,8 @@ OSStatus UMAPrOpen()
 #endif
 }
 
-#if PM_USE_SESSION_APIS
-OSStatus UMAPrClose(PMPrintSession *macPrintPort)
+#if TARGET_CARBON && PM_USE_SESSION_APIS
+OSStatus UMAPrClose(PMPrintSession *macPrintSession)
 #else
 OSStatus UMAPrClose()
 #endif
@@ -344,7 +344,8 @@ OSStatus UMAPrClose()
 	if ( gPrOpenCounter == 1 )
 	{
   #if PM_USE_SESSION_APIS
-	    err = PMRelease(*macPrintPort) ;
+	    err = PMRelease(*macPrintSession) ;
+	    *macPrintSession = kPMNoReference;
   #else
 	    err = PMEnd() ;
   #endif
