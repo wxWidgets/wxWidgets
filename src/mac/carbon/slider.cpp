@@ -79,7 +79,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     
     UInt16 tickMarks = 0 ;
     if ( style & wxSL_AUTOTICKS )
-        tickMarks = maxValue - minValue ;
+        tickMarks = (maxValue - minValue); 
+        
+    if (tickMarks > 20)
+        tickMarks = tickMarks/5; //keep the number of tickmarks from becoming unwieldly
         
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
@@ -353,9 +356,16 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     int  sliderBreadth;
     
     xborder = yborder = 0;
-    
+
     if (GetWindowStyle() & wxSL_LABELS)
     {
+        //Labels have this control's parent as their parent
+        //so if this control is not at 0,0 relative to the parent
+        //the labels need to know the position of this control
+        //relative to its parent in order to size properly, so
+        //move the control first so we can use GetPosition()
+        wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
+    
         wxString text;
         int ht;
         
@@ -382,30 +392,32 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         
         if(GetWindowStyle() & wxSL_VERTICAL)
         {
-            
-            if ( m_macMinimumStatic )
-                m_macMinimumStatic->Move(x + sliderBreadth + wxSLIDER_BORDERTEXT,
-                y + h - yborder - textheight);
-            if ( m_macMaximumStatic )
-                m_macMaximumStatic->Move(x + sliderBreadth + wxSLIDER_BORDERTEXT, y + 0);
-            if ( m_macValueStatic )
-                m_macValueStatic->Move(0, y + h - textheight);
             h = h - yborder ;
+                        
+            if ( m_macMinimumStatic )
+                m_macMinimumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT,
+                GetPosition().y + h - yborder - textheight);
+            if ( m_macMaximumStatic )
+                m_macMaximumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT, GetPosition().y + 0);
+            if ( m_macValueStatic )
+                m_macValueStatic->Move(GetPosition().x, GetPosition().y + h - textheight);
         }
         else
         {
-            if ( m_macMinimumStatic )
-                m_macMinimumStatic->Move(x + 0, y + sliderBreadth + wxSLIDER_BORDERTEXT);
-            if ( m_macMaximumStatic )
-                m_macMaximumStatic->Move(x + w - xborder - maxValWidth / 2,
-                y + sliderBreadth + wxSLIDER_BORDERTEXT);
-            if ( m_macValueStatic )
-                m_macValueStatic->Move(x + w - textwidth, y + 0);
             w = w - xborder ;
+            if ( m_macMinimumStatic )
+                m_macMinimumStatic->Move(GetPosition().x + 0, GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
+            if ( m_macMaximumStatic )
+                m_macMaximumStatic->Move(GetPosition().x + w - (maxValWidth/2),
+                GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
+            if ( m_macValueStatic )
+                m_macValueStatic->Move(GetPosition().x + w, GetPosition().y + 0);
         }
     }
-    
+    //If the control has labels, we still need to call this again because
+    //the labels alter the control's w and h values. 
     wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
+
 }
 
 void wxSlider::DoMoveWindow(int x, int y, int width, int height)

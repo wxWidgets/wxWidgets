@@ -39,10 +39,13 @@ MenuHandle NewUniqueMenu()
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the choice
-static const wxCoord MARGIN = 2;
 #if TARGET_API_MAC_OSX
+// margin should be bigger on OS X due to blue highlight
+// around text control.
+static const wxCoord MARGIN = 6;
 static const int    POPUPWIDTH = 24;
 #else
+static const wxCoord MARGIN = 2;
 static const int    POPUPWIDTH = 18;
 #endif
 static const int    POPUPHEIGHT = 23;
@@ -207,7 +210,8 @@ wxSize wxComboBox::DoGetBestSize() const
     if ( m_text != NULL )
     {
         wxSize  sizeText = m_text->GetBestSize();
-        
+        if (sizeText.y > size.y)
+            size.y = sizeText.y;
         size.x = POPUPWIDTH + sizeText.x + MARGIN;
     }
 
@@ -216,8 +220,14 @@ wxSize wxComboBox::DoGetBestSize() const
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     height = POPUPHEIGHT;
-    
-    wxControl::DoMoveWindow(x, y, width, height);
+    int origin = 0;
+#if TARGET_API_MAC_OSX
+    // give the controls some padding so that the text ctrl's borders
+    // and blue highlight can appear
+    origin = 4;
+#endif
+
+    wxControl::DoMoveWindow(x, y, width + origin, height + origin);
 
     if ( m_text == NULL )
     {
@@ -228,8 +238,14 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     else
     {
         wxCoord wText = width - POPUPWIDTH - MARGIN;
-        m_text->SetSize(0, 0, wText, height);
-        m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
+#if TARGET_API_MAC_OSX
+        // also, we need to shrink the size of the wxTextCtrl a bit
+        // to make it appear properly on OS X.
+        height -= 8;
+        wText -= 8;
+#endif
+        m_text->SetSize(origin, origin, wText, height);
+        m_choice->SetSize(origin + wText + MARGIN, 0, POPUPWIDTH, -1);
     }    
 }
 
