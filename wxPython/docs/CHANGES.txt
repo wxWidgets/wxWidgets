@@ -16,13 +16,14 @@ Added wxMirrorDC.
 
 Added wxIconLocation
 
-
 Added Python wrappers for the new wxVScrolledWindow, wxVListBox, and
 wxHtmlListBox classes.
 
 Added wrappers for wxBookCtrl and wxListbook.  wxNotebook now derives
 from wxBookCtrl.
 
+Added Gordon Williams' PyPlot module to the library, available as the
+wx.lib.plot module.
 
 
 
