@@ -206,7 +206,7 @@ protected:
 
     // event handlers
     void OnSize(wxSizeEvent& event);
-    void OnNcPaint(wxPaintEvent& event);
+    void OnNcPaint(wxNcPaintEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnErase(wxEraseEvent& event);
 

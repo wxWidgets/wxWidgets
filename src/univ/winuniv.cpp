@@ -211,7 +211,7 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // ----------------------------------------------------------------------------
 
 // the event handlers executed when the window must be repainted
-void wxWindow::OnNcPaint(wxPaintEvent& WXUNUSED(event))
+void wxWindow::OnNcPaint(wxNcPaintEvent& WXUNUSED(event))
 {
     if ( m_renderer )
     {

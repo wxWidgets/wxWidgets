@@ -238,7 +238,7 @@ void wxTopLevelWindow::DoSetClientSize(int width, int height)
         wxTopLevelWindowNative::DoSetClientSize(width, height);
 }
 
-void wxTopLevelWindow::OnNcPaint(wxPaintEvent& event)
+void wxTopLevelWindow::OnNcPaint(wxNcPaintEvent& event)
 {
     if ( !ms_drawDecorations || !m_renderer )
         event.Skip();
