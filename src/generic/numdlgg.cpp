@@ -156,6 +156,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
     Centre( wxBOTH );
 
+    m_spinctrl->SetSelection(-1, -1);
     m_spinctrl->SetFocus();
 
     wxEndBusyCursor();
