@@ -49,13 +49,39 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 {
 }
 
-- (void)doIdle: (id)data;
 - (void)sendEvent: (NSEvent*)anEvent;
 @end // wxPoserNSApplication
 
 WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
 @implementation wxPoserNSApplication : NSApplication
+
+- (void)sendEvent: (NSEvent*)anEvent
+{
+    wxLogDebug("SendEvent");
+    wxTheApp->CocoaInstallRequestedIdleHandler();
+    [super sendEvent: anEvent];
+}
+
+@end // wxPoserNSApplication
+
+// ========================================================================
+// wxNSApplicationDelegate
+// ========================================================================
+@interface wxNSApplicationDelegate : NSObject
+{
+}
+
+- (void)doIdle: (id)data;
+// Delegate methods
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
+- (void)applicationWillBecomeActive:(NSNotification *)notification;
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applicationWillResignActive:(NSNotification *)notification;
+- (void)applicationDidResignActive:(NSNotification *)notification;
+@end // interface wxNSApplicationDelegate : NSObject
+
+@implementation wxNSApplicationDelegate : NSObject
 
 - (void)doIdle: (id)data
 {
@@ -89,31 +115,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     // Add ourself back into the run loop (on next event) if necessary
     wxTheApp->CocoaRequestIdle();
 }
-
-- (void)sendEvent: (NSEvent*)anEvent
-{
-    wxLogDebug("SendEvent");
-    wxTheApp->CocoaInstallRequestedIdleHandler();
-    [super sendEvent: anEvent];
-}
-
-@end // wxPoserNSApplication
-
-// ========================================================================
-// wxNSApplicationDelegate
-// ========================================================================
-@interface wxNSApplicationDelegate : NSObject
-{
-}
-
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
-- (void)applicationWillBecomeActive:(NSNotification *)notification;
-- (void)applicationDidBecomeActive:(NSNotification *)notification;
-- (void)applicationWillResignActive:(NSNotification *)notification;
-- (void)applicationDidResignActive:(NSNotification *)notification;
-@end // interface wxNSApplicationDelegate : NSObject
-
-@implementation wxNSApplicationDelegate : NSObject
 
 // NOTE: Terminate means that the event loop does NOT return and thus
 // cleanup code doesn't properly execute.  Furthermore, wxWindows has its
@@ -237,7 +238,7 @@ void wxApp::CocoaInstallIdleHandler()
     m_isIdle = false;
     // Call doIdle for EVERYTHING dammit
 // We'd need Foundation/NSConnection.h for this next constant, do we need it?
-    [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaApp argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode,*/ NSModalPanelRunLoopMode, /**/NSEventTrackingRunLoopMode,/**/ nil] ];
+    [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaAppDelegate argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode,*/ NSModalPanelRunLoopMode, /**/NSEventTrackingRunLoopMode,/**/ nil] ];
 }
 
 void wxApp::CocoaDelegate_applicationWillBecomeActive()
@@ -273,7 +274,7 @@ bool wxApp::OnInitGui()
 //    [ m_cocoaApp setDelegate:m_cocoaApp ];
     #if 0
     wxLogDebug("Just for kicks");
-    [ m_cocoaApp performSelector:@selector(doIdle:) withObject:NULL ];
+    [ m_cocoaAppDelegate performSelector:@selector(doIdle:) withObject:NULL ];
     wxLogDebug("okay.. done now");
     #endif
     return TRUE;
