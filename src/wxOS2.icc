@@ -37,6 +37,8 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "OS2\\FILEDLG.CPP"
       source "OS2\\FONT.CPP"
       source "OS2\\FONTDLG.CPP"
+      source "OS2\\FONTENUM.CPP"
+      source "OS2\\FONTUTIL.CPP"
       source "OS2\\FRAME.CPP"
       source "OS2\\GAUGE.CPP"
       source "OS2\\GDIIMAGE.CPP"

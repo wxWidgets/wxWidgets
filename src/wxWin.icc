@@ -8,9 +8,9 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
                         link(linkwithsharedlib, "yes"), link(defaultlibs, "no"), link(extdictionary, "no"), opt(inline, "yes"),
                         incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\Include"), macros(redefine, "yes"),
                         file(genobject, "..\\src\\common\\dbgos240\\"),
-                        file(usepch, "No"), debug(maxerrors, 100), info(cmp, "yes"), info(cnd, "yes"), info(cns, "yes"), info(cnv, "yes"), 
-                        info(cpy, "yes"), info(dcl, "yes"), info(eff, "yes"), info(enu, "yes"), info(ext, "yes"), info(ini, "yes"), 
-                        info(ord, "yes"), info(par, "yes"), info(rea, "yes"), info(trd, "yes"), info(tru, "yes"), info(uni, "yes"), 
+                        file(usepch, "No"), debug(maxerrors, 100), info(cmp, "yes"), info(cnd, "yes"), info(cns, "yes"), info(cnv, "yes"),
+                        info(cpy, "yes"), info(dcl, "yes"), info(eff, "yes"), info(enu, "yes"), info(ext, "yes"), info(ini, "yes"),
+                        info(ord, "yes"), info(par, "yes"), info(rea, "yes"), info(trd, "yes"), info(tru, "yes"), info(uni, "yes"),
                         info(use, "yes")
 {
    perform
@@ -35,6 +35,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\docview.cpp"
       source "COMMON\\dynarray.cpp"
       source "COMMON\\dynlib.cpp"
+      source "COMMON\\encconv.cpp"
       source "COMMON\\event.cpp"
       option report(level, "W")
       {
@@ -198,6 +199,8 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "OS2\\FILEDLG.CPP"
       source "OS2\\FONT.CPP"
       source "OS2\\FONTDLG.CPP"
+      source "OS2\\FONTENUM.CPP"
+      source "OS2\\FONTUTIL.CPP"
       source "OS2\\FRAME.CPP"
       source "OS2\\GAUGE.CPP"
       source "OS2\\GDIIMAGE.CPP"

@@ -33,6 +33,7 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "COMMON\\docview.cpp"
       source "COMMON\\dynarray.cpp"
       source "COMMON\\dynlib.cpp"
+      source "COMMON\\encconv.cpp"
       source "COMMON\\event.cpp"
       option report(level, "W")
       {
