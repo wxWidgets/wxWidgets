@@ -8,6 +8,13 @@ Last Update 05-12-1995
 #pragma implementation "liner.cpp"
 #endif
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include <math.h>
 
 #include <stdlib.h>

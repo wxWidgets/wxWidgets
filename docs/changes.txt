@@ -10,8 +10,11 @@ wxBase:
 - Fixed new charset detection code (langinfo.h not included in intl.cpp;
   langinfo.h not neccessary in strconv.cpp)
 - ODBC Informix fixes (submitted by Roger Gammans)
+- Added ODBC date support to wxVariant
 - Added wxDbGrid class for displaying ODBC tables
 - Added wxDir::Traverse
+- Removed redundant wxDebugContext functions using C++ streams,
+  so now standard stream usage should be unnecessary
 
 All (GUI):
 
@@ -32,13 +35,14 @@ All (GUI):
 - Fixed calendar sample bug with using wxCommandEvent::GetInt()
   instead of GetId()
 - Added wxDbGrid combining wxODBC classes with wxGrid
+- Added more makefiles and project files for contrib hierarchy
 
 wxMSW:
 
 - Fixed wxApp::ProcessMessage so controls don't lose their
   accelerators when the accelerators are redefined elsewhere
 - Accelerators consisting of simple keystrokes (without control,
-  alt or shift) are now possible
+  alt or shift) now work
 - Compile fixes for Watcom C++ added
 - Compile fixes for Cygwin 1.0 added
 - Use SetForegroundWindow() in wxWindow::Raise() instead of BringWindowToTop()
@@ -50,6 +54,11 @@ wxMSW:
 - We now send iconize events
 - Fixed wxFrame::SetClientSize() with toolbar bug
 - Added mousewheel processing
+- Added wxSystemSettings::Get/SetOption so we can configure
+  wxWindows at run time; used this to implement no-maskblt option
+  in wxDC
+- Fixed bug when using MDIS_ALLCHILDSTYLES style: so now MDI
+  child frame styles are honoured
 
 wxGTK:
 
@@ -97,8 +106,8 @@ wxMSW:
 
 - threads: bug in wxCondition::Broadcast fixed (Pieter van der Meulen)
 - fixed bug in MDI children flags (mis)handling
-- it is possible to compile wxCHMHelpController with other compilers than VisualC++
-  now and hhctrl.ocx is loaded at runtime.
+- it is possible to compile wxCHMHelpController with compilers
+  other than Visual C++ now and hhctrl.ocx is loaded at runtime
 
 wxGTK:
 
