@@ -2966,7 +2966,7 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
     {
         wxListLineData *line = &m_lines[i];
         long ret = line->IsHit( x, y );
-        if (ret & flags)
+        if (ret) //  & flags) // No: flags is output-only so may be garbage at this point
         {
             flags = (int)ret;
             return count;
