@@ -52,7 +52,7 @@
 // constants (to be removed, for testing only)
 // ----------------------------------------------------------------------------
 
-static const size_t BORDER_THICKNESS = 1;
+static const size_t BORDER_THICKNESS = 10;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -205,6 +205,7 @@ public:
                                    const wxMenuGeometryInfo& geomInfo);
 #endif
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
 
@@ -370,6 +371,9 @@ protected:
                                   wxAlignment align,
                                   int indexAccel);
 
+    // initialize the combo bitmaps
+    void InitComboBitmaps();
+
 private:
     const wxColourScheme *m_scheme;
 
@@ -390,6 +394,18 @@ private:
 
     // the line wrap bitmap (drawn at the end of wrapped lines)
     wxBitmap m_bmpLineWrap;
+
+    // the combobox bitmaps
+    enum
+    {
+        ComboState_Normal,
+        ComboState_Focus,
+        ComboState_Pressed,
+        ComboState_Disabled,
+        ComboState_Max
+    };
+
+    wxBitmap m_bitmapsCombo[ComboState_Max];
 };
 
 // ----------------------------------------------------------------------------
@@ -1792,16 +1808,64 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 
     return NULL;
 }
-#endif
+#endif // wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------
 
+void wxGTKRenderer::InitComboBitmaps()
+{
+    wxSize sizeArrow = m_sizeScrollbarArrow;
+    sizeArrow.x -= 2;
+    sizeArrow.y -= 2;
+
+    size_t n;
+
+    for ( n = ComboState_Normal; n < ComboState_Max; n++ )
+    {
+        m_bitmapsCombo[n].Create(sizeArrow.x, sizeArrow.y);
+    }
+
+    static const int comboButtonFlags[ComboState_Max] =
+    {
+        0,
+        wxCONTROL_CURRENT,
+        wxCONTROL_PRESSED,
+        wxCONTROL_DISABLED,
+    };
+
+    wxRect rect(wxPoint(0, 0), sizeArrow);
+
+    wxMemoryDC dc;
+    for ( n = ComboState_Normal; n < ComboState_Max; n++ )
+    {
+        int flags = comboButtonFlags[n];
+
+        dc.SelectObject(m_bitmapsCombo[n]);
+        DoDrawBackground(dc, GetBackgroundColour(flags), rect);
+        DrawArrow(dc, wxDOWN, rect, flags);
+    }
+}
+
 void wxGTKRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
+                                    wxBitmap *bmpFocus,
                                     wxBitmap *bmpPressed,
                                     wxBitmap *bmpDisabled)
 {
-    // TODO
+    if ( !m_bitmapsCombo[ComboState_Normal].Ok() )
+    {
+        InitComboBitmaps();
+    }
+
+    if ( bmpNormal )
+        *bmpNormal = m_bitmapsCombo[ComboState_Normal];
+    if ( bmpFocus )
+        *bmpFocus = m_bitmapsCombo[ComboState_Focus];
+    if ( bmpPressed )
+        *bmpPressed = m_bitmapsCombo[ComboState_Pressed];
+    if ( bmpDisabled )
+        *bmpDisabled = m_bitmapsCombo[ComboState_Disabled];
 }
 
 // ----------------------------------------------------------------------------
@@ -2220,9 +2284,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
     {
         // TODO: this is ad hoc...
         size->x += 3*window->GetCharWidth();
-        if ( size->x < 80 )
-            size->x = 80;
-        wxCoord minBtnHeight = 22;
+        wxCoord minBtnHeight = 18;
         if ( size->y < minBtnHeight )
             size->y = minBtnHeight;
 
