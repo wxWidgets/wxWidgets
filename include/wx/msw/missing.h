@@ -161,6 +161,7 @@ typedef struct tagNMLVDISPINFOW {
 
 #if ((defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__GNUWIN32__)) && !defined(HDN_GETDISPINFOW)
 #define HDN_GETDISPINFOW (HDN_FIRST-29)
+#if !wxCHECK_W32API_VERSION(2, 2)
 typedef struct {
         NMHDR hdr;
         int iItem;
@@ -170,6 +171,7 @@ typedef struct {
         int iImage;
         LPARAM lParam;
 } NMHDDISPINFOW, *LPNMHDDISPINFOW;
+#endif
 #endif
 
 
