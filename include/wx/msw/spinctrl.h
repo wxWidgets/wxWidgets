@@ -94,6 +94,9 @@ protected:
     // the handler for wxSpinButton events
     void OnSpinChange(wxSpinEvent& event);
 
+    // Handle processing of special keys
+    void OnChar(wxKeyEvent& event);
+
     // the data for the "buddy" text ctrl
     WXHWND     m_hwndBuddy;
     WXFARPROC  m_wndProcBuddy;
