@@ -64,6 +64,7 @@
 
 #include "wx/file.h"
 #include "wx/regex.h"
+#include "wx/hash.h"
 
 // C++ parsing classes
 #include "cjparser.h"
@@ -1264,16 +1265,28 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
         funcname = dtor;
     }
 
-    m_textFunc.Printf("\n"
-                      "\\membersection{%s::%s}\\label{%s}\n"
-                      "\n"
-                      "\\%sfunc{%s%s}{%s}{",
+	static wxHashTable sg_MemberSectionsDone(wxKEY_STRING);
+	wxString memberSectionName;
+	memberSectionName.Printf("%s::%s", m_classname.c_str(), funcname.c_str());
+
+	m_textFunc = wxEmptyString;
+	if (!sg_MemberSectionsDone.Get(memberSectionName))
+	{
+		m_textFunc.Printf("\n"
+                      "\\membersection{%s::%s}\\label{%s}\n",
                       m_classname.c_str(), funcname.c_str(),
-                      MakeLabel(m_classname, funcname).c_str(),
+                      MakeLabel(m_classname, funcname).c_str());
+		sg_MemberSectionsDone.Put(memberSectionName, (wxObject*) & sg_MemberSectionsDone);
+	}
+
+	wxString func;
+	func.Printf("\n"
+                      "\\%sfunc{%s%s}{%s}{",
                       op.mIsConstant ? "const" : "",
                       op.mIsVirtual ? "virtual " : "",
                       op.mRetType.c_str(),
                       funcname.c_str());
+	m_textFunc += func;
 }
 
 void HelpGenVisitor::VisitParameter( spParameter& param )
@@ -2163,6 +2176,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.20  2002/01/03 14:23:33  JS
+   Added code to make it not duplicate membersections for overloaded functions
+
    Revision 1.19  2002/01/03 13:34:12  JS
    Added FlushAll to CloseClass, otherwise text was only flushed right at the end,
    and appeared in one file.
