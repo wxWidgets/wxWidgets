@@ -103,10 +103,9 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
             // no such encodings at all
             return FALSE;
         }
-
-        m_charset = info.charset;
-        m_facename = info.facename;
     }
+    m_charset = info.charset;
+    m_facename = info.facename;
 
     return TRUE;
 }
