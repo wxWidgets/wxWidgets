@@ -57,6 +57,8 @@ public:
     // -----------------
 
     virtual int GetCount() const = 0;
+    bool IsEmpty() const { return GetCount() == 0; }
+
     virtual wxString GetString(int n) const = 0;
     virtual void SetString(int n, const wxString& s) = 0;
     virtual int FindString(const wxString& s) const = 0;
