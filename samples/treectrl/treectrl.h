@@ -153,6 +153,7 @@ public:
     void OnTogHideRoot(wxCommandEvent& event)  { TogStyle(wxTR_HIDE_ROOT); }
     void OnTogRootLines(wxCommandEvent& event) { TogStyle(wxTR_LINES_AT_ROOT); }
     void OnTogBorder(wxCommandEvent& event)    { TogStyle(wxTR_ROW_LINES); }
+    void OnTogFullHighlight(wxCommandEvent& event)    { TogStyle(wxTR_FULL_ROW_HIGHLIGHT); }
 
     void OnDump(wxCommandEvent& event);
 #ifndef NO_MULTIPLE_SELECTION
@@ -223,6 +224,7 @@ enum
     TreeTest_TogHideRoot,
     TreeTest_TogRootLines,
     TreeTest_TogBorder,
+    TreeTest_TogFullHighlight,
     TreeTest_Dump,
     TreeTest_DumpSelected,
     TreeTest_Count,

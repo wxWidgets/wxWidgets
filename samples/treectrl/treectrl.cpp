@@ -75,6 +75,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(TogHideRoot)
     MENU_LINK(TogRootLines)
     MENU_LINK(TogBorder)
+    MENU_LINK(TogFullHighlight)
     MENU_LINK(Dump)
 #ifndef NO_MULTIPLE_SELECTION
     MENU_LINK(DumpSelected)
@@ -185,6 +186,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->Append(TreeTest_TogRootLines, "Toggle &lines at root");
     style_menu->Append(TreeTest_TogHideRoot, "Toggle &hidden root");
     style_menu->Append(TreeTest_TogBorder, "Toggle &item border");
+    style_menu->Append(TreeTest_TogFullHighlight, "Toggle &full row highlight");
     style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode");
 #ifndef NO_MULTIPLE_SELECTION
     style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
