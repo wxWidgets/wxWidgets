@@ -282,9 +282,8 @@ wxString wxStandardPathsWin16::GetConfigDir() const
         wxLogLastError(_T("GetWindowsDirectory"));
     }
 #else
-    // TODO:
-    //    eVC4 - use CSIDL_WINDOWS
-    //    eVC3 - probably not possible through API
+    // TODO: use CSIDL_WINDOWS (eVC4, possibly not eVC3)
+    return wxT("\\Windows");
 #endif
 
     return dir;

@@ -292,7 +292,10 @@ wxString wxFileConfig::GetGlobalDir()
     // There's no such thing as global cfg dir in MS-DOS, let's return
     // current directory (FIXME_MGL?)
     return wxT(".\\");
-#else // Windows
+#elif defined(__WXWINCE__)
+    strDir = wxT("\\Windows\\");
+#elif // Windows
+
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
 
