@@ -4960,7 +4960,9 @@ static PyObject *_wrap_wxProcess_GetInputStream(PyObject *self, PyObject *args, 
             Py_DECREF(arg);
 
             // set ThisOwn
-            PyObject_SetAttrString(_resultobj, "thisown", PyInt_FromLong(1));
+            PyObject* one = PyInt_FromLong(1);
+            PyObject_SetAttrString(_resultobj, "thisown", one);
+            Py_DECREF(one);
         }
     } else {
         Py_INCREF(Py_None);
@@ -5013,7 +5015,9 @@ static PyObject *_wrap_wxProcess_GetErrorStream(PyObject *self, PyObject *args, 
             Py_DECREF(arg);
 
             // set ThisOwn
-            PyObject_SetAttrString(_resultobj, "thisown", PyInt_FromLong(1));
+            PyObject* one = PyInt_FromLong(1);
+            PyObject_SetAttrString(_resultobj, "thisown", one);
+            Py_DECREF(one);
         }
     } else {
         Py_INCREF(Py_None);
