@@ -437,6 +437,7 @@ void wxWindowMSW::Init()
     m_frozenness = 0;
 
     m_hWnd = 0;
+    m_hDWP = 0;
 
     m_xThumbSize = 0;
     m_yThumbSize = 0;
@@ -1531,9 +1532,29 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     if (height < 0)
         height = 0;
 
-    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    // if our parent had prepared a defer window handle for us, use it
+    HDWP hdwp = m_parent ? (HDWP)m_parent->m_hDWP : NULL;
+    if ( hdwp )
     {
-        wxLogLastError(wxT("MoveWindow"));
+        hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
+                                x, y, width, height,
+                                SWP_NOZORDER);
+        if ( !hdwp )
+        {
+            wxLogLastError(_T("DeferWindowPos"));
+        }
+
+        // hdwp must be updated as it may have been changed
+        m_parent->m_hDWP = (WXHANDLE)hdwp;
+    }
+
+    // otherwise (or if deferring failed) move the window in place immediately
+    if ( !hdwp )
+    {
+        if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+        {
+            wxLogLastError(wxT("MoveWindow"));
+        }
     }
 }
 
@@ -2238,6 +2259,46 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             // processing it and failing to pass the message along may cause
             // memory and resource leaks!
             (void)HandleDestroy();
+            break;
+
+        case WM_WINDOWPOSCHANGING:
+            {
+                WINDOWPOS *wp = wx_reinterpret_cast(WINDOWPOS *, lParam);
+
+                if ( wp->flags & SWP_NOSIZE )
+                    break;
+
+                // when we resize this window, its children are probably going
+                // to be repositioned as well, prepare to use DeferWindowPos()
+                // for them
+                const int numChildren = GetChildren().GetCount();
+                if ( numChildren > 1 )
+                {
+                    m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
+                    if ( !m_hDWP )
+                    {
+                        wxLogLastError(_T("BeginDeferWindowPos"));
+                    }
+                }
+            }
+            break;
+
+        case WM_WINDOWPOSCHANGED:
+            // first let DefWindowProc() handle the message: it will generate
+            // WM_MOVE and WM_SIZE as needed
+            processed = MSWDefWindowProc(message, wParam, lParam) == 0;
+
+            // then change the positions of all child windows at once
+            if ( m_hDWP )
+            {
+                // put all child controls in place at once now
+                if ( !::EndDeferWindowPos((HDWP)m_hDWP) )
+                {
+                    wxLogLastError(_T("EndDeferWindowPos"));
+                }
+
+                m_hDWP = NULL;
+            }
             break;
 
         case WM_SIZE:

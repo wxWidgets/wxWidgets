@@ -493,6 +493,10 @@ private:
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int m_frozenness;
 
+    // current defer window position operation handle (may be NULL)
+    HANDLE m_hDWP;
+
+
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
     DECLARE_NO_COPY_CLASS(wxWindowMSW)
     DECLARE_EVENT_TABLE()
