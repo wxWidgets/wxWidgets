@@ -1363,7 +1363,7 @@ wxPseudoMetaFile::wxPseudoMetaFile()
   m_outlineOp = -1;
 }
 
-wxPseudoMetaFile::wxPseudoMetaFile(wxPseudoMetaFile& mf)
+wxPseudoMetaFile::wxPseudoMetaFile(wxPseudoMetaFile& mf):wxObject()
 {
   mf.Copy(*this);
 }

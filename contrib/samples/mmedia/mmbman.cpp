@@ -72,29 +72,29 @@ class MMBoardSoundFile: public MMBoardFile {
 public:
     MMBoardSoundFile(const wxString& filename);
     ~MMBoardSoundFile();
-    
+
     bool NeedWindow();
-    
+
     void SetWindow(wxWindow *window);
-    
+
     void Play();
     void Pause();
     void Resume();
     void Stop();
-    
+
     MMBoardTime GetPosition();
     MMBoardTime GetLength();
     void SetPosition(MMBoardTime btime);
-    
+
     bool IsStopped();
     bool IsPaused();
-    
+
     wxString GetStringType();
     wxString GetStringInformation();
-    
+
 protected:
     wxSoundFileStream *GetDecoder();
-    
+
     wxSoundStream *m_output_stream;
     wxInputStream *m_input_stream;
     wxSoundFileStream *m_file_stream;
@@ -107,26 +107,26 @@ class MMBoardVideoFile: public MMBoardFile {
 public:
     MMBoardVideoFile(const wxString& filename);
     ~MMBoardVideoFile();
-    
+
     bool NeedWindow();
-    
+
     void SetWindow(wxWindow *window);
-    
+
     void Play();
     void Pause();
     void Resume();
     void Stop();
-    
+
     MMBoardTime GetPosition();
     MMBoardTime GetLength();
     void SetPosition(MMBoardTime btime);
-    
+
     bool IsStopped();
     bool IsPaused();
-    
+
     wxString GetStringType();
     wxString GetStringInformation();
-    
+
 protected:
     wxWindow *m_output_window;
     wxVideoBaseDriver *m_video_driver;
@@ -148,14 +148,14 @@ MMBoardSoundFile::MMBoardSoundFile(const wxString& filename)
 {
     m_input_stream = new wxFileInputStream(filename);
     m_output_stream = MMBoardManager::OpenSoundStream();
-    
+
     m_file_stream = GetDecoder();
-    
+
     if (!m_file_stream) {
         SetError(MMBoard_UnknownFile);
         return;
     }
-    
+
     // Compute length
     wxUint32 length, seconds;
 
@@ -177,25 +177,25 @@ MMBoardSoundFile::~MMBoardSoundFile()
 wxSoundFileStream *MMBoardSoundFile::GetDecoder()
 {
     wxSoundFileStream *f_stream;
-    
+
     // First, we try a Wave decoder
     f_stream = new wxSoundWave(*m_input_stream, *m_output_stream);
     m_file_type = MMBoard_WAVE;
     if (f_stream->CanRead())
         return f_stream;
     delete f_stream;
-    
+
     // Then, a AIFF decoder
     f_stream = new wxSoundAiff(*m_input_stream, *m_output_stream);
     m_file_type = MMBoard_AIFF;
     if (f_stream->CanRead())
         return f_stream;
     delete f_stream;
-    
+
     m_file_type = MMBoard_UNKNOWNTYPE;
-    
+
     // TODO: automate
-    
+
     return NULL;
 }
 
@@ -218,17 +218,17 @@ MMBoardTime MMBoardSoundFile::GetPosition()
 {
     wxUint32 length, seconds;
     MMBoardTime file_time;
-    
+
     file_time.seconds = file_time.minutes = file_time.hours = 0;
     if (m_file_stream->IsStopped())
         return file_time;
-    
+
     length = m_file_stream->GetPosition();
     seconds = m_file_stream->GetSoundFormat().GetTimeFromBytes(length);
     file_time.seconds = seconds % 60;
     file_time.minutes = (seconds / 60) % 60;
     file_time.hours   = seconds / 3600;
-    
+
     return file_time;
 }
 
@@ -302,14 +302,14 @@ wxString MMBoardSoundFile::GetStringInformation()
 {
     wxString info;
     wxSoundFormatBase *format;
-    
+
     format = &(m_file_stream->GetSoundFormat());
-    
+
     info = wxT("Data encoding: ");
     switch (format->GetType()) {
     case wxSOUND_PCM: {
         wxSoundFormatPcm *pcm_format = (wxSoundFormatPcm *)format;
-      
+
     info += wxString::Format(wxT("PCM %s %s\n"),
                                  pcm_format->Signed() ? wxT("signed") : wxT("unsigned"),
                                  pcm_format->GetOrder() == wxLITTLE_ENDIAN ? wxT("little endian") : wxT("big endian"));
@@ -354,7 +354,7 @@ wxString MMBoardSoundFile::GetStringInformation()
 MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
 {
     m_output_window = NULL;
-  
+
 #if defined(__UNIX__)
     m_video_driver = new wxVideoXANIM(filename);
 #elif defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__)
@@ -362,6 +362,7 @@ MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
     // deliver "digitalv.h" required in this feature
     m_video_driver = new wxVideoWindows(filename);
 #else
+    wxUnusedVar(filename);
     m_video_driver = NULL;
     SetError(MMBoard_UnknownFile);
 #endif
@@ -425,7 +426,7 @@ MMBoardTime MMBoardVideoFile::GetLength()
     int frameTime;
 
     frameTime = (int)( m_video_driver->GetNbFrames() / m_video_driver->GetFrameRate());
-    
+
     btime.seconds = frameTime % 60;
     btime.minutes = (frameTime / 60) % 60;
     btime.hours   = frameTime / 3600;

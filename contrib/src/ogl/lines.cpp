@@ -2355,7 +2355,7 @@ wxArrowHead::wxArrowHead(WXTYPE type, int end, double size, double dist, const w
     m_id = wxNewId();
 }
 
-wxArrowHead::wxArrowHead(wxArrowHead& toCopy)
+wxArrowHead::wxArrowHead(wxArrowHead& toCopy):wxObject()
 {
   m_arrowType = toCopy.m_arrowType; m_arrowEnd = toCopy.GetArrowEnd();
   m_arrowSize = toCopy.m_arrowSize;

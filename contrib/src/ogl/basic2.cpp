@@ -71,10 +71,10 @@ void wxPolygonShape::Create(wxList *the_points)
   else
   {
       m_originalPoints = the_points;
-      
+
       // Duplicate the list of points
       m_points = new wxList;
-      
+
       wxObjectList::compatibility_iterator node = the_points->GetFirst();
       while (node)
       {
@@ -1774,7 +1774,7 @@ wxShapeRegion::wxShapeRegion()
   m_actualPenObject = NULL;
 }
 
-wxShapeRegion::wxShapeRegion(wxShapeRegion& region)
+wxShapeRegion::wxShapeRegion(wxShapeRegion& region):wxObject()
 {
   m_regionText = region.m_regionText;
   m_regionName = region.m_regionName;

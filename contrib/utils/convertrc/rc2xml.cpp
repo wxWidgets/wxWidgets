@@ -842,7 +842,7 @@ void rc2xml::ParseListBox(wxString varname)
     CONTROL         "",IDC_RICHEDIT1,"RICHEDIT",ES_AUTOHSCROLL | WS_BORDER |
                     WS_TABSTOP,103,110,40,14
 */
-void rc2xml::ParseRichEdit(wxString label, wxString varname)
+void rc2xml::ParseRichEdit(wxString WXUNUSED(label), wxString varname)
 {
     wxString token;
     //while (ReadOrs(token));
@@ -1013,7 +1013,7 @@ void rc2xml::WriteToolButton(wxString name,int index, int width, int height, wxB
     little.SaveFile(m_targetpath+name,wxBITMAP_TYPE_BMP);
 }
 
-void rc2xml::ParseStringTable(wxString varname)
+void rc2xml::ParseStringTable(wxString WXUNUSED(varname))
 {
     wxString token;
     token=GetToken();
@@ -1023,13 +1023,12 @@ void rc2xml::ParseStringTable(wxString varname)
     wxString *msg;
 
     while ((token!=_T("END"))&(token!=_T("}")))
-        {
+    {
         msg=new wxString;
         *msg=GetStringQuote();
         m_stringtable->Append(token,msg);
         token=GetToken();
-        }
-
+    }
 }
 
 bool rc2xml::LookUpString(wxString strid,wxString & st)
