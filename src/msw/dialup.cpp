@@ -841,17 +841,10 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
     if ( dwRet != 0 )
     {
-#if wxUSE_UNICODE
-        // can't pass a wxWCharBuffer through ( ... )
-        wxLogError(_("Failed to %s dialup connection: %s").data(),
-                   async ? _("initiate").data() : _("establish").data(),
-                   GetErrorString(dwRet).c_str());
-#else
         // can't pass a wxWCharBuffer through ( ... )
         wxLogError(_("Failed to %s dialup connection: %s"),
                    wxString(async ? _("initiate") : _("establish")).c_str(),
                    GetErrorString(dwRet).c_str());
-#endif
 
         // we should still call RasHangUp() if we got a non 0 connection
         if ( ms_hRasConnection )
