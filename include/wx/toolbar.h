@@ -15,7 +15,7 @@
 #include "wx/tbarbase.h"     // the base class for all toolbars
 
 #if wxUSE_TOOLBAR
-    #if !wxUSE_TOOLBAR_NATIVE || defined(__WXUNIVERSAL__)
+    #if !wxUSE_TOOLBAR_NATIVE
         #include "wx/tbarsmpl.h"
 
         class WXDLLEXPORT wxToolBar : public wxToolBarSimple
@@ -79,7 +79,9 @@
             DECLARE_DYNAMIC_CLASS(wxToolBar)
         };
     #else // wxUSE_TOOLBAR_NATIVE
-        #if defined(__WXMSW__) && defined(__WIN95__)
+        #if defined(__WXUNIVERSAL__)
+           #include "wx/univ/toolbar.h"
+        #elif defined(__WXMSW__) && defined(__WIN95__)
            #include "wx/msw/tbar95.h"
         #elif defined(__WXMSW__)
            #include "wx/msw/tbarmsw.h"

@@ -272,6 +272,7 @@ UNIVOBJS = bmpbuttn.obj &
 	statusbr.obj &
 	textctrl.obj &
 	theme.obj &
+	toolbar.obj &
 	topluniv.obj &
 	winuniv.obj
 
@@ -499,6 +500,9 @@ textctrl.obj:     $(UNIVDIR)\textctrl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 theme.obj:     $(UNIVDIR)\theme.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+toolbar.obj:     $(UNIVDIR)\toolbar.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 topluniv.obj:     $(UNIVDIR)\topluniv.cpp

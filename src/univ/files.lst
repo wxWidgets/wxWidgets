@@ -33,6 +33,7 @@ UNIV_SOURCES = \
 		univ/statusbr.cpp \
 		univ/textctrl.cpp \
 		univ/theme.cpp \
+		univ/toolbar.cpp \
 		univ/topluniv.cpp \
 		univ/themes/win32.cpp \
 		univ/winuniv.cpp
@@ -73,6 +74,7 @@ UNIV_HEADERS = \
 		univ/statusbr.h \
 		univ/textctrl.h \
 		univ/theme.h \
+		univ/toolbar.h \
 		univ/toplevel.h \
 		univ/window.h
 
@@ -109,6 +111,7 @@ UNIVOBJS = \
 		statusbr.o \
 		textctrl.o \
 		theme.o \
+		toolbar.o \
 		topluniv.o \
 		win32.o \
 		winuniv.o

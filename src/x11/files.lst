@@ -531,6 +531,7 @@ ALL_HEADERS = \
 		univ/statusbr.h \
 		univ/textctrl.h \
 		univ/theme.h \
+		univ/toolbar.h \
 		univ/toplevel.h \
 		univ/window.h \
 		generic/accel.h \

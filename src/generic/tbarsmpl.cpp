@@ -85,7 +85,7 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
-#if !wxUSE_TOOLBAR_NATIVE || defined(__WXUNIVERSAL__)
+#if !wxUSE_TOOLBAR_NATIVE
     #include "wx/toolbar.h"
 
     IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarSimple)

@@ -1164,6 +1164,10 @@ SOURCE=.\univ\theme.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\toolbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\topluniv.cpp
 # End Source File
 # Begin Source File
