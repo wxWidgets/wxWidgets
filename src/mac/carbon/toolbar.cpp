@@ -173,7 +173,9 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
         : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
                             clientData, shortHelp, longHelp)
 {
-    Init() ;
+    Init();
+    
+    if (id == wxID_SEPARATOR) return;
     
     WindowRef window = (WindowRef) tbar->MacGetRootWindow() ;    
     wxSize toolSize = tbar->GetToolSize() ;    
