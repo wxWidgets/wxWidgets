@@ -1,6 +1,6 @@
 # This file was created automatically by SWIG.
 import utilsc
-import string
+import wx
 class wxConfigBasePtr :
     Type_Unknown = utilsc.wxConfigBase_Type_Unknown
     Type_String = utilsc.wxConfigBase_Type_String
@@ -551,17 +551,17 @@ class wxDateTimePtr :
         return "<C wxDateTime instance at %s>" % (self.this,)
     
     def __add__(self, other):
-        if string.find(other.this, 'wxTimeSpan') != -1:
+        if isinstance(other, wxTimeSpanPtr):
             return self.__add__TS(other)
-        if string.find(other.this, 'wxDateSpan') != -1:
+        if isinstance(other, wxDateSpanPtr):
             return self.__add__DS(other)
         raise TypeError, 'Invalid r.h.s. type for __add__'
     def __sub__(self, other):
-        if string.find(other.this, 'wxDateTime') != -1:
+        if isinstance(other, wxDateTimePtr):
             return self.__sub__DT(other)
-        if string.find(other.this, 'wxTimeSpan') != -1:
+        if isinstance(other, wxTimeSpanPtr):
             return self.__sub__TS(other)
-        if string.find(other.this, 'wxDateSpan') != -1:
+        if isinstnace(other, wxDateSpanPtr):
             return self.__sub__DS(other)
         raise TypeError, 'Invalid r.h.s. type for __sub__'
 

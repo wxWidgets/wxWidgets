@@ -15,7 +15,6 @@ from controls import *
 
 from events import *
 import wx
-import string
 class wxSizerItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -235,7 +234,7 @@ class wxSizerPtr(wxObjectPtr):
     def Add(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.AddSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.AddSizer, args, kw)
         else:
             apply(self.AddWindow, args, kw)
@@ -243,7 +242,7 @@ class wxSizerPtr(wxObjectPtr):
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
             apply(self.InsertSpacer, args, kw)
-        elif string.find(args[1].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.InsertSizer, args, kw)
         else:
             apply(self.InsertWindow, args, kw)
@@ -251,7 +250,7 @@ class wxSizerPtr(wxObjectPtr):
     def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.PrependSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.PrependSizer, args, kw)
         else:
             apply(self.PrependWindow, args, kw)
@@ -259,7 +258,7 @@ class wxSizerPtr(wxObjectPtr):
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
             return apply(self.RemovePos, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             return apply(self.RemoveSizer, args, kw)
         else:
             return apply(self.RemoveWindow, args, kw)
@@ -274,7 +273,7 @@ class wxSizerPtr(wxObjectPtr):
     def SetItemMinSize(self, *args):
         if type(args[0]) == type(1):
             apply(self.SetItemMinSizePos, args)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.SetItemMinSizeSizer, args)
         else:
             apply(self.SetItemMinSizeWindow, args)
@@ -289,19 +288,19 @@ class wxSizerPtr(wxObjectPtr):
     
     
     def Show(self, *args):
-        if string.find(args[0].this, 'Sizer') != -1:
+        if isinstance(args[0], wxSizerPtr):
             apply(self.ShowSizer, args)
         else:
             apply(self.ShowWindow, args)
 
     def Hide(self, *args):
-        if string.find(args[0].this, 'Sizer') != -1:
+        if isinstance(args[0], wxSizerPtr):
             apply(self.HideSizer, args)
         else:
             apply(self.HideWindow, args)
 
     def IsShown(self, *args):
-        if string.find(args[0].this, 'Sizer') != -1:
+        if isinstance(args[0], wxSizerPtr):
             return apply(self.IsShownSizer, args)
         else:
             return apply(self.IsShownWindow, args)

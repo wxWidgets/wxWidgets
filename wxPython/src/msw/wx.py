@@ -1549,6 +1549,7 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 wxGauge95    = wxGauge
 wxGauge95Ptr = wxGaugePtr
 
+
 wxPyAssertionError = wxc.wxPyAssertionError
 
 
