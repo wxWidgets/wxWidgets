@@ -40,6 +40,6 @@ def makeGray((r,g,b), factor, maskColor):
     changed.
     """
     if (r,g,b) != maskColor:
-        return map(lambda x: ((230 - x) * factor) + x, (r,g,b))
+        return map(lambda x: int((230 - x) * factor) + x, (r,g,b))
     else:
         return (r,g,b)
