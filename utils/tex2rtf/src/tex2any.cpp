@@ -581,31 +581,34 @@ bool read_a_line(char *buf)
                 break;
             }
 
-            if (readInVerbatim)
+            if (checkSyntax)
             {
-                // There should NOT be a '\' before the '_'
-                if ((bufIndex > 0 && (buf[bufIndex-1] == '\\')) && (buf[0] != '%'))
+                if (readInVerbatim)
                 {
-                   wxString errBuf;
-                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that should NOT have a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
-                   OnError((char *)errBuf.c_str());
+                    // There should NOT be a '\' before the '_'
+                    if ((bufIndex > 0 && (buf[bufIndex-1] == '\\')) && (buf[0] != '%'))
+                    {
+                        wxString errBuf;
+                        errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that should NOT have a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                        OnError((char *)errBuf.c_str());
+                    }
                 }
-            }
-            else
-            {
-                // There should be a '\' before the '_'
-                if (bufIndex == 0)
+                else
                 {
-                   wxString errBuf;
-                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
-                   OnError((char *)errBuf.c_str());
-                }
-                else if ((buf[bufIndex-1] != '\\') && (buf[0] != '%') &&  // If it is a comment line, then no warnings
-                         (strncmp(buf, "\\input", 6))) // do not report filenames that have underscores in them
-                {
-                   wxString errBuf;
-                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
-                   OnError((char *)errBuf.c_str());
+                    // There should be a '\' before the '_'
+                    if (bufIndex == 0)
+                    {
+                        wxString errBuf;
+                        errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                        OnError((char *)errBuf.c_str());
+                    }
+                    else if ((buf[bufIndex-1] != '\\') && (buf[0] != '%') &&  // If it is a comment line, then no warnings
+                        (strncmp(buf, "\\input", 6))) // do not report filenames that have underscores in them
+                    {
+                        wxString errBuf;
+                        errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                        OnError((char *)errBuf.c_str());
+                    }
                 }
             }
             buf[bufIndex++] = ch;

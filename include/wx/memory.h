@@ -28,6 +28,8 @@
 
 #include <stddef.h>
 
+// Obsolete
+#if 0
 #if wxUSE_IOSTREAMH
     // N.B. BC++ doesn't have istream.h, ostream.h
 #   include <iostream.h>
@@ -36,6 +38,7 @@
 #   if defined(__VISUALC__) || defined(__MWERKS__)
 //        using namespace std;
 #   endif
+#endif
 #endif
 
 #ifdef __WXDEBUG__
@@ -227,8 +230,11 @@ protected:
     // Traverse the list.
     static void TraverseList (PmSFV, wxMemStruct *from = NULL);
 
+    // Obsolete
+#if 0
     static wxSTD streambuf *m_streamBuf;
     static wxSTD ostream *m_debugStream;
+#endif
 
     static int debugLevel;
     static bool debugOn;
@@ -243,12 +249,15 @@ public:
     wxDebugContext(void);
     ~wxDebugContext(void);
 
+    // Obsolete
+#if 0
     static bool HasStream(void) { return (m_debugStream != NULL); };
     static wxSTD ostream& GetStream(void) { return *m_debugStream; }
     static wxSTD streambuf *GetStreamBuf(void) { return m_streamBuf; }
     static void SetStream(wxSTD ostream *stream, wxSTD streambuf *buf = NULL);
     static bool SetFile(const wxString& file);
     static bool SetStandardError(void);
+#endif
 
     static int GetLevel(void) { return debugLevel; }
     static void SetLevel(int level) { debugLevel = level; }

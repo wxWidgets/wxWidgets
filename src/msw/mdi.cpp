@@ -1146,7 +1146,12 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
         ccs.hWindowMenu = (HMENU) parent->GetWindowMenu()->GetHMenu();
     ccs.idFirstChild = wxFIRST_MDI_CHILD;
 
-    DWORD msStyle = MDIS_ALLCHILDSTYLES | WS_VISIBLE | WS_CHILD |
+    // Note from JACS: please don't restore MDIS_ALLCHILDSTYLES
+    // without verifying that the OGL Studio sample works. Currently,
+    // it doesn't, with this style. We have to track it down, but
+    // I'd rather Studio (and maybe apps like it) didn't completely
+    // break.
+    DWORD msStyle = /* MDIS_ALLCHILDSTYLES | */ WS_VISIBLE | WS_CHILD |
                     WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
     if ( style & wxHSCROLL )

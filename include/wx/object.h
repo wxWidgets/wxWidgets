@@ -198,12 +198,14 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 #endif // Debug/!Debug
 
 // Unfortunately Borland seems to need this include.
+#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
 #ifdef __BORLANDC__
     #if wxUSE_IOSTREAMH
         #include <iostream.h>
     #else
         #include <iostream>
     #endif
+#endif
 #endif
 
 class WXDLLEXPORT wxObjectRefData;

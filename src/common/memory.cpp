@@ -40,10 +40,13 @@
 
 #include "wx/ioswrap.h"
 
+// Obsolete
+#if 0
 #if wxUSE_IOSTREAMH
     #include <fstream.h>
 #else
     #include <fstream>
+#endif
 #endif
 
 #if !defined(__WATCOMC__) && !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )\
@@ -465,8 +468,11 @@ wxMemStruct *wxDebugContext::m_tail = NULL;
 // wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
 
 // Must initialise these in wxEntry, and then delete them just before wxEntry exits
+// Obsolete
+#if 0
 wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
 wxSTD ostream *wxDebugContext::m_debugStream = NULL;
+#endif
 
 bool wxDebugContext::m_checkPrevious = FALSE;
 int wxDebugContext::debugLevel = 1;
@@ -486,7 +492,7 @@ wxDebugContext::wxDebugContext(void)
 
 wxDebugContext::~wxDebugContext(void)
 {
-  SetStream(NULL, NULL);
+//  SetStream(NULL, NULL);
 }
 
 /*
@@ -494,6 +500,8 @@ wxDebugContext::~wxDebugContext(void)
  * between SetFile and SetStream.
  */
 
+// Obsolete
+#if 0
 void wxDebugContext::SetStream(wxSTD ostream *str, wxSTD streambuf *buf)
 {
   if (m_debugStream)
@@ -548,7 +556,8 @@ bool wxDebugContext::SetStandardError(void)
 #endif
   return FALSE;
 }
-
+#endif
+    // 0
 
 /*
   Work out the positions of the markers by creating an array of 2 markers
