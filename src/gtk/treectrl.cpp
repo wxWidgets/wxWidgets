@@ -27,11 +27,15 @@
 // clicked
 
 void gtk_treeitem_expand_callback(GtkWidget *WXUNUSED(widget), wxTreeItem *treeitem) {
+  if (treeitem->ignore)
+    return;
   treeitem->SendExpanding(treeitem->m_owner);
   treeitem->SendExpand(treeitem->m_owner);
 };
 
 void gtk_treeitem_collapse_callback( GtkWidget *WXUNUSED(widget), wxTreeItem *treeitem) {
+  if (treeitem->ignore)
+    return;
   treeitem->SendCollapsing(treeitem->m_owner);
   treeitem->SendCollapse(treeitem->m_owner);
 };
@@ -94,11 +98,21 @@ void wxTreeItem::Create() {
   gtk_container_add (GTK_CONTAINER(m_parentwidget), GTK_WIDGET(m_widget));
   gtk_widget_show(GTK_WIDGET(m_widget));
 
+  ignore  = FALSE;
+
   gtk_signal_connect(GTK_OBJECT(m_widget), "select",
       GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
 
   gtk_signal_connect(GTK_OBJECT(m_widget), "deselect",
       GTK_SIGNAL_FUNC(gtk_treeitem_deselect_callback), (gpointer)this );
+
+  if (expand_handler == 0)
+    expand_handler = gtk_signal_connect(GTK_OBJECT(m_widget), "expand",
+      GTK_SIGNAL_FUNC(gtk_treeitem_expand_callback), (gpointer)this );
+
+  if (collapse_handler == 0)
+    collapse_handler = gtk_signal_connect( GTK_OBJECT(m_widget), "collapse",
+      GTK_SIGNAL_FUNC(gtk_treeitem_collapse_callback), (gpointer)this );
 
   if ((m_mask & wxTREE_MASK_CHILDREN) != 0)
     AddSubtree();
@@ -125,17 +139,13 @@ void wxTreeItem::AddSubtree() {
     return;
 
   m_tree = GTK_TREE(gtk_tree_new());
-   
-  if (expand_handler == 0)
-    expand_handler = gtk_signal_connect(GTK_OBJECT(m_widget), "expand",
-      GTK_SIGNAL_FUNC(gtk_treeitem_expand_callback), (gpointer)this );
-
-  if (collapse_handler == 0)
-    collapse_handler = gtk_signal_connect( GTK_OBJECT(m_widget), "collapse",
-      GTK_SIGNAL_FUNC(gtk_treeitem_collapse_callback), (gpointer)this );
-
   gtk_tree_item_set_subtree(GTK_TREE_ITEM(m_widget), GTK_WIDGET(m_tree));
   gtk_widget_show(GTK_WIDGET(m_tree));
+
+  ignore = TRUE;
+  gtk_tree_item_expand(m_widget);
+  gtk_tree_item_collapse(m_widget);
+  ignore  = FALSE;
 }
 
 void wxTreeItem::AddChild(wxTreeItem *child) {
@@ -150,11 +160,16 @@ bool wxTreeItem::HasChildren() {
 
 void wxTreeItem::DeleteChildren() {
   wxTreeItem *item;
+  
   long no = GetChildrenNumber();
   for (long i=0; i<no; i++)
     if ((item = GetChild(i)) != 0)
       delete item;
   m_childlist.Clear();
+  
+  if ((no == 0) && (m_widget != NULL))
+    gtk_tree_item_remove_subtree(m_widget);
+
   m_tree = NULL;
   
   if ((m_mask & wxTREE_MASK_CHILDREN) != 0)
@@ -333,10 +348,9 @@ int wxTreeCtrl::GetCount() const
   return m_anchor->NumberOfVisibleDescendents();
 };
 
-long wxTreeCtrl::InsertItem(long parent, const wxString& label, long data,
+long wxTreeCtrl::InsertItem(long parent, const wxString& label,
       int image, int selImage, long insertAfter) {
   wxTreeItem item;
-  item.m_data = data;
   if (!label.IsNull() || (label == "")) {
     item.m_text = label;
     item.m_mask |= wxTREE_MASK_TEXT;
@@ -383,23 +397,49 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
   
     new_child = new wxTreeItem(GTK_WIDGET(p->m_tree), info);
     p->AddChild(new_child);
+gtk_widget_draw_default(GTK_WIDGET(m_tree));
   } else {
     new_child = new wxTreeItem(GTK_WIDGET(m_tree), info);
     m_anchor = new_child;
   }
 
-/* Disabled until wxImageList q solved
-  if ((info.m_mask & wxTREE_MASK_IMAGE) == 0) {
-    wxBitmap *bmp;
+/* Disabled until wxImageList q solved  >>> seems it solved */
+/*
+  wxBitmap *bmp;
+  if ((new_child->m_mask & wxTREE_MASK_IMAGE) != 0) {
+    if (m_imageList != NULL) {
+//      if ((bmp = m_imageList->GetBitmap(new_child->m_image)) != NULL) {
+      if ((bmp = m_imageList->GetBitmap(0)) != NULL) {
+        if (bmp->Ok()) {
+          GdkBitmap *mask = NULL;
+          if (bmp->GetMask()) mask = bmp->GetMask()->GetBitmap();
+          GtkWidget *pixmap = gtk_pixmap_new(bmp->GetPixmap(), mask);
 
-    if ((bmp = m_imageList->GetItem(info.m_image))->Ok()) {
-      GdkBitmap *mask = NULL;
-      if (bmp->GetMask()) mask = bmp->GetMask()->GetBitmap();
-      GtkWidget *pixmap = gtk_pixmap_new( bmp->GetPixmap(), mask );
+gtk_widget_unref(new_child->m_widget->plus_pix_widget);
+gtk_container_remove(GTK_CONTAINER(new_child->m_widget->pixmaps_box),
+                     new_child->m_widget->plus_pix_widget);
+gtk_container_add(GTK_CONTAINER(new_child->m_widget->pixmaps_box),
+                  pixmap);
+          gtk_widget_show(pixmap);
+          GTK_TREE_ITEM(new_child->m_widget)->plus_pix_widget = pixmap;
+        }
+      }
 
-      gtk_widget_set_parent(pixmap, GTK_WIDGET(new_child->m_widget));
-      gtk_widget_show(pixmap);
-      GTK_TREE_ITEM(new_child->m_widget)->pixmaps_box = pixmap;
+      if ((bmp = m_imageList->GetBitmap(1)) != NULL) {
+        if (bmp->Ok()) {
+          GdkBitmap *mask = NULL;
+          if (bmp->GetMask()) mask = bmp->GetMask()->GetBitmap();
+          GtkWidget *pixmap = gtk_pixmap_new(bmp->GetPixmap(), mask);
+
+gtk_widget_unref(new_child->m_widget->minus_pix_widget);
+//gtk_container_remove(GTK_CONTAINER(new_child->m_widget->pixmaps_box),
+//                     new_child->m_widget->plus_pix_widget);
+//gtk_container_add(GTK_CONTAINER(new_child->m_widget->pixmaps_box),
+//                  pixmap);
+          gtk_widget_show(pixmap);
+          GTK_TREE_ITEM(new_child->m_widget)->minus_pix_widget = pixmap;
+        }
+      }
     }
   }
 */
