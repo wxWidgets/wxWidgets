@@ -11,7 +11,7 @@
         proplist.cpp
         resource.cpp
         tbarsmpl.cpp
-        treelay.cpp
+        treelay.cpp        
         wxexpr.cpp
         
         <!--
@@ -38,12 +38,14 @@
     <dll id="deprecateddll" template="wx_contrib_dll" cond="SHARED=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_DEPRECATED</define>
+        <include>$(SRCDIR)</include>
         <sources>$(DEPRECATED_SRC)</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
     
     <lib id="deprecatedlib" template="wx_contrib_lib" cond="SHARED=='0'">
+        <include>$(SRCDIR)</include>
         <sources>$(DEPRECATED_SRC)</sources>
     </lib>
     
