@@ -1,8 +1,7 @@
 #----------------------------------------------------------------------------
 # Name:         dbg.py
-# Version:      1.1
-# Last Updated: 02/27/2003 06:40pm
-# Authors:      Will Sadkin
+# RCS-ID:       $Id$
+# Author:       Will Sadkin
 # Email:        wsadkin@nameconnector.com
 # Created:      07/11/2002
 # Copyright:    (c) 2002 by Will Sadkin, 2002
@@ -94,6 +93,7 @@ foo
 
 _indent = 0     # current number of indentations
 _dbg = 0        # enable/disable flag
+_suspend = 0    # allows code to "suspend/resume" potential dbg output
 _wxLog = 0      # use wxLogMessage for debug output
 
 
@@ -103,20 +103,27 @@ _outstream_stack = []    # for restoration of streams as necessary
 del sys
 
 
+def dbgEnabled():
+    return _dbg
+
+def dbgSuspended():
+    return _suspend
+
 def dbg(*args, **kwargs):
     """
     This function provides a useful framework for generating
     optional debugging output that can be displayed at an
     arbitrary level of indentation.
     """
-    global _indent, _dbg, _wxLog, _outstream, _outstream_stack
+    global _indent, _dbg, _suspend, _wxLog, _outstream, _outstream_stack
     if not _dbg and not 'enable' in kwargs.keys():
         return
 
-    if _dbg and len(args):
-        output = ' ' * 3 * _indent
-        for arg in args:
-            output += ' '.join([output, str(arg)]) # (emulate print functionality)
+    if _dbg and len(args) and not _suspend:
+        # (emulate print functionality)
+        strs = [str(arg) for arg in args]
+        output = ' ' * 3 * _indent + ' '.join(strs)
+
         if _wxLog:
             from wxPython.wx import wxLogMessage    # (if not already imported)
             wxLogMessage(output)
@@ -127,9 +134,9 @@ def dbg(*args, **kwargs):
 
     # post process args:
     for kwarg, value in kwargs.items():
-        if kwarg == 'indent' and value == 1:
+        if kwarg == 'indent' and value:
             _indent = _indent + 1
-        elif kwarg == 'indent' and value == 0 and _indent > 0:
+        elif kwarg == 'indent' and not value and _indent > 0:
             _indent = _indent - 1
 
         if kwarg == 'enable' and value:
@@ -137,10 +144,13 @@ def dbg(*args, **kwargs):
             _dbg = 1
             if not old_dbg:
                 dbg('dbg enabled')
-        elif kwarg == 'enable' and value == 0:
+        elif kwarg == 'enable' and not value:
             if _dbg:
                 dbg('dbg disabled')
                 _dbg = 0
+
+        if kwarg == 'suspend':
+            _suspend = value
 
         if kwarg == 'wxlog':
             _wxLog = value
@@ -150,6 +160,7 @@ def dbg(*args, **kwargs):
             _outstream = value
         elif kwarg == 'stream' and value is None and len(_outstream_stack) > 0:
             _outstream = _outstream_stack.pop(-1)
+
 
 #------------------------------------------------------------
 
@@ -163,7 +174,7 @@ if __name__ == "__main__":
     devnull = wxLogNull()
     dbg('4,5,6...') # shouldn't print, according to doc...
     del devnull
-    dbg('(resuming to wxLogStdErr: 7,8,9...', indent=0)
+    dbg('(resuming to wxLogStdErr)', '7,8,9...', indent=0)
     dbg('disabling wxLog output, switching to stderr:')
     dbg(wxlog=0, stream=sys.stderr)
     dbg(_outstream, 'switching back to stdout:')
