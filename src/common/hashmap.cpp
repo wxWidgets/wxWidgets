@@ -2,7 +2,7 @@
 // Name:        hashmap.cpp
 // Purpose:     wxHashMap implementation
 // Author:      Mattia Barbon
-// Modified by: 
+// Modified by:
 // Created:     29/01/2002
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
@@ -21,8 +21,6 @@
 #endif
 
 #include "wx/hashmap.h"
-
-#include <assert.h>
 
 /* FYI: This is the "One-at-a-Time" algorithm by Bob Jenkins */
 /* from requirements by Colin Plumb. */
@@ -63,7 +61,7 @@ unsigned long wxStringHash::charStringHash( const char* k )
 #endif
 
 /* from SGI STL */
-const unsigned long _wxHashTableBase2::s_primes[prime_count] =
+const unsigned long _wxHashTableBase2::ms_primes[prime_count] =
 {
     7ul,          13ul,         29ul,
     53ul,         97ul,         193ul,       389ul,       769ul,
@@ -76,7 +74,7 @@ const unsigned long _wxHashTableBase2::s_primes[prime_count] =
 
 unsigned long _wxHashTableBase2::GetNextPrime( unsigned long n )
 {
-    const unsigned long* ptr = &s_primes[0];
+    const unsigned long* ptr = &ms_primes[0];
     for( size_t i = 0; i < prime_count; ++i, ++ptr )
     {
         if( n < *ptr )
@@ -84,14 +82,15 @@ unsigned long _wxHashTableBase2::GetNextPrime( unsigned long n )
     }
 
     /* someone might try to alloc a 2^32-element hash table */
-    assert(0);
+    wxFAIL_MSG( _T("hash table too big?") );
+
     /* quiet warning */
     return 0;
 }
 
 unsigned long _wxHashTableBase2::GetPreviousPrime( unsigned long n )
 {
-    const unsigned long* ptr = &s_primes[prime_count - 1];
+    const unsigned long* ptr = &ms_primes[prime_count - 1];
 
     for( size_t i = 0; i < prime_count; ++i, --ptr )
     {

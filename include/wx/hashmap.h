@@ -2,7 +2,7 @@
 // Name:        hashmap.cpp
 // Purpose:     wxHashMap class
 // Author:      Mattia Barbon
-// Modified by: 
+// Modified by:
 // Created:     29/01/2002
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
@@ -31,7 +31,7 @@ class WXDLLEXPORT _wxHashTableBase2
 {
 public:
     typedef void (*NodeDtor)(_wxHashTable_NodeBase*);
-    typedef unsigned long (*BucketFromNode)(_wxHashTableBase2*,_wxHashTable_NodeBase*); 
+    typedef unsigned long (*BucketFromNode)(_wxHashTableBase2*,_wxHashTable_NodeBase*);
     typedef _wxHashTable_NodeBase* (*ProcessNode)(_wxHashTable_NodeBase*);
 protected:
     static _wxHashTable_NodeBase* DummyProcessNode(_wxHashTable_NodeBase* node);
@@ -46,15 +46,15 @@ protected:
         return 0;
     }
 
-    /* static const unsigned prime_count = 31; */
+    // as static const unsigned prime_count = 31 but works with all compilers
     enum { prime_count = 31 };
-    static const unsigned long s_primes[prime_count];
+    static const unsigned long ms_primes[prime_count];
 
-    /* returns the first prime in s_primes greater than n */
+    // returns the first prime in ms_primes greater than n
     static unsigned long GetNextPrime( unsigned long n );
 
-    /* returns the first prime in s_primes smaller than n */
-    /* ( or s_primes[0] if n is very small ) */
+    // returns the first prime in ms_primes smaller than n
+    // ( or ms_primes[0] if n is very small )
     static unsigned long GetPreviousPrime( unsigned long n );
 
     static void CopyHashTable( _wxHashTable_NodeBase** srcTable,
@@ -62,19 +62,14 @@ protected:
                                _wxHashTable_NodeBase** dstTable,
                                BucketFromNode func, ProcessNode proc );
 
-    /* maybe just use calloc */
     static void** AllocTable( size_t size )
     {
-        void** table = new void*[size];
-
-        memset( table, 0, size * sizeof(void*) );
-
-        return table;
+        return (void **)calloc(size, sizeof(void*));
     }
 };
 
 #define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
-CLASSEXP CLASSNAME:protected _wxHashTableBase2 \
+CLASSEXP CLASSNAME : protected _wxHashTableBase2 \
 { \
 public: \
     typedef KEY_T key_type; \
@@ -139,7 +134,7 @@ protected: \
     protected: \
         Node* GetNextNode() \
         { \
-	    size_type bucket = GetBucketForNode(m_ht,m_node); \
+            size_type bucket = GetBucketForNode(m_ht,m_node); \
             for( size_type i = bucket + 1; i < m_ht->m_tableBuckets; ++i ) \
             { \
                 if( m_ht->m_table[i] ) \
@@ -151,7 +146,7 @@ protected: \
         void PlusPlus() \
         { \
             Node* next = m_node->m_next(); \
-	    m_node = next ? next : GetNextNode(); \
+            m_node = next ? next : GetNextNode(); \
         } \
     }; \
  \
@@ -208,14 +203,14 @@ public: \
          m_getKey = ht.m_getKey; \
          m_items = ht.m_items; \
          HashCopy( ht ); \
-        return *this; \
+         return *this; \
     } \
  \
     ~CLASSNAME() \
     { \
         clear(); \
  \
-        delete[] m_table; \
+        free(m_table); \
     } \
  \
     hasher hash_funct() { return m_hasher; } \
@@ -330,7 +325,7 @@ protected: \
                        this, (_wxHashTable_NodeBase**)m_table, \
                        (BucketFromNode)&GetBucketForNode,\
                        (ProcessNode)&DummyProcessNode ); \
-        delete[] srcTable; \
+        free(srcTable); \
     } \
  \
     /* this must be called _after_ m_table has been cleaned */ \
@@ -345,6 +340,8 @@ protected: \
     } \
 };
 
+// defines an STL-like pair class CLASSNAME storing two fields: first of type
+// KEY_T and second of type VALUE_T
 #define _WX_DECLARE_PAIR( KEY_T, VALUE_T, CLASSNAME, CLASSEXP ) \
 CLASSEXP CLASSNAME \
 { \
@@ -361,12 +358,19 @@ public: \
     t2 second; \
 };
 
+// defines the class CLASSNAME returning the key part (of type KEY_T) from a
+// pair of type PAIR_T
 #define _WX_DECLARE_HASH_MAP_KEY_EX( KEY_T, PAIR_T, CLASSNAME, CLASSEXP ) \
 CLASSEXP CLASSNAME \
 { \
 public: \
-    CLASSNAME() {}; \
+    CLASSNAME() { } \
     KEY_T operator()( PAIR_T pair ) const { return pair.first; } \
+    \
+    /* the dummy assignment operator is needed to suppress compiler */ \
+    /* warnings from hash table class' operator=(): gcc complains about */ \
+    /* "statement with no effect" without it */ \
+    CLASSNAME& operator=(const CLASSNAME&) { return *this; } \
 };
 
 // grow/shrink predicates
@@ -377,51 +381,70 @@ inline bool grow_lf70( size_t buckets, size_t items )
     return float(items)/float(buckets) >= 0.85;
 }
 
+// ----------------------------------------------------------------------------
+// hashing and comparison functors
+// ----------------------------------------------------------------------------
+
+// NB: implementation detail: all of these classes must have dummy assignment
+//     operators to suppress warnings about "statement with no effect" from gcc
+//     in the hash table class assignment operator (where they're assigned)
+
 // integer types
 class WXDLLEXPORT wxIntegerHash
 {
 public:
-    wxIntegerHash() {};
+    wxIntegerHash() { }
     unsigned long operator()( long x ) const { return (unsigned long)x; }
     unsigned long operator()( unsigned long x ) const { return x; }
     unsigned long operator()( int x ) const { return (unsigned long)x; }
     unsigned long operator()( unsigned int x ) const { return x; }
+    unsigned long operator()( short x ) const { return (unsigned long)x; }
+    unsigned long operator()( unsigned short x ) const { return x; }
+
+    wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
 
 class WXDLLEXPORT wxIntegerEqual
 {
 public:
-    wxIntegerEqual() {};
+    wxIntegerEqual() { }
     bool operator()( long a, long b ) const { return a == b; }
-    bool operator()( unsigned long a, unsigned long b ) const
-        { return a == b; }
+    bool operator()( unsigned long a, unsigned long b ) const { return a == b; }
     bool operator()( int a, int b ) const { return a == b; }
-    bool operator()( unsigned int a, unsigned int b ) const
-        { return a == b; }
+    bool operator()( unsigned int a, unsigned int b ) const { return a == b; }
+    bool operator()( short a, short b ) const { return a == b; }
+    bool operator()( unsigned short a, unsigned short b ) const { return a == b; }
+
+    wxIntegerEqual& operator=(const wxIntegerEqual&) { return *this; }
 };
 
 // pointers
 class WXDLLEXPORT wxPointerHash
 {
 public:
-    wxPointerHash() {};
-    unsigned long operator()( const void* k ) const
-        { return (unsigned long)k; }
+    wxPointerHash() { }
+
+    // TODO: this might not work well on architectures with 64 bit pointers but
+    //       32 bit longs, we should use % ULONG_MAX there
+    unsigned long operator()( const void* k ) const { return (unsigned long)k; }
+
+    wxPointerHash& operator=(const wxPointerHash&) { return *this; }
 };
 
 class WXDLLEXPORT wxPointerEqual
 {
 public:
-    wxPointerEqual() {};
-    bool operator()( const void* a, const void* b ) const
-        { return a == b; }
+    wxPointerEqual() { }
+    bool operator()( const void* a, const void* b ) const { return a == b; }
+
+    wxPointerEqual& operator=(const wxPointerEqual&) { return *this; }
 };
 
 // wxString, char*, wxChar*
 class WXDLLEXPORT wxStringHash
 {
 public:
-    wxStringHash() {};
+    wxStringHash() {}
     unsigned long operator()( const wxString& x ) const
         { return wxCharStringHash( x.c_str() ); }
     unsigned long operator()( const wxChar* x ) const
@@ -431,13 +454,15 @@ public:
     unsigned long operator()( const char* x ) const
         { return charStringHash( x ); }
     static unsigned long charStringHash( const char* );
-#endif
+#endif // wxUSE_UNICODE
+
+    wxStringHash& operator=(const wxStringHash&) { return *this; }
 };
 
 class WXDLLEXPORT wxStringEqual
 {
 public:
-    wxStringEqual() {};
+    wxStringEqual() {}
     bool operator()( const wxString& a, const wxString& b ) const
         { return a == b; }
     bool operator()( const wxChar* a, const wxChar* b ) const
@@ -445,7 +470,9 @@ public:
 #if wxUSE_UNICODE
     bool operator()( const char* a, const char* b ) const
         { return strcmp( a, b ) == 0; }
-#endif
+#endif // wxUSE_UNICODE
+
+    wxStringEqual& operator=(const wxStringEqual&) { return *this; }
 };
 
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
@@ -512,8 +539,5 @@ public: \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
                           CLASSNAME, class WXDLLEXPORT );
 
-#endif
+#endif // _WX_HASHMAP_H_
 
-// Local variables:
-// mode: c++
-// End:
