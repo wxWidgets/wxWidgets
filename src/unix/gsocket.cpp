@@ -1412,7 +1412,7 @@ void GSocket::Detected_Write()
 
     m_establishing = false;
 
-    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, (SOCKLEN_T*) &len);
+    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
 
     if (error)
     {
