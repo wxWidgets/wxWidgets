@@ -9808,4 +9808,4 @@ $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a: $(XMLLIB_OBJECTS)
 endif
 endif
 
-.PHONY: all clean samples setup_h
+.PHONY: all build_cfg_file clean samples setup_h

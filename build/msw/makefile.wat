@@ -9635,7 +9635,7 @@ $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib :  $(BASELIB_OBJECTS)
 !endif
 !endif
 
-build_cfg_file :  $(SETUPHDIR)
+build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=5 >>$(BUILD_CFG_FILE)
 	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)

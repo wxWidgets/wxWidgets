@@ -15,6 +15,7 @@
         </set>
         
         <action id="build_cfg_file">
+            <is-phony>1</is-phony>
             <dependency-of>all</dependency-of>
             <depends>libdir_setup</depends>
             <command>
