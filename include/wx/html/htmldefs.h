@@ -93,8 +93,6 @@
     /* size of one scroll step of wxHtmlWindow in pixels */
 #define wxHTML_BUFLEN                  1024
     /* size of temporary buffer used during parsing */
-#define wxHTML_REALLOC_STEP              32
-    /* steps of array reallocation */
 #define wxHTML_PRINT_MAX_PAGES          999
     /* maximum number of pages printable via html printing */
 
