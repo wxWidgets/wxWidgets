@@ -1018,6 +1018,7 @@
     src/mgl/settings.cpp
     src/mgl/window.cpp
     src/mgl/utils.cpp
+    src/generic/timer.cpp
 </set>
 <set var="MGL_LOWLEVEL_HDR">
     include/wx/mgl/app.h
@@ -1041,6 +1042,7 @@
     include/wx/mgl/region.h
     include/wx/mgl/toplevel.h
     include/wx/mgl/window.h
+    include/wx/generic/timer.h
 </set>
 
 
@@ -1492,8 +1494,6 @@
     src/univ/themes/win32.cpp
     src/univ/themes/metal.cpp
 </set>
-<set var="UNIV_THEMES_HDR">
-</set>
 
 <!-- don't ask... wxX11 must have something extra I guess -->
 <set var="UNIV_TEXTCTRL">
@@ -1537,7 +1537,9 @@
     src/univ/statusbr.cpp
     src/univ/toolbar.cpp
     src/univ/theme.cpp
-    src/univ/winuniv.cpp    
+    src/univ/winuniv.cpp
+    src/generic/caret.cpp
+    src/generic/mdig.cpp
     src/generic/imaglist.cpp
     src/generic/colrdlgg.cpp
     src/generic/listctrl.cpp
@@ -1589,6 +1591,8 @@
     include/wx/univ/theme.h
     include/wx/univ/toolbar.h
     include/wx/univ/window.h
+    include/wx/generic/caret.h
+    include/wx/generic/mdig.h
     include/wx/generic/fdrepdlg.h
     include/wx/generic/fontdlgg.h
     include/wx/generic/tabg.h
