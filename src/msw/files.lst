@@ -268,6 +268,7 @@ ALL_SOURCES = \
 		msw/utilsexc.cpp \
 		msw/ole/uuid.cpp \
 		msw/volume.cpp \
+		msw/uxtheme.cpp \
 		msw/wave.cpp \
 		msw/window.cpp \
 		html/helpctrl.cpp \
@@ -956,6 +957,7 @@ GUIOBJS = \
 		treectrl.o \
 		utils.o \
 		utilsexc.o \
+		uxtheme.o \
 		volume.o \
 		wave.o \
 		window.o

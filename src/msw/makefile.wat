@@ -316,6 +316,7 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\utils.obj &
 	$(OUTPUTDIR)\utilsexc.obj &
 	$(OUTPUTDIR)\uuid.obj &
+	$(OUTPUTDIR)\uxtheme.obj &
 	$(OUTPUTDIR)\volume.obj &
 	$(OUTPUTDIR)\wave.obj &
 	$(OUTPUTDIR)\window.obj

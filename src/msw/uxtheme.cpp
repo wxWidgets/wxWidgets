@@ -6,10 +6,29 @@
  * __stdcall calling convention
  */
 
+#ifdef __GNUG__
+#pragma implementation "uxtheme.h"
+#endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/toplevel.h"
+    #include "wx/string.h"
+    #include "wx/log.h"
+#endif //WX_PRECOMP
+
+#if wxUSE_UXTHEME
+
 #include <windows.h>
 
 #include "wx/msw/winundef.h"
-#include "wx/wx.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/app.h"         // for GetComCtl32Version
@@ -43,6 +62,11 @@ wxUxThemeEngine* wxUxThemeEngine::wxInitUxThemeEngine()
 {
     wxUxThemeEngine* pThemeEngine = new wxUxThemeEngine ;
     return pThemeEngine ;
+}
+
+wxUxThemeEngine* wxUxThemeEngine::Get()
+{
+    return g_pThemeEngine;
 }
 
 #ifdef WXU_USE_WXMODULE
@@ -244,4 +268,7 @@ wxUxThemeEngine::~wxUxThemeEngine()
     }
     ResetFunctionPointers() ;
 }
+
+#endif
+    // wxUSE_UXTHEME
 

@@ -206,6 +206,7 @@ MSWOBJS = $(OBJ_PATH)\accel.obj \
 		$(OBJ_PATH)\utils.obj \
 		$(OBJ_PATH)\utilsexc.obj \
 		$(OBJ_PATH)\uuid.obj \
+		$(OBJ_PATH)\uxtheme.obj \
 		$(OBJ_PATH)\volume.obj \
 		$(OBJ_PATH)\wave.obj \
 		$(OBJ_PATH)\window.obj
@@ -914,6 +915,8 @@ $(OBJ_PATH)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 $(OBJ_PATH)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
 $(OBJ_PATH)\uuid.obj: $(OLEDIR)\uuid.$(SRCSUFF)
+
+$(OBJ_PATH)\uxtheme.obj: $(MSWDIR)\uxtheme.$(SRCSUFF)
 
 $(OBJ_PATH)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
 

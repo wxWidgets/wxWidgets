@@ -9,6 +9,10 @@
 #ifndef _WX_UXTHEME_H_
 #define _WX_UXTHEME_H_
 
+#ifdef __GNUG__
+  #pragma interface "uxtheme.cpp"
+#endif
+
 // Use wxModule approach to initialization.
 #define WXU_USE_WXMODULE 1
 
@@ -73,11 +77,11 @@ typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(WXHTHEME, WX
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDEXTENT)(WXHTHEME, WXHDC, int, int, 
     const WXURECT *, WXURECT *) ;
 
-typedef enum WXUTHEMESIZE
+enum WXUTHEMESIZE
 {
     WXU_TS_MIN,             // minimum size
     WXU_TS_TRUE,            // size without stretching
-    WXU_TS_DRAW,            // size that theme mgr will use to draw part
+    WXU_TS_DRAW             // size that theme mgr will use to draw part
 };
 
 typedef struct tagWXUSIZE
@@ -145,7 +149,7 @@ typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEICON)(WXHTHEME, WXHDC, int, int,
     const WXURECT *, WXHIMAGELIST, int) ;
 typedef WXUBOOL (__stdcall *PFNWXUISTHEMEPARTDEFINED)(WXHTHEME, int, int) ;
 typedef WXUBOOL (__stdcall *PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT)(WXHTHEME, int, int) ;
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMECOLOR)(WXHTHEME, int, int, int, WXCOLORREF) ;
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMECOLOR)(WXHTHEME, int, int, int, WXCOLORREF*) ;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEMETRIC)(WXHTHEME, WXHDC, int,
     int, int, int *) ;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMESTRING)(WXHTHEME, int,
@@ -191,7 +195,8 @@ typedef struct _WXUINTLIST
 } WXUINTLIST, *PWXUINTLIST;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEINTLIST)(WXHTHEME, int,
 	int, int, WXUINTLIST*) ;
-typedef enum WXUPROPERTYORIGIN
+
+enum WXUPROPERTYORIGIN
 {
     WXU_PO_STATE,           // property was found in the state section
     WXU_PO_PART,            // property was found in the part section
@@ -199,6 +204,7 @@ typedef enum WXUPROPERTYORIGIN
     WXU_PO_GLOBAL,          // property was found in [globals] section
     WXU_PO_NOTFOUND         // property was not found
 };
+
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPROPERTYORIGIN)(WXHTHEME, int,
     int, int, enum WXUPROPERTYORIGIN *) ;
 typedef WXUHRESULT (__stdcall *PFNWXUSETWINDOWTHEME)(WXHWND, const wchar_t*, const wchar_t *) ;
@@ -241,7 +247,7 @@ typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)(const wchar_
 typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(WXHWND, WXHDC, WXURECT *) ;
 typedef WXUHRESULT (__stdcall *PFNWXUENABLETHEMING)(WXUBOOL) ;
 
-class wxUxThemeEngine
+class WXDLLEXPORT wxUxThemeEngine
 {
 private:
     wxUxThemeEngine() ;
@@ -256,6 +262,7 @@ private:
 
 public:
     static wxUxThemeEngine* wxInitUxThemeEngine() ;
+    static wxUxThemeEngine* Get() ;
 protected:
     void ResetFunctionPointers() ;
 public:
@@ -308,12 +315,12 @@ public:
     PFNWXUENABLETHEMING m_pfnEnableTheming ;
 };
 
-extern wxUxThemeEngine* g_pThemeEngine ;
+WXDLLEXPORT_DATA(extern wxUxThemeEngine*) g_pThemeEngine ;
 
-BOOL wxCanUseInitThemeEngine() ;
+WXDLLEXPORT BOOL wxCanUseInitThemeEngine() ;
 
 #if !defined(WXU_USE_WXMODULE)
-BOOL wxUxInitThemeEngine() ;
+WXDLLEXPORT BOOL wxUxInitThemeEngine() ;
 #endif
 
 #endif

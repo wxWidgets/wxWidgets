@@ -96,6 +96,9 @@ public:
     // set the padding between tabs (in pixels)
   void SetPadding(const wxSize& padding);
 
+    // Windows only: attempts to get colour for UX theme page background
+  wxColour GetThemeBackgroundColour();
+
   // operations
   // ----------
     // remove all pages
@@ -112,6 +115,8 @@ public:
     // style.
   void SetTabSize(const wxSize& sz);
 
+    // Windows only: attempts to apply the UX theme page background to this page
+  void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
 
   // Hit test
   int HitTest(const wxPoint& pt, long& flags);

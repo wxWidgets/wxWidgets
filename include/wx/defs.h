@@ -1000,6 +1000,11 @@ enum wxBorder
 // parent is destroyed before the child
 #define wxWS_EX_TRANSIENT               0x00000004
 
+// don't paint the window background, we'll assume it will
+// be done by a theming engine. This is not yet used but could
+// possibly be made to work in the future, at least on Windows
+#define wxWS_EX_THEMED_BACKGROUND       0x00000008
+
 // Use this style to add a context-sensitive help to the window (currently for
 // Win32 only and it doesn't work if wxMINIMIZE_BOX or wxMAXIMIZE_BOX are used)
 #define wxFRAME_EX_CONTEXTHELP  0x00000004

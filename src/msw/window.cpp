@@ -3738,6 +3738,9 @@ extern wxCOLORMAP *wxGetStdColourMap()
 
 bool wxWindowMSW::HandlePaint()
 {
+//    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
+//        return FALSE;
+    
 #ifdef __WIN32__
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
@@ -3790,6 +3793,29 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     if ( ::IsIconic(GetHwnd()) )
         return TRUE;
 
+#if 0
+    if (GetParent() && GetParent()->GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
+    {
+        return FALSE;
+    }
+
+    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
+    {
+        if (wxUxThemeEngine::Get())
+        {
+            WXHTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData(GetHWND(), L"TAB");
+            if (hTheme)
+            {
+                WXURECT rect;
+                ::GetClientRect((HWND) GetHWND(), (RECT*) & rect);
+                wxUxThemeEngine::Get()->m_pfnDrawThemeBackground(hTheme, hdc, 10 /* TABP_BODY */, 0, &rect, &rect);
+                wxUxThemeEngine::Get()->m_pfnCloseThemeData(hTheme);
+                return TRUE;
+            }
+        }
+    }
+#endif
+    
     wxDCTemp dc(hdc);
 
     dc.SetHDC(hdc);
