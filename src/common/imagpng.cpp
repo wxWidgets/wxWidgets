@@ -76,7 +76,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     // VZ: as this function uses setjmp() the only fool proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
     
-    unsigned char **lines = (unsigned char **) NULL;
+    unsigned char **lines;
     unsigned int i;
     png_infop info_ptr = (png_infop) NULL;
     
@@ -87,17 +87,17 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
         (png_error_ptr) NULL,
         (png_error_ptr) NULL );
     if (!png_ptr)
-        goto error;
+        goto error_nolines;
     
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
-        goto error;
+        goto error_nolines;
     
     if (setjmp(png_ptr->jmpbuf))
-        goto error;
+        goto error_nolines;
     
     if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-        goto error;
+        goto error_nolines;
     
     png_set_read_fn( png_ptr, &stream, _PNG_stream_reader);
     
@@ -119,11 +119,11 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     image->Create( width, height );
     
     if (!image->Ok())
-        goto error;
+        goto error_nolines;
     
     lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
     if (lines == NULL)
-        goto error;
+        goto error_nolines;
     
     for (i = 0; i < height; i++)
     {
@@ -211,8 +211,10 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
     
     return TRUE;
-    
-error:
+
+ error_nolines:
+    lines = NULL; // called from before it was set
+ error:
     wxLogError(_("Couldn't load a PNG image - probably file is corrupted."));
     
     if ( image->Ok() )
