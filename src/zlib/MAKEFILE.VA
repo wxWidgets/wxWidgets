@@ -1,0 +1,102 @@
+#
+# File:      makefile.vc
+# Author:    David Webster
+# Created:   1999
+# Updated:
+# Copyright: c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds os2png.lib library for OS/2 3.0/4.0
+
+# Suffixes
+OBJSUFF=obj
+SRCSUFF=c
+
+OS2FLAGS=/c /W3 /DOS232 /D__VISAGECPP__ /Ss /Q /N100
+OS2LINKFLAGS=/BASE:0x00010000 /PMTYPE:PM /NOE /NOD /ALIGN:16
+OS2LIBFLAGS=/NOL /NOE
+OS2LIBS=CPPOM30.lib CPPOOC3.LIB OS2386.LIB
+
+# Change WXDIR or WXWIN to wherever wxWindows is found
+WXDIR = j:\dev\wx2\wxWindows
+
+OS2ZLIBDIR=$(WXDIR)\src\zlib
+OS2ZLIBINC=$(WINPNGDIR)
+OS2ZLIBLIB=$(WXDIR)\lib\os2zlib.lib
+
+INC=
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!if "$(NOPCH)" == "1"
+PCH=
+PRECOMP=
+MAKEPRECOMP=
+!else
+PCH=$(WXLIBNAME).pch
+PRECOMP=/Si$(PCH)
+MAKEPRECOMP=/Fi$(PCH)
+!endif
+
+!if "$(FINAL)" == "0"
+D=Debug
+OPT =
+DEBUG_FLAGS= /Ti /D__WXDEBUG__ #/Fb
+LINK_DEBUG_FLAGS=/DEBUG
+CRTFLAG=/Gm /Gd
+!else
+# /O1 - smallest code
+# /O2 - fastest code
+D=Release
+OPT = /O+ /Oc /G5
+DEBUG_FLAGS=
+LINK_DEBUG_FLAGS=/RELEASE
+CRTFLAG=/Gm /Gd
+!endif
+
+CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+
+{..\zlib}.c{..\zlib\$D}.obj:
+    @echo $<
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+OBJECTS = \
+  ..\zlib\$D\adler32.obj \
+  ..\zlib\$D\compress.obj \
+  ..\zlib\$D\crc32.obj \
+  ..\zlib\$D\deflate.obj \
+  ..\zlib\$D\gzio.obj \
+  ..\zlib\$D\infblock.obj \
+  ..\zlib\$D\infcodes.obj \
+  ..\zlib\$D\inflate.obj \
+  ..\zlib\$D\inftrees.obj \
+  ..\zlib\$D\infutil.obj \
+  ..\zlib\$D\inffast.obj \
+  ..\zlib\$D\trees.obj \
+  ..\zlib\$D\uncompr.obj \
+  ..\zlib\$D\zutil.obj
+
+all: $(OS2ZLIBDIR)\$D  $(OS2ZLIBLIB)
+
+$(OS2ZLIBDIR)\$D:
+       md $(OS2ZLIBDIR)\$D
+
+$(WXDIR)\lib\os2zlib.lib: $(OBJECTS)
+ touch $(WXDIR)\lib\os2zlib.lib
+ del $(WXDIR)\lib\os2zlib.lib
+ ilib $(OS2LIBFLAGS) $@ @<<
+    $**;
+<<
+
+clean:
+        del *.obj
+        del *.exe
+        del *.lib
+
+cleanall:     clean
+
