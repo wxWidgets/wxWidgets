@@ -376,13 +376,15 @@ public:
     void SetHelp(const wxString& strHelp);
     void Enable(bool bDoEnable = TRUE);
     void Check(bool bDoCheck = TRUE);
-    bool IsCheckable();
 };
 
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/08/17 18:29:40  RD
+// Removed an extra method definition
+//
 // Revision 1.4  1998/08/16 04:31:11  RD
 // More wxGTK work.
 //
