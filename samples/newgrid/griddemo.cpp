@@ -231,6 +231,16 @@ GridFrame::GridFrame()
     grid->SetColSize(4, 120);
     grid->SetColMinimalWidth(4, 120);
 
+    grid->SetColFormatFloat(5);
+    grid->SetCellValue(0, 5, "3.1415");
+    grid->SetCellValue(1, 5, "1415");
+    grid->SetCellValue(2, 5, "12345.67890");
+
+    grid->SetColFormatFloat(6, 6, 2);
+    grid->SetCellValue(0, 6, "3.1415");
+    grid->SetCellValue(1, 6, "1415");
+    grid->SetCellValue(2, 6, "12345.67890");
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
@@ -1096,5 +1106,8 @@ BugsGridFrame::BugsGridFrame()
     grid->SetMargins(0, 0);
 
     grid->Fit();
-    Fit();
+    wxSize size = grid->GetSize();
+    size.x += 10;
+    size.y += 10;
+    SetClientSize(size);
 }

@@ -127,6 +127,10 @@ public:
                                wxDC& dc,
                                int row, int col) = 0;
 
+    // interpret renderer parameters: arbitrary string whose interpretatin is
+    // left to the derived classes
+    virtual void SetParameters(const wxString& params);
+
 protected:
     // virtual dtor for any base class - private because only DecRef() can
     // delete us
@@ -195,13 +199,13 @@ protected:
 class WXDLLEXPORT wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellFloatRenderer(int width, int precision);
+    wxGridCellFloatRenderer(int width = -1, int precision = -1);
 
     // get/change formatting parameters
     int GetWidth() const { return m_width; }
-    void SetWidth(int width) { m_width = width; }
+    void SetWidth(int width) { m_width = width; m_format.clear(); }
     int GetPrecision() const { return m_precision; }
-    void SetPrecision(int precision) { m_precision = precision; }
+    void SetPrecision(int precision) { m_precision = precision; m_format.clear(); }
 
     // draw the string right aligned with given width/precision
     virtual void Draw(wxGrid& grid,
@@ -215,13 +219,17 @@ public:
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col);
+
+    // parameters string format is "width[,precision]"
+    virtual void SetParameters(const wxString& params);
+
 protected:
     wxString GetString(wxGrid& grid, int row, int col);
 
 private:
     // formatting parameters
     int m_width,
-    m_precision;
+        m_precision;
 
     wxString m_format;
 };
@@ -1089,10 +1097,17 @@ public:
     void     DisableDragGridSize() { EnableDragGridSize(FALSE); }
     bool     CanDragGridSize() { return m_canDragGridSize; }
 
-
     // this sets the specified attribute for all cells in this row/col
     void     SetRowAttr(int row, wxGridCellAttr *attr);
     void     SetColAttr(int col, wxGridCellAttr *attr);
+
+    // shortcuts for setting the column parameters
+
+    // set the format for the data in the column: default is string
+    void     SetColFormatBool(int col);
+    void     SetColFormatNumber(int col);
+    void     SetColFormatFloat(int col, int width = -1, int precision = -1);
+    void     SetColFormatCustom(int col, const wxString& typeName);
 
     void     EnableGridLines( bool enable = TRUE );
     bool     GridLinesEnabled() { return m_gridLinesEnabled; }
