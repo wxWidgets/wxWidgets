@@ -2866,7 +2866,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     {
         // Ask the tree control what tooltip (if any) should be shown
         wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, GetId());
-        hevent.m_item = (long) hoverItem;
+        hevent.m_item = hoverItem;
         hevent.SetEventObject(this);
 
         if ( GetEventHandler()->ProcessEvent(hevent) && hevent.IsAllowed() )

@@ -2480,7 +2480,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 NMTVGETINFOTIP *info = (NMTVGETINFOTIP*)lParam;
 
                 // Which item are we trying to get a tooltip for?
-                event.m_item = (WXHTREEITEM) info->hItem;
+                event.m_item = info->hItem;
 
                 break;
             }
