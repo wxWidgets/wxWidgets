@@ -156,6 +156,10 @@ int _System soclose(int);
   signal(SIGPIPE, old_handler);             \
 }
 
+/* If a SIGPIPE is issued by a socket call on a remotely closed socket,
+   the program will "crash" unless it explicitly handles the SIGPIPE.
+   By using MSG_NOSIGNAL, the SIGPIPE is suppressed. Later, we will
+   use SO_NOSIGPIPE (if available), the BSD equivalent. */
 #ifdef MSG_NOSIGNAL
 #  define GSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
 #else /* MSG_NOSIGNAL not available (FreeBSD including OS X) */
@@ -539,11 +543,6 @@ GSocket *GSocket::WaitConnection()
 
   assert(this);
 
-#ifndef __DARWIN__
-  /* Reenable CONNECTION events */
-  Enable(GSOCK_CONNECTION);
-#endif
-
   /* If the socket has already been created, we exit immediately */
   if (m_fd == INVALID_SOCKET || !m_server)
   {
@@ -570,10 +569,8 @@ GSocket *GSocket::WaitConnection()
 
   connection->m_fd = accept(m_fd, &from, (SOCKLEN_T *) &fromlen);
 
-#ifdef __DARWIN__
   /* Reenable CONNECTION events */
   Enable(GSOCK_CONNECTION);
-#endif
 
   if (connection->m_fd == INVALID_SOCKET)
   {
@@ -700,6 +697,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
+
+  /* We only call Enable_Events if we know e aren't shutting down the socket */
 
   if (m_non_blocking)
   {
@@ -1303,7 +1302,7 @@ int GSocket::Recv_Stream(char *buffer, int size)
   do 
   {
     ret = recv(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
-  } while (ret == -1 && errno == EINTR);
+  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
   return ret;
 }
 
@@ -1319,7 +1318,7 @@ int GSocket::Recv_Dgram(char *buffer, int size)
   do 
   {
     ret = recvfrom(m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
-  } while (ret == -1 && errno == EINTR);
+  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
   if (ret == -1)
     return -1;
@@ -1356,7 +1355,7 @@ int GSocket::Send_Stream(const char *buffer, int size)
   do 
   {
     ret = send(m_fd, (char *)buffer, size, GSOCKET_MSG_NOSIGNAL);
-  } while (ret == -1 && errno == EINTR);
+  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 #ifndef __VISAGECPP__
   UNMASK_SIGNAL();
 #endif
@@ -1389,7 +1388,7 @@ int GSocket::Send_Dgram(const char *buffer, int size)
   do 
   {
     ret = sendto(m_fd, (char *)buffer, size, 0, addr, len);
-  } while (ret == -1 && errno == EINTR);
+  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 #ifndef __VISAGECPP__
   UNMASK_SIGNAL();
 #endif
@@ -1436,6 +1435,7 @@ void GSocket::Detected_Read()
     }
     else
     {
+      /* Do not throw a lost event in cases where the socket isn't really lost */
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == EINTR)) 
       {
         CALL_CALLBACK(this, GSOCK_INPUT);
