@@ -61,7 +61,6 @@ public:
     inline WX_NSWindow GetNSWindow() { return m_cocoaNSWindow; }
     virtual void Cocoa_close(void);
     virtual bool Cocoa_windowShouldClose(void);
-    virtual void Cocoa_wxMenuItemAction(wxMenuItem& item);
     virtual void CocoaNotification_DidBecomeKey(void);
     virtual void CocoaNotification_DidResignKey(void);
 protected:

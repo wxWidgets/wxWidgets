@@ -26,7 +26,6 @@ public:
     void DisassociateNSWindow(WX_NSWindow cocoaNSWindow);
     virtual void Cocoa_close(void) = 0;
     virtual bool Cocoa_windowShouldClose(void) = 0;
-    virtual void Cocoa_wxMenuItemAction(wxMenuItem& item) = 0;
     virtual void CocoaNotification_DidBecomeKey(void) { }
     virtual void CocoaNotification_DidResignKey(void) { }
 protected:

@@ -13,7 +13,6 @@
 #define _WX_COCOA_FRAME_H_
 
 class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxMenuItem;
 class WXDLLEXPORT wxStatusBar;
 
 class WXDLLEXPORT wxFrame: public wxFrameBase 
@@ -52,7 +51,6 @@ protected:
 // Cocoa specifics
 // ------------------------------------------------------------------------
 protected:
-    virtual void Cocoa_wxMenuItemAction(wxMenuItem& item);
     virtual void CocoaSetWxWindowSize(int width, int height);
 
     // Helper function to position status/tool bars

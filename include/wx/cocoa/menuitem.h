@@ -52,6 +52,7 @@ public:
 protected:
     WX_NSMenuItem m_cocoaNSMenuItem;
     static wxMenuItemCocoaHash sm_cocoaHash;
+    static struct objc_object *sm_cocoaTarget;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

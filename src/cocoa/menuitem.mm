@@ -23,6 +23,7 @@
     #include "wx/menuitem.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/cocoa/ObjcPose.h"
@@ -35,13 +36,39 @@
 #if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-wxMenuItemCocoaHash wxMenuItemCocoa::sm_cocoaHash;
-
-// ----------------------------------------------------------------------------
 // functions prototypes
 // ----------------------------------------------------------------------------
+
+// ============================================================================
+// @class wxNSMenuItemTarget
+// ============================================================================
+@interface wxNSMenuItemTarget : NSObject
+{
+}
+
+- (void)wxMenuItemAction: (id)sender;
+@end //interface wxNSMenuItemTarget
+
+@implementation wxNSMenuItemTarget : NSObject
+
+- (void)wxMenuItemAction: (id)sender
+{
+    wxLogDebug("wxMenuItemAction");
+    wxMenuItem *item = wxMenuItem::GetFromCocoa(sender);
+    wxCHECK_RET(item,"wxMenuItemAction received but no wxMenuItem exists!");
+
+    wxMenu *menu = item->GetMenu();
+    wxCHECK_RET(menu,"wxMenuItemAction received but wxMenuItem is not in a wxMenu");
+    wxMenuBar *menubar = menu->GetMenuBar();
+    if(menubar)
+    {
+        wxFrame *frame = menubar->GetFrame();
+        wxCHECK_RET(frame, "wxMenuBar MUST be attached to a wxFrame!");
+        frame->Command(item->GetId());
+    }
+}
+
+@end //implementation wxNSMenuItemTarget
 
 // ============================================================================
 // @class wxPoserNSMenuItem
@@ -61,6 +88,9 @@ WX_IMPLEMENT_POSER(wxPoserNSMenuItem);
 // wxMenuItemCocoa implementation
 // ============================================================================
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
+wxMenuItemCocoaHash wxMenuItemCocoa::sm_cocoaHash;
+
+struct objc_object *wxMenuItemCocoa::sm_cocoaTarget = [[wxNSMenuItemTarget alloc] init];
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase
@@ -97,6 +127,7 @@ wxMenuItemCocoa::wxMenuItemCocoa(wxMenu *pParentMenu,
     NSString *menuTitle = [[NSString alloc] initWithCString: wxStripMenuCodes(strName).c_str()];
     m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(wxMenuItemAction:) keyEquivalent:@""];
     sm_cocoaHash.insert(wxMenuItemCocoaHash::value_type(m_cocoaNSMenuItem,this));
+    [m_cocoaNSMenuItem setTarget:sm_cocoaTarget];
     if(pSubMenu)
     {
         wxASSERT(pSubMenu->GetNSMenu());

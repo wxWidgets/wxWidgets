@@ -128,10 +128,6 @@ void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newVie
         [m_cocoaNSWindow setContentView:newView];
 }
 
-void wxTopLevelWindowCocoa::Cocoa_wxMenuItemAction(wxMenuItem& item)
-{
-}
-
 void wxTopLevelWindowCocoa::CocoaNotification_DidBecomeKey(void)
 {
     wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaNotification_DidBecomeKey",this);

@@ -98,7 +98,6 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
 - (void)close;
 - (BOOL)windowShouldClose: (id)sender;
 
-- (BOOL)wxMenuItemAction: (id)sender;
 @end // wxPoserNSwindow
 
 WX_IMPLEMENT_POSER(wxPoserNSWindow);
@@ -125,17 +124,5 @@ WX_IMPLEMENT_POSER(wxPoserNSWindow);
     return YES;
 }
 
-- (BOOL)wxMenuItemAction: (id)sender
-{
-    wxLogDebug("wxMenuItemAction");
-    wxMenuItem *item = wxMenuItem::GetFromCocoa(sender);
-    if(!item)
-        return NO;
-
-    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(self);
-    wxASSERT(tlw);
-    tlw->Cocoa_wxMenuItemAction(*item);
-    return YES;
-}
 @end // implementation wxPoserNSWindow
 

@@ -167,10 +167,12 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
+    wxMenuBarBase::Attach(frame);
 }
 
 void wxMenuBar::Detach()
 {
+    wxMenuBarBase::Detach();
 }
 
 wxSize wxMenuBar::DoGetBestClientSize() const

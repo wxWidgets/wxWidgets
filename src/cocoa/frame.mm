@@ -19,8 +19,6 @@
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include "wx/menuitem.h"
-
 #include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSWindow.h>
@@ -55,11 +53,6 @@ bool wxFrame::Create(wxWindow *parent,
 wxFrame::~wxFrame()
 {
     [m_frameNSView release];
-}
-
-void wxFrame::Cocoa_wxMenuItemAction(wxMenuItem& item)
-{
-    Command(item.GetId());
 }
 
 void wxFrame::AttachMenuBar(wxMenuBar *mbar)
