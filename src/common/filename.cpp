@@ -107,9 +107,16 @@
 #endif
 
 #ifdef __MWERKS__
+#ifdef __MACH__
+#include <sys/types.h>
+#include <utime.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#else
 #include <stat.h>
 #include <unistd.h>
 #include <unix.h>
+#endif
 #endif
 
 #ifdef __WATCOMC__

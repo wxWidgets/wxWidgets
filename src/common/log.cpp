@@ -65,6 +65,11 @@
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
+#if defined(__MWERKS__) && wxUSE_UNICODE
+    #include <wtime.h>
+#endif
+
+
 // ----------------------------------------------------------------------------
 // non member functions
 // ----------------------------------------------------------------------------

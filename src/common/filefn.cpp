@@ -60,10 +60,17 @@
     #include <sys/types.h>
     #include <sys/stat.h>
 #else
+#ifdef __MACH__
+#include <sys/types.h>
+#include <utime.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#else
     #include <stat.h>
     #include <unistd.h>
     #include <unix.h>
     #include <fcntl.h>
+#endif
 #endif
 
 #ifdef __UNIX__

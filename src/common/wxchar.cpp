@@ -47,6 +47,10 @@
   #include <winnt.h>
 #endif
 
+#if defined(__MWERKS__) && __MSL__ >= 0x6000
+using namespace std ;
+#endif
+
 #if wxUSE_WCHAR_T
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
@@ -848,11 +852,7 @@ int wxFscanf( FILE *stream, const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
-#ifdef __WXMAC__ 
-    int ret = ::vfwscanf(stream, wxFormatConverter(format), argptr);
-#else
     int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
-#endif
 
     va_end(argptr);
 

@@ -29,13 +29,15 @@ int yyback(int *, int);
 #if __MSL__ < 0x6000
 int read( int , char * , int ) ;
 #else
+#ifndef __MACH__
 int _read( int , void * , size_t ) ;
 #define read _read
+#endif
 #endif
 #ifdef __WXMSW__
 //int fileno( FILE* ) ; This is defined in watcom
 #else
-#if __MSL__ < 0x6000
+#if __MSL__ < 0x6000L
 int fileno( void* ) ;
 #endif
 #endif

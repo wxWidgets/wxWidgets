@@ -91,7 +91,10 @@
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
 
-#if !defined(__MWERKS__) || defined(__WXMSW__)
+#ifndef __MWERKS__
+    #include  <sys/types.h>   // needed for stat
+    #include  <sys/stat.h>    // stat
+#elif defined(__MWERKS__) && ( defined(__WXMSW__) || defined(__MACH__) )
     #include  <sys/types.h>   // needed for stat
     #include  <sys/stat.h>    // stat
 #endif

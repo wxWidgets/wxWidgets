@@ -97,6 +97,10 @@
     #undef HAVE_STRPTIME
 #endif // broken strptime()
 
+#if defined(__MWERKS__) && wxUSE_UNICODE
+    #include <wtime.h>
+#endif
+
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
