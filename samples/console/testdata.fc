@@ -1,5 +1,0 @@
-# this is the test data file for wxFileConfig tests
-value1=one
-# a comment here
-value2=two
-value\ with\ spaces\ inside\ it=nothing special
