@@ -670,12 +670,12 @@ void wxWindow::GetClientSize(int *x, int *y) const
 {
     HWND hWnd = (HWND) GetHWND();
     RECT rect;
-    GetClientRect(hWnd, &rect);
+    ::GetClientRect(hWnd, &rect);
     *x = rect.right;
     *y = rect.bottom;
 }
 
-void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
@@ -706,14 +706,14 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
         MoveWindow(hWnd, actualX, actualY, actualWidth, actualHeight, (BOOL)TRUE);
 }
 
-void wxWindow::SetClientSize(int width, int height)
+void wxWindow::DoSetClientSize(int width, int height)
 {
     wxWindow *parent = GetParent();
     HWND hWnd = (HWND) GetHWND();
     HWND hParentWnd = (HWND) (HWND) parent->GetHWND();
 
     RECT rect;
-    GetClientRect(hWnd, &rect);
+    ::GetClientRect(hWnd, &rect);
 
     RECT rect2;
     GetWindowRect(hWnd, &rect2);

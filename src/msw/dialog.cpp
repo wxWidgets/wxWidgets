@@ -252,7 +252,7 @@ void wxDialog::SetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
   RECT rect;
-  GetClientRect(hWnd, &rect);
+  ::GetClientRect(hWnd, &rect);
 
   RECT rect2;
   GetWindowRect(hWnd, &rect2);

@@ -167,7 +167,7 @@ wxMDIParentFrame::~wxMDIParentFrame(void)
 void wxMDIParentFrame::GetClientSize(int *x, int *y) const
 {
   RECT rect;
-  GetClientRect((HWND) GetHWND(), &rect);
+  ::GetClientRect((HWND) GetHWND(), &rect);
 
   int cwidth = rect.right;
   int cheight = rect.bottom;
@@ -731,7 +731,7 @@ void wxMDIChildFrame::SetClientSize(int width, int height)
   HWND hWnd = (HWND) GetHWND();
 
   RECT rect;
-  GetClientRect(hWnd, &rect);
+  ::GetClientRect(hWnd, &rect);
 
   RECT rect2;
   GetWindowRect(hWnd, &rect2);

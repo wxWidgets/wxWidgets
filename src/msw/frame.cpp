@@ -167,7 +167,7 @@ WXHMENU wxFrame::GetWinMenu() const
 void wxFrame::GetClientSize(int *x, int *y) const
 {
   RECT rect;
-  GetClientRect((HWND) GetHWND(), &rect);
+  ::GetClientRect((HWND) GetHWND(), &rect);
 
   if ( GetStatusBar() )
   {
@@ -191,7 +191,7 @@ void wxFrame::DoSetClientSize(int width, int height)
   HWND hWnd = (HWND) GetHWND();
 
   RECT rect;
-  GetClientRect(hWnd, &rect);
+  ::GetClientRect(hWnd, &rect);
 
   RECT rect2;
   GetWindowRect(hWnd, &rect2);
@@ -657,7 +657,7 @@ bool wxFrame::MSWOnPaint()
       if (the_icon)
       {
         RECT rect;
-        GetClientRect((HWND) GetHWND(), &rect);
+        ::GetClientRect((HWND) GetHWND(), &rect);
         int icon_width = 32;
         int icon_height = 32;
         int icon_x = (int)((rect.right - icon_width)/2);
