@@ -57,6 +57,11 @@
     #define wxUSE_LONGLONG_NATIVE 0
     class WXDLLEXPORT wxLongLongWx;
     typedef wxLongLongWx wxLongLong;
+#else
+    // if nothing is defined, use native implementation by default, of course
+    #ifndef wxUSE_LONGLONG_NATIVE
+        #define wxUSE_LONGLONG_NATIVE 1
+    #endif
 #endif
 
 #ifndef wxUSE_LONGLONG_WX
@@ -112,10 +117,13 @@ public:
     unsigned long GetLo() const
         { return (unsigned long) (m_ll & 0x00000000FFFFFFFFl); }
 
+        // get absolute value
+    wxLongLongNative& Abs() { if ( m_ll < 0 ) m_ll = -m_ll; return *this; }
+
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
 
-    operator wxLongLong_t() const { return m_ll; }
+    //operator wxLongLong_t() const { return m_ll; }
 
     // operations
         // addition
@@ -189,7 +197,7 @@ public:
     wxLongLongNative& operator^=(const wxLongLongNative& ll)
         { m_ll ^= ll.m_ll; return *this; }
 
-    // multiplication/division TODO
+    // multiplication/division
     wxLongLongNative operator*(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll * ll.m_ll); }
     wxLongLongNative& operator*=(const wxLongLongNative& ll)
@@ -197,25 +205,41 @@ public:
 
     wxLongLongNative operator/(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll / ll.m_ll); }
+    wxLongLongNative operator/(long l) const
+        { return wxLongLongNative(m_ll / l); }
     wxLongLongNative& operator/=(const wxLongLongNative& ll)
         { m_ll /= ll.m_ll; return *this; }
 
     wxLongLongNative operator%(const wxLongLongNative& ll) const
         { return wxLongLongNative(m_ll % ll.m_ll); }
+    wxLongLongNative operator%(long l) const
+        { return wxLongLongNative(m_ll % l); }
 
     // comparison
     bool operator==(const wxLongLongNative& ll) const
         { return m_ll == ll.m_ll; }
+    bool operator==(long l) const
+        { return m_ll == l; }
     bool operator!=(const wxLongLongNative& ll) const
         { return m_ll != ll.m_ll; }
+    bool operator!=(long l) const
+        { return m_ll != l; }
     bool operator<(const wxLongLongNative& ll) const
         { return m_ll < ll.m_ll; }
+    bool operator<(long l) const
+        { return m_ll < l; }
     bool operator>(const wxLongLongNative& ll) const
         { return m_ll > ll.m_ll; }
+    bool operator>(long l) const
+        { return m_ll > l; }
     bool operator<=(const wxLongLongNative& ll) const
         { return m_ll <= ll.m_ll; }
+    bool operator<=(long l) const
+        { return m_ll <= l; }
     bool operator>=(const wxLongLongNative& ll) const
         { return m_ll >= ll.m_ll; }
+    bool operator>=(long l) const
+        { return m_ll >= l; }
 
     // miscellaneous
         // conversion to byte array: returns a pointer to static buffer!

@@ -31,11 +31,83 @@
 
 //#define TEST_ARRAYS
 //#define TEST_LOG
-#define TEST_THREADS
+//#define TEST_THREADS
+//#define TEST_TIME
+#define TEST_LONGLONG
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// long long
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_LONGLONG
+
+#include <wx/longlong.h>
+#include <wx/timer.h>
+
+static void TestSpeed()
+{
+    static const long max = 100000000;
+    long n;
+    
+    {
+        wxStopWatch sw;
+
+        long l = 0;
+        for ( n = 0; n < max; n++ )
+        {
+            l += n;
+        }
+
+        printf("Summing longs took %ld milliseconds.\n", sw.Time());
+    }
+
+    {
+        wxStopWatch sw;
+
+        __int64 l = 0;
+        for ( n = 0; n < max; n++ )
+        {
+            l += n;
+        }
+
+        printf("Summing __int64s took %ld milliseconds.\n", sw.Time());
+    }
+
+    {
+        wxStopWatch sw;
+
+        wxLongLong l;
+        for ( n = 0; n < max; n++ )
+        {
+            l += n;
+        }
+
+        printf("Summing wxLongLongs took %ld milliseconds.\n", sw.Time());
+    }
+}
+
+static void TestDivision()
+{
+    wxLongLong ll = 0x38417388; // some number < LONG_MAX
+
+    wxASSERT( (ll / 1000l)*1000l == ll );
+}
+
+#endif // TEST_LONGLONG
+
+// ----------------------------------------------------------------------------
+// date time
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_TIME
+
+#include <wx/datetime.h>
+
+#endif // TEST_TIME
 
 // ----------------------------------------------------------------------------
 // threads
@@ -240,6 +312,21 @@ int main(int argc, char **argv)
     printf("\nThread terminated with exit code %lu.\n",
            (unsigned long)thread.Wait());
 #endif // TEST_THREADS
+
+#ifdef TEST_LONGLONG
+    if ( 0 )
+        TestSpeed();
+    if ( 1 )
+        TestDivision();
+#endif // TEST_LONGLONG
+
+#ifdef TEST_TIME
+    wxDateTime time = wxDateTime::Now();
+    printf("Current time: '%s', current year %u is %sa leap one",
+           time.Format().c_str(),
+           time.GetYear(),
+           wxDateTime::IsLeapYear(time.GetYear()) ? "" : "not");
+#endif // TEST_TIME
 
     wxUninitialize();
 

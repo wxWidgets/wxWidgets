@@ -136,6 +136,12 @@ long wxGetCurrentTime()
 // return GMT time in millisecond
 long wxGetCurrentMTime()
 {
+#if defined(__WIN32__)
+    SYSTEMTIME st;
+    ::GetLocalTime(&st);
+
+    return 1000*(60*(60*st.wHour+st.wMinute)+st.wSecond)+st.wMilliseconds;
+#else
 #if defined(HAVE_LOCALTIME)
     time_t t0 = time(&t0);
     if ( t0 != (time_t)-1 )
@@ -166,6 +172,7 @@ long wxGetCurrentMTime()
     wxLogSysError(_("Failed to get the system time"));
 
     return -1;
+#endif // __WIN32__/!__WIN32__
 }
 
 bool wxGetLocalTime(long *timeZone, int *dstObserved)
