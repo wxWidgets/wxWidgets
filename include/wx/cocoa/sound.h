@@ -24,21 +24,21 @@
 class WXDLLEXPORT wxSound : public wxSoundBase
 {
 public:
-  wxSound();
-  wxSound(const wxString& fileName, bool isResource = FALSE);
-  wxSound(int size, const wxByte* data);
-  ~wxSound();
+    wxSound();
+    wxSound(const wxString& fileName, bool isResource = false);
+    wxSound(int size, const wxByte* data);
+    ~wxSound();
 
 public:
-  bool  Create(const wxString& fileName, bool isResource = FALSE);
-  bool  IsOk() const { return m_hSnd != NULL; }
-  static void  Stop();
-  static bool IsPlaying();
+    bool Create(const wxString& fileName, bool isResource = false);
+    bool IsOk() const { return m_hSnd != NULL; }
+    static void Stop();
+    static bool IsPlaying();
 
-  inline WX_NSSound GetNSSound()
-  {		return m_hSnd;	}
+    inline WX_NSSound GetNSSound()
+    {   return m_hSnd; }
 protected:  
-  bool  DoPlay(unsigned flags) const;
+    bool DoPlay(unsigned flags) const;
 
 private:
     WX_NSSound m_hSnd; //NSSound handle
