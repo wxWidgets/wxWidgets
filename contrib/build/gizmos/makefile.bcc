@@ -37,8 +37,7 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_ledctrl.obj \
 	$(OBJS)\gizmosdll_multicell.obj \
 	$(OBJS)\gizmosdll_splittree.obj \
-	$(OBJS)\gizmosdll_statpict.obj \
-	$(OBJS)\gizmosdll_treelistctrl.obj
+	$(OBJS)\gizmosdll_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
@@ -51,8 +50,7 @@ GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_ledctrl.obj \
 	$(OBJS)\gizmoslib_multicell.obj \
 	$(OBJS)\gizmoslib_splittree.obj \
-	$(OBJS)\gizmoslib_statpict.obj \
-	$(OBJS)\gizmoslib_treelistctrl.obj
+	$(OBJS)\gizmoslib_statpict.obj
 
 ### Conditionally set variables: ###
 
@@ -221,9 +219,6 @@ $(OBJS)\gizmosdll_splittree.obj: ../../src/gizmos\splittree.cpp
 $(OBJS)\gizmosdll_statpict.obj: ../../src/gizmos\statpict.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
 
-$(OBJS)\gizmosdll_treelistctrl.obj: ../../src/gizmos\treelistctrl.cpp
-	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
-
 $(OBJS)\gizmoslib_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) -H $**
 
@@ -243,7 +238,4 @@ $(OBJS)\gizmoslib_splittree.obj: ../../src/gizmos\splittree.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) $**
 
 $(OBJS)\gizmoslib_statpict.obj: ../../src/gizmos\statpict.cpp
-	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) $**
-
-$(OBJS)\gizmoslib_treelistctrl.obj: ../../src/gizmos\treelistctrl.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) $**

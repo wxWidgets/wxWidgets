@@ -480,10 +480,6 @@ SOURCE=../../src/gizmos\splittree.cpp
 
 SOURCE=../../src/gizmos\statpict.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=../../src/gizmos\treelistctrl.cpp
-# End Source File
 # End Group
 # End Target
 # End Project
