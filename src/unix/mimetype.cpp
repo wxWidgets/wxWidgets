@@ -421,6 +421,7 @@ void wxGNOMEIconHandler::Init()
 {
     wxArrayString dirs;
     dirs.Add(_T("/usr/share"));
+    dirs.Add(_T("/usr/local/share"));
 
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
@@ -450,7 +451,14 @@ bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
     wxString iconname = ms_icons[(size_t)index];
 
 #if wxUSE_GUI
-    *icon = wxIcon(iconname);
+    wxLogNull nolog;
+    wxIcon icn;
+    if (iconname.Right(4).MakeUpper() == _T(".XPM"))
+        icn = wxIcon(iconname);
+    else
+        icn = wxIcon(iconname, wxBITMAP_TYPE_ANY);
+    if (icn.Ok()) *icon = icn;
+    else return FALSE;
 #else
     // helpful for testing in console mode
     wxLogDebug(_T("Found GNOME icon for '%s': '%s'\n"),
@@ -683,7 +691,14 @@ bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
     wxString iconname = ms_icons[(size_t)index];
 
 #if wxUSE_GUI
-    *icon = wxIcon(iconname);
+    wxLogNull nolog;
+    wxIcon icn;
+    if (iconname.Right(4).MakeUpper() == _T(".XPM"))
+        icn = wxIcon(iconname);
+    else
+        icn = wxIcon(iconname, wxBITMAP_TYPE_ANY);
+    if (icn.Ok()) *icon = icn;
+    else return FALSE;
 #else
     // helpful for testing in console mode
     wxLogDebug(_T("Found KDE icon for '%s': '%s'\n"),
@@ -814,8 +829,8 @@ ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
 {
     if ( ms_iconHandlers.GetCount() == 0 )
     {
-        ms_iconHandlers.Add(&gs_iconHandlerGNOME);
         ms_iconHandlers.Add(&gs_iconHandlerKDE);
+        ms_iconHandlers.Add(&gs_iconHandlerGNOME);
     }
 
     return ms_iconHandlers;
@@ -824,6 +839,12 @@ ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
 // read system and user mailcaps (TODO implement mime.types support)
 wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 {
+    // read KDE/GNOME tables
+    ArrayIconHandlers& handlers = GetIconHandlers();
+    size_t count = handlers.GetCount();
+    for ( size_t hn = 0; hn < count; hn++ )
+        handlers[hn]->GetMimeInfoRecords(this);
+
     // directories where we look for mailcap and mime.types by default
     // (taken from metamail(1) sources)
     static const wxChar *aStandardLocations[] =
@@ -864,12 +885,6 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     if ( wxFile::Exists(strUserMimeTypes) ) {
         ReadMimeTypes(strUserMimeTypes);
     }
-
-    // read KDE/GNOME tables
-    ArrayIconHandlers& handlers = GetIconHandlers();
-    size_t count = handlers.GetCount();
-    for ( n = 0; n < count; n++ )
-        handlers[n]->GetMimeInfoRecords(this);
 }
 
 wxFileType *
