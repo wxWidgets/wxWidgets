@@ -1413,6 +1413,10 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
     }
     else // valid sel range
     {
+        // remember the 'to' position as the current position, used to move the
+        // caret there later
+        wxTextPos toOrig = to;
+
         OrderPositions(from, to);
 
         wxCHECK_RET( to <= GetLastPosition(),
@@ -1458,8 +1462,8 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
         }
         //else: nothing to do
 
-        // the insertion point is put at the end of selection
-        DoSetInsertionPoint(to);
+        // the insertion point is put at the location where the caret was moved
+        DoSetInsertionPoint(toOrig);
     }
 }
 
