@@ -62,6 +62,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fontutil.h>
 #include <wx/dcbuffer.h>
 #include <wx/iconbndl.h>
+#ifdef __WXMAC__
+#include <wx/mac/private.h>
+#endif
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -4318,6 +4321,63 @@ static PyObject *_wrap_wxBrush_SetStyle(PyObject *self, PyObject *args, PyObject
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxBrush_SetStyle(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxBrush_GetMacTheme(_swigobj)  (_swigobj->GetMacTheme())
+static PyObject *_wrap_wxBrush_GetMacTheme(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    short  _result;
+    wxBrush * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBrush_GetMacTheme",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrush_GetMacTheme. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (short )wxBrush_GetMacTheme(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("h",_result);
+    return _resultobj;
+}
+
+#define wxBrush_SetMacTheme(_swigobj,_swigarg0)  (_swigobj->SetMacTheme(_swigarg0))
+static PyObject *_wrap_wxBrush_SetMacTheme(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBrush * _arg0;
+    short  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","macThemeBrush", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh:wxBrush_SetMacTheme",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBrush_SetMacTheme. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxBrush_SetMacTheme(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10626,6 +10686,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxBrushList_RemoveBrush", (PyCFunction) _wrap_wxBrushList_RemoveBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrushList_FindOrCreateBrush", (PyCFunction) _wrap_wxBrushList_FindOrCreateBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrushList_AddBrush", (PyCFunction) _wrap_wxBrushList_AddBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_SetMacTheme", (PyCFunction) _wrap_wxBrush_SetMacTheme, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBrush_GetMacTheme", (PyCFunction) _wrap_wxBrush_GetMacTheme, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrush_SetStyle", (PyCFunction) _wrap_wxBrush_SetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrush_SetStipple", (PyCFunction) _wrap_wxBrush_SetStipple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBrush_SetColour", (PyCFunction) _wrap_wxBrush_SetColour, METH_VARARGS | METH_KEYWORDS },

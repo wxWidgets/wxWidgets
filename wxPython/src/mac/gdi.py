@@ -448,6 +448,12 @@ class wxBrushPtr(wxGDIObjectPtr):
     def SetStyle(self, *_args, **_kwargs):
         val = gdic.wxBrush_SetStyle(self, *_args, **_kwargs)
         return val
+    def GetMacTheme(self, *_args, **_kwargs):
+        val = gdic.wxBrush_GetMacTheme(self, *_args, **_kwargs)
+        return val
+    def SetMacTheme(self, *_args, **_kwargs):
+        val = gdic.wxBrush_SetMacTheme(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     def __nonzero__(self): return self.Ok()

@@ -1363,6 +1363,18 @@ class wxGridPtr(wxScrolledWindowPtr):
     def SetRowMinimalHeight(self, *_args, **_kwargs):
         val = gridc.wxGrid_SetRowMinimalHeight(self, *_args, **_kwargs)
         return val
+    def SetColMinimalAcceptableWidth(self, *_args, **_kwargs):
+        val = gridc.wxGrid_SetColMinimalAcceptableWidth(self, *_args, **_kwargs)
+        return val
+    def SetRowMinimalAcceptableHeight(self, *_args, **_kwargs):
+        val = gridc.wxGrid_SetRowMinimalAcceptableHeight(self, *_args, **_kwargs)
+        return val
+    def GetColMinimalAcceptableWidth(self, *_args, **_kwargs):
+        val = gridc.wxGrid_GetColMinimalAcceptableWidth(self, *_args, **_kwargs)
+        return val
+    def GetRowMinimalAcceptableHeight(self, *_args, **_kwargs):
+        val = gridc.wxGrid_GetRowMinimalAcceptableHeight(self, *_args, **_kwargs)
+        return val
     def SetDefaultCellBackgroundColour(self, *_args, **_kwargs):
         val = gridc.wxGrid_SetDefaultCellBackgroundColour(self, *_args, **_kwargs)
         return val

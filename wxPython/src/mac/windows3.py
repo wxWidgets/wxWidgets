@@ -271,6 +271,27 @@ class wxLayoutAlgorithm(wxLayoutAlgorithmPtr):
 
 
 
+class wxTipWindowPtr(wxFramePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetBoundingRect(self, *_args, **_kwargs):
+        val = windows3c.wxTipWindow_SetBoundingRect(self, *_args, **_kwargs)
+        return val
+    def Close(self, *_args, **_kwargs):
+        val = windows3c.wxTipWindow_Close(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxTipWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxTipWindow(wxTipWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = windows3c.new_wxTipWindow(*_args,**_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

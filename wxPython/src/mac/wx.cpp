@@ -2485,6 +2485,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxGROW", PyInt_FromLong((long) wxGROW));
 	 PyDict_SetItemString(d,"wxEXPAND", PyInt_FromLong((long) wxEXPAND));
 	 PyDict_SetItemString(d,"wxNB_FIXEDWIDTH", PyInt_FromLong((long) wxNB_FIXEDWIDTH));
+	 PyDict_SetItemString(d,"wxNB_TOP", PyInt_FromLong((long) wxNB_TOP));
 	 PyDict_SetItemString(d,"wxNB_LEFT", PyInt_FromLong((long) wxNB_LEFT));
 	 PyDict_SetItemString(d,"wxNB_RIGHT", PyInt_FromLong((long) wxNB_RIGHT));
 	 PyDict_SetItemString(d,"wxNB_BOTTOM", PyInt_FromLong((long) wxNB_BOTTOM));
