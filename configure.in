@@ -1932,7 +1932,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
-            BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
+            BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
         fi
       ;;
       *-*-irix5* | *-*-irix6* )

@@ -8441,7 +8441,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
-            BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
+            BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
         fi
       ;;
       *-*-irix5* | *-*-irix6* )
@@ -9103,7 +9103,7 @@ else
 int main() {
 
 /* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x;
+typedef int charset[2]; const charset x = {0,0};
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
 char **p;
@@ -9178,7 +9178,7 @@ for ac_kw in inline __inline__ __inline; do
 #include "confdefs.h"
 
 int main() {
-} $ac_kw foo() {
+} int $ac_kw foo() {
 ; return 0; }
 EOF
 if { (eval echo configure:9185: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
