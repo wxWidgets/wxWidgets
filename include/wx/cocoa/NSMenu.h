@@ -34,6 +34,7 @@ public:
     ,   OBSERVE_DidSendAction       = 0x08
     ,   OBSERVE_WillSendAction      = 0x10
     };
+    virtual void Cocoa_dealloc() {}
     virtual void CocoaNotification_menuDidAddItem(WX_NSNotification notification) {}
     virtual void CocoaNotification_menuDidChangeItem(WX_NSNotification notification) {}
     virtual void CocoaNotification_menuDidRemoveItem(WX_NSNotification notification) {}
