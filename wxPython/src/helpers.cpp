@@ -164,8 +164,16 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
 
     // This is the next part of the wxEntry functionality...
-    wxPythonApp->argc = 0;
-    wxPythonApp->argv = NULL;
+    PyObject* sysargv = PySys_GetObject("argv");
+    int argc = PyList_Size(sysargv);
+    char** argv = new char*[argc+1];
+    int x;
+    for(x=0; x<argc; x++)
+        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
+    argv[argc] = NULL;
+
+    wxPythonApp->argc = argc;
+    wxPythonApp->argv = argv;
 
     wxEntryInitGui();
 
