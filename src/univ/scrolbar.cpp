@@ -896,11 +896,9 @@ void wxScrollTimer::Notify()
     }
     else
     {
-        if ( !DoNotify() )
-        {
-            // scrolled till the end
-            Stop();
-        }
+        // if DoNotify() returns false, we're already deleted by the timer
+        // event handler, so don't do anything else here
+        (void)DoNotify();
     }
 }
 

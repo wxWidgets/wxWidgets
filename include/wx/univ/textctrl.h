@@ -284,11 +284,17 @@ protected:
     // common part of all ctors
     void Init();
 
+    // drawing
+    // -------
+
     // draw the text in the given rectangle
     void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
 
     // draw the line wrap marks in this rect
     void DoDrawLineWrapMarks(wxDC& dc, const wxRect& rectUpdate);
+
+    // line/row geometry calculations
+    // ------------------------------
 
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
@@ -308,6 +314,9 @@ protected:
 
     // get the row following this line
     wxTextCoord GetRowAfterLine(wxTextCoord line) const;
+
+    // refresh functions
+    // -----------------
 
     // the text area is the part of the window in which the text can be
     // displayed, i.e. part of it inside the margins and the real text area is
@@ -368,6 +377,10 @@ protected:
     // (SetInsertionPoint() does nothing if the position didn't change)
     void DoSetInsertionPoint(wxTextPos pos);
 
+    // move caret to the new position without updating the display (for
+    // internal use only)
+    void MoveInsertionPoint(wxTextPos pos);
+
     // set the caret to its initial (default) position
     void InitInsertionPoint();
 
@@ -379,6 +392,9 @@ protected:
 
     // update the max width after the given line was modified
     void UpdateMaxWidth(wxTextCoord line);
+
+    // hit testing
+    // -----------
 
     // HitTest2() is more efficient than 2 consecutive HitTest()s with the same
     // line (i.e. y) and it also returns the offset of the starting position in
@@ -424,7 +440,22 @@ protected:
     // recalc the line height and char width (to call when the font changes)
     void RecalcFontMetrics();
 
+    // vertical scrolling helpers
+    // --------------------------
+
+    // all these functions are for multi line controls only
+
+    // get the number of visible lines
+    size_t GetLinesPerPage() const;
+
+    // return the position above the cursor or INVALID_POS_VALUE
+    wxTextPos GetPositionAbove();
+
+    // return the position below the cursor or INVALID_POS_VALUE
+    wxTextPos GetPositionBelow();
+
     // event handlers
+    // --------------
     void OnIdle(wxIdleEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);

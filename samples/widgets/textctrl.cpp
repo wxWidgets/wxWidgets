@@ -562,12 +562,12 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
     wxPathList pathlist;
     pathlist.Add(_T("."));
     pathlist.Add(_T(".."));
-    pathlist.Add(_T("../../../samples/texttest"));
+    pathlist.Add(_T("../../../samples/widgets"));
 
-    wxString filename = pathlist.FindValidPath(_T("texttest.cpp"));
+    wxString filename = pathlist.FindValidPath(_T("textctrl.cpp"));
     if ( !filename )
     {
-        wxLogError(_T("File texttest.cpp not found."));
+        wxLogError(_T("File textctrl.cpp not found."));
     }
     else // load it
     {

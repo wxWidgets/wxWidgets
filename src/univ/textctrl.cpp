@@ -188,6 +188,13 @@ static inline void OrderPositions(wxTextPos& from, wxTextPos& to)
 #define wxTEXT_COMMAND_INSERT _T("insert")
 #define wxTEXT_COMMAND_REMOVE _T("remove")
 
+// the value which is never used for text position, even not -1 which is
+// sometimes used for some special meaning
+static const wxTextPos INVALID_POS_VALUE = -2;
+
+// overlap between pages (when using PageUp/Dn) in lines
+static const size_t PAGE_OVERLAP_IN_LINES = 1;
+
 // ----------------------------------------------------------------------------
 // private data of wxTextCtrl
 // ----------------------------------------------------------------------------
@@ -1268,15 +1275,20 @@ void wxTextCtrl::InitInsertionPoint()
     ClearSelection();
 }
 
-void wxTextCtrl::DoSetInsertionPoint(wxTextPos pos)
+void wxTextCtrl::MoveInsertionPoint(wxTextPos pos)
 {
     wxASSERT_MSG( pos >= 0 && pos <= GetLastPosition(),
                  _T("DoSetInsertionPoint() can only be called with valid pos") );
 
     m_curPos = pos;
     PositionToXY(m_curPos, &m_curCol, &m_curRow);
+}
 
-    ShowPosition(m_curPos);
+void wxTextCtrl::DoSetInsertionPoint(wxTextPos pos)
+{
+    MoveInsertionPoint(pos);
+
+    ShowPosition(pos);
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -4226,6 +4238,85 @@ void wxTextCtrl::ShowCaret(bool show)
 }
 
 // ----------------------------------------------------------------------------
+// vertical scrolling (multiline only)
+// ----------------------------------------------------------------------------
+
+size_t wxTextCtrl::GetLinesPerPage() const
+{
+    if ( IsSingleLine() )
+        return 1;
+
+    return GetRealTextArea().height / GetLineHeight();
+}
+
+wxTextPos wxTextCtrl::GetPositionAbove()
+{
+    wxCHECK_MSG( !IsSingleLine(), INVALID_POS_VALUE,
+                 _T("can't move cursor vertically in a single line control") );
+
+    // move the cursor up by one ROW not by one LINE: this means that
+    // we should really use HitTest() and not just go to the same
+    // position in the previous line
+    wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
+    if ( MData().m_xCaret == -1 )
+    {
+        // remember the initial cursor abscissa
+        MData().m_xCaret = pt.x;
+    }
+    else
+    {
+        // use the remembered abscissa
+        pt.x = MData().m_xCaret;
+    }
+
+    CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
+    pt.y -= GetLineHeight();
+
+    wxTextCoord col, row;
+    if ( HitTestLogical(pt, &col, &row) == wxTE_HT_BEFORE )
+    {
+        // can't move further
+        return INVALID_POS_VALUE;
+    }
+
+    return XYToPosition(col, row);
+}
+
+wxTextPos wxTextCtrl::GetPositionBelow()
+{
+    wxCHECK_MSG( !IsSingleLine(), INVALID_POS_VALUE,
+                 _T("can't move cursor vertically in a single line control") );
+
+    // see comments for wxACTION_TEXT_UP
+    wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
+    if ( MData().m_xCaret == -1 )
+    {
+        // remember the initial cursor abscissa
+        MData().m_xCaret = pt.x;
+    }
+    else
+    {
+        // use the remembered abscissa
+        pt.x = MData().m_xCaret;
+    }
+
+    CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
+    pt.y += GetLineHeight();
+
+    wxTextCoord col, row;
+    if ( HitTestLogical(pt, &col, &row) == wxTE_HT_BELOW )
+    {
+        // can't go further down
+        return INVALID_POS_VALUE;
+    }
+
+    // note that wxTE_HT_BEYOND is ok: it happens when we go down
+    // from a longer line to a shorter one, for example (OTOH
+    // wxTE_HT_BEFORE can never happen)
+    return XYToPosition(col, row);
+}
+
+// ----------------------------------------------------------------------------
 // input
 // ----------------------------------------------------------------------------
 
@@ -4264,8 +4355,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
     // set newPos to -2 as it can't become equal to it in the assignments below
     // (but it can become -1)
-    static const wxTextPos INVALID_POS_VALUE = -2;
-
     wxTextPos newPos = INVALID_POS_VALUE;
 
     if ( action == wxACTION_TEXT_HOME )
@@ -4292,28 +4381,12 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( !IsSingleLine() )
         {
-            // move the cursor up by one ROW not by one LINE: this means that
-            // we should really use HitTest() and not just go to the same
-            // position in the previous line
-            wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
-            if ( MData().m_xCaret == -1 )
-            {
-                // remember the initial cursor abscissa
-                MData().m_xCaret = pt.x;
-            }
-            else
-            {
-                // use the remembered abscissa
-                pt.x = MData().m_xCaret;
-            }
-            rememberAbscissa = TRUE;
-            CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-            pt.y -= GetLineHeight();
+            newPos = GetPositionAbove();
 
-            wxTextCoord col, row;
-            if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BEFORE )
+            if ( newPos != INVALID_POS_VALUE )
             {
-                newPos = XYToPosition(col, row);
+                // remember where the cursor original had been
+                rememberAbscissa = TRUE;
             }
         }
     }
@@ -4321,29 +4394,12 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( !IsSingleLine() )
         {
-            // see comments for wxACTION_TEXT_UP
-            wxPoint pt = GetCaretPosition() - m_rectText.GetPosition();
-            if ( MData().m_xCaret == -1 )
-            {
-                // remember the initial cursor abscissa
-                MData().m_xCaret = pt.x;
-            }
-            else
-            {
-                // use the remembered abscissa
-                pt.x = MData().m_xCaret;
-            }
-            rememberAbscissa = TRUE;
-            CalcUnscrolledPosition(pt.x, pt.y, &pt.x, &pt.y);
-            pt.y += GetLineHeight();
+            newPos = GetPositionBelow();
 
-            wxTextCoord col, row;
-            if ( HitTestLogical(pt, &col, &row) != wxTE_HT_BELOW )
+            if ( newPos != INVALID_POS_VALUE )
             {
-                // note that wxTE_HT_BEYOND is ok: it happens when we go down
-                // from a longer line to a shorter one, for example (OTOH
-                // wxTE_HT_BEFORE can never happen)
-                newPos = XYToPosition(col, row);
+                // remember where the cursor original had been
+                rememberAbscissa = TRUE;
             }
         }
     }
@@ -4371,6 +4427,70 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
             command = new wxTextCtrlInsertCommand(strArg);
 
             textChanged = TRUE;
+        }
+    }
+    else if ( (action == wxACTION_TEXT_PAGE_UP) ||
+              (action == wxACTION_TEXT_PAGE_DOWN) )
+    {
+        if ( !IsSingleLine() )
+        {
+            size_t count = GetLinesPerPage();
+            if ( count > PAGE_OVERLAP_IN_LINES )
+            {
+                // pages should overlap slightly to allow the reader to keep
+                // orientation in the text
+                count -= PAGE_OVERLAP_IN_LINES;
+            }
+
+            // remember where the cursor original had been
+            rememberAbscissa = TRUE;
+
+            bool goUp = action == wxACTION_TEXT_PAGE_UP;
+            for ( size_t line = 0; line < count; line++ )
+            {
+                wxTextPos pos = goUp ? GetPositionAbove() : GetPositionBelow();
+                if ( pos == INVALID_POS_VALUE )
+                {
+                    // can't move further
+                    break;
+                }
+
+                MoveInsertionPoint(pos);
+                newPos = pos;
+            }
+
+            // we implement the Unix scrolling model here: cursor will always
+            // be on the first line after Page Down and on the last one after
+            // Page Up
+            //
+            // Windows programs usually keep the cursor line offset constant
+            // but do we really need it?
+            wxCoord y;
+            if ( goUp )
+            {
+                // find the line such that when it is the first one, the
+                // current position is in the last line
+                wxTextPos pos = 0;
+                for ( size_t line = 0; line < count; line++ )
+                {
+                    pos = GetPositionAbove();
+                    if ( pos == INVALID_POS_VALUE )
+                        break;
+
+                    MoveInsertionPoint(pos);
+                }
+
+                MoveInsertionPoint(newPos);
+
+                PositionToLogicalXY(pos, NULL, &y);
+            }
+            else // scrolled down
+            {
+                PositionToLogicalXY(newPos, NULL, &y);
+            }
+
+            // scroll vertically only
+            Scroll(-1, y);
         }
     }
     else if ( action == wxACTION_TEXT_SEL_WORD )
@@ -4633,6 +4753,18 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
         case WXK_RIGHT:
             action << (ctrlDown ? wxACTION_TEXT_WORD_RIGHT
                                 : wxACTION_TEXT_RIGHT);
+            break;
+
+        case WXK_PAGEDOWN:
+        case WXK_NEXT:
+            // we don't map Ctrl-PgUp/Dn to anything special - what should it
+            // to? for now, it's the same as without control
+            action << wxACTION_TEXT_PAGE_DOWN;
+            break;
+
+        case WXK_PAGEUP:
+        case WXK_PRIOR:
+            action << wxACTION_TEXT_PAGE_UP;
             break;
 
         // delete
