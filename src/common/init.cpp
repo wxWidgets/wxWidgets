@@ -17,19 +17,17 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "appbase.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef    __BORLANDC__
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-
-#include "wx/app.h"
-#include "wx/debug.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/debug.h"
+    #include "wx/module.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // global vars
@@ -39,12 +37,6 @@ wxApp * WXDLLEXPORT wxTheApp = NULL;
 
 wxAppInitializerFunction
     wxAppBase::m_appInitFn = (wxAppInitializerFunction)NULL;
-
-#if wxUSE_THREADS
-    // List of events pending processing
-    wxList *wxPendingEvents = NULL;
-    wxCriticalSection *wxPendingEventsLocker = NULL;
-#endif // wxUSE_THREADS
 
 // ----------------------------------------------------------------------------
 // private classes

@@ -869,8 +869,9 @@ public:
                                  const wxString& second);
 
   // constructors and destructor
-    // default ctor
-  wxArrayString();
+    // default ctor: if autoSort is TRUE, the array is always sorted (in
+    // alphabetical order)
+  wxArrayString(bool autoSort = FALSE);
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // assignment operator
@@ -927,16 +928,30 @@ public:
     // sort array elements using specified comparaison function
   void Sort(CompareFunction compareFunction);
 
-private:
-  void    Grow();     // makes array bigger if needed
-  void    Free();     // free the string stored
+protected:
+  void Copy(const wxArrayString& src);  // copies the contents of another array
 
-  void    DoSort();   // common part of all Sort() variants
+private:
+  void Grow();                          // makes array bigger if needed
+  void Free();                          // free all the strings stored
+
+  void DoSort();                        // common part of all Sort() variants
 
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements
 
-  wxChar  **m_pItems;   // pointer to data
+  wxChar  **m_pItems; // pointer to data
+
+  bool    m_autoSort; // if TRUE, keep the array always sorted
+};
+
+class WXDLLEXPORT wxSortedArrayString : public wxArrayString
+{
+public:
+  wxSortedArrayString() : wxArrayString(TRUE)
+    { }
+  wxSortedArrayString(const wxArrayString& array) : wxArrayString(TRUE)
+    { Copy(array); }
 };
 
 // ---------------------------------------------------------------------------

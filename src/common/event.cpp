@@ -615,7 +615,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     extern void wxapp_install_idle_handler();
     if ( g_isIdle )
         wxapp_install_idle_handler();
-#else // this works for wxMSW, but may be for others too?
+#elif wxUSE_GUI // this works for wxMSW, but may be for others too?
     // might also send a dummy message to the top level window, this would
     // probably be cleaner?
     wxIdleEvent eventIdle;

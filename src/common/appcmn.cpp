@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/list.h"
 #endif
 
 #include "wx/thread.h"

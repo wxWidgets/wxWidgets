@@ -1639,11 +1639,12 @@ wxString& wxString::replace(size_t nStart, size_t nLen,
 #define   STRING(p)   ((wxString *)(&(p)))
 
 // ctor
-wxArrayString::wxArrayString()
+wxArrayString::wxArrayString(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
   m_pItems = (wxChar **) NULL;
+  m_autoSort = autoSort;
 }
 
 // copy ctor
@@ -1652,6 +1653,7 @@ wxArrayString::wxArrayString(const wxArrayString& src)
   m_nSize  =
   m_nCount = 0;
   m_pItems = (wxChar **) NULL;
+  m_autoSort = src.m_autoSort;
 
   *this = src;
 }
@@ -1662,18 +1664,30 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
   if ( m_nSize > 0 )
     Clear();
 
+  Copy(src);
+
+  return *this;
+}
+
+void wxArrayString::Copy(const wxArrayString& src)
+{
   if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
     Alloc(src.m_nCount);
 
   // we can't just copy the pointers here because otherwise we would share
-  // the strings with another array
+  // the strings with another array because strings are ref counted
+#if 0
+  if ( m_nCount != 0 )
+    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(wxChar *));
+#endif // 0
+
   for ( size_t n = 0; n < src.m_nCount; n++ )
     Add(src[n]);
 
-  if ( m_nCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(wxChar *));
-
-  return *this;
+  // if the other array is auto sorted too, we're already sorted, but
+  // otherwise we should rearrange the items
+  if ( m_autoSort && !src.m_autoSort )
+    Sort();
 }
 
 // grow the array
@@ -1689,8 +1703,8 @@ void wxArrayString::Grow()
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
-#if defined(__VISAGECPP__)
-      int                           array_size = ARRAY_DEFAULT_INITIAL_SIZE;
+#if defined(__VISAGECPP__) && defined(__WXDEBUG__)
+      int array_size = ARRAY_DEFAULT_INITIAL_SIZE;
       wxASSERT( array_size != 0 );
 #else
       wxASSERT( ARRAY_DEFAULT_INITIAL_SIZE != 0 );
@@ -1783,20 +1797,46 @@ void wxArrayString::Shrink()
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 {
-  if ( bFromEnd ) {
-    if ( m_nCount > 0 ) {
-      size_t ui = m_nCount;
-      do {
-        if ( STRING(m_pItems[--ui])->IsSameAs(sz, bCase) )
-          return ui;
-      }
-      while ( ui != 0 );
+  if ( m_autoSort ) {
+    // use binary search in the sorted array
+    wxASSERT_MSG( bCase && !bFromEnd,
+                  wxT("search parameters ignored for auto sorted array") );
+
+    size_t i,
+           lo = 0,
+           hi = m_nCount;
+    int res;
+    while ( lo < hi ) {
+      i = (lo + hi)/2;
+
+      res = wxStrcmp(sz, m_pItems[i]);
+      if ( res < 0 )
+        hi = i;
+      else if ( res > 0 )
+        lo = i + 1;
+      else
+        return i;
     }
+
+    return wxNOT_FOUND;
   }
   else {
-    for( size_t ui = 0; ui < m_nCount; ui++ ) {
-      if( STRING(m_pItems[ui])->IsSameAs(sz, bCase) )
-        return ui;
+    // use linear search in unsorted array
+    if ( bFromEnd ) {
+      if ( m_nCount > 0 ) {
+        size_t ui = m_nCount;
+        do {
+          if ( STRING(m_pItems[--ui])->IsSameAs(sz, bCase) )
+            return ui;
+        }
+        while ( ui != 0 );
+      }
+    }
+    else {
+      for( size_t ui = 0; ui < m_nCount; ui++ ) {
+        if( STRING(m_pItems[ui])->IsSameAs(sz, bCase) )
+          return ui;
+      }
     }
   }
 
@@ -1806,13 +1846,41 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 // add item at the end
 void wxArrayString::Add(const wxString& str)
 {
-  wxASSERT( str.GetStringData()->IsValid() );
+  if ( m_autoSort ) {
+    // insert the string at the correct position to keep the array sorted
+    size_t i,
+           lo = 0,
+           hi = m_nCount;
+    int res;
+    while ( lo < hi ) {
+      i = (lo + hi)/2;
 
-  Grow();
+      res = wxStrcmp(str, m_pItems[i]);
+      if ( res < 0 )
+        hi = i;
+      else if ( res > 0 )
+        lo = i + 1;
+      else {
+        lo = hi = i;
+        break;
+      }
+    }
 
-  // the string data must not be deleted!
-  str.GetStringData()->Lock();
-  m_pItems[m_nCount++] = (wxChar *)str.c_str();
+    wxASSERT_MSG( lo == hi, wxT("binary search broken") );
+
+    Insert(str, lo);
+  }
+  else {
+    wxASSERT( str.GetStringData()->IsValid() );
+
+    Grow();
+
+    // the string data must not be deleted!
+    str.GetStringData()->Lock();
+
+    // just append
+    m_pItems[m_nCount++] = (wxChar *)str.c_str();
+  }
 }
 
 // add item at the given position
@@ -1820,7 +1888,9 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 {
   wxASSERT( str.GetStringData()->IsValid() );
 
-  wxCHECK_RET( nIndex <= m_nCount, _("bad index in wxArrayString::Insert") );
+  wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
+
+  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Insert") );
 
   Grow();
 
@@ -1836,7 +1906,7 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 // removes item from array (by index)
 void wxArrayString::Remove(size_t nIndex)
 {
-  wxCHECK_RET( nIndex <= m_nCount, _("bad index in wxArrayString::Remove") );
+  wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Remove") );
 
   // release our lock
   Item(nIndex).GetStringData()->Unlock();
@@ -1852,7 +1922,7 @@ void wxArrayString::Remove(const wxChar *sz)
   int iIndex = Index(sz);
 
   wxCHECK_RET( iIndex != wxNOT_FOUND,
-               _("removing inexistent element in wxArrayString::Remove") );
+               wxT("removing inexistent element in wxArrayString::Remove") );
 
   Remove(iIndex);
 }
@@ -1932,6 +2002,8 @@ void wxArrayString::Sort(bool reverseOrder)
 
 void wxArrayString::DoSort()
 {
+  wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
+
   // just sort the pointers using qsort() - of course it only works because
   // wxString() *is* a pointer to its data
   qsort(m_pItems, m_nCount, sizeof(wxChar *), wxStringCompareFunction);

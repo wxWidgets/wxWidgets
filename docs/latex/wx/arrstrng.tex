@@ -6,8 +6,8 @@ wxArrayString is an efficient container for storing
 are added to it (so it is as easy to use as a linked list), but the access
 time to the elements is constant, instead of being linear in number of
 elements as in the case of linked lists. It is also very size efficient and
-doesn't take more space than a C array {\it wxString[]} type. wxArrayString
-uses its knowledge of internals of wxString class to achieve this.
+doesn't take more space than a C array {\it wxString[]} type (wxArrayString
+uses its knowledge of internals of wxString class to achieve this).
 
 This class is used in the same way as other dynamic \helpref{arrays}{wxarray},
 except that no {\it WX\_DEFINE\_ARRAY} declaration is needed for it. When a
@@ -26,8 +26,18 @@ array elements may be modified in place like this
     array.Last().MakeUpper();
 \end{verbatim}
 
-Finally, none of the methods of this class is virtual including its
-destructor, so this class should not be derived from.
+There is also a varian of wxArrayString called wxSortedArrayString which has
+exactly the same methods as wxArrayString, but which always keeps the string
+in it in (alphabetical) order. wxSortedArrayString uses binary search in its 
+\helpref{Index}{wxarraystringindex} function (insteadf of linear search for
+wxArrayString::Index) which makes it much more efficient if you add strings to
+the array rarely (because, of course, you have to pay for Index() efficiency
+by having Add() be slower) but search for them often. Several methods should
+not be used with sorted array (basicly, all which break the order of items)
+which is mentioned in their description.
+
+Final word: none of the methods of wxArrayString is virtual including its
+destructor, so this class should not be used as a base class.
 
 \wxheading{Derived from}
 
@@ -54,6 +64,9 @@ functions.
 
 Default and copy constructors.
 
+Note that when an array is assigned to a sorted array, its contents is
+automatically sorted during construction.
+
 \membersection{wxArrayString::\destruct{wxArrayString}}\label{wxarraystringdtor}
 
 \func{}{\destruct{wxArrayString}}{}
@@ -69,7 +82,7 @@ Assignment operator.
 
 \membersection{wxArrayString::operator[]}\label{wxarraystringoperatorindex}
 
-\func{wxString\&}{operatorp[]}{\param{size\_t }{nIndex}}
+\func{wxString\&}{operator[]}{\param{size\_t }{nIndex}}
 
 Return the array element at position {\it nIndex}. An assert failure will
 result from an attempt to access an element beyond the end of array in debug
@@ -82,6 +95,11 @@ This is the operator version of \helpref{Item}{wxarraystringitem} method.
 \func{void}{Add}{\param{const wxString\& }{str}}
 
 Appends a new item to the array.
+
+{\bf Warning:} For sorted arrays, the index of the inserted item will not be,
+in general, equal to \helpref{GetCount()}{wxarraystringgetcount} - 1 because
+the item is inserted at the correct position to keep the array sorted and not
+appended.
 
 See also: \helpref{Insert}{wxarraystringinsert}
 
@@ -136,6 +154,10 @@ Search the element in the array, starting from the beginning if
 {\it bFromEnd} is FALSE or from end otherwise. If {\it bCase}, comparison is
 case sensitive (default), otherwise the case is ignored.
 
+This function uses linear search for wxArrayString and binary search for
+wxSortedArrayString, but it ignores the {\it bCase} and {\it bFromEnd} 
+parameters in the latter case.
+
 Returns index of the first item matched or wxNOT\_FOUND if there is no match.
 
 \membersection{wxArrayString::Insert}\label{wxarraystringinsert}
@@ -151,6 +173,10 @@ Insert("foo", 0);
 
 If {\it nIndex} is equal to {\it GetCount() + 1} this function behaves as 
 \helpref{Add}{wxarraystringadd}.
+
+{\bf Warning:} this function should not be used with sorted array because it
+could break the order of items and, for example, subsequent calls to 
+\helpref{Index()}{wxarraystringindex} would not work then!
 
 \membersection{wxArrayString::IsEmpty}\label{wxarraystringisempty}
 
@@ -211,6 +237,10 @@ See also: \helpref{Alloc}{wxarraystringalloc}, \helpref{Dynamic array memory man
 Sorts the array in alphabetical order or in reverse alphabetical order if
 {\it reverseOrder} is TRUE.
 
+{\bf Warning:} this function should not be used with sorted array because it
+could break the order of items and, for example, subsequent calls to 
+\helpref{Index()}{wxarraystringindex} would not work then!
+
 See also: \helpref{Sort}{wxarraystringsortcallback}
 
 \membersection{wxArrayString::Sort (user defined)}\label{wxarraystringsortcallback}
@@ -244,6 +274,10 @@ array.Add("four");
 
 array.Sort(CompareStringLen);
 \end{verbatim}
+
+{\bf Warning:} this function should not be used with sorted array because it
+could break the order of items and, for example, subsequent calls to 
+\helpref{Index()}{wxarraystringindex} would not work then!
 
 See also: \helpref{Sort}{wxarraystringsort}
 
