@@ -4593,7 +4593,10 @@ void wxWindowOS2::MoveChildren(
   int                               nDiff
 )
 {
-    if (GetAutoLayout())
+    //
+    // We want to handle top levels ourself, manually
+    //
+    if (!IsTopLevel() && GetAutoLayout())
     {
         Layout();
     }
