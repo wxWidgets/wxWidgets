@@ -621,7 +621,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         int existingExtent = (int)SendMessage(GetHwnd(), LB_GETHORIZONTALEXTENT, 0, 0L);
         HDC dc = GetWindowDC(GetHwnd());
         HFONT oldFont = 0;
-        if (GetFont().Ok() && GetFont().GetResourceHandle())
+        if (GetFont().Ok() && GetFont().GetResourceHandle() != 0)
             oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
 
         GetTextMetrics(dc, &lpTextMetric);
@@ -641,7 +641,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         int largestExtent = 0;
         HDC dc = GetWindowDC(GetHwnd());
         HFONT oldFont = 0;
-        if (GetFont().Ok() && GetFont().GetResourceHandle())
+        if (GetFont().Ok() && GetFont().GetResourceHandle() != 0)
             oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
 
         GetTextMetrics(dc, &lpTextMetric);
