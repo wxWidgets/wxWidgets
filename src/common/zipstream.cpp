@@ -32,13 +32,13 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     m_Pos = 0;
     m_Size = 0;
-    m_Archive = (void*) unzOpen(archive);
+    m_Archive = (void*) unzOpen(archive.mb_str(wxConvFile));
     if (m_Archive == NULL) 
     {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    if (unzLocateFile((unzFile)m_Archive, file, 0) != UNZ_OK) 
+    if (unzLocateFile((unzFile)m_Archive, file.mb_str(wxConvFile), 0) != UNZ_OK) 
     {
         m_lasterror = wxStream_READ_ERR;
         return;
