@@ -660,7 +660,7 @@ void wxMenuBar::MacInstallMenuBar()
 						if ( item->IsSeparator() )
 						{
 							if ( mh )
-								UMAAppendMenuItem(mh, "\p-" );
+								MacAppendMenu(mh, "\p-" );
 						}
 						else
 						{
