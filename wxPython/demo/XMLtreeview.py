@@ -33,7 +33,8 @@ else:
     class XMLTree(wx.TreeCtrl):
         def __init__(self, parent, ID):
             wx.TreeCtrl.__init__(self, parent, ID)
-            self.nodeStack = [self.AddRoot("Root")]
+            self._root = self.AddRoot("Root")
+            self.nodeStack = [self._root]
 
             # Trees need an image list to do DnD...
             self.il = wx.ImageList(16,16)
@@ -51,6 +52,15 @@ else:
                 self.draggingItem = item
                 event.Allow()  # if DnD of this item is okay Allow it.
 
+        def IsDescendant(self, firstItem, secondItem):
+            "Recursive check if firstItem is a descendant of a secondItem."
+            if firstItem == self._root:
+                return False
+            parentItem = self.GetItemParent(firstItem)
+            if parentItem == secondItem:
+                return True
+            else:
+                return self.IsDescendant(parentItem, secondItem)
 
         def OnEndDrag(self, evt):
             itemSrc = self.draggingItem
@@ -59,6 +69,10 @@ else:
 
             if not itemDst.IsOk():
                 print "Can't drag to here..."
+                return
+
+            if self.IsDescendant(itemDst, itemSrc):
+                print "Can't move item to its descendant"
                 return
 
             # For this simple example just take the text of the source item
