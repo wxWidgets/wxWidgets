@@ -311,7 +311,9 @@ wxCursor::wxCursor(int idCursor)
         { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
         { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
         {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
-        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
+        // Displays as an I-beam on XP, so use a cursor file
+//        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
+        {  false, _T("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
         { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
         {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
         {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
