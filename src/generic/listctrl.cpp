@@ -616,6 +616,7 @@ public:
     void SetItemState( long item, long state, long stateMask );
     int GetItemState( long item, long stateMask ) const;
     void GetItemRect( long index, wxRect &rect ) const;
+    wxRect GetViewRect() const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
 
@@ -4759,7 +4760,7 @@ void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
 
 wxSize wxGenericListCtrl::GetItemSpacing() const
 {
-    const int spacing = GetItemSpacing(HasFlag(wxLC_SMALL_ICON));
+    const int spacing = m_mainWin->GetItemSpacing(HasFlag(wxLC_SMALL_ICON));
 
     return wxSize(spacing, spacing);
 }
