@@ -78,7 +78,7 @@ enum wxFontEncoding
 
         // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932,  // Shift JIS
-    wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
+    wxFONTENCODING_EUC_JP = wxFONTENCODING_UTF8 + 1,  // Extended Unix Codepage for Japanese
 
     wxFONTENCODING_UNICODE,         // Unicode - currently used only by
                                     // wxEncodingConverter class

@@ -182,6 +182,7 @@ All:
 - fix for deleting entries at root level in wxFileConfig
 - wxStopWatch::Start() didn't resume it contrary to the docs
 - accept '\r' as delimiter when parsing dates
+- fixed duplicate wxFontEncoding values
 
 Unix (GUI):
 
