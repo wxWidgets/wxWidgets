@@ -179,11 +179,11 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				HEADER_SEARCH_PATHS = "../../src/build/wxWindows.build/wxDynamicRelease.build/DerivedSources/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__WXDEBUG__ -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -D__WXMAC__ -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_RESMERGERFLAGS = "-srcIs DF";
 				OTHER_REZFLAGS = "";
@@ -323,11 +323,11 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				HEADER_SEARCH_PATHS = "../../src/build/wxWindows.build/wxDynamicDebug.build/DerivedSources/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__WXDEBUG__ -DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_RESMERGERFLAGS = "-srcIs DF";
 				OTHER_REZFLAGS = "";
@@ -483,11 +483,11 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				HEADER_SEARCH_PATHS = "../../src/build/wxWindows.build/wxDynamicRelease.build/DerivedSources/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_RESMERGERFLAGS = "-srcIs DF";
 				OTHER_REZFLAGS = "";
@@ -671,11 +671,11 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				HEADER_SEARCH_PATHS = "../../src/build/wxWindows.build/wxStaticRelease.build/DerivedSources/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = ../../src/build;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXMAC__ -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
 				OTHER_LDFLAGS = "";
 				OTHER_RESMERGERFLAGS = "-srcIs DF";
 				OTHER_REZFLAGS = "";
