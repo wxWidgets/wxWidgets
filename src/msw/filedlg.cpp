@@ -303,10 +303,11 @@ int wxFileDialog::ShowModal()
 
         if ( ( m_dialogStyle & wxMULTIPLE ) &&
 #if defined(OFN_EXPLORER)
-             ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') ) )
+             ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
 #else
-             ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') ) )
+             ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') )
 #endif // OFN_EXPLORER
+           )
         {
 #if defined(OFN_EXPLORER)
             m_dir = fileNameBuffer;
@@ -334,7 +335,6 @@ int wxFileDialog::ShowModal()
             if ( m_dir.Last() != _T('\\') )
                 dir += _T('\\');
 
-            m_fileNames.Sort(wxStringSortAscending);
             m_path = dir + m_fileName;
         }
         else
