@@ -49,6 +49,9 @@
 
 #include <ToolUtils.h>
 
+//For targeting OSX
+#include "wx/mac/private.h"
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -983,7 +986,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         wclass = kDocumentWindowClass ;
     }
-#if ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
     else if ( HasFlag( wxFRAME_DRAWER ) )
     {
         wclass = kDrawerWindowClass;

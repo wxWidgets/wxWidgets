@@ -1839,7 +1839,7 @@ wxString wxMacMLTEControl::GetLineText(long lineNo) const
             currentHeight += lineHeight;
         }
         
-        Point thePoint = { firstPoint.v + Fix2Long(currentHeight), firstPoint.h + Fix2Long(0) };
+        Point thePoint = { firstPoint.v + (currentHeight >> 16), firstPoint.h + (0) };
         TXNOffset theOffset;
         TXNPointToOffset(m_txn, thePoint, &theOffset);
                     
@@ -1878,7 +1878,7 @@ int  wxMacMLTEControl::GetLineLength(long lineNo) const
             currentHeight += lineHeight;
         }
         
-        Point thePoint = { firstPoint.v + Fix2Long(currentHeight), firstPoint.h + Fix2Long(0) };
+        Point thePoint = { firstPoint.v + (currentHeight >> 16), firstPoint.h + (0) };
         TXNOffset theOffset;
         TXNPointToOffset(m_txn, thePoint, &theOffset);
                     
