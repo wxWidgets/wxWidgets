@@ -28,6 +28,7 @@
 void wxSetIconsX11( WXDisplay* display, WXWindow window,
                     const wxIconBundle& ib )
 {
+#if !wxUSE_NANOX
     size_t size = 0;
     size_t i, max = ib.m_icons.GetCount();
 
@@ -91,6 +92,7 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
                          (Window)window,
                          net_wm_icon );
     }
+#endif
 }
 
 #endif

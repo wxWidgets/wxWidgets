@@ -92,7 +92,7 @@ void wxColourRefData::FreeColour()
 {
     if (!m_colormap)
         return;
-        
+#if !wxUSE_NANOX        
     if ((wxTheApp->m_visualType == GrayScale) ||
         (wxTheApp->m_visualType == PseudoColor))
     {
@@ -105,6 +105,7 @@ void wxColourRefData::FreeColour()
             XFreeColors( wxGlobalDisplay(), (Colormap) m_colormap, &pixel, 1, 0 );
         }
     }
+#endif
 }
 
 void wxColourRefData::AllocColour( WXColormap cmap )
@@ -114,6 +115,7 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
     FreeColour();
 
+#if !wxUSE_NANOX
     if ((wxTheApp->m_visualType == GrayScale) ||
         (wxTheApp->m_visualType == PseudoColor))
     {
@@ -122,6 +124,7 @@ void wxColourRefData::AllocColour( WXColormap cmap )
         colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] + 1;
     }
     else
+#endif
     {
         m_hasPixel = XAllocColor( wxGlobalDisplay(), (Colormap) cmap, &m_color );
     }

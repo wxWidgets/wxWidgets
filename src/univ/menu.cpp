@@ -2242,7 +2242,7 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
     wxCHECK_RET( m_current != -1, _T("no menu to popup") );
 
     // forgot to call DismissMenu()?
-    wxASSERT_MSG( !m_menuShown, _T("shouldn't show two menu at once!") );
+    wxASSERT_MSG( !m_menuShown, _T("shouldn't show two menus at once!") );
 
     // in any case, we should show it - even if we won't
     m_shouldShowMenu = TRUE;

@@ -399,17 +399,21 @@ wxApp::wxApp()
     m_showIconic = FALSE;
     m_initialSize = wxDefaultSize;
     
+#if !wxUSE_NANOX
     m_visualColormap = NULL;
     m_colorCube = NULL;
+#endif
 }
 
 wxApp::~wxApp()
 {
+#if !wxUSE_NANOX
     if (m_colorCube)
         free( m_colorCube );
         
     if (m_visualColormap)
         delete [] (XColor*)m_visualColormap;
+#endif
 }
 
 bool wxApp::Initialized()
@@ -505,7 +509,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
     {
         case Expose:
         {
-#if wxUSE_TWO_WINDOWS
+#if wxUSE_TWO_WINDOWS && !wxUSE_NANOX
             if (event->xexpose.window != (Window)win->GetClientWindow())
             {
                 XEvent tmp_event;
@@ -989,6 +993,7 @@ bool wxApp::OnInitGui()
 
     m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
 
+#if !wxUSE_NANOX
     // Get info about the current visual. It is enough
     // to do this once here unless we support different
     // visuals, displays and screens. Given that wxX11
@@ -1082,6 +1087,7 @@ bool wxApp::OnInitGui()
             }
         }
     }
+#endif
     
     return TRUE;
 }

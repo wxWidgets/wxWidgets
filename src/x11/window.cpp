@@ -168,8 +168,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (pos2.y == -1)
 	pos2.y = 0;
     
-#if !wxUSE_NANOX
-
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows = 
         ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
@@ -177,6 +175,9 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     bool need_two_windows = FALSE;
 #endif
 
+#if wxUSE_NANOX
+    long xattributes = 0;
+#else
     XSetWindowAttributes xattributes;
     long xattributes_mask = 0;
     
@@ -187,22 +188,41 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
     
     xattributes_mask |= CWEventMask;
+#endif
     
     if (need_two_windows)
     {
+#if wxUSE_NANOX
+        long backColor, foreColor;
+        backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
+        foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
+    
+        Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, 0, InputOutput, xvisual, backColor, foreColor);
+        XSelectInput( xdisplay, xwindow,
+          GR_EVENT_MASK_CLOSE_REQ | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+          ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+          KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+                      PropertyChangeMask );
+        
+#else
+        // Normal X11
         xattributes.event_mask = 
             ExposureMask | StructureNotifyMask | ColormapChangeMask;
 
         Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-    
+
+#endif
+        
         XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
     
         m_mainWindow = (WXWindow) xwindow;
         wxAddWindowToTable( xwindow, (wxWindow*) this );
     
         XMapWindow( xdisplay, xwindow );
-    
+
+#if !wxUSE_NANOX    
         xattributes.event_mask = 
             ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
             ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
@@ -214,7 +234,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             xattributes_mask |= CWBitGravity;
             xattributes.bit_gravity = StaticGravity;
         }
-
+#endif
+        
         if (HasFlag( wxSUNKEN_BORDER) || HasFlag( wxRAISED_BORDER))
         {
             pos2.x = 2;
@@ -233,10 +254,23 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             pos2.x = 0;
             pos2.y = 0;
         }
+#if wxUSE_NANOX        
+        backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
+        foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
+    
+        xwindow = XCreateWindowWithColor( xdisplay, xwindow, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, 0, InputOutput, xvisual, backColor, foreColor);
+        XSelectInput( xdisplay, xwindow,
+          GR_EVENT_MASK_CLOSE_REQ | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+          ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+          KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+                      PropertyChangeMask );
         
+#else
         xwindow = XCreateWindow( xdisplay, xwindow, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-    
+#endif
+        
         XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
     
         m_clientWindow = (WXWindow) xwindow;
@@ -247,7 +281,20 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     else
     {
         // wxLogDebug( "No two windows needed %s", GetName().c_str() );
+#if wxUSE_NANOX
+        long backColor, foreColor;
+        backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
+        foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
     
+        Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, 0, InputOutput, xvisual, backColor, foreColor);
+        XSelectInput( xdisplay, xwindow,
+          GR_EVENT_MASK_CLOSE_REQ | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+          ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+          KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+                      PropertyChangeMask );
+        
+#else
         xattributes.event_mask = 
             ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
             ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
@@ -262,7 +309,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
         Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-            
+#endif
+        
         XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
     
         m_mainWindow = (WXWindow) xwindow;
@@ -271,29 +319,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         
         XMapWindow( xdisplay, xwindow );
     }
-#else
-
-    int extraFlags = GR_EVENT_MASK_CLOSE_REQ;
-
-    long backColor, foreColor;
-    backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
-    foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
-    
-    Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
-                                    0, 0, InputOutput, xvisual, backColor, foreColor);
-    XSelectInput( xdisplay, xwindow,
-        extraFlags | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
-        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
-        PropertyChangeMask );
-    
-    XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
-    
-    m_mainWindow = (WXWindow) xwindow;
-    wxAddWindowToTable( xwindow, (wxWindow*) this );
-    
-    XMapWindow( xdisplay, xwindow );
-#endif
 
     // Is a subwindow, so map immediately
     m_isShown = TRUE;

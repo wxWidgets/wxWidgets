@@ -733,14 +733,14 @@ wxImage wxBitmap::ConvertToImage() const
 
     Display *xdisplay = (Display*) M_BMPDATA->m_display;
     wxASSERT_MSG( xdisplay, wxT("No display") );
-    
-    int bpp = wxTheApp->m_visualDepth;
 
 #if wxUSE_NANOX
+    //int bpp = DefaultDepth(xdisplay, xscreen);
     wxGetImageFromDrawable((Pixmap) GetPixmap(), 0, 0, GetWidth(), GetHeight(), image);
     return image;
 #else
     // !wxUSE_NANOX
+    int bpp = wxTheApp->m_visualDepth;
     XImage *x_image = NULL;
     if (GetPixmap())
     {

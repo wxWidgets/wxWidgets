@@ -107,7 +107,8 @@ public:
     static long           sm_lastMessageTime;
     bool                  m_showIconic;    
     wxSize                m_initialSize;
-    
+
+#if !wxUSE_NANOX    
     // Someone find a better place for these
     int                   m_visualType;   // TrueColor, DirectColor etc.
     int                   m_visualDepth;
@@ -125,6 +126,7 @@ public:
     int                   m_visualBluePrec;
     
     unsigned char        *m_colorCube;
+#endif
     
 protected:
     bool                  m_keepGoing;
