@@ -1744,6 +1744,7 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
                 column = i;
                 return res;
             }
+            x += w;
         }
     }
 
