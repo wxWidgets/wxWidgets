@@ -122,5 +122,9 @@ SOURCE=.\splittree.cpp
 
 SOURCE=.\ledctrl.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\statpict.cpp
+# End Source File
 # End Target
 # End Project

@@ -14,9 +14,9 @@ LIBVERSION_AGE=@WX_AGE@
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=gizmos
 
-HEADERS=multicell.h splittree.h editlbox.h dynamicsash.h ledctrl.h
+HEADERS=multicell.h splittree.h editlbox.h dynamicsash.h ledctrl.h statpict.h
 
-OBJECTS=multicell.o splittree.o editlbox.o dynamicsash.o ledctrl.o
+OBJECTS=multicell.o splittree.o editlbox.o dynamicsash.o ledctrl.o statpict.o
 DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include

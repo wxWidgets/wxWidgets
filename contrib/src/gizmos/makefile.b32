@@ -19,6 +19,7 @@ OBJECTS = \
 	$(OBJ_PATH)\editlbox.obj \
 	$(OBJ_PATH)\dynamicsash.obj \
 	$(OBJ_PATH)\ledctrl.obj \
+	$(OBJ_PATH)\statpict.obj \
 
 !include $(WXDIR)\src\makelib.b32
 
@@ -27,4 +28,5 @@ $(OBJ_PATH)\splittree.obj : splittree.cpp
 $(OBJ_PATH)\editlbox.obj : editlbox.cpp
 $(OBJ_PATH)\dynamicsash.obj : dynamicsash.cpp
 $(OBJ_PATH)\ledctrl.obj : ledctrl.cpp
+$(OBJ_PATH)\statpict.obj : statpict.cpp
 

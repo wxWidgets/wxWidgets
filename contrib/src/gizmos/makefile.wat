@@ -10,7 +10,8 @@ OBJECTS =  &
     $(OUTPUTDIR)\splittree.obj &
     $(OUTPUTDIR)\editlbox.obj &
     $(OUTPUTDIR)\dynamicsash.obj &
-    $(OUTPUTDIR)\ledctrl.obj
+    $(OUTPUTDIR)\ledctrl.obj &
+    $(OUTPUTDIR)\statpict.obj
 
 !include $(WXDIR)\src\makelib.wat
 

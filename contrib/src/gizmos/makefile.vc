@@ -23,7 +23,7 @@ LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\gizmos
 
 !include $(WXDIR)\src\makevc.env
 
-OBJECTS = $(D)\multicell.obj $(D)\splittree.obj $(D)\editlbox.obj $(D)\dynamicsash.obj $(D)\ledctrl.obj
+OBJECTS = $(D)\multicell.obj $(D)\splittree.obj $(D)\editlbox.obj $(D)\dynamicsash.obj $(D)\ledctrl.obj $(D)\statpict.obj
 
 LIBTARGET=$(WXDIR)\lib\gizmos$(LIBEXT).lib
 
