@@ -128,6 +128,8 @@ void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
     wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
+
+    SetFieldsWidth();
 }
 
 void wxStatusBar95::SetStatusWidths(int n, const int widths[])
