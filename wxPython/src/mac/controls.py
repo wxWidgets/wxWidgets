@@ -809,6 +809,34 @@ def PreSlider(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+wxEVT_COMMAND_TOGGLEBUTTON_CLICKED = _controls.wxEVT_COMMAND_TOGGLEBUTTON_CLICKED
+EVT_TOGGLEBUTTON = wx.PyEventBinder( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 1)
+
+class ToggleButton(core.Control):
+    def __init__(self, *args, **kwargs):
+        newobj = _controls.new_ToggleButton(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxToggleButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class ToggleButtonPtr(ToggleButton):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = ToggleButton
+_controls.ToggleButton_swigregister(ToggleButtonPtr)
+
+def PreToggleButton(*args, **kwargs):
+    val = _controls.new_PreToggleButton(*args, **kwargs)
+    val.thisown = 1
+    
+    return val
+
+#---------------------------------------------------------------------------
+
 class BookCtrl(core.Control):
     def GetPageCount(*args, **kwargs): return _controls.BookCtrl_GetPageCount(*args, **kwargs)
     def GetPage(*args, **kwargs): return _controls.BookCtrl_GetPage(*args, **kwargs)

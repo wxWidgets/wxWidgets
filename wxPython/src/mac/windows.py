@@ -825,6 +825,59 @@ def PreHtmlListBox(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+class TaskBarIcon(core.EvtHandler):
+    def __init__(self, *args, **kwargs):
+        newobj = _windows.new_TaskBarIcon(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_windows.delete_TaskBarIcon):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class TaskBarIconPtr(TaskBarIcon):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = TaskBarIcon
+_windows.TaskBarIcon_swigregister(TaskBarIconPtr)
+
+class TaskBarIconEvent(core.Event):
+    def __init__(self, *args, **kwargs):
+        newobj = _windows.new_TaskBarIconEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTaskBarIconEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class TaskBarIconEventPtr(TaskBarIconEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = TaskBarIconEvent
+_windows.TaskBarIconEvent_swigregister(TaskBarIconEventPtr)
+
+wxEVT_TASKBAR_MOVE = _windows.wxEVT_TASKBAR_MOVE
+wxEVT_TASKBAR_LEFT_DOWN = _windows.wxEVT_TASKBAR_LEFT_DOWN
+wxEVT_TASKBAR_LEFT_UP = _windows.wxEVT_TASKBAR_LEFT_UP
+wxEVT_TASKBAR_RIGHT_DOWN = _windows.wxEVT_TASKBAR_RIGHT_DOWN
+wxEVT_TASKBAR_RIGHT_UP = _windows.wxEVT_TASKBAR_RIGHT_UP
+wxEVT_TASKBAR_LEFT_DCLICK = _windows.wxEVT_TASKBAR_LEFT_DCLICK
+wxEVT_TASKBAR_RIGHT_DCLICK = _windows.wxEVT_TASKBAR_RIGHT_DCLICK
+EVT_TASKBAR_MOVE = wx.PyEventBinder (         wxEVT_TASKBAR_MOVE )
+EVT_TASKBAR_LEFT_DOWN = wx.PyEventBinder (    wxEVT_TASKBAR_LEFT_DOWN )
+EVT_TASKBAR_LEFT_UP = wx.PyEventBinder (      wxEVT_TASKBAR_LEFT_UP )
+EVT_TASKBAR_RIGHT_DOWN = wx.PyEventBinder (   wxEVT_TASKBAR_RIGHT_DOWN )
+EVT_TASKBAR_RIGHT_UP = wx.PyEventBinder (     wxEVT_TASKBAR_RIGHT_UP )
+EVT_TASKBAR_LEFT_DCLICK = wx.PyEventBinder (  wxEVT_TASKBAR_LEFT_DCLICK )
+EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
+
+#---------------------------------------------------------------------------
+
 class ColourData(core.Object):
     def __init__(self, *args, **kwargs):
         newobj = _windows.new_ColourData(*args, **kwargs)

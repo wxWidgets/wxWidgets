@@ -468,6 +468,11 @@ def RegionFromBitmap(*args, **kwargs):
     val.thisown = 1
     return val
 
+def RegionFromPoints(*args, **kwargs):
+    val = _gdi.new_RegionFromPoints(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 class RegionIterator(core.Object):
     def __init__(self, *args, **kwargs):
         newobj = _gdi.new_RegionIterator(*args, **kwargs)

@@ -208,8 +208,8 @@ SWIGIMPORT(void)              SWIG_InstallConstants(PyObject *d, swig_const_info
 #define  SWIGTYPE_p_wxString swig_types[28] 
 #define  SWIGTYPE_p_wxPrinterDC swig_types[29] 
 #define  SWIGTYPE_p_wxIconBundle swig_types[30] 
-#define  SWIGTYPE_p_wxDash swig_types[31] 
-#define  SWIGTYPE_p_wxPoint swig_types[32] 
+#define  SWIGTYPE_p_wxPoint swig_types[31] 
+#define  SWIGTYPE_p_wxDash swig_types[32] 
 #define  SWIGTYPE_p_wxScreenDC swig_types[33] 
 #define  SWIGTYPE_p_wxCursor swig_types[34] 
 #define  SWIGTYPE_p_wxClientDC swig_types[35] 
@@ -218,8 +218,8 @@ SWIGIMPORT(void)              SWIG_InstallConstants(PyObject *d, swig_const_info
 #define  SWIGTYPE_p_wxImageList swig_types[38] 
 #define  SWIGTYPE_p_unsigned_char swig_types[39] 
 #define  SWIGTYPE_p_wxGDIObject swig_types[40] 
-#define  SWIGTYPE_p_wxLocale swig_types[41] 
-#define  SWIGTYPE_p_wxIcon swig_types[42] 
+#define  SWIGTYPE_p_wxIcon swig_types[41] 
+#define  SWIGTYPE_p_wxLocale swig_types[42] 
 #define  SWIGTYPE_p_wxRegion swig_types[43] 
 #define  SWIGTYPE_p_wxLanguageInfo swig_types[44] 
 #define  SWIGTYPE_p_wxConfigBase swig_types[45] 
@@ -400,6 +400,10 @@ wxCursor *new_wxCursor(PyObject *bits,int width,int height,int hotSpotX,int hotS
         }
 
 
+wxRegion *new_wxRegion(int points,wxPoint *points_array,int fillStyle){
+            PyErr_SetNone(PyExc_NotImplementedError);
+            return NULL;
+        }
 void wxRegionIterator_Next(wxRegionIterator *self){
             (*self) ++;
         }
@@ -3822,6 +3826,42 @@ static PyObject *_wrap_new_RegionFromBitmap(PyObject *self, PyObject *args, PyOb
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxRegion, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_RegionFromPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    wxPoint *arg2 = (wxPoint *) 0 ;
+    int arg3 = (int) wxWINDING_RULE ;
+    wxRegion *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "points",(char *) "fillStyle", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_RegionFromPoints",kwnames,&obj0,&arg3)) goto fail;
+    {
+        arg2 = wxPoint_LIST_helper(obj0, &arg1);
+        if (arg2 == NULL) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRegion *)new_wxRegion(arg1,arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxRegion, 1);
+    {
+        if (arg2) delete [] arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (arg2) delete [] arg2;
+    }
     return NULL;
 }
 
@@ -16369,6 +16409,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Cursor_swigregister", Cursor_swigregister, METH_VARARGS },
 	 { (char *)"new_Region", (PyCFunction) _wrap_new_Region, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_RegionFromBitmap", (PyCFunction) _wrap_new_RegionFromBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_RegionFromPoints", (PyCFunction) _wrap_new_RegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Region", (PyCFunction) _wrap_delete_Region, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_Clear", (PyCFunction) _wrap_Region_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Region_Contains", (PyCFunction) _wrap_Region_Contains, METH_VARARGS | METH_KEYWORDS },
@@ -17198,8 +17239,8 @@ static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0},{"_p
 static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxPrinterDC[] = {{"_p_wxPrinterDC", 0, "wxPrinterDC *", 0},{"_p_wxPrinterDC"},{0}};
 static swig_type_info _swigt__p_wxIconBundle[] = {{"_p_wxIconBundle", 0, "wxIconBundle *", 0},{"_p_wxIconBundle"},{0}};
-static swig_type_info _swigt__p_wxDash[] = {{"_p_wxDash", 0, "wxDash *", 0},{"_p_wxDash"},{0}};
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{"_p_wxPoint"},{0}};
+static swig_type_info _swigt__p_wxDash[] = {{"_p_wxDash", 0, "wxDash *", 0},{"_p_wxDash"},{0}};
 static swig_type_info _swigt__p_wxScreenDC[] = {{"_p_wxScreenDC", 0, "wxScreenDC *", 0},{"_p_wxScreenDC"},{0}};
 static swig_type_info _swigt__p_wxCursor[] = {{"_p_wxCursor", 0, "wxCursor *", 0},{"_p_wxCursor"},{0}};
 static swig_type_info _swigt__p_wxClientDC[] = {{"_p_wxClientDC", 0, "wxClientDC *", 0},{"_p_wxClientDC"},{0}};
@@ -17208,8 +17249,8 @@ static swig_type_info _swigt__p_wxBufferedDC[] = {{"_p_wxBufferedDC", 0, "wxBuff
 static swig_type_info _swigt__p_wxImageList[] = {{"_p_wxImageList", 0, "wxImageList *", 0},{"_p_wxImageList"},{0}};
 static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *", 0},{"_p_unsigned_char"},{0}};
 static swig_type_info _swigt__p_wxGDIObject[] = {{"_p_wxGDIObject", 0, "wxGDIObject *", 0},{"_p_wxIcon", _p_wxIconTo_p_wxGDIObject},{"_p_wxPyPen", _p_wxPyPenTo_p_wxGDIObject},{"_p_wxPen", _p_wxPenTo_p_wxGDIObject},{"_p_wxFont", _p_wxFontTo_p_wxGDIObject},{"_p_wxPalette", _p_wxPaletteTo_p_wxGDIObject},{"_p_wxGDIObject"},{"_p_wxCursor", _p_wxCursorTo_p_wxGDIObject},{"_p_wxBitmap", _p_wxBitmapTo_p_wxGDIObject},{"_p_wxRegion", _p_wxRegionTo_p_wxGDIObject},{"_p_wxBrush", _p_wxBrushTo_p_wxGDIObject},{0}};
-static swig_type_info _swigt__p_wxLocale[] = {{"_p_wxLocale", 0, "wxLocale *", 0},{"_p_wxLocale"},{0}};
 static swig_type_info _swigt__p_wxIcon[] = {{"_p_wxIcon", 0, "wxIcon *", 0},{"_p_wxIcon"},{0}};
+static swig_type_info _swigt__p_wxLocale[] = {{"_p_wxLocale", 0, "wxLocale *", 0},{"_p_wxLocale"},{0}};
 static swig_type_info _swigt__p_wxRegion[] = {{"_p_wxRegion", 0, "wxRegion *", 0},{"_p_wxRegion"},{0}};
 static swig_type_info _swigt__p_wxLanguageInfo[] = {{"_p_wxLanguageInfo", 0, "wxLanguageInfo *", 0},{"_p_wxLanguageInfo"},{0}};
 static swig_type_info _swigt__p_wxConfigBase[] = {{"_p_wxConfigBase", 0, "wxConfigBase *", 0},{"_p_wxConfigBase"},{0}};
@@ -17261,8 +17302,8 @@ _swigt__p_wxRect,
 _swigt__p_wxString, 
 _swigt__p_wxPrinterDC, 
 _swigt__p_wxIconBundle, 
-_swigt__p_wxDash, 
 _swigt__p_wxPoint, 
+_swigt__p_wxDash, 
 _swigt__p_wxScreenDC, 
 _swigt__p_wxCursor, 
 _swigt__p_wxClientDC, 
@@ -17271,8 +17312,8 @@ _swigt__p_wxBufferedDC,
 _swigt__p_wxImageList, 
 _swigt__p_unsigned_char, 
 _swigt__p_wxGDIObject, 
-_swigt__p_wxLocale, 
 _swigt__p_wxIcon, 
+_swigt__p_wxLocale, 
 _swigt__p_wxRegion, 
 _swigt__p_wxLanguageInfo, 
 _swigt__p_wxConfigBase, 

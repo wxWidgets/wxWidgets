@@ -517,6 +517,11 @@ wxString wxObject_GetClassName(wxObject *self){
 void wxObject_Destroy(wxObject *self){
             delete self;
         }
+
+#ifndef __WXMAC__
+#define wxCURSOR_COPY_ARROW wxCURSOR_ARROW
+#endif
+
 PyObject *wxSize_asTuple(wxSize *self){
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);

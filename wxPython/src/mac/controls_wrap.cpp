@@ -191,73 +191,74 @@ SWIGIMPORT(void)              SWIG_InstallConstants(PyObject *d, swig_const_info
 #define  SWIGTYPE_p_wxTreeItemData swig_types[11] 
 #define  SWIGTYPE_p_wxPyTreeItemData swig_types[12] 
 #define  SWIGTYPE_p_wxItemContainer swig_types[13] 
-#define  SWIGTYPE_p_wxDirFilterListCtrl swig_types[14] 
-#define  SWIGTYPE_p_wxPyListCtrl swig_types[15] 
+#define  SWIGTYPE_p_wxPyListCtrl swig_types[14] 
+#define  SWIGTYPE_p_wxDirFilterListCtrl swig_types[15] 
 #define  SWIGTYPE_p_wxStaticLine swig_types[16] 
 #define  SWIGTYPE_p_wxControl swig_types[17] 
 #define  SWIGTYPE_p_wxPyControl swig_types[18] 
 #define  SWIGTYPE_p_wxGauge swig_types[19] 
 #define  SWIGTYPE_p_wxToolBarBase swig_types[20] 
 #define  SWIGTYPE_p_wxFont swig_types[21] 
-#define  SWIGTYPE_p_wxRadioButton swig_types[22] 
-#define  SWIGTYPE_p_wxChoice swig_types[23] 
-#define  SWIGTYPE_p_wxListItemAttr swig_types[24] 
-#define  SWIGTYPE_p_int swig_types[25] 
-#define  SWIGTYPE_p_wxSize swig_types[26] 
-#define  SWIGTYPE_p_wxListView swig_types[27] 
-#define  SWIGTYPE_p_wxIcon swig_types[28] 
-#define  SWIGTYPE_p_wxTextCtrl swig_types[29] 
-#define  SWIGTYPE_p_wxNotebook swig_types[30] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[31] 
-#define  SWIGTYPE_p_wxArrayString swig_types[32] 
-#define  SWIGTYPE_p_wxListbook swig_types[33] 
-#define  SWIGTYPE_p_wxStaticBitmap swig_types[34] 
-#define  SWIGTYPE_p_wxSlider swig_types[35] 
-#define  SWIGTYPE_p_wxStaticBox swig_types[36] 
-#define  SWIGTYPE_p_wxArrayInt swig_types[37] 
-#define  SWIGTYPE_p_wxContextHelp swig_types[38] 
-#define  SWIGTYPE_p_long swig_types[39] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[40] 
-#define  SWIGTYPE_p_wxListEvent swig_types[41] 
-#define  SWIGTYPE_p_wxListBox swig_types[42] 
-#define  SWIGTYPE_p_wxCheckListBox swig_types[43] 
-#define  SWIGTYPE_p_wxBookCtrl swig_types[44] 
-#define  SWIGTYPE_p_wxSpinButton swig_types[45] 
-#define  SWIGTYPE_p_wxButton swig_types[46] 
-#define  SWIGTYPE_p_wxBitmapButton swig_types[47] 
-#define  SWIGTYPE_p_wxRect swig_types[48] 
-#define  SWIGTYPE_p_wxContextHelpButton swig_types[49] 
-#define  SWIGTYPE_p_wxRadioBox swig_types[50] 
-#define  SWIGTYPE_p_wxScrollBar swig_types[51] 
-#define  SWIGTYPE_p_wxTreeItemId swig_types[52] 
-#define  SWIGTYPE_p_wxComboBox swig_types[53] 
-#define  SWIGTYPE_p_wxHelpEvent swig_types[54] 
-#define  SWIGTYPE_p_wxListItem swig_types[55] 
-#define  SWIGTYPE_p_wxNotebookSizer swig_types[56] 
-#define  SWIGTYPE_p_wxSpinCtrl swig_types[57] 
-#define  SWIGTYPE_p_wxImageList swig_types[58] 
-#define  SWIGTYPE_p_wxHelpProvider swig_types[59] 
-#define  SWIGTYPE_p_wxTextAttr swig_types[60] 
-#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[61] 
-#define  SWIGTYPE_p_wxPoint swig_types[62] 
-#define  SWIGTYPE_p_wxListbookEvent swig_types[63] 
-#define  SWIGTYPE_p_wxNotebookEvent swig_types[64] 
-#define  SWIGTYPE_p_wxObject swig_types[65] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[66] 
-#define  SWIGTYPE_p_wxWindow swig_types[67] 
-#define  SWIGTYPE_p_wxString swig_types[68] 
-#define  SWIGTYPE_p_wxBitmap swig_types[69] 
-#define  SWIGTYPE_p_wxTreeEvent swig_types[70] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[71] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[72] 
-#define  SWIGTYPE_p_wxStaticText swig_types[73] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[74] 
-#define  SWIGTYPE_p_wxToolBarToolBase swig_types[75] 
-#define  SWIGTYPE_p_wxColour swig_types[76] 
-#define  SWIGTYPE_p_wxToolBar swig_types[77] 
-#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[78] 
-#define  SWIGTYPE_p_wxValidator swig_types[79] 
-static swig_type_info *swig_types[81];
+#define  SWIGTYPE_p_wxToggleButton swig_types[22] 
+#define  SWIGTYPE_p_wxRadioButton swig_types[23] 
+#define  SWIGTYPE_p_wxChoice swig_types[24] 
+#define  SWIGTYPE_p_wxListItemAttr swig_types[25] 
+#define  SWIGTYPE_p_int swig_types[26] 
+#define  SWIGTYPE_p_wxSize swig_types[27] 
+#define  SWIGTYPE_p_wxListView swig_types[28] 
+#define  SWIGTYPE_p_wxIcon swig_types[29] 
+#define  SWIGTYPE_p_wxTextCtrl swig_types[30] 
+#define  SWIGTYPE_p_wxNotebook swig_types[31] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[32] 
+#define  SWIGTYPE_p_wxArrayString swig_types[33] 
+#define  SWIGTYPE_p_wxListbook swig_types[34] 
+#define  SWIGTYPE_p_wxStaticBitmap swig_types[35] 
+#define  SWIGTYPE_p_wxSlider swig_types[36] 
+#define  SWIGTYPE_p_wxStaticBox swig_types[37] 
+#define  SWIGTYPE_p_wxArrayInt swig_types[38] 
+#define  SWIGTYPE_p_wxContextHelp swig_types[39] 
+#define  SWIGTYPE_p_long swig_types[40] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[41] 
+#define  SWIGTYPE_p_wxListEvent swig_types[42] 
+#define  SWIGTYPE_p_wxListBox swig_types[43] 
+#define  SWIGTYPE_p_wxCheckListBox swig_types[44] 
+#define  SWIGTYPE_p_wxBookCtrl swig_types[45] 
+#define  SWIGTYPE_p_wxSpinButton swig_types[46] 
+#define  SWIGTYPE_p_wxButton swig_types[47] 
+#define  SWIGTYPE_p_wxBitmapButton swig_types[48] 
+#define  SWIGTYPE_p_wxRect swig_types[49] 
+#define  SWIGTYPE_p_wxContextHelpButton swig_types[50] 
+#define  SWIGTYPE_p_wxRadioBox swig_types[51] 
+#define  SWIGTYPE_p_wxScrollBar swig_types[52] 
+#define  SWIGTYPE_p_wxTreeItemId swig_types[53] 
+#define  SWIGTYPE_p_wxComboBox swig_types[54] 
+#define  SWIGTYPE_p_wxHelpEvent swig_types[55] 
+#define  SWIGTYPE_p_wxListItem swig_types[56] 
+#define  SWIGTYPE_p_wxNotebookSizer swig_types[57] 
+#define  SWIGTYPE_p_wxSpinCtrl swig_types[58] 
+#define  SWIGTYPE_p_wxImageList swig_types[59] 
+#define  SWIGTYPE_p_wxHelpProvider swig_types[60] 
+#define  SWIGTYPE_p_wxTextAttr swig_types[61] 
+#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[62] 
+#define  SWIGTYPE_p_wxPoint swig_types[63] 
+#define  SWIGTYPE_p_wxListbookEvent swig_types[64] 
+#define  SWIGTYPE_p_wxNotebookEvent swig_types[65] 
+#define  SWIGTYPE_p_wxObject swig_types[66] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[67] 
+#define  SWIGTYPE_p_wxWindow swig_types[68] 
+#define  SWIGTYPE_p_wxString swig_types[69] 
+#define  SWIGTYPE_p_wxBitmap swig_types[70] 
+#define  SWIGTYPE_p_wxTreeEvent swig_types[71] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[72] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[73] 
+#define  SWIGTYPE_p_wxStaticText swig_types[74] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[75] 
+#define  SWIGTYPE_p_wxToolBarToolBase swig_types[76] 
+#define  SWIGTYPE_p_wxColour swig_types[77] 
+#define  SWIGTYPE_p_wxToolBar swig_types[78] 
+#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[79] 
+#define  SWIGTYPE_p_wxValidator swig_types[80] 
+static swig_type_info *swig_types[82];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -382,6 +383,24 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
     wxChar* wxToggleButtonNameStr = _T("wxToggleButton");
     DECLARE_DEF_STRING(ToggleButtonNameStr);
 
+
+
+#ifdef __WXMAC__
+// implement dummy classes and such for wxMac
+
+#define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
+class wxToggleButton : public wxControl
+{
+public:
+    wxToggleButton(wxWindow *, wxWindowID, const wxString&,
+                   const wxPoint&, const wxSize&, long,
+                   const wxValidator&, const wxString&)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    
+    wxToggleButton()
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+#endif
 
 
 #include <wx/notebook.h>
@@ -10637,6 +10656,126 @@ static PyObject * Slider_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxSlider, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxWindowID arg2 ;
+    wxString *arg3 = 0 ;
+    wxPoint const &arg4_defvalue = wxDefaultPosition ;
+    wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+    wxSize const &arg5_defvalue = wxDefaultSize ;
+    wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+    long arg6 = (long) 0 ;
+    wxValidator const &arg7_defvalue = wxDefaultValidator ;
+    wxValidator *arg7 = (wxValidator *) &arg7_defvalue ;
+    wxString const &arg8_defvalue = wxPyToggleButtonNameStr ;
+    wxString *arg8 = (wxString *) &arg8_defvalue ;
+    wxToggleButton *result;
+    bool temp3 = false ;
+    wxPoint temp4 ;
+    wxSize temp5 ;
+    bool temp8 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
+    char *kwnames[] = {
+        (char *) "parent",(char *) "id",(char *) "label",(char *) "pos",(char *) "size",(char *) "style",(char *) "validator",(char *) "name", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|OOlOO:new_ToggleButton",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4,&arg6,&obj6,&obj7)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg3 = wxString_in_helper(obj2);
+        if (arg3 == NULL) SWIG_fail;
+        temp3 = true;
+    }
+    if (obj3) {
+        {
+            arg4 = &temp4;
+            if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = &temp5;
+            if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+        }
+    }
+    if (obj6) {
+        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxValidator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if (arg7 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        }
+    }
+    if (obj7) {
+        {
+            arg8 = wxString_in_helper(obj7);
+            if (arg8 == NULL) SWIG_fail;
+            temp8 = true;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxToggleButton *)new wxToggleButton(arg1,arg2,(wxString const &)*arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxValidator const &)*arg7,(wxString const &)*arg8);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxToggleButton, 1);
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (temp8)
+        delete arg8;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (temp8)
+        delete arg8;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_PreToggleButton(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToggleButton *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_PreToggleButton",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxToggleButton *)new wxToggleButton();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxToggleButton, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * ToggleButton_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxToggleButton, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
@@ -24995,6 +25134,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Slider_GetSelStart", (PyCFunction) _wrap_Slider_GetSelStart, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Slider_SetSelection", (PyCFunction) _wrap_Slider_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Slider_swigregister", Slider_swigregister, METH_VARARGS },
+	 { (char *)"new_ToggleButton", (PyCFunction) _wrap_new_ToggleButton, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreToggleButton", (PyCFunction) _wrap_new_PreToggleButton, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_swigregister", ToggleButton_swigregister, METH_VARARGS },
 	 { (char *)"BookCtrl_GetPageCount", (PyCFunction) _wrap_BookCtrl_GetPageCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_GetPage", (PyCFunction) _wrap_BookCtrl_GetPage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_GetSelection", (PyCFunction) _wrap_BookCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
@@ -25694,6 +25836,9 @@ static void *_p_wxBookCtrlTo_p_wxControl(void *x) {
 static void *_p_wxRadioButtonTo_p_wxControl(void *x) {
     return (void *)((wxControl *)  ((wxRadioButton *) x));
 }
+static void *_p_wxToggleButtonTo_p_wxControl(void *x) {
+    return (void *)((wxControl *)  ((wxToggleButton *) x));
+}
 static void *_p_wxGaugeTo_p_wxControl(void *x) {
     return (void *)((wxControl *)  ((wxGauge *) x));
 }
@@ -25787,6 +25932,9 @@ static void *_p_wxToolBarTo_p_wxEvtHandler(void *x) {
 static void *_p_wxMenuTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *)  ((wxMenu *) x));
 }
+static void *_p_wxToggleButtonTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxToggleButton *) x));
+}
 static void *_p_wxRadioButtonTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxRadioButton *) x));
 }
@@ -25850,14 +25998,14 @@ static void *_p_wxListBoxTo_p_wxEvtHandler(void *x) {
 static void *_p_wxChoiceTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *)(wxControlWithItems *) ((wxChoice *) x));
 }
-static void *_p_wxListViewTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *)(wxPyListCtrl *) ((wxListView *) x));
-}
 static void *_p_wxNotebookTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *)(wxBookCtrl *) ((wxNotebook *) x));
 }
 static void *_p_wxStaticBitmapTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxStaticBitmap *) x));
+}
+static void *_p_wxListViewTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *)(wxPyListCtrl *) ((wxListView *) x));
 }
 static void *_p_wxSpinCtrlTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxSpinCtrl *) x));
@@ -25996,6 +26144,9 @@ static void *_p_wxGaugeTo_p_wxObject(void *x) {
 }
 static void *_p_wxRadioButtonTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxRadioButton *) x));
+}
+static void *_p_wxToggleButtonTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxToggleButton *) x));
 }
 static void *_p_wxToolBarBaseTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxToolBarBase *) x));
@@ -26255,6 +26406,9 @@ static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
 static void *_p_wxToolBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *)(wxToolBarBase *) ((wxToolBar *) x));
 }
+static void *_p_wxToggleButtonTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxControl *) ((wxToggleButton *) x));
+}
 static void *_p_wxRadioButtonTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *) ((wxRadioButton *) x));
 }
@@ -26333,9 +26487,6 @@ static void *_p_wxStaticBoxTo_p_wxWindow(void *x) {
 static void *_p_wxSliderTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *) ((wxSlider *) x));
 }
-static void *_p_wxContextHelpButtonTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxControl *)(wxButton *)(wxBitmapButton *) ((wxContextHelpButton *) x));
-}
 static void *_p_wxSpinButtonTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *) ((wxSpinButton *) x));
 }
@@ -26344,6 +26495,9 @@ static void *_p_wxButtonTo_p_wxWindow(void *x) {
 }
 static void *_p_wxBitmapButtonTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *)(wxButton *) ((wxBitmapButton *) x));
+}
+static void *_p_wxContextHelpButtonTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxControl *)(wxButton *)(wxBitmapButton *) ((wxContextHelpButton *) x));
 }
 static void *_p_wxTextCtrlTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxControl *) ((wxTextCtrl *) x));
@@ -26422,14 +26576,15 @@ static swig_type_info _swigt__p_bool[] = {{"_p_bool", 0, "bool *", 0},{"_p_bool"
 static swig_type_info _swigt__p_wxTreeItemData[] = {{"_p_wxTreeItemData", 0, "wxTreeItemData *", 0},{"_p_wxTreeItemData"},{0}};
 static swig_type_info _swigt__p_wxPyTreeItemData[] = {{"_p_wxPyTreeItemData", 0, "wxPyTreeItemData *", 0},{"_p_wxPyTreeItemData"},{0}};
 static swig_type_info _swigt__p_wxItemContainer[] = {{"_p_wxItemContainer", 0, "wxItemContainer *", 0},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxItemContainer},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxItemContainer},{"_p_wxChoice", _p_wxChoiceTo_p_wxItemContainer},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxItemContainer},{"_p_wxListBox", _p_wxListBoxTo_p_wxItemContainer},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxItemContainer},{"_p_wxItemContainer"},{0}};
-static swig_type_info _swigt__p_wxDirFilterListCtrl[] = {{"_p_wxDirFilterListCtrl", 0, "wxDirFilterListCtrl *", 0},{"_p_wxDirFilterListCtrl"},{0}};
 static swig_type_info _swigt__p_wxPyListCtrl[] = {{"_p_wxPyListCtrl", 0, "wxPyListCtrl *", 0},{"_p_wxPyListCtrl"},{"_p_wxListView", _p_wxListViewTo_p_wxPyListCtrl},{0}};
+static swig_type_info _swigt__p_wxDirFilterListCtrl[] = {{"_p_wxDirFilterListCtrl", 0, "wxDirFilterListCtrl *", 0},{"_p_wxDirFilterListCtrl"},{0}};
 static swig_type_info _swigt__p_wxStaticLine[] = {{"_p_wxStaticLine", 0, "wxStaticLine *", 0},{"_p_wxStaticLine"},{0}};
-static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxToolBar", _p_wxToolBarTo_p_wxControl},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxControl},{"_p_wxListBox", _p_wxListBoxTo_p_wxControl},{"_p_wxChoice", _p_wxChoiceTo_p_wxControl},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxControl},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxControl},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxControl},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxControl},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxControl},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxControl},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxControl},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxControl},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxControl},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxControl},{"_p_wxGauge", _p_wxGaugeTo_p_wxControl},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxControl},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxControl},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxControl},{"_p_wxButton", _p_wxButtonTo_p_wxControl},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxControl},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxControl},{"_p_wxListbook", _p_wxListbookTo_p_wxControl},{"_p_wxNotebook", _p_wxNotebookTo_p_wxControl},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxControl},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxControl},{"_p_wxListView", _p_wxListViewTo_p_wxControl},{"_p_wxControl"},{"_p_wxSlider", _p_wxSliderTo_p_wxControl},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxControl},{"_p_wxPyControl", _p_wxPyControlTo_p_wxControl},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxControl},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxControl},{0}};
+static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxControl},{"_p_wxToolBar", _p_wxToolBarTo_p_wxControl},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxControl},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxControl},{"_p_wxControl"},{"_p_wxPyControl", _p_wxPyControlTo_p_wxControl},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxControl},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxControl},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxControl},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxControl},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxControl},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxControl},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{"_p_wxGauge", _p_wxGaugeTo_p_wxControl},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxControl},{"_p_wxListbook", _p_wxListbookTo_p_wxControl},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxControl},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxControl},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxControl},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxControl},{"_p_wxListBox", _p_wxListBoxTo_p_wxControl},{"_p_wxChoice", _p_wxChoiceTo_p_wxControl},{"_p_wxListView", _p_wxListViewTo_p_wxControl},{"_p_wxNotebook", _p_wxNotebookTo_p_wxControl},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxControl},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxControl},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxControl},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxControl},{"_p_wxSlider", _p_wxSliderTo_p_wxControl},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxControl},{"_p_wxButton", _p_wxButtonTo_p_wxControl},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxControl},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxControl},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxControl},{0}};
 static swig_type_info _swigt__p_wxPyControl[] = {{"_p_wxPyControl", 0, "wxPyControl *", 0},{"_p_wxPyControl"},{0}};
 static swig_type_info _swigt__p_wxGauge[] = {{"_p_wxGauge", 0, "wxGauge *", 0},{"_p_wxGauge"},{0}};
 static swig_type_info _swigt__p_wxToolBarBase[] = {{"_p_wxToolBarBase", 0, "wxToolBarBase *", 0},{"_p_wxToolBarBase"},{"_p_wxToolBar", _p_wxToolBarTo_p_wxToolBarBase},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
+static swig_type_info _swigt__p_wxToggleButton[] = {{"_p_wxToggleButton", 0, "wxToggleButton *", 0},{"_p_wxToggleButton"},{0}};
 static swig_type_info _swigt__p_wxRadioButton[] = {{"_p_wxRadioButton", 0, "wxRadioButton *", 0},{"_p_wxRadioButton"},{0}};
 static swig_type_info _swigt__p_wxChoice[] = {{"_p_wxChoice", 0, "wxChoice *", 0},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxChoice},{"_p_wxChoice"},{0}};
 static swig_type_info _swigt__p_wxListItemAttr[] = {{"_p_wxListItemAttr", 0, "wxListItemAttr *", 0},{"_p_wxListItemAttr"},{0}};
@@ -26448,7 +26603,7 @@ static swig_type_info _swigt__p_wxStaticBox[] = {{"_p_wxStaticBox", 0, "wxStatic
 static swig_type_info _swigt__p_wxArrayInt[] = {{"_p_wxArrayInt", 0, "wxArrayInt *", 0},{"_p_wxArrayInt"},{0}};
 static swig_type_info _swigt__p_wxContextHelp[] = {{"_p_wxContextHelp", 0, "wxContextHelp *", 0},{"_p_wxContextHelp"},{0}};
 static swig_type_info _swigt__p_long[] = {{"_p_long", 0, "long *", 0},{"_p_long"},{0}};
-static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxToolBar", _p_wxToolBarTo_p_wxEvtHandler},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxPyControl", _p_wxPyControlTo_p_wxEvtHandler},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxEvtHandler},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxEvtHandler},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxEvtHandler},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxEvtHandler},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxEvtHandler},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxGauge", _p_wxGaugeTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxEvtHandler},{"_p_wxListbook", _p_wxListbookTo_p_wxEvtHandler},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxEvtHandler},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxEvtHandler},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxEvtHandler},{"_p_wxChoice", _p_wxChoiceTo_p_wxEvtHandler},{"_p_wxListBox", _p_wxListBoxTo_p_wxEvtHandler},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxEvtHandler},{"_p_wxListView", _p_wxListViewTo_p_wxEvtHandler},{"_p_wxNotebook", _p_wxNotebookTo_p_wxEvtHandler},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxEvtHandler},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxEvtHandler},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxEvtHandler},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxEvtHandler},{"_p_wxSlider", _p_wxSliderTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxEvtHandler},{"_p_wxButton", _p_wxButtonTo_p_wxEvtHandler},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxEvtHandler},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxEvtHandler},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxEvtHandler},{0}};
+static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxToolBar", _p_wxToolBarTo_p_wxEvtHandler},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxEvtHandler},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxPyControl", _p_wxPyControlTo_p_wxEvtHandler},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxEvtHandler},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxEvtHandler},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxEvtHandler},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxEvtHandler},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxEvtHandler},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxGauge", _p_wxGaugeTo_p_wxEvtHandler},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxListbook", _p_wxListbookTo_p_wxEvtHandler},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxEvtHandler},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxEvtHandler},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxEvtHandler},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxEvtHandler},{"_p_wxListBox", _p_wxListBoxTo_p_wxEvtHandler},{"_p_wxChoice", _p_wxChoiceTo_p_wxEvtHandler},{"_p_wxListView", _p_wxListViewTo_p_wxEvtHandler},{"_p_wxNotebook", _p_wxNotebookTo_p_wxEvtHandler},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxEvtHandler},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxEvtHandler},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxEvtHandler},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxEvtHandler},{"_p_wxSlider", _p_wxSliderTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxEvtHandler},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxEvtHandler},{"_p_wxButton", _p_wxButtonTo_p_wxEvtHandler},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxEvtHandler},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxEvtHandler},{0}};
 static swig_type_info _swigt__p_wxListEvent[] = {{"_p_wxListEvent", 0, "wxListEvent *", 0},{"_p_wxListEvent"},{0}};
 static swig_type_info _swigt__p_wxListBox[] = {{"_p_wxListBox", 0, "wxListBox *", 0},{"_p_wxListBox"},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxListBox},{0}};
 static swig_type_info _swigt__p_wxCheckListBox[] = {{"_p_wxCheckListBox", 0, "wxCheckListBox *", 0},{"_p_wxCheckListBox"},{0}};
@@ -26473,9 +26628,9 @@ static swig_type_info _swigt__p_wxSimpleHelpProvider[] = {{"_p_wxSimpleHelpProvi
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{"_p_wxPoint"},{0}};
 static swig_type_info _swigt__p_wxListbookEvent[] = {{"_p_wxListbookEvent", 0, "wxListbookEvent *", 0},{"_p_wxListbookEvent"},{0}};
 static swig_type_info _swigt__p_wxNotebookEvent[] = {{"_p_wxNotebookEvent", 0, "wxNotebookEvent *", 0},{"_p_wxNotebookEvent"},{0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxTextUrlEvent", _p_wxTextUrlEventTo_p_wxObject},{"_p_wxBookCtrlEvent", _p_wxBookCtrlEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxObject},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxObject},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxPyControl", _p_wxPyControlTo_p_wxObject},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxObject},{"_p_wxGauge", _p_wxGaugeTo_p_wxObject},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxChoice", _p_wxChoiceTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxListView", _p_wxListViewTo_p_wxObject},{"_p_wxNotebook", _p_wxNotebookTo_p_wxObject},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxListbook", _p_wxListbookTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxObject},{"_p_wxSlider", _p_wxSliderTo_p_wxObject},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxContextHelp", _p_wxContextHelpTo_p_wxObject},{"_p_wxListEvent", _p_wxListEventTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxObject},{"_p_wxListBox", _p_wxListBoxTo_p_wxObject},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxObject},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxObject},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxObject},{"_p_wxButton", _p_wxButtonTo_p_wxObject},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxObject},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxObject},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxObject},{"_p_wxHelpEvent", _p_wxHelpEventTo_p_wxObject},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxObject},{"_p_wxListItem", _p_wxListItemTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxNotebookSizer", _p_wxNotebookSizerTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxObject},{"_p_wxListbookEvent", _p_wxListbookEventTo_p_wxObject},{"_p_wxNotebookEvent", _p_wxNotebookEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxTreeEvent", _p_wxTreeEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxToolBarToolBase", _p_wxToolBarToolBaseTo_p_wxObject},{"_p_wxToolBar", _p_wxToolBarTo_p_wxObject},{"_p_wxBookCtrlSizer", _p_wxBookCtrlSizerTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxTextUrlEvent", _p_wxTextUrlEventTo_p_wxObject},{"_p_wxBookCtrlEvent", _p_wxBookCtrlEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxObject},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxObject},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxObject},{"_p_wxPyControl", _p_wxPyControlTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxObject},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxObject},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxObject},{"_p_wxGauge", _p_wxGaugeTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxChoice", _p_wxChoiceTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxListView", _p_wxListViewTo_p_wxObject},{"_p_wxNotebook", _p_wxNotebookTo_p_wxObject},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxListbook", _p_wxListbookTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxObject},{"_p_wxSlider", _p_wxSliderTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxContextHelp", _p_wxContextHelpTo_p_wxObject},{"_p_wxListEvent", _p_wxListEventTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxListBox", _p_wxListBoxTo_p_wxObject},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxObject},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxObject},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxObject},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxObject},{"_p_wxButton", _p_wxButtonTo_p_wxObject},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxObject},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxObject},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxObject},{"_p_wxHelpEvent", _p_wxHelpEventTo_p_wxObject},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxObject},{"_p_wxListItem", _p_wxListItemTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxNotebookSizer", _p_wxNotebookSizerTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxObject},{"_p_wxListbookEvent", _p_wxListbookEventTo_p_wxObject},{"_p_wxNotebookEvent", _p_wxNotebookEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxTreeEvent", _p_wxTreeEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxToolBarToolBase", _p_wxToolBarToolBaseTo_p_wxObject},{"_p_wxToolBar", _p_wxToolBarTo_p_wxObject},{"_p_wxBookCtrlSizer", _p_wxBookCtrlSizerTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{0}};
 static swig_type_info _swigt__p_wxKeyEvent[] = {{"_p_wxKeyEvent", 0, "wxKeyEvent *", 0},{"_p_wxKeyEvent"},{0}};
-static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxToolBar", _p_wxToolBarTo_p_wxWindow},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxPyControl", _p_wxPyControlTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxWindow},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxWindow},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxWindow},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxWindow},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxWindow},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxGauge", _p_wxGaugeTo_p_wxWindow},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxWindow},{"_p_wxListbook", _p_wxListbookTo_p_wxWindow},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxWindow},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxWindow},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxWindow},{"_p_wxChoice", _p_wxChoiceTo_p_wxWindow},{"_p_wxListBox", _p_wxListBoxTo_p_wxWindow},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxWindow},{"_p_wxListView", _p_wxListViewTo_p_wxWindow},{"_p_wxNotebook", _p_wxNotebookTo_p_wxWindow},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxWindow},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxWindow},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxWindow},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxWindow},{"_p_wxSlider", _p_wxSliderTo_p_wxWindow},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxWindow},{"_p_wxButton", _p_wxButtonTo_p_wxWindow},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxWindow},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxWindow},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxWindow},{0}};
+static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxToolBar", _p_wxToolBarTo_p_wxWindow},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxWindow},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxPyControl", _p_wxPyControlTo_p_wxWindow},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxWindow},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxWindow},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxWindow},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxWindow},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxWindow},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxWindow},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxGauge", _p_wxGaugeTo_p_wxWindow},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxWindow},{"_p_wxListbook", _p_wxListbookTo_p_wxWindow},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxWindow},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxWindow},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxWindow},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxWindow},{"_p_wxListBox", _p_wxListBoxTo_p_wxWindow},{"_p_wxChoice", _p_wxChoiceTo_p_wxWindow},{"_p_wxListView", _p_wxListViewTo_p_wxWindow},{"_p_wxNotebook", _p_wxNotebookTo_p_wxWindow},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxWindow},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxWindow},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxWindow},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxWindow},{"_p_wxSlider", _p_wxSliderTo_p_wxWindow},{"_p_wxButton", _p_wxButtonTo_p_wxWindow},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxWindow},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxWindow},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxWindow},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxWindow},{0}};
 static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0},{"_p_wxBitmap"},{0}};
 static swig_type_info _swigt__p_wxTreeEvent[] = {{"_p_wxTreeEvent", 0, "wxTreeEvent *", 0},{"_p_wxTreeEvent"},{0}};
@@ -26504,14 +26659,15 @@ _swigt__p_bool,
 _swigt__p_wxTreeItemData, 
 _swigt__p_wxPyTreeItemData, 
 _swigt__p_wxItemContainer, 
-_swigt__p_wxDirFilterListCtrl, 
 _swigt__p_wxPyListCtrl, 
+_swigt__p_wxDirFilterListCtrl, 
 _swigt__p_wxStaticLine, 
 _swigt__p_wxControl, 
 _swigt__p_wxPyControl, 
 _swigt__p_wxGauge, 
 _swigt__p_wxToolBarBase, 
 _swigt__p_wxFont, 
+_swigt__p_wxToggleButton, 
 _swigt__p_wxRadioButton, 
 _swigt__p_wxChoice, 
 _swigt__p_wxListItemAttr, 
@@ -26637,6 +26793,7 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"SP_ARROW_KEYS", (long) wxSP_ARROW_KEYS, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"SP_WRAP", (long) wxSP_WRAP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_SPINCTRL_UPDATED", (long) wxEVT_COMMAND_SPINCTRL_UPDATED, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", (long) wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", (long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NB_FIXEDWIDTH", (long) wxNB_FIXEDWIDTH, 0, 0, 0},
