@@ -17,6 +17,13 @@
 
 #include "gdk/gdk.h"
 
+
+//-------------------------------------------------------------------------
+// global data
+//-------------------------------------------------------------------------
+
+GdkAtom  g_textAtom        = 0;
+
 //-------------------------------------------------------------------------
 // wxDataFormat
 //-------------------------------------------------------------------------
@@ -25,6 +32,7 @@ IMPLEMENT_CLASS(wxDataFormat, wxObject)
 
 wxDataFormat::wxDataFormat()
 {
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     m_type = wxDF_INVALID;
     m_hasAtom = FALSE;
     m_atom = (GdkAtom) 0;
@@ -32,16 +40,19 @@ wxDataFormat::wxDataFormat()
 
 wxDataFormat::wxDataFormat( wxDataType type )
 {
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     SetType( type );
 }
 
 wxDataFormat::wxDataFormat( const wxString &id )
 {
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     SetId( id );
 }
 
 wxDataFormat::wxDataFormat( wxDataFormat &format )
 {
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     m_type = format.GetType();
     m_id = format.GetId();
     m_hasAtom = TRUE;
@@ -50,11 +61,12 @@ wxDataFormat::wxDataFormat( wxDataFormat &format )
 
 wxDataFormat::wxDataFormat( const GdkAtom atom )
 {
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     m_hasAtom = TRUE;
     
     m_atom = atom;
     
-    if (m_atom == GDK_TARGET_STRING)
+    if (m_atom == g_textAtom)
     {
         m_type = wxDF_TEXT;
     } else
@@ -79,7 +91,7 @@ void wxDataFormat::SetType( wxDataType type )
     
     if (m_type == wxDF_TEXT)
     {
-        m_id = "STRING";
+        m_id = "TEXT";
     } 
     else
     if (m_type == wxDF_BITMAP)
@@ -124,8 +136,8 @@ GdkAtom wxDataFormat::GetAtom()
 	
 	if (m_type == wxDF_TEXT)
 	{
-            m_atom = GDK_TARGET_STRING;
-        } 
+            m_atom = g_textAtom;
+        }
 	else
         if (m_type == wxDF_BITMAP)
         {

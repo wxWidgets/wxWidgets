@@ -25,7 +25,6 @@
 
 wxClipboard *wxTheClipboard = (wxClipboard*) NULL;
 
-GdkAtom  g_textAtom        = 0;
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
 
@@ -295,7 +294,6 @@ wxClipboard::wxClipboard()
 		        (gpointer) NULL );
 		      
     if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
     if (!g_targetsAtom) g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
   
     m_formatSupported = FALSE;
