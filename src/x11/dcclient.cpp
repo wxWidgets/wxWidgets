@@ -1405,7 +1405,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCoord height = h;
     
     // Draw layout.
-    x11_draw_layout( (Drawable) m_window, (GC) m_textGC, x, y, layout );
+    x11_draw_layout( (Drawable) m_window, (GC) m_textGC, x, y, layout, m_textForegroundColour );
     
     g_object_unref( G_OBJECT( layout ) );
     

@@ -185,6 +185,13 @@ Unix (Base/GUI):
 - don't include -I/usr/include nor -I/usr/local/include in wx-config output
 - shared library symbols are now versioned on platforms that support it (Linux)
 
+wxGTK:
+- Further work for GTK 2.0 and Unicode support.
+- Addition of native frame site grip.
+
+wxX11:
+- Unicode support through Pango library.
+
 wxMSW:
 
 - fixed crashes in wxListCtrl under XP

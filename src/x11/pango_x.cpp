@@ -12,7 +12,8 @@ x11_draw_glyphs( Drawable       drawable,
 		         PangoFont     *font,
 		         int            x,
 		         int            y,
-		         PangoGlyphString *glyphs);
+		         PangoGlyphString *glyphs,
+                 wxColour       &colour );
                  
 void 
 x11_draw_layout_line_with_colors( Drawable         drawable,
@@ -20,8 +21,7 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
                                   int              x, 
                                   int              y,
                                   PangoLayoutLine  *line,
-                                  XColor           *foreground,
-                                  XColor           *background);
+                                  wxColour       &colour );
                                   
 void 
 x11_draw_layout_with_colors( Drawable      drawable,
@@ -29,15 +29,15 @@ x11_draw_layout_with_colors( Drawable      drawable,
                              int           x, 
                              int           y,
                              PangoLayout  *layout,
-                             XColor       *foreground,
-                             XColor       *background);
+                             wxColour     &colour );
                              
 void 
 x11_draw_layout( Drawable     drawable,
                  GC           gc,
                  int          x, 
                  int          y,
-                 PangoLayout *layout);
+                 PangoLayout *layout,
+                 wxColour    &colour);
                  
 void
 x11_pango_get_item_properties( PangoItem      *item,
@@ -55,16 +55,32 @@ x11_pango_get_item_properties( PangoItem      *item,
 /* Implementation */
 
 void
-x11_draw_glyphs( Drawable       drawable,
-		         GC             gc,
-		         PangoFont     *font,
-		         int            x,
-		         int            y,
-		         PangoGlyphString *glyphs)
+x11_draw_glyphs( Drawable            drawable,
+		         GC                  gc,
+		         PangoFont          *font,
+		         int                 x,
+		         int                 y,
+		         PangoGlyphString   *glyphs,
+                 wxColour           &colour )
 {
     if (PANGO_XFT_IS_FONT (font))
     {
-        pango_xft_picture_render( wxGlobalDisplay(), drawable, drawable, font, glyphs, x, y );
+        Display* xdisplay = wxGlobalDisplay();
+        int xscreen = DefaultScreen( xdisplay );
+        Visual* xvisual = DefaultVisual( xdisplay, xscreen );
+
+        Colormap xcolormap = DefaultColormapOfScreen( XScreenOfDisplay( xdisplay, xscreen ) );
+
+        XftDraw *draw = XftDrawCreate( xdisplay, drawable, xvisual, xcolormap );
+        XftColor color;
+        color.pixel = 0;
+        color.color.red = colour.Red() << 8;
+        color.color.green = colour.Green() << 8;
+        color.color.blue = colour.Blue() << 8;
+        color.color.alpha = 65000;
+        pango_xft_render( draw, &color, font, glyphs, x, y );
+        
+        XftDrawDestroy( draw );
     }
     else
     {
@@ -77,9 +93,8 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
                                   GC               gc,
                                   int              x, 
                                   int              y,
-                                  PangoLayoutLine  *line,
-                                  XColor           *foreground,
-                                  XColor           *background)
+                                  PangoLayoutLine *line,
+                                  wxColour        &colour )
 {
     PangoRectangle overall_rect;
     PangoRectangle logical_rect;
@@ -131,7 +146,7 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
             int gx = x + x_off / PANGO_SCALE;
             int gy = risen_y;
           
-            x11_draw_glyphs( drawable, gc, run->item->analysis.font, gx, gy, run->glyphs);
+            x11_draw_glyphs( drawable, gc, run->item->analysis.font, gx, gy, run->glyphs, colour );
         }
       
         if (uline ==  PANGO_UNDERLINE_SINGLE)
@@ -153,8 +168,7 @@ x11_draw_layout_with_colors( Drawable      drawable,
                              int           x, 
                              int           y,
                              PangoLayout  *layout,
-                             XColor       *foreground,
-                             XColor       *background)
+                             wxColour       &colour )
 {
     PangoLayoutIter *iter = pango_layout_get_iter (layout);
   
@@ -171,8 +185,7 @@ x11_draw_layout_with_colors( Drawable      drawable,
                                           x + logical_rect.x / PANGO_SCALE,
                                           y + baseline / PANGO_SCALE,
                                           line,
-                                          foreground,
-                                          background);
+                                          colour );
                                           
     } while (pango_layout_iter_next_line (iter));
 
@@ -184,11 +197,12 @@ x11_draw_layout( Drawable     drawable,
                  GC           gc,
                  int          x, 
                  int          y,
-                 PangoLayout *layout)
+                 PangoLayout *layout,
+                 wxColour    &colour)
 {
     wxCHECK_RET( layout, wxT("No layout") );
 
-    x11_draw_layout_with_colors (drawable, gc, x, y, layout, NULL, NULL);
+    x11_draw_layout_with_colors (drawable, gc, x, y, layout, colour );
 }
 
 void

@@ -1110,6 +1110,14 @@ bool wxApp::OnInitGui()
 
 PangoContext* wxApp::GetPangoContext()
 {
+    static PangoContext *ret = NULL;
+    if (ret)
+        return ret;
+    
+    Display *xdisplay = (Display*) wxApp::GetDisplay();
+    
+#if 1
+    int xscreen = DefaultScreen(xdisplay);
     static int use_xft = -1;
     if (use_xft == -1)
     {
@@ -1117,12 +1125,6 @@ PangoContext* wxApp::GetPangoContext()
         use_xft = (val == L"1");
     }
   
-    Display *xdisplay = (Display*) wxApp::GetDisplay();
-    int xscreen = DefaultScreen(xdisplay);
-    
-    PangoContext *ret = NULL;
-    
-#if 0
     if (use_xft)
         ret = pango_xft_get_context( xdisplay, xscreen );
     else

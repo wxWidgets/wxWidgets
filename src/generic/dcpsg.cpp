@@ -204,7 +204,8 @@ static const char *wxPostScriptHeaderColourImage = "\
   } ifelse          %% end of 'false' case\n\
 ";
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
 static char wxPostScriptHeaderReencodeISO1[] =
     "\n/reencodeISO {\n"
 "dup dup findfont dup length dict begin\n"
@@ -886,7 +887,8 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
@@ -1117,13 +1119,18 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     }
 }
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
 
 #define PANGO_ENABLE_ENGINE
 
+#ifdef __WXGTK20__
 #include "wx/gtk/private.h"
-#include "wx/fontutil.h"
 #include "gtk/gtk.h"
+#else
+#include "wx/x11/private.h"
+#endif
+
+#include "wx/fontutil.h"
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
@@ -1233,7 +1240,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
     int dpi = GetResolution();
     dpi = 300;
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
@@ -1754,7 +1761,8 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     fprintf( m_pstream, wxPostScriptHeaderEllipse );
     fprintf( m_pstream, wxPostScriptHeaderEllipticArc );
     fprintf( m_pstream, wxPostScriptHeaderColourImage );
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO1 );
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO2 );
 #endif
@@ -1972,7 +1980,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         return;
     }
     
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
     int dpi = GetResolution();
     PangoContext *context = pango_ft2_get_context ( dpi, dpi );
     
