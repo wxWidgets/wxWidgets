@@ -12,24 +12,27 @@
 /*
    Here are brief descriptions of the filename formats supported by this class:
 
-   wxPATH_UNIX: standard Unix format, absolute file names have the form
+   wxPATH_UNIX: standard Unix format, used under Darwin as well, absolute file
+                names have the form:
                 /dir1/dir2/.../dirN/filename, "." and ".." stand for the
                 current and parent directory respectively, "~" is parsed as the
                 user HOME and "~username" as the HOME of that user
 
-   wxPATH_DOS:  DOS/Windows format, absolute file names have the form
+   wxPATH_DOS:  DOS/Windows format, absolute file names have the form:
                 drive:\dir1\dir2\...\dirN\filename.ext where drive is a single
                 letter. "." and ".." as for Unix but no "~".
 
                 There are also UNC names of the form \\share\fullpath
 
-   wxPATH_MAC:  Mac OS 8/9 format, absolute file names have the form
+   wxPATH_MAC:  Mac OS 8/9 and Mac OS X under CodeWarrior 7 format, absolute file 
+                names have the form
                     volume:dir1:...:dirN:filename
                 and the relative file names are either
                     :dir1:...:dirN:filename
                 or just
                     filename
                 (although :filename works as well).
+                :::file is not yet supported. TODO.
 
    wxPATH_VMS:  VMS native format, absolute file names have the form
                     <device>:[dir1.dir2.dir3]file.txt
@@ -343,7 +346,7 @@ wxString wxFileName::GetCwd(const wxString& volume)
     {
         SetCwd(cwdOld);
     }
-
+    
     return cwd;
 }
 
@@ -605,7 +608,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     wxFileName curDir;
 
     format = GetFormat(format);
-
+    
     // make the path absolute
     if ( (flags & wxPATH_NORM_ABSOLUTE) && !IsAbsolute() )
     {
@@ -632,7 +635,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
             }
         }
     }
-
+    
     // handle ~ stuff under Unix only
     if ( (format == wxPATH_UNIX) && (flags & wxPATH_NORM_TILDE) )
     {
@@ -668,7 +671,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     {
         wxString dir = dirs[n];
 
-        if ( flags && wxPATH_NORM_DOTS )
+        if ( flags & wxPATH_NORM_DOTS )
         {
             if ( dir == wxT(".") )
             {
