@@ -636,6 +636,10 @@ SOURCE=..\..\src\generic\laywin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\propdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\sashwin.cpp
 # End Source File
 # Begin Source File
@@ -875,6 +879,10 @@ SOURCE=..\..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\propdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\sashwin.h
 # End Source File
 # Begin Source File
@@ -916,6 +924,10 @@ SOURCE=..\..\include\wx\joystick.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\laywin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propdlg.h
 # End Source File
 # Begin Source File
 

@@ -7809,6 +7809,10 @@ SOURCE=..\..\include\wx\generic\progdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\propdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\sashwin.h
 # End Source File
 # Begin Source File
@@ -8506,6 +8510,10 @@ SOURCE=..\..\include\wx\prntbase.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\progdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propdlg.h
 # End Source File
 # Begin Source File
 
