@@ -433,8 +433,8 @@ wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
 %nokwargs wxGetTranslation;
-wxString wxGetTranslation(const wxString& sz);
-wxString wxGetTranslation(const wxString& sz1, const wxString& sz2, size_t n);
+wxString wxGetTranslation(const wxString& str);
+wxString wxGetTranslation(const wxString& str, const wxString& strPlural, size_t n);
 
 //---------------------------------------------------------------------------
 %newgroup
