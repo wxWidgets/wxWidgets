@@ -26,6 +26,8 @@
     #include "wx/timer.h"
 #endif
 
+#include "wx/cocoa/autorelease.h"
+
 #import <Foundation/NSTimer.h>
 
 // ============================================================================
@@ -94,6 +96,10 @@ void wxTimer::Init()
 
 bool wxTimer::Start(int millisecs, bool oneShot)
 {
+    Stop();
+    
+    wxAutoNSAutoreleasePool thePool;
+
     m_cocoaNSTimer =     [[NSTimer 
             scheduledTimerWithTimeInterval: millisecs / 1000.0 //seconds
             target:		wxTimer::sm_cocoaDelegate
@@ -108,9 +114,11 @@ void wxTimer::Stop()
 {
     if (m_cocoaNSTimer)
     {
+        NSObject* theUserInfo = [m_cocoaNSTimer userInfo];
         [m_cocoaNSTimer invalidate];
-        [[m_cocoaNSTimer userInfo] release];
+        [theUserInfo release];
         [m_cocoaNSTimer release];
+        m_cocoaNSTimer = NULL;
     }
 }
 
