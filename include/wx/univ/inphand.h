@@ -36,6 +36,7 @@
 #define wxINP_HANDLER_SLIDER            _T("slider")
 #define wxINP_HANDLER_SPINBTN           _T("spinbtn")
 #define wxINP_HANDLER_TEXTCTRL          _T("textctrl")
+#define wxINP_HANDLER_TOPLEVEL          _T("toplevel")
 
 // ----------------------------------------------------------------------------
 // wxInputHandler: maps the events to the actions

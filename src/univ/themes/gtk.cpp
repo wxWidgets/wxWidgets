@@ -48,6 +48,7 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
+#include "wx/toplevel.h"
 
 // ----------------------------------------------------------------------------
 // constants (to be removed, for testing only)
@@ -211,7 +212,8 @@ public:
                                    const wxString& title,
                                    const wxIcon& icon,
                                    int flags,
-                                   int pressedButtons = 0);
+                                   int specialButton = 0,
+                                   int specialButtonFlag = 0);
     virtual void DrawFrameBorder(wxDC& dc,
                                  const wxRect& rect,
                                  int flags);
@@ -235,6 +237,7 @@ public:
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
     virtual wxSize GetFrameIconSize() const;
+    virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
@@ -649,6 +652,8 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_NOTEBOOK )
             handler = new wxStdNotebookInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_NOTEBOOK
+        else if ( control == wxINP_HANDLER_TOPLEVEL )
+            handler = new wxStdFrameInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -2379,7 +2384,8 @@ void wxGTKRenderer::DrawFrameTitleBar(wxDC& dc,
                                       const wxString& title,
                                       const wxIcon& icon,
                                       int flags,
-                                      int pressedButtons)
+                                      int specialButton,
+                                      int specialButtonFlag)
 {
 }
 
@@ -2429,6 +2435,11 @@ wxSize wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) con
 wxSize wxGTKRenderer::GetFrameIconSize() const
 {
     return wxSize(-1, -1);
+}
+
+int wxGTKRenderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const
+{
+    return wxHT_TOPLEVEL_CLIENT_AREA;
 }
 
 

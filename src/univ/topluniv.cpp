@@ -31,6 +31,7 @@
 #include "wx/dcclient.h"
 #include "wx/bitmap.h"
 #include "wx/image.h"
+#include "wx/cshelp.h"
 
 
 // ----------------------------------------------------------------------------
@@ -55,6 +56,7 @@ void wxTopLevelWindow::Init()
 {
     m_isActive = FALSE;
     m_windowStyle = 0;
+    m_pressedButton = 0;
 }
 
 bool wxTopLevelWindow::Create(wxWindow *parent,
@@ -80,12 +82,12 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
         styleOrig = style;
         exstyleOrig = GetExtraStyle();
-//        style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
-//                   wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW | 
-//                   wxTHICK_FRAME);
-//        style = wxSIMPLE_BORDER;
-//        SetExtraStyle(exstyleOrig & 
-//                      ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
+        style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
+                   wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW | 
+                   wxTHICK_FRAME);
+        style = wxSIMPLE_BORDER;
+        SetExtraStyle(exstyleOrig & 
+                      ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
     }
 
     if ( !wxTopLevelWindowNative::Create(parent, id, title, pos, 
@@ -132,11 +134,13 @@ long wxTopLevelWindow::GetDecorationsStyle() const
     {
         style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_BUTTON_CLOSE;
         if ( m_windowStyle & wxMINIMIZE_BOX )
-            style |= wxTOPLEVEL_BUTTON_MINIMIZE;
+            style |= wxTOPLEVEL_BUTTON_ICONIZE;
         if ( m_windowStyle & wxMAXIMIZE_BOX )
             style |= wxTOPLEVEL_BUTTON_MAXIMIZE;
+#if wxUSE_HELP
         if ( m_exStyle & (wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP))
             style |= wxTOPLEVEL_BUTTON_HELP;
+#endif
     }
     if ( (m_windowStyle & (wxSIMPLE_BORDER | wxNO_BORDER)) == 0 )
         style |= wxTOPLEVEL_BORDER;
@@ -151,6 +155,13 @@ long wxTopLevelWindow::GetDecorationsStyle() const
         style |= wxTOPLEVEL_ACTIVE;
 
     return style;
+}
+
+void wxTopLevelWindow::RefreshTitleBar()
+{
+    wxNcPaintEvent event(GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -223,8 +234,19 @@ void wxTopLevelWindow::OnNcPaint(wxPaintEvent& event)
         wxWindowDC dc(this);
         m_renderer->DrawFrameTitleBar(dc, rect, 
                                       GetTitle(), m_titlebarIcon,
-                                      GetDecorationsStyle());
+                                      GetDecorationsStyle(),
+                                      m_pressedButton,
+                                      wxCONTROL_PRESSED);
     }
+}
+
+long wxTopLevelWindow::HitTest(const wxPoint& pt) const
+{
+    int w, h;
+    wxTopLevelWindowNative::DoGetClientSize(&w, &h);
+    wxRect rect(wxTopLevelWindowNative::GetClientAreaOrigin(), wxSize(w, h));
+    
+    return m_renderer->HitTestFrame(rect, pt, GetDecorationsStyle());
 }
 
 // ----------------------------------------------------------------------------
@@ -261,6 +283,39 @@ void wxTopLevelWindow::SetIcon(const wxIcon& icon)
 // actions
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindow::ClickTitleBarButton(long button)
+{
+    switch ( button )
+    {
+        case wxTOPLEVEL_BUTTON_CLOSE:
+            Close();
+            break;
+
+        case wxTOPLEVEL_BUTTON_ICONIZE:
+            Iconize();
+            break;
+
+        case wxTOPLEVEL_BUTTON_MAXIMIZE:
+            Maximize();
+            break;
+
+        case wxTOPLEVEL_BUTTON_RESTORE:
+            Restore();
+            break;
+
+        case wxTOPLEVEL_BUTTON_HELP:
+#if wxUSE_HELP
+            {
+            wxContextHelp contextHelp(this);
+            }
+#endif
+            break;
+            
+        default:
+            wxFAIL_MSG(wxT("incorrect button specification"));
+    }
+}
+
 bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
                                      long numArg,
                                      const wxString& strArg)
@@ -274,10 +329,32 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
             wxNcPaintEvent event(GetId());
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event);
-            printf("activation: %i\n", m_isActive);
         }
         return TRUE;
     }
+    
+    else if ( action == wxACTION_TOPLEVEL_BUTTON_PRESS )
+    {
+        m_pressedButton = numArg;
+        RefreshTitleBar();
+        return TRUE;
+    }
+    
+    else if ( action == wxACTION_TOPLEVEL_BUTTON_RELEASE )
+    {
+        m_pressedButton = 0;
+        RefreshTitleBar();
+        return TRUE;
+    }
+    
+    else if ( action == wxACTION_TOPLEVEL_BUTTON_CLICK )
+    {
+        m_pressedButton = 0;
+        RefreshTitleBar();
+        ClickTitleBarButton(numArg);
+        return TRUE;
+    }
+    
     else
         return FALSE;
 }
@@ -290,17 +367,82 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
 wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
             : wxStdInputHandler(inphand)
 {
+    m_winCapture = NULL;
+    m_winHitTest = 0;
+    m_winPressed = 0;
 }
 
 bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                                          const wxMouseEvent& event)
 {
+    // the button has 2 states: pressed and normal with the following
+    // transitions between them:
+    //
+    //      normal -> left down -> capture mouse and go to pressed state
+    //      pressed -> left up inside -> generate click -> go to normal
+    //                         outside ------------------>
+    //
+    // the other mouse buttons are ignored
+    if ( event.Button(1) )
+    {
+        if ( event.ButtonDown(1) )
+        {
+            wxTopLevelWindow *w = wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
+            long hit = w->HitTest(event.GetPosition());
+            
+            if ( hit & wxHT_TOPLEVEL_ANY_BUTTON )
+            {
+                m_winCapture = w;
+                m_winCapture->CaptureMouse();
+                m_winHitTest = hit;
+                m_winPressed = hit;
+                consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
+                return TRUE;
+            }
+        }
+
+        else // up
+        {
+            if ( m_winCapture )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+
+                if ( m_winHitTest == m_winPressed )
+                {
+                    consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK, m_winPressed);
+                    return TRUE;
+                }
+            }
+            //else: the mouse was released outside the window, this doesn't
+            //      count as a click
+        }
+    }
+
     return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
 bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer, 
                                              const wxMouseEvent& event)
 {
+    // we only have to do something when the mouse leaves/enters the pressed
+    // button and don't care about the other ones
+    if ( event.GetEventObject() == m_winCapture )
+    {
+        long hit = m_winCapture->HitTest(event.GetPosition());
+
+        if ( hit != m_winHitTest )
+        {
+            if ( hit != m_winPressed )
+                consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_RELEASE, m_winPressed);
+            else
+                consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
+            
+            m_winHitTest = hit;
+            return TRUE;
+        }
+    }
+
     return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 

@@ -23,54 +23,57 @@
 // ----------------------------------------------------------------------------
 
 // frame decorations type flags used in wxRenderer and wxColourScheme
-// (also used for hit tests)
 enum
 {
     wxTOPLEVEL_ACTIVE          = 0x00000001,
     wxTOPLEVEL_MAXIMIZED       = 0x00000002,
     wxTOPLEVEL_TITLEBAR        = 0x00000004,
-    wxTOPLEVEL_RESIZEABLE      = 0x00000008,
-    wxTOPLEVEL_ICON            = 0x00000010,
-    wxTOPLEVEL_BUTTON_CLOSE    = 0x00000020,
-    wxTOPLEVEL_BUTTON_MAXIMIZE = 0x00000040,
-    wxTOPLEVEL_BUTTON_MINIMIZE = 0x00000080,
-    wxTOPLEVEL_BUTTON_RESTORE  = 0x00000100,
-    wxTOPLEVEL_BUTTON_HELP     = 0x00000200,    
-    wxTOPLEVEL_BORDER          = 0x00000400,
+    wxTOPLEVEL_ICON            = 0x00000009,
+    wxTOPLEVEL_RESIZEABLE      = 0x00000010,
+    wxTOPLEVEL_BORDER          = 0x00000020,
+    wxTOPLEVEL_BUTTON_CLOSE    = 0x01000000,
+    wxTOPLEVEL_BUTTON_MAXIMIZE = 0x02000000,
+    wxTOPLEVEL_BUTTON_ICONIZE =  0x04000000,
+    wxTOPLEVEL_BUTTON_RESTORE  = 0x08000000,
+    wxTOPLEVEL_BUTTON_HELP     = 0x10000000,    
 };
 
 // frame hit test return values:
 enum
 {
-    wxHT_TOPLEVEL_NOWHERE = 0,
-    wxHT_TOPLEVEL_CLIENT_AREA,
-    wxHT_TOPLEVEL_ICON,
-    wxHT_TOPLEVEL_TITLEBAR,
-    wxHT_TOPLEVEL_BUTTON_CLOSE = wxTOPLEVEL_BUTTON_CLOSE,
-    wxHT_TOPLEVEL_BUTTON_MAXIMIZE = wxTOPLEVEL_BUTTON_MAXIMIZE,
-    wxHT_TOPLEVEL_BUTTON_MINIMIZE = wxTOPLEVEL_BUTTON_MINIMIZE,
-    wxHT_TOPLEVEL_BUTTON_RESTORE = wxTOPLEVEL_BUTTON_RESTORE,
-    wxHT_TOPLEVEL_BUTTON_HELP = wxTOPLEVEL_BUTTON_HELP,
-    wxHT_TOPLEVEL_BORDER_N,
-    wxHT_TOPLEVEL_BORDER_S,
-    wxHT_TOPLEVEL_BORDER_E,
-    wxHT_TOPLEVEL_BORDER_W,
-    wxHT_TOPLEVEL_BORDER_NE = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_E,
-    wxHT_TOPLEVEL_BORDER_SE = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_E,
-    wxHT_TOPLEVEL_BORDER_NW = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_W,
-    wxHT_TOPLEVEL_BORDER_SW = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_W,
+    wxHT_TOPLEVEL_NOWHERE         = 0x00000000,
+    wxHT_TOPLEVEL_CLIENT_AREA     = 0x00000001,
+    wxHT_TOPLEVEL_ICON            = 0x00000002,
+    wxHT_TOPLEVEL_TITLEBAR        = 0x00000004,
+
+    wxHT_TOPLEVEL_BORDER_N        = 0x00000010,
+    wxHT_TOPLEVEL_BORDER_S        = 0x00000020,
+    wxHT_TOPLEVEL_BORDER_E        = 0x00000040,
+    wxHT_TOPLEVEL_BORDER_W        = 0x00000080,
+    wxHT_TOPLEVEL_ANY_BORDER      = 0x000000F0,
+    wxHT_TOPLEVEL_BORDER_NE       = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_E,
+    wxHT_TOPLEVEL_BORDER_SE       = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_E,
+    wxHT_TOPLEVEL_BORDER_NW       = wxHT_TOPLEVEL_BORDER_N | wxHT_TOPLEVEL_BORDER_W,
+    wxHT_TOPLEVEL_BORDER_SW       = wxHT_TOPLEVEL_BORDER_S | wxHT_TOPLEVEL_BORDER_W,
+
+    wxHT_TOPLEVEL_BUTTON_CLOSE    = /*0x01000000*/ wxTOPLEVEL_BUTTON_CLOSE,
+    wxHT_TOPLEVEL_BUTTON_MAXIMIZE = /*0x02000000*/ wxTOPLEVEL_BUTTON_MAXIMIZE,
+    wxHT_TOPLEVEL_BUTTON_ICONIZE =  /*0x04000000*/ wxTOPLEVEL_BUTTON_ICONIZE,
+    wxHT_TOPLEVEL_BUTTON_RESTORE  = /*0x08000000*/ wxTOPLEVEL_BUTTON_RESTORE,
+    wxHT_TOPLEVEL_BUTTON_HELP     = /*0x10000000*/ wxTOPLEVEL_BUTTON_HELP,
+    wxHT_TOPLEVEL_ANY_BUTTON      =   0x1F000000
 };
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
-#define wxACTION_TOPLEVEL_ACTIVATE     _T("activate")   // (de)activate the frame
-#define wxACTION_TOPLEVEL_CLOSE        _T("close")      // close the frame
-#define wxACTION_TOPLEVEL_MAXIMIZE     _T("maximize")   // maximize the frame
-#define wxACTION_TOPLEVEL_MINIMIZE     _T("minimize")   // minimize the frame
-#define wxACTION_TOPLEVEL_RESTORE      _T("restore")    // undo maximization
-#define wxACTION_TOPLEVEL_CONTEXT_HELP _T("contexthelp")// context help mode
+#define wxACTION_TOPLEVEL_ACTIVATE       _T("activate")   // (de)activate the frame
+#define wxACTION_TOPLEVEL_BUTTON_PRESS   _T("pressbtn")   // press titlebar btn
+#define wxACTION_TOPLEVEL_BUTTON_RELEASE _T("releasebtn") // press titlebar btn
+#define wxACTION_TOPLEVEL_BUTTON_CLICK   _T("clickbtn")   // press titlebar btn
+#define wxACTION_TOPLEVEL_MOVE           _T("move")       // move the frame
+#define wxACTION_TOPLEVEL_RESIZE         _T("resize")     // resize the frame
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindow
@@ -112,19 +115,26 @@ public:
 
     // implementation from now on
     // --------------------------
+    
+    // tests for frame's part at given point
+    long HitTest(const wxPoint& pt) const;
 
 protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
-    virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }
+    // handle titlebar button click event
+    virtual void ClickTitleBarButton(long button);
 
-    // common part of all ctors
-    void Init();
+    virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }
 
     // return wxTOPLEVEL_xxx combination based on current state of the frame
     long GetDecorationsStyle() const;
+
+    // common part of all ctors
+    void Init();
     
+    void RefreshTitleBar();
     void OnNcPaint(wxPaintEvent& event);
 
     // TRUE if wxTLW should render decorations (aka titlebar) itself
@@ -135,6 +145,8 @@ protected:
     wxIcon m_titlebarIcon;
     // saved window style in fullscreen mdoe
     long m_fsSavedStyle;
+    // currently pressed titlebar button
+    long m_pressedButton;
 
     DECLARE_DYNAMIC_CLASS(wxTopLevelWindow)
     DECLARE_EVENT_TABLE()
@@ -154,6 +166,12 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
     virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+
+private:
+    // the window (button) which has capture or NULL and the last hittest result
+    wxTopLevelWindow *m_winCapture;
+    long              m_winHitTest;
+    long              m_winPressed;
 };
 
 #endif // __WX_UNIV_TOPLEVEL_H__

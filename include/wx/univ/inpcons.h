@@ -90,7 +90,9 @@ private: \
     void OnKeyDown(wxKeyEvent& event); \
     void OnKeyUp(wxKeyEvent& event); \
     void OnFocus(wxFocusEvent& event); \
-    void OnActivate(wxActivateEvent& event);
+public: /* because of docview :-( */ \
+    void OnActivate(wxActivateEvent& event); \
+private:
 
 // implement the event table entries for wxControlContainer
 #define WX_EVENT_TABLE_INPUT_CONSUMER(classname) \
@@ -134,7 +136,7 @@ private: \
     void classname::OnActivate(wxActivateEvent& event) \
     { \
         wxInputConsumer::OnActivate(event); \
-    }
+    } \
 
 
 #endif // _WX_UNIV_INPCONS_H_
