@@ -145,8 +145,8 @@ values as parameter:
     };
 \end{verbatim}
 
-Different parst of the world use different conventions for the week start.
-In some countries, the week starts on Sunday, while in others - on Monday.
+Different parts of the world use different conventions for the week start.
+In some countries, the week starts on Sunday, while in others -- on Monday.
 The ISO standard doesn't address this issue, so we support both conventions in
 the functions whose result depends on it (\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and 
 \helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}).
@@ -260,7 +260,7 @@ some more complicated calculations to find the answer are under the
 \helpref{GetDay}{wxdatetimegetday}\\
 \helpref{GetWeekDay}{wxdatetimegetweekday}\\
 \helpref{GetHour}{wxdatetimegethour}\\
-\helpref{GeTMinute}{wxdatetimegetminute}\\
+\helpref{GetMinute}{wxdatetimegetminute}\\
 \helpref{GetSecond}{wxdatetimegetsecond}\\
 \helpref{GetMillisecond}{wxdatetimegetmillisecond}\\
 \helpref{GetDayOfYear}{wxdatetimegetdayofyear}\\
@@ -309,34 +309,35 @@ defined to be equivalent to the second forms of these functions.
 
 \membersection{Parsing and formatting dates}
 
-These functions perform convert wxDateTime obejcts to and from text. The
+These functions convert wxDateTime obejcts to and from text. The
 conversions to text are mostly trivial: you can either do it using the default
-date and time representations for the current locale (
-\helpref{FormatDate}{wxdatetimeformatdate} and
+date and time representations for the current locale ( 
+\helpref{FormatDate}{wxdatetimeformatdate} and 
 \helpref{FormatTime}{wxdatetimeformattime}), using the international standard
-representation defined by ISO 8601 (
-\helpref{FormatISODate}{wxdatetimeformatisodate} and
+representation defined by ISO 8601 ( 
+\helpref{FormatISODate}{wxdatetimeformatisodate} and 
 \helpref{FormatISOTime}{wxdatetimeformatisotime}) or by specifying any format
 at all and using \helpref{Format}{wxdatetimeformat} directly.
 
 The conversions from text are more interesting, as there are much more
-possibilities to care about. The simples cases can be taken care of with
+possibilities to care about. The simplest cases can be taken care of with 
 \helpref{ParseFormat}{wxdatetimeparseformat} which can parse any date in the
 given (rigid) format. \helpref{ParseRfc822Date}{wxdatetimeparserfc822date} is
-another function for parsing dates in predefined format - the one of RFC 822
+another function for parsing dates in predefined format -- the one of RFC 822
 which (still...) defines the format of email messages on the Internet. This
-format can not be described with {\tt strptime(3)}-like format strings used by
+format can not be described with {\tt strptime(3)}-like format strings used by 
 \helpref{Format}{wxdatetimeformat}, hence the need for a separate function.
 
 But the most interesting functions are 
-\helpref{ParseDateTime}{wxdatetimeparsedatetime} and 
+\helpref{ParseTime}{wxdatetimeparsetime}, 
 \helpref{ParseDate}{wxdatetimeparsedate} and 
-\helpref{ParseTime}{wxdatetimeparsetime}. They try to parse the date ans time
-(or only one of them) in `free' format, i.e. allow them to be specified in any
-of possible ways. These functions will usually be used to parse the
-(interactive) user input which is not bound to be in any predefined format. As
-an example, \helpref{ParseDateTime}{wxdatetimeparsedatetime} can parse the
-strings such as {\tt "tomorrow"}, {\tt "March first"}, {\tt "next Sunday"}.
+\helpref{ParseDateTime}{wxdatetimeparsedatetime}. They try to parse the date
+ans time (or only one of them) in `free' format, i.e. allow them to be
+specified in any of possible ways. These functions will usually be used to
+parse the (interactive) user input which is not bound to be in any predefined
+format. As an example, \helpref{ParseDateTime}{wxdatetimeparsedatetime} can
+parse the strings such as {\tt "tomorrow"}, {\tt "March first"} and even 
+{\tt "next Sunday"}.
 
 \helpref{ParseRfc822Date}{wxdatetimeparserfc822date}\\
 \helpref{ParseFormat}{wxdatetimeparseformat}\\
@@ -356,7 +357,7 @@ related to the week days. They allow to find the given week day in the
 week with given number (either in the month or in the year) and so on.
 
 All (non-const) functions in this section don't modify the time part of the
-wxDateTime - they only work with the date part of it.
+wxDateTime -- they only work with the date part of it.
 
 \helpref{SetToWeekDayInSameWeek}{wxdatetimesettoweekdayinsameweek}\\
 \helpref{GetWeekDayInSameWeek}{wxdatetimegetweekdayinsameweek}\\
@@ -1184,7 +1185,7 @@ may be either positive (counting from the beginning of the month) or negative
 
 For example, {\tt SetToWeekDay(2, wxDateTime::Wed)} will set the date to the
 second Wednesday in the current month and
-{\tt SetToWeekDay(-1, wxDateTime::Sun)} - to the last Sunday in it.
+{\tt SetToWeekDay(-1, wxDateTime::Sun)} -- to the last Sunday in it.
 
 Returns {\tt TRUE} if the date was modified successfully, {\tt FALSE}
 otherwise meaning that the specified date doesn't exist.
