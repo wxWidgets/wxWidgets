@@ -151,6 +151,15 @@ the licence files in the installation directory:
 
 \section{What's New?}\label{whatsnew}
 
+{\bf Version 1.02, June 16th 2003}
+
+\begin{itemize}\itemsep=10pt
+\item The <b>Platform</b> group has been renamed
+<b>Target</b>, since there can be multiple targets
+per platform.
+\item The Windows/Universal target has been added.
+\end{itemize}
+
 {\bf Version 1.01, June 14th 2003}
 
 \begin{itemize}\itemsep=10pt
@@ -594,7 +603,7 @@ group and its children is considered to be a virtual
 taken into account if the option is a radio option
 or group. For each radio option, all other mutually
 exclusive options need to be listed. See the
-{\bf Platform} group for an example of this.
+{\bf Target} group for an example of this.
 
 \section{How \ctshortname generates the configure commands}
 
@@ -623,7 +632,7 @@ by using the {\bf value} custom string property.
 
 \section{How \ctshortname generates the setup.h file}
 
-The {\bf Platforms} group is ignored. In all other
+The {\bf Target} group is ignored. In all other
 cases, if the setting is prefixed by wxUSE_...
 and it's a boolean setting, \ctshortname will
 output 1 or 0 depending on the setting state.

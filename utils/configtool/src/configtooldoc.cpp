@@ -639,7 +639,7 @@ void ctConfigToolDoc::GenerateSetup(ctConfigItem* item, wxString& str)
     wxString name = item->GetName();
 
     // We don't process the platform choice
-    if (item->GetName() == wxT("Platform"))
+    if (item->GetName() == wxT("Target"))
         return;
 
     if (item->IsInActiveContext() &&
@@ -689,8 +689,8 @@ wxString ctConfigToolDoc::GenerateConfigureCommand()
 
     str << path << wxT("configure");
 
-    // Find the platform option to use
-    ctConfigItem* platformsFolder = GetTopItem()->FindItem(wxT("Platform"));
+    // Find the target to use
+    ctConfigItem* platformsFolder = GetTopItem()->FindItem(wxT("Target"));
     if (platformsFolder)
     {
         for ( wxNode* node = platformsFolder->GetChildren().GetFirst(); node; node = node->GetNext() )
@@ -714,7 +714,7 @@ void ctConfigToolDoc::GenerateConfigureCommand(ctConfigItem* item, wxString& str
 {
     // We don't process the platform group, since we've
     // already done so.
-    if (item->GetName() == wxT("Platform"))
+    if (item->GetName() == wxT("Target"))
         return;
 
     if (item->IsInActiveContext() &&

@@ -15,7 +15,7 @@
 //// Build settings
 
 // Version
-#define ctVERSION_NUMBER            1.01
+#define ctVERSION_NUMBER            1.02
 
 // Whether to have a splash screen
 #define ctUSE_SPLASH_SCREEN         0

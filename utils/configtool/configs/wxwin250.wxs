@@ -18,8 +18,10 @@
         <setting type="group">
             <active>1</active>
             <enabled>0</enabled>
-            <name>Platform</name>
-            <description>&lt;B&gt;Choose a platform&lt;/B&gt;</description>
+            <name>Target</name>
+            <description>&lt;B&gt;Choose a target&lt;/B&gt;&lt;P&gt;
+
+There may be several targets per platform; for example on MS Windows, you can choose the native widgets target (Windows) or the wxUniversal widgets target (Windows/Universal).</description>
             <default-state>1</default-state>
             <requires></requires>
             <precludes></precludes>
@@ -36,14 +38,32 @@
                 <name>Windows</name>
                 <description>&lt;B&gt;The WIN32 port.&lt;/B&gt;&lt;P&gt;
 
-This port is for Windows 9x, ME, NT, 2K, XP.
+This port is for Windows 9x, ME, NT, 2K, XP, using the native widgets.
 </description>
                 <default-state>1</default-state>
                 <requires></requires>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>MGL,X11,Mac Carbon,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>MGL,X11,Mac Carbon,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
+                <context></context>
+                <configure-command>--with-msw</configure-command>
+                <help-topic></help-topic>
+                <notes></notes>
+            </setting>
+            <setting type="bool-radio">
+                <active>1</active>
+                <enabled>1</enabled>
+                <name>Windows/Universal</name>
+                <description>&lt;b&gt;Windows/Universal&lt;/b&gt;&lt;P&gt;
+
+A port for MS Windows, using the wxUniversal widget set.</description>
+                <default-state>1</default-state>
+                <requires></requires>
+                <precludes></precludes>
+                <enabled-if></enabled-if>
+                <enabled-if-not></enabled-if-not>
+                <exclusivity>GTK+ 1.x,GTK+ 2.x,Mac Carbon,Mac Cocoa,MGL,Motif,OS/2,Windows,Wine,X11</exclusivity>
                 <context></context>
                 <configure-command>--with-msw</configure-command>
                 <help-topic></help-topic>
@@ -62,7 +82,7 @@ This port is based on the wxUniversal widgets.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>MGL,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>MGL,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-x11</configure-command>
                 <help-topic></help-topic>
@@ -81,7 +101,7 @@ A port for Mac OS 9 and Mac OS 10.x.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>MGL,X11,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>MGL,X11,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-mac</configure-command>
                 <help-topic></help-topic>
@@ -99,7 +119,7 @@ This port uses the Cocoa API on Mac OS X.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>GTK+ 2.x,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11</exclusivity>
+                <exclusivity>GTK+ 2.x,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-cocoa</configure-command>
                 <help-topic></help-topic>
@@ -118,7 +138,7 @@ This port is based on the GTK+ 1.x and 2.x widget set.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>MGL,X11,Mac Carbon,Windows,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>MGL,X11,Mac Carbon,Windows,Motif,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-gtk</configure-command>
                 <help-topic></help-topic>
@@ -126,7 +146,7 @@ This port is based on the GTK+ 1.x and 2.x widget set.
             </setting>
             <setting type="bool-radio">
                 <active>1</active>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <name>GTK+ 2.x</name>
                 <description>&lt;B&gt;wxGTK with GTK+ 2&lt;/B&gt;&lt;P&gt;
 
@@ -136,7 +156,7 @@ This port uses GTK+ 2.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>Mac Cocoa,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11</exclusivity>
+                <exclusivity>Mac Cocoa,GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,OS/2,Wine,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-gtk2</configure-command>
                 <help-topic></help-topic>
@@ -155,7 +175,7 @@ This port uses Motif 1.x/2.x or Lesstif.
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>MGL,X11,Mac Carbon,Windows,GTK+ 1.x,OS/2,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>MGL,X11,Mac Carbon,Windows,GTK+ 1.x,OS/2,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-motif</configure-command>
                 <help-topic></help-topic>
@@ -173,7 +193,7 @@ This port uses OS/2 Presentation Manager.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,X11,Mac Cocoa,GTK+ 2.x,Wine</exclusivity>
+                <exclusivity>GTK+ 1.x,Mac Carbon,MGL,Motif,Windows,X11,Mac Cocoa,GTK+ 2.x,Wine,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-pm</configure-command>
                 <help-topic></help-topic>
@@ -191,7 +211,7 @@ The wxMSW port built for Wine (Windows emulation library).</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>Mac Cocoa,GTK+ 1.x,GTK+ 2.x,Mac Carbon,MGL,Motif,Windows,OS/2,X11</exclusivity>
+                <exclusivity>Mac Cocoa,GTK+ 1.x,GTK+ 2.x,Mac Carbon,MGL,Motif,Windows,OS/2,X11,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-wine</configure-command>
                 <help-topic></help-topic>
@@ -209,7 +229,7 @@ This port is based on the wxUniversal widgets.</description>
                 <precludes></precludes>
                 <enabled-if></enabled-if>
                 <enabled-if-not></enabled-if-not>
-                <exclusivity>X11,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,Wine,GTK+ 2.x</exclusivity>
+                <exclusivity>X11,Mac Carbon,Windows,GTK+ 1.x,Motif,OS/2,Mac Cocoa,Wine,GTK+ 2.x,Windows/Universal</exclusivity>
                 <context></context>
                 <configure-command>--with-mgl</configure-command>
                 <help-topic></help-topic>
@@ -253,13 +273,13 @@ If on, builds a GUI version of the library as opposed to wxBase. Currently, this
             </setting>
             <setting type="bool-check">
                 <active>0</active>
-                <enabled>0</enabled>
+                <enabled>1</enabled>
                 <name>__WXMSW__</name>
                 <description>This is enabled if the relevant platform settings are enabled.</description>
                 <default-state>1</default-state>
-                <requires>Windows,Wine</requires>
+                <requires>Windows,Wine,Windows/Universal</requires>
                 <precludes></precludes>
-                <enabled-if>Windows,Wine</enabled-if>
+                <enabled-if>Windows,Wine,Windows/Universal</enabled-if>
                 <enabled-if-not></enabled-if-not>
                 <exclusivity></exclusivity>
                 <context></context>
@@ -269,7 +289,7 @@ If on, builds a GUI version of the library as opposed to wxBase. Currently, this
             </setting>
             <setting type="bool-check">
                 <active>0</active>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <name>__WXGTK__</name>
                 <description>This is enabled if the relevant platform settings are enabled.
 </description>
@@ -286,7 +306,7 @@ If on, builds a GUI version of the library as opposed to wxBase. Currently, this
             </setting>
             <setting type="bool-check">
                 <active>0</active>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <name>__WXGTK20__</name>
                 <description>This is enabled if the relevant platform settings are enabled.
 </description>
@@ -405,14 +425,14 @@ If on, builds a GUI version of the library as opposed to wxBase. Currently, this
             </setting>
             <setting type="bool-check">
                 <active>0</active>
-                <enabled>0</enabled>
+                <enabled>1</enabled>
                 <name>__WXUNIVERSAL__</name>
                 <description>This is enabled if the relevant platform settings are enabled.
 </description>
                 <default-state>1</default-state>
-                <requires>X11,MGL</requires>
+                <requires>X11,MGL,Windows/Universal</requires>
                 <precludes></precludes>
-                <enabled-if>X11,MGL</enabled-if>
+                <enabled-if>X11,MGL,Windows/Universal</enabled-if>
                 <enabled-if-not></enabled-if-not>
                 <exclusivity></exclusivity>
                 <context></context>
@@ -421,8 +441,8 @@ If on, builds a GUI version of the library as opposed to wxBase. Currently, this
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>1</active>
-                <enabled>0</enabled>
+                <active>0</active>
+                <enabled>1</enabled>
                 <name>wxUSE_UNIVERSAL</name>
                 <description>&lt;B&gt;Universal&lt;/B&gt;&lt;P&gt;
 
@@ -430,13 +450,13 @@ Specifies if wxUniversal should be used instead of native widgets.&lt;P&gt;
 
 If the selected port in &lt;B&gt;Platform&lt;/B&gt; is a wxUniversal port, this setting is enabled and is not user-editable. Otherwise, it can be enabled or disabled. However this doesn't necessarily mean that the configuration is supported for any given platform.</description>
                 <default-state>0</default-state>
-                <requires></requires>
+                <requires>__WXUNIVERSAL__</requires>
                 <precludes></precludes>
                 <enabled-if>__WXUNIVERSAL__</enabled-if>
                 <enabled-if-not></enabled-if-not>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command></configure-command>
+                <configure-command>--enable-universal</configure-command>
                 <help-topic></help-topic>
                 <notes></notes>
             </setting>
@@ -802,7 +822,7 @@ Recommended setting: 0 (please update your code)
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>0</active>
+                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxFONT_SIZE_COMPATIBILITY</name>
                 <description>&lt;B&gt;Define as 1 for font size to be backward compatible to 1.63 and earlier.&lt;/B&gt;&lt;P&gt;
@@ -823,7 +843,7 @@ Default is 0.
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>0</active>
+                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxDIALOG_UNIT_COMPATIBILITY</name>
                 <description>&lt;B&gt;Set to 0 for accurate dialog units, else 1 to be as per 2.1.16 and before.&lt;/B&gt;&lt;P&gt;
@@ -958,7 +978,7 @@ Default: 0. Recommended setting: 0
                 <notes></notes>
             </setting>
             <setting type="bool-check">
-                <active>0</active>
+                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxUSE_ON_FATAL_EXCEPTION</name>
                 <description>&lt;B&gt;Fatal exceptions handling&lt;/B&gt;&lt;P&gt;
@@ -2542,7 +2562,7 @@ This class is needed by wxNotebook, wxTreeCtrl and wxListCtrl.
                 <notes></notes>
             </setting>
             <setting type="check-group">
-                <active>0</active>
+                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxUSE_METAFILE</name>
                 <description>&lt;B&gt;wxMetaFile&lt;/B&gt;&lt;P&gt;
@@ -2568,7 +2588,7 @@ Recommended setting: default or 0 for everything for portable programs.
                 <help-topic>wxMetaFile</help-topic>
                 <notes></notes>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_ENH_METAFILE</name>
                     <description>&lt;B&gt;wxEnhMetaFile&lt;/B&gt;&lt;P&gt;
@@ -2586,7 +2606,7 @@ Enhanced metafile (recommended).</description>
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_WIN_METAFILES_ALWAYS</name>
                     <description>This option is obsolete. Set to 0.</description>
@@ -2807,7 +2827,7 @@ Set to 1 for XPM format support.
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_ICO_CUR</name>
                     <description>&lt;B&gt;MS Windows icons and cursors support&lt;/B&gt;&lt;P&gt;
@@ -3769,7 +3789,7 @@ Default: 1.</description>
                 <help-topic>wxHelpController</help-topic>
                 <notes></notes>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_MS_HTML_HELP</name>
                     <description>&lt;B&gt;MS HTML Help&lt;/B&gt;&lt;P&gt;
@@ -3844,7 +3864,7 @@ Settings for various input devices.</description>
             <help-topic></help-topic>
             <notes></notes>
             <setting type="bool-check">
-                <active>0</active>
+                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxUSE_MOUSEWHEEL</name>
                 <description>&lt;B&gt;Mousewheel support&lt;/B&gt;&lt;P&gt;
@@ -4069,7 +4089,7 @@ Default: 0
                 <help-topic></help-topic>
                 <notes></notes>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_OWNER_DRAWN</name>
                     <description>&lt;B&gt;Owner-drawn controls&lt;/B&gt;&lt;P&gt;
@@ -4090,7 +4110,7 @@ Default: 1. Recommended setting: 1, set to 0 for a small library size reduction.
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_RICHEDIT</name>
                     <description>&lt;B&gt;Rich edit control support&lt;/B&gt;&lt;P&gt;
@@ -4111,7 +4131,7 @@ Default: 1 for compilers which support it  Recommended setting: 1, only set it t
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_RICHEDIT2</name>
                     <description>&lt;B&gt;Rich edit control version 2&lt;/B&gt;&lt;P&gt;
@@ -4131,7 +4151,7 @@ Default: 1</description>
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>0</enabled>
                     <name>wxUSE_MFC</name>
                     <description>&lt;B&gt;MFC interoperation&lt;/B&gt;&lt;P&gt;
@@ -4152,7 +4172,7 @@ Default: 0. Recommended setting: 0 unless you really have to use MFC
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_OLE</name>
                     <description>&lt;B&gt;OLE support&lt;/B&gt;&lt;P&gt;
@@ -4173,7 +4193,7 @@ Default: 1. Recommended setting: 1
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_UXTHEME</name>
                     <description>&lt;B&gt;MS Windows XP UX Theme Engine support&lt;/B&gt;&lt;P&gt;
@@ -4192,7 +4212,7 @@ Set to 1 to compile MS Windows XP theme engine support.
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_UXTHEME_AUTO</name>
                     <description>&lt;B&gt;MS Windows XP UX Theme Engine auto-adaptation&lt;/B&gt;&lt;P&gt;
@@ -4212,7 +4232,7 @@ Set to 1 to auto-adapt to MS Windows XP themes where possible
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>1</enabled>
                     <name>wxUSE_DC_CACHEING</name>
                     <description>Caches device contexts to improve performance.&lt;P&gt;
@@ -4232,7 +4252,7 @@ Default: 1</description>
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>0</active>
+                    <active>1</active>
                     <enabled>0</enabled>
                     <name>wxUSE_DIB_FOR_BITMAP</name>
                     <description>Set this to 1 to enable the use of DIB's for wxBitmap to support
@@ -4268,7 +4288,7 @@ Default: 0
                 <help-topic></help-topic>
                 <notes></notes>
                 <setting type="bool-check">
-                    <active>1</active>
+                    <active>0</active>
                     <enabled>1</enabled>
                     <name>wxUSE_GTKTEST</name>
                     <description>&lt;B&gt;GTK+ test&lt;/B&gt;&lt;P&gt;
@@ -4286,7 +4306,7 @@ Try to compile and run a test GTK program.</description>
                     <notes></notes>
                 </setting>
                 <setting type="bool-check">
-                    <active>1</active>
+                    <active>0</active>
                     <enabled>0</enabled>
                     <name>wxUSE_GTKPREFIX</name>
                     <description>&lt;B&gt;GTK+ prefix&lt;/B&gt;&lt;P&gt;
@@ -4307,7 +4327,7 @@ Prefix where GTK+ is installed (optional). Type the prefix into the &lt;b&gt;val
 Type the prefix into the <B>value</B> property."></value>
                 </setting>
                 <setting type="bool-check">
-                    <active>1</active>
+                    <active>0</active>
                     <enabled>0</enabled>
                     <name>wxUSE_GTKEXECPREFIX</name>
                     <description>&lt;B&gt;GTK+ exec prefix&lt;/B&gt;&lt;P&gt;
@@ -4349,7 +4369,7 @@ Search for libiconv in DIR/include and DIR/lib. Type the prefix into the &lt;b&g
 Type the prefix into the <B>value</B> property."></value>
                 </setting>
                 <setting type="bool-check">
-                    <active>1</active>
+                    <active>0</active>
                     <enabled>1</enabled>
                     <name>wxUSE_X</name>
                     <description>&lt;B&gt;Use X&lt;/B&gt;&lt;P&gt;
