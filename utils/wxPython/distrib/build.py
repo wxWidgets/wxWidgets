@@ -209,6 +209,18 @@ def splitlines(st):
 
 #----------------------------------------------------------------------------
 
+def strippath(st):
+    # remove any leading paths, retrieve only file name. Used while
+    # parsing the SOURCES file list, so that object files are local, 
+    # while source may be anywere)
+    if sys.platform == 'win32':
+	sep = '\\'
+    else:
+	sep = '/'
+    return string.split(st,sep)[-1]
+
+#----------------------------------------------------------------------------
+
 class BuildConfig:
     def __init__(self, **kw):
         self.__dict__.update(kw)
@@ -287,7 +299,13 @@ class BuildConfig:
                 raise SystemExit, "Python development files not found"
 
             self.CCC = self.findMFValue(mfText, 'CCC')
+	    if not self.CCC:
+		print "Warning: C++ compiler not specified (CCC). Assuming c++"
+		self.CCC = 'c++'
             self.CC = self.findMFValue(mfText, 'CC')
+	    if not self.CC:
+		print "Warning: C compiler not specified (CCC). Assuming cc"
+		self.CC = 'cc'
             self.OPT = self.findMFValue(mfText, 'OPT')
             self.SO = self.findMFValue(mfText, 'SO')
             self.LDSHARED = self.findMFValue(mfText, 'LDSHARED')
@@ -325,7 +343,8 @@ class BuildConfig:
         for name in self.SWIGFILES:
             objects = objects + os.path.splitext(name)[0] + self.OBJEXT + ' '
         for name in self.SOURCES:
-            objects = objects + os.path.splitext(name)[0] + self.OBJEXT + ' '
+	    obj = strippath(name)
+            objects = objects + os.path.splitext(obj)[0] + self.OBJEXT + ' '
         self.OBJECTS = splitlines(objects)
 
 

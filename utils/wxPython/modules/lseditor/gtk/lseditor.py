@@ -35,146 +35,145 @@ class wxsLSEditorPluginPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, lseditorc=lseditorc):
+    def __del__(self,lseditorc=lseditorc):
         if self.thisown == 1 :
-            lseditorc.delete_wxsLSEditorPlugin(self.this)
-    def Create(self,arg0,arg1):
-        val = lseditorc.wxsLSEditorPlugin_Create(self.this,arg0.this,arg1)
+            lseditorc.delete_wxsLSEditorPlugin(self)
+    def Create(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_Create,(self,) + _args, _kwargs)
         return val
-    def OnOpen(self,arg0):
-        val = lseditorc.wxsLSEditorPlugin_OnOpen(self.this,arg0)
+    def OnOpen(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnOpen,(self,) + _args, _kwargs)
         return val
-    def OnSave(self,arg0):
-        val = lseditorc.wxsLSEditorPlugin_OnSave(self.this,arg0)
+    def OnSave(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnSave,(self,) + _args, _kwargs)
         return val
-    def OnCopy(self):
-        val = lseditorc.wxsLSEditorPlugin_OnCopy(self.this)
+    def OnCopy(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnCopy,(self,) + _args, _kwargs)
         return val
-    def OnCut(self):
-        val = lseditorc.wxsLSEditorPlugin_OnCut(self.this)
+    def OnCut(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnCut,(self,) + _args, _kwargs)
         return val
-    def OnPaste(self):
-        val = lseditorc.wxsLSEditorPlugin_OnPaste(self.this)
+    def OnPaste(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnPaste,(self,) + _args, _kwargs)
         return val
-    def OnDelete(self):
-        val = lseditorc.wxsLSEditorPlugin_OnDelete(self.this)
+    def OnDelete(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnDelete,(self,) + _args, _kwargs)
         return val
-    def OnUndo(self):
-        val = lseditorc.wxsLSEditorPlugin_OnUndo(self.this)
+    def OnUndo(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnUndo,(self,) + _args, _kwargs)
         return val
-    def OnRedo(self):
-        val = lseditorc.wxsLSEditorPlugin_OnRedo(self.this)
+    def OnRedo(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnRedo,(self,) + _args, _kwargs)
         return val
-    def SelectAll(self):
-        val = lseditorc.wxsLSEditorPlugin_SelectAll(self.this)
+    def SelectAll(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_SelectAll,(self,) + _args, _kwargs)
         return val
-    def OnGotoLine(self,arg0,*args):
-        val = apply(lseditorc.wxsLSEditorPlugin_OnGotoLine,(self.this,arg0,)+args)
+    def OnGotoLine(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnGotoLine,(self,) + _args, _kwargs)
         return val
-    def OnProperties(self):
-        val = lseditorc.wxsLSEditorPlugin_OnProperties(self.this)
+    def OnProperties(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnProperties,(self,) + _args, _kwargs)
         return val
-    def OnFind(self):
-        val = lseditorc.wxsLSEditorPlugin_OnFind(self.this)
+    def OnFind(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnFind,(self,) + _args, _kwargs)
         return val
-    def OnFindNext(self):
-        val = lseditorc.wxsLSEditorPlugin_OnFindNext(self.this)
+    def OnFindNext(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnFindNext,(self,) + _args, _kwargs)
         return val
-    def OnFindPrevious(self):
-        val = lseditorc.wxsLSEditorPlugin_OnFindPrevious(self.this)
+    def OnFindPrevious(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnFindPrevious,(self,) + _args, _kwargs)
         return val
-    def OnReplace(self):
-        val = lseditorc.wxsLSEditorPlugin_OnReplace(self.this)
+    def OnReplace(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnReplace,(self,) + _args, _kwargs)
         return val
-    def OnToggleBookmark(self):
-        val = lseditorc.wxsLSEditorPlugin_OnToggleBookmark(self.this)
+    def OnToggleBookmark(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnToggleBookmark,(self,) + _args, _kwargs)
         return val
-    def OnNextBookmark(self):
-        val = lseditorc.wxsLSEditorPlugin_OnNextBookmark(self.this)
+    def OnNextBookmark(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnNextBookmark,(self,) + _args, _kwargs)
         return val
-    def OnPreviousBookmark(self):
-        val = lseditorc.wxsLSEditorPlugin_OnPreviousBookmark(self.this)
+    def OnPreviousBookmark(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnPreviousBookmark,(self,) + _args, _kwargs)
         return val
-    def OnShowBookmarks(self):
-        val = lseditorc.wxsLSEditorPlugin_OnShowBookmarks(self.this)
+    def OnShowBookmarks(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_OnShowBookmarks,(self,) + _args, _kwargs)
         return val
-    def SetCheckpoint(self):
-        val = lseditorc.wxsLSEditorPlugin_SetCheckpoint(self.this)
+    def SetCheckpoint(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_SetCheckpoint,(self,) + _args, _kwargs)
         return val
-    def CheckpointModified(self):
-        val = lseditorc.wxsLSEditorPlugin_CheckpointModified(self.this)
+    def CheckpointModified(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CheckpointModified,(self,) + _args, _kwargs)
         return val
-    def CanCopy(self):
-        val = lseditorc.wxsLSEditorPlugin_CanCopy(self.this)
+    def CanCopy(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CanCopy,(self,) + _args, _kwargs)
         return val
-    def CanCut(self):
-        val = lseditorc.wxsLSEditorPlugin_CanCut(self.this)
+    def CanCut(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CanCut,(self,) + _args, _kwargs)
         return val
-    def CanPaste(self):
-        val = lseditorc.wxsLSEditorPlugin_CanPaste(self.this)
+    def CanPaste(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CanPaste,(self,) + _args, _kwargs)
         return val
-    def CanUndo(self):
-        val = lseditorc.wxsLSEditorPlugin_CanUndo(self.this)
+    def CanUndo(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CanUndo,(self,) + _args, _kwargs)
         return val
-    def CanRedo(self):
-        val = lseditorc.wxsLSEditorPlugin_CanRedo(self.this)
+    def CanRedo(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_CanRedo,(self,) + _args, _kwargs)
         return val
-    def GetName(self):
-        val = lseditorc.wxsLSEditorPlugin_GetName(self.this)
+    def GetName(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetName,(self,) + _args, _kwargs)
         return val
-    def IsModified(self):
-        val = lseditorc.wxsLSEditorPlugin_IsModified(self.this)
+    def IsModified(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_IsModified,(self,) + _args, _kwargs)
         return val
-    def GetWindow(self):
-        val = lseditorc.wxsLSEditorPlugin_GetWindow(self.this)
-        val = wxWindowPtr(val)
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def SetFileName(self,arg0):
-        val = lseditorc.wxsLSEditorPlugin_SetFileName(self.this,arg0)
+    def SetFileName(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_SetFileName,(self,) + _args, _kwargs)
         return val
-    def HoldCursor(self,arg0):
-        val = lseditorc.wxsLSEditorPlugin_HoldCursor(self.this,arg0)
+    def HoldCursor(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_HoldCursor,(self,) + _args, _kwargs)
         return val
-    def FindWordAtCursor(self):
-        val = lseditorc.wxsLSEditorPlugin_FindWordAtCursor(self.this)
+    def FindWordAtCursor(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_FindWordAtCursor,(self,) + _args, _kwargs)
         return val
-    def GetCursorPos(self,arg0,arg1):
-        val = lseditorc.wxsLSEditorPlugin_GetCursorPos(self.this,arg0,arg1)
+    def GetCursorPos(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetCursorPos,(self,) + _args, _kwargs)
         return val
-    def SetCursorPos(self,arg0,arg1):
-        val = lseditorc.wxsLSEditorPlugin_SetCursorPos(self.this,arg0,arg1)
+    def SetCursorPos(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_SetCursorPos,(self,) + _args, _kwargs)
         return val
-    def GetPagePos(self,arg0,arg1):
-        val = lseditorc.wxsLSEditorPlugin_GetPagePos(self.this,arg0,arg1)
+    def GetPagePos(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetPagePos,(self,) + _args, _kwargs)
         return val
-    def GetText(self,arg0,arg1,arg2,arg3,arg4,arg5):
-        val = lseditorc.wxsLSEditorPlugin_GetText(self.this,arg0,arg1,arg2,arg3,arg4,arg5)
+    def GetText(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetText,(self,) + _args, _kwargs)
         return val
-    def InsertText(self,arg0,arg1,arg2,arg3):
-        val = lseditorc.wxsLSEditorPlugin_InsertText(self.this,arg0,arg1,arg2,arg3)
+    def InsertText(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_InsertText,(self,) + _args, _kwargs)
         return val
-    def DeleteText(self,arg0,arg1,arg2,arg3):
-        val = lseditorc.wxsLSEditorPlugin_DeleteText(self.this,arg0,arg1,arg2,arg3)
+    def DeleteText(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_DeleteText,(self,) + _args, _kwargs)
         return val
-    def PositionToXY(self,arg0,arg1,arg2,arg3):
-        val = lseditorc.wxsLSEditorPlugin_PositionToXY(self.this,arg0,arg1,arg2,arg3)
+    def PositionToXY(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_PositionToXY,(self,) + _args, _kwargs)
         return val
-    def GetSelectionRange(self,arg0,arg1,arg2,arg3):
-        val = lseditorc.wxsLSEditorPlugin_GetSelectionRange(self.this,arg0,arg1,arg2,arg3)
+    def GetSelectionRange(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetSelectionRange,(self,) + _args, _kwargs)
         return val
-    def GetCharacterSize(self):
-        val = lseditorc.wxsLSEditorPlugin_GetCharacterSize(self.this)
-        val = wxSizePtr(val)
-        val.thisown = 1
+    def GetCharacterSize(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_GetCharacterSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
-    def IsUnixText(self):
-        val = lseditorc.wxsLSEditorPlugin_IsUnixText(self.this)
+    def IsUnixText(self, *_args, **_kwargs):
+        val = apply(lseditorc.wxsLSEditorPlugin_IsUnixText,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxsLSEditorPlugin instance>"
+        return "<C wxsLSEditorPlugin instance at %s>" % (self.this,)
 class wxsLSEditorPlugin(wxsLSEditorPluginPtr):
-    def __init__(self) :
-        self.this = lseditorc.new_wxsLSEditorPlugin()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(lseditorc.new_wxsLSEditorPlugin,_args,_kwargs)
         self.thisown = 1
 
 

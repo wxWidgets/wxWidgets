@@ -36,23 +36,23 @@ class HtmlHistoryItemPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPos(self):
-        val = htmlc.HtmlHistoryItem_GetPos(self.this)
+    def GetPos(self, *_args, **_kwargs):
+        val = apply(htmlc.HtmlHistoryItem_GetPos,(self,) + _args, _kwargs)
         return val
-    def SetPos(self,arg0):
-        val = htmlc.HtmlHistoryItem_SetPos(self.this,arg0)
+    def SetPos(self, *_args, **_kwargs):
+        val = apply(htmlc.HtmlHistoryItem_SetPos,(self,) + _args, _kwargs)
         return val
-    def GetPage(self):
-        val = htmlc.HtmlHistoryItem_GetPage(self.this)
+    def GetPage(self, *_args, **_kwargs):
+        val = apply(htmlc.HtmlHistoryItem_GetPage,(self,) + _args, _kwargs)
         return val
-    def GetAnchor(self):
-        val = htmlc.HtmlHistoryItem_GetAnchor(self.this)
+    def GetAnchor(self, *_args, **_kwargs):
+        val = apply(htmlc.HtmlHistoryItem_GetAnchor,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C HtmlHistoryItem instance>"
+        return "<C HtmlHistoryItem instance at %s>" % (self.this,)
 class HtmlHistoryItem(HtmlHistoryItemPtr):
-    def __init__(self,arg0,arg1) :
-        self.this = htmlc.new_HtmlHistoryItem(arg0,arg1)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_HtmlHistoryItem,_args,_kwargs)
         self.thisown = 1
 
 
@@ -62,54 +62,48 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetPage(self,arg0):
-        val = htmlc.wxHtmlWindow_SetPage(self.this,arg0)
+    def SetPage(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetPage,(self,) + _args, _kwargs)
         return val
-    def LoadPage(self,arg0):
-        val = htmlc.wxHtmlWindow_LoadPage(self.this,arg0)
+    def LoadPage(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_LoadPage,(self,) + _args, _kwargs)
         return val
-    def GetOpenedPage(self):
-        val = htmlc.wxHtmlWindow_GetOpenedPage(self.this)
+    def GetOpenedPage(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetOpenedPage,(self,) + _args, _kwargs)
         return val
-    def SetRelatedFrame(self,arg0,arg1):
-        val = htmlc.wxHtmlWindow_SetRelatedFrame(self.this,arg0.this,arg1)
+    def SetRelatedFrame(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetRelatedFrame,(self,) + _args, _kwargs)
         return val
-    def GetRelatedFrame(self):
-        val = htmlc.wxHtmlWindow_GetRelatedFrame(self.this)
-        val = wxFramePtr(val)
+    def GetRelatedFrame(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetRelatedFrame,(self,) + _args, _kwargs)
+        if val: val = wxFramePtr(val) 
         return val
-    def SetRelatedStatusBar(self,arg0):
-        val = htmlc.wxHtmlWindow_SetRelatedStatusBar(self.this,arg0)
+    def SetRelatedStatusBar(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetRelatedStatusBar,(self,) + _args, _kwargs)
         return val
-    def SetFonts(self,arg0,arg1,arg2,arg3,arg4):
-        val = htmlc.wxHtmlWindow_SetFonts(self.this,arg0,arg1,arg2,arg3,arg4)
+    def SetFonts(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetFonts,(self,) + _args, _kwargs)
         return val
-    def SetTitle(self,arg0):
-        val = htmlc.wxHtmlWindow_SetTitle(self.this,arg0)
+    def SetTitle(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetTitle,(self,) + _args, _kwargs)
         return val
-    def SetBorders(self,arg0):
-        val = htmlc.wxHtmlWindow_SetBorders(self.this,arg0)
+    def SetBorders(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_SetBorders,(self,) + _args, _kwargs)
         return val
-    def HistoryBack(self):
-        val = htmlc.wxHtmlWindow_HistoryBack(self.this)
+    def HistoryBack(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HistoryBack,(self,) + _args, _kwargs)
         return val
-    def HistoryForward(self):
-        val = htmlc.wxHtmlWindow_HistoryForward(self.this)
+    def HistoryForward(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HistoryForward,(self,) + _args, _kwargs)
         return val
-    def HistoryClear(self):
-        val = htmlc.wxHtmlWindow_HistoryClear(self.this)
+    def HistoryClear(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HistoryClear,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxHtmlWindow instance>"
+        return "<C wxHtmlWindow instance at %s>" % (self.this,)
 class wxHtmlWindow(wxHtmlWindowPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(htmlc.new_wxHtmlWindow,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlWindow,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
         wx._StdOnScrollCallbacks(self)

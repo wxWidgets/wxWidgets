@@ -35,46 +35,41 @@ class wxGLContextPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, glcanvasc=glcanvasc):
+    def __del__(self,glcanvasc=glcanvasc):
         if self.thisown == 1 :
-            glcanvasc.delete_wxGLContext(self.this)
-    def SetCurrent(self):
-        val = glcanvasc.wxGLContext_SetCurrent(self.this)
+            glcanvasc.delete_wxGLContext(self)
+    def SetCurrent(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_SetCurrent,(self,) + _args, _kwargs)
         return val
-    def SetColour(self,arg0):
-        val = glcanvasc.wxGLContext_SetColour(self.this,arg0)
+    def SetColour(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_SetColour,(self,) + _args, _kwargs)
         return val
-    def SwapBuffers(self):
-        val = glcanvasc.wxGLContext_SwapBuffers(self.this)
+    def SwapBuffers(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_SwapBuffers,(self,) + _args, _kwargs)
         return val
-    def SetupPixelFormat(self):
-        val = glcanvasc.wxGLContext_SetupPixelFormat(self.this)
+    def SetupPixelFormat(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_SetupPixelFormat,(self,) + _args, _kwargs)
         return val
-    def SetupPalette(self,arg0):
-        val = glcanvasc.wxGLContext_SetupPalette(self.this,arg0.this)
+    def SetupPalette(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_SetupPalette,(self,) + _args, _kwargs)
         return val
-    def CreateDefaultPalette(self):
-        val = glcanvasc.wxGLContext_CreateDefaultPalette(self.this)
-        val = wxPalettePtr(val)
-        val.thisown = 1
+    def CreateDefaultPalette(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_CreateDefaultPalette,(self,) + _args, _kwargs)
+        if val: val = wxPalettePtr(val) ; val.thisown = 1
         return val
-    def GetPalette(self):
-        val = glcanvasc.wxGLContext_GetPalette(self.this)
-        val = wxPalettePtr(val)
+    def GetPalette(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_GetPalette,(self,) + _args, _kwargs)
+        if val: val = wxPalettePtr(val) 
         return val
-    def GetWindow(self):
-        val = glcanvasc.wxGLContext_GetWindow(self.this)
-        val = wxWindowPtr(val)
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLContext_GetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxGLContext instance>"
+        return "<C wxGLContext instance at %s>" % (self.this,)
 class wxGLContext(wxGLContextPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(glcanvasc.new_wxGLContext,(arg0,arg1.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(glcanvasc.new_wxGLContext,_args,_kwargs)
         self.thisown = 1
 
 
@@ -84,32 +79,24 @@ class wxGLCanvasPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetCurrent(self):
-        val = glcanvasc.wxGLCanvas_SetCurrent(self.this)
+    def SetCurrent(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLCanvas_SetCurrent,(self,) + _args, _kwargs)
         return val
-    def SetColour(self,arg0):
-        val = glcanvasc.wxGLCanvas_SetColour(self.this,arg0)
+    def SetColour(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLCanvas_SetColour,(self,) + _args, _kwargs)
         return val
-    def SwapBuffers(self):
-        val = glcanvasc.wxGLCanvas_SwapBuffers(self.this)
+    def SwapBuffers(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLCanvas_SwapBuffers,(self,) + _args, _kwargs)
         return val
-    def GetContext(self):
-        val = glcanvasc.wxGLCanvas_GetContext(self.this)
-        val = wxGLContextPtr(val)
+    def GetContext(self, *_args, **_kwargs):
+        val = apply(glcanvasc.wxGLCanvas_GetContext,(self,) + _args, _kwargs)
+        if val: val = wxGLContextPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxGLCanvas instance>"
+        return "<C wxGLCanvas instance at %s>" % (self.this,)
 class wxGLCanvas(wxGLCanvasPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        try: argl[6] = argl[6].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(glcanvasc.new_wxGLCanvas,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(glcanvasc.new_wxGLCanvas,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
