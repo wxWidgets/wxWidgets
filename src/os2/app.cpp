@@ -769,10 +769,7 @@ bool wxApp::DoMessage()
                 {
                     QMSG            vMsg = svSavedMessages[n];
 
-                    if ( !ProcessMessage((WXMSG *)&vMsg) )
-                    {
-                        ::WinDispatchMsg(vHabmain, &vMsg);
-                    }
+                    DoMessage((WXMSG*)&vMsg);
                 }
                 svSavedMessages.Empty();
             }

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\WX.lib
+;From library:  H:\Dev\Wx2\WxWindows\Lib\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -5813,12 +5813,14 @@ EXPORTS
       InsertTool__13wxToolBarBaseFUiiRC8wxStringRC8wxBitmapT410wxItemKindN23P8wxObject
       ;wxToolBarBase::InsertControl(unsigned int,wxControl*)
       InsertControl__13wxToolBarBaseFUiP9wxControl
-      ;wxToolBarBase::SetMargins(int,int)
-      SetMargins__13wxToolBarBaseFiT1
+      ;wxToolBarBase::FindControl(int)
+      FindControl__13wxToolBarBaseFi
       ;wxToolBarBase::sm_eventTableEntries
       sm_eventTableEntries__13wxToolBarBase
       ;wxToolBarBase::SetRows(int)
       SetRows__13wxToolBarBaseFi
+      ;wxToolBarBase::SetMargins(int,int)
+      SetMargins__13wxToolBarBaseFiT1
       ;wxToolBarToolBase::SetLongHelp(const wxString&)
       SetLongHelp__17wxToolBarToolBaseFRC8wxString
       ;wxToolBarBase::SetToolShortHelp(int,const wxString&)
@@ -11503,12 +11505,12 @@ EXPORTS
       wxConstructorForwxAcceleratorTable__Fv
       ;wxAcceleratorTable::SetHACCEL(unsigned long)
       SetHACCEL__18wxAcceleratorTableFUl
-      ;wxAcceleratorTable::wxAcceleratorTable(int,wxAcceleratorEntry*)
-      __ct__18wxAcceleratorTableFiP18wxAcceleratorEntry
       ;wxAcceleratorTable::~wxAcceleratorTable()
       __dt__18wxAcceleratorTableFv
       ;wxAcceleratorTable::Ok() const
       Ok__18wxAcceleratorTableCFv
+      ;wxAcceleratorTable::wxAcceleratorTable(int,const wxAcceleratorEntry*)
+      __ct__18wxAcceleratorTableFiPC18wxAcceleratorEntry
       __vft20wxAcceleratorRefData15wxObjectRefData
       ;wxAcceleratorTable::wxAcceleratorTable()
       __ct__18wxAcceleratorTableFv
