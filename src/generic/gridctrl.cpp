@@ -215,6 +215,8 @@ void wxGridCellEnumRenderer::SetParameters(const wxString& params)
 wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString& choices)
                     : wxGridCellChoiceEditor()
 {
+    m_startint = -1;
+
     if (!choices.IsEmpty())
         SetParameters(choices);
 }
