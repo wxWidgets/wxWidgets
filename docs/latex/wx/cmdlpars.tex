@@ -80,10 +80,10 @@ the following constants:
 \begin{verbatim}
 enum wxCmdLineEntryType
 {
-    wxCMD\_LINE\_SWITCH,
-    wxCMD\_LINE\_OPTION,
-    wxCMD\_LINE\_PARAM,
-    wxCMD\_LINE\_NONE         // use this to terminate the list
+    wxCMD_LINE_SWITCH,
+    wxCMD_LINE_OPTION,
+    wxCMD_LINE_PARAM,
+    wxCMD_LINE_NONE         // use this to terminate the list
 }
 \end{verbatim}
 }
@@ -103,10 +103,10 @@ by an option or parameter are:
 \begin{verbatim}
 enum wxCmdLineParamType
 {
-    wxCMD\_LINE\_VAL\_STRING,  // default
-    wxCMD\_LINE\_VAL\_NUMBER,
-    wxCMD\_LINE\_VAL\_DATE,
-    wxCMD\_LINE\_VAL\_NONE
+    wxCMD_LINE_VAL_STRING,  // default
+    wxCMD_LINE_VAL_NUMBER,
+    wxCMD_LINE_VAL_DATE,
+    wxCMD_LINE_VAL_NONE
 }
 \end{verbatim}
 }
@@ -117,11 +117,11 @@ Finally, the {\tt flags} field is a combination of the following bit masks:
 \begin{verbatim}
 enum
 {
-    wxCMD\_LINE\_OPTION\_MANDATORY = 0x01, // this option must be given
-    wxCMD\_LINE\_PARAM\_OPTIONAL   = 0x02, // the parameter may be omitted
-    wxCMD\_LINE\_PARAM\_MULTIPLE   = 0x04, // the parameter may be repeated
-    wxCMD\_LINE\_OPTION\_HELP      = 0x08, // this option is a help request
-    wxCMD\_LINE\_NEEDS\_SEPARATOR  = 0x10, // must have sep before the value
+    wxCMD_LINE_OPTION_MANDATORY = 0x01, // this option must be given
+    wxCMD_LINE_PARAM_OPTIONAL   = 0x02, // the parameter may be omitted
+    wxCMD_LINE_PARAM_MULTIPLE   = 0x04, // the parameter may be repeated
+    wxCMD_LINE_OPTION_HELP      = 0x08, // this option is a help request
+    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10, // must have sep before the value
 }
 \end{verbatim}
 }
