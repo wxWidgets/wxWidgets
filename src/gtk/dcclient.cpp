@@ -1711,10 +1711,17 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
                                  wxCoord *descent, wxCoord *externalLeading,
                                  wxFont *theFont) const
 {
+    if ( width )
+        *width = 0;
+    if ( height )
+        *height = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
     if (string.IsEmpty())
     {
-        if (width) (*width) = 0;
-        if (height) (*height) = 0;
         return;
     }
     
@@ -1761,21 +1768,25 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         pango_layout_iter_free(iter);
         *descent = h - PANGO_PIXELS(baseline);
     }
-    if (externalLeading)
-        *externalLeading = 0;  // ??
     
     // Reset old font description
     if (theFont)
         pango_layout_set_font_description( m_layout, m_fontdesc );
 #else // GTK+ 1.x
     wxFont fontToUse = m_font;
-    if (theFont) fontToUse = *theFont;
+    if (theFont)
+        fontToUse = *theFont;
     
     GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
-    if (width) (*width) = wxCoord(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
-    if (height) (*height) = wxCoord((font->ascent + font->descent) / m_scaleY);
-    if (descent) (*descent) = wxCoord(font->descent / m_scaleY);
-    if (externalLeading) (*externalLeading) = 0;  // ??
+    if ( !font )
+        return;
+
+    if (width)
+        *width = wxCoord(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
+    if (height)
+        *height = wxCoord((font->ascent + font->descent) / m_scaleY);
+    if (descent)
+        *descent = wxCoord(font->descent / m_scaleY);
 #endif // GTK+ 2/1
 }
 
