@@ -3551,6 +3551,15 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>msgout.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -5605,6 +5614,20 @@
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>msw</ACCESSPATH>
+                    <PATH>popupwin.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>msgout.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
                     <PATHTYPE>RootRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <PATH>..\lib\zlib.lib</PATH>
@@ -5626,13 +5649,6 @@
                     <PATHTYPE>RootRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <PATH>..\lib\jpeg.lib</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>msw</ACCESSPATH>
-                    <PATH>popupwin.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -13864,6 +13880,15 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>msgout.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -15918,6 +15943,20 @@
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>msw</ACCESSPATH>
+                    <PATH>popupwin.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>msgout.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
                     <PATHTYPE>RootRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <PATH>..\lib\zlib.lib</PATH>
@@ -15939,13 +15978,6 @@
                     <PATHTYPE>RootRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <PATH>..\lib\jpeg.lib</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>msw</ACCESSPATH>
-                    <PATH>popupwin.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -17722,6 +17754,14 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>common</ACCESSPATH>
                 <PATH>module.cpp</PATH>
+                <PATHFORMAT>Windows</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib Win32 debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>common</ACCESSPATH>
+                <PATH>msgout.cpp</PATH>
                 <PATHFORMAT>Windows</PATHFORMAT>
             </FILEREF>
             <FILEREF>
