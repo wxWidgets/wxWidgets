@@ -1308,7 +1308,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
         // Scale bitmap if required
         wxBitmap use_bitmap;
-        if ((bm_width != bm_ww) || (bm_height != bm_hh))
+        if ((memDC->m_selected.GetWidth()!= bm_ww) || ( memDC->m_selected.GetHeight()!= bm_hh))
         {
             // This indicates that the blitting code below will get
             // a clipped bitmap and therefore needs to move the origin
@@ -1426,7 +1426,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     }
     else // use_bitmap_method
     {
-        if ((width != ww) || (height != hh))
+        if ((memDC->m_selected.GetWidth() != ww) || (memDC->m_selected.GetHeight() != hh))
         {
             // get clip coords
             wxRegion tmp( xx,yy,ww,hh );
