@@ -40,6 +40,7 @@
 #include <wx/dcscreen.h>
 #include <wx/scrolwin.h>
 #include <wx/renderer.h>
+#include <wx/dcmemory.h>
 
 #include "wx/treelistctrl.h"
 
