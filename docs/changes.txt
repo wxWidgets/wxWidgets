@@ -104,6 +104,7 @@ All (GUI):
 - wxColourDatabase API now uses objects instead of pointers
 - added resolution option to JPEG image handler (Jeff Burton)
 - added wxCalendarEvent::SetDate, wxCalendarEvent::SetWeekDay
+- wxGenericDirCtrl now accepts multiple wildcards
 
 wxMSW:
 

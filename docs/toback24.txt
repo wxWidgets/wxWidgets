@@ -232,6 +232,12 @@ Checking in zipstrm.cpp;
 new revision: 1.10; previous revision: 1.9
 done
 
+32. Apply patch [ 866387 ] wxGenericDirCtrl does not accept multiple wildcards
+
+Checking in src/generic/dirctrlg.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/generic/dirctrlg.cpp,v  <--  dirctrlg.cpp
+new revision: 1.81; previous revision: 1.80
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
