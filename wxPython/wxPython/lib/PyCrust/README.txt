@@ -1,6 +1,10 @@
 PyCrust - The Flakiest Python Shell
 Half-baked by Patrick K. O'Brien (pobrien@orbtech.com)
-======================================================
+
+==============================================================
+* Orbtech - "Your Source For Python Development Services"    *
+* Sample all our half-baked Python goods at www.orbtech.com. *
+==============================================================
 
 What is PyCrust?
 ----------------
@@ -20,7 +24,7 @@ shouldn't build a Python program without a PyCrust either.
 
 
 Where can I get the latest release of PyCrust?
-------------------------------------------------------------
+----------------------------------------------
 The latest PyCrust releases are available at:
 http://sourceforge.net/project/showfiles.php?group_id=31263
 

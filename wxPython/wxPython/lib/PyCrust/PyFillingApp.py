@@ -1,22 +1,21 @@
 #!/usr/bin/env python
-"""PyFilling is a python namespace inspection application."""
+"""PyFillingApp is a python namespace inspection application."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "August 21, 2001"
 __version__ = "$Revision$"[11:-2]
 
 # We use this object to get more introspection when run standalone.
 application = None
 
-import filling
+from PyCrust import filling
 
 # These are imported just to have something interesting to inspect.
-import crust
-import interpreter
-import introspect
-import pseudo
-import shell
+from PyCrust import crust
+from PyCrust import interpreter
+from PyCrust import introspect
+from PyCrust import pseudo
+from PyCrust import shell
 import sys
 from wxPython import wx
 
@@ -33,3 +32,4 @@ def main():
 if __name__ == '__main__':
     main()
 
+ 

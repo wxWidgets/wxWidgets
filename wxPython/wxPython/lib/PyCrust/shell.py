@@ -5,7 +5,6 @@ SourceForge project page at http://sourceforge.net/projects/pycrust/."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "July 1, 2001"
 __version__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
@@ -326,6 +325,20 @@ class Shell(wxStyledTextCtrl):
         # If the auto-complete window is up let it do its thing.
         elif self.AutoCompActive():
             event.Skip()
+        # Cut to the clipboard.
+        elif event.ControlDown() and key in (ord('X'), ord('x')):
+            self.Cut()
+        # Copy to the clipboard.
+        elif event.ControlDown() and not event.ShiftDown() \
+        and key in (ord('C'), ord('c')):
+            self.Copy()
+        # Copy to the clipboard, including prompts.
+        elif event.ControlDown() and event.ShiftDown() \
+        and key in (ord('C'), ord('c')):
+            self.CopyWithPrompts()
+        # Paste from the clipboard.
+        elif event.ControlDown() and key in (ord('V'), ord('v')):
+            self.Paste()
         # Retrieve the previous command from the history buffer.
         elif (event.ControlDown() and key == WXK_UP) \
         or (event.AltDown() and key in (ord('P'), ord('p'))):
@@ -362,6 +375,9 @@ class Shell(wxStyledTextCtrl):
                 event.Skip()
         # Don't toggle between insert mode and overwrite mode.
         elif key == WXK_INSERT:
+            pass
+        # Protect the readonly portion of the shell.
+        elif not self.CanEdit():
             pass
         else:
             event.Skip()
@@ -509,22 +525,26 @@ class Shell(wxStyledTextCtrl):
         The command may not necessarily be valid Python syntax."""
         if not text:
             text = self.GetCurLine()[0]
-        # XXX Need to extract real prompts here. Need to keep track of the
-        # prompt every time a command is issued.
+        # Strip the prompt off the front of text leaving just the command.
+        command = self.lstripPrompt(text)
+        if command == text:
+            command = ''  # Real commands have prompts.
+        if rstrip:
+            command = command.rstrip()
+        return command
+
+    def lstripPrompt(self, text):
+        """Return text without a leading prompt."""
         ps1 = str(sys.ps1)
         ps1size = len(ps1)
         ps2 = str(sys.ps2)
         ps2size = len(ps2)
-        # Strip the prompt off the front of text leaving just the command.
+        # Strip the prompt off the front of text.
         if text[:ps1size] == ps1:
-            command = text[ps1size:]
+            text = text[ps1size:]
         elif text[:ps2size] == ps2:
-            command = text[ps2size:]
-        else:
-            command = ''
-        if rstrip:
-            command = command.rstrip()
-        return command
+            text = text[ps2size:]
+        return text
     
     def push(self, command):
         """Send command to the interpreter for execution."""
@@ -738,6 +758,17 @@ class Shell(wxStyledTextCtrl):
         if self.CanCopy():
             command = self.GetSelectedText()
             command = command.replace(os.linesep + sys.ps2, os.linesep)
+            command = command.replace(os.linesep + sys.ps1, os.linesep)
+            command = self.lstripPrompt(text=command)
+            data = wxTextDataObject(command)
+            if wxTheClipboard.Open():
+                wxTheClipboard.SetData(data)
+                wxTheClipboard.Close()
+
+    def CopyWithPrompts(self):
+        """Copy selection, including prompts, and place it on the clipboard."""
+        if self.CanCopy():
+            command = self.GetSelectedText()
             data = wxTextDataObject(command)
             if wxTheClipboard.Open():
                 wxTheClipboard.SetData(data)
@@ -752,6 +783,7 @@ class Shell(wxStyledTextCtrl):
                     if wxTheClipboard.GetData(data):
                         command = data.GetText()
                         command = self.fixLineEndings(command)
+                        command = self.lstripPrompt(text=command)
                         command = command.replace(os.linesep + sys.ps2, '\n')
                         command = command.replace(os.linesep, '\n')
                         command = command.replace('\n', os.linesep + sys.ps2)
@@ -952,10 +984,13 @@ class ShellFrame(wxFrame, ShellMenu):
         """Create a PyCrust ShellFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
+        intro += '\nSponsored by Orbtech.com – Your Source For Python Development Services'
         self.CreateStatusBar()
         self.SetStatusText(intro)
         if wxPlatform == '__WXMSW__':
-            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
+            import os
+            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
+            icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
             self.SetIcon(icon)
         self.shell = Shell(parent=self, id=-1, introText=intro, \
                            locals=locals, InterpClass=InterpClass, \
@@ -966,3 +1001,4 @@ class ShellFrame(wxFrame, ShellMenu):
 
 
            
+    

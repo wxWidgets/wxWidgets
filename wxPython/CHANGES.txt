@@ -95,6 +95,8 @@ same document.
 
 Added wxEditableListBox gizmo.
 
+Added a greatly enhanced wxEditor from Steve Howell and Adam Feuer.
+
 
 
 

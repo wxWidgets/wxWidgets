@@ -2,7 +2,6 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "July 1, 2001"
 __version__ = "$Revision$"[11:-2]
 
 class PseudoKeyword:
@@ -88,3 +87,4 @@ class PseudoFileErr(PseudoFile):
         return 1
         
         
+ 

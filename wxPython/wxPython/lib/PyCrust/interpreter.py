@@ -2,7 +2,6 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "July 1, 2001"
 __version__ = "$Revision$"[11:-2]
 
 import os
@@ -103,4 +102,4 @@ class InterpreterAlaCarte(Interpreter):
         sys.ps1 = ps1
         sys.ps2 = ps2
 
-  
+   

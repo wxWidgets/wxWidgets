@@ -2,7 +2,6 @@
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "July 1, 2001"
 __version__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
@@ -46,15 +45,20 @@ class CrustFrame(wxFrame, ShellMenu):
     revision = __version__
     
     def __init__(self, parent=None, id=-1, title='PyCrust', \
+                 pos=wxDefaultPosition, size=wxDefaultSize, \
+                 style=wxDEFAULT_FRAME_STYLE, \
                  rootObject=None, rootLabel=None, rootIsNamespace=1, \
                  locals=None, InterpClass=None, *args, **kwds):
         """Create a PyCrust CrustFrame instance."""
-        wxFrame.__init__(self, parent, id, title)
+        wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
+        intro += '\nSponsored by Orbtech.com – Your Source For Python Development Services'
         self.CreateStatusBar()
         self.SetStatusText(intro)
         if wxPlatform == '__WXMSW__':
-            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
+            import os
+            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
+            icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
             self.SetIcon(icon)
         self.crust = Crust(parent=self, intro=intro, \
                            rootObject=rootObject, \
@@ -75,3 +79,4 @@ class CrustFrame(wxFrame, ShellMenu):
         self.createMenus()
 
 
+   

@@ -3,7 +3,6 @@ the local namespace or any object."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "August 21, 2001"
 __version__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
@@ -217,6 +216,7 @@ class FillingText(wxStyledTextCtrl):
         self.SetViewWhiteSpace(0)
         self.SetTabWidth(4)
         self.SetUseTabs(0)
+        self.SetReadOnly(1)
 
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
@@ -247,6 +247,11 @@ class FillingText(wxStyledTextCtrl):
         self.StyleSetSpec(wxSTC_P_IDENTIFIER, "")
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
         self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+
+    def SetText(self, *args, **kwds):
+        self.SetReadOnly(0)
+        wxStyledTextCtrl.SetText(self, *args, **kwds)
+        self.SetReadOnly(1)
 
 
 class Filling(wxSplitterWindow):
@@ -288,7 +293,9 @@ class FillingFrame(wxFrame):
         self.CreateStatusBar()
         self.SetStatusText(intro)
         if wxPlatform == '__WXMSW__':
-            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
+            import os
+            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
+            icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
             self.SetIcon(icon)
         self.filling = Filling(parent=self, rootObject=rootObject, \
                                rootLabel=rootLabel, \
@@ -308,3 +315,4 @@ class App(wxApp):
 
 
   
+   

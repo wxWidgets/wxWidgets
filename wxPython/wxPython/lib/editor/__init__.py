@@ -15,4 +15,3 @@
 
 # import the main classes into the package namespace.
 from editor    import wxEditor
-from py_editor import wxPyEditor

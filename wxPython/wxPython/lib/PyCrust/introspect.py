@@ -3,7 +3,6 @@ like call tips and command auto completion."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
-__date__ = "August 8, 2001"
 __version__ = "$Revision$"[11:-2]
 
 import inspect
@@ -168,3 +167,4 @@ def getRoot(command, terminator=None):
     return root
 
      
+ 

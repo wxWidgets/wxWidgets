@@ -151,6 +151,7 @@ Source: "samples\StyleEditor\*.cfg";           DestDir: "{app}\wxPython\samples\
 Source: "samples\pySketch\*.py";           DestDir: "{app}\wxPython\samples\pySketch"; Components: samples
 Source: "samples\pySketch\images\*.bmp";   DestDir: "{app}\wxPython\samples\pySketch\images"; Components: samples
 
+Source: "samples\frogedit\*.py";           DestDir: "{app}\wxPython\samples\frogedit"; Components: samples
 
 ;;------------------------------------------------------------
 
@@ -192,6 +193,8 @@ Type: files; Name: "{app}\wxPython\samples\stxview\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\stxview\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyo";
+Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyc";
+Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
 
 '''
 
