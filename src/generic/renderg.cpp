@@ -209,18 +209,22 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
     // white background
     dc.SetPen(*wxGREY_PEN);
     dc.SetBrush(*wxWHITE_BRUSH);
-    dc.DrawRectangle(rect.Deflate(1, 2));
+    dc.DrawRectangle(rect);
 
     // black lines
     const wxCoord xMiddle = rect.x + rect.width/2;
     const wxCoord yMiddle = rect.y + rect.height/2;
 
+    // half of the length of the horz lines in "-" and "+"
+    const wxCoord halfWidth = rect.width/2 - 2;
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(xMiddle - 2, yMiddle, xMiddle + 3, yMiddle);
+    dc.DrawLine(xMiddle - halfWidth, yMiddle, xMiddle + halfWidth, yMiddle);
     if ( !(flags & wxCONTROL_EXPANDED) )
     {
         // turn "-" into "+"
-        dc.DrawLine(xMiddle, yMiddle - 2, xMiddle, yMiddle + 3);
+        const wxCoord halfHeight = rect.height/2 - 2;
+        dc.DrawLine(xMiddle, yMiddle - halfHeight,
+                    xMiddle, yMiddle + halfHeight);
     }
 }
 

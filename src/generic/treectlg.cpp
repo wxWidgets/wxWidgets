@@ -2317,8 +2317,8 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             }
             else // no custom buttons
             {
-                static const int wImage = 10;
-                static const int hImage = 12;
+                static const int wImage = 9;
+                static const int hImage = 9;
 
                 wxRendererNative::Get().DrawTreeItemButton
                                         (
