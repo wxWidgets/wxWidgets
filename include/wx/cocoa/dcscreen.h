@@ -21,6 +21,11 @@ public:
     wxScreenDC(void);
     wxScreenDC( wxDC *dc ); // Create compatible DC
     ~wxScreenDC(void);
+
+    // Compatibility with X's requirements for drawing on top of all windows
+    static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return true; }
+    static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return true; }
+    static bool EndDrawingOnTop() { return true; }
 };
 
 #endif // __WX_COCOA_DCSCREEN_H__
