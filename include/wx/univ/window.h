@@ -175,6 +175,10 @@ public:
     bool UseFgCol() const { return m_hasFgCol; }
     bool UseFont() const { return m_hasFont; }
 
+    // return TRUE if this window serves as a container for the other windows
+    // only and doesn't get any input itself
+    virtual bool IsStaticBox() const { return FALSE; }
+
     // returns the (low level) renderer to use for drawing the control by
     // querying the current theme
     wxRenderer *GetRenderer() const { return m_renderer; }
@@ -264,6 +268,11 @@ protected:
 
     // is the mouse currently inside the window?
     bool m_isCurrent:1;
+
+#ifdef __WXMSW__
+    // override MSWWindowProc() to process WM_NCHITTEST
+    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXMSW__
 
 private:
     // the window scrollbars

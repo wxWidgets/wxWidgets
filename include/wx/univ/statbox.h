@@ -58,6 +58,10 @@ protected:
     // get the size of the border
     wxRect GetBorderGeometry() const;
 
+    // returning TRUE from here ensures that we act as a container window for
+    // our children
+    virtual bool IsStaticBox() const { return TRUE; }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };

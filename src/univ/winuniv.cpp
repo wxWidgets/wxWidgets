@@ -1100,3 +1100,29 @@ void wxWindow::OnKeyUp(wxKeyEvent& event)
 
 #endif // wxUSE_MENUS
 
+// ----------------------------------------------------------------------------
+// MSW-specific section
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMSW__
+
+#include "wx/msw/private.h"
+
+long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( message == WM_NCHITTEST )
+    {
+        // the windows which contain the other windows should let the mouse
+        // events through, otherwise a window inside a static box would
+        // never get any events at all
+        if ( IsStaticBox() )
+        {
+            return HTTRANSPARENT;
+        }
+    }
+
+    return wxWindowNative::MSWWindowProc(message, wParam, lParam);
+}
+
+#endif // __WXMSW__
+
