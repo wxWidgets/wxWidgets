@@ -145,6 +145,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         return FALSE;
     }
 
+    SetBackgroundColour(*wxRED);
+
     m_text = new wxSpinCtrlText(this, value);
     m_btn = new wxSpinCtrlButton(this, style);
 
@@ -158,6 +160,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // make IsEnabled() return TRUE
     wxControl::Enable(FALSE); // don't use non virtual Disable() here!
     m_isEnabled = TRUE;
+
+    // we don't even need to show this window itself - and not doing it avoids
+    // that it overwrites the text control
+    wxControl::Show(FALSE);
+    m_isShown = TRUE;
 
     return TRUE;
 }
