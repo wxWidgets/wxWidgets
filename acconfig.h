@@ -534,6 +534,11 @@
 #define wxUSE_MINIFRAME 0
 
 /*
+ * wxHTML
+ */
+#define wxUSE_HTML 0
+
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */

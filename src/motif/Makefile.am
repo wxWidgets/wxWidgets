@@ -61,6 +61,9 @@ libwx_motif_la_SOURCES = \
  event.cpp \
  file.cpp \
  fileconf.cpp \
+ filesys.cpp \
+ fs_inet.cpp \
+ fs_zip.cpp \
  framecmn.cpp \
  ftp.cpp \
  gdicmn.cpp \
@@ -105,8 +108,11 @@ libwx_motif_la_SOURCES = \
  wfstream.cpp \
  wincmn.cpp \
  wxexpr.cpp \
+ unzip.c \
+ zipstream.cpp \
  zstream.cpp \
 \
+ busyinfo.cpp \
  caret.cpp \
  choicdgg.cpp \
  colrdlgg.cpp \
@@ -188,7 +194,25 @@ libwx_motif_la_SOURCES = \
  timer.cpp \
  toolbar.cpp \
  utils.cpp \
- window.cpp
+ window.cpp \
+\
+ htmlcell.cpp \
+ htmlfilter.cpp \
+ htmlhelp.cpp \
+ htmlhelp_io.cpp \
+ htmlparser.cpp \
+ htmltag.cpp \
+ htmlwin.cpp \
+ htmlwinparser.cpp \
+ mod_fonts.cpp \
+ mod_hline.cpp \
+ mod_image.cpp \
+ mod_layout.cpp \
+ mod_links.cpp \
+ mod_list.cpp \
+ mod_pre.cpp \
+ mod_tables.cpp \
+ search.cpp
 
 # propform.cpp \
 # proplist.cpp \

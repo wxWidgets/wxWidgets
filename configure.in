@@ -292,6 +292,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
   DEFAULT_wxUSE_MINIFRAME=no
+  DEFAULT_wxUSE_HTML=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=no
@@ -391,6 +392,7 @@ else
   DEFAULT_wxUSE_STARTUP_TIPS=yes
   DEFAULT_wxUSE_PROGRESSDLG=yes
   DEFAULT_wxUSE_MINIFRAME=yes
+  DEFAULT_wxUSE_HTML=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -675,6 +677,7 @@ WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_T
 WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
+WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
@@ -1993,6 +1996,11 @@ if test "$wxUSE_MINIFRAME" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
+if test "$wxUSE_HTML" = "yes"; then
+    AC_DEFINE(wxUSE_HTML)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
+fi
+
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
@@ -2178,6 +2186,14 @@ dnl             samples/Makefile samples/minimal/Makefile
             samples/validate/Makefile
             samples/wxpoem/Makefile
             samples/wxsocket/Makefile
+            samples/html/Makefile
+            samples/html/about/Makefile
+            samples/html/help/Makefile
+            samples/html/test/Makefile
+            samples/html/printing/Makefile
+            samples/html/widget/Makefile
+            samples/html/virtual/Makefile
+            samples/html/zip/Makefile
           ],
           [
             chmod +x wx-config

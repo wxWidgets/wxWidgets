@@ -198,6 +198,8 @@
                                   // wxWindow::SetToolTip() method
 #define wxUSE_SOCKETS       0
                                   // Set to 1 to use socket classes
+#define wxUSE_HTML          0
+                                  // Set to 1 to use wxHTML sub-library
 
 /*
  * Finer detail

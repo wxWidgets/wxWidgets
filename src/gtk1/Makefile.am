@@ -12,7 +12,7 @@ SUFFIXES = .cpp .c
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${srcdir}/../html:${EXTRA_VPATH}
 
 lib_LTLIBRARIES = @WX_LIBRARY_NAME@
 EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la libwx_msw.la
@@ -44,7 +44,10 @@ libwx_gtk_la_SOURCES = \
  file.cpp \
  fileconf.cpp \
  filefn.cpp \
+ filesys.cpp \
  framecmn.cpp \
+ fs_inet.cpp \
+ fs_zip.cpp \
  ftp.cpp \
  gdicmn.cpp \
  hash.cpp \
@@ -90,6 +93,7 @@ libwx_gtk_la_SOURCES = \
  time.cpp \
  timercmn.cpp \
  tokenzr.cpp \
+ unzip.c \
  url.cpp \
  utilscmn.cpp \
  valgen.cpp \
@@ -101,10 +105,12 @@ libwx_gtk_la_SOURCES = \
  wxchar.cpp \
  wxexpr.cpp \
  zstream.cpp \
+ zipstream.cpp \
 \
  db.cpp \
  dbtable.cpp \
 \
+ busyinfo.cpp \
  caret.cpp \
  colrdlgg.cpp \
  dcpsg.cpp \
@@ -192,7 +198,26 @@ libwx_gtk_la_SOURCES = \
  utilsgtk.cpp \
  utilsres.cpp \
  wave.cpp \
- window.cpp
+ window.cpp \
+\
+ htmlcell.cpp \
+ htmlfilter.cpp \
+ htmlhelp.cpp \
+ htmlhelp_io.cpp \
+ htmlparser.cpp \
+ htmltag.cpp \
+ htmlwin.cpp \
+ htmlwinparser.cpp \
+ mod_fonts.cpp \
+ mod_hline.cpp \
+ mod_image.cpp \
+ mod_layout.cpp \
+ mod_links.cpp \
+ mod_list.cpp \
+ mod_pre.cpp \
+ mod_tables.cpp \
+ search.cpp
+
 
 # these are the sources which we build by our own rules
 #
