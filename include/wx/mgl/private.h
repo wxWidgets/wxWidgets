@@ -37,12 +37,12 @@ extern void wxBitmapToPixPattern(const wxBitmap& bitmap,
 // Sets current DC and restores previous one upon destruction:
 class wxCurrentDCSwitcher
 {
-    public:
-        wxCurrentDCSwitcher(MGLDevCtx *dc)
-                { m_old = dc->makeCurrent(); }
-        ~wxCurrentDCSwitcher()
-                { MGL_makeCurrentDC(m_old); }
-        MGLDC *m_old;
+public:
+    wxCurrentDCSwitcher(MGLDevCtx *dc)
+            { m_old = dc->makeCurrent(); }
+    ~wxCurrentDCSwitcher()
+            { MGL_makeCurrentDC(m_old); }
+    MGLDC *m_old;
 };
 
 

@@ -33,10 +33,9 @@ class WXDLLEXPORT wxPalette;
 
 class WXDLLEXPORT wxPalette: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxPalette)
+    DECLARE_DYNAMIC_CLASS(wxPalette)
 
-  public:
-
+public:
     wxPalette();
     wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     wxPalette(const wxPalette& palette);
