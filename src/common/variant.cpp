@@ -2054,6 +2054,12 @@ wxStringList& wxVariant::GetStringList() const
     return (wxStringList&) ((wxVariantDataStringList*) m_data)->GetValue();
 }
 
+// Make empty list
+void wxVariant::NullList()
+{
+    SetData(new wxVariantDataList());
+};
+
 // Append to list
 void wxVariant::Append(const wxVariant& value)
 {
