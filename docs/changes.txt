@@ -222,6 +222,11 @@ All:
 - changed wxURL to inherit from wxURI and provide assignment and comparison
 - implemented wxConvUTF7 (modified patch from Fredrik Roubert)
 - added versions of MB2WC and WC2MB for wxMBConv that for embedded null chars
+- Unicode support in wxODBC is now fully implemented
+- A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
+  SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent 
+  behavior between Unicode and non-unicode builds
+- BLOB example added to samples\db (thanks to Casey ODonnell)
 
 All (GUI):
 
