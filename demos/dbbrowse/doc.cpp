@@ -170,7 +170,7 @@ bool MainDoc::OnInitODBC()
 
     //---------------------------------------------------------------------------------------
     const char sep = 3; // separator character used in string between DSN ans DsDesc
-    wxStringList s_SortDSNList, s_SortDsDescList;
+    wxSortedArrayString s_SortDSNList, s_SortDsDescList;
     // BJO-20000127
     // In order to have same sort result on both Dsn and DsDesc, create a 'keyed' string.
     // The key will be removed after sorting
@@ -183,31 +183,26 @@ bool MainDoc::OnInitODBC()
         s_SortDSNList.Add(Dsn);
         s_SortDsDescList.Add(KeyString);
     }
-    s_SortDSNList.Sort();     //BJO
-    s_SortDsDescList.Sort();  //BJO
     
-    wxChar ** s_SortDSN = s_SortDSNList.ListToArray();        //BJO
-    wxChar ** s_SortDsDesc = s_SortDsDescList.ListToArray();  //BJO
     //---------------------------------------------------------------------------------------
     // Allocate n ODBC-DSN objects to hold the information
+    // Allocate n wxDatabase objects to hold the column information
     p_DSN = new DSN[i_DSN];  //BJO
+    db_Br = new BrowserDB[i_DSN];
     for (i=0;i<i_DSN;i++)
     {
-        KeyString = s_SortDsDesc[i];
+        KeyString = s_SortDsDescList[i];
         KeyString = KeyString.AfterFirst(sep);
-        wxStrcpy(s_SortDsDesc[i],KeyString.c_str());
-        (p_DSN+i)->Dsn = s_SortDSN[i];
-        (p_DSN+i)->Drv = s_SortDsDesc[i];
+
+        // ODBC-DSN object
+        (p_DSN+i)->Dsn = s_SortDSNList[i];
+        (p_DSN+i)->Drv = KeyString;
         (p_DSN+i)->Usr = _T("");
         (p_DSN+i)->Pas = _T("");
         Temp0.Printf(_T("%02d) Dsn(%s) DsDesc(%s)"),i,(p_DSN+i)->Dsn.c_str(),(p_DSN+i)->Drv.c_str());
         wxLogMessage(Temp0);
-    }
-    //---------------------------------------------------------------------------------------
-    // Allocate n wxDatabase objects to hold the column information
-    db_Br = new BrowserDB[i_DSN];
-    for (i=0;i<i_DSN;i++)
-    {
+
+        // wxDataBase object
         (db_Br+i)->p_LogWindow = p_LogWin;
         (db_Br+i)->ODBCSource  = (p_DSN+i)->Dsn;
         (db_Br+i)->UserName    = (p_DSN+i)->Usr;
@@ -218,8 +213,6 @@ bool MainDoc::OnInitODBC()
 
     DbConnectInf.FreeHenv();
 
-    delete [] s_SortDSN;
-    delete [] s_SortDsDesc;
     //---------------------------------------------------------------------------------------
     if (!i_DSN)
     {

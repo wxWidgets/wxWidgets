@@ -2227,21 +2227,17 @@ void CparameterDlg::FillDataSourceList()
 {
     wxChar Dsn[SQL_MAX_DSN_LENGTH + 1];
     wxChar DsDesc[255];
-    wxStringList strList;
+    wxSortedArrayString strArr;
 
     while (wxDbGetDataSource(wxGetApp().DbConnectInf->GetHenv(), Dsn,
                              SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
-        strList.Add(Dsn);
-
-    strList.Sort();
-    strList.Add(wxT(""));
-
-    wxString current;
-    for (wxStringList::Node *node = strList.GetFirst(); node; node = node->GetNext() )
     {
-        current = node->GetData();
-        if(!current.IsEmpty())
-            pParamODBCSourceList->Append(current.c_str());
+        strArr.Add(Dsn);
+    }
+
+    for (size_t i=0; i < strArr.GetCount(); i++ )
+    {
+        pParamODBCSourceList->Append(strArr[i].c_str());
     }
 
 }  // CparameterDlg::FillDataSourceList()
