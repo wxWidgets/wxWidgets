@@ -94,10 +94,16 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, 
 
 wxSizerItem::~wxSizerItem()
 {
-    if (m_userData)
-        delete m_userData;
-    if (m_sizer)
+    delete m_userData;
+
+    if ( m_window )
+    {
+        m_window->SetContainingSizer(NULL);
+    }
+    else // we must be a sizer
+    {
         delete m_sizer;
+    }
 }
 
 
