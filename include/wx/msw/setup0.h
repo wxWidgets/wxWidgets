@@ -36,6 +36,22 @@
 // so there is little advantage to setting it to 1.
 #define WXWIN_COMPATIBILITY  0
 
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 0.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2 0
+
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 0.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2_2 0
+
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
 // but this is very dangerous because you can mistakenly pass an icon instead
 // of a bitmap to a function taking "const wxBitmap&" - which will *not* work

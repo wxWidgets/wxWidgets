@@ -991,6 +991,9 @@ WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exce
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
+WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWin 2.0 compatibility], WXWIN_COMPATIBILITY_2)
+WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWin 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
+
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
 dnl ---------------------------------------------------------------------------
@@ -3132,6 +3135,16 @@ else
     else
         OPTIMISE="-O"
     fi
+fi
+
+if test "$WXWIN_COMPATIBILITY_2" = "yes"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_2)
+
+    WXWIN_COMPATIBILITY_2_2="yes"
+fi
+
+if test "$WXWIN_COMPATIBILITY_2_2" = "yes"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_2_2)
 fi
 
 dnl ---------------------------------------------------------------------------
