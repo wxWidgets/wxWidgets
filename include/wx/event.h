@@ -274,7 +274,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_IDLE, 439)
     DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
     DECLARE_EVENT_TYPE(wxEVT_SIZING, 441)
-    DECLARE_EVENT_TYPE(wxEVT_MOVING, 4442)
+    DECLARE_EVENT_TYPE(wxEVT_MOVING, 442)
 
         // Generic command events
         // Note: a click is a higher-level event than button down/up
