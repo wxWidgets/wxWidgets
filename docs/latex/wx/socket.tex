@@ -255,8 +255,9 @@ A pointer to the previous user data.
 
 This function shuts down the socket, disabling further transmission and
 reception of data; it also disables events for the socket and frees the
-associated system resources. If you \helpref{Destroy}{wxsocketbasedestroy}
-a socket, Close is automatically called.
+associated system resources. Upon socket destruction, Close is automatically
+called. This means that you don't need to do it yourself, unless you
+explicitly want to disable further operation.
 
 \wxheading{Remark/Warning}
 
@@ -509,7 +510,7 @@ See \helpref{Callback}{wxsocketbasecallback} and
 %
 \membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
 
-\func{void}{SetFlags}{\param{wxSocketBase::wxSockFlags}{ flags}}
+\func{void}{SetFlags}{\param{wxSocketBase::wxSocketFlags}{ flags}}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -976,7 +977,7 @@ For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbaseset
 %
 \membersection{wxSocketClient::wxSocketClient}
 
-\func{}{wxSocketClient}{\param{wxSockFlags}{ flags = wxSocketBase::NONE}}
+\func{}{wxSocketClient}{\param{wxSocketFlags}{ flags = wxSOCKET_NONE}}
 
 Constructor.
 
@@ -1161,7 +1162,7 @@ Returns the socket event type.
 %
 \membersection{wxSocketServer::wxSocketServer}\label{wxsocketserverconstr}
 
-\func{}{wxSocketServer}{\param{wxSockAddress\&}{ address}, \param{wxSockFlags}{ flags = wxSocketBase::NONE}}
+\func{}{wxSocketServer}{\param{wxSockAddress\&}{ address}, \param{wxSocketFlags}{ flags = wxSOCKET_NONE}}
 
 Constructs a new server and tries to bind to the specified {\it address}.
 Before trying to accept new connections, test whether it succeeded with
