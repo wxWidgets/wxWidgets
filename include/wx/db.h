@@ -5,7 +5,7 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
-// Mods:        Dec, 1998: 
+// Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 //                     April, 1999
 //                -Added QUERY_ONLY mode support to reduce default number of cursors
@@ -89,8 +89,9 @@ enum enumDummy {enumDum1};
 
 const int DB_PATH_MAX                 = 254;
 
-char * const SQL_LOG_FILENAME         = "sqllog.txt";
-char * const SQL_CATALOG_FILENAME     = "catalog.txt";
+extern char const *SQL_LOG_FILENAME;
+extern char const *SQL_CATALOG_FILENAME;
+
 
 // Database Globals
 const int DB_TYPE_NAME_LEN            = 40;
