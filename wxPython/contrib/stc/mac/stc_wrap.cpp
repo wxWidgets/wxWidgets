@@ -16382,7 +16382,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"wxEVT_STC_MACRORECORD", SWIG_FromInt((int)wxEVT_STC_MACRORECORD));
     PyDict_SetItemString(d,"wxEVT_STC_MARGINCLICK", SWIG_FromInt((int)wxEVT_STC_MARGINCLICK));
     PyDict_SetItemString(d,"wxEVT_STC_NEEDSHOWN", SWIG_FromInt((int)wxEVT_STC_NEEDSHOWN));
-    PyDict_SetItemString(d,"wxEVT_STC_POSCHANGED", SWIG_FromInt((int)wxEVT_STC_POSCHANGED));
     PyDict_SetItemString(d,"wxEVT_STC_PAINTED", SWIG_FromInt((int)wxEVT_STC_PAINTED));
     PyDict_SetItemString(d,"wxEVT_STC_USERLISTSELECTION", SWIG_FromInt((int)wxEVT_STC_USERLISTSELECTION));
     PyDict_SetItemString(d,"wxEVT_STC_URIDROPPED", SWIG_FromInt((int)wxEVT_STC_URIDROPPED));
