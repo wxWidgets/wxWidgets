@@ -329,7 +329,7 @@ def makeLibName(name):
 
 
 def adjustCFLAGS(cflags, defines, includes):
-    '''Extrace the raw -I, -D, and -U flags and put them into
+    '''Extract the raw -I, -D, and -U flags and put them into
        defines and includes as needed.'''
     newCFLAGS = []
     for flag in cflags:
@@ -350,7 +350,7 @@ def adjustCFLAGS(cflags, defines, includes):
 
 
 def adjustLFLAGS(lfags, libdirs, libs):
-    '''Extrace the -L and -l flags and put them in libdirs and libs as needed'''
+    '''Extract the -L and -l flags and put them in libdirs and libs as needed'''
     newLFLAGS = []
     for flag in lflags:
         if flag[:2] == '-L':
@@ -402,7 +402,7 @@ if os.name == 'nt':
     GENDIR = 'msw'
 
     includes = ['src',
-                opj(WXDIR, 'lib', 'vc_msw' + libFlag() + 'dll'),
+                opj(WXDIR, 'lib', 'vc_dll', 'msw' + libFlag()),
                 opj(WXDIR, 'include'),
                 opj(WXDIR, 'contrib', 'include'),
                 ]
@@ -425,7 +425,7 @@ if os.name == 'nt':
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
 
-    libdirs = [ opj(WXDIR, 'lib', 'vc_msw' + libFlag() + 'dll') ]
+    libdirs = [ opj(WXDIR, 'lib', 'vc_dll') ]
     libs = [ 'wxbase' + WXDLLVER + libFlag(),  # TODO: trim this down to what is really needed for the core
              'wxbase' + WXDLLVER + libFlag() + '_net',
              'wxbase' + WXDLLVER + libFlag() + '_xml',
