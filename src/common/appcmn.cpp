@@ -147,6 +147,9 @@ void wxAppBase::CleanUp()
 
 void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 {
+    // first add the standard non GUI options
+    wxAppConsole::OnInitCmdLine(parser);
+
     // the standard command line options
     static const wxCmdLineEntryDesc cmdLineGUIDesc[] =
     {
