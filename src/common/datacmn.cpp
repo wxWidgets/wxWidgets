@@ -120,6 +120,7 @@ WXDLLEXPORT_DATA(const wxChar *) wxFrameNameStr = wxT("frame");
 WXDLLEXPORT_DATA(const wxChar *) wxGaugeNameStr = wxT("gauge");
 WXDLLEXPORT_DATA(const wxChar *) wxStaticBoxNameStr = wxT("groupBox");
 WXDLLEXPORT_DATA(const wxChar *) wxListBoxNameStr = wxT("listBox");
+WXDLLEXPORT_DATA(const wxChar *) wxListCtrlNameStr = wxT("listctrl");
 WXDLLEXPORT_DATA(const wxChar *) wxStaticTextNameStr = wxT("message");
 WXDLLEXPORT_DATA(const wxChar *) wxStaticBitmapNameStr = wxT("message");
 WXDLLEXPORT_DATA(const wxChar *) wxMultiTextNameStr = wxT("multitext");

@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/os2/listctrl.h
+// Purpose:     wxListCtrl class
+// Author:      
+// Modified by:
+// Created:     
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
@@ -27,7 +38,7 @@ public:
                ,const wxSize&      rSize = wxDefaultSize
                ,long               lStyle = wxLC_ICON
                ,const wxValidator& rValidator = wxDefaultValidator
-               ,const wxString&    rsName = _T("wxListCtrl"))
+               ,const wxString&    rsName = wxListCtrlNameStr)
     {
         Init();
         Create( pParent
@@ -47,7 +58,7 @@ public:
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = wxLC_ICON
                 ,const wxValidator& rValidator = wxDefaultValidator
-                ,const wxString&    rsName = _T("wxListCtrl")
+                ,const wxString&    rsName = wxListCtrlNameStr
                );
 
 
@@ -173,7 +184,7 @@ public:
 
     //
     // Retrieves the spacing between icons in pixels.
-    // If small is TRUE, gets the spacing for the small icon
+    // If bIsSmall is true, gets the spacing for the small icon
     // view, otherwise the large icon view.
     //
     int  GetItemSpacing(bool bIsSmall) const;
@@ -214,7 +225,7 @@ public:
     //
     // Add or remove a single window style
     void SetSingleStyle( long lStyle
-                        ,bool bAdd = TRUE
+                        ,bool bAdd = true
                        );
 
     //
@@ -317,7 +328,7 @@ public:
     //
     long FindItem( long            lStart
                   ,const wxString& rsStr
-                  ,bool            bPartial = FALSE
+                  ,bool            bPartial = false
                  );
 
     //
@@ -476,12 +487,12 @@ protected:
                                                         // keep track of inserted/deleted columns
 
     //
-    // TRUE if we have any internal data (user data & attributes)
+    // true if we have any internal data (user data & attributes)
     //
     bool                            m_bAnyInternalData;
 
     //
-    // TRUE if we have any items with custom attributes
+    // true if we have any items with custom attributes
     //
     bool                            m_bHasAnyAttr;
 

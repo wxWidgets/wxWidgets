@@ -176,14 +176,14 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   inline wxListCtrl(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "listCtrl")
+            const wxString& name = wxListCtrlNameStr)
   {
     Create(parent, id, pos, size, style, validator, name);
   }
   ~wxListCtrl();
 
   bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = "wxListCtrl");
+            long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxListCtrlNameStr);
 
 
   // Attributes
@@ -256,7 +256,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   int GetColumnCount() const;
 
   // Retrieves the spacing between icons in pixels.
-  // If small is TRUE, gets the spacing for the small icon
+  // If isSmall is true, gets the spacing for the small icon
   // view, otherwise the large icon view.
   int GetItemSpacing(bool isSmall) const;
 
@@ -274,7 +274,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   long GetTopItem() const ;
 
   // Add or remove a single window style
-  void SetSingleStyle(long style, bool add = TRUE) ;
+  void SetSingleStyle(long style, bool add = true) ;
 
   // Set the whole window style
   void SetWindowStyleFlag(long style) ;
@@ -335,7 +335,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Find an item whose label matches this string, starting from the item after 'start'
   // or the beginning if 'start' is -1.
-  long FindItem(long start, const wxString& str, bool partial = FALSE);
+  long FindItem(long start, const wxString& str, bool partial = false);
 
   // Find an item whose data matches this data, starting from the item after 'start'
   // or the beginning if 'start' is -1.

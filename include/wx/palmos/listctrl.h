@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -72,9 +72,6 @@ class WXDLLEXPORT wxImageList;
      - addition of further convenience functions
        to avoid use of wxListItem in some functions
      - state/overlay images: probably not needed.
-     - in Win95, you can be called back to supply other information
-       besides text, such as state information. This saves no memory
-       and is probably superfluous to requirements.
      - testing of whole API, extending current sample.
 
 
@@ -95,7 +92,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = _T("wxListCtrl"))
+               const wxString& name = wxListCtrlNameStr)
     {
         Init();
 
@@ -110,7 +107,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = _T("wxListCtrl"));
+                const wxString& name = wxListCtrlNameStr);
 
 
     // Attributes
@@ -229,12 +226,6 @@ public:
     wxImageList *GetImageList(int which) const ;
 
     // Sets the image list
-    // N.B. There's a quirk in the Win95 list view implementation.
-    // If in wxLC_LIST mode, it'll *still* display images by the labels if
-    // there's a small-icon image list set for the control - even though you
-    // haven't specified wxLIST_MASK_IMAGE when inserting.
-    // So you have to set a NULL small-icon image list to be sure that
-    // the wxLC_LIST mode works without icons. Of course, you may want icons...
     void SetImageList(wxImageList *imageList, int which) ;
     void AssignImageList(wxImageList *imageList, int which) ;
 
@@ -401,8 +392,6 @@ protected:
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
 private:
-    // process NM_CUSTOMDRAW notification message
-    WXLPARAM OnCustomDraw(WXLPARAM lParam);
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()
@@ -412,4 +401,3 @@ private:
 #endif // wxUSE_LISTCTRL
 
 #endif // _WX_LISTCTRL_H_
-

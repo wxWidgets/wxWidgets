@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_LISTCTRL && defined(__WIN95__)
+#if wxUSE_LISTCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -42,18 +42,6 @@
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
 #include "wx/dcclient.h"
-
-#include "wx/palmos/private.h"
-
-#include "wx/palmos/wrapcctl.h"
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// private helper classes
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // events
@@ -212,8 +200,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-/* static */ wxVisualAttributes
-wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+/* static */ wxVisualAttributes wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     wxVisualAttributes attrs;
 
@@ -626,16 +613,6 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 // message processing
 // ----------------------------------------------------------------------------
 
-// see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
-
-WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
-{
-    return CDRF_DODEFAULT;
-}
-
-#endif // NM_CUSTOMDRAW supported
-
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
@@ -682,8 +659,7 @@ static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId)
     return NULL;
 };
 
-static
-wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
+static wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
 {
     return wxGetInternalData(GetHwndOf(ctl), itemId);
 };

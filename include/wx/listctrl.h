@@ -23,6 +23,12 @@
 #include "wx/listbase.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(extern const wxChar*) wxListCtrlNameStr;
+
+// ----------------------------------------------------------------------------
 // include the wxListCtrl class declaration
 // ----------------------------------------------------------------------------
 
@@ -46,7 +52,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxT("listctrl") )
+                const wxString &name = wxListCtrlNameStr)
     {
         Create(parent, winid, pos, size, style, validator, name);
     }

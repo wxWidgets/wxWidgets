@@ -9,10 +9,10 @@ A special case of report view quite different from the other modes of the list
 control is a virtual control in which the items data (including text, images
 and attributes) is managed by the main program and is requested by the control
 itself only when needed which allows to have controls with millions of items
-without consuming much memory. To use virtual list control you must use 
-\helpref{SetItemCount}{wxlistctrlsetitemcount} first and overload at least 
-\helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally 
-\helpref{OnGetItemImage}{wxlistctrlongetitemimage} and 
+without consuming much memory. To use virtual list control you must use
+\helpref{SetItemCount}{wxlistctrlsetitemcount} first and overload at least
+\helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage} and
 \helpref{OnGetItemAttr}{wxlistctrlongetitemattr}) to return the information
 about the items when the control requests it. Virtual list control can be used
 as a normal one except that no operations which can take time proportional to
@@ -111,7 +111,7 @@ Default constructor.
 
 \func{}{wxListCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxListCtrlNameStr}}
 
 Constructor, creating and showing a list control.
 
@@ -163,7 +163,7 @@ Arranges the items in icon or small icon view. This only has effect on Win32. {\
 
 \func{void}{AssignImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
 
-Sets the image list associated with the control and 
+Sets the image list associated with the control and
 takes ownership of it (i.e. the control will, unlike when using
 SetImageList, delete the list when destroyed). {\it which} is one of
 wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
@@ -184,7 +184,7 @@ Deletes all items and all columns.
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
-\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listCtrl"}}
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxListCtrlNameStr}}
 
 Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlctor} for further details.
 
@@ -251,7 +251,7 @@ the beginning if 'start' is -1.
 
 \func{long}{FindItem}{\param{long }{start}, \param{const wxPoint\& }{pt}, \param{int }{direction}}
 
-Find an item nearest this position in the specified direction, starting from 
+Find an item nearest this position in the specified direction, starting from
 {\it start} or the beginning if {\it start} is -1.
 
 \pythonnote{In place of a single overloaded method name, wxPython
@@ -640,7 +640,7 @@ method:\par
 
 \func{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
 
-This function may be overloaded in the derived class for a control with 
+This function may be overloaded in the derived class for a control with
 {\tt wxLC\_VIRTUAL} style. It should return the attribute for the
 for the specified {\tt item} or {\tt NULL} to use the default appearance
 parameters.
@@ -657,8 +657,8 @@ The base class version always returns {\tt NULL}.
 
 \func{virtual int}{OnGetItemImage}{\param{long }{item}}
 
-This function must be overloaded in the derived class for a control with 
-{\tt wxLC\_VIRTUAL} style having an \helpref{image list}{wxlistctrlsetimagelist} 
+This function must be overloaded in the derived class for a control with
+{\tt wxLC\_VIRTUAL} style having an \helpref{image list}{wxlistctrlsetimagelist}
 (if the control doesn't have an image list, it is not necessary to overload
  it). It should return the index of the items image in the controls image list
 or $-1$ for no image.
@@ -675,7 +675,7 @@ The base class version always returns $-1$.
 
 \constfunc{virtual wxString}{OnGetItemText}{\param{long }{item}, \param{long }{column}}
 
-This function {\bf must} be overloaded in the derived class for a control with 
+This function {\bf must} be overloaded in the derived class for a control with
 {\tt wxLC\_VIRTUAL} style. It should return the string containing the text of
 the given {\it column} for the specified {\tt item}.
 
@@ -716,8 +716,8 @@ virtual list controls.
 
 \func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
 
-Scrolls the list control. If in icon, small icon or report view mode, 
-{\it dx} specifies the number of pixels to scroll. If in list view mode, 
+Scrolls the list control. If in icon, small icon or report view mode,
+{\it dx} specifies the number of pixels to scroll. If in list view mode,
 {\it dx} specifies the number of columns to scroll. {\it dy} always specifies
 the number of pixels to scroll vertically.
 
@@ -842,7 +842,7 @@ string or image at a given location.}
 
 Sets the background colour for this item. This function only works in report view.
 
-The colour can be retrieved using 
+The colour can be retrieved using
 \helpref{GetItemBackgroundColour}{wxlistctrlgetitembackgroundcolour}.
 
 
@@ -908,7 +908,7 @@ Sets the item text for this item.
 
 Sets the colour for this item. This function only works in report view.
 
-The colour can be retrieved using 
+The colour can be retrieved using
 \helpref{GetItemTextColour}{wxlistctrlgetitemtextcolour}.
 
 
