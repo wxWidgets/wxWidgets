@@ -124,6 +124,11 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
     }
 }
 
+wxMenuBar* wxCocoaNSWindow::GetAppMenuBar()
+{
+    return NULL;
+}
+
 // ============================================================================
 // @class wxPoserNSWindow
 // ============================================================================
