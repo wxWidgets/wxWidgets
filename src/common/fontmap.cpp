@@ -479,7 +479,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         cs.Trim(FALSE);
 
         // discard the optional quotes
-        if ( !!cs )
+        if ( !cs.empty() )
         {
             if ( cs[0u] == _T('"') && cs.Last() == _T('"') )
             {
@@ -489,7 +489,10 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         cs.MakeUpper();
 
-        if ( !cs || cs == wxT("US-ASCII") )
+        // nl_langinfo() under Solaris returns 646 by default which stands for
+        // ISO-646, i.e. 7 bit ASCII and we should recognize it to avoid
+        // warnings about unrecognized encoding on each program startup
+        if ( cs.empty() || cs == _T("US-ASCII") || cs == _T("646") )
         {
             encoding = wxFONTENCODING_DEFAULT;
         }
