@@ -936,7 +936,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     return true;
 }
     
-bool wxImage::ConvertAlphaToMask(unsigned threshold)
+bool wxImage::ConvertAlphaToMask(unsigned char threshold)
 {
     if (!HasAlpha())
         return true;
@@ -954,12 +954,12 @@ bool wxImage::ConvertAlphaToMask(unsigned threshold)
     unsigned char *imgdata = GetData();
     unsigned char *alphadata = GetAlpha();
 
-    size_t w = GetWidth();
-    size_t h = GetHeight();
+    int w = GetWidth();
+    int h = GetHeight();
 
-    for (size_t y = 0; y < h; y++)
+    for (int y = 0; y < h; y++)
     {
-        for (size_t x = 0; x < w; x++, imgdata += 3, alphadata++)
+        for (int x = 0; x < w; x++, imgdata += 3, alphadata++)
         {
             if ((unsigned)(*alphadata) < threshold)
             {

@@ -209,7 +209,7 @@ public:
 
     // converts image's alpha channel to mask, if it has any, does nothing
     // otherwise:
-    bool ConvertAlphaToMask(unsigned threshold = 128);
+    bool ConvertAlphaToMask(unsigned char threshold = 128);
 
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
