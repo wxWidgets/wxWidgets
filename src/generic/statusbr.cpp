@@ -94,7 +94,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   return success;
 }
 
-void wxStatusBar::SetFieldsCount(int number, const int *widths)
+void wxStatusBar::SetFieldsCount(int number, const int widths[])
 {
   m_nFields = number;
 
@@ -138,7 +138,7 @@ wxString wxStatusBar::GetStatusText(int n) const
     return m_statusStrings[n];
 }
 
-void wxStatusBar::SetStatusWidths(int n, const int *widths_field)
+void wxStatusBar::SetStatusWidths(int n, const int widths_field[])
 {
   // only set status widths, when n == number of statuswindows
   if (n == m_nFields)

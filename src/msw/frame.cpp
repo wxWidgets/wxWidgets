@@ -390,7 +390,7 @@ void wxFrame::SetStatusText(const wxString& text, int number)
   m_frameStatusBar->SetStatusText(text, number);
 }
 
-void wxFrame::SetStatusWidths(int n, int *widths_field)
+void wxFrame::SetStatusWidths(int n, const int widths_field[])
 {
   wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
 

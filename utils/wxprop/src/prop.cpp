@@ -307,7 +307,7 @@ wxPropertyValue *wxPropertyValue::NewCopy(void)
     case wxPropertyValueInteger:
       return new wxPropertyValue(value.integer);
     case wxPropertyValuebool:
-      return new wxPropertyValue((value.integer != 0));
+      return new wxPropertyValue((bool) (value.integer != 0));
     case wxPropertyValueReal:
       return new wxPropertyValue(value.real);
     case wxPropertyValueString:

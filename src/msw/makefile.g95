@@ -161,6 +161,7 @@ MSWOBJS = \
   minifram.$(OBJSUFF) \
   msgdlg.$(OBJSUFF) \
   nativdlg.$(OBJSUFF) \
+  notebook.$(OBJSUFF) \
   ownerdrw.$(OBJSUFF) \
   palette.$(OBJSUFF) \
   pen.$(OBJSUFF) \

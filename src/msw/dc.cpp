@@ -510,7 +510,7 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
 	 HPEN orig_pen = NULL;
 
 	 if (do_pen || !m_pen.Ok())
-		orig_pen = ::SelectObject((HDC) m_hDC, ::GetStockObject(NULL_PEN));
+		orig_pen = (HPEN) ::SelectObject((HDC) m_hDC, (HPEN) ::GetStockObject(NULL_PEN));
 
 	 (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
 		  XLOG2DEV(x2) + 1, YLOG2DEV(y2) + 1);
@@ -522,7 +522,7 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
 	 HBRUSH orig_brush = NULL;
 
 	 if (do_brush || !m_brush.Ok())
-		orig_brush = ::SelectObject((HDC) m_hDC, ::GetStockObject(NULL_BRUSH));
+		orig_brush = (HBRUSH) ::SelectObject((HDC) m_hDC, (HBRUSH) ::GetStockObject(NULL_BRUSH));
 
 	 (void)Rectangle((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
 		  XLOG2DEV(x2), YLOG2DEV(y2));
@@ -592,7 +592,7 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
   // draw pie with NULL_PEN first and then outline otherwise a line is
   // drawn from the start and end points to the centre
-  HPEN orig_pen = ::SelectObject((HDC) m_hDC, ::GetStockObject(NULL_PEN));
+  HPEN orig_pen = (HPEN) ::SelectObject((HDC) m_hDC, (HPEN) ::GetStockObject(NULL_PEN));
   if (m_signY > 0)
   {
     (void)Pie((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2)+1, YLOG2DEV(y2)+1,
@@ -702,7 +702,7 @@ void wxDC::SetBrush(const wxBrush& brush)
     if (m_brush.GetResourceHandle())
     {
       HBRUSH b = 0;
-      b = ::SelectObject((HDC) m_hDC, (HBRUSH)m_brush.GetResourceHandle()) ;
+      b = (HBRUSH) ::SelectObject((HDC) m_hDC, (HBRUSH)m_brush.GetResourceHandle()) ;
       if (!m_oldBrush)
         m_oldBrush = (WXHBRUSH) b;
     }
@@ -716,7 +716,7 @@ void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
 #if DEBUG > 1
     wxDebugMsg("wxDC::DrawText: Selecting HFONT %X\n", m_font.GetResourceHandle());
 #endif
-    HFONT f = ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());
+    HFONT f = (HFONT) ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());
     if (!m_oldFont)
       m_oldFont = (WXHFONT) f;
   }
@@ -914,8 +914,8 @@ void wxDC::GetTextExtent(const wxString& string, long *x, long *y,
   GetTextExtentPoint((HDC) m_hDC, (char *)(const char *) string, strlen((char *)(const char *) string), &sizeRect);
   GetTextMetrics((HDC) m_hDC, &tm);
 
-  if (x) *x = XDEV2LOGREL(sizeRect.cx);
-  if (y) *y = YDEV2LOGREL(sizeRect.cy);
+  *x = XDEV2LOGREL(sizeRect.cx);
+  *y = YDEV2LOGREL(sizeRect.cy);
   if (descent) *descent = tm.tmDescent;
   if (externalLeading) *externalLeading = tm.tmExternalLeading;
 }
@@ -1365,3 +1365,4 @@ void wxDC::GetTextExtent(const wxString& string, float *x, float *y,
         *externalLeading = externalLeading1;
 }
 #endif
+

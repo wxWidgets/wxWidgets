@@ -105,10 +105,10 @@ wxNotebook::wxNotebook()
 
 // the same arguments as for wxControl
 wxNotebook::wxNotebook(wxWindow *parent,
-                       const wxWindowID id, 
+                       wxWindowID id,
                        const wxPoint& pos,
                        const wxSize& size,
-                       const long style,
+                       long style,
                        const wxString& name)
 {
   Init();
@@ -118,10 +118,10 @@ wxNotebook::wxNotebook(wxWindow *parent,
 
 // Create() function
 bool wxNotebook::Create(wxWindow *parent,
-                        const wxWindowID id, 
+                        wxWindowID id,
                         const wxPoint& pos,
                         const wxSize& size,
-                        const long style,
+                        long style,
                         const wxString& name)
 {
   // base init
@@ -414,7 +414,7 @@ void wxNotebook::Command(wxCommandEvent& event)
   wxFAIL_MSG("wxNotebook::Command not implemented");
 }
 
-bool wxNotebook::MSWNotify(const WXWPARAM wParam, const WXLPARAM lParam)
+bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
   wxNotebookEvent event(wxEVT_NULL, m_windowId, 
                         TabCtrl_GetCurSel(m_hwnd), m_nSelection);

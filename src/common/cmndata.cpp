@@ -215,7 +215,7 @@ void wxPrintData::ConvertToNative(void)
     pd->Flags = PD_RETURNDC ;
 //    pd->lStructSize = sizeof( PRINTDLG );
     pd->lStructSize = 66 ;
-    pd->hwndOwner=(HANDLE)NULL;
+    pd->hwndOwner=(HWND)NULL;
     pd->hDevNames=(HANDLE)NULL;
     pd->hInstance=(HINSTANCE)NULL;
     pd->lCustData = (LPARAM) NULL;

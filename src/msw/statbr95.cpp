@@ -95,7 +95,10 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
 {
   SetParent(parent);
 
-  m_windowId = id == -1 ? NewControlId() : id;
+  if (id == -1)
+    m_windowId = NewControlId();
+  else
+    m_windowId = id;
 
   DWORD wstyle = WS_CHILD | WS_VISIBLE;
   if ( style & wxST_SIZEGRIP )
@@ -116,7 +119,7 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
   return TRUE;
 }
 
-void wxStatusBar95::CopyFieldsWidth(int *widths)
+void wxStatusBar95::CopyFieldsWidth(const int widths[])
 {
   if (widths && !m_statusWidths)
     m_statusWidths = new int[m_nFields];
@@ -131,7 +134,7 @@ void wxStatusBar95::CopyFieldsWidth(int *widths)
   }
 }
 
-void wxStatusBar95::SetFieldsCount(int nFields, int *widths)
+void wxStatusBar95::SetFieldsCount(int nFields, const int widths[])
 {
   wxASSERT( (nFields > 0) && (nFields < 255) );
 
@@ -141,7 +144,7 @@ void wxStatusBar95::SetFieldsCount(int nFields, int *widths)
   SetFieldsWidth();
 }
 
-void wxStatusBar95::SetStatusWidths(int n, int *widths)
+void wxStatusBar95::SetStatusWidths(int n, const int widths[])
 {
   // @@ I don't understand what this function is for...
   wxASSERT( n == m_nFields );
@@ -218,6 +221,7 @@ wxString wxStatusBar95::GetStatusText(int nField) const
   if (len > 0)
   {
         StatusBar_GetText(hwnd, nField, str.GetWriteBuf(len));
+        str.UngetWriteBuf();
   }
   return str;
 }

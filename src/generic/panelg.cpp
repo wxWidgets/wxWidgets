@@ -112,6 +112,9 @@ void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
 // set focus to the next child which accepts it (or first/last if node == NULL)
 bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
 {
+	// Added by JACS since this seems to cause an infinite loop.
+	return FALSE;
+
   // @@ using typed list would be better...
   #define WIN(node) ((wxWindow *)(node->Data()))
 

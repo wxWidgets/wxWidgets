@@ -157,6 +157,7 @@ MSWOBJS = \
   $(MSWDIR)\minifram.obj \
   $(MSWDIR)\msgdlg.obj \
   $(MSWDIR)\nativdlg.obj \
+  $(MSWDIR)\notebook.obj \
   $(MSWDIR)\ownerdrw.obj \
   $(MSWDIR)\palette.obj \
   $(MSWDIR)\pen.obj \
@@ -314,6 +315,8 @@ $(MSWDIR)\minifram.obj:     $(MSWDIR)\minifram.$(SRCSUFF)
 $(MSWDIR)\msgdlg.obj:     $(MSWDIR)\msgdlg.$(SRCSUFF)
 
 $(MSWDIR)\nativdlg.obj:     $(MSWDIR)\nativdlg.$(SRCSUFF)
+
+$(MSWDIR)\notebook.obj:     $(MSWDIR)\notebook.$(SRCSUFF)
 
 $(MSWDIR)\ownerdrw.obj:     $(MSWDIR)\ownerdrw.$(SRCSUFF)
 

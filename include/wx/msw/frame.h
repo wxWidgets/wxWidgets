@@ -91,7 +91,7 @@ public:
   virtual void SetStatusText(const wxString& text, int number = 0);
 
   // Set status line widths
-  virtual void SetStatusWidths(int n, int *widths_field);
+  virtual void SetStatusWidths(int n, const int widths_field[]);
 
   // Hint to tell framework which status bar to use
   // TODO: should this go into a wxFrameworkSettings class perhaps?
