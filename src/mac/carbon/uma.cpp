@@ -798,7 +798,7 @@ Rect* UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds)
     WindowRef tlwref = GetControlOwner( theControl ) ;
 
     wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
-    if ( tlwwx->MacUsesCompositing() )
+    if ( tlwwx != NULL && tlwwx->MacUsesCompositing() )
     {
         ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
         HIPoint hiPoint = CGPointMake(  0 , 0 ) ;
