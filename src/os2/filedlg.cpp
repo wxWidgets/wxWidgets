@@ -17,14 +17,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-    #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/dialog.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #define INCL_PM
@@ -36,158 +35,486 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "wx/tokenzr.h"
+
+#define wxMAXPATH                    1024
+#define wxMAXFILE                    1024
+#define wxMAXEXT                        5
+
+#ifndef MAXPATH
+# define MAXPATH                      400
+#endif
+
+#ifndef MAXDRIVE
+# define MAXDRIVE                       3
+#endif
+
+#ifndef MAXFILE
+# define MAXFILE                        9
+#endif
+
+#ifndef MAXEXT
+# define MAXEXT                         5
+#endif
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
-wxString wxFileSelector( const char* title
-                        ,const char* defaultDir
-                        ,const char* defaultFileName
-                        ,const char* defaultExtension
-                        ,const char* filter
-                        ,int         flags
-                        ,wxWindow*   parent
-                        ,int         x
-                        ,int         y
-                       )
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+wxString wxFileSelector(
+  const char*                       pzTitle
+, const char*                       pzDefaultDir
+, const char*                       pzDefaultFileName
+, const char*                       pzDefaultExtension
+, const char*                       pzFilter
+, int                               nFlags
+, wxWindow*                         pParent
+, int                               nX
+, int                               nY
+)
 {
-    // If there's a default extension specified but no filter, we create a suitable
-    // filter.
+    wxString                        sFilter("");
+    wxString                        sDefaultDirString;
+    wxString                        sDefaultFilenameString;
 
-    wxString filter2("");
-    if ( defaultExtension && !filter )
-        filter2 = wxString("*.") + wxString(defaultExtension) ;
-    else if ( filter )
-        filter2 = filter;
+    //
+    // If there's a default extension specified but no filter, we create
+    // a suitable filter.
+    //
+    if (pzDefaultExtension && !pzFilter)
+        sFilter = wxString("*.") + wxString(pzDefaultExtension);
+    else if (pzFilter)
+        sFilter = pzFilter;
 
-    wxString defaultDirString;
-    if (defaultDir)
-        defaultDirString = defaultDir;
+    if (pzDefaultDir)
+        sDefaultDirString = pzDefaultDir;
     else
-        defaultDirString = "";
+        sDefaultDirString = "";
 
-    wxString defaultFilenameString;
-    if (defaultFileName)
-        defaultFilenameString = defaultFileName;
+    if (pzDefaultFileName)
+        sDefaultFilenameString = pzDefaultFileName;
     else
-        defaultFilenameString = "";
+        sDefaultFilenameString = "";
 
-    wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
+    wxFileDialog                    vFileDialog( pParent
+                                                ,pzTitle
+                                                ,sDefaultDirString
+                                                ,sDefaultFilenameString
+                                                ,sFilter
+                                                ,nFlags
+                                                ,wxPoint(nX, nY)
+                                               );
 
-    if ( fileDialog.ShowModal() == wxID_OK )
+    if (wxStrlen(pzDefaultExtension) != 0)
     {
-        return fileDialog.GetPath();
+        int                         nFilterFind = 0;
+        int                         nFilterIndex = 0;
+
+        for (unsigned int i = 0; i < sFilter.Len(); i++)
+        {
+            if (sFilter.GetChar(i) == wxT('|'))
+            {
+                //
+                // Save the start index of the new filter
+                unsigned int        uIs = i++;
+
+                //
+                // Find the end of the filter
+                //
+                for(; i < sFilter.Len(); i++)
+                {
+                    if(sFilter[i] == wxT('|'))
+                        break;
+                }
+
+                if( i - uIs - 1 > 0 && uIs + 1 < sFilter.Len() )
+                {
+                    if(sFilter.Mid(uIs + 1, i - uIs - 1).Contains(pzDefaultExtension))
+                    {
+                        nFilterFind = nFilterIndex;
+                        break;
+                    }
+                }
+                nFilterIndex++;
+            }
+        }
+        vFileDialog.SetFilterIndex(nFilterFind);
+    }
+    if (vFileDialog.ShowModal() == wxID_OK)
+    {
+        return vFileDialog.GetPath();
     }
     else
         return wxEmptyString;
-}
+} // end of wxFileSelector
 
-# ifndef MAXPATH
-# define MAXPATH   400
-# endif
-
-# ifndef MAXDRIVE
-# define MAXDRIVE  3
-# endif
-
-# ifndef MAXFILE
-# define MAXFILE   9
-# endif
-
-# ifndef MAXEXT
-# define MAXEXT    5
-# endif
-
-wxString wxFileSelectorEx( const char* title
-                          ,const char* defaultDir
-                          ,const char* defaultFileName
-                          ,int*        defaultFilterIndex
-                          ,const char* filter
-                          ,int         flags
-                          ,wxWindow*   parent
-                          ,int         x
-                          ,int         y
-                         )
+wxString wxFileSelectorEx (
+  const char*                       pzTitle
+, const char*                       pzDefaultDir
+, const char*                       pzDefaultFileName
+, int*                              pnDefaultFilterIndex
+, const char*                       pzFilter
+, int                               nFlags
+, wxWindow*                         pParent
+, int                               nX
+, int                               nY
+)
 {
-    wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
-        defaultFileName ? defaultFileName : "", filter ? filter : "", flags, wxPoint(x, y));
+    wxFileDialog                    vFileDialog( pParent
+                                                ,pzTitle ? pzTitle : ""
+                                                ,pzDefaultDir ? pzDefaultDir : ""
+                                                ,pzDefaultFileName ? pzDefaultFileName : ""
+                                                ,pzFilter ? pzFilter : ""
+                                                ,nFlags
+                                                ,wxPoint(nX, nY)
+                                               );
 
-    if ( fileDialog.ShowModal() == wxID_OK )
+    if (vFileDialog.ShowModal() == wxID_OK)
     {
-        *defaultFilterIndex = fileDialog.GetFilterIndex();
-        return fileDialog.GetPath();
+        *pnDefaultFilterIndex = vFileDialog.GetFilterIndex();
+        return vFileDialog.GetPath();
     }
     else
         return wxEmptyString;
-}
+} // end of wxFileSelectorEx
 
-wxFileDialog::wxFileDialog( wxWindow*       parent
-                           ,const wxString& message
-                           ,const wxString& defaultDir
-                           ,const wxString& defaultFileName
-                           ,const wxString& wildCard
-                           ,long            style
-                           ,const wxPoint&  pos
-                          )
+// ----------------------------------------------------------------------------
+// CLASS wxFileDialog
+// ----------------------------------------------------------------------------
+
+wxFileDialog::wxFileDialog (
+  wxWindow*                         pParent
+, const wxString&                   rsMessage
+, const wxString&                   rsDefaultDir
+, const wxString&                   rsDefaultFileName
+, const wxString&                   rsWildCard
+, long                              lStyle
+, const wxPoint&                    rPos
+)
 {
-    m_message = message;
-    m_dialogStyle = style;
-    m_parent = parent;
-    m_path = "";
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
-    m_filterIndex = 1;
-}
+    m_sMessage     = rsMessage;
+    m_lDialogStyle = lStyle;
+    if ((m_lDialogStyle & wxMULTIPLE) && (m_lDialogStyle & wxSAVE))
+        m_lDialogStyle &= ~wxMULTIPLE;
+    m_pParent      = pParent;
+    m_sPath        = "";
+    m_sFileName    = rsDefaultFileName;
+    m_sDir         = rsDefaultDir;
+    m_sWildCard    = rsWildCard;
+    m_nFilterIndex = 1;
+    m_vPos         = rPos;
+} // end of wxFileDialog::wxFileDialog
+
+void wxFileDialog::GetPaths (
+  wxArrayString&                    rasPaths
+) const
+{
+    wxString                        sDir(m_sDir);
+    size_t                          nCount = m_asFileNames.GetCount();
+
+    rasPaths.Empty();
+    if (m_sDir.Last() != _T('\\'))
+        sDir += _T('\\');
+
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        rasPaths.Add(sDir + m_asFileNames[n]);
+    }
+} // end of wxFileDialog::GetPaths
 
 int wxFileDialog::ShowModal()
 {
-    // TODO
+    wxString                        sTheFilter;
+    wxString                        sFilterBuffer;
+    static wxChar                   zFileNameBuffer[wxMAXPATH];           // the file-name
+    HWND                            hWnd = 0;
+    wxChar                          zTitleBuffer[wxMAXFILE + 1 + wxMAXEXT];  // the file-name, without path
+    wxString 	                    sDir;
+    size_t 	                        i;
+    size_t                          nLen = m_sDir.length();
+    FILEDLG                         vFileDlg;
+    ULONG                           lFlags = 0L;
+
+    memset(&vFileDlg, '\0', sizeof(FILEDLG));
+    if (m_pParent)
+        hWnd = (HWND) m_pParent->GetHWND();
+    if (!hWnd && wxTheApp->GetTopWindow())
+        hWnd = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+
+
+    *zFileNameBuffer = wxT('\0');
+    *zTitleBuffer    = wxT('\0');
+
+    m_lDialogStyle & wxSAVE ? lFlags != FDS_SAVEAS_DIALOG
+                                      : FDS_OPEN_DIALOG
+                                      ;
+    if ((m_lDialogStyle & wxHIDE_READONLY) || (m_lDialogStyle & wxSAVE))
+        lFlags |= FDS_SAVEAS_DIALOG;
+    if (m_lDialogStyle & wxMULTIPLE )
+        lFlags |= FDS_OPEN_DIALOG | FDS_MULTIPLESEL;
+
+    vFileDlg.cbSize = sizeof(FILEDLG);
+    vFileDlg.fl = lFlags;
+    vFileDlg.pszTitle = zTitleBuffer;
+
+    //
+    // Convert forward slashes to backslashes (file selector doesn't like
+    // forward slashes) and also squeeze multiple consecutive slashes into one
+    // as it doesn't like two backslashes in a row neither
+    //
+    sDir.reserve(nLen);
+    for ( i = 0; i < nLen; i++ )
+    {
+        wxChar                      ch = m_sDir[i];
+
+        switch (ch)
+        {
+            case _T('/'):
+                //
+                // Convert to backslash
+                //
+                ch = _T('\\');
+
+                //
+                // Fall through
+                //
+            case _T('\\'):
+                while (i < nLen - 1)
+                {
+                    wxChar          chNext = m_sDir[i + 1];
+
+                    if (chNext != _T('\\') && chNext != _T('/'))
+                        break;
+
+                    //
+                    // Ignore the next one, unless it is at the start of a UNC path
+                    //
+                    if (i > 0)
+                        i++;
+                    else
+                        break;
+                }
+
+                //
+                // Fall through
+                //
+
+            default:
+                //
+                // Normal char
+                sDir += ch;
+        }
+    }
+    if ( wxStrlen(m_sWildCard) == 0 )
+        sTheFilter = "";
+    else
+        sTheFilter = m_sWildCard ;
+
+    if (!wxStrchr(sTheFilter, wxT('|') ) )
+    {
+        //
+        // Only one filter ==> default text
+        //
+        sFilterBuffer.Printf( _("Files (%s)|%s")
+                             ,sTheFilter.c_str()
+                             ,sTheFilter.c_str()
+                            );
+    }
+    else
+    {                                // more then one filter
+        sFilterBuffer = sTheFilter;
+    }
+
+    sFilterBuffer += wxT("|");
+
+    //
+    // Replace | with \0
+    //
+    for (i = 0; i < sFilterBuffer.Len(); i++ )
+    {
+        if (sFilterBuffer.GetChar(i) == wxT('|'))
+        {
+            sFilterBuffer[i] = wxT('\0');
+        }
+    }
+    if (!sTheFilter.IsEmpty())
+        sDir += sTheFilter;
+    else
+        sDir += m_sFileName;
+    wxStrcpy(vFileDlg.szFullFile, sDir.c_str());
+
+    hWnd = ::WinFileDlg( GetHwndOf(m_pParent)
+                        ,GetHwndOf(m_pParent)
+                        ,&vFileDlg
+                       );
+    if (hWnd && vFileDlg.lReturn == DID_OK)
+    {
+        m_asFileNames.Empty();
+        if ((m_lDialogStyle & wxMULTIPLE ) && vFileDlg.ulFQFCount > 1)
+        {
+            for (int i = 0; i < vFileDlg.ulFQFCount; i++)
+            {
+                if (i == 0)
+                {
+                    m_sDir = wxPathOnly(wxString((const char*)vFileDlg.papszFQFilename[i]));
+                    m_sPath = (const char*)vFileDlg.papszFQFilename[i];
+                }
+                m_sFileName = wxFileNameFromPath(wxString((const char*)vFileDlg.papszFQFilename[i]));
+                m_asFileNames.Add(m_sFileName);
+            }
+        }
+        else if (!m_lDialogStyle & wxSAVE)
+        {
+            m_sPath = vFileDlg.szFullFile;
+            m_sFileName = wxFileNameFromPath(vFileDlg.szFullFile);
+            m_sDir = wxPathOnly(vFileDlg.szFullFile);
+        }
+        else // save file
+        {
+            const wxChar*           pzExtension = NULL;
+
+            wxStrcpy(zFileNameBuffer, vFileDlg.szFullFile);
+
+            int                     nIdx = wxStrlen(zFileNameBuffer) - 1;
+
+            if (zFileNameBuffer[nIdx] == wxT('.') )
+            {
+                zFileNameBuffer[nIdx] = wxT('\0');
+
+                //
+                // User has typed a filename without an extension:
+                //
+                // A filename can end in a "." here ("abc."), this means it
+                // does not have an extension. Because later on a "." with
+                // the default extension is appended we remove the "." if
+                // filename ends with one (We don't want files called
+                // "abc..ext")
+                //
+                pzExtension = sFilterBuffer.c_str();
+
+                for( int i = 0; i < sFilterBuffer.length(); i++ )
+                {
+                    //
+                    // Get extension
+                    //
+                    pzExtension = wxStrrchr(pzExtension, wxT('.'));
+                    if ( pzExtension                      &&
+                        !wxStrrchr(pzExtension, wxT('*')) &&
+                        !wxStrrchr(pzExtension, wxT('?')) &&
+                        pzExtension[1]                    &&
+                        pzExtension[1] != wxT(' ')
+                       )              // != "blabla. "
+                    {
+                        //
+                        // Now concat extension to the fileName:
+                        //
+                        m_sPath = wxString(zFileNameBuffer) + pzExtension;
+                    }
+                }
+            }
+            else
+            {
+                m_sPath = vFileDlg.szFullFile;
+            }
+            m_sFileName = wxFileNameFromPath(vFileDlg.szFullFile);
+            m_sDir = wxPathOnly(vFileDlg.szFullFile);
+
+            //
+            // === Simulating the wxOVERWRITE_PROMPT >>============================
+            //
+            if ((m_lDialogStyle & wxOVERWRITE_PROMPT) &&
+                (m_lDialogStyle & wxSAVE) &&
+                (wxFileExists(m_sPath.c_str())))
+            {
+                wxString            sMessageText;
+
+                sMessageText.Printf( _("File '%s' already exists.\nDo you want to replace it?")
+                                    ,m_sPath.c_str()
+                                   );
+                if (wxMessageBox( sMessageText
+                                 ,wxT("Save File As")
+                                 ,wxYES_NO | wxICON_EXCLAMATION
+                                ) != wxYES)
+                {
+                    return wxID_CANCEL;
+                }
+            }
+        }
+        return wxID_OK;
+    }
     return wxID_CANCEL;
-}
+} // end of wxFileDialog::ShowModal
 
+//
 // Generic file load/save dialog
-static wxString wxDefaultFileSelector( bool        load
-                                      ,const char* what
-                                      ,const char* extension
-                                      ,const char* default_name
-                                      ,wxWindow*   parent
-                                     )
+//
+static wxString wxDefaultFileSelector (
+  bool                              bLoad
+, const char*                       pzWhat
+, const char*                       pzExtension
+, const char*                       pzDefaultName
+, wxWindow*                         pParent
+)
 {
-  char *ext = (char *)extension;
+    char*                           pzExt = (char *)pzExtension;
+    char                            zPrompt[50];
+    wxString                        sStr;
+    char                            zWild[60];
 
-  char prompt[50];
-  wxString str;
-  if (load)
-    str = "Load %s file";
-  else
-    str = "Save %s file";
-  sprintf(prompt, wxGetTranslation(str), what);
+    if (bLoad)
+        sStr = "Load %s file";
+    else
+        sStr = "Save %s file";
+    sprintf(zPrompt, wxGetTranslation(sStr), pzWhat);
 
-  if (*ext == '.') ext++;
-  char wild[60];
-  sprintf(wild, "*.%s", ext);
+    if (*pzExt == '.')
+        pzExt++;
+    sprintf(zWild, "*.%s", pzExt);
+    return wxFileSelector ( zPrompt
+                           ,NULL
+                           ,pzDefaultName
+                           ,pzExt
+                           ,zWild
+                           ,0
+                           ,pParent
+                          );
+} // end of wxDefaultFileSelector
 
-  return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
-}
-
+//
 // Generic file load dialog
-wxString wxLoadFileSelector( const char* what
-                            ,const char* extension
-                            ,const char* default_name
-                            ,wxWindow*   parent
-                           )
+//
+wxString wxLoadFileSelector (
+  const char*                       pzWhat
+, const char*                       pzExtension
+, const char*                       pzDefaultName
+, wxWindow*                         pParent
+)
 {
-  return wxDefaultFileSelector(TRUE, what, extension, default_name, parent);
-}
+    return wxDefaultFileSelector( TRUE
+                                 ,pzWhat
+                                 ,pzExtension
+                                 ,pzDefaultName
+                                 ,pParent
+                                );
+} // end of wxLoadFileSelector
 
 
+//
 // Generic file save dialog
-wxString wxSaveFileSelector( const char* what
-                            ,const char* extension
-                            ,const char* default_name
-                            ,wxWindow*   parent
-                           )
+//
+wxString wxSaveFileSelector (
+  const char*                       pzWhat
+, const char*                       pzExtension
+, const char*                       pzDefaultName
+, wxWindow*                         pParent
+)
 {
-  return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
-}
-
+    return wxDefaultFileSelector( FALSE
+                                 ,pzWhat
+                                 ,pzExtension
+                                 ,pzDefaultName
+                                 ,pParent
+                                );
+} // end of wxSaveFileSelector
 

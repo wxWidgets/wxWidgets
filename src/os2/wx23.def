@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -303,8 +303,6 @@ EXPORTS
       __ct__21wxPageSetupDialogDataFRC21wxPageSetupDialogData
       ;wxColourData::wxColourData(const wxColourData&)
       __ct__12wxColourDataFRC12wxColourData
-      ;wxPrintData::operator=(const wxPrintSetupData&)
-      __as__11wxPrintDataFRC16wxPrintSetupData
       ;wxPrintData::~wxPrintData()
       __dt__11wxPrintDataFv
       ;wxConstructorForwxPrintDialogData()
@@ -1963,7 +1961,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6238,7 +6236,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7718,41 +7716,20 @@ EXPORTS
       __dt__17wxBufferedPaintDCFv
   ;From object file:  ..\generic\dcpsg.cpp
     ;PUBDEFs (Symbols available from object file):
-      __vft23wxPostScriptPrintDialog8wxObject
       ;wxPostScriptDC::wxPostScriptDC(const wxPrintData&)
       __ct__14wxPostScriptDCFRC11wxPrintData
-      ;wxGetPrinterScaling(double*,double*)
-      wxGetPrinterScaling__FPdT1
-      ;wxPostScriptPrintDialog::wxPostScriptPrintDialog(wxWindow*,const wxString&,const wxPoint&,const wxSize&,int)
-      __ct__23wxPostScriptPrintDialogFP8wxWindowRC8wxStringRC7wxPointRC6wxSizei
       ;wxPostScriptDC::DoDrawPoint(int,int)
       DoDrawPoint__14wxPostScriptDCFiT1
       ;wxPostScriptDC::DoDrawLines(int,wxPoint*,int,int)
       DoDrawLines__14wxPostScriptDCFiP7wxPointN21
       ;wxPostScriptDC::DoDrawEllipse(int,int,int,int)
       DoDrawEllipse__14wxPostScriptDCFiN31
-      ;wxPostScriptPrintDialog::ShowModal()
-      ShowModal__23wxPostScriptPrintDialogFv
-      ;wxGetPrinterCommand()
-      wxGetPrinterCommand__Fv
-      ;wxGetPrintPreviewCommand()
-      wxGetPrintPreviewCommand__Fv
-      ;wxPrintSetupData::~wxPrintSetupData()
-      __dt__16wxPrintSetupDataFv
       ;wxPostScriptDC::StartPage()
       StartPage__14wxPostScriptDCFv
-      ;wxPostScriptModule::OnInit()
-      OnInit__18wxPostScriptModuleFv
       ;wxPostScriptDC::GetCharHeight() const
       GetCharHeight__14wxPostScriptDCCFv
       ;wxPostScriptDC::EndPage()
       EndPage__14wxPostScriptDCFv
-      ;wxPostScriptDC::Create(const wxString&,unsigned long,wxWindow*)
-      Create__14wxPostScriptDCFRC8wxStringUlP8wxWindow
-      ;wxSetPrinterFile(const wxString&)
-      wxSetPrinterFile__FRC8wxString
-      ;wxSetAFMPath(const wxString&)
-      wxSetAFMPath__FRC8wxString
       ;wxPostScriptDC::DoDrawRotatedText(const wxString&,int,int,double)
       DoDrawRotatedText__14wxPostScriptDCFRC8wxStringiT2d
       __vft14wxPostScriptDC8wxObject
@@ -7762,17 +7739,6 @@ EXPORTS
       DoDrawSpline__14wxPostScriptDCFP6wxList
       ;wxPostScriptDC::DoSetClippingRegion(int,int,int,int)
       DoSetClippingRegion__14wxPostScriptDCFiN31
-      wxThePrintSetupData
-      ;wxSetPrinterMode(int)
-      wxSetPrinterMode__Fi
-      ;wxGetPrinterTranslation(int*,int*)
-      wxGetPrinterTranslation__FPiT1
-      ;wxPrintSetupData::sm_classwxPrintSetupData
-      sm_classwxPrintSetupData__16wxPrintSetupData
-      ;wxPrintSetupData::operator=(const wxPrintData&)
-      __as__16wxPrintSetupDataFRC11wxPrintData
-      ;wxPrintSetupData::operator=(wxPrintSetupData&)
-      __as__16wxPrintSetupDataFR16wxPrintSetupData
       ;wxPostScriptDC::SetLogicalFunction(int)
       SetLogicalFunction__14wxPostScriptDCFi
       ;wxPostScriptDC::DoGetSizeMM(int*,int*) const
@@ -7783,21 +7749,10 @@ EXPORTS
       DoDrawLine__14wxPostScriptDCFiN31
       ;wxPostScriptDC::DoGetPixel(int,int,wxColour*) const
       DoGetPixel__14wxPostScriptDCCFiT1P8wxColour
-      ;wxConstructorForwxPostScriptModule()
-      wxConstructorForwxPostScriptModule__Fv
-      ;wxPostScriptDC::wxPostScriptDC(const wxString&,unsigned long,wxWindow*)
-      __ct__14wxPostScriptDCFRC8wxStringUlP8wxWindow
       ;wxPostScriptDC::DoDrawRoundedRectangle(int,int,int,int,double)
       DoDrawRoundedRectangle__14wxPostScriptDCFiN31d
-      ;wxInitializePrintSetupData(unsigned long)
-      wxInitializePrintSetupData__FUl
-      __vft18wxPostScriptModule8wxObject
       ;wxPostScriptDC::SetResolution(int)
       SetResolution__14wxPostScriptDCFi
-      ;wxSetPrinterScaling(double,double)
-      wxSetPrinterScaling__FdT1
-      ;wxPostScriptModule::sm_classwxPostScriptModule
-      sm_classwxPostScriptModule__18wxPostScriptModule
       ;wxPostScriptDC::SetDeviceOrigin(int,int)
       SetDeviceOrigin__14wxPostScriptDCFiT1
       ;wxPostScriptDC::SetAxisOrientation(unsigned long,unsigned long)
@@ -7808,20 +7763,12 @@ EXPORTS
       DoDrawPolygon__14wxPostScriptDCFiP7wxPointN31
       ;wxPostScriptDC::DoDrawEllipticArc(int,int,int,int,double,double)
       DoDrawEllipticArc__14wxPostScriptDCFiN31dT5
-      ;wxPostScriptDC::GetResolution()
-      GetResolution__14wxPostScriptDCFv
-      ;wxGetPrinterFile()
-      wxGetPrinterFile__Fv
       ;wxConstructorForwxPostScriptDC()
       wxConstructorForwxPostScriptDC__Fv
       ;wxPostScriptDC::wxPostScriptDC()
       __ct__14wxPostScriptDCFv
-      ;wxPostScriptModule::OnExit()
-      OnExit__18wxPostScriptModuleFv
-      ;wxPostScriptDC::PrinterDialog(wxWindow*)
-      PrinterDialog__14wxPostScriptDCFP8wxWindow
-      ;wxSetPrinterOptions(const wxString&)
-      wxSetPrinterOptions__FRC8wxString
+      ;wxPostScriptDC::GetResolution()
+      GetResolution__14wxPostScriptDCFv
       ;wxPostScriptDC::DoDrawBitmap(const wxBitmap&,int,int,unsigned long)
       DoDrawBitmap__14wxPostScriptDCFRC8wxBitmapiT2Ul
       ;wxPostScriptDC::SetBackground(const wxBrush&)
@@ -7834,14 +7781,6 @@ EXPORTS
       DoBlit__14wxPostScriptDCFiN31P4wxDCN31UlN21
       ;wxPostScriptDC::~wxPostScriptDC()
       __dt__14wxPostScriptDCFv
-      ;wxGetPrinterOptions()
-      wxGetPrinterOptions__Fv
-      ;wxGetPrinterMode()
-      wxGetPrinterMode__Fv
-      ;wxGetAFMPath()
-      wxGetAFMPath__Fv
-      ;wxConstructorForwxPrintSetupData()
-      wxConstructorForwxPrintSetupData__Fv
       ;wxPostScriptDC::Ok() const
       Ok__14wxPostScriptDCCFv
       ;wxPostScriptDC::GetPPI() const
@@ -7854,31 +7793,16 @@ EXPORTS
       Clear__14wxPostScriptDCFv
       ;wxPostScriptDC::StartDoc(const wxString&)
       StartDoc__14wxPostScriptDCFRC8wxString
-      ;wxSetPrinterCommand(const wxString&)
-      wxSetPrinterCommand__FRC8wxString
-      ;wxSetPrintPreviewCommand(const wxString&)
-      wxSetPrintPreviewCommand__FRC8wxString
-      ;wxPostScriptPrintDialog::sm_classwxPostScriptPrintDialog
-      sm_classwxPostScriptPrintDialog__23wxPostScriptPrintDialog
       ;wxPostScriptDC::sm_classwxPostScriptDC
       sm_classwxPostScriptDC__14wxPostScriptDC
       ;wxPostScriptDC::SetFont(const wxFont&)
       SetFont__14wxPostScriptDCFRC6wxFont
-      __vft16wxPrintSetupData8wxObject
       ;wxPostScriptDC::SetBrush(const wxBrush&)
       SetBrush__14wxPostScriptDCFRC7wxBrush
       ;wxPostScriptDC::DoGetSize(int*,int*) const
       DoGetSize__14wxPostScriptDCCFPiT1
-      ;wxSetPrinterTranslation(int,int)
-      wxSetPrinterTranslation__FiT1
-      ;wxSetPrinterOrientation(int)
-      wxSetPrinterOrientation__Fi
       ;wxPostScriptDC::DoDrawIcon(const wxIcon&,int,int)
       DoDrawIcon__14wxPostScriptDCFRC6wxIconiT2
-      ;wxGetPrinterOrientation()
-      wxGetPrinterOrientation__Fv
-      ;wxPrintSetupData::wxPrintSetupData()
-      __ct__16wxPrintSetupDataFv
       ;wxPostScriptDC::SetPen(const wxPen&)
       SetPen__14wxPostScriptDCFRC5wxPen
       ;wxPostScriptDC::GetCharWidth() const
@@ -9907,8 +9831,6 @@ EXPORTS
       OnOK__20wxGenericPrintDialogFR14wxCommandEvent
       ;wxGenericPrintDialog::wxGenericPrintDialog(wxWindow*,wxPrintDialogData*)
       __ct__20wxGenericPrintDialogFP8wxWindowP17wxPrintDialogData
-      ;wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow*,wxPrintSetupData*)
-      __ct__25wxGenericPrintSetupDialogFP8wxWindowP16wxPrintSetupData
       ;wxGenericPrintDialog::ShowModal()
       ShowModal__20wxGenericPrintDialogFv
       ;wxGenericPageSetupDialog::TransferDataFromWindow()
