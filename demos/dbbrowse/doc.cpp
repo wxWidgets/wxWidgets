@@ -204,7 +204,7 @@ bool MainDoc::OnInitODBC()
   (db_Br+i)->pDoc        = this;
   (db_Br+i)->i_Which     = i;
  }
- if (SQLFreeEnv(&DbConnectInf.Henv) != SQL_SUCCESS) // BJO20000125
+ if (SQLFreeEnv(DbConnectInf.Henv) != SQL_SUCCESS) // BJO20000125 / MJ10777.20000309 : no &
  {
   // Error freeing environment handle
  }
