@@ -498,7 +498,7 @@ public :
     template<typename T> T& Get()
     {
         wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data) ;
-        wxASSERT_MSG( dataptr , "Cast not possible" ) ;
+        wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
         return dataptr->Get() ;
     }
 
@@ -506,7 +506,7 @@ public :
     template<typename T> const T& Get() const
     {
         const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data) ;
-        wxASSERT_MSG( dataptr , "Cast not possible" ) ;
+        wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
         return dataptr->Get() ;
     }
 
