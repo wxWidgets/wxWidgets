@@ -134,7 +134,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     while ((i < end_pos) && 
                ((c = source[i++]) != ' ' && c != '\r' && c != '\n' && c != '\t' &&
                 c != '>')) 
-	{
+    {
         if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
         m_Name += c;
     }
@@ -144,12 +144,12 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     // remove whitespaces around '=':
     if (source[i-1] != '>')
         while ((i < end_pos) && ((c = source[i++]) != '>')) 
-	    {
+        {
             if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
             if (c == '\r' || c == '\n' || c == '\t') c = ' '; // make future parsing a bit simpler
             m_Params += c;
             if (c == '"') 
-	        {
+            {
                 // remove spaces around the '=' character:
                 if (m_Params.Length() > 1 && 
                     m_Params[m_Params.Length()-2] == ' ')
@@ -167,7 +167,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
                 m_Params += c;
             }
             else if (c == '\'') 
-	        {
+            {
                 while ((i < end_pos) && ((c = source[i++]) != '\'')) m_Params += c;
                 m_Params += c;
             }
@@ -190,7 +190,7 @@ bool wxHtmlTag::HasParam(const wxString& par) const
     if (*st == 0) return FALSE;
     if (*p == 0) return FALSE;
     for (st2 = st, p2 = p; ; st2++) {
-        if (*p2 == 0 && *st2 == wxT('=')) return TRUE;
+        if (*p2 == 0 && (*st2 == wxT('=') || *st2 == wxT(' '))) return TRUE;
         if (*st2 == 0) return FALSE;
         if (*p2 != *st2) p2 = &invalid;
         if (*p2 == *st2) p2++;
@@ -222,21 +222,22 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
     if (*st == 0) return "";
     if (*p == 0) return "";
     for (st2 = st, p2 = p; ; st2++) {
-        if (*p2 == 0 && *st2 == wxT('=')) { // found
+        if (*p2 == 0 && (*st2 == wxT('=') || *st2 == wxT(' '))) { // found
+            if (*st2 == wxT(' ')) return wxEmptyString;
             wxString fnd = "";
             st2++; // '=' character
             comma = FALSE;
-	    comma_char = '\0';
+            comma_char = '\0';
             if (!with_commas && (*(st2) == '"')) {
-	        st2++;
-		comma = TRUE; 
-		comma_char = '"';
-	    }
-	    else if (!with_commas && (*(st2) == '\'')) {
-	        st2++; 
-		comma = TRUE;
-		comma_char = '\'';
-	    }
+                st2++;
+                comma = TRUE; 
+                comma_char = '"';
+            }
+            else if (!with_commas && (*(st2) == '\'')) {
+                st2++; 
+                comma = TRUE;
+                comma_char = '\'';
+            }
             while (*st2 != 0) {
                 if (comma && *st2 == comma_char) comma = FALSE;
                 else if ((*st2 == ' ') && (!comma)) break;
