@@ -132,16 +132,22 @@ public:
     wxTextCtrlInsertCommand(const wxString& textToInsert)
         : wxTextCtrlCommand(wxTEXT_COMMAND_INSERT), m_text(textToInsert)
     {
+        m_from = -1;
     }
 
     // combine the 2 commands together
     void Append(wxTextCtrlInsertCommand *other);
 
+    virtual bool CanUndo() const;
     virtual bool Do(wxTextCtrl *text);
     virtual bool Undo(wxTextCtrl *text);
 
 private:
+    // the text we insert
     wxString m_text;
+
+    // the position where we inserted the text
+    long m_from;
 };
 
 // remove text command
@@ -155,6 +161,7 @@ public:
         m_to = to;
     }
 
+    virtual bool CanUndo() const;
     virtual bool Do(wxTextCtrl *text);
     virtual bool Undo(wxTextCtrl *text);
 
@@ -1518,24 +1525,24 @@ void wxTextCtrlCommandProcessor::Store(wxCommand *command)
             wxTextCtrlInsertCommand *
                 cmdInsLast = IsInsertCommand(GetCurrentCommand());
 
-            // this would be a logic error in the code here as the flag is only
-            // set after adding insert command and reset after adding any other
-            // one
-            wxCHECK_RET( cmdInsLast,
-                         _T("when compressing commands last must be insert") );
+            // it is possible that we don't have any last command at all if,
+            // for example, it was undone since the last Store(), so deal with
+            // this case too
+            if ( cmdInsLast )
+            {
+                cmdInsLast->Append(cmdIns);
 
-            cmdInsLast->Append(cmdIns);
+                delete cmdIns;
 
-            delete cmdIns;
-
-            // don't need to call the base class version
-            return;
+                // don't need to call the base class version
+                return;
+            }
         }
-        else // not compressing
-        {
-            // append the following insert commands to this one
-            m_compressInserts = TRUE;
-        }
+
+        // append the following insert commands to this one
+        m_compressInserts = TRUE;
+
+        // let the base class version will do the job normally
     }
     else // not an insert command
     {
@@ -1543,7 +1550,7 @@ void wxTextCtrlCommandProcessor::Store(wxCommand *command)
         // command not being an insert one anyhow
         StopCompressing();
 
-        // the base class version will do the job normally
+        // let the base class version will do the job normally
     }
 
     wxCommandProcessor::Store(command);
@@ -1554,8 +1561,18 @@ void wxTextCtrlInsertCommand::Append(wxTextCtrlInsertCommand *other)
     m_text += other->m_text;
 }
 
+bool wxTextCtrlInsertCommand::CanUndo() const
+{
+    return m_from != -1;
+}
+
 bool wxTextCtrlInsertCommand::Do(wxTextCtrl *text)
 {
+    // the text is going to be inserted at the current position, remember where
+    // exactly it is
+    m_from = text->GetInsertionPoint();
+
+    // and now do insert it
     text->WriteText(m_text);
 
     return TRUE;
@@ -1563,9 +1580,18 @@ bool wxTextCtrlInsertCommand::Do(wxTextCtrl *text)
 
 bool wxTextCtrlInsertCommand::Undo(wxTextCtrl *text)
 {
-    wxFAIL_MSG(_T("TODO"));
+    wxCHECK_MSG( CanUndo(), FALSE, _T("impossible to undo insert cmd") );
 
-    return FALSE;
+    // remove the text from where we inserted it
+    text->Remove(m_from, m_from + m_text.length());
+
+    return TRUE;
+}
+
+bool wxTextCtrlRemoveCommand::CanUndo() const
+{
+    // if we were executed, we should have the text we removed
+    return !m_textDeleted.empty();
 }
 
 bool wxTextCtrlRemoveCommand::Do(wxTextCtrl *text)
@@ -1579,9 +1605,10 @@ bool wxTextCtrlRemoveCommand::Do(wxTextCtrl *text)
 
 bool wxTextCtrlRemoveCommand::Undo(wxTextCtrl *text)
 {
-    wxFAIL_MSG(_T("TODO"));
+    text->SetInsertionPoint(m_from);
+    text->WriteText(m_textDeleted);
 
-    return FALSE;
+    return TRUE;
 }
 
 void wxTextCtrl::Undo()
@@ -2924,20 +2951,29 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
-    // we're only interested in key presses without Alt modifier
-    if ( !pressed || event.AltDown() )
+    // we're only interested in key presses
+    if ( !pressed )
         return FALSE;
+
+    int keycode = event.GetKeyCode();
 
     wxControlAction action;
     wxString str;
-    bool ctrlDown = event.ControlDown();
-    if ( event.ShiftDown() )
+    bool ctrlDown = event.ControlDown(),
+         shiftDown = event.ShiftDown();
+    if ( shiftDown )
     {
         action = wxACTION_TEXT_PREFIX_SEL;
     }
 
-    int keycode = event.GetKeyCode();
-    switch ( keycode )
+    // the only key combination with Alt we recognize is Alt-Bksp for undo, so
+    // treat it first separately
+    if ( event.AltDown() )
+    {
+        if ( keycode == WXK_BACK && !ctrlDown && !shiftDown )
+            action = wxACTION_TEXT_UNDO;
+    }
+    else switch ( keycode )
     {
         // cursor movement
         case WXK_HOME:

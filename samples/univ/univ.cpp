@@ -395,18 +395,18 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     sizeText.x = 200;
     text->SetSize(sizeText);
 #else
-    wxTextCtrl *text = new wxTextCtrl(this, -1, //_T("Hello,\nMultiverse!"),
-                                      //"0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n",
-                                      "",
+    wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
                                       wxPoint(10, 30),
                                       wxSize(-1, 150),
                                       wxTE_MULTILINE);
 
+#if 0
     // test wxTextCtrl::Replace()
     TestTextCtrlReplace(text, "");
     TestTextCtrlReplace(text, "0\n1\n2\n3");
     TestTextCtrlReplace(text, "0\n1\n2\n3\n");
     TestTextCtrlReplace(text, "first\nsecond\n\nthird line");
+#endif
 #endif
     text->SetFocus();
     //text->SetEditable(FALSE);
