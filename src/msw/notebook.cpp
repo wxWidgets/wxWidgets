@@ -704,7 +704,7 @@ wxColour wxNotebookGetThemeBackgroundColour(wxNotebook* notebook)
                 m_pfnGetThemeColor(hTheme,
                 10 /* TABP_BODY */,
                 1 /* NORMAL */,
-                3821, /* FILLCOLORHINT */
+                3802 /* color of bg fill */,
                 & themeColor);
             
             wxUxThemeEngine::Get()->m_pfnCloseThemeData(hTheme);
