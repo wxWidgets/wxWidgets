@@ -11,7 +11,6 @@
 
 #ifdef __GNUG__
     #pragma implementation "app.h"
-    #pragma implementation "appbase.h"
 #endif
 
 #include "wx/frame.h"
