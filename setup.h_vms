@@ -100,6 +100,9 @@
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
 
+/* MS-DOS with DJGPP */
+#undef __DOS__
+
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
 #undef __WINDOWS__
@@ -610,6 +613,11 @@
  * Compile wxString in wide character (Unicode) mode?
  */
 #define wxUSE_UNICODE 0
+
+/*
+ * Use MS Layer for Unicode on Win9X (Win32 only)?
+ */
+#define wxUSE_UNICODE_MSLU 0
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
