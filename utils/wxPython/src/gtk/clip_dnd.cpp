@@ -208,6 +208,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPySaveThread(doSave);
 }
 
+    // See below in the init function...
     wxClipboard* wxPyTheClipboard;
 
 class wxPyDropSource : public wxDropSource {
@@ -3325,7 +3326,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObject","_class_wxDataObject",0},
     { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
     { "_wxPyDropSource","_class_wxPyDropSource",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -3409,6 +3409,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRect","_class_wxRect",0},
     { "_wxPoint","_class_wxPoint",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_char","_wxDash",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
@@ -3432,7 +3433,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -3541,8 +3541,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
     { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
+    { "_wxDash","_char",0},
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},

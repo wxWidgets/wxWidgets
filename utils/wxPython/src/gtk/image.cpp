@@ -1744,7 +1744,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPNGHandler","_class_wxPNGHandler",0},
     { "_wxPen","_class_wxPen",0},
     { "_byte","_unsigned_char",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -1776,6 +1775,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPoint","_class_wxPoint",0},
     { "_class_wxPNMHandler","_wxPNMHandler",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_char","_wxDash",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
@@ -1786,7 +1786,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_class_wxRegion","_wxRegion",0},
     { "_wxFont","_class_wxFont",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -1885,8 +1884,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
+    { "_wxDash","_char",0},
     { "_class_wxPalette","_wxPalette",0},
 {0,0,0}};
 

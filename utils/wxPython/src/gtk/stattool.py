@@ -63,6 +63,19 @@ class wxToolBarToolPtr :
     def __del__(self,stattoolc=stattoolc):
         if self.thisown == 1 :
             stattoolc.delete_wxToolBarTool(self)
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarTool_SetSize,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarTool_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarTool_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetControl(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarTool_GetControl,(self,) + _args, _kwargs)
+        if val: val = wxControlPtr(val) 
+        return val
     def __setattr__(self,name,value):
         if name == "m_toolStyle" :
             stattoolc.wxToolBarTool_m_toolStyle_set(self,value)
@@ -72,6 +85,18 @@ class wxToolBarToolPtr :
             return
         if name == "m_index" :
             stattoolc.wxToolBarTool_m_index_set(self,value)
+            return
+        if name == "m_x" :
+            stattoolc.wxToolBarTool_m_x_set(self,value)
+            return
+        if name == "m_y" :
+            stattoolc.wxToolBarTool_m_y_set(self,value)
+            return
+        if name == "m_width" :
+            stattoolc.wxToolBarTool_m_width_set(self,value)
+            return
+        if name == "m_height" :
+            stattoolc.wxToolBarTool_m_height_set(self,value)
             return
         if name == "m_toggleState" :
             stattoolc.wxToolBarTool_m_toggleState_set(self,value)
@@ -108,6 +133,14 @@ class wxToolBarToolPtr :
             return stattoolc.wxToolBarTool_m_clientData_get(self)
         if name == "m_index" : 
             return stattoolc.wxToolBarTool_m_index_get(self)
+        if name == "m_x" : 
+            return stattoolc.wxToolBarTool_m_x_get(self)
+        if name == "m_y" : 
+            return stattoolc.wxToolBarTool_m_y_get(self)
+        if name == "m_width" : 
+            return stattoolc.wxToolBarTool_m_width_get(self)
+        if name == "m_height" : 
+            return stattoolc.wxToolBarTool_m_height_get(self)
         if name == "m_toggleState" : 
             return stattoolc.wxToolBarTool_m_toggleState_get(self)
         if name == "m_isToggle" : 
@@ -141,8 +174,14 @@ class wxToolBarPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def AddControl(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_AddControl,(self,) + _args, _kwargs)
+        return val
     def AddSeparator(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_AddSeparator,(self,) + _args, _kwargs)
+        return val
+    def ClearTools(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_ClearTools,(self,) + _args, _kwargs)
         return val
     def AddTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_AddTool,(self,) + _args, _kwargs)
@@ -154,6 +193,10 @@ class wxToolBarPtr(wxControlPtr):
         return val
     def EnableTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_EnableTool,(self,) + _args, _kwargs)
+        return val
+    def GetToolMargins(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_GetToolMargins,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def GetToolEnabled(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_GetToolEnabled,(self,) + _args, _kwargs)

@@ -469,6 +469,40 @@ static PyObject *_wrap_wxEvtHandler_Connect(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static bool  wxEvtHandler_Disconnect(wxEvtHandler *self,int  id,int  lastId,wxEventType  eventType) {
+            return self->Disconnect(id, lastId, eventType,
+                                   (wxObjectEventFunction)
+                                    &wxPyCallback::EventThunker);
+        }
+static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxEvtHandler * _arg0;
+    int  _arg1;
+    int  _arg2 = (int ) -1;
+    wxEventType  _arg3 = (wxEventType ) wxEVT_NULL;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id","lastId","eventType", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|ii:wxEvtHandler_Disconnect",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEvtHandler_Disconnect. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxEvtHandler_Disconnect(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxValidatorTowxEvtHandler(void *ptr) {
     wxValidator *src;
     wxEvtHandler *dest;
@@ -3452,13 +3486,12 @@ static PyObject *_wrap_wxWindow_SetScrollbar(PyObject *self, PyObject *args, PyO
     int  _arg2;
     int  _arg3;
     int  _arg4;
-    bool  _arg5 = (bool ) TRUE;
+    int  _arg5 = (int ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool5 = (int) TRUE;
     char *_kwnames[] = { "self","orientation","position","thumbSize","range","refresh", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|i:wxWindow_SetScrollbar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&tempbool5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|i:wxWindow_SetScrollbar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3467,7 +3500,6 @@ static PyObject *_wrap_wxWindow_SetScrollbar(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
-    _arg5 = (bool ) tempbool5;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxWindow_SetScrollbar(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
@@ -5373,6 +5405,42 @@ static PyObject *_wrap_wxScrolledWindow_SetScrollbars(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxScrolledWindow_SetTargetWindow(_swigobj,_swigarg0)  (_swigobj->SetTargetWindow(_swigarg0))
+static PyObject *_wrap_wxScrolledWindow_SetTargetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxScrolledWindow_SetTargetWindow",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_SetTargetWindow. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScrolledWindow_SetTargetWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_SetTargetWindow(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxScrolledWindow_ViewStart(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ViewStart(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxScrolledWindow_ViewStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6404,9 +6472,7 @@ static PyObject *_wrap_wxMenu_RemoveItem(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-static void  wxMenu_Destroy(wxMenu *self) {
-            delete self;
-        }
+static void  wxMenu_Destroy(wxMenu *self) { delete self; }
 static PyObject *_wrap_wxMenu_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMenu * _arg0;
@@ -8384,6 +8450,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_CalcUnscrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_SetTargetWindow", (PyCFunction) _wrap_wxScrolledWindow_SetTargetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollbars", (PyCFunction) _wrap_wxScrolledWindow_SetScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_Scroll", (PyCFunction) _wrap_wxScrolledWindow_Scroll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_PrepareDC", (PyCFunction) _wrap_wxScrolledWindow_PrepareDC, METH_VARARGS | METH_KEYWORDS },
@@ -8527,6 +8594,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxValidator_GetWindow", (PyCFunction) _wrap_wxValidator_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_Clone", (PyCFunction) _wrap_wxValidator_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxValidator", (PyCFunction) _wrap_new_wxValidator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEvtHandler_Disconnect", (PyCFunction) _wrap_wxEvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Connect", (PyCFunction) _wrap_wxEvtHandler_Connect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetPreviousHandler", (PyCFunction) _wrap_wxEvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetNextHandler", (PyCFunction) _wrap_wxEvtHandler_SetNextHandler, METH_VARARGS | METH_KEYWORDS },
@@ -8587,7 +8655,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObject","_class_wxDataObject",0},
     { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
     { "_wxPyDropSource","_class_wxPyDropSource",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -8629,6 +8696,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRect","_class_wxRect",0},
     { "_wxPoint","_class_wxPoint",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_char","_wxDash",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
@@ -8645,7 +8713,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataFormat","_wxDataFormat",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -8783,8 +8850,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_wxValidator",SwigwxValidatorTowxEvtHandler},
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
+    { "_wxDash","_char",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},

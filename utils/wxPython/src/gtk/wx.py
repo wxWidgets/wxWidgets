@@ -966,6 +966,9 @@ def EVT_IDLE(win, func):
 def EVT_UPDATE_UI(win, id, func):
     win.Connect(id, -1, wxEVT_UPDATE_UI, func)
 
+def EVT_UPDATE_UI_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_UPDATE_UI, func)
+
 
 # Mouse Events
 def EVT_LEFT_DOWN(win, func):
@@ -1477,6 +1480,8 @@ wxPyDefaultSize.Set(-1,-1)
 wxDefaultPosition  = wxPyDefaultPosition
 wxDefaultSize      = wxPyDefaultSize
 
+# backwards compatibility
+wxNoRefBitmap      = wxBitmap
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to
@@ -1506,7 +1511,8 @@ def wxPyTypeCast(obj, typeStr):
         newPtr = ptrcast(obj, typeStr+"_p")
     theClass = globals()[typeStr+"Ptr"]
     theObj = theClass(newPtr)
-    theObj.thisown = obj.thisown
+    if hasattr(obj, "this"):
+        theObj.thisown = obj.thisown
     return theObj
 
 
@@ -1591,6 +1597,13 @@ class wxApp(wxPyApp):
         if self.stdioWin != None:
             self.stdioWin.close()
 
+#----------------------------------------------------------------------------
+
+class wxPySimpleApp(wxApp):
+    def __init__(self):
+        wxApp.__init__(self, 0)
+    def OnInit(self):
+        return true
 
 
 #----------------------------------------------------------------------------

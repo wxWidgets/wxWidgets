@@ -931,6 +931,102 @@ static PyObject *_wrap_wxCommandEvent_IsSelection(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxCommandEvent_SetString(_swigobj,_swigarg0)  (_swigobj->SetString(_swigarg0))
+static PyObject *_wrap_wxCommandEvent_SetString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCommandEvent * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","s", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxCommandEvent_SetString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_SetString. Expected _wxCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCommandEvent_SetString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxCommandEvent_SetExtraLong(_swigobj,_swigarg0)  (_swigobj->SetExtraLong(_swigarg0))
+static PyObject *_wrap_wxCommandEvent_SetExtraLong(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCommandEvent * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","extraLong", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxCommandEvent_SetExtraLong",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_SetExtraLong. Expected _wxCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCommandEvent_SetExtraLong(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCommandEvent_SetInt(_swigobj,_swigarg0)  (_swigobj->SetInt(_swigarg0))
+static PyObject *_wrap_wxCommandEvent_SetInt(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCommandEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","i", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxCommandEvent_SetInt",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_SetInt. Expected _wxCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCommandEvent_SetInt(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxScrollEventTowxCommandEvent(void *ptr) {
     wxScrollEvent *src;
     wxCommandEvent *dest;
@@ -4982,6 +5078,9 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxScrollEvent_GetPosition", (PyCFunction) _wrap_wxScrollEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollEvent_GetOrientation", (PyCFunction) _wrap_wxScrollEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrollEvent", (PyCFunction) _wrap_new_wxScrollEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_SetInt", (PyCFunction) _wrap_wxCommandEvent_SetInt, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_SetExtraLong", (PyCFunction) _wrap_wxCommandEvent_SetExtraLong, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_SetString", (PyCFunction) _wrap_wxCommandEvent_SetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_IsSelection", (PyCFunction) _wrap_wxCommandEvent_IsSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_GetString", (PyCFunction) _wrap_wxCommandEvent_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_GetSelection", (PyCFunction) _wrap_wxCommandEvent_GetSelection, METH_VARARGS | METH_KEYWORDS },

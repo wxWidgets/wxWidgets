@@ -9,12 +9,6 @@ class wxBitmapPtr :
     def __del__(self,gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxBitmap(self)
-    def GetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_GetDepth,(self,) + _args, _kwargs)
-        return val
-    def GetHeight(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_GetHeight,(self,) + _args, _kwargs)
-        return val
     def GetPalette(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_GetPalette,(self,) + _args, _kwargs)
         if val: val = wxPalettePtr(val) 
@@ -23,29 +17,35 @@ class wxBitmapPtr :
         val = apply(gdic.wxBitmap_GetMask,(self,) + _args, _kwargs)
         if val: val = wxMaskPtr(val) 
         return val
-    def GetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_GetWidth,(self,) + _args, _kwargs)
-        return val
     def LoadFile(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_LoadFile,(self,) + _args, _kwargs)
-        return val
-    def Ok(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_Ok,(self,) + _args, _kwargs)
         return val
     def SaveFile(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_SaveFile,(self,) + _args, _kwargs)
         return val
-    def SetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_SetDepth,(self,) + _args, _kwargs)
+    def SetMask(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetMask,(self,) + _args, _kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_Ok,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetWidth,(self,) + _args, _kwargs)
         return val
     def SetHeight(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_SetHeight,(self,) + _args, _kwargs)
         return val
-    def SetMask(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_SetMask,(self,) + _args, _kwargs)
-        return val
-    def SetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxBitmap_SetWidth,(self,) + _args, _kwargs)
+    def SetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxBitmap_SetDepth,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
@@ -61,9 +61,6 @@ class wxMaskPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxMask(self)
     def __repr__(self):
         return "<C wxMask instance at %s>" % (self.this,)
 class wxMask(wxMaskPtr):
@@ -74,36 +71,36 @@ class wxMask(wxMaskPtr):
 
 
 
-class wxIconPtr(wxBitmapPtr):
+class wxIconPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def __del__(self,gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxIcon(self)
-    def GetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxIcon_GetDepth,(self,) + _args, _kwargs)
-        return val
-    def GetHeight(self, *_args, **_kwargs):
-        val = apply(gdic.wxIcon_GetHeight,(self,) + _args, _kwargs)
-        return val
-    def GetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxIcon_GetWidth,(self,) + _args, _kwargs)
-        return val
     def LoadFile(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_LoadFile,(self,) + _args, _kwargs)
         return val
     def Ok(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_Ok,(self,) + _args, _kwargs)
         return val
-    def SetDepth(self, *_args, **_kwargs):
-        val = apply(gdic.wxIcon_SetDepth,(self,) + _args, _kwargs)
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def SetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetWidth,(self,) + _args, _kwargs)
         return val
     def SetHeight(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_SetHeight,(self,) + _args, _kwargs)
         return val
-    def SetWidth(self, *_args, **_kwargs):
-        val = apply(gdic.wxIcon_SetWidth,(self,) + _args, _kwargs)
+    def SetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxIcon_SetDepth,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxIcon instance at %s>" % (self.this,)
@@ -115,7 +112,7 @@ class wxIcon(wxIconPtr):
 
 
 
-class wxCursorPtr(wxBitmapPtr):
+class wxCursorPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -275,6 +272,12 @@ class wxPenPtr :
     def SetWidth(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_SetWidth,(self,) + _args, _kwargs)
         return val
+    def GetDashes(self, *_args, **_kwargs):
+        val = apply(gdic.wxPen_GetDashes,(self,) + _args, _kwargs)
+        return val
+    def SetDashes(self, *_args, **_kwargs):
+        val = apply(gdic.wxPen_SetDashes,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxPen instance at %s>" % (self.this,)
 class wxPen(wxPenPtr):
@@ -385,6 +388,9 @@ class wxDCPtr :
         return val
     def DrawRectangle(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawRectangle,(self,) + _args, _kwargs)
+        return val
+    def DrawRotatedText(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_DrawRotatedText,(self,) + _args, _kwargs)
         return val
     def DrawRoundedRectangle(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawRoundedRectangle,(self,) + _args, _kwargs)
@@ -717,11 +723,6 @@ class wxImageList(wxImageListPtr):
 def wxEmptyBitmap(*_args, **_kwargs):
     val = apply(gdic.wxEmptyBitmap,_args,_kwargs)
     if val: val = wxBitmapPtr(val); val.thisown = 1
-    return val
-
-def wxNoRefBitmap(*_args, **_kwargs):
-    val = apply(gdic.wxNoRefBitmap,_args,_kwargs)
-    if val: val = wxBitmapPtr(val)
     return val
 
 def wxMaskColour(*_args, **_kwargs):

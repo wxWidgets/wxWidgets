@@ -4293,8 +4293,8 @@ static PyObject *_wrap_wxTreeCtrl_GetSelection(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxTreeCtrl_GetParent(_swigobj,_swigarg0)  (_swigobj->GetParent(_swigarg0))
-static PyObject *_wrap_wxTreeCtrl_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetParent(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeItemId * _result;
     wxTreeCtrl * _arg0;
@@ -4305,25 +4305,25 @@ static PyObject *_wrap_wxTreeCtrl_GetParent(PyObject *self, PyObject *args, PyOb
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetParent",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetItemParent",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetParent. Expected _wxTreeCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetItemParent. Expected _wxTreeCtrl_p.");
         return NULL;
         }
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
         else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetParent. Expected _wxTreeItemId_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemParent. Expected _wxTreeItemId_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxTreeItemId (wxTreeCtrl_GetParent(_arg0,*_arg1));
+        _result = new wxTreeItemId (wxTreeCtrl_GetItemParent(_arg0,*_arg1));
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTreeItemId_p");
@@ -5596,7 +5596,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_GetFirstChild", (PyCFunction) _wrap_wxTreeCtrl_GetFirstChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetChildrenCount", (PyCFunction) _wrap_wxTreeCtrl_GetChildrenCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetSelections", (PyCFunction) _wrap_wxTreeCtrl_GetSelections, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTreeCtrl_GetParent", (PyCFunction) _wrap_wxTreeCtrl_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetItemParent", (PyCFunction) _wrap_wxTreeCtrl_GetItemParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetSelection", (PyCFunction) _wrap_wxTreeCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetRootItem", (PyCFunction) _wrap_wxTreeCtrl_GetRootItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_IsSelected", (PyCFunction) _wrap_wxTreeCtrl_IsSelected, METH_VARARGS | METH_KEYWORDS },
@@ -5777,7 +5777,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_wxChoice","_class_wxChoice",0},
     { "_wxSlider","_class_wxSlider",0},
-    { "_long","_wxDash",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
@@ -5847,6 +5846,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_char","_wxDash",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
@@ -5876,7 +5876,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_wxCloseEvent","_class_wxCloseEvent",0},
-    { "_unsigned_long","_wxDash",0},
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
@@ -6067,8 +6066,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
     { "_class_wxScrollBar","_wxScrollBar",0},
-    { "_wxDash","_unsigned_long",0},
-    { "_wxDash","_long",0},
+    { "_wxDash","_char",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
     { "_wxKeyEvent","_class_wxKeyEvent",0},
     { "_wxMoveEvent","_class_wxMoveEvent",0},

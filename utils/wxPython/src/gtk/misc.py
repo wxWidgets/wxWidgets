@@ -196,6 +196,18 @@ class wxRectPtr :
     def GetRight(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_GetRight,(self,) + _args, _kwargs)
         return val
+    def SetLeft(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetLeft,(self,) + _args, _kwargs)
+        return val
+    def SetRight(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetRight,(self,) + _args, _kwargs)
+        return val
+    def SetTop(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetTop,(self,) + _args, _kwargs)
+        return val
+    def SetBottom(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetBottom,(self,) + _args, _kwargs)
+        return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_asTuple,(self,) + _args, _kwargs)
         return val
@@ -384,6 +396,9 @@ class wxRegionPtr :
     def ContainsRect(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_ContainsRect,(self,) + _args, _kwargs)
         return val
+    def ContainsRectDim(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_ContainsRectDim,(self,) + _args, _kwargs)
+        return val
     def GetBox(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_GetBox,(self,) + _args, _kwargs)
         if val: val = wxRectPtr(val) ; val.thisown = 1
@@ -391,17 +406,41 @@ class wxRegionPtr :
     def Intersect(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_Intersect,(self,) + _args, _kwargs)
         return val
+    def IntersectRect(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_IntersectRect,(self,) + _args, _kwargs)
+        return val
+    def IntersectRegion(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_IntersectRegion,(self,) + _args, _kwargs)
+        return val
     def IsEmpty(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_IsEmpty,(self,) + _args, _kwargs)
-        return val
-    def Subtract(self, *_args, **_kwargs):
-        val = apply(miscc.wxRegion_Subtract,(self,) + _args, _kwargs)
         return val
     def Union(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_Union,(self,) + _args, _kwargs)
         return val
+    def UnionRect(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_UnionRect,(self,) + _args, _kwargs)
+        return val
+    def UnionRegion(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_UnionRegion,(self,) + _args, _kwargs)
+        return val
+    def Subtract(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_Subtract,(self,) + _args, _kwargs)
+        return val
+    def SubtractRect(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_SubtractRect,(self,) + _args, _kwargs)
+        return val
+    def SubtractRegion(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_SubtractRegion,(self,) + _args, _kwargs)
+        return val
     def Xor(self, *_args, **_kwargs):
         val = apply(miscc.wxRegion_Xor,(self,) + _args, _kwargs)
+        return val
+    def XorRect(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_XorRect,(self,) + _args, _kwargs)
+        return val
+    def XorRegion(self, *_args, **_kwargs):
+        val = apply(miscc.wxRegion_XorRegion,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxRegion instance at %s>" % (self.this,)
@@ -527,6 +566,8 @@ class wxBusyInfo(wxBusyInfoPtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+wxIntersectRect = miscc.wxIntersectRect
 
 wxNewId = miscc.wxNewId
 

@@ -50,6 +50,9 @@ class wxEvtHandlerPtr :
     def Connect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Connect,(self,) + _args, _kwargs)
         return val
+    def Disconnect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_Disconnect,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
 class wxEvtHandler(wxEvtHandlerPtr):
@@ -585,6 +588,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def SetScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetScrollbars,(self,) + _args, _kwargs)
+        return val
+    def SetTargetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_SetTargetWindow,(self,) + _args, _kwargs)
         return val
     def ViewStart(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_ViewStart,(self,) + _args, _kwargs)
