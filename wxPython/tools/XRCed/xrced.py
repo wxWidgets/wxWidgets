@@ -6,7 +6,7 @@
 
 from wxPython.wx import *
 from wxPython.xrc import *
-from wxPython.html import *
+from wxPython.html import wxHtmlWindow
 from xml.dom import minidom
 import os
 import getopt
@@ -27,7 +27,7 @@ else:
     modernFont = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.0.7-2'
+version = '0.0.7-3'
 
 # Local modules
 from xxx import *
@@ -183,6 +183,8 @@ class Panel(wxNotebook):
         else:
             # Remove page if exists
             if self.GetPageCount() == 2:
+                self.SetSelection(0)
+                self.page1.Refresh()
                 self.RemovePage(1)
     def Clear(self):
         self.SetData(None)
@@ -370,12 +372,13 @@ class StylePage(ParamPage):
             present = param in xxx.params.keys()
             check = self.checks[param]
             check.SetValue(present)
-            control = self.controls[param]
+            w = self.controls[param]
+            w.modified = false
             if present:
-                control.SetValue(xxx.params[param].value())
+                w.SetValue(xxx.params[param].value())
             else:
-                control.SetValue('')
-            control.Enable(present)
+                w.SetValue('')
+            w.Enable(present)
         self.SetModified(false)
 
 ################################################################################
@@ -422,7 +425,7 @@ class XML_Tree(wxTreeCtrl):
         self.SetBackgroundColour(wxColour(224, 248, 224))
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
-        if wxGetOsVersion()[1] == 1:
+        if wxGetOsVersion()[0] == wxGTK:
             EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
         else:
             EVT_LEFT_DCLICK(self, self.OnDClick)
@@ -523,7 +526,6 @@ class XML_Tree(wxTreeCtrl):
         except:
             print 'ERROR: MakeXXXFromDom(%s, %s)' % (xxxParent, node)
             raise
-#            return
         treeObj = xxx.treeObject()
         # Append tree item
         item = self.AppendItem(itemParent, treeObj.treeName(),
@@ -609,8 +611,8 @@ class XML_Tree(wxTreeCtrl):
             if panel.IsModified():
                 self.Apply(xxx, oldItem)
                 #if conf.autoRefresh:
-                if testWin and not tree.IsHighlatable(oldItem):
-                    if testWin.highLight:
+                if testWin:
+                    if testWin.highLight and not tree.IsHighlatable(oldItem):
                         testWin.highLight.Remove()
                     self.needUpdate = true
                 status = 'Changes were applied'
@@ -998,13 +1000,7 @@ class Frame(wxFrame):
         icon = wxIcon(os.path.join(sys.path[0], 'xrced.ico'), wxBITMAP_TYPE_ICO)
         self.SetIcon(icon)
 
-        # Defaults
-        self.sashPos = 100
-        self.panelX = self.panelY = -1
-        self.panelWidth = 300
-        self.panelHeight = 200
-
-        # Idle flas
+        # Idle flag
         self.inIdle = false
 
         # Make menus
@@ -1075,11 +1071,12 @@ class Frame(wxFrame):
                          'Refresh', 'Refresh view')
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', true)
-        if wxGetOsVersion()[1] == 1:
+        if wxGetOsVersion()[0] == wxGTK:
             tb.AddSeparator()   # otherwise auto-refresh sticks in status line
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
         self.tb = tb
+        self.minWidth = tb.GetSize()[0] # minimal width is the size of toolbar
 
         # File
         EVT_MENU(self, wxID_NEW, self.OnNew)
@@ -1527,20 +1524,35 @@ class Frame(wxFrame):
         conf.embedPanel = evt.IsChecked()
         if conf.embedPanel:
             # Remember last dimentions
-            self.panelWidth, self.panelHeight = panel.GetSize()
+            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
+            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
+            size = self.GetSize()
+            pos = self.GetPosition()
+            sizePanel = panel.GetSize()
             panel.Reparent(self.splitter)
             self.miniFrame.GetSizer().RemoveWindow(panel)
-            self.splitter.SplitVertically(tree, panel, self.sashPos)
+            wxYield()
+            # Widen
+            self.SetDimensions(pos.x, pos.y, size.x + sizePanel.x, size.y)
+            self.splitter.SplitVertically(tree, panel, conf.sashPos)
             self.miniFrame.Show(false)
         else:
-            self.sashPos = self.splitter.GetSashPosition()
+            conf.sashPos = self.splitter.GetSashPosition()
+            pos = self.GetPosition()
+            size = self.GetSize()
+            sizePanel = panel.GetSize()
             self.splitter.Unsplit(panel)
             sizer = self.miniFrame.GetSizer()
             panel.Reparent(self.miniFrame)
             panel.Show(true)
             sizer.Add(panel, 1, wxEXPAND)
             self.miniFrame.Show(true)
-            self.miniFrame.SetSize((self.panelWidth, self.panelHeight))
+            self.miniFrame.SetDimensions(conf.panelX, conf.panelY,
+                                         conf.panelWidth, conf.panelHeight)
+            wxYield()
+            # Reduce width
+            self.SetDimensions(pos.x, pos.y,
+                               max(size.x - sizePanel.x, self.minWidth), size.y)
 
     def OnTest(self, evt):
         if not tree.selection: return   # key pressed event
@@ -1694,8 +1706,6 @@ class Frame(wxFrame):
             evt.Enable((self.clipboard and tree.selection) != None)
         elif evt.GetId() == self.ID_TEST:
             evt.Enable(tree.selection != tree.root)
-        elif evt.GetId() == self.ID_REFRESH:
-            evt.Enable(testWin != None)
 
     def OnIdle(self, evt):
         if self.inIdle: return          # Recursive call protection
@@ -1724,16 +1734,13 @@ class Frame(wxFrame):
         if testWin: testWin.Destroy()
         # Destroy cached windows
         panel.cacheParent.Destroy()
-#        for w in panel.styleCache.values(): w.Destroy()
         if not panel.GetPageCount() == 2:
             panel.page2.Destroy()
         conf.x, conf.y = self.GetPosition()
         conf.width, conf.height = self.GetSize()
         if conf.embedPanel:
             conf.sashPos = self.splitter.GetSashPosition()
-            conf.panelWidth, conf.panelHeight = self.panelWidth, self.panelHeight
         else:
-            conf.sashPos = self.sashPos
             conf.panelX, conf.panelY = self.miniFrame.GetPosition()
             conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
         evt.Skip()
@@ -1792,12 +1799,15 @@ class Frame(wxFrame):
             self.OnRefresh(wxCommandEvent())
             f = open(path, 'w')
             # Make temporary copy
-            self.domCopy = domCopy = tree.dom.cloneNode(true)
-            self.Indent(domCopy.getElementsByTagName('resource')[0])
-            domCopy.writexml(f)
-#            domCopy.unlink()
-            self.domCopy = None
+            # !!! We can't clone dom node, it works only once
+            #self.domCopy = tree.dom.cloneNode(true)
+            self.domCopy = minidom.Document()
+            mainNode = self.domCopy.appendChild(tree.mainNode.cloneNode(true))
+            self.Indent(mainNode)
+            self.domCopy.writexml(f)
             f.close()
+            self.domCopy.unlink()
+            self.domCopy = None
             self.modified = false
             panel.SetModified(false)
         except:

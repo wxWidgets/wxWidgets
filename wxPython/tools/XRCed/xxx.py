@@ -11,11 +11,19 @@ import wxPython.lib.wxpTag
 
 from params import *
 
-# Parameter value class
-class xxxParam:
-    # Standard use: for text nodes
+# Base class for interface parameter classes
+class xxxNode:
     def __init__(self, node):
         self.node = node
+    def remove(self):
+        self.node.parentNode.removeChild(self.node)
+        self.node.unlink()
+
+# Generic (text) parameter class
+class xxxParam(xxxNode):
+    # Standard use: for text nodes
+    def __init__(self, node):
+        xxxNode.__init__(self, node)
         if not node.hasChildNodes():
             # If does not have child nodes, create empty text node
             text = tree.dom.createTextNode('')
@@ -29,9 +37,6 @@ class xxxParam:
         return self.textNode.data
     def update(self, value):
         self.textNode.data = value
-    def remove(self):
-        self.node.parentNode.removeChild(self.node)
-        self.node.unlink()
 
 # Integer parameter
 class xxxParamInt(xxxParam):
@@ -48,9 +53,9 @@ class xxxParamInt(xxxParam):
         self.textNode.data = str(value)
 
 # Content parameter
-class xxxParamContent:
+class xxxParamContent(xxxNode):
     def __init__(self, node):
-        self.node = node
+        xxxNode.__init__(self, node)
         data, l = [], []                # data is needed to quicker value retrieval
         nodes = node.childNodes[:]      # make a copy of the child list
         for n in nodes:
@@ -92,9 +97,9 @@ class xxxParamContent:
         self.data = value
 
 # Content parameter for checklist
-class xxxParamContentCheckList:
+class xxxParamContentCheckList(xxxNode):
     def __init__(self, node):
-        self.node = node
+        xxxNode.__init__(self, node)
         data, l = [], []                # data is needed to quicker value retrieval
         nodes = node.childNodes[:]      # make a copy of the child list
         for n in nodes:
@@ -213,12 +218,13 @@ class xxxObject:
 
 ################################################################################
 
-# This is a little special 
-class xxxParamFont(xxxObject):
+# This is a little special: it is both xxxObject and xxxNode
+class xxxParamFont(xxxObject, xxxNode):
     allParams = ['size', 'style', 'weight', 'family', 'underlined',
                  'face', 'encoding']
     def __init__(self, parent, element):
         xxxObject.__init__(self, parent, element)
+        xxxNode.__init__(self, element)
         self.parentNode = parent       # required to behave similar to DOM node
         v = []
         for p in self.allParams:
@@ -248,9 +254,6 @@ class xxxParamFont(xxxObject):
         self.data = v
     def value(self):
         return self.data
-    def remove(self):
-        self.parentNode.removeChild(self.element)
-        self.element.unlink()
 
 ################################################################################
 

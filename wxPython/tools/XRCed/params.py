@@ -144,7 +144,7 @@ class ParamColour(PPanel):
         self.ID_BUTTON = wxNewId()
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=buttonSize)
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
         sizer.Add(self.text, 0, wxRIGHT, 5)
         self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(40, -1))
         sizer.Add(self.button, 0, wxGROW)
@@ -156,11 +156,10 @@ class ParamColour(PPanel):
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
         EVT_LEFT_DOWN(self.button, self.OnLeftDown)
     def GetValue(self):
-        return self.value
+        return self.text.GetValue()
     def SetValue(self, value):
         self.freeze = true
         if not value: value = '#FFFFFF'
-        self.value = value
         self.text.SetValue(str(value))  # update text ctrl
         colour = wxColour(int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16))
         self.button.SetBackgroundColour(colour)
@@ -169,7 +168,6 @@ class ParamColour(PPanel):
     def OnChange(self, evt):
         if self.freeze: return
         self.SetModified()
-        self.textModified = true
         evt.Skip()
     def OnPaintButton(self, evt):
         dc = wxPaintDC(self.button)
@@ -179,11 +177,12 @@ class ParamColour(PPanel):
         size = self.button.GetSize()
         dc.DrawRectangle(0, 0, size.x, size.y)
     def OnLeftDown(self, evt):
-        dlg = wxColourDialog(self)
+        data = wxColourData()
+        data.SetColour(self.GetValue())
+        dlg = wxColourDialog(self, data)
         if dlg.ShowModal() == wxID_OK:
             self.SetValue('#%02X%02X%02X' % dlg.GetColourData().GetColour().Get())
             self.SetModified()
-            self.textModified = false
         dlg.Destroy()
 
 ################################################################################
