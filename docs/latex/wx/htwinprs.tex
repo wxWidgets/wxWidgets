@@ -32,7 +32,7 @@ The product of parsing is a wxHtmlCell (resp. wxHtmlContainer) object.
 
 \func{}{wxHtmlWinParser}{\void}
 
-\func{}{wxHtmlWinParser}{\param{wxWindow }{*wnd}}
+\func{}{wxHtmlWinParser}{\param{wxHtmlWindow }{*wnd}}
 
 Constructor. Don't use the default one, use constructor with
 {\it wnd} paremeter ({\it wnd} is pointer to associated \helpref{wxHtmlWindow}{wxhtmlwindow})
@@ -42,6 +42,14 @@ Constructor. Don't use the default one, use constructor with
 \func{static void}{AddModule}{\param{wxHtmlTagsModule }{*module}}
 
 Adds \helpref{module}{handlers} to the list of wxHtmlWinParser tag handler.
+
+\membersection{wxHtmlWinParser::CanOpenURL}\label{wxhtmlwinparsercanopenurl}
+
+\func{virtual bool}{CanOpenURL}{\param{const wxString\& }{url}}
+
+Call this function to determine whether you are allowed to open given URL. 
+Default behaviour is to call \helpref{wxHtmlWindow::OnOpeningURL}{wxhtmlwindowonopeningurl}
+of the associated wxHtmlWindow object.
 
 \membersection{wxHtmlWinParser::CloseContainer}\label{wxhtmlwinparserclosecontainer}
 
@@ -185,7 +193,7 @@ that is supported by operating system.
 
 \membersection{wxHtmlWinParser::GetWindow}\label{wxhtmlwinparsergetwindow}
 
-\func{wxWindow*}{GetWindow}{\void}
+\func{wxHtmlWindow*}{GetWindow}{\void}
 
 Returns associated window (wxHtmlWindow). This may be NULL! (You should always
 test if it is non-NULL. For example {\tt TITLE} handler sets window

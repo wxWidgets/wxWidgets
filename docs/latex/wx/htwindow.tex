@@ -198,6 +198,15 @@ Called when user clicks on hypertext link. Default behaviour is to call
 
 Also see \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
 
+\membersection{wxHtmlWindow::OnOpeningURL}\label{wxhtmlwindowonopeningurl}
+
+\func{virtual bool}{OnOpeningURL}{\param{const wxString\& }{url}}
+
+Called when an URL is being opened (either when the user clicks on a link or
+an image is loaded). If the function returns FALSE, the URL won't be fetched.
+Default behaviour is to return TRUE.
+
+Also see \helpref{wxHtmlWinParser::CanOpenURL}{wxhtmlwinparsercanopenurl}.
 
 \membersection{wxHtmlWindow::OnSetTitle}\label{wxhtmlwindowonsettitle}
 
