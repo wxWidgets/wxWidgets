@@ -15,7 +15,7 @@ WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
 $(LIBTARGET): $(OBJECTS)
-        erase $(LIBTARGET)
+        -erase $(LIBTARGET)
 	tlib $(LIBTARGET) /P512 @&&!
 -+$(OBJECTS:.obj =.obj -+)
 !

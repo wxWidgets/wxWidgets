@@ -265,7 +265,7 @@ all:	all_libs all_execs
 !if "$(DLL)" == "0"
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-        erase $(LIBTARGET)
+        -erase $(LIBTARGET)
 	tlib $(LIBTARGET) /P512 @&&!
 -+$(OBJECTS:.obj =.obj -+) -+$(PERIPH_LIBS:.lib =.lib -+)
 !
@@ -273,8 +273,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 !else
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-	erase $(LIBTARGET)
-	erase $(WXLIBDIR)\wx.dll
+	-erase $(LIBTARGET)
+	-erase $(WXLIBDIR)\wx.dll
         tlink32 $(LINK_FLAGS) /v @&&!
 c0d32.obj $(OBJECTS)
 $(WXLIBDIR)\wx
@@ -716,13 +716,13 @@ $(WIN95FLAG)
 # -Oxt
 
 clean: $(PERIPH_CLEAN_TARGET)
-    erase $(LIBTARGET)
-    erase *.obj
-    erase *.pch
-    erase *.csm
-    erase *.cfg
-	erase ..\common\y_tab.c
-    erase ..\common\lex_yy.c
+    -erase $(LIBTARGET)
+    -erase *.obj
+    -erase *.pch
+    -erase *.csm
+    -erase *.cfg
+	-erase ..\common\y_tab.c
+    -erase ..\common\lex_yy.c
 
 cleanall: clean
 

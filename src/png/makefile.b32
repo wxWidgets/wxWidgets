@@ -36,7 +36,7 @@ OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
 all: $(WINPNGLIB)
 
 $(WINPNGLIB): $(OBJECTS) 
-        erase $(WINPNGLIB)
+        -erase $(WINPNGLIB)
 	tlib $(WINPNGLIB) /P512 @&&!
 -+$(OBJECTS:.obj =.obj -+) 
 !
