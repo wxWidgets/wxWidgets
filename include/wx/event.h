@@ -875,8 +875,8 @@ public:
  wxEVT_PAINT_ICON
  */
 
-#if defined(__WXDEBUG__) && defined(__WXMSW__)
-    // see comments in src/msw/dcclient.cpp where g_isPainting is defined
+#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
+    // see comments in src/msw|os2/dcclient.cpp where g_isPainting is defined
     extern WXDLLEXPORT int g_isPainting;
 #endif // debug
 
@@ -890,13 +890,13 @@ public:
         m_eventType = wxEVT_PAINT;
         m_id = Id;
 
-#if defined(__WXDEBUG__) && defined(__WXMSW__)
+#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
         // set the internal flag for the duration of processing of WM_PAINT
         g_isPainting++;
 #endif // debug
     }
 
-#if defined(__WXDEBUG__) && defined(__WXMSW__)
+#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
     ~wxPaintEvent()
     {
         g_isPainting--;
