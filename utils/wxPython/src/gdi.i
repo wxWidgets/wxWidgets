@@ -33,28 +33,25 @@
 
 //---------------------------------------------------------------------------
 
-class wxGDIImage {
-public:
-    long GetHandle();
-    void SetHandle(long handle);
-
-    bool Ok();
-
-    int GetWidth();
-    int GetHeight();
-    int GetDepth();
-
-    void SetWidth(int w);
-    void SetHeight(int h);
-    void SetDepth(int d);
-
-    void SetSize(const wxSize& size);
-
-};
+//  class wxGDIImage {
+//  public:
+//      long GetHandle();
+//      void SetHandle(long handle);
+//      bool Ok();
+//      int GetWidth();
+//      int GetHeight();
+//      int GetDepth();
+//      void SetWidth(int w);
+//      void SetHeight(int h);
+//      void SetDepth(int d);
+//      void SetSize(const wxSize& size);
+//  };
 
 //---------------------------------------------------------------------------
 
-class wxBitmap : public wxGDIImage {
+class wxBitmap
+//: public wxGDIImage
+{
 public:
     wxBitmap(const wxString& name, long type);
     ~wxBitmap();
@@ -67,7 +64,24 @@ public:
 #ifdef __WXMSW__
     void SetPalette(wxPalette& palette);
 #endif
+
+    // wxGDIImage methods
+#ifdef __WXMSW__
+    long GetHandle();
+    void SetHandle(long handle);
+#endif
+    bool Ok();
+    int GetWidth();
+    int GetHeight();
+    int GetDepth();
+    void SetWidth(int w);
+    void SetHeight(int h);
+    void SetDepth(int d);
+#ifdef __WXMSW__
+    void SetSize(const wxSize& size);
+#endif
 };
+
 
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 
@@ -108,24 +122,60 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxIcon : public wxGDIImage {
+class wxIcon
+//: public wxGDIImage
+{
 public:
     wxIcon(const wxString& name, long flags,
            int desiredWidth = -1, int desiredHeight = -1);
     ~wxIcon();
 
     bool LoadFile(const wxString& name, long flags);
+
+    // wxGDIImage methods
+#ifdef __WXMSW__
+    long GetHandle();
+    void SetHandle(long handle);
+#endif
+    bool Ok();
+    int GetWidth();
+    int GetHeight();
+    int GetDepth();
+    void SetWidth(int w);
+    void SetHeight(int h);
+    void SetDepth(int d);
+#ifdef __WXMSW__
+    void SetSize(const wxSize& size);
+#endif
 };
 
 
 //---------------------------------------------------------------------------
 
-class wxCursor : public wxGDIImage {
+class wxCursor
+//: public wxGDIImage
+{
 public:
 #ifdef __WXMSW__
     wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
 #endif
     ~wxCursor();
+
+    // wxGDIImage methods
+#ifdef __WXMSW__
+    long GetHandle();
+    void SetHandle(long handle);
+#endif
+    bool Ok();
+#ifdef __WXMSW__
+    int GetWidth();
+    int GetHeight();
+    int GetDepth();
+    void SetWidth(int w);
+    void SetHeight(int h);
+    void SetDepth(int d);
+    void SetSize(const wxSize& size);
+#endif
 };
 
 %name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
@@ -266,7 +316,7 @@ public:
 #ifdef __WXMSW__
 typedef unsigned long wxDash;
 #else
-typedef byte wxDash;
+typedef char wxDash;
 #endif
 
 

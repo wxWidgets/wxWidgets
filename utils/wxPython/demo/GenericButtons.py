@@ -41,12 +41,14 @@ class TestPanel(wxPanel):
         b = wxGenBitmapButton(self, -1, None, (100, 130))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
-        mask = wxMaskColour(bmp, wxBLUE)
-        bmp.SetMask(mask)
+        if wxPlatform == '__WXMSW__':
+            mask = wxMaskColour(bmp, wxBLUE)
+            bmp.SetMask(mask)
         b.SetBitmapLabel(bmp)
         bmp = wxBitmap('bitmaps/lb2.bmp', wxBITMAP_TYPE_BMP)
-        mask = wxMaskColour(bmp, wxBLUE)
-        bmp.SetMask(mask)
+        if wxPlatform == '__WXMSW__':
+            mask = wxMaskColour(bmp, wxBLUE)
+            bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetBestSize()
 
@@ -57,12 +59,14 @@ class TestPanel(wxPanel):
         b = wxGenBitmapToggleButton(self, -1, None, (100, 230))
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
-        mask = wxMaskColour(bmp, wxBLUE)
-        bmp.SetMask(mask)
+        if wxPlatform == '__WXMSW__':
+            mask = wxMaskColour(bmp, wxBLUE)
+            bmp.SetMask(mask)
         b.SetBitmapLabel(bmp)
         bmp = wxBitmap('bitmaps/lb2.bmp', wxBITMAP_TYPE_BMP)
-        mask = wxMaskColour(bmp, wxBLUE)
-        bmp.SetMask(mask)
+        if wxPlatform == '__WXMSW__':
+            mask = wxMaskColour(bmp, wxBLUE)
+            bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetToggle(true)
         b.SetBestSize()

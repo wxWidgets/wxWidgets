@@ -141,12 +141,14 @@ public:
 
 
     void EnableTool(int toolIndex, bool enable);
+#ifdef __WXMSW__
     wxToolBarTool* FindToolForPosition(long x, long y);
     wxSize GetToolSize();
     wxSize GetToolBitmapSize();
     void SetToolBitmapSize(const wxSize& size);
-    wxSize GetToolMargins();
     wxSize GetMaxSize();
+#endif
+    wxSize GetToolMargins();
 //    wxObject* GetToolClientData(int toolIndex);
     bool GetToolEnabled(int toolIndex);
     wxString GetToolLongHelp(int toolIndex);
@@ -164,16 +166,13 @@ public:
     void SetToolPacking(int packing);
     void SetToolSeparation(int separation);
     void ToggleTool(int toolIndex, const bool toggle);
+#ifdef __WXMSW__
     void SetToggle(int toolIndex, bool toggle);
-
     void SetMaxRowsCols(int rows, int cols);
     int GetMaxRows();
     int GetMaxCols();
-
+#endif
 };
-
-
-
 
 //---------------------------------------------------------------------------
 

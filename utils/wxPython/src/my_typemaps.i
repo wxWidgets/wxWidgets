@@ -79,9 +79,13 @@
 }
 
 
-
+#ifdef __WXMSW__
 %typemap(python,in) wxDash* LIST = unsigned long* LIST;
 %typemap(python,freearg) wxDash* LIST = unsigned long* LIST;
+#else
+%typemap(python,in) wxDash* LIST = byte* LIST;
+%typemap(python,freearg) wxDash* LIST = byte* LIST;
+#endif
 
 
 %typemap(python,in) char** LIST {
