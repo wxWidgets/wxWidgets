@@ -1285,6 +1285,25 @@ void draw_bezier_outline(wxPostScriptDC* caller,
 
 #endif
 
+
+#if wxUSE_PANGO
+static void InitializePangoContext(PangoContext *context)
+{
+#ifdef __WXGTK__
+    pango_context_set_base_dir(context,
+			        gtk_widget_get_default_direction() == GTK_TEXT_DIR_LTR ?
+                    PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+    pango_context_set_language(context, gtk_get_default_language());
+#else
+    // FIXME: assuming LTR is incorrect!
+    pango_context_set_base_dir(context, PANGO_DIRECTION_LTR);
+    wxString lang = wxLocale::GetCanonicalName();
+    pango_context_set_language(context,
+                               pango_language_from_string(lang::ToAscii()));
+#endif
+}
+#endif
+
 void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
@@ -1333,12 +1352,11 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     int ps_dpi = 72;
     int pango_dpi = 600;
     PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
+    
+    InitializePangoContext(context);
 
     double scale = (double)pango_dpi / (double)ps_dpi;
     scale /= m_userScaleY;
-
-    pango_context_set_language (context, pango_language_from_string ("en_US"));
-    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
 
     pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
 
@@ -2069,11 +2087,10 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     int pango_dpi = 600;
     PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
 
+    InitializePangoContext(context);
+
     double scale = pango_dpi / wx_dpi;
     scale /= m_userScaleY;
-
-    pango_context_set_language (context, pango_language_from_string ("en_US"));
-    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
 
     PangoLayout *layout = pango_layout_new (context);
 
@@ -2097,7 +2114,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         PangoLayoutIter *iter = pango_layout_get_iter(layout);
         int baseline = pango_layout_iter_get_baseline(iter);
         pango_layout_iter_free(iter);
-        *descent = *y - PANGO_PIXELS(baseline) / scale;
+        *descent = wxCoord(*y - PANGO_PIXELS(baseline) / scale);
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
 
