@@ -644,7 +644,7 @@ if os.name == 'nt':
                 (WXPLAT, None),
                 ('WXUSINGDLL', '1'),
 
-                ('SWIG_TYPE_TABLE', 'wxPython_type_table'),
+                ('SWIG_TYPE_TABLE', '_wxPython_table'),
                 ('WXP_USE_THREAD', '1'),
                 ]
 
