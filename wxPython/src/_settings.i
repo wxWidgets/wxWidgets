@@ -183,6 +183,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MAKE_CONST_WXSTRING(WINDOW_DEFAULT_VARIANT);
+
 class wxSystemOptions : public wxObject
 {
 public:
