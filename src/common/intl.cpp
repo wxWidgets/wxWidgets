@@ -1260,7 +1260,19 @@ wxString wxLocale::GetSystemEncodingName()
     free(oldLocale);
     if (alang)
     {
-        encname = wxConvLibc.cMB2WX(alang);
+#ifdef __SOLARIS__
+        // nl_langinfo() under Solaris returns 646 by default which stands for
+        // ISO-646, i.e. 7 bit ASCII and we should recognize it to avoid
+        // warnings about unrecognized encoding on each program startup
+        if ( strcmp(alang, "646") == 0 )
+        {
+            encname = _T("US-ASCII");
+        }
+#endif // __SOLARIS__
+        else
+        {
+            encname = wxConvLibc.cMB2WX(alang);
+        }
     }
     else
 #endif // HAVE_LANGINFO_H
@@ -1328,8 +1340,20 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {
-        return wxTheFontMapper->
+        wxFontEncoding enc = wxTheFontMapper->
             CharsetToEncoding(encname, FALSE /* not interactive */);
+
+        // this should probably be considered as a bug in CharsetToEncoding():
+        // it shouldn't return wxFONTENCODING_DEFAULT at all - but it does it
+        // for US-ASCII charset
+        //
+        // we, OTOH, definitely shouldn't return it as it doesn't make sense at
+        // all (which encoding is it?)
+        if ( enc != wxFONTENCODING_DEFAULT )
+        {
+            return enc;
+        }
+        //else: return wxFONTENCODING_SYSTEM below
     }
 #endif // Win32/Unix
 
