@@ -30,7 +30,7 @@ class WXDLLEXPORT wxScreenDC: public wxDC
 {
 public:
     wxScreenDC();
-    ~wxScreenDC() {}
+    ~wxScreenDC();
 
     static bool StartDrawingOnTop(wxWindow *WXUNUSED(window)) { return TRUE; }
     static bool StartDrawingOnTop(wxRect *WXUNUSED(rect) = NULL) { return TRUE; }

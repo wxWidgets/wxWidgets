@@ -25,4 +25,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
 wxScreenDC::wxScreenDC() : wxDC()
 {
     SetMGLDC(g_displayDC, FALSE /* no ownership */);
+    
+    // VS: we have to hide the mouse, otherwise rendering artifacts may occur
+    MS_obscure();
+}
+
+wxScreenDC::~wxScreenDC()
+{
+    MS_show();
 }
