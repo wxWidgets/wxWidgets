@@ -199,7 +199,7 @@ LifeFrame::LifeFrame() :
     menuFile->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _("Start a new game"));
     menuFile->Append(wxID_OPEN, wxGetStockLabel(wxID_OPEN), _("Open an existing Life pattern"));
     menuFile->Append(ID_SAMPLES, _("&Sample game..."), _("Select a sample configuration"));
-#ifndef __WXWINCE__
+#if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT, true, _T("Alt-X")), _("Quit this program"));
 

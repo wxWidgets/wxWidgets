@@ -148,6 +148,10 @@ void wxTopLevelWindowMSW::Init()
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     m_MenuBarHWND = 0;
 #endif
+#ifdef __POCKETPC__
+    // A dummy menubar for dialogs
+    m_menuBarHWND = 0;
+#endif
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -415,6 +419,27 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         ::SetWindowText(GetHwnd(), title);
     }
 
+#ifdef __POCKETPC__
+    // Create an empty menubar so that we don't see the menubar underneath
+    SHMENUBARINFO mbi;
+
+    memset (&mbi, 0, sizeof (SHMENUBARINFO));
+    mbi.cbSize     = sizeof (SHMENUBARINFO);
+    mbi.hwndParent = (HWND) GetParent()->GetHWND();
+    mbi.nToolBarId = 5000;
+    mbi.nBmpId     = 0;
+    mbi.cBmpImages = 0;
+    mbi.dwFlags = 0 ; // SHCMBF_EMPTYBAR;
+    mbi.hInstRes = wxGetInstance();
+
+    if (!SHCreateMenuBar(&mbi))
+    {
+        wxFAIL_MSG( _T("SHCreateMenuBar failed") );
+    }
+
+    m_menuBarHWND = (WXHWND) mbi.hwndMB;
+#endif
+
     SubclassWin(m_hWnd);
     
 #ifdef __SMARTPHONE__
@@ -563,6 +588,15 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+#ifdef __POCKETPC__
+    // Destroy the dummy menubar for dialogs
+    if (m_menuBarHWND)
+    {
+        ::DestroyWindow((HWND) m_menuBarHWND);
+        m_menuBarHWND = 0;
+    }
+#endif
+
     // after destroying an owned window, Windows activates the next top level
     // window in Z order but it may be different from our owner (to reproduce
     // this simply Alt-TAB to another application and back before closing the

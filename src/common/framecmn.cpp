@@ -489,9 +489,15 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
                                         wxWindowID id,
                                         const wxString& name)
 {
+#if defined(__WXWINCE__) && defined(__POCKETPC__)
+    return new wxToolMenuBar(this, id,
+                         wxDefaultPosition, wxDefaultSize,
+                         style, name);
+#else
     return new wxToolBar(this, id,
                          wxDefaultPosition, wxDefaultSize,
                          style, name);
+#endif
 }
 
 void wxFrameBase::SetToolBar(wxToolBar *toolbar)

@@ -23,19 +23,18 @@ wxToolBarBase\\
 \wxheading{Include files}
 
 <wx/toolbar.h> (to allow wxWidgets to select an appropriate toolbar class)\\
-<wx/tbarbase.h> (the base class)\\
-<wx/tbarmsw.h> (the non-Windows 95 Windows toolbar class)\\
-<wx/tbar95.h> (the Windows 95/98 toolbar class)\\
+<wx/tbarbase.h> (the base class)
 
 \wxheading{Remarks}
 
 You may also create a toolbar that is managed by the frame, by
-calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
+calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}. Under Pocket PC,
+you should {\it always} use this function for creating the toolbar
+to be managed by the frame, so that wxWidgets can use a combined
+menubar and toolbar. Where you manage your own toolbars, create a wxToolBar
+as usual.
 
-Due to the use of native toolbars on the various platforms, certain adaptions will
-often have to be made in order to get optimal look on all platforms as some platforms
-ignore the values for explicit placement and use their own layout and the meaning
-of a "separator" is a vertical line under Windows95 vs. simple space under GTK etc.
+The meaning of a "separator" is a vertical line under Windows and simple space under GTK+.
 
 {\bf wxToolBar95:} Note that this toolbar paints tools to reflect system-wide colours.
 If you use more than 16 colours in your tool bitmaps, you may wish to suppress

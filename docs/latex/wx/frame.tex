@@ -241,6 +241,11 @@ with \helpref{wxFrame::SetToolBar}{wxframesettoolbar}, the frame will manage the
 position and adjust the return value from \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} to
 reflect the available space for application windows.
 
+Under Pocket PC, you should {\it always} use this function for creating the toolbar
+to be managed by the frame, so that wxWidgets can use a combined
+menubar and toolbar. Where you manage your own toolbars, create a wxToolBar
+as usual.
+
 \wxheading{See also}
 
 \helpref{wxFrame::CreateStatusBar}{wxframecreatestatusbar},\rtfsp

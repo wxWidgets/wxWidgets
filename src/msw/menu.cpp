@@ -716,9 +716,13 @@ wxMenuBar::~wxMenuBar()
 {
     // In Windows CE (not .NET), the menubar is always associated
     // with a toolbar, which destroys the menu implicitly.
-#if defined(WINCE_WITHOUT_COMMANDBAR)
+#if defined(WINCE_WITHOUT_COMMANDBAR) && defined(__POCKETPC__)
     if (GetToolBar())
-        GetToolBar()->SetMenuBar(NULL);
+    {
+        wxToolMenuBar* toolMenuBar = wxDynamicCast(GetToolBar(), wxToolMenuBar);
+        if (toolMenuBar)
+            toolMenuBar->SetMenuBar(NULL);
+    }
 #else
     // we should free Windows resources only if Windows doesn't do it for us
     // which happens if we're attached to a frame

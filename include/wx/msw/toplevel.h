@@ -165,6 +165,11 @@ protected:
     void ReloadAllButtons();
 #endif // __SMARTPHONE__ && __WXWINCE__
 
+    // Empty menubar for dialogs
+#ifdef __POCKETPC__
+    WXHWND                   m_menuBarHWND;
+#endif
+
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)
 };

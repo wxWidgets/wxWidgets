@@ -357,7 +357,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 #elif defined(WINCE_WITHOUT_COMMANDBAR)
     if (!GetToolBar())
     {
-        wxToolBar* toolBar = new wxToolBar(this, wxID_ANY,
+        wxToolMenuBar* toolBar = new wxToolMenuBar(this, wxID_ANY,
                          wxDefaultPosition, wxDefaultSize,
                          wxBORDER_NONE | wxTB_HORIZONTAL,
                          wxToolBarNameStr, menubar);

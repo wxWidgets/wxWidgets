@@ -136,16 +136,38 @@ provided, to show settings in the correct style on PocketPC and on other platfor
 Notifications (bubble HTML text with optional buttons and links) will also be
 implemented in the future for PocketPC.
 
+Modeless dialogs probably don't make sense for PocketPC and Smartphone, since
+frames and dialogs are normally full-screen, and a modeless dialog is normally
+intended to co-exist with the main application frame.
+
 \subsubsection{Menubars and toolbars in wxWinCE}
 
-Menubars and toolbars can only be implemented using a combined control,
-but you can use the same syntax as before; wxWidgets will combine the menubar
-and toolbar.
+\wxheading{Menubars and toolbars in PocketPC}
 
 On PocketPC, a frame must always have a menubar, even if it's empty.
+An empty menubar is automatically provided for dialogs, to hide
+any existing menubar for the duration of the dialog.
+
+Menubars and toolbars are implemented using a combined control,
+but you can use essentially the usual wxWidgets API; wxWidgets will combine the menubar
+and toolbar. However, there are some restrictions:
+
+\itemsep=0pt
+\begin{itemize}
+\item You must create the frame's primary toolbar with wxFrame::CreateToolBar,
+because this uses the special wxToolMenuBar class (derived from wxToolBar)
+to implement the combined toolbar and menubar. Otherwise, you can create and manage toolbars
+using the wxToolBar class as usual, for example to implement an optional
+formatting toolbar above the menubar as Pocket Word does. But don't assign
+a wxToolBar to a frame using SetToolBar - you should always use CreateToolBar
+for the main frame toolbar.
+\item Deleting and adding tools to wxToolMenuBar is not supported.
+\end{itemize}
+
+\wxheading{Menubars and toolbars in Smartphone}
 
 On Smartphone, there are only two menu buttons, so a menubar is simulated
-using a nested menu on the right menu button. Toolbars are simply ignored on
+using a nested menu on the right menu button. Any toolbars are simply ignored on
 Smartphone.
 
 \subsubsection{Closing windows in wxWinCE}
@@ -160,9 +182,15 @@ wxID\_EXIT, it will do the right thing.
 
 \subsubsection{Control differences on wxWinCE}
 
-This section is to be written.
+These controls are missing from wxWinCE:
 
-Can someone remind us why wxChoice was rewritten for Smartphone?
+\itemsep=0pt
+\begin{itemize}
+\item {\bf wxCheckListBox} This can be implemented using a wxListCtrl in report mode
+with checked/unchecked images.
+\end{itemize}
+
+This section is currently incomplete.
 
 \subsubsection{Online help in wxWinCE}
 
@@ -197,6 +225,9 @@ Win32.
 the correct size on the emulator, but too small on a VGA Pocket Loox device.
 \item {\bf wxStaticLine.} Lines don't show up, and the documentation suggests that
 missing styles are implemented with WM\_PAINT.
+\item {\bf wxCheckListBox.} This class needs to be implemented in terms of a wxListCtrl
+in report mode, using icons for checkbox states. This is necessary because owner-draw listboxes
+are not supported on Windows CE.
 \item {\bf OK button.} We should allow the OK button on a dialog to be optional, perhaps
 by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more

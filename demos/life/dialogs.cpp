@@ -186,14 +186,14 @@ XLife is (c) 1989 by Jon Bennett et al.")),
     sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 #endif // wxUSE_STATLINE
 
-#ifndef __WXWINCE__
+#if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     sizer->Add( CreateButtonSizer(wxOK), 0, wxCENTRE | wxALL, 10 );
 #endif
 
     // activate
     SetSizer(sizer);
 
-#ifndef __WXWINCE__
+#if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     sizer->SetSizeHints(this);
     sizer->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
