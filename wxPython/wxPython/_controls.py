@@ -216,6 +216,7 @@ wxNB_LEFT = wx._controls.NB_LEFT
 wxNB_RIGHT = wx._controls.NB_RIGHT
 wxNB_BOTTOM = wx._controls.NB_BOTTOM
 wxNB_MULTILINE = wx._controls.NB_MULTILINE
+wxNB_NOPAGETHEME = wx._controls.NB_NOPAGETHEME
 wxNB_HITTEST_NOWHERE = wx._controls.NB_HITTEST_NOWHERE
 wxNB_HITTEST_ONICON = wx._controls.NB_HITTEST_ONICON
 wxNB_HITTEST_ONLABEL = wx._controls.NB_HITTEST_ONLABEL
