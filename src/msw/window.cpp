@@ -446,7 +446,11 @@ bool wxWindow::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
+#ifdef __WIN16__
     ::BringWindowToTop(GetHwnd());
+#else // Win32
+    ::SetForegroundWindow(GetHwnd());
+#endif
 }
 
 // Lower the window to the bottom of the Z order
