@@ -49,7 +49,7 @@ ThreadExitProc(gpointer WXUNUSED(client), gint fid,
 }
 
 // Global initialization
-static void wxThreadGuiInit(void)
+static void wxThreadGuiInit()
 {
   pipe(p_thrd_pipe);
   p_thrd_inid = gdk_input_add(p_thrd_pipe[0], GDK_INPUT_READ,
@@ -57,7 +57,7 @@ static void wxThreadGuiInit(void)
 }
 
 // Global cleanup
-static void wxThreadGuiExit(void)
+static void wxThreadGuiExit()
 {
   gdk_input_remove(p_thrd_inid);
   close(p_thrd_pipe[0]);

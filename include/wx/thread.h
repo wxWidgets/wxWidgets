@@ -22,7 +22,8 @@
 typedef enum {
   MUTEX_NO_ERROR=0,
   MUTEX_DEAD_LOCK,		// Mutex has been already locked by THE CALLING thread 
-  MUTEX_BUSY			// Mutex has been already locked by ONE thread
+  MUTEX_BUSY,			// Mutex has been already locked by ONE thread
+  MUTEX_UNLOCKED
 } wxMutexError;
 
 typedef enum {

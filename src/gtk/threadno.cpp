@@ -16,29 +16,35 @@
 
 wxMutex::wxMutex()
 {
-  m_locked = FALSE;
+  m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
+  if (m_locked)
+    wxDebugMsg("wxMutex warning: destroying a locked mutex (%d locks)\n", m_locked);
 }
 
 MutexError wxMutex::Lock()
 {
-  m_locked = TRUE;
-  return NO_ERROR;
+  m_locked++;
+  return MUTEX_NO_ERROR;
 }
 
 MutexError wxMutex::TryLock()
 {
-  m_locked = TRUE;
-  return NO_ERROR;
+  if (m_locked > 0)
+    return MUTEX_BUSY;
+  m_locked++;
+  return MUTEX_NO_ERROR;
 }
 
 MutexError wxMutex::Unlock()
 {
-  m_locked = FALSE;
-  return NO_ERROR;
+  if (m_locked == 0)
+    return MUTEX_UNLOCKED;
+  m_locked--;
+  return MUTEX_NO_ERROR;
 }
 
 wxCondition::wxCondition()
@@ -76,12 +82,12 @@ ThreadError wxThread::Create()
 {
   p_internal->exit_status = Entry();
   OnExit();
-  return NO_ERROR;
+  return THREAD_NO_ERROR;
 }
 
 ThreadError wxThread::Destroy()
 {
-  return RUNNING;
+  return THREAD_RUNNING;
 }
 
 void wxThread::DeferDestroy()
@@ -135,22 +141,23 @@ void wxThread::OnExit()
   Join();
 }
 
-// Global initialization
-static void wxThreadInit(void *WXUNUSED(client))
-{
+
+// Automatic initialization
+class wxThreadModule : public wxModule {
+  DECLARE_DYNAMIC_CLASS(wxThreadModule)
+public:
+  bool OnInit();
+  void OnExit();
+};
+
+bool wxThreadModule::OnInit() {
   wxMainMutex.Lock();
+  return TRUE;
 }
 
-// Global cleanup
-static void wxThreadExit(void *WXUNUSED(client))
+void wxThreadModule::wxThreadExit()
 {
   wxMainMutex.Unlock();
 }
 
-// Let automatic initialization be performed from wxCommonInit().
-static struct
-wxThreadGlobal {
-  wxThreadGlobal() {
-      wxRegisterModuleFunction(wxThreadInit, wxThreadExit, NULL);
-  }
-} dummy;
+IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)

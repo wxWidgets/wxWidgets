@@ -51,13 +51,15 @@ wxMutex::wxMutex()
 {
   p_internal = new wxMutexInternal;
   pthread_mutex_init(&(p_internal->p_mutex), NULL);
-  m_locked = false;
+  m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
-  if (m_locked)
-    pthread_mutex_unlock(&(p_internal->p_mutex));
+  if (m_locked > 0)
+    wxDebugMsg("wxMutex warning: freeing a locked mutex (%d locks)\n",
+               m_locked);
+
   pthread_mutex_destroy(&(p_internal->p_mutex));
   delete p_internal;
 }
@@ -67,9 +69,8 @@ wxMutexError wxMutex::Lock()
   int err;
 
   err = pthread_mutex_lock(&(p_internal->p_mutex));
-  switch (err) {
-  case EDEADLK: return MUTEX_DEAD_LOCK;
-  }
+  if (err == EDEADLK)
+    return MUTEX_DEAD_LOCK;
   m_locked++;
   return MUTEX_NO_ERROR;
 }
@@ -90,7 +91,10 @@ wxMutexError wxMutex::TryLock()
 
 wxMutexError wxMutex::Unlock()
 {
-  if (m_locked > 0) m_locked--;
+  if (m_locked > 0)
+    m_locked--;
+  else
+    return MUTEX_UNLOCKED;
   pthread_mutex_unlock(&(p_internal->p_mutex));
   return MUTEX_NO_ERROR;
 }
