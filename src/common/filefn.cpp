@@ -214,34 +214,43 @@ void wxPathList::Add (const wxString& path)
 // Add paths e.g. from the PATH environment variable
 void wxPathList::AddEnvList (const wxString& envVariable)
 {
-  static const wxChar PATH_TOKS[] =
+    static const wxChar PATH_TOKS[] =
 #ifdef __WINDOWS__
-        wxT(" ;"); // Don't seperate with colon in DOS (used for drive)
+        /*
+        The space has been removed from the tokenizers, otherwise a
+        path such as "C:\Program Files" would be split into 2 paths:
+        "C:\Program" and "Files"
+        */
+//        wxT(" ;"); // Don't seperate with colon in DOS (used for drive)
+        wxT(";"); // Don't seperate with colon in DOS (used for drive)
 #else
         wxT(" :;");
 #endif
 
-  wxChar *val = wxGetenv (WXSTRINGCAST envVariable);
-  if (val && *val)
+    wxChar *val = wxGetenv (WXSTRINGCAST envVariable);
+    if (val && *val)
     {
-      wxChar *s = copystring (val);
-      wxChar *save_ptr, *token = wxStrtok (s, PATH_TOKS, &save_ptr);
+        wxChar *s = copystring (val);
+        wxChar *save_ptr, *token = wxStrtok (s, PATH_TOKS, &save_ptr);
 
-      if (token)
-      {
-          Add (copystring (token));
-          while (token)
-          {
-              if ((token = wxStrtok ((wxChar *) NULL, PATH_TOKS, &save_ptr)) != NULL)
-                  Add (wxString(token));
-          }
-      }
+        if (token)
+        {
+            Add(token);
+            while (token)
+            {
+                if ( (token = wxStrtok ((wxChar *) NULL, PATH_TOKS, &save_ptr))
+                    != NULL )
+                {
+                    Add(token);
+                }
+            }
+        }
 
-      // suppress warning about unused variable save_ptr when wxStrtok() is a
-      // macro which throws away its third argument
-      save_ptr = token;
+        // suppress warning about unused variable save_ptr when wxStrtok() is a
+        // macro which throws away its third argument
+        save_ptr = token;
 
-      delete [] s;
+        delete [] s;
     }
 }
 
