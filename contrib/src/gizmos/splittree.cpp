@@ -38,6 +38,7 @@
 #include "wx/generic/treectlg.h"
 
 #include "wx/gizmos/splittree.h"
+#include <math.h>
 
 /*
  * wxRemotelyScrolledTreeCtrl
@@ -170,7 +171,7 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
         scrolledWindow->GetScrollPixelsPerUnit(& xppu2, & yppu2);
 
         dc.SetDeviceOrigin( -startX * xppu1, -startY * yppu2 );
-        dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
+        // dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
     }
 }
 
@@ -244,14 +245,18 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
 			wxRect itemRect;
 			if (GetBoundingRect(GetRootItem(), itemRect))
 			{
-				int itemHeight = itemRect.GetHeight();
+                // Actually, the real height seems to be 1 less than reported
+                // (e.g. 16 instead of 16)
+                int itemHeight = itemRect.GetHeight() - 1;
 				
 				int w, h;
 				GetClientSize(&w, &h);
 				
 				wxRect rect(0, 0, 0, 0);
 				CalcTreeSize(rect);
-				int treeViewHeight = rect.GetHeight()/itemHeight;
+
+                double f = ((double) (rect.GetHeight()) / (double) itemHeight)  ;
+                int treeViewHeight = (int) ceil(f);
 				
 				int scrollPixelsPerLine = itemHeight;
 				int scrollPos = - (itemRect.y / itemHeight);
@@ -299,9 +304,6 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(wxRect& rect)
 
 void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& rect)
 {
-	// TODO: implement GetFirst/NextVisibleItem
-	// for wxGenericTreeCtrl, plus GetBoundingRect.
-
 	// More efficient implementation would be to find the last item (but how?)
 	// Q: is the bounding rect relative to the top of the virtual tree workspace
 	// or the top of the window? How would we convert?
@@ -571,7 +573,10 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
     // don't cause an infinite loop
     static bool inOnScroll = FALSE;
     if (inOnScroll)
+    {
+        event.Skip();
         return;
+    }
     inOnScroll = TRUE;
     
     int orient = event.GetOrientation();

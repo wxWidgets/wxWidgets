@@ -23,7 +23,7 @@ LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\gizmos
 
 !include $(WXDIR)\src\makevc.env
 
-OBJECTS = $(D)\multicell.obj $(D)\splittree.obj
+OBJECTS = $(D)\multicell.obj $(D)\splittree.obj $(D)\editlbox.obj
 
 LIBTARGET=$(WXDIR)\lib\gizmos$(LIBEXT).lib
 
@@ -56,6 +56,11 @@ $(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
 <<
 
 $(D)\splittree.obj:      splittree.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+$(D)\editlbox.obj:      editlbox.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
 <<

@@ -91,12 +91,20 @@ SOURCE=..\..\include\wx\gizmos\multicell.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\gizmos\editlbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\gizmos\splittree.h
 # End Source File
 # End Group
 # Begin Source File
 
 SOURCE=.\multicell.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\editlbox.cpp
 # End Source File
 # Begin Source File
 

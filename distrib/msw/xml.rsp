@@ -39,6 +39,12 @@ contrib/src/xml/*.ico
 contrib/src/xml/*.bmp
 contrib/src/xml/README
 
+contrib/src/xml/expat/copying.txt
+contrib/src/xml/expat/xmlparse/*.c
+contrib/src/xml/expat/xmlparse/*.h
+contrib/src/xml/expat/xmltok/*.c
+contrib/src/xml/expat/xmltok/*.h
+
 contrib/include/wx/xml/*.h
 
 contrib/samples/xml/*.cpp

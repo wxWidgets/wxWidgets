@@ -15,6 +15,7 @@ GIZMOSLIB=$(WXDIR)/lib/libgizmos$(GUISUFFIX).a
 LIB_CPP_SRC=\
 \
   multicell.o\
+  editlbox.o\
   splittree.o
 
 all:    $(GIZMOSLIB)
