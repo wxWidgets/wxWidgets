@@ -600,6 +600,12 @@ case "${canonical}" in
   *-*-linux* )
     USE_LINUX=1
     AC_DEFINE(__LINUX__)
+    TMP=`uname -m`
+    if test "x$TMP" = "xalpha"
+    then
+      USE_ALPHA=1
+      AC_DEFINE(__ALPHA__)
+    fi
   ;;
   *-*-irix5* | *-*-irix6* ) 
     USE_SGI=1

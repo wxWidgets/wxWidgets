@@ -303,8 +303,8 @@ public:
     char& Last()
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
-    // on 64bit systems, this gives overload problems:
-#if SIZEOF_INT <= 4
+    // on alpha-linux this gives overload problems:
+#if ! defined(__ALPHA__)
     /// operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
