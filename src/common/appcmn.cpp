@@ -84,8 +84,21 @@ wxAppBase::wxAppBase()
 #if wxUSE_GUI
     m_topWindow = (wxWindow *)NULL;
     m_useBestVisual = FALSE;
-    m_exitOnFrameDelete = TRUE;
     m_isActive = TRUE;
+
+    // We don't want to exit the app if the user code shows a dialog from its
+    // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
+    // to Yes initially as this dialog would be the last top level window.
+    // OTOH, if we set it to No initially we'll have to overwrite it with Yes
+    // when we enter our OnRun() because we do want the default behaviour from
+    // then on. But this would be a problem if the user code calls
+    // SetExitOnFrameDelete(FALSE) from OnInit().
+    //
+    // So we use the special "Later" value which is such that
+    // GetExitOnFrameDelete() returns FALSE for it but which we know we can
+    // safely (i.e. without losing the effect of the users SetExitOnFrameDelete
+    // call) overwrite in OnRun()
+    m_exitOnFrameDelete = Later;
 #endif // wxUSE_GUI
 
 #ifdef __WXDEBUG__
@@ -112,6 +125,19 @@ bool wxAppBase::OnInitGui()
     return TRUE;
 }
 #endif // wxUSE_GUI
+
+int wxAppBase::OnRun()
+{
+    // see the comment in ctor: if the initial value hasn't been changed, use
+    // the default Yes from now on
+    if ( m_exitOnFrameDelete == Later )
+    {
+        m_exitOnFrameDelete = Yes;
+    }
+    //else: it has been changed, assume the user knows what he is doing
+
+    return MainLoop();
+}
 
 int wxAppBase::OnExit()
 {

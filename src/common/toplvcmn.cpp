@@ -60,7 +60,19 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
 {
-    // this destructor is required for Darwin
+    // don't let wxTheApp keep any stale pointers to us
+    if ( wxTheApp && wxTheApp->GetTopWindow() == this )
+        wxTheApp->SetTopWindow(NULL);
+
+    bool shouldExit = IsLastBeforeExit();
+
+    wxTopLevelWindows.DeleteObject(this);
+
+    if ( shouldExit )
+    {
+        // then do it
+        wxTheApp->ExitMainLoop();
+    }
 }
 
 bool wxTopLevelWindowBase::Destroy()
@@ -72,6 +84,19 @@ bool wxTopLevelWindowBase::Destroy()
 
     return TRUE;
 }
+
+/* static */
+bool wxTopLevelWindowBase::IsLastBeforeExit()
+{
+    // we exit the application if there are no more top level windows left
+    // normally but wxApp can prevent this from happening
+    return (wxTopLevelWindows.GetCount() == 1) &&
+            wxTheApp && wxTheApp->GetExitOnFrameDelete();
+}
+
+// ----------------------------------------------------------------------------
+// wxTopLevelWindow geometry
+// ----------------------------------------------------------------------------
 
 wxSize wxTopLevelWindowBase::GetMaxSize() const
 {

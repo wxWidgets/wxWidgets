@@ -483,24 +483,13 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
         wxASSERT_MSG( FALSE, _T("Window still grabbed"));
         RemoveGrab();
     }
-    
+
     m_isBeingDeleted = TRUE;
 
     // it may also be GtkScrolledWindow in the case of an MDI child
     if (GTK_IS_WINDOW(m_widget))
     {
         gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
-    }
-
-    wxTopLevelWindows.DeleteObject( this );
-
-    if (wxTheApp->GetTopWindow() == this)
-        wxTheApp->SetTopWindow( (wxWindow*) NULL );
-
-    if ((wxTopLevelWindows.Number() == 0) &&
-        (wxTheApp->GetExitOnFrameDelete()))
-    {
-        wxTheApp->ExitMainLoop();
     }
 }
 
@@ -522,11 +511,11 @@ static void wx_win_hints_set_layer(GtkWidget *window, int layer)
     XEvent xev;
     GdkWindowPrivate *priv;
     gint prev_error;
-  
+
     prev_error = gdk_error_warnings;
     gdk_error_warnings = 0;
     priv = (GdkWindowPrivate*)(GTK_WIDGET(window)->window);
-  
+
     if (GTK_WIDGET_MAPPED(window))
     {
         xev.type = ClientMessage;
@@ -536,14 +525,14 @@ static void wx_win_hints_set_layer(GtkWidget *window, int layer)
         xev.xclient.format = 32;
         xev.xclient.data.l[0] = (long)layer;
         xev.xclient.data.l[1] = gdk_time_get();
-      
+
         XSendEvent(GDK_DISPLAY(), GDK_ROOT_WINDOW(), False,
             SubstructureNotifyMask, (XEvent*) &xev);
     }
     else
     {
         long data[1];
-      
+
         data[0] = layer;
         XChangeProperty(GDK_DISPLAY(), priv->xwindow, gs_XA_WIN_LAYER,
               XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 1);
@@ -574,14 +563,14 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
         int screen_width,screen_height;
         wxDisplaySize( &screen_width, &screen_height );
-        
+
 		gint client_x, client_y, root_x, root_y;
 		gint width, height;
 
 		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
 		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
 					 &width, &height, NULL);
-                     
+
         wx_win_hints_set_layer( m_widget, WIN_LAYER_ABOVE_DOCK );
 
 		gdk_window_move_resize (m_widget->window, -client_x, -client_y,
@@ -590,7 +579,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     else
     {
         wx_win_hints_set_layer( m_widget, WIN_LAYER_NORMAL );
-        
+
         SetSize( m_fsSaveFrame.x, m_fsSaveFrame.y, m_fsSaveFrame.width, m_fsSaveFrame.height );
     }
 
@@ -778,7 +767,7 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
             // Gtk-WARNING **: gtk_widget_size_allocate():
             //       attempt to allocate widget with width 65535 and height 600
             // but I don't have time to track them all now..
-            // 
+            //
             // Really we need to encapulate all this height/width business and
             // stop any old method from ripping at the members directly and
             // scattering -1's without regard for who might resolve them later.

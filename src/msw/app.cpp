@@ -701,22 +701,8 @@ int wxEntry(WXHINSTANCE hInstance,
         wxLog::SetTimestamp(NULL);
 #endif
 
-        int retValue = 0;
-
-        // it is common to create a modal dialog in OnInit() (to ask/notify the
-        // user about something) but it wouldn't work if we don't change the
-        // "exit on delete last frame" flag here as when this dialog is
-        // deleted, the app would terminate (it was the last top level window
-        // as the main frame wasn't created yet!), so disable this behaviour
-        // temproarily
-        bool exitOnLastFrameDelete = wxTheApp->GetExitOnFrameDelete();
-        wxTheApp->SetExitOnFrameDelete(FALSE);
-
         // init the app
-        retValue = wxEntryInitGui() && wxTheApp->OnInit() ? 0 : -1;
-
-        // restore the old flag value
-        wxTheApp->SetExitOnFrameDelete(exitOnLastFrameDelete);
+        int retValue = wxEntryInitGui() && wxTheApp->OnInit() ? 0 : -1;
 
         if ( retValue == 0 )
         {
@@ -986,8 +972,8 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
-    // VZ: why not ::PostQuitMessage()?
-    m_keepGoing = FALSE;
+    // this will set m_keepGoing to FALSE a bit later
+    ::PostQuitMessage(0);
 }
 
 bool wxApp::Pending()

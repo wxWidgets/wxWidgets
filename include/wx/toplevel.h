@@ -135,15 +135,20 @@ protected:
     virtual void DoClientToScreen(int *x, int *y) const;
     virtual void DoScreenToClient(int *x, int *y) const;
 
+    // test whether this window makes part of the frame
+    // (menubar, toolbar and statusbar are excluded from automatic layout)
+    virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const
+        { return FALSE; }
+
+    // check if we should exit the program after deleting another top level
+    // window (this is used in common dtor and wxMSW code)
+    static bool IsLastBeforeExit();
+
     // send the iconize event, return TRUE if processed
     bool SendIconizeEvent(bool iconized = TRUE);
 
     // the frame icon
     wxIconBundle m_icons;
-
-    // test whether this window makes part of the frame
-    // (menubar, toolbar and statusbar are excluded from automatic layout)
-    virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const { return FALSE; }
 
     DECLARE_EVENT_TABLE()
 };

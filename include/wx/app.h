@@ -128,7 +128,7 @@ public:
         //
         // Override: rarely in GUI applications, always in console ones.
 #if wxUSE_GUI
-    virtual int OnRun() { return MainLoop(); };
+    virtual int OnRun();
 #else // !GUI
     virtual int OnRun() = 0;
 #endif // wxUSE_GUI
@@ -236,11 +236,13 @@ public:
 
         // control the exit behaviour: by default, the program will exit the
         // main loop (and so, usually, terminate) when the last top-level
-        // program window is deleted. Beware that if you disabel this (with
-        // SetExitOnFrameDelete(FALSE)), you'll have to call ExitMainLoop()
-        // explicitly from somewhere.
-    void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
-    bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
+        // program window is deleted. Beware that if you disable this behaviour
+        // (with SetExitOnFrameDelete(FALSE)), you'll have to call
+        // ExitMainLoop() explicitly from somewhere.
+    void SetExitOnFrameDelete(bool flag)
+        { m_exitOnFrameDelete = flag ? Yes : No; }
+    bool GetExitOnFrameDelete() const
+        { return m_exitOnFrameDelete == Yes; }
 
 #endif // wxUSE_GUI
 
@@ -392,8 +394,16 @@ protected:
     // the main top level window - may be NULL
     wxWindow *m_topWindow;
 
-    // if TRUE, exit the main loop when the last top level window is deleted
-    bool m_exitOnFrameDelete;
+    // if Yes, exit the main loop when the last top level window is deleted, if
+    // No don't do it and if Later -- only do it once we reach our OnRun()
+    //
+    // the explanation for using this strange scheme is given in appcmn.cpp
+    enum
+    {
+        Later = -1,
+        No,
+        Yes
+    } m_exitOnFrameDelete;
 
     // TRUE if the apps whats to use the best visual on systems where
     // more than one are available (Sun, SGI, XFree86 4.0 ?)

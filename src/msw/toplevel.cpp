@@ -454,11 +454,11 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
     if ( this == ms_hiddenParent )
     {
         // stop [infinite] recursion which would otherwise happen when we do
-        // "delete ms_hiddenParent" below
+        // "delete ms_hiddenParent" below -- and we're not interested in doing
+        // anything of the rest below for that window because the rest of
+        // wxWindows doesn't even know about it
         return;
     }
-
-    wxTopLevelWindows.DeleteObject(this);
 
     if ( wxModelessWindows.Find(this) )
         wxModelessWindows.DeleteObject(this);
@@ -476,20 +476,14 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
         }
     }
 
-    // If this is the last top-level window, exit.
-    if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
+    // if this is the last top-level window, we're going to exit and we should
+    // delete ms_hiddenParent now to avoid leaking it
+    if ( IsLastBeforeExit() )
     {
         if ( ms_hiddenParent )
         {
             delete ms_hiddenParent;
             ms_hiddenParent = NULL;
-        }
-
-        wxTheApp->SetTopWindow(NULL);
-
-        if ( wxTheApp->GetExitOnFrameDelete() )
-        {
-            ::PostQuitMessage(0);
         }
     }
 }

@@ -22,7 +22,8 @@ is to explicitly delete child frames in the top-level frame's \helpref{wxCloseEv
 handler.
 
 In emergencies the \helpref{wxExit}{wxexit} function can be called to kill the
-application.
+application however normally the applications shuts down automatically, 
+\helpref{see below}{wxappshutdownoverview}.
 
 An example of defining an application follows:
 
@@ -55,11 +56,25 @@ construction time.
 You can also use DECLARE\_APP(appClass) in a header file to declare the wxGetApp function which returns
 a reference to the application object.
 
-\subsection{Application shutdown}
+\subsection{Application shutdown}\label{wxappshutdownoverview}
 
-\helpref{OnExit}{wxapponexit} is called when the application exits but {\it before}
-wxWindows cleans its internal structures. Your should delete all wxWindows object that
-your created by the time OnExit finishes. In particular, do {\bf not} destroy them
+The application normally shuts down when the last of its top level windows is
+closed. This is normally the expected behaviour and means that it is enough to
+call \helpref{Close()}{wxwindowclose} in response to the {\tt "Exit"} menu
+command if your program has a single top level window. If this behaviour is not
+desirable \helpref{wxApp::SetExitOnFrameDelete}{wxappsetexitonframedelete} can
+be called to change it. Note that starting from wxWindows 2.3.3 such logic
+doesn't apply for the windows shown before the program enters the main loop: in
+other words, you can safely show a dialog from 
+\helpref{wxApp::OnInit}{wxapponinit} and not be afraid that your application
+terminates when this dialog -- which is the last top level window for the
+moment -- is closed.
+
+
+Another aspect of the application shutdown is the \helpref{OnExit}{wxapponexit} 
+which is called when the application exits but {\it before} wxWindows cleans up
+its internal structures. Your should delete all wxWindows object that your
+created by the time OnExit finishes. In particular, do {\bf not} destroy them
 from application class' destructor!
 
 For example, this code may crash:
