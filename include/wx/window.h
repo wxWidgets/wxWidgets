@@ -424,17 +424,11 @@ public:
 
         // Override these methods for windows that have a virtual size
         // independent of their client size.  eg. the virtual area of a
-        // wxScrolledWindow.  Default is to return m_virtualSize unless
-        // the client size is bigger.
+        // wxScrolledWindow. 
 
     virtual void DoSetVirtualSize( int x, int y );
     virtual wxSize DoGetVirtualSize() const;
     
-    
-        // Really return just m_virtualSize, nothing else
-    
-    wxSize GetPureVirtualSize() const { return m_virtualSize; }
-
         // Return the largest of ClientSize and BestSize (as determined
         // by a sizer, interior children, or other means)
 

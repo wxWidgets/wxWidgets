@@ -1112,18 +1112,6 @@ method:\par
 }}
 
 
-\membersection{wxWindow::GetPureVirtualSize}\label{wxwindowgetpurevirtualsize}
-
-\constfunc{wxSize}{GetPureVirtualSize}{\void}
-
-This gets the virtual size of the window in pixels as it has been set
-by \helpref{SetVirtualSize}{wxwindowsetvirtualsize}.
-
-\helpref{GetSize}{wxwindowgetsize},\rtfsp
-\helpref{GetClientSize}{wxwindowgetclientsize},\rtfsp
-\helpref{GetVirtualSize}{wxwindowgetvirtualsize}
-
-
 \membersection{wxWindow::GetRect}\label{wxwindowgetrect}
 
 \constfunc{virtual wxRect}{GetRect}{\void}
@@ -1293,11 +1281,10 @@ Returns a pointer to the current validator for the window, or NULL if there is n
 
 \constfunc{wxSize}{GetVirtualSize}{\void}
 
-This gets the virtual size of the window in pixels as it has been set
-by \helpref{SetVirtualSize}{wxwindowsetvirtualsize} or the size of the
-client area, if it is larger. Use 
-\helpref{GetPureVirtualSize}{wxwindowgetpurevirtualsize} if you want
-to get the actual virtual height independent of the client size.
+This gets the virtual size of the window in pixels. By default it
+returns the client size of the window, but after a call to
+\helpref{SetVirtualSize}{wxwindowsetvirtualsize} it will return
+that size.
 
 \wxheading{Parameters}
 

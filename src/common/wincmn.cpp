@@ -789,10 +789,10 @@ void wxWindowBase::DoSetVirtualSize( int x, int y )
 
 wxSize wxWindowBase::DoGetVirtualSize() const
 {
-    wxSize  s( GetClientSize() );
+    if (m_virtualSize == wxDefaultSize)
+        return GetClientSize();
 
-    return wxSize( wxMax( m_virtualSize.GetWidth(), s.GetWidth() ),
-                   wxMax( m_virtualSize.GetHeight(), s.GetHeight() ) );
+    return m_virtualSize;
 }
 
 // ----------------------------------------------------------------------------

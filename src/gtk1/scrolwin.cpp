@@ -351,7 +351,7 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
 
     // Setting hints here should arguably be deprecated, but without it
     // a sizer might override this manual scrollbar setting in old code.
-    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    // m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
     m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
@@ -371,7 +371,7 @@ void wxScrolledWindow::AdjustScrollbars()
 
     m_targetWindow->GetClientSize( &w, &h );
     m_targetWindow->GetVirtualSize( &vw, &vh );
-
+    
     if (m_xScrollPixelsPerLine == 0)
     {
         m_hAdjust->upper = 1.0;
@@ -380,10 +380,16 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
-        m_hAdjust->upper = vw / m_xScrollPixelsPerLine;
+        m_hAdjust->upper = (vw+m_xScrollPixelsPerLine-1) / m_xScrollPixelsPerLine;
+        m_hAdjust->page_size = w / m_xScrollPixelsPerLine;
         m_hAdjust->page_increment = w / m_xScrollPixelsPerLine;
-        m_hAdjust->page_size = m_hAdjust->page_increment;
 
+        // Special case. When client and virtual size are very close but
+        // the client is big enough, kill scrollbar.
+        
+        if ((m_hAdjust->page_size < m_hAdjust->upper) && (w >= vw)) 
+            m_hAdjust->page_size += 1.0;
+        
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
 
@@ -408,9 +414,12 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
-        m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
+        m_vAdjust->upper = (vh+m_yScrollPixelsPerLine-1) / m_yScrollPixelsPerLine;
+        m_vAdjust->page_size = h / m_yScrollPixelsPerLine;
         m_vAdjust->page_increment = h / m_yScrollPixelsPerLine;
-        m_vAdjust->page_size = m_vAdjust->page_increment;
+        
+        if ((m_vAdjust->page_size < m_vAdjust->upper) && (h >= vh)) 
+            m_vAdjust->page_size += 1.0;
 
         if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
         {
