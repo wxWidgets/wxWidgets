@@ -56,6 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "streamsc"
 
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/stream.h>
 #include <wx/list.h>
 

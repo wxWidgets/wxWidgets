@@ -582,6 +582,12 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         val = apply(htmlc.wxHtmlWindow_GetParser,(self,) + _args, _kwargs)
         if val: val = wxHtmlWinParserPtr(val) 
         return val
+    def ScrollToAnchor(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_ScrollToAnchor,(self,) + _args, _kwargs)
+        return val
+    def HasAnchor(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_HasAnchor,(self,) + _args, _kwargs)
+        return val
     def base_OnLinkClicked(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_base_OnLinkClicked,(self,) + _args, _kwargs)
         return val

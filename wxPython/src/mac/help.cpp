@@ -1238,7 +1238,6 @@ SWIGEXPORT(void) inithelpc() {
 	 PyDict_SetItemString(d,"wxID_CONTEXT_HELP", PyInt_FromLong((long) wxID_CONTEXT_HELP));
 	 PyDict_SetItemString(d,"wxEVT_HELP", PyInt_FromLong((long) wxEVT_HELP));
 	 PyDict_SetItemString(d,"wxEVT_DETAILED_HELP", PyInt_FromLong((long) wxEVT_DETAILED_HELP));
-	 PyDict_SetItemString(d,"wxEVT_CONTEXT_MENU", PyInt_FromLong((long) wxEVT_CONTEXT_MENU));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

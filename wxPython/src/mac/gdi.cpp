@@ -172,6 +172,12 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         delete [] cArray;
         return icon;
     }
+
+    wxIcon* wxIconFromBitmap(const wxBitmap& bmp) {
+        wxIcon* icon = new wxIcon();
+        icon->CopyFromBitmap(bmp);
+        return icon;
+    }
                               // Alternate 'constructor'
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
@@ -473,6 +479,40 @@ static PyObject *_wrap_wxIconFromXPMData(PyObject *self, PyObject *args, PyObjec
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxIcon *)wxIconFromXPMData(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxIconFromBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    wxBitmap * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "bmp", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIconFromBitmap",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconFromBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxIcon *)wxIconFromBitmap(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1455,7 +1495,7 @@ static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     wxBitmap * _result;
     wxString * _arg0;
-    wxBitmapType  _arg1 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
+    wxBitmapType  _arg1 = (wxBitmapType ) wxBITMAP_TYPE_ANY;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "name","type", NULL };
     char _ptemp[128];
@@ -1605,7 +1645,7 @@ static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxBitmap * _arg0;
     wxString * _arg1;
-    wxBitmapType  _arg2 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
+    wxBitmapType  _arg2 = (wxBitmapType ) wxBITMAP_TYPE_ANY;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","name","type", NULL };
@@ -12195,6 +12235,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIconFromBitmap", (PyCFunction) _wrap_wxIconFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconFromXPMData", (PyCFunction) _wrap_wxIconFromXPMData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEmptyIcon", (PyCFunction) _wrap_wxEmptyIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMaskColour", (PyCFunction) _wrap_wxMaskColour, METH_VARARGS | METH_KEYWORDS },

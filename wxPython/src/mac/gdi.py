@@ -1273,6 +1273,11 @@ def wxIconFromXPMData(*_args, **_kwargs):
     if val: val = wxIconPtr(val); val.thisown = 1
     return val
 
+def wxIconFromBitmap(*_args, **_kwargs):
+    val = apply(gdic.wxIconFromBitmap,_args,_kwargs)
+    if val: val = wxIconPtr(val); val.thisown = 1
+    return val
+
 def wxStockCursor(*_args, **_kwargs):
     val = apply(gdic.wxStockCursor,_args,_kwargs)
     if val: val = wxCursorPtr(val); val.thisown = 1

@@ -40,10 +40,13 @@ from printfw import *
 from sizers import *
 
 from filesys import *
-class wxHtmlBookRecordPtr :
+class wxHtmlBookRecordPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetBookFile(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlBookRecord_GetBookFile,(self,) + _args, _kwargs)
+        return val
     def GetTitle(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlBookRecord_GetTitle,(self,) + _args, _kwargs)
         return val
@@ -61,6 +64,18 @@ class wxHtmlBookRecordPtr :
         return val
     def GetContentsEnd(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlBookRecord_GetContentsEnd,(self,) + _args, _kwargs)
+        return val
+    def SetTitle(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlBookRecord_SetTitle,(self,) + _args, _kwargs)
+        return val
+    def SetBasePath(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlBookRecord_SetBasePath,(self,) + _args, _kwargs)
+        return val
+    def SetStart(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlBookRecord_SetStart,(self,) + _args, _kwargs)
+        return val
+    def GetFullPath(self, *_args, **_kwargs):
+        val = apply(htmlhelpc.wxHtmlBookRecord_GetFullPath,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxHtmlBookRecord instance at %s>" % (self.this,)
