@@ -130,22 +130,21 @@ wxString wxToolBarTimer::helpString;
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar,
-                                          int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
-                                          wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString)
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
 {
-    return new wxToolBarTool(tbar, id, bitmap1, bitmap2, toggle,
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
                              clientData, shortHelpString, longHelpString);
 }
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar, wxControl *control)
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    return new wxToolBarTool(tbar, control);
+    return new wxToolBarTool(this, control);
 }
 
 void wxToolBarTool::Init()
@@ -156,8 +155,11 @@ void wxToolBarTool::Init()
 
 wxToolBarTool::~wxToolBarTool()
 {
-    XtDestroyWidget(m_widget);
-    XmDestroyPixmap(DefaultScreenOfDisplay((Display*)wxGetDisplay()), m_pixmap);
+    if ( m_widget )
+        XtDestroyWidget(m_widget);
+    if ( m_pixmap )
+        XmDestroyPixmap(DefaultScreenOfDisplay((Display*)wxGetDisplay()),
+                        m_pixmap);
 }
 
 // ----------------------------------------------------------------------------
@@ -383,6 +385,8 @@ bool wxToolBar::Realize()
                         insensPixmap2 = XCreateInsensitivePixmap((Display*) wxGetDisplay(), pixmap2);
                     }
 
+                    tool->SetPixmap(pixmap2);
+
                     XtVaSetValues (button,
                             XmNindicatorOn, False,
                             XmNshadowThickness, 2,
@@ -413,6 +417,9 @@ bool wxToolBar::Realize()
                         pixmap2 = (Pixmap) bmp.GetArmPixmap(button);
 
                     }
+
+                    tool->SetPixmap(pixmap2);
+
                     // Normal button
                     XtVaSetValues(button,
                             XmNlabelPixmap, pixmap,
@@ -420,6 +427,7 @@ bool wxToolBar::Realize()
                             XmNarmPixmap, pixmap2,
                             NULL);
                 }
+
                 XtManageChild(button);
 
                 {
@@ -447,48 +455,53 @@ bool wxToolBar::Realize()
     return TRUE;
 }
 
-wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
-                                              wxCoord WXUNUSED(y)) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
+                                                  wxCoord WXUNUSED(y)) const
 {
     wxFAIL_MSG( _T("TODO") );
 
-    return (wxToolBarTool *)NULL;
+    return (wxToolBarToolBase *)NULL;
 }
 
-bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarTool *tool)
+bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
     tool->Attach(this);
 
     return TRUE;
 }
 
-bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarTool *tool)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
     tool->Detach();
 
     return TRUE;
 }
 
-void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     XtSetSensitive(tool->GetButtonWidget(), (Boolean) enable);
 }
 
-void wxToolBar::DoToggleTool(wxToolBarTool *tool, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *toolBase, bool toggle)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     XmToggleButtonSetState(tool->GetButtonWidget(), (Boolean) toggle, False);
 }
 
-void wxToolBar::DoSetToggle(wxToolBarTool *tool, bool toggle)
+void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
+                            bool WXUNUSED(toggle))
 {
-    wxFAIL_MSG( _T("TODO") );
+    // nothing to do
 }
 
 // ----------------------------------------------------------------------------
 // Motif callbacks
 // ----------------------------------------------------------------------------
 
-wxToolBarTool *wxToolBar::FindToolByWidget(WXWidget w) const
+wxToolBarToolBase *wxToolBar::FindToolByWidget(WXWidget w) const
 {
     wxToolBarToolsList::Node* node = m_tools.GetFirst();
     while ( node )
@@ -502,7 +515,7 @@ wxToolBarTool *wxToolBar::FindToolByWidget(WXWidget w) const
         node = node->GetNext();
     }
 
-    return (wxToolBarTool *)NULL;
+    return (wxToolBarToolBase *)NULL;
 }
 
 static void wxToolButtonCallback(Widget w,
@@ -510,7 +523,7 @@ static void wxToolButtonCallback(Widget w,
                                  XtPointer WXUNUSED(ptr))
 {
     wxToolBar *toolBar = (wxToolBar *) clientData;
-    wxToolBarTool *tool = toolBar->FindToolByWidget((WXWidget) w);
+    wxToolBarToolBase *tool = toolBar->FindToolByWidget((WXWidget) w);
     if ( !tool )
         return;
 
@@ -534,7 +547,7 @@ static void wxToolButtonPopupCallback(Widget w,
     static const int delayMilli = 800;
 
     wxToolBar* toolBar = (wxToolBar*) client_data;
-    wxToolBarTool *tool = toolBar->FindToolByWidget((WXWidget) w);
+    wxToolBarToolBase *tool = toolBar->FindToolByWidget((WXWidget) w);
 
     if ( !tool )
         return;

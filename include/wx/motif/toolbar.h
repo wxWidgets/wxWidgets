@@ -44,26 +44,35 @@ public:
     virtual ~wxToolBar();
 
     // override/implement base class virtuals
-    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     virtual bool Realize();
 
     // implementation from now on
 
     // find tool by widget
-    wxToolBarTool *FindToolByWidget(WXWidget w) const;
+    wxToolBarToolBase *FindToolByWidget(WXWidget w) const;
 
 protected:
     // common part of all ctors
     void Init();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
-    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)
