@@ -469,6 +469,8 @@ if os.name == 'nt':
     if UNDEF_NDEBUG:
         defines.append( ('NDEBUG',) )  # using a 1-tuple makes it do an undef
 
+    if HYBRID:
+        defines.append( ('__NO_VC_CRTDBG__', None) )
 
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
