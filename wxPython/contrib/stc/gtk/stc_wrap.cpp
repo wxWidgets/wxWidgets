@@ -14179,6 +14179,46 @@ static PyObject *_wrap_StyledTextCtrl_Allocate(PyObject *, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_FindColumn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line",(char *) "column", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_FindColumn",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (int)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->FindColumn(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -17068,6 +17108,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_SetCharsDefault", (PyCFunction) _wrap_StyledTextCtrl_SetCharsDefault, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_Allocate", (PyCFunction) _wrap_StyledTextCtrl_Allocate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_FindColumn", (PyCFunction) _wrap_StyledTextCtrl_FindColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -18738,6 +18779,12 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_LEX_BASH", SWIG_From_int((int)(62))); 
     }
     {
+        PyDict_SetItemString(d,"STC_LEX_ASN1", SWIG_From_int((int)(63))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_VHDL", SWIG_From_int((int)(64))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_From_int((int)(1000))); 
     }
     {
@@ -19461,6 +19508,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_ERR_TIDY", SWIG_From_int((int)(19))); 
     }
     {
+        PyDict_SetItemString(d,"STC_ERR_JAVA_STACK", SWIG_From_int((int)(20))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_BAT_DEFAULT", SWIG_From_int((int)(0))); 
     }
     {
@@ -19999,6 +20049,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_CSS_SINGLESTRING", SWIG_From_int((int)(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSS_IDENTIFIER2", SWIG_From_int((int)(15))); 
     }
     {
         PyDict_SetItemString(d,"STC_POV_DEFAULT", SWIG_From_int((int)(0))); 
@@ -20685,6 +20738,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_AU3_PREPROCESSOR", SWIG_From_int((int)(11))); 
     }
     {
+        PyDict_SetItemString(d,"STC_AU3_SPECIAL", SWIG_From_int((int)(12))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_APDL_DEFAULT", SWIG_From_int((int)(0))); 
     }
     {
@@ -20700,16 +20756,28 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STC_APDL_STRING", SWIG_From_int((int)(4))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_WORD", SWIG_From_int((int)(5))); 
+        PyDict_SetItemString(d,"STC_APDL_OPERATOR", SWIG_From_int((int)(5))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_COMMAND", SWIG_From_int((int)(6))); 
+        PyDict_SetItemString(d,"STC_APDL_WORD", SWIG_From_int((int)(6))); 
     }
     {
         PyDict_SetItemString(d,"STC_APDL_PROCESSOR", SWIG_From_int((int)(7))); 
     }
     {
-        PyDict_SetItemString(d,"STC_APDL_FUNCTION", SWIG_From_int((int)(8))); 
+        PyDict_SetItemString(d,"STC_APDL_COMMAND", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_SLASHCOMMAND", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_STARCOMMAND", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_ARGUMENT", SWIG_From_int((int)(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_APDL_FUNCTION", SWIG_From_int((int)(12))); 
     }
     {
         PyDict_SetItemString(d,"STC_SH_DEFAULT", SWIG_From_int((int)(0))); 
@@ -20752,6 +20820,84 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_SH_HERE_Q", SWIG_From_int((int)(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_DEFAULT", SWIG_From_int((int)(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_COMMENT", SWIG_From_int((int)(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_IDENTIFIER", SWIG_From_int((int)(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_STRING", SWIG_From_int((int)(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_OID", SWIG_From_int((int)(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_SCALAR", SWIG_From_int((int)(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_KEYWORD", SWIG_From_int((int)(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_ATTRIBUTE", SWIG_From_int((int)(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_DESCRIPTOR", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_TYPE", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ASN1_OPERATOR", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_DEFAULT", SWIG_From_int((int)(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_COMMENT", SWIG_From_int((int)(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_COMMENTLINEBANG", SWIG_From_int((int)(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_NUMBER", SWIG_From_int((int)(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STRING", SWIG_From_int((int)(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_OPERATOR", SWIG_From_int((int)(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_IDENTIFIER", SWIG_From_int((int)(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STRINGEOL", SWIG_From_int((int)(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_KEYWORD", SWIG_From_int((int)(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDOPERATOR", SWIG_From_int((int)(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_ATTRIBUTE", SWIG_From_int((int)(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDFUNCTION", SWIG_From_int((int)(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDPACKAGE", SWIG_From_int((int)(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_STDTYPE", SWIG_From_int((int)(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_VHDL_USERWORD", SWIG_From_int((int)(14))); 
     }
     {
         PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_From_int((int)(2011))); 
