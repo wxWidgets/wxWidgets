@@ -306,7 +306,7 @@ wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
     return dc;
 }
 
-bool wxWindowsPrinter::Setup(wxWindow *parent)
+bool wxWindowsPrinter::Setup(wxWindow *WXUNUSED(parent))
 {
 #if 0
     // We no longer expose that dialog
