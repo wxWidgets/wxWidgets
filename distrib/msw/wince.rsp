@@ -4,3 +4,6 @@ src/msw/wince/wxWindowsCE.vcw
 samples/minimal/minimalCE.vcp
 samples/minimal/minimalCE.vcw
 
+samples/widgets/widgetsCE.vcp
+samples/widgets/widgetsCE.vcw
+

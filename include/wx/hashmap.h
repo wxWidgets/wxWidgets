@@ -75,7 +75,9 @@ protected:
     static void** AllocTable( size_t sz )
     {
 #ifdef __WXWINCE__
-        return (void **)malloc(sz * sizeof(void*));
+        void** ptr = (void **)malloc(sz * sizeof(void*));
+        memset( ptr, 0, sz * sizeof(void*));
+        return ptr;
 #else
         return (void **)calloc(sz, sizeof(void*));
 #endif

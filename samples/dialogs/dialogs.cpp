@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifdef __WXWINCE__
+#include "wx/msw/wince/time.h"
+#endif
+
 #include "wx/colordlg.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"

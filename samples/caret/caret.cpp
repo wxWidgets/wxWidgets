@@ -272,8 +272,7 @@ void MyFrame::OnSetFontSize(wxCommandEvent& WXUNUSED(event))
 {
     long fontSize = wxGetNumberFromUser
                     (
-                        _T("The font size also determines the caret size so\n"
-                           "this demonstrates resizing the caret."),
+                        _T("The font size also determines the caret size so\nthis demonstrates resizing the caret."),
                         _T("Font size (in points):"),
                         _T("wxCaret sample"),
                         12, 1, 100,

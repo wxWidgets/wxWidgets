@@ -250,8 +250,8 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while ( node )
     {
-        wxWindow *win = node->GetData();
-        if (SendIdleEvents(win, event))
+        wxWindow *child = node->GetData();
+        if (SendIdleEvents(child, event))
             needMore = TRUE;
 
         node = node->GetNext();
