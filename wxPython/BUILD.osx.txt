@@ -63,6 +63,27 @@ get things from various CVS repositories as needed.
 7. Figure out what's wrong, figure out how to fix it, and then send
    the patches to me.  <wink>
 
+
+
+NOTE: If you get a compile error while building the wxGLCanvas module
+then this is likely due to a bug in one of Apple's header files.  This
+one character patch to
+/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Headers/fp.h
+will take care of it:
+
+
+--- fp.h.orig	2003-06-23 13:17:16.000000000 -0700
++++ fp.h	2003-06-23 13:51:46.000000000 -0700
+@@ -1893,7 +1893,7 @@
+ extern long double  scalbl(long double x, long n);
+ #if TYPE_LONGDOUBLE_IS_DOUBLE
+   #ifdef __cplusplus
+-    inline long double scalbl(long double x, long n) { return (long double) scalb((double)(x), (n)); }
++    inline long double scalbl(long double x, long n) { return (long double) scalbl((double)(x), (n)); }
+   #else
+     #define scalbl(x, n) ((long double) scalb((double)(x), (n)))
+   #endif
+
 --Robin
 
 
