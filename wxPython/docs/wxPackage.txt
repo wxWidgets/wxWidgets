@@ -21,9 +21,9 @@ Introduction
 ============
 
 Big things sometimes come in small packages.  This is certainly true
-of the new wx package, which is being introduced as a way to allow the
-"wx" prefix to be dropped from the names of all wxPython classes,
-functions, and constants.
+of the new wx package, which is being introduced in wxPython 2.4.1 as
+a way to allow the "wx" prefix to be dropped from the names of all
+wxPython classes, functions, and constants.
 
 
 Why change anything?

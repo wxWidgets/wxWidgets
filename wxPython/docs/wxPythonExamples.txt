@@ -21,8 +21,9 @@ Introduction
 ============
 
 This document illustrates example programs using wxPython.  All the
-examples make use of the new wx package syntax, which is a bit
-different than older examples you might come across.
+examples make use of the new wx package syntax introduced in wxPython
+2.4.1, which is a bit different than older examples you might come
+across.
 
 
 Background (with tongue firmly in cheek)
@@ -45,10 +46,11 @@ namespace transition easier for everyone, even Chicken Little.
 
    If you have no idea what I mean by the "wx namespace transition,"
    consider yourself lucky.  You can simply use these examples to
-   learn wxPython in its current state.  All you need to know is that
-   previous wxPython code used a slightly different syntax that some
-   folks (including me) considered ugly.  So we changed it.  And
-   that's when the sky starting falling...
+   learn wxPython in its current state (beginning with wxPython
+   version 2.4.1).  All you need to know is that previous wxPython
+   code used a slightly different syntax that some folks (including
+   me) considered ugly.  So we changed it.  And that's when the sky
+   starting falling...
 
    If you want more of the technical details, read the `wx package
    documentation`_.

@@ -21,7 +21,8 @@
 Introduction
 ============
 
-This is a tutorial for the wxPython GUI toolkit.
+This is a tutorial for the wxPython GUI toolkit.  It uses the new wx
+package syntax that was introduced in wxPython 2.4.1.
 
 
 What is wxPython?
