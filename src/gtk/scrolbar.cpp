@@ -36,6 +36,7 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 extern bool   g_blockEventsOnScroll;
+static wxEventType g_currentUpDownEvent = wxEVT_NULL;
 
 static const float sensitivity = 0.02;
 
@@ -70,6 +71,14 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
+    // throw a LINEUP / LINEDOWN event if necessary
+    if (g_currentUpDownEvent != wxEVT_NULL)
+    {
+        wxScrollEvent event( g_currentUpDownEvent, win->GetId(), value, orient );   
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+      }
+
 /*
     wxCommandEvent cevent( wxEVT_COMMAND_SCROLLBAR_UPDATED, win->GetId() );
     cevent.SetEventObject( win );
@@ -80,17 +89,39 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
 //-----------------------------------------------------------------------------
 // "button_press_event" from slider
 //-----------------------------------------------------------------------------
-
 static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
                                                  GdkEventButton *gdk_event,
                                                  wxScrollBar *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//  g_blockEventsOnScroll = TRUE;  doesn't work in DialogEd
+    // check if a LINEUP/LINEDOWN event must be thrown
+    // I suppose here the size of scrollbar top/bottom buttons is 16px height
+    if (gdk_event->type == GDK_BUTTON_PRESS && gdk_event->button == 1)
+    {
+        int scroll_height, mouse_pos;
 
-    // FIXME: there is no slider field any more, what was meant here?
+        // get the mouse position when the click is done 
+        if (widget->orientation == GTK_ORIENTATION_VERTICAL)
+        {   
+            scroll_height = GTK_WIDGET(widget)->allocation.height - 16;
+            mouse_pos = (int)gdk_event->y;
+        }
+        else
+        {
+            scroll_height = GTK_WIDGET(widget)->allocation.width - 16;
+            mouse_pos = (int)gdk_event->x;
+        }
+	
+        // compare mouse position to scrollbar height
+        if  (mouse_pos > scroll_height)
+            g_currentUpDownEvent = wxEVT_SCROLL_LINEDOWN;
+        else if (mouse_pos < 16)
+            g_currentUpDownEvent = wxEVT_SCROLL_LINEUP;
+      }
+
 #ifndef __WXGTK20__
+    // There is no slider field any more
     win->m_isScrolling = (gdk_event->window == widget->slider);
 #endif
 
@@ -109,8 +140,6 @@ gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-//  g_blockEventsOnScroll = FALSE;
-
     if (win->m_isScrolling)
     {
         wxEventType command = wxEVT_SCROLL_THUMBRELEASE;
@@ -123,6 +152,9 @@ gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
     }
 
     win->m_isScrolling = FALSE;
+
+    // reset the LINEUP/LINEDOWN flag when the mouse button is released
+    g_currentUpDownEvent = wxEVT_NULL;
 
     return FALSE;
 }
@@ -164,12 +196,10 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
                         "value_changed",
                         (GtkSignalFunc) gtk_scrollbar_callback,
                         (gpointer) this );
-
     gtk_signal_connect( GTK_OBJECT(m_widget),
                         "button_press_event",
                         (GtkSignalFunc)gtk_scrollbar_button_press_callback,
                         (gpointer) this );
-
     gtk_signal_connect( GTK_OBJECT(m_widget),
                         "button_release_event",
                         (GtkSignalFunc)gtk_scrollbar_button_release_callback,
