@@ -1021,7 +1021,7 @@ class LineShape(Shape):
         # Problem with pen - if not a solid pen, does strange things
         # to the arrowhead. So make (get) a new pen that's solid.
         if self._pen and self._pen.GetStyle() != wx.SOLID:
-            solid_pen = wx.ThePenList().FindOrCreatePen(self._pen.GetColour(), 1, wx.SOLID)
+            solid_pen = wx.ThePenList.FindOrCreatePen(self._pen.GetColour(), 1, wx.SOLID)
             if solid_pen:
                 dc.SetPen(solid_pen)
 
