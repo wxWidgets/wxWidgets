@@ -167,10 +167,13 @@ wxNO_BORDER = wxc.wxNO_BORDER
 wxUSER_COLOURS = wxc.wxUSER_COLOURS
 wxNO_3D = wxc.wxNO_3D
 wxTAB_TRAVERSAL = wxc.wxTAB_TRAVERSAL
+wxWANTS_CHARS = wxc.wxWANTS_CHARS
 wxHORIZONTAL = wxc.wxHORIZONTAL
 wxVERTICAL = wxc.wxVERTICAL
 wxBOTH = wxc.wxBOTH
 wxCENTER_FRAME = wxc.wxCENTER_FRAME
+wxCENTRE_ON_SCREEN = wxc.wxCENTRE_ON_SCREEN
+wxCENTER_ON_SCREEN = wxc.wxCENTER_ON_SCREEN
 wxSTAY_ON_TOP = wxc.wxSTAY_ON_TOP
 wxICONIZE = wxc.wxICONIZE
 wxMINIMIZE = wxc.wxMINIMIZE
@@ -189,6 +192,11 @@ wxDEFAULT_FRAME_STYLE = wxc.wxDEFAULT_FRAME_STYLE
 wxDEFAULT_DIALOG_STYLE = wxc.wxDEFAULT_DIALOG_STYLE
 wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
 wxFRAME_FLOAT_ON_PARENT = wxc.wxFRAME_FLOAT_ON_PARENT
+wxED_CLIENT_MARGIN = wxc.wxED_CLIENT_MARGIN
+wxED_BUTTONS_BOTTOM = wxc.wxED_BUTTONS_BOTTOM
+wxED_BUTTONS_RIGHT = wxc.wxED_BUTTONS_RIGHT
+wxED_STATIC_LINE = wxc.wxED_STATIC_LINE
+wxEXT_DIALOG_STYLE = wxc.wxEXT_DIALOG_STYLE
 wxCLIP_CHILDREN = wxc.wxCLIP_CHILDREN
 wxRETAINED = wxc.wxRETAINED
 wxBACKINGSTORE = wxc.wxBACKINGSTORE
@@ -249,6 +257,7 @@ wxTR_HAS_BUTTONS = wxc.wxTR_HAS_BUTTONS
 wxTR_EDIT_LABELS = wxc.wxTR_EDIT_LABELS
 wxTR_LINES_AT_ROOT = wxc.wxTR_LINES_AT_ROOT
 wxTR_MULTIPLE = wxc.wxTR_MULTIPLE
+wxTR_SINGLE = wxc.wxTR_SINGLE
 wxTR_HAS_VARIABLE_ROW_HEIGHT = wxc.wxTR_HAS_VARIABLE_ROW_HEIGHT
 wxLC_ICON = wxc.wxLC_ICON
 wxLC_SMALL_ICON = wxc.wxLC_SMALL_ICON
@@ -287,6 +296,8 @@ wxYES_NO = wxc.wxYES_NO
 wxCANCEL = wxc.wxCANCEL
 wxYES = wxc.wxYES
 wxNO = wxc.wxNO
+wxNO_DEFAULT = wxc.wxNO_DEFAULT
+wxYES_DEFAULT = wxc.wxYES_DEFAULT
 wxICON_EXCLAMATION = wxc.wxICON_EXCLAMATION
 wxICON_HAND = wxc.wxICON_HAND
 wxICON_QUESTION = wxc.wxICON_QUESTION
@@ -294,6 +305,14 @@ wxICON_INFORMATION = wxc.wxICON_INFORMATION
 wxICON_STOP = wxc.wxICON_STOP
 wxICON_ASTERISK = wxc.wxICON_ASTERISK
 wxICON_MASK = wxc.wxICON_MASK
+wxICON_WARNING = wxc.wxICON_WARNING
+wxICON_ERROR = wxc.wxICON_ERROR
+wxFORWARD = wxc.wxFORWARD
+wxBACKWARD = wxc.wxBACKWARD
+wxRESET = wxc.wxRESET
+wxHELP = wxc.wxHELP
+wxMORE = wxc.wxMORE
+wxSETUP = wxc.wxSETUP
 wxCENTRE = wxc.wxCENTRE
 wxCENTER = wxc.wxCENTER
 wxSIZE_AUTO_WIDTH = wxc.wxSIZE_AUTO_WIDTH
@@ -377,9 +396,29 @@ wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
 wxPD_ELAPSED_TIME = wxc.wxPD_ELAPSED_TIME
 wxPD_ESTIMATED_TIME = wxc.wxPD_ESTIMATED_TIME
 wxPD_REMAINING_TIME = wxc.wxPD_REMAINING_TIME
-wxNO_DEFAULT = wxc.wxNO_DEFAULT
 wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
+wxMB_DOCKABLE = wxc.wxMB_DOCKABLE
 wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
+wxLEFT = wxc.wxLEFT
+wxRIGHT = wxc.wxRIGHT
+wxUP = wxc.wxUP
+wxDOWN = wxc.wxDOWN
+wxALL = wxc.wxALL
+wxTOP = wxc.wxTOP
+wxBOTTOM = wxc.wxBOTTOM
+wxNORTH = wxc.wxNORTH
+wxSOUTH = wxc.wxSOUTH
+wxEAST = wxc.wxEAST
+wxWEST = wxc.wxWEST
+wxSTRETCH_NOT = wxc.wxSTRETCH_NOT
+wxSHRINK = wxc.wxSHRINK
+wxGROW = wxc.wxGROW
+wxEXPAND = wxc.wxEXPAND
+wxNB_FIXEDWIDTH = wxc.wxNB_FIXEDWIDTH
+wxLI_HORIZONTAL = wxc.wxLI_HORIZONTAL
+wxLI_VERTICAL = wxc.wxLI_VERTICAL
+wxHW_SCROLLBAR_NEVER = wxc.wxHW_SCROLLBAR_NEVER
+wxHW_SCROLLBAR_AUTO = wxc.wxHW_SCROLLBAR_AUTO
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -1040,6 +1079,69 @@ def EVT_COMMAND_SCROLL_PAGEDOWN(win, id, func):
 def EVT_COMMAND_SCROLL_THUMBTRACK(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK, func)
 
+#---
+def EVT_SCROLLWIN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_TOP,       func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_BOTTOM,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEUP,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEDOWN,  func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEUP,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEDOWN,  func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_THUMBTRACK,func)
+
+def EVT_SCROLLWIN_TOP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_TOP, func)
+
+def EVT_SCROLLWIN_BOTTOM(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_BOTTOM, func)
+
+def EVT_SCROLLWIN_LINEUP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEUP, func)
+
+def EVT_SCROLLWIN_LINEDOWN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEDOWN, func)
+
+def EVT_SCROLLWIN_PAGEUP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEUP, func)
+
+def EVT_SCROLLWIN_PAGEDOWN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEDOWN, func)
+
+def EVT_SCROLLWIN_THUMBTRACK(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_THUMBTRACK, func)
+
+
+
+# Scrolling, with an id
+def EVT_COMMAND_SCROLLWIN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_TOP,       func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_BOTTOM,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_THUMBTRACK,func)
+
+def EVT_COMMAND_SCROLLWIN_TOP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_TOP, func)
+
+def EVT_COMMAND_SCROLLWIN_BOTTOM(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_BOTTOM, func)
+
+def EVT_COMMAND_SCROLLWIN_LINEUP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEUP, func)
+
+def EVT_COMMAND_SCROLLWIN_LINEDOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEDOWN, func)
+
+def EVT_COMMAND_SCROLLWIN_PAGEUP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEUP, func)
+
+def EVT_COMMAND_SCROLLWIN_PAGEDOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEDOWN, func)
+
+def EVT_COMMAND_SCROLLWIN_THUMBTRACK(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_THUMBTRACK, func)
 
 # Convenience commands
 def EVT_BUTTON(win, id, func):

@@ -152,3 +152,4 @@ wx.wxPyPolygonShapePtr    = wxPyPolygonShapePtr
 wx.wxPyTextShapePtr       = wxPyTextShapePtr
 wx.wxShapeRegionPtr       = wxShapeRegionPtr
 wx.wxOGLConstraintPtr     = wxOGLConstraintPtr
+wx.wxControlPointPtr      = wxControlPointPtr

@@ -90,6 +90,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBackgroundColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
+    def GetChildren(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetChildren,(self,) + _args, _kwargs)
+        return val
     def GetCharHeight(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetCharHeight,(self,) + _args, _kwargs)
         return val
@@ -106,6 +109,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetConstraints(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetConstraints,(self,) + _args, _kwargs)
         if val: val = wxLayoutConstraintsPtr(val) 
+        return val
+    def GetEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetEventHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetFont,(self,) + _args, _kwargs)
@@ -214,6 +221,13 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Move(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Move,(self,) + _args, _kwargs)
         return val
+    def PopEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PopEventHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
+        return val
+    def PushEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PushEventHandler,(self,) + _args, _kwargs)
+        return val
     def PopupMenuXY(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PopupMenuXY,(self,) + _args, _kwargs)
         return val
@@ -295,6 +309,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetCursor(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetCursor,(self,) + _args, _kwargs)
+        return val
+    def SetEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetEventHandler,(self,) + _args, _kwargs)
         return val
     def SetTitle(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetTitle,(self,) + _args, _kwargs)
@@ -492,6 +509,9 @@ class wxMenuPtr(wxEvtHandlerPtr):
     def AppendMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_AppendMenu,(self,) + _args, _kwargs)
         return val
+    def AppendItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenu_AppendItem,(self,) + _args, _kwargs)
+        return val
     def AppendSeparator(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenu_AppendSeparator,(self,) + _args, _kwargs)
         return val
@@ -576,6 +596,27 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
     def FindItemForId(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_FindItemForId,(self,) + _args, _kwargs)
         if val: val = wxMenuItemPtr(val) 
+        return val
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_SetLabel,(self,) + _args, _kwargs)
+        return val
+    def EnableTop(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_EnableTop,(self,) + _args, _kwargs)
+        return val
+    def GetHelpString(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_GetHelpString,(self,) + _args, _kwargs)
+        return val
+    def GetLabel(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_GetLabel,(self,) + _args, _kwargs)
+        return val
+    def SetHelpString(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_SetHelpString,(self,) + _args, _kwargs)
+        return val
+    def GetLabelTop(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_GetLabelTop,(self,) + _args, _kwargs)
+        return val
+    def SetLabelTop(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_SetLabelTop,(self,) + _args, _kwargs)
         return val
     def GetMenuCount(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_GetMenuCount,(self,) + _args, _kwargs)

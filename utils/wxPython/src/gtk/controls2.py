@@ -457,6 +457,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         val = apply(controls2c.wxTreeCtrl_GetParent,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
+    def GetSelections(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetSelections,(self,) + _args, _kwargs)
+        return val
     def GetChildrenCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetChildrenCount,(self,) + _args, _kwargs)
         return val
@@ -484,6 +487,10 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def GetPrevVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetPrevVisible,(self,) + _args, _kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetLastChild(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetLastChild,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
     def AddRoot(self, *_args, **_kwargs):
@@ -540,6 +547,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def EditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_EditLabel,(self,) + _args, _kwargs)
+        return val
+    def SortChildren(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SortChildren,(self,) + _args, _kwargs)
         return val
     def SetItemBold(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetItemBold,(self,) + _args, _kwargs)
