@@ -1320,7 +1320,6 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
 
 
 
-
 //////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridTextCtrl, wxTextCtrl )
@@ -1349,11 +1348,15 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
 {
     switch ( event.KeyCode() )
     {
+#if 0
         case WXK_ESCAPE:
             m_grid->SetEditControlValue( startValue );
             SetInsertionPointEnd();
             break;
-
+#else
+        case WXK_ESCAPE:
+            m_grid->EnableCellEditControl( FALSE );
+#endif
         case WXK_UP:
         case WXK_DOWN:
         case WXK_LEFT:
@@ -1398,7 +1401,6 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
                 }
             }
             break;
-
         case WXK_HOME:
         case WXK_END:
             if ( m_isCellControl )
@@ -1656,6 +1658,20 @@ void wxGridWindow::OnEraseBackground(wxEraseEvent&)
 { }
 
 
+//-----------------------------------------------------------------------------
+// wxGridEditTimer (internal)
+//-----------------------------------------------------------------------------
+
+wxGridEditTimer::wxGridEditTimer( wxGrid *owner )
+{
+    m_owner = owner;
+}
+
+void wxGridEditTimer::Notify()
+{
+    m_owner->EnableCellEditControl( TRUE );
+}
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -1695,6 +1711,7 @@ wxGrid::~wxGrid()
 
     if (m_ownTable)
         delete m_table;
+    delete m_editTimer;
 }
 
 
@@ -1879,6 +1896,8 @@ void wxGrid::Init()
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = FALSE;
+
+    m_editTimer = new wxGridEditTimer ( this );
 
     m_rowResizeCursor = wxCursor( wxCURSOR_SIZENS );
     m_colResizeCursor = wxCursor( wxCURSOR_SIZEWE );
@@ -2317,6 +2336,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
+                    y = wxMax( y,
+                               m_rowBottoms[m_dragRowOrCol] -
+                               m_rowHeights[m_dragRowOrCol] +
+                               WXGRID_MIN_ROW_HEIGHT );
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -2479,6 +2502,10 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
+                    x = wxMax( x,
+                               m_colRights[m_dragRowOrCol] -
+                               m_colWidths[m_dragRowOrCol] +
+                               WXGRID_MIN_COL_WIDTH );
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -2756,6 +2783,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
+	    y = wxMax( y,
+		       m_rowBottoms[m_dragRowOrCol] -
+		       m_rowHeights[m_dragRowOrCol] +
+		       WXGRID_MIN_ROW_HEIGHT );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -2772,6 +2803,9 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
+	    x = wxMax( x,
+		       m_colRights[m_dragRowOrCol] -
+		       m_colWidths[m_dragRowOrCol] + WXGRID_MIN_COL_WIDTH );
             dc.SetLogicalFunction(wxINVERT);
             if ( m_dragLastPos >= 0 )
             {
@@ -2804,16 +2838,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         if ( event.LeftDown() )
         {
-            if ( event.AltDown() )
-            {
-                MakeCellVisible( coords );
-                SetCurrentCell( coords );
-                EnableCellEditControl( TRUE );
-            }
-            else
-            {
-                EnableCellEditControl( FALSE );
-            }
+            EnableCellEditControl( FALSE );
             if ( event.ShiftDown() )
             {
                 SelectBlock( m_currentCellCoords, coords );
@@ -2838,6 +2863,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         else if ( event.LeftDClick() )
         {
             EnableCellEditControl( FALSE );
+	    m_editTimer->Stop();
             if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
             {
                 SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
@@ -2863,6 +2889,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 // been hidden for drag-shrinking.
                 if ( IsCellEditControlEnabled() )
                     ShowCellEditControl();
+		if( IsEditable() && coords == m_currentCellCoords )
+		m_editTimer->Start( 100, TRUE );
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
             {
@@ -3556,11 +3584,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 if ( !IsCellEditControlEnabled() )
                     EnableCellEditControl( TRUE );
                 if ( IsCellEditControlEnabled() )
-		{
-		    event.SetEventObject( m_cellEditCtrl );
-		    m_cellEditCtrl->GetEventHandler()->ProcessEvent( event );
-		}
-		break;
+                {
+                    event.SetEventObject( m_cellEditCtrl );
+                    m_cellEditCtrl->GetEventHandler()->ProcessEvent( event );
+                }
+                break;
         }
     }
 
@@ -4061,7 +4089,7 @@ void wxGrid::ShowCellEditControl()
             int left, top, right, bottom;
             CalcScrolledPosition( rect.GetLeft(), rect.GetTop(), &left, &top );
             CalcScrolledPosition( rect.GetRight(), rect.GetBottom(), &right, &bottom );
-
+            left--; top--; right--; bottom--;   // cell is shifted by one pixel
             int cw, ch;
             m_gridWin->GetClientSize( &cw, &ch );
 

@@ -31,7 +31,7 @@
 #include "wx/textctrl.h"
 #include "wx/combobox.h"
 #include "wx/dynarray.h"
-
+#include "wx/timer.h"
 
 // Default parameters for wxGrid
 //
@@ -569,6 +569,20 @@ private:
 
     DECLARE_DYNAMIC_CLASS( wxGridTextCtrl )
     DECLARE_EVENT_TABLE()
+};
+
+//-----------------------------------------------------------------------------
+// wxGridEditTimer (internal)
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGridEditTimer: public wxTimer
+{
+ private:
+   wxGrid  *m_owner;
+
+ public:
+   wxGridEditTimer( wxGrid *owner );
+   void Notify();
 };
 
 // ----------------------------------------------------------------------------
@@ -1183,6 +1197,8 @@ protected:
     int  m_dragLastPos;
     int  m_dragRowOrCol;
     bool m_isDragging;
+
+    wxTimer	    *m_editTimer;
 
     wxGridCellCoords m_selectionStart;
 
