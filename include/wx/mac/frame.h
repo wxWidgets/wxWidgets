@@ -28,7 +28,8 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxMacToolTip ;
 
-class WXDLLEXPORT wxFrame: public wxFrameBase {
+class WXDLLEXPORT wxFrame: public wxFrameBase 
+{
 public:
     // construction
     wxFrame() { Init(); }
