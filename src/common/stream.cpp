@@ -114,7 +114,7 @@ void wxStreamBuffer::ResetBuffer()
 {
   m_stream->m_lasterror = wxStream_NOERROR;
   m_stream->m_lastcount = 0;
-  if (m_mode == read)
+  if (m_mode == read && m_flushable)
     m_buffer_pos = m_buffer_end;
   else
     m_buffer_pos = m_buffer_start;
