@@ -27,7 +27,7 @@
     #include "wx/bitmap.h"
 #endif
 
-#ifndef _WX_IMAGE_H_
+#if wxUSE_IMAGE && !defined(_WX_IMAGE_H_)
     #include "wx/image.h"
 #endif
 
@@ -56,6 +56,7 @@ void wxIconBundle::DeleteIcons()
 
 void wxIconBundle::AddIcon( const wxString& file, long type )
 {
+#if wxUSE_IMAGE
     size_t count = wxImage::GetImageCount( file, type );
     size_t i;
     wxImage image;
@@ -74,6 +75,7 @@ void wxIconBundle::AddIcon( const wxString& file, long type )
         AddIcon( *tmp );
         delete tmp;
     }
+#endif
 }
 
 const wxIcon& wxIconBundle::GetIcon( const wxSize& size ) const

@@ -45,6 +45,8 @@
     #include "wx/palette.h"
 #endif
 
+#if wxUSE_IMAGE
+
 #include "wx/image.h"
 #include "wx/quantize.h"
 
@@ -1654,4 +1656,7 @@ bool wxQuantize::Quantize(const wxImage& src,
 
     return TRUE;
 }
+
+#endif
+    // wxUSE_IMAGE
 
