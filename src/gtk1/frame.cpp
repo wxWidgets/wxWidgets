@@ -347,6 +347,33 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
     win->m_isIconized = TRUE;
 }
 
+//-----------------------------------------------------------------------------
+// "expose_event" of m_client
+//-----------------------------------------------------------------------------
+
+static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
+{
+    GtkPizza *pizza = GTK_PIZZA(widget);
+
+    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+        
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// "draw" of m_client
+//-----------------------------------------------------------------------------
+
+
+static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxWindow *win )
+{
+    GtkPizza *pizza = GTK_PIZZA(widget);
+
+    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
+		GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
+}
+
 // ----------------------------------------------------------------------------
 // wxFrame itself
 // ----------------------------------------------------------------------------
@@ -475,6 +502,12 @@ bool wxFrame::Create( wxWindow *parent,
     gtk_widget_show( m_mainWidget );
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
+
+    /* for m_mainWidget themes */
+    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
+                GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
+                GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 
 #ifdef __WXDEBUG__
     debug_focus_in( m_mainWidget, wxT("wxFrame::m_mainWidget"), name );
