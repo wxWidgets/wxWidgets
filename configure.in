@@ -1363,11 +1363,14 @@ dnl flush the cache because checking for libraries below might abort
 AC_CACHE_SAVE
 
 dnl check for glibc version
+dnl
+dnl VZ: I have no idea why had this check been there originally, but now
+dnl     it is only used to get the recursive mutexes under Linux
 if test "$USE_LINUX" = 1; then
     AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
         AC_TRY_COMPILE([#include <features.h>],
             [
-                #if !__GLIBC_PREREQ(2, 1)
+                #if (__GLIBC__ < 2) || (__GLIBC_MINOR__ < 1)
                     #error not glibc2.1
                 #endif
             ],

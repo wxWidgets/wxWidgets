@@ -9589,7 +9589,7 @@ else
 #include <features.h>
 int main() {
 
-                #if !__GLIBC_PREREQ(2, 1)
+                #if (__GLIBC__ < 2) || (__GLIBC_MINOR__ < 1)
                     #error not glibc2.1
                 #endif
             
