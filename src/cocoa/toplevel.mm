@@ -4,9 +4,9 @@
 // Author:      David Elliott 
 // Modified by:
 // Created:     2002/11/27
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// License:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -30,7 +30,6 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
-#include "wx/cocoa/mbarman.h"
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
