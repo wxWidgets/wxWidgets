@@ -18,6 +18,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/msgout.h"
 
 /*
   The macro which will be expanded to include the file and line number
@@ -288,6 +289,9 @@ public:
     // that are outstanding
     static int CountObjectsLeft(bool sinceCheckpoint = FALSE);
 
+    // This function is used to output the dump
+    static void OutputDumpLine(const wxChar *szFormat, ...);
+
 private:
     // Store these here to allow access to the list without
     // needing to have a wxMemStruct object.
@@ -299,6 +303,31 @@ private:
     static bool                 m_checkPrevious;
 };
 
+// Final cleanup (e.g. deleting the log object and doing memory leak checking)
+// will be delayed until all wxDebugContextDumpDelayCounter objects have been
+// destructed. Adding one wxDebugContextDumpDelayCounter per file will delay
+// memory leak checking until after destructing all global objects.
+class WXDLLIMPEXP_BASE wxDebugContextDumpDelayCounter
+{
+public:
+    wxDebugContextDumpDelayCounter() {
+        sm_count++;
+    }
+
+    ~wxDebugContextDumpDelayCounter() {
+        sm_count--;
+        if(!sm_count) DoDump();
+    }
+private:
+    void DoDump();
+    static int sm_count;
+};
+
+// make leak dump after all globals have been destructed
+static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_File;
+#define WXDEBUG_DUMPDELAYCOUNTER \
+    static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_Extra;
+
 // Output a debug message, in a system dependent fashion.
 void WXDLLIMPEXP_BASE wxTrace(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
 void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_PRINTF_2;
@@ -306,7 +335,9 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_P
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
 
-#else // else part for the #if __WXDEBUG__
+#else // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+
+#define WXDEBUG_DUMPDELAYCOUNTER
 
 // Borland C++ Builder 6 seems to have troubles with inline functions (see bug
 // 819700)
@@ -321,7 +352,7 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_P
 #define WXTRACE TRUE ? (void)0 : wxTrace
 #define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel
 
-#endif // __WXDEBUG__
+#endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #endif
     // _WX_MEMORYH__

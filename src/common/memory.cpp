@@ -343,7 +343,7 @@ void wxMemStruct::PrintNode ()
       msg += wxT("object");
 
     wxString msg2;
-    msg2.Printf(wxT(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at 0x%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
     wxLogMessage(msg);
@@ -356,7 +356,7 @@ void wxMemStruct::PrintNode ()
       msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
     msg += wxT("non-object data");
     wxString msg2;
-    msg2.Printf(wxT(" at $%lX, size %d\n"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at 0x%lX, size %d\n"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
     wxLogMessage(msg);
@@ -389,10 +389,10 @@ void wxMemStruct::Dump ()
       msg += wxT("unknown object class");
 
     wxString msg2(wxT(""));
-    msg2.Printf(wxT(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
+    msg2.Printf(wxT(" at 0x%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
-    wxLogMessage(msg);
+    wxDebugContext::OutputDumpLine(msg);
   }
   else
   {
@@ -401,9 +401,9 @@ void wxMemStruct::Dump ()
       msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
 
     wxString msg2(wxT(""));
-    msg2.Printf(wxT("non-object data at $%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
+    msg2.Printf(wxT("non-object data at 0x%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
     msg += msg2;
-    wxLogMessage(msg);
+    wxDebugContext::OutputDumpLine(msg);
   }
 }
 
@@ -613,18 +613,18 @@ bool wxDebugContext::Dump(void)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = WXSTRINGCAST appNameStr;
-        wxLogMessage(wxT("----- Memory dump of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
     }
     else
     {
-      wxLogMessage( wxT("----- Memory dump -----") );
+      OutputDumpLine( wxT("----- Memory dump -----") );
     }
   }
 
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
-  wxLogMessage( wxT("") );
-  wxLogMessage( wxT("") );
+  OutputDumpLine( wxT("") );
+  OutputDumpLine( wxT("") );
 
   return TRUE;
 #else
@@ -669,11 +669,11 @@ bool wxDebugContext::PrintStatistics(bool detailed)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = WXSTRINGCAST appNameStr;
-        wxLogMessage(wxT("----- Memory statistics of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
     }
     else
     {
-      wxLogMessage( wxT("----- Memory statistics -----") );
+      OutputDumpLine( wxT("----- Memory statistics -----") );
     }
   }
 
@@ -730,22 +730,22 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   {
     while (list)
     {
-      wxLogMessage(wxT("%ld objects of class %s, total size %ld"),
+      OutputDumpLine(wxT("%ld objects of class %s, total size %ld"),
           list->instanceCount, list->instanceClass, list->totalSize);
       wxDebugStatsStruct *old = list;
       list = old->next;
       free((char *)old);
     }
-    wxLogMessage(wxT(""));
+    OutputDumpLine(wxT(""));
   }
 
   SetDebugMode(currentMode);
 
-  wxLogMessage(wxT("Number of object items: %ld"), noObjectNodes);
-  wxLogMessage(wxT("Number of non-object items: %ld"), noNonObjectNodes);
-  wxLogMessage(wxT("Total allocated size: %ld"), totalSize);
-  wxLogMessage(wxT(""));
-  wxLogMessage(wxT(""));
+  OutputDumpLine(wxT("Number of object items: %ld"), noObjectNodes);
+  OutputDumpLine(wxT("Number of non-object items: %ld"), noNonObjectNodes);
+  OutputDumpLine(wxT("Total allocated size: %ld"), totalSize);
+  OutputDumpLine(wxT(""));
+  OutputDumpLine(wxT(""));
 
   return TRUE;
 #else
@@ -857,6 +857,31 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
 
   return n ;
 }
+
+// This function is used to output the dump
+void wxDebugContext::OutputDumpLine(const wxChar *szFormat, ...)
+{
+    // a buffer of 2048 bytes should be long enough for a file name
+    // and a class name
+    wxChar buf[2048];
+    int count;
+    va_list argptr;
+    va_start(argptr, szFormat);
+    buf[sizeof(buf)-1] = _T('\0');
+
+    // keep 3 bytes for a \r\n\0
+    count = wxVsnprintf(buf, sizeof(buf)-3, szFormat, argptr);
+
+    if ( count < 0 )
+        count = sizeof(buf)-3;
+    buf[count]=_T('\r');
+    buf[count+1]=_T('\n');
+    buf[count+2]=_T('\0');
+
+    wxMessageOutputDebug dbgout;
+    dbgout.Printf(buf);
+}
+
 
 #if USE_THREADSAFE_MEMORY_ALLOCATION
 static bool memSectionOk = FALSE;
@@ -1075,5 +1100,28 @@ void wxTraceLevel(int, const wxChar * ...)
 #endif
 }
 
-#endif
+//----------------------------------------------------------------------------
+// Final cleanup after all global objects in all files have been destructed
+//----------------------------------------------------------------------------
+
+// Don't set it to 0 by dynamic initialization
+// Some compilers will realy do the asignment later
+// All global variables are initialized to 0 at the very beginning, and this is just fine.
+int wxDebugContextDumpDelayCounter::sm_count;
+
+void wxDebugContextDumpDelayCounter::DoDump()
+{
+    if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
+    {
+        wxDebugContext::OutputDumpLine(wxT("There were memory leaks.\n"));
+        wxDebugContext::Dump();
+        wxDebugContext::PrintStatistics();
+    }
+}
+
+// Even if there is nothing else, make sure that there is at
+// least one clenup counter object
+static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_One;
+
+#endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
