@@ -781,7 +781,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
         //                T.path = remove_dot_segments(T.path);
         //             endif;
         //             T.query = R.query;
-        if (m_path[(const size_t&)0] != '/')
+        if (!m_path.StartsWith(wxT("/")))
         {
             //Marge paths
             const wxChar* op = m_path.c_str();
