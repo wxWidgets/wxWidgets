@@ -8025,6 +8025,62 @@ static PyObject *_wrap_wxTextCtrl_SetEditable(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxTextCtrl_IsSingleLine(_swigobj)  (_swigobj->IsSingleLine())
+static PyObject *_wrap_wxTextCtrl_IsSingleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_IsSingleLine",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_IsSingleLine. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextCtrl_IsSingleLine(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_IsMultiLine(_swigobj)  (_swigobj->IsMultiLine())
+static PyObject *_wrap_wxTextCtrl_IsMultiLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_IsMultiLine",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_IsMultiLine. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextCtrl_IsMultiLine(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void  wxTextCtrl_write(wxTextCtrl *self,const wxString & text) {
             self->AppendText(text);
         }
@@ -8067,7 +8123,7 @@ static PyObject *_wrap_wxTextCtrl_write(PyObject *self, PyObject *args, PyObject
 }
 
 static wxString  wxTextCtrl_GetString(wxTextCtrl *self,long  from,long  to) {
-            return self->GetValue().Mid(from, to-from);
+            return self->GetValue().Mid(from, to - from);
         }
 static PyObject *_wrap_wxTextCtrl_GetString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11742,6 +11798,8 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxScrollBar", (PyCFunction) _wrap_new_wxScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetString", (PyCFunction) _wrap_wxTextCtrl_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_write", (PyCFunction) _wrap_wxTextCtrl_write, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_IsMultiLine", (PyCFunction) _wrap_wxTextCtrl_IsMultiLine, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_IsSingleLine", (PyCFunction) _wrap_wxTextCtrl_IsSingleLine, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetEditable", (PyCFunction) _wrap_wxTextCtrl_SetEditable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SelectAll", (PyCFunction) _wrap_wxTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetSelection", (PyCFunction) _wrap_wxTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },

@@ -299,7 +299,7 @@ static PyObject *_wrap_new_wxFSFile(PyObject *self, PyObject *args, PyObject *kw
         _arg0 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        _arg0 = wxPyCBInputStream_create(_obj0, FALSE);
         if (_arg0 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;

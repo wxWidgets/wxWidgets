@@ -2335,8 +2335,8 @@ static PyObject *_wrap_wxListEvent_m_item_get(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxListEvent_GetCode(_swigobj)  (_swigobj->GetCode())
-static PyObject *_wrap_wxListEvent_GetCode(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxListEvent_GetKeyCode(_swigobj)  (_swigobj->GetKeyCode())
+static PyObject *_wrap_wxListEvent_GetKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxListEvent * _arg0;
@@ -2344,18 +2344,18 @@ static PyObject *_wrap_wxListEvent_GetCode(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListEvent_GetCode",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxListEvent_GetKeyCode",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_GetCode. Expected _wxListEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_GetKeyCode. Expected _wxListEvent_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxListEvent_GetCode(_arg0);
+    _result = (int )wxListEvent_GetKeyCode(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6218,8 +6218,8 @@ static PyObject *_wrap_wxTreeEvent_GetKeyEvent(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxTreeEvent_GetCode(_swigobj)  (_swigobj->GetCode())
-static PyObject *_wrap_wxTreeEvent_GetCode(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTreeEvent_GetKeyCode(_swigobj)  (_swigobj->GetKeyCode())
+static PyObject *_wrap_wxTreeEvent_GetKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxTreeEvent * _arg0;
@@ -6227,18 +6227,18 @@ static PyObject *_wrap_wxTreeEvent_GetCode(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeEvent_GetCode",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeEvent_GetKeyCode",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_GetCode. Expected _wxTreeEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_GetKeyCode. Expected _wxTreeEvent_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxTreeEvent_GetCode(_arg0);
+    _result = (int )wxTreeEvent_GetKeyCode(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10649,7 +10649,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "new_wxPreTreeCtrl", (PyCFunction) _wrap_new_wxPreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTreeEvent_GetCode", (PyCFunction) _wrap_wxTreeEvent_GetCode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_GetKeyCode", (PyCFunction) _wrap_wxTreeEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetKeyEvent", (PyCFunction) _wrap_wxTreeEvent_GetKeyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetPoint", (PyCFunction) _wrap_wxTreeEvent_GetPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetOldItem", (PyCFunction) _wrap_wxTreeEvent_GetOldItem, METH_VARARGS | METH_KEYWORDS },
@@ -10760,7 +10760,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListEvent_GetPoint", (PyCFunction) _wrap_wxListEvent_GetPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetColumn", (PyCFunction) _wrap_wxListEvent_GetColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetIndex", (PyCFunction) _wrap_wxListEvent_GetIndex, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListEvent_GetCode", (PyCFunction) _wrap_wxListEvent_GetCode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListEvent_GetKeyCode", (PyCFunction) _wrap_wxListEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_item_get", (PyCFunction) _wrap_wxListEvent_m_item_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_pointDrag_get", (PyCFunction) _wrap_wxListEvent_m_pointDrag_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_m_col_get", (PyCFunction) _wrap_wxListEvent_m_col_get, METH_VARARGS | METH_KEYWORDS },
