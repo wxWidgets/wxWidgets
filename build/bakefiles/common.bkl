@@ -137,6 +137,9 @@
     <set var="WXLIB_XML">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('xml')))</if>
     </set>
+    <set var="WXLIB_XRC">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('xrc')))</if>
+    </set>
     <set var="WXLIB_ODBC">
         <if cond="MONOLITHIC=='0' and USE_ODBC=='1'">
             $(mk.evalExpr(wxwin.mkLibName('odbc')))
