@@ -63,6 +63,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)
 
 bool wxToolBarToolBase::Enable(bool enable)
 {
+    if ( m_enabled == enable )
+        return false;
+
     m_enabled = enable;
 
     return true;
@@ -72,6 +75,9 @@ bool wxToolBarToolBase::Toggle(bool toggle)
 {
     wxASSERT_MSG( CanBeToggled(), _T("can't toggle this tool") );
 
+    if ( m_toggled == toggle )
+        return false;
+
     m_toggled = toggle;
 
     return true;
@@ -80,6 +86,8 @@ bool wxToolBarToolBase::Toggle(bool toggle)
 bool wxToolBarToolBase::SetToggle(bool toggle)
 {
     wxItemKind kind = toggle ? wxITEM_CHECK : wxITEM_NORMAL;
+    if ( m_kind == kind )
+        return false;
 
     m_kind = kind;
 
@@ -88,6 +96,9 @@ bool wxToolBarToolBase::SetToggle(bool toggle)
 
 bool wxToolBarToolBase::SetShortHelp(const wxString& help)
 {
+    if ( m_shortHelpString == help )
+        return false;
+
     m_shortHelpString = help;
 
     return true;
@@ -95,6 +106,9 @@ bool wxToolBarToolBase::SetShortHelp(const wxString& help)
 
 bool wxToolBarToolBase::SetLongHelp(const wxString& help)
 {
+    if ( m_longHelpString == help )
+        return false;
+
     m_longHelpString = help;
 
     return true;
