@@ -201,17 +201,17 @@ void wxWindowCocoaScroller::ClientSizeToSize(int &width, int &height)
         hasHorizontalScroller: [m_cocoaNSScrollView hasHorizontalScroller]
         hasVerticalScroller: [m_cocoaNSScrollView hasVerticalScroller]
         borderType: [m_cocoaNSScrollView borderType]];
-    width = frameSize.width;
-    height = frameSize.height;
+    width = (int)frameSize.width;
+    height = (int)frameSize.height;
 }
 
 void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
 {
     NSSize nssize = [m_cocoaNSScrollView contentSize];
     if(x)
-        *x = nssize.width;
+        *x = (int)nssize.width;
     if(y)
-        *y = nssize.height;
+        *y = (int)nssize.height;
 }
 
 void wxWindowCocoaScroller::Cocoa_FrameChanged(void)
