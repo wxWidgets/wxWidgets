@@ -421,6 +421,10 @@ private:
                        const wxListItemAttr *attr,
                        bool highlight);
 
+    // draw the text on the DC with the correct justification; also add an
+    // ellipsis if the text is too large to fit in the current width
+    void DrawTextFormatted(wxDC *dc, const wxString &text, int col, int x, int y, int width);
+
     // these are only used by GetImage/SetImage above, we don't support images
     // with subitems at the public API level yet
     void SetImage( int index, int image );
@@ -1738,13 +1742,67 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             width -= ix;
         }
 
-        wxDCClipper clipper(*dc, xOld, y, width, rect.height);
+        wxDCClipper clipper(*dc, xOld, y, width - 8, rect.height);
 
         if ( item->HasText() )
         {
-            dc->DrawText( item->GetText(), xOld, y );
+            DrawTextFormatted(dc, item->GetText(), col, xOld, y, width - 8);
         }
     }
+}
+
+void wxListLineData::DrawTextFormatted( wxDC *dc,
+                                        const wxString &text,
+					int col,
+                                        int x,
+					int y,
+					int width )
+{
+    wxString drawntext, ellipsis;
+    wxCoord w, h, base_w;
+    wxListItem item;
+
+    // determine if the string can fit inside the current width
+    dc->GetTextExtent(text, &w, &h);
+
+    // if it can, draw it
+    if (w <= width) {
+        m_owner->GetColumn(col, item);
+        if (item.m_format == wxLIST_FORMAT_LEFT)
+            dc->DrawText(text, x, y);
+        else if (item.m_format == wxLIST_FORMAT_RIGHT)
+            dc->DrawText(text, x + width - w, y);
+        else if (item.m_format == wxLIST_FORMAT_CENTER)
+            dc->DrawText(text, x + ((width - w) / 2), y);
+
+    // otherwise, truncate and add an ellipsis if possible
+    } else {
+
+        // determine the base width
+        ellipsis = wxString(wxT("..."));
+        dc->GetTextExtent(ellipsis, &base_w, &h);
+
+        // continue until we have enough space or only one character left
+        drawntext = text.Left(text.Length() - 1);
+        while (drawntext.Length() > 1) {
+            dc->GetTextExtent(drawntext, &w, &h);
+            if (w + base_w <= width)
+                break;
+            drawntext = drawntext.Left(drawntext.Length() - 1);
+        }
+
+        // if still not enough space, remove ellipsis characters
+        while (ellipsis.Length() > 0 && w + base_w > width) {
+          ellipsis = ellipsis.Left(ellipsis.Length() - 1);
+          dc->GetTextExtent(ellipsis, &base_w, &h);
+        }
+
+        // now draw the text
+        dc->DrawText(drawntext, x, y);
+        dc->DrawText(ellipsis, x + w, y);
+
+    }
+
 }
 
 bool wxListLineData::Highlight( bool on )
