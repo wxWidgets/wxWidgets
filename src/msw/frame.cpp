@@ -422,6 +422,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
     if (!menu_bar)
     {
+        delete m_frameMenuBar;
         m_frameMenuBar = NULL;
         return;
     }

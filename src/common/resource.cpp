@@ -1935,6 +1935,7 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { _T("wxTRANSPARENT_WINDOW"), wxTRANSPARENT_WINDOW},
   { _T("wxNO_BORDER"), wxNO_BORDER},
   { _T("wxCLIP_CHILDREN"), wxCLIP_CHILDREN},
+  { _T("wxTAB_TRAVERSAL"), 0}, // Compatibility only
 
   { _T("wxTINY_CAPTION_HORIZ"), wxTINY_CAPTION_HORIZ},
   { _T("wxTINY_CAPTION_VERT"), wxTINY_CAPTION_VERT},
