@@ -131,7 +131,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
  * Generalized clipboard implementation by Matthew Flatt
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxClipboardBase)
+IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
 wxClipboard::wxClipboard()
 {
