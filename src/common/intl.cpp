@@ -2238,6 +2238,8 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     {
         return wxFONTENCODING_CP950;
     }
+#elif defined(__WXMAC__)
+    return wxMacGetFontEncFromSystemEnc( CFStringGetSystemEncoding() ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
