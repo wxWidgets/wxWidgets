@@ -673,20 +673,20 @@ void wxExpr::WriteClause(FILE* stream)  // Write this expression as a top-level 
   if (node)
   {
     node->WriteExpr(stream);
-    wxFprintf( stream, wxT("(") );
+    fprintf( stream, "(" );
     node = node->next;
     bool first = TRUE;
     while (node)
     {
       if (!first)
-        wxFprintf( stream, wxT("  ") );
+        fprintf( stream, "  " );
       node->WriteExpr(stream);
       node = node->next;
       if (node) 
-        wxFprintf( stream, wxT(",\n") );
+        fprintf( stream, ",\n" );
       first = FALSE;
     }
-    wxFprintf( stream, wxT(").\n\n") );
+    fprintf( stream, ").\n\n" );
   }
 }
 
@@ -699,40 +699,40 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
   // I don't want to turn optimization off since it's needed
   // for reading in files quickly.
 #if defined(__WATCOMC__)
-  wxChar buf[2];
-  wxSprintf(buf, wxT(""));
+  char buf[2];
+  sprintf(buf, "");
 #endif
 
   switch (type)
   {
     case wxExprInteger:
     {
-      wxFprintf( stream, wxT("%ld"), value.integer );
+      fprintf( stream, "%ld", value.integer );
       break;
     }
     case wxExprReal:
     {
       double f = value.real;
-      wxFprintf( stream, wxT("%.6g"), f);
+      fprintf( stream, "%.6g", f);
       break;
     }
     case wxExprString:
     {
-      wxFprintf( stream, wxT("\"") );
+      fprintf( stream, "\"" );
       size_t i;
       const wxWX2MBbuf val = wxConvLibc.cWX2MB(value.string);
       size_t len = strlen(val);
       for (i = 0; i < len; i++)
       {
-        wxChar ch = val[i];
-        if (ch == wxT('"') || ch == wxT('\\'))
-        wxFprintf( stream, wxT("\\") );
-        wxChar tmp[2];
+        char ch = val[i];
+        if (ch == '"' || ch == '\\')
+        fprintf( stream, "\\" );
+        char tmp[2];
         tmp[0] = ch;
         tmp[1] = 0;
-        wxFprintf( stream, tmp );
+        fprintf( stream, tmp );
       }
-      wxFprintf( stream, wxT("\"") );
+      fprintf( stream, "\"" );
       break;
     }
     case wxExprWord:
@@ -752,12 +752,12 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
       }
 
       if (quote_it)
-        wxFprintf( stream ,wxT("'") );
+        fprintf( stream ,"'" );
 
-      wxFprintf( stream, (const wxChar*) val );
+      fprintf( stream, val );
 
       if (quote_it)
-        wxFprintf( stream, wxT("'") );
+        fprintf( stream, "'" );
 
       break;
     }
@@ -774,20 +774,20 @@ void wxExpr::WriteExpr(FILE* stream)    // Write as any other subexpression
           wxExpr *arg1 = expr->next;
           wxExpr *arg2 = arg1->next;
           arg1->WriteExpr(stream);
-          wxFprintf( stream, wxT(" = ") );
+          fprintf( stream, " = " );
           arg2->WriteExpr(stream);
         }
         else
         {
-          wxFprintf( stream, wxT("[") );
+          fprintf( stream, "[" );
           while (expr)
           {
             expr->WriteExpr(stream);
             expr = expr->next;
             if (expr) 
-	      wxFprintf( stream, wxT(", ") );
+	        fprintf( stream, ", " );
           }
-          wxFprintf( stream, wxT("]") );
+          fprintf( stream, "]" );
         }
       }
       break;
