@@ -365,6 +365,12 @@ bool wxHtmlWindow::HistoryBack()
 
     if (m_HistoryPos < 1) return FALSE;
 
+    // store scroll position into history item:
+    int x, y;
+    ViewStart(&x, &y);
+    m_History[m_HistoryPos].SetPos(y);
+
+    // go to previous position:
     m_HistoryPos--;
 
     l = m_History[m_HistoryPos].GetPage();
