@@ -31,8 +31,9 @@
             streams/memstream.cpp
             streams/sstream.cpp
             streams/zlibstream.cpp
-			uris/uris.cpp
+            uris/uris.cpp
         </sources>
+        <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
 
