@@ -45,6 +45,6 @@ include/wx_pb.h
 include/wx/mac/*.h
 include/wx/mac/private/*.h
 
-samples/samples.r
+samples/sample.r
 samples/minimal/minimal.pbproj/project.pbxproj
 
