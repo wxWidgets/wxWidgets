@@ -132,7 +132,7 @@ public:
     {   wxTextCtrl::SelectAll(); }
     virtual bool CanCopy() const
     {   return wxTextCtrl::CanCopy(); }
-    virtual bool CanCut() const = 0
+    virtual bool CanCut() const
     {   return wxTextCtrl::CanCut(); }
     virtual bool CanPaste() const
     {   return wxTextCtrl::CanPaste(); }
