@@ -96,8 +96,10 @@ public:
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
+#if wxUSE_PROGRESSDLG
     void OnUpdateShowProgress( wxUpdateUIEvent& event );
     void OnShowProgress( wxCommandEvent &event );
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
@@ -123,8 +125,10 @@ public:
 
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
+#if wxUSE_GAUGE
     wxGauge       *m_gauge,
                   *m_gaugeVert;
+#endif // wxUSE_GAUGE
 #if wxUSE_SLIDER
     wxSlider      *m_slider;
 #endif // wxUSE_SLIDER
@@ -133,7 +137,9 @@ public:
     wxButton      *m_lbSelectThis;
 #if wxUSE_SPINBTN
     wxSpinButton  *m_spinbutton;
+#if wxUSE_PROGRESSDLG
     wxButton      *m_btnProgress;
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
@@ -399,13 +405,18 @@ const int  ID_RADIOBUTTON_2     = 167;
 
 const int  ID_SET_FONT          = 170;
 
+#if wxUSE_GAUGE
 const int  ID_GAUGE             = 180;
+#endif // wxUSE_GAUGE
+
 #if wxUSE_SLIDER
 const int  ID_SLIDER            = 181;
 #endif // wxUSE_SLIDER
 
 const int  ID_SPIN              = 182;
+#if wxUSE_PROGRESSDLG
 const int  ID_BTNPROGRESS       = 183;
+#endif // wxUSE_PROGRESSDLG
 const int  ID_BUTTON_LABEL      = 184;
 const int  ID_SPINCTRL          = 185;
 
@@ -472,8 +483,10 @@ EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
+#if wxUSE_PROGRESSDLG
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
 EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
@@ -532,8 +545,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_CHOICE
     m_combo = NULL;
     m_radio = NULL;
+#if wxUSE_GAUGE
     m_gauge = NULL;
     m_gaugeVert = NULL;
+#endif // wxUSE_GAUGE
 #if wxUSE_SLIDER
     m_slider = NULL;
 #endif // wxUSE_SLIDER
@@ -542,7 +557,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_lbSelectThis = NULL;
 #if wxUSE_SPINBTN
     m_spinbutton = NULL;
+#if wxUSE_PROGRESSDLG
     m_btnProgress = NULL;
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
     m_spinctrl = NULL;
@@ -574,7 +591,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // image ids
     enum
     {
-        Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
+        Image_List,
+        Image_Choice,
+        Image_Combo,
+        Image_Text,
+        Image_Radio,
+#if wxUSE_GAUGE
+        Image_Gauge,
+#endif // wxUSE_GAUGE
+        Image_Max
     };
 
     // fill the image list
@@ -587,20 +612,36 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     imagelist-> Add( wxBitmap( combo_xpm ));
     imagelist-> Add( wxBitmap( text_xpm ));
     imagelist-> Add( wxBitmap( radio_xpm ));
+#if wxUSE_GAUGE
     imagelist-> Add( wxBitmap( gauge_xpm ));
+#endif // wxUSE_GAUGE
     m_book->SetImageList(imagelist);
 #elif defined(__WXMSW__)
     // load images from resources
     enum
     {
-        Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
+        Image_List,
+        Image_Choice,
+        Image_Combo,
+        Image_Text,
+        Image_Radio,
+#if wxUSE_GAUGE
+        Image_Gauge,
+#endif // wxUSE_GAUGE
+        Image_Max
     };
     wxImageList *imagelist = new wxImageList(16, 16, false, Image_Max);
 
     static const wxChar *s_iconNames[Image_Max] =
     {
-        _T("list"), _T("choice"), _T("combo"), _T("text"), _T("radio"),
-        _T("gauge")
+        _T("list")
+        , _T("choice")
+        , _T("combo")
+        , _T("text")
+        , _T("radio")
+#if wxUSE_GAUGE
+        , _T("gauge")
+#endif // wxUSE_GAUGE
     };
 
     for ( size_t n = 0; n < Image_Max; n++ )
@@ -622,7 +663,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #define    Image_Combo -1
 #define    Image_Text -1
 #define    Image_Radio -1
+#if wxUSE_GAUGE
 #define    Image_Gauge -1
+#endif // wxUSE_GAUGE
 #define    Image_Max -1
 
 #endif
@@ -784,8 +827,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
 
+#if wxUSE_PROGRESSDLG
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, _T("&Show progress dialog"),
                                   wxPoint(300, 160) );
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
@@ -1326,8 +1371,10 @@ void MyPanel::OnUpdateLabel( wxCommandEvent &event )
 
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 {
+#if wxUSE_GAUGE
     m_gauge->SetValue( m_slider->GetValue() );
     m_gaugeVert->SetValue( m_slider->GetValue() / 2 );
+#endif // wxUSE_GAUGE
 }
 
 #endif // wxUSE_SLIDER
@@ -1424,6 +1471,8 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
     m_text->AppendText(value);
 }
 
+#if wxUSE_PROGRESSDLG
+
 void MyPanel::OnUpdateShowProgress( wxUpdateUIEvent& event )
 {
     event.Enable( m_spinbutton->GetValue() > 0 );
@@ -1479,6 +1528,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+#endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 
 void MyPanel::OnSizerCheck( wxCommandEvent &event)
