@@ -765,9 +765,8 @@ class Size(object):
         elif index == 1: self.height = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Size, self.Get())
 
 
 class SizePtr(Size):
@@ -863,9 +862,8 @@ class RealPoint(object):
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0.0, 0.0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.RealPoint, self.Get())
 
 
 class RealPointPtr(RealPoint):
@@ -977,9 +975,8 @@ class Point(object):
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Point, self.Get())
 
 
 class PointPtr(Point):
@@ -1251,9 +1248,8 @@ class Rect(object):
         elif index == 3: self.height = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0,0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Rect, self.Get())
 
 
 class RectPtr(Rect):
@@ -1425,10 +1421,8 @@ class Point2D(object):
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0.0, 0.0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
-
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Point2D, self.Get())
 
 
 class Point2DPtr(Point2D):
@@ -7103,7 +7097,7 @@ class Sizer(Object):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
-
+    # for backwards compatibility only, please do not use in new code
     AddWindow = AddSizer = AddSpacer = Add
     PrependWindow = PrependSizer = PrependSpacer = Prepend
     InsertWindow = InsertSizer = InsertSpacer = Insert
@@ -7486,9 +7480,8 @@ class GBPosition(object):
         elif index == 1: self.SetCol(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.GBPosition, self.Get())
 
     row = property(GetRow, SetRow)
     col = property(GetCol, SetCol)
@@ -7552,9 +7545,8 @@ class GBSpan(object):
         elif index == 1: self.SetColspan(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.GBSpan, self.Get())
 
     rowspan = property(GetRowspan, SetRowspan)
     colspan = property(GetColspan, SetColspan)
