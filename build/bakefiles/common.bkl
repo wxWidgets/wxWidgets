@@ -523,6 +523,10 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
         <mac_version>$(WXMACVERSION)</mac_version>
+
+        <!-- version info resources: -->
+        <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
+        <win32-res>src/msw/version.rc</win32-res>
     </template>
 
     <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">
