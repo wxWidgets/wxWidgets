@@ -431,6 +431,7 @@ void wxWindowMSW::Init()
     m_lastKeydownProcessed = false;
 
     m_childrenDisabled = NULL;
+    m_frozenness = 0;
 
     // wxWnd
     m_hMenu = 0;
@@ -1294,16 +1295,24 @@ static inline void SendSetRedraw(HWND hwnd, bool on)
 
 void wxWindowMSW::Freeze()
 {
-    SendSetRedraw(GetHwnd(), false);
+    if ( !m_frozenness++ )
+    {
+        SendSetRedraw(GetHwnd(), false);
+    }
 }
 
 void wxWindowMSW::Thaw()
 {
-    SendSetRedraw(GetHwnd(), true);
+    wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
 
-    // we need to refresh everything or otherwise he invalidated area is not
-    // repainted
-    Refresh();
+    if ( !--m_frozenness )
+    {
+        SendSetRedraw(GetHwnd(), true);
+
+        // we need to refresh everything or otherwise he invalidated area is not
+        // repainted
+        Refresh();
+    }
 }
 
 void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)

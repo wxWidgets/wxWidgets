@@ -74,6 +74,13 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
+2.5.2
+-----
+
+wxMSW:
+- wxWindow::Freeze()/Thaw() can now be nested
+
+
 2.5.1
 -----
 
