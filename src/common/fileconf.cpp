@@ -565,7 +565,16 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
 
     // add the line to linked list
     if ( bLocal )
+    {
       LineListAppend(strLine);
+
+      // let the root group have it start line as well
+      if ( !n )
+      {
+        m_pCurrentGroup->SetLine(m_linesTail);
+      }
+    }
+
 
     // skip leading spaces
     for ( pStart = strLine; wxIsspace(*pStart); pStart++ )
