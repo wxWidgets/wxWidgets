@@ -496,36 +496,34 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     }
     else // notebook still not empty
     {
-        // change the selected page if it was deleted or became invalid
-        int selNew;
-        if ( m_nSelection == int(GetPageCount()) )
+        int selNew = TabCtrl_GetCurSel(m_hwnd);
+        if (selNew != -1)
         {
-            // last page deleted, make the new last page the new selection
-            selNew = m_nSelection - 1;
+            // No selection change, just refresh the current selection.
+            // Because it could be that the slection index changed 
+            // we need to update it. 
+            // Note: this does not mean the selection it self changed.
+            m_nSelection = selNew;
+            m_pages[m_nSelection]->Refresh();
         }
-        else if ( int(nPage) <= m_nSelection )
+        else if (int(nPage) == m_nSelection)
         {
-            // we must show another page, even if it has the same index
-            selNew = m_nSelection;
-        }
-        else // nothing changes for the currently selected page
-        {
-            selNew = -1;
-
-            // we still must refresh the current page: this needs to be done
-            // for some unknown reason if the tab control shows the up-down
-            // control (i.e. when there are too many pages) -- otherwise after
-            // deleting a page nothing at all is shown
-            if (m_nSelection >= 0)
-                m_pages[m_nSelection]->Refresh();
-        }
-
-        if ( selNew != -1 )
-        {
+            // The selection was deleted.
+            
+            // Determine new selection.
+            if (m_nSelection == int(GetPageCount()))
+                selNew = m_nSelection - 1;
+            else
+                selNew = m_nSelection;
+            
             // m_nSelection must be always valid so reset it before calling
             // SetSelection()
             m_nSelection = -1;
             SetSelection(selNew);
+        }
+        else
+        {
+            wxFAIL; // Windows did not behave ok.
         }
     }
 
