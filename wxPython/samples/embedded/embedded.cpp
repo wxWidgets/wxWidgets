@@ -82,8 +82,8 @@ void MyApp::Init_wxPython()
     Py_Initialize();
     PyEval_InitThreads();
 
-    // Load the wxPython core API.  Imports the wxPython.wxc
-    // module and sets a pointer to a function table located there.
+    // Load the wxPython core API.  Imports the wx._core module and sets a
+    // local pointer to a function table located there.
     wxPyCoreAPI_IMPORT();
 
     // Save the current Python thread state and release the
@@ -95,9 +95,11 @@ void MyApp::Init_wxPython()
 MyApp::~MyApp()
 {
     // Restore the thread state and tell Python to cleanup after itself.
+    // wxPython will do its own cleanup as part of that process.
     wxPyEndAllowThreads(m_mainTState);
     Py_Finalize();
 }
+
 
 IMPLEMENT_APP(MyApp)
 
@@ -159,8 +161,8 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 
 char* python_code1 = "\
-from wxPython.wx import wxFrame\n\
-f = wxFrame(None, -1, 'Hello from wxPython!', size=(250, 150))\n\
+import wx\n\
+f = wx.Frame(None, -1, 'Hello from wxPython!', size=(250, 150))\n\
 f.Show()\n\
 ";
 
@@ -190,8 +192,8 @@ void MyFrame::RedirectStdio()
     // only on demand when something is printed, like a traceback.
     char* python_redirect = "\
 import sys\n\
-from wxPython.wx import wxPyOnDemandOutputWindow\n\
-output = wxPyOnDemandOutputWindow()\n\
+import wx\n\
+output = wx.PyOnDemandOutputWindow()\n\
 sys.stdin = sys.stderr = output\n\
 ";
     bool blocked = wxPyBeginBlockThreads();
@@ -253,7 +255,6 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     // wxPython object that wraps it.
     PyObject* arg = wxPyMake_wxObject(parent);
     wxASSERT(arg != NULL);
-
     PyObject* tuple = PyTuple_New(1);
     PyTuple_SET_ITEM(tuple, 0, arg);
     result = PyEval_CallObject(func, tuple);
