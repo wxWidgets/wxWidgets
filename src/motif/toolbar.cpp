@@ -29,6 +29,7 @@
 #include "wx/app.h"
 #include "wx/timer.h"
 #include "wx/toolbar.h"
+#include "wx/frame.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -193,18 +194,11 @@ bool wxToolBar::Create(wxWindow *parent,
                        long style,
                        const wxString& name)
 {
-    Init();
+    if( !wxControl::CreateControl( parent, id, pos, size, style,
+                                   wxDefaultValidator, name ) )
+        return FALSE;
 
-    m_windowId = id;
-
-    SetName(name);
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    m_foregroundColour = parent->GetForegroundColour();
-    m_windowStyle = style;
-
-    SetParent(parent);
-
-    if (parent) parent->AddChild(this);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -229,11 +223,19 @@ bool wxToolBar::Create(wxWindow *parent,
 
     m_mainWidget = (WXWidget) toolbar;
 
-    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
+    wxPoint rPos = pos;
+    wxSize  rSize = size;
+
+    if( rPos.x == -1 ) rPos.x = 0;
+    if( rPos.y == -1 ) rPos.y = 0;
+    if( rSize.x == -1 && GetParent() )
+        rSize.x = GetParent()->GetSize().x;
+
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  rPos.x, rPos.y, rSize.x, rSize.y);
 
     ChangeBackgroundColour();
 
@@ -254,6 +256,8 @@ bool wxToolBar::Realize()
         return TRUE;
     }
 
+    bool isVertical = GetWindowStyle() & wxTB_VERTICAL;
+
     // Separator spacing
     const int separatorSize = GetToolSeparation(); // 8;
     wxSize margins = GetToolMargins();
@@ -264,7 +268,7 @@ bool wxToolBar::Realize()
     int currentX = marginX;
     int currentY = marginY;
 
-    int buttonHeight = 0;
+    int buttonHeight = 0, buttonWidth = 0;
 
     int currentSpacing = 0;
 
@@ -284,15 +288,23 @@ bool wxToolBar::Realize()
                 wxControl* control = tool->GetControl();
                 wxSize sz = control->GetSize();
                 wxPoint pos = control->GetPosition();
-                // Allow a control to specify a y-offset by setting its initial position,
-                // but still don't allow it to position itself above the top margin.
+                // Allow a control to specify a y[x]-offset by setting
+                // its initial position, but still don't allow it to
+                // position itself above the top[left] margin.
                 int controlY = (pos.y > 0) ? currentY + pos.y : currentY;
-                control->Move(currentX, controlY);
-                currentX += sz.x + packing;
+                int controlX = (pos.x > 0) ? currentX + pos.x : currentX;
+                control->Move( isVertical ? controlX : currentX,
+                               isVertical ? currentY : controlY );
+                if ( isVertical )
+                    currentY += sz.y + packing;
+                else
+                    currentX += sz.x + packing;
 
                 break;
             }
             case wxTOOL_STYLE_SEPARATOR:
+                 // skip separators for vertical toolbars
+                if( isVertical ) break;
                 currentX += separatorSize;
                 break;
 
@@ -351,7 +363,6 @@ bool wxToolBar::Realize()
 
                     wxColour col;
                     col.SetPixel(backgroundPixel);
-
                     bmp = wxCreateMaskedBitmap(bmp, col);
 
                     tool->SetNormalBitmap(bmp);
@@ -367,7 +378,6 @@ bool wxToolBar::Realize()
                 else
                     XtVaGetValues(button, XmNarmColor, &backgroundPixel,
                             NULL);
-
                 wxColour col;
                 col.SetPixel(backgroundPixel);
 
@@ -462,8 +472,12 @@ bool wxToolBar::Realize()
                                   XmNwidth, &width,
                                   XmNheight, & height,
                                   NULL);
-                    currentX += width + packing;
+                    if ( isVertical )
+                        currentY += height + packing;
+                    else
+                        currentX += width + packing;
                     buttonHeight = wxMax(buttonHeight, height);
+                    buttonWidth = wxMax(buttonWidth, width);
                 }
 
                 XtAddEventHandler (button, EnterWindowMask | LeaveWindowMask,
@@ -476,7 +490,9 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
-    SetSize(-1, -1, currentX, buttonHeight + 2*marginY);
+    SetSize( -1, -1,
+             isVertical ? buttonWidth + 2 * marginX : currentX,
+             isVertical ? currentY : buttonHeight +  2*marginY );
 
     return TRUE;
 }
@@ -521,6 +537,39 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
                             bool WXUNUSED(toggle))
 {
     // nothing to do
+}
+
+void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    int old_width, old_height;
+    GetSize(&old_width, &old_height);
+
+    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
+    
+    // Correct width and height if needed.
+    if ( width == -1 || height == -1 )
+    {
+        int tmp_width, tmp_height;
+        GetSize(&tmp_width, &tmp_height);
+
+        if ( width == -1 )
+            width = tmp_width;
+        if ( height == -1 )
+            height = tmp_height;
+    }
+  
+    // We must refresh the frame size when the toolbar changes size
+    // otherwise the toolbar can be shown incorrectly
+    if ( old_width != width || old_height != height )
+    {
+        // But before we send the size event check it 
+        // we have a frame that is not being deleted.
+        wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+        if ( frame && !frame->IsBeingDeleted() )
+        {
+            frame->SendSizeEvent();
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------

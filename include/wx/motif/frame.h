@@ -61,7 +61,10 @@ public:
     
     // Create toolbar
 #if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
+    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
+                                     wxWindowID id = -1,
+                                     const wxString& name = wxToolBarNameStr);
+    virtual void SetToolBar(wxToolBar *toolbar);
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
     
@@ -88,6 +91,8 @@ public:
     void SetVisibleStatus( bool status ) { m_visibleStatus = status; }
 
     bool PreResize();
+
+    void SendSizeEvent();
 
     // for generic/mdig.h
     virtual void DoGetClientSize(int *width, int *height) const;    

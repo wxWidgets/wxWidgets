@@ -603,6 +603,13 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
+void wxFrame::SendSizeEvent()
+{
+    wxSizeEvent event(GetSize(), GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->AddPendingEvent(event);
+}
+
 #if wxUSE_TOOLBAR
 
 wxToolBar* wxFrame::CreateToolBar(long style,
@@ -615,6 +622,12 @@ wxToolBar* wxFrame::CreateToolBar(long style,
     }
 
     return m_frameToolBar;
+}
+
+void wxFrame::SetToolBar(wxToolBar *toolbar)
+{
+    wxFrameBase::SetToolBar(toolbar);
+    SendSizeEvent();
 }
 
 void wxFrame::PositionToolBar()
