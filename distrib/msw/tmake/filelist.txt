@@ -181,7 +181,7 @@ object.cpp	Common	Base
 objstrm.cpp	Common	Base
 odbc.cpp	Common	NotGTK,NotX,NotOS2
 paper.cpp	Common
-popupcmn.cpp	Common
+popupcmn.cpp	Common NotGTK
 prntbase.cpp	Common
 process.cpp	Common	Win32Only,Base
 protocol.cpp	Common	Socket,Base
@@ -404,7 +404,7 @@ menu.cpp	GTK
 minifram.cpp	GTK
 notebook.cpp	GTK
 pen.cpp	GTK	LowLevel
-popupwin.cpp	GTK	LowLevel
+popupwin.cpp	LowLevel
 radiobox.cpp	GTK
 radiobut.cpp	GTK
 region.cpp	GTK	LowLevel

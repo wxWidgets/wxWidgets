@@ -122,7 +122,6 @@ ALL_SOURCES = \
 		common/object.cpp \
 		common/objstrm.cpp \
 		common/paper.cpp \
-		common/popupcmn.cpp \
 		common/prntbase.cpp \
 		common/process.cpp \
 		common/protocol.cpp \
@@ -196,7 +195,6 @@ ALL_SOURCES = \
 		gtk/minifram.cpp \
 		gtk/notebook.cpp \
 		gtk/pen.cpp \
-		gtk/popupwin.cpp \
 		gtk/radiobox.cpp \
 		gtk/radiobut.cpp \
 		gtk/region.cpp \
@@ -667,7 +665,6 @@ COMMONOBJS = \
 		object.o \
 		objstrm.o \
 		paper.o \
-		popupcmn.o \
 		prntbase.o \
 		process.o \
 		protocol.o \
@@ -783,7 +780,6 @@ COMMONDEPS = \
 		object.d \
 		objstrm.d \
 		paper.d \
-		popupcmn.d \
 		prntbase.d \
 		process.d \
 		protocol.d \
@@ -1095,6 +1091,7 @@ GUI_LOWLEVEL_DEPS = \
 		icon.d \
 		main.d \
 		pen.d \
+		popupwin.d \
 		region.d \
 		settings.d \
 		timer.d \

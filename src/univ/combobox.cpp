@@ -88,7 +88,7 @@ public:
         SetBitmapSelected(bmpPressed);
         SetBitmapDisabled(bmpDisabled);
 
-        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
+//        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
     }
 
 protected:

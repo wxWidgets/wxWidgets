@@ -88,7 +88,6 @@ enum IndicatorStatus
     IndicatorStatus_Max
 };
 
-// ----------------------------------------------------------------------------
 // wxWin32Renderer: draw the GUI elements in Win32 style
 // ----------------------------------------------------------------------------
 
@@ -2682,6 +2681,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
 
 #else // !wxUSE_MENUS
 
+/*
 void wxWin32Renderer::DrawMenuBarItem(wxDC& WXUNUSED(dc),
                                       const wxRect& WXUNUSED(rectOrig),
                                       const wxString& WXUNUSED(label),
@@ -2718,6 +2718,7 @@ wxWin32Renderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
 {
     return NULL;
 }
+*/
 
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
