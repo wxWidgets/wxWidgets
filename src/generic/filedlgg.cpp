@@ -445,37 +445,29 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     if (name.length() == 2 && name[1u] == wxT(':'))
     {
         m_isDir = TRUE;
-        m_isExe = m_isLink = FALSE;
+        m_isExe =
+        m_isLink = FALSE;
         m_size = 0;
         return;
     }
-#endif
+#endif // __DOS__ || __WINDOWS__
 
     wxStructStat buff;
-    wxStat( m_fileName, &buff );
 
 #if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
-    struct stat lbuff;
-    lstat( m_fileName.fn_str(), &lbuff );
-    m_isLink = S_ISLNK( lbuff.st_mode );
-    struct tm *t = localtime( &lbuff.st_mtime );
-#else
+    lstat( m_fileName.fn_str(), &buff );
+    m_isLink = S_ISLNK( buff.st_mode );
+#else // no lstat()
+    wxStat( m_fileName, &buff );
     m_isLink = FALSE;
-    struct tm *t = localtime( &buff.st_mtime );
 #endif
 
-//  struct passwd *user = getpwuid( buff.st_uid );
-//  struct group *grp = getgrgid( buff.st_gid );
-
-#ifdef __VISUALC__
-    m_isDir = ((buff.st_mode & _S_IFDIR ) == _S_IFDIR );
-#else
-	m_isDir = S_ISDIR( buff.st_mode );
-#endif // VC++
-    m_isExe = ((buff.st_mode & wxS_IXUSR ) == wxS_IXUSR );
+    m_isDir = (buff.st_mode & S_IFDIR) != 0;
+    m_isExe = (buff.st_mode & wxS_IXUSR) != 0;
 
     m_size = buff.st_size;
 
+    const struct tm * const t = localtime( &buff.st_mtime );
     m_hour = t->tm_hour;
     m_minute = t->tm_min;
     m_month = t->tm_mon+1;
@@ -483,21 +475,10 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_year = t->tm_year;
     m_year += 1900;
 
-    char buffer[10];
-    sprintf( buffer, "%c%c%c",
-     ((( buff.st_mode & wxS_IRUSR ) == wxS_IRUSR ) ? 'r' : '-'),
-     ((( buff.st_mode & wxS_IWUSR ) == wxS_IWUSR ) ? 'w' : '-'),
-     ((( buff.st_mode & wxS_IXUSR ) == wxS_IXUSR ) ? 'x' : '-') );
-#if wxUSE_UNICODE
-    m_permissions = wxConvUTF8.cMB2WC( buffer );
-#else
-    m_permissions = buffer;
-#endif
-
-//    m_permissions.sprintf( wxT("%c%c%c"),
-//     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? wxT('r') : wxT('-')),
-//     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? wxT('w') : wxT('-')),
-//     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? wxT('x') : wxT('-')) );
+    m_permissions.Printf(_T("%c%c%c"),
+                         buff.st_mode & wxS_IRUSR ? _T('r') : _T('-'),
+                         buff.st_mode & wxS_IWUSR ? _T('w') : _T('-'),
+                         buff.st_mode & wxS_IXUSR ? _T('x') : _T('-'));
 }
 
 wxString wxFileData::GetName() const
@@ -1311,13 +1292,13 @@ void wxFileDialog::OnTextChange( wxCommandEvent &WXUNUSED(event) )
         // not get the file whose name they typed.
         if (m_list->GetSelectedItemCount() > 0)
         {
-    	    long item = m_list->GetNextItem(-1, wxLIST_NEXT_ALL,
+            long item = m_list->GetNextItem(-1, wxLIST_NEXT_ALL,
                 wxLIST_STATE_SELECTED);
             while ( item != -1 )
-    	    {
+            {
                 m_list->SetItemState(item,0, wxLIST_STATE_SELECTED);
                 item = m_list->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-    	    }
+            }
         }
     }
 }
