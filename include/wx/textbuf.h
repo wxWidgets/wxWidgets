@@ -43,7 +43,9 @@ enum wxTextFileType
 // wxTextBuffer
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_EXPORTED_ARRAY_INT(wxTextFileType, ArrayFileType);
+WX_DEFINE_USER_EXPORTED_ARRAY_INT(wxTextFileType,
+                                  wxArrayLinesType,
+                                  class WXDLLIMPEXP_BASE);
 
 #endif // wxUSE_TEXTBUFFER
 
@@ -188,8 +190,8 @@ protected:
     wxString m_strBufferName;  // name of the buffer
 
 private:
-    ArrayFileType m_aTypes;   // type of each line
-    wxArrayString m_aLines;   // lines of file
+    wxArrayLinesType m_aTypes;   // type of each line
+    wxArrayString    m_aLines;   // lines of file
 
     size_t        m_nCurLine; // number of current line in the buffer
 
