@@ -384,10 +384,12 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         y = (sizeDpy.y - h) / 2;
     }
 
+#ifndef __WXWINCE__
     if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
     {
         wxLogLastError(wxT("MoveWindow"));
     }
+#endif
 
     if ( !title.empty() )
     {
