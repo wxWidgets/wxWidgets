@@ -46,7 +46,6 @@ public:
 
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const { return m_fsIsShowing; };
     virtual void Raise();
 
     // implementation only from now on
@@ -146,15 +145,10 @@ protected:
     wxWindow             *m_winLastFocused;
 
     // Data to save/restore when calling ShowFullScreen
-    long                  m_fsStyle; // Passed to ShowFullScreen
-    wxRect                m_fsOldSize;
-    long                  m_fsOldWindowStyle;
     int                   m_fsStatusBarFields; // 0 for no status bar
     int                   m_fsStatusBarHeight;
     int                   m_fsToolBarHeight;
 //    WXHMENU               m_fsMenu;
-    bool                  m_fsIsMaximized;
-    bool                  m_fsIsShowing;
 
 private:
 #if wxUSE_TOOLTIPS

@@ -59,9 +59,8 @@ public:
 
     virtual bool Show(bool show = TRUE);
 
-    // FIXME -- not yet moved from wxFrame to wxTLW
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) { return FALSE; }
-    virtual bool IsFullScreen() const { return FALSE; }
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
     // implementation from now on
     // --------------------------
@@ -100,6 +99,13 @@ protected:
     // should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
+
+    // Data to save/restore when calling ShowFullScreen
+    long                  m_fsStyle; // Passed to ShowFullScreen
+    wxRect                m_fsOldSize;
+    long                  m_fsOldWindowStyle;
+    bool                  m_fsIsMaximized;
+    bool                  m_fsIsShowing;
 };
 
 // list of all frames and modeless dialogs
