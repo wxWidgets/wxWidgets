@@ -19,6 +19,10 @@ All (GUI):
 - Added style parameter to wxBufferedDC to allow buffering just the client, or
   the whole virtual area.
 
+Unix:
+
+- fixed build on Linux/AMD64
+
 wxGTK:
 
 - Improved wxSystemSettings::GetMetric() to work better with X11. (Mart Raudsepp)
