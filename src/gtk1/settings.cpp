@@ -17,7 +17,6 @@
 
 #include "wx/settings.h"
 #include "wx/debug.h"
-#include "wx/module.h"
 #include "wx/cmndata.h"
 #include "wx/fontutil.h"
 
@@ -28,17 +27,11 @@
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
 // ----------------------------------------------------------------------------
-// wxSystemSettingsModule
+// wxSystemObjects
 // ----------------------------------------------------------------------------
 
-class wxSystemSettingsModule : public wxModule
+struct wxSystemObjects
 {
-public:
-    virtual bool OnInit() { ms_instance = this; return TRUE; }
-    virtual void OnExit() { ms_instance = NULL; }
-
-    static wxSystemSettingsModule *ms_instance;
-
     wxColour m_colBtnFace,
              m_colBtnShadow,
              m_colBtnHighlight,
@@ -48,14 +41,9 @@ public:
              m_colBtnText;
 
     wxFont m_fontSystem;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
-
-wxSystemSettingsModule *wxSystemSettingsModule::ms_instance = NULL;
+static wxSystemObjects gs_objects;
 
 // ----------------------------------------------------------------------------
 // wxSystemSettings implementation
@@ -156,7 +144,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_MENUBAR:
         case wxSYS_COLOUR_3DLIGHT:
-            if (!wxSystemSettingsModule::ms_instance->m_colBtnFace.Ok())
+            if (!gs_objects.m_colBtnFace.Ok())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue) )
@@ -166,11 +154,11 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                     blue = 0x9c40;
                 }
 
-                wxSystemSettingsModule::ms_instance->m_colBtnFace = wxColour( red   >> SHIFT,
+                gs_objects.m_colBtnFace = wxColour( red   >> SHIFT,
                                                    green >> SHIFT,
                                                    blue  >> SHIFT );
             }
-            return wxSystemSettingsModule::ms_instance->m_colBtnFace;
+            return gs_objects.m_colBtnFace;
 
         case wxSYS_COLOUR_WINDOW:
             return *wxWHITE;
@@ -181,23 +169,23 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_BTNSHADOW:
         //case wxSYS_COLOUR_3DSHADOW:
-            if (!wxSystemSettingsModule::ms_instance->m_colBtnShadow.Ok())
+            if (!gs_objects.m_colBtnShadow.Ok())
             {
                 wxColour faceColour(GetColour(wxSYS_COLOUR_3DFACE));
-                wxSystemSettingsModule::ms_instance->m_colBtnShadow =
+                gs_objects.m_colBtnShadow =
                    wxColour((unsigned char) (faceColour.Red() * 0.666),
                             (unsigned char) (faceColour.Green() * 0.666),
                             (unsigned char) (faceColour.Blue() * 0.666));
             }
 
-            return wxSystemSettingsModule::ms_instance->m_colBtnShadow;
+            return gs_objects.m_colBtnShadow;
 
         case wxSYS_COLOUR_3DHIGHLIGHT:
         //case wxSYS_COLOUR_BTNHIGHLIGHT:
             return * wxWHITE;
 
         case wxSYS_COLOUR_HIGHLIGHT:
-            if (!wxSystemSettingsModule::ms_instance->m_colHighlight.Ok())
+            if (!gs_objects.m_colHighlight.Ok())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue,
@@ -209,14 +197,14 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                     blue = 0x9c40;
                 }
 
-                wxSystemSettingsModule::ms_instance->m_colHighlight = wxColour( red   >> SHIFT,
+                gs_objects.m_colHighlight = wxColour( red   >> SHIFT,
                                                         green >> SHIFT,
                                                         blue  >> SHIFT );
             }
-            return wxSystemSettingsModule::ms_instance->m_colHighlight;
+            return gs_objects.m_colHighlight;
 
         case wxSYS_COLOUR_LISTBOX:
-            if (!wxSystemSettingsModule::ms_instance->m_colListBox.Ok())
+            if (!gs_objects.m_colListBox.Ok())
             {
                 int red, green, blue;
                 if ( GetColourFromGTKWidget(red, green, blue,
@@ -224,16 +212,16 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                                             GTK_STATE_NORMAL,
                                             wxGTK_BASE) )
                 {
-                    wxSystemSettingsModule::ms_instance->m_colListBox = wxColour( red   >> SHIFT,
+                    gs_objects.m_colListBox = wxColour( red   >> SHIFT,
                                                           green >> SHIFT,
                                                           blue  >> SHIFT );
                 }
                 else
                 {
-                    wxSystemSettingsModule::ms_instance->m_colListBox = wxColour(*wxWHITE);
+                    gs_objects.m_colListBox = wxColour(*wxWHITE);
                 }
             }
-            return wxSystemSettingsModule::ms_instance->m_colListBox;
+            return gs_objects.m_colListBox;
 
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
@@ -241,7 +229,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
         case wxSYS_COLOUR_INFOTEXT:
-            if (!wxSystemSettingsModule::ms_instance->m_colBtnText.Ok())
+            if (!gs_objects.m_colBtnText.Ok())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue,
@@ -254,11 +242,11 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                     blue = 0;
                 }
 
-                wxSystemSettingsModule::ms_instance->m_colBtnText = wxColour( red   >> SHIFT,
+                gs_objects.m_colBtnText = wxColour( red   >> SHIFT,
                                                       green >> SHIFT,
                                                       blue  >> SHIFT );
             }
-            return wxSystemSettingsModule::ms_instance->m_colBtnText;
+            return gs_objects.m_colBtnText;
 
             // this (as well as wxSYS_COLOUR_INFOTEXT above) is used for
             // tooltip windows - Robert, please change this code to use the
@@ -267,15 +255,15 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return wxColour(255, 255, 225);
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
-            if (!wxSystemSettingsModule::ms_instance->m_colHighlightText.Ok())
+            if (!gs_objects.m_colHighlightText.Ok())
             {
                 wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
                 if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
-                    wxSystemSettingsModule::ms_instance->m_colHighlightText = wxColour(*wxBLACK);
+                    gs_objects.m_colHighlightText = wxColour(*wxBLACK);
                 else
-                    wxSystemSettingsModule::ms_instance->m_colHighlightText = wxColour(*wxWHITE);
+                    gs_objects.m_colHighlightText = wxColour(*wxWHITE);
             }
-            return wxSystemSettingsModule::ms_instance->m_colHighlightText;
+            return gs_objects.m_colHighlightText;
 
         case wxSYS_COLOUR_APPWORKSPACE:
             return *wxWHITE;    // ?
@@ -310,7 +298,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
         {
-            if (!wxSystemSettingsModule::ms_instance->m_fontSystem.Ok())
+            if (!gs_objects.m_fontSystem.Ok())
             {
 #ifdef __WXGTK20__
                 GtkWidget *widget = gtk_button_new();
@@ -321,20 +309,20 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 {  
                     wxNativeFontInfo info;  
                     info.description = def->font_desc;  
-                    wxSystemSettingsModule::ms_instance->m_fontSystem = wxFont(info);  
+                    gs_objects.m_fontSystem = wxFont(info);  
                 }  
                 else  
                 {  
                     const gchar *font_name =
                         _gtk_rc_context_get_default_font_name(gtk_settings_get_default());
-                    wxSystemSettingsModule::ms_instance->m_fontSystem = wxFont(wxString::FromAscii(font_name));
+                    gs_objects.m_fontSystem = wxFont(wxString::FromAscii(font_name));
                 }  
                 gtk_widget_destroy( widget );
 #else
-                wxSystemSettingsModule::ms_instance->m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+                gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
 #endif
             }
-            return wxSystemSettingsModule::ms_instance->m_fontSystem;
+            return gs_objects.m_fontSystem;
         }
 
         default:
