@@ -87,6 +87,23 @@ wxContextHelp::~wxContextHelp()
         EndContextHelp();
 }
 
+static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool push)
+{
+    if (push)
+        win->PushEventHandler(new wxContextHelpEvtHandler(help));
+    else
+        win->PopEventHandler();
+
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* child = (wxWindow*) node->Data();
+        wxPushOrPopEventHandlers(help, child, push);
+
+        node = node->Next();
+    }
+}
+
 // Begin 'context help mode'
 bool wxContextHelp::BeginContextHelp(wxWindow* win)
 {
@@ -103,7 +120,10 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     //    wxSetCursor(cursor);
 #endif
 
-    win->PushEventHandler(new wxContextHelpEvtHandler(this));
+    m_status = FALSE;
+
+//    win->PushEventHandler(new wxContextHelpEvtHandler(this));
+    wxPushOrPopEventHandlers(this, win, TRUE);
 
     win->CaptureMouse();
 
@@ -111,7 +131,8 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     win->ReleaseMouse();
 
-    win->PopEventHandler(TRUE);
+//    win->PopEventHandler(TRUE);
+    wxPushOrPopEventHandlers(this, win, FALSE);
 
     win->SetCursor(oldCursor);
 
@@ -173,7 +194,8 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
         (event.GetEventType() == wxEVT_ACTIVATE) ||
         (event.GetEventType() == wxEVT_MOUSE_CAPTURE_CHANGED))
     {
-        m_contextHelp->SetStatus(FALSE);
+        // May have already been set to TRUE by a left-click
+        //m_contextHelp->SetStatus(FALSE);
         m_contextHelp->EndContextHelp();
         return TRUE;
     }
