@@ -49,9 +49,10 @@ bool wxPyDoingCleanup = False;
 struct wxPyThreadState {
     unsigned long  tid;
     PyThreadState* tstate;
+    int            blocked;
 
     wxPyThreadState(unsigned long _tid=0, PyThreadState* _tstate=NULL)
-        : tid(_tid), tstate(_tstate) {}
+        : tid(_tid), tstate(_tstate), blocked(1) {}
 };
 
 #include <wx/dynarray.h>
@@ -895,21 +896,21 @@ unsigned long wxPyGetCurrentThreadId() {
     return wxThread::GetCurrentId();
 }
 
-static PyThreadState* gs_shutdownTState;
+static wxPyThreadState gs_shutdownTState;
 
 static
-PyThreadState* wxPyGetThreadState() {
+wxPyThreadState* wxPyGetThreadState() {
     if (wxPyTMutex == NULL) // Python is shutting down...
-        return gs_shutdownTState;
+        return &gs_shutdownTState;
 
     unsigned long ctid = wxPyGetCurrentThreadId();
-    PyThreadState* tstate = NULL;
+    wxPyThreadState* tstate = NULL;
 
     wxPyTMutex->Lock();
     for(size_t i=0; i < wxPyTStates->GetCount(); i++) {
         wxPyThreadState& info = wxPyTStates->Item(i);
         if (info.tid == ctid) {
-            tstate = info.tstate;
+            tstate = &info;
             break;
         }
     }
@@ -918,10 +919,11 @@ PyThreadState* wxPyGetThreadState() {
     return tstate;
 }
 
+
 static
 void wxPySaveThreadState(PyThreadState* tstate) {
     if (wxPyTMutex == NULL) { // Python is shutting down, assume a single thread...
-        gs_shutdownTState = tstate;
+        gs_shutdownTState.tstate = tstate;
         return;
     }
     unsigned long ctid = wxPyGetCurrentThreadId();
@@ -950,6 +952,7 @@ void wxPySaveThreadState(PyThreadState* tstate) {
 #endif
 
 
+
 // Calls from Python to wxWindows code are wrapped in calls to these
 // functions:
 
@@ -957,6 +960,7 @@ PyThreadState* wxPyBeginAllowThreads() {
 #ifdef WXP_WITH_THREAD
     PyThreadState* saved = PyEval_SaveThread();  // Py_BEGIN_ALLOW_THREADS;
     wxPySaveThreadState(saved);
+    wxPyGetThreadState()->blocked -= 1;
     return saved;
 #else
     return NULL;
@@ -965,6 +969,7 @@ PyThreadState* wxPyBeginAllowThreads() {
 
 void wxPyEndAllowThreads(PyThreadState* saved) {
 #ifdef WXP_WITH_THREAD
+    wxPyGetThreadState()->blocked += 1;
     PyEval_RestoreThread(saved);   // Py_END_ALLOW_THREADS;
 #endif
 }
@@ -976,17 +981,21 @@ void wxPyEndAllowThreads(PyThreadState* saved) {
 
 void wxPyBeginBlockThreads() {
 #ifdef WXP_WITH_THREAD
-    PyThreadState* tstate = wxPyGetThreadState();
-    PyEval_RestoreThread(tstate);
+    wxPyThreadState* tstate = wxPyGetThreadState();
+    if (tstate->blocked++ == 0) {  // if nested calls then do nothing
+        PyEval_RestoreThread(tstate->tstate);
+    }
 #endif
 }
 
 
 void wxPyEndBlockThreads() {
 #ifdef WXP_WITH_THREAD
-    // Is there any need to save it again?
-    // PyThreadState* tstate =
-    PyEval_SaveThread();
+    wxPyThreadState* tstate = wxPyGetThreadState();
+    tstate->blocked -= 1;
+    if ( tstate->blocked == 0) {  // if nested calls then do nothing
+        PyEval_SaveThread();
+    }
 #endif
 }
 
@@ -1336,31 +1345,34 @@ void wxPyCallback::EventThunker(wxEvent& event) {
         arg = wxPyConstructObject((void*)&event, className);
     }
 
-    // Call the event handler, passing the event object
-    tuple = PyTuple_New(1);
-    PyTuple_SET_ITEM(tuple, 0, arg);  // steals ref to arg
-    result = PyEval_CallObject(func, tuple);
-    if ( result ) {
-        Py_DECREF(result);   // result is ignored, but we still need to decref it
-        PyErr_Clear();       // Just in case...
-    } else {
+    if (!arg) {
         PyErr_Print();
-    }
-
-    if ( checkSkip ) {
-        // if the event object was one of our special types and
-        // it had been cloned, then we need to extract the Skipped
-        // value from the original and set it in the clone.
-        result = PyObject_CallMethod(arg, "GetSkipped", "");
+    } else {
+        // Call the event handler, passing the event object
+        tuple = PyTuple_New(1);
+        PyTuple_SET_ITEM(tuple, 0, arg);  // steals ref to arg
+        result = PyEval_CallObject(func, tuple);
         if ( result ) {
-            event.Skip(PyInt_AsLong(result));
-            Py_DECREF(result);
+            Py_DECREF(result);   // result is ignored, but we still need to decref it
+            PyErr_Clear();       // Just in case...
         } else {
             PyErr_Print();
         }
-    }
 
-    Py_DECREF(tuple);
+        if ( checkSkip ) {
+            // if the event object was one of our special types and
+            // it had been cloned, then we need to extract the Skipped
+            // value from the original and set it in the clone.
+            result = PyObject_CallMethod(arg, "GetSkipped", "");
+            if ( result ) {
+                event.Skip(PyInt_AsLong(result));
+                Py_DECREF(result);
+            } else {
+                PyErr_Print();
+            }
+        }
+        Py_DECREF(tuple);
+    }
     wxPyEndBlockThreads();
 }
 
