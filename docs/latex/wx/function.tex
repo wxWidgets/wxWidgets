@@ -1831,14 +1831,20 @@ See also \helpref{wxGetResource}{wxgetresource}, \helpref{wxConfigBase}{wxconfig
 
 Yields control to pending messages in the windowing system. This can be useful, for example, when a
 time-consuming process writes to a text window. Without an occasional
-yield, the text window will not be updated properly, and (since Windows
-multitasking is cooperative) other processes will not respond.
+yield, the text window will not be updated properly, and on systems with
+cooperative multitasking, such as Windows 3.1 other processes will not respond.
 
 Caution should be exercised, however, since yielding may allow the
 user to perform actions which are not compatible with the current task.
 Disabling menu items or whole menus during processing can avoid unwanted
 reentrance of code: see \helpref{::wxSafeYield}{wxsafeyield} for a better
 function.
+
+Note that wxYield will not flush the message logs. This is intentional as
+calling wxYield is usually done to quickly update the screen and popping up a
+message box dialog may be undesirable. If you do with to flush the log
+messages immediately (otherwise it will be done during the next idle loop
+iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
 
 \wxheading{Include files}
 

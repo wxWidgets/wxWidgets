@@ -544,7 +544,7 @@ wxMenu *wxMenuBarBase::Remove(size_t pos)
     return menu;
 }
 
-int wxMenuBarBase::FindMenu(const wxString& title)
+int wxMenuBarBase::FindMenu(const wxString& title) const
 {
     wxString label = wxMenuItem::GetLabelFromText(title);
 

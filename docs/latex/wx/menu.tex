@@ -584,6 +584,15 @@ Enables or disables a whole menu.
 Only use this when the menu bar has been
 associated with a frame.
 
+\membersection{wxMenuBar::FindMenu}\label{wxmenubarfindmenu}
+
+\constfunc{int}{FindMenu}{\param{const wxString\& }{title}}
+
+Returns the index of the menu with the given {\it title} or wxNOT\_FOUND if no
+such menu exists in this menubar. The {\it title} parameter may specify either
+the menu title (with accelerator characters, i.e. {\tt "\&File"}) or just the
+menu label ({\tt "File"}) indifferently.
+
 \membersection{wxMenuBar::FindMenuItem}\label{wxmenubarfindmenuitem}
 
 \constfunc{int}{FindMenuItem}{\param{const wxString\& }{menuString}, \param{const wxString\& }{itemString}}
