@@ -871,6 +871,7 @@ int wxApp::GetComCtl32Version()
         // if so, then we can check for the version
         if ( dllComCtl32.IsLoaded() )
         {
+#ifdef DLLVER_PLATFORM_WINDOWS
             // try to use DllGetVersion() if available in _headers_
             wxDYNLIB_FUNCTION( DLLGETVERSIONPROC, DllGetVersion, dllComCtl32 );
             if ( pfnDllGetVersion )
@@ -892,6 +893,7 @@ int wxApp::GetComCtl32Version()
                                         dvi.dwMinorVersion;
                 }
             }
+#endif
 
             // if DllGetVersion() is unavailable either during compile or
             // run-time, try to guess the version otherwise
