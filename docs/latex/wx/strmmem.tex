@@ -1,0 +1,102 @@
+% -----------------------------------------------------------------------------
+% wxMemoryInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxMemoryInputStream}}\label{wxmeminputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}
+
+\wxheading{Remark}
+
+You can create a similar stream by this way:
+\begin{verbatim}
+  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read);
+  wxInputStream *input = new wxInputStream(sb);
+
+  sb->SetBufferIO(data, data\_end);
+\end{verbatim}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMemoryInputStream::wxMemoryInputStream}
+
+\func{}{wxMemoryInputStream}{\param{const char *}{ data}, \param{size\_t}{ len}}
+
+Initializes a new read-only memory stream which will use the specified buffer
+\it{data} of length \it{len}.
+
+\membersection{wxMemoryInputStream::\destruct{wxMemoryInputStream}}
+
+\func{}{\destruct{wxFileInputStream}}{\void}
+
+Destructor.
+
+% -----------------------------------------------------------------------------
+% wxMemoryOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxMemoryOutputStream}}\label{wxmemoutputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}
+
+
+\wxheading{Remark}
+
+You can create a similar stream by this way:
+\begin{verbatim}
+  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::write);
+  wxOutputStream *input = new wxOutputStream(sb);
+
+  // If there are data
+    sb->SetBufferIO(data, data\_end);
+  // Else
+    sb->Fixed(FALSE);
+\end{verbatim}
+
+This way is also useful to create read/write memory stream:
+\begin{verbatim}
+  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read\_write);
+  wxOutputStream *output = new wxOutputStream(sb);
+  wxInputStream *input = new wxInputStream(sb);
+
+  // If there are data
+    sb->SetBufferIO(data, data\_end);
+  // Else
+    sb->Fixed(FALSE);
+\end{verbatim}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMemoryOutputStream::wxMemoryOutputStream}
+
+\func{}{wxMemoryOutputStream}{\param{char *}{ data = NULL}, \param{size\_t}{ length = 0}}
+
+If \it{data} is NULL, then it will initialize a new empty buffer which will
+grow when it needs.
+
+\wxheading{Warning}
+
+If the buffer is created, it will be destroyed at the destruction of the
+stream.
+
+\membersection{wxMemoryOutputStream::\destruct{wxMemoryOutputStream}}
+
+\func{}{\destruct{wxMemoryOutputStream}}{\void}
+
+Destructor.
