@@ -1,4 +1,3 @@
-xyz
 option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfuncs, "no"), lang(allowtypedefasclassname, "yes"),
                         lang(templatedefimpls, "dontparse"), lang(compatmath, "yes"),
                         lang(nokeyword, "const_cast"), lang(nokeyword, "explicit"), lang(nokeyword, "false"),
