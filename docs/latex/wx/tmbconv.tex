@@ -11,9 +11,10 @@
 
 \section{wxMBConv classes overview}\label{mbconvclasses}
 
-Classes: \helpref{wxMBConv}{wxmbconv}, \helpref{wxMBConvFile}{wxmbconvfile}, 
+Classes: \helpref{wxMBConv}{wxmbconv}, \helpref{wxMBConvLibc}{wxmbconvlibc}, 
 \helpref{wxMBConvUTF7}{wxmbconvutf7}, \helpref{wxMBConvUTF8}{wxmbconvutf8}, 
-\helpref{wxCSConv}{wxcsconv}
+\helpref{wxCSConv}{wxcsconv},
+\helpref{wxMBConvUTF16}{wxmbconvutf16}, \helpref{wxMBConvUTF32}{wxmbconvutf32}
 
 The wxMBConv classes in wxWindows enables an Unicode-aware application to
 easily convert between Unicode and the variety of 8-bit encoding systems still
@@ -57,23 +58,21 @@ traditional 8-bit-encoding. And this is what the wxMBConv classes do.
 
 The base class for all these conversions is the wxMBConv class (which itself
 implements standard libc locale conversion). Derived classes include
-wxMBConvFile, wxMBConvUTF7, wxMBConvUTF8, and wxCSConv, which implement
-different kinds of conversions. You can also derive your own class for your
-own custom encoding and use it, should you need it. All you need to do is
-override the MB2WC and WC2MB methods.
+wxMBConvLibc, several different wxMBConvUTFxxx classes, and wxCSConv, which
+implement different kinds of conversions. You can also derive your own class
+for your own custom encoding and use it, should you need it. All you need to do
+is override the MB2WC and WC2MB methods.
 
 \subsection{wxMBConv objects}
 
-In C++, for a class to be useful and possible to pass around, it needs to be
-instantiated. All of the wxWindows-provided wxMBConv classes have predefined
-instances (wxConvLibc, wxConvFile, wxConvUTF7, wxConvUTF8, wxConvLocal).
-You can use these predefined objects directly, or you can instantiate your own
-objects.
+Several of the wxWindows-provided wxMBConv classes have predefined instances
+(wxConvLibc, wxConvFile, wxConvUTF7, wxConvUTF8, wxConvLocal). You can use
+these predefined objects directly, or you can instantiate your own objects.
 
-A variable, wxConvCurrent, points to the conversion object that the user interface
-is supposed to use, in the case that the user interface is not Unicode-based (like
-with GTK+ 1.2). By default, it points to wxConvLibc or wxConvLocal, depending on
-which works best on the current platform.
+A variable, wxConvCurrent, points to the conversion object that the user
+interface is supposed to use, in the case that the user interface is not
+Unicode-based (like with GTK+ 1.2). By default, it points to wxConvLibc or
+wxConvLocal, depending on which works best on the current platform.
 
 \subsection{wxCSConv}
 

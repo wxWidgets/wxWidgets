@@ -1,0 +1,81 @@
+\section{\class{wxMBConvUTF16}}\label{wxmbconvutf16}
+
+This class is used to convert between multibyte encodings and UTF-16 Unicode
+encoding (also known as UCS-2). Unlike \helpref{UTF-8}{wxmbconvutf8} encoding,
+UTF-16 uses words and not bytes and hence depends on the byte ordering:
+big or little endian. Hence this class is provided in two versions:
+wxMBConvUTF16LE and wxMBConvUTF16BE and wxMBConvUTF16 itself is just a typedef
+for one of them (native for the given platform, e.g. LE under Windows and BE
+under Mac).
+
+\wxheading{Derived from}
+
+\helpref{wxMBConv}{wxmbconv}
+
+\wxheading{Include files}
+
+<wx/strconv.h>
+
+\wxheading{See also}
+
+\helpref{wxMBConvUTF8}{wxmbconvutf8}, 
+\helpref{wxMBConvUTF32}{wxmbconvutf32}, 
+\helpref{wxMBConv classes overview}{mbconvclasses}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMBConvUTF16::MB2WC}\label{wxmbconvutf16mb2wc}
+
+\constfunc{size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
+
+Converts from UTF-16 encoding to Unicode. Returns the size of the destination
+buffer.
+
+\membersection{wxMBConvUTF16::WC2MB}\label{wxmbconvutf16wc2mb}
+
+\constfunc{size\_t}{WC2MB}{\param{char* }{buf}, \param{const wchar\_t* }{psz}, \param{size\_t }{n}}
+
+Converts from Unicode to UTF-16 encoding. Returns the size of the destination
+buffer.
+
+
+\section{\class{wxMBConvUTF32}}\label{wxmbconvutf32}
+
+This class is used to convert between multibyte encodings and UTF-32 Unicode
+encoding (also known as UCS-4). Unlike \helpref{UTF-8}{wxmbconvutf8} encoding,
+UTF-32 uses (double) words and not bytes and hence depends on the byte ordering:
+big or little endian. Hence this class is provided in two versions:
+wxMBConvUTF32LE and wxMBConvUTF32BE and wxMBConvUTF32 itself is just a typedef
+for one of them (native for the given platform, e.g. LE under Windows and BE
+under Mac).
+
+\wxheading{Derived from}
+
+\helpref{wxMBConv}{wxmbconv}
+
+\wxheading{Include files}
+
+<wx/strconv.h>
+
+\wxheading{See also}
+
+\helpref{wxMBConvUTF8}{wxmbconvutf8}, 
+\helpref{wxMBConvUTF16}{wxmbconvutf16}, 
+\helpref{wxMBConv classes overview}{mbconvclasses}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMBConvUTF32::MB2WC}\label{wxmbconvutf32mb2wc}
+
+\constfunc{size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
+
+Converts from UTF-32 encoding to Unicode. Returns the size of the destination
+buffer.
+
+\membersection{wxMBConvUTF32::WC2MB}\label{wxmbconvutf32wc2mb}
+
+\constfunc{size\_t}{WC2MB}{\param{char* }{buf}, \param{const wchar\_t* }{psz}, \param{size\_t }{n}}
+
+Converts from Unicode to UTF-32 encoding. Returns the size of the destination
+buffer.
+
