@@ -24,6 +24,7 @@
 
 #include "wx/generic/dirctrlg.h"
 
+#include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/button.h"
 #include "wx/layout.h"
