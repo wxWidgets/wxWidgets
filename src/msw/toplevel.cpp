@@ -732,9 +732,9 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
     HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
     {
-        wxLogLastError(_T("GetSystemMenu"));
-
-        return FALSE;
+        // no system menu at all -- ok if we want to remove the close button
+        // anyhow, but bad if we want to show it
+        return !enable;
     }
 
     // enabling/disabling the close item from it also automatically
