@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     4/1/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:     wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IPCBASEH__

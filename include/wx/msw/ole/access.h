@@ -51,6 +51,12 @@ public:
     // Returns the IAccessible standard interface pointer
     void* GetIAccessibleStd() ;
 
+// Operations
+
+    // Sends an event when something changes in an accessible object.
+    static void NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
+                            int objectId);
+
 protected:
     void Init();
 

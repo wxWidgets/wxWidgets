@@ -6,7 +6,7 @@
 // Created:     01/23/03
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TREECTRL_H_

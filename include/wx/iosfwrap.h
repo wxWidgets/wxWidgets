@@ -6,7 +6,7 @@
 // Created:     18.12.2002
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Jan van Dijk <jan@etpmod.phys.tue.nl>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #if wxUSE_STD_IOSTREAM

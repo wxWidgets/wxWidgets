@@ -6,7 +6,8 @@
 // Modified by: 18.12.99 by VZ to use the new wxDateTime class
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:(c)
+// Copyright:   Julian Smart, Steve Marcus, Eric Simon, Chris Hill,
+//              Charles D. Price
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -4,8 +4,8 @@
 // Author:      Robert Roebling
 // Modified by: Vadim Zeitlin for Windows version
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:     wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _NOTEBOOK_H

@@ -6,7 +6,7 @@
 // Created:     12.05.02
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997-2002 wxWindows team
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FONTDLG_H_BASE_

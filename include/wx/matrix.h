@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        matrix.h
 // Purpose:     wxTransformMatrix class. NOT YET USED
-//! Author:      Chris Breeze, Julian Smart
+// Author:      Chris Breeze, Julian Smart
 // Modified by:  Klaas Holwerda
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) Julian Smart, Chris Breeze
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

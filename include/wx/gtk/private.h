@@ -6,7 +6,7 @@
 // Created:     12.03.02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GTK_PRIVATE_H_

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     30.07.2001
 // Copyright:   (c) 2001 Lindsay Mathieson <lindsay@mathieson.org>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VECTOR_H_
