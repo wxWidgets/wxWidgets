@@ -1537,6 +1537,19 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     wxEventType event_type = wxEVT_NULL;
 
+#ifdef __WXGTK20__
+    if ( gdk_event->type == GDK_2BUTTON_PRESS &&
+            gdk_event->button >= 1 && gdk_event->button <= 3 )
+    {
+        // Reset GDK internal timestamp variables in order to disable GDK
+        // triple click events. GDK will then next time believe no button has
+        // been clicked just before, and send a normal button click event.
+        GdkDisplay* display = gtk_widget_get_display (widget);
+        display->button_click_time[1] = 0;
+        display->button_click_time[0] = 0;
+    }
+#endif // GTK 2+
+
     if (gdk_event->button == 1)
     {
         // note that GDK generates triple click events which are not supported
@@ -1544,6 +1557,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         // clicks would simply go missing
         switch (gdk_event->type)
         {
+            // we shouldn't get triple clicks at all for GTK2 because we
+            // suppress them artificially using the code above but we still
+            // should map them to something for GTK1 and not just ignore them
+            // as this would lose clicks
             case GDK_3BUTTON_PRESS:     // we could also map this to DCLICK...
             case GDK_BUTTON_PRESS:
                 event_type = wxEVT_LEFT_DOWN;
@@ -1562,6 +1579,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     {
         switch (gdk_event->type)
         {
+            case GDK_3BUTTON_PRESS:
             case GDK_BUTTON_PRESS:
                 event_type = wxEVT_MIDDLE_DOWN;
                 break;
@@ -1578,6 +1596,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     {
         switch (gdk_event->type)
         {
+            case GDK_3BUTTON_PRESS:
             case GDK_BUTTON_PRESS:
                 event_type = wxEVT_RIGHT_DOWN;
                 break;
