@@ -137,6 +137,8 @@ private:
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     LV_ITEM *m_item;
+
+    DECLARE_NO_COPY_CLASS(wxLV_ITEM)
 };
 
 ///////////////////////////////////////////////////////
@@ -183,6 +185,8 @@ public:
        if (attr)
            delete attr;
    };
+
+    DECLARE_NO_COPY_CLASS(wxListItemInternalData)
 };
 
 // Get the internal data structure

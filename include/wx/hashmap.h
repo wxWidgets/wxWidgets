@@ -24,6 +24,10 @@ struct WXDLLEXPORT _wxHashTable_NodeBase
     _wxHashTable_NodeBase() : m_nxt(0) {}
 
     _wxHashTable_NodeBase* m_nxt;
+
+// Cannot do this:
+//  DECLARE_NO_COPY_CLASS(_wxHashTable_NodeBase)
+// without rewriting the macros, which require a public copy constructor.
 };
 
 // private

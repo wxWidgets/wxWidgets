@@ -165,6 +165,8 @@ protected:
     wxArrayPages  m_pages;      // array of pages
     wxImageList  *m_imageList;  // we can have an associated image list
     bool m_ownsImageList;       // true if we must delete m_imageList
+
+    DECLARE_NO_COPY_CLASS(wxNotebookBase)
 };
 
 // ----------------------------------------------------------------------------

@@ -67,6 +67,7 @@ protected:
 
 DECLARE_DYNAMIC_CLASS(wxSplashScreen)
 DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxSplashScreen)
 };
 
 /*

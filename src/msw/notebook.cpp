@@ -402,70 +402,85 @@ bool wxNotebook::InsertPage(int nPage,
                             bool bSelect,
                             int imageId)
 {
-  wxASSERT( pPage != NULL );
-  wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
+    wxCHECK_MSG( pPage != NULL, FALSE, _T("NULL page in wxNotebook::InsertPage") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE,
+                 _T("invalid index in wxNotebook::InsertPage") );
 
-  // do add the tab to the control
 
-  // init all fields to 0
-  TC_ITEM tcItem;
-  memset(&tcItem, 0, sizeof(tcItem));
+    // add a new tab to the control
+    // ----------------------------
 
-  if ( imageId != -1 )
-  {
-    tcItem.mask |= TCIF_IMAGE;
-    tcItem.iImage  = imageId;
-  }
+    // init all fields to 0
+    TC_ITEM tcItem;
+    wxZeroMemory(tcItem);
 
-  if ( !strText.IsEmpty() )
-  {
-    tcItem.mask |= TCIF_TEXT;
-    tcItem.pszText = (wxChar *)strText.c_str(); // const_cast
-  }
+    // set the image, if any
+    if ( imageId != -1 )
+    {
+        tcItem.mask |= TCIF_IMAGE;
+        tcItem.iImage  = imageId;
+    }
 
-  if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
-    wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
+    // and the text
+    if ( !strText.IsEmpty() )
+    {
+        tcItem.mask |= TCIF_TEXT;
+        tcItem.pszText = (wxChar *)strText.c_str(); // const_cast
+    }
 
-    return FALSE;
-  }
+    // fit the notebook page to the tab control's display area: this should be
+    // done before adding it to the notebook or TabCtrl_InsertItem() will
+    // change the notebooks size itself!
+    RECT rc;
+    rc.left = rc.top = 0;
+    GetSize((int *)&rc.right, (int *)&rc.bottom);
+    TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
+    pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 
-  // if the inserted page is before the selected one, we must update the
-  // index of the selected page
-  if ( nPage <= m_nSelection )
-  {
-    // one extra page added
-    m_nSelection++;
-  }
 
-  // save the pointer to the page
-  m_pages.Insert(pPage, nPage);
+    // finally do insert it
+    if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
+        wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
 
-  // don't show pages by default (we'll need to adjust their size first)
-  HWND hwnd = GetWinHwnd(pPage);
-  SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
+        return FALSE;
+    }
 
-  // this updates internal flag too - otherwise it will get out of sync
-  pPage->Show(FALSE);
+    // succeeded: save the pointer to the page
+    m_pages.Insert(pPage, nPage);
 
-  // fit the notebook page to the tab control's display area
-  RECT rc;
-  rc.left = rc.top = 0;
-  GetSize((int *)&rc.right, (int *)&rc.bottom);
-  TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
-  pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    // hide the page: unless it is selected, it shouldn't be shown (and if it
+    // is selected it will be shown later)
+    HWND hwnd = GetWinHwnd(pPage);
+    SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
 
-  // some page should be selected: either this one or the first one if there is
-  // still no selection
-  int selNew = -1;
-  if ( bSelect )
-    selNew = nPage;
-  else if ( m_nSelection == -1 )
-    selNew = 0;
+    // this updates internal flag too -- otherwise it would get out of sync
+    // with the real state
+    pPage->Show(FALSE);
 
-  if ( selNew != -1 )
-    SetSelection(selNew);
 
-  return TRUE;
+    // now deal with the selection
+    // ---------------------------
+
+    // if the inserted page is before the selected one, we must update the
+    // index of the selected page
+    if ( nPage <= m_nSelection )
+    {
+        // one extra page added
+        m_nSelection++;
+    }
+
+    // some page should be selected: either this one or the first one if there
+    // is still no selection
+    int selNew = -1;
+    if ( bSelect )
+        selNew = nPage;
+    else if ( m_nSelection == -1 )
+        selNew = 0;
+
+    if ( selNew != -1 )
+        SetSelection(selNew);
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

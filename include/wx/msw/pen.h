@@ -41,6 +41,14 @@ protected:
   wxDash *      m_dash ;
   wxColour      m_colour;
   WXHPEN        m_hPen;
+
+private:
+// Cannot use
+//  DECLARE_NO_COPY_CLASS(wxPenRefData)
+// because copy constructor is explicitly declared above;
+// but no copy assignment operator is defined, so declare
+// it private to prevent the compiler from defining it:
+    wxPenRefData& operator=(const wxPenRefData&);
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)

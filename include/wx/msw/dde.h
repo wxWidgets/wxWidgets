@@ -78,6 +78,8 @@ public:
   wxChar*       m_sendingData;
   int           m_dataSize;
   wxIPCFormat  m_dataType;
+
+    DECLARE_NO_COPY_CLASS(wxDDEConnection)
 };
 
 class WXDLLEXPORT wxDDEServer: public wxServerBase

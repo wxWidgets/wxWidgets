@@ -79,6 +79,7 @@ private:
     wxDateTime m_Modif;
 
     DECLARE_ABSTRACT_CLASS(wxFSFile)
+    DECLARE_NO_COPY_CLASS(wxFSFile)
 };
 
 
@@ -202,6 +203,7 @@ protected:
             // handler that succeed in FindFirst query
 
     DECLARE_DYNAMIC_CLASS(wxFileSystem)
+    DECLARE_NO_COPY_CLASS(wxFileSystem)
 };
 
 

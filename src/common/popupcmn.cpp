@@ -74,6 +74,7 @@ private:
     wxPopupTransientWindow *m_popup;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxPopupWindowHandler)
 };
 
 class wxPopupFocusHandler : public wxEvtHandler
@@ -104,6 +105,7 @@ private:
 #endif // __WXGTK__
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxPopupFocusHandler)
 };
 
 // ----------------------------------------------------------------------------

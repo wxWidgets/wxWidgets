@@ -95,6 +95,8 @@ private:
     CLIPFORMAT *m_formats;  // formats we can provide data in
     ULONG       m_nCount,   // number of formats we support
                 m_nCurrent; // current enum position
+
+    DECLARE_NO_COPY_CLASS(wxIEnumFORMATETC)
 };
 
 // ----------------------------------------------------------------------------
@@ -129,6 +131,8 @@ private:
     wxDataObject *m_pDataObject;      // pointer to C++ class we belong to
 
     bool m_mustDelete;
+
+    DECLARE_NO_COPY_CLASS(wxIDataObject)
 };
 
 // ============================================================================

@@ -85,6 +85,8 @@ protected:
 
     // get default drop effect for given keyboard flags
     static inline DWORD GetDropEffect(DWORD flags);
+
+    DECLARE_NO_COPY_CLASS(wxIDropTarget)
 };
 
 // ----------------------------------------------------------------------------

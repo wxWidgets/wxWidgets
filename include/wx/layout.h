@@ -148,6 +148,8 @@ public:
     // Get the value of this edge or dimension, or if this
     // is not determinable, -1.
     int GetEdge(wxEdge which, wxWindowBase *thisWin, wxWindowBase *other) const;
+
+    DECLARE_NO_COPY_CLASS(wxIndividualLayoutConstraint)
 };
 
 // ----------------------------------------------------------------------------

@@ -58,6 +58,8 @@ public:
     virtual size_t GetBufferOffset( const wxDataFormat& format );
 private:
     IDataObject *m_pIDataObject; // pointer to the COM interface
+
+    DECLARE_NO_COPY_CLASS(wxDataObject)
 };
 
 #endif  //_WX_MSW_OLE_DATAOBJ_H

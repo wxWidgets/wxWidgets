@@ -95,6 +95,14 @@ protected:
 
         return TRUE;
     }
+
+private:
+// Cannot use
+//  DECLARE_NO_COPY_CLASS(wxTextValidator)
+// because copy constructor is explicitly declared above;
+// but no copy assignment operator is defined, so declare
+// it private to prevent the compiler from defining it:
+    wxTextValidator& operator=(const wxTextValidator&);
 };
 
 #endif

@@ -99,6 +99,8 @@ protected:
     wxString            m_titleFormat;
     int                 m_FrameStyle;
     // DECLARE_EVENT_TABLE()
+
+    DECLARE_NO_COPY_CLASS(wxHtmlHelpController)
 };
 
 #endif // wxUSE_WXHTML_HELP

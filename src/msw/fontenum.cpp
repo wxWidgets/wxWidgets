@@ -90,6 +90,8 @@ private:
 
     // the list of facenames we already found while enumerating facenames
     wxArrayString m_facenames;
+
+    DECLARE_NO_COPY_CLASS(wxFontEnumeratorHelper)
 };
 
 // ----------------------------------------------------------------------------

@@ -60,6 +60,7 @@ private:
     wxCalendarCtrl *m_cal;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxMonthComboBox)
 };
 
 class wxYearSpinCtrl : public wxSpinCtrl
@@ -74,6 +75,7 @@ private:
     wxCalendarCtrl *m_cal;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxYearSpinCtrl)
 };
 
 // ----------------------------------------------------------------------------

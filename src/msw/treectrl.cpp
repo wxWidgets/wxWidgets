@@ -322,6 +322,8 @@ public:
 
 private:
     wxTreeItemData *m_data;
+
+    DECLARE_NO_COPY_CLASS(wxVirtualNode)
 };
 
 #ifdef __VISUALC__
@@ -360,6 +362,8 @@ private:
     bool Traverse(const wxTreeItemId& root, bool recursively);
 
     const wxTreeCtrl *m_tree;
+
+    DECLARE_NO_COPY_CLASS(wxTreeTraversal)
 };
 
 // internal class for getting the selected items
@@ -487,6 +491,8 @@ private:
 
     // the real client data
     wxTreeItemData *m_data;
+
+    DECLARE_NO_COPY_CLASS(wxTreeItemIndirectData)
 };
 
 // ----------------------------------------------------------------------------

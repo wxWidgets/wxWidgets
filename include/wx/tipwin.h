@@ -92,6 +92,8 @@ private:
     DECLARE_EVENT_TABLE()
 
     friend class wxTipWindowView;
+
+    DECLARE_NO_COPY_CLASS(wxTipWindow)
 };
 
 #endif // wxUSE_TIPWINDOW

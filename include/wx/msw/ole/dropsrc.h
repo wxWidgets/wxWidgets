@@ -76,6 +76,8 @@ protected:
 
 private:
     wxIDropSource *m_pIDropSource;  // the pointer to COM interface
+
+    DECLARE_NO_COPY_CLASS(wxDropSource)
 };
 
 #endif  //_WX_OLEDROPSRC_H

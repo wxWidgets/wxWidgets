@@ -51,6 +51,8 @@ class WXDLLEXPORT wxFileInputStream: public wxInputStream {
  protected:
   wxFile *m_file;
   bool m_file_destroy;
+
+    DECLARE_NO_COPY_CLASS(wxFileInputStream)
 };
 
 class WXDLLEXPORT wxFileOutputStream: public wxOutputStream {
@@ -79,6 +81,8 @@ class WXDLLEXPORT wxFileOutputStream: public wxOutputStream {
  protected:
   wxFile *m_file;
   bool m_file_destroy;
+
+    DECLARE_NO_COPY_CLASS(wxFileOutputStream)
 };
 
 class WXDLLEXPORT wxFileStream: public wxFileInputStream, public wxFileOutputStream {
@@ -111,6 +115,8 @@ class WXDLLEXPORT wxFFileInputStream: public wxInputStream {
  protected:
   wxFFile *m_file;
   bool m_file_destroy;
+
+    DECLARE_NO_COPY_CLASS(wxFFileInputStream)
 };
 
 class WXDLLEXPORT wxFFileOutputStream: public wxOutputStream {
@@ -139,6 +145,8 @@ class WXDLLEXPORT wxFFileOutputStream: public wxOutputStream {
  protected:
   wxFFile *m_file;
   bool m_file_destroy;
+
+    DECLARE_NO_COPY_CLASS(wxFFileOutputStream)
 };
 
 class WXDLLEXPORT wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {

@@ -140,6 +140,7 @@ private:
     static wxString ms_details;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxLogDialog)
 };
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
@@ -450,6 +451,7 @@ private:
     wxLogWindow *m_log;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxLogFrame)
 };
 
 BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)

@@ -130,6 +130,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxSizerItem);
+    DECLARE_NO_COPY_CLASS(wxSizerItem)
 };
 
 //---------------------------------------------------------------------------
@@ -317,6 +318,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxFlexGridSizer);
+    DECLARE_NO_COPY_CLASS(wxFlexGridSizer)
 };
 
 //---------------------------------------------------------------------------
@@ -373,6 +375,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxStaticBoxSizer);
+    DECLARE_NO_COPY_CLASS(wxStaticBoxSizer)
 };
 
 #endif // wxUSE_STATBOX
@@ -401,6 +404,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxNotebookSizer);
+    DECLARE_NO_COPY_CLASS(wxNotebookSizer)
 };
 
 #endif // wxUSE_NOTEBOOK

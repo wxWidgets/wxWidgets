@@ -65,6 +65,8 @@ private:
 
     // the size of the buffer
     size_t m_size;
+
+    DECLARE_NO_COPY_CLASS(wxStreamTempInputBuffer)
 };
 
 inline wxStreamTempInputBuffer::wxStreamTempInputBuffer()

@@ -137,6 +137,8 @@ private:
   wxString  m_strLine;                  // line contents
   wxFileConfigLineList *m_pNext,        // next node
                        *m_pPrev;        // previous one
+
+    DECLARE_NO_COPY_CLASS(wxFileConfigLineList)
 };
 
 // ----------------------------------------------------------------------------
@@ -179,6 +181,8 @@ public:
   void SetValue(const wxString& strValue, bool bUser = TRUE);
   void SetDirty();
   void SetLine(wxFileConfigLineList *pLine);
+
+    DECLARE_NO_COPY_CLASS(wxFileConfigEntry)
 };
 
 // ----------------------------------------------------------------------------
@@ -248,6 +252,8 @@ public:
   // called by entries/subgroups when they're created/deleted
   void SetLastEntry(wxFileConfigEntry *pEntry) { m_pLastEntry = pEntry; }
   void SetLastGroup(wxFileConfigGroup *pGroup) { m_pLastGroup = pGroup; }
+
+    DECLARE_NO_COPY_CLASS(wxFileConfigGroup)
 };
 
 // ============================================================================

@@ -48,6 +48,8 @@ class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
         wxHashTableLong *m_DirsFound;
 
         wxString DoFind();
+
+    DECLARE_NO_COPY_CLASS(wxZipFSHandler)
 };
 
 

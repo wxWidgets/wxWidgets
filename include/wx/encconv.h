@@ -148,6 +148,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
 
+    DECLARE_NO_COPY_CLASS(wxEncodingConverter)
 };
 
 #endif // wxUSE_FONTMAP

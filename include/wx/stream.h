@@ -98,6 +98,8 @@ protected:
     wxStreamError m_lasterror;
 
     friend class wxStreamBuffer;
+
+    DECLARE_NO_COPY_CLASS(wxInputStream)
 };
 
 // ----------------------------------------------------------------------------
@@ -307,6 +309,8 @@ public:
 
 protected:
     wxInputStream *m_parent_i_stream;
+
+    DECLARE_NO_COPY_CLASS(wxFilterInputStream)
 };
 
 class WXDLLEXPORT wxFilterOutputStream : public wxOutputStream
@@ -322,6 +326,8 @@ public:
 
 protected:
     wxOutputStream *m_parent_o_stream;
+
+    DECLARE_NO_COPY_CLASS(wxFilterOutputStream)
 };
 
 // ============================================================================
@@ -437,6 +443,14 @@ protected:
     bool m_destroybuf,      // deallocate buffer?
          m_fixed,
          m_flushable;
+
+private:
+// Cannot use
+//  DECLARE_NO_COPY_CLASS(wxStreamBuffer)
+// because copy constructor is explicitly declared above;
+// but no copy assignment operator is defined, so declare
+// it private to prevent the compiler from defining it:
+    wxStreamBuffer& operator=(const wxStreamBuffer&);
 };
 
 // ---------------------------------------------------------------------------
@@ -471,6 +485,8 @@ protected:
     virtual off_t OnSysTell() const;
 
     wxStreamBuffer *m_i_streambuf;
+
+    DECLARE_NO_COPY_CLASS(wxBufferedInputStream)
 };
 
 // ----------------------------------------------------------------------------
@@ -508,6 +524,8 @@ protected:
     virtual off_t OnSysTell() const;
 
     wxStreamBuffer *m_o_streambuf;
+
+    DECLARE_NO_COPY_CLASS(wxBufferedOutputStream)
 };
 
 #endif // wxUSE_STREAMS

@@ -346,6 +346,8 @@ public:
 
 private:
     HDC m_hdc;
+
+    DECLARE_NO_COPY_CLASS(ScreenHDC)
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC in ctor and
@@ -360,6 +362,8 @@ public:
 
 private:
     HDC m_hdc;
+
+    DECLARE_NO_COPY_CLASS(MemoryHDC)
 };
 
 // a class which selects a GDI object into a DC in its ctor and deselects in
@@ -378,6 +382,8 @@ public:
 private:
    HDC m_hdc;
    HGDIOBJ m_hgdiobj;
+
+    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
 // ---------------------------------------------------------------------------

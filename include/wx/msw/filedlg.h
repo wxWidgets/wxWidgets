@@ -69,6 +69,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
+    DECLARE_NO_COPY_CLASS(wxFileDialog)
 };
 
 // File selector - backward compatibility

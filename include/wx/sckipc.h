@@ -102,6 +102,8 @@ private:
   //
   virtual bool Execute(const wxString& str)
     { return Execute(str, -1, wxIPC_TEXT); }
+
+    DECLARE_NO_COPY_CLASS(wxTCPConnection)
 };
 
 class wxTCPServer: public wxServerBase
@@ -127,6 +129,8 @@ protected:
   // the name of the file associated to the Unix domain socket, may be empty
   wxString m_filename;
 #endif // __UNIX_LIKE__
+
+    DECLARE_NO_COPY_CLASS(wxTCPServer)
 };
 
 class wxTCPClient: public wxClientBase

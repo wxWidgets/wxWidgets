@@ -63,6 +63,8 @@ public:
 #endif // wxUSE_PALETTE
     wxArrayString   m_optionNames;
     wxArrayString   m_optionValues;
+
+    DECLARE_NO_COPY_CLASS(wxImageRefData)
 };
 
 wxImageRefData::wxImageRefData()

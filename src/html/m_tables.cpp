@@ -125,6 +125,8 @@ private:
     // Computes minimal and maximal widths of columns. Needs to be called
     // only once, before first Layout(). 
     void ComputeMinMaxWidths();
+
+    DECLARE_NO_COPY_CLASS(wxHtmlTableCell)
 };
 
 

@@ -114,6 +114,7 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
+    DECLARE_NO_COPY_CLASS(wxMDIParentFrame)
 };
 
 // ---------------------------------------------------------------------------

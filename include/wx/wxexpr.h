@@ -190,6 +190,8 @@ class WXDLLEXPORT wxExpr
   // so we can index into the wxExpr database and fish out the pointer.
   inline void SetClientData(wxObject *data) { client_data = data; }
   inline wxObject *GetClientData(void) const { return client_data; }
+
+    DECLARE_NO_COPY_CLASS(wxExpr)
 };
 
 class WXDLLEXPORT wxExprDatabase: public wxList
@@ -249,6 +251,7 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxExprDatabase)
+    DECLARE_NO_COPY_CLASS(wxExprDatabase)
 };
 
 // Function call-style interface - some more convenience wrappers/unwrappers

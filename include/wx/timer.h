@@ -103,6 +103,8 @@ protected:
 
     int     m_milli;        // the timer interval
     bool    m_oneShot;      // TRUE if one shot
+
+    DECLARE_NO_COPY_CLASS(wxTimerBase)
 };
 
 // ----------------------------------------------------------------------------

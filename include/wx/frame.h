@@ -220,6 +220,7 @@ protected:
 #endif // wxUSE_TOOLBAR
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxFrameBase)
 };
 
 // include the real class declaration

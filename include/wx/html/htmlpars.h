@@ -174,6 +174,8 @@ protected:
     wxList m_HandlersList;
     wxHashTable m_HandlersHash;
 
+    DECLARE_NO_COPY_CLASS(wxHtmlParser)
+
     // class for opening files (file system)
     wxFileSystem *m_FS;
     // handlers stack used by PushTagHandler and PopTagHandler
@@ -228,6 +230,8 @@ protected:
         { m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1()); }
 
     wxHtmlParser *m_Parser;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlTagHandler)
 };
 
 
@@ -264,6 +268,8 @@ protected:
     wxMBConv *m_conv;
     wxFontEncoding m_encoding;
 #endif
+
+    DECLARE_NO_COPY_CLASS(wxHtmlEntitiesParser)
 };
 
 

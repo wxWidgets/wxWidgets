@@ -260,6 +260,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDragImage)
+    DECLARE_NO_COPY_CLASS(wxDragImage)
 };
 
 #endif

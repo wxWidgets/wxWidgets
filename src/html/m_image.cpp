@@ -303,6 +303,8 @@ private:
     double              m_scale;
     wxHtmlImageMapCell *m_imageMap;
     wxString            m_mapName;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlImageCell)
 };
 
 #if wxUSE_GIF && wxUSE_TIMER
@@ -317,6 +319,8 @@ class wxGIFTimer : public wxTimer
 
     private:
         wxHtmlImageCell *m_cell;
+
+    DECLARE_NO_COPY_CLASS(wxGIFTimer)
 };
 #endif
 

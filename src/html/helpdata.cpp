@@ -114,6 +114,8 @@ class HP_TagHandler : public wxHtmlTagHandler
         bool HandleTag(const wxHtmlTag& tag);
         void WriteOut(wxHtmlContentsItem*& array, int& size);
         void ReadIn(wxHtmlContentsItem* array, int size);
+
+    DECLARE_NO_COPY_CLASS(HP_TagHandler)
 };
 
 

@@ -172,6 +172,8 @@ private:
 
     // the reference count
     size_t m_ref;
+
+    DECLARE_NO_COPY_CLASS(wxMemoryBufferData)
 };
 
 

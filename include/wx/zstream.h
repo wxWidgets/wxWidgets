@@ -33,6 +33,8 @@ class WXDLLEXPORT wxZlibInputStream: public wxFilterInputStream {
   size_t m_z_size;
   unsigned char *m_z_buffer;
   struct z_stream_s *m_inflate;
+
+    DECLARE_NO_COPY_CLASS(wxZlibInputStream)
 };
 
 class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
@@ -49,6 +51,8 @@ class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
   size_t m_z_size;
   unsigned char *m_z_buffer;
   struct z_stream_s *m_deflate;
+
+    DECLARE_NO_COPY_CLASS(wxZlibOutputStream)
 };
 
 #endif

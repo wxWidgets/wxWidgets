@@ -122,6 +122,8 @@ private:
   wxChar *      m_buffer;
   size_t        m_buffersize;
   bool          m_deletebufferwhendone;
+
+    DECLARE_NO_COPY_CLASS(wxConnectionBase)
 };
 
 

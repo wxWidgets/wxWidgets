@@ -241,6 +241,7 @@ protected:
 #endif
 
     DECLARE_DYNAMIC_CLASS(wxDC)
+    DECLARE_NO_COPY_CLASS(wxDC)
 };
 
 // ----------------------------------------------------------------------------

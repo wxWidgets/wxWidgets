@@ -89,6 +89,10 @@ struct wxGridCellWithAttr
 
     wxGridCellCoords coords;
     wxGridCellAttr  *attr;
+
+// Cannot do this:
+//  DECLARE_NO_COPY_CLASS(wxGridCellWithAttr)
+// without rewriting the macros, which require a public copy constructor.
 };
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellWithAttr, wxGridCellWithAttrArray);
@@ -141,6 +145,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxGridRowLabelWindow)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridRowLabelWindow)
 };
 
 
@@ -162,6 +167,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxGridColLabelWindow)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridColLabelWindow)
 };
 
 
@@ -183,6 +189,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridCornerLabelWindow)
 };
 
 class WXDLLEXPORT wxGridWindow : public wxWindow
@@ -220,6 +227,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxGridWindow)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridWindow)
 };
 
 
@@ -242,6 +250,7 @@ private:
     wxGridCellEditor*   m_editor;
     DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler)
 };
 
 
@@ -322,6 +331,8 @@ struct wxGridDataTypeInfo
     wxString            m_typeName;
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;
+
+    DECLARE_NO_COPY_CLASS(wxGridDataTypeInfo)
 };
 
 

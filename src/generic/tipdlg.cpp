@@ -115,6 +115,7 @@ private:
     wxCheckBox *m_checkbox;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxTipDialog)
 };
 
 // ============================================================================

@@ -201,6 +201,8 @@ protected:
 #endif // wxUSE_MOUSEWHEEL
 
     wxScrollHelperEvtHandler *m_handler;
+
+    DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
 
 // ----------------------------------------------------------------------------

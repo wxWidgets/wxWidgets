@@ -211,6 +211,8 @@ private:
     wxFontMapper *m_fontMapper;
     bool          m_ok;
     wxString      m_pathOld;
+
+    DECLARE_NO_COPY_CLASS(wxFontMapperPathChanger)
 };
 
 // ============================================================================

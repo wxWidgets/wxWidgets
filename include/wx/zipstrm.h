@@ -49,6 +49,8 @@ private:
     // this void* is handle of archive . I'm sorry it is void and not proper
     // type but I don't want to make unzip.h header public.
     void *m_Archive;
+
+    DECLARE_NO_COPY_CLASS(wxZipInputStream)
 };
 
 

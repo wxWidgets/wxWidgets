@@ -121,6 +121,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxDialog)
 };
 
 #endif

@@ -174,6 +174,8 @@ public:
 
 protected:
     wxHelpControllerBase*   m_helpController;
+
+    DECLARE_NO_COPY_CLASS(wxHelpControllerHelpProvider)
 };
 
 // Convenience function for turning context id into wxString

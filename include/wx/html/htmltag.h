@@ -47,6 +47,8 @@ public:
 
     // Finds parameters for tag starting at at and fills the variables
     void QueryTag(int at, int* end1, int* end2);
+
+    DECLARE_NO_COPY_CLASS(wxHtmlTagsCache)
 };
 
 
@@ -142,6 +144,8 @@ private:
     wxHtmlTag *m_Prev;
     wxHtmlTag *m_FirstChild, *m_LastChild;
     wxHtmlTag *m_Parent;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlTag)
 };
 
 

@@ -269,6 +269,7 @@ private:
     static wxHtmlProcessorList *m_GlobalProcessors;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxHtmlWindow)
 };
 
 

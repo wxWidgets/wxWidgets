@@ -467,6 +467,7 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
+    DECLARE_NO_COPY_CLASS(wxGenericTreeCtrl)
 };
 
 #if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)

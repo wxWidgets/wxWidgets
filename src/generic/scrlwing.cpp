@@ -82,6 +82,8 @@ private:
     wxScrollHelper *m_scrollHelper;
 
     bool m_hasDrawnWindow;
+
+    DECLARE_NO_COPY_CLASS(wxScrollHelperEvtHandler)
 };
 
 // ----------------------------------------------------------------------------
@@ -104,6 +106,8 @@ private:
     wxEventType m_eventType;
     int m_pos,
         m_orient;
+
+    DECLARE_NO_COPY_CLASS(wxAutoScrollTimer)
 };
 
 // ============================================================================

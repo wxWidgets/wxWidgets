@@ -124,6 +124,7 @@ protected:
     wxImageList*    m_imageList;
 
 DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxTabCtrl)
 };
 
 class WXDLLEXPORT wxTabEvent : public wxNotifyEvent

@@ -111,6 +111,8 @@ protected:
     // stacks of previous values for PushStatusText/PopStatusText
     // this is created on demand, use GetStatusStack/GetOrCreateStatusStack
     wxListString **m_statusTextStacks;
+
+    DECLARE_NO_COPY_CLASS(wxStatusBarBase)
 };
 
 // ----------------------------------------------------------------------------

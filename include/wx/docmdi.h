@@ -49,6 +49,7 @@ protected:
 private:
     DECLARE_CLASS(wxDocMDIParentFrame)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxDocMDIParentFrame)
 };
 
 /*
@@ -82,6 +83,7 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxDocMDIChildFrame)
+    DECLARE_NO_COPY_CLASS(wxDocMDIChildFrame)
 };
 
 #endif

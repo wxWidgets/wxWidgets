@@ -1026,6 +1026,8 @@ public:
 
 protected:
     void* m_value;
+
+    DECLARE_NO_COPY_CLASS(wxVariantDataVoidPtr)
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxVariantDataVoidPtr, wxVariantData)

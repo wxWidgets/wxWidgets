@@ -307,6 +307,8 @@ private:
   wxString      m_strName,      // name of entry (i.e. name only)
                 m_strOldPath;   // saved path
   bool          m_bChanged;     // was the path changed?
+
+    DECLARE_NO_COPY_CLASS(wxConfigPathChanger)
 };
 
 

@@ -261,6 +261,8 @@ private:
   wxSockCbk     m_cbk;              // callback
   char         *m_cdata;            // callback data
 #endif // WXWIN_COMPATIBILITY
+
+    DECLARE_NO_COPY_CLASS(wxSocketBase)
 };
 
 

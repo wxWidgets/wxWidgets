@@ -127,6 +127,7 @@ protected:
     wxPopupFocusHandler  *m_handlerFocus;
 
     DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
+    DECLARE_NO_COPY_CLASS(wxPopupTransientWindow)
 };
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)

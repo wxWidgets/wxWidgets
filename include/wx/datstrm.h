@@ -60,6 +60,8 @@ protected:
 #if wxUSE_UNICODE
     wxMBConv& m_conv;
 #endif
+
+    DECLARE_NO_COPY_CLASS(wxDataInputStream)
 };
 
 class WXDLLEXPORT wxDataOutputStream
@@ -101,6 +103,8 @@ protected:
 #if wxUSE_UNICODE
     wxMBConv& m_conv;
 #endif
+
+    DECLARE_NO_COPY_CLASS(wxDataOutputStream)
 };
 
 #endif

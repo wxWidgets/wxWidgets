@@ -84,6 +84,8 @@ public:
     
 private:
     wxArrayString *m_Facenames, *m_Encodings;
+
+    DECLARE_NO_COPY_CLASS(wxFontEnumerator)
 };
 
 #endif // _WX_FONTENUM_H_

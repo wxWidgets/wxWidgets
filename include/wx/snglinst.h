@@ -60,6 +60,8 @@ private:
 
     // the implementation details (platform specific)
     class WXDLLEXPORT wxSingleInstanceCheckerImpl *m_impl;
+
+    DECLARE_NO_COPY_CLASS(wxSingleInstanceChecker)
 };
 
 #endif // wxUSE_SNGLINST_CHECKER

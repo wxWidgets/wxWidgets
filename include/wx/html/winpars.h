@@ -176,6 +176,8 @@ private:
     wxString m_FontFaceFixed, m_FontFaceNormal;
             // html font sizes and faces of fixed and proportional fonts
 
+    DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
+
 #if !wxUSE_UNICODE
     wxFontEncoding m_InputEnc, m_OutputEnc;
             // I/O font encodings
@@ -206,6 +208,8 @@ public:
 
 protected:
     wxHtmlWinParser *m_WParser; // same as m_Parser, but overcasted
+
+    DECLARE_NO_COPY_CLASS(wxHtmlWinTagHandler)
 };
 
 

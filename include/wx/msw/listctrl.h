@@ -397,6 +397,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxListCtrl)
 };
 
 #endif // wxUSE_LISTCTRL

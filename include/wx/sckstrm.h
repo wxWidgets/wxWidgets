@@ -36,6 +36,8 @@ class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
   wxSocketBase *m_o_socket;
 
   size_t OnSysWrite(const void *buffer, size_t bufsize);
+
+    DECLARE_NO_COPY_CLASS(wxSocketOutputStream)
 };
 
 class WXDLLEXPORT wxSocketInputStream : public wxInputStream
@@ -53,6 +55,8 @@ class WXDLLEXPORT wxSocketInputStream : public wxInputStream
   wxSocketBase *m_i_socket;
 
   size_t OnSysRead(void *buffer, size_t bufsize);
+
+    DECLARE_NO_COPY_CLASS(wxSocketInputStream)
 };
 
 class WXDLLEXPORT wxSocketStream : public wxSocketInputStream,

@@ -53,6 +53,8 @@ protected:
 
   // deletes the header value strings
   void ClearHeaders();
+
+    DECLARE_NO_COPY_CLASS(wxHTTP)
 };
 
 #endif // wxUSE_PROTOCOL_HTTP

@@ -285,6 +285,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxSplitterWindow)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxSplitterWindow)
 };
 
 // ----------------------------------------------------------------------------

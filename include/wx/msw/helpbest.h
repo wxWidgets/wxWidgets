@@ -110,6 +110,7 @@ protected:
     wxHelpControllerBase* m_helpController;
 
     DECLARE_DYNAMIC_CLASS(wxBestHelpController)
+    DECLARE_NO_COPY_CLASS(wxBestHelpController)
 };
 
 #endif // wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) && wxUSE_WXHTML_HELP

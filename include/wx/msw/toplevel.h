@@ -120,6 +120,7 @@ protected:
     wxWindow             *m_winLastFocused;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)
 };
 
 // list of all frames and modeless dialogs

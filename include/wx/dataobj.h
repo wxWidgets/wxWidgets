@@ -447,6 +447,8 @@ private:
         { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
         { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
+
+    DECLARE_NO_COPY_CLASS(wxCustomDataObject)
 };
 
 // ----------------------------------------------------------------------------

@@ -119,6 +119,8 @@ protected:
     wxCursor m_cursorCopy,
              m_cursorMove,
              m_cursorStop;
+
+    DECLARE_NO_COPY_CLASS(wxDropSourceBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -192,6 +194,8 @@ public:
 
 protected:
     wxDataObject *m_dataObject;
+
+    DECLARE_NO_COPY_CLASS(wxDropTargetBase)
 };
 
 // ----------------------------------------------------------------------------

@@ -147,6 +147,7 @@ private:
                  *m_next;
 
     DECLARE_DYNAMIC_CLASS(wxWizardPageSimple)
+    DECLARE_NO_COPY_CLASS(wxWizardPageSimple)
 };
 
 // ----------------------------------------------------------------------------
@@ -242,6 +243,7 @@ private:
     wxWizardPage*    m_page;
 
     DECLARE_DYNAMIC_CLASS(wxWizardEvent)
+    DECLARE_NO_COPY_CLASS(wxWizardEvent)
 };
 
 // ----------------------------------------------------------------------------

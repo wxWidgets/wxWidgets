@@ -389,6 +389,8 @@ protected:
     long           m_style;             // combination of wxMENU_XXX flags
 
     wxEvtHandler  *m_eventHandler;      // a pluggable in event handler
+
+    DECLARE_NO_COPY_CLASS(wxMenuBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -516,6 +518,8 @@ protected:
 
     // the frame we are attached to (may be NULL)
     wxFrame *m_menuBarFrame;
+
+    DECLARE_NO_COPY_CLASS(wxMenuBarBase)
 };
 
 // ----------------------------------------------------------------------------

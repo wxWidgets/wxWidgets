@@ -56,6 +56,8 @@ public:
 
 //// Data
     wxContextHelp* m_contextHelp;
+
+    DECLARE_NO_COPY_CLASS(wxContextHelpEvtHandler)
 };
 
 // ============================================================================
