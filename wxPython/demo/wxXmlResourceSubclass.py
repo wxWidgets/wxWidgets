@@ -8,7 +8,8 @@ resourceText = r'''<?xml version="1.0"?>
 <resource>
 
 <!-- Notice that the class IS a standard wx class, and a custom
-     subclass is specified as "moduleName.ClassName" -->
+     subclass is specified as "moduleName.ClassName"  Try changing
+     the classname to one that does not exist and see what happens -->
 
 <object class="wxPanel" subclass="wxXmlResourceSubclass.MyBluePanel" name="MyPanel">
     <size>200,100</size>
