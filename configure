@@ -6957,8 +6957,6 @@ fi
 if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_PRINTING_ARCHITECTURE=no
   wxUSE_DRAG_AND_DROP=no
-  # Generic notebook requires tab dialog
-  DEFAULT_wxUSE_TABDIALOG=yes
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
@@ -40629,6 +40627,8 @@ fi
 
         ;;
     esac
+
+
 
 
 
