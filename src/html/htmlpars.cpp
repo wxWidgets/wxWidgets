@@ -80,8 +80,9 @@ wxHtmlParser::wxHtmlParser()
 
 wxHtmlParser::~wxHtmlParser()
 {
-    while (RestoreState())
-        DestroyDOMTree();
+    while (RestoreState()) {}
+    DestroyDOMTree();
+    
     delete m_HandlersStack;
     m_HandlersHash.Clear();
     m_HandlersList.DeleteContents(TRUE);
@@ -385,6 +386,8 @@ void wxHtmlParser::SetSourceAndSaveState(const wxString& src)
 bool wxHtmlParser::RestoreState()
 {
     if (!m_SavedStates) return FALSE;
+
+    DestroyDOMTree();
 
     wxHtmlParserState *s = m_SavedStates;
     m_SavedStates = s->m_nextState;
