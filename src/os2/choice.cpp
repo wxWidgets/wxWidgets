@@ -112,7 +112,7 @@ int wxChoice::DoAppend(
 } // end of wxChoice::DoAppend
 
 int wxChoice::DoInsert(
-  const wxString&                   rsItem
+  const wxString&                   rsItem,
   int                               pos
 )
 {
@@ -120,7 +120,7 @@ int wxChoice::DoInsert(
     wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
 
     if (pos == GetCount())
-        return DoAppend(item);
+        return DoAppend(rsItem);
 
     int                             nIndex;
     SHORT                           nIndexType = 0;
