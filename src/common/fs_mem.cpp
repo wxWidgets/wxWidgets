@@ -172,28 +172,6 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 }
 
 
-#if wxUSE_IMAGE
-
-/*static*/ void
-wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long type)
-{
-    if (!CheckHash(filename)) return;
-
-
-    wxMemoryOutputStream mems;
-    if (image.Ok() && image.SaveFile(mems, (int)type))
-        m_Hash -> Put(filename, new MemFSHashObj(mems));
-    else
-    {
-        wxString s;
-        s.Printf(_("Failed to store image '%s' to memory VFS!"), filename.c_str());
-        wxPrintf(wxT("'%s'\n"), s.c_str());
-        wxLogError(s);
-    }
-}
-
-#endif // wxUSE_IMAGE
-
 /*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const wxString& textdata)
 {
     AddFile(filename, (const void*) textdata.mb_str(), textdata.Length());
@@ -225,6 +203,26 @@ wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long ty
 #endif // __WXBASE__
 
 #if wxUSE_GUI
+
+#if wxUSE_IMAGE
+/*static*/ void
+wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long type)
+{
+    if (!CheckHash(filename)) return;
+
+
+    wxMemoryOutputStream mems;
+    if (image.Ok() && image.SaveFile(mems, (int)type))
+        m_Hash -> Put(filename, new MemFSHashObj(mems));
+    else
+    {
+        wxString s;
+        s.Printf(_("Failed to store image '%s' to memory VFS!"), filename.c_str());
+        wxPrintf(wxT("'%s'\n"), s.c_str());
+        wxLogError(s);
+    }
+}
+#endif // wxUSE_IMAGE
 
 /*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
 {
