@@ -112,7 +112,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     const int widths[] = { -1, 60 };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
-    wxLogStatus(this, "no selection");
+    wxLogStatus(this, _T("no selection"));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -184,23 +184,23 @@ void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Demo of wxCheckListBox control\n"
-                 "© Vadim Zeitlin 1998-1999",
-                 "About wxCheckListBox",
+    wxMessageBox(_T("Demo of wxCheckListBox control\n"
+                    "© Vadim Zeitlin 1998-1999"),
+                 _T("About wxCheckListBox"),
                  wxICON_INFORMATION, this);
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
 {
     int nSel = event.GetSelection();
-    wxLogStatus(this, "item %d selected (%schecked)", nSel,
-                      m_pListBox->IsChecked(nSel) ? "" : "not ");
+    wxLogStatus(this, _T("item %d selected (%schecked)"), nSel,
+                      m_pListBox->IsChecked(nSel) ? _T("") : _T("not "));
 }
 
 void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
     wxString strSelection;
-    strSelection.sprintf("item %d double clicked", m_pListBox->GetSelection());
+    strSelection.sprintf(_T("item %d double clicked"), m_pListBox->GetSelection());
     wxMessageDialog dialog(this, strSelection);
     dialog.ShowModal();
 }
@@ -209,8 +209,8 @@ void CheckListBoxFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
     unsigned int nItem = event.GetInt();
 
-    wxLogStatus(this, "item %d was %schecked", nItem,
-                      m_pListBox->IsChecked(nItem) ? "" : "un");
+    wxLogStatus(this, _T("item %d was %schecked"), nItem,
+                      m_pListBox->IsChecked(nItem) ? _T("") : _T("un"));
 }
 
 void CheckListBoxFrame::OnButtonUp(wxCommandEvent& WXUNUSED(event))
@@ -233,7 +233,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
         int positionNew = up ? selection - 1 : selection + 2;
         if ( positionNew < 0 || positionNew > m_pListBox->Number() )
         {
-            wxLogStatus(this, "Can't move this item %s", up ? "up" : "down");
+            wxLogStatus(this, _T("Can't move this item %s"), up ? _T("up") : _T("down"));
         }
         else
         {
@@ -251,11 +251,11 @@ void CheckListBoxFrame::OnButtonMove(bool up)
             m_pListBox->Check(selectionNew, wasChecked);
             m_pListBox->SetSelection(selectionNew);
 
-            wxLogStatus(this, "Item moved %s", up ? "up" : "down");
+            wxLogStatus(this, _T("Item moved %s"), up ? _T("up") : _T("down"));
         }
     }
     else
     {
-        wxLogStatus(this, "Please select an item");
+        wxLogStatus(this, _T("Please select an item"));
     }
 }
