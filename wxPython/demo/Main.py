@@ -48,6 +48,7 @@ _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
         'StandardPaths',
+        'MediaCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -151,6 +152,7 @@ _treeList = [
         'FloatCanvas',
         'HtmlWindow',
         'IntCtrl',
+        'MediaCtrl',
         'MVCTree',   
         'MaskedEditControls',
         'MaskedNumCtrl',
