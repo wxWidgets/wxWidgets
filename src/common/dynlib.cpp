@@ -39,6 +39,8 @@
 #include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/filename.h"        // for SplitPath()
+#include "wx/app.h"
+#include "wx/apptrait.h"
 
 #if defined(__WXMAC__)
     #include "wx/mac/private.h"
@@ -409,31 +411,11 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     wxString suffix;
     if ( cat == wxDL_PLUGIN_GUI )
     {
-        suffix = wxString::FromAscii(
-#if defined(__WXMSW__)
-                "msw"
-#elif defined(__WXGTK__)
-                "gtk"
-#elif defined(__WXMGL__)
-                "mgl"
-#elif defined(__WXMOTIF__)
-                "motif"
-#elif defined(__WXOS2__)
-                "pm"
-#elif defined(__WXX11__)
-                "x11"
-#elif defined(__WXMAC__)
-                "mac"
-#elif defined(__WXCOCOA__)
-                "cocoa"
-#else // FIXME - wrong!
-                ""
-#endif
-       );
-
-#ifdef __WXUNIVERSAL__
-        suffix << _T("univ");
-#endif
+        wxAppTraits *traits = wxAppConsole::GetInstance() ?
+                              wxAppConsole::GetInstance()->GetTraits() : NULL;
+        wxASSERT_MSG( traits, 
+               _("can't query for GUI plugins name in console applications") );
+        suffix = traits->GetToolkitInfo()->shortName;
     }
 #if wxUSE_UNICODE
     suffix << _T('u');

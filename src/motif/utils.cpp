@@ -133,19 +133,24 @@ void wxBell()
     XBell (wxGlobalDisplay(), 0);
 }
 
-int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
 {
+    wxToolkitInfo info;
+    info.shortName = _T("motif");
+    info.name = _T("wxMotif");
+#ifdef __WXUNIVERSAL__
+    info.shortName << _T("univ");
+    info.name << _T("/wxUniversal");
+#endif
     // FIXME TODO
     // This code is WRONG!! Does NOT return the
     // Motif version of the libs but the X protocol
     // version!
     Display *display = wxGlobalDisplay();
-    if (majorVsn)
-        *majorVsn = ProtocolVersion (display);
-    if (minorVsn)
-        *minorVsn = ProtocolRevision (display);
-
-    return wxMOTIF_X;
+    info.versionMajor = ProtocolVersion (display);
+    info.versionMinor = ProtocolRevision (display);
+    info.os = wxMOTIF_X;
+    return &info;
 }
 
 // ----------------------------------------------------------------------------

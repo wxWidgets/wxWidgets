@@ -1012,7 +1012,7 @@ wxString wxGetOsDescription()
 #endif // Win32/16
 }
 
-int wxAppTraits::GetOSVersion(int *verMaj, int *verMin)
+wxToolkitInfo *wxAppTraits::GetToolkitInfo()
 {
     // cache the version info, it's not going to change
     //
@@ -1056,12 +1056,12 @@ int wxAppTraits::GetOSVersion(int *verMaj, int *verMin)
         }
     }
 
-    if ( verMaj )
-        *verMaj = s_major;
-    if ( verMin )
-        *verMin = s_minor;
-
-    return s_ver;
+    static wxToolkitInfo info;    
+    info.versionMajor = s_major;
+    info.versionMinor = s_minor;
+    info.os = s_ver;
+    info.name = _T("wxBase");
+    return &info;
 }
 
 // ----------------------------------------------------------------------------

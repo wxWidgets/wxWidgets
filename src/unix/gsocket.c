@@ -111,7 +111,8 @@ struct sockaddr_un
 #endif /* __GSOCKET_STANDALONE__ */
 
 /* redefine some GUI-only functions to do nothing in console mode */
-#if defined(wxUSE_GUI) && !wxUSE_GUI
+#if 1 //defined(wxUSE_GUI) && !wxUSE_GUI
+      // FIXME -- temporary measure
 #  define _GSocket_GUI_Init(socket) (1)
 #  define _GSocket_GUI_Destroy(socket)
 #  define _GSocket_Enable_Events(socket)

@@ -44,9 +44,10 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    // under MSW this function does the same thing for console and GUI
-    // applications so we can implement it directly in the base class
-    virtual int GetOSVersion(int *verMaj, int *verMin);
+    // under MSW this function returns same version for both console and GUI
+    // applications so we can implement it directly in the base class and only
+    // override it wxGUIAppTraits to fill in toolkit information
+    virtual wxToolkitInfo *GetToolkitInfo();
 };
 
 #endif // _WX_MSW_APPTBASE_H_

@@ -122,14 +122,23 @@ int wxDisplayDepth()
     return gdk_window_get_visual( wxGetRootWindow()->window )->depth;
 }
 
-int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+wxToolkitInfo *wxGUIAppTraits::GetToolkitInfo()
 {
-    if (majorVsn)
-        *majorVsn = GTK_MAJOR_VERSION;
-    if (minorVsn)
-        *minorVsn = GTK_MINOR_VERSION;
-
-    return wxGTK;
+    static wxToolkitInfo info;
+#ifdef __WXGTK20__
+    info.shortName = _T("gtk2");
+#else
+    info.shortName = _T("gtk");
+#endif
+    info.name = _T("wxGTK");
+#ifdef __WXUNIVERSAL__
+    info.shortName << _T("univ");
+    info.name << _T("/wxUniversal");
+#endif
+    info.versionMajor = GTK_MAJOR_VERSION;
+    info.versionMinor = GTK_MINOR_VERSION;
+    info.os = wxGTK;
+    return &info;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

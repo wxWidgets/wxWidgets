@@ -22,7 +22,7 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    virtual int GetOSVersion(int *verMaj, int *verMin);
+    virtual wxToolkitInfo *GetToolkitInfo();
 };
 
 #if wxUSE_GUI
@@ -33,7 +33,7 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    virtual int GetOSVersion(int *verMaj, int *verMin);
+    virtual wxToolkitInfo *GetToolkitInfo();
 };
 
 #endif // wxUSE_GUI

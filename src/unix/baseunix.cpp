@@ -88,8 +88,9 @@ wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
 // this is in mac/utils.cpp under Mac
 #ifndef __WXMAC__
 
-int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
+wxToolkitInfo *wxConsoleAppTraits::GetToolkitInfo()
 {
+    static wxToolkitInfo info;
     int major, minor;
     char name[256];
 
@@ -100,12 +101,12 @@ int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
         minor = -1;
     }
 
-    if ( verMaj )
-        *verMaj = major;
-    if ( verMin )
-        *verMin = minor;
+    info.versionMajor = major;
+    info.versionMinor = minor;
+    info.name = _T("wxBase");
+    info.os = wxUNIX;
 
-    return wxUNIX;
+    return &info;
 }
 
 #endif // __WXMAC__

@@ -12,15 +12,37 @@
 #ifndef _WX_APPTRAIT_H_
 #define _WX_APPTRAIT_H_
 
-class WXDLLEXPORT wxObject;
+#include "wx/string.h"
+
+class WXDLLIMPEXP_BASE wxObject;
 class WXDLLEXPORT wxAppTraits;
 #if wxUSE_FONTMAP
     class WXDLLEXPORT wxFontMapper;
 #endif // wxUSE_FONTMAP
-class WXDLLEXPORT wxLog;
-class WXDLLEXPORT wxMessageOutput;
+class WXDLLIMPEXP_BASE wxLog;
+class WXDLLIMPEXP_BASE wxMessageOutput;
 class WXDLLEXPORT wxRendererNative;
-class WXDLLEXPORT wxString;
+class WXDLLIMPEXP_BASE wxString;
+struct WXDLLIMPEXP_BASE wxToolkitInfo;
+
+// ----------------------------------------------------------------------------
+// toolkit information
+// ----------------------------------------------------------------------------
+
+// Information about the toolkit that the app is running under (e.g. wxMSW):
+struct WXDLLIMPEXP_BASE wxToolkitInfo
+{
+    // Short name of the toolkit (e.g. "msw" or "mswuniv"); empty for console:
+    wxString shortName;
+    // Descriptive name of the toolkit, human readable (e.g. "wxMSW" or
+    // "wxMSW/Universal"); "wxBase" for console apps:
+    wxString name;
+    // Version of the underlying toolkit or of the OS for console apps:
+    int versionMajor, versionMinor;
+    // OS mnenomics, e.g. wxGTK or wxMSW:
+    int os;
+};
+
 
 // ----------------------------------------------------------------------------
 // wxAppTraits: this class defines various configurable aspects of wxApp
@@ -85,13 +107,14 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
 
 
-    // other miscellaneous helpers
-    // ---------------------------
-
-    // wxGetOsVersion() behaves differently in GUI and non-GUI builds under
-    // Unix: in the former case it returns the information about the toolkit
-    // and in the latter -- about the OS, so we need to virtualize it
-    virtual int GetOSVersion(int *verMaj, int *verMin) = 0;
+    // return information about what toolkit is running; we need for two things
+    // that are both contained in wxBase:
+    //  - wxGetOsVersion() behaves differently in GUI and non-GUI builds under
+    //    Unix: in the former case it returns the information about the toolkit
+    //    and in the latter -- about the OS, so we need to virtualize it
+    //  - wxDynamicLibrary::CanonicalizePluginName() must embed toolkit
+    //    signature in DLL name
+    virtual wxToolkitInfo *GetToolkitInfo() = 0;
 };
 
 // ----------------------------------------------------------------------------
