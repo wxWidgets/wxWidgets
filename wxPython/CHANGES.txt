@@ -88,6 +88,8 @@ Added OOR support for wxGridCellRenderer, wxGridCellEditor,
 wxGridCellAttr, wxGridCellAttrProvider, wxGridTableBase and their
 derived classes.
 
+Added wxImage.GetDataBuffer which returns an in-place edit buffer of
+the image data.  (Patch #546009)
 
 
 

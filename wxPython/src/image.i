@@ -167,6 +167,12 @@ public:
     //void SetData( unsigned char *data );
 
     %addmethods {
+        PyObject* GetDataBuffer() {
+            unsigned char* data = self->GetData();
+            int len = self->GetWidth() * self->GetHeight() * 3;
+            return PyBuffer_FromReadWriteMemory(data, len);
+        }
+
         PyObject* GetData() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
