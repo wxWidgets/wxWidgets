@@ -1168,10 +1168,115 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     }
 }
 
+#ifdef __WXGTK20__
+
+#include "wx/gtk/private.h"
+#include "wx/fontutil.h"
+#include "gtk/gtk.h"
+#include <pango/pangoft2.h>
+
+#endif
+
 void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
+#ifdef 0
+  //__WXGTK20__
+
+    PangoContext *context = pango_ft2_get_context (150, 150);
+
+    // What are these for?
+    pango_context_set_language (context, pango_language_from_string ("en_US"));
+    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
+
+    // Set the font
+    pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
+
+    // Create layout 
+    PangoLayout *layout = layout = pango_layout_new (context);
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = wxConvUTF8.cWC2MB( text );
+#else
+    wxCharBuffer buffer = wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) );
+#endif
+	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
+    
+    // Find out extent for the bitmap
+    int height = 0;
+    int width = 0;
+    PangoRectangle logical_rect;
+    pango_layout_get_extents (layout, NULL, &logical_rect);
+    height = PANGO_PIXELS (logical_rect.height);
+    width = PANGO_PIXELS (logical_rect.width);
+
+    // Allocate FreeType 2 bitmap
+    int byte_width = (width + 7)/8 * 8;
+    FT_Bitmap bitmap;
+    guchar *buf = (guchar*) g_malloc (byte_width * height);
+    memset (buf, 0x00, byte_width * height);
+    bitmap.rows = height;
+    bitmap.width = byte_width;
+	bitmap.pitch = byte_width;
+	bitmap.buffer = buf;
+	bitmap.num_grays = 256;
+	bitmap.pixel_mode = ft_pixel_mode_grays;
+	
+    // Render bitmap
+	pango_ft2_render_layout (&bitmap, layout, 0, 0);
+
+	// Invert bitmap to get black text on white background
+    for (int pix_idx = 0; pix_idx < width * height; pix_idx++)
+        buf[pix_idx] = 255-buf[pix_idx];
+
+    // Write PS output
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y /*+ bitmap.GetHeight()*/ );
+
+    fprintf(m_pstream, "gsave\n");
+    fprintf(m_pstream, "%d %d translate\n", xx, yy);
+    fprintf(m_pstream, "/img_width %d def\n", bitmap.width);
+    fprintf(m_pstream, "/img_height %d def\n", bitmap.rows);
+    fprintf(m_pstream, "/picstr img_width 8 idiv string def\n");
+
+    fprintf(m_pstream,
+	  "  img_width 72 150 div mul\n"
+          "  img_height 72 150 div mul scale\n"
+	  "  0 setgray\n"
+	  "  img_width img_height\n"
+	  "  true\n"
+	  "  [img_width 0 0 img_height neg 0 img_height 0.67 mul]\n"
+	  "  { currentfile\n"
+	  "    picstr readhexstring pop }\n"
+	  "  imagemask"
+	  );
+
+
+    for (int b_idx= 0; b_idx < bitmap.width/8 * bitmap.rows; b_idx++)
+    {
+      guchar packed_b = 0;
+      int bit_idx;
+
+      if (b_idx % (bitmap.width/8) == 0)
+	fprintf(m_pstream, "\n");
+      
+      for (bit_idx = 0; bit_idx < 8; bit_idx++)
+	{
+	  guchar this_bit = bitmap.buffer[b_idx * 8+bit_idx]>128;
+	  packed_b = (packed_b << 1) + this_bit;
+	}
+    
+
+      fprintf(m_pstream, "%02x", packed_b);
+    }
+  
+    fprintf(m_pstream, "\ngrestore\n" );
+    
+    
+    // Free memory
+    g_free( buf );
+
+#else
     wxCoord text_w, text_h, text_descent;
 
     GetTextExtent(text, &text_w, &text_h, &text_descent);
@@ -1276,6 +1381,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + size * text.Length() * 2/3 , y );
+#endif
 }
 
 void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )

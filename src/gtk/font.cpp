@@ -178,6 +178,27 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
+    
+    
+    // Create native font info
+    m_nativeFontInfo.description = pango_font_description_new();
+
+    // And set its values    
+    switch (m_family)
+    {
+        case wxFONTFAMILY_TELETYPE:
+           pango_font_description_set_family( m_nativeFontInfo.description, "monospaced" );
+           break;
+        case wxFONTFAMILY_SWISS:
+           pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
+           break;
+        default:
+           pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
+           break;
+    }
+    SetStyle( m_style );
+    SetPointSize( m_pointSize );
+    SetWeight( m_weight );
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )

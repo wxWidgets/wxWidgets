@@ -331,6 +331,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
 #ifdef __WXGTK20__
     m_context = gtk_widget_get_pango_context( widget );
+    
     m_fontdesc = widget->style->font_desc;
 #endif
 
