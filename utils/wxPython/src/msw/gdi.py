@@ -244,13 +244,6 @@ class wxPenPtr :
         val = gdic.wxPen_GetColour(self.this)
         val = wxColourPtr(val)
         return val
-    def GetDashes(self,arg0):
-        val = gdic.wxPen_GetDashes(self.this,arg0)
-        return val
-    def GetStipple(self):
-        val = gdic.wxPen_GetStipple(self.this)
-        val = wxBitmapPtr(val)
-        return val
     def GetJoin(self):
         val = gdic.wxPen_GetJoin(self.this)
         return val
@@ -269,12 +262,6 @@ class wxPenPtr :
     def SetColour(self,arg0):
         val = gdic.wxPen_SetColour(self.this,arg0.this)
         return val
-    def SetDashes(self,arg0,*args):
-        val = apply(gdic.wxPen_SetDashes,(self.this,arg0,)+args)
-        return val
-    def SetStipple(self,arg0):
-        val = gdic.wxPen_SetStipple(self.this,arg0.this)
-        return val
     def SetJoin(self,arg0):
         val = gdic.wxPen_SetJoin(self.this,arg0)
         return val
@@ -283,6 +270,19 @@ class wxPenPtr :
         return val
     def SetWidth(self,arg0):
         val = gdic.wxPen_SetWidth(self.this,arg0)
+        return val
+    def GetDashes(self,arg0):
+        val = gdic.wxPen_GetDashes(self.this,arg0)
+        return val
+    def GetStipple(self):
+        val = gdic.wxPen_GetStipple(self.this)
+        val = wxBitmapPtr(val)
+        return val
+    def SetDashes(self,arg0,*args):
+        val = apply(gdic.wxPen_SetDashes,(self.this,arg0,)+args)
+        return val
+    def SetStipple(self,arg0):
+        val = gdic.wxPen_SetStipple(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxPen instance>"

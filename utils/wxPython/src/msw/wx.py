@@ -1189,10 +1189,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.2  1998/12/17 18:07:15  RD
-# wxPython 0.5.2
-# Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
-# versions are much closer now!
+# Revision 1.3  1998/12/21 19:59:03  RD
+# Now compiles with /GX- on MSW.
 #
 # Revision 1.7  1998/11/25 08:45:21  RD
 #

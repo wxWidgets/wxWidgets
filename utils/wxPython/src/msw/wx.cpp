@@ -33,10 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  1998/12/17 18:07:12  RD
- * wxPython 0.5.2
- * Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
- * versions are much closer now!
+ * Revision 1.3  1998/12/21 19:59:01  RD
+ * Now compiles with /GX- on MSW.
  *
  ************************************************************************/
 
@@ -1800,7 +1798,6 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxStatusBar","_wxStatusBar",0);
-	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
@@ -1926,7 +1923,6 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
-	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_wxTreeItemId","_class_wxTreeItemId",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);

@@ -40,6 +40,8 @@ THISDIR=$(WXDIR)\utils\wxPython
 EXTRALIBS=$(PYTHONDIR)\libs\python15.lib
 EXTRAINC=-I$(PYTHONDIR)\include -I.
 EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H
+OVERRIDEFLAGS=/GX-
+
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXMSW__
 GENCODEDIR=msw
@@ -239,6 +241,9 @@ $(TARGETDIR)\__init__.py  : __init__.py
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.8  1998/12/21 19:58:06  RD
+# Now compiles with /GX- on MSW.
+#
 # Revision 1.7  1998/12/15 20:41:20  RD
 # Changed the import semantics from "from wxPython import *" to "from
 # wxPython.wx import *"  This is for people who are worried about

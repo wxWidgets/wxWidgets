@@ -2292,58 +2292,6 @@ static PyObject *_wrap_wxPen_GetColour(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxPen_GetDashes(_swigobj,_swigarg0)  (_swigobj->GetDashes(_swigarg0))
-static PyObject *_wrap_wxPen_GetDashes(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPen * _arg0;
-    wxDash ** _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPen_GetDashes",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetDashes. Expected _wxPen_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxDash_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_GetDashes. Expected _wxDash_pp.");
-        return NULL;
-        }
-    }
-    _result = (int )wxPen_GetDashes(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPen_GetStipple(_swigobj)  (_swigobj->GetStipple())
-static PyObject *_wrap_wxPen_GetStipple(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxBitmap * _result;
-    wxPen * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPen_GetStipple",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetStipple. Expected _wxPen_p.");
-        return NULL;
-        }
-    }
-    _result = (wxBitmap *)wxPen_GetStipple(_arg0);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 #define wxPen_GetJoin(_swigobj)  (_swigobj->GetJoin())
 static PyObject *_wrap_wxPen_GetJoin(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2479,72 +2427,6 @@ static PyObject *_wrap_wxPen_SetColour(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxPen_SetDashes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDashes(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPen * _arg0;
-    int  _arg1;
-    wxDash * _arg2;
-    char * _argc0 = 0;
-    PyObject * _obj2 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sO:wxPen_SetDashes",&_argc0,&_obj2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_SetDashes. Expected _wxPen_p.");
-        return NULL;
-        }
-    }
-    if (_obj2)
-{
-    _arg2 = (unsigned long*)long_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
-}
-{
-    _arg1 = PyList_Size(_obj2);
-}
-    wxPen_SetDashes(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    delete [] _arg2;
-}
-    return _resultobj;
-}
-
-#define wxPen_SetStipple(_swigobj,_swigarg0)  (_swigobj->SetStipple(_swigarg0))
-static PyObject *_wrap_wxPen_SetStipple(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPen * _arg0;
-    wxBitmap * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPen_SetStipple",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_SetStipple. Expected _wxPen_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_SetStipple. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    wxPen_SetStipple(_arg0,*_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPen_SetJoin(_swigobj,_swigarg0)  (_swigobj->SetJoin(_swigarg0))
 static PyObject *_wrap_wxPen_SetJoin(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2606,6 +2488,124 @@ static PyObject *_wrap_wxPen_SetWidth(PyObject *self, PyObject *args) {
         }
     }
     wxPen_SetWidth(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPen_GetDashes(_swigobj,_swigarg0)  (_swigobj->GetDashes(_swigarg0))
+static PyObject *_wrap_wxPen_GetDashes(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPen * _arg0;
+    wxDash ** _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxPen_GetDashes",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetDashes. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxDash_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_GetDashes. Expected _wxDash_pp.");
+        return NULL;
+        }
+    }
+    _result = (int )wxPen_GetDashes(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPen_GetStipple(_swigobj)  (_swigobj->GetStipple())
+static PyObject *_wrap_wxPen_GetStipple(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxPen * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxPen_GetStipple",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetStipple. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+    _result = (wxBitmap *)wxPen_GetStipple(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxPen_SetDashes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDashes(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPen * _arg0;
+    int  _arg1;
+    wxDash * _arg2;
+    char * _argc0 = 0;
+    PyObject * _obj2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxPen_SetDashes",&_argc0,&_obj2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_SetDashes. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = (unsigned long*)long_LIST_helper(_obj2);
+    if (_arg2 == NULL) {
+        return NULL;
+    }
+}
+{
+    _arg1 = PyList_Size(_obj2);
+}
+    wxPen_SetDashes(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    delete [] _arg2;
+}
+    return _resultobj;
+}
+
+#define wxPen_SetStipple(_swigobj,_swigarg0)  (_swigobj->SetStipple(_swigarg0))
+static PyObject *_wrap_wxPen_SetStipple(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPen * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxPen_SetStipple",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_SetStipple. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_SetStipple. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    wxPen_SetStipple(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -5234,19 +5234,19 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxBrush_GetStipple", _wrap_wxBrush_GetStipple, 1 },
 	 { "wxBrush_GetColour", _wrap_wxBrush_GetColour, 1 },
 	 { "new_wxBrush", _wrap_new_wxBrush, 1 },
+	 { "wxPen_SetStipple", _wrap_wxPen_SetStipple, 1 },
+	 { "wxPen_SetDashes", _wrap_wxPen_SetDashes, 1 },
+	 { "wxPen_GetStipple", _wrap_wxPen_GetStipple, 1 },
+	 { "wxPen_GetDashes", _wrap_wxPen_GetDashes, 1 },
 	 { "wxPen_SetWidth", _wrap_wxPen_SetWidth, 1 },
 	 { "wxPen_SetStyle", _wrap_wxPen_SetStyle, 1 },
 	 { "wxPen_SetJoin", _wrap_wxPen_SetJoin, 1 },
-	 { "wxPen_SetStipple", _wrap_wxPen_SetStipple, 1 },
-	 { "wxPen_SetDashes", _wrap_wxPen_SetDashes, 1 },
 	 { "wxPen_SetColour", _wrap_wxPen_SetColour, 1 },
 	 { "wxPen_SetCap", _wrap_wxPen_SetCap, 1 },
 	 { "wxPen_Ok", _wrap_wxPen_Ok, 1 },
 	 { "wxPen_GetWidth", _wrap_wxPen_GetWidth, 1 },
 	 { "wxPen_GetStyle", _wrap_wxPen_GetStyle, 1 },
 	 { "wxPen_GetJoin", _wrap_wxPen_GetJoin, 1 },
-	 { "wxPen_GetStipple", _wrap_wxPen_GetStipple, 1 },
-	 { "wxPen_GetDashes", _wrap_wxPen_GetDashes, 1 },
 	 { "wxPen_GetColour", _wrap_wxPen_GetColour, 1 },
 	 { "wxPen_GetCap", _wrap_wxPen_GetCap, 1 },
 	 { "new_wxPen", _wrap_new_wxPen, 1 },
