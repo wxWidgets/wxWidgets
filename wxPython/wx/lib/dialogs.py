@@ -174,9 +174,9 @@ def findDialog(parent=None, searchText='', wholeWordsOnly=0, caseSensitive=0):
     wSearchText.SetFocus()
 
     result = DialogResults(dlg.ShowModal())
-    result.text = wSearchText.GetValue()
-    result.wholeword = wWholeWord.GetValue()
-    result.casesensitive = wCase.GetValue()
+    result.searchText = wSearchText.GetValue()
+    result.wholeWordsOnly = wWholeWord.GetValue()
+    result.caseSensitive = wCase.GetValue()
     dlg.Destroy()
     return result
 
@@ -224,7 +224,7 @@ def fontDialog(parent=None, fontData=None, font=None):
         fontData.SetInitialFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
 
     if font is not None:
-        aFontData.SetInitialFont(font)
+        fontData.SetInitialFont(font)
 
     dialog = wx.FontDialog(parent, fontData)
     result = DialogResults(dialog.ShowModal())
@@ -323,7 +323,7 @@ directoryDialog = dirDialog
 
 def singleChoiceDialog(parent=None, message='', title='', lst=[], 
                        style=wx.OK | wx.CANCEL | wx.CENTRE):
-    dialog = wx.SingleChoiceDialog(parent, message, title, lst, style)
+    dialog = wx.SingleChoiceDialog(parent, message, title, list(lst), style | wx.DEFAULT_DIALOG_STYLE)
     result = DialogResults(dialog.ShowModal())
     result.selection = dialog.GetStringSelection()
     dialog.Destroy()
@@ -347,7 +347,7 @@ if __name__ == '__main__':
     class MyApp(wx.App):
 
         def OnInit(self):
-            self.frame = frame = wx.Frame(None, -1, "Dialogs", size=(400, 200))
+            self.frame = frame = wx.Frame(None, -1, "Dialogs", size=(400, 240))
             panel = wx.Panel(frame, -1)
             self.panel = panel
 
