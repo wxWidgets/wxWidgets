@@ -346,11 +346,12 @@ public:
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
 
     // Dir accessors
-    void AppendDir( const wxString &dir );
-    void PrependDir( const wxString &dir );
-    void InsertDir( int before, const wxString &dir );
-    void RemoveDir( int pos );
     size_t GetDirCount() const { return m_dirs.size(); }
+    void AppendDir(const wxString& dir);
+    void PrependDir(const wxString& dir);
+    void InsertDir(size_t before, const wxString& dir);
+    void RemoveDir(size_t pos);
+    void RemoveLastDir() { RemoveDir(GetDirCount() - 1); }
 
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; }

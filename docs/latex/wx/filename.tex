@@ -107,13 +107,15 @@ or \helpref{$==$}{wxfilenameoperatorequal}.
 
 \membersection{File name components}\label{filenamecomponents}
 
-These functions allow to examine and modify the directories of the path:
+These functions allow to examine and modify the individual directories of the
+path:
 
 \helpref{AppendDir}{wxfilenameappenddir}\\
 \helpref{InsertDir}{wxfilenameinsertdir}\\
 \helpref{GetDirCount}{wxfilenamegetdircount}
 \helpref{PrependDir}{wxfilenameprependdir}\\
-\helpref{RemoveDir}{wxfilenameremovedir}
+\helpref{RemoveDir}{wxfilenameremovedir}\\
+\helpref{RemoveLastDir}{wxfilenameremovelastdir}
 
 To change the components of the file name individually you can use the
 following functions:
@@ -535,7 +537,7 @@ Returns {\tt true} if a volume specifier is present.
 
 \membersection{wxFileName::InsertDir}\label{wxfilenameinsertdir}
 
-\func{void}{InsertDir}{\param{int }{before}, \param{const wxString\& }{dir}}
+\func{void}{InsertDir}{\param{size\_t }{before}, \param{const wxString\& }{dir}}
 
 Inserts a directory component before the zero-based position in the directory
 list. Please see \helpref{AppendDir}{wxfilenameappenddir} for important notes.
@@ -705,9 +707,20 @@ Prepends a directory to the file path. Please see
 
 \membersection{wxFileName::RemoveDir}\label{wxfilenameremovedir}
 
-\func{void}{RemoveDir}{\param{int }{pos}}
+\func{void}{RemoveDir}{\param{size\_t }{pos}}
 
-Removes a directory name.
+Removes the specified directory component from the path.
+
+\wxheading{See also}
+
+\helpref{GetDirCount}{wxfilenamegetdircount}
+
+
+\membersection{wxFileName::RemoveLastDir}\label{wxfilenameremovelastdir}
+
+\func{void}{RemoveLastDir}{\void}
+
+Removes last directory component from the path.
 
 
 \membersection{wxFileName::Rmdir}\label{wxfilenamermdir}

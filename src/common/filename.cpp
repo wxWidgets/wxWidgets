@@ -1320,26 +1320,26 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
     return true;
 }
 
-void wxFileName::AppendDir( const wxString &dir )
+void wxFileName::AppendDir( const wxString& dir )
 {
     if ( IsValidDirComponent(dir) )
         m_dirs.Add( dir );
 }
 
-void wxFileName::PrependDir( const wxString &dir )
+void wxFileName::PrependDir( const wxString& dir )
 {
     InsertDir(0, dir);
 }
 
-void wxFileName::InsertDir( int before, const wxString &dir )
+void wxFileName::InsertDir(size_t before, const wxString& dir)
 {
     if ( IsValidDirComponent(dir) )
-        m_dirs.Insert( dir, before );
+        m_dirs.Insert(dir, before);
 }
 
-void wxFileName::RemoveDir( int pos )
+void wxFileName::RemoveDir(size_t pos)
 {
-    m_dirs.RemoveAt( (size_t)pos );
+    m_dirs.RemoveAt(pos);
 }
 
 // ----------------------------------------------------------------------------
