@@ -124,8 +124,6 @@ bool wxDialog::IsModalShowing() const
     return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
 }
 
-extern bool s_macIsInModalLoop ;
-
 bool wxDialog::Show(bool show)
 {
     if ( !wxDialogBase::Show(show) )
@@ -157,6 +155,10 @@ bool wxDialog::Show(bool show)
     return TRUE;
 }
 
+#if !TARGET_CARBON
+extern bool s_macIsInModalLoop ;
+#endif
+
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
@@ -175,22 +177,26 @@ void wxDialog::DoShowModal()
     {
         winFocus = wxTheApp->GetTopWindow();
     }
+#if TARGET_CARBON
+	BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
+#else
 	// TODO : test whether parent gets disabled
-
 	bool formerModal = s_macIsInModalLoop ;
 	s_macIsInModalLoop = true ;
-
+#endif
 	while ( IsModalShowing() )
 	{
-		while ( !wxTheApp->Pending() && wxTheApp->ProcessIdle() )
-		{
-		}
 		wxTheApp->MacDoOneEvent() ;
+		// calls process idle itself
 	}
 	
-	s_macIsInModalLoop = formerModal ;
-
+#if TARGET_CARBON
+	EndAppModalStateForWindow( (WindowRef) MacGetWindowRef() ) ;
+#else
     // TODO probably reenable the parent window if any
+	s_macIsInModalLoop = formerModal ;
+#endif
+
 
     // and restore focus
     if ( winFocus )
