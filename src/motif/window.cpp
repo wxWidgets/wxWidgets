@@ -179,9 +179,22 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool map)
         return FALSE;
 
     if ( map )
+    {
+        XtManageChild(w);
         XtMapWidget(w);
+    }
     else
+    {
         XtUnmapWidget(w);
+        XtUnmanageChild(w);
+    }
+
+    //   Rationale: a lot of common operations (including but not
+    // limited to moving, resizing and appending items to a listbox)
+    // unmamange the widget, do their work, then manage it again.
+    // This means that, for example adding an item to a listbox will show it,
+    // or that most controls are shown every time they are moved or resized!
+    XtSetMappedWhenManaged( w, map );
 
     return TRUE;
 }
