@@ -326,7 +326,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         wxToolBar* toolBar = new wxToolBar(this, -1,
                          wxDefaultPosition, wxDefaultSize,
                          wxBORDER_NONE | wxTB_HORIZONTAL,
-                         wxToolBarNameStr, GetMenuBar());
+                         wxToolBarNameStr, menubar);
         SetToolBar(toolBar);
         menubar->SetToolBar(toolBar);
     }
