@@ -401,7 +401,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
     <!-- =============================================================== -->
 
     <!-- Link against one wxWin library. Value must be literal! -->
-    <define-tag name="wx-lib" rules="exe,dll">
+    <define-tag name="wx-lib" rules="exe,dll,module">
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
     </define-tag>
 
