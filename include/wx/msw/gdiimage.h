@@ -102,8 +102,8 @@ public:
     void SetExtension(const wxString& ext) { m_extension = ext; }
     void SetType(long type) { m_type = type; }
 
-    wxString GetName() const { return m_name; }
-    wxString GetExtension() const { return m_extension; }
+    const wxString& GetName() const { return m_name; }
+    const wxString& GetExtension() const { return m_extension; }
     long GetType() const { return m_type; }
 
     // real handler operations: to implement in derived classes
