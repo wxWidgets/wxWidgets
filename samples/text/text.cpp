@@ -930,7 +930,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 _T("very very very long line to test ")
                                 _T("wxHSCROLL style"),
                                 wxPoint(450, 10), wxSize(230, 230),
-                                wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
+                                wxTE_RICH | wxTE_MULTILINE);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
