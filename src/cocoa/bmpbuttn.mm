@@ -42,8 +42,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID winid,
     // DoAddChild(this) will retain us again since addSubView doesn't.
     [m_cocoaNSView release];
 
-    [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
-    [GetNSButton() setTitle:@"Bitmap Button"];
+    [GetNSButton() setBezelStyle: NSRegularSquareBezelStyle];
+    [GetNSButton() setImage:bitmap.GetNSImage(true)];
     [GetNSControl() sizeToFit];
 
     if(m_parent)
