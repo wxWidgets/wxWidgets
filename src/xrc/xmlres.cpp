@@ -124,8 +124,7 @@ bool wxXmlResource::Load(const wxString& filemask)
         if (fnd.Lower().Matches(wxT("*.zip")) ||
             fnd.Lower().Matches(wxT("*.xrs")))
         {
-            wxString url(wxFileSystem::FileNameToURL(fnd));
-            rt = rt && Load(url + wxT("#zip:*.xrc"));
+            rt = rt && Load(fnd + wxT("#zip:*.xrc"));
         }
         else
 #endif
