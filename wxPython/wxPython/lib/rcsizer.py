@@ -111,12 +111,12 @@ class RowColSizer(wxPySizer):
 
     #--------------------------------------------------
     def CalcMin( self ):
+        self.rowHeights = []
+        self.colWidths = []
+
         items = self.GetChildren()
         if not items:
             return wxSize(10, 10)
-
-        self.rowHeights = []
-        self.colWidths = []
 
         for item in items:
             self._add( item.CalcMin(), item.GetUserData() )
