@@ -118,7 +118,26 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         SetBackground(MacGetBackgroundBrush(window));
     }
     else
-        m_graphicContext = NULL ;
+    {
+        // as out of order redraw is not supported under CQ, we have to create a qd port for these
+        // situations
+        wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+        if (!rootwindow)
+            return;
+        WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
+        wxSize size = window->GetClientSize() ;
+        int x , y ;
+        x = y = 0 ;
+        window->MacWindowToRootWindow( &x , &y ) ;
+        m_macLocalOrigin.x = x ;
+        m_macLocalOrigin.y = y ;
+        CGrafPtr port = UMAGetWindowPort( windowref ) ;
+        
+        m_graphicContext = new wxMacCGContext( port ) ;
+        m_graphicContext->SetPen( m_pen ) ;
+        m_graphicContext->SetBrush( m_brush ) ;
+        SetBackground(MacGetBackgroundBrush(window));
+    }
     // there is no out-of-order drawing on OSX
 #else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
@@ -172,7 +191,8 @@ wxClientDC::wxClientDC(wxWindow *window)
     }
     else
     {
-    /*
+        // as out of order redraw is not supported under CQ, we have to create a qd port for these
+        // situations
         wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
         if (!rootwindow)
             return;
@@ -191,9 +211,7 @@ wxClientDC::wxClientDC(wxWindow *window)
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
         SetBackground(MacGetBackgroundBrush(window));
-        m_ok = TRUE ;
-    */
-    }
+     }
     m_ok = TRUE ;    
 #else
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;

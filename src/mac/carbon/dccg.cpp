@@ -168,13 +168,7 @@ CGPathRef wxMacCGPath::GetPath() const
 wxMacCGContext::wxMacCGContext( CGrafPtr port ) 
 {
     m_qdPort = port ;
-    Rect bounds ;
-    GetPortBounds( (CGrafPtr) port , &bounds ) ;
-    OSStatus status = QDBeginCGContext( (CGrafPtr) port , &m_cgContext ) ;
-
-    wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
-    CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top ) ;
-    CGContextScaleCTM( m_cgContext , 1 , -1 ) ;
+    m_cgContext = NULL ;
 }
 
 wxMacCGContext::wxMacCGContext( CGContextRef cgcontext )
@@ -247,15 +241,47 @@ void wxMacCGContext::FillPath( const wxGraphicPath *p , const wxColor &fillColor
     CGContextRestoreGState( m_cgContext ) ;
 }
     
-wxGraphicPath* wxMacCGContext::CreatePath() { return new wxMacCGPath() ; }
-CGContextRef wxMacCGContext::GetNativeContext() { return m_cgContext ; }
-void wxMacCGContext::SetNativeContext( CGContextRef cg ) { m_cgContext = cg ; }
+wxGraphicPath* wxMacCGContext::CreatePath() 
+{ 
+    CGContextRef cg = GetNativeContext() ;
+    // make sure that we now have a real cgref, before doing
+    // anything with paths
+    return new wxMacCGPath() ; 
+}
+
+// in case we only got a QDPort only create a cgref now
+
+CGContextRef wxMacCGContext::GetNativeContext() 
+{ 
+    if( m_cgContext == NULL )
+    {
+        Rect bounds ;
+        GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
+        OSStatus status = QDBeginCGContext( (CGrafPtr) m_qdPort , &m_cgContext ) ;
+
+        wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
+        CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top ) ;
+        CGContextScaleCTM( m_cgContext , 1 , -1 ) ;
+        
+        SetPen( m_pen ) ;
+        SetBrush( m_brush ) ;
+    }
+    return m_cgContext ; 
+}
+
+void wxMacCGContext::SetNativeContext( CGContextRef cg ) 
+{ 
+    m_cgContext = cg ; 
+}
 
 void wxMacCGContext::SetPen( const wxPen &pen )
 {
+    m_pen = pen ;
+    if ( m_cgContext == NULL )
+        return ;
     bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
     bool stroke = pen.GetStyle() != wxTRANSPARENT ;
-
+    
 #if 0
     // we can benchmark performance, should go into a setting later
     CGContextSetShouldAntialias( m_cgContext , false ) ;
@@ -373,6 +399,10 @@ void wxMacCGContext::SetPen( const wxPen &pen )
 }
 void wxMacCGContext::SetBrush( const wxBrush &brush )
 {
+    m_brush = brush ;
+    if ( m_cgContext == NULL )
+        return ;
+
     bool fill = brush.GetStyle() != wxTRANSPARENT ;
     bool stroke = m_pen.GetStyle() != wxTRANSPARENT ;
 

@@ -2692,6 +2692,12 @@ wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
     return wxEmptyString ;
 }
 
+void wxWindowMac::ClearBackground()
+{
+    Refresh() ;
+    Update() ;
+}
+
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
@@ -2906,6 +2912,34 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 if ( RectInRgn( &childRect , updatergn ) )
                 {
 #if wxMAC_USE_CORE_GRAPHICS
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+                    if ( HIThemeDrawFrame )
+                    {
+                        Rect srect = childRect ;
+                        HIThemeFrameDrawInfo info ;
+                        info.version = 0 ;
+                        info.kind = 0 ;
+                        info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+                        if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+                        {
+                            SInt32 border = 0 ;
+                            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
+                            InsetRect( &srect , border , border );
+                            info.kind = kHIThemeFrameTextFieldSquare ;
+                        }
+                        else if (HasFlag(wxSIMPLE_BORDER))
+                        {
+                            SInt32 border = 0 ;
+                            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+                            InsetRect( &srect , border , border );
+                            info.kind = kHIThemeFrameListBox ;
+                        }
+
+                        CGRect rect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
+                            srect.bottom - srect.top ) ;
+                        HIThemeDrawFrame( &rect , &info , (CGContextRef) MacGetCGContextRef() , kHIThemeOrientationNormal ) ;
+                    }
+#endif
 #else
                     // paint custom borders
                     wxNcPaintEvent eventNc( child->GetId() );
@@ -2923,6 +2957,14 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             if ( child->m_peer->NeedsFocusRect() && child->m_peer->HasFocus() )
             {
 #if wxMAC_USE_CORE_GRAPHICS
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+                if ( HIThemeDrawFocusRect )
+                {
+                    CGRect rect = CGRectMake( childRect.left , childRect.top , childRect.right - childRect.left ,
+                        childRect.bottom - childRect.top ) ;
+                    HIThemeDrawFocusRect( &rect , true , (CGContextRef) MacGetCGContextRef() , kHIThemeOrientationNormal ) ;
+                }
+#endif
 #else
                 wxWindowDC dc(this) ;
                 dc.SetClippingRegion(wxRegion(updatergn));

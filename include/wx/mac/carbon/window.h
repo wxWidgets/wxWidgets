@@ -82,6 +82,9 @@ public:
     virtual void Freeze() ;
     virtual void Thaw() ;
 
+    virtual void Update() ;
+    virtual void ClearBackground() ;
+
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font ) ;
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -193,7 +196,6 @@ public:
     
     bool		        MacIsUserPane() { return m_macIsUserPane; }
 
-    virtual void        Update() ;
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;
         
     virtual void        MacSetBackgroundBrush( const wxBrush &brush ) ;
