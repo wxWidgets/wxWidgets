@@ -287,10 +287,11 @@ int wxFileDialog::ShowModal()
     // Convert forward slashes to backslashes (file selector doesn't like
     // forward slashes) and also squeeze multiple consecutive slashes into one
     // as it doesn't like two backslashes in a row neither
-    wxString dir;
-    size_t len = m_dir.length();
+
+    wxString 	dir;
+    size_t 	i, len = m_dir.length();
     dir.reserve(len);
-    for ( size_t i = 0; i < len; i++ )
+    for ( i = 0; i < len; i++ )
     {
         wxChar ch = m_dir[i];
         switch ( ch )
