@@ -22,7 +22,8 @@ WIN_BUILD=/c/BUILD
 
 
 # Just like the above
-OSX_HOST=bigmac
+OSX_HOST_panther=bigmac
+OSX_HOST_jaguar=whopper
 OSX_BUILD=/tmp/BUILD
 
 
@@ -210,25 +211,49 @@ fi
 # ---------------------------------------------------------------------------
 # OSX build
 
-if [ $skiposx != yes ]; then
-    echo "-=-=- Starting OSX build..."
+function DoOSXBuild {
+    local host=$1
+    local flavor=$2
+
+    # test if the target machine is online
+    if ping -q -c1 -w1 $host > /dev/null; then
+	echo "-----------------------------------------------------------------"
+	echo " The $host machine is online, build continuing..."
+	echo "-----------------------------------------------------------------"
+    else
+	echo "-----------------------------------------------------------------"
+	echo "The $host machine is offline, skipping the OSX $flavor build."
+	echo "-----------------------------------------------------------------"
+	return 0
+    fi
+
+    echo "-=-=- Starting OSX-$flavor build on $host..."
 
     echo "Copying source files and build script..."
-    ssh $OSX_HOST "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/*"
+    ssh $host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/*"
     scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
 	$STAGING_DIR/wxPythonDocs-$VERSION.tar.gz \
 	$STAGING_DIR/wxPythonDemo-$VERSION.tar.gz \
 	distrib/all/build-osx \
-	$OSX_HOST:$OSX_BUILD
+	$host:$OSX_BUILD
 
-     echo "Running build script on $OSX_HOST..."
+     echo "Running build script on $host..."
      wxdir=$OSX_BUILD/wxPythonSrc-$VERSION
      cmd=./build-osx
-     ssh root@$OSX_HOST "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $PYVER && rm $cmd"
+     ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $PYVER && rm $cmd"
 
      echo "Fetching the results..."
-     scp "$OSX_HOST:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
-     ssh $OSX_HOST "rm $OSX_BUILD/wxPythonOSX*"
+     scp "$host:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
+     ssh $host "rm $OSX_BUILD/wxPythonOSX*"
+
+}
+
+
+if [ $skiposx != yes ]; then
+
+    DoOSXBuild $OSX_HOST_panther panther
+    DoOSXBuild $OSX_HOST_jaguar jaguar
+
 fi
 
 
@@ -274,10 +299,12 @@ function DoLinuxBuild {
 
 }
 
+if [ $skiplinux != yes ]; then
 
-DoLinuxBuild co-rh9 RH9 $PYVER
-DoLinuxBuild co-fc2 FC2 2.3
+    DoLinuxBuild co-rh9 RH9 $PYVER
+    DoLinuxBuild co-fc2 FC2 2.3
 
+fi
 
 
 # ---------------------------------------------------------------------------
