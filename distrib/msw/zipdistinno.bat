@@ -170,9 +170,12 @@ copy %src\docs\msw\install.txt %dest\install-msw-%version%.txt
 copy %src\docs\mac\install.txt %dest\install-mac-%version%.txt
 copy %src\docs\motif\install.txt %dest\install-motif-%version%.txt
 copy %src\docs\gtk\install.txt %dest\install-gtk-%version%.txt
+copy %src\docs\x11\install.txt %dest\install-x11-%version%.txt
 copy %src\docs\readme.txt %dest\readme-%version%.txt
 copy %src\docs\motif\readme.txt %dest\readme-motif-%version%.txt
 copy %src\docs\gtk\readme.txt %dest\readme-gtk-%version%.txt
+copy %src\docs\x11\readme.txt %dest\readme-x11-%version%.txt
+copy %src\docs\x11\readme-nanox.txt %dest\readme-nanox-%version%.txt
 copy %src\docs\msw\readme.txt %dest\readme-msw-%version%.txt
 copy %src\docs\mac\readme.txt %dest\readme-mac-%version%.txt
 copy %src\docs\os2\install.txt %dest\install-os2-%version%.txt

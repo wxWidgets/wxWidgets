@@ -35,6 +35,10 @@
 #include "wx/app.h"
 #endif
 
+#if wxUSE_THREADS
+#include "wx/thread.h"
+#endif
+
 #include "wx/log.h"
 #include <stdlib.h>
 
@@ -116,8 +120,6 @@ void wxMemStruct::ErrorMsg (const char * mesg)
 {
   wxLogMessage(wxT("wxWindows memory checking error: %s"), mesg);
   PrintNode ();
-
-//         << m_fileName << ' ' << m_lineNum << endl;
 }
 
 /*
@@ -127,8 +129,6 @@ void wxMemStruct::ErrorMsg ()
 {
   wxLogMessage(wxT("wxWindows over/underwrite memory error:"));
   PrintNode ();
-
-//    cerr << m_fileName << ' ' << m_lineNum << endl;
 }
 
 
@@ -464,15 +464,6 @@ int wxMemStruct::ValidateNode ()
 
 wxMemStruct *wxDebugContext::m_head = NULL;
 wxMemStruct *wxDebugContext::m_tail = NULL;
-// wxSTD ostream *wxDebugContext::m_debugStream = NULL;
-// wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
-
-// Must initialise these in wxEntry, and then delete them just before wxEntry exits
-// Obsolete
-#if 0
-wxSTD streambuf *wxDebugContext::m_streamBuf = NULL;
-wxSTD ostream *wxDebugContext::m_debugStream = NULL;
-#endif
 
 bool wxDebugContext::m_checkPrevious = FALSE;
 int wxDebugContext::debugLevel = 1;
@@ -486,78 +477,11 @@ int wxDebugContext::m_balignmask = (int)((char *)&markerCalc[1] - (char*)&marker
 
 wxDebugContext::wxDebugContext(void)
 {
-//  m_streamBuf = new wxDebugStreamBuf;
-//  m_debugStream = new wxSTD ostream(m_streamBuf);
 }
 
 wxDebugContext::~wxDebugContext(void)
 {
-//  SetStream(NULL, NULL);
 }
-
-/*
- * It's bizarre, but with BC++ 4.5, the value of str changes
- * between SetFile and SetStream.
- */
-
-// Obsolete
-#if 0
-void wxDebugContext::SetStream(wxSTD ostream *str, wxSTD streambuf *buf)
-{
-  if (m_debugStream)
-  {
-    m_debugStream->flush();
-    delete m_debugStream;
-  }
-  m_debugStream = NULL;
-
-  // Not allowed in Watcom (~streambuf is protected).
-  // Is this trying to say something significant to us??
-#ifndef __WATCOMC__
-  if (m_streamBuf)
-  {
-    wxSTD streambuf* oldBuf = m_streamBuf;
-    m_streamBuf = NULL;
-    delete oldBuf;
-  }
-#endif
-  m_streamBuf = buf;
-  m_debugStream = str;
-}
-
-bool wxDebugContext::SetFile(const wxString& file)
-{
-  wxSTD ofstream *str = new wxSTD ofstream(file.mb_str());
-
-  if (str->bad())
-  {
-    delete str;
-    return FALSE;
-  }
-  else
-  {
-    SetStream(str);
-    return TRUE;
-  }
-}
-
-bool wxDebugContext::SetStandardError(void)
-{
-    // Obsolete
-#if 0
-#if !defined(_WINDLL)
-  wxDebugStreamBuf *buf = new wxDebugStreamBuf;
-  wxSTD ostream *stream = new wxSTD ostream(m_streamBuf);
-  SetStream(stream, buf);
-  return TRUE;
-#else
-  return FALSE;
-#endif
-#endif
-  return FALSE;
-}
-#endif
-    // 0
 
 /*
   Work out the positions of the markers by creating an array of 2 markers
@@ -631,11 +555,6 @@ size_t wxDebugContext::PaddedSize (const size_t size)
         return(size + m_balign - padb);
     else
         return(size);
-
-// Old (slow) code
-#if 0
-    return size + GetPadding (size);
-#endif
 }
 
 /*
@@ -677,9 +596,6 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
 bool wxDebugContext::PrintList (void)
 {
 #ifdef __WXDEBUG__
-//  if (!HasStream())
-//    return FALSE;
-
   TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
   return TRUE;
@@ -691,10 +607,6 @@ bool wxDebugContext::PrintList (void)
 bool wxDebugContext::Dump(void)
 {
 #ifdef __WXDEBUG__
-//  if (!HasStream())
-//    return FALSE;
-
-//  if (TRUE)
   {
     wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr("");
@@ -709,6 +621,7 @@ bool wxDebugContext::Dump(void)
       wxLogMessage( wxT("----- Memory dump -----") );
     }
   }
+  
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
   wxLogMessage( wxT("") );
@@ -750,10 +663,6 @@ static wxDebugStatsStruct *InsertStatsStruct(wxDebugStatsStruct *head, wxDebugSt
 bool wxDebugContext::PrintStatistics(bool detailed)
 {
 #ifdef __WXDEBUG__
-//  if (!HasStream())
-//    return FALSE;
-
-//  if (TRUE)
   {
     wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr(wxT(""));
@@ -786,8 +695,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   for (st = from; st != 0; st = st->m_next)
   {
     void* data = st->GetActualData();
-//    if (detailed && (data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
-      if (detailed && (data != (void*) wxLog::GetActiveTarget()))
+    if (detailed && (data != (void*) wxLog::GetActiveTarget()))
     {
       wxChar *className = (wxChar*) wxT("nonobject");
       if (st->m_isObject && st->GetActualData())
@@ -809,7 +717,6 @@ bool wxDebugContext::PrintStatistics(bool detailed)
       stats->totalSize += st->RequestSize();
     }
 
-//    if ((data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
     if (data != (void*) wxLog::GetActiveTarget())
     {
         totalSize += st->RequestSize();
@@ -850,10 +757,6 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
 bool wxDebugContext::PrintClasses(void)
 {
-//  if (!HasStream())
-//    return FALSE;
-
-//  if (TRUE)
   {
     wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr(wxT(""));
@@ -949,7 +852,6 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
   for (wxMemStruct * st = from; st != 0; st = st->m_next)
   {
       void* data = st->GetActualData();
-//      if ((data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
       if (data != (void*) wxLog::GetActiveTarget())
           n ++;
   }
@@ -957,9 +859,43 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
   return n ;
 }
 
+#if wxUSE_THREADS
+static bool memSectionOk = false;
+
+class MemoryCriticalSection : public wxCriticalSection
+{
+public:
+	MemoryCriticalSection() {
+		memSectionOk = true;
+	}
+};
+
+class MemoryCriticalSectionLocker
+{
+public:
+    inline MemoryCriticalSectionLocker(wxCriticalSection& critsect)
+	: m_critsect(critsect), m_locked(memSectionOk) { if(m_locked) m_critsect.Enter(); }
+    inline ~MemoryCriticalSectionLocker() { if(m_locked) m_critsect.Leave(); }
+	
+private:
+    // no assignment operator nor copy ctor
+    MemoryCriticalSectionLocker(const MemoryCriticalSectionLocker&);
+    MemoryCriticalSectionLocker& operator=(const MemoryCriticalSectionLocker&);
+	
+    wxCriticalSection& m_critsect;
+	bool	m_locked;
+};
+
+static MemoryCriticalSection memLocker;
+#endif
+
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
 {
+#if wxUSE_THREADS
+  MemoryCriticalSectionLocker lock(memLocker);
+#endif
+    
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
 
@@ -1016,6 +952,10 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
 // TODO: check whether was allocated as a vector
 void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
+#if wxUSE_THREADS
+  MemoryCriticalSectionLocker lock(memLocker);
+#endif
+  
   if (!buf)
     return;
 
@@ -1056,9 +996,6 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
     (void) memset (wxDebugContext::CallerMemPos (startPointer), MemFillChar,
                    st->RequestSize ());
 
-    // Don't allow delayed freeing of memory in this version
-//    if (!wxDebugContext::GetDelayFree())
-//    free((void *)st);
     free((char *)st);
 }
 
