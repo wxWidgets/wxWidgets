@@ -153,6 +153,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     }
 
 
+
 #ifdef __WXMSW__
     wxBitmap* wxBitmapFromData(PyObject* data, long type,
                                int width, int height, int depth = 1) {

@@ -661,6 +661,35 @@ static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+static const char * wxEvtHandler_GetClassName(wxEvtHandler *self) {
+            return self->GetClassInfo()->GetClassName();
+        }
+static PyObject *_wrap_wxEvtHandler_GetClassName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char * _result;
+    wxEvtHandler * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEvtHandler_GetClassName",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEvtHandler_GetClassName. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (char *)wxEvtHandler_GetClassName(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
 static void *SwigwxValidatorTowxEvtHandler(void *ptr) {
     wxValidator *src;
     wxEvtHandler *dest;
@@ -6574,15 +6603,14 @@ static PyObject *_wrap_wxMenu_Append(PyObject *self, PyObject *args, PyObject *k
     int  _arg1;
     wxString * _arg2;
     wxString * _arg3 = (wxString *) &wxPyEmptyStr;
-    bool  _arg4 = (bool ) FALSE;
+    int  _arg4 = (int ) FALSE;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
-    int tempbool4 = (int) FALSE;
     char *_kwnames[] = { "self","id","item","helpString","checkable", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|Oi:wxMenu_Append",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&tempbool4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|Oi:wxMenu_Append",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6628,7 +6656,6 @@ static PyObject *_wrap_wxMenu_Append(PyObject *self, PyObject *args, PyObject *k
     _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
 #endif
 }
-    _arg4 = (bool ) tempbool4;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxMenu_Append(_arg0,_arg1,*_arg2,*_arg3,_arg4);
@@ -9816,6 +9843,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxValidator_GetWindow", (PyCFunction) _wrap_wxValidator_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_Clone", (PyCFunction) _wrap_wxValidator_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxValidator", (PyCFunction) _wrap_new_wxValidator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEvtHandler_GetClassName", (PyCFunction) _wrap_wxEvtHandler_GetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Disconnect", (PyCFunction) _wrap_wxEvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Connect", (PyCFunction) _wrap_wxEvtHandler_Connect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetPreviousHandler", (PyCFunction) _wrap_wxEvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },

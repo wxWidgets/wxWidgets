@@ -150,6 +150,10 @@ class wxImagePtr :
         val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
         if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
+    def ConvertToMonoBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToMonoBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
     def Create(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Create,(self,) + _args, _kwargs)
         return val
@@ -280,6 +284,11 @@ def wxImageFromBitmap(*_args, **_kwargs):
     return val
 
 wxInitAllImageHandlers = imagec.wxInitAllImageHandlers
+
+def wxBitmapFromImage(*_args, **_kwargs):
+    val = apply(imagec.wxBitmapFromImage,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
 
 wxImage_CanRead = imagec.wxImage_CanRead
 

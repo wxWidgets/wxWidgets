@@ -6,6 +6,9 @@ if [ "$1" = "15" ]; then
 elif [ "$1" = "20" ]; then
     PYVER=2.0
     shift
+elif [ "$1" = "21" ]; then
+    PYVER=2.1
+    shift
 fi
 
 
@@ -20,6 +23,11 @@ if [ "$1" =  "c" ]; then
     shift
     CMD="$SETUP $FLAGS $OTHERFLAGS clean"
     OTHERCMD="rm -f wxPython/*.so"
+
+# "d" --> clean extension modules only
+elif [ "$1" = "d" ]; then
+    shift
+    CMD="rm -f wxPython/*.so"
 
 # "i" --> install
 elif [ "$1" = "i" ]; then

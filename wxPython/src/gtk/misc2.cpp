@@ -1032,6 +1032,82 @@ static PyObject *_wrap_wxGetDisplaySizeMM(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static PyObject *_wrap_wxClientDisplayRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int * _arg0;
+    int  temp;
+    int * _arg1;
+    int  temp0;
+    int * _arg2;
+    int  temp1;
+    int * _arg3;
+    int  temp2;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+{
+  _arg0 = &temp;
+}
+{
+  _arg1 = &temp0;
+}
+{
+  _arg2 = &temp1;
+}
+{
+  _arg3 = &temp2;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxClientDisplayRect",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxClientDisplayRect(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg0));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetClientDisplayRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetClientDisplayRect",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxRect (wxGetClientDisplayRect());
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxCursor * _arg0;
@@ -5581,6 +5657,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetClientDisplayRect", (PyCFunction) _wrap_wxGetClientDisplayRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxClientDisplayRect", (PyCFunction) _wrap_wxClientDisplayRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplaySizeMM", (PyCFunction) _wrap_wxGetDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplaySizeMM", (PyCFunction) _wrap_wxDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplaySize", (PyCFunction) _wrap_wxGetDisplaySize, METH_VARARGS | METH_KEYWORDS },

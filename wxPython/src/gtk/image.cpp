@@ -125,6 +125,11 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 extern wxImage  wxNullImage; 
 
 #endif
+
+    wxBitmap* wxBitmapFromImage(const wxImage& img, int depth=-1) {
+        return new wxBitmap(img, depth);
+    }
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -289,6 +294,40 @@ static PyObject *_wrap_wxNullImage_get() {
     SWIG_MakePtr(ptemp,(char *) &wxNullImage,"_wxImage_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
+}
+
+static PyObject *_wrap_wxBitmapFromImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxImage * _arg0;
+    int  _arg1 = (int ) -1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "img","depth", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxBitmapFromImage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapFromImage. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBitmap *)wxBitmapFromImage(*_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
 }
 
 #define wxImageHandler_GetName(_swigobj)  (_swigobj->GetName())
@@ -925,6 +964,38 @@ static PyObject *_wrap_wxImage_ConvertToBitmap(PyObject *self, PyObject *args, P
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = new wxBitmap (wxImage_ConvertToBitmap(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxImage_ConvertToMonoBitmap(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->ConvertToMonoBitmap(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxImage_ConvertToMonoBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxImage * _arg0;
+    unsigned char  _arg1;
+    unsigned char  _arg2;
+    unsigned char  _arg3;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","red","green","blue", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Obbb:wxImage_ConvertToMonoBitmap",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_ConvertToMonoBitmap. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxBitmap (wxImage_ConvertToMonoBitmap(_arg0,_arg1,_arg2,_arg3));
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
@@ -2204,6 +2275,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_Scale", (PyCFunction) _wrap_wxImage_Scale, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Destroy", (PyCFunction) _wrap_wxImage_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Create", (PyCFunction) _wrap_wxImage_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_ConvertToMonoBitmap", (PyCFunction) _wrap_wxImage_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_ConvertToBitmap", (PyCFunction) _wrap_wxImage_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxImage", (PyCFunction) _wrap_delete_wxImage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxImage", (PyCFunction) _wrap_new_wxImage, METH_VARARGS | METH_KEYWORDS },
@@ -2222,6 +2294,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageHandler_GetType", (PyCFunction) _wrap_wxImageHandler_GetType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetExtension", (PyCFunction) _wrap_wxImageHandler_GetExtension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageHandler_GetName", (PyCFunction) _wrap_wxImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmapFromImage", (PyCFunction) _wrap_wxBitmapFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInitAllImageHandlers", (PyCFunction) _wrap_wxInitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromMime", (PyCFunction) _wrap_wxImageFromMime, METH_VARARGS | METH_KEYWORDS },

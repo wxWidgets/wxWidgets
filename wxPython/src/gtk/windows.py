@@ -56,11 +56,11 @@ class wxEvtHandlerPtr :
     def Disconnect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Disconnect,(self,) + _args, _kwargs)
         return val
+    def GetClassName(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_GetClassName,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
-    
-    _prop_list_ = {}
-    
 class wxEvtHandler(wxEvtHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxEvtHandler,_args,_kwargs)
