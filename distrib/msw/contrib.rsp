@@ -11,19 +11,6 @@ contrib/samples/canvas/simple/*.rc
 contrib/samples/canvas/simple/SimpleVC.dsp
 contrib/samples/canvas/simple/SimpleVC.dsw
 
-contrib/samples/canvas/test/*.cpp
-contrib/samples/canvas/test/*.h
-contrib/samples/canvas/test/*.def
-contrib/samples/canvas/test/makefile*
-contrib/samples/canvas/test/*.xbm
-contrib/samples/canvas/test/*.xpm
-contrib/samples/canvas/test/*.txt
-contrib/samples/canvas/test/*.ico
-contrib/samples/canvas/test/*.bmp
-contrib/samples/canvas/test/*.rc
-contrib/samples/canvas/test/TestVC.dsp
-contrib/samples/canvas/test/TestVC.dsw
-
 contrib/samples/plot/*.cpp
 contrib/samples/plot/*.h
 contrib/samples/plot/*.def
@@ -36,6 +23,21 @@ contrib/samples/plot/*.bmp
 contrib/samples/plot/*.rc
 contrib/samples/plot/PlotVC.dsp
 contrib/samples/plot/PlotVC.dsw
+
+contrib/samples/applet/*.cpp
+contrib/samples/applet/*.h
+contrib/samples/applet/*.def
+contrib/samples/applet/makefile*
+contrib/samples/applet/*.xbm
+contrib/samples/applet/*.xpm
+contrib/samples/applet/*.txt
+contrib/samples/applet/*.html
+contrib/samples/applet/*.ico
+contrib/samples/applet/*.bmp
+contrib/samples/applet/*.rc
+contrib/samples/applet/*.wdr
+contrib/samples/applet/AppletVC.dsp
+contrib/samples/applet/AppletVC.dsw
 
 contrib/samples/gizmos/multicell/*.cpp
 contrib/samples/gizmos/multicell/*.h
@@ -68,15 +70,32 @@ contrib/src/canvas/*.h
 contrib/src/canvas/make*
 contrib/src/canvas/CanvasVC.dsp
 contrib/src/canvas/CanvasVC.dsw
+contrib/include/wx/canvas/*.h
 
 contrib/src/plot/*.cpp
 contrib/src/plot/*.h
 contrib/src/plot/make*
 contrib/src/plot/PlotVC.dsp
 contrib/src/plot/PlotVC.dsw
+contrib/include/wx/plot/*.h
+contrib/include/wx/plot/*.xpm
+contrib/include/wx/plot/*.bmp
+contrib/include/wx/plot/*.rc
 
 contrib/src/gizmos/*.cpp
 contrib/src/gizmos/*.h
 contrib/src/gizmos/make*
 contrib/src/gizmos/GizmosVC.dsp
 contrib/src/gizmos/GizmosVC.dsw
+contrib/include/wx/gizmos/*.h
+
+contrib/src/applet/*.cpp
+contrib/src/applet/*.h
+contrib/src/applet/make*
+contrib/src/applet/AppletVC.dsp
+contrib/src/applet/AppletVC.dsw
+contrib/include/wx/applet/*.h
+contrib/include/wx/applet/*.xpm
+contrib/include/wx/applet/*.bmp
+contrib/include/wx/applet/*.rc
+
