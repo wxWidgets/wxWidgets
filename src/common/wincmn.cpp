@@ -2102,6 +2102,52 @@ void wxWindowBase::SendDestroyEvent()
 }
 
 // ----------------------------------------------------------------------------
+// event processing
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VALIDATORS
+
+bool wxWindowBase::TryValidator(wxEvent& event)
+{
+    // Can only use the validator of the window which
+    // is receiving the event
+    if ( event.GetEventObject() == this )
+    {
+        wxValidator *validator = GetValidator();
+        if ( validator && validator->ProcessEvent(event) )
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+#endif // wxUSE_VALIDATORS
+
+bool wxWindowBase::TryParent(wxEvent& event)
+{
+    // Carry on up the parent-child hierarchy, but only if event is a command
+    // event: it wouldn't make sense for a parent to receive a child's size
+    // event, for example
+    if ( event.IsCommandEvent() )
+    {
+        // honour the requests to stop propagation at this window: this is
+        // used by the dialogs, for example, to prevent processing the events
+        // from the dialog controls in the parent frame which rarely, if ever,
+        // makes sense
+        if ( !(GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
+        {
+            wxWindow *parent = GetParent();
+            if ( parent && !parent->IsBeingDeleted() )
+                return parent->GetEventHandler()->ProcessEvent(event);
+        }
+    }
+
+    return wxEvtHandler::TryParent(event);
+}
+
+// ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
 

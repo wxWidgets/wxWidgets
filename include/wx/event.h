@@ -2094,6 +2094,22 @@ private:
     static const wxEventTableEntry sm_eventTableEntries[];
 
 protected:
+    // hooks for wxWindow used by ProcessEvent()
+    // -----------------------------------------
+
+    // this one is called before trying our own event table to allow plugging
+    // in the validators
+#if wxUSE_VALIDATORS
+    virtual bool TryValidator(wxEvent& WXUNUSED(event)) { return false; }
+#endif // wxUSE_VALIDATORS
+
+    // this one is called after failing to find the event handle in our own
+    // table to give a chance to the other windows to process it
+    //
+    // base class implementation passes the event to wxTheApp
+    virtual bool TryParent(wxEvent& event);
+
+
     static const wxEventTable sm_eventTable;
 
     virtual const wxEventTable *GetEventTable() const;
@@ -2110,10 +2126,6 @@ protected:
     wxCriticalSection*  m_eventsLocker;
 #  endif
 #endif
-
-    // optimization: instead of using costly IsKindOf() to decide whether we're
-    // a window (which is true in 99% of cases), use this flag
-    bool                m_isWindow;
 
     // Is event handler enabled?
     bool                m_enabled;

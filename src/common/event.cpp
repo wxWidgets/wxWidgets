@@ -620,7 +620,6 @@ wxEvtHandler::wxEvtHandler()
     m_previousHandler = (wxEvtHandler *) NULL;
     m_enabled = TRUE;
     m_dynamicEvents = (wxList *) NULL;
-    m_isWindow = FALSE;
     m_pendingEvents = (wxList *) NULL;
 #if wxUSE_THREADS
 #  if !defined(__VISAGECPP__)
@@ -786,47 +785,25 @@ void wxEvtHandler::ProcessPendingEvents()
  * Event table stuff
  */
 
-bool wxEvtHandler::ProcessEvent(wxEvent& event)
+bool wxEvtHandler::TryParent(wxEvent& event)
 {
-#if wxUSE_GUI
-
-    // We have to use the actual window or processing events from
-    // wxWindowNative destructor won't work (we don't see the wxWindow class)
-#ifdef __WXDEBUG__
-    // check that our flag corresponds to reality
-    wxClassInfo* info = NULL;
-#ifdef __WXUNIVERSAL__
-#  if defined(__WXMSW__)
-    info = CLASSINFO(wxWindowMSW);
-#  elif defined(__WXGTK__)
-    info = CLASSINFO(wxWindowGTK);
-#  elif defined(__WXX11__)
-    info = CLASSINFO(wxWindowX11);
-#  elif defined(__WXMGL__)
-    info = CLASSINFO(wxWindowMGL);
-#  elif defined(__WXPM__)
-    info = CLASSINFO(wxWindowOS2);
-#  elif defined(__WXMAC__)
-    info = CLASSINFO(wxWindowMac);
-#  elif defined(__WXMOTIF__)
-    info = CLASSINFO(wxWindowMotif);
-#  endif
-#else
-    info = CLASSINFO(wxWindow);
-#endif
-
-    if ( m_isWindow != IsKindOf(info) )
+    if ( wxTheApp && (this != wxTheApp) )
     {
-        wxString msg = GetClassInfo()->GetClassName();
-        msg += _T(" should [not] be a window but it is [not]");
-
-        wxFAIL_MSG( msg );
+        // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always
+        // swallow it. wxEVT_IDLE is sent explicitly to wxApp so it will be
+        // processed appropriately via SearchEventTable.
+        if ( event.GetEventType() != wxEVT_IDLE )
+        {
+            if ( wxTheApp->ProcessEvent(event) )
+                return TRUE;
+        }
     }
 
-#endif // __WXDEBUG__
+    return FALSE;
+}
 
-#endif // wxUSE_GUI
-
+bool wxEvtHandler::ProcessEvent(wxEvent& event)
+{
     // allow the application to hook into event processing
     if ( wxTheApp )
     {
@@ -844,51 +821,17 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
-
-#if 0
-/*
-        What is this? When using GUI threads, a non main
-        threads can send an event and process it itself.
-        This breaks GTK's GUI threads, so please explain.
-*/
-
-        // Check whether we are in a child thread.
-        if ( !wxThread::IsMain() )
-          return ProcessThreadEvent(event);
-#endif
-
         // Handle per-instance dynamic event tables first
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
             return TRUE;
 
+#if wxUSE_VALIDATORS
+        if ( TryValidator(event) )
+            return TRUE;
+#endif // wxUSE_VALIDATORS
+
         // Then static per-class event tables
         const wxEventTable *table = GetEventTable();
-
-#if wxUSE_GUI && wxUSE_VALIDATORS
-        // Try the associated validator first, if this is a window.
-        // Problem: if the event handler of the window has been replaced,
-        // this wxEvtHandler may no longer be a window.
-        // Therefore validators won't be processed if the handler
-        // has been replaced with SetEventHandler.
-        // THIS CAN BE CURED if PushEventHandler is used instead of
-        // SetEventHandler, and then processing will be passed down the
-        // chain of event handlers.
-        if (m_isWindow)
-        {
-            wxWindow *win = (wxWindow *)this;
-
-            // Can only use the validator of the window which
-            // is receiving the event
-            if ( win == event.GetEventObject() )
-            {
-                wxValidator *validator = win->GetValidator();
-                if ( validator && validator->ProcessEvent(event) )
-                {
-                    return TRUE;
-                }
-            }
-        }
-#endif
 
         // Search upwards through the inheritance hierarchy
         while (table)
@@ -906,42 +849,10 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
             return TRUE;
     }
 
-#if wxUSE_GUI
-    // Carry on up the parent-child hierarchy, but only if event is a command
-    // event: it wouldn't make sense for a parent to receive a child's size
-    // event, for example
-    if ( m_isWindow && event.IsCommandEvent() )
-    {
-        wxWindow *win = (wxWindow *)this;
-
-        // honour the requests to stop propagation at this window: this is
-        // used by the dialogs, for example, to prevent processing the events
-        // from the dialog controls in the parent frame which rarely, if ever,
-        // makes sense
-        if ( !(win->GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
-        {
-            wxWindow *parent = win->GetParent();
-            if ( parent && !parent->IsBeingDeleted() )
-                return parent->GetEventHandler()->ProcessEvent(event);
-        }
-    }
-#endif // wxUSE_GUI
-
-    // Last try - application object.
-    if ( wxTheApp && (this != wxTheApp) )
-    {
-        // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always
-        // swallow it. wxEVT_IDLE is sent explicitly to wxApp so it will be
-        // processed appropriately via SearchEventTable.
-        if ( event.GetEventType() != wxEVT_IDLE )
-        {
-            if ( wxTheApp->ProcessEvent(event) )
-                return TRUE;
-        }
-    }
-
-    return FALSE;
+    return TryParent(event);
 }
+
+#if wxUSE_BASE
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
@@ -1134,6 +1045,8 @@ bool wxEvtHandler::OnClose()
         return FALSE;
 }
 #endif // WXWIN_COMPATIBILITY
+
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 

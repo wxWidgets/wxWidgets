@@ -876,6 +876,13 @@ public:
 #endif // wxUSE_PALETTE
 
 protected:
+    // event handling specific to wxWindow
+#if wxUSE_VALIDATORS
+    virtual bool TryValidator(wxEvent& event);
+#endif // wxUSE_VALIDATORS
+    virtual bool TryParent(wxEvent& event);
+
+
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes
     void SatisfyConstraints();
