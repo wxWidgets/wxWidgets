@@ -30,7 +30,12 @@ static void ColouriseDocument(
     WordList *keywordlists[],
     Accessor &styler);
 
-LexerModule lmAda(SCLEX_ADA, ColouriseDocument, "ada");
+static const char * const adaWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmAda(SCLEX_ADA, ColouriseDocument, "ada", NULL, adaWordListDesc);
 
 /*
  * Implementation
