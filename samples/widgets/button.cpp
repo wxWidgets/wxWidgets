@@ -105,7 +105,7 @@ protected:
     wxRadioBox *m_radioHAlign,
                *m_radioVAlign;
 
-    // the gauge itself and the sizer it is in
+    // the button itself and the sizer it is in
     wxButton *m_button;
     wxSizer *m_sizerButton;
 
@@ -168,7 +168,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Default"));
 
 #ifndef __WXUNIVERSAL__
-    // only wxUniv currently supoprts buttons with images
+    // only wxUniv currently supports buttons with images
     m_chkImage->Disable();
 #endif // !wxUniv
 
