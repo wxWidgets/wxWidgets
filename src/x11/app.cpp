@@ -650,6 +650,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         default:
             //wxString eventName = wxGetXEventName(XEvent& event);
             //wxLogDebug(wxT("Event %s not handled"), eventName.c_str());
+            break;
 #endif // __WXDEBUG__
     }
 
