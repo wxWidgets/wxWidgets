@@ -21,6 +21,7 @@
 
 #include "wx/xrc/xh_panel.h"
 #include "wx/panel.h"
+#include "wx/frame.h"  // to get wxNO_3D
 
 IMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler)
 

@@ -21,6 +21,7 @@
 
 #include "wx/xrc/xh_frame.h"
 #include "wx/frame.h"
+#include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
 #include "wx/log.h"
 #include "wx/intl.h"
 
