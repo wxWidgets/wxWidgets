@@ -22,7 +22,7 @@ Provides: wxwin
 # in addition, we should provide libwx_gtk as automatic generator only notices
 # libwx_gtk-%{ver}-%{rel}
 Provides: libwx_gtk.so
-Provides: libwx_gtk-2.2.so
+Provides: libwx_gtk-2.3.so
 
 %description
 wxWindows is a free C++ library for cross-platform GUI development.
@@ -68,17 +68,15 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 /sbin/ldconfig
 
 %files
-%defattr (-, root, root)
-%defattr (644, root, root, 755)
+%defattr(-, root, root)
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk.*
-%attr(755, -, -) %{pref}/lib/libwx_gtk-2.2.*
+%attr(755, root, root) %{pref}/lib/libwx_gtk.*
+%attr(755, root, root) %{pref}/lib/libwx_gtk-2.3.*
 
 %files devel
-%defattr (-, root, root)
-%defattr (644, root, root, 755)
+%defattr(-,root,root)
 %dir %{pref}/include/wx
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
@@ -88,3 +86,5 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 
 %files gl
 %attr(755, root, root) %{pref}/lib/libwx_gtk_gl*
+
+
