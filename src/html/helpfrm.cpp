@@ -346,8 +346,10 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
 
             wxLayoutConstraints *b4 = new wxLayoutConstraints;
-            m_ContentsBox = new wxTreeCtrl( dummy, wxID_HTML_TREECTRL,
-                wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTR_HAS_BUTTONS );
+            m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
+                                           wxDefaultPosition, wxDefaultSize, 
+                                           wxSUNKEN_BORDER | 
+                                           wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT);
             m_ContentsBox->AssignImageList(ContentsImageList);
 
             b4->top.Below (m_Bookmarks, 10);
@@ -366,7 +368,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         {
             m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
                                            wxDefaultPosition, wxDefaultSize,
-                                           wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
+                                           wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
             m_ContentsBox->AssignImageList(ContentsImageList);
             m_NavigPan->AddPage(m_ContentsBox, _("Contents"));
         }
@@ -766,9 +768,13 @@ void wxHtmlHelpFrame::CreateContents()
     //     set its icon accordingly
     bool imaged[MAX_ROOTS];
     m_ContentsBox->DeleteAllItems();
+    
+    // FIXME - will go away when wxMSW's wxTreeCtrl supports wxTR_HIDE_ROOT!
+    bool hasSuperRoot = (booksCnt > 1) || 
+                        (m_ContentsBox->GetWindowStyle() & wxTR_HIDE_ROOT);
 
     // Don't show (Help) root if there's only one boook
-    if (booksCnt > 1)
+    if (hasSuperRoot)
     {
         roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
         m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
@@ -782,7 +788,7 @@ void wxHtmlHelpFrame::CreateContents()
         if (it->m_Level == 0)
         {
             // special case, only one book, make it tree's root:
-            if (booksCnt == 1)
+            if (!hasSuperRoot)
             {
                 roots[0] = roots[1] = m_ContentsBox->AddRoot(
                                          it->m_Name, IMG_Book, -1,
