@@ -41,7 +41,6 @@ wxClipboardBase::wxClipboardBase()
 // ----------------------------------------------------------------------------
 // wxClipboardModule: module responsible for initializing the global clipboard
 // object
-//
 // ----------------------------------------------------------------------------
 
 class wxClipboardModule : public wxModule
@@ -58,5 +57,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxClipboardModule)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
+// ----------------------------------------------------------------------------
+// global data defined here
+// ----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule, wxModule)
