@@ -1762,6 +1762,8 @@ void wxArrayString::Grow(size_t nIncrement)
     if ( m_nSize == 0 ) {
       // was empty, alloc some memory
       m_nSize = ARRAY_DEFAULT_INITIAL_SIZE;
+      if (m_nSize < nIncrement)
+          m_nSize = nIncrement;
       m_pItems = new wxChar *[m_nSize];
     }
     else {

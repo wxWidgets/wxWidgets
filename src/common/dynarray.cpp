@@ -112,11 +112,14 @@ void name::Grow(size_t nIncrement)                                          \
   /* only do it if no more place */                                         \
   if( m_nCount == m_nSize ) {                                               \
     if( m_nSize == 0 ) {                                                    \
-        /* was empty, alloc some memory */                                  \
-      m_pItems = new T[WX_ARRAY_DEFAULT_INITIAL_SIZE];                      \
+      /* was empty, determine initial size */                               \
+      size_t size = WX_ARRAY_DEFAULT_INITIAL_SIZE;                          \
+      if (size < nIncrement) size = nIncrement;                             \
+      /* allocate some memory */                                            \
+      m_pItems = new T[size];                                               \
       /* only grow if allocation succeeded */                               \
       if ( m_pItems ) {                                                     \
-          m_nSize = WX_ARRAY_DEFAULT_INITIAL_SIZE;                          \
+          m_nSize = size;                                                   \
       }                                                                     \
     }                                                                       \
     else                                                                    \
