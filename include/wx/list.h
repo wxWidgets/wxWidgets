@@ -29,12 +29,6 @@
 #pragma interface "list.h"
 #endif
 
-#ifdef __WXPM__
-#define LINKAGEMODE _Optlink
-#else
-#define LINKAGEMODE
-#endif
-
 // -----------------------------------------------------------------------------
 // headers
 // -----------------------------------------------------------------------------

@@ -63,7 +63,9 @@
     #ifndef __WXPM__
         #define __WXPM__
     #endif
+
     // Place other OS/2 compiler environment defines here
+    #define LINKAGEMODE _Optlink
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__
@@ -81,6 +83,11 @@
         #define __SYMANTECC__
     #endif  // compiler
 #endif  // OS
+
+// LINKAGEMODE mode is empty for everyting except OS/2
+#ifndef LINKAGEMODE
+    #define LINKAGEMODE
+#endif // LINKAGEMODE
 
 // suppress some Visual C++ warnings
 #ifdef __VISUALC__
