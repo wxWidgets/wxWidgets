@@ -123,7 +123,7 @@ class ShapeCanvas(wx.ScrolledWindow):
             self._draggedShape.GetEventHandler().OnDragLeft(True, x, y, keys, self._draggedAttachment)
             self._oldDragX, self._oldDragY = x, y
 
-        elif evt.LeftUp and self._draggedShape and self._dragState == ContinueDraggingLeft:
+        elif evt.LeftUp() and self._draggedShape and self._dragState == ContinueDraggingLeft:
             self._dragState = NoDragging
             self._checkTolerance = True
 
