@@ -51,9 +51,20 @@
     // Win16 doesn't have them
     #undef wxUSE_SPINBUTTON
     #define wxUSE_SPINBUTTON 0
+#else
+    #if !defined(wxUSE_SPINBUTTON)
+        #define wxUSE_SPINBUTTON 1
+    #endif
 #endif // __WIN16__
 
 #include "wx/progdlg.h"
+
+// VZ: this is a temp. hack, will remove soon
+#define wxUSE_SPINCTRL 1
+
+#if wxUSE_SPINCTRL
+    #include "wx/spinctrl.h"
+#endif // wxUSE_SPINCTRL
 
 //----------------------------------------------------------------------
 // class definitions
@@ -85,7 +96,7 @@ public:
     void OnPageChanged( wxNotebookEvent &event );
     void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
-#ifndef wxUSE_SPINBUTTON
+#if wxUSE_SPINBUTTON
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
@@ -102,10 +113,15 @@ public:
     wxButton      *m_fontButton;
     wxButton      *m_lbSelectNum;
     wxButton      *m_lbSelectThis;
-#ifndef wxUSE_SPINBUTTON
+#if wxUSE_SPINBUTTON
     wxSpinButton  *m_spinbutton;
     wxButton      *m_btnProgress;
-#endif
+#endif // wxUSE_SPINBUTTON
+
+#if wxUSE_SPINCTRL
+    wxSpinCtrl    *m_spinctrl;
+#endif // wxUSE_SPINCTRL
+
     wxTextCtrl    *m_spintext;
     wxCheckBox    *m_checkbox;
 
@@ -281,7 +297,7 @@ EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
 EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
-#ifndef wxUSE_SPINBUTTON
+#if wxUSE_SPINBUTTON
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
@@ -467,26 +483,33 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxString s;
     s << initialSpinValue;
     m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
-#ifndef wxUSE_SPINBUTTON
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
+#if wxUSE_SPINBUTTON
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(80, -1) );
     m_spinbutton->SetRange(-10,30);
     m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "Show progress dialog",
-                                  wxPoint(208, 159) );
-#endif
+                                  wxPoint(408, 159) );
+#endif // wxUSE_SPINBUTTON
+
+#if wxUSE_SPINCTRL
+    m_spinctrl = new wxSpinCtrl( panel, -1, wxPoint(200, 159), wxSize(80, 20) );
+    m_spinctrl->SetRange(10,30);
+    m_spinctrl->SetValue(15);
+#endif // wxUSE_SPINCTRL
+
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 
     panel = new wxPanel(m_notebook);
-    
+
 #ifndef __WXMOTIF__  // wxStaticBitmap not working under Motif yet. MB
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon, wxPoint(10, 10));
 
     bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
     bmpStatic->SetIcon(wxTheApp->GetStdIcon(wxICON_QUESTION));
-#endif
-    
+#endif // !Motif
+
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
@@ -766,7 +789,7 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
     m_gauge->SetValue( m_slider->GetValue() );
 }
 
-#ifndef wxUSE_SPINBUTTON
+#if wxUSE_SPINBUTTON
 void MyPanel::OnSpinUp( wxSpinEvent &event )
 {
     wxString value;

@@ -13,7 +13,7 @@
 #define _WX_SPINBUTT_H_
 
 #ifdef __GNUG__
-#pragma interface "spinbutt.h"
+    #pragma interface "spinbutt.h"
 #endif
 
 #include "wx/control.h"
@@ -21,15 +21,10 @@
 
 #if defined(__WIN95__)
 
-
 class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
 {
-DECLARE_DYNAMIC_CLASS(wxSpinButton)
-
 public:
-    /*
-     * Public interface
-     */
+    // construction
     wxSpinButton() { }
 
     wxSpinButton(wxWindow *parent,
@@ -62,9 +57,15 @@ public:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
+
+protected:
+   virtual wxSize DoGetBestSize();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
 
 #endif
-    // _WX_WIN95__
+    // __WIN95__
 #endif
     // _WX_SPINBUTT_H_

@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "spinbutt.h"
 #endif
@@ -36,10 +44,22 @@
     #include <commctrl.h>
 #endif
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
     IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 #endif
+
+// ----------------------------------------------------------------------------
+// wxSpinButton
+// ----------------------------------------------------------------------------
 
 bool wxSpinButton::Create(wxWindow *parent,
                           wxWindowID id,
@@ -48,70 +68,108 @@ bool wxSpinButton::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-  wxSystemSettings settings;
-  m_backgroundColour = parent->GetBackgroundColour() ;
-  m_foregroundColour = parent->GetForegroundColour() ;
+    // basic initialization
+    InitBase();
 
-  SetName(name);
+    m_windowId = (id == -1) ? NewControlId() : id;
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    m_backgroundColour = parent->GetBackgroundColour() ;
+    m_foregroundColour = parent->GetForegroundColour() ;
 
-  m_windowStyle = style;
+    SetName(name);
 
-  SetParent(parent);
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
 
-  if (width <= 0)
-    width = 100;
-  if (height <= 0)
-    height = 30;
-  if (x < 0)
-    x = 0;
-  if (y < 0)
-    y = 0;
+    m_windowStyle = style;
 
-  InitBase();
+    SetParent(parent);
 
-  m_windowId = (id == -1) ? NewControlId() : id;
+    // get the right size for the control
+    if ( width <= 0 || height <= 0 )
+    {
+        wxSize size = DoGetBestSize();
+        if ( width <= 0 )
+            width = size.x;
+        if ( height <= 0 )
+            height = size.y;
+    }
 
-  DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP;
+    if ( x < 0 )
+        x = 0;
+    if ( y < 0 )
+        y = 0;
 
-  if ( m_windowStyle & wxSP_HORIZONTAL )
-    wstyle |= UDS_HORZ;
-  if ( m_windowStyle & wxSP_ARROW_KEYS )
-    wstyle |= UDS_ARROWKEYS;
-  if ( m_windowStyle & wxSP_WRAP )
-    wstyle |= UDS_WRAP;
+    // translate the styles
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
+                   UDS_SETBUDDYINT; // it doesn't harm if we don't have buddy
 
-  // Create the ListView control.
-  HWND hWndListControl = CreateUpDownControl(wstyle,
-    x, y, width, height,
-    (HWND) parent->GetHWND(),
-    m_windowId,
-    wxGetInstance(),
-    0,
-    m_min, m_max, m_min);
+    if ( m_windowStyle & wxSP_HORIZONTAL )
+        wstyle |= UDS_HORZ;
+    if ( m_windowStyle & wxSP_ARROW_KEYS )
+        wstyle |= UDS_ARROWKEYS;
+    if ( m_windowStyle & wxSP_WRAP )
+        wstyle |= UDS_WRAP;
 
-  m_hWnd = (WXHWND) hWndListControl;
-  if (parent) parent->AddChild(this);
+    // create the UpDown control.
+    m_hWnd = (WXHWND)CreateUpDownControl
+                     (
+                       wstyle,
+                       x, y, width, height,
+                       GetHwndOf(parent),
+                       m_windowId,
+                       wxGetInstance(),
+                       NULL, // no buddy
+                       m_max, m_min,
+                       m_min // initial position
+                     );
 
-  // TODO: have this for all controls.
-  if ( !m_hWnd )
-    return FALSE;
+    if ( !m_hWnd )
+    {
+        wxLogLastError("CreateUpDownControl");
 
-  SubclassWin((WXHWND) m_hWnd);
+        return FALSE;
+    }
 
-  return TRUE;
+    if ( parent )
+    {
+        parent->AddChild(this);
+    }
+
+    SubclassWin(m_hWnd);
+
+    return TRUE;
 }
 
 wxSpinButton::~wxSpinButton()
 {
 }
 
+// ----------------------------------------------------------------------------
+// size calculation
+// ----------------------------------------------------------------------------
+
+wxSize wxSpinButton::DoGetBestSize()
+{
+    if ( (GetWindowStyle() & wxSP_VERTICAL) != 0 )
+    {
+        // vertical control
+        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
+                      2*GetSystemMetrics(SM_CYVSCROLL));
+    }
+    else
+    {
+        // horizontal control
+        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
+                      GetSystemMetrics(SM_CYHSCROLL));
+    }
+}
+
+// ----------------------------------------------------------------------------
 // Attributes
-////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 
 int wxSpinButton::GetValue() const
 {
@@ -170,7 +228,7 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     *result = event.IsAllowed() ? 0 : 1;
 
     return processed;
-#else
+#else // GnuWin32
     return FALSE;
 #endif
 }

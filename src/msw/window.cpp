@@ -1174,6 +1174,14 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
         *y = rect.bottom;
 }
 
+void wxWindow::DoMoveWindow(int x, int y, int width, int height)
+{
+    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    {
+        wxLogLastError("MoveWindow");
+    }
+}
+
 // set the size of the window: if the dimensions are positive, just use them,
 // but if any of them is equal to -1, it means that we must find the value for
 // it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
@@ -1225,7 +1233,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             if ( size.x == -1 )
             {
-                size= DoGetBestSize();
+                size = DoGetBestSize();
             }
             //else: already called DoGetBestSize() above
 
@@ -1238,10 +1246,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
-    {
-        wxLogLastError("MoveWindow");
-    }
+    DoMoveWindow(x, y, width, height);
 }
 
 // for a generic window there is no natural best size - just use the current one
@@ -1281,7 +1286,7 @@ void wxWindow::DoSetClientSize(int width, int height)
         ::ScreenToClient(hParentWnd, &point);
     }
 
-    MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)TRUE);
+    DoMoveWindow(point.x, point.y, actual_width, actual_height);
 
     wxSizeEvent event(wxSize(width, height), m_windowId);
     event.SetEventObject(this);
@@ -2291,7 +2296,7 @@ bool wxWindow::MSWCreate(int id,
         }
 
         m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
-                                        wclass,
+                                        className,
                                         title ? title : wxT(""),
                                         style,
                                         x1, y1,

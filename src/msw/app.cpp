@@ -281,6 +281,9 @@ bool wxApp::Initialize()
 // RegisterWindowClasses
 // ---------------------------------------------------------------------------
 
+// TODO we should only register classes really used by the app. For this it
+//      would be enough to just delay the class registration until an attempt
+//      to create a window of this class is made.
 bool wxApp::RegisterWindowClasses()
 {
     WNDCLASS wndclass;
@@ -301,8 +304,8 @@ bool wxApp::RegisterWindowClasses()
 
     // Register the frame window class.
     wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-    wndclass.style         = styleNormal;
     wndclass.lpszClassName = wxFrameClassName;
+    wndclass.style         = styleNormal;
 
     if ( !RegisterClass(&wndclass) )
     {
@@ -324,7 +327,8 @@ bool wxApp::RegisterWindowClasses()
 
     // Register the MDI frame window class.
     wndclass.hbrBackground = (HBRUSH)NULL; // paint MDI frame ourselves
-    wndclass.lpszClassName = wxMDIFrameClassNameNoRedraw;
+    wndclass.lpszClassName = wxMDIFrameClassName;
+    wndclass.style         = styleNormal;
 
     if ( !RegisterClass(&wndclass) )
     {
@@ -334,7 +338,7 @@ bool wxApp::RegisterWindowClasses()
     }
 
     // "no redraw" MDI frame
-    wndclass.lpszClassName = wxMDIFrameClassName;
+    wndclass.lpszClassName = wxMDIFrameClassNameNoRedraw;
     wndclass.style         = styleNoRedraw;
 
     if ( !RegisterClass(&wndclass) )
@@ -347,6 +351,7 @@ bool wxApp::RegisterWindowClasses()
     // Register the MDI child frame window class.
     wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wndclass.lpszClassName = wxMDIChildFrameClassName;
+    wndclass.style         = styleNormal;
 
     if ( !RegisterClass(&wndclass) )
     {
@@ -369,6 +374,7 @@ bool wxApp::RegisterWindowClasses()
     // Register the panel window class.
     wndclass.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
     wndclass.lpszClassName = wxPanelClassName;
+    wndclass.style         = styleNormal;
 
     if ( !RegisterClass(&wndclass) )
     {

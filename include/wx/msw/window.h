@@ -49,6 +49,7 @@ enum
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxWindow : public wxWindowBase
 {
     DECLARE_DYNAMIC_CLASS(wxWindow);
@@ -403,6 +404,12 @@ protected:
     // get the size which best suits the window: e.g., for a static text it
     // will be the width and height of the text
     virtual wxSize DoGetBestSize();
+
+    // move the window to the specified location and resize it: this is called
+    // from both DoSetSize() and DoSetClientSize() and would usually just call
+    // ::MoveWindow() except for composite controls which will want to arrange
+    // themselves inside the given rectangle
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
