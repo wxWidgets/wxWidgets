@@ -28,6 +28,9 @@
 #if !wxUSE_PROPSHEET
 #error Please set wxUSE_PROPSHEET to 1 in setup.h.
 #endif
+#if !wxUSE_RESOURCES
+#error Please set wxUSE_RESOURCES to 1 in setup.h.
+#endif
 
 IMPLEMENT_APP(MyApp)
 
