@@ -37,6 +37,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/combobox.h"
 #include "wx/brush.h"
 #include "wx/clipbrd.h"
