@@ -1,0 +1,15 @@
+# Purpose: makefile for multicell example (BC++ 16bit)
+# Created 2000-07-28
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+
+TARGET=mtest
+OBJECTS=$(TARGET).obj ..\src\multicell.obj
+EXTRAINC=-I..\include
+
+!include $(WXDIR)\src\makeprog.bcc
+

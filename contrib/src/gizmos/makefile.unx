@@ -1,0 +1,32 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998
+#
+#
+# Makefile for Gizmos library, Unix
+
+include ../../src/make.env
+
+GIZMOSLIB=$(WXDIR)/lib/libgizmos$(GUISUFFIX).a
+
+LIB_CPP_SRC=\
+\
+  multicell.o\
+  splittree.o
+
+all:    $(GIZMOSLIB)
+
+# Define library objects
+OBJECTS=\
+ $(LIB_CPP_SRC:.cpp=.o)
+
+$(GIZMOSLIB) : $(OBJECTS)
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+clean:
+	rm -f $(OBJECTS) $(GIZMOSLIB)
+

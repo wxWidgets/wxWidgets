@@ -1,0 +1,19 @@
+# Makefile : Builds sample (VC++, WIN32)
+# Use FINAL=1 argument to nmake to build final version with no debug info.
+# Created 2000-07-28
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+FINAL=0
+PROGRAM=mtest
+OBJECTS = $(PROGRAM).obj
+
+!if "$(FINAL)" == "0"
+EXTRALIBS=$(WXDIR)\lib\gizmosd.lib
+!else
+EXTRALIBS=$(WXDIR)\lib\gizmos.lib
+!endif
+
+!include $(WXDIR)\src\makeprog.vc
+
+

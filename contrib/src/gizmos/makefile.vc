@@ -1,0 +1,150 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds OGL classes library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\gizmos
+GIZMOSINC = $(WXDIR)\contrib\include\wx\gizmos
+THISDIR = $(WXDIR)\contrib\src\gizmos
+EXTRAFLAGS=/DPROLOGIO=1
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\gizmos
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\multicell.obj $(D)\splittree.obj
+
+LIBTARGET=$(WXDIR)\lib\gizmos$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\multicell.obj:      multicell.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+$(D)\splittree.obj:      splittree.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\gizmos.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\gizmos\gizmos.htm
+htmlhelp: $(DOCDIR)\htmlhelp\gizmos.chm
+htb:	$(DOCDIR)\htb\gizmos.htb
+hlp: $(DOCDIR)\winhelp\gizmos.hlp
+pdfrtf: $(DOCDIR)\pdf\gizmos.rtf
+ps: $(DOCDIR)\ps\gizmos.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\gizmos.tex
+
+
+$(DOCDIR)\winhelp\gizmos.hlp:         $(LOCALDOCDIR)\gizmos.rtf $(LOCALDOCDIR)\gizmos.hpj
+        cd $(LOCALDOCDIR)
+        -erase gizmos.ph
+        hc gizmos
+        move gizmos.hlp $(DOCDIR)\winhelp\gizmos.hlp
+        move gizmos.cnt $(DOCDIR)\winhelp\gizmos.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\gizmos.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\gizmos.tex $(LOCALDOCDIR)\gizmos.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\gizmos.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\gizmos.tex $(DOCDIR)\pdf\gizmos.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\gizmos\gizmos.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\gizmos
+        copy *.gif $(DOCDIR)\html\gizmos
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\gizmos.tex $(DOCDIR)\html\gizmos\gizmos.htm -twice -html
+        -erase $(DOCDIR)\html\gizmos\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\gizmos\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\gizmos.chm: $(DOCDIR)\html\gizmos\gizmos.htm $(DOCDIR)\html\gizmos\gizmos.hhp
+	cd $(DOCDIR)\html\gizmos
+	-hhc gizmos.hhp
+    move gizmos.chm $(DOCDIR)\htmlhelp\gizmos.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\gizmos.htb: $(DOCDIR)\html\gizmos\gizmos.htm
+	cd $(DOCDIR)\html\gizmos
+    -erase /Y gizmos.zip gizmos.htb
+    zip32 gizmos.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move gizmos.zip $(DOCDIR)\htb\gizmos.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\gizmos.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex gizmos
+        -latex gizmos
+        -makeindx gizmos
+        -bibtex gizmos
+        -latex gizmos
+        -latex gizmos
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\gizmos.ps:	$(LOCALDOCDIR)\gizmos.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o gizmos.ps gizmos
+        move gizmos.ps $(WXDIR)\docs\ps\gizmos.ps
+        cd $(THISDIR)
+
