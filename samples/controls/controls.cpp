@@ -314,6 +314,10 @@ enum
 
 bool MyApp::OnInit()
 {
+    // use standard command line handling:
+    if ( !wxApp::OnInit() )
+        return FALSE;
+
     // parse the cmd line
     int x = 50,
         y = 50;
