@@ -314,7 +314,7 @@ void wxMenuItem::SetText(const wxString& label)
     {
         wxXmString label_str(label2);
         XtVaSetValues ((Widget) m_buttonWidget,
-            XmNlabelString, label_str,
+            XmNlabelString, label_str(),
             NULL);
         if (mnem != 0)
             XtVaSetValues ((Widget) m_buttonWidget, XmNmnemonic, mnem, NULL);
