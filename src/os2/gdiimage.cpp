@@ -33,6 +33,9 @@
 #include "wx/app.h"
 #include "wx/os2/gdiimage.h"
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxGDIImageHandlerList);
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -234,7 +237,7 @@ static wxSize GetHiconSize(WXHICON hicon);
 // implementation
 // ============================================================================
 
-wxList wxGDIImage::ms_handlers;
+wxGDIImageHandlerList wxGDIImage::ms_handlers;
 
 // ----------------------------------------------------------------------------
 // wxGDIImage functions forwarded to wxGDIImageRefData
@@ -333,33 +336,29 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
   long                              lType
 )
 {
-    wxNode*                         pNode = ms_handlers.First();
-
-    while (pNode)
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
+    while ( node )
     {
-        wxGDIImageHandler*          pHandler = (wxGDIImageHandler *)pNode->Data();
+        wxGDIImageHandler *handler = node->GetData();
+        if ( handler->GetType() == type )
+            return handler;
 
-        if (pHandler->GetType() == lType)
-            return pHandler;
-        pNode = pNode->Next();
+        node = node->GetNext();
     }
-    return(NULL);
+
+    return((wxGDIImageHandler*)NULL);
 }
 
 void wxGDIImage::CleanUpHandlers()
 {
-    wxNode*                         pNode = ms_handlers.First();
-
-    while (pNode)
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
+    while ( node )
     {
-        wxGDIImageHandler*          pHandler = (wxGDIImageHandler *)pNode->Data();
-        wxNode*                     pNext    = pNode->Next();
-
-        delete pHandler;
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-        delete pNode;
-#endif
-        pNode = pNext;
+        wxGDIImageHandler *handler = node->GetData();
+        wxGDIImageHandlerList::compatibility_iterator next = node->GetNext();
+        delete handler;
+        ms_handlers.Erase( node );
+        node = next;
     }
 }
 
