@@ -613,7 +613,8 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
 {
-    wxLogMessage(_T("Item %ld: %s (item data = %ld)"),
-                 event.GetIndex(), eventName, event.GetData());
+    wxLogMessage(_T("Item %ld: %s (item text = %s, data = %ld)"),
+                 event.GetIndex(), eventName,
+                 event.GetText().c_str(), event.GetData());
 }
 
