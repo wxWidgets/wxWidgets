@@ -28,6 +28,7 @@
 #import <AppKit/NSBitmapImageRep.h>
 #import <AppKit/NSGraphics.h>
 #import <AppKit/NSImage.h>
+#import <AppKit/NSColor.h>
 
 // ========================================================================
 // wxBitmapRefData
@@ -386,9 +387,26 @@ wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
 
 wxImage wxBitmap::ConvertToImage() const
 {
+    wxAutoNSAutoreleasePool pool;
     if(!Ok())
         return /*wxImage(5,5)*/wxNullImage;
-    return wxImage(M_BITMAPDATA->m_width,M_BITMAPDATA->m_height);
+    NSImage *nsimage = GetNSImage(false /* don't use mask */);
+    wxImage newImage(M_BITMAPDATA->m_width,M_BITMAPDATA->m_height);
+    [nsimage lockFocus];
+    for(int i=0; i < M_BITMAPDATA->m_width; i++)
+    {
+        // Don't let the pool get too big as you'll notice we're creating
+        // two autoreleased NSColor objects with every iteration.
+        wxAutoNSAutoreleasePool loopPool;
+        for(int j=0; j < M_BITMAPDATA->m_height; j++)
+        {
+            NSColor *pixelColor = NSReadPixel(NSMakePoint(i,M_BITMAPDATA->m_height - j - 1));
+            NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+            newImage.SetRGB(i,j,int([color redComponent]*255.0), int([color greenComponent]*255.0), int([color blueComponent]*255.0));
+        }
+    }
+    [nsimage unlockFocus];
+    return newImage;
 }
 
 bool wxBitmap::CreateFromXpm(const char **xpm)
