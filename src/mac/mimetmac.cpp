@@ -46,6 +46,15 @@
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
 
+bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt)
+{
+    return FALSE;
+}
+
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int index)
+{
+    return FALSE;
+}
 
 bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
 {
@@ -83,7 +92,7 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
         return FALSE;
 }
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
+bool wxFileTypeImpl::GetIcon(wxIcon *icon,  wxString *sCommand, int *iIndex) const
 {
     // no such file type or no value or incorrect icon entry
     return FALSE;
@@ -94,9 +103,24 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
     return FALSE;
 }
 
-bool wxFileTypeImpl::Unassociate()
+size_t
+wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
+			       const wxFileType::MessageParameters& params) const
 {
-    return FALSE;
+    wxFAIL_MSG( _T("TODO") );
+    return 0;
+}
+
+void
+wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extraDir)
+{
+    wxFAIL_MSG( _T("TODO") );
+}
+
+void
+wxMimeTypesManagerImpl::ClearData()
+{
+    wxFAIL_MSG( _T("TODO") );
 }
 
 // extension -> file type
@@ -194,3 +218,10 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
     return NULL;
 }
+
+bool
+wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
+{
+    return FALSE;
+}
+

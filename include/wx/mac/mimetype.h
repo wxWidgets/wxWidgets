@@ -28,6 +28,13 @@ public :
     ~wxMimeTypesManagerImpl() { }
 #endif
  
+    // load all data into memory - done when it is needed for the first time
+    void Initialize(int mailcapStyles = wxMAILCAP_STANDARD,
+                    const wxString& extraDir = wxEmptyString);
+
+    // and delete the data here
+    void ClearData();
+
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext) ;
@@ -43,6 +50,8 @@ public :
 
     // create a new filetype association
     wxFileType *Associate(const wxFileTypeInfo& ftInfo);
+    // remove association
+    bool Unassociate(wxFileType *ft);
 
     // create a new filetype with the given name and extension
     wxFileType *CreateFileType(const wxString& filetype, const wxString& ext);
@@ -54,6 +63,16 @@ private:
 class wxFileTypeImpl
 {
 public:
+    // initialization functions
+    // this is used to construct a list of mimetypes which match;
+    // if built with GetFileTypeFromMimetype index 0 has the exact match and
+    // index 1 the type / * match
+    // if built with GetFileTypeFromExtension, index 0 has the mimetype for
+    // the first extension found, index 1 for the second and so on
+    
+    void Init(wxMimeTypesManagerImpl *manager, size_t index)
+	{ m_manager = manager; m_index.Add(index); }
+
     // initialize us with our file type name
     void SetFileType(const wxString& strFileType)
         { m_strFileType = strFileType; }
@@ -64,7 +83,7 @@ public:
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
-    bool GetIcon(wxIcon *icon) const;
+    bool GetIcon(wxIcon *icon, wxString *sCommand = NULL, int *iIndex = NULL) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters&) const
@@ -76,16 +95,26 @@ public:
     size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
                           const wxFileType::MessageParameters& params) const;
 
-    bool Unassociate();
+    // remove the record for this file type
+    // probably a mistake to come here, use wxMimeTypesManager.Unassociate (ft) instead
+    bool Unassociate(wxFileType *ft)
+	{
+	    return m_manager->Unassociate(ft);
+	}
+    
+    // set an arbitrary command, ask confirmation if it already exists and
+    // overwriteprompt is TRUE
+    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = TRUE);
+    bool SetDefaultIcon(const wxString& strIcon = wxEmptyString, int index = 0);
 
-private:
+ private:
     // helper function
     bool GetCommand(wxString *command, const char *verb) const;
-
+    
+    wxMimeTypesManagerImpl *m_manager;
+    wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
     wxString m_strFileType, m_ext;
 };
-
-
 
 #endif
   //_MIMETYPE_H
