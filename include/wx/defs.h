@@ -411,18 +411,10 @@ typedef  int   unsigned  wxUint32;
 
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
   #if defined(SIZEOF_INT)
-    #if (SIZEOF_SHORT == 2)
       typedef  short   signed  wxInt16;
       typedef  short unsigned  wxUint16;
-    #else
-      #error "FIXME"
-    #endif
-    #if (SIZEOF_INT == 4)
       typedef  int     signed  wxInt32;
       typedef  int   unsigned  wxUint32;
-    #else
-      #error "FIXME"
-    #endif
   #else
     typedef  short   signed  wxInt16;
     typedef  short unsigned  wxUint16;
@@ -822,6 +814,9 @@ enum wxOrientation
 #define wxPD_CAN_ABORT      0x0001
 #define wxPD_APP_MODAL      0x0002
 #define wxPD_AUTO_HIDE      0x0004
+#define wxPD_ELAPSED_TIME   0x0008
+#define wxPD_ESTIMATED_TIME 0x0010
+#define wxPD_REMAINING_TIME 0x0020
 
 /*
  * GDI descriptions

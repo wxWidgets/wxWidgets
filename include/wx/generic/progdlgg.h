@@ -21,6 +21,7 @@
 #if wxUSE_PROGRESSDLG
 
 #include "wx/frame.h"
+#include "wx/time.h"
 
 /** Progress dialog which shows a moving progress bar.
     Taken from the Mahogany project.*/
@@ -72,6 +73,10 @@ private:
    class wxStaticText *m_msg;
    /// disable all or parent window only
    bool m_disableParentOnly;
+   /// displayed elapsed, estimated, remaining time
+   class wxStaticText *m_elapsed, *m_estimated, *m_remaining;
+   /// time when the dialog was created or NULL 
+   class wxTime *m_time;
    /// parent window
    class wxWindow *m_parent;
    /// continue processing or not (return value for Update())
