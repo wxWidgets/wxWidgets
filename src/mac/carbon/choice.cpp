@@ -21,7 +21,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 extern MenuHandle NewUniqueMenu() ;
 wxChoice::~wxChoice()
 {
-	// DeleteMenu( m_macPopUpMenuId ) ;
+    if ( HasClientObjectData() )
+    {
+        size_t i, max = GetCount();
+
+        for ( i = 0; i < max; ++i )
+            delete GetClientObject(i);
+    }
+
+        // DeleteMenu( m_macPopUpMenuId ) ;
 	// DisposeMenu( m_macPopUpMenuHandle ) ;
 }
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
