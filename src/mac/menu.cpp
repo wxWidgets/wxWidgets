@@ -613,40 +613,38 @@ void wxMenuBar::RebuildAccelTable()
 }
 
 #endif // wxUSE_ACCEL
-#ifdef WXMAKINGDLL
-extern short gCurrentResource ;
-#endif
+
 void wxMenuBar::MacInstallMenuBar() 
 {
-	if ( s_macInstalledMenuBar == this )
-		return ;
+    if ( s_macInstalledMenuBar == this )
+        return ;
 		
     wxStAppResource resload ;
 		
-  	Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
-  	wxString message ;
-  	wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
-  	::SetMenuBar( menubar ) ;
+    Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
+    wxString message ;
+    wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
+    ::SetMenuBar( menubar ) ;
 #if TARGET_API_MAC_CARBON
     ::DisposeMenuBar( menubar ) ;
 #else
-  	::DisposeHandle( menubar ) ;
+    ::DisposeHandle( menubar ) ;
 #endif
 
-		MenuHandle menu = ::GetMenuHandle( kwxMacAppleMenuId ) ;
 #if TARGET_API_MAC_OS8
+    MenuHandle menu = ::GetMenuHandle( kwxMacAppleMenuId ) ;
     if ( CountMenuItems( menu ) == 2 )
     {
-		  ::AppendResMenu(menu, 'DRVR');
-		}
+        ::AppendResMenu(menu, 'DRVR');
+    }
 #endif
  
-   	for (int i = 0; i < m_menus.GetCount(); i++)
+   	for (size_t i = 0; i < m_menus.GetCount(); i++)
   	{
-			Str255 	label;
-    	wxNode *node;
-    	wxMenuItem *item;
-    	int pos ;
+            Str255 	label;
+            wxNode *node;
+            wxMenuItem *item;
+            int pos ;
 			wxMenu* menu = m_menus[i] , *subMenu = NULL ;
 		
 			if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
@@ -719,7 +717,7 @@ void wxMenuBar::MacInstallMenuBar()
 					}
 				}
 				::InsertMenu(MAC_WXHMENU(m_menus[i]->GetHMenu()), 0);
-				for ( int i = 0 ; i < submenus.GetCount() ; ++i )
+				for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
 				{
 				  wxMenu* submenu = (wxMenu*) submenus[i] ;
         	wxNode *subnode;
@@ -893,7 +891,7 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
     }
     else
     {		
-        for (int i = 0; i < m_menus.GetCount() ; i++)
+        for (size_t i = 0; i < m_menus.GetCount() ; i++)
         {
             if ( m_menus[i]->MacGetMenuId() == macMenuId || ( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) ) )
             {
@@ -907,7 +905,7 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
             }
         }
 	
-	  for (int i = 0; i < m_menus.GetCount(); i++)
+	  for (size_t i = 0; i < m_menus.GetCount(); i++)
 	  {
 	  	if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
 	  	{
