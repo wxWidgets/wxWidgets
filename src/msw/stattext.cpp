@@ -86,7 +86,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   SubclassWin(m_hWnd);
 
-  SetFont(parent->GetFont());
+  wxControl::SetFont(parent->GetFont());
   SetSize(x, y, width, height);
 
   return TRUE;
@@ -147,6 +147,22 @@ void wxStaticText::SetLabel(const wxString& label)
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
     }
 }
+
+
+bool wxStaticText::SetFont(const wxFont& font)
+{
+    bool ret = wxControl::SetFont(font);
+
+    // adjust the size of the window to fit to the label unless autoresizing is
+    // disabled
+    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+    {
+        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+    }
+
+    return ret;
+}
+
 
 long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {

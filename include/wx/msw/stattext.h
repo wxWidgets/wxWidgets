@@ -46,6 +46,7 @@ public:
 
     // accessors
     void SetLabel(const wxString& label);
+    bool SetFont( const wxFont &font );
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
