@@ -307,7 +307,7 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation),
             return false;
     }
 
-    int newPos = MSWInvertOrNot((int) ::SendMessage((HWND) control, TBM_GETPOS, 0, 0));
+    int newPos = ValueInvertOrNot((int) ::SendMessage((HWND) control, TBM_GETPOS, 0, 0));
     if ( (newPos < GetMin()) || (newPos > GetMax()) )
     {
         // out of range - but we did process it
@@ -507,22 +507,14 @@ wxSize wxSlider95::DoGetBestSize() const
 // slider-specific methods
 // ----------------------------------------------------------------------------
 
-int wxSlider95::MSWInvertOrNot(int value) const
-{
-    if (m_windowStyle & wxSL_INVERSE) 
-        return (m_rangeMax + m_rangeMin) - value; 
-    else 
-        return value; 
-}
-
 int wxSlider95::GetValue() const
 {
-    return MSWInvertOrNot(::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0));
+    return ValueInvertOrNot(::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0));
 }
 
 void wxSlider95::SetValue(int value)
 {
-    ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)MSWInvertOrNot(value));
+    ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)ValueInvertOrNot(value));
 
     if ( m_labels )
     {
@@ -539,8 +531,8 @@ void wxSlider95::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
-        ::SetWindowText((*m_labels)[SliderLabel_Min], Format(MSWInvertOrNot(m_rangeMin)));
-        ::SetWindowText((*m_labels)[SliderLabel_Max], Format(MSWInvertOrNot(m_rangeMax)));
+        ::SetWindowText((*m_labels)[SliderLabel_Min], Format(ValueInvertOrNot(m_rangeMin)));
+        ::SetWindowText((*m_labels)[SliderLabel_Max], Format(ValueInvertOrNot(m_rangeMax)));
     }
 }
 

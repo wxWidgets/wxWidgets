@@ -123,7 +123,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
 wxSlider::~wxSlider()
 {
-    // this is a special case, as we had to add windows as siblings we are 
+    // this is a special case, as we had to add windows as siblings we are
     // responsible for their disposal, but only if we are not part of a DestroyAllChildren
     if ( m_parent && m_parent->IsBeingDeleted() == false )
     {
@@ -136,7 +136,7 @@ wxSlider::~wxSlider()
 int wxSlider::GetValue() const
 {
     // We may need to invert the value returned by the widget
-    return MacInvertOrNot( m_peer->GetValue() ) ;
+    return ValueInvertOrNot( m_peer->GetValue() ) ;
 }
 
 void wxSlider::SetValue(int value)
@@ -147,7 +147,7 @@ void wxSlider::SetValue(int value)
         m_macValueStatic->SetLabel( valuestring ) ;
 
     // We only invert for the setting of the actual native widget
-    m_peer->SetValue( MacInvertOrNot ( value ) ) ;
+    m_peer->SetValue( ValueInvertOrNot ( value ) ) ;
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -161,11 +161,11 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_peer->SetMaximum( m_rangeMax);
 
     if(m_macMinimumStatic) {
-        value.Printf(wxT("%d"), MacInvertOrNot( m_rangeMin ) );
+        value.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
         m_macMinimumStatic->SetLabel(value);
     }
     if(m_macMaximumStatic) {
-        value.Printf(wxT("%d"), MacInvertOrNot( m_rangeMax ) );
+        value.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
         m_macMaximumStatic->SetLabel(value);
     }
     SetValue(m_rangeMin);
@@ -254,7 +254,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
-    SInt16 value = MacInvertOrNot ( m_peer->GetValue() ) ;
+    SInt16 value = ValueInvertOrNot ( m_peer->GetValue() ) ;
 
     SetValue( value ) ;
 
@@ -278,7 +278,7 @@ wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent )
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
-    SInt16 value = MacInvertOrNot ( m_peer->GetValue() ) ;
+    SInt16 value = ValueInvertOrNot ( m_peer->GetValue() ) ;
 
     SetValue( value ) ;
 
@@ -326,9 +326,9 @@ wxSize wxSlider::DoGetBestSize() const
         int ht, wd;
 
         // Get maximum text label width and height
-        text.Printf(wxT("%d"), MacInvertOrNot( m_rangeMin ) );
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
         GetTextExtent(text, &textwidth, &textheight);
-        text.Printf(wxT("%d"), MacInvertOrNot( m_rangeMax ) );
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &wd, &ht);
         if(ht > textheight) {
             textheight = ht;
@@ -389,9 +389,9 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         int ht;
 
         // Get maximum text label width and height
-        text.Printf(wxT("%d"), MacInvertOrNot( m_rangeMin ) );
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
         GetTextExtent(text, &minValWidth, &textheight);
-        text.Printf(wxT("%d"), MacInvertOrNot( m_rangeMax ) );
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &maxValWidth, &ht);
         if(ht > textheight) {
             textheight = ht;
@@ -433,27 +433,26 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
                 m_macValueStatic->Move(GetPosition().x + w, GetPosition().y + 0);
         }
     }
-    
-    
+
     // yet another hack since this is a composite control
-    // when wxSlider has it's size hardcoded, we're not allowed to 
-    // change the size. But when the control has labels, we DO need 
+    // when wxSlider has it's size hardcoded, we're not allowed to
+    // change the size. But when the control has labels, we DO need
     // to resize the internal Mac control to accomodate the text labels.
     // We need to trick the wxWidgets resize mechanism so that we can
-    // resize the slider part of the control ONLY. 
-    
+    // resize the slider part of the control ONLY.
+
     // TODO: Can all of this code go in the conditional wxSL_LABELS block?
-    
+
     int minWidth;
     minWidth = m_minWidth;
-	
+
     if (GetWindowStyle() & wxSL_LABELS)
     {
         // make sure we don't allow the entire control to be resized accidently
         if (width == GetSize().x)
             m_minWidth = -1;
     }
-	//If the control has labels, we still need to call this again because
+    //If the control has labels, we still need to call this again because
     //the labels alter the control's w and h values.
     wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
 
@@ -466,7 +465,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 }
 
 // Common processing to invert slider values based on wxSL_INVERSE
-int wxSlider::MacInvertOrNot(int value) const
+int wxSlider::ValueInvertOrNot(int value) const
 {
     if (m_windowStyle & wxSL_VERTICAL)
     {
@@ -480,10 +479,7 @@ int wxSlider::MacInvertOrNot(int value) const
     }
     else // normal logic applies to HORIZONTAL sliders
     {
-        if (m_windowStyle & wxSL_INVERSE)
-            return (m_rangeMax + m_rangeMin) - value;
-        else
-            return value;
+        return wxSliderBase::ValueInvertOrNot(value);
     }
 }
 

@@ -80,10 +80,19 @@ public:
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
-
     virtual void ApplyParentThemeBackground(const wxColour& bg)
         { SetBackgroundColour(bg); }
 
+protected:
+
+    // adjust value according to wxSL_INVERSE style
+    virtual int ValueInvertOrNot(int value) const
+    {
+        if (HasFlag(wxSL_INVERSE))
+            return (GetMax() + GetMin()) - value;
+        else
+            return value;
+    }
 
 private:
     DECLARE_NO_COPY_CLASS(wxSliderBase)

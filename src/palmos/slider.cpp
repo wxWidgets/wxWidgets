@@ -195,14 +195,6 @@ int wxSlider::GetPageSize() const
     return ret;
 }
 
-int wxSlider::PalmInvertOrNot(int value) const
-{
-    if (m_windowStyle & wxSL_INVERSE)
-        return (GetMax() + GetMin()) - value;
-    else
-        return value;
-}
-
 int wxSlider::GetValue() const
 {
     ControlType *control = (ControlType *)GetObjectPtr();
@@ -210,12 +202,12 @@ int wxSlider::GetValue() const
         return 0;
     uint16_t ret;
     CtlGetSliderValues(control, NULL, NULL, NULL, &ret);
-    return PalmInvertOrNot(ret);
+    return ValueInvertOrNot(ret);
 }
 
 void wxSlider::SetValue(int value)
 {
-    SetIntValue(PalmInvertOrNot(value));
+    SetIntValue(ValueInvertOrNot(value));
     m_oldValue = m_oldPos = value;
 }
 
@@ -335,7 +327,7 @@ bool wxSlider::SendUpdatedEvent()
 bool wxSlider::SendScrollEvent(EventType* event)
 {
     wxEventType scrollEvent;
-    int newPos = PalmInvertOrNot(event->data.ctlRepeat.value);
+    int newPos = ValueInvertOrNot(event->data.ctlRepeat.value);
     if ( newPos == m_oldPos )
     {
         // nothing changed since last event

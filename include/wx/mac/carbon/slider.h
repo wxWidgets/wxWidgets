@@ -25,86 +25,85 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
 // Slider
 class WXDLLEXPORT wxSlider: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxSlider)
+    DECLARE_DYNAMIC_CLASS(wxSlider)
 
 public:
-  wxSlider();
+    wxSlider();
 
-  inline wxSlider(wxWindow *parent, wxWindowID id,
-           int value, int minValue, int maxValue,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxSL_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxSliderNameStr)
-  {
-      Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
-  }
+    inline wxSlider(wxWindow *parent, wxWindowID id,
+                    int value, int minValue, int maxValue,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxSL_HORIZONTAL,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxSliderNameStr)
+    {
+        Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
+    }
 
-  ~wxSlider();
+    ~wxSlider();
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           int value, int minValue, int maxValue,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxSL_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxSliderNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+                int value, int minValue, int maxValue,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSL_HORIZONTAL,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxSliderNameStr);
 
-  virtual int GetValue() const ;
-  virtual void SetValue(int);
+    virtual int GetValue() const ;
+    virtual void SetValue(int);
 
-  void SetRange(int minValue, int maxValue);
+    void SetRange(int minValue, int maxValue);
 
-  inline int GetMin() const { return m_rangeMin; }
-  inline int GetMax() const { return m_rangeMax; }
+    inline int GetMin() const { return m_rangeMin; }
+    inline int GetMax() const { return m_rangeMax; }
 
-  void SetMin(int minValue) { SetRange(minValue, m_rangeMax); }
-  void SetMax(int maxValue) { SetRange(m_rangeMin, maxValue); }
-    
-  // For trackbars only
-  void SetTickFreq(int n, int pos);
-  inline int GetTickFreq() const { return m_tickFreq; }
-  void SetPageSize(int pageSize);
-  int GetPageSize() const ;
-  void ClearSel() ;
-  void ClearTicks() ;
-  void SetLineSize(int lineSize);
-  int GetLineSize() const ;
-  int GetSelEnd() const ;
-  int GetSelStart() const ;
-  void SetSelection(int minPos, int maxPos);
-  void SetThumbLength(int len) ;
-  int GetThumbLength() const ;
-  void SetTick(int tickPos) ;
+    void SetMin(int minValue) { SetRange(minValue, m_rangeMax); }
+    void SetMax(int maxValue) { SetRange(m_rangeMin, maxValue); }
 
- 
-     // set min/max size of the slider
-     virtual void DoSetSizeHints( int minW, int minH,
-                                int maxW = -1, int maxH = -1,
-                                int incW = -1, int incH = -1 );
- 
-   protected:
-     virtual wxSize DoGetBestSize() const;
-     virtual void   DoSetSize(int x, int y, int w, int h, int sizeFlags);
-     virtual void   DoMoveWindow(int x, int y, int w, int h);
- 
-  void Command(wxCommandEvent& event);
+    // For trackbars only
+    void SetTickFreq(int n, int pos);
+    inline int GetTickFreq() const { return m_tickFreq; }
+    void SetPageSize(int pageSize);
+    int GetPageSize() const ;
+    void ClearSel() ;
+    void ClearTicks() ;
+    void SetLineSize(int lineSize);
+    int GetLineSize() const ;
+    int GetSelEnd() const ;
+    int GetSelStart() const ;
+    void SetSelection(int minPos, int maxPos);
+    void SetThumbLength(int len) ;
+    int GetThumbLength() const ;
+    void SetTick(int tickPos) ;
+
+    // set min/max size of the slider
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW = -1, int maxH = -1,
+                                 int incW = -1, int incH = -1 );
+
+protected:
+    virtual wxSize DoGetBestSize() const;
+    virtual void   DoSetSize(int x, int y, int w, int h, int sizeFlags);
+    virtual void   DoMoveWindow(int x, int y, int w, int h);
+
+    void Command(wxCommandEvent& event);
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
     // Common processing to invert slider values based on wxSL_INVERSE
-    int MacInvertOrNot(int value) const;
+    virtual int ValueInvertOrNot(int value) const;
 
-     wxStaticText*    m_macMinimumStatic ;
-     wxStaticText*    m_macMaximumStatic ;
-     wxStaticText*    m_macValueStatic ;
+    wxStaticText*    m_macMinimumStatic ;
+    wxStaticText*    m_macMaximumStatic ;
+    wxStaticText*    m_macValueStatic ;
 
-  int           m_rangeMin;
-  int           m_rangeMax;
-  int           m_pageSize;
-  int           m_lineSize;
-  int           m_tickFreq;
+    int           m_rangeMin;
+    int           m_rangeMax;
+    int           m_pageSize;
+    int           m_lineSize;
+    int           m_tickFreq;
 private :
 DECLARE_EVENT_TABLE()
 };
