@@ -130,7 +130,7 @@ const wxChar *GetExtendedDBErrorMsg2(wxDb *pDb, wxChar *ErrFile, int ErrLine)
 
 
 // Clookup constructor
-Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &defDir)
+Clookup::Clookup(wxString tblName, wxString colName, wxDb *pDb, const wxString &defDir)
    : wxDbTable(pDb, tblName, 1, wxEmptyString, !wxDB_QUERY_ONLY,
                defDir)
 {
@@ -141,7 +141,7 @@ Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &de
 
 
 // Clookup2 constructor
-Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
+Clookup2::Clookup2(wxString tblName, wxString colName1, wxString colName2,
                    wxDb *pDb, const wxString &defDir)
    : wxDbTable(pDb, tblName, (UWORD)(1 + (wxStrlen(colName2) > 0)), wxEmptyString,
                !wxDB_QUERY_ONLY, defDir)

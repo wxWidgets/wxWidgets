@@ -44,15 +44,16 @@ const wxChar     CONTACT_TABLE_NAME[]       = wxT("contacts");
 
 #define wxODBC_BLOB_SUPPORT
 
+
 // Number of columns in the CONTACT table
 #ifdef wxODBC_BLOB_SUPPORT
-    const int        CONTACT_NO_COLS            = 13;        // 0-12
+    const int        CONTACT_NO_COLS        = 14;        // 0-13
+    const int        MAX_PICTURE_SIZE       = 128000;    // in bytes
 #else
-    const int        CONTACT_NO_COLS            = 12;        // 0-11
+    const int        CONTACT_NO_COLS        = 12;        // 0-11
 #endif
 
 const wxChar     PARAM_FILENAME[]           = wxT("dbtest.cfg");
-
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 
@@ -85,7 +86,8 @@ class CstructContact : public wxObject
         wxChar             Country[20+1];
         TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWidgets project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
-        wxChar             Picture[50000];
+        ULONG              BlobSize;
+        wxChar             Picture[MAX_PICTURE_SIZE];
         bool               IsDeveloper;         // Is this person a developer for wxWidgets, or just a subscriber
         UCHAR              Contributions;       // Something to show off an integer field
         ULONG              LinesOfCode;         // Something to show off a 'long' field
@@ -283,6 +285,11 @@ class CeditorDlg : public wxPanel
         wxRadioBox      *pDeveloperRadio;
         wxChoice        *pNativeLangChoice;
         wxStaticText    *pNativeLangMsg;
+#ifdef wxODBC_BLOB_SUPPORT
+        wxStaticText    *pPictureMsg, *pPictSizeMsg;
+        wxButton        *pChooseImageBtn, *pShowImageBtn;
+        wxTextCtrl      *pPictSizeTxt;
+#endif
 
     public:
         // Indicates if the editor dialog has been initialized yet (used to
@@ -300,6 +307,13 @@ class CeditorDlg : public wxPanel
         void    OnActivate(bool) {};  // necessary for hot keys
 
         bool    Initialize();
+
+#ifdef wxODBC_BLOB_SUPPORT
+        // Methods for reading image file into current table, and
+        // also displaying the image.
+        void    OnSelectPict();
+        void    OnShowImage();
+#endif
 
         // Sets wxStaticText fields to be editable or not depending
         // on the current value of 'mode'
@@ -374,6 +388,13 @@ DECLARE_EVENT_TABLE()
 #define EDITOR_DIALOG_CATALOG           240
 #define EDITOR_DIALOG_DATATYPES         250
 #define EDITOR_DIALOG_DB_DIAGS          260
+#ifdef wxODBC_BLOB_SUPPORT
+	#define EDITOR_DIALOG_PIC_MSG           270
+	#define EDITOR_DIALOG_PICSIZE_MSG       271
+	#define EDITOR_DIALOG_PIC_BROWSE        272
+	#define EDITOR_DIALOG_PIC_SHOW          273
+	#define EDITOR_DIALOG_PIC_SIZE_TEXT     274
+#endif
 
 // *************************** CparameterDlg ***************************
 
@@ -515,7 +536,7 @@ class CqueryDlg : public wxDialog
         wxTextCtrl              *pFocusTxt;
 
         CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], const wxString &pWhereArg);
-        ~CqueryDlg(){};
+        ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
@@ -557,6 +578,33 @@ DECLARE_EVENT_TABLE()
 #define QUERY_DIALOG_VALUE2_TEXT        322
 #define QUERY_DIALOG_HINT_GROUP         323
 #define QUERY_DIALOG_HINT_MSG           324
+
+#ifdef wxODBC_BLOB_SUPPORT
+
+class CimageDlg : public wxDialog
+{
+public:
+    CimageDlg(wxWindow *parent, wxChar *pImageData, off_t iSize);
+    ~CimageDlg();
+
+    void OnCloseWindow(wxCloseEvent &event);
+
+private:
+    wxStaticBitmap *m_pDisplayBmp;
+    wxBitmap       *m_pBmp;
+    wxImage        *m_pImage;
+
+protected:
+
+
+DECLARE_EVENT_TABLE()
+};  // CimageDlg
+
+#define IMAGE_DIALOG            400
+
+#define IMAGE_DIALOG_STATIC_BMP 401
+
+#endif
 
 wxChar * const langNO                        = wxT("No");
 wxChar * const langYES                       = wxT("Yes");

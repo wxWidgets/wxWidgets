@@ -32,7 +32,7 @@ class Clookup : public wxDbTable
 
         wxChar lookupCol[LOOKUP_COL_LEN+1];
 
-        Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &defDir=wxT(""));
+        Clookup(wxString tblName, wxString colName, wxDb *pDb, const wxString &defDir=wxT(""));
 
 };  // Clookup
 
@@ -45,7 +45,7 @@ class Clookup2 : public wxDbTable
         wxChar lookupCol1[LOOKUP_COL_LEN+1];
         wxChar lookupCol2[LOOKUP_COL_LEN+1];
 
-        Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2, wxDb *pDb, const wxString &defDir=wxT(""));
+        Clookup2(wxString tblName, wxString colName1, wxString colName2, wxDb *pDb, const wxString &defDir=wxT(""));
 
 };  // Clookup2
 
