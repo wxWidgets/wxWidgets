@@ -2,7 +2,7 @@
 #define _WX_IMAGLIST_H_BASE_
 
 #if defined(__WXMSW__)
-#ifdef __WIN16__
+#if defined(__WIN16__) || defined(__WXMICROWIN__)
 #include "wx/generic/imaglist.h"
 #else
 #include "wx/msw/imaglist.h"

@@ -608,7 +608,7 @@ long wxExecute(wxChar **argv,
             close(pipeErr[1]); // close writing side
         }
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__WXMICROWIN__)
         wxEndProcessData *data = new wxEndProcessData;
 
         if ( sync )

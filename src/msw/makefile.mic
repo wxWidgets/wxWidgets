@@ -31,8 +31,8 @@ JPEGLIB = $(WXDIR)/lib/libjpeg.a
 TIFFLIB = $(WXDIR)/lib/libtiff.a
 
 GENERICOBJS = \
-        $(GENDIR)/accel.$(OBJSUFF) \
-        $(GENDIR)/busyinfo.$(OBJSUFF) \
+                $(GENDIR)/accel.$(OBJSUFF) \
+                $(GENDIR)/busyinfo.$(OBJSUFF) \
 		$(GENDIR)/calctrl.$(OBJSUFF) \
 		$(GENDIR)/choicdgg.$(OBJSUFF) \
 		$(GENDIR)/colrdlgg.$(OBJSUFF) \
@@ -42,6 +42,7 @@ GENERICOBJS = \
 		$(GENDIR)/grid.$(OBJSUFF) \
 		$(GENDIR)/gridctrl.$(OBJSUFF) \
 		$(GENDIR)/gridsel.$(OBJSUFF) \
+		$(GENDIR)/imaglist.$(OBJSUFF) \
 		$(GENDIR)/laywin.$(OBJSUFF) \
 		$(GENDIR)/listctrl.$(OBJSUFF) \
 		$(GENDIR)/logg.$(OBJSUFF) \
