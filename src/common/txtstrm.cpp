@@ -430,6 +430,8 @@ wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 {
     WriteString( wxString(&wc, m_conv, 1) );
+
+    return *this;
 }
 
 #endif // wxUSE_WCHAR_T
