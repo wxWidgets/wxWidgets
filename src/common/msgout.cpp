@@ -33,13 +33,13 @@
     #include "wx/ffile.h"
     #include "wx/app.h"
     #include "wx/intl.h"
-    #include "wx/apptrait.h"
     #if wxUSE_GUI
         #include "wx/msgdlg.h"
     #endif // wxUSE_GUI
 #endif
 
 #include "wx/msgout.h"
+#include "wx/apptrait.h"
 #include "wx/log.h"
 
 #include <stdarg.h>
