@@ -22,7 +22,8 @@ functions that take a wxSplitterEvent argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGED(id, func)}
     {The sash position was changed. May be used to prevent the change from
-     taking place. Processes wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
+     taking place or to modify the proposed sash position. Processes
+     wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
 \twocolitem{{\bf EVT\_SPLITTER\_UNSPLIT(id, func)}}
     {The splitter has been just unsplit. Processes wxEVT\_COMMAND\_SPLITTER\_UNSPLIT
      event.}
@@ -35,7 +36,8 @@ functions that take a wxSplitterEvent argument.
 
 \wxheading{See also}
 
-\helpref{wxSplitterWindow}{wxsplitterwindow}
+\helpref{wxSplitterWindow}{wxsplitterwindow},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -46,4 +48,62 @@ functions that take a wxSplitterEvent argument.
 
 Constructor. Used internally by wxWindows only.
 
-% TODO
+
+\membersection{wxSplitterWindow::SetSashPosition}\label{wxsplittereventsetsashposition}
+
+\func{void}{SetSashPosition}{\param{int}{pos}}
+
+Sets the new sash position. Set to -1 to prevent the sash from
+repositioning.
+
+May only be called while processing
+wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED events.
+
+\wxheading{Paramters}
+
+\docparam{pos}{New sash position.}
+
+
+\membersection{wxSplitterWindow::GetSashPosition}\label{wxsplittereventgetsashposition}
+
+\constfunc{int}{GetSashPosition}{\void}
+
+Returns the new sash position.
+
+May only be called while processing
+wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED events.
+
+
+\membersection{wxSplitterWindow::GetWindowBeingRemoved}\label{wxsplittereventgetwindowbeingremoved}
+
+\constfunc{wxWindow*}{GetWindowBeingRemoved}{\void}
+
+Returns a pointer to the window being removed when a splitter window
+is unsplit.
+
+May only be called while processing
+wxEVT\_COMMAND\_SPLITTER\_UNSPLIT events.
+
+
+\membersection{wxSplitterWindow::GetX}\label{wxsplittereventgetx}
+
+\constfunc{int}{GetX}{\void}
+
+Returns the x double-click point.
+
+May only be called while processing
+wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED events.
+
+
+\membersection{wxSplitterWindow::GetY}\label{wxsplittereventgety}
+
+\constfunc{int}{GetY}{\void}
+
+Returns the y double-click point.
+
+May only be called while processing
+wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED events.
+
+
+
+
