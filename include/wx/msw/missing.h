@@ -163,7 +163,7 @@ typedef struct tagNMLVDISPINFOW {
 #endif
 #endif
 
-#if ((defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__GNUWIN32__) || defined(__DIGITALMARS__) || defined (__BORLANDC__)) && !defined(HDN_GETDISPINFOW)
+#if ((defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__GNUWIN32__) || defined (__MINGW32__) || defined(__DIGITALMARS__) || defined (__BORLANDC__)) && !defined(HDN_GETDISPINFOW)
 #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #if !wxCHECK_W32API_VERSION(2, 2)
 typedef struct {
