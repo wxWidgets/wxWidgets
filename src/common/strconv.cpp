@@ -188,6 +188,11 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 
 #define IGNORE_LIBC 0
 
+wxMBConv::~wxMBConv()
+{
+    // nothing to do here
+}
+
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
 #if IGNORE_LIBC
