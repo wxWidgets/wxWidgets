@@ -128,7 +128,7 @@ wxSize wxComboBox::DoGetBestSize() const
 {
     wxSize size = m_choice->GetBestSize();
     
-    if ( m_text != 0 )
+    if ( m_text != NULL )
     {
         wxSize  sizeText = m_text->GetBestSize();
         
@@ -143,7 +143,7 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     
     wxControl::DoMoveWindow(x, y, width, height);
 
-    if ( m_text == 0 )
+    if ( m_text == NULL )
     {
         m_choice->SetSize(0, 0 , width, -1);
     }
@@ -177,13 +177,16 @@ bool wxComboBox::Show(bool show)
     return TRUE;
 }
 
- void wxComboBox::SetFocus()
- {
-    m_text->SetFocus();
- }
+void wxComboBox::SetFocus()
+{
+    if ( m_text != NULL) {
+        m_text->SetFocus();
+    }
+}
 
 
-void wxComboBox::DelegateTextChanged( const wxString& value ) {
+void wxComboBox::DelegateTextChanged( const wxString& value )
+{
 }
 
 
@@ -217,7 +220,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     wxSize csize = size;
     if ( style & wxCB_READONLY )
     {
-        m_text = 0;
+        m_text = NULL;
     }
     else
     {
@@ -241,7 +244,7 @@ wxString wxComboBox::GetValue() const
 {
     wxString        result;
     
-    if ( m_text == 0 )
+    if ( m_text == NULL )
     {
         result = m_choice->GetString( m_choice->GetSelection() );
     }
@@ -261,7 +264,7 @@ void wxComboBox::SetValue(const wxString& value)
 // Clipboard operations
 void wxComboBox::Copy()
 {
-    if ( m_text != 0 )
+    if ( m_text != NULL )
     {
         m_text->Copy();
     }
@@ -269,7 +272,7 @@ void wxComboBox::Copy()
 
 void wxComboBox::Cut()
 {
-    if ( m_text != 0 )
+    if ( m_text != NULL )
     {
         m_text->Cut();
     }
@@ -277,7 +280,7 @@ void wxComboBox::Cut()
 
 void wxComboBox::Paste()
 {
-    if ( m_text != 0 )
+    if ( m_text != NULL )
     {
         m_text->Paste();
     }
@@ -285,14 +288,14 @@ void wxComboBox::Paste()
 
 void wxComboBox::SetEditable(bool editable)
 {
-    if ( ( m_text == 0 ) && editable )
+    if ( ( m_text == NULL ) && editable )
     {
         m_text = new wxComboBoxText( this );
     }
-    else if ( ( m_text != 0 ) && !editable )
+    else if ( ( m_text != NULL ) && !editable )
     {
         delete m_text;
-        m_text = 0;
+        m_text = NULL;
     }
 
     int currentX, currentY;
@@ -369,7 +372,7 @@ void wxComboBox::SetSelection(int n)
 {
     m_choice->SetSelection( n );
     
-    if ( m_text != 0 )
+    if ( m_text != NULL )
     {
         m_text->SetValue( GetString( n ) );
     }
