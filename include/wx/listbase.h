@@ -214,18 +214,29 @@ public:
     void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = NULL; } }
 
     // setters
-    void SetMask(long mask) { m_mask = mask; }
-    void SetId(long id) { m_itemId = id; }
-    void SetColumn(int col) { m_col = col; }
-    void SetState(long state) { m_state = state; m_stateMask |= state; }
-    void SetStateMask(long stateMask) { m_stateMask = stateMask; }
-    void SetText(const wxString& text) { m_text = text; }
-    void SetImage(int image) { m_image = image; }
-    void SetData(long data) { m_data = data; }
-    void SetData(void *data) { m_data = (long)data; }
+    void SetMask(long mask)
+        { m_mask = mask; }
+    void SetId(long id)
+        { m_itemId = id; }
+    void SetColumn(int col)
+        { m_col = col; }
+    void SetState(long state)
+        { m_mask |= wxLIST_MASK_STATE; m_state = state; m_stateMask |= state; }
+    void SetStateMask(long stateMask)
+        { m_stateMask = stateMask; }
+    void SetText(const wxString& text)
+        { m_mask |= wxLIST_MASK_TEXT; m_text = text; }
+    void SetImage(int image)
+        { m_mask |= wxLIST_MASK_IMAGE; m_image = image; }
+    void SetData(long data)
+        { m_mask |= wxLIST_MASK_DATA; m_data = data; }
+    void SetData(void *data)
+        { m_mask |= wxLIST_MASK_DATA; m_data = (long)data; }
 
-    void SetWidth(int width) { m_width = width; }
-    void SetAlign(wxListColumnFormat align) { m_format = align; }
+    void SetWidth(int width)
+        { m_mask |= wxLIST_MASK_WIDTH; m_width = width; }
+    void SetAlign(wxListColumnFormat align)
+        { m_mask |= wxLIST_MASK_FORMAT; m_format = align; }
 
     void SetTextColour(const wxColour& colText)
         { Attributes().SetTextColour(colText); }
