@@ -32,3 +32,19 @@ Please see also:
 
 - Complete this ToDo list :-)
 
+For 2.1: small changes not involving rewriting anything
+-------------------------------------------------------
+
+- wxArrayDouble class?
+
+- generate CREATE/DESTROY events just after/before a window (any window, not
+  just frame/dialog) is created/deleted
+
+- Dynamic menu handling: wxMenuBar::DeleteMenu(), InsertMenu()
+
+For 2.2: major new additions
+-------------------------------------------------------
+
+- Unicode support (Win32 only probably)
+
+- DnD and OLE clipboard, uniform DnD/clipboard handling
