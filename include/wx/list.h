@@ -85,9 +85,13 @@ enum wxKeyType
 
 #define WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl) \
     WX_DECLARE_LIST_X(elT, liT, decl)
+#define WX_DECLARE_LIST_PTR_3(elT, dummy1, liT, dummy2, decl) \
+    WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl)
 
 #define WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
     WX_DECLARE_LIST_X(elT, liT, decl)
+#define WX_DECLARE_LIST_PTR_2(elT, liT, dummy, decl) \
+    WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
 
 #define WX_DECLARE_LIST_X(elT, liT, decl) \
     WX_DECLARE_LIST_XO(elT*, liT, decl)
@@ -208,12 +212,18 @@ enum wxKeyType
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
     WX_DECLARE_LIST_X(elementtype, listname, class)
+#define WX_DECLARE_LIST_PTR(elementtype, listname)                          \
+    WX_DECLARE_LIST(elementtype, listname)
 
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
     WX_DECLARE_LIST_X(elementtype, listname, class WXDLLEXPORT)
+#define WX_DECLARE_EXPORTED_LIST_PTR(elementtype, listname)                 \
+    WX_DECLARE_EXPORTED_LIST(elementtype, listname)
 
 #define WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)       \
     WX_DECLARE_LIST_X(elementtype, listname, class usergoo)
+#define WX_DECLARE_USER_EXPORTED_LIST_PTR(elementtype, listname, usergoo)   \
+    WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)
 
 // this macro must be inserted in your program after
 //      #include <wx/listimpl.cpp>
@@ -545,8 +555,14 @@ private:
 //     particularly useful with, for example, "wxWindow *" list where the
 //     wxWindowBase pointers are put into the list, but wxWindow pointers are
 //     retrieved from it.
+//
+//  4. final hack is that WX_DECLARE_LIST_3 is defined in terms of
+//     WX_DECLARE_LIST_4 to allow defining classes without operator->() as
+//     it results in compiler warnings when this operator doesn't make sense
+//     (i.e. stored elements are not pointers)
 
-#define WX_DECLARE_LIST_3(T, Tbase, name, nodetype, classexp)               \
+// common part of WX_DECLARE_LIST_3 and WX_DECLARE_LIST_PTR_3
+#define WX_DECLARE_LIST_4(T, Tbase, name, nodetype, classexp, ptrop)        \
     typedef int (*wxSortFuncFor_##name)(const T **, const T **);            \
                                                                             \
     classexp nodetype : public wxNodeBase                                   \
@@ -675,8 +691,7 @@ private:
             iterator() : m_node(NULL), m_init(NULL) { }                     \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
-            pointer_type operator->() const                                 \
-                { return (pointer_type)m_node->GetDataPtr(); }              \
+            ptrop                                                           \
             itor& operator++() { m_node = m_node->GetNext(); return *this; }\
             itor operator++(int)                                            \
                 { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
@@ -719,8 +734,7 @@ private:
                 : m_node(it.m_node), m_init(it.m_init) { }                  \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
-            pointer_type operator->() const                                 \
-                { return (pointer_type)m_node->GetDataPtr(); }              \
+            ptrop                                                           \
             itor& operator++() { m_node = m_node->GetNext(); return *this; }\
             itor operator++(int)                                            \
                 { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
@@ -761,8 +775,7 @@ private:
             reverse_iterator() : m_node(NULL), m_init(NULL) { }             \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
-            pointer_type operator->() const                                 \
-                { return (pointer_type)m_node->GetDataPtr(); }              \
+            ptrop                                                           \
             itor& operator++()                                              \
                 { m_node = m_node->GetPrevious(); return *this; }           \
             itor operator++(int)                                            \
@@ -803,8 +816,7 @@ private:
                 : m_node(it.m_node), m_init(it.m_init) { }                  \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
-            pointer_type operator->() const                                 \
-                { return (pointer_type)m_node->GetDataPtr(); }              \
+            ptrop                                                           \
             itor& operator++()                                              \
                 { m_node = m_node->GetPrevious(); return *this; }           \
             itor operator++(int)                                            \
@@ -923,20 +935,41 @@ private:
         } */                                                                \
     }
 
+#define WX_LIST_PTROP                                                       \
+            pointer_type operator->() const                                 \
+                { return (pointer_type)m_node->GetDataPtr(); }
+#define WX_LIST_PTROP_NONE
+
+#define WX_DECLARE_LIST_3(T, Tbase, name, nodetype, classexp)               \
+    WX_DECLARE_LIST_4(T, Tbase, name, nodetype, classexp, WX_LIST_PTROP_NONE)
+#define WX_DECLARE_LIST_PTR_3(T, Tbase, name, nodetype, classexp)        \
+    WX_DECLARE_LIST_4(T, Tbase, name, nodetype, classexp, WX_LIST_PTROP)
+
 #define WX_DECLARE_LIST_2(elementtype, listname, nodename, classexp)        \
     WX_DECLARE_LIST_3(elementtype, elementtype, listname, nodename, classexp)
+#define WX_DECLARE_LIST_PTR_2(elementtype, listname, nodename, classexp)        \
+    WX_DECLARE_LIST_PTR_3(elementtype, elementtype, listname, nodename, classexp)
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class)
+#define WX_DECLARE_LIST_PTR(elementtype, listname)                              \
+    typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
+    WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class)
 
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class WXDLLEXPORT)
+#define WX_DECLARE_EXPORTED_LIST_PTR(elementtype, listname)                     \
+    typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
+    WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class WXDLLEXPORT)
 
 #define WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)       \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class usergoo)
+#define WX_DECLARE_USER_EXPORTED_LIST_PTR(elementtype, listname, usergoo)       \
+    typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
+    WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class usergoo)
 
 // this macro must be inserted in your program after
 //      #include <wx/listimpl.cpp>
@@ -963,7 +996,9 @@ private:
 // -----------------------------------------------------------------------------
 // wxList compatibility class: in fact, it's a list of wxObjects
 // -----------------------------------------------------------------------------
-WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode, class WXDLLIMPEXP_BASE);
+
+WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode,
+                        class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
