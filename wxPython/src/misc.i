@@ -272,8 +272,13 @@ public:
     void SetTop(int top);
     void SetBottom(int bottom);
 
+    void Deflate(int dx, int dy);
     void Inflate(int dx, int dy);
-    bool Inside(int cx, int cy);
+    %name(InsideXY)bool Inside(int cx, int cy);
+    bool Inside(const wxPoint& pt);
+    bool Intersects(const wxRect& rect);
+    %name(OffsetXY) void Offset(int dx, int dy);
+    void Offset(const wxPoint& pt);
 
     int x, y, width, height;
 
