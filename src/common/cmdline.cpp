@@ -1015,7 +1015,7 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
 
                 case _T(' '):
                 case _T('\t'):
-                    if ( isInsideQuotes )
+                    if ( isInsideQuotes || isQuotedByBS )
                     {
                         // preserve it, skip endParam below
                         break;
@@ -1025,6 +1025,15 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
                 case _T('\0'):
                     endParam = TRUE;
                     break;
+
+                default:
+                    if ( isQuotedByBS )
+                    {
+                        // ignore backslash before an ordinary character - this
+                        // is needed to properly handle the file names under
+                        // Windows appearing in the command line
+                        arg += _T('\\');
+                    }
             }
 
             // end of argument?
