@@ -181,6 +181,7 @@ class wxPyListCtrl;
 class wxPyControl;
 class wxPyPrintout;
 class wxGenericDragImage;
+class wxPyTaskBarIcon;
 
 
 #ifdef __WXMAC__
