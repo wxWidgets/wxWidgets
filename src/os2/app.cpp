@@ -183,8 +183,8 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
-                            ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT | CS_FRAME
+                            ,NULL
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,sizeof(ULONG)
                            ))
     {
@@ -196,7 +196,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassNameNoRedraw
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,0
                             ,0
                            ))
@@ -209,7 +209,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxMDIFrameClassName
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,0
                            ))
@@ -222,7 +222,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxMDIFrameClassNameNoRedraw
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,0
                             ,0
                            ))
@@ -235,7 +235,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxMDIChildFrameClassName
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST
                             ,0
                            ))
@@ -248,7 +248,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxMDIChildFrameClassNameNoRedraw
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,CS_HITTEST
                             ,0
                            ))
@@ -261,7 +261,7 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxPanelClassName
-                            ,(PFNWP)wxWndProc
+                            ,NULL
                             ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
                             ,0
                            ))
@@ -274,8 +274,8 @@ bool wxApp::RegisterWindowClasses(
 
     if (!::WinRegisterClass( vHab
                             ,wxCanvasClassName
-                            ,(PFNWP)wxWndProc
-                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
+                            ,NULL
+                            ,0 // CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
                             ,0
                            ))
     {
@@ -651,11 +651,11 @@ int wxApp::MainLoop()
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-      while (!Pending() && ProcessIdle())
-      {
+        while (/*Pending() &&*/ ProcessIdle())
+        {
 //          wxUsleep(10000);
-      }
-      DoMessage();
+        }
+        DoMessage();
     }
     return (int)svCurrentMsg.mp1;
 } // end of wxApp::MainLoop
@@ -749,11 +749,13 @@ bool wxApp::ProcessMessage(
            if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
                 CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)uSch);
 
-            for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
-            {
-                if((bRc = pWnd->OS2TranslateMessage(pWxmsg)) == TRUE)
-                    break;
-            }
+  
+           for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+           {
+               if((bRc = pWnd->OS2TranslateMessage(pWxmsg)) == TRUE)
+                   break;
+           }
+  
             if(!bRc)    // untranslated, should restore original value
                 CHARMSG(pChmsg)->chr = uSch;
         }
@@ -778,7 +780,7 @@ void wxApp::OnIdle(
     //
     // Avoid recursion (via ProcessEvent default case)
     //
-    if (sbInOnIdle )
+    if (sbInOnIdle)
         return;
 
     sbInOnIdle = TRUE;

@@ -130,6 +130,7 @@ GENERICOBJS= \
   ..\generic\$D\tbarsmpl.obj \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\tipdlg.obj \
+  ..\generic\$D\tipwin.obj \
   ..\generic\$D\treectlg.obj \
   ..\generic\$D\treelay.obj \
   ..\generic\$D\wizard.obj
@@ -173,6 +174,7 @@ GENLIBOBJS= \
   tbarsmpl.obj \
   textdlgg.obj \
   tipdlg.obj \
+  tipwin.obj \
   treectlg.obj \
   treelay.obj \
   wizard.obj
@@ -189,6 +191,7 @@ COMMONOBJS = \
   ..\common\$D\cmdline.obj \
   ..\common\$D\cmndata.obj \
   ..\common\$D\config.obj \
+  ..\common\$D\cshelp.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
   ..\common\$D\datetime.obj \
@@ -300,6 +303,7 @@ COMLIBOBJS1 = \
   cmdline.obj \
   cmndata.obj \
   config.obj \
+  cshelp.obj \
   ctrlcmn.obj \
   ctrlsub.obj \
   datetime.obj \
@@ -336,10 +340,10 @@ COMLIBOBJS1 = \
   helpbase.obj \
   http.obj \
   imagall.obj \
-  imagbmp.obj \
-  image.obj
+  imagbmp.obj
 
 COMLIBOBJS2 = \
+  image.obj \
   imaggif.obj \
   imagjpeg.obj \
   imagpcx.obj \
@@ -380,10 +384,10 @@ COMLIBOBJS2 = \
   string.obj \
   tbarbase.obj \
   textcmn.obj \
-  textfile.obj \
-  timercmn.obj
+  textfile.obj
 
 COMLIBOBJS3 = \
+  timercmn.obj \
   tokenzr.obj \
   treebase.obj \
   txtstrm.obj \
@@ -631,6 +635,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\cmdline.obj
   copy ..\common\$D\cmndata.obj
   copy ..\common\$D\config.obj
+  copy ..\common\$D\cshelp.obj
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\ctrlsub.obj
   copy ..\common\$D\datetime.obj
@@ -668,9 +673,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\http.obj
   copy ..\common\$D\imagall.obj
   copy ..\common\$D\imagbmp.obj
-  copy ..\common\$D\image.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\image.obj
   copy ..\common\$D\imaggif.obj
   copy ..\common\$D\imagjpeg.obj
   copy ..\common\$D\imagpcx.obj
@@ -712,9 +717,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
-  copy ..\common\$D\timercmn.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
   copy ..\common\$D\treebase.obj
   copy ..\common\$D\txtstrm.obj
@@ -769,6 +774,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\tbarsmpl.obj
   copy ..\generic\$D\textdlgg.obj
   copy ..\generic\$D\tipdlg.obj
+  copy ..\generic\$D\tipwin.obj
   copy ..\generic\$D\treectlg.obj
   copy ..\generic\$D\treelay.obj
   copy ..\generic\$D\wizard.obj

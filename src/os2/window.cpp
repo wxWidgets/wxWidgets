@@ -1718,9 +1718,14 @@ void wxWindow::UnpackCommand(
 , WORD*                             pCmd
 )
 {
+/*
     *pId = LOWORD(wParam);
     *phWnd = (WXHWND)lParam;
     *pCmd = HIWORD(wParam);
+*/
+    *pId = LOWORD(wParam);
+    *phWnd = NULL;  // or may be GetHWND() ?
+    *pCmd = LOWORD(lParam);
 } // end of wxWindow::UnpackCommand
 
 void wxWindow::UnpackActivate(
@@ -1802,7 +1807,7 @@ MRESULT EXPENTRY wxWndProc(
         pWnd->SetHWND((WXHWND)hWnd);
     }
 
-    MRESULT                         rc = (MRESULT)FALSE;
+    MRESULT                         rc = (MRESULT)0;
 
 
     //
@@ -1821,6 +1826,7 @@ MRESULT EXPENTRY wxWndProc(
         else
             rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
+
     return rc;
 } // end of wxWndProc
 
@@ -1881,7 +1887,6 @@ MRESULT wxWindow::OS2WindowProc(
         case WM_DESTROY:
              HandleDestroy();
              bProcessed = TRUE;
-//             delete this;
              break;
 
         case WM_MOVE:
@@ -2337,10 +2342,10 @@ bool wxWindow::OS2Create(
 {
     ERRORID                         vError;
     wxString                        sError;
-    long                            lX1      = (long)CW_USEDEFAULT;
+    long                            lX1      = 0L;
     long                            lY1      = 0L;
-    long                            lWidth1  = (long)CW_USEDEFAULT;
-    long                            lHeight1 = 100L;
+    long                            lWidth1  = 20L;
+    long                            lHeight1 = 20L;
     int                             nControlId = 0;
 
     //
@@ -2426,7 +2431,7 @@ bool wxWindow::OS2Create(
     wxAssociateWinWithHandle((HWND)m_hWnd
                              ,this
                             );
-    //
+    // 
     // Now need to subclass window.
     //
 

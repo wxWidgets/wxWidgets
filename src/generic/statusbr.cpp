@@ -80,7 +80,6 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
-  m_themeEnabled = TRUE;
 
   bool success = wxWindow::Create(parent, id,
                                   wxDefaultPosition, wxDefaultSize,
@@ -176,11 +175,17 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   wxPaintDC dc(this);
 
+#ifdef __WXPM__
+    RECTL wrectl;
+
+    ::WinQueryWindowRect(GetHWND(), &wrectl);
+    ::WinFillRect(dc.GetHDC(), &wrectl, CLR_BLACK);
+#else
+
   int i;
   if ( GetFont().Ok() )
     dc.SetFont(GetFont());
   dc.SetBackgroundMode(wxTRANSPARENT);
-  dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
 
   for ( i = 0; i < m_nFields; i ++ )
     DrawField(dc, i);
@@ -188,6 +193,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #   ifdef __WXMSW__
         dc.SetFont(wxNullFont);
 #   endif // MSW
+#endif
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
@@ -322,7 +328,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 void wxStatusBarGeneric::InitColours()
 {
     // Shadow colours
-#ifndef __WIN16__
+#if defined(__WIN95__)
     wxColour mediumShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW));
     m_mediumShadowPen = wxPen(mediumShadowColour, 1, wxSOLID);
 
