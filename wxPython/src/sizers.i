@@ -43,6 +43,8 @@ public:
     //wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
     //wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
 
+    void DeleteWindows();
+
     wxPoint GetPosition();
     wxSize GetSize();
     wxSize CalcMin();
@@ -236,6 +238,10 @@ public:
 
     void Fit( wxWindow *window );
     void SetSizeHints( wxWindow *window );
+
+    void Clear( bool delete_windows=FALSE );
+    void DeleteWindows();
+
 
     // wxList& GetChildren();
     %addmethods {
