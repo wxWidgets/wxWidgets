@@ -4,7 +4,8 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    dlg = wxFontDialog(frame)
+    data = wxFontData()
+    dlg = wxFontDialog(frame, data)
     if dlg.ShowModal() == wxID_OK:
         data = dlg.GetFontData()
         font = data.GetChosenFont()
@@ -33,7 +34,7 @@ This class represents the font chooser dialog.
 wxFontDialog()
 ----------------------------
 
-wxFontDialog(wxWindow* parent, wxFontData* data = NULL)
+wxFontDialog(wxWindow* parent, wxFontData* data)
 
-Constructor. Pass a parent window, and optionally a pointer to a block of font data, which will be copied to the font dialog's font data.
+Constructor. Pass a parent window and a font data object, which will be copied to the font dialog's font data.
 """

@@ -188,7 +188,7 @@ public:
 
 class wxFontDialog : public wxDialog {
 public:
-    wxFontDialog(wxWindow* parent, wxFontData* data = NULL);
+    wxFontDialog(wxWindow* parent, wxFontData* data);
 
     %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
