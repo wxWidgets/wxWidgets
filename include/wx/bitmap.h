@@ -32,7 +32,7 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
-#if defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXMOTIF__)
+#if defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXCOCOA__) || defined(__WXMOTIF__)
 // Only used by some ports
 // FIXME -- make all ports (but MSW which uses wxGDIImage) use these base classes
 
@@ -166,6 +166,8 @@ protected:
 #include "wx/mgl/bitmap.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/bitmap.h"
+#elif defined(__WXCOCOA__)
+#include "wx/cocoa/bitmap.h"
 #elif defined(__WXPM__)
 #include "wx/os2/bitmap.h"
 #endif
