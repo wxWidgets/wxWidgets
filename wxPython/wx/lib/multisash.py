@@ -366,12 +366,17 @@ class MultiViewLeaf(wx.Window):
         return self.GetParent().CanSize(side,self)
 
     def OnSize(self,evt):
-        self.sizerHor.OnSize(evt)
-        self.sizerVer.OnSize(evt)
-        self.creatorHor.OnSize(evt)
-        self.creatorVer.OnSize(evt)
-        self.detail.OnSize(evt)
-        self.closer.OnSize(evt)
+        def doresize():
+            try:
+                self.sizerHor.OnSize(evt)
+                self.sizerVer.OnSize(evt)
+                self.creatorHor.OnSize(evt)
+                self.creatorVer.OnSize(evt)
+                self.detail.OnSize(evt)
+                self.closer.OnSize(evt)
+            except:
+                pass
+        wx.CallAfter(doresize)
 
 #----------------------------------------------------------------------
 
