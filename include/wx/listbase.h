@@ -18,7 +18,11 @@
 
 #if wxUSE_LISTCTRL
 
+#include "wx/colour.h"
 #include "wx/font.h"
+#include "wx/gdicmn.h"
+
+#include "wx/event.h"
 
 // ----------------------------------------------------------------------------
 // types
