@@ -620,42 +620,6 @@ WXHWND wxSlider95::GetEditValue() const
     return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : NULL;
 }
 
-bool wxSlider95::ContainsHWND(WXHWND hWnd) const
-{
-    return m_labels && m_labels->HasWindow((HWND)hWnd);
-}
-
-bool wxSlider95::Show(bool show)
-{
-    if ( !wxSliderBase::Show(show) )
-        return false;
-
-    if ( m_labels )
-        m_labels->Show(show);
-
-    return true;
-}
-
-bool wxSlider95::Enable(bool enable)
-{
-    if ( !wxSliderBase::Enable(enable) )
-        return false;
-
-    if ( m_labels )
-        m_labels->Enable(enable);
-
-    return true;
-}
-
-bool wxSlider95::SetFont(const wxFont& font)
-{
-    if ( !wxSliderBase::SetFont(font) )
-        return false;
-
-    if ( m_labels )
-        m_labels->SetFont(font);
-
-    return true;
-}
+WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxSlider95, wxSliderBase, m_labels)
 
 #endif // wxUSE_SLIDER
