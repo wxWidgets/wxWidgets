@@ -34,6 +34,15 @@ None
 
 Constructor (used internally by wxWindows only).
 
+\membersection{wxNotifyEvent::Allow}\label{wxnotifyeventallow}
+
+\func{void}{Allow}{\void}
+
+This is the opposite of \helpref{Veto()}{wxnotifyeventveto}: it explicitly
+allows the event to be processed. For most events it is not necessary to call
+this method as the events are allowed anyhow but some are forbidden by default
+(this will be mentioned in the corresponding event description).
+
 \membersection{wxNotifyEvent::IsAllowed}\label{wxnotifyeventisallowed}
 
 \constfunc{bool}{IsAllowed}{\void}
