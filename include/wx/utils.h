@@ -153,10 +153,19 @@ WXDLLEXPORT wxString wxDecToHex(int dec);
 
 enum
 {
-    wxEXEC_ASYNC    = 0,    // execute the process asynchronously
-    wxEXEC_SYNC     = 1,    //                     synchronously
-    wxEXEC_NOHIDE   = 2     // under Windows, don't hide the child even if it's
-                            // IO is redirected (this is done by default)
+    // execute the process asynchronously
+    wxEXEC_ASYNC    = 0,
+
+    // execute it synchronously, i.e. wait until it finishes
+    wxEXEC_SYNC     = 1,
+
+    // under Windows, don't hide the child even if it's IO is redirected (this
+    // is done by default)
+    wxEXEC_NOHIDE   = 2,
+
+    // under Unix, if the process is the group leader then killing -pid kills
+    // all children as well as pid
+    wxEXEC_MAKE_GROUP_LEADER = 4
 };
 
 // Execute another program.

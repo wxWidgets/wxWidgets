@@ -650,6 +650,13 @@ long wxExecute(wxChar **argv,
                 if ( fd != STDERR_FILENO )
                     close(fd);
             }
+
+            if ( flags & wxEXEC_MAKE_GROUP_LEADER )
+            {
+                // Set process group to child process' pid.  Then killing -pid
+                // of the parent will kill the process and all of its children.
+                setsid();
+            }
         }
 
         // redirect stdio, stdout and stderr
