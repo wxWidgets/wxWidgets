@@ -9,9 +9,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-   TODO for better virtual list control support:
+   TODO
 
-   1. we need to implement searching/sorting somehow
+   1. we need to implement searching/sorting for virtual controls somehow
+   2. when changing selection the lines are refreshed twice
  */
 
 // ============================================================================
@@ -3172,11 +3173,16 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 le.m_itemIndex = m_current;
                 GetLine(m_current)->GetItem( 0, le.m_item );
                 GetParent()->GetEventHandler()->ProcessEvent( le );
+
+                if ( IsHighlighted(m_current) )
+                {
+                    // don't unselect the item in single selection mode
+                    break;
+                }
+                //else: select it in ReverseHighlight() below if unselected
             }
-            else
-            {
-                ReverseHighlight(m_current);
-            }
+
+            ReverseHighlight(m_current);
             break;
 
         case WXK_RETURN:
@@ -3798,7 +3804,7 @@ void wxListMainWindow::RefreshAll()
     Refresh();
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
-    if ( headerWin )
+    if ( headerWin && headerWin->m_dirty )
     {
         headerWin->m_dirty = FALSE;
         headerWin->Refresh();
@@ -3898,6 +3904,7 @@ void wxListMainWindow::DeleteItem( long lindex )
         m_lines.RemoveAt( index );
     }
 
+    // we need to refresh the (vert) scrollbar as the number of items changed
     m_dirty = TRUE;
 
     SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
