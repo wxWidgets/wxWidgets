@@ -42,7 +42,7 @@ public:
     int GetFormatMode();
     wxString GetName();
     wxString GetColour();
-    wxColour *GetActualColourObject();
+    wxColour GetActualColourObject();
     wxList& GetFormattedText();
     wxString GetPenColour();
     int GetPenStyle();

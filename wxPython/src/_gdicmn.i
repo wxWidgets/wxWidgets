@@ -301,11 +301,18 @@ public:
         bool, operator!=(const wxPoint& pt),
         "Test for inequality of wx.Point objects.");
 
+
+
+//     %nokwargs operator+;
+//     %nokwargs operator-;
+//     %nokwargs operator+=;
+//     %nokwargs operator-=;
     
     DocDeclStr(
         wxPoint, operator+(const wxPoint& pt),
         "Add pt's proprties to this and return the result.");
 
+   
     DocDeclStr(
         wxPoint, operator-(const wxPoint& pt),
         "Subtract pt's proprties from this and return the result");
@@ -319,6 +326,27 @@ public:
         wxPoint&, operator-=(const wxPoint& pt),
         "Subtract pt from this object.");
 
+
+    
+//     DocDeclStr(
+//         wxPoint, operator+(const wxSize& sz),
+//         "Add sz to this Point and return the result.");
+
+//     DocDeclStr(
+//         wxPoint, operator-(const wxSize& sz),
+//         "Subtract sz from this Point and return the result");
+
+
+//     DocDeclStr(
+//         wxPoint&, operator+=(const wxSize& sz),
+//         "Add sz to this object.");
+
+//     DocDeclStr(
+//         wxPoint&, operator-=(const wxSize& sz),
+//         "Subtract sz from this object.");
+
+
+    
     
     %extend {
         DocStr(Set, "Set both the x and y properties");
