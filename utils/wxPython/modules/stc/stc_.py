@@ -62,8 +62,8 @@ def EVT_STC_DOUBLECLICK(win, id, fn):
 def EVT_STC_MODIFIED(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_MODIFIED, fn)
 
-def EVT_STC_CMDKEY(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_CMDKEY, fn)
+def EVT_STC_KEY(win, id, fn):
+    win.Connect(id, -1, wxEVT_STC_KEY, fn)
 
 def EVT_STC_MACRORECORD(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_MACRORECORD, fn)

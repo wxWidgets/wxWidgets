@@ -118,6 +118,21 @@ class PythonSTC(wxStyledTextCtrl):
         self.StyleSetSpec(34, "fore:#FFFFFF,back:#0000FF,bold")
         self.StyleSetSpec(35, "fore:#000000,back:#FF0000,bold")
 
+        EVT_KEY_UP(self, self.OnKeyPressed)
+
+
+    def OnKeyPressed(self, event):
+        key = event.KeyCode()
+        if key == 32 and event.ControlDown():
+            pos = self.GetCurrentPos()
+            # Tips
+            if event.ShiftDown():
+                self.CallTipSetBackground("yellow")
+                self.CallTipShow(pos, 'param1, param2')
+            # Code completion
+            else:
+                self.AutoCompShow('I love wxPython a b c')
+
 
 
     def OnUpdateUI(self, evt):
@@ -148,8 +163,10 @@ class PythonSTC(wxStyledTextCtrl):
             self.BraceBadlight(braceAtCaret)
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
-            self.SetCurrentPosition(braceOpposite)
-            self.SetCurrentPosition(caretPos)
+            #pt = self.PointFromPosition(braceOpposite)
+            #self.Refresh(true, wxRect(pt.x, pt.y, 5,5))
+            #print pt
+            #self.Refresh(false)
 
 
     def OnMarginClick(self, evt):
