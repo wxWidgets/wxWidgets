@@ -38,7 +38,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ffilestream.o \
 	$(OBJS)\test_filestream.o \
 	$(OBJS)\test_memstream.o \
-	$(OBJS)\test_zlibstream.o
+	$(OBJS)\test_zlibstream.o \
+	$(OBJS)\test_fontmap.o
 
 ### Conditionally set variables: ###
 
@@ -217,6 +218,9 @@ $(OBJS)\test_memstream.o: ./streams/memstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_zlibstream.o: ./streams/zlibstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_fontmap.o: ./fontmap/fontmap.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 .PHONY: all clean data

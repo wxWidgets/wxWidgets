@@ -459,6 +459,10 @@ SOURCE=.\filesys\filesys.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\fontmap\fontmap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\formatconverter\formatconverter.cpp
 # End Source File
 # Begin Source File

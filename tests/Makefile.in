@@ -53,7 +53,8 @@ TEST_OBJECTS =  \
 	test_ffilestream.o \
 	test_filestream.o \
 	test_memstream.o \
-	test_zlibstream.o
+	test_zlibstream.o \
+	test_fontmap.o
 
 ### Conditionally set variables: ###
 
@@ -180,6 +181,9 @@ test_memstream.o: $(srcdir)/streams/memstream.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_fontmap.o: $(srcdir)/fontmap/fontmap.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 

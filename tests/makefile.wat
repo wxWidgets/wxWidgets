@@ -195,7 +195,8 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_ffilestream.obj &
 	$(OBJS)\test_filestream.obj &
 	$(OBJS)\test_memstream.obj &
-	$(OBJS)\test_zlibstream.obj
+	$(OBJS)\test_zlibstream.obj &
+	$(OBJS)\test_fontmap.obj
 
 
 all : $(OBJS)
@@ -280,4 +281,7 @@ $(OBJS)\test_memstream.obj :  .AUTODEPEND .\streams\memstream.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_zlibstream.obj :  .AUTODEPEND .\streams\zlibstream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_fontmap.obj :  .AUTODEPEND .\fontmap\fontmap.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
