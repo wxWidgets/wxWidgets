@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso8859-2\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirctrlg.cpp:1259 ../src/generic/dirdlgg.cpp:550
@@ -292,25 +292,12 @@ msgid ""
 "+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
-"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
-"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
-"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
-"+4</font></tt></body></html>"
-msgstr ""
-"<html><meta http-equiv=\"Content-Type\" content=\"text/html; "
-"charset=iso8859-2\"><body>Obyèejné písmo<br>(a <u>podtr¾ené</u>. "
-"<i>Kurziva.</i> <b>Tuèné.</b> <b><i>Tuèná kurziva.</i></b><br><font "
-"size=-2>velikost -2</font><br><font size=-1>velikost -1</font><br><font "
-"size=+0>velikost +0</font><br><font size=+1>velikost +1</font><br><font "
-"size=+2>velikost +2</font><br><font size=+3>velikost +3</font><br><font "
-"size=+4>velikost +4</font><br><p><tt>Neproporcionální písmo.<br> "
-"<b>tuèné</b> <i>kurziva</i> <b><i>tuèná kurziva "
-"<u>podtr¾ené</u></i></b><br><font size=-2>velikost -2</font><br><font "
-"size=-1>velikost -1</font><br><font size=+0>velikost +0</font><br><font "
-"size=+1>velikost +1</font><br><font size=+2>velikost +2</font><br><font "
-"size=+3>velikost +3</font><br><font size=+4>velikost "
-"+4</font></tt></body></html>"
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
+msgstr "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-2\"><body>Obyèejné písmo<br>(a <u>podtr¾ené</u>. <i>Kurziva.</i> <b>Tuèné.</b> <b><i>Tuèná kurziva.</i></b><br><font size=-2>velikost -2</font><br><font size=-1>velikost -1</font><br><font size=+0>velikost +0</font><br><font size=+1>velikost +1</font><br><font size=+2>velikost +2</font><br><font size=+3>velikost +3</font><br><font size=+4>velikost +4</font><br><p><tt>Neproporcionální písmo.<br> <b>tuèné</b> <i>kurziva</i> <b><i>tuèná kurziva <u>podtr¾ené</u></i></b><br><font size=-2>velikost -2</font><br><font size=-1>velikost -1</font><br><font size=+0>velikost +0</font><br><font size=+1>velikost +1</font><br><font size=+2>velikost +2</font><br><font size=+3>velikost +3</font><br><font size=+4>velikost +4</font></tt></body></html>"
 
 #: ../src/common/paper.cpp:113
 msgid "A3 sheet, 297 x 420 mm"
@@ -536,9 +523,7 @@ msgstr "Nemohu kopírovat hodnoty nepodporovaného typu %d"
 
 #: ../src/msw/listctrl.cpp:217
 msgid "Can't create list control window, check that comctl32.dll is installed."
-msgstr ""
-"Nemohu vytvoøit ovládací prvek list, zkontrolujte, jestli máte "
-"nainstalovanou comctl32.dll."
+msgstr "Nemohu vytvoøit ovládací prvek list, zkontrolujte, jestli máte nainstalovanou comctl32.dll."
 
 #: ../src/msw/registry.cpp:395
 #, c-format
@@ -831,8 +816,7 @@ msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
-"Nemohu zjistit tøídu prvku (control) nebo jeho id: '%s'. Pou¾ijte (nenulové) "
-"èíslo\n"
+"Nemohu zjistit tøídu prvku (control) nebo jeho id: '%s'. Pou¾ijte (nenulové) èíslo\n"
 " nebo poskytnìte #define (viz. manuál)"
 
 #: ../src/common/resource.cpp:1245
@@ -886,9 +870,7 @@ msgstr "Nemohu spustit DDE server '%s'."
 
 #: ../src/common/imagpng.cpp:251
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr ""
-"Nemohu naèíst PNG obrázek - buï je po¹kozený soubor nebo je nedostatek "
-"pamìti."
+msgstr "Nemohu naèíst PNG obrázek - buï je po¹kozený soubor nebo je nedostatek pamìti."
 
 #: ../src/msw/ole/dataobj.cpp:151
 #, c-format
@@ -948,9 +930,7 @@ msgstr "Ozdobný"
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
-msgstr ""
-"Vytáèené pøipojení není dostupné, proto¾e Remote Access Service (RAS) není "
-"nainstalován. Prosím, nainstalujte ho."
+msgstr "Vytáèené pøipojení není dostupné, proto¾e Remote Access Service (RAS) není nainstalován. Prosím, nainstalujte ho."
 
 #: ../src/generic/tipdlg.cpp:177
 msgid "Did you know..."
@@ -969,9 +949,7 @@ msgstr "Adresáø neexistuje"
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
-msgstr ""
-"Zobrazí v¹echny polo¾ky rejstøíku, které obsahují daný podøetìzec. "
-"Nerozli¹uje velká a malá písmena."
+msgstr "Zobrazí v¹echny polo¾ky rejstøíku, které obsahují daný podøetìzec. Nerozli¹uje velká a malá písmena."
 
 #: ../src/html/helpfrm.cpp:554
 msgid "Display options dialog"
@@ -1006,8 +984,7 @@ msgstr "Nalezené polo¾ky"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %d in '%s'."
-msgstr ""
-"Chyba bìhem expanze promìnných prostøedí: chybí '%c' na pozici %d v '%s'."
+msgstr "Chyba bìhem expanze promìnných prostøedí: chybí '%c' na pozici %d v '%s'."
 
 #: ../src/generic/dirctrlg.cpp:604 ../src/generic/dirctrlg.cpp:622
 #: ../src/generic/dirctrlg.cpp:633 ../src/generic/dirctrlg.cpp:1347
@@ -1120,9 +1097,7 @@ msgstr "Nelze navázat spojení se server '%s' na téma '%s'"
 msgid ""
 "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
 "resources."
-msgstr ""
-"Nelze vytvoøit dialog. Nejspí¹ jste zapomnìl vlo¾it wx/msw/wx.rc do resource "
-"souboru."
+msgstr "Nelze vytvoøit dialog. Nejspí¹ jste zapomnìl vlo¾it wx/msw/wx.rc do resource souboru."
 
 #: ../src/generic/dirctrlg.cpp:1258 ../src/generic/dirdlgg.cpp:549
 msgid "Failed to create directory "
@@ -1199,9 +1174,7 @@ msgstr "Nepodaøilo se zjistit místní systémový èas"
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
-msgstr ""
-"Nemohu pøipojit vlákno, zji¹tìna mo¾ná chybná alokace pamìti - restartujte "
-"prosím program"
+msgstr "Nemohu pøipojit vlákno, zji¹tìna mo¾ná chybná alokace pamìti - restartujte prosím program"
 
 #: ../src/common/dynlib.cpp:235
 #, c-format
@@ -1422,13 +1395,9 @@ msgstr "Kotva HTML %s neexistuje."
 
 #: ../src/html/helpfrm.cpp:1236
 msgid ""
-"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books "
-"(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
-"files (*.*)|*"
-msgstr ""
-"soubory HTML (*.htm)|*.htm|soubory HTML (*.html)|*.html|HTML nápovìda "
-"(*.htb)|*.htb|HTML nápovìda (*.zip)|*.zip|Projekt HTML nápovìdy "
-"(*.hhp)|*.hhp|V¹echny soubory (*.*)|*"
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|"
+"Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
+msgstr "soubory HTML (*.htm)|*.htm|soubory HTML (*.html)|*.html|HTML nápovìda (*.htb)|*.htb|HTML nápovìda (*.zip)|*.zip|Projekt HTML nápovìdy (*.hhp)|*.hhp|V¹echny soubory (*.*)|*"
 
 #: ../src/common/fontmap.cpp:104
 msgid "Hebrew (ISO-8859-8)"
@@ -1479,9 +1448,7 @@ msgstr "Neplatná specifikace souboru."
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
-msgstr ""
-"Není mo¾né vytvoøit rich edit prvek, pou¾iji obyèejný. Pøeinstalujte prosím "
-"riched32.dll."
+msgstr "Není mo¾né vytvoøit rich edit prvek, pou¾iji obyèejný. Pøeinstalujte prosím riched32.dll."
 
 #: ../src/unix/utilsunx.cpp:350
 msgid "Impossible to get child process input"
@@ -2030,9 +1997,7 @@ msgstr "Hledat"
 msgid ""
 "Search contents of help book(s) for all occurences of the text you typed "
 "above"
-msgstr ""
-"Prohledá obsah knih(y) s nápovìdou a vypí¹e v¹echny výskyty textu, který "
-"jste zadal"
+msgstr "Prohledá obsah knih(y) s nápovìdou a vypí¹e v¹echny výskyty textu, který jste zadal"
 
 #: ../src/html/helpfrm.cpp:767
 msgid "Search in all books"
@@ -2082,8 +2047,7 @@ msgstr "Nastavení..."
 
 #: ../src/msw/dialup.cpp:539
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr ""
-"Nalezeno nìkolik aktivních vytáèených pøipojení, vybírám jedno náhodnì."
+msgstr "Nalezeno nìkolik aktivních vytáèených pøipojení, vybírám jedno náhodnì."
 
 #: ../src/html/helpfrm.cpp:345
 msgid "Show all"
@@ -2242,17 +2206,13 @@ msgstr "Musíte zadat hodnotu volby '%s'."
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
-msgstr ""
-"Verze Remote Access Service (RAS) na tomto poèítaèi je pøíli¹ stará, prosím "
-"upgradujte (chybí tato funkce: %s)."
+msgstr "Verze Remote Access Service (RAS) na tomto poèítaèi je pøíli¹ stará, prosím upgradujte (chybí tato funkce: %s)."
 
 #: ../src/msw/thread.cpp:1083
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
-msgstr ""
-"Modul s vlákny se nepodaøilo iniciovat: nemohu ukládat hodnoty v 'local "
-"storage'"
+msgstr "Modul s vlákny se nepodaøilo iniciovat: nemohu ukládat hodnoty v 'local storage'"
 
 #: ../src/unix/threadpsx.cpp:1441
 msgid "Thread module initialization failed: failed to create thread key"
@@ -2262,9 +2222,7 @@ msgstr "Selhala inicializace modulu s vlákny: nelze vytvoøit klíè"
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
-msgstr ""
-"Modul s vlákny se nepodaøilo iniciovat: nemohu alokovat index v 'local "
-"storage'"
+msgstr "Modul s vlákny se nepodaøilo iniciovat: nemohu alokovat index v 'local storage'"
 
 #: ../src/unix/threadpsx.cpp:962
 msgid "Thread priority setting is ignored."
