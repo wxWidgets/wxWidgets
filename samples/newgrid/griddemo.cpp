@@ -87,6 +87,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
+    EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
 
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
@@ -111,6 +112,7 @@ GridFrame::GridFrame()
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
+    fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B");
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
 
@@ -611,6 +613,12 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
     Close( TRUE );
 }
 
+void GridFrame::OnBugsTable(wxCommandEvent& )
+{
+    BugsGridFrame *frame = new BugsGridFrame;
+    frame->Show(TRUE);
+}
+
 void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
@@ -660,4 +668,80 @@ BigGridFrame::BigGridFrame(long sizeGrid)
     m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
     m_grid->SetTable(m_table, TRUE);
+}
+
+// ----------------------------------------------------------------------------
+// BugsGridFrame: a "realistic" table
+// ----------------------------------------------------------------------------
+
+BugsGridFrame::BugsGridFrame()
+             : wxFrame(NULL, -1, "Bugs table",
+                       wxDefaultPosition, wxSize(500, 300))
+{
+    enum Severity
+    {
+        Wish,
+        Minor,
+        Normal,
+        Major,
+        Critical
+    };
+
+    static const wxChar* severities[] =
+    {
+        _T("wishlist"),
+        _T("minor"),
+        _T("normal"),
+        _T("major"),
+        _T("critical"),
+    };
+
+    static const struct GridData
+    {
+        int id;
+        const wxChar *summary;
+        Severity severity;
+        int prio;
+        const wxChar *platform;
+        bool opened;
+    } data [] =
+    {
+        { 18, _T("foo doesn't work"), Major, 1, _T("wxMSW"), TRUE },
+        { 27, _T("bar crashes"), Critical, 1, _T("all"), FALSE },
+        { 45, _T("printing is slow"), Minor, 3, _T("wxMSW"), TRUE },
+        { 68, _T("Rectangle() fails"), Normal, 1, _T("wxMSW"), FALSE },
+    };
+
+    static const wxChar *headers[] =
+    {
+        _T("Id"),
+        _T("Summary"),
+        _T("Severity"),
+        _T("Priority"),
+        _T("Platform"),
+        _T("Opened?"),
+    };
+
+    // TODO the correct data type must be used for each column
+
+    wxGrid *grid = new wxGrid(this, -1);
+    wxGridTableBase *table =
+        new wxGridStringTable(WXSIZEOF(data), WXSIZEOF(headers));
+    for ( size_t row = 0; row < WXSIZEOF(data); row++ )
+    {
+        const GridData& gd = data[row];
+        table->SetValue(row, 0, wxString::Format("%d", gd.id));
+        table->SetValue(row, 1, gd.summary);
+        table->SetValue(row, 2, severities[gd.severity]);
+        table->SetValue(row, 3, wxString::Format("%d", gd.prio));
+        table->SetValue(row, 4, gd.platform);
+        table->SetValue(row, 5, gd.opened ? _T("True") : wxEmptyString);
+    }
+
+    for ( size_t col = 0; col < WXSIZEOF(headers); col++ )
+    {
+        table->SetColLabelValue(col, headers[col]);
+    }
+
+    grid->SetTable(table, TRUE);
 }

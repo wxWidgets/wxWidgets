@@ -72,6 +72,7 @@ public:
     void OnQuit( wxCommandEvent& );
     void About( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
+    void OnBugsTable( wxCommandEvent& );
 
     enum
     {
@@ -96,6 +97,7 @@ public:
         ID_SET_CELL_BG_COLOUR,
         ID_ABOUT,
         ID_VTABLE,
+        ID_BUGS_TABLE,
 
         ID_TESTFUNC
     };
@@ -149,6 +151,15 @@ private:
     BigGridTable* m_table;
 };
 
+// ----------------------------------------------------------------------------
+// another, more realistic, grid example
+// ----------------------------------------------------------------------------
+
+class BugsGridFrame : public wxFrame
+{
+public:
+    BugsGridFrame();
+};
 
 #endif // griddemo_h
 
