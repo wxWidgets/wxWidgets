@@ -644,7 +644,7 @@ void wxMultiCellCanvas :: Add(wxWindow *win, unsigned int row, unsigned int col)
 {
 	wxASSERT_MSG(row >= 0 && row < m_maxRows, wxString("Row ") + itoa(row) + " out of bounds (" + itoa(m_maxRows) + ")");
 	wxASSERT_MSG(col >= 0 && col < m_maxCols, wxString("Column ") + itoa(col) + " out of bounds (" + itoa(m_maxCols) + ")");
-	wxASSERT_MSG(m_cells[CELL_LOC(row, col)] == NULL, "Cell already occupied");
+	wxASSERT_MSG(m_cells[CELL_LOC(row, col)] == NULL, _("Cell already occupied"));
 
 	wxCell *newCell = new wxCell(win);
 	m_cells[CELL_LOC(row,col)] = newCell;
