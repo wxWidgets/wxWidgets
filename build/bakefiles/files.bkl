@@ -1803,7 +1803,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- don't ask... wxX11 must have something extra I guess -->
 <set var="UNIV_TEXTCTRL">
-    <if cond="TOOLKIT=='X11'">src/x11/textctrl.cpp</if>
+<!--    <if cond="TOOLKIT=='X11'">src/x11/textctrl.cpp</if> -->
+    <if cond="TOOLKIT=='X11'">src/univ/textctrl.cpp</if>
     <if cond="TOOLKIT=='MGL'">src/univ/textctrl.cpp</if>
     <if cond="TOOLKIT=='GTK'">src/univ/textctrl.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/univ/textctrl.cpp</if>
