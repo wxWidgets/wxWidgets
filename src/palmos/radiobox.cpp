@@ -354,12 +354,15 @@ bool wxRadioBox::Enable(int item, bool enable)
 
 bool wxRadioBox::Show(bool show)
 {
+    // TODO
     return false;
 }
 
 // Show a specific button
-void wxRadioBox::Show(int item, bool show)
+bool wxRadioBox::Show(int item, bool show)
 {
+    // TODO
+    return false;
 }
 
 wxString wxRadioBox::GetLabel()

@@ -474,9 +474,9 @@ void wxRadioBox::DoSetSize(
             ,&nHeightOld
            );
 
-    if (nX == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (nX == wxDefaultCoord && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nXx = nCurrentX;
-    if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (nY == wxDefaultCoord && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nYy = nCurrentY;
     if (nYy < 0)
         nYy = 0;
@@ -671,7 +671,7 @@ void wxRadioBox::DoSetSize(
 
 bool wxRadioBox::Enable(int nItem, bool bEnable)
 {
-    wxCHECK_MSG( nItem >= 0 && nItem < m_nNoItems, false,
+    wxCHECK_MSG( IsValid(nItem), false,
                  wxT("invalid item in wxRadioBox::Enable()") );
 
     ::WinEnableWindow((HWND) m_ahRadioButtons[nItem], bEnable);
@@ -715,7 +715,7 @@ wxString wxRadioBox::GetLabel(
   int                               nItem
 ) const
 {
-    wxCHECK_MSG(nItem >= 0 && nItem < m_nNoItems, wxEmptyString, wxT("invalid radiobox index") );
+    wxCHECK_MSG( IsValid(nItem), wxEmptyString, wxT("invalid radiobox index") );
 
     return wxGetWindowText(m_ahRadioButtons[nItem]);
 } // end of wxRadioBox::GetLabel
@@ -1052,9 +1052,9 @@ void wxRadioBox::SetSelection(
   int                               nNum
 )
 {
-    wxCHECK_RET( (nNum >= 0) && (nNum < m_nNoItems), wxT("invalid radiobox index") );
+    wxCHECK_RET( IsValid(nNum), wxT("invalid radiobox index") );
 
-    if (m_nSelectedButton >= 0 && m_nSelectedButton < m_nNoItems)
+    if ( IsValid(m_nSelectedButton) )
         ::WinSendMsg((HWND)m_ahRadioButtons[m_nSelectedButton], BM_SETCHECK, (MPARAM)0, (MPARAM)0);
 
     ::WinSendMsg((HWND)m_ahRadioButtons[nNum], BM_SETCHECK, (MPARAM)1, (MPARAM)0);
@@ -1067,7 +1067,7 @@ void wxRadioBox::SetString(
 , const wxString&                   rsLabel
 )
 {
-    wxCHECK_RET( nItem >= 0 && nItem < m_nNoItems, wxT("invalid radiobox index") );
+    wxCHECK_RET( IsValid(nItem), wxT("invalid radiobox index") );
 
     m_pnRadioWidth[nItem] = m_pnRadioHeight[nItem] = -1;
     ::WinSetWindowText((HWND)m_ahRadioButtons[nItem], rsLabel.c_str());
@@ -1103,15 +1103,17 @@ bool wxRadioBox::Show(
 } // end of wxRadioBox::Show
 
 // Show a specific button
-void wxRadioBox::Show(
+bool wxRadioBox::Show(
   int                               nItem
 , bool                              bShow
 )
 {
-    wxCHECK_RET( nItem >= 0 && nItem < m_nNoItems,
+    wxCHECK_MSG( IsValid(nItem), false,
                  wxT("invalid item in wxRadioBox::Show()") );
 
     ::WinShowWindow((HWND)m_ahRadioButtons[nItem], bShow);
+
+    return true;
 } // end of wxRadioBox::Show
 
 void wxRadioBox::SubclassRadioButton(

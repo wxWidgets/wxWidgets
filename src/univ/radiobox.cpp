@@ -329,11 +329,11 @@ bool wxRadioBox::Enable(int n, bool enable)
     return m_buttons[n]->Enable(enable);
 }
 
-void wxRadioBox::Show(int n, bool show)
+bool wxRadioBox::Show(int n, bool show)
 {
-    wxCHECK_RET( IsValid(n), _T("invalid index in wxRadioBox::Show") );
+    wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::Show") );
 
-    m_buttons[n]->Show(show);
+    return m_buttons[n]->Show(show);
 }
 
 // ----------------------------------------------------------------------------

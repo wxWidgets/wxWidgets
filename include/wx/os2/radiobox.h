@@ -116,10 +116,8 @@ public:
                                 ,WXWORD wId
                                );
     void             SendNotificationEvent(void);
-    virtual void     Show( int  nItem
-                          ,bool bShow =  true
-                         ) ;
-    bool             Show(bool bShow);
+    virtual bool     Show(int  nItem, bool bShow = true);
+    virtual bool     Show(bool bShow = true);
     MRESULT          WindowProc( WXUINT   uMsg
                                 ,WXWPARAM wParam
                                 ,WXLPARAM lParam
