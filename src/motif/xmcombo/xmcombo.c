@@ -557,7 +557,10 @@ static XtActionsRec actions[] = {
  * durchgefuehrt werden.
  */
 static XtTranslations NewEditTranslations, NewEditTranslationsNE, 
-                      NewListTranslations, NewListTranslationsE;
+#ifdef NODRAGNDROP
+                      NewListTranslations,
+#endif
+                      NewListTranslationsE;
 
 static XtConvertArgRec ConverterScreenConvertArg[] = {
     { XtBaseOffset, (XtPointer) XtOffset(Widget, core.screen), 
@@ -1597,6 +1600,8 @@ static void GetValuesAlmost(XmComboBoxWidget w, ArgList args,
 			    break;
 			}
 		    break;
+        case RWIGNORE:
+            ;
 		} /* case read mode */
 	    } /* if entry found */
 	} /* for every mirrored entry */
