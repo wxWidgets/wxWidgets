@@ -851,17 +851,20 @@ void wxMenuItem::Check( bool check )
 {
     wxCHECK_RET( m_menuItem, wxT("invalid menu item") );
 
-    wxCHECK_RET( IsCheckable(), wxT("Can't check uncheckable item!") )
-
     if (check == m_isChecked)
         return;
 
     wxMenuItemBase::Check( check );
 
-    // GTK+ does it itself for the radio item
-    if ( GetKind() == wxITEM_CHECK )
+    switch ( GetKind() )
     {
-        gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+        case wxITEM_CHECK:
+        case wxITEM_RADIO:
+            gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+            break;
+
+        default:
+            wxFAIL_MSG( _T("can't check this item") );
     }
 }
 
@@ -964,8 +967,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif
 
 #if GTK_CHECK_VERSION(1, 2, 0)
-    // is this a radio item?
-    bool isRadio = FALSE;
+    // does this item terminate the current radio group?
+    bool endOfRadioGroup = TRUE;
 #endif // GTK+ >= 1.2
 
     if ( mitem->IsSeparator() )
@@ -982,6 +985,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         /* this will be wrong for more than one separator. do we care? */
         menuItem = gtk_item_factory_get_widget( m_factory, "<main>/sep" );
+
+        // we might have a separator inside a radio group
+        endOfRadioGroup = FALSE;
 #else // GTK+ 1.0
         menuItem = gtk_menu_item_new();
 #endif // GTK 1.2/1.0
@@ -1097,9 +1103,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     item_type = pathRadio;
                 }
 
-                // remember that this one was a radio item to avoid resetting
-                // m_pathLastRadio below
-                isRadio = TRUE;
+                // continue the existing radio group, if any
+                endOfRadioGroup = FALSE;
                 break;
 
             default:
@@ -1162,7 +1167,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     mitem->SetMenuItem(menuItem);
 
 #if GTK_CHECK_VERSION(1, 2, 0)
-    if ( !isRadio )
+    if ( endOfRadioGroup )
     {
         m_pathLastRadio.clear();
     }
