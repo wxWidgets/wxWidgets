@@ -27,6 +27,11 @@ class App(wx.wxApp):
         # >>> sys.application.whatever
         import sys
         sys.application = self
+
+        # exec a startup script if one is given on the command line
+        if len(sys.argv) > 1:
+            self.shellFrame.shell.execStartupScript(sys.argv[1])
+
         return True
 
 
