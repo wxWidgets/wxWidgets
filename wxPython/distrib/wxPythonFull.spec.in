@@ -137,9 +137,8 @@ cd $WXDIR/wxPython
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
-	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
-	CONTRIBS_INC="$WXDIR/contrib/include" \
-	build
+	WX_CONFIG="$WXDIR/bld/wx-config --inplace" \
+       	build
 
 
 # Build wxrc (XRC resource tool)

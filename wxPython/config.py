@@ -38,8 +38,8 @@ import distutils.command.clean
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 2
-VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "p"     # release flags, such as prerelease num, unicode, etc.
+VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
+VER_FLAGS        = ""     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -300,7 +300,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
         i_file   = os.path.join(dir, file)
         py_file  = os.path.join(dir, gendir, pre+basefile+'.py')
         cpp_file = os.path.join(dir, gendir, pre+basefile+'_wrap.cpp')
-        xml_file = os.path.join("docs", "xml-raw", basefile+'_swig.xml')
+        xml_file = os.path.join("docs", "xml-raw", basefile+pre+'_swig.xml')
 
         if add_under:
             interface = ['-interface', '_'+basefile+'_']

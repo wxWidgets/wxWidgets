@@ -40,7 +40,7 @@ function usage {
     echo "command flags:"
     echo "   skipcopy       Don't copy the files for the tarball from the workspace"
     echo "   skiptar        Don't build the tarball"
-    echo "   skiprpm        Don't build the RPM (but why?)"
+    echo "   skiprpm        Don't build the RPM"
     echo "   skipclean      Don't do the cleanup at the end"
     echo "   gtk2           Build using wxGTK2 and Unicode"
     echo "   x11            Build using wxX11"
@@ -87,7 +87,7 @@ for flag in $*; do
     case ${flag} in
 	skipcopy)  skipcopy=1                          ;;
 	skipclean) skipclean=1                         ;;
-	skiptar)   skiptar=1                           ;;
+	skiptar)   skiptar=1; skipcopy=1               ;;
 	skiprpm)   skiprpm=1                           ;;
 	gtk2)      unicode=1; port=GTK2; lcport=gtk2   ;;
 	x11)       port=X11; lcport=x11                ;;
