@@ -131,7 +131,7 @@ void SetCurrentChapterName(char *s, char *file)
   CurrentChapterFile = copystring(file);
 
   currentFileName = CurrentChapterFile;
-  
+
   SetCurrentTopic(s);
 }
 void SetCurrentSectionName(char *s, char *file)
@@ -225,7 +225,7 @@ void ReopenSectionContentsFile(void)
  * converting Latex-isms into HTML-isms, such as 2 newlines -> <P>.
  *
  */
- 
+
 void ProcessText2HTML(TexChunk *chunk)
 {
   bool changed = FALSE;
@@ -297,7 +297,7 @@ void ProcessText2HTML(TexChunk *chunk)
  * and before TraverseDocument is called.
  *
  */
- 
+
 void Text2HTML(TexChunk *chunk)
 {
   Tex2RTFYield();
@@ -374,7 +374,7 @@ void AddBrowseButtons(char *upLabel, char *upFilename,
     contentsReference = contentsReferenceBuf;
     sprintf(contentsReference, "<img align=center src=\"%s\" BORDER=0 ALT=\"Contents\">", ConvertCase("contents.gif"));
   }
-  
+
   char *upReference = NULL;
   if (htmlBrowseButtons == HTML_BUTTONS_TEXT)
     upReference = UpNameString;
@@ -384,7 +384,7 @@ void AddBrowseButtons(char *upLabel, char *upFilename,
     upReference = upReferenceBuf;
     sprintf(upReference, "<img align=center src=\"%s\" BORDER=0 ALT=\"Up\">", ConvertCase("up.gif"));
   }
-  
+
   char *backReference = NULL;
   if (htmlBrowseButtons == HTML_BUTTONS_TEXT)
     backReference = "&lt;&lt;";
@@ -394,7 +394,7 @@ void AddBrowseButtons(char *upLabel, char *upFilename,
     backReference = backReferenceBuf;
     sprintf(backReference, "<img align=center src=\"%s\" BORDER=0 ALT=\"Previous\">", ConvertCase("back.gif"));
   }
-  
+
   char *forwardReference = NULL;
   if (htmlBrowseButtons == HTML_BUTTONS_TEXT)
     forwardReference = "&gt;&gt;";
@@ -404,9 +404,9 @@ void AddBrowseButtons(char *upLabel, char *upFilename,
     forwardReference = forwardReferenceBuf;
     sprintf(forwardReference, "<img align=center src=\"%s\" BORDER=0 ALT=\"Next\">", ConvertCase("forward.gif"));
   }
-  
+
   TexOutput("<CENTER>");
-  
+
   char buf[200];
 
   /*
@@ -556,9 +556,9 @@ char *ParseColourString(char *bkStr, bool *isPicture)
         int red = atoi(tok1);
         int green = atoi(tok2);
         int blue = atoi(tok3);
-        
+
         strcpy(resStr, "#");
-        
+
         char buf[3];
         DecToHex(red, buf);
         strcat(resStr, buf);
@@ -596,7 +596,7 @@ void OutputBodyStart(void)
       TexOutput(" BGCOLOR="); TexOutput(s);
     }
   }
-    
+
   // Set foreground text colour, if one is specified
   if (textColourString)
   {
@@ -672,7 +672,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         sprintf(titleBuf, "%s_contents.html", FileNameFromPath(FileRoot));
 
       fprintf(Chapters, "<A NAME=\"%s\"></A>", topicName);
-      
+
       AddBrowseButtons("", titleBuf, // Up
                        lastTopic, lastFileName,  // Last topic
                        topicName, ChaptersName); // This topic
@@ -717,7 +717,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
       if (macroId != ltSECTIONSTAR)
         sectionNo ++;
-        
+
       SetCurrentOutput(NULL);
       startedSections = TRUE;
 
@@ -938,7 +938,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             OutputCurrentSection();
             TexOutput("</A><BR>");
 */
-            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SectionsName);             
+            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SectionsName);
             SetCurrentOutput(Sections);
         }
 
@@ -1019,7 +1019,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       {
         // End cell, start cell
         TexOutput("</TD>");
-        
+
         // Start new row and cell, setting alignment for the first cell.
         if (currentColumn < noColumns)
           currentColumn ++;
@@ -1033,7 +1033,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         {
           // Convert from points * 20 into pixels.
           int points = TableData[currentColumn].width / 20;
-        
+
           // Say the display is 100 DPI (dots/pixels per inch).
           // There are 72 pts to the inch. So 1pt = 1/72 inch, or 100 * 1/72 dots.
           int pixels = (int)(points * 100.0 / 72.0);
@@ -1070,7 +1070,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
     if (start)
     {
       currentColumn = 0;
-      
+
       // Start new row and cell, setting alignment for the first cell.
       char buf[100];
       if (TableData[currentColumn].justification == 'c')
@@ -1081,7 +1081,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       {
         // Convert from points * 20 into pixels.
         int points = TableData[currentColumn].width / 20;
-        
+
         // Say the display is 100 DPI (dots/pixels per inch).
         // There are 72 pts to the inch. So 1pt = 1/72 inch, or 100 * 1/72 dots.
         int pixels = (int)(points * 100.0 / 72.0);
@@ -1479,7 +1479,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       if (htmlFrameContents && FrameContents)
       {
         SetCurrentOutput(FrameContents);
-        
+
         // Add a special label for the contents page.
         TexOutput("<CENTER>\n");
         TexOutput("<H3>\n");
@@ -1499,7 +1499,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         }
         TexOutput("\n</CENTER>\n");
         TexOutput("<P><HR><P>\n");
-        
+
         SetCurrentOutput(Titlepage);
       }
 */
@@ -1701,7 +1701,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     {
       if (!suppressNameDecoration) TexOutput("</B>");
     }
-    
+
     if (start && (arg_no == 3))
       TexOutput("(");
     if (!start && (arg_no == 3))
@@ -1793,7 +1793,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     if (start)
     {
       char *sec = NULL;
-      
+
       char *refName = GetArgData();
       if (refName)
       {
@@ -1916,11 +1916,11 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           alignment = " align=left";
         else if  (macroId == ltIMAGER)
           alignment = " align=right";
-        
+
         // Try to find an XBM or GIF image first.
         char *filename = copystring(GetArgData());
         char buf[500];
-        
+
         strcpy(buf, filename);
         StripExtension(buf);
         strcat(buf, ".xbm");
@@ -1998,7 +1998,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       // Try to find an XBM or GIF image first.
       char *filename = copystring(GetArgData());
       char buf[500];
-        
+
       strcpy(buf, filename);
       StripExtension(buf);
       strcat(buf, ".xbm");
@@ -2552,7 +2552,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       return FALSE;
     break;
   }
-*/  
+*/
   case ltTABULAR:
   case ltSUPERTABULAR:
   {
@@ -2801,7 +2801,7 @@ bool HTMLGo(void)
     if (TitlepageName) delete[] TitlepageName;
     TitlepageName = copystring(buf);
     Titlepage = fopen(buf, "w");
-    
+
     if (truncateFilenames)
       sprintf(buf, "%s_fc.htm", FileRoot);
     else
@@ -2907,7 +2907,7 @@ bool HTMLGo(void)
         else
           fprintf(tmpTitle, "<HEAD><TITLE>%s</TITLE></HEAD>\n\n", FileNameFromPath(FileRoot));
       }
-      
+
       // Output frame information
       if (htmlFrameContents)
       {
@@ -2922,13 +2922,13 @@ bool HTMLGo(void)
         fprintf(tmpTitle, "<FRAME SRC=\"%s\">\n", ConvertCase(FileNameFromPath(contentsFrameName)));
         fprintf(tmpTitle, "<FRAME SRC=\"%s\" NAME=\"mainwindow\">\n", ConvertCase(FileNameFromPath(firstFileName)));
         fprintf(tmpTitle, "</FRAMESET>\n");
-        
+
         fprintf(tmpTitle, "<NOFRAMES>\n");
       }
 
       // Output <BODY...> to temporary title page
       OutputBodyStart();
-      
+
       // Concat titlepage
       FILE *fd = fopen(TitlepageName, "r");
       if (fd)
@@ -3039,27 +3039,40 @@ void GenerateHTMLWorkshopFiles(char *fname)
 
   sprintf(buf, "%s.hhp", fname);
   f = fopen(buf, "wt");
-  fprintf(f, 
+  fprintf(f,
       "[OPTIONS]\n"
-      "Compatibility=1.1 or later\n"
+      "Compatibility=1.1\n"
+      "Full-text search=Yes\n"
       "Contents file=%s.hhc\n"
+      "Compiled file=%s.chm\n"
+      "Default Window=%sHelp\n"
       "Default topic=%s\n"
       "Index file=%s.hhk\n"
       "Title=",
       FileNameFromPath(fname),
+      FileNameFromPath(fname),
+      FileNameFromPath(fname),
       FileNameFromPath(TitlepageName),
       FileNameFromPath(fname)
       );
-      
+
   if (DocumentTitle) {
     SetCurrentOutput(f);
     TraverseChildrenFromChunk(DocumentTitle);
   }
   else fprintf(f, "(unknown)");
-  
+
+  fprintf(f, "\n\n[WINDOWS]\n"
+          "%sHelp=,\"%s.hhc\",\"%s.hhk\",\"%s\",,,,,,0x2420,,0x380e,,,,,0,,,",
+          FileNameFromPath(fname),
+          FileNameFromPath(fname),
+          FileNameFromPath(fname),
+          FileNameFromPath(TitlepageName));
+
+
   fprintf(f, "\n\n[FILES]\n");
   fprintf(f, "%s\n", FileNameFromPath(TitlepageName));
-  for (int i = 1; i <= fileId; i++) { 
+  for (int i = 1; i <= fileId; i++) {
     if (truncateFilenames)
       sprintf(buf, "%s%d.htm", FileNameFromPath(FileRoot), i);
     else
@@ -3097,7 +3110,7 @@ void GenerateHTMLWorkshopFiles(char *fname)
       while (node1)
       {
         char *s = (char *)node1->Data();
-        fprintf(f, 
+        fprintf(f,
             " <LI> <OBJECT type=\"text/sitemap\">\n"
             "  <param name=\"Local\" value=\"%s#%s\">\n"
             "  <param name=\"Name\" value=\"%s\">\n"
@@ -3107,7 +3120,7 @@ void GenerateHTMLWorkshopFiles(char *fname)
       }
     }
   }
-    
+
   fprintf(f, "</UL>\n");
   fclose(f);
 }
@@ -3123,19 +3136,19 @@ void HTMLWorkshopAddToContents(int level, char *s, char *file)
 
   if (level > HTMLWorkshopLastLevel)
     for (i = HTMLWorkshopLastLevel; i < level; i++)
-      fprintf(HTMLWorkshopContents, "<UL>"); 
+      fprintf(HTMLWorkshopContents, "<UL>");
   if (level < HTMLWorkshopLastLevel)
     for (i = level; i < HTMLWorkshopLastLevel; i++)
-      fprintf(HTMLWorkshopContents, "</UL>"); 
-  
+      fprintf(HTMLWorkshopContents, "</UL>");
+
   SetCurrentOutput(HTMLWorkshopContents);
-  fprintf(HTMLWorkshopContents, 
+  fprintf(HTMLWorkshopContents,
             " <LI> <OBJECT type=\"text/sitemap\">\n"
             "  <param name=\"Local\" value=\"%s#%s\">\n"
             "  <param name=\"Name\" value=\"",
 	    file, s);
   OutputCurrentSection();
-  fprintf(HTMLWorkshopContents,	    	    
+  fprintf(HTMLWorkshopContents,
 	    "\">\n"
             "  </OBJECT>\n");
   HTMLWorkshopLastLevel = level;
@@ -3146,10 +3159,10 @@ void HTMLWorkshopStartContents()
 {
   char buf[300];
   sprintf(buf, "%s.hhc", FileRoot);
-  HTMLWorkshopContents = fopen(buf, "wt");  
+  HTMLWorkshopContents = fopen(buf, "wt");
   HTMLWorkshopLastLevel = 0;
 
-  fprintf(HTMLWorkshopContents, 
+  fprintf(HTMLWorkshopContents,
       "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"
       "<HTML>\n"
       "<HEAD>\n"
@@ -3159,7 +3172,13 @@ void HTMLWorkshopStartContents()
       "<OBJECT type=\"text/site properties\">\n"
       " <param name=\"ImageType\" value=\"Folder\">\n"
       "</OBJECT>\n"
-      "<UL>\n");
+      "<UL>\n"
+      "<LI> <OBJECT type=\"text/sitemap\">\n"
+      "<param name=\"Local\" value=\"%s\">\n"
+      "<param name=\"Name\" value=\"Contents\">\n</OBJECT>\n",
+      FileNameFromPath(TitlepageName)
+      );
+
 }
 
 
