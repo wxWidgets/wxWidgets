@@ -137,11 +137,7 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
     wxString s(handler -> GetSupportedTags());
     wxStringTokenizer tokenizer(s, ", ");
 
-#if (wxVERSION_NUMBER < 2100)
-    while (tokenizer.HasMoreToken())
-#else
     while (tokenizer.HasMoreTokens())
-#endif
         m_HandlersHash.Put(tokenizer.NextToken(), handler);
 
     if (m_HandlersList.IndexOf(handler) == wxNOT_FOUND)

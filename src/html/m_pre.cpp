@@ -66,11 +66,7 @@ wxHtmlPRECell::wxHtmlPRECell(const wxString& s, wxDC& dc) : wxHtmlCell()
     m_Width = m_Height = 0;
 
     i = 0;
-#if (wxVERSION_NUMBER < 2100)
-    while (tokenizer.HasMoreToken()) {
-#else
     while (tokenizer.HasMoreTokens()) {
-#endif
         if (i % 10 == 0) m_Text = (wxString**) realloc(m_Text, sizeof(wxString*) * (i + 10));
         tmp = tokenizer.NextToken();
         tmp.Replace("&nbsp;", " ", TRUE);
