@@ -3129,7 +3129,8 @@ if test "$GCC" = yes ; then
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
-        CPPFLAGS="-MMD ${CPPFLAGS}"
+        CFLAGS="-MMD ${CFLAGS}"
+        CXXFLAGS="-MMD ${CXXFLAGS}"
     fi
     if test "$USE_WIN32" = 1 ; then
         # I'm not even really sure what this was ever added to solve,
