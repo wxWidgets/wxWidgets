@@ -21,13 +21,13 @@
 
 class WXDLLEXPORT wxRadioBoxXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxRadioBoxXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
-    private:
-        bool m_InsideBox;
-        wxArrayString strList;
+public:
+    wxRadioBoxXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+private:
+    bool m_insideBox;
+    wxArrayString strList;
 };
 
 #endif

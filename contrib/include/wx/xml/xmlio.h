@@ -20,21 +20,45 @@
 #include "wx/xml/xml.h"
 
 
+class WXDLLEXPORT wxXmlIOHandlerExpat : public wxXmlIOHandler
+{
+public:
+    virtual wxXmlIOType GetType() { return wxXML_IO_EXPAT; }
+    virtual bool CanLoad(wxInputStream& stream);
+    virtual bool CanSave() { return FALSE; }
+
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) { return FALSE; }
+};
+
+
+class WXDLLEXPORT wxXmlIOHandlerWriter : public wxXmlIOHandler
+{
+public:
+    virtual wxXmlIOType GetType() { return wxXML_IO_TEXT_OUTPUT; }
+    virtual bool CanLoad(wxInputStream& stream) { return FALSE; }
+    virtual bool CanSave() { return TRUE; }
+
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc) { return FALSE; }
+    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
+};
+
+
 class WXDLLEXPORT wxXmlIOHandlerBin : public wxXmlIOHandler
 {
-    public:
-        wxXmlIOHandlerBin() {}
+public:
+    wxXmlIOHandlerBin() {}
 
-        virtual wxXmlIOType GetType() { return wxXML_IO_BIN; }
-        virtual bool CanLoad(wxInputStream& stream);
-        virtual bool CanSave() { return TRUE; }
+    virtual wxXmlIOType GetType() { return wxXML_IO_BIN; }
+    virtual bool CanLoad(wxInputStream& stream);
+    virtual bool CanSave() { return TRUE; }
 
-        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
-        virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
-        
-    protected: 
-        wxString ReadHeader(wxInputStream& stream);
-        void WriteHeader(wxOutputStream& stream, const wxString& header);
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
+
+protected: 
+    wxString ReadHeader(wxInputStream& stream);
+    void WriteHeader(wxOutputStream& stream, const wxString& header);
 };
 
 
@@ -43,30 +67,17 @@ class WXDLLEXPORT wxXmlIOHandlerBin : public wxXmlIOHandler
 
 class WXDLLEXPORT wxXmlIOHandlerBinZ : public wxXmlIOHandlerBin
 {
-    public:
-        wxXmlIOHandlerBinZ() {}
+public:
+    wxXmlIOHandlerBinZ() {}
 
-        virtual wxXmlIOType GetType() { return wxXML_IO_BINZ; }
-        virtual bool CanLoad(wxInputStream& stream);
+    virtual wxXmlIOType GetType() { return wxXML_IO_BINZ; }
+    virtual bool CanLoad(wxInputStream& stream);
 
-        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
-        virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 };
 
 #endif
-
-
-
-class WXDLLEXPORT wxXmlIOHandlerLibxml : public wxXmlIOHandler
-{
-    public:
-        virtual wxXmlIOType GetType() { return wxXML_IO_LIBXML; }
-        virtual bool CanLoad(wxInputStream& stream);
-        virtual bool CanSave();
-
-        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
-        virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
-};
 
 
 #endif // _WX_XMLIO_H_

@@ -21,10 +21,10 @@
 
 class WXDLLEXPORT wxStaticLineXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxStaticLineXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxStaticLineXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif

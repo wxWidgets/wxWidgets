@@ -19,10 +19,10 @@
 
 class WXDLLEXPORT wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxCalendarCtrlXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxCalendarCtrlXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

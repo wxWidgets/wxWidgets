@@ -22,10 +22,10 @@
 
 class WXDLLEXPORT wxCheckBoxXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxCheckBoxXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxCheckBoxXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif

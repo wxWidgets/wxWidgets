@@ -22,16 +22,16 @@ class WXDLLEXPORT wxSizer;
 
 class WXDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxSizerXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxSizerXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+
+private:
+    bool m_isInside;
+    wxSizer *m_parentSizer;
         
-    private:
-        bool m_IsInside;
-        wxSizer *m_ParentSizer;
-        
-        bool IsSizerNode(wxXmlNode *node);
+    bool IsSizerNode(wxXmlNode *node);
 };
 
 

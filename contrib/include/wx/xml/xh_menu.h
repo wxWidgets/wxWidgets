@@ -19,13 +19,13 @@
 
 class WXDLLEXPORT wxMenuXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxMenuXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
-        
-    private:
-        bool m_InsideMenu;
+public:
+    wxMenuXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+
+private:
+    bool m_insideMenu;
 };
 
 class WXDLLEXPORT wxMenuBarXmlHandler : public wxXmlResourceHandler

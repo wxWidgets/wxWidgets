@@ -29,10 +29,10 @@ class WXDLLEXPORT wxScrollBarXmlHandler : public wxXmlResourceHandler
         wxSL_DEFAULT_MAX = 100
     };
 
-    public:
-        wxScrollBarXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxScrollBarXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxBitmapButtonXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxBitmapButtonXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxBitmapButtonXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

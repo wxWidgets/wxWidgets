@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxStaticBitmapXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxStaticBitmapXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxStaticBitmapXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

@@ -28,10 +28,10 @@ class WXDLLEXPORT wxSpinButtonXmlHandler : public wxXmlResourceHandler
         wxSP_DEFAULT_MAX = 100
     };
 
-    public:
-        wxSpinButtonXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxSpinButtonXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 #endif
 
@@ -45,10 +45,10 @@ class WXDLLEXPORT wxSpinCtrlXmlHandler : public wxXmlResourceHandler
         wxSP_DEFAULT_MAX = 100
     };
 
-    public:
-        wxSpinCtrlXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxSpinCtrlXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 #endif
 

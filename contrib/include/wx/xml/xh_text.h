@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxTextCtrlXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxTextCtrlXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxTextCtrlXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

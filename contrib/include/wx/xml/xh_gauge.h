@@ -29,10 +29,10 @@ class WXDLLEXPORT wxGaugeXmlHandler : public wxXmlResourceHandler
         wxGAUGE_DEFAULT_RANGE = 100
     };
 
-    public:
-        wxGaugeXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxGaugeXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif

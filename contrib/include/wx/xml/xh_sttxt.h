@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxStaticTextXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxStaticTextXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxStaticTextXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

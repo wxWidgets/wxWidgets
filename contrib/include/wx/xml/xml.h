@@ -53,10 +53,11 @@ enum wxXmlNodeType
 
 enum wxXmlIOType
 {
-    wxXML_IO_AUTO = 0, // detect it automatically
-    wxXML_IO_LIBXML,   // use libxml2 to parse/save XML document
-    wxXML_IO_BIN,      // save in binary uncompressed proprietary format
-    wxXML_IO_BINZ      // svae in binary zlib-compressed proprietary format
+    wxXML_IO_AUTO = 0,    // detect it automatically
+    wxXML_IO_EXPAT,       // use Expat to load from text/xml document
+    wxXML_IO_TEXT_OUTPUT, // generic saver into text/xml
+    wxXML_IO_BIN,         // save in binary uncompressed proprietary format
+    wxXML_IO_BINZ         // svae in binary zlib-compressed proprietary format
 };
 
 
@@ -66,24 +67,25 @@ enum wxXmlIOType
 
 class WXDLLEXPORT wxXmlProperty
 {
-    public:
-        wxXmlProperty() : m_Next(NULL) {}
-        wxXmlProperty(const wxString& name, const wxString& value, wxXmlProperty *next)
-            : m_Name(name), m_Value(value), m_Next(next) {}
-        ~wxXmlProperty() { delete m_Next; }
-    
-        wxString GetName() const { return m_Name; }
-        wxString GetValue() const { return m_Value; }
-        wxXmlProperty *GetNext() const { return m_Next; }
-        
-        void SetName(const wxString& name) { m_Name = name; }
-        void SetValue(const wxString& value) { m_Value = value; }
-        void SetNext(wxXmlProperty *next) { m_Next = next; }
+public:
+    wxXmlProperty() : m_next(NULL) {}
+    wxXmlProperty(const wxString& name, const wxString& value, 
+                  wxXmlProperty *next)
+            : m_name(name), m_value(value), m_next(next) {}
+    ~wxXmlProperty() { delete m_next; }
 
-    private:
-        wxString m_Name;
-        wxString m_Value;
-        wxXmlProperty *m_Next;
+    wxString GetName() const { return m_name; }
+    wxString GetValue() const { return m_value; }
+    wxXmlProperty *GetNext() const { return m_next; }
+
+    void SetName(const wxString& name) { m_name = name; }
+    void SetValue(const wxString& value) { m_value = value; }
+    void SetNext(wxXmlProperty *next) { m_next = next; }
+
+private:
+    wxString m_name;
+    wxString m_value;
+    wxXmlProperty *m_next;
 };
 
 
@@ -93,66 +95,74 @@ class WXDLLEXPORT wxXmlProperty
 // are irrelevant) and wxXML_ELEMENT_NODE (e.g. in <title>hi</title> there is
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
+//
+// If wxUSE_UNICODE is 0, all strings are encoded in UTF-8 encoding (same as
+// ASCII for characters 0-127). You can use wxMBConvUTF8 to convert then to 
+// desired encoding:
+//
+//     wxCSConv myConv("iso8859-2");
+//     wxString s(cMB2WC(node->GetContent().c_str()), myConv);
 
 class WXDLLEXPORT wxXmlNode
 {
-    public:
-        wxXmlNode() : m_Properties(NULL), m_Parent(NULL), 
-                      m_Children(NULL), m_Next(NULL) {}
-        wxXmlNode(wxXmlNode *parent,wxXmlNodeType type, 
-                  const wxString& name, const wxString& content,
-                  wxXmlProperty *props, wxXmlNode *next);
-        ~wxXmlNode() { delete m_Properties; delete m_Next; delete m_Children; }
+public:
+    wxXmlNode() : m_properties(NULL), m_parent(NULL), 
+                  m_children(NULL), m_next(NULL) {}
+    wxXmlNode(wxXmlNode *parent,wxXmlNodeType type, 
+              const wxString& name, const wxString& content,
+              wxXmlProperty *props, wxXmlNode *next);
+    ~wxXmlNode() { delete m_properties; delete m_next; delete m_children; }
 
-        // copy ctor & operator=. Note that this does NOT copy syblings
-        // and parent pointer, i.e. m_Parent and m_Next will be NULL
-        // after using copy ctor and are never unmodified by operator=.
-        // On the other hand, it DOES copy children and properties.
-        wxXmlNode(const wxXmlNode& node);
-        wxXmlNode& operator=(const wxXmlNode& node);
-        
-        // user-friendly creation:
-        wxXmlNode(wxXmlNodeType type, const wxString& name, 
-                  const wxString& content = wxEmptyString);
-        void AddChild(wxXmlNode *child);
-        void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
-        bool RemoveChild(wxXmlNode *child);
-        void AddProperty(const wxString& name, const wxString& value);
-        bool DeleteProperty(const wxString& name);
+    // copy ctor & operator=. Note that this does NOT copy syblings
+    // and parent pointer, i.e. m_parent and m_next will be NULL
+    // after using copy ctor and are never unmodified by operator=.
+    // On the other hand, it DOES copy children and properties.
+    wxXmlNode(const wxXmlNode& node);
+    wxXmlNode& operator=(const wxXmlNode& node);
 
-        // access methods:
-        wxXmlNodeType GetType() const { return m_Type; }
-        wxString GetName() const { return m_Name; }
-        wxString GetContent() const { return m_Content; }
-        
-        wxXmlNode *GetParent() const { return m_Parent; }
-        wxXmlNode *GetNext() const { return m_Next; }
-        wxXmlNode *GetChildren() const { return m_Children; }
+    // user-friendly creation:
+    wxXmlNode(wxXmlNodeType type, const wxString& name, 
+              const wxString& content = wxEmptyString);
+    void AddChild(wxXmlNode *child);
+    void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
+    bool RemoveChild(wxXmlNode *child);
+    void AddProperty(const wxString& name, const wxString& value);
+    bool DeleteProperty(const wxString& name);
 
-        wxXmlProperty *GetProperties() const { return m_Properties; }
-        bool GetPropVal(const wxString& propName, wxString *value) const;
-        wxString GetPropVal(const wxString& propName, const wxString& defaultVal) const;
-        bool HasProp(const wxString& propName) const;
-        
-        void SetType(wxXmlNodeType type) { m_Type = type; }
-        void SetName(const wxString& name) { m_Name = name; }
-        void SetContent(const wxString& con) { m_Content = con; }
-        
-        void SetParent(wxXmlNode *parent) { m_Parent = parent; }
-        void SetNext(wxXmlNode *next) { m_Next = next; }
-        void SetChildren(wxXmlNode *child) { m_Children = child; }
-        
-        void SetProperties(wxXmlProperty *prop) { m_Properties = prop; }
-        void AddProperty(wxXmlProperty *prop);
+    // access methods:
+    wxXmlNodeType GetType() const { return m_type; }
+    wxString GetName() const { return m_name; }
+    wxString GetContent() const { return m_content; }
 
-    private:
-        wxXmlNodeType m_Type;
-        wxString m_Name;
-        wxString m_Content;
-        wxXmlProperty *m_Properties;
-        wxXmlNode *m_Parent, *m_Children, *m_Next;
+    wxXmlNode *GetParent() const { return m_parent; }
+    wxXmlNode *GetNext() const { return m_next; }
+    wxXmlNode *GetChildren() const { return m_children; }
 
-        void DoCopy(const wxXmlNode& node);
+    wxXmlProperty *GetProperties() const { return m_properties; }
+    bool GetPropVal(const wxString& propName, wxString *value) const;
+    wxString GetPropVal(const wxString& propName, 
+                        const wxString& defaultVal) const;
+    bool HasProp(const wxString& propName) const;
+
+    void SetType(wxXmlNodeType type) { m_type = type; }
+    void SetName(const wxString& name) { m_name = name; }
+    void SetContent(const wxString& con) { m_content = con; }
+
+    void SetParent(wxXmlNode *parent) { m_parent = parent; }
+    void SetNext(wxXmlNode *next) { m_next = next; }
+    void SetChildren(wxXmlNode *child) { m_children = child; }
+
+    void SetProperties(wxXmlProperty *prop) { m_properties = prop; }
+    void AddProperty(wxXmlProperty *prop);
+
+private:
+    wxXmlNodeType m_type;
+    wxString m_name;
+    wxString m_content;
+    wxXmlProperty *m_properties;
+    wxXmlNode *m_parent, *m_children, *m_next;
+
+    void DoCopy(const wxXmlNode& node);
 };
 
 
@@ -167,51 +177,61 @@ class WXDLLEXPORT wxXmlNode
 
 class WXDLLEXPORT wxXmlDocument : public wxObject
 {
-    public:
-        wxXmlDocument() : wxObject(), m_Version(wxT("1.0")), m_Root(NULL)  {}
-        wxXmlDocument(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
-        wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
-        ~wxXmlDocument() { delete m_Root; }
-        
-        wxXmlDocument(const wxXmlDocument& doc);
-        wxXmlDocument& operator=(const wxXmlDocument& doc);
-    
-        // Parses .xml file and loads data. Returns TRUE on success, FALSE
-        // otherwise. 
-        // NOTE: Any call to this method will result into linking against libxml
-        //       and app's binary size will grow by ca. 250kB
-        bool Load(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
-        bool Load(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
-        
-        // Saves document as .xml file.
-        bool Save(const wxString& filename, wxXmlIOType io_type) const;
-        bool Save(wxOutputStream& stream, wxXmlIOType io_type) const;
-        
-        // Returns root node of the document.
-        wxXmlNode *GetRoot() const { return m_Root; }
-        
-        // Returns version of document (may be empty).
-        wxString GetVersion() const { return m_Version; }
-        // Returns encoding of document (may be empty).
-        wxString GetEncoding() const { return m_Encoding; }
-        
-        // Write-access methods:
-        void SetRoot(wxXmlNode *node) { delete m_Root ; m_Root = node; }
-        void SetVersion(const wxString& version) { m_Version = version; }
-        void SetEncoding(const wxString& encoding) { m_Encoding = encoding; }
+public:
+    wxXmlDocument() : wxObject(), m_version(wxT("1.0")), m_root(NULL)  {}
+    wxXmlDocument(const wxString& filename, 
+                  wxXmlIOType io_type = wxXML_IO_AUTO);
+    wxXmlDocument(wxInputStream& stream, 
+                  wxXmlIOType io_type = wxXML_IO_AUTO);
+    ~wxXmlDocument() { delete m_root; }
 
-        static void AddHandler(wxXmlIOHandler *handler);
-        static void CleanUpHandlers();
-        static void InitStandardHandlers();
+    wxXmlDocument(const wxXmlDocument& doc);
+    wxXmlDocument& operator=(const wxXmlDocument& doc);
 
-    protected:
-        static wxList *sm_Handlers;
+    // Parses .xml file and loads data. Returns TRUE on success, FALSE
+    // otherwise. 
+    // NOTE: Any call to this method will result into linking against libxml
+    //       and app's binary size will grow by ca. 250kB
+    bool Load(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
+    bool Load(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
 
-    private:
-        wxString m_Version, m_Encoding;
-        wxXmlNode *m_Root;
-        
-        void DoCopy(const wxXmlDocument& doc);
+    // Saves document as .xml file.
+    bool Save(const wxString& filename, 
+              wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
+    bool Save(wxOutputStream& stream, 
+              wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
+
+    bool IsOk() const { return m_root != NULL; }
+
+    // Returns root node of the document.
+    wxXmlNode *GetRoot() const { return m_root; }
+
+    // Returns version of document (may be empty).
+    wxString GetVersion() const { return m_version; }
+    // Returns encoding of document (may be empty).
+    // Note: this is the encoding original fail was saved in, *not* the
+    // encoding of in-memory representation! Data in wxXmlNode are always
+    // stored in wchar_t (in Unicode build) or UTF-8 encoded 
+    // (if wxUSE_UNICODE is 0).
+    wxString GetEncoding() const { return m_encoding; }
+
+    // Write-access methods:
+    void SetRoot(wxXmlNode *node) { delete m_root ; m_root = node; }
+    void SetVersion(const wxString& version) { m_version = version; }
+    void SetEncoding(const wxString& encoding) { m_encoding = encoding; }
+
+    static void AddHandler(wxXmlIOHandler *handler);
+    static void CleanUpHandlers();
+    static void InitStandardHandlers();
+
+protected:
+    static wxList *sm_handlers;
+
+private:
+    wxString m_version, m_encoding;
+    wxXmlNode *m_root;
+
+    void DoCopy(const wxXmlDocument& doc);
 };
 
 

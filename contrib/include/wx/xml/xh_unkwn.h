@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxUnknownWidgetXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxUnknownWidgetXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

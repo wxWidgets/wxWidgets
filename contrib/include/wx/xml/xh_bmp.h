@@ -20,18 +20,18 @@
 
 class WXDLLEXPORT wxBitmapXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxBitmapXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxBitmapXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 class WXDLLEXPORT wxIconXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxIconXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxIconXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 

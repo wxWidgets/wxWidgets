@@ -29,10 +29,10 @@ class WXDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
         wxSL_DEFAULT_MAX = 100
     };
 
-    public:
-        wxSliderXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxSliderXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif

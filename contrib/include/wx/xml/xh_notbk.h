@@ -22,14 +22,14 @@ class WXDLLEXPORT wxNotebook;
 
 class WXDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxNotebookXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
-        
-    private:
-        bool m_IsInside;
-        wxNotebook *m_Notebook;
+public:
+    wxNotebookXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+
+private:
+    bool m_isInside;
+    wxNotebook *m_notebook;
 };
 
 #endif

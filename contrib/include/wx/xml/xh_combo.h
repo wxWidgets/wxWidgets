@@ -21,13 +21,13 @@
 
 class WXDLLEXPORT wxComboBoxXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxComboBoxXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
-    private:
-        bool m_InsideBox;
-        wxArrayString strList;
+public:
+    wxComboBoxXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+private:
+    bool m_insideBox;
+    wxArrayString strList;
 };
 
 #endif

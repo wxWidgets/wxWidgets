@@ -23,14 +23,14 @@ class WXDLLEXPORT wxToolBar;
 
 class WXDLLEXPORT wxToolBarXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxToolBarXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxToolBarXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
         
-    private:
-        bool m_IsInside;
-        wxToolBar *m_Toolbar;
+private:
+    bool m_isInside;
+    wxToolBar *m_toolbar;
 };
 
 #endif

@@ -19,13 +19,13 @@
 
 class WXDLLEXPORT wxCheckListXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxCheckListXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
-    private:
-        bool m_InsideBox;
-        wxArrayString strList;
+public:
+    wxCheckListXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+private:
+    bool m_insideBox;
+    wxArrayString strList;
 };
 
 

@@ -23,10 +23,10 @@
 
 class WXDLLEXPORT wxHtmlWindowXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxHtmlWindowXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxHtmlWindowXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif

@@ -22,10 +22,10 @@
 
 class WXDLLEXPORT wxRadioButtonXmlHandler : public wxXmlResourceHandler
 {
-    public:
-        wxRadioButtonXmlHandler();
-        virtual wxObject *DoCreateResource();
-        virtual bool CanHandle(wxXmlNode *node);
+public:
+    wxRadioButtonXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
 };
 
 #endif
