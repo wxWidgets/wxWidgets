@@ -21,12 +21,16 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/hash.h"
-#ifdef wxUSE_SERIAL
-#include "wx/objstrm.h"
-#include "wx/serbase.h"
-#endif
-#endif
+    #include "wx/hash.h"
+    #ifdef wxUSE_SERIAL
+        #include "wx/objstrm.h"
+        #include "wx/serbase.h"
+
+        // for error messages
+        #include "wx/log.h"
+        #include "wx/intl.h"
+    #endif // wxUSE_SERIAL
+#endif // WX_PRECOMP
 
 #include <string.h>
 #include <assert.h>
@@ -283,19 +287,17 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
   wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
   if (!lib) {
-    wxMessageBox("Can't load wxSerial dynamic library.", "Alert !");
+    wxLogError(_("Can't load wxSerial dynamic library."));
     return;
   }
   if (!m_serialObj) {
     m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
     if (!m_serialObj) {
-      wxString message;
-
-      message.Printf("Can't find the serialization object (%s) for the object %s",
-                     WXSTRINGCAST obj_name,
-                     WXSTRINGCAST GetClassInfo()->GetClassName());
-      wxMessageBox(message, "Alert !");
+      wxLogError(_("Can't find the serialization object '%s' "
+                   "for the object '%s'."),
+                 obj_name.c_str(),
+                 GetClassInfo()->GetClassName());
       return;
     }
     m_serialObj->SetObject(this);
@@ -313,12 +315,10 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
     m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
     if (!m_serialObj) {
-      wxString message;
-
-      message.Printf("Can't find the serialization object (%s) for the object %s",
-                     WXSTRINGCAST obj_name,
-                     WXSTRINGCAST GetClassInfo()->GetClassName());
-      wxMessageBox(message, "Alert !");
+      wxLogError(_("Can't find the serialization object '%s' "
+                   "for the object '%s'."),
+                 obj_name.c_str(),
+                 GetClassInfo()->GetClassName());
       return;
     }
     m_serialObj->SetObject(this);
