@@ -38527,6 +38527,8 @@ fi
 
 
 
+
+
     # Check whether --enable-precomp-headers or --disable-precomp-headers was given.
 if test "${enable_precomp_headers+set}" = set; then
   enableval="$enable_precomp_headers"
@@ -39182,7 +39184,6 @@ EOF
         COND_WXUSE_ZLIB_BUILTIN=""
     fi
 
-USE_ZLIB_BUILTIN)
 
 
 
