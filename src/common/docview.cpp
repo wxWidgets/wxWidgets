@@ -2171,77 +2171,99 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STD_IOSTREAM
+
 bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename.fn_str(), _T("rb"))) == NULL)
+    wxFFile file(filename, _T("rb"));
+    if ( !file.IsOpened() )
         return FALSE;
 
-    while ((ch = getc (fd1)) != EOF)
-        stream << (unsigned char)ch;
+    char buf[4096];
 
-    fclose (fd1);
+    size_t nRead;
+    do
+    {
+        nRead = file.Read(buf, WXSIZEOF(buf));
+        if ( file.Error() )
+            return FALSE;
+
+        stream.write(buf, nRead);
+        if ( !stream )
+            return FALSE;
+    }
+    while ( !file.Eof() );
+
     return TRUE;
 }
 
 bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename.fn_str(), _T("wb"))) == NULL)
-    {
+    wxFFile file(filename, _T("wb"));
+    if ( !file.IsOpened() )
         return FALSE;
-    }
 
-    while (!stream.eof())
+    char buf[4096];
+    do
     {
-        ch = stream.get();
-        if (!stream.eof())
-            putc (ch, fd1);
+        stream.read(buf, WXSIZEOF(buf));
+        if ( !stream.bad() ) // fail may be set on EOF, don't use operator!()
+        {
+            if ( !file.Write(buf, stream.gcount()) )
+                return FALSE;
+        }
     }
-    fclose (fd1);
+    while ( !stream.eof() );
+
     return TRUE;
 }
-#else
+
+#else // !wxUSE_STD_IOSTREAM
+
 bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename, wxT("rb"))) == NULL)
+    wxFFile file(filename, _T("rb"));
+    if ( !file.IsOpened() )
         return FALSE;
 
-    while ((ch = getc (fd1)) != EOF)
-        stream.PutC((char) ch);
+    char buf[4096];
 
-    fclose (fd1);
+    size_t nRead;
+    do
+    {
+        nRead = file.Read(buf, WXSIZEOF(buf));
+        if ( file.Error() )
+            return FALSE;
+
+        stream.Write(buf, nRead);
+        if ( !stream )
+            return FALSE;
+    }
+    while ( !file.Eof() );
+
     return TRUE;
 }
 
 bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 {
-    FILE *fd1;
-    char ch;
-
-    if ((fd1 = wxFopen (filename, wxT("wb"))) == NULL)
-    {
+    wxFFile file(filename, _T("wb"));
+    if ( !file.IsOpened() )
         return FALSE;
-    }
 
-    int len = stream.GetSize();
-    // TODO: is this the correct test for EOF?
-    while (stream.TellI() < (len - 1))
+    char buf[4096];
+    do
     {
-        ch = stream.GetC();
-        putc (ch, fd1);
+        stream.Read(buf, WXSIZEOF(buf));
+
+        const size_t nRead = stream.LastRead();
+        if ( !nRead || !file.Write(buf, nRead) )
+            return FALSE;
     }
-    fclose (fd1);
+    while ( !stream.Eof() );
+
     return TRUE;
 }
-#endif
+
+#endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
