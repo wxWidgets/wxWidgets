@@ -1194,6 +1194,10 @@ public:
 
     bool SearchDynamicEventTable( wxEvent& event );
 
+#if wxUSE_THREADS
+    void ClearEventLocker() { delete m_eventsLocker; m_eventsLocker = NULL; };
+#endif
+
 private:
     static const wxEventTableEntry         sm_eventTableEntries[];
 
@@ -1203,18 +1207,18 @@ protected:
     virtual const wxEventTable *GetEventTable() const;
 
 protected:
-    wxEvtHandler*      m_nextHandler;
-    wxEvtHandler*      m_previousHandler;
-    bool               m_enabled;           // Is event handler enabled?
-    wxList*            m_dynamicEvents;
-    wxList*	       m_pendingEvents;
+    wxEvtHandler*       m_nextHandler;
+    wxEvtHandler*       m_previousHandler;
+    bool                m_enabled;           // Is event handler enabled?
+    wxList*             m_dynamicEvents;
+    wxList*	            m_pendingEvents;
 #if wxUSE_THREADS
-    wxCriticalSection* m_eventsLocker;
+    wxCriticalSection*  m_eventsLocker;
 #endif
 
     // optimization: instead of using costly IsKindOf() to decide whether we're
     // a window (which is true in 99% of cases), use this flag
-    bool              m_isWindow;
+    bool                m_isWindow;
 };
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);

@@ -1197,13 +1197,13 @@ char *wxmake_string(char *str)
   int len, i;
   const wxMB2WXbuf sbuf = wxConv_libc.cMB2WX(str);
 
-  str++;			/* skip leading quote */
+//  str++;			/* skip leading quote */
   len = wxStrlen(sbuf) - 1;	/* ignore trailing quote */
     
   s = new wxChar[len + 1];
     
   t = s;
-  for(i=0; i<len; i++)
+  for(i=1; i<len; i++) // 1 since we want to skip leading quote
   {
     if (sbuf[i] == _T('\\') && sbuf[i+1] == _T('"'))
     {
