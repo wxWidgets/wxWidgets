@@ -21,9 +21,6 @@
 // windows manager, control manager, navigation services etc. are 
 // present
 
-#define wxUSE_MLTE 0
-
-
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
@@ -51,9 +48,8 @@ void UMACleanupToolbox()
 	{
 		NavUnload() ;
 	}
-#if wxUSE_MLTE
-	TXNTerminateTextension( ) ;
-#endif
+  if ( TXNTerminateTextension != (void*) kUnresolvedCFragSymbolAddress )
+	  TXNTerminateTextension( ) ;
 }
 void UMAInitToolbox( UInt16 inMoreMastersCalls )
 {
@@ -108,14 +104,16 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 		NavLoad() ;
 	}
 
-#if wxUSE_MLTE
-  TXNMacOSPreferredFontDescription defaults;
-  defaults.fontID = kFontIDGeneva ;
-  defaults.pointSize = (10 << 16) ;
-  defaults.fontStyle = kTXNDefaultFontStyle;
-  defaults.encoding = kTXNSystemDefaultEncoding;
-	TXNInitTextension(&defaults,  1, (kTXNAlwaysUseQuickDrawTextMask | kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
-#endif
+  if ( TXNInitTextension != (void*) kUnresolvedCFragSymbolAddress )
+  { 
+    TXNMacOSPreferredFontDescription defaults;
+    defaults.fontID = kFontIDGeneva ;
+    defaults.pointSize = (10 << 16) ;
+    defaults.fontStyle = kTXNDefaultFontStyle;
+    defaults.encoding = kTXNSystemDefaultEncoding;
+  	TXNInitTextension(&defaults,  1, (kTXNAlwaysUseQuickDrawTextMask | kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
+	}
+
   long menuMgrAttr ;
   Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
   if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
