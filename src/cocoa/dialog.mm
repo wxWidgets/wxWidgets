@@ -105,10 +105,13 @@ void wxDialog::SetModal(bool flag)
 
 bool wxDialog::Show(bool show)
 {
+    if(m_isShown == show)
+        return false;
     if(show)
         InitDialog();
     if(IsModal())
     {
+        m_isShown = show;
         if(show)
         {
             wxAutoNSAutoreleasePool pool;
@@ -124,6 +127,8 @@ bool wxDialog::Show(bool show)
             wxModalDialogs.DeleteObject(this);
         }
     }
+    else
+        return wxTopLevelWindow::Show(show);
     return true;
 }
 
