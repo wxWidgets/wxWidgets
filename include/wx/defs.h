@@ -331,11 +331,12 @@ typedef int wxWindowID;
 // stdcall is used for all functions called by Windows under Windows
 #ifdef __WINDOWS__
     #if defined(__GNUWIN32__)
-        #define wxCALLBACK __attribute__((stdcall))
+        #define wxSTDCALL __attribute__((stdcall))
     #else
         // both VC++ and Borland understand this
-        #define wxCALLBACK _stdcall
+        #define wxSTDCALL _stdcall
     #endif
+
 #else // Win
     // no such stupidness under Unix
     #define wxSTDCALL
@@ -348,6 +349,7 @@ typedef int wxWindowID;
 #else
     // no stdcall under Unix nor Win16
     #define wxCALLBACK
+
 #endif // platform
 
 // callling convention for the qsort(3) callback
