@@ -210,6 +210,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     wxFocusEvent event(wxEVT_KILL_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    if (thisWindow->MacIsUserPane())
+                        result = noErr;
                 }
                 else
                 {
@@ -227,6 +229,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    if (thisWindow->MacIsUserPane())
+                        result = noErr;
                 }
             }
             break ;
