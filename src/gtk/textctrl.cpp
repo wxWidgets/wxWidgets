@@ -475,7 +475,7 @@ wxString wxTextCtrl::GetValue() const
         GtkTextIter end;
         gtk_text_buffer_get_end_iter( text_buffer, &end );
         gchar *text = gtk_text_buffer_get_text( text_buffer, &start, &end, TRUE );
-
+        
 #if wxUSE_UNICODE
         wxWCharBuffer buffer( wxConvUTF8.cMB2WX( text ) );
 #else

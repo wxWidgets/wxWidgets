@@ -278,6 +278,10 @@ bool wxToolBar::Create( wxWindow *parent,
 #ifdef __WXGTK20__
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     GtkSetStyle();
+    
+    // Doesn't work this way.
+    // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
+    // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
 #else
     GtkOrientation orient;
     GtkToolbarStyle gtkStyle;
@@ -374,9 +378,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
+#ifndef __WXGTK20__
     // if we have inserted a space before all the tools we must change the GTK
     // index by 1
     size_t posGtk = m_xMargin > 1 ? pos + 1 : pos;
+#else
+    size_t posGtk = pos;
+#endif
 
     if ( tool->IsButton() )
     {
@@ -590,8 +598,10 @@ void wxToolBar::SetMargins( int x, int y )
     wxCHECK_RET( GetToolsCount() == 0,
                  wxT("wxToolBar::SetMargins must be called before adding tools.") );
 
+#ifndef __WXGTK20__
     if (x > 1)
         gtk_toolbar_append_space( m_toolbar );  // oh well
+#endif
 
     m_xMargin = x;
     m_yMargin = y;
