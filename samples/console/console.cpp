@@ -50,13 +50,14 @@
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
-#define TEST_LOCALE
+//#define TEST_LOCALE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_PATHLIST
 //#define TEST_REGCONF
 //#define TEST_REGISTRY
+#define TEST_SNGLINST
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
 //#define TEST_STRINGS
@@ -66,6 +67,10 @@
 //#define TEST_WCHAR
 //#define TEST_ZIP
 //#define TEST_ZLIB
+
+#ifdef TEST_SNGLINST
+    #include <wx/snglinst.h>
+#endif // TEST_SNGLINST
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -4548,10 +4553,27 @@ static void TestStringReplace()
 
 int main(int argc, char **argv)
 {
-    if ( !wxInitialize() )
+    wxInitializer initializer;
+    if ( !initializer )
     {
         fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
+
+        return -1;
     }
+
+#ifdef TEST_SNGLINST
+    wxSingleInstanceChecker checker(_T("wxConsoleSample"));
+    if ( checker.IsAnotherRunning() )
+    {
+        wxPrintf(_T("Another instance of the program is running, exiting.\n"));
+
+        return 1;
+    }
+
+    // wait some time to give time to launch another instance
+    wxPrintf(_T("Press \"Enter\" to continue..."));
+    wxFgetc(stdin);
+#endif // TEST_SNGLINST
 
 #ifdef TEST_CHARSET
     TestCharset();
@@ -4896,8 +4918,6 @@ int main(int argc, char **argv)
     TestZlibStreamWrite();
     TestZlibStreamRead();
 #endif // TEST_ZLIB
-
-    wxUninitialize();
 
     return 0;
 }
