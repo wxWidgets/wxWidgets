@@ -118,7 +118,7 @@ wxDirData::wxDirData(const wxString& dirname)
 	m_CPB.hFileInfo.ioNamePtr = m_name ;
 	m_index = 0 ;
 
-	FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
+	OSErr err = FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
 }
 
 wxDirData::~wxDirData()
