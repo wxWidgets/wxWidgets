@@ -549,7 +549,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream)
 
         char buf[1024];
         while ( !inStream.Read(buf, WXSIZEOF(buf)).Eof() )
-            strTmp += wxString(buf, inStream.LastRead());
+            strTmp.append(wxConvertMB2WX(buf), inStream.LastRead());
 
         strTmp += wxString(buf, inStream.LastRead());
 
