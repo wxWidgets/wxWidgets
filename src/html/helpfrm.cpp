@@ -462,6 +462,7 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
         delete m_Data;
     if (m_NormalFonts) delete m_NormalFonts;
     if (m_FixedFonts) delete m_FixedFonts;
+    if (m_PagesHash) delete m_PagesHash;
 }
 
 
