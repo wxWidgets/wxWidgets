@@ -182,14 +182,12 @@ public:
     void SetAssertMode(int mode);
 
 
-    static bool GetMacDefaultEncodingIsPC();
     static bool GetMacSupportPCMenuShortcuts();
     static long GetMacAboutMenuItemId();
     static long GetMacPreferencesMenuItemId();
     static long GetMacExitMenuItemId();
     static wxString GetMacHelpMenuTitleName();
 
-    static void SetMacDefaultEncodingIsPC(bool val);
     static void SetMacSupportPCMenuShortcuts(bool val);
     static void SetMacAboutMenuItemId(long val);
     static void SetMacPreferencesMenuItemId(long val);
@@ -205,7 +203,8 @@ public:
     static int GetComCtl32Version();
 #else
     %extend {
-        static int GetComCtl32Version() { PyErr_SetNone(PyExc_NotImplementedError); }
+        static int GetComCtl32Version()
+            { PyErr_SetNone(PyExc_NotImplementedError); return 0; }
     }
 #endif
 };

@@ -99,9 +99,6 @@ public:
     // listbox and ensures that it is visible i.e. not scrolled out of view
     void AppendAndEnsureVisible(const wxString& s);
 
-    // return TRUE if the listbox allows multiple selection
-    bool HasMultipleSelection() const;
-
     // return TRUE if this listbox is sorted
     bool IsSorted() const;
 };

@@ -5,13 +5,11 @@ App
 PySimpleApp
 PyWidgetTester
 
-App_GetMacDefaultEncodingIsPC
 App_GetMacSupportPCMenuShortcuts
 App_GetMacAboutMenuItemId
 App_GetMacPreferencesMenuItemId
 App_GetMacExitMenuItemId
 App_GetMacHelpMenuTitleName
-App_SetMacDefaultEncodingIsPC
 App_SetMacSupportPCMenuShortcuts
 App_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId

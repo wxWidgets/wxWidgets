@@ -122,13 +122,11 @@ your Mac."""
 
 
 # change from wxPyApp_ to wxApp_
-App_GetMacDefaultEncodingIsPC    = _core.PyApp_GetMacDefaultEncodingIsPC
 App_GetMacSupportPCMenuShortcuts = _core.PyApp_GetMacSupportPCMenuShortcuts
 App_GetMacAboutMenuItemId        = _core.PyApp_GetMacAboutMenuItemId
 App_GetMacPreferencesMenuItemId  = _core.PyApp_GetMacPreferencesMenuItemId
 App_GetMacExitMenuItemId         = _core.PyApp_GetMacExitMenuItemId
 App_GetMacHelpMenuTitleName      = _core.PyApp_GetMacHelpMenuTitleName
-App_SetMacDefaultEncodingIsPC    = _core.PyApp_SetMacDefaultEncodingIsPC
 App_SetMacSupportPCMenuShortcuts = _core.PyApp_SetMacSupportPCMenuShortcuts
 App_SetMacAboutMenuItemId        = _core.PyApp_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId  = _core.PyApp_SetMacPreferencesMenuItemId

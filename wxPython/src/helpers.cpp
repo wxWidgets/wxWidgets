@@ -239,14 +239,6 @@ void wxPyApp::OnAssert(const wxChar *file,
 #endif
 
 
-/*static*/
-bool wxPyApp::GetMacDefaultEncodingIsPC() {
-#ifdef __WXMAC__
-    return s_macDefaultEncodingIsPC;
-#else
-    return 0;
-#endif
-}
 
 /*static*/
 bool wxPyApp::GetMacSupportPCMenuShortcuts() {
@@ -290,13 +282,6 @@ wxString wxPyApp::GetMacHelpMenuTitleName() {
     return s_macHelpMenuTitleName;
 #else
     return wxEmptyString;
-#endif
-}
-
-/*static*/
-void wxPyApp::SetMacDefaultEncodingIsPC(bool val) {
-#ifdef __WXMAC__
-    s_macDefaultEncodingIsPC = val;
 #endif
 }
 

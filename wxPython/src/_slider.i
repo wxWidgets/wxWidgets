@@ -54,6 +54,7 @@ public:
     virtual void SetRange(int minValue, int maxValue);
     virtual int GetMin() const;
     virtual int GetMax() const;
+    
     void SetMin( int minValue );
     void SetMax( int maxValue );
 

@@ -41,7 +41,7 @@ void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 wxString wxGetOsDescription();
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 long wxGetFreeMemory();
 #else
 %inline %{
@@ -199,7 +199,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 //---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 void wxWakeUpMainThread();
 #else
 %inline %{

@@ -496,6 +496,7 @@
 %rename(CURSOR_WATCH)                       wxCURSOR_WATCH;
 %rename(CURSOR_BLANK)                       wxCURSOR_BLANK;
 %rename(CURSOR_DEFAULT)                     wxCURSOR_DEFAULT;
+%rename(CURSOR_COPY_ARROW)                  wxCURSOR_COPY_ARROW;
 %rename(CURSOR_ARROWWAIT)                   wxCURSOR_ARROWWAIT;
 %rename(CURSOR_MAX)                         wxCURSOR_MAX;
 %rename(Size)                               wxSize;

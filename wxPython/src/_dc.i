@@ -654,18 +654,6 @@ public:
 
 
 
-class  wxPrinterDC : public wxDC {
-public:
-    wxPrinterDC(const wxPrintData& printData);
-    %name(PrinterDC2) wxPrinterDC(const wxString& driver,
-                                    const wxString& device,
-                                    const wxString& output,
-                                    bool interactive = TRUE,
-                                    int orientation = wxPORTRAIT);
-};
-
-
-
 #else  // Make some dummies for the other platforms
 
 %{
@@ -681,14 +669,6 @@ public:
         { PyErr_SetNone(PyExc_NotImplementedError); }
 };
 
-class  wxPrinterDC : public wxClientDC {
-public:
-    wxPrinterDC(const wxPrintData&)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
-    
-    wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
-};
 %}
 
 class wxMetaFile : public wxObject {
@@ -703,19 +683,45 @@ public:
                  const wxString& description = wxPyEmptyString);
 };
 
-class  wxPrinterDC : public wxDC {
-public:
-    wxPrinterDC(const wxPrintData& printData);
-    %name(PrinterDC2) wxPrinterDC(const wxString& driver,
-                                    const wxString& device,
-                                    const wxString& output,
-                                    bool interactive = TRUE,
-                                    int orientation = wxPORTRAIT);
-};
-
 
 #endif
 
 
 //---------------------------------------------------------------------------
+
+#if defined(__WXMSW__) || defined(__WXMAC__)
+
+class  wxPrinterDC : public wxDC {
+public:
+    wxPrinterDC(const wxPrintData& printData);
+//     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
+//                                     const wxString& device,
+//                                     const wxString& output,
+//                                     bool interactive = TRUE,
+//                                     int orientation = wxPORTRAIT);
+};
+
+#else
+%{
+class  wxPrinterDC : public wxClientDC {
+public:
+    wxPrinterDC(const wxPrintData&)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    
+//     wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
+//         { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+%}
+ 
+class  wxPrinterDC : public wxDC {
+public:
+    wxPrinterDC(const wxPrintData& printData);
+//     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
+//                                     const wxString& device,
+//                                     const wxString& output,
+//                                     bool interactive = TRUE,
+//                                     int orientation = wxPORTRAIT);
+};
+#endif
+
 //---------------------------------------------------------------------------

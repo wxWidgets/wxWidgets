@@ -77,8 +77,6 @@
 %rename(LayoutAlgorithm)                    wxLayoutAlgorithm;
 %rename(PopupWindow)                        wxPopupWindow;
 %rename(TipWindow)                          wxTipWindow;
-%rename(TaskBarIcon)                        wxTaskBarIcon;
-%rename(TaskBarIconEvent)                   wxTaskBarIconEvent;
 %rename(ColourData)                         wxColourData;
 %rename(ColourDialog)                       wxColourDialog;
 %rename(DirDialog)                          wxDirDialog;
