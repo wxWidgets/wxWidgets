@@ -798,13 +798,14 @@ Homepage: http://xrced.sourceforge.net\
         panel.cacheParent.Destroy()
         if not panel.GetPageCount() == 2:
             panel.page2.Destroy()
-        conf.x, conf.y = self.GetPosition()
-        conf.width, conf.height = self.GetSize()
-        if conf.embedPanel:
-            conf.sashPos = self.splitter.GetSashPosition()
-        else:
-            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
-            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
+        if not self.IsIconized():
+            conf.x, conf.y = self.GetPosition()
+            conf.width, conf.height = self.GetSize()
+            if conf.embedPanel:
+                conf.sashPos = self.splitter.GetSashPosition()
+            else:
+                conf.panelX, conf.panelY = self.miniFrame.GetPosition()
+                conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
         evt.Skip()
 
     def Clear(self):
