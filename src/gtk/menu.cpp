@@ -948,8 +948,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // due to an apparent bug in GTK+, we have to use a static buffer here -
         // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
         // somehow! (VZ)
-        static char s_accel[32]; // must be big enough for <control><alt><shift>F12
-        strncpy(s_accel, GetHotKey(*mitem).mb_str(), WXSIZEOF(s_accel));
+        static char s_accel[50]; // must be big enougg
+        wxString tmp( GetHotKey(*mitem) );
+        strncpy(s_accel, tmp.mb_str(), WXSIZEOF(s_accel));
         entry.accelerator = s_accel;
 #else // !wxUSE_ACCEL
         entry.accelerator = (char*) NULL;
@@ -1089,6 +1090,20 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_F11:
             case WXK_F12:
                 hotkey << wxT('F') << code - WXK_F1 + 1;
+                break;
+                
+                // GTK seems to use XStringToKeySym here
+            case WXK_NUMPAD_INSERT:
+                hotkey << wxT("KP_Insert" );
+                break;
+            case WXK_NUMPAD_DELETE:
+                hotkey << wxT("KP_Delete" );
+                break;
+            case WXK_INSERT:
+                hotkey << wxT("Insert" );
+                break;
+            case WXK_DELETE:
+                hotkey << wxT("Delete" );
                 break;
 
                 // if there are any other keys wxGetAccelFromString() may return,

@@ -45,28 +45,28 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxStaticLine creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     if ( IsVertical() )
     {
         m_widget = gtk_vseparator_new();
-	if (size.x == -1)
-	{
-	    wxSize new_size( size );
-	    new_size.x = 4;
-	    SetSize( new_size );
-	}
+        if (size.x == -1)
+        {
+            wxSize new_size( size );
+            new_size.x = 4;
+            SetSize( new_size );
+        }
     }
     else
     {
         m_widget = gtk_hseparator_new();
-	if (size.y == -1)
-	{
-	    wxSize new_size( size );
-	    new_size.y = 4;
-	    SetSize( new_size );
-	}
+        if (size.y == -1)
+        {
+            wxSize new_size( size );
+            new_size.y = 4;
+            SetSize( new_size );
+        }
     }
 
     m_parent->DoAddChild( this );

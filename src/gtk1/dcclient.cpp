@@ -755,10 +755,10 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
         {
-            gdk_draw_line( m_window, m_penGC, xx+rr, yy, xx+ww-rr, yy );
-            gdk_draw_line( m_window, m_penGC, xx+rr, yy+hh, xx+ww-rr, yy+hh );
-            gdk_draw_line( m_window, m_penGC, xx, yy+rr, xx, yy+hh-rr );
-            gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr, xx+ww, yy+hh-rr );
+            gdk_draw_line( m_window, m_penGC, xx+rr+1, yy, xx+ww-rr, yy );
+            gdk_draw_line( m_window, m_penGC, xx+rr+1, yy+hh, xx+ww-rr, yy+hh );
+            gdk_draw_line( m_window, m_penGC, xx, yy+rr+1, xx, yy+hh-rr );
+            gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr+1, xx+ww, yy+hh-rr );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, dd, dd, 90*64, 90*64 );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
