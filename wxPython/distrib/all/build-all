@@ -102,10 +102,10 @@ jaguarTask =  Task( Job(config.OSX_HOST_jaguar,
 pantherTask =  Task( Job(config.OSX_HOST_panther,
                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther"]) )
 
-rpmTask = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "none", "co-rh9",    "rh9",   config.PYVER]),
+rpmTask = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   config.PYVER]),
                  Job("co-fc2",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
-                 Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "none",  "co-mdk92", "mdk92", "2.3"]),
-                 Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "none",  "co-mdk101","mdk101","2.3"]),
+                 Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.3"]),
+                 Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
                  ])
 
 buildTasks = [ windowsTask,
