@@ -1080,7 +1080,13 @@ bool wxMCIMediaBackend::SetPosition(wxLongLong where)
 {
     MCI_SEEK_PARMS seekParms;
     seekParms.dwCallback = 0;
+#if wxUSE_LONGLONG_NATIVE && !wxUSE_LONGLONG_WX
     seekParms.dwTo = (DWORD)where.GetValue();
+#else /* wxUSE_LONGLONG_WX */
+    /* no way to return it in one piece */
+    wxASSERT( where.GetHi()==0 );
+    seekParms.dwTo = (DWORD)where.GetLo();
+#endif /* wxUSE_LONGLONG_* */
 
     //device was playing?
     bool bReplay = GetState() == wxMEDIASTATE_PLAYING;
