@@ -827,7 +827,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     
     long cookie;
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
-    while (childId != 0)
+    while (childId.IsOk())
     {
         wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
         
@@ -869,15 +869,15 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     bool done = FALSE;
     wxTreeItemId id = FindChild(m_rootId, path, done);
     wxTreeItemId lastId = id; // The last non-zero id
-    while ((id > 0) && !done)
+    while (id.IsOK() && !done)
     {
         ExpandDir(id);
 
         id = FindChild(id, path, done);
-        if (id != 0)
+        if (id.IsOk())
             lastId = id;
     }
-    if (lastId > 0)
+    if (lastId.IsOk())
     {
         wxDirItemDataEx *data = (wxDirItemDataEx *) m_treeCtrl->GetItemData(lastId);
         if (data->m_isDir)
@@ -890,7 +890,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
             long cookie;
             wxTreeItemId childId = m_treeCtrl->GetFirstChild(lastId, cookie);
             bool selectedChild = FALSE;
-            while (childId != 0)
+            while (childId.IsOk())
             {
                 wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
                 
