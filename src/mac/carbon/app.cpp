@@ -402,7 +402,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
 
         if ( type )
         {
-            wxMenuEvent wxevent(type, cmd);
+            wxMenuEvent wxevent(type, cmd, menu);
             wxevent.SetEventObject(menu);
 
             wxEvtHandler* handler = menu->GetEventHandler();
