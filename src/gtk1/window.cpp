@@ -281,12 +281,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (g_blockEventsOnDrag) return FALSE;
 
 /*
-    printf( "OnKeyPress from " );
+    wxPrintf( _T("OnKeyPress from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T(".\n") );
 */
-
     long key_code = 0;
     switch (gdk_event->keyval)
     {
@@ -572,6 +571,13 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
+/*
+    wxPrintf( _T("1) OnButtonPress from ") );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T(".\n") );
+*/
+    
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -585,20 +591,31 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
             gtk_widget_grab_focus (win->m_wxwindow);
 
 /*
-            printf( "GrabFocus from " );
+            wxPrintf( _T("GrabFocus from ") );
             if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-                printf( win->GetClassInfo()->GetClassName() );
-            printf( ".\n" );
+                wxPrintf( win->GetClassInfo()->GetClassName() );
+            wxPrintf( _T(".\n") );
 */
 
         }
+/*
+	else
+	{
+            wxPrintf( _T("No GrabFocus from ") );
+            if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+                wxPrintf( win->GetClassInfo()->GetClassName() );
+	    if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
+	        wxPrintf( _T(" because it already has") );
+            wxPrintf( _T(".\n") );
+	}
+*/
     }
 
 /*
-    printf( "OnButtonPress from " );
+    wxPrintf( _T("2) OnButtonPress from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T(".\n") );
 */
 
     wxEventType event_type = wxEVT_LEFT_DOWN;
@@ -948,12 +965,12 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
 
 
 /*
-    printf( "OnSetFocus from " );
+    wxPrintf( _T("OnSetFocus from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( "   " );
-    printf( WXSTRINGCAST win->GetLabel() );
-    printf( ".\n" );
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T("   ") );
+    wxPrintf( win->GetLabel() );
+    wxPrintf( _T(".\n") );
 */
 
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
@@ -984,10 +1001,12 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     }
 
 /*
-    printf( "OnKillFocus from " );
+    wxPrintf( _T("OnKillFocus from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( _T("   ") );
+    wxPrintf( win->GetLabel() );
+    wxPrintf( _T(".\n") );
 */
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
@@ -1314,14 +1333,14 @@ gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
     if (win->m_backgroundColour != wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ))
     {
         wxColour bg( win->m_backgroundColour );
-	win->SetBackgroundColour( wxNullColour );
+	win->m_backgroundColour = wxNullColour;
 	win->SetBackgroundColour( bg );
     }
     
     if (win->m_foregroundColour != *wxBLACK)
     {
         wxColour fg( win->m_foregroundColour );
-	win->SetForegroundColour( wxNullColour );
+	win->m_foregroundColour = wxNullColour;
 	win->SetForegroundColour( fg );
     }
     
@@ -1781,12 +1800,13 @@ void wxWindow::PostCreation()
 #endif
     }
 
-    ConnectWidget( GetConnectWidget() );
+    GtkWidget *connect_widget = GetConnectWidget();
 
-/*  we cannot set colours, fonts and cursors before the widget has
-    been realized, so we do this directly after realization */
-   
-    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
+    ConnectWidget( connect_widget );
+
+   /*  we cannot set colours, fonts and cursors before the widget has
+       been realized, so we do this directly after realization */
+    gtk_signal_connect( GTK_OBJECT(connect_widget), "realize",
 			    GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
 			    
     m_hasVMT = TRUE;
@@ -2641,8 +2661,9 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     m_backgroundColour = colour;
     if (!m_backgroundColour.Ok()) return;
 
-    if (!m_widget->window) return;
-
+    GtkWidget *connect_widget = GetConnectWidget();
+    if (!connect_widget->window) return;
+    
     if (m_wxwindow && m_wxwindow->window)
     {
 	/* wxMSW doesn't clear the window here. I don't do that

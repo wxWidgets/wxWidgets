@@ -249,13 +249,6 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
 
     /* resize on OnInternalIdle */
     parent->m_sizeSet = FALSE;
-
-    if (parent->m_windowStyle & wxTAB_TRAVERSAL)
-    {
-        /* we now allow a window to get the focus as long as it
-           doesn't have any children. */
-        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -335,8 +328,14 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     /* m_wxwindow only represents the client area without toolbar and menubar */
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
-    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
+    
+    /* we allow the frame to get the focus as otherwise no
+       keye vents will get sent to it. the point with this is
+       that the menu's key accelerators work by interceting
+       key events here */
+    GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+    GTK_WIDGET_SET_FLAGS (m_wxwindow, GTK_HAS_FOCUS);
 
     if (m_parent) m_parent->AddChild( this );
 
@@ -763,6 +762,11 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
+        /* support for native key accelerators indicated by underscroes */
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+         gtk_accel_group_attach( m_frameMenuBar->m_accel, GTK_OBJECT(m_wxwindow));
+#endif 
+
         wxNode *node = m_frameMenuBar->GetMenus().First();
         while (node)
         {
@@ -788,6 +792,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         }
     }
 
+    /* resize window in OnInternalIdle */
     m_sizeSet = FALSE;
 }
 

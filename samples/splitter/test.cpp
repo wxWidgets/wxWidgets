@@ -46,7 +46,7 @@ public:
       return FALSE;
     
     wxString str;
-    str.Printf("Sash position = %d", newSashPosition);
+    str.Printf( _T("Sash position = %d"), newSashPosition);
     m_frame->SetStatusText(str);
 
     return TRUE;
@@ -219,15 +219,19 @@ void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 {
   wxString str;
-  str.Printf("%d", m_splitter->GetMinimumPaneSize());
+  str.Printf( _T("%d"), m_splitter->GetMinimumPaneSize());
   str = wxGetTextFromUser("Enter minimal size for panes:", "", str, this);
   if ( str.IsEmpty() )
     return;
 
+/*
+  What is atoi in Unicode?
+  
   int minsize = atoi(str);
   m_splitter->SetMinimumPaneSize(minsize);
-  str.Printf("Min pane size = %d", minsize);
+  str.Printf( _T("Min pane size = %d"), minsize);
   SetStatusText(str, 1);
+*/
 }
 
 void MyFrame::UpdateUIHorizontal(wxUpdateUIEvent& event)
@@ -248,7 +252,7 @@ void MyFrame::UpdateUIUnsplit(wxUpdateUIEvent& event)
 void MyFrame::UpdatePosition()
 {
   wxString str;
-  str.Printf("Sash position = %d", m_splitter->GetSashPosition());
+  str.Printf( _("Sash position = %d"), m_splitter->GetSashPosition());
   SetStatusText(str);
 }
 

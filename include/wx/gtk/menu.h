@@ -48,6 +48,7 @@ public:
     wxMenuBar();
     wxMenuBar(long style);
     wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
+    ~wxMenuBar();
 
     // menubar construction
     void Append( wxMenu *menu, const wxString &title );
@@ -88,12 +89,15 @@ public:
     wxMenuItem* FindMenuItemById( int id ) const { return FindItem(id); }
 #endif // WXWIN_COMPATIBILITY
 
-    // implementation
+    // implementation only
     wxList& GetMenus() { return m_menus; }
 
-protected:
-    wxList       m_menus;
-    GtkWidget   *m_menubar;
+    GtkAccelGroup   *m_accel;
+    GtkItemFactory  *m_factory;
+    
+private:
+    wxList           m_menus;
+    GtkWidget       *m_menubar;
 };
 
 //-----------------------------------------------------------------------------
@@ -170,14 +174,14 @@ public:
     void SetInvokingWindow( wxWindow *win );
     wxWindow *GetInvokingWindow();
 
-    // implementation only
+    // implementation GTK only
     GtkWidget       *m_menu;  // GtkMenu
     GtkWidget       *m_owner;
-    
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
 
 private:
+
     wxString       m_title;
     wxList         m_items;
     wxWindow      *m_invokingWindow;

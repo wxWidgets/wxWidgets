@@ -28,13 +28,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 wxMenuBar::wxMenuBar( long style )
 {
-    m_needParent = FALSE; // hmmm
+    /* the parent window is known after wxFrame::SetMenu() */
+    m_needParent = FALSE; 
 
     PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, style, "menu" );
 
     m_menus.DeleteContents( TRUE );
 
+    /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+    m_accel = gtk_accel_group_new();
+    m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
+    m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
+#else    
     m_menubar = gtk_menu_bar_new();
+#endif
 
     if (style & wxMB_DOCKABLE)
     {
@@ -54,13 +62,21 @@ wxMenuBar::wxMenuBar( long style )
 
 wxMenuBar::wxMenuBar()
 {
-    m_needParent = FALSE; // hmmm
+    /* the parent window is known after wxFrame::SetMenu() */
+    m_needParent = FALSE;
 
     PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
 
     m_menus.DeleteContents( TRUE );
 
+    /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+    m_accel = gtk_accel_group_new();
+    m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
+    m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
+#else    
     m_menubar = gtk_menu_bar_new();
+#endif
 
     m_widget = GTK_WIDGET(m_menubar);
 
@@ -69,29 +85,70 @@ wxMenuBar::wxMenuBar()
     Show( TRUE );
 }
 
+wxMenuBar::~wxMenuBar()
+{
+   // how to destroy a GtkItemFactory ?
+}
+
 void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
     
-    wxString s = _T("");
+    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
+    wxString str;
     for ( const wxChar *pc = title; *pc != _T('\0'); pc++ )
     {
         if (*pc == _T('&'))
 	{
 	    pc++; /* skip it */
-#if (GTK_MINOR_VERSION > 0)
-    //      s << '_';  not yet
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+            str << _T('_');
 #endif
         }
-        s << *pc;
+        str << *pc;
     }
 
-    menu->SetTitle(s);
-    menu->m_owner = gtk_menu_item_new_with_label( MBSTRINGCAST s.mbc_str() );
+    /* this doesn't have much effect right now */
+    menu->SetTitle( str );
+    
+    /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
+#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+
+    /* local buffer in multibyte form */
+    char buf[200];
+    strcpy( buf, "/" );
+    strcat( buf, str.mb_str() );
+    
+    GtkItemFactoryEntry entry;
+    entry.path = buf;
+    entry.accelerator = (gchar*) NULL;
+    entry.callback = (GtkItemFactoryCallback) NULL;
+    entry.callback_action = 0;
+    entry.item_type = "<Branch>";
+    
+    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+    
+    /* in order to get the pointer to the item we need the item text _without_ underscores */
+    wxString tmp = _T("<main>/");
+    for ( const wxChar *pc = str; *pc != _T('\0'); pc++ )
+    {
+        if (*pc == _T('_')) pc++; /* skip it */
+        tmp << *pc;
+    }
+    
+    menu->m_owner = gtk_item_factory_get_item( m_factory, tmp.mb_str() );
+    
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
+    
+#else
+
+    menu->m_owner = gtk_menu_item_new_with_label( str.mb_str() );
     gtk_widget_show( menu->m_owner );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
     gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), menu->m_owner );
+    
+#endif
 }
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
@@ -420,7 +477,7 @@ void wxMenuItem::SetName( const wxString& str )
     if (m_menuItem)
     {
         GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-        gtk_label_set( label, m_text.mbc_str());
+        gtk_label_set( label, m_text.mb_str());
     }
 }
 
@@ -525,16 +582,18 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     mitem->SetText(item);
     mitem->SetHelp(helpStr);
     mitem->SetCheckable(checkable);
-    const wxChar *text = mitem->GetText();
     
 #if (GTK_MINOR_VERSION > 0)
-    wxChar buf[100];
-    wxStrcpy( buf, _T("/") );
-    wxStrcat( buf, text );
+    /* text has "_" instead of "&" after mitem->SetText() */ 
+    wxString text( mitem->GetText() );
     
-    const wxWX2MBbuf pbuf = wxConv_current->cWX2MB(buf);
+    /* local buffer in multibyte form */
+    char buf[200];
+    strcpy( buf, "/" );
+    strcat( buf, text.mb_str() );
+    
     GtkItemFactoryEntry entry;
-    entry.path = MBSTRINGCAST pbuf;
+    entry.path = buf;
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
     entry.callback_action = 0;
@@ -553,12 +612,12 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
         s << *pc;
     }
     
-    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s.mbc_str() );
+    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s.mb_str() );
     
 #else
 
-    GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
-                                    : gtk_menu_item_new_with_label(text);
+    GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( item.mb_str() )
+                                    : gtk_menu_item_new_with_label( item.mb_str() );
 				    
     gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),

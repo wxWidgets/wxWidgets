@@ -109,10 +109,23 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_owner = (wxWindow *)NULL;
   
     if (!window) return;
+    
     GtkWidget *widget = window->m_wxwindow;
     if (!widget) return;
+    
     m_window = widget->window;
+    
+    /* not realized ? */
+    if (!m_window)
+    {
+         /* force realization */
+         gtk_widget_realize( widget );
+         m_window = widget->window;
+    }
+    
+    /* still not realized ? */
     if (!m_window) return;
+    
     if (window->m_wxwindow)
         m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
     else
