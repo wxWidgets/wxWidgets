@@ -161,7 +161,7 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     tabStyle |= WS_TABSTOP | TCS_TABS;
 
-    if ( style & wxTC_MULTILINE )
+    if ( style & wxNB_MULTILINE )
         tabStyle |= TCS_MULTILINE;
     if ( style & wxNB_FIXEDWIDTH )
         tabStyle |= TCS_FIXEDWIDTH;
@@ -432,13 +432,6 @@ bool wxNotebook::InsertPage(int nPage,
 
   // this updates internal flag too - otherwise it will get out of sync
   pPage->Show(FALSE);
-
-  // fit the notebook page to the tab control's display area
-  RECT rc;
-  rc.left = rc.top = 0;
-  GetSize((int *)&rc.right, (int *)&rc.bottom);
-  TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
-  pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 
   // some page should be selected: either this one or the first one if there is
   // still no selection
