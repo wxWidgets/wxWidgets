@@ -580,6 +580,8 @@ bool wxApp::OnInitGui()
         argv);
 
     if (!dpy) {
+         // if you don't log to stderr, nothing will be shown...
+        delete wxLog::SetActiveTarget(new wxLogStderr);
         wxString className(wxTheApp->GetClassName());
         wxLogError(_("wxWindows could not open display for '%s': exiting."),
                    (const char*) className);
