@@ -11,6 +11,8 @@
     #pragma implementation "tooltip.h"
 #endif
 
+#ifdef wxUSE_TOOLTIPS
+
 #include "wx/window.h"
 #include "wx/tooltip.h"
 
@@ -86,4 +88,5 @@ void wxToolTip::SetDelay( long msecs )
 
     gtk_tooltips_set_delay( ss_tooltips, msecs );
 }
+#endif
 
