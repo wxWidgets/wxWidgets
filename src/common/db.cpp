@@ -93,6 +93,9 @@
 
 DbList WXDLLEXPORT *PtrBegDbList = 0;
 
+char const *SQL_LOG_FILENAME         = "sqllog.txt";
+char const *SQL_CATALOG_FILENAME     = "catalog.txt";
+
 #ifdef __WXDEBUG__
     extern wxList TablesInUse;
 #endif
@@ -101,11 +104,11 @@ DbList WXDLLEXPORT *PtrBegDbList = 0;
 enum sqlLog SQLLOGstate = sqlLogOFF;
 
 //char SQLLOGfn[DB_PATH_MAX+1] = SQL_LOG_FILENAME;
-char *SQLLOGfn          = SQL_LOG_FILENAME;
+char *SQLLOGfn         = (char*) SQL_LOG_FILENAME;
 
 // The wxDB::errorList is copied to this variable when the wxDB object
 // is closed.  This way, the error list is still available after the
-// database object is closed.  This is necessary if the database 
+// database object is closed.  This is necessary if the database
 // connection fails so the calling application can show the operator
 // why the connection failed.  Note: as each wxDB object is closed, it
 // will overwrite the errors of the previously destroyed wxDB object in 
