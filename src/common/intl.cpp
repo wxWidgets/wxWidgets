@@ -307,15 +307,19 @@ static wxString GetFullSearchPath(const wxChar *lang)
     wxGetWorkingDirectory( cwd , sizeof( cwd ) ) ;
     searchPath << GetAllMsgCatalogSubdirs(cwd, lang);
     // generic search paths could be somewhere in the system folder preferences
-#else
+#else // !Mac
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
 
+#ifdef __UNIX__
     // and finally add some standard ones
     searchPath
         << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
-#endif
+#endif // __UNIX__
+
+#endif // platform
+
     return searchPath;
 }
 
@@ -1425,12 +1429,14 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
 
             if ( szDomain != NULL )
             {
-                wxLogDebug(_T("string '%s' not found in domain '%s' for locale '%s'."),
-                             szOrigString, szDomain, m_strLocale.c_str());
+                wxLogTrace(_T("i18n"),
+                           _T("string '%s' not found in domain '%s' for locale '%s'."),
+                           szOrigString, szDomain, m_strLocale.c_str());
             }
             else
             {
-                wxLogDebug(_T("string '%s' not found in locale '%s'."),
+                wxLogTrace(_T("i18n"),
+                           _T("string '%s' not found in locale '%s'."),
                            szOrigString, m_strLocale.c_str());
             }
         }
