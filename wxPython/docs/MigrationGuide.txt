@@ -394,5 +394,11 @@ GetSystemColour, GetSystemFont and GetSystemMetric have also gone into
 the bit-bucket.  Use GetColour, GetFont and GetMetric instead.
 
 
+The wx.NO_FULL_REPAINT_ON_RESIZE style is now the default style for
+all windows.  The name still exists for compatibility, but it is set
+to zero.  If you want to disable the setting (so it matches the old
+default) then you need to use the new wx.FULL_REPAINT_ON_RESIZE style
+flag otherwise only the freshly exposed areas of the window will be
+refreshed.
 
 
