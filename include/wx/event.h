@@ -173,10 +173,11 @@ enum {
  wxEVT_COMMAND_LIST_INSERT_ITEM,
  wxEVT_COMMAND_LIST_COL_CLICK,
 
- /* Tab control event types */
+ /* Tab and notebook control event types */
  wxEVT_COMMAND_TAB_SEL_CHANGED,
- wxEVT_COMMAND_TAB_SEL_CHANGING
-
+ wxEVT_COMMAND_TAB_SEL_CHANGING,
+ wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+ wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
 };
 
 // Compatibility
