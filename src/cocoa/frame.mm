@@ -59,13 +59,13 @@ wxFrame::~wxFrame()
 void wxFrame::AttachMenuBar(wxMenuBar *mbar)
 {
     wxFrameBase::AttachMenuBar(mbar);
-    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
+    wxMenuBarManager::GetInstance()->UpdateMenuBar();
 }
 
 void wxFrame::DetachMenuBar()
 {
     wxFrameBase::DetachMenuBar();
-    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
+    wxMenuBarManager::GetInstance()->UpdateMenuBar();
 }
 
 void wxFrame::SetMenuBar(wxMenuBar *menubar)
@@ -78,7 +78,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menubar)
 
     wxFrameBase::DetachMenuBar();
     wxFrameBase::AttachMenuBar(menubar);
-    wxMenuBarManager::GetInstance()->UpdateWindowMenuBar(this);
+    wxMenuBarManager::GetInstance()->UpdateMenuBar();
 }
 
 wxMenuBar* wxFrame::GetAppMenuBar(wxCocoaNSWindow *win)

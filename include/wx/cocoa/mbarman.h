@@ -50,7 +50,7 @@ public:
     void WindowDidResignMain(NSNotification *notification);
     void WindowWillClose(NSNotification *notification);
 #endif // 0
-    void UpdateWindowMenuBar(wxTopLevelWindowNative *win);
+    void UpdateMenuBar();
 protected:
     void SetMenuBar(wxMenuBar* menubar);
     void InstallMenuBarForWindow(wxCocoaNSWindow *win);

@@ -277,7 +277,7 @@ void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
     SetMenuBar(menubar);
 }
 
-void wxMenuBarManager::UpdateWindowMenuBar(wxTopLevelWindowNative *win)
+void wxMenuBarManager::UpdateMenuBar()
 {
     if(m_windowCurrent)
         InstallMenuBarForWindow(m_windowCurrent);
