@@ -30,6 +30,7 @@ wxButtonXmlHandler::wxButtonXmlHandler()
     XRC_ADD_STYLE(wxBU_RIGHT);
     XRC_ADD_STYLE(wxBU_TOP);
     XRC_ADD_STYLE(wxBU_BOTTOM);
+    XRC_ADD_STYLE(wxBU_EXACTFIT);
     AddWindowStyles();
 }
 
