@@ -424,3 +424,21 @@ dnl ### begin block COND_WXUSE_EXPAT_BUILTIN ###
         COND_WXUSE_EXPAT_BUILTIN=""
     fi
     AC_SUBST(COND_WXUSE_EXPAT_BUILTIN)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBPNG" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN)
