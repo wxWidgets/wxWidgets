@@ -125,8 +125,7 @@ public:
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
     virtual void SetNativeFontInfo(const wxNativeFontInfo& info);
-
-    // VZ: there is no void SetNativeFontInfo(const wxString& info), needed?
+    void SetNativeFontInfo(const wxString& info);
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)

@@ -207,12 +207,16 @@ family identifiers.
 
 \helpref{wxFont::SetFamily}{wxfontsetfamily}
 
-\membersection{wxFont::GetFontId}\label{wxfontgetfontid}
+\membersection{wxFont::GetNativeFontInfoDesc}\label{wxfontgetnativefontinfodesc}
 
-\constfunc{int}{GetFontId}{\void}
+\constfunc{wxString}{GetNativeFontInfoDesc}{\void}
 
-Returns the font id, if the portable font system is in operation. See \helpref{Font overview}{wxfontoverview} for
-further details.
+Returns the platform-dependent string completely describing this font or an
+empty string if the font wasn't constructed using the native font description.
+
+\wxheading{See also}
+
+\helpref{wxFont::SetNativeFontInfo}{wxfontsetnativefontinfo}
 
 \membersection{wxFont::GetPointSize}\label{wxfontgetpointsize}
 
@@ -311,6 +315,15 @@ Sets the font family.
 \wxheading{See also}
 
 \helpref{wxFont::GetFamily}{wxfontgetfamily}, \helpref{wxFont::SetFaceName}{wxfontsetfacename}
+
+\membersection{wxFont::SetNativeFontInfo}\label{wxfontsetnativefontinfo}
+
+\func{void}{SetNativeFontInfo}{\param{const wxString\& }{info}}
+
+Creates the font corresponding to the given native font description string
+which must have been previously returned by 
+\helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
+invalid, font is unchanged.
 
 \membersection{wxFont::SetPointSize}\label{wxfontsetpointsize}
 
