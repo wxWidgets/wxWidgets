@@ -21,7 +21,7 @@ AppName = wxPython
 AppVerName = wxPython %(VERSION)s for Python %(PYTHONVER)s
 OutputBaseFilename = wxPython-%(VERSION)s-%(PYVER)s
 AppCopyright = Copyright © 2001 Total Control Software
-DefaultDirName = {code:GetPythonDir|c:\DoNotInstallHere}
+DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(SHORTVER)s for Python %(PYTHONVER)s
 AlwaysCreateUninstallIcon = yes
 
@@ -98,6 +98,12 @@ Source: "demo\bitmaps\*.jpg";               DestDir: "{app}\wxPython\demo\bitmap
 Source: "demo\bitmaps\*.png";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
 Source: "demo\bitmaps\*.ico";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
 
+Source: "demo\bmp_source\*.gif";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.bmp";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+;;Source: "demo\bmp_source\*.jpg";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.png";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+Source: "demo\bmp_source\*.ico";               DestDir: "{app}\wxPython\demo\bmp_source"; Components: demo
+
 Source: "demo\data\*.htm";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.html";                 DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.py";                   DestDir: "{app}\wxPython\demo\data"; Components: demo
@@ -135,6 +141,7 @@ Source: "samples\stxview\*.py";                  DestDir: "{app}\wxPython\sample
 Source: "samples\stxview\*.stx";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
 Source: "samples\stxview\*.txt";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
 Source: "samples\stxview\StructuredText\*.py";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
+Source: "samples\stxview\StructuredText\*.txt";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
 
 Source: "samples\StyleEditor\*.txt";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.py";            DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
@@ -154,8 +161,6 @@ Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\li
 Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";
 Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";
 Name: "{group}\Sample Apps";           Filename: "{app}\wxPython\samples"; Components: samples
-
-;;Name: "{group}\Uninstall wxPython";    Filename: "{app}\wxPython\unins000.exe";            WorkingDir: "{app}\wxPython";
 
 
 ;;------------------------------------------------------------
@@ -200,6 +205,7 @@ IFS_Template = r"""
 program Setup;
 var
     PythonDir : String;
+    InstallDir : String;
 
 function InitializeSetup(): Boolean;
 begin
@@ -211,11 +217,13 @@ begin
                                    'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
                                    '', PythonDir) then begin
 
-            MsgBox('No installation of Python %(PYTHONVER)s found.\nBe sure to enter a pathname that places wxPython\non the PYTHONPATH',
+            MsgBox('No installation of Python %(PYTHONVER)s found in registry.\nBe sure to enter a pathname that places wxPython\non the PYTHONPATH',
                    mbConfirmation, MB_OK);
             PythonDir := 'C:\Put a directory on PYTHONPATH here\';
         end;
     end;
+    InstallDir := PythonDir;
+    %(IF22)s
     Result := true;
 end;
 
@@ -223,6 +231,11 @@ end;
 function GetPythonDir(Default: String): String;
 begin
     Result := PythonDir;
+end;
+
+function GetInstallDir(Default: String): String;
+begin
+    Result := InstallDir;
 end;
 
 begin
@@ -270,6 +283,10 @@ def main():
     ISSFILE    = "__wxPython.iss"
     IFSFILE    = "__wxPython.ifs"
 
+    if PYTHONVER >= "2.2":
+        IF22 = r"InstallDir := InstallDir + '\Lib\site-packages';"
+    else:
+        IF22 = ""
 
     if string.find(WXDLL, "h") != -1:
         PYVER = PYVER + "-hybrid"
