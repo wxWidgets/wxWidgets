@@ -67,7 +67,10 @@ class wxContextHelpPtr(wxObjectPtr):
         self.thisown = 0
     def __del__(self, delfunc=helpc.delete_wxContextHelp):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def BeginContextHelp(self, *_args, **_kwargs):
         val = apply(helpc.wxContextHelp_BeginContextHelp,(self,) + _args, _kwargs)
         return val

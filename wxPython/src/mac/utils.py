@@ -12,7 +12,10 @@ class wxConfigBasePtr :
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxConfigBase):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def DeleteAll(self, *_args, **_kwargs):
         val = apply(utilsc.wxConfigBase_DeleteAll,(self,) + _args, _kwargs)
         return val
@@ -139,7 +142,10 @@ class wxConfigPtr(wxConfigBasePtr):
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxConfig):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def __repr__(self):
         return "<C wxConfig instance at %s>" % (self.this,)
 class wxConfig(wxConfigPtr):
@@ -156,7 +162,10 @@ class wxFileConfigPtr(wxConfigBasePtr):
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxFileConfig):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def __repr__(self):
         return "<C wxFileConfig instance at %s>" % (self.this,)
 class wxFileConfig(wxFileConfigPtr):
@@ -264,7 +273,10 @@ class wxDateTimePtr :
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxDateTime):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetToCurrent(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateTime_SetToCurrent,(self,) + _args, _kwargs)
         if val: val = wxDateTimePtr(val) 
@@ -605,7 +617,10 @@ class wxTimeSpanPtr :
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxTimeSpan):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def Add(self, *_args, **_kwargs):
         val = apply(utilsc.wxTimeSpan_Add,(self,) + _args, _kwargs)
         if val: val = wxTimeSpanPtr(val) 
@@ -704,7 +719,10 @@ class wxDateSpanPtr :
         self.thisown = 0
     def __del__(self, delfunc=utilsc.delete_wxDateSpan):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetYears(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateSpan_SetYears,(self,) + _args, _kwargs)
         if val: val = wxDateSpanPtr(val) 
