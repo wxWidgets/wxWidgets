@@ -111,7 +111,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 extern wxValidator wxPyDefaultValidator;
 
-    int wxCALLBACK wxPyTreeCtrl_SortItems(long item1, long item2, long funcPtr) {
+    int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
         int retval = 0;
         PyObject* func = (PyObject*)funcPtr;
         bool doSave = wxPyRestoreThread();
@@ -4542,7 +4542,7 @@ static bool  wxListCtrl_SortItems(wxListCtrl *self,PyObject * func) {
             if (!PyCallable_Check(func))
                 return FALSE;
 
-            return self->SortItems(wxPyTreeCtrl_SortItems, (long)func);
+            return self->SortItems(wxPyListCtrl_SortItems, (long)func);
         }
 static PyObject *_wrap_wxListCtrl_SortItems(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

@@ -3,56 +3,44 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
-class TestGrid(wxGrid):
+buttonDefs = {
+    814 : ('GridSimple',     'Simple wxGrid, catching all events'),
+    815 : ('GridCustEdRend', 'wxGrid showing custom Editors and Renderers'),
+    816 : ('GridCustTable',  'wxGrid using a custom Table'),
+    817 : ('GridHugeTable',  'A wxGrid with a HUGE table (100M cells!)'),
+    }
+
+
+class ButtonPanel(wxPanel):
     def __init__(self, parent, log):
-        wxGrid.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1)
         self.log = log
 
-        self.CreateGrid(16, 16)
-        self.SetColumnWidth(3, 200)
-        self.SetRowHeight(4, 45)
-        self.SetCellValue("First cell", 0, 0)
-        self.SetCellValue("Another cell", 1, 1)
-        self.SetCellValue("Yet another cell", 2, 2)
-        self.SetCellTextFont(wxFont(12, wxROMAN, wxITALIC, wxNORMAL), 0, 0)
-        self.SetCellTextColour(wxRED, 1, 1)
-        self.SetCellBackgroundColour(wxCYAN, 2, 2)
-        self.UpdateDimensions()
-        self.AdjustScrollbars()
+        box = wxBoxSizer(wxVERTICAL)
+        box.Add(20, 30)
+        keys = buttonDefs.keys()
+        keys.sort()
+        for k in keys:
+            text = buttonDefs[k][1]
+            btn = wxButton(self, k, text)
+            box.Add(btn, 0, wxALIGN_CENTER|wxALL, 15)
+            EVT_BUTTON(self, k, self.OnButton)
 
-        EVT_GRID_SELECT_CELL(self, self.OnSelectCell)
-        EVT_GRID_CELL_CHANGE(self, self.OnCellChange)
-        EVT_GRID_CELL_LCLICK(self, self.OnCellClick)
-        EVT_GRID_LABEL_LCLICK(self, self.OnLabelClick)
-
-        self.SetEditInPlace(true)
-        #print self.GetCells()
+        self.SetAutoLayout(true)
+        self.SetSizer(box)
 
 
-    def OnSelectCell(self, event):
-        self.log.WriteText("OnSelectCell: (%d, %d)\n" % (event.m_row, event.m_col))
+    def OnButton(self, evt):
+        modName = buttonDefs[evt.GetId()][0]
+        module = __import__(modName)
+        frame = module.TestFrame(self, self.log)
+        frame.Show(true)
 
-    def OnCellChange(self, event):
-        self.log.WriteText("OnCellChange: (%d, %d)\n" % (event.m_row, event.m_col))
-
-    def OnCellClick(self, event):
-        self.log.WriteText("OnCellClick: (%d, %d)\n" % (event.m_row, event.m_col))
-
-    def OnLabelClick(self, event):
-        self.log.WriteText("OnLabelClick: (%d, %d)\n" % (event.m_row, event.m_col))
-        #if event.m_row >= 10:
-        #    self.SetLabelValue(wxVERTICAL, 'XX', event.m_row)
-        #    self.Refresh()
-        #else:
-        #    size = self.GetLabelSize(wxVERTICAL)
-        #    print size
-        #    self.SetLabelSize(wxVERTICAL, size+10)
-        #    self.Refresh()
 
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestGrid(nb, log)
+    win = ButtonPanel(nb, log)
     return win
 
 #---------------------------------------------------------------------------
@@ -66,22 +54,6 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
 overview = """\
-wxGrid is a class for displaying and editing tabular information.
-
-wxGrid()
------------------
-
-wxGrid(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style=0, const wxString& name="grid")
-
-Constructor. Before using a wxGrid object, you must call CreateGrid to set up the required rows and columns.
+This demo shows various ways of using the ** NEW ** wxGrid.  For more details see wxPython/demo/Grid*.py.
 """

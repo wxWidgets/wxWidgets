@@ -50,7 +50,7 @@ below.)
    include/wx/msw/setup.h and edit it for the options you want.  At a
    minimum you should set the following:
 
-	   wxUSE_NEW_GRID		    0
+	   wxUSE_NEW_GRID		    1
 	   wxUSE_GLOBAL_MEMORY_OPERATORS    0
 	   wxUSE_LIBTIFF		    1
 

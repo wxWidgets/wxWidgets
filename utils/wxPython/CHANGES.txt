@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-New in 2.1.14
+New in 2.1.16
 -------------
 
 Fixed wxTreeCtrl.HitTest to return both the tree item as well as the
@@ -15,6 +15,15 @@ Fixed some problems in OGL.  Also wxShape.SetClientData and
 .GetClientData can now deal with Python objects.
 
 Added wxListCtrl.SortItems and changed the demo to show how to use it.
+
+Plugged a memory leak.
+
+Wrapped the new wxGrid and friends.  The old wxGrid class is no longer
+available.  There are some incompatibilities, and unfortunately the
+new classes are not documented yet, (however the methods are more
+consistent with each other now so you may be able to guess pretty
+good...)
+
 
 
 

@@ -390,16 +390,17 @@ void wxPyCallbackHelper::setSelf(PyObject* self, int incref) {
 }
 
 
-bool wxPyCallbackHelper::findCallback(const wxString& name) {
-    m_lastFound = NULL;
+bool wxPyCallbackHelper::findCallback(const wxString& name) const {
+    wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
+    self->m_lastFound = NULL;
     if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str()))
-        m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
+        self->m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
 
     return m_lastFound != NULL;
 }
 
 
-int wxPyCallbackHelper::callCallback(PyObject* argTuple) {
+int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
     PyObject*   result;
     int         retval = FALSE;
 
@@ -414,7 +415,7 @@ int wxPyCallbackHelper::callCallback(PyObject* argTuple) {
 
 // Invoke the Python callable object, returning the raw PyObject return
 // value.  Caller should DECREF the return value and also call PyEval_SaveThread.
-PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
+PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
     PyObject*   result;
 
     result = PyEval_CallObject(m_lastFound, argTuple);

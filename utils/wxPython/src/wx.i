@@ -135,6 +135,7 @@ extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
 extern "C" SWIGEXPORT(void) initsizersc();
 extern "C" SWIGEXPORT(void) initclip_dndc();
+extern "C" SWIGEXPORT(void) initgridc();
 %}
 
 
@@ -164,6 +165,7 @@ extern "C" SWIGEXPORT(void) initclip_dndc();
     initprintfwc();
     initsizersc();
     initclip_dndc();
+    initgridc();
 %}
 
 //----------------------------------------------------------------------

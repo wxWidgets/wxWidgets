@@ -14,7 +14,9 @@
 
 %{
 #include "helpers.h"
+#ifdef OLD_GRID
 #include <wx/grid.h>
+#endif
 #include <wx/notebook.h>
 #include <wx/splitter.h>
 #ifdef __WXMSW__
@@ -39,7 +41,7 @@
 
 //---------------------------------------------------------------------------
 
-//#ifdef OLD_GRID
+#ifdef OLD_GRID
 
 enum {
     wxGRID_TEXT_CTRL,
@@ -236,7 +238,7 @@ enum {
     wxEVT_GRID_LABEL_RCLICK,
 };
 
-//#endif
+#endif
 
 //---------------------------------------------------------------------------
 
