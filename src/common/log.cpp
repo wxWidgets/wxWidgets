@@ -332,8 +332,8 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             break;
 
         case wxLOG_Info:
-        case wxLOG_Message:
             if ( GetVerbose() )
+        case wxLOG_Message:
                 DoLogString(str + szString, t);
             // fall through
 
@@ -346,7 +346,6 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 #ifdef __WXDEBUG__
             DoLogString(szString, t);
 #endif
-
             break;
 
         default:
@@ -789,6 +788,7 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             case wxLOG_Status:
                 // by default, these messages are ignored by wxLog, so process
                 // them ourselves
+                if ( !wxIsEmpty(szString) )
                 {
                     wxString str;
                     str << _("Status: ") << szString;
