@@ -298,7 +298,7 @@ bool wxCursor::Ok() const
 }
 
 // Motif-specific: create/get a cursor for the current display
-WXCursor wxCursor::GetXCursor(WXDisplay* display)
+WXCursor wxCursor::GetXCursor(WXDisplay* display) const
 {
     if (!M_CURSORDATA)
         return (WXCursor) 0;
@@ -333,7 +333,7 @@ WXCursor wxCursor::GetXCursor(WXDisplay* display)
 }
 
 // Make a cursor from standard id
-WXCursor wxCursor::MakeCursor(WXDisplay* display, wxStockCursor id)
+WXCursor wxCursor::MakeCursor(WXDisplay* display, wxStockCursor id) const
 {
     Display* dpy = (Display*) display;
     Cursor cursor = (Cursor) 0;

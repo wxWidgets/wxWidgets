@@ -57,7 +57,7 @@ public:
 
     // Motif-specific.
     // Create/get a cursor for the current display
-    WXCursor GetXCursor(WXDisplay* display) ;
+    WXCursor GetXCursor(WXDisplay* display) const;
 private:
     void Create(const char bits[], int width, int height,
                 int hotSpotX = -1, int hotSpotY = -1,
@@ -65,7 +65,7 @@ private:
     void Create(WXPixmap cursor, WXPixmap mask, int hotSpotX, int hotSpotY);
 
     // Make a cursor from standard id
-    WXCursor MakeCursor(WXDisplay* display, wxStockCursor id);
+    WXCursor MakeCursor(WXDisplay* display, wxStockCursor id) const;
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
