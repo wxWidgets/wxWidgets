@@ -54,6 +54,7 @@
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 
 extern wxApp *wxTheApp ;
+extern wxControl *wxFindControlFromMacControl(ControlHandle inControl ) ;
 
 // CS:TODO we still have a problem getting properly at the text events of a control because under Carbon
 // the MLTE engine registers itself for the key events thus the normal flow never occurs, the only measure for the
@@ -196,8 +197,10 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
             
             /* save the drawing state */
         SetPort((**tpvars).fDrawingEnvironment);
-            /* verify our boundary */
+           /* verify our boundary */
         GetControlBounds(theControl, &bounds);
+
+        wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
         if ( ! EqualRect(&bounds, &varsp->fRFocusOutline) ) {
             // scrollbar is on the border, we add one
             Rect oldbounds = varsp->fRFocusOutline ;
@@ -224,6 +227,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
         if ((**tpvars).fIsActive && varsp->fInFocus) DrawThemeFocusRect(&varsp->fRFocusOutline, true);
             /* release our globals */
         HSetState((Handle) tpvars, state);
+
     }
 }
 
@@ -284,6 +288,7 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlHandle theControl, Point
                 /* handle clicks in the text part */
             case kmUPTextPart:
                 {   SetPort((**tpvars).fDrawingEnvironment);
+                    wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
                     TXNClick( varsp->fTXNRec, (const EventRecord*) wxTheApp->MacGetCurrentEvent());
                 }
                 break;
@@ -314,6 +319,7 @@ static pascal void TPPaneIdleProc(ControlHandle theControl) {
             varsp = *tpvars;
                 /* get the current mouse coordinates (in our window) */
             SetPortWindowPort(GetControlOwner(theControl));
+            wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             GetMouse(&mousep);
                 /* there's a 'focus thing' and an 'unfocused thing' */
             if (varsp->fInFocus) {
@@ -351,6 +357,7 @@ static pascal ControlPartCode TPPaneKeyDownProc(ControlHandle theControl,
         if ((**tpvars).fInFocus) {
                 /* turn autoscrolling on and send the key event to text edit */
             SetPort((**tpvars).fDrawingEnvironment);
+            wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             EventRecord ev ;
             memset( &ev , 0 , sizeof( ev ) ) ;
             ev.what = keyDown ;
@@ -378,6 +385,7 @@ static pascal void TPPaneActivateProc(ControlHandle theControl, Boolean activati
         varsp = *tpvars;
             /* de/activate the text edit record */
         SetPort((**tpvars).fDrawingEnvironment);
+        wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             GetControlBounds(theControl, &bounds);
             varsp->fIsActive = activating;
             TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
@@ -423,6 +431,7 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
                 define your own value for handling click-to-focus type events. */
             /* save the drawing state */
         SetPort((**tpvars).fDrawingEnvironment);
+        wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             /* calculate the next highlight state */
         switch (action) {
             default:
@@ -736,6 +745,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_macTXN =  (**tpvars).fTXNRec ;
         m_macTXNvars = tpvars ;
         m_macUsesTXN = true ;
+      	TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
+        TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
     }
   
   return TRUE;
@@ -813,8 +824,13 @@ void wxTextCtrl::SetValue(const wxString& st)
     }
     else
     {
-        TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
-                    kTXNStartOffset, kTXNEndOffset);
+        bool formerEditable = IsEditable() ;
+        SetEditable(true) ;
+      	TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
+      	  kTXNStartOffset, kTXNEndOffset);
+      	TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
+        TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
+        SetEditable(formerEditable) ;
     }
     MacRedrawControl() ;
 }
@@ -828,6 +844,8 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
     if ( m_macUsesTXN )
     {
+        bool formerEditable = IsEditable() ;
+        SetEditable(true) ;
 		TXNTypeAttributes typeAttr[4] ;
 		Str255 fontName = "\pMonaco" ;
 		SInt16 fontSize = 12 ;
@@ -872,6 +890,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
             OSStatus status = TXNSetTypeAttributes ((TXNObject)m_macTXN, attrCounter , typeAttr,
                 start,end);
         }
+        SetEditable(formerEditable) ;
     }
     return TRUE ;
 }
@@ -942,6 +961,7 @@ void wxTextCtrl::Paste()
         {
             TXNConvertFromPublicScrap();
             TXNPaste((TXNObject)m_macTXN); 
+            SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
         }
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event.SetString( GetValue() ) ;
@@ -1010,10 +1030,19 @@ void wxTextCtrl::SetEditable(bool editable)
     if ( editable != m_editable )
     {
         m_editable = editable ;
-    if ( editable )
-            UMAActivateControl( (ControlHandle) m_macControl ) ;
+        if ( !m_macUsesTXN )
+        {
+            if ( editable )
+            	UMAActivateControl( (ControlHandle) m_macControl ) ;
+            else
+            	UMADeactivateControl((ControlHandle)  m_macControl ) ;
+        }
         else
-            UMADeactivateControl((ControlHandle)  m_macControl ) ;
+        {
+            TXNControlTag tag[] = { kTXNIOPrivilegesTag } ;
+            TXNControlData data[] = { editable ? kTXNReadWrite : kTXNReadOnly } ;
+            TXNSetTXNObjectControls( (TXNObject) m_macTXN , false , sizeof(tag) / sizeof (TXNControlTag) , tag , data ) ;
+        }
     }
 }
 
@@ -1075,10 +1104,13 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     }
     else
     {
-      TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
-      TXNClear( ((TXNObject) m_macTXN) ) ;
-      TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
-        kTXNUseCurrentSelection, kTXNUseCurrentSelection);
+        bool formerEditable = IsEditable() ;
+        SetEditable(true) ;
+	    TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
+	    TXNClear( ((TXNObject) m_macTXN) ) ;
+  	    TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
+  	    kTXNUseCurrentSelection, kTXNUseCurrentSelection);
+  	    SetEditable( formerEditable ) ;
     }
     Refresh() ;
 }
@@ -1096,8 +1128,11 @@ void wxTextCtrl::Remove(long from, long to)
   }
   else
   {
+    bool formerEditable = IsEditable() ;
+    SetEditable(true) ;
     TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ; 
     TXNClear( ((TXNObject) m_macTXN) ) ; 
+    SetEditable( formerEditable ) ;
   }
     Refresh() ;
 }
@@ -1124,6 +1159,7 @@ void wxTextCtrl::SetSelection(long from, long to)
     SetPort((**tpvars).fDrawingEnvironment);
         /* change the selection */
     TXNSetSelection( (**tpvars).fTXNRec, from, to);
+    TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
   }
 }
 
@@ -1150,12 +1186,15 @@ void wxTextCtrl::WriteText(const wxString& text)
     }
     else
     {
+        bool formerEditable = IsEditable() ;
+        SetEditable(true) ;
 	    long start , end , dummy ;
 	    GetSelection( &start , &dummy ) ;
         TXNSetData( ((TXNObject) m_macTXN), kTXNTextData, (void*) (const char*)value, value.Length(),
           kTXNUseCurrentSelection, kTXNUseCurrentSelection);
     	GetSelection( &dummy , &end ) ;
         SetStyle( start , end , GetDefaultStyle() ) ;
+    	SetEditable( formerEditable ) ;
     }
     MacRedrawControl() ;
 }
@@ -1376,12 +1415,31 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     int key = event.GetKeyCode() ;
     bool eat_key = false ;
     
+    if ( key == 'c' && event.MetaDown() )
+    {
+        if ( CanCopy() )
+            Copy() ;
+        return ;
+    }
+    
     if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB && 
         !( key == WXK_RETURN && ( (m_windowStyle & wxPROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) ) 
 /*        && key != WXK_PRIOR && key != WXK_NEXT && key != WXK_HOME && key != WXK_END */
         )
     {
         // eat it
+        return ;
+    }
+    if ( key == 'v' && event.MetaDown() )
+    {
+        if ( CanPaste() )
+            Paste() ;
+        return ;
+    }
+    if ( key == 'x' && event.MetaDown() )
+    {
+        if ( CanCut() )
+            Cut() ;
         return ;
     }
     switch ( key )
@@ -1447,7 +1505,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         // default handling
         event.Skip() ;
     }
-    if ( key >= 0x20 ||
+    if ( ( key >= 0x20 && key < WXK_START ) ||
          key == WXK_RETURN ||
          key == WXK_DELETE || 
          key == WXK_BACK)
