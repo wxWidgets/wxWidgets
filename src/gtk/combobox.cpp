@@ -35,7 +35,8 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 
-static bool   gs_typedSelection = FALSE;
+static wxComboBox  *gs_lastCombo = NULL;
+static wxString     gs_lastString;
 
 //-----------------------------------------------------------------------------
 // "select-child" - click/cursor get select-child, changed, select-child
@@ -50,31 +51,25 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     
     if (g_blockEventsOnDrag) return;
 
-    if (!gs_typedSelection)
-    {
-        
-    if (combo->m_alreadySent)
-    {
-        combo->m_alreadySent = FALSE;
-        return;
-    }
-        
-    combo->m_alreadySent = TRUE;
-    }
-    else
-    {
-        gs_typedSelection = FALSE;
-    }
-
     int curSelection = combo->GetSelection();
-
+    
     if (combo->m_prevSelection != curSelection)
     {
         GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
         gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
     }
-
     combo->m_prevSelection = curSelection;
+
+    if ((combo == gs_lastCombo) &&
+        (combo->GetStringSelection() == gs_lastString))
+    {
+        return;
+    }
+    else
+    {
+        gs_lastCombo = combo;
+        gs_lastString = combo->GetStringSelection();
+    }
 
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( curSelection );
@@ -85,7 +80,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 }
 
 //-----------------------------------------------------------------------------
-//  "changed" - typing and list item matches get changed, select-child, changed
+//  "changed" - typing and list item matches get changed, select-child
 //              if it doesn't match an item then just get a single changed
 //-----------------------------------------------------------------------------
 
@@ -96,15 +91,6 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     if (!combo->m_hasVMT) return;
 
-     if ((combo->FindString(combo->GetValue()) != wxNOT_FOUND) && !combo->m_alreadySent)
-     {
-         gs_typedSelection = TRUE;
-         
-         // Do we send a TEXT_UPDATE event if we send a CMOBOBOX event 
-         // anyways? I think so.
-         // return;
-     }
-        
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
@@ -405,6 +391,8 @@ int wxComboBox::FindString( const wxString &item )
 #else
         wxString str( label->label );
 #endif
+        wxPrintf( L"Item %s\n", str.c_str() );
+
         if (item == str)
             return count;
             
