@@ -205,9 +205,31 @@ user. It may return FALSE to prevent the change or TRUE to allow it.
 The default implementation of this function verifies that the sizes of both 
 panes of the splitter are greater than minimum pane size.
 
+\membersection{wxSplitterWindow::ReplaceWindow}\label{wxsplitterwindowreplacewindow}
+
+\func{bool}{ReplaceWindow}{\param{wxWindow * }{winOld}, \param{wxWindow * }{winNew}}
+
+This function replaces one of the windows managed by the wxSplitterWindow with
+another one. It is in general better to use it instead of calling Unsplit()
+and then resplitting the window back because it will provoke much less flicker
+(if any). It is valid to call this function whether the splitter has two
+windows or only one.
+
+Both parameters should be non NULL and {\it winOld} must specify one of the
+windows managed by the splitter. If the parameters are incorrect or the window
+couldn't be replaced, FALSE is returned. Otherwise the function will return
+TRUE, but please notice that it will not delete the replaced window and you
+may wish to do it yourself.
+
 \wxheading{See also}
 
 \helpref{wxSplitterWindow::GetMinimumPaneSize}{wxsplitterwindowgetminimumpanesize}
+
+\wxheading{See also}
+
+\helpref{wxSplitterWindow::Unsplit}{wxsplitterwindowunsplit}\\
+\helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically}\\
+\helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}
 
 \membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
 

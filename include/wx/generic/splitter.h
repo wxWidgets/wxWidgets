@@ -94,6 +94,10 @@ public:
     // Doesn't actually delete the window.
     bool Unsplit(wxWindow *toRemove = (wxWindow *) NULL);
 
+    // Replaces one of the windows with another one (neither old nor new
+    // parameter should be NULL)
+    bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
+
     // Is the window split?
     bool IsSplit() const { return (m_windowTwo != NULL); }
 

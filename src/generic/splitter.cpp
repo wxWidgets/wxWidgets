@@ -587,22 +587,17 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     if ( ! IsSplit() )
         return FALSE;
 
+    wxWindow *win = NULL;
     if ( toRemove == NULL || toRemove == m_windowTwo)
     {
-        wxWindow *win = m_windowTwo ;
+        win = m_windowTwo ;
         m_windowTwo = (wxWindow *) NULL;
-        OnUnsplit(win);
-        m_sashPosition = 0;
-        SizeWindows();
     }
     else if ( toRemove == m_windowOne )
     {
-        wxWindow *win = m_windowOne ;
+        win = m_windowOne ;
         m_windowOne = m_windowTwo;
         m_windowTwo = (wxWindow *) NULL;
-        OnUnsplit(win);
-        m_sashPosition = 0;
-        SizeWindows();
     }
     else
     {
@@ -610,6 +605,36 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
 
         return FALSE;
     }
+
+    OnUnsplit(win);
+    m_sashPosition = 0;
+    SizeWindows();
+
+    return TRUE;
+}
+
+// Replace a window with another one
+bool wxSplitterWindow::ReplaceWindow(wxWindow *winOld, wxWindow *winNew)
+{
+    wxCHECK_MSG( winOld, FALSE, "use one of Split() functions instead" );
+    wxCHECK_MSG( winNew, FALSE, "use Unsplit() functions instead" );
+
+    if ( winOld == m_windowTwo )
+    {
+        m_windowTwo = winNew;
+    }
+    else if ( winOld == m_windowOne )
+    {
+        m_windowOne = winNew;
+    }
+    else
+    {
+        wxFAIL_MSG("splitter: attempt to replace a non-existent window");
+
+        return FALSE;
+    }
+
+    SizeWindows();
 
     return TRUE;
 }
