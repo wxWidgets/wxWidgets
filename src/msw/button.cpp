@@ -75,7 +75,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   m_hWnd = (WXHWND)CreateWindowEx
                    (
                     MakeExtendedStyle(m_windowStyle),
-                    "BUTTON",
+                    _T("BUTTON"),
                     label,
                     WS_VISIBLE | WS_TABSTOP | WS_CHILD,
                     0, 0, 0, 0, 
@@ -115,7 +115,7 @@ void wxButton::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
   int current_width;
   int cyf;
-  char buf[300];
+  wxChar buf[300];
   GetWindowText((HWND) GetHWND(), buf, 300);
   GetTextExtent(buf, &current_width, &cyf,NULL,NULL,
     & this->GetFont());
@@ -164,7 +164,7 @@ wxString wxButton::GetLabel(void) const
 
 void wxButton::SetLabel(const wxString& label)
 {
-  SetWindowText((HWND) GetHWND(), (const char *) label);
+  SetWindowText((HWND) GetHWND(), (const wxChar *) label);
 }
 
 WXHBRUSH wxButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

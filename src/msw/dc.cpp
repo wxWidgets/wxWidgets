@@ -680,7 +680,7 @@ void wxDC::DoDrawText(const wxString& text, long x, long y)
     else
         SetBkMode(GetHdc(), OPAQUE);
 
-    (void)TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), (char *) (const char *)text, strlen((const char *)text));
+    (void)TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), WXSTRINGCAST text, wxStrlen(WXSTRINGCAST text));
 
     if (m_textBackgroundColour.Ok())
         (void)SetBkColor(GetHdc(), old_background);
@@ -755,7 +755,7 @@ void wxDC::SetFont(const wxFont& the_font)
         HFONT f = (HFONT) ::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
         if (f == (HFONT) NULL)
         {
-            wxLogDebug("::SelectObject failed in wxDC::SetFont.");
+            wxLogDebug(_T("::SelectObject failed in wxDC::SetFont."));
         }
         if (!m_oldFont)
             m_oldFont = (WXHFONT) f;
@@ -962,7 +962,7 @@ void wxDC::GetTextExtent(const wxString& string, long *x, long *y,
     SIZE sizeRect;
     TEXTMETRIC tm;
 
-    GetTextExtentPoint(GetHdc(), (char *)(const char *) string, strlen((char *)(const char *) string), &sizeRect);
+    GetTextExtentPoint(GetHdc(), WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
     GetTextMetrics(GetHdc(), &tm);
 
     if (x) *x = XDEV2LOGREL(sizeRect.cx);

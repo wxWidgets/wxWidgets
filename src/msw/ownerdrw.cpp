@@ -68,13 +68,13 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   dc.SetFont(GetFont());
 
   // ## ugly...
-  char *szStripped = new char[m_strName.Len()];
-  wxStripMenuCodes((char *)m_strName.c_str(), szStripped);
+  wxChar *szStripped = new wxChar[m_strName.Len()];
+  wxStripMenuCodes((wxChar *)m_strName.c_str(), szStripped);
   wxString str = szStripped;
   delete [] szStripped;
 
   // # without this menu items look too tightly packed (at least under Windows)
-  str += 'W'; // 'W' is typically the widest letter
+  str += _T('W'); // 'W' is typically the widest letter
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
   m_nHeight = *pheight;                // remember height for use in OnDrawItem
@@ -150,7 +150,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
     DrawState(hdc, NULL, NULL, 
-              (LPARAM)(const char *)m_strName, m_strName.Length(), 
+              (LPARAM)(const wxChar *)m_strName, m_strName.Length(), 
               x, rc.y, rc.GetWidth(), rc.GetHeight(),
               DST_PREFIXTEXT | ( st & wxODDisabled ? DSS_DISABLED : 0) );
 

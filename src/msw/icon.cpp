@@ -119,7 +119,7 @@ bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
   {
     wxIcon *icon = (wxIcon *)bitmap;
     wxIconRefData *data = (wxIconRefData *)icon->GetRefData();
-    data->m_hIcon = (WXHICON)ReadIconFile((char *)name.c_str(), wxGetInstance(),
+    data->m_hIcon = (WXHICON)ReadIconFile((wxChar *)name.c_str(), wxGetInstance(),
                                           &data->m_width, &data->m_height);
 
     data->m_ok = data->m_hIcon != 0;

@@ -175,7 +175,7 @@ wxPaintDC::wxPaintDC()
 
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
-    wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
+    wxCHECK_RET( canvas, _T("NULL canvas in wxPaintDC ctor") );
 
 #ifdef __WXDEBUG__
     if ( !g_isPainting )

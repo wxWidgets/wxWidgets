@@ -73,9 +73,13 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
     HRSRC hresInfo;
 #if defined(__WIN32__) && !defined(__TWIN32__)
-    hresInfo = ::FindResourceA((HMODULE) wxhInstance, fileName, "WAVE");
+#ifdef _UNICODE
+    hresInfo = ::FindResourceW((HMODULE) wxhInstance, fileName, _T("WAVE"));
 #else
-    hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, "WAVE");
+    hresInfo = ::FindResourceA((HMODULE) wxhInstance, fileName, _T("WAVE"));
+#endif
+#else
+    hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, _T("WAVE"));
 #endif
     if (!hresInfo)
         return FALSE;
@@ -129,7 +133,7 @@ bool wxWave::Play(bool async, bool looped) const
     return FALSE;
 
 #ifdef __WIN32__
-  return ( ::PlaySound((LPCSTR)m_waveData, NULL, SND_MEMORY |
+  return ( ::PlaySound((LPCTSTR)m_waveData, NULL, SND_MEMORY |
     SND_NODEFAULT | (async ? SND_ASYNC : SND_SYNC) | (looped ? (SND_LOOP | SND_ASYNC) : 0)) != 0 );
 #else
   return ( ::sndPlaySound((LPCSTR)m_waveData, SND_MEMORY |

@@ -117,7 +117,7 @@ extern MSG s_currentMsg;
 
 wxMenu *wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
-extern char wxCanvasClassName[];
+extern wxChar wxCanvasClassName[];
 
 #ifdef __WXDEBUG__
     // see comments in dcclient.cpp where g_isPainting is defined
@@ -301,7 +301,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, "can't create wxWindow without parent" );
+    wxCHECK_MSG( parent, FALSE, _T("can't create wxWindow without parent") );
 
     CreateBase(parent, id, pos, size, style, name);
 
@@ -796,7 +796,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, "subclassing window twice?" );
+    wxASSERT_MSG( !m_oldWndProc, _T("subclassing window twice?") );
 
     wxAssociateWinWithHandle((HWND)hWnd, this);
 
@@ -1295,7 +1295,7 @@ void wxWindow::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    GetTextExtentPoint(dc, (const char *)string, (int)string.Length(), &sizeRect);
+    GetTextExtentPoint(dc, (const wxChar *)string, (int)string.Length(), &sizeRect);
     GetTextMetrics(dc, &tm);
 
     if ( fontToUse && fnt && hfontOld )
@@ -1589,7 +1589,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 {
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__
-    wxLogTrace(wxTraceMessages, "Processing %s(wParam=%8lx, lParam=%8lx)",
+    wxLogTrace(wxTraceMessages, _T("Processing %s(wParam=%8lx, lParam=%8lx)"),
                wxGetMessageName(message), wParam, lParam);
 #endif // __WXDEBUG__
 
@@ -1966,7 +1966,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     if ( !processed )
     {
 #ifdef __WXDEBUG__
-        wxLogTrace(wxTraceMessages, "Forwarding %s to DefWindowProc.",
+        wxLogTrace(wxTraceMessages, _T("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // __WXDEBUG__
         rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -2007,7 +2007,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     // adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
     wxCHECK_RET( hWnd != (HWND)NULL,
-                 "attempt to add a NULL hWnd to window list ignored" );
+                 _T("attempt to add a NULL hWnd to window list ignored") );
 
     if ( !wxWinHandleList->Find((long)hWnd) )
         wxWinHandleList->Append((long)hWnd, win);
@@ -2034,16 +2034,16 @@ void wxWindow::MSWDetachWindowMenu()
         int i;
         for (i = 0; i < N; i++)
         {
-            char buf[100];
+            wxChar buf[100];
             int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
             if ( !chars )
             {
-                wxLogLastError("GetMenuString");
+                wxLogLastError(_T("GetMenuString"));
 
                 continue;
             }
 
-            if ( strcmp(buf, "&Window") == 0 )
+            if ( wxStrcmp(buf, _T("&Window")) == 0 )
             {
                 RemoveMenu(hMenu, i, MF_BYPOSITION);
 
@@ -2055,15 +2055,15 @@ void wxWindow::MSWDetachWindowMenu()
 
 bool wxWindow::MSWCreate(int id,
                          wxWindow *parent,
-                         const char *wclass,
+                         const wxChar *wclass,
                          wxWindow *wx_win,
-                         const char *title,
+                         const wxChar *title,
                          int x,
                          int y,
                          int width,
                          int height,
                          WXDWORD style,
-                         const char *dialog_template,
+                         const wxChar *dialog_template,
                          WXDWORD extendedStyle)
 {
     int x1 = CW_USEDEFAULT;
@@ -2119,14 +2119,14 @@ bool wxWindow::MSWCreate(int id,
             if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
                                  SWP_NOSIZE | SWP_NOMOVE) )
             {
-                wxLogLastError("SetWindowPos");
+                wxLogLastError(_T("SetWindowPos"));
             }
         }
 
         // move the dialog to its initial position without forcing repainting
         if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
         {
-            wxLogLastError("MoveWindow");
+            wxLogLastError(_T("MoveWindow"));
         }
     }
     else
@@ -2137,7 +2137,7 @@ bool wxWindow::MSWCreate(int id,
 
         m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
                                         wclass,
-                                        title ? title : "",
+                                        title ? title : _T(""),
                                         style,
                                         x1, y1,
                                         width1, height1,
@@ -2211,7 +2211,7 @@ bool wxWindow::MSWOnNotify(int WXUNUSED(idCtrl),
     if ( hdr->code == TTN_NEEDTEXT && m_tooltip )
     {
         TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-        ttt->lpszText = (char *)m_tooltip->GetTip().c_str();
+        ttt->lpszText = (wxChar *)m_tooltip->GetTip().c_str();
 
         // processed
         return TRUE;
@@ -2388,7 +2388,7 @@ bool wxWindow::HandleDropFiles(WXWPARAM wParam)
     int wIndex;
     for (wIndex=0; wIndex < (int)gwFilesDropped; wIndex++)
     {
-        DragQueryFile (hFilesInfo, wIndex, (LPSTR) wxBuffer, 1000);
+        DragQueryFile (hFilesInfo, wIndex, (LPTSTR) wxBuffer, 1000);
         files[wIndex] = wxBuffer;
     }
     DragFinish (hFilesInfo);
@@ -3101,7 +3101,7 @@ bool wxWindow::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
             break;
 
         default:
-            wxFAIL_MSG("no such joystick event");
+            wxFAIL_MSG(_T("no such joystick event"));
 
             return FALSE;
     }

@@ -91,8 +91,8 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern char *wxBuffer;
-extern char *wxOsVersion;
+extern wxChar *wxBuffer;
+extern wxChar *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 #if wxUSE_THREADS
@@ -107,11 +107,11 @@ MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
 // FIXME why not const? and not static?
-char wxFrameClassName[]         = "wxFrameClass";
-char wxMDIFrameClassName[]      = "wxMDIFrameClass";
-char wxMDIChildFrameClassName[] = "wxMDIChildFrameClass";
-char wxPanelClassName[]         = "wxPanelClass";
-char wxCanvasClassName[]        = "wxCanvasClass";
+wxChar wxFrameClassName[]         = _T("wxFrameClass");
+wxChar wxMDIFrameClassName[]      = _T("wxMDIFrameClass");
+wxChar wxMDIChildFrameClassName[] = _T("wxMDIChildFrameClass");
+wxChar wxPanelClassName[]         = _T("wxPanelClass");
+wxChar wxCanvasClassName[]        = _T("wxCanvasClass");
 
 HICON wxSTD_FRAME_ICON = (HICON) NULL;
 HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
@@ -162,12 +162,12 @@ bool wxApp::Initialize()
     //    wxRedirectIOToConsole();
 #endif
 
-    wxBuffer = new char[1500]; // FIXME
+    wxBuffer = new wxChar[1500]; // FIXME
 
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_RESOURCES
-    wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
+    wxGetResource(_T("wxWindows"), _T("OsVersion"), &wxOsVersion);
 #endif
 
     // I'm annoyed ... I don't know where to put this and I don't want to
@@ -193,7 +193,7 @@ bool wxApp::Initialize()
     InitCommonControls();
 
 #if wxUSE_RICHEDIT
-    gs_hRichEdit = LoadLibrary("RICHED32.DLL");
+    gs_hRichEdit = LoadLibrary(_T("RICHED32.DLL"));
 
     if (gs_hRichEdit == (HINSTANCE) NULL)
     {
@@ -215,20 +215,20 @@ bool wxApp::Initialize()
 
 #if wxUSE_CTL3D
     if (!Ctl3dRegister(wxhInstance))
-        wxLogError("Cannot register CTL3D");
+        wxLogError(_T("Cannot register CTL3D"));
 
     Ctl3dAutoSubclass(wxhInstance);
 #endif
 
     g_globalCursor = new wxCursor;
 
-    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, "wxSTD_FRAME");
-    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDIPARENTFRAME");
-    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDICHILDFRAME");
+    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_FRAME"));
+    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_MDIPARENTFRAME"));
+    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, _T("wxSTD_MDICHILDFRAME"));
 
-    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_FRAME");
-    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDIPARENTFRAME");
-    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDICHILDFRAME");
+    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_FRAME"));
+    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_MDIPARENTFRAME"));
+    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, _T("wxDEFAULT_MDICHILDFRAME"));
 
     RegisterWindowClasses();
 
@@ -236,7 +236,7 @@ bool wxApp::Initialize()
 
     LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
-    lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" );
+    lb.lbHatch = (int)LoadBitmap( wxhInstance, _T("wxDISABLE_BUTTON_BITMAP") );
     if ( lb.lbHatch )
     {
         wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
@@ -356,13 +356,13 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
     int count = 0;
 
     // Get application name
-    char name[260]; // 260 is MAX_PATH value from windef.h
+    wxChar name[260]; // 260 is MAX_PATH value from windef.h
     ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
 
     args.Add(name);
     count++;
 
-    strcpy(name, wxFileNameFromPath(name));
+    wxStrcpy(name, wxFileNameFromPath(name));
     wxStripExtension(name);
     wxTheApp->SetAppName(name);
 
@@ -373,16 +373,16 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
     while (i < len)
     {
         // Skip whitespace
-        while ((i < len) && isspace(cmdLine.GetChar(i)))
+        while ((i < len) && wxIsspace(cmdLine.GetChar(i)))
             i ++;
 
         if (i < len)
         {
-            if (cmdLine.GetChar(i) == '"') // We found the start of a string
+            if (cmdLine.GetChar(i) == _T('"')) // We found the start of a string
             {
                 i ++;
                 int first = i;
-                while ((i < len) && (cmdLine.GetChar(i) != '"'))
+                while ((i < len) && (cmdLine.GetChar(i) != _T('"')))
                     i ++;
 
                 wxString arg(cmdLine.Mid(first, (i - first)));
@@ -396,7 +396,7 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
             else // Unquoted argument
             {
                 int first = i;
-                while ((i < len) && !isspace(cmdLine.GetChar(i)))
+                while ((i < len) && !wxIsspace(cmdLine.GetChar(i)))
                     i ++;
 
                 wxString arg(cmdLine.Mid(first, (i - first)));
@@ -407,11 +407,11 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
         }
     }
 
-    wxTheApp->argv = new char*[count + 1];
+    wxTheApp->argv = new wxChar*[count + 1];
     for (i = 0; i < count; i++)
     {
         wxString arg(args[i]);
-        wxTheApp->argv[i] = copystring((const char*)arg);
+        wxTheApp->argv[i] = copystring((const wxChar*)arg);
     }
     wxTheApp->argv[count] = NULL; // argv[] is a NULL-terminated list
     wxTheApp->argc = count;
@@ -531,7 +531,7 @@ void wxApp::CleanUp()
     // wxDebugContext, too.
     if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
-        wxLogDebug("There were memory leaks.");
+        wxLogDebug(_T("There were memory leaks."));
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
@@ -588,12 +588,12 @@ int wxEntry(WXHINSTANCE hInstance,
             // the IMPLEMENT_APP macro is used instead, which sets an initializer
             // function for delayed, dynamic app object construction.
             wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
-                         "No initializer - use IMPLEMENT_APP macro." );
+                         _T("No initializer - use IMPLEMENT_APP macro.") );
 
             wxTheApp = (*wxApp::GetInitializerFunction()) ();
         }
 
-        wxCHECK_MSG( wxTheApp, 0, "You have to define an instance of wxApp!" );
+        wxCHECK_MSG( wxTheApp, 0, _T("You have to define an instance of wxApp!") );
 
         // save the WinMain() parameters
         wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
@@ -771,7 +771,7 @@ bool wxApp::DoMessage()
     {
 #if wxUSE_THREADS
         wxASSERT_MSG( wxThread::IsMain(),
-                      "only the main thread can process Windows messages" );
+                      _T("only the main thread can process Windows messages") );
 
         static bool s_hadGuiLock = TRUE;
         static wxMsgArray s_aSavedMessages;
@@ -1071,7 +1071,7 @@ wxWindow* wxApp::GetTopWindow() const
 int wxApp::GetComCtl32Version() const
 {
     // have we loaded COMCTL32 yet?
-    HMODULE theModule = ::GetModuleHandle("COMCTL32");
+    HMODULE theModule = ::GetModuleHandle(_T("COMCTL32"));
     int version = 0;
 
     // if so, then we can check for the version

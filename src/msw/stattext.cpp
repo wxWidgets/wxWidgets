@@ -72,12 +72,12 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   if ( wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), "STATIC", (const char *)label,
+  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), _T("STATIC"), (const wxChar *)label,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create static ctrl" );
+  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create static ctrl") );
 
 #if wxUSE_CTL3D
 /*
@@ -162,7 +162,7 @@ void wxStaticText::SetLabel(const wxString& label)
   int w, h;
   GetTextExtent(label, &w, &h, NULL, NULL, & GetFont());
   MoveWindow((HWND) GetHWND(), point.x, point.y, (int)(w + 10), (int)h, TRUE);
-  SetWindowText((HWND) GetHWND(), (const char *)label);
+  SetWindowText((HWND) GetHWND(), (const wxChar *)label);
 }
 
 WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

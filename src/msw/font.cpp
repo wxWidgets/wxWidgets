@@ -158,9 +158,9 @@ bool wxFont::RealizeResource(void)
     else if (M_FONTDATA->m_weight == wxBOLD)
       ff_weight = FW_BOLD;
 
-    const char* pzFace = (const char*) ff_face;
+    const wxChar* pzFace = (const wxChar*) ff_face;
     if (!M_FONTDATA->m_faceName.IsNull())
-        pzFace = (const char*) M_FONTDATA->m_faceName ;
+        pzFace = (const wxChar*) M_FONTDATA->m_faceName ;
 
 /* Always calculate fonts using the screen DC (is this the best strategy?)
  * There may be confusion if a font is selected into a printer

@@ -426,7 +426,7 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
     BITMAPFILEHEADER   bf;
     WORD		nNumColors;
     BOOL result = FALSE;
-    char str[128];
+    wxChar str[128];
     WORD offBits;
     HDC hDC;
     BOOL bCoreHead = FALSE;
@@ -436,8 +436,8 @@ BOOL ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     fh = OpenFile (lpFileName, &of, OF_READ);
     if (fh == -1) {
-        wsprintf(str,"Can't open file '%s'", lpFileName);
-	MessageBox(NULL, str, "Error", MB_ICONSTOP | MB_OK);
+        wsprintf(str,_T("Can't open file '%s'"), lpFileName);
+	MessageBox(NULL, str, _T("Error"), MB_ICONSTOP | MB_OK);
 	return (0);
     }
 

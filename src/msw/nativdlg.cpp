@@ -171,7 +171,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 
     wxWindow* win = NULL;
 
-    if (str == "BUTTON")
+    if (str == _T("BUTTON"))
     {
         int style1 = (style & 0xFF);
         if ((style1 == BS_3STATE) || (style1 == BS_AUTO3STATE) || (style1 == BS_AUTOCHECKBOX) ||
@@ -188,7 +188,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         {
             // TODO: how to find the bitmap?
             win = new wxBitmapButton;
-            wxLogError("Have not yet implemented bitmap button as BS_BITMAP button.");
+            wxLogError(_T("Have not yet implemented bitmap button as BS_BITMAP button."));
         }
 #endif
         else if (style1 == BS_OWNERDRAW)
@@ -215,7 +215,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
                        id);
         }
     }
-    else if (str == "COMBOBOX")
+    else if (str == _T("COMBOBOX"))
     {
         win = new wxComboBox;
     }
@@ -225,30 +225,30 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     // for correct functioning.
     // Could have wxWindow::AdoptAttributesFromHWND(WXHWND)
     // to be overridden by each control class.
-    else if (str == "EDIT")
+    else if (str == _T("EDIT"))
     {
         win = new wxTextCtrl;
     }
-    else if (str == "LISTBOX")
+    else if (str == _T("LISTBOX"))
     {
         win = new wxListBox;
     }
-    else if (str == "SCROLLBAR")
+    else if (str == _T("SCROLLBAR"))
     {
         win = new wxScrollBar;
     }
 #if defined(__WIN95__) && !defined(__TWIN32__)
-    else if (str == "MSCTLS_UPDOWN32")
+    else if (str == _T("MSCTLS_UPDOWN32"))
     {
         win = new wxSpinButton;
     }
 #endif
-    else if (str == "MSCTLS_TRACKBAR32")
+    else if (str == _T("MSCTLS_TRACKBAR32"))
     {
         // Need to ascertain if it's horiz or vert
         win = new wxSlider;
     }
-    else if (str == "STATIC")
+    else if (str == _T("STATIC"))
     {
         int style1 = (style & 0xFF);
 
@@ -260,13 +260,13 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             win = new wxStaticBitmap;
 
             // Help! this doesn't correspond with the wxWin implementation.
-            wxLogError("Please make SS_BITMAP statics into owner-draw buttons.");
+            wxLogError(_T("Please make SS_BITMAP statics into owner-draw buttons."));
         }
 #endif
     }
     else
     {
-        wxString msg("Don't know how to convert from Windows class ");
+        wxString msg(_T("Don't know how to convert from Windows class "));
         msg += str;
         wxLogError(msg);
     }

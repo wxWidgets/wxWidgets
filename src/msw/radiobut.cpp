@@ -90,11 +90,11 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     msStyle |= WS_BORDER;
 */
 
-  m_hWnd = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, (const char *)label,
+  m_hWnd = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, (const wxChar *)label,
                           msStyle,0,0,0,0,
                           (HWND) parent->GetHWND(), (HMENU)m_windowId, wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create radiobutton" );
+  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create radiobutton") );
 
 #if wxUSE_CTL3D
   if (want3D)
@@ -112,7 +112,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 //  SetValue(value);
 
   // start GRW fix
-  if (label != "")
+  if (label != _T(""))
   {
     int label_width, label_height;
     GetTextExtent(label, &label_width, &label_height, NULL, NULL, & this->GetFont());
@@ -142,7 +142,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
 void wxRadioButton::SetLabel(const wxString& label)
 {
-  SetWindowText((HWND) GetHWND(), (const char *)label);
+  SetWindowText((HWND) GetHWND(), (const wxChar *)label);
 }
 
 void wxRadioButton::SetValue(bool value)

@@ -93,7 +93,7 @@ wxPNGReader::wxPNGReader(void)
   imageOK = FALSE;
 }
 
-wxPNGReader::wxPNGReader ( char* ImageFileName )
+wxPNGReader::wxPNGReader ( wxChar* ImageFileName )
 {
   imageOK = FALSE;
   filetype = 0;
@@ -383,12 +383,12 @@ wxMask *wxPNGReader::CreateMask(void)
     return mask;
 }
 
-bool wxPNGReader::ReadFile(char * ImageFileName)
+bool wxPNGReader::ReadFile(wxChar * ImageFileName)
 {
   int number_passes;
 
   if (ImageFileName)
-   strcpy(filename, ImageFileName);
+   wxStrcpy(filename, ImageFileName);
 
   FILE *fp;
   png_struct *png_ptr;
@@ -396,7 +396,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
   wxPNGReaderIter iter(this);
 
   /* open the file */
-  fp = fopen(filename, "rb");
+  fp = fopen(wxConvFile.cWX2MB(filename), "rb");
   if (!fp)
     return FALSE;
 
@@ -525,10 +525,10 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 
 /* write a png file */
 
-bool wxPNGReader::SaveFile(char * ImageFileName)
+bool wxPNGReader::SaveFile(wxChar * ImageFileName)
 {
   if (ImageFileName)
-   strcpy(filename, ImageFileName);
+   wxStrcpy(filename, ImageFileName);
 
   wxPNGReaderIter iter(this);
   FILE *fp;
@@ -536,7 +536,7 @@ bool wxPNGReader::SaveFile(char * ImageFileName)
   png_info *info_ptr;
 
    /* open the file */
-  fp = fopen(filename, "wb");
+  fp = fopen(wxConvFile.cWX2MB(filename), "wb");
   if (!fp)
     return FALSE;
 
@@ -693,14 +693,14 @@ static void DecToHex(int dec, char *buf)
 }
 
 
-bool wxPNGReader::SaveXPM(char *filename, char *name)
+bool wxPNGReader::SaveXPM(wxChar *filename, wxChar *name)
 {
-    char nameStr[256];
+    wxChar nameStr[256];
     if ( name )
-        strcpy(nameStr, name);
+        wxStrcpy(nameStr, name);
     else
     {
-        strcpy(nameStr, filename);
+        wxStrcpy(nameStr, filename);
         wxStripExtension(nameStr);
     }
 
@@ -713,7 +713,7 @@ bool wxPNGReader::SaveXPM(char *filename, char *name)
     if ( !GetPalette() )
         return FALSE;
 
-    ofstream str(filename);
+    ofstream str(wxConvFile.cWX2MB(filename));
     if ( str.bad() )
         return FALSE;
 
@@ -770,7 +770,7 @@ bool wxPNGFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     int desiredWidth, int desiredHeight)
 {
     wxPNGReader reader;
-    if (reader.ReadFile((char*) (const char*) name))
+    if (reader.ReadFile(WXSTRINGCAST name))
     {
         return reader.InstantiateBitmap(bitmap);
     }

@@ -125,12 +125,12 @@ void ClearSystemPalette(void)
  *   bits....
  */
 
-int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
+int DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
 {
    HFILE               fh;
    OFSTRUCT            of;
 
-   fh = OpenFile(szFile, &of, OF_WRITE | OF_CREATE);
+   fh = OpenFile(wxConvFile.cWX2MB(szFile), &of, OF_WRITE | OF_CREATE);
 
   if (!fh) {
 //   printf("la regamos0");
@@ -166,7 +166,7 @@ int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
   return 1;
 }
 
-PDIB DibOpenFile(LPSTR szFile)
+PDIB DibOpenFile(LPTSTR szFile)
 {
    HFILE               fh;
    DWORD               dwLen;
@@ -181,7 +181,7 @@ PDIB DibOpenFile(LPSTR szFile)
    #define GetCurrentInstance()    (HINSTANCE)SELECTOROF((LPVOID)&of)
 #endif
 
-   fh = OpenFile(szFile, &of, OF_READ);
+   fh = OpenFile(wxConvFile.cWX2MB(szFile), &of, OF_READ);
 
    if (fh == -1)
    {
@@ -190,6 +190,8 @@ PDIB DibOpenFile(LPSTR szFile)
           // TODO: Unicode version
 #ifdef __WIN16__
       h = FindResource(GetCurrentInstance(), szFile, RT_BITMAP);
+#elif wxUSE_UNICODE
+      h = FindResourceW(GetCurrentInstance(), szFile, RT_BITMAP);
 #else
       h = FindResourceA(GetCurrentInstance(), szFile, RT_BITMAP);
 #endif

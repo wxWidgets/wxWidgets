@@ -83,7 +83,7 @@ int wxMessageDialog::ShowModal(void)
   else
     msStyle |= MB_TASKMODAL;
     
-  int msAns = MessageBox(hWnd, (LPCSTR)(const char *)m_message, (LPCSTR)(const char *)m_caption, msStyle);
+  int msAns = MessageBox(hWnd, (LPCTSTR)(const wxChar *)m_message, (LPCTSTR)(const wxChar *)m_caption, msStyle);
   int ans = wxOK;
   switch (msAns)
   {

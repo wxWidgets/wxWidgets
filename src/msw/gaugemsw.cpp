@@ -107,7 +107,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   msFlags |= ZYZGS_3D;
 
   HWND wx_button =
-      CreateWindowEx(MakeExtendedStyle(m_windowStyle), "zYzGauge", NULL, msFlags,
+      CreateWindowEx(MakeExtendedStyle(m_windowStyle), _T("zYzGauge"), NULL, msFlags,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
@@ -674,7 +674,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
 
 
 /* static global variables */
-static char gszzYzGaugeClass[] = "zYzGauge";
+static wxChar gszzYzGaugeClass[] = _T("zYzGauge");
     
 
 /* window word position definitions */
@@ -786,7 +786,7 @@ BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance)
     /*  Get a DC to determine whether device is mono or not, and set
      *  default foreground/background colors as appropriate.
      */
-    if ((hdc = CreateIC("DISPLAY", NULL, NULL, 0L)))
+    if ((hdc = CreateIC(_T("DISPLAY"), NULL, NULL, 0L)))
     {
         /* check for mono-display */
         if ((GetDeviceCaps(hdc, BITSPIXEL) == 1) &&
@@ -849,7 +849,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     DWORD       dwExtent;
     RECT        rc1, rc2;
     HFONT       hFont;
-    char        ach[ 6 ];
+    wxChar      ach[ 6 ];
     WORD        dx, dy, wGomerX, wGomerY;
 /* Win32s has no GetTextExtent(); let's try GetTextExtentPoint() instead,
  * which needs a SIZE* parameter */
@@ -940,7 +940,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     hFont = (HFONT) SelectObject(hdc, pgauge->hFont);
 
     /* build up a string to blit out--ie the meaning of life: "42%" */
-    wsprintf(ach, "%3d%%", (WORD)((DWORD)iPos * 100 / iRange));
+    wsprintf(ach, _T("%3d%%"), (WORD)((DWORD)iPos * 100 / iRange));
 /* Win32s has no GetTextExtent(); let's try GetTextExtentPoint() instead */
 #if defined(__WIN32__)
     GetTextExtentPoint(hdc, ach, wGomerX = lstrlen(ach), &size);

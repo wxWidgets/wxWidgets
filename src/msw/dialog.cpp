@@ -122,13 +122,13 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // Allows creation of dialogs with & without captions under MSWindows,
     // resizeable or not (but a resizeable dialog always has caption -
     // otherwise it would look too strange)
-    const char *dlg;
+    const wxChar *dlg;
     if ( style & wxTHICK_FRAME )
-        dlg = "wxResizeableDialog";
+        dlg = _T("wxResizeableDialog");
     else if ( style & wxCAPTION )
-        dlg = "wxCaptionDialog";
+        dlg = _T("wxCaptionDialog");
     else
-        dlg = "wxNoCaptionDialog";
+        dlg = _T("wxNoCaptionDialog");
     MSWCreate(m_windowId, parent, NULL, this, NULL,
               x, y, width, height,
               0, // style is not used if we have dlg template
@@ -480,7 +480,7 @@ bool wxDialog::Show(bool show)
 
 void wxDialog::SetTitle(const wxString& title)
 {
-  SetWindowText((HWND) GetHWND(), (const char *)title);
+  SetWindowText((HWND) GetHWND(), title.c_str());
 }
 
 wxString wxDialog::GetTitle() const

@@ -57,9 +57,9 @@
 
 // windowsx.h and commctrl.h don't define those, so we do it here
 #define StatusBar_SetParts(h, n, w) SendMessage(h, SB_SETPARTS, (WPARAM)n, (LPARAM)w)
-#define StatusBar_SetText(h, n, t)  SendMessage(h, SB_SETTEXT, (WPARAM)n, (LPARAM)(LPCSTR)t)
+#define StatusBar_SetText(h, n, t)  SendMessage(h, SB_SETTEXT, (WPARAM)n, (LPARAM)(LPCTSTR)t)
 #define StatusBar_GetTextLen(h, n)  LOWORD(SendMessage(h, SB_GETTEXTLENGTH, (WPARAM)n, 0))
-#define StatusBar_GetText(h, n, s)  LOWORD(SendMessage(h, SB_GETTEXT, (WPARAM)n, (LPARAM)(LPSTR)s))
+#define StatusBar_GetText(h, n, s)  LOWORD(SendMessage(h, SB_GETTEXT, (WPARAM)n, (LPARAM)(LPTSTR)s))
 
 #define hwnd      ((HWND)m_hWnd)
 
@@ -97,11 +97,11 @@ bool wxStatusBar95::Create(wxWindow *parent, wxWindowID id, long style)
     wstyle |= SBARS_SIZEGRIP;
 
   m_hWnd = (WXHWND)CreateStatusWindow(wstyle,
-                                      "",
+                                      _T(""),
                                       (HWND)parent->GetHWND(),
                                       m_windowId);
   if ( m_hWnd == 0 ) {
-    wxLogSysError("can't create status bar window");
+    wxLogSysError(_T("can't create status bar window"));
     return FALSE;
   }
 
@@ -191,7 +191,7 @@ void wxStatusBar95::SetFieldsWidth()
   }
 
   if ( !StatusBar_SetParts(hwnd, m_nFields, pWidths) ) {
-    wxLogDebug("StatusBar_SetParts failed.");
+    wxLogDebug(_T("StatusBar_SetParts failed."));
   }
 
   delete [] pWidths;
@@ -200,7 +200,7 @@ void wxStatusBar95::SetFieldsWidth()
 void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 {
   if ( !StatusBar_SetText(hwnd, nField, strText) ) {
-    wxLogDebug("StatusBar_SetText failed");
+    wxLogDebug(_T("StatusBar_SetText failed"));
   }
 }
 
@@ -208,7 +208,7 @@ wxString wxStatusBar95::GetStatusText(int nField) const
 {
   wxASSERT( (nField > -1) && (nField < m_nFields) );
 
-  wxString str("");
+  wxString str(_T(""));
   int len = StatusBar_GetTextLen(hwnd, nField);
   if (len > 0)
   {

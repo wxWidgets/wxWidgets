@@ -106,7 +106,7 @@ static DWORD wxExecuteThread(wxExecuteData *data)
     }
 
     wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
-                  "process should have terminated" );
+                  _T("process should have terminated") );
 
     // send a message indicating process termination to the window
     SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
@@ -147,11 +147,11 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
     return 0;
 }
 
-extern char wxPanelClassName[];
+extern wxChar wxPanelClassName[];
 
 long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 {
-    wxCHECK_MSG( !!command, 0, "empty command in wxExecute" );
+    wxCHECK_MSG( !!command, 0, _T("empty command in wxExecute") );
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
     // the old code is disabled because we really need a process handle
@@ -223,7 +223,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 
     if ( ::CreateProcess(
                          NULL,       // application name (use only cmd line)
-                         (char *)command.c_str(),    // full command line
+                         (wxChar *)command.c_str(),  // full command line
                          NULL,       // security attributes: defaults for both
                          NULL,       //   the process and its main thread
                          FALSE,      // don't inherit handles
@@ -247,7 +247,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     // termination
     HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
-    wxASSERT_MSG( hwnd, "can't create a hidden window for wxExecute" );
+    wxASSERT_MSG( hwnd, _T("can't create a hidden window for wxExecute") );
 
     FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
                                                      wxGetInstance());
@@ -262,7 +262,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     data->state       = sync;
     if ( sync )
     {
-        wxASSERT_MSG( !handler, "wxProcess param ignored for sync execution" );
+        wxASSERT_MSG( !handler, _T("wxProcess param ignored for sync execution") );
 
         data->handler = NULL;
     }

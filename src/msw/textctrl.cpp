@@ -135,7 +135,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxTE_MULTILINE)
   {
     wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
-                  "wxTE_PROCESS_ENTER style is ignored for multiline controls" );
+                  _T("wxTE_PROCESS_ENTER style is ignored for multiline controls") );
 
     msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
     m_windowStyle |= wxTE_PROCESS_ENTER;
@@ -151,14 +151,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxTE_PASSWORD) // hidden input
     msStyle |= ES_PASSWORD;
 
-  const char *windowClass = "EDIT";
+  const wxChar *windowClass = _T("EDIT");
 
 #if wxUSE_RICHEDIT
   if ( m_windowStyle & wxTE_MULTILINE )
   {
     msStyle |= ES_AUTOVSCROLL;
     m_isRich = TRUE;
-    windowClass = "RichEdit" ;
+    windowClass = _T("RichEdit") ;
   }
   else
     m_isRich = FALSE;
@@ -172,7 +172,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_RICHEDIT
   if (m_windowStyle & wxSIMPLE_BORDER)
   {
-    windowClass = "EDIT";
+    windowClass = _T("EDIT");
     m_isRich = FALSE;
   }
 #endif
@@ -187,7 +187,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                         0, 0, 0, 0, (HWND) ((wxWindow*)parent)->GetHWND(), (HMENU)m_windowId,
                         wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create text ctrl" );
+  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create text ctrl") );
 
 #if wxUSE_CTL3D
   if ( want3D )
@@ -240,7 +240,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
   // retrieve the style to see whether this is an edit or richedit ctrl
 #if wxUSE_RICHEDIT
-  char buf[256];
+  wxChar buf[256];
 
 #ifndef __WIN32__
   GetClassName((HWND) hWnd, buf, 256);
@@ -259,7 +259,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
   wxString str(buf);
   str.UpperCase();
 
-  if (str == "EDIT")
+  if (str == _T("EDIT"))
     m_isRich = FALSE;
   else
     m_isRich = TRUE;
@@ -299,7 +299,7 @@ void wxTextCtrl::SetValue(const wxString& value)
   }
   if (singletons > 0)
   {
-    char *tmp = new char[len + singletons + 1];
+    wxChar *tmp = new wxChar[len + singletons + 1];
     int j = 0;
     for (i = 0; i < len; i ++)
     {
@@ -316,7 +316,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     delete[] tmp;
   }
   else
-    SetWindowText(GetHwnd(), (const char *)value);
+    SetWindowText(GetHwnd(), (const wxChar *)value);
 
   AdjustSpaceLimit();
 }
@@ -486,7 +486,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 
     // Now replace with 'value', by pasting.
-    wxSetClipboardData(wxDF_TEXT, (wxObject *) (const char *)value, 0, 0);
+    wxSetClipboardData(wxDF_TEXT, (wxObject *) (const wxChar *)value, 0, 0);
 
     // Paste into edit control
     SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);
@@ -543,7 +543,7 @@ bool wxTextCtrl::LoadFile(const wxString& file)
   Clear();
 
 //  ifstream input(WXSTRINGCAST file, ios::nocreate | ios::in);
-  ifstream input(WXSTRINGCAST file, ios::in);
+  ifstream input(MBSTRINGCAST file.mb_str(wxConvFile), ios::in);
 
   if (!input.bad())
   {
@@ -555,31 +555,37 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 
 #ifdef __SALFORDC__
       struct _stat stat_buf;
-      if (stat((char*) (const char*) file, &stat_buf) < 0)
+      if (stat(MBSTRINGCAST file.mb_str(wxConvFile), &stat_buf) < 0)
         return FALSE;
 #else
       struct stat stat_buf;
-      if (stat(file, &stat_buf) < 0)
+      if (stat(file.mb_str(wxConvFile), &stat_buf) < 0)
         return FALSE;
 #endif
 
-//      char *tmp_buffer = (char*)farmalloc(stat_buf.st_size+1);
+//      wxChar *tmp_buffer = (wxChar*)farmalloc(stat_buf.st_size+1);
       // This may need to be a bigger buffer than the file size suggests,
       // if it's a UNIX file. Give it an extra 1000 just in case.
-      char *tmp_buffer = (char*)farmalloc((size_t)(stat_buf.st_size+1+1000));
+      wxChar *tmp_buffer = (wxChar*)farmalloc((size_t)(stat_buf.st_size+1+1000));
+      char *read_buffer = new char[512];
       long no_lines = 0;
       long pos = 0;
       while (!input.eof() && input.peek() != EOF)
       {
-        input.getline(wxBuffer, 500);
-  int len = strlen(wxBuffer);
+        input.getline(read_buffer, 500);
+  int len = strlen(read_buffer);
   wxBuffer[len] = 13;
   wxBuffer[len+1] = 10;
   wxBuffer[len+2] = 0;
-  strcpy(tmp_buffer+pos, wxBuffer);
-  pos += strlen(wxBuffer);
+#if wxUSE_UNICODE
+  pos += wxConvCurrent->MB2WC(tmp_buffer+pos, read_buffer, (size_t)-1);
+#else
+  strcpy(tmp_buffer+pos, read_buffer);
+  pos += strlen(read_buffer);
+#endif
   no_lines++;
       }
+      delete[] read_buffer;
 
       SetWindowText(GetHwnd(), tmp_buffer);
       SendMessage(GetHwnd(), EM_SETMODIFY, FALSE, 0L);
@@ -599,15 +605,15 @@ bool wxTextCtrl::SaveFile(const wxString& file)
 {
     wxString theFile(file);
 
-    if (theFile == "")
+    if (theFile == _T(""))
         theFile = m_fileName;
 
-    if (theFile == "")
+    if (theFile == _T(""))
         return FALSE;
 
     m_fileName = theFile;
 
-    ofstream output((char*) (const char*) theFile);
+    ofstream output(MBSTRINGCAST theFile.mb_str(wxConvFile));
     if (output.bad())
         return FALSE;
 
@@ -664,7 +670,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    SetWindowText(GetHwnd(), "");
+    SetWindowText(GetHwnd(), _T(""));
 }
 
 bool wxTextCtrl::IsModified() const
@@ -1002,7 +1008,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
     wxString str;
-    str.Printf("%.2f", f);
+    str.Printf(_T("%.2f"), f);
     AppendText(str);
     return *this;
 }
@@ -1010,7 +1016,7 @@ wxTextCtrl& wxTextCtrl::operator<<(float f)
 wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
     wxString str;
-    str.Printf("%.2f", d);
+    str.Printf(_T("%.2f"), d);
     AppendText(str);
     return *this;
 }
@@ -1018,7 +1024,7 @@ wxTextCtrl& wxTextCtrl::operator<<(double d)
 wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
     wxString str;
-    str.Printf("%d", i);
+    str.Printf(_T("%d"), i);
     AppendText(str);
     return *this;
 }
@@ -1026,7 +1032,7 @@ wxTextCtrl& wxTextCtrl::operator<<(int i)
 wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
     wxString str;
-    str.Printf("%ld", i);
+    str.Printf(_T("%ld"), i);
     AppendText(str);
     return *this;
 }

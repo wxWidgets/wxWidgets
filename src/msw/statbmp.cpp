@@ -87,17 +87,17 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 #ifdef __WIN32__
     // create a static control with either SS_BITMAP or SS_ICON style depending
     // on what we have here
-    const char *classname = "STATIC";
+    const wxChar *classname = _T("STATIC");
     int winstyle = m_isIcon ? SS_ICON : SS_BITMAP;
 #else // Win16
-    const char *classname = "BUTTON";
+    const wxChar *classname = _T("BUTTON");
     int winstyle = BS_OWNERDRAW;
 #endif // Win32
 
     m_hWnd = (WXHWND)::CreateWindow
                        (
                         classname,
-                        "",
+                        _T(""),
                         winstyle | WS_CHILD | WS_VISIBLE,
                         0, 0, 0, 0,
                         (HWND)parent->GetHWND(),
@@ -106,7 +106,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                         NULL
                        );
 
-    wxCHECK_MSG( m_hWnd, FALSE, "Failed to create static bitmap" );
+    wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create static bitmap") );
 
     SetBitmap(bitmap);
 

@@ -58,8 +58,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   m_windowStyle = style;
 
   wxString Label = label;
-  if (Label == "")
-    Label = " "; // Apparently needed or checkbox won't show
+  if (Label == _T(""))
+    Label = _T(" "); // Apparently needed or checkbox won't show
 
 	if ( id == -1 )
   		m_windowId = NewControlId();
@@ -89,7 +89,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     msStyle |= WS_BORDER;
 */
 
-  m_hWnd = (WXHWND)CreateWindowEx(exStyle, "BUTTON", Label,
+  m_hWnd = (WXHWND)CreateWindowEx(exStyle, _T("BUTTON"), Label,
                                   msStyle,
                                   0, 0, 0, 0,
                                   (HWND)parent->GetHWND(), (HMENU)m_windowId,
@@ -245,7 +245,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
   checkHeight = -1 ;
   long msStyle = CHECK_FLAGS;
 
-  HWND wx_button = CreateWindowEx(MakeExtendedStyle(m_windowStyle), CHECK_CLASS, "toggle",
+  HWND wx_button = CreateWindowEx(MakeExtendedStyle(m_windowStyle), CHECK_CLASS, _T("toggle"),
                     msStyle,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);

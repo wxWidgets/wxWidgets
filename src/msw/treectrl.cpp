@@ -160,7 +160,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                        (
                         exStyle,
                         WC_TREEVIEW,
-                        "",
+                        _T(""),
                         wstyle,
                         pos.x, pos.y, size.x, size.y,
                         (HWND)parent->GetHWND(),
@@ -169,7 +169,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                         NULL
                        );
 
-    wxCHECK_MSG( m_hWnd, FALSE, "Failed to create tree ctrl" );
+    wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create tree ctrl") );
 
     if ( parent )
         parent->AddChild(this);
@@ -287,7 +287,7 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
 
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
-    char buf[512];  // the size is arbitrary...
+    wxChar buf[512];  // the size is arbitrary...
 
     wxTreeViewItem tvItem(item, TVIF_TEXT);
     tvItem.pszText = buf;
@@ -295,7 +295,7 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
     if ( !DoGetItem(&tvItem) )
     {
         // don't return some garbage which was on stack, but an empty string
-        buf[0] = '\0';
+        buf[0] = _T('\0');
     }
 
     return wxString(buf);
@@ -304,7 +304,7 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
     wxTreeViewItem tvItem(item, TVIF_TEXT);
-    tvItem.pszText = (char *)text.c_str();  // conversion is ok
+    tvItem.pszText = (wxChar *)text.c_str();  // conversion is ok
     DoSetItem(&tvItem);
 }
 
@@ -495,16 +495,16 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), "The item you call GetNextVisible() "
-                                   "for must be visible itself!");
+    wxASSERT_MSG( IsVisible(item), _T("The item you call GetNextVisible() "
+                                      "for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), "The item you call GetPrevVisible() "
-                                   "for must be visible itself!");
+    wxASSERT_MSG( IsVisible(item), _T("The item you call GetPrevVisible() "
+                                      "for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
@@ -533,7 +533,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     if ( !text.IsEmpty() )
     {
         mask |= TVIF_TEXT;
-        tvIns.item.pszText = (char *)text.c_str();  // cast is ok
+        tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok
     }
 
     if ( image != -1 )
@@ -668,7 +668,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   flag == (TVE_COLLAPSE | TVE_COLLAPSERESET) ||
                   flag == TVE_EXPAND   ||
                   flag == TVE_TOGGLE,
-                  "Unknown flag in wxTreeCtrl::DoExpand" );
+                  _T("Unknown flag in wxTreeCtrl::DoExpand") );
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
     // emulate them
@@ -691,7 +691,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
     else
     {
         // I wonder if it really ever happens...
-        wxLogDebug("TreeView_Expand: change didn't took place.");
+        wxLogDebug(_T("TreeView_Expand: change didn't took place."));
     }
 }
 
@@ -770,7 +770,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 
     HWND hWnd = (HWND) TreeView_EditLabel(wxhWnd, (HTREEITEM) (WXHTREEITEM) item);
 
-    wxCHECK_MSG( hWnd, NULL, "Can't edit tree ctrl label" );
+    wxCHECK_MSG( hWnd, NULL, _T("Can't edit tree ctrl label") );
 
     DeleteTextCtrl();
 
@@ -856,7 +856,7 @@ static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
 int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
                                const wxTreeItemId& item2)
 {
-    return strcmp(GetItemText(item1), GetItemText(item2));
+    return wxStrcmp(GetItemText(item1), GetItemText(item2));
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
@@ -995,8 +995,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
 
                     default:
-                        wxLogDebug("unexpected code %d in TVN_ITEMEXPAND "
-                                   "message", tv->action);
+                        wxLogDebug(_T("unexpected code %d in TVN_ITEMEXPAND "
+                                      "message"), tv->action);
                 }
 
                 bool ing = (hdr->code == TVN_ITEMEXPANDING);

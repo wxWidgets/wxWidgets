@@ -105,8 +105,8 @@ bool wxToolBar95::Create(wxWindow *parent,
   m_foregroundColour = *wxBLACK ;
 
   wxASSERT_MSG( (style & wxTB_VERTICAL) == 0,
-                "Sorry, wxToolBar95 under Windows 95 only "
-                "supports horizontal orientation." );
+                _T("Sorry, wxToolBar95 under Windows 95 only "
+                   "supports horizontal orientation.") );
 
   m_maxWidth = -1;
   m_maxHeight = -1;
@@ -161,7 +161,7 @@ bool wxToolBar95::Create(wxWindow *parent,
                      (
                       exStyle,                  // Extended styles.
                       TOOLBARCLASSNAME,         // Class name for the toolbar.
-                      "",                       // No default text.
+                      _T(""),                   // No default text.
                       msflags,                  // Styles
                       x, y, width, height,      // Standard toolbar size and position.
                       (HWND) parent->GetHWND(), // Parent window of the toolbar.
@@ -170,7 +170,7 @@ bool wxToolBar95::Create(wxWindow *parent,
                       NULL                      // No class data.
                      );
 
-  wxCHECK_MSG( hWndToolbar, FALSE, "Toolbar creation failed" );
+  wxCHECK_MSG( hWndToolbar, FALSE, _T("Toolbar creation failed") );
 
   // Toolbar-specific initialisation
   ::SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE,
@@ -252,7 +252,7 @@ bool wxToolBar95::CreateTools()
     replaceBitmap.nIDNew = (UINT) (HBITMAP) m_hBitmap;
     replaceBitmap.nButtons = noButtons;
     if (::SendMessage((HWND) GetHWND(), TB_REPLACEBITMAP, (WPARAM) 0, (LPARAM) &replaceBitmap) == -1)
-      wxFAIL_MSG("Could not add bitmap to toolbar");
+      wxFAIL_MSG(_T("Could not add bitmap to toolbar"));
 
     ::DeleteObject((HBITMAP) oldToolBarBitmap);
 
@@ -271,7 +271,7 @@ bool wxToolBar95::CreateTools()
     addBitmap.hInst = 0;
     addBitmap.nID = (UINT)m_hBitmap;
     if (::SendMessage((HWND) GetHWND(), TB_ADDBITMAP, (WPARAM) noButtons, (LPARAM) &addBitmap) == -1)
-      wxFAIL_MSG("Could not add bitmap to toolbar");
+      wxFAIL_MSG(_T("Could not add bitmap to toolbar"));
   }
 
   // Now add the buttons.
@@ -316,7 +316,7 @@ bool wxToolBar95::CreateTools()
 
   long rc = ::SendMessage((HWND) GetHWND(), TB_ADDBUTTONS, (WPARAM)i, (LPARAM)& buttons);
 
-  wxCHECK_MSG( rc, FALSE, "failed to add buttons to the toolbar" );
+  wxCHECK_MSG( rc, FALSE, _T("failed to add buttons to the toolbar") );
 
   (void)::SendMessage((HWND) GetHWND(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
 
@@ -373,7 +373,7 @@ bool wxToolBar95::MSWOnNotify(int WXUNUSED(idCtrl),
     {
         if ( hdr->code == TTN_NEEDTEXTA )
         {
-            ttText->lpszText = (char *)help.c_str();
+            ttText->lpszText = (wxChar *)help.c_str();
         }
 #if (_WIN32_IE >= 0x0300)
         else

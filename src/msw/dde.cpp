@@ -214,7 +214,7 @@ wxDDEServer::wxDDEServer(void)
 bool wxDDEServer::Create(const wxString& server_name)
 {
   m_serviceName = server_name;
-  HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)server_name, CP_WINANSI);
+  HSZ serviceName = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST server_name, CP_WINANSI);
 
   if (DdeNameService(DDEIdInst, serviceName, (HSZ) NULL, DNS_REGISTER) == 0)
   {
@@ -226,9 +226,9 @@ bool wxDDEServer::Create(const wxString& server_name)
 
 wxDDEServer::~wxDDEServer(void)
 {
-  if (m_serviceName != "")
+  if (m_serviceName != _T(""))
   {
-    HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)m_serviceName, CP_WINANSI);
+    HSZ serviceName = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST m_serviceName, CP_WINANSI);
     if (DdeNameService(DDEIdInst, serviceName, NULL, DNS_UNREGISTER) == 0)
     {
       DDEPrintError();
@@ -324,8 +324,8 @@ bool wxDDEClient::ValidHost(const wxString& /* host */)
 
 wxConnectionBase *wxDDEClient::MakeConnection(const wxString& /* host */, const wxString& server_name, const wxString& topic)
 {
-  HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)server_name, CP_WINANSI);
-  HSZ topic_atom = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)topic, CP_WINANSI);
+  HSZ serviceName = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST server_name, CP_WINANSI);
+  HSZ topic_atom = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST topic, CP_WINANSI);
 
   HCONV hConv = DdeConnect(DDEIdInst, serviceName, topic_atom, (PCONVCONTEXT)NULL);
   if (hConv == (HCONV) NULL)
@@ -439,11 +439,11 @@ bool wxDDEConnection::Disconnect(void)
   return (DdeDisconnect((HCONV) m_hConv) != 0);
 }
 
-bool wxDDEConnection::Execute(char *data, int size, wxIPCFormat format)
+bool wxDDEConnection::Execute(wxChar *data, int size, wxIPCFormat format)
 {
   DWORD result;
   if (size < 0)
-    size = strlen(data);
+    size = wxStrlen(data);
 
   size ++;
 
@@ -471,11 +471,11 @@ char *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat form
   else return NULL;
 }
 
-bool wxDDEConnection::Poke(const wxString& item, char *data, int size, wxIPCFormat format)
+bool wxDDEConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFormat format)
 {
   DWORD result;
   if (size < 0)
-    size = strlen(data);
+    size = wxStrlen(data);
 
   size ++;
 
@@ -503,10 +503,10 @@ bool wxDDEConnection::StopAdvise(const wxString& item)
 }
 
 // Calls that SERVER can make
-bool wxDDEConnection::Advise(const wxString& item, char *data, int size, wxIPCFormat format)
+bool wxDDEConnection::Advise(const wxString& item, wxChar *data, int size, wxIPCFormat format)
 {
   if (size < 0)
-    size = strlen(data);
+    size = wxStrlen(data);
 
   size ++;
 
@@ -541,11 +541,11 @@ DWORD /* lData2 */)
   {
     case XTYP_CONNECT:
     {
-      char topic_buf[100];
-      char server_buf[100];
-      DdeQueryString(DDEIdInst, hsz1, (LPSTR)topic_buf, sizeof(topic_buf),
+      wxChar topic_buf[100];
+      wxChar server_buf[100];
+      DdeQueryString(DDEIdInst, hsz1, (LPTSTR)topic_buf, WXSIZEOF(topic_buf),
                      CP_WINANSI);
-      DdeQueryString(DDEIdInst, hsz2, (LPSTR)server_buf, sizeof(topic_buf),
+      DdeQueryString(DDEIdInst, hsz2, (LPTSTR)server_buf, WXSIZEOF(topic_buf),
                      CP_WINANSI);
       wxDDEServer *server = DDEFindServer(server_buf);
       if (server)
@@ -612,8 +612,8 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        char item_name[200];
-        DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
+        wxChar item_name[200];
+        DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
 
         int user_size = -1;
@@ -636,8 +636,8 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        char item_name[200];
-        DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
+        wxChar item_name[200];
+        DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
@@ -653,8 +653,8 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        char item_name[200];
-        DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
+        wxChar item_name[200];
+        DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
 
         return (DDERETURN)connection->OnStartAdvise(connection->m_topicName, wxString(item_name));
@@ -668,8 +668,8 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        char item_name[200];
-        DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
+        wxChar item_name[200];
+        DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
         return (DDERETURN)connection->OnStopAdvise(connection->m_topicName, wxString(item_name));
       } else return (DDERETURN)0;
@@ -697,8 +697,8 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        char item_name[200];
-        DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
+        wxChar item_name[200];
+        DdeQueryString(DDEIdInst, hsz2, (LPTSTR)item_name, WXSIZEOF(item_name),
                      CP_WINANSI);
 
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
@@ -717,7 +717,7 @@ DWORD /* lData2 */)
 // Atom table stuff
 static HSZ DDEAddAtom(const wxString& string)
 {
-  HSZ atom = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)string, CP_WINANSI);
+  HSZ atom = DdeCreateStringHandle(DDEIdInst, WXSTRINGCAST string, CP_WINANSI);
   wxAtomTable.Append(string, (wxObject *)atom);
   return atom;
 }
@@ -736,68 +736,68 @@ static HSZ DDEGetAtom(const wxString& string)
 
 void DDEPrintError(void)
 {
-  char *err = NULL;
+  wxChar *err = NULL;
   switch (DdeGetLastError(DDEIdInst))
   {
     case DMLERR_ADVACKTIMEOUT:
-      err = "A request for a synchronous advise transaction has timed out.";
+      err = _T("A request for a synchronous advise transaction has timed out.");
       break;
     case DMLERR_BUSY:
-      err = "The response to the transaction caused the DDE_FBUSY bit to be set.";
+      err = _T("The response to the transaction caused the DDE_FBUSY bit to be set.");
       break;
     case DMLERR_DATAACKTIMEOUT:
-      err = "A request for a synchronous data transaction has timed out.";
+      err = _T("A request for a synchronous data transaction has timed out.");
       break;
     case DMLERR_DLL_NOT_INITIALIZED:
-      err = "A DDEML function was called without first calling the DdeInitialize function,\n\ror an invalid instance identifier\n\rwas passed to a DDEML function.";
+      err = _T("A DDEML function was called without first calling the DdeInitialize function,\n\ror an invalid instance identifier\n\rwas passed to a DDEML function.");
       break;
     case DMLERR_DLL_USAGE:
-      err = "An application initialized as APPCLASS_MONITOR has\n\rattempted to perform a DDE transaction,\n\ror an application initialized as APPCMD_CLIENTONLY has \n\rattempted to perform server transactions.";
+      err = _T("An application initialized as APPCLASS_MONITOR has\n\rattempted to perform a DDE transaction,\n\ror an application initialized as APPCMD_CLIENTONLY has \n\rattempted to perform server transactions.");
       break;
     case DMLERR_EXECACKTIMEOUT:
-      err = "A request for a synchronous execute transaction has timed out.";
+      err = _T("A request for a synchronous execute transaction has timed out.");
       break;
     case DMLERR_INVALIDPARAMETER:
-      err = "A parameter failed to be validated by the DDEML.";
+      err = _T("A parameter failed to be validated by the DDEML.");
       break;
     case DMLERR_LOW_MEMORY:
-      err = "A DDEML application has created a prolonged race condition.";
+      err = _T("A DDEML application has created a prolonged race condition.");
       break;
     case DMLERR_MEMORY_ERROR:
-      err = "A memory allocation failed.";
+      err = _T("A memory allocation failed.");
       break;
     case DMLERR_NO_CONV_ESTABLISHED:
-      err = "A client's attempt to establish a conversation has failed.";
+      err = _T("A client's attempt to establish a conversation has failed.");
       break;
     case DMLERR_NOTPROCESSED:
-      err = "A transaction failed.";
+      err = _T("A transaction failed.");
       break;
     case DMLERR_POKEACKTIMEOUT:
-      err = "A request for a synchronous poke transaction has timed out.";
+      err = _T("A request for a synchronous poke transaction has timed out.");
       break;
     case DMLERR_POSTMSG_FAILED:
-      err = "An internal call to the PostMessage function has failed. ";
+      err = _T("An internal call to the PostMessage function has failed. ");
       break;
     case DMLERR_REENTRANCY:
-      err = "Reentrancy problem.";
+      err = _T("Reentrancy problem.");
       break;
     case DMLERR_SERVER_DIED:
-      err = "A server-side transaction was attempted on a conversation\n\rthat was terminated by the client, or the server\n\rterminated before completing a transaction.";
+      err = _T("A server-side transaction was attempted on a conversation\n\rthat was terminated by the client, or the server\n\rterminated before completing a transaction.");
       break;
     case DMLERR_SYS_ERROR:
-      err = "An internal error has occurred in the DDEML.";
+      err = _T("An internal error has occurred in the DDEML.");
       break;
     case DMLERR_UNADVACKTIMEOUT:
-      err = "A request to end an advise transaction has timed out.";
+      err = _T("A request to end an advise transaction has timed out.");
       break;
     case DMLERR_UNFOUND_QUEUE_ID:
-      err = "An invalid transaction identifier was passed to a DDEML function.\n\rOnce the application has returned from an XTYP_XACT_COMPLETE callback,\n\rthe transaction identifier for that callback is no longer valid.";
+      err = _T("An invalid transaction identifier was passed to a DDEML function.\n\rOnce the application has returned from an XTYP_XACT_COMPLETE callback,\n\rthe transaction identifier for that callback is no longer valid.");
       break;
     default:
-      err = "Unrecognised error type.";
+      err = _T("Unrecognised error type.");
       break;
   }
-  MessageBox((HWND) NULL, (LPCSTR)err, "DDE Error", MB_OK | MB_ICONINFORMATION);
+  MessageBox((HWND) NULL, (LPCTSTR)err, _T("DDE Error"), MB_OK | MB_ICONINFORMATION);
 }
 
 #endif

@@ -199,7 +199,7 @@ void wxFillLogFont(LOGFONT *logFont, wxFont *font)
     logFont->lfClipPrecision = CLIP_DEFAULT_PRECIS;
     logFont->lfQuality = PROOF_QUALITY;
     logFont->lfPitchAndFamily = DEFAULT_PITCH | ff_family;
-    strcpy(logFont->lfFaceName, ff_face);
+    wxStrcpy(logFont->lfFaceName, ff_face);
 }
 
 wxFont wxCreateFontFromLogFont(LOGFONT *logFont) // , bool createNew)
@@ -209,7 +209,7 @@ wxFont wxCreateFontFromLogFont(LOGFONT *logFont) // , bool createNew)
   int fontWeight = wxNORMAL;
   int fontPoints = 10;
   bool fontUnderline = FALSE;
-  char *fontFace = NULL;
+  wxChar *fontFace = NULL;
 
 //  int lfFamily = logFont->lfPitchAndFamily & 0xF0;
   int lfFamily = logFont->lfPitchAndFamily;

@@ -57,8 +57,8 @@
 extern wxWindowList wxModelessWindows;      // from dialog.cpp
 extern wxMenu *wxCurrentPopupMenu;
 
-extern char wxMDIFrameClassName[];
-extern char wxMDIChildFrameClassName[];
+extern wxChar wxMDIFrameClassName[];
+extern wxChar wxMDIChildFrameClassName[];
 extern wxWindow *wxWndHook;                 // from window.cpp
 
 extern wxList *wxWinHandleList;
@@ -174,7 +174,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   int width = size.x;
   int height = size.y;
 
-  m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), "wxWindowMenu");
+  m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), _T("wxWindowMenu"));
 
   DWORD msflags = WS_OVERLAPPED;
   if (style & wxMINIMIZE_BOX)
@@ -1084,7 +1084,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exStyle,
-                        "MDICLIENT",
+                        _T("MDICLIENT"),
                         NULL,
                         msStyle,
                         0, 0, 0, 0,
@@ -1137,7 +1137,7 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
-    wxCHECK_RET( parent, "MDI client without parent frame? weird..." );
+    wxCHECK_RET( parent, _T("MDI client without parent frame? weird...") );
 
     ::DrawMenuBar(GetWinHwnd(parent));
 }
@@ -1150,11 +1150,11 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
     bool success = FALSE;
     for ( int i = 0; i < N; i++ )
     {
-        char buf[256];
+        wxChar buf[256];
         int chars = GetMenuString(hmenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION);
         if ( chars == 0 )
         {
-            wxLogLastError("GetMenuString");
+            wxLogLastError(_T("GetMenuString"));
 
             continue;
         }
@@ -1163,7 +1163,7 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
         {
             success = TRUE;
             ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                         (UINT)subMenu, "&Window");
+                         (UINT)subMenu, _T("&Window"));
             break;
         }
     }

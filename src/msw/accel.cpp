@@ -84,12 +84,12 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
     HACCEL hAccel =
 #if defined(__WIN32__) && !defined(__TWIN32__)
 #ifdef UNICODE
-        ::LoadAcceleratorsW(wxGetInstance(), (const char *)resource);
+        ::LoadAcceleratorsW(wxGetInstance(), (const wxChar *)resource);
 #else
         ::LoadAcceleratorsA(wxGetInstance(), (const char *)resource);
 #endif
 #else
-        ::LoadAccelerators(wxGetInstance(), (const char *)resource);
+        ::LoadAccelerators(wxGetInstance(), (const wxChar *)resource);
 #endif
     M_ACCELDATA->m_hAccel = hAccel;
     M_ACCELDATA->m_ok = (hAccel != 0);

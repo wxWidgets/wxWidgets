@@ -185,7 +185,7 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection(int nPage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("notebook page out of range") );
 
   ChangePage(m_nSelection, nPage);
 
@@ -204,20 +204,20 @@ void wxNotebook::AdvanceSelection(bool bForward)
 
 bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("notebook page out of range") );
 
   TC_ITEM tcItem;
   tcItem.mask = TCIF_TEXT;
-  tcItem.pszText = (char *)strText.c_str();
+  tcItem.pszText = (wxChar *)strText.c_str();
 
   return TabCtrl_SetItem(m_hwnd, nPage, &tcItem) != 0;
 }
 
 wxString wxNotebook::GetPageText(int nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), "", "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), _T(""), _T("notebook page out of range") );
 
-  char buf[256];
+  wxChar buf[256];
   TC_ITEM tcItem;
   tcItem.mask = TCIF_TEXT;
   tcItem.pszText = buf;
@@ -232,7 +232,7 @@ wxString wxNotebook::GetPageText(int nPage) const
 
 int wxNotebook::GetPageImage(int nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("notebook page out of range") );
 
   TC_ITEM tcItem;
   tcItem.mask = TCIF_IMAGE;
@@ -242,7 +242,7 @@ int wxNotebook::GetPageImage(int nPage) const
 
 bool wxNotebook::SetPageImage(int nPage, int nImage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("notebook page out of range") );
 
   TC_ITEM tcItem;
   tcItem.mask = TCIF_IMAGE;
@@ -272,7 +272,7 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 // remove one page from the notebook
 bool wxNotebook::DeletePage(int nPage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("notebook page out of range") );
 
   TabCtrl_DeleteItem(m_hwnd, nPage);
 
@@ -285,7 +285,7 @@ bool wxNotebook::DeletePage(int nPage)
 // remove one page from the notebook, without deleting
 bool wxNotebook::RemovePage(int nPage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, "notebook page out of range" );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("notebook page out of range") );
 
   TabCtrl_DeleteItem(m_hwnd, nPage);
 
@@ -343,13 +343,13 @@ bool wxNotebook::InsertPage(int nPage,
   if (!strText.IsEmpty())
   {
     tcItem.mask    |= TCIF_TEXT;
-    tcItem.pszText = (char *)strText.c_str();
+    tcItem.pszText = (wxChar *)strText.c_str();
   }
   else
-    tcItem.pszText = (char *) NULL;
+    tcItem.pszText = (wxChar *) NULL;
 
   if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
-    wxLogError("Can't create the notebook page '%s'.", strText.c_str());
+    wxLogError(_T("Can't create the notebook page '%s'."), strText.c_str());
     return FALSE;
   }
 

@@ -87,12 +87,12 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "COMBOBOX", NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, _T("COMBOBOX"), NULL,
                    msStyle,
                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                    wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create combobox" );
+  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create combobox") );
 
 /*
 #if wxUSE_CTL3D
@@ -123,7 +123,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
 void wxChoice::Append(const wxString& item)
 {
-  SendMessage((HWND) GetHWND(), CB_ADDSTRING, 0, (LONG)(const char *)item);
+  SendMessage((HWND) GetHWND(), CB_ADDSTRING, 0, (LONG)(const wxChar *)item);
 
   m_noStrings ++;
 }
@@ -166,7 +166,7 @@ int wxChoice::FindString(const wxString& s) const
   }
   return -1;
 #else
- int pos = (int)SendMessage((HWND) GetHWND(), CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)(LPSTR)(const char *)s);
+ int pos = (int)SendMessage((HWND) GetHWND(), CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)(LPSTR)(const wxChar *)s);
  if (pos == LB_ERR)
    return -1;
  else
@@ -327,7 +327,7 @@ wxString wxChoice::GetStringSelection (void) const
   if (sel > -1)
     return wxString(this->GetString (sel));
   else
-    return wxString("");
+    return wxString(_T(""));
 }
 
 bool wxChoice::SetStringSelection (const wxString& s)

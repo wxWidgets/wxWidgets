@@ -62,28 +62,28 @@ typedef unsigned char *RegString;
 static struct
 {
   HKEY        hkey;
-  const char *szName;
-  const char *szShortName;
+  const wxChar *szName;
+  const wxChar *szShortName;
 }
 aStdKeys[] = 
 { 
-  { HKEY_CLASSES_ROOT,      "HKEY_CLASSES_ROOT",      "HKCR" },
+  { HKEY_CLASSES_ROOT,      _T("HKEY_CLASSES_ROOT"),      _T("HKCR") },
 #ifdef  __WIN32__
-  { HKEY_CURRENT_USER,      "HKEY_CURRENT_USER",      "HKCU" },
-  { HKEY_LOCAL_MACHINE,     "HKEY_LOCAL_MACHINE",     "HKLM" },
-  { HKEY_USERS,             "HKEY_USERS",             "HKU"  }, // short name?
-  { HKEY_PERFORMANCE_DATA,  "HKEY_PERFORMANCE_DATA",  "HKPD" },
+  { HKEY_CURRENT_USER,      _T("HKEY_CURRENT_USER"),      _T("HKCU") },
+  { HKEY_LOCAL_MACHINE,     _T("HKEY_LOCAL_MACHINE"),     _T("HKLM") },
+  { HKEY_USERS,             _T("HKEY_USERS"),             _T("HKU")  }, // short name?
+  { HKEY_PERFORMANCE_DATA,  _T("HKEY_PERFORMANCE_DATA"),  _T("HKPD") },
 #if     WINVER >= 0x0400
-  { HKEY_CURRENT_CONFIG,    "HKEY_CURRENT_CONFIG",    "HKCC" },
+  { HKEY_CURRENT_CONFIG,    _T("HKEY_CURRENT_CONFIG"),    _T("HKCC") },
 #ifndef __GNUWIN32__
-  { HKEY_DYN_DATA,          "HKEY_DYN_DATA",          "HKDD" }, // short name?
+  { HKEY_DYN_DATA,          _T("HKEY_DYN_DATA"),          _T("HKDD") }, // short name?
 #endif  //GNUWIN32
 #endif  //WINVER >= 4.0
 #endif  //WIN32
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
-#define   REG_SEPARATOR     '\\'
+#define   REG_SEPARATOR     _T('\\')
 
 // useful for Windows programmers: makes somewhat more clear all these zeroes
 // being passed to Windows APIs
@@ -107,11 +107,11 @@ aStdKeys[] =
 static inline void RemoveTrailingSeparator(wxString& str);
 
 // returns TRUE if given registry key exists
-static bool KeyExists(WXHKEY hRootKey, const char *szKey);
+static bool KeyExists(WXHKEY hRootKey, const wxChar *szKey);
 
 // combines value and key name (uses static buffer!)
-static const char *GetFullName(const wxRegKey *pKey, 
-                               const char *szValue = NULL);
+static const wxChar *GetFullName(const wxRegKey *pKey, 
+                               const wxChar *szValue = NULL);
 
 // ============================================================================
 // implementation of wxRegKey class
@@ -125,18 +125,18 @@ const size_t wxRegKey::nStdKeys = WXSIZEOF(aStdKeys);
 
 // @@ should take a `StdKey key', but as it's often going to be used in loops
 //    it would require casts in user code.  
-const char *wxRegKey::GetStdKeyName(size_t key)
+const wxChar *wxRegKey::GetStdKeyName(size_t key)
 {
   // return empty string if key is invalid
-  wxCHECK_MSG( key < nStdKeys, "", "invalid key in wxRegKey::GetStdKeyName" );
+  wxCHECK_MSG( key < nStdKeys, _T(""), _T("invalid key in wxRegKey::GetStdKeyName") );
 
   return aStdKeys[key].szName;
 }
 
-const char *wxRegKey::GetStdKeyShortName(size_t key)
+const wxChar *wxRegKey::GetStdKeyShortName(size_t key)
 {
   // return empty string if key is invalid
-  wxCHECK( key < nStdKeys, "" );
+  wxCHECK( key < nStdKeys, _T("") );
 
   return aStdKeys[key].szShortName;
 }
@@ -156,7 +156,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
   }
 
   if ( ui == nStdKeys ) {
-    wxFAIL_MSG("invalid key prefix in wxRegKey::ExtractKeyName.");
+    wxFAIL_MSG(_T("invalid key prefix in wxRegKey::ExtractKeyName."));
 
     hRootKey = HKEY_CLASSES_ROOT;
   }
@@ -176,7 +176,7 @@ wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(WXHKEY hkey)
       return (StdKey)ui;
   }
   
-  wxFAIL_MSG("non root hkey passed to wxRegKey::GetStdKeyFromHkey.");
+  wxFAIL_MSG(_T("non root hkey passed to wxRegKey::GetStdKeyFromHkey."));
 
   return HKCR;
 }
@@ -472,7 +472,7 @@ bool wxRegKey::DeleteSelf()
   return TRUE;
 }
 
-bool wxRegKey::DeleteKey(const char *szKey)
+bool wxRegKey::DeleteKey(const wxChar *szKey)
 {
   if ( !Open() )
     return FALSE;
@@ -481,13 +481,13 @@ bool wxRegKey::DeleteKey(const char *szKey)
   return key.DeleteSelf();
 }
 
-bool wxRegKey::DeleteValue(const char *szValue)
+bool wxRegKey::DeleteValue(const wxChar *szValue)
 {
   if ( !Open() )
     return FALSE;
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
-    m_dwLastError = RegDeleteValue((HKEY) m_hKey, (char*) (const char*) szValue);
+    m_dwLastError = RegDeleteValue((HKEY) m_hKey, WXSTRINGCAST szValue);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't delete value '%s' from key '%s'"),
                     szValue, GetName().c_str());
@@ -514,14 +514,14 @@ bool wxRegKey::DeleteValue(const char *szValue)
 // ----------------------------------------------------------------------------
 
 // return TRUE if value exists
-bool wxRegKey::HasValue(const char *szValue) const
+bool wxRegKey::HasValue(const wxChar *szValue) const
 {
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
   
   #ifdef  __WIN32__
     if ( CONST_CAST Open() ) {
-      return RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
+      return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                              NULL, NULL, NULL) == ERROR_SUCCESS;
     }
     else
@@ -545,7 +545,7 @@ bool wxRegKey::HasSubkeys() const
 }
 
 // returns TRUE if given subkey exists
-bool wxRegKey::HasSubKey(const char *szKey) const
+bool wxRegKey::HasSubKey(const wxChar *szKey) const
 {
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
@@ -556,14 +556,14 @@ bool wxRegKey::HasSubKey(const char *szKey) const
     return FALSE;
 }
 
-wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue) const
+wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
 {
   #ifdef  __WIN32__
     if ( ! CONST_CAST Open() )
       return Type_None;
 
     DWORD dwType;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                                     &dwType, NULL, NULL);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
@@ -578,7 +578,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue) const
 }
 
 #ifdef  __WIN32__
-bool wxRegKey::SetValue(const char *szValue, long lValue)
+bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
 {
 #ifdef __TWIN32__
   wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
@@ -597,12 +597,12 @@ bool wxRegKey::SetValue(const char *szValue, long lValue)
 #endif
 }
 
-bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
+bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
 {
   if ( CONST_CAST Open() ) {
     DWORD dwType, dwSize = sizeof(DWORD);
     RegString pBuf = (RegString)plValue;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                                     &dwType, pBuf, &dwSize);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
@@ -612,7 +612,7 @@ bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
     else {
       // check that we read the value of right type
       wxASSERT_MSG( dwType == REG_DWORD, 
-                    "Type mismatch in wxRegKey::QueryValue()."  );
+                    _T("Type mismatch in wxRegKey::QueryValue().")  );
 
       return TRUE;
     }
@@ -623,23 +623,23 @@ bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
 
 #endif  //Win32
 
-bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
+bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
 {
   if ( CONST_CAST Open() ) {
     #ifdef  __WIN32__
       // first get the type and size of the data
       DWORD dwType, dwSize;
-      m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
+      m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                                       &dwType, NULL, &dwSize);
       if ( m_dwLastError == ERROR_SUCCESS ) {
         RegString pBuf = (RegString)strValue.GetWriteBuf(dwSize);
-        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, (char*) (const char*) szValue, RESERVED,
+        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                                         &dwType, pBuf, &dwSize);
         strValue.UngetWriteBuf();
         if ( m_dwLastError == ERROR_SUCCESS ) {
           // check that it was the right type
           wxASSERT_MSG( dwType == REG_SZ, 
-                        "Type mismatch in wxRegKey::QueryValue()." );
+                        _T("Type mismatch in wxRegKey::QueryValue().") );
 
           return TRUE;
         }
@@ -660,7 +660,7 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
   return FALSE;
 }
 
-bool wxRegKey::SetValue(const char *szValue, const wxString& strValue)
+bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
 #if defined( __WIN32__) && !defined(__TWIN32__)
@@ -715,7 +715,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
     return FALSE;
 
 #if defined( __WIN32__) && !defined(__TWIN32__)
-    char  szValueName[1024];                  // @@ use RegQueryInfoKey...
+    wxChar  szValueName[1024];                  // @@ use RegQueryInfoKey...
     DWORD dwValueLen = WXSIZEOF(szValueName);
 
     lIndex++;
@@ -768,7 +768,7 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
   if ( lIndex == -1 )
     return FALSE;
 
-  char szKeyName[_MAX_PATH + 1];
+  wxChar szKeyName[_MAX_PATH + 1];
   m_dwLastError = RegEnumKey((HKEY) m_hKey, lIndex++, szKeyName, WXSIZEOF(szKeyName));
 
   if ( m_dwLastError != ERROR_SUCCESS ) {
@@ -789,7 +789,7 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
 }
 
 // returns TRUE if the value contains a number (else it's some string)
-bool wxRegKey::IsNumericValue(const char *szValue) const
+bool wxRegKey::IsNumericValue(const wxChar *szValue) const
   { 
       ValueType type = GetValueType(szValue);
       switch ( type ) {
@@ -806,7 +806,7 @@ bool wxRegKey::IsNumericValue(const char *szValue) const
 // ============================================================================
 // implementation of global private functions
 // ============================================================================
-bool KeyExists(WXHKEY hRootKey, const char *szKey)
+bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
 {
   HKEY hkeyDummy;
   if ( RegOpenKey( (HKEY) hRootKey, szKey, &hkeyDummy) == ERROR_SUCCESS ) {
@@ -817,12 +817,12 @@ bool KeyExists(WXHKEY hRootKey, const char *szKey)
     return FALSE;
 }
 
-const char *GetFullName(const wxRegKey *pKey, const char *szValue)
+const wxChar *GetFullName(const wxRegKey *pKey, const wxChar *szValue)
 {
   static wxString s_str;
   s_str = pKey->GetName();
-  if ( !IsEmpty(szValue) )
-    s_str << "\\" << szValue;
+  if ( !wxIsEmpty(szValue) )
+    s_str << _T("\\") << szValue;
 
   return s_str.c_str();
 }

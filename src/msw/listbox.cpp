@@ -130,7 +130,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             event.m_commandInt = aSelections[0] ;
             event.m_clientData = GetClientData(event.m_commandInt);
             wxString str(GetString(event.m_commandInt));
-            if (str != "")
+            if (str != _T(""))
             {
 		event.m_commandString = str;
             }
@@ -229,13 +229,13 @@ bool wxListBox::Create(wxWindow *parent,
         wstyle |= WS_BORDER;
     }
 
-    m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "LISTBOX", NULL,
+    m_hWnd = (WXHWND)::CreateWindowEx(exStyle, _T("LISTBOX"), NULL,
             wstyle | WS_CHILD,
             0, 0, 0, 0,
             (HWND)parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL);
 
-    wxCHECK_MSG( m_hWnd, FALSE, "Failed to create listbox" );
+    wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create listbox") );
 
 #if wxUSE_CTL3D
     if (want3D)
@@ -284,7 +284,7 @@ void wxListBox::SetupColours()
 void wxListBox::SetFirstItem(int N)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::SetFirstItem" );
+                 _T("invalid index in wxListBox::SetFirstItem") );
 
     SendMessage(GetHwnd(),LB_SETTOPINDEX,(WPARAM)N,(LPARAM)0) ;
 }
@@ -300,7 +300,7 @@ void wxListBox::SetFirstItem(const wxString& s)
 void wxListBox::Delete(int N)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::Delete" );
+                 _T("invalid index in wxListBox::Delete") );
 
     SendMessage(GetHwnd(), LB_DELETESTRING, N, 0);
     m_noItems--;
@@ -334,7 +334,7 @@ void wxListBox::Append(const wxString& item, void *Client_data)
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
         // client data must be pointer to wxOwnerDrawn, otherwise we would crash
         // in OnMeasure/OnDraw.
-        wxFAIL_MSG("Can't use client data with owner-drawn listboxes");
+        wxFAIL_MSG(_T("Can't use client data with owner-drawn listboxes"));
     }
     else
 #endif
@@ -374,7 +374,7 @@ void wxListBox::Set(int n, const wxString *choices, void** clientData)
             ListBox_SetItemData(GetHwnd(), ui, pNewItem);
 
             wxASSERT_MSG(clientData[ui] == NULL,
-                    "Can't use client data with owner-drawn listboxes");
+                    _T("Can't use client data with owner-drawn listboxes"));
         }
     }
 #endif
@@ -412,7 +412,7 @@ void wxListBox::Clear()
 void wxListBox::SetSelection(int N, bool select)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::SetSelection" );
+                 _T("invalid index in wxListBox::SetSelection") );
 
     if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
         SendMessage(GetHwnd(), LB_SETSEL, select, N);
@@ -428,7 +428,7 @@ void wxListBox::SetSelection(int N, bool select)
 bool wxListBox::Selected(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
-                 "invalid index in wxListBox::Selected" );
+                 _T("invalid index in wxListBox::Selected") );
 
     return SendMessage(GetHwnd(), LB_GETSEL, N, 0) == 0 ? FALSE : TRUE;
 }
@@ -436,7 +436,7 @@ bool wxListBox::Selected(int N) const
 void wxListBox::Deselect(int N)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::Deselect" );
+                 _T("invalid index in wxListBox::Deselect") );
 
     if ((m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED))
         SendMessage(GetHwnd(), LB_SETSEL, FALSE, N);
@@ -445,18 +445,18 @@ void wxListBox::Deselect(int N)
 void *wxListBox::GetClientData(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, NULL,
-                 "invalid index in wxListBox::GetClientData" );
+                 _T("invalid index in wxListBox::GetClientData") );
 
-    return (char *)SendMessage(GetHwnd(), LB_GETITEMDATA, N, 0);
+    return (void *)SendMessage(GetHwnd(), LB_GETITEMDATA, N, 0);
 }
 
 void wxListBox::SetClientData(int N, void *Client_data)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::SetClientData" );
+                 _T("invalid index in wxListBox::SetClientData") );
 
     if ( ListBox_SetItemData(GetHwnd(), N, Client_data) == LB_ERR )
-        wxLogDebug("LB_SETITEMDATA failed");
+        wxLogDebug(_T("LB_SETITEMDATA failed"));
 }
 
 // Return number of selections and an array of selected integers
@@ -470,7 +470,7 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
         if (no_sel != 0) {
             int *selections = new int[no_sel];
             if ( ListBox_GetSelItems(GetHwnd(), no_sel, selections) == LB_ERR ) {
-                wxFAIL_MSG("This listbox can't have single-selection style!");
+                wxFAIL_MSG(_T("This listbox can't have single-selection style!"));
             }
 
             aSelections.Alloc(no_sel);
@@ -496,8 +496,8 @@ int wxListBox::GetSelection() const
     wxCHECK_MSG( !(m_windowStyle & wxLB_MULTIPLE) &&
                  !(m_windowStyle & wxLB_EXTENDED),
                  -1,
-                 "GetSelection() can't be used with multiple-selection "
-                 "listboxes, use GetSelections() instead." );
+                 _T("GetSelection() can't be used with multiple-selection "
+                    "listboxes, use GetSelections() instead.") );
 
     return ListBox_GetCurSel(GetHwnd());
 }
@@ -506,7 +506,7 @@ int wxListBox::GetSelection() const
 wxString wxListBox::GetString(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, "",
-                 "invalid index in wxListBox::GetClientData" );
+                 _T("invalid index in wxListBox::GetClientData") );
 
     int len = ListBox_GetTextLen(GetHwnd(), N);
 
@@ -585,7 +585,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         return;
     TEXTMETRIC lpTextMetric;
 
-    if (s != "")
+    if (s != _T(""))
     {
         int existingExtent = (int)SendMessage(GetHwnd(), LB_GETHORIZONTALEXTENT, 0, 0L);
         HDC dc = GetWindowDC(GetHwnd());
@@ -595,7 +595,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 
         GetTextMetrics(dc, &lpTextMetric);
         SIZE extentXY;
-        ::GetTextExtentPoint(dc, (LPSTR) (const char *)s, s.Length(), &extentXY);
+        ::GetTextExtentPoint(dc, (LPTSTR) (const wxChar *)s, s.Length(), &extentXY);
         int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
 
         if (oldFont)
@@ -621,7 +621,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
             int len = (int)SendMessage(GetHwnd(), LB_GETTEXT, i, (LONG)wxBuffer);
             wxBuffer[len] = 0;
             SIZE extentXY;
-            ::GetTextExtentPoint(dc, (LPSTR)wxBuffer, len, &extentXY);
+            ::GetTextExtentPoint(dc, (LPTSTR)wxBuffer, len, &extentXY);
             int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
             if (extentX > largestExtent)
                 largestExtent = extentX;
@@ -638,20 +638,20 @@ void
 wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 {
     wxCHECK_RET( pos >= 0 && pos <= m_noItems,
-                 "invalid index in wxListBox::InsertItems" );
+                 _T("invalid index in wxListBox::InsertItems") );
 
     int i;
     for (i = 0; i < nItems; i++)
         ListBox_InsertString(GetHwnd(), i + pos, items[i]);
     m_noItems += nItems;
 
-    SetHorizontalExtent("");
+    SetHorizontalExtent(_T(""));
 }
 
 void wxListBox::SetString(int N, const wxString& s)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::SetString" );
+                 _T("invalid index in wxListBox::SetString") );
 
     int sel = -1;
     if (!(m_windowStyle & wxLB_MULTIPLE) && !(m_windowStyle & wxLB_EXTENDED))
@@ -665,7 +665,7 @@ void wxListBox::SetString(int N, const wxString& s)
     if (N == (m_noItems - 1))
         newN = -1;
 
-    SendMessage(GetHwnd(), LB_INSERTSTRING, newN, (LPARAM) (const char *)s);
+    SendMessage(GetHwnd(), LB_INSERTSTRING, newN, (LPARAM) (const wxChar *)s);
     if (oldData)
         wxListBox::SetClientData(N, oldData);
 
@@ -779,7 +779,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
     wxDC dc;
-    dc.SetHDC((WXHDC)CreateIC("DISPLAY", NULL, NULL, 0));
+    dc.SetHDC((WXHDC)CreateIC(_T("DISPLAY"), NULL, NULL, 0));
     dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_ANSI_VAR_FONT));
 
     pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;

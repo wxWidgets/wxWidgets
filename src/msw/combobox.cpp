@@ -108,12 +108,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "COMBOBOX", NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, _T("COMBOBOX"), NULL,
                    msStyle,
                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                    wxGetInstance(), NULL);
 
-  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create combobox" );
+  wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create combobox") );
 
 /*
 #if wxUSE_CTL3D
@@ -164,7 +164,7 @@ void wxComboBox::SetValue(const wxString& value)
   }
   if (singletons > 0)
   {
-    char *tmp = new char[len + singletons + 1];
+    wxChar *tmp = new wxChar[len + singletons + 1];
     int j = 0;
     for (i = 0; i < len; i ++)
     {
@@ -181,7 +181,7 @@ void wxComboBox::SetValue(const wxString& value)
     delete[] tmp;
   }
   else
-    SetWindowText((HWND) GetHWND(), (const char *)value);
+    SetWindowText((HWND) GetHWND(), (const wxChar *)value);
 }
 
 // Clipboard operations
@@ -278,7 +278,7 @@ void wxComboBox::Replace(long from, long to, const wxString& value)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 
     // Now replace with 'value', by pasting.
-    wxSetClipboardData(wxDF_TEXT, (wxObject *)(const char *)value, 0, 0);
+    wxSetClipboardData(wxDF_TEXT, (wxObject *)(const wxChar *)value, 0, 0);
 
     // Paste into edit control
     SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);

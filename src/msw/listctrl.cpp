@@ -115,7 +115,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // Create the ListView control.
     m_hWnd = (WXHWND)CreateWindowEx(exStyle,
                                     WC_LISTVIEW,
-                                    "",
+                                    _T(""),
                                     wstyle,
                                     x, y, width, height,
                                     (HWND) parent->GetHWND(),
@@ -124,7 +124,7 @@ bool wxListCtrl::Create(wxWindow *parent,
                                     NULL);
 
     if ( !m_hWnd ) {
-        wxLogError("Can't create list control window.");
+        wxLogError(_T("Can't create list control window."));
 
         return FALSE;
     }
@@ -229,7 +229,7 @@ void wxListCtrl::RecreateWindow()
         WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
         HWND hWndListControl = CreateWindowEx(exStyle,
                 WC_LISTVIEW,
-                "",
+                _T(""),
                 style,
                 x, y, width, height,
                 (HWND) GetParent()->GetHWND(),
@@ -381,7 +381,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
         lvCol.mask |= LVCF_TEXT;
-        lvCol.pszText = new char[513];
+        lvCol.pszText = new wxChar[513];
         lvCol.cchTextMax = 512;
     }
 
@@ -503,7 +503,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if ( info.m_mask & wxLIST_MASK_TEXT )
     {
         lvItem.mask |= LVIF_TEXT;
-        lvItem.pszText = new char[513];
+        lvItem.pszText = new wxChar[513];
         lvItem.cchTextMax = 512;
     }
     else
@@ -1094,7 +1094,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
     }
     else
     {
-        wxLogDebug("Failed to insert the column '%s' into listview!",
+        wxLogDebug(_T("Failed to insert the column '%s' into listview!"),
                    lvCol.pszText);
     }
 
@@ -1297,7 +1297,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             if ( !event.m_item.m_text.IsNull() )
             {
                 info->item.pszText = AddPool(event.m_item.m_text);
-                info->item.cchTextMax = strlen(info->item.pszText) + 1;
+                info->item.cchTextMax = wxStrlen(info->item.pszText) + 1;
             }
         }
         //    wxConvertToMSWListItem(this, event.m_item, info->item);
@@ -1308,7 +1308,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return TRUE;
 }
 
-char *wxListCtrl::AddPool(const wxString& str)
+wxChar *wxListCtrl::AddPool(const wxString& str)
 {
     // Remove the first element if 3 strings exist
     if ( m_stringPool.Number() == 3 )
@@ -1317,8 +1317,8 @@ char *wxListCtrl::AddPool(const wxString& str)
         delete[] (char *)node->Data();
         delete node;
     }
-    wxNode *node = m_stringPool.Add((char *) (const char *)str);
-    return (char *)node->Data();
+    wxNode *node = m_stringPool.Add(WXSTRINGCAST str);
+    return (wxChar *)node->Data();
 }
 
 // List item structure
@@ -1356,7 +1356,7 @@ static void wxConvertFromMSWListItem(const wxListCtrl *ctrl, wxListItem& info, L
 
         if ( needText )
         {
-            lvItem.pszText = new char[513];
+            lvItem.pszText = new wxChar[513];
             lvItem.cchTextMax = 512;
         }
         //    lvItem.mask |= TVIF_HANDLE | TVIF_STATE | TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_CHILDREN | TVIF_PARAM ;
@@ -1467,7 +1467,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_
         }
         else
         {
-            lvItem.pszText = (char *) (const char *)info.m_text ;
+            lvItem.pszText = WXSTRINGCAST info.m_text ;
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.Length();
             else

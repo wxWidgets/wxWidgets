@@ -72,7 +72,7 @@ wxMetafile::wxMetafile(const wxString& file)
 
     M_METAFILEDATA->m_windowsMappingMode = wxMM_ANISOTROPIC;
     M_METAFILEDATA->m_metafile = 0;
-    if (!file.IsNull() && (file.Cmp("") == 0))
+    if (!file.IsNull() && (file.Cmp(_T("")) == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
 }
 
@@ -146,7 +146,7 @@ wxMetafileDC::wxMetafileDC(const wxString& file)
   if (!file.IsNull() && wxFileExists(file))
     wxRemoveFile(file);
 
-  if (!file.IsNull() && (file != ""))
+  if (!file.IsNull() && (file != _T("")))
     m_hDC = (WXHDC) CreateMetaFile(file);
   else
     m_hDC = (WXHDC) CreateMetaFile(NULL);
@@ -167,7 +167,7 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
   m_minY = 10000;
   m_maxX = -10000;
   m_maxY = -10000;
-  if (file != "" && wxFileExists(file)) wxRemoveFile(file);
+  if (file != _T("") && wxFileExists(file)) wxRemoveFile(file);
   m_hDC = (WXHDC) CreateMetaFile(file);
 
   m_ok = TRUE;
@@ -197,7 +197,7 @@ void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
 
   SIZE sizeRect;
   TEXTMETRIC tm;
-  GetTextExtentPoint(dc, (char *)(const char *) string, strlen((char *)(const char *) string), &sizeRect);
+  GetTextExtentPoint(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
   GetTextMetrics(dc, &tm);
 
   ReleaseDC(NULL, dc);
@@ -340,12 +340,12 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 	p < (WORD *)&pMFHead ->checksum; ++p)
        pMFHead ->checksum ^= *p;
 
-  FILE *fd = fopen((char *)(const char *)filename, "rb");
+  FILE *fd = fopen(filename.mb_str(wxConvFile), "rb");
   if (!fd) return FALSE;
   
-  char tempFileBuf[256];
-  wxGetTempFileName("mf", tempFileBuf);
-  FILE *fHandle = fopen(tempFileBuf, "wb");
+  wxChar tempFileBuf[256];
+  wxGetTempFileName(_T("mf"), tempFileBuf);
+  FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
   if (!fHandle)
     return FALSE;
   fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);

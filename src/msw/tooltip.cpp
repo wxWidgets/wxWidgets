@@ -111,7 +111,7 @@ static void SendTooltipMessageToAll(UINT msg, WPARAM wParam, LPARAM lParam)
             continue;
         }
 
-        wxASSERT_MSG( dialog || frame, "logic error" );
+        wxASSERT_MSG( dialog || frame, _T("logic error") );
 
         WXHWND hwndTT = frame ? frame->GetToolTipCtrl()
                               : dialog->GetToolTipCtrl();
@@ -173,7 +173,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
     }
 
     wxCHECK_MSG( frame || dialog, 0,
-                 "can't create tooltip control outside a frame or a dialog" );
+                 _T("can't create tooltip control outside a frame or a dialog") );
 
     HWND hwndTT = (HWND)(frame ? frame->GetToolTipCtrl()
                                : dialog->GetToolTipCtrl());
@@ -271,7 +271,7 @@ void wxToolTip::SetTip(const wxString& tip)
     {
         // update it immediately
         wxToolInfo ti(m_window);
-        ti.lpszText = (char *)m_text.c_str();
+        ti.lpszText = (wxChar *)m_text.c_str();
 
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
     }
