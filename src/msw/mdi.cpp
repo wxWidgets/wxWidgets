@@ -705,6 +705,12 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
+    DestroyChildren();
+
+    // already delete by DestroyChildren()
+    m_frameToolBar = NULL;
+    m_frameStatusBar = NULL;
+
     MSWDestroyWindow();
 }
 
