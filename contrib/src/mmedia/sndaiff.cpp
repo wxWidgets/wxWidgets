@@ -175,7 +175,7 @@ bool wxSoundAiff::PrepareToPlay()
     return TRUE;
 }
 
-bool wxSoundAiff::PrepareToRecord(wxUint32 time)
+bool wxSoundAiff::PrepareToRecord(wxUint32 WXUNUSED(time))
 {
     // TODO
     return FALSE;
@@ -187,7 +187,7 @@ bool wxSoundAiff::FinishRecording()
     return FALSE;
 }
 
-bool wxSoundAiff::RepositionStream(wxUint32 position)
+bool wxSoundAiff::RepositionStream(wxUint32 WXUNUSED(position))
 {
     // If the stream is not seekable "TellI() returns wxInvalidOffset" we cannot reposition stream
     if (m_base_offset == wxInvalidOffset)

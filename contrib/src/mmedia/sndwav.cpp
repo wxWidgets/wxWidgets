@@ -98,10 +98,10 @@ bool wxSoundWave::CanRead()
     return TRUE;
 }
 
-bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint32 len,
+bool wxSoundWave::HandleOutputPCM(wxDataInputStream& WXUNUSED(data), wxUint32 len,
                                   wxUint16 channels, 
-                                  wxUint32 sample_fq, wxUint32 byte_p_sec,
-                                  wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+                                  wxUint32 sample_fq, wxUint32 WXUNUSED(byte_p_sec),
+                                  wxUint16 WXUNUSED(byte_p_spl), wxUint16 bits_p_spl)
 {
     wxSoundFormatPcm sndformat;
     
@@ -121,8 +121,8 @@ bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint32 len,
 
 bool wxSoundWave::HandleOutputMSADPCM(wxDataInputStream& data, wxUint32 len,
                                       wxUint16 channels, 
-                                      wxUint32 sample_fq, wxUint32 byte_p_sec,
-                                      wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+                                      wxUint32 sample_fq, wxUint32 WXUNUSED(byte_p_sec),
+                                      wxUint16 WXUNUSED(byte_p_spl), wxUint16 WXUNUSED(bits_p_spl))
 {
     wxSoundFormatMSAdpcm sndformat;
     wxInt16 *coefs[2];
@@ -159,10 +159,10 @@ bool wxSoundWave::HandleOutputMSADPCM(wxDataInputStream& data, wxUint32 len,
     return TRUE;
 }
 
-bool wxSoundWave::HandleOutputG721(wxDataInputStream& data, wxUint32 len,
-                                   wxUint16 channels,
-                                   wxUint32 sample_fq, wxUint32 byte_p_sec,
-                                   wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+bool wxSoundWave::HandleOutputG721(wxDataInputStream& WXUNUSED(data), wxUint32 len,
+                                   wxUint16 WXUNUSED(channels),
+                                   wxUint32 sample_fq, wxUint32 WXUNUSED(byte_p_sec),
+                                   wxUint16 WXUNUSED(byte_p_spl), wxUint16 WXUNUSED(bits_p_spl))
 {
     wxSoundFormatG72X sndformat;
     
@@ -402,7 +402,7 @@ bool wxSoundWave::FinishRecording()
     return TRUE;
 }
 
-bool wxSoundWave::RepositionStream(wxUint32 position)
+bool wxSoundWave::RepositionStream(wxUint32 WXUNUSED(position))
 {
     if (m_base_offset == wxInvalidOffset)
         return FALSE;

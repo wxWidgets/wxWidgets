@@ -133,7 +133,7 @@ bool csApp::CreatePalette(wxFrame *parent)
   palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, _T("Pointer"));
   palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, TRUE, 0, -1, NULL, _T("Text"));
 
-  char** symbols = new char*[20];
+  wxChar** symbols = new wxChar*[20];
   int noSymbols = 0;
 
   symbols[noSymbols] = _T("Wide Rectangle");

@@ -124,7 +124,7 @@ wxSoundStreamWin::~wxSoundStreamWin()
 LRESULT APIENTRY _EXPORT 
 
  _wxSoundHandlerWndProc(HWND hWnd, UINT message,
-                 WPARAM wParam, LPARAM lParam)
+                 WPARAM wParam, LPARAM WXUNUSED(lParam))
 {
   wxSoundStreamWin *sndwin;
 
@@ -154,15 +154,13 @@ void wxSoundStreamWin::CreateSndWindow()
 {
   FARPROC proc = MakeProcInstance((FARPROC)_wxSoundHandlerWndProc,
                                   wxGetInstance());
-  int error;
-
   // NB: class name must be kept in sync with wxCanvasClassName in 
   // src/msw/app.cpp!
   m_internal->m_sndWin = ::CreateWindow(wxT("wxWindowClass"), NULL, 0,
 					0, 0, 0, 0, NULL, (HMENU) NULL,
                                         wxGetInstance(), NULL);
 
-  error = GetLastError();
+  GetLastError();
 
   ::SetWindowLong(m_internal->m_sndWin, GWL_WNDPROC, (LONG)proc);
 
@@ -661,7 +659,7 @@ wxSoundStream& wxSoundStreamWin::Read(void *buffer, wxUint32 len)
 // fragment finished. It reinitializes the parameters of the fragment and
 // sends an event to the clients.
 // -------------------------------------------------------------------------
-void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle, int flag)
+void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 WXUNUSED(dev_handle), int flag)
 {
     wxSoundInfoHeader *info;
     

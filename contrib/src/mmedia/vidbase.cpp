@@ -33,12 +33,12 @@ wxVideoBaseDriver::wxVideoBaseDriver()
   m_video_output = NULL;
 }
 
-wxVideoBaseDriver::wxVideoBaseDriver(wxInputStream& str)
+wxVideoBaseDriver::wxVideoBaseDriver(wxInputStream& WXUNUSED(str))
 {
   m_video_output = NULL;
 }
 
-wxVideoBaseDriver::wxVideoBaseDriver(const wxString& filename)
+wxVideoBaseDriver::wxVideoBaseDriver(const wxString& WXUNUSED(filename))
 {
   m_video_output = NULL;
 }

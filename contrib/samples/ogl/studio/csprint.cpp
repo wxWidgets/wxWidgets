@@ -190,8 +190,8 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
     {
       delete newBitmap;
       
-      char buf[200];
-      sprintf(buf, "Sorry, could not allocate clipboard bitmap (%dx%d)", (maxX+10), (maxY+10));
+      wxChar buf[200];
+      wxSprintf(buf, _T("Sorry, could not allocate clipboard bitmap (%dx%d)"), (maxX+10), (maxY+10));
       wxMessageBox(buf, _T("Clipboard copy problem"));
       return FALSE;
     }
