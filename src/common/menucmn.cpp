@@ -51,7 +51,8 @@ WX_DEFINE_LIST(wxMenuItemList);
 
 wxMenuItemBase::~wxMenuItemBase()
 {
-    delete m_subMenu;
+    if (m_subMenu)
+        delete m_subMenu;
 }
 
 #if wxUSE_ACCEL
@@ -128,7 +129,8 @@ void wxMenuBase::Init(long style)
 
 wxMenuBase::~wxMenuBase()
 {
-    // nothing to do, wxMenuItemList dtor will delete the menu items
+    // nothing to do, wxMenuItemList dtor will delete the menu items.
+       // Actually, in GTK, the submenus have to get deleted first.
 }
 
 // ----------------------------------------------------------------------------

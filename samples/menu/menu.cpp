@@ -391,9 +391,10 @@ void MyFrame::OnAppendMenuItem(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *menubar = GetMenuBar();
+    
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
-
-    menu->Append(Menu_Dummy_Last, "Dummy sub menu\tCtrl-F12",
+    
+    menu->Append(Menu_Dummy_Last, "Dummy sub menu\tCtrl-F2",
                  CreateDummyMenu());
 }
 

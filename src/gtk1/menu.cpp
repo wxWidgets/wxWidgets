@@ -757,11 +757,11 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
+   m_items.Clear();
+ 
    gtk_widget_destroy( m_menu );
 
    gtk_object_unref( GTK_OBJECT(m_factory) );
-
-   // the menu items are deleted by the base class dtor
 }
 
 bool wxMenu::DoAppend(wxMenuItem *mitem)
@@ -802,6 +802,7 @@ bool wxMenu::DoAppend(wxMenuItem *mitem)
         entry.callback = (GtkItemFactoryCallback) 0;
         entry.callback_action = 0;
         entry.item_type = "<Branch>";
+        entry.accelerator = (gchar*) NULL;
 
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
@@ -832,6 +833,7 @@ bool wxMenu::DoAppend(wxMenuItem *mitem)
             entry.item_type = "<CheckItem>";
         else
             entry.item_type = "<Item>";
+        entry.accelerator = (gchar*) NULL;
 
 #if wxUSE_ACCEL
         // due to an apparent bug in GTK+, we have to use a static buffer here -
