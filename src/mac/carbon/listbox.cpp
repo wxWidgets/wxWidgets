@@ -72,16 +72,19 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
                                      Cell cell, short dataOffset, short dataLength,
                                      ListHandle listHandle )
 {
+    wxListBox*          list;
+    list = (wxListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
+    if ( list == NULL )
+        return ;
+    
     GrafPtr savePort;
     GrafPtr grafPtr;
     RgnHandle savedClipRegion;
     SInt32 savedPenMode;
-    wxListBox*          list;
     GetPort(&savePort);
     SetPort((**listHandle).port);
     grafPtr = (**listHandle).port ;
     // typecast our refCon
-    list = (wxListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
     
     //  Calculate the cell rect.
     
@@ -313,6 +316,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 wxListBox::~wxListBox()
 {
     FreeData() ;
+    // avoid access during destruction
+    SetControlReference( (ControlHandle) m_macControl , NULL ) ;
     if ( m_macList )
     {
 #if !TARGET_CARBON
