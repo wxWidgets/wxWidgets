@@ -60,6 +60,7 @@ class wxDropTarget: public wxObject
     
     virtual void OnEnter() { }
     virtual void OnLeave() { }
+    virtual void OnMouseMove( long WXUNUSED(x), long WXUNUSED(y) ) { }
     virtual bool OnDrop( long x, long y, const void *data, size_t size ) = 0;
 
     // Override these to indicate what kind of data you support: 

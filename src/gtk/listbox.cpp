@@ -72,8 +72,25 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
     {
         wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
         event.SetEventObject( listbox );
-        event.SetInt( sel );
+	
+        wxArrayInt aSelections;
+        int count = listbox->GetSelections(aSelections);
+        if ( count > 0 )
+        {
+            event.m_commandInt = aSelections[0] ;
+            event.m_clientData = listbox->GetClientData( event.m_commandInt );
+            wxString str(listbox->GetString(event.m_commandInt));
+            if (str != "") event.m_commandString = copystring((char *)(const char *)str);
+        }
+        else
+        {
+            event.m_commandInt = -1 ;
+            event.m_commandString = copystring("") ;
+        }
+
         listbox->GetEventHandler()->ProcessEvent( event );
+	
+        if (event.m_commandString) delete[] event.m_commandString ;
     }
 
     return FALSE;

@@ -73,7 +73,7 @@ commands :	/* empty */
 	;
 
 command	:       WORD PERIOD
-			{process_command(proio_cons(make_word($1), NULL)); free($1);}
+			{process_command(proio_cons(wxmake_word($1), NULL)); free($1);}
         |       expr PERIOD
 			{process_command($1);}
 	|	error PERIOD
@@ -81,7 +81,7 @@ command	:       WORD PERIOD
 	;
 
 expr	:	WORD OPEN arglist CLOSE 
-			{$$ = proio_cons(make_word($1), $3); free($1);}
+			{$$ = proio_cons(wxmake_word($1), $3); free($1);}
 	|	OPEN_SQUARE CLOSE_SQUARE
                         {$$ = proio_cons(NULL, NULL);}
 	|	OPEN_SQUARE arglist CLOSE_SQUARE
@@ -98,24 +98,24 @@ arglist	:
 	;
 
 arg	:	WORD EQUALS arg1
-			{$$ = proio_cons(make_word("="), proio_cons(make_word($1), proio_cons($3, NULL)));
+			{$$ = proio_cons(wxmake_word("="), proio_cons(wxmake_word($1), proio_cons($3, NULL)));
                          free($1); }
 	|	arg1
 			{$$ = $1; }
 
 arg1	:	WORD
-			{$$ = make_word($1); free($1);}
+			{$$ = wxmake_word($1); free($1);}
 	|	STRING
-			{$$ = make_string($1); free($1);}
+			{$$ = wxmake_string($1); free($1);}
 	|	INTEGER
-			{$$ = make_integer($1); free($1);}
+			{$$ = wxmake_integer($1); free($1);}
 	|	INTEGER PERIOD INTEGER
-			{$$ = make_real($1, $3); free($1); free($3); }
+			{$$ = wxmake_real($1, $3); free($1); free($3); }
         |       INTEGER EXP INTEGER
-                         {$$ = make_exp($1, $3); free($1); free($3); }
+                         {$$ = wxmake_exp($1, $3); free($1); free($3); }
         |
               INTEGER PERIOD INTEGER EXP INTEGER
-                         {$$ = make_exp2($1, $3, $5); free($1); free($3);
+                         {$$ = wxmake_exp2($1, $3, $5); free($1); free($3);
                                                                   free($5); }
 
 	|	expr

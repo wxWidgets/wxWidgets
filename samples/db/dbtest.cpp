@@ -41,23 +41,22 @@
 #include "db.xpm"
 #endif
 
-#include <stdio.h>					// Included strictly for reading the text file with the database parameters
+#include <stdio.h>                  /* Included strictly for reading the text file with the database parameters */
 
-#include	<wx/db.h>					// Required in the file which will get the data source connection
-#include    <wx/dbtable.h>				// Has the wxTable object from which all data objects will inherit their data table functionality
+#include <wx/db.h>                  /* Required in the file which will get the data source connection */
+#include <wx/dbtable.h>             /* Has the wxTable object from which all data objects will inherit their data table functionality */
 
-extern DbList* WXDLLEXPORT PtrBegDbList;		// from db.cpp, used in getting back error results from db connections
+extern DbList* WXDLLEXPORT PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
-#include "dbtest.h"				// Header file for this demonstration program
-#include "listdb.h"					// Code to support the "Lookup" button on the editor dialog
+#include "dbtest.h"                 /* Header file for this demonstration program */
+#include "listdb.h"                 /* Code to support the "Lookup" button on the editor dialog */
 
 IMPLEMENT_APP(DatabaseDemoApp)
 
-extern char ListDB_Selection[];	// Used to return the first column value for the selected line from the listDB routines
-extern char ListDB_Selection2[]; // Used to return the second column value for the selected line from the listDB routines
+extern char ListDB_Selection[];	    /* Used to return the first column value for the selected line from the listDB routines */
+extern char ListDB_Selection2[];    /* Used to return the second column value for the selected line from the listDB routines */
 
-DatabaseDemoFrame	*DemoFrame;		// Pointer to the main frame
-
+DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
 
 /* Pointer to the main database connection used in the program.  This
  * pointer would normally be used for doing things as database lookups
@@ -79,8 +78,8 @@ DatabaseDemoFrame	*DemoFrame;		// Pointer to the main frame
  *		table object which will do a CommitTrans() or RollbackTrans() that a
  *		new wxDB object be created and used for it.
  */
+ 
 wxDB	*READONLY_DB;
-
 
 /*
  * This function will return the exact string(s) from the database engine
@@ -94,6 +93,7 @@ wxDB	*READONLY_DB;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
+ 
 char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 {
 	static wxString msg;
@@ -102,9 +102,7 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 
 	if (ErrFile || ErrLine)
 	{
-		msg += "\n";
-		msg.Append ('-',80);
-		msg += "\nFile: ";
+		msg += "File: ";
 		msg += ErrFile;
 		msg += "   Line: ";
 		tStr.Printf("%d",ErrLine);
@@ -112,12 +110,11 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 		msg += "\n";
 	}
 
-	msg.Append ('-',80);
-	msg.Append ("\nODBC ERRORS\n");
-	msg.Append ('-',80);
+	msg.Append ("\nODBC errors:\n");
 	msg += "\n";
-	// Scan through each database connection displaying
-	// any ODBC errors that have occured.
+	
+	/* Scan through each database connection displaying 
+	 * any ODBC errors that have occured. */
 	for (DbList *pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
 	{
 		// Skip over any free connections
@@ -544,8 +541,8 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 
 	// Build the dialog
 
-	wxStaticBox *FunctionGrp		= new wxStaticBox(this, EDITOR_DIALOG_FN_GROUP, "",  wxPoint(15, 1), wxSize(497,  69), 0, "FunctionGrp");
-	wxStaticBox *SearchGrp		= new wxStaticBox(this, EDITOR_DIALOG_SEARCH_GROUP, "", wxPoint(417, 1), wxSize(95, 242), 0, "SearchGrp");
+	(void)new wxStaticBox(this, EDITOR_DIALOG_FN_GROUP, "",  wxPoint(15, 1), wxSize(497,  69), 0, "FunctionGrp");
+	(void)new wxStaticBox(this, EDITOR_DIALOG_SEARCH_GROUP, "", wxPoint(417, 1), wxSize(95, 242), 0, "SearchGrp");
 
 	pCreateBtn		= new wxButton(this, EDITOR_DIALOG_CREATE, "&Create",  wxPoint(25,  21), wxSize(70, 35), 0, wxDefaultValidator, "CreateBtn");
 	pEditBtn			= new wxButton(this, EDITOR_DIALOG_EDIT, "&Edit",	wxPoint(102,  21), wxSize(70, 35), 0, wxDefaultValidator, "EditBtn");
@@ -622,7 +619,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 	// The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
 	// to achieve a single row (in this case the first name in alphabetical order).
 	
-	Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
+  	Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
 	
 	// NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
 	Contact->where = (char*) (const char*) Contact->whereStr;

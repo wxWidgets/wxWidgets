@@ -122,7 +122,7 @@ getinitfile(char* buf, int size)
         int     i, j;
         char*   ptr;
 
-        j = STRLEN("/iodbc.ini") + 1;
+        j = STRLEN("/odbc.ini") + 1;
 
         if( size < j )
         {
@@ -130,7 +130,7 @@ getinitfile(char* buf, int size)
         }
 
 #ifdef FIX_INI_FILE
-        sprintf( buf, "%s/iodbc.ini", DIR_INI_FILE );
+        sprintf( buf, "%s/odbc.ini", DIR_INI_FILE );
 #else
 #  ifdef OS2
         *buf = '\0';
@@ -151,7 +151,7 @@ getinitfile(char* buf, int size)
                 }
                 else
                 {
-                        strcpy( buf, "iodbc.ini" );
+                        strcpy( buf, "odbc.ini" );
                 }
 
         }
@@ -166,7 +166,7 @@ getinitfile(char* buf, int size)
                 return NULL;
         }
 
-        sprintf( buf + i, "/iodbc.ini");
+        sprintf( buf + i, "/odbc.ini");
 
         return buf;
 #    else
@@ -189,7 +189,7 @@ getinitfile(char* buf, int size)
                 return NULL;
         }
 
-        sprintf( buf, "%s%s", ptr, "/.iodbc.ini");
+        sprintf( buf, "%s%s", ptr, "/.odbc.ini");
         /* i.e. searching ~/.iodbc.ini */
 #    endif
 #  endif

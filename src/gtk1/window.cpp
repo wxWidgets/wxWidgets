@@ -1231,6 +1231,11 @@ static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
     gtk_widget_set_usize( GTK_WIDGET(child->m_widget),
                           child->m_width,
 			  child->m_height );
+			  
+    if (wxIS_KIND_OF(parent,wxFrame))
+    {
+        parent->m_sizeSet = FALSE;
+    }
 }
 
 //-----------------------------------------------------------------------------

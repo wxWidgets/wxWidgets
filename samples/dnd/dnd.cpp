@@ -145,7 +145,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
           m_strText("wxWindows drag & drop works :-)")
 
 {
-  SetBackgroundColour(* wxWHITE);
+//  SetBackgroundColour(* wxWHITE);
 
   // frame icon and status bar
   SetIcon(wxICON(mondrian));
@@ -185,7 +185,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
                                wxTE_MULTILINE | wxTE_READONLY |
-                               wxSUNKEN_BORDER| wxHSCROLL);
+                               wxSUNKEN_BORDER );
 
   // redirect log messages to the text window (don't forget to delete it!)
   m_pLog = new wxLogTextCtrl(m_ctrlLog);
@@ -237,7 +237,7 @@ void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
 
   wxPaintDC dc(this);
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL ) );
-  dc.DrawText( "Drag text from here!", 20, h-30 );
+  dc.DrawText( "Drag text from here!", 20, h-22 );
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& /* event */)

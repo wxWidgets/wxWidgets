@@ -397,7 +397,7 @@ yyreduce:
     {
 case 3:
 #line 68 "parser.y"
-{process_command(proio_cons(make_word(yyvsp[-1].s), NULL)); free(yyvsp[-1].s);}
+{process_command(proio_cons(wxmake_word(yyvsp[-1].s), NULL)); free(yyvsp[-1].s);}
 break;
 case 4:
 #line 70 "parser.y"
@@ -409,7 +409,7 @@ case 5:
 break;
 case 6:
 #line 76 "parser.y"
-{yyval.s = proio_cons(make_word(yyvsp[-3].s), yyvsp[-1].s); free(yyvsp[-3].s);}
+{yyval.s = proio_cons(wxmake_word(yyvsp[-3].s), yyvsp[-1].s); free(yyvsp[-3].s);}
 break;
 case 7:
 #line 78 "parser.y"
@@ -433,7 +433,7 @@ case 11:
 break;
 case 12:
 #line 93 "parser.y"
-{yyval.s = proio_cons(make_word("="), proio_cons(make_word(yyvsp[-2].s), proio_cons(yyvsp[0].s, NULL)));
+{yyval.s = proio_cons(wxmake_word("="), proio_cons(wxmake_word(yyvsp[-2].s), proio_cons(yyvsp[0].s, NULL)));
                          free(yyvsp[-2].s); }
 break;
 case 13:
@@ -442,27 +442,27 @@ case 13:
 break;
 case 14:
 #line 99 "parser.y"
-{yyval.s = make_word(yyvsp[0].s); free(yyvsp[0].s);}
+{yyval.s = wxmake_word(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 15:
 #line 101 "parser.y"
-{yyval.s = make_string(yyvsp[0].s); free(yyvsp[0].s);}
+{yyval.s = wxmake_string(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 16:
 #line 103 "parser.y"
-{yyval.s = make_integer(yyvsp[0].s); free(yyvsp[0].s);}
+{yyval.s = wxmake_integer(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 17:
 #line 105 "parser.y"
-{yyval.s = make_real(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
+{yyval.s = wxmake_real(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
 break;
 case 18:
 #line 107 "parser.y"
-{yyval.s = make_exp(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
+{yyval.s = wxmake_exp(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
 break;
 case 19:
 #line 110 "parser.y"
-{yyval.s = make_exp2(yyvsp[-4].s, yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-4].s); free(yyvsp[-2].s);
+{yyval.s = wxmake_exp2(yyvsp[-4].s, yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-4].s); free(yyvsp[-2].s);
                                                                   free(yyvsp[0].s); }
 break;
 case 20:

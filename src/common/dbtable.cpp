@@ -508,9 +508,9 @@ UWORD wxTable::GetRowNum(void)
 /********** wxTable::bindInsertParams() **********/
 bool wxTable::bindInsertParams(void)
 {
-	SWORD   fSqlType;
-	UDWORD  precision;
-	SWORD   scale;
+	SWORD   fSqlType = 0;
+	UDWORD  precision = 0;
+	SWORD   scale = 0;
 
 	// Bind each column (that can be inserted) of the table to a parameter marker
 	for (int i = 0; i < noCols; i++)
@@ -563,9 +563,9 @@ bool wxTable::bindInsertParams(void)
 /********** wxTable::bindUpdateParams() **********/
 bool wxTable::bindUpdateParams(void)
 {
-	SWORD   fSqlType;
-	UDWORD  precision;
-	SWORD   scale;
+	SWORD   fSqlType = 0;
+	UDWORD  precision = 0;
+	SWORD   scale = 0;
 	
 	// Bind each UPDATEABLE column of the table to a parameter marker
 	for (int i = 0, colNo = 1; i < noCols; i++)

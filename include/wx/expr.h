@@ -88,12 +88,12 @@
 #ifdef __cplusplus
 extern "C" {
 char *proio_cons(char *, char *);
-char * make_integer(char *);
-char * make_word(char *);
-char * make_string(char *);
-char * make_real(char *, char *);
-char * make_exp(char *, char *);
-char * make_exp2(char *, char *, char*);
+char * wxmake_integer(char *);
+char * wxmake_word(char *);
+char * wxmake_string(char *);
+char * wxmake_real(char *, char *);
+char * wxmake_exp(char *, char *);
+char * wxmake_exp2(char *, char *, char*);
 void add_expr(char *);
 void process_command(char *);
 void syntax_error(char *);
@@ -101,23 +101,23 @@ void syntax_error(char *);
 #else
 #if __BORLANDC__
 char *proio_cons(char *, char *);
-char * make_integer(char *);
-char * make_word(char *);
-char * make_string(char *);
-char * make_real(char *, char *);
-char * make_exp(char *, char *);
-char * make_exp2(char *, char *, char*);
+char * wxmake_integer(char *);
+char * wxmake_word(char *);
+char * wxmake_string(char *);
+char * wxmake_real(char *, char *);
+char * wxmake_exp(char *, char *);
+char * wxmake_exp2(char *, char *, char*);
 void add_expr(char *);
 void process_command(char *);
 void syntax_error(char *);
 #else
 char *proio_cons();
-char * make_integer();
-char * make_word();
-char * make_string();
-char * make_real();
-char * make_exp();
-char * make_exp2();
+char * wxmake_integer();
+char * wxmake_word();
+char * wxmake_string();
+char * wxmake_real();
+char * wxmake_exp();
+char * wxmake_exp2();
 
 void add_expr();
 void process_command();

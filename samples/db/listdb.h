@@ -23,7 +23,7 @@
 
 #include <wx/dbtable.h>
 
-const LOOKUP_COL_LEN = 250;
+const int LOOKUP_COL_LEN = 250;
 
 // Global database connection
 extern wxDB *READONLY_DB;

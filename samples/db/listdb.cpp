@@ -75,7 +75,7 @@ char ListDB_Selection[LOOKUP_COL_LEN+1];
 char ListDB_Selection2[LOOKUP_COL_LEN+1];
 
 // Constants
-const LISTDB_NO_SPACES_BETWEEN_COLS = 3;
+const int LISTDB_NO_SPACES_BETWEEN_COLS = 3;
 
 
 // Clookup constructor

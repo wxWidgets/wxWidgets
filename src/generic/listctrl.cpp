@@ -2049,155 +2049,160 @@ void wxListMainWindow::DeleteItem( long index )
 
 void wxListMainWindow::DeleteColumn( int col )
 {
-  wxCHECK_RET( col < (int)m_columns.GetCount(),
+    wxCHECK_RET( col < (int)m_columns.GetCount(),
                "attempting to delete inexistent column in wxListView" );
 
-  m_dirty = TRUE;
-  wxNode *node = m_columns.Nth( col );
-  if (node) m_columns.DeleteNode( node );
+    m_dirty = TRUE;
+    wxNode *node = m_columns.Nth( col );
+    if (node) m_columns.DeleteNode( node );
 }
 
 void wxListMainWindow::DeleteAllItems( void )
 {
-  m_dirty = TRUE;
-  m_current = (wxListLineData *) NULL;
-  wxNode *node = m_lines.First();
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    DeleteLine( line );
-    node = node->Next();
-  }
-  m_lines.Clear();
+    m_dirty = TRUE;
+    m_current = (wxListLineData *) NULL;
+    wxNode *node = m_lines.First();
+    while (node)
+    {
+        wxListLineData *line = (wxListLineData*)node->Data();
+        DeleteLine( line );
+        node = node->Next();
+    }
+    m_lines.Clear();
 }
 
 void wxListMainWindow::DeleteEverything( void )
 {
-  m_dirty = TRUE;
-  m_current = (wxListLineData *) NULL;
-  wxNode *node = m_lines.First();
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    DeleteLine( line );
-    node = node->Next();
-  }
-  m_lines.Clear();
-  m_current = (wxListLineData *) NULL;
-  m_columns.Clear();
+    m_dirty = TRUE;
+    m_current = (wxListLineData *) NULL;
+    wxNode *node = m_lines.First();
+    while (node)
+    {
+        wxListLineData *line = (wxListLineData*)node->Data();
+        DeleteLine( line );
+        node = node->Next();
+    }
+    m_lines.Clear();
+    m_current = (wxListLineData *) NULL;
+    m_columns.Clear();
 }
 
 void wxListMainWindow::EnsureVisible( long index )
 {
-  wxListLineData *oldCurrent = m_current;
-  m_current = (wxListLineData *) NULL;
-  int i = index;
-  wxNode *node = m_lines.Nth( i );
-  if (node) m_current = (wxListLineData*)node->Data();
-  if (m_current) MoveToFocus();
-  m_current = oldCurrent;
+    wxListLineData *oldCurrent = m_current;
+    m_current = (wxListLineData *) NULL;
+    int i = index;
+    wxNode *node = m_lines.Nth( i );
+    if (node) m_current = (wxListLineData*)node->Data();
+    if (m_current) MoveToFocus();
+    m_current = oldCurrent;
 }
 
 long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(partial) )
 {
-  long pos = start;
-  wxString tmp = str;
-  if (pos < 0) pos = 0;
-  wxNode *node = m_lines.Nth( pos );
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    wxString s = "";
-    line->GetText( 0, s );
-    if (s == tmp) return pos;
-    node = node->Next();
-    pos++;
-  }
-  return -1;
+    long pos = start;
+    wxString tmp = str;
+    if (pos < 0) pos = 0;
+    wxNode *node = m_lines.Nth( pos );
+    while (node)
+    {
+        wxListLineData *line = (wxListLineData*)node->Data();
+        wxString s = "";
+        line->GetText( 0, s );
+        if (s == tmp) return pos;
+        node = node->Next();
+        pos++;
+    }
+    return -1;
 }
 
 long wxListMainWindow::FindItem(long start, long data)
 {
-  long pos = start;
-  if (pos < 0) pos = 0;
-  wxNode *node = m_lines.Nth( pos );
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    wxListItem item;
-    line->GetItem( 0, item );
-    if (item.m_data == data) return pos;
-    node = node->Next();
-    pos++;
-  }
-  return -1;
+    long pos = start;
+    if (pos < 0) pos = 0;
+    wxNode *node = m_lines.Nth( pos );
+    while (node)
+    {
+        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListItem item;
+        line->GetItem( 0, item );
+        if (item.m_data == data) return pos;
+        node = node->Next();
+        pos++;
+    }
+    return -1;
 }
 
 long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
-  wxNode *node = m_lines.First();
-  int count = 0;
-  while (node)
-  {
-    wxListLineData *line = (wxListLineData*)node->Data();
-    long ret = line->IsHit( x, y );
-    if (ret & flags)
+    wxNode *node = m_lines.First();
+    int count = 0;
+    while (node)
     {
-      flags = ret;
-      return count;
+        wxListLineData *line = (wxListLineData*)node->Data();
+        long ret = line->IsHit( x, y );
+        if (ret & flags)
+        {
+            flags = ret;
+            return count;
+        }
+        node = node->Next();
+        count++;
     }
-    node = node->Next();
-    count++;
-  }
-  return -1;
+    return -1;
 }
 
 void wxListMainWindow::InsertItem( wxListItem &item )
 {
-  m_dirty = TRUE;
-  int mode = 0;
-  if (m_mode & wxLC_REPORT) mode = wxLC_REPORT;
-  else if (m_mode & wxLC_LIST) mode = wxLC_LIST;
-  else if (m_mode & wxLC_ICON) mode = wxLC_ICON;
-  else if (m_mode & wxLC_SMALL_ICON) mode = wxLC_ICON;  // no typo
-  wxListLineData *line = new wxListLineData( this, mode, m_hilightBrush );
-  if (m_mode & wxLC_REPORT)
-  {
-    line->InitItems( GetColumnCount() );
-    item.m_width = GetColumnWidth( 0 )-3;
-  }
-  else
-    line->InitItems( 1 );
-  line->SetItem( 0, item );
-  if ((item.m_itemId >= 0) && (item.m_itemId < (int)m_lines.GetCount()))
-  {
-     wxNode *node = m_lines.Nth( item.m_itemId );
-     if (node) m_lines.Insert( node, line );
-  }
-  else
-  {
-    m_lines.Append( line );
-  }
+    m_dirty = TRUE;
+    int mode = 0;
+    if (m_mode & wxLC_REPORT) mode = wxLC_REPORT;
+    else if (m_mode & wxLC_LIST) mode = wxLC_LIST;
+    else if (m_mode & wxLC_ICON) mode = wxLC_ICON;
+    else if (m_mode & wxLC_SMALL_ICON) mode = wxLC_ICON;  // no typo
+    
+    wxListLineData *line = new wxListLineData( this, mode, m_hilightBrush );
+    
+    if (m_mode & wxLC_REPORT)
+    {
+        line->InitItems( GetColumnCount() );
+        item.m_width = GetColumnWidth( 0 )-3;
+    }
+    else
+    {
+        line->InitItems( 1 );
+    }
+    
+    line->SetItem( 0, item );
+    if ((item.m_itemId >= 0) && (item.m_itemId < (int)m_lines.GetCount()))
+    {
+        wxNode *node = m_lines.Nth( item.m_itemId );
+        if (node) m_lines.Insert( node, line );
+    }
+    else
+    {
+        m_lines.Append( line );
+    }
 }
 
 void wxListMainWindow::InsertColumn( long col, wxListItem &item )
 {
-  m_dirty = TRUE;
-  if (m_mode & wxLC_REPORT)
-  {
-    if (item.m_width == wxLIST_AUTOSIZE_USEHEADER) item.m_width = GetTextLength( item.m_text );
-    wxListHeaderData *column = new wxListHeaderData( item );
-    if ((col >= 0) && (col < (int)m_columns.GetCount()))
+    m_dirty = TRUE;
+    if (m_mode & wxLC_REPORT)
     {
-      wxNode *node = m_columns.Nth( col );
-      if (node)
-        m_columns.Insert( node, column );
+        if (item.m_width == wxLIST_AUTOSIZE_USEHEADER) item.m_width = GetTextLength( item.m_text );
+        wxListHeaderData *column = new wxListHeaderData( item );
+        if ((col >= 0) && (col < (int)m_columns.GetCount()))
+        {
+            wxNode *node = m_columns.Nth( col );
+            if (node)
+                 m_columns.Insert( node, column );
+        }
+        else
+        {
+            m_columns.Append( column );
+        }
     }
-    else
-    {
-      m_columns.Append( column );
-    }
-  }
 }
 
 wxListCtrlCompare list_ctrl_compare_func_2;
@@ -2205,21 +2210,21 @@ long              list_ctrl_compare_data;
 
 int list_ctrl_compare_func_1( const void *arg1, const void *arg2 )
 {
-  wxListLineData *line1 = *((wxListLineData**)arg1);
-  wxListLineData *line2 = *((wxListLineData**)arg2);
-  wxListItem item;
-  line1->GetItem( 0, item );
-  long data1 = item.m_data;
-  line2->GetItem( 0, item );
-  long data2 = item.m_data;
-  return list_ctrl_compare_func_2( data1, data2, list_ctrl_compare_data );
+    wxListLineData *line1 = *((wxListLineData**)arg1);
+    wxListLineData *line2 = *((wxListLineData**)arg2);
+    wxListItem item;
+    line1->GetItem( 0, item );
+    long data1 = item.m_data;
+    line2->GetItem( 0, item );
+    long data2 = item.m_data;
+    return list_ctrl_compare_func_2( data1, data2, list_ctrl_compare_data );
 }
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 {
-  list_ctrl_compare_func_2 = fn;
-  list_ctrl_compare_data = data;
-  m_lines.Sort( list_ctrl_compare_func_1 );
+    list_ctrl_compare_func_2 = fn;
+    list_ctrl_compare_data = data;
+    m_lines.Sort( list_ctrl_compare_func_1 );
 }
 
 // -------------------------------------------------------------------------------------
@@ -2251,13 +2256,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 wxListEvent::wxListEvent( wxEventType commandType, int id ):
   wxNotifyEvent( commandType, id )
 {
-  m_code = 0;
-  m_itemIndex = 0;
-  m_oldItemIndex = 0;
-  m_col = 0;
-  m_cancelled = FALSE;
-  m_pointDrag.x = 0;
-  m_pointDrag.y = 0;
+    m_code = 0;
+    m_itemIndex = 0;
+    m_oldItemIndex = 0;
+    m_col = 0;
+    m_cancelled = FALSE;
+    m_pointDrag.x = 0;
+    m_pointDrag.y = 0;
 }
 
 // -------------------------------------------------------------------------------------
@@ -2273,11 +2278,11 @@ END_EVENT_TABLE()
 
 wxListCtrl::wxListCtrl(void)
 {
-  m_imageListNormal = (wxImageList *) NULL;
-  m_imageListSmall = (wxImageList *) NULL;
-  m_imageListState = (wxImageList *) NULL;
-  m_mainWin = (wxListMainWindow*) NULL;
-  m_headerWin = (wxListHeaderWindow*) NULL;
+    m_imageListNormal = (wxImageList *) NULL;
+    m_imageListSmall = (wxImageList *) NULL;
+    m_imageListState = (wxImageList *) NULL;
+    m_mainWin = (wxListMainWindow*) NULL;
+    m_headerWin = (wxListHeaderWindow*) NULL;
 }
 
 wxListCtrl::~wxListCtrl(void)
@@ -2289,124 +2294,126 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
       long style, const wxValidator &validator,
       const wxString &name )
 {
-  m_imageListNormal = (wxImageList *) NULL;
-  m_imageListSmall = (wxImageList *) NULL;
-  m_imageListState = (wxImageList *) NULL;
-  m_mainWin = (wxListMainWindow*) NULL;
-  m_headerWin = (wxListHeaderWindow*) NULL;
+    m_imageListNormal = (wxImageList *) NULL;
+    m_imageListSmall = (wxImageList *) NULL;
+    m_imageListState = (wxImageList *) NULL;
+    m_mainWin = (wxListMainWindow*) NULL;
+    m_headerWin = (wxListHeaderWindow*) NULL;
 
-  long s = style;
+    long s = style;
 
-  if ((s & wxLC_REPORT == 0) &&
-      (s & wxLC_LIST == 0) &&
-      (s & wxLC_ICON == 0))
-    s = s | wxLC_LIST;
+    if ((s & wxLC_REPORT == 0) &&
+        (s & wxLC_LIST == 0) &&
+        (s & wxLC_ICON == 0))
+    {
+        s = s | wxLC_LIST;
+    }
 
-  bool ret = wxControl::Create( parent, id, pos, size, s, name );
+    bool ret = wxControl::Create( parent, id, pos, size, s, name );
 
-  SetValidator( validator );
+    SetValidator( validator );
   
-  if (s & wxSUNKEN_BORDER) s -= wxSUNKEN_BORDER;
+    if (s & wxSUNKEN_BORDER) s -= wxSUNKEN_BORDER;
 
-  m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
+    m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
 
-  if (GetWindowStyleFlag() & wxLC_REPORT)
-    m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
-  else
-    m_headerWin = (wxListHeaderWindow *) NULL;
+    if (GetWindowStyleFlag() & wxLC_REPORT)
+        m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
+    else
+        m_headerWin = (wxListHeaderWindow *) NULL;
 
-  return ret;
+    return ret;
 }
 
 void wxListCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  // handled in OnIdle
+    /* handled in OnIdle */
 
-  if (m_mainWin) m_mainWin->m_dirty = TRUE;
+    if (m_mainWin) m_mainWin->m_dirty = TRUE;
 }
 
 void wxListCtrl::SetSingleStyle( long style, bool add )
 {
-  long flag = GetWindowStyleFlag();
+    long flag = GetWindowStyleFlag();
 
-  if (add)
-  {
-    if (style & wxLC_MASK_TYPE)  flag = flag & ~wxLC_MASK_TYPE;
-    if (style & wxLC_MASK_ALIGN) flag = flag & ~wxLC_MASK_ALIGN;
-    if (style & wxLC_MASK_SORT) flag = flag & ~wxLC_MASK_SORT;
-  }
+    if (add)
+    {
+        if (style & wxLC_MASK_TYPE)  flag = flag & ~wxLC_MASK_TYPE;
+        if (style & wxLC_MASK_ALIGN) flag = flag & ~wxLC_MASK_ALIGN;
+        if (style & wxLC_MASK_SORT) flag = flag & ~wxLC_MASK_SORT;
+    }
 
-  if (add)
-  {
-    flag |= style;
-  }
-  else
-  {
-    if (flag & style) flag -= style;
-  }
+    if (add)
+    {
+        flag |= style;
+    }
+    else
+    {
+        if (flag & style) flag -= style;
+    }
 
-  SetWindowStyleFlag( flag );
+    SetWindowStyleFlag( flag );
 }
 
 void wxListCtrl::SetWindowStyleFlag( long flag )
 {
-  m_mainWin->DeleteEverything();
+    m_mainWin->DeleteEverything();
 
-  int width = 0;
-  int height = 0;
-  GetClientSize( &width, &height );
+    int width = 0;
+    int height = 0;
+    GetClientSize( &width, &height );
 
-  m_mainWin->SetMode( flag );
+    m_mainWin->SetMode( flag );
 
-  if (flag & wxLC_REPORT)
-  {
-    if (!(GetWindowStyleFlag() & wxLC_REPORT))
+    if (flag & wxLC_REPORT)
     {
-//      m_mainWin->SetSize( 0, 24, width, height-24 );
-      if (!m_headerWin)
-      {
-        m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
-      }
-      else
-      {
-//        m_headerWin->SetSize( 0, 0, width, 23 );
-        m_headerWin->Show( TRUE );
-      }
+        if (!(GetWindowStyleFlag() & wxLC_REPORT))
+        {
+//          m_mainWin->SetSize( 0, 24, width, height-24 );
+            if (!m_headerWin)
+            {
+                m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
+            }
+            else
+            {
+//              m_headerWin->SetSize( 0, 0, width, 23 );
+                m_headerWin->Show( TRUE );
+            }
+        }
     }
-  }
-  else
-  {
-    if (GetWindowStyleFlag() & wxLC_REPORT)
+    else
     {
-//      m_mainWin->SetSize( 0, 0, width, height );
-      m_headerWin->Show( FALSE );
+        if (GetWindowStyleFlag() & wxLC_REPORT)
+        {
+//          m_mainWin->SetSize( 0, 0, width, height );
+            m_headerWin->Show( FALSE );
+        }
     }
-  }
 
-  wxWindow::SetWindowStyleFlag( flag );
+    wxWindow::SetWindowStyleFlag( flag );
 }
 
 bool wxListCtrl::GetColumn(int col, wxListItem &item) const
 {
-  m_mainWin->GetColumn( col, item );
-  return TRUE;
+    m_mainWin->GetColumn( col, item );
+    return TRUE;
 }
 
 bool wxListCtrl::SetColumn( int col, wxListItem& item )
 {
-  m_mainWin->SetColumn( col, item );
-  return TRUE;
+    m_mainWin->SetColumn( col, item );
+    return TRUE;
 }
 
 int wxListCtrl::GetColumnWidth( int col ) const
 {
-  return m_mainWin->GetColumnWidth( col );
+    return m_mainWin->GetColumnWidth( col );
 }
 
 bool wxListCtrl::SetColumnWidth( int col, int width )
 {
-  m_mainWin->SetColumnWidth( col, width );
-  return TRUE;
+    m_mainWin->SetColumnWidth( col, width );
+    return TRUE;
 }
 
 int wxListCtrl::GetCountPerPage(void) const
@@ -2422,129 +2429,128 @@ wxText& wxListCtrl::GetEditControl(void) const
 
 bool wxListCtrl::GetItem( wxListItem &info ) const
 {
-  m_mainWin->GetItem( info );
-  return TRUE;
+    m_mainWin->GetItem( info );
+    return TRUE;
 }
 
 bool wxListCtrl::SetItem( wxListItem &info )
 {
-  m_mainWin->SetItem( info );
-  return TRUE;
+    m_mainWin->SetItem( info );
+    return TRUE;
 }
 
 long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
 {
-  wxListItem info;
-  info.m_text = label;
-  info.m_mask = wxLIST_MASK_TEXT;
-  info.m_itemId = index;
-  info.m_col = col;
-  if ( imageId > -1 )
-  {
-    info.m_image = imageId;
-    info.m_mask |= wxLIST_MASK_IMAGE;
-  }
-;
-  m_mainWin->SetItem(info);
-  return TRUE;
+    wxListItem info;
+    info.m_text = label;
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = index;
+    info.m_col = col;
+    if ( imageId > -1 )
+    {
+        info.m_image = imageId;
+        info.m_mask |= wxLIST_MASK_IMAGE;
+    };
+    m_mainWin->SetItem(info);
+    return TRUE;
 }
 
 int wxListCtrl::GetItemState( long item, long stateMask ) const
 {
-  return m_mainWin->GetItemState( item, stateMask );
+    return m_mainWin->GetItemState( item, stateMask );
 }
 
 bool wxListCtrl::SetItemState( long item, long state, long stateMask )
 {
-  m_mainWin->SetItemState( item, state, stateMask );
-  return TRUE;
+    m_mainWin->SetItemState( item, state, stateMask );
+    return TRUE;
 }
 
 bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
-  wxListItem info;
-  info.m_image = image;
-  info.m_mask = wxLIST_MASK_IMAGE;
-  info.m_itemId = item;
-  m_mainWin->SetItem( info );
-  return TRUE;
+    wxListItem info;
+    info.m_image = image;
+    info.m_mask = wxLIST_MASK_IMAGE;
+    info.m_itemId = item;
+    m_mainWin->SetItem( info );
+    return TRUE;
 }
 
 wxString wxListCtrl::GetItemText( long item ) const
 {
-  wxListItem info;
-  info.m_itemId = item;
-  m_mainWin->GetItem( info );
-  return info.m_text;
+    wxListItem info;
+    info.m_itemId = item;
+    m_mainWin->GetItem( info );
+    return info.m_text;
 }
 
 void wxListCtrl::SetItemText( long item, const wxString &str )
 {
-  wxListItem info;
-  info.m_mask = wxLIST_MASK_TEXT;
-  info.m_itemId = item;
-  info.m_text = str;
-  m_mainWin->SetItem( info );
+    wxListItem info;
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = item;
+    info.m_text = str;
+    m_mainWin->SetItem( info );
 }
 
 long wxListCtrl::GetItemData( long item ) const
 {
-  wxListItem info;
-  info.m_itemId = item;
-  m_mainWin->GetItem( info );
-  return info.m_data;
+    wxListItem info;
+    info.m_itemId = item;
+    m_mainWin->GetItem( info );
+    return info.m_data;
 }
 
 bool wxListCtrl::SetItemData( long item, long data )
 {
-  wxListItem info;
-  info.m_mask = wxLIST_MASK_DATA;
-  info.m_itemId = item;
-  info.m_data = data;
-  m_mainWin->SetItem( info );
-  return TRUE;
+    wxListItem info;
+    info.m_mask = wxLIST_MASK_DATA;
+    info.m_itemId = item;
+    info.m_data = data;
+    m_mainWin->SetItem( info );
+    return TRUE;
 }
 
 bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) ) const
 {
-  m_mainWin->GetItemRect( item, rect );
-  return TRUE;
+    m_mainWin->GetItemRect( item, rect );
+    return TRUE;
 }
 
 bool wxListCtrl::GetItemPosition( long item, wxPoint& pos ) const
 {
-  m_mainWin->GetItemPosition( item, pos );
-  return TRUE;
+    m_mainWin->GetItemPosition( item, pos );
+    return TRUE;
 }
 
 bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
 {
-  return 0;
+    return 0;
 }
 
 int wxListCtrl::GetItemCount(void) const
 {
-  return m_mainWin->GetItemCount();
+    return m_mainWin->GetItemCount();
 }
 
 int wxListCtrl::GetColumnCount(void) const
 {
-  return m_mainWin->GetColumnCount();
+    return m_mainWin->GetColumnCount();
 }
 
 void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
 {
-  m_mainWin->SetItemSpacing( spacing, isSmall );
+    m_mainWin->SetItemSpacing( spacing, isSmall );
 }
 
 int wxListCtrl::GetItemSpacing( bool isSmall ) const
 {
-  return m_mainWin->GetItemSpacing( isSmall );
+    return m_mainWin->GetItemSpacing( isSmall );
 }
 
 int wxListCtrl::GetSelectedItemCount(void) const
 {
-  return m_mainWin->GetSelectedItemCount();
+    return m_mainWin->GetSelectedItemCount();
 }
 
 /*
@@ -2559,51 +2565,51 @@ void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 
 long wxListCtrl::GetTopItem(void) const
 {
-  return 0;
+    return 0;
 }
 
 long wxListCtrl::GetNextItem( long item, int geom, int state ) const
 {
-  return m_mainWin->GetNextItem( item, geom, state );
+    return m_mainWin->GetNextItem( item, geom, state );
 }
 
 wxImageList *wxListCtrl::GetImageList(int which) const
 {
-  if (which == wxIMAGE_LIST_NORMAL)
-  {
-    return m_imageListNormal;
-  }
-  else if (which == wxIMAGE_LIST_SMALL)
-  {
-    return m_imageListSmall;
-  }
-  else if (which == wxIMAGE_LIST_STATE)
-  {
-    return m_imageListState;
-  }
-  return (wxImageList *) NULL;
+    if (which == wxIMAGE_LIST_NORMAL)
+    {
+        return m_imageListNormal;
+    }
+    else if (which == wxIMAGE_LIST_SMALL)
+    {
+        return m_imageListSmall;
+    }
+    else if (which == wxIMAGE_LIST_STATE)
+    {
+        return m_imageListState;
+    }
+    return (wxImageList *) NULL;
 }
 
 void wxListCtrl::SetImageList( wxImageList *imageList, int which )
 {
-  m_mainWin->SetImageList( imageList, which );
+    m_mainWin->SetImageList( imageList, which );
 }
 
 bool wxListCtrl::Arrange( int WXUNUSED(flag) )
 {
-  return 0;
+    return 0;
 }
 
 bool wxListCtrl::DeleteItem( long item )
 {
-  m_mainWin->DeleteItem( item );
-  return TRUE;
+    m_mainWin->DeleteItem( item );
+    return TRUE;
 }
 
 bool wxListCtrl::DeleteAllItems(void)
 {
-  m_mainWin->DeleteAllItems();
-  return TRUE;
+    m_mainWin->DeleteAllItems();
+    return TRUE;
 }
 
 bool wxListCtrl::DeleteAllColumns()
@@ -2611,18 +2617,18 @@ bool wxListCtrl::DeleteAllColumns()
     for ( size_t n = 0; n < m_mainWin->m_columns.GetCount(); n++ )
         DeleteColumn(n);
 	
-   return TRUE;
+    return TRUE;
 }
 
 void wxListCtrl::ClearAll()
 {
-  m_mainWin->DeleteEverything();
+    m_mainWin->DeleteEverything();
 }
 
 bool wxListCtrl::DeleteColumn( int col )
 {
-  m_mainWin->DeleteColumn( col );
-  return TRUE;
+    m_mainWin->DeleteColumn( col );
+    return TRUE;
 }
 
 /*
@@ -2633,35 +2639,35 @@ wxText& wxListCtrl::Edit( long WXUNUSED(item ) )
 
 bool wxListCtrl::EnsureVisible( long item )
 {
-  m_mainWin->EnsureVisible( item );
-  return TRUE;
+    m_mainWin->EnsureVisible( item );
+    return TRUE;
 }
 
 long wxListCtrl::FindItem( long start, const wxString& str,  bool partial )
 {
-  return m_mainWin->FindItem( start, str, partial );
+    return m_mainWin->FindItem( start, str, partial );
 }
 
 long wxListCtrl::FindItem( long start, long data )
 {
-  return m_mainWin->FindItem( start, data );
+    return m_mainWin->FindItem( start, data );
 }
 
 long wxListCtrl::FindItem( long WXUNUSED(start), const wxPoint& WXUNUSED(pt),
                            int WXUNUSED(direction))
 {
-  return 0;
+    return 0;
 }
 
 long wxListCtrl::HitTest( const wxPoint &point, int &flags )
 {
-  return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
+    return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
 
 long wxListCtrl::InsertItem( wxListItem& info )
 {
-  m_mainWin->InsertItem( info );
-  return 0;
+    m_mainWin->InsertItem( info );
+    return 0;
 }
 
 long wxListCtrl::InsertItem( long index, const wxString &label )

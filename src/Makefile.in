@@ -158,7 +158,6 @@ install::
 	  $(INSTALL) -d $(libdir)/wx/include/wx/gtk ; \
 	  mv $(includedir)/wx/gtk/setup.h $(libdir)/wx/include/wx/gtk/setup.h ; \
 	fi
-	@echo "  Moving setup.h to library path"
 	@if test "@TOOLKIT@" = "MOTIF" ; then \
 	  cd $(WXBASEDIR)/src ; \
 	  $(INSTALL) -d $(libdir)/wx/include/wx/motif ; \

@@ -542,7 +542,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         }
     }
 
-    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
+    m_sizeSet = FALSE;
 }
 
 wxMenuBar *wxFrame::GetMenuBar() const
@@ -560,7 +560,7 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
 
     GetChildren().DeleteObject( m_frameToolBar );
 
-    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
+    m_sizeSet = FALSE;
 
     return m_frameToolBar;
 }
@@ -583,7 +583,7 @@ wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, co
 
     m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
 
-    if (m_sizeSet) GtkOnSize( m_x, m_y, m_width, m_height );
+    m_sizeSet = FALSE;
 
     return m_frameStatusBar;
 }

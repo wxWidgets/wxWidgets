@@ -323,7 +323,7 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *WXUNUSED(parent)
     c->bottom.SameAs     (m_editorFrame, wxBottom, 0);
     c->width.Unconstrained();
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
-    c->height.Absolute(105);
+    c->height.Absolute(120);
 #else
     c->height.Absolute(60);
 #endif

@@ -62,6 +62,7 @@ class MyPanel: public wxPanel
 
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
+    void OnListBoxDoubleClick( wxCommandEvent &event );
     void OnListBoxButtons( wxCommandEvent &event );
     void OnChoice( wxCommandEvent &event );
     void OnChoiceButtons( wxCommandEvent &event );
@@ -209,6 +210,7 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                         MyPanel::OnSize)
   EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)
   EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
+  EVT_LISTBOX_DCLICK(ID_LISTBOX,          MyPanel::OnListBoxDoubleClick)
   EVT_BUTTON    (ID_LISTBOX_SEL_NUM,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_SEL_STR,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_CLEAR,        MyPanel::OnListBoxButtons)
@@ -247,10 +249,10 @@ END_EVENT_TABLE()
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
-  SetBackgroundColour("cadet blue");
+//  SetBackgroundColour("cadet blue");
 
   m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
-  m_text->SetBackgroundColour("wheat");
+//  m_text->SetBackgroundColour("wheat");
 
   m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
 
@@ -319,30 +321,30 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
   wxButton *button = (wxButton*)NULL;
 
-  m_notebook->SetBackgroundColour("cadet blue");
+//  m_notebook->SetBackgroundColour("cadet blue");
 
   wxPanel *panel = (wxPanel*) NULL;
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
-  m_listbox->SetBackgroundColour("wheat");
+//  m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
-  button->SetForegroundColour( "red" );
+//  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
   m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
 
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
-  m_choice->SetBackgroundColour("wheat");
+//  m_choice->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -353,10 +355,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
 
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 5, choices );
-  m_combo->SetBackgroundColour("wheat");
+//  m_combo->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -367,11 +369,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
 
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   wxTextCtrl *tc = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
   (*tc) << " More text.";
-  tc->SetBackgroundColour("wheat");
+//  tc->SetBackgroundColour("wheat");
   m_multitext = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
   (*m_multitext) << " More text.";
   m_multitext->SetBackgroundColour("wheat");
@@ -387,16 +389,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   };
 
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
-  m_radio->SetBackgroundColour("wheat");
+//  m_radio->SetBackgroundColour("wheat");
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_SPECIFY_COLS );
-  m_radio->SetBackgroundColour("wheat");
+//  m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
   m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
-  m_fontButton->SetForegroundColour("blue");
+//  m_fontButton->SetForegroundColour("blue");
   (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(340,80), wxSize(140,30) );
   (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(340,130), wxSize(140,30) );
   wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxSize(110,30) );
@@ -405,13 +407,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 
   panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
+//  panel->SetBackgroundColour("cadet blue");
+//  panel->SetForegroundColour("blue");
   (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(180,130) );
   m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155,-1) );
-  m_gauge->SetBackgroundColour("wheat");
+//  m_gauge->SetBackgroundColour("wheat");
   m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1) );
-  m_slider->SetBackgroundColour("wheat");
+//  m_slider->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(200,10), wxSize(290,130) );
   (void)new wxStaticText( panel, -1,
     "In order see the gauge (aka progress bar)\n"
@@ -426,9 +428,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 #endif
     );
   m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
-  m_spintext->SetBackgroundColour("wheat");
+//  m_spintext->SetBackgroundColour("wheat");
   m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
-  m_spinbutton->SetBackgroundColour("wheat");
+//  m_spinbutton->SetBackgroundColour("wheat");
   m_spinbutton->SetRange(0,100);
 
   m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
@@ -527,6 +529,13 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
   m_text->WriteText( "ListBox selection string is: " );
+  m_text->WriteText( event.GetString() );
+  m_text->WriteText( "\n" );
+}
+
+void MyPanel::OnListBoxDoubleClick( wxCommandEvent &event )
+{
+  m_text->WriteText( "ListBox double click string is: " );
   m_text->WriteText( event.GetString() );
   m_text->WriteText( "\n" );
 }

@@ -1138,14 +1138,14 @@ bool wxExprIsFunctor(wxExpr *expr, const wxString& functor)
  *
  */
 
-char *make_integer(char *str)
+char *wxmake_integer(char *str)
 {
   wxExpr *x = new wxExpr(atol(str));
 
   return (char *)x;
 }
 
-char *make_real(char *str1, char *str2)
+char *wxmake_real(char *str1, char *str2)
 {
   char buf[50];
 
@@ -1158,7 +1158,7 @@ char *make_real(char *str1, char *str2)
 
 // extern "C" double exp10(double);
 
-char *make_exp(char *str1, char *str2)
+char *wxmake_exp(char *str1, char *str2)
 {
   double mantissa = (double)atoi(str1);
   double exponent = (double)atoi(str2);
@@ -1170,7 +1170,7 @@ char *make_exp(char *str1, char *str2)
   return (char *)x;
 }
 
-char *make_exp2(char *str1, char *str2, char *str3)
+char *wxmake_exp2(char *str1, char *str2, char *str3)
 {
   char buf[50];
 
@@ -1185,13 +1185,13 @@ char *make_exp2(char *str1, char *str2, char *str3)
   return (char *)x;
 }
 
-char *make_word(char *str)
+char *wxmake_word(char *str)
 {
   wxExpr *x = new wxExpr(wxExprWord, str);
   return (char *)x;
 }
 
-char *make_string(char *str)
+char *wxmake_string(char *str)
 {
   char *s, *t;
   int len, i;
