@@ -390,6 +390,12 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
         return FALSE;
     }
 
+    // explicitly say that we want to use Unicode because otherwise we get ANSI
+    // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
+#if wxUSE_UNICODE
+    ::SendMessage(GetHwnd(), LVM_SETUNICODEFORMAT, TRUE, 0);
+#endif
+
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
     if ( (wstyle & LVS_REPORT) && wxTheApp->GetComCtl32Version() >= 470 )
@@ -2145,10 +2151,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-                // when using MSLU we get ANSI messages sometimes, apparently
-#if wxUSE_UNICODE_MSLU
-            case LVN_GETDISPINFOA:
-#endif // wxUSE_UNICODE_MSLU
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
                 {
@@ -2160,29 +2162,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( lvi.mask & LVIF_TEXT )
                     {
                         wxString text = OnGetItemText(item, lvi.iSubItem);
-#if wxUSE_UNICODE_MSLU
-                        if ( nmhdr->code == LVN_GETDISPINFOA )
-                        {
-                            if ( !::WideCharToMultiByte
-                                    (
-                                        CP_ACP,
-                                        0,          // no flags
-                                        text,
-                                        text.length() + 1,
-                                        (char *)lvi.pszText,
-                                        lvi.cchTextMax,
-                                        NULL,       // default character
-                                        NULL        // [out] def char used flag
-                                    ) )
-                            {
-                                wxLogLastError(_T("WideCharToMultiByte()"));
-                            }
-                        }
-                        else 
-#endif // wxUSE_UNICODE_MSLU
-                        {
-                            wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
-                        }
+                        wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
                     }
 
                     // see comment at the end of wxListCtrl::GetColumn()
