@@ -515,7 +515,8 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
         node = node->Next();
     }
-    return needMore ;
+    
+    return needMore;
 }
 
 int wxApp::MainLoop()

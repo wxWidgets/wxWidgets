@@ -225,7 +225,6 @@ void wxWindowDC::SetUpDC()
         m_textGC = (WXGC*) wxGetPoolGC( (Window) m_window, wxTEXT_SCREEN );
         m_bgGC = (WXGC*) wxGetPoolGC( (Window) m_window, wxBG_SCREEN );
     }
-#if 0
     else
     if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
     {
@@ -234,7 +233,6 @@ void wxWindowDC::SetUpDC()
         m_textGC = (WXGC*) wxGetPoolGC( (Window) m_window, wxTEXT_MONO );
         m_bgGC = (WXGC*) wxGetPoolGC( (Window) m_window, wxBG_MONO );
     }
-#endif
     else
     {
         m_penGC = (WXGC*) wxGetPoolGC( (Window) m_window, wxPEN_COLOUR );
@@ -342,8 +340,6 @@ void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
-
-	wxLogDebug("Drawing line at %d, %d -> %d, %d", XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
     }
 }
 
@@ -751,7 +747,6 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
-    wxLogDebug("Drawing rectangle at %d, %d (%dx%d)", x, y, width, height);
 }
 
 void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -1535,14 +1530,14 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         else
         {
             XSetFillStyle( (Display*) m_display, (GC) m_brushGC, FillStippled );
-//            XSetStipple( (Display*) m_display, (GC) m_brushGC, (Pixmap) m_brush.GetStipple()->GetBitmap() );
+            XSetStipple( (Display*) m_display, (GC) m_brushGC, (Pixmap) m_brush.GetStipple()->GetBitmap() );
         }
     }
 
     if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
     {
         XSetFillStyle( (Display*) m_display, (GC) m_textGC, FillOpaqueStippled );
-//        XSetStipple( (Display*) m_display, (GC) m_textGC, (Pixmap) m_brush.GetStipple()->GetMask()->GetBitmap() );
+        XSetStipple( (Display*) m_display, (GC) m_textGC, (Pixmap) m_brush.GetStipple()->GetMask()->GetBitmap() );
     }
 
     if (IS_HATCH(m_brush.GetStyle()))
@@ -1586,7 +1581,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
         else
         {
             XSetFillStyle( (Display*) m_display, (GC) m_bgGC, FillStippled );
-//            XSetStipple( (Display*) m_display, (GC) m_bgGC, (Pixmap) m_backgroundBrush.GetStipple()->GetBitmap() );
+            XSetStipple( (Display*) m_display, (GC) m_bgGC, (Pixmap) m_backgroundBrush.GetStipple()->GetBitmap() );
         }
     }
 

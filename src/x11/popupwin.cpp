@@ -62,13 +62,12 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     
     long xattributes_mask =
         CWOverrideRedirect |
+        CWSaveUnder |
         CWBorderPixel | CWBackPixel;
     xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
-
-    // Trying True in order to stop WM decorating it
-    //xattributes.override_redirect = False;
-    xattributes.override_redirect = TRUE;
+    xattributes.override_redirect = True;
+    xattributes.save_under = True;
 
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );

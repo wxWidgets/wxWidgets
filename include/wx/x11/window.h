@@ -134,10 +134,15 @@ public:
     // smaller
     virtual wxPoint GetClientAreaOrigin() const;
     
-protected:
-    // event handlers (not virtual by design)
-    void OnIdle(wxIdleEvent& event);
+    // I don't want users to override what's done in idle so everything that
+    // has to be done in idle time in order for wxX11 to work is done in
+    // OnInternalIdle
+    virtual void OnInternalIdle();
     
+    // For compatibility across platforms (not in event table)
+    void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
+    
+protected:
     // Makes an adjustment to the window position (for example, a frame that has
     // a toolbar that it manages itself).
     virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);

@@ -50,12 +50,6 @@
 #include <string.h>
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-static const int SCROLL_MARGIN = 4;
-
-// ----------------------------------------------------------------------------
 // global variables for this module
 // ----------------------------------------------------------------------------
 
@@ -78,7 +72,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxWindowX11, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowX11, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowX11::OnSysColourChanged)
-    EVT_IDLE(wxWindowX11::OnIdle)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -895,13 +888,12 @@ void wxWindowX11::GetTextExtent(const wxString& string,
                              int *descent, int *externalLeading,
                              const wxFont *theFont) const
 {
-    wxFont *fontToUse = (wxFont *)theFont;
-    if (!fontToUse)
-        fontToUse = (wxFont *) & m_font;
+    wxFont fontToUse = m_font;
+    if (theFont) fontToUse = *theFont;
 
-    wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
-    
-    WXFontStructPtr pFontStruct = theFont->GetFontStruct(1.0, GetXDisplay());
+    wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
+
+    WXFontStructPtr pFontStruct = fontToUse.GetFontStruct(1.0, GetXDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
@@ -913,7 +905,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
         &ascent, &descent2, &overall);
 #endif
 
-    XTextExtents((XFontStruct*) pFontStruct, string, slen,
+    XTextExtents((XFontStruct*) pFontStruct, string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);
 
     if ( x )
@@ -958,16 +950,13 @@ void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
     }
     else
     {
-       int height,width;
-       GetSize( &width, &height );
+        int height,width;
+        GetSize( &width, &height );
             
         // Schedule for later Updating in ::Update() or ::OnInternalIdle().
         m_updateRegion.Clear();
         m_updateRegion.Union( 0, 0, width, height );
     }
-    
-    // Actually don't schedule yet..
-    Update();
 }
 
 void wxWindowX11::Update()
@@ -1019,6 +1008,8 @@ void wxWindowX11::X11SendPaintEvents()
     paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( paint_event );
 
+    m_updateRegion.Clear();
+    
     m_clipPaintRegion = FALSE;
 }
 
@@ -1045,8 +1036,11 @@ void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
-void wxWindowX11::OnIdle(wxIdleEvent& WXUNUSED(event))
+void wxWindowX11::OnInternalIdle()
 {
+    // Update invalidated regions.
+    Update();
+    
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
     UpdateWindowUI();
