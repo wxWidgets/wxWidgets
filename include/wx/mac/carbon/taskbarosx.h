@@ -45,13 +45,12 @@ public:
     //pops up the menu
     bool PopupMenu(wxMenu *menu);
 
-    //internal functions - don't call
-    void SetInternalEvent(void* pEvent);        
+    //internal functions - don't call       
     wxMenu* GetCurrentMenu();
+    wxMenu* DoCreatePopupMenu();
 
 protected:
     wxTaskBarIconType m_nType;
-    void* m_pEvent;
     void* m_pEventHandlerRef;
     wxMenu* m_pMenu;
     bool m_iconAdded;

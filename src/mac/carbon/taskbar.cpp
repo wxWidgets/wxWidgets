@@ -21,13 +21,6 @@
 #include "wx/menu.h"
 #include "wx/icon.h"
 
-#if 0
-
-#include "wx/frame.h"
-#include "wx/dialog.h"
-
-#endif
-
 //
 //TODO:  Implement  Apple Software Guidelines - show the top window it it's not shown,
 //and force it to be unminimized - and all unminimized windows should be brought to 
@@ -97,24 +90,40 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
     }
     
     wxASSERT(eventClass == kEventClassApplication && eventKind == kEventAppGetDockTileMenu);
-	
-	//set the internal event
-	pTB->SetInternalEvent(inEvent);
-	
+		    	
 	//process the right click event
 	wxTaskBarIconEvent evt(wxEVT_TASKBAR_RIGHT_UP,NULL);
 	pTB->ProcessEvent(evt);
 		
-	//set the internal event
-	pTB->SetInternalEvent(NULL);
+    //create popup menu
+    wxMenu* menu = pTB->DoCreatePopupMenu();
+    
+    OSStatus err = noErr;
 
-	return noErr;
+    if(menu)
+    {
+        //note to self - a MenuRef IS A MenuHandle
+        MenuRef hMenu = MAC_WXHMENU(menu->GetHMenu());
+
+        //When we call SetEventParameter it will decrement
+        //the reference count of the menu - we need to make
+        //sure it stays around in the wxMenu class here
+        RetainMenu(hMenu);
+
+        //set the actual dock menu
+        err = SetEventParameter((EventRef) inEvent, kEventParamMenuRef, 
+					typeMenuRef, sizeof(MenuRef), 
+					 &hMenu);
+        wxASSERT(err == 0);
+    }
+
+	return err;
 }
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxDockEventHandler );
 
 wxTaskBarIcon::wxTaskBarIcon(const wxTaskBarIconType& nType)
-    : m_nType(nType), m_pEvent(NULL), m_pEventHandlerRef(NULL), m_pMenu(NULL), m_iconAdded(false)
+    : m_nType(nType), m_pEventHandlerRef(NULL), m_pMenu(NULL), m_iconAdded(false)
 {
     //Register the events that will return the dock menu
 	EventTypeSpec tbEventList[] = { { kEventClassCommand, kEventProcessCommand },
@@ -136,35 +145,27 @@ wxTaskBarIcon::~wxTaskBarIcon()
     RemoveEventHandler((EventHandlerRef&)m_pEventHandlerRef);
 }
 
-void wxTaskBarIcon::SetInternalEvent(void* pEvent)
-{
-	m_pEvent = pEvent;
-}
-
 wxMenu* wxTaskBarIcon::GetCurrentMenu()
 {
+    return m_pMenu;
+}
+
+wxMenu* wxTaskBarIcon::DoCreatePopupMenu()
+{
+    if (m_pMenu)
+        delete m_pMenu;
+
+    m_pMenu = CreatePopupMenu();
+    
+    if (m_pMenu)
+        m_pMenu->SetEventHandler(this);
+    
     return m_pMenu;
 }
 
 // Operations:
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    #if 0
-    wxASSERT(wxTheApp);
-    wxWindow* pTopWindow = wxTheApp->GetTopWindow();
-    
-    wxASSERT(pTopWindow);
-    
-    if(pTopWindow->IsKindOf(CLASSINFO(wxDialog)))
-        ((wxDialog*)pTopWindow)->SetIcon(icon);
-    else
-    {
-        wxASSERT(pTopWindow->IsKindOf(CLASSINFO(wxFrame)));
-        ((wxFrame*)pTopWindow)->SetIcon(icon);
-    }
-    
-    return true;
-    #else
     //TODO: (IT WORKS!)  Make work without mask - mayby by using a wxDC?
     
     wxASSERT(icon.GetMask() != NULL);
@@ -187,7 +188,6 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         CGImageRelease(pImage);
 
 	return m_iconAdded = err == noErr;
-    #endif
 }
 	
 bool wxTaskBarIcon::RemoveIcon()
@@ -200,29 +200,15 @@ bool wxTaskBarIcon::RemoveIcon()
 	
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
-	wxASSERT(m_pEvent != NULL);
-    
     if (m_pMenu)
         delete m_pMenu;
-        
+    
     m_pMenu = menu;
-    menu->SetEventHandler(this);
-
-	//note to self - a MenuRef IS A MenuHandle
-	MenuRef hMenu = MAC_WXHMENU(menu->GetHMenu());
-
-	//When we call SetEventParameter it will decrement
-	//the reference count of the menu - we need to make
-	//sure it stays around in the wxMenu class here
-	RetainMenu(hMenu);
-
-	//set the actual dock menu
-	OSStatus err = SetEventParameter((EventRef) m_pEvent, kEventParamMenuRef, 
-					typeMenuRef, sizeof(MenuRef), 
-					 &hMenu);
-	wxASSERT(err == 0);
-	
-	return err == noErr;
+    
+    wxASSERT(menu);
+    m_pMenu->SetEventHandler(this);
+    
+    return SetApplicationDockTileMenu(MAC_WXHMENU(menu->GetHMenu()));
 }
 
 #endif //wxHAS_TASK_BAR_ICON
