@@ -74,7 +74,8 @@ class GraphWindow(wxWindow):
         self.font = wxFont(12, wxSWISS, wxNORMAL, wxBOLD)
         self.SetFont(self.font)
 
-        self.colors = [ wxRED, wxGREEN, wxBLUE, wxCYAN] #, wxNamedColour("Yellow") ]
+        self.colors = [ wxRED, wxGREEN, wxBLUE, wxCYAN,
+                        wxNamedColour("Yellow"), wxNamedColor("Navy") ]
 
 
     def SetValue(self, index, value):
@@ -94,12 +95,11 @@ class GraphWindow(wxWindow):
         self.barHeight = hmax
 
 
-    def OnPaint(self, evt):
-        size = self.GetSize()
-        dc = wxPaintDC(self)
-        dc.BeginDrawing()
+    def Draw(self, dc, size):
         dc.SetFont(self.font)
         dc.SetTextForeground(wxBLUE)
+        dc.SetBackground(wxBrush(self.GetBackgroundColour()))
+        dc.Clear()
         dc.SetPen(wxPen(wxBLACK, 3, wxSOLID))
         dc.DrawLine(self.linePos, 0, self.linePos, size.height-10)
 
@@ -118,7 +118,24 @@ class GraphWindow(wxWindow):
             if ypos > size.height-10:
                 break
 
-        dc.EndDrawing()
+
+    def OnPaint(self, evt):
+        size = self.GetSize()
+        bmp = wxEmptyBitmap(size.width, size.height)
+        dc = wxMemoryDC()
+        dc.SelectObject(bmp)
+        self.Draw(dc, size)
+
+        wdc = wxPaintDC(self)
+        wdc.BeginDrawing()
+        wdc.Blit(0,0, size.width, size.height, dc, 0,0)
+        wdc.EndDrawing()
+
+
+    def OnEraseBackground(self, evt):
+        pass
+
+
 
 
 #----------------------------------------------------------------------
@@ -137,7 +154,8 @@ class TestFrame(wxFrame):
                      "window by sending events to it.", wxPoint(5,5))
         panel.Fit()
 
-        self.graph = GraphWindow(self, ['Zero', 'One', 'Two', 'Three'])
+        self.graph = GraphWindow(self, ['Zero', 'One', 'Two', 'Three', 'Four',
+                                        'Five', 'Six', 'Seven'])
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(panel, 0, wxEXPAND)
@@ -153,10 +171,14 @@ class TestFrame(wxFrame):
 
         EVT_UPDATE_BARGRAPH(self, self.OnUpdate)
         self.threads = []
-        self.threads.append(CalcBarThread(self, 0, 25))
-        self.threads.append(CalcBarThread(self, 1, 50))
-        self.threads.append(CalcBarThread(self, 2, 75))
-        self.threads.append(CalcBarThread(self, 3, 100))
+        self.threads.append(CalcBarThread(self, 0, 50))
+        self.threads.append(CalcBarThread(self, 1, 75))
+        self.threads.append(CalcBarThread(self, 2, 100))
+        self.threads.append(CalcBarThread(self, 3, 150))
+        self.threads.append(CalcBarThread(self, 4, 225))
+        self.threads.append(CalcBarThread(self, 5, 300))
+        self.threads.append(CalcBarThread(self, 6, 250))
+        self.threads.append(CalcBarThread(self, 7, 175))
 
         for t in self.threads:
             t.Start()
@@ -165,7 +187,7 @@ class TestFrame(wxFrame):
 
     def OnUpdate(self, evt):
         self.graph.SetValue(evt.barNum, evt.value)
-        self.graph.Refresh()
+        self.graph.Refresh(false)
 
 
     def OnCloseWindow(self, evt):

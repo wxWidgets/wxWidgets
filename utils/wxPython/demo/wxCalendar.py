@@ -100,7 +100,7 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50)).SetBackgroundColour(wxNamedColour('Red'))
 
-        bmp = wxBitmap('Calbmp/Calend.bmp', wxBITMAP_TYPE_BMP)
+        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, 60, bmp, wxPoint(380, 80))#, wxSize(30, 30))
         EVT_BUTTON(self, 60, self.TestDlg)
 
@@ -108,7 +108,7 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150)).SetBackgroundColour(wxNamedColour('Blue'))
 
-        bmp = wxBitmap('Calbmp/Calend.bmp', wxBITMAP_TYPE_BMP)
+        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, 160, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, 160, self.TestFrame)
 
@@ -374,7 +374,7 @@ class CalendFrame(wxFrame):
     def MakeToolMenu(self):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
-        bmp_path = 'Calbmp/'
+        bmp_path = 'bitmaps/'
         SetToolPath(self, tb, 10, bmp_path + 'DbDec.bmp', 'Dec Year')
         EVT_TOOL(self, 10, self.OnDecYear)
 
