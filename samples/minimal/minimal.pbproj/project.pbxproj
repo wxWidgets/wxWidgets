@@ -7,7 +7,7 @@
 	objects = {
 		0249A665FF388DC511CA2CEA = {
 			isa = PBXApplicationReference;
-			path = minimal.app;
+			path = minimalStaticDebug.app;
 			refType = 3;
 		};
 		0249A669FF388E3911CA2CEA = {
@@ -83,6 +83,8 @@
 			children = (
 				0249A665FF388DC511CA2CEA,
 				F5A0C6B302CF7C5801000133,
+				CA8957A304D7071800000080,
+				CA89596A04D79E8B00000080,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -110,6 +112,8 @@
 			targets = (
 				20286C34FDCF999611CA2CEA,
 				F5A0C6A702CF7C5801000133,
+				CA89579504D7071800000080,
+				CA89595D04D79E8B00000080,
 			);
 		};
 		20286C29FDCF999611CA2CEA = {
@@ -148,7 +152,10 @@
 			children = (
 				F5F5A69602CDB02701000133,
 				F5A0C6B502CF7C9601000133,
+				CA89578E04D706FC00000080,
+				CA89596C04D79FED00000080,
 				20286C33FDCF999611CA2CEA,
+				CA60173504D423C000000080,
 				0249A669FF388E3911CA2CEA,
 			);
 			isa = PBXGroup;
@@ -182,7 +189,7 @@
 				OTHER_REZFLAGS = "";
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = ../../include/wx_pb.h;
-				PRODUCT_NAME = minimal;
+				PRODUCT_NAME = minimalStaticDebug;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = app;
@@ -190,7 +197,7 @@
 			dependencies = (
 			);
 			isa = PBXApplicationTarget;
-			name = minimalDebug;
+			name = StaticDebug;
 			productInstallPath = "$(HOME)/Applications";
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = 0249A665FF388DC511CA2CEA;
@@ -201,9 +208,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>minimal</string>
+	<string>minimalStaticDebug</string>
 	<key>CFBundleGetInfoString</key>
-	<string>minimal version 2.3.3, (c) 2002 wxWindows</string>
+	<string>minimal version 2.5.0, (c) 2003 wxWindows</string>
 	<key>CFBundleIconFile</key>
 	<string>wxmac.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -211,23 +218,23 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
-	<string>2.3.3, (c) 2002 wxWindows</string>
+	<string>2.5.0, (c) 2003 wxWindows</string>
 	<key>CFBundleName</key>
 	<string>minimal</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.3.3</string>
+	<string>2.5.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.3.3</string>
+	<string>2.5.0</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002 wxWindows</string>
+	<string>Copyright 2003 wxWindows</string>
 </dict>
 </plist>
 ";
@@ -261,6 +268,7 @@
 				20286C3CFDCF999611CA2CEA,
 				0249A66AFF388E3911CA2CEA,
 				F5F5A69702CDB02701000133,
+				CA60173604D423C000000080,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,6 +284,365 @@
 //202
 //203
 //204
+//CA0
+//CA1
+//CA2
+//CA3
+//CA4
+		CA60173504D423C000000080 = {
+			isa = PBXFrameworkReference;
+			name = System.framework;
+			path = /System/Library/Frameworks/System.framework;
+			refType = 0;
+		};
+		CA60173604D423C000000080 = {
+			fileRef = CA60173504D423C000000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA60173704D423C000000080 = {
+			fileRef = CA60173504D423C000000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89578E04D706FC00000080 = {
+			isa = PBXFileReference;
+			name = libwx_macd.dylib;
+			path = ../../src/build/libwx_macd.dylib;
+			refType = 2;
+		};
+		CA89579504D7071800000080 = {
+			buildPhases = (
+				CA89579604D7071800000080,
+				CA89579704D7071800000080,
+				CA89579904D7071800000080,
+				CA89579B04D7071800000080,
+				CA8957A104D7071800000080,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = ../../src/build;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "-D__WXDEBUG__ -DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_LDFLAGS = "";
+				OTHER_RESMERGERFLAGS = "-srcIs DF";
+				OTHER_REZFLAGS = "";
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = ../../include/wx_pb.h;
+				PRODUCT_NAME = minimalDynamicDebug;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = DynamicDebug;
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = CA8957A304D7071800000080;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>minimalDynamicDebug</string>
+	<key>CFBundleGetInfoString</key>
+	<string>minimal version 2.5.0, (c) 2003 wxWindows</string>
+	<key>CFBundleIconFile</key>
+	<string>wxmac.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.wxwindows.samples.minimal</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLongVersionString</key>
+	<string>2.5.0, (c) 2003 wxWindows</string>
+	<key>CFBundleName</key>
+	<string>minimal</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.5.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>2.5.0</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright 2003 wxWindows</string>
+</dict>
+</plist>
+";
+		};
+		CA89579604D7071800000080 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89579704D7071800000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89579804D7071800000080,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89579804D7071800000080 = {
+			fileRef = F5F5A69A02CDB0E101000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89579904D7071800000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89579A04D7071800000080,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89579A04D7071800000080 = {
+			fileRef = F591E05701FCC5DE01000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89579B04D7071800000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89579C04D7071800000080,
+				CA89579D04D7071800000080,
+				CA89579F04D7071800000080,
+				CA8957A004D7071800000080,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89579C04D7071800000080 = {
+			fileRef = 20286C33FDCF999611CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89579D04D7071800000080 = {
+			fileRef = 0249A669FF388E3911CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89579F04D7071800000080 = {
+			fileRef = CA60173504D423C000000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8957A004D7071800000080 = {
+			fileRef = CA89578E04D706FC00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8957A104D7071800000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA8957A204D7071800000080,
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA8957A204D7071800000080 = {
+			fileRef = F5F5A69802CDB04601000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA8957A304D7071800000080 = {
+			isa = PBXApplicationReference;
+			path = minimalDynamicDebug.app;
+			refType = 3;
+		};
+		CA89595D04D79E8B00000080 = {
+			buildPhases = (
+				CA89595E04D79E8B00000080,
+				CA89595F04D79E8B00000080,
+				CA89596104D79E8B00000080,
+				CA89596304D79E8B00000080,
+				CA89596804D79E8B00000080,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = ../../src/build;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DWXUSINGDLL -D__WXMAC__ -fno-rtti -fno-exceptions";
+				OTHER_LDFLAGS = "";
+				OTHER_RESMERGERFLAGS = "-srcIs DF";
+				OTHER_REZFLAGS = "";
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = ../../include/wx_pb.h;
+				PRODUCT_NAME = minimalDynamicRelease;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = DynamicRelease;
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = CA89596A04D79E8B00000080;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>minimalDynamicRelease</string>
+	<key>CFBundleGetInfoString</key>
+	<string>minimal version 2.5.0, (c) 2003 wxWindows</string>
+	<key>CFBundleIconFile</key>
+	<string>wxmac.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.wxwindows.samples.minimal</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLongVersionString</key>
+	<string>2.5.0, (c) 2003 wxWindows</string>
+	<key>CFBundleName</key>
+	<string>minimal</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.5.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>2.5.0</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright 2003 wxWindows</string>
+</dict>
+</plist>
+";
+		};
+		CA89595E04D79E8B00000080 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89595F04D79E8B00000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89596004D79E8B00000080,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89596004D79E8B00000080 = {
+			fileRef = F5F5A69A02CDB0E101000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596104D79E8B00000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89596204D79E8B00000080,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89596204D79E8B00000080 = {
+			fileRef = F591E05701FCC5DE01000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596304D79E8B00000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89596404D79E8B00000080,
+				CA89596504D79E8B00000080,
+				CA89596704D79E8B00000080,
+				CA89596D04D79FED00000080,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89596404D79E8B00000080 = {
+			fileRef = 20286C33FDCF999611CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596504D79E8B00000080 = {
+			fileRef = 0249A669FF388E3911CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596704D79E8B00000080 = {
+			fileRef = CA60173504D423C000000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596804D79E8B00000080 = {
+			buildActionMask = 2147483647;
+			files = (
+				CA89596904D79E8B00000080,
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA89596904D79E8B00000080 = {
+			fileRef = F5A0C6BB02CF7CD901000133;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CA89596A04D79E8B00000080 = {
+			isa = PBXApplicationReference;
+			path = minimalDynamicRelease.app;
+			refType = 3;
+		};
+		CA89596C04D79FED00000080 = {
+			isa = PBXFileReference;
+			name = libwx_mac.dylib;
+			path = ../../src/build/libwx_mac.dylib;
+			refType = 2;
+		};
+		CA89596D04D79FED00000080 = {
+			fileRef = CA89596C04D79FED00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//CA0
+//CA1
+//CA2
+//CA3
+//CA4
 //F50
 //F51
 //F52
@@ -314,7 +681,7 @@
 				OTHER_REZFLAGS = "";
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = ../../include/wx_pb.h;
-				PRODUCT_NAME = minimal;
+				PRODUCT_NAME = minimalStaticRelease;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = app;
@@ -322,7 +689,7 @@
 			dependencies = (
 			);
 			isa = PBXApplicationTarget;
-			name = minimalRelease;
+			name = StaticRelease;
 			productInstallPath = "$(HOME)/Applications";
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = F5A0C6B302CF7C5801000133;
@@ -333,9 +700,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>minimal</string>
+	<string>minimalStaticRelease</string>
 	<key>CFBundleGetInfoString</key>
-	<string>minimal version 2.3.3, (c) 2002 wxWindows</string>
+	<string>minimal version 2.5.0, (c) 2003 wxWindows</string>
 	<key>CFBundleIconFile</key>
 	<string>wxmac.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -343,23 +710,23 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
-	<string>2.3.3, (c) 2002 wxWindows</string>
+	<string>2.5.0, (c) 2003 wxWindows</string>
 	<key>CFBundleName</key>
 	<string>minimal</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.3.3</string>
+	<string>2.5.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.3.3</string>
+	<string>2.5.0</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002 wxWindows</string>
+	<string>Copyright 2003 wxWindows</string>
 </dict>
 </plist>
 ";
@@ -405,6 +772,7 @@
 				F5A0C6AE02CF7C5801000133,
 				F5A0C6AF02CF7C5801000133,
 				F5A0C6BA02CF7C9901000133,
+				CA60173704D423C000000080,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,7 +799,7 @@
 		};
 		F5A0C6B302CF7C5801000133 = {
 			isa = PBXApplicationReference;
-			path = minimal.app;
+			path = minimalStaticRelease.app;
 			refType = 3;
 		};
 		F5A0C6B502CF7C9601000133 = {
