@@ -709,6 +709,32 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
     wx/generic/paletteg.h
+    wx/gtk/app.h
+    wx/gtk/bitmap.h
+    wx/gtk/brush.h
+    wx/gtk/clipbrd.h
+    wx/gtk/colour.h
+    wx/gtk/cursor.h
+    wx/gtk/dataform.h
+    wx/gtk/dataobj.h
+    wx/gtk/dataobj2.h
+    wx/gtk/dc.h
+    wx/gtk/dcclient.h
+    wx/gtk/dcmemory.h
+    wx/gtk/dcscreen.h
+    wx/gtk/dnd.h
+    wx/gtk/font.h
+    wx/gtk/gdiobj.h
+    wx/gtk/icon.h
+    wx/gtk/minifram.h
+    wx/gtk/pen.h
+    wx/gtk/popupwin.h
+    wx/gtk/region.h
+    wx/gtk/timer.h
+    wx/gtk/tooltip.h
+    wx/gtk/toplevel.h
+    wx/gtk/win_gtk.h
+    wx/gtk/window.h
 </set>
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->
@@ -768,48 +794,27 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/statusbr.h
     wx/generic/tabg.h
     wx/gtk/accel.h
-    wx/gtk/app.h
-    wx/gtk/bitmap.h
     wx/gtk/bmpbuttn.h
-    wx/gtk/brush.h
     wx/gtk/button.h
     wx/gtk/checkbox.h
     wx/gtk/checklst.h
     wx/gtk/colordlg.h
     wx/gtk/choice.h
-    wx/gtk/clipbrd.h
-    wx/gtk/colour.h
     wx/gtk/combobox.h
     wx/gtk/control.h
-    wx/gtk/cursor.h
-    wx/gtk/dataform.h
-    wx/gtk/dataobj.h
-    wx/gtk/dataobj2.h
-    wx/gtk/dc.h
-    wx/gtk/dcclient.h
-    wx/gtk/dcmemory.h
-    wx/gtk/dcscreen.h
     wx/gtk/dialog.h
-    wx/gtk/dnd.h
     wx/gtk/filedlg.h
-    wx/gtk/font.h
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
     wx/gtk/gauge.h
-    wx/gtk/gdiobj.h
-    wx/gtk/icon.h
     wx/gtk/listbox.h
     wx/gtk/mdi.h
     wx/gtk/menu.h
     wx/gtk/menuitem.h
-    wx/gtk/minifram.h
     wx/gtk/msgdlg.h
     wx/gtk/notebook.h
-    wx/gtk/pen.h
-    wx/gtk/popupwin.h
     wx/gtk/radiobox.h
     wx/gtk/radiobut.h
-    wx/gtk/region.h
     wx/gtk/scrolbar.h
     wx/gtk/scrolwin.h
     wx/gtk/slider.h
@@ -822,12 +827,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/tbargtk.h
     wx/gtk/textctrl.h
     wx/gtk/tglbtn.h
-    wx/gtk/timer.h
-    wx/gtk/tooltip.h
-    wx/gtk/toplevel.h
     wx/gtk/treectrl.h
-    wx/gtk/win_gtk.h
-    wx/gtk/window.h
 </set>
 
 
