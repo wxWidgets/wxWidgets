@@ -135,9 +135,21 @@ class PythonSTC(wxStyledTextCtrl):
                 #st = string.join(lst)
                 #print len(st)
                 #self.AutoCompShow(0, st)
+
+                kw = keyword.kwlist[:]
+                kw.append("zzzzzz")
+                kw.append("aaaaa")
+                kw.append("__init__")
+                kw.append("zzaaaaa")
+                kw.append("zZaaaaa")
+                kw.append("this_is_a_longer_value")
+                kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
+
+                kw.reverse()
+
                 self.AutoCompSetIgnoreCase(true)
-                self.AutoCompShow(0, string.join(keyword.kwlist))
-                self.AutoCompSelect('br')
+                self.AutoCompShow(0, string.join(kw))
+                #self.AutoCompSelect('br')
         else:
             event.Skip()
 

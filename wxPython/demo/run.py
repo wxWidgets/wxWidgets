@@ -40,6 +40,12 @@ class RunDemoApp(wxApp):
         frame = wxFrame(None, -1, "RunDemo: " + self.name, size=(0,0),
                         style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
+        menuBar = wxMenuBar()
+        menu = wxMenu()
+        menu.Append(101, "E&xit\tAlt-X", "Exit demo")
+        EVT_MENU(self, 101, self.OnButton)
+        menuBar.Append(menu, "&File")
+        frame.SetMenuBar(menuBar)
         frame.Show(true)
         win = self.demoModule.runTest(frame, frame, Log())
 
