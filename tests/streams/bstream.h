@@ -400,9 +400,12 @@ protected:
         DoDeleteInStream();
     }
     void DeleteOutStream()
-    {
+    {        
         if (m_pCurrentOut == NULL)
             return;
+        
+        CPPUNIT_ASSERT(m_pCurrentOut->Close());
+        
         delete m_pCurrentOut;
         m_pCurrentOut = NULL;
         // Incase something extra needs to be done.

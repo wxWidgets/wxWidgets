@@ -149,7 +149,6 @@ public:
     virtual bool CopyArchiveMetaData(wxArchiveInputStream& stream) = 0;
 
     virtual bool CloseEntry() = 0;
-    virtual bool Close() = 0;
 
 protected:
     wxArchiveOutputStream(wxOutputStream& stream, wxMBConv& conv);

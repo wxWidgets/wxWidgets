@@ -33,6 +33,19 @@ Creates a dummy wxOutputStream object.
 Destructor.
 
 
+\membersection{wxOutputStream::Close}\label{wxoutputstreamclose}
+
+\func{bool}{Close}{\void}
+
+Closes the stream, returning {\tt false} if an error occurs. The
+stream is closed implicitly in the destructor if Close() is not
+called explicitly.
+
+If this stream wraps another stream or some other resource such
+as a file, then the underlying resource is closed too if it is owned
+by this stream, or left open otherwise.
+
+
 \membersection{wxOutputStream::LastWrite}\label{wxoutputstreamlastwrite}
 
 \constfunc{size\_t}{LastWrite}{\void}

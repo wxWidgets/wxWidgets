@@ -238,20 +238,20 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
   m_lasterror = wxSTREAM_WRITE_ERROR;
 }
 
-wxZlibOutputStream::~wxZlibOutputStream()
-{
-  if (m_deflate && m_z_buffer)
-    DoFlush(true);
-  deflateEnd(m_deflate);
-  delete m_deflate;
+bool wxZlibOutputStream::Close()
+ {
+  DoFlush(true);
+   deflateEnd(m_deflate);
+   delete m_deflate;
 
-  delete[] m_z_buffer;
-}
+  m_deflate = NULL;
+   delete[] m_z_buffer;
+  m_z_buffer = NULL;
+  return IsOk();
+ }
 
 void wxZlibOutputStream::DoFlush(bool final)
 {
-  wxASSERT_MSG(m_deflate && m_z_buffer, wxT("Deflate stream not open"));
-
   if (!m_deflate || !m_z_buffer)
     m_lasterror = wxSTREAM_WRITE_ERROR;
   if (!IsOk())

@@ -257,6 +257,7 @@ public:
     virtual size_t LastWrite() const { return wxStreamBase::m_lastcount; }
 
     virtual void Sync();
+    virtual bool Close() { return true; }
 
     wxOutputStream& operator<<(wxInputStream& out) { return Write(out); }
     wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
@@ -515,6 +516,7 @@ public:
     wxFileOffset TellO() const;
 
     void Sync();
+    bool Close();
 
     wxFileOffset GetLength() const;
 

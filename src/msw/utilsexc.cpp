@@ -179,7 +179,8 @@ class wxPipeOutputStream: public wxOutputStream
 {
 public:
     wxPipeOutputStream(HANDLE hOutput);
-    virtual ~wxPipeOutputStream();
+    virtual ~wxPipeOutputStream() { Close(); }
+    bool Close();
 
 protected:
     size_t OnSysWrite(const void *buffer, size_t len);
@@ -444,10 +445,11 @@ wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
     }
 }
 
-wxPipeOutputStream::~wxPipeOutputStream()
+bool wxPipeOutputStream::Close()
 {
-    ::CloseHandle(m_hOutput);
+   return ::CloseHandle(m_hOutput) != 0;
 }
+
 
 size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 {

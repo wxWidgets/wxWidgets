@@ -67,6 +67,7 @@ class WXDLLIMPEXP_BASE wxFileOutputStream: public wxOutputStream {
 //     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
+  bool Close() { return m_file_destroy ? m_file->Close() : true; }
   wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }
@@ -136,6 +137,7 @@ class WXDLLIMPEXP_BASE wxFFileOutputStream: public wxOutputStream {
 //     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
+  bool Close() { return m_file_destroy ? m_file->Close() : true; }
   wxFileOffset GetLength() const;
 
   bool Ok() const { return m_file->IsOpened(); }

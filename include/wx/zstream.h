@@ -69,9 +69,10 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
 class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
  public:
   wxZlibOutputStream(wxOutputStream& stream, int level = -1, int flags = wxZLIB_ZLIB);
-  virtual ~wxZlibOutputStream();
+  virtual ~wxZlibOutputStream() { Close(); }
 
   void Sync() { DoFlush(false); }
+  bool Close();
   wxFileOffset GetLength() const { return m_pos; }
 
   static bool CanHandleGZip();

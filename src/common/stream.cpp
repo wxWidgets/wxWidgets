@@ -1185,6 +1185,13 @@ wxBufferedOutputStream::~wxBufferedOutputStream()
     delete m_o_streambuf;
 }
 
+bool wxBufferedOutputStream::Close()
+{
+    Sync();
+    return IsOk();
+}
+
+
 wxOutputStream& wxBufferedOutputStream::Write(const void *buffer, size_t size)
 {
     m_lastcount = 0;
