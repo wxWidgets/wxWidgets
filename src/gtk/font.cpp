@@ -20,21 +20,6 @@
 // local data
 //-----------------------------------------------------------------------------
 
-static char *wx_font_family [] = {
-    "wxDEFAULT", "wxDECORATIVE", "wxROMAN", "wxSCRIPT",
-    "wxSWISS", "wxMODERN", "wxTELETYPE",
-};
-
-/*
-static char *wx_font_style [] = {
-    "wxDEFAULT", "wxNORMAL", "wxSLANT", "wxITALIC",
-};
-
-static char *wx_font_weight [] = {
-    "wxDEFAULT", "wxNORMAL", "wxBOLD", "wxLIGHT",
-};
-*/
-
 extern wxFontNameDirectory *wxTheFontNameDirectory;
 
 //-----------------------------------------------------------------------------
@@ -64,10 +49,10 @@ class wxFontRefData: public wxObjectRefData
 wxFontRefData::wxFontRefData(void) : m_scaled_xfonts(wxKEY_INTEGER)
 {
   m_byXFontName = FALSE;
-  m_pointSize = -1;
-  m_family = -1;
-  m_style = -1;
-  m_weight = -1;
+  m_pointSize = 12;
+  m_family = wxSWISS;
+  m_style = wxNORMAL;
+  m_weight = wxNORMAL;
   m_underlined = FALSE;
   m_fontId = 0;
   m_faceName = (char *) NULL;
@@ -128,8 +113,11 @@ wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
     M_FONTDATA->m_fontId = FontIdOrFamily;
     M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
   }
+  if (Style == wxDEFAULT) Style = wxSWISS;
   M_FONTDATA->m_style = Style;
+  if (Weight == wxDEFAULT) Weight = wxNORMAL;
   M_FONTDATA->m_weight = Weight;
+  if (PointSize == wxDEFAULT) PointSize = 10;
   M_FONTDATA->m_pointSize = PointSize;
   M_FONTDATA->m_underlined = Underlined;
 
@@ -189,106 +177,120 @@ bool wxFont::operator != ( const wxFont& font )
   return m_refData != font.m_refData; 
 }
 
-bool wxFont::Ok()
+bool wxFont::Ok() const
 {
-  return (m_refData != NULL);
+  if (!m_refData)
+  {
+    wxFAIL_MSG( "invalid font" );
+    return FALSE;
+  }
+  else
+    return TRUE;
 }
 
 int wxFont::GetPointSize(void) const
 {
+  if (!Ok()) return 0;
+  
   return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceString(void) const
 {
+  if (!Ok()) return "";
+  
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s;
 }
 
 wxString wxFont::GetFaceName(void) const
 {
+  if (!Ok()) return "";
+  
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s; 
 }
 
 int wxFont::GetFamily(void) const
 {
+  if (!Ok()) return 0;
+  
   return M_FONTDATA->m_family;
 }
 
 wxString wxFont::GetFamilyString(void) const
 {
-  wxString s = wx_font_family[M_FONTDATA->m_family - wxDEFAULT];
-  return s;
+  if (!Ok()) return "wxDEFAULT";
+  
+  switch (M_FONTDATA->m_family)
+  {
+    case wxDECORATIVE:   return wxString("wxDECORATIVE");
+    case wxROMAN:        return wxString("wxROMAN");
+    case wxSCRIPT:       return wxString("wxSCRIPT");
+    case wxSWISS:        return wxString("wxSWISS");
+    case wxMODERN:       return wxString("wxMODERN");
+    case wxTELETYPE:     return wxString("wxTELETYPE");
+    default:             return "wxDEFAULT";
+  }
+
+  return "wxDEFAULT";
 }
 
 int wxFont::GetFontId(void) const
 {
+  if (!Ok()) return 0;
+  
   return M_FONTDATA->m_fontId; // stub
 }
 
 int wxFont::GetStyle(void) const
 {
+  if (!Ok()) return 0;
+  
   return M_FONTDATA->m_style;
 }
 
 wxString wxFont::GetStyleString(void) const
 {
-    switch (M_FONTDATA->m_style)
-    {
-        case wxNORMAL:
-        {
-            return wxString("wxNORMAL");
-        }
-        case wxSLANT:
-        {
-            return wxString("wxSLANT");
-        }
-        case wxITALIC:
-        {
-            return wxString("wxITALIC");
-        }
-        case wxDEFAULT:
-        default:
-        {
-            return wxString("wxDEFAULT");
-        }
-    }
-    return wxString("wxDEFAULT");
+  if (!Ok()) return "wxDEFAULT";
+  
+  switch (M_FONTDATA->m_style)
+  {
+    case wxNORMAL:   return wxString("wxNORMAL");
+    case wxSLANT:    return wxString("wxSLANT");
+    case wxITALIC:   return wxString("wxITALIC");
+    default:         return wxString("wxDEFAULT");
+  }
+    
+  return wxString("wxDEFAULT");
 }
 
 int wxFont::GetWeight(void) const
 {
+  if (!Ok()) return 0;
+
   return M_FONTDATA->m_weight;
 }
 
 wxString wxFont::GetWeightString(void) const
 {
-    switch (M_FONTDATA->m_weight)
-    {
-        case wxNORMAL:
-        {
-            return wxString("wxNORMAL");
-        }
-        case wxBOLD:
-        {
-            return wxString("wxBOLD");
-        }
-        case wxLIGHT:
-        {
-            return wxString("wxLIGHT");
-        }
-        case wxDEFAULT:
-        default:
-        {
-            return wxString("wxDEFAULT");
-        }
-    }
-    return wxString("wxDEFAULT");
+  if (!Ok()) return "wxDEFAULT";
+
+  switch (M_FONTDATA->m_weight)
+  {
+    case wxNORMAL:   return wxString("wxNORMAL");
+    case wxBOLD:     return wxString("wxBOLD");
+    case wxLIGHT:    return wxString("wxLIGHT");
+    default:         return wxString("wxDEFAULT");
+  }
+  
+  return wxString("wxDEFAULT");
 }
 
 bool wxFont::GetUnderlined(void) const
 {
+  if (!Ok()) return FALSE;
+  
   return M_FONTDATA->m_underlined;
 }
 

@@ -150,13 +150,8 @@ bool wxResourceManager::Initialize()
   strcat(buf, "\\dialoged.ini");
   m_optionsResourceFilename = buf;
 #elif defined(__WXGTK__)
-  /*
-  wxString buf;
-  wxGetHomeDir(&buf);
-  buf += "/.dialogedrc";
-  m_optionsResourceFilename = buf;
-  */
-  m_optionsResourceFilename = ".dialoged.rc";
+  wxGetHomeDir( &m_optionsResourceFilename );
+  m_optionsResourceFilename += "/.dialogedrc";
 #else
 #error "Unsupported platform."
 #endif

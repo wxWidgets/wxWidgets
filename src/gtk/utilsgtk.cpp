@@ -80,15 +80,11 @@ int wxDisplayDepth(void)
 // user and home routines
 //------------------------------------------------------------------------
 
-char* wxGetHomeDir( char *dest )
+const char* wxGetHomeDir( wxString *home  )
 {
-  wxString tmp = wxGetUserHome( wxString() );
-  if (tmp.IsNull())
-    strcpy( wxBuffer, "/" );
-  else
-    strcpy( wxBuffer, tmp );
-  if (dest) strcpy( dest, WXSTRINGCAST tmp );
-  return wxBuffer;
+  *home = wxGetUserHome( wxString() );
+  if (home->IsNull()) *home = "/";
+  return *home;
 };
 
 char *wxGetUserHome( const wxString &user )

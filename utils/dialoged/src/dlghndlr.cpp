@@ -371,13 +371,16 @@ void wxResourceEditorDialogHandler::OnItemEvent(wxControl *item, wxMouseEvent& e
 
   event.m_x = event.m_x + x;
   event.m_y = event.m_y + y;
+  
   ProcessItemEvent(item, event, dragType);
 }
 
 void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEvent& event, int selectionHandle)
 {
   wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
-
+  
+  if (dragItem) childHandler = (wxResourceEditorControlHandler *)dragItem->GetEventHandler();
+  
   long x, y;
   event.Position(&x, &y);
   int keys = 0;

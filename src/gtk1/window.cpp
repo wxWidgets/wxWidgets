@@ -116,6 +116,7 @@
 extern wxList wxPendingDelete;
 extern wxList wxTopLevelWindows;
 extern bool   g_blockEventsOnDrag;
+wxWindow     *g_captureWindow = (wxWindow*)NULL;
 
 //-----------------------------------------------------------------------------
 // "expose_event" (of m_wxwindow, not of m_widget)
@@ -299,6 +300,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 {
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
   
+  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
 
   if (win->m_wxwindow)
@@ -403,6 +406,9 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 { 
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
+  
+  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
 
   if (!win->HasVMT()) return TRUE;
@@ -469,6 +475,9 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 { 
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
+  
+  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
 
   if (!win->HasVMT()) return TRUE;
@@ -599,7 +608,11 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
   if (widget->window != gdk_event->window) return TRUE;
+  
+  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
+  
   if (!win->HasVMT()) return TRUE;
   
   if (widget->window)
@@ -621,8 +634,12 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
   if (widget->window != gdk_event->window) return TRUE;
-  if (!win->HasVMT()) return TRUE;
+  
+  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
+  
+  if (!win->HasVMT()) return TRUE;
   
   if (widget->window)
     gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
@@ -1981,6 +1998,7 @@ void wxWindow::CaptureMouse(void)
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK), 
         (GdkWindow *) NULL, (GdkCursor *) NULL, GDK_CURRENT_TIME );
+  g_captureWindow = this;
 }
 
 void wxWindow::ReleaseMouse(void)
@@ -1988,6 +2006,7 @@ void wxWindow::ReleaseMouse(void)
   GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_remove( connect_widget );
   gdk_pointer_ungrab ( GDK_CURRENT_TIME );
+  g_captureWindow = (wxWindow*) NULL;;
 }
 
 void wxWindow::SetTitle( const wxString &WXUNUSED(title) )

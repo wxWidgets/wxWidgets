@@ -56,8 +56,6 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 
   SetValidator( validator );
 
-  wxControl::SetLabel( label );
-
   m_widget = gtk_check_button_new_with_label( m_label );
  
   wxSize newSize = size;
@@ -70,6 +68,8 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
     
   PostCreation();
   
+  SetLabel( label );
+
   Show( TRUE );
     
   return TRUE;

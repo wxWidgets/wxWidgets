@@ -59,7 +59,7 @@ class wxFont: public wxGDIObject
     wxFont& operator = ( const wxFont& font );
     bool operator == ( const wxFont& font );
     bool operator != ( const wxFont& font );
-    bool Ok();
+    bool Ok() const;
 
     int GetPointSize(void) const;
     wxString GetFaceName(void) const;

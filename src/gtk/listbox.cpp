@@ -85,7 +85,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   
   m_list = GTK_LIST( gtk_list_new() );
   
-  GtkSelectionMode mode = GTK_SELECTION_SINGLE;
+  GtkSelectionMode mode = GTK_SELECTION_BROWSE;
   if (style & wxLB_MULTIPLE)
     mode = GTK_SELECTION_MULTIPLE;
   else if (style & wxLB_EXTENDED)
@@ -95,6 +95,11 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   
   gtk_container_add (GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
   gtk_widget_show( GTK_WIDGET(m_list) );
+  
+  wxSize newSize = size;
+  if (newSize.x == -1) newSize.x = 100;
+  if (newSize.y == -1) newSize.y = 110;
+  SetSize( newSize.x, newSize.y );
   
   for (int i = 0; i < n; i++)
   {
@@ -222,21 +227,14 @@ char *wxListBox::GetClientData( int n ) const
 
 int wxListBox::GetSelection(void) const
 {
-  GList *selection = m_list->selection;
-  if (selection)
+  GList *child = m_list->children;
+  int count = 0;
+  while (child)
   {
-    GList *child = m_list->children;
-    int count = 0;
-    while (child)
-    {
-      if (child->data == selection->data) return count;
-      count++;
-      child = child->next;
-    }
+    if (GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED) return count;
+    count++;
+    child = child->next;
   }
-  // No, I think it's reasonable to return -1 to indicate
-  // there is no selection. -- JACS
-//  wxFAIL_MSG("wrong listbox index");
   return -1;
 }
 
