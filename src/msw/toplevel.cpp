@@ -72,21 +72,25 @@ extern const wxChar *wxCanvasClassName;
 // wxTopLevelWindowMSW implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxDialog helpers
+// ----------------------------------------------------------------------------
+
 // Dialog window proc
 LONG APIENTRY _EXPORT
-wxDlgProc(HWND WXUNUSED(hWnd), UINT message, WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
+wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    if ( message == WM_INITDIALOG )
+    switch ( message )
     {
-        // for this message, returning TRUE tells system to set focus to the
-        // first control in the dialog box
-        return TRUE;
-    }
-    else
-    {
-        // for all the other ones, FALSE means that we didn't process the
-        // message
-        return FALSE;
+        case WM_INITDIALOG:
+            // for this message, returning TRUE tells system to set focus to the
+            // first control in the dialog box
+            return TRUE;
+
+        default:
+            // for all the other ones, FALSE means that we didn't process the
+            // message
+            return FALSE;
     }
 }
 
