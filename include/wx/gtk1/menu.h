@@ -118,6 +118,10 @@ public:
         Init(title, 0, func);
     }
 #endif
+    wxMenu( long style )
+    {
+        Init( wxEmptyString, style );
+    }
     wxMenu( const wxString& title = wxEmptyString, long style = 0 )
     {
         Init(title, style);

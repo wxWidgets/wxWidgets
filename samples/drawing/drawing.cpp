@@ -61,6 +61,8 @@ public:
     virtual bool OnInit();
 };
 
+class MyCanvas;
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -71,28 +73,43 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnPaint(wxPaintEvent &event);
     void OnOption(wxCommandEvent &event);
     void OnMouseMove(wxMouseEvent &event);
 
     wxColour SelectColour();
     void PrepareDC(wxDC& dc);
 
-protected:
-    int      m_backgroundMode;
-    int      m_mapMode;
-    double   m_xUserScale;
-    double   m_yUserScale;
-    int      m_xLogicalOrigin;
-    int      m_yLogicalOrigin;
-    bool     m_xAxisReversed,
-             m_yAxisReversed;
-    wxColour m_colourForeground,    // these are _text_ colours
-             m_colourBackground;
-    wxBrush  m_backgroundBrush;
+    int         m_backgroundMode;
+    int         m_mapMode;
+    double      m_xUserScale;
+    double      m_yUserScale;
+    int         m_xLogicalOrigin;
+    int         m_yLogicalOrigin;
+    bool        m_xAxisReversed,
+                m_yAxisReversed;
+    wxColour    m_colourForeground,    // these are _text_ colours
+                m_colourBackground;
+    wxBrush     m_backgroundBrush;
+    MyCanvas   *m_canvas;
 
 private:
     // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
+};
+
+// define a scrollable canvas for drawing onto
+class MyCanvas: public wxScrolledWindow
+{
+public:
+    MyCanvas( MyFrame *parent );
+    
+    void DoDrawTests( int x, int y, wxDC &dc );
+    void OnPaint(wxPaintEvent &event);
+    
+protected:
+    MyFrame *m_owner;
+    
+private:
     DECLARE_EVENT_TABLE()
 };
 
@@ -141,19 +158,6 @@ enum
 // event tables and other macros for wxWindows
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-
-    EVT_MOTION (MyFrame::OnMouseMove)
-    EVT_PAINT  (MyFrame::OnPaint)
-
-    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Minimal_About, MyFrame::OnAbout)
-
-    EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
-END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
 // the application object during program execution (it's better than using a
@@ -175,7 +179,7 @@ bool MyApp::OnInit()
 {
     // Create the main application window
     MyFrame *frame = new MyFrame("Drawing sample",
-                                 wxPoint(50, 50), wxSize(450, 340));
+                                 wxPoint(50, 50), wxSize(550, 340));
 
     // Show it and tell the application that it's our main window
     frame->Show(TRUE);
@@ -188,8 +192,190 @@ bool MyApp::OnInit()
 }
 
 // ----------------------------------------------------------------------------
-// main frame
+// MyCanvas
 // ----------------------------------------------------------------------------
+
+// the event tables connect the wxWindows events with the functions (event
+// handlers) which process them.
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+    EVT_PAINT  (MyCanvas::OnPaint)
+END_EVENT_TABLE()
+
+MyCanvas::MyCanvas( MyFrame *parent )
+  : wxScrolledWindow( parent )
+{
+  m_owner = parent;
+}
+
+void MyCanvas::DoDrawTests( int x, int y, wxDC &dc )
+{
+   wxRect rect;
+   rect.x = dc.LogicalToDeviceX( x-20 );
+   rect.y = dc.LogicalToDeviceY( y-20 );
+   rect.width = dc.LogicalToDeviceXRel( 500 );
+   rect.height = dc.LogicalToDeviceYRel( 200 );
+   if (!IsExposed(rect)) return;
+
+   dc.DrawLine( x    , y, x    , y    );
+   dc.DrawLine( x+ 20, y, x+ 20, y+ 1 );
+   dc.DrawLine( x+ 40, y, x+ 40, y+ 2 );
+   dc.DrawLine( x+ 60, y, x+ 60, y+ 3 );
+   dc.DrawLine( x+ 80, y, x+ 80, y+ 4 );
+   dc.DrawLine( x+100, y, x+100, y+ 5 );
+   dc.DrawLine( x+120, y, x+120, y+ 6 );
+   dc.DrawLine( x+140, y, x+140, y+10 );
+   dc.DrawLine( x+160, y, x+160, y+20 );
+   dc.DrawLine( x+180, y, x+180, y+30 );
+   
+   dc.DrawLine( x+200, y, x+200   , y    );
+   dc.DrawLine( x+220, y, x+220+ 1, y+ 1 );
+   dc.DrawLine( x+240, y, x+240+ 2, y+ 2 );
+   dc.DrawLine( x+260, y, x+260+ 3, y+ 3 );
+   dc.DrawLine( x+280, y, x+280+ 4, y+ 4 );
+   dc.DrawLine( x+300, y, x+300+ 5, y+ 5 );
+   dc.DrawLine( x+320, y, x+320+ 6, y+ 6 );
+   dc.DrawLine( x+340, y, x+340+10, y+10 );
+   dc.DrawLine( x+360, y, x+360+20, y+20 );
+   dc.DrawLine( x+380, y, x+380+30, y+30 );
+   
+   dc.DrawLine( x+420, y   , x+420  ,  y    );
+   dc.DrawLine( x+420, y+10, x+420+1,  y+10 );
+   dc.DrawLine( x+420, y+20, x+420+2,  y+20 );
+   dc.DrawLine( x+420, y+30, x+420+3,  y+30 );
+   dc.DrawLine( x+420, y+40, x+420+4,  y+40 );
+   dc.DrawLine( x+420, y+50, x+420+5,  y+50 );
+   dc.DrawLine( x+420, y+60, x+420+6,  y+60 );
+   dc.DrawLine( x+420, y+70, x+420+10, y+70 );
+   dc.DrawLine( x+420, y+80, x+420+20, y+80 );
+   dc.DrawLine( x+420, y+90, x+420+30, y+90 );
+   
+   y -= 40;
+   
+   dc.DrawCircle( x, y+100, 1);
+   dc.DrawCircle( x, y+110, 2);
+   dc.DrawCircle( x, y+120, 3);
+   dc.DrawCircle( x, y+130, 4);
+   dc.DrawCircle( x, y+140, 5);
+   dc.DrawCircle( x, y+160, 7);
+   dc.DrawCircle( x, y+180, 8);
+   
+   dc.DrawRectangle( x+50, y+100, 1, 1);
+   dc.DrawRectangle( x+50, y+110, 2, 2);
+   dc.DrawRectangle( x+50, y+120, 3, 3);
+   dc.DrawRectangle( x+50, y+130, 4, 4);
+   dc.DrawRectangle( x+50, y+140, 5, 5);
+   dc.DrawRectangle( x+50, y+160, 10, 10);
+   dc.DrawRectangle( x+50, y+180, 20, 20);
+   
+   dc.DrawRoundedRectangle( x+100, y+100, 1, 1, 1);
+   dc.DrawRoundedRectangle( x+100, y+110, 2, 2, 1);
+   dc.DrawRoundedRectangle( x+100, y+120, 3, 3, 1);
+   dc.DrawRoundedRectangle( x+100, y+130, 4, 4, 1);
+   dc.DrawRoundedRectangle( x+100, y+140, 5, 5, 1);
+   dc.DrawRoundedRectangle( x+100, y+160, 10, 10, 1);
+   dc.DrawRoundedRectangle( x+100, y+180, 20, 20, 1);
+   
+   dc.DrawRoundedRectangle( x+150, y+100, 1, 1, 2);
+   dc.DrawRoundedRectangle( x+150, y+110, 2, 2, 2);
+   dc.DrawRoundedRectangle( x+150, y+120, 3, 3, 2);
+   dc.DrawRoundedRectangle( x+150, y+130, 4, 4, 2);
+   dc.DrawRoundedRectangle( x+150, y+140, 5, 5, 2);
+   dc.DrawRoundedRectangle( x+150, y+160, 10, 10, 2);
+   dc.DrawRoundedRectangle( x+150, y+180, 20, 20, 2);
+   
+   dc.DrawRoundedRectangle( x+200, y+100, 1, 1, 3);
+   dc.DrawRoundedRectangle( x+200, y+110, 2, 2, 3);
+   dc.DrawRoundedRectangle( x+200, y+120, 3, 3, 3);
+   dc.DrawRoundedRectangle( x+200, y+130, 4, 4, 3);
+   dc.DrawRoundedRectangle( x+200, y+140, 5, 5, 3);
+   dc.DrawRoundedRectangle( x+200, y+160, 10, 10, 3);
+   dc.DrawRoundedRectangle( x+200, y+180, 20, 20, 3);
+   
+   dc.DrawRoundedRectangle( x+250, y+100, 1, 1, 5);
+   dc.DrawRoundedRectangle( x+250, y+110, 2, 2, 5);
+   dc.DrawRoundedRectangle( x+250, y+120, 3, 3, 5);
+   dc.DrawRoundedRectangle( x+250, y+130, 4, 4, 5);
+   dc.DrawRoundedRectangle( x+250, y+140, 5, 5, 5);
+   dc.DrawRoundedRectangle( x+250, y+160, 10, 10, 5);
+   dc.DrawRoundedRectangle( x+250, y+180, 20, 20, 5);
+   
+   dc.DrawRoundedRectangle( x+300, y+100, 1, 1, 10);
+   dc.DrawRoundedRectangle( x+300, y+110, 2, 2, 10);
+   dc.DrawRoundedRectangle( x+300, y+120, 3, 3, 10);
+   dc.DrawRoundedRectangle( x+300, y+130, 4, 4, 10);
+   dc.DrawRoundedRectangle( x+300, y+140, 5, 5, 10);
+   dc.DrawRoundedRectangle( x+300, y+160, 10, 10, 10);
+   dc.DrawRoundedRectangle( x+300, y+180, 20, 20, 10);
+   
+}
+
+void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+    m_owner->PrepareDC(dc);
+
+    dc.SetBackgroundMode( m_owner->m_backgroundMode );
+    if ( m_owner->m_backgroundBrush.Ok() )
+        dc.SetBackground( m_owner->m_backgroundBrush );
+    if ( m_owner->m_colourForeground.Ok() )
+        dc.SetTextForeground( m_owner->m_colourForeground );
+    if ( m_owner->m_colourBackground.Ok() )
+        dc.SetTextBackground( m_owner->m_colourBackground );
+
+    // mark the origin
+    dc.DrawCircle(0, 0, 10);
+#ifndef __WXGTK__   // not implemented in wxGTK :-(
+    dc.FloodFill(0, 0, wxColour(255, 0, 0));
+#endif // __WXGTK__
+
+    dc.DrawText( "This is text", 110, 10 );
+
+    dc.DrawIcon( wxICON(mondrian), 110, 40 );
+    
+    dc.SetBrush( *wxRED_BRUSH );
+    
+    int x = 20;
+    int y = 80;
+    int step = 200;
+    
+    dc.SetPen( wxPen( "black", 1, 0) );
+    DoDrawTests( x, y, dc );
+       
+    y += step;
+    
+    dc.SetPen( wxPen( "black", 1, wxDOT) );
+    DoDrawTests( x, y, dc );
+    
+    y += step;
+    
+    dc.SetPen( wxPen( "black", 1, wxSHORT_DASH) );
+    DoDrawTests( x, y, dc );
+    
+    y += step;
+    
+    dc.SetPen( wxPen( "black", 1, wxLONG_DASH) );
+    DoDrawTests( x, y, dc );
+    
+    y += step;
+    
+    dc.SetPen( wxPen( "black", 1, wxDOT_DASH) );
+    DoDrawTests( x, y, dc );
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
+
+// the event tables connect the wxWindows events with the functions (event
+// handlers) which process them. It can be also done at run-time, but for the
+// simple menu events like this the static method is much simpler.
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MOTION    (MyFrame::OnMouseMove)
+    EVT_MENU      (Minimal_Quit,     MyFrame::OnQuit)
+    EVT_MENU      (Minimal_About,    MyFrame::OnAbout)
+    EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
+END_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -258,8 +444,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_xAxisReversed =
     m_yAxisReversed = FALSE;
     m_backgroundMode = wxSOLID;
-}
 
+    m_canvas = new MyCanvas( this );
+    m_canvas->SetScrollbars( 10, 10, 100, 200 );
+}
 
 // event handlers
 
@@ -370,71 +558,6 @@ void MyFrame::PrepareDC(wxDC& dc)
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
-}
-
-void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
-{
-    wxPaintDC dc(this);
-    PrepareDC(dc);
-
-    dc.SetBackgroundMode( m_backgroundMode );
-    if ( m_backgroundBrush.Ok() )
-        dc.SetBackground( m_backgroundBrush );
-    if ( m_colourForeground.Ok() )
-        dc.SetTextForeground( m_colourForeground );
-    if ( m_colourBackground.Ok() )
-        dc.SetTextBackground( m_colourBackground );
-
-    // mark the origin
-    dc.DrawCircle(0, 0, 10);
-#ifndef __WXGTK__   // not implemented in wxGTK :-(
-    dc.FloodFill(0, 0, wxColour(255, 0, 0));
-#endif // __WXGTK__
-
-    dc.DrawRectangle( 10, 10, 90, 90 );
-    dc.DrawRoundedRectangle( 110, 10, 90, 90, 5 );
-    
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( 10, 110, 100, 110 );
-    dc.SetPen( *wxBLACK_PEN );
-    dc.DrawLine( 100, 110, 100, 200 );
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( 100, 200, 10, 200 );
-    dc.SetPen( *wxBLACK_PEN );
-    dc.DrawLine( 10, 200, 10, 110 );
-    
-    wxPen white_butt( "white", 1, wxSOLID );
-    white_butt.SetCap( wxCAP_BUTT );
-    wxPen black_butt( "black", 1, wxSOLID );
-    black_butt.SetCap( wxCAP_BUTT );
-    
-    dc.SetPen( white_butt );
-    dc.DrawLine( 110, 110, 200, 110 );
-    dc.SetPen( black_butt );
-    dc.DrawLine( 200, 110, 200, 200 );
-    dc.SetPen( white_butt );
-    dc.DrawLine( 200, 200, 110, 200 );
-    dc.SetPen( black_butt );
-    dc.DrawLine( 110, 200, 110, 110 );
-    
-    wxPen white_miter( "white", 1, wxSOLID );
-    white_miter.SetJoin( wxJOIN_MITER );
-    wxPen black_miter( "black", 1, wxSOLID );
-    black_miter.SetJoin( wxJOIN_MITER );
-    
-    dc.SetPen( white_miter );
-    dc.DrawLine( 210, 110, 300, 110 );
-    dc.SetPen( black_miter );
-    dc.DrawLine( 300, 110, 300, 200 );
-    dc.SetPen( white_miter );
-    dc.DrawLine( 300, 200, 210, 200 );
-    dc.SetPen( black_miter );
-    dc.DrawLine( 210, 200, 210, 110 );
-    
-
-    dc.DrawText( "This is text\n(on multiple lines)", 110, 10 );
-
-    dc.DrawIcon( wxICON(mondrian), 110, 40 );
 }
 
 void MyFrame::OnMouseMove(wxMouseEvent &event)

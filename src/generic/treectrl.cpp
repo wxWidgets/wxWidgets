@@ -411,7 +411,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 #endif
 
   SetBackgroundColour( *wxWHITE );
-  m_dottedPen = wxPen( "GREY", 0, wxDOT );
+//  m_dottedPen = wxPen( "grey", 0, wxDOT );
+  m_dottedPen = wxPen( "grey", 0, 0 );
 
   return TRUE;
 }
@@ -1650,7 +1651,8 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 else
                 {
                     wxTreeItemId next = GetNextSibling( m_key_current );
-                    if (next == 0)
+//                    if (next == 0)
+                    if (!next)
                     {
                         wxTreeItemId current = m_key_current;
                         while (current && !next)
@@ -1659,7 +1661,8 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                             if (current) next = GetNextSibling( current );
                         }
                     }
-                    if (next != 0)
+//                    if (next != 0)
+                    if (next)
                     {
                         SelectItem( next, unselect_others, extended_select );
 			m_key_current=next.m_pItem;

@@ -16,8 +16,7 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/settings.h"
-
-#include <wx/intl.h>
+#include "wx/intl.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
