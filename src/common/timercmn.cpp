@@ -141,22 +141,18 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
-  *timeZone = _timezone; // tp->tm_gmtoff; // ???
-  *dstObserved = tp->tm_isdst;
-#elif 0
-  /* HH: This code apparently was needed by very old Mingw-gcc versions
-   * Modern mingw's don't need it. Since old gcc isn't supported anyway,
-   * I think this stuff can go */
-  time_t t0;
-  struct tm *tp;
-  time(&t0);
-  tp = localtime(&t0);
+# if __GNUC__ == 2 && __GNUC_MINOR__ <= 8
+  // gcc 2.8.x or earlier
   timeb tz;
   ftime(& tz);
   *timeZone = tz._timezone;
+# else
+  // egcs or gcc 2.95
+  *timeZone = _timezone; // tp->tm_gmtoff; // ???
+# endif
   *dstObserved = tp->tm_isdst;
 #else
-
+// not mingw32...
 #if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__) || defined(__WXPM__)) \
    && !defined(__GNUWIN32__) && !defined(__MWERKS__) )
 #  if defined(__BORLANDC__)
