@@ -339,7 +339,8 @@ The following functions control this option:
  \param{const wxString\& }{vendorName = wxEmptyString},
  \param{const wxString\& }{localFilename = wxEmptyString},
  \param{const wxString\& }{globalFilename = wxEmptyString},
- \param{long}{ style = 0}}
+ \param{long}{ style = 0},
+ \param{wxMBConv\&}{ conv = wxConvUTF8}}
 
 This is the default and only constructor of the wxConfigBase class, and
 derived classes.
@@ -374,6 +375,10 @@ add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which will turn off character
 escaping for the values of entries stored in the config file: for example 
 a {\it foo} key with some backslash characters will be stored as {\tt foo=C:$\backslash$mydir} instead
 of the usual storage of {\tt foo=C:$\backslash\backslash$mydir}.
+
+\docparam{conv}{This parameter is only used by wxFileConfig when compiled
+in Unicode mode. It specifies the encoding in what the configuration file
+is written.}
 
 The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
 file must be read or written to by a non-wxWindows program (which might not 
