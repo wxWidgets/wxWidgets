@@ -776,7 +776,7 @@ void MyFrame::DropInSomeBars( int layoutNo )
         {
             if ( layoutNo == THIRD_LAYOUT  )
             {
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXX11__)
                 cbCommonPaneProperties props;
                 layout.GetPaneProperties( props );
                 props.mRealTimeUpdatesOn = FALSE; // real-time OFF for gtk!!!
@@ -849,7 +849,7 @@ void MyFrame::CreateLayout( int layoutNo )
     {
         pLayout->PushDefaultPlugins();
         pLayout->AddPlugin( CLASSINFO( cbBarHintsPlugin ) ); // facny "X"es and beveal for bars
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || || defined(__WXX11__) 
         pLayout->AddPlugin( CLASSINFO( cbHintAnimationPlugin ) );
 #endif
         pLayout->AddPlugin( CLASSINFO( cbRowDragPlugin ) ); 

@@ -36,7 +36,7 @@
 #include "cspalette.h"
 #include "symbols.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/arrow.xpm"
 #include "bitmaps/texttool.xpm"
 #endif
@@ -118,7 +118,7 @@ bool csApp::CreatePalette(wxFrame *parent)
     wxBitmap PaletteArrow("arrowtool");
     wxBitmap TextTool("texttool");
     wxSize toolBitmapSize(32, 32);
-#elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     wxBitmap PaletteArrow(arrow_xpm);
     wxBitmap TextTool(texttool_xpm);
     wxSize toolBitmapSize(22, 22);

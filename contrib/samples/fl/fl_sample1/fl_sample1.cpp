@@ -117,7 +117,7 @@ MyFrame::MyFrame( wxWindow* parent, char *title )
     
     mpLayout = new wxFrameLayout( mpInternalFrm, mpClientWnd );
     
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXX11__)
     // real-time dosn't work well under wxGtk yet
     cbCommonPaneProperties props;
     mpLayout->GetPaneProperties( props );

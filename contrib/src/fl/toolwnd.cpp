@@ -867,7 +867,7 @@ void cbMiniButton::Reset()
 
 void cbCloseBox::Draw( wxDC& dc )
 {
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXX11__)
 
     cbMiniButton::Draw( dc );
     

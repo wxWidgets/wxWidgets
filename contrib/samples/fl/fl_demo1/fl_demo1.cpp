@@ -134,7 +134,7 @@ MyFrame::MyFrame(wxFrame *frame)
     
     mpLayout = new wxFrameLayout( this, mpClientWnd );
     
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXX11__)
     cbCommonPaneProperties props;
     mpLayout->GetPaneProperties( props );
     

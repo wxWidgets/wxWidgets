@@ -22,237 +22,237 @@ src/regex/regex.dsw
 
 samples/samples.dsw
 
-samples/calendar/Calendar.dsp
-samples/calendar/Calendar.dsw
+samples/calendar/calendar.dsp
+samples/calendar/calendar.dsw
 
-samples/caret/Caret.dsp
-samples/caret/Caret.dsw
+samples/caret/caret.dsp
+samples/caret/caret.dsw
 
-samples/checklst/Checklst.dsp
-samples/checklst/Checklst.dsw
+samples/checklst/checklst.dsp
+samples/checklst/checklst.dsw
 
-samples/config/Config.dsp
-samples/config/Config.dsw
+samples/config/config.dsp
+samples/config/config.dsw
 
 samples/console/console.dsp
 samples/console/console.dsw
 
-samples/controls/Controls.dsp
-samples/controls/Controls.dsw
+samples/controls/controls.dsp
+samples/controls/controls.dsw
 
-samples/db/Db.dsp
-samples/db/Db.dsw
+samples/db/db.dsp
+samples/db/db.dsw
 
-samples/dialogs/Dialogs.dsp
-samples/dialogs/Dialogs.dsw
+samples/dialogs/dialogs.dsp
+samples/dialogs/dialogs.dsw
 
-samples/dialup/Dialup.dsp
-samples/dialup/Dialup.dsw
+samples/dialup/dialup.dsp
+samples/dialup/dialup.dsw
 
-samples/dnd/Dnd.dsp
-samples/dnd/Dnd.dsw
+samples/dnd/dnd.dsp
+samples/dnd/dnd.dsw
 
-samples/dragimag/Dragimag.dsp
-samples/dragimag/Dragimag.dsw
+samples/dragimag/dragimag.dsp
+samples/dragimag/dragimag.dsw
 
-samples/docview/Docview.dsp
-samples/docview/Docview.dsw
+samples/docview/docview.dsp
+samples/docview/docview.dsw
 
-samples/docvwmdi/DocVwMdi.dsp
-samples/docvwmdi/DocVwMdi.dsw
+samples/docvwmdi/docvwmdi.dsp
+samples/docvwmdi/docvwmdi.dsw
 
-samples/drawing/Drawing.dsp
-samples/drawing/Drawing.dsw
+samples/drawing/drawing.dsp
+samples/drawing/drawing.dsw
 
-samples/dynamic/Dynamic.dsp
-samples/dynamic/Dynamic.dsw
+samples/dynamic/dynamic.dsp
+samples/dynamic/dynamic.dsw
 
-samples/erase/Erase.dsp
-samples/erase/Erase.dsw
+samples/erase/erase.dsp
+samples/erase/erase.dsw
 
-samples/event/Event.dsp
-samples/event/Event.dsw
+samples/event/event.dsp
+samples/event/event.dsw
 
-samples/exec/Exec.dsp
-samples/exec/Exec.dsw
+samples/exec/exec.dsp
+samples/exec/exec.dsw
 
-samples/font/Font.dsp
-samples/font/Font.dsw
+samples/font/font.dsp
+samples/font/font.dsw
 
-samples/grid/Grid.dsp
-samples/grid/Grid.dsw
+samples/grid/grid.dsp
+samples/grid/grid.dsw
 
-samples/help/Help.dsp
-samples/help/Help.dsw
+samples/help/help.dsp
+samples/help/help.dsw
 
-samples/html/about/About.dsp
-samples/html/about/About.dsw
-samples/html/help/Help.dsp
-samples/html/help/Help.dsw
-samples/html/helpview/HelpView.dsp
-samples/html/helpview/HelpView.dsw
-samples/html/printing/Printing.dsp
-samples/html/printing/Printing.dsw
-samples/html/test/Test.dsp
-samples/html/test/Test.dsw
-samples/html/virtual/Virtual.dsp
-samples/html/virtual/Virtual.dsw
-samples/html/widget/Widget.dsp
-samples/html/widget/Widget.dsw
-samples/html/zip/Zip.dsp
-samples/html/zip/Zip.dsw
+samples/html/about/about.dsp
+samples/html/about/about.dsw
+samples/html/help/help.dsp
+samples/html/help/help.dsw
+samples/html/helpview/helpview.dsp
+samples/html/helpview/helpview.dsw
+samples/html/printing/printing.dsp
+samples/html/printing/printing.dsw
+samples/html/test/test.dsp
+samples/html/test/test.dsw
+samples/html/virtual/virtual.dsp
+samples/html/virtual/virtual.dsw
+samples/html/widget/widget.dsp
+samples/html/widget/widget.dsw
+samples/html/zip/zip.dsp
+samples/html/zip/zip.dsw
 
-samples/image/Image.dsp
-samples/image/Image.dsw
+samples/image/image.dsp
+samples/image/image.dsw
 
-samples/internat/Internat.dsp
-samples/internat/Internat.dsw
+samples/internat/internat.dsp
+samples/internat/internat.dsw
 
-samples/ipc/Client.dsp
-samples/ipc/Client.dsw
-samples/ipc/Server.dsp
-samples/ipc/Server.dsw
+samples/ipc/client.dsp
+samples/ipc/client.dsw
+samples/ipc/server.dsp
+samples/ipc/server.dsw
 
-samples/joytest/Joytest.dsp
-samples/joytest/Joytest.dsw
+samples/joytest/joytest.dsp
+samples/joytest/joytest.dsw
 
-samples/layout/Layout.dsp
-samples/layout/Layout.dsw
+samples/layout/layout.dsp
+samples/layout/layout.dsw
 
-samples/listctrl/ListCtrl.dsp
-samples/listctrl/ListCtrl.dsw
+samples/listctrl/listctrl.dsp
+samples/listctrl/listctrl.dsw
 
-samples/mdi/Mdi.dsp
-samples/mdi/Mdi.dsw
+samples/mdi/mdi.dsp
+samples/mdi/mdi.dsw
 
-samples/memcheck/Memcheck.dsp
-samples/memcheck/Memcheck.dsw
+samples/memcheck/memcheck.dsp
+samples/memcheck/memcheck.dsw
 
-samples/menu/Menu.dsp
-samples/menu/Menu.dsw
+samples/menu/menu.dsp
+samples/menu/menu.dsw
 
-samples/mfc/Mfc.dsp
-samples/mfc/Mfc.dsw
+samples/mfc/mfc.dsp
+samples/mfc/mfc.dsw
 
-samples/minimal/Minimal.dsp
-samples/minimal/Minimal.dsw
+samples/minimal/minimal.dsp
+samples/minimal/minimal.dsw
 
-samples/minifram/Minifram.dsp
-samples/minifram/Minifram.dsw
+samples/minifram/minifram.dsp
+samples/minifram/minifram.dsw
 
-samples/nativdlg/Nativdlg.dsp
-samples/nativdlg/Nativdlg.dsw
+samples/nativdlg/nativdlg.dsp
+samples/nativdlg/nativdlg.dsw
 
-samples/newgrid/Newgrid.dsp
-samples/newgrid/Newgrid.dsw
+samples/newgrid/newgrid.dsp
+samples/newgrid/newgrid.dsw
 
-samples/notebook/Notebook.dsp
-samples/notebook/Notebook.dsw
+samples/notebook/notebook.dsp
+samples/notebook/notebook.dsw
 
-samples/oleauto/Oleauto.dsp
-samples/oleauto/Oleauto.dsw
+samples/oleauto/oleauto.dsp
+samples/oleauto/oleauto.dsw
 
-samples/ownerdrw/OwnerDrw.dsp
-samples/ownerdrw/OwnerDrw.dsw
+samples/ownerdrw/ownerDrw.dsp
+samples/ownerdrw/ownerDrw.dsw
 
-samples/png/Png.dsp
-samples/png/Png.dsw
+samples/png/png.dsp
+samples/png/png.dsw
 
-samples/printing/Printing.dsp
-samples/printing/Printing.dsw
+samples/printing/printing.dsp
+samples/printing/printing.dsw
 
-samples/proplist/Proplist.dsp
-samples/proplist/Proplist.dsw
+samples/proplist/proplist.dsp
+samples/proplist/proplist.dsw
 
-samples/propsize/Propsize.dsp
-samples/propsize/Propsize.dsw
+samples/propsize/propsize.dsp
+samples/propsize/propsize.dsw
 
-samples/Regtest/Regtest.dsp
-samples/Regtest/Regtest.dsw
+samples/regtest/regtest.dsp
+samples/regtest/regtest.dsw
 
-samples/resource/Resource.dsp
-samples/resource/Resource.dsw
+samples/resource/resource.dsp
+samples/resource/resource.dsw
 
-samples/richedit/RichEdit.dsp
-samples/richedit/RichEdit.dsw
+samples/richedit/richedit.dsp
+samples/richedit/richedit.dsw
 
-samples/rotate/Rotate.dsp
-samples/rotate/Rotate.dsw
+samples/rotate/rotate.dsp
+samples/rotate/rotate.dsw
 
-samples/sashtest/Sashtest.dsp
-samples/sashtest/Sashtest.dsw
+samples/sashtest/sashtest.dsp
+samples/sashtest/sashtest.dsw
 
-samples/scroll/Scroll.dsp
-samples/scroll/Scroll.dsw
+samples/scroll/scroll.dsp
+samples/scroll/scroll.dsw
 
-samples/scrollsub/Scrollsub.dsp
-samples/scrollsub/Scrollsub.dsw
+samples/scrollsub/scrollsub.dsp
+samples/scrollsub/scrollsub.dsw
 
-samples/sockets/Client.dsp
-samples/sockets/Server.dsp
-samples/sockets/Client.dsw
-samples/sockets/Server.dsw
+samples/sockets/client.dsp
+samples/sockets/server.dsp
+samples/sockets/client.dsw
+samples/sockets/server.dsw
 
-samples/splitter/Splitter.dsp
-samples/splitter/Splitter.dsw
+samples/splitter/splitter.dsp
+samples/splitter/splitter.dsw
 
-samples/statbar/Statbar.dsp
-samples/statbar/Statbar.dsw
+samples/statbar/statbar.dsp
+samples/statbar/statbar.dsw
 
-samples/taskbar/Taskbar.dsp
-samples/taskbar/Taskbar.dsw
+samples/taskbar/taskbar.dsp
+samples/taskbar/taskbar.dsw
 
-samples/text/Text.dsp
-samples/text/Text.dsw
+samples/text/text.dsp
+samples/text/text.dsw
 
-samples/thread/Thread.dsp
-samples/thread/Thread.dsw
+samples/thread/thread.dsp
+samples/thread/thread.dsw
 
-samples/toolbar/Toolbar.dsp
-samples/toolbar/Toolbar.dsw
+samples/toolbar/toolbar.dsp
+samples/toolbar/toolbar.dsw
 
-samples/treectrl/Treectrl.dsp
-samples/treectrl/TreeCtrl.dsw
+samples/treectrl/treetest.dsp
+samples/treectrl/treetest.dsw
 
-samples/treelay/Treelay.dsp
-samples/treelay/Treelay.dsw
+samples/treelay/treelay.dsp
+samples/treelay/treelay.dsw
 
-samples/typetest/Typetest.dsp
-samples/typetest/Typetest.dsw
+samples/typetest/typetest.dsp
+samples/typetest/typetest.dsw
 
-samples/validate/Validate.dsp
-samples/validate/Validate.dsw
+samples/validate/validate.dsp
+samples/validate/validate.dsw
 
-samples/wizard/Wizard.dsp
-samples/wizard/Wizard.dsw
+samples/wizard/wizard.dsp
+samples/wizard/wizard.dsw
 
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
 
-samples/opengl/cube/Cube.dsp
-samples/opengl/cube/Cube.dsw
-samples/opengl/isosurf/Isosurf.dsp
-samples/opengl/isosurf/Isosurf.dsw
-samples/opengl/penguin/Penguin.dsp
-samples/opengl/penguin/Penguin.dsw
+samples/opengl/cube/cube.dsp
+samples/opengl/cube/cube.dsw
+samples/opengl/isosurf/isosurf.dsp
+samples/opengl/isosurf/isosurf.dsw
+samples/opengl/penguin/penguin.dsp
+samples/opengl/penguin/penguin.dsw
 
-demos/bombs/Bombs.dsp
-demos/bombs/Bombs.dsw
+demos/bombs/bombs.dsp
+demos/bombs/bombs.dsw
 
-demos/dbbrowse/Dbbrowse.dsp
-demos/dbbrowse/Dbbrowse.dsw
+demos/dbbrowse/dbbrowse.dsp
+demos/dbbrowse/dbbrowse.dsw
 
-demos/forty/Forty.dsp
-demos/forty/Forty.dsw
+demos/forty/forty.dsp
+demos/forty/forty.dsw
 
-demos/fractal/Fractal.dsp
-demos/fractal/Fractal.dsw
+demos/fractal/fractal.dsp
+demos/fractal/fractal.dsw
 
-demos/life/Life.dsp
-demos/life/Life.dsw
+demos/life/life.dsp
+demos/life/life.dsw
 
-demos/poem/Poem.dsp
-demos/poem/Poem.dsw
+demos/poem/poem.dsp
+demos/poem/poem.dsw
 
 utils/dialoged/src/DialogEdVC.dsp
 utils/dialoged/src/DialogEdVC.dsw
@@ -315,12 +315,16 @@ contrib/samples/plot/PlotVC.dsw
 
 contrib/src/gizmos/GizmosVC.dsp
 contrib/src/gizmos/GizmosVC.dsw
-contrib/samples/gizmos/multicell/MulticellVC.dsp
-contrib/samples/gizmos/multicell/MulticellVC.dsw
+contrib/samples/gizmos/dynsash/dynsash.dsp
+contrib/samples/gizmos/dynsash/dynsash.dsw
+contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsp
+contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw
+contrib/samples/gizmos/editlbox/editlbox.dsp
+contrib/samples/gizmos/editlbox/editlbox.dsw
+contrib/samples/gizmos/multicell/multicell.dsp
+contrib/samples/gizmos/multicell/multicell.dsw
 contrib/samples/gizmos/splittree/TreeVC.dsp
 contrib/samples/gizmos/splittree/TreeVC.dsw
-contrib/samples/gizmos/editlbox/EditlboxVC.dsp
-contrib/samples/gizmos/editlbox/EditlboxVC.dsw
 
 contrib/src/animate/AnimateVC.dsp
 contrib/src/animate/AnimateVC.dsw

@@ -35,7 +35,7 @@
 #include  <wx/wx.h>
 #endif //WX_PRECOMP
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXX11__)
 #include "db.xpm"
 #endif
 

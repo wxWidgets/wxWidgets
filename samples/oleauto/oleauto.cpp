@@ -48,7 +48,7 @@
 // ressources
 // ----------------------------------------------------------------------------
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
     #include "mondrian.xpm"
 #endif
 

@@ -387,7 +387,7 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
     pChild->Reparent(pNewParent);
 
     return;
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK__) || defined(__WXX11__)
     // FOR NOW:: floating with wxGtk still very buggy
 
     return;
