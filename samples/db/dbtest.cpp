@@ -278,7 +278,13 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
     if (pEditorDlg->Close())
         pEditorDlg = NULL;
     else
+	 {
         event.Veto();
+		  return;
+    }
+
+    // Cleans up the environment space allocated for the SQL/ODBC connection handle
+    SQLFreeEnv(DbConnectInf.Henv);
 
     this->Destroy();
 
@@ -471,7 +477,7 @@ bool Ccontact::FetchByName(char *name)
 {
     whereStr.Printf("NAME = '%s'",name);
     where = (char*) (const char*) this->whereStr;
-    orderBy = 0;
+    orderBy = "";
 
     if (!Query())
         return(FALSE);
@@ -639,7 +645,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
         Contact->where = (char*) (const char*) Contact->whereStr;
     }
     else
-        Contact->where = 0;
+		 Contact->where = "";
 
     // Perform the Query to get the result set.  
     // NOTE: If there are no rows returned, that is a valid result, so Query() would return TRUE.  
@@ -807,7 +813,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
             Contact->where = (char*) (const char*) Contact->whereStr;
         }
         else
-            Contact->where = 0;
+            Contact->where = "";
 
         if (!Contact->Query())
         {
@@ -2048,7 +2054,7 @@ void CqueryDlg::ProcessCountBtn()
     ULONG whereCnt = dbTable->Count();
 
     // Count() of all records in the table
-    dbTable->where = 0;
+    dbTable->where = "";
     ULONG totalCnt = dbTable->Count();
 
     if (whereCnt > 0 || totalCnt == 0)
