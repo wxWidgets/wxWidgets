@@ -112,7 +112,7 @@ static const int SCROLL_UNIT_X = 15;
 static const int LINE_SPACING = 0;
 
 // extra margins around the text label
-static const int EXTRA_WIDTH = 3;
+static const int EXTRA_WIDTH = 4;
 static const int EXTRA_HEIGHT = 4;
 
 // margin between the window and the items
