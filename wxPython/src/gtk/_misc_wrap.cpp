@@ -232,11 +232,11 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxLogTextCtrl swig_types[23] 
 #define  SWIGTYPE_p_wxTextCtrl swig_types[24] 
 #define  SWIGTYPE_p_wxBusyCursor swig_types[25] 
-#define  SWIGTYPE_p_wxPyTextDataObject swig_types[26] 
-#define  SWIGTYPE_p_wxBitmapDataObject swig_types[27] 
-#define  SWIGTYPE_p_wxTextDataObject swig_types[28] 
-#define  SWIGTYPE_p_wxDataObject swig_types[29] 
-#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[30] 
+#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[26] 
+#define  SWIGTYPE_p_wxPyTextDataObject swig_types[27] 
+#define  SWIGTYPE_p_wxBitmapDataObject swig_types[28] 
+#define  SWIGTYPE_p_wxTextDataObject swig_types[29] 
+#define  SWIGTYPE_p_wxDataObject swig_types[30] 
 #define  SWIGTYPE_p_wxFileDataObject swig_types[31] 
 #define  SWIGTYPE_p_wxCustomDataObject swig_types[32] 
 #define  SWIGTYPE_p_wxURLDataObject swig_types[33] 
@@ -288,11 +288,10 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxPyLog swig_types[79] 
 #define  SWIGTYPE_p_wxLogNull swig_types[80] 
 #define  SWIGTYPE_p_wxColour swig_types[81] 
-#define  SWIGTYPE_p_wxByte swig_types[82] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[83] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[84] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[85] 
-static swig_type_info *swig_types[87];
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[82] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[83] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[84] 
+static swig_type_info *swig_types[86];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -855,7 +854,7 @@ public:
                         "wxSound is not available on this platform.");
         wxPyEndBlockThreads(blocked);
     }
-    wxSound(const wxString&, bool) {
+    wxSound(const wxString&/*, bool*/) {
         bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
@@ -870,7 +869,7 @@ public:
     
     ~wxSound() {};
 
-    bool Create(const wxString&, bool) { return false; }
+    bool Create(const wxString&/*, bool*/) { return false; }
     bool Create(int, const wxByte*) { return false; };
     bool IsOk() { return false; };    
     bool Play(unsigned) const { return false; }
@@ -880,6 +879,45 @@ public:
 
 #endif
 
+wxSound *new_wxSound(wxString const &fileName){
+            if (fileName.Length() == 0)
+                return new wxSound;
+            else
+                return new wxSound(fileName);
+        }
+wxSound *new_wxSound(PyObject *data){
+            unsigned char* buffer; int size;
+            wxSound *sound = NULL;
+
+            bool blocked = wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
+            sound = new wxSound(size, buffer);
+        done:
+            wxPyEndBlockThreads(blocked);
+            return sound;
+        }
+bool wxSound_CreateFromData(wxSound *self,PyObject *data){
+        #ifndef __WXMAC__
+            unsigned char* buffer;
+            int size;
+            bool rv = False;
+
+            bool blocked = wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
+            rv = self->Create(size, buffer);
+        done:
+            wxPyEndBlockThreads(blocked);
+            return rv;
+        #else
+                 bool blocked = wxPyBeginBlockThreads();
+                 PyErr_SetString(PyExc_NotImplementedError,
+                                 "Create from data is not available on this platform.");
+                 wxPyEndBlockThreads(blocked);
+                 return False;
+        #endif
+        }
 
 #include <wx/mimetype.h>
 
@@ -11395,47 +11433,28 @@ static PyObject * JoystickEvent_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_Sound__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_Sound(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxSound *result;
-    
-    if(!PyArg_ParseTuple(args,(char *)":new_Sound")) goto fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxSound *)new wxSound();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSound, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_Sound__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxString *arg1 = 0 ;
-    bool arg2 = (bool) false ;
+    wxString const &arg1_defvalue = wxPyEmptyString ;
+    wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxSound *result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "fileName", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"O|O:new_Sound",&obj0,&obj1)) goto fail;
-    {
-        arg1 = wxString_in_helper(obj0);
-        if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
-    }
-    if (obj1) {
-        arg2 = (bool) SWIG_AsBool(obj1); 
-        if (PyErr_Occurred()) SWIG_fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_Sound",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = wxString_in_helper(obj0);
+            if (arg1 == NULL) SWIG_fail;
+            temp1 = True;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxSound *)new wxSound((wxString const &)*arg1,arg2);
+        result = (wxSound *)new_wxSound((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11455,22 +11474,20 @@ static PyObject *_wrap_new_Sound__SWIG_1(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_new_Sound__SWIG_2(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_SoundFromData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    int arg1 ;
-    wxByte *arg2 = (wxByte *) 0 ;
+    PyObject *arg1 = (PyObject *) 0 ;
     wxSound *result;
     PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "data", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_Sound",&obj0,&obj1)) goto fail;
-    arg1 = (int) SWIG_AsInt(obj0); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxByte,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_SoundFromData",kwnames,&obj0)) goto fail;
+    arg1 = obj0;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxSound *)new wxSound(arg1,(wxByte const *)arg2);
+        result = (wxSound *)new_wxSound(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11478,57 +11495,6 @@ static PyObject *_wrap_new_Sound__SWIG_2(PyObject *self, PyObject *args) {
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSound, 1);
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_Sound(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
-    
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
-    }
-    if (argc == 0) {
-        return _wrap_new_Sound__SWIG_0(self,args);
-    }
-    if ((argc >= 1) && (argc <= 2)) {
-        int _v;
-        {
-            _v = PyString_Check(argv[0]) || PyUnicode_Check(argv[0]);
-        }
-        if (_v) {
-            if (argc <= 1) {
-                return _wrap_new_Sound__SWIG_1(self,args);
-            }
-            _v = SWIG_CheckBool(argv[1]);
-            if (_v) {
-                return _wrap_new_Sound__SWIG_1(self,args);
-            }
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        _v = SWIG_CheckInt(argv[0]);
-        if (_v) {
-            {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxByte, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
-                }
-            }
-            if (_v) {
-                return _wrap_new_Sound__SWIG_2(self,args);
-            }
-        }
-    }
-    
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_Sound'");
     return NULL;
 }
 
@@ -11558,18 +11524,19 @@ static PyObject *_wrap_delete_Sound(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_Sound_Create__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_Sound_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSound *arg1 = (wxSound *) 0 ;
     wxString *arg2 = 0 ;
-    bool arg3 = (bool) false ;
     bool result;
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "fileName", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO|O:Sound_Create",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sound_Create",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSound,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -11577,13 +11544,9 @@ static PyObject *_wrap_Sound_Create__SWIG_0(PyObject *self, PyObject *args) {
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
     }
-    if (obj2) {
-        arg3 = (bool) SWIG_AsBool(obj2); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Create((wxString const &)*arg2,arg3);
+        result = (bool)(arg1)->Create((wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11605,26 +11568,24 @@ static PyObject *_wrap_Sound_Create__SWIG_0(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Sound_Create__SWIG_1(PyObject *self, PyObject *args) {
+static PyObject *_wrap_Sound_CreateFromData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSound *arg1 = (wxSound *) 0 ;
-    int arg2 ;
-    wxByte *arg3 = (wxByte *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:Sound_Create",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sound_CreateFromData",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSound,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxByte,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Create(arg2,(wxByte const *)arg3);
+        result = (bool)wxSound_CreateFromData(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11634,76 +11595,6 @@ static PyObject *_wrap_Sound_Create__SWIG_1(PyObject *self, PyObject *args) {
     }
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Sound_Create(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[4];
-    int ii;
-    
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
-    }
-    if ((argc >= 2) && (argc <= 3)) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxSound, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = PyString_Check(argv[1]) || PyUnicode_Check(argv[1]);
-            }
-            if (_v) {
-                if (argc <= 2) {
-                    return _wrap_Sound_Create__SWIG_0(self,args);
-                }
-                _v = SWIG_CheckBool(argv[2]);
-                if (_v) {
-                    return _wrap_Sound_Create__SWIG_0(self,args);
-                }
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxSound, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            _v = SWIG_CheckInt(argv[1]);
-            if (_v) {
-                {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxByte, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
-                }
-                if (_v) {
-                    return _wrap_Sound_Create__SWIG_1(self,args);
-                }
-            }
-        }
-    }
-    
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'Sound_Create'");
     return NULL;
 }
 
@@ -11736,15 +11627,18 @@ static PyObject *_wrap_Sound_IsOk(PyObject *self, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_Sound_Play(PyObject *self, PyObject *args) {
+static PyObject *_wrap_Sound_Play(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSound *arg1 = (wxSound *) 0 ;
     unsigned int arg2 = (unsigned int) wxSOUND_ASYNC ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "flags", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"O|O:Sound_Play",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Sound_Play",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSound,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
@@ -11767,7 +11661,7 @@ static PyObject *_wrap_Sound_Play(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_Sound_PlaySound(PyObject *self, PyObject *args) {
+static PyObject *_wrap_Sound_PlaySound(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     unsigned int arg2 = (unsigned int) wxSOUND_ASYNC ;
@@ -11775,8 +11669,11 @@ static PyObject *_wrap_Sound_PlaySound(PyObject *self, PyObject *args) {
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "filename",(char *) "flags", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"O|O:Sound_PlaySound",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Sound_PlaySound",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -28364,12 +28261,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"JoystickEvent_ButtonUp", (PyCFunction) _wrap_JoystickEvent_ButtonUp, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"JoystickEvent_ButtonIsDown", (PyCFunction) _wrap_JoystickEvent_ButtonIsDown, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"JoystickEvent_swigregister", JoystickEvent_swigregister, METH_VARARGS },
-	 { (char *)"new_Sound", _wrap_new_Sound, METH_VARARGS },
+	 { (char *)"new_Sound", (PyCFunction) _wrap_new_Sound, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_SoundFromData", (PyCFunction) _wrap_new_SoundFromData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Sound", (PyCFunction) _wrap_delete_Sound, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Sound_Create", _wrap_Sound_Create, METH_VARARGS },
+	 { (char *)"Sound_Create", (PyCFunction) _wrap_Sound_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sound_CreateFromData", (PyCFunction) _wrap_Sound_CreateFromData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sound_IsOk", (PyCFunction) _wrap_Sound_IsOk, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Sound_Play", _wrap_Sound_Play, METH_VARARGS },
-	 { (char *)"Sound_PlaySound", _wrap_Sound_PlaySound, METH_VARARGS },
+	 { (char *)"Sound_Play", (PyCFunction) _wrap_Sound_Play, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sound_PlaySound", (PyCFunction) _wrap_Sound_PlaySound, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sound_Stop", (PyCFunction) _wrap_Sound_Stop, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sound_swigregister", Sound_swigregister, METH_VARARGS },
 	 { (char *)"new_FileTypeInfo", (PyCFunction) _wrap_new_FileTypeInfo, METH_VARARGS | METH_KEYWORDS },
@@ -29354,11 +29253,11 @@ static swig_type_info _swigt__p_wxLogStderr[] = {{"_p_wxLogStderr", 0, "wxLogStd
 static swig_type_info _swigt__p_wxLogTextCtrl[] = {{"_p_wxLogTextCtrl", 0, "wxLogTextCtrl *", 0, 0, 0, 0},{"_p_wxLogTextCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTextCtrl[] = {{"_p_wxTextCtrl", 0, "wxTextCtrl *", 0, 0, 0, 0},{"_p_wxTextCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBusyCursor[] = {{"_p_wxBusyCursor", 0, "wxBusyCursor *", 0, 0, 0, 0},{"_p_wxBusyCursor", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyTextDataObject[] = {{"_p_wxPyTextDataObject", 0, "wxPyTextDataObject *", 0, 0, 0, 0},{"_p_wxPyTextDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBitmapDataObject[] = {{"_p_wxBitmapDataObject", 0, "wxBitmapDataObject *", 0, 0, 0, 0},{"_p_wxBitmapDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxBitmapDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTextDataObject[] = {{"_p_wxTextDataObject", 0, "wxTextDataObject *", 0, 0, 0, 0},{"_p_wxTextDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxTextDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDataObject[] = {{"_p_wxDataObject", 0, "wxDataObject *", 0, 0, 0, 0},{"_p_wxDataObjectSimple", _p_wxDataObjectSimpleTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxDataObjectComposite", _p_wxDataObjectCompositeTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0, 0, 0, 0},{"_p_wxFileDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCustomDataObject[] = {{"_p_wxCustomDataObject", 0, "wxCustomDataObject *", 0, 0, 0, 0},{"_p_wxCustomDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxURLDataObject[] = {{"_p_wxURLDataObject", 0, "wxURLDataObject *", 0, 0, 0, 0},{"_p_wxURLDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -29410,7 +29309,6 @@ static swig_type_info _swigt__p_wxProcessEvent[] = {{"_p_wxProcessEvent", 0, "wx
 static swig_type_info _swigt__p_wxPyLog[] = {{"_p_wxPyLog", 0, "wxPyLog *", 0, 0, 0, 0},{"_p_wxPyLog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxLogNull[] = {{"_p_wxLogNull", 0, "wxLogNull *", 0, 0, 0, 0},{"_p_wxLogNull", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxByte[] = {{"_p_wxByte", 0, "wxByte *", 0, 0, 0, 0},{"_p_wxByte", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxConfigPathChanger[] = {{"_p_wxConfigPathChanger", 0, "wxConfigPathChanger *", 0, 0, 0, 0},{"_p_wxConfigPathChanger", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyTimer[] = {{"_p_wxPyTimer", 0, "wxPyTimer *", 0, 0, 0, 0},{"_p_wxPyTimer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDateSpan[] = {{"_p_wxDateSpan", 0, "wxDateSpan *", 0, 0, 0, 0},{"_p_wxDateSpan", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -29442,11 +29340,11 @@ _swigt__p_wxLogStderr,
 _swigt__p_wxLogTextCtrl, 
 _swigt__p_wxTextCtrl, 
 _swigt__p_wxBusyCursor, 
+_swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxPyTextDataObject, 
 _swigt__p_wxBitmapDataObject, 
 _swigt__p_wxTextDataObject, 
 _swigt__p_wxDataObject, 
-_swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxFileDataObject, 
 _swigt__p_wxCustomDataObject, 
 _swigt__p_wxURLDataObject, 
@@ -29498,7 +29396,6 @@ _swigt__p_wxProcessEvent,
 _swigt__p_wxPyLog, 
 _swigt__p_wxLogNull, 
 _swigt__p_wxColour, 
-_swigt__p_wxByte, 
 _swigt__p_wxConfigPathChanger, 
 _swigt__p_wxPyTimer, 
 _swigt__p_wxDateSpan, 

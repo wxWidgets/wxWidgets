@@ -714,6 +714,7 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *ar
         arg2 = new wxMemoryBuffer(len);
         temp2 = True;
         memcpy(arg2->GetData(), str, len);
+        arg2->SetDataLen(len);
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();

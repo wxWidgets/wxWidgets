@@ -2020,13 +2020,9 @@ SOUND_LOOP = _misc_.SOUND_LOOP
 class Sound(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSound instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
-        """
-        __init__(self) -> Sound
-        __init__(self, String fileName, bool isResource=false) -> Sound
-        __init__(self, int size, wxByte data) -> Sound
-        """
-        newobj = _misc_.new_Sound(*args)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, String fileName=EmptyString) -> Sound"""
+        newobj = _misc_.new_Sound(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -2036,24 +2032,25 @@ class Sound(object):
             if self.thisown: destroy(self)
         except: pass
 
-    def Create(*args):
-        """
-        Create(self, String fileName, bool isResource=false) -> bool
-        Create(self, int size, wxByte data) -> bool
-        """
-        return _misc_.Sound_Create(*args)
+    def Create(*args, **kwargs):
+        """Create(self, String fileName) -> bool"""
+        return _misc_.Sound_Create(*args, **kwargs)
+
+    def CreateFromData(*args, **kwargs):
+        """CreateFromData(self, PyObject data) -> bool"""
+        return _misc_.Sound_CreateFromData(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
         return _misc_.Sound_IsOk(*args, **kwargs)
 
-    def Play(*args):
+    def Play(*args, **kwargs):
         """Play(self, unsigned int flags=SOUND_ASYNC) -> bool"""
-        return _misc_.Sound_Play(*args)
+        return _misc_.Sound_Play(*args, **kwargs)
 
-    def PlaySound(*args):
+    def PlaySound(*args, **kwargs):
         """PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
-        return _misc_.Sound_PlaySound(*args)
+        return _misc_.Sound_PlaySound(*args, **kwargs)
 
     PlaySound = staticmethod(PlaySound)
     def Stop(*args, **kwargs):
@@ -2070,9 +2067,15 @@ class SoundPtr(Sound):
         self.__class__ = Sound
 _misc_.Sound_swigregister(SoundPtr)
 
-def Sound_PlaySound(*args):
+def SoundFromData(*args, **kwargs):
+    """SoundFromData(PyObject data) -> Sound"""
+    val = _misc_.new_SoundFromData(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def Sound_PlaySound(*args, **kwargs):
     """Sound_PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
-    return _misc_.Sound_PlaySound(*args)
+    return _misc_.Sound_PlaySound(*args, **kwargs)
 
 def Sound_Stop(*args, **kwargs):
     """Sound_Stop()"""
