@@ -520,7 +520,20 @@ void wxFrame::OnInternalIdle()
     if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
 #endif
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar) m_frameStatusBar->OnInternalIdle();
+    if (m_frameStatusBar)
+    {
+        m_frameStatusBar->OnInternalIdle();
+
+        // There may be controls in the status bar that
+        // need to be updated
+        for ( wxWindowList::compatibility_iterator node = m_frameStatusBar->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+        {
+            wxWindow *child = node->GetData();
+            child->OnInternalIdle();
+        }
+    }
 #endif
 }
 
