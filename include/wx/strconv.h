@@ -95,12 +95,15 @@ WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
 // wxCSConv (for conversion based on loadable char sets)
 // ----------------------------------------------------------------------------
 
+#include "wx/fontenc.h"
+
 class WXDLLIMPEXP_BASE wxCharacterSet;
 
 class WXDLLIMPEXP_BASE wxCSConv : public wxMBConv
 {
 public:
     wxCSConv(const wxChar *charset);
+    wxCSConv(wxFontEncoding encoding);
     wxCSConv(const wxCSConv& conv);
     virtual ~wxCSConv();
 
@@ -114,12 +117,16 @@ public:
     void Clear() ;
 
 private:
+    // common part of all ctors
+    void Init();
+
     void SetName(const wxChar *charset);
 
     // note that we can't use wxString here because of compilation
     // dependencies: we're included from wx/string.h
     wxChar *m_name;
     wxCharacterSet *m_cset;
+    wxFontEncoding m_encoding;
     bool m_deferred;
 };
 
@@ -161,7 +168,11 @@ public:
     const char* cWX2MB(const char *psz) const { return psz; }
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal, wxConvISO8859_1, wxConvUTF8;
+WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc,
+                                       wxConvFile,
+                                       wxConvLocal,
+                                       wxConvISO8859_1,
+                                       wxConvUTF8;
 WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name

@@ -433,13 +433,12 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 class wxCharacterSet
 {
 public:
-    wxCharacterSet(const wxChar*name) : cname(name) {}
+    wxCharacterSet() { }
     virtual ~wxCharacterSet() {}
+
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) = 0;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) = 0;
     virtual bool usable() const = 0;
-public:
-    const wxChar*cname;
 };
 
 // ----------------------------------------------------------------------------
@@ -449,8 +448,7 @@ public:
 class ID_CharSet : public wxCharacterSet
 {
 public:
-    ID_CharSet(const wxChar *name, wxMBConv *cnv)
-        : wxCharacterSet(name), work(cnv) {}
+    ID_CharSet(wxMBConv *cnv) : work(cnv) {}
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
         { return work ? work->MB2WC(buf,psz,n) : (size_t)-1; }
@@ -746,15 +744,21 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
 
-extern long wxCharsetToCodepage(const wxChar *charset); // from utils.cpp
+// from utils.cpp
+extern WXDLLIMPEXP_BASE long wxCharsetToCodepage(const wxChar *charset);
+extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 
 class CP_CharSet : public wxCharacterSet
 {
 public:
     CP_CharSet(const wxChar* name)
-        : wxCharacterSet(name)
         {
             m_CodePage = wxCharsetToCodepage(name);
+        }
+
+    CP_CharSet(wxFontEncoding encoding)
+        {
+            m_CodePage = wxEncodingToCodepage(encoding);
         }
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
@@ -808,17 +812,31 @@ public:
 
 class EC_CharSet : public wxCharacterSet
 {
+private:
+    void Init()
+    {
+        m_ok = m2w.Init(m_enc, wxFONTENCODING_UNICODE) &&
+               w2m.Init(wxFONTENCODING_UNICODE, m_enc);
+    }
+
 public:
     // temporarily just use wxEncodingConverter stuff,
     // so that it works while a better implementation is built
-    EC_CharSet(const wxChar* name) : wxCharacterSet(name),
-                                     enc(wxFONTENCODING_SYSTEM)
+    EC_CharSet(const wxChar* name)
     {
         if (name)
-            enc = wxFontMapper::Get()->CharsetToEncoding(name, FALSE);
+            m_enc = wxFontMapper::Get()->CharsetToEncoding(name, FALSE);
+        else
+            m_enc = wxFONTENCODING_SYSTEM;
 
-        m_ok = m2w.Init(enc, wxFONTENCODING_UNICODE) &&
-               w2m.Init(wxFONTENCODING_UNICODE, enc);
+        Init();
+    }
+
+    EC_CharSet(wxFontEncoding enc)
+    {
+        m_enc = enc;
+
+        Init();
     }
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n))
@@ -841,7 +859,7 @@ public:
     bool usable() const { return m_ok; }
 
 public:
-    wxFontEncoding enc;
+    wxFontEncoding m_enc;
     wxEncodingConverter m2w, w2m;
 
     // were we initialized successfully?
@@ -855,37 +873,46 @@ public:
 // ----------------------------------------------------------------------------
 // the function creating the wxCharacterSet for the specified charset on the
 // current system, trying all possibilities
+//
+// it uses the name if it is given or encoding if name == NULL
 // ----------------------------------------------------------------------------
 
-static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
+static wxCharacterSet *
+wxGetCharacterSet(const wxChar *name, wxFontEncoding encoding)
 {
     // check for the special case of ASCII charset
+    if ( (!name && encoding == wxFONTENCODING_DEFAULT)
 #if wxUSE_FONTMAP
-    if ( wxFontMapper::Get()->CharsetToEncoding(name) == wxFONTENCODING_DEFAULT )
-#else // wxUSE_FONTMAP
-    if ( !name )
-#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+            || wxFontMapper::Get()->
+                    CharsetToEncoding(name) == wxFONTENCODING_DEFAULT
+#endif // wxUSE_FONTMAP
+       )
     {
         // don't convert at all
         return NULL;
     }
 
-    // the test above must have taken care of this case
-    wxCHECK_MSG( name, NULL, _T("NULL name must be wxFONTENCODING_DEFAULT") );
-
     wxCharacterSet *cset;
 
-    if ( wxStricmp(name, wxT("UTF8")) == 0 || wxStricmp(name, wxT("UTF-8")) == 0)
+    if ( (name &&
+            (wxStricmp(name, wxT("UTF8")) == 0 ||
+             wxStricmp(name, wxT("UTF-8")) == 0)) ||
+          encoding == wxFONTENCODING_UTF8 )
     {
-        cset = new ID_CharSet(name, &wxConvUTF8);
+        cset = new ID_CharSet(&wxConvUTF8);
     }
-    else
+    else // !UTF-8
     {
 #ifdef HAVE_ICONV
-        cset = new IC_CharSet(name);
-#else // !HAVE_ICONV
-        cset = NULL;
-#endif // HAVE_ICONV/!HAVE_ICONV
+        if ( name )
+        {
+            cset = new IC_CharSet(name);
+        }
+        else
+#endif // HAVE_ICONV
+        {
+            cset = NULL;
+        }
     }
 
     // it can only be NULL in this case
@@ -901,7 +928,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     }
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
-    cset = new CP_CharSet(name);
+    cset = name ? new CP_CharSet(name) : new CP_CharSet(encoding);
     if ( cset->usable() )
         return cset;
 
@@ -910,7 +937,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 #endif // defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXUNIVERSAL__)
 
 #if wxUSE_FONTMAP
-    cset = new EC_CharSet(name);
+    cset = name ? new EC_CharSet(name) : new EC_CharSet(encoding);
     if ( cset->usable() )
         return cset;
 
@@ -918,7 +945,15 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     cset = NULL;
 #endif // wxUSE_FONTMAP
 
-    wxLogError(_("Cannot convert from encoding '%s'!"), name);
+    wxLogError(_("Cannot convert from encoding '%s'!"),
+               name ? name
+                    :
+#if wxUSE_FONTMAP
+                     wxFontMapper::GetEncodingDescription(encoding).c_str()
+#else // !wxUSE_FONTMAP
+                     wxString::Format(_T("%s"), encoding).c_str()
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+              );
 
     return NULL;
 }
@@ -927,13 +962,26 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 // wxCSConv implementation
 // ============================================================================
 
-wxCSConv::wxCSConv(const wxChar *charset)
+void wxCSConv::Init()
 {
     m_name = (wxChar *)NULL;
     m_cset = (wxCharacterSet *) NULL;
     m_deferred = TRUE;
+}
+
+wxCSConv::wxCSConv(const wxChar *charset)
+{
+    Init();
+    m_encoding = wxFONTENCODING_DEFAULT;
 
     SetName(charset);
+}
+
+wxCSConv::wxCSConv(wxFontEncoding encoding)
+{
+    Init();
+
+    m_encoding = encoding;
 }
 
 wxCSConv::~wxCSConv()
@@ -942,25 +990,29 @@ wxCSConv::~wxCSConv()
 }
 
 wxCSConv::wxCSConv(const wxCSConv& conv)
-    : wxMBConv()
+        : wxMBConv()
 {
-    Clear();
+    Init();
+
     SetName(conv.m_name);
+    m_encoding = conv.m_encoding;
 }
 
 wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
 {
     Clear();
+
     SetName(conv.m_name);
+    m_encoding = conv.m_encoding;
+
     return *this;
 }
 
 void wxCSConv::Clear()
 {
-    if (m_name)
-        free(m_name);
-    if (m_cset)
-        delete m_cset;
+    free(m_name);
+    delete m_cset;
+
     m_name = NULL;
     m_cset = NULL;
 }
@@ -981,7 +1033,7 @@ void wxCSConv::LoadNow()
         // it would probably be better to make GetSystemEncodingName() always
         // available (i.e. even when wxUSE_INTL == 0)?
 #if wxUSE_INTL
-        if ( !m_name )
+        if ( !m_name && m_encoding == wxFONTENCODING_DEFAULT )
         {
             wxString name = wxLocale::GetSystemEncodingName();
             if ( !name.empty() )
@@ -992,7 +1044,7 @@ void wxCSConv::LoadNow()
 #endif // wxUSE_INTL
 
         // wxGetCharacterSet() complains about NULL name
-        m_cset = m_name ? wxGetCharacterSet(m_name) : NULL;
+        m_cset = wxGetCharacterSet(m_name, m_encoding);
         m_deferred = FALSE;
     }
 }
