@@ -229,32 +229,40 @@ WXHRGN wxStaticBox::MSWCalculateClippingRegion()
     RECT rc;
     ::GetWindowRect(GetHwnd(), &rc);
     HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-
-    wxWindowList::compatibility_iterator node = GetParent()->GetChildren().GetFirst();
-    while ( node )
+    
+    wxList hWnds;
+    HWND child = ::GetWindow((HWND) GetParent()->GetHWND(), GW_CHILD);
+    while (child != 0)
     {
-        wxWindow *child = node->GetData();
+        hWnds.Append((wxObject*) child);
+        child = ::GetWindow(child, GW_HWNDNEXT);
+    }
+    
+    for (wxNode* node = hWnds.GetFirst(); node; node = node->GetNext())
+    {
+        HWND child = (HWND) node->GetData();
+        wxWindow* childWindow = wxGetWindowFromHWND((WXHWND) child);
 
         // can't just test for (this != child) here since if a wxStaticBox
         // overlaps another wxStaticBox then neither are drawn. The overlapping
         // region will flicker but we shouldn't have overlapping windows anyway.
-        if ( !child->IsKindOf(CLASSINFO(wxStaticBox)) )
+        if (!childWindow || !childWindow->IsKindOf(CLASSINFO(wxStaticBox)))
         {
-            ::GetWindowRect(GetHwndOf(child), &rc);
+            ::GetWindowRect(child, &rc);
             if ( RectInRegion(hrgn, &rc) )
             {
                 // need to remove WS_CLIPSIBLINGS from all sibling windows
                 // that are within this staticbox if set
-                LONG style = ::GetWindowLong(GetHwndOf(child), GWL_STYLE);
+                LONG style = ::GetWindowLong(child, GWL_STYLE);
                 if ( style & WS_CLIPSIBLINGS )
                 {
                     style &= ~WS_CLIPSIBLINGS;
-                    ::SetWindowLong(GetHwndOf(child), GWL_STYLE, style);
+                    ::SetWindowLong(child, GWL_STYLE, style);
 
                     // MSDN: "If you have changed certain window data using
                     // SetWindowLong, you must call SetWindowPos to have the
                     // changes take effect."
-                    ::SetWindowPos(GetHwndOf(child), NULL, 0, 0, 0, 0,
+                    ::SetWindowPos(child, NULL, 0, 0, 0, 0,
                                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
                                    SWP_FRAMECHANGED);
                 }
@@ -264,9 +272,8 @@ WXHRGN wxStaticBox::MSWCalculateClippingRegion()
                 ::DeleteObject(hrgnchild);
             }
         }
-
-        node = node->GetNext();
     }
+    
     ::GetWindowRect(GetHwnd(), &rc);
     ::OffsetRgn(hrgn, -rc.left, -rc.top);
 
