@@ -831,7 +831,11 @@ class wxTreeItemIdPtr :
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxTreeItemId instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    
     Ok = IsOk
+    def __nonzero__(self):
+        return self.IsOk()
+
 class wxTreeItemId(wxTreeItemIdPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = controls2c.new_wxTreeItemId(*_args,**_kwargs)

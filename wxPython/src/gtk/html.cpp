@@ -4465,6 +4465,45 @@ static PyObject *_wrap_wxHtmlWindow_LoadPage(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxHtmlWindow_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
+static PyObject *_wrap_wxHtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyHtmlWindow * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_LoadFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_LoadFile. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxHtmlWindow_LoadFile(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxHtmlWindow_AppendToPage(_swigobj,_swigarg0)  (_swigobj->AppendToPage(_swigarg0))
 static PyObject *_wrap_wxHtmlWindow_AppendToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6575,6 +6614,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_GetOpenedAnchor", (PyCFunction) _wrap_wxHtmlWindow_GetOpenedAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetOpenedPage", (PyCFunction) _wrap_wxHtmlWindow_GetOpenedPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_AppendToPage", (PyCFunction) _wrap_wxHtmlWindow_AppendToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_LoadFile", (PyCFunction) _wrap_wxHtmlWindow_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_LoadPage", (PyCFunction) _wrap_wxHtmlWindow_LoadPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_SetPage", (PyCFunction) _wrap_wxHtmlWindow_SetPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow__setCallbackInfo", (PyCFunction) _wrap_wxHtmlWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
