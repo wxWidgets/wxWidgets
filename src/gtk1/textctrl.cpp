@@ -1435,12 +1435,14 @@ void wxTextCtrl::ChangeFontGlobally()
     // possible!
     //
     // TODO: it can be implemented much more efficiently for GTK2
-    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE)
 #ifndef __WXGTK20__
-                    && m_updateFont
-#endif // GTK+ 1.x
-                    ,
+    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE) && m_updateFont,
+
                   _T("shouldn't be called for single line controls") );
+#else
+    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE),
+                  _T("shouldn't be called for single line controls") );
+#endif
 
     wxString value = GetValue();
     if ( !value.IsEmpty() )
