@@ -40,12 +40,28 @@ public:
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
-    bool GetIcon(wxIcon *icon) const;
+    bool GetIcon(wxIcon *icon, wxString *sCommand = NULL, int *iIndex = NULL) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters& params) const;
     bool GetPrintCommand(wxString *printCmd,
                          const wxFileType::MessageParameters& params) const;
+
+    size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
+                          const wxFileType::MessageParameters& params) const;
+
+    bool Unassociate();
+
+    // set an arbitrary command, ask confirmation if it already exists and
+    // overwriteprompt is TRUE
+    bool SetCommand(const wxString& cmd,
+                    const wxString& verb,
+                    bool overwriteprompt = TRUE);
+
+    bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
+
+    // this is called  by Associate
+    bool SetDescription (const wxString& desc);
 
 private:
     // helper function: reads the command corresponding to the specified verb
@@ -69,11 +85,12 @@ public:
 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
+    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // this are NOPs under Windows
+    // these are NOPs under Windows
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
         { return TRUE; }
     bool ReadMimeTypes(const wxString& filename)
