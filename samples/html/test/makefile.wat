@@ -36,6 +36,11 @@ PORTNAME = msw
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+WXDEBUGFLAG = d
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 WXDEBUGFLAG = d
 !endif
 WXDLLFLAG =
@@ -50,22 +55,47 @@ WXUNIVNAME =
 !ifeq WXUNIV 1
 WXUNIVNAME = univ
 !endif
-__DEBUGFLAG_0 =
+__DEBUGINFO_0 =
 !ifeq BUILD debug
-__DEBUGFLAG_0 = -d2
+!ifeq DEBUG_INFO default
+__DEBUGINFO_0 = -d2
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG_0 = -d0
+!ifeq DEBUG_INFO default
+__DEBUGINFO_0 = -d0
 !endif
-__DEBUGFLAG_1 =
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO_0 = -d0
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO_0 = -d2
+!endif
+__DEBUGINFO_1 =
 !ifeq BUILD debug
-__DEBUGFLAG_1 = debug all
+!ifeq DEBUG_INFO default
+__DEBUGINFO_1 = debug all
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG_1 = 
+!ifeq DEBUG_INFO default
+__DEBUGINFO_1 = 
+!endif
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO_1 = 
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO_1 = debug all
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
 __DLLFLAG_p =
@@ -136,7 +166,7 @@ LIBDIRNAME = &
 	.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm &
+TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
@@ -177,7 +207,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS) $(OBJS)\test_test.res
 	@%append $(OBJS)\test.lbc option quiet
 	@%append $(OBJS)\test.lbc name $^@
 	@%append $(OBJS)\test.lbc option incremental
-	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
 	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc option resource=$(OBJS)\test_test.res

@@ -26,7 +26,7 @@ about:
 
 clean: 
 	rm -rf ./.deps
-	rm -f -f ./*.o
+	rm -f ./*.o
 	(cd about && $(MAKE) clean)
 	(cd help && $(MAKE) clean)
 	(cd helpview && $(MAKE) clean)
