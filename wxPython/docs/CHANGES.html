@@ -47,6 +47,16 @@ image (.dmg file) that users can just drag and drop to wherever they
 want to put them.</p>
 <p>The wxWave class has been renamed to wxSound, and now has a slightly
 different API.</p>
+<p>Updated the AnalogClockWindow with many enhancements from E. A. Tacão.</p>
+<p>wxMac now has wx.ToggleButton!</p>
+<p>wx.stc.StyledTextCtrl has been update to version 1.58 of Scintilla.</p>
+<p>To help with the wx.stc.StyledTextCtrl performance issues on wxMac
+I've added a SetUseAntiAliasing method (and GetUseAntiAliasing) too
+that will turn off the use of antialiased fonts in the wxSTC, allowing
+it to bypass the slow text measuring routines and use the fast and
+simple one instead.  By default the setting is turned off.  When run
+on OSX The Py* apps have a new item on the Options menu for
+controlling this setting if you would like to experiment with it.</p>
 </div>
 <div class="section" id="id1">
 <h1><a name="id1">2.4.2.4</a></h1>
@@ -1201,7 +1211,7 @@ version segfault shortly after starting up.</p>
 </div>
 <hr class="footer" />
 <div class="footer">
-Generated on: 2004-02-04 23:31 UTC.
+Generated on: 2004-02-27 00:27 UTC.
 </div>
 </body>
 </html>
