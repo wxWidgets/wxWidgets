@@ -37,110 +37,137 @@ class WXDLLEXPORT wxListBox : public wxListBoxBase
 public:
     // ctors and such
     wxListBox();
-    wxListBox(wxWindow *parent, wxWindowID id,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL,
-            long style = 0,
+    wxListBox( wxWindow*          pParent
+              ,wxWindowID         vId
+              ,const wxPoint&     rPos = wxDefaultPosition
+              ,const wxSize&      rSize = wxDefaultSize
+              ,int                n = 0
+              ,const wxString     asChoices[] = NULL
+              ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-            const wxValidator& validator = wxDefaultValidator,
+              ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-            const wxString& name = wxListBoxNameStr)
+              ,const wxString&    rsName = wxListBoxNameStr)
     {
-        Create(parent, id, pos, size, n, choices, style, validator, name);
+        Create( pParent
+               ,vId
+               ,rPos
+               ,rSize
+               ,n
+               ,asChoices
+               ,lStyle
+#if wxUSE_VALIDATORS
+               ,rValidator
+#endif
+               ,rsName
+              );
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
-                long style = 0,
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,int                n = 0
+                ,const wxString     asChoices[] = NULL
+                ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-                const wxValidator& validator = wxDefaultValidator,
+                ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-                const wxString& name = wxListBoxNameStr);
+                ,const wxString&    rsName = wxListBoxNameStr
+               );
 
     virtual ~wxListBox();
 
-    // implement base class pure virtuals
-    virtual void Clear();
-    virtual void Delete(int n);
+    //
+    // Implement base class pure virtuals
+    //
+    virtual void          Clear(void);
+    virtual void          Delete(int n);
 
-    virtual int GetCount() const;
-    virtual wxString GetString(int n) const;
-    virtual void SetString(int n, const wxString& s);
-    virtual int FindString(const wxString& s) const;
+    virtual int           GetCount(void) const;
+    virtual wxString      GetString(int n) const;
+    virtual void          SetString( int             n
+                                    ,const wxString& rsString
+                                   );
+    virtual int           FindString(const wxString& rsString) const;
 
-    virtual bool IsSelected(int n) const;
-    virtual void SetSelection(int n, bool select = TRUE);
-    virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
+    virtual bool          IsSelected(int n) const;
+    virtual void          SetSelection( int  n
+                                       ,bool bSelect = TRUE
+                                      );
+    virtual int           GetSelection(void) const;
+    virtual int           GetSelections(wxArrayInt& raSelections) const;
 
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual int           DoAppend(const wxString& rsItem);
+    virtual void          DoInsertItems( const wxArrayString& raItems
+                                        ,int                  rPos
+                                       );
+    virtual void          DoSetItems( const wxArrayString& raItems
+                                     ,void **              ppClientData
+                                    );
 
-    virtual void DoSetFirstItem(int n);
+    virtual void          DoSetFirstItem(int n);
 
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual void          DoSetItemClientData( int   n
+                                              ,void* pClientData
+                                             );
+    virtual void*         DoGetItemClientData(int n) const;
+    virtual void          DoSetItemClientObject( int           n
+                                                ,wxClientData* pClientData
+                                               );
     virtual wxClientData* DoGetItemClientObject(int n) const;
 
+    //
     // wxCheckListBox support
+    //
 #if wxUSE_OWNER_DRAWN
-    bool OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
-    bool OS2OnDraw(WXDRAWITEMSTRUCT *item);
+    bool                  OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
+    bool                  OS2OnDraw(WXDRAWITEMSTRUCT *item);
 
-    // plug-in for derived classes
-    virtual wxOwnerDrawn *CreateItem(size_t n);
-
-    // allows to get the item and use SetXXX functions to set it's appearance
-    wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
-
-    // get the index of the given item
-    int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
+    virtual wxOwnerDrawn* CreateItem(size_t n);
+    wxOwnerDrawn*         GetItem(size_t n) const { return m_aItems[n]; }
+    int                   GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
 #endif // wxUSE_OWNER_DRAWN
 
-    // Windows-specific code to set the horizontal extent of the listbox, if
-    // necessary. If s is non-NULL, it's used to calculate the horizontal
-    // extent. Otherwise, all strings are used.
-    virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
-
-    // Windows callbacks
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam, WXLPARAM lParam);
-
-    bool OS2Command(WXUINT param, WXWORD id);
-
-    virtual void SetupColours();
+    bool                  OS2Command( WXUINT uParam
+                                     ,WXWORD wId
+                                    );
+    virtual void          SetupColours(void);
 
 protected:
-    // do we have multiple selections?
-    bool HasMultipleSelection() const;
 
-    int m_noItems;
-    int m_selected;
+    bool                  HasMultipleSelection(void) const;
+    virtual wxSize        DoGetBestSize(void) const;
 
-    virtual wxSize DoGetBestSize() const;
+    int                             m_nNumItems;
+    int                             m_nSelected;
+
 
 #if wxUSE_OWNER_DRAWN
-    // control items
-    wxListBoxItemsArray m_aItems;
+    //
+    // Control items
+    //
+    wxListBoxItemsArray             m_aItems;
 #endif
 
 private:
 #if wxUSE_WX_RESOURCES
 #  if wxUSE_OWNER_DRAWN
-    virtual wxControl *CreateItem(const wxItemResource* childResource,
-                                  const wxItemResource* parentResource,
-                                  const wxResourceTable *table = (const wxResourceTable *) NULL)
-    { return(wxWindowBase::CreateItem(childResource, parentResource, table)); }
+    virtual wxControl*    CreateItem( const wxItemResource*  pChildResource
+                                     ,const wxItemResource*  pParentResource
+                                     ,const wxResourceTable* pTable = (const wxResourceTable *) NULL
+                                    )
+    {
+        return(wxWindowBase::CreateItem( pChildResource
+                                        ,pParentResource
+                                        ,pTable
+                                       )
+              );
+    }
 #  endif
 #endif
     DECLARE_DYNAMIC_CLASS(wxListBox)
-};
+}; // end of wxListBox
 
 #endif
     // _WX_LISTBOX_H_
