@@ -393,8 +393,9 @@ void wxWindowBase::Centre(int direction)
     xNew += posParent.x;
     yNew += posParent.y;
 
-    // move the centre of this window to this position
-    Move(xNew, yNew);
+    // move the window to this position (keeping the old size but using
+    // SetSize() and not Move() to allow xNew and/or yNew to be -1)
+    SetSize(xNew, yNew, -1, -1, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 // fits the window around the children
