@@ -601,6 +601,7 @@ calctrl.h	W
 caret.h	W
 checkbox.h	W
 checklst.h	W
+chkconf.h	W	B
 choicdlg.h	W
 choice.h	W
 clipbrd.h	W
