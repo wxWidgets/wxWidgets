@@ -1372,6 +1372,7 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/helpview/src/*.cpp $(DISTDIR)/utils/helpview/src
 	cp $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
 	cp $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc

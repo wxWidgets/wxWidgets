@@ -66,7 +66,7 @@ public:
    ~wxGLContext();
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
 
@@ -106,7 +106,7 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
           const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
    void OnSize(wxSizeEvent& event);
