@@ -86,6 +86,7 @@ public:
     virtual bool Enable( bool enable = TRUE );
 
     virtual void SetFocus();
+    virtual void SetFocusFromKbd();
 
     virtual bool Reparent(wxWindowBase *newParent);
 

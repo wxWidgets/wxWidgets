@@ -458,6 +458,20 @@ void wxWindowMSW::SetFocus()
     }
 }
 
+void wxWindowMSW::SetFocusFromKbd()
+{
+    wxWindowBase::SetFocusFromKbd();
+
+    // when the focus is given to the control with DLGC_HASSETSEL style from
+    // keyboard its contents should be entirely selected: this is what
+    // ::IsDialogMessage() does and so we should do it as well to provide the
+    // same LNF as the native programs
+    if ( ::SendMessage(GetHwnd(), WM_GETDLGCODE, 0, 0) & DLGC_HASSETSEL )
+    {
+        ::SendMessage(GetHwnd(), EM_SETSEL, 0, -1);
+    }
+}
+
 // Get the window with the focus
 wxWindow *wxWindowBase::FindFocus()
 {
