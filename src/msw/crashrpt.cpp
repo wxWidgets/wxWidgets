@@ -222,6 +222,7 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
     }
 #else // !wxUSE_DBGHELP
     wxUnusedVar(flags);
+    wxUnusedVar(ep);
 
     Output(_T("Support for crash report generation was not included ")
            _T("in this wxWidgets version."));
