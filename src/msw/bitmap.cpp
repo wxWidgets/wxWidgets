@@ -30,7 +30,6 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #endif
-#include "wx/image.h"
 
 #include "wx/msw/private.h"
 #include "wx/log.h"
@@ -77,7 +76,7 @@ wxBitmapRefData::~wxBitmapRefData(void)
   m_hBitmap = 0 ;
 
   if (m_bitmapMask)
-//    delete m_bitmapMask;    // this line cause an exception
+    delete m_bitmapMask;
   m_bitmapMask = NULL;
 
 }
