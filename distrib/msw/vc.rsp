@@ -51,6 +51,8 @@ samples/db/db.dsw
 
 samples/dialogs/dialogs.dsp
 samples/dialogs/dialogs.dsw
+samples/dialogs/dialogsUniv.dsp
+samples/dialogs/dialogsUniv.dsw
 
 samples/dialup/dialup.dsp
 samples/dialup/dialup.dsw
