@@ -109,6 +109,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 static char* wxStringErrorMsg = "string type is required for parameter";
+
+    static wxString wxPyEmptyStr("");
                               // Alternate 'constructor'
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
         return new wxBitmap(width, height, depth);

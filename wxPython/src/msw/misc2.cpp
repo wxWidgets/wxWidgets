@@ -112,6 +112,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+    static wxString wxPyEmptyStr("");
+
 
     wxColour wxSystemSettings_GetSystemColour(int index) {
         return wxSystemSettings::GetSystemColour(index);
@@ -656,7 +658,7 @@ static PyObject *_wrap_wxGetNumberFromUser(PyObject *self, PyObject *args, PyObj
     long  _arg4 = (long ) 0;
     long  _arg5 = (long ) 100;
     wxWindow * _arg6 = (wxWindow *) NULL;
-    wxPoint * _arg7 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg7 = (wxPoint *) &wxDefaultPosition;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;

@@ -1032,10 +1032,8 @@ wxLongLong wxGetLocalTimeMillis();
 //---------------------------------------------------------------------------
 
 %init %{
-
-//    wxClassInfo::CleanUpClasses();
-//    wxClassInfo::InitializeClasses();
-
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 %}
 
 //---------------------------------------------------------------------------

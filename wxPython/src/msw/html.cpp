@@ -6559,9 +6559,8 @@ SWIGEXPORT(void) inithtmlc() {
 
     inithtmlhelpc();
 
-    //wxClassInfo::CleanUpClasses();
-    //wxClassInfo::InitializeClasses();
-
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

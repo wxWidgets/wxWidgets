@@ -108,6 +108,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+    static wxString wxPyEmptyStr("");
+
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
         wxRegion  reg2(*r2);

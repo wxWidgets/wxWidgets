@@ -321,8 +321,8 @@ static PyObject *_wrap_new_wxSashWindow(PyObject *self, PyObject *args, PyObject
     wxSashWindow * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxCLIP_CHILDREN|(wxSW_3D);
     char * _arg5 = (char *) "sashWindow";
     PyObject * _argo0 = 0;
@@ -1295,8 +1295,8 @@ static PyObject *_wrap_new_wxSashLayoutWindow(PyObject *self, PyObject *args, Py
     wxSashLayoutWindow * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxCLIP_CHILDREN|(wxSW_3D);
     char * _arg5 = (char *) "layoutWindow";
     PyObject * _argo0 = 0;

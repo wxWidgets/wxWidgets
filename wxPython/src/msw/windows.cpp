@@ -106,6 +106,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+    static wxString wxPyEmptyStr("");
+
     bool wxValidator_IsSilent() {
         return wxValidator::IsSilent();
     }
@@ -948,8 +950,8 @@ static PyObject *_wrap_new_wxWindow(PyObject *self, PyObject *args, PyObject *kw
     wxWindow * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
     char * _arg5 = (char *) "panel";
     PyObject * _argo0 = 0;
@@ -5182,8 +5184,8 @@ static PyObject *_wrap_new_wxPanel(PyObject *self, PyObject *args, PyObject *kwa
     wxPanel * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxTAB_TRAVERSAL;
     char * _arg5 = (char *) "panel";
     PyObject * _argo0 = 0;
@@ -5359,8 +5361,8 @@ static PyObject *_wrap_new_wxDialog(PyObject *self, PyObject *args, PyObject *kw
     wxWindow * _arg0;
     wxWindowID  _arg1;
     wxString * _arg2;
-    wxPoint * _arg3 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg4 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxDEFAULT_DIALOG_STYLE;
     char * _arg6 = (char *) "dialogBox";
     PyObject * _argo0 = 0;
@@ -5826,8 +5828,8 @@ static PyObject *_wrap_new_wxScrolledWindow(PyObject *self, PyObject *args, PyOb
     wxScrolledWindow * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxHSCROLL|wxVSCROLL;
     char * _arg5 = (char *) "scrolledWindow";
     PyObject * _argo0 = 0;

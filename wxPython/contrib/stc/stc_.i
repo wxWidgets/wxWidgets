@@ -88,8 +88,8 @@ def EVT_STC_POSCHANGED(win, id, fn):
 
 %init %{
 
-//    wxClassInfo::CleanUpClasses();
-//    wxClassInfo::InitializeClasses();
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 
 %}
 

@@ -531,7 +531,7 @@ static PyObject *_wrap_new_wxDirDialog(PyObject *self, PyObject *args, PyObject 
     char * _arg1 = (char *) "Choose a directory";
     char * _arg2 = (char *) "";
     long  _arg3 = (long ) 0;
-    wxPoint * _arg4 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj4 = 0;
@@ -831,7 +831,7 @@ static PyObject *_wrap_new_wxFileDialog(PyObject *self, PyObject *args, PyObject
     char * _arg3 = (char *) "";
     char * _arg4 = (char *) "*.*";
     long  _arg5 = (long ) 0;
-    wxPoint * _arg6 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg6 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj6 = 0;
@@ -1545,7 +1545,7 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args, 
     int  _arg3;
     wxString * _arg4;
     long  _arg5 = (long ) wxOK|wxCANCEL|wxCENTRE;
-    wxPoint * _arg6 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg6 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -1803,7 +1803,7 @@ static PyObject *_wrap_new_wxTextEntryDialog(PyObject *self, PyObject *args, PyO
     char * _arg2 = (char *) "Input Text";
     char * _arg3 = (char *) "";
     long  _arg4 = (long ) wxOK|wxCANCEL|wxCENTRE;
-    wxPoint * _arg5 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg5 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj5 = 0;
@@ -2580,7 +2580,7 @@ static PyObject *_wrap_new_wxMessageDialog(PyObject *self, PyObject *args, PyObj
     char * _arg1;
     char * _arg2 = (char *) "Message box";
     long  _arg3 = (long ) wxOK|wxCANCEL|wxCENTRE;
-    wxPoint * _arg4 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj4 = 0;

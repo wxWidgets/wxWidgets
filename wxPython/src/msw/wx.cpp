@@ -865,48 +865,32 @@ static PyObject *_wrap_ptrmap(PyObject *self, PyObject *args, PyObject *kwargs) 
     return _resultobj;
 }
 
-static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
-    wxPoint * temp;
+static int _wrap_wxDefaultPosition_set(PyObject *val) {
 
-    if (val) {
-        if (val == Py_None) { temp = NULL; }
-        else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultPosition. Expected _wxPoint_p.");
-        return 1;
-        }
-    }
-    wxPyDefaultPosition = *temp;
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable wxDefaultPosition is read-only.");
+    return 1;
 }
 
-static PyObject *_wrap_wxPyDefaultPosition_get() {
+static PyObject *_wrap_wxDefaultPosition_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp,(char *) &wxPyDefaultPosition,"_wxPoint_p");
+    SWIG_MakePtr(ptemp,(char *) &wxDefaultPosition,"_wxPoint_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
 
-static int _wrap_wxPyDefaultSize_set(PyObject *val) {
-    wxSize * temp;
+static int _wrap_wxDefaultSize_set(PyObject *val) {
 
-    if (val) {
-        if (val == Py_None) { temp = NULL; }
-        else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultSize. Expected _wxSize_p.");
-        return 1;
-        }
-    }
-    wxPyDefaultSize = *temp;
-    return 0;
+    PyErr_SetString(PyExc_TypeError,"Variable wxDefaultSize is read-only.");
+    return 1;
 }
 
-static PyObject *_wrap_wxPyDefaultSize_get() {
+static PyObject *_wrap_wxDefaultSize_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp,(char *) &wxPyDefaultSize,"_wxSize_p");
+    SWIG_MakePtr(ptemp,(char *) &wxDefaultSize,"_wxSize_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
@@ -3012,8 +2996,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
-	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
-	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
+	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);
+	 SWIG_addvarlink(SWIG_globals,"wxDefaultSize",_wrap_wxDefaultSize_get, _wrap_wxDefaultSize_set);
 
     // Make our API structure a CObject so other modules can import it
     // from this module.

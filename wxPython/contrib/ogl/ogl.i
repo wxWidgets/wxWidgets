@@ -230,8 +230,8 @@ extern "C" SWIGEXPORT(void) initoglcanvasc();
     initoglcanvasc();
 
 
-//    wxClassInfo::CleanUpClasses();
-//    wxClassInfo::InitializeClasses();
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
 
 %}
 

@@ -279,8 +279,8 @@ static PyObject *_wrap_new_wxNotebook(PyObject *self, PyObject *args, PyObject *
     wxNotebook * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
     char * _arg5 = (char *) "notebook";
     PyObject * _argo0 = 0;
@@ -1205,8 +1205,8 @@ static PyObject *_wrap_new_wxSplitterWindow(PyObject *self, PyObject *args, PyOb
     wxSplitterWindow * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxSP_3D|wxCLIP_CHILDREN;
     char * _arg5 = (char *) "splitterWindow";
     PyObject * _argo0 = 0;
