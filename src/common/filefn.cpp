@@ -1086,11 +1086,15 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     // instead of our code if available
     //
     // NB: 3rd parameter is bFailIfExists i.e. the inverse of overwrite
-    return ::CopyFile(file1, file2, !overwrite) != 0;
+    if ( !::CopyFile(file1, file2, !overwrite) )
+    {
+        wxLogSysError(_("Failed to copy the file '%s' to '%s'"),
+                      file1.c_str(), file2.c_str());
+
+        return FALSE;
+    }
 #elif defined(__WXPM__)
-    if (::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) == 0)
-        return TRUE;
-    else
+    if ( ::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) != 0 )
         return FALSE;
 #else // !Win32
     wxStructStat fbuf;
@@ -1169,9 +1173,9 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return FALSE;
     }
 #endif // OS/2 || Mac
+#endif // __WXMSW__ && __WIN32__
 
     return TRUE;
-#endif // __WXMSW__ && __WIN32__
 }
 
 bool
