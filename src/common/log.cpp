@@ -630,12 +630,16 @@ void wxLogChain::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     {
         // bogus cast just to access protected DoLog
         ((wxLogChain *)m_logOld)->DoLog(level, szString, t);
+
+        m_bHasMessages |= m_logOld->HasPendingMessages();
     }
 
     if ( m_logNew && m_logNew != this )
     {
         // as above...
         ((wxLogChain *)m_logNew)->DoLog(level, szString, t);
+
+        m_bHasMessages |= m_logNew->HasPendingMessages();
     }
 }
 
