@@ -716,11 +716,12 @@ bool wxRadioBox::SetFont(const wxFont& font)
     WXHFONT hfont = wxFont(font).GetResourceHandle();
     for ( int n = 0; n < m_noItems; n++ )
     {
-        ::SendMessage((HWND)m_radioButtons[n], WM_SETFONT, (WPARAM)hfont, 0L);
-    }
+        HWND hwndBtn = (HWND)m_radioButtons[n];
+        ::SendMessage(hwndBtn, WM_SETFONT, (WPARAM)hfont, 0L);
 
-    // this is needed because otherwise the buttons are not redrawn correctly
-    Refresh();
+        // otherwise the buttons are not redrawn correctly
+        ::InvalidateRect(hwndBtn, NULL, FALSE /* don't erase bg */);
+    }
 
     return TRUE;
 }

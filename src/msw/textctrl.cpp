@@ -422,6 +422,10 @@ void wxTextCtrl::SetValue(const wxString& value)
 
         SetWindowText(GetHwnd(), valueDos.c_str());
 
+        // for compatibility with the GTK and because it is more logical, we
+        // move the cursor to the end of the text after SetValue()
+        SetInsertionPointEnd();
+
         AdjustSpaceLimit();
     }
 }

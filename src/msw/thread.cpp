@@ -390,31 +390,38 @@ private:
 
 DWORD wxThreadInternal::WinThreadStart(wxThread *thread)
 {
-    // first of all, check whether we hadn't been cancelled already
+    DWORD rc;
+    bool wasCancelled;
+
+    // first of all, check whether we hadn't been cancelled already and don't
+    // start the user code at all then
     if ( thread->m_internal->GetState() == STATE_EXITED )
     {
-        return (DWORD)-1;
+        rc = (DWORD)-1;
+        wasCancelled = TRUE;
     }
-
-    // store the thread object in the TLS
-    if ( !::TlsSetValue(gs_tlsThisThread, thread) )
+    else // do run thread
     {
-        wxLogSysError(_("Can not start thread: error writing TLS."));
+        // store the thread object in the TLS
+        if ( !::TlsSetValue(gs_tlsThisThread, thread) )
+        {
+            wxLogSysError(_("Can not start thread: error writing TLS."));
 
-        return (DWORD)-1;
+            return (DWORD)-1;
+        }
+
+        rc = (DWORD)thread->Entry();
+
+        // enter m_critsect before changing the thread state
+        thread->m_critsect.Enter();
+        wasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
+        thread->m_internal->SetState(STATE_EXITED);
+        thread->m_critsect.Leave();
     }
-
-    DWORD rc = (DWORD)thread->Entry();
-
-    // enter m_critsect before changing the thread state
-    thread->m_critsect.Enter();
-    bool wasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
-    thread->m_internal->SetState(STATE_EXITED);
-    thread->m_critsect.Leave();
 
     thread->OnExit();
 
-    // if the thread was cancelled (from Delete()), then it the handle is still
+    // if the thread was cancelled (from Delete()), then its handle is still
     // needed there
     if ( thread->IsDetached() && !wasCancelled )
     {
@@ -522,7 +529,13 @@ bool wxThreadInternal::Resume()
         return FALSE;
     }
 
-    m_state = STATE_RUNNING;
+    // don't change the state from STATE_EXITED because it's special and means
+    // we are going to terminate without running any user code - if we did it,
+    // the codei n Delete() wouldn't work
+    if ( m_state != STATE_EXITED )
+    {
+        m_state = STATE_RUNNING;
+    }
 
     return TRUE;
 }
@@ -753,29 +766,44 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     // Delete() is always safe to call, so consider all possible states
 
-    // has the thread started to run?
-    bool shouldResume = FALSE;
+    // we might need to resume the thread, but we might also not need to cancel
+    // it if it doesn't run yet
+    bool shouldResume = FALSE,
+         shouldCancel = TRUE,
+         isRunning = FALSE;
 
+    // check if the thread already started to run
     {
         wxCriticalSectionLocker lock(m_critsect);
 
         if ( m_internal->GetState() == STATE_NEW )
         {
-            // WinThreadStart() will see it and terminate immediately
+            // WinThreadStart() will see it and terminate immediately, no need
+            // to cancel the thread - but we still need to resume it to let it
+            // run
             m_internal->SetState(STATE_EXITED);
 
-            shouldResume = TRUE;
+            Resume();   // it knows about STATE_EXITED special case
+
+            shouldCancel = FALSE;
+            isRunning = TRUE;
+
+            // shouldResume is correctly set to FALSE here
+        }
+        else
+        {
+            shouldResume = IsPaused();
         }
     }
 
-    // is the thread paused?
-    if ( shouldResume || IsPaused() )
+    // resume the thread if it is paused
+    if ( shouldResume )
         Resume();
 
     HANDLE hThread = m_internal->GetHandle();
 
     // does is still run?
-    if ( IsRunning() )
+    if ( isRunning || IsRunning() )
     {
         if ( IsMain() )
         {
@@ -788,6 +816,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
 
         // ask the thread to terminate
+        if ( shouldCancel )
         {
             wxCriticalSectionLocker lock(m_critsect);
 
@@ -880,7 +909,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     {
         // if the thread exits normally, this is done in WinThreadStart, but in
         // this case it would have been too early because
-        // MsgWaitForMultipleObject() would fail if the therad handle was
+        // MsgWaitForMultipleObject() would fail if the thread handle was
         // closed while we were waiting on it, so we must do it here
         delete this;
     }

@@ -88,6 +88,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP1255,
     wxFONTENCODING_CP1256,
     wxFONTENCODING_CP1257,
+    wxFONTENCODING_CP437,
 };
 
 // the descriptions for them
@@ -117,6 +118,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows Hebrew (CP 1255)" ),
     wxTRANSLATE( "Windows Arabic (CP 1256)" ),
     wxTRANSLATE( "Windows Baltic (CP 1257)" ),
+    wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
 };
 
 // and the internal names
@@ -146,6 +148,7 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows1255" ),
     wxT( "windows1256" ),
     wxT( "windows1257" ),
+    wxT( "windows437" ),
 };
 
 // ----------------------------------------------------------------------------

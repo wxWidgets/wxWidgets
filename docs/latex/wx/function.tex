@@ -2162,6 +2162,18 @@ avoid using {\tt \#ifdef}s when creating bitmaps.
 
 <wx/gdicmn.h>
 
+\membersection{wxConstCast}\label{wxconstcast}
+
+\func{}{wxConstCast}{ptr, classname}
+
+This macro expands into {\tt const\_cast<classname *>(ptr)} if the compiler
+supports {\it const\_cast} or into an old, C-style cast, otherwise.
+
+\wxheading{See also}
+
+\helpref{wxDynamicCast}{wxdynamiccast}\\
+\helpref{wxStatiicCast}{wxstaticcast}
+
 \membersection{WXDEBUG\_NEW}\label{debugnew}
 
 \func{}{WXDEBUG\_NEW}{arg}
@@ -2207,7 +2219,9 @@ Example:
 
 \wxheading{See also}
 
-\helpref{RTTI overview}{runtimeclassoverview}
+\helpref{RTTI overview}{runtimeclassoverview}\\
+\helpref{wxConstCast}{wxconstcast}\\
+\helpref{wxStatiicCast}{wxstaticcast}
 
 \membersection{wxICON}\label{wxiconmacro}
 
@@ -2455,6 +2469,17 @@ is no connection between names used in resources, and the global bitmap data.
 \membersection{::wxResourceRegisterIconData}
 
 Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
+
+\membersection{wxStaticCast}\label{wxstaticcast}
+
+\func{}{wxStaticCast}{ptr, classname}
+
+This macro checks that the cast is valid in debug mode (an assert failure will
+result if {\tt wxDynamicCast(ptr, classname) == NULL}) and then returns the
+result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
+
+\helpref{wxDynamicCast}{wxdynamiccast}\\
+\helpref{wxConstCast}{wxconstcast}
 
 \section{Log functions}\label{logfunctions}
 

@@ -94,7 +94,7 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
 wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
-    
+
     s << (long)encoding << _T(';') << facename;
     if ( charset != ANSI_CHARSET )
     {
@@ -173,7 +173,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
     }
 
     info->encoding = encoding;
-   
+
     return TRUE;
 }
 
@@ -196,6 +196,69 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
     ::DeleteObject((HGDIOBJ)hfont);
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxFontEncoding <-> CHARSET_XXX
+// ----------------------------------------------------------------------------
+
+wxFontEncoding wxGetFontEncFromCharSet(int cs)
+{
+    wxFontEncoding fontEncoding;
+
+    switch ( cs )
+    {
+        default:
+            // JACS: Silently using ANSI_CHARSET
+            // apparently works for Chinese Windows. Assume it works
+            // for all/most other languages.
+            //wxFAIL_MSG(wxT("unsupported charset"));
+            // fall through
+
+        case ANSI_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1252;
+            break;
+
+#ifdef __WIN32__
+        case EASTEUROPE_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1250;
+            break;
+
+        case BALTIC_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1257;
+            break;
+
+        case RUSSIAN_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1251;
+            break;
+
+        case ARABIC_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1256;
+            break;
+
+        case GREEK_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1253;
+            break;
+
+        case HEBREW_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1255;
+            break;
+
+        case TURKISH_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1254;
+            break;
+
+        case THAI_CHARSET:
+            fontEncoding = wxFONTENCODING_CP437;
+            break;
+#endif // Win32
+
+        case OEM_CHARSET:
+            fontEncoding = wxFONTENCODING_CP437;
+            break;
+    }
+
+    return fontEncoding;
 }
 
 // ----------------------------------------------------------------------------
@@ -410,62 +473,8 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 #endif
     int fontPoints = (int) (((72.0*((double)height))/(double) ppInch) + 0.5);
 
-    wxFontEncoding fontEncoding;
-    switch ( logFont->lfCharSet )
-    {
-        default:
-            // JACS: Silently using ANSI_CHARSET
-            // apparently works for Chinese Windows. Assume it works
-            // for all/most other languages.
-            //wxFAIL_MSG(wxT("unsupported charset"));
-            // fall through
-
-        case ANSI_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1252;
-            break;
-
-#ifdef __WIN32__
-        case EASTEUROPE_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1250;
-            break;
-
-        case BALTIC_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1257;
-            break;
-
-        case RUSSIAN_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1251;
-            break;
-
-        case ARABIC_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1256;
-            break;
-
-        case GREEK_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1253;
-            break;
-
-        case HEBREW_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1255;
-            break;
-
-        case TURKISH_CHARSET:
-            fontEncoding = wxFONTENCODING_CP1254;
-            break;
-
-        case THAI_CHARSET:
-            fontEncoding = wxFONTENCODING_CP437;
-            break;
-#endif
-
-        case OEM_CHARSET:
-            fontEncoding = wxFONTENCODING_CP437;
-            break;
-    }
-
     return wxFont(fontPoints, fontFamily, fontStyle,
                   fontWeight, fontUnderline, fontFace,
-                  fontEncoding);
+                  wxGetFontEncFromCharSet(logFont->lfCharSet));
 }
-
 
