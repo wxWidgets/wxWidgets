@@ -80,6 +80,10 @@ wxString wxTextFile::Translate(const wxString& text, wxTextFileType type)
     if ( type == wxTextFileType_None )
         return text;
 
+    // GRG: don't do anything either if it is empty
+    if ( text.IsEmpty() )
+        return text;
+
     wxString eol = GetEOL(type), result;
 
     // optimization: we know that the length of the new string will be about
