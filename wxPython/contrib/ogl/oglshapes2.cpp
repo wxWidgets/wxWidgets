@@ -3832,7 +3832,7 @@ static PyObject *_wrap_wxPyLineShape_GetLabelPosition(PyObject *self, PyObject *
 #define wxPyLineShape_GetNextControlPoint(_swigobj,_swigarg0)  (_swigobj->GetNextControlPoint(_swigarg0))
 static PyObject *_wrap_wxPyLineShape_GetNextControlPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxPoint * _result;
+    wxRealPoint * _result;
     wxPyLineShape * _arg0;
     wxPyShape * _arg1;
     PyObject * _argo0 = 0;
@@ -3859,12 +3859,12 @@ static PyObject *_wrap_wxPyLineShape_GetNextControlPoint(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPoint *)wxPyLineShape_GetNextControlPoint(_arg0,_arg1);
+    _result = (wxRealPoint *)wxPyLineShape_GetNextControlPoint(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRealPoint_p");
         _resultobj = Py_BuildValue("s",_ptemp);
     } else {
         Py_INCREF(Py_None);

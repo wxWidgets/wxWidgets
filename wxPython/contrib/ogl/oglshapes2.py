@@ -393,7 +393,7 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def GetNextControlPoint(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetNextControlPoint,(self,) + _args, _kwargs)
-        if val: val = wxPointPtr(val) 
+        if val: val = wxRealPointPtr(val) 
         return val
     def GetTo(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetTo,(self,) + _args, _kwargs)
