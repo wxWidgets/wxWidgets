@@ -48,6 +48,14 @@
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
+#include "wx/hash.h"
+#include "wx/module.h"
+
+// ----------------------------------------------------------------------------
+// private data
+// ----------------------------------------------------------------------------
+
+static wxHashTable *g_fontHash = (wxHashTable*) NULL;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -324,7 +332,16 @@ static bool wxTestFontSpec(const wxString& fontspec)
         return TRUE;
     }
 
-    wxNativeFont test = wxLoadFont(fontspec);
+    wxNativeFont test = (wxNativeFont) g_fontHash->Get( fontspec );
+    if (test)
+    {
+//        printf( "speed up\n" );
+        return TRUE;
+    }
+
+    test = wxLoadFont(fontspec);
+    g_fontHash->Put( fontspec, (wxObject*) test );
+    
     if ( test )
     {
         wxFreeFont(test);
@@ -484,3 +501,32 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     return wxLoadFont(fontSpec);
 }
 
+// ----------------------------------------------------------------------------
+// wxFontModule
+// ----------------------------------------------------------------------------
+
+class wxFontModule : public wxModule
+{
+public:
+    bool OnInit();
+    void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFontModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFontModule, wxModule)
+
+bool wxFontModule::OnInit()
+{
+    g_fontHash = new wxHashTable( wxKEY_STRING );
+
+    return TRUE;
+}
+
+void wxFontModule::OnExit()
+{
+    delete g_fontHash;
+
+    g_fontHash = (wxHashTable *)NULL;
+}

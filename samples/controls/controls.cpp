@@ -714,7 +714,7 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    GetParent()->Move(100, 100);
+//    GetParent()->Move(100, 100);
 
     wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;

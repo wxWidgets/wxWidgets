@@ -63,6 +63,57 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
 }
 
 //-----------------------------------------------------------------------------
+// "key_press_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxRadioBox *rb )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!rb->m_hasVMT) return FALSE;
+    if (g_blockEventsOnDrag) return FALSE;
+
+    if ((gdk_event->keyval != GDK_Up) &&
+        (gdk_event->keyval != GDK_Down) &&
+        (gdk_event->keyval != GDK_Left) &&
+        (gdk_event->keyval != GDK_Right))
+    {
+        return FALSE;
+    }
+    
+    wxNode *node = rb->m_boxes.Find( (wxObject*) widget );
+    if (!node)
+    {
+        return FALSE;
+    }
+    
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+    
+    if ((gdk_event->keyval == GDK_Up) ||
+        (gdk_event->keyval == GDK_Left))
+    {
+        if (node == rb->m_boxes.First())
+	    node = rb->m_boxes.Last();
+	else
+	    node = node->Previous();
+    }
+    else
+    {
+        if (node == rb->m_boxes.Last())
+	    node = rb->m_boxes.First();
+	else
+	    node = node->Next();
+    }
+    
+    GtkWidget *button = (GtkWidget*) node->Data();
+	
+    gtk_widget_grab_focus( button );
+    
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
@@ -111,6 +162,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, label.mbc_str() ) );
 
+        gtk_signal_connect( GTK_OBJECT(m_radio), "key_press_event",
+           GTK_SIGNAL_FUNC(gtk_radiobox_keypress_callback), (gpointer)this );
+	   
         m_boxes.Append( (wxObject*) m_radio );
 
         ConnectWidget( GTK_WIDGET(m_radio) );

@@ -50,7 +50,10 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
     m_isStaticBox = TRUE;
     
-    m_widget = gtk_frame_new(m_label.mbc_str());
+    if (label.IsEmpty())
+        m_widget = gtk_frame_new( (char*) NULL );
+    else
+        m_widget = gtk_frame_new( m_label.mbc_str() );
 
     m_parent->DoAddChild( this );
   
