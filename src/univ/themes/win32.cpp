@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/button.h"
     #include "wx/dc.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP

@@ -30,7 +30,7 @@
 #if wxUSE_STATTEXT
 
 #ifndef WX_PRECOMP
-    #include "wx/dc.h"
+    #include "wx/dcclient.h"
     #include "wx/stattext.h"
     #include "wx/validate.h"
 #endif

@@ -31,6 +31,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/control.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/univ/renderer.h"

@@ -16,14 +16,18 @@
  */
 
 #ifdef __GNUG__
-    #pragma implementation "renderer.h"
+    #pragma interface "renderer.h"
 #endif
 
 #ifndef _WX_UNIX_RENDERER_H_
 #define _WX_UNIX_RENDERER_H_
 
+class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxWindow;
+
+#include "wx/string.h"
+#include "wx/gdicmn.h"
 
 // ----------------------------------------------------------------------------
 // constants

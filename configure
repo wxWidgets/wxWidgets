@@ -1388,8 +1388,8 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_BUTTON=no
-  DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
@@ -1526,8 +1526,8 @@ else
 
   DEFAULT_wxUSE_ACCEL=yes
   DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
@@ -9662,7 +9662,7 @@ rm -f conftest*
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        PORT_FILES="${PORT_FILES} \${top_srcdir)/src/univ/files.lst"
+        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
     fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"
@@ -15126,11 +15126,9 @@ EOF
 fi
 
 
+USES_CONTROLS=0
 if test "$wxUSE_CONTROLS" = "yes"; then
-  cat >> confdefs.h <<\EOF
-#define wxUSE_CONTROLS 1
-EOF
-
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_ACCEL" = "yes"; then
@@ -15138,6 +15136,7 @@ if test "$wxUSE_ACCEL" = "yes"; then
 #define wxUSE_ACCEL 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then
@@ -15145,6 +15144,7 @@ if test "$wxUSE_BUTTON" = "yes"; then
 #define wxUSE_BUTTON 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_BMPBUTTON" = "yes"; then
@@ -15152,6 +15152,7 @@ if test "$wxUSE_BMPBUTTON" = "yes"; then
 #define wxUSE_BMPBUTTON 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CARET" = "yes"; then
@@ -15159,6 +15160,7 @@ if test "$wxUSE_CARET" = "yes"; then
 #define wxUSE_CARET 1
 EOF
 
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
 fi
 
@@ -15167,6 +15169,7 @@ if test "$wxUSE_COMBOBOX" = "yes"; then
 #define wxUSE_COMBOBOX 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHOICE" = "yes"; then
@@ -15174,6 +15177,7 @@ if test "$wxUSE_CHOICE" = "yes"; then
 #define wxUSE_CHOICE 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKBOX" = "yes"; then
@@ -15181,6 +15185,7 @@ if test "$wxUSE_CHECKBOX" = "yes"; then
 #define wxUSE_CHECKBOX 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKLST" = "yes"; then
@@ -15188,6 +15193,7 @@ if test "$wxUSE_CHECKLST" = "yes"; then
 #define wxUSE_CHECKLISTBOX 1
 EOF
 
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
@@ -15196,6 +15202,7 @@ if test "$wxUSE_GAUGE" = "yes"; then
 #define wxUSE_GAUGE 1
 EOF
 
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_NEW_GRID" = "yes"; then
@@ -15204,6 +15211,7 @@ if test "$wxUSE_NEW_GRID" = "yes"; then
 #define wxUSE_NEW_GRID 1
 EOF
 
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
 fi
 
@@ -15212,6 +15220,7 @@ if test "$wxUSE_GRID" = "yes"; then
 #define wxUSE_GRID 1
 EOF
 
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
 fi
 
@@ -15227,6 +15236,7 @@ if test "$wxUSE_LISTBOX" = "yes"; then
 #define wxUSE_LISTBOX 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
@@ -15235,6 +15245,7 @@ if test "$wxUSE_LISTCTRL" = "yes"; then
 #define wxUSE_LISTCTRL 1
 EOF
 
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
     else
         echo "configure: warning: wxListCtrl requires wxImageList and won't be compiled without it" 1>&2
@@ -15246,6 +15257,7 @@ if test "$wxUSE_NOTEBOOK" = "yes"; then
 #define wxUSE_NOTEBOOK 1
 EOF
 
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
@@ -15254,6 +15266,7 @@ if test "$wxUSE_RADIOBOX" = "yes"; then
 #define wxUSE_RADIOBOX 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_RADIOBTN" = "yes"; then
@@ -15261,6 +15274,7 @@ if test "$wxUSE_RADIOBTN" = "yes"; then
 #define wxUSE_RADIOBTN 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SASH" = "yes"; then
@@ -15276,6 +15290,7 @@ if test "$wxUSE_SCROLLBAR" = "yes"; then
 #define wxUSE_SCROLLBAR 1
 EOF
 
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
 fi
 
@@ -15284,6 +15299,7 @@ if test "$wxUSE_SLIDER" = "yes"; then
 #define wxUSE_SLIDER 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
@@ -15291,6 +15307,7 @@ if test "$wxUSE_SPINBTN" = "yes"; then
 #define wxUSE_SPINBTN 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINCTRL" = "yes"; then
@@ -15298,6 +15315,7 @@ if test "$wxUSE_SPINCTRL" = "yes"; then
 #define wxUSE_SPINCTRL 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
@@ -15313,6 +15331,7 @@ if test "$wxUSE_STATBMP" = "yes"; then
 #define wxUSE_STATBMP 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATBOX" = "yes"; then
@@ -15320,6 +15339,7 @@ if test "$wxUSE_STATBOX" = "yes"; then
 #define wxUSE_STATBOX 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATTEXT" = "yes"; then
@@ -15327,6 +15347,7 @@ if test "$wxUSE_STATTEXT" = "yes"; then
 #define wxUSE_STATTEXT 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
@@ -15337,6 +15358,7 @@ if test "$wxUSE_STATLINE" = "yes"; then
 #define wxUSE_STATLINE 1
 EOF
 
+        USES_CONTROLS=1
     fi
 fi
 
@@ -15345,6 +15367,7 @@ if test "$wxUSE_STATUSBAR" = "yes"; then
 #define wxUSE_STATUSBAR 1
 EOF
 
+    USES_CONTROLS=1
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
 fi
@@ -15362,6 +15385,7 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
 #define wxUSE_TEXTCTRL 1
 EOF
 
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS text"
 fi
 
@@ -15370,6 +15394,7 @@ if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
 #define wxUSE_TOOLBAR_SIMPLE 1
 EOF
 
+    USES_CONTROLS=1
     wxUSE_TOOLBAR="yes"
 fi
 
@@ -15378,6 +15403,7 @@ if test "$wxUSE_TOOLBAR" = "yes"; then
 #define wxUSE_TOOLBAR 1
 EOF
 
+    USES_CONTROLS=1
 
         if test "$wxUSE_TOOLBAR_SIMPLE" != "yes"; then
         wxUSE_TOOLBAR_NATIVE="yes"
@@ -15391,6 +15417,7 @@ if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
 #define wxUSE_TOOLBAR_NATIVE 1
 EOF
 
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
@@ -15414,10 +15441,18 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 #define wxUSE_TREECTRL 1
 EOF
 
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
     else
         echo "configure: warning: wxTreeCtrl requires wxImageList and won't be compiled without it" 1>&2
     fi
+fi
+
+if test "$USES_CONTROLS" = 1; then
+    cat >> confdefs.h <<\EOF
+#define wxUSE_CONTROLS 1
+EOF
+
 fi
 
 
@@ -15715,7 +15750,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:15719: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:15754: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

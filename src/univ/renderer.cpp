@@ -29,6 +29,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/control.h"
+    #include "wx/dc.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"

@@ -29,6 +29,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
@@ -48,7 +50,7 @@ wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
 wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
                                   const wxChar *n,
                                   const wxChar *d)
-       : ctor(c), name(n), desc(d)
+       : name(n), desc(d), ctor(c)
 {
     // insert us (in the head of) the linked list
     next = ms_allThemes;

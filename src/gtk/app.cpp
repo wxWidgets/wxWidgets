@@ -249,6 +249,7 @@ wxApp::wxApp()
 
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
+    m_isActive = TRUE;
 
     m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
@@ -467,6 +468,11 @@ bool wxApp::Pending()
 void wxApp::Dispatch()
 {
     gtk_main_iteration();
+}
+
+bool wxApp::IsActive() const
+{
+    return m_isActive;
 }
 
 void wxApp::DeletePendingObjects()

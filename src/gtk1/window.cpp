@@ -2569,6 +2569,8 @@ void wxWindow::OnInternalIdle()
         // do it only once
         g_sendActivateEvent = -1;
 
+        wxTheApp->SetActive(activate);
+
         wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
         event.SetEventObject(this);
 

@@ -779,8 +779,8 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_BUTTON=no
-  DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
@@ -917,8 +917,8 @@ else
 
   DEFAULT_wxUSE_ACCEL=yes
   DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
@@ -3559,56 +3559,68 @@ dnl ---------------------------------------------------------------------------
 dnl GUI controls
 dnl ---------------------------------------------------------------------------
 
+USES_CONTROLS=0
 if test "$wxUSE_CONTROLS" = "yes"; then
-  AC_DEFINE(wxUSE_CONTROLS)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then
   AC_DEFINE(wxUSE_BUTTON)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_BMPBUTTON" = "yes"; then
   AC_DEFINE(wxUSE_BMPBUTTON)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CARET" = "yes"; then
   AC_DEFINE(wxUSE_CARET)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
 fi
 
 if test "$wxUSE_COMBOBOX" = "yes"; then
   AC_DEFINE(wxUSE_COMBOBOX)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKBOX" = "yes"; then
   AC_DEFINE(wxUSE_CHECKBOX)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then
   AC_DEFINE(wxUSE_GAUGE)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_NEW_GRID" = "yes"; then
   wxUSE_GRID="yes"
   AC_DEFINE(wxUSE_NEW_GRID)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
 fi
 
 if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
+  USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
 fi
 
@@ -3618,11 +3630,13 @@ fi
 
 if test "$wxUSE_LISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_LISTBOX)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
     if test "$wxUSE_IMAGLIST" = "yes"; then
         AC_DEFINE(wxUSE_LISTCTRL)
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
     else
         AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
@@ -3631,15 +3645,18 @@ fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then
     AC_DEFINE(wxUSE_NOTEBOOK)
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_RADIOBTN" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBTN)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SASH" = "yes"; then
@@ -3649,19 +3666,23 @@ fi
 
 if test "$wxUSE_SCROLLBAR" = "yes"; then
     AC_DEFINE(wxUSE_SCROLLBAR)
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
     AC_DEFINE(wxUSE_SLIDER)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
     AC_DEFINE(wxUSE_SPINBTN)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPINCTRL" = "yes"; then
     AC_DEFINE(wxUSE_SPINCTRL)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
@@ -3671,14 +3692,17 @@ fi
 
 if test "$wxUSE_STATBMP" = "yes"; then
     AC_DEFINE(wxUSE_STATBMP)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATBOX" = "yes"; then
     AC_DEFINE(wxUSE_STATBOX)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATTEXT" = "yes"; then
     AC_DEFINE(wxUSE_STATTEXT)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
@@ -3686,11 +3710,13 @@ if test "$wxUSE_STATLINE" = "yes"; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
     else
         AC_DEFINE(wxUSE_STATLINE)
+        USES_CONTROLS=1
     fi
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
     AC_DEFINE(wxUSE_STATUSBAR)
+    USES_CONTROLS=1
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
 fi
@@ -3702,16 +3728,19 @@ fi
 
 if test "$wxUSE_TEXTCTRL" = "yes"; then
     AC_DEFINE(wxUSE_TEXTCTRL)
+    USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS text"
 fi
 
 if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR_SIMPLE)
+    USES_CONTROLS=1
     wxUSE_TOOLBAR="yes"
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR)
+    USES_CONTROLS=1
 
     dnl if wxUSE_TOOLBAR and !wxUSE_TOOLBAR_SIMPLE => wxUSE_TOOLBAR_NATIVE
     if test "$wxUSE_TOOLBAR_SIMPLE" != "yes"; then
@@ -3723,6 +3752,7 @@ fi
 
 if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR_NATIVE)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
@@ -3740,10 +3770,15 @@ fi
 if test "$wxUSE_TREECTRL" = "yes"; then
     if test "$wxUSE_IMAGLIST" = "yes"; then
         AC_DEFINE(wxUSE_TREECTRL)
+        USES_CONTROLS=1
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
     else
         AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
     fi
+fi
+
+if test "$USES_CONTROLS" = 1; then
+    AC_DEFINE(wxUSE_CONTROLS)
 fi
 
 dnl ---------------------------------------------------------------------------

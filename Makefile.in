@@ -32,7 +32,7 @@ include ./src/make.env
 srcdir = @srcdir@
 
 VP1 = @top_srcdir@/src/common
-VP1_5 = @top_srcdir@/src/univ
+VP1_5 = @top_srcdir@/src/univ@PATH_IFS@@top_srcdir@/src/univ/themes
 VP2 = @top_srcdir@/src/@TOOLKIT_DIR@
 VP3 = @top_srcdir@/src/motif/xmcombo
 VP4 = @top_srcdir@/src/generic
