@@ -82,12 +82,36 @@ char *wxFileSelector(const char *title,
         defaultFilenameString = "";
 
     wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
-
+    if(defaultExtension)
+      {
+	unsigned int ii;
+	int filterFind,filterIndex=0;
+	filterFind=1;
+	for(ii=0;ii<filter2.Length();ii++)
+	  {
+	    if(filter2[ii] == '|')
+	      {
+		unsigned int is=ii++;
+		filterIndex++;
+		for(;ii<filter2.Length();ii++)
+		  if(filter2[ii] == '|')
+		    break;
+		if(ii-is-1 > 0 && is+1 < filter2.Length())
+		  if(filter2.Mid(is+1,ii-is-1) == defaultExtension)
+		    {
+		      filterFind=filterIndex;
+		      break;
+		    }
+	      }
+	  }
+	fileDialog.SetFilterIndex(filterFind);
+      }                 
+    
     if ( fileDialog.ShowModal() == wxID_OK )
-    {
+      {
         strcpy(wxBuffer, (const char *)fileDialog.GetPath());
         return wxBuffer;
-    }
+      }
     else
         return NULL;
 }
