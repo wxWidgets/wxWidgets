@@ -56,6 +56,7 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
     data_s.WriteString(info.object->GetClassInfo()->GetClassName());
   } else {
     data_s.WriteString(TAG_EMPTY_OBJECT);
+    return;
   }
 
   data_s.WriteString(GetObjectName(info.object));
@@ -80,6 +81,9 @@ void wxObjectOutputStream::AddChild(wxObject *obj)
     info->duplicate = FALSE;
     m_saved_objs.Append(obj);
   }
+  if (!obj)
+    info->duplicate = FALSE;
+
   info->n_children = 0;
   info->object = obj;
   info->parent = m_current_info; // Not useful here.
@@ -135,6 +139,7 @@ bool wxObjectOutputStream::SaveObject(wxObject& obj)
   m_stage = 0;
   info.object = &obj;
   info.n_children = 0;
+  info.duplicate = FALSE;
   ProcessObjectDef(&info);
 
   m_stage = 1;
@@ -180,10 +185,24 @@ wxObject *wxObjectInputStream::GetParent() const
   return m_current_info->parent->object;
 }
 
+wxObject *wxObjectInputStream::GetChild()
+{
+  wxObject *obj = GetChild(0);
+
+  m_current_info->children_removed++;
+
+  return obj;
+}
+
 wxObject *wxObjectInputStream::GetChild(int no) const
 {
-  wxNode *node = m_current_info->children.Nth(m_current_info->children_removed+no);
+  wxNode *node;
   wxObjectStreamInfo *info;
+
+  if (m_current_info->children_removed >= m_current_info->n_children)
+    return NULL;
+
+  node = m_current_info->children.Nth(m_current_info->children_removed+no);
 
   if (!node)
     return (wxObject *) NULL;
@@ -210,17 +229,18 @@ bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
     return FALSE;
 
   class_name = data_s.ReadString();
-  info->object_name = data_s.ReadString();
   info->children_removed = 0;
 
   if (class_name == TAG_EMPTY_OBJECT)
     info->object = (wxObject *) NULL;
   else if (class_name == TAG_DUPLICATE_OBJECT) {
+    info->object_name = data_s.ReadString();
     info->object = SolveName(info->object_name);
     info->n_children = 0;
   } else {
+    info->object_name = data_s.ReadString();
     info->object = wxCreateDynamicObject( WXSTRINGCAST class_name);
-    info->n_children = data_s.Read8();
+    info->n_children = data_s.Read32();
   }
   return TRUE;
 }
@@ -260,6 +280,14 @@ void wxObjectInputStream::ProcessObjectData(wxObjectStreamInfo *info)
   while (node) {
     ProcessObjectData((wxObjectStreamInfo *)node->Data());
     node = node->Next();
+  }
+
+  m_current_info = info;
+
+  if (info->recall) {
+    m_secondcall = TRUE;
+    info->object->LoadObject(*this);
+    m_secondcall = FALSE;
   }
 }
 

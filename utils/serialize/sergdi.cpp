@@ -21,10 +21,15 @@
 #include <wx/brush.h>
 #include <wx/serbase.h>
 #include <wx/imaglist.h>
+#include <wx/region.h>
+#include <wx/colour.h>
+#include <wx/palette.h>
+#include <wx/dcmemory.h>
 #include "sergdi.h"
 
 IMPLEMENT_SERIAL_CLASS(wxBitmap, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxGDIObject, wxObject)
+IMPLEMENT_SERIAL_CLASS(wxRegion, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxColour, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxFont, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxPen, wxGDIObject)
@@ -37,15 +42,68 @@ IMPLEMENT_ALIAS_SERIAL_CLASS(wxFontList, wxList)
 IMPLEMENT_ALIAS_SERIAL_CLASS(wxColourDatabase, wxList)
 IMPLEMENT_ALIAS_SERIAL_CLASS(wxBitmapList, wxList)
 
+// ----------------------------------------------------------------------------
+
 void WXSERIAL(wxBitmap)::StoreObject(wxObjectOutputStream& s)
 {
   // TODO
+  // I implemented a basic image saving (maybe I'll need to improve wxWin API).
+
+  int x, y, w, h;
+  wxDataOutputStream data_s(s);
+  wxBitmap *bitmap = (wxBitmap *)Object();
+  wxColour col;
+  wxMemoryDC dc;
+
+  w = bitmap->GetWidth();
+  h = bitmap->GetHeight();
+
+  if (s.FirstStage()) {
+    s.AddChild(bitmap->GetMask());
+  }
+
+  dc.SelectObject(*bitmap);
+
+  data_s.Write16(w);
+  data_s.Write16(h);
+  for (y=0;y<h;y++)
+    for (x=0;x<w;x++) {
+      dc.GetPixel(x, y, &col);
+      data_s.Write8( col.Red() );
+      data_s.Write8( col.Green() );
+      data_s.Write8( col.Blue() );
+    }
 }
 
 void WXSERIAL(wxBitmap)::LoadObject(wxObjectInputStream& s)
 {
   // TODO
+  // I implemented a basic image loading (maybe I'll need to improve wxWin API).
+  wxDataInputStream data_s(s);
+  wxBitmap *bitmap = (wxBitmap *)Object();
+  wxMemoryDC dc;
+  wxPen pen;
+  int x, y, w, h;
+  int r, g, b;
+
+  w = data_s.Read16();
+  h = data_s.Read16();
+
+  bitmap->Resize(w, h);
+  dc.SelectObject(*bitmap);
+
+  for (y=0;y<h;y++)
+    for (x=0;x<w;x++) {
+      r = data_s.Read8();
+      g = data_s.Read8();
+      b = data_s.Read8();
+      pen.SetColour(r, g, b);
+      dc.SetPen(pen);
+      dc.DrawPoint(x,y); 
+    }
 }
+
+// ----------------------------------------------------------------------------
 
 void WXSERIAL(wxGDIObject)::StoreObject(wxObjectOutputStream& s)
 {
@@ -64,6 +122,42 @@ void WXSERIAL(wxGDIObject)::LoadObject(wxObjectInputStream& s)
 
   ((wxGDIObject *)Object())->SetVisible( data_s.Read8() );
 }
+
+// ----------------------------------------------------------------------------
+
+void WXSERIAL(wxRegion)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxGDIObject)::StoreObject(s);
+
+  if (s.FirstStage())
+    return;
+
+  wxDataOutputStream data_s(s);
+  wxRect rect = ((wxRegion *)Object())->GetBox();
+
+  data_s.Write16( rect.GetX() ); 
+  data_s.Write16( rect.GetY() ); 
+  data_s.Write16( rect.GetWidth() ); 
+  data_s.Write16( rect.GetHeight() ); 
+}
+
+void WXSERIAL(wxRegion)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxGDIObject)::LoadObject(s);
+
+  wxDataInputStream data_s(s);
+  wxRegion *region = (wxRegion *)Object();
+  wxRect rect;
+
+  rect.SetX( data_s.Read16() );
+  rect.SetY( data_s.Read16() );
+  rect.SetWidth( data_s.Read16() );
+  rect.SetHeight( data_s.Read16() );
+
+  *region = wxRegion(rect);
+}
+
+// ----------------------------------------------------------------------------
 
 void WXSERIAL(wxColour)::StoreObject(wxObjectOutputStream& s)
 {
@@ -94,6 +188,8 @@ void WXSERIAL(wxColour)::LoadObject(wxObjectInputStream& s)
 
   colour->Set(r, g, b);
 }
+
+// ----------------------------------------------------------------------------
 
 void WXSERIAL(wxPen)::StoreObject(wxObjectOutputStream& s)
 {
@@ -129,6 +225,7 @@ void WXSERIAL(wxPen)::LoadObject(wxObjectInputStream& s)
   pen->SetWidth( data_s.Read8() );
 }
 
+// ----------------------------------------------------------------------------
 void WXSERIAL(wxBrush)::StoreObject(wxObjectOutputStream& s)
 {
   wxBrush *brush = (wxBrush *)Object();
@@ -159,6 +256,7 @@ void WXSERIAL(wxBrush)::LoadObject(wxObjectInputStream& s)
     *brush = wxBrush(bmap);
 }
 
+// ----------------------------------------------------------------------------
 void WXSERIAL(wxFont)::StoreObject(wxObjectOutputStream& s)
 {
   wxFont *font = (wxFont *)Object();
@@ -198,6 +296,8 @@ void WXSERIAL(wxFont)::LoadObject(wxObjectInputStream& s)
 
   *font = wxFont(psize, face_name, family, style, weight, underlined);
 }
+
+// ----------------------------------------------------------------------------
 
 void WXSERIAL(wxImageList)::StoreObject(wxObjectOutputStream& s)
 {

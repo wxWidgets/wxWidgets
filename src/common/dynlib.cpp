@@ -118,7 +118,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     return ((wxLibrary *)node->Data());
 
 #ifdef __UNIX__
-  lib_name.Prepend("lib");
+  lib_name.Prepend("./lib");
   lib_name += ".so";
 
   printf("lib_name = %s\n", WXSTRINGCAST lib_name);

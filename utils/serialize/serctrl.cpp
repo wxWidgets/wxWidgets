@@ -46,6 +46,7 @@ IMPLEMENT_SERIAL_CLASS(wxRadioBox, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxRadioButton, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxButton, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxStaticText, wxControl)
+IMPLEMENT_SERIAL_CLASS(wxStaticBox, wxControl)
 
 //-----------------------------------------------------------------------------
 
@@ -244,40 +245,45 @@ void WXSERIAL(wxNotebook)::StoreObject(wxObjectOutputStream& s)
   wxImageList *imaglist = notebook->GetImageList();
   int i, pcount = notebook->GetPageCount();
 
+  WXSERIAL(wxControl)::StoreObject(s);
   if (s.FirstStage()) {
     s.AddChild(imaglist);
-    WXSERIAL(wxControl)::StoreObject(s);
     return;
   }
 
   wxDataOutputStream data_s(s);
 
   data_s.Write8( pcount );
-  WXSERIAL(wxControl)::StoreObject(s);
 
   for (i=0;i<pcount;i++)
     data_s.WriteString( notebook->GetPageText(i) );
-
 }
 
 void WXSERIAL(wxNotebook)::LoadObject(wxObjectInputStream& s)
 {
   wxNotebook *notebook = (wxNotebook *)Object();
-  int i, pcount;
+  int i;
   wxImageList *imaglist;
 
-  imaglist = (wxImageList *)s.GetChild();
+  if (s.SecondCall()) {
+    for (i=0;i<m_pcount;i++)
+      notebook->AddPage( (wxWindow *)s.GetChild(), m_stringlist[i] );
+    return;
+  }
 
   WXSERIAL(wxControl)::LoadObject(s);
+
+  imaglist = (wxImageList *)s.GetChild();
 
   notebook->Create(m_parent, m_id, wxPoint(m_x, m_y), wxSize(m_w, m_h),
                    m_style, m_name);
 
   wxDataInputStream data_s(s);
 
-  pcount = data_s.Read8();
-  for (i=0;i<pcount;i++)
-    notebook->SetPageText(i, data_s.ReadString() );
+  m_pcount = data_s.Read8();
+  for (i=0;i<m_pcount;i++)
+    m_stringlist.Add(data_s.ReadString());
+  s.Recall();
 }
 
 //-----------------------------------------------------------------------------

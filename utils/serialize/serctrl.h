@@ -27,10 +27,21 @@ DECLARE_SERIAL_CLASS(wxChoice, wxControl)
 DECLARE_SERIAL_CLASS(wxComboBox, wxControl)
 DECLARE_SERIAL_CLASS(wxGauge, wxControl)
 DECLARE_SERIAL_CLASS(wxListBox, wxControl)
-DECLARE_SERIAL_CLASS(wxNotebook, wxControl)
 DECLARE_SERIAL_CLASS(wxRadioBox, wxControl)
 DECLARE_SERIAL_CLASS(wxRadioButton, wxControl)
 DECLARE_SERIAL_CLASS(wxStaticText, wxControl)
 DECLARE_SERIAL_CLASS(wxStaticBox, wxControl)
+
+
+class WXSERIAL(wxNotebook) : public WXSERIAL(wxControl) {
+  DECLARE_DYNAMIC_CLASS( wxNotebook_Serialize )
+public:
+  void StoreObject(wxObjectOutputStream& s);
+  void LoadObject(wxObjectInputStream& s);
+
+protected:
+  int m_pcount;
+  wxArrayString m_stringlist;
+};
 
 #endif

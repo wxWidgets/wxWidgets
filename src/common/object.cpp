@@ -235,8 +235,13 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 {
   wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
   wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
-  WXSERIAL(wxObject) *serial =
-                           (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
+  WXSERIAL(wxObject) *serial;
+
+  if (!lib) {
+    wxMessageBox("Can't load wxSerial dynamic library.", "Alert !");
+    return;
+  }
+  serial = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
   if (!serial) {
     wxString message;

@@ -27,7 +27,7 @@ class wxObjectStreamInfo : public wxObject {
   wxList children;
   wxObjectStreamInfo *parent;
   wxObject *object;
-  bool duplicate;
+  bool duplicate, recall;
 };
 
 class wxObjectOutputStream : public wxFilterOutputStream {
@@ -57,6 +57,9 @@ class wxObjectInputStream : public wxFilterInputStream {
  public:
   wxObjectInputStream(wxInputStream& s);
 
+  bool SecondCall() const { return m_secondcall; }
+  void Recall(bool on = TRUE) { m_current_info->recall = on; }
+
   wxObject *GetChild(int no) const;
   wxObject *GetChild();
   int NumberOfChildren() const { return m_current_info->n_children; }
@@ -72,6 +75,7 @@ class wxObjectInputStream : public wxFilterInputStream {
   void ProcessObjectData(wxObjectStreamInfo *info);
 
  protected:
+  bool m_secondcall;
   wxObjectStreamInfo *m_current_info;
   wxList m_solver;
 };

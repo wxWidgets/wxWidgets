@@ -20,6 +20,7 @@
 #include "serwnd.h"
 #include "sergdi.h"
 #include "serctrl.h"
+#include "serext.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxObject_Serialize, wxObject)
 
@@ -41,9 +42,13 @@ WXDLL_ENTRY_FUNCTION()
   REGISTER_CLASS(wxMenu);
   REGISTER_CLASS(wxMenuItem);
   REGISTER_CLASS(wxMenuBar);
+  REGISTER_CLASS(wxMDIParentFrame);
+  REGISTER_CLASS(wxMDIChildFrame);
+  REGISTER_CLASS(wxMDIClientWindow);
 
   REGISTER_CLASS(wxGDIObject);
   REGISTER_CLASS(wxBitmap);
+  REGISTER_CLASS(wxRegion);
   REGISTER_CLASS(wxColour);
   REGISTER_CLASS(wxFont);
   REGISTER_CLASS(wxPen);
@@ -54,6 +59,7 @@ WXDLL_ENTRY_FUNCTION()
   REGISTER_CLASS(wxFontList);
   REGISTER_CLASS(wxColourDatabase);
   REGISTER_CLASS(wxBitmapList);
+  REGISTER_CLASS(wxImageList);
 
   REGISTER_CLASS(wxControl);
   REGISTER_CLASS(wxSlider);
@@ -63,9 +69,14 @@ WXDLL_ENTRY_FUNCTION()
   REGISTER_CLASS(wxListBox);
   REGISTER_CLASS(wxButton);
   REGISTER_CLASS(wxStaticText);
+  REGISTER_CLASS(wxStaticBox);
   REGISTER_CLASS(wxRadioBox);
   REGISTER_CLASS(wxComboBox);
   REGISTER_CLASS(wxNotebook);
+
+  REGISTER_CLASS(wxSplitterWindow);
+  REGISTER_CLASS(wxGrid);
+  REGISTER_CLASS(wxGridCell);
 
   return lib;
 }

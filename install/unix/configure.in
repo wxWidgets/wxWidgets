@@ -1286,27 +1286,32 @@ if test "$USE_THREADS" = "1"; then
   AC_CHECK_LIB(pthread-0.7, pthread_create, [
      UNIX_THREAD="gtk/threadpsx.cpp"
      THREADS_LINK="-lpthread-0.7"
-     AC_DEFINE(USE_THREADS)
   ],[
     AC_CHECK_HEADER(sys/prctl.h, [
         UNIX_THREAD="gtk/threadsgi.cpp"
-        AC_DEFINE(USE_THREADS)
     ])
-    AC_CHECK_LIB(pthread, pthread_create, [
+
+    dnl pthread_create is always available in pthread but it seems not to be
+    dnl the case for pthread_setcanceltype.
+
+    AC_CHECK_LIB(pthread, pthread_setcanceltype, [
        UNIX_THREAD="gtk/threadpsx.cpp"
        THREADS_LINK="-lpthread"
-       AC_DEFINE(USE_THREADS)
     ])
   ])
-  AC_CHECK_LIB(pthreads, pthread_create, [
+  AC_CHECK_LIB(pthreads, pthread_setcanceltype, [
      UNIX_THREAD="gtk/threadpsx.cpp"
      THREADS_LINK="-lpthreads"
-     AC_DEFINE(USE_THREADS)
   ])
+fi
+
+if test -z "$UNIX_THREAD"; then
+  USE_THREADS=0
 fi
 
 AC_SUBST(UNIX_THREAD)
 AC_SUBST(THREADS_LINK)
+AC_DEFINE(USE_THREADS)
 
 dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
 dnl   defines THREADS_LINK it contains the thread library to link with. (GL)

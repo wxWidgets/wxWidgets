@@ -26,6 +26,7 @@
 #include <wx/serbase.h>
 #include <wx/statusbr.h>
 #include <wx/mdi.h>
+#include "wx/log.h"
 #include "serwnd.h"
 
 
@@ -49,9 +50,10 @@ IMPLEMENT_SERIAL_CLASS(wxMDIClientWindow, wxWindow)
 void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
 {
   wxWindow *win_object = (wxWindow *)Object();
-  wxNode *node = win_object->GetChildren()->First();
 
   if (s.FirstStage()) {
+    wxNode *node = win_object->GetChildren()->First();
+
     s.AddChild(win_object->GetConstraints());
     s.AddChild(win_object->GetValidator());
 
@@ -71,14 +73,16 @@ void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
   wxDataOutputStream data(s);
   int x,y,w,h;
 
-  data.WriteString(win_object->GetName());
-  data.WriteString(win_object->GetLabel());
-  data.WriteString(win_object->GetTitle());
+  data.WriteString( win_object->GetName() );
+  data.WriteString( win_object->GetLabel() );
+  data.WriteString( win_object->GetTitle() );
 
-  data.Write8(win_object->GetAutoLayout());
-  data.Write8(win_object->IsShown());
+  data.Write8( win_object->GetAutoLayout() );
+  data.Write8( win_object->IsShown() );
   data.Write32( win_object->GetWindowStyleFlag() );
-  data.Write32(win_object->GetId());
+  data.Write32( win_object->GetId() );
+  wxLogDebug( "Number = %d", win_object->GetChildren()->Number() );
+  data.Write8( win_object->GetChildren()->Number() );
 
   win_object->GetSize(&w, &h);
   win_object->GetPosition(&x, &y);
@@ -92,6 +96,9 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
 {
   wxDataInputStream data_s(s);
   wxWindow *win_object = (wxWindow *)Object();
+  wxColour *colour;
+  wxFont *font;
+  int number;
 
   m_parent = (wxWindow *)s.GetParent();
 
@@ -103,6 +110,7 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
   m_shown       = data_s.Read8();
   m_style       = data_s.Read32();
   m_id          = data_s.Read32();
+  number        = data_s.Read8();
 
   m_x = data_s.Read16();
   m_y = data_s.Read16();
@@ -110,11 +118,23 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
   m_h = data_s.Read16();
 
   /* I assume we will never create raw wxWindow object */
-
+  (void)s.GetChild(); // We pass wxLayoutConstraints.
+ 
   m_validator = (wxValidator *)s.GetChild();
-  win_object->SetDefaultBackgroundColour(*((wxColour *)s.GetChild()));
-  win_object->SetDefaultForegroundColour(*((wxColour *)s.GetChild()));
-  win_object->SetFont(*((wxFont *)s.GetChild()));
+  if (!m_validator)
+    m_validator = (wxValidator *)&wxDefaultValidator;
+
+  colour = (wxColour *)s.GetChild();
+  if (colour)
+    win_object->SetDefaultBackgroundColour(*colour);
+  colour = (wxColour *)s.GetChild();
+  if (colour)
+    win_object->SetDefaultForegroundColour(*colour);
+  font = (wxFont *)s.GetChild();
+  if (font)
+    win_object->SetFont(*font);
+
+  s.RemoveChildren(number);
 
   return;
 }
