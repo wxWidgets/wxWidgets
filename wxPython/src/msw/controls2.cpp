@@ -8456,7 +8456,7 @@ static PyObject *_wrap_wxTreeCtrl_InsertItemBefore(PyObject *self, PyObject *arg
     wxString * _arg3;
     int  _arg4 = (int ) -1;
     int  _arg5 = (int ) -1;
-    wxTreeItemData * _arg6 = (wxTreeItemData *) NULL;
+    wxPyTreeItemData * _arg6 = (wxPyTreeItemData *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj3 = 0;
@@ -8501,8 +8501,8 @@ static PyObject *_wrap_wxTreeCtrl_InsertItemBefore(PyObject *self, PyObject *arg
 }
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxTreeItemData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxTreeCtrl_InsertItemBefore. Expected _wxTreeItemData_p.");
+        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxPyTreeItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxTreeCtrl_InsertItemBefore. Expected _wxPyTreeItemData_p.");
         return NULL;
         }
     }

@@ -1220,7 +1220,7 @@ public:
                                 size_t before,
                                 const wxString& text,
                                 int image = -1, int selectedImage = -1,
-                                wxTreeItemData *data = NULL);
+                                wxPyTreeItemData *data = NULL);
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,

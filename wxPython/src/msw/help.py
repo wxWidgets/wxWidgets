@@ -26,9 +26,6 @@ def EVT_DETAILED_HELP(win, id, func):
 def EVT_DETAILED_HELP_RANGE(win, id, id2, func):
     win.Connect(id, id2, wxEVT_DETAILED_HELP, func)
 
-def EVT_CONTEXT_MENU(win, func):
-    win.Connect(-1, -1, wxEVT_CONTEXT_MENU, func)
-
 class wxHelpEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
@@ -186,7 +183,6 @@ wxDIALOG_EX_CONTEXTHELP = helpc.wxDIALOG_EX_CONTEXTHELP
 wxID_CONTEXT_HELP = helpc.wxID_CONTEXT_HELP
 wxEVT_HELP = helpc.wxEVT_HELP
 wxEVT_DETAILED_HELP = helpc.wxEVT_DETAILED_HELP
-wxEVT_CONTEXT_MENU = helpc.wxEVT_CONTEXT_MENU
 
 
 #-------------- USER INCLUDE -----------------------
