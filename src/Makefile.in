@@ -76,6 +76,7 @@ LIB_CPP_SRC=\
  gtk/filedlg.cpp \
  gtk/font.cpp \
  gtk/frame.cpp \
+ gtk/gauge.cpp \
  gtk/gdiobj.cpp \
  gtk/icon.cpp \
  gtk/listbox.cpp \
@@ -90,6 +91,7 @@ LIB_CPP_SRC=\
  gtk/settings.cpp \
  gtk/slider.cpp \
  gtk/statbox.cpp \
+ gtk/statbmp.cpp \
  gtk/stattext.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \

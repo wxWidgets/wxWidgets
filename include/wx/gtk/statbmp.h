@@ -18,7 +18,6 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/list.h"
 #include "wx/control.h"
 
 //-----------------------------------------------------------------------------
@@ -28,7 +27,34 @@
 class wxStaticBitmap;
 
 //-----------------------------------------------------------------------------
+// global data
+//-----------------------------------------------------------------------------
+
+extern const char* wxStaticBitmapNameStr;
+
+//-----------------------------------------------------------------------------
 // wxStaticBitmap
 //-----------------------------------------------------------------------------
+
+class wxStaticBitmap: public wxControl
+{
+  DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+  
+  public:
+  
+    wxStaticBitmap(void);
+    wxStaticBitmap( wxWindow *parent, const wxWindowID id, const wxBitmap& label,
+      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+      const long style = 0, const wxString& name = wxStaticBitmapNameStr );
+    bool Create( wxWindow *parent, const wxWindowID id, const wxBitmap& label,
+      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+      const long style = 0, const wxString& name = wxStaticBitmapNameStr);
+    virtual void SetBitmap( const wxBitmap& bitmap );
+    wxBitmap& GetBitmap(void) const { return (wxBitmap&)m_bitmap; }
+
+ private:
+ 
+   wxBitmap   m_bitmap;
+};
 
 #endif // __GTKSTATICBITMAPH__

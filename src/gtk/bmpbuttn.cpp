@@ -72,8 +72,6 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
     gtk_container_add( GTK_CONTAINER(m_widget), pixmap );
   };
   
-  
-  
   if (newSize.x == -1) newSize.x = m_bitmap.GetHeight()+10;
   if (newSize.y == -1) newSize.y = m_bitmap.GetWidth()+10;
   SetSize( newSize.x, newSize.y );
