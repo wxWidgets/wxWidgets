@@ -101,8 +101,9 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
     g_return_if_fail (gc != NULL);
 
 #ifdef __WXGTK20__
-    if (GDK_WINDOW_DESTROYED(drawable) || GDK_WINDOW_DESTROYED(src))
-        return;
+    // This doesn't seem to exist for bitmaps (1-bit)
+    // if (GDK_WINDOW_DESTROYED(drawable) || GDK_WINDOW_DESTROYED(src))
+    //    return;
 
     gdk_drawable_get_size(src, &src_width, &src_height);
 #else
@@ -193,7 +194,7 @@ static void wxInitGCPool()
         // If we cannot malloc, then fail with error
         // when debug is enabled.  If debug is not enabled,
         // the problem will eventually get caught
-		// in wxGetPoolGC.
+        // in wxGetPoolGC.
         wxFAIL_MSG( wxT("Cannot allocate GC pool") );
         return;
     }
@@ -239,13 +240,13 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
     // We did not find an available GC.
     // We need to grow the GC pool.
     pptr = (wxGC *)realloc(wxGCPool,
-		(wxGCPoolSize + GC_POOL_ALLOC_SIZE)*sizeof(wxGC));
+        (wxGCPoolSize + GC_POOL_ALLOC_SIZE)*sizeof(wxGC));
     if (pptr != NULL)
     {
         // Initialize newly allocated pool.
         wxGCPool = pptr;
-    	memset(&wxGCPool[wxGCPoolSize], 0,
-			GC_POOL_ALLOC_SIZE*sizeof(wxGC));
+        memset(&wxGCPool[wxGCPoolSize], 0,
+            GC_POOL_ALLOC_SIZE*sizeof(wxGC));
     
         // Initialize entry we will return.    
         wxGCPool[wxGCPoolSize].m_gc = gdk_gc_new( window );
