@@ -304,6 +304,7 @@ BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_PAINT(wxToolBar::OnPaint)
     EVT_KILL_FOCUS(wxToolBar::OnKillFocus)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
+    EVT_TIMER(-1, wxToolBar::OnTimer)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -906,6 +907,8 @@ void wxToolBar::OnMouseEvent(
         ReleaseMouse();
     }
 
+    m_vToolTimer.Stop();
+    m_vToolTimer.Start(3000L, FALSE);
     if (!pTool)
     {
         if (m_nCurrentTool > -1)
@@ -1405,5 +1408,19 @@ void wxToolBar::RaiseTool (
         vDC.DrawLine(vX, vY + vHeight, vX, vY);
     }
 } // end of wxToolBar::RaiseTool
+
+void wxToolBar::OnTimer (
+  wxTimerEvent&                     rEvent
+)
+{
+    if (rEvent.GetId() == (int)m_ulToolTimer)
+    {
+        (void)wxMessageBox("wxWindows toolbar timer", "ToolTimer");
+    }
+    else if (rEvent.GetId() == (int)m_ulToolExpTimer)
+    {
+        (void)wxMessageBox("wxWindows toolbar timer", "ToolExpTimer");
+    }
+} // end of wxToolBar::OnTimer
 
 #endif // ndef for wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE

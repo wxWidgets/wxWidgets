@@ -56,6 +56,22 @@ wxTimer::~wxTimer()
     wxTimerList.DeleteObject(this);
 }
 
+void wxTimer::Notify()
+{
+    //
+    // The base class version generates an event if it has owner - which it
+    // should because otherwise nobody can process timer events, but it does
+    // not use the OS's ID, which OS/2 must have to figure out which timer fired
+    //
+    wxCHECK_RET( m_owner, _T("wxTimer::Notify() should be overridden.") );
+
+    wxTimerEvent                    vEvent( m_ulId
+                                           ,m_milli
+                                          );
+
+    (void)m_owner->ProcessEvent(vEvent);
+} // end of wxTimer::Notify
+
 bool wxTimer::Start(
   int                               nMilliseconds
 , bool                              bOneShot
