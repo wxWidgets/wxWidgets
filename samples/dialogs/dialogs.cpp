@@ -38,6 +38,7 @@
 #include "wx/progdlg.h"
 #include "wx/fdrepdlg.h"
 #include "wx/busyinfo.h"
+#include "wx/image.h"
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -123,7 +124,9 @@ MyCanvas *myCanvas = (MyCanvas *) NULL;
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
+#if wxUSE_IMAGE
     wxInitAllImageHandlers();
+#endif
 
 #if defined(__WXGTK__) && defined(wxUSE_UNICODE)
   wxConvCurrent = &wxConvLibc;
