@@ -100,17 +100,6 @@ wxRendererNative& wxRendererNative::GetGeneric()
     return s_rendererGeneric;
 }
 
-// some platforms have their own renderers
-#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK__)
-
-/* static */
-wxRendererNative& wxRendererNative::Get()
-{
-    return GetGeneric();
-}
-
-#endif // platforms using their own renderers
-
 wxRendererGeneric::wxRendererGeneric()
     : m_penBlack(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)),
       m_penDarkGrey(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)),

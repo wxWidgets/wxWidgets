@@ -118,7 +118,7 @@ static const char *aqua_arrow_down_xpm[] = {
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererNative::Get()
+wxRendererNative& wxRendererNative::GetDefault()
 {
     static wxRendererMac s_rendererMac;
 

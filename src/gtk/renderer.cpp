@@ -76,7 +76,7 @@ public:
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererNative::Get()
+wxRendererNative& wxRendererNative::GetDefault()
 {
     static wxRendererGTK s_rendererGTK;
 

@@ -48,7 +48,7 @@ private:
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererNative::Get()
+wxRendererNative& wxRendererNative::GetDefault()
 {
     static wxRendererMSW s_rendererMSW;
 

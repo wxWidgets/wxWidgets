@@ -30,6 +30,13 @@ class WXDLLEXPORT wxWindow;
 
 #include "wx/gdicmn.h" // for wxPoint
 
+// some platforms have their own renderers, others use the generic one
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
+    #define wxHAS_NATIVE_RENDERER
+#else
+    #undef wxHAS_NATIVE_RENDERER
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -109,6 +116,9 @@ public:
 
     // return the generic implementation of the renderer
     static wxRendererNative& GetGeneric();
+
+    // return the default (native) implementation for this platform
+    static wxRendererNative& GetDefault();
 };
 
 // ----------------------------------------------------------------------------
@@ -158,6 +168,21 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxDelegateRendererNative)
 };
+
+// ----------------------------------------------------------------------------
+// inline functions implementation
+// ----------------------------------------------------------------------------
+
+#ifndef wxHAS_NATIVE_RENDERER
+
+// default native renderer is the generic one then
+/* static */ inline
+wxRendererNative& wxRendererNative::GetDefault()
+{
+    return GetGeneric();
+}
+
+#endif // !wxHAS_NATIVE_RENDERER
 
 #endif // _WX_RENDERER_H_
 

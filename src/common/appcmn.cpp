@@ -322,6 +322,12 @@ wxFontMapper *wxGUIAppTraitsBase::CreateFontMapper()
 
 #endif // wxUSE_FONTMAP
 
+wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
+{
+    // use the default native renderer by default
+    return NULL;
+}
+
 #ifdef __WXDEBUG__
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)

@@ -506,6 +506,12 @@ wxFontMapper *wxConsoleAppTraitsBase::CreateFontMapper()
 
 #endif // wxUSE_FONTMAP
 
+wxRendererNative *wxConsoleAppTraitsBase::CreateRenderer()
+{
+    // console applications don't use renderers
+    return NULL;
+}
+
 #ifdef __WXDEBUG__
 bool wxConsoleAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {

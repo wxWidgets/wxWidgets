@@ -19,6 +19,7 @@ class WXDLLEXPORT wxAppTraits;
 #endif // wxUSE_FONTMAP
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxMessageOutput;
+class WXDLLEXPORT wxRendererNative;
 class WXDLLEXPORT wxString;
 
 // ----------------------------------------------------------------------------
@@ -43,6 +44,13 @@ public:
     // create the global font mapper object used for encodings/charset mapping
     virtual wxFontMapper *CreateFontMapper() = 0;
 #endif // wxUSE_FONTMAP
+
+    // get the renderer to use for drawing the generic controls (return value
+    // may be NULL in which case the default renderer for the current platform
+    // is used); this is used in GUI only and always returns NULL in console
+    //
+    // NB: returned pointer will be deleted by the caller
+    virtual wxRendererNative *CreateRenderer() = 0;
 
 
     // functions abstracting differences between GUI and console modes
@@ -123,6 +131,7 @@ public:
 #if wxUSE_FONTMAP
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
+    virtual wxRendererNative *CreateRenderer();
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
@@ -149,6 +158,7 @@ public:
 #if wxUSE_FONTMAP
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
+    virtual wxRendererNative *CreateRenderer();
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
