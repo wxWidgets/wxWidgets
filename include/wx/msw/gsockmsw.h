@@ -62,7 +62,6 @@ struct _GAddress
   GSocketError m_error;
 };
 
-
 /* Input / output */
 
 GSocketError _GSocket_Input_Timeout(GSocket *socket);
@@ -75,9 +74,13 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
+bool _GSocket_GUI_Init(GSocket *socket);
+void _GSocket_GUI_Destroy(GSocket *socket);
+
+LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
+
 void _GSocket_Enable_Events(GSocket *socket);
 void _GSocket_Disable_Events(GSocket *socket);
-LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 /* GAddress */
 

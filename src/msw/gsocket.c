@@ -22,18 +22,10 @@
 #include "wx/msw/gsockmsw.h"
 #include "wx/gsocket.h"
 
-#define INSTANCE wxGetInstance()
-
 #else
 
 #include "gsockmsw.h"
 #include "gsocket.h"
-
-/* If not using wxWindows, a global var called hInst must
- * be available and it must containt the app's instance
- * handle.
- */
-#define INSTANCE hInst
 
 #endif /* __GSOCKET_STANDALONE__ */
 
@@ -55,81 +47,6 @@
     #pragma warning(disable:4127) /* conditional expression is constant */
 #endif /* Visual C++ */
 
-#define CLASSNAME  "_GSocket_Internal_Window_Class"
-#define WINDOWNAME "_GSocket_Internal_Window_Name"
-
-/* Maximum number of different GSocket objects at a given time.
- * This value can be modified at will, but it CANNOT be greater
- * than (0x7FFF - WM_USER + 1)
- */
-#define MAXSOCKETS 1024
-
-#if (MAXSOCKETS > (0x7FFF - WM_USER + 1))
-#error "MAXSOCKETS is too big!"
-#endif
-
-
-/* Global variables */
-
-extern HINSTANCE INSTANCE;
-static HWND hWin;
-static CRITICAL_SECTION critical;
-static GSocket* socketList[MAXSOCKETS];
-static int firstAvailable;
-
-/* Global initializers */
-
-bool GSocket_Init()
-{
-  WSADATA wsaData;
-  WNDCLASS winClass;
-  int i;
-
-  /* Create internal window for event notifications */
-  winClass.style         = 0;
-  winClass.lpfnWndProc   = _GSocket_Internal_WinProc;
-  winClass.cbClsExtra    = 0;
-  winClass.cbWndExtra    = 0;
-  winClass.hInstance     = INSTANCE;
-  winClass.hIcon         = (HICON) NULL;
-  winClass.hCursor       = (HCURSOR) NULL;
-  winClass.hbrBackground = (HBRUSH) NULL;
-  winClass.lpszMenuName  = (LPCTSTR) NULL;
-  winClass.lpszClassName = CLASSNAME;
-
-  RegisterClass(&winClass);
-  hWin = CreateWindow(CLASSNAME,
-                      WINDOWNAME,
-                      0, 0, 0, 0, 0,
-                      (HWND) NULL, (HMENU) NULL, INSTANCE, (LPVOID) NULL);
-
-  if (!hWin) return FALSE;
-
-  /* Initialize socket list */
-  InitializeCriticalSection(&critical);
-
-  for (i = 0; i < MAXSOCKETS; i++)
-  {
-    socketList[i] = NULL;
-  }
-  firstAvailable = 0;
-
-  /* Initialize WinSocket */
-  return (WSAStartup((1 << 8) | 1, &wsaData) == 0);
-}
-
-void GSocket_Cleanup()
-{
-  /* Destroy internal window */
-  DestroyWindow(hWin);
-  UnregisterClass(CLASSNAME, INSTANCE);
-
-  /* Delete critical section */
-  DeleteCriticalSection(&critical);
-
-  /* Cleanup WinSocket */
-  WSACleanup();
-}
 
 /* Constructors / Destructors for GSocket */
 
@@ -156,26 +73,12 @@ GSocket *GSocket_new()
   socket->m_timeout.tv_usec = 0;
   socket->m_detected        = 0;
 
-  /* Allocate a new message number for this socket */
-  EnterCriticalSection(&critical);
-
-  i = firstAvailable;
-  while (socketList[i] != NULL)
+  /* Per-socket GUI-specific initialization */
+  if (!_GSocket_GUI_Init(socket))
   {
-    i = (i + 1) % MAXSOCKETS;
-
-    if (i == firstAvailable)    /* abort! */
-    {
-      free(socket);
-      LeaveCriticalSection(&critical);
-      return NULL;
-    }
+    free(socket);
+    return NULL;
   }
-  socketList[i] = socket;
-  firstAvailable = (i + 1) % MAXSOCKETS;
-  socket->m_msgnumber = (i + WM_USER);
-
-  LeaveCriticalSection(&critical);
 
   return socket;
 }
@@ -184,10 +87,8 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* Remove the socket from the list */
-  EnterCriticalSection(&critical);
-  socketList[(socket->m_msgnumber - WM_USER)] = NULL;
-  LeaveCriticalSection(&critical);
+  /* Per-socket GUI-specific cleanup */
+  _GSocket_GUI_Destroy(socket);
 
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != INVALID_SOCKET)
@@ -683,7 +584,6 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   return GSOCK_NOERROR;
 }
 
-
 /* Generic IO */
 
 /* Like recv(), send(), ... */
@@ -816,7 +716,6 @@ GSocketError GSocket_GetError(GSocket *socket)
   return socket->m_error;
 }
 
-
 /* Callbacks */
 
 /* GSOCK_INPUT:
@@ -884,108 +783,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
   }
 }
 
-
-/* Internals */
-
-/* _GSocket_Enable_Events:
- *  Enable all event notifications; we need to be notified of all
- *  events for internal processing, but we will only notify users
- *  when an appropiate callback function has been installed.
- */
-void _GSocket_Enable_Events(GSocket *socket)
-{
-  assert (socket != NULL);
-
-  if (socket->m_fd != INVALID_SOCKET)
-  {
-    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber,
-                   FD_READ | FD_WRITE | FD_ACCEPT | FD_CONNECT | FD_CLOSE);
-  }
-}
-
-/* _GSocket_Disable_Events:
- *  Disable event notifications (when shutdowning the socket)
- */
-void _GSocket_Disable_Events(GSocket *socket)
-{
-  assert (socket != NULL);
-
-  if (socket->m_fd != INVALID_SOCKET)
-  {
-    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
-  }
-}
-
-
-LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
-                                           UINT uMsg,
-                                           WPARAM wParam,
-                                           LPARAM lParam)
-{
-  GSocket *socket;
-  GSocketEvent event;
-  GSocketCallback cback;
-  char *data;
-
-  if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
-  {
-    EnterCriticalSection(&critical);
-    socket = socketList[(uMsg - WM_USER)];
-    event = -1;
-    cback = NULL;
-    data = NULL;
-
-    /* Check that the socket still exists (it has not been
-     * destroyed) and for safety, check that the m_fd field
-     * is what we expect it to be.
-     */
-    if ((socket != NULL) && (socket->m_fd == wParam))
-    {
-      switch WSAGETSELECTEVENT(lParam)
-      {
-        case FD_READ:    event = GSOCK_INPUT; break;
-        case FD_WRITE:   event = GSOCK_OUTPUT; break;
-        case FD_ACCEPT:  event = GSOCK_CONNECTION; break;
-        case FD_CONNECT:
-        {
-          if (WSAGETSELECTERROR(lParam) != 0)
-            event = GSOCK_LOST;
-          else
-            event = GSOCK_CONNECTION;
-          break;
-        }
-        case FD_CLOSE:   event = GSOCK_LOST; break;
-      }
-
-      if (event != -1)
-      {
-        cback = socket->m_cbacks[event];
-        data = socket->m_data[event];
-
-        if (event == GSOCK_LOST)
-          socket->m_detected = GSOCK_LOST_FLAG;
-        else
-          socket->m_detected |= (1 << event);
-      }
-    }
-
-    /* OK, we can now leave the critical section because we have
-     * already obtained the callback address (we make no further
-     * accesses to socket->whatever). However, the app should
-     * be prepared to handle events from a socket that has just
-     * been closed!
-     */
-    LeaveCriticalSection(&critical);
-
-    if (cback != NULL)
-      (cback)(socket, event, data);
-
-    return (LRESULT) 0;
-  }
-  else
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
+/* Internals (IO) */
 
 /* _GSocket_Input_Timeout:
  *  For blocking sockets, wait until data is available or
