@@ -47,6 +47,8 @@
     typedef long off_t;
 #endif
 
+#endif
+
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
 // VisualAge C++ V4.0 cannot have any external linkage const decs
