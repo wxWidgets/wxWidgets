@@ -32,15 +32,15 @@
     Uninstallable=1
     DefaultDirName=c:\wxWindows_2.3.4
     DefaultGroupName=wxWindows 2.3.4
-    LicenseFile=C:\wx2dev\wxWindows\docs\licence.txt
-    InfoBeforeFile=C:\wx2dev\wxWindows\docs\readme.txt
-    InfoAfterFile=C:\wx2dev\wxWindows\docs\msw\install.txt
+    LicenseFile=C:\wx24\wxWindows\docs\licence.txt
+    InfoBeforeFile=C:\wx24\wxWindows\docs\readme.txt
+    InfoAfterFile=C:\wx24\wxWindows\docs\msw\install.txt
     MessagesFile=compiler:default.isl
     DiskSpanning=1
     DiskSize=1457664
     DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
-    SourceDir=c:\wx2dev\wxWindows\deliver\wxWindows-2.3.4
-    OutputDir=c:\wx2dev\wxWindows\deliver
+    SourceDir=c:\wx24\wxWindows\deliver\wxWindows-2.3.4
+    OutputDir=c:\wx24\wxWindows\deliver
 

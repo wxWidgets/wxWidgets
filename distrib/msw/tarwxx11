@@ -63,7 +63,7 @@ echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
 rm -f $2/wxX11-${WXVER}*.tar.gz
-rm -f $2/wxWindows-${WXVER}
+rm -f $2/wxX11-${WXVER}
 
 ### wxX11: combined wxMotif and wxX11 distributions
 cd $1
@@ -73,13 +73,13 @@ $TAR cf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
 
 echo Re-tarring wxX11 in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxX11-${WXVER}
+cd wxX11-${WXVER}
 $TAR xf ../wxX11-${WXVER}.tar
 cd ..
 rm -f wxX11-${WXVER}.tar
-$TAR cf $2/wxX11-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxX11-${WXVER}.tar wxX11-${WXVER}/*
+rm -f -r wxX11-${WXVER}
 gzip $2/wxX11-${WXVER}.tar
 
 

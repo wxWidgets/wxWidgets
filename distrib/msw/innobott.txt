@@ -36,6 +36,6 @@
 ;InnoVer=1.3
 ;AddVerTo=AppVerName
 ;SetupFilename=setup.exe
-;OutputFolder=C:\wx2dev\wxWindows\deliver
+;OutputFolder=C:\wx24\wxWindows\deliver
 ;CopyrightText=Copyright © The wxWindows Team
 
