@@ -64,9 +64,6 @@ public:
     GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
     GSocketError SetSockOpt(int level, int optname,
         const void *optval, int optlen);
-    /* API compatibility functions */
-    static void _GSocket_Detected_Read(GSocket *socket);
-    static void _GSocket_Detected_Write(GSocket *socket);
     virtual void Detected_Read();
     virtual void Detected_Write();
 protected:
