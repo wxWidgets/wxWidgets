@@ -15,7 +15,7 @@
 
 #include "wx/timer.h"
 #include "wx/app.h"
-#include "wx/list.h"
+#include "wx/hashmap.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -27,14 +27,16 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject);
 
-static wxList wxTimerList(wxKEY_INTEGER);
+WX_DECLARE_VOIDPTR_HASH_MAP(wxTimer*, wxTimerHashMap);
+
+static wxTimerHashMap s_timers;
 
 void wxTimerCallback (wxTimer * timer)
 {
   // Check to see if it's still on
-  if (!wxTimerList.Find((long)timer))
+  if (s_timers.find(timer) == s_timers.end())
     return;
 
   if (timer->m_id == 0)
@@ -59,8 +61,8 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
-    wxTimer::Stop();
-    wxTimerList.DeleteObject(this);
+    Stop();
+    s_timers.erase(this);
 }
 
 bool wxTimer::Start(int milliseconds, bool mode)
@@ -69,8 +71,8 @@ bool wxTimer::Start(int milliseconds, bool mode)
 
     (void)wxTimerBase::Start(milliseconds, mode);
 
-    if (!wxTimerList.Find((long)this))
-        wxTimerList.Append((long)this, this);
+    if (s_timers.find(this) == s_timers.end())
+        s_timers[this] = this;
 
     m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
                             m_milli,
