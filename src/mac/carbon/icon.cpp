@@ -184,8 +184,6 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
                 CopyFromBitmap( bmp ) ;
                 return true;
             }
-#else
-            return false;
 #endif
         }
     }
