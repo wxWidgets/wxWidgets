@@ -180,7 +180,8 @@ MyFrame::MyFrame(const wxString& title)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    m_tc = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize,
+    m_tc = new wxTextCtrl(this, -1, wxEmptyString,
+                          wxDefaultPosition, wxDefaultSize,
                           wxTE_MULTILINE|wxTE_READONLY);
     NotifyUsingFile(m_soundFile);
 }
