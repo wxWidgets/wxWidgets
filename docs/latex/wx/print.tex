@@ -59,7 +59,7 @@ void SetPrintMode(wxPrintMode printMode) ;
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrintData::wxPrintData}
+\membersection{wxPrintData::wxPrintData}\label{wxprintdatactor}
 
 \func{}{wxPrintData}{\void}
 
@@ -70,7 +70,7 @@ Default constructor.
 Copy constructor.
 
 
-\membersection{wxPrintData::\destruct{wxPrintData}}
+\membersection{wxPrintData::\destruct{wxPrintData}}\label{wxprintdatadtor}
 
 \func{}{\destruct{wxPrintData}}{\void}
 
@@ -376,7 +376,7 @@ a successfully dismissed print dialog.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrintDialog::wxPrintDialog}
+\membersection{wxPrintDialog::wxPrintDialog}\label{wxprintdialogctor}
 
 \func{}{wxPrintDialog}{\param{wxWindow* }{parent}, \param{wxPrintDialogData* }{data = NULL}}
 
@@ -388,7 +388,7 @@ data, which will be copied to the print dialog's print data.
 \helpref{wxPrintDialogData}{wxprintdialogdata}
 
 
-\membersection{wxPrintDialog::\destruct{wxPrintDialog}}
+\membersection{wxPrintDialog::\destruct{wxPrintDialog}}\label{wxprintdialogdtor}
 
 \func{}{\destruct{wxPrintDialog}}{\void}
 
@@ -450,7 +450,7 @@ It contains a wxPrintData object with underlying printing settings.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrintDialogData::wxPrintDialogData}
+\membersection{wxPrintDialogData::wxPrintDialogData}\label{wxprintdialogdatactor}
 
 \func{}{wxPrintDialogData}{\void}
 
@@ -465,7 +465,7 @@ Copy constructor.
 Construct an object from a print dialog data object.
 
 
-\membersection{wxPrintDialogData::\destruct{wxPrintDialogData}}
+\membersection{wxPrintDialogData::\destruct{wxPrintDialogData}}\label{wxprintdialogdatadtor}
 
 \func{}{\destruct{wxPrintDialogData}}{\void}
 
@@ -689,7 +689,7 @@ method of printing.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrinter::wxPrinter}
+\membersection{wxPrinter::wxPrinter}\label{wxprinterctor}
 
 \func{}{wxPrinter}{\param{wxPrintDialogData* }{data = NULL}}
 
@@ -702,7 +702,7 @@ dialog data, which will be copied to the printer object's local data.
 \helpref{wxPrintData}{wxprintdata}
 
 
-\membersection{wxPrinter::\destruct{wxPrinter}}
+\membersection{wxPrinter::\destruct{wxPrinter}}\label{wxprinterdtor}
 
 \func{}{\destruct{wxPrinter}}{\void}
 
@@ -814,7 +814,7 @@ achieving the correct scaling for the page.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrinterDC::wxPrinterDC}
+\membersection{wxPrinterDC::wxPrinterDC}\label{wxprinterdcctor}
 
 \func{}{wxPrinterDC}{\param{const wxPrintData\& }{printData}}
 
@@ -857,7 +857,7 @@ wxPrintPreview object to initiate printing or previewing.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrintout::wxPrintout}
+\membersection{wxPrintout::wxPrintout}\label{wxprintoutctor}
 
 \func{}{wxPrintout}{\param{const wxString\& }{title = "Printout"}}
 
@@ -865,7 +865,7 @@ Constructor. Pass an optional title argument - the current filename would be a g
 (at least in MSW)
 
 
-\membersection{wxPrintout::\destruct{wxPrintout}}
+\membersection{wxPrintout::\destruct{wxPrintout}}\label{wxprintoutdtor}
 
 \func{}{\destruct{wxPrintout}}{\void}
 
@@ -1069,7 +1069,7 @@ immediately after the frame is shown.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPrintPreview::wxPrintPreview}
+\membersection{wxPrintPreview::wxPrintPreview}\label{wxprintpreviewctor}
 
 \func{}{wxPrintPreview}{\param{wxPrintout* }{printout}, \param{wxPrintout* }{printoutForPrinting},
 \param{wxPrintData* }{data=NULL}}
@@ -1091,7 +1091,7 @@ Ok could return false if there was a problem initializing the printer device con
 (current printer not set, for example).
 
 
-\membersection{wxPrintPreview::\destruct{wxPrintPreview}}
+\membersection{wxPrintPreview::\destruct{wxPrintPreview}}\label{wxprintpreviewdtor}
 
 \func{}{\destruct{wxPrinter}}{\void}
 

@@ -21,7 +21,7 @@ system to display the preview.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxPreviewCanvas::wxPreviewCanvas}
+\membersection{wxPreviewCanvas::wxPreviewCanvas}\label{wxpreviewcanvasctor}
 
 \func{}{wxPreviewCanvas}{\param{wxPrintPreview* }{preview}, \param{wxWindow* }{parent},
  \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},
@@ -29,7 +29,7 @@ system to display the preview.
 
 Constructor.
 
-\membersection{wxPreviewCanvas::\destruct{wxPreviewCanvas}}
+\membersection{wxPreviewCanvas::\destruct{wxPreviewCanvas}}\label{wxpreviewcanvasdtor}
 
 \func{}{\destruct{wxPreviewCanvas}}{\void}
 
@@ -139,7 +139,7 @@ class may be used without derivation.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxPreviewFrame::wxPreviewFrame}
+\membersection{wxPreviewFrame::wxPreviewFrame}\label{wxpreviewframector}
 
 \func{}{wxPreviewFrame}{\param{wxPrintPreview* }{preview}, \param{wxWindow* }{parent}, \param{const wxString\& }{title},
  \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& size }{size = wxDefaultSize},
@@ -148,27 +148,27 @@ class may be used without derivation.
 Constructor. Pass a print preview object plus other normal frame arguments.
 The print preview object will be destroyed by the frame when it closes.
 
-\membersection{wxPreviewFrame::\destruct{wxPreviewFrame}}
+\membersection{wxPreviewFrame::\destruct{wxPreviewFrame}}\label{wxpreviewframedtor}
 
 \func{}{\destruct{wxPreviewFrame}}{\void}
 
 Destructor. 
 
-\membersection{wxPreviewFrame::CreateControlBar}
+\membersection{wxPreviewFrame::CreateControlBar}\label{wxpreviewframecreatecontrolbar}
 
 \func{void}{CreateControlBar}{\void}
 
 Creates a wxPreviewControlBar. Override this function to allow
 a user-defined preview control bar object to be created.
 
-\membersection{wxPreviewFrame::CreateCanvas}
+\membersection{wxPreviewFrame::CreateCanvas}\label{wxpreviewframecreatecanvas}
 
 \func{void}{CreateCanvas}{\void}
 
 Creates a wxPreviewCanvas. Override this function to allow
 a user-defined preview canvas object to be created.
 
-\membersection{wxPreviewFrame::Initialize}
+\membersection{wxPreviewFrame::Initialize}\label{wxpreviewframeinitialize}
 
 \func{void}{Initialize}{\void}
 
@@ -179,7 +179,7 @@ in the application.
 This function should be called by the application prior to
 showing the frame.
 
-\membersection{wxPreviewFrame::OnCloseWindow}
+\membersection{wxPreviewFrame::OnCloseWindow}\label{wxpreviewframeonclosewindow}
 
 \func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
 
