@@ -1065,9 +1065,6 @@ class wxTreeCtrlPtr(wxControlPtr):
     def GetBoundingRect(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetBoundingRect,(self,) + _args, _kwargs)
         return val
-    def OnPaint(self, *_args, **_kwargs):
-        val = apply(controls2c.wxTreeCtrl_OnPaint,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxTreeCtrl instance at %s>" % (self.this,)
     
