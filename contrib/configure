@@ -827,27 +827,28 @@ ac_given_srcdir=$srcdir
 
 trap 'rm -fr `echo "
             src/Makefile
+            src/deprecated/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
             src/svg/Makefile	    
             src/xrc/Makefile
-            src/canvas/Makefile
             src/gizmos/Makefile
             src/plot/Makefile
             src/applet/Makefile
             src/fl/Makefile
             src/net/Makefile
             samples/Makefile
+            samples/deprecated/Makefile
+            samples/deprecated/proplist/Makefile
+            samples/deprecated/resource/Makefile
+            samples/deprecated/treelay/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
             samples/svg/Makefile
-            samples/canvas/Makefile
-            samples/canvas/test/Makefile
-            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
@@ -952,27 +953,28 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
+            src/deprecated/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
             src/svg/Makefile	    
             src/xrc/Makefile
-            src/canvas/Makefile
             src/gizmos/Makefile
             src/plot/Makefile
             src/applet/Makefile
             src/fl/Makefile
             src/net/Makefile
             samples/Makefile
+            samples/deprecated/Makefile
+            samples/deprecated/proplist/Makefile
+            samples/deprecated/resource/Makefile
+            samples/deprecated/treelay/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
             samples/svg/Makefile
-            samples/canvas/Makefile
-            samples/canvas/test/Makefile
-            samples/canvas/simple/Makefile
             samples/gizmos/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile

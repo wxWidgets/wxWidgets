@@ -856,10 +856,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             ownerdrw/Makefile
             png/Makefile
             printing/Makefile
-            proplist/Makefile
             propsize/Makefile
             regtest/Makefile
-            resource/Makefile
             rotate/Makefile
             sashtest/Makefile
             shaped/Makefile
@@ -873,7 +871,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             thread/Makefile
             toolbar/Makefile
             treectrl/Makefile
-            treelay/Makefile
             typetest/Makefile
             validate/Makefile
             widgets/Makefile
