@@ -29,6 +29,13 @@
         <if cond="FORMAT=='autoconf'">
             <ldflags>$(EXTRALIBS_OPENGL)</ldflags>
         </if>
+        <!-- system libraries on windows: -->
+        <if cond="FORMAT!='autoconf'">
+            <if cond="COMPILER=='wat' or COMPILER=='gcc'">
+                <sys-lib>opengl32</sys-lib>
+                <sys-lib>glu32</sys-lib>
+            </if>
+        </if>        
     </dll>
     
     <lib id="gllib" template="wx_lib"
