@@ -183,12 +183,16 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 wxDllType
 wxDllLoader::GetProgramHandle(void)
 {
-#ifdef __UNIX__
-    return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
+#if defined( HAVE_DLOPEN )
+   // optain handle for main program
+   return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/); 
+#elif defined (HAVE_SHL_LOAD)
+   // shl_findsymbol with NULL handle looks up in main program
+   return 0; 
 #else
-    wxFAIL_MSG(_("This method is not implemented under Windows or OS/2"));
-
-    return 0;
+#warning "Please implement this for your system!"
+   wxFAIL_MSG(_("This method is not implemented under Windows or OS/2"));
+   return 0;
 #endif
 }
 
