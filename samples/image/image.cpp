@@ -66,7 +66,34 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+
+const int nChoices = 8 ;
+static const wxString bppchoices[nChoices] =
+{
+    "1 bpp color",
+    "1 bpp B&W",
+    "4 bpp color",
+    "8 bpp color",
+    "8 bpp greyscale",
+    "8 bpp red",
+    "8 bpp own palette",
+    "24 bpp"
+};
+
+static const int bppvalues[nChoices] =
+{
+    wxBMP_1BPP,
+    wxBMP_1BPP_BW,
+    wxBMP_4BPP,
+    wxBMP_8BPP,
+    wxBMP_8BPP_GREY,
+    wxBMP_8BPP_RED,
+    wxBMP_8BPP_PALETTE,
+    wxBMP_24BPP
+};
+
 // MyFrame
+
 
 class MyFrame: public wxFrame
 {
@@ -106,33 +133,9 @@ public:
     {
         wxImage image(m_bitmap);
 
-        static const wxString bppchoices[8] =
-        {
-            "1 bpp color",
-            "1 bpp B&W",
-            "4 bpp color",
-            "8 bpp color",
-            "8 bpp greyscale",
-            "8 bpp red",
-            "8 bpp own palette",
-            "24 bpp"
-        };
-
-        static const int bppvalues[WXSIZEOF(bppchoices)] =
-        {
-            wxBMP_1BPP,
-            wxBMP_1BPP_BW,
-            wxBMP_4BPP,
-            wxBMP_8BPP,
-            wxBMP_8BPP_GREY,
-            wxBMP_8BPP_RED,
-            wxBMP_8BPP_PALETTE,
-            wxBMP_24BPP
-        };
-
         int bppselection = wxGetSingleChoiceIndex("Set BMP BPP",
                                                   "Set BMP BPP",
-                                                  WXSIZEOF(bppchoices),
+                                                  nChoices,
                                                   bppchoices,
                                                   this);
         if ( bppselection == -1 )
