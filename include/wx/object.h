@@ -201,7 +201,7 @@ private:                                        \
     static const wxString sm_className;         \
 public:                                         \
     name##PluginSentinel();                     \
-    ~##name##PluginSentinel();                  \
+    ~name##PluginSentinel();                    \
 };                                              \
 name##PluginSentinel  m_pluginsentinel;
 
