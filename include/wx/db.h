@@ -452,7 +452,8 @@ enum wxDBMS
     dbmsINFORMIX,
     dbmsVIRTUOSO,
     dbmsDB2,
-    dbmsINTERBASE
+    dbmsINTERBASE,
+    dbmsPERVASIVE_SQL
 };
 
 
