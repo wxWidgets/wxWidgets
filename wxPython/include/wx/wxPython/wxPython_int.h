@@ -64,6 +64,10 @@
 # pragma warning(disable:4190)
 #endif
 
+#ifdef __WXMAC__  // avoid a bug in Carbon headers
+#define scalb scalbn
+#endif
+
 //---------------------------------------------------------------------------
 
 typedef unsigned char byte;

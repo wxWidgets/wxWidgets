@@ -55,7 +55,7 @@ Topic :: Software Development :: User Interfaces
 
 # Config values below this point can be reset on the setup.py command line.
 
-BUILD_GLCANVAS = 0 # If true, build the contrib/glcanvas extension module
+BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 0      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
@@ -900,9 +900,8 @@ wxpExtensions.append(ext)
 if BUILD_GLCANVAS:
     msg('Preparing GLCANVAS...')
     location = 'contrib/glcanvas'
-    swig_files = ['glcanvas.i']
 
-    swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
+    swig_sources = run_swig(['glcanvas.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     gl_libs = []
@@ -914,7 +913,7 @@ if BUILD_GLCANVAS:
         gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
         gl_lflags = lflags
 
-    ext = Extension('glcanvasc',
+    ext = Extension('_glcanvas',
                     swig_sources,
 
                     include_dirs = includes,
