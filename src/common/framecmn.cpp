@@ -176,6 +176,15 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     return pt;
 }
 
+
+void wxFrameBase::SendSizeEvent()
+{
+    wxSizeEvent event( GetSize(), GetId() );
+    event.SetEventObject( this );
+    GetEventHandler()->AddPendingEvent( event );
+}
+
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------

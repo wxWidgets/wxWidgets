@@ -78,10 +78,7 @@ public:
 
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
-    //
-    // currently it is only implemented under MSW but is declared here to make
-    // it possible to call it in portable code without using #ifdef's
-    virtual void SendSizeEvent() { }
+    virtual void SendSizeEvent();
 
     // menu bar functions
     // ------------------
