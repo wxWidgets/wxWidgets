@@ -1886,7 +1886,7 @@ wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
         // for Dec, we can't compare with gs_cumulatedDays[mon + 1], but we
         // don't need it neither - because of the CHECK above we know that
         // yday lies in December then
-        if ( (mon == Dec) || (yday < gs_cumulatedDays[isLeap][mon + 1]) )
+        if ( (mon == Dec) || (yday <= gs_cumulatedDays[isLeap][mon + 1]) )
         {
             Set(yday - gs_cumulatedDays[isLeap][mon], mon, year);
 
