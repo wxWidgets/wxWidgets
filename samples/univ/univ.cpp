@@ -65,12 +65,12 @@
 //#define TEST_CHECKBOX
 //#define TEST_CHECKLISTBOX
 //#define TEST_COMBO
-#define TEST_GAUGE
+//#define TEST_GAUGE
 //#define TEST_LISTBOX
 //#define TEST_NOTEBOOK
 //#define TEST_RADIO
 //#define TEST_SCROLL
-//#define TEST_SLIDER
+#define TEST_SLIDER
 //#define TEST_SPIN
 //#define TEST_STATIC_BMP
 //#define TEST_STATIC_BOX

@@ -18,6 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
+    #pragma implementation "spinbutbase.h"
     #pragma implementation "univspinbutt.h"
 #endif
 
@@ -27,12 +28,12 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_SPINBTN
-
 #ifndef WX_PRECOMP
 #endif
 
 #include "wx/spinbutt.h"
+
+#if wxUSE_SPINBTN
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"

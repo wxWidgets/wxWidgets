@@ -135,7 +135,8 @@ void wxScrollArrows::DrawArrow(Arrow arrow,
     };
 
     void (wxRenderer::*pfn)(wxDC&, wxDirection, const wxRect&, int) =
-        scrollbarLike ? wxRenderer::DrawScrollbarArrow : wxRenderer::DrawArrow;
+        scrollbarLike ? &wxRenderer::DrawScrollbarArrow
+                      : &wxRenderer::DrawArrow;
 
     (m_control->GetRenderer()->*pfn)
     (

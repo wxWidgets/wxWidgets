@@ -27,6 +27,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif // WX_PRECOMP
+
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/scrthumb.h"
 

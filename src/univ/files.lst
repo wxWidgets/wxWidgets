@@ -11,17 +11,20 @@ UNIVOBJS = \
            radiobox.o \
            radiobut.o \
            renderer.o \
+           scrarrow.o \
            scrolbar.o \
+           scrthumb.o \
+           slider.o \
+           spinbutt.o \
            statbmp.o \
            statbox.o \
            statline.o \
            stattext.o \
+           textctrl.o \
            theme.o \
            gtk.o \
            winuniv.o \
            win32.o
-
-#textctrl.o \
 
 UNIVDEPS = \
            bmpbuttn.d \
@@ -36,7 +39,11 @@ UNIVDEPS = \
            radiobox.d \
            radiobut.d \
            renderer.d \
+           scrarrow.d \
            scrolbar.d \
+           scrthumb.d \
+           slider.d \
+           spinbutt.d \
            statbmp.d \
            statbox.d \
            statline.d \

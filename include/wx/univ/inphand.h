@@ -97,17 +97,17 @@ public:
     virtual bool HandleMouse(wxControl *control,
                              const wxMouseEvent& event)
     {
-        return m_handler ? m_handler->HandleMouse(control, event) : NULL;
+        return m_handler ? m_handler->HandleMouse(control, event) : FALSE;
     }
 
     virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event)
     {
-        return m_handler ? m_handler->HandleMouseMove(control, event) : NULL;
+        return m_handler ? m_handler->HandleMouseMove(control, event) : FALSE;
     }
 
     virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event)
     {
-        return m_handler ? m_handler->HandleFocus(control, event) : NULL;
+        return m_handler ? m_handler->HandleFocus(control, event) : FALSE;
     }
 
 private:

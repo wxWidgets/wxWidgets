@@ -12,6 +12,10 @@
 #ifndef _WX_COMBOBOX_H_BASE_
 #define _WX_COMBOBOX_H_BASE_
 
+#include "wx/defs.h"
+
+#if wxUSE_COMBOBOX
+
 WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
 
 // ----------------------------------------------------------------------------
@@ -61,6 +65,8 @@ public:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/combobox.h"
 #endif
+
+#endif // wxUSE_COMBOBOX
 
 #endif
     // _WX_COMBOBOX_H_BASE_

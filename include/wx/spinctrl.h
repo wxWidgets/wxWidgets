@@ -50,7 +50,7 @@ protected:
 // include the platform-dependent class implementation
 // ----------------------------------------------------------------------------
 
-#if defined(__WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__)
     #include "wx/generic/spinctlg.h"
 #elif defined(__WXMSW__) && defined(__WIN32__)
     #include "wx/msw/spinctrl.h"
