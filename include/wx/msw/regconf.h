@@ -98,7 +98,7 @@ public:
   bool Write(const wxString& key, bool bValue)
       { return wxConfigBase::Write(key, bValue); }
 
-  virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
+  virtual bool Flush(bool WXUNUSED(bCurrentOnly) = FALSE) { return TRUE; }
 
   // rename
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
