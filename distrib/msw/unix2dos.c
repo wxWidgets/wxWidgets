@@ -69,14 +69,14 @@ main(int argc, char *argv[])
             char tmpFile[512];
             sprintf(tmpFile, "%s.tmp", argv[i]);
             
-            fp = fopen(argv[i], "r");
+            fp = fopen(argv[i], "rb");
             if (!fp)
             {
                 fprintf(stderr, "Cannot open %s.\n", argv[i]);
                 i ++;
                 continue;
             }
-            outFile = fopen(tmpFile, "w");
+            outFile = fopen(tmpFile, "wb");
             if (!outFile)
             {
                 fprintf(stderr, "Cannot open %s.\n", tmpFile);
@@ -112,20 +112,28 @@ void translate(FILE *ifp, FILE *ofp, int unix2Dos)
     int c,d;
     
     if (!unix2Dos)
+    {
         /* DOS2Unix */
-        while ((c = getc(ifp)) != EOF){
+        while ((c = getc(ifp)) != EOF)
+        {
             if (c == CR)
-                switch(d = getc(ifp)){ /* check to see if LF follows */
-    case LF:
-        putc(d,ofp);         /* if so, ignore CR */
-        break;
-    default:
-        putc(c,ofp);         /* if not, output CR and following char */
-        putc(d,ofp);
-            }   else putc(c, ofp); /* c is not a CR */
+            {
+                switch(d = getc(ifp))
+                { /* check to see if LF follows */
+                    case LF:
+                        putc(d,ofp);         /* if so, ignore CR */
+                        break;
+                    default:
+                        putc(c,ofp);         /* if not, output CR and following char */
+                        putc(d,ofp);
+                }
+            }
+            else
+                putc(c, ofp); /* c is not a CR */
         }
-        
-        else
+     }
+     else
+        {
             /* Unix2DOS */
             while ((c = getc(ifp)) != EOF){
                 if (c == CR)
@@ -134,6 +142,7 @@ void translate(FILE *ifp, FILE *ofp, int unix2Dos)
                     putc(CR, ofp); /* add CR before each LF */
                 putc(c, ofp);
             }
+        }
 }
 
 void usage()
