@@ -137,7 +137,9 @@ void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  // FIXME: is this right? Causes a segfault on my system and doesn't
+  // seem right: wxPaintDC does not inherit from wxMemoryDC
+  //   if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -150,7 +152,9 @@ void wxPaintDC::CrossHair( long x, long y )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  // FIXME: is this right? Causes a segfault on my system and doesn't
+  // seem right: wxPaintDC does not inherit from wxMemoryDC
+  // if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {

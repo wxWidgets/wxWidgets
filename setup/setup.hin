@@ -407,6 +407,9 @@
 /* Define if you have <unistd.h>.  */
 #undef HAVE_UNISTD_H
 
+/* Define if you have <fnmatch.h>.  */
+#undef HAVE_FNMATCH_H
+
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
 

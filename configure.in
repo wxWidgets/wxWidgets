@@ -411,18 +411,20 @@ AC_HEADER_STDC
 dnl   defines STDC_HEADERS if ANSI-C header
 AC_HEADER_SYS_WAIT
 dnl   defines HAVE_SYS_WAIT_H if sys/wait.h exist and is POSIX.1
-AC_CHECK_HEADER(fcntl.h)
+AC_CHECK_HEADERS(fcntl.h)
 dnl   defines HAVE_FCNTL_H
-AC_CHECK_HEADER(limits.h)
+AC_CHECK_HEADERS(limits.h)
 dnl   defines HAVE_LIMITS_h
-AC_CHECK_HEADER(sys/file.h)
+AC_CHECK_HEADERS(sys/file.h)
 dnl   defines HAVE_SYS_FILE_H
-AC_CHECK_HEADER(sys/time.h)
+AC_CHECK_HEADERS(sys/time.h)
 dnl   defines HAVE_SYS_TIME_H
-AC_CHECK_HEADER(unistd.h)
+AC_CHECK_HEADERS(unistd.h)
 dnl   defines HAVE_UNISTD_H
+AC_CHECK_HEADERS(fnmatch.h)
+dnl   defines HAVE_FNMATCH_H
 dnl As it needs Linux 2.1.x for the moment: check whether the file exists (GL).
-AC_CHECK_HEADER(linux/joystick.h)
+AC_CHECK_HEADERS(linux/joystick.h)
 GTK_JOYSTICK=""
 if test "$ac_cv_header_linux_joystick_h" = "yes"; then
   GTK_JOYSTICK="gtk/joystick.cpp"
