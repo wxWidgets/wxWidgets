@@ -206,8 +206,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   else
     m_windowId = NewControlId();
 
-  long exflags;
-  long msflags = MSWGetCreateWindowFlags(&exflags);
+  WXDWORD exflags;
+  WXDWORD msflags = MSWGetCreateWindowFlags(&exflags);
 
   if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
                             title,
