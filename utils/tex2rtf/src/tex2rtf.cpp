@@ -57,6 +57,7 @@ char *contentsString = NULL;
 bool suppressNameDecoration = FALSE;
 bool OkToClose = TRUE;
 int passNumber = 1;
+int errorCount = 0;
 
 #ifndef NO_GUI
 
@@ -282,9 +283,9 @@ bool MyApp::OnInit()
     }
     else
     {
-      char buf[100];
-      sprintf(buf, "Invalid switch %s.\n", argv[i]);
-      OnError(buf);
+      wxString buf;
+      buf.Printf("Invalid switch %s.\n", argv[i]);
+      OnError((char *)buf.c_str());
       i++;
 #ifdef NO_GUI
       ShowOptions();
@@ -630,6 +631,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 void MyFrame::OnGo(wxCommandEvent& event)
 {
       passNumber = 1;
+      errorCount = 0;
       menuBar->EnableTop(0, FALSE);
       menuBar->EnableTop(1, FALSE);
       menuBar->EnableTop(2, FALSE);
@@ -786,11 +788,13 @@ void ChooseInputFile(bool force)
       ClearKeyWordTable();
       ResetContentsLevels(0);
       passNumber = 1;
-      char buf[300];
+      errorCount = 0;
+
       InputFile = copystring(s);
       wxString str = wxFileNameFromPath(InputFile);
-      sprintf(buf, "Tex2RTF [%s]", (const char*) str);
-      frame->SetTitle(buf);
+      wxString buf;
+      buf.Printf("Tex2RTF [%s]", str.c_str());
+      frame->SetTitle((char *)buf.c_str());
       OutputFile = NULL;
     }
   }
@@ -915,9 +919,9 @@ bool Go(void)
 #ifndef NO_GUI
     if (isInteractive)
     {
-      char buf[50];
-      sprintf(buf, "Working, pass %d...", passNumber);
-      frame->SetStatusText(buf);
+      wxString buf;
+      buf.Printf("Working, pass %d...", passNumber);
+      frame->SetStatusText((char *)buf.c_str());
     }
 #endif
     OkToClose = FALSE;
@@ -956,21 +960,34 @@ bool Go(void)
     TexCleanUp();
     startedSections = FALSE;
 
-    char buf[100];
+    wxString buf;
 #ifndef NO_GUI
     long tim = wxGetElapsedTime();
-    sprintf(buf, "Finished PASS #%d in %ld seconds.\n", passNumber, (long)(tim/1000.0));
-    OnInform(buf);
+    buf.Printf("Finished PASS #%d in %ld seconds.\n", passNumber, (long)(tim/1000.0));
+    OnInform((char *)buf.c_str());
+
+    if (errorCount)
+    {
+        buf.Printf("Errors encountered during this pass: %lu\n", errorCount);
+        OnInform((char *)buf.c_str());
+    }
+
     if (isInteractive)
     {
-      sprintf(buf, "Done, %d %s.", passNumber, (passNumber > 1) ? "passes" : "pass");
-      frame->SetStatusText(buf);
+      buf.Printf("Done, %d %s.", passNumber, (passNumber > 1) ? "passes" : "pass");
+      frame->SetStatusText((char *)buf.c_str());
     }
 #else
-    sprintf(buf, "Done, %d %s.", passNumber, (passNumber > 1) ? "passes" : "pass");
-    OnInform(buf);
+    buf.Printf("Done, %d %s.", passNumber, (passNumber > 1) ? "passes" : "pass");
+    OnInform((char *)buf.c_str());
+    if (errorCount)
+    {
+        buf.Printf("Errors encountered during this pass: %lu\n", errorCount);
+        OnInform((char *)buf.c_str());
+    }
 #endif
     passNumber ++;
+    errorCount = 0;
     OkToClose = TRUE;
     return TRUE;
   }
@@ -985,6 +1002,8 @@ bool Go(void)
 
 void OnError(char *msg)
 {
+  errorCount++;
+
 #ifdef NO_GUI
   cerr << "Error: " << msg << "\n";
   cerr.flush();
@@ -998,6 +1017,7 @@ void OnError(char *msg)
     cerr.flush();
   }
 #endif
+
 #ifdef __WXMSW__
     wxError(msg);
 #endif
