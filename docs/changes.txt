@@ -228,6 +228,7 @@ All (GUI):
 - support for comma in contrib gizmo wxLEDNumberCtrl (Grant Likely)
 - recursive wxSizer::Show for subsizer and return value if element was found
 - added wxChoicebook control
+- smoother time estimation updates in wxProgressDialog (Christian Sturmlechner)
 
 Unix:
 

@@ -84,7 +84,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(parent, wxID_ANY, title)
+                : wxDialog(parent, wxID_ANY, title),
+                  m_delay(3)
 {
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
@@ -150,6 +151,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     // create the estimated/remaining/total time zones if requested
     m_elapsed = m_estimated = m_remaining = (wxStaticText*)NULL;
+    m_display_estimated = m_last_timeupdate = m_break = 0;
+    m_ctdelay = 0;
 
     // if we are going to have at least one label, remmeber it in this var
     wxStaticText *label = NULL;
@@ -297,12 +300,50 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
     {
         unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
-        unsigned long estimated = (unsigned long)(( (double) elapsed * m_maximum ) / ((double)value)) ;
-        unsigned long remaining = estimated - elapsed;
+        if (    m_last_timeupdate < elapsed
+             || value == m_maximum
+           )
+        {
+            m_last_timeupdate = elapsed;
+            unsigned long estimated = m_break +
+                  (unsigned long)(( (double) (elapsed-m_break) * m_maximum ) / ((double)value)) ;
+            if (    estimated > m_display_estimated
+                 && m_ctdelay >= 0
+               )
+            {
+                ++m_ctdelay;
+            }
+            else if (    estimated < m_display_estimated
+                      && m_ctdelay <= 0
+                    )
+            {
+                --m_ctdelay;
+            }
+            else
+            {
+                m_ctdelay = 0;
+            }
+            if (    m_ctdelay >= m_delay          // enough confirmations for a higher value
+                 || m_ctdelay <= (m_delay*-1)     // enough confirmations for a lower value
+                 || value == m_maximum            // to stay consistent
+                 || elapsed > m_display_estimated // to stay consistent
+                 || ( elapsed > 0 && elapsed < 4 ) // additional updates in the beginning
+               )
+            {
+                m_display_estimated = estimated;
+                m_ctdelay = 0;
+            }
+        }
+
+        unsigned long display_remaining = m_display_estimated - elapsed;
+        if ( display_remaining < 0 )
+        {
+            display_remaining = 0;
+        }
 
         SetTimeLabel(elapsed, m_elapsed);
-        SetTimeLabel(estimated, m_estimated);
-        SetTimeLabel(remaining, m_remaining);
+        SetTimeLabel(m_display_estimated, m_estimated);
+        SetTimeLabel(display_remaining, m_remaining);
     }
 
     if ( value == m_maximum )
@@ -360,6 +401,8 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 void wxProgressDialog::Resume()
 {
     m_state = Continue;
+    m_ctdelay = m_delay; // force an update of the elapsed/estimated/remaining time
+    m_break += wxGetCurrentTime()-m_timeStop;
 
     // it may have been disabled by OnCancel(), so enable it back to let the
     // user interrupt us again if needed
@@ -398,6 +441,9 @@ void wxProgressDialog::OnCancel(wxCommandEvent& event)
         // update the button state immediately so that the user knows that the
         // request has been noticed
         m_btnAbort->Disable();
+
+        // save the time when the dialog was stopped
+        m_timeStop = wxGetCurrentTime();
     }
 }
 
@@ -417,6 +463,8 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
     {
         // next Update() will notice it
         m_state = Canceled;
+        m_btnAbort->Disable();
+        m_timeStop = wxGetCurrentTime();
     }
 }
 

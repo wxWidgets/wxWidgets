@@ -91,6 +91,10 @@ private:
                       *m_remaining;
    // time when the dialog was created
    unsigned long m_timeStart;
+   // time when the dialog was closed or cancelled
+   unsigned long m_timeStop;
+   // time between the moment the dialog was closed/cancelled and resume
+   unsigned long m_break;
 
    // parent top level window (may be NULL)
    wxWindow *m_parentTop;
@@ -109,6 +113,17 @@ private:
 
    // the maximum value
    int m_maximum;
+
+   // saves the time when elapsed time was updated so there is only one
+   // update per second
+   unsigned long m_last_timeupdate;
+   // tells how often a change of the estimated time has to be confirmed
+   // before it is actually displayed - this reduces the frequence of updates
+   // of estimated and remaining time
+   const int m_delay;
+   // counts the confirmations
+   int m_ctdelay;
+   unsigned long m_display_estimated;
 
 #if defined(__WXMSW__ ) || defined(__WXPM__)
    // the factor we use to always keep the value in 16 bit range as the native
