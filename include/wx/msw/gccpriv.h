@@ -59,6 +59,7 @@
     #define __CYGWIN10__
 #endif
 
+#ifndef __WATCOMC__ /* this workarounds a bug in Watcom's parser */
 /* Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
    so let's define them ourselves: */
 #if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
@@ -85,6 +86,7 @@
       #endif
     #endif
 #endif
+#endif /* __WATCOMC__ */
 
 
 #endif
