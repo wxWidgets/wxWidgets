@@ -96,7 +96,7 @@ static inline int wxMacTabMargin(long nbStyle, long side)
     // but we have to special case wxNB_TOP since it is zero...
     if ( side == wxNB_TOP)
     {
-        if ( nbStyle != 0 && nbStyle & wxNB_LEFT|wxNB_RIGHT|wxNB_BOTTOM)
+        if ( nbStyle != 0 && nbStyle & (wxNB_LEFT|wxNB_RIGHT|wxNB_BOTTOM))
         {
             return otherMargin;
         }
