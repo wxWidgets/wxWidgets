@@ -50,9 +50,9 @@ bool wxCheckListBox::IsChecked( int index ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = label->label;
+        wxString str = wxString(label->label,*wxConv_current);
 
-        return (str[1] == 'X');
+        return (str[1] == _T('X'));
     }
 
     wxFAIL_MSG(_T("wrong checklistbox index"));
@@ -69,7 +69,7 @@ void wxCheckListBox::Check( int index, bool check )
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = label->label;
+        wxString str = wxString(label->label,*wxConv_current);
 
         if (check == (str[1] == _T('X'))) return;
 

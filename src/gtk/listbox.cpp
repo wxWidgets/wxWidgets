@@ -387,7 +387,7 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str(GET_REAL_LABEL(label->label));
+        wxString str(GET_REAL_LABEL(label->label),*wxConvCurrent);
         deletedLabels.Add(str);
 
         // save data
@@ -649,7 +649,7 @@ int wxListBox::FindString( const wxString &item ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = GET_REAL_LABEL(label->label);
+        wxString str = wxString(GET_REAL_LABEL(label->label),*wxConvCurrent);
 
         if (str == item)
             return count;
@@ -718,7 +718,7 @@ wxString wxListBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = GET_REAL_LABEL(label->label);
+        wxString str = wxString(GET_REAL_LABEL(label->label),*wxConvCurrent);
 
         return str;
     }
@@ -738,7 +738,7 @@ wxString wxListBox::GetStringSelection() const
         GtkBin *bin = GTK_BIN( selection->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = GET_REAL_LABEL(label->label);
+        wxString str = wxString(GET_REAL_LABEL(label->label),*wxConvCurrent);
 
         return str;
     }

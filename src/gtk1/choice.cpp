@@ -251,7 +251,7 @@ int wxChoice::FindString( const wxString &string ) const
 
         wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
-       if (string == label->label)
+       if (string == wxString(label->label,*wxConv_current))
            return count;
 
        child = child->next;
@@ -304,7 +304,7 @@ wxString wxChoice::GetString( int n ) const
 
             wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
-            return label->label;
+            return wxString(label->label,*wxConv_current);
         }
         child = child->next;
         count++;
@@ -312,7 +312,7 @@ wxString wxChoice::GetString( int n ) const
 
     wxFAIL_MSG( _T("wxChoice: invalid index in GetString()") );
 
-    return "";
+    return _T("");
 }
 
 wxString wxChoice::GetStringSelection() const
@@ -323,7 +323,7 @@ wxString wxChoice::GetStringSelection() const
 
     wxASSERT_MSG( label != NULL , _T("wxChoice: invalid label") );
 
-    return label->label;
+    return wxString(label->label,*wxConv_current);
 }
 
 int wxChoice::Number() const

@@ -662,6 +662,8 @@ int wxEntry( int argc, char *argv[] )
 {
     gtk_set_locale();
 
+    if (!wxOKlibc()) wxConv_current = &wxConv_local;
+
     gtk_init( &argc, &argv );
 
     wxSetDetectableAutoRepeat( TRUE );
