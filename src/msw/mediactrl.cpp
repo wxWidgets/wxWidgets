@@ -2,7 +2,7 @@
 // Name:        msw/mediactrl.cpp
 // Purpose:     wxMediaCtrl MSW
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by: 
+// Modified by:
 // Created:     11/07/04
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
@@ -33,8 +33,8 @@
 //###########################################################################
 
 IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
-IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent); 
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED); 
+IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
 
 //---------------------------------------------------------------------------
 //  wxMediaCtrlImpl
@@ -46,10 +46,10 @@ public:
     wxMediaCtrlImpl() : m_bLoaded(false)
     {                                                                   }
 
-    virtual ~wxMediaCtrlImpl() 
+    virtual ~wxMediaCtrlImpl()
     {                               }
 
-    virtual bool Create(wxMediaCtrl* WXUNUSED(ctrl)) 
+    virtual bool Create(wxMediaCtrl* WXUNUSED(ctrl))
     {   return false;               }
 
     virtual bool Play() { return false; }
@@ -70,7 +70,7 @@ public:
 
     virtual double GetPlaybackRate() { return 0; }
     virtual bool SetPlaybackRate(double) { return false; }
-    
+
     virtual bool MSWWindowProc(WXUINT, WXWPARAM, WXLPARAM) { return false; }
 
     bool IsLoaded()
@@ -197,12 +197,12 @@ public:
 //
 //---------------------------------------------------------------------------
 
-bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileName, 
-                         const wxPoint& pos, const wxSize& size, 
+bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileName,
+                         const wxPoint& pos, const wxSize& size,
                          long style, long WXUNUSED(driver), const wxString& name)
 {
     //base create
-    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN, 
+    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN,
                             wxDefaultValidator, name) )
         return false;
 
@@ -235,12 +235,12 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     return true;
 }
 
-bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxURI& location, 
-                         const wxPoint& pos, const wxSize& size, 
+bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxURI& location,
+                         const wxPoint& pos, const wxSize& size,
                          long style, long WXUNUSED(driver), const wxString& name)
 {
     //base create
-    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN, 
+    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN,
                             wxDefaultValidator, name) )
         return false;
 
@@ -383,7 +383,7 @@ wxMediaCtrl::~wxMediaCtrl()
 //
 //---------------------------------------------------------------------------
 
-#if wxUSE_DIRECTSHOW 
+#if wxUSE_DIRECTSHOW
 
 wxDXMediaCtrlImpl::wxDXMediaCtrlImpl() : m_pGB(NULL)
 {
@@ -409,14 +409,14 @@ bool wxDXMediaCtrlImpl::Create(wxMediaCtrl* ctrl)
 bool wxDXMediaCtrlImpl::Load(const wxString& fileName)
 {
     if(m_bLoaded)
-        Cleanup();                        
-        
+        Cleanup();
+
     SAFE_RELEASE(m_pGB);
 
     CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
                       IID_IGraphBuilder, (void**)&m_pGB);
 
-    //load the graph & render 
+    //load the graph & render
     if( FAILED(m_pGB->RenderFile(fileName.wc_str(wxConvLocal), NULL)) )
         return false;
 
@@ -440,7 +440,7 @@ bool wxDXMediaCtrlImpl::Load(const wxString& fileName)
 
         nSX = nSY = 0;
     }
-    else 
+    else
     {
         m_bVideo = true;
     }
@@ -505,9 +505,9 @@ bool wxDXMediaCtrlImpl::SetPosition(long where)
     LONGLONG pos = ((LONGLONG)where) * 10000;
 
     return SUCCEEDED( m_pMS->SetPositions(
-                                &pos, 
+                                &pos,
                                 AM_SEEKING_AbsolutePositioning,
-                                NULL, 
+                                NULL,
                                 AM_SEEKING_NoPositioning
                                     ) );
 }
@@ -536,7 +536,7 @@ wxMediaState wxDXMediaCtrlImpl::GetState()
     HRESULT hr;
     OAFilterState theState;
     hr = m_pMC->GetState(INFINITE, &theState);
-    
+
     wxASSERT( SUCCEEDED(hr) );
 
     //MSW state is the same as ours
@@ -568,8 +568,8 @@ bool wxDXMediaCtrlImpl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPa
 
         // Process all queued events
         while(SUCCEEDED(m_pME->GetEvent(&evCode, (LONG_PTR *) &evParam1,
-                                       (LONG_PTR *) &evParam2, 0) 
-                       ) 
+                                       (LONG_PTR *) &evParam2, 0)
+                       )
              )
         {
             // Free memory associated with callback, since we're not using it
@@ -589,7 +589,7 @@ bool wxDXMediaCtrlImpl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPa
                 wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED, m_ctrl->GetId());
                 m_ctrl->GetParent()->ProcessEvent(theEvent);
             }
-        }    
+        }
         return true;
     }
     return false;
@@ -692,7 +692,7 @@ wxWMMEMediaCtrlImpl::wxWMMEMediaCtrlImpl() : m_bVideo(false)
 /*        TCHAR sz[5000];
 	 mciGetErrorString(nError, sz, 5000);
             wxMessageBox(wxString::Format(_T("Error:%s"), sz));
-  */          
+  */
 }
 
 wxWMMEMediaCtrlImpl::~wxWMMEMediaCtrlImpl()
@@ -701,7 +701,7 @@ wxWMMEMediaCtrlImpl::~wxWMMEMediaCtrlImpl()
 }
 
 bool wxWMMEMediaCtrlImpl::Create(wxMediaCtrl* ctrl)
-{    
+{
     m_ctrl = ctrl;
     return true;
 }
@@ -720,7 +720,7 @@ bool wxWMMEMediaCtrlImpl::Load(const wxString& fileName)
     //then it actually automagically finds the device for you!
     if ( mciSendCommand(0, MCI_OPEN,
          MCI_OPEN_ELEMENT,
-        (DWORD)(LPVOID)&openParms) != 0)  
+        (DWORD)(LPVOID)&openParms) != 0)
     return false;
 
     m_hDev = openParms.wDeviceID;
@@ -737,7 +737,7 @@ bool wxWMMEMediaCtrlImpl::Load(const wxString& fileName)
     windowParms.hWnd = (HWND)m_ctrl->GetHandle();
     m_bVideo = (mciSendCommand(m_hDev, MCI_WINDOW,
                          0x00010000L //MCI_DGV_WINDOW_HWND
-                         , 
+                         ,
                          (DWORD)(LPVOID)&windowParms) == 0);
     m_bLoaded = true;
 
@@ -746,7 +746,7 @@ bool wxWMMEMediaCtrlImpl::Load(const wxString& fileName)
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
-    
+
     return true;
 }
 
@@ -812,9 +812,9 @@ bool wxWMMEMediaCtrlImpl::SetPosition(long where)
 long wxWMMEMediaCtrlImpl::GetPosition()
 {
     MCI_STATUS_PARMS statusParms;
-    
-    statusParms.dwItem = MCI_STATUS_POSITION; 
-    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM, 
+
+    statusParms.dwItem = MCI_STATUS_POSITION;
+    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
         (DWORD)(LPSTR)&statusParms) != 0)
         return 0;
 
@@ -824,9 +824,9 @@ long wxWMMEMediaCtrlImpl::GetPosition()
 long wxWMMEMediaCtrlImpl::GetDuration()
 {
     MCI_STATUS_PARMS statusParms;
-    
-    statusParms.dwItem = MCI_STATUS_LENGTH; 
-    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM, 
+
+    statusParms.dwItem = MCI_STATUS_LENGTH;
+    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
         (DWORD)(LPSTR)&statusParms) != 0)
         return 0;
 
@@ -841,10 +841,10 @@ wxSize wxWMMEMediaCtrlImpl::DoGetBestSize() const
 {
     if(m_bVideo)
     {
-        MCI_DGV_RECT_PARMS rect; 
+        MCI_DGV_RECT_PARMS rect;
 
         mciSendCommand(m_hDev, MCI_WHERE, 0x00020000L//MCI_DGV_WHERE_SOURCE
-            , 
+            ,
             (DWORD)(LPSTR)&rect);
         return wxSize(rect.rc.right, rect.rc.bottom);
     }
@@ -883,3 +883,4 @@ bool wxWMMEMediaCtrlImpl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
 }
 
 #endif //wxUSE_MEDIACTRL
+

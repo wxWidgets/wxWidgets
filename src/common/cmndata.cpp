@@ -258,7 +258,9 @@ bool wxPrintData::Ok() const
     return m_nativeData->Ok();
 }
 
-#if WXWIN_COMPATIBILITY_2_4
+// What should happen here?  wxPostScriptPrintNativeData is not
+// defined unless all this is true on MSW.
+#if WXWIN_COMPATIBILITY_2_4 && wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
 #include "wx/generic/prntdlgg.h"
 
