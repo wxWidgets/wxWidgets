@@ -78,9 +78,13 @@ static const int idMenuTitle = -2;
 // ---------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
-wxMenu::wxMenu(const wxString& title, const wxFunction func)
-      : m_title(title)
+void wxMenu::Init(const wxString& title
+#ifdef WXWIN_COMPATIBILITY
+               , const wxFunction func
+#endif
+               )
 {
+    m_title = title;
     m_parent = NULL;
     m_eventHandler = this;
     m_pInvokingWindow = NULL;

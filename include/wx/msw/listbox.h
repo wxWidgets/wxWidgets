@@ -129,6 +129,8 @@ protected:
     int m_noItems;
     int m_selected;
 
+    virtual wxSize DoGetBestSize();
+
 #if wxUSE_OWNER_DRAWN
     // control items
     wxListBoxItemsArray m_aItems;

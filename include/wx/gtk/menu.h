@@ -92,7 +92,7 @@ public:
 
     // implementation only
     wxList& GetMenus() { return m_menus; }
-    
+
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
 
@@ -112,9 +112,17 @@ class wxMenu : public wxEvtHandler
     DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
-    wxMenu( const wxString& title = wxEmptyString,
-            const wxFunction func = (wxFunction) NULL,
-            long style = 0);
+#ifdef WXWIN_COMPATIBILITY
+    wxMenu( const wxString& title, const wxFunction func)
+    {
+        Init(title, 0, func);
+    }
+#endif
+    wxMenu( const wxString& title = wxEmptyString, long style = 0 )
+    {
+        Init(title, style, NULL);
+    }
+
     wxMenu( long style );
     ~wxMenu();
 
@@ -172,6 +180,8 @@ public:
     // compatibility: these functions are deprecated
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
+
+    wxFunction m_callback;
 #endif // WXWIN_COMPATIBILITY
 
     // implementation
@@ -186,17 +196,20 @@ public:
     GtkItemFactory  *m_factory;
 
     // used by wxMenuBar
-    inline long GetStyle(void) const { return m_style; }
- private:
+    long GetStyle(void) const { return m_style; }
+
+private:
     // common code for both constructors:
     void Init( const wxString& title,
-               const wxFunction func,
-               long style);
+               long style
+#ifdef WXWIN_COMPATIBILITY
+               , const wxFunction func
+#endif
+               );
 
     wxString       m_title;
     wxList         m_items;
     wxWindow      *m_invokingWindow;
-    wxFunction     m_callback;
     wxEvtHandler  *m_eventHandler;
     void          *m_clientData;
     long           m_style;

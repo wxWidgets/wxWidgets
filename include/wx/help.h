@@ -6,6 +6,8 @@
 #ifdef __WXMSW__
     #include "wx/msw/helpwin.h"
 
+    #undef wxHelpController
+    #undef sm_classwxHelpController
     #define wxHelpController wxWinHelpController
     #define sm_classwxHelpController sm_classwxWinHelpController
 #else // !MSW

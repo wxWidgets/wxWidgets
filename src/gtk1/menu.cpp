@@ -501,15 +501,6 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
     event.SetEventObject( menu );
 
-/*   wxMSW doesn't call callback here either
-
-     if (menu->m_callback)
-     {
-        (void) (*(menu->m_callback)) (*menu, event);
-        return;
-     }
-*/
-
     if (menu->GetEventHandler()->ProcessEvent(event))
         return;
 
@@ -646,7 +637,12 @@ wxMenu::wxMenu(long style)
 }
 
 void
-wxMenu::Init( const wxString& title, const wxFunction func, long style )
+wxMenu::Init( const wxString& title,
+              long style,
+#ifdef WXWIN_COMPATIBILITY
+              , const wxFunction func
+#endif
+              )
 {
     m_title = title;
     m_items.DeleteContents( TRUE );
@@ -661,7 +657,10 @@ wxMenu::Init( const wxString& title, const wxFunction func, long style )
     m_menu = gtk_menu_new();  // Do not show!
 #endif
 
+#ifdef WXWIN_COMPATIBILITY
     m_callback = func;
+#endif
+
     m_eventHandler = this;
     m_clientData = (void*) NULL;
 

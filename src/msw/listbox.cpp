@@ -650,6 +650,35 @@ bool wxListBox::SetStringSelection (const wxString& s, bool flag)
         return FALSE;
 }
 
+wxSize wxListBox::DoGetBestSize()
+{
+    // find the widest string
+    int wLine;
+    int wListbox = 0;
+    for ( int i = 0; i < m_noItems; i++ )
+    {
+        wxString str(GetString(i));
+        GetTextExtent(str, &wLine, NULL);
+        if ( wLine > wListbox )
+            wListbox = wLine;
+    }
+
+    // give it some reasonable default value if there are no strings in the
+    // list
+    if ( wListbox == 0 )
+        wListbox = 100;
+
+    // the listbox should be slightly larger than the widest string
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+    wListbox += 3*cx;
+
+    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(wxMax(m_noItems, 7));
+
+    return wxSize(wListbox, hListbox);
+}
+
 // Is this the right thing? Won't setselection generate a command
 // event too? No! It'll just generate a setselection event.
 // But we still can't have this being called whenever a real command

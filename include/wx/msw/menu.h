@@ -36,8 +36,20 @@ class WXDLLEXPORT wxMenu : public wxEvtHandler
     DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
-    // ctor & dtor
-    wxMenu(const wxString& title = wxEmptyString, const wxFunction func = NULL);
+    // ctors & dtor
+#ifdef WXWIN_COMPATIBILITY
+    wxMenu(const wxString& title,
+           const wxFunction func)
+    {
+        Init(title, func);
+    }
+#endif
+
+    wxMenu(const wxString& title = wxEmptyString, long WXUNUSED(style) = 0)
+    {
+        Init(title);
+    }
+
     virtual ~wxMenu();
 
     // construct menu
@@ -143,6 +155,13 @@ private:
 #endif // WXWIN_COMPATIBILITY
 
 private:
+    // common part of all ctors
+    void Init(const wxString& title
+#ifdef WXWIN_COMPATIBILITY
+              , const wxFunction func = NULL
+#endif
+             );
+
     bool              m_doBreak;
 
     // This is used when m_hMenu is NULL because we don't want to
