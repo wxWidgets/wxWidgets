@@ -2182,96 +2182,102 @@ dnl the name of the static library
 WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
 WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY}_gl.a"
 
-dnl the name of the shared library
-case "${host}" in
-  *-*-mingw32* )
-    WX_LIBRARY_NAME_SHARED="wx${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}_${WX_RELEASE_NUMBER}.dll"
-  ;;
-  * )
-    WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-    WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-  ;;
-esac
-
-dnl the name of the links to the shared library
-WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.so"
-WX_LIBRARY_LINK3="lib${WX_LIBRARY}.so"
-WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so"
-WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.so"
-
-dnl shared library settings
-SHARED_LD=
-PIC_FLAG=
-WX_ALL=
-WX_ALL_INSTALLED=
-BURNT_LIBRARY_NAME=
-WX_TARGET_LIBRARY_SONAME=
-
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
+    dnl the name of the shared library
+    case "${host}" in
+      *-*-mingw32* )
+        WX_LIBRARY_NAME_SHARED="wx${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}_${WX_RELEASE_NUMBER}.dll"
+      ;;
+
+      *-hp-hpux* )
+        SO_SUFFIX="sl"
+      ;;
+
+      *-*-darwin* )
+        SO_SUFFIX="dylib"
+      ;;
+
+      * )
+        SO_SUFFIX="so"
+      ;;
+    esac
+
+    dnl set the name of the shared lib if not done above
+    if test "x$SO_SUFFIX" != "x"; then
+        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+    fi
+
+    dnl the name of the links to the shared library
+    WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.${SO_SUFFIX}.${WX_CURRENT}"
+    WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.${SO_SUFFIX}"
+    WX_LIBRARY_LINK3="lib${WX_LIBRARY}.${SO_SUFFIX}"
+    WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${SO_SUFFIX}.${WX_CURRENT}"
+    WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.${SO_SUFFIX}"
+    WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.${SO_SUFFIX}"
+
+    dnl install targets
+    if test "$wxUSE_OPENGL" = "yes"; then
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+        WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+    else
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
+    fi
+
+    dnl the extra compiler flags needed for compilation of shared library
+    dnl sources, the default is understood by many compilers but not all - for
+    dnl them we set it specially below
+    PIC_FLAG="-fPIC"
+
+    dnl the command to use for creating the shared library
+    SHARED_LD="${CXX} -shared -o"
+
     case "${host}" in
       *-hp-hpux* )
-        if test "$GCC" = yes ; then
-            SHARED_LD="${CXX} -shared -fPIC -o"
-            PIC_FLAG="-fPIC"
-        else
+        dnl default settings are good for gcc but not for the native HP-UX
+        if test "$GCC" != "yes"; then
             dnl no idea why it wants it, but it does
             LDFLAGS="-L/usr/lib"
 
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
         fi
-        WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_NAME}.sl"
-        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_NAME}_gl.sl"
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
-        else
-            WX_ALL="${WX_LIBRARY_NAME_SHARED}"
-        fi
+
       ;;
 
-      dnl in fact, these settings are for any platform using gcc
       *-*-linux* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
+        if test "$GCC" != "yes"; then
+            AC_CACHE_CHECK([for Intel compiler], wx_cv_prog_icc,
+            [
+                AC_TRY_COMPILE([],
+                    [
+                        #ifndef __INTEL_COMPILER
+                            #error Not icc
+                        #endif
+                    ],
+                    wx_cv_prog_icc=yes,
+                    wx_cv_prog_icc=no
+                )
+            ])
+
+            if test "$wx_cv_prog_icc" = "yes"; then
+                PIC_FLAG="-KPIC"
+            fi
+        fi
+
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
             BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
             BURNT_LIBRARY_NAME_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
             dnl substitute this in makelib.env for the contrib libs
             WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
         fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
       ;;
-      *-*-irix5* | *-*-irix6* )
-        if test "$GCC" = yes ; then
-           SHARED_LD="${CXX} -shared -o"
-           PIC_FLAG="-fPIC"
-        else
-           SHARED_LD="${CXX} -shared -o"
-        fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
-      ;;
+
       *-*-solaris2* )
         if test "$GCC" = yes ; then
-            SHARED_LD="${CXX} -shared -o"
-            PIC_FLAG="-fPIC"
-
             dnl newer versions of gcc need -isystem to compile X headers on
             dnl Solaris (which use old style C syntax)
             CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
@@ -2279,80 +2285,24 @@ if test "$wxUSE_SHARED" = "yes"; then
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
         fi
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
       ;;
-      *-*-sunos4* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
-      ;;
+
       *-*-darwin* )
         TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__DARWIN__ -D__POWERPC__"
         CPPFLAGS="${CPPFLAGS} -fno-common"
         SHARED_LD="${CXX} -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
-            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
-        else
-            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-            WX_ALL="CREATE_LINKS"
-        fi
+
         dnl add the resources target for wxMac
         if test "$wxUSE_MAC" = 1 ; then
                 WX_ALL="${WX_ALL} ./lib/lib${WX_LIBRARY}-${WX_RELEASE}.r"
         fi
-        dnl the name of the shared library
-        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-        dnl the name of the links to the shared library
-        WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.dylib.${WX_CURRENT}"
-        WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.dylib"
-        WX_LIBRARY_LINK3="lib${WX_LIBRARY}.dylib"
-        WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib.${WX_CURRENT}"
-        WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.dylib"
-        WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.dylib"
       ;;
-      *-*-osf* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-dgux5* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-sysv5* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
+
       *-*-aix* )
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
-        WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
+
       *-*-cygwin* )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
@@ -2364,6 +2314,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL="${WX_LIBRARY_NAME_STATIC}"
         fi
       ;;
+
       *-*-mingw32* )
         WX_LIBRARY_NAME_STATIC="lib/libwx${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}_${WX_RELEASE_NUMBER}.a"
         SHARED_LD="${CC} -shared -Wl,--out-implib,${WX_LIBRARY_NAME_STATIC} -o"
@@ -2378,19 +2329,28 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL="${WX_LIBRARY_NAME_SHARED}"
         fi
       ;;
+
       *-pc-os2_emx )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
       ;;
+
       *-*-beos* )
         dnl can't use gcc under BeOS for shared library creation because it
         dnl complains about missing 'main'
         SHARED_LD="${LD} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
       ;;
+
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-sunos4* | \
+      *-*-irix5* | *-*-irix6* | \
+      *-*-osf* | \
+      *-*-dgux5* | \
+      *-*-sysv5* )
+        dnl defaults are ok
+      ;;
+
       *)
         AC_MSG_ERROR(unknown system type ${host}.)
     esac
@@ -2400,6 +2360,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
     fi
+
     dnl do not alter the LIBRARY_TYPE strings "so" and "a", they are magic
     WX_TARGET_LIBRARY_TYPE="so"
 else
