@@ -355,6 +355,10 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
 
     m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
+    // The above should arguably be deprecated, this however we still need.
+
+    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;

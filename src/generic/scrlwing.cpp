@@ -346,6 +346,10 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 
     m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
+    // The above should arguably be deprecated, this however we still need.
+
+    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
 
