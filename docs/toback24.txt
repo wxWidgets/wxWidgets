@@ -264,3 +264,13 @@ diff -u -2 -r1.35 winuniv.cpp
  }
  
 
+22. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
+
+CVS: [RR] wxWindows/src/gtk dcclient.cpp,1.162,1.163 font.cpp,1.69,1.70 window.cpp,1.411,1.412
+CVS: [RR] wxWindows/src/gtk choice.cpp,1.55,1.56 combobox.cpp,1.87,1.88
+CVS: [RR] wxWindows/src/gtk minifram.cpp,1.29,1.30
+   (not sure about minifram.cpp: must be checked for binary compatibility - VS)
+
+When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
+have wxFont::GetInternalFont while 2.4 must have it because of binary
+compatibility!
