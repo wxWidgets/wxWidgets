@@ -43,229 +43,233 @@
 # o wxTimeCtrl -> masked.TimeCtrl
 #
 
-"""<html><body>
-<P>
-<B>TimeCtrl</B> provides a multi-cell control that allows manipulation of a time
+"""
+*TimeCtrl* provides a multi-cell control that allows manipulation of a time
 value.  It supports 12 or 24 hour format, and you can use wxDateTime or mxDateTime
 to get/set values from the control.
-<P>
+
 Left/right/tab keys to switch cells within a TimeCtrl, and the up/down arrows act
 like a spin control.  TimeCtrl also allows for an actual spin button to be attached
 to the control, so that it acts like the up/down arrow keys.
-<P>
-The <B>!</B> or <B>c</B> key sets the value of the control to the current time.
-<P>
-Here's the API for TimeCtrl:
-<DL><PRE>
-    <B>TimeCtrl</B>(
+
+The ! or c key sets the value of the control to the current time.
+
+  Here's the API for TimeCtrl::
+
+    from wx.lib.masked import TimeCtrl
+
+    TimeCtrl(
          parent, id = -1,
-         <B>value</B> = '00:00:00',
+         value = '00:00:00',
          pos = wx.DefaultPosition,
          size = wx.DefaultSize,
-         <B>style</B> = wxTE_PROCESS_TAB,
-         <B>validator</B> = wx.DefaultValidator,
+         style = wxTE_PROCESS_TAB,
+         validator = wx.DefaultValidator,
          name = "time",
-         <B>format</B> = 'HHMMSS',
-         <B>fmt24hr</B> = False,
-         <B>displaySeconds</B> = True,
-         <B>spinButton</B> = None,
-         <B>min</B> = None,
-         <B>max</B> = None,
-         <B>limited</B> = None,
-         <B>oob_color</B> = "Yellow"
-)
-</PRE>
-<UL>
-    <DT><B>value</B>
-    <DD>If no initial value is set, the default will be midnight; if an illegal string
+         format = 'HHMMSS',
+         fmt24hr = False,
+         displaySeconds = True,
+         spinButton = None,
+         min = None,
+         max = None,
+         limited = None,
+         oob_color = "Yellow"
+        )
+
+
+  value
+    If no initial value is set, the default will be midnight; if an illegal string
     is specified, a ValueError will result.  (You can always later set the initial time
     with SetValue() after instantiation of the control.)
-    <DL><B>size</B>
-    <DD>The size of the control will be automatically adjusted for 12/24 hour format
+
+  size
+    The size of the control will be automatically adjusted for 12/24 hour format
     if wx.DefaultSize is specified.  NOTE: due to a problem with wx.DateTime, if the
     locale does not use 'AM/PM' for its values, the default format will automatically
     change to 24 hour format, and an AttributeError will be thrown if a non-24 format
     is specified.
-    <DT><B>style</B>
-    <DD>By default, TimeCtrl will process TAB events, by allowing tab to the
+
+  style
+    By default, TimeCtrl will process TAB events, by allowing tab to the
     different cells within the control.
-    <DT><B>validator</B>
-    <DD>By default, TimeCtrl just uses the default (empty) validator, as all
+
+  validator
+    By default, TimeCtrl just uses the default (empty) validator, as all
     of its validation for entry control is handled internally.  However, a validator
     can be supplied to provide data transfer capability to the control.
-    <BR>
-    <DT><B>format</B>
-    <DD>This parameter can be used instead of the fmt24hr and displaySeconds
+    
+  format
+    This parameter can be used instead of the fmt24hr and displaySeconds
     parameters, respectively; it provides a shorthand way to specify the time
     format you want.  Accepted values are 'HHMMSS', 'HHMM', '24HHMMSS', and
     '24HHMM'.  If the format is specified, the other two arguments will be ignored.
-    <BR>
-    <DT><B>fmt24hr</B>
-    <DD>If True, control will display time in 24 hour time format; if False, it will
+    
+  fmt24hr
+    If True, control will display time in 24 hour time format; if False, it will
     use 12 hour AM/PM format.  SetValue() will adjust values accordingly for the
-    control, based on the format specified.  (This value is ignored if the <i>format</i>
+    control, based on the format specified.  (This value is ignored if the *format*
     parameter is specified.)
-    <BR>
-    <DT><B>displaySeconds</B>
-    <DD>If True, control will include a seconds field; if False, it will
-    just show hours and minutes. (This value is ignored if the <i>format</i>
+    
+  displaySeconds
+    If True, control will include a seconds field; if False, it will
+    just show hours and minutes. (This value is ignored if the *format*
     parameter is specified.)
-    <BR>
-    <DT><B>spinButton</B>
-    <DD>If specified, this button's events will be bound to the behavior of the
+    
+  spinButton
+    If specified, this button's events will be bound to the behavior of the
     TimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
-    <BR>
-    <DT><B>min</B>
-    <DD>Defines the lower bound for "valid" selections in the control.
+    
+  min
+    Defines the lower bound for "valid" selections in the control.
     By default, TimeCtrl doesn't have bounds.  You must set both upper and lower
     bounds to make the control pay attention to them, (as only one bound makes no sense
     with times.) "Valid" times will fall between the min and max "pie wedge" of the
     clock.
-    <DT><B>max</B>
-    <DD>Defines the upper bound for "valid" selections in the control.
+  max
+    Defines the upper bound for "valid" selections in the control.
     "Valid" times will fall between the min and max "pie wedge" of the
-    clock. (This can be a "big piece", ie. <b>min = 11pm, max= 10pm</b>
-    means <I>all but the hour from 10:00pm to 11pm are valid times.</I>)
-    <DT><B>limited</B>
-    <DD>If True, the control will not permit entry of values that fall outside the
+    clock. (This can be a "big piece", ie. min = 11pm, max= 10pm
+    means *all but the hour from 10:00pm to 11pm are valid times.*)
+  limited
+    If True, the control will not permit entry of values that fall outside the
     set bounds.
-    <BR>
-    <DT><B>oob_color</B>
-    <DD>Sets the background color used to indicate out-of-bounds values for the control
+    
+  oob_color
+    Sets the background color used to indicate out-of-bounds values for the control
     when the control is not limited.  This is set to "Yellow" by default.
-    </DL>
-</UL>
-<BR>
-<BR>
-<BR>
-<DT><B>EVT_TIMEUPDATE(win, id, func)</B>
-<DD>func is fired whenever the value of the control changes.
-<BR>
-<BR>
-<DT><B>SetValue(time_string | wxDateTime | wxTimeSpan | mx.DateTime | mx.DateTimeDelta)</B>
-<DD>Sets the value of the control to a particular time, given a valid
-value; raises ValueError on invalid value.
-<EM>NOTE:</EM> This will only allow mx.DateTime or mx.DateTimeDelta if mx.DateTime
-was successfully imported by the class module.
-<BR>
-<DT><B>GetValue(as_wxDateTime = False, as_mxDateTime = False, as_wxTimeSpan=False, as mxDateTimeDelta=False)</B>
-<DD>Retrieves the value of the time from the control.  By default this is
-returned as a string, unless one of the other arguments is set; args are
-searched in the order listed; only one value will be returned.
-<BR>
-<DT><B>GetWxDateTime(value=None)</B>
-<DD>When called without arguments, retrieves the value of the control, and applies
-it to the wxDateTimeFromHMS() constructor, and returns the resulting value.
-The date portion will always be set to Jan 1, 1970. This form is the same
-as GetValue(as_wxDateTime=True).  GetWxDateTime can also be called with any of the
-other valid time formats settable with SetValue, to regularize it to a single
-wxDateTime form.  The function will raise ValueError on an unconvertable argument.
-<BR>
-<DT><B>GetMxDateTime()</B>
-<DD>Retrieves the value of the control and applies it to the DateTime.Time()
-constructor,and returns the resulting value.  (The date portion will always be
-set to Jan 1, 1970.) (Same as GetValue(as_wxDateTime=True); provided for backward
-compatibility with previous release.)
-<BR>
-<BR>
-<DT><B>BindSpinButton(SpinBtton)</B>
-<DD>Binds an externally created spin button to the control, so that up/down spin
-events change the active cell or selection in the control (in addition to the
-up/down cursor keys.)  (This is primarily to allow you to create a "standard"
-interface to time controls, as seen in Windows.)
-<BR>
-<BR>
-<DT><B>SetMin(min=None)</B>
-<DD>Sets the expected minimum value, or lower bound, of the control.
-(The lower bound will only be enforced if the control is
-configured to limit its values to the set bounds.)
-If a value of <I>None</I> is provided, then the control will have
-explicit lower bound.  If the value specified is greater than
-the current lower bound, then the function returns False and the
-lower bound will not change from its current setting.  On success,
-the function returns True.  Even if set, if there is no corresponding
-upper bound, the control will behave as if it is unbounded.
-<DT><DD>If successful and the current value is outside the
-new bounds, if the control is limited the value will be
-automatically adjusted to the nearest bound; if not limited,
-the background of the control will be colored with the current
-out-of-bounds color.
-<BR>
-<DT><B>GetMin(as_string=False)</B>
-<DD>Gets the current lower bound value for the control, returning
-None, if not set, or a wxDateTime, unless the as_string parameter
-is set to True, at which point it will return the string
-representation of the lower bound.
-<BR>
-<BR>
-<DT><B>SetMax(max=None)</B>
-<DD>Sets the expected maximum value, or upper bound, of the control.
-(The upper bound will only be enforced if the control is
-configured to limit its values to the set bounds.)
-If a value of <I>None</I> is provided, then the control will
-have no explicit upper bound.  If the value specified is less
-than the current lower bound, then the function returns False and
-the maximum will not change from its current setting. On success,
-the function returns True.  Even if set, if there is no corresponding
-lower bound, the control will behave as if it is unbounded.
-<DT><DD>If successful and the current value is outside the
-new bounds, if the control is limited the value will be
-automatically adjusted to the nearest bound; if not limited,
-the background of the control will be colored with the current
-out-of-bounds color.
-<BR>
-<DT><B>GetMax(as_string = False)</B>
-<DD>Gets the current upper bound value for the control, returning
-None, if not set, or a wxDateTime, unless the as_string parameter
-is set to True, at which point it will return the string
-representation of the lower bound.
 
-<BR>
-<BR>
-<DT><B>SetBounds(min=None,max=None)</B>
-<DD>This function is a convenience function for setting the min and max
-values at the same time.  The function only applies the maximum bound
-if setting the minimum bound is successful, and returns True
-only if both operations succeed.  <B><I>Note: leaving out an argument
-will remove the corresponding bound, and result in the behavior of
-an unbounded control.</I></B>
-<BR>
-<DT><B>GetBounds(as_string = False)</B>
-<DD>This function returns a two-tuple (min,max), indicating the
-current bounds of the control.  Each value can be None if
-that bound is not set.  The values will otherwise be wxDateTimes
-unless the as_string argument is set to True, at which point they
-will be returned as string representations of the bounds.
-<BR>
-<BR>
-<DT><B>IsInBounds(value=None)</B>
-<DD>Returns <I>True</I> if no value is specified and the current value
-of the control falls within the current bounds.  This function can also
-be called with a value to see if that value would fall within the current
-bounds of the given control.  It will raise ValueError if the value
-specified is not a wxDateTime, mxDateTime (if available) or parsable string.
-<BR>
-<BR>
-<DT><B>IsValid(value)</B>
-<DD>Returns <I>True</I>if specified value is a legal time value and
-falls within the current bounds of the given control.
-<BR>
-<BR>
-<DT><B>SetLimited(bool)</B>
-<DD>If called with a value of True, this function will cause the control
-to limit the value to fall within the bounds currently specified.
-(Provided both bounds have been set.)
-If the control's value currently exceeds the bounds, it will then
-be set to the nearest bound.
-If called with a value of False, this function will disable value
-limiting, but coloring of out-of-bounds values will still take
-place if bounds have been set for the control.
-<DT><B>IsLimited()</B>
-<DD>Returns <I>True</I> if the control is currently limiting the
-value to fall within the current bounds.
-<BR>
-</DL>
-</body></html>
+--------------------
+
+EVT_TIMEUPDATE(win, id, func)
+    func is fired whenever the value of the control changes.
+
+
+SetValue(time_string | wxDateTime | wxTimeSpan | mx.DateTime | mx.DateTimeDelta)
+    Sets the value of the control to a particular time, given a valid
+    value; raises ValueError on invalid value.
+
+*NOTE:* This will only allow mx.DateTime or mx.DateTimeDelta if mx.DateTime
+    was successfully imported by the class module.
+
+GetValue(as_wxDateTime = False, as_mxDateTime = False, as_wxTimeSpan=False, as mxDateTimeDelta=False)
+    Retrieves the value of the time from the control.  By default this is
+    returned as a string, unless one of the other arguments is set; args are
+    searched in the order listed; only one value will be returned.
+
+GetWxDateTime(value=None)
+    When called without arguments, retrieves the value of the control, and applies
+    it to the wxDateTimeFromHMS() constructor, and returns the resulting value.
+    The date portion will always be set to Jan 1, 1970. This form is the same
+    as GetValue(as_wxDateTime=True).  GetWxDateTime can also be called with any of the
+    other valid time formats settable with SetValue, to regularize it to a single
+    wxDateTime form.  The function will raise ValueError on an unconvertable argument.
+
+GetMxDateTime()
+    Retrieves the value of the control and applies it to the DateTime.Time()
+    constructor,and returns the resulting value.  (The date portion will always be
+    set to Jan 1, 1970.) (Same as GetValue(as_wxDateTime=True); provided for backward
+    compatibility with previous release.)
+
+
+BindSpinButton(SpinBtton)
+    Binds an externally created spin button to the control, so that up/down spin
+    events change the active cell or selection in the control (in addition to the
+    up/down cursor keys.)  (This is primarily to allow you to create a "standard"
+    interface to time controls, as seen in Windows.)
+
+
+SetMin(min=None)
+    Sets the expected minimum value, or lower bound, of the control.
+    (The lower bound will only be enforced if the control is
+    configured to limit its values to the set bounds.)
+    If a value of *None* is provided, then the control will have
+    explicit lower bound.  If the value specified is greater than
+    the current lower bound, then the function returns False and the
+    lower bound will not change from its current setting.  On success,
+    the function returns True.  Even if set, if there is no corresponding
+    upper bound, the control will behave as if it is unbounded.
+
+    If successful and the current value is outside the
+    new bounds, if the control is limited the value will be
+    automatically adjusted to the nearest bound; if not limited,
+    the background of the control will be colored with the current
+    out-of-bounds color.
+
+GetMin(as_string=False)
+    Gets the current lower bound value for the control, returning
+    None, if not set, or a wxDateTime, unless the as_string parameter
+    is set to True, at which point it will return the string
+    representation of the lower bound.
+
+
+SetMax(max=None)
+    Sets the expected maximum value, or upper bound, of the control.
+    (The upper bound will only be enforced if the control is
+    configured to limit its values to the set bounds.)
+    If a value of *None* is provided, then the control will
+    have no explicit upper bound.  If the value specified is less
+    than the current lower bound, then the function returns False and
+    the maximum will not change from its current setting. On success,
+    the function returns True.  Even if set, if there is no corresponding
+    lower bound, the control will behave as if it is unbounded.
+
+    If successful and the current value is outside the
+    new bounds, if the control is limited the value will be
+    automatically adjusted to the nearest bound; if not limited,
+    the background of the control will be colored with the current
+    out-of-bounds color.
+
+GetMax(as_string = False)
+    Gets the current upper bound value for the control, returning
+    None, if not set, or a wxDateTime, unless the as_string parameter
+    is set to True, at which point it will return the string
+    representation of the lower bound.
+
+
+
+SetBounds(min=None,max=None)
+    This function is a convenience function for setting the min and max
+    values at the same time.  The function only applies the maximum bound
+    if setting the minimum bound is successful, and returns True
+    only if both operations succeed.  *Note: leaving out an argument
+    will remove the corresponding bound, and result in the behavior of
+    an unbounded control.*
+
+GetBounds(as_string = False)
+    This function returns a two-tuple (min,max), indicating the
+    current bounds of the control.  Each value can be None if
+    that bound is not set.  The values will otherwise be wxDateTimes
+    unless the as_string argument is set to True, at which point they
+    will be returned as string representations of the bounds.
+
+
+IsInBounds(value=None)
+    Returns *True* if no value is specified and the current value
+    of the control falls within the current bounds.  This function can also
+    be called with a value to see if that value would fall within the current
+    bounds of the given control.  It will raise ValueError if the value
+    specified is not a wxDateTime, mxDateTime (if available) or parsable string.
+
+
+IsValid(value)
+    Returns *True* if specified value is a legal time value and
+    falls within the current bounds of the given control.
+
+
+SetLimited(bool)
+    If called with a value of True, this function will cause the control
+    to limit the value to fall within the bounds currently specified.
+    (Provided both bounds have been set.)
+    If the control's value currently exceeds the bounds, it will then
+    be set to the nearest bound.
+    If called with a value of False, this function will disable value
+    limiting, but coloring of out-of-bounds values will still take
+    place if bounds have been set for the control.
+IsLimited()
+    Returns *True* if the control is currently limiting the
+    value to fall within the current bounds.
+
+
 """
 
 import  copy
@@ -291,6 +295,9 @@ wxEVT_TIMEVAL_UPDATED = wx.NewEventType()
 EVT_TIMEUPDATE = wx.PyEventBinder(wxEVT_TIMEVAL_UPDATED, 1)
 
 class TimeUpdatedEvent(wx.PyCommandEvent):
+    """
+    Used to fire an EVT_TIMEUPDATE event whenever the value in a TimeCtrl changes.
+    """
     def __init__(self, id, value ='12:00:00 AM'):
         wx.PyCommandEvent.__init__(self, wxEVT_TIMEVAL_UPDATED, id)
         self.value = value
@@ -299,9 +306,10 @@ class TimeUpdatedEvent(wx.PyCommandEvent):
         return self.value
 
 class TimeCtrlAccessorsMixin:
-    # Define TimeCtrl's list of attributes having their own
-    # Get/Set functions, ignoring those that make no sense for
-    # an numeric control.
+    """
+    Defines TimeCtrl's list of attributes having their own Get/Set functions,
+    ignoring those in the base class that make no sense for a time control.
+    """
     exposed_basectrl_params = (
          'defaultValue',
          'description',
@@ -328,6 +336,9 @@ class TimeCtrlAccessorsMixin:
 
 
 class TimeCtrl(BaseMaskedTextCtrl):
+    """
+    Masked control providing several time formats and manipulation of time values.
+    """
 
     valid_ctrl_params = {
         'format' :  'HHMMSS',       # default format code
@@ -467,6 +478,9 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
 
     def SetParameters(self, **kwargs):
+        """
+        Function providing access to the parameters governing TimeCtrl display and bounds.
+        """
 ##        dbg('TimeCtrl::SetParameters(%s)' % repr(kwargs), indent=1)
         maskededit_kwargs = {}
         reset_format = False
@@ -621,6 +635,11 @@ class TimeCtrl(BaseMaskedTextCtrl):
                  as_mxDateTime = False,
                  as_wxTimeSpan = False,
                  as_mxDateTimeDelta = False):
+        """
+        This function returns the value of the display as a string by default, but
+        supports return as a wx.DateTime, mx.DateTime, wx.TimeSpan, or mx.DateTimeDelta,
+        if requested. (Evaluated in the order above-- first one wins!)
+        """
 
 
         if as_wxDateTime or as_mxDateTime or as_wxTimeSpan or as_mxDateTimeDelta:
@@ -640,7 +659,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
     def SetWxDateTime(self, wxdt):
         """
-        Because SetValue can take a wxDateTime, this is now just an alias.
+        Because SetValue can take a wx.DateTime, this is now just an alias.
         """
         self.SetValue(wxdt)
 
@@ -654,9 +673,9 @@ class TimeCtrl(BaseMaskedTextCtrl):
             wxTimeSpan
             mxDateTime
             mxDateTimeDelta
-        and converts it to a wxDateTime that always has Jan 1, 1970 as its date
+        and converts it to a wx.DateTime that always has Jan 1, 1970 as its date
         portion, so that range comparisons around values can work using
-        wxDateTime's built-in comparison function.  If a value is not
+        wx.DateTime's built-in comparison function.  If a value is not
         provided to convert, the string value of the control will be used.
         If the value is not one of the accepted types, a ValueError will be
         raised.
@@ -725,13 +744,17 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
     def SetMxDateTime(self, mxdt):
         """
-        Because SetValue can take an mxDateTime, (if DateTime is importable),
+        Because SetValue can take an mx.DateTime, (if DateTime is importable),
         this is now just an alias.
         """
         self.SetValue(value)
 
 
     def GetMxDateTime(self, value=None):
+        """
+        Returns the value of the control as an mx.DateTime, with the date
+        portion set to January 1, 1970.
+        """
         if value is None:
             t = self.GetValue(as_mxDateTime=True)
         else:
@@ -869,7 +892,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         values at the same time.  The function only applies the maximum bound
         if setting the minimum bound is successful, and returns True
         only if both operations succeed.
-        NOTE: leaving out an argument will remove the corresponding bound.
+        **NOTE:** leaving out an argument will remove the corresponding bound.
         """
         ret = self.SetMin(min)
         return ret and self.SetMax(max)
@@ -969,7 +992,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
     def IsLimited(self):
         """
         Returns True if the control is currently limiting the
-        value to fall within any current bounds.  Note: can
+        value to fall within any current bounds.  *Note:* can
         be set even if there are no current bounds.
         """
         return self.__limited
@@ -1072,9 +1095,10 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
     def SetInsertionPoint(self, pos):
         """
-        Records the specified position and associated cell before calling base class' function.
-        This is necessary to handle the optional spin button, because the insertion
-        point is lost when the focus shifts to the spin button.
+        This override records the specified position and associated cell before
+        calling base class' function.  This is necessary to handle the optional
+        spin button, because the insertion point is lost when the focus shifts
+        to the spin button.
         """
 ##        dbg('TimeCtrl::SetInsertionPoint', pos, indent=1)
         BaseMaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
@@ -1333,7 +1357,15 @@ if __name__ == '__main__':
         app.MainLoop()
     except:
         traceback.print_exc()
-i=0
+__i=0
+
+## CHANGELOG:
+## ====================
+##  Version 1.3
+##  1. Converted docstrings to reST format, added doc for ePyDoc.
+##  2. Renamed helper functions, vars etc. not intended to be visible in public
+##     interface to code.
+##
 ## Version 1.2
 ##   1. Changed parameter name display_seconds to displaySeconds, to follow
 ##      other masked edit conventions.

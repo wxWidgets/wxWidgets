@@ -15,51 +15,50 @@
 # masked.TimeCtrl, and masked.IpAddrCtrl.
 #
 #----------------------------------------------------------------------------
+"""
+Provides a generic, fully configurable masked edit text control, as well as
+a base class from which you can derive masked controls tailored to a specific
+function.  See maskededit module overview for how to configure the control.
+"""
+
 import  wx
 from wx.lib.masked import *
 
 # jmg 12/9/03 - when we cut ties with Py 2.2 and earlier, this would
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
-dbg = Logger()
+##dbg = Logger()
 ##dbg(enable=1)
 
-# ## TRICKY BIT: to avoid a ton of boiler-plate, and to
-# ## automate the getter/setter generation for each valid
-# ## control parameter so we never forget to add the
-# ## functions when adding parameters, this loop
-# ## programmatically adds them to the class:
-# ## (This makes it easier for Designers like Boa to
-# ## deal with masked controls.)
-#
-# ## To further complicate matters, this is done with an
-# ## extra level of inheritance, so that "general" classes like
-# ## MaskedTextCtrl can have all possible attributes,
-# ## while derived classes, like TimeCtrl and MaskedNumCtrl
-# ## can prevent exposure of those optional attributes of their base
-# ## class that do not make sense for their derivation.  Therefore,
-# ## we define
-# ##    BaseMaskedTextCtrl(TextCtrl, MaskedEditMixin)
-# ## and
-# ##    MaskedTextCtrl(BaseMaskedTextCtrl, MaskedEditAccessorsMixin).
-# ##
-# ## This allows us to then derive:
-# ##    MaskedNumCtrl( BaseMaskedTextCtrl )
-# ##
-# ## and not have to expose all the same accessor functions for the
-# ## derived control when they don't all make sense for it.
-# ##
 
 class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
     """
     This is the primary derivation from MaskedEditMixin.  It provides
     a general masked text control that can be configured with different
-    masks.  It's actually a "base masked textCtrl", so that the
-    MaskedTextCtrl class can be derived from it, and add those
-    accessor functions to it that are appropriate to the general class,
-    whilst other classes can derive from BaseMaskedTextCtrl, and
-    only define those accessor functions that are appropriate for
-    those derivations.
+    masks.
+
+    However, this is done with an extra level of inheritance, so that
+    "general" classes like masked.TextCtrl can have all possible attributes,
+    while derived classes, like masked.TimeCtrl and masked.NumCtrl
+    can prevent exposure of those optional attributes of their base
+    class that do not make sense for their derivation.  Therefore,
+    we define::
+    
+        BaseMaskedTextCtrl(TextCtrl, MaskedEditMixin)
+
+    and::
+    
+        masked.TextCtrl(BaseMaskedTextCtrl, MaskedEditAccessorsMixin).
+
+    This allows us to then derive::
+    
+        masked.NumCtrl( BaseMaskedTextCtrl )
+
+    and not have to expose all the same accessor functions for the
+    derived control when they don't all make sense for it.
+
+    In practice, BaseMaskedTextCtrl should never be instantiated directly,
+    but should only be used in derived classes.
     """
 
     def __init__( self, parent, id=-1, value = '',
@@ -119,12 +118,12 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 ####        dbg("MaskedTextCtrl::_SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
         return self.SetSelection( sel_start, sel_to )
 
-    def SetSelection(self, sel_start, sel_to):
-        """
-        This is just for debugging...
-        """
+##    def SetSelection(self, sel_start, sel_to):
+##        """
+##        This is just for debugging...
+##        """
 ##        dbg("MaskedTextCtrl::SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
-        wx.TextCtrl.SetSelection(self, sel_start, sel_to)
+##        wx.TextCtrl.SetSelection(self, sel_start, sel_to)
 
 
     def _GetInsertionPoint(self):
@@ -134,12 +133,12 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 ####        dbg("MaskedTextCtrl::_SetInsertionPoint(%(pos)d)" % locals())
         self.SetInsertionPoint(pos)
 
-    def SetInsertionPoint(self, pos):
-        """
-        This is just for debugging...
-        """
+##    def SetInsertionPoint(self, pos):
+##        """
+##        This is just for debugging...
+##        """
 ##        dbg("MaskedTextCtrl::SetInsertionPoint(%(pos)d)" % locals())
-        wx.TextCtrl.SetInsertionPoint(self, pos)
+##        wx.TextCtrl.SetInsertionPoint(self, pos)
 
 
     def _GetValue(self):
@@ -148,6 +147,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.GetValue()
+
 
     def _SetValue(self, value):
         """
@@ -163,7 +163,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 
     def SetValue(self, value):
         """
-        This function redefines the externally accessible .SetValue to be
+        This function redefines the externally accessible .SetValue() to be
         a smart "paste" of the text in question, so as not to corrupt the
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
@@ -225,6 +225,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         wx.CallAfter(self._SetInsertionPoint, replace_to)
         wx.CallAfter(self._SetSelection, replace_to, replace_to)
 ##        dbg(indent=0)
+
 
     def SetFont(self, *args, **kwargs):
         """ Set the font, then recalculate control size, if appropriate. """
@@ -316,10 +317,10 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 
     def IsModified(self):
         """
-        This function overrides the raw wxTextCtrl method, because the
+        This function overrides the raw wx.TextCtrl method, because the
         masked edit mixin uses SetValue to change the value, which doesn't
-        modify the state of this attribute.  So, we keep track on each
-        keystroke to see if the value changes, and if so, it's been
+        modify the state of this attribute.  So, the derived control keeps track
+        on each keystroke to see if the value changes, and if so, it's been
         modified.
         """
         return wx.TextCtrl.IsModified(self) or self.modified
@@ -334,17 +335,20 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 
 class TextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
     """
-    This extra level of inheritance allows us to add the generic set of
-    masked edit parameters only to this class while allowing other
-    classes to derive from the "base" masked text control, and provide
-    a smaller set of valid accessor functions.
+    The "user-visible" masked text control; it is identical to the
+    BaseMaskedTextCtrl class it's derived from.
+    (This extra level of inheritance allows us to add the generic
+    set of masked edit parameters only to this class while allowing
+    other classes to derive from the "base" masked text control,
+    and provide a smaller set of valid accessor functions.)
+    See BaseMaskedTextCtrl for available methods.
     """
     pass
 
 
 class PreMaskedTextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
     """
-    This allows us to use XRC subclassing.
+    This class exists to support the use of XRC subclassing.
     """
     # This should really be wx.EVT_WINDOW_CREATE but it is not
     # currently delivered for native controls on all platforms, so
@@ -362,9 +366,13 @@ class PreMaskedTextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
         self.Unbind(self._firstEventType)
         self._PostInit()
 
-i=0
+__i=0
 ## CHANGELOG:
 ## ====================
+##  Version 1.2
+##  - Converted docstrings to reST format, added doc for ePyDoc.
+##    removed debugging override functions.
+##
 ##  Version 1.1
 ##  1. Added .SetFont() method that properly resizes control
 ##  2. Modified control to support construction via XRC mechanism.

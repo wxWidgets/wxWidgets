@@ -324,7 +324,10 @@ def runTest( frame, nb, log ):
 
 #----------------------------------------------------------------------
 import wx.lib.masked.numctrl as mnum
-overview = mnum.__doc__
+overview = """<html>
+<PRE><FONT SIZE=-1>
+""" + mnum.__doc__ + """
+</FONT></PRE>"""
 
 if __name__ == '__main__':
     import sys,os

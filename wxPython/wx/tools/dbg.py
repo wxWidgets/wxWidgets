@@ -147,8 +147,14 @@ class Logger:
             return
 
         if self._dbg and len(args) and not self._suspend:
-            # (emulate print functionality)
-            strs = [str(arg) for arg in args]
+            # (emulate print functionality; handle unicode as best as possible:)
+            strs = []
+            for arg in args:
+                try:
+                    strs.append(str(arg))
+                except:
+                    strs.append(repr(arg))
+
             output = ' '.join(strs)
             if self.name: output = self.name+': ' + output
             output = ' ' * 3 * self._indent + output

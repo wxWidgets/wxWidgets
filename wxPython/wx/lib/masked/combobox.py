@@ -13,19 +13,29 @@
 #
 #----------------------------------------------------------------------------
 
-import  wx
+"""
+Provides masked edit capabilities within a ComboBox format, as well as
+a base class from which you can derive masked comboboxes tailored to a specific
+function.  See maskededit module overview for how to configure the control.
+"""
+
+import  wx, types, string
 from wx.lib.masked import *
 
 # jmg 12/9/03 - when we cut ties with Py 2.2 and earlier, this would
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
-dbg = Logger()
+##dbg = Logger()
 ##dbg(enable=0)
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 ## Because calling SetSelection programmatically does not fire EVT_COMBOBOX
 ## events, we have to do it ourselves when we auto-complete.
 class MaskedComboBoxSelectEvent(wx.PyCommandEvent):
+    """
+    Because calling SetSelection programmatically does not fire EVT_COMBOBOX
+    events, the derived control has to do it itself when it auto-completes.
+    """
     def __init__(self, id, selection = 0, object=None):
         wx.PyCommandEvent.__init__(self, wx.wxEVT_COMMAND_COMBOBOX_SELECTED, id)
 
@@ -40,8 +50,9 @@ class MaskedComboBoxSelectEvent(wx.PyCommandEvent):
 
 class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
     """
-    This masked edit control adds the ability to use a masked input
-    on a combobox, and do auto-complete of such values.
+    Base class for generic masked edit comboboxes; allows auto-complete of values.
+    It is not meant to be instantiated directly, but rather serves as a base class
+    for any subsequent refinements.
     """
     def __init__( self, parent, id=-1, value = '',
                   pos = wx.DefaultPosition,
@@ -138,8 +149,8 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
             self._SetInitialValue(value)
 
 
-        self._SetKeycodeHandler(wx.WXK_UP, self.OnSelectChoice)
-        self._SetKeycodeHandler(wx.WXK_DOWN, self.OnSelectChoice)
+        self._SetKeycodeHandler(wx.WXK_UP, self._OnSelectChoice)
+        self._SetKeycodeHandler(wx.WXK_DOWN, self._OnSelectChoice)
 
         if setupEventHandling:
             ## Setup event handlers
@@ -148,7 +159,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
             self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick)  ## select field under cursor on dclick
             self.Bind(wx.EVT_RIGHT_UP, self._OnContextMenu )    ## bring up an appropriate context menu
             self.Bind(wx.EVT_CHAR, self._OnChar )               ## handle each keypress
-            self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown )         ## for special processing of up/down keys
+            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDownInComboBox ) ## for special processing of up/down keys
             self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## for processing the rest of the control keys
                                                                 ## (next in evt chain)
             self.Bind(wx.EVT_TEXT, self._OnTextChange )         ## color control appropriately & keep
@@ -173,11 +184,11 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         """ Set the font, then recalculate control size, if appropriate. """
         wx.ComboBox.SetFont(self, *args, **kwargs)
         if self._autofit:
-            dbg('calculated size:', self._CalcSize())            
+##            dbg('calculated size:', self._CalcSize())            
             self.SetClientSize(self._CalcSize())
             width = self.GetSize().width
             height = self.GetBestSize().height
-            dbg('setting client size to:', (width, height))
+##            dbg('setting client size to:', (width, height))
             self.SetBestFittingSize((width, height))
 
 
@@ -355,11 +366,11 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def Append( self, choice, clientData=None ):
         """
-        This function override is necessary so we can keep track of any additions to the list
-        of choices, because wxComboBox doesn't have an accessor for the choice list.
-        The code here is the same as in the SetParameters() mixin function, but is
-        done for the individual value as appended, so the list can be built incrementally
-        without speed penalty.
+        This base control function override is necessary so the control can keep track
+        of any additions to the list of choices, because wx.ComboBox doesn't have an
+        accessor for the choice list.  The code here is the same as in the
+        SetParameters() mixin function, but is done for the individual value
+        as appended, so the list can be built incrementally without speed penalty.
         """
         if self._mask:
             if type(choice) not in (types.StringType, types.UnicodeType):
@@ -408,8 +419,9 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def Clear( self ):
         """
-        This function override is necessary so we can keep track of any additions to the list
-        of choices, because wxComboBox doesn't have an accessor for the choice list.
+        This base control function override is necessary so the derived control can
+        keep track of any additions to the list of choices, because wx.ComboBox
+        doesn't have an accessor for the choice list.
         """
         if self._mask:
             self._choices = []
@@ -421,8 +433,8 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def _OnCtrlParametersChanged(self):
         """
-        Override mixin's default OnCtrlParametersChanged to detect changes in choice list, so
-        we can update the base control:
+        This overrides the mixin's default OnCtrlParametersChanged to detect
+        changes in choice list, so masked.Combobox can update the base control:
         """
         if self.controlInitialized and self._choices != self._ctrl_constraints._choices:
             wx.ComboBox.Clear(self)
@@ -433,7 +445,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def GetMark(self):
         """
-        This function is a hack to make up for the fact that wxComboBox has no
+        This function is a hack to make up for the fact that wx.ComboBox has no
         method for returning the selected portion of its edit control.  It
         works, but has the nasty side effect of generating lots of intermediate
         events.
@@ -470,7 +482,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def SetSelection(self, index):
         """
-        Necessary for bookkeeping on choice selection, to keep current value
+        Necessary override for bookkeeping on choice selection, to keep current value
         current.
         """
 ##        dbg('MaskedComboBox::SetSelection(%d)' % index)
@@ -481,7 +493,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         wx.ComboBox.SetSelection(self, index)
 
 
-    def OnKeyDown(self, event):
+    def _OnKeyDownInComboBox(self, event):
         """
         This function is necessary because navigation and control key
         events do not seem to normally be seen by the wxComboBox's
@@ -495,7 +507,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
             event.Skip()    # let mixin default KeyDown behavior occur
 
 
-    def OnSelectChoice(self, event):
+    def _OnSelectChoice(self, event):
         """
         This function appears to be necessary, because the processing done
         on the text of the control somehow interferes with the combobox's
@@ -569,13 +581,13 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
     def _OnReturn(self, event):
         """
-        For wxComboBox, it seems that if you hit return when the dropdown is
+        For wx.ComboBox, it seems that if you hit return when the dropdown is
         dropped, the event that dismisses the dropdown will also blank the
-        control, because of the implementation of wxComboBox.  So here,
-        we look and if the selection is -1, and the value according to
-        (the base control!) is a value in the list, then we schedule a
+        control, because of the implementation of wxComboBox.  So this function
+        examines the selection and if it is -1, and the value according to
+        (the base control!) is a value in the list, then it schedules a
         programmatic wxComboBox.SetSelection() call to pick the appropriate
-        item in the list. (and then do the usual OnReturn bit.)
+        item in the list. (and then does the usual OnReturn bit.)
         """
 ##        dbg('MaskedComboBox::OnReturn', indent=1)
 ##        dbg('current value: "%s"' % self.GetValue(), 'current index:', self.GetSelection())
@@ -589,17 +601,20 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
 class ComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
     """
-    This extra level of inheritance allows us to add the generic set of
-    masked edit parameters only to this class while allowing other
-    classes to derive from the "base" masked combobox control, and provide
-    a smaller set of valid accessor functions.
+    The "user-visible" masked combobox control, this class is
+    identical to the BaseMaskedComboBox class it's derived from.
+    (This extra level of inheritance allows us to add the generic
+    set of masked edit parameters only to this class while allowing
+    other classes to derive from the "base" masked combobox control,
+    and provide a smaller set of valid accessor functions.)
+    See BaseMaskedComboBox for available methods.
     """
     pass
 
 
 class PreMaskedComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
     """
-    This allows us to use XRC subclassing.
+    This class exists to support the use of XRC subclassing.
     """
     # This should really be wx.EVT_WINDOW_CREATE but it is not
     # currently delivered for native controls on all platforms, so
@@ -617,9 +632,14 @@ class PreMaskedComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
         self.Unbind(self._firstEventType)
         self._PostInit()
 
-i=0
+__i = 0
 ## CHANGELOG:
 ## ====================
+##  Version 1.2
+##  1. Converted docstrings to reST format, added doc for ePyDoc.
+##  2. Renamed helper functions, vars etc. not intended to be visible in public
+##     interface to code.
+##
 ##  Version 1.1
 ##  1. Added .SetFont() method that properly resizes control
 ##  2. Modified control to support construction via XRC mechanism.

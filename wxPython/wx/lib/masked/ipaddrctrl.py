@@ -14,20 +14,27 @@
 #   address with extra whitespace removed.
 #
 #----------------------------------------------------------------------------
+"""
+Provides a smart text input control that understands the structure and
+limits of IP Addresses, and allows automatic field navigation as the
+user hits '.' when typing.
+"""
 
-import  wx
+import  wx, types, string
 from wx.lib.masked import BaseMaskedTextCtrl
 
 # jmg 12/9/03 - when we cut ties with Py 2.2 and earlier, this would
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
-dbg = Logger()
+##dbg = Logger()
 ##dbg(enable=0)
 
 class IpAddrCtrlAccessorsMixin:
-    # Define IpAddrCtrl's list of attributes having their own
-    # Get/Set functions, exposing only those that make sense for
-    # an IP address control.
+    """
+    Defines IpAddrCtrl's list of attributes having their own
+    Get/Set functions, exposing only those that make sense for
+    an IP address control.
+    """
 
     exposed_basectrl_params = (
         'fields',
@@ -116,6 +123,11 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
 
 
     def OnDot(self, event):
+        """
+        Defines what action to take when the '.' character is typed in the
+        control.  By default, the current field is right-justified, and the
+        cursor is placed in the next field.
+        """
 ##        dbg('IpAddrCtrl::OnDot', indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         oldvalue = self.GetValue()
@@ -133,6 +145,9 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
 
 
     def GetAddress(self):
+        """
+        Returns the control value, with any spaces removed.
+        """
         value = BaseMaskedTextCtrl.GetValue(self)
         return value.replace(' ','')    # remove spaces from the value
 
@@ -144,6 +159,12 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
         return False
 
     def SetValue(self, value):
+        """
+        Takes a string value, validates it for a valid IP address,
+        splits it into an array of 4 fields, justifies it
+        appropriately, and inserts it into the control.
+        Invalid values will raise a ValueError exception.
+        """
 ##        dbg('IpAddrCtrl::SetValue(%s)' % str(value), indent=1)
         if type(value) not in (types.StringType, types.UnicodeType):
 ##            dbg(indent=0)
@@ -151,6 +172,7 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
 
         bValid = True   # assume True
         parts = value.split('.')
+
         if len(parts) != 4:
             bValid = False
         else:
@@ -184,6 +206,15 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
             BaseMaskedTextCtrl.SetValue(self, value)
 ##        dbg(indent=0)
 
-i=0
+__i=0
+## CHANGELOG:
+## ====================
+##  Version 1.2
+##  1. Fixed bugs involving missing imports now that these classes are in
+##     their own module.
+##  2. Added doc strings for ePyDoc.
+##  3. Renamed helper functions, vars etc. not intended to be visible in public
+##     interface to code.
+##
 ## Version 1.1
 ##  Made ipaddrctrls allow right-insert in subfields, now that insert/cut/paste works better

@@ -15,44 +15,43 @@
 # o Removed wx prefix
 #
 
-"""<html><body>
-<P>
-<B>masked.Ctrl</B> is actually a factory function for several types of
+"""
+
+*masked.Ctrl* is actually a factory function for several types of
 masked edit controls:
-<P>
-<UL>
-    <LI><b>masked.TextCtrl</b>   - standard masked edit text box</LI>
-    <LI><b>masked.ComboBox</b>   - adds combobox capabilities</LI>
-    <LI><b>masked.IpAddrCtrl</b> - adds logical input semantics for IP address entry</LI>
-    <LI><b>masked.TimeCtrl</b>   - special subclass handling lots of time formats as values</LI>
-    <LI><b>masked.NumCtrl</b>    - special subclass handling numeric values</LI>
-</UL>
-<P>
-<B>masked.Ctrl</B> works by looking for a special <b><i>controlType</i></b>
+
+    =================  =========================================================
+    masked.TextCtrl     standard masked edit text box
+    masked.ComboBox     adds combobox capabilities
+    masked.IpAddrCtrl   adds logical input semantics for IP address entry
+    masked.TimeCtrl     special subclass handling lots of time formats as values
+    masked.NumCtrl      special subclass handling numeric values
+    =================  =========================================================
+
+masked.Ctrl works by looking for a special *controlType*
 parameter in the variable arguments of the control, to determine
 what kind of instance to return.
-controlType can be one of:
-<PRE><FONT SIZE=-1>
+controlType can be one of::
+
     controlTypes.TEXT
     controlTypes.COMBO
     controlTypes.IPADDR
     controlTypes.TIME
     controlTypes.NUMBER
-</FONT></PRE>
+
 These constants are also available individually, ie, you can
-use either of the following:
-<PRE><FONT SIZE=-1>
+use either of the following::
+
     from wxPython.wx.lib.masked import Ctrl, COMBO, TEXT, NUMBER, TIME
     from wxPython.wx.lib.masked import Ctrl, controlTypes
-</FONT></PRE>
+
 If not specified as a keyword argument, the default controlType is
 controlTypes.TEXT.
-<P>
-Each of the above classes has its own unique arguments, but MaskedCtrl
-provides a single "unified" interface for masked controls.  Masked.TextCtrl,
-masked.ComboBox and masked.IpAddrCtrl are all documented below; the others have
-their own demo pages and interface descriptions.
-</body></html>
+
+Each of the above classes has its own unique arguments, but Masked.Ctrl
+provides a single "unified" interface for masked controls.
+
+
 """
 
 from wx.lib.masked   import TextCtrl, ComboBox, IpAddrCtrl

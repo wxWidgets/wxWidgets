@@ -50,34 +50,39 @@
 # o wxTimeCtrl -> TimeCtrl
 #
 
-"""\
-<b>Masked Edit Overview:
-=====================</b>
-<b>masked.TextCtrl</b>
+'''\
+====================
+Masked Edit Overview
+====================
+
+masked.TextCtrl:
     is a sublassed text control that can carefully control the user's input
     based on a mask string you provide.
 
-    General usage example:
+    General usage example::
+
         control = masked.TextCtrl( win, -1, '', mask = '(###) ###-####')
 
     The example above will create a text control that allows only numbers to be
     entered and then only in the positions indicated in the mask by the # sign.
 
-<b>masked.ComboBox</b>
+masked.ComboBox:
     is a similar subclass of wxComboBox that allows the same sort of masking,
     but also can do auto-complete of values, and can require the value typed
     to be in the list of choices to be colored appropriately.
 
-<b>masked.Ctrl</b>
+masked.Ctrl:
     is actually a factory function for several types of masked edit controls:
 
-    <b>masked.TextCtrl</b>   - standard masked edit text box
-    <b>masked.ComboBox</b>   - adds combobox capabilities
-    <b>masked.IpAddrCtrl</b> - adds special semantics for IP address entry
-    <b>masked.TimeCtrl</b>   - special subclass handling lots of types as values
-    <b>masked.NumCtrl</b>    - special subclass handling numeric values
+    =================   ==================================================
+    masked.TextCtrl     standard masked edit text box
+    masked.ComboBox     adds combobox capabilities
+    masked.IpAddrCtrl   adds special semantics for IP address entry
+    masked.TimeCtrl     special subclass handling lots of types as values
+    masked.NumCtrl      special subclass handling numeric values
+    =================   ==================================================
 
-    It works by looking for a <b><i>controlType</i></b> parameter in the keyword
+    It works by looking for a *controlType* parameter in the keyword
     arguments of the control, to determine what kind of instance to return.
     If not specified as a keyword argument, the default control type returned
     will be masked.TextCtrl.
@@ -89,19 +94,25 @@
     (See end of following discussion for how to configure the wx.MaskedCtrl()
     to select the above control types.)
 
+=========================
 
-<b>INITILIZATION PARAMETERS
-========================
-mask=</b>
-Allowed mask characters and function:
+Initialization Parameters
+-------------------------
+mask
+    Allowed mask characters and function:
+
+    =========  ==========================================================
     Character   Function
-            #       Allow numeric only (0-9)
-            N       Allow letters and numbers (0-9)
-            A       Allow uppercase letters only
-            a       Allow lowercase letters only
-            C       Allow any letter, upper or lower
-            X       Allow string.letters, string.punctuation, string.digits
-            &amp;       Allow string.punctuation only
+    =========  ==========================================================
+        #       Allow numeric only (0-9)
+        N       Allow letters and numbers (0-9)
+        A       Allow uppercase letters only
+        a       Allow lowercase letters only
+        C       Allow any letter, upper or lower
+        X       Allow string.letters, string.punctuation, string.digits
+        &       Allow string.punctuation only
+        \*       Allow any ansi character
+    =========  ==========================================================
 
 
     These controls define these sets of characters using string.letters,
@@ -111,11 +122,13 @@ Allowed mask characters and function:
     set the locale.
     For example, to allow international characters to be used in the
     above masks, you can place the following in your code as part of
-    your application's initialization code:
+    your application's initialization code::
 
       import locale
       locale.setlocale(locale.LC_ALL, '')
 
+    The controls now also support (by popular demand) all "ansi" chars,
+    that is, all ascii codes between 32 and 255, by use of the * mask character.
 
   Using these mask characters, a variety of template masks can be built. See
   the demo for some other common examples include date+time, social security
@@ -124,7 +137,7 @@ Allowed mask characters and function:
   (use \\ for literal backslash, as in: r'CCC\\NNN'.)
 
 
-  <b>Note:</b>
+  *Note:*
       Masks containing only # characters and one optional decimal point
       character are handled specially, as "numeric" controls.  Such
       controls have special handling for typing the '-' key, handling
@@ -135,36 +148,43 @@ Allowed mask characters and function:
       forth (see below).  These allow you to construct reasonable
       numeric entry controls.
 
-  <b>Note:</b>
+  *Note:*
       Changing the mask for a control deletes any previous field classes
       (and any associated validation or formatting constraints) for them.
 
-<b>useFixedWidthFont=</b>
+useFixedWidthFont
   By default, masked edit controls use a fixed width font, so that
   the mask characters are fixed within the control, regardless of
   subsequent modifications to the value.  Set to False if having
-  the control font be the same as other controls is required.
+  the control font be the same as other controls is required. (This is
+  a control-level parameter.)
 
+defaultEncoding
+  (Applies to unicode systems only) By default, the default unicode encoding
+  used is latin1, or iso-8859-1.  If necessary, you can set this control-level
+  parameter to govern the codec used to decode your keyboard inputs.
+  (This is a control-level parameter.)
 
-<b>formatcodes=</b>
+formatcodes
   These other properties can be passed to the class when instantiating it:
     Formatcodes are specified as a string of single character formatting
-    codes that modify  behavior of the control:
+    codes that modify  behavior of the control::
+    
             _  Allow spaces
             !  Force upper
             ^  Force lower
             R  Right-align field(s)
             r  Right-insert in field(s) (implies R)
-            &lt;  Stay in field until explicit navigation out of it
+            <  Stay in field until explicit navigation out of it
 
-            &gt;  Allow insert/delete within partially filled fields (as
+            >  Allow insert/delete within partially filled fields (as
                opposed to the default "overwrite" mode for fixed-width
                masked edit controls.)  This allows single-field controls
                or each field within a multi-field control to optionally
                behave more like standard text controls.
                (See EMAIL or phone number autoformat examples.)
 
-               <i>Note: This also governs whether backspace/delete operations
+               *Note: This also governs whether backspace/delete operations
                shift contents of field to right of cursor, or just blank the
                erased section.
 
@@ -172,7 +192,7 @@ Allowed mask characters and function:
                or control allows right insert anywhere within the current
                non-empty value in the field.  (Otherwise right-insert behavior
                is only performed to when the entire right-insertable field is
-               selected or the cursor is at the right edge of the field.</i>
+               selected or the cursor is at the right edge of the field.*
 
 
             ,  Allow grouping character in integer fields of numeric controls
@@ -202,8 +222,9 @@ Allowed mask characters and function:
                (See USSTATE autoformat demo for how this can be used.)
             S  select entire field when navigating to new field
 
-<b>fillChar=
-defaultValue=</b>
+fillChar
+
+defaultValue
   These controls have two options for the initial state of the control.
   If a blank control with just the non-editable characters showing
   is desired, simply leave the constructor variable fillChar as its
@@ -217,31 +238,39 @@ defaultValue=</b>
   This value must satisfy the non-editable characters of the mask,
   but need not conform to the replaceable characters.
 
-<b>groupChar=
-decimalChar=</b>
+groupChar
+
+decimalChar
   These parameters govern what character is used to group numbers
   and is used to indicate the decimal point for numeric format controls.
   The default groupChar is ',', the default decimalChar is '.'
   By changing these, you can customize the presentation of numbers
   for your location.
-  eg: formatcodes = ',', groupChar="'"                   allows  12'345.34
-      formatcodes = ',', groupChar='.', decimalChar=','  allows  12.345,34
 
-<b>shiftDecimalChar=</b>
+  Eg::
+
+        formatcodes = ',', groupChar="'"                   allows  12'345.34
+        formatcodes = ',', groupChar='.', decimalChar=','  allows  12.345,34
+
+  (These are control-level parameters.)
+
+shiftDecimalChar
   The default "shiftDecimalChar" (used for "backwards-tabbing" until
   shift-tab is fixed in wxPython) is '>' (for QUERTY keyboards.) for
   other keyboards, you may want to customize this, eg '?' for shift ',' on
   AZERTY keyboards, ':' or ';' for other European keyboards, etc.
+  (This is a control-level parameter.)
 
-<b>useParensForNegatives=False</b>
+useParensForNegatives=False
   This option can be used with signed numeric format controls to
   indicate signs via () rather than '-'.
+  (This is a control-level parameter.)
 
-<b>autoSelect=False</b>
+autoSelect=False
   This option can be used to have a field or the control try to
   auto-complete on each keystroke if choices have been specified.
 
-<b>autoCompleteKeycodes=[]</b>
+autoCompleteKeycodes=[]
   By default, DownArrow, PageUp and PageDown will auto-complete a
   partially entered field.  Shift-DownArrow, Shift-UpArrow, PageUp
   and PageDown will also auto-complete, but if the field already
@@ -252,72 +281,81 @@ decimalChar=</b>
 
   Additional auto-complete keys can be specified via this parameter.
   Any keys so specified will act like PageDown.
+  (This is a control-level parameter.)
 
 
 
-<b>Validating User Input:
-======================</b>
-  There are a variety of initialization parameters that are used to validate
-  user input.  These parameters can apply to the control as a whole, and/or
-  to individual fields:
+Validating User Input
+=====================
+There are a variety of initialization parameters that are used to validate
+user input.  These parameters can apply to the control as a whole, and/or
+to individual fields:
 
-        excludeChars=   A string of characters to exclude even if otherwise allowed
-        includeChars=   A string of characters to allow even if otherwise disallowed
-        validRegex=     Use a regular expression to validate the contents of the text box
-        validRange=     Pass a rangeas list (low,high) to limit numeric fields/values
-        choices=        A list of strings that are allowed choices for the control.
-        choiceRequired= value must be member of choices list
-        compareNoCase=  Perform case-insensitive matching when validating against list
-                        <i>Note: for masked.ComboBox, this defaults to True.</i>
-        emptyInvalid=   Boolean indicating whether an empty value should be considered invalid
+        =====================  ==================================================================
+        excludeChars           A string of characters to exclude even if otherwise allowed
+        includeChars           A string of characters to allow even if otherwise disallowed
+        validRegex             Use a regular expression to validate the contents of the text box
+        validRange             Pass a rangeas list (low,high) to limit numeric fields/values
+        choices                A list of strings that are allowed choices for the control.
+        choiceRequired         value must be member of choices list
+        compareNoCase          Perform case-insensitive matching when validating against list
+                               *Note: for masked.ComboBox, this defaults to True.*
+        emptyInvalid           Boolean indicating whether an empty value should be considered 
+                               invalid
 
-        validFunc=      A function to call of the form: bool = func(candidate_value)
-                        which will return True if the candidate_value satisfies some
-                        external criteria for the control in addition to the the
-                        other validation, or False if not.  (This validation is
-                        applied last in the chain of validations.)
+        validFunc              A function to call of the form: bool = func(candidate_value)
+                               which will return True if the candidate_value satisfies some
+                               external criteria for the control in addition to the the
+                               other validation, or False if not.  (This validation is
+                               applied last in the chain of validations.)
 
-        validRequired=  Boolean indicating whether or not keys that are allowed by the
-                        mask, but result in an invalid value are allowed to be entered
-                        into the control.  Setting this to True implies that a valid
-                        default value is set for the control.
+        validRequired          Boolean indicating whether or not keys that are allowed by the
+                               mask, but result in an invalid value are allowed to be entered
+                               into the control.  Setting this to True implies that a valid
+                               default value is set for the control.
 
-        retainFieldValidation=
-                        False by default; if True, this allows individual fields to
-                        retain their own validation constraints independently of any
-                        subsequent changes to the control's overall parameters.
+        retainFieldValidation  False by default; if True, this allows individual fields to
+                               retain their own validation constraints independently of any
+                               subsequent changes to the control's overall parameters.
+                               (This is a control-level parameter.)
 
-        validator=      Validators are not normally needed for masked controls, because
-                        of the nature of the validation and control of input.  However,
-                        you can supply one to provide data transfer routines for the
-                        controls.
+        validator              Validators are not normally needed for masked controls, because
+                               of the nature of the validation and control of input.  However,
+                               you can supply one to provide data transfer routines for the
+                               controls.
+        =====================  ==================================================================
 
 
-<b>Coloring Behavior:
-==================</b>
+Coloring Behavior
+=================
   The following parameters have been provided to allow you to change the default
   coloring behavior of the control.   These can be set at construction, or via
   the .SetCtrlParameters() function.  Pass a color as string e.g. 'Yellow':
 
-        emptyBackgroundColour=      Control Background color when identified as empty. Default=White
-        invalidBackgroundColour=    Control Background color when identified as Not valid. Default=Yellow
-        validBackgroundColour=      Control Background color when identified as Valid. Default=white
+        ========================  =======================================================================
+        emptyBackgroundColour      Control Background color when identified as empty. Default=White
+        invalidBackgroundColour    Control Background color when identified as Not valid. Default=Yellow
+        validBackgroundColour      Control Background color when identified as Valid. Default=white
+        ========================  =======================================================================
 
 
   The following parameters control the default foreground color coloring behavior of the
   control. Pass a color as string e.g. 'Yellow':
-        foregroundColour=           Control foreground color when value is not negative.  Default=Black
-        signedForegroundColour=     Control foreground color when value is negative. Default=Red
+
+        ========================  ======================================================================
+        foregroundColour           Control foreground color when value is not negative.  Default=Black
+        signedForegroundColour     Control foreground color when value is negative. Default=Red
+        ========================  ======================================================================
 
 
-<b>Fields:
-=======</b>
+Fields
+======
   Each part of the mask that allows user input is considered a field.  The fields
   are represented by their own class instances.  You can specify field-specific
   constraints by constructing or accessing the field instances for the control
   and then specifying those constraints via parameters.
 
-<b>fields=</b>
+fields
   This parameter allows you to specify Field instances containing
   constraints for the individual fields of a control, eg: local
   choice lists, validation rules, functions, regexps, etc.
@@ -329,50 +367,57 @@ decimalChar=</b>
   Any field not represented by the list or dictionary will be
   implicitly created by the control.
 
-  eg:
+  Eg::
+
     fields = [ Field(formatcodes='_r'), Field('choices=['a', 'b', 'c']) ]
-  or
+    
+  Or::
+
     fields = {
-              1: ( Field(formatcodes='_R', choices=['a', 'b', 'c']),
-              3: ( Field(choices=['01', '02', '03'], choiceRequired=True)
+               1: ( Field(formatcodes='_R', choices=['a', 'b', 'c']),
+               3: ( Field(choices=['01', '02', '03'], choiceRequired=True)
              }
 
   The following parameters are available for individual fields, with the
   same semantics as for the whole control but applied to the field in question:
 
-    fillChar        # if set for a field, it will override the control's fillChar for that field
-    groupChar       # if set for a field, it will override the control's default
-    defaultValue    # sets field-specific default value; overrides any default from control
-    compareNoCase   # overrides control's settings
-    emptyInvalid    # determines whether field is required to be filled at all times
-    validRequired   # if set, requires field to contain valid value
+    ==============  =============================================================================
+    fillChar        if set for a field, it will override the control's fillChar for that field
+    groupChar       if set for a field, it will override the control's default
+    defaultValue    sets field-specific default value; overrides any default from control
+    compareNoCase   overrides control's settings
+    emptyInvalid    determines whether field is required to be filled at all times
+    validRequired   if set, requires field to contain valid value
+    ==============  =============================================================================
 
   If any of the above parameters are subsequently specified for the control as a
   whole, that new value will be propagated to each field, unless the
   retainFieldValidation control-level parameter is set.
 
-    formatcodes     # Augments control's settings
-    excludeChars    #     '       '        '
-    includeChars    #     '       '        '
-    validRegex      #     '       '        '
-    validRange      #     '       '        '
-    choices         #     '       '        '
-    choiceRequired  #     '       '        '
-    validFunc       #     '       '        '
+    ==============  ==============================
+    formatcodes      Augments control's settings
+    excludeChars         '       '        '
+    includeChars         '       '        '
+    validRegex           '       '        '
+    validRange           '       '        '
+    choices              '       '        '
+    choiceRequired       '       '        '
+    validFunc            '       '        '
+    ==============  ==============================
 
 
 
-<b>Control Class Functions:
-========================
-  .GetPlainValue(value=None)</b>
+Control Class Functions
+=======================
+.GetPlainValue(value=None)
                     Returns the value specified (or the control's text value
                     not specified) without the formatting text.
                     In the example above, might return phone no='3522640075',
                     whereas control.GetValue() would return '(352) 264-0075'
-  <b>.ClearValue()</b>
+.ClearValue()
                     Returns the control's value to its default, and places the
                     cursor at the beginning of the control.
-  <b>.SetValue()</b>
+.SetValue()
                     Does "smart replacement" of passed value into the control, as does
                     the .Paste() method.  As with other text entry controls, the
                     .SetValue() text replacement begins at left-edge of the control,
@@ -384,7 +429,9 @@ decimalChar=</b>
                     control before attempting to set the value.
                     If a value does not follow the format of the control's mask, or will
                     not fit into the control, a ValueError exception will be raised.
-                    Eg:
+
+                    Eg::
+
                       mask = '(###) ###-####'
                           .SetValue('1234567890')           => '(123) 456-7890'
                           .SetValue('(123)4567890')         => '(123) 456-7890'
@@ -403,53 +450,58 @@ decimalChar=</b>
                           .SetValue('%.2f' % -111.12345 )   => '   -111.12'
 
 
-  <b>.IsValid(value=None)</b>
+.IsValid(value=None)
                     Returns True if the value specified (or the value of the control
                     if not specified) passes validation tests
-  <b>.IsEmpty(value=None)</b>
+.IsEmpty(value=None)
                     Returns True if the value specified (or the value of the control
                     if not specified) is equal to an "empty value," ie. all
                     editable characters == the fillChar for their respective fields.
-  <b>.IsDefault(value=None)</b>
+.IsDefault(value=None)
                     Returns True if the value specified (or the value of the control
                     if not specified) is equal to the initial value of the control.
 
-  <b>.Refresh()</b>
+.Refresh()
                     Recolors the control as appropriate to its current settings.
 
-  <b>.SetCtrlParameters(**kwargs)</b>
+.SetCtrlParameters(\*\*kwargs)
                     This function allows you to set up and/or change the control parameters
                     after construction; it takes a list of key/value pairs as arguments,
                     where the keys can be any of the mask-specific parameters in the constructor.
-                    Eg:
+
+                    Eg::
+
                         ctl = masked.TextCtrl( self, -1 )
                         ctl.SetCtrlParameters( mask='###-####',
                                                defaultValue='555-1212',
                                                formatcodes='F')
 
-  <b>.GetCtrlParameter(parametername)</b>
+.GetCtrlParameter(parametername)
                     This function allows you to retrieve the current value of a parameter
                     from the control.
 
-  <b><i>Note:</i></b> Each of the control parameters can also be set using its
+  *Note:* Each of the control parameters can also be set using its
       own Set and Get function.  These functions follow a regular form:
       All of the parameter names start with lower case; for their
       corresponding Set/Get function, the parameter name is capitalized.
-      Eg: ctl.SetMask('###-####')
+
+    Eg::
+
+          ctl.SetMask('###-####')
           ctl.SetDefaultValue('555-1212')
           ctl.GetChoiceRequired()
           ctl.GetFormatcodes()
 
-  <b><i>Note:</i></b> After any change in parameters, the choices for the
+  *Note:* After any change in parameters, the choices for the
       control are reevaluated to ensure that they are still legal.  If you
       have large choice lists, it is therefore more efficient to set parameters
       before setting the choices available.
 
-  <b>.SetFieldParameters(field_index, **kwargs)</b>
+.SetFieldParameters(field_index, \*\*kwargs)
                     This function allows you to specify change individual field
                     parameters after construction. (Indices are 0-based.)
 
-  <b>.GetFieldParameter(field_index, parametername)</b>
+.GetFieldParameter(field_index, parametername)
                     Allows the retrieval of field parameters after construction
 
 
@@ -472,12 +524,12 @@ Take a look at the demo; the zip-code validation succeeds as long as the
 first five numerals are entered. the last four are optional, but if
 any are entered, there must be 4 to be valid.
 
-<B>masked.Ctrl Configuration
-==========================</B>
-masked.Ctrl works by looking for a special <b><i>controlType</i></b>
+masked.Ctrl Configuration
+=========================
+masked.Ctrl works by looking for a special *controlType*
 parameter in the variable arguments of the control, to determine
 what kind of instance to return.
-controlType can be one of:
+controlType can be one of::
 
     controlTypes.TEXT
     controlTypes.COMBO
@@ -486,14 +538,15 @@ controlType can be one of:
     controlTypes.NUMBER
 
 These constants are also available individually, ie, you can
-use either of the following:
+use either of the following::
 
     from wxPython.wx.lib.masked import MaskedCtrl, controlTypes
     from wxPython.wx.lib.masked import MaskedCtrl, COMBO, TEXT, NUMBER, IPADDR
 
 If not specified as a keyword argument, the default controlType is
 controlTypes.TEXT.
-"""
+
+'''
 
 """
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -756,7 +809,7 @@ import  wx
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
 
-dbg = Logger()
+##dbg = Logger()
 ##dbg(enable=1)
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
@@ -792,7 +845,10 @@ control = (
 ##   X- allow any character (string.letters, string.punctuation, string.digits)
 ## Note: locale settings affect what "uppercase", lowercase, etc comprise.
 ##
-maskchars = ("#","A","a","X","C","N", '&')
+maskchars = ("#","A","a","X","C","N",'*','&')
+ansichars = ""
+for i in xrange(32, 256):
+    ansichars += chr(i)
 
 months = '(01|02|03|04|05|06|07|08|09|10|11|12)'
 charmonths = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)'
@@ -1181,6 +1237,16 @@ autoformats.sort()
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
 class Field:
+    """
+    This class manages the individual fields in a masked edit control.
+    Each field has a zero-based index, indicating its position in the
+    control, an extent, an associated mask, and a plethora of optional
+    parameters.  Fields can be instantiated and then associated with
+    parent masked controls, in order to provide field-specific configuration.
+    Alternatively, fields will be implicitly created by the parent control
+    if not provided at construction, at which point, the fields can then
+    manipulated by the controls .SetFieldParameters() method.
+    """
     valid_params = {
               'index': None,                    ## which field of mask; set by parent control.
               'mask': "",                       ## mask chars for this field
@@ -1250,7 +1316,7 @@ class Field:
 ##                dbg(indent=0, suspend=0)
                 raise AttributeError('invalid keyword argument "%s"' % key)
 
-        if self._index is not None: dbg('field index:', self._index)
+##        if self._index is not None: dbg('field index:', self._index)
 ##        dbg('parameters:', indent=1)
         for key, value in kwargs.items():
 ##            dbg('%s:' % key, value)
@@ -1293,7 +1359,7 @@ class Field:
 ####            dbg("self._old_fillChar: '%s'" % self._old_fillChar)
 
         if kwargs.has_key('mask') or kwargs.has_key('validRegex'):  # (set/changed)
-            self._isInt = isInteger(self._mask)
+            self._isInt = _isInteger(self._mask)
 ##            dbg('isInt?', self._isInt, 'self._mask:"%s"' % self._mask)
 
 ##        dbg(indent=0, suspend=0)
@@ -1306,7 +1372,7 @@ class Field:
         """
 ##        dbg(suspend=1)
 ##        dbg('maskededit.Field::_ValidateParameters', indent=1)
-        if self._index is not None: dbg('field index:', self._index)
+##        if self._index is not None: dbg('field index:', self._index)
 ####        dbg('parameters:', indent=1)
 ##        for key, value in kwargs.items():
 ####            dbg('%s:' % key, value)
@@ -1582,6 +1648,7 @@ class MaskedEditMixin:
     """
     This class allows us to abstract the masked edit functionality that could
     be associated with any text entry control. (eg. wx.TextCtrl, wx.ComboBox, etc.)
+    It forms the basis for all of the lib.masked controls.
     """
     valid_ctrl_params = {
               'mask': 'XXXXXXXXXXXXX',          ## mask string for formatting this control
@@ -1590,6 +1657,7 @@ class MaskedEditMixin:
               'datestyle':    'MDY',            ## optional date style for date-type values. Can trigger autocomplete year
               'autoCompleteKeycodes': [],       ## Optional list of additional keycodes which will invoke field-auto-complete
               'useFixedWidthFont': True,        ## Use fixed-width font instead of default for base control
+              'defaultEncoding': 'latin1',      ## optional argument to indicate unicode codec to use (unicode ctrls only)
               'retainFieldValidation': False,   ## Set this to true if setting control-level parameters independently,
                                                 ## from field validation constraints
               'emptyBackgroundColour': "White",
@@ -1670,7 +1738,8 @@ class MaskedEditMixin:
             'X': string.letters + string.punctuation + string.digits,
             'C': string.letters,
             'N': string.letters + string.digits,
-            '&': string.punctuation
+            '&': string.punctuation,
+            '*': ansichars
         }
 
         ## self._ignoreChange is used by MaskedComboBox, because
@@ -1701,7 +1770,8 @@ class MaskedEditMixin:
     def SetCtrlParameters(self, **kwargs):
         """
         This public function can be used to set individual or multiple masked edit
-        parameters after construction.
+        parameters after construction.  (See maskededit module overview for the list
+        of valid parameters.)
         """
 ##        dbg(suspend=1)
 ##        dbg('MaskedEditMixin::SetCtrlParameters', indent=1)
@@ -1850,8 +1920,8 @@ class MaskedEditMixin:
         self._autofit = self._ctrl_constraints._autofit
         self._isNeg      = False
 
-        self._isDate     = 'D' in self._ctrl_constraints._formatcodes and isDateType(mask)
-        self._isTime     = 'T' in self._ctrl_constraints._formatcodes and isTimeType(mask)
+        self._isDate     = 'D' in self._ctrl_constraints._formatcodes and _isDateType(mask)
+        self._isTime     = 'T' in self._ctrl_constraints._formatcodes and _isTimeType(mask)
         if self._isDate:
             # Set _dateExtent, used in date validation to locate date in string;
             # always set as though year will be 4 digits, even if mask only has
@@ -1926,7 +1996,7 @@ class MaskedEditMixin:
 ##        dbg(indent=0, suspend=0)
 
     def SetMaskParameters(self, **kwargs):
-        """ old name for this function """
+        """ old name for the SetCtrlParameters function  (DEPRECATED)"""
         return self.SetCtrlParameters(**kwargs)
 
 
@@ -1942,7 +2012,7 @@ class MaskedEditMixin:
             TypeError('"%s".GetCtrlParameter: invalid parameter "%s"' % (self.name, paramname))
 
     def GetMaskParameter(self, paramname):
-        """ old name for this function """
+        """ old name for the GetCtrlParameters function  (DEPRECATED)"""
         return self.GetCtrlParameter(paramname)
 
 
@@ -1978,6 +2048,8 @@ class MaskedEditMixin:
         Because changes to fields can affect the overall control,
         direct access to the fields is prevented, and the control
         is always "reconfigured" after setting a field parameter.
+        (See maskededit module overview for the list of valid field-level
+        parameters.)
         """
         if field_index not in self._field_indices:
             raise IndexError('%s is not a valid field for control "%s".' % (str(field_index), self.name))
@@ -2106,13 +2178,13 @@ class MaskedEditMixin:
         self._decimalChar = self._ctrl_constraints._decimalChar
         self._shiftDecimalChar = self._ctrl_constraints._shiftDecimalChar
 
-        self._isFloat      = isFloatingPoint(s) and not self._ctrl_constraints._validRegex
-        self._isInt      = isInteger(s) and not self._ctrl_constraints._validRegex
+        self._isFloat      = _isFloatingPoint(s) and not self._ctrl_constraints._validRegex
+        self._isInt      = _isInteger(s) and not self._ctrl_constraints._validRegex
         self._signOk     = '-' in self._ctrl_constraints._formatcodes and (self._isFloat or self._isInt)
         self._useParens  = self._ctrl_constraints._useParensForNegatives
         self._isNeg      = False
 ####        dbg('self._signOk?', self._signOk, 'self._useParens?', self._useParens)
-####        dbg('isFloatingPoint(%s)?' % (s), isFloatingPoint(s),
+####        dbg('isFloatingPoint(%s)?' % (s), _isFloatingPoint(s),
 ##            'ctrl regex:', self._ctrl_constraints._validRegex)
 
         if self._signOk and s[0] != ' ':
@@ -2818,22 +2890,34 @@ class MaskedEditMixin:
             keep_processing = False
         else:
             field = self._FindField(pos)
+
 ##            dbg("key ='%s'" % chr(key))
-            if chr(key) == ' ':
+##            if chr(key) == ' ':
 ##                dbg('okSpaces?', field._okSpaces)
-                pass
+##                pass
 
+            char = chr(key) # (must work if we got this far)
 
-            if chr(key) in field._excludeChars + self._ctrl_constraints._excludeChars:
+            if 'unicode' in wx.PlatformInfo:
+                char = char.decode(self._defaultEncoding)
+                excludes = u''
+                if type(field._excludeChars) != types.UnicodeType:
+                    excludes += field._excludeChars.decode(self._defaultEncoding)
+                if type(self._ctrl_constraints) != types.UnicodeType:
+                    excludes += self._ctrl_constraints._excludeChars.decode(self._defaultEncoding)
+            else:
+                excludes = field._excludeChars + self._ctrl_constraints._excludeChars
+
+            if char in excludes:
                 keep_processing = False
 
-            if keep_processing and self._isCharAllowed( chr(key), pos, checkRegex = True ):
+            if keep_processing and self._isCharAllowed( char, pos, checkRegex = True ):
 ##                dbg("key allowed by mask")
                 # insert key into candidate new value, but don't change control yet:
                 oldstr = self._GetValue()
                 newstr, newpos, new_select_to, match_field, match_index = self._insertKey(
-                                chr(key), pos, sel_start, sel_to, self._GetValue(), allowAutoSelect = True)
-##                dbg("str with '%s' inserted:" % chr(key), '"%s"' % newstr)
+                                char, pos, sel_start, sel_to, self._GetValue(), allowAutoSelect = True)
+##                dbg("str with '%s' inserted:" % char, '"%s"' % newstr)
                 if self._ctrl_constraints._validRequired and not self.IsValid(newstr):
 ##                    dbg('not valid; checking to see if adjusted string is:')
                     keep_processing = False
@@ -4184,10 +4268,10 @@ class MaskedEditMixin:
         else:
             year_field = 2
 
-##        dbg('getYear: "%s"' % getYear(text, self._datestyle))
-        year    = string.replace( getYear( text, self._datestyle),self._fields[year_field]._fillChar,"")  # drop extra fillChars
-        month   = getMonth( text, self._datestyle)
-        day     = getDay( text, self._datestyle)
+##        dbg('getYear: "%s"' % _getYear(text, self._datestyle))
+        year    = string.replace( _getYear( text, self._datestyle),self._fields[year_field]._fillChar,"")  # drop extra fillChars
+        month   = _getMonth( text, self._datestyle)
+        day     = _getDay( text, self._datestyle)
 ##        dbg('self._datestyle:', self._datestyle, 'year:', year, 'Month', month, 'day:', day)
 
         yearVal = None
@@ -4228,7 +4312,7 @@ class MaskedEditMixin:
             else:   # pad with 0's to make a 4-digit year
                 year = "%04d" % yearVal
             if self._4digityear or force4digit_year:
-                text = makeDate(year, month, day, self._datestyle, text) + text[self._dateExtent:]
+                text = _makeDate(year, month, day, self._datestyle, text) + text[self._dateExtent:]
 ##        dbg('newdate: "%s"' % text, indent=0)
         return text
 
@@ -4288,6 +4372,12 @@ class MaskedEditMixin:
         """
         maskChar = self.maskdict[pos]
         okchars = self.maskchardict[maskChar]    ## entry, get mask approved characters
+
+        # convert okchars to unicode if required; will force subsequent appendings to
+        # result in unicode strings
+        if 'unicode' in wx.PlatformInfo and type(okchars) != types.UnicodeType:
+            okchars = okchars.decode(self._defaultEncoding)
+
         field = self._FindField(pos)
         if okchars and field._okSpaces:          ## Allow spaces?
             okchars += " "
@@ -4861,6 +4951,11 @@ class MaskedEditMixin:
                 left  = text[0:pos]
                 right   = text[pos+1:]
 
+            if 'unicode' in wx.PlatformInfo and type(char) != types.UnicodeType:
+                # convert the keyboard constant to a unicode value, to
+                # ensure it can be concatenated into the control value:
+                char = char.decode(self._defaultEncoding)
+
             newtext = left + char + right
 
             if self._signOk and self._useParens:
@@ -5108,7 +5203,7 @@ class MaskedEditMixin:
                 fstr.replace(field._fillChar, ' ')
                 datestr = datestr[:start] + fstr + datestr[end:]
 
-            year, month, day = getDateParts( datestr, self._datestyle)
+            year, month, day = _getDateParts( datestr, self._datestyle)
             year = int(year)
 ##            dbg('self._dateExtent:', self._dateExtent)
             if self._dateExtent == 11:
@@ -5186,7 +5281,7 @@ class MaskedEditMixin:
         if not valid:
 ##            dbg('cannot convert string to valid time')
             pass
-        if valid: dbg('valid time')
+##        if valid: dbg('valid time')
 ##        dbg(indent=0)
         return valid
 
@@ -5383,6 +5478,9 @@ class MaskedEditMixin:
         else:
             item = 'selection'
 ##        dbg('maxlength:', maxlength)
+        if 'unicode' in wx.PlatformInfo and type(paste_text) != types.UnicodeType:
+            paste_text = paste_text.decode(self._defaultEncoding)
+
         length_considered = len(paste_text)
         if length_considered > maxlength:
 ##            dbg('paste text will not fit into the %s:' % item, indent=0)
@@ -5477,6 +5575,10 @@ class MaskedEditMixin:
             paste_text = value
 
         if paste_text is not None:
+
+            if 'unicode' in wx.PlatformInfo and type(paste_text) != types.UnicodeType:
+                paste_text = paste_text.decode(self._defaultEncoding)
+
 ##            dbg('paste text: "%s"' % paste_text)
             # (conversion will raise ValueError if paste isn't legal)
             sel_start, sel_to = self._GetSelection()
@@ -5963,32 +6065,32 @@ class MaskedEditMixin:
         pass
 
  ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
-# ## TRICKY BIT: to avoid a ton of boiler-plate, and to
-# ## automate the getter/setter generation for each valid
-# ## control parameter so we never forget to add the
-# ## functions when adding parameters, this loop
-# ## programmatically adds them to the class:
-# ## (This makes it easier for Designers like Boa to
-# ## deal with masked controls.)
-#
-# ## To further complicate matters, this is done with an
-# ## extra level of inheritance, so that "general" classes like
-# ## MaskedTextCtrl can have all possible attributes,
-# ## while derived classes, like TimeCtrl and MaskedNumCtrl
-# ## can prevent exposure of those optional attributes of their base
-# ## class that do not make sense for their derivation.  Therefore,
-# ## we define
-# ##    BaseMaskedTextCtrl(TextCtrl, MaskedEditMixin)
-# ## and
-# ##    MaskedTextCtrl(BaseMaskedTextCtrl, MaskedEditAccessorsMixin).
-# ##
-# ## This allows us to then derive:
-# ##    MaskedNumCtrl( BaseMaskedTextCtrl )
-# ##
-# ## and not have to expose all the same accessor functions for the
-# ## derived control when they don't all make sense for it.
-# ##
 class MaskedEditAccessorsMixin:
+    """
+    To avoid a ton of boiler-plate, and to automate the getter/setter generation
+    for each valid control parameter so we never forget to add the functions when
+    adding parameters, this class programmatically adds the masked edit mixin
+    parameters to itself.
+    (This makes it easier for Designers like Boa to deal with masked controls.)
+
+    To further complicate matters, this is done with an extra level of inheritance,
+    so that "general" classes like masked.TextCtrl can have all possible attributes,
+    while derived classes, like masked.TimeCtrl and masked.NumCtrl can prevent
+    exposure of those optional attributes of their base class that do not make
+    sense for their derivation.
+
+    Therefore, we define:
+        BaseMaskedTextCtrl(TextCtrl, MaskedEditMixin)
+    and
+        masked.TextCtrl(BaseMaskedTextCtrl, MaskedEditAccessorsMixin).
+
+    This allows us to then derive:
+        masked.NumCtrl( BaseMaskedTextCtrl )
+
+    and not have to expose all the same accessor functions for the
+    derived control when they don't all make sense for it.
+
+    """
 
     # Define the default set of attributes exposed by the most generic masked controls:
     exposed_basectrl_params = MaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys()
@@ -6014,7 +6116,7 @@ class MaskedEditAccessorsMixin:
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 ## these are helper subroutines:
 
-def movetofloat( origvalue, fmtstring, neg, addseparators=False, sepchar = ',',fillchar=' '):
+def _movetofloat( origvalue, fmtstring, neg, addseparators=False, sepchar = ',',fillchar=' '):
     """ addseparators = add separator character every three numerals if True
     """
     fmt0 = fmtstring.split('.')
@@ -6027,7 +6129,7 @@ def movetofloat( origvalue, fmtstring, neg, addseparators=False, sepchar = ',',f
     return (ret,len(fmt1))
 
 
-def isDateType( fmtstring ):
+def _isDateType( fmtstring ):
     """ Checks the mask and returns True if it fits an allowed
         date or datetime format.
     """
@@ -6048,7 +6150,7 @@ def isDateType( fmtstring ):
     if re.match(filter,fmtstring): return True
     return False
 
-def isTimeType( fmtstring ):
+def _isTimeType( fmtstring ):
     """ Checks the mask and returns True if it fits an allowed
         time format.
     """
@@ -6058,19 +6160,19 @@ def isTimeType( fmtstring ):
     return False
 
 
-def isFloatingPoint( fmtstring):
+def _isFloatingPoint( fmtstring):
     filter = re.compile("[ ]?[#]+\.[#]+\n")
     if re.match(filter,fmtstring+"\n"): return True
     return False
 
 
-def isInteger( fmtstring ):
+def _isInteger( fmtstring ):
     filter = re.compile("[#]+\n")
     if re.match(filter,fmtstring+"\n"): return True
     return False
 
 
-def getDateParts( dateStr, dateFmt ):
+def _getDateParts( dateStr, dateFmt ):
     if len(dateStr) > 11: clip = dateStr[0:11]
     else:                 clip = dateStr
     if clip[-2] not in string.digits:
@@ -6092,14 +6194,14 @@ def getDateParts( dateStr, dateFmt ):
         return y,m,d
 
 
-def getDateSepChar(dateStr):
+def _getDateSepChar(dateStr):
     clip   = dateStr[0:10]
     dateSep = (('/' in clip) * '/') + (('-' in clip) * '-') + (('.' in clip) * '.')
     return dateSep
 
 
-def makeDate( year, month, day, dateFmt, dateStr):
-    sep    = getDateSepChar( dateStr)
+def _makeDate( year, month, day, dateFmt, dateStr):
+    sep    = _getDateSepChar( dateStr)
     if dateFmt == "MDY":
         return "%s%s%s%s%s" % (month,sep,day,sep,year)  ## year, month, date parts
     elif dateFmt == "DMY":
@@ -6110,20 +6212,20 @@ def makeDate( year, month, day, dateFmt, dateStr):
         return none
 
 
-def getYear(dateStr,dateFmt):
-    parts = getDateParts( dateStr, dateFmt)
+def _getYear(dateStr,dateFmt):
+    parts = _getDateParts( dateStr, dateFmt)
     return parts[0]
 
-def getMonth(dateStr,dateFmt):
-    parts = getDateParts( dateStr, dateFmt)
+def _getMonth(dateStr,dateFmt):
+    parts = _getDateParts( dateStr, dateFmt)
     return parts[1]
 
-def getDay(dateStr,dateFmt):
-    parts = getDateParts( dateStr, dateFmt)
+def _getDay(dateStr,dateFmt):
+    parts = _getDateParts( dateStr, dateFmt)
     return parts[2]
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
-class test(wx.PySimpleApp):
+class __test(wx.PySimpleApp):
         def OnInit(self):
             from wx.lib.rcsizer import RowColSizer
             self.frame = wx.Frame( None, -1, "MaskedEditMixin 0.0.7 Demo Page #1", size = (700,600))
@@ -6247,7 +6349,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
             self.frame.Close()
 
         def onClickPage(self, event):
-            self.page2 = test2(self.frame,-1,"")
+            self.page2 = __test2(self.frame,-1,"")
             self.page2.Show(True)
 
         def _onCheck1(self,event):
@@ -6279,7 +6381,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class test2(wx.Frame):
+class __test2(wx.Frame):
         def __init__(self, parent, id, caption):
             wx.Frame.__init__( self, parent, id, "MaskedEdit control 0.0.7 Demo Page #2 -- AutoFormats", size = (550,600))
             from wx.lib.rcsizer import RowColSizer
@@ -6365,9 +6467,9 @@ To see a great example of validations in action, try entering a bad email addres
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
 if __name__ == "__main__":
-    app = test(False)
+    app = __test(False)
 
-i=1
+__i=0
 ##
 ## Current Issues:
 ## ===================================
@@ -6426,6 +6528,14 @@ i=1
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.8
+##  1. Fixed bug involving incorrect variable name, causing combobox autocomplete to fail.
+##  2. Added proper support for unicode version of wxPython
+##  3. Added * as mask char meaning "all ansi chars" (ordinals 32-255).
+##  4. Converted doc strings to use reST format, for ePyDoc documentation.
+##  5. Renamed helper functions, classes, etc. not intended to be visible in public
+##     interface to code.
+##
 ##  Version 1.7
 ##  1. Fixed intra-right-insert-field erase, such that it doesn't leave a hole, but instead
 ##     shifts the text to the left accordingly.

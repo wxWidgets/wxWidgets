@@ -44,61 +44,61 @@
 # o wxMaskedNumCtrl -> masked.NumCtrl
 #
 
-"""<html><body>
-<P>
-<B>masked.NumCtrl:</B>
-<UL>
-<LI>allows you to get and set integer or floating point numbers as value,</LI>
-<LI>provides bounds support and optional value limiting,</LI>
-<LI>has the right-insert input style that MaskedTextCtrl supports,</LI>
-<LI>provides optional automatic grouping, sign control and format, grouping and decimal
-character selection, etc. etc.</LI>
-</UL>
-<P>
-Being derived from MaskedTextCtrl, the control only allows
-fixed-point  notation.  That is, it has a fixed (though reconfigurable)
-maximum width for the integer portion and optional fixed width
-fractional portion.
-<P>
-Here's the API:
-<DL><PRE>
-    <B>masked.NumCtrl</B>(
-         parent, id = -1,
-         <B>value</B> = 0,
-         pos = wx.DefaultPosition,
-         size = wx.DefaultSize,
-         style = 0,
-         validator = wx.DefaultValidator,
-         name = "masked.number",
-         <B>integerWidth</B> = 10,
-         <B>fractionWidth</B> = 0,
-         <B>allowNone</B> = False,
-         <B>allowNegative</B> = True,
-         <B>useParensForNegatives</B> = False,
-         <B>groupDigits</B> = False,
-         <B>groupChar</B> = ',',
-         <B>decimalChar</B> = '.',
-         <B>min</B> = None,
-         <B>max</B> = None,
-         <B>limited</B> = False,
-         <B>selectOnEntry</b> = True,
-         <B>foregroundColour</B> = "Black",
-         <B>signedForegroundColour</B> = "Red",
-         <B>emptyBackgroundColour</B> = "White",
-         <B>validBackgroundColour</B> = "White",
-         <B>invalidBackgroundColour</B> = "Yellow",
-         <B>autoSize</B> = True
-         )
-</PRE>
-<UL>
-    <DT><B>value</B>
-    <DD>If no initial value is set, the default will be zero, or
+"""
+masked.NumCtrl:
+  - allows you to get and set integer or floating point numbers as value,</LI>
+  - provides bounds support and optional value limiting,</LI>
+  - has the right-insert input style that MaskedTextCtrl supports,</LI>
+  - provides optional automatic grouping, sign control and format, grouping and decimal
+    character selection, etc. etc.</LI>
+
+
+  Being derived from masked.TextCtrl, the control only allows
+  fixed-point  notation.  That is, it has a fixed (though reconfigurable)
+  maximum width for the integer portion and optional fixed width
+  fractional portion.
+
+  Here's the API::
+
+        from wx.lib.masked import NumCtrl
+
+        NumCtrl(
+             parent, id = -1,
+             value = 0,
+             pos = wx.DefaultPosition,
+             size = wx.DefaultSize,
+             style = 0,
+             validator = wx.DefaultValidator,
+             name = "masked.number",
+             integerWidth = 10,
+             fractionWidth = 0,
+             allowNone = False,
+             allowNegative = True,
+             useParensForNegatives = False,
+             groupDigits = False,
+             groupChar = ',',
+             decimalChar = '.',
+             min = None,
+             max = None,
+             limited = False,
+             selectOnEntry = True,
+             foregroundColour = "Black",
+             signedForegroundColour = "Red",
+             emptyBackgroundColour = "White",
+             validBackgroundColour = "White",
+             invalidBackgroundColour = "Yellow",
+             autoSize = True
+             )
+
+
+  value
+        If no initial value is set, the default will be zero, or
         the minimum value, if specified.  If an illegal string is specified,
         a ValueError will result. (You can always later set the initial
         value with SetValue() after instantiation of the control.)
-    <BR>
-    <DL><B>integerWidth</B>
-    <DD>Indicates how many places to the right of any decimal point
+
+  integerWidth
+        Indicates how many places to the right of any decimal point
         should be allowed in the control.  This will, perforce, limit
         the size of the values that can be entered. This number need
         not include space for grouping characters or the sign, if either
@@ -106,271 +106,276 @@ Here's the API:
         mask is automatically by the control.  The default of 10
         will allow any 32 bit integer value.  The minimum value
         for integerWidth is 1.
-    <BR>
-    <DL><B>fractionWidth</B>
-    <DD>Indicates how many decimal places to show for numeric value.
+
+  fractionWidth
+        Indicates how many decimal places to show for numeric value.
         If default (0), then the control will display and return only
         integer or long values.
-    <BR>
-    <DT><B>allowNone</B>
-    <DD>Boolean indicating whether or not the control is allowed to be
+
+  allowNone
+        Boolean indicating whether or not the control is allowed to be
         empty, representing a value of None for the control.
-    <BR>
-    <DT><B>allowNegative</B>
-    <DD>Boolean indicating whether or not control is allowed to hold
+        
+  allowNegative
+        Boolean indicating whether or not control is allowed to hold
         negative numbers.
-    <BR>
-    <DT><B>useParensForNegatives</B>
-    <DD>If true, this will cause negative numbers to be displayed with ()s
+
+  useParensForNegatives
+        If true, this will cause negative numbers to be displayed with ()s
         rather than -, (although '-' will still trigger a negative number.)
-    <BR>
-    <DT><B>groupDigits</B>
-    <DD>Indicates whether or not grouping characters should be allowed and/or
+
+  groupDigits
+        Indicates whether or not grouping characters should be allowed and/or
         inserted when leaving the control or the decimal character is entered.
-    <BR>
-    <DT><B>groupChar</B>
-    <DD>What grouping character will be used if allowed. (By default ',')
-    <BR>
-    <DT><B>decimalChar</B>
-    <DD>If fractionWidth is > 0, what character will be used to represent
+
+  groupChar
+        What grouping character will be used if allowed. (By default ',')
+
+  decimalChar
+        If fractionWidth is > 0, what character will be used to represent
         the decimal point.  (By default '.')
-    <BR>
-    <DL><B>min</B>
-    <DD>The minimum value that the control should allow.  This can be also be
+
+  min
+        The minimum value that the control should allow.  This can be also be
         adjusted with SetMin().  If the control is not limited, any value
         below this bound will result in a background colored with the current
         invalidBackgroundColour.  If the min specified will not fit into the
         control, the min setting will be ignored.
-    <BR>
-    <DT><B>max</B>
-    <DD>The maximum value that the control should allow.  This can be
+
+  max
+        The maximum value that the control should allow.  This can be
         adjusted with SetMax().  If the control is not limited, any value
         above this bound will result in a background colored with the current
         invalidBackgroundColour.  If the max specified will not fit into the
         control, the max setting will be ignored.
-    <BR>
-    <DT><B>limited</B>
-    <DD>Boolean indicating whether the control prevents values from
+
+  limited
+        Boolean indicating whether the control prevents values from
         exceeding the currently set minimum and maximum values (bounds).
         If False and bounds are set, out-of-bounds values will
         result in a background colored with the current invalidBackgroundColour.
-    <BR>
-    <DT><B>selectOnEntry</B>
-    <DD>Boolean indicating whether or not the value in each field of the
+
+  selectOnEntry
+        Boolean indicating whether or not the value in each field of the
         control should be automatically selected (for replacement) when
         that field is entered, either by cursor movement or tabbing.
         This can be desirable when using these controls for rapid data entry.
-    <BR>
-    <DT><B>foregroundColour</B>
-    <DD>Color value used for positive values of the control.
-    <BR>
-    <DT><B>signedForegroundColour</B>
-    <DD>Color value used for negative values of the control.
-    <BR>
-    <DT><B>emptyBackgroundColour</B>
-    <DD>What background color to use when the control is considered
+
+  foregroundColour
+        Color value used for positive values of the control.
+
+  signedForegroundColour
+        Color value used for negative values of the control.
+
+  emptyBackgroundColour
+        What background color to use when the control is considered
         "empty." (allow_none must be set to trigger this behavior.)
-    <BR>
-    <DT><B>validBackgroundColour</B>
-    <DD>What background color to use when the control value is
+
+  validBackgroundColour
+        What background color to use when the control value is
         considered valid.
-    <BR>
-    <DT><B>invalidBackgroundColour</B>
-    <DD>Color value used for illegal values or values out-of-bounds of the
+
+  invalidBackgroundColour
+        Color value used for illegal values or values out-of-bounds of the
         control when the bounds are set but the control is not limited.
-    <BR>
-    <DT><B>autoSize</B>
-    <DD>Boolean indicating whether or not the control should set its own
+
+  autoSize
+        Boolean indicating whether or not the control should set its own
         width based on the integer and fraction widths.  True by default.
-        <B><I>Note:</I></B> Setting this to False will produce seemingly odd
+        <I>Note:</I> Setting this to False will produce seemingly odd
         behavior unless the control is large enough to hold the maximum
         specified value given the widths and the sign positions; if not,
         the control will appear to "jump around" as the contents scroll.
         (ie. autoSize is highly recommended.)
-</UL>
-<BR>
-<BR>
-<DT><B>masked.EVT_NUM(win, id, func)</B>
-<DD>Respond to a EVT_COMMAND_MASKED_NUMBER_UPDATED event, generated when
-the value changes. Notice that this event will always be sent when the
-control's contents changes - whether this is due to user input or
-comes from the program itself (for example, if SetValue() is called.)
-<BR>
-<BR>
-<DT><B>SetValue(int|long|float|string)</B>
-<DD>Sets the value of the control to the value specified, if
-possible.  The resulting actual value of the control may be
-altered to conform to the format of the control, changed
-to conform with the bounds set on the control if limited,
-or colored if not limited but the value is out-of-bounds.
-A ValueError exception will be raised if an invalid value
-is specified.
-<BR>
-<DT><B>GetValue()</B>
-<DD>Retrieves the numeric value from the control.  The value
-retrieved will be either be returned as a long if the
-fractionWidth is 0, or a float otherwise.
-<BR>
-<BR>
-<DT><B>SetParameters(**kwargs)</B>
-<DD>Allows simultaneous setting of various attributes
-of the control after construction.  Keyword arguments
-allowed are the same parameters as supported in the constructor.
-<BR>
-<BR>
-<DT><B>SetIntegerWidth(value)</B>
-<DD>Resets the width of the integer portion of the control.  The
-value must be >= 1, or an AttributeError exception will result.
-This value should account for any grouping characters that might
-be inserted (if grouping is enabled), but does not need to account
-for the sign, as that is handled separately by the control.
-<DT><B>GetIntegerWidth()</B>
-<DD>Returns the current width of the integer portion of the control,
-not including any reserved sign position.
-<BR>
-<BR>
-<DT><B>SetFractionWidth(value)</B>
-<DD>Resets the width of the fractional portion of the control.  The
-value must be >= 0, or an AttributeError exception will result.  If
-0, the current value of the control will be truncated to an integer
-value.
-<DT><B>GetFractionWidth()</B>
-<DD>Returns the current width of the fractional portion of the control.
-<BR>
-<BR>
-<DT><B>SetMin(min=None)</B>
-<DD>Resets the minimum value of the control.  If a value of <I>None</I>
-is provided, then the control will have no explicit minimum value.
-If the value specified is greater than the current maximum value,
-then the function returns False and the minimum will not change from
-its current setting.  On success, the function returns True.
-<DT><DD>
-If successful and the current value is lower than the new lower
-bound, if the control is limited, the value will be automatically
-adjusted to the new minimum value; if not limited, the value in the
-control will be colored as invalid.
-<DT><DD>
-If min > the max value allowed by the width of the control,
-the function will return False, and the min will not be set.
-<BR>
-<DT><B>GetMin()</B>
-<DD>Gets the current lower bound value for the control.
-It will return None if no lower bound is currently specified.
-<BR>
-<BR>
-<DT><B>SetMax(max=None)</B>
-<DD>Resets the maximum value of the control. If a value of <I>None</I>
-is provided, then the control will have no explicit maximum value.
-If the value specified is less than the current minimum value, then
-the function returns False and the maximum will not change from its
-current setting. On success, the function returns True.
-<DT><DD>
-If successful and the current value is greater than the new upper
-bound, if the control is limited the value will be automatically
-adjusted to this maximum value; if not limited, the value in the
-control will be colored as invalid.
-<DT><DD>
-If max > the max value allowed by the width of the control,
-the function will return False, and the max will not be set.
-<BR>
-<DT><B>GetMax()</B>
-<DD>Gets the current upper bound value for the control.
-It will return None if no upper bound is currently specified.
-<BR>
-<BR>
-<DT><B>SetBounds(min=None,max=None)</B>
-<DD>This function is a convenience function for setting the min and max
-values at the same time.  The function only applies the maximum bound
-if setting the minimum bound is successful, and returns True
-only if both operations succeed.  <B><I>Note:</I></B> leaving out an argument
-will remove the corresponding bound.
-<DT><B>GetBounds()</B>
-<DD>This function returns a two-tuple (min,max), indicating the
-current bounds of the control.  Each value can be None if
-that bound is not set.
-<BR>
-<BR>
-<DT><B>IsInBounds(value=None)</B>
-<DD>Returns <I>True</I> if no value is specified and the current value
-of the control falls within the current bounds.  This function can also
-be called with a value to see if that value would fall within the current
-bounds of the given control.
-<BR>
-<BR>
-<DT><B>SetLimited(bool)</B>
-<DD>If called with a value of True, this function will cause the control
-to limit the value to fall within the bounds currently specified.
-If the control's value currently exceeds the bounds, it will then
-be limited accordingly.
-If called with a value of False, this function will disable value
-limiting, but coloring of out-of-bounds values will still take
-place if bounds have been set for the control.
-<DT><B>GetLimited()</B>
-<DT><B>IsLimited()</B>
-<DD>Returns <I>True</I> if the control is currently limiting the
-value to fall within the current bounds.
-<BR>
-<BR>
-<DT><B>SetAllowNone(bool)</B>
-<DD>If called with a value of True, this function will cause the control
-to allow the value to be empty, representing a value of None.
-If called with a value of False, this function will prevent the value
-from being None.  If the value of the control is currently None,
-ie. the control is empty, then the value will be changed to that
-of the lower bound of the control, or 0 if no lower bound is set.
-<DT><B>GetAllowNone()</B>
-<DT><B>IsNoneAllowed()</B>
-<DD>Returns <I>True</I> if the control currently allows its
-value to be None.
-<BR>
-<BR>
-<DT><B>SetAllowNegative(bool)</B>
-<DD>If called with a value of True, this function will cause the
-control to allow the value to be negative (and reserve space for
-displaying the sign. If called with a value of False, and the
-value of the control is currently negative, the value of the
-control will be converted to the absolute value, and then
-limited appropriately based on the existing bounds of the control
-(if any).
-<DT><B>GetAllowNegative()</B>
-<DT><B>IsNegativeAllowed()</B>
-<DD>Returns <I>True</I> if the control currently permits values
-to be negative.
-<BR>
-<BR>
-<DT><B>SetGroupDigits(bool)</B>
-<DD>If called with a value of True, this will make the control
-automatically add and manage grouping characters to the presented
-value in integer portion of the control.
-<DT><B>GetGroupDigits()</B>
-<DT><B>IsGroupingAllowed()</B>
-<DD>Returns <I>True</I> if the control is currently set to group digits.
-<BR>
-<BR>
-<DT><B>SetGroupChar()</B>
-<DD>Sets the grouping character for the integer portion of the
-control.  (The default grouping character this is ','.
-<DT><B>GetGroupChar()</B>
-<DD>Returns the current grouping character for the control.
-<BR>
-<BR>
-<DT><B>SetSelectOnEntry()</B>
-<DD>If called with a value of <I>True</I>, this will make the control
-automatically select the contents of each field as it is entered
-within the control.  (The default is True.)
-<DT><B>GetSelectOnEntry()</B>
-<DD>Returns <I>True</I> if the control currently auto selects
-the field values on entry.
-<BR>
-<BR>
-<DT><B>SetAutoSize(bool)</B>
-<DD>Resets the autoSize attribute of the control.
-<DT><B>GetAutoSize()</B>
-<DD>Returns the current state of the autoSize attribute for the control.
-<BR>
-<BR>
-</DL>
-</body></html>
+
+--------------------------
+
+masked.EVT_NUM(win, id, func)
+    Respond to a EVT_COMMAND_MASKED_NUMBER_UPDATED event, generated when
+    the value changes. Notice that this event will always be sent when the
+    control's contents changes - whether this is due to user input or
+    comes from the program itself (for example, if SetValue() is called.)
+
+
+SetValue(int|long|float|string)
+    Sets the value of the control to the value specified, if
+    possible.  The resulting actual value of the control may be
+    altered to conform to the format of the control, changed
+    to conform with the bounds set on the control if limited,
+    or colored if not limited but the value is out-of-bounds.
+    A ValueError exception will be raised if an invalid value
+    is specified.
+
+GetValue()
+    Retrieves the numeric value from the control.  The value
+    retrieved will be either be returned as a long if the
+    fractionWidth is 0, or a float otherwise.
+
+
+SetParameters(\*\*kwargs)
+    Allows simultaneous setting of various attributes
+    of the control after construction.  Keyword arguments
+    allowed are the same parameters as supported in the constructor.
+
+
+SetIntegerWidth(value)
+    Resets the width of the integer portion of the control.  The
+    value must be >= 1, or an AttributeError exception will result.
+    This value should account for any grouping characters that might
+    be inserted (if grouping is enabled), but does not need to account
+    for the sign, as that is handled separately by the control.
+GetIntegerWidth()
+    Returns the current width of the integer portion of the control,
+    not including any reserved sign position.
+
+
+SetFractionWidth(value)
+    Resets the width of the fractional portion of the control.  The
+    value must be >= 0, or an AttributeError exception will result.  If
+    0, the current value of the control will be truncated to an integer
+    value.
+GetFractionWidth()
+    Returns the current width of the fractional portion of the control.
+
+
+SetMin(min=None)
+    Resets the minimum value of the control.  If a value of <I>None</I>
+    is provided, then the control will have no explicit minimum value.
+    If the value specified is greater than the current maximum value,
+    then the function returns False and the minimum will not change from
+    its current setting.  On success, the function returns True.
+
+    If successful and the current value is lower than the new lower
+    bound, if the control is limited, the value will be automatically
+    adjusted to the new minimum value; if not limited, the value in the
+    control will be colored as invalid.
+
+    If min > the max value allowed by the width of the control,
+    the function will return False, and the min will not be set.
+
+GetMin()
+    Gets the current lower bound value for the control.
+    It will return None if no lower bound is currently specified.
+
+
+SetMax(max=None)
+    Resets the maximum value of the control. If a value of <I>None</I>
+    is provided, then the control will have no explicit maximum value.
+    If the value specified is less than the current minimum value, then
+    the function returns False and the maximum will not change from its
+    current setting. On success, the function returns True.
+
+    If successful and the current value is greater than the new upper
+    bound, if the control is limited the value will be automatically
+    adjusted to this maximum value; if not limited, the value in the
+    control will be colored as invalid.
+
+    If max > the max value allowed by the width of the control,
+    the function will return False, and the max will not be set.
+
+GetMax()
+    Gets the current upper bound value for the control.
+    It will return None if no upper bound is currently specified.
+
+
+SetBounds(min=None,max=None)
+    This function is a convenience function for setting the min and max
+    values at the same time.  The function only applies the maximum bound
+    if setting the minimum bound is successful, and returns True
+    only if both operations succeed.  <B><I>Note:</I> leaving out an argument
+    will remove the corresponding bound.
+GetBounds()
+    This function returns a two-tuple (min,max), indicating the
+    current bounds of the control.  Each value can be None if
+    that bound is not set.
+
+
+IsInBounds(value=None)
+    Returns <I>True</I> if no value is specified and the current value
+    of the control falls within the current bounds.  This function can also
+    be called with a value to see if that value would fall within the current
+    bounds of the given control.
+
+
+SetLimited(bool)
+    If called with a value of True, this function will cause the control
+    to limit the value to fall within the bounds currently specified.
+    If the control's value currently exceeds the bounds, it will then
+    be limited accordingly.
+    If called with a value of False, this function will disable value
+    limiting, but coloring of out-of-bounds values will still take
+    place if bounds have been set for the control.
+
+GetLimited()
+
+IsLimited()
+    Returns <I>True</I> if the control is currently limiting the
+    value to fall within the current bounds.
+
+
+SetAllowNone(bool)
+    If called with a value of True, this function will cause the control
+    to allow the value to be empty, representing a value of None.
+    If called with a value of False, this function will prevent the value
+    from being None.  If the value of the control is currently None,
+    ie. the control is empty, then the value will be changed to that
+    of the lower bound of the control, or 0 if no lower bound is set.
+
+GetAllowNone()
+
+IsNoneAllowed()
+    Returns <I>True</I> if the control currently allows its
+    value to be None.
+
+
+SetAllowNegative(bool)
+    If called with a value of True, this function will cause the
+    control to allow the value to be negative (and reserve space for
+    displaying the sign. If called with a value of False, and the
+    value of the control is currently negative, the value of the
+    control will be converted to the absolute value, and then
+    limited appropriately based on the existing bounds of the control
+    (if any).
+
+GetAllowNegative()
+
+IsNegativeAllowed()
+    Returns <I>True</I> if the control currently permits values
+    to be negative.
+
+
+SetGroupDigits(bool)
+    If called with a value of True, this will make the control
+    automatically add and manage grouping characters to the presented
+    value in integer portion of the control.
+
+GetGroupDigits()
+
+IsGroupingAllowed()
+    Returns <I>True</I> if the control is currently set to group digits.
+
+
+SetGroupChar()
+    Sets the grouping character for the integer portion of the
+    control.  (The default grouping character this is ','.
+GetGroupChar()
+    Returns the current grouping character for the control.
+
+
+SetSelectOnEntry()
+    If called with a value of <I>True</I>, this will make the control
+    automatically select the contents of each field as it is entered
+    within the control.  (The default is True.)
+    GetSelectOnEntry()
+    Returns <I>True</I> if the control currently auto selects
+    the field values on entry.
+
+
+SetAutoSize(bool)
+    Resets the autoSize attribute of the control.
+GetAutoSize()
+    Returns the current state of the autoSize attribute for the control.
+
 """
 
 import  copy
@@ -396,6 +401,10 @@ EVT_NUM = wx.PyEventBinder(wxEVT_COMMAND_MASKED_NUMBER_UPDATED, 1)
 #----------------------------------------------------------------------------
 
 class NumberUpdatedEvent(wx.PyCommandEvent):
+    """
+    Used to fire an EVT_NUM event whenever the value in a NumCtrl changes.
+    """
+
     def __init__(self, id, value = 0, object=None):
         wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, id)
 
@@ -410,9 +419,11 @@ class NumberUpdatedEvent(wx.PyCommandEvent):
 
 #----------------------------------------------------------------------------
 class NumCtrlAccessorsMixin:
-    # Define masked.NumCtrl's list of attributes having their own
-    # Get/Set functions, ignoring those that make no sense for
-    # an numeric control.
+    """
+    Defines masked.NumCtrl's list of attributes having their own
+    Get/Set functions, ignoring those that make no sense for
+    a numeric control.
+    """
     exposed_basectrl_params = (
          'decimalChar',
          'shiftDecimalChar',
@@ -449,6 +460,11 @@ class NumCtrlAccessorsMixin:
 #----------------------------------------------------------------------------
 
 class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
+    """
+    Masked edit control supporting "native" numeric values, ie. .SetValue(3), for
+    example, and supporting a variety of formatting options, including automatic
+    rounding specifiable precision, grouping and decimal place characters, etc.
+    """
 
 
     valid_ctrl_params = {
@@ -591,7 +607,8 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 
     def SetParameters(self, **kwargs):
         """
-        This routine is used to initialize and reconfigure the control:
+        This function is used to initialize and reconfigure the control.
+        See TimeCtrl module overview for available parameters.
         """
 ##        dbg('NumCtrl::SetParameters', indent=1)
         maskededit_kwargs = {}
@@ -1731,7 +1748,7 @@ if __name__ == '__main__':
     except:
         traceback.print_exc()
 
-i=0
+__i=0
 ## To-Do's:
 ## =============================##
 ##   1. Add support for printf-style format specification.

@@ -21,11 +21,12 @@ class TestPanel( scrolled.ScrolledPanel ):
         
         text1 = wx.StaticText( self, -1, "12-hour format:")
         self.time12 = masked.TimeCtrl( self, -1, name="12 hour control" )
-        spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
+        h = self.time12.GetSize().height
+        spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,h), wx.SP_VERTICAL )
         self.time12.BindSpinButton( spin1 )
 
         text2 = wx.StaticText( self, -1, "24-hour format:")
-        spin2 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
+        spin2 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,h), wx.SP_VERTICAL )
         self.time24 = masked.TimeCtrl(
                         self, -1, name="24 hour control", fmt24hr=True,
                         spinButton = spin2
@@ -226,7 +227,10 @@ def runTest( frame, nb, log ):
 
 #----------------------------------------------------------------------
 import wx.lib.masked.timectrl as timectl
-overview = timectl.__doc__
+overview = """<html>
+<PRE><FONT SIZE=-1>
+""" + timectl.__doc__ + """
+</FONT></PRE>"""
 
 if __name__ == '__main__':
     import sys,os
