@@ -154,7 +154,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     wxFont font = m_fontData.GetInitialFont();
     if( font.Ok() )
     {
-        wxNativeFontInfo *info = font.GetNativeFontInfo();
+        const wxNativeFontInfo *info = font.GetNativeFontInfo();
 
         if ( info )
         {
