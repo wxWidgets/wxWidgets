@@ -19,6 +19,7 @@
         ../../contrib/samples/*.bkl
         ../../contrib/samples/*/*.bkl
         ../../contrib/samples/*/*/*.bkl
+        ../../contrib/utils/*/*.bkl
     </input>
 
     <!-- List of output formats to generate: -->
