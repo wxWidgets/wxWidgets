@@ -107,7 +107,8 @@ void wxDialog::Init()
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
-bool wxDialog::Create(wxWindow *parent, wxWindowID id,
+bool wxDialog::Create(wxWindow *parent,
+                      wxWindowID id,
                       const wxString& title,
                       const wxPoint& pos,
                       const wxSize& size,
@@ -122,9 +123,8 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     wxTopLevelWindows.Append(this);
 
-    //  windowFont = wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL);
-
-    if (parent) parent->AddChild(this);
+    if ( parent )
+        parent->AddChild(this);
 
     if ( id == -1 )
         m_windowId = (int)NewControlId();
@@ -159,6 +159,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     if (m_exStyle & wxDIALOG_EX_CONTEXTHELP)
         extendedStyle |= WS_EX_CONTEXTHELP;
 #endif
+
     // Allows creation of dialogs with & without captions under MSWindows,
     // resizeable or not (but a resizeable dialog always has caption -
     // otherwise it would look too strange)

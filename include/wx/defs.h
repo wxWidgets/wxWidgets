@@ -912,10 +912,15 @@ enum wxStretch
 #define wxTINY_CAPTION_VERT     0x0080
 #define wxRESIZE_BORDER         0x0040
 
+#define wxDIALOG_NO_PARENT      0x0001  // Don't make owned by apps top window
+#define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
+#define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
+
 // deprecated versions defined for compatibility reasons
 #define wxRESIZE_BOX            wxMAXIMIZE_BOX
 #define wxTHICK_FRAME           wxRESIZE_BORDER
 
+// obsolete styles, unused any more
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
 
@@ -1155,12 +1160,6 @@ enum wxStretch
 #define wxSP_3DBORDER         0x0200
 #define wxSP_FULLSASH         0x0400
 #define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
-
-/*
- * wxFrame extra flags
- */
-// No title on taskbar
-#define wxFRAME_TOOL_WINDOW 0x0004
 
 /*
  * wxTabCtrl flags

@@ -666,12 +666,12 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
   WXDWORD extendedStyle = MakeExtendedStyle(style);
 
   // make all frames appear in the win9x shell taskbar unless
-  // wxFRAME_TOOL_WINDOW is explicitly given - without giving them
+  // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without giving them
   // WS_EX_APPWINDOW style, the child (i.e. owned) frames wouldn't appear in it
 #if !defined(__WIN16__) && !defined(__SC__)
-  if (style & wxFRAME_TOOL_WINDOW)
+  if ( style & wxFRAME_TOOL_WINDOW )
       extendedStyle |= WS_EX_TOOLWINDOW;
-  else
+  else if ( !(style & wxFRAME_NO_TASKBAR) )
       extendedStyle |= WS_EX_APPWINDOW;
 #endif
 

@@ -34,12 +34,15 @@ application windows.
 \twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{Stay on top of other windows. Windows only.}
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu.}
 \twocolitem{\windowstyle{wxSIMPLE\_BORDER}}{Displays no border or decorations. GTK and Windows only.}
-\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window (Unix only).}
-\twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{Causes the frame to be above the parent window in the
-z-order and not shown in the taskbar. Without this style, frames are created as top-level windows that may be obscured by
-the parent window, and frame titles are shown in the taskbar. Windows and GTK.}
-\twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Causes a frame with a small titlebar to be created;
-the frame title does not appear in the taskbar. Windows only.}
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window.}
+\twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Causes a frame with a small
+titlebar to be created; the frame does not appear in the taskbar under Windows.}
+\twocolitem{\windowstyle{wxFRAME\_NO\_TASKBAR}}{Creates a normal frame but if
+this frame has a parent it does not appear in the taskbar under Windows. Note
+that a frame without parent will still appear in the taskbar even with this
+style. Has no effect under other platforms.}
+\twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{Unused any longer, use
+wxFRAME\_TOOL\_WINDOW or wxFRAME\_NO\_TASKBAR instead}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
 caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended

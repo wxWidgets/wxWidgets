@@ -2366,14 +2366,22 @@ bool wxWindow::MSWCreate(int id,
     }
 #endif // 0
 
-    HWND hParent = (HWND)NULL;
-    if ( parent )
-        hParent = (HWND) parent->GetHWND();
+    HWND hParent = parent ? GetHwndOf(parent) : NULL;
 
     wxWndHook = this;
 
     if ( dialog_template )
     {
+        // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
+        // app window as parent - this avoids creating modal dialogs without
+        // parent
+        if ( !hParent && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
+        {
+            wxWindow *winTop = wxTheApp->GetTopWindow();
+            if ( winTop )
+                hParent = GetHwndOf(winTop);
+        }
+
         m_hWnd = (WXHWND)::CreateDialog(wxGetInstance(),
                                         dialog_template,
                                         hParent,
@@ -2381,27 +2389,37 @@ bool wxWindow::MSWCreate(int id,
 
         if ( m_hWnd == 0 )
         {
-            wxLogError(_("Can't find dummy dialog template!\nCheck resource include path for finding wx.rc."));
+            wxLogError(_("Can't find dialog template '%s'!\nCheck resource include path for finding wx.rc."),
+                       dialog_template);
 
             return FALSE;
         }
-        if (extendedStyle != 0)
+
+        if ( extendedStyle != 0 )
         {
             ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, extendedStyle);
             ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
-                SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                           SWP_NOSIZE |
+                           SWP_NOMOVE |
+                           SWP_NOZORDER |
+                           SWP_NOACTIVATE);
         }
+
 #if defined(__WIN95__)
         // For some reason, the system menu is activated when we use the
         // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
         if (extendedStyle & WS_EX_CONTEXTHELP)
         {
-            if (wxTheApp->GetTopWindow() && (wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame))))
+            wxFrame *winTop = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
+            if ( winTop )
             {
-                wxIcon icon = ((wxFrame*)wxTheApp->GetTopWindow())->GetIcon();
-                if (icon.Ok())
-                    SendMessage(GetHwnd(), WM_SETICON,
-                        (WPARAM)TRUE, (LPARAM)(HICON) icon.GetHICON());
+                wxIcon icon = winTop->GetIcon();
+                if ( icon.Ok() )
+                {
+                    ::SendMessage(GetHwnd(), WM_SETICON,
+                                  (WPARAM)TRUE,
+                                  (LPARAM)GetHiconOf(icon));
+                }
             }
         }
 #endif // __WIN95__
@@ -2426,7 +2444,7 @@ bool wxWindow::MSWCreate(int id,
             wxLogLastError(wxT("MoveWindow"));
         }
     }
-    else
+    else // creating a normal window, not a dialog
     {
         int controlId = 0;
         if ( style & WS_CHILD )
@@ -2462,6 +2480,7 @@ bool wxWindow::MSWCreate(int id,
     }
 
     wxWndHook = NULL;
+
 #ifdef __WXDEBUG__
     wxNode* node = wxWinHandleList->Member(this);
     if (node)
@@ -2472,7 +2491,8 @@ bool wxWindow::MSWCreate(int id,
             wxLogError(wxT("A second HWND association is being added for the same window!"));
         }
     }
-#endif
+#endif // Debug
+
     wxAssociateWinWithHandle((HWND) m_hWnd, this);
 
     return TRUE;

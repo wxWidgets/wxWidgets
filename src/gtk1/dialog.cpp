@@ -632,7 +632,9 @@ int wxDialog::ShowModal()
        return GetReturnCode();
     }
 
-    if ( !GetParent() )
+    // use the apps top level window as parent if none given unless explicitly
+    // forbidden
+    if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
     {
         wxWindow *parent = wxTheApp->GetTopWindow();
         if ( parent && parent != this )
