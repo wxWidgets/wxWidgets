@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
+
 // Define a new application type
 class MyApp: public wxApp
 { public:
@@ -62,9 +66,8 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
+#else
+  frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
   // Make a menubar

@@ -24,8 +24,18 @@
 #include <wx/toolbar.h>
 
 #ifdef __WXGTK__
-#include "folder.xpm"
+#include "mondrian.xpm"
+#include "bitmaps/new.xpm"
+#include "bitmaps/open.xpm"
+#include "bitmaps/save.xpm"
+#include "bitmaps/copy.xpm"
+#include "bitmaps/cut.xpm"
+// #include "bitmaps/paste.xpm"
+#include "bitmaps/print.xpm"
+#include "bitmaps/preview.xpm"
+#include "bitmaps/help.xpm"
 #endif
+
 
 #include "mdi.h"
 
@@ -51,9 +61,6 @@ bool MyApp::OnInit(void)
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mdi_icn"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
 #endif
 
   // Make a menubar
@@ -136,9 +143,8 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
       // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
       subframe->SetIcon(wxIcon("chrt_icn"));
-#endif
-#ifdef __X__
-      subframe->SetIcon(wxIcon("aiai.xbm"));
+#else
+      subframe->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
       // Give it a status line
@@ -311,14 +317,15 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     bitmaps[6] = new wxBitmap("icon7", wxBITMAP_TYPE_RESOURCE);
     bitmaps[7] = new wxBitmap("icon8", wxBITMAP_TYPE_RESOURCE);
 #else
-    bitmaps[0] = new wxBitmap( folder_xpm );
-    bitmaps[1] = new wxBitmap( folder_xpm );
-    bitmaps[2] = new wxBitmap( folder_xpm );
-    bitmaps[3] = new wxBitmap( folder_xpm );
-    bitmaps[4] = new wxBitmap( folder_xpm );
-    bitmaps[5] = new wxBitmap( folder_xpm );
-    bitmaps[6] = new wxBitmap( folder_xpm );
-    bitmaps[7] = new wxBitmap( folder_xpm );
+  bitmaps[0] = new wxBitmap( new_xpm );
+  bitmaps[1] = new wxBitmap( open_xpm );
+  bitmaps[2] = new wxBitmap( save_xpm );
+  bitmaps[3] = new wxBitmap( copy_xpm );
+  bitmaps[4] = new wxBitmap( cut_xpm );
+//  bitmaps[5] = new wxBitmap( paste_xpm );
+  bitmaps[5] = new wxBitmap( preview_xpm );
+  bitmaps[6] = new wxBitmap( print_xpm );
+  bitmaps[7] = new wxBitmap( help_xpm );
 #endif
 
 #ifdef __WXMSW__

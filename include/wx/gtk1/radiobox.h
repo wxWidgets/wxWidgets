@@ -79,6 +79,9 @@ class wxRadioBox: public wxControl
   
     GtkRadioButton *m_radio;
     
+  public:
+  
+    bool            m_alreadySent;
 };
 
 #endif // __GTKRADIOBOXH__

@@ -50,7 +50,7 @@ IMPLEMENT_WXWIN_MAIN
 bool MyApp::OnInit(void)
 {
   m_canvasTextColour = wxColour("BLACK");
-  m_canvasFont = *wxNORMAL_FONT;
+  m_canvasFont = *wxSWISS_FONT;
 
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, "wxWindows dialogs example", wxPoint(50, 50), wxSize(400, 300));

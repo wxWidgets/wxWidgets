@@ -24,6 +24,10 @@
 
 #include  "wx/dnd.h"
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // Derive 2 simple classes which just put in the listbox the strings (text or
 // file names) we drop on them
@@ -142,6 +146,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 #ifdef __WXMSW__
   // frame icon and status bar
   SetIcon(wxIcon("mondrian"));
+#else
+  SetIcon(wxIcon(mondrian_xpm));
 #endif  
   
   const int widths[] = { -1 };

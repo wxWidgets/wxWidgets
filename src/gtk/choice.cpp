@@ -19,15 +19,14 @@
 // wxChoice
 //-----------------------------------------------------------------------------
 
-void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-  wxChoice *choice = (wxChoice*)data;
-  wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId());
+  wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
   event.SetInt( choice->GetSelection() );
   wxString tmp( choice->GetStringSelection() );
   event.SetString( WXSTRINGCAST(tmp) );
   event.SetEventObject(choice);
-  choice->ProcessEvent(event);
+  choice->GetEventHandler()->ProcessEvent(event);
 };
 
 //-----------------------------------------------------------------------------
@@ -103,8 +102,8 @@ void wxChoice::Clear(void)
 
 int wxChoice::FindString( const wxString &string ) const
 {
-  // If you read this code once and you think you undestand
-  // it, then you are very wrong. RR
+  // If you read this code once and you think you understand
+  // it, then you are very wrong. Robert Roebling.
   
   GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   int count = 0;
@@ -112,7 +111,8 @@ int wxChoice::FindString( const wxString &string ) const
   while (child)
   {
     GtkBin *bin = GTK_BIN( child->data );
-    GtkLabel *label = GTK_LABEL(bin->child);
+    GtkLabel *label = NULL;
+    if (bin->child) label = GTK_LABEL(bin->child);
     if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
     if (string == label->label) return count;
     child = child->next;
@@ -151,7 +151,8 @@ wxString wxChoice::GetString( int n ) const
     GtkBin *bin = GTK_BIN( child->data );
     if (count == n)
     {
-      GtkLabel *label = GTK_LABEL(bin->child);
+      GtkLabel *label = NULL;
+      if (bin->child) label = GTK_LABEL(bin->child);
       if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       return label->label;
     };
@@ -188,6 +189,8 @@ void wxChoice::SetSelection( int n )
 {
   int tmp = n;
   gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
+  
+  gtk_choice_clicked_callback( NULL, this );
 };
 
 void wxChoice::SetStringSelection( const wxString &string )

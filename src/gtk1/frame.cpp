@@ -33,7 +33,7 @@ extern wxList wxPendingDelete;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// size
+// set size
 
 void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
@@ -64,6 +64,19 @@ bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(
   win->Close();
 
   return TRUE;
+};
+
+//-----------------------------------------------------------------------------
+// configure
+
+gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
+{
+  if (!win->HasVMT()) return FALSE;
+  
+  win->m_x = event->x;
+  win->m_y = event->y;
+  
+  return FALSE;
 };
 
 //-----------------------------------------------------------------------------
@@ -143,6 +156,9 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
   gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
     GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
 
+  gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
+    GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
+    
   PostCreation();
 
   gtk_widget_realize( m_mainWindow );
@@ -210,10 +226,11 @@ void wxFrame::GetClientSize( int *width, int *height ) const
   };
 };
 
-void wxFrame::GtkOnSize( int x, int y, int width, int height )
+void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
 {
-  m_x = x;
-  m_y = y;
+  // due to a bug in gtk, x,y are always 0
+  // m_x = x;
+  // m_y = y;
 
   if ((m_height == height) && (m_width == width) &&
       (m_sizeSet)) return;
@@ -240,7 +257,7 @@ void wxFrame::GtkOnSize( int x, int y, int width, int height )
   // m_wxwindow just like any other window.
 
 //  not really needed
-  gtk_widget_set_usize( m_mainWindow, width, height );
+//  gtk_widget_set_usize( m_mainWindow, width, height );
 
   if (m_frameMenuBar)
   {

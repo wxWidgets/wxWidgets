@@ -26,12 +26,11 @@ class wxButton;
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
-void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
 {
-  wxButton *button = (wxButton*)data;
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
-  button->ProcessEvent(event);
+  button->GetEventHandler()->ProcessEvent(event);
 };
 
 //-----------------------------------------------------------------------------

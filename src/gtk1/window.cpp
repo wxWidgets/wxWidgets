@@ -27,7 +27,7 @@
 #include "wx/mdi.h"
 #include "wx/notebook.h"
 #include "wx/statusbr.h"
-#include "wx/treectrl.h"
+//#include "wx/treectrl.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
 #include "wx/gtk/win_gtk.h"
@@ -1064,7 +1064,8 @@ void wxWindow::ImplementSetPosition(void)
     if (IsKindOf(CLASSINFO(wxFrame)) ||
         IsKindOf(CLASSINFO(wxDialog)))
     {
-      gtk_widget_set_uposition( m_widget, m_x, m_y );
+      if ((m_x != -1) || (m_y != -1))
+        gtk_widget_set_uposition( m_widget, m_x, m_y );
     }
     else
     {
@@ -1362,7 +1363,7 @@ void wxWindow::Fit(void)
 
     node = node->Next();
   }
-  SetClientSize(maxX + 5, maxY + 5);
+  SetClientSize(maxX + 5, maxY + 10);
 };
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
@@ -1473,7 +1474,7 @@ void wxWindow::AddChild( wxWindow *child )
   
   // wxFrame has a private AddChild
   
-  if (IS_KIND_OF(this,wxFrame))
+  if (IS_KIND_OF(this,wxFrame) && !IS_KIND_OF(this,wxMDIChildFrame))
   {
     wxFrame *frame = (wxFrame*)this;
     frame->AddChild( child );
@@ -1603,12 +1604,6 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     gdk_rect.y = rect->y;
     gdk_rect.width = rect->width;
     gdk_rect.height = rect->height;
-    
-    if (IS_KIND_OF(this,wxTreeCtrl))
-    {
-      printf( "x: %d y: %d w: %d h: %d .\n",
-        gdk_rect.x, gdk_rect.y, gdk_rect.width, gdk_rect.height );
-    }
     
     if (m_wxwindow)
       gtk_widget_draw( m_wxwindow, &gdk_rect );

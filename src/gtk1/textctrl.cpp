@@ -59,7 +59,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   PreCreation( parent, id, pos, size, style, name );
 
   bool bMultiLine = (style & wxTE_MULTILINE) != 0;
-  if ( bMultiLine ) {
+  if ( bMultiLine ) 
+  {
     // a multi-line edit control: create a vertical scrollbar by default and
     // horizontal if requested
     bool bHasHScrollbar = (style & wxHSCROLL) != 0;

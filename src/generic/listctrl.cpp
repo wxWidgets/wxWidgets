@@ -1103,6 +1103,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
       m_current = line;
       HilightAll( FALSE );
       m_current->ReverseHilight();
+      RefreshLine( m_current );
     }
     else
     {
@@ -1110,6 +1111,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
       {
         m_current = line;
         m_current->ReverseHilight();
+        RefreshLine( m_current );
       }
       else if (event.ControlDown())
       {
@@ -1143,21 +1145,20 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 	  RefreshLine( test_line );
 	  node = node->Next();
 	}
-	return;
       }
       else 
       {
         m_current = line;
         HilightAll( FALSE );
         m_current->ReverseHilight();
+        RefreshLine( m_current );
       }
     }
-    RefreshLine( m_current );
     if (m_current != oldCurrent)
     {
+      RefreshLine( oldCurrent );
       UnfocusLine( oldCurrent );
       FocusLine( m_current );
-      RefreshLine( oldCurrent );
     };
     m_lastOnSame = (m_current == oldCurrent);
     return;
@@ -1198,15 +1199,15 @@ void wxListMainWindow::MoveToFocus( void )
 
 void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
 {
-  UnfocusLine( m_current );
   if ((m_mode & wxLC_SINGLE_SEL) || (m_usedKeys == FALSE)) m_current->Hilight( FALSE );
   wxListLineData *oldCurrent = m_current;
   m_current = newCurrent;
   MoveToFocus();
   if (shiftDown || (m_mode & wxLC_SINGLE_SEL)) m_current->Hilight( TRUE );
-  FocusLine( m_current );
   RefreshLine( m_current );
   RefreshLine( oldCurrent );
+  FocusLine( m_current );
+  UnfocusLine( oldCurrent );
 };
 
 void wxListMainWindow::OnChar( wxKeyEvent &event )
@@ -1310,14 +1311,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
       if (!(m_mode & wxLC_SINGLE_SEL))
       {
         wxListLineData *oldCurrent = m_current;
-        UnfocusLine( m_current );
         m_current->ReverseHilight();
         wxNode *node = m_lines.Member( m_current )->Next();       
         if (node) m_current = (wxListLineData*)node->Data();
         MoveToFocus();
-        FocusLine( m_current );
-	RefreshLine( m_current );
 	RefreshLine( oldCurrent );
+	RefreshLine( m_current );
+        UnfocusLine( oldCurrent );
+        FocusLine( m_current );
       };
     };
     break;
@@ -1828,6 +1829,7 @@ void wxListMainWindow::DeleteColumn( int col )
 void wxListMainWindow::DeleteAllItems( void )
 {
   m_dirty = TRUE;
+  m_current = NULL;
   wxNode *node = m_lines.First();
   while (node)
   {
@@ -1836,12 +1838,12 @@ void wxListMainWindow::DeleteAllItems( void )
     node = node->Next();
   };
   m_lines.Clear();
-  m_current = NULL;
 };
 
 void wxListMainWindow::DeleteEverything( void )
 {
   m_dirty = TRUE;
+  m_current = NULL;
   wxNode *node = m_lines.First();
   while (node)
   {

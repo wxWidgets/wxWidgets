@@ -20,10 +20,8 @@
 // wxListBox
 //-----------------------------------------------------------------------------
 
-void gtk_listitem_select_callback( GtkWidget *widget, gpointer data )
+void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
 {
-  wxListBox *listbox = (wxListBox*)data;
-
   wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
   
   event.SetInt( listbox->GetIndex( widget ) );
@@ -32,10 +30,9 @@ void gtk_listitem_select_callback( GtkWidget *widget, gpointer data )
   GtkLabel *label = GTK_LABEL( bin->child );
   wxString tmp( label->label );
   event.SetString( WXSTRINGCAST(tmp) );
-  
   event.SetEventObject( listbox );
   
-  listbox->ProcessEvent( event );
+  listbox->GetEventHandler()->ProcessEvent( event );
 };
 
 //-----------------------------------------------------------------------------

@@ -292,6 +292,8 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
   
   (void) new wxButton( &dialog, wxID_OK, "Return", wxPoint(w/2-40,h-50), wxSize(80,30) );
   
+  dialog.Fit();
+  
   dialog.ShowModal();
 };
 

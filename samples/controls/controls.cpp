@@ -26,6 +26,10 @@
 
 #include "wx/notebook.h"
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -45,10 +49,17 @@ class MyPanel: public wxPanel
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxButtons( wxCommandEvent &event );
+    void OnChoice( wxCommandEvent &event );
+    void OnChoiceButtons( wxCommandEvent &event );
+    void OnCombo( wxCommandEvent &event );
+    void OnComboButtons( wxCommandEvent &event );
+    void OnRadio( wxCommandEvent &event );
+    void OnRadioButtons( wxCommandEvent &event );
     
     wxListBox   *m_listbox;
     wxChoice    *m_choice;
     wxComboBox  *m_combo;
+    wxRadioBox  *m_radio;
     
     wxTextCtrl  *m_text;
     wxNotebook  *m_notebook;    
@@ -93,9 +104,8 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
+#else
+  frame->SetIcon(wxIcon( mondrian_xpm ));
 #endif
 
   wxMenu *file_menu = new wxMenu;
@@ -132,8 +142,16 @@ const  ID_CHOICE_CLEAR      = 123;
 const  ID_CHOICE_APPEND     = 124;
 
 const  ID_COMBO             = 140;
+const  ID_COMBO_SEL_NUM     = 141;
+const  ID_COMBO_SEL_STR     = 142;
+const  ID_COMBO_CLEAR       = 143;
+const  ID_COMBO_APPEND      = 144;
 
 const  ID_TEXT              = 150;
+
+const  ID_RADIOBOX          = 160;
+const  ID_RADIOBOX_SEL_NUM  = 161;
+const  ID_RADIOBOX_SEL_STR  = 162;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)
@@ -142,6 +160,19 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_LISTBOX_SEL_STR,    MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_CLEAR,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_APPEND,     MyPanel::OnListBoxButtons)
+  EVT_CHOICE    (ID_CHOICE,             MyPanel::OnChoice)
+  EVT_BUTTON    (ID_CHOICE_SEL_NUM,     MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_SEL_STR,     MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_CLEAR,       MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_APPEND,      MyPanel::OnChoiceButtons)
+  EVT_CHOICE    (ID_COMBO,              MyPanel::OnCombo)
+  EVT_BUTTON    (ID_COMBO_SEL_NUM,      MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_SEL_STR,      MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_CLEAR,        MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_APPEND,       MyPanel::OnComboButtons)
+  EVT_RADIOBOX  (ID_RADIOBOX,           MyPanel::OnRadio)
+  EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,   MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_RADIOBOX_SEL_STR,   MyPanel::OnRadioButtons)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
@@ -154,18 +185,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxString choices[] =
   {
     "This",
-    "is",
-    "a",
-    "wonderfull example.",
-    "Or",
-    "what",
-    "do",
-    "you",
-    "think?"
+    "is a",
+    "wonderfull",
+    "example.",
   };
   
   wxPanel *panel = new wxPanel(m_notebook);
-  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 9, choices );
+  m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
@@ -173,15 +199,29 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxList");
   
   panel = new wxPanel(m_notebook);
-  m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 9, choices );
+  m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 4, choices );
+  (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_CHOICE_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   m_notebook->AddPage(panel, "wxChoice");
   
   panel = new wxPanel(m_notebook);
-  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 9, choices );
+  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(170,-1), 4, choices );
+  (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_COMBO_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   m_notebook->AddPage(panel, "wxComboBox");
   
   wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(120,100), wxTE_MULTILINE );
   m_notebook->AddPage( text, "wxTextCtrl" );
+  
+  panel = new wxPanel(m_notebook);
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 4, choices );
+  (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(200,30), wxSize(100,30) );
+  (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(200,80), wxSize(100,30) );
+  m_notebook->AddPage(panel, "wxRadioBox");
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -196,16 +236,128 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-  m_text->WriteText( "ListBox Event:\n");
   m_text->WriteText( "ListBox selection string is: " );
   m_text->WriteText( event.GetString() );
   m_text->WriteText( "\n" );
 }
 
-void MyPanel::OnListBoxButtons( wxCommandEvent &WXUNUSED(event) )
+void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 {
-	if (m_notebook->GetPageCount() > 1)
-		m_notebook->DeletePage( 1 );
+  switch (event.GetId())
+  {
+    case ID_LISTBOX_SEL_NUM:
+    {
+      m_listbox->SetSelection( 2 );
+      break;
+    }
+    case ID_LISTBOX_SEL_STR:
+    {
+      m_listbox->SetStringSelection( "This" );
+      break;
+    }
+    case ID_LISTBOX_CLEAR:
+    {
+      m_listbox->Clear();
+      break;
+    }
+    case ID_LISTBOX_APPEND:
+    {
+      m_listbox->Append( "Hi!" );
+      break;
+    }
+  }
+}
+
+void MyPanel::OnChoice( wxCommandEvent &event )
+{
+  m_text->WriteText( "Choice selection string is: " );
+  m_text->WriteText( event.GetString() );
+  m_text->WriteText( "\n" );
+}
+
+void MyPanel::OnChoiceButtons( wxCommandEvent &event )
+{
+  switch (event.GetId())
+  {
+    case ID_CHOICE_SEL_NUM:
+    {
+      m_choice->SetSelection( 2 );
+      break;
+    }
+    case ID_CHOICE_SEL_STR:
+    {
+      m_choice->SetStringSelection( "This" );
+      break;
+    }
+    case ID_CHOICE_CLEAR:
+    {
+      m_choice->Clear();
+      break;
+    }
+    case ID_CHOICE_APPEND:
+    {
+      m_choice->Append( "Hi!" );
+      break;
+    }
+  }
+}
+
+void MyPanel::OnCombo( wxCommandEvent &event )
+{
+  m_text->WriteText( "ComboBox selection string is: " );
+  m_text->WriteText( event.GetString() );
+  m_text->WriteText( "\n" );
+}
+
+void MyPanel::OnComboButtons( wxCommandEvent &event )
+{
+  switch (event.GetId())
+  {
+    case ID_COMBO_SEL_NUM:
+    {
+      m_combo->SetSelection( 2 );
+      break;
+    }
+    case ID_COMBO_SEL_STR:
+    {
+      m_combo->SetStringSelection( "This" );
+      break;
+    }
+    case ID_COMBO_CLEAR:
+    {
+      m_combo->Clear();
+      break;
+    }
+    case ID_COMBO_APPEND:
+    {
+      m_combo->Append( "Hi!" );
+      break;
+    }
+  }
+}
+
+void MyPanel::OnRadio( wxCommandEvent &event )
+{
+  m_text->WriteText( "RadioBox selection string is: " );
+  m_text->WriteText( event.GetString() );
+  m_text->WriteText( "\n" );
+}
+
+void MyPanel::OnRadioButtons( wxCommandEvent &event )
+{
+  switch (event.GetId())
+  {
+    case ID_RADIOBOX_SEL_NUM:
+    {
+      m_radio->SetSelection( 2 );
+      break;
+    }
+    case ID_RADIOBOX_SEL_STR:
+    {
+      m_radio->SetStringSelection( "This" );
+      break;
+    }
+  }
 }
 
 //----------------------------------------------------------------------

@@ -76,6 +76,7 @@ class wxComboBox: public wxControl
   wxString GetStringSelection(void) const;
   int Number(void) const;
   void SetSelection( int n );
+  void SetStringSelection( const wxString &string );
 
   // Text field functions
   wxString GetValue(void) const ;
@@ -96,8 +97,11 @@ class wxComboBox: public wxControl
 
   private:
   
-  wxList m_clientData;
-   
+    wxList   m_clientData;
+  
+  public:
+  
+    bool     m_alreadySent;
 };
 
 #endif // __GTKCOMBOBOXH__

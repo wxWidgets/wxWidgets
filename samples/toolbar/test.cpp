@@ -23,11 +23,21 @@
 #include "wx/toolbar.h"
 #include "test.h"
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#include "bitmaps/new.xpm"
+#include "bitmaps/open.xpm"
+#include "bitmaps/save.xpm"
+#include "bitmaps/copy.xpm"
+#include "bitmaps/cut.xpm"
+// #include "bitmaps/paste.xpm"
+#include "bitmaps/print.xpm"
+#include "bitmaps/preview.xpm"
+#include "bitmaps/help.xpm"
+#endif
+
 IMPLEMENT_APP(MyApp)
 
-#ifdef __X__
-// TODO: include XBM or XPM icons for X apps
-#endif
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame
@@ -43,9 +53,8 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("mondrian.xbm"));
+#else
+  frame->SetIcon( wxIcon(mondrian_xpm) );
 #endif
 
   // Make a menubar
@@ -96,17 +105,16 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBarBitmaps[5] = new wxBitmap("icon6");
   toolBarBitmaps[6] = new wxBitmap("icon7");
   toolBarBitmaps[7] = new wxBitmap("icon8");
-#endif
-#ifdef __X__
-  // TODO
-  toolBarBitmaps[0] = new wxBitmap(...);
-  toolBarBitmaps[1] = new wxBitmap(...);
-  toolBarBitmaps[2] = new wxBitmap(...);
-  toolBarBitmaps[3] = new wxBitmap(...);
-  toolBarBitmaps[4] = new wxBitmap(...);
-  toolBarBitmaps[5] = new wxBitmap(...);
-  toolBarBitmaps[6] = new wxBitmap(...);
-  toolBarBitmaps[7] = new wxBitmap(...);
+#else
+  toolBarBitmaps[0] = new wxBitmap( new_xpm );
+  toolBarBitmaps[1] = new wxBitmap( open_xpm );
+  toolBarBitmaps[2] = new wxBitmap( save_xpm );
+  toolBarBitmaps[3] = new wxBitmap( copy_xpm );
+  toolBarBitmaps[4] = new wxBitmap( cut_xpm );
+//  toolBarBitmaps[5] = new wxBitmap( paste_xpm );
+  toolBarBitmaps[5] = new wxBitmap( preview_xpm );
+  toolBarBitmaps[6] = new wxBitmap( print_xpm );
+  toolBarBitmaps[7] = new wxBitmap( help_xpm );
 #endif
 
 #ifdef __WXMSW__
@@ -114,7 +122,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 #else
   int width = 16;
 #endif
-  int offX = 5;
   int currentX = 5;
 
   toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, (float)currentX, -1, NULL, "New file");
@@ -164,19 +171,19 @@ MyFrame::MyFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wx
   m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox("wxWindows wxToolBar demo\n", "About wxToolBar");
 }
 
 // Define the behaviour for the frame closing
 // - must delete all frames except for the main one.
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   Destroy();
 }

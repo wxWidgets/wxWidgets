@@ -26,12 +26,11 @@ class wxBitmapButton;
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
 
-void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-  wxBitmapButton *button = (wxBitmapButton*)data;
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
-  button->ProcessEvent(event);
+  button->GetEventHandler()->ProcessEvent(event);
 };
 
 //-----------------------------------------------------------------------------

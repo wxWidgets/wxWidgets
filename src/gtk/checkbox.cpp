@@ -19,13 +19,12 @@
 // wxCheckBox
 //-----------------------------------------------------------------------------
 
-void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
 {
-  wxCheckBox *cb = (wxCheckBox*)data;
   wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
   event.SetInt( cb->GetValue() );
   event.SetEventObject(cb);
-  cb->ProcessEvent(event);
+  cb->GetEventHandler()->ProcessEvent(event);
 };
 
 //-----------------------------------------------------------------------------

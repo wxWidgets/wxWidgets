@@ -52,7 +52,7 @@ void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *win )
   
   wxScrollEvent event( command, win->GetId(), value, orient );
   event.SetEventObject( win );
-  win->ProcessEvent( event );
+  win->GetEventHandler()->ProcessEvent( event );
   
 /*
   wxCommandEvent cevent( wxEVT_COMMAND_SCROLLBAR_UPDATED, win->GetId() );

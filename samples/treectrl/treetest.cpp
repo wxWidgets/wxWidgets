@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
+
 #include "wx/treectrl.h"
 
 #include "treetest.h"
@@ -65,9 +69,8 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
+#else
+  frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
   // Make an image list containing small icons

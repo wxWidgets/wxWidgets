@@ -22,15 +22,22 @@
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
-void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioBox *rb )
 {
-  wxRadioBox *rb = (wxRadioBox*)data;
+  if (rb->m_alreadySent)
+  {
+    rb->m_alreadySent = FALSE;
+    return;
+  }
+
+  rb->m_alreadySent = TRUE;
+  
   wxCommandEvent event( wxEVT_COMMAND_RADIOBOX_SELECTED, rb->GetId() );
   event.SetInt( rb->GetSelection() );
   wxString tmp( rb->GetStringSelection() );
   event.SetString( WXSTRINGCAST(tmp) );
   event.SetEventObject( rb );
-  rb->ProcessEvent(event);
+  rb->GetEventHandler()->ProcessEvent(event);
 };
 
 //-----------------------------------------------------------------------------
@@ -56,6 +63,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       int WXUNUSED(majorDim), long style,
       const wxString &name )
 {
+  m_alreadySent = FALSE;
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
@@ -74,6 +82,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     for (int i = 0; i < n; i++)
     {
       if (i) radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );
+      
       m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i] ) );
       
       if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
@@ -123,13 +132,33 @@ bool wxRadioBox::Show( bool show )
   return TRUE;
 };
 
-int wxRadioBox::FindString( const wxString& WXUNUSED(s) ) const
+int wxRadioBox::FindString( const wxString &s ) const
 {
-  return 0;
+  GSList *item = gtk_radio_button_group( m_radio );
+  
+  int count = g_slist_length(item)-1;
+  
+  while (item)
+  {
+    GtkButton *b = GTK_BUTTON( item->data );
+    GtkLabel *l = GTK_LABEL( b->child );
+    if (s == l->label) return count;
+    count--;
+    item = item->next;
+  };
+
+  return -1;
 };
 
-void wxRadioBox::SetSelection( int WXUNUSED(n) )
+void wxRadioBox::SetSelection( int n )
 {
+  GSList *item = gtk_radio_button_group( m_radio );
+  item = g_slist_nth( item, g_slist_length(item)-n-1 );
+  if (!item) return;
+  
+  GtkToggleButton *button = GTK_TOGGLE_BUTTON( item->data );
+  
+  gtk_toggle_button_set_state( button, 1 );
 };
 
 int wxRadioBox::GetSelection(void) const
@@ -146,9 +175,18 @@ int wxRadioBox::GetSelection(void) const
   return -1;
 };
 
-wxString wxRadioBox::GetString( int WXUNUSED(n) ) const
+wxString wxRadioBox::GetString( int n ) const
 {
-  return "";
+  GSList *item = gtk_radio_button_group( m_radio );
+  
+  item = g_slist_nth( item, g_slist_length(item)-n-1 );
+  if (!item) return "";
+  
+  GtkToggleButton *button = GTK_TOGGLE_BUTTON( item->data );
+  
+  GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
+  
+  return wxString( label->label );
 };
 
 wxString wxRadioBox::GetLabel(void) const
@@ -201,8 +239,11 @@ wxString wxRadioBox::GetStringSelection(void) const
   return "";
 };
 
-bool wxRadioBox::SetStringSelection( const wxString& WXUNUSED(s) )
+bool wxRadioBox::SetStringSelection( const wxString&s )
 {
+  int res = FindString( s );
+  if (res == -1) return FALSE;
+  SetSelection( res );
   return TRUE;
 };
 

@@ -15,18 +15,52 @@
 #include "wx/combobox.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+//-----------------------------------------------------------------------------
+// clicked
+
+static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
+  if (combo->m_alreadySent)
+  {
+    combo->m_alreadySent = FALSE;
+    return;
+  }
+
+  combo->m_alreadySent = TRUE;
+  
   wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, combo->GetId());
   event.SetInt( combo->GetSelection() );
   wxString tmp( combo->GetStringSelection() );
   event.SetString( WXSTRINGCAST(tmp) );
   event.SetEventObject(combo);
-  combo->ProcessEvent(event);
+  combo->GetEventHandler()->ProcessEvent(event);
 };
+
+//-----------------------------------------------------------------------------
+// size 
+
+/*
+static gint gtk_combo_size_callback( GtkCombo *widget, GtkAllocation* alloc, wxComboBox *win )
+{ 
+  if (!win->HasVMT()) return FALSE;
+  if (g_blockEventsOnDrag) return FALSE;
+  if (!widget->button) return FALSE;
+  
+  widget->button->allocation.x = 
+    alloc->width - widget->button->allocation.width;
+  
+  return FALSE;
+};
+*/
 
 //-----------------------------------------------------------------------------
 
@@ -37,6 +71,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   int n, const wxString choices[],
   long style, const wxString& name )
 {
+  m_alreadySent = FALSE;
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
@@ -60,10 +95,17 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   
     gtk_container_add( GTK_CONTAINER(list), list_item );
     
+    m_clientData.Append( (wxObject*)NULL );
+    
     gtk_widget_show( list_item );
   };
   
   PostCreation();
+
+/*
+  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
+    GTK_SIGNAL_FUNC(gtk_combo_size_callback), (gpointer)this );
+*/
 
   if (!value.IsNull()) SetValue( value );
     
@@ -76,31 +118,44 @@ void wxComboBox::Clear(void)
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_clear_items( GTK_LIST(list), 0, Number() );
+  
+  m_clientData.Clear();
 };
 
 void wxComboBox::Append( const wxString &item )
+{
+  Append( item, (char*)NULL );
+};
+
+void wxComboBox::Append( const wxString &item, char *clientData )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
   GtkWidget *list_item;
   list_item = gtk_list_item_new_with_label( item ); 
   
- gtk_signal_connect( GTK_OBJECT(list_item), "select", 
+  gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   
   gtk_container_add( GTK_CONTAINER(list), list_item );
     
   gtk_widget_show( list_item );
-};
-
-void wxComboBox::Append( const wxString &WXUNUSED(item), char* WXUNUSED(clientData) )
-{
+  
+  m_clientData.Append( (wxObject*)clientData );
 };
 
 void wxComboBox::Delete( int n )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_clear_items( GTK_LIST(list), n, n );
+  
+  wxNode *node = m_clientData.Nth( n );
+  if (!node)
+  {
+    wxFAIL_MSG("wxComboBox::Delete wrong index");
+  }
+  else
+    m_clientData.DeleteNode( node );
 };
 
 int wxComboBox::FindString( const wxString &item )
@@ -194,6 +249,13 @@ void wxComboBox::SetSelection( int n )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   gtk_list_select_item( GTK_LIST(list), n );
+};
+
+void wxComboBox::SetStringSelection( const wxString &string )
+{
+  int res = FindString( string );
+  if (res == -1) return;
+  SetSelection( res );
 };
 
 wxString wxComboBox::GetValue(void) const

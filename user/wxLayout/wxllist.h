@@ -60,8 +60,8 @@ public:
        @param baseLine the baseline for alignment, from top of box
        @draw if set to false, do not draw but just calculate sizes
    */
-   virtual void Draw(wxDC &dc, wxPoint position, CoordType baseLine,
-                     bool draw = true) {};
+   virtual void Draw( wxDC &WXUNUSED(dc), wxPoint WXUNUSED(position), 
+                     CoordType WXUNUSED(baseLine), bool draw = true) {};
 
    /** Calculates and returns the size of the object. May need to be
        called twice to work.
@@ -70,8 +70,9 @@ public:
        baseline)
        @return the size of the object's box in pixels
    */
-   virtual wxPoint GetSize(CoordType *baseLine) const { return
-                                                           wxPoint(0,0); };
+   virtual wxPoint GetSize( CoordType *WXUNUSED(baseLine) ) const 
+     { return wxPoint(0,0); };
+     
    /// returns the number of cursor positions occupied by this object
    virtual CoordType CountPositions(void) const { return 1; }
 

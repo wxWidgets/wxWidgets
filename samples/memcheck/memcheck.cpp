@@ -27,6 +27,10 @@
 
 #include "wx/date.h"
 
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
+
 #if !WXDEBUG
 #error You must set WXDEBUG to 1 on the 'make' command line (MSW) or with configure (GTK)
 #endif
@@ -59,9 +63,7 @@ bool MyApp::OnInit(void)
   // Give it an icon
 #ifdef wx_msw
   frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef wx_x
-  frame->SetIcon(wxIcon("mondrian.xbm"));
+  frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
   // Make a menubar
