@@ -34,8 +34,8 @@ wxSoundFormatBase::~wxSoundFormatBase()
 
 wxSoundFormatBase *wxSoundFormatBase::Clone() const
 {
-    wxLogFatalError(wxT("In wxSoundFormatBase::Clone() but I should"
-                        " not be there"));
+    wxLogFatalError(wxT("In wxSoundFormatBase::Clone() but I should")
+                    wxT(" not be there"));
     return NULL;
 }
 

@@ -53,7 +53,7 @@ static inline wxSoundStreamWin *wxFindSoundFromHandle(WXHWND hWnd)
   wxNode *node = wxSoundHandleList->Find((long)hWnd);
   if (!node)
     return NULL;
-  return (wxSoundStreamWin *)node->Data();
+  return (wxSoundStreamWin *)node->GetData();
 }
 
 struct _wxSoundInternal {

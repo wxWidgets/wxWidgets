@@ -396,6 +396,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 
     SetSoundFormatReturn = m_sndio->SetSoundFormat(*new_format);
     wxASSERT( SetSoundFormatReturn );
+    wxUnusedVar( SetSoundFormatReturn );
     
     m_sndformat = new_format;
     return TRUE;

@@ -18,7 +18,9 @@
 #include "wx/wx.h"
 #endif
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__) && !defined(__WATCOMC__)
+#if defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__)
+// versions of Open Watcom and MinGW tested against this source does not
+// deliver "digitalv.h" required in this feature
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -86,7 +88,7 @@ void wxVideoWindows::OpenFile()
     MCI_STATUS_PARMS statusStruct;
 
     openStruct.lpstrDeviceType = _T("avivideo");
-    openStruct.lpstrElementName = (wxChar *)m_filename.mb_str().data();
+    openStruct.lpstrElementName = (wxChar *)m_filename.c_str();
     openStruct.hWndParent = 0;
     
     mciSendCommand(0, MCI_OPEN,

@@ -15,6 +15,10 @@
     #pragma interface "vidwin.h"
 #endif
 
+#if defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__)
+// versions of Open Watcom and MinGW tested against this source does not
+// deliver "digitalv.h" required in this feature
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -98,5 +102,7 @@ public:
     bool IsPaused() const;
     bool IsStopped() const;
 };
+
+#endif
 
 #endif

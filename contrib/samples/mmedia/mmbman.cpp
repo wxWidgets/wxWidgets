@@ -357,7 +357,9 @@ MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
   
 #if defined(__UNIX__)
     m_video_driver = new wxVideoXANIM(filename);
-#elif defined(__WIN32__)
+#elif defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__)
+    // versions of Open Watcom and MinGW tested against this source does not
+    // deliver "digitalv.h" required in this feature
     m_video_driver = new wxVideoWindows(filename);
 #else
     m_video_driver = NULL;

@@ -117,6 +117,7 @@ bool wxSoundAiff::PrepareToPlay()
     // "FORM"
     
     len = data.Read32(); 
+    wxUnusedVar(len);
     FAIL_WITH(m_input->LastRead() != 4, wxSOUND_INVSTRM);
     // dummy len
     

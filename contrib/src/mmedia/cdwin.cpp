@@ -46,15 +46,14 @@
 IMPLEMENT_DYNAMIC_CLASS(wxCDAudioWin, wxCDAudio)
     
 wxCDAudioWin::wxCDAudioWin(void)
-  : wxCDAudio(), m_trksize(NULL), m_trkpos(NULL), m_ok(TRUE), m_toc(NULL)
+  : wxCDAudio(), m_trksize(NULL), m_trkpos(NULL), m_toc(NULL), m_ok(TRUE)
 {
   MCI_OPEN_PARMS open_struct;
   MCI_SET_PARMS set_struct;
-  DWORD ret;
 
   m_internal = new CDAW_Internal;
   open_struct.lpstrDeviceType = _T("cdaudio");
-  ret = mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE,
+  DWORD ret = mciSendCommand((MCIDEVICEID)NULL, MCI_OPEN, MCI_OPEN_TYPE,
                        (DWORD)&open_struct);
   if (ret) {
     m_ok = FALSE;
@@ -63,20 +62,20 @@ wxCDAudioWin::wxCDAudioWin(void)
   m_internal->dev_id = open_struct.wDeviceID;
 
   set_struct.dwTimeFormat = MCI_FORMAT_MSF;
-  ret = mciSendCommand(m_internal->dev_id, MCI_SET, MCI_SET_TIME_FORMAT,
+  mciSendCommand(m_internal->dev_id, MCI_SET, MCI_SET_TIME_FORMAT,
                        (DWORD)(LPVOID)&set_struct);
 
   PrepareToc();
 
   set_struct.dwTimeFormat = MCI_FORMAT_TMSF;
-  ret = mciSendCommand(m_internal->dev_id, MCI_SET, MCI_SET_TIME_FORMAT,
+  mciSendCommand(m_internal->dev_id, MCI_SET, MCI_SET_TIME_FORMAT,
                        (DWORD)(LPVOID)&set_struct);
 }
 
 wxCDAudioWin::~wxCDAudioWin(void)
 {
   if (m_ok) {
-    mciSendCommand(m_internal->dev_id, MCI_CLOSE, 0, NULL);
+    mciSendCommand(m_internal->dev_id, MCI_CLOSE, 0,(DWORD_PTR)NULL);
     delete m_toc;
     delete[] m_trksize;
     delete[] m_trkpos;
@@ -202,7 +201,7 @@ wxCDAudio::CDstatus wxCDAudioWin::GetStatus(void)
 wxCDtime wxCDAudioWin::GetTime(void)
 {
   MCI_STATUS_PARMS status_struct;
-  wxCDtime cd_time = {-1, -1, -1, -1};
+  wxCDtime cd_time = {0,0,0,0};
 
   if (!m_ok)
     return cd_time;
