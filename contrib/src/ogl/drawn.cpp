@@ -676,7 +676,7 @@ void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
  */
 
 wxOpDraw::wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
-         double theRadius, wxChar *s) : wxDrawOp(theOp)
+         double theRadius, const wxString& s) : wxDrawOp(theOp)
 {
   m_x1 = theX1;
   m_y1 = theY1;
@@ -685,13 +685,11 @@ wxOpDraw::wxOpDraw(int theOp, double theX1, double theY1, double theX2, double t
   m_x3 = 0.0;
   m_y3 = 0.0;
   m_radius = theRadius;
-  if (s) m_textString = copystring(s);
-  else m_textString = NULL;
+  m_textString = s;
 }
 
 wxOpDraw::~wxOpDraw()
 {
-  if (m_textString) delete[] m_textString;
 }
 
 wxDrawOp *wxOpDraw::Copy(wxPseudoMetaFile *WXUNUSED(newImage))
@@ -968,8 +966,7 @@ void wxOpDraw::ReadExpr(wxPseudoMetaFile *WXUNUSED(image), wxExpr *expr)
     {
       m_x1 = expr->Nth(1)->RealValue();
       m_y1 = expr->Nth(2)->RealValue();
-      wxString str(expr->Nth(3)->StringValue());
-      m_textString = copystring(str);
+      m_textString = wxString(expr->Nth(3)->StringValue());
       break;
     }
     case DRAWOP_DRAW_ARC:
@@ -2365,7 +2362,7 @@ void wxPseudoMetaFile::DrawText(const wxString& text, const wxPoint& pt)
     wxOpDraw *theOp = new wxOpDraw(DRAWOP_DRAW_TEXT,
           (double) pt.x, (double) pt.y, 0.0, 0.0);
 
-    theOp->m_textString = copystring(text);
+    theOp->m_textString = text;
 
     m_ops.Append(theOp);
 }

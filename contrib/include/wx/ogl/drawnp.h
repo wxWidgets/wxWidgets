@@ -146,7 +146,7 @@ class WXDLLIMPEXP_OGL wxOpDraw: public wxDrawOp
 {
  public:
   wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
-         double radius = 0.0, wxChar *s = NULL);
+         double radius = 0.0, const wxString& s = wxEmptyString);
   ~wxOpDraw();
   void Do(wxDC& dc, double xoffset, double yoffset);
   void Scale(double scaleX, double scaleY);
@@ -166,7 +166,7 @@ public:
   double     m_x3;
   double     m_y3;
   double     m_radius;
-  wxChar*    m_textString;
+  wxString   m_textString;
 
 };
 

@@ -505,7 +505,7 @@ void oglDrawFormattedText(wxDC& dc, wxList *text_list,
 
   dc.SetClippingRegion(
                     (long)(m_xpos - width/2.0), (long)(m_ypos - height/2.0),
-                    (long)width, (long)height);
+                    (long)width+1, (long)height+1); // +1 to allow for rounding errors
 
   wxNode *current = text_list->GetFirst();
   while (current)
