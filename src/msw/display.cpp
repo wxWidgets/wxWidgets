@@ -31,7 +31,9 @@
 #if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
+   #include "wx/app.h"
    #include "wx/dynarray.h"
+   #include "wx/frame.h"
 #endif
 
 #include "wx/dynload.h"
@@ -218,7 +220,7 @@ HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,
                                      LPVOID lpContext)
 {
     // we need at least the mode size
-    static const int FLAGS_REQUIRED = DDSD_HEIGHT | DDSD_WIDTH;
+    static const DWORD FLAGS_REQUIRED = DDSD_HEIGHT | DDSD_WIDTH;
     if ( (lpDDSurfaceDesc->dwFlags & FLAGS_REQUIRED) == FLAGS_REQUIRED )
     {
         wxArrayVideoModes * const modes = (wxArrayVideoModes *)lpContext;
@@ -505,7 +507,11 @@ wxString wxDisplay::GetName() const
         wxZeroMemory(monInfo);
         monInfo.cbSize = sizeof(monInfo);
 
-        if ( !::GetMonitorInfo(dpyInfo.m_hmon, &monInfo) )
+        // NB: Cast from MONITORINFOEX* to MONITORINFO* is done because
+        //     Mingw headers - unlike the ones from Microsoft's Platform SDK -
+        //     don't derive the former from the latter in C++ mode and so
+        //     the pointer's type is not converted implicitly.
+        if ( !::GetMonitorInfo(dpyInfo.m_hmon, (LPMONITORINFO)&monInfo) )
         {
             wxLogLastError(_T("GetMonitorInfo"));
         }
