@@ -21,7 +21,6 @@ the corresponding topic.
 \helpref{IMPLEMENT\_CLASS}{implementclass}\\
 \helpref{IMPLEMENT\_DYNAMIC\_CLASS2}{implementdynamicclass2}\\
 \helpref{IMPLEMENT\_DYNAMIC\_CLASS}{implementdynamicclass}\\
-\helpref{ngettext}{ngettext}\\
 \helpref{wxCONCAT}{wxconcat}\\
 \helpref{WXDEBUG\_NEW}{debugnew}\\
 \helpref{WXTRACELEVEL}{tracelevel}\\
@@ -1408,22 +1407,6 @@ deleted with the {\it delete} operator.
 This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 
-\membersection{ngettext}\label{ngettext}
-
-\func{const wxChar *}{ngettext}{\param{const char *}{str}, \param{const char *}{strPlural}, \param{size\_t }{n}}
-
-This macro expands into a call to plural form version of
-\helpref{wxGetTranslation}{wxgettranslation} 
-function, so it marks the message for the extraction by {\tt xgettext} just as 
-\helpref{wxTRANSLATE}{wxtranslate} does, but also returns the translation of
-the string for the current locale during execution, either singular or plural
-form depending on the value of \arg{n}.
-
-\wxheading{See also}
-
-\helpref{\_}{underscore}
-
-
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 
 \func{const char *}{wxGetTranslation}{\param{const char * }{str}}
@@ -1447,9 +1430,10 @@ It is also used as the key for the search in the catalog.
 The \arg{strPlural} parameter is the plural form (in English).
 The parameter \arg{n} is used to determine the plural form.  If no
 message catalog is found \arg{str} is returned if `n == 1',
-otherwise \arg{strPlural}. The \helpref{ngettext}{ngettext} macro is defined
-to do the same thing.
+otherwise \arg{strPlural}.
 See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
+
+Both versions call \helpref{wxLocale::GetString}{wxlocalegetstring}.
 
 \membersection{::wxIsEmpty}\label{wxisempty}
 
@@ -1622,11 +1606,6 @@ function, so it marks the message for the extraction by {\tt xgettext} just as
 the string for the current locale during execution.
 
 Don't confuse this macro with \helpref{\_T()}{underscoret}!
-
-\wxheading{See also}
-
-\helpref{ngettext}{ngettext}
-
 
 
 \membersection{\_T}\label{underscoret}
