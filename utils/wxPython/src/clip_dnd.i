@@ -411,6 +411,8 @@ public:
                    const wxIcon &go = wxNullIcon)
         : wxDropSource(win, go) {}
 #endif
+    ~wxPyDropSource() { printf("dtor\n"); }
+
     DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
     PYPRIVATE;
 };
@@ -432,8 +434,8 @@ public:
                    const wxIcon &go = wxNullIcon);
 #endif
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, int incref);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, 0)"
     ~wxPyDropSource();
 
     void SetData(wxDataObject& data);

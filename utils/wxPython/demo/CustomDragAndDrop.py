@@ -232,7 +232,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-This demo shows Drand and Drop using a custom data type and a custom data object.  A type called "DoodleLines" is created and a Python Pickle of a list is actually transfered in the drag and drop opperation.
+This demo shows Drag and Drop using a custom data type and a custom data object.  A type called "DoodleLines" is created and a Python Pickle of a list is actually transfered in the drag and drop opperation.
 
 A second data object is also created containing a bitmap of the image and is made available to any drop target that accepts bitmaps, such as MS Word.
 
