@@ -705,7 +705,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.BeginDrawing();
      
-  dc.SetFont( m_font );
+  dc.SetFont( *GetFont() );
 
   int w = 0;
   int h = 0;
@@ -1020,7 +1020,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.BeginDrawing();
 
-  dc.SetFont( m_font );
+  dc.SetFont( *GetFont() );
 
   wxNode *node = m_lines.First();
   while (node) 
@@ -1845,7 +1845,7 @@ long wxListMainWindow::GetMode( void ) const
 void wxListMainWindow::CalculatePositions( void )
 {
   wxPaintDC dc( this );
-  dc.SetFont( m_font );
+  dc.SetFont( *GetFont() );
 
   int iconSpacing = 0;
   if (m_mode & wxLC_ICON) iconSpacing = m_normal_spacing;
