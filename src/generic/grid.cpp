@@ -2048,7 +2048,10 @@ void wxGrid::SetEditControlValue( const wxString& value )
     if ( m_table )
     {
         wxString s;
-        s = ( value == wxEmptyString ? GetCellValue(m_currentCellCoords) : value );
+        if ( !value )
+            s = GetCellValue(m_currentCellCoords);
+        else
+            s = value;
 
         if ( IsTopEditControlEnabled() )
         {
