@@ -1574,7 +1574,7 @@ case "${host}" in
               )
           ])
 
-          if test x"$ac_cv_string_strcasecmp" = "xyes"; then
+          if test x"$ac_cv_strings_strcasecmp" = "xyes"; then
               AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
           else
               AC_MSG_ERROR([No case-insensitive string comparison function found.])
