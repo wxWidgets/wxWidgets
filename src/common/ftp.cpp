@@ -469,9 +469,15 @@ bool wxFTP::RmFile(const wxString& path)
 class wxInputFTPStream : public wxSocketInputStream
 {
 public:
-    wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
-        : wxSocketInputStream(*sock), m_ftp(ftp_clt)
+    wxInputFTPStream(wxFTP *ftp, wxSocketBase *sock)
+        : wxSocketInputStream(*sock)
     {
+        m_ftp = ftp;
+
+        // FIXME make the timeout configurable
+
+        // set a shorter than default timeout
+        m_i_socket->SetTimeout(60); // 1 minute
     }
 
     size_t GetSize() const { return m_ftpsize; }
