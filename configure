@@ -20304,7 +20304,7 @@ if test "$wxUSE_GUI" = "yes"; then
     LIBS="$GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LIBS"
 
         
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs \
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
                      drawing dynamic erase event exec font image \
                      minimal richedit rotate widgets"
 
