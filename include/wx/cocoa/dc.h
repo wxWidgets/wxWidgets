@@ -45,7 +45,7 @@ public:
     virtual void SetPen(const wxPen& pen);
     virtual void SetBrush(const wxBrush& brush);
     virtual void SetBackground(const wxBrush& brush);
-    virtual void SetBackgroundMode(int mode) {}
+    virtual void SetBackgroundMode(int mode) { m_backgroundMode = mode; }
     virtual void SetPalette(const wxPalette& palette);
 
     virtual void DestroyClippingRegion();
