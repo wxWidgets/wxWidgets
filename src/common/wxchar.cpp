@@ -566,7 +566,7 @@ class wxFormatConverter
 public:
     wxFormatConverter(const wxChar *format);
 
-    operator const wxChar *() const { return m_fmt.c_str(); }
+    operator const wxChar *() const { return m_nCopied ? m_fmtOrig : m_fmt.c_str(); }
 
 private:
     // copy another character to the translated format: this function does the
@@ -777,7 +777,7 @@ int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2
 {
     va_list argptr;
     va_start(argptr, format);
-
+    
     int ret = vwprintf( wxFormatConverter(format), argptr );
 
     va_end(argptr);
