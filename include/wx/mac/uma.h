@@ -21,6 +21,7 @@ long UMAGetAppearanceVersion() ;
 bool UMAHasWindowManager() ;
 long UMAGetWindowManagerAttr() ;
 bool UMAHasAquaLayout() ;
+bool UMASystemIsInitialized() ;
 
 // process manager
 

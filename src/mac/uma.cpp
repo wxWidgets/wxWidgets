@@ -19,6 +19,8 @@
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
+static bool sUMASystemInitialized = false ;
+
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
@@ -29,7 +31,7 @@ static long sUMAWindowManagerAttr = 0 ;
 bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
 long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
 bool UMAHasAquaLayout() { return sUMAHasAquaLayout ; }
-
+bool UMASystemIsInitialized() { return sUMASystemInitialized ; }
 
 void UMACleanupToolbox()
 {
@@ -112,7 +114,7 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
   Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
   if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
     sUMAHasAquaLayout = true ;
-
+  sUMASystemInitialized = true ;
 }
 
 // process manager
