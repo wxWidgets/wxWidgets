@@ -1527,10 +1527,65 @@ void wxWindowOS2::DoGetClientSize(
     RECTL                           vRect;
 
    ::WinQueryWindowRect(hWnd, &vRect);
+    if (IsKindOf(CLASSINFO(wxDialog)))
+    {
+        RECTL                       vTitle;
+        HWND                        hWndTitle;
+        //
+        // For a Dialog we have to explicitly request the client portion.
+        // For a Frame the hWnd IS the client window
+        //
+        hWndTitle = ::WinWindowFromID(hWnd, FID_TITLEBAR);
+        if (::WinQueryWindowRect(hWndTitle, &vTitle))
+        {
+            if (vTitle.yTop - vTitle.yBottom == 0)
+            {
+                //
+                // Dialog has not been created yet, use a default
+                //
+                vTitle.yTop = 20;
+            }
+            vRect.yTop -= (vTitle.yTop - vTitle.yBottom);
+        }
+
+        ULONG                       uStyle = ::WinQueryWindowULong(hWnd, QWL_STYLE);
+
+        //
+        // Deal with borders
+        //
+        if (uStyle & FCF_DLGBORDER)
+        {
+            vRect.xLeft += 4;
+            vRect.xRight -= 4;
+            vRect.yTop -= 4;
+            vRect.yBottom += 4;
+        }
+        else if (uStyle & FCF_SIZEBORDER)
+        {
+            vRect.xLeft += 4;
+            vRect.xRight -= 4;
+            vRect.yTop -= 4;
+            vRect.yBottom += 4;
+        }
+        else if (uStyle & FCF_BORDER)
+        {
+            vRect.xLeft += 2;
+            vRect.xRight -= 2;
+            vRect.yTop -= 2;
+            vRect.yBottom += 2;
+        }
+        else // make some kind of adjustment or top sizers ram into the titlebar!
+        {
+            vRect.xLeft += 3;
+            vRect.xRight -= 3;
+            vRect.yTop -= 3;
+            vRect.yBottom += 3;
+        }
+    }
     if (pWidth)
-        *pWidth  = vRect.xRight;
+        *pWidth  = vRect.xRight - vRect.xLeft;
     if (pHeight)
-        *pHeight = vRect.yTop;
+        *pHeight = vRect.yTop - vRect.yBottom;
 } // end of wxWindowOS2::DoGetClientSize
 
 void wxWindowOS2::DoMoveWindow(
@@ -2390,6 +2445,29 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                     ,HIWORD(lParam)
                                     ,(WXUINT)wParam
                                    );
+            break;
+
+        case WM_WINDOWPOSCHANGED:
+
+            //
+            // Dialogs under OS/2 do not get WM_SIZE events at all.
+            // Instead they get this, which can function much like WM_SIZE
+            // PSWP contains the new sizes and positioning, PSWP+1 the old
+            // We use this because ADJUSTWINDOWPOS comes BEFORE the new
+            // position is added and our auto layout does a WinQueryWindowRect
+            // to get the CURRENT client size.  That is the size used to position
+            // child controls, so we need to already be sized
+            // in order to get the child controls positoned properly.
+            //
+            if (IsKindOf(CLASSINFO(wxDialog)))
+            {
+                PSWP                pSwp = (PSWP)PVOIDFROMMP(wParam);
+
+                bProcessed = HandleSize( pSwp->cx
+                                        ,pSwp->cy
+                                        ,(WXUINT)lParam
+                                       );
+            }
             break;
 
         case WM_ACTIVATE:
@@ -4051,7 +4129,7 @@ int wxWindowOS2::GetOS2ParentHeight(
     // Case 1
     //
     if (pParent->IsKindOf(CLASSINFO(wxDialog)))
-        return(pParent->GetSize().y);
+        return(pParent->GetClientSize().y);
 
     //
     // Case 2 -- if we are one of the separately built standard Frame
