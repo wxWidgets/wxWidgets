@@ -258,9 +258,9 @@ wx.lib.iewin version instead.
 Fixed wx.BufferedPaintDC for scrolled windows to work whether the
 buffer is covering only the client area or the full virtual area of
 the scrolled window.  By default it will assume that only the client
-area is covered.  This is different than the old behavior, to indicate
-that the entire virtual area is covered then add a
-style=wx.BUFFER_VIRTUAL_AREA parameter. 
+area is covered.  This is different than the old behavior so to
+indicate that the entire virtual area is covered simply add a
+style=wx.BUFFER_VIRTUAL_AREA parameter.
 
 wx.gizmos.TreeListCtrl:  Add support for the EVT_TREE_ITEM_GETTOOLTIP
 event. 
