@@ -312,10 +312,10 @@ bool wxBitmap::Create( int width, int height, int depth )
     M_BMPDATA->m_height = height;
 
 #if wxUSE_NANOX
-    M_BMPDATA->m_bitmap = (WXPixmap) GrNewPixmap(width, height, NULL);
+    M_BMPDATA->m_pixmap = (WXPixmap) GrNewPixmap(width, height, NULL);
     M_BMPDATA->m_bpp = bpp;
 
-    wxASSERT_MSG( M_BMPDATA->m_bitmap, wxT("Bitmap creation failed") );
+    wxASSERT_MSG( M_BMPDATA->m_pixmap, wxT("Bitmap creation failed") );
 #else
     if (depth == 1)
     {
@@ -426,13 +426,45 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     if (!Create(w, h, depth))
         return FALSE;
 
-    wxMemoryDC memDC;
-    memDC.SelectObject(*this);
+    // Unfortunately the mask has to be screen-depth since
+    // 1-bpp bitmaps don't seem to be supported
+    // TODO: implement transparent drawing, presumably
+    // by doing several blits as per the Windows
+    // implementation because Nano-X doesn't support
+    // XSetClipMask.
 
-    // Warning: this is very inefficient.
-    wxPen pen;
-    pen.SetStyle(wxSOLID);
-    pen.SetWidth(1);
+    bool hasMask = image.HasMask();
+    
+    GC pixmapGC = GrNewGC();
+    Pixmap pixmap = (Pixmap) GetPixmap();
+
+    GC maskGC = 0;
+    Pixmap maskPixmap = 0;
+
+    unsigned char maskR = 0;
+    unsigned char maskG = 0;
+    unsigned char maskB = 0;
+
+    if (hasMask)
+    {
+        maskR = image.GetMaskRed();
+        maskG = image.GetMaskGreen();
+        maskB = image.GetMaskBlue();
+        
+        maskGC = GrNewGC();
+        maskPixmap = GrNewPixmap(w, h, 0);
+        if (!maskPixmap)
+            hasMask = FALSE;
+        else
+        {
+            wxMask* mask = new wxMask;
+            mask->SetBitmap((WXPixmap) maskPixmap);
+            SetMask(mask);
+        }
+    }
+
+    GR_COLOR lastPixmapColour = 0;
+    GR_COLOR lastMaskColour = 0;
     
     int i, j;
     for (i = 0; i < w; i++)
@@ -442,26 +474,43 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
             unsigned char red = image.GetRed(i, j);
             unsigned char green = image.GetGreen(i, j);
             unsigned char blue = image.GetBlue(i, j);
-            wxColour colour(red, green, blue);
 
-            pen.SetColour(colour);
-            memDC.SetPen(pen);
-            memDC.DrawPoint(i, j);
+            GR_COLOR colour = GR_RGB(red, green, blue);
+
+            // Efficiency measure
+            if (colour != lastPixmapColour || (i == 0 && j == 0))
+            {
+                GrSetGCForeground(pixmapGC, colour);
+                lastPixmapColour = colour;
+            }
             
-#if 0
+            GrPoint(pixmap, pixmapGC, i, j);
+            
             if (hasMask)
             {
                 // scan the bitmap for the transparent colour and set the corresponding
                 // pixels in the mask to BLACK and the rest to WHITE
                 if (maskR == red && maskG == green && maskB == blue)
-                    ::SetPixel(hMaskDC, i, j, PALETTERGB(0, 0, 0));
+                {
+                    colour = GR_RGB(0, 0, 0);
+                }
                 else
-                    ::SetPixel(hMaskDC, i, j, PALETTERGB(255, 255, 255));
+                {
+                    colour = GR_RGB(255, 255, 255);
+                }
+                if (colour != lastMaskColour || (i == 0 && j == 0))
+                {
+                    GrSetGCForeground(maskGC, colour);
+                    lastMaskColour = colour;
+                }
+                GrPoint(maskPixmap, maskGC, i, j);
             }
-#endif
         }
     }
-    memDC.SelectObject(wxNullBitmap);
+
+    GrDestroyGC(pixmapGC);
+    if (hasMask)
+        GrDestroyGC(maskGC);
     
     return TRUE;
 #else
@@ -760,6 +809,7 @@ wxImage wxBitmap::ConvertToImage() const
     wxColour pixelCol;
 
     // Warning: this is very inefficient.
+    // TODO: use GrReadArea to get an array of pixels
     int i, j;
     for (i = 0; i < w; i++)
     {
