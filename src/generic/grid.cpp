@@ -2577,7 +2577,7 @@ void wxGrid::CalcRowLabelsExposed( wxRegion& reg )
             if ( GetRowBottom(row) < top )
                 continue;
 
-            if ( GetRowTop(top) > bottom )
+            if ( GetRowTop(row) > bottom )
                 break;
 
             m_rowLabelsExposed.Add( row );
@@ -4320,16 +4320,16 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     int i;
     for ( i = 0; i < m_numRows; i++ )
     {
-        int bottom = GetRowBottom(i) - 1;
+        int bot = GetRowBottom(i) - 1;
 
-        if ( bottom > bottom )
+        if ( bot > bottom )
         {
             break;
         }
 
-        if ( bottom >= top )
+        if ( bot >= top )
         {
-            dc.DrawLine( left, bottom, right, bottom );
+            dc.DrawLine( left, bot, right, bot );
         }
     }
 
