@@ -536,10 +536,11 @@ size_t wxStringBase::find_last_of(const wxChar* sz, size_t nStart) const
     }
     else
     {
-        wxASSERT( nStart <= length() );
+        wxASSERT_MSG( nStart <= length(),
+                        _T("invalid index in find_last_of()") );
     }
 
-    for ( const wxChar *p = c_str() + length() - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
     {
         if ( wxStrchr(sz, *p) )
             return p - c_str();
