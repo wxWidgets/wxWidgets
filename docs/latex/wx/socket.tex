@@ -154,7 +154,13 @@ Returns a reference to the current object.
 
 \func{void}{SetFlags}{\param{wxSockFlags}{ flags}}
 
-TODO
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSocketBase::NONE}}{Normal functionnalities.}
+\twocolitem{{\bf wxSocketBase::NOWAIT}}{Get the available data in the input queue and exit immediately.}
+\twocolitem{{\bf wxSocketBase::WAITALL}}{Wait for all required data unless an error occured.}
+\twocolitem{{\bf wxSocketBase::SPEED}}{Disable the asynchronous IO functionnality.}
+\end{twocollist}
 
 %
 % Read

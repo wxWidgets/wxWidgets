@@ -82,6 +82,9 @@ size_t wxStreamBuffer::WriteBack(const char *buf, size_t bufsize)
 {
   char *ptrback;
 
+  if (m_mode != read)
+    return 0;
+
   ptrback = AllocSpaceWBack(bufsize);
   if (!ptrback)
     return 0;
@@ -137,6 +140,7 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 void wxStreamBuffer::ResetBuffer()
 {
   m_stream->m_lasterror = wxStream_NOERROR;
+  m_stream->m_lastcount = 0;
   if (m_mode == read)
     m_buffer_pos = m_buffer_end;
   else

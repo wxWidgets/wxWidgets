@@ -37,8 +37,13 @@ Destructor.
 \constfunc{wxStreamError}{LastError}{\void}
 
 This function returns the last error.
-% It is of the form:
-% TODO
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxStream_NOERROR}}{No error occured.}
+\twocolitem{{\bf wxStream_EOF}}{An End-Of-File occured.}
+\twocolitem{{\bf wxStream_WRITE_ERR}}{A generic error occured on the last write call.}
+\twocolitem{\bf wxStream_READ_ERR}{A generic error occured on the last read call.}
+\end{twocollist}
 
 \membersection{wxStreamBase::StreamSize}
 \constfunc{size_t}{StreamSize}{\void}

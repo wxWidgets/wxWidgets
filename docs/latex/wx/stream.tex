@@ -23,25 +23,59 @@ None
 Constructor, creates a new stream buffer using \it{stream} as a parent stream
 and \it{mode} as the IO mode. \it{mode} can be: wxStreamBuffer::read,
 wxStreamBuffer::write, wxStreamBuffer::read\_write.
+One stream can have many stream buffers but only one is used internally to
+pass IO call (e.g. wxInputStream::Read() -> wxStreamBuffer::Read()). But you
+can call directly wxStreamBuffer::Read without any problems.
 
-\membersection{wxStreamBuffer::wxStreamBuffer}
+\wxheading{Warning}
+
+All errors and messages linked to the stream are stored in the stream object.
+\begin{verbatim}
+   streambuffer.Read(...);
+   streambuffer2.Read(...); /* This one erases previous error messages set by 
+                               ``streambuffer'' */
+\end{verbatim}
 
 \func{}{wxStreamBuffer}{\param{BufMode}{ mode}}
 
 Constructor, creates a new empty stream buffer which won't flush any data
-to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write).
+to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write). This stream buffer has the advantage to be stream independent and to
+work only on memory buffers but it is still compatible with the rest of the
+wxStream classes. You can write, read to this special stream and it will
+grow (if it is allowed by the user) its internal buffer. Briefly, it has all
+functionnalities of a ``normal'' stream.
 
-\membersection{wxStreamBuffer::wxStreamBuffer}
+\wxheading{Warning}
 
-\func{}{wxStreamBuffer}{\param{const wxStreamBase\&}{ buffer}}
+The "read\_write" mode may not work: it isn't completely finished.
 
-Constructor, creates a new stream buffer from the specified stream \it{buffer}.
+\wxheading{See also}
+
+\helpref{wxStreamBuffer:SetBufferIO}{wxstreambufsetbufferio}
+
+\func{}{wxStreamBuffer}{\param{const wxStreamBuffer &}{buffer}}
+
+Constructor. It initializes the stream buffer with the data of the specified
+stream buffer. The new stream buffer is nearly exactly the same as the
+original: it has the same attributes, the same size, the same position, shares
+the same internal buffer. The interresting point is that they can differ
+in the future but the root is the same.
+
+\wxheading{Warning}
+
+The fact that the two stream buffers shared the same buffer could generate
+segmentation violation if the parent is destroyed and the children continues
+operating. It is advised to use this feature only in very local area of the
+program.
 
 \membersection{wxStreamBuffer::\destruct{wxStreamBuffer}}
 
 \func{}{wxStreamBuffer}{\destruct{wxStreamBuffer}}
 
-Destructor, destroys the stream buffer.
+Destructor. It finalizes all IO calls and frees all internal buffers if
+necessary. In the case of a children stream buffer, the internal buffer isn't
+freed, this is the job of the parent.
+The "Write-Back" buffer is freed.
 
 % -----------
 % Filtered IO
@@ -51,6 +85,10 @@ Destructor, destroys the stream buffer.
 \func{size\_t}{Read}{\param{void *}{buffer}, \param{size\_t }{size}}
 
 Reads a block of the specified \it{size} and stores datas in \it{buffer}.
+This function uses also the "Write-Back" buffer: in the case there are datas
+waiting in this buffer, they are used before anything else. After that, if there
+are still datas to be read, the stream is read and the stream buffer position
+is incremented.
 
 \wxheading{Return value}
 
@@ -58,7 +96,9 @@ It returns the real read size. If returned size is different of the specified
 \it{size}, an error occured and should be tested using 
 \helpref{LastError}{wxstreambaselasterror}.
 
-\membersection{wxStreamBuffer::Read}\label{wxstreambufreadbuf}
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::WriteBack}{wxstreambufwriteback}
 
 \func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
 
@@ -69,34 +109,45 @@ when there aren't datas anymore in the current buffer.
 
 \func{size\_t}{Write}{\param{const void *}{buffer}, \param{size\_t }{size}}
 
-Writes a block of the specified \it{size} using datas of \it{buffer}.
-
-\membersection{wxStreamBuffer::Write}
+Writes a block of the specified \it{size} using datas of \it{buffer}. The datas
+are cached in a buffer before being sent in one block to the stream.
 
 \func{size\_t}{Write}{\param{wxStreamBuffer *}{buffer}}
 
 See \helpref{Read}{wxstreambufreadbuf}
 
-\membersection{wxStreamBuffer::WriteBack}
+\membersection{wxStreamBuffer::WriteBack}\label{wxstreambufwriteback}
 
 \func{size\_t}{WriteBack}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
 
-This function is only useful in ``read'' mode. It puts the specified \it{buffer}
-in the input queue of the stream buf. By this way, the next
-\helpref{Read}{wxstreambufread} call will first use these datas.
+This function is only useful in \it{read} mode. It is the manager of the "Write-Back"
+buffer. This buffer acts like a temporary buffer where datas which has to be 
+read during the next read IO call are put. This is useful when you get a big
+block of data which you didn't want to read: you can replace them at the top
+of the input queue by this way.
 
-\membersection{wxStreamBuffer::WriteBack}
+\wxheading{Return value}
+
+Returns the amount of bytes saved in the Write-Back buffer.
 
 \func{size\_t}{WriteBack}{\param{char }{c}}
 
-As for the previous function, it puts the specified byte in the input queue of the
-stream buffer.
+This function acts like the previous one except that it takes only one
+character: it is sometimes shorter to use than the generic function.
 
 \membersection{wxStreamBuffer::GetChar}
 
 \func{char}{GetChar}{\void}
 
-Gets a single char from the stream buffer.
+Gets a single char from the stream buffer. It acts like the Read call.
+
+\wxheading{Problem}
+
+You aren't directly notified if an error occured during the IO call.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::Read}{wxstreambufread}
 
 \membersection{wxStreamBuffer::PutChar}
 
@@ -104,17 +155,47 @@ Gets a single char from the stream buffer.
 
 Puts a single char to the stream buffer.
 
+\wxheading{Problem}
+
+You aren't directly notified if an error occured during the IO call.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::Read}{wxstreambufwrite}
+
 \membersection{wxStreamBuffer::Tell}
 
 \constfunc{off\_t}{Tell}{\void}
 
-Gets the current position in the \it{stream}.
+Gets the current position in the stream. This position is calculated from
+the \it{real} position in the stream and from the internal buffer position: so
+it gives you the position in the \it{real} stream counted from the start of
+the stream.
+
+\wxheading{Return value}
+
+Returns the current position in the stream if possible, wxInvalidOffset in the
+other case.
 
 \membersection{wxStreamBuffer::Seek}\label{wxstreambufferseek}
 
 \func{off\_t}{Seek}{\param{off\_t }{pos}, \param{wxSeekMode }{mode}}
 
-Changes the current position. (TODO)
+Changes the current position.
+
+\it{mode} may be one of the following:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFromStart}}{The position is counted from the start of the stream.}
+\twocolitem{{\bf wxFromCurrent}}{The position is counted from the current position of the stream.}
+\twocolitem{{\bf wxFromEnd}}{The position is counted from the end of the stream.}
+\end{twocollist}
+
+\wxheading{Return value}
+
+Upon successful completion, it returns the new offset as measured in bytes from
+the beginning of the stream. Otherwise, it returns wxInvalidOffset.
 
 % --------------
 % Buffer control
@@ -123,16 +204,14 @@ Changes the current position. (TODO)
 
 \func{void}{ResetBuffer}{\void}
 
-Frees all internal buffers and resets to initial state all variables.
+Resets to the initial state variables concerning the buffer.
 
-\membersection{wxStreamBuffer::SetBufferIO}
+\membersection{wxStreamBuffer::SetBufferIO}\label{wxstreambufsetbufferio}
 
 \func{void}{SetBufferIO}{\param{char*}{ buffer\_start}, \param{char*}{ buffer\_end}}
 
 Specifies which pointers to use for stream buffering. You need to pass a pointer on the
 start of the buffer end and another on the end.
-
-\membersection{wxStreamBuffer::SetBufferIO}
 
 \func{void}{SetBufferIO}{\param{size\_t}{ bufsize}}
 
@@ -214,5 +293,5 @@ Returns the amount of available datas in the buffer.
 
 \func{wxStreamBase*}{Stream}{\void}
 
-Returns the stream parent of the stream buffer.
+Returns the parent stream of the stream buffer.
 
