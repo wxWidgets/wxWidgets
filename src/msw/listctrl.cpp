@@ -100,7 +100,7 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
   if ( want3D || wxStyleHasBorder(m_windowStyle) )
     wstyle |= WS_BORDER;
 
-  wstyle |= LVS_SHAREIMAGELISTS;
+  wstyle |= LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS   ;
   m_baseStyle = wstyle;
 
   long oldStyle = 0; // Dummy

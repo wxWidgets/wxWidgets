@@ -81,6 +81,10 @@ Notes:
   I'd prefer you to fix the problem and send the fix to me :-) or at
   least let me know about it.
 
+- If you have trouble compiling the file y_tab.c, or have strange
+  linking errors, check whether you're using a C or C++ compiler for this file.
+  You should specify a C compiler in the CCLEX variable in src/make.env.
+
 - If you run into problems with a missing X11/Xpm.h header, you
   need to install the XPM package. It can be obtained from:
 

@@ -553,12 +553,19 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxSP_WRAP           0x0020
 
 /*
- * wxSplitterWnd flags
+ * wxSplitterWindow flags
  */
 
 #define wxSP_NOBORDER       0x0000
 #define wxSP_3D             0x0004
 #define wxSP_BORDER         0x0008
+
+/*
+ * wxFrame extra flags
+ */
+
+// No title on taskbar
+#define wxFRAME_TOOL_WINDOW 0x0004
 
 /*
  * wxTabCtrl flags

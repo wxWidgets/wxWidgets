@@ -77,7 +77,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     groupStyle = WS_GROUP;
 
 //  long msStyle = groupStyle | RADIO_FLAGS;
-  long msStyle = groupStyle | BS_RADIOBUTTON | WS_CHILD | WS_VISIBLE ;
+  long msStyle = groupStyle | BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE ;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;

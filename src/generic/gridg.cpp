@@ -88,7 +88,7 @@ wxGenericGrid::wxGenericGrid(void)
   m_editable = TRUE;
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
-#elseif defined(__WXGTK__)
+#elif defined(__WXGTK__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
@@ -146,7 +146,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_editable = TRUE;
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
-#elseif defined(__WXGTK__)
+#elif defined(__WXGTK__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
