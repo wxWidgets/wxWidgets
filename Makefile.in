@@ -7412,7 +7412,8 @@ samples:
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
-	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_NAME) $(DESTDIR)$(libdir)/wx/config
+	$(INSTALL_PROGRAM) lib/wx/config/@WXCONFIG_DATA_FILE@ $(DESTDIR)$(libdir)/wx/config
+	(cd $(DESTDIR)$(libdir)/wx/config && rm -f $(TOOLCHAIN_NAME) && $(LN_S) @WXCONFIG_DATA_FILE@ $(TOOLCHAIN_NAME))
 	$(INSTALL_PROGRAM) wx-config $(DESTDIR)$(bindir)
 	(cd $(DESTDIR)$(bindir) && rm -f wx$(TOOLCHAIN_NAME)-config && $(LN_S) wx-config wx$(TOOLCHAIN_NAME)-config)
 
