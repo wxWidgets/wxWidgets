@@ -276,7 +276,7 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 %post
 if [ -e %{wxprefbase} ]; then
-	rm %{wxprefbase}
+	rm -r %{wxprefbase}
 fi
 ln -s %{wxpref} %{wxprefbase}
 
