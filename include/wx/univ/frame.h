@@ -20,7 +20,7 @@
 // wxFrame
 // ----------------------------------------------------------------------------
 
-class wxFrame : public wxFrameBase
+class WXDLLEXPORT wxFrame : public wxFrameBase
 {
 public:
     wxFrame() {}
@@ -34,7 +34,7 @@ public:
     {
         Create(parent, id, title, pos, size, style, name);
     }
-            
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -56,10 +56,10 @@ public:
 
 protected:
     void OnSize(wxSizeEvent& event);
-    
+
     // sends wxSizeEvent to itself (used after attaching xxxBar)
     void SendSizeEvent();
-    
+
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
 
