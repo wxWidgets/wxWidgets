@@ -355,7 +355,12 @@ bool wxSizer::Remove( int pos )
 
 void wxSizer::Fit( wxWindow *window )
 {
-    wxSize size = FitSize( window );
+    wxSize size;
+    if (window->IsTopLevel())
+        size = FitSize( window );
+    else
+        size = GetMinWindowSize( window );
+
     window->SetSize( size );
 }
 
