@@ -118,6 +118,7 @@ fileconf.cpp	C	B
 filefn.cpp	C	B
 filesys.cpp	C	B
 fontcmn.cpp	C
+fontmap.cpp	C
 framecmn.cpp	C
 fs_inet.cpp	C
 fs_zip.cpp	C
@@ -223,6 +224,7 @@ droptgt.cpp	M	O
 filedlg.cpp	M
 font.cpp	M
 fontdlg.cpp	M
+fontutil.cpp	M
 frame.cpp	M
 gauge95.cpp	M	32
 gaugemsw.cpp	M	16
@@ -286,6 +288,7 @@ gsocket.c	M	S
 
 dialup.cpp	U
 fontenum.cpp	U
+fontutil.cpp	U
 threadpsx.cpp	U
 utilsunx.cpp	U	B
 gsocket.c	U
@@ -479,6 +482,8 @@ filefn.h	W
 filesys.h	W
 font.h	W
 fontdlg.h	W
+fontmap.h	W
+fontutil.h	W
 frame.h	W
 fs_inet.h	W
 fs_zip.h	W
