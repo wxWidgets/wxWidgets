@@ -525,7 +525,7 @@ void MyFrame::OnNotebook(wxNotebookEvent& event)
     static int s_numNotebookEvents = 0;
 
     wxLogMessage(wxT("Notebook event #%d: %s (%d)"),
-        s_numNotebookEvents++, str, eventType);
+        s_numNotebookEvents++, str.c_str(), eventType);
 
     m_text->SetInsertionPointEnd();
 
