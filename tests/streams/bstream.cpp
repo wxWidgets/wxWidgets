@@ -37,7 +37,7 @@ class StreamCase : public TestSuite
 {
 public:
     StreamCase() 
-        :TestSuite("Streams") 
+        :TestSuite(STREAM_TEST_NAME) 
     { /* Nothing extra */ }
     static Test *suite();
 };

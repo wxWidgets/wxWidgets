@@ -84,7 +84,7 @@ private:
 
 ffileStream::ffileStream()
 {
-    /* Nothing extra */
+    m_bSeekInvalidBeyondEnd = false;
 }
 
 ffileStream::~ffileStream()

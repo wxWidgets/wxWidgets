@@ -84,7 +84,7 @@ private:
 
 fileStream::fileStream()
 {
-    /* Nothing extra */
+    m_bSeekInvalidBeyondEnd = false;
 }
 
 fileStream::~fileStream()

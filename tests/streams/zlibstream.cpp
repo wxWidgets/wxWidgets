@@ -34,6 +34,9 @@
 using namespace std;
 using namespace CppUnit;
 
+#define WXTEST_WITH_GZIP_CONDITION(testMethod) \
+    WXTEST_WITH_CONDITION( COMPOSE_TEST_NAME(zlibStream), wxZlibInputStream::CanHandleGZip() && wxZlibOutputStream::CanHandleGZip(), testMethod )
+
 #define DATABUFFER_SIZE 1024
 
 static const wxString FILENAME_GZ = _T("zlibtest.gz");
@@ -41,7 +44,7 @@ static const wxString FILENAME_GZ = _T("zlibtest.gz");
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 //
-// Try to fully test wxZlibInputStream and wxFileOutputStream
+// Try to fully test wxZlibInputStream and wxZlibOutputStream
 
 class zlibStream : public BaseStreamTestCase<wxZlibInputStream, wxZlibOutputStream>
 {
@@ -76,11 +79,11 @@ public:
         CPPUNIT_TEST(TestStream_ZLib_NoComp);
         CPPUNIT_TEST(TestStream_ZLib_SpeedComp);
         CPPUNIT_TEST(TestStream_ZLib_BestComp);
-        CPPUNIT_TEST(TestStream_GZip_Default);
-        CPPUNIT_TEST(TestStream_GZip_NoComp);
-        CPPUNIT_TEST(TestStream_GZip_SpeedComp);
-        CPPUNIT_TEST(TestStream_GZip_BestComp);
-        CPPUNIT_TEST(TestStream_ZLibGZip);
+        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_Default);
+        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_NoComp);
+        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_SpeedComp);
+        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_BestComp);
+        WXTEST_WITH_GZIP_CONDITION(TestStream_ZLibGZip);
         CPPUNIT_TEST(Decompress_BadData);
         CPPUNIT_TEST(Decompress_wx24Data);
     CPPUNIT_TEST_SUITE_END();

@@ -14,17 +14,19 @@
 using namespace CppUnit;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Some macros preventing use from typing too much ;-)
+// Some macros preventing us from typing too much ;-)
 //
 
 #define STREAM_TEST_NAME "Streams"
+#define COMPOSE_TEST_NAME(Name) \
+    STREAM_TEST_NAME "." #Name
 #define STREAM_REGISTER_SUB_SUITE(Name) \
     extern Test* Get##Name##Suite(); \
     suite->addTest(Get##Name##Suite())
 #define STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE(Name) \
     Test* Get##Name##Suite() { return Name::suite(); }
 #define STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(Name) \
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, STREAM_TEST_NAME "." #Name ); \
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) ); \
     STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE( Name )
 
 
@@ -57,6 +59,7 @@ public:
     BaseStreamTestCase()
         :m_bSimpleTellITest(false),
          m_bSimpleTellOTest(false),
+         m_bSeekInvalidBeyondEnd(true),
          m_pCurrentIn(NULL),
          m_pCurrentOut(NULL)
     { /* Nothing extra */ }
@@ -176,7 +179,7 @@ protected:
         //CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) == (off_t)stream_in.GetSize()-2);
         CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
-        CPPUNIT_ASSERT(stream_in.SeekI(10, wxFromCurrent) == wxInvalidOffset);
+        CPPUNIT_ASSERT((stream_in.SeekI(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
     }
 
     // Just try to perform a TellI() on the input stream.
@@ -210,14 +213,12 @@ protected:
         TStreamIn &stream_in = CreateInStream();
 
         // Test the full stream
-        while(!stream_in.Eof())
+        while (stream_in.IsOk())
         {
-            if (!stream_in.IsOk())
-                break;
-
             char peekChar = stream_in.Peek();
             char getChar = stream_in.GetC();
-            CPPUNIT_ASSERT(peekChar == getChar);
+            if (stream_in.LastRead() == 1)
+                CPPUNIT_ASSERT(peekChar == getChar);
         }
     }
 
@@ -313,7 +314,7 @@ protected:
         //CPPUNIT_ASSERT(stream_out.SeekO(-2, wxFromEnd) == (off_t)stream_in.GetSize()-2);
         CPPUNIT_ASSERT(stream_out.SeekO(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
-        CPPUNIT_ASSERT(stream_out.SeekO(10, wxFromCurrent) == wxInvalidOffset);
+        CPPUNIT_ASSERT((stream_out.SeekO(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
     }
 
     // Just try to perform a TellO() on the output stream.
@@ -349,6 +350,8 @@ protected:
                                 // Default false.
     bool m_bSimpleTellOTest;    // if true, no SeekO will be used by the TellI test. 
                                 // Default false.
+    bool m_bSeekInvalidBeyondEnd; // if true a SeekI|O beyond the end of the stream should return wxInvalidOffset
+                                  // Default true.
 
 protected:
     TStreamIn &CreateInStream()
