@@ -172,6 +172,7 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 }
 
 
+#if wxUSE_IMAGE
 
 /*static*/ void
 wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long type)
@@ -191,6 +192,7 @@ wxMemoryFSHandlerBase::AddFile(const wxString& filename, wxImage& image, long ty
     }
 }
 
+#endif // wxUSE_IMAGE
 
 /*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const wxString& textdata)
 {

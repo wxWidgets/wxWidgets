@@ -39,7 +39,9 @@ public:
     // Add file to list of files stored in memory. Stored data (bitmap, text or
     // raw data) will be copied into private memory stream and available under
     // name "memory:" + filename
+#if wxUSE_IMAGE
     static void AddFile(const wxString& filename, wxImage& image, long type);
+#endif // wxUSE_IMAGE
     static void AddFile(const wxString& filename, const wxString& textdata);
     static void AddFile(const wxString& filename, const void *binarydata, size_t size);
 
