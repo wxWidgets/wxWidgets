@@ -1,0 +1,43 @@
+                    How to write unit tests for wxWindows
+                    =====================================
+
+ Unit tests for wxWindows are written using small cppunit framework. To compile
+(but not to run) them you need to have it installed. Hence the first part of
+this note exlpains how to do it while the second one explains how to write the
+test.
+
+I. CppUnit Installation
+-----------------------
+
+1. Get it from http://www.sourceforge.net/projects/cppunit
+   (latest version as of the time of this writing is 1.8.0)
+
+2. Build the library:
+ a) Under Windows using VC++ (both versions 6 and 7 work):
+    - build everything in CppUnitLibraries.dsw work space
+    - add include and lib subdirectories of the directory
+      where you installed cppunit to the compiler search path
+      using "Tools|Options" menu in VC IDEA
+
+ b) Under Unix: run configure && make && make install as usual
+
+
+II. Writing tests with CppUnit
+------------------------------
+
+1. Create a new directory tests/foo
+
+2. Write the main.cpp file for the test program copying, if you want,
+   from one of the existing tests. The things to look for:
+ a) #include "wx/cppunit.h" instead of directly including CppUnit headers
+ b) don't put too many things in one test case nor in one method of a test
+    case as it makes understanding what exactly failed harder later
+
+   Read CppUnit documentation for more.
+
+3. Write a bakefile for the new test (again, copy an existing one...)
+
+=== EOF ===
+
+Author:  VZ
+Version: $Id$
