@@ -228,7 +228,9 @@ public:
     static wxXmlResource *Set(wxXmlResource *res);
 
     // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
-    int GetFlags() { return m_flags; }
+    int GetFlags() const { return m_flags; }
+    // Set flags after construction.
+    void SetFlags(int flags) { m_flags = flags; }
 
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
