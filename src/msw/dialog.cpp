@@ -322,18 +322,6 @@ bool wxDialog::Show(bool show)
                 {
                     // use it
                     m_parent = parent;
-
-                    // VZ: to make dialog behave properly we should reparent
-                    //     the dialog for Windows as well - unfortunately,
-                    //     following the docs for SetParent() results in this
-                    //     code which plainly doesn't work
-#if 0
-                    long dwStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-                    dwStyle &= ~WS_POPUP;
-                    dwStyle |= WS_CHILD;
-                    ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyle);
-                    ::SetParent(GetHwnd(), GetHwndOf(parent));
-#endif // 0
                 }
             }
 

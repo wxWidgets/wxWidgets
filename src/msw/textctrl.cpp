@@ -300,6 +300,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !MSWCreateControl(windowClass, msStyle, pos, size, value) )
         return FALSE;
 
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+
 #if wxUSE_RICHEDIT
     if (m_isRich)
     {

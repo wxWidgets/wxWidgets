@@ -193,8 +193,9 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
     {
         parent = wxTheApp->GetTopWindow();
 
-        // but don't use the window which is about to be destroyed as parent
-        if ( parent->IsBeingDeleted() )
+        // but don't use the window which is currently hidden as then the
+        // dialog would be hidden as well
+        if ( parent && !parent->IsShown() )
         {
             parent = NULL;
         }
