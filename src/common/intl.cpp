@@ -1418,9 +1418,11 @@ bool wxLocale::Init(const wxChar *szName,
   // TODO: how to find languageId
   // SetLocaleInfo(languageId, SORT_DEFAULT, localeName);
 #else
-  m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
-  if ( m_pszOldLocale )
-      m_pszOldLocale = wxStrdup(m_pszOldLocale);
+  wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, szLocale);
+  if ( oldLocale )
+      m_pszOldLocale = wxStrdup(oldLocale);
+  else
+      m_pszOldLocale = NULL;
 #endif
 
   if ( m_pszOldLocale == NULL )
