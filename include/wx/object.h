@@ -211,7 +211,7 @@ name##PluginSentinel  m_pluginsentinel;
     wxPluginLibrary *e = (wxPluginLibrary*) wxPluginLibrary::ms_classes.Get(#name);   \
     if( e != 0 ) { e->RefObj(); }                                      \
  }                                                                  \
- name::name##PluginSentinel::~##name##PluginSentinel() {            \
+ name::name##PluginSentinel::~name##PluginSentinel() {            \
     wxPluginLibrary *e = (wxPluginLibrary*) wxPluginLibrary::ms_classes.Get(#name);   \
     if( e != 0 ) { e->UnrefObj(); }                                 \
  }

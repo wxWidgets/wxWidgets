@@ -360,7 +360,7 @@
 #define wxUSE_DYNLIB_CLASS    1
 
 // experimental, don't use for now
-#define wxUSE_DYNAMIC_LOADER  0
+#define wxUSE_DYNAMIC_LOADER  1
 
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1

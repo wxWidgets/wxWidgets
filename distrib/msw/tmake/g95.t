@@ -299,7 +299,7 @@ else
 endif
 
 #ARCHINCDIR=$(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/lib/msw$(INCEXT))
-ARCHINCDIR=(WXDIR)/lib/msw$(INCEXT)
+ARCHINCDIR=$(WXDIR)/lib/msw$(INCEXT)
 
 SETUP_H=$(ARCHINCDIR)/wx/setup.h
 

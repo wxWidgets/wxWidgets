@@ -252,9 +252,11 @@ bool wxApp::Initialize()
         ;
 #endif // Win16
 
+#if wxUSE_OLE
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
+#endif
 
 #endif // wxUSE_OLE
 
