@@ -193,9 +193,6 @@ protected:
     // get our client size from the page size
     wxSize GetSizeForPage(const wxSize& size) const;
 
-    // change thep age and send events about it (can be vetoed by user code)
-    void ChangePage(int nPage);
-
     // scroll the tabs so that the first page shown becomes the given one
     void ScrollTo(int page);
 

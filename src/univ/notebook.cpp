@@ -212,6 +212,17 @@ int wxNotebook::SetSelection(int nPage)
         return m_sel;
     }
 
+    // event handling
+    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+    event.SetSelection(nPage);
+    event.SetOldSelection(m_sel);
+    event.SetEventObject(this);
+    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    {
+        // program doesn't allow the page change
+        return m_sel;
+    }
+
     // we need to change m_sel first, before calling RefreshTab() below as
     // otherwise the previously selected tab wouldn't be redrawn properly under
     // wxGTK which calls Refresh() immediately and not during the next event
@@ -255,33 +266,11 @@ int wxNotebook::SetSelection(int nPage)
         m_pages[m_sel]->Show();
     }
 
-    return selOld;
-}
-
-void wxNotebook::ChangePage(int nPage)
-{
-    wxCHECK_RET( IS_VALID_PAGE(nPage), _T("invalid notebook page") );
-
-    if ( (size_t)nPage == m_sel )
-    {
-        // nothing to do
-        return;
-    }
-
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-    event.SetSelection(nPage);
-    event.SetOldSelection(m_sel);
-    event.SetEventObject(this);
-    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
-    {
-        // program doesn't allow the page change
-        return;
-    }
-
-    SetSelection(nPage);
-
+    // event handling
     event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
     GetEventHandler()->ProcessEvent(event);
+
+    return selOld;
 }
 
 // ----------------------------------------------------------------------------
@@ -1303,11 +1292,11 @@ bool wxNotebook::PerformAction(const wxControlAction& action,
                                const wxString& strArg)
 {
     if ( action == wxACTION_NOTEBOOK_NEXT )
-        ChangePage(GetNextPage(TRUE));
+        SetSelection(GetNextPage(TRUE));
     else if ( action == wxACTION_NOTEBOOK_PREV )
-        ChangePage(GetNextPage(FALSE));
+        SetSelection(GetNextPage(FALSE));
     else if ( action == wxACTION_NOTEBOOK_GOTO )
-        ChangePage((int)numArg);
+        SetSelection((int)numArg);
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
