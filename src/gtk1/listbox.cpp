@@ -756,7 +756,11 @@ wxString wxListBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxGTK_CONV_BACK(  GET_REAL_LABEL(label->label) );
+#ifdef __WXGTK20__
+        wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+#else
+        wxString str = wxString( label->label );
+#endif
 
         return str;
     }
@@ -785,7 +789,11 @@ int wxListBox::FindString( const wxString &item ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxGTK_CONV_BACK( GET_REAL_LABEL(label->label) );
+#ifdef __WXGTK20__
+        wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+#else
+        wxString str = wxString( label->label );
+#endif
 
         if (str == item)
             return count;

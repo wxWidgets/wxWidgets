@@ -131,7 +131,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
+#ifndef __WXGTK20__
     gtk_list_set_selection_mode( GTK_LIST(list), GTK_SELECTION_MULTIPLE );
+#endif
 
     for (int i = 0; i < n; i++)
     {
@@ -405,7 +407,11 @@ wxString wxComboBox::GetString( int n ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        str = wxString(label->label,*wxConvCurrent);
+#ifdef __WXGTK20__
+        str = wxGTK_CONV_BACK( gtk_label_get_text( label) );
+#else
+        str = wxString( label->label );
+#endif
     }
     else
     {
@@ -471,8 +477,18 @@ void wxComboBox::SetStringSelection( const wxString &string )
 
 wxString wxComboBox::GetValue() const
 {
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    wxString tmp = wxString(gtk_entry_get_text( GTK_ENTRY(entry) ),*wxConvCurrent);
+    GtkEntry *entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+    wxString tmp( wxGTK_CONV_BACK( gtk_entry_get_text( entry ) ) );
+
+#if 0    
+    for (int i = 0; i < wxStrlen(tmp.c_str()) +1; i++)
+    {
+        wxChar c = tmp[i];
+        printf( "%d ", (int) (c) );
+    }
+    printf( "\n" );
+#endif
+    
     return tmp;
 }
 
@@ -540,14 +556,18 @@ long wxComboBox::GetLastPosition() const
 void wxComboBox::Replace( long from, long to, const wxString& value )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-    // FIXME: not quite sure how to do this method right in multibyte mode
-    // FIXME GTK 2.0
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
     if (value.IsNull()) return;
     gint pos = (gint)to;
-    gtk_editable_insert_text( GTK_EDITABLE(entry), value.mbc_str(), value.Length(), &pos );
+    
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = wxConvUTF8.cWX2MB( value );
+    gtk_editable_insert_text( GTK_EDITABLE(entry), (const char*) buffer, strlen( (const char*) buffer ), &pos );
+#else
+    gtk_editable_insert_text( GTK_EDITABLE(entry), value.c_str(), value.Length(), &pos );
+#endif
 }
 
 void wxComboBox::Remove(long from, long to)

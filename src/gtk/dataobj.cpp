@@ -95,7 +95,7 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
-    wxString ret( gdk_atom_name( m_format ) );  // this will convert from ascii to Unicode
+    wxString ret = wxString::FromAscii( gdk_atom_name( m_format ) );
     return ret;
 }
 
@@ -121,7 +121,7 @@ void wxDataFormat::SetId( const wxChar *id )
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
-    m_format = gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );  // what is the string cast for?
+    m_format = gdk_atom_intern( (const char*) tmp.ToAscii(), FALSE ); 
 }
 
 void wxDataFormat::PrepareFormats()
@@ -134,7 +134,11 @@ void wxDataFormat::PrepareFormats()
     //     text/uri-list for file dnd because compatibility is not important
     //     here (with whom?)
     if (!g_textAtom)
+#if wxUSE_UNICODE
+        g_textAtom = gdk_atom_intern( "text/utf8", FALSE );
+#else
         g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
+#endif
     if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
     if (!g_fileAtom)

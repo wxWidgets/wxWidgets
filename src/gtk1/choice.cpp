@@ -257,7 +257,11 @@ int wxChoice::FindString( const wxString &string ) const
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
         
-        wxString tmp( wxGTK_CONV_BACK( label->label ) );
+#ifdef __WXGTK20__
+         wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
+#else
+         wxString tmp( label->label );
+#endif
         if (string == tmp)
             return count;
 
@@ -271,9 +275,15 @@ int wxChoice::FindString( const wxString &string ) const
 int wxChoice::GetSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
+    
+#ifdef __WXGTK20__
 
+    return gtk_option_menu_get_history( GTK_OPTION_MENU(m_widget) );
+    
+#else
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
+    
     GList *child = menu_shell->children;
     while (child)
     {
@@ -284,6 +294,7 @@ int wxChoice::GetSelection() const
     }
 
     return -1;
+#endif
 }
 
 void wxChoice::SetString( int WXUNUSED(n), const wxString& WXUNUSED(string) )
@@ -313,7 +324,11 @@ wxString wxChoice::GetString( int n ) const
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-            return wxString( wxGTK_CONV_BACK(label->label) );
+#ifdef __WXGTK20__
+            return wxString( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
+#else
+            return wxString( label->label );
+#endif
         }
         child = child->next;
         count++;
