@@ -35,8 +35,11 @@
 
 #include "wx/progdlg.h"
 
-// uncomment this to get some debugging messages from the trace code
-//#define TRACE
+#ifdef USE_EXECUTE
+    #define EXEC(cmd) wxExecute((cmd), wxEXEC_SYNC)
+#else
+    #define EXEC(cmd) system(cmd)
+#endif
 
 class MyThread;
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
@@ -74,7 +77,6 @@ public:
 
     // callbacks
     void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
 
     void OnStartThread(wxCommandEvent& event);
@@ -86,6 +88,12 @@ public:
     void OnStartWorker(wxCommandEvent& event);
     void OnWorkerEvent(wxCommandEvent& event);
     void OnUpdateWorker(wxUpdateUIEvent& event);
+
+    void OnExecMain(wxCommandEvent& event);
+    void OnExecThread(wxCommandEvent& event);
+
+    void OnShowCPUs(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent &event);
 
@@ -114,22 +122,28 @@ private:
 // ID for the menu commands
 enum
 {
-    TEST_QUIT          = 1,
-    TEST_TEXT          = 101,
-    TEST_ABOUT,
-    TEST_CLEAR,
-    TEST_START_THREAD  = 201,
-    TEST_START_THREADS,
-    TEST_STOP_THREAD,
-    TEST_PAUSE_THREAD,
-    TEST_RESUME_THREAD,
-    TEST_START_WORKER,
+    THREAD_QUIT          = 1,
+    THREAD_TEXT          = 101,
+    THREAD_CLEAR,
+    THREAD_START_THREAD  = 201,
+    THREAD_START_THREADS,
+    THREAD_STOP_THREAD,
+    THREAD_PAUSE_THREAD,
+    THREAD_RESUME_THREAD,
+    THREAD_START_WORKER,
+
+    THREAD_EXEC_MAIN,
+    THREAD_EXEC_THREAD,
+
+    THREAD_SHOWCPUS,
+    THREAD_ABOUT,
+
     WORKER_EVENT    // this one gets sent from the worker thread
 };
 
-//--------------------------------------------------
+// ----------------------------------------------------------------------------
 // GUI thread
-//--------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class MyThread : public wxThread
 {
@@ -209,9 +223,9 @@ void *MyThread::Entry()
     return NULL;
 }
 
-//--------------------------------------------------
+// ----------------------------------------------------------------------------
 // worker thread
-//--------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class MyWorkerThread : public wxThread
 {
@@ -249,19 +263,12 @@ void *MyWorkerThread::Entry()
         if ( TestDestroy() )
             break;
 
-        wxString text;
-        text.Printf(wxT("[%u] Thread 0x%x here!!"), m_count, GetId());
-
         // create any type of command event here
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
         event.SetInt( m_count );
-        event.SetString( text );
 
         // send in a thread-safe way
         wxPostEvent( m_frame, event );
-
-        // same as:
-        // m_frame->AddPendingEvent( event );
 
         // wxSleep() can't be called from non-main thread!
         wxThread::Sleep(200);
@@ -274,22 +281,49 @@ void *MyWorkerThread::Entry()
     return NULL;
 }
 
-//--------------------------------------------------
-// main program
-//--------------------------------------------------
+// ----------------------------------------------------------------------------
+// a thread which simply calls wxExecute
+// ----------------------------------------------------------------------------
+
+class MyExecThread : public wxThread
+{
+public:
+    MyExecThread(const wxChar *command) : wxThread(wxTHREAD_JOINABLE),
+                                          m_command(command)
+    {
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        return (ExitCode)EXEC(m_command);
+    }
+
+private:
+    wxString m_command;
+};
+
+// ----------------------------------------------------------------------------
+// implementation
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(TEST_QUIT, MyFrame::OnQuit)
-    EVT_MENU(TEST_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(TEST_CLEAR, MyFrame::OnClear)
-    EVT_MENU(TEST_START_THREAD, MyFrame::OnStartThread)
-    EVT_MENU(TEST_START_THREADS, MyFrame::OnStartThreads)
-    EVT_MENU(TEST_STOP_THREAD, MyFrame::OnStopThread)
-    EVT_MENU(TEST_PAUSE_THREAD, MyFrame::OnPauseThread)
-    EVT_MENU(TEST_RESUME_THREAD, MyFrame::OnResumeThread)
+    EVT_MENU(THREAD_QUIT, MyFrame::OnQuit)
+    EVT_MENU(THREAD_CLEAR, MyFrame::OnClear)
+    EVT_MENU(THREAD_START_THREAD, MyFrame::OnStartThread)
+    EVT_MENU(THREAD_START_THREADS, MyFrame::OnStartThreads)
+    EVT_MENU(THREAD_STOP_THREAD, MyFrame::OnStopThread)
+    EVT_MENU(THREAD_PAUSE_THREAD, MyFrame::OnPauseThread)
+    EVT_MENU(THREAD_RESUME_THREAD, MyFrame::OnResumeThread)
 
-    EVT_UPDATE_UI(TEST_START_WORKER, MyFrame::OnUpdateWorker)
-    EVT_MENU(TEST_START_WORKER, MyFrame::OnStartWorker)
+    EVT_MENU(THREAD_EXEC_MAIN, MyFrame::OnExecMain)
+    EVT_MENU(THREAD_EXEC_THREAD, MyFrame::OnExecThread)
+
+    EVT_MENU(THREAD_SHOWCPUS, MyFrame::OnShowCPUs)
+    EVT_MENU(THREAD_ABOUT, MyFrame::OnAbout)
+
+    EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
+    EVT_MENU(THREAD_START_WORKER, MyFrame::OnStartWorker)
     EVT_MENU(WORKER_EVENT, MyFrame::OnWorkerEvent)
 
     EVT_IDLE(MyFrame::OnIdle)
@@ -298,37 +332,46 @@ END_EVENT_TABLE()
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-#ifdef TRACE
-    wxLog::AddTraceMask("thread");
-#endif
+    // uncomment this to get some debugging messages from the trace code
+    // on the console (or just set WXTRACE env variable to include "thread")
+    //wxLog::AddTraceMask("thread");
 
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *)NULL, "wxWindows threads sample",
                                  50, 50, 450, 340);
 
     // Make a menubar
-    wxMenu *file_menu = new wxMenu;
+    wxMenuBar *menuBar = new wxMenuBar;
 
-    file_menu->Append(TEST_CLEAR, "&Clear log\tCtrl-L");
-    file_menu->AppendSeparator();
-    file_menu->Append(TEST_ABOUT, "&About");
-    file_menu->AppendSeparator();
-    file_menu->Append(TEST_QUIT, "E&xit\tAlt-X");
-    wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(THREAD_CLEAR, "&Clear log\tCtrl-L");
+    menuFile->AppendSeparator();
+    menuFile->Append(THREAD_QUIT, "E&xit\tAlt-X");
+    menuBar->Append(menuFile, "&File");
 
-    wxMenu *thread_menu = new wxMenu;
-    thread_menu->Append(TEST_START_THREAD, "&Start a new thread\tCtrl-N");
-    thread_menu->Append(TEST_START_THREADS, "Start &many threads at once");
-    thread_menu->Append(TEST_STOP_THREAD, "S&top a running thread\tCtrl-S");
-    thread_menu->AppendSeparator();
-    thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread\tCtrl-P");
-    thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
-    thread_menu->AppendSeparator();
-    thread_menu->Append(TEST_START_WORKER, "Start &worker thread\tCtrl-W");
+    wxMenu *menuThread = new wxMenu;
+    menuThread->Append(THREAD_START_THREAD, "&Start a new thread\tCtrl-N");
+    menuThread->Append(THREAD_START_THREADS, "Start &many threads at once");
+    menuThread->Append(THREAD_STOP_THREAD, "S&top a running thread\tCtrl-S");
+    menuThread->AppendSeparator();
+    menuThread->Append(THREAD_PAUSE_THREAD, "&Pause a running thread\tCtrl-P");
+    menuThread->Append(THREAD_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
+    menuThread->AppendSeparator();
+    menuThread->Append(THREAD_START_WORKER, "Start &worker thread\tCtrl-W");
+    menuBar->Append(menuThread, "&Thread");
 
-    menu_bar->Append(thread_menu, "&Thread");
-    frame->SetMenuBar(menu_bar);
+    wxMenu *menuExec = new wxMenu;
+    menuExec->Append(THREAD_EXEC_MAIN, "&Launch a program from main thread\tF5");
+    menuExec->Append(THREAD_EXEC_THREAD, "L&aunch a program from a thread\tCtrl-F5");
+    menuBar->Append(menuExec, "&Execute");
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(THREAD_SHOWCPUS, "&Show CPU count");
+    menuHelp->AppendSeparator();
+    menuHelp->Append(THREAD_ABOUT, "&About...");
+    menuBar->Append(menuHelp, "&Help");
+
+    frame->SetMenuBar(menuBar);
 
     // Show the frame
     frame->Show(TRUE);
@@ -528,6 +571,47 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
     Close(TRUE);
 }
 
+void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("The exit code from the main program is %ld",
+                 EXEC("/bin/echo \"main program\""));
+}
+
+void MyFrame::OnExecThread(wxCommandEvent& WXUNUSED(event))
+{
+    MyExecThread thread("/bin/echo \"child thread\"");
+    thread.Run();
+
+    wxLogMessage("The exit code from a child thread is %ld",
+                 (long)thread.Wait());
+}
+
+void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
+{
+    wxString msg;
+
+    int nCPUs = wxThread::GetCPUCount();
+    switch ( nCPUs )
+    {
+        case -1:
+            msg = "Unknown number of CPUs";
+            break;
+
+        case 0:
+            msg = "WARNING: you're running without any CPUs!";
+            break;
+
+        case 1:
+            msg = "This system only has one CPU.";
+            break;
+
+        default:
+            msg.Printf("This system has %d CPUs", nCPUs);
+    }
+            
+    wxLogMessage(msg);
+}
+
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(this, "wxWindows multithreaded application sample\n"
@@ -542,11 +626,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef TRACE
-    // log a separator
-    wxLogTrace("-------- log window cleared --------");
-#endif
-
     m_txtctrl->Clear();
 }
 
