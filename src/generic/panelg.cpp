@@ -121,7 +121,12 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
-    return wxWindow::Create(parent, id, pos, size, style, name);
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return false;
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+
+    return true;
 }
 
 wxPanel::~wxPanel()
