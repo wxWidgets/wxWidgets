@@ -25,6 +25,7 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/os2/private.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif // PCH
