@@ -77,6 +77,9 @@
 // The SC_CP_UTF8 value can be used to enter Unicode mode.
 // This is the same value as CP_UTF8 in Windows
 #define wxSTC_CP_UTF8 65001
+
+// The SC_CP_DBCS value can be used to indicate a DBCS mode for GTK+.
+#define wxSTC_CP_DBCS 1
 #define wxSTC_MARKER_MAX 31
 #define wxSTC_MARK_CIRCLE 0
 #define wxSTC_MARK_ROUNDRECT 1
@@ -107,6 +110,7 @@
 #define wxSTC_MARK_BACKGROUND 22
 #define wxSTC_MARK_DOTDOTDOT 23
 #define wxSTC_MARK_ARROWS 24
+#define wxSTC_MARK_PIXMAP 25
 #define wxSTC_MARK_CHARACTER 10000
 
 // Markers used for outlining column.
@@ -188,7 +192,17 @@
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
+#define wxSTC_FOLDLEVELBOXHEADERFLAG 0x4000
+#define wxSTC_FOLDLEVELBOXFOOTERFLAG 0x8000
+#define wxSTC_FOLDLEVELCONTRACTED 0x10000
+#define wxSTC_FOLDLEVELUNINDENT 0x20000
 #define wxSTC_FOLDLEVELNUMBERMASK 0x0FFF
+#define wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED 0x0002
+#define wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED 0x0004
+#define wxSTC_FOLDFLAG_LINEAFTER_EXPANDED 0x0008
+#define wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED 0x0010
+#define wxSTC_FOLDFLAG_LEVELNUMBERS 0x0040
+#define wxSTC_FOLDFLAG_BOX 0x0001
 #define wxSTC_TIME_FOREVER 10000000
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
@@ -200,7 +214,7 @@
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
 #define wxSTC_CURSORNORMAL -1
-#define wxSTC_CURSORWAIT 3
+#define wxSTC_CURSORWAIT 4
 
 // Constants for use with SetVisiblePolicy, similar to SetCaretPolicy.
 #define wxSTC_VISIBLE_SLOP 0x01
@@ -308,6 +322,11 @@
 #define wxSTC_LEX_BAAN 31
 #define wxSTC_LEX_MATLAB 32
 #define wxSTC_LEX_SCRIPTOL 33
+#define wxSTC_LEX_ASM 34
+#define wxSTC_LEX_CPPNOCASE 35
+#define wxSTC_LEX_FORTRAN 36
+#define wxSTC_LEX_F77 37
+#define wxSTC_LEX_CSS 38
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -576,6 +595,7 @@
 #define wxSTC_ERR_DIFF_ADDITION 11
 #define wxSTC_ERR_DIFF_DELETION 12
 #define wxSTC_ERR_DIFF_MESSAGE 13
+#define wxSTC_ERR_PHP 14
 
 // Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -622,24 +642,31 @@
 #define wxSTC_AVE_COMMENT 1
 #define wxSTC_AVE_NUMBER 2
 #define wxSTC_AVE_WORD 3
-#define wxSTC_AVE_KEYWORD 4
-#define wxSTC_AVE_STATEMENT 5
 #define wxSTC_AVE_STRING 6
 #define wxSTC_AVE_ENUM 7
 #define wxSTC_AVE_STRINGEOL 8
 #define wxSTC_AVE_IDENTIFIER 9
 #define wxSTC_AVE_OPERATOR 10
+#define wxSTC_AVE_WORD1 11
+#define wxSTC_AVE_WORD2 12
+#define wxSTC_AVE_WORD3 13
+#define wxSTC_AVE_WORD4 14
+#define wxSTC_AVE_WORD5 15
+#define wxSTC_AVE_WORD6 16
 
 // Lexical states for SCLEX_ADA
 #define wxSTC_ADA_DEFAULT 0
-#define wxSTC_ADA_COMMENT 1
-#define wxSTC_ADA_NUMBER 2
-#define wxSTC_ADA_WORD 3
-#define wxSTC_ADA_STRING 4
+#define wxSTC_ADA_WORD 1
+#define wxSTC_ADA_IDENTIFIER 2
+#define wxSTC_ADA_NUMBER 3
+#define wxSTC_ADA_DELIMITER 4
 #define wxSTC_ADA_CHARACTER 5
-#define wxSTC_ADA_OPERATOR 6
-#define wxSTC_ADA_IDENTIFIER 7
+#define wxSTC_ADA_CHARACTEREOL 6
+#define wxSTC_ADA_STRING 7
 #define wxSTC_ADA_STRINGEOL 8
+#define wxSTC_ADA_LABEL 9
+#define wxSTC_ADA_COMMENTLINE 10
+#define wxSTC_ADA_ILLEGAL 11
 
 // Lexical states for SCLEX_BAAN
 #define wxSTC_BAAN_DEFAULT 0
@@ -719,6 +746,51 @@
 #define wxSTC_SCRIPTOL_COMMENTDOCKEYWORD 17
 #define wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR 18
 #define wxSTC_SCRIPTOL_COMMENTBASIC 19
+
+// Lexical states for SCLEX_ASM
+#define wxSTC_ASM_DEFAULT 0
+#define wxSTC_ASM_COMMENT 1
+#define wxSTC_ASM_NUMBER 2
+#define wxSTC_ASM_STRING 3
+#define wxSTC_ASM_OPERATOR 4
+#define wxSTC_ASM_IDENTIFIER 5
+#define wxSTC_ASM_CPUINSTRUCTION 6
+#define wxSTC_ASM_MATHINSTRUCTION 7
+#define wxSTC_ASM_REGISTER 8
+#define wxSTC_ASM_DIRECTIVE 9
+#define wxSTC_ASM_DIRECTIVEOPERAND 10
+
+// Lexical states for SCLEX_FORTRAN
+#define wxSTC_F_DEFAULT 0
+#define wxSTC_F_COMMENT 1
+#define wxSTC_F_NUMBER 2
+#define wxSTC_F_STRING1 3
+#define wxSTC_F_STRING2 4
+#define wxSTC_F_STRINGEOL 5
+#define wxSTC_F_OPERATOR 6
+#define wxSTC_F_IDENTIFIER 7
+#define wxSTC_F_WORD 8
+#define wxSTC_F_WORD2 9
+#define wxSTC_F_WORD3 10
+#define wxSTC_F_PREPROCESSOR 11
+#define wxSTC_F_OPERATOR2 12
+#define wxSTC_F_LABEL 13
+#define wxSTC_F_CONTINUATION 14
+
+// Lexical states for SCLEX_CSS
+#define wxSTC_CSS_DEFAULT 0
+#define wxSTC_CSS_TAG 1
+#define wxSTC_CSS_CLASS 2
+#define wxSTC_CSS_PSEUDOCLASS 3
+#define wxSTC_CSS_UNKNOWN_PSEUDOCLASS 4
+#define wxSTC_CSS_OPERATOR 5
+#define wxSTC_CSS_IDENTIFIER 6
+#define wxSTC_CSS_UNKNOWN_IDENTIFIER 7
+#define wxSTC_CSS_VALUE 8
+#define wxSTC_CSS_COMMENT 9
+#define wxSTC_CSS_ID 10
+#define wxSTC_CSS_IMPORTANT 11
+#define wxSTC_CSS_DIRECTIVE 12
 
 
 //-----------------------------------------
@@ -866,6 +938,9 @@
 
 // Switch the current line with the previous.
 #define wxSTC_CMD_LINETRANSPOSE 2339
+
+// Duplicate the current line.
+#define wxSTC_CMD_LINEDUPLICATE 2404
 
 // Transform the selection to lower case.
 #define wxSTC_CMD_LOWERCASE 2340
@@ -1091,8 +1166,8 @@ public:
     // Set the symbol used for a particular marker number,
     // and optionally the fore and background colours.
     void MarkerDefine(int markerNumber, int markerSymbol,
-                         const wxColour& foreground = wxNullColour,
-                         const wxColour& background = wxNullColour);
+                const wxColour& foreground = wxNullColour,
+                const wxColour& background = wxNullColour);
 
     // Set the foreground colour used for a particular marker number.
     void MarkerSetForeground(int markerNumber, const wxColour& fore);
@@ -1117,6 +1192,9 @@ public:
 
     // Find the previous line before lineStart that includes a marker in mask.
     int MarkerPrevious(int lineStart, int markerMask);
+
+    // Define a marker from a bitmap
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
 
     // Set a margin to be either numeric or symbolic.
     void SetMarginType(int margin, int marginType);
@@ -1339,6 +1417,19 @@ public:
     // after the inserted text upon completion.
     bool AutoCompGetDropRestOfWord();
 
+    // Register an image for use in autocompletion lists.
+    void RegisterImage(int type, const wxBitmap& bmp);
+
+    // Clear all the registered images.
+    void ClearRegisteredImages();
+
+    // Retrieve the auto-completion list type-separator character.
+    int AutoCompGetTypeSeparator();
+
+    // Change the type-separator character in the string setting up an auto-completion list.
+    // Default is '?' but can be changed if items contain '?'.
+    void AutoCompSetTypeSeparator(int separatorCharacter);
+
     // Set the number of spaces used for one level of indentation.
     void SetIndent(int indentSize);
 
@@ -1427,14 +1518,14 @@ public:
 
     // On Windows, will draw the document into a display context such as a printer.
     int FormatRange(bool   doDraw,
-                               int    startPos,
-                               int    endPos,
-                               wxDC*  draw,
-                               wxDC*  target,  // Why does it use two? Can they be the same?
-                               wxRect renderRect,
-                               wxRect pageRect);
+               int    startPos,
+               int    endPos,
+               wxDC*  draw,
+               wxDC*  target,  // Why does it use two? Can they be the same?
+               wxRect renderRect,
+               wxRect pageRect);
 
-    // Retrieve the line at the top of the display.
+    // Retrieve the display line at the top of the display.
     int GetFirstVisibleLine();
 
     // Retrieve the contents of a line.
@@ -1630,7 +1721,7 @@ public:
     // Ensure a particular line is visible by expanding any header line hiding it.
     void EnsureVisible(int line);
 
-    // Set some debugging options for folding.
+    // Set some style options for folding.
     void SetFoldFlags(int flags);
 
     // Ensure a particular line is visible by expanding any header line hiding it.
@@ -1695,6 +1786,40 @@ public:
 
     // Retrieve the height of a particular line of text in pixels.
     int TextHeight(int line);
+
+    // Show or hide the vertical scroll bar.
+    void SetUseVerticalScrollBar(bool show);
+
+    // Is the vertical scroll bar visible?
+    bool GetUseVerticalScrollBar();
+
+    // Append a string to the end of the document without changing the selection.
+    void AppendText(int length, const wxString& text);
+
+    // Is drawing done in two phases with backgrounds drawn before foregrounds?
+    bool GetTwoPhaseDraw();
+
+    // In twoPhaseDraw mode, drawing is performed in two phases, first the background
+    // and then the foreground. This avoids chopping off characters that overlap the next run.
+    void SetTwoPhaseDraw(bool twoPhase);
+
+    // Make the target range start and end be the same as the selection range start and end.
+    void TargetFromSelection();
+
+    // Join the lines in the target.
+    // This is an experimental feature and may be changed or removed.
+    void LinesJoin();
+
+    // Split the lines in the target into lines that are less wide than pixelWidth
+    // where possible.
+    void LinesSplit(int pixelWidth);
+
+    // Set the colours used as a chequerboard pattern in the fold margin
+    void SetFoldMarginColour(bool useSetting, const wxColour& back);
+    void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
+
+    // Duplicate the current line.
+    void LineDuplicate();
 
     // Move caret to first position on display line.
     void HomeDisplay();
@@ -1860,6 +1985,9 @@ public:
     void SetXOffset(int newOffset);
     int GetXOffset();
 
+    // Set the last x chosen value to be the caret x position
+    void ChooseCaretX();
+
     // Set the way the caret is kept visible when going sideway.
     // The exclusion zone is given in pixels.
     void SetXCaretPolicy(int caretPolicy, int caretSlop);
@@ -1867,6 +1995,12 @@ public:
     // Set the way the line the caret is on is kept visible.
     // The exclusion zone is given in lines.
     void SetYCaretPolicy(int caretPolicy, int caretSlop);
+
+    // Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
+    void SetPrintWrapMode(int mode);
+
+    // Is printing line wrapped.
+    int GetPrintWrapMode();
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();
