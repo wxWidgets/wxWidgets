@@ -10,13 +10,18 @@
 #pragma implementation "wxllist.h"
 #endif
 
+#include "wx/wxprec.h"
+#ifdef __BORLANDC__
+#  pragma hdrstop
+#endif
+
+
 //#include "Mpch.h"
 #ifdef M_PREFIX
 #   include "gui/wxllist.h"
 #else
 #   include "wxllist.h"
 #endif
-
 #ifndef USE_PCH
 #   include   "iostream.h"
 #   include   <wx/dc.h>
@@ -198,7 +203,8 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &coords)
 {
-   dc.DrawBitmap(*m_Icon, coords.x, coords.y-m_Icon->GetHeight());
+   dc.DrawBitmap(*m_Icon, coords.x, coords.y-m_Icon->GetHeight(),
+                 (m_Icon->GetMask() == NULL) ? FALSE : TRUE);
 }
 
 void
@@ -1476,11 +1482,11 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    float scale = ScaleDC(&psdc);
 
    psdc.GetSize(&m_PageWidth, &m_PageHeight);
-   // This sets a left/top origin of 10% and 20%:
+   // This sets a left/top origin of 10% and 5%:
    m_Offset = wxPoint(m_PageWidth/10, m_PageHeight/20);
 
    // This is the length of the printable area.
-   m_PrintoutHeight = m_PageHeight - (int) (m_PageHeight * 0.1);
+   m_PrintoutHeight = m_PageHeight - (int) (m_PageHeight * 0.15);
    m_PrintoutHeight = (int)( m_PrintoutHeight / scale); // we want to use the real paper height
    
    

@@ -11,14 +11,17 @@
 #pragma implementation "wxLayout.h"
 #endif
 
+#include "wx/wxprec.h"
+#ifdef __BORLANDC__
+#  pragma hdrstop
+#endif
+
 #include "wxLayout.h"
 #include "wx/textfile.h"
 
 
 #include   "Micon.xpm"
 
-// for testing only:
-#include   <stdio.h>
 
 //-----------------------------------------------------------------------------
 // main program
@@ -53,8 +56,6 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    EVT_CHAR    (  wxLayoutWindow::OnChar  )
    END_EVENT_TABLE()
 
-
-   int orientation = wxPORTRAIT;
 
 MyFrame::MyFrame(void) :
    wxFrame( (wxFrame *) NULL, -1, (char *) "wxLayout", wxPoint(20,20), wxSize(600,360) )
@@ -296,7 +297,6 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 #endif
    wxPrintData printData;
-   printData.SetOrientation(orientation);
 
    // Pass two printout objects: for preview, and possible printing.
    wxPrintPreview *preview = new wxPrintPreview(new
@@ -320,7 +320,6 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
    wxPrintData printData;
-   printData.SetOrientation(orientation);
 
    // Pass two printout objects: for preview, and possible printing.
    wxPrintPreview *preview = new wxPrintPreview(new wxLayoutPrintout( m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);
@@ -332,23 +331,13 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
+#ifdef OS_WIN
    wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
 #else
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 #endif
-   wxPrintData data;
-   data.SetOrientation(orientation);
-
-#ifdef __WXMSW__
-   wxPrintDialog printerDialog(this, & data);
-#else
-   wxGenericPrintDialog printerDialog(this, & data);
-#endif
-   printerDialog.GetPrintData().SetSetupDialog(TRUE);
+   wxPrintDialog printerDialog(this, & m_PrintData);
    printerDialog.ShowModal();
-
-   orientation = printerDialog.GetPrintData().GetOrientation();
 }
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
@@ -359,7 +348,6 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 #endif
    wxPageSetupData data;
-   data.SetOrientation(orientation);
 
 #ifdef __WXMSW__
    wxPageSetupDialog pageSetupDialog(this, & data);
@@ -369,7 +357,6 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
    pageSetupDialog.ShowModal();
 
    data = pageSetupDialog.GetPageSetupData();
-   orientation = data.GetOrientation();
 }
 
 void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
@@ -377,17 +364,13 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
    wxPrintData data;
-   data.SetOrientation(orientation);
 
 #ifdef __WXMSW__
    wxPrintDialog printerDialog(this, & data);
 #else
    wxGenericPrintDialog printerDialog(this, & data);
 #endif
-   printerDialog.GetPrintData().SetSetupDialog(TRUE);
    printerDialog.ShowModal();
-
-   orientation = printerDialog.GetPrintData().GetOrientation();
 }
 
 void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
@@ -395,16 +378,12 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
    wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
    wxPageSetupData data;
-   data.SetOrientation(orientation);
-
 #ifdef __WXMSW__
    wxPageSetupDialog pageSetupDialog(this, & data);
 #else
    wxGenericPageSetupDialog pageSetupDialog(this, & data);
 #endif
    pageSetupDialog.ShowModal();
-
-   orientation = pageSetupDialog.GetPageSetupData().GetOrientation();
 }
 
 

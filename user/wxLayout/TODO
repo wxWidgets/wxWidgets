@@ -5,14 +5,37 @@ BUGS
 - dmalloc shows duplicate deletion after merging two lines and
   deleting the second half
 
-- printout page calculation still a bit wrong
 - word wrap for objects with lots of non-space needs to search in positive
-direction if begin of first object is reached
+  direction if begin of first object is reached
+
+  - delete in empty line doesn't always work
+  - fix initial scrollbar sizes
+  - fix horiz scrollbar size
+  - occasionally wraps lines wongly (twice) ??
 
 TODO
 =====================================================================
 - replacement of llist in window
 - undo
-- Selections
-- More optimisations
 
+- Selections!!!
+
+- More optimisations:
+
+- let each line have a pointer to the last layoutcommand and let that
+  one only store the settings that changed, then we no longer need to
+  recalculate all the lines
+
+  - update rectangle (needs support in wxllist and wxWindows)
+
+- fix(simplify) cursor size calculation: don't use icon cursor if there
+  is no cursor object
+
+  - copy/cut/selections
+  - UNDO
+
+- cut&paste (paste is there but broken in wxGTK)
+  The current paste in wxGTK is broken, support is there.
+  Once selections are there, add copy (trivial).
+
+- DragNDrop (waiting for wxGTK/gtk1.2 & GNOME 1.0 / Debian Slink)

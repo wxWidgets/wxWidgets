@@ -10,8 +10,13 @@
 #   pragma implementation "wxlwindow.h"
 #endif
 
-//#include "Mpch.h"
+#include "wx/wxprec.h"
+#ifdef __BORLANDC__
+#  pragma hdrstop
+#endif
 
+
+//#include "Mpch.h"
 #ifdef M_BASEDIR
 #   ifndef USE_PCH
 #     include "Mcommon.h"
@@ -34,6 +39,7 @@
 #endif
 
 #include <wx/clipbrd.h>
+#include <wx/textctrl.h>
 #include <wx/dataobj.h>
 
 #include <ctype.h>
@@ -429,6 +435,7 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 void
 wxLayoutWindow::Paste(void)
 {
+   wxString text;
    // Read some text
    if (wxTheClipboard->Open())
    {
@@ -436,10 +443,28 @@ wxLayoutWindow::Paste(void)
       if (wxTheClipboard->IsSupported(wxDF_TEXT))
       {
          wxTheClipboard->GetData(&data);
-         wxLayoutImportText( m_llist, data.GetText());
+         text += data.GetText();
       }  
       wxTheClipboard->Close();
    }
+#ifdef __WXGTK__
+   /* wxGTK's sophisticated multi-format copy/paste is not supported
+      by 99% of the X11 clients available. If there was no selection,
+      do the dumb thing, too:
+   */
+#if 0
+   /* Unfortunately, this little hack doesn't work. So I'll go back to 
+      pure X11. */
+   if(text.Length() == 0)
+   {
+      wxTextCtrl tmp_tctrl(this,-1);
+      tmp_tctrl.Paste();
+      text += tmp_tctrl.GetValue();
+   }
+#endif
+   
+#endif
+   wxLayoutImportText( m_llist, text);
 }
 
 

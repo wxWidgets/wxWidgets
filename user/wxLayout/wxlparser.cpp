@@ -34,6 +34,8 @@ inline static bool IsEndOfLine(const char *p, int mode)
 
 void wxLayoutImportText(wxLayoutList *list, wxString const &str, int withflag)
 {
+   if(str.Length() == 0)
+      return;
    char * cptr = (char *)str.c_str(); // string gets changed only temporarily
    const char * begin = cptr;
    char  backup;

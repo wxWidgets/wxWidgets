@@ -48,7 +48,7 @@ class MyFrame: public wxFrame
 
 private:
    wxLayoutWindow  *m_lwin;
-   
+   wxPrintData m_PrintData;
 };
 
 //-----------------------------------------------------------------------------
