@@ -1815,7 +1815,7 @@ int wxListMainWindow::GetSelectedItemCount( void )
     if (line->IsHilighted()) ret++;
     node = node->Next();
   }
-  return 0;
+  return ret;
 }
 
 void wxListMainWindow::SetMode( long mode )
