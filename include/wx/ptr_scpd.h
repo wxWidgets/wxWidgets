@@ -182,5 +182,32 @@ void name::reset(T * p){                \
     }                                   \
 }
 
+// ----------------------------------------------------------------------------
+// "Tied" scoped pointer: same as normal one but also sets the value of
+//                        some other variable to the pointer value
+// ----------------------------------------------------------------------------
+
+#define wxDEFINE_TIED_SCOPED_PTR_TYPE(T)                                      \
+    wxDEFINE_SCOPED_PTR_TYPE(T);                                              \
+    class T ## TiedPtr : public T ## Ptr                                      \
+    {                                                                         \
+    public:                                                                   \
+        T ## TiedPtr(T **pp, T *p)                                            \
+            : T ## Ptr(p), m_pp(pp)                                           \
+        {                                                                     \
+            m_pOld = *pp;                                                     \
+            *pp = p;                                                          \
+        }                                                                     \
+                                                                              \
+        ~ T ## TiedPtr()                                                      \
+        {                                                                     \
+            *m_pp = m_pOld;                                                   \
+        }                                                                     \
+                                                                              \
+    private:                                                                  \
+        T **m_pp;                                                             \
+        T *m_pOld;                                                            \
+    }
+
 #endif // __WX_SCOPED_POINTER__
 

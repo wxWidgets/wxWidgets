@@ -86,10 +86,18 @@ Once again, in this cass \texttt{CLASSNAME} will be \texttt{TYPEPtr}.
 
 \membersection{wxScopedPtr::wxScopedPtr}
 
-\func{}{wxScopedPtr}{\param{type}{ * T = NULL}}
+\func{}{explicit wxScopedPtr}{\param{type}{ * T = NULL}}
 
-Creates the smart pointer with the given pointer or none if NULL.  On
+Creates the smart pointer with the given pointer or none if {\tt NULL}.  On
 compilers that support it, this uses the explicit keyword.
+
+
+\membersection{wxScopedPtr::\destruct{wxScopedPtr}
+
+\func{}{\destruct{wxScopedPtr}}{\void}
+
+Destructor frees the pointer help by this object if it is not {\t NULL}.
+
 
 \membersection{wxScopedPtr::release}
 
@@ -108,6 +116,7 @@ Deletes the currently held pointer and sets it to {\it p} or to NULL if no
 arguments are specified. This function does check to make sure that the
 pointer you are assigning is not the same pointer that is already stored.
 
+
 \membersection{wxScopedPtr::operator *}
 
 \func{const T\&}{operator *}{\void}
@@ -116,12 +125,14 @@ This operator works like the standard C++ pointer operator to return the object
 being pointed to by the pointer.  If the pointer is NULL or invalid this will
 crash.
 
+
 \membersection{wxScopedPtr::operator -$>$} % TODO
 
 \func{const T*}{operator -$>$}{\void} % TODO
 
 This operator works like the standard C++ pointer operator to return the pointer
 in the smart pointer or NULL if it is empty.
+
 
 \membersection{wxScopedPtr::get}
 
@@ -130,10 +141,58 @@ in the smart pointer or NULL if it is empty.
 This operator gets the pointer stored in the smart pointer or returns NULL if
 there is none.
 
+
 \membersection{wxScopedPtr::swap}
 
 \func{\void}{swap}{\param{wxScopedPtr}{ \& other}}
 
 Swap the pointer inside the smart pointer with {\it other}. The pointer being
 swapped must be of the same type (hence the same class name).
+
+
+
+
+%%%%%%% wxScopedTiedPtr %%%%%%%
+\section{\class{wxScopedTiedPtr}}\label{wxscopedtiedptr}
+
+This is a variation on the topic of \helpref{wxScopedPtr}{wxscopedptr}. This
+class is also a smart pointer but in addition it ``ties'' the pointer value to
+another variable. In other words, during the life time of this class the value
+of that variable is set to be the same as the value of the pointer itself and
+it is reset to its old value when the object is destroyed. This class is
+especially useful when converting the existing code (which may already store
+the pointers value in some variable) to the smart pointers.
+
+\wxheading{Example}
+
+\wxheading{Derives from}
+
+\helpref{wxScopedPtr}{wxscopedptr}
+
+\wxheading{Include files}
+
+<wx/ptr\_scpd.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxScopedTiedPtr::wxScopedTiedPtr}\label{wxscopedtiedptrctor}
+
+\func{}{wxScopedTiedPtr}{\param{T **}{ppTie}, \param{T *}{ptr}}
+
+Constructor creates a smart pointer initialized with \arg{ptr} and stores 
+\arg{ptr} in the location specified by \arg{ppTie} which must not be 
+{\tt NULL}.
+
+\membersection{wxScopedTiedPtr::\destruct{wxScopedTiedPtr}}\label{wxscopedtiedptrdtor}
+
+\func{}{\destruct{wxScopedTiedPtr}}{\void}
+
+Destructor frees the pointer help by this object and restores the value stored
+at the tied location (as specified in the \helpref{constructor}{wxscopedtiedptrctor})
+to the old value.
+
+Warning: this location may now contain an uninitialized value if it hadn't been
+initialized previously, in particular don't count on it magically being 
+{\tt NULL}!
+
 
