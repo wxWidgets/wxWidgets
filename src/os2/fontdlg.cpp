@@ -45,17 +45,16 @@ wxFontDialog::wxFontDialog()
     m_dialogParent = NULL;
 }
 
-wxFontDialog::wxFontDialog(wxWindow *parent, wxFontData *data)
+wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData& rData)
 {
-    Create(parent, data);
+    Create(parent, rData);
 }
 
-bool wxFontDialog::Create(wxWindow *parent, wxFontData *data)
+bool wxFontDialog::Create(wxWindow *parent, const wxFontData& rData)
 {
     m_dialogParent = parent;
 
-    if (data)
-        m_fontData = *data;
+    m_fontData = rData;
     return TRUE;
 }
 

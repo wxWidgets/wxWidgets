@@ -365,11 +365,10 @@ bool wxOwnerDrawn::OnDrawItem(
             //
             wxASSERT((nBmpWidth <= rRect.width) && (nBmpHeight <= rRect.height));
 
-            //
-            //MT: blit with mask enabled.
-            //
+            int                     nHeightDiff = m_nHeight - nBmpHeight;
+
             rDC.Blit( rRect.x + (GetMarginWidth() - nBmpWidth) / 2
-                     ,rRect.y + (m_nHeight - nBmpHeight) /2
+                     ,rRect.y + nHeightDiff / 2
                      ,nBmpWidth
                      ,nBmpHeight
                      ,&vDCMem
@@ -383,8 +382,8 @@ bool wxOwnerDrawn::OnDrawItem(
             {
                 RECT                vRectBmp = { rRect.x
                                                 ,rRect.y
-                                                ,rRect.x + GetMarginWidth()
-                                                ,rRect.y + m_nHeight
+                                                ,rRect.x + GetMarginWidth() - 1
+                                                ,rRect.y + m_nHeight - 1
                                                };
                 POINTL              vPnt1 = {rRect.x + 1, rRect.y + 3}; // Leave a little background border
                 POINTL              vPnt2 = {rRect.x + GetMarginWidth(), rRect.y + m_nHeight - 3};

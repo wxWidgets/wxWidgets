@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1940,7 +1940,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -4486,6 +4486,8 @@ EXPORTS
       Create__17wxPopupWindowBaseFP8wxWindowi
       ;wxPopupWindowBase::~wxPopupWindowBase()
       __dt__17wxPopupWindowBaseFv
+      ;wxConstructorForwxPopupWindow()
+      wxConstructorForwxPopupWindow__Fv
       ;wxPopupTransientWindow::OnDismiss()
       OnDismiss__22wxPopupTransientWindowFv
       ;wxPopupTransientWindow::DismissAndNotify()
@@ -4500,6 +4502,8 @@ EXPORTS
       __dt__22wxPopupTransientWindowFv
       ;wxPopupTransientWindow::PopHandlers()
       PopHandlers__22wxPopupTransientWindowFv
+      ;wxPopupWindow::sm_classwxPopupWindow
+      sm_classwxPopupWindow__13wxPopupWindow
   ;From object file:  ..\common\prntbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPreviewControlBar::OnZoom(wxCommandEvent&)
@@ -5042,10 +5046,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxSystemSettings::ms_screen
       ms_screen__16wxSystemSettings
-      ;wxSystemSettings::SetScreen(wxSystemScreen)
-      SetScreen__16wxSystemSettingsF14wxSystemScreen
       ;wxSystemSettings::GetScreenType()
-      GetScreen__16wxSystemSettingsFv
+      GetScreenType__16wxSystemSettingsFv
+      ;wxSystemSettings::SetScreenType(wxSystemScreenType)
+      SetScreenType__16wxSystemSettingsF18wxSystemScreenType
   ;From object file:  ..\common\sizer.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSizerItem::wxSizerItem(int,int,int,int,int,wxObject*)
@@ -6138,7 +6142,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7902,12 +7906,10 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericFontDialog::OnCloseWindow(wxCloseEvent&)
       OnCloseWindow__19wxGenericFontDialogFR12wxCloseEvent
-      ;wxGenericFontDialog::wxGenericFontDialog(wxWindow*,wxFontData*)
-      __ct__19wxGenericFontDialogFP8wxWindowP10wxFontData
+      ;wxGenericFontDialog::wxGenericFontDialog(wxWindow*,const wxFontData&)
+      __ct__19wxGenericFontDialogFP8wxWindowRC10wxFontData
       ;wxFontStyleIntToString(int)
       wxFontStyleIntToString__Fi
-      ;wxGenericFontDialog::Create(wxWindow*,wxFontData*)
-      Create__19wxGenericFontDialogFP8wxWindowP10wxFontData
       ;wxGenericFontDialog::GetEventTable() const
       GetEventTable__19wxGenericFontDialogCFv
       ;wxFontPreviewer::sm_eventTable
@@ -7924,6 +7926,8 @@ EXPORTS
       OnPaint__15wxFontPreviewerFR12wxPaintEvent
       ;wxGenericFontDialog::OnChangeFont(wxCommandEvent&)
       OnChangeFont__19wxGenericFontDialogFR14wxCommandEvent
+      ;wxGenericFontDialog::Create(wxWindow*,const wxFontData&)
+      Create__19wxGenericFontDialogFP8wxWindowRC10wxFontData
       ;wxGenericFontDialog::ShowModal()
       ShowModal__19wxGenericFontDialogFv
       ;wxGenericFontDialog::sm_eventTableEntries
@@ -10093,6 +10097,8 @@ EXPORTS
       __vft16wxSplitterWindow8wxObject
       ;wxSplitterWindow::DoSplit(wxSplitMode,wxWindow*,wxWindow*,int)
       DoSplit__16wxSplitterWindowF11wxSplitModeP8wxWindowT2i
+      ;wxSplitterWindow::SetSashPositionAndNotify(int)
+      SetSashPositionAndNotify__16wxSplitterWindowFi
       ;wxSplitterWindow::SetMinimumPaneSize(int)
       SetMinimumPaneSize__16wxSplitterWindowFi
       ;wxSplitterWindow::OnSashPositionChange(int)
@@ -12754,16 +12760,16 @@ EXPORTS
       ;wxConstructorForwxFontDialog()
       wxConstructorForwxFontDialog__Fv
       __vft12wxFontDialog8wxObject
-      ;wxFontDialog::wxFontDialog(wxWindow*,wxFontData*)
-      __ct__12wxFontDialogFP8wxWindowP10wxFontData
+      ;wxFontDialog::Create(wxWindow*,const wxFontData&)
+      Create__12wxFontDialogFP8wxWindowRC10wxFontData
+      ;wxFontDialog::wxFontDialog(wxWindow*,const wxFontData&)
+      __ct__12wxFontDialogFP8wxWindowRC10wxFontData
       ;wxFontDialog::wxFontDialog()
       __ct__12wxFontDialogFv
       ;wxFontDialog::ShowModal()
       ShowModal__12wxFontDialogFv
       ;wxFontDialog::sm_classwxFontDialog
       sm_classwxFontDialog__12wxFontDialog
-      ;wxFontDialog::Create(wxWindow*,wxFontData*)
-      Create__12wxFontDialogFP8wxWindowP10wxFontData
   ;From object file:  ..\os2\fontenum.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFontEnumerator::EnumerateFacenames(wxFontEncoding,unsigned long)
