@@ -183,8 +183,11 @@ bool wxTextFile::OnRead(wxMBConv& conv)
 bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
 {
     wxFileName fn = m_strBufferName;
+
+    // We do NOT want wxPATH_NORM_CASE here, or the case will not
+    // be preserved.
     if ( !fn.IsAbsolute() )
-        fn.Normalize();
+        fn.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_LONG);
 
     wxTempFile fileTmp(fn.GetFullPath());
 
