@@ -46,7 +46,7 @@
 
 #include <ctype.h>
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     #include <direct.h>
 #ifndef __MWERKS__
     #include <dos.h>
@@ -58,7 +58,7 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 #ifndef __UNIX__
     #include <io.h>
 #endif
@@ -124,7 +124,7 @@ public:
     bool       state;         // set to FALSE when the process finishes
 };
 
-#if defined(__WIN32__) && wxUSE_STREAMS
+#if defined(__WIN32__) && wxUSE_STREAMS && !defined(__WXWINCE__)
 
 // ----------------------------------------------------------------------------
 // wxPipeStreams
@@ -329,7 +329,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
 // implementation of IO redirection support classes
 // ============================================================================
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
 
 // ----------------------------------------------------------------------------
 // wxPipeInputStreams
@@ -596,7 +596,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     // the IO redirection is only supported with wxUSE_STREAMS
     BOOL redirect = FALSE;
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
     wxPipe pipeIn, pipeOut, pipeErr;
 
     // we'll save here the copy of pipeIn[Write]
@@ -624,7 +624,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     wxZeroMemory(si);
     si.cb = sizeof(si);
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
     if ( redirect )
     {
         si.dwFlags = STARTF_USESTDHANDLES;
@@ -667,7 +667,10 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 #endif // wxUSE_STREAMS
 
     PROCESS_INFORMATION pi;
-    DWORD dwFlags = CREATE_DEFAULT_ERROR_MODE | CREATE_SUSPENDED;
+    DWORD dwFlags = CREATE_SUSPENDED;
+#ifndef __WXWINCE__
+    dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
+#endif
 
     bool ok = ::CreateProcess
                 (
@@ -684,7 +687,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
                  &pi                // process info
                 ) != 0;
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
     // we can close the pipe ends used by child anyhow
     if ( redirect )
     {
@@ -696,7 +699,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
     if ( !ok )
     {
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
         // close the other handles too
         if ( redirect )
         {
@@ -710,7 +713,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         return flags & wxEXEC_SYNC ? -1 : 0;
     }
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
     // the input buffer bufOut is connected to stdout, this is why it is
     // called bufOut and not bufIn
     wxStreamTempInputBuffer bufOut,
@@ -752,10 +755,17 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
     // create a hidden window to receive notification about process
     // termination
+#ifdef __WXWINCE__
+    HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
+                               WS_OVERLAPPED,
+                               0, 0, 0, 0, NULL,
+                               (HMENU)NULL, wxGetInstance(), 0);
+#else
     HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
                                WS_OVERLAPPEDWINDOW,
                                0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
+#endif
     wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
 
     // Alloc data
@@ -809,7 +819,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
     ::CloseHandle(hThread);
 
-#if wxUSE_IPC
+#if wxUSE_IPC && !defined(__WXWINCE__)
     // second part of DDE hack: now establish the DDE conversation with the
     // just launched process
     if ( !ddeServer.empty() )
@@ -860,7 +870,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     // wait until the child process terminates
     while ( data->state )
     {
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && !defined(__WXWINCE__)
         bufOut.Update();
         bufErr.Update();
 #endif // wxUSE_STREAMS

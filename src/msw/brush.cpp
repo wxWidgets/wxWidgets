@@ -151,26 +151,30 @@ void wxBrushRefData::Free()
 
 static int TransllateHatchStyle(int style)
 {
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     switch ( style )
     {
-#ifndef __WXMICROWIN__
         case wxBDIAGONAL_HATCH: return HS_BDIAGONAL;
         case wxCROSSDIAG_HATCH: return HS_DIAGCROSS;
         case wxFDIAGONAL_HATCH: return HS_FDIAGONAL;
         case wxCROSS_HATCH:     return HS_CROSS;
         case wxHORIZONTAL_HATCH:return HS_HORIZONTAL;
         case wxVERTICAL_HATCH:  return HS_VERTICAL;
-#endif // __WXMICROWIN__
         default:                return -1;
     }
+#else // __WXMICROWIN__
+    return -1;
+#endif
 }
 
 HBRUSH wxBrushRefData::GetHBRUSH()
 {
     if ( !m_hBrush )
     {
+#ifndef __WXWINCE__
         int hatchStyle = TransllateHatchStyle(m_style);
         if ( hatchStyle == -1 )
+#endif
         {
             switch ( m_style )
             {
@@ -196,10 +200,12 @@ HBRUSH wxBrushRefData::GetHBRUSH()
                     break;
             }
         }
+#ifndef __WXWINCE__
         else // create a hatched brush
         {
             m_hBrush = ::CreateHatchBrush(hatchStyle, m_colour.GetPixel());
         }
+#endif
 
         if ( !m_hBrush )
         {

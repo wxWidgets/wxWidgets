@@ -749,6 +749,7 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
     return ::GetScrollPosWX(hWnd, wOrient);
 #else
     SCROLLINFO scrollInfo;
+    scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_POS;
     if ( !::GetScrollInfo(hWnd,
                                   wOrient,

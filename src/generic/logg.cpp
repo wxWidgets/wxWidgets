@@ -86,6 +86,10 @@
 // allows to exclude the usage of wxDateTime
 static wxString TimeStamp(const wxChar *format, time_t t)
 {
+#ifdef __WXWINCE__
+    // FIXME
+    return wxEmptyString;
+#else
     wxChar buf[4096];
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, localtime(&t)) )
     {
@@ -93,6 +97,7 @@ static wxString TimeStamp(const wxChar *format, time_t t)
         wxFAIL_MSG(_T("strftime() failed"));
     }
     return wxString(buf);
+#endif
 }
 
 
@@ -198,7 +203,11 @@ void wxVLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
 
     wxASSERT( gs_pFrame == NULL ); // should be reset!
     gs_pFrame = pFrame;
+#ifdef __WXWINCE__
+    wxLog::OnLog(wxLOG_Status, msg, 0);
+#else
     wxLog::OnLog(wxLOG_Status, msg, time(NULL));
+#endif
     gs_pFrame = (wxFrame *) NULL;
   }
 }

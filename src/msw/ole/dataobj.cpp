@@ -39,8 +39,12 @@
 
 #include "wx/msw/private.h"         // includes <windows.h>
 
+#ifdef __WXWINCE__
+#include <winreg.h>
+#endif
+
 // for some compilers, the entire ole2.h must be included, not only oleauto.h
-#if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__)
+#if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__) || defined(__WXWINCE__)
   #include <ole2.h>
 #endif
 
@@ -299,6 +303,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             pmedium->tymed = TYMED_ENHMF;
             break;
 
+#ifndef __WXWINCE__
         case wxDF_METAFILE:
             pmedium->hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                                            sizeof(METAFILEPICT));
@@ -308,7 +313,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             }
             pmedium->tymed = TYMED_MFPICT;
             break;
-
+#endif
         default:
             // alloc memory
             size_t size = m_pDataObject->GetDataSize(format);
@@ -472,11 +477,13 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         break;
 #endif
                     case CF_BITMAP:
+#ifndef __WXWINCE__
                     case CF_HDROP:
                         // these formats don't use size at all, anyhow (but
                         // pass data by handle, which is always a single DWORD)
                         size = 0;
                         break;
+#endif
 
                     case CF_DIB:
                         // the handler will calculate size itself (it's too
@@ -484,10 +491,11 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         size = 0;
                         break;
 
+#ifndef __WXWINCE__
                     case CF_METAFILEPICT:
                         size = sizeof(METAFILEPICT);
                         break;
-
+#endif
                     default:
                         {
                             // we suppose that the size precedes the data
@@ -956,6 +964,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 {
+#ifndef __WXWINCE__
     m_filenames.Empty();
 
     // the documentation states that the first member of DROPFILES structure is
@@ -989,6 +998,9 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
     }
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 void wxFileDataObject::AddFile(const wxString& file)
@@ -1001,6 +1013,7 @@ void wxFileDataObject::AddFile(const wxString& file)
 
 size_t wxFileDataObject::GetDataSize() const
 {
+#ifndef __WXWINCE__
     // size returned will be the size of the DROPFILES structure,
     // plus the list of filesnames (null byte separated), plus
     // a double null at the end
@@ -1020,10 +1033,14 @@ size_t wxFileDataObject::GetDataSize() const
     }
 
     return sz;
+#else
+    return 0;
+#endif
 }
 
 bool wxFileDataObject::GetDataHere(void *pData) const
 {
+#ifndef __WXWINCE__
     // pData points to an externally allocated memory block
     // created using the size returned by GetDataSize()
 
@@ -1060,6 +1077,9 @@ bool wxFileDataObject::GetDataHere(void *pData) const
     *pbuf = wxT('\0');
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------

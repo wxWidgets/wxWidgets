@@ -54,6 +54,10 @@
 #include "wx/process.h"
 #include "wx/txtstrm.h"
 
+#if defined(__WXWINCE__) && wxUSE_DATETIME
+#include "wx/datetime.h"
+#endif
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,13 +83,9 @@
 #include "wx/msw/wince/time.h"
 #endif
 
-#ifndef __MWERKS__
+#if !defined(__MWERKS__) && !defined(__WXWINCE__)
     #include <sys/types.h>
     #include <sys/stat.h>
-#endif
-
-#ifdef __SALFORDC__
-    #include <clib.h>
 #endif
 
 #ifdef __WXMSW__
@@ -263,10 +263,19 @@ wxString wxDecToHex(int dec)
 // Return the current date/time
 wxString wxNow()
 {
+#ifdef __WXWINCE__
+#if wxUSE_DATETIME
+    wxDateTime now = wxDateTime::Now();
+    return now.Format();
+#else
+    return wxEmptyString;
+#endif
+#else
     time_t now = time((time_t *) NULL);
     char *date = ctime(&now);
     date[24] = '\0';
     return wxString::FromAscii(date);
+#endif
 }
 
 const wxChar *wxGetInstallPrefix()

@@ -119,7 +119,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
-#if defined(__WIN95__)
+#ifndef __WXWINCE__
     long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
     if (style & BS_BITMAP)
     {
@@ -249,20 +249,21 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
 
     // draw the border
     oldp = (HPEN) SelectObject( (HDC) dc, sel? penDkShadow : penHiLight);
-    MoveToEx((HDC) dc, left, top, NULL); LineTo((HDC) dc, right-1, top);
-    MoveToEx((HDC) dc, left, top+1, NULL); LineTo((HDC) dc, left, bottom-1);
+
+    wxDrawLine((HDC) dc, left, top, right-1, top);
+    wxDrawLine((HDC) dc, left, top+1, left, bottom-1);
 
     SelectObject( (HDC) dc, sel? penShadow : penLight);
-    MoveToEx((HDC) dc, left+1, top+1, NULL); LineTo((HDC) dc, right-2, top+1);
-    MoveToEx((HDC) dc, left+1, top+2, NULL); LineTo((HDC) dc, left+1, bottom-2);
+    wxDrawLine((HDC) dc, left+1, top+1, right-2, top+1);
+    wxDrawLine((HDC) dc, left+1, top+2, left+1, bottom-2);
 
     SelectObject( (HDC) dc, sel? penLight : penShadow);
-    MoveToEx((HDC) dc, left+1, bottom-2, NULL); LineTo((HDC) dc, right-1, bottom-2);
-    MoveToEx((HDC) dc, right-2, bottom-3, NULL); LineTo((HDC) dc, right-2, top);
+    wxDrawLine((HDC) dc, left+1, bottom-2, right-1, bottom-2);
+    wxDrawLine((HDC) dc, right-2, bottom-3, right-2, top);
 
     SelectObject( (HDC) dc, sel? penHiLight : penDkShadow);
-    MoveToEx((HDC) dc, left, bottom-1, NULL); LineTo((HDC) dc, right+2, bottom-1);
-    MoveToEx((HDC) dc, right-1, bottom-2, NULL); LineTo((HDC) dc, right-1, top-1);
+    wxDrawLine((HDC) dc, left, bottom-1, right+2, bottom-1);
+    wxDrawLine((HDC) dc, right-1, bottom-2, right-1, top-1);
 
     // delete allocated resources
     SelectObject((HDC) dc,oldp);

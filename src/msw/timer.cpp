@@ -48,7 +48,8 @@ WX_DECLARE_HASH_MAP( long,
                      wxTimerMap );
 
 wxTimerMap wxTimerList;
-UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
+
+void WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
 // ----------------------------------------------------------------------------
 // macros
@@ -95,11 +96,16 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 
     wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
 
+#ifdef __WXWINCE__
+    m_id = ::SetTimer(NULL, (UINT)(m_id ? m_id : 1),
+                      (UINT)m_milli, (void (__stdcall *)(struct HWND__ *,unsigned int,unsigned int,unsigned long)) wxTimerProc);
+#else
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
 
     m_id = ::SetTimer(NULL, (UINT)(m_id ? m_id : 1),
                       (UINT)m_milli, wxTimerProcInst);
+#endif
 
     if ( m_id > 0 )
     {
@@ -143,17 +149,16 @@ void wxProcessTimer(wxTimer& timer)
     timer.Notify();
 }
 
-UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
+void WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
     
     wxTimerMap::iterator node = wxTimerList.find((long)idTimer);
 
-    wxCHECK_MSG( node != wxTimerList.end(), 0,
-                 wxT("bogus timer id in wxTimerProc") );
+    wxASSERT_MSG( node != wxTimerList.end(), wxT("bogus timer id in wxTimerProc") );
 
     wxProcessTimer(*(node->second));
 
-    return 0;
+    // return 0;
 }
 
 #endif // wxUSE_TIMER

@@ -44,7 +44,7 @@
 
 #include "wx/timer.h"
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     #include <direct.h>
 
     #ifndef __MWERKS__
@@ -74,7 +74,7 @@
     #include <lm.h>
 #endif // USE_NET_API
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     #ifndef __UNIX__
         #include <io.h>
     #endif
@@ -123,7 +123,9 @@ static const wxChar eUSERID[]    = wxT("UserId");
 // Get hostname only (without domain name)
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WXWINCE__)
+    return FALSE;
+#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -203,7 +205,9 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__win32s__) && !defined(__WXMICROWIN__)
+#if defined(__WXWINCE__)
+    return FALSE;
+#elif defined(__WIN32__) && !defined(__win32s__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
@@ -241,7 +245,9 @@ bool wxGetUserId(wxChar *buf, int maxSize)
 // Get user name e.g. Julian Smart
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
-#ifdef USE_NET_API
+#if defined(__WXWINCE__)
+    return FALSE;
+#elif defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
         return FALSE;
@@ -329,7 +335,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 {
   wxString& strDir = *pstr;
 
-  #if defined(__UNIX__)
+#if defined(__UNIX__)
     const wxChar *szHome = wxGetenv("HOME");
     if ( szHome == NULL ) {
       // we're homeless...
@@ -349,7 +355,9 @@ const wxChar* wxGetHomeDir(wxString *pstr)
       cygwin_conv_to_full_win32_path(strDir, windowsPath);
       strDir = windowsPath;
     #endif
-  #else   // Windows
+#elif defined(__WXWINCE__)
+      // Nothing
+#else
     #ifdef  __WIN32__
       strDir.clear();
 
@@ -415,7 +423,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     // extract the dir name
     wxSplitPath(strPath, &strDir, NULL, NULL);
 
-  #endif  // UNIX/Win
+#endif  // UNIX/Win
 
   return strDir.c_str();
 }
@@ -458,6 +466,9 @@ bool wxDirExists(const wxString& dir)
 
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     if ( path.empty() )
         return FALSE;
 
@@ -557,6 +568,8 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     }
 
     return TRUE;
+#endif
+    // __WXWINCE__
 }
 
 // ----------------------------------------------------------------------------
@@ -565,7 +578,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
 bool wxGetEnv(const wxString& var, wxString *value)
 {
-#ifdef __WIN16__
+#ifdef __WXWINCE__
+    return FALSE;
+#elif defined(__WIN16__)
     const wxChar* ret = wxGetenv(var);
     if ( !ret )
         return FALSE;
@@ -599,7 +614,7 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 {
     // some compilers have putenv() or _putenv() or _wputenv() but it's better
     // to always use Win32 function directly instead of dealing with them
-#if defined(__WIN32__)
+#if defined(__WIN32__) && !defined(__WXWINCE__)
     if ( !::SetEnvironmentVariable(var, value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
@@ -811,6 +826,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
 // Execute a program in an Interactive Shell
 bool wxShell(const wxString& command)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     wxChar *shell = wxGetenv(wxT("COMSPEC"));
     if ( !shell )
         shell = (wxChar*) wxT("\\COMMAND.COM");
@@ -828,12 +846,15 @@ bool wxShell(const wxString& command)
     }
 
     return wxExecute(cmd, wxEXEC_SYNC) == 0;
+#endif
 }
 
 // Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
-#ifdef __WIN32__
+#ifdef __WXWINCE__
+    return FALSE;
+#elif defined(__WIN32__)
     bool bOK = TRUE;
 
     if ( wxGetOsVersion(NULL, NULL) == wxWINDOWS_NT ) // if is NT or 2K

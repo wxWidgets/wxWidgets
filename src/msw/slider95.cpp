@@ -594,9 +594,13 @@ void wxSlider95::SetRange(int minValue, int maxValue)
 WXHBRUSH wxSlider95::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
+#ifndef __WXWINCE__
     if ( nCtlColor == CTLCOLOR_SCROLLBAR )
         return 0;
-
+#else
+    if ( nCtlColor != CTLCOLOR_STATIC )
+        return 0;
+#endif
     // Otherwise, it's a static
     return wxControl::OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
 }

@@ -102,7 +102,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
     m_waveLength = (int) fileWave.Length();
 
-    m_waveData = (wxByte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
+    m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
     if (!m_waveData)
         return FALSE;
 
@@ -117,7 +117,7 @@ bool wxWave::Create(int size, const wxByte* data)
   Free();
   m_isResource = FALSE;
   m_waveLength=size;
-  m_waveData = (wxByte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
+  m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
   if (!m_waveData)
      return FALSE;
 
@@ -143,20 +143,24 @@ bool wxWave::Free()
 {
   if (m_waveData)
   {
-#ifdef __WIN32__
-    HGLOBAL waveData = ::GlobalHandle(m_waveData);
+#ifdef __WXWINCE__
+    HGLOBAL waveData = (HGLOBAL) m_waveData;
+#elif defined(__WIN32__)
+    HGLOBAL waveData = GlobalHandle(m_waveData);
 #else
     HGLOBAL waveData = GlobalPtrHandle(m_waveData);
 #endif
 
     if (waveData)
     {
-      if (m_isResource)
+#ifndef __WXWINCE__
+        if (m_isResource)
         ::FreeResource(waveData);
       else
+#endif
       {
-        ::GlobalUnlock(waveData);
-        ::GlobalFree(waveData);
+        GlobalUnlock(waveData);
+        GlobalFree(waveData);
       }
 
       m_waveData = NULL;

@@ -32,7 +32,13 @@
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
+#include "wx/msw/private.h"
 #include "wx/log.h"
+
+#ifdef __WXWINCE__
+    #include <winreg.h>
+    #include <ole2.h>
+#endif
 
 #ifdef __WIN32__
     #if !defined(__GNUWIN32__) || wxUSE_NORLANDER_HEADERS
@@ -46,11 +52,6 @@
 #endif
 
 #include "wx/dnd.h"
-
-#ifndef __WIN32__
-    #include <ole2.h>
-    #include <olestd.h>
-#endif
 
 #include "wx/msw/ole/oleutils.h"
 

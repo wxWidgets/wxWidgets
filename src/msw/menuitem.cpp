@@ -50,6 +50,11 @@
 
 #include "wx/msw/private.h"
 
+#ifdef __WXWINCE__
+// Implemented in menu.cpp
+UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
+#endif
+
 // ---------------------------------------------------------------------------
 // macro
 // ---------------------------------------------------------------------------
@@ -342,12 +347,28 @@ void wxMenuItem::SetText(const wxString& text)
             data = (wxChar*) text.c_str();
         }
 
+#ifdef __WXWINCE__
+        // FIXME: complete this, applying the old
+        // flags
+        MENUITEMINFO info;
+        wxZeroMemory(info);
+        info.cbSize = sizeof(info);
+        info.fMask = MIIM_TYPE;
+        info.fType = MFT_STRING;
+        info.cch = text.Length();
+        info.dwTypeData = (LPTSTR) data ;
+        if ( !SetMenuItemInfo(hMenu, id, FALSE, & info) )
+        {
+            wxLogLastError(wxT("SetMenuItemInfo"));
+        }
+#else
         if ( ::ModifyMenu(hMenu, id,
                           MF_BYCOMMAND | flagsOld,
                           id, data) == (int)0xFFFFFFFF )
         {
             wxLogLastError(wxT("ModifyMenu"));
         }
+#endif
     }
 }
 

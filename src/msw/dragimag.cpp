@@ -117,6 +117,9 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
     m_hImageList = 0;
 
     UINT flags = 0 ;
+#ifdef __WXWINCE__
+    flags = ILC_COLOR;
+#else
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
     else if (image.GetDepth() <= 8)
@@ -127,6 +130,7 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
         flags = ILC_COLOR24;
     else
         flags = ILC_COLOR32;
+#endif
 
     bool mask = (image.GetMask() != 0);
 
@@ -170,6 +174,9 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
     m_hImageList = 0;
 
     UINT flags = 0 ;
+#ifdef __WXWINCE__
+    flags = ILC_COLOR;
+#else
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
     else if (image.GetDepth() <= 8)
@@ -180,6 +187,7 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
         flags = ILC_COLOR24;
     else
         flags = ILC_COLOR32;
+#endif
     bool mask = TRUE;
     if ( mask )
         flags |= ILC_MASK;

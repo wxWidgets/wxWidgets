@@ -145,7 +145,7 @@ bool wxListBox::Create(wxWindow *parent,
     if (m_windowStyle & wxLB_SORT)
         wstyle |= LBS_SORT;
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN && !defined(__WXWINCE__)
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
         // we don't support LBS_OWNERDRAWVARIABLE yet
         wstyle |= LBS_OWNERDRAWFIXED;
@@ -703,7 +703,11 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
+#ifdef __WXWINCE__
+    HDC hdc = GetDC(NULL);
+#else
     HDC hdc = CreateIC(wxT("DISPLAY"), NULL, NULL, 0);
+#endif
 
     wxDC dc;
     dc.SetHDC((WXHDC)hdc);

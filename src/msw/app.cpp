@@ -111,7 +111,7 @@
 
 #if _WIN32_IE >= 0x0300 && \
     (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
-    !defined(__CYGWIN__)
+    !defined(__CYGWIN__) && !defined(__WXWINCE__)
     #include <shlwapi.h>
 #endif
 
@@ -120,7 +120,8 @@
 // ---------------------------------------------------------------------------
 
 extern wxList WXDLLEXPORT wxPendingDelete;
-#ifndef __WXMICROWIN__
+
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 extern void wxSetKeyboardHook(bool doIt);
 #endif
 
@@ -316,7 +317,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     RegisterWindowClasses();
 
-#ifndef __WXMICROWIN__
+#if defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     // Create the brush for disabling bitmap buttons
 
     LOGBRUSH lb;
@@ -344,7 +345,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if (wxDummyChar) wxDummyChar++;
 #endif
 
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(TRUE);
 #endif
 
@@ -497,7 +498,7 @@ bool wxApp::UnregisterWindowClasses()
 
 void wxApp::CleanUp()
 {
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(FALSE);
 #endif
 
@@ -877,7 +878,7 @@ typedef HRESULT (CALLBACK* WXADLLGETVERSIONPROC)(WXADLLVERSIONINFO *);
 /* static */
 int wxApp::GetComCtl32Version()
 {
-#ifdef __WXMICROWIN__
+#if defined(__WXMICROWIN__) || defined(__WXWINCE__)
     return 0;
 #else
     // cache the result

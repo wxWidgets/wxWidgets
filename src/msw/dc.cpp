@@ -167,15 +167,19 @@ public:
     StretchBltModeChanger(HDC hdc, int mode)
         : m_hdc(hdc)
     {
+#ifndef __WXWINCE__
         m_modeOld = ::SetStretchBltMode(m_hdc, mode);
         if ( !m_modeOld )
             wxLogLastError(_T("SetStretchBltMode"));
+#endif
     }
 
     ~StretchBltModeChanger()
     {
+#ifndef __WXWINCE__
         if ( !::SetStretchBltMode(m_hdc, m_modeOld) )
             wxLogLastError(_T("SetStretchBltMode"));
+#endif
     }
 
 private:
@@ -374,7 +378,7 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
     // note that we combine the new clipping region with the existing one: this
     // is compatible with what the other ports do and is the documented
     // behaviour now (starting with 2.3.3)
-#ifdef __WIN16__
+#if defined(__WIN16__) || defined(__WXWINCE__)
     RECT rectClip;
     if ( !::GetClipBox(GetHdc(), &rectClip) )
         return;
@@ -510,7 +514,9 @@ void wxDC::Clear()
         rect.bottom = m_selectedBitmap.GetHeight();
     }
 
+#ifndef __WXWINCE__
     (void) ::SetMapMode(GetHdc(), MM_TEXT);
+#endif
 
     DWORD colour = ::GetBkColor(GetHdc());
     HBRUSH brush = ::CreateSolidBrush(colour);
@@ -520,15 +526,22 @@ void wxDC::Clear()
     int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
         height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
 
+#ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
+
     ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
     ::SetWindowExtEx(GetHdc(), width, height, NULL);
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
+#endif
 }
 
 bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
+
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return FALSE;
 #endif
@@ -557,6 +570,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
     CalcBoundingBox(x, y);
     
     return success;
+#endif
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
@@ -586,11 +600,8 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
     wxCoord x2 = x+VIEWPORT_EXTENT;
     wxCoord y2 = y+VIEWPORT_EXTENT;
 
-    (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), NULL);
-    (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y));
-
-    (void)MoveToEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y1), NULL);
-    (void)LineTo(GetHdc(), XLOG2DEV(x), YLOG2DEV(y2));
+    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y));
+    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(y1), XLOG2DEV(x), YLOG2DEV(y2));
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -602,8 +613,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     if (!GetHDC()) return;
 #endif
 
-    (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), NULL);
-    (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y2));
+    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -615,6 +625,10 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord x2, wxCoord y2,
                      wxCoord xc, wxCoord yc)
 {
+#ifdef __WXWINCE__
+    // FIXME: emulate Arc
+#else
+
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
 #endif
@@ -662,6 +676,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 
     CalcBoundingBox(xc - r, yc - r);
     CalcBoundingBox(xc + r, yc + r);
+#endif
 }
 
 void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
@@ -681,7 +696,11 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     rect.right  = x2;
     rect.bottom = y2;
 
+#ifdef __WXWINCE__
+    DrawFrameControl(GetHdc(), &rect, DFC_BUTTON, DFCS_BUTTONCHECK);
+#else
     DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
+#endif
 #else // Win16
     // In WIN16, draw a cross
     HPEN blackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
@@ -740,9 +759,13 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
+#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+#endif
         (void)Polygon(GetHdc(), cpoints, n);
+#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
+#endif
         delete[] cpoints;
     }
     else
@@ -751,9 +774,13 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
+#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+#endif
         (void)Polygon(GetHdc(), (POINT*) points, n);
+#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
+#endif
     }
 }
 
@@ -889,6 +916,10 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
+#ifdef __WXWINCE__
+    // FIXME
+#else
+
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
 #endif
@@ -932,6 +963,7 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
+#endif
 }
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1122,11 +1154,19 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
                                                           : OPAQUE);
 
+#ifdef __WXWINCE__
+    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, NULL,
+                   text.c_str(), text.length(), NULL) == 0 )
+    {
+        wxLogLastError(wxT("TextOut"));
+    }
+#else
     if ( ::TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                    text.c_str(), text.length()) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
     }
+#endif
 
     // restore the old parameters (text foreground colour may be left because
     // it never is set to anything else, but background should remain
@@ -1617,6 +1657,7 @@ void wxDC::SetMapMode(int mode)
     // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
     //     cases we could do with MM_TEXT and in the remaining 0.9% with
     //     MM_ISOTROPIC (TODO!)
+#ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
     int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
@@ -1627,6 +1668,7 @@ void wxDC::SetMapMode(int mode)
 
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
+#endif
 }
 
 void wxDC::SetUserScale(double x, double y)
@@ -1635,6 +1677,7 @@ void wxDC::SetUserScale(double x, double y)
     if (!GetHDC()) return;
 #endif
 
+#ifndef __WXWINCE__
     if ( x == m_userScaleX && y == m_userScaleY )
         return;
 
@@ -1642,6 +1685,7 @@ void wxDC::SetUserScale(double x, double y)
     m_userScaleY = y;
 
     SetMapMode(m_mappingMode);
+#endif
 }
 
 void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
@@ -1650,6 +1694,7 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
     if (!GetHDC()) return;
 #endif
 
+#ifndef __WXWINCE__
     int signX = xLeftRight ? 1 : -1,
         signY = yBottomUp ? -1 : 1;
 
@@ -1660,6 +1705,7 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
 
         SetMapMode(m_mappingMode);
     }
+#endif
 }
 
 void wxDC::SetSystemScale(double x, double y)
@@ -1668,6 +1714,7 @@ void wxDC::SetSystemScale(double x, double y)
     if (!GetHDC()) return;
 #endif
 
+#ifndef __WXWINCE__
     if ( x == m_scaleX && y == m_scaleY )
         return;
 
@@ -1675,6 +1722,7 @@ void wxDC::SetSystemScale(double x, double y)
     m_scaleY = y;
 
     SetMapMode(m_mappingMode);
+#endif
 }
 
 void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
@@ -1683,6 +1731,7 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
     if (!GetHDC()) return;
 #endif
 
+#ifndef __WXWINCE__
     if ( x == m_logicalOriginX && y == m_logicalOriginY )
         return;
 
@@ -1690,6 +1739,7 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
     m_logicalOriginY = y;
 
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
+#endif
 }
 
 void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
@@ -1698,6 +1748,7 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
     if (!GetHDC()) return;
 #endif
 
+#ifndef __WXWINCE__
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
         return;
 
@@ -1705,6 +1756,7 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
     m_deviceOriginY = y;
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1950,6 +2002,9 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     {
         // if we already have a DIB, draw it using StretchDIBits(), otherwise
         // use StretchBlt() if available and finally fall back to BitBlt()
+
+        // FIXME: use appropriate WinCE functions
+#ifndef __WXWINCE__
         const int caps = ::GetDeviceCaps(GetHdc(), RASTERCAPS);
         if ( bmpSrc.Ok() && (caps & RC_STRETCHDIB) )
         {
@@ -2022,6 +2077,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                 success = TRUE;
             }
         }
+#endif
+        // __WXWINCE__
     }
 
     ::SetTextColor(GetHdc(), old_textground);

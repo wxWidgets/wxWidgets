@@ -104,8 +104,10 @@ int wxMessageDialog::ShowModal()
 
     if (hWnd)
         msStyle |= MB_APPLMODAL;
+#ifndef __WXWINCE__
     else
         msStyle |= MB_TASKMODAL;
+#endif
 
     // do show the dialog
     int msAns = MessageBox(hWnd, m_message.c_str(), m_caption.c_str(), msStyle);

@@ -1260,7 +1260,16 @@ WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
 #ifndef wxAtof
 double   WXDLLEXPORT wxAtof(const wxChar *psz)
 {
-  return atof(wxConvLocal.cWX2MB(psz));
+#ifdef __WXWINCE__
+    double d;
+    wxString str(psz);
+    if (str.ToDouble(& d))
+        return d;
+    else
+        return 0.0;
+#else
+    return atof(wxConvLocal.cWX2MB(psz));
+#endif
 }
 #endif
 

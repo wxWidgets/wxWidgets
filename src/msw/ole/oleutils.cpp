@@ -35,10 +35,21 @@
 
 #ifndef __CYGWIN10__
 
-#include <windows.h>
+#include "wx/msw/private.h"
+
+#ifdef __WXWINCE__
+    #include <winreg.h>
+    #include <ole2.h>
+
+    #define GUID_DEFINED
+    #define UUID_DEFINED
+#endif
 
 // OLE
+#ifndef __WXWINCE__
 #include  "wx/msw/ole/uuid.h"
+#endif
+
 #include  "wx/msw/ole/oleutils.h"
 
 #if defined(__VISUALC__) && (__VISUALC__ > 1000)
@@ -169,9 +180,13 @@ static wxString GetIidName(REFIID riid)
     }
   }
 
+#ifndef __WXWINCE__
   // unknown IID, just transform to string
   Uuid uuid(riid);
   return wxString((const wxChar *)uuid);
+#else
+  return wxEmptyString;
+#endif
 }
 
 void wxLogQueryInterface(const wxChar *szInterface, REFIID riid)

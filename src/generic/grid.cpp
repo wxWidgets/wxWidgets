@@ -911,7 +911,7 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
                 return TRUE;
 
             default:
-                if ( (keycode < 128) && isdigit(keycode) )
+                if ( (keycode < 128) && wxIsdigit(keycode) )
                     return TRUE;
         }
     }
@@ -924,7 +924,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
     if ( !HasRange() )
     {
         int keycode = event.GetKeyCode();
-        if ( isdigit(keycode) || keycode == '+' || keycode == '-'
+        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1064,7 +1064,7 @@ void wxGridCellFloatEditor::Reset()
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
-        if ( isdigit(keycode) || keycode == '+' || keycode == '-' || keycode == '.'
+        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-' || keycode == '.'
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1166,7 +1166,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             default:
                 // additionally accept 'e' as in '1e+6'
                 if ( (keycode < 128) &&
-                     (isdigit(keycode) || tolower(keycode) == 'e') )
+                     (wxIsdigit(keycode) || tolower(keycode) == 'e') )
                     return TRUE;
         }
     }

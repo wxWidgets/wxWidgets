@@ -64,8 +64,11 @@
     (defined(__GNUG__) && defined(__MSVCRT__)) || \
     defined(__WATCOMC__) || defined(__MWERKS__)
 
+#ifndef __WXWINCE__
     #undef wxUSE_BEGIN_THREAD
     #define wxUSE_BEGIN_THREAD
+#endif
+
 #endif
 
 #ifdef wxUSE_BEGIN_THREAD
@@ -292,6 +295,7 @@ private:
 
 wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 {
+#ifndef __WXWINCE__
     if ( maxcount == 0 )
     {
         // make it practically infinite
@@ -305,7 +309,7 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
                         maxcount,
                         NULL            // no name
                     );
-
+#endif
     if ( !m_semaphore )
     {
         wxLogLastError(_T("CreateSemaphore()"));
@@ -344,7 +348,9 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 
 wxSemaError wxSemaphoreInternal::Post()
 {
+#ifndef __WXWINCE__
     if ( !::ReleaseSemaphore(m_semaphore, 1, NULL /* ptr to previous count */) )
+#endif
     {
         wxLogLastError(_T("ReleaseSemaphore"));
 
@@ -952,6 +958,7 @@ unsigned long wxThread::GetCurrentId()
 
 bool wxThread::SetConcurrency(size_t level)
 {
+#ifndef __WXWINCE__
     wxASSERT_MSG( IsMain(), _T("should only be called from the main thread") );
 
     // ok only for the default one
@@ -1041,7 +1048,7 @@ bool wxThread::SetConcurrency(size_t level)
 
         return FALSE;
     }
-
+#endif
     return TRUE;
 }
 

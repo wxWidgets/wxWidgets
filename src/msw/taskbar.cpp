@@ -31,19 +31,18 @@
 
 #if defined(__WIN95__)
 
-#include <windows.h>
-
+#include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
 
 #include <string.h>
 #include "wx/taskbar.h"
-#include "wx/msw/private.h"
 
 #ifdef __GNUWIN32_OLD__
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#ifdef __SALFORDC__
+#ifdef __WXWINCE__
+    #include <winreg.h>
     #include <shellapi.h>
 #endif
 
@@ -151,7 +150,8 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     if ( !tooltip.empty() )
     {
         notifyData.uFlags |= NIF_TIP;
-        lstrcpyn(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
+//        lstrcpyn(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
+        wxStrncpy(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
     }
 
     bool ok = Shell_NotifyIcon(m_iconAdded ? NIM_MODIFY

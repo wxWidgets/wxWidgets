@@ -279,7 +279,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 static const int gs_metricsMap[] =
 {
     -1,  // wxSystemMetric enums start at 1, so give a dummy value for pos 0.
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXWINCE__)
     SM_CMOUSEBUTTONS,
 #else
     -1,
@@ -297,17 +297,25 @@ static const int gs_metricsMap[] =
     SM_CXEDGE,
     SM_CYEDGE,
 #else
-    -1, -1, -1, -1
+    -1, -1, -1, -1,
 #endif
     SM_CXHSCROLL,
     SM_CYHSCROLL,
+#ifdef SM_CXHTHUMB
     SM_CXHTHUMB,
+#else
+    -1,
+#endif
     SM_CXICON,
     SM_CYICON,
     SM_CXICONSPACING,
     SM_CYICONSPACING,
+#ifdef SM_CXHTHUMB
     SM_CXMIN,
     SM_CYMIN,
+#else
+    -1, -1,
+#endif
     SM_CXSCREEN,
     SM_CYSCREEN,
 
@@ -317,13 +325,17 @@ static const int gs_metricsMap[] =
     SM_CXSMICON,
     SM_CYSMICON,
 #else
-    -1, -1, -1, -1
+    -1, -1, -1, -1,
 #endif
     SM_CYHSCROLL,
     SM_CXVSCROLL,
     SM_CXVSCROLL,
     SM_CYVSCROLL,
+#ifdef SM_CYVTHUMB
     SM_CYVTHUMB,
+#else
+    -1,
+#endif
     SM_CYCAPTION,
     SM_CYMENU,
 #if defined(__WIN32__) && defined(SM_NETWORK)
@@ -331,13 +343,21 @@ static const int gs_metricsMap[] =
 #else
     -1,
 #endif
+#ifdef SM_PENWINDOWS
     SM_PENWINDOWS,
+#else
+    -1,
+#endif
 #if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
     SM_SHOWSOUNDS,
 #else
     -1,
 #endif
+#ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
+#else
+    -1
+#endif
 };
 
 // Get a system metric, e.g. scrollbar size

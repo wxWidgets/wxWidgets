@@ -269,7 +269,11 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     {
         int style1 = (style & 0xFF);
 
-        if ((style1 == SS_LEFT) || (style1 == SS_RIGHT) || (style1 == SS_SIMPLE))
+        if ((style1 == SS_LEFT) || (style1 == SS_RIGHT)
+#ifndef __WXWINCE__
+            || (style1 == SS_SIMPLE)
+#endif
+            )
             win = new wxStaticText;
 #if wxUSE_STATBMP
 #if defined(__WIN32__) && defined(BS_BITMAP)

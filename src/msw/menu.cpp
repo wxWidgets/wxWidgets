@@ -67,6 +67,7 @@ static const int idMenuTitle = -2;
 // make the given menu item default
 static void SetDefaultMenuItem(HMENU hmenu, UINT id)
 {
+#ifndef __WXWINCE__
     MENUITEMINFO mii;
     wxZeroMemory(mii);
     mii.cbSize = sizeof(MENUITEMINFO);
@@ -77,7 +78,21 @@ static void SetDefaultMenuItem(HMENU hmenu, UINT id)
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
+#endif
 }
+
+#ifdef __WXWINCE__
+UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
+{
+    MENUITEMINFO info;
+    wxZeroMemory(info);
+    info.cbSize = sizeof(info);
+    info.fMask = MIIM_STATE;
+    if ( !GetMenuItemInfo(hMenu, id, flags & MF_BYCOMMAND ? FALSE : TRUE, & info) )
+        wxLogLastError(wxT("GetMenuItemInfo"));
+    return info.fState;
+}
+#endif
 
 // ============================================================================
 // implementation
@@ -467,12 +482,26 @@ void wxMenu::SetTitle(const wxString& label)
         else
         {
             // modify the title
+#ifdef __WXWINCE__
+            MENUITEMINFO info;
+            wxZeroMemory(info);
+            info.cbSize = sizeof(info);
+            info.fMask = MIIM_TYPE;
+            info.fType = MFT_STRING;
+            info.cch = m_title.Length();
+            info.dwTypeData = (LPTSTR) m_title.c_str();
+            if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
+            {
+                wxLogLastError(wxT("SetMenuItemInfo"));
+            }
+#else
             if ( !ModifyMenu(hMenu, 0u,
                              MF_BYPOSITION | MF_STRING,
                              (unsigned)idMenuTitle, m_title) )
             {
                 wxLogLastError(wxT("ModifyMenu"));
             }
+#endif
         }
     }
 
@@ -500,7 +529,8 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
         //     useless anyhow (as it could be retrieved using GetId()) and
         //     uncompatible with wxGTK, so now we use the command int instead
         //     to pass the checked status
-        SendEvent(id, ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
+        UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) ;
+        SendEvent(id, menuState & MF_CHECKED);
     }
 
     return TRUE;
@@ -656,11 +686,26 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
         id = pos;
     }
 
+#ifdef __WXWINCE__
+    MENUITEMINFO info;
+    wxZeroMemory(info);
+    info.cbSize = sizeof(info);
+    info.fMask = MIIM_TYPE;
+    info.fType = MFT_STRING;
+    info.cch = label.Length();
+    info.dwTypeData = (LPTSTR) label.c_str();
+    if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, & info) )
+    {
+        wxLogLastError(wxT("SetMenuItemInfo"));
+    }
+    
+#else
     if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
-                      id, label) == (int)0xFFFFFFFF )
+        id, label) == (int)0xFFFFFFFF )
     {
         wxLogLastError(wxT("ModifyMenu"));
     }
+#endif
 
     Refresh();
 }

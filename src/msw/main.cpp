@@ -100,6 +100,15 @@ extern "C"
 
 #if !defined(_WINDLL)
 
+#ifdef __WXWINCE__
+int WINAPI WinMain(HINSTANCE hInstance,
+                   HINSTANCE hPrevInstance,
+                   LPWSTR lpCmdLine,
+                   int nCmdShow)
+{
+    return wxEntry(hInstance, hPrevInstance, (char*) lpCmdLine, nCmdShow);
+}
+#else
 int PASCAL WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
@@ -107,6 +116,7 @@ int PASCAL WinMain(HINSTANCE hInstance,
 {
     return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }
+#endif
 
 #else // _WINDLL
 

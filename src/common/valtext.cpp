@@ -229,6 +229,10 @@ void wxTextValidator::SetExcludeList(const wxStringList& list)
     m_excludeList = list;
 }
 
+#ifdef __WXWINCE__
+inline int isascii(wxChar c) { return (c >= 0) && (c <=127); }
+#endif
+
 void wxTextValidator::OnChar(wxKeyEvent& event)
 {
 /*

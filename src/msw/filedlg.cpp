@@ -43,7 +43,7 @@
 
 #include "wx/msw/private.h"
 
-#if !defined(__WIN32__) || defined(__SALFORDC__)
+#if !defined(__WIN32__) || defined(__WXWINCE__)
     #include <commdlg.h>
 #endif
 

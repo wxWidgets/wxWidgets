@@ -39,7 +39,15 @@
 
 #include "wx/bitmap.h"
 #include "wx/msw/gdiimage.h"
+
+#if wxUSE_WXDIB
 #include "wx/msw/dib.h"
+#endif
+
+#ifdef __WXWINCE__
+#include <winreg.h>
+#include <shellapi.h>
+#endif
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxGDIImageHandlerList);
@@ -345,11 +353,15 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
                                 int WXUNUSED(desiredWidth),
                                 int WXUNUSED(desiredHeight))
 {
+#if wxUSE_WXDIB
     wxCHECK_MSG( bitmap, false, _T("NULL bitmap in LoadFile") );
 
     wxDIB dib(name);
 
     return dib.IsOk() && bitmap->CopyFromDIB(dib);
+#else
+    return FALSE;
+#endif
 }
 
 bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
@@ -357,11 +369,15 @@ bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
                                 int WXUNUSED(type),
                                 const wxPalette * WXUNUSED(pal))
 {
+#if wxUSE_WXDIB
     wxCHECK_MSG( bitmap, false, _T("NULL bitmap in SaveFile") );
 
     wxDIB dib(*bitmap);
 
     return dib.Save(name);
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -415,7 +431,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     }
     else
 #endif
-    // were we asked for a large icon?
+        // were we asked for a large icon?
     if ( desiredWidth == ::GetSystemMetrics(SM_CXICON) &&
          desiredHeight == ::GetSystemMetrics(SM_CYICON) )
     {
@@ -442,11 +458,13 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     }
     //else: not standard size, load below
 
+#ifndef __WXWINCE__
     if ( !hicon )
     {
         // take any size icon from the file by index
         hicon = ::ExtractIcon(wxGetInstance(), nameReal, iconIndex);
     }
+#endif
 
     if ( !hicon )
     {
@@ -508,6 +526,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     }
 
     // next check if it's not a standard icon
+#ifndef __WXWINCE__
     if ( !hicon && !hasSize )
     {
         static const struct
@@ -530,6 +549,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
             }
         }
     }
+#endif
 
     wxSize size = wxGetHiconSize(hicon);
     icon->SetSize(size.x, size.y);
@@ -546,7 +566,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 wxSize wxGetHiconSize(HICON hicon)
 {
     wxSize size(32, 32);    // default
-
+#ifndef __WXWINCE__
     if ( hicon && wxGetOsVersion() != wxWIN32S )
     {
         ICONINFO info;
@@ -571,7 +591,7 @@ wxSize wxGetHiconSize(HICON hicon)
                 ::DeleteObject(info.hbmColor);
         }
     }
-
+#endif
     return size;
 }
 

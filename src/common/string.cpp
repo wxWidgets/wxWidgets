@@ -1013,6 +1013,10 @@ wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplaceAll)
   return uiCount;
 }
 
+#ifdef __WXWINCE__
+inline int isascii(wxChar c) { return (c >= 0) && (c <=127); }
+#endif
+
 bool wxString::IsAscii() const
 {
   const wxChar *s = (const wxChar*) *this;

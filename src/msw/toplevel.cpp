@@ -41,6 +41,11 @@
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/winundef.h"
+
+#ifdef CreateDialog
+#undef CreateDialog
+#endif
 
 #include "wx/display.h"
 
@@ -155,7 +160,11 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
+    {
+#ifndef __WXWINCE__
         msflags |= WS_THICKFRAME;
+#endif
+    }
     else if ( !(style & wxBORDER_NONE) )
         msflags |= WS_BORDER;
     else
@@ -173,10 +182,12 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_MAXIMIZEBOX;
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
+#ifndef __WXWINCE__
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
+#endif
 
     // Keep this here because it saves recoding this function in wxTinyFrame
 #if wxUSE_ITSY_BITSY && !defined(__WIN32__)
@@ -212,11 +223,13 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             // The second one is solved here by using WS_EX_APPWINDOW flag, the
             // first one is dealt with in our MSWGetParent() method
             // implementation
+#ifndef __WXWINCE__
             if ( !(style & wxFRAME_NO_TASKBAR) && GetParent() )
             {
                 // need to force the frame to appear in the taskbar
                 *exflags |= WS_EX_APPWINDOW;
             }
+#endif
             //else: nothing to do [here]
         }
 #endif // !Win16
@@ -580,7 +593,11 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
 
 bool wxTopLevelWindowMSW::IsMaximized() const
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     return ::IsZoomed(GetHwnd()) != 0;
+#endif
 }
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)
@@ -590,10 +607,14 @@ void wxTopLevelWindowMSW::Iconize(bool iconize)
 
 bool wxTopLevelWindowMSW::IsIconized() const
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     // also update the current state
     ((wxTopLevelWindowMSW *)this)->m_iconized = ::IsIconic(GetHwnd()) != 0;
 
     return m_iconized;
+#endif
 }
 
 void wxTopLevelWindowMSW::Restore()
@@ -633,7 +654,12 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         LONG offFlags = 0;
 
         if (style & wxFULLSCREEN_NOBORDER)
-            offFlags |= WS_BORDER | WS_THICKFRAME;
+        {
+            offFlags |= WS_BORDER;
+#ifndef __WXWINCE__
+            offFlags |= WS_THICKFRAME;
+#endif
+        }
         if (style & wxFULLSCREEN_NOCAPTION)
             offFlags |= WS_CAPTION | WS_SYSMENU;
 
@@ -653,8 +679,11 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         else // fall back to the main desktop
 #else // wxUSE_DISPLAY
         {
+            // FIXME: implement for WinCE
+#ifndef __WXWINCE__
             // resize to the size of the desktop
             wxCopyRECTToRect(wxGetWindowRect(::GetDesktopWindow()), rect);
+#endif
         }
 #endif // wxUSE_DISPLAY
 
@@ -727,9 +756,9 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 {
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__)
     // get system (a.k.a. window) menu
-    HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
+    HMENU hmenu = GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
     {
         // no system menu at all -- ok if we want to remove the close button
@@ -760,6 +789,9 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 
 bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
@@ -800,6 +832,7 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
         return FALSE;
     }
     return TRUE;
+#endif
 }
 
 // ----------------------------------------------------------------------------

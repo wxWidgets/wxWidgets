@@ -248,11 +248,17 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     HBRUSH hBrush = ::CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
 
     HDC hdc = GetHdcOf((*event.GetDC()));
+
+#ifndef __WXWINCE__
     int mode = ::SetMapMode(hdc, MM_TEXT);
+#endif
 
     ::FillRect(hdc, &rect, hBrush);
     ::DeleteObject(hBrush);
+
+#ifndef __WXWINCE__
     ::SetMapMode(hdc, mode);
+#endif
 }
 
 WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),

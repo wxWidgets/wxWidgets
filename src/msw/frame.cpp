@@ -42,6 +42,10 @@
 
 #include "wx/msw/private.h"
 
+#ifdef __WXWINCE__
+#include <commctrl.h>
+#endif
+
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
     #include "wx/generic/statusbr.h"
@@ -102,6 +106,9 @@ void wxFrame::Init()
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
+#ifdef __WXWINCE__
+    m_commandBar = 0;
+#endif
 
     // Data to save/restore when calling ShowFullScreen
     m_fsStatusBarFields = 0;
@@ -132,8 +139,15 @@ bool wxFrame::Create(wxWindow *parent,
 wxFrame::~wxFrame()
 {
     m_isBeingDeleted = TRUE;
-
     DeleteAllBars();
+#ifdef __WXWINCE__
+    if (m_commandBar)
+    {
+        ::DestroyWindow((HWND) m_commandBar);
+        m_commandBar = NULL;
+    }
+#endif
+
 }
 
 // ----------------------------------------------------------------------------
@@ -283,7 +297,21 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 
 void wxFrame::InternalSetMenuBar()
 {
-#ifndef __WXMICROWIN__
+#ifdef __WXMICROWIN__
+    // Nothing
+#elif defined(__WXWINCE__)
+    if (!m_commandBar)
+    {
+        // TODO: what identifer shall we use?
+        // TODO: eventually have a wxCommandBar class
+        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), 999);
+    }
+    if (m_commandBar)
+    {
+        CommandBar_InsertMenubarEx((HWND) m_commandBar, wxGetInstance(),
+            (LPTSTR) (HMENU) m_hMenu, 0);
+    }
+#else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
         wxLogLastError(wxT("SetMenu"));
@@ -334,7 +362,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_TOOLBAR
 
-#ifndef __WXMICROWIN__
+        // TODO: make it work for WinCE
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         if (style & wxFULLSCREEN_NOMENUBAR)
             SetMenu((HWND)GetHWND(), (HMENU) NULL);
 #endif
@@ -381,7 +410,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_STATUSBAR
 
-#ifndef __WXMICROWIN__
+        // TODO: make it work for WinCE
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         if ((m_fsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
             SetMenu((HWND)GetHWND(), (HMENU)m_hMenu);
 #endif
@@ -540,7 +570,7 @@ bool wxFrame::HandlePaint()
     RECT rect;
     if ( GetUpdateRect(GetHwnd(), &rect, FALSE) )
     {
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         if ( m_iconized )
         {
             const wxIcon& icon = GetIcon();
@@ -590,7 +620,7 @@ bool wxFrame::HandlePaint()
 bool wxFrame::HandleSize(int x, int y, WXUINT id)
 {
     bool processed = FALSE;
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
     switch ( id )
     {
@@ -748,7 +778,7 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = HandlePaint();
             break;
 
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_MENUSELECT:
             {
                 WXWORD item, flags;

@@ -30,7 +30,7 @@
 #include "malloc.h"
 #endif
 
-#include <windows.h>
+#include "wx/msw/private.h"
 
 #if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
     #include <commctrl.h>
@@ -40,7 +40,6 @@
 
 #include "wx/tabctrl.h"
 #include "wx/app.h"
-#include "wx/msw/private.h"
 #include "wx/msw/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
@@ -101,7 +100,9 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   if (m_windowStyle & wxBORDER)
     tabStyle |= WS_BORDER;
 
+#ifndef __WXWINCE__
   tabStyle |= TCS_TOOLTIPS;
+#endif
 
   // Create the toolbar control.
   HWND hWndTabCtrl = CreateWindowEx(0L,     // No extended styles.
@@ -144,13 +145,14 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             eventType = wxEVT_COMMAND_TAB_SEL_CHANGING;
             break;
 
+#ifndef __WXWINCE__
         case TTN_NEEDTEXT:
         {
             // TODO
 //            if (tool->m_shortHelpString != "")
 //                ttText->lpszText = (char *) (const char *)tool->m_shortHelpString;
         }
-
+#endif
         default :
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }

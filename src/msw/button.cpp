@@ -424,11 +424,10 @@ static void DrawButtonText(HDC hdc,
 
 static void DrawRect(HDC hdc, const RECT& r)
 {
-    MoveToEx(hdc, r.left, r.top, NULL);
-    LineTo(hdc, r.right, r.top);
-    LineTo(hdc, r.right, r.bottom);
-    LineTo(hdc, r.left, r.bottom);
-    LineTo(hdc, r.left, r.top);
+    wxDrawLine(hdc, r.left, r.top, r.right, r.top);
+    wxDrawLine(hdc, r.right, r.top, r.right, r.bottom);
+    wxDrawLine(hdc, r.right, r.bottom, r.left, r.bottom);
+    wxDrawLine(hdc, r.left, r.bottom, r.left, r.top);
 }
 
 void wxButton::MakeOwnerDrawn()
@@ -542,24 +541,20 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
             InflateRect(&r, -1, -1);
         }
 
-        MoveToEx(hdc, r.left, r.bottom, NULL);
-        LineTo(hdc, r.right, r.bottom);
-        LineTo(hdc, r.right, r.top - 1);
+        wxDrawLine(hdc, r.left, r.bottom, r.right, r.bottom);
+        wxDrawLine(hdc, r.right, r.bottom, r.right, r.top - 1);
 
         (void)SelectObject(hdc, hpenWhite);
-        MoveToEx(hdc, r.left, r.bottom - 1, NULL);
-        LineTo(hdc, r.left, r.top);
-        LineTo(hdc, r.right, r.top);
+        wxDrawLine(hdc, r.left, r.bottom - 1, r.left, r.top);
+        wxDrawLine(hdc, r.left, r.top, r.right, r.top);
 
         (void)SelectObject(hdc, hpenLightGr);
-        MoveToEx(hdc, r.left + 1, r.bottom - 2, NULL);
-        LineTo(hdc, r.left + 1, r.top + 1);
-        LineTo(hdc, r.right - 1, r.top + 1);
+        wxDrawLine(hdc, r.left + 1, r.bottom - 2, r.left + 1, r.top + 1);
+        wxDrawLine(hdc, r.left + 1, r.top + 1, r.right - 1, r.top + 1);
 
         (void)SelectObject(hdc, hpenGrey);
-        MoveToEx(hdc, r.left + 1, r.bottom - 1, NULL);
-        LineTo(hdc, r.right - 1, r.bottom - 1);
-        LineTo(hdc, r.right - 1, r.top);
+        wxDrawLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1);
+        wxDrawLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top);
     }
 
     (void)SelectObject(hdc, hpenOld);

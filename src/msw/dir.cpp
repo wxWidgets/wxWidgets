@@ -41,6 +41,10 @@
 #include "wx/dir.h"
 #include "wx/filefn.h"          // for wxPathExists()
 
+#ifdef __WXMSW__
+    #include "wx/msw/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // define the types and functions used for file searching
 // ----------------------------------------------------------------------------
@@ -130,8 +134,6 @@
         return (attr & (_A_SYSTEM | _A_HIDDEN)) != 0;
     }
 #else // Win32
-    #include <windows.h>
-
     typedef WIN32_FIND_DATA FIND_STRUCT;
     typedef HANDLE FIND_DATA;
     typedef DWORD FIND_ATTR;

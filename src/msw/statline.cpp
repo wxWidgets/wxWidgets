@@ -76,7 +76,12 @@ WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     // add our default styles
-    return msStyle | SS_GRAYRECT | SS_SUNKEN | SS_NOTIFY | WS_CLIPSIBLINGS;
+    msStyle |= SS_SUNKEN | SS_NOTIFY | WS_CLIPSIBLINGS;
+#ifndef __WXWINCE__
+    msStyle |= SS_GRAYRECT ;
+#endif
+
+    return msStyle ;
 }
 
 #endif // wxUSE_STATLINE

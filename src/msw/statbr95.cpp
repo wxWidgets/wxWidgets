@@ -96,9 +96,11 @@ bool wxStatusBar95::Create(wxWindow *parent,
     }
     else
     {
+#ifndef __WXWINCE__
         // may be some versions of comctl32.dll do need it - anyhow, it won't
         // do any harm
         wstyle |= SBARS_SIZEGRIP;
+#endif
     }
 
     m_hWnd = (WXHWND)CreateStatusWindow(wstyle,

@@ -127,10 +127,11 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     int position,
         maxPos, trackPos = pos;
 
-#ifdef __WIN32__
     // when we're dragging the scrollbar we can't use pos parameter because it
     // is limited to 16 bits
-    if ( wParam == SB_THUMBPOSITION || wParam == SB_THUMBTRACK )
+    // JACS: now always using GetScrollInfo, since there's no reason
+    // not to
+//    if ( wParam == SB_THUMBPOSITION || wParam == SB_THUMBTRACK )
     {
         SCROLLINFO scrollInfo;
         wxZeroMemory(scrollInfo);
@@ -150,13 +151,14 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
         position = scrollInfo.nPos;
         maxPos = scrollInfo.nMax;
     }
+#if 0
     else
-#endif // Win32
     {
         position = ::GetScrollPos((HWND) control, SB_CTL);
         int minPos;
         ::GetScrollRange((HWND) control, SB_CTL, &minPos, &maxPos);
     }
+#endif
 
 #if defined(__WIN95__)
     // A page size greater than one has the effect of reducing the effective
@@ -265,7 +267,17 @@ void wxScrollBar::SetThumbPosition(int viewStart)
 
 int wxScrollBar::GetThumbPosition(void) const
 {
-    return ::GetScrollPos((HWND)m_hWnd, SB_CTL);
+    SCROLLINFO scrollInfo;
+    wxZeroMemory(scrollInfo);
+    scrollInfo.cbSize = sizeof(SCROLLINFO);
+    scrollInfo.fMask = SIF_POS;
+    
+    if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )
+    {
+        wxLogLastError(_T("GetScrollInfo"));
+    }
+    return scrollInfo.nPos;
+//    return ::GetScrollPos((HWND)m_hWnd, SB_CTL);
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,

@@ -953,15 +953,24 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 bool processed = TRUE;
 
+                // HELPINFO doesn't seem to be supported on WinCE.
+#ifndef __WXWINCE__
                 HELPINFO* info = (HELPINFO*) lParam;
                 // Don't yet process menu help events, just windows
                 if (info->iContextType == HELPINFO_WINDOW)
+#endif
                 {
                     wxWindow* subjectOfHelp = radiobox;
                     bool eventProcessed = FALSE;
                     while (subjectOfHelp && !eventProcessed)
                     {
-                        wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), wxPoint(info->MousePos.x, info->MousePos.y) ) ; // info->iCtrlId);
+                        wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(),
+#ifdef __WXWINCE__
+                                              wxPoint(0, 0)
+#else
+                                              wxPoint(info->MousePos.x, info->MousePos.y)
+#endif
+                            ) ; // info->iCtrlId);
                         helpEvent.SetEventObject(radiobox);
                         eventProcessed = radiobox->GetEventHandler()->ProcessEvent(helpEvent);
 
@@ -970,14 +979,16 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                     }
                     processed = eventProcessed;
                 }
+#ifndef __WXWINCE__
                 else if (info->iContextType == HELPINFO_MENUITEM)
                 {
                     wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId) ;
                     helpEvent.SetEventObject(radiobox);
                     processed = radiobox->GetEventHandler()->ProcessEvent(helpEvent);
                 }
-                else processed = FALSE;
-
+                else
+                    processed = FALSE;
+#endif
                 if (processed)
                     return 0;
 

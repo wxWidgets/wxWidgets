@@ -35,6 +35,8 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
+#if wxUSE_WXDIB
+
 #include "wx/bitmap.h"
 #include "wx/intl.h"
 #include "wx/file.h"
@@ -606,3 +608,6 @@ bool wxDIB::Create(const wxImage& image)
 
 #endif // wxUSE_IMAGE
 
+#endif
+    // wxUSE_WXDIB
+    

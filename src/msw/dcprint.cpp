@@ -38,7 +38,11 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/msw/private.h"
+
+#if wxUSE_WXDIB
 #include "wx/msw/dib.h"
+#endif
+
 #include "wx/dcprint.h"
 #include "math.h"
 
@@ -341,6 +345,7 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
                                   const wxBitmap& bmp,
                                   wxCoord x, wxCoord y)
 {
+#if wxUSE_WXDIB
     wxDIB dib(bmp);
     if ( !dib.IsOk() )
         return FALSE;
@@ -373,6 +378,9 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
     }
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 void wxPrinterDC::DoDrawBitmap(const wxBitmap& bmp,

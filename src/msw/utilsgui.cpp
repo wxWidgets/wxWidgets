@@ -443,4 +443,18 @@ extern void HIMETRICToPixel(LONG *x, LONG *y)
     *y /= (iHeightMM * 100);
 }
 
+void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)
+{
+#ifdef __WXWINCE__
+    POINT points[2];
+    points[0].x = x1;
+    points[0].y = y1;
+    points[1].x = x2;
+    points[1].y = y2;
+    Polyline(hdc, points, 2);
+#else
+    MoveToEx(hdc, x1, y1, NULL); LineTo((HDC) hdc, x2, y2);
+#endif
+}
+
 

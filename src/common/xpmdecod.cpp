@@ -551,7 +551,13 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         return TRUE;
     }
 
+#ifdef __WXWINCE__
+    // TODO: is this right? How come it compiles on other
+    // platforms?
+    name = (char*) wxStrdup((wxChar*) inname);
+#else
     name = wxStrdup(inname);
+#endif
 
     // theRGBRecords[] has no names with spaces, and no grey, but a
     // lot of gray...

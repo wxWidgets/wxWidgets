@@ -30,7 +30,6 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "assert.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
@@ -149,7 +148,7 @@ bool wxPen::RealizeResource()
        // Join style, Cap style, Pen Stippling only on Win32.
        // Currently no time to find equivalent on Win3.1, sorry
        // [if such equiv exist!!]
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
        if (M_PENDATA->m_join==wxJOIN_ROUND        &&
            M_PENDATA->m_cap==wxCAP_ROUND          &&
            M_PENDATA->m_style!=wxUSER_DASH        &&
@@ -397,7 +396,7 @@ int wx2msPenStyle(int wx_style)
     int cstyle;
     switch (wx_style)
     {
-#if !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
        case wxDOT:
            cstyle = PS_DOT;
            break;
@@ -417,7 +416,7 @@ int wx2msPenStyle(int wx_style)
 #endif
 
        case wxUSER_DASH:
-#if !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 #ifdef __WIN32__
            // Win32s doesn't have PS_USERSTYLE
            if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)

@@ -50,6 +50,8 @@
 #include <windows.h>
 #include <windowsx.h>
 
+#include "wx/msw/private.h"
+
 #if defined(__GNUWIN32_OLD__)
     #include "wx/msw/gnuwin32/extra.h"
 #endif
@@ -161,7 +163,11 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       rect.right  = nCheckWidth;
       rect.bottom = nCheckHeight;
 
+#ifdef __WXWINCE__
+      DrawFrameControl(hdcMem, &rect, DFC_BUTTON, DFCS_BUTTONCHECK);
+#else
       DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+#endif
 
       // finally copy it to screen DC and clean up
       BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight,

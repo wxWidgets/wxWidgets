@@ -43,7 +43,8 @@
 #include "wx/apptrait.h"
 #include "wx/module.h"
 
-#if wxUSE_CONFIG
+// wxMemoryConfig uses wxFileConfig
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     #include "wx/config.h"
     #include "wx/memconf.h"
 #endif
@@ -197,7 +198,7 @@ wxFontMapper *wxFontMapperBase::sm_instance = NULL;
 
 wxFontMapperBase::wxFontMapperBase()
 {
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     m_config = NULL;
     m_configIsDummy = FALSE;
 #endif // wxUSE_CONFIG
@@ -205,7 +206,7 @@ wxFontMapperBase::wxFontMapperBase()
 
 wxFontMapperBase::~wxFontMapperBase()
 {
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     if ( m_configIsDummy )
         delete m_config;
 #endif // wxUSE_CONFIG
@@ -244,7 +245,7 @@ wxFontMapper *wxFontMapperBase::Set(wxFontMapper *mapper)
     return old;
 }
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
 
 // ----------------------------------------------------------------------------
 // config usage customisation
@@ -365,7 +366,7 @@ wxFontMapperBase::CharsetToEncoding(const wxString& charset,
     // we're going to modify it, make a copy
     wxString cs = charset;
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_FILECONFIG
     // first try the user-defined settings
     wxFontMapperPathChanger path(this, FONTMAPPER_CHARSET_PATH);
     if ( path.IsOk() )

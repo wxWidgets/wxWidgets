@@ -38,6 +38,12 @@
 
 #include  <windows.h>
 
+#ifdef __WXWINCE__
+#include "wx/msw/private.h"
+#include <winbase.h>
+#include <winreg.h>
+#endif
+
 // other std headers
 #include  <stdlib.h>      // for _MAX_PATH
 
@@ -71,10 +77,12 @@ aStdKeys[] =
   { HKEY_CURRENT_USER,      wxT("HKEY_CURRENT_USER"),      wxT("HKCU") },
   { HKEY_LOCAL_MACHINE,     wxT("HKEY_LOCAL_MACHINE"),     wxT("HKLM") },
   { HKEY_USERS,             wxT("HKEY_USERS"),             wxT("HKU")  }, // short name?
+#ifndef __WXWINCE__
   { HKEY_PERFORMANCE_DATA,  wxT("HKEY_PERFORMANCE_DATA"),  wxT("HKPD") },
-#if     WINVER >= 0x0400
+#endif
+#if WINVER >= 0x0400 && !defined(__WXWINCE__)
   { HKEY_CURRENT_CONFIG,    wxT("HKEY_CURRENT_CONFIG"),    wxT("HKCC") },
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__WXWINCE__)
   { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // short name?
 #endif  //GNUWIN32
 #endif  //WINVER >= 4.0
@@ -372,7 +380,8 @@ bool wxRegKey::Open()
     return TRUE;
 
   HKEY tmpKey;
-  m_dwLastError = RegOpenKey((HKEY) m_hRootKey, m_strKey, &tmpKey);
+  m_dwLastError = RegOpenKeyEx((HKEY) m_hRootKey, m_strKey,
+      0, 0, &tmpKey);
   if ( m_dwLastError != ERROR_SUCCESS ) {
     wxLogSysError(m_dwLastError, _("Can't open registry key '%s'"),
                   GetName().c_str());
@@ -397,7 +406,19 @@ bool wxRegKey::Create(bool bOkIfExists)
     return TRUE;
 
   HKEY tmpKey;
+#ifdef __WXWINCE__
+  DWORD disposition;
+  m_dwLastError = RegCreateKeyEx((HKEY) m_hRootKey, m_strKey,
+      NULL, // reserved
+      NULL, // class string
+      0,
+      0,
+      NULL,
+      &tmpKey,
+      &disposition);
+#else
   m_dwLastError = RegCreateKey((HKEY) m_hRootKey, m_strKey, &tmpKey);
+#endif
   if ( m_dwLastError != ERROR_SUCCESS ) {
     wxLogSysError(m_dwLastError, _("Can't create registry key '%s'"),
                   GetName().c_str());
@@ -856,6 +877,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
             strValue.UngetWriteBuf();
 
             // expand the var expansions in the string unless disabled
+#ifndef __WXWINCE__
             if ( (dwType == REG_EXPAND_SZ) && !raw )
             {
                 DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
@@ -878,6 +900,8 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
                     wxLogLastError(_T("ExpandEnvironmentStrings"));
                 }
             }
+#endif
+            // __WXWINCE__
         }
 
         if ( m_dwLastError == ERROR_SUCCESS ) {
@@ -1012,7 +1036,14 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
     return FALSE;
 
   wxChar szKeyName[_MAX_PATH + 1];
+
+#ifdef __WXWINCE__
+  DWORD sizeName = WXSIZEOF(szKeyName);
+  m_dwLastError = RegEnumKeyEx((HKEY) m_hKey, lIndex++, szKeyName, & sizeName,
+      0, NULL, NULL, NULL);
+#else
   m_dwLastError = RegEnumKey((HKEY) m_hKey, lIndex++, szKeyName, WXSIZEOF(szKeyName));
+#endif
 
   if ( m_dwLastError != ERROR_SUCCESS ) {
     if ( m_dwLastError == ERROR_NO_MORE_ITEMS ) {
@@ -1057,7 +1088,7 @@ bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
     return TRUE;
 
   HKEY hkeyDummy;
-  if ( RegOpenKey( (HKEY) hRootKey, szKey, &hkeyDummy) == ERROR_SUCCESS ) {
+  if ( RegOpenKeyEx( (HKEY) hRootKey, szKey, 0, 0, &hkeyDummy) == ERROR_SUCCESS ) {
     RegCloseKey(hkeyDummy);
     return TRUE;
   }

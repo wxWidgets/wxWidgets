@@ -55,7 +55,10 @@
 
 #include <string.h>
 #include <stdlib.h>
+
+#ifndef __WXWINCE__
 #include <sys/types.h>
+#endif
 
 #if wxUSE_RICHEDIT
 

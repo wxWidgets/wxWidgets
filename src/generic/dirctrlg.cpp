@@ -112,7 +112,12 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 {
 #if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
 
-#ifdef __WIN32__
+#ifdef __WXWINCE__
+    // No logical drives; return "\"
+    paths.Add(wxT("\\"));
+    names.Add(wxT("\\"));
+    return 1;
+#elif defined(__WIN32__)
     wxChar driveBuffer[256];
     size_t n = (size_t) GetLogicalDriveStrings(255, driveBuffer);
     size_t i = 0;
@@ -292,7 +297,9 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 int setdrive(int drive)
 {
-#if defined(__GNUWIN32__) && \
+#ifdef __WXWINCE__
+    return 0;
+#elif defined(__GNUWIN32__) && \
     (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
     return _chdrive(drive);
 #else
@@ -304,11 +311,7 @@ int setdrive(int drive)
 	newdrive[1] = wxT(':');
 	newdrive[2] = wxT('\0');
 #if defined(__WXMSW__)
-#ifdef __WIN16__
-    if (wxSetWorkingDirectory(newdrive))
-#else
 	if (::SetCurrentDirectory(newdrive))
-#endif
 #else
     // VA doesn't know what LPSTR is and has its own set
 	if (DosSetCurrentDir((PSZ)newdrive))
@@ -321,6 +324,9 @@ int setdrive(int drive)
 
 bool wxIsDriveAvailable(const wxString& dirName)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
 #ifdef __WIN32__
     UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 #endif
@@ -350,6 +356,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
 #endif
 
     return success;
+#endif
 }
 #endif // __WINDOWS__ || __WXPM__
 

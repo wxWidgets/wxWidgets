@@ -34,11 +34,11 @@
   #include "wx/font.h"
 #endif
 
+#include "wx/msw/private.h"
+
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
-
-#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -159,7 +159,10 @@ void wxFontEnumeratorHelper::DoEnumerate()
 #ifndef __WXMICROWIN__
     HDC hDC = ::GetDC(NULL);
 
-#ifdef __WIN32__
+#ifdef __WXWINCE__
+    ::EnumFontFamilies(hDC, m_facename, (wxFONTENUMPROC)wxFontEnumeratorProc,
+                         (LPARAM)this) ;
+#elif defined(__WIN32__)
     LOGFONT lf;
     lf.lfCharSet = m_charset;
     wxStrncpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));

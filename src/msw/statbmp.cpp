@@ -269,10 +269,12 @@ long wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
                                    WXWPARAM wParam,
                                    WXLPARAM lParam)
 {
+#ifndef __WXWINCE__
     // Ensure that static items get messages. Some controls don't like this
     // message to be intercepted (e.g. RichEdit), hence the tests.
     if ( nMsg == WM_NCHITTEST )
         return (long)HTCLIENT;
+#endif
 
     return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }

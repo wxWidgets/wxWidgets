@@ -42,6 +42,11 @@
 
 #include "wx/msw/private.h"
 
+#ifdef __WXWINCE__
+#include <winreg.h>
+#include <objbase.h>
+#include <shlguid.h>
+#endif
 #include <shlobj.h> // Win95 shell
 
 // ----------------------------------------------------------------------------
@@ -135,7 +140,11 @@ int wxDirDialog::ShowModal()
     bi.hwndOwner      = parent ? GetHwndOf(parent) : NULL;
     bi.pidlRoot       = NULL;
     bi.pszDisplayName = NULL;
+#ifdef __WXWINCE__
+    bi.lpszTitle      = m_message.mb_str();
+#else
     bi.lpszTitle      = m_message.c_str();
+#endif
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = (LPARAM)m_path.c_str();    // param for the callback
@@ -217,7 +226,9 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
             // initial selection here
             //
             // wParam = TRUE => lParam is a string and not a PIDL
+#ifndef __WXWINCE__
             SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
+#endif
             break;
 
         case BFFM_SELCHANGED:

@@ -30,7 +30,6 @@
 
 #include "wx/gdiobj.h"
 #include "wx/msw/private.h"
-#include "assert.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 

@@ -312,8 +312,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                    CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_READONLY )
         msStyle |= CBS_DROPDOWNLIST;
+#ifndef __WXWINCE__
     else if ( style & wxCB_SIMPLE )
         msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
+#endif
     else
         msStyle |= CBS_DROPDOWN;
 

@@ -37,13 +37,12 @@
 #endif
 
 #include "wx/fontdlg.h"
+#include "wx/msw/private.h"
 
-#if !defined(__WIN32__) || defined(__SALFORDC__)
-#include <windows.h>
+#if !defined(__WIN32__) || defined(__WXWINCE__)
 #include <commdlg.h>
 #endif
 
-#include "wx/msw/private.h"
 #include "wx/cmndata.h"
 #include "wx/log.h"
 

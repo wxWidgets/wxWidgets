@@ -84,7 +84,13 @@ WXHWND wxPopupWindow::MSWGetParent() const
     //     WS_CHILD but then showing a popup would deactivate the parent which
     //     is ugly and working around this, although possible, is even more
     //     ugly
+    // GetDesktopWindow() is not always supported on WinCE, and if
+    // it is, it often returns NULL.
+#ifdef __WXWINCE__
+    return 0;
+#else
     return (WXHWND)::GetDesktopWindow();
+#endif
 }
 
 bool wxPopupWindow::Show(bool show)

@@ -39,7 +39,7 @@ long timezone = 0;
 
 // Hint: use GetSystemTime()
 
-struct tm * localtime(const time_t *)
+struct tm * __cdecl localtime(const time_t *)
 {
     // TODO
     return NULL;
@@ -105,26 +105,26 @@ struct tm * localtime(const time_t *)
 #endif
 }
 
-time_t time(time_t *)
+time_t __cdecl time(time_t *)
 {
     // TODO
     return 0;
 }
 
-size_t wcsftime(wchar_t *, size_t, const wchar_t *,
+size_t __cdecl wcsftime(wchar_t *, size_t, const wchar_t *,
         const struct tm *)
 {
     // TODO
     return 0;
 }
 
-time_t mktime(struct tm *)
+time_t __cdecl mktime(struct tm *)
 {
     // TODO
     return 0;
 }
 
-struct tm * gmtime(const time_t *)
+struct tm * __cdecl gmtime(const time_t *)
 {
     // TODO
     return NULL;
