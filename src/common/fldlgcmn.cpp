@@ -45,7 +45,8 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
                                    const wxPoint& WXUNUSED(pos))
                 : m_message(message),
                   m_dir(defaultDir),
-                  m_fileName(defaultFile)
+                  m_fileName(defaultFile),
+                  m_wildCard(wildCard)
 {
     m_parent = parent;
     m_dialogStyle = style;
