@@ -55,6 +55,9 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#ifdef HAVE_LANGINFO_H
+  #include <langinfo.h>
+#endif
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     #define wxHAVE_WIN32_MB2WC
@@ -361,34 +364,44 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // wxConvBrokenFileNames is made for GTK2 in Unicode mode when
 // files are accidentally written in an encoding which is not
 // the system encoding. Typically, the system encoding will be
-// UTF8 but there might be files stored in ISO8859-1 in disk. 
+// UTF8 but there might be files stored in ISO8859-1 on disk. 
 // ----------------------------------------------------------------------------
 
 class wxConvBrokenFileNames: public wxMBConvLibc
 {
 public:
+    wxConvBrokenFileNames() : m_utf8conv(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL) { }
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    inline bool UseUTF8() const;
+private:
+    wxMBConvUTF8 m_utf8conv;
 };
+
+bool wxConvBrokenFileNames::UseUTF8() const
+{
+#if defined HAVE_LANGINFO_H && defined CODESET
+    char *codeset = nl_langinfo(CODESET);
+    return strcmp(codeset, "UTF-8") == 0;
+#else
+    return false;
+#endif
+}
 
 size_t wxConvBrokenFileNames::MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const
 {
-#if 0
-    if (we find some invalid characters)
-    {
-       Convert to Unicode range.
-    }
+    if (UseUTF8())
+        return m_utf8conv.MB2WC( outputBuf, psz, outputSize );
     else
-#endif
-    return wxMBConvLibc::MB2WC( outputBuf, psz, outputSize );
+        return wxMBConvLibc::MB2WC( outputBuf, psz, outputSize );
 }
 
 size_t wxConvBrokenFileNames::WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const
 {
-#if 0
-    Convert back from Unicode range.
-#endif
-    return wxMBConvLibc::WC2MB( outputBuf, psz, outputSize );
+    if (UseUTF8())
+        return m_utf8conv.WC2MB( outputBuf, psz, outputSize );
+    else
+        return wxMBConvLibc::WC2MB( outputBuf, psz, outputSize );
 }
 
 // ----------------------------------------------------------------------------
@@ -602,12 +615,17 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 static wxUint32 utf8_max[]=
     { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };
 
+const wxUint32 wxUnicodePUA = 0x100000;
+const wxUint32 wxUnicodePUAEnd = wxUnicodePUA + 256;
+
 size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
     size_t len = 0;
 
     while (*psz && ((!buf) || (len < n)))
     {
+        const char *opsz = psz;
+        bool invalid = false;
         unsigned char cc = *psz++, fc = cc;
         unsigned cnt;
         for (cnt = 0; fc & 0x80; cnt++)
@@ -625,7 +643,7 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
             if (!cnt)
             {
                 // invalid UTF-8 sequence
-                return (size_t)-1;
+                invalid = true;
             }
             else
             {
@@ -633,32 +651,96 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                 wxUint32 res = cc & (0x3f >> cnt);
                 while (cnt--)
                 {
-                    cc = *psz++;
+                    cc = *psz;
                     if ((cc & 0xC0) != 0x80)
                     {
                         // invalid UTF-8 sequence
-                        return (size_t)-1;
+                        invalid = true;
+                        break;
                     }
+                    psz++;
                     res = (res << 6) | (cc & 0x3f);
                 }
-                if (res <= utf8_max[ocnt])
+                if (invalid || res <= utf8_max[ocnt])
                 {
                     // illegal UTF-8 encoding
+                    invalid = true;
+                }
+                else if ((m_options & MAP_INVALID_UTF8_TO_PUA) &&
+                        res >= wxUnicodePUA && res < wxUnicodePUAEnd)
+                {
+                    // if one of our PUA characters turns up externally
+                    // it must also be treated as an illegal sequence
+                    // (a bit like you have to escape an escape character)
+                    invalid = true;
+                }
+                else
+                {
+#ifdef WC_UTF16
+                    // cast is ok because wchar_t == wxUuint16 if WC_UTF16
+                    size_t pa = encode_utf16(res, (wxUint16 *)buf);
+                    if (pa == (size_t)-1)
+                    {
+                        invalid = true;
+                    }
+                    else
+                    {
+                        if (buf)
+                            buf += pa;
+                        len += pa;
+                    }
+#else // !WC_UTF16
+                    if (buf)
+                        *buf++ = res;
+                    len++;
+#endif // WC_UTF16/!WC_UTF16
+                }
+            }
+            if (invalid)
+            {
+                if (m_options & MAP_INVALID_UTF8_TO_PUA)
+                {
+                    while (opsz < psz && (!buf || len < n))
+                    {
+#ifdef WC_UTF16
+                        // cast is ok because wchar_t == wxUuint16 if WC_UTF16
+                        size_t pa = encode_utf16((unsigned char)*opsz + wxUnicodePUA, (wxUint16 *)buf);
+                        wxASSERT(pa != (size_t)-1);
+                        if (buf)
+                            buf += pa;
+                        opsz++;
+                        len += pa;
+#else
+                        if (buf)
+                            *buf++ = wxUnicodePUA + (unsigned char)*opsz;
+                        opsz++;
+                        len++;
+#endif
+                    }
+                }
+                else
+                if (m_options & MAP_INVALID_UTF8_TO_OCTAL)
+                {
+                    while (opsz < psz && (!buf || len < n))
+                    {
+                        wchar_t str[6];
+                        wxSnprintf( str, 5, L"\\%o", (int) (unsigned char) *opsz );
+                        if (buf)
+                            *buf++ = str[0];
+                        if (buf)
+                            *buf++ = str[1];
+                        if (buf)
+                            *buf++ = str[2];
+                        if (buf)
+                            *buf++ = str[3];
+                        opsz++;
+                        len += 4;
+                    }
+                }
+                else
+                {
                     return (size_t)-1;
                 }
-#ifdef WC_UTF16
-                // cast is ok because wchar_t == wxUuint16 if WC_UTF16
-                size_t pa = encode_utf16(res, (wxUint16 *)buf);
-                if (pa == (size_t)-1)
-                  return (size_t)-1;
-                if (buf)
-                    buf += pa;
-                len += pa;
-#else // !WC_UTF16
-                if (buf)
-                    *buf++ = res;
-                len++;
-#endif // WC_UTF16/!WC_UTF16
             }
         }
     }
@@ -681,24 +763,49 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #else
         cc=(*psz++) & 0x7fffffff;
 #endif
-        unsigned cnt;
-        for (cnt = 0; cc > utf8_max[cnt]; cnt++) {}
-        if (!cnt)
+        if ((m_options & MAP_INVALID_UTF8_TO_PUA)
+            && cc >= wxUnicodePUA && cc < wxUnicodePUAEnd)
         {
-            // plain ASCII char
             if (buf)
-                *buf++ = (char) cc;
+                *buf++ = (char)(cc - wxUnicodePUA);
+            len++;
+        } 
+        else
+        if ((m_options & MAP_INVALID_UTF8_TO_OCTAL)
+            && cc == L'\\')
+        {
+            wchar_t str[4];
+            str[0] = *psz; psz++;
+            str[1] = *psz; psz++;
+            str[2] = *psz; psz++;
+            str[3] = 0;
+            int octal;
+            wxSscanf( str, L"%o", &octal );
+            if (buf)
+                *buf++ = (char) octal;
             len++;
         }
-
         else
         {
-            len += cnt + 1;
-            if (buf)
+            unsigned cnt;
+            for (cnt = 0; cc > utf8_max[cnt]; cnt++) {}
+            if (!cnt)
             {
-                *buf++ = (char) ((-128 >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt)));
-                while (cnt--)
-                    *buf++ = (char) (0x80 | ((cc >> (cnt * 6)) & 0x3f));
+                // plain ASCII char
+                if (buf)
+                    *buf++ = (char) cc;
+                len++;
+            }
+
+            else
+            {
+                len += cnt + 1;
+                if (buf)
+                {
+                    *buf++ = (char) ((-128 >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt)));
+                    while (cnt--)
+                        *buf++ = (char) (0x80 | ((cc >> (cnt * 6)) & 0x3f));
+                }
             }
         }
     }
@@ -707,9 +814,6 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
     return len;
 }
-
-
-
 
 // ----------------------------------------------------------------------------
 // UTF-16
@@ -2627,6 +2731,7 @@ static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
 static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
+static wxConvBrokenFileNames wxConvBrokenFileNamesObj;
 
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
@@ -2636,9 +2741,11 @@ WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8 = wxConvUTF8Obj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
 #ifdef __WXOSX__
-                                                    wxConvUTF8Obj;
+                                    wxConvUTF8Obj;
+#elif __WXGTK20__
+                                    wxConvBrokenFileNamesObj;
 #else
-                                                    wxConvLibcObj;
+                                    wxConvLibcObj;
 #endif
 
 
