@@ -327,7 +327,7 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     {
         m_selection = listBox->GetSelection();
         m_stringSelection = listBox->GetStringSelection();
-        m_clientData = (char*)listBox->GetClientData(m_selection);
+        m_clientData = listBox->GetClientData(m_selection);
     }
 
     EndModal(wxID_OK);
@@ -340,7 +340,7 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
     {
         m_selection = listBox->GetSelection();
         m_stringSelection = listBox->GetStringSelection();
-        m_clientData = (char*)listBox->GetClientData(m_selection);
+        m_clientData = listBox->GetClientData(m_selection);
     }
 
     EndModal(wxID_OK);

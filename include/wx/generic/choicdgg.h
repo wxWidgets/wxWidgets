@@ -81,7 +81,6 @@ public:
 protected:
     int         m_selection;
     wxString    m_stringSelection;
-    void       *m_clientData;
     wxListBox  *m_listbox;
 
 private:

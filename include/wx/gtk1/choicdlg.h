@@ -40,9 +40,9 @@ public:
         const wxStringList& choices, char **clientData = (char **) NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
 
     void SetSelection(int sel) ;
-    inline int GetSelection(void) const { return m_selection; }
-    inline wxString GetStringSelection(void) const { return m_stringSelection; }
-    inline char *GetSelectionClientData(void) const { return m_clientData; }
+    int GetSelection() const { return m_selection; }
+    wxString GetStringSelection() const { return m_stringSelection; }
+    char *GetSelectionClientData() const { return (char *)m_clientData; }
 
     void OnOK(wxCommandEvent& event);
     void OnListBoxDClick(wxCommandEvent& event);
@@ -53,7 +53,6 @@ protected:
     long        m_dialogStyle;
     int         m_selection;
     wxString    m_stringSelection;
-    char*     m_clientData;
 };
 
 WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
