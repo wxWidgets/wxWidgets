@@ -2637,6 +2637,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEve
     switch (xevent->xany.type)
     {
     case KeyPress:
+    case KeyRelease:
         {
             char buf[20];
 
