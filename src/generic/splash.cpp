@@ -68,7 +68,11 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     Show(TRUE);
     m_window->SetFocus();
-    wxYield(); // Without this, you see a blank screen for an instant
+#ifdef __WXMSW__
+    Update(); // Without this, you see a blank screen for an instant
+#else
+    wxYieldIfNeeded(); // Should eliminate this
+#endif
 }
 
 wxSplashScreen::~wxSplashScreen()
