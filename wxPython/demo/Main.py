@@ -172,7 +172,7 @@ class wxPythonDemo(wxFrame):
             self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
             self.nb.AddPage(self.ovr, "Overview")
 
-        else:  # hopefully I can remove this hacky code soon
+        else:  # hopefully I can remove this hacky code soon, see bug #216861
             panel = wxPanel(self.nb, -1)
             self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
             self.nb.AddPage(panel, "Overview")
