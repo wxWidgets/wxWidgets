@@ -41,11 +41,6 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\prop.hlp
-  Destination=%GROUP%\wxProperty Classes Help.lnk
-  Working Directory=%MAINDIR%
-end
-item: Create Shortcut
   Source=%MAINDIR%\docs\winhelp\tex2rtf.hlp
   Destination=%GROUP%\Tex2RTF Help.lnk
   Working Directory=%MAINDIR%
@@ -129,12 +124,6 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Object Graphics Library Help
   Command Line=%MAINDIR%\docs\winhelp\ogl.hlp
-  Default Directory=%MAINDIR%
-end
-item: Add ProgMan Icon
-  Group=%GROUP%
-  Icon Name=wxProperty Classes Help
-  Command Line=%MAINDIR%\docs\winhelp\prop.hlp
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon

@@ -10,37 +10,6 @@ docs/latex/wx/*.bmp
 docs/latex/wx/*.gif
 docs/latex/wx/*.wmf
 
-docs/latex/proplist/*.tex
-docs/latex/proplist/*.sty
-docs/latex/proplist/*.bib
-docs/latex/proplist/*.hpj
-docs/latex/proplist/*.ini
-docs/latex/proplist/*.txt
-docs/latex/proplist/*.cnt
-docs/latex/proplist/*.eps
-docs/latex/proplist/*.bmp
-docs/latex/proplist/*.gif
-docs/latex/proplist/*.wmf
-
-docs/latex/porting/*.tex
-docs/latex/porting/*.sty
-docs/latex/porting/*.bib
-docs/latex/porting/*.hpj
-docs/latex/porting/*.ini
-docs/latex/porting/*.txt
-docs/latex/porting/*.cnt
-docs/latex/porting/*.eps
-docs/latex/porting/*.gif
-docs/latex/porting/*.bmp
-
-utils/wxhelp/docs/*.tex
-utils/wxhelp/docs/*.txt
-utils/wxhelp/docs/*.hpj
-utils/wxhelp/docs/*.ini
-utils/wxhelp/docs/*.bmp
-utils/wxhelp/docs/*.wmf
-utils/wxhelp/docs/*.gif
-
 utils/tex2rtf/docs/*.tex
 utils/tex2rtf/docs/*.txt
 utils/tex2rtf/docs/*.hpj
@@ -93,5 +62,4 @@ utils/dialoged/docs/*.eps
 utils/dialoged/docs/*.bmp
 utils/dialoged/docs/*.wmf
 utils/dialoged/docs/*.gif
-
 

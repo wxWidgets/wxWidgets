@@ -170,6 +170,8 @@ bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetNa
     wxString relativeReleasePath(relativeRootPath + wxString("/src/Release"));
     wxString relativeDebugPathJPEG(relativeRootPath + wxString("/src/jpeg/Debug"));
     wxString relativeReleasePathJPEG(relativeRootPath + wxString("/src/jpeg/Release"));
+    wxString relativeDebugPathTIFF(relativeRootPath + wxString("/src/tiff/Debug"));
+    wxString relativeReleasePathTIFF(relativeRootPath + wxString("/src/tiff/Release"));
 
     wxProject project;
 
@@ -177,8 +179,8 @@ bool MyApp::GenerateSample(const wxString& projectName, const wxString& targetNa
     project.SetIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
     project.SetResourceIncludeDirs(wxStringList((const char*) relativeIncludePath, 0));
     project.SetLibDirs(wxStringList((const char*) relativeLibPath, 0));
-    project.SetDebugLibDirs(wxStringList((const char*) relativeDebugPath, (const char*) relativeDebugPathJPEG, 0));
-    project.SetReleaseLibDirs(wxStringList((const char*) relativeReleasePath, (const char*) relativeReleasePathJPEG, 0));
+    project.SetDebugLibDirs(wxStringList((const char*) relativeDebugPath, (const char*) relativeDebugPathJPEG, (const char*) relativeDebugPathTIFF, 0));
+    project.SetReleaseLibDirs(wxStringList((const char*) relativeReleasePath, (const char*) relativeReleasePathJPEG, (const char*) relativeReleasePathTIFF, 0));
 
     project.SetProjectName(projectName);
     project.SetTargetName(targetName);
@@ -656,7 +658,7 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
     stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /machine:I386\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib ";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib tiff.lib ";
     n = m_extraLibs.Number();
     for (i = 0; i < n; i++)
     {
@@ -716,7 +718,7 @@ bool wxProject::GenerateVCProject()
     stream << "# ADD BSC32 /nologo\n";
     stream << "LINK32=link.exe\n";
     stream << "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\n";
-    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib ";
+    stream << "# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib wxvc.lib jpeg.lib tiff.lib ";
     n = m_extraLibs.Number();
     for (i = 0; i < n; i++)
     {

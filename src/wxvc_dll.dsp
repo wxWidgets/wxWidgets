@@ -270,6 +270,11 @@ SOURCE=.\common\imagpng.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\imagtiff.cpp
+# ADD CPP /I "tiff" /I "zlib"
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\intl.cpp
 # End Source File
 # Begin Source File

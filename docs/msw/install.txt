@@ -92,7 +92,8 @@ Using project files:
    Debug and Release configurations. If you have VC++ 4,
    use makefile.vc, but you may only have one set of object
    files at a time in use (debug or release versions).
-4. Open a sample project file, choose a configuration, and compile.
+4. Open a sample project file, choose a configuration using
+   Build | Set Active Configuration..., and compile.
    The project files don't use precompiled headers, to save
    space, but you can switch PCH compiling on for greater speed.
 
