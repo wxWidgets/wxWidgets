@@ -449,7 +449,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 // ----------------------------------------------------------------------------
 
 // handy table for sending events
-static const wxEventType g_events[2][2] =
+static wxEventType g_events[2][2] =
 {
     { wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxEVT_COMMAND_TREE_ITEM_COLLAPSING },
     { wxEVT_COMMAND_TREE_ITEM_EXPANDED,  wxEVT_COMMAND_TREE_ITEM_EXPANDING  }
@@ -502,8 +502,15 @@ void wxTreeCtrl::Init()
     m_textCtrl = NULL;
     m_hasAnyAttr = FALSE;
     m_dragImage = NULL;
-
     m_htSelStart = 0;
+
+    // Initialize static array of events, because with the new event system,
+    // they may not be initialized yet.
+
+    g_events[0][0] = wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
+    g_events[0][1] = wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
+    g_events[1][0] = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
+    g_events[1][1] = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent,
