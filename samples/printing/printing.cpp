@@ -319,7 +319,7 @@ void MyFrame::Draw(wxDC& dc)
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
   
-  wxIcon my_icon( wxICON(mondrian) );
+  wxIcon my_icon = wxICON(mondrian) ;
 
   dc.DrawIcon( my_icon, 100, 100);
 }

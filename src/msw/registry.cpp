@@ -314,7 +314,7 @@ bool wxRegKey::GetKeyInfo(ulong *pnSubKeys,
                           ulong *pnMaxValueLen) const
 #endif
 {
-#ifdef  __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
   m_dwLastError = ::RegQueryInfoKey
                   (
                     (HKEY) m_hKey,
@@ -474,7 +474,7 @@ bool wxRegKey::DeleteValue(const char *szValue)
   if ( !Open() )
     return FALSE;
 
-  #ifdef  __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
     m_dwLastError = RegDeleteValue((HKEY) m_hKey, (char*) (const char*) szValue);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("can't delete value '%s' from key '%s'"),
@@ -568,6 +568,10 @@ wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue)
 #ifdef  __WIN32__
 bool wxRegKey::SetValue(const char *szValue, long lValue)
 {
+#ifdef __TWIN32__
+  wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
+  return FALSE;
+#else
   if ( CONST_CAST Open() ) {
     m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_DWORD,
                                   (RegString)&lValue, sizeof(lValue));
@@ -578,6 +582,7 @@ bool wxRegKey::SetValue(const char *szValue, long lValue)
   wxLogSysError(m_dwLastError, _("can't set value of '%s'"),
                 GetFullName(this, szValue));
   return FALSE;
+#endif
 }
 
 bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
@@ -646,7 +651,7 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
 bool wxRegKey::SetValue(const char *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
-    #ifdef  __WIN32__
+#if defined( __WIN32__) && !defined(__TWIN32__)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(), 
                                     strValue.Len() + 1);
@@ -697,7 +702,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
   if ( lIndex == -1 )
     return FALSE;
 
-  #ifdef  __WIN32__
+#if defined( __WIN32__) && !defined(__TWIN32__)
     char  szValueName[1024];                  // @@ use RegQueryInfoKey...
     DWORD dwValueLen = WXSIZEOF(szValueName);
 

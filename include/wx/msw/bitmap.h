@@ -162,10 +162,10 @@ public:
   inline wxPalette *GetColourMap(void) const { return GetPalette(); }
   void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
 #endif
-  inline wxPalette* GetPalette(void) const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : NULL); }
+  inline wxPalette* GetPalette(void) const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
   void SetPalette(const wxPalette& palette);
 
-  inline wxMask *GetMask(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : NULL); }
+  inline wxMask *GetMask(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : (wxMask*) NULL); }
   void SetMask(wxMask *mask) ;
 
   inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
@@ -192,7 +192,7 @@ public:
   void SetHBITMAP(WXHBITMAP bmp);
   inline WXHBITMAP GetHBITMAP(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
   inline void SetSelectedInto(wxDC *dc) { if (M_BITMAPDATA) M_BITMAPDATA->m_selectedInto = dc; }
-  inline wxDC *GetSelectedInto(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_selectedInto : NULL); }
+  inline wxDC *GetSelectedInto(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_selectedInto : (wxDC*) NULL); }
   bool FreeResource(bool force = FALSE);
 
   // Creates a bitmap that matches the device context's depth, from

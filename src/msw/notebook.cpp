@@ -40,9 +40,13 @@
 
 #include  <windowsx.h>  // for SetWindowFont
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
   #include "wx/msw/gnuwin32/extra.h"
-#else   //!GnuWin32
+#endif
+#endif
+
+#if !defined(__GNUWIN32__) || defined(__TWIN32__)
   #include <commctrl.h>
 #endif
 

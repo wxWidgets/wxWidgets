@@ -63,6 +63,8 @@ setup/shared/sharedSysV
 
 misc/afm/*.afm
 
+src/gtk/dcps.cpp
+
 src/motif/*.cpp
 src/motif/*.c
 src/motif/*.h

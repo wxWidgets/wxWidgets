@@ -61,8 +61,10 @@
 #include <windowsx.h>
 #endif
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include <wx/msw/gnuwin32/extra.h>
+#endif
 #endif
 
 #ifdef GetCharWidth
@@ -1420,7 +1422,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
 {
     // adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
-    wxCHECK_RET( hWnd != NULL, "attempt to add a NULL hWnd to window list" );
+    wxCHECK_RET( hWnd != (HWND) NULL, "attempt to add a NULL hWnd to window list" );
 
     if ( !wxWinHandleList->Find((long)hWnd) )
         wxWinHandleList->Append((long)hWnd, win);
@@ -2963,7 +2965,7 @@ void wxSetKeyboardHook(bool doIt)
     {
         wxTheKeyboardHookProc = MakeProcInstance((FARPROC) wxKeyboardHook, wxGetInstance());
         wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
             GetCurrentThreadId());
         //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
 #else

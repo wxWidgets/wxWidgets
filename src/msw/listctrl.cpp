@@ -31,12 +31,14 @@
 
 #include "wx/msw/private.h"
 
-#ifndef __GNUWIN32__
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
 #include <commctrl.h>
 #endif
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 static void wxConvertToMSWListItem(const wxListCtrl *ctrl, wxListItem& info, LV_ITEM& tvItem);

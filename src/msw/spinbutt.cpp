@@ -24,12 +24,15 @@
 #include "wx/wx.h"
 #endif
 
-#if defined(__WIN95__)
+// Can't resolve reference to CreateUpDownControl in
+// TWIN32, but could probably use normal CreateWindow instead.
+
+#if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include "wx/spinbutt.h"
 #include "wx/msw/private.h"
 
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) || defined(__TWIN32__)
 #include <commctrl.h>
 #endif
 

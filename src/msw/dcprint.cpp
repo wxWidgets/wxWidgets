@@ -65,7 +65,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
      PRINTDLG pd;
 	
      pd.lStructSize = sizeof( PRINTDLG );
-     pd.hwndOwner=NULL;
+     pd.hwndOwner=(HWND) NULL;
      pd.hDevMode=(HANDLE)NULL;
      pd.hDevNames=(HANDLE)NULL;
      pd.Flags=PD_RETURNDC | PD_NOSELECTION | PD_NOPAGENUMS;

@@ -43,6 +43,8 @@ High Priority
 
 - Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
 
+- Printing dialogs need some tidying.
+
 Low Priority
 ------------
 
@@ -58,8 +60,6 @@ Low Priority
   wxImage code (derived from XV) for BMP/GIF but it's very bloated. However,
   when implemented as extra bitmap handlers, the code won't be linked
   unless needed. Update: see if wxImage can handle these formats.
-
-- Print/preview framework in print.cpp (see wxGTK).
 
 - Enhance event handling such that you override e.g. left-click
   and unless you call the base OnMouseEvent, the click won't be

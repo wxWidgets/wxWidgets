@@ -28,15 +28,17 @@
 #include "wx/utils.h"
 #endif
 
-#ifdef __WIN95__
+#if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include <windows.h>
 #include <string.h>
 #include <wx/msw/taskbar.h>
 #include <wx/msw/private.h>
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include <wx/msw/gnuwin32/extra.h>
+#endif
 #endif
 
 #ifdef __SALFORDC__

@@ -100,8 +100,8 @@ bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int width, int h
     {
       wxBitmap *wxBM = (wxBitmap *)obj;
 
-      HDC hdcMem = CreateCompatibleDC(NULL);
-      HDC hdcSrc = CreateCompatibleDC(NULL);
+      HDC hdcMem = CreateCompatibleDC((HDC) NULL);
+      HDC hdcSrc = CreateCompatibleDC((HDC) NULL);
       HBITMAP old = (HBITMAP) ::SelectObject(hdcSrc, (HBITMAP) wxBM->GetHBITMAP());
       HBITMAP hBitmap = CreateCompatibleBitmap(hdcSrc,
                                               wxBM->GetWidth(), wxBM->GetHeight());
@@ -133,7 +133,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int width, int h
     {
 #if wxUSE_IMAGE_LOADING_IN_MSW
       HBITMAP hBitmap=(HBITMAP) ((wxBitmap *)obj)->GetHBITMAP();
-      HANDLE hDIB=BitmapToDIB(hBitmap,NULL); // NULL==uses system palette
+      HANDLE hDIB=BitmapToDIB(hBitmap,(HPALETTE) NULL); // NULL==uses system palette
       bool success = (::SetClipboardData(CF_DIB,hDIB) != 0);
 #else
       bool success=FALSE;
@@ -220,8 +220,8 @@ wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
       if (!hBitmap)
         return NULL;
 
-      HDC hdcMem = CreateCompatibleDC(NULL);
-      HDC hdcSrc = CreateCompatibleDC(NULL);
+      HDC hdcMem = CreateCompatibleDC((HDC) NULL);
+      HDC hdcSrc = CreateCompatibleDC((HDC) NULL);
 
       HBITMAP old = (HBITMAP) ::SelectObject(hdcSrc, hBitmap);
       GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&bm);
@@ -343,6 +343,7 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
+#if wxUSE_DRAG_AND_DROP
     wxNode* node = m_data.First();
     while (node)
     {
@@ -351,6 +352,7 @@ void wxClipboard::Clear()
         node = node->Next();
     }
     m_data.Clear();
+#endif
 }
 
 bool wxClipboard::Open()

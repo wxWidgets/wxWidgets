@@ -49,7 +49,7 @@ wxColour wxSystemSettings::GetSystemColour(int index)
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
 	HFONT hFont = (HFONT) ::GetStockObject(index);
-	if ( hFont != NULL )
+	if ( hFont != (HFONT) NULL )
 	{
 		LOGFONT lf;
 		if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )

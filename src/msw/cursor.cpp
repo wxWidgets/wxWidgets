@@ -125,29 +125,29 @@ wxCursor::wxCursor(int cursor_type)
   switch (cursor_type)
   {
     case wxCURSOR_WAIT:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_WAIT);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_WAIT);
       break;
     case wxCURSOR_IBEAM:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_IBEAM);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_IBEAM);
       break;
     case wxCURSOR_CROSS:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_CROSS);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_CROSS);
       break;
     case wxCURSOR_SIZENWSE:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_SIZENWSE);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENWSE);
       break;
     case wxCURSOR_SIZENESW:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_SIZENESW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENESW);
       break;
     case wxCURSOR_SIZEWE:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_SIZEWE);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZEWE);
       break;
     case wxCURSOR_SIZENS:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_SIZENS);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENS);
       break;
     case wxCURSOR_CHAR:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
     }
     case wxCURSOR_HAND:
@@ -177,17 +177,17 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_LEFT_BUTTON:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
     }
     case wxCURSOR_RIGHT_BUTTON:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
     }
     case wxCURSOR_MIDDLE_BUTTON:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
     }
     case wxCURSOR_SIZING:
@@ -232,7 +232,7 @@ wxCursor::wxCursor(int cursor_type)
     }
     default:
     case wxCURSOR_ARROW:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
   }
 }
@@ -242,7 +242,7 @@ wxCursor::~wxCursor(void)
 //	FreeResource(TRUE);
 }
 
-bool wxCursor::FreeResource(bool force)
+bool wxCursor::FreeResource(bool WXUNUSED(force))
 {
   if (M_CURSORDATA && M_CURSORDATA->m_hCursor && M_CURSORDATA->m_destroyCursor)
   {

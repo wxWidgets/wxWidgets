@@ -9,9 +9,11 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef __WXMOTIF__
 #ifdef __GNUG__
 #pragma implementation
 #pragma interface
+#endif
 #endif
 
 #include "wx/defs.h"
@@ -28,8 +30,12 @@
 #include "wx/image.h"
 #include "wx/log.h"
 
+#include <math.h>
+
+#ifdef __WXGTK__
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // start and end of document/page
@@ -784,7 +790,8 @@ void wxPostScriptDC::SetFont (const wxFont& font)
     if (!font.Ok())  return;
     
     m_font = font;
-    
+
+#ifdef __WXGTK__    
     char *name = wxTheFontNameDirectory->GetPostScriptName( m_font.GetFamily(),
 							    m_font.GetWeight(),
 							    m_font.GetStyle() );
@@ -794,6 +801,84 @@ void wxPostScriptDC::SetFont (const wxFont& font)
 	       << "/" << name << " findfont\n"
 	       << YLOG2DEVREL(font.GetPointSize())
 	       << " scalefont setfont\n";
+#else
+  char buf[100];
+  const char *name;
+  const char *style = "";
+  int Style = m_font.GetStyle ();
+  int Weight = m_font.GetWeight ();
+
+  switch (m_font.GetFamily ())
+    {
+    case wxTELETYPE:
+    case wxMODERN:
+      name = "/Courier";
+      break;
+    case wxSWISS:
+      name = "/Helvetica";
+      break;
+    case wxROMAN:
+//      name = "/Times-Roman";
+      name = "/Times"; // Altered by EDZ
+      break;
+    case wxSCRIPT:
+      name = "/Zapf-Chancery-MediumItalic";
+      Style  = wxNORMAL;
+      Weight = wxNORMAL;
+      break;
+    default:
+    case wxDEFAULT: // Sans Serif Font
+      name = "/LucidaSans";
+    }
+
+  if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
+    {
+      if (m_font.GetFamily () == wxROMAN)
+	style = "-Roman";
+      else
+	style = "";
+    }
+  else if (Style == wxNORMAL && Weight == wxBOLD)
+    style = "-Bold";
+
+  else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
+    {
+      if (m_font.GetFamily () == wxROMAN)
+	style = "-Italic";
+      else
+	style = "-Oblique";
+    }
+  else if (Style == wxITALIC && Weight == wxBOLD)
+    {
+      if (m_font.GetFamily () == wxROMAN)
+	style = "-BoldItalic";
+      else
+	style = "-BoldOblique";
+    }
+  else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
+    {
+      if (m_font.GetFamily () == wxROMAN)
+	style = "-Italic";
+      else
+	style = "-Oblique";
+    }
+  else if (Style == wxSLANT && Weight == wxBOLD)
+    {
+      if (m_font.GetFamily () == wxROMAN)
+	style = "-BoldItalic";
+      else
+	style = "-BoldOblique";
+    }
+  else
+    style = "";
+
+  strcpy (buf, name);
+  strcat (buf, style);
+  *m_pstream << buf << " findfont\n";
+  //  *m_pstream << (m_font.GetPointSize() * m_scaleFactor) << " scalefont setfont\n";
+  // No scale factor in this implementation?
+  *m_pstream << (m_font.GetPointSize()) << " scalefont setfont\n";
+#endif
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )

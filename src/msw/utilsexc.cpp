@@ -41,8 +41,10 @@
 #endif
 
 #ifdef __GNUWIN32__
+#ifndef __TWIN32__
 #include <sys/unistd.h>
 #include <sys/stat.h>
+#endif
 #endif
 
 #ifdef __WIN32__
@@ -111,7 +113,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
   if (command == "")
     return 0;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
   char * cl;
   char * argp;
   int clen;

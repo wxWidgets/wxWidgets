@@ -63,7 +63,7 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
   if (m_hAccel)
   {
     // This function not available in WIN16
-#ifndef __WIN16__
+#if !defined(__WIN16__) && !defined(__TWIN32__)
     DestroyAcceleratorTable((HACCEL) m_hAccel);
 #endif
   }
@@ -85,7 +85,7 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
     m_refData = new wxAcceleratorRefData;
 
     HACCEL hAccel =
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
 #ifdef UNICODE
         ::LoadAcceleratorsW(wxGetInstance(), (const char *)resource);
 #else
@@ -104,7 +104,7 @@ extern int wxCharCodeWXToMSW(int id, bool *isVirtual);
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     // Not available in WIN16
-#ifndef __WIN16__
+#if !defined(__WIN16__) && !defined(__TWIN32__)
     m_refData = new wxAcceleratorRefData;
 
     ACCEL* arr = new ACCEL[n];

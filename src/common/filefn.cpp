@@ -64,7 +64,10 @@
 #endif
 
 #ifdef __GNUWIN32__
+#ifndef __TWIN32__
 #include <sys/unistd.h>
+#endif
+
 #define stricmp strcasecmp
 #endif
 

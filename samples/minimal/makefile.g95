@@ -31,7 +31,7 @@ $(OBJDIR)/minimal.$(OBJSUFF):	minimal.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ minimal.$(SRCSUFF)
 
 $(OBJDIR)/minimal_resources.o:  minimal.rc
-	$(RESCOMP) -i minimal.rc -o $(OBJDIR)/minimal_resources.o $(RESFLAGS)
+	$(RESCOMP) $(RCINPUTSWITCH) minimal.rc $(RCOUTPUTSWITCH) $(OBJDIR)/minimal_resources.o $(RESFLAGS)
 
 clean:
 	rm -f $(OBJECTS) minimal$(GUISUFFIX).exe core *.rsc *.res

@@ -58,7 +58,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
 	if (hWndNext)
 	  child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
 
-    while (hWndNext != NULL)
+    while (hWndNext != (HWND) NULL)
     {
        hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
 	   if (hWndNext)
@@ -140,7 +140,11 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 #ifdef UNICODE
 	GetClassNameW((HWND) hWnd, buf, 256);
 #else
+#ifdef __TWIN32__
+	GetClassName((HWND) hWnd, buf, 256);
+#else
 	GetClassNameA((HWND) hWnd, buf, 256);
+#endif
 #endif
 #endif
 
@@ -224,7 +228,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 	{
 		win = new wxScrollBar;
 	}
-#if defined(__WIN95__)
+#if defined(__WIN95__) && !defined(__TWIN32__)
 	else if (str == "MSCTLS_UPDOWN32")
 	{
 		win = new wxSpinButton;

@@ -168,7 +168,7 @@ WXHANDLE wxBrush::GetResourceHandle(void)
   return (WXHANDLE) M_BRUSHDATA->m_hBrush;
 }
 
-bool wxBrush::FreeResource(bool force)
+bool wxBrush::FreeResource(bool WXUNUSED(force))
 {
   if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush != 0))
   {

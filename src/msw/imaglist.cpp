@@ -35,7 +35,7 @@
 #include "wx/msw/imaglist.h"
 #include "wx/msw/private.h"
 
-#ifndef __GNUWIN32__
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
 #include <commctrl.h>
 #endif
 
@@ -104,9 +104,14 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
+#ifdef __TWIN32__
+        wxFAIL_MSG("ImageList_AddMasked not implemented in TWIN32");
+        return -1;
+#else
 	HBITMAP hBitmap1 = (HBITMAP) bitmap.GetHBITMAP();
 	COLORREF colorRef = PALETTERGB(maskColour.Red(), maskColour.Green(), maskColour.Blue());
 	return ImageList_AddMasked((HIMAGELIST) GetHIMAGELIST(), hBitmap1, colorRef);
+#endif
 }
 
 // Adds a bitmap and mask from an icon.
@@ -121,11 +126,16 @@ int wxImageList::Add(const wxIcon& icon)
 // 'bitmap' and 'mask'.
 bool wxImageList::Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask)
 {
+#ifdef __TWIN32__
+        wxFAIL_MSG("ImageList_Replace not implemented in TWIN32");
+        return FALSE;
+#else
 	HBITMAP hBitmap1 = (HBITMAP) bitmap.GetHBITMAP();
 	HBITMAP hBitmap2 = 0;
 	if ( mask.Ok() )
 	    hBitmap2 = (HBITMAP) mask.GetHBITMAP();
 	return (ImageList_Replace((HIMAGELIST) GetHIMAGELIST(), index, hBitmap1, hBitmap2) != 0);
+#endif
 }
 
 /* Not supported by Win95
@@ -150,7 +160,12 @@ bool wxImageList::Replace(int index, const wxIcon& icon)
 // Removes the image at the given index.
 bool wxImageList::Remove(int index)
 {
+#ifdef __TWIN32__
+        wxFAIL_MSG("ImageList_Replace not implemented in TWIN32");
+        return FALSE;
+#else
 	return (ImageList_Remove((HIMAGELIST) GetHIMAGELIST(), index) != 0);
+#endif
 }
 
 // Remove all images
@@ -171,6 +186,10 @@ bool wxImageList::RemoveAll(void)
 bool wxImageList::Draw(int index, wxDC& dc, int x, int y,
     int flags, bool solidBackground)
 {
+#ifdef __TWIN32__
+        wxFAIL_MSG("ImageList_Replace not implemented in TWIN32");
+        return FALSE;
+#else
 	HDC hDC = (HDC) dc.GetHDC();
 	if ( !hDC )
 		return FALSE;
@@ -204,6 +223,7 @@ bool wxImageList::Draw(int index, wxDC& dc, int x, int y,
 
 	return (ImageList_Draw((HIMAGELIST) GetHIMAGELIST(), index, hDC,
 		x, y, style) != 0);
+#endif
 }
 
 #endif

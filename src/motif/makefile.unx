@@ -91,6 +91,7 @@ LIB_CPP_SRC=\
  dc.cpp \
  dcclient.cpp \
  dcmemory.cpp \
+ dcps.cpp \
  dcscreen.cpp \
  dialog.cpp \
  dnd.cpp \

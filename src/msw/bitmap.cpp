@@ -91,7 +91,7 @@ wxBitmap::~wxBitmap(void)
         wxTheBitmapList->DeleteObject(this);
 }
 
-bool wxBitmap::FreeResource(bool force)
+bool wxBitmap::FreeResource(bool WXUNUSED(force))
 {
   if ( !M_BITMAPDATA )
   return FALSE;
@@ -187,9 +187,9 @@ bool wxBitmap::Create(int w, int h, int d)
   }
   else
   {
-    HDC dc = GetDC(NULL);
+    HDC dc = GetDC((HWND) NULL);
     M_BITMAPDATA->m_hBitmap = (WXHBITMAP) CreateCompatibleBitmap(dc, w, h);
-    ReleaseDC(NULL, dc);
+    ReleaseDC((HWND) NULL, dc);
     M_BITMAPDATA->m_depth = wxDisplayDepth();
   }
   if (M_BITMAPDATA->m_hBitmap)
@@ -385,9 +385,9 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
 {
     wxMemoryDC      memDC;
     wxBitmap        tmpBitmap(this->GetWidth(), this->GetHeight(), dc.GetDepth());
-    HPALETTE        hPal = NULL;
+    HPALETTE        hPal = (HPALETTE) NULL;
     LPBITMAPINFO    lpDib;
-    void            *lpBits = NULL;
+    void            *lpBits = (void*) NULL;
 
 /*
     wxASSERT( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != 0) );
@@ -577,18 +577,18 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
-bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
+bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap), void *WXUNUSED(data), long WXUNUSED(type), int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
 {
   return FALSE;
 }
 
-bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long type,
-    int desiredWidth, int desiredHeight)
+bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), long WXUNUSED(type),
+    int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
 {
   return FALSE;
 }
 
-bool wxBitmapHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), int WXUNUSED(type), const wxPalette *WXUNUSED(palette))
 {
   return FALSE;
 }
@@ -613,8 +613,8 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
 
-bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-    int desiredWidth, int desiredHeight)
+bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
+    int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
 {
     // TODO: load colourmap.
     M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ::LoadBitmap(wxGetInstance(), name);
@@ -652,8 +652,8 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxBMPFileHandler, wxBitmapHandler)
 
-bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-    int desiredWidth, int desiredHeight)
+bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
+    int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
 {
 #if wxUSE_IMAGE_LOADING_IN_MSW
     wxPalette *palette = NULL;
@@ -677,7 +677,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
 #endif
 }
 
-bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *pal)
+bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int WXUNUSED(type), const wxPalette *pal)
 {
 #if wxUSE_IMAGE_LOADING_IN_MSW
     wxPalette *actualPalette = (wxPalette *)pal;

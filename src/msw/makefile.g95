@@ -293,11 +293,16 @@ $(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
 
 # Replace yacc with bison if you run into compilation
 # problems with y_tab.c.
+
 $(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
 	$(YACC) -o $(COMMDIR)/y_tab.c $(COMMDIR)/parser.y
 
-#	mv y.tab.c $(COMMDIR)/y_tab.c
+# If you use e.g. gcc on Unix, uncomment these lines
+# and comment out the above.
 
+#$(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
+#	$(YACC) $(COMMDIR)/parser.y
+#	mv y.tab.c $(COMMDIR)/y_tab.c
 
 # Extra targets
 rcparser:

@@ -39,7 +39,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
-  m_hDC = (WXHDC) ::CreateCompatibleDC(NULL);
+  m_hDC = (WXHDC) ::CreateCompatibleDC((HDC) NULL);
   m_ok = (m_hDC != 0);
   m_bOwnsDC = TRUE;
 

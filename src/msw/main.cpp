@@ -40,15 +40,25 @@
 
 #if !defined(_WINDLL)
 
+#ifdef __TWIN32__
+
+extern "C"
+BOOL PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+
+#else
+
 #ifdef __WATCOMC__
 int PASCAL
 #else
 int APIENTRY
 #endif
 
- WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR m_lpCmdLine, int nCmdShow )
+ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+#endif
+// __TWIN32__
+
 {
-  return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance, m_lpCmdLine, nCmdShow);
+  return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance, lpCmdLine, nCmdShow);
 }
 #endif
 

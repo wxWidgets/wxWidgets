@@ -31,7 +31,7 @@
 #include "wx/msw/slider95.h"
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
 #include <commctrl.h>
 #endif
 

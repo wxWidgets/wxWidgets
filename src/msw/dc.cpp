@@ -255,7 +255,7 @@ void wxDC::SetPalette(const wxPalette& palette)
     m_oldPalette = 0;
   }
 
-  m_palette = m_palette;
+  m_palette = palette;
 
   if (!m_palette.Ok())
   {
@@ -380,7 +380,7 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
   double radius = (double)sqrt(dx*dx+dy*dy) ;;
   if (x1==x2 && x2==y2)
   {
-    DrawEllipse(xc,yc,(double)(radius*2.0),(double)(radius*2)) ;
+    DrawEllipse(xc,yc,(long)(radius*2.0),(long)(radius*2.0)) ;
     return ;
   }
 
@@ -605,7 +605,7 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
 void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
 {
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
   ::DrawIconEx((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON(),
       icon.GetWidth(), icon.GetHeight(), 0, 0, DI_NORMAL);
 #else
@@ -677,7 +677,7 @@ void wxDC::SetFont(const wxFont& the_font)
   if (m_font.Ok() && m_font.GetResourceHandle())
   {
     HFONT f = (HFONT) ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());
-    if (f == NULL)
+    if (f == (HFONT) NULL)
     {
         wxDebugMsg("::SelectObject failed in wxDC::SetFont.");
     }
@@ -895,7 +895,11 @@ bool wxDC::StartDoc(const wxString& message)
 #ifdef UNICODE
      ::StartDocW((HDC) m_hDC, &docinfo);
 #else
+#ifdef __TWIN32__
+     ::StartDoc((HDC) m_hDC, &docinfo);
+#else
      ::StartDocA((HDC) m_hDC, &docinfo);
+#endif
 #endif
 #endif
 
@@ -1680,7 +1684,7 @@ static bool wx_spline_add_point(double x, double y)
 
 static void wx_spline_draw_point_array(wxDC *dc)
 {
-  dc->DrawLines(&wx_spline_point_list, (double)0.0, (double)0.0);
+  dc->DrawLines(&wx_spline_point_list, 0, 0);
   wxNode *node = wx_spline_point_list.First();
   while (node)
   {

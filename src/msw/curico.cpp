@@ -19,8 +19,10 @@
 #include <io.h>
 #include <windows.h>
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 #include "wx/msw/curicop.h"
@@ -39,9 +41,9 @@ HICON ReadIconFile( char *szFileName, HINSTANCE hInst, int *W, int *H)
 { HICON   hIcon;
   HANDLE  hDIB;
 
-  if( (hDIB = ReadIcon(szFileName, W, H)) == NULL)
+  if( (hDIB = ReadIcon(szFileName, W, H)) == (HANDLE) NULL)
                                           // read the icon DIB from file
-    return NULL;
+    return (HICON) NULL;
   hIcon = MakeIcon( hDIB, hInst);         // create an icon from DIB
   GlobalFree( hDIB);
   return hIcon;
@@ -62,9 +64,9 @@ HICON CursorToIcon( char *szFileName, HINSTANCE hInst, int *W, int *H)
 { HANDLE  hDIB;     // Handle to DIB memory
   HICON   hIcon;    // Handle to Icon
 
-  if( (hDIB = ReadCur( szFileName, NULL, W, H)) == NULL)
+  if( (hDIB = ReadCur( szFileName, NULL, W, H)) == (HANDLE) NULL)
                                                     // Read cursor DIB
-    return NULL;
+    return (HICON) NULL;
   hIcon = MakeIcon( hDIB, hInst);      // make icon from cursor DIB
   GlobalFree( hDIB);
   return hIcon;
@@ -98,11 +100,10 @@ HANDLE ReadIcon( char *szFileName, int *W, int *H)
   ++nDirEntries;
 
   if((cbHead != sizeof( ICONFILEHEADER)) || (cbRes != sizeof( ICONFILERES)))
-    return NULL;
-
+    return (HANDLE) NULL;
   // Verify that it's an .ICON file
   if( iconFileHead.wResourceType != 1)
-    return NULL;
+    return (HANDLE) NULL;
 
   // inserted by P.S.
   while( (nDirEntries < iconFileHead.wResourceCount) &&
@@ -110,7 +111,7 @@ HANDLE ReadIcon( char *szFileName, int *W, int *H)
   {
     cbRes = _lread( hFile, (LPSTR )&iconFileRes, sizeof( ICONFILERES));
     if(cbRes != sizeof( ICONFILERES))
-      return NULL;
+      return (HANDLE) NULL;
     else
       ++nDirEntries;
   }
@@ -122,8 +123,9 @@ HANDLE ReadIcon( char *szFileName, int *W, int *H)
 
   // Allocate and lock memory to read in the DIB
   hDIB = GlobalAlloc(GHND, iconFileRes.dwDIBSize);
-  if(hDIB == NULL)
-    return NULL;
+  if(hDIB == (HANDLE) NULL)
+    return (HANDLE) NULL;
+
 #ifdef __WINDOWS_386__
   lpDIB = (LPBITMAPINFO)MK_FP32(GlobalLock(hDIB));
 #else
@@ -143,7 +145,7 @@ HANDLE ReadIcon( char *szFileName, int *W, int *H)
   if( (DWORD )cbBits != iconFileRes.dwDIBSize)
   {
     GlobalFree( hDIB);
-    return NULL;
+    return (HANDLE) NULL;
   }
   return hDIB;
 }
@@ -219,13 +221,13 @@ HICON MakeIcon( HANDLE hDIB, HINSTANCE hInst)
 
   dwBmpSize = (DWORD )(bmpXor.bmWidthBytes * bmpXor.bmHeight * bmpXor.bmPlanes);
   hXorDDB = GlobalAlloc( GHND, dwBmpSize);
-  if(hXorDDB == NULL)
+  if(hXorDDB == (HANDLE) NULL)
   {
     // clean up before quitting
     DeleteObject( hbmXor);
     DeleteDC( hDC);
     GlobalUnlock( hDIB);
-    return NULL;
+    return (HICON) NULL;
   }
 
 #ifdef __WINDOWS_386__
@@ -277,8 +279,8 @@ HCURSOR ReadCursorFile( char *szFileName, HINSTANCE hInst, int *W, int *H,
   POINT     ptHotSpot;
 
   // read cur DIB from file
-  if( (hDIB = ReadCur( szFileName, (LPPOINT )&ptHotSpot, W, H)) == NULL)
-    return NULL;
+  if( (hDIB = ReadCur( szFileName, (LPPOINT )&ptHotSpot, W, H)) == (HANDLE) NULL)
+    return (HCURSOR) NULL;
   hCursor = MakeCursor( hDIB, (LPPOINT )&ptHotSpot, hInst);//create cur from DIB
   if(XHot != 0)
     *XHot = ptHotSpot.x;
@@ -305,9 +307,9 @@ HCURSOR IconToCursor( char *szFileName, HINSTANCE hInst, int XHot, int YHot,
   HANDLE    hDIB;
   POINT     ptHotSpot;
 
-  if( (hDIB = ReadIcon( szFileName, W, H)) == NULL)
+  if( (hDIB = ReadIcon( szFileName, W, H)) == (HANDLE) NULL)
                                              //read icon file to get icon DIB
-    return NULL;
+    return (HCURSOR) NULL;
   // Set the hot spot of the cursor
   ptHotSpot.x = XHot;
   ptHotSpot.y = YHot;
@@ -345,11 +347,11 @@ HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
   ++nDirEntries;
 
   if((cbHead != sizeof( CURFILEHEADER)) || (cbRes != sizeof( CURFILERES)))
-    return NULL;
+    return (HANDLE) NULL;
 
    // Verify that it's an .CUR file
   if ((curFileRes.bReserved1 != 0) || (curFileHead.wResourceType != 2))
-    return NULL;
+    return (HANDLE) NULL;
 
   // following added by P.S.
   while( (nDirEntries < curFileHead.wResourceCount) &&
@@ -357,7 +359,7 @@ HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
   {
     cbRes = _lread( hFile, (LPSTR )&curFileRes, sizeof( CURFILERES));
     if(cbRes != sizeof( CURFILERES))
-      return NULL;
+      return (HANDLE) NULL;
     else
       ++nDirEntries;
   }
@@ -369,8 +371,8 @@ HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
 
   // Allocate & lock memory to read in the DIB
   hDIB = GlobalAlloc(GHND, curFileRes.dwDIBSize);
-  if(hDIB == NULL)
-    return NULL;
+  if(hDIB == (HANDLE) NULL)
+    return (HANDLE) NULL;
 
 #ifdef __WINDOWS_386__
   lpDIB = (LPBITMAPINFO )MK_FP32(GlobalLock(hDIB));
@@ -390,9 +392,9 @@ HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
   {
     GlobalUnlock( hDIB);
     GlobalFree( hDIB);
-    return NULL;
+    return (HANDLE) NULL;
   }
-  if(lpptHotSpot != NULL)  // If it is necessary to know the hot spot
+  if(lpptHotSpot != (LPPOINT) NULL)  // If it is necessary to know the hot spot
   {
     lpptHotSpot->x = (int )curFileRes.wXHotspot;
     lpptHotSpot->y = (int )curFileRes.wYHotspot;
@@ -433,13 +435,13 @@ HBITMAP ColorDDBToMonoDDB ( HBITMAP hbm)
 
   dwLen = bi.biSize + PaletteSize((LPSTR)&bi);
 
-  hdc = GetDC( NULL);
+  hdc = GetDC( (HWND) NULL);
 
   hdib = GlobalAlloc( GHND, dwLen);
-  if (hdib == NULL)
+  if (hdib == (HANDLE) NULL)
   {
-    ReleaseDC( NULL, hdc);
-    return NULL;
+    ReleaseDC( (HWND) NULL, hdc);
+    return (HBITMAP) NULL;
   }
 
 #ifdef __WINDOWS_386__
@@ -469,8 +471,8 @@ HBITMAP ColorDDBToMonoDDB ( HBITMAP hbm)
   else
   {
     GlobalFree( hdib);
-    ReleaseDC( NULL, hdc);
-    return NULL;
+    ReleaseDC( (HWND) NULL, hdc);
+    return (HBITMAP) NULL;
   }
 
   // Call GetDIBits with a NON-NULL lpBits parameter, to actually
@@ -487,9 +489,9 @@ HBITMAP ColorDDBToMonoDDB ( HBITMAP hbm)
                  (LPBITMAPINFO)lpbi, DIB_RGB_COLORS) == 0)
   {
     GlobalUnlock( hdib);
-    hdib = NULL;
-    ReleaseDC( NULL, hdc);
-    return NULL;
+    hdib = (HANDLE) NULL;
+    ReleaseDC( (HWND) NULL, hdc);
+    return (HBITMAP) NULL;
   }
 
   // Finally, create a monochrome DDB, and put the DIB into
@@ -503,7 +505,7 @@ HBITMAP ColorDDBToMonoDDB ( HBITMAP hbm)
   GlobalUnlock( hdib);
   GlobalFree( hdib);
 
-  ReleaseDC(NULL, hdc);
+  ReleaseDC((HWND) NULL, hdc);
   return hbmMono;
 }
 
@@ -581,12 +583,12 @@ HCURSOR MakeCursor( HANDLE hDIB, LPPOINT lpptHotSpot, HINSTANCE hInst)
 
   dwBmpSize = (DWORD )(bmpXor.bmWidthBytes * bmpXor.bmHeight * bmpXor.bmPlanes);
   hXorDDB = GlobalAlloc( GHND, dwBmpSize);
-  if(hXorDDB == NULL)
+  if(hXorDDB == (HANDLE) NULL)
   {  // clean up before quitting
     DeleteObject( hbmXor);
     DeleteDC( hDC);
     GlobalUnlock( hDIB);
-    return NULL;
+    return (HCURSOR) NULL;
   }
 #ifdef __WINDOWS_386__
   lpXorDDB = (LPSTR)MK_FP32(GlobalLock( hXorDDB));
@@ -766,7 +768,7 @@ HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint)
   NPSTR     andBits;
   NPSTR     xorBits;
 
-  hDC = GetDC(NULL);
+  hDC = GetDC((HWND) NULL);
   hDCColor = CreateCompatibleDC(hDC);
   hDCMono = CreateCompatibleDC(hDC);
   hAndBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
@@ -843,7 +845,7 @@ HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap)
   NPSTR     andBits;
   NPSTR     xorBits;
 
-  hDC = GetDC(NULL);
+  hDC = GetDC((HWND) NULL);
   hDCColor = CreateCompatibleDC(hDC);
   hDCMono = CreateCompatibleDC(hDC);
   hAndBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
@@ -882,7 +884,7 @@ HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap)
   DeleteDC(hDCMono);
   DeleteObject(hAndBmp);
   DeleteObject(hXorBmp);
-  ReleaseDC(NULL, hDC);
+  ReleaseDC((HWND) NULL, hDC);
 #ifndef __WIN32__
   LocalUnlock(LocalHandle((WORD) andBits));
   LocalUnlock(LocalHandle((WORD) xorBits));

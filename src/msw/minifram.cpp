@@ -32,8 +32,10 @@
 #include "wx/minifram.h"
 #include "wx/msw/private.h"
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 #if !USE_SHARED_LIBRARY

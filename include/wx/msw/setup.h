@@ -268,6 +268,19 @@
 #define wxUSE_OWNER_DRAWN 0
 #endif
 
+#ifdef __TWIN32__
+
+#undef wxUSE_THREADS
+#define wxUSE_THREADS 0
+
+#undef wxUSE_DBWIN32
+#define wxUSE_DBWIN32 0
+
+#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
+
+#endif
+
 // Minimal setup e.g. for compiling small utilities
 #define MINIMAL_WXWINDOWS_SETUP 0
 

@@ -34,14 +34,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC(void)
 {
-  m_hDC = (WXHDC) ::GetDC(NULL);
+  m_hDC = (WXHDC) ::GetDC((HWND) NULL);
   m_hDCCount ++;
 }
 
 wxScreenDC::~wxScreenDC(void)
 {
   SelectOldObjects(m_hDC);
-  ::ReleaseDC(NULL, (HDC) m_hDC);
+  ::ReleaseDC((HWND) NULL, (HDC) m_hDC);
   m_hDC = 0;
   m_hDCCount --;
 }

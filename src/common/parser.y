@@ -3,7 +3,7 @@
 #ifdef _MSC_VER
 #include <io.h>
 #endif
-#ifdef __GNUWIN32__
+#if defined(__GNUWIN32__) && !defined(__TWIN32__)
 #include <sys/unistd.h>
 #endif
 

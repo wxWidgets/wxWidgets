@@ -35,8 +35,10 @@
 #include <mmsystem.h>
 #endif
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 wxWave::wxWave()
@@ -50,7 +52,7 @@ wxWave::wxWave(const wxString& sFileName, bool isResource)
   Create(sFileName, isResource);
 }
 
-wxWave::wxWave(int size, const byte* data)
+wxWave::wxWave(int size, const wxByte* data)
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
   Create(size, data);
@@ -70,7 +72,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
     m_isResource = TRUE;
 
     HRSRC hresInfo;
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
     hresInfo = ::FindResourceA((HMODULE) wxhInstance, fileName, "WAVE");
 #else
     hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, "WAVE");
@@ -82,7 +84,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
     if (waveData)
     {
-      m_waveData= (byte*)::LockResource(waveData);
+      m_waveData= (wxByte*)::LockResource(waveData);
       m_waveLength = (int) ::SizeofResource((HMODULE) wxhInstance, hresInfo);
     }
 
@@ -98,7 +100,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
     m_waveLength = (int) fileWave.Length();
 
-    m_waveData = (byte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
+    m_waveData = (wxByte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
     if (!m_waveData)
         return FALSE;
 
@@ -108,12 +110,12 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
   }
 }
 
-bool wxWave::Create(int size, const byte* data)
+bool wxWave::Create(int size, const wxByte* data)
 {
   Free();
   m_isResource = FALSE;
   m_waveLength=size;
-  m_waveData = (byte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
+  m_waveData = (wxByte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
   if (!m_waveData)
      return FALSE;
 

@@ -43,7 +43,7 @@ public:
 #  endif
 #endif
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 
 // wxGTK has its own wxPostscriptDC
 

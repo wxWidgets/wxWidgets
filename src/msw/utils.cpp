@@ -29,6 +29,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/timer.h"
+#include "wx/intl.h"
 
 #include <windows.h>
 
@@ -42,7 +43,7 @@
 #endif
 #endif  //GNUWIN32
 
-#ifdef __GNUWIN32__
+#if defined(__GNUWIN32__) && !defined(__TWIN32__)
 #include <sys/unistd.h>
 #include <sys/stat.h>
 #endif  //GNUWIN32
@@ -135,7 +136,7 @@ static const char eUSERNAME[]  = "UserName";
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
 bool wxGetHostName(char *buf, int maxSize)
 {
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__TWIN32__)
   DWORD nSize = maxSize;
   return (::GetComputerName(buf, &nSize) != 0);
 #else
@@ -154,7 +155,7 @@ bool wxGetHostName(char *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(char *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__win32s__)
+#if defined(__WIN32__) && !defined(__win32s__) && !defined(__TWIN32__)
 
     // VZ: why should it be so complicated??
 #if 0
@@ -288,7 +289,7 @@ wxShell(const wxString& command)
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory(void)
 {
-#if defined(__WIN32__) && !defined(__BORLANDC__)
+#if defined(__WIN32__) && !defined(__BORLANDC__) && !defined(__TWIN32__)
   MEMORYSTATUS memStatus;
   memStatus.dwLength = sizeof(MEMORYSTATUS);
   GlobalMemoryStatus(&memStatus);
@@ -567,7 +568,7 @@ const char* wxGetHomeDir(wxString *pstr)
 {
   wxString& strDir = *pstr;
 
-  #ifdef __UNIX__
+  #if defined(__UNIX__) && !defined(__TWIN32__)
     const char *szHome = getenv("HOME");
     if ( szHome == NULL ) {
       // we're homeless...
@@ -677,7 +678,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 char *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
 {
   char *s = NULL;
-#ifndef __WIN32__
+#if !defined(__WIN32__) || defined(__TWIN32__)
   HRSRC hResource = ::FindResource(wxGetInstance(), WXSTRINGCAST resourceName, WXSTRINGCAST resourceType);
 #else
 #ifdef UNICODE
@@ -721,34 +722,34 @@ void wxGetMousePosition( int* x, int* y )
 // Return TRUE if we have a colour display
 bool wxColourDisplay(void)
 {
-  HDC dc = ::GetDC(NULL);
+  HDC dc = ::GetDC((HWND) NULL);
   bool flag;
   int noCols = GetDeviceCaps(dc, NUMCOLORS);
   if ((noCols == -1) || (noCols > 2))
     flag = TRUE;
   else
     flag = FALSE;
-  ReleaseDC(NULL, dc);
+  ReleaseDC((HWND) NULL, dc);
   return flag;
 }
 
 // Returns depth of screen
 int wxDisplayDepth(void)
 {
-  HDC dc = ::GetDC(NULL);
+  HDC dc = ::GetDC((HWND) NULL);
   int planes = GetDeviceCaps(dc, PLANES);
   int bitsPerPixel = GetDeviceCaps(dc, BITSPIXEL);
   int depth = planes*bitsPerPixel;
-  ReleaseDC(NULL, dc);
+  ReleaseDC((HWND) NULL, dc);
   return depth;
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-  HDC dc = ::GetDC(NULL);
+  HDC dc = ::GetDC((HWND) NULL);
   *width = GetDeviceCaps(dc, HORZRES); *height = GetDeviceCaps(dc, VERTRES);
-  ReleaseDC(NULL, dc);
+  ReleaseDC((HWND) NULL, dc);
 }
 
 bool wxDirExists(const wxString& dir)
@@ -982,7 +983,7 @@ To download dbwin32, see e.g.:
 http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
 */
 
-#if !defined(__MWERKS__) && !defined(__SALFORDC__)
+#if !defined(__MWERKS__) && !defined(__SALFORDC__) && !defined(__TWIN32__)
 #include <process.h>
 #endif
 
@@ -1010,7 +1011,11 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
 #ifdef _UNICODE
     ::OutputDebugStringW(achBuffer);
 #else
+#ifdef __TWIN32__
+    ::OutputDebugString(achBuffer);
+#else
     ::OutputDebugStringA(achBuffer);
+#endif
 #endif
 
     /* bail if it's not Win95 */

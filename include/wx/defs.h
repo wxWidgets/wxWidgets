@@ -79,6 +79,10 @@
 #define __WIN95__
 #endif
 
+#if defined(TWIN32) && !defined(__TWIN32__)
+#define __TWIN32__
+#endif
+
 #endif // wxMSW
 
 // Make sure the environment is set correctly
@@ -134,9 +138,12 @@
 #endif
 
 #if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__) || defined(__SALFORDC__)
-    #define byte unsigned char
+// Not a good idea, because later system files (e.g. windows.h)
+// may try to define it. Use wxByte instead.
+// #define byte unsigned char
 #endif
 
+typedef unsigned char wxByte;
 typedef short int WXTYPE;
 typedef int wxWindowID;
 
@@ -211,6 +218,10 @@ class WXDLLEXPORT wxEvent;
 // ----------------------------------------------------------------------------
 // Error codes
 // ----------------------------------------------------------------------------
+
+#ifdef ERR_PARAM
+#undef ERR_PARAM
+#endif
 
 /// Standard error codes
 enum  ErrCode

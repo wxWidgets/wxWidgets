@@ -33,8 +33,10 @@
 #include <windows.h>
 #include <windowsx.h>
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include <wx/msw/gnuwin32/extra.h>
+#endif
 #endif
 
 #ifdef GetCharWidth

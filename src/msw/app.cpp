@@ -68,7 +68,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
   #include <commctrl.h>
 #endif
 
@@ -116,15 +116,15 @@ char wxMDIChildFrameClassName[] = "wxMDIChildFrameClass";
 char wxPanelClassName[]         = "wxPanelClass";
 char wxCanvasClassName[]        = "wxCanvasClass";
 
-HICON wxSTD_FRAME_ICON = NULL;
-HICON wxSTD_MDICHILDFRAME_ICON = NULL;
-HICON wxSTD_MDIPARENTFRAME_ICON = NULL;
+HICON wxSTD_FRAME_ICON = (HICON) NULL;
+HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
+HICON wxSTD_MDIPARENTFRAME_ICON = (HICON) NULL;
 
-HICON wxDEFAULT_FRAME_ICON = NULL;
-HICON wxDEFAULT_MDICHILDFRAME_ICON = NULL;
-HICON wxDEFAULT_MDIPARENTFRAME_ICON = NULL;
+HICON wxDEFAULT_FRAME_ICON = (HICON) NULL;
+HICON wxDEFAULT_MDICHILDFRAME_ICON = (HICON) NULL;
+HICON wxDEFAULT_MDIPARENTFRAME_ICON = (HICON) NULL;
 
-HBRUSH wxDisableButtonBrush = 0;
+HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
 LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -140,8 +140,14 @@ LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
 long wxApp::sm_lastMessageTime = 0;
 
-#ifdef __WIN95__
-  static HINSTANCE gs_hRichEdit = NULL;
+#if defined(__WIN95__) && !defined(__TWIN32__)
+#define wxUSE_RICHEDIT 1
+#else
+#define wxUSE_RICHEDIT 0
+#endif
+
+#if wxUSE_RICHEDIT
+  static HINSTANCE gs_hRichEdit = (HINSTANCE) NULL;
 #endif
 
 //// Initialize
@@ -183,12 +189,16 @@ bool wxApp::Initialize()
 
 #if defined(__WIN95__)
     InitCommonControls();
+
+#if wxUSE_RICHEDIT
     gs_hRichEdit = LoadLibrary("RICHED32.DLL");
 
-    if (gs_hRichEdit == NULL)
+    if (gs_hRichEdit == (HINSTANCE) NULL)
     {
       wxMessageBox("Could not initialise Rich Edit DLL");
     }
+#endif
+
 #endif
 
     int iMsg = 96;
@@ -275,8 +285,8 @@ bool wxApp::RegisterWindowClasses()
   wndclass.cbClsExtra    = 0;
   wndclass.cbWndExtra    = sizeof( DWORD ); // was 4
   wndclass.hInstance     = wxhInstance;
-  wndclass.hIcon         = NULL;        // wxSTD_FRAME_ICON;
-  wndclass.hCursor       = LoadCursor( NULL, IDC_ARROW );
+  wndclass.hIcon         = (HICON) NULL;        // wxSTD_FRAME_ICON;
+  wndclass.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
   wndclass.hbrBackground =  (HBRUSH)(COLOR_APPWORKSPACE+1) ;
 //  wndclass.hbrBackground = GetStockObject( WHITE_BRUSH );
   wndclass.lpszMenuName  = NULL;
@@ -299,10 +309,10 @@ bool wxApp::RegisterWindowClasses()
   wndclass1.cbClsExtra    = 0;
   wndclass1.cbWndExtra    = sizeof( DWORD ); // was 4
   wndclass1.hInstance     = wxhInstance;
-  wndclass1.hIcon         = NULL; // wxSTD_MDIPARENTFRAME_ICON;
-  wndclass1.hCursor       = LoadCursor( NULL, IDC_ARROW );
+  wndclass1.hIcon         = (HICON) NULL; // wxSTD_MDIPARENTFRAME_ICON;
+  wndclass1.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
 //  wndclass1.hbrBackground =  (HBRUSH)(COLOR_APPWORKSPACE+1) ;
-  wndclass1.hbrBackground = NULL;
+  wndclass1.hbrBackground = (HBRUSH) NULL;
   wndclass1.lpszMenuName  = NULL;
 
   wndclass1.lpszClassName = wxMDIFrameClassName;
@@ -321,8 +331,8 @@ bool wxApp::RegisterWindowClasses()
   wndclass4.cbClsExtra    = 0;
   wndclass4.cbWndExtra    = sizeof( DWORD ); // was 4
   wndclass4.hInstance     = wxhInstance;
-  wndclass4.hIcon         = NULL;       // wxSTD_MDICHILDFRAME_ICON;
-  wndclass4.hCursor       = LoadCursor( NULL, IDC_ARROW );
+  wndclass4.hIcon         = (HICON) NULL;       // wxSTD_MDICHILDFRAME_ICON;
+  wndclass4.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
   // TODO: perhaps this should be NULL so that Windows doesn't
   // paint the background itself (would OnEraseBackground duplicate
   // this?)
@@ -348,8 +358,8 @@ bool wxApp::RegisterWindowClasses()
   wndclass2.cbClsExtra    = 0;
   wndclass2.cbWndExtra    = sizeof( DWORD ); // was 4
   wndclass2.hInstance     = wxhInstance;
-  wndclass2.hIcon         = NULL;
-  wndclass2.hCursor       = NULL;
+  wndclass2.hIcon         = (HICON) NULL;
+  wndclass2.hCursor       = (HCURSOR) NULL;
 //  wndclass2.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1) ;
   wndclass2.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
   wndclass2.lpszMenuName  = NULL;
@@ -373,10 +383,10 @@ bool wxApp::RegisterWindowClasses()
   wndclass3.cbClsExtra    = 0;
   wndclass3.cbWndExtra    = sizeof( DWORD ); // was 4
   wndclass3.hInstance     = wxhInstance;
-  wndclass3.hIcon         = NULL;
-  wndclass3.hCursor       = NULL;
+  wndclass3.hIcon         = (HICON) NULL;
+  wndclass3.hCursor       = (HCURSOR) NULL;
 //  wndclass3.hbrBackground = (HBRUSH)(COLOR_WINDOW+1) ;
-  wndclass3.hbrBackground = NULL;
+  wndclass3.hbrBackground = (HBRUSH) NULL;
   wndclass3.lpszMenuName  = NULL;
   wndclass3.lpszClassName = wxCanvasClassName;
   if (!RegisterClass( &wndclass3))
@@ -500,8 +510,12 @@ void wxApp::CleanUp()
   wxSetKeyboardHook(FALSE);
 
 #ifdef __WIN95__
-  if (gs_hRichEdit != NULL)
+
+#if wxUSE_RICHEDIT
+  if (gs_hRichEdit != (HINSTANCE) NULL)
     FreeLibrary(gs_hRichEdit);
+#endif
+
 #endif
 
 #if wxUSE_PENWINDOWS
@@ -922,7 +936,7 @@ bool wxApp::ProcessMessage(WXMSG *Msg)
 
   // Try translations first; find the youngest window with
   // a translation table.
-  for (hWnd = msg->hwnd; hWnd != NULL; hWnd = ::GetParent(hWnd))
+  for (hWnd = msg->hwnd; hWnd != (HWND) NULL; hWnd = ::GetParent(hWnd))
   {
     wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
     if (wnd)
@@ -933,7 +947,7 @@ bool wxApp::ProcessMessage(WXMSG *Msg)
   }
 
   // Anyone for a non-translation message? Try youngest descendants first.
-  for (hWnd = msg->hwnd; hWnd != NULL; hWnd = ::GetParent(hWnd))
+  for (hWnd = msg->hwnd; hWnd != (HWND) NULL; hWnd = ::GetParent(hWnd))
   {
     wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
     if (wnd)
@@ -1033,7 +1047,7 @@ void wxApp::DeletePendingObjects()
   }
 }
 
-void wxApp::OnEndSession(wxCloseEvent& event)
+void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
     if (GetTopWindow())
         GetTopWindow()->Close(TRUE);
@@ -1136,6 +1150,6 @@ HINSTANCE wxGetInstance()
 
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
-#if (defined(_MSC_VER) && !defined(__WIN32__)) || defined(__GNUWIN32__)
+#if (defined(_MSC_VER) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__TWIN32__))
   #include "main.cpp"
 #endif

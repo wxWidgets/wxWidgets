@@ -48,7 +48,7 @@ wxWave::wxWave(const wxString& sFileName, bool isResource)
     Create(sFileName, isResource);
 }
 
-wxWave::wxWave(int size, const byte* data)
+wxWave::wxWave(int size, const wxByte* data)
   : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
 {
     Create(size, data);
@@ -80,7 +80,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
         m_waveLength = (int) fileWave.Length();
     
-        m_waveData = new byte[m_waveLength];
+        m_waveData = new wxByte[m_waveLength];
         if (!m_waveData)
 	{
             return FALSE;
@@ -92,12 +92,12 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
     }
 }
 
-bool wxWave::Create(int size, const byte* data)
+bool wxWave::Create(int size, const wxByte* data)
 {
     Free();
     m_isResource = FALSE;
     m_waveLength=size;
-    m_waveData = new byte[size];
+    m_waveData = new wxByte[size];
     if (!m_waveData)
     {
         return FALSE;

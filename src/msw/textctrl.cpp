@@ -66,7 +66,13 @@
 
 #include <string.h>
 
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
+#if defined(__WIN95__) && !defined(__TWIN32__)
+#define wxUSE_RICHEDIT 1
+#else
+#define wxUSE_RICHEDIT 0
+#endif
+
+#if wxUSE_RICHEDIT && !defined(__GNUWIN32__)
 #include <richedit.h>
 #endif
 
@@ -152,7 +158,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     msStyle |= ES_PASSWORD;
 
   char *windowClass = "EDIT";
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
   if ( m_windowStyle & wxTE_MULTILINE )
   {
     msStyle |= ES_AUTOVSCROLL;
@@ -168,7 +174,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
   // If we're in Win95, and we want a simple 2D border,
   // then make it an EDIT control instead.
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
   if (m_windowStyle & wxSIMPLE_BORDER)
   {
     windowClass = "EDIT";
@@ -196,7 +202,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   }
 #endif
 
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
   if (m_isRich)
   {
     // Have to enable events
@@ -245,7 +251,11 @@ void wxTextCtrl::AdoptAttributesFromHWND(void)
 #ifdef UNICODE
   GetClassNameW((HWND) hWnd, buf, 256);
 #else
+#ifdef __TWIN32__
+  GetClassName((HWND) hWnd, buf, 256);
+#else
   GetClassNameA((HWND) hWnd, buf, 256);
+#endif
 #endif
 #endif
 
@@ -394,7 +404,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
 {
   HWND hWnd = (HWND) GetHWND();
 #ifdef __WIN32__
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
   if ( m_isRich)
   {
     CHARRANGE range;
@@ -424,7 +434,7 @@ void wxTextCtrl::SetInsertionPointEnd(void)
 
 long wxTextCtrl::GetInsertionPoint(void) const
 {
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
   if (m_isRich)
   {
     CHARRANGE range;
@@ -1099,7 +1109,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 // For Rich Edit controls. Do we need it?
 #if 0
-#if defined(__WIN95__)
+#if wxUSE_RICHEDIT
 bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
   wxCommandEvent event(0, m_windowId);

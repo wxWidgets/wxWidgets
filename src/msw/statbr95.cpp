@@ -36,7 +36,7 @@
 #include  <windows.h>
 #include  <windowsx.h>
 
-#if !defined(__GNUWIN32__)
+#if !defined(__GNUWIN32__) || defined(__TWIN32__)
 #include  <commctrl.h>
 #endif
 

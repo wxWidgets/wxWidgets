@@ -89,7 +89,7 @@ int wxColourDialog::ShowModal(void)
       custColours[i] = RGB(m_colourData.custColours[i].Red(), m_colourData.custColours[i].Green(), m_colourData.custColours[i].Blue());
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
-    chooseColorStruct.hwndOwner = (HWND) (m_dialogParent ? (HWND) m_dialogParent->GetHWND() : NULL);
+    chooseColorStruct.hwndOwner = (HWND) (m_dialogParent ? (HWND) m_dialogParent->GetHWND() : (HWND) NULL);
     chooseColorStruct.rgbResult = RGB(m_colourData.dataColour.Red(), m_colourData.dataColour.Green(), m_colourData.dataColour.Blue());
     chooseColorStruct.lpCustColors = custColours;
 

@@ -19,6 +19,8 @@ src/makeg95.env
 src/makesl.env
 src/makeprog.sl
 src/ntwxwin.mak
+src/maketwin.env
+src/makeprog.twn
 src/makefile.bcc
 src/makefile.dos
 src/makefile.nt

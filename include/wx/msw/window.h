@@ -462,7 +462,7 @@ public:
   // Does this window want to accept keyboard focus?
   virtual bool AcceptsFocus() const;
 
-  virtual void PrepareDC( wxDC &dc ) {};
+  virtual void PrepareDC( wxDC& WXUNUSED(dc) ) {};
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
@@ -765,7 +765,7 @@ inline int wxWindow::GetId() const { return m_windowId; }
 inline void wxWindow::SetId(int id) { m_windowId = id; }
 inline wxWindow *wxWindow::GetParent() const { return m_windowParent; }
 inline void wxWindow::SetParent(wxWindow *p) { m_windowParent = p; }
-inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : NULL); }
+inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : (wxWindow*) NULL); }
 inline wxList& wxWindow::GetChildren() const { return (wxList&) *m_children; }
 inline wxFont& wxWindow::GetFont() const { return (wxFont&) m_windowFont; }
 inline wxString wxWindow::GetName() const { return m_windowName; }

@@ -131,7 +131,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 #endif
 
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
 
 // these should move into wxPostscriptDC:
 double UnderlinePosition = 0.0F;

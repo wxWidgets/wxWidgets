@@ -182,11 +182,15 @@ inline bool wxStyleHasBorder(long style)
 #endif
 
 #if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
+
+#ifndef __TWIN32__
 #ifdef OutputDebugString
 #undef OutputDebugString
 #endif
 
 #define OutputDebugString OutputDebugStringW95
+#endif
+
 extern void OutputDebugStringW95(const char*, ...);
 #endif
 

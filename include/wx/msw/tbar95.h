@@ -44,9 +44,9 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
             const wxString& name = wxToolBarNameStr);
 
   // Call default behaviour
-  void OnPaint(wxPaintEvent& event) { Default() ; }
-  void OnSize(wxSizeEvent& event) { Default() ; }
-  void OnKillFocus(wxFocusEvent& event) { Default() ; }
+  void OnPaint(wxPaintEvent& WXUNUSED(event)) { Default() ; }
+  void OnSize(wxSizeEvent& WXUNUSED(event)) { Default() ; }
+  void OnKillFocus(wxFocusEvent& WXUNUSED(event)) { Default() ; }
   void OnMouseEvent(wxMouseEvent& event);
 
   // Handle wxToolBar95 events

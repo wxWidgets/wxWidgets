@@ -48,8 +48,10 @@
 
 #include "wx/msw/dib.h"
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 #ifndef SEEK_CUR
@@ -259,7 +261,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal)
 
 	dwLen = bi.biSize + PaletteSize(&bi);
 
-	hdc = GetDC(NULL);
+	hdc = GetDC((HWND) NULL);
 	hpal = SelectPalette(hdc, hpal, FALSE);
 	RealizePalette(hdc);
 
@@ -327,7 +329,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal)
 		GlobalUnlock(hdib);
 		hdib = NULL;
 		SelectPalette(hdc, hpal, FALSE);
-		ReleaseDC(NULL, hdc);
+		ReleaseDC((HWND) NULL, hdc);
 		return NULL;
 		}
 

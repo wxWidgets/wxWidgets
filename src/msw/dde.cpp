@@ -34,8 +34,10 @@
 #include "wx/msw/private.h"
 #include "wx/dde.h"
 
+#ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
+#endif
 #endif
 
 #include <windows.h>
@@ -197,7 +199,7 @@ bool wxDDEServer::Create(const wxString& server_name)
   m_serviceName = server_name;
   HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)server_name, CP_WINANSI);
 
-  if (DdeNameService(DDEIdInst, serviceName, NULL, DNS_REGISTER) == 0)
+  if (DdeNameService(DDEIdInst, serviceName, (HSZ) NULL, DNS_REGISTER) == 0)
   {
     DDEPrintError();
     return FALSE;
@@ -309,8 +311,8 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& /* host */, const 
   HSZ topic_atom = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)topic, CP_WINANSI);
 
   HCONV hConv = DdeConnect(DDEIdInst, serviceName, topic_atom, (PCONVCONTEXT)NULL);
-  if (hConv == NULL)
-    return NULL;
+  if (hConv == (HCONV) NULL)
+    return (wxConnectionBase*) NULL;
   else
   {
     wxDDEConnection *connection = (wxDDEConnection*) OnMakeConnection();
@@ -322,7 +324,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& /* host */, const 
       m_connections.Append(connection);
       return connection;
     }
-    else return NULL;
+    else return (wxConnectionBase*) NULL;
   }
 }
 
@@ -778,7 +780,7 @@ void DDEPrintError(void)
       err = "Unrecognised error type.";
       break;
   }
-  MessageBox(NULL, (LPCSTR)err, "DDE Error", MB_OK | MB_ICONINFORMATION);
+  MessageBox((HWND) NULL, (LPCSTR)err, "DDE Error", MB_OK | MB_ICONINFORMATION);
 }
 
 #endif

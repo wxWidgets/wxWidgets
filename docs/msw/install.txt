@@ -230,6 +230,18 @@ References:
      http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32/index.html
  - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
 
+TWIN32 and gcc on Linux
+-----------------------
+
+The wxWindows 2 for Windows port may be compiled using
+the TWIN32 emulator package from www.willows.com. However,
+TWIN32 is by no means finished so this should be taken as
+something to think about for the future, rather than
+a tool for writing products with.
+
+Use makefile.twn in much the same way as makefile.g95, as
+described above. Not all sample makefiles are supplied yet.
+
 Notes
 -----
 
