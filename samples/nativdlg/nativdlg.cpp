@@ -97,11 +97,6 @@ void MyFrame::OnTest1(wxCommandEvent& event)
       MyDialog *dialog = new MyDialog;
       if (dialog->LoadNativeDialog(this, _T("dialog1")))
       {
-/*
-        wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("multitext3", dialog);
-        if (text)
-          text->SetValue("wxWindows resource demo");
-*/
         dialog->SetModal(TRUE);
         dialog->ShowModal();
       }

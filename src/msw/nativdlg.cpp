@@ -108,7 +108,20 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
     else
         wxTopLevelWindows.Append(this);
 
-    // FIXME why don't we enum all children here?
+    // Enumerate all children
+    HWND hWndNext;
+    hWndNext = ::GetWindow((HWND) m_hWnd, GW_CHILD);
+
+    wxWindow* child = NULL;
+    if (hWndNext)
+        child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+
+    while (hWndNext != (HWND) NULL)
+    {
+        hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
+        if (hWndNext)
+            child = CreateWindowFromHWND(this, (WXHWND) hWndNext);
+    }
 
     return TRUE;
 }
