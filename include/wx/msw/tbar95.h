@@ -60,6 +60,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    virtual void SetWindowStyleFlag(long style);
+
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 

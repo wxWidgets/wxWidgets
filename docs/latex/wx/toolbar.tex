@@ -42,9 +42,6 @@ ignore the values for explicit placement and use their own layout and the meanin
 of a "separator" is a vertical line under Windows95 vs. simple space under GTK etc.
 
 {\bf wxToolBar95:} Note that this toolbar paints tools to reflect user-selected colours.
-The toolbar orientation must always be {\bf wxHORIZONTAL}.
-
-{\bf wxToolBarGtk:} The toolbar orientation is ignored and is always {\bf wxHORIZONTAL}.
 
 \wxheading{Window styles}
 
@@ -60,7 +57,9 @@ toolbar).}
 \twocolitem{\windowstyle{wxTB\_NOICONS}}{Doesn't show the icons in the toolbar buttons, by default they are shown}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles}.
+See also \helpref{window styles overview}{windowstyles}. Note that the Win32
+native toolbar ignores {\tt wxTB\_NOICONS} style. Also, toggling the 
+{\tt wxTB\_TEXT} works only if the style was initially on.
 
 \wxheading{Event handling}
 

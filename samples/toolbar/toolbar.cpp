@@ -152,7 +152,7 @@ private:
 
 const int ID_TOOLBAR = 500;
 
-static const long TOOLBAR_STYLE = wxNO_BORDER | wxTB_FLAT | wxTB_DOCKABLE;
+static const long TOOLBAR_STYLE = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
 
 enum
 {
@@ -227,7 +227,7 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
                                  "wxToolBar Sample",
-                                 wxPoint(100, 100), wxSize(450, 300));
+                                 wxPoint(100, 100), wxSize(550, 300));
 
     frame->Show(TRUE);
 
@@ -397,6 +397,8 @@ MyFrame::MyFrame(wxFrame* parent,
     // Associate the menu bar with the frame
     SetMenuBar(menuBar);
 
+    menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, TRUE);
+
     // Create the toolbar
     RecreateToolbar();
 }
@@ -464,8 +466,8 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
                                style);
 
         m_tbar->AddRadioTool(wxID_NEW, _T("First"), wxBITMAP(new));
-        m_tbar->AddRadioTool(wxID_NEW, _T("Second"), wxBITMAP(new));
-        m_tbar->AddRadioTool(wxID_NEW, _T("Third"), wxBITMAP(new));
+        m_tbar->AddRadioTool(wxID_OPEN, _T("Second"), wxBITMAP(open));
+        m_tbar->AddRadioTool(wxID_SAVE, _T("Third"), wxBITMAP(save));
         m_tbar->AddSeparator();
         m_tbar->AddTool(wxID_HELP, _T("Help"), wxBITMAP(help));
 

@@ -161,6 +161,19 @@ public:
         m_nSepCount = 1;
     }
 
+    virtual void SetLabel(const wxString& label)
+    {
+        if ( label == m_label )
+            return;
+
+        wxToolBarToolBase::SetLabel(label);
+
+        // we need to update the label shown in the toolbar because it has a
+        // pointer to the internal buffer of the old label
+        //
+        // TODO: use TB_SETBUTTONINFO
+    }
+
     // set/get the number of separators which we use to cover the space used by
     // a control in the toolbar
     void SetSeparatorsCount(size_t count) { m_nSepCount = count; }
@@ -543,7 +556,6 @@ bool wxToolBar::Realize()
                 wxLogDebug(wxT("TB_DELETEBUTTON failed"));
             }
         }
-
     }
 
     if ( addBitmap ) // no old bitmap or we can't replace it
@@ -566,6 +578,7 @@ bool wxToolBar::Realize()
     // this array will hold the indices of all controls in the toolbar
     wxArrayInt controlIds;
 
+    bool lastWasRadio = FALSE;
     int i = 0;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
@@ -579,6 +592,7 @@ bool wxToolBar::Realize()
 
         wxZeroMemory(button);
 
+        bool isRadio = FALSE;
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
@@ -592,6 +606,12 @@ bool wxToolBar::Realize()
 
             case wxTOOL_STYLE_BUTTON:
                 button.iBitmap = bitmapId;
+
+                if ( HasFlag(wxTB_TEXT) && !tool->GetLabel().empty() )
+                {
+                    button.iString = (int)tool->GetLabel().c_str();
+                }
+
                 button.idCommand = tool->GetId();
 
                 if ( tool->IsEnabled() )
@@ -599,12 +619,39 @@ bool wxToolBar::Realize()
                 if ( tool->IsToggled() )
                     button.fsState |= TBSTATE_CHECKED;
 
-                button.fsStyle = tool->CanBeToggled() ? TBSTYLE_CHECK
-                                                      : TBSTYLE_BUTTON;
+                switch ( tool->GetKind() )
+                {
+                    case wxITEM_RADIO:
+                        button.fsStyle = TBSTYLE_CHECKGROUP;
+
+                        if ( !lastWasRadio )
+                        {
+                            // the first item in the radio group is checked by
+                            // default to be consistent with wxGTK and the menu
+                            // radio items
+                            button.fsState |= TBSTATE_CHECKED;
+                        }
+
+                        isRadio = TRUE;
+                        break;
+
+                    case wxITEM_CHECK:
+                        button.fsStyle = TBSTYLE_CHECK;
+                        break;
+
+                    default:
+                        wxFAIL_MSG( _T("unexpected toolbar button kind") );
+                        // fall through
+
+                    case wxITEM_NORMAL:
+                        button.fsStyle = TBSTYLE_BUTTON;
+                }
 
                 bitmapId++;
                 break;
         }
+
+        lastWasRadio = isRadio;
 
         i++;
     }
@@ -979,6 +1026,67 @@ void wxToolBar::UpdateSize()
     {
         frame->SendSizeEvent();
     }
+}
+
+// ----------------------------------------------------------------------------
+// toolbar styles
+// ---------------------------------------------------------------------------
+
+void wxToolBar::SetWindowStyleFlag(long style)
+{
+    // there doesn't seem to be any reasonably simple way to prevent the
+    // toolbar from showing the icons so for now we don't honour wxTB_NOICONS
+    if ( (style & wxTB_TEXT) != (GetWindowStyle() & wxTB_TEXT) )
+    {
+        // update the strings of all toolbar buttons
+        //
+        // NB: we can only do it using TB_SETBUTTONINFO which is available
+        //     in comctl32.dll >= 4.71 only
+#if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+        if ( wxTheApp->GetComCtl32Version() >= 471 )
+        {
+            // set the (underlying) separators width to be that of the
+            // control
+            TBBUTTONINFO tbbi;
+            tbbi.cbSize = sizeof(tbbi);
+            tbbi.dwMask = TBIF_TEXT;
+            if ( !(style & wxTB_TEXT) )
+            {
+                // don't show the text - remove the labels
+                tbbi.pszText = NULL;
+            }
+
+            for ( wxToolBarToolsList::Node *node = m_tools.GetFirst();
+                  node;
+                  node = node->GetNext() )
+            {
+                wxToolBarToolBase *tool = node->GetData();
+                if ( !tool->IsButton() )
+                {
+                    continue;
+                }
+
+                if ( style & wxTB_TEXT )
+                {
+                    // cast is harmless
+                    tbbi.pszText = (wxChar *)tool->GetLabel().c_str();
+                }
+
+                if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                                  tool->GetId(), (LPARAM)&tbbi) )
+                {
+                    // the id is probably invalid?
+                    wxLogLastError(wxT("TB_SETBUTTONINFO"));
+                }
+            }
+
+            UpdateSize();
+            Refresh();
+        }
+#endif // comctl32.dll 4.71
+    }
+
+    wxToolBarBase::SetWindowStyleFlag(style);
 }
 
 // ----------------------------------------------------------------------------
