@@ -1,9 +1,10 @@
 @echo off
 
-rem VZ: this is quick and _very_ dirty
+rem VZ: this is quick and _very_ dirty, to be replaced by a script directly
+rem     parsing the files.txt and include/wx/version.h...
 
-set VER=2.3.3
-set DEST=q:\wxBase-%VER%
+set VER=2.3.4
+set DEST=t:\wxBase-%VER%
 
 mkdir %DEST%
 mkdir %DEST%\include
@@ -26,6 +27,18 @@ chdir %WXWIN%
 
 rem Copy the files to the root directory
 
+copy /q configure.in %DEST%
+copy /q configure %DEST%
+copy /q wxwin.m4 %DEST%
+copy /q aclocal.m4 %DEST%
+copy /q config.sub %DEST%
+copy /q config.guess %DEST%
+copy /q install-sh %DEST%
+copy /q mkinstalldirs %DEST%
+copy /q wx-config.in %DEST%
+copy /q setup.h.in %DEST%
+copy /q Makefile.in %DEST%
+copy /q wxBase.spec %DEST%
 copy /q docs\changes.txt %DEST%\CHANGES.txt
 copy /q docs\licence.txt %DEST%\LICENCE.txt
 copy /q docs\base\readme.txt %DEST%\README.txt
@@ -39,12 +52,15 @@ copy /q src\makeb32.env %DEST%\src\makeb32.env
 copy /q src\makelib.b32 %DEST%\src\makelib.b32
 copy /q src\makeprog.b32 %DEST%\src\makeprog.b32
 copy /q src\msw\makebase.b32 %DEST%\src\msw\makebase.b32
+copy /q src\*.in %DEST%\src
 
 rem Copy the sample
 
 copy /q samples\console\console.cpp %DEST%\samples\console\console.cpp
 copy /q samples\console\console.dsp %DEST%\samples\console\console.dsp
 copy /q samples\console\makefile.b32 %DEST%\samples\console\makefile.b32
+copy /q samples\console\makefile.unx %DEST%\samples\console
+copy /q samples\console\Makefile.in %DEST%\samples\console
 copy /q samples\console\testdata.fc %DEST%\samples\console\testdata.fc
 
 rem Copy regex and zlib files
