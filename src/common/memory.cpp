@@ -867,13 +867,13 @@ void wxDebugContext::OutputDumpLine(const wxChar *szFormat, ...)
     int count;
     va_list argptr;
     va_start(argptr, szFormat);
-    buf[sizeof(buf)-1] = _T('\0');
+    buf[sizeof(buf)/sizeof(wxChar)-1] = _T('\0');
 
     // keep 3 bytes for a \r\n\0
-    count = wxVsnprintf(buf, sizeof(buf)-3, szFormat, argptr);
+    count = wxVsnprintf(buf, sizeof(buf)/sizeof(wxChar)-3, szFormat, argptr);
 
     if ( count < 0 )
-        count = sizeof(buf)-3;
+        count = sizeof(buf)/sizeof(wxChar)-3;
     buf[count]=_T('\r');
     buf[count+1]=_T('\n');
     buf[count+2]=_T('\0');
