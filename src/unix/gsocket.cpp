@@ -923,7 +923,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
 
     /* Do not use a static struct, Linux can garble it */
     tv.tv_sec = m_timeout / 1000;
-    tv.tv_usec = (m_timeout % 1000) / 1000;
+    tv.tv_usec = (m_timeout % 1000) * 1000;
 
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
