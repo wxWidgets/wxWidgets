@@ -473,6 +473,27 @@ ALL_HEADERS = \
 		xpmdecod.h \
 		zipstrm.h \
 		zstream.h \
+		mgl/app.h \
+		mgl/bitmap.h \
+		mgl/brush.h \
+		mgl/clipbrd.h \
+		mgl/colour.h \
+		mgl/cursor.h \
+		mgl/dc.h \
+		mgl/dcclient.h \
+		mgl/dcmemory.h \
+		mgl/dcscreen.h \
+		mgl/font.h \
+		mgl/fontutil.h \
+		mgl/gdiobj.h \
+		mgl/icon.h \
+		mgl/palette.h \
+		mgl/pen.h \
+		mgl/popupwin.h \
+		mgl/private.h \
+		mgl/region.h \
+		mgl/toplevel.h \
+		mgl/window.h \
 		generic/accel.h \
 		generic/calctrl.h \
 		generic/caret.h \
@@ -537,7 +558,6 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \

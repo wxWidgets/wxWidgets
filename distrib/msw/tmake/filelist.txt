@@ -30,6 +30,7 @@
 #  MotifH	/include/wx/motif
 #  MSWH	/include/wx/msw
 #  OS2H	/include/wx/os2
+#  MGLH /include/wx/mgl
 #  X11H	/include/wx/x11
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
@@ -1228,6 +1229,28 @@ reparent.h	X11H
 textctrl.h	X11H
 toplevel.h	X11H
 window.h	X11H
+
+app.h	MGLH
+bitmap.h	MGLH
+brush.h	MGLH
+clipbrd.h	MGLH
+colour.h	MGLH
+cursor.h	MGLH
+dc.h	MGLH
+dcclient.h	MGLH
+dcmemory.h	MGLH
+dcscreen.h	MGLH
+font.h	MGLH
+fontutil.h	MGLH
+gdiobj.h	MGLH
+icon.h	MGLH
+palette.h	MGLH
+pen.h	MGLH
+popupwin.h	MGLH
+private.h	MGLH
+region.h	MGLH
+toplevel.h	MGLH
+window.h	MGLH
 
 accel.h	MSWH
 app.h	MSWH
