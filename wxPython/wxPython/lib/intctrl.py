@@ -295,10 +295,12 @@ class wxIntValidator( wxPyValidator ):
             elif set_to_zero:
                 # select to "empty" numeric value
                 wxCallAfter(ctrl.SetValue, new_value)
+                wxCallAfter(ctrl.SetInsertionPoint, 0)
                 wxCallAfter(ctrl.SetSelection, 0, 1)
 
             elif set_to_minus_one:
                 wxCallAfter(ctrl.SetValue, new_value)
+                wxCallAfter(ctrl.SetInsertionPoint, 1)
                 wxCallAfter(ctrl.SetSelection, 1, 2)
 
             elif not internally_set:
@@ -747,6 +749,7 @@ class wxIntCtrl(wxTextCtrl):
         if select_len == len(wxTextCtrl.GetValue(self)):
             if not self.IsNoneAllowed():
                 self.SetValue(0)
+                self.SetInsertionPoint(0)
                 self.SetSelection(0,1)
             else:
                 self.SetValue(None)
@@ -842,6 +845,7 @@ if __name__ == '__main__':
         def OnClick(self, event):
             dlg = myDialog(self.panel, -1, "test wxIntCtrl")
             dlg.int_ctrl.SetValue(501)
+            dlg.int_ctrl.SetInsertionPoint(1)
             dlg.int_ctrl.SetSelection(1,2)
             rc = dlg.ShowModal()
             print 'final value', dlg.int_ctrl.GetValue()
