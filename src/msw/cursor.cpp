@@ -326,18 +326,16 @@ wxCursor::wxCursor(const wxString& filename,
             hcursor = ::LoadCursorFromFile(filename);
             break;
 
-        case wxBITMAP_TYPE_ICO:
 #if wxUSE_RESOURCE_LOADING_IN_MSW
+        case wxBITMAP_TYPE_ICO:
             hcursor = IconToCursor((wxChar *)filename.c_str(),
                                    wxGetInstance(),
                                    hotSpotX, hotSpotY,
                                    NULL, NULL);
-#endif // wxUSE_RESOURCE_LOADING_IN_MSW
             break;
 
         case wxBITMAP_TYPE_BMP:
             {
-#if wxUSE_RESOURCE_LOADING_IN_MSW
                 HBITMAP hBitmap = 0;
                 HPALETTE hPalette = 0;
                 if ( wxReadDIB((wxChar *)filename.c_str(), &hBitmap, &hPalette) )
@@ -352,12 +350,12 @@ wxCursor::wxCursor(const wxString& filename,
                     DeleteObject(hBitmap);
                 }
                 else
-#endif // wxUSE_RESOURCE_LOADING_IN_MSW
                 {
                     hcursor = NULL;
                 }
             }
             break;
+#endif // wxUSE_RESOURCE_LOADING_IN_MSW
 
         default:
             wxFAIL_MSG( _T("unknown cursor resource type") );
