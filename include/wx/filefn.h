@@ -200,7 +200,11 @@ enum wxSeekMode
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
         typedef off_t wxFileOffset;
-        typedef unsigned off_t wxFileSize_t;
+        #if defined(__DMC__)
+            typedef unsigned long wxFileSize_t;
+        #else
+            typedef unsigned off_t wxFileSize_t;
+        #endif
         #define wxFileOffsetFmtSpec _("")
     #endif
 
