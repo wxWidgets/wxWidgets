@@ -8,14 +8,16 @@
 .first
 	define wx [--.include.wx]
 
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
+CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
+	   /assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 
 .suffixes : .cpp
 
 .cpp.obj :
 	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cpp
 .c.obj :
-	cc $(CFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).c
+	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
 	accel.obj,\
