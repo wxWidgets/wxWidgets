@@ -43,10 +43,11 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         maxValue = 2 /* kControlCheckboxMixedValue */;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_peer = new wxMacControl() ;
     verify_noerr( CreateCheckBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds ,
-        CFSTR("") , 0 , false , (ControlRef*) &m_macControl ) ) ;
-
-    SetControl32BitMaximum( (ControlRef) m_macControl , maxValue ) ;
+        CFSTR("") , 0 , false , *m_peer ) );
+    
+    m_peer->SetMaximum( maxValue ) ;
     
     MacPostControlCreate(pos,size) ;
 
@@ -85,13 +86,12 @@ void wxCheckBox::Command (wxCommandEvent & event)
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState) ::GetControl32BitValue( (ControlRef) m_macControl );
+    return (wxCheckBoxState) m_peer->GetValue() ;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
 {
-    ::SetControl32BitValue( (ControlRef) m_macControl , (int) val) ;
-    MacRedrawControl() ;
+    m_peer->SetValue( val ) ;
 }
 
 wxInt32 wxCheckBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 

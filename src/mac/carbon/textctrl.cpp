@@ -738,7 +738,7 @@ void wxTextCtrl::Init()
 wxTextCtrl::~wxTextCtrl()
 {
 #if wxMAC_USE_MLTE
-    SetControlReference((ControlRef)m_macControl, 0) ;
+    SetControlReference(*m_peer, 0) ;
 #if !wxMAC_USE_MLTE_HIVIEW
     TXNDeleteObject((TXNObject)m_macTXN);
 #endif
@@ -803,11 +803,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         if ( scrollView )
         {
             HIViewAddSubview( scrollView , textView ) ;
-            m_macControl = (WXWidget) scrollView ;
+            m_peer = scrollView ;
         }
         else
         {
-            m_macControl = (WXWidget) textView ;
+            m_peer = textView ;
         }
 #else
         short featurSet;
@@ -816,11 +816,13 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
-        verify_noerr( CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, featurSet , (ControlRef*) &m_macControl) ) ;
+        m_peer = new wxMacControl() ;
+        verify_noerr( CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, featurSet , , *m_peer ) );
+    ) ) ;
         
         wxMacWindowClipper c(this) ;
         STPTextPaneVars *varsp ;
-        mUPOpenControl( varsp, (ControlRef) m_macControl, m_windowStyle );
+        mUPOpenControl( varsp, *m_peer, m_windowStyle );
         m_macTXNvars = varsp ;
         m_macTXN =  varsp->fTXNRec ;
 #endif
@@ -841,7 +843,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
       	wxMacWindowClipper clipper( this ) ;
 #if !wxMAC_USE_MLTE_HIVIEW
-        TPUpdateVisibility( (ControlRef) m_macControl ) ;
+        TPUpdateVisibility( *m_peer ) ;
 #endif
         SetTXNData( (STPTextPaneVars *)m_macTXNvars , (TXNObject) m_macTXN , st , kTXNStartOffset, kTXNEndOffset ) ;
 
@@ -863,11 +865,13 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
     CFStringRef cfr = cf ;
     Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
-    CreateEditUnicodeTextControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds , cfr , isPassword , NULL , (ControlRef*) &m_macControl ) ;
+    m_peer = new wxMacControl() ;
+    CreateEditUnicodeTextControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds , cfr , isPassword , NULL , *m_peer ) ;
+    
     if ( !(m_windowStyle & wxTE_MULTILINE) )
     {
         Boolean singleline = true ;
-        ::SetControlData( (ControlHandle) m_macControl, kControlEditTextPart , kControlEditTextSingleLineTag , sizeof( singleline ) , &singleline ) ;
+        ::SetControlData( *m_peer, kControlEditTextPart , kControlEditTextSingleLineTag , sizeof( singleline ) , &singleline ) ;
     }
     MacPostControlCreate(pos,size) ;
     
@@ -887,7 +891,7 @@ void wxTextCtrl::MacVisibilityChanged()
 #if !wxMAC_USE_MLTE_HIVIEW
     MLTESetObjectVisibility((STPTextPaneVars*) m_macTXNvars , MacIsReallyShown() , GetWindowStyle() ) ;
     if ( !MacIsReallyShown() )
-        InvalWindowRect( GetControlOwner( (ControlHandle) m_macControl ) , &((STPTextPaneVars *)m_macTXNvars)->fRBounds ) ;
+        InvalWindowRect( GetControlOwner( *m_peer ) , &((STPTextPaneVars *)m_macTXNvars)->fRBounds ) ;
 #endif
 #else
     if ( !(m_windowStyle & wxTE_MULTILINE) && MacIsReallyShown() )
@@ -899,12 +903,12 @@ void wxTextCtrl::MacVisibilityChanged()
         ResType datatag = GetWindowStyle() & wxTE_PASSWORD ? 
             kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag ;
 
-        verify_noerr( GetControlData( (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, 
+        verify_noerr( GetControlData( *m_peer , 0, kControlEditTextSelectionTag, 
                     sizeof(ControlEditTextSelectionRec), &sel, &actualSize ) );
-        verify_noerr( GetControlData( (ControlRef) m_macControl , 0, datatag , sizeof(CFStringRef), &value, &actualSize ) );
+        verify_noerr( GetControlData( *m_peer , 0, datatag , sizeof(CFStringRef), &value, &actualSize ) );
         
-        verify_noerr( SetControlData(  (ControlRef) m_macControl , 0, datatag, sizeof(CFStringRef), &value ) );
-        verify_noerr( SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, sizeof(ControlEditTextSelectionRec), &sel ) );
+        verify_noerr( SetControlData(  *m_peer , 0, datatag, sizeof(CFStringRef), &value ) );
+        verify_noerr( SetControlData(  *m_peer , 0, kControlEditTextSelectionTag, sizeof(ControlEditTextSelectionRec), &sel ) );
                         
         CFRelease( value ) ;
     }
@@ -984,7 +988,7 @@ wxString wxTextCtrl::GetValue() const
     CFStringRef value = NULL ;
     Size    actualSize = 0 ;
 
-    verify_noerr( GetControlData( (ControlRef) m_macControl , 0, GetWindowStyle() & wxTE_PASSWORD ? 
+    verify_noerr( GetControlData( *m_peer , 0, GetWindowStyle() & wxTE_PASSWORD ? 
         kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag, 
                     sizeof(CFStringRef), &value, &actualSize ) );
     if ( value )
@@ -1004,7 +1008,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 #else
     ControlEditTextSelectionRec sel ;
     Size actualSize ;
-    verify_noerr( GetControlData( (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, 
+    verify_noerr( GetControlData( *m_peer , 0, kControlEditTextSelectionTag, 
                     sizeof(ControlEditTextSelectionRec), &sel, &actualSize ) );
     if ( from ) *from = sel.selStart ;
     if ( to ) *to = sel.selEnd ;
@@ -1039,7 +1043,7 @@ void wxTextCtrl::SetValue(const wxString& str)
 #else
     wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
     CFStringRef value = cf ;
-    verify_noerr( SetControlData(  (ControlRef) m_macControl , 0, GetWindowStyle() & wxTE_PASSWORD ? 
+    verify_noerr( SetControlData(  *m_peer , 0, GetWindowStyle() & wxTE_PASSWORD ? 
         kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag, 
         sizeof(CFStringRef), &value ) );
 #endif
@@ -1167,6 +1171,8 @@ void wxTextCtrl::Copy()
         ClearCurrentScrap();
         TXNCopy((TXNObject)m_macTXN);
         TXNConvertToPublicScrap();
+#else
+        m_peer->SendHICommand( kHICommandCopy ) ;
 #endif
     }
 }
@@ -1179,6 +1185,8 @@ void wxTextCtrl::Cut()
         ClearCurrentScrap();
         TXNCut((TXNObject)m_macTXN);
         TXNConvertToPublicScrap();
+#else
+        m_peer->SendHICommand( kHICommandCut ) ;
 #endif
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event.SetString( GetValue() ) ;
@@ -1195,6 +1203,8 @@ void wxTextCtrl::Paste()
         TXNConvertFromPublicScrap();
         TXNPaste((TXNObject)m_macTXN);
         SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
+#else
+        m_peer->SendHICommand( kHICommandPaste ) ;
 #endif
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event.SetString( GetValue() ) ;
@@ -1246,7 +1256,7 @@ void wxTextCtrl::SetEditable(bool editable)
         TXNSetTXNObjectControls( (TXNObject) m_macTXN , false , sizeof(tag) / sizeof (TXNControlTag) , tag , data ) ;
 #else
         Boolean value = !editable ;
-        ::SetControlData( (ControlHandle) m_macControl, 0, kControlEditTextLockedTag , sizeof( value ) , &value ) ;
+        ::SetControlData( *m_peer, 0, kControlEditTextLockedTag , sizeof( value ) , &value ) ;
 #endif
     }
 }
@@ -1336,7 +1346,7 @@ void wxTextCtrl::SetSelection(long from, long to)
     ControlEditTextSelectionRec sel ;
     sel.selStart = from ;
     sel.selEnd = to ;
-    verify_noerr( SetControlData( (ControlRef) m_macControl , 0, kControlEditTextSelectionTag, 
+    verify_noerr( SetControlData( *m_peer , 0, kControlEditTextSelectionTag, 
                     sizeof(ControlEditTextSelectionRec), &sel ) );
 
 #endif
@@ -1474,7 +1484,7 @@ void wxTextCtrl::WriteText(const wxString& str)
     #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
         wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
         CFStringRef value = cf ;
-        SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextInsertCFStringRefTag, 
+        SetControlData(  *m_peer , 0, kControlEditTextInsertCFStringRefTag, 
             sizeof(CFStringRef), &value );
     #else
         wxString val = GetValue() ;
@@ -1632,6 +1642,13 @@ int wxTextCtrl::GetNumberOfLines() const
     ItemCount lines = 0 ;
 #if wxMAC_USE_MLTE
     TXNGetLineCount((TXNObject)m_macTXN, &lines ) ;
+#else
+    wxString content = GetValue() ;
+    lines = 1;
+    for (size_t i = 0; i < content.Length() ; i++)
+    {
+        if (content[i] == '\r') lines++;
+    }
 #endif
     return lines ;
 }
@@ -1778,14 +1795,36 @@ int wxTextCtrl::GetLineLength(long lineNo) const
                 ++xpos ;
         }
     }
+#else
+    // TODO change this if possible to reflect real lines
+    wxString content = GetValue() ;
+
+    // Find line first
+    int count = 0;
+    for (size_t i = 0; i < content.Length() ; i++)
+    {
+        if (count == lineNo)
+        {
+            // Count chars in line then
+            count = 0;
+            for (size_t j = i; j < content.Length(); j++)
+            {
+                count++;
+                if (content[j] == '\n') return count;
+            }
+
+            return count;
+        }
+        if (content[i] == '\n') count++;
+    }
 #endif
     return 0;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    wxString line ;
 #if wxMAC_USE_MLTE
+    wxString line ;
     Point curpt ;
     wxString content = GetValue() ;
 
@@ -1823,8 +1862,34 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
             }
         }
     }
-#endif
     return line ;
+#else
+    // TODO change this if possible to reflect real lines
+    wxString content = GetValue() ;
+
+    // Find line first
+    int count = 0;
+    for (size_t i = 0; i < content.Length() ; i++)
+    {
+        if (count == lineNo)
+        {
+            // Add chars in line then
+            wxString tmp;
+
+            for (size_t j = i; j < content.Length(); j++)
+            {
+                if (content[j] == '\n')
+                    return tmp;
+
+                tmp += content[j];
+            }
+
+            return tmp;
+        }
+        if (content[i] == '\n') count++;
+    }
+    return wxEmptyString ;
+#endif
 }
 
 /*
@@ -1956,7 +2021,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 keychar = short(ev->message & charCodeMask);
                 keycode = short(ev->message & keyCodeMask) >> 8 ;
 
-                ::HandleControlKey( (ControlRef) m_macControl , keycode , keychar , ev->modifiers ) ;
+                ::HandleControlKey( *m_peer , keycode , keychar , ev->modifiers ) ;
             }
         }
     }

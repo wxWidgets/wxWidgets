@@ -39,18 +39,20 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_peer = new wxMacControl() ;
     if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
-        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , (ControlRef*) &m_macControl ) ) ;
+        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , *m_peer ) );
     }
     else
     {
         ControlButtonContentInfo info ;
         info.contentType = kControlNoContent ;
         verify_noerr(CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds,CFSTR(""),
-            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , (ControlRef*) &m_macControl ) ) ;
+            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , *m_peer ) );
     }
-    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
+    
+    wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
     
     MacPostControlCreate(pos,size) ;
     
@@ -68,19 +70,9 @@ void wxButton::SetDefault()
         parent->SetDefaultItem(this);
     }
 
-    Boolean inData;
-    if ( btnOldDefault && btnOldDefault->m_macControl )
-    {
-          inData = 0;
-        ::SetControlData( (ControlRef) btnOldDefault->m_macControl , kControlButtonPart ,
-                           kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
-    }
-    if ( (ControlRef) m_macControl )
-    {
-          inData = 1;
-        ::SetControlData(  (ControlRef) m_macControl , kControlButtonPart ,
-                           kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
-    }
+    if ( btnOldDefault )
+        btnOldDefault->m_peer->SetData(kControlButtonPart , kControlPushButtonDefaultTag , (Boolean) 0 ) ;
+    m_peer->SetData(kControlButtonPart , kControlPushButtonDefaultTag , (Boolean) 1 ) ;
 }
 
 wxSize wxButton::DoGetBestSize() const
@@ -121,13 +113,7 @@ wxSize wxButton::GetDefaultSize()
 
 void wxButton::Command (wxCommandEvent & event)
 {
-    if ( (ControlRef) m_macControl )
-    {
-        HiliteControl(  (ControlRef) m_macControl , kControlButtonPart ) ;
-        unsigned long finalTicks ;
-        Delay( 8 , &finalTicks ) ;
-        HiliteControl(  (ControlRef) m_macControl , 0 ) ;
-    }
+    m_peer->Flash(kControlButtonPart) ;
     ProcessCommand (event);
 }
 

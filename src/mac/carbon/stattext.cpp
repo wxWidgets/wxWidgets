@@ -49,8 +49,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     wxMacCFStringHolder str(m_label,m_font.GetEncoding() ) ;
+    m_peer = new wxMacControl() ;
     verify_noerr(CreateStaticTextControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, str , 
-        NULL , (ControlRef*)&m_macControl ) ) ;  
+        NULL , *m_peer ) ) ;  
 
     MacPostControlCreate(pos,size) ;
 
@@ -61,7 +62,7 @@ wxSize wxStaticText::DoGetBestSize() const
 {
     ControlFontStyleRec controlFont ;
     Size outSize ;
-    verify_noerr( GetControlData( (ControlRef) m_macControl , kControlEntireControl , kControlFontStyleTag , sizeof(controlFont) , &controlFont , &outSize ) ) ;
+    verify_noerr( GetControlData( *m_peer , kControlEntireControl , kControlFontStyleTag , sizeof(controlFont) , &controlFont , &outSize ) ) ;
     
     Point bounds ;
     SInt16 baseline ;
@@ -88,7 +89,7 @@ void wxStaticText::SetLabel(const wxString& st )
     
     wxMacCFStringHolder str(m_label,m_font.GetEncoding() ) ;
     CFStringRef ref = str ;
-    SetControlData( (ControlRef) m_macControl, kControlEntireControl , kControlStaticTextCFStringTag, sizeof( CFStringRef ),
+    SetControlData( *m_peer, kControlEntireControl , kControlStaticTextCFStringTag, sizeof( CFStringRef ),
 		&ref );
 
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )

@@ -175,10 +175,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    ControlRef browser ;
 
-    verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , (ControlRef *)&m_macControl ) );
-    browser = (ControlRef) m_macControl ;
+    m_peer = new wxMacControl() ;
+    verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , *m_peer ) );
 
     DataBrowserSelectionFlags  options = kDataBrowserDragSelect ;
     if ( style & wxLB_MULTIPLE )
@@ -193,7 +192,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     {
         options += kDataBrowserSelectOnlyOne ;
     }
-    verify_noerr(SetDataBrowserSelectionFlags  (browser, options ) ); 
+    verify_noerr(SetDataBrowserSelectionFlags  (*m_peer, options ) ); 
 
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
@@ -221,11 +220,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	 kDataBrowserTableViewSelectionColumn ;
 
 	
-	verify_noerr(::AddDataBrowserListViewColumn(browser, &columnDesc, kDataBrowserListViewAppendColumn) ) ;
-    verify_noerr(::AutoSizeDataBrowserListViewColumns( browser ) ) ;
-    verify_noerr(::SetDataBrowserHasScrollBars( browser , false , true ) ) ;
-    verify_noerr(::SetDataBrowserTableViewHiliteStyle( browser, kDataBrowserTableViewFillHilite  ) ) ;
-    verify_noerr(::SetDataBrowserListViewHeaderBtnHeight( browser , 0 ) ) ;
+	verify_noerr(::AddDataBrowserListViewColumn(*m_peer, &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+    verify_noerr(::AutoSizeDataBrowserListViewColumns( *m_peer ) ) ;
+    verify_noerr(::SetDataBrowserHasScrollBars( *m_peer , false , true ) ) ;
+    verify_noerr(::SetDataBrowserTableViewHiliteStyle( *m_peer, kDataBrowserTableViewFillHilite  ) ) ;
+    verify_noerr(::SetDataBrowserListViewHeaderBtnHeight( *m_peer , 0 ) ) ;
     DataBrowserCallbacks callbacks ;
     
     callbacks.version = kDataBrowserLatestCallbacks;
@@ -241,7 +240,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 #else
 	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
 #endif
-    SetDataBrowserCallbacks(browser, &callbacks);
+    SetDataBrowserCallbacks(*m_peer, &callbacks);
 
     MacPostControlCreate(pos,size) ;
 
@@ -257,7 +256,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    SetControlReference( (ControlRef) m_macControl , NULL ) ;
+    SetControlReference( *m_peer , NULL ) ;
     FreeData() ;
     // avoid access during destruction
     if ( m_macList )
@@ -626,27 +625,27 @@ wxOwnerDrawn *wxListBox::CreateItem(size_t n)
 void wxListBox::MacDelete( int N )
 {
     UInt32 id = m_idArray[N] ;
-    verify_noerr(::RemoveDataBrowserItems((ControlRef) m_macControl , kDataBrowserNoItem , 1 , (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr(::RemoveDataBrowserItems(*m_peer , kDataBrowserNoItem , 1 , (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
     m_idArray.RemoveAt( N ) ;
 }
 
 void wxListBox::MacInsert( int n , const wxString& text)
 {
-    verify_noerr(::AddDataBrowserItems( (ControlRef) m_macControl , kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr(::AddDataBrowserItems( *m_peer , kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
     m_idArray.Insert( m_nextId , n ) ;
     ++m_nextId ;
 }
 
 void wxListBox::MacAppend( const wxString& text)
 {
-    verify_noerr(::AddDataBrowserItems( (ControlRef) m_macControl , kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr(::AddDataBrowserItems( *m_peer , kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
     m_idArray.Add( m_nextId ) ;
     ++m_nextId ;
 }
 
 void wxListBox::MacClear()
 {
-    verify_noerr(::RemoveDataBrowserItems((ControlRef) m_macControl , kDataBrowserNoItem , 0 , NULL , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr(::RemoveDataBrowserItems(*m_peer , kDataBrowserNoItem , 0 , NULL , kDataBrowserItemNoProperty ) ) ;
     m_idArray.Empty() ;
 }
 
@@ -659,26 +658,26 @@ void wxListBox::MacSetSelection( int n , bool select )
         if ( n >= 0 )
         {
             UInt32 idOld = m_idArray[n] ;
-            SetDataBrowserSelectedItems((ControlRef) m_macControl , 1 , & idOld , kDataBrowserItemsRemove ) ;
+            SetDataBrowserSelectedItems(*m_peer , 1 , & idOld , kDataBrowserItemsRemove ) ;
         }
     }
-    if ( ::IsDataBrowserItemSelected( (ControlRef) m_macControl , id ) != select )
+    if ( ::IsDataBrowserItemSelected( *m_peer , id ) != select )
     {
-        verify_noerr(::SetDataBrowserSelectedItems((ControlRef) m_macControl , 1 , & id , kDataBrowserItemsToggle ) ) ;
+        verify_noerr(::SetDataBrowserSelectedItems(*m_peer , 1 , & id , kDataBrowserItemsToggle ) ) ;
     }
     MacScrollTo( n ) ;
 }
 
 bool wxListBox::MacIsSelected( int n ) const
 {
-    return ::IsDataBrowserItemSelected( (ControlRef) m_macControl , m_idArray[n] ) ;
+    return ::IsDataBrowserItemSelected( *m_peer , m_idArray[n] ) ;
 }
 
 int wxListBox::MacGetSelection() const
 {
     for ( size_t i = 0 ; i < m_idArray.GetCount() ; ++i )
     {
-        if ( ::IsDataBrowserItemSelected((ControlRef) m_macControl , m_idArray[i] ) )
+        if ( ::IsDataBrowserItemSelected(*m_peer , m_idArray[i] ) )
         {
             return i ;
         }
@@ -693,7 +692,7 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     aSelections.Empty();
     for ( size_t i = 0 ; i < m_idArray.GetCount() ; ++i )
     {
-        if ( ::IsDataBrowserItemSelected((ControlRef) m_macControl , m_idArray[i] ) )
+        if ( ::IsDataBrowserItemSelected(*m_peer , m_idArray[i] ) )
         {
             aSelections.Add( i ) ;
             no_sel++ ;
@@ -706,13 +705,13 @@ void wxListBox::MacSet( int n , const wxString& text )
 {
     // as we don't store the strings we only have to issue a redraw
     UInt32 id = m_idArray[n] ;
-    verify_noerr( ::UpdateDataBrowserItems( (ControlRef) m_macControl , kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr( ::UpdateDataBrowserItems( *m_peer , kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
 }
 
 void wxListBox::MacScrollTo( int n )
 {
     UInt32 id = m_idArray[n] ;
-    verify_noerr( ::RevealDataBrowserItem((ControlRef) m_macControl , id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
+    verify_noerr( ::RevealDataBrowserItem(*m_peer , id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
 #if !TARGET_API_MAC_OSX

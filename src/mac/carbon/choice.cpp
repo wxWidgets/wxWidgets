@@ -67,15 +67,14 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreatePopupButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        -12345 , false /* no variable width */ , 0 , 0 , 0 , (ControlRef*) &m_macControl ) ) ;
+        -12345 , false /* no variable width */ , 0 , 0 , 0 , *m_peer ) );
+    
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;
-    SetControlData( (ControlRef) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-    SetControl32BitMinimum( (ControlRef) m_macControl , 0 ) ;
-    SetControl32BitMaximum( (ControlRef) m_macControl , 0) ;
-    if ( n > 0 )
-        SetControl32BitValue( (ControlRef) m_macControl , 1 ) ;
+    m_peer->SetData<MenuHandle>( kControlNoPart , kControlPopupButtonMenuHandleTag , (MenuHandle) m_macPopUpMenuHandle ) ;
+    m_peer->SetValueAndRange( n > 0 ? 1 : 0 , 0 , 0 ) ;
     MacPostControlCreate(pos,size) ;
     // TODO wxCB_SORT
     for ( int i = 0; i < n; i++ )
@@ -96,7 +95,7 @@ int wxChoice::DoAppend(const wxString& item)
     m_datas.Add( NULL ) ;
     int index = m_strings.GetCount()  - 1  ;
     DoSetItemClientData( index , NULL ) ;
-    SetControl32BitMaximum( (ControlRef) m_macControl , GetCount()) ;
+    m_peer->SetMaximum( GetCount() ) ;
     return index ;
 }
 
@@ -112,7 +111,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     m_strings.Insert( item, pos ) ;
     m_datas.Insert( NULL, pos ) ;
     DoSetItemClientData( pos , NULL ) ;
-    SetControl32BitMaximum( (ControlRef) m_macControl , pos) ;
+    m_peer->SetMaximum( GetCount() ) ;
     return pos ;
 }
 
@@ -126,7 +125,7 @@ void wxChoice::Delete(int n)
     ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1) ;
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
-    SetControl32BitMaximum( (ControlRef) m_macControl , GetCount()) ;
+    m_peer->SetMaximum( GetCount() ) ;
 }
 
 void wxChoice::Clear()
@@ -138,7 +137,7 @@ void wxChoice::Clear()
     }
     m_strings.Empty() ;
     m_datas.Empty() ;
-    SetControl32BitMaximum( (ControlRef) m_macControl , 0 ) ;
+    m_peer->SetMaximum( 0 ) ;
 }
 
 void wxChoice::FreeData()
@@ -158,12 +157,12 @@ void wxChoice::FreeData()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return GetControl32BitValue( (ControlRef) m_macControl ) -1 ;
+    return m_peer->GetValue() -1 ;
 }
 
 void wxChoice::SetSelection(int n)
 {
-    SetControl32BitValue( (ControlRef) m_macControl , n + 1 ) ;
+    m_peer->SetValue( n + 1 ) ;
 }
 
 // ----------------------------------------------------------------------------

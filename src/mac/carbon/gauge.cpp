@@ -30,66 +30,52 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     m_macIsUserPane = FALSE ;
-    
+
     if ( !wxGaugeBase::Create(parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name) )
         return false;
 
     wxSize size = s ;
 
-    m_rangeMax = range ;
-    m_gaugePos = 0 ;
-    
     if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
     {
         size = wxSize( 200 , 16 ) ;
     }
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreateProgressBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
-     m_gaugePos , 0 , m_rangeMax , false /* not indeterminate */ , (ControlRef*) &m_macControl ) ) ;
+     GetValue() , 0 , GetRange() , false /* not indeterminate */ , *m_peer ) );
+    
        
     MacPostControlCreate(pos,size) ;
     
     return TRUE;
 }
 
-void wxGauge::SetShadowWidth(int w)
-{
-}
-
-void wxGauge::SetBezelFace(int w)
-{
-}
-
 void wxGauge::SetRange(int r)
 {
-    m_rangeMax = r;
-    ::SetControl32BitMaximum( (ControlRef) m_macControl , m_rangeMax ) ;
+    // we are going via the base class in case there is 
+    // some change behind the values by it
+    wxGaugeBase::SetRange(r) ;
+    if ( m_peer && m_peer->Ok() )
+        m_peer->SetMaximum( GetRange() ) ;
 }
 
 void wxGauge::SetValue(int pos)
 {
-    m_gaugePos = pos;
-       ::SetControl32BitValue( (ControlRef) m_macControl , m_gaugePos ) ;
-}
-
-int wxGauge::GetShadowWidth() const
-{
-    return 0;
-}
-
-int wxGauge::GetBezelFace() const
-{
-    return 0;
-}
-
-int wxGauge::GetRange() const
-{
-    return m_rangeMax;
+    // we are going via the base class in case there is 
+    // some change behind the values by it
+    wxGaugeBase::SetValue(pos) ;
+    if ( m_peer && m_peer->Ok() )
+        m_peer->SetValue( GetValue() ) ;
 }
 
 int wxGauge::GetValue() const
 {
-    return m_gaugePos;
+/*
+    if ( m_peer && m_peer->Ok() )
+        return m_peer->GetValue() ;
+*/
+    return m_gaugePos ;
 }
 

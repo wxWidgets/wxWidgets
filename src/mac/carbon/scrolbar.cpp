@@ -47,8 +47,10 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreateScrollBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
-    0 , 0 , 100 , 1 , true /* liveTracking */ , wxMacLiveScrollbarActionUPP , (ControlRef*) &m_macControl ) ) ;
+    0 , 0 , 100 , 1 , true /* liveTracking */ , wxMacLiveScrollbarActionUPP , *m_peer ) );
+    
 
     MacPostControlCreate(pos,size) ;
 
@@ -61,12 +63,12 @@ wxScrollBar::~wxScrollBar()
 
 void wxScrollBar::SetThumbPosition(int viewStart)
 {
-    ::SetControl32BitValue( (ControlRef) m_macControl , viewStart ) ;
+    ::SetControl32BitValue( *m_peer , viewStart ) ;
 }
 
 int wxScrollBar::GetThumbPosition() const
 {
-    return ::GetControl32BitValue( (ControlRef) m_macControl ) ;
+    return ::GetControl32BitValue( *m_peer ) ;
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
@@ -78,10 +80,10 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 
    int range1 = wxMax((m_objectSize - m_viewSize), 0) ;
 
-    SetControl32BitMaximum( (ControlRef) m_macControl , range1 ) ;
-    SetControl32BitMinimum( (ControlRef) m_macControl , 0 ) ;
-    SetControl32BitValue( (ControlRef) m_macControl , position ) ;
-    SetControlViewSize( (ControlRef) m_macControl , m_viewSize ) ;
+    SetControl32BitMaximum( *m_peer , range1 ) ;
+    SetControl32BitMinimum( *m_peer , 0 ) ;
+    SetControl32BitValue( *m_peer , position ) ;
+    SetControlViewSize( *m_peer , m_viewSize ) ;
 
     if ( refresh )
       MacRedrawControl() ;
@@ -96,9 +98,9 @@ void wxScrollBar::Command(wxCommandEvent& event)
 
 void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) 
 {
-    int position = GetControl32BitValue( (ControlRef) m_macControl) ;
-    int minPos = GetControl32BitMinimum( (ControlRef) m_macControl) ;
-    int maxPos = GetControl32BitMaximum( (ControlRef) m_macControl) ;
+    int position = GetControl32BitValue( *m_peer) ;
+    int minPos = GetControl32BitMinimum( *m_peer) ;
+    int maxPos = GetControl32BitMaximum( *m_peer) ;
     
     wxEventType scrollEvent = wxEVT_NULL;
     int nScrollInc = 0;
@@ -169,9 +171,9 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
 
 wxInt32 wxScrollBar::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) 
 {
-    int position = GetControl32BitValue( (ControlRef) m_macControl) ;
-    int minPos = GetControl32BitMinimum( (ControlRef) m_macControl) ;
-    int maxPos = GetControl32BitMaximum( (ControlRef) m_macControl) ;
+    int position = GetControl32BitValue( *m_peer) ;
+    int minPos = GetControl32BitMinimum( *m_peer) ;
+    int maxPos = GetControl32BitMaximum( *m_peer) ;
     
     wxEventType scrollEvent = wxEVT_NULL;
     int nScrollInc = 0;

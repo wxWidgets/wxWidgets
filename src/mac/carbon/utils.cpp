@@ -1281,7 +1281,7 @@ OSStatus wxMacCarbonEvent::GetParameter(EventParamName inName, EventParamType in
     return ::GetEventParameter( m_eventRef , inName , inDesiredType , NULL , inBufferSize , NULL , outData ) ;   
 }
 
-OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType inType, UInt32 inBufferSize, void * inData)
+OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType inType, UInt32 inBufferSize, const void * inData)
 {
     return ::SetEventParameter( m_eventRef , inName , inType , inBufferSize , inData ) ;   
 }
@@ -1303,6 +1303,36 @@ OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , 
 OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData)
 {
     return ::SetControlData( m_controlRef , inPartCode , inTag , inSize , inData ) ;   
+}
+
+OSStatus wxMacControl::SendEvent(  EventRef event , OptionBits inOptions ) 
+{
+    return SendEventToEventTargetWithOptions( event, 
+        HIObjectGetEventTarget( (HIObjectRef) m_controlRef ),
+	        inOptions );        
+}
+
+OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions ) 
+{
+    wxMacCarbonEvent event( kEventClassCommand , kEventCommandProcess ) ;
+    event.SetParameter<HICommand>(kEventParamDirectObject,command) ;
+    return SendEvent( event , inOptions ) ;     
+}
+
+OSStatus wxMacControl::SendHICommand( UInt32 commandID , OptionBits inOptions  ) 
+{
+    HICommand command ;
+    memset( &command, 0 , sizeof(command) ) ;
+    command.commandID = commandID ;
+    return SendHICommand( command , inOptions ) ;
+}
+
+void wxMacControl::Flash( ControlPartCode part , UInt32 ticks ) 
+{
+    HiliteControl( m_controlRef , part ) ;
+    unsigned long finalTicks ;
+    Delay( ticks , &finalTicks ) ;
+    HiliteControl( m_controlRef , kControlNoPart ) ;
 }
 
 // ----------------------------------------------------------------------------

@@ -43,8 +43,9 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     
+    m_peer = new wxMacControl() ;
     verify_noerr(CreateGroupBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, CFSTR("") , 
-        true /*primary*/ , (ControlRef*)&m_macControl ) ) ;  
+        true /*primary*/ , *m_peer ) ) ;  
 
     MacPostControlCreate(pos,size) ;
     

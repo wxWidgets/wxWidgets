@@ -81,9 +81,11 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if ( style & wxSL_AUTOTICKS )
         tickMarks = maxValue - minValue ;
         
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
     value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
-        wxMacLiveScrollbarActionUPP , (ControlRef*) &m_macControl ) ) ;
+        wxMacLiveScrollbarActionUPP , *m_peer ) );
+    
         
     if(style & wxSL_VERTICAL) {
         SetSizeHints(10, -1, 10, -1);  // Forces SetSize to use the proper width
@@ -118,7 +120,7 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetValue() const
 {
-    return GetControl32BitValue( (ControlRef) m_macControl) ;
+    return GetControl32BitValue( *m_peer) ;
 }
 
 void wxSlider::SetValue(int value)
@@ -127,7 +129,7 @@ void wxSlider::SetValue(int value)
     valuestring.Printf( wxT("%d") , value ) ;    
     if ( m_macValueStatic )
         m_macValueStatic->SetLabel( valuestring ) ;
-    SetControl32BitValue( (ControlRef) m_macControl , value ) ;
+    SetControl32BitValue( *m_peer , value ) ;
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -137,8 +139,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
     
-    SetControl32BitMinimum( (ControlRef) m_macControl, m_rangeMin);
-    SetControl32BitMaximum( (ControlRef) m_macControl, m_rangeMax);
+    SetControl32BitMinimum( *m_peer, m_rangeMin);
+    SetControl32BitMaximum( *m_peer, m_rangeMax);
     
     if(m_macMinimumStatic) {
         value.Printf(wxT("%d"), m_rangeMin);
@@ -232,7 +234,7 @@ void wxSlider::Command (wxCommandEvent & event)
 
 void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool mouseStillDown ) 
 {
-    SInt16 value = ::GetControl32BitValue( (ControlRef) m_macControl ) ;
+    SInt16 value = ::GetControl32BitValue( *m_peer ) ;
     
     SetValue( value ) ;        
     
@@ -254,7 +256,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
 
 wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) 
 {
-    SInt16 value = ::GetControl32BitValue( (ControlRef) m_macControl ) ;
+    SInt16 value = ::GetControl32BitValue( *m_peer ) ;
     
     SetValue( value ) ;        
     

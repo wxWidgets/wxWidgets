@@ -54,9 +54,11 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
         
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
-     (ControlRef*) &m_macControl ) ) ;
-    SetControlAction( (ControlRef) m_macControl , wxMacLiveScrollbarActionUPP ) ;
+     *m_peer ) );
+    
+    SetControlAction( *m_peer , wxMacLiveScrollbarActionUPP ) ;
     MacPostControlCreate(pos,size) ;
     
     return TRUE;
@@ -93,8 +95,8 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     m_min = minVal;
     m_max = maxVal;
-    SetControl32BitMaximum( (ControlRef) m_macControl , maxVal ) ;
-    SetControl32BitMinimum((ControlRef) m_macControl , minVal ) ;
+    SetControl32BitMaximum( *m_peer , maxVal ) ;
+    SetControl32BitMinimum(*m_peer , minVal ) ;
 }
 
 void wxSpinButton::MacHandleValueChanged( int inc )
@@ -137,7 +139,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     {
         m_value = oldValue ;
     }
-    SetControl32BitValue( (ControlRef) m_macControl , m_value ) ;
+    SetControl32BitValue( *m_peer , m_value ) ;
     
     /* always send a thumbtrack event */
     if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)

@@ -972,13 +972,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
+    m_peer = new wxMacControl() ;
 #if TARGET_API_MAC_OSX
     // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
     // the content view, so we have to retrieve it explicitely
     HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
-        (ControlRef*)&m_macControl ) ;
+        *m_peer ) ;
 #else
-    ::CreateRootControl( (WindowRef)m_macWindow , (ControlRef*)&m_macControl ) ;
+    ::CreateRootControl( (WindowRef)m_macWindow , *m_peer ) ;
 #endif
     // the root control level handleer
     MacInstallEventHandler() ;

@@ -125,8 +125,10 @@ bool wxNotebook::Create(wxWindow *parent,
             tabsize = kControlSizeSmall; 
     }
 
+    m_peer = new wxMacControl() ;
     verify_noerr ( CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
-     tabsize , tabstyle, 0, NULL, (ControlRef*) &m_macControl) ); 
+     tabsize , tabstyle, 0, NULL,  *m_peer ) );
+    
     
     MacPostControlCreate(pos,size) ;
     return TRUE ;
@@ -329,7 +331,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     {
         m_nSelection++;
         // while this still is the same page showing, we need to update the tabs
-        SetControl32BitValue( (ControlRef) m_macControl , m_nSelection + 1 ) ;
+        SetControl32BitValue( *m_peer , m_nSelection + 1 ) ;
     }
     
     // some page should be selected: either this one or the first one if there
@@ -348,12 +350,12 @@ bool wxNotebook::InsertPage(size_t nPage,
 
 /* Added by Mark Newsam
 * When a page is added or deleted to the notebook this function updates
-* information held in the m_macControl so that it matches the order
+* information held in the control so that it matches the order
 * the user would expect.
 */
 void wxNotebook::MacSetupTabs()
 {
-    SetControl32BitMaximum( (ControlRef) m_macControl , GetPageCount() ) ;
+    SetControl32BitMaximum( *m_peer , GetPageCount() ) ;
 
     wxNotebookPage *page;
     ControlTabInfoRec info;
@@ -366,9 +368,9 @@ void wxNotebook::MacSetupTabs()
         info.iconSuiteID = 0;
         wxMacStringToPascal( page->GetLabel() , info.name ) ;
 
-        SetControlData( (ControlRef) m_macControl, ii+1, kControlTabInfoTag,
+        SetControlData( *m_peer, ii+1, kControlTabInfoTag,
             sizeof( ControlTabInfoRec) , (char*) &info ) ;
-        SetTabEnabled( (ControlRef) m_macControl , ii+1 , true ) ;
+        SetTabEnabled( *m_peer , ii+1 , true ) ;
 #if TARGET_CARBON
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
@@ -397,7 +399,7 @@ void wxNotebook::MacSetupTabs()
                 wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
                 info.contentType = kControlContentIconRef ;
                 info.u.iconRef = iconRef ;
-                SetControlData( (ControlRef) m_macControl, ii+1,kControlTabImageContentTag,
+                SetControlData( *m_peer, ii+1,kControlTabImageContentTag,
                     sizeof( info ), (Ptr)&info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
                 if ( UMAGetSystemVersion() < 0x1030 )
@@ -412,7 +414,7 @@ void wxNotebook::MacSetupTabs()
 #endif
     }
     Rect bounds;
-    UMAGetControlBoundsInWindowCoords((ControlRef)m_macControl, &bounds);
+    UMAGetControlBoundsInWindowCoords(*m_peer, &bounds);
     InvalWindowRect((WindowRef)MacGetTopLevelWindowRef(), &bounds);
 }
 
@@ -564,14 +566,14 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     }
     
     m_nSelection = nSel;
-    SetControl32BitValue( (ControlRef) m_macControl , m_nSelection + 1 ) ;
+    SetControl32BitValue( *m_peer , m_nSelection + 1 ) ;
 }
 
 wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
     OSStatus status = eventNotHandledErr ;
     
-    SInt32 newSel = GetControl32BitValue( (ControlRef) m_macControl ) - 1 ;
+    SInt32 newSel = GetControl32BitValue( *m_peer ) - 1 ;
     if ( newSel != m_nSelection )
     {
         wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
@@ -589,7 +591,7 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
         }
         else
         {
-            SetControl32BitValue( (ControlRef) m_macControl , m_nSelection + 1 ) ;
+            SetControl32BitValue( *m_peer , m_nSelection + 1 ) ;
         }
         status = noErr ;
     }
