@@ -1,0 +1,144 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2001
+# Updated:
+# Copyright:	(c) 2001, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds Plot class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\animate
+GIZMOSINC = $(WXDIR)\contrib\include\wx\animate
+THISDIR = $(WXDIR)\contrib\src\animate
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\animate
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\animate.obj
+
+LIBTARGET=$(WXDIR)\lib\anim$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\animate.obj:      animate.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\animate.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\animate\animate.htm
+htmlhelp: $(DOCDIR)\htmlhelp\animate.chm
+htb:	$(DOCDIR)\htb\animate.htb
+hlp: $(DOCDIR)\winhelp\animate.hlp
+pdfrtf: $(DOCDIR)\pdf\animate.rtf
+ps: $(DOCDIR)\ps\animate.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\animate.tex
+
+
+$(DOCDIR)\winhelp\animate.hlp:         $(LOCALDOCDIR)\animate.rtf $(LOCALDOCDIR)\animate.hpj
+        cd $(LOCALDOCDIR)
+        -erase animate.ph
+        hc animate
+        move animate.hlp $(DOCDIR)\winhelp\animate.hlp
+        move animate.cnt $(DOCDIR)\winhelp\animate.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\animate.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\animate.tex $(LOCALDOCDIR)\animate.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\animate.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\animate.tex $(DOCDIR)\pdf\animate.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\animate\animate.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\animate
+        copy *.gif $(DOCDIR)\html\animate
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\animate.tex $(DOCDIR)\html\animate\animate.htm -twice -html
+        -erase $(DOCDIR)\html\animate\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\animate\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\animate.chm: $(DOCDIR)\html\animate\animate.htm $(DOCDIR)\html\animate\animate.hhp
+	cd $(DOCDIR)\html\animate
+	-hhc animate.hhp
+    move animate.chm $(DOCDIR)\htmlhelp\animate.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\animate.htb: $(DOCDIR)\html\animate\animate.htm
+	cd $(DOCDIR)\html\animate
+    -erase animate.zip animate.htb
+    zip animate.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move animate.zip $(DOCDIR)\htb\animate.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\animate.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex animate
+        -latex animate
+        -makeindx animate
+        -bibtex animate
+        -latex animate
+        -latex animate
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\animate.ps:	$(LOCALDOCDIR)\animate.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o animate.ps animate
+        move animate.ps $(WXDIR)\docs\ps\animate.ps
+        cd $(THISDIR)
+

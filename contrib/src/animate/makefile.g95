@@ -1,0 +1,16 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows Animation library Cygwin/Mingw32).
+
+WXDIR = ../../..
+
+LIBTARGET=$(WXDIR)/lib/libanim.a
+OBJECTS = animate.o
+
+include $(WXDIR)/src/makelib.g95
+

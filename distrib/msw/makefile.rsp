@@ -95,6 +95,7 @@ contrib/src/mmedia/Makefile.in
 contrib/src/stc/Makefile.in
 contrib/src/plot/Makefile.in
 contrib/src/gizmos/Makefile.in
+contrib/src/animate/Makefile.in
 
 contrib/samples/Makefile.in
 contrib/samples/canvas/test/Makefile.in
@@ -111,6 +112,7 @@ contrib/samples/mmedia/Makefile.in
 contrib/samples/plot/Makefile.in
 contrib/samples/stc/Makefile.in
 contrib/samples/applet/Makefile.in
+contrib/samples/animate/Makefile.in
 
 contrib/utils/Makefile.in
 

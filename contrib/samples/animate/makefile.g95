@@ -1,0 +1,19 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows sample (Cygwin/Mingw32).
+
+WXDIR = ../../..
+
+TARGET=anitest
+OBJECTS = $(TARGET).o
+EXTRAINC = -I$(WXDIR)/contrib/include
+RCEXTRAINC = --include-dir $(WXDIR)/contrib/include
+EXTRALIBS = -lanim
+
+include $(WXDIR)/src/makeprog.g95
+

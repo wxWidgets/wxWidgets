@@ -319,3 +319,11 @@ contrib/samples/gizmos/multicell/MulticellVC.dsp
 contrib/samples/gizmos/multicell/MulticellVC.dsw
 contrib/samples/gizmos/splittree/TreeVC.dsp
 contrib/samples/gizmos/splittree/TreeVC.dsw
+contrib/samples/gizmos/editlbox/EditlboxVC.dsp
+contrib/samples/gizmos/editlbox/EditlboxVC.dsw
+
+contrib/src/animate/AnimateVC.dsp
+contrib/src/animate/AnimateVC.dsw
+contrib/samples/animate/AniTestVC.dsp
+contrib/samples/animate/AniTestVC.dsw
+

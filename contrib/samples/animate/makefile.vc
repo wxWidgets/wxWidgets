@@ -1,0 +1,9 @@
+WXDIR = $(WXWIN)
+PROGRAM = anitest
+
+OBJECTS = $(PROGRAM).obj
+EXTRALIBS = $(WXDIR)\lib\anim$(LIBEXT).lib
+EXTRAINC = -I$(WXDIR)\contrib\include
+
+!include $(WXDIR)\src\makeprog.vc
+
