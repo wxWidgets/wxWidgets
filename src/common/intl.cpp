@@ -2510,7 +2510,7 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
 #ifdef __WXMSW__
 
 /* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
     wxString str;
     wxChar buffer[256];
@@ -2559,9 +2559,11 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             switch (index)
             {
                 case wxLOCALE_THOUSANDS_SEP:
-                    return locale_info->thousands_sep;
+                    return wxString(locale_info->thousands_sep,
+                                    *wxConvCurrent);
                 case wxLOCALE_DECIMAL_POINT:
-                    return locale_info->decimal_point;
+                    return wxString(locale_info->decimal_point,
+                                    *wxConvCurrent);
                 default:
                     return wxEmptyString;
             }
@@ -2569,9 +2571,11 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             switch (index)
             {
                 case wxLOCALE_THOUSANDS_SEP:
-                    return locale_info->mon_thousands_sep;
+                    return wxString(locale_info->mon_thousands_sep,
+                                    *wxConvCurrent);
                 case wxLOCALE_DECIMAL_POINT:
-                    return locale_info->mon_decimal_point;
+                    return wxString(locale_info->mon_decimal_point,
+                                    *wxConvCurrent);
                 default:
                     return wxEmptyString;
             }

@@ -1068,8 +1068,13 @@ void wxGridCellFloatEditor::Reset()
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
+    char tmpbuf[2];
+    tmpbuf[0] = (char) keycode;
+    tmpbuf[1] = '\0';
+    bool is_decimal_point = ( wxString(tmpbuf, *wxConvCurrent) == 
+      wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
         if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
-            || keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0u]
+            || is_decimal_point
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1168,13 +1173,21 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             case WXK_NUMPAD_DECIMAL:
                 return TRUE;
 
-            default:
-                // additionally accept 'e' as in '1e+6', also '-', '+', and '.'
+            default: 
+            {
+               // additionally accept 'e' as in '1e+6', also '-', '+', and '.'
+                char tmpbuf[2];
+                tmpbuf[0] = (char) keycode;
+                tmpbuf[1] = '\0';
+                bool is_decimal_point =
+                  ( wxString(tmpbuf, *wxConvCurrent) == 
+                    wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                      wxLOCALE_CAT_NUMBER) );
                 if ( (keycode < 128) &&
                      (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
-                      keycode == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER)[0u] || 
-                      keycode == '+' || keycode == '-') )
+                      is_decimal_point || keycode == '+' || keycode == '-') )
                     return TRUE;
+            }
         }
     }
 
