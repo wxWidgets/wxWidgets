@@ -12,7 +12,7 @@ LIBVERSION_AGE=0
 OBJECTS=cdbase.o cdwin.o g711.o g721.o g723_24.o \
   g723_40.o g72x.o sndaiff.o sndbase.o sndcodec.o \
   sndcpcm.o sndfile.o sndg72x.o sndpcm.o sndulaw.o \
-  sndwav.o sndwin.o vidbase.o vidwin.o sndoss.o sndesd.o
+  sndwav.o sndwin.o vidbase.o vidwin.o vidxanm.o sndoss.o sndesd.o
 
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
