@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -52,44 +52,44 @@ char *wxFileSelector(const char *title,
                      const char *defaultExtension, const char *filter, int flags,
                      wxWindow *parent, int x, int y)
 {
-	// In the original implementation, defaultExtension is passed to the lpstrDefExt member
-	// of OPENFILENAME. This extension, if non-NULL, is appended to the filename if the user
-	// fails to type an extension.
-	// The new implementation (taken from wxFileSelectorEx) appends the extension automatically,
-	// by looking at the filter specification. In fact this should be better than the
-	// native Microsoft implementation because Windows only allows *one* default extension,
-	// whereas here we do the right thing depending on the filter the user has chosen.
+    // In the original implementation, defaultExtension is passed to the lpstrDefExt member
+    // of OPENFILENAME. This extension, if non-NULL, is appended to the filename if the user
+    // fails to type an extension.
+    // The new implementation (taken from wxFileSelectorEx) appends the extension automatically,
+    // by looking at the filter specification. In fact this should be better than the
+    // native Microsoft implementation because Windows only allows *one* default extension,
+    // whereas here we do the right thing depending on the filter the user has chosen.
 
-	// If there's a default extension specified but no filter, we create a suitable
-	// filter.
+    // If there's a default extension specified but no filter, we create a suitable
+    // filter.
 
-	wxString filter2("");
-	if ( defaultExtension && !filter )
-		filter2 = wxString("*.") + wxString(defaultExtension) ;
-	else if ( filter )
-		filter2 = filter;
+    wxString filter2("");
+    if ( defaultExtension && !filter )
+        filter2 = wxString("*.") + wxString(defaultExtension) ;
+    else if ( filter )
+        filter2 = filter;
 
-	wxString defaultDirString;
-	if (defaultDir)
-		defaultDirString = defaultDir;
-	else
-		defaultDirString = "";
+    wxString defaultDirString;
+    if (defaultDir)
+        defaultDirString = defaultDir;
+    else
+        defaultDirString = "";
 
-	wxString defaultFilenameString;
-	if (defaultFileName)
-		defaultFilenameString = defaultFileName;
-	else
-		defaultFilenameString = "";
+    wxString defaultFilenameString;
+    if (defaultFileName)
+        defaultFilenameString = defaultFileName;
+    else
+        defaultFilenameString = "";
 
-	wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
+    wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
 
-	if ( fileDialog.ShowModal() == wxID_OK )
-	{
-		strcpy(wxBuffer, (const char *)fileDialog.GetPath());
-		return wxBuffer;
-	}
-	else
-		return NULL;
+    if ( fileDialog.ShowModal() == wxID_OK )
+    {
+        strcpy(wxBuffer, (const char *)fileDialog.GetPath());
+        return wxBuffer;
+    }
+    else
+        return NULL;
 }
 
 # if __BORLANDC__
@@ -113,28 +113,28 @@ char *wxFileSelector(const char *title,
 # endif
 
 
-char *wxFileSelectorEx( const char *title,
-			const char *defaultDir,
-			const char *defaultFileName,
-			int* defaultFilterIndex,
-			const char *filter,
-            int       flags,
-            wxWindow* parent,
-            int       x,
-            int       y)
+char *wxFileSelectorEx(const char *title,
+                       const char *defaultDir,
+                       const char *defaultFileName,
+                       int* defaultFilterIndex,
+                       const char *filter,
+                       int       flags,
+                       wxWindow* parent,
+                       int       x,
+                       int       y)
 
 {
-	wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
+    wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
         defaultFileName ? defaultFileName : "", filter ? filter : "", flags, wxPoint(x, y));
 
-	if ( fileDialog.ShowModal() == wxID_OK )
-	{
-		*defaultFilterIndex = fileDialog.GetFilterIndex();
-		strcpy(wxBuffer, (const char *)fileDialog.GetPath());
-		return wxBuffer;
-	}
-	else
-		return NULL;
+    if ( fileDialog.ShowModal() == wxID_OK )
+    {
+        *defaultFilterIndex = fileDialog.GetFilterIndex();
+        strcpy(wxBuffer, (const char *)fileDialog.GetPath());
+        return wxBuffer;
+    }
+    else
+        return NULL;
 }
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
@@ -144,11 +144,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
-	m_path = "";
-	m_fileName = defaultFileName;
-	m_dir = defaultDir;
-	m_wildCard = wildCard;
-	m_filterIndex = 1;
+    m_path = "";
+    m_fileName = defaultFileName;
+    m_dir = defaultDir;
+    m_wildCard = wildCard;
+    m_filterIndex = 1;
 }
 
 int wxFileDialog::ShowModal(void)
@@ -156,41 +156,43 @@ int wxFileDialog::ShowModal(void)
   HWND hWnd = 0;
   if (m_parent) hWnd = (HWND) m_parent->GetHWND();
 
-	static char  fileNameBuffer [ MAXPATH ];		   // the file-name
-	char         titleBuffer    [ MAXFILE+1+MAXEXT ];  // the file-name, without path
+    static char  fileNameBuffer [ MAXPATH ];           // the file-name
+    char         titleBuffer    [ MAXFILE+1+MAXEXT ];  // the file-name, without path
 
-	*fileNameBuffer = '\0';
+    *fileNameBuffer = '\0';
     *titleBuffer    = '\0';
 
-	char* filterBuffer = NULL;
-	char* extension    = NULL;
-	char* theFilter    = (char *)(const char *)m_wildCard;
+    char* filterBuffer = NULL;
+    char* extension    = NULL;
+    char* theFilter    = (char *)(const char *)m_wildCard;
 
     long msw_flags = 0;
-    if ( (m_dialogStyle & wxHIDE_READONLY) || (m_dialogStyle & wxSAVE) ) { msw_flags |= OFN_HIDEREADONLY; }
+    if ( (m_dialogStyle & wxHIDE_READONLY) || (m_dialogStyle & wxSAVE) )
+      msw_flags |= OFN_HIDEREADONLY;
+    if ( m_dialogStyle & wxFILE_MUST_EXIST )
+      msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-
-	OPENFILENAME of;
-	memset(&of, 0, sizeof(OPENFILENAME));
+    OPENFILENAME of;
+    memset(&of, 0, sizeof(OPENFILENAME));
 
     of.lpstrCustomFilter = NULL;   // system should not save custom filter
-	of.nMaxCustFilter    = 0L;
+    of.nMaxCustFilter    = 0L;
 
-	of.nFileOffset       = 0;      // 0-based pointer to filname in lpstFile
-	of.nFileExtension    = 0;      // 0-based pointer to extension in lpstrFile
-	of.lpstrDefExt       = NULL;   // no default extension
+    of.nFileOffset       = 0;      // 0-based pointer to filname in lpstFile
+    of.nFileExtension    = 0;      // 0-based pointer to extension in lpstrFile
+    of.lpstrDefExt       = NULL;   // no default extension
 
-	of.lStructSize 		 = sizeof(OPENFILENAME);
-	of.hwndOwner 		 = hWnd;
-	of.lpstrTitle        = (char *)(const char *)m_message;
+    of.lStructSize       = sizeof(OPENFILENAME);
+    of.hwndOwner         = hWnd;
+    of.lpstrTitle        = (char *)(const char *)m_message;
 
 
-	of.lpstrFileTitle    = titleBuffer;
-	of.nMaxFileTitle     = MAXFILE + 1 + MAXEXT;	// Windows 3.0 and 3.1
+    of.lpstrFileTitle    = titleBuffer;
+    of.nMaxFileTitle     = MAXFILE + 1 + MAXEXT;    // Windows 3.0 and 3.1
 
-	of.lpstrInitialDir   = (const char *) m_dir;
+    of.lpstrInitialDir   = (const char *) m_dir;
 
-	of.Flags 			 = msw_flags;
+    of.Flags             = msw_flags;
 
 
 
@@ -207,46 +209,46 @@ int wxFileDialog::ShowModal(void)
     */
     //=======================================================================
 
-	if ( !theFilter || (strcmp(theFilter, "") == 0)) theFilter = "*.*";
+    if ( !theFilter || (strcmp(theFilter, "") == 0)) theFilter = "*.*";
 
-	int filterBufferLen = 0;
+    int filterBufferLen = 0;
 
-	if ( !strchr( theFilter, '|' ) ) { 			// only one filter ==> default text:
-		char buffText[] = "Files (%s)|%s";
-		filterBufferLen = strlen( theFilter )*2 + strlen( buffText ) -4;
-		filterBuffer    = new char[ filterBufferLen +2 ];
+    if ( !strchr( theFilter, '|' ) ) {          // only one filter ==> default text:
+        char buffText[] = "Files (%s)|%s";
+        filterBufferLen = strlen( theFilter )*2 + strlen( buffText ) -4;
+        filterBuffer    = new char[ filterBufferLen +2 ];
 
-		if ( filterBuffer ) {
-			sprintf( filterBuffer, buffText, theFilter, theFilter );
-		}
-	}
-	else {                  					// more then one filter
-		filterBufferLen = strlen( theFilter );
-		filterBuffer    = new char[ filterBufferLen +2 ];
+        if ( filterBuffer ) {
+            sprintf( filterBuffer, buffText, theFilter, theFilter );
+        }
+    }
+    else {                                      // more then one filter
+        filterBufferLen = strlen( theFilter );
+        filterBuffer    = new char[ filterBufferLen +2 ];
 
-		if ( filterBuffer ) {
-			strcpy( filterBuffer, theFilter );
-	    }
-	}
+        if ( filterBuffer ) {
+            strcpy( filterBuffer, theFilter );
+        }
+    }
 
-    if ( filterBuffer ) {  					    // Substituting '|' with '\0'
-		for ( int i = 0; i < filterBufferLen; i++ ) {
-			if ( filterBuffer[i] == '|' ) { filterBuffer[i] = '\0'; }
-		}
-	}
+    if ( filterBuffer ) {                       // Substituting '|' with '\0'
+        for ( int i = 0; i < filterBufferLen; i++ ) {
+            if ( filterBuffer[i] == '|' ) { filterBuffer[i] = '\0'; }
+        }
+    }
 
-	filterBuffer[filterBufferLen+1] = '\0';
+    filterBuffer[filterBufferLen+1] = '\0';
 
-	of.lpstrFilter  = (LPSTR)filterBuffer;
-	of.nFilterIndex = m_filterIndex;
+    of.lpstrFilter  = (LPSTR)filterBuffer;
+    of.nFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 
     strncpy( fileNameBuffer, (const char *)m_fileName, MAXPATH-1 );
     fileNameBuffer[ MAXPATH-1 ] = '\0';
 
-	of.lpstrFile = fileNameBuffer;  // holds returned filename
-	of.nMaxFile  = MAXPATH;
+    of.lpstrFile = fileNameBuffer;  // holds returned filename
+    of.nMaxFile  = MAXPATH;
 
     //== Execute FileDialog >>=================================================
 
@@ -258,58 +260,58 @@ int wxFileDialog::ShowModal(void)
 
         m_filterIndex = (int)of.nFilterIndex;
 
-	    if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != '.' )
+        if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != '.' )
         {                                    // user has typed an filename
                                              // without an extension:
 
-	        int   maxFilter = (int)(of.nFilterIndex*2L-1L);
-	        extension       = filterBuffer;
+            int   maxFilter = (int)(of.nFilterIndex*2L-1L);
+            extension       = filterBuffer;
 
-	        for( int i = 0; i < maxFilter; i++ ) {		    // get extension
-		        extension = extension + strlen( extension ) +1;
-	        }
+            for( int i = 0; i < maxFilter; i++ ) {          // get extension
+                extension = extension + strlen( extension ) +1;
+            }
 
-	        if (  (extension = strrchr( extension, '.' ))   // != "blabla" 
-			      && !strrchr( extension, '*' )             // != "blabla.*"
-			      && !strrchr( extension, '?' )             // != "blabla.?"
-			      && extension[1]                           // != "blabla."
-			      && extension[1] != ' ' )                  // != "blabla. "
-	        {
+            if (  (extension = strrchr( extension, '.' ))   // != "blabla" 
+                  && !strrchr( extension, '*' )             // != "blabla.*"
+                  && !strrchr( extension, '?' )             // != "blabla.?"
+                  && extension[1]                           // != "blabla."
+                  && extension[1] != ' ' )                  // != "blabla. "
+            {
                               // now concat extension to the fileName:
-				m_fileName = wxString(fileNameBuffer) + wxString(extension);
+                m_fileName = wxString(fileNameBuffer) + wxString(extension);
 
                 int len = strlen( fileNameBuffer );
-	            strncpy( fileNameBuffer + len, extension, MAXPATH - len );
+                strncpy( fileNameBuffer + len, extension, MAXPATH - len );
                 fileNameBuffer[ MAXPATH -1 ] = '\0';
             }
-	    }
+        }
 
         m_path = fileNameBuffer;
-		m_fileName = wxFileNameFromPath(fileNameBuffer);
+        m_fileName = wxFileNameFromPath(fileNameBuffer);
 
 
-	    //=== Simulating the wxOVERWRITE_PROMPT >>============================
+        //=== Simulating the wxOVERWRITE_PROMPT >>============================
 
-	    if ( (m_dialogStyle & wxOVERWRITE_PROMPT) && ::wxFileExists( fileNameBuffer ) )
+        if ( (m_dialogStyle & wxOVERWRITE_PROMPT) && ::wxFileExists( fileNameBuffer ) )
         {
-		    char  questionText[] = "Replace file\n%s?";
-		    char* messageText    = new char[strlen(questionText)+strlen(fileNameBuffer)-1];
-		    sprintf( messageText, questionText, fileNameBuffer );
+            char  questionText[] = "Replace file\n%s?";
+            char* messageText    = new char[strlen(questionText)+strlen(fileNameBuffer)-1];
+            sprintf( messageText, questionText, fileNameBuffer );
 
-		    if ( messageText && ( wxMessageBox( (const char *)messageText, m_message, wxYES_NO ) != wxYES ) )
+            if ( messageText && ( wxMessageBox( (const char *)messageText, m_message, wxYES_NO ) != wxYES ) )
             {
                 success = FALSE;
-		    }
+            }
 
-		    delete[] messageText;
-	    }
+            delete[] messageText;
+        }
 
     } // END: if ( success )
 
 
     delete[] filterBuffer;
 
-	return (success ? wxID_OK : wxID_CANCEL) ;
+    return (success ? wxID_OK : wxID_CANCEL) ;
 
 }
 
@@ -326,9 +328,9 @@ wxDefaultFileSelector(bool load, const char *what, const char *extension, const 
   char prompt[50];
   wxString str;
   if (load)
-	str = (const char*) wxTString("Load %s file");
+    str = (const char*) wxTString("Load %s file");
   else
-	str = (const char*) wxTString("Save %s file");
+    str = (const char*) wxTString("Save %s file");
   sprintf(prompt, str, what);
 
   if (*ext == '.') ext++;
