@@ -90,7 +90,7 @@ public:
     virtual void SetString(int n, const wxString& label);
     // change the individual radio button state
     virtual bool Enable(int n, bool enable = true);
-    virtual void Show(int n, bool show = true);
+    virtual bool Show(int n, bool show = true);
     // layout parameters
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;

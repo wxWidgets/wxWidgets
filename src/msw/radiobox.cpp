@@ -366,7 +366,7 @@ int wxRadioBox::GetNumHor() const
 
 void wxRadioBox::SetString(int item, const wxString& label)
 {
-    wxCHECK_RET( item >= 0 && item < GetCount(), wxT("invalid radiobox index") );
+    wxCHECK_RET( IsValid(item), wxT("invalid radiobox index") );
 
     m_radioWidth[item] =
     m_radioHeight[item] = wxDefaultCoord;
@@ -376,7 +376,7 @@ void wxRadioBox::SetString(int item, const wxString& label)
 
 void wxRadioBox::SetSelection(int N)
 {
-    wxCHECK_RET( (N >= 0) && (N < GetCount()), wxT("invalid radiobox index") );
+    wxCHECK_RET( IsValid(N), wxT("invalid radiobox index") );
 
     // unselect the old button
     if ( m_selectedButton != wxNOT_FOUND )
@@ -391,7 +391,7 @@ void wxRadioBox::SetSelection(int N)
 // Find string for position
 wxString wxRadioBox::GetString(int item) const
 {
-    wxCHECK_MSG( item >= 0 && item < GetCount(), wxEmptyString,
+    wxCHECK_MSG( IsValid(item), wxEmptyString,
                  wxT("invalid radiobox index") );
 
     return wxGetWindowText((*m_radioButtons)[item]);
@@ -410,20 +410,23 @@ void wxRadioBox::SetFocus()
 // Enable a specific button
 bool wxRadioBox::Enable(int item, bool enable)
 {
-    wxCHECK_MSG( item >= 0 && item < GetCount(), false,
+    wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::Enable()") );
 
-    ::EnableWindow((*m_radioButtons)[item], enable);
-    return true;
+    BOOL ret = ::EnableWindow((*m_radioButtons)[item], enable);
+
+    return (ret == 0) == enable;
 }
 
 // Show a specific button
-void wxRadioBox::Show(int item, bool show)
+bool wxRadioBox::Show(int item, bool show)
 {
-    wxCHECK_RET( item >= 0 && item < GetCount(),
+    wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::Show()") );
 
-    ::ShowWindow((*m_radioButtons)[item], show ? SW_SHOW : SW_HIDE);
+    BOOL ret = ::ShowWindow((*m_radioButtons)[item], show ? SW_SHOW : SW_HIDE);
+
+    return (ret != 0) == show;
 }
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)

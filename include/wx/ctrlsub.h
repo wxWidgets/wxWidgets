@@ -65,6 +65,11 @@ public:
     // reads better for multi-selection ones
     void Select(int n) { SetSelection(n); }
 
+
+protected:
+
+    // check that the index is valid
+    inline bool IsValid(int n) const { return n >= 0 && n < GetCount(); }
 };
 
 class WXDLLEXPORT wxItemContainer : public wxItemContainerImmutable

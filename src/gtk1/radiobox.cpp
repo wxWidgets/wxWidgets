@@ -435,7 +435,7 @@ bool wxRadioBox::Show( bool show )
 
 int wxRadioBox::FindString( const wxString &find ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid radiobox") );
 
     int count = 0;
 
@@ -456,7 +456,7 @@ int wxRadioBox::FindString( const wxString &find ) const
         node = node->GetNext();
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 void wxRadioBox::SetFocus()
@@ -497,7 +497,7 @@ void wxRadioBox::SetSelection( int n )
 
 int wxRadioBox::GetSelection(void) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid radiobox") );
 
     int count = 0;
 
@@ -512,7 +512,7 @@ int wxRadioBox::GetSelection(void) const
 
     wxFAIL_MSG( wxT("wxRadioBox none selected") );
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxString wxRadioBox::GetString( int n ) const
@@ -592,13 +592,13 @@ bool wxRadioBox::Enable( int item, bool enable )
     return true;
 }
 
-void wxRadioBox::Show( int item, bool show )
+bool wxRadioBox::Show( int item, bool show )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
     wxList::compatibility_iterator node = m_boxes.Item( item );
 
-    wxCHECK_RET( node, wxT("radiobox wrong index") );
+    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
 
     GtkWidget *button = GTK_WIDGET( node->GetData() );
 
@@ -606,6 +606,8 @@ void wxRadioBox::Show( int item, bool show )
         gtk_widget_show( button );
     else
         gtk_widget_hide( button );
+
+    return true;
 }
 
 wxString wxRadioBox::GetStringSelection() const
@@ -639,7 +641,7 @@ bool wxRadioBox::SetStringSelection( const wxString &s )
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
     int res = FindString( s );
-    if (res == -1) return false;
+    if (res == wxNOT_FOUND) return false;
     SetSelection( res );
 
     return true;

@@ -97,8 +97,10 @@ bool wxRadioBox::Enable(int n, bool enable)
     return false;
 }
 
-void wxRadioBox::Show(int n, bool show)
+bool wxRadioBox::Show(int n, bool show)
 {
+    // TODO
+    return false;
 }
 
     // layout parameters

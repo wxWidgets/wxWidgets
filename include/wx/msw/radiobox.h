@@ -93,7 +93,7 @@ public:
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
     virtual bool Enable(int n, bool enable = true);
-    virtual void Show(int n, bool show = true);
+    virtual bool Show(int n, bool show = true);
     virtual int GetColumnCount() const { return GetNumHor(); }
     virtual int GetRowCount() const { return GetNumVer(); }
 

@@ -182,7 +182,7 @@ wxRadioBox::~wxRadioBox()
 
 void wxRadioBox::SetString(int item, const wxString& label)
 {
-    if (item < 0 || item >= m_noItems)
+    if (!IsValid(item))
         return;
 
     Widget widget = (Widget) m_radioButtons[item];
@@ -204,12 +204,12 @@ int wxRadioBox::FindString(const wxString& s) const
     for (i = 0; i < m_noItems; i++)
         if (s == m_radioButtonLabels[i])
             return i;
-    return -1;
+    return wxNOT_FOUND;
 }
 
 void wxRadioBox::SetSelection(int n)
 {
-    if ((n < 0) || (n >= m_noItems))
+    if (!IsValid(n))
         return;
 
     m_selectedButton = n;
@@ -235,7 +235,7 @@ int wxRadioBox::GetSelection() const
 // Find string for position
 wxString wxRadioBox::GetString(int n) const
 {
-    if ((n < 0) || (n >= m_noItems))
+    if (!IsValid(n))
         return wxEmptyString;
     return m_radioButtonLabels[n];
 }
@@ -267,7 +267,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 // Enable a specific button
 bool wxRadioBox::Enable(int n, bool enable)
 {
-    if ((n < 0) || (n >= m_noItems))
+    if (!IsValid(n))
         return false;
 
     XtSetSensitive ((Widget) m_radioButtons[n], (Boolean) enable);
@@ -294,7 +294,7 @@ bool wxRadioBox::Show(bool show)
 }
 
 // Show a specific button
-void wxRadioBox::Show(int n, bool show)
+bool wxRadioBox::Show(int n, bool show)
 {
   // This method isn't complete, and we try do do our best...
   // It's main purpose isn't for allowing Show/Unshow dynamically,
@@ -307,8 +307,8 @@ void wxRadioBox::Show(int n, bool show)
   // In my case, this is a 'direction' box, and the Show(5,False) is
   // coupled with an Enable(5,False)
   //
-    if ((n < 0) || (n >= m_noItems))
-        return;
+    if (!IsValid(n))
+        return false;
 
     XtVaSetValues ((Widget) m_radioButtons[n],
         XmNindicatorOn, (unsigned char) show,
@@ -320,6 +320,8 @@ void wxRadioBox::Show(int n, bool show)
     // after this call!!
     if (!show)
         wxRadioBox::SetString (n, " ");
+
+    return true;
 }
 
 // For single selection items only
