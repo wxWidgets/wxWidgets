@@ -516,9 +516,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>z)À</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -733,6 +733,20 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pngvcrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pnggccrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -808,6 +822,16 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>pngwutil.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pngvcrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pnggccrd.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -1005,9 +1029,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>z)À</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -1597,9 +1621,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>z)À</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -1814,6 +1838,20 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pngvcrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pnggccrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -1824,6 +1862,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>pngerror.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pnggccrd.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -1873,6 +1916,11 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
+                    <PATH>pngvcrd.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>pngwio.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -1912,6 +1960,12 @@
             <TARGETNAME>release</TARGETNAME>
             <PATHTYPE>Name</PATHTYPE>
             <PATH>pngerror.c</PATH>
+            <PATHFORMAT>MacOS</PATHFORMAT>
+        </FILEREF>
+        <FILEREF>
+            <TARGETNAME>release</TARGETNAME>
+            <PATHTYPE>Name</PATHTYPE>
+            <PATH>pnggccrd.c</PATH>
             <PATHFORMAT>MacOS</PATHFORMAT>
         </FILEREF>
         <FILEREF>
@@ -1966,6 +2020,12 @@
             <TARGETNAME>release</TARGETNAME>
             <PATHTYPE>Name</PATHTYPE>
             <PATH>pngtrans.c</PATH>
+            <PATHFORMAT>MacOS</PATHFORMAT>
+        </FILEREF>
+        <FILEREF>
+            <TARGETNAME>release</TARGETNAME>
+            <PATHTYPE>Name</PATHTYPE>
+            <PATH>pngvcrd.c</PATH>
             <PATHFORMAT>MacOS</PATHFORMAT>
         </FILEREF>
         <FILEREF>
