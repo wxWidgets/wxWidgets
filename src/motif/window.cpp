@@ -2992,15 +2992,26 @@ wxWindow *wxGetActiveWindow()
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    wxFAIL_MSG(_("Not implemented"));
-    return NULL;
+    pt = wxGetMousePosition();
+    wxWindow* found = wxFindWindowAtPoint(pt);
+    return found;
 }
 
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-    wxFAIL_MSG(_("Not implemented"));
-    return wxPoint;
+    Display *display = (Display*) wxGetDisplay();
+    Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
+    Window rootReturn, childReturn;
+    int rootX, rootY, winX, winY;
+    unsigned int maskReturn;
+
+    XQueryPointer (display,
+		   rootWindow,
+		   &rootReturn,
+                   &childReturn,
+                   &rootX, &rootY, &winX, &winY, &maskReturn);
+    return wxPoint(rootX, rootY);
 }
 
 // ----------------------------------------------------------------------------

@@ -667,6 +667,47 @@ wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& i
   return menuBar->FindMenuItem (menuString, itemString);
 }
 
+// Try to find the deepest child that contains 'pt'
+wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
+{
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* child = (wxWindow*) node->Data();
+        wxWindow* foundWin = wxFindWindowAtPoint(child, pt);
+        if (foundWin)
+            return foundWin;
+        node = node->Next();
+    }
+
+    wxPoint pos = win->GetPosition();
+    wxSize sz = win->GetSize();
+    if (win->GetParent())
+    {
+        pos = win->GetParent()->ClientToScreen(pos);
+    }
+
+    wxRect rect(pos, sz);
+    if (rect.Inside(pt))
+        return win;
+    else
+        return NULL;
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    wxNode* node = wxTopLevelWindows.First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* found = wxFindWindowAtPoint(win, pt);
+        if (found)
+            return found;
+        node = node->Next();
+    }
+    return NULL;
+}
+
 #endif // wxUSE_GUI
 
 /*

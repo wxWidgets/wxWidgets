@@ -78,7 +78,10 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     wxCursor cursor(wxCURSOR_QUESTION_ARROW);
     wxCursor oldCursor = win->GetCursor();
     win->SetCursor(cursor);
-    wxSetCursor(cursor);
+
+#ifdef __WXMSW__
+    //    wxSetCursor(cursor);
+#endif
 
     win->PushEventHandler(new wxContextHelpEvtHandler(this));
 
@@ -133,7 +136,7 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
     {
         case wxEVT_LEFT_DOWN:
         {
-            wxMouseEvent& mouseEvent = (wxMouseEvent&) event;
+	  //wxMouseEvent& mouseEvent = (wxMouseEvent&) event;
             m_contextHelp->SetStatus(TRUE);
             m_contextHelp->EndContextHelp();
             return TRUE;

@@ -313,6 +313,7 @@ public:
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
     bool Inside(int cx, int cy) const;
+    bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
     wxRect operator+(const wxRect& rect) const;
     wxRect& operator+=(const wxRect& rect);
 
