@@ -675,6 +675,14 @@ void wxMenuBar::MacInstallMenuBar()
         else
             EnableMenuCommand( NULL , kHICommandPreferences ) ;
     }
+    if ( UMAGetSystemVersion() >= 0x1000 && wxApp::s_macExitMenuItemId)
+    {
+        wxMenuItem *item = FindItem( wxApp::s_macExitMenuItemId , NULL ) ;
+        if ( item == NULL || !(item->IsEnabled()) )
+            DisableMenuCommand( NULL , kHICommandQuit ) ;
+        else
+            EnableMenuCommand( NULL , kHICommandQuit ) ;
+    }
 #endif
        wxMenuList::compatibility_iterator menuIter = m_menus.GetFirst();
        //
