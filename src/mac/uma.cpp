@@ -461,11 +461,14 @@ void UMAActivateControl( ControlHandle inControl )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -486,17 +489,24 @@ void UMAActivateControl( ControlHandle inControl )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
+DisposeRgn( updateRgn ) ;
+
 }
 
 void UMADrawControl( ControlHandle inControl ) 
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -517,17 +527,22 @@ void UMADrawControl( ControlHandle inControl )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 void UMAMoveControl( ControlHandle inControl , short x , short y ) 
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -548,17 +563,22 @@ void UMAMoveControl( ControlHandle inControl , short x , short y )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 void UMASizeControl( ControlHandle inControl , short x , short y ) 
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -579,6 +599,8 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 
 }
 
@@ -586,11 +608,14 @@ void UMADeactivateControl( ControlHandle inControl )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -611,6 +636,8 @@ void UMADeactivateControl( ControlHandle inControl )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 void UMASetThemeWindowBackground	       (WindowRef 				inWindow,
@@ -708,11 +735,14 @@ void UMAHiliteControl	(ControlHandle 			inControl,
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
     if ( UMAHasAppearance() )
     {
         ::HiliteControl( inControl , hiliteState ) ;
@@ -726,17 +756,22 @@ void UMAHiliteControl	(ControlHandle 			inControl,
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 void UMAShowControl						(ControlHandle 			inControl)
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
     if ( UMAHasAppearance() )
     {
         ::ShowControl( inControl ) ;
@@ -750,6 +785,8 @@ void UMAShowControl						(ControlHandle 			inControl)
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 
@@ -1003,11 +1040,14 @@ void UMAIdleControls					(WindowPtr 				inWindow)
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) 
 {
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
+#if TARGET_CARBON
     GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( inWindow , updateRgn ) ;
 #endif
+	Point zero = { 0 , 0 } ;
+	LocalToGlobal( &zero ) ;
+	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
 #if UMA_USE_APPEARANCE
     if ( UMAHasAppearance() )
     {
@@ -1028,6 +1068,8 @@ void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
 #else
     InvalRgn( updateRgn ) ;
 #endif
+	DisposeRgn( updateRgn ) ;
+
 }
 
 OSErr UMAGetRootControl( WindowPtr inWindow , ControlHandle *outControl ) 
