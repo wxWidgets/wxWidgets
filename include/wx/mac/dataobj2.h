@@ -41,11 +41,11 @@ public:
     virtual bool SetData(size_t len, const void *buf);
 
 protected :
-	void Init() ;
-	void Clear() ;
-	
-	void* m_pictHandle ;
-	bool m_pictCreated ;
+    void Init() ;
+    void Clear() ;
+
+    void* m_pictHandle ;
+    bool m_pictCreated ;
 private:
     // Virtual function hiding supression
     size_t GetDataSize(const wxDataFormat& rFormat) const

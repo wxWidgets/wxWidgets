@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BITMAP_H_
@@ -84,8 +84,8 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-  int	        m_bitmapType ;
-  WXHMETAFILE	m_hPict ;
+  int            m_bitmapType ;
+  WXHMETAFILE    m_hPict ;
   WXHBITMAP     m_hBitmap;
   WXHICON       m_hIcon ;
   wxMask *      m_bitmapMask; // Optional mask

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DC_H_
@@ -27,14 +27,14 @@
 //-----------------------------------------------------------------------------
 
 #ifndef MM_TEXT
-#define MM_TEXT			0
-#define MM_ISOTROPIC	1
-#define MM_ANISOTROPIC	2
-#define MM_LOMETRIC		3
-#define MM_HIMETRIC		4
-#define MM_TWIPS		5
-#define MM_POINTS		6
-#define MM_METRIC		7
+#define MM_TEXT            0
+#define MM_ISOTROPIC    1
+#define MM_ANISOTROPIC    2
+#define MM_LOMETRIC        3
+#define MM_HIMETRIC        4
+#define MM_TWIPS        5
+#define MM_POINTS        6
+#define MM_METRIC        7
 #endif
 
 //-----------------------------------------------------------------------------
@@ -109,82 +109,82 @@ class WXDLLEXPORT wxDC: public wxDCBase
   
     
     wxCoord XDEV2LOG(wxCoord x) const
-	{
-	  long new_x = x - m_deviceOriginX ;
-	  if (new_x > 0) 
-	    return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-	  else
-	    return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
-	}
+    {
+      long new_x = x - m_deviceOriginX ;
+      if (new_x > 0)
+        return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+      else
+        return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+    }
     wxCoord XDEV2LOGREL(wxCoord x) const
-	{ 
-	  if (x > 0) 
-	    return (wxCoord)((double)(x) / m_scaleX + 0.5);
-	  else
-	    return (wxCoord)((double)(x) / m_scaleX - 0.5);
-	}
+    { 
+      if (x > 0)
+        return (wxCoord)((double)(x) / m_scaleX + 0.5);
+      else
+        return (wxCoord)((double)(x) / m_scaleX - 0.5);
+    }
     wxCoord YDEV2LOG(wxCoord y) const
-	{
-	  long new_y = y - m_deviceOriginY ;
-	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-	  else
-	    return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
-	}
+    {
+      long new_y = y - m_deviceOriginY ;
+      if (new_y > 0)
+        return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+      else
+        return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+    }
     wxCoord YDEV2LOGREL(wxCoord y) const
-	{ 
-	  if (y > 0)
-	    return (wxCoord)((double)(y) / m_scaleY + 0.5);
-	  else
-	    return (wxCoord)((double)(y) / m_scaleY - 0.5);
-	}
+    { 
+      if (y > 0)
+        return (wxCoord)((double)(y) / m_scaleY + 0.5);
+      else
+        return (wxCoord)((double)(y) / m_scaleY - 0.5);
+    }
     wxCoord XLOG2DEV(wxCoord x) const
-	{ 
-	  long new_x = x - m_logicalOriginX;
-	  if (new_x > 0)
-	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX  ;
-	  else
-	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
-	}
+    { 
+      long new_x = x - m_logicalOriginX;
+      if (new_x > 0)
+        return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX  ;
+      else
+        return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
+    }
     wxCoord XLOG2DEVREL(wxCoord x) const
-	{ 
-	  if (x > 0)
-	    return (wxCoord)((double)(x) * m_scaleX + 0.5);
-	  else
-	    return (wxCoord)((double)(x) * m_scaleX - 0.5);
-	}
+    { 
+      if (x > 0)
+        return (wxCoord)((double)(x) * m_scaleX + 0.5);
+      else
+        return (wxCoord)((double)(x) * m_scaleX - 0.5);
+    }
     wxCoord YLOG2DEV(wxCoord y) const
-	{
-	  long new_y = y - m_logicalOriginY ;
-	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY ;
-	  else
-	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
-	}
+    {
+      long new_y = y - m_logicalOriginY ;
+      if (new_y > 0)
+        return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY ;
+      else
+        return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
+    }
     wxCoord YLOG2DEVREL(wxCoord y) const
-	{ 
-	  if (y > 0)
-	    return (wxCoord)((double)(y) * m_scaleY + 0.5);
-	  else
-	    return (wxCoord)((double)(y) * m_scaleY - 0.5);
-	}
+    { 
+      if (y > 0)
+        return (wxCoord)((double)(y) * m_scaleY + 0.5);
+      else
+        return (wxCoord)((double)(y) * m_scaleY - 0.5);
+    }
     wxCoord XLOG2DEVMAC(wxCoord x) const
-	{ 
-	  long new_x = x - m_logicalOriginX;
-	  if (new_x > 0)
-	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
-	  else
-	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
-	}
+    { 
+      long new_x = x - m_logicalOriginX;
+      if (new_x > 0)
+        return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
+      else
+        return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
+    }
     wxCoord YLOG2DEVMAC(wxCoord y) const
-	{
-	  long new_y = y - m_logicalOriginY ;
-	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
-	  else
-	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
-	}
-  
+    {
+      long new_y = y - m_logicalOriginY ;
+      if (new_y > 0)
+        return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
+      else
+        return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
+    }
+
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 //
@@ -252,41 +252,41 @@ protected:
     // not yet used
     bool         m_needComputeScaleX,m_needComputeScaleY;         
     // If un-scrolled is non-zero or d.o. changes with scrolling.
-	// Set using SetInternalDeviceOrigin().
-	long         m_internalDeviceOriginX,m_internalDeviceOriginY;  
-	 // To be set by external classes such as wxScrolledWindow
-	 // using SetDeviceOrigin()
-    long         m_externalDeviceOriginX,m_externalDeviceOriginY;  
+    // Set using SetInternalDeviceOrigin().
+    long         m_internalDeviceOriginX,m_internalDeviceOriginY;
+     // To be set by external classes such as wxScrolledWindow
+     // using SetDeviceOrigin()
+    long         m_externalDeviceOriginX,m_externalDeviceOriginY;
                                                                     
     // Begin implementation for Mac
     public:
-								    
-	WXHDC				m_macPort ;
-	WXHBITMAP			m_macMask ;
+                                    
+    WXHDC                m_macPort ;
+    WXHBITMAP            m_macMask ;
 
-	// in order to preserve the const inheritance of the virtual functions, we have to 
-	// use mutable variables starting from CWPro 5
+    // in order to preserve the const inheritance of the virtual functions, we have to 
+    // use mutable variables starting from CWPro 5
 
-	void					MacInstallFont() const ;
-	void					MacInstallPen() const ;
-	void					MacInstallBrush() const ;
-	
-	mutable bool	m_macFontInstalled ;
-	mutable bool	m_macPenInstalled ;
-	mutable bool	m_macBrushInstalled ;
-	
-	WXHRGN				    m_macBoundaryClipRgn ;
-	WXHRGN                  m_macCurrentClipRgn ;
-	wxPoint					m_macLocalOrigin ;
-	void					MacSetupPort( wxMacPortStateHelper* ph ) const ;
-	void                    MacCleanupPort( wxMacPortStateHelper* ph ) const ;
-	mutable void*                   m_macATSUIStyle ;
-	mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
-	mutable bool                    m_macFormerAliasState ;
-	mutable short                   m_macFormerAliasSize ;
-	mutable bool                    m_macAliasWasEnabled ;
-	mutable void*                   m_macForegroundPixMap ;
-	mutable void*                   m_macBackgroundPixMap ;
+    void                    MacInstallFont() const ;
+    void                    MacInstallPen() const ;
+    void                    MacInstallBrush() const ;
+
+    mutable bool    m_macFontInstalled ;
+    mutable bool    m_macPenInstalled ;
+    mutable bool    m_macBrushInstalled ;
+
+    WXHRGN                    m_macBoundaryClipRgn ;
+    WXHRGN                  m_macCurrentClipRgn ;
+    wxPoint                    m_macLocalOrigin ;
+    void                    MacSetupPort( wxMacPortStateHelper* ph ) const ;
+    void                    MacCleanupPort( wxMacPortStateHelper* ph ) const ;
+    mutable void*                   m_macATSUIStyle ;
+    mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
+    mutable bool                    m_macFormerAliasState ;
+    mutable short                   m_macFormerAliasSize ;
+    mutable bool                    m_macAliasWasEnabled ;
+    mutable void*                   m_macForegroundPixMap ;
+    mutable void*                   m_macBackgroundPixMap ;
 };
 
 #endif

@@ -58,11 +58,11 @@ public:
   void OnChar(wxKeyEvent& event) ;
   void OnLeftClick(wxMouseEvent& event) ;
 
-	// metrics
-	wxInt32 m_checkBoxWidth;
+    // metrics
+    wxInt32 m_checkBoxWidth;
     wxInt32 m_checkBoxHeight;
-	wxInt32	m_TextBaseLineOffset;
-	
+    wxInt32    m_TextBaseLineOffset;
+
     // the array containing the checked status of the items
     wxArrayInt m_checks;
 

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CHOICE_H_
@@ -67,7 +67,7 @@ public:
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
   virtual void SetString( int , const wxString& s ) ;
-	void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    void        MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
 /*
   virtual void Append(const wxString& item);
@@ -81,7 +81,7 @@ public:
 
   // Mac specific
   virtual void Command(wxCommandEvent& event);
-  void		MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+  void        MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
   virtual inline int GetColumns() const { return 1 ; };
 */
@@ -98,8 +98,8 @@ protected:
 
   wxArrayString m_strings;
   wxChoiceDataArray m_datas ;
-  WXHMENU	m_macPopUpMenuHandle ;
+  WXHMENU    m_macPopUpMenuHandle ;
 };
 
 #endif
-	// _WX_CHOICE_H_
+    // _WX_CHOICE_H_

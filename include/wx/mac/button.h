@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BUTTON_H_
@@ -42,7 +42,7 @@ class WXDLLEXPORT wxButton: public wxButtonBase
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-	virtual void MacHandleControlClick( WXWidget control , short controlpart ) ;
+    virtual void MacHandleControlClick( WXWidget control , short controlpart ) ;
     static wxSize GetDefaultSize();
 
   virtual void SetDefault();

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CURSOR_H_
@@ -29,11 +29,11 @@ public:
     ~wxCursorRefData();
 
 protected:
-    WXHCURSOR 	m_hCursor;
-    bool		m_disposeHandle;
-    bool		m_releaseHandle;
+    WXHCURSOR     m_hCursor;
+    bool        m_disposeHandle;
+    bool        m_releaseHandle;
     bool        m_isColorCursor ;
-    long		m_themeCursor ;
+    long        m_themeCursor ;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -57,7 +57,7 @@ public:
 
     wxCursor(const wxImage & image) ;
 
-	wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
+    wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
    int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
@@ -69,7 +69,7 @@ public:
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
 
-	void MacInstall() const ;
+    void MacInstall() const ;
 
   void SetHCURSOR(WXHCURSOR cursor);
   inline WXHCURSOR GetHCURSOR() const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }

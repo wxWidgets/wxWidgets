@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCMEMORY_H_
@@ -28,8 +28,8 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
     ~wxMemoryDC(void);
     virtual void SelectObject( const wxBitmap& bitmap );
     virtual void DoGetSize( int *width, int *height ) const;
-		wxBitmap	GetSelectedObject() { return m_selected ; }
-  private: 
+        wxBitmap    GetSelectedObject() { return m_selected ; }
+  private:
     wxBitmap  m_selected;
 };
 

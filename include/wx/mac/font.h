@@ -106,12 +106,12 @@ protected:
     bool            m_noAA;      // No anti-aliasing
     
 public:
-    short	   m_macFontNum;
-    short	   m_macFontSize;
+    short       m_macFontNum;
+    short       m_macFontSize;
     unsigned char  m_macFontStyle;
     wxUint32       m_macATSUFontID;
 public:
-    void		MacFindFont() ;
+    void        MacFindFont() ;
 };
 // ----------------------------------------------------------------------------
 // wxFont

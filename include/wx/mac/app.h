@@ -93,8 +93,8 @@ public:
     void DeletePendingObjects();
     bool IsExiting() { return !m_keepGoing ; }
 #if TARGET_CARBON
-	WXEVENTHANDLERREF	MacGetEventHandler() { return m_macEventHandler ; }
-	WXEVENTHANDLERREF	MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
+    WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
+    WXEVENTHANDLERREF    MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
 #endif
 
 public:
@@ -111,8 +111,8 @@ private:
 
     // mac specifics
 #if TARGET_CARBON
-	WXEVENTHANDLERREF	  m_macEventHandler ;
-	WXEVENTHANDLERCALLREF	  m_macCurrentEventHandlerCallRef ;
+    WXEVENTHANDLERREF      m_macEventHandler ;
+    WXEVENTHANDLERCALLREF      m_macCurrentEventHandlerCallRef ;
 #endif
     WXEVENTREF            m_macCurrentEvent ;
 
@@ -164,21 +164,21 @@ public:
     
 #endif
 
-    void				  MacHandleMenuCommand( wxUint32 command ) ;	
-    bool          		  MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
-    bool          		  MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
-    
+    void                  MacHandleMenuCommand( wxUint32 command ) ;    
+    bool                    MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+    bool                    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+
     virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     
     // in response of an open-document apple event
-    virtual void   	  MacOpenFile(const wxString &fileName) ;
+    virtual void         MacOpenFile(const wxString &fileName) ;
     // in response of a print-document apple event
-    virtual void   	  MacPrintFile(const wxString &fileName) ;
+    virtual void         MacPrintFile(const wxString &fileName) ;
     // in response of a open-application apple event
-    virtual void   	  MacNewFile() ;
+    virtual void         MacNewFile() ;
 
     DECLARE_EVENT_TABLE()
 };
