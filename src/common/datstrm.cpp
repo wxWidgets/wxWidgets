@@ -86,13 +86,21 @@ double wxDataInputStream::ReadDouble()
 
 wxString wxDataInputStream::ReadString()
 {
-  wxString s;
   size_t len;
 
   len = Read32();
 
+#if wxUSE_UNICODE
+  char *tmp = new char[len + 1];
+  m_input->Read(tmp, len);
+  tmp[len] = 0;
+  wxString s(tmp);
+  delete[] tmp;
+#else
+  wxString s;
   m_input->Read(s.GetWriteBuf(len), len);
   s.UngetWriteBuf();
+#endif
 
   return s;
 }
