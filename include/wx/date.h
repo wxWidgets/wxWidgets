@@ -161,16 +161,16 @@ public:
     int GetMonth() const { return m_date.GetMonth() + 1; }
 
     // First Date Of Month
-    wxDate GetMonthStart() const { return(wxDate(GetMonth(), 1, GetYear())); }
+    wxDate GetMonthStart() const { return(wxDate(GetMonth()-1, 1, GetYear())); }
     // Last Date Of Month
-    wxDate GetMonthEnd() const { return wxDate(GetMonth()+1, 1, GetYear())-1; }
+    wxDate GetMonthEnd() const { return wxDate(GetMonth(), 1, GetYear())-1; }
 
     // eg. 1992
     int GetYear() const { return m_date.GetYear(); }
     // First Date Of Year
-    wxDate GetYearStart() const { return wxDate(1, 1, GetYear()); }
+    wxDate GetYearStart() const { return wxDate(0, 1, GetYear()); }
     // Last Date Of Year
-    wxDate GetYearEnd() const { return wxDate(1, 1, GetYear()+1) - 1; }
+    wxDate GetYearEnd() const { return wxDate(0, 1, GetYear()+1) - 1; }
 
     bool IsBetween(const wxDate& first, const wxDate& second) const
     {
