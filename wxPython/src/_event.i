@@ -179,9 +179,6 @@ enum {
     wxEVT_COMMAND_KILL_FOCUS,
     wxEVT_COMMAND_ENTER,
 
-        // Help events
-//     wxEVT_HELP,
-//     wxEVT_DETAILED_HELP,
 };    
 
 
@@ -363,11 +360,6 @@ EVT_IDLE = wx.PyEventBinder( wxEVT_IDLE )
 
 EVT_UPDATE_UI = wx.PyEventBinder( wxEVT_UPDATE_UI, 1)
 EVT_UPDATE_UI_RANGE = wx.PyEventBinder( wxEVT_UPDATE_UI, 2)
-
-// EVT_HELP = wx.PyEventBinder( wxEVT_HELP, 1)
-// EVT_HELP_RANGE = wx.PyEventBinder( wxEVT_HELP, 2)
-// EVT_DETAILED_HELP = wx.PyEventBinder( wxEVT_DETAILED_HELP, 1)
-// EVT_DETAILED_HELP_RANGE = wx.PyEventBinder( wxEVT_DETAILED_HELP, 2)
 
 EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 
