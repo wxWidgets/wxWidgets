@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------------------
 //-- Some Global Vars for all Files (extern in ?.h needed) -------------------------------
 // Global structure for holding ODBC connection information
-wxDbConnectInf DbConnectInf;
+extern wxDbConnectInf DbConnectInf;
 
 //----------------------------------------------------------------------------------------
 wxConfigBase   *p_ProgramCfg;       // All Config and Path information
@@ -159,11 +159,12 @@ bool MainDoc::OnInitODBC()
     int i = 0;
     //---------------------------------------------------------------------------------------
     // Initialize the ODBC Environment for Database Operations
-    
-    if (SQLAllocEnv(&DbConnectInf.Henv) != SQL_SUCCESS)
+
+    if (!DbConnectInf.AllocHenv())
     {
         return FALSE;
     }
+
     //---------------------------------------------------------------------------------------
     const char sep = 3; // separator character used in string between DSN ans DsDesc
     wxStringList s_SortDSNList, s_SortDsDescList;
@@ -172,7 +173,7 @@ bool MainDoc::OnInitODBC()
     // The key will be removed after sorting
     wxString KeyString;
     //---------------------------------------------------------------------------------------
-    while(wxDbGetDataSource(DbConnectInf.Henv, Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
+    while(wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
     {
         i_DSN++;   // How many Dsn have we ?
         KeyString.Printf("%s%c%s",Dsn, sep, DsDesc);
@@ -212,10 +213,9 @@ bool MainDoc::OnInitODBC()
         (db_Br+i)->pDoc        = this;
         (db_Br+i)->i_Which     = i;
     }
-    if (SQLFreeEnv(DbConnectInf.Henv) != SQL_SUCCESS) // BJO20000125 / MJ10777.20000309 : no &
-    {
-        // Error freeing environment handle
-    }
+
+    DbConnectInf.FreeHenv();
+
     delete [] s_SortDSN;
     delete [] s_SortDsDesc;
     //---------------------------------------------------------------------------------------

@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
-wxDbConnectInf ConnectInf;		// Für DBase
+wxDbConnectInf DbConnectInf;		// Für DBase
 
 //----------------------------------------------------------------------------------------
 extern WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList;	/* from db.cpp, used in getting back error results from db connections */
@@ -79,7 +79,7 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 //----------------------------------------------------------------------------------------
 BrowserDB::BrowserDB()
 {
-    Zeiger_auf_NULL(0);
+    PointerToNULL(0);
     ODBCSource = "";			 // ODBC data source name (created with ODBC Administrator under Win95/NT)
     UserName   = "";			 // database username - must already exist in the data source
     Password   = "";			 // password database username
@@ -90,7 +90,7 @@ BrowserDB::BrowserDB()
 //----------------------------------------------------------------------------------------
 BrowserDB::~BrowserDB()
 {
-    Zeiger_auf_NULL(1);  // Clean up Tables and Databases (Commit, Close und delete)
+    PointerToNULL(1);  // Clean up Tables and Databases (Commit, Close and delete)
 }  // BrowserDB destructor
 
 //----------------------------------------------------------------------------------------
@@ -113,16 +113,12 @@ bool BrowserDB::OnStartDB(int Quiet)
     if (db_BrowserDB != NULL)
     {
         if (!Quiet)
-            wxLogMessage(_("\n-I-> BrowserDB::OnStartDB() : DB is allready open."));
+            wxLogMessage(_("\n-I-> BrowserDB::OnStartDB() : DB is already open."));
         return TRUE;
     }
-    // Initialize the ODBC Environment for Database Operations
-    if (SQLAllocEnv(&ConnectInf.Henv) != SQL_SUCCESS)
-    {
-        if (!Quiet)
-            wxLogMessage(_("\n-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occured while trying to get a connection to the data source"));
-        return FALSE;
-    }
+
+    DbConnectInf.AllocHenv();
+
     //---------------------------------------------------------------------------------------
     // Connect to datasource
     //---------------------------------------------------------------------------------------
@@ -147,21 +143,22 @@ bool BrowserDB::OnStartDB(int Quiet)
     if (OK)
     {
         //--------------------------------------------------------------------------------------
-        ConnectInf.Dsn	  = ODBCSource; 		  // ODBC data source name (created with ODBC Administrator under Win95/NT)
-        ConnectInf.Uid	  = UserName;			  // database username - must already exist in the data source
-        ConnectInf.AuthStr= Password;		  // password database username
-        db_BrowserDB = wxDbGetConnection(&ConnectInf);
+        DbConnectInf.SetDsn(ODBCSource); 		  // ODBC data source name (created with ODBC Administrator under Win95/NT)
+        DbConnectInf.SetUserID(UserName);	      // database username - must already exist in the data source
+        DbConnectInf.SetPassword(Password);	  // password database username
+        db_BrowserDB = wxDbGetConnection(&DbConnectInf);
         // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
         if (db_BrowserDB == NULL)
         {
-            ConnectInf.Dsn		 = "";
-            ConnectInf.Uid		 = "";
-            ConnectInf.AuthStr	 = "";
+            DbConnectInf.SetDsn(wxT(""));
+            DbConnectInf.SetUserID(wxT(""));
+            DbConnectInf.SetPassword(wxT(""));
             if (!Quiet)
             {
                 wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
                 wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
             }
+            DbConnectInf.FreeHenv();
             return FALSE;
         }
         //--------------------------------------------------------------------------------------
@@ -175,7 +172,10 @@ bool BrowserDB::OnStartDB(int Quiet)
         return TRUE;
     }
     else
+    {
+        DbConnectInf.FreeHenv();
         return FALSE;
+    }
 }
 
 //----------------------------------------------------------------------------------------
@@ -187,13 +187,9 @@ bool BrowserDB::OnCloseDB(int Quiet)
     {
 //        db_BrowserDB->Close();
         wxDbFreeConnection(db_BrowserDB);
-/*        
-        // Free Environment Handle that ODBC uses
-        if (SQLFreeEnv(&ConnectInf.Henv) != SQL_SUCCESS)
-        {
-            // Error freeing environment handle
-        }
-*/
+
+        DbConnectInf.FreeHenv();
+
         db_BrowserDB = NULL;
     }
     if (!Quiet)
@@ -422,7 +418,7 @@ wxDbColInf* BrowserDB::OnGetColumns(char *tableName, int numCols, int Quiet)
 }
 
 //----------------------------------------------------------------------------------------
-void BrowserDB::Zeiger_auf_NULL(int Art)
+void BrowserDB::PointerToNULL(int Art)
 {
     if (Art == 1) // Löschen
     {

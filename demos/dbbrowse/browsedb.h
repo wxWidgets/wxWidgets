@@ -14,7 +14,7 @@
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 //----------------------------------------------------------------------------------------
-extern wxDbConnectInf DbConnectInf;
+//extern wxDbConnectInf DbConnectInf;
 class MainDoc;
 
 //----------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
     //---------------------------------------------------------------------------------------
     BrowserDB();
     ~BrowserDB();
-    void Zeiger_auf_NULL(int Art);
+    void PointerToNULL(int Art);
     bool Initialize(int Quiet);
     //---------------------------------------------------------------------------------------
     bool           OnStartDB(int Quiet);
