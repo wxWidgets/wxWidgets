@@ -43,6 +43,14 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   PreCreation( parent, id, pos, size, style, name );
   
   m_widget = gtk_label_new( label );
+  GtkJustification justify;
+  if ( style & wxALIGN_CENTER )
+    justify = GTK_JUSTIFY_CENTER;
+  else if ( style & wxALIGN_RIGHT )
+    justify = GTK_JUSTIFY_RIGHT;
+  else // wxALIGN_LEFT is 0
+    justify = GTK_JUSTIFY_LEFT;
+  gtk_label_set_justify(GTK_LABEL(m_widget), justify);
   
   if (newSize.x == -1) newSize.x = gdk_string_measure( m_widget->style->font, label );
   if (newSize.y == -1) newSize.y = 26;
