@@ -186,12 +186,12 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(_T("Caret wxWidgets sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -200,7 +200,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -235,8 +235,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -298,7 +298,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
-        : wxScrolledWindow( parent, -1,
+        : wxScrolledWindow( parent, wxID_ANY,
                             wxDefaultPosition, wxDefaultSize,
                             wxSUNKEN_BORDER )
 {

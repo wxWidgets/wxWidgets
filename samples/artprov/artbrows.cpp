@@ -107,35 +107,35 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
 #include "null.xpm"
 
 BEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
-    EVT_LIST_ITEM_SELECTED(-1, wxArtBrowserDialog::OnSelectItem)
-    EVT_CHOICE(-1, wxArtBrowserDialog::OnChooseClient)
+    EVT_LIST_ITEM_SELECTED(wxID_ANY, wxArtBrowserDialog::OnSelectItem)
+    EVT_CHOICE(wxID_ANY, wxArtBrowserDialog::OnChooseClient)
 END_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
-    : wxDialog(parent, -1, _T("Art resources browser"), 
+    : wxDialog(parent, wxID_ANY, _T("Art resources browser"), 
                wxDefaultPosition, wxDefaultSize, 
                wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
     wxSizer *subsizer;
     
-    wxChoice *choice = new wxChoice(this, -1);
+    wxChoice *choice = new wxChoice(this, wxID_ANY);
     FillClients(choice);
     
     subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(this, -1, _T("Client:")), 0, wxALIGN_CENTER_VERTICAL);
+    subsizer->Add(new wxStaticText(this, wxID_ANY, _T("Client:")), 0, wxALIGN_CENTER_VERTICAL);
     subsizer->Add(choice, 1, wxLEFT, 5);
     sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
     
-    m_list = new wxListCtrl(this, -1, wxDefaultPosition, wxSize(250, 300),
+    m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
     m_list->InsertColumn(0, _T("wxArtID"));
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
     
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
-    m_canvas = new wxStaticBitmap(this, -1, wxBitmap(null_xpm));
+    m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm));
     subsub->Add(m_canvas);
     subsub->Add(100, 100);
     subsizer->Add(subsub);
@@ -147,7 +147,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
     
     SetSizer(sizer);
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     sizer->Fit(this);
 
     choice->SetSelection(6/*wxART_MESSAGE_BOX*/);

@@ -177,15 +177,15 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 #else
     wxMessageBox( _T("This sample has to be compiled with wxUSE_ACCESSIBILITY"), _T("Building error"), wxOK);
-    return FALSE;
+    return false;
 #endif // wxUSE_ACCESSIBILITY
 }
 
@@ -304,7 +304,7 @@ public:
         // Gets a variant representing the selected children
         // of this object.
         // Acceptable values:
-        // - a null variant (IsNull() returns TRUE)
+        // - a null variant (IsNull() returns true)
         // - a list variant (GetType() == wxT("list"))
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long"))
@@ -319,7 +319,7 @@ public:
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     m_textCtrl = NULL;
 
@@ -356,10 +356,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 #endif // wxUSE_STATUSBAR
 
 
-    wxSplitterWindow* splitter = new wxSplitterWindow(this, -1);
+    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY);
     splitter->SetAccessible(new SplitterWindowAccessible(splitter));
 
-    wxListBox* listBox = new wxListBox(splitter, -1);
+    wxListBox* listBox = new wxListBox(splitter, wxID_ANY);
     listBox->Append(wxT("Cabbages"));
     listBox->Append(wxT("Kings"));
     listBox->Append(wxT("Sealing wax"));
@@ -367,7 +367,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     listBox->CreateAccessible();
     listBox->SetHelpText(wxT("This is a sample wxWidgets listbox, with a number of items in it."));
 
-    m_textCtrl = new wxTextCtrl(splitter, -1, wxT(""), wxDefaultPosition,
+    m_textCtrl = new wxTextCtrl(splitter, wxID_ANY, wxT(""), wxDefaultPosition,
         wxDefaultSize, wxTE_MULTILINE);
     m_textCtrl->CreateAccessible();
     m_textCtrl->SetHelpText(wxT("This is a sample wxWidgets multiline text control."));
@@ -375,7 +375,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     splitter->SplitHorizontally(listBox, m_textCtrl, 150);
 
 #if 0
-    wxScrolledWindow* scrolledWindow = new wxScrolledWindow(this, -1);
+    wxScrolledWindow* scrolledWindow = new wxScrolledWindow(this, wxID_ANY);
     scrolledWindow->SetAccessible(new ScrolledWindowAccessible(scrolledWindow));
 #endif
 }
@@ -385,8 +385,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -498,7 +498,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
 
         wxString str;
         str.Printf(wxT("Name = %s; Role = %s"), name.c_str(), role.c_str());
-        str.Pad(indent, wxT(' '), FALSE);
+        str.Pad(indent, wxT(' '), false);
         Log(str);
     }
 
@@ -507,7 +507,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
     {
         wxString str;
         str.Printf(wxT("There are %d children."), (int) childCount);
-        str.Pad(indent, wxT(' '), FALSE);
+        str.Pad(indent, wxT(' '), false);
         Log(str);
         Log(wxT(""));
     }
@@ -519,7 +519,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
 
         wxString str;
         str.Printf(wxT("%d) Name = %s; Role = %s"), i, name.c_str(), role.c_str());
-        str.Pad(indent, wxT(' '), FALSE);
+        str.Pad(indent, wxT(' '), false);
         Log(str);
 
         VARIANT var;
@@ -533,7 +533,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         {
             wxString str;
             str.Printf(wxT("This is a real object."));
-            str.Pad(indent+4, wxT(' '), FALSE);
+            str.Pad(indent+4, wxT(' '), false);
             Log(str);
 
             if (pDisp->QueryInterface(IID_IAccessible, (LPVOID*) & childObject) == S_OK)
@@ -547,7 +547,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         {
             wxString str;
             str.Printf(wxT("This is an element."));
-            str.Pad(indent+4, wxT(' '), FALSE);
+            str.Pad(indent+4, wxT(' '), false);
             Log(str);
         }
         // Log(wxT(""));
@@ -1100,7 +1100,7 @@ wxAccStatus SplitterWindowAccessible::GetFocus(int* WXUNUSED(childId), wxAccessi
 // Gets a variant representing the selected children
 // of this object.
 // Acceptable values:
-// - a null variant (IsNull() returns TRUE)
+// - a null variant (IsNull() returns true)
 // - a list variant (GetType() == wxT("list"))
 // - an integer representing the selected child element,
 //   or 0 if this object is selected (GetType() == wxT("long"))

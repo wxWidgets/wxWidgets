@@ -658,8 +658,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #if wxUSE_CHOICE
     panel = new wxPanel(m_notebook);
-    m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
-    m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
+    m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultSize.y), 5, choices );
+    m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,wxDefaultSize.y),
                                    5, choices, wxCB_SORT );
 
     SetChoiceClientData(wxT("choice"), m_choice);
@@ -682,7 +682,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxStaticBox( panel, wxID_ANY, _T("&Box around combobox"),
                            wxPoint(5, 5), wxSize(150, 100));
     m_combo = new MyComboBox( panel, ID_COMBO, _T("This"),
-                              wxPoint(20,25), wxSize(120, -1),
+                              wxPoint(20,25), wxSize(120, wxDefaultSize.y),
                               5, choices,
                               wxCB_READONLY | wxPROCESS_ENTER);
     m_combo->SetBackgroundColour(*wxBLUE);
@@ -732,7 +732,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
                                wxPoint(195,35), wxSize(30, 90),
                                wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
-    m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1),
+    m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,wxDefaultSize.y),
                              wxSL_AUTOTICKS | wxSL_LABELS );
     m_slider->SetTickFreq(40, 0);
 #if wxUSE_TOOLTIPS
@@ -748,7 +748,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxStaticText( panel, wxID_ANY,
                             _T("Drag the slider!"),
                             wxPoint(250,30),
-                            wxSize(240, -1)
+                            wxSize(240, wxDefaultSize.y)
                           );
 #else
     (void)new wxStaticText( panel, wxID_ANY,
@@ -765,9 +765,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
-    m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,-1) );
+    m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,wxDefaultSize.y) );
 #if wxUSE_SPINBTN
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, -1) );
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, wxDefaultSize.y) );
     m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
 
@@ -776,7 +776,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, _T(""), wxPoint(200, 160), wxSize(80, -1) );
+    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, _T(""), wxPoint(200, 160), wxSize(80, wxDefaultSize.y) );
     m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
@@ -852,8 +852,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
 
     wxStaticBoxSizer *csizer =
-      new wxStaticBoxSizer (new wxStaticBox (panel, wxID_ANY, _T("Show Buttons")),
-			    wxHORIZONTAL );
+      new wxStaticBoxSizer (new wxStaticBox (panel, wxID_ANY, _T("Show Buttons")), wxHORIZONTAL );
     
     wxCheckBox *check1, *check2, *check3, *check4, *check14, *checkBig;
     check1 = new wxCheckBox (panel, ID_SIZER_CHECK1, _T("1"));
@@ -1055,9 +1054,9 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
             }
         case ID_LISTBOX_SEL_STR:
             {
-                if (m_listbox->FindString(_T("This")) > -1)
+                if (m_listbox->FindString(_T("This")) != wxNOT_FOUND)
                     m_listbox->SetStringSelection( _T("This") );
-                if (m_listboxSorted->FindString(_T("This")) > -1)
+                if (m_listboxSorted->FindString(_T("This")) != wxNOT_FOUND)
                     m_listboxSorted->SetStringSelection( _T("This") );
                 m_lbSelectNum->WarpPointer( 40, 14 );
                 break;

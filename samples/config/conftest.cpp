@@ -114,7 +114,7 @@ bool MyApp::OnInit()
 
   // create the main program window
   MyFrame *frame = new MyFrame;
-  frame->Show(TRUE);
+  frame->Show(true);
   SetTopWindow(frame);
 
   // use our config object...
@@ -126,7 +126,7 @@ bool MyApp::OnInit()
                  wxICON_INFORMATION | wxOK);
   }
 
-  return TRUE;
+  return true;
 }
 
 int MyApp::OnExit()
@@ -145,7 +145,7 @@ int MyApp::OnExit()
 
 // main frame ctor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *) NULL, -1, _T("wxConfig Demo"))
+       : wxFrame((wxFrame *) NULL, wxID_ANY, _T("wxConfig Demo"))
 {
   // menu
   wxMenu *file_menu = new wxMenu;
@@ -163,10 +163,10 @@ MyFrame::MyFrame()
 
   // child controls
   wxPanel *panel = new wxPanel(this);
-  (void)new wxStaticText(panel, -1, _T("These controls remember their values!"),
+  (void)new wxStaticText(panel, wxID_ANY, _T("These controls remember their values!"),
                          wxPoint(10, 10), wxSize(300, 20));
-  m_text = new wxTextCtrl(panel, -1, _T(""), wxPoint(10, 40), wxSize(300, 20));
-  m_check = new wxCheckBox(panel, -1, _T("show welcome message box at startup"),
+  m_text = new wxTextCtrl(panel, wxID_ANY, _T(""), wxPoint(10, 40), wxSize(300, 20));
+  m_check = new wxCheckBox(panel, wxID_ANY, _T("show welcome message box at startup"),
                            wxPoint(10, 70), wxSize(300, 20));
 
   // restore the control's values from the config
@@ -209,7 +209,7 @@ MyFrame::MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent&)
 {
-  Close(TRUE);
+  Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent&)

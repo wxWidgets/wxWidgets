@@ -95,8 +95,8 @@ bool MyApp::OnInit()
     // create the main application window
     MyFrame *frame = new MyFrame(_T("wxArtProvider sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
-    frame->Show(TRUE);
-    return TRUE;
+    frame->Show(true);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -141,7 +141,7 @@ wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     SetIcon(wxICON(mondrian));
 
@@ -175,8 +175,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))

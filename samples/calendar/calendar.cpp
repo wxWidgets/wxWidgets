@@ -205,7 +205,7 @@ bool MyApp::OnInit()
     frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
     return true;
 }
@@ -279,7 +279,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
+    // true is to force the frame to close
     Close(true);
 }
 
