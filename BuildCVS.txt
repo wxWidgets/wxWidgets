@@ -132,3 +132,13 @@ If all is well, do an install; from win32
 Native and cross-compiled installations can co-exist peacefully 
 (as long as their widget sets differ), except for wx-config. You might 
 want to rename the cross-compiled one to i586-mingw32-wx-config, or something.
+
+Cross-compiling TODO:
+---------------------
+- resource compiling must be done manually for now (should/can we link the 
+default wx resources into libwx_msw.a?)
+- dynamic libraries
+- static executables are HUGE -- there must be room for improvement.
+- wxUSE_DYNLIB_CLASS double def is probably a bug in configure.in
+- figure out a clean way to determine we're building with configure
+- possibly some problems with parser.y and lexer.c and the like.
