@@ -31,6 +31,7 @@
 #include "wx/module.h"
 
 #include "wx/cocoa/ObjcPose.h"
+#include "wx/cocoa/autorelease.h"
 
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
@@ -96,21 +97,6 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 
 @end // wxPoserNSApplication
 WX_IMPLEMENT_POSER(wxPoserNSApplication);
-
-class wxAutoNSAutoreleasePool
-{
-public:
-    wxAutoNSAutoreleasePool()
-    {
-        m_pool = [[NSAutoreleasePool alloc] init];
-    }
-    ~wxAutoNSAutoreleasePool()
-    {
-        [m_pool release];
-    }
-protected:
-    NSAutoreleasePool *m_pool;
-};
 
 // ============================================================================
 // functions
