@@ -40,10 +40,13 @@
     // configure might have found it already for us
     #ifndef HAVE_LOCALTIME
         #define HAVE_LOCALTIME
-
-        // TODO add test for broken compilers here if needed
-        #define WX_GMTOFF_IN_TM
     #endif
+#endif
+
+// TODO: #define WX_GMTOFF_IN_TM for Windows compilers which have it here
+
+#if defined(__WIN32__) && !defined(WX_GMTOFF_IN_TM)
+    #include <winbase.h>
 #endif
 
 #if defined(HAVE_GETTIMEOFDAY)
@@ -198,11 +201,9 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
         *timeZone = 60*tb.timezone;
         *dstObserved = tb.dstflag;
     }
-#else
-    // special hacks for known compilers - I wonder if this is still needed,
-    // i.e. if there are any of them which don't support localtime()? (VZ)
-
-    #if defined(__BORLANDC__)
+#else // no standard function return tz info
+    // special hacks for known compilers
+    #if defined(__BORLANDC__) || defined(__VISUALC__)
         *timeZone = _timezone;
         *dstObserved = _daylight;
     #elif defined(__SALFORDC__)
@@ -211,10 +212,29 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
     #elif defined(__VISAGECPP__)
         *timeZone = _timezone;
         *dstObserved = daylight;
+    #elif defined(__WIN32__)
+        TIME_ZONE_INFORMATION tzInfo;
+        switch ( GetTimeZoneInformation(&tzInfo) )
+        {
+            default:
+                wxFAIL_MSG(_T("unknown GetTimeZoneInformation return code"));
+                // fall through
+
+            case TIME_ZONE_ID_UNKNOWN:
+            case TIME_ZONE_ID_STANDARD:
+                *dstObserved = FALSE;
+                break;
+
+            case TIME_ZONE_ID_DAYLIGHT:
+                *dstObserved = TRUE;
+                break;
+        }
+
+        *timeZone = 60*tzInfo.Bias;
     #else
         wxFAIL_MSG(_T("wxGetLocalTime() not implemented"));
     #endif // compiler
-#endif
+#endif // all ways in the known Universe to get tz info
 
     return FALSE;
 }

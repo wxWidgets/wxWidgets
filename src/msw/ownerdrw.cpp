@@ -140,11 +140,13 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   // using native API because it reckognizes '&' 
   #ifdef  O_DRAW_NATIVE_API
     int nPrevMode = SetBkMode(hdc, TRANSPARENT);
-    HBRUSH  hbr = CreateSolidBrush(colBack),
-            hPrevBrush = (HBRUSH) SelectObject(hdc, hbr);
+    HBRUSH hbr = CreateSolidBrush(colBack),
+           hPrevBrush = (HBRUSH)SelectObject(hdc, hbr);
 
     RECT rectAll = { rc.GetLeft(), rc.GetTop(), rc.GetRight(), rc.GetBottom() };
     FillRect(hdc, &rectAll, hbr);
+
+    DeleteObject(hbr);
 
     // use default font if no font set
     HFONT hfont;
@@ -186,14 +188,19 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 
         // then draw a check mark into it
       RECT rect = { 0, 0, GetMarginWidth(), m_nHeight };
+      if ( m_nHeight > 0 )
+      {
 #ifndef __SC__
-      DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+        DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
 #endif
+      }
 
         // finally copy it to screen DC and clean up
       BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight, 
              hdcMem, 0, 0, SRCCOPY);
+
       DeleteDC(hdcMem);
+      DeleteObject(hbmpCheck);
 #else
         // #### to do: perhaps using Marlett font (create equiv. font under X)
 //        wxFAIL("not implemented");

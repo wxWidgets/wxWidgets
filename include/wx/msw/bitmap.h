@@ -140,6 +140,11 @@ public:
 
   // If depth is omitted, will create a bitmap compatible with the display
   wxBitmap(int width, int height, int depth = -1);
+
+  // we must have this, otherwise icons are silently copied into bitmaps using
+  // the copy ctor but the resulting bitmap is invalid!
+  wxBitmap(const wxIcon& icon);
+
   ~wxBitmap();
 
   virtual bool Create(int width, int height, int depth = -1);

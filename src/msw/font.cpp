@@ -200,8 +200,6 @@ bool wxFont::RealizeResource()
     {
         // VZ: the old code returned FALSE in this case, but it doesn't seem
         //     to make sense because the font _was_ created
-        wxLogDebug(wxT("Calling wxFont::RealizeResource() twice"));
-
         return TRUE;
     }
 

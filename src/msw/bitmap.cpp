@@ -99,26 +99,44 @@ wxBitmap::wxBitmap()
     wxTheBitmapList->AddBitmap(this);
 }
 
+wxBitmap::wxBitmap(const wxIcon& icon)
+{
+    if ( wxTheBitmapList )
+        wxTheBitmapList->AddBitmap(this);
+
+    if ( !icon.Ok() )
+        return;
+
+    int width = icon.GetWidth(),
+        height = icon.GetHeight();
+
+    HDC hdc = ::CreateCompatibleDC(NULL);   // screen DC
+    HBITMAP hbitmap = ::CreateCompatibleBitmap(hdc, width, height);
+    HBITMAP hbmpOld = (HBITMAP)::SelectObject(hdc, hbitmap);
+
+    HICON hicon = (HICON) icon.GetHICON();
+#if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
+    ::DrawIconEx(hdc, 0, 0, hicon, width, height, 0, 0, DI_NORMAL);
+#else
+    ::DrawIcon(hdc, 0, 0, hicon);
+#endif
+
+    ::SelectObject(hdc, hbmpOld);
+    ::DeleteDC(hdc);
+
+    m_refData = new wxBitmapRefData;
+    M_BITMAPDATA->m_width = width;
+    M_BITMAPDATA->m_height = height;
+    M_BITMAPDATA->m_depth = wxDisplayDepth();
+    M_BITMAPDATA->m_numColors = 0;
+
+    M_BITMAPDATA->m_hBitmap = (WXHBITMAP)hbitmap;
+    M_BITMAPDATA->m_ok = TRUE;
+}
+
 wxBitmap::wxBitmap(const wxBitmap& bitmap)
 {
-    wxIcon *icon = wxDynamicCast(&bitmap, wxIcon);
-    if ( icon )
-    {
-        HDC hdc = ::CreateCompatibleDC(NULL);   // screen DC
-        HBITMAP hbitmap = ::CreateCompatibleBitmap(hdc,
-                                                   icon->GetWidth(),
-                                                   icon->GetHeight());
-        ::SelectObject(hdc, hbitmap);
-        ::DrawIcon(hdc, 0, 0, (HICON)icon->GetHICON());
-
-        ::DeleteDC(hdc);
-
-        SetHBITMAP((WXHBITMAP)hbitmap);
-    }
-    else
-    {
-        Ref(bitmap);
-    }
+    Ref(bitmap);
 
     if ( wxTheBitmapList )
         wxTheBitmapList->AddBitmap(this);
