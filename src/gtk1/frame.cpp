@@ -607,13 +607,13 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::UpdateMenuBarSize()
 {
-    wxASSERT_MSG( m_frameMenuBar, _T("Updating non existant menubar?") );
-
     GtkRequisition  req;
 
     req.width = 2;
     req.height = 2;
-
+    
+    // this is called after Remove with a NULL m_frameMenuBar
+    if ( m_frameMenuBar )
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_frameMenuBar->m_widget) )->size_request )
         (m_frameMenuBar->m_widget, &req );
 
