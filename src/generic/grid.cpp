@@ -2,7 +2,7 @@
 // Name:        generic/grid.cpp
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
-// Modified by:
+// Modified by: Robin Dunn, Vadim Zeitlin
 // Created:     1/08/1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward (mbedward@ozemail.com.au)
@@ -388,12 +388,30 @@ wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 //       The scroll bars may be a little flakey once in a while, but that is
 //       surely much less horrible than having scroll lines of only 1!!!
 //       -- Robin
-static const size_t GRID_SCROLL_LINE = 15;  // 1;
-
+//
+//       Well, it's still seriously broken so it might be better but needs
+//       fixing anyhow
+//       -- Vadim
+static const size_t GRID_SCROLL_LINE_X = 15;  // 1;
+static const size_t GRID_SCROLL_LINE_Y = GRID_SCROLL_LINE_X;
 
 // the size of hash tables used a bit everywhere (the max number of elements
 // in these hash tables is the number of rows/columns)
 static const int GRID_HASH_SIZE = 100;
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static inline GetScrollX(int x)
+{
+    return (x + GRID_SCROLL_LINE_X - 1) / GRID_SCROLL_LINE_X;
+}
+
+static inline GetScrollY(int y)
+{
+    return (y + GRID_SCROLL_LINE_Y - 1) / GRID_SCROLL_LINE_Y;
+}
 
 // ============================================================================
 // implementation
@@ -3886,32 +3904,34 @@ void wxGrid::CalcDimensions()
     // preserve (more or less) the previous position
     int x, y;
     GetViewStart( &x, &y );
-    // maybe we don't need scrollbars at all? and if we do, transform w and h
-    // from pixels into logical units
+
+    // maybe we don't need scrollbars at all?
+    //
+    // also adjust the position to be valid for the new scroll rangs
     if ( w <= cw )
     {
-        w = 0; x= 0;
+        w = x = 0;
     }
     else
     {
-        w = (w + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
         if ( x >= w )
             x = w - 1;
     }
+
     if ( h <= ch )
     {
-        h = 0; y = 0;
+        h = y = 0;
     }
     else
     {
-        h = (h + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
         if ( y >= h )
             y = h - 1;
     }
 
     // do set scrollbar parameters
-    SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
-                   w, h, x, y, (GetBatchCount() != 0));
+    SetScrollbars( GRID_SCROLL_LINE_X, GRID_SCROLL_LINE_Y,
+                   GetScrollX(w), GetScrollY(h), x, y,
+                   GetBatchCount() != 0);
 }
 
 
@@ -5497,66 +5517,62 @@ int wxGrid::SendEvent( const wxEventType type,
 {
    bool claimed;
    bool vetoed= FALSE;
-	
+
    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
-    {
-        int rowOrCol = (row == -1 ? col : row);
+   {
+       int rowOrCol = (row == -1 ? col : row);
 
-        wxGridSizeEvent gridEvt( GetId(),
-                                 type,
-                                 this,
-                                 rowOrCol,
-                                 mouseEv.GetX() + GetRowLabelSize(),
-                                 mouseEv.GetY() + GetColLabelSize(),
-                                 mouseEv.ControlDown(),
-                                 mouseEv.ShiftDown(),
-                                 mouseEv.AltDown(),
-                                 mouseEv.MetaDown() );
+       wxGridSizeEvent gridEvt( GetId(),
+               type,
+               this,
+               rowOrCol,
+               mouseEv.GetX() + GetRowLabelSize(),
+               mouseEv.GetY() + GetColLabelSize(),
+               mouseEv.ControlDown(),
+               mouseEv.ShiftDown(),
+               mouseEv.AltDown(),
+               mouseEv.MetaDown() );
 
-        claimed = GetEventHandler()->ProcessEvent(gridEvt);
-	vetoed = !gridEvt.IsAllowed();
-
-    }
+       claimed = GetEventHandler()->ProcessEvent(gridEvt);
+       vetoed = !gridEvt.IsAllowed();
+   }
    else if ( type == wxEVT_GRID_RANGE_SELECT )
-    {
-        // Right now, it should _never_ end up here!
-        wxGridRangeSelectEvent gridEvt( GetId(),
-                                        type,
-                                        this,
-                                        m_selectingTopLeft,
-                                        m_selectingBottomRight,
-                                        TRUE,
-                                        mouseEv.ControlDown(),
-                                        mouseEv.ShiftDown(),
-                                        mouseEv.AltDown(),
-                                        mouseEv.MetaDown() );
+   {
+       // Right now, it should _never_ end up here!
+       wxGridRangeSelectEvent gridEvt( GetId(),
+               type,
+               this,
+               m_selectingTopLeft,
+               m_selectingBottomRight,
+               TRUE,
+               mouseEv.ControlDown(),
+               mouseEv.ShiftDown(),
+               mouseEv.AltDown(),
+               mouseEv.MetaDown() );
 
-        claimed = GetEventHandler()->ProcessEvent(gridEvt);
-  	vetoed = !gridEvt.IsAllowed();
-	
-    }
+       claimed = GetEventHandler()->ProcessEvent(gridEvt);
+       vetoed = !gridEvt.IsAllowed();
+   }
    else
-    {
-        wxGridEvent gridEvt( GetId(),
-                             type,
-                             this,
-                             row, col,
-                             mouseEv.GetX() + GetRowLabelSize(),
-                             mouseEv.GetY() + GetColLabelSize(),
-                             FALSE,
-                             mouseEv.ControlDown(),
-                             mouseEv.ShiftDown(),
-                             mouseEv.AltDown(),
-                             mouseEv.MetaDown() );
-         claimed = GetEventHandler()->ProcessEvent(gridEvt);
-     	 vetoed = !gridEvt.IsAllowed();
-    }
+   {
+       wxGridEvent gridEvt( GetId(),
+               type,
+               this,
+               row, col,
+               mouseEv.GetX() + GetRowLabelSize(),
+               mouseEv.GetY() + GetColLabelSize(),
+               FALSE,
+               mouseEv.ControlDown(),
+               mouseEv.ShiftDown(),
+               mouseEv.AltDown(),
+               mouseEv.MetaDown() );
+       claimed = GetEventHandler()->ProcessEvent(gridEvt);
+       vetoed = !gridEvt.IsAllowed();
+   }
 
-  // A Veto'd event may not be `claimed' so test this first
-  if (vetoed) return -1;
-  return claimed ? 1 : 0;
-
-
+   // A Veto'd event may not be `claimed' so test this first
+   if (vetoed) return -1;
+   return claimed ? 1 : 0;
 }
 
 
@@ -5592,10 +5608,9 @@ int wxGrid::SendEvent( const wxEventType type,
         vetoed  = !gridEvt.IsAllowed();
      }
 
-	// A Veto'd event may not be `claimed' so test this first
-	if (vetoed) return -1;
-	return claimed ? 1 : 0;
-
+    // A Veto'd event may not be `claimed' so test this first
+    if (vetoed) return -1;
+    return claimed ? 1 : 0;
 }
 
 
@@ -5605,14 +5620,14 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 }
 
 
-// This is just here to make sure that CalcDimensions gets called when
-// the grid view is resized... then the size event is skipped to allow
-// the box sizers to handle everything
-//
-void wxGrid::OnSize( wxSizeEvent& WXUNUSED(event) )
+void wxGrid::OnSize( wxSizeEvent& event )
 {
+    // position the child windows
     CalcWindowSizes();
-    CalcDimensions();
+
+    // don't call CalcDimensions() from here, the base class handles the size
+    // changes itself
+    event.Skip();
 }
 
 
@@ -6647,10 +6662,10 @@ void wxGrid::EnableCellEditControl( bool enable )
     {
         if ( enable )
         {
- 	    if (SendEvent( wxEVT_GRID_EDITOR_SHOWN) <0)
-		return;
+            if (SendEvent( wxEVT_GRID_EDITOR_SHOWN) <0)
+                return;
 
-	    // this should be checked by the caller!
+            // this should be checked by the caller!
             wxASSERT_MSG( CanEnableCellControl(),
                           _T("can't enable editing for this cell!") );
 
@@ -6661,10 +6676,10 @@ void wxGrid::EnableCellEditControl( bool enable )
         }
         else
         {
-	    //FIXME:add veto support
-	    SendEvent( wxEVT_GRID_EDITOR_HIDDEN);
+            //FIXME:add veto support
+            SendEvent( wxEVT_GRID_EDITOR_HIDDEN);
 
-	    HideCellEditControl();
+            HideCellEditControl();
             SaveEditControlValue();
 
             // do it after HideCellEditControl()
@@ -6825,9 +6840,9 @@ void wxGrid::SaveEditControlValue()
                        m_currentCellCoords.GetRow(),
                        m_currentCellCoords.GetCol() ) < 0 ) {
 
-			      //Event has been veto set the data back.
-                              SetCellValue(row,col,oldval);
-	       }
+                // Event has been vetoed, set the data back.
+                SetCellValue(row,col,oldval);
+            }
         }
     }
 }
@@ -7031,7 +7046,7 @@ void wxGrid::MakeCellVisible( int row, int col )
             //
             // Sometimes GRID_SCROLL_LINE/2 is not enough, so just add a full
             // scroll unit...
-            ypos += GRID_SCROLL_LINE;
+            ypos += GRID_SCROLL_LINE_Y;
         }
 
         if ( left < 0 )
@@ -7053,13 +7068,15 @@ void wxGrid::MakeCellVisible( int row, int col )
             }
 
             // see comment for ypos above
-            xpos += GRID_SCROLL_LINE;
+            xpos += GRID_SCROLL_LINE_X;
         }
 
         if ( xpos != -1  ||  ypos != -1 )
         {
-            if ( xpos != -1 ) xpos /= GRID_SCROLL_LINE;
-            if ( ypos != -1 ) ypos /= GRID_SCROLL_LINE;
+            if ( xpos != -1 )
+                xpos /= GRID_SCROLL_LINE_X;
+            if ( ypos != -1 )
+                ypos /= GRID_SCROLL_LINE_Y;
             Scroll( xpos, ypos );
             AdjustScrollbars();
         }
@@ -8529,6 +8546,7 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 
     if ( !calcOnly )
         BeginBatch();
+
     for ( int col = 0; col < m_numCols; col++ )
     {
         if ( !calcOnly )
@@ -8538,8 +8556,10 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 
         width += GetColWidth(col);
     }
+
     if ( !calcOnly )
         EndBatch();
+
     return width;
 }
 
@@ -8549,6 +8569,7 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 
     if ( !calcOnly )
         BeginBatch();
+
     for ( int row = 0; row < m_numRows; row++ )
     {
         if ( !calcOnly )
@@ -8558,15 +8579,78 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 
         height += GetRowHeight(row);
     }
+
     if ( !calcOnly )
         EndBatch();
+
     return height;
 }
 
 void wxGrid::AutoSize()
 {
-    // set the size too
-    SetClientSize(SetOrCalcColumnSizes(FALSE), SetOrCalcRowSizes(FALSE));
+    BeginBatch();
+
+    wxSize size(SetOrCalcColumnSizes(FALSE), SetOrCalcRowSizes(FALSE));
+
+    // round up the size to a multiple of scroll step - this ensures that we
+    // won't get the scrollbars if we're sized exactly to this width
+    wxSize sizeFit(GetScrollX(size.x) * GRID_SCROLL_LINE_X,
+                   GetScrollY(size.y) * GRID_SCROLL_LINE_Y);
+
+    // distribute the extra space between teh columns/rows to avoid having
+    // extra white space
+    wxCoord diff = sizeFit.x - size.x;
+    if ( diff )
+    {
+        // try to resize the columns uniformly
+        wxCoord diffPerCol = diff / m_numCols;
+        if ( diffPerCol )
+        {
+            for ( int col = 0; col < m_numCols; col++ )
+            {
+                SetColSize(col, GetColWidth(col) + diffPerCol);
+            }
+        }
+
+        // add remaining amount to the last columns
+        diff -= diffPerCol * m_numCols;
+        if ( diff )
+        {
+            for ( int col = m_numCols - 1; col >= m_numCols - diff; col-- )
+            {
+                SetColSize(col, GetColWidth(col) + 1);
+            }
+        }
+    }
+
+    // same for rows
+    diff = sizeFit.y - size.y;
+    if ( diff )
+    {
+        // try to resize the columns uniformly
+        wxCoord diffPerRow = diff / m_numRows;
+        if ( diffPerRow )
+        {
+            for ( int row = 0; row < m_numRows; row++ )
+            {
+                SetRowSize(row, GetRowHeight(row) + diffPerRow);
+            }
+        }
+
+        // add remaining amount to the last rows
+        diff -= diffPerRow * m_numRows;
+        if ( diff )
+        {
+            for ( int row = m_numRows - 1; row >= m_numRows - diff; row-- )
+            {
+                SetRowSize(row, GetRowHeight(row) + 1);
+            }
+        }
+    }
+
+    EndBatch();
+
+    SetClientSize(sizeFit);
 }
 
 wxSize wxGrid::DoGetBestSize() const
