@@ -31,12 +31,19 @@ PYVER=$@
 
 rpmtop=_rpm_top
 
+if which rpmbuild > /dev/null 2>&1; then
+    RPMBUILD=rpmbuild
+else
+    RPMBUILD=rpm
+fi
+
+
 function DoRPMBuild {
     # $1 : python version
     # $2 : port
     # $3 : unicode
     
-    rpmbuild --define "_topdir $PWD/$rpmtop" \
+    $RPMBUILD --define "_topdir $PWD/$rpmtop" \
 	--define "_tmppath $PWD/$rpmtop/tmp" \
 	--define "release ${RELEASE}_py$1" \
 	--define "pyver $1" \
