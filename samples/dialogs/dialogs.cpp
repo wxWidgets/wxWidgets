@@ -2,7 +2,7 @@
 // Name:        dialogs.cpp
 // Purpose:     Common dialogs demo
 // Author:      Julian Smart
-// Modified by: ABX (2004) - adjustementd for conditional building
+// Modified by: ABX (2004) - adjustements for conditional building + new menu
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -74,13 +74,17 @@
     #include "wx/generic/colrdlgg.h"
 #endif // USE_COLOURDLG_GENERIC
 
-#if USE_FONTDLG_GENERIC
-    #include "wx/generic/fontdlgg.h"
-#endif // USE_FONTDLG_GENERIC
-
 #if USE_DIRDLG_GENERIC
     #include "wx/generic/dirdlgg.h"
 #endif // USE_DIRDLG_GENERIC
+
+#if USE_FILEDLG_GENERIC
+    #include "wx/generic/filedlgg.h"
+#endif // USE_FILEDLG_GENERIC
+
+#if USE_FONTDLG_GENERIC
+    #include "wx/generic/fontdlgg.h"
+#endif // USE_FONTDLG_GENERIC
 
 IMPLEMENT_APP(MyApp)
 
@@ -125,6 +129,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
 #endif // wxUSE_FILEDLG
+
+#if USE_FILEDLG_GENERIC
+    EVT_MENU(DIALOGS_FILE_OPEN_GENERIC,             MyFrame::FileOpenGeneric)
+    EVT_MENU(DIALOGS_FILES_OPEN_GENERIC,            MyFrame::FilesOpenGeneric)
+    EVT_MENU(DIALOGS_FILE_SAVE_GENERIC,             MyFrame::FileSaveGeneric)
+#endif // USE_FILEDLG_GENERIC
 
 #if wxUSE_DIRDLG
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
@@ -220,22 +230,26 @@ bool MyApp::OnInit()
             choices_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose colour"));
         #endif // wxUSE_COLOURDLG
 
-        #if USE_COLOURDLG_GENERIC
-            choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, _T("&Choose colour (generic)"));
-        #endif // USE_COLOURDLG_GENERIC
-
         #if wxUSE_FONTDLG
             choices_menu->Append(DIALOGS_CHOOSE_FONT, _T("Choose &font"));
         #endif // wxUSE_FONTDLG
-
-        #if USE_FONTDLG_GENERIC
-            choices_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose &font (generic)"));
-        #endif // USE_FONTDLG_GENERIC
 
         #if wxUSE_CHOICEDLG
             choices_menu->Append(DIALOGS_SINGLE_CHOICE,  _T("&Single choice\tCtrl-C"));
             choices_menu->Append(DIALOGS_MULTI_CHOICE,  _T("M&ultiple choice\tCtrl-U"));
         #endif // wxUSE_CHOICEDLG
+
+        #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
+            choices_menu->AppendSeparator();
+        #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
+
+        #if USE_COLOURDLG_GENERIC
+            choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, _T("&Choose colour (generic)"));
+        #endif // USE_COLOURDLG_GENERIC
+
+        #if USE_FONTDLG_GENERIC
+            choices_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose &font (generic)"));
+        #endif // USE_FONTDLG_GENERIC
 
         file_menu->Append(wxID_ANY,_T("Choices and selectors"),choices_menu);
 
@@ -267,6 +281,14 @@ bool MyApp::OnInit()
         filedlg_menu->Append(DIALOGS_FILE_OPEN2,  _T("&Second open file\tCtrl-2"));
         filedlg_menu->Append(DIALOGS_FILES_OPEN,  _T("Open &files\tCtrl-Q"));
         filedlg_menu->Append(DIALOGS_FILE_SAVE,  _T("Sa&ve file\tCtrl-S"));
+
+        #if USE_FILEDLG_GENERIC
+            filedlg_menu->AppendSeparator();
+            filedlg_menu->Append(DIALOGS_FILE_OPEN_GENERIC,  _T("&Open file (generic)"));
+            filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC,  _T("Open &files (generic)"));
+            filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC,  _T("Sa&ve file (generic)"));
+        #endif // USE_FILEDLG_GENERIC
+
         file_menu->Append(wxID_ANY,_T("File operations"),filedlg_menu);
 
     #endif // wxUSE_FILEDLG
@@ -275,13 +297,13 @@ bool MyApp::OnInit()
         wxMenu *dir_menu = new wxMenu;
 
         dir_menu->Append(DIALOGS_DIR_CHOOSE,  _T("&Choose a directory\tCtrl-D"));
-
-        #if USE_DIRDLG_GENERIC
-            dir_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  _T("&Choose a directory (generic)"));
-        #endif // USE_DIRDLG_GENERIC
-
         dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  _T("Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D"));
         file_menu->Append(wxID_ANY,_T("Directory operations"),dir_menu);
+
+        #if USE_DIRDLG_GENERIC
+            dir_menu->AppendSeparator();
+            dir_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  _T("&Choose a directory (generic)"));
+        #endif // USE_DIRDLG_GENERIC
 
     #endif // wxUSE_DIRDLG
 
@@ -727,6 +749,84 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
     }
 }
 #endif // wxUSE_FILEDLG
+
+#if USE_FILEDLG_GENERIC
+void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
+{
+    wxGenericFileDialog dialog
+                 (
+                    this,
+                    _T("Testing open file dialog"),
+                    wxEmptyString,
+                    wxEmptyString,
+                    _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+                 );
+
+    dialog.SetDirectory(wxGetHomeDir());
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString info;
+        info.Printf(_T("Full file name: %s\n")
+                    _T("Path: %s\n")
+                    _T("Name: %s"),
+                    dialog.GetPath().c_str(),
+                    dialog.GetDirectory().c_str(),
+                    dialog.GetFilename().c_str());
+        wxMessageDialog dialog2(this, info, _T("Selected file"));
+        dialog2.ShowModal();
+    }
+}
+
+void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
+{
+    wxString wildcards = _T("All files (*.*)|*.*|C++ files (*.h;*.cpp)|*.h;*.cpp");
+    wxGenericFileDialog dialog(this, _T("Testing open multiple file dialog"),
+                        wxEmptyString, wxEmptyString, wildcards,
+                        wxMULTIPLE);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxArrayString paths, filenames;
+
+        dialog.GetPaths(paths);
+        dialog.GetFilenames(filenames);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf(_T("File %d: %s (%s)\n"),
+                     (int)n, paths[n].c_str(), filenames[n].c_str());
+
+            msg += s;
+        }
+        s.Printf(_T("Filter index: %d"), dialog.GetFilterIndex());
+        msg += s;
+
+        wxMessageDialog dialog2(this, msg, _T("Selected files"));
+        dialog2.ShowModal();
+    }
+}
+
+void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
+{
+    wxGenericFileDialog dialog(this,
+                        _T("Testing save file dialog"),
+                        wxEmptyString,
+                        _T("myletter.doc"),
+                        _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
+                        wxSAVE|wxOVERWRITE_PROMPT);
+
+    dialog.SetFilterIndex(1);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxLogMessage(_T("%s, filter %d"),
+                     dialog.GetPath().c_str(), dialog.GetFilterIndex());
+    }
+}
+#endif // USE_FILEDLG_GENERIC
 
 #if wxUSE_DIRDLG
 void MyFrame::DoDirChoose(int style)

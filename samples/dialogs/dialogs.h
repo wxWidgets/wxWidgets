@@ -20,17 +20,24 @@
     )
 
 
-#define USE_FONTDLG_GENERIC                                                       \
-    (                                                                             \
-        wxUSE_FONTDLG &&                                                          \
-        ( defined(__WXMSW__) || defined(__WXPM__) ) &&                            \
-        !defined(__WXUNIVERSAL__)                                                 \
-    )
-
 #define USE_DIRDLG_GENERIC                                                        \
     (                                                                             \
         wxUSE_DIRDLG &&                                                           \
         ( defined(__WXMSW__) || defined(__WXMAC__) ) &&                           \
+        !defined(__WXUNIVERSAL__)                                                 \
+    )
+
+#define USE_FILEDLG_GENERIC                                                       \
+    (                                                                             \
+        wxUSE_FILEDLG &&                                                          \
+        ( defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXPM__) ) &&      \
+        !defined(__WXUNIVERSAL__)                                                 \
+    )
+
+#define USE_FONTDLG_GENERIC                                                       \
+    (                                                                             \
+        wxUSE_FONTDLG &&                                                          \
+        ( defined(__WXMSW__) || defined(__WXPM__) ) &&                            \
         !defined(__WXUNIVERSAL__)                                                 \
     )
 
@@ -116,6 +123,12 @@ public:
     void FilesOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
+
+#if USE_FILEDLG_GENERIC
+    void FileOpenGeneric(wxCommandEvent& event);
+    void FilesOpenGeneric(wxCommandEvent& event);
+    void FileSaveGeneric(wxCommandEvent& event);
+#endif // USE_FILEDLG_GENERIC
 
 #if wxUSE_DIRDLG
     void DirChoose(wxCommandEvent& event);
@@ -208,6 +221,9 @@ enum
     DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,
     DIALOGS_FILE_SAVE,
+    DIALOGS_FILE_OPEN_GENERIC,
+    DIALOGS_FILES_OPEN_GENERIC,
+    DIALOGS_FILE_SAVE_GENERIC,
     DIALOGS_DIR_CHOOSE,
     DIALOGS_DIRNEW_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,

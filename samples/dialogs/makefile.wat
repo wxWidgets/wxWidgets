@@ -115,6 +115,7 @@ ____GENERIC_FILES_FILENAMES_OBJECTS =
 ____GENERIC_FILES_FILENAMES_OBJECTS =  &
 	$(OBJS)\dialogs_colrdlgg.obj &
 	$(OBJS)\dialogs_dirdlgg.obj &
+	$(OBJS)\dialogs_filedlgg.obj &
 	$(OBJS)\dialogs_fontdlgg.obj
 !endif
 __WXLIB_ADV_p =
@@ -229,6 +230,9 @@ $(OBJS)\dialogs_colrdlgg.obj :  .AUTODEPEND .\..\..\src\generic\colrdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dirdlgg.obj :  .AUTODEPEND .\..\..\src\generic\dirdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+
+$(OBJS)\dialogs_filedlgg.obj :  .AUTODEPEND .\..\..\src\generic\filedlgg.cpp
 	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_fontdlgg.obj :  .AUTODEPEND .\..\..\src\generic\fontdlgg.cpp

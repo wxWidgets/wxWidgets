@@ -108,6 +108,7 @@ __DLLFLAG_p_1 = -dWXUSINGDLL
 ____GENERIC_FILES_FILENAMES_OBJECTS =  \
 	$(OBJS)\dialogs_colrdlgg.obj \
 	$(OBJS)\dialogs_dirdlgg.obj \
+	$(OBJS)\dialogs_filedlgg.obj \
 	$(OBJS)\dialogs_fontdlgg.obj
 !endif
 !if "$(MONOLITHIC)" == "0"
@@ -191,6 +192,9 @@ $(OBJS)\dialogs_colrdlgg.obj: .\..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(DIALOGS_CXXFLAGS) $**
 
 $(OBJS)\dialogs_dirdlgg.obj: .\..\..\src\generic\dirdlgg.cpp
+	$(CXX) -q -c -P -o$@ $(DIALOGS_CXXFLAGS) $**
+
+$(OBJS)\dialogs_filedlgg.obj: .\..\..\src\generic\filedlgg.cpp
 	$(CXX) -q -c -P -o$@ $(DIALOGS_CXXFLAGS) $**
 
 $(OBJS)\dialogs_fontdlgg.obj: .\..\..\src\generic\fontdlgg.cpp

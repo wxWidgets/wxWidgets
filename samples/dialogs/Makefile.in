@@ -79,10 +79,12 @@ COND_PLATFORM_OS2_1___dialogs___os2_emxbindcmd = $(NM) dialogs$(EXEEXT) | if \
 @COND_TOOLKIT_MAC@	dialogs.app/Contents/PkgInfo
 @COND_TOOLKIT_MSW_WXUNIV_0@__GENERIC_FILES_OBJECTS \
 @COND_TOOLKIT_MSW_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
-@COND_TOOLKIT_MSW_WXUNIV_0@	dialogs_fontdlgg.o
+@COND_TOOLKIT_MSW_WXUNIV_0@	dialogs_filedlgg.o dialogs_fontdlgg.o
 @COND_TOOLKIT_MAC_WXUNIV_0@__GENERIC_FILES_OBJECTS \
-@COND_TOOLKIT_MAC_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o
-@COND_TOOLKIT_PM_WXUNIV_0@__GENERIC_FILES_OBJECTS = dialogs_fontdlgg.o
+@COND_TOOLKIT_MAC_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
+@COND_TOOLKIT_MAC_WXUNIV_0@	dialogs_filedlgg.o
+@COND_TOOLKIT_PM_WXUNIV_0@__GENERIC_FILES_OBJECTS \
+@COND_TOOLKIT_PM_WXUNIV_0@	= dialogs_fontdlgg.o dialogs_filedlgg.o
 COND_MONOLITHIC_0___WXLIB_ADV_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
@@ -189,6 +191,15 @@ dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 
 @COND_TOOLKIT_MAC_WXUNIV_0@dialogs_dirdlgg.o: $(srcdir)/../../src/generic/dirdlgg.cpp
 @COND_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $<

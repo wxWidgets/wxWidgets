@@ -110,6 +110,7 @@ ifeq ($(WXUNIV),0)
 ____GENERIC_FILES_FILENAMES_OBJECTS =  \
 	$(OBJS)\dialogs_colrdlgg.o \
 	$(OBJS)\dialogs_dirdlgg.o \
+	$(OBJS)\dialogs_filedlgg.o \
 	$(OBJS)\dialogs_fontdlgg.o
 endif
 ifeq ($(MONOLITHIC),0)
@@ -189,6 +190,9 @@ $(OBJS)\dialogs_colrdlgg.o: ./../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dirdlgg.o: ./../../src/generic/dirdlgg.cpp
+	$(CXX) -c -o $@ $(DIALOGS_CXXFLAGS) $<
+
+$(OBJS)\dialogs_filedlgg.o: ./../../src/generic/filedlgg.cpp
 	$(CXX) -c -o $@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_fontdlgg.o: ./../../src/generic/fontdlgg.cpp
