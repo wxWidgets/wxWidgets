@@ -36,6 +36,7 @@
 #include "corner2.xpm"
 #include "corner3.xpm"
 #include "corner4.xpm"
+#include "wxpoem.xpm"
 #endif
 
 #define         buf_size 10000
@@ -488,7 +489,7 @@ void MainWindow::Search(bool ask)
     {
       s.MakeLower();
       if (search_string) delete[] search_string;
-      search_string = copystring(s);
+      search_string = wxStrcpy(new wxChar[wxStrlen(s.c_str()) + 1], s.c_str());
       search_ok = true;
     } else search_ok = false;
   }
@@ -553,8 +554,8 @@ bool MyApp::OnInit()
 
   if (argc > 1)
   {
-    index_filename = copystring(argv[1]);
-    data_filename = copystring(argv[1]);
+    index_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
+    data_filename = wxStrcpy(new wxChar[wxStrlen(argv[1]) + 1], argv[1]);
   }
   else
   {
