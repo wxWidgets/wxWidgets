@@ -19,139 +19,172 @@ public:
     // --------
 
     wxTextCtrl();
-    wxTextCtrl(wxWindow *parent, wxWindowID id,
-               const wxString& value = wxEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
+    wxTextCtrl( wxWindow*          pParent
+               ,wxWindowID         vId
+               ,const wxString&    rsValue = wxEmptyString
+               ,const wxPoint&     rPos = wxDefaultPosition
+               ,const wxSize&      rSize = wxDefaultSize
+               ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-               const wxValidator& validator = wxDefaultValidator,
+               ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-               const wxString& name = wxTextCtrlNameStr)
+               ,const wxString&    rsName = wxTextCtrlNameStr
+              )
     {
-        Create(parent, id, value, pos, size, style, validator, name);
+        Create(pParent, vId, rsValue, rPos, rSize, lStyle, rValidator, rsName);
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxString&    rsValue = wxEmptyString
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-                const wxValidator& validator = wxDefaultValidator,
+                ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-                const wxString& name = wxTextCtrlNameStr);
+                ,const wxString&    rsName = wxTextCtrlNameStr
+               );
 
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+    virtual      wxString GetValue(void) const;
+    virtual void SetValue(const wxString& rsValue);
 
-    virtual int GetLineLength(long lineNo) const;
-    virtual wxString GetLineText(long lineNo) const;
-    virtual int GetNumberOfLines() const;
+    virtual int      GetLineLength(long nLineNo) const;
+    virtual wxString GetLineText(long nLineNo) const;
+    virtual int      GetNumberOfLines(void) const;
 
-    virtual bool IsModified() const;
-    virtual bool IsEditable() const;
+    virtual bool IsModified(void) const;
+    virtual bool IsEditable(void) const;
 
     // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(long* from, long* to) const;
+    virtual void GetSelection( long* pFrom
+                              ,long* pTo
+                             ) const;
 
     // operations
     // ----------
 
     // editing
-    virtual void Clear();
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
+    virtual void Clear(void);
+    virtual void Replace( long            lFrom
+                         ,long            lTo
+                         ,const wxString& rsValue
+                        );
+    virtual void Remove( long lFrom
+                        ,long lTo
+                       );
 
     // load the controls contents from the file
-    virtual bool LoadFile(const wxString& file);
+    virtual bool LoadFile(const wxString& rsFile);
 
     // clears the dirty flag
-    virtual void DiscardEdits();
+    virtual void DiscardEdits(void);
 
     // writing text inserts it at the current position, appending always
     // inserts it at the end
-    virtual void WriteText(const wxString& text);
-    virtual void AppendText(const wxString& text);
+    virtual void WriteText(const wxString& rsText);
+    virtual void AppendText(const wxString& rsText);
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const;
+    virtual long XYToPosition( long lX
+                              ,long lY
+                             ) const;
+    virtual bool PositionToXY( long  lPos
+                              ,long* plX
+                              ,long* plY
+                             ) const;
 
-    virtual void ShowPosition(long pos);
+    virtual void ShowPosition(long lPos);
 
     // Clipboard operations
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
+    virtual void Copy(void);
+    virtual void Cut(void);
+    virtual void Paste(void);
 
-    virtual bool CanCopy() const;
-    virtual bool CanCut() const;
-    virtual bool CanPaste() const;
+    virtual bool CanCopy(void) const;
+    virtual bool CanCut(void) const;
+    virtual bool CanPaste(void) const;
 
     // Undo/redo
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo(void);
+    virtual void Redo(void);
 
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
+    virtual bool CanUndo(void) const;
+    virtual bool CanRedo(void) const;
 
     // Insertion point
-    virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
+    virtual void SetInsertionPoint(long lPos);
+    virtual void SetInsertionPointEnd(void);
+    virtual long GetInsertionPoint(void) const;
+    virtual long GetLastPosition(void) const;
 
-    virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
+    virtual void SetSelection( long lFrom
+                              ,long lTo
+                             );
+    virtual void SetEditable(bool bEditable);
 
+    //
     // Implementation from now on
     // --------------------------
+    //
+    virtual void Command(wxCommandEvent& rEvent);
+    virtual bool OS2Command( WXUINT uParam
+                            ,WXWORD wId
+                           );
 
-    virtual void Command(wxCommandEvent& event);
-    virtual bool OS2Command(WXUINT param, WXWORD id);
+    virtual WXHBRUSH OnCtlColor( WXHDC    hDC
+                                ,WXHWND   pWnd
+                                ,WXUINT   nCtlColor
+                                ,WXUINT   message
+                                ,WXWPARAM wParam
+                                ,WXLPARAM lParam
+                               );
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam,
-                                WXLPARAM lParam);
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
 
-    virtual void AdoptAttributesFromHWND();
-    virtual void SetupColours();
+    virtual void AdoptAttributesFromHWND(void);
+    virtual void SetupColours(void);
 
-    virtual bool AcceptsFocus() const;
+    virtual bool AcceptsFocus(void) const;
 
     // callbacks
-    void OnDropFiles(wxDropFilesEvent& event);
-    void OnChar(wxKeyEvent& event); // Process 'enter' if required
+    void OnDropFiles(wxDropFilesEvent& rEvent);
+    void OnChar(wxKeyEvent& rEvent); // Process 'enter' if required
 
-    void OnCut(wxCommandEvent& event);
-    void OnCopy(wxCommandEvent& event);
-    void OnPaste(wxCommandEvent& event);
-    void OnUndo(wxCommandEvent& event);
-    void OnRedo(wxCommandEvent& event);
+    void OnCut(wxCommandEvent& rEvent);
+    void OnCopy(wxCommandEvent& rEvent);
+    void OnPaste(wxCommandEvent& rEvent);
+    void OnUndo(wxCommandEvent& rEvent);
+    void OnRedo(wxCommandEvent& rEvent);
 
-    void OnUpdateCut(wxUpdateUIEvent& event);
-    void OnUpdateCopy(wxUpdateUIEvent& event);
-    void OnUpdatePaste(wxUpdateUIEvent& event);
-    void OnUpdateUndo(wxUpdateUIEvent& event);
-    void OnUpdateRedo(wxUpdateUIEvent& event);
+    void OnUpdateCut(wxUpdateUIEvent& rEvent);
+    void OnUpdateCopy(wxUpdateUIEvent& rEvent);
+    void OnUpdatePaste(wxUpdateUIEvent& rEvent);
+    void OnUpdateUndo(wxUpdateUIEvent& rEvent);
+    void OnUpdateRedo(wxUpdateUIEvent& rEvent);
+
+    inline bool IsMLE(void) {return m_bIsMLE;}
+    inline void SetMLE(bool bIsMLE) {m_bIsMLE = bIsMLE;}
 
 protected:
+    //
     // call this to increase the size limit (will do nothing if the current
     // limit is big enough)
-    void AdjustSpaceLimit();
-
-    virtual wxSize DoGetBestSize() const;
+    //
+    void           AdjustSpaceLimit(void);
+    virtual wxSize DoGetBestSize(void) const;
 
 private:
+    bool                            m_bIsMLE;
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
-};
+}; // end of CLASS wxTextCtrl
 
 #endif
     // _WX_TEXTCTRL_H_
