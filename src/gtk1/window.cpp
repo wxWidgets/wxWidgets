@@ -1065,7 +1065,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     return TRUE;
 }
 
-#ifndef __WXGTK20__
+
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
                                            wxWindow *win )
@@ -1115,42 +1115,58 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // will only be sent if it is not in an accelerator table.
     if (!ret)
     {
-        // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
+        long key_code;
         KeySym keysym = gdk_event->keyval;
-        long key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
-        if ( !key_code )
+#ifdef __WXGTK20__
+        // In GTK 2.0, we need to hand over the key event to an input method
+        // and the IM will emit a "commit" event containing the actual utf8
+        // character.  In that case the EVT_CHAR events will be sent from
+        // there.  But only do it this way for non-KeySym keys.
+        key_code = wxTranslateKeySymToWXKey(gdk_event->keyval, FALSE /* isChar */);
+        if ( !key_code && win->m_imContext )
         {
-            if ( gdk_event->length == 1 )
-            {
-                key_code = (unsigned char)gdk_event->string[0];
-            }
-            else if ( wxIsAsciiKeysym(keysym) )
-            {
-                // ASCII key
-                key_code = (unsigned char)keysym;
-            }
+            gtk_im_context_filter_keypress ( (GtkIMContext*) win->m_imContext, gdk_event );
+            ret = TRUE;
         }
-
-        if ( key_code )
+        else
+#endif
         {
-            wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
-
-            event.m_keyCode = key_code;
-
-            // Implement OnCharHook by checking ancesteror top level windows
-            wxWindow *parent = win;
-            while (parent && !parent->IsTopLevel())
-            parent = parent->GetParent();
-            if (parent)
+            // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
+            key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
+            if ( !key_code )
             {
-                event.SetEventType( wxEVT_CHAR_HOOK );
-                ret = parent->GetEventHandler()->ProcessEvent( event );
+                if ( gdk_event->length == 1 )
+                {
+                    key_code = (unsigned char)gdk_event->string[0];
+                }
+                else if ( wxIsAsciiKeysym(keysym) )
+                {
+                    // ASCII key
+                    key_code = (unsigned char)keysym;
+                }
             }
 
-            if (!ret)
+            if ( key_code )
             {
-                event.SetEventType(wxEVT_CHAR);
-                ret = win->GetEventHandler()->ProcessEvent( event );
+                wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
+
+                event.m_keyCode = key_code;
+
+                // Implement OnCharHook by checking ancesteror top level windows
+                wxWindow *parent = win;
+                while (parent && !parent->IsTopLevel())
+                    parent = parent->GetParent();
+                if (parent)
+                {
+                    event.SetEventType( wxEVT_CHAR_HOOK );
+                    ret = parent->GetEventHandler()->ProcessEvent( event );
+                }
+
+                if (!ret)
+                {
+                    event.SetEventType(wxEVT_CHAR);
+                    ret = win->GetEventHandler()->ProcessEvent( event );
+                }
             }
         }
     }
@@ -1221,132 +1237,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
     return FALSE;
 }
-#endif
 
 #ifdef __WXGTK20__
-static gint gtk_window_key_press_callback( GtkWidget *widget,
-                                           GdkEventKey *gdk_event,
-                                           wxWindow *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    if (!win->m_hasVMT)
-        return FALSE;
-    if (g_blockEventsOnDrag)
-        return FALSE;
-
-    bool ret = FALSE;
-    bool dont_use_IM = FALSE;
-
-    wxKeyEvent event( wxEVT_KEY_DOWN );
-    long keycode = wxTranslateKeySymToWXKey( gdk_event->keyval, FALSE );
-    if (keycode)
-    {
-        // We were able to decode the key press without
-        // any input method, so don't use it.
-        dont_use_IM = TRUE;
-
-        // now fill all the other fields
-        int x = 0;
-        int y = 0;
-        GdkModifierType state;
-        if (gdk_event->window)
-            gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-
-        event.SetTimestamp( gdk_event->time );
-        event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
-        event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
-        event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
-        event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK) != 0;
-        event.m_keyCode = keycode;
-        event.m_scanCode = gdk_event->keyval;
-        event.m_rawCode = (wxUint32) gdk_event->keyval;
-        event.m_rawFlags = 0;
-        event.m_x = x;
-        event.m_y = y;
-        event.SetEventObject( win );
-
-        // send key down event
-        ret = win->GetEventHandler()->ProcessEvent( event );
-
-        if (!ret)
-        {
-            // Implement OnCharHook by checking ancesteror top level windows
-            wxWindow *parent = win;
-            while (parent && !parent->IsTopLevel())
-            parent = parent->GetParent();
-            if (parent)
-            {
-                event.SetEventType( wxEVT_CHAR_HOOK );
-                ret = parent->GetEventHandler()->ProcessEvent( event );
-            }
-
-            if (!ret)
-            {
-                event.SetEventType(wxEVT_CHAR);
-                ret = win->GetEventHandler()->ProcessEvent( event );
-            }
-        }
-
-        // win is a control: tab can be propagated up
-        if ( !ret &&
-             ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
-            win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
-        {
-            wxNavigationKeyEvent new_event;
-            new_event.SetEventObject( win->GetParent() );
-            // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
-            new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-            // CTRL-TAB changes the (parent) window, i.e. switch notebook page
-            new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
-            new_event.SetCurrentFocus( win );
-            ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
-        }
-
-        if ( !ret &&
-             (gdk_event->keyval == GDK_Escape) )
-        {
-            wxWindow *winForCancel = win, *btnCancel = NULL;
-            while ( winForCancel )
-            {
-                btnCancel = winForCancel->FindWindow(wxID_CANCEL);
-                if ( btnCancel ) break;
-
-                if ( winForCancel->IsTopLevel() ) break;
-
-                winForCancel = winForCancel->GetParent();
-            }
-
-            if ( btnCancel )
-            {
-                wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-                event.SetEventObject(btnCancel);
-                ret = btnCancel->GetEventHandler()->ProcessEvent(event);
-            }
-        }
-    }
-
-    if (ret)
-    {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
-        return TRUE;
-    }
-
-    if (!dont_use_IM && win->m_imContext)
-    {
-        // In GTK 2.0, we need to hand over the key
-        // event to an input method and the IM will
-        // emit a "commit" event containing the
-        // actual utf8 character.
-        gtk_im_context_filter_keypress ( (GtkIMContext*) win->m_imContext, gdk_event );
-
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
 static void gtk_wxwindow_commit_cb (GtkIMContext *context,
 						   const gchar  *str,
 						   wxWindow     *window)
@@ -1369,23 +1261,25 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     event.m_keyCode = uniChar;
 #endif
 
+
+    // TODO:  We still need to set all the extra attributes of the
+    //        event, modifiers and such...
+
+
+    // Implement OnCharHook by checking ancestor top level windows
+    wxWindow *parent = window;
+    while (parent && !parent->IsTopLevel())
+        parent = parent->GetParent();
+    if (parent)
+    {
+        event.SetEventType( wxEVT_CHAR_HOOK );
+        ret = parent->GetEventHandler()->ProcessEvent( event );
+    }
+
     if (!ret)
     {
-        // Implement OnCharHook by checking ancesteror top level windows
-        wxWindow *parent = window;
-        while (parent && !parent->IsTopLevel())
-        parent = parent->GetParent();
-        if (parent)
-        {
-            event.SetEventType( wxEVT_CHAR_HOOK );
-            ret = parent->GetEventHandler()->ProcessEvent( event );
-        }
-
-        if (!ret)
-        {
-            event.SetEventType(wxEVT_CHAR);
-            ret = window->GetEventHandler()->ProcessEvent( event );
-        }
+        event.SetEventType(wxEVT_CHAR);
+        ret = window->GetEventHandler()->ProcessEvent( event );
     }
 }
 #endif
@@ -1835,10 +1729,10 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     {
         // synthetize a mouse enter or leave event if needed
         GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
-        // This seems to be necessary and actually been added to 
+        // This seems to be necessary and actually been added to
         // GDK itself in version 2.0.X
         gdk_flush();
-        
+
         bool hasMouse = winUnderMouse == gdk_event->window;
         if ( hasMouse != g_captureWindowHasMouse )
         {
@@ -2064,7 +1958,7 @@ gint gtk_window_enter_callback( GtkWidget *widget,
 
     // Event was emitted after a grab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
-    
+
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     int x = 0;
@@ -2104,7 +1998,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
-    
+
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
