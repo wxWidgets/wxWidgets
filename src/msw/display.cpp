@@ -56,6 +56,10 @@
     #pragma warning(disable:4706)
 #endif
 
+// with mingw32, we must include windows.h first and it doesn't hurt with other
+// compilers
+#include <windows.h>
+
 #include <multimon.h>
 
 #ifdef _MSC_VER
