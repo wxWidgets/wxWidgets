@@ -32,6 +32,8 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
    {
        run before '-mkdir ' '..\\src\\common\\dbgos240dll'
        run before '-mkdir ' '..\\samples\\minimal\\dbgos240dll'
+       run before 'copy ' '..\\src\common\\dosyacc.c ' '..\\src\\common\\y_tab.c'
+       run before 'copy ' '..\\src\common\\doslex.c ' '..\\src\\common\\lex_yy.c'
    }
    target type("dll") "..\\lib\\Wxwindll.dll"
    {
