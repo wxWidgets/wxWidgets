@@ -467,11 +467,16 @@ private:                                                                 \
 // Some commonly used predefined base arrays
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_BASEARRAY(const void *, wxBaseArrayPtrVoid);
-WX_DECLARE_EXPORTED_BASEARRAY(short,        wxBaseArrayShort);
-WX_DECLARE_EXPORTED_BASEARRAY(int,          wxBaseArrayInt);
-WX_DECLARE_EXPORTED_BASEARRAY(long,         wxBaseArrayLong);
-WX_DECLARE_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble);
+WX_DECLARE_USER_EXPORTED_BASEARRAY(const void *, wxBaseArrayPtrVoid,
+                                   WXDLLIMPEXP_BASE);
+WX_DECLARE_USER_EXPORTED_BASEARRAY(short,        wxBaseArrayShort,
+                                   WXDLLIMPEXP_BASE);
+WX_DECLARE_USER_EXPORTED_BASEARRAY(int,          wxBaseArrayInt,
+                                   WXDLLIMPEXP_BASE);
+WX_DECLARE_USER_EXPORTED_BASEARRAY(long,         wxBaseArrayLong,
+                                   WXDLLIMPEXP_BASE);
+WX_DECLARE_USER_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble,
+                                   WXDLLIMPEXP_BASE);
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define arrays from base arrays
@@ -588,10 +593,10 @@ WX_DECLARE_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble);
 // Some commonly used predefined arrays
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_EXPORTED_ARRAY_SHORT (short,  wxArrayShort);
-WX_DEFINE_EXPORTED_ARRAY_INT   (int,    wxArrayInt);
-WX_DEFINE_EXPORTED_ARRAY_LONG  (long,   wxArrayLong);
-WX_DEFINE_EXPORTED_ARRAY       (void *, wxArrayPtrVoid);
+WX_DEFINE_USER_EXPORTED_ARRAY_SHORT (short,  wxArrayShort,   WXDLLIMPEXP_BASE);
+WX_DEFINE_USER_EXPORTED_ARRAY_INT   (int,    wxArrayInt,     WXDLLIMPEXP_BASE);
+WX_DEFINE_USER_EXPORTED_ARRAY_LONG  (long,   wxArrayLong,    WXDLLIMPEXP_BASE);
+WX_DEFINE_USER_EXPORTED_ARRAY       (void *, wxArrayPtrVoid, WXDLLIMPEXP_BASE);
 
 // -----------------------------------------------------------------------------
 // convenience macros
