@@ -56,7 +56,7 @@ class TestPanel(wx.Panel):
         self.tx = wx.StaticText(self, -1,                                
              "This sample allows you to see all the stock cursors \n"
              "available to wxPython.  Simply select a name from the \n"
-             "wx.Choice and then move the mouse into the dineo below \n"
+             "wx.Choice and then move the mouse into the window below \n"
              "to see the cursor.  NOTE: not all stock cursors have a \n"
              "specific representaion on all platforms.")
         
