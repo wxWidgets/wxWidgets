@@ -68,12 +68,18 @@ FORCE_LINK_ME(m_layout)
 
 class WXDLLEXPORT wxHtmlPageBreakCell : public wxHtmlCell
 {
-  public:
+public:
     wxHtmlPageBreakCell() {}
 
-    bool AdjustPagebreak(int* pagebreak, int* known_pagebreaks = NULL, int number_of_pages = 0) const;
+    bool AdjustPagebreak(int* pagebreak,
+                         int* known_pagebreaks = NULL,
+                         int number_of_pages = 0) const;
+    void Draw(wxDC& WXUNUSED(dc),
+              int WXUNUSED(x), int WXUNUSED(y),
+              int WXUNUSED(view_y1), int WXUNUSED(view_y2),
+              wxHtmlRenderingState& WXUNUSED(state)) {}
 
-  private:
+private:
     DECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell)
 };
 

@@ -114,12 +114,13 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, in
 
     if (!dont_render)
     {
+        wxHtmlRenderingState rstate(NULL);
         m_DC->SetBrush(*wxWHITE_BRUSH);
-
         m_DC->SetClippingRegion(x, y, m_Width, hght);
         m_Cells->Draw(*m_DC,
-                        x, (y - from),
-                        y, pbreak + (y /*- from*/));
+                      x, (y - from),
+                      y, pbreak + (y /*- from*/),
+                      rstate);
         m_DC->DestroyClippingRegion();
     }
 

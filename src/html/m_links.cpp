@@ -32,18 +32,29 @@ FORCE_LINK_ME(m_links)
 
 class wxHtmlAnchorCell : public wxHtmlCell
 {
-    private:
-        wxString m_AnchorName;
+private:
+    wxString m_AnchorName;
 
-    public:
-        wxHtmlAnchorCell(const wxString& name) : wxHtmlCell() {m_AnchorName = name;}
-        virtual const wxHtmlCell* Find(int condition, const void* param) const
+public:
+    wxHtmlAnchorCell(const wxString& name) : wxHtmlCell()
+        { m_AnchorName = name; }
+    void Draw(wxDC& WXUNUSED(dc),
+              int WXUNUSED(x), int WXUNUSED(y),
+              int WXUNUSED(view_y1), int WXUNUSED(view_y2),
+              wxHtmlRenderingState& WXUNUSED(state)) {}
+
+    virtual const wxHtmlCell* Find(int condition, const void* param) const
+    {
+        if ((condition == wxHTML_COND_ISANCHOR) && 
+            (m_AnchorName == (*((const wxString*)param))))
         {
-            if ((condition == wxHTML_COND_ISANCHOR) && (m_AnchorName == (*((const wxString*)param))))
-                return this;
-            else
-                return wxHtmlCell::Find(condition, param);
+            return this;
         }
+        else
+        {
+            return wxHtmlCell::Find(condition, param);
+        }
+    }
 };
 
 
