@@ -365,13 +365,13 @@ if [ $skiplinux != yes ]; then
 	#    wait $winPID
 	#fi
 
-	(DoLinuxBuild co-rh9    rh9    $PYVER 2>&1 | PrefixLines co-rh9 &; \
-	 DoLinuxBuild co-fc2    fc2    2.3    2>&1 | PrefixLines co-fc2    ) &
+	DoLinuxBuild co-rh9    rh9    $PYVER 2>&1 | PrefixLines co-rh9 & 
+	DoLinuxBuild co-fc2    fc2    2.3    2>&1 | PrefixLines co-fc2 &
 
 	wait $!  # wait for the previous two to complete before starting the next two
 
-	(DoLinuxBuild co-mdk92  mdk92  2.3    2>&1 | PrefixLines co-mdk92  &; \
-	 DoLinuxBuild co-mdk101 mdk101 2.3    2>&1 | PrefixLines co-mdk101    ) &
+	DoLinuxBuild co-mdk92  mdk92  2.3    2>&1 | PrefixLines co-mdk92  & 
+	DoLinuxBuild co-mdk101 mdk101 2.3    2>&1 | PrefixLines co-mdk101 & 
     fi
 fi
 
