@@ -835,12 +835,6 @@ WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 The reason for the strange syntax for data is that some compilers use different
 keyword ordering for exporting data.
 
-<P>There also several other places where you should take care of shared
-library case: all IMPLEMENT_xxx macros which are usually used in the
-corresponding .cpp files must be taken inside
-"<TT>&#35;if !USE_SHARED_LIBRARY</TT>" and in the <TT>&#35;if USE_SHARED_LIBRARY</TT>
-case you should put them inside <TT>common/cmndata.cpp</TT> file.
-
     <P><LI><A NAME="set_get"></LI><B>Use Set/Get prefixes for accessors</B><P>
 There is a convention in wxWindows to prefix the accessors (i.e. any simple, in
 general, inline function which does nothing else except changing or returning
