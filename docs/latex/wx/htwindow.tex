@@ -294,6 +294,45 @@ Read values: all things set by SetFonts, SetBorders.
 
 \docparam{path}{Optional path in config tree. If not given current path is used.}
 
+\membersection{wxHtmlWindow::SelectAll}\label{wxhtmlwindowselectall}
+
+\func{void}{SelectAll}{\void}
+
+Selects all text in the window.
+
+\wxheading{See also}
+
+\helpref{SelectLine}{wxhtmlwindowselectline},
+\helpref{SelectWord}{wxhtmlwindowselectword}
+
+\membersection{wxHtmlWindow::SelectLine}\label{wxhtmlwindowselectline}
+
+\func{void}{SelectLine}{\param{const wxPoint\& }{pos}}
+
+Selects the line of text that \arg{pos} points at. Note that \arg{pos}
+is relative to the top of displayed page, not to window's origin, use
+\helpref{CalcUnscrolledPosition}{wxscrolledwindowcalcunscrolledposition}
+to convert physical coordinate.
+
+\wxheading{See also}
+
+\helpref{SelectAll}{wxhtmlwindowselectall},
+\helpref{SelectWord}{wxhtmlwindowselectword}
+
+\membersection{wxHtmlWindow::SelectWord}\label{wxhtmlwindowselectword}
+
+\func{void}{SelectWord}{\param{const wxPoint\& }{pos}}
+
+Selects the word at position \arg{pos}. Note that \arg{pos}
+is relative to the top of displayed page, not to window's origin, use
+\helpref{CalcUnscrolledPosition}{wxscrolledwindowcalcunscrolledposition}
+to convert physical coordinate.
+
+\wxheading{See also}
+
+\helpref{SelectAll}{wxhtmlwindowselectall},
+\helpref{SelectLine}{wxhtmlwindowselectline}
+
 \membersection{wxHtmlWindow::SetBorders}\label{wxhtmlwindowsetborders}
 
 \func{void}{SetBorders}{\param{int }{b}}
