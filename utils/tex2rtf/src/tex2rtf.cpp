@@ -67,7 +67,7 @@ static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
 #endif
 
-const float versionNo = (float)TEX2RTF_VERSION_NUMBER;
+const float versionNo = float(TEX2RTF_VERSION_NUMBER);
 
 TexChunk *currentMember = NULL;
 bool startedSections = false;
