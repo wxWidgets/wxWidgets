@@ -152,14 +152,32 @@ selection_received( GtkWidget *WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 static gint
-selection_clear( GtkWidget *WXUNUSED(widget), GdkEventSelection *WXUNUSED(event) )
+selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 {
     if (!wxTheClipboard) return TRUE;
     
-    // the clipboard is no longer in our hands. we have to delete the
-    // clipboard data.
+    if (event->selection == GDK_SELECTION_PRIMARY)
+    {
+        wxTheClipboard->m_ownsPrimarySelection = FALSE;
+    }
+    else
+    if (event->selection == g_clipboardAtom)
+    {
+        wxTheClipboard->m_ownsClipboard = FALSE;
+    }
+    else
+    {
+        return FALSE;
+    }
     
-    wxTheClipboard->m_dataObjects.Clear();
+    if ((!wxTheClipboard->m_ownsPrimarySelection) &&
+        (!wxTheClipboard->m_ownsClipboard))
+    {
+        // the clipboard is no longer in our hands. we can the
+        // clipboard data.
+    
+        wxTheClipboard->m_dataObjects.Clear();
+    }
   
     return TRUE;
 }
@@ -247,6 +265,9 @@ wxClipboard::wxClipboard()
 {
     m_open = FALSE;
 
+    m_ownsClipboard = FALSE;
+    m_ownsPrimarySelection = FALSE;
+
     m_dataObjects.DeleteContents( TRUE );
   
     m_receivedData = (wxDataObject*) NULL;
@@ -256,7 +277,7 @@ wxClipboard::wxClipboard()
 
     gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
                         "selection_clear_event",
-		        GTK_SIGNAL_FUNC( selection_clear ), 
+		        GTK_SIGNAL_FUNC( selection_clear_clip ), 
 		        (gpointer) NULL );
 		      
     if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
@@ -281,9 +302,14 @@ void wxClipboard::Clear()
         /*  As we have data we also own the clipboard. Once we no longer own
             it, clear_selection is called which will set m_data to zero */
      
-        if (gdk_selection_owner_get( g_clipboardAtom) == m_clipboardWidget->window)
+        if (gdk_selection_owner_get( g_clipboardAtom ) == m_clipboardWidget->window)
         {
             gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+        }
+    
+        if (gdk_selection_owner_get( GDK_SELECTION_PRIMARY ) == m_clipboardWidget->window)
+        {
+            gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME );
         }
     
         m_dataObjects.Clear();
@@ -339,11 +365,22 @@ bool wxClipboard::SetData( wxDataObject *data )
     {
         data->m_formatAtom = GetTargetAtom( data->GetFormat() );
     }
+    
+    // This should happen automatically
       
+    m_ownsClipboard = FALSE;
+    m_ownsPrimarySelection = FALSE;
+    
     // Add handlers if someone requests data
   
     gtk_selection_add_handler( m_clipboardWidget, 
                                g_clipboardAtom,
+			       data->m_formatAtom,
+			       selection_handler,
+			       NULL );
+			       
+    gtk_selection_add_handler( m_clipboardWidget, 
+                               GDK_SELECTION_PRIMARY,
 			       data->m_formatAtom,
 			       selection_handler,
 			       NULL );
@@ -356,6 +393,15 @@ bool wxClipboard::SetData( wxDataObject *data )
     {
         return FALSE;
     }
+    m_ownsClipboard = TRUE;
+    
+    if (!gtk_selection_owner_set( m_clipboardWidget, 
+                                  GDK_SELECTION_PRIMARY,
+				  GDK_CURRENT_TIME ))
+    {
+        return FALSE;
+    }
+    m_ownsPrimarySelection = TRUE;
 			     
     return TRUE;
 }

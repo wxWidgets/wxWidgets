@@ -49,7 +49,7 @@ public:
 
   int FindMenuItem( const wxString &menuString, const wxString &itemString ) const;
   wxMenuItem* FindMenuItemById( int id ) const;
-  inline wxMenuItem* FindMenuItemForId( int id ) const
+  inline wxMenuItem* FindItemForId( int id ) const
     { return FindMenuItemById( id ); }
   
   void Check( int id, bool check );

@@ -73,10 +73,10 @@ public:
  
   bool              m_open;
   
+  bool              m_ownsClipboard;
+  bool              m_ownsPrimarySelection;
+  
   wxList            m_dataObjects;
-  char             *m_sentString, 
-		   *m_receivedString;
-  void             *m_receivedTargets;
   GtkWidget        *m_clipboardWidget;
   
   bool              m_formatSupported;

@@ -310,8 +310,8 @@ public:
     void Enable(int id, bool enable);
     bool Enabled(int id);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
-#ifdef __WXMSW__
     wxMenuItem * FindItemForId(int id);
+#ifdef __WXMSW__
     void EnableTop(int pos, bool enable);
     wxString GetHelpString(int id);
     wxString GetLabel(int id);
@@ -351,7 +351,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1998/12/18 15:49:10  RR
+//   wxClipboard now serves the primary selection as well
+//   wxPython fixes
+//   warning mesages
+//
 // Revision 1.10  1998/12/17 17:52:20  RD
+//
 // wxPython 0.5.2
 // Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
 // versions are much closer now!

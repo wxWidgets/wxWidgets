@@ -152,14 +152,12 @@ public:
     int GetStyle();
     bool GetUnderlined();
     int GetWeight();
-#ifdef __WXMSW__
     void SetFaceName(const wxString& faceName);
     void SetFamily(int family);
     void SetPointSize(int pointSize);
     void SetStyle(int style);
     void SetUnderlined(bool underlined);
     void SetWeight(int weight);
-#endif
 };
 
 //----------------------------------------------------------------------
@@ -210,24 +208,23 @@ public:
     int GetCap();
     wxColour& GetColour();
 
-#ifdef __WXMSW__
-            // **** This one needs to return a list of ints (wxDash)
-    int GetDashes(wxDash **dashes);
-    wxBitmap* GetStipple();
-#endif
     int GetJoin();
     int GetStyle();
     int GetWidth();
     bool Ok();
     void SetCap(int cap_style);
     void SetColour(wxColour& colour);
-#ifdef __WXMSW__
-    void SetDashes(int LCOUNT, wxDash* LIST);
-    void SetStipple(wxBitmap& stipple);
-#endif
     void SetJoin(int join_style);
     void SetStyle(int style);
     void SetWidth(int width);
+    
+#ifdef __WXMSW__
+            // **** This one needs to return a list of ints (wxDash)
+    int GetDashes(wxDash **dashes);
+    wxBitmap* GetStipple();
+    void SetDashes(int LCOUNT, wxDash* LIST);
+    void SetStipple(wxBitmap& stipple);
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -505,7 +502,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1998/12/18 15:49:05  RR
+//   wxClipboard now serves the primary selection as well
+//   wxPython fixes
+//   warning mesages
+//
 // Revision 1.10  1998/12/17 18:05:50  RD
+//
 // wxPython 0.5.2
 // Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
 // versions are much closer now!

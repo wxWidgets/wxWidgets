@@ -86,21 +86,29 @@ bool wxPalette::Ok(void) const
   return (m_refData);
 };
 
-bool wxPalette::Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+bool wxPalette::Create( int WXUNUSED(n), 
+                        const unsigned char *WXUNUSED(red), 
+			const unsigned char *WXUNUSED(green), 
+			const unsigned char *WXUNUSED(blue) )
 {
   wxFAIL_MSG("not implemented");
 
   return FALSE;
 };
 
-int wxPalette::GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const
+int wxPalette::GetPixel( const unsigned char WXUNUSED(red), 
+                         const unsigned char WXUNUSED(green), 
+			 const unsigned char WXUNUSED(blue) ) const
 {
   wxFAIL_MSG("not implemented");
 
   return 0;
 };
 
-bool wxPalette::GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const
+bool wxPalette::GetRGB( int WXUNUSED(pixel), 
+                        unsigned char *WXUNUSED(red), 
+			unsigned char *WXUNUSED(green), 
+			unsigned char *WXUNUSED(blue) ) const
 {
   wxFAIL_MSG("not implemented");
 
