@@ -177,6 +177,9 @@
 // will have to modify the makefiles to include unicows.lib import library as the first
 // library.
 //
+// If your compiler doesn't have unicows.lib, you can get a version of it at
+// http://www.volny.cz/v.slavik/libunicows/
+//
 // Default is 0
 //
 // Recommended setting: 0
