@@ -14,7 +14,7 @@
 
 #include "wx/spinctrl.h"
 
-#ifdef wxUSE_SPINBTN
+#if wxUSE_SPINCTRL
 
 #include "wx/utils.h"
 #include "wx/spinbutt.h"
@@ -67,7 +67,7 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
     event.SetPosition( value );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
-    
+
     /* always send a thumbtrack event */
     if (command != wxEVT_SCROLL_THUMBTRACK)
     {
@@ -205,7 +205,7 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     m_adjust->upper = fmax;
 
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
-    
+
     // these two calls are required due to some bug in GTK
     Refresh();
     SetFocus();
@@ -221,7 +221,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame))
             top_frame = top_frame->GetParent();
 	GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-	
+
 	if (window->default_widget)
         {
             gtk_widget_activate (window->default_widget);
