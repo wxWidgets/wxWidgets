@@ -59,13 +59,18 @@ output_libs()
         else
             basename=$basename_gui
         fi
+        if test $lib = "base" ; then
+            libname="$basename"
+        else
+            libname="${basename}_${lib}"
+        fi
 
         all_ldflags="$all_ldflags $xflags"
         if test $static_flag = yes ; then
-            wxlibs="$wxlibs @libdir@/lib${basename}_${lib}-${release}.a"
+            wxlibs="$wxlibs @libdir@/lib${libname}-${release}.a"
             all_libs="$all_libs $xlibs"
         else
-            wxlibs="$wxlibs -l${basename}_${lib}-${release}"
+            wxlibs="$wxlibs -l${libname}-${release}"
         fi
     done
 
