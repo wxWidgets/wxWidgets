@@ -3863,6 +3863,11 @@ void wxDateTimeHolidayAuthority::AddAuthority(wxDateTimeHolidayAuthority *auth)
     ms_authorities.Add(auth);
 }
 
+wxDateTimeHolidayAuthority::~wxDateTimeHolidayAuthority()
+{
+    // nothing to do here
+}
+
 // ----------------------------------------------------------------------------
 // wxDateTimeWorkDays
 // ----------------------------------------------------------------------------
