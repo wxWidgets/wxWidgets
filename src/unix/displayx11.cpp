@@ -81,9 +81,9 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
     for (i = 0; i < numscreens; ++i)
     {
       if (p.x >= screenarr[i].x_org &&
-          p.x <= screenarr[i].x_org + screenarr[i].width &&
+          p.x < screenarr[i].x_org + screenarr[i].width &&
           p.y >= screenarr[i].y_org &&
-          p.y <= screenarr[i].y_org + screenarr[i].height)
+          p.y < screenarr[i].y_org + screenarr[i].height)
       {
         which_screen = i;
       }
@@ -96,9 +96,9 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
   {
     wxSize size = wxGetDisplaySize();
     if (p.x >= 0 &&
-        p.x <= size.GetWidth() && 
-        p.y > 0 &&
-        p.y <= size.GetHeight())
+        p.x < size.GetWidth() &&
+        p.y >= 0 &&
+        p.y < size.GetHeight())
     {
         return 0;
     }
@@ -256,6 +256,22 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
             return false;
         }
     }
+    /*
+    //Brian Victor's patch (X11 can't change bit depth yet), here for reference
+  Display *disp = (Display*)wxGetDisplay();
+  int count_return;
+  int* depths = XListDepths(disp, 0, &count_return);
+  wxArrayVideoModes modes;
+  if (depths)
+  {
+    int x;
+    for (x = 0; x < count_return; ++x)
+    {
+      modes.Add(wxVideoMode(m_priv->m_rect.GetWidth(), m_priv->m_rect.GetHeight(), depths[x]));
+    }
+  }
+  return modes;
+    */
 }
 
 #endif /* wxUSE_DISPLAY */
