@@ -18,8 +18,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxStaticTextNameStr;
-
 class WXDLLEXPORT wxStaticText : public wxControl
 {
 DECLARE_DYNAMIC_CLASS(wxStaticText)

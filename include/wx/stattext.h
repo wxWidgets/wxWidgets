@@ -5,7 +5,7 @@
 
 #include "wx/control.h"
 
-extern const wxChar *wxStaticTextNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticTextNameStr;
 
 class WXDLLEXPORT wxStaticTextBase : public wxControl
 {
