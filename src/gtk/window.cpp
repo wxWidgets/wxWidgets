@@ -1374,30 +1374,16 @@ gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
-    if (win->m_font != *wxSWISS_FONT)
-    {
-        wxFont font( win->m_font );
-        win->m_font = wxNullFont;
-	win->SetFont( font );
-    }
+    if (win->m_delayedFont)
+        win->SetFont( win->GetFont() );
 
-    if (win->m_backgroundColour != wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ))
-    {
-        wxColour bg( win->m_backgroundColour );
-	win->m_backgroundColour = wxNullColour;
-	win->SetBackgroundColour( bg );
-    }
+    if (win->m_delayedBackgroundColour)
+        win->SetBackgroundColour( win->GetBackgroundColour() );
 
-    if (win->m_foregroundColour != *wxBLACK)
-    {
-        wxColour fg( win->m_foregroundColour );
-	win->m_foregroundColour = wxNullColour;
-	win->SetForegroundColour( fg );
-    }
+    if (win->m_delayedForegroundColour)
+        win->SetForegroundColour( win->GetForegroundColour() );
 
-    wxCursor cursor( win->m_cursor );
-    win->m_cursor = wxNullCursor;
-    win->SetCursor( cursor );
+    win->SetCursor( win->GetCursor() );
 
     return FALSE;
 }
@@ -1463,9 +1449,6 @@ void wxWindow::Init()
     m_y = 0;
     m_width = 0;
     m_height = 0;
-
-    m_font = *wxSWISS_FONT;
-    m_windowName = "noname";
 
     m_sizeSet = FALSE;
     m_hasVMT = FALSE;
@@ -2098,8 +2081,11 @@ bool wxWindow::Show( bool show )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
 
-    if ( !wxWindowBase::Show(show) )
+    if (!wxWindowBase::Show(show))
+    {
+        // nothing to do
         return FALSE;
+    }
 
     if (show)
         gtk_widget_show( m_widget );
@@ -2113,8 +2099,11 @@ bool wxWindow::Enable( bool enable )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
 
-    if ( !wxWindowBase::Enable(enable) )
+    if (!wxWindowBase::Enable(enable))
+    {
+        // nothing to do
         return FALSE;
+    }
 
     gtk_widget_set_sensitive( m_widget, enable );
     if ( m_wxwindow )
@@ -2234,9 +2223,24 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
 
-    if ( wxWindowBase::SetCursor(cursor) )
+    if (!wxWindowBase::SetCursor(cursor))
     {
-        if (!m_widget->window) return TRUE;
+        // don't leave if the GTK widget has just
+        // been realized
+        if (!m_delayedCursor) return FALSE;
+    }
+    
+    GtkWidget *connect_widget = GetConnectWidget();
+    if (!connect_widget->window)
+    {
+        // indicate that a new style has been set
+	// but it couldn't get applied as the
+	// widget hasn't been realized yet.
+	m_delayedCursor = TRUE;
+	
+	// pretend we have done something
+        return TRUE;
+    }
 
         if ((m_widget) && (m_widget->window))
              gdk_window_set_cursor( m_widget->window, GetCursor().GetCursor() );
@@ -2244,14 +2248,8 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
         if ((m_wxwindow) && (m_wxwindow->window))
              gdk_window_set_cursor( m_wxwindow->window, GetCursor().GetCursor() );
 
-        // cursor was set
-        return TRUE;
-    }
-    else
-    {
-        // cursor hasn't been changed
-        return FALSE;
-    }
+    // cursor was set
+    return TRUE;
 }
 
 void wxWindow::WarpPointer( int WXUNUSED(x), int WXUNUSED(y) )
@@ -2332,10 +2330,24 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 
-    if (!wxWindowBase::SetBackgroundColour(colour)) return FALSE;
-
+    if (!wxWindowBase::SetBackgroundColour(colour))
+    {
+        // don't leave if the GTK widget has just
+        // been realized
+        if (!m_delayedBackgroundColour) return FALSE;
+    }
+    
     GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window) return TRUE;
+    if (!connect_widget->window)
+    {
+        // indicate that a new style has been set
+	// but it couldn't get applied as the
+	// widget hasn't been realized yet.
+	m_delayedBackgroundColour = TRUE;
+	
+	// pretend we have done something
+        return TRUE;
+    }
 
     if (m_wxwindow && m_wxwindow->window)
     {
@@ -2366,10 +2378,24 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 
-    if (!wxWindowBase::SetForegroundColour(colour)) return FALSE;
-
+    if (!wxWindowBase::SetForegroundColour(colour))
+    {
+        // don't leave if the GTK widget has just
+        // been realized
+        if (!m_delayedForegroundColour) return FALSE;
+    }
+    
     GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window) return TRUE;
+    if (!connect_widget->window)
+    {
+        // indicate that a new style has been set
+	// but it couldn't get applied as the
+	// widget hasn't been realized yet.
+	m_delayedForegroundColour = TRUE;
+	
+	// pretend we have done something
+        return TRUE;
+    }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if (sysbg == m_foregroundColour)
@@ -2514,10 +2540,24 @@ bool wxWindow::SetFont( const wxFont &font )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T(	"invalid window") );
 
-    if (!wxWindowBase::SetFont(font)) return FALSE;
+    if (!wxWindowBase::SetFont(font))
+    {
+        // don't leave if the GTK widget has just
+        // been realized
+        if (!m_delayedFont) return FALSE;
+    }
     
     GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window) return TRUE;
+    if (!connect_widget->window)
+    {
+        // indicate that a new style has been set
+	// but it couldn't get applied as the
+	// widget hasn't been realized yet.
+	m_delayedFont = TRUE;
+	
+	// pretend we have done something
+        return TRUE;
+    }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if ( sysbg == m_backgroundColour )

@@ -284,7 +284,7 @@ void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
     else
     {
         SetReturnCode(wxID_CANCEL);
-        this->Show(FALSE);
+        Show(FALSE);
     }
 }
 
@@ -296,12 +296,12 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
         printf( "OnOK 2.\n" );
         if (IsModal())
         {
-        printf( "OnOK: modal.\n" );
+            printf( "OnOK: modal.\n" );
             EndModal(wxID_OK);
         }
         else
         {
-        printf( "OnOK: non-modal.\n" );
+            printf( "OnOK: non-modal.\n" );
             SetReturnCode(wxID_OK);
             this->Show(FALSE);
         }
@@ -508,21 +508,11 @@ bool wxDialog::Show( bool show )
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
 
-    if (show != m_isShown)
-    {
-        if (show)
-        {
-            gtk_widget_show( m_widget );
-        }
-        else
-            gtk_widget_hide( m_widget );
-            
-        m_isShown = show;
-    }
+    bool ret = wxWindow::Show( show );
 
     if (show) InitDialog();
 
-    return TRUE;
+    return ret;
 }
 
 bool wxDialog::IsModal() const
