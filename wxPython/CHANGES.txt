@@ -176,7 +176,7 @@ example.
 
 Added wxPython.lib.mixins.rubberband module from Robb Shecter.
 
-
+Added wxTimeCtrl from Will Sadkin.
 
 
 

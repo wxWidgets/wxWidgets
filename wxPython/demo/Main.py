@@ -37,6 +37,7 @@ _treeList = [
         'wxKeyEvents',
         'wxWizard',
         'wxXmlResourceHandler',
+        'wxTimeCtrl',
         ]),
 
     # managed windows == things with a caption you can close
@@ -129,6 +130,7 @@ _treeList = [
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
+        'wxTimeCtrl',
         ]),
 
     # How to lay out the controls in a frame/dialog
