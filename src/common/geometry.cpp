@@ -22,6 +22,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_GEOMETRY
+
 #include "wx/log.h"
 #include <string.h>
 
@@ -309,3 +311,4 @@ void wxRect2DInt::ReadFrom( wxDataInputStream &stream )
 	m_height = stream.Read32() ; 
 }
 
+#endif // wxUSE_GEOMETRY
