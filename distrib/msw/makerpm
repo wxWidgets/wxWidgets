@@ -473,7 +473,7 @@ if [ "$SPINWXMGL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxmgl
 fi
 
-if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+if [ "$SPINWXMAC" = "1" ]; then
   dospinwxmac
 fi
 
