@@ -170,6 +170,7 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
         }
         else
         {
+#if wxUSE_IMAGE
             wxImage loadimage(filename, type);
             if (loadimage.Ok()) 
             {
@@ -183,6 +184,9 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
                 CopyFromBitmap( bmp ) ;
                 return true;
             }
+#else
+            return false;
+#endif
         }
     }
     return true ;
