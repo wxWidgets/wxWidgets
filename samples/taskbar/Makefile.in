@@ -1,0 +1,23 @@
+#
+# File:		Makefile.in
+# Author:	Fabian Wenzel
+# Created:	2002
+# Updated:	
+# Copyright:	(c) 2002 Fabian Wenzel
+#
+# "%W% %G%"
+#
+# Makefile for taskbar example (MSW).
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/taskbar
+
+PROGRAM=tbtest
+
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
+
+include ../../src/makeprog.env
+
+@IF_GNU_MAKE@-include $(DEPFILES)
