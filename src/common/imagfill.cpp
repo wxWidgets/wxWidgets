@@ -22,6 +22,8 @@
 #if wxUSE_IMAGE
 
 #include "wx/image.h"
+#include "wx/brush.h"
+#include "wx/pen.h"
 
 // DoFloodFill
 // Fills with the colour extracted from fillBrush, starting at x,y until either
