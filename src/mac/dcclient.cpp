@@ -85,6 +85,8 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *window)
 {
 	wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+        if (!rootwindow)
+            return;
 	WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
 	wxPoint origin = window->GetClientAreaOrigin() ;
 	wxSize size = window->GetClientSize() ;
