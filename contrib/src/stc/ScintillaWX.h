@@ -140,7 +140,7 @@ private:
     wxStyledTextCtrl*   stc;
 
     wxTextDataObject    textDO;
-    wxSTCDropTarget     dropTarget;
+    wxSTCDropTarget*    dropTarget;
     wxDragResult        dragResult;
 };
 

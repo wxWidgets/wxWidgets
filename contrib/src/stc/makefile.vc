@@ -67,18 +67,6 @@ $(OBJECTS)
 <<
 
 
-$(PROGRAM).exe: $(D)\$(PROGRAM).obj  $(DUMMYOBJ) $(WXLIB) $(LIBTARGET) $(PROGRAM).res
-	$(link) @<<
--out:$(PROGRAM).exe
-$(LINKFLAGS)
-$(DUMMYOBJ) $(D)\$(PROGRAM).obj $(LIBTARGET) $(PROGRAM).res
-$(LIBS)
-<<
-
-$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
-    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
-
-
 
 {$(S)}.cxx{$(D)}.obj:
 	$(cc) @<<

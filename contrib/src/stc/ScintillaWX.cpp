@@ -84,8 +84,9 @@ ScintillaWX::~ScintillaWX() {
 
 void ScintillaWX::Initialise() {
     //ScintillaBase::Initialise();
-    dropTarget.SetScintilla(this);
-    stc->SetDropTarget(&dropTarget);
+    dropTarget = new wxSTCDropTarget;
+    dropTarget->SetScintilla(this);
+    stc->SetDropTarget(dropTarget);
 }
 
 
