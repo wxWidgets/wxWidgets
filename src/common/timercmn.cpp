@@ -109,13 +109,12 @@ void wxTimerBase::Notify()
 void wxStopWatch::Start(long t)
 {
     m_t0 = wxGetLocalTimeMillis() - t;
-
     m_pause = 0;
 }
 
 long wxStopWatch::GetElapsedTime() const
 {
-    return (wxGetLocalTimeMillis() - m_t0).GetLo();
+  return (wxGetLocalTimeMillis() - m_t0).GetLo();
 }
 
 long wxStopWatch::Time() const
@@ -253,6 +252,7 @@ wxLongLong wxGetLocalTimeMillis()
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
     {
+        val *= tp.tv_sec;
         return (val + (tp.tv_usec / 1000));
     }
 #elif defined(HAVE_FTIME)
