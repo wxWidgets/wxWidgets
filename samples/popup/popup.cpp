@@ -138,54 +138,54 @@ SimpleTransientPopup::~SimpleTransientPopup()
 
 void SimpleTransientPopup::Popup(wxWindow *focus)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::Popup"), int(this) );
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::Popup"), long(this) );
     wxPopupTransientWindow::Popup(focus);
 }
 
 void SimpleTransientPopup::OnDismiss()
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnDismiss"), int(this) );
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnDismiss"), long(this) );
     wxPopupTransientWindow::OnDismiss();
 }
 
 bool SimpleTransientPopup::ProcessLeftDown(wxMouseEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::ProcessLeftDown pos(%d, %d)"), int(this), event.GetX(), event.GetY());
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::ProcessLeftDown pos(%d, %d)"), long(this), event.GetX(), event.GetY());
     return wxPopupTransientWindow::ProcessLeftDown(event);
 }
 bool SimpleTransientPopup::Show( bool show )
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::Show %d"), int(this), int(show));
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::Show %d"), long(this), int(show));
     return wxPopupTransientWindow::Show(show);
 }
 
 void SimpleTransientPopup::OnSize(wxSizeEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSize"), int(this) );
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnSize"), long(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnSetFocus(wxFocusEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSetFocus"), int(this) );
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnSetFocus"), long(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnKillFocus(wxFocusEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnKillFocus"), int(this) );
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnKillFocus"), long(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnMouse pos(%d, %d)"), int(this), event.GetX(), event.GetY());
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnMouse pos(%d, %d)"), long(this), event.GetX(), event.GetY());
     event.Skip();
 }
 
 void SimpleTransientPopup::OnButton(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnButton ID %d"), int(this), event.GetId());
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnButton ID %d"), long(this), event.GetId());
 
     wxButton *button = wxDynamicCast(event.GetEventObject(), wxButton);
     if (button->GetLabel() == wxT("Press Me"))
@@ -198,7 +198,7 @@ void SimpleTransientPopup::OnButton(wxCommandEvent& event)
 
 void SimpleTransientPopup::OnSpinCtrl(wxSpinEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSpinCtrl ID %d Value %d"), int(this), event.GetId(), event.GetInt());
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnSpinCtrl ID %d Value %ld"), long(this), event.GetId(), event.GetInt());
     event.Skip();
 }
 
@@ -344,7 +344,7 @@ void MyFrame::OnStartSimplePopup(wxCommandEvent& event)
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
     popup->Position( pos, sz );
-    wxLogMessage( wxT("0x%x Simple Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
+    wxLogMessage( wxT("0x%lx Simple Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
     popup->Popup();
 }
 
@@ -357,7 +357,7 @@ void MyFrame::OnStartScrolledPopup(wxCommandEvent& event)
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
     popup->Position( pos, sz );
-    wxLogMessage( wxT("0x%x Scrolled Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
+    wxLogMessage( wxT("0x%lx Scrolled Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
     popup->Popup();
 }
 
@@ -409,7 +409,7 @@ void MyDialog::OnStartSimplePopup(wxCommandEvent& event)
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
     popup->Position( pos, sz );
-    wxLogMessage( wxT("0x%x Dialog Simple Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
+    wxLogMessage( wxT("0x%lx Dialog Simple Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
     popup->Popup();
 }
 
@@ -422,6 +422,6 @@ void MyDialog::OnStartScrolledPopup(wxCommandEvent& event)
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
     popup->Position( pos, sz );
-    wxLogMessage( wxT("0x%x Dialog Scrolled Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
+    wxLogMessage( wxT("0x%lx Dialog Scrolled Popup Shown pos(%d, %d) size(%d, %d)"), long(popup), pos.x, pos.y, sz.x, sz.y );
     popup->Popup();
 }
