@@ -70,8 +70,11 @@
 	$DEBUG_SUFFIX="";
 	$DLL_OR_LIB=Config("wxbase") ? "wxBase" : "wxWindows";
 	$DLL_FLAGS=" ";
-	#! actually this depends on the contents of setup.h
-	$EXTRA_LIBS=Config("wxbase") ? "" : "zlib png jpeg tiff";
+	#! actually this should depend on the contents of setup.h!
+	$EXTRA_LIBS="zlib regex";
+	if ( !Config("wxbase") ) {
+	    $EXTRA_LIBS.=" png jpeg tiff";
+	}
     }
 
     #! let's be smarter: first of all, if no extension is given, add .lib
