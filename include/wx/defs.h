@@ -323,6 +323,50 @@ typedef int wxWindowID;
     #endif
 #endif
 
+/* provide replacement for C99 va_copy() if the compiler doesn't have it */
+
+/* could be already defined by configure or the user */
+#ifndef wxVaCopy
+    /* if va_copy is a macro or configure detected that we have it, use it */
+    #if defined(va_copy) || defined(HAVE_VA_COPY)
+        #define wxVaCopy va_copy
+    #else /* no va_copy, try to provide a replacement */
+        /*
+           configure tries to determine whether va_list is an array or struct
+           type, but it may not be used under Windows, so deal with a few
+           special cases.
+         */
+
+        #ifdef __WATCOMC__
+            /* Watcom uses array type for va_list except for PPC and Alpha */
+            #if !defined(__PPC__) && !defined(__AXP__)
+                #define VA_LIST_IS_ARRAY
+            #endif
+        #endif /* __WATCOMC__ */
+
+        #if defined(__PPC__) && (defined(_CALL_SYSV) || defined (_WIN32))
+            /*
+                PPC using SysV ABI and NT/PPC are special in that they use an
+                extra level of indirection.
+             */
+            #define VA_LIST_IS_POINTER
+        #endif /* SysV or Win32 on __PPC__ */
+
+        /*
+            note that we use memmove(), not memcpy(), in case anybody tries
+            to do wxVaCopy(ap, ap)
+         */
+        #if defined(VA_LIST_IS_POINTER)
+            #define wxVaCopy(d, s)  memmove(*(d), *(s), sizeof(va_list))
+        #elif defined(VA_LIST_IS_ARRAY)
+            #define wxVaCopy(d, s) memmove((d), (s), sizeof(va_list))
+        #else /* we can only hope that va_lists are simple lvalues */
+            #define wxVaCopy(d, s) ((d) = (s))
+        #endif
+    #endif /* va_copy/!va_copy */
+#endif // wxVaCopy
+
+
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */

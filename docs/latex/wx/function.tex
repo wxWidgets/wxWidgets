@@ -237,6 +237,7 @@ the corresponding topic.
 \helpref{wxUnix2DosFilename}{wxunix2dosfilename}\\
 \helpref{wxUnsetEnv}{wxunsetenv}\\
 \helpref{wxUsleep}{wxusleep}\\
+\helpref{wxVaCopy}{wxvacopy}\\
 \helpref{wxVsnprintf}{wxvsnprintf}\\
 \helpref{wxWakeUpIdle}{wxwakeupidle}\\
 \helpref{wxWriteResource}{wxwriteresource}\\
@@ -2975,6 +2976,19 @@ allows to define unsigned 64 bit compile time constants:
 \wxheading{See also}
 
 \helpref{wxLL}{wxll}, \helpref{wxLongLong}{wxlonglong}
+
+
+\membersection{wxVaCopy}\label{wxvacopy}
+
+\func{void}{wxVaCopy}{\param{va\_list }{argptrDst}, \param{va\_list}{argptrSrc}}
+
+This macro is the same as the standard C99 \texttt{va\_copy} for the compilers
+which support it or its replacement for those that don't. It must be used to
+preserve the value of a \texttt{va\_list} object if you need to use it after
+passing it to another function because it can be modified by the latter.
+
+As with \texttt{va\_start}, each call to \texttt{wxVaCopy} must have a matching 
+\texttt{va\_end}.
 
 
 \membersection{::wxWriteResource}\label{wxwriteresource}
