@@ -92,7 +92,7 @@ protected:
 private:
     // VZ: can't use default copy ctor for this class, should write a correct
     //     one! (TODO)
-    DECLARE_NO_COPY_CLASS(wxURL);
+    DECLARE_NO_COPY_CLASS(wxURL)
 
     DECLARE_DYNAMIC_CLASS(wxURL)
 };
