@@ -133,16 +133,16 @@ public:
     bool IsSplit() const { return (m_windowTwo != NULL); }
 
     // Sets the sash size
-    void SetSashSize(int width) { m_sashSize = width; }
+    void SetSashSize(int WXUNUSED(width)) { }
 
     // Sets the border size
-    void SetBorderSize(int width) { m_borderSize = width; }
+    void SetBorderSize(int WXUNUSED(width)) { }
 
     // Gets the sash size
-    int GetSashSize() const { return m_sashSize; }
+    int GetSashSize() const;
 
     // Gets the border size
-    int GetBorderSize() const { return m_borderSize; }
+    int GetBorderSize() const;
 
     // Set the sash position
     void SetSashPosition(int position, bool redraw = TRUE);
@@ -192,9 +192,6 @@ public:
     // In live mode, resize child windows in idle time
     void OnInternalIdle();
 
-    // Draws borders
-    virtual void DrawBorders(wxDC& dc);
-
     // Draws the sash
     virtual void DrawSash(wxDC& dc);
 
@@ -202,13 +199,10 @@ public:
     virtual void DrawSashTracker(int x, int y);
 
     // Tests for x, y over sash
-    virtual bool SashHitTest(int x, int y, int tolerance = 2);
+    virtual bool SashHitTest(int x, int y, int tolerance = 5);
 
     // Resizes subwindows
     virtual void SizeWindows();
-
-    // Initialize colours
-    void InitColours();
 
     void SetNeedUpdating(bool needUpdating) { m_needUpdating = needUpdating; }
     bool GetNeedUpdating() const { return m_needUpdating ; }
@@ -262,8 +256,6 @@ protected:
     int         m_dragMode;
     int         m_oldX;
     int         m_oldY;
-    int         m_borderSize;
-    int         m_sashSize;     // Sash width or height
     int         m_sashPosition; // Number of pixels from left or top
     int         m_requestedSashPosition;
     int         m_sashPositionCurrent; // while dragging
@@ -272,13 +264,7 @@ protected:
     int         m_minimumPaneSize;
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
-    wxPen*      m_sashTrackerPen;
-    wxPen*      m_lightShadowPen;
-    wxPen*      m_mediumShadowPen;
-    wxPen*      m_darkShadowPen;
-    wxPen*      m_hilightPen;
-    wxBrush*    m_faceBrush;
-    wxPen*      m_facePen;
+    wxPen      *m_sashTrackerPen;
 
 private:
     WX_DECLARE_CONTROL_CONTAINER();

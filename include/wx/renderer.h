@@ -76,6 +76,26 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) = 0;
 
+    // draw the border for sash window: this border must be such that the sash
+    // drawn by DrawSash() blends into it well
+    virtual void DrawSplitterBorder(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect) = 0;
+
+    // draw a (vertical) sash
+    virtual void DrawSplitterSash(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxSize& size,
+                                  wxCoord position) = 0;
+
+
+    // geometry functions
+    // ------------------
+
+    // get the splitter parameters: the x field of the returned point is the
+    // sash width and the y field is the border width
+    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win) = 0;
+
 
     // pseudo constructors
     // -------------------
@@ -106,11 +126,27 @@ public:
                                   const wxRect& rect,
                                   int flags = 0)
         { m_rendererNative.DrawHeaderButton(win, dc, rect, flags); }
+
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0)
         { m_rendererNative.DrawTreeItemButton(win, dc, rect, flags); }
+
+    virtual void DrawSplitterBorder(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect)
+        { m_rendererNative.DrawSplitterBorder(win, dc, rect); }
+
+    virtual void DrawSplitterSash(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxSize& size,
+                                  wxCoord position)
+        { m_rendererNative.DrawSplitterSash(win, dc, size, position); }
+
+
+    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win)
+        { return m_rendererNative.GetSplitterSashAndBorder(win); }
 
 protected:
     wxRendererNative& m_rendererNative;

@@ -49,6 +49,12 @@ public:
                                     const wxRect& rect,
                                     int flags = 0);
 
+    // draw a (vertical) sash
+    virtual void DrawSplitterSash(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxSize& size,
+                                  wxCoord position);
+
 private:
     // the tree buttons
     wxBitmap m_bmpTreeExpanded,
@@ -183,5 +189,22 @@ wxRendererMac::DrawTreeItemButton(wxWindow *win,
                                              : m_bmpTreeCollapsed,
                   rect.x, rect.y, true /* use mask */);
 #endif // 0/1
+}
+
+void
+wxRendererMac::DrawSash(wxWindow *win,
+                        wxDC& dc,
+                        const wxSize& size,
+                        wxCoord position)
+{
+    // VZ: we have to somehow determine if we're drawing a normal sash or
+    //     a brushed metal one as they look quite differently... this is
+    //     completely bogus anyhow, of course (TODO)
+
+    const wxCoord h = size.y;
+
+    dc.SetPen(*wxLIGHT_GREY_PEN);
+    dc.SetBrush(*wxWHITE_BRUSH);
+    dc.DrawRectangle(position, 0, 7, h);
 }
 
