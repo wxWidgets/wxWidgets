@@ -34,10 +34,11 @@ public:
            long style = wxDEFAULT_FRAME_STYLE|wxTINY_CAPTION_HORIZ,
            const wxString& name = wxFrameNameStr)
   {
+      // Use wxFrame constructor in absence of more specific code.
       Create(parent, id, title, pos, size, style, name);
   }
 
-  ~wxMiniFrame();
+  ~wxMiniFrame() {}
 protected:
 };
 

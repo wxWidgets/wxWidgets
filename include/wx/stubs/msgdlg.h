@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msgdlg.h
-// Purpose:     wxMessageDialog class
+// Purpose:     wxMessageDialog class. Use generic version if no
+//              platform-specific implementation.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98

@@ -67,7 +67,7 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxValidator;
 
 #if USE_DRAG_AND_DROP
-class wxDropTarget;
+class WXDLLEXPORT wxDropTarget;
 #endif
 
 #if USE_WX_RESOURCES
@@ -311,6 +311,15 @@ public:
   inline virtual void SetForegroundColour(const wxColour& col);
   inline virtual wxColour GetForegroundColour() const;
 
+  // Set/get window default background colour (for children to inherit).
+  // NOTE: these may be removed in later revisions.
+  inline virtual void SetDefaultBackgroundColour(const wxColour& col);
+  inline virtual wxColour GetDefaultBackgroundColour(void) const;
+
+  // Set/get window default foreground colour (for children to inherit)
+  inline virtual void SetDefaultForegroundColour(const wxColour& col);
+  inline virtual wxColour GetDefaultForegroundColour(void) const;
+
   // Get the default button, if there is one
   inline virtual wxButton *GetDefaultItem() const;
   inline virtual void SetDefaultItem(wxButton *but);
@@ -382,11 +391,6 @@ public:
   // Executes the default message
   virtual long Default();
 
-/* TODO: implement your own data access
-  virtual WXHWND GetHWND() const ;
-  virtual void SetHWND(WXHWND hWnd);
-*/
-
 /* TODO: you may need something like this
   // Determine whether 3D effects are wanted
   virtual WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D);
@@ -455,8 +459,6 @@ protected:
   bool                  m_autoLayout;                            // Whether to call Layout() in OnSize
   wxWindow *            m_windowParent;                     // Each window always knows its parent
   wxValidator *         m_windowValidator;
-  bool                  m_inOnSize; 			// Protection against OnSize reentry
-  bool                  m_winEnabled;
   int                   m_minSizeX;
   int                   m_minSizeY;
   int                   m_maxSizeX;
@@ -468,7 +470,6 @@ protected:
   bool                  m_caretEnabled;
   bool                  m_caretShown;
   wxFont                m_windowFont;                               // Window's font
-  bool                  m_isShown;
   wxCursor              m_windowCursor;                        // Window's cursor
   wxString              m_windowName;                            // Window name
 
@@ -476,31 +477,14 @@ protected:
 
   wxColour              m_backgroundColour ;
   wxColour              m_foregroundColour ;
-  bool                  m_backgroundTransparent;
-
-  int                   m_xThumbSize;
-  int                   m_yThumbSize;
-
-  float                 m_lastXPos;
-  float                 m_lastYPos;
-  int                   m_lastEvent;
-
-  bool                  m_mouseInWindow;
+  wxColour              m_defaultBackgroundColour;
+  wxColour              m_defaultForegroundColour;
 
 #if USE_DRAG_AND_DROP
   wxDropTarget         *m_pDropTarget;    // the current drop target or NULL
 #endif  //USE_DRAG_AND_DROP
 
 public:
-/* TODO: implementation of window handle, note of last message, etc.
-  WXHWND                m_hWnd; 			// MS Windows window handle
-  WXUINT                m_lastMsg;
-  WXWPARAM              m_lastWParam;
-  WXLPARAM              m_lastLParam;
-  WXHMENU               m_hMenu; // Menu, if any
-
-*/
-
   wxRegion              m_updateRegion;
   wxList *              m_children;                           // Window's children
   int                   m_returnCode;
@@ -534,6 +518,10 @@ inline void wxWindow::SetBackgroundColour(const wxColour& col) { m_backgroundCol
 inline wxColour wxWindow::GetBackgroundColour() const { return m_backgroundColour; };
 inline void wxWindow::SetForegroundColour(const wxColour& col) { m_foregroundColour = col; };
 inline wxColour wxWindow::GetForegroundColour() const { return m_foregroundColour; };
+inline void wxWindow::SetDefaultForegroundColour(const wxColour& col) { m_defaultForegroundColour = col; };
+inline wxColour wxWindow::GetDefaultForegroundColour(void) const { return m_defaultForegroundColour; };
+inline void wxWindow::SetDefaultBackgroundColour(const wxColour& col) { m_defaultBackgroundColour = col; };
+inline wxColour wxWindow::GetDefaultBackgroundColour(void) const { return m_defaultBackgroundColour; };
 
 inline wxButton *wxWindow::GetDefaultItem() const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }

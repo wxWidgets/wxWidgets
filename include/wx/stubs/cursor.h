@@ -69,5 +69,7 @@ public:
 */
 };
 
+extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
+
 #endif
     // _WX_CURSOR_H_

@@ -1,6 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        printdlg.h
-// Purpose:     wxPrintDialog, wxPageSetupDialog classes
+// Purpose:     wxPrintDialog, wxPageSetupDialog classes.
+//              Use generic, PostScript version if no
+//              platform-specific implementation.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98

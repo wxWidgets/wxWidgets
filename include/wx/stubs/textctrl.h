@@ -30,9 +30,7 @@ WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 // Single-line text item
 class WXDLLEXPORT wxTextCtrl: public wxControl
 
-// 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow and streambuf:
-// it complains about deriving a huge class from the huge class streambuf. !!
-// Also, can't use streambuf if making or using a DLL :-(
+// TODO Some platforms/compilers don't like inheritance from streambuf.
 
 #if (defined(__BORLANDC__) && !defined(__WIN32__)) || defined(__MWERKS__)
 #define NO_TEXT_WINDOW_STREAM
@@ -132,7 +130,7 @@ public:
   virtual void Command(wxCommandEvent& event);
 
 protected:
-  wxString  fileName;
+  wxString  m_fileName;
   
   DECLARE_EVENT_TABLE()
 };

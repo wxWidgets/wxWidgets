@@ -27,6 +27,7 @@ class WXDLLEXPORT wxPenRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxPen;
 public:
     wxPenRefData();
+    wxPenRefData(const wxPenRefData& data);
     ~wxPenRefData();
 
 protected:
@@ -86,6 +87,15 @@ public:
   }
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : NULL); };
+
+// Implementation
+
+  // Useful helper: create the brush resource
+  void RealizeResource();
+
+  // When setting properties, we must make sure we're not changing
+  // another object
+  void Unshare();
 };
 
 #endif

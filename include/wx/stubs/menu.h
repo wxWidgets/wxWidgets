@@ -52,7 +52,7 @@ public:
     // insert a break in the menu
   void Break();
     // delete an item
-  void Delete(int id); /* If it's a submenu, menu is not destroyed. VZ: why? */
+  void Delete(int id);
 
   // menu item control
   void Enable(int id, bool Flag);
@@ -74,7 +74,7 @@ public:
   virtual wxString GetHelpString(int id) const ;
 
   // find item
-    // Finds the item id matching the given string, NOT_FOUND if not found.
+    // Finds the item id matching the given string, -1 if not found.
   virtual int FindItem(const wxString& itemString) const ;
     // Find wxMenuItem by ID, and item's menu too if itemMenu is !NULL.
   wxMenuItem *FindItemForId(int itemId, wxMenu **itemMenu = NULL) const;
@@ -93,7 +93,6 @@ public:
 
   int               m_noItems;
   wxString          m_title;
-  wxMenu *          m_topLevelMenu;
   wxMenuBar *       m_menuBar;
   wxList            m_menuItems;
   wxEvtHandler *    m_parent;

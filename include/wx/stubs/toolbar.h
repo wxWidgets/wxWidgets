@@ -59,14 +59,13 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   wxSize GetToolSize() const;
 
   wxSize GetMaxSize() const;
-  void GetSize(int *w, int *y) const;
 
-  // Add all the buttons: required for Win.
+  // Add all the buttons
   virtual bool CreateTools();
-  virtual void SetRows(int nRows);
   virtual void Layout() {}
 
-  // The post-tool-addition call
+  // The post-tool-addition call. TODO: do here whatever's
+  // necessary for completing the toolbar construction.
   bool Realize() { return CreateTools(); };
 
 protected:

@@ -19,8 +19,6 @@
 
 typedef   unsigned int  uint;
 
-class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
-
 class wxCheckListBox : public wxListBox
 {
   DECLARE_DYNAMIC_CLASS(wxCheckListBox)
@@ -42,18 +40,6 @@ public:
 
   // accessors
   uint  GetItemHeight() const { return m_nItemHeight; }
-
-protected:
-  // we create our items ourselves and they have non-standard size,
-  // so we need to override these functions
-  virtual wxOwnerDrawn *CreateItem(uint n);
-
-  // pressing space or clicking the check box toggles the item
-  void OnChar(wxKeyEvent& event);
-  void OnLeftClick(wxMouseEvent& event);
-
-private:
-  uint    m_nItemHeight;  // height of checklistbox items (the same for all)
 
   DECLARE_EVENT_TABLE()
 };

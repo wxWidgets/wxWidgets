@@ -60,11 +60,9 @@ public:
   ~wxDialog();
 
   virtual bool Destroy();
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   void SetClientSize(int width, int height);
   void GetPosition(int *x, int *y) const;
   bool Show(bool show);
-  bool IsShown() const ;
   void Iconize(bool iconize);
 
   virtual bool IsIconized() const;
@@ -75,7 +73,6 @@ public:
 
   bool OnClose();
   void OnCharHook(wxKeyEvent& event);
-  void OnPaint(wxPaintEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 
   void SetModal(bool flag);

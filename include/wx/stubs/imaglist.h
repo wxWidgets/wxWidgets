@@ -1,6 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imaglist.h
-// Purpose:     wxImageList class
+// Purpose:     wxImageList class. Note: if your GUI doesn't have
+//              an image list equivalent, you can use the generic class
+//              in src/generic.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98

@@ -109,6 +109,7 @@ protected:
   wxString  m_extension;
   long      m_type;
 };
+
 #define M_BITMAPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
 
 class WXDLLEXPORT wxBitmap: public wxGDIObject

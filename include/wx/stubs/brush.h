@@ -27,6 +27,7 @@ class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxBrush;
 public:
     wxBrushRefData();
+    wxBrushRefData(const wxBrushRefData& data);
     ~wxBrushRefData();
 
 protected:
@@ -57,7 +58,7 @@ public:
 
   virtual void SetColour(const wxColour& col)  ;
   virtual void SetColour(const wxString& col)  ;
-  virtual void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
+  virtual void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
   virtual void SetStyle(int style)  ;
   virtual void SetStipple(const wxBitmap& stipple)  ;
 
@@ -70,6 +71,15 @@ public:
   inline wxBitmap *GetStipple() const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_stipple : 0); };
 
   virtual bool Ok() const { return (m_refData != NULL) ; }
+
+// Implementation
+
+  // Useful helper: create the brush resource
+  void RealizeResource();
+
+  // When setting properties, we must make sure we're not changing
+  // another object
+  void Unshare();
 };
 
 #endif

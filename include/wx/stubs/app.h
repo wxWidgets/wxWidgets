@@ -131,7 +131,6 @@ public:
 
   // Implementation
   static void CommonInit();
-  static void CleanUp();
   static void CommonCleanUp();
   void DeletePendingObjects();
   bool ProcessIdle();
@@ -146,8 +145,8 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-// TODO: add platform-specific arguments, e.g. int argc, char* argv[]
-int WXDLLEXPORT wxEntry();
+// TODO: add platform-specific arguments
+int WXDLLEXPORT wxEntry( int argc, char *argv[] );
 
 #endif
     // _WX_APP_H_

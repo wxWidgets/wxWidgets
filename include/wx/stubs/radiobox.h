@@ -56,7 +56,6 @@ public:
   wxString GetLabel() const;
   void SetLabel(const wxString& label);
   void SetLabel(int item, const wxString& label) ;
-  void SetLabel(int item, wxBitmap *bitmap) ;
   wxString GetLabel(int item) const;
   bool Show(bool show);
   void SetFocus();
@@ -79,9 +78,6 @@ protected:
   WXHWND *          m_radioButtons;
 */
   int               m_majorDim ;
-  int *             m_radioWidth ;  // for bitmaps (not implemented)
-  int *             m_radioHeight ;
-
   int               m_noItems;
   int               m_noRowsOrCols;
   int               m_selectedButton;

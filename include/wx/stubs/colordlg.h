@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colordlg.h
-// Purpose:     wxColourDialog class
+// Purpose:     wxColourDialog class. Use generic version if no
+//              platform-specific implementation.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98

@@ -29,7 +29,6 @@ public:
 protected:
   int           m_pointSize;
   int           m_family;
-  int           m_fontId;
   int           m_style;
   int           m_weight;
   bool          m_underlined;
@@ -49,19 +48,18 @@ class WXDLLEXPORT wxFont: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxFont)
 public:
   wxFont();
-  wxFont(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
+  wxFont(int pointSize, int family, int style, int weight, bool underlined = FALSE, const wxString& faceName = wxEmptyString);
   inline wxFont(const wxFont& font) { Ref(font); }
-  inline wxFont(const wxFont* font) { /* UnRef(); */ if (font) Ref(*font); }
+  inline wxFont(const wxFont* font) { if (font) Ref(*font); }
 
   ~wxFont();
 
-  bool Create(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
+  bool Create(int pointSize, int family, int style, int weight, bool underlined = FALSE, const wxString& faceName = wxEmptyString);
 
   virtual bool Ok() const { return (m_refData != NULL) ; }
 
   inline int GetPointSize() const { return M_FONTDATA->m_pointSize; }
   inline int GetFamily() const { return M_FONTDATA->m_family; }
-  inline int GetFontId() const { return M_FONTDATA->m_fontId; } /* New font system */
   inline int GetStyle() const { return M_FONTDATA->m_style; }
   inline int GetWeight() const { return M_FONTDATA->m_weight; }
   wxString GetFamilyString() const ;
@@ -80,6 +78,10 @@ public:
   inline wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
   inline bool operator == (const wxFont& font) { return m_refData == font.m_refData; }
   inline bool operator != (const wxFont& font) { return m_refData != font.m_refData; }
+
+  // Implementation
+protected:
+  void Unshare();
 };
 
 #endif

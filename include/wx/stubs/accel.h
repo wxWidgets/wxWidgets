@@ -68,10 +68,6 @@ public:
     inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
 
     bool Ok() const;
-/* TODO: Accessors for your GUI
-    void SetHACCEL(WXHACCEL hAccel);
-    WXHACCEL GetHACCEL() const;
-*/
 };
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;

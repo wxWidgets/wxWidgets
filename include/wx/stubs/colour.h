@@ -22,7 +22,7 @@ class WXDLLEXPORT wxColour: public wxObject
   DECLARE_DYNAMIC_CLASS(wxColour)
 public:
   wxColour();
-  wxColour(const unsigned char r, const unsigned char g, const unsigned char b);
+  wxColour(unsigned char r, unsigned char g, unsigned char b);
   wxColour(unsigned long colRGB) { Set(colRGB); }
   wxColour(const wxColour& col);
   wxColour(const wxString& col);
