@@ -147,7 +147,7 @@ class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
 public:
     // ctors and dtor
     wxMenuBar(long WXUNUSED(style) = 0) { Init(); }
-    wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0)
+    wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
     virtual ~wxMenuBar();
 
     // implement base class virtuals
