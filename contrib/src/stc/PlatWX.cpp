@@ -595,11 +595,13 @@ void Window::Show(bool show) {
 
 void Window::InvalidateAll() {
     GETWIN(id)->Refresh(false);
+    wxWakeUpIdle();
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
     wxRect r = wxRectFromPRectangle(rc);
     GETWIN(id)->Refresh(false, &r);
+    wxWakeUpIdle();
 }
 
 void Window::SetFont(Font &font) {
