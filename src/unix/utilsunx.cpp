@@ -465,7 +465,7 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
     command we set up a pipe with a valid file descriptor on the reading side
     when the output is redirected. So the subprocess happily writes to it ...
     until the pipe buffer (which is usually quite big on Unix, I think the
-    default is 4Mb) is full. Then the writing process stops and waits until we
+    default is 4Kb) is full. Then the writing process stops and waits until we
     read some data from the pipe to be able to continue writing to it but we
     never do it because we wait until it terminates to start reading and so we
     have a classical deadlock.
@@ -473,7 +473,11 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
    Here is the fix: we now read the output as soon as it appears into a temp
    buffer (wxStreamTempBuffer object) and later just stuff it back into the
    stream when the process terminates. See supporting code in wxExecute()
-   itself as well.   
+   itself as well.
+
+   Note that this is horribly inefficient for large amounts of output (count
+   the number of times we copy the data around) and so a better API is badly
+   needed!
 */
 
 class wxStreamTempBuffer
@@ -503,7 +507,7 @@ private:
 
 wxStreamTempBuffer::wxStreamTempBuffer()
 {
-    m_stream = NULL; 
+    m_stream = NULL;
     m_buffer = NULL;
     m_size = 0;
 }
@@ -517,9 +521,9 @@ void wxStreamTempBuffer::Update()
 {
     if ( m_stream && !m_stream->Eof() )
     {
-        // realloc in blocks of 1Kb - surely not the best strategy but which
-        // one is?
-        static const size_t incSize = 1024;
+        // realloc in blocks of 4Kb: this is the default (and minimal) buffer
+        // size of the Unix pipes so it should be the optimal step
+        static const size_t incSize = 4096;
 
         void *buf = realloc(m_buffer, m_size + incSize);
         if ( !buf )
@@ -531,7 +535,7 @@ void wxStreamTempBuffer::Update()
         {
             m_buffer = buf;
             m_stream->Read((char *)m_buffer + m_size, incSize);
-            m_size += incSize;
+            m_size += m_stream->LastRead();
         }
     }
 }
@@ -546,6 +550,87 @@ wxStreamTempBuffer::~wxStreamTempBuffer()
 }
 
 #endif // wxUSE_STREAMS
+
+// ----------------------------------------------------------------------------
+// wxPipe: this encpasulates pipe() system call
+// ----------------------------------------------------------------------------
+
+class wxPipe
+{
+public:
+    // the symbolic names for the pipe ends
+    enum Direction
+    {
+        Read,
+        Write
+    };
+
+    enum
+    {
+        INVALID_FD = -1
+    };
+
+    // default ctor doesn't do anything
+    wxPipe() { m_fds[Read] = m_fds[Write] = INVALID_FD; }
+
+    // create the pipe, return TRUE if ok, FALSE on error
+    bool Create()
+    {
+        if ( pipe(m_fds) == -1 )
+        {
+            wxLogSysError(_("Pipe creation failed"));
+
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    // return TRUE if we were created successfully
+    bool IsOk() const { return m_fds[Read] != INVALID_FD; }
+
+    // return the descriptor for one of the pipe ends
+    int operator[](Direction which) const
+    {
+        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_fds),
+                      _T("invalid pipe index") );
+
+        return m_fds[which];
+    }
+
+    // detach a descriptor, meaning that the pipe dtor won't close it, and
+    // return it
+    int Detach(Direction which)
+    {
+        wxASSERT_MSG( which >= 0 && (size_t)which < WXSIZEOF(m_fds),
+                      _T("invalid pipe index") );
+
+        int fd = m_fds[which];
+        m_fds[which] = INVALID_FD;
+
+        return fd;
+    }
+
+    // close the pipe descriptors
+    void Close()
+    {
+        for ( size_t n = 0; n < WXSIZEOF(m_fds); n++ )
+        {
+            if ( m_fds[n] != INVALID_FD )
+                close(m_fds[n]);
+        }
+    }
+
+    // dtor closes the pipe descriptors
+    ~wxPipe() { Close(); }
+
+private:
+    int m_fds[2];
+};
+
+// ----------------------------------------------------------------------------
+// wxExecute: the real worker function
+// ----------------------------------------------------------------------------
 
 long wxExecute(wxChar **argv,
                int flags,
@@ -585,10 +670,9 @@ long wxExecute(wxChar **argv,
 
 #if wxUSE_GUI
     // create pipes
-    int end_proc_detect[2];
-    if ( pipe(end_proc_detect) == -1 )
+    wxPipe pipeEndProcDetect;
+    if ( !pipeEndProcDetect.Create() )
     {
-        wxLogSysError( _("Pipe creation failed") );
         wxLogError( _("Failed to execute '%s'\n"), *argv );
 
         ARGS_CLEANUP;
@@ -598,25 +682,14 @@ long wxExecute(wxChar **argv,
 #endif // wxUSE_GUI
 
     // pipes for inter process communication
-    int pipeIn[2],      // stdin
-        pipeOut[2],     // stdout
-        pipeErr[2];     // stderr
-
-    pipeIn[0] = pipeIn[1] =
-    pipeOut[0] = pipeOut[1] =
-    pipeErr[0] = pipeErr[1] = -1;
+    wxPipe pipeIn,      // stdin
+           pipeOut,     // stdout
+           pipeErr;     // stderr
 
     if ( process && process->IsRedirected() )
     {
-        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 || pipe(pipeErr) == -1 )
+        if ( !pipeIn.Create() || !pipeOut.Create() || !pipeErr.Create() )
         {
-#if wxUSE_GUI
-            // free previously allocated resources
-            close(end_proc_detect[0]);
-            close(end_proc_detect[1]);
-#endif // wxUSE_GUI
-
-            wxLogSysError( _("Pipe creation failed") );
             wxLogError( _("Failed to execute '%s'\n"), *argv );
 
             ARGS_CLEANUP;
@@ -634,17 +707,6 @@ long wxExecute(wxChar **argv,
 
     if ( pid == -1 )     // error?
     {
-#if wxUSE_GUI
-        close(end_proc_detect[0]);
-        close(end_proc_detect[1]);
-        close(pipeIn[0]);
-        close(pipeIn[1]);
-        close(pipeOut[0]);
-        close(pipeOut[1]);
-        close(pipeErr[0]);
-        close(pipeErr[1]);
-#endif // wxUSE_GUI
-
         wxLogSysError( _("Fork failed") );
 
         ARGS_CLEANUP;
@@ -654,7 +716,9 @@ long wxExecute(wxChar **argv,
     else if ( pid == 0 )  // we're in child
     {
 #if wxUSE_GUI
-        close(end_proc_detect[0]); // close reading side
+        // reading side can be safely closed but we should keep the write one
+        // opened
+        pipeEndProcDetect.Detach(wxPipe::Write);
 #endif // wxUSE_GUI
 
         // These lines close the open file descriptors to to avoid any
@@ -665,9 +729,11 @@ long wxExecute(wxChar **argv,
         {
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
-                if ( fd == pipeIn[0] || fd == pipeOut[1] || fd == pipeErr[1]
+                if ( fd == pipeIn[wxPipe::Read]
+                        || fd == pipeOut[wxPipe::Write]
+                        || fd == pipeErr[wxPipe::Write]
 #if wxUSE_GUI
-                     || fd == end_proc_detect[1]
+                        || fd == pipeEndProcDetect[wxPipe::Write]
 #endif // wxUSE_GUI
                    )
                 {
@@ -675,34 +741,34 @@ long wxExecute(wxChar **argv,
                     continue;
                 }
 
-                // leave stderr opened too, it won't do any hurm
+                // leave stderr opened too, it won't do any harm
                 if ( fd != STDERR_FILENO )
                     close(fd);
             }
 
 #ifndef __VMS
-	   if ( flags & wxEXEC_MAKE_GROUP_LEADER )
+            if ( flags & wxEXEC_MAKE_GROUP_LEADER )
             {
                 // Set process group to child process' pid.  Then killing -pid
                 // of the parent will kill the process and all of its children.
                 setsid();
             }
-#endif
+#endif // !__VMS
         }
 
         // redirect stdio, stdout and stderr
-        if ( pipeIn[0] != -1 )
+        if ( pipeIn.IsOk() )
         {
-            if ( dup2(pipeIn[0], STDIN_FILENO) == -1 ||
-                 dup2(pipeOut[1], STDOUT_FILENO) == -1 ||
-                 dup2(pipeErr[1], STDERR_FILENO) == -1 )
+            if ( dup2(pipeIn[wxPipe::Read], STDIN_FILENO) == -1 ||
+                 dup2(pipeOut[wxPipe::Write], STDOUT_FILENO) == -1 ||
+                 dup2(pipeErr[wxPipe::Write], STDERR_FILENO) == -1 )
             {
                 wxLogSysError(_("Failed to redirect child process input/output"));
             }
 
-            close(pipeIn[0]);
-            close(pipeOut[1]);
-            close(pipeErr[1]);
+            pipeIn.Close();
+            pipeOut.Close();
+            pipeErr.Close();
         }
 
         execvp (*mb_argv, mb_argv);
@@ -713,6 +779,9 @@ long wxExecute(wxChar **argv,
         // some compilers complain about missing return - of course, they
         // should know that exit() doesn't return but what else can we do if
         // they don't?
+        //
+        // and, sure enough, other compilers complain about unreachable code
+        // after exit() call, so we can just always have return here...
 #if defined(__VMS) || defined(__INTEL_COMPILER)
         return 0;
 #endif
@@ -730,23 +799,39 @@ long wxExecute(wxChar **argv,
         {
 #if wxUSE_STREAMS
             // in/out for subprocess correspond to our out/in
-            wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
-            wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
-            wxInputStream *errStream = new wxProcessFileInputStream(pipeErr[0]);
+            wxOutputStream *outStream =
+                new wxProcessFileOutputStream(pipeIn.Detach(wxPipe::Write));
+
+            wxInputStream *inStream =
+                new wxProcessFileInputStream(pipeOut.Detach(wxPipe::Read));
+
+            wxInputStream *errStream =
+                new wxProcessFileInputStream(pipeErr.Detach(wxPipe::Read));
 
             process->SetPipeStreams(inStream, outStream, errStream);
 
             bufIn.Init(inStream);
-            bufErr.Init(inStream);
+            bufErr.Init(errStream);
 #endif // wxUSE_STREAMS
+        }
 
-            close(pipeIn[0]); // close reading side
-            close(pipeOut[1]); // close writing side
-            close(pipeErr[1]); // close writing side
+        if ( pipeIn.IsOk() )
+        {
+            pipeIn.Close();
+            pipeOut.Close();
+            pipeErr.Close();
         }
 
 #if wxUSE_GUI && !defined(__WXMICROWIN__)
         wxEndProcessData *data = new wxEndProcessData;
+
+        data->tag = wxAddProcessCallback
+                    (
+                        data,
+                        pipeEndProcDetect.Detach(wxPipe::Read)
+                    );
+
+        pipeEndProcDetect.Close();
 
         if ( flags & wxEXEC_SYNC )
         {
@@ -756,9 +841,6 @@ long wxExecute(wxChar **argv,
 
             // sync execution: indicate it by negating the pid
             data->pid = -pid;
-            data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
-
-            close(end_proc_detect[1]); // close writing side
 
             wxBusyCursor bc;
             wxWindowDisabler wd;
@@ -790,9 +872,6 @@ long wxExecute(wxChar **argv,
             // will be deleted in GTK_EndProcessDetector
             data->process  = process;
             data->pid      = pid;
-            data->tag      = wxAddProcessCallback(data, end_proc_detect[0]);
-
-            close(end_proc_detect[1]); // close writing side
 
             return pid;
         }
