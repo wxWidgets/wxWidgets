@@ -1,0 +1,186 @@
+/*-*- c++ -*-********************************************************
+ * wxlparser.h : parsers,  import/export for wxLayoutList           *
+ *                                                                  *
+ * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
+ *                                                                  *
+ * $Id$
+ *******************************************************************/
+
+#ifdef __GNUG__
+#   pragma implementation "wxlparser.h"
+#endif
+
+#include   "wxllist.h"
+#include   "wxlparser.h"
+
+#define   BASE_SIZE 12
+
+void wxLayoutImportText(wxLayoutList &list, wxString const &str)
+{
+   char * cptr = (char *)str.c_str(); // string gets changed only temporarily
+   const char * begin = cptr;
+   char  backup;
+   
+   for(;;)
+   {
+      begin = cptr++;
+      while(*cptr && *cptr != '\n')
+         cptr++;
+      backup = *cptr;
+      *cptr = '\0';
+      list.Insert(begin);
+      *cptr = backup;
+      if(backup == '\n')
+         list.LineBreak();
+      else if(backup == '\0') // reached end of string
+         break;
+      cptr++;
+   }
+}
+
+static
+wxString wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
+                                 wxLayoutStyleInfo **lastStylePtr)
+{
+   static char buffer[20];
+   wxString html;
+   
+   wxLayoutStyleInfo *si = cmd.GetStyle();
+   wxLayoutStyleInfo *last_si = NULL;
+
+   int size, sizecount;
+   
+   if(lastStylePtr != NULL)
+      last_si = *lastStylePtr;
+   
+   html += "<font ";
+
+   html +="color=";
+   sprintf(buffer,"\"#%02X%02X%02X\"", si->fg_red,si->fg_green,si->fg_blue);
+   html += buffer;
+
+
+   html += " bgcolor=";
+   sprintf(buffer,"\"#%02X%02X%02X\"", si->bg_red,si->bg_green,si->bg_blue);
+   html += buffer;
+
+   switch(si->family)
+   {
+   case wxSWISS:
+   case wxMODERN:
+      html += " face=\"Arial,Helvetica\""; break;
+   case wxROMAN:
+      html += " face=\"Times New Roman, Times\""; break;
+   case wxTELETYPE:
+      html += " face=\"Courier New, Courier\""; break;
+   default:
+      ;
+   }
+
+   size = BASE_SIZE; sizecount = 0;
+   while(size < si->size && sizecount < 5)
+   {
+      sizecount ++;
+      size = (size*12)/10;
+   }
+   while(size > si->size && sizecount > -5)
+   {
+      sizecount --;
+      size = (size*10)/12;
+   }
+   html += "size=";
+   sprintf(buffer,"%+1d", sizecount);
+   html += buffer;
+
+   html +=">";
+
+   if(last_si != NULL)
+      html ="</font>"+html; // terminate any previous font command
+
+   if((si->weight == wxBOLD) && ( (!last_si) || (last_si->weight != wxBOLD)))
+      html += "<b>";
+   else
+      if(si->weight != wxBOLD && ( last_si && (last_si->weight == wxBOLD)))
+         html += "</b>";
+
+   if(si->style == wxSLANT)
+      si->style = wxITALIC; // the same for html
+   
+   if((si->style == wxITALIC) && ( (!last_si) || (last_si->style != wxITALIC)))
+      html += "<i>";
+   else
+      if(si->style != wxITALIC && ( last_si && (last_si->style == wxITALIC)))
+         html += "</i>";
+
+   if(si->underline && ( (!last_si) || ! last_si->underline))
+      html += "<u>";
+   else if(si->underline == false && ( last_si && last_si->underline))
+      html += "</u>";
+   
+   if(last_si)
+      delete last_si;
+   *lastStylePtr = si;
+   return html;
+}
+
+
+
+#define   WXLO_IS_TEXT(type) \
+( (type == WXLO_TYPE_TEXT || type == WXLO_TYPE_LINEBREAK) \
+  || (type == WXLO_TYPE_CMD \
+      && mode == WXLO_EXPORT_AS_HTML))
+
+
+  
+   wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
+                                        wxLayoutList::iterator &from,
+                                        wxLayoutExportMode mode)
+{
+   if(from == list.end())
+      return NULL;
+   
+   wxLayoutObjectType   type = (*from)->GetType();
+   wxLayoutExportObject     * export = new wxLayoutExportObject();
+
+   static wxLayoutStyleInfo *s_si = NULL;
+   
+   if( mode == WXLO_EXPORT_AS_OBJECTS || ! WXLO_IS_TEXT(type)) // simple case
+   {
+      export->type = WXLO_EXPORT_OBJECT;
+      export->content.object = *from;
+      from++;
+      return export;
+   }
+
+   wxString *str = new wxString();
+   
+   // text must be concatenated
+   while(from != list.end() && WXLO_IS_TEXT(type))
+   {
+      switch(type)
+      {
+      case WXLO_TYPE_TEXT:
+         *str += ((wxLayoutObjectText *)*from)->GetText();
+         break;
+      case WXLO_TYPE_LINEBREAK:
+         if(mode == WXLO_EXPORT_AS_HTML)
+            *str += "<br>";
+         *str += '\n';
+         break;
+      case WXLO_TYPE_CMD:
+         //wxASSERT(mode == WXLO_EXPORT_AS_HTML,"reached cmd object in text mode")
+         assert(mode == WXLO_EXPORT_AS_HTML);
+         *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
+                                           *)*from, &s_si);
+         break;
+      default:  // ignore icons
+         ;
+      }
+      from++;
+      if(from != list.end())
+         type = (*from)->GetType();
+   }
+   export->type = (mode == WXLO_EXPORT_AS_HTML) ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
+   export->content.text = str;
+   return export;
+}
