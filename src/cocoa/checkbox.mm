@@ -53,17 +53,27 @@ wxCheckBox::~wxCheckBox()
     DisassociateNSButton(m_cocoaNSView);
 }
 
-void wxCheckBox::SetValue(bool)
+void wxCheckBox::SetValue(bool value)
 {
+    if(value)
+        [GetNSButton() setState: NSOnState];
+    else
+        [GetNSButton() setState: NSOffState];
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return false;
+    int state = [GetNSButton() state];
+    wxASSERT(state!=NSMixedState);
+    return state==NSOnState;
 }
 
 void wxCheckBox::Cocoa_wxNSButtonAction(void)
 {
     wxLogDebug("Checkbox");
+    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    InitCommandEvent(event); //    event.SetEventObject(this);
+    event.SetInt(GetValue());
+    Command(event);
 }
 
