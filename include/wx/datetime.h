@@ -32,11 +32,12 @@ class WXDLLEXPORT wxDateSpan;
 // rebuilt)
 // For Mingw32, causes a link error.
 #if defined( __WXDEBUG__) && !defined(__MINGW32__)
+    #undef inline
     #define inline
 #endif // Debug
 
 /*
- * TODO Well, everything :-)
+ * TODO
  *
  * + 1. Time zones with minutes (make TimeZone a class)
  * ? 2. getdate() function like under Solaris
