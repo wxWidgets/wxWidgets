@@ -217,6 +217,9 @@ All:
 - active mode support in wxFTP (Randall Fox)
 - sped up wxHTTP and wxFTP
 - added wxStringInput/OutputStreams
+- wxSystemSettings::GetMetric now returns -1 for metrics that are not
+  supported, instead of zero.
+
 
 All (GUI):
 

@@ -63,119 +63,51 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
 	switch ( index)
 	{
-        case wxSYS_MOUSE_BUTTONS:
-            // TODO
-            return 0;
-        case wxSYS_BORDER_X:
-            // TODO
-            return 0;
-        case wxSYS_BORDER_Y:
-            // TODO
-            return 0;
-        case wxSYS_CURSOR_X:
-            // TODO
-            return 0;
-        case wxSYS_CURSOR_Y:
-            // TODO
-            return 0;
-        case wxSYS_DCLICK_X:
-            // TODO
-            return 0;
-        case wxSYS_DCLICK_Y:
-            // TODO
-            return 0;
-        case wxSYS_DRAG_X:
-            // TODO
-            return 0;
-        case wxSYS_DRAG_Y:
-            // TODO
-            return 0;
-        case wxSYS_EDGE_X:
-            // TODO
-            return 0;
-        case wxSYS_EDGE_Y:
-            // TODO
-            return 0;
-        case wxSYS_HSCROLL_ARROW_X:
-            // TODO
-            return 0;
-        case wxSYS_HSCROLL_ARROW_Y:
-            // TODO
-            return 0;
-        case wxSYS_HTHUMB_X:
-            // TODO
-            return 0;
-        case wxSYS_ICON_X:
-            // TODO
-            return 0;
-        case wxSYS_ICON_Y:
-            // TODO
-            return 0;
-        case wxSYS_ICONSPACING_X:
-            // TODO
-            return 0;
-        case wxSYS_ICONSPACING_Y:
-            // TODO
-            return 0;
-        case wxSYS_WINDOWMIN_X:
-            // TODO
-            return 0;
-        case wxSYS_WINDOWMIN_Y:
-            // TODO
-            return 0;
+        // TODO case wxSYS_MOUSE_BUTTONS:
+        // TODO case wxSYS_BORDER_X:
+        // TODO case wxSYS_BORDER_Y:
+        // TODO case wxSYS_CURSOR_X:
+        // TODO case wxSYS_CURSOR_Y:
+        // TODO case wxSYS_DCLICK_X:
+        // TODO case wxSYS_DCLICK_Y:
+        // TODO case wxSYS_DRAG_X:
+        // TODO case wxSYS_DRAG_Y:
+        // TODO case wxSYS_EDGE_X:
+        // TODO case wxSYS_EDGE_Y:
+        // TODO case wxSYS_HSCROLL_ARROW_X:
+        // TODO case wxSYS_HSCROLL_ARROW_Y:
+        // TODO case wxSYS_HTHUMB_X:
+        // TODO case wxSYS_ICON_X:
+        // TODO case wxSYS_ICON_Y:
+        // TODO case wxSYS_ICONSPACING_X:
+        // TODO case wxSYS_ICONSPACING_Y:
+        // TODO case wxSYS_WINDOWMIN_X:
+        // TODO case wxSYS_WINDOWMIN_Y:
+            
         case wxSYS_SCREEN_X:
             return DisplayWidth( wxGlobalDisplay(), 0 );
             
         case wxSYS_SCREEN_Y:
             return DisplayHeight( wxGlobalDisplay(), 0 );
             
-        case wxSYS_FRAMESIZE_X:
-            // TODO
-            return 0;
-        case wxSYS_FRAMESIZE_Y:
-            // TODO
-            return 0;
-        case wxSYS_SMALLICON_X:
-            // TODO
-            return 0;
-        case wxSYS_SMALLICON_Y:
-            // TODO
-            return 0;
-        case wxSYS_HSCROLL_Y:
-            // TODO
-            return 0;
-        case wxSYS_VSCROLL_X:
-            // TODO
-            return 0;
-        case wxSYS_VSCROLL_ARROW_X:
-            // TODO
-            return 0;
-        case wxSYS_VSCROLL_ARROW_Y:
-            // TODO
-            return 0;
-        case wxSYS_VTHUMB_Y:
-            // TODO
-            return 0;
-        case wxSYS_CAPTION_Y:
-            // TODO
-            return 0;
-        case wxSYS_MENU_Y:
-            // TODO
-            return 0;
-        case wxSYS_NETWORK_PRESENT:
-            // TODO
-            return 0;
-        case wxSYS_PENWINDOWS_PRESENT:
-            // TODO
-            return 0;
-        case wxSYS_SHOW_SOUNDS:
-            // TODO
-            return 0;
-        case wxSYS_SWAP_BUTTONS:
-            // TODO
-            return 0;
+        // TODO case wxSYS_FRAMESIZE_X:
+        // TODO case wxSYS_FRAMESIZE_Y:
+        // TODO case wxSYS_SMALLICON_X:
+        // TODO case wxSYS_SMALLICON_Y:
+        // TODO case wxSYS_HSCROLL_Y:
+        // TODO case wxSYS_VSCROLL_X:
+        // TODO case wxSYS_VSCROLL_ARROW_X:
+        // TODO case wxSYS_VSCROLL_ARROW_Y:
+        // TODO case wxSYS_VTHUMB_Y:
+        // TODO case wxSYS_CAPTION_Y:
+        // TODO case wxSYS_MENU_Y:
+        // TODO case wxSYS_NETWORK_PRESENT:
+        // TODO case wxSYS_PENWINDOWS_PRESENT:
+        // TODO case wxSYS_SHOW_SOUNDS:
+        // TODO case wxSYS_SWAP_BUTTONS:
+            
         default:
-            return 0;
+            return -1;  // unsupported metric
     }
 }
 

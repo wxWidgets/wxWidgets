@@ -191,80 +191,50 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
             return 15;
-        case wxSYS_MOUSE_BUTTONS:
-            // TODO
-        case wxSYS_BORDER_X:
-            // TODO
-        case wxSYS_BORDER_Y:
-            // TODO
-        case wxSYS_CURSOR_X:
-            // TODO
-        case wxSYS_CURSOR_Y:
-            // TODO
-        case wxSYS_DCLICK_X:
-            // TODO
-        case wxSYS_DCLICK_Y:
-            // TODO
-        case wxSYS_DRAG_X:
-            // TODO
-        case wxSYS_DRAG_Y:
-            // TODO
-        case wxSYS_EDGE_X:
-            // TODO
-        case wxSYS_EDGE_Y:
-            // TODO
-        case wxSYS_HSCROLL_ARROW_X:
-            // TODO
-        case wxSYS_HSCROLL_ARROW_Y:
-            // TODO
-        case wxSYS_HTHUMB_X:
-            // TODO
-        case wxSYS_ICON_X:
-            // TODO
-        case wxSYS_ICON_Y:
-            // TODO
-        case wxSYS_ICONSPACING_X:
-            // TODO
-        case wxSYS_ICONSPACING_Y:
-            // TODO
-        case wxSYS_WINDOWMIN_X:
-            // TODO
-        case wxSYS_WINDOWMIN_Y:
-            break;
+            
         case wxSYS_SCREEN_X:
             return_value = DisplayWidth( wxGlobalDisplay(), 0 );
             break;
         case wxSYS_SCREEN_Y:
             return_value = DisplayHeight( wxGlobalDisplay(), 0 );
             break;
-        case wxSYS_FRAMESIZE_X:
-            // TODO
-        case wxSYS_FRAMESIZE_Y:
-            // TODO
-        case wxSYS_SMALLICON_X:
-            // TODO
-        case wxSYS_SMALLICON_Y:
-            // TODO
-        case wxSYS_VSCROLL_ARROW_X:
-            // TODO
-        case wxSYS_VSCROLL_ARROW_Y:
-            // TODO
-        case wxSYS_VTHUMB_Y:
-            // TODO
-        case wxSYS_CAPTION_Y:
-            // TODO
-        case wxSYS_MENU_Y:
-            // TODO
-        case wxSYS_NETWORK_PRESENT:
-            // TODO
-        case wxSYS_PENWINDOWS_PRESENT:
-            // TODO
-        case wxSYS_SHOW_SOUNDS:
-            // TODO
-        case wxSYS_SWAP_BUTTONS:
-            // TODO
+
+        // TODO case wxSYS_MOUSE_BUTTONS:
+        // TODO case wxSYS_BORDER_X:
+        // TODO case wxSYS_BORDER_Y:
+        // TODO case wxSYS_CURSOR_X:
+        // TODO case wxSYS_CURSOR_Y:
+        // TODO case wxSYS_DCLICK_X:
+        // TODO case wxSYS_DCLICK_Y:
+        // TODO case wxSYS_DRAG_X:
+        // TODO case wxSYS_DRAG_Y:
+        // TODO case wxSYS_EDGE_X:
+        // TODO case wxSYS_EDGE_Y:
+        // TODO case wxSYS_HSCROLL_ARROW_X:
+        // TODO case wxSYS_HSCROLL_ARROW_Y:
+        // TODO case wxSYS_HTHUMB_X:
+        // TODO case wxSYS_ICON_X:
+        // TODO case wxSYS_ICON_Y:
+        // TODO case wxSYS_ICONSPACING_X:
+        // TODO case wxSYS_ICONSPACING_Y:
+        // TODO case wxSYS_WINDOWMIN_X:
+        // TODO case wxSYS_WINDOWMIN_Y:
+        // TODO case wxSYS_FRAMESIZE_X:
+        // TODO case wxSYS_FRAMESIZE_Y:
+        // TODO case wxSYS_SMALLICON_X:
+        // TODO case wxSYS_SMALLICON_Y:
+        // TODO case wxSYS_VSCROLL_ARROW_X:
+        // TODO case wxSYS_VSCROLL_ARROW_Y:
+        // TODO case wxSYS_VTHUMB_Y:
+        // TODO case wxSYS_CAPTION_Y:
+        // TODO case wxSYS_MENU_Y:
+        // TODO case wxSYS_NETWORK_PRESENT:
+        // TODO case wxSYS_PENWINDOWS_PRESENT:
+        // TODO case wxSYS_SHOW_SOUNDS:
+        // TODO case wxSYS_SWAP_BUTTONS:
+
         default:
-            ;
+            return_value = -1; // unsuported metric
     }
 
     return return_value;

@@ -99,7 +99,8 @@ standalone function named {\tt wxSystemSettings\_GetFont}}
 
 \func{static int}{GetMetric}{\param{wxSystemMetric}{ index}}
 
-Returns a system metric.
+Returns the value of a system metric, or -1 if the metric is not
+supported on the current platform.
 
 {\it index} can be one of:
 

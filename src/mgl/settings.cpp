@@ -95,8 +95,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
             return 15; 
             break;
         default:
-            wxCHECK_MSG(index, 0, wxT("wxSystemSettings::GetMetric not fully implemented"));
-            return 0;
+            return -1;  // unsupported metric
     }
 }
 

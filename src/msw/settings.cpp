@@ -390,7 +390,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
     if ( indexMSW == -1 )
     {
         // not supported under current system
-        return 0;
+        return -1;
     }
 
     int rc = ::GetSystemMetrics(indexMSW);

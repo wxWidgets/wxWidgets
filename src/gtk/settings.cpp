@@ -378,7 +378,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index )
         case wxSYS_ICON_X:     return 32;
         case wxSYS_ICON_Y:     return 32;
         default:               
-            return 0;   // metric is unknown
+            return -1;   // metric is unknown
     }
 }
 
