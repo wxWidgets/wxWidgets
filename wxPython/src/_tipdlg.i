@@ -66,10 +66,10 @@ IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 // Now let SWIG know about it
 class wxPyTipProvider : public wxTipProvider {
 public:
+    %pythonAppend wxPyTipProvider "self._setCallbackInfo(self, PyTipProvider)"
     wxPyTipProvider(size_t currentTip);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyTipProvider)"
 };
 
 
