@@ -135,6 +135,8 @@ enum
            #include "wx/gtk/tbargtk.h"
         #elif defined(__WXMAC__)
            #include "wx/mac/toolbar.h"
+        #elif defined(__WXCOCOA__)
+           #include "wx/cocoa/toolbar.h"
         #elif defined(__WXPM__)
            #include "wx/os2/toolbar.h"
         #endif
