@@ -329,7 +329,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     if ( m_page )
     {
         // send the event to the old page
-        wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGING, GetId(), goingForward);
+        wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGING, GetId(), goingForward, m_page);
         if ( m_page->GetEventHandler()->ProcessEvent(event) &&
              !event.IsAllowed() )
         {
@@ -400,7 +400,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // nothing to do: the label was already correct
 
     // send the change event to the new page now
-    wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGED, GetId(), goingForward);
+    wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGED, GetId(), goingForward, m_page);
     (void)m_page->GetEventHandler()->ProcessEvent(event);
 
     // and finally show it
@@ -442,7 +442,7 @@ void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(event))
     // page, but a small extra check won't hurt
     wxWindow *win = m_page ? (wxWindow *)m_page : (wxWindow *)this;
 
-    wxWizardEvent event(wxEVT_WIZARD_CANCEL, GetId());
+    wxWizardEvent event(wxEVT_WIZARD_CANCEL, GetId(), FALSE, m_page);
     if ( !win->GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
     {
         // no objections - close the dialog
