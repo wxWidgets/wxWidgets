@@ -1481,7 +1481,7 @@ CREATE_SHARED=
 case "${canonical}" in
 
   *-hp-hpux* )
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       CXXFLAGS="${CXXFLAGS} +a1 -z -Aa -D_HPUX_SOURCE"
       CFLAGS="${CFLAGS} -z -D_HPUX_SOURCE"
       PICFLAGS="+z"
@@ -1505,7 +1505,7 @@ case "${canonical}" in
   ;;
 
   *-*-solaris2* ) 
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       PICFLAGS="-KPIC"
     else
       PICFLAGS="-fPIC"
@@ -1515,7 +1515,7 @@ case "${canonical}" in
   ;;
 
   *-*-sunos4* ) 
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       PICFLAGS="-PIC"
     else
       PICFLAGS="-fPIC"
@@ -1537,7 +1537,7 @@ case "${canonical}" in
   ;;
 
   *-*-dgux5* ) 
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
       PICFLAGS="-fPIC"
@@ -1547,7 +1547,7 @@ case "${canonical}" in
   ;;
 
   *-*-sysv5* ) 
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
       PICFLAGS="-fPIC"
@@ -1557,7 +1557,7 @@ case "${canonical}" in
   ;;
 
   *-*-aix* ) 
-    if test "${CC}" != "gcc" ; then
+    if test "$GCC" != "yes" ; then
       PICFLAGS="-bM\:SRE"
     else
       PICFLAGS="-fPIC"
