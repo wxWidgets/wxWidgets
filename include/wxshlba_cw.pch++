@@ -1,0 +1,31 @@
+#if __option (profile)
+#if __POWERPC__
+	#pragma precompile_target "wxshlba_PPC++_prof.mch"
+#elif __INTEL_
+	#pragma precompile_target "wxshlba_x86Prof++_prof.mch"
+#elif __CFM68K__
+	#pragma precompile_target "wxshlba_cfmProf++_prof.mch"
+#else
+	#pragma precompile_target "wxshlba_68kProf++_prof.mch"
+#endif
+#else
+#if __POWERPC__
+	#pragma precompile_target "wxshlba_PPC++.mch"
+#elif __INTEL__
+	#pragma precompile_target "wxshlba_x86++.mch"
+#elif __CFM68K__
+	#pragma precompile_target "wxshlba_cfm++.mch"
+#else
+	#pragma precompile_target "wxshlba_68k++.mch"
+#endif
+#endif
+
+#pragma once on
+#define WXUSINGDLL
+#define WX_PRECOMP
+#define wxUSE_GUI 1
+#define OLDP2C 1
+#include "wx/wx_cw_cm.h"
+#ifdef WX_PRECOMP
+   #include "wx/wxprec.h"
+#endif
