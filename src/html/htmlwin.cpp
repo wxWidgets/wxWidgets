@@ -78,6 +78,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = NULL;
+    m_tmpLastCell = NULL;
     m_tmpCanDrawLocks = 0;
     m_FS = new wxFileSystem();
     m_RelatedStatusBar = -1;
@@ -611,7 +612,20 @@ void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
     LoadPage(link.GetHref());
 }
 
+void wxHtmlWindow::OnCellClicked(wxHtmlCell *cell,
+                                 wxCoord x, wxCoord y,
+                                 const wxMouseEvent& event)
+{ 
+    wxCHECK_RET( cell, _T("can't be called with NULL cell") );
 
+    cell->OnMouseClick(this, x, y, event);
+}
+
+void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
+                                    wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+{
+    // do nothing here
+}
 
 void wxHtmlWindow::OnDraw(wxDC& dc)
 {
@@ -658,15 +672,23 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 
     if (event.ButtonDown())
     {
-        int sx, sy;
-        GetViewStart(&sx, &sy);
-        sx *= wxHTML_SCROLL_STEP;
-        sy *= wxHTML_SCROLL_STEP;
+        if ( m_Cell )
+        {
+            int sx, sy;
+            GetViewStart(&sx, &sy);
+            sx *= wxHTML_SCROLL_STEP;
+            sy *= wxHTML_SCROLL_STEP;
 
-        wxPoint pos = event.GetPosition();
+            wxPoint pos = event.GetPosition();
+            pos.x += sx;
+            pos.y += sy;
 
-        if (m_Cell)
-            m_Cell->OnMouseClick(this, sx + pos.x, sy + pos.y, event);
+            wxHtmlCell *cell = m_Cell->FindCellByPos(pos.x, pos.y);
+
+            // VZ: is it possible that we don't find anything at all?
+            if ( cell )
+                OnCellClicked(cell, pos.x, pos.y, event);
+        }
     }
 }
 
@@ -690,24 +712,39 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
         int x, y;
         wxGetMousePosition(&x, &y);
         ScreenToClient(&x, &y);
+        x += sx;
+        y += sy;
 
-        wxHtmlLinkInfo *lnk = m_Cell->GetLink(sx + x, sy + y);
-
-        if (lnk != m_tmpLastLink)
+        wxHtmlCell *cell = m_Cell->FindCellByPos(x, y);
+        if ( cell != m_tmpLastCell )
         {
-            if (lnk == NULL)
+            wxHtmlLinkInfo *lnk = cell ? cell->GetLink(x, y) : NULL;
+
+            if (lnk != m_tmpLastLink)
             {
-                SetCursor(*s_cur_arrow);
-                if (m_RelatedStatusBar != -1) m_RelatedFrame->SetStatusText(wxEmptyString, m_RelatedStatusBar);
+                if (lnk == NULL)
+                {
+                    SetCursor(*s_cur_arrow);
+                    if (m_RelatedStatusBar != -1)
+                        m_RelatedFrame->SetStatusText(wxEmptyString, m_RelatedStatusBar);
+                }
+                else
+                {
+                    SetCursor(*s_cur_hand);
+                    if (m_RelatedStatusBar != -1)
+                        m_RelatedFrame->SetStatusText(lnk->GetHref(), m_RelatedStatusBar);
+                }
+                m_tmpLastLink = lnk;
             }
-            else
-            {
-                SetCursor(*s_cur_hand);
-                if (m_RelatedStatusBar != -1)
-                    m_RelatedFrame->SetStatusText(lnk->GetHref(), m_RelatedStatusBar);
-            }
-            m_tmpLastLink = lnk;
+
+            m_tmpLastCell = cell;
         }
+        else // mouse moved but stayed in the same cell
+        {
+            if ( cell )
+                OnCellMouseHover(cell, x, y);
+        }
+
         m_tmpMouseMoved = FALSE;
     }
 }

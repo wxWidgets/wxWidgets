@@ -144,6 +144,37 @@ htmlwin -> SetPage("help/myproject/index.htm");
 
 FALSE if an error occurred, TRUE otherwise
 
+\membersection{wxHtmlWindow::OnCellClicked}\label{wxhtmlwindowoncellclicked}
+
+\func{virtual void}{OnCellClicked}{\param{wxHtmlCell }{*cell}, \param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxMouseEvent\& }{event}}
+
+This method is called when a mouse button is clicked inside wxHtmlWindow.
+The default behaviour is to call 
+\helpref{OnLinkClicked}{wxhtmlwindowonlinkclicked} if the cell contains a
+hypertext link.
+
+\wxheading{Parameters}
+
+\docparam{cell}{The cell inside which the mouse was clicked, always a simple
+(i.e. non container) cell}
+
+\docparam{x, y}{The logical coordinates of the click point}
+
+\docparam{event}{The mouse event containing other information about the click}
+
+\membersection{wxHtmlWindow::OnCellMouseHover}\label{wxhtmlwindowoncellmousehover}
+
+\func{virtual void}{OnCellMouseHover}{\param{wxHtmlCell }{*cell}, \param{wxCoord }{x}, \param{wxCoord }{y}}
+
+This method is called when a mouse moves over an HTML cell.
+
+\wxheading{Parameters}
+
+\docparam{cell}{The cell inside which the mouse is currently, always a simple
+(i.e. non container) cell}
+
+\docparam{x, y}{The logical coordinates of the click point}
+
 \membersection{wxHtmlWindow::OnLinkClicked}\label{wxhtmlwindowonlinkclicked}
 
 \func{virtual void}{OnLinkClicked}{\param{const wxHtmlLinkInfo\& }{link}}

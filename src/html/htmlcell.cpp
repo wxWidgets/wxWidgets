@@ -115,6 +115,14 @@ const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED
 }
 
 
+wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y) const
+{
+    if ( x >= 0 && x < m_Width && y >= 0 && y < m_Height )
+        return wxConstCast(this, wxHtmlCell);
+
+    return NULL;
+}
+
 
 //-----------------------------------------------------------------------------
 // wxHtmlWordCell
@@ -460,18 +468,12 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
 
 wxHtmlLinkInfo *wxHtmlContainerCell::GetLink(int x, int y) const
 {
-    wxHtmlCell *c = m_Cells;
-    int cx, cy, cw, ch;
+    wxHtmlCell *cell = FindCellByPos(x, y);
 
-    while (c)
-    {
-        cx = c->GetPosX(), cy = c->GetPosY();
-        cw = c->GetWidth(), ch = c->GetHeight();
-        if ((x >= cx) && (x < cx + cw) && (y >= cy) && (y < cy + ch))
-            return c->GetLink(x - cx, y - cy);
-        c = c->GetNext();
-    }
-    return NULL;
+    // VZ: I don't know if we should pass absolute or relative coords to
+    //     wxHtmlCell::GetLink()? As the base class version just ignores them
+    //     anyhow, it hardly matters right now but should still be clarified
+    return cell ? cell->GetLink(x, y) : NULL;
 }
 
 
@@ -550,25 +552,29 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
 }
 
 
+wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y) const
+{
+    for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
+    {
+        int cx = cell->GetPosX(),
+            cy = cell->GetPosY();
+
+        if ( (cx <= x) && (cx + cell->GetWidth() > x) &&
+             (cy <= y) && (cy + cell->GetHeight() > y) )
+        {
+            return cell->FindCellByPos(x - cx, y - cy);
+        }
+    }
+
+    return NULL;
+}
+
 
 void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event)
 {
-    if (m_Cells)
-    {
-        wxHtmlCell *c = m_Cells;
-        while (c)
-        {
-            if (    (c->GetPosX() <= x) &&
-                    (c->GetPosY() <= y) &&
-                    (c->GetPosX() + c->GetWidth() > x) &&
-                    (c->GetPosY() + c->GetHeight() > y))
-            {
-                c->OnMouseClick(parent, x - c->GetPosX(), y - c->GetPosY(), event);
-                break;
-            }
-            c = c->GetNext();
-        }
-    }
+    wxHtmlCell *cell = FindCellByPos(x, y);
+    if ( cell )
+        cell->OnMouseClick(parent, x, y, event);
 }
 
 

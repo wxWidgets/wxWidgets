@@ -60,7 +60,7 @@ public:
     // members access methods
     wxHtmlCell *GetNext() const {return m_Next;}
 
-    // members writin methods
+    // members writing methods
     virtual void SetPos(int x, int y) {m_PosX = x, m_PosY = y;}
     void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell) {m_Next = cell;}
@@ -91,8 +91,7 @@ public:
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
     // This function is called when mouse button is clicked over the cell.
-    // left, middle, right are flags indicating whether the button was or wasn't
-    // pressed.
+    //
     // Parent is pointer to wxHtmlWindow that generated the event
     // HINT: if this handling is not enough for you you should use
     //       wxHtmlBinderCell
@@ -118,18 +117,28 @@ public:
     //       called Layout() before!
     virtual void GetHorizontalConstraints(int *left, int *right) const;
 
+    // Returns true for simple == terminal cells, i.e. not composite ones.
+    // This if for internal usage only and may disappear in future versions!
+    virtual bool IsTerminalCell() const { return true; }
+
+    // Find the terminal cell inside this cell at the given position (relative
+    // to this cell)
+    //
+    // Returns NULL if not found
+    virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y) const;
+
 protected:
     wxHtmlCell *m_Next;
             // pointer to the next cell
     wxHtmlContainerCell *m_Parent;
-        // pointer to parent cell
+            // pointer to parent cell
     long m_Width, m_Height, m_Descent;
             // dimensions of fragment
             // m_Descent is used to position text&images..
     long m_PosX, m_PosY;
             // position where the fragment is drawn
     wxHtmlLinkInfo *m_Link;
-            // destination address if this fragment is hypertext link, "" otherwise
+            // destination address if this fragment is hypertext link, NULL otherwise
     bool m_CanLiveOnPagebreak;
             // true if this cell can be placed on pagebreak, false otherwise
 };
@@ -213,6 +222,11 @@ public:
 
     // returns pointer to the first cell in container or NULL
     wxHtmlCell* GetFirstCell() const {return m_Cells;}
+
+    // see comment in wxHtmlCell about this method
+    virtual bool IsTerminalCell() const { return false; }
+
+    virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y) const;
 
 protected:
     int m_IndentLeft, m_IndentRight, m_IndentTop, m_IndentBottom;

@@ -123,7 +123,18 @@ public:
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);
 
-    // Called when users clicked on hypertext link. Default behavior is to
+    // Called when the mouse hovers over a cell: (x, y) are logical coords
+    //
+    // Default behaviour is to do nothing at all
+    virtual void OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
+
+    // Called when user clicks on a cell. Default behavior is to call
+    // OnLinkClicked() if this cell corresponds to a hypertext link
+    virtual void OnCellClicked(wxHtmlCell *cell,
+                               wxCoord x, wxCoord y,
+                               const wxMouseEvent& event);
+
+    // Called when user clicked on hypertext link. Default behavior is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
 
@@ -195,6 +206,8 @@ private:
     bool m_tmpMouseMoved;
     // contains last link name
     wxHtmlLinkInfo *m_tmpLastLink;
+    // contains the last (terminal) cell which contained the mouse
+    wxHtmlCell *m_tmpLastCell;
     // if >0 contents of the window is not redrawn
     // (in order to avoid ugly blinking)
     int m_tmpCanDrawLocks;
