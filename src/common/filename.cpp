@@ -1616,23 +1616,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate)
 {
-#if defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
-    if ( !dtAccess && !dtMod )
-    {
-        // can't modify the creation time anyhow, don't try
-        return TRUE;
-    }
-
-    // if dtAccess or dtMod is not specified, use the other one (which must be
-    // non NULL because of the test above) for both times
-    utimbuf utm;
-    utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
-    utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
-    if ( utime(GetFullPath().fn_str(), &utm) == 0 )
-    {
-        return TRUE;
-    }
-#elif defined(__WIN32__)
+#if defined(__WIN32__)
     wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
     if ( fh.IsOk() )
     {
@@ -1652,6 +1636,22 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         {
             return TRUE;
         }
+    }
+#elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+    if ( !dtAccess && !dtMod )
+    {
+        // can't modify the creation time anyhow, don't try
+        return TRUE;
+    }
+
+    // if dtAccess or dtMod is not specified, use the other one (which must be
+    // non NULL because of the test above) for both times
+    utimbuf utm;
+    utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
+    utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
+    if ( utime(GetFullPath().fn_str(), &utm) == 0 )
+    {
+        return TRUE;
     }
 #else // other platform
 #endif // platforms
@@ -1685,20 +1685,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtCreate) const
 {
-#if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
-    wxStructStat stBuf;
-    if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
-    {
-        if ( dtAccess )
-            dtAccess->Set(stBuf.st_atime);
-        if ( dtMod )
-            dtMod->Set(stBuf.st_mtime);
-        if ( dtCreate )
-            dtCreate->Set(stBuf.st_ctime);
-
-        return TRUE;
-    }
-#elif defined(__WIN32__)
+#if defined(__WIN32__)
     wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
     if ( fh.IsOk() )
     {
@@ -1718,6 +1705,19 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 
             return TRUE;
         }
+    }
+#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
+    wxStructStat stBuf;
+    if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
+    {
+        if ( dtAccess )
+            dtAccess->Set(stBuf.st_atime);
+        if ( dtMod )
+            dtMod->Set(stBuf.st_mtime);
+        if ( dtCreate )
+            dtCreate->Set(stBuf.st_ctime);
+
+        return TRUE;
     }
 #else // other platform
 #endif // platforms
