@@ -368,6 +368,9 @@
 
 #define wxUSE_SPLASH              1
 
-#define NO_TEXT_WINDOW_STREAM     1
+#if (!(defined(WXUSINGDLL) || defined(WXMAKINGDLL)))
+    #define NO_TEXT_WINDOW_STREAM     1  // defined in textctrl.h for DLL builds
+#endif
+
 #endif
     // _WX_SETUP_H_

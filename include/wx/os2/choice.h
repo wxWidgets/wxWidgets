@@ -74,18 +74,6 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-private:
-    // Virtual function hiding supression
-/*
-    inline virtual void DoSetClientData( void *data )
-    { wxWindowBase::DoSetClientData(data); }
-    inline virtual void DoSetClientObject( wxClientData *data )
-    { wxWindowBase::DoSetClientObject(data); }
-    inline virtual wxClientData *DoGetClientObject() const
-    { return(wxWindowBase::DoGetClientObject());}
-    inline virtual void *DoGetClientData() const
-    { return(wxWindowBase::DoGetClientData());}
-*/
 };
 
 #endif // _WX_CHOICE_H_
