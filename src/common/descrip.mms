@@ -83,6 +83,7 @@ OBJECTS1=fs_inet.obj,\
 		gdicmn.obj,\
 		gifdecod.obj,\
 		hash.obj,\
+		hashmap.obj,\
 		helpbase.obj,\
 		http.obj,\
 		imagall.obj,\
@@ -198,6 +199,7 @@ SOURCES = \
 		gdicmn.cpp,\
 		gifdecod.cpp,\
 		hash.cpp,\
+		hashmap.cpp,\
 		helpbase.cpp,\
 		http.cpp,\
 		imagall.cpp,\
@@ -345,6 +347,7 @@ ftp.obj : ftp.cpp
 gdicmn.obj : gdicmn.cpp
 gifdecod.obj : gifdecod.cpp
 hash.obj : hash.cpp
+hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
 imagall.obj : imagall.cpp
