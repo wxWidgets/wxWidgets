@@ -3237,7 +3237,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
     // tokenize the string
     size_t nPosCur = 0;
-    static const wxChar *dateDelimiters = _T(".,/-\t\n ");
+    static const wxChar *dateDelimiters = _T(".,/-\t\r\n ");
     wxStringTokenizer tok(p, dateDelimiters);
     while ( tok.HasMoreTokens() )
     {

@@ -181,6 +181,7 @@ All:
 - fixed assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
 - fix for deleting entries at root level in wxFileConfig
 - wxStopWatch::Start() didn't resume it contrary to the docs
+- accept '\r' as delimiter when parsing dates
 
 Unix (GUI):
 
