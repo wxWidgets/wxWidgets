@@ -1110,6 +1110,45 @@ def EVT_CALCULATE_LAYOUT(win, func):
     win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
 
 
+# wxListCtrl
+def EVT_LIST_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_DRAG, func)
+
+def EVT_LIST_BEGIN_RDRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_RDRAG, func)
+
+def EVT_LIST_BEGIN_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, func)
+
+def EVT_LIST_END_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_END_LABEL_EDIT, func)
+
+def EVT_LIST_DELETE_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ITEM, func)
+
+def EVT_LIST_DELETE_ALL_ITEMS(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, func)
+
+def EVT_LIST_GET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_GET_INFO, func)
+
+def EVT_LIST_SET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_SET_INFO, func)
+
+def EVT_LIST_ITEM_SELECTED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
+
+def EVT_LIST_ITEM_DESELECTED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
+
+def EVT_LIST_KEY_DOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_KEY_DOWN, func)
+
+def EVT_LIST_INSERT_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_INSERT_ITEM, func)
+
+def EVT_LIST_COL_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
 
 
 #----------------------------------------------------------------------
@@ -1210,7 +1249,11 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.4  1999/01/30 07:31:12  RD
+# Revision 1.5  1999/02/01 00:11:12  RD
+# Added the missing EVT_LIST_ITEM_SELECTED and friends.
+#
+# Revision 1.9  1999/01/30 07:30:09  RD
+#
 # Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 #
 # Various cleanup, tweaks, minor additions, etc. to maintain

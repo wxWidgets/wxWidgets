@@ -47,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.5.3"
+#define __version__ "0.5.4"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -156,7 +156,11 @@ extern "C" SWIGEXPORT(void,initwindows3c)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1999/02/01 00:10:41  RD
+// Added the missing EVT_LIST_ITEM_SELECTED and friends.
+//
 // Revision 1.4  1999/01/30 07:30:16  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

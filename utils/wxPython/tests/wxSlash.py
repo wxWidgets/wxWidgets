@@ -15,13 +15,13 @@ widget set/library must have in order to be taken seriously :-)
 file from http://slashdot.org, which contains the headlines in a computer
 friendly format. It then displays said headlines in a wxWindows list control.
 
-    You can read articles using either Python's html library or an external 
+    You can read articles using either Python's html library or an external
 browser. Uncheck the 'browser->internal' menu item to use the latter option.
 Use the settings dialog box to set how external browser is started.
 
     This code is available under the wxWindows license, see elsewhere. If you
 modify this code, be aware of the fact that slashdot.org's maintainer,
-CmdrTaco, explicitly asks 'ultramode.txt' downloaders not to do this 
+CmdrTaco, explicitly asks 'ultramode.txt' downloaders not to do this
 automatically more than twice per hour. If this feature is abused, CmdrTaco
 may remove the ultramode file completely and that will make a *lot* of people
 unhappy.
@@ -50,7 +50,7 @@ class HTMLTextView(wxFrame):
         self.mainmenu.Append(menu, '&File')
         self.SetMenuBar(self.mainmenu)
         self.CreateStatusBar(1)
-        
+
         self.text = wxTextCtrl(self, -1, "", wxPyDefaultPosition,
                                wxPyDefaultSize, wxTE_MULTILINE | wxTE_READONLY)
 
@@ -59,7 +59,7 @@ class HTMLTextView(wxFrame):
 
     def logprint(self, x):
         self.SetStatusText(x)
-        
+
     def OpenURL(self, url):
         self.url = url
         m = re.match('file:(\S+)\s*', url)
@@ -95,7 +95,7 @@ class HTMLTextView(wxFrame):
         self.text.SetValue(tmp.read())
         self.SetTitle(url)
         self.logprint(url)
-        
+
     def OnFileOpen(self, event):
         dlg = wxTextEntryDialog(self, "Enter URL to open:", "")
         if dlg.ShowModal() == wxID_OK:
@@ -110,7 +110,7 @@ class HTMLTextView(wxFrame):
 
     def OnCloseWindow(self, event):
         self.Destroy()
-        
+
 
 def ParseSlashdot(f):
     art_sep = re.compile('%%\r?\n')
@@ -121,10 +121,10 @@ def ParseSlashdot(f):
     for i in range(1,len(list)-1):
         art_list.append(line_sep.split(list[i]))
     return art_list
-        
+
 def myprint(x):
     print x
-    
+
 def RetrieveAsFile(host, path='', logprint = myprint):
     try:
         h = HTTP(host)
@@ -143,10 +143,7 @@ def RetrieveAsFile(host, path='', logprint = myprint):
 #    f = open('/home/harm/ultramode.txt','r')
     return f
 
-# This one isn't defined in the default wxPython modules...
-def EVT_LIST_ITEM_SELECTED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
-    
+
 class AppStatusBar(wxStatusBar):
     def __init__(self, parent):
         wxStatusBar.__init__(self,parent, -1)
@@ -155,7 +152,7 @@ class AppStatusBar(wxStatusBar):
         self.but = wxButton(self, 1001, "Refresh")
         EVT_BUTTON(self, 1001, parent.OnViewRefresh)
         self.OnSize(None)
-        
+
     def logprint(self,x):
         self.SetStatusText(x,1)
 
@@ -172,7 +169,7 @@ class AppStatusBar(wxStatusBar):
 # For example, if you're about to perform function f which may take a long
 # time, write "Please wait" in the statusbar, then create a QuickTimer(f)
 # object to automatically call f after a short delay. That way, wxWindows
-# will get a chance to update the statusbar before the long function is 
+# will get a chance to update the statusbar before the long function is
 # called.
 # FIXME: can this be done better using an OnIdle kind of thing?
 class QuickTimer(wxTimer):
@@ -219,15 +216,15 @@ class AppFrame(wxFrame):
 	menu.Append(230, '&About', 'Some documentation');
 	EVT_MENU(self, 230, self.OnAbout)
 	self.mainmenu.Append(menu, '&Help')
-        
+
         self.SetMenuBar(self.mainmenu)
-        
+
         self.BrowserSettings = "netscape -remote 'OpenURL(%s, new_window)'"
-        
+
 	# A status bar to tell people what's happening
 	self.sb = AppStatusBar(self)
         self.SetStatusBar(self.sb)
-        
+
         self.list = wxListCtrl(self, 1100)
 	self.list.SetSingleStyle(wxLC_REPORT)
 	self.list.InsertColumn(0, 'Subject')
@@ -240,14 +237,14 @@ class AppFrame(wxFrame):
         self.list.SetColumnWidth(3, 100)
 
         EVT_LIST_ITEM_SELECTED(self, 1100, self.OnItemSelected)
-        
+
 	self.logprint("Connecting to slashdot... Please wait.")
 	# Need a longer time here. Don't really know why
 	self.timer = QuickTimer(self.DoRefresh, 1000)
 
     def logprint(self, x):
         self.sb.logprint(x)
-        
+
     def OnFileExit(self, event):
         self.Destroy()
 
@@ -305,7 +302,7 @@ class AppFrame(wxFrame):
             self.UseInternal = 1
         else:
             self.UseInternal = 0
-        
+
     def OnBrowserSettings(self, event):
         dlg = wxTextEntryDialog(self, "Enter command to view URL.\nUse %s as a placeholder for the URL.", "", self.BrowserSettings);
         if dlg.ShowModal() == wxID_OK:
@@ -314,11 +311,11 @@ class AppFrame(wxFrame):
     def OnAbout(self, event):
 	dlg = wxMessageDialog(self, __doc__, "wxSlash", wxOK | wxICON_INFORMATION)
 	dlg.ShowModal()
-        
+
     def OnItemSelected(self, event):
         self.current = event.m_itemIndex
         self.logprint("URL: %s" % (self.url[self.current]))
-        
+
     def OnCloseWindow(self, event):
         self.Destroy()
 

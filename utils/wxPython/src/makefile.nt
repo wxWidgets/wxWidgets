@@ -9,6 +9,7 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
+VERSION=0.5.4
 
 # Set WXDIR to the root wxWindows directory for your system
 WXDIR = $(WXWIN)
@@ -259,10 +260,19 @@ SOURCES = $(GENCODEDIR)\wx.cpp        $(GENCODEDIR)\wx.py       \
 
 sources : $(SOURCES)
 
+
+dist:
+	cd ..\..
+	wxPython\distrib\zipit.bat $(VERSION)
+
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.10  1999/02/01 00:10:40  RD
+# Added the missing EVT_LIST_ITEM_SELECTED and friends.
+#
 # Revision 1.9  1999/01/30 07:30:13  RD
+#
 # Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 #
 # Various cleanup, tweaks, minor additions, etc. to maintain
