@@ -1494,13 +1494,10 @@ UNIX_THREAD=""
 if test "$wxUSE_THREADS" = "1"; then
     dnl find if POSIX threads are available
 
-    dnl For glibc 2 users who have the old libc 5 too check pthread-0.7 first
-    AC_CHECK_LIB(pthread-0.7, pthread_create, [
-        UNIX_THREAD="unix/threadpsx.cpp"
-        THREADS_LINK="pthread-0.7"
-    ],[
-        dnl standard lib name is pthread
-        AC_CHECK_LIB(pthread, pthread_create, [
+    dnl standard lib name is pthread
+    dnl We no longer test for pthread-0.7 as it breaks compilation on some
+    dnl glibc2 systems, especially for static linkage.
+    AC_CHECK_LIB(pthread, pthread_create, [
             UNIX_THREAD="unix/threadpsx.cpp"
             THREADS_LINK="pthread"
         ], [
@@ -1515,8 +1512,6 @@ if test "$wxUSE_THREADS" = "1"; then
                 ])
             ])
         ])
-    ])
-
     if test "$THREADS_LINK" != ""; then
         AC_DEFINE(wxUSE_THREADS)
     else
