@@ -52,7 +52,7 @@ bool wxCheckListBox::IsChecked( int index ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(label->label,*wxConv_current);
+        wxString str = wxString(label->label,*wxConvCurrent);
 
         return (str[1] == _T('X'));
     }

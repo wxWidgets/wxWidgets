@@ -48,11 +48,7 @@ extern const wxChar *wxToolBarNameStr;
 
 class wxToolBar: public wxControl
 {
-  DECLARE_EVENT_TABLE()
-  DECLARE_DYNAMIC_CLASS(wxToolBar)
-  
-  public:
-
+public:
     wxToolBar(void);
     wxToolBar( wxWindow *parent, wxWindowID id, 
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -120,6 +116,12 @@ class wxToolBar: public wxControl
     int           m_xMargin;
     int           m_yMargin;
     bool          m_hasToolAlready;
+    
+    void OnInternalIdle();
+    
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
 #endif

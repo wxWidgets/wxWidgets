@@ -32,7 +32,8 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool       g_blockEventsOnDrag;
+extern wxCursor   g_globalCursor;
 
 //-----------------------------------------------------------------------------
 // "clicked" (internal from gtk_toolbar)
@@ -596,6 +597,37 @@ void wxToolBar::OnIdle( wxIdleEvent &WXUNUSED(ievent) )
 
         node = node->Next();
     }
+}
+
+void wxToolBar::OnInternalIdle()
+{
+    wxCursor cursor = m_cursor;
+    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+
+    if (cursor.Ok() && m_currentGdkCursor != cursor)
+    {
+        wxCursor oldGdkCursor = m_currentGdkCursor;
+        m_currentGdkCursor = cursor;
+	
+        wxNode *node = m_tools.First();
+	while (node)
+        {
+	    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+	    if (!tool->m_item->window)
+	    {
+	        /* windows not yet realized. come back later. */
+                m_currentGdkCursor = oldGdkCursor;
+		break;
+	    }
+	    else
+	    {
+	        gdk_window_set_cursor( tool->m_item->window, m_currentGdkCursor.GetCursor() );
+	    }
+	    node = node->Next();
+        }
+    }
+
+    UpdateWindowUI();
 }
 
 #endif

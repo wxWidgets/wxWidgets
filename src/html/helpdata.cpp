@@ -564,7 +564,7 @@ bool wxHtmlSearchStatus::Search()
 	    if (m_Engine.Scan(file -> GetStream())) {
 		m_Name = m_Data->m_Contents[i].m_Name;
 		m_ContentsItem = m_Data->m_Contents + i;
-		found = true;
+		found = TRUE;
 	    }
 	}
 	delete file;

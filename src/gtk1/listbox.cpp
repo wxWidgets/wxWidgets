@@ -1011,8 +1011,9 @@ void wxListBox::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (m_widget->window && cursor.Ok() && m_currentGdkCursor != cursor)
+    if (GTK_WIDGET(m_list)->window && cursor.Ok() && m_currentGdkCursor != cursor)
     {
+        wxCursor oldGdkCursor = m_currentGdkCursor;
         m_currentGdkCursor = cursor;
 	
 	gdk_window_set_cursor( GTK_WIDGET(m_list)->window, m_currentGdkCursor.GetCursor() );
@@ -1023,7 +1024,16 @@ void wxListBox::OnInternalIdle()
             GtkBin *bin = GTK_BIN( child->data );
             GtkWidget *label = GTK_WIDGET( bin->child );
 	    
-	    gdk_window_set_cursor( label->window, m_currentGdkCursor.GetCursor() );
+	    if (!label->window)
+	    {
+	        /* windows not yet realized. come back later. */
+                m_currentGdkCursor = oldGdkCursor;
+		break;
+	    }
+	    else
+	    {
+	        gdk_window_set_cursor( label->window, m_currentGdkCursor.GetCursor() );
+	    }
 
             child = child->next;
         }

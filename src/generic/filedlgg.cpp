@@ -812,12 +812,14 @@ void wxFileDialog::HandleAction( const wxString &fn )
     }
 
     SetPath( filename );
+    
+    wxCommandEvent event;
+    wxDialog::OnOK(event);
 }
 
 void wxFileDialog::OnListOk( wxCommandEvent &event )
 {
     HandleAction( m_text->GetValue() );
-    event.Skip();
 }
 
 void wxFileDialog::OnList( wxCommandEvent &WXUNUSED(event) )
