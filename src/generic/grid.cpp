@@ -6724,8 +6724,13 @@ void wxGrid::ShowCellEditControl()
 #endif // 0
 
             // cell is shifted by one pixel
-            rect.x--;
-            rect.y--;
+            // However, don't allow x or y to become negative
+            // since the SetSize() method interprets that as 
+            // "don't change."
+            if (rect.x > 0)
+                rect.x--;
+            if (rect.y > 0)
+                rect.y--;
 
             wxGridCellAttr* attr = GetCellAttr(row, col);
             wxGridCellEditor* editor = attr->GetEditor(this, row, col);
@@ -6857,17 +6862,17 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
         if ( i_max >= BorderArray.GetCount())
             i_max = BorderArray.GetCount() - 1;
     }
-    if ( coord > BorderArray[i_max])    
+    if ( coord > BorderArray[i_max])
         return -1;
+    if ( coord < BorderArray[0] )
+        return 0;
 
-    while ( i_max - i_min > 1 )
+    while ( i_max - i_min > 0 )
     {
         wxCHECK_MSG(BorderArray[i_min] <= coord && coord < BorderArray[i_max],
                     -1, _T("wxGrid: internal error in CoordToRowOrCol"));
         if (coord >=  BorderArray[ i_max - 1])
-        {
             return i_max;
-        }
         else
             i_max--;
         int median = i_min + (i_max - i_min + 1) / 2;
@@ -6899,8 +6904,10 @@ int wxGrid::XToCol( int x )
 int wxGrid::YToEdgeOfRow( int y )
 {
     int i, d;
-
-    for ( i = YToRow( y ) - 1;  i < m_numRows;  i++ )
+    i = YToRow(y);
+    if ( i > 0 )
+        i--;
+    for ( ;  i < m_numRows;  i++ )
     {
         if ( GetRowHeight(i) > WXGRID_LABEL_EDGE_ZONE )
         {
@@ -6920,8 +6927,10 @@ int wxGrid::YToEdgeOfRow( int y )
 int wxGrid::XToEdgeOfCol( int x )
 {
     int i, d;
-
-    for (i = XToCol( x ) - 1;  i < m_numCols;  i++ )
+    i = XToCol(x);
+    if ( i > 0 )
+        i--;
+    for ( ;  i < m_numCols;  i++ )
     {
         if ( GetColWidth(i) > WXGRID_LABEL_EDGE_ZONE )
         {
