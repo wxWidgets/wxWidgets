@@ -36,7 +36,8 @@ class MySplitterWindow : public wxSplitterWindow
 {
 public:
   MySplitterWindow(wxFrame *parent, wxWindowID id)
-    : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE)
+    : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize,
+                       wxSP_3D | wxSP_LIVE_UPDATE | wxCLIP_CHILDREN)
   {
     m_frame = parent;
   }
@@ -145,8 +146,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-    wxFrame(frame, SPLITTER_FRAME, title, pos, size)
+MyFrame::MyFrame(wxFrame* frame, const wxString& title,
+                 const wxPoint& pos, const wxSize& size)
+       : wxFrame(frame, SPLITTER_FRAME, title, pos, size,
+                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
   CreateStatusBar(2);
 
