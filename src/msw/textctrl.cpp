@@ -297,7 +297,18 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_isRich = FALSE;
 #endif // wxUSE_RICHEDIT
 
-    if ( !MSWCreateControl(windowClass, msStyle, pos, size, value) )
+    // we need to turn '\n's into "\r\n"s for the multiline controls
+    wxString valueWin;
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        valueWin = wxTextFile::Translate(value, wxTextFileType_Dos);
+    }
+    else // single line
+    {
+        valueWin = value;
+    }
+
+    if ( !MSWCreateControl(windowClass, msStyle, pos, size, valueWin) )
         return FALSE;
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
