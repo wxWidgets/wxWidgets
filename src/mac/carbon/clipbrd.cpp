@@ -21,6 +21,7 @@
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
 #include "wx/intl.h"
+#include "wx/log.h"
 
 #include "wx/mac/private.h"
 #ifndef __DARWIN__
