@@ -74,10 +74,13 @@ class MyFrame(wx.Frame):
 class MyApp(wx.App):
     def OnInit(self):
         frame = MyFrame(None, "Simple wxPython App")
-        frame.Show(True)
         self.SetTopWindow(frame)
+
+        print "This is where print statements go."
+
+        frame.Show(True)
         return True
         
-app = MyApp(True)
+app = MyApp(redirect=True)
 app.MainLoop()
 
