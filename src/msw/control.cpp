@@ -150,7 +150,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     if ( !m_hWnd )
     {
         wxLogDebug(wxT("Failed to create a control of class '%s'"), classname);
-        wxFAIL_MSG(_T("something is very wrong"));
+        wxFAIL_MSG(_T("something is very wrong, CreateWindowEx failed"));
 
         return FALSE;
     }
