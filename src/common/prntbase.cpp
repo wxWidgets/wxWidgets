@@ -612,7 +612,8 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
 
     if (m_previewCanvas)
     {
-        RenderPage(pageNum);
+        if (!RenderPage(pageNum))
+        	return FALSE;
         m_previewCanvas->Refresh();
     }
     return TRUE;
@@ -623,7 +624,8 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
     DrawBlankPage(canvas, dc);
 
     if (!m_previewBitmap)
-        RenderPage(m_currentPage);
+        if (!RenderPage(m_currentPage))
+        	return FALSE;
 
     if (!m_previewBitmap)
         return FALSE;
@@ -682,8 +684,10 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
         m_previewBitmap = new wxBitmap((int)actualWidth, (int)actualHeight);
         if (!m_previewBitmap || !m_previewBitmap->Ok())
         {
-            if (m_previewBitmap)
+            if (m_previewBitmap) {
                 delete m_previewBitmap;
+                m_previewBitmap = NULL;
+            }
             wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
             return FALSE;
         }
@@ -713,6 +717,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
         memoryDC.SelectObject(wxNullBitmap);
 
         delete m_previewBitmap;
+        m_previewBitmap = NULL;
         return FALSE;
     }
 
