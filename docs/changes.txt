@@ -184,6 +184,13 @@ All:
 
 - Added missing wx/quantize.h to install.
 
+wxGTK:
+
+- Added wxEVT_MENU_OPEN event generation.
+- Fixed bug in generic file selector causing incomplete file extensions to
+  be appended to filenames with no extension.
+
+
 2.4.0
 -----
 
