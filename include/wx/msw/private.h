@@ -362,13 +362,13 @@ private:
     DECLARE_NO_COPY_CLASS(ScreenHDC)
 };
 
-// the same as ScreenHDC but for memory DCs: creates the HDC in ctor and
-// destroys it in dtor
+// the same as ScreenHDC but for memory DCs: creates the HDC compatible with
+// the given one (screen by default) in ctor and destroys it in dtor
 class MemoryHDC
 {
 public:
-    MemoryHDC() { m_hdc = ::CreateCompatibleDC(NULL); }
-   ~MemoryHDC() { ::DeleteDC(m_hdc);                  }
+    MemoryHDC(HDC hdc) { m_hdc = ::CreateCompatibleDC(hdc); }
+   ~MemoryHDC() { ::DeleteDC(m_hdc); }
 
     operator HDC() const { return m_hdc; }
 
