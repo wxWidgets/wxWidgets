@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------
+
+if [ ! -d wxPython ]; then  # TODO: make this test more robust
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+
+rm -r docs/api/*
+
+epydoc --name wxPython \
+    --html \
+    --output docs/api \
+    --ignore-param-mismatch \
+    --inheritance none \
+    --no-expand-subpackages \
+    --no-private \
+    --css docs/wxPython-epydoc.css \
+    --docformat restructuredtext \
+    $* \
+    ./wx/__init__.py
+
+#    --no-frames \
+#    --docformat epytext \
+#    --debug \
+
+
+# TODO: 
+#   1. Should rebuild the top-level docs too (but we need more of them first!)
+#   2. bundle it all up into a tarball
+#   3. etc.
+
+
