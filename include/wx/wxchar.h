@@ -81,8 +81,9 @@
 #include <stdarg.h>
 
 // non Unix compilers which do have wchar.h (but not tchar.h which is included
-// below and which includes wchar.h anyhow)
-#if defined(__MWERKS__) || defined(__VISAGECPP__)
+// below and which includes wchar.h anyhow).
+// Actually MinGW has tchar.h, but it does not include wchar.h
+#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
     #endif
