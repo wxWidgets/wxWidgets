@@ -963,17 +963,19 @@ size_t wxFileDataObject::GetDataSize() const
     // a double null at the end
 
     // if no filenames in list, size is 0
-    if (m_filenames.GetCount() == 0) return 0;
+    if ( m_filenames.GetCount() == 0 )
+        return 0;
 
     // inital size of DROPFILES struct + null byte
     size_t sz = sizeof(DROPFILES) + 1;
 
-    int i;
-    for (i=0; i<m_filenames.GetCount(); ++i)
+    size_t count = m_filenames.GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
         // add filename length plus null byte
         sz += m_filenames[i].Len() + 1;
     }
+
     return sz;
 }
 
@@ -983,29 +985,35 @@ bool wxFileDataObject::GetDataHere(void *pData) const
     // created using the size returned by GetDataSize()
 
     // if pData is NULL, or there are no files, return
-    if (!pData || m_filenames.GetCount() == 0) return FALSE;
+    if ( !pData || m_filenames.GetCount() == 0 )
+        return FALSE;
 
     // convert data pointer to a DROPFILES struct pointer
     LPDROPFILES pDrop = (LPDROPFILES) pData;
 
     // initialize DROPFILES struct
     pDrop->pFiles = sizeof(DROPFILES);
-    pDrop->fNC = FALSE;
+    pDrop->fNC = FALSE;                 // not non-client coords
+#if wxUSE_UNICODE
+    pDrop->fWide = TRUE;
+#else // ANSI
     pDrop->fWide = FALSE;
+#endif // Unicode/Ansi
 
     // set start of filenames list (null separated)
-    char *pbuf = (char*)pDrop + sizeof(DROPFILES);
+    wxChar *pbuf = (BYTE *)pDrop + sizeof(DROPFILES);
 
-    size_t i;
-    for (i=0; i<m_filenames.GetCount(); ++i)
+    size_t count = m_filenames.GetCount();
+    for (size_t i = 0; i < count; i++ )
     {
         // copy filename to pbuf and add null terminator
         size_t len = m_filenames[i].Len();
         memcpy(pbuf, m_filenames[i], len);
         pbuf += len;
-        *pbuf++ = '\0';
+        *pbuf++ = wxT('\0');
     }
-    *pbuf = '\0';	// add final null terminator
+
+    *pbuf = wxT('\0');	// add final null terminator
 
     return TRUE;
 }
