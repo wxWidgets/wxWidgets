@@ -92,7 +92,7 @@ const wxEventTable wxEvtHandler::sm_eventTable =
     { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-    { DECLARE_EVENT_TABLE_ENTRY(0, 0, 0, (wxObjectEventFunction)NULL, NULL) };
+    { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
 // ----------------------------------------------------------------------------
 // global variables
