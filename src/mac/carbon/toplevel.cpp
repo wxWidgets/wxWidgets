@@ -372,7 +372,7 @@ ControlRef wxMacFindSubControl( Point location , ControlRef superControl , Contr
 ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart )
 {
 #if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 1030 )
+    if ( UMAGetSystemVersion() >= 0x1030 )
         return FindControlUnderMouse( location , window , outPart ) ;
 #endif
     ControlRef rootControl = NULL ;
@@ -394,6 +394,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     short windowPart = ::FindWindow(screenMouseLocation, &window);
 
     wxWindow* currentMouseWindow = NULL ;
+
     if ( window )
     {
         // calculate window relative coordinates
