@@ -28,7 +28,7 @@
 #endif
 
 #ifndef NO_TEXT_WINDOW_STREAM
-    #ifdef wxUSE_STD_IOSTREAM
+    #if wxUSE_STD_IOSTREAM
         #include "ioswrap.h"    // for iostream classes if we need them
     #else // !wxUSE_STD_IOSTREAM
         // can't compile this feature in if we don't use streams at all

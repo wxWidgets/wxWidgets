@@ -64,15 +64,13 @@ class wxInetCacheNode : public wxObject
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == "http") || (p == "ftp");
+    return (p == _T("http")) || (p == _T("ftp"));
 }
-
-
 
 
 wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
-    wxString right = GetProtocol(location) + ":" + GetRightLocation(location);
+    wxString right = GetProtocol(location) + _T(":") + GetRightLocation(location);
     wxInputStream *s;
     wxString content;
     wxInetCacheNode *info;
@@ -80,15 +78,17 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     info = (wxInetCacheNode*) m_Cache.Get(right);
 
     // Add item into cache:
-    if (info == NULL) {
+    if (!info == NULL) 
+    {
         wxURL url(right);
         s = url.GetInputStream();
         content = url.GetProtocol().GetContentType();
         if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
-        if (s) {
+        if (s) 
+	{
             char buf[256];
 
-            wxGetTempFileName("wxhtml", buf);
+            wxGetTempFileName( "wxhtml", buf);
             info = new wxInetCacheNode(buf, content);
             m_Cache.Put(right, info);
 
@@ -98,18 +98,22 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
             }
             delete s;
         }
-        else return NULL; //we can't open the URL
+        else
+	{ 
+	    return (wxFSFile*) NULL; // we can't open the URL
+	}
     }
 
     // Load item from cache:
-    s = new wxFileInputStream(info -> GetTemp());
-    if (s) {
+    s = new wxFileInputStream(info->GetTemp());
+    if (s) 
+    {
         return new wxFSFile(s,
                             right,
-                            info -> GetMime(),
+                            info->GetMime(),
                             GetAnchor(location));
     }
-    else return NULL;
+    else return (wxFSFile*) NULL;
 }
 
 
@@ -120,9 +124,10 @@ wxInternetFSHandler::~wxInternetFSHandler()
     wxInetCacheNode *n2;
 
     m_Cache.BeginFind();
-    while ((n = m_Cache.Next()) != NULL) {
-        n2 = (wxInetCacheNode*) n -> GetData();
-        wxRemoveFile(n2 -> GetTemp());
+    while ((n = m_Cache.Next()) != NULL) 
+    {
+        n2 = (wxInetCacheNode*) n->GetData();
+        wxRemoveFile(n2->GetTemp());
         delete n2;
     }
 }
