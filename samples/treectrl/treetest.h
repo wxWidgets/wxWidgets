@@ -9,7 +9,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#define USE_GENERIC_TREECTRL 1
+#define USE_GENERIC_TREECTRL 0
 
 #if USE_GENERIC_TREECTRL
 #include "wx/generic/treectlg.h"
