@@ -115,8 +115,9 @@ class WXDLLEXPORT wxInputStream {
 
   wxInputStream(wxStreamBuffer *buffer);
 
-  virtual size_t DoRead(void *buffer, size_t size) { return 0; }
-  virtual off_t DoSeekInput(off_t pos, wxSeekMode mode)
+  virtual size_t DoRead(void *WXUNUSED(buffer), size_t WXUNUSED(size) ) 
+         { return 0; }
+  virtual off_t DoSeekInput( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
          { return wxInvalidOffset; }
   virtual off_t DoTellInput() const
          { return wxInvalidOffset; }
@@ -169,8 +170,9 @@ class WXDLLEXPORT wxOutputStream {
 
   wxOutputStream(wxStreamBuffer *buffer);
 
-  virtual size_t DoWrite(const void *buffer, size_t size) { return 0; }
-  virtual off_t DoSeekOutput(off_t pos, wxSeekMode mode)
+  virtual size_t DoWrite( const void *WXUNUSED(buffer), size_t WXUNUSED(size) ) 
+            { return 0; }
+  virtual off_t DoSeekOutput( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) )
             { return wxInvalidOffset; }
   virtual off_t DoTellOutput() const
             { return wxInvalidOffset; }

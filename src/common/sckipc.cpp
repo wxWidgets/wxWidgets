@@ -168,11 +168,11 @@ bool wxTCPServer::Create(const wxString& server_name)
   return TRUE;
 }
 
-wxTCPServer::~wxTCPServer (void)
+wxTCPServer::~wxTCPServer(void)
 {
 }
 
-wxConnectionBase *wxTCPServer::OnAcceptConnection(const wxString& topic)
+wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topic) )
 {
   return new wxTCPConnection();
 }

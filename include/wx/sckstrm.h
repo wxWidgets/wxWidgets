@@ -25,8 +25,10 @@ class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
   virtual ~wxSocketOutputStream();
 
   wxOutputStream& Write(const void *buffer, size_t size);
-  off_t SeekO(off_t pos, wxSeekMode mode) { return -1; }
-  off_t TellO() { return -1; }
+  off_t SeekO( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) ) 
+    { return -1; }
+  off_t TellO() 
+    { return -1; }
 
   bool Bad() { return m_o_socket->IsDisconnected(); }
   size_t LastWrite() { return m_o_socket->LastCount(); }
@@ -41,8 +43,10 @@ class WXDLLEXPORT wxSocketInputStream : public wxInputStream
   ~wxSocketInputStream();
 
   wxInputStream& Read(void *buffer, size_t size);
-  off_t SeekI(off_t pos, wxSeekMode mode) { return -1; }
-  off_t TellI() { return -1; }
+  off_t SeekI( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) ) 
+    { return -1; }
+  off_t TellI() 
+    { return -1; }
 
   bool Eof() { return m_i_socket->IsDisconnected(); }
   size_t LastRead() { return m_i_socket->LastCount(); }

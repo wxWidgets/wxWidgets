@@ -1017,7 +1017,7 @@ bool wxSocketBase::DoRequests(wxRequestEvent req_flag)
 void wxSocketBase::WantSpeedBuffer(char *buffer, size_t nbytes,
                                    wxRequestEvent evt)
 {
-  int ret;
+  int ret = 0;
 
   switch (evt) {
   case EVT_PEEK:
@@ -1193,7 +1193,7 @@ wxSocketClient::~wxSocketClient()
 // --------------------------------------------------------------
 // --------- wxSocketClient Connect functions -------------------
 // --------------------------------------------------------------
-bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
+bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
 {
   struct linger linger;
 
