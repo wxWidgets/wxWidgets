@@ -70,6 +70,13 @@ static wxWindowList wxModalDialogs;
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
+/*
+	TODO PROPERTIES
+
+		style (wxDEFAULT_DIALOG_STYLE)
+		centered (bool, false )
+*/
+
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)

@@ -53,19 +53,21 @@
 
 #if wxUSE_EXTENDED_RTTI
 const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ; 
- wxObject* wxVariantToObjectConverterwxObject ( const wxxVariant &data ) 
+ wxObject* wxVariantToObjectConverterwxObject ( wxxVariant &data ) 
 { return data.Get<wxObject*>() ; } 
+ wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data ) 
+{ return &data.Get<wxObject>() ; } 
  wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data ) 
  { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
  wxClassInfo wxObject::sm_classwxObject(sm_classParentswxObject , wxT("") , wxT("wxObject"),   
             (int) sizeof(wxObject),                              \
             (wxObjectConstructorFn) 0   ,   
 			(wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,     
-			0 , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);    
+			0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);    
  template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
  template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
  template<> const wxTypeInfo* wxGetTypeInfo( wxObject ** )
- { static wxClassTypeInfo s_typeInfo(&wxObject::sm_classwxObject) ; return &s_typeInfo ; }
+ { static wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::sm_classwxObject) ; return &s_typeInfo ; }
 #else
 wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),

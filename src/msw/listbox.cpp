@@ -49,6 +49,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
+/*
+TODO PROPERTIES
+	selection
+	content
+		item
+*/
+
 // ============================================================================
 // list box item declaration and implementation
 // ============================================================================

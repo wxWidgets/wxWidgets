@@ -83,6 +83,12 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFrame)
+/*
+	TODO PROPERTIES
+
+		style (wxDEFAULT_FRAME_STYLE)
+		centered (bool, false )
+*/
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxFrame)

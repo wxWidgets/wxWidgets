@@ -42,6 +42,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 
+/*
+	TODO PROPERTIES
+		selection (long)
+		content (list)
+			item
+*/
+
 // ============================================================================
 // implementation
 // ============================================================================

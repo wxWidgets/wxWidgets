@@ -61,6 +61,11 @@
 
 IMPLEMENT_CLASS(wxScrolledWindow, wxGenericScrolledWindow)
 
+/*
+	TODO PROPERTIES
+		style wxHSCROLL | wxVSCROLL
+*/
+
 // ----------------------------------------------------------------------------
 // wxScrollHelperEvtHandler: intercept the events from the window and forward
 // them to wxScrollHelper

@@ -49,6 +49,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
+/*
+	TODO PROPERTIES
+
+		label
+		value (bool , 0 )
+*/
+
 void wxRadioButton::Init()
 {
     m_focusJustSet = FALSE;

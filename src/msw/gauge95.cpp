@@ -68,6 +68,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
 
+/*
+	TODO PROPERTIES
+		range (long)
+		value (long)
+		shadow (ShadowWidth)
+		bezel (BezelFace)
+*/
+
 // ============================================================================
 // implementation
 // ============================================================================

@@ -117,6 +117,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
+/*
+	TODO PROPERTIES :
+		value
+*/
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)

@@ -68,6 +68,16 @@
 #include "wx/panel.h"
 #endif
 
+/*
+	notebookpage
+		object
+		object_ref
+		label
+		selected
+		style
+		usenotebooksizer
+*/
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

@@ -31,6 +31,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
+/*
+	TODO PROPERTIES
+		value (long,0)
+		thumbsize(long,1)
+		range( long , 10 )
+		pagesize( long , 1)
+*/
+
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
 #if WXWIN_COMPATIBILITY
   EVT_SCROLL(wxScrollBar::OnScroll)

@@ -55,6 +55,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
+/* 
+	TODO PROPERTIES
+		selection (long¨)
+		content
+			value
+			item
+*/
+
 // ----------------------------------------------------------------------------
 // function prototypes
 // ----------------------------------------------------------------------------

@@ -430,6 +430,13 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
 
+/*
+TODO PROPERTIES
+	defaultfolder string
+	filter string
+	(long) defaultfilter)
+*/
+
 BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_ITEM_EXPANDING     (-1, wxGenericDirCtrl::OnExpandItem)
   EVT_TREE_ITEM_COLLAPSED     (-1, wxGenericDirCtrl::OnCollapseItem)

@@ -32,6 +32,16 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
+/*
+TODO PROPERTIES :
+
+long "style" , wxBU_AUTODRAW
+bool "default" , 0
+bitmap "selected" ,
+bitmap "focus" ,
+bitmap "disabled" ,
+*/
+
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,

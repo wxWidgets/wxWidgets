@@ -93,6 +93,14 @@ BEGIN_EVENT_TABLE(wxWizard, wxDialog)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
+
+/*
+	TODO PROPERTIES :
+	wxWizard
+		extstyle
+		title
+*/
+
 IMPLEMENT_ABSTRACT_CLASS(wxWizardPage, wxPanel)
 IMPLEMENT_DYNAMIC_CLASS(wxWizardPageSimple, wxWizardPage)
 IMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent)

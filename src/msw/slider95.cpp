@@ -39,6 +39,18 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
 
+/*
+	TODO PROPERTIES
+		value wxSL_DEFAULT_VALUE
+		min wxSL_DEFAULT_MIN
+		max wxSL_DEFAULT_MAX
+		tickfreq (long , 0 )
+		pagesize ( long )
+		linesize (long)
+		thumg (long)
+		tick (long)
+		selmin / selmax (long)
+*/
 // Slider
 wxSlider95::wxSlider95()
 {

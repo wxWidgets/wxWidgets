@@ -115,6 +115,23 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 
+/*
+	TODO PROPERTIES
+		wxMenu
+			label
+			help
+
+		separator
+		break
+		label
+		accel
+		radio
+		checkable
+		help
+		bitmap
+		wxMenuItem
+*/
+
 // ---------------------------------------------------------------------------
 // wxMenu construction, adding and removing menu items
 // ---------------------------------------------------------------------------

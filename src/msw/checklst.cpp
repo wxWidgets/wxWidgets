@@ -69,6 +69,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
+/*
+TODO PROPERTIES
+	list content
+		item , checked (no)
+*/
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class
 // ----------------------------------------------------------------------------

@@ -49,6 +49,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
+/*
+	selection
+	content
+		label
+		dimension
+		item
+*/
+
 // there are two possible ways to create the radio buttons: either as children
 // of the radiobox or as siblings of it - allow playing with both variants for
 // now, eventually we will choose the best one for our purposes

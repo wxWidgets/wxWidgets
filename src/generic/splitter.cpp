@@ -48,6 +48,16 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_UNSPLIT)
 
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)
+
+/*
+	TODO PROPERTIES
+		style wxSP_3D
+		sashpos (long , 0 )
+		minsize (long -1 )
+		object, object_ref
+		orientation
+*/
+
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)

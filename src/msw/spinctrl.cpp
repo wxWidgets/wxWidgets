@@ -52,6 +52,15 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 
+/*
+	TODO PROPERTIES
+		style wxSP_ARROW_KEYS
+		value wxSP_DEFAULT_VALUE
+		min wxSP_DEFAULT_MIN
+		max wxSP_DEFAULT_MAX
+
+*/
+
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
 

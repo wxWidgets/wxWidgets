@@ -25,7 +25,22 @@
 
 #include <string.h>
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( wxColour , wxObject , "wx/colour.h" ) 
+
+WX_BEGIN_PROPERTIES_TABLE(wxColour)
+	WX_READONLY_PROPERTY( Red, unsigned char , Red , 0 )
+	WX_READONLY_PROPERTY( Green, unsigned char  , Green , 0 ) 
+	WX_READONLY_PROPERTY( Blue, unsigned char , Blue , 0 )
+WX_END_PROPERTIES_TABLE()
+
+WX_CONSTRUCTOR_3( wxColour , unsigned char , Red , unsigned char , Green , unsigned char , Blue )  
+
+WX_BEGIN_HANDLERS_TABLE(wxColour)
+WX_END_HANDLERS_TABLE()
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+#endif
 
 // Colour
 

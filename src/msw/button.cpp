@@ -51,6 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxButton)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent )
+	// default
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxButton)

@@ -44,7 +44,51 @@
 
 #include "wx/tokenzr.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
+#if wxUSE_EXTENDED_RTTI
+
+WX_BEGIN_ENUM( wxFontFamily )
+	WX_ENUM_MEMBER( wxDEFAULT )
+	WX_ENUM_MEMBER( wxDECORATIVE )
+	WX_ENUM_MEMBER( wxROMAN )
+	WX_ENUM_MEMBER( wxSCRIPT )
+	WX_ENUM_MEMBER( wxSWISS )
+	WX_ENUM_MEMBER( wxMODERN )
+	WX_ENUM_MEMBER( wxTELETYPE )
+WX_END_ENUM( wxFontFamily )
+
+WX_BEGIN_ENUM( wxFontStyle )
+	WX_ENUM_MEMBER( wxNORMAL )
+	WX_ENUM_MEMBER( wxITALIC )
+	WX_ENUM_MEMBER( wxSLANT )
+WX_END_ENUM( wxFontStyle )
+
+WX_BEGIN_ENUM( wxFontWeight )
+	WX_ENUM_MEMBER( wxNORMAL )
+	WX_ENUM_MEMBER( wxLIGHT )
+	WX_ENUM_MEMBER( wxBOLD )
+WX_END_ENUM( wxFontWeight )
+
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject,"wx/font.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxFont)
+	WX_PROPERTY( Size,int, SetPointSize, GetPointSize, 12 )
+	WX_PROPERTY( Family, int  , SetFamily, GetFamily, (int)wxDEFAULT ) // wxFontFamily
+	WX_PROPERTY( Style, int , SetStyle, GetStyle, (int)wxNORMAL ) // wxFontStyle
+	WX_PROPERTY( Weight, int , SetWeight, GetWeight, (int)wxNORMAL ) // wxFontWeight
+	WX_PROPERTY( Underlined, bool , SetUnderlined, GetUnderlined, false )
+	WX_PROPERTY_SET_BY_REF( Face, wxString , SetFaceName, GetFaceName, )
+	WX_PROPERTY( Encoding, wxFontEncoding , SetEncoding, GetEncoding, wxFONTENCODING_DEFAULT )
+WX_END_PROPERTIES_TABLE()
+
+WX_CONSTRUCTOR_6( wxFont , int , Size , int , Family , int , Style , int , Weight , bool , Underlined , wxString , Face )  
+
+WX_BEGIN_HANDLERS_TABLE(wxFont)
+WX_END_HANDLERS_TABLE()
+
+#else
+	IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
+#endif
+
 
 // ----------------------------------------------------------------------------
 // constants

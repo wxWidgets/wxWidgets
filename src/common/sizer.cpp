@@ -43,7 +43,38 @@ IMPLEMENT_CLASS(wxNotebookSizer, wxSizer)
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
 
-
+/*
+	TODO PROPERTIES
+	  sizeritem
+	    object
+		object_ref
+		  minsize
+		  option
+		  flag
+		  border
+     spacer
+		option
+		flag
+		borfder
+	boxsizer
+	   orient
+    staticboxsizer
+	   orient
+	   label
+	gridsizer
+	   rows
+	   cols
+	   vgap
+	   hgap
+	flexgridsizer
+	   rows
+	   cols
+	   vgap
+	   hgap
+	   growablerows
+	   growablecols
+    minsize
+*/
 //---------------------------------------------------------------------------
 // wxSizerItem
 //---------------------------------------------------------------------------

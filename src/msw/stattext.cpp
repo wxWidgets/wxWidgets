@@ -33,6 +33,10 @@
 #include <stdio.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
+/*
+	TODO PROPERTIES :
+		label
+*/
 
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,

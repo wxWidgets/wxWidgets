@@ -233,12 +233,26 @@ static inline void wxBringWindowToTop(HWND hwnd)
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxWindow, wxWindowBase,"wx/window.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxWindow)
+	// WX_DEFAULT_CHILD_PARENT_RELATION( Parent , Children ) ;
 	WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  )
 	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1 )
+	// MaxHeight, Width , MinHeight , Width
+	// TODO switch label to control and title to toplevels
 	WX_PROPERTY_SET_BY_REF( Title,wxString, SetTitle, GetTitle, wxT("") )
 	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
-	WX_PROPERTY_SET_BY_REF( Position,wxPoint, SetPosition , GetPosition, wxDefaultPosition )
-	WX_PROPERTY_SET_BY_REF( Size,wxSize, SetSize, GetSize, wxDefaultSize )
+	WX_PROPERTY_SET_BY_REF( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) ) // pos
+	WX_PROPERTY_SET_BY_REF( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) ) // size
+	WX_PROPERTY( WindowStyle , long , SetWindowStyle , GetWindowStyle , ) // style 
+	WX_PROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , ) // extstyle
+	WX_PROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
+	WX_PROPERTY_SET_BY_REF_RET_BOOL( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , ) // bg
+	WX_PROPERTY_SET_BY_REF_RET_BOOL( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , ) // fg
+	//WX_PROPERTY_SET_BY_REF( Cursor , wxCursor , SetCursor , GetCursor , )
+	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
+	// WX_PROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
+	WX_PROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
+	WX_PROPERTY_SET_RET_BOOL( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) )
+	WX_PROPERTY_SET_RET_BOOL( Shown , bool , Show , IsShown , wxxVariant((bool)true) )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxWindow)

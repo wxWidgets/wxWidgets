@@ -57,6 +57,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 
+/*
+	TODO PROPERTIES
+
+		style wxSP_VERTICAL | wxSP_ARROW_KEYS
+		value wxSP_DEFAULT_VALUE
+		min wxSP_DEFAULT_MIN
+		max wxSP_DEFAULT_MAX
+
+*/
+
 // ----------------------------------------------------------------------------
 // wxSpinButton
 // ----------------------------------------------------------------------------

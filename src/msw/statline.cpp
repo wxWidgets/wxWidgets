@@ -47,6 +47,10 @@
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
+/*
+	TODO PROPERTIES :
+		style (wxLI_HORIZONTAL)
+*/
 
 // ----------------------------------------------------------------------------
 // wxStaticLine
