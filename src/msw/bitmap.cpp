@@ -122,12 +122,37 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     wxBitmapRefData *refData = new wxBitmapRefData;
     m_refData = refData;
 
-    refData->m_width = icon.GetWidth();
-    refData->m_height = icon.GetHeight();
+    int w = icon.GetWidth(),
+        h = icon.GetHeight();
+
+    refData->m_width = w;
+    refData->m_height = h;
     refData->m_depth = wxDisplayDepth();
 
     refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
-    refData->m_bitmapMask = new wxMask((WXHBITMAP)iconInfo.hbmMask);
+
+    // the mask returned by GetIconInfo() is inversed compared to the usual
+    // wxWin convention
+    HBITMAP hbmpMask = ::CreateBitmap(w, h, 1, 1, 0);
+
+    // the icons mask is opposite to the usual wxWin convention
+    HDC dcSrc = ::CreateCompatibleDC(NULL);
+    HDC dcDst = ::CreateCompatibleDC(NULL);
+    (void)SelectObject(dcSrc, iconInfo.hbmMask);
+    (void)SelectObject(dcDst, hbmpMask);
+
+    HBRUSH brush = ::CreateSolidBrush(RGB(255, 255, 255));
+    RECT rect = { 0, 0, w, h };
+    FillRect(dcDst, &rect, brush);
+
+    BitBlt(dcDst, 0, 0, w, h, dcSrc, 0, 0, SRCINVERT);
+
+    SelectObject(dcDst, NULL);
+    SelectObject(dcSrc, NULL);
+    DeleteDC(dcDst);
+    DeleteDC(dcSrc);
+
+    refData->m_bitmapMask = new wxMask((WXHBITMAP)hbmpMask);
 
 #if WXWIN_COMPATIBILITY_2
     refData->m_ok = TRUE;
