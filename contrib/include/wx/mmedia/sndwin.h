@@ -24,7 +24,7 @@ class WXDLLIMPEXP_MMEDIA wxSoundStreamWin : public wxSoundStream {
   wxSoundStream& Write(const void *buffer, wxUint32 len);
   wxSoundStream& Read(void *buffer, wxUint32 len); 
 
-  bool SetSoundFormat(wxSoundFormatBase& base);
+  bool SetSoundFormat(const wxSoundFormatBase& base);
 
   bool StartProduction(int evt);
   bool StopProduction();

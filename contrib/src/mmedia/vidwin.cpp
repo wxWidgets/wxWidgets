@@ -155,7 +155,7 @@ bool wxVideoWindows::SetSize(wxSize WXUNUSED(size))
     return TRUE;
 }
 
-bool wxVideoWindows::IsCapable(wxVideoType v_type)
+bool wxVideoWindows::IsCapable(wxVideoType v_type) const
 {
     return (v_type == wxVIDEO_MSAVI);
 }

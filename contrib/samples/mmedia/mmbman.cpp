@@ -248,7 +248,7 @@ bool MMBoardSoundFile::NeedWindow()
     return FALSE;
 }
 
-void MMBoardSoundFile::SetWindow(wxWindow *window)
+void MMBoardSoundFile::SetWindow(wxWindow *WXUNUSED(window))
 {
 }
 
@@ -277,14 +277,25 @@ wxString MMBoardSoundFile::GetStringType()
     switch (m_file_type) {
         case MMBoard_WAVE:
             return wxString(wxT("WAVE file"));
+            #if 0
+            // break is not reachable after return
             break;
+            #endif
         case MMBoard_AIFF:
             return wxString(wxT("AIFF file"));
+            #if 0
+            // break is not reachable after return
             break;
+            #endif
+        #if 0
+        // default moved outside switch for those compilers
+        // which complain about lack of return in function
         default:
             return wxString(wxT("Unknown file"));
             break;
+        #endif
     }
+    return wxString(wxT("Unknown file"));
 }
 
 wxString MMBoardSoundFile::GetStringInformation()
@@ -419,7 +430,7 @@ MMBoardTime MMBoardVideoFile::GetLength()
     return btime;
 }
 
-void MMBoardVideoFile::SetPosition(MMBoardTime btime)
+void MMBoardVideoFile::SetPosition(MMBoardTime WXUNUSED(btime))
 {
 }
 
@@ -443,12 +454,12 @@ wxString MMBoardVideoFile::GetStringInformation()
     wxString info;
 
     info = wxT("Video codec: ");
-    info += m_video_driver->GetMovieCodec() + "\n";
+    info += m_video_driver->GetMovieCodec() + _T("\n");
     info += wxT("Audio codec: ");
     info += m_video_driver->GetAudioCodec();
-    info += wxString::Format(" Sample rate: %d Channels: %d\n", m_video_driver->GetSampleRate(),
+    info += wxString::Format(_T(" Sample rate: %d Channels: %d\n"), m_video_driver->GetSampleRate(),
                              m_video_driver->GetBPS());
-    info += wxString::Format(" Frame rate: %.01f", m_video_driver->GetFrameRate());
+    info += wxString::Format(_T(" Frame rate: %.01f"), m_video_driver->GetFrameRate());
     return info;
 }
 
@@ -509,7 +520,7 @@ wxSoundStream *MMBoardManager::OpenSoundStream()
     return new wxSoundStreamWin();
 #endif
 
-  wxMessageBox("You are trying to open a multimedia but you have not devices", "Error", wxOK | wxICON_ERROR, NULL);
+  wxMessageBox(_T("You are trying to open a multimedia but you have not devices"), _T("Error"), wxOK | wxICON_ERROR, NULL);
 
   return NULL;
 }

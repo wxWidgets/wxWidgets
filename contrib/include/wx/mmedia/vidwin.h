@@ -90,7 +90,7 @@ public:
     // Return the total number of frames in the movie
     wxUint32 GetNbFrames() const;
     
-    bool IsCapable(wxVideoType v_type);
+    bool IsCapable(wxVideoType v_type) const;
     
     bool AttachOutput(wxWindow& output);
     void DetachOutput(void);

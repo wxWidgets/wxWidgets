@@ -164,7 +164,7 @@ IMPLEMENT_APP(MMBoardApp)
 bool MMBoardApp::OnInit()
 {
     // create the main application window
-    MMBoardFrame *frame = new MMBoardFrame("Multimedia Board",
+    MMBoardFrame *frame = new MMBoardFrame(_T("Multimedia Board"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -174,16 +174,16 @@ bool MMBoardApp::OnInit()
     m_caps = TestMultimediaCaps();
 
     if (!m_caps) {
-      wxMessageBox("Your system has no multimedia capabilities. We are exiting now.", "Major error !", wxOK | wxICON_ERROR, NULL);
+      wxMessageBox(_T("Your system has no multimedia capabilities. We are exiting now."), _T("Major error !"), wxOK | wxICON_ERROR, NULL);
       return FALSE;
     }
 
     wxString msg;
-    msg.Printf("Detected : %s%s%s", (m_caps & MM_SOUND_OSS) ? "OSS " : "",
-	                            (m_caps & MM_SOUND_ESD) ? "ESD " : "",
-	                            (m_caps & MM_SOUND_WIN) ? "WIN" : "");
+    msg.Printf(_T("Detected : %s%s%s"), (m_caps & MM_SOUND_OSS) ? _T("OSS ") : _T(""),
+	                            (m_caps & MM_SOUND_ESD) ? _T("ESD ") : _T(""),
+	                            (m_caps & MM_SOUND_WIN) ? _T("WIN") : _T(""));
 
-    wxMessageBox(msg, "Good !", wxOK | wxICON_INFORMATION, NULL);
+    wxMessageBox(msg, _T("Good !"), wxOK | wxICON_INFORMATION, NULL);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -298,7 +298,7 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 
     m_fileType = new wxStaticText(infoPanel, -1, wxT(""));
     wxStaticLine *line = new wxStaticLine(infoPanel, -1);
-    m_infoText = new wxStaticText(infoPanel, -1, "");
+    m_infoText = new wxStaticText(infoPanel, -1, _T(""));
 
     UpdateInfoText();
 
@@ -402,7 +402,7 @@ void MMBoardFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                 wxT("an example of the capabilities of the wxWindows multimedia classes.\n")
 		wxT("Copyright 1999, 2000, Guilhem Lavaux.\n"));
  
-    wxMessageBox(msg, "About MMBoard", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About MMBoard"), wxOK | wxICON_INFORMATION, this);
 }
 
 void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
@@ -418,7 +418,7 @@ void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     }
     
     // select a file to be opened
-    selected_file = wxLoadFileSelector("multimedia", "*", NULL, this);
+    selected_file = wxLoadFileSelector(_T("multimedia"), _T("*"), NULL, this);
     if (selected_file.IsNull())
         return;
     
