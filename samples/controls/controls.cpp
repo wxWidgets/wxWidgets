@@ -127,8 +127,19 @@ bool MyApp::OnInit(void)
 // MyTextCtrl
 //----------------------------------------------------------------------
 
+class MyTextCtrl : public wxTextCtrl
+{
+public:
+  MyTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
+              const wxPoint &pos, const wxSize &size, int style );
+
+  void OnRightButton(wxCommandEvent&) { }
+
+DECLARE_EVENT_TABLE()
+};
+
 BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
-  EVT_RIGHT_DOWN   (MyTextCtrl::OnRightButton)
+  EVT_RIGHT_DOWN(MyTextCtrl::OnRightButton)
 END_EVENT_TABLE()
   
 MyTextCtrl::MyTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
@@ -386,7 +397,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-  (void*) new MyPanel( this, 10, 10, 300, 100 );
+  (void)new MyPanel( this, 10, 10, 300, 100 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
