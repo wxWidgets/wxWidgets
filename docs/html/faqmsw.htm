@@ -46,7 +46,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#access">Is MS Active Accessibility supported?</a></li>
 <li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files??</a></li>
 <li><a href="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></li>
-<li><a href="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></li>
+<li><a href="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></li>
 <li><a href="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></li>
 </ul>
 <hr>
@@ -359,7 +359,7 @@ The templates are described in tmake ref manual (1-2 pages of text)
 and are quite simple. They do contain some Perl code, but my Perl is
 primitive (very C like) so it should be possible for anybody to make
 trivial modifications to it (I hope that only trivial modifications
-will be needed). I&#39;ve tagged the ol makefiles as MAKEFILES_WITHOUT_TMAKE
+will be needed). I&#39;ve tagged the old makefiles as MAKEFILES_WITHOUT_TMAKE
 in the cvs, so you can always retrieve them and compare the new ones,
 this will make it easier to solve the problems you might have.<P>
 
@@ -437,7 +437,7 @@ your items, or accelerators may not be registered properly.<P>
 
 Currently this is not possible because the wxConfig family of classes is
 supposed to deal with per-user application configuration data, and HKLM is
-only supposed to be writeable by a user with Administrator privileges. In theory,
+only supposed to be writable by a user with Administrator privileges. In theory,
 only installers should write to HKLM. This is still a point debated by the
 wxWidgets developers. There are at least two ways to work around it if you really
 need to write to HKLM.<P>
@@ -525,7 +525,7 @@ when linking your project, this means that you used different versions of CRT
 project. Visual C++ provides static or dynamic and multithread safe or not
 versions of CRT for each of debug and release builds, for a total of 8
 libraries. You can choose among them by going to the "Code generation"
-page/subitem of the "C++" tab/item in the project proprieties dialog in VC6/7.
+page/subitem of the "C++" tab/item in the project properties dialog in VC6/7.
 <p>
 To avoid problems, you <strong>must</strong> use the same one for all
 components of your project. wxWindows uses multithread safe DLL version of the
@@ -538,7 +538,7 @@ slightly smaller and faster.
 But the most important thing is to use the <strong>same</strong> CRT setting for
 all components of your project.
 
-<h3><a name="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></h3>
+<h3><a name="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></h3>
 
 If you get errors when including Microsoft DirectShow or DirectDraw headers,
 the following message from Peter Whaite could help:
