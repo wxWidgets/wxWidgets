@@ -644,6 +644,8 @@ wxLayoutLine::wxLayoutLine(wxLayoutLine *prev, wxLayoutList *llist)
    }
 
    m_StyleInfo = llist->GetDefaultStyleInfo();
+
+   llist->IncNumLines();
 }
 
 wxLayoutLine::~wxLayoutLine()
@@ -1004,8 +1006,12 @@ wxLayoutLine::DeleteWord(CoordType xpos)
 wxLayoutLine *
 wxLayoutLine::DeleteLine(bool update, wxLayoutList *llist)
 {
-   if(m_Next) m_Next->m_Previous = m_Previous;
-   if(m_Previous) m_Previous->m_Next = m_Next;
+   // maintain linked list integrity
+   if(m_Next)
+       m_Next->m_Previous = m_Previous;
+   if(m_Previous)
+       m_Previous->m_Next = m_Next;
+
    if(update)
    {
       m_Next->MoveLines(-1);
@@ -1021,6 +1027,9 @@ wxLayoutLine::DeleteLine(bool update, wxLayoutList *llist)
    }
    wxLayoutLine *next = m_Next;
    delete this;
+
+   llist->DecNumLines();
+
    return next;
 }
 
@@ -1513,6 +1522,7 @@ wxLayoutList::wxLayoutList()
    m_caret = NULL;
 #endif // WXLAYOUT_USE_CARET
 
+   m_numLines = 0;
    m_FirstLine = NULL;
    InvalidateUpdateRect();
    Clear();
@@ -1522,6 +1532,8 @@ wxLayoutList::~wxLayoutList()
 {
    InternalClear();
    m_FirstLine->DeleteLine(false, this);
+
+   wxASSERT_MSG( m_numLines == 0, "line count calculation broken" );
 }
 
 void
@@ -2296,15 +2308,22 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
 #endif
       line = line->GetNextLine();
    }
-   if(line == NULL)
+
+   if ( !line )
    {
-      if(found) *found = false;
+      if ( found )
+          *found = false;
+
       return NULL; // not found
    }
-   if(cursorPos) cursorPos->y = line->GetLineNumber();
+
+   if ( cursorPos )
+       cursorPos->y = line->GetLineNumber();
+
    // Now, find the object in the line:
+   ApplyStyle(line->GetStyleInfo(), dc);
    wxLOiterator i = line->FindObjectScreen(dc, pos.x,
-                                           cursorPos ? & cursorPos->x : NULL ,
+                                           cursorPos ? &cursorPos->x : NULL,
                                            found);
    return (i == NULLIT) ? NULL : *i;
 

@@ -798,13 +798,23 @@ public:
          MoveCursorHorizontally(m_CursorLine->GetLength()-m_CursorPos.x);
       }
 
-   /// Move cursor to begin of line.
+   /// Move cursor to the start of line.
    void MoveCursorToBeginOfLine(void)
       { MoveCursorHorizontally(-m_CursorPos.x); }
+
+   /// get the number of lines in the list
+   size_t GetNumLines() const { return m_numLines; }
 
    /// Returns current cursor position.
    const wxPoint &GetCursorPos(wxDC &dc) const { return m_CursorPos; }
    const wxPoint &GetCursorPos() const { return m_CursorPos; }
+
+   /// move cursor to the end of text
+   void MoveCursorToEnd(void)
+   {
+      MoveCursorTo(wxPoint(0, GetNumLines() - 1));
+      MoveCursorToEndOfLine();
+   }
 
    //@}
 
@@ -1109,16 +1119,24 @@ public:
    void Debug(void);
 #endif
 
+   // for wxLayoutLine usage only
+   void IncNumLines() { m_numLines++; }
+   void DecNumLines() { m_numLines--; }
+
 private:
    /// Clear the list.
    void InternalClear(void);
 
    /// The list of lines.
    wxLayoutLine *m_FirstLine;
+   /// The number of lines in the list (store instead recalculating for speed)
+   size_t m_numLines;
+
    /// The update rectangle which needs to be refreshed:
    wxRect  m_UpdateRect;
    /// Is the update rectangle valid?
    bool    m_UpdateRectValid;
+
    /**@name Cursor Management */
    //@{
    /// Where the text cursor (column,line) is.

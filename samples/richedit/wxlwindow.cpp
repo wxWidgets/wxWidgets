@@ -304,7 +304,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
              else
              {
                 // click beyond the end of the text
-                m_llist->MoveCursorTo(m_llist->GetSize());
+                m_llist->MoveCursorToEnd();
              }
 
              // clicking a mouse removes the selection
@@ -490,7 +490,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    case WXK_END:
       if ( ctrlDown )
-         m_llist->MoveCursorTo(m_llist->GetSize());
+         m_llist->MoveCursorToEnd();
       else
          m_llist->MoveCursorToEndOfLine();
       break;
