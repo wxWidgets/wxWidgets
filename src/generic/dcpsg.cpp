@@ -1005,7 +1005,10 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, buffer );
     fprintf( m_pstream, " findfont\n" );
 
-    fprintf( m_pstream, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
+    sprintf( buffer, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
+    for (int i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
                 // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
                 // to 1/1000th of pt and then back.
@@ -1085,10 +1088,14 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         double redPS = (double)(red) / 255.0;
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
-
-        fprintf( m_pstream,
+        
+        char buffer[100];
+        sprintf( buffer,
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.'; 
+        fprintf( m_pstream, buffer );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1129,9 +1136,13 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        fprintf( m_pstream,
+        char buffer[100];
+        sprintf( buffer,
                 "%.8f %.8f %.8f setrgbcolor\n",
                 redPS, greenPS, bluePS );
+        for (int i = 0; i < 100; i++)
+            if (buffer[i] == ',') buffer[i] = '.'; 
+        fprintf( m_pstream, buffer );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1175,9 +1186,13 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            fprintf( m_pstream,
-                    "%.8f %.8f %.8f setrgbcolor\n",
-                    redPS, greenPS, bluePS );
+            char buffer[100];
+            sprintf( buffer,
+                "%.8f %.8f %.8f setrgbcolor\n",
+                redPS, greenPS, bluePS );
+            for (int i = 0; i < 100; i++)
+                if (buffer[i] == ',') buffer[i] = '.'; 
+            fprintf( m_pstream, buffer );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1283,9 +1298,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            fprintf( m_pstream,
-                    "%.8f %.8f %.8f setrgbcolor\n",
-                    redPS, greenPS, bluePS );
+            char buffer[100];
+            sprintf( buffer,
+                "%.8f %.8f %.8f setrgbcolor\n",
+                redPS, greenPS, bluePS );
+            for (int i = 0; i < 100; i++)
+                if (buffer[i] == ',') buffer[i] = '.'; 
+            fprintf( m_pstream, buffer );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1300,7 +1319,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     // FIXME only correct for 90 degrees
     fprintf(m_pstream, "%d %d moveto\n",
             XLOG2DEV((wxCoord)(x + size)), YLOG2DEV(by) );
-    fprintf(m_pstream, "%.8f rotate\n", angle);
+            
+    char buffer[100];
+    sprintf(buffer, "%.8f rotate\n", angle);
+    int i;
+    for (i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.'; 
+    fprintf(m_pstream, buffer);
 
     /* I don't know how to write char to a stream, so I use a mini string */
     char tmpbuf[2];
@@ -1309,7 +1334,6 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
-    int i;
     for (i = 0; i < len; i++)
     {
         int c = (unsigned char) textbuf[i];
@@ -1333,7 +1357,11 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     }
 
     fprintf( m_pstream, ") show\n" );
-    fprintf( m_pstream, "%.8f rotate\n", -angle );
+    
+    sprintf( buffer, "%.8f rotate\n", -angle );
+    for (i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.'; 
+    fprintf( m_pstream, buffer );
 
     if (m_font.GetUnderlined())
     {
@@ -1755,7 +1783,12 @@ void wxPostScriptDC::StartPage()
         // fprintf( m_pstream, "90 rotate llx neg ury nef translate\n" );
     }
 
-    fprintf( m_pstream, "%.8f %.8f scale\n", scale_x, scale_y );
+    char buffer[100];
+    sprintf( buffer, "%.8f %.8f scale\n", scale_x, scale_y );
+    for (int i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
+    
     fprintf( m_pstream, "%d %d translate\n", translate_x, translate_y );
 }
 

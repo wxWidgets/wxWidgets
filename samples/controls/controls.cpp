@@ -753,7 +753,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton(panel, ID_BUTTON_LABEL, "&Toggle label", wxPoint(250, 20));
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
-                               wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
+                               wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
     m_label->SetForegroundColour( *wxBLUE );
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
@@ -1177,7 +1177,7 @@ void MyPanel::OnUpdateLabel( wxCommandEvent &WXUNUSED(event) )
     static bool s_long = TRUE;
 
     s_long = !s_long;
-    m_label->SetLabel(s_long ? "very very very long text" : "shorter text");
+    m_label->SetLabel(s_long ? "Very very very very very long text." : "Shorter text.");
 }
 
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
