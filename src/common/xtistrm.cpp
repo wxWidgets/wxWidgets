@@ -69,14 +69,14 @@ void wxWriter::ClearObjectContext()
     m_data->m_nextId = 0 ;
 }
 
-void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name )
+void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name , wxxVariantArray &metadata )
 {
     DoBeginWriteTopLevelEntry( name ) ;
-    WriteObject( object , classInfo , persister , false ) ;
+    WriteObject( object , classInfo , persister , false , metadata) ;
     DoEndWriteTopLevelEntry( name ) ;
 }
 
-void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded)
+void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded, wxxVariantArray &metadata )
 {
     // hack to avoid writing out embedded windows, these are windows that are constructed as part of other windows, they would
     // doubly constructed afterwards
@@ -85,7 +85,7 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo 
     if ( win && win->GetId() < 0 )
         return ;
 
-    if ( persister->BeforeWriteObject( this , object , classInfo ) )
+    if ( persister->BeforeWriteObject( this , object , classInfo , metadata) )
     {
         if ( object == NULL )
             DoWriteNullObject() ;
@@ -103,7 +103,7 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo 
             if ( !isEmbedded && dynobj )
                 m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid ;
 
-            DoBeginWriteObject( object , classInfo , oid ) ;
+            DoBeginWriteObject( object , classInfo , oid , metadata ) ;
             wxWriterInternalPropertiesData data ;
             WriteAllProperties( object , classInfo , persister , &data ) ;
             DoEndWriteObject( object , classInfo , oid  ) ;
@@ -152,7 +152,7 @@ void wxWriter::FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeIn
 }
 void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data )
 {
-   // in case this object is wxDynamic object we have to hand over the streaming
+    // in case this object is wxDynamic object we have to hand over the streaming
     // of the properties of the superclasses to the real super class instance
     {
         const wxObject *iterobj = obj ;
@@ -191,7 +191,8 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                         {
                             const wxClassInfo* pci = cti->GetClassInfo() ;
                             wxObject *vobj = pci->VariantToInstance( value ) ;
-                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT ) ;
+                            wxxVariantArray md ;
+                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md ) ;
                         }
                         else
                         {                               
@@ -233,7 +234,8 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                         {
                             const wxClassInfo* pci = cti->GetClassInfo() ;
                             wxObject *vobj = pci->VariantToInstance( value ) ;
-                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT ) ;
+                            wxxVariantArray md ;
+                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md) ;
                         }
                         else
                         {                               
@@ -246,7 +248,7 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
         }
         pi = pi->GetNext() ;
     }
- }
+}
 
 int wxWriter::GetObjectID(const wxObject *obj) 
 {
@@ -325,13 +327,17 @@ void wxXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) )
     m_data->Pop() ;
 }
 
-void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID   ) 
+void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata   ) 
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
     pnode->AddProperty(wxT("class"), wxString(classInfo->GetClassName()));
     pnode->AddProperty(wxT("id"), wxString::Format( "%d" , objectID ) );
 
+    for ( size_t i = 0 ; i < metadata.GetCount() ; ++i )
+    {
+        pnode->AddProperty( metadata[i].GetName() , metadata[i].GetAsString() ) ;
+    }
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
 }
@@ -501,7 +507,17 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     // first make the object know to our internal registry
     SetObjectClassInfo( objectID , classInfo ) ;
 
-    callbacks->AllocateObject(objectID, classInfo);
+    wxxVariantArray metadata ;
+    wxXmlProperty *xp = node->GetProperties() ;
+    while ( xp )
+    {
+        if ( xp->GetName() != wxString("class") && xp->GetName() != wxString("id") )
+        {
+            metadata.Add( new wxxVariant( xp->GetValue() , xp->GetName() ) ) ;
+        }
+        xp = xp->GetNext() ;
+    }
+    callbacks->AllocateObject(objectID, classInfo, metadata);
 
     // 
     // stream back the Create parameters first
@@ -565,7 +581,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     // got the parameters.  Call the Create method
     callbacks->CreateObject(objectID, classInfo,
         classInfo->GetCreateParamCount(),
-        createParams, createParamOids, createClassInfos);
+        createParams, createParamOids, createClassInfos, metadata );
 
     // now stream in the rest of the properties, in the sequence their properties were written in the xml
     for ( size_t j = 0 ; j < propertyNames.size() ; ++j )
@@ -632,7 +648,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
                         callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
-                        sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
+                            sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
                     }
 
                 }
@@ -712,7 +728,8 @@ wxRuntimeDepersister::~wxRuntimeDepersister()
     delete m_data ;
 }
 
-void wxRuntimeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo)
+void wxRuntimeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo ,
+                                          wxxVariantArray &metadata)
 {
     wxObject *O;
     O = classInfo->CreateObject();
@@ -724,7 +741,8 @@ void wxRuntimeDepersister::CreateObject(int objectID,
                                         int paramCount,
                                         wxxVariant *params,
                                         int *objectIdValues,
-                                        const wxClassInfo **objectClassInfos)
+                                        const wxClassInfo **objectClassInfos ,
+                                        wxxVariantArray &metadata)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -809,9 +827,9 @@ wxObject *wxRuntimeDepersister::GetObject(int objectID)
 
 // adds an element to a property collection
 void wxRuntimeDepersister::AddToPropertyCollection( int objectID ,
-    const wxClassInfo *classInfo,
-    const wxPropertyInfo* propertyInfo ,
-    const wxxVariant &value) 
+                                                   const wxClassInfo *classInfo,
+                                                   const wxPropertyInfo* propertyInfo ,
+                                                   const wxxVariant &value) 
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -820,9 +838,9 @@ void wxRuntimeDepersister::AddToPropertyCollection( int objectID ,
 
 // sets the corresponding property (value is an object)
 void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
-    const wxClassInfo *classInfo,
-    const wxPropertyInfo* propertyInfo ,
-    int valueObjectId) 
+                                                           const wxClassInfo *classInfo,
+                                                           const wxPropertyInfo* propertyInfo ,
+                                                           int valueObjectId) 
 {
     wxObject *o, *valo;
     o = m_data->GetObject(objectID);
@@ -874,7 +892,8 @@ wxCodeDepersister::~wxCodeDepersister()
     delete m_data ;
 }
 
-void wxCodeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo)
+void wxCodeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo ,
+                                       wxxVariantArray &metadata)
 {
     wxString objectName = wxString::Format( "LocalObject_%d" , objectID ) ;
     m_fp->WriteString( wxString::Format( "\t%s *%s = new %s;\n",
@@ -916,7 +935,8 @@ void wxCodeDepersister::CreateObject(int objectID,
                                      int paramCount,
                                      wxxVariant *params,
                                      int *objectIDValues,
-                                     const wxClassInfo **WXUNUSED(objectClassInfos)
+                                     const wxClassInfo **WXUNUSED(objectClassInfos) ,
+                                     wxxVariantArray &metadata
                                      )
 {
     int i;
@@ -964,9 +984,9 @@ void wxCodeDepersister::SetPropertyAsObject(int objectID,
 }
 
 void wxCodeDepersister::AddToPropertyCollection( int objectID ,
-    const wxClassInfo *classInfo,
-    const wxPropertyInfo* propertyInfo ,
-    const wxxVariant &value) 
+                                                const wxClassInfo *classInfo,
+                                                const wxPropertyInfo* propertyInfo ,
+                                                const wxxVariant &value) 
 {
     m_fp->WriteString( wxString::Format( "\t%s->%s(%s);\n",
         m_data->GetObjectName(objectID),
@@ -976,9 +996,9 @@ void wxCodeDepersister::AddToPropertyCollection( int objectID ,
 
 // sets the corresponding property (value is an object)
 void wxCodeDepersister::AddToPropertyCollectionAsObject(int objectID,
-    const wxClassInfo *classInfo,
-    const wxPropertyInfo* propertyInfo ,
-    int valueObjectId) 
+                                                        const wxClassInfo *classInfo,
+                                                        const wxPropertyInfo* propertyInfo ,
+                                                        int valueObjectId) 
 {
     // TODO
 }

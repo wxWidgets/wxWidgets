@@ -478,6 +478,7 @@ public :
         GetTypeInfo()->ConvertToString( *this , s ) ;
 		return s ;
 	}
+    const wxString& GetName() const { return m_name ; }
 private :
     wxxVariantData* m_data ;
     wxString m_name ;

@@ -50,7 +50,7 @@ class wxPersister
 {
 public :
     // will be called before an object is written, may veto by returning false
-    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) ) { return true ; } 
+    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , wxxVariantArray &WXUNUSED(metadata)) { return true ; } 
 
     // will be called after this object has been written, may be needed for adjusting stacks
     virtual void AfterWriteObject( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) ) {}
@@ -81,7 +81,7 @@ public :
     ~wxWriter() ;
 
     // with this call you start writing out a new top-level object
-    void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name ) ;
+    void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , const wxString &name , wxxVariantArray &WXUNUSED(metadata)) ;
 
     //
     // Managing the object identity table a.k.a context
@@ -109,7 +109,7 @@ public :
     virtual void DoEndWriteTopLevelEntry( const wxString &name ) = 0 ;
 
     // start of writing an object having the passed in ID
-    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) = 0 ;
+    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata ) = 0 ;
 
     // end of writing an toplevel object name param is used for unique identification within the container
     virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) = 0 ;
@@ -142,7 +142,7 @@ private :
     struct wxWriterInternalPropertiesData ;
 
     void WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data ) ;
-    void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded) ;
+    void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded, wxxVariantArray &metadata ) ;
     void FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeInfo* dti, const wxObject* &sink , const wxHandlerInfo *&handler) ;
 } ;
 
@@ -171,7 +171,7 @@ public :
     virtual void DoEndWriteTopLevelEntry( const wxString &name )  ;
 
     // start of writing an object having the passed in ID
-    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) ;
+    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata ) ;
 
     // end of writing an toplevel object name param is used for unique identification within the container
     virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) ;
@@ -268,7 +268,7 @@ class wxDepersister
 {
 public :
     // allocate the new object on the heap, that object will have the passed in ID
-    virtual void AllocateObject(int objectID, wxClassInfo *classInfo) = 0;
+    virtual void AllocateObject(int objectID, wxClassInfo *classInfo, wxxVariantArray &metadata) = 0;
 
     // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
@@ -279,8 +279,8 @@ public :
         int paramCount,
         wxxVariant *VariantValues ,
         int *objectIDValues ,
-        const wxClassInfo **objectClassInfos
-        ) = 0;
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata) = 0;
 
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
@@ -337,7 +337,8 @@ public :
     wxObject *GetObject(int objectID) ;
 
     // allocate the new object on the heap, that object will have the passed in ID
-    virtual void AllocateObject(int objectID, wxClassInfo *classInfo) ;
+    virtual void AllocateObject(int objectID, wxClassInfo *classInfo ,
+        wxxVariantArray &metadata) ;
 
     // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
@@ -348,7 +349,8 @@ public :
         int paramCount,
         wxxVariant *VariantValues ,
         int *objectIDValues,
-        const wxClassInfo **objectClassInfos
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata
         ) ;
 
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
@@ -408,7 +410,8 @@ public:
     ~wxCodeDepersister() ;
 
     // allocate the new object on the heap, that object will have the passed in ID
-    virtual void AllocateObject(int objectID, wxClassInfo *classInfo) ;
+    virtual void AllocateObject(int objectID, wxClassInfo *classInfo ,
+        wxxVariantArray &metadata) ;
 
     // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
@@ -419,7 +422,8 @@ public:
         int paramCount,
         wxxVariant *variantValues ,
         int *objectIDValues,
-        const wxClassInfo **objectClassInfos
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata
         ) ;
 
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
