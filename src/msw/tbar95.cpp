@@ -1040,69 +1040,186 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_SIZE )
+    // calculate our minor dimenstion ourselves - we're confusing the standard
+    // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
+    RECT r;
+    if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
     {
-        // calculate our minor dimenstion ourselves - we're confusing the
-        // standard logic (TB_AUTOSIZE) with our horizontal toolbars and other
-        // hacks
-        RECT r;
-        if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
+        int w, h;
+
+        if ( GetWindowStyle() & wxTB_VERTICAL )
         {
-            int w, h;
-
-            if ( GetWindowStyle() & wxTB_VERTICAL )
+            w = r.right - r.left;
+            if ( m_maxRows )
             {
-                w = r.right - r.left;
-                if ( m_maxRows )
+                w *= (m_nButtons + m_maxRows - 1)/m_maxRows;
+            }
+            h = HIWORD(lParam);
+        }
+        else
+        {
+            w = LOWORD(lParam);
+            h = r.bottom - r.top;
+            if ( m_maxRows )
+            {
+                // FIXME: 6 is hardcoded separator line height...
+                h += 6;
+                h *= m_maxRows;
+            }
+        }
+
+        if ( MAKELPARAM(w, h) != lParam )
+        {
+            // size really changed
+            SetSize(w, h);
+        }
+
+        // message processed
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
+{
+    // erase any dummy separators which we used for aligning the controls if
+    // any here
+
+    // first of all, do we have any controls at all?
+    wxToolBarToolsList::Node *node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( node->GetData()->IsControl() )
+            break;
+    }
+
+    if ( !node )
+    {
+        // no controls, nothing to erase
+        return FALSE;
+    }
+
+    // prepare the DC on which we'll be drawing
+    wxClientDC dc(this);
+    dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
+    dc.SetPen(*wxTRANSPARENT_PEN);
+
+    RECT r;
+    if ( !GetUpdateRect(GetHwnd(), &r, FALSE) )
+    {
+        // nothing to redraw anyhow
+        return FALSE;
+    }
+
+    wxRect rectUpdate;
+    wxCopyRECTToRect(r, rectUpdate);
+
+    dc.SetClippingRegion(rectUpdate);
+
+    // draw the toolbar tools, separators &c normally
+    wxControl::MSWWindowProc(WM_PAINT, wParam, lParam);
+
+    // for each control in the toolbar find all the separators intersecting it
+    // and erase them
+    //
+    // NB: this is really the only way to do it as we don't know if a separator
+    //     corresponds to a control (i.e. is a dummy one) or a real one
+    //     otherwise
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarToolBase *tool = node->GetData();
+        if ( tool->IsControl() )
+        {
+            // get the control rect in our client coords
+            wxControl *control = tool->GetControl();
+            wxRect rectCtrl = control->GetRect();
+            control->ClientToScreen(&rectCtrl.x, &rectCtrl.y);
+            ScreenToClient(&rectCtrl.x, &rectCtrl.y);
+
+            // iterate over all buttons
+            TBBUTTON tbb;
+            int count = ::SendMessage(GetHwnd(), TB_BUTTONCOUNT, 0, 0);
+            for ( int n = 0; n < count; n++ )
+            {
+                // is it a separator?
+                if ( !::SendMessage(GetHwnd(), TB_GETBUTTON,
+                                    n, (LPARAM)&tbb) )
                 {
-                    w *= (m_nButtons + m_maxRows - 1)/m_maxRows;
+                    wxLogDebug(_T("TB_GETBUTTON failed?"));
+
+                    continue;
                 }
-                h = HIWORD(lParam);
-            }
-            else
-            {
-                w = LOWORD(lParam);
-                h = r.bottom - r.top;
-                if ( m_maxRows )
+
+                if ( tbb.fsStyle != TBSTYLE_SEP )
+                    continue;
+
+                // get the bounding rect of the separator
+                RECT r;
+                if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT,
+                                    n, (LPARAM)&r) )
                 {
-                    h += 6; // FIXME: this is the separator line height...
-                    h *= m_maxRows;
+                    wxLogDebug(_T("TB_GETITEMRECT failed?"));
+
+                    continue;
+                }
+
+                // does it intersect the control?
+                wxRect rectItem;
+                wxCopyRECTToRect(r, rectItem);
+                if ( rectCtrl.Intersects(rectItem) )
+                {
+                    // yes, do erase it!
+                    dc.DrawRectangle(rectItem);
                 }
             }
-
-            if ( MAKELPARAM(w, h) != lParam )
-            {
-                // size really changed
-                SetSize(w, h);
-            }
-
-            // message processed
-            return 0;
         }
     }
-    else if ( nMsg == WM_MOUSEMOVE )
+
+    return TRUE;
+}
+
+void wxToolBar::HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxCoord x = GET_X_LPARAM(lParam),
+            y = GET_Y_LPARAM(lParam);
+    wxToolBarToolBase* tool = FindToolForPosition( x, y );
+
+    // cursor left current tool
+    if( tool != m_pInTool && !tool )
     {
-        wxCoord x = GET_X_LPARAM(lParam), y = GET_Y_LPARAM(lParam);
-        wxToolBarToolBase* tool = FindToolForPosition( x, y );
+        m_pInTool = 0;
+        OnMouseEnter( -1 );
+    }
 
-        // cursor left current tool
-        if( tool != m_pInTool && !tool )
-        {
-            m_pInTool = 0;
-            OnMouseEnter( -1 );
-        }
+    // cursor entered a tool
+    if( tool != m_pInTool && tool )
+    {
+        m_pInTool = tool;
+        OnMouseEnter( tool->GetId() );
+    }
+}
 
-        // cursor entered a tool
-        if( tool != m_pInTool && tool )
-        {
-            m_pInTool = tool;
-            OnMouseEnter( tool->GetId() );
-        }
+long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    switch ( nMsg )
+    {
+        case WM_SIZE:
+            if ( HandleSize(wParam, lParam) )
+                return 0;
+            break;
 
-        // we don't handle mouse moves, so fall through
-        // to wxControl::MSWWindowProc
+        case WM_MOUSEMOVE:
+            // we don't handle mouse moves, so always pass the message to
+            // wxControl::MSWWindowProc
+            HandleMouseMove(wParam, lParam);
+            break;
+
+        case WM_PAINT:
+            if ( HandlePaint(wParam, lParam) )
+                return 0;
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

@@ -92,8 +92,13 @@ protected:
     // should be called whenever the toolbar size changes
     void UpdateSize();
 
-    // override WndProc to process WM_SIZE
+    // override WndProc mainly to process WM_SIZE
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    // handlers for various events
+    bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
+    bool HandlePaint(WXWPARAM wParam, WXLPARAM lParam);
+    void HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam);
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
