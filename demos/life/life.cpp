@@ -183,8 +183,9 @@ bool LifeApp::OnInit()
 // --------------------------------------------------------------------------
 
 // frame constructor
-LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
-    _("Life!"), wxDefaultPosition )
+LifeFrame::LifeFrame() : 
+  wxFrame( (wxFrame *) NULL, wxID_ANY, _("Life!"), wxDefaultPosition ),
+  m_navigator(NULL)
 {
     // frame icon
     SetIcon(wxICON(mondrian));
@@ -198,12 +199,15 @@ LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
     menuFile->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _("Start a new game"));
     menuFile->Append(wxID_OPEN, wxGetStockLabel(wxID_OPEN), _("Open an existing Life pattern"));
     menuFile->Append(ID_SAMPLES, _("&Sample game..."), _("Select a sample configuration"));
+#ifndef __WXWINCE__
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT, true, _T("Alt-X")), _("Quit this program"));
 
     menuView->Append(ID_SHOWNAV, _("Navigation &toolbox"), _("Show or hide toolbox"), wxITEM_CHECK);
     menuView->Check(ID_SHOWNAV, true);
     menuView->AppendSeparator();
+#endif
+
     menuView->Append(ID_ORIGIN, _("&Absolute origin"), _("Go to (0, 0)"));
     menuView->Append(ID_CENTER, _("&Center of mass"), _("Find center of mass"));
     menuView->Append(ID_NORTH, _("&North"), _("Find northernmost cell"));
@@ -327,15 +331,17 @@ LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
     sizer3->Add( panel1, 1, wxGROW );
     sizer3->Add( panel2, 0, wxGROW );
     SetSizer( sizer3 );
+
 #ifndef __WXWINCE__
     sizer3->Fit( this );
 
     // set minimum frame size
     sizer3->SetSizeHints( this );
+
+    // navigator frame - not appropriate for small devices
+    m_navigator = new LifeNavigator(this);
 #endif
 
-    // navigator frame
-    m_navigator = new LifeNavigator(this);
 }
 
 LifeFrame::~LifeFrame()
@@ -407,7 +413,8 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
         case ID_SHOWNAV:
         {
             bool checked = GetMenuBar()->GetMenu(1)->IsChecked(ID_SHOWNAV);
-            m_navigator->Show(checked);
+            if (m_navigator)
+                m_navigator->Show(checked);
             break;
         }
         case ID_INFO:

@@ -170,8 +170,7 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
                           wxDefaultPosition, wxDefaultSize)
 {
     // logo
-    wxBitmap bmp(life_xpm);
-    wxStaticBitmap *sbmp = new wxStaticBitmap(this, wxID_ANY, bmp);
+    wxStaticBitmap *sbmp = new wxStaticBitmap(this, wxID_ANY, wxBitmap(life_xpm));
 
     // layout components
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
@@ -188,12 +187,15 @@ XLife is (c) 1989 by Jon Bennett et al.")),
 #if wxUSE_STATLINE
     sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 #endif // wxUSE_STATLINE
+
+#ifndef __WXWINCE__
     sizer->Add( CreateButtonSizer(wxOK), 0, wxCENTRE | wxALL, 10 );
+#endif
 
     // activate
     SetSizer(sizer);
 
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#ifdef __WXWINCE__
     Layout();
 #else
     sizer->SetSizeHints(this);
