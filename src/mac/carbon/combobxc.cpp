@@ -17,8 +17,10 @@
 #include "wx/button.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
+#if TARGET_API_MAC_OSX
 #ifndef __HIVIEW__
 	#include <HIToolbox/HIView.h>
+#endif
 #endif
 
 #if !USE_SHARED_LIBRARY
@@ -27,7 +29,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 // composite combobox implementation by Dan "Bud" Keith bud@otsys.com
 
+#if TARGET_API_MAC_OSX
 #define USE_HICOMBOBOX 1 //use hi combobox define
+#else
+#define USE_HICOMBOBOX 0
+#endif
 
 static int nextPopUpMenuId = 1000 ;
 MenuHandle NewUniqueMenu() 
