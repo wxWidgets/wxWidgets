@@ -1952,7 +1952,7 @@ struct WXDLLEXPORT wxWindowNext
 
 void wxWindowBase::CaptureMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(0x%08x)"), this);
+    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), this);
 
     wxWindow *winOld = GetCapture();
     if ( winOld )
@@ -1972,7 +1972,7 @@ void wxWindowBase::CaptureMouse()
 
 void wxWindowBase::ReleaseMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(0x%08x)"), this);
+    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), this);
 
     wxASSERT_MSG( GetCapture() == this, wxT("attempt to release mouse, but this window hasn't captured it") );
 
@@ -1989,7 +1989,7 @@ void wxWindowBase::ReleaseMouse()
     //else: stack is empty, no previous capture
 
     wxLogTrace(_T("mousecapture"),
-               _T("After ReleaseMouse() mouse is captured by 0x%08x"),
+               _T("After ReleaseMouse() mouse is captured by %p"),
                GetCapture());
 }
 
@@ -2005,3 +2005,4 @@ wxWindow* wxGetTopLevelParent(wxWindow *win)
     return win;
 }
 
+// vi:sts=4:sw=4:et
