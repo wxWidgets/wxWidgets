@@ -80,7 +80,7 @@ static void wxCanvasInputEvent(Widget drawingArea, XtPointer data, XmDrawingArea
 static void wxCanvasMotionEvent(Widget, XButtonEvent * event);
 static void wxCanvasEnterLeave(Widget drawingArea, XtPointer clientData, XCrossingEvent * event);
 static void wxScrollBarCallback(Widget widget, XtPointer clientData,
-                                XmScaleCallbackStruct *cbs);
+                                XmScrollBarCallbackStruct *cbs);
 static void wxPanelItemEventHandler(Widget    wid,
                                     XtPointer client_data,
                                     XEvent*   event,
@@ -402,6 +402,15 @@ wxWindow::~wxWindow()
             wxDeleteWindowFromTable((Widget) m_scrolledWindow);
         }
 
+        if (m_hScrollBar)
+        {
+            wxDeleteWindowFromTable((Widget) m_hScrollBar);
+        }
+        if (m_vScrollBar)
+        {
+            wxDeleteWindowFromTable((Widget) m_vScrollBar);
+        }
+
         UnmanageAndDestroy(m_hScrollBar);
         UnmanageAndDestroy(m_vScrollBar);
         UnmanageAndDestroy(m_scrolledWindow);
@@ -470,6 +479,8 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
             NULL);
 
         m_hScroll = TRUE;
+
+        wxAddWindowToTable( hScrollBar, this );
     }
 
     if (orientation == wxVERTICAL)
@@ -503,6 +514,8 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
             NULL);
 
         m_vScroll = TRUE;
+
+        wxAddWindowToTable( vScrollBar, this );
     }
 
     XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
@@ -518,6 +531,7 @@ void wxWindow::DestroyScrollbar(wxOrientation orientation)
     {
         if (m_hScrollBar)
         {
+            wxDeleteWindowFromTable((Widget)m_hScrollBar);
             XtDestroyWidget((Widget) m_hScrollBar);
         }
         m_hScrollBar = (WXWidget) 0;
@@ -533,6 +547,7 @@ void wxWindow::DestroyScrollbar(wxOrientation orientation)
     {
         if (m_vScrollBar)
         {
+            wxDeleteWindowFromTable((Widget)m_vScrollBar);
             XtDestroyWidget((Widget) m_vScrollBar);
         }
         m_vScrollBar = (WXWidget) 0;
@@ -2196,7 +2211,7 @@ static void wxPanelItemEventHandler(Widget    wid,
 
 static void wxScrollBarCallback(Widget scrollbar,
                                 XtPointer clientData,
-                                XmScaleCallbackStruct *cbs)
+                                XmScrollBarCallbackStruct *cbs)
 {
     wxWindow *win = wxGetWindowFromTable(scrollbar);
     int orientation = (int) clientData;
@@ -2206,44 +2221,44 @@ static void wxScrollBarCallback(Widget scrollbar,
     {
     case XmCR_INCREMENT:
         {
-            eventType = wxEVT_SCROLL_LINEDOWN;
+            eventType = wxEVT_SCROLLWIN_LINEDOWN;
             break;
         }
     case XmCR_DECREMENT:
         {
-            eventType = wxEVT_SCROLL_LINEUP;
+            eventType = wxEVT_SCROLLWIN_LINEUP;
             break;
         }
     case XmCR_DRAG:
         {
-            eventType = wxEVT_SCROLL_THUMBTRACK;
+            eventType = wxEVT_SCROLLWIN_THUMBTRACK;
             break;
         }
     case XmCR_VALUE_CHANGED:
         {
             // TODO: Should this be intercepted too, or will it cause
             // duplicate events?
-            eventType = wxEVT_SCROLL_THUMBTRACK;
+            eventType = wxEVT_SCROLLWIN_THUMBTRACK;
             break;
         }
     case XmCR_PAGE_INCREMENT:
         {
-            eventType = wxEVT_SCROLL_PAGEDOWN;
+            eventType = wxEVT_SCROLLWIN_PAGEDOWN;
             break;
         }
     case XmCR_PAGE_DECREMENT:
         {
-            eventType = wxEVT_SCROLL_PAGEUP;
+            eventType = wxEVT_SCROLLWIN_PAGEUP;
             break;
         }
     case XmCR_TO_TOP:
         {
-            eventType = wxEVT_SCROLL_TOP;
+            eventType = wxEVT_SCROLLWIN_TOP;
             break;
         }
     case XmCR_TO_BOTTOM:
         {
-            eventType = wxEVT_SCROLL_BOTTOM;
+            eventType = wxEVT_SCROLLWIN_BOTTOM;
             break;
         }
     default:
@@ -2254,11 +2269,11 @@ static void wxScrollBarCallback(Widget scrollbar,
         }
     }
 
-    wxScrollEvent event(eventType, win->GetId());
-    event.SetEventObject(win);
-    event.SetPosition(cbs->value);
-    event.SetOrientation( (orientation == XmHORIZONTAL) ? wxHORIZONTAL : wxVERTICAL );
-
+    wxScrollWinEvent event(eventType,
+                           cbs->value,
+                           ((orientation == XmHORIZONTAL) ?
+                            wxHORIZONTAL : wxVERTICAL));
+    event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2871,3 +2886,7 @@ wxWindow *wxGetActiveWindow()
 // ----------------------------------------------------------------------------
 
 int wxNoOptimize::ms_count = 0;
+
+
+
+
