@@ -255,7 +255,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         {
             ch = -1;
             i ++;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
             // Add another to skip the linefeed
             i ++;
 #endif
