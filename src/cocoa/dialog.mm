@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/15
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   2002 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -43,7 +43,7 @@ WX_IMPLEMENT_COCOA_OWNER(wxDialog,NSPanel,NSWindow,NSWindow)
 void wxDialog::Init()
 {
     m_isModal = false;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
@@ -194,15 +194,15 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     event.Veto();
 
     static wxList closing;
-    
+
     if ( closing.Member(this) )
     {
         wxLogDebug(wxT("WARNING: Attempting to recursively call Close for dialog"));
         return;
     }
-    
+
     closing.Append(this);
-    
+
     wxLogTrace(wxTRACE_COCOA,wxT("Sending Cancel Event"));
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
@@ -222,9 +222,9 @@ void wxDialog::OnOK(wxCommandEvent& event)
 
 void wxDialog::OnApply(wxCommandEvent& event)
 {
-	if (Validate())
-		TransferDataFromWindow();
-	// TODO probably need to disable the Apply button until things change again
+    if (Validate())
+        TransferDataFromWindow();
+    // TODO probably need to disable the Apply button until things change again
 }
 
 void wxDialog::OnCancel(wxCommandEvent& event)

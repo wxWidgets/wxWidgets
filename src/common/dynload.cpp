@@ -526,13 +526,13 @@ wxLibraries::wxLibraries():m_loaded(wxKEY_STRING)
 
 wxLibraries::~wxLibraries()
 {
-    wxNode *node = m_loaded.First();
+    wxNode *node = m_loaded.GetFirst();
 
     while (node) {
-        wxLibrary *lib = (wxLibrary *)node->Data();
+        wxLibrary *lib = (wxLibrary *)node->GetData();
         delete lib;
 
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -543,7 +543,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     wxNode      *node = m_loaded.Find(name.GetData());
 
     if (node != NULL)
-        return ((wxLibrary *)node->Data());
+        return ((wxLibrary *)node->GetData());
 
     // If DLL shares data, this is necessary.
     old_sm_first = wxClassInfo::sm_first;
@@ -567,15 +567,15 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 
 wxObject *wxLibraries::CreateObject(const wxString& path)
 {
-    wxNode *node = m_loaded.First();
+    wxNode *node = m_loaded.GetFirst();
     wxObject *obj;
 
     while (node) {
-        obj = ((wxLibrary *)node->Data())->CreateObject(path);
+        obj = ((wxLibrary *)node->GetData())->CreateObject(path);
         if (obj)
             return obj;
 
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }

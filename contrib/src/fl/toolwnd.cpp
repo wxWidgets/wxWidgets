@@ -164,7 +164,7 @@ void wxToolWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     int w,h;
     GetSize( &w, &h );
 
-    wxBrush backGround( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID );
+    wxBrush backGround( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxSOLID );
     //dc.SetBrush( *wxLIGHT_GREY_BRUSH );
     dc.SetBrush( backGround );
     dc.SetPen( *wxTRANSPARENT_PEN );

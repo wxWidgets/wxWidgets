@@ -56,7 +56,7 @@ wxListBoxItem::wxListBoxItem(
   const wxString& rsStr
 )
 : wxOwnerDrawn( rsStr
-               ,FALSE
+               ,false
               )
 {
     //
@@ -128,7 +128,7 @@ bool wxListBox::Create(
 
     wxSystemSettings                vSettings;
 
-    SetBackgroundColour(vSettings.GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(vSettings.GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(pParent->GetForegroundColour());
 
     m_windowId = (vId == -1) ? (int)NewControlId() : vId;
@@ -172,7 +172,7 @@ bool wxListBox::Create(
                                       );
     if (m_hWnd == 0)
     {
-        return FALSE;
+        return false;
     }
 
     //
@@ -221,7 +221,7 @@ bool wxListBox::Create(
             ,nHeight
            );
     delete pTextFont;
-    return TRUE;
+    return true;
 } // end of wxListBox::Create
 
 wxListBox::~wxListBox()
@@ -435,7 +435,7 @@ bool wxListBox::IsSelected(
   int                               N
 ) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_nNumItems, FALSE,
+    wxCHECK_MSG( N >= 0 && N < m_nNumItems, false,
                  wxT("invalid index in wxListBox::Selected") );
 
     LONG                            lItem;
@@ -785,7 +785,7 @@ bool wxListBox::OS2Command(
         //
         // Some event we're not interested in
         //
-        return FALSE;
+        return false;
     }
     wxCommandEvent                  vEvent( eEvtType
                                            ,m_windowId
@@ -873,14 +873,14 @@ bool wxListBox::OS2OnDraw (
     //
     // Only owner-drawn control should receive this message
     //
-    wxCHECK(((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE);
+    wxCHECK(((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false);
 
 
     //
     // The item may be -1 for an empty listbox
     //
     if (lItemID == -1L)
-        return FALSE;
+        return false;
 
     wxListBoxItem*                   pData = (wxListBoxItem*)PVOIDFROMMR( ::WinSendMsg( GetHwnd()
                                                                                        ,LM_QUERYITEMHANDLE
@@ -889,7 +889,7 @@ bool wxListBox::OS2OnDraw (
                                                                                       )
                                                                         );
 
-    wxCHECK(pData, FALSE );
+    wxCHECK(pData, false );
 
     wxDC                              vDc;
     wxRect                            vRect( wxPoint( pDrawStruct->rclItem.xLeft
@@ -962,7 +962,7 @@ bool wxListBox::OS2OnDraw (
             // For now we don't care about anything else
             // just ignore the entire message!
             //
-            return TRUE;
+            return true;
         }
     }
     return pData->OnDrawItem( vDc

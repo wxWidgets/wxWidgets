@@ -1597,18 +1597,18 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     // grey out fields if the grid is disabled
     if( grid.IsEnabled() )
     {
-      if ( isSelected )
-      {
-          dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
-      }
-      else
-      {
-          dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
-      }
+        if ( isSelected )
+        {
+            dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+        }
+        else
+        {
+            dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+        }
     }
     else
     {
-      dc.SetBrush(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
+        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
     }
 
     dc.SetPen( *wxTRANSPARENT_PEN );
@@ -1644,8 +1644,8 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
     }
     else
     {
-      dc.SetTextBackground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
-      dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_GRAYTEXT));
+      dc.SetTextBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+      dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
 
     dc.SetFont( attr.GetFont() );
@@ -1932,7 +1932,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
     else
     {
         wxString tmp = params.BeforeFirst(_T(','));
-        if ( !!tmp )
+        if ( !tmp.empty() )
         {
             long width;
             if ( tmp.ToLong(&width) )
@@ -1946,7 +1946,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 
         }
                 tmp = params.AfterFirst(_T(','));
-                if ( !!tmp )
+                if ( !tmp.empty() )
                 {
                     long precision;
             if ( tmp.ToLong(&precision) )
@@ -3653,7 +3653,7 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     rect.SetY( 1 );
     rect.SetWidth( client_width - 2 );
     rect.SetHeight( client_height - 2 );
-    
+
     wxRendererNative::Get().DrawHeaderButton( this, dc, rect, 0 );
 #else
     dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW),1, wxSOLID) );
@@ -7220,9 +7220,9 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     rect.SetY( GetRowTop(row) + 1 );
     rect.SetWidth( m_rowLabelWidth - 2 );
     rect.SetHeight( GetRowHeight(row) - 2 );
-    
+
     CalcScrolledPosition( 0, rect.y, NULL, &rect.y );
-    
+
     wxWindowDC *win_dc = (wxWindowDC*) &dc;
 
     wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );
@@ -7277,14 +7277,14 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
         return;
 
     int colLeft = GetColLeft(col);
-    
+
     wxRect rect;
 #ifdef __WXGTK__
     rect.SetX( colLeft + 1 );
     rect.SetY( 1 );
     rect.SetWidth( GetColWidth(col) - 2 );
     rect.SetHeight( m_colLabelHeight - 2 );
-    
+
     wxWindowDC *win_dc = (wxWindowDC*) &dc;
 
     wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );

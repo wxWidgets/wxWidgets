@@ -90,5 +90,14 @@ wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
     m_editCancelled = event.m_editCancelled;
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
+int wxTreeEvent::GetCode() const
+{
+    return m_evtKey.GetKeyCode();
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 #endif // wxUSE_TREECTRL
 

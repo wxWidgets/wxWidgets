@@ -423,7 +423,7 @@ bool wxPropertyListView::CreateControls()
     if (!panel)
         return false;
 
-    wxFont guiFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    wxFont guiFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
 #ifdef __WXMSW__
     wxFont *boringFont =

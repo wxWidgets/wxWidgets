@@ -286,7 +286,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
-    int GetCode() const { return m_evtKey.GetKeyCode(); }
+    wxDEPRECATED( int GetCode() const);
 #endif // WXWIN_COMPATIBILITY_2_2
 
 private:

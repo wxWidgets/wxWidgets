@@ -103,7 +103,7 @@ bool wxXmlResource::Load(const wxString& filemask)
         fnd = wxXmlFindFirst;
     else
         fnd = filemask;
-    while (!!fnd)
+    while (!fnd.empty())
     {
         // NB: Load() accepts both filenames and URLs (should probably be
         //     changed to filenames only, but embedded resources currently

@@ -532,15 +532,15 @@ WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-WXDLLIMPEXP_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1 );
 
 // Non-fatal error (continues)
 WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxInternalErrorStr;
-WXDLLIMPEXP_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr) );
 
 // Fatal error (exits)
 WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFatalErrorStr;
-WXDLLIMPEXP_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr) );
 
 #endif // WXWIN_COMPATIBILITY_2_2
 

@@ -180,7 +180,7 @@ class WXDLLEXPORT wxSystemSettings : public wxSystemSettingsNative
 public:
 #ifdef __WXUNIVERSAL__
     // in wxUniversal we want to use the theme standard colours instead of the
-    // system ones, otherwuse wxSystemSettings is just the same as
+    // system ones, otherwise wxSystemSettings is just the same as
     // wxSystemSettingsNative
     static wxColour GetColour(wxSystemColour index);
 #endif // __WXUNIVERSAL__
@@ -195,15 +195,13 @@ public:
     // Value
     static wxSystemScreenType ms_screen;
 
-
+#if WXWIN_COMPATIBILITY_2_4
     // the backwards compatible versions of wxSystemSettingsNative functions,
     // don't use these methods in the new code!
-    static wxColour GetSystemColour(int index)
-        { return GetColour((wxSystemColour)index); }
-    static wxFont GetSystemFont(int index)
-        { return GetFont((wxSystemFont)index); }
-    static int GetSystemMetric(int index)
-        { return GetMetric((wxSystemMetric)index); }
+    wxDEPRECATED(static wxColour GetSystemColour(int index));
+    wxDEPRECATED(static wxFont GetSystemFont(int index));
+    wxDEPRECATED(static int GetSystemMetric(int index));
+#endif
 };
 
 #endif
