@@ -16,7 +16,6 @@ UNIVOBJS = \
            statbox.o \
            statline.o \
            stattext.o \
-           textctrl.o \
            theme.o \
            gtk.o \
            winuniv.o \

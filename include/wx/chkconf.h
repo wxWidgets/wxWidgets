@@ -105,13 +105,24 @@
 #endif /* wxUSE_STOPWATCH */
 
 #if wxUSE_TEXTCTRL
-#   if defined(__WXUNIVERSAL__) && !wxUSE_CARET
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxTextCtrl requires wxCaret in wxUniversal"
-#        else
-#            undef wxUSE_CARET
-#            define wxUSE_CARET 1
-#        endif
+#   ifdef __WXUNIVERSAL__
+#       if !wxUSE_CARET
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxTextCtrl requires wxCaret in wxUniversal"
+#           else
+#               undef wxUSE_CARET
+#               define wxUSE_CARET 1
+#           endif
+#       endif /* wxUSE_CARET */
+
+#       if !wxUSE_SCROLLBAR
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxTextCtrl requires wxScrollBar in wxUniversal"
+#           else
+#               undef wxUSE_SCROLLBAR
+#               define wxUSE_SCROLLBAR 1
+#           endif
+#       endif /* wxUSE_SCROLLBAR */
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
@@ -143,3 +154,13 @@
 #       define wxUSE_FILE 1
 #   endif
 #endif /* wxUSE_TEXTFILE */
+
+#if wxUSE_CLIPBOARD && !wxUSE_DATAOBJ
+#   if wxABORT_ON_CONFIG_ERROR
+#       error "wxClipboard requires wxDataObject"
+#   else
+#       undef wxUSE_DATAOBJ
+#       define wxUSE_DATAOBJ
+#   endif
+#endif /* wxUSE_CLIPBOARD */
+

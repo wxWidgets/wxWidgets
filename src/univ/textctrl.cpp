@@ -383,7 +383,7 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
     // check if this line is valid: i.e. before the first invalid one
     bool IsValidLine(wxTextCoord line) const
     {
-        return m_rowFirstInvalid == -1 || line < m_rowFirstInvalid;
+        return (m_rowFirstInvalid == -1) || (line < m_rowFirstInvalid);
     }
 
     // def ctor
@@ -603,9 +603,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
         m_data.sdata = new wxTextSingleLineData;
     }
 
-    // do it before calling base class create which results in calling OnSize
-    RecalcFontMetrics();
-
     if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
     {
@@ -622,6 +619,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         if ( !(style & wxHSCROLL) )
         {
             WData().m_linesData.Add(new wxWrappedLineData);
+            WData().InvalidateLinesBelow(0);
         }
 
         // we might support it but it's quite useless and other ports don't
@@ -630,6 +628,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                       _T("wxTE_PASSWORD can't be used with multiline ctrls") );
     }
 
+    RecalcFontMetrics();
     SetValue(value);
     SetBestSize(size);
 
@@ -2088,6 +2087,15 @@ bool wxTextCtrl::CanRedo() const
 
 wxSize wxTextCtrl::DoGetBestClientSize() const
 {
+    // when we're called for the very first time from Create() we must
+    // calculate the font metrics here because we can't do it before calling
+    // Create() (there is no window yet and wxGTK crashes) but we need them
+    // here
+    if ( m_heightLine == -1 )
+    {
+        wxConstCast(this, wxTextCtrl)->RecalcFontMetrics();
+    }
+
     wxCoord w, h;
     GetTextExtent(GetTextToShow(GetLineText(0)), &w, &h);
 

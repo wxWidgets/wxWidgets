@@ -92,7 +92,7 @@ static const struct ControlValues
     bool wraplines;
     bool readonly;
 } DEFAULTS =
-    { TextLines_Multi, FALSE, FALSE, FALSE };
+    { TextLines_Multi, FALSE, TRUE, FALSE };
 
 // ----------------------------------------------------------------------------
 // our classes
