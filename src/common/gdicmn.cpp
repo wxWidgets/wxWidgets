@@ -31,6 +31,7 @@
 #include "wx/palette.h"
 #include "wx/app.h"
 #include "wx/dc.h"
+#include "wx/utils.h"
 
 #include "wx/log.h"
 #include <string.h>
@@ -96,10 +97,10 @@ const wxRect& wxRect::operator += (const wxRect& rect)
 
 wxRect wxRect::operator + (const wxRect& rect) const
 { 
-	int x1 = min(this->x, rect.x);
-	int y1 = min(this->y, rect.y);
-	int y2 = max(y+height, rect.height+rect.y);
-	int x2 = max(x+width, rect.width+rect.x);
+	int x1 = wxMin(this->x, rect.x);
+	int y1 = wxMin(this->y, rect.y);
+	int y2 = wxMax(y+height, rect.height+rect.y);
+	int x2 = wxMax(x+width, rect.width+rect.x);
 	return wxRect(x1, y1, x2-x1, y2-y1);
 }
 
