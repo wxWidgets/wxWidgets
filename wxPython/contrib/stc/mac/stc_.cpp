@@ -9129,6 +9129,65 @@ static PyObject *_wrap_wxStyledTextCtrl_SetHScrollBar(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_GetLastKeydownProcessed(_swigobj)  (_swigobj->GetLastKeydownProcessed())
+static PyObject *_wrap_wxStyledTextCtrl_GetLastKeydownProcessed(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetLastKeydownProcessed",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetLastKeydownProcessed. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxStyledTextCtrl_GetLastKeydownProcessed(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetLastKeydownProcessed(_swigobj,_swigarg0)  (_swigobj->SetLastKeydownProcessed(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetLastKeydownProcessed(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetLastKeydownProcessed",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetLastKeydownProcessed. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxStyledTextCtrl_SetLastKeydownProcessed(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxStyledTextEventTowxCommandEvent(void *ptr) {
     wxStyledTextEvent *src;
     wxCommandEvent *dest;
@@ -10565,6 +10624,8 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextEvent_SetPosition", (PyCFunction) _wrap_wxStyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxStyledTextEvent", (PyCFunction) _wrap_delete_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStyledTextEvent", (PyCFunction) _wrap_new_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetLastKeydownProcessed", (PyCFunction) _wrap_wxStyledTextCtrl_SetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetLastKeydownProcessed", (PyCFunction) _wrap_wxStyledTextCtrl_GetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetHScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetHScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetVScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetVScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SendMsg", (PyCFunction) _wrap_wxStyledTextCtrl_SendMsg, METH_VARARGS | METH_KEYWORDS },

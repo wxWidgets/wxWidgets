@@ -5,6 +5,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from streams import *
 class wxImageHandlerPtr(wxObjectPtr):
     def __init__(self,this):
@@ -193,10 +195,6 @@ class wxImagePtr(wxObjectPtr):
     def __del__(self,imagec=imagec):
         if self.thisown == 1 :
             imagec.delete_wxImage(self)
-    def ConvertToBitmap(self, *_args, **_kwargs):
-        val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
     def Create(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Create,(self,) + _args, _kwargs)
         return val
@@ -222,6 +220,15 @@ class wxImagePtr(wxObjectPtr):
         return val
     def GetBlue(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetBlue,(self,) + _args, _kwargs)
+        return val
+    def FindFirstUnusedColour(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_FindFirstUnusedColour,(self,) + _args, _kwargs)
+        return val
+    def SetMaskFromImage(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetMaskFromImage,(self,) + _args, _kwargs)
+        return val
+    def DoFloodFill(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_DoFloodFill,(self,) + _args, _kwargs)
         return val
     def LoadFile(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_LoadFile,(self,) + _args, _kwargs)
@@ -321,6 +328,14 @@ class wxImagePtr(wxObjectPtr):
         return val
     def CountColours(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_CountColours,(self,) + _args, _kwargs)
+        return val
+    def ConvertToBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
+    def ConvertToMonoBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToMonoBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
         return "<C wxImage instance at %s>" % (self.this,)

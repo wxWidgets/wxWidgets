@@ -5,6 +5,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from windows import *
 
 from clip_dnd import *

@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from fonts import *
+
 from clip_dnd import *
 
 from events import *
@@ -980,6 +982,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def SetHScrollBar(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetHScrollBar,(self,) + _args, _kwargs)
+        return val
+    def GetLastKeydownProcessed(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetLastKeydownProcessed,(self,) + _args, _kwargs)
+        return val
+    def SetLastKeydownProcessed(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetLastKeydownProcessed,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxStyledTextCtrl instance at %s>" % (self.this,)

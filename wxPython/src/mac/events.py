@@ -4,6 +4,8 @@ import eventsc
 from misc import *
 
 from gdi import *
+
+from fonts import *
 class wxEventPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this

@@ -624,6 +624,7 @@ extern "C" SWIGEXPORT(void) initclip_dndc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
 extern "C" SWIGEXPORT(void) initutilsc();
+extern "C" SWIGEXPORT(void) initfontsc();
 
 
 
@@ -1650,39 +1651,7 @@ static PyObject *_wrap_wxPyApp_SetUseBestVisual(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPyApp_GetStdIcon(_swigobj,_swigarg0)  (_swigobj->GetStdIcon(_swigarg0))
-static PyObject *_wrap_wxPyApp_GetStdIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxIcon * _result;
-    wxPyApp * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","which", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyApp_GetStdIcon",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetStdIcon. Expected _wxPyApp_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxIcon (wxPyApp_GetStdIcon(_arg0,_arg1));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 static PyMethodDef wxcMethods[] = {
-	 { "wxPyApp_GetStdIcon", (PyCFunction) _wrap_wxPyApp_GetStdIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetVendorName", (PyCFunction) _wrap_wxPyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetTopWindow", (PyCFunction) _wrap_wxPyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
@@ -1894,11 +1863,13 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxCLIP_SIBLINGS", PyInt_FromLong((long) wxCLIP_SIBLINGS));
 	 PyDict_SetItemString(d,"wxRETAINED", PyInt_FromLong((long) wxRETAINED));
 	 PyDict_SetItemString(d,"wxBACKINGSTORE", PyInt_FromLong((long) wxBACKINGSTORE));
-	 PyDict_SetItemString(d,"wxTB_3DBUTTONS", PyInt_FromLong((long) wxTB_3DBUTTONS));
 	 PyDict_SetItemString(d,"wxTB_HORIZONTAL", PyInt_FromLong((long) wxTB_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxTB_VERTICAL", PyInt_FromLong((long) wxTB_VERTICAL));
+	 PyDict_SetItemString(d,"wxTB_3DBUTTONS", PyInt_FromLong((long) wxTB_3DBUTTONS));
 	 PyDict_SetItemString(d,"wxTB_FLAT", PyInt_FromLong((long) wxTB_FLAT));
 	 PyDict_SetItemString(d,"wxTB_DOCKABLE", PyInt_FromLong((long) wxTB_DOCKABLE));
+	 PyDict_SetItemString(d,"wxTB_NOICONS", PyInt_FromLong((long) wxTB_NOICONS));
+	 PyDict_SetItemString(d,"wxTB_TEXT", PyInt_FromLong((long) wxTB_TEXT));
 	 PyDict_SetItemString(d,"wxCOLOURED", PyInt_FromLong((long) wxCOLOURED));
 	 PyDict_SetItemString(d,"wxFIXED_LENGTH", PyInt_FromLong((long) wxFIXED_LENGTH));
 	 PyDict_SetItemString(d,"wxALIGN_LEFT", PyInt_FromLong((long) wxALIGN_LEFT));
@@ -2611,6 +2582,7 @@ SWIGEXPORT(void) initwxc() {
     initstreamsc();
     initfilesysc();
     initutilsc();
+    initfontsc();
 
 
     PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));
