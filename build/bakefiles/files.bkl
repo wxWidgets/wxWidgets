@@ -727,6 +727,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/checkbox.cpp
     src/gtk/checklst.cpp
     src/gtk/choice.cpp
+    src/gtk/colordlg.cpp
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/dialog.cpp
@@ -755,6 +756,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/utilsres.cpp
 </set>
 <set var="GTK_HDR" hints="files">
+    wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/listctrl.h
@@ -768,6 +770,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/button.h
     wx/gtk/checkbox.h
     wx/gtk/checklst.h
+    wx/gtk/colordlg.h
     wx/gtk/choice.h
     wx/gtk/clipbrd.h
     wx/gtk/colour.h
