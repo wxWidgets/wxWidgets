@@ -298,7 +298,7 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 #define wxPATH_SEP_MAC        wxT(";")
 
 // platform independent versions
-#if defined(__UNIX__) && !defined(__CYGWIN__)
+#if defined(__UNIX__) && !defined(__CYGWIN__) && !defined(__OS2__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
@@ -314,7 +314,7 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 
 // this is useful for wxString::IsSameAs(): to compare two file names use
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
-#if defined(__UNIX__) && !defined(__DARWIN__)
+#if defined(__UNIX__) && !defined(__DARWIN__) && !defined(__OS2__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  TRUE
 #else   // Windows, Mac OS and OS/2
   #define wxARE_FILENAMES_CASE_SENSITIVE  FALSE
@@ -324,7 +324,7 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 inline bool wxIsPathSeparator(wxChar c)
 {
     // under DOS/Windows we should understand both Unix and DOS file separators
-#if defined(__UNIX__) || defined(__MAC__)
+#if ( defined(__UNIX__) && !defined(__OS2__) )|| defined(__MAC__) 
     return c == wxFILE_SEP_PATH;
 #else
     return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX;
