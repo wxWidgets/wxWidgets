@@ -61,8 +61,11 @@ bool wxBitmapButton::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString &name)
 {
+    // we add wxBU_EXACTFIT because the bitmap buttons are not the standard
+    // ones and so shouldn't be forced to be of the standard size which is
+    // typically too big for them
     if ( !wxButton::Create(parent, id, bitmap, _T(""),
-                           pos, size, style, validator, name) )
+                           pos, size, style | wxBU_EXACTFIT, validator, name) )
         return FALSE;
 
     m_bmpNormal = bitmap;
