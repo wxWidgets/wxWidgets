@@ -795,27 +795,49 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
           *xFontName = newFontName;
     }
 
-    // try to load exactly the font requested first
-    if( !font )
-    {
-        font = wxLoadQueryFont( pointSize, family, style, weight,
-                                underlined, facename,
-                                info.xregistry, info.xencoding,
-                                xFontName );
-    }
-
     if ( !font )
     {
         // search up and down by stepsize 10
         int max_size = pointSize + 20 * (1 + (pointSize/180));
         int min_size = pointSize - 20 * (1 + (pointSize/180));
 
-        int i;
+        int i, round; // counters
 
-        // Search for smaller size (approx.)
-        for ( i = pointSize - 10; !font && i >= 10 && i >= min_size; i -= 10 )
+        // first round: search for equal, then for smaller and for larger size with the given weight and style
+        int testweight = weight;
+        int teststyle = style;
+
+        for ( round = 0; round < 3; round++ )
         {
-            font = wxLoadQueryFont(i, family, style, weight, underlined,
+            // second round: use normal weight
+            if ( round == 1 )
+        {
+                if ( testweight != wxNORMAL )
+                {
+                    testweight = wxNORMAL;
+                }
+                else
+                {
+                    ++round; // fall through to third round
+                }
+            }
+
+            // third round: ... and use normal style
+            if ( round == 2 )
+            {
+                if ( teststyle != wxNORMAL )
+                {
+                    teststyle = wxNORMAL;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            // Search for equal or smaller size (approx.)
+            for ( i = pointSize; !font && i >= 10 && i >= min_size; i -= 10 )
+            {
+                font = wxLoadQueryFont(i, family, teststyle, testweight, underlined,
                                    facename, info.xregistry, info.xencoding,
                                    xFontName);
         }
@@ -823,9 +845,10 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         // Search for larger size (approx.)
         for ( i = pointSize + 10; !font && i <= max_size; i += 10 )
         {
-            font = wxLoadQueryFont(i, family, style, weight, underlined,
+                font = wxLoadQueryFont(i, family, teststyle, testweight, underlined,
                                    facename, info.xregistry, info.xencoding,
                                    xFontName);
+            }
         }
 
         // Try default family

@@ -320,7 +320,14 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( wxGetRootWindow()->window, &mask, NULL, (gchar **) bits );
 
-    wxCHECK_MSG( M_BMPDATA->m_pixmap, FALSE, wxT("couldn't create pixmap") );
+    if (!M_BMPDATA->m_pixmap)
+    {
+        UnRef();
+        
+        wxFAIL_MSG( wxT("couldn't create pixmap") );
+        
+        return FALSE;
+    }
 
     if (mask)
     {
@@ -853,7 +860,12 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
     M_BMPDATA->m_height = height;
     M_BMPDATA->m_bpp = 1;
 
-    wxCHECK_RET( M_BMPDATA->m_bitmap, wxT("couldn't create bitmap") );
+    if (!M_BMPDATA->m_bitmap)
+    {
+        UnRef();
+        
+        wxFAIL_MSG( wxT("couldn't create bitmap") );
+    }
 }
 
 wxBitmap::~wxBitmap()

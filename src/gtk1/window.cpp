@@ -255,10 +255,6 @@ wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 // send any activate events at all
 static int        g_sendActivateEvent = -1;
 
-/* hack: we need something to pass to gtk_menu_popup, so we store the time of
-   the last click here */
-static guint32 gs_timeLastClick = 0;
-
 extern bool g_mainThreadLocked;
 
 //-----------------------------------------------------------------------------
@@ -1580,8 +1576,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     // their own X window and thus cannot get any events.
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
-
-    gs_timeLastClick = gdk_event->time;
 
 /*
     wxPrintf( wxT("2) OnButtonPress from ") );
@@ -4234,7 +4228,11 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
                   wxPopupMenuPositionCallback,  // function to position it
                   NULL,                         // client data
                   0,                            // button used to activate it
-                  gs_timeLastClick              // the time of activation
+#ifdef __WXGTK20__
+                  gtk_get_current_event_time()
+#else
+                  GDK_CURRENT_TIME
+#endif
                 );
 
     while (is_waiting)
