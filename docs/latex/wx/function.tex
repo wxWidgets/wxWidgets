@@ -201,6 +201,7 @@ the corresponding topic.
 \helpref{wxSplitPath}{wxsplitfunction}\\
 \helpref{wxStartTimer}{wxstarttimer}\\
 \helpref{wxStaticCast}{wxstaticcast}\\
+\helpref{wxStrcmp}{wxstrcmp}\\
 \helpref{wxStricmp}{wxstricmp}\\
 \helpref{wxStringEq}{wxstringeq}\\
 \helpref{wxStringMatch}{wxstringmatch}\\
@@ -1225,6 +1226,16 @@ as wxGetTranslation.
 
 Returns {\tt true} if the pointer is either {\tt NULL} or points to an empty
 string, {\tt false} otherwise.
+
+\membersection{::wxStrcmp}\label{wxstrcmp}
+
+\func{int}{wxStrcmp}{\param{const char *}{p1}, \param{const char *}{p2}}
+
+Returns a negative value, 0, or positive value if {\it p1} is less than, equal
+to or greater than {\it p2}. The comparison is case-sensitive.
+
+This function complements the standard C function {\it stricmp()} which performs
+case-insensitive comparison.
 
 \membersection{::wxStricmp}\label{wxstricmp}
 
