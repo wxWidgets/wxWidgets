@@ -272,14 +272,19 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
     
   SetGWorld( wp , NULL ) ;
   Rect portRect ;
-  GetPortBounds( wp , &portRect ) ;
-
+  if ( clipRgn )
+    portRect = (**clipRgn).rgnBBox ;   
+  else
+  	GetPortBounds( wp , &portRect ) ;
   pict = OpenPicture(&portRect);   
   if(pict)  
   {
     RGBForeColor( &black ) ;
     RGBBackColor( &white ) ;
-
+    
+    if ( clipRgn )
+    	SetClip( clipRgn ) ;
+    
     LockPixels( GetGWorldPixMap( wp ) ) ;
     CopyBits(GetPortBitMapForCopyBits(wp),          
             GetPortBitMapForCopyBits(wp),       
@@ -290,6 +295,8 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
     ClosePicture();                 
   }
   SetGWorld( origPort , origDev ) ;
+  if ( clipRgn )
+  	DisposeRgn( clipRgn ) ;
   return pict;                  
 }
 
