@@ -591,21 +591,7 @@ void wxToolBarBase::OnIdle(wxIdleEvent& event)
 // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
 void wxToolBarBase::DoToolbarUpdates()
 {
-    wxWindow* parent = this;
-    while (parent->GetParent())
-        parent = parent->GetParent();
-
-// This kind of #ifdef is a good way to annoy people. It breaks
-// apps, but only on one platform and due to a hack in officially
-// platform independent code. It took me hours to fix this. RR.
-//
-// #ifdef __WXMSW__
-//    wxWindow* focusWin = wxFindFocusDescendant(parent);
-// #else
-    wxWindow* focusWin = (wxWindow*) NULL;
-// #endif
-
-    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler() ;
+    wxEvtHandler* evtHandler = GetEventHandler() ;
 
     for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();
           node;

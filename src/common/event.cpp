@@ -903,7 +903,8 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 void wxEvtHandler::Connect( int id, int lastId,
                             int eventType,
                             wxObjectEventFunction func,
-                            wxObject *userData )
+                            wxObject *userData,
+                            wxEvtHandler* eventSink )
 {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
     wxEventTableEntry *entry = new wxEventTableEntry;
@@ -914,7 +915,7 @@ void wxEvtHandler::Connect( int id, int lastId,
     entry->m_callbackUserData = userData;
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     wxDynamicEventTableEntry *entry =
-        new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
+        new wxDynamicEventTableEntry(eventType, id, lastId, func, userData, eventSink);
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     if (!m_dynamicEvents)
@@ -926,7 +927,8 @@ void wxEvtHandler::Connect( int id, int lastId,
 
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
                   wxObjectEventFunction func,
-                  wxObject *userData )
+                  wxObject *userData,
+                  wxEvtHandler* eventSink )
 {
     if (!m_dynamicEvents)
         return FALSE;
@@ -944,6 +946,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
             ((entry->m_lastId == lastId) || (lastId == -1)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
             ((entry->m_fn == func) || (func == (wxObjectEventFunction)NULL)) &&
+            ((entry->m_eventSink == eventSink) || (eventSink == (wxEvtHandler*)NULL)) &&
             ((entry->m_callbackUserData == userData) || (userData == (wxObject*)NULL)))
         {
             if (entry->m_callbackUserData)
@@ -985,7 +988,12 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
                 event.Skip(FALSE);
                 event.m_callbackUserData = entry->m_callbackUserData;
 
-                (this->*((wxEventFunction) (entry->m_fn)))(event);
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
+                if (entry->m_eventSink)
+                    ((entry->m_eventSink)->*((wxEventFunction) (entry->m_fn)))(event);
+                else
+#endif                    
+                    (this->*((wxEventFunction) (entry->m_fn)))(event);
 
                 if ( ! event.GetSkipped() )
                     return TRUE;

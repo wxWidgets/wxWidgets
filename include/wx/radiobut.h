@@ -16,7 +16,7 @@
 
 /*
    There is no wxRadioButtonBase class as wxRadioButton interface is the same
-   as of wxCheckBox(Base), but under some platforms wxRadioButton really
+   as wxCheckBox(Base), but under some platforms wxRadioButton really
    derives from wxCheckBox and on the others it doesn't.
 
    The pseudo-declaration of wxRadioButtonBase would look like this:

@@ -27,10 +27,10 @@
 // Note: this is intended to be used in wxDC at some point to replace
 // the current system of scaling/translation. It is not yet used.
 
-//:defenition
+//:definition
 //  A 3x3 matrix to do 2D transformations.
-//  It can be used to map data to window coordinates.
-//  But also for manipulating your own data.
+//  It can be used to map data to window coordinates,
+//  and also for manipulating your own data.
 //  For example drawing a picture (composed of several primitives)
 //  at a certain coordinate and angle within another parent picture.
 //  At all times m_isIdentity is set if the matrix itself is an Identity matrix.

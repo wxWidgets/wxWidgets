@@ -1969,19 +1969,27 @@ struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 };
 
+class WXDLLEXPORT wxEvtHandler;
+
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
 struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntryBase
 {
     wxDynamicEventTableEntry(int evType, int winid, int idLast,
-                             wxObjectEventFunction fn, wxObject *data)
+                             wxObjectEventFunction fn, wxObject *data, wxEvtHandler* eventSink)
         : wxEventTableEntryBase(winid, idLast, fn, data),
-          m_eventType(evType)
+          m_eventType(evType),
+          m_eventSink(eventSink)
     { }
 
     // not a reference here as we can't keep a reference to a temporary int
     // created to wrap the constant value typically passed to Connect() - nor
     // do we need it
     int m_eventType;
+
+    // Pointer to object whose function is fn - so we don't assume the
+    // EventFunction is always a member of the EventHandler receiving the 
+    // message
+    wxEvtHandler* m_eventSink;
 };
 
 #endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
@@ -2031,23 +2039,27 @@ public:
     // winid and event type
     void Connect( int winid, int lastId, int eventType,
                   wxObjectEventFunction func,
-                  wxObject *userData = (wxObject *) NULL );
+                  wxObject *userData = (wxObject *) NULL,
+                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL );
 
     // Convenience function: take just one id
     void Connect( int winid, int eventType,
                   wxObjectEventFunction func,
-                  wxObject *userData = (wxObject *) NULL )
-        { Connect(winid, wxID_ANY, eventType, func, userData); }
+                  wxObject *userData = (wxObject *) NULL,
+                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL )
+        { Connect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
     bool Disconnect( int winid, int lastId, wxEventType eventType,
                   wxObjectEventFunction func = NULL,
-                  wxObject *userData = (wxObject *) NULL );
+                  wxObject *userData = (wxObject *) NULL,
+                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL );
 
     // Convenience function: take just one id
     bool Disconnect( int winid, wxEventType eventType = wxEVT_NULL,
                   wxObjectEventFunction func = NULL,
-                  wxObject *userData = (wxObject *) NULL )
-        { return Disconnect(winid, wxID_ANY, eventType, func, userData); }
+                  wxObject *userData = (wxObject *) NULL,
+                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL )
+        { return Disconnect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
 
     // User data can be associated with each wxEvtHandler
