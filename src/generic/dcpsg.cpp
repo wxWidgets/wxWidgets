@@ -613,7 +613,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
     }
 }
 
-void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxPostScriptDC::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -626,7 +626,7 @@ void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wx
         PsPrint( "newpath\n" );
 
         int ofs = 0;
-        for (int i = 0; i < n; ofs += start[i++])
+        for (int i = 0; i < n; ofs += count[i++])
         {
             wxCoord xx = LogicalToDeviceX(points[ofs].x + xoffset);
             wxCoord yy = LogicalToDeviceY(points[ofs].y + yoffset);
@@ -635,7 +635,7 @@ void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wx
 
             CalcBoundingBox( points[ofs].x + xoffset, points[ofs].y + yoffset );
 
-            for (int j = 1; j < start[i]; j++)
+            for (int j = 1; j < count[i]; j++)
             {
                 xx = LogicalToDeviceX(points[ofs+j].x + xoffset);
                 yy = LogicalToDeviceY(points[ofs+j].y + yoffset);
@@ -655,7 +655,7 @@ void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wx
         PsPrint( "newpath\n" );
 
         int ofs = 0;
-        for (int i = 0; i < n; ofs += start[i++])
+        for (int i = 0; i < n; ofs += count[i++])
         {
             wxCoord xx = LogicalToDeviceX(points[ofs].x + xoffset);
             wxCoord yy = LogicalToDeviceY(points[ofs].y + yoffset);
@@ -664,7 +664,7 @@ void wxPostScriptDC::DoDrawPolyPolygon (int n, int start[], wxPoint points[], wx
 
             CalcBoundingBox( points[ofs].x + xoffset, points[ofs].y + yoffset );
 
-            for (int j = 1; j < start[i]; j++)
+            for (int j = 1; j < count[i]; j++)
             {
                 xx = LogicalToDeviceX(points[ofs+j].x + xoffset);
                 yy = LogicalToDeviceY(points[ofs+j].y + yoffset);

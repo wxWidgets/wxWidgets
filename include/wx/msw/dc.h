@@ -191,7 +191,7 @@ protected:
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
-    virtual void DoDrawPolyPolygon(int n, int start[], wxPoint points[],
+    virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    int fillStyle = wxODDEVEN_RULE);
 

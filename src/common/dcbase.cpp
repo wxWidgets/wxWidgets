@@ -108,14 +108,14 @@ void wxDCBase::DrawPolygon(const wxList *list,
 
 void
 wxDCBase::DoDrawPolyPolygon(int n,
-                            int start[],
+                            int count[],
                             wxPoint points[],
                             wxCoord xoffset, wxCoord yoffset,
                             int fillStyle)
 {
     if ( n == 1 )
     {
-        DoDrawPolygon(start[0], points, xoffset, yoffset, fillStyle);
+        DoDrawPolygon(count[0], points, xoffset, yoffset, fillStyle);
         return;
     }
 
@@ -126,14 +126,14 @@ wxDCBase::DoDrawPolyPolygon(int n,
     for (i = j = lastOfs = 0; i < n; i++)
     {
         lastOfs = j;
-        j      += start[i];
+        j      += count[i];
     }
     pts = new wxPoint[j+n-1];
     for (i = 0; i < j; i++)
         pts[i] = points[i];
     for (i = 2; i <= n; i++)
     {
-        lastOfs -= start[n-i];
+        lastOfs -= count[n-i];
         pts[j++] = pts[lastOfs];
     }
 
@@ -143,8 +143,8 @@ wxDCBase::DoDrawPolyPolygon(int n,
     SetPen(pen);
     for (i = j = 0; i < n; i++)
     {
-        DoDrawLines(start[i], pts+j, xoffset, yoffset);
-        j += start[i];
+        DoDrawLines(count[i], pts+j, xoffset, yoffset);
+        j += count[i];
     }
     delete pts;
 }

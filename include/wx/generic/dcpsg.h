@@ -67,7 +67,7 @@ public:
   void DoDrawPoint(wxCoord x, wxCoord y);
   void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0);
   void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-  void DoDrawPolyPolygon(int n, int start[], wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+  void DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
   void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
   void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20);
   void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);

@@ -780,7 +780,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
 
 void
 wxDC::DoDrawPolyPolygon(int n,
-                        int start[],
+                        int count[],
                         wxPoint points[],
                         wxCoord xoffset,
                         wxCoord yoffset,
@@ -794,7 +794,7 @@ wxDC::DoDrawPolyPolygon(int n,
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
     int i, cnt;
     for (i = cnt = 0; i < n; i++)
-        cnt += start[i];
+        cnt += count[i];
 
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -810,7 +810,7 @@ wxDC::DoDrawPolyPolygon(int n,
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
 #endif        
-        (void)PolyPolygon(GetHdc(), cpoints, start, n);
+        (void)PolyPolygon(GetHdc(), cpoints, count, n);
 #ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
 #endif        
@@ -824,7 +824,7 @@ wxDC::DoDrawPolyPolygon(int n,
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
 #endif        
-        (void)PolyPolygon(GetHdc(), (POINT*) points, start, n);
+        (void)PolyPolygon(GetHdc(), (POINT*) points, count, n);
 #ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
 #endif        
