@@ -38,7 +38,7 @@
 #include "gsocket.h"
 
 /* If not using wxWindows, a global var called hInst must
- * be available and it must containt the app's instance
+ * be available and it must contain the app's instance
  * handle.
  */
 #define INSTANCE hInst
