@@ -12,7 +12,7 @@
 #ifndef _WX_CW__
 #define _WX_CW__
 
-#if __MWERKS__ >= 0x2400
+#if __MWERKS__ >= 0x2400 && __MWERKS__ < 0x3200
 #pragma old_argmatch on
 #endif
 
