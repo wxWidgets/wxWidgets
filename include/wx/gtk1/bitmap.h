@@ -44,28 +44,28 @@ class wxMask: public wxObject
   DECLARE_DYNAMIC_CLASS(wxMask)
 
   public:
-  
-    wxMask(void);
+
+    wxMask();
     wxMask( const wxBitmap& bitmap, const wxColour& colour );
     wxMask( const wxBitmap& bitmap, int paletteIndex );
     wxMask( const wxBitmap& bitmap );
-    ~wxMask(void);
+    ~wxMask();
 
   private:
-  
+
     friend wxBitmap;
     friend wxDC;
     friend wxPaintDC;
     friend wxToolBar;
     friend wxBitmapButton;
     friend wxStaticBitmap;
-    
-    GdkBitmap *GetBitmap(void) const;
-    
+
+    GdkBitmap *GetBitmap() const;
+
   protected:
-  
-    GdkBitmap *m_bitmap;     
-    
+
+    GdkBitmap *m_bitmap;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -79,40 +79,40 @@ class wxBitmap: public wxObject
 
   public:
 
-    wxBitmap(void);
+    wxBitmap();
     wxBitmap( int width, int height, int depth = -1 );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( char **bits );
     wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxBitmap* bmp );
-    wxBitmap( const wxString &filename, int type );
-    ~wxBitmap(void);
+    wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM);
+    ~wxBitmap();
     wxBitmap& operator = ( const wxBitmap& bmp );
     bool operator == ( const wxBitmap& bmp );
     bool operator != ( const wxBitmap& bmp );
-    bool Ok(void) const;
-    
-    int GetHeight(void) const;
-    int GetWidth(void) const;
-    int GetDepth(void) const;
+    bool Ok() const;
+
+    int GetHeight() const;
+    int GetWidth() const;
+    int GetDepth() const;
     void SetHeight( int height );
     void SetWidth( int width );
     void SetDepth( int depth );
 
-    wxMask *GetMask(void) const;
+    wxMask *GetMask() const;
     void SetMask( wxMask *mask );
-    
-    void Resize( int height, int width );
-    
-    bool SaveFile( const wxString &name, int type, wxPalette *palette = NULL );
-    bool LoadFile( const wxString &name, int type );
 
-    wxPalette *GetPalette(void) const;
-    wxPalette *GetColourMap(void) const
+    void Resize( int height, int width );
+
+    bool SaveFile( const wxString &name, int type, wxPalette *palette = NULL );
+    bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM);
+
+    wxPalette *GetPalette() const;
+    wxPalette *GetColourMap() const
       { return GetPalette(); };
 
   private:
-  
+
     friend wxDC;
     friend wxPaintDC;
     friend wxMemoryDC;
@@ -120,13 +120,13 @@ class wxBitmap: public wxObject
     friend wxBitmapButton;
     friend wxStaticBitmap;
 
-    GdkPixmap *GetPixmap(void) const;
-    GdkBitmap *GetBitmap(void) const;
-    
-    void DestroyImage(void);
-    void RecreateImage(void);
-    void Render(void);
-    
+    GdkPixmap *GetPixmap() const;
+    GdkBitmap *GetBitmap() const;
+
+    void DestroyImage();
+    void RecreateImage();
+    void Render();
+
     // no data :-)
 };
 
