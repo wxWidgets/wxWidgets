@@ -1635,13 +1635,14 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
                 if ( useGetThemeText )
                 {
                     Point bounds={0,0} ;
+                    SInt16 baseline ;
                     CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
             		::GetThemeTextDimensions( mString,
             							kThemeCurrentPortFont,
             							kThemeStateActive,
-            							true,
+            							false,
             							&bounds,
-            							nil );
+            							&baseline );
             	    CFRelease( mString ) ;
             	    curwidth = bounds.h ;
                 }
@@ -1661,13 +1662,14 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
         if ( useGetThemeText )
         {
             Point bounds={0,0} ;
+            SInt16 baseline ;
             CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
     		::GetThemeTextDimensions( mString,
     							kThemeCurrentPortFont,
     							kThemeStateActive,
-    							true,
+    							false,
     							&bounds,
-    							nil );
+    							&baseline );
     	    CFRelease( mString ) ;
     	    curwidth = bounds.h ;
         }
