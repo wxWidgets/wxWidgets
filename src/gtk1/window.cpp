@@ -1203,14 +1203,15 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
         if ( !key_code )
         {
-            if ( gdk_event->length == 1 )
-            {
-                key_code = (unsigned char)gdk_event->string[0];
-            }
-            else if ( wxIsAsciiKeysym(keysym) )
+            if ( wxIsAsciiKeysym(keysym) )
             {
                 // ASCII key
                 key_code = (unsigned char)keysym;
+            }
+            // gdk_event->string is actually deprecated
+            else if ( gdk_event->length == 1 )
+            {
+                key_code = (unsigned char)gdk_event->string[0];
             }
         }
 
