@@ -65,7 +65,7 @@ public :
 	~wxMacPortSetter() ;
 private :
 	wxMacPortStateHelper m_ph ;
-	wxDC* m_dc ;
+	const wxDC* m_dc ;
 } ;
 
 class wxMacDrawingHelper
