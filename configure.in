@@ -854,8 +854,8 @@ dnl ---------------------------------------------------------------------------
 dnl resources
 dnl ---------------------------------------------------------------------------
 
-dnl WX_ARG_ENABLE(prologio,    [  --enable-prologio       use Prolog IO library], wxUSE_PROLOGIO)
-WX_ARG_ENABLE(resources,   [  --enable-resources      use wxWindows resources], wxUSE_RESOURCES)
+WX_ARG_ENABLE(prologio,    [  --enable-prologio       not available; see contrib], wxUSE_PROLOGIO)
+WX_ARG_ENABLE(resources,   [  --enable-resources      not available; see contrib], wxUSE_RESOURCES)
 
 WX_ARG_ENABLE(xresources,  [  --enable-xresources     use X resources for save (default for gtk+)], wxUSE_X_RESOURCES)
 
@@ -2662,9 +2662,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
-dnl        AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
-dnl        wxUSE_PROLOGIO="yes"
-dnl        wxUSE_RESOURCES="yes"
         AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
         wxUSE_THREADS="no"
     fi
@@ -4765,22 +4762,9 @@ if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
-dnl if test "$wxUSE_PROLOGIO" = "yes" ; then
-dnl     AC_DEFINE(wxUSE_PROLOGIO)
-dnl     ALL_OBJECTS="$ALL_OBJECTS parser.o"
-dnl fi
-
-dnl if test "$wxUSE_RESOURCES" = "yes" ; then
-dnl     if test "$wxUSE_NANOX" = "yes"; then
-dnl         AC_MSG_WARN([Cannot use resource database functions in NanoX])
-dnl     else
-dnl         AC_DEFINE(wxUSE_RESOURCES)
-dnl         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
-dnl     fi
-dnl     if test "$wxUSE_PROLOGIO" != "yes" ; then
-dnl         ALL_OBJECTS="$ALL_OBJECTS parser.o"
-dnl     fi
-dnl fi
+if test "$wxUSE_PROLOGIO" = "yes" -o test "$wxUSE_RESOURCES" = "yes"; then
+    AC_MSG_ERROR([wxExpr and old-style resources are now available in contrib only])
+fi
 
 if test "$wxUSE_X_RESOURCES" = "yes"; then
     AC_DEFINE(wxUSE_X_RESOURCES)
