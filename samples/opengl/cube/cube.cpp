@@ -34,8 +34,13 @@
 #include "cube.h"
 
 #ifndef __WXMSW__     // for wxStopWatch, see remark below
-#include <sys/time.h>
-#include <sys/unistd.h>
+  #if defined(__WXMAC__) && !defined(__DARWIN__)
+    #include <utime.h>
+    #include <unistd.h>
+  #else
+    #include <sys/time.h>
+    #include <sys/unistd.h>
+  #endif
 #else
 #include <sys/timeb.h>
 #endif
