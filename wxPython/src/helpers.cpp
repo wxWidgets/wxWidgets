@@ -10,7 +10,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>  // get the correct definition of NULL
 
 #undef DEBUG
 #include <Python.h>
@@ -28,7 +27,6 @@
 #include <gdk/gdkprivate.h>
 #include <wx/gtk/win_gtk.h>
 #endif
-
 
 //----------------------------------------------------------------------
 
@@ -226,13 +224,6 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
-
-#if 0  // Try it out without this check, see how it does...
-    if (wxTopLevelWindows.Number() > 0) {
-        PyErr_SetString(PyExc_TypeError, "Only 1 wxApp per process!");
-        return NULL;
-    }
-#endif
 
     // This is the next part of the wxEntry functionality...
     int argc = 0;
