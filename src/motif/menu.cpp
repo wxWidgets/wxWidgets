@@ -916,7 +916,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 #else
             xmCascadeButtonWidgetClass, (Widget) parent,
 #endif
-            XmNlabelString, label_str,
+            XmNlabelString, label_str(),
             XmNsubMenuId, menu,
             NULL);
 

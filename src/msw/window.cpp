@@ -2254,6 +2254,12 @@ bool wxWindow::MSWCreate(int id,
         if ( style & WS_CHILD )
             controlId = id;
 
+        wxString className(wclass);
+        if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
+        {
+            className += _T("NR");
+        }
+
         m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
                                         wclass,
                                         title ? title : _T(""),

@@ -108,9 +108,15 @@ MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
 // FIXME why not const? and not static?
+
+// NB: all "NoRedraw" classes must have the same names as the "normal" classes
+//     with NR suffix - wxWindow::MSWCreate() supposes this
 wxChar wxFrameClassName[]         = _T("wxFrameClass");
+wxChar wxFrameClassNameNoRedraw[] = _T("wxFrameClassNR");
 wxChar wxMDIFrameClassName[]      = _T("wxMDIFrameClass");
+wxChar wxMDIFrameClassNameNoRedraw[] = _T("wxMDIFrameClassNR");
 wxChar wxMDIChildFrameClassName[] = _T("wxMDIChildFrameClass");
+wxChar wxMDIChildFrameClassNameNoRedraw[] = _T("wxMDIChildFrameClassNR");
 wxChar wxPanelClassName[]         = _T("wxPanelClass");
 wxChar wxCanvasClassName[]        = _T("wxCanvasClass");
 
@@ -278,11 +284,15 @@ bool wxApp::RegisterWindowClasses()
 {
     WNDCLASS wndclass;
 
+    // for each class we register one with CS_(V|H)REDRAW style and one
+    // without for windows created with wxNO_FULL_REDRAW_ON_REPAINT flag
+    static const long styleNormal = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+    static const long styleNoRedraw = CS_DBLCLKS;
+
     // the fields which are common to all classes
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
     wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // what is this DWORD used for?
+    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
     wndclass.hInstance     = wxhInstance;
     wndclass.hIcon         = (HICON) NULL;
     wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
@@ -290,9 +300,7 @@ bool wxApp::RegisterWindowClasses()
 
     // Register the frame window class.
     wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-#ifdef _MULTIPLE_INSTANCES
-    sprintf( wxFrameClassName,"wxFrameClass%d", wxhInstance );
-#endif
+    wndclass.style         = styleNormal;
     wndclass.lpszClassName = wxFrameClassName;
 
     if ( !RegisterClass(&wndclass) )
@@ -302,13 +310,35 @@ bool wxApp::RegisterWindowClasses()
         return FALSE;
     }
 
+    // "no redraw" frame
+    wndclass.lpszClassName = wxFrameClassNameNoRedraw;
+    wndclass.style         = styleNoRedraw;
+
+    if ( !RegisterClass(&wndclass) )
+    {
+        wxLogLastError("RegisterClass(no redraw frame)");
+
+        return FALSE;
+    }
+
     // Register the MDI frame window class.
     wndclass.hbrBackground = (HBRUSH)NULL; // paint MDI frame ourselves
-    wndclass.lpszClassName = wxMDIFrameClassName;
+    wndclass.lpszClassName = wxMDIFrameClassNameNoRedraw;
 
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError("RegisterClass(MDI parent)");
+
+        return FALSE;
+    }
+
+    // "no redraw" MDI frame
+    wndclass.lpszClassName = wxMDIFrameClassName;
+    wndclass.style         = styleNoRedraw;
+
+    if ( !RegisterClass(&wndclass) )
+    {
+        wxLogLastError("RegisterClass(no redraw MDI parent frame)");
 
         return FALSE;
     }
@@ -320,6 +350,17 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError("RegisterClass(MDI child)");
+
+        return FALSE;
+    }
+
+    // "no redraw" MDI child frame
+    wndclass.lpszClassName = wxMDIChildFrameClassNameNoRedraw;
+    wndclass.style         = styleNoRedraw;
+
+    if ( !RegisterClass(&wndclass) )
+    {
+        wxLogLastError("RegisterClass(no redraw MDI child)");
 
         return FALSE;
     }

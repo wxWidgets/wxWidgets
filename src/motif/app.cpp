@@ -654,8 +654,7 @@ bool wxApp::CheckForKeyDown(WXEvent* event)
       wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
       wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
 
-      win->ProcessEvent( keyEvent );
-      return (keyEvent.GetSkipped() != TRUE);
+      return win->ProcessEvent( keyEvent );
     }
 
     return FALSE;

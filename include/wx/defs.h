@@ -588,7 +588,7 @@ enum
 
 // don't invalidate the whole window (resulting in a PAINT event) when the
 // window is resized (currently, makes sense for wxMSW only)
-#define wxNO_FULLREPAINT_ON_RESIZE 0x00010000
+#define wxNO_FULL_REPAINT_ON_RESIZE 0x00010000
 /*
  * wxFrame/wxDialog style flags
  */
