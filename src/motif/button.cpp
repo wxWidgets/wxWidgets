@@ -122,6 +122,14 @@ void wxButton::SetDefault()
     XtVaSetValues ((Widget) parent->GetMainWidget(), XmNdefaultButton, (Widget) GetMainWidget(), NULL);
 }
 
+/* static */
+wxSize wxButton::GetDefaultSize()
+{
+    // TODO: check font size as in wxMSW ?  MB
+    //
+    return wxSize(80,26);
+}
+
 void wxButton::Command (wxCommandEvent & event)
 {
     ProcessCommand (event);

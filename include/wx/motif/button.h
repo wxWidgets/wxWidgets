@@ -48,6 +48,8 @@ public:
     virtual void SetDefault();
     virtual void Command(wxCommandEvent& event);
 
+    static wxSize GetDefaultSize();
+    
     // Implementation
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
