@@ -467,14 +467,18 @@ void wxNotebook::MacSetupTabs()
                 OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
                 wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
                 IconRef iconRef ;
-                err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;
+                err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1, iconFamily, &iconRef ) ;
                 wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
                 info.contentType = kControlContentIconRef ;
                 info.u.iconRef = iconRef ;
                 SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
                     sizeof( info ), (Ptr)&info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
-                   UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
+                if ( UMAGetSystemVersion() <= 0x1030 )
+                {              	
+                	UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
+                }
+       
                 ReleaseIconRef( iconRef ) ;
                 DisposeHandle( (Handle) iconFamily ) ;
             }
