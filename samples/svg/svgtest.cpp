@@ -224,8 +224,8 @@ void MyFrame::OnClose(wxCloseEvent& event)
         return ;
     }
     // now try the children
-    wxNode * pNode = m_children.GetFirst ();
-    wxNode * pNext ;
+    wxObjectList::compatibility_iterator pNode = m_children.GetFirst ();
+    wxObjectList::compatibility_iterator pNext ;
     MyChild * pChild ;
     while ( pNode )
     {
@@ -233,7 +233,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
         pChild = (MyChild*) pNode -> GetData ();
         if (pChild -> Close ())
         {
-            delete pNode ;
+            m_children.Erase(pNode) ;
         }
         else
         {

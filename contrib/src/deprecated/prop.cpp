@@ -76,7 +76,7 @@ wxPropertyValue::wxPropertyValue(const wxString& val)
   m_modifiedFlag = FALSE;
   m_type = wxPropertyValueString;
 
-  m_value.string = copystring((const wxChar *)val);
+  m_value.string = copystring(val.c_str());
   m_clientData = NULL;
   m_next = NULL;
   m_last = NULL;
@@ -165,7 +165,7 @@ wxPropertyValue::wxPropertyValue(wxList *the_list)
   m_last = NULL;
   m_value.first = NULL;
 
-  wxNode *node = the_list->GetFirst();
+  wxObjectList::compatibility_iterator node = the_list->GetFirst();
   while (node)
   {
     wxPropertyValue *expr = (wxPropertyValue *)node->GetData();
@@ -184,10 +184,10 @@ wxPropertyValue::wxPropertyValue(wxStringList *the_list)
   m_last = NULL;
   m_value.first = NULL;
 
-  wxStringList::Node *node = the_list->GetFirst();
+  wxStringList::compatibility_iterator node = the_list->GetFirst();
   while (node)
   {
-    wxChar *s = node->GetData();
+    wxString s = node->GetData();
     Append(new wxPropertyValue(s));
     node = node->GetNext();
   }
@@ -945,7 +945,7 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
   if (property->GetValidator())
     return property->GetValidator();
 
-  wxNode *node = m_validatorRegistryList.GetFirst();
+  wxObjectList::compatibility_iterator node = m_validatorRegistryList.GetFirst();
   while (node)
   {
     wxPropertyValidatorRegistry *registry = (wxPropertyValidatorRegistry *)node->GetData();
@@ -991,7 +991,7 @@ void wxPropertySheet::AddProperty(wxProperty *property)
 // Get property by name
 wxProperty *wxPropertySheet::GetProperty(const wxString& name) const
 {
-  wxNode *node = m_properties.Find((const wxChar*) name);
+  wxObjectList::compatibility_iterator node = m_properties.Find((const wxChar*) name);
   if (!node)
     return NULL;
   else
@@ -1011,12 +1011,12 @@ bool wxPropertySheet::SetProperty(const wxString& name, const wxPropertyValue& v
 
 void wxPropertySheet::RemoveProperty(const wxString& name)
 {
-  wxNode *node = m_properties.Find(name);
+  wxObjectList::compatibility_iterator node = m_properties.Find(name);
   if(node)
   {
     wxProperty *prop = (wxProperty *)node->GetData();
      delete prop;
-    m_properties.DeleteNode(node);
+    m_properties.Erase(node);
   }
 }    
 
@@ -1028,11 +1028,11 @@ bool wxPropertySheet::HasProperty(const wxString& name) const
 // Clear all properties
 void wxPropertySheet::Clear(void)
 {
-  wxNode *node = m_properties.GetFirst();
+  wxObjectList::compatibility_iterator node = m_properties.GetFirst();
   while (node)
   {
     wxProperty *prop = (wxProperty *)node->GetData();
-    wxNode *next = node->GetNext();
+    wxObjectList::compatibility_iterator next = node->GetNext();
     delete prop;
     delete node;
     node = next;
@@ -1042,7 +1042,7 @@ void wxPropertySheet::Clear(void)
 // Sets/clears the modified flag for each property value
 void wxPropertySheet::SetAllModified(bool flag)
 {
-  wxNode *node = m_properties.GetFirst();
+  wxObjectList::compatibility_iterator node = m_properties.GetFirst();
   while (node)
   {
     wxProperty *prop = (wxProperty *)node->GetData();

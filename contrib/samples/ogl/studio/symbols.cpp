@@ -74,7 +74,7 @@ void csSymbolDatabase::AddSymbol(csSymbol* symbol)
 
 void csSymbolDatabase::ClearSymbols()
 {
-    wxNode* node = m_symbols.GetFirst();
+    wxObjectList::compatibility_iterator node = m_symbols.GetFirst();
     while (node)
     {
         csSymbol* symbol = (csSymbol*) node->GetData();
@@ -87,7 +87,7 @@ void csSymbolDatabase::ClearSymbols()
 
 csSymbol* csSymbolDatabase::FindSymbol(const wxString& name) const
 {
-    wxNode* node = m_symbols.GetFirst();
+    wxObjectList::compatibility_iterator node = m_symbols.GetFirst();
     while (node)
     {
         csSymbol* symbol = (csSymbol*) node->GetData();
@@ -101,7 +101,7 @@ csSymbol* csSymbolDatabase::FindSymbol(const wxString& name) const
 
 csSymbol* csSymbolDatabase::FindSymbol(int toolId) const
 {
-    wxNode* node = m_symbols.GetFirst();
+    wxObjectList::compatibility_iterator node = m_symbols.GetFirst();
     while (node)
     {
         csSymbol* symbol = (csSymbol*) node->GetData();

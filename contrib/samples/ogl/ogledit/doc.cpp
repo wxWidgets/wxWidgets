@@ -424,7 +424,7 @@ bool DiagramCommand::Undo(void)
 // Remove each individual line connected to a shape by sending a command.
 void DiagramCommand::RemoveLines(wxShape *shape)
 {
-  wxNode *node = shape->GetLines().GetFirst();
+  wxObjectList::compatibility_iterator node = shape->GetLines().GetFirst();
   while (node)
   {
     wxLineShape *line = (wxLineShape *)node->GetData();
@@ -455,7 +455,7 @@ void MyEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys,
     {
       // Ensure no other shape is selected, to simplify Undo/Redo code
       bool redraw = false;
-      wxNode *node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
+      wxObjectList::compatibility_iterator node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
       while (node)
       {
         wxShape *eachShape = (wxShape *)node->GetData();

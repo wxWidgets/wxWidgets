@@ -120,7 +120,7 @@ csDiagramCommand::csDiagramCommand(const wxString& name, csDiagramDocument *doc,
 
 csDiagramCommand::~csDiagramCommand()
 {
-    wxNode* node = m_states.GetFirst();
+    wxObjectList::compatibility_iterator node = m_states.GetFirst();
     while (node)
     {
         csCommandState* state = (csCommandState*) node->GetData();
@@ -147,14 +147,14 @@ void csDiagramCommand::InsertState(csCommandState* state)
 // Schedule all lines connected to the states to be cut.
 void csDiagramCommand::RemoveLines()
 {
-    wxNode* node = m_states.GetFirst();
+    wxObjectList::compatibility_iterator node = m_states.GetFirst();
     while (node)
     {
         csCommandState* state = (csCommandState*) node->GetData();
         wxShape* shape = state->GetShapeOnCanvas();
         wxASSERT( (shape != NULL) );
 
-        wxNode *node1 = shape->GetLines().GetFirst();
+        wxObjectList::compatibility_iterator node1 = shape->GetLines().GetFirst();
         while (node1)
         {
             wxLineShape *line = (wxLineShape *)node1->GetData();
@@ -172,7 +172,7 @@ void csDiagramCommand::RemoveLines()
 
 csCommandState* csDiagramCommand::FindStateByShape(wxShape* shape)
 {
-    wxNode* node = m_states.GetFirst();
+    wxObjectList::compatibility_iterator node = m_states.GetFirst();
     while (node)
     {
         csCommandState* state = (csCommandState*) node->GetData();
@@ -185,7 +185,7 @@ csCommandState* csDiagramCommand::FindStateByShape(wxShape* shape)
 
 bool csDiagramCommand::Do()
 {
-    wxNode* node = m_states.GetFirst();
+    wxObjectList::compatibility_iterator node = m_states.GetFirst();
     while (node)
     {
         csCommandState* state = (csCommandState*) node->GetData();
@@ -200,7 +200,7 @@ bool csDiagramCommand::Undo()
 {
     // Undo in reverse order, so e.g. shapes get added
     // back before the lines do.
-    wxNode* node = m_states.GetLast();
+    wxObjectList::compatibility_iterator node = m_states.GetLast();
     while (node)
     {
         csCommandState* state = (csCommandState*) node->GetData();

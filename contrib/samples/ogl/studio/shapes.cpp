@@ -301,7 +301,7 @@ void csEvtHandler::OnDragLeft(bool draw, double x, double y, int keys, int attac
   GetShape()->GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
 
   // Draw bounding box for other selected shapes
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
      wxShape* shape = (wxShape*) node->GetData();
@@ -360,7 +360,7 @@ void csEvtHandler::OnBeginDragLeft(double x, double y, int keys, int attachment)
   GetShape()->GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
 
   // Draw bounding box for other selected shapes
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
      wxShape* shape = (wxShape*) node->GetData();
@@ -415,7 +415,7 @@ void csEvtHandler::OnEndDragLeft(double x, double y, int keys, int attachment)
                 new csCommandState(ID_CS_MOVE, newShape, GetShape()));
 
   // Move line points
-  wxNode* node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = GetShape()->GetCanvas()->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
      wxShape* shape = (wxShape*) node->GetData();
@@ -429,7 +429,7 @@ void csEvtHandler::OnEndDragLeft(double x, double y, int keys, int attachment)
         {
             wxLineShape* newLineShape = (wxLineShape*) lineShape->CreateNewCopy();
 
-            wxNode *node1 = newLineShape->GetLineControlPoints()->GetFirst();
+            wxObjectList::compatibility_iterator node1 = newLineShape->GetLineControlPoints()->GetFirst();
             while (node1)
             {
                 wxRealPoint *point = (wxRealPoint *)node1->GetData();

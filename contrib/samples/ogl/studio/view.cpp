@@ -199,7 +199,7 @@ wxShape *csDiagramView::FindFirstSelectedShape(void)
 {
   csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
   wxShape *theShape = NULL;
-  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
     wxShape *eachShape = (wxShape *)node->GetData();
@@ -216,7 +216,7 @@ wxShape *csDiagramView::FindFirstSelectedShape(void)
 void csDiagramView::FindSelectedShapes(wxList& selections, wxClassInfo* toFind)
 {
   csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
-  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
     wxShape *eachShape = (wxShape *)node->GetData();
@@ -331,7 +331,7 @@ void csDiagramView::DoCut(wxList& shapes)
     {
         csDiagramCommand* cmd = new csDiagramCommand(_T("Cut"), doc);
 
-        wxNode* node = shapes.GetFirst();
+        wxObjectList::compatibility_iterator node = shapes.GetFirst();
         while (node)
         {
             wxShape *theShape = (wxShape*) node->GetData();
@@ -363,8 +363,8 @@ void csDiagramView::DoCmd(wxList& shapes, wxList& oldShapes, int cmd, const wxSt
     {
         csDiagramCommand* command = new csDiagramCommand(op, doc);
 
-        wxNode* node = shapes.GetFirst();
-        wxNode* node1 = oldShapes.GetFirst();
+        wxObjectList::compatibility_iterator node = shapes.GetFirst();
+        wxObjectList::compatibility_iterator node1 = oldShapes.GetFirst();
         while (node && node1)
         {
             wxShape *theShape = (wxShape*) node->GetData();
@@ -410,7 +410,7 @@ void csDiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))
 
         csDiagramCommand* cmd = new csDiagramCommand(_T("Change colour"), doc);
 
-        wxNode* node = selections.GetFirst();
+        wxObjectList::compatibility_iterator node = selections.GetFirst();
         while (node)
         {
             wxShape *theShape = (wxShape*) node->GetData();
@@ -479,7 +479,7 @@ void csDiagramView::ApplyPointSize(int pointSize)
     {
         csDiagramCommand* cmd = new csDiagramCommand(_T("Point size"), doc);
 
-        wxNode* node = selections.GetFirst();
+        wxObjectList::compatibility_iterator node = selections.GetFirst();
         while (node)
         {
             wxShape *theShape = (wxShape*) node->GetData();
@@ -531,7 +531,7 @@ void csDiagramView::SelectAll(bool select)
         wxList selections;
         FindSelectedShapes(selections);
 
-        wxNode* node = selections.GetFirst();
+        wxObjectList::compatibility_iterator node = selections.GetFirst();
         while (node)
         {
             wxShape *theShape = (wxShape*) node->GetData();
@@ -544,7 +544,7 @@ void csDiagramView::SelectAll(bool select)
     else
     {
         csDiagramDocument *doc = (csDiagramDocument *)GetDocument();
-        wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
+        wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
         while (node)
         {
             wxShape *eachShape = (wxShape *)node->GetData();

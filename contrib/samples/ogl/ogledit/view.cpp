@@ -127,7 +127,7 @@ void DiagramView::OnDraw(wxDC *dc)
   if (diagram_p->GetShapeList())
   {
     /* wxCursor *old_cursor = NULL; */
-    wxNode *current = diagram_p->GetShapeList()->GetFirst();
+    wxObjectList::compatibility_iterator current = diagram_p->GetShapeList()->GetFirst();
 
     while (current) // Loop through the entire list of shapes
     {
@@ -177,7 +177,7 @@ wxShape *DiagramView::FindSelectedShape(void)
 {
   DiagramDocument *doc = (DiagramDocument *)GetDocument();
   wxShape *theShape = NULL;
-  wxNode *node = doc->GetDiagram()->GetShapeList()->GetFirst();
+  wxObjectList::compatibility_iterator node = doc->GetDiagram()->GetShapeList()->GetFirst();
   while (node)
   {
     wxShape *eachShape = (wxShape *)node->GetData();
