@@ -249,7 +249,7 @@ class wxHtmlImageCell : public wxHtmlCell
         wxHtmlImageMapCell *m_ImageMap;
         wxString m_MapName;
 
-        wxHtmlImageCell(wxFSFile *input, int w = -1, int h = -1, int align = wxHTML_ALIGN_BOTTOM, wxString mapname = wxEmptyString);
+        wxHtmlImageCell(wxFSFile *input, int w = -1, int h = -1, double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM, wxString mapname = wxEmptyString);
         ~wxHtmlImageCell() {if (m_Image) delete m_Image; }
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
@@ -262,7 +262,7 @@ class wxHtmlImageCell : public wxHtmlCell
 // wxHtmlImageCell
 //--------------------------------------------------------------------------------
 
-wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxString mapname) : wxHtmlCell()
+wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, double scale, int align, wxString mapname) : wxHtmlCell()
 {
     wxImage *img;
     int ww, hh;
@@ -276,6 +276,10 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxStr
         hh = img -> GetHeight();
         if (w != -1) m_Width = w; else m_Width = ww;
         if (h != -1) m_Height = h; else m_Height = hh;
+
+        m_Width = (int)(scale * (double)w);
+        m_Height = (int)(scale * (double)h);
+
         if ((m_Width != ww) || (m_Height != hh)) {
             wxImage img2 = img -> Scale(m_Width, m_Height);
             m_Image = new wxBitmap(img2.ConvertToBitmap());
@@ -373,10 +377,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 wxHtmlImageCell *cel = NULL;
                 if (str) {
-		    int neww = (w == -1) ? -1 : (int)(m_WParser -> GetPixelScale() * (double)w),
-		        newh = (h == -1) ? -1 : (int)(m_WParser -> GetPixelScale() * (double)h);
-		    
-                    cel = new wxHtmlImageCell(str, neww, newh, al, mn);
+                    cel = new wxHtmlImageCell(str, w, h, m_WParser -> GetPixelScale(), al, mn);
                     cel -> SetLink(m_WParser -> GetLink());
                     m_WParser -> GetContainer() -> InsertCell(cel);
                     delete str;
