@@ -31,6 +31,7 @@
 #include "wx/ffile.h"
 #include "wx/filename.h"
 #include "wx/wfstream.h"
+#include "wx/utils.h"
 
 
 class XRCWidgetData
