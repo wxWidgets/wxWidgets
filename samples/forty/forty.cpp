@@ -131,6 +131,10 @@ const wxColour& FortyApp::TextColour()
 FortyFrame::FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h):
 	wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
+#ifdef __WXMAC__
+	// we need this in order to allow the about menu relocation, since ABOUT is not the default id of the about menu 
+	wxApp::s_macAboutMenuItemId = ABOUT ;
+#endif
 	// set the icon
 #ifdef __WXMSW__
 	SetIcon(wxIcon("CardsIcon"));
