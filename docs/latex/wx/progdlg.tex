@@ -68,30 +68,32 @@ reached.}
 
 Destructor. Deletes the dialog and enables all top level windows.
 
-\membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
-
-\func{bool}{Update}{
-  \param{int }{value = -1},\rtfsp
-  \param{const char * }{newmsg = NULL},  }
-
-Updates the dialog, setting the progress bar to the new value and, if
-given changes the message above it. Returns TRUE if the ABORT button 
-has \emph{not} been pressed.
-
-If FALSE is returned, the application can either immediately destroy the dialog
-or ask the user for the confirmation and if the abort is not confirmed the
-dialog may be resumed with \helpref{Resume}{wxprogressdialogresume} function.
-
-\docparam{value}{The new value of the progress meter. It must be strictly less
-than the maximum value given to the constructor (i.e., as usual in C, the
-index runs from $0$ to $maximum-1$).}
-\docparam{newmsg}{The new messages for the progress dialog text, if none is
-given the message is not changed.}
-
 \membersection{wxProgressDialog::Resume}\label{wxprogressdialogresume}
 
 \func{void}{Resume}{\void}
 
 Can be used to continue with the dialog, after the user had chosen
 ABORT.
+
+\membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
+
+\func{bool}{Update}{
+  \param{int }{value},\rtfsp
+  \param{const wxString\&}{newmsg = ""},  }
+
+Updates the dialog, setting the progress bar to the new value and, if
+given changes the message above it. Returns true unless the Cancel button
+has been pressed.
+
+If FALSE is returned, the application can either immediately destroy the dialog
+or ask the user for the confirmation and if the abort is not confirmed the
+dialog may be resumed with \helpref{Resume}{wxprogressdialogresume} function.
+
+\wxheading{Parameters}
+
+\docparam{value}{The new value of the progress meter. It must be strictly less
+than the maximum value given to the constructor (i.e., as usual in C, the
+index runs from $0$ to $maximum-1$).}
+\docparam{newmsg}{The new messages for the progress dialog text, if it is
+empty (which is the default) the message is not changed.}
 
