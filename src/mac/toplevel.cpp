@@ -41,6 +41,11 @@
 #include "wx/mac/aga.h"
 #include "wx/tooltip.h"
 
+#define wxMAC_DEBUG_REDRAW 0
+#ifndef wxMAC_DEBUG_REDRAW
+#define wxMAC_DEBUG_REDRAW 0
+#endif
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -689,7 +694,7 @@ void wxTopLevelWindowMac::MacInvalidate( const Rect * rect, bool eraseBackground
   }
   InvalWindowRect( m_macWindow , rect ) ;
   // turn this on to debug the refreshing cycle
-#if 0
+#if wxMAC_DEBUG_REDRAW
   PaintRect( rect ) ;
 #endif
   SetPort( formerPort ) ;
