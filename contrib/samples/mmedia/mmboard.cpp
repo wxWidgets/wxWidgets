@@ -297,13 +297,17 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     wxBoxSizer *infoSizer = new wxBoxSizer(wxVERTICAL);
 
     m_fileType = new wxStaticText(infoPanel, wxID_ANY, wxEmptyString);
+#if wxUSE_STATLINE
     wxStaticLine *line = new wxStaticLine(infoPanel, wxID_ANY);
+#endif // wxUSE_STATLINE
     m_infoText = new wxStaticText(infoPanel, wxID_ANY, wxEmptyString);
 
     UpdateInfoText();
 
     infoSizer->Add(m_fileType, 0, wxGROW | wxALL, 1);
+#if wxUSE_STATLINE
     infoSizer->Add(line, 0, wxGROW | wxCENTRE, 20);
+#endif // wxUSE_STATLINE
     infoSizer->Add(m_infoText, 0, wxGROW | wxALL, 1);
 
     infoPanel->SetSizer(infoSizer);
@@ -332,11 +336,17 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
 
     // Top sizer
     m_sizer = new wxBoxSizer(wxVERTICAL);
+#if wxUSE_STATLINE
     m_sizer->Add(new wxStaticLine(m_panel, wxID_ANY), 0, wxGROW | wxCENTRE, 0);
+#endif // wxUSE_STATLINE
     m_sizer->Add(m_positionSlider, 0, wxCENTRE | wxGROW | wxALL, 2);
+#if wxUSE_STATLINE
     m_sizer->Add(new wxStaticLine(m_panel, wxID_ANY), 0, wxGROW | wxCENTRE, 0);
+#endif // wxUSE_STATLINE
     m_sizer->Add(buttonSizer, 0, wxALL, 0);
+#if wxUSE_STATLINE
     m_sizer->Add(new wxStaticLine(m_panel, wxID_ANY), 0, wxGROW | wxCENTRE, 0);
+#endif // wxUSE_STATLINE
     m_sizer->Add(infoPanel, 1, wxCENTRE | wxGROW, 0);
 
     m_panel->SetSizer(m_sizer);
