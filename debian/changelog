@@ -1,3 +1,9 @@
+wxwindows2.2 (2.3.1) unstable; urgency=low
+
+  * 2.3.1 debs -- still not for general release though.
+
+ -- Ron <ron@debian.org>  Sun, 10 Jun 2001 20:10:36 -0700
+
 wxwindows2.2 (2.3.0) unstable; urgency=low
 
   * Updated 2.2 build scripts for 2.3
