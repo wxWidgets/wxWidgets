@@ -1356,7 +1356,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	@# in other dist targets.  Ugly and hardly portable but it
 	@# will run on any Debian box and that's enough for now.
 
-	find $(DISTDIR) \( -name "CVS" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
 			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
 			-print0 | xargs -0 rm -rf
 

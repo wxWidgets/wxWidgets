@@ -1,4 +1,3 @@
-#!/bin/env python
 #----------------------------------------------------------------------------
 # Name:         BrowseImage.py
 # Purpose:      Display and Select Image Files

@@ -1,5 +1,3 @@
-libwxgtk2.2-dbg: non-dev-pkg-with-shlib-symlink
-libwxgtk2.2-dbg: unused-shlib-entry-in-control-file
-libwxbase2.2-dbg: non-dev-pkg-with-shlib-symlink
-libwxbase2.2-dbg: unused-shlib-entry-in-control-file
+libwxgtk2.3-dbg: non-dev-pkg-with-shlib-symlink
+libwxbase2.3-dbg: non-dev-pkg-with-shlib-symlink
 
