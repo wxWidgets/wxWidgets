@@ -1,31 +1,31 @@
 
 /* pngwio.c - functions for data output
  *
- * libpng 1.0.1
+ * libpng 1.2.4 - July 8, 2002
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
- * Copyright (c) 1996, 1997 Andreas Dilger
- * Copyright (c) 1998, Glenn Randers-Pehrson
- * March 15, 1998
+ * Copyright (c) 1998-2002 Glenn Randers-Pehrson
+ * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
+ * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
- * This file provides a location for all output.  Users which need
- * special handling are expected to write functions which have the same
- * arguments as these, and perform similar functions, but possibly use
- * different output methods.  Note that you shouldn't change these
+ * This file provides a location for all output.  Users who need
+ * special handling are expected to write functions that have the same
+ * arguments as these and perform similar functions, but that possibly
+ * use different output methods.  Note that you shouldn't change these
  * functions, but rather write replacement functions and then change
  * them at run time with png_set_write_fn(...).
  */
 
 #define PNG_INTERNAL
 #include "png.h"
+#ifdef PNG_WRITE_SUPPORTED
 
 /* Write the data to whatever output you are using.  The default routine
    writes to a file pointer.  Note that this routine sometimes gets called
    with very small lengths, so you should implement some kind of simple
    buffering if you are using unbuffered writes.  This should never be asked
-   to write more then 64K on a 16 bit machine.  */
+   to write more than 64K on a 16 bit machine.  */
 
-void
+void /* PRIVATE */
 png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    if (png_ptr->write_data_fn != NULL )
@@ -35,21 +35,24 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 }
 
 #if !defined(PNG_NO_STDIO)
-/* This is the function which does the actual writing of data.  If you are
+/* This is the function that does the actual writing of data.  If you are
    not writing to a standard C stream, you should create a replacement
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
-static void
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    png_uint_32 check;
 
-   check = fwrite(data, 1, length, (FILE *)(png_ptr->io_ptr));
+#if defined(_WIN32_WCE)
+   if ( !WriteFile((HANDLE)(png_ptr->io_ptr), data, length, &check, NULL) )
+      check = 0;
+#else
+   check = fwrite(data, 1, length, (png_FILE_p)(png_ptr->io_ptr));
+#endif
    if (check != length)
-   {
       png_error(png_ptr, "Write Error");
-   }
 }
 #else
 /* this is the model-independent version. Since the standard I/O library
@@ -60,19 +63,24 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define NEAR_BUF_SIZE 1024
 #define MIN(a,b) (a <= b ? a : b)
 
-static void
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    png_uint_32 check;
    png_byte *near_data;  /* Needs to be "png_byte *" instead of "png_bytep" */
-   FILE *io_ptr;
+   png_FILE_p io_ptr;
 
    /* Check if data really is near. If so, use usual code. */
    near_data = (png_byte *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE *)CVT_PTR(png_ptr->io_ptr);
+   io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)near_data == data)
    {
+#if defined(_WIN32_WCE)
+      if ( !WriteFile(io_ptr, near_data, length, &check, NULL) )
+         check = 0;
+#else
       check = fwrite(near_data, 1, length, io_ptr);
+#endif
    }
    else
    {
@@ -84,7 +92,12 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
       {
          written = MIN(NEAR_BUF_SIZE, remaining);
          png_memcpy(buf, data, written); /* copy far buffer to near buffer */
+#if defined(_WIN32_WCE)
+         if ( !WriteFile(io_ptr, buf, written, &err, NULL) )
+            err = 0;
+#else
          err = fwrite(buf, 1, written, io_ptr);
+#endif
          if (err != written)
             break;
          else
@@ -95,9 +108,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
       while (remaining != 0);
    }
    if (check != length)
-   {
       png_error(png_ptr, "Write Error");
-   }
 }
 
 #endif
@@ -107,7 +118,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    to disk).  After png_flush is called, there should be no data pending
    writing in any buffers. */
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-void
+void /* PRIVATE */
 png_flush(png_structp png_ptr)
 {
    if (png_ptr->output_flush_fn != NULL)
@@ -115,13 +126,15 @@ png_flush(png_structp png_ptr)
 }
 
 #if !defined(PNG_NO_STDIO)
-static void
+void PNGAPI
 png_default_flush(png_structp png_ptr)
 {
-   FILE *io_ptr;
-   io_ptr = (FILE *)CVT_PTR((png_ptr->io_ptr));
+#if !defined(_WIN32_WCE)
+   png_FILE_p io_ptr;
+   io_ptr = (png_FILE_p)CVT_PTR((png_ptr->io_ptr));
    if (io_ptr != NULL)
       fflush(io_ptr);
+#endif
 }
 #endif
 #endif
@@ -133,13 +146,13 @@ png_default_flush(png_structp png_ptr)
    png_ptr       - pointer to a png output data structure
    io_ptr        - pointer to user supplied structure containing info about
                    the output functions.  May be NULL.
-   write_data_fn - pointer to a new output function which takes as its
+   write_data_fn - pointer to a new output function that takes as its
                    arguments a pointer to a png_struct, a pointer to
-                   data to be written, and a 32-bit unsigned int which is
+                   data to be written, and a 32-bit unsigned int that is
                    the number of bytes to be written.  The new write
                    function should call png_error(png_ptr, "Error msg")
                    to exit and output any fatal error messages.
-   flush_data_fn - pointer to a new flush function which takes as its
+   flush_data_fn - pointer to a new flush function that takes as its
                    arguments a pointer to a png_struct.  After a call to
                    the flush function, there should be no data in any buffers
                    or pending transmission.  If the output method doesn't do
@@ -148,7 +161,7 @@ png_default_flush(png_structp png_ptr)
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
                    supplied for compatibility. */
-void
+void PNGAPI
 png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
    png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
 {
@@ -175,14 +188,21 @@ png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
 #endif /* PNG_WRITE_FLUSH_SUPPORTED */
 
    /* It is an error to read while writing a png file */
-   png_ptr->read_data_fn = NULL;
+   if (png_ptr->read_data_fn != NULL)
+   {
+      png_ptr->read_data_fn = NULL;
+      png_warning(png_ptr,
+         "Attempted to set both read_data_fn and write_data_fn in");
+      png_warning(png_ptr,
+         "the same structure.  Resetting read_data_fn to NULL.");
+   }
 }
 
-#if defined(USE_FAR_KEYWORD) 
-#if defined(_MSC_VER)   
+#if defined(USE_FAR_KEYWORD)
+#if defined(_MSC_VER)
 void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
 {
-   void *near_ptr;   
+   void *near_ptr;
    void FAR *far_ptr;
    FP_OFF(near_ptr) = FP_OFF(ptr);
    far_ptr = (void FAR *)near_ptr;
@@ -194,7 +214,7 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
 #  else
 void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
 {
-   void *near_ptr;   
+   void *near_ptr;
    void FAR *far_ptr;
    near_ptr = (void FAR *)ptr;
    far_ptr = (void FAR *)near_ptr;
@@ -205,3 +225,4 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
 }
 #   endif
 #   endif
+#endif /* PNG_WRITE_SUPPORTED */

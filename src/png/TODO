@@ -1,22 +1,24 @@
-TODO - list of things to do for libpng
+TODO - list of things to do for libpng:
 
-fix problem with C++ and EXTERN "C"
-add "grayscale->palette" transformation and "palette->grayscale" detection
-add "grayscale" -> "grayscale+alpha" and "grayscale+FILLER" transformations
-improved dithering
-multi-lingual error and warning message support
-sPLT chunk handling
-cHRM transformation
-complete sRGB transformation (presently it simply uses gamma=0.45)
-man pages for function calls
-high-level API for reading images
-final bug fixes
-better documentation
-better filter selection
-   (counting huffman bits/precompression?  filter inertia?  filter costs?)
-optional palette creation
-histogram creation
-support for application-defined chunk handlers
-keep up with public chunks
-better C++ wrapper/full C++ implementation?
-text conversion between different code pages (Latin-1 -> Mac and DOS)
+Final bug fixes.
+Improve API by hiding the png_struct and png_info structs.
+Finish work on the no-floating-point version (including gamma compensation)
+Better C++ wrapper/full C++ implementation?
+Fix problem with C++ and EXTERN "C".
+cHRM transformation.
+Improve setjmp/longjmp usage or remove it in favor of returning error codes.
+Add "grayscale->palette" transformation and "palette->grayscale" detection.
+Improved dithering.
+Multi-lingual error and warning message support.
+Complete sRGB transformation (presently it simply uses gamma=0.45455).
+Man pages for function calls.
+Better documentation.
+Better filter selection
+   (counting huffman bits/precompression?  filter inertia?  filter costs?).
+Histogram creation.
+Text conversion between different code pages (Latin-1 -> Mac and DOS).
+Should we always malloc 2^bit_depth PLTE/tRNS/hIST entries for safety?
+Build gamma tables using fixed point (and do away with floating point entirely).
+Use greater precision when changing to linear gamma for compositing against
+  background and doing rgb-to-gray transformation.
+Investigate pre-incremented loop counters and other loop constructions.
