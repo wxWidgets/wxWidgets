@@ -1885,19 +1885,22 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
-           {
+            {
                 short x = LOWORD(lParam);
                 short y = HIWORD(lParam);
 
                 processed = HandleMouseMove(x, y, wParam);
-           }
-           break;
+            }
+            break;
 
         case WM_LBUTTONDOWN:
-           // set focus to this window
-           SetFocus();
+            // set focus to this window
+            if ( AcceptsFocus() )
+            {
+                SetFocus();
+            }
 
-           // fall through
+            // fall through
 
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
