@@ -424,7 +424,7 @@ public:
                           wxString *path,
                           wxString *name,
                           wxString *ext,
-                          wxPathFormat format = wxPATH_NATIVE)
+                          wxPathFormat format)
     {
         SplitPath(fullpath, volume, path, name, ext, NULL, format);
     }
