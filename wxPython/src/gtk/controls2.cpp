@@ -62,6 +62,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
+#include <wx/dirctrl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -9312,7 +9313,1640 @@ static PyObject *_wrap_wxTreeCtrl_GetBoundingRect(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+static void *SwigwxDirItemDataTowxObject(void *ptr) {
+    wxDirItemData *src;
+    wxObject *dest;
+    src = (wxDirItemData *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxDirItemData(_swigarg0,_swigarg1,_swigarg2) (new wxDirItemData(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxDirItemData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirItemData * _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    bool  _arg2;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "path","name","isDir", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:new_wxDirItemData",_kwnames,&_obj0,&_obj1,&tempbool2)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxDirItemData *)new_wxDirItemData(*_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDirItemData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_SetNewDirName(_swigobj,_swigarg0)  (_swigobj->SetNewDirName(_swigarg0))
+static PyObject *_wrap_wxDirItemData_SetNewDirName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirItemData * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDirItemData_SetNewDirName",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_SetNewDirName. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxDirItemData_SetNewDirName(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_m_path_set(_swigobj,_swigval) (_swigobj->m_path = *(_swigval),_swigval)
+static PyObject *_wrap_wxDirItemData_m_path_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirItemData * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","m_path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDirItemData_m_path_set",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_path_set. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxString *)wxDirItemData_m_path_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_m_path_get(_swigobj) (&_swigobj->m_path)
+static PyObject *_wrap_wxDirItemData_m_path_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirItemData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDirItemData_m_path_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_path_get. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxString *)wxDirItemData_m_path_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_m_name_set(_swigobj,_swigval) (_swigobj->m_name = *(_swigval),_swigval)
+static PyObject *_wrap_wxDirItemData_m_name_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirItemData * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","m_name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDirItemData_m_name_set",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_name_set. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxString *)wxDirItemData_m_name_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_m_name_get(_swigobj) (&_swigobj->m_name)
+static PyObject *_wrap_wxDirItemData_m_name_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxDirItemData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDirItemData_m_name_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_name_get. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxString *)wxDirItemData_m_name_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isHidden_set(_swigobj,_swigval) (_swigobj->m_isHidden = _swigval,_swigval)
+static PyObject *_wrap_wxDirItemData_m_isHidden_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","m_isHidden", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDirItemData_m_isHidden_set",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isHidden_set. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isHidden_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isHidden_get(_swigobj) ((bool ) _swigobj->m_isHidden)
+static PyObject *_wrap_wxDirItemData_m_isHidden_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDirItemData_m_isHidden_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isHidden_get. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isHidden_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isExpanded_set(_swigobj,_swigval) (_swigobj->m_isExpanded = _swigval,_swigval)
+static PyObject *_wrap_wxDirItemData_m_isExpanded_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","m_isExpanded", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDirItemData_m_isExpanded_set",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isExpanded_set. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isExpanded_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isExpanded_get(_swigobj) ((bool ) _swigobj->m_isExpanded)
+static PyObject *_wrap_wxDirItemData_m_isExpanded_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDirItemData_m_isExpanded_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isExpanded_get. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isExpanded_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isDir_set(_swigobj,_swigval) (_swigobj->m_isDir = _swigval,_swigval)
+static PyObject *_wrap_wxDirItemData_m_isDir_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","m_isDir", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxDirItemData_m_isDir_set",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isDir_set. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isDir_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirItemData_m_isDir_get(_swigobj) ((bool ) _swigobj->m_isDir)
+static PyObject *_wrap_wxDirItemData_m_isDir_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirItemData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDirItemData_m_isDir_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirItemData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirItemData_m_isDir_get. Expected _wxDirItemData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirItemData_m_isDir_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static void *SwigwxGenericDirCtrlTowxControl(void *ptr) {
+    wxGenericDirCtrl *src;
+    wxControl *dest;
+    src = (wxGenericDirCtrl *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGenericDirCtrlTowxWindow(void *ptr) {
+    wxGenericDirCtrl *src;
+    wxWindow *dest;
+    src = (wxGenericDirCtrl *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGenericDirCtrlTowxEvtHandler(void *ptr) {
+    wxGenericDirCtrl *src;
+    wxEvtHandler *dest;
+    src = (wxGenericDirCtrl *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGenericDirCtrlTowxObject(void *ptr) {
+    wxGenericDirCtrl *src;
+    wxObject *dest;
+    src = (wxGenericDirCtrl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxGenericDirCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8) (new wxGenericDirCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8))
+static PyObject *_wrap_new_wxGenericDirCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxString * _arg2 = (wxString *) &wxDirDialogDefaultFolderStr;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) (wxDIRCTRL_3D_INTERNAL)|wxSUNKEN_BORDER;
+    wxString * _arg6 = (wxString *) &wxEmptyString;
+    int  _arg7 = (int ) 0;
+    wxString * _arg8 = (wxString *) &"dirCtrl";
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
+    PyObject * _obj8 = 0;
+    char *_kwnames[] = { "parent","id","dir","pos","size","style","filter","defaultFilter","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOOlOiO:new_wxGenericDirCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6,&_arg7,&_obj8)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxGenericDirCtrl. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj6)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj6) && !PyUnicode_Check(_obj6)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj6, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg6 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj6)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg6 = new wxString(PyString_AS_STRING(_obj6), PyString_GET_SIZE(_obj6));
+#endif
+}
+    if (_obj8)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj8) && !PyUnicode_Check(_obj8)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj8, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg8 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj8)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg8 = new wxString(PyString_AS_STRING(_obj8), PyString_GET_SIZE(_obj8));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxGenericDirCtrl *)new_wxGenericDirCtrl(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7,*_arg8);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDirCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
+}
+{
+    if (_obj8)
+        delete _arg8;
+}
+    return _resultobj;
+}
+
+#define new_wxPreGenericDirCtrl() (new wxGenericDirCtrl())
+static PyObject *_wrap_new_wxPreGenericDirCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreGenericDirCtrl",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxGenericDirCtrl *)new_wxPreGenericDirCtrl();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDirCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8))
+static PyObject *_wrap_wxGenericDirCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGenericDirCtrl * _arg0;
+    wxWindow * _arg1;
+    wxWindowID  _arg2 = (wxWindowID ) -1;
+    wxString * _arg3 = (wxString *) &wxDirDialogDefaultFolderStr;
+    wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg5 = (wxSize *) &wxDefaultSize;
+    long  _arg6 = (long ) (wxDIRCTRL_3D_INTERNAL)|wxSUNKEN_BORDER;
+    wxString * _arg7 = (wxString *) &wxEmptyString;
+    int  _arg8 = (int ) 0;
+    wxString * _arg9 = (wxString *) &"treeCtrl";
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _obj3 = 0;
+    wxPoint  temp;
+    PyObject * _obj4 = 0;
+    wxSize  temp0;
+    PyObject * _obj5 = 0;
+    PyObject * _obj7 = 0;
+    PyObject * _obj9 = 0;
+    char *_kwnames[] = { "self","parent","id","dir","pos","size","style","filter","defaultFilter","name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOOlOiO:wxGenericDirCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_obj7,&_arg8,&_obj9)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_Create. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGenericDirCtrl_Create. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
+}
+    if (_obj4)
+{
+    _arg4 = &temp;
+    if (! wxPoint_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = &temp0;
+    if (! wxSize_helper(_obj5, &_arg5))
+        return NULL;
+}
+    if (_obj7)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj7) && !PyUnicode_Check(_obj7)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj7, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg7 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj7)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg7 = new wxString(PyString_AS_STRING(_obj7), PyString_GET_SIZE(_obj7));
+#endif
+}
+    if (_obj9)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj9) && !PyUnicode_Check(_obj9)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj9, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg9 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj9)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg9 = new wxString(PyString_AS_STRING(_obj9), PyString_GET_SIZE(_obj9));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxGenericDirCtrl_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,*_arg7,_arg8,*_arg9);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj3)
+        delete _arg3;
+}
+{
+    if (_obj7)
+        delete _arg7;
+}
+{
+    if (_obj9)
+        delete _arg9;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_ExpandPath(_swigobj,_swigarg0)  (_swigobj->ExpandPath(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_ExpandPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGenericDirCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGenericDirCtrl_ExpandPath",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_ExpandPath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxGenericDirCtrl_ExpandPath(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetDefaultPath(_swigobj)  (_swigobj->GetDefaultPath())
+static PyObject *_wrap_wxGenericDirCtrl_GetDefaultPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetDefaultPath",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetDefaultPath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxGenericDirCtrl_GetDefaultPath(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_SetDefaultPath(_swigobj,_swigarg0)  (_swigobj->SetDefaultPath(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_SetDefaultPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGenericDirCtrl_SetDefaultPath",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_SetDefaultPath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxGenericDirCtrl_SetDefaultPath(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetPath(_swigobj)  (_swigobj->GetPath())
+static PyObject *_wrap_wxGenericDirCtrl_GetPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetPath",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetPath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxGenericDirCtrl_GetPath(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetFilePath(_swigobj)  (_swigobj->GetFilePath())
+static PyObject *_wrap_wxGenericDirCtrl_GetFilePath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetFilePath",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetFilePath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxGenericDirCtrl_GetFilePath(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_SetPath(_swigobj,_swigarg0)  (_swigobj->SetPath(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_SetPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGenericDirCtrl_SetPath",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_SetPath. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxGenericDirCtrl_SetPath(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_ShowHidden(_swigobj,_swigarg0)  (_swigobj->ShowHidden(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_ShowHidden(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGenericDirCtrl_ShowHidden",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_ShowHidden. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxGenericDirCtrl_ShowHidden(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetShowHidden(_swigobj)  (_swigobj->GetShowHidden())
+static PyObject *_wrap_wxGenericDirCtrl_GetShowHidden(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetShowHidden",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetShowHidden. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxGenericDirCtrl_GetShowHidden(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetFilter(_swigobj)  (_swigobj->GetFilter())
+static PyObject *_wrap_wxGenericDirCtrl_GetFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetFilter",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetFilter. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxGenericDirCtrl_GetFilter(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_SetFilter(_swigobj,_swigarg0)  (_swigobj->SetFilter(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_SetFilter(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filter", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGenericDirCtrl_SetFilter",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_SetFilter. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxGenericDirCtrl_SetFilter(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetFilterIndex(_swigobj)  (_swigobj->GetFilterIndex())
+static PyObject *_wrap_wxGenericDirCtrl_GetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetFilterIndex",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetFilterIndex. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (int )wxGenericDirCtrl_GetFilterIndex(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_SetFilterIndex(_swigobj,_swigarg0)  (_swigobj->SetFilterIndex(_swigarg0))
+static PyObject *_wrap_wxGenericDirCtrl_SetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGenericDirCtrl_SetFilterIndex",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_SetFilterIndex. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxGenericDirCtrl_SetFilterIndex(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetRootId(_swigobj)  (_swigobj->GetRootId())
+static PyObject *_wrap_wxGenericDirCtrl_GetRootId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeItemId * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetRootId",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetRootId. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxTreeItemId (wxGenericDirCtrl_GetRootId(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTreeItemId_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetTreeCtrl(_swigobj)  (_swigobj->GetTreeCtrl())
+static PyObject *_wrap_wxGenericDirCtrl_GetTreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeCtrl * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetTreeCtrl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetTreeCtrl. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxTreeCtrl *)wxGenericDirCtrl_GetTreeCtrl(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTreeCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_GetFilterListCtrl(_swigobj)  (_swigobj->GetFilterListCtrl())
+static PyObject *_wrap_wxGenericDirCtrl_GetFilterListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirFilterListCtrl * _result;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_GetFilterListCtrl",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_GetFilterListCtrl. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxDirFilterListCtrl *)wxGenericDirCtrl_GetFilterListCtrl(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDirFilterListCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxDirFilterListCtrlTowxChoice(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxChoice *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxChoice *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirFilterListCtrlTowxControlWithItems(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxControlWithItems *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxControlWithItems *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirFilterListCtrlTowxControl(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxControl *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirFilterListCtrlTowxWindow(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxWindow *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirFilterListCtrlTowxEvtHandler(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxEvtHandler *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDirFilterListCtrlTowxObject(void *ptr) {
+    wxDirFilterListCtrl *src;
+    wxObject *dest;
+    src = (wxDirFilterListCtrl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxDirFilterListCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxDirFilterListCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxDirFilterListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirFilterListCtrl * _result;
+    wxGenericDirCtrl * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOl:new_wxDirFilterListCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDirFilterListCtrl. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxDirFilterListCtrl *)new_wxDirFilterListCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDirFilterListCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxPreDirFilterListCtrl() (new wxDirFilterListCtrl())
+static PyObject *_wrap_new_wxPreDirFilterListCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirFilterListCtrl * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreDirFilterListCtrl",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxDirFilterListCtrl *)new_wxPreDirFilterListCtrl();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDirFilterListCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxDirFilterListCtrl_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxDirFilterListCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxDirFilterListCtrl * _arg0;
+    wxGenericDirCtrl * _arg1;
+    wxWindowID  _arg2 = (wxWindowID ) -1;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","parent","id","pos","size","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOl:wxDirFilterListCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirFilterListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirFilterListCtrl_Create. Expected _wxDirFilterListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDirFilterListCtrl_Create. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxDirFilterListCtrl_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDirFilterListCtrl_FillFilterList(_swigobj,_swigarg0,_swigarg1)  (_swigobj->FillFilterList(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxDirFilterListCtrl_FillFilterList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDirFilterListCtrl * _arg0;
+    wxString * _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filter","defaultFilter", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxDirFilterListCtrl_FillFilterList",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDirFilterListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDirFilterListCtrl_FillFilterList. Expected _wxDirFilterListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxDirFilterListCtrl_FillFilterList(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static PyMethodDef controls2cMethods[] = {
+	 { "wxDirFilterListCtrl_FillFilterList", (PyCFunction) _wrap_wxDirFilterListCtrl_FillFilterList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirFilterListCtrl_Create", (PyCFunction) _wrap_wxDirFilterListCtrl_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreDirFilterListCtrl", (PyCFunction) _wrap_new_wxPreDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDirFilterListCtrl", (PyCFunction) _wrap_new_wxDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetFilterListCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetTreeCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetRootId", (PyCFunction) _wrap_wxGenericDirCtrl_GetRootId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_SetFilterIndex", (PyCFunction) _wrap_wxGenericDirCtrl_SetFilterIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetFilterIndex", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilterIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_SetFilter", (PyCFunction) _wrap_wxGenericDirCtrl_SetFilter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetFilter", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilter, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetShowHidden", (PyCFunction) _wrap_wxGenericDirCtrl_GetShowHidden, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_ShowHidden", (PyCFunction) _wrap_wxGenericDirCtrl_ShowHidden, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_SetPath", (PyCFunction) _wrap_wxGenericDirCtrl_SetPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetFilePath", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilePath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetPath", (PyCFunction) _wrap_wxGenericDirCtrl_GetPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_SetDefaultPath", (PyCFunction) _wrap_wxGenericDirCtrl_SetDefaultPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_GetDefaultPath", (PyCFunction) _wrap_wxGenericDirCtrl_GetDefaultPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_ExpandPath", (PyCFunction) _wrap_wxGenericDirCtrl_ExpandPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_Create", (PyCFunction) _wrap_wxGenericDirCtrl_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreGenericDirCtrl", (PyCFunction) _wrap_new_wxPreGenericDirCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGenericDirCtrl", (PyCFunction) _wrap_new_wxGenericDirCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isDir_get", (PyCFunction) _wrap_wxDirItemData_m_isDir_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isDir_set", (PyCFunction) _wrap_wxDirItemData_m_isDir_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isExpanded_get", (PyCFunction) _wrap_wxDirItemData_m_isExpanded_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isExpanded_set", (PyCFunction) _wrap_wxDirItemData_m_isExpanded_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isHidden_get", (PyCFunction) _wrap_wxDirItemData_m_isHidden_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_isHidden_set", (PyCFunction) _wrap_wxDirItemData_m_isHidden_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_name_get", (PyCFunction) _wrap_wxDirItemData_m_name_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_name_set", (PyCFunction) _wrap_wxDirItemData_m_name_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_path_get", (PyCFunction) _wrap_wxDirItemData_m_path_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_m_path_set", (PyCFunction) _wrap_wxDirItemData_m_path_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirItemData_SetNewDirName", (PyCFunction) _wrap_wxDirItemData_SetNewDirName, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDirItemData", (PyCFunction) _wrap_new_wxDirItemData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetBoundingRect", (PyCFunction) _wrap_wxTreeCtrl_GetBoundingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemFont", (PyCFunction) _wrap_wxTreeCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxTreeCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
@@ -9589,6 +11223,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_byte","_unsigned_char",0},
+    { "_wxChoice","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxChoice},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_size_t","_wxCoord",0},
@@ -9627,6 +11262,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxObject},
+    { "_wxObject","_wxGenericDirCtrl",SwigwxGenericDirCtrlTowxObject},
+    { "_wxObject","_wxDirItemData",SwigwxDirItemDataTowxObject},
     { "_wxObject","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxObject},
     { "_wxObject","_wxTreeEvent",SwigwxTreeEventTowxObject},
     { "_wxObject","_wxPyTreeItemData",SwigwxPyTreeItemDataTowxObject},
@@ -9637,6 +11275,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
+    { "_wxControl","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxControl},
+    { "_wxControl","_wxGenericDirCtrl",SwigwxGenericDirCtrlTowxControl},
     { "_wxControl","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxControl},
     { "_wxControl","_wxListView",SwigwxListViewTowxControl},
     { "_wxControl","_wxPyListCtrl",SwigwxPyListCtrlTowxControl},
@@ -9650,6 +11290,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
+    { "_wxControlWithItems","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxControlWithItems},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -9685,9 +11326,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
     { "_wxPyListCtrl","_wxListView",SwigwxListViewTowxPyListCtrl},
+    { "_wxEvtHandler","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxEvtHandler},
+    { "_wxEvtHandler","_wxGenericDirCtrl",SwigwxGenericDirCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxListView",SwigwxListViewTowxEvtHandler},
     { "_wxEvtHandler","_wxPyListCtrl",SwigwxPyListCtrlTowxEvtHandler},
+    { "_wxWindow","_wxDirFilterListCtrl",SwigwxDirFilterListCtrlTowxWindow},
+    { "_wxWindow","_wxGenericDirCtrl",SwigwxGenericDirCtrlTowxWindow},
     { "_wxWindow","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxWindow},
     { "_wxWindow","_wxListView",SwigwxListViewTowxWindow},
     { "_wxWindow","_wxPyListCtrl",SwigwxPyListCtrlTowxWindow},
@@ -9841,6 +11486,10 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_END_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_TREE_END_DRAG));
+	 PyDict_SetItemString(d,"wxDIRCTRL_DIR_ONLY", PyInt_FromLong((long) wxDIRCTRL_DIR_ONLY));
+	 PyDict_SetItemString(d,"wxDIRCTRL_SELECT_FIRST", PyInt_FromLong((long) wxDIRCTRL_SELECT_FIRST));
+	 PyDict_SetItemString(d,"wxDIRCTRL_SHOW_FILTERS", PyInt_FromLong((long) wxDIRCTRL_SHOW_FILTERS));
+	 PyDict_SetItemString(d,"wxDIRCTRL_3D_INTERNAL", PyInt_FromLong((long) wxDIRCTRL_3D_INTERNAL));
 
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");

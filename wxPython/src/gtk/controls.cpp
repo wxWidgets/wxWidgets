@@ -74,7 +74,6 @@ extern PyObject *SWIG_newvarlink(void);
 #endif
 
 
-
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
@@ -6563,6 +6562,41 @@ static PyObject *_wrap_wxTextCtrl_SetValue(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxTextCtrl_GetRange(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetRange(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_GetRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","from","to", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_GetRange",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetRange. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxTextCtrl_GetRange(_arg0,_arg1,_arg2));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 #define wxTextCtrl_GetLineLength(_swigobj,_swigarg0)  (_swigobj->GetLineLength(_swigarg0))
 static PyObject *_wrap_wxTextCtrl_GetLineLength(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7314,7 +7348,6 @@ static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args, P
 #define wxTextCtrl_PositionToXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PositionToXY(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    bool  _result;
     wxTextCtrl * _arg0;
     long  _arg1;
     long * _arg2;
@@ -7342,11 +7375,12 @@ static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
+        wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
 {
     PyObject *o;
     o = PyInt_FromLong((long) (*_arg2));
@@ -11556,6 +11590,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_GetNumberOfLines", (PyCFunction) _wrap_wxTextCtrl_GetNumberOfLines, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetLineText", (PyCFunction) _wrap_wxTextCtrl_GetLineText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetLineLength", (PyCFunction) _wrap_wxTextCtrl_GetLineLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetRange", (PyCFunction) _wrap_wxTextCtrl_GetRange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetValue", (PyCFunction) _wrap_wxTextCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetValue", (PyCFunction) _wrap_wxTextCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Create", (PyCFunction) _wrap_wxTextCtrl_Create, METH_VARARGS | METH_KEYWORDS },

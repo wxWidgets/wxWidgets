@@ -100,6 +100,34 @@ class wxICOHandler(wxICOHandlerPtr):
 
 
 
+class wxCURHandlerPtr(wxICOHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxCURHandler instance at %s>" % (self.this,)
+class wxCURHandler(wxCURHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxCURHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxANIHandlerPtr(wxCURHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxANIHandler instance at %s>" % (self.this,)
+class wxANIHandler(wxANIHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxANIHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxGIFHandlerPtr(wxImageHandlerPtr):
     def __init__(self,this):
         self.this = this

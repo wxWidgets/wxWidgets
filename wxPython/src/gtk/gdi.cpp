@@ -3715,6 +3715,34 @@ static PyObject *_wrap_wxFont_GetEncoding(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxFont_IsFixedWidth(_swigobj)  (_swigobj->IsFixedWidth())
+static PyObject *_wrap_wxFont_IsFixedWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_IsFixedWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_IsFixedWidth. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxFont_IsFixedWidth(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxFont_GetNativeFontInfo(_swigobj)  (_swigobj->GetNativeFontInfo())
 static PyObject *_wrap_wxFont_GetNativeFontInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11632,6 +11660,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxFont_GetNativeFontInfoUserDesc", (PyCFunction) _wrap_wxFont_GetNativeFontInfoUserDesc, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetNativeFontInfoDesc", (PyCFunction) _wrap_wxFont_GetNativeFontInfoDesc, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetNativeFontInfo", (PyCFunction) _wrap_wxFont_GetNativeFontInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_IsFixedWidth", (PyCFunction) _wrap_wxFont_IsFixedWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetEncoding", (PyCFunction) _wrap_wxFont_GetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetFaceName", (PyCFunction) _wrap_wxFont_GetFaceName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetUnderlined", (PyCFunction) _wrap_wxFont_GetUnderlined, METH_VARARGS | METH_KEYWORDS },

@@ -643,6 +643,9 @@ class wxTextCtrlPtr(wxControlPtr):
     def SetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_SetValue,(self,) + _args, _kwargs)
         return val
+    def GetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetRange,(self,) + _args, _kwargs)
+        return val
     def GetLineLength(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_GetLineLength,(self,) + _args, _kwargs)
         return val
