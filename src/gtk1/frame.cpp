@@ -249,13 +249,10 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
  * virtual function here as wxWindows requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
+static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 {
-    if (wxIS_KIND_OF(child,wxToolBar) || wxIS_KIND_OF(child,wxMenuBar))
+    if (!parent->m_insertInClientArea)
     {
-        /* actually, menubars are never inserted here, but this
-           may change one day */
-    
         /* these are outside the client area */
         wxFrame* frame = (wxFrame*) parent;
         gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
@@ -318,7 +315,8 @@ wxFrame::wxFrame()
     m_mainWidget = (GtkWidget*) NULL;
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
-    m_insertCallback = wxInsertChildInFrame;
+    m_insertCallback = (wxInsertChildFunction) NULL;
+    m_insertInClientArea = TRUE;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -334,7 +332,8 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_mainWidget = (GtkWidget*) NULL;
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
-    m_insertCallback = wxInsertChildInFrame;
+    m_insertCallback = (wxInsertChildFunction) NULL;
+    m_insertInClientArea = TRUE;
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -350,7 +349,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_title = title;
     
-    m_insertCallback = wxInsertChildInFrame;
+    m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
     GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
@@ -752,7 +751,7 @@ void wxFrame::OnInternalIdle()
     DoMenuUpdates();
 }
 
-void wxFrame::OnCloseWindow( wxCloseEvent& event )
+void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )
 {
     Destroy();
 }
@@ -887,15 +886,19 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
     }
 }
 
-wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
+wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
 
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE, _T("recreating toolbar in wxFrame") );
 
+    m_insertInClientArea = FALSE;
+    
     m_frameToolBar = OnCreateToolBar( style, id, name );
 
-    GetChildren().DeleteObject( m_frameToolBar );
+    if (m_frameToolBar) GetChildren().DeleteObject( m_frameToolBar );
+    
+    m_insertInClientArea = TRUE;
 
     m_sizeSet = FALSE;
 

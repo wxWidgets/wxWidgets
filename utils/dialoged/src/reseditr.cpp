@@ -2188,7 +2188,6 @@ void wxResourceEditorFrame::OnCloseWindow(wxCloseEvent& event)
  */
 
 BEGIN_EVENT_TABLE(wxResourceEditorScrolledWindow, wxScrolledWindow)
-    EVT_SCROLL(wxResourceEditorScrolledWindow::OnScroll)
     EVT_PAINT(wxResourceEditorScrolledWindow::OnPaint)
 END_EVENT_TABLE()
 
@@ -2205,17 +2204,6 @@ wxResourceEditorScrolledWindow::wxResourceEditorScrolledWindow(wxWindow *parent,
 
 wxResourceEditorScrolledWindow::~wxResourceEditorScrolledWindow()
 {
-}
-
-void wxResourceEditorScrolledWindow::OnScroll(wxScrollEvent& event)
-{
-    wxScrolledWindow::OnScroll(event);
-
-    int x, y;
-    ViewStart(& x, & y);
-
-    if (m_childWindow)
-        m_childWindow->Move(m_marginX + (- x * 10), m_marginY + (- y * 10));
 }
 
 void wxResourceEditorScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))

@@ -114,6 +114,7 @@ public:
     GtkWidget    *m_mainWidget;
     bool          m_menuBarDetached;
     bool          m_toolBarDetached;
+    bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
 protected:
     virtual void DoSetSize(int x, int y,

@@ -382,7 +382,6 @@ class wxResourceEditorScrolledWindow: public wxScrolledWindow
       long style = 0);
   ~wxResourceEditorScrolledWindow();
 
-  void OnScroll(wxScrollEvent& event);
   void OnPaint(wxPaintEvent& event);
 
   void DrawTitle(wxDC& dc);

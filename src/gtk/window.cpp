@@ -44,6 +44,10 @@
 #include "gdk/gdkkeysyms.h"
 #include "wx/gtk/win_gtk.h"
 
+#if (GTK_MINOR_VERSION == 0)
+#include "gdk/gdkx.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -184,6 +188,22 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 // key event conversion routines
 //-----------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION == 0)
+static guint
+gdk_keyval_to_upper (guint	  keyval)
+{
+  if (keyval)
+    {
+      KeySym lower_val = 0;
+      KeySym upper_val = 0;
+      
+      XConvertCase (keyval, &lower_val, &upper_val);
+      return upper_val;
+    }
+  return 0;
+}
+#endif
 
 static long map_to_unmodified_wx_keysym( KeySym keysym )
 {
@@ -638,6 +658,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
     
+#if (GTK_MINOR_VERSION > 0)
     /* pressing F10 will activate the menu bar of the top frame */
     if ( (!ret) &&
          (gdk_event->keyval == GDK_F10) )
@@ -665,6 +686,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
             ancestor = ancestor->GetParent();
         }
     }
+#endif
 
 /*
     Damn, I forgot why this didn't work, but it didn't work.
@@ -1232,7 +1254,9 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         gdk_window_set_cursor( widget->window, win->GetCursor().GetCursor() );
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
+#if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
+#endif
     event.SetEventObject( win );
 
     int x = 0;
@@ -1279,7 +1303,9 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+#if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
+#endif
     event.SetEventObject( win );
 
     int x = 0;

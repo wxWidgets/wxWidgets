@@ -488,9 +488,9 @@ void wxMenuItem::SetName( const wxString& str )
 #if (GTK_MINOR_VERSION > 0)
             m_text << _T('_');
         } else 
-	if (*pc == _T('/'))
+	if (*pc == _T('/'))      /* we have to filter out slashes ... */
 	{
-            m_text << _T('\\');
+            m_text << _T('\\');  /* ... and replace them with back slashes */
 #endif
         }
         else
@@ -674,6 +674,12 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
 	       strcpy( hotbuf, "<control>" );
 	       wxString last = hotkey.Right(1);
 	       strcat( hotbuf, last.mb_str() );
+               entry.accelerator = hotbuf;
+	       break;
+	    }
+	    case _T('F'):   /* function keys */
+	    {
+	       strcpy( hotbuf, hotkey.mb_str() );
                entry.accelerator = hotbuf;
 	       break;
 	    }

@@ -183,17 +183,17 @@ bool MyApp::OnInit()
     frame->SetIcon( wxICON(mondrian) );
 
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(MINIMAL_ABOUT, "&About");
-    file_menu->Append(MINIMAL_QUIT, "E&xit");
+    file_menu->Append(MINIMAL_ABOUT, "&About\tF1");
+    file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
 
     wxMenuBar *menu_bar = new wxMenuBar( wxMB_DOCKABLE );
     menu_bar->Append(file_menu, "&File");
 
 #if wxUSE_TOOLTIPS
     wxMenu *tooltip_menu = new wxMenu;
-    tooltip_menu->Append(MINIMAL_SET_TOOLTIP_DELAY, "Set &delay");
+    tooltip_menu->Append(MINIMAL_SET_TOOLTIP_DELAY, "Set &delay\tCtrl-D");
     tooltip_menu->AppendSeparator();
-    tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips",
+    tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips\tCrtl-T",
             "enable/disable tooltips", TRUE);
     tooltip_menu->Check(MINIMAL_ENABLE_TOOLTIPS, TRUE);
     menu_bar->Append(tooltip_menu, "&Tooltips");
