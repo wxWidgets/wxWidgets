@@ -323,13 +323,39 @@ wxTextInputStream& wxTextInputStream::operator>>(float& f)
     return *this;
 }
 
-wxTextOutputStream::wxTextOutputStream(wxOutputStream& s)
+wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
   : m_output(s)
 {
+    m_mode = mode;
+    if (m_mode == wxEOL_NATIVE)
+    {
+#if defined(__WXMSW__) || defined(__WXPM__)
+        m_mode = wxEOL_DOS;
+#elif defined(__WXMAC__)
+        m_mode = wxEOL_MAC;
+#else
+        m_mode = wxEOL_UNIX;
+#endif
+    }
 }
 
 wxTextOutputStream::~wxTextOutputStream()
 {
+}
+
+void wxTextOutputStream::SetMode( wxEOL mode = wxEOL_NATIVE )
+{
+    m_mode = mode;
+    if (m_mode == wxEOL_NATIVE)
+    {
+#if defined(__WXMSW__) || defined(__WXPM__)
+        m_mode = wxEOL_DOS;
+#elif defined(__WXMAC__)
+        m_mode = wxEOL_MAC;
+#else
+        m_mode = wxEOL_UNIX;
+#endif
+    }
 }
 
 void wxTextOutputStream::Write32(wxUint32 i)
@@ -371,25 +397,22 @@ void wxTextOutputStream::WriteString(const wxString& string)
         wxChar c = string[i];
         if (c == wxT('\n'))
         {
-#if   defined(__WINDOWS__)
-            c = wxT('\r');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-            c = wxT('\n');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-#elif defined(__UNIX__)
-            c = wxT('\n');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-#elif defined(__WXMAC__)
-            c = wxT('\r');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-#elif   defined(__OS2__)
-            c = wxT('\r');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-            c = wxT('\n');
-            m_output.Write( (const void*)(&c), sizeof(wxChar) );
-#else
-            #error  "wxTextOutputStream: unsupported platform."
-#endif
+	    if (m_mode == wxEOL_DOS)
+	    {
+                 c = wxT('\r');
+                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
+                 c = wxT('\n');
+                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
+	    } else 
+	    if (m_mode == wxEOL_MAC)
+	    {
+                 c = wxT('\r');
+                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
+	    } else
+	    {
+                 c = wxT('\n');
+                 m_output.Write( (const void*)(&c), sizeof(wxChar) );
+            }
         }
         else
         {

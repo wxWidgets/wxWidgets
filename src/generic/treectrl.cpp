@@ -297,12 +297,9 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
   m_parent = parent;
 
   m_attr = (wxTreeItemAttr *)NULL;
-
-  dc.GetTextExtent( m_text, &m_width, &m_height );
-  // TODO : Add the width of the image
-  // PB   : We don't know which image is shown (image, selImage)
-  //        We don't even know imageList from the treectrl this item belongs to !!!
-  // At this point m_width doesn't mean much, this can be remove !
+  
+  m_width = 0;
+  m_height = 0;
 }
 
 wxGenericTreeItem::~wxGenericTreeItem()
@@ -1327,21 +1324,23 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
         int y = 0;
         m_anchor->GetSize( x, y, this );
         y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
         int x_pos = GetScrollPos( wxHORIZONTAL );
         // Item should appear at top
         SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, item_y/PIXELS_PER_UNIT );
     }
     else if (item_y+GetLineHeight(gitem) > start_y+client_h)
     {
-       // going up
-       int x = 0;
-       int y = 0;
-       m_anchor->GetSize( x, y, this );
-       y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-       item_y += PIXELS_PER_UNIT+2;
-       int x_pos = GetScrollPos( wxHORIZONTAL );
+        // going up
+        int x = 0;
+        int y = 0;
+        m_anchor->GetSize( x, y, this );
+        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        item_y += PIXELS_PER_UNIT+2;
+        int x_pos = GetScrollPos( wxHORIZONTAL );
         // Item should appear at bottom
-       SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, (item_y+GetLineHeight(gitem)-client_h)/PIXELS_PER_UNIT );
+        SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, (item_y+GetLineHeight(gitem)-client_h)/PIXELS_PER_UNIT );
     }
 }
 
@@ -1435,8 +1434,8 @@ void wxTreeCtrl::AdjustMyScrollbars()
         int x = 0;
         int y = 0;
         m_anchor->GetSize( x, y, this );
-        //y += GetLineHeight(m_anchor);
         y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
         int x_pos = GetScrollPos( wxHORIZONTAL );
         int y_pos = GetScrollPos( wxVERTICAL );
         SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT, x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT, x_pos, y_pos );

@@ -44,118 +44,125 @@ WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 #define wxStream_READ_ERR   wxSTREAM_READ_ERROR
   
 typedef enum {
-  wxStream_NOERROR = 0,
-  wxStream_EOF,
-  wxStream_WRITE_ERR,
-  wxStream_READ_ERR
+  wxSTREAM_NO_ERROR = 0,
+  wxSTREAM_NO_ERR = wxSTREAM_NO_ERROR,
+  wxSTREAM_NOERROR = wxSTREAM_NO_ERROR,
+  
+  wxSTREAM_EOF,
+  
+  wxSTREAM_WRITE_ERROR,
+  wxSTREAM_WRITE_ERR = wxSTREAM_WRITE_ERROR,
+  
+  wxSTREAM_READ_ERROR,
+  wxSTREAM_READ_ERR = wxSTREAM_READ_ERROR,
+  
 } wxStreamError;
 
-class WXDLLEXPORT wxStreamBase {
- public:
-  wxStreamBase();
-  virtual ~wxStreamBase();
+class WXDLLEXPORT wxStreamBase 
+{
+public:
+    wxStreamBase();
+    virtual ~wxStreamBase();
 
-  bool operator!() const { return (LastError() != wxSTREAM_NOERROR); }
-  wxStreamError LastError() const { return m_lasterror; }
-  virtual size_t GetSize() const { return ~((size_t)0); }
-  size_t StreamSize() const { return GetSize(); }
+    bool operator!() const { return (LastError() != wxSTREAM_NOERROR); }
+    wxStreamError LastError() const { return m_lasterror; }
+    virtual size_t GetSize() const { return ~((size_t)0); }
+    size_t StreamSize() const { return GetSize(); }
 
- protected:
+protected:
+    virtual size_t OnSysRead(void *buffer, size_t bufsize);
+    virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
+    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
+    virtual off_t OnSysTell() const;
 
-  virtual size_t OnSysRead(void *buffer, size_t bufsize);
-  virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
-  virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-  virtual off_t OnSysTell() const;
+    friend class wxStreamBuffer;
 
- protected:
-  friend class wxStreamBuffer;
-
-  size_t m_lastcount;
-  wxStreamError m_lasterror;
+    size_t m_lastcount;
+    wxStreamError m_lasterror;
 };
 
-class WXDLLEXPORT wxInputStream: public wxStreamBase {
- public:
-  wxInputStream();
-  virtual ~wxInputStream();
+class WXDLLEXPORT wxInputStream: public wxStreamBase 
+{
+public:
+    wxInputStream();
+    virtual ~wxInputStream();
 
-  // IO functions
-  virtual char Peek();
-  char GetC();
-  virtual wxInputStream& Read(void *buffer, size_t size);
-  wxInputStream& Read(wxOutputStream& stream_out);
+    // IO functions
+    virtual char Peek();
+    char GetC();
+    virtual wxInputStream& Read(void *buffer, size_t size);
+    wxInputStream& Read(wxOutputStream& stream_out);
 
-  // Position functions
-  virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-  virtual off_t TellI() const;
+    // Position functions
+    virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+    virtual off_t TellI() const;
 
-  // State functions
-  virtual size_t LastRead() { return wxStreamBase::m_lastcount; }
+    // State functions
+    virtual size_t LastRead() { return wxStreamBase::m_lastcount; }
 
-  // Ungetch
-  size_t Ungetch(const void *buffer, size_t size);
-  bool Ungetch(char c);
+    // Ungetch
+    size_t Ungetch(const void *buffer, size_t size);
+    bool Ungetch(char c);
 
-  // Operators
-  wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
+    // Operators
+    wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
 #if wxUSE_SERIAL
-  wxInputStream& operator>>(wxObject *& obj);
+    wxInputStream& operator>>(wxObject *& obj);
 #endif
-  wxInputStream& operator>>( __wxInputManip func) { return func(*this); }
+    wxInputStream& operator>>( __wxInputManip func) { return func(*this); }
 
- protected:
-  // Ungetch managers
-  char *m_wback;
-  size_t m_wbacksize;
-  size_t m_wbackcur;
+protected:
+    // Ungetch managers
+    char *m_wback;
+    size_t m_wbacksize;
+    size_t m_wbackcur;
 
-  char *AllocSpaceWBack(size_t needed_size);
-  size_t GetWBack(char *buf, size_t bsize);
-
+    char *AllocSpaceWBack(size_t needed_size);
+    size_t GetWBack(char *buf, size_t bsize);
 };
 
-class WXDLLEXPORT wxOutputStream: public wxStreamBase {
- public:
-  wxOutputStream();
-  virtual ~wxOutputStream();
+class WXDLLEXPORT wxOutputStream: public wxStreamBase 
+{
+public:
+    wxOutputStream();
+    virtual ~wxOutputStream();
 
-  void PutC(char c);
-  virtual wxOutputStream& Write(const void *buffer, size_t size);
-  wxOutputStream& Write(wxInputStream& stream_in);
+    void PutC(char c);
+    virtual wxOutputStream& Write(const void *buffer, size_t size);
+    wxOutputStream& Write(wxInputStream& stream_in);
 
-  virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-  virtual off_t TellO() const;
+    virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
+    virtual off_t TellO() const;
 
-  virtual size_t LastWrite() const { return wxStreamBase::m_lastcount; }
+    virtual size_t LastWrite() const { return wxStreamBase::m_lastcount; }
 
-  virtual void Sync();
+    virtual void Sync();
 
-  wxOutputStream& operator<<(wxInputStream& out) { return Write(out); }
+    wxOutputStream& operator<<(wxInputStream& out) { return Write(out); }
 #if wxUSE_SERIAL
-  wxOutputStream& operator<<(wxObject& obj);
+    wxOutputStream& operator<<(wxObject& obj);
 #endif
-  wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
+    wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
 };
 
 // ---------------------------------------------------------------------------
 // A stream for measuring streamed output
 // ---------------------------------------------------------------------------
 
-class wxCountingOutputStream: public wxOutputStream {
- public:
-  wxCountingOutputStream();
+class wxCountingOutputStream: public wxOutputStream 
+{
+public:
+    wxCountingOutputStream();
 
-  size_t GetSize() const;
-  bool Ok() const { return TRUE; }
+    size_t GetSize() const;
+    bool Ok() const { return TRUE; }
 
- protected:
+protected:
+    size_t OnSysWrite(const void *buffer, size_t size);
+    off_t OnSysSeek(off_t pos, wxSeekMode mode);
+    off_t OnSysTell() const;
 
-  size_t OnSysWrite(const void *buffer, size_t size);
-  off_t OnSysSeek(off_t pos, wxSeekMode mode);
-  off_t OnSysTell() const;
-
- protected:
-  size_t m_currentPos;
+    size_t m_currentPos;
 };
 
 
@@ -163,153 +170,148 @@ class wxCountingOutputStream: public wxOutputStream {
 // "Filter" streams
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
- public:
-  wxFilterInputStream();
-  wxFilterInputStream(wxInputStream& stream);
-  ~wxFilterInputStream();
+class WXDLLEXPORT wxFilterInputStream: public wxInputStream 
+{
+public:
+    wxFilterInputStream();
+    wxFilterInputStream(wxInputStream& stream);
+    ~wxFilterInputStream();
 
-  char Peek() { return m_parent_i_stream->Peek(); }
+    char Peek() { return m_parent_i_stream->Peek(); }
 
-  size_t GetSize() const { return m_parent_i_stream->GetSize(); }
+    size_t GetSize() const { return m_parent_i_stream->GetSize(); }
 
- protected:
-  wxInputStream *m_parent_i_stream;
+protected:
+    wxInputStream *m_parent_i_stream;
 };
 
-class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
- public:
-  wxFilterOutputStream();
-  wxFilterOutputStream(wxOutputStream& stream);
-  ~wxFilterOutputStream();
+class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream 
+{
+public:
+    wxFilterOutputStream();
+    wxFilterOutputStream(wxOutputStream& stream);
+    ~wxFilterOutputStream();
 
-  size_t GetSize() const { return m_parent_o_stream->GetSize(); }
+    size_t GetSize() const { return m_parent_o_stream->GetSize(); }
 
- protected:
-  wxOutputStream *m_parent_o_stream;
+protected:
+    wxOutputStream *m_parent_o_stream;
 };
 
 // ---------------------------------------------------------------------------
 // Stream buffer
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStreamBuffer {
- public:
-  typedef enum {
-    read = 0, write, read_write
-  } BufMode;
+class WXDLLEXPORT wxStreamBuffer 
+{
+public:
+    typedef enum {
+        read = 0, write, read_write
+    } BufMode;
 
-  // -----------
-  // ctor & dtor
-  // -----------
-  wxStreamBuffer(wxStreamBase& stream, BufMode mode);
-  wxStreamBuffer(BufMode mode);
-  wxStreamBuffer(const wxStreamBuffer& buf);
-  ~wxStreamBuffer();
+    wxStreamBuffer(wxStreamBase& stream, BufMode mode);
+    wxStreamBuffer(BufMode mode);
+    wxStreamBuffer(const wxStreamBuffer& buf);
+    ~wxStreamBuffer();
 
-  // -----------
-  // Filtered IO
-  // -----------
-  size_t Read(void *buffer, size_t size);
-  size_t Read(wxStreamBuffer *buf);
-  size_t Write(const void *buffer, size_t size);
-  size_t Write(wxStreamBuffer *buf);
+    // Filtered IO
+    size_t Read(void *buffer, size_t size);
+    size_t Read(wxStreamBuffer *buf);
+    size_t Write(const void *buffer, size_t size);
+    size_t Write(wxStreamBuffer *buf);
 
-  char Peek();
-  char GetChar();
-  void PutChar(char c);
-  off_t Tell() const;
-  off_t Seek(off_t pos, wxSeekMode mode);
+    char Peek();
+    char GetChar();
+    void PutChar(char c);
+    off_t Tell() const;
+    off_t Seek(off_t pos, wxSeekMode mode);
 
-  // --------------
-  // Buffer control
-  // --------------
-  void ResetBuffer();
-  void SetBufferIO(char *buffer_start, char *buffer_end);
-  void SetBufferIO(size_t bufsize);
-  char *GetBufferStart() const { return m_buffer_start; }
-  char *GetBufferEnd() const { return m_buffer_end; }
-  char *GetBufferPos() const { return m_buffer_pos; }
-  off_t GetIntPosition() const { return m_buffer_pos-m_buffer_start; }
-  void SetIntPosition(off_t pos) { m_buffer_pos = m_buffer_start+pos; }
-  size_t GetLastAccess() const { return m_buffer_end-m_buffer_start; }
+    // Buffer control
+    void ResetBuffer();
+    void SetBufferIO(char *buffer_start, char *buffer_end);
+    void SetBufferIO(size_t bufsize);
+    char *GetBufferStart() const { return m_buffer_start; }
+    char *GetBufferEnd() const { return m_buffer_end; }
+    char *GetBufferPos() const { return m_buffer_pos; }
+    off_t GetIntPosition() const { return m_buffer_pos-m_buffer_start; }
+    void SetIntPosition(off_t pos) { m_buffer_pos = m_buffer_start+pos; }
+    size_t GetLastAccess() const { return m_buffer_end-m_buffer_start; }
 
-  void Fixed(bool fixed) { m_fixed = fixed; }
-  void Flushable(bool f) { m_flushable = f; }
+    void Fixed(bool fixed) { m_fixed = fixed; }
+    void Flushable(bool f) { m_flushable = f; }
 
-  bool FlushBuffer();
-  bool FillBuffer();
-  size_t GetDataLeft();
+    bool FlushBuffer();
+    bool FillBuffer();
+    size_t GetDataLeft();
 
-  // --------------
-  // Administration
-  // --------------
-  wxStreamBase *Stream() { return m_stream; }
+    // Misc.
+    wxStreamBase *Stream() { return m_stream; }
 
- protected:
-  void GetFromBuffer(void *buffer, size_t size);
-  void PutToBuffer(const void *buffer, size_t size);
+protected:
+    void GetFromBuffer(void *buffer, size_t size);
+    void PutToBuffer(const void *buffer, size_t size);
 
- protected:
-  char *m_buffer_start, *m_buffer_end, *m_buffer_pos;
-  size_t m_buffer_size;
+    char *m_buffer_start, *m_buffer_end, *m_buffer_pos;
+    size_t m_buffer_size;
 
-  bool m_fixed, m_flushable;
+    bool m_fixed, m_flushable;
 
-  wxStreamBase *m_stream;
-  BufMode m_mode;
-  bool m_destroybuf, m_destroystream;
+    wxStreamBase *m_stream;
+    BufMode m_mode;
+    bool m_destroybuf, m_destroystream;
 };
 
 // ---------------------------------------------------------------------------
 // wxBufferedStreams
 // ---------------------------------------------------------------------------
 
-class wxBufferedInputStream: public wxFilterInputStream {
- public:
-  wxBufferedInputStream(wxInputStream& stream);
-  ~wxBufferedInputStream();
+class wxBufferedInputStream: public wxFilterInputStream 
+{
+public:
+    wxBufferedInputStream(wxInputStream& stream);
+    ~wxBufferedInputStream();
 
-  char Peek();
-  wxInputStream& Read(void *buffer, size_t size);
+    char Peek();
+    wxInputStream& Read(void *buffer, size_t size);
   
-  // Position functions
-  off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellI() const;
+    // Position functions
+    off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+    off_t TellI() const;
 
-  wxStreamBuffer *InputStreamBuffer() const { return m_i_streambuf; }
+    wxStreamBuffer *InputStreamBuffer() const { return m_i_streambuf; }
 
- protected:
-  size_t OnSysRead(void *buffer, size_t bufsize);
-  off_t OnSysSeek(off_t seek, wxSeekMode mode);
-  off_t OnSysTell() const;  
+protected:
+    size_t OnSysRead(void *buffer, size_t bufsize);
+    off_t OnSysSeek(off_t seek, wxSeekMode mode);
+    off_t OnSysTell() const;  
 
- protected:
-  wxStreamBuffer *m_i_streambuf;
+    wxStreamBuffer *m_i_streambuf;
 };
 
-class wxBufferedOutputStream: public wxFilterOutputStream {
- public:
-  wxBufferedOutputStream(wxOutputStream& stream);
-  ~wxBufferedOutputStream();
+class wxBufferedOutputStream: public wxFilterOutputStream 
+{
+public:
+    wxBufferedOutputStream(wxOutputStream& stream);
+    ~wxBufferedOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
+    wxOutputStream& Write(const void *buffer, size_t size);
   
-  // Position functions
-  off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellO() const;
+    // Position functions
+    off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
+    off_t TellO() const;
 
-  void Sync();
+    void Sync();
 
-  wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
+    size_t GetSize() const;
+  
+    wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
- protected:
-  size_t OnSysWrite(const void *buffer, size_t bufsize);
-  off_t OnSysSeek(off_t seek, wxSeekMode mode);
-  off_t OnSysTell() const;  
+protected:
+    size_t OnSysWrite(const void *buffer, size_t bufsize);
+    off_t OnSysSeek(off_t seek, wxSeekMode mode);
+    off_t OnSysTell() const;  
 
- protected:
-  wxStreamBuffer *m_o_streambuf;
+    wxStreamBuffer *m_o_streambuf;
 };
 
 #endif

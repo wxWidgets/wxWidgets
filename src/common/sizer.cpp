@@ -469,7 +469,7 @@ void wxBoxSizer::RecalcSizes()
 wxSize wxBoxSizer::CalcMin()
 {
     if (m_children.GetCount() == 0)
-        return wxSize(2,2);
+        return wxSize(10,10);
 
     m_stretchable = 0;
     m_minWidth = 0;
