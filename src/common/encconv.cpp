@@ -287,9 +287,9 @@ wxString wxEncodingConverter::Convert(const wxString& input)
 #define STOP wxFONTENCODING_SYSTEM
 
 #define NUM_OF_PLATFORMS  4 /*must conform to enum wxPLATFORM_XXXX !!!*/
-#define ENC_PER_PLATFORM  3
+#define ENC_PER_PLATFORM  5
            // max no. of encodings for one language used on one platform
-           // Anybody thinks 3 is not enough? ;-)
+           // Anybody thinks 5 is not enough? ;-)
 
 static wxFontEncoding 
     EquivalentEncodings[][NUM_OF_PLATFORMS][ENC_PER_PLATFORM+1] = {
@@ -354,8 +354,9 @@ static wxFontEncoding
 
     // Cyrillic
     {
-        /* unix    */ {wxFONTENCODING_ISO8859_13, wxFONTENCODING_ISO8859_4, STOP},
-        /* windows */ {wxFONTENCODING_CP1257, STOP},
+        /* unix    */ {wxFONTENCODING_ISO8859_13, wxFONTENCODING_ISO8859_4,
+                       wxFONTENCODING_ISO8859_15, wxFONTENCODING_ISO8859_1, STOP},
+        /* windows */ {wxFONTENCODING_CP1257, wxFONTENCODING_CP1252, STOP},
         /* os2     */ {STOP},
         /* mac     */ {STOP}   
     },
