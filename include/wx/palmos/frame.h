@@ -64,26 +64,6 @@ public:
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
-    // Status bar
-#if wxUSE_STATUSBAR
-    virtual wxStatusBar* OnCreateStatusBar(int number = 1,
-                                           long style = wxST_SIZEGRIP,
-                                           wxWindowID id = 0,
-                                           const wxString& name = wxStatusLineNameStr);
-
-    virtual void PositionStatusBar();
-
-    // Hint to tell framework which status bar to use: the default is to use
-    // native one for the platforms which support it (Win32), the generic one
-    // otherwise
-
-    // TODO: should this go into a wxFrameworkSettings class perhaps?
-    static void UseNativeStatusBar(bool useNative)
-        { m_useNativeStatusBar = useNative; };
-    static bool UsesNativeStatusBar()
-        { return m_useNativeStatusBar; };
-#endif // wxUSE_STATUSBAR
-
     WXHMENU GetWinMenu() const { return m_hMenu; }
 
     // event handlers
@@ -142,11 +122,6 @@ protected:
 
     // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;
-
-#if wxUSE_STATUSBAR
-    static bool           m_useNativeStatusBar;
-    wxStatusBar              *StatusBar;
-#endif // wxUSE_STATUSBAR
 
     // Data to save/restore when calling ShowFullScreen
     int                   m_fsStatusBarFields; // 0 for no status bar

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-    EVT_PAINT(wxFrame::OnPaint)    
+    EVT_PAINT(wxFrame::OnPaint)
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
@@ -86,7 +86,7 @@ wxBEGIN_FLAGS( wxFrameStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -136,7 +136,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxFrame)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
@@ -147,24 +147,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// static class members
-// ----------------------------------------------------------------------------
-
-#if wxUSE_STATUSBAR
-    #if wxUSE_NATIVE_STATUSBAR
-        bool wxFrame::m_useNativeStatusBar = TRUE;
-    #else
-        bool wxFrame::m_useNativeStatusBar = FALSE;
-    #endif
-#endif // wxUSE_NATIVE_STATUSBAR
-
-// ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
 
 void wxFrame::Init()
 {
-    StatusBar=NULL;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -177,7 +164,7 @@ bool wxFrame::Create(wxWindow *parent,
 {
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name, this) )
         return false;
-        
+
     return true;
 }
 
@@ -211,38 +198,6 @@ void wxFrame::SendSizeEvent()
 {
 }
 
-#if wxUSE_STATUSBAR
-wxStatusBar *wxFrame::OnCreateStatusBar(int number,
-                                        long style,
-                                        wxWindowID id,
-                                        const wxString& name)
-{
-    wxStatusBar *statusBar = NULL;
-
-#if wxUSE_NATIVE_STATUSBAR
-    if ( !UsesNativeStatusBar() )
-    {
-        statusBar = (wxStatusBar *)new wxStatusBarGeneric(this, id, style);
-    }
-    else
-#endif
-    {
-        statusBar = new wxStatusBar(this, id, style, name);
-    }
-
-    statusBar->SetFieldsCount(number);
-
-       StatusBar=statusBar;
-    return statusBar;
-
-    return NULL;
-}
-
-void wxFrame::PositionStatusBar()
-{
-}
-#endif // wxUSE_STATUSBAR
-
 #if wxUSE_MENUS_NATIVE
 
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
@@ -264,7 +219,7 @@ bool wxFrame::HandleMenuOpen()
 {
     if(!m_frameMenuBar)
         return false;
-        
+
     m_frameMenuBar->LoadMenu();
     return true;
 }
@@ -280,9 +235,9 @@ bool wxFrame::HandleMenuSelect(int ItemID)
 
     wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item);
     commandEvent.SetEventObject(this);
-        
+
     GetEventHandler()->ProcessEvent(commandEvent);
-    return true;    
+    return true;
 }
 
 #endif // wxUSE_MENUS_NATIVE
@@ -294,12 +249,12 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxFrame::OnPaint(wxPaintEvent& event)
 {
-    #if wxUSE_STATUSBAR
-        if(StatusBar!=NULL)
-            StatusBar->DrawStatusBar();
-    #endif
+#if wxUSE_STATUSBAR
+    if( m_frameStatusBar )
+        m_frameStatusBar->DrawStatusBar();
+#endif // wxUSE_STATUSBAR
 }
-  
+
 // Pass TRUE to show full screen, FALSE to restore.
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
