@@ -1475,6 +1475,7 @@ htmlcell.h	HtmlH
 htmldefs.h	HtmlH
 htmlfilt.h	HtmlH
 htmlpars.h	HtmlH
+htmlproc.h	HtmlH
 htmltag.h	HtmlH
 htmlwin.h	HtmlH
 winpars.h	HtmlH
