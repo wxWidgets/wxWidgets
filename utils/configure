@@ -650,6 +650,8 @@ trap 'rm -fr `echo "
             dialoged/src/Makefile
             emulator/Makefile
             emulator/src/Makefile
+            helpview/Makefile
+            helpview/src/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -735,6 +737,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             dialoged/src/Makefile
             emulator/Makefile
             emulator/src/Makefile
+            helpview/Makefile
+            helpview/src/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
