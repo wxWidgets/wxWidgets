@@ -1408,12 +1408,12 @@ void wxDbTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereC
         if (CanUpdByROWID())
         {
             SDWORD cb;
-            char   rowid[ROWID_LEN];
+            char   rowid[wxDB_ROWID_LEN];
 
             // Get the ROWID value.  If not successful retreiving the ROWID,
             // simply fall down through the code and build the WHERE clause
             // based on the key fields.
-            if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+            if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
             {
                 wxStrcat(pSqlStmt, "ROWID = '");
                 wxStrcat(pSqlStmt, rowid);
@@ -1464,12 +1464,12 @@ void wxDbTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereC
         if (CanUpdByROWID())
         {
             SDWORD cb;
-            char   rowid[ROWID_LEN];
+            char   rowid[wxDB_ROWID_LEN];
 
             // Get the ROWID value.  If not successful retreiving the ROWID,
             // simply fall down through the code and build the WHERE clause
             // based on the key fields.
-            if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+            if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
             {
                 wxStrcat(pSqlStmt, "ROWID = '");
                 wxStrcat(pSqlStmt, rowid);
@@ -1819,7 +1819,7 @@ wxDbColDataPtr* wxDbTable::SetColDefs (wxDbColInf *pColInfs, ULONG numCols)
 /********** wxDbTable::SetCursor() **********/
 void wxDbTable::SetCursor(HSTMT *hstmtActivate)
 {
-    if (hstmtActivate == DEFAULT_CURSOR)
+    if (hstmtActivate == wxDB_DEFAULT_CURSOR)
         hstmt = *hstmtDefault;
     else
         hstmt = *hstmtActivate;
@@ -1912,12 +1912,12 @@ bool wxDbTable::Refresh(void)
     if (CanUpdByROWID())
     {
         SDWORD cb;
-        char   rowid[ROWID_LEN+1];
+        char   rowid[wxDB_ROWID_LEN+1];
 
         // Get the ROWID value.  If not successful retreiving the ROWID,
         // simply fall down through the code and build the WHERE clause
         // based on the key fields.
-        if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+        if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, wxDB_ROWID_LEN, &cb) == SQL_SUCCESS)
         {
             wxStrcat(whereClause, queryTableName);
             wxStrcat(whereClause, ".ROWID = '");

@@ -93,7 +93,7 @@ enum enumDummy {enumDum1};
 #define FALSE 0
 #endif
 
-const int DB_PATH_MAX                 = 254;
+const int wxDB_PATH_MAX                 = 254;
 
 extern char const *SQL_LOG_FILENAME;
 extern char const *SQL_CATALOG_FILENAME;
@@ -243,7 +243,7 @@ struct wxDbConnectInf
     char fileType[SQL_MAX_DSN_LENGTH+1];               // Not sure what the max length is
 
     // Optionals needed for some databases like dBase
-    char defaultDir[DB_PATH_MAX];                      // Directory that db file resides in
+    char defaultDir[wxDB_PATH_MAX];                      // Directory that db file resides in
 };
 
 struct wxDbSqlTypeInfo
@@ -534,6 +534,8 @@ bool WXDLLEXPORT wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsD
 //#################################################################################
 
 // Backward compability structures/classes.  This will eventually go away
+const int DB_PATH_MAX      = wxDB_PATH_MAX;
+
 typedef wxDb                 wxDB;
 typedef wxDbTableInf         wxTableInf;
 typedef wxDbColInf           wxColInf;

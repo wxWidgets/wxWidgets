@@ -43,10 +43,10 @@
     #include "db.h"
 #endif
 
-const int   ROWID_LEN       = 24;  // 18 is the max, 24 is in case it gets larger
-const int   DEFAULT_CURSOR  = 0;
-const bool  QUERY_ONLY      = TRUE;
-const bool  DISABLE_VIEW    = TRUE;
+const int   wxDB_ROWID_LEN       = 24;  // 18 is the max, 24 is in case it gets larger
+const int   wxDB_DEFAULT_CURSOR  = 0;
+const bool  wxDB_QUERY_ONLY      = TRUE;
+const bool  wxDB_DISABLE_VIEW    = TRUE;
 
 // The following class is used to define a column of a table.
 // The wxDbTable constructor will dynamically allocate as many of
@@ -129,7 +129,7 @@ public:
     int       noCols;                                    // # of columns in the table
     bool      queryOnly;                                 // Query Only, no inserts, updates or deletes
 
-    char      tablePath[DB_PATH_MAX];                    // needed for dBase tables
+    char      tablePath[wxDB_PATH_MAX];                  // needed for dBase tables
 
     // Column Definitions
     wxDbColDef *colDefs;         // Array of wxDbColDef structures
@@ -144,7 +144,7 @@ public:
 
     // Public member functions
     wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
-            const char *qryTblName = 0, bool qryOnly = !QUERY_ONLY, const char *tblPath=NULL);
+            const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath=NULL);
     virtual ~wxDbTable();
     bool    Open(void);
     bool    CreateTable(bool attemptDrop=TRUE);
@@ -191,7 +191,7 @@ public:
 
     HSTMT  *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
     bool    DeleteCursor(HSTMT *hstmtDel);
-    void    SetCursor(HSTMT *hstmtActivate = (void **) DEFAULT_CURSOR);
+    void    SetCursor(HSTMT *hstmtActivate = (void **) wxDB_DEFAULT_CURSOR);
     HSTMT   GetCursor(void) { return(hstmt); }
     ULONG   Count(const char *args="*");
     int     DB_STATUS(void) { return(pDb->DB_STATUS); }
@@ -220,6 +220,12 @@ typedef wxDbColDef      wxColDef;
 typedef wxDbColDef      CcolDef;
 typedef wxDbColDataPtr  wxColDataPtr;
 typedef wxDbColDataPtr  CcolDataPtr;
+
+const int   ROWID           = wxDB_ROWID_LEN;
+const int   DEFAULT_CURSOR  = wxDB_DEFAULT_CURSOR;
+const bool  QUERY_ONLY      = wxDB_QUERY_ONLY;
+const bool  DISABLE_VIEW    = wxDB_DISABLE_VIEW;
+
 
 #endif
 

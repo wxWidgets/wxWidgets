@@ -104,7 +104,7 @@ char const *SQL_CATALOG_FILENAME     = "catalog.txt";
 // SQL Log defaults to be used by GetDbConnection
 wxDbSqlLogState SQLLOGstate = sqlLogOFF;
 
-//char SQLLOGfn[DB_PATH_MAX+1] = SQL_LOG_FILENAME;
+//char SQLLOGfn[wxDB_PATH_MAX+1] = SQL_LOG_FILENAME;
 wxChar *SQLLOGfn         = (wxChar*) SQL_LOG_FILENAME;
 
 // The wxDb::errorList is copied to this variable when the wxDb object
