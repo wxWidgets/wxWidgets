@@ -130,12 +130,14 @@ frame associated with the view.
 
 \func{virtual bool}{OnCreate}{\param{wxDocument* }{doc}, \param{long}{ flags}}
 
-Called just after view construction to give the view a chance to initialize
-itself based on the passed document and flags (unused). By default, simply
-returns TRUE. If the function returns FALSE, the view will be deleted.
+wxDocManager or wxDocument creates a wxView via a wxDocTemplate.
+Just after the wxDocTemplate creates the wxView, it calls
+wxView::OnCreate. In its OnCreate member function, the wxView can create a wxDocChildFrame
+or a derived class. This wxDocChildFrame provides user interface
+elements to view and/or edit the contents of the wxDocument.
 
-The predefined document child frame, wxDocChildFrame, calls this function
-automatically.
+By default, simply returns TRUE. If the function returns FALSE, the
+view will be deleted.
 
 \membersection{wxView::OnCreatePrintout}
 
