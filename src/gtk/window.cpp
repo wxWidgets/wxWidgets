@@ -591,6 +591,8 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 // "event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK20__
+
 // GTK thinks it is clever and filters out a certain amount of "unneeded"
 // expose events. We need them, of course, so we override the main event
 // procedure in GtkWidget by giving our own handler for all system events.
@@ -612,6 +614,8 @@ gint gtk_window_event_event_callback( GtkWidget *widget,
     return FALSE;
 }
 }
+
+#endif // !GTK+ 2
 
 //-----------------------------------------------------------------------------
 // "draw" of m_wxwindow
