@@ -45,7 +45,7 @@
 #include "xpm.h"
 
 // Added by JACS for some compilers (no popen/pclose functions)
-#if defined(__WATCOMC__) || (!defined(WIN32) && defined(_MSC_VER))
+#if defined(__WATCOMC__) || (!defined(WIN32) && defined(_MSC_VER)) || (!defined(WIN32) && defined(__BORLANDC__))
 #define NO_ZPIPE
 #endif
 

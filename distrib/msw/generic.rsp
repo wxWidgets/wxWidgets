@@ -18,9 +18,7 @@ template.mak
 wx-config.in
 makefile.unx.in
 wxinstall
-descrip.mms
 setup.h_vms
-src/common/descrip.mms
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
@@ -117,7 +115,6 @@ src/zlib/*.txt
 src/zlib/makefile*
 src/zlib/*.com
 src/zlib/*.3
-src/zlib/*.mms
 
 include/wx/*.h
 include/wx/*.inl
@@ -180,14 +177,14 @@ utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
-utils/hhp2cache/*.h
-utils/hhp2cache/*.cpp
-utils/hhp2cache/*.def
-utils/hhp2cache/*.rc
-utils/hhp2cache/makefile*
-utils/hhp2cache/*.xbm
-utils/hhp2cache/*.xpm
-utils/hhp2cache/*.txt
+utils/hhp2cached/*.h
+utils/hhp2cached/*.cpp
+utils/hhp2cached/*.def
+utils/hhp2cached/*.rc
+utils/hhp2cached/makefile*
+utils/hhp2cached/*.xbm
+utils/hhp2cached/*.xpm
+utils/hhp2cached/*.txt
 
 contrib/configure
 contrib/configure.in

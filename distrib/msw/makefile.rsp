@@ -79,3 +79,25 @@ contrib/samples/ogl/studio/Makefile.in
 contrib/samples/mmedia/Makefile.in
 contrib/samples/stc/Makefile.in
 
+descrip.mms
+contrib\samples\mmedia\descrip.mms
+deliver\wx\src\common\descrip.mms
+deliver\wx\src\png\scripts\descrip.mms
+deliver\wx\src\zlib\descrip.mms
+demos\bombs\descrip.mms
+samples\caret\descrip.mms
+samples\checklst\descrip.mms
+samples\config\descrip.mms
+samples\controls\descrip.mms
+samples\dialogs\descrip.mms
+samples\image\descrip.mms
+samples\menu\descrip.mms
+samples\minimal\descrip.mms
+src\common\descrip.mms
+src\generic\descrip.mms
+src\gtk\descrip.mms
+src\motif\descrip.mms
+src\png\scripts\descrip.mms
+src\unix\descrip.mms
+src\zlib\descrip.mms
+utils\dialoged\src\descrip.mms

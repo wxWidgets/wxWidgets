@@ -244,6 +244,9 @@ utils/dialoged/src/DialogEdVC.dsw
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw
 
+utils/hhp2cached/hhp2cachedVC.dsp
+utils/hhp2cached/hhp2cachedVC.dsw
+
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw
 

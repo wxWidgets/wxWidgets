@@ -40,7 +40,7 @@ THISDIR = $(WXDIR)\src\msw
 # Please set these according to the settings in wx_setup.h, so we can include
 # the appropriate libraries in wx.lib
 USE_CTL3D=1
-USE_XPM_IN_MSW=0
+USE_XPM_IN_MSW=1
 
 PERIPH_LIBS=
 PERIPH_TARGET=
@@ -51,7 +51,7 @@ PERIPH_LIBS=$(WXDIR)\lib\bcc16\ctl3dv2.lib $(PERIPH_LIBS)
 !endif
 
 !if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\xpm.lib $(PERIPH_LIBS)
+PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
 PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
@@ -706,8 +706,6 @@ $(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
 
 $(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
 
-
-
 all_utils:
     cd $(WXDIR)\utils
     make -f makefile.bcc
@@ -723,17 +721,8 @@ all_execs:
     make -f makefile.bcc all_execs
     cd $(WXDIR)\src\msw
 
-all_libs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.bcc dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
-          wxstring wxtree mfutils # wxxpm
-
-all_contribs:
-    cd $(WXDIR)\src\msw
-    make -f makefile.bcc fafa wxstring itsy gauge # wxxpm
-
 # CONTRIB
-wxxpm:	$(CFG)
+xpm:	$(CFG)
 	cd $(WXDIR)\src\xpm
 	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
