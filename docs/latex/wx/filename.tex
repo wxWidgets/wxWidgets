@@ -65,42 +65,115 @@ enum wxPathNormalize
 }
 \end{verbatim}
 
+\latexignore{\rtfignore{\wxheading{Function groups}}}
+
+\membersection{File name format}
+
+wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
+and VMS formats. Although these formats are quite different, wxFileName tries
+to treat them all in the sam generic way. It supposes that all file names
+consist of the following parts: the volume (also known as drive under Windows
+or device under VMS), the path which is a sequence of directory names separated
+by the \helpref{path separators}{wxfilenamegetpathseparators} and the full
+filename itself which, in turn, is composed from the base file name and the
+extension. All of the individual components of the file name may be empty and,
+for example, the volume name is always empty under Unix, but if they are all
+empty simultaneously, the filename object is considered to be in an invalid
+state and \helpref{IsOk}{wxfilenameisok} returns {\tt FALSE} for it.
+
+File names can be case-sensitive or not, the function\rtfsp
+\helpref{IsCaseSensitive}{wxfilenameiscasesensitive} allows to determine this.
+
+The rules for determining if the file name is absolute or relative also depends
+on the file name format and the only portable way to answer to this question is
+to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
+filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}.
+
+Other functions returning information about the file format provided by this
+class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
+\helpref{IsPathSeparator}{wxfilenameispathseparator} and\rtfsp
+\helpref{IsWild}{wxfilenameiswild}.
+
+\helpref{IsRelative}{wxfilenameisrelative}
+
+\membersection{File name construction}
+
+TODO.
+
+\membersection{File tests}
+
+Before doing the other tests you should use \helpref{IsOk}{wxfilenameisok} to
+verify that the filename is well defined. If it is, 
+\helpref{FileExists}{wxfilenamefileexists} can be used to test if a file with
+such name exists and \helpref{DirExists}{wxfilenamedirexists} - if a directory
+with this name exists.
+
+File names should be compared using \helpref{SameAs}{wxfilenamesameas} method
+or \helpref{$==$}{wxfilenameoperatorequal}.
+
+\membersection{File name components}
+
+These functions allow to examine and modify the directories of the path:
+
+\helpref{AppendDir}{wxfilenameappenddir}\\
+\helpref{InsertDir}{wxfilenameinsertdir}\\
+\helpref{GetDirCount}{wxfilenamegetdircount}
+\helpref{PrependDir}{wxfilenameprependdir}\\
+\helpref{RemoveDir}{wxfilenameremovedir}
+
+To change the components of the file name individually you can use the
+following functions:
+
+\helpref{GetExt}{wxfilenamegetext}\\
+\helpref{GetName}{wxfilenamegetname}\\
+\helpref{GetVolume}{wxfilenamegetvolume}\\
+\helpref{HasExt}{wxfilenamehasext}\\
+\helpref{HasName}{wxfilenamehasname}\\
+\helpref{HasVolume}{wxfilenamehasvolume}\\
+\helpref{SetExt}{wxfilenamesetext}\\
+\helpref{SetName}{wxfilenamesetname}\\
+\helpref{SetVolume}{wxfilenamesetvolume}\\
+
+\membersection{Operations}
+
+These methods allow to work with the file creation, access and modification
+times:
+
+\helpref{GetModificationTime}{wxfilenamegetmodificationtime}\\
+\helpref{GetTimes}{wxfilenamegettimes}\\
+\helpref{SetTimes}{wxfilenamesettimes}\\
+\helpref{Touch}{wxfilenametouch}
+
+Other file system operations functions are:
+
+\helpref{Mkdir}{wxfilenamemkdir}\\
+\helpref{Rmdir}{wxfilenamermdir}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilenamedef}
+\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilename}
 
 \func{}{wxFileName}{\void}
 
 Default constructor.
 
-\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilenamecopy}
-
 \func{}{wxFileName}{\param{const wxFileName\& }{filename}}
 
 Copy constructor.
 
-\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilename1}
-
 \func{}{wxFileName}{\param{const wxString\& }{fullpath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-from a full filename: if it terminates with a '/', a directory path
+From a full filename: if it terminates with a '/', a directory path
 is contructed (the name will be empty), otherwise a file name and
 extension are extracted from it
 
-
-\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilename2}
-
 \func{}{wxFileName}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-from a directory name and a file name
-
-
-\membersection{wxFileName::wxFileName}\label{wxfilenamewxfilename3}
+Constructor from a directory name and a file name.
 
 \func{}{wxFileName}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-from a directory name, file base name and extension
-
+Constructor from a directory name, file base name and extension
 
 \membersection{wxFileName::AppendDir}\label{wxfilenameappenddir}
 
@@ -134,11 +207,14 @@ from a directory name, file base name and extension
 
 \membersection{wxFileName::AssignCwd}\label{wxfilenameassigncwd}
 
-\func{void}{AssignCwd}{\void}
+\func{void}{AssignCwd}{\param{const wxString\& }{volume = ""}}
 
-various file/dir operations
-retrieve the value of the current working directory
+Makes this object refer to the current working directory on the specified
+volume (or current volume if {\it volume} is empty).
 
+\wxheading{See also}
+
+\helpref{GetCwd}{wxfilenamegetcwd}
 
 \membersection{wxFileName::AssignDir}\label{wxfilenameassigndir}
 
@@ -206,8 +282,20 @@ static pseudo constructors
 
 \membersection{wxFileName::GetCwd}\label{wxfilenamegetcwd}
 
-\func{wxString}{GetCwd}{\void}
+\func{wxString}{GetCwd}{\param{const wxString\& }{volume = ""}}
 
+Retrieve the value of the current working directory on the specified volume. If
+the volume is empty, the programs current working directory is returned for the
+current volume.
+
+\wxheading{Return value}
+
+The string containing the current working directory or an empty string on
+error.
+
+\wxheading{See also}
+
+\helpref{AssignCwd}{wxfilenameassigncwd}
 
 \membersection{wxFileName::GetDirCount}\label{wxfilenamegetdircount}
 
@@ -384,14 +472,18 @@ FIXME: what exactly does this do?
 
 \func{bool}{Mkdir}{\param{int }{perm = 0777}, \param{bool }{full = FALSE}}
 
-directory creation and removal.
-if full is TRUE, will try to make each directory in the path.
+\func{static bool}{Mkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}, \param{bool }{full = FALSE}}
 
+\docparam{dir}{the directory to create}
 
-\membersection{wxFileName::Mkdir}\label{wxfilenamemkdir}
+\docparam{parm}{the permissions for the newly created directory}
 
-\func{bool}{Mkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}, \param{bool }{full = FALSE}}
+\docparam{full}{if {\tt TRUE}, will try to make each directory in the path}
 
+\wxheading{Return value}
+
+Returns {\tt TRUE} if the directory was successfully created, {\tt FALSE}
+otherwise.
 
 \membersection{wxFileName::Normalize}\label{wxfilenamenormalize}
 
@@ -418,30 +510,25 @@ this may be done using another (than current) value of cwd
 
 \func{bool}{Rmdir}{\void}
 
+\func{static bool}{Rmdir}{\param{const wxString\& }{dir}}
 
-\membersection{wxFileName::Rmdir}\label{wxfilenamermdir}
-
-\func{bool}{Rmdir}{\param{const wxString\& }{dir}}
+Deletes the specified directory.
 
 
 \membersection{wxFileName::SameAs}\label{wxfilenamesameas}
 
 \func{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-compares with the rules of this platform
+Compares the filename using the rules of this platform
 
 
 \membersection{wxFileName::SetCwd}\label{wxfilenamesetcwd}
 
 \func{bool}{SetCwd}{\void}
 
+\func{static bool}{SetCwd}{\param{const wxString\& }{cwd}}
+
 change the current working directory
-
-
-\membersection{wxFileName::SetCwd}\label{wxfilenamesetcwd}
-
-\func{bool}{SetCwd}{\param{const wxString\& }{cwd}}
-
 
 \membersection{wxFileName::SetExt}\label{wxfilenamesetext}
 
@@ -493,20 +580,15 @@ set the access and modification times to the current moment
 
 \func{wxFileName\& operator}{operator=}{\param{const wxFileName\& }{filename}}
 
-
-\membersection{wxFileName::operator=}\label{wxfilenameoperatorassign}
-
 \func{wxFileName\& operator}{operator=}{\param{const wxString\& }{filename}}
 
+Assigns the new value to this filename object.
 
 \membersection{wxFileName::operator==}\label{wxfilenameoperatorequal}
 
 \func{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
 
-uses the current platform settings
-
-
-\membersection{wxFileName::operator==}\label{wxfilenameoperatorequal}
-
 \func{bool operator}{operator==}{\param{const wxString\& }{filename}}
+
+Returns {\tt TRUE} if the filenames are equal for the native file format.
 

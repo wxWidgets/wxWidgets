@@ -189,8 +189,8 @@ public:
     // various file/dir operations
 
         // retrieve the value of the current working directory
-    void AssignCwd();
-    static wxString GetCwd();
+    void AssignCwd(const wxString& volume = wxEmptyString);
+    static wxString GetCwd(const wxString& volume = wxEmptyString);
 
         // change the current working directory
     bool SetCwd();
@@ -321,10 +321,7 @@ public:
                           wxString *path,
                           wxString *name,
                           wxString *ext,
-                          wxPathFormat format = wxPATH_NATIVE)
-    {
-        SplitPath(fullpath, NULL, path, name, ext, format);
-    }
+                          wxPathFormat format = wxPATH_NATIVE);
 
 private:
     // the drive/volume/device specification (always empty for Unix)

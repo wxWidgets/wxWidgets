@@ -311,15 +311,33 @@ bool wxFileName::DirExists( const wxString &dir )
 // CWD and HOME stuff
 // ----------------------------------------------------------------------------
 
-void wxFileName::AssignCwd()
+void wxFileName::AssignCwd(const wxString& volume)
 {
-    AssignDir(wxFileName::GetCwd());
+    AssignDir(wxFileName::GetCwd(volume));
 }
 
 /* static */
-wxString wxFileName::GetCwd()
+wxString wxFileName::GetCwd(const wxString& volume)
 {
-    return ::wxGetCwd();
+    // if we have the volume, we must get the current directory on this drive
+    // and to do this we have to chdir to this volume - at least under Windows,
+    // I don't know how to get the current drive on another volume elsewhere
+    // (TODO)
+    wxString cwdOld;
+    if ( !volume.empty() )
+    {
+        cwdOld = wxGetCwd();
+        SetCwd(volume + GetVolumeSeparator());
+    }
+
+    wxString cwd = ::wxGetCwd();
+
+    if ( !volume.empty() )
+    {
+        SetCwd(cwdOld);
+    }
+
+    return cwd;
 }
 
 bool wxFileName::SetCwd()
@@ -432,9 +450,13 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     if ( (flags & wxPATH_NORM_ABSOLUTE) && !IsAbsolute() )
     {
         if ( cwd.empty() )
-            curDir.AssignCwd();
-        else
+        {
+            curDir.AssignCwd(GetVolume());
+        }
+        else // cwd provided
+        {
             curDir.AssignDir(cwd);
+        }
 
         // the path may be not absolute because it doesn't have the volume name
         // but in this case we shouldn't modify the directory components of it
@@ -976,6 +998,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 // path splitting function
 // ----------------------------------------------------------------------------
 
+/* static */
 void wxFileName::SplitPath(const wxString& fullpathWithVolume,
                            wxString *pstrVolume,
                            wxString *pstrPath,
@@ -1118,6 +1141,22 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
             // take everything after the dot
             *pstrExt = fullpath.Mid(posLastDot + 1);
         }
+    }
+}
+
+/* static */
+void wxFileName::SplitPath(const wxString& fullpath,
+                           wxString *path,
+                           wxString *name,
+                           wxString *ext,
+                           wxPathFormat format)
+{
+    wxString volume;
+    SplitPath(fullpath, &volume, path, name, ext, format);
+
+    if ( path && !volume.empty() )
+    {
+        path->Prepend(volume + GetVolumeSeparator(format));
     }
 }
 
