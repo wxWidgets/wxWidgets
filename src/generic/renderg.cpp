@@ -209,11 +209,11 @@ wxRendererGeneric::GetSplitterParams(const wxWindow *win)
     if ( win->HasFlag(wxSP_3D) )
     {
         sashWidth = 7;
-        border = 3;
+        border = 2;
     }
     else // no 3D effect
     {
-        sashWidth = 2;
+        sashWidth = 3;
         border = 0;
     }
 
