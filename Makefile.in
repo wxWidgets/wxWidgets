@@ -18,7 +18,7 @@ include ./src/make.env
 #     implicit rules (%.o: %.c) because they are more portable, in
 #     particular the BSD make understands the former but not the
 #     latter
-.SUFFIXES: .o .c .cpp .cxx .rsrc .r
+.SUFFIXES: .o .c .cpp .cxx .rsrc .r .mm
 
 .c.o:
 	$(CC) -c $(CFLAGS) $(PICFLAGS) -o $@ $<
@@ -27,6 +27,10 @@ include ./src/make.env
 	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
 .cxx.o:
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
+
+# Objective-C++, right now just use CXXFLAGS
+.mm.o:
 	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
 .rsrc.r:
