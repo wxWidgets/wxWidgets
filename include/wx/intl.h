@@ -37,7 +37,7 @@
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
-#define wxTRANSLATE(str) (str)
+#define wxTRANSLATE(str) wxT(str)
 
 // ----------------------------------------------------------------------------
 // forward decls
