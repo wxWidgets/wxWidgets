@@ -287,7 +287,7 @@ class wxPluginLibraryModule : public wxModule
 {
 public:
     wxPluginLibraryModule() {}
-    bool OnInit() { wxPluginLibrary::ms_classes = new wxDLImports(wxKEY_STRING); return TRUE; }
+    bool OnInit() { wxPluginLibrary::ms_classes = new wxDLImports(wxKEY_STRING); wxPluginManager::CreateManifest(); return TRUE; }
     void OnExit() { delete wxPluginLibrary::ms_classes; wxPluginLibrary::ms_classes = NULL;
                     wxPluginManager::ClearManifest(); }
 
