@@ -111,7 +111,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_About,            MyFrame::OnAbout)
     EVT_MENU(Sound_PlaySync,         MyFrame::OnPlaySync)
     EVT_MENU(Sound_PlayAsync,        MyFrame::OnPlayAsync)
-    EVT_MENU(Sound_PlayAsyncOnStack, MyFrame::OnPlayAsync)
+    EVT_MENU(Sound_PlayAsyncOnStack, MyFrame::OnPlayAsyncOnStack)
     EVT_MENU(Sound_PlayLoop,         MyFrame::OnPlayLoop)
 END_EVENT_TABLE()
 
@@ -168,7 +168,7 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Append(Sound_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
     playMenu->Append(Sound_PlaySync, _T("Play sound &synchronously"));
     playMenu->Append(Sound_PlayAsync, _T("Play sound &asynchronously"));
-    playMenu->Append(Sound_PlayAsync, _T("Play sound asynchronously (&object on stack)"));
+    playMenu->Append(Sound_PlayAsyncOnStack, _T("Play sound asynchronously (&object on stack)"));
     playMenu->Append(Sound_PlayLoop, _T("&Loop sound"));
 
     // now append the freshly created menu to the menu bar...
