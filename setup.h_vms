@@ -723,6 +723,11 @@
 /* #define wxUSE_UXTHEME_AUTO 1*/
 
 /*
+ *  Set to 1 to use mousewheel events on Windows
+ */
+/* #undef wxUSE_MOUSEWHEEL */
+
+/*
  * Use wxURL class
  */
 #define wxUSE_URL 1
