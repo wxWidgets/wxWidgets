@@ -2501,6 +2501,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_chckl.cpp
     src/xrc/xh_choic.cpp
     src/xrc/xh_combo.cpp
+    src/xrc/xh_datectrl.cpp
     src/xrc/xh_dlg.cpp
     src/xrc/xh_frame.cpp
     src/xrc/xh_gauge.cpp

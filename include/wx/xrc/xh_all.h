@@ -30,6 +30,7 @@
 #include "wx/xrc/xh_combo.h"
 #include "wx/xrc/xh_chckl.h"
 #include "wx/xrc/xh_choic.h"
+#include "wx/xrc/xh_datectrl.h"
 #include "wx/xrc/xh_sizer.h"
 #include "wx/xrc/xh_stbmp.h"
 #include "wx/xrc/xh_notbk.h"

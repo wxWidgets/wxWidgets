@@ -107,6 +107,7 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_STATUSBAR
     AddHandler(new wxStatusBarXmlHandler);
 #endif
+    AddHandler(new wxDateCtrlXmlHandler);
 }
 
 #endif // wxUSE_XRC

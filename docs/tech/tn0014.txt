@@ -350,6 +350,13 @@ Example:
 </object>
 
 
+wxDatePickerCtrl
+----------------
+pos                        Position                -1,-1
+size                       Size                    -1,-1
+style                      Style[wxDatePickerCtrl]
+
+
 wxDialog
 --------
 pos                        Position                -1,-1
