@@ -33,7 +33,9 @@
     #include "wx/log.h"
 #endif
 
+// this include needs to be outside precomp for BCC
 #include "wx/textfile.h"
+
 #include "wx/generic/grid.h"
 
 // ----------------------------------------------------------------------------
@@ -1787,9 +1789,18 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     m_isDragging = FALSE;
 
 
+    // ------------ Entering or leaving the window
+    //
+    if ( event.Entering() || event.Leaving() )
+    {
+        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+        m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+    }
+
+    
     // ------------ Left button pressed
     //
-    if ( event.LeftDown() )
+    else if ( event.LeftDown() )
     {
         // don't send a label click event for a hit on the
         // edge of the row label - this is probably the user
@@ -1833,43 +1844,12 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
             m_rowLabelWin->ReleaseMouse();
+            DoEndDragResizeRow();
 
-            if ( m_dragLastPos >= 0 )
-            {
-                // erase the last line and resize the row
-                //
-                int cw, ch, left, dummy;
-                m_gridWin->GetClientSize( &cw, &ch );
-                CalcUnscrolledPosition( 0, 0, &left, &dummy );
-
-                wxClientDC dc( m_gridWin );
-                PrepareDC( dc );
-                dc.SetLogicalFunction( wxINVERT );
-                dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
-                HideCellEditControl();
-
-                int rowTop = m_rowBottoms[m_dragRowOrCol] - m_rowHeights[m_dragRowOrCol];
-                SetRowSize( m_dragRowOrCol, wxMax( y - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
-                if ( !GetBatchCount() )
-                {
-                  // Only needed to get the correct rect.y:
-                  wxRect rect ( CellToRect( m_dragRowOrCol, 0 ) );
-                  rect.x = 0;
-                  CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
-                  rect.width = m_rowLabelWidth;
-                  rect.height = ch - rect.y;
-                  m_rowLabelWin->Refresh( TRUE, &rect );
-                  rect.width = cw;
-                  m_gridWin->Refresh( FALSE, &rect );
-                }
-
-                ShowCellEditControl();
-
-                // Note: we are ending the event *after* doing
-                // default processing in this case
-                //
-                SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
-            }
+            // Note: we are ending the event *after* doing
+            // default processing in this case
+            //
+            SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
         }
 
         m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
@@ -1914,11 +1894,10 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 m_rowLabelWin->SetCursor( m_rowResizeCursor );
             }
         }
-        else
+        else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
             m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-            if ( m_rowLabelWin->GetCursor() == m_rowResizeCursor )
-                m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+            m_rowLabelWin->SetCursor( *wxSTANDARD_CURSOR );
         }
     }
 }
@@ -1973,9 +1952,18 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     m_isDragging = FALSE;
 
 
+    // ------------ Entering or leaving the window
+    //
+    if ( event.Entering() || event.Leaving() )
+    {
+        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+        m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+    }
+
+    
     // ------------ Left button pressed
     //
-    if ( event.LeftDown() )
+    else if ( event.LeftDown() )
     {
         // don't send a label click event for a hit on the
         // edge of the col label - this is probably the user
@@ -2019,44 +2007,12 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
         {
             m_colLabelWin->ReleaseMouse();
-
-            if ( m_dragLastPos >= 0 )
-            {
-                // erase the last line and resize the col
-                //
-                int cw, ch, dummy, top;
-                m_gridWin->GetClientSize( &cw, &ch );
-                CalcUnscrolledPosition( 0, 0, &dummy, &top );
-
-                wxClientDC dc( m_gridWin );
-                PrepareDC( dc );
-                dc.SetLogicalFunction( wxINVERT );
-                dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
-                HideCellEditControl();
-
-                int colLeft = m_colRights[m_dragRowOrCol] - m_colWidths[m_dragRowOrCol];
-                SetColSize( m_dragRowOrCol, wxMax( x - colLeft, WXGRID_MIN_COL_WIDTH ) );
-
-                if ( !GetBatchCount() )
-                {
-                  // Only needed to get the correct rect.x:
-                  wxRect rect ( CellToRect( 0, m_dragRowOrCol ) );
-                  rect.y = 0;
-                  CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
-                  rect.width = cw - rect.x;
-                  rect.height = m_colLabelHeight;
-                  m_colLabelWin->Refresh( TRUE, &rect );
-                  rect.height = ch;
-                  m_gridWin->Refresh( FALSE, &rect );
-                }
-
-                ShowCellEditControl();
-
-                // Note: we are ending the event *after* doing
-                // default processing in this case
-                //
-                SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
-            }
+            DoEndDragResizeCol();
+            
+            // Note: we are ending the event *after* doing
+            // default processing in this case
+            //
+            SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
         }
 
         m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
@@ -2101,11 +2057,10 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 m_colLabelWin->SetCursor( m_colResizeCursor );
             }
         }
-        else
+        else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
             m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-            if ( m_colLabelWin->GetCursor() == m_colResizeCursor )
-                m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
+            m_colLabelWin->SetCursor( *wxSTANDARD_CURSOR );
         }
     }
 }
@@ -2177,7 +2132,39 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
             }
         }
+        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+        {
+            int cw, ch, left, dummy;
+            m_gridWin->GetClientSize( &cw, &ch );
+            CalcUnscrolledPosition( 0, 0, &left, &dummy );
 
+            wxClientDC dc( m_gridWin );
+            PrepareDC( dc );
+            dc.SetLogicalFunction(wxINVERT);
+            if ( m_dragLastPos >= 0 )
+            {
+                dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
+            }
+            dc.DrawLine( left, y, left+cw, y );
+            m_dragLastPos = y;
+        }
+        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+        {
+            int cw, ch, dummy, top;
+            m_gridWin->GetClientSize( &cw, &ch );
+            CalcUnscrolledPosition( 0, 0, &dummy, &top );
+            
+            wxClientDC dc( m_gridWin );
+            PrepareDC( dc );
+            dc.SetLogicalFunction(wxINVERT);
+            if ( m_dragLastPos >= 0 )
+            {
+                dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
+            }
+            dc.DrawLine( x, top, x, top+ch );
+            m_dragLastPos = x;
+        }
+            
         return;
     }
 
@@ -2185,13 +2172,22 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
     if ( coords != wxGridNoCellCoords )
     {
-        if ( event.LeftDown() )
+        if ( event.Entering() || event.Leaving() )
+        {
+            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+        }
+        
+        // ------------ Left button pressed
+        //
+        else if ( event.LeftDown() )
         {
             if ( event.ShiftDown() )
             {
                 SelectBlock( m_currentCellCoords, coords );
             }
-            else
+            else if ( XToEdgeOfCol(x) < 0  &&
+                      YToEdgeOfRow(y) < 0 )
             {
                 if ( !SendEvent( EVT_GRID_CELL_LEFT_CLICK,
                                  coords.GetRow(),
@@ -2209,10 +2205,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.LeftDClick() )
         {
-            SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
-                       coords.GetRow(),
-                       coords.GetCol(),
-                       event );
+            if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
+            {
+                SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
+                           coords.GetRow(),
+                           coords.GetCol(),
+                           event );
+            }
         }
 
 
@@ -2226,13 +2225,33 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 {
                     SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, event );
                 }
+
+                // Show the edit control, if it has
+                // been hidden for drag-shrinking.
+                if ( IsCellEditControlEnabled() )
+                    ShowCellEditControl();
             }
+            else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+            {
+                m_gridWin->ReleaseMouse();
+                DoEndDragResizeRow();
 
-            // Show the edit control, if it has
-            // been hidden for drag-shrinking.
-            if ( IsCellEditControlEnabled() )
-                ShowCellEditControl();
-
+                // Note: we are ending the event *after* doing
+                // default processing in this case
+                //
+                SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
+            }
+            else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+            {
+                m_gridWin->ReleaseMouse();
+                DoEndDragResizeCol();
+            
+                // Note: we are ending the event *after* doing
+                // default processing in this case
+                //
+                SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
+            }
+            
             m_dragLastPos = -1;
         }
 
@@ -2268,10 +2287,132 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.Moving() && !event.IsButton() )
         {
-            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+            int dragRow = YToEdgeOfRow( y );
+            int dragCol = XToEdgeOfCol( x );
+
+            // Dragging on the corner of a cell to resize in both
+            // directions is not implemented yet...
+            //
+            if ( dragRow >= 0  &&  dragCol >= 0 )
+            {
+                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+                m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+                return;
+            }
+
+            if ( dragRow >= 0 )
+            {
+                m_dragRowOrCol = dragRow;
+
+                if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+                {
+                    m_cursorMode = WXGRID_CURSOR_RESIZE_ROW;
+                    m_gridWin->SetCursor( m_rowResizeCursor );
+                }
+
+                return;
+            }
+                
+            if ( dragCol >= 0 )
+            {
+                m_dragRowOrCol = dragCol;
+                    
+                if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+                {
+                    m_cursorMode = WXGRID_CURSOR_RESIZE_COL;
+                    m_gridWin->SetCursor( m_colResizeCursor );
+                }
+                    
+                return;
+            }
+                
+            // Neither on a row or col edge
+            //
+            if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
+            {
+                m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+                m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
+            }
         }
     }
 }
+
+
+void wxGrid::DoEndDragResizeRow()
+{
+    if ( m_dragLastPos >= 0 )
+    {
+        // erase the last line and resize the row
+        //
+        int cw, ch, left, dummy;
+        m_gridWin->GetClientSize( &cw, &ch );
+        CalcUnscrolledPosition( 0, 0, &left, &dummy );
+
+        wxClientDC dc( m_gridWin );
+        PrepareDC( dc );
+        dc.SetLogicalFunction( wxINVERT );
+        dc.DrawLine( left, m_dragLastPos, left+cw, m_dragLastPos );
+        HideCellEditControl();
+
+        int rowTop = m_rowBottoms[m_dragRowOrCol] - m_rowHeights[m_dragRowOrCol];
+        SetRowSize( m_dragRowOrCol,
+                    wxMax( m_dragLastPos - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
+        
+        if ( !GetBatchCount() )
+        {
+            // Only needed to get the correct rect.y:
+            wxRect rect ( CellToRect( m_dragRowOrCol, 0 ) );
+            rect.x = 0;
+            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+            rect.width = m_rowLabelWidth;
+            rect.height = ch - rect.y;
+            m_rowLabelWin->Refresh( TRUE, &rect );
+            rect.width = cw;
+            m_gridWin->Refresh( FALSE, &rect );
+        }
+
+        ShowCellEditControl();
+    }
+}
+
+
+void wxGrid::DoEndDragResizeCol()
+{
+    if ( m_dragLastPos >= 0 )
+    {
+        // erase the last line and resize the col
+        //
+        int cw, ch, dummy, top;
+        m_gridWin->GetClientSize( &cw, &ch );
+        CalcUnscrolledPosition( 0, 0, &dummy, &top );
+
+        wxClientDC dc( m_gridWin );
+        PrepareDC( dc );
+        dc.SetLogicalFunction( wxINVERT );
+        dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top+ch );
+        HideCellEditControl();
+
+        int colLeft = m_colRights[m_dragRowOrCol] - m_colWidths[m_dragRowOrCol];
+        SetColSize( m_dragRowOrCol,
+                    wxMax( m_dragLastPos - colLeft, WXGRID_MIN_COL_WIDTH ) );
+
+        if ( !GetBatchCount() )
+        {
+            // Only needed to get the correct rect.x:
+            wxRect rect ( CellToRect( 0, m_dragRowOrCol ) );
+            rect.y = 0;
+            CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
+            rect.width = cw - rect.x;
+            rect.height = m_colLabelHeight;
+            m_colLabelWin->Refresh( TRUE, &rect );
+            rect.height = ch;
+            m_gridWin->Refresh( FALSE, &rect );
+        }
+        
+        ShowCellEditControl();
+    }
+}
+
 
 
 //
@@ -3226,8 +3367,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 {
     int startPos = 0;
     int pos;
-    wxTextFile tf;
-    wxString eol =  wxTextFile::GetEOL( wxTextFileType_Unix );
+    wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
     wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
     
     while ( startPos < (int)tVal.Length() )
@@ -4478,12 +4618,6 @@ void wxGrid::SetRowSize( int row, int height )
         m_rowBottoms[i] += diff;
     }
     CalcDimensions();
-
-    // Note: we are ending the event *after* doing
-    // default processing in this case
-    //
-    SendEvent( EVT_GRID_ROW_SIZE,
-               row, -1 );
 }
 
 void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
@@ -4519,12 +4653,6 @@ void wxGrid::SetColSize( int col, int width )
         m_colRights[i] += diff;
     }
     CalcDimensions();
-
-    // Note: we are ending the event *after* doing
-    // default processing in this case
-    //
-    SendEvent( EVT_GRID_COL_SIZE,
-               -1, col );
 }
 
 void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )

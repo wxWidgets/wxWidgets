@@ -458,6 +458,8 @@ public:
     void ProcessGridCellMouseEvent( wxMouseEvent& event );
     bool ProcessTableMessage( wxGridTableMessage& );
 
+    void DoEndDragResizeRow();
+    void DoEndDragResizeCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
     void SetTable( wxGridTableBase *table ) { m_table = table; }
