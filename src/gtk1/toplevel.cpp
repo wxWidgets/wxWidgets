@@ -1070,7 +1070,13 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 bool wxTopLevelWindowGTK::IsActive()
 {
 #ifdef __WXGTK20__
+    // Order the conditions like this so we don't
+    // have to decide how to include version for GTK+ 1 versus 2
+#if GTK_CHECK_VERSION(2,2,0)
     return GTK_WINDOW( m_widget )->has_toplevel_focus;
+#else
+    return wxTopLevelWindowBase::IsActive();
+#endif
 #else
     return wxTopLevelWindowBase::IsActive();
 #endif
