@@ -43,12 +43,7 @@ See Combined Protocols paragraph for details.
 
 The left location precedes the protocol in the URL string. 
 It is not used by global protocols like HTTP but it becomes handy when nesting
-protocols - for example you may want to access files in ZIP archive that is
-located on some FTP server:
-
-ftp:ftp.archives.org/pub/cpp\_doc.zip\#zip:reference/fopen.htm\#syntax
-
-In fact, you have to use 'left location' even when accessing local ZIPs:
+protocols - for example you may want to access files in a ZIP archive:
 
 file:archives/cpp\_doc.zip\#zip:reference/fopen.htm\#syntax
 
@@ -57,12 +52,6 @@ In this example, the protocol is "zip", the left location is
 is "file:archives/cpp\_doc.zip". 
 
 There are {\bf two} protocols used in this example: "zip" and "file".
-You can construct even more complicated addresses like this one:
-
-http://www.archives.org/myarchive.zip\#zip:local/docs/cpp/stdio.zip\#zip:index.htm
-
-In this example you access zip virtual file system stdio.zip stored in another zip (myarchive.zip)
-which can be found at WWW.
 
 \wxheading{File Systems Included in wxHTML}
 
