@@ -47,6 +47,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
+        'StockButtons',
         'Ticker',
         ]),
 
