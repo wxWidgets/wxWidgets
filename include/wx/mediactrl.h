@@ -190,6 +190,9 @@ protected:
     virtual void DoMoveWindow(int x, int y, int w, int h);
     wxSize DoGetBestSize() const;
 
+#ifdef __WXMAC__
+    friend class wxMediaBackend;
+#endif
     class wxMediaBackend* m_imp;
     bool m_bLoaded;
     bool m_bLoop;
@@ -255,6 +258,11 @@ public:
 
     virtual wxMediaState GetState()
     {   return wxMEDIASTATE_STOPPED;    }
+
+#ifdef __WXMAC__
+    wxMacControl* GetControlPeer(wxControl* ctrl) 
+    {	return ((wxMediaCtrl*)ctrl)->m_peer;	}
+#endif
 
     DECLARE_CLASS(wxMediaBackend)
 };

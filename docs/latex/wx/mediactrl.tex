@@ -32,7 +32,7 @@ wxMediaCtrl is not currently available on unix systems.
 
 \membersection{Rendering media}\label{renderingmediawxmediactrl}
 
-wxMediaCtrl can generally, depending upon the backend, render
+Depending upon the backend, wxMediaCtrl can render
 and display pretty much any kind of media that the native system can - 
 such as an image, mpeg video, or mp3 (without license restrictions -
 sense it relies on native system calls that may not technically
@@ -104,7 +104,7 @@ Use ActiveMovie/DirectShow.  Requires wxUSE\_DIRECTSHOW to be
 enabled, requires linkage with the static library strmiids.lib,
 and is available on Windows Only.}
 \twocolitem{{\bf wxMEDIABACKEND\_QUICKTIME}}{
-Use QuickTime.  Windows and Mac Only. }
+Use QuickTime.  Windows and Mac Only. WARNING: On Mac Systems lower than OSX 10.2 this defaults to emulating window positioning and suffers from several bugs, including not working correctly embedded in a wxNotebook. }
 \twocolitem{{\bf wxMEDIABACKEND\_MCI}}{
 Use Media Command Interface.  Windows Only. }
 \end{twocollist}
