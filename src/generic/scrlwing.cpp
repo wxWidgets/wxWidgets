@@ -402,29 +402,33 @@ void wxScrollHelper::SetWindow(wxWindow *win)
 
     m_win = win;
 
-    DoSetTargetWindow(win);
+    DoSetTargetWindow(win, TRUE);
 }
 
-void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
+void wxScrollHelper::DoSetTargetWindow(wxWindow *target, bool pushEventHandler)
 {
     m_targetWindow = target;
 
     // install the event handler which will intercept the events we're
     // interested in
-    m_handler = new wxScrollHelperEvtHandler(this);
-    m_targetWindow->PushEventHandler(m_handler);
+    if (pushEventHandler)
+    {
+        m_handler = new wxScrollHelperEvtHandler(this);
+        m_targetWindow->PushEventHandler(m_handler);
+    }
 }
 
-void wxScrollHelper::SetTargetWindow( wxWindow *target )
+void wxScrollHelper::SetTargetWindow( wxWindow *target, bool pushEventHandler )
 {
     wxCHECK_RET( target, wxT("target window must not be NULL") );
 
     if ( target == m_targetWindow )
         return;
 
-    DeleteEvtHandler();
+    if (pushEventHandler)
+        DeleteEvtHandler();
 
-    DoSetTargetWindow(target);
+    DoSetTargetWindow(target, pushEventHandler);
 }
 
 wxWindow *wxScrollHelper::GetTargetWindow() const

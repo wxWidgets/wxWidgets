@@ -379,7 +379,7 @@ void wxScrolledWindow::AdjustScrollbars()
 // target window handling
 // ----------------------------------------------------------------------------
 
-void wxScrolledWindow::SetTargetWindow( wxWindow *target )
+void wxScrolledWindow::SetTargetWindow( wxWindow *target, bool WXUNUSED(pushEventHandler) )
 {
     wxASSERT_MSG( target, wxT("target window must not be NULL") );
     m_targetWindow = target;

@@ -1786,7 +1786,6 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     bool processed = FALSE;
     long rc = 0;
-
     bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
 
     if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
@@ -1978,7 +1977,6 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
     }
 #endif // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-
     if ( !processed )
         rc = wxControl::MSWWindowProc(nMsg, wParam, lParam);
 
@@ -2390,7 +2388,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // for the other messages the return value is ignored and there is
             // nothing special to do
     }
-
     return processed;
 }
 

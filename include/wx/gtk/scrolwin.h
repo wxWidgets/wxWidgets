@@ -62,7 +62,7 @@ public:
     // window (e.g. a child of it in order to scroll only a portion
     // the area between the scrollbars (spreadsheet: only cell area
     // will move).
-    virtual void SetTargetWindow( wxWindow *target );
+    virtual void SetTargetWindow( wxWindow *target, bool pushEventHandler = FALSE );
     virtual wxWindow *GetTargetWindow();
 
     // Number of pixels per user unit (0 or -1 for no scrollbar)

@@ -74,6 +74,23 @@
    #endif
 #endif
 
+// PlaySound
+
+#ifdef PlaySound
+   #undef PlaySound
+   #ifdef _UNICODE
+   inline BOOL PlaySound(LPCWSTR pszSound, HMODULE hMod, DWORD fdwSound)
+   {
+      return PlaySoundW(pszSound, hMod, fdwSound);
+   }
+   #else
+   inline BOOL PlaySound(LPCSTR pszSound, HMODULE hMod, DWORD fdwSound)
+   {
+      return PlaySoundA(pszSound, hMod, fdwSound);
+   }
+   #endif
+#endif
+
 // GetClassName
 
 #ifdef GetClassName

@@ -80,7 +80,7 @@ public:
     // occasions you might want it to scroll [part of] another window (e.g. a
     // child of it in order to scroll only a portion the area between the
     // scrollbars (spreadsheet: only cell area will move).
-    virtual void SetTargetWindow(wxWindow *target);
+    virtual void SetTargetWindow(wxWindow *target, bool pushEventHandler = FALSE);
     virtual wxWindow *GetTargetWindow() const;
 
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
@@ -146,7 +146,7 @@ protected:
 
     // change just the target window (unlike SetWindow which changes m_win as
     // well)
-    void DoSetTargetWindow(wxWindow *target);
+    void DoSetTargetWindow(wxWindow *target, bool pushEventHandler = FALSE);
 
     // delete the event handler we installed
     void DeleteEvtHandler();
