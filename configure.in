@@ -1711,9 +1711,34 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$wxUSE_MGL" = 1; then
-        dnl FIXME_MGL - test for MGL
+        dnl FIXME_MGL - test for MGL's variants for freebsd etc.
+		
+		AC_MSG_CHECKING(for SciTech MGL library)
+		if test "x$MGL_ROOT" = x ; then
+		    AC_MSG_RESULT(not found)
+		    AC_MSG_ERROR([Cannot find MGL library. Make sure MGL_ROOT is set.])
+		else
+		    AC_MSG_RESULT($MGL_ROOT)
+		fi
+		
+		MGL_OS=linux/gcc/glibc
+		MGL_LIB_TYPE=""
+        
+		if test "$wxUSE_DEBUG_FLAG" = yes ; then
+		    if test -f $MGL_ROOT/lib/debug/$MGL_OS/libmgl.a ; then
+                MGL_LIB_TYPE=debug
+            fi
+        fi
+        if test "x$MGL_LIB_TYPE" = x ; then
+            if test -f $MGL_ROOT/lib/release/$MGL_OS/libmgl.a ; then
+                MGL_LIB_TYPE=release
+			else
+                AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
+			fi
+		fi
+		
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
-        GUI_TK_LIBRARY="-L$MGL_ROOT/lib/debug/linux/gcc/glibc -lmgl -lmglcpp -lpm"
+        GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$MGL_LIB_TYPE/$MGL_OS -lmgl -lmglcpp -lpm"
 
         AFMINSTALL=afminstall
         TOOLKIT=MGL
