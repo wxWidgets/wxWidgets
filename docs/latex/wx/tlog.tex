@@ -1,9 +1,9 @@
 \section{Log classes overview}\label{wxlogoverview}
 
 Classes: \helpref{wxLog}{wxlog}, \helpref{wxLogStderr}{wxlogstderr},
-\helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},
-\helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},
-\helpref{wxLogNull}{wxlognull}
+ \helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},
+ \helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},
+ \helpref{wxLogNull}{wxlognull}
 
 This is a general overview of logging classes provided by wxWindows. The word
 logging here has a broad sense, including all of the program output, not only
@@ -36,8 +36,7 @@ might be activated if the user wishes to know more details about the program
 progress (another, but possibly confusing name for the same function is {\bf
 wxLogInfo}
 \item{\bf wxLogStatus} is for status messages - they will go into the status
-bar of the active or specified (as the first argument)
-\helpref{wxFrame}{wxframe} if it has one.
+bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe} if it has one.
 \item{\bf wxLogSysError} is mostly used by wxWindows itself, but might be
 handy for logging errors after system call (API function) failure. It logs the
 specified message text as well as the last system error code ({\it errno} or
@@ -63,18 +62,18 @@ generic mechanisms, but are not really adapted for wxWindows, while the log
 classes are. Some of advantages in using wxWindows log functions are:
 
 \begin{itemize}\itemsep=0pt
-\item{Portability} It's a common practice to use {\it printf()} statements or
+\item{\bf Portability} It's a common practice to use {\it printf()} statements or
 cout/cerr C++ streams for writing out some (debug or otherwise) information.
 Although it works just fine under Unix, these messages go strictly nowever
 under Windows where the stdout of GUI programs is not assigned to anything.
 Thus, you might view {\it wxLogMessage()} as a simple substitute for {\it
 printf()}.
-\item{Flexibility} The output of wxLog functions can be redirected or
+\item{\bf Flexibility} The output of wxLog functions can be redirected or
 suppressed entirely based on their importance, which is either impossible or
 difficult to do with traditional methods. For example, only error messages, or
 only error messages and warnings might be logged, filtering out all
 informational messages.
-\item{Completeness} Usually, an error message should be presented to the user
+\item{\bf Completeness} Usually, an error message should be presented to the user
 when some operation fails. Let's take a quite simple but common case of a file
 error: suppose that you're writing your data file on disk and there is not
 enough space. The actual error might have been detected inside wxWindows code

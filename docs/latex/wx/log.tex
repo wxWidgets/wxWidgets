@@ -34,7 +34,7 @@ of messages.
 
 \helpref{OnLog}{wxlogonlog}\\
 \helpref{GetActiveTarget}{wxloggetactivetarget}\\
-\helpref{SetActiveTarget}{wxsetactivetarget}\\
+\helpref{SetActiveTarget}{wxlogsetactivetarget}\\
 \helpref{DontCreateOnDemand}{wxlogdontcreateondemand}
 
 \membersection{Message buffering}
@@ -50,7 +50,7 @@ verify it.
 \helpref{Flush}{wxlogflush}\\
 \helpref{HasPendingMessages}{haspendingmessages}
 
-\membersection{Customization}{wxlogcustomization}
+\membersection{Customization}\label{wxlogcustomization}
 
 The functions below allow some limited customization of wxLog behaviour
 without writing a new log target class (which, aside of being a matter of
@@ -62,6 +62,7 @@ shown to the user because they present little interest, but may be activated,
 for example, in order to help the user find some program problem.
 
 As for the (real) trace messages, they come in different kinds:
+
 \begin{itemize}\itemsep=0pt
 \item{wxTraceMemAlloc} for the messages about creating and deleting objects
 \item{wxTraceMessages} for tracing the windowing system messages/events
@@ -130,34 +131,34 @@ previous active log target (may be NULL).
 Instructs wxLog to not create new log targets on the fly if there is none
 currently. (Almost) for internal use only.
 
-\membersection{wxLog::Flush}{wxlogflush}
+\membersection{wxLog::Flush}\label{wxlogflush}
 
 \func{virtual void}{Flush}{\void}
 
 Shows all the messages currently in buffer and clears it. If the buffer
 is already empty, nothing happens.
 
-\membersection{wxLog::HasPendingMessages}{haspendingmessages}
+\membersection{wxLog::HasPendingMessages}\label{haspendingmessages}
 
 \constfunc{bool}{HasPendingMessages}{\void}
 
 Returns true if there are any messages in the buffer (not yet shown to the
 user). (Almost) for internal use only.
 
-\membersection{wxLog::SetVerbose}{wxlogsetverbose}
+\membersection{wxLog::SetVerbose}\label{wxlogsetverbose}
 
 \func{void}{SetVerbose}{\param{bool }{ verbose = TRUE}}
 
 Activates or desactivates verbose mode in which the verbose messages are
 logged as the normal ones instead of being silently dropped.
 
-\membersection{wxLog::GetVerbose}{wxloggetverbose}
+\membersection{wxLog::GetVerbose}\label{wxloggetverbose}
 
 \constfunc{bool}{GetVerbose}{\void}
 
 Returns whether the verbose mode is currently active.
 
-\membersection{wxLog::SetTimeStampFormat}{wxlogsettimestampformat}
+\membersection{wxLog::SetTimeStampFormat}\label{wxlogsettimestampformat}
 
 \func{void}{SetTimeStampFormat}{\param{const char * }{ format}}
 
@@ -166,20 +167,20 @@ messages. The string may contain any normal characters as well as \%
 prefixed format specificators, see {\it strftime()} manual for details.
 Passing an empty string to this function disables message timestamping.
 
-\membersection{wxLog::GetTimeStampFormat}{wxloggettimestampformat}
+\membersection{wxLog::GetTimeStampFormat}\label{wxloggettimestampformat}
 
 \constfunc{const char *}{GetTimeStampFormat}{\void}
 
 Returns the current timestamp format string.
 
-\membersection{wxLog::SetTraceMask}{wxlogsettracemask}
+\membersection{wxLog::SetTraceMask}\label{wxlogsettracemask}
 
 \func{static void}{SetTraceMask}{\param{wxTraceMask }{ mask}}
 
 Sets the trace mask, see \helpref{Customization}{wxlogcustomization}
 section for details.
 
-\membersection{wxLog::GetTraceMask}{wxloggettracemask}
+\membersection{wxLog::GetTraceMask}\label{wxloggettracemask}
 
-Returns the current trace mask, see \helpref{Customization}{wxlogcustomization}
-section for details.
+Returns the current trace mask, see \helpref{Customization}{wxlogcustomization} section
+for details.

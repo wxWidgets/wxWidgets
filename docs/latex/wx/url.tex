@@ -6,7 +6,7 @@
 
 \wxheading{See also}
 
-\helpref{wxSocketBase}{wxsocketbase},\helpref{wxProtocol}{wxprotocol}
+\helpref{wxSocketBase}{wxsocketbase}, \helpref{wxProtocol}{wxprotocol}
 
 % ----------------------------------------------------------------------------
 % Members
@@ -14,7 +14,8 @@
 
 \latexignore{\rtfignore{\membersection{Members}}}
 
-\membersection{wxURL::wxURL}{wxurlconstr}
+\membersection{wxURL::wxURL}\label{wxurlconstr}
+
 \func{}{wxURL}{\param{const wxString\&}{ url}}
 
 Constructs an URL object from the string.
@@ -24,6 +25,7 @@ Constructs an URL object from the string.
 \docparam{url}{Url string to parse.}
 
 \membersection{wxURL::\destruct{wxURL}}
+
 \func{}{\destruct{wxURL}}{\void}
 
 Destroys the URL object.
@@ -32,6 +34,7 @@ Destroys the URL object.
 % GetProtocolName
 %
 \membersection{wxURL::GetProtocolName}
+
 \constfunc{wxString}{GetProtocolName}{\void}
 
 Returns the name of the protocol which will be used to get the URL.
@@ -40,6 +43,7 @@ Returns the name of the protocol which will be used to get the URL.
 % GetProtocol
 %
 \membersection{wxURL::GetProtocol}
+
 \func{wxProtocol\&}{GetProtocol}{\void}
 
 Returns a reference to the protocol which will be used to get the URL.
@@ -48,6 +52,7 @@ Returns a reference to the protocol which will be used to get the URL.
 % GetError
 %
 \membersection{wxURL::GetError}
+
 \constfunc{wxURLError}{GetError}{\void}
 
 Returns the last error. This error refers to the URL parsing or to the protocol.
@@ -68,22 +73,24 @@ It can be one of these errors:
 % GetInputStream
 %
 \membersection{wxURL::GetInputStream}
+
 \func{wxInputStream *}{GetInputStream}{\void}
 
 Initializes the protocol and opens the input stream.
 
-\wxheading{Return value:}
+\wxheading{Return value}
 
 It returns a read-only wxStream.
 
-\wxheading{See also:}
+\wxheading{See also}
 
 \helpref{wxInputStream}{wxinputstream}
 
 %
 % SetDefaultProxy
 %
-\membersection{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
+\membersection{wxURL::SetDefaultProxy}\label{wxurlsetdefaultproxy}
+
 \func{static void}{SetDefaultProxy}{\param{const wxString\&}{ url\_proxy}}
 
 Sets the default proxy server to use to get the URL. The string specifies
@@ -100,7 +107,8 @@ the proxy like this: <hostname>:<port number>.
 %
 % SetProxy
 %
-\membersection{wxURL::SetProxy}{wxurlsetproxy}
+\membersection{wxURL::SetProxy}\label{wxurlsetproxy}
+
 \func{void}{SetProxy}{\param{const wxString\&}{ url\_proxy}}
 
 Sets the proxy to use for this URL.
@@ -108,3 +116,4 @@ Sets the proxy to use for this URL.
 \wxheading{See also}
 
 \helpref{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
+

@@ -10,9 +10,20 @@
 #elif defined(__WXQT__)
 #include "wx/generic/prntdlgg.h"
 #elif defined(__WXMAC__)
+#include "wx/mac/printdlg.h"
+#elif defined(__WXSTUBS__)
 #include "wx/generic/prntdlgg.h"
-#elif defined(__WXSRUBS__)
-#include "wx/generic/prntdlgg.h"
+#endif
+
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#define wxPrintDialog wxGenericPrintDialog
+#define sm_classwxPrintDialog sm_classwxGenericPrintDialog
+
+#define wxPrintSetupDialog wxGenericPrintSetupDialog
+#define sm_classwxPrintSetupDialog sm_classwxGenericPrintSetupDialog
+
+#define wxPageSetupDialog wxGenericPageSetupDialog
+#define sm_classwxPageSetupDialog sm_classwxGenericPageSetupDialog
 #endif
 
 #endif

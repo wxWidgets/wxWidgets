@@ -16,9 +16,11 @@
 
 #ifndef wxPrinter
 #define wxPrinter wxPostScriptPrinter
+#define sm_classwxPrinter sm_classwxPostScriptPrinter
 #endif
 #ifndef wxPrintPreview
 #define wxPrintPreview wxPostScriptPrintPreview
+#define sm_classwxPrintPreview sm_classwxPostScriptPrintPreview
 #endif
 
 #endif
