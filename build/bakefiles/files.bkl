@@ -2298,6 +2298,54 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- ====================================================================== -->
+<!--                               wxMedia                                  -->
+<!-- ====================================================================== -->
+
+<set var="MEDIA_CMN_SRC" hints="files">
+</set>
+
+<set var="MEDIA_CMN_HDR" hints="files">
+	wx/mediactrl.h
+</set>
+
+<set var="MEDIA_MSW_SRC" hints="files">
+	src/msw/mediactrl.cpp
+</set>
+<set var="MEDIA_MSW_HDR" hints="files">
+    wx/msw/mediactrl.h
+</set>
+<!-- not built on WindowsCE: -->
+<set var="MEDIA_MSW_ONLY_SRC" hints="files">
+</set>
+<set var="MEDIA_MSW_ONLY_HDR" hints="files">
+</set>
+
+<set var="MEDIA_MAC_SRC" hints="files">
+	src/mac/carbon/mediactrl.cpp
+</set>
+<set var="MEDIA_MAC_HDR" hints="files">
+    include/mac/carbon/mediactrl.h
+</set>
+
+<set var="MEDIA_COCOA_SRC" hints="files">
+</set>
+<set var="MEDIA_COCOA_HDR" hints="files">
+</set>
+
+<set var="MEDIA_OS2_SRC" hints="files">
+</set>
+<set var="MEDIA_OS2_HDR" hints="files">
+</set>
+
+<set var="MEDIA_UNIX_SRC" hints="files">
+</set>
+<set var="MEDIA_UNIX_HDR" hints="files">
+</set>
+
+<set var="MEDIA_GTK_SRC" hints="files">
+</set>
+
+<!-- ====================================================================== -->
 <!--                               wxHTML                                   -->
 <!-- ====================================================================== -->
 
@@ -2676,6 +2724,29 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
     <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>
 
+    <!-- wxMedia files: -->
+    <set var="MEDIA_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_ONLY_SRC)</if>
+        <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MEDIA_MAC_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_SRC) $(MEDIA_GTK_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='PM'">$(MEDIA_OS2_SRC)</if>
+    </set>
+    <set var="MEDIA_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_ONLY_HDR)</if>
+        <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_HDR)</if>
+        <if cond="TOOLKIT=='MAC'">$(MEDIA_MAC_HDR)</if>
+        <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_HDR)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='PM'">$(MEDIA_OS2_HDR)</if>
+    </set>
+    <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
+    <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>
 
 
     <set var="GUI_CORE_HEADERS" hints="files">
@@ -2688,7 +2759,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CMN_HDR)
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
-            $(ADVANCED_HDR) $(HTML_HDR)
+            $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(DBGRID_HDR) $(XRC_HDR)
         </if>
     </set>

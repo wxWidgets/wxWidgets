@@ -96,6 +96,37 @@
     
     
     <!-- ================================================================= -->
+    <!--                     wxMedia classes library                       -->
+    <!-- ================================================================= -->
+    
+    <dll id="mediadll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_MEDIA</define>
+        <sources>$(MEDIA_SRC)</sources>
+        <msvc-headers>$(MEDIA_HDR)</msvc-headers>
+        <library>coredll</library>
+        <library>basedll</library>
+
+     <!--
+	<if cond="FORMAT!='autoconf'">
+            <if cond="FORMAT!='borland' and FORMAT!='msevc4prj'">
+                <sys-lib>strmiids</sys-lib>
+            </if>
+        </if>
+     -->
+    </dll>
+    
+    <lib id="medialib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <sources>$(MEDIA_SRC)</sources>
+        <msvc-headers>$(MEDIA_HDR)</msvc-headers>
+    </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">media=medialib+mediadll</set>
+
+
+    <!-- ================================================================= -->
     <!--                        DB classes library                         -->
     <!-- ================================================================= -->
     
