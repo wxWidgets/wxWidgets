@@ -258,6 +258,8 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/*.* $(DISTDIR)/include
@@ -271,6 +273,8 @@ MACX_DIST: ALL_GUI_DIST
 	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
 	mkdir $(DISTDIR)/src/mac/macsock
 	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 # TODO: Distribute some files
 COCOA_DIST: ALL_GUI_DIST
@@ -463,6 +467,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.mms $(DISTDIR)/samples/dialogs
 
+	mkdir $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/*.cpp $(DISTDIR)/samples/dialup
+
 	mkdir $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
@@ -539,6 +548,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/help/*.cpp $(DISTDIR)/samples/help
 	cp $(SAMPDIR)/help/*.xpm $(DISTDIR)/samples/help
 	cp $(SAMPDIR)/help/doc/*.* $(DISTDIR)/samples/help/doc
+
+	mkdir $(DISTDIR)/samples/htlbox
+	cp $(SAMPDIR)/htlbox/Makefile.in $(DISTDIR)/samples/htlbox
+	cp $(SAMPDIR)/htlbox/makefile.unx $(DISTDIR)/samples/htlbox
+	cp $(SAMPDIR)/htlbox/*.cpp $(DISTDIR)/samples/htlbox
+	cp $(SAMPDIR)/htlbox/*.xpm $(DISTDIR)/samples/htlbox
 
 	mkdir $(DISTDIR)/samples/html
 	cp $(SAMPDIR)/html/Makefile.in $(DISTDIR)/samples/html
@@ -693,10 +708,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
 	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
     
-	mkdir $(DISTDIR)/samples/dialup
-	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
-	cp $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup
-	cp $(SAMPDIR)/dialup/*.cpp $(DISTDIR)/samples/dialup
+	mkdir $(DISTDIR)/samples/multimon
+	cp $(SAMPDIR)/multimon/Makefile.in $(DISTDIR)/samples/multimon
+	cp $(SAMPDIR)/multimon/makefile.unx $(DISTDIR)/samples/multimon
+	cp $(SAMPDIR)/multimon/*.cpp $(DISTDIR)/samples/multimon
 
 	mkdir $(DISTDIR)/samples/notebook
 	cp $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook
@@ -746,6 +761,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 #	cp $(SAMPDIR)/resource/*.cpp $(DISTDIR)/samples/resource
 #	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
 #	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
+
+	mkdir $(DISTDIR)/samples/render
+	cp $(SAMPDIR)/render/Makefile.in $(DISTDIR)/samples/render
+	cp $(SAMPDIR)/render/makefile.unx $(DISTDIR)/samples/render
+	cp $(SAMPDIR)/render/*.cpp $(DISTDIR)/samples/render
 
 	mkdir $(DISTDIR)/samples/rotate
 	cp $(SAMPDIR)/rotate/Makefile.in $(DISTDIR)/samples/rotate
