@@ -460,6 +460,8 @@ size_t wxCmdLineParser::GetParamCount() const
 
 wxString wxCmdLineParser::GetParam(size_t n) const
 {
+    wxCHECK_MSG( n < GetParamCount(), wxEmptyString, _T("invalid param index") );
+
     return m_data->m_parameters[n];
 }
 
