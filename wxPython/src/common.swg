@@ -70,6 +70,5 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 #ifdef __cplusplus
 }
-
 #endif
 
