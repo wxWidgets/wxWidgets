@@ -242,18 +242,24 @@
 #ifdef wxHAVE_TCHAR_SUPPORT
     #include <ctype.h>
 
+    #if defined(__WATCOMC__) && defined(UNICODE)
+      #define WXWCHAR_T_CAST(c) (wint_t)(c)
+    #else
+      #define WXWCHAR_T_CAST(c) c
+    #endif
+    
     /* ctype.h functions */
-    #define  wxIsalnum   _istalnum
-    #define  wxIsalpha   _istalpha
-    #define  wxIscntrl   _istcntrl
-    #define  wxIsdigit   _istdigit
-    #define  wxIsgraph   _istgraph
-    #define  wxIslower   _istlower
-    #define  wxIsprint   _istprint
-    #define  wxIspunct   _istpunct
-    #define  wxIsspace   _istspace
-    #define  wxIsupper   _istupper
-    #define  wxIsxdigit  _istxdigit
+    #define  wxIsalnum(c)   _istalnum(WXWCHAR_T_CAST(c))
+    #define  wxIsalpha(c)   _istalpha(WXWCHAR_T_CAST(c))
+    #define  wxIscntrl(c)   _istcntrl(WXWCHAR_T_CAST(c))
+    #define  wxIsdigit(c)   _istdigit(WXWCHAR_T_CAST(c))
+    #define  wxIsgraph(c)   _istgraph(WXWCHAR_T_CAST(c))
+    #define  wxIslower(c)   _istlower(WXWCHAR_T_CAST(c))
+    #define  wxIsprint(c)   _istprint(WXWCHAR_T_CAST(c))
+    #define  wxIspunct(c)   _istpunct(WXWCHAR_T_CAST(c))
+    #define  wxIsspace(c)   _istspace(WXWCHAR_T_CAST(c))
+    #define  wxIsupper(c)   _istupper(WXWCHAR_T_CAST(c))
+    #define  wxIsxdigit(c)  _istxdigit(WXWCHAR_T_CAST(c))
 
     /*
        There is a bug in VC6 C RTL: toxxx() functions dosn't do anything with
