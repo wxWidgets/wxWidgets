@@ -37,11 +37,11 @@ wxStringTokenizer::~wxStringTokenizer()
 
 off_t wxStringTokenizer::FindDelims(const wxString& str, const wxString& delims) const
 {
-    for ( int i = 0; i < str.Length(); i++ )
+    for ( size_t i = 0; i < str.Length(); i++ )
     {
         char c = str[i];
 
-        for ( int j = 0; j < delims.Length() ; j++ )
+        for ( size_t j = 0; j < delims.Length() ; j++ )
         {
             if ( delims[j] == c )
                 return i;

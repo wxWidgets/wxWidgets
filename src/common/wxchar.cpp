@@ -146,7 +146,7 @@ int WXDLLEXPORT wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
 #ifndef wxStrdup
-wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
+WXDLLEXPORT wxChar * wxStrdup(const wxChar *psz)
 {
   size_t size = (wxStrlen(psz) + 1) * sizeof(wxChar);
   wxChar *ret = (wxChar *) malloc(size);
@@ -168,7 +168,7 @@ int WXDLLEXPORT wxStricmp(const wxChar *psz1, const wxChar *psz2)
 #endif
 
 #ifndef wxStrtok
-wxChar * WXDLLEXPORT wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
+WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
 {
   if (!psz) psz = *save_ptr;
   psz += wxStrspn(psz, delim);
