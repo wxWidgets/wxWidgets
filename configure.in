@@ -696,6 +696,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_SLIDER=no
   DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPINCTRL=no
   DEFAULT_wxUSE_SPLITTER=no
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
@@ -808,6 +809,7 @@ else
   DEFAULT_wxUSE_SCROLLBAR=yes
   DEFAULT_wxUSE_SLIDER=yes
   DEFAULT_wxUSE_SPINBTN=yes
+  DEFAULT_wxUSE_SPINCTRL=yes
   DEFAULT_wxUSE_SPLITTER=yes
   DEFAULT_wxUSE_STATBMP=yes
   DEFAULT_wxUSE_STATBOX=yes
@@ -911,6 +913,7 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_SLIDER=no
   DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPINCTRL=no
   DEFAULT_wxUSE_SPLITTER=no
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
@@ -1075,6 +1078,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_SCROLLBAR=yes
   DEFAULT_wxUSE_SLIDER=yes
   DEFAULT_wxUSE_SPINBTN=yes
+  DEFAULT_wxUSE_SPINCTRL=yes
   DEFAULT_wxUSE_SPLITTER=yes
   DEFAULT_wxUSE_STATBMP=yes
   DEFAULT_wxUSE_STATBOX=yes
@@ -1105,6 +1109,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_SLIDER=no
   DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPINCTRL=no
   DEFAULT_wxUSE_SPLITTER=no
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
@@ -1136,6 +1141,7 @@ WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], w
 WX_ARG_ENABLE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
 WX_ARG_ENABLE(slider,      [  --enable-slider         use wxSlider class], wxUSE_SLIDER)
 WX_ARG_ENABLE(spinbtn,     [  --enable-spinbtn        use wxSpinButton class], wxUSE_SPINBTN)
+WX_ARG_ENABLE(spinctrl,    [  --enable-spinctrl       use wxSpinCtrl class], wxUSE_SPINCTRL)
 WX_ARG_ENABLE(splitter,    [  --enable-splitter       use wxSplitterWindow class], wxUSE_SPLITTER)
 WX_ARG_ENABLE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
 WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
@@ -2791,6 +2797,10 @@ fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
     AC_DEFINE(wxUSE_SPINBTN)
+fi
+
+if test "$wxUSE_SPINCTRL" = "yes"; then
+    AC_DEFINE(wxUSE_SPINCTRL)
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
