@@ -112,7 +112,7 @@ static int firstAvailable;
 
 int _GSocket_GUI_Init(void)
 {
-  LPCTSTR pclassname;
+  static LPCTSTR pclassname = NULL;
   int i;
 
   /* Create internal window for event notifications */
