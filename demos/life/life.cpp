@@ -443,7 +443,7 @@ void LifeFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
     if (filedlg.ShowModal() == wxID_OK)
     {
-        wxFileInputStream stream(filedlg.GetFilename());
+        wxFileInputStream stream(filedlg.GetPath());
         LifeReader reader(stream);
 
         // the reader handles errors itself, no need to do anything here
