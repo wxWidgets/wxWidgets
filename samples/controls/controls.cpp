@@ -479,7 +479,9 @@ EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #if wxUSE_SPINCTRL
 EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
+#if wxUSE_TOGGLEBTN
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
+#endif // wxUSE_TOGGLEBTN
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
@@ -743,7 +745,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel = new wxPanel(m_notebook);
 
-#if !defined(__WXMOTIF__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
+#if !defined(__WXMOTIF__) && !defined(__WXMAC__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
                                                    wxPoint(10, 10));
@@ -786,8 +788,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
 
+#if wxUSE_TOGGLEBTN
     (void)new wxToggleButton(panel, ID_BUTTON_LABEL,
                              "&Toggle label", wxPoint(250, 20));
+#endif // wxUSE_TOGGLEBTN
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
                                wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
