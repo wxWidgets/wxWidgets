@@ -696,6 +696,10 @@ bool wxLocale::Init(int language, int flags)
             locale = wxT("in") + locale.Mid(3);
         else if (mid == wxT("yi"))
             locale = wxT("ji") + locale.Mid(3);
+        else if (mid == wxT("nb"))
+            locale = wxT("no_NO");
+        else if (mid == wxT("nn"))
+            locale = wxT("no_NY");
 
         retloc = wxSetlocale(LC_ALL, locale);
     }
@@ -892,10 +896,16 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         wxString lang;
         if ( langOrig == wxT("iw"))
             lang = _T("he");
-        else if ( langOrig == wxT("in") )
+        else if (langOrig == wxT("in"))
             lang = wxT("id");
-        else if ( langOrig == wxT("ji") )
+        else if (langOrig == wxT("ji"))
             lang = wxT("yi");
+        else if (langOrig == wxT("no_NO"))
+            lang = wxT("nb_NO");
+        else if (langOrig == wxT("no_NY"))
+            lang = wxT("nn_NO");
+        else if (langOrig == wxT("no"))
+            lang = wxT("nb_NO");
         else
             lang = langOrig;
 
@@ -991,7 +1001,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         lc = wxT("fr_CA") ;
         break ;
       case verNorway:
-        lc = wxT("no_NO") ;
+        lc = wxT("nb_NO") ;
         break ;
       case verIsrael:
         lc = wxT("iw_IL") ;
@@ -2340,7 +2350,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_NAURU,                      "na"   , 0              , 0                                 , "Nauru")
    LNG(wxLANGUAGE_NEPALI,                     "ne"   , LANG_NEPALI    , SUBLANG_DEFAULT                   , "Nepali")
    LNG(wxLANGUAGE_NEPALI_INDIA,               "ne_IN", LANG_NEPALI    , SUBLANG_NEPALI_INDIA              , "Nepali (India)")
-   LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "no_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , "Norwegian (Bokmal)")
+   LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "nb_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , "Norwegian (Bokmal)")
    LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "nn_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , "Norwegian (Nynorsk)")
    LNG(wxLANGUAGE_OCCITAN,                    "oc"   , 0              , 0                                 , "Occitan")
    LNG(wxLANGUAGE_ORIYA,                      "or"   , LANG_ORIYA     , SUBLANG_DEFAULT                   , "Oriya")
