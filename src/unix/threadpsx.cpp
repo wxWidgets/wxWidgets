@@ -164,8 +164,13 @@ wxMutex::wxMutex()
 {
     m_internal = new wxMutexInternal;
 
-    pthread_mutex_init(&(m_internal->m_mutex),
-                       (pthread_mutexattr_t*) NULL );
+    // support recursive locks like Win32, i.e. a thread can lock a mutex which
+    // it had itself already locked
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&(m_internal->m_mutex), &attr);
+
     m_locked = 0;
 }
 

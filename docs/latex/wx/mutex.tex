@@ -3,7 +3,11 @@
 A mutex object is a synchronization object whose state is set to signaled when
 it is not owned by any thread, and nonsignaled when it is owned. Its name comes
 from its usefulness in coordinating mutually-exclusive access to a shared
-resource. Only one thread at a time can own a mutex object.
+resource. Only one thread at a time can own a mutex object but the mutexes are
+recursive in the sense that a thread can lock a mutex which it had already
+locked before (instead of dead locking the entire process in this situation by
+starting to wait on a mutex which will never be released while the thread is
+waiting).
 
 For example, when several thread use the data stored in the linked list,
 modifications to the list should be only allowed to one thread at a time
@@ -55,7 +59,7 @@ Notice how wxMutexLocker was used in the second function to ensure that the
 mutex is unlocked in any case: whether the function returns TRUE or FALSE
 (because the destructor of the local object {\it lock} is always called). Using
 this class instead of directly using wxMutex is, in general safer and is even
-more so if yoor program uses C++ exceptions.
+more so if your program uses C++ exceptions.
 
 \wxheading{Derived from}
 
