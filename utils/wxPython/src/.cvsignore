@@ -5,10 +5,13 @@ Setup
 Setup.in.new
 Setup.save
 Setup.save
+Setup.test
+compile.py
 config.c
 glcanvas.h
 glcanvasc.exp
 make.bat
+makefile.test
 sedscript
 templates
 transfer.zip
