@@ -110,4 +110,7 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 // Manifest file for Windows XP
 //
 
+#if !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)
 1 24 "wx/msw/wx.manifest"
+#endif
+

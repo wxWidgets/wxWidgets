@@ -840,12 +840,6 @@
 #define wxUSE_SPLINES     1
                                 // 0 for no splines
 
-#define wxUSE_XPM_IN_MSW   1
-                                // 0 for no XPM support in wxBitmap.
-                                // Default is 1, as XPM is now fully
-                                // supported this makes easier the issue
-                                // of portable icons and bitmaps.
-
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support
 
