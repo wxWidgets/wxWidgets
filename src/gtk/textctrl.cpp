@@ -298,9 +298,6 @@ void wxTextCtrl::SetValue( const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
     wxString tmp = _T("");
     if (!value.IsNull()) tmp = value;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -319,9 +316,6 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
@@ -329,9 +323,6 @@ void wxTextCtrl::WriteText( const wxString &text )
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
     if (text.IsEmpty()) return;
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
@@ -365,9 +356,6 @@ void wxTextCtrl::WriteText( const wxString &text )
         /* bring entry's cursor uptodate. bug in GTK. */
         gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::AppendText( const wxString &text )
@@ -375,9 +363,6 @@ void wxTextCtrl::AppendText( const wxString &text )
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
     if (text.IsEmpty()) return;
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
@@ -412,9 +397,6 @@ void wxTextCtrl::AppendText( const wxString &text )
     {
         gtk_entry_append_text( GTK_ENTRY(m_text), text.mbc_str() );
     }
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
@@ -645,21 +627,12 @@ void wxTextCtrl::Remove( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 
@@ -673,26 +646,17 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
         gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 #endif
     }
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::Cut()
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::Copy()
@@ -710,17 +674,11 @@ void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
-
 #if (GTK_MINOR_VERSION > 0)
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
 #else
     gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
-
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 bool wxTextCtrl::CanCopy() const
