@@ -1,6 +1,9 @@
 \section{\class{wxScrollEvent}}\label{wxscrollevent}
 
-A scroll event holds information about events sent from scrollbars and scrolling windows.
+A scroll event holds information about events sent from stand-alone scrollbars,
+spin-buttons and sliders - starting from wxWindows 2.1, scrolled windows send the
+\helpref{wxScrollWinEvent}{wxscrollwinevent} which does not derive from
+wxCommandEvent, but from wxEvent directly.
 
 \wxheading{Derived from}
 
@@ -49,7 +52,8 @@ horizontal and vertical scroll events are processed using the same event handler
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnScroll}{wxwindowonscroll}, \helpref{wxScrollBar}{wxscrollbar}, \helpref{Event handling overview}{eventhandlingoverview}
+\helpref{wxScrollBar}{wxscrollbar}, \helpref{wxSlider}{wxslider}, \helpref{wxSpinButton}{wxspinbutton}, \\
+\helpref{wxScrollWinEvent}{wxscrollwinevent}, \helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

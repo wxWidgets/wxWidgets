@@ -37,15 +37,15 @@ functions that take a \helpref{wxTreeEvent}{wxtreeevent} argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_TREE\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
 \twocolitem{{\bf EVT\_TREE\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
-\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label.}
-\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_DELETE\_ITEM(id, func)}}{Delete an item.}
 \twocolitem{{\bf EVT\_TREE\_GET\_INFO(id, func)}}{Request information from the application.}
 \twocolitem{{\bf EVT\_TREE\_SET\_INFO(id, func)}}{Information is being supplied.}
 \twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{Parent has been expanded.}
-\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
-\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \end{twocollist}%
 
@@ -149,16 +149,15 @@ Deletes all the items in the control.
 
 \membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
-\func{wxTextCtrl*}{EditLabel}{\param{const wxTreeItemId\&}{ item}}
+\func{void}{EditLabel}{\param{const wxTreeItemId\&}{ item}}
 
-Starts editing the label of the given item, returning the text control that
-the tree control uses for editing. This function generates a
-EVT\_BEGIN\_LABEL\_EDIT event and if the event handler returns FALSE, label
-editing will not start and NULL will be returned - be ready to handle this
-case.
+Starts editing the label of the given item. This function generates a
+EVT\_TREE\_BEGIN\_LABEL\_EDIT event which can be vetoed so that no
+text control will appear for in-place editing.
 
-The text control returned should not be deleted by the application and is not
-valid any longer after the EVT\_END\_LABEL\_EDIT event is received.
+If the user changed the label (i.e. s/he does not press ESC or leave
+the text control without changes, a EVT\_TREE\_END\_LABEL\_EDIT event 
+will be sent which can be vetoed as well.
 
 \wxheading{See also}
 

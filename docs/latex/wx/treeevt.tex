@@ -22,23 +22,17 @@ functions that take a wxTreeEvent argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_TREE\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
 \twocolitem{{\bf EVT\_TREE\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
-\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label.}
-\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_DELETE\_ITEM(id, func)}}{Delete an item.}
 \twocolitem{{\bf EVT\_TREE\_GET\_INFO(id, func)}}{Request information from the application.}
 \twocolitem{{\bf EVT\_TREE\_SET\_INFO(id, func)}}{Information is being supplied.}
 \twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{Parent has been expanded.}
-\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{Parent is being expanded. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
-\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \end{twocollist}%
-
-For the EVT\_TREE\_BEGIN\_EDIT, EVT\_TREE\_END\_LABEL\_EDIT,
-EVT\_TREE\_ITEM\_EXPANDING and EVT\_TREE\_SEL\_CHANGING events you may call
-\helpref{Veto()}{wxnotifyeventveto} to prevent the given operation from
-happening except for EVT\_TREE\_END\_LABEL\_EDIT means that the items label
-will not be changed.
 
 \wxheading{See also}
 

@@ -48,8 +48,8 @@ functions that take a \helpref{wxListEvent}{wxlistevent} argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_LIST\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
 \twocolitem{{\bf EVT\_LIST\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
-\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label.}
-\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_LIST\_DELETE\_ITEM(id, func)}}{Delete an item.}
 \twocolitem{{\bf EVT\_LIST\_DELETE\_ALL\_ITEMS(id, func)}}{Delete all items.}
 \twocolitem{{\bf EVT\_LIST\_GET\_INFO(id, func)}}{Request information from the application, usually the item text.}
@@ -149,16 +149,15 @@ Deletes a column.
 
 \membersection{wxListCtrl::EditLabel}\label{wxlistctrledit}
 
-\func{wxTextCtrl *}{Edit}{\param{long }{item}}
+\func{void}{EditLabel}{\param{long }{item}}
 
-Starts editing the label of the given item, returning the text control that
-the tree control uses for editing. This function generates a
-EVT\_LIST\_BEGIN\_LABEL\_EDIT event and if the event handler returns FALSE, label
-editing will not start and NULL will be returned - be ready to handle this
-case.
+Starts editing the label of the given item. This function generates a
+EVT\_LIST\_BEGIN\_LABEL\_EDIT event which can be vetoed so that no
+text control will appear for in-place editing.
 
-The text control returned should not be deleted by the application and is not
-valid any longer after the EVT\_LIST\_END\_LABEL\_EDIT event is received.
+If the user changed the label (i.e. s/he does not press ESC or leave
+the text control without changes, a EVT\_LIST\_END\_LABEL\_EDIT event 
+will be sent which can be vetoed as well.
 
 \membersection{wxListCtrl::EnsureVisible}\label{wxlistctrlensurevisible}
 

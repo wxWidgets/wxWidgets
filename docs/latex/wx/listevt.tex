@@ -22,8 +22,8 @@ functions that take a wxListEvent argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_LIST\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
 \twocolitem{{\bf EVT\_LIST\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
-\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label.}
-\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
 \twocolitem{{\bf EVT\_LIST\_DELETE\_ITEM(id, func)}}{Delete an item.}
 \twocolitem{{\bf EVT\_LIST\_DELETE\_ALL\_ITEMS(id, func)}}{Delete all items.}
 \twocolitem{{\bf EVT\_LIST\_GET\_INFO(id, func)}}{Request information from the application, usually the item text.}

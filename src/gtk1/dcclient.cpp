@@ -1057,10 +1057,10 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
   
     if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->Ok()))
     {
-        if (m_brush.GetStipple()->GetPixmap())
-            gdk_gc_set_tile( m_bgGC, m_brush.GetStipple()->GetPixmap() );
+        if (m_backgroundBrush.GetStipple()->GetPixmap())
+            gdk_gc_set_tile( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
         else
-            gdk_gc_set_stipple( m_bgGC, m_brush.GetStipple()->GetBitmap() );
+            gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetBitmap() );
     }
   
     if (IS_HATCH(m_backgroundBrush.GetStyle()))
