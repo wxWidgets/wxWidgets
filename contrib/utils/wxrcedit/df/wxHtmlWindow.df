@@ -1,6 +1,0 @@
-node wxHtmlWindow
-var url of text
-var htmlcode of text
-var borders of dimension
-var style of flags wxHW_SCROLLBAR_NEVER,wxHW_SCROLLBAR_AUTO
-derived from control
