@@ -203,16 +203,31 @@
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         class wxMAKE_UNIQUE_ASSERT_NAME { \
           unsigned int msg: expr; \
-          wxMAKE_UNIQUE_ASSERT_NAME(){wxUnusedVar(msg);} \
+          wxMAKE_UNIQUE_ASSERT_NAME() { wxUnusedVar(msg); } \
         }
 #else
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
 #endif
 
+/*
+   When using VC++ 6 with "Edit and Continue" on, the compiler completely
+   mishandles __LINE__ and so wxCOMPILE_TIME_ASSERT() doesn't work, provide a
+   way to make "unique" assert names by specifying a unique prefix explicitly
+ */
+#define wxMAKE_UNIQUE_ASSERT_NAME2(text) wxCONCAT(wxAssert_, text)
 
-/* for compatibility only, don't use any more, not needed */
-#define wxCOMPILE_TIME_ASSERT2(expr, msg, text) wxCOMPILE_TIME_ASSERT(expr, msg)
+#ifdef __WATCOMC__
+    /* avoid "unused symbol" warning */
+    #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
+        class wxMAKE_UNIQUE_ASSERT_NAME2(text) { \
+          unsigned int msg: expr; \
+          wxMAKE_UNIQUE_ASSERT_NAME2(text) { wxUnusedVar(msg); } \
+        }
+#else
+    #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
+        struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
+#endif
 
 /*  helpers for wxCOMPILE_TIME_ASSERT below, for private use only */
 #define wxMAKE_BITSIZE_MSG(type, size) type ## SmallerThan ## size ## Bits

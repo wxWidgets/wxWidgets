@@ -473,11 +473,11 @@ typedef int wxWindowID;
 /*  appending the current line number to the given identifier to reduce the */
 /*  probability of the conflict (it may still happen if this is used in the */
 /*  headers, hence you should avoid doing it or provide unique prefixes then) */
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && (__VISUALC__ >= 1300)
     /*
        __LINE__ handling is completely broken in VC++ when using "Edit and
        Continue" (/ZI option) and results in preprocessor errors if we use it
-       inside the macros. Luckily it has another standard macro which can be
+       inside the macros. Luckily VC7 has another standard macro which can be
        used like this and is even better than __LINE__ because it is globally
        unique.
      */
