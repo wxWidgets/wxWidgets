@@ -598,7 +598,7 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
    For some systems vsnprintf() exists in the system libraries but not in the
    headers, so we need to declare it ourselves to be able to use it.
  */
-#ifndef HAVE_VSNPRINTF_DECL
+#if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
     extern "C"
     int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 #endif // !HAVE_VSNPRINTF_DECL
