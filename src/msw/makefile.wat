@@ -236,6 +236,7 @@ MSWOBJS = accel.obj &
 	glcanvas.obj &
 	gsocket.obj &
 	gsockmsw.obj &
+	helpchm.obj &
 	helpwin.obj &
 	icon.obj &
 	imaglist.obj &

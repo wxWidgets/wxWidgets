@@ -253,6 +253,7 @@ gaugemsw.cpp	M	16
 gdiimage.cpp	M
 gdiobj.cpp	M
 glcanvas.cpp	M
+helpchm.cpp	M       32
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32
@@ -618,6 +619,7 @@ hash.h	W	B
 help.h	W
 helpbase.h	W
 helphtml.h	W
+helpchm.h	W
 helpwin.h	W
 helpxlp.h	W
 icon.h	W
@@ -903,6 +905,7 @@ gaugemsw.h	9
 gdiimage.h	9
 gdiobj.h	9
 glcanvas.h	9
+helpchm.h	9
 helpwin.h	9
 icon.h	9
 imaglist.h	9

@@ -31,6 +31,8 @@ There are currently the following help controller classes defined:
 
 \begin{itemize}\itemsep=0pt
 \item wxWinHelpController, for controlling Windows Help.
+\item wxCHMHelpController, for controlling MS HTML Help. To use this, you need to set wxUSE\_MS\_HTML\_HELP
+to 0 in setup.h, and link your application with Microsoft's htmlhelp.lib. Currently VC++ only.
 \item wxExtHelpController, for controlling external browsers under Unix.
 The default browser is Netscape Navigator. The 'help' sample shows its use.
 \item wxHelpControllerHtml, using \helpref{wxHTML}{wxhtml} to display help. See {\tt wx/helpwxht.h} for
@@ -51,6 +53,7 @@ wxHelpControllerBase\\
 <wx/help.h> (wxWindows chooses the appropriate help controller class)\\
 <wx/helpbase.h> (wxHelpControllerBase class)\\
 <wx/helpwin.h> (Windows Help controller)\\
+<wx/msw/helpchm.h> (MS HTML Help controller)\\
 <wx/generic/helpext.h> (external HTML browser controller)\\
 <wx/generic/helpwxht.h> (simple wxHTML-based help controller)\\
 <wx/html/helpctrl.h> (advanced wxHTML based help controller: wxHtmlHelpController)
@@ -111,11 +114,20 @@ contents.
 
 \membersection{wxHelpController::DisplaySection}\label{wxhelpcontrollerdisplaysection}
 
+\func{virtual bool}{DisplaySection}{\param{const wxString\&}{ section}}
+
+If the help viewer is not running, runs it and displays the given section.
+
+The interpretation of {\it section} differs between help viewers. For most viewers,
+this call is equivalent to KeywordSearch. For MS HTML Help, if {\it section} has a .htm
+or .html extension, that HTML file within the .chm file will be displayed; otherwise
+a keyword search is done.
+
 \func{virtual bool}{DisplaySection}{\param{int}{ sectionNo}}
 
 If the help viewer is not running, runs it and displays the given section.
 
-{\it WinHelp:} {\it sectionNo} is a context id.
+{\it WinHelp, MS HTML Help:} {\it sectionNo} is a context id.
 
 {\it External HTML help/wxHTML based help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
 
@@ -126,6 +138,8 @@ If the help viewer is not running, runs it and displays the given section.
 \end{verbatim}
 
 {\it wxHtmlHelpController:} {\it sectionNo} is an identifier as specified in the {\tt .hhc} file. See \helpref{Help files format}{helpformat}.
+
+See also the help sample for notes on how to specify section numbers for various help file formats.
 
 \membersection{wxHelpController::GetFrameParameters}\label{wxhelpcontrollergetframeparameters}
 
@@ -159,7 +173,7 @@ that the viewer is a variant of Netscape Navigator.}
 If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
 match is found, the file is displayed at this section.
 
-{\it WinHelp:} If more than one match is found, 
+{\it WinHelp, MS HTML Help:} If more than one match is found, 
 the first topic is displayed.
 
 {\it External HTML help:} If more than one match is found, 

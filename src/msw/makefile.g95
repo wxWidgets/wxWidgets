@@ -261,6 +261,7 @@ MSWOBJS     = \
 		$(MSWDIR)/glcanvas.$(OBJSUFF) \
 		$(MSWDIR)/gsocket.$(OBJSUFF) \
 		$(MSWDIR)/gsockmsw.$(OBJSUFF) \
+		$(MSWDIR)/helpchm.$(OBJSUFF) \
 		$(MSWDIR)/helpwin.$(OBJSUFF) \
 		$(MSWDIR)/icon.$(OBJSUFF) \
 		$(MSWDIR)/imaglist.$(OBJSUFF) \

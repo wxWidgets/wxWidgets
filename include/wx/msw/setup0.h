@@ -445,9 +445,10 @@
 
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
-// Note: wxHELP uses IPC under X so these are interdependent!
 #define wxUSE_HELP        1
                                 // 0 for no help facility
+#define wxUSE_MS_HTML_HELP 0
+                                // 0 for no MS HTML Help
 #define wxUSE_RESOURCES   1
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
@@ -605,8 +606,8 @@
 // disable the settings which don't work for some compilers
 // ----------------------------------------------------------------------------
 
-// These don't work as expected for mingw32 and cygwin32
 #if defined(__GNUWIN32__)
+// These don't work as expected for mingw32 and cygwin32
 #undef  wxUSE_MEMORY_TRACING
 #define wxUSE_MEMORY_TRACING            0
 
@@ -615,6 +616,9 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
+
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
 #endif // __GNUWIN32__
 
 // MFC duplicates these operators
@@ -691,6 +695,12 @@
 #define wxUSE_LIBJPEG 0
 #endif
 
+#if defined(__BORLANDC__)
+// Need a BC++-specific htmlhelp.lib before we can enable this
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
+#endif
+
 #if defined(__WXMSW__) && defined(__WATCOMC__)
 #undef wxUSE_LIBJPEG
 #define wxUSE_LIBJPEG 0
@@ -700,6 +710,9 @@
 
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
+
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
 #endif
 
 #if defined(__WXMSW__) && !defined(__WIN32__)
@@ -740,6 +753,8 @@
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
 
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
 #endif // Win16
 
 // ----------------------------------------------------------------------------

@@ -280,6 +280,7 @@ MSWOBJS = ..\msw\$D\accel.obj \
 		..\msw\$D\glcanvas.obj \
 		..\msw\$D\gsocket.obj \
 		..\msw\$D\gsockmsw.obj \
+		..\msw\$D\helpchm.obj \
 		..\msw\$D\helpwin.obj \
 		..\msw\$D\icon.obj \
 		..\msw\$D\imaglist.obj \

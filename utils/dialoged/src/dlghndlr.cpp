@@ -1081,6 +1081,9 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
           int x2 = (int)(x1 + (x - dragOffsetX) - xpos);
           int y2 = (int)(y1 + (y - dragOffsetY) - ypos);
 
+          resourceX = x2;
+          resourceY = y2;
+
           // Update the associated resource
           resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
           if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)

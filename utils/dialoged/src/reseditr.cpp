@@ -420,7 +420,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     wxString str = filename;
     if (str == wxString(""))
     {
-      wxString f(wxFileSelector("Open resource file", NULL, NULL, "wxr", "*.wxr", 0, wxTheApp->GetTopWindow()));
+      wxString f(wxFileSelector("Open resource file", wxGetCwd(), wxEmptyString, "wxr", "*.wxr", 0, wxTheApp->GetTopWindow()));
       if (!f.IsNull() && f != "")
         str = f;
       else

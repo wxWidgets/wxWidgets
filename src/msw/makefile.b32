@@ -264,6 +264,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\gsocket.obj \
 		$(MSWDIR)\gsockmsw.obj \
 		$(MSWDIR)\helpwin.obj \
+		$(MSWDIR)\helpchm.obj \
 		$(MSWDIR)\icon.obj \
 		$(MSWDIR)\imaglist.obj \
 		$(MSWDIR)\joystick.obj \
@@ -479,6 +480,8 @@ $(MSWDIR)\glcanvas.obj: $(MSWDIR)\glcanvas.$(SRCSUFF)
 $(MSWDIR)\gsocket.obj: $(MSWDIR)\gsocket.c
 
 $(MSWDIR)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
+
+$(MSWDIR)\helpchm.obj: $(MSWDIR)\helpchm.$(SRCSUFF)
 
 $(MSWDIR)\helpwin.obj: $(MSWDIR)\helpwin.$(SRCSUFF)
 

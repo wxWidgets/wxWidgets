@@ -883,6 +883,10 @@ SOURCE=.\msw\gsockmsw.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\helpchm.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\helpwin.cpp
 # End Source File
 # Begin Source File
