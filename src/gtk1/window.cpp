@@ -1356,9 +1356,9 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     InitMouseEvent( win, event, gdk_event );
 
     AdjustEventButtonState(event);
-    
+
     // wxListBox actually get mouse events from the item
-    
+
     if (win->m_isListBox)
     {
         event.m_x += widget->allocation.x;
@@ -1489,7 +1489,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     AdjustEventButtonState(event);
 
     // wxListBox actually get mouse events from the item
-    
+
     if (win->m_isListBox)
     {
         event.m_x += widget->allocation.x;
@@ -2370,7 +2370,7 @@ void wxWindowGTK::Init()
 
     m_noExpose = FALSE;
     m_nativeSizeEvent = FALSE;
-    
+
     m_hasScrolling = FALSE;
     m_isScrolling = FALSE;
 
@@ -2545,7 +2545,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     if (m_parent)
         m_parent->DoAddChild( this );
-        
+
     m_focusWidget = m_wxwindow;
 
     PostCreation();
@@ -2639,7 +2639,7 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-    
+
     if (m_wxwindow)
     {
         if (!m_noExpose)
@@ -3087,7 +3087,7 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
         dx = pizza->xoffset;
         dy = pizza->yoffset;
     }
-    
+
     if (x) (*x) = m_x - dx;
     if (y) (*y) = m_y - dy;
 }
@@ -3280,7 +3280,7 @@ void wxWindowGTK::SetFocus()
            // ?
         }
     }
-    
+
 #if 0
     wxPrintf( "SetFocus finished in " );
     if (GetClassInfo() && GetClassInfo()->GetClassName())
@@ -3872,7 +3872,7 @@ bool wxWindowGTK::SetFont( const wxFont &font )
     return TRUE;
 }
 
-void wxWindowGTK::CaptureMouse()
+void wxWindowGTK::DoCaptureMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
@@ -3901,7 +3901,7 @@ void wxWindowGTK::CaptureMouse()
     g_captureWindowHasMouse = TRUE;
 }
 
-void wxWindowGTK::ReleaseMouse()
+void wxWindowGTK::DoReleaseMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 

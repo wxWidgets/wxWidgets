@@ -460,9 +460,12 @@ public:
         // move the mouse to the specified position
     virtual void WarpPointer(int x, int y) = 0;
 
-        // start or end mouse capture
-    virtual void CaptureMouse() = 0;
-    virtual void ReleaseMouse() = 0;
+        // start or end mouse capture, these functions maintain the stack of
+        // windows having captured the mouse and after calling ReleaseMouse()
+        // the mouse is not released but returns to the window which had had
+        // captured it previously (if any)
+    void CaptureMouse();
+    void ReleaseMouse();
 
         // get the window which currently captures the mouse or NULL
     static wxWindow *GetCapture();
@@ -882,6 +885,10 @@ protected:
     virtual void DoScreenToClient( int *x, int *y ) const = 0;
 
     virtual wxHitTest DoHitTest(wxCoord x, wxCoord y) const;
+
+    // capture/release the mouse, used by Capture/ReleaseMouse()
+    virtual void DoCaptureMouse();
+    virtual void DoReleaseMouse();
 
     // retrieve the position/size of the window
     virtual void DoGetPosition( int *x, int *y ) const = 0;

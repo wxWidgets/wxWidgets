@@ -200,13 +200,6 @@ public:
     // we refresh the window when it is dis/enabled
     virtual bool Enable(bool enable = TRUE);
 
-    // our Capture/ReleaseMouse() maintains the stack of windows which had
-    // captured the mouse and when ReleaseMouse() is called, the mouse freed
-    // only if the stack is empty, otherwise it is captured back by the window
-    // on top of the stack
-    virtual void CaptureMouse();
-    virtual void ReleaseMouse();
-
 protected:
     // common part of all ctors
     void Init();

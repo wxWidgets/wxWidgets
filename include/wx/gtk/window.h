@@ -65,8 +65,6 @@ public:
     virtual bool Reparent( wxWindowBase *newParent );
 
     virtual void WarpPointer(int x, int y);
-    virtual void CaptureMouse();
-    virtual void ReleaseMouse();
 
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
@@ -159,7 +157,7 @@ public:
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = FALSE; }
-    
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -168,7 +166,7 @@ public:
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
     GtkWidget           *m_wxwindow;        // mostly the client area as per wxWindows
-    
+
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
@@ -228,6 +226,9 @@ public:
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    virtual void DoCaptureMouse();
+    virtual void DoReleaseMouse();
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

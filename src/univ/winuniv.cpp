@@ -934,53 +934,6 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 }
 
 // ----------------------------------------------------------------------------
-// mouse capture
-// ----------------------------------------------------------------------------
-
-struct WXDLLEXPORT wxWindowNext
-{
-    wxWindow *win;
-    wxWindowNext *next;
-} *wxWindow::ms_winCaptureNext = NULL;
-
-void wxWindow::CaptureMouse()
-{
-    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(0x%08x)"), this);
-
-    wxWindow *winOld = GetCapture();
-    if ( winOld )
-    {
-        // save it on stack
-        wxWindowNext *item = new wxWindowNext;
-        item->win = winOld;
-        item->next = ms_winCaptureNext;
-        ms_winCaptureNext = item;
-    }
-    //else: no mouse capture to save
-
-    wxWindowNative::CaptureMouse();
-}
-
-void wxWindow::ReleaseMouse()
-{
-    wxWindowNative::ReleaseMouse();
-
-    if ( ms_winCaptureNext )
-    {
-        ms_winCaptureNext->win->CaptureMouse();
-
-        wxWindowNext *item = ms_winCaptureNext;
-        ms_winCaptureNext = item->next;
-        delete item;
-    }
-    //else: stack is empty, no previous capture
-
-    wxLogTrace(_T("mousecapture"),
-               _T("After ReleaseMouse() mouse is captured by 0x%08x"),
-               GetCapture());
-}
-
-// ----------------------------------------------------------------------------
 // accelerators and menu hot keys
 // ----------------------------------------------------------------------------
 

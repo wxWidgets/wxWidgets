@@ -546,7 +546,7 @@ wxString wxWindowMSW::GetTitle() const
     return wxGetWindowText(GetHWND());
 }
 
-void wxWindowMSW::CaptureMouse()
+void wxWindowMSW::DoCaptureMouse()
 {
     HWND hWnd = GetHwnd();
     if ( hWnd )
@@ -555,7 +555,7 @@ void wxWindowMSW::CaptureMouse()
     }
 }
 
-void wxWindowMSW::ReleaseMouse()
+void wxWindowMSW::DoReleaseMouse()
 {
     if ( !::ReleaseCapture() )
     {
