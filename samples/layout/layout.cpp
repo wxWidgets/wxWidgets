@@ -9,6 +9,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -24,17 +28,15 @@
 #error You must set wxUSE_CONSTRAINTS to 1 in setup.h!
 #endif
 
-#include <ctype.h>
-
 #include "wx/sizer.h"
 #include "wx/statline.h"
 #include "wx/notebook.h"
 
 #include "layout.h"
 
-// Declare two frames
-MyFrame   *frame = (MyFrame *) NULL;
-wxMenuBar *menu_bar = (wxMenuBar *) NULL;
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_APP(MyApp)
 
@@ -45,243 +47,57 @@ MyApp::MyApp()
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  frame = new MyFrame(NULL, _T("wxWindows Layout Demo"), -1, -1, 400, 300);
+  MyFrame *frame = new MyFrame;
 
-  frame->SetAutoLayout(TRUE);
+  frame->Show(TRUE);
 
-  // Give it a status line
-  frame->CreateStatusBar(2);
+  return TRUE;
+}
 
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+  EVT_MENU(LAYOUT_ABOUT, MyFrame::OnAbout)
+  EVT_MENU(LAYOUT_QUIT, MyFrame::OnQuit)
+
+  EVT_MENU(LAYOUT_TEST_CONSTRAINTS, MyFrame::TestConstraints)
+  EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestFlexSizers)
+  EVT_MENU(LAYOUT_TEST_NB_SIZER, MyFrame::TestNotebookSizers)
+END_EVENT_TABLE()
+
+// Define my frame constructor
+MyFrame::MyFrame()
+       : wxFrame(NULL, -1, _T("wxWindows Layout Demo"),
+                 wxDefaultPosition, wxDefaultSize,
+                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+{
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(LAYOUT_TEST_SIZER, _T("&Test sizers"),      _T("Test sizer"));
-  file_menu->Append(LAYOUT_TEST_NB, _T("&Test notebook sizers"),      _T("Test notebook sizer"));
+  file_menu->Append(LAYOUT_TEST_CONSTRAINTS, _T("Test &constraints"));
+  file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer"));
+  file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("&Test notebook sizers"));
 
   file_menu->AppendSeparator();
-  file_menu->Append(LAYOUT_QUIT, _T("E&xit"),                _T("Quit program"));
+  file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(LAYOUT_ABOUT, _T("&About"),              _T("About layout demo"));
+  help_menu->Append(LAYOUT_ABOUT, _T("&About"), _T("About layout demo"));
 
-  menu_bar = new wxMenuBar;
+  wxMenuBar *menu_bar = new wxMenuBar;
 
   menu_bar->Append(file_menu, _T("&File"));
   menu_bar->Append(help_menu, _T("&Help"));
 
   // Associate the menu bar with the frame
-  frame->SetMenuBar(menu_bar);
+  SetMenuBar(menu_bar);
 
-  // Make a panel
-  wxPanel *panel = new wxPanel(frame);
-
-  // Create some panel items
-  wxButton *btn1 = new wxButton(panel, -1, _T("A button (1)")) ;
-
-  wxLayoutConstraints *b1 = new wxLayoutConstraints;
-  b1->centreX.SameAs    (panel, wxCentreX);
-  b1->top.SameAs        (panel, wxTop, 5);
-  b1->width.PercentOf   (panel, wxWidth, 80);
-  b1->height.AsIs       ();
-  btn1->SetConstraints(b1);
-
-  wxListBox *list = new wxListBox(panel, -1,
-                                  wxPoint(-1, -1), wxSize(200, 100));
-  list->Append(_T("Apple"));
-  list->Append(_T("Pear"));
-  list->Append(_T("Orange"));
-  list->Append(_T("Banana"));
-  list->Append(_T("Fruit"));
-
-  wxLayoutConstraints *b2 = new wxLayoutConstraints;
-  b2->top.Below         (btn1, 5);
-  b2->left.SameAs       (panel, wxLeft, 5);
-  b2->width.PercentOf   (panel, wxWidth, 40);
-  b2->bottom.SameAs     (panel, wxBottom, 5);
-  list->SetConstraints(b2);
-
-  wxTextCtrl *mtext = new wxTextCtrl(panel, -1, _T("Some text"));
-
-  wxLayoutConstraints *b3 = new wxLayoutConstraints;
-  b3->top.Below         (btn1, 5);
-  b3->left.RightOf      (list, 5);
-  b3->right.SameAs      (panel, wxRight, 5);
-  b3->bottom.SameAs     (panel, wxBottom, 5);
-  mtext->SetConstraints(b3);
-
-  MyWindow *canvas = new MyWindow(frame, 0, 0, 400, 400, wxRETAINED);
-
-  // Make a text window
-  MyTextWindow *text_window = new MyTextWindow(frame, 0, 250, 400, 150);
-
-  // Set constraints for panel subwindow
-  wxLayoutConstraints *c1 = new wxLayoutConstraints;
-
-  c1->left.SameAs       (frame, wxLeft);
-  c1->top.SameAs        (frame, wxTop);
-  c1->right.PercentOf   (frame, wxWidth, 50);
-  c1->height.PercentOf  (frame, wxHeight, 50);
-
-  panel->SetConstraints(c1);
-
-  // Set constraints for canvas subwindow
-  wxLayoutConstraints *c2 = new wxLayoutConstraints;
-
-  c2->left.SameAs       (panel, wxRight);
-  c2->top.SameAs        (frame, wxTop);
-  c2->right.SameAs      (frame, wxRight);
-  c2->height.PercentOf  (frame, wxHeight, 50);
-
-  canvas->SetConstraints(c2);
-
-  // Set constraints for text subwindow
-  wxLayoutConstraints *c3 = new wxLayoutConstraints;
-  c3->left.SameAs       (frame, wxLeft);
-  c3->top.Below         (panel);
-  c3->right.SameAs      (frame, wxRight);
-  c3->bottom.SameAs     (frame, wxBottom);
-
-  text_window->SetConstraints(c3);
-
-  frame->Show(TRUE);
-
-  frame->SetStatusText(_T("wxWindows layout demo"));
-
-  SetTopWindow(frame);
-
-  return TRUE;
-}
-
-//-----------------------------------------------------------------
-//  MyFrame
-//-----------------------------------------------------------------
-
-// Define my frame constructor
-MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
-       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
-{
-}
-
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-  EVT_MENU(LAYOUT_QUIT, MyFrame::OnQuit)
-  EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestSizers)
-  EVT_MENU(LAYOUT_TEST_NB, MyFrame::TestNotebookSizers)
-  EVT_MENU(LAYOUT_ABOUT, MyFrame::About)
-END_EVENT_TABLE()
-
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
-{
-    Close(TRUE);
-}
-
-void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
-{
-    MySizerFrame *newFrame = new MySizerFrame(NULL, _T("Sizer Test Frame"), 50, 50);
-    newFrame->Show(TRUE);
-}
-
-void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
-{
-    wxDialog dialog( this, -1, wxString(_T("Notebook Sizer Test Dialog"))  );
-
-    // Begin with first hierarchy: a notebook at the top and
-    // and OK button at the bottom.
-
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
-    wxNotebook *notebook = new wxNotebook( &dialog, -1 );
-    wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
-    topsizer->Add( nbs, 1, wxGROW );
-
-    wxButton *button = new wxButton( &dialog, wxID_OK, _T("OK") );
-    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
-
-    // First page: one big text ctrl
-    wxTextCtrl *multi = new wxTextCtrl( notebook, -1, _T("TextCtrl."), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-    notebook->AddPage( multi, _T("Page One") );
-
-    // Second page: a text ctrl and a button
-    wxPanel *panel = new wxPanel( notebook, -1 );
-    notebook->AddPage( panel, _T("Page Two") );
-
-    wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
-
-    wxTextCtrl *text = new wxTextCtrl( panel, -1, _T("TextLine 1."), wxDefaultPosition, wxSize(250,-1) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
-    text = new wxTextCtrl( panel, -1, _T("TextLine 2."), wxDefaultPosition, wxSize(250,-1) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
-    wxButton *button2 = new wxButton( panel, -1, _T("Hallo") );
-    panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
-
-    panel->SetAutoLayout( TRUE );
-    panel->SetSizer( panelsizer );
-
-    // Tell dialog to use sizer
-
-    dialog.SetAutoLayout( TRUE );
-    dialog.SetSizer( topsizer );
-    topsizer->Fit( &dialog );
-    topsizer->SetSizeHints( &dialog );
-
-    dialog.ShowModal();
-}
+  CreateStatusBar(2);
+  SetStatusText(_T("wxWindows layout demo"));
 
 
-void MyFrame::About(wxCommandEvent& WXUNUSED(event) )
-{
-    (void)wxMessageBox(_T("wxWindows GUI library layout demo\n"),
-            _T("About Layout Demo"), wxOK|wxCENTRE);
-}
-
-//-----------------------------------------------------------------
-//  MyWindow
-//-----------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(MyWindow, wxWindow)
-    EVT_PAINT(MyWindow::OnPaint)
-END_EVENT_TABLE()
-
-// Define a constructor for my canvas
-MyWindow::MyWindow(wxFrame *frame, int x, int y, int w, int h, long style)
-        : wxWindow(frame, -1, wxPoint(x, y), wxSize(w, h), style)
-{
-}
-
-MyWindow::~MyWindow()
-{
-}
-
-// Define the repainting behaviour
-void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
-{
-  wxPaintDC dc(this);
-  dc.SetPen(* wxGREEN_PEN);
-  dc.DrawLine(0, 0, 200, 200);
-  dc.DrawLine(200, 0, 0, 200);
-
-  dc.SetBrush(* wxCYAN_BRUSH);
-  dc.SetPen(* wxRED_PEN);
-
-  dc.DrawRectangle(100, 100, 100, 50);
-  dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
-
-  dc.DrawEllipse(250, 250, 100, 50);
-#if wxUSE_SPLINES
-  dc.DrawSpline(50, 200, 50, 100, 200, 10);
-#endif // wxUSE_SPLINES
-  dc.DrawLine(50, 230, 200, 230);
-
-  dc.SetPen(* wxBLACK_PEN);
-  dc.DrawArc(50, 300, 100, 250, 100, 300 );
-}
-
-//-----------------------------------------------------------------
-//  MySizerFrame
-//-----------------------------------------------------------------
-
-MySizerFrame::MySizerFrame(wxFrame *frame, wxChar *title, int x, int y )
-            : wxFrame(frame, -1, title, wxPoint(x, y) )
-{
   // we want to get a dialog that is stretchable because it
   // has a text ctrl in the middle. at the bottom, we have
   // two buttons which.
@@ -367,5 +183,269 @@ MySizerFrame::MySizerFrame(wxFrame *frame, wxChar *title, int x, int y )
   SetSizer( topsizer );
 }
 
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
+{
+    Close(TRUE);
+}
 
+void MyFrame::TestConstraints(wxCommandEvent& WXUNUSED(event) )
+{
+    MyConstraintsFrame *
+        newFrame = new MyConstraintsFrame(_T("Constraints Test Frame"), 100, 100);
+    newFrame->Show(TRUE);
+}
+
+void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
+{
+    MyFlexSizerFrame *newFrame = new MyFlexSizerFrame(_T("Flex Sizer Test Frame"), 50, 50);
+    newFrame->Show(TRUE);
+}
+
+void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
+{
+    MySizerDialog dialog( this, _T("Notebook Sizer Test Dialog") );
+
+    dialog.ShowModal();
+}
+
+
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
+{
+    (void)wxMessageBox(_T("wxWindows GUI library layout demo\n"),
+            _T("About Layout Demo"), wxOK|wxICON_INFORMATION);
+}
+
+// ----------------------------------------------------------------------------
+// MyConstraintsFrame
+// ----------------------------------------------------------------------------
+
+MyConstraintsFrame::MyConstraintsFrame(const wxChar *title, int x, int y)
+                  : wxFrame(NULL, -1, title, wxPoint(x, y) )
+{
+  // Make a panel
+  wxPanel *panel = new wxPanel(this);
+
+  // Create some panel items
+  wxButton *btn1 = new wxButton(panel, -1, _T("A button (1)")) ;
+
+  wxLayoutConstraints *b1 = new wxLayoutConstraints;
+  b1->centreX.SameAs    (panel, wxCentreX);
+  b1->top.SameAs        (panel, wxTop, 5);
+  b1->width.PercentOf   (panel, wxWidth, 80);
+  b1->height.AsIs       ();
+  btn1->SetConstraints(b1);
+
+  wxListBox *list = new wxListBox(panel, -1,
+                                  wxPoint(-1, -1), wxSize(200, 100));
+  list->Append(_T("Apple"));
+  list->Append(_T("Pear"));
+  list->Append(_T("Orange"));
+  list->Append(_T("Banana"));
+  list->Append(_T("Fruit"));
+
+  wxLayoutConstraints *b2 = new wxLayoutConstraints;
+  b2->top.Below         (btn1, 5);
+  b2->left.SameAs       (panel, wxLeft, 5);
+  b2->width.PercentOf   (panel, wxWidth, 40);
+  b2->bottom.SameAs     (panel, wxBottom, 5);
+  list->SetConstraints(b2);
+
+  wxTextCtrl *mtext = new wxTextCtrl(panel, -1,
+                                     _T("This frame is laid out using\n"
+                                        "constraints, but the preferred\n"
+                                        "layout mechanism now are sizers."),
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     wxTE_MULTILINE);
+
+  wxLayoutConstraints *b3 = new wxLayoutConstraints;
+  b3->top.Below         (btn1, 5);
+  b3->left.RightOf      (list, 5);
+  b3->right.SameAs      (panel, wxRight, 5);
+  b3->bottom.SameAs     (panel, wxBottom, 5);
+  mtext->SetConstraints(b3);
+
+  wxTextCtrl *canvas = new wxTextCtrl(this, -1, _T("yet another window"));
+
+  // Make a text window
+  wxTextCtrl *text_window = new wxTextCtrl(this, -1, _T(""),
+                                           wxDefaultPosition,
+                                           wxDefaultSize,
+                                           wxTE_MULTILINE);
+
+  // Set constraints for panel subwindow
+  wxLayoutConstraints *c1 = new wxLayoutConstraints;
+
+  c1->left.SameAs       (this, wxLeft);
+  c1->top.SameAs        (this, wxTop);
+  c1->right.PercentOf   (this, wxWidth, 50);
+  c1->height.PercentOf  (this, wxHeight, 50);
+
+  panel->SetConstraints(c1);
+
+  // Set constraints for canvas subwindow
+  wxLayoutConstraints *c2 = new wxLayoutConstraints;
+
+  c2->left.SameAs       (panel, wxRight);
+  c2->top.SameAs        (this, wxTop);
+  c2->right.SameAs      (this, wxRight);
+  c2->height.PercentOf  (this, wxHeight, 50);
+
+  canvas->SetConstraints(c2);
+
+  // Set constraints for text subwindow
+  wxLayoutConstraints *c3 = new wxLayoutConstraints;
+  c3->left.SameAs       (this, wxLeft);
+  c3->top.Below         (panel);
+  c3->right.SameAs      (this, wxRight);
+  c3->bottom.SameAs     (this, wxBottom);
+
+  text_window->SetConstraints(c3);
+
+  SetAutoLayout(TRUE);
+}
+
+// ----------------------------------------------------------------------------
+//  MyFlexSizerFrame
+// ----------------------------------------------------------------------------
+
+void MyFlexSizerFrame::InitFlexSizer(wxFlexGridSizer *sizer)
+{
+    for ( int i = 0; i < 3; i++ )
+    {
+        for ( int j = 0; j < 3; j++ )
+        {
+            sizer->Add(new wxStaticText
+                           (
+                            this,
+                            -1,
+                            wxString::Format(_T("(%d, %d)"), i + 1, j + 1),
+                            wxDefaultPosition,
+                            wxDefaultSize,
+                            wxALIGN_CENTER
+                           ),
+                       0, wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALL, 3);
+        }
+    }
+}
+
+MyFlexSizerFrame::MyFlexSizerFrame(const wxChar *title, int x, int y )
+            : wxFrame(NULL, -1, title, wxPoint(x, y) )
+{
+    wxFlexGridSizer *sizerFlex;
+
+    // consttuct the first column
+    wxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
+    sizerCol1->Add(new wxStaticText(this, -1, _T("Ungrowable:")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol1->Add(new wxStaticText(this, -1, _T("Growable middle column:")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(1);
+    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol1->Add(new wxStaticText(this, -1, _T("Growable middle row:")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableRow(1);
+    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol1->Add(new wxStaticText(this, -1, _T("All growable columns:")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(0, 1);
+    sizerFlex->AddGrowableCol(1, 2);
+    sizerFlex->AddGrowableCol(2, 3);
+    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    // the second one
+    wxSizer *sizerCol2 = new wxBoxSizer(wxVERTICAL);
+    sizerCol2->Add(new wxStaticText(this, -1, _T("Growable middle row and column:")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(1);
+    sizerFlex->AddGrowableRow(1);
+    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol2->Add(new wxStaticText(this, -1, _T("Same with horz flex direction")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(1);
+    sizerFlex->AddGrowableRow(1);
+    sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
+    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol2->Add(new wxStaticText(this, -1, _T("Same with grow mode == \"none\"")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(1);
+    sizerFlex->AddGrowableRow(1);
+    sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
+    sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
+    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    sizerCol2->Add(new wxStaticText(this, -1, _T("Same with grow mode == \"all\"")), 0, wxCENTER | wxTOP, 20);
+    sizerFlex = new wxFlexGridSizer(3, 3);
+    InitFlexSizer(sizerFlex);
+    sizerFlex->AddGrowableCol(1);
+    sizerFlex->AddGrowableRow(1);
+    sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
+    sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_ALL);
+    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+
+    // add both columns to grid sizer
+    wxGridSizer *sizerTop = new wxGridSizer(2, 0, 20);
+    sizerTop->Add(sizerCol1, 1, wxEXPAND);
+    sizerTop->Add(sizerCol2, 1, wxEXPAND);
+
+    SetSizer(sizerTop);
+    sizerTop->SetSizeHints(this);
+}
+
+// ----------------------------------------------------------------------------
+// MySizerDialog
+// ----------------------------------------------------------------------------
+
+MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
+             : wxDialog(parent, -1, wxString(title))
+{
+    // Begin with first hierarchy: a notebook at the top and
+    // and OK button at the bottom.
+
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+
+    wxNotebook *notebook = new wxNotebook( this, -1 );
+    wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
+    topsizer->Add( nbs, 1, wxGROW );
+
+    wxButton *button = new wxButton( this, wxID_OK, _T("OK") );
+    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
+
+    // First page: one big text ctrl
+    wxTextCtrl *multi = new wxTextCtrl( notebook, -1, _T("TextCtrl."), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    notebook->AddPage( multi, _T("Page One") );
+
+    // Second page: a text ctrl and a button
+    wxPanel *panel = new wxPanel( notebook, -1 );
+    notebook->AddPage( panel, _T("Page Two") );
+
+    wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
+
+    wxTextCtrl *text = new wxTextCtrl( panel, -1, _T("TextLine 1."), wxDefaultPosition, wxSize(250,-1) );
+    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    text = new wxTextCtrl( panel, -1, _T("TextLine 2."), wxDefaultPosition, wxSize(250,-1) );
+    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    wxButton *button2 = new wxButton( panel, -1, _T("Hallo") );
+    panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
+
+    panel->SetAutoLayout( TRUE );
+    panel->SetSizer( panelsizer );
+
+    // Tell dialog to use sizer
+    SetSizer( topsizer );
+    topsizer->SetSizeHints( this );
+}
 
