@@ -220,7 +220,9 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     if (ret)
     {
         GdkDragAction action;
-        if (result == wxDragCopy)
+        if ((result == wxDragCopy) && (context->actions & GDK_ACTION_COPY) ||
+            (result == wxDragMove) && !(context->actions & GDK_ACTION_MOVE) ||
+            (result == wxDragLink) && !(context->actions & GDK_ACTION_LINK))
             action = GDK_ACTION_COPY;
         else if (result == wxDragLink)
             action = GDK_ACTION_LINK;
@@ -371,7 +373,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
        this is only valid for the duration of this call */
     drop_target->SetDragData( data );
 
-    wxDragResult result = ConvertFromGTK(context->suggested_action);
+    wxDragResult result = ConvertFromGTK(context->action);
 
     if ( wxIsDragResultOk( drop_target->OnData( x, y, result ) ) )
     {
