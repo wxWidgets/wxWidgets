@@ -204,7 +204,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 
 class wxPyDropSource : public wxDropSource {
 public:
-#ifdef __WXMSW__
+#ifndef __WXGTK__
      wxPyDropSource(wxWindow *win = NULL,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,

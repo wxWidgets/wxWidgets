@@ -309,9 +309,6 @@ class wxGridCellEditorPtr :
     def Destroy(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_Destroy,(self,) + _args, _kwargs)
         return val
-    def GetValue(self, *_args, **_kwargs):
-        val = apply(gridc.wxGridCellEditor_GetValue,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxGridCellEditor instance at %s>" % (self.this,)
 class wxGridCellEditor(wxGridCellEditorPtr):
@@ -355,9 +352,6 @@ class wxPyGridCellEditorPtr(wxGridCellEditorPtr):
     def base_SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellEditor_base_SetParameters,(self,) + _args, _kwargs)
         return val
-    def base_GetValue(self, *_args, **_kwargs):
-        val = apply(gridc.wxPyGridCellEditor_base_GetValue,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxPyGridCellEditor instance at %s>" % (self.this,)
 class wxPyGridCellEditor(wxPyGridCellEditorPtr):
@@ -374,6 +368,9 @@ class wxGridCellTextEditorPtr(wxGridCellEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellTextEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellTextEditor instance at %s>" % (self.this,)
 class wxGridCellTextEditor(wxGridCellTextEditorPtr):
@@ -389,6 +386,9 @@ class wxGridCellNumberEditorPtr(wxGridCellTextEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellNumberEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellNumberEditor instance at %s>" % (self.this,)
 class wxGridCellNumberEditor(wxGridCellNumberEditorPtr):
@@ -404,6 +404,9 @@ class wxGridCellFloatEditorPtr(wxGridCellTextEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellFloatEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellFloatEditor instance at %s>" % (self.this,)
 class wxGridCellFloatEditor(wxGridCellFloatEditorPtr):
@@ -419,6 +422,9 @@ class wxGridCellBoolEditorPtr(wxGridCellEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellBoolEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellBoolEditor instance at %s>" % (self.this,)
 class wxGridCellBoolEditor(wxGridCellBoolEditorPtr):
@@ -434,6 +440,9 @@ class wxGridCellChoiceEditorPtr(wxGridCellEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellChoiceEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellChoiceEditor instance at %s>" % (self.this,)
 class wxGridCellChoiceEditor(wxGridCellChoiceEditorPtr):
@@ -449,6 +458,9 @@ class wxGridCellEnumEditorPtr(wxGridCellChoiceEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEnumEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellEnumEditor instance at %s>" % (self.this,)
 class wxGridCellEnumEditor(wxGridCellEnumEditorPtr):
@@ -464,6 +476,9 @@ class wxGridCellAutoWrapStringEditorPtr(wxGridCellTextEditorPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAutoWrapStringEditor_GetValue,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxGridCellAutoWrapStringEditor instance at %s>" % (self.this,)
 class wxGridCellAutoWrapStringEditor(wxGridCellAutoWrapStringEditorPtr):

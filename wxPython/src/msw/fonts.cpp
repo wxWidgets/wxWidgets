@@ -3510,6 +3510,42 @@ static PyObject *_wrap_wxLocale_GetLanguageInfo(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+static PyObject *_wrap_wxLocale_FindLanguageInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLanguageInfo * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "locale", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLocale_FindLanguageInfo",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxLanguageInfo *)wxLocale::FindLanguageInfo(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLanguageInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxLocale_AddLanguage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxLanguageInfo * _arg0;
@@ -3835,6 +3871,7 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxLocale_GetName", (PyCFunction) _wrap_wxLocale_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetString", (PyCFunction) _wrap_wxLocale_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_AddLanguage", (PyCFunction) _wrap_wxLocale_AddLanguage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_FindLanguageInfo", (PyCFunction) _wrap_wxLocale_FindLanguageInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetLanguageInfo", (PyCFunction) _wrap_wxLocale_GetLanguageInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_IsLoaded", (PyCFunction) _wrap_wxLocale_IsLoaded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_AddCatalog", (PyCFunction) _wrap_wxLocale_AddCatalog, METH_VARARGS | METH_KEYWORDS },
