@@ -126,7 +126,7 @@ extern wxChar wxCanvasClassName[];
 // ---------------------------------------------------------------------------
 
 // the window proc for all our windows
-LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
+LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 
 #ifdef  __WXDEBUG__
@@ -1709,7 +1709,7 @@ void wxWindow::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
 wxWindow *wxWndHook = NULL;
 
 // Main window proc
-LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__

@@ -29,7 +29,7 @@
 
 wxChar wxGLCanvasClassName[]        = wxT("wxGLCanvasClass");
 
-LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
+LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 
 /*
@@ -48,8 +48,8 @@ wxGLContext::wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette)
   wglMakeCurrent((HDC) m_hDC, m_glContext);
 }
 
-wxGLContext::wxGLContext( 
-               bool isRGB, wxGLCanvas *win, 
+wxGLContext::wxGLContext(
+               bool isRGB, wxGLCanvas *win,
                const wxPalette& palette,
                const wxGLContext *other        /* for sharing display lists */
 )
@@ -139,13 +139,13 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
   m_glContext = new wxGLContext(TRUE, this, palette);
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+wxGLCanvas::wxGLCanvas( wxWindow *parent,
               const wxGLContext *shared, wxWindowID id,
               const wxPoint& pos, const wxSize& size, long style, const wxString& name,
               int *attribList, const wxPalette& palette )
   : wxScrolledWindow()
 //  : wxScrolledWindow(parent, id, pos, size, style, name)
-{			
+{
     bool ret = Create(parent, id, pos, size, style, name);
 
     if ( ret )

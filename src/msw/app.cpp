@@ -127,7 +127,7 @@ HICON wxDEFAULT_MDIPARENTFRAME_ICON = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
-LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
 #if defined(__WIN95__) && !defined(__TWIN32__)
     #define wxUSE_RICHEDIT 1
@@ -555,7 +555,7 @@ void wxApp::CleanUp()
     if (wxWinHandleList)
         delete wxWinHandleList;
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to 
+    // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
     delete wxPendingEvents;
 #if wxUSE_THREADS
@@ -956,7 +956,7 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     while ( hWnd && !wndThis )
     {
         hWnd = ::GetParent(hWnd);
-        wndThis = wxFindWinFromHandle((WXHWND)hWnd);        
+        wndThis = wxFindWinFromHandle((WXHWND)hWnd);
     }
 
     // Try translations first; find the youngest window with
