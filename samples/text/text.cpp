@@ -685,7 +685,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             else
             {
                 wxLogDebug( wxT("Stopped capturing mouse and events.") );
-                m_hasCapture = TRUE;
+                m_hasCapture = FALSE;
                 ReleaseMouse();
             }
             break;
