@@ -63,7 +63,7 @@ wxString wxComboBox::GetStringSelection()
     return wxEmptyString;
 }
 
-void wxComboBox::SetStringSelection(wxString& selection)
+void wxComboBox::SetStringSelection(const wxString& selection)
 {
 }
 
