@@ -24,19 +24,23 @@
 
 #include "wx/platform.h"
 
+/*  RN - only double-check the environment when building in C++ 
+    Shouldn't configure pass the environment to all sub-libs too? */
+#ifdef __cplusplus
 /*  Make sure the environment is set correctly */
-#if defined(__WXMSW__) && defined(__X__)
-    #error "Target can't be both X and Windows"
-#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
+#   if defined(__WXMSW__) && defined(__X__)
+#       error "Target can't be both X and Windows"
+#   elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__WXCOCOA__) && \
       !defined(__X__) && !defined(__WXMGL__) && !defined(__WXX11__) && \
       wxUSE_GUI
-    #ifdef __UNIX__
-        #error "No Target! You should use wx-config program for compilation flags!"
-    #else /*  !Unix */
-    #error "No Target! You should use supplied makefiles for compilation!"
-    #endif /*  Unix/!Unix */
-#endif
+#       ifdef __UNIX__
+#           error "No Target! You should use wx-config program for compilation flags!"
+#       else /*  !Unix */
+#           error "No Target! You should use supplied makefiles for compilation!"
+#       endif /*  Unix/!Unix */
+#   endif
+#endif /*__cplusplus*/
 
 #ifndef __WXWINDOWS__
     #define __WXWINDOWS__ 1
@@ -2016,7 +2020,7 @@ typedef void*       WXDisplay;
 typedef WindowPtr       WXHWND;
 typedef Handle          WXHANDLE;
 typedef CIconHandle     WXHICON;
-/* typedef unsigned long   WXHFONT; */
+// typedef unsigned long   WXHFONT; */
 typedef MenuHandle      WXHMENU;
 /* typedef unsigned long   WXHPEN; */
 /* typedef unsigned long   WXHBRUSH; */

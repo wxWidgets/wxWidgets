@@ -504,7 +504,7 @@
             #define wxPuts(ws) wxFputs(ws, stdout)
             #define wxPutchar(wch) wxPutc(wch, stdout)
 
-            /*  we need %s to %ls conversion for printf and scanf etc */
+            // we need %s to %ls conversion for printf and scanf etc */
             #define wxNEED_PRINTF_CONVERSION
             /*  glibc doesn't have wide char equivalents of the other stuff so */
             /*  use our own versions */
