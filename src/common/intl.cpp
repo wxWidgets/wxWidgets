@@ -706,7 +706,7 @@ bool wxLocale::Init(int language, int flags)
         return FALSE;
     }
 #elif defined(__WIN32__)
-    wxMB2WXbuf retloc(wxT("C"));
+    wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
@@ -1256,7 +1256,7 @@ wxString wxLocale::GetSystemEncodingName()
     char *alang = nl_langinfo(CODESET);
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
-    
+
     if ( alang )
     {
         // 7 bit ASCII encoding has several alternative names which we should
