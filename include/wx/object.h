@@ -304,7 +304,11 @@ name##PluginSentinel  m_pluginsentinel;
 // Just seems a bit nicer-looking (pretend it's not a macro)
 #define wxIsKindOf(obj, className) obj->IsKindOf(&className::ms_classInfo)
 
-// to be replaced by dynamic_cast<> in the future
+// this cast does some more checks at compile time as it uses static_cast
+// internally
+//
+// note that it still has different semantics from dynamic_cast<> and so can't
+// be replaced by it as long as there are any compilers not supporting it
 #define wxDynamicCast(obj, className) \
     ((className *) wxCheckDynamicCast( \
         wx_const_cast(wxObject *, wx_static_cast(const wxObject *, \
@@ -314,7 +318,7 @@ name##PluginSentinel  m_pluginsentinel;
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
- (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
+     (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
 
 #ifdef __WXDEBUG__
 inline void* wxCheckCast(void *ptr)
@@ -326,7 +330,7 @@ inline void* wxCheckCast(void *ptr)
  ((className *)wxCheckCast(wxDynamicCast(obj, className)))
 
 #else  // !__WXDEBUG__
-#define wxStaticCast(obj, className) ((className *)(obj))
+#define wxStaticCast(obj, className) wx_static_cast(className *, obj)
 
 #endif  // __WXDEBUG__
 
