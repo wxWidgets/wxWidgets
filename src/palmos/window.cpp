@@ -448,10 +448,10 @@ void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
         if(rect)
         {
             RectangleType dirtyRect;
-            dirtyRect.topLeft.x = rect->GetX();
-            dirtyRect.topLeft.y = rect->GetY();
-            dirtyRect.extent.x = rect->GetWidth();
-            dirtyRect.extent.y = rect->GetHeight();
+            dirtyRect.topLeft.x = rect->GetX() - 1;
+            dirtyRect.topLeft.y = rect->GetY() - 1;
+            dirtyRect.extent.x = rect->GetWidth() + 1;
+            dirtyRect.extent.y = rect->GetHeight() + 1;
             WinInvalidateRect(handle, &dirtyRect);
         }
         else
@@ -510,6 +510,10 @@ void wxWindowPalm::DoGetClientSize(int *x, int *y) const
 
 void wxWindowPalm::DoGetPosition(int *x, int *y) const
 {
+    if(x)
+        *x = 0;
+    if(y)
+        *y = 0;
 }
 
 void wxWindowPalm::DoScreenToClient(int *x, int *y) const

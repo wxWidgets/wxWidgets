@@ -254,6 +254,8 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 {
     wxRect oldRect = GetRect();
 
+    m_pos.x = x;
+    m_pos.y = y;
     m_size.x = width;
     m_size.y = height;
 
@@ -292,7 +294,7 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 // get the origin of the client area in the client coordinates
 wxPoint wxRadioBox::GetClientAreaOrigin() const
 {
-    return GetParent()->GetClientAreaOrigin() + GetPosition();
+    return GetPosition();
 }
 
 void wxRadioBox::SetString(int item, const wxString& label)

@@ -123,7 +123,14 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
             w = size.x == wxDefaultCoord ? 1 : size.x,
             h = size.y == wxDefaultCoord ? 1 : size.y;
 
-    AdjustForParentClientOrigin(x, y);
+    wxWindow *win = this;
+    while(win->GetParent())
+    {
+        win = win->GetParent();
+        wxPoint pt(win->GetClientAreaOrigin());
+        x += pt.x;
+        y += pt.y;
+    }
 
     ControlType *control = CtlNewControl(
                                (void **)&form,
@@ -299,18 +306,23 @@ void wxControl::DoSetBounds( RectangleType &rect )
 
 void wxControl::DoGetPosition( int *x, int *y ) const
 {
+    int ox = 0, oy = 0;
+    AdjustForParentClientOrigin(ox, oy);
+
     RectangleType rect;
     DoGetBounds(rect);
+
     if(x)
-        *x = rect.topLeft.x;
+        *x = rect.topLeft.x - ox;
     if(y)
-        *y = rect.topLeft.y;
+        *y = rect.topLeft.y - oy;
 }
 
 void wxControl::DoGetSize( int *width, int *height ) const
 {
     RectangleType rect;
     DoGetBounds(rect);
+
     if(width)
         *width = rect.extent.x;
     if(height)
