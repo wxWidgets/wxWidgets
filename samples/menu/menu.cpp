@@ -107,9 +107,9 @@ protected:
 #endif
 
     void OnMenuOpen(wxMenuEvent& event)
-        { LogMenuOpenOrClose(event, _T("opened")); }
+        { LogMenuOpenOrClose(event, _T("opened")); event.Skip(); }
     void OnMenuClose(wxMenuEvent& event)
-        { LogMenuOpenOrClose(event, _T("closed")); }
+        { LogMenuOpenOrClose(event, _T("closed")); event.Skip(); }
 
     void OnUpdateCheckMenuItemUI(wxUpdateUIEvent& event);
 
