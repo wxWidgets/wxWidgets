@@ -477,13 +477,20 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
     inOnIdle = TRUE;
 
-    // 'Garbage' collection of windows deleted with Close().
-    DeletePendingObjects();
+    // If there are pending events, we must process them: pending events
+    // are either events to the threads other than main or events posted
+    // with wxPostEvent() functions
+    // GRG: I have moved this here so that all pending events are processed
+    //   before starting to delete any objects. This behaves better (in
+    //   particular, wrt wxPostEvent) and is coherent with wxGTK's current
+    //   behaviour. Also removed the '#if wxUSE_THREADS' around it.
+    //  Changed Mar/2000 before 2.1.14
 
-#if wxUSE_THREADS
     // Flush pending events.
     ProcessPendingEvents();
-#endif
+
+    // 'Garbage' collection of windows deleted with Close().
+    DeletePendingObjects();
 
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
