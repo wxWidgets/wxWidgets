@@ -2994,6 +2994,8 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
         nonDefault = TRUE;
     }
 
+    AdjustForParentClientOrigin(x, y);
+
     return nonDefault;
 }
 

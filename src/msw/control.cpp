@@ -106,10 +106,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         style |= WS_VISIBLE;
     }
 
+    // choose the position for the control
     int x = pos.x == -1 ? 0 : pos.x,
         y = pos.y == -1 ? 0 : pos.y,
         w = size.x == -1 ? 0 : size.x,
         h = size.y == -1 ? 0 : size.y;
+
+    // ... and adjust it to account for ap ossible parent frames toolbar
+    AdjustForParentClientOrigin(x, y);
 
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
