@@ -69,7 +69,7 @@
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CARET        0
-#define wxUSE_CHECKBOX     0
+#define wxUSE_CHECKBOX     1
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_CHOICE       0
 #define wxUSE_COMBOBOX     0

@@ -48,7 +48,7 @@ wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
 // "dynamic" theme creation
 // ----------------------------------------------------------------------------
 
-wxThemeInfo::wxThemeInfo(wxThemeInfo::Constructor c,
+wxThemeInfo::wxThemeInfo(Constructor c,
                          const wxChar *n,
                          const wxChar *d)
            : name(n), desc(d), ctor(c)

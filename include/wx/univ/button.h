@@ -106,7 +106,7 @@ public:
 
 protected:
     virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0,
+                               long numArg = -1,
                                const wxString& strArg = wxEmptyString);
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);

@@ -94,14 +94,34 @@ struct WXDLLEXPORT wxThemeInfo
     wxThemeInfo(Constructor ctor, const wxChar *name, const wxChar *desc);
 };
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// to use a standard theme insert this macro into one of the application files:
+// without it, an over optimizing linker may discard the object module
+// containing the theme implementation entirely
+#define WX_USE_THEME(themename)                                             \
+    extern bool wxThemeUse##themename;                                      \
+    static struct wxThemeUserFor##themename                                 \
+    {                                                                       \
+        wxThemeUserFor##themename() { wxThemeUse##themename = TRUE; }       \
+    } wxThemeDoUse##themename
+
 // to declare a new theme, this macro must be used in the class declaration
-#define WX_DECLARE_THEME() static wxThemeInfo ms_info
+#define WX_DECLARE_THEME(themename)                                         \
+    private:                                                                \
+        static wxThemeInfo ms_info##themename;                              \
+    public:                                                                 \
+        const wxThemeInfo *GetThemeInfo() const                             \
+            { return &ms_info##themename; }
 
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
+    extern bool wxThemeUse##themename = TRUE;                               \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
-    wxThemeInfo classname::ms_info(wxCtorFor##themename,                    \
-                                   #themename, themedesc)
+    wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
+                                              #themename, themedesc)
 
 #endif // _WX_UNIV_THEME_H_
 

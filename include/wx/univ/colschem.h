@@ -19,6 +19,7 @@
 class WXDLLEXPORT wxWindow;
 
 #include "wx/colour.h"
+#include "wx/checkbox.h"
 
 // ----------------------------------------------------------------------------
 // wxColourScheme
@@ -62,6 +63,11 @@ public:
 
     // get a standard colour
     virtual wxColour Get(StdColour col) const = 0;
+
+#if wxUSE_CHECKBOX
+    // get a standard bitmap
+    virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status) = 0;
+#endif // wxUSE_CHECKBOX
 
     // get the background colour for the given window
     virtual wxColour GetBackground(wxWindow *win) const = 0;

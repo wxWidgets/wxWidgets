@@ -346,13 +346,13 @@ void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
 
         wxControl *ctrl = wxStaticCast(m_window, wxControl);
 
-        m_renderer->DrawLabel(m_dc,
-                              label,
-                              bitmap,
-                              rectLabel,
-                              m_window->GetStateFlags(),
-                              ctrl->GetAlignment(),
-                              ctrl->GetAccelIndex());
+        m_renderer->DrawButtonLabel(m_dc,
+                                    label,
+                                    bitmap,
+                                    rectLabel,
+                                    m_window->GetStateFlags(),
+                                    ctrl->GetAlignment(),
+                                    ctrl->GetAccelIndex());
     }
 }
 
@@ -620,4 +620,48 @@ void wxControlRenderer::DrawItems(const wxListBox *lbox,
 
         rect.y += lineHeight;
     }
+}
+
+void wxControlRenderer::DrawLabelBox(const wxBitmap& bitmap, wxCoord margin)
+{
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
+
+    if ( margin == -1 )
+        margin = 4;
+
+    // calculate the position of the bitmap and of the label
+    wxRect rectBmp;
+    rectBmp.width = bitmap.GetWidth();
+    rectBmp.height = bitmap.GetHeight();
+    rectBmp.y = m_rect.y + (m_rect.height - rectBmp.height + 1) / 2;
+
+    wxRect rectLabel;
+    wxString label = m_window->GetLabel();
+    m_dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
+    rectLabel.y = m_rect.y + (m_rect.height - rectLabel.height) / 2;
+
+    if ( m_window->GetWindowStyle() & wxALIGN_RIGHT )
+    {
+        rectBmp.SetRight(m_rect.GetRight());
+        rectLabel.SetRight(rectBmp.GetLeft() - margin);
+        rectLabel.SetLeft(m_rect.GetLeft());
+    }
+    else // normal (checkbox to the left of the text) case
+    {
+        rectBmp.SetLeft(m_rect.GetLeft());
+        rectLabel.SetLeft(rectBmp.GetRight() + margin);
+        rectLabel.SetRight(m_rect.GetRight());
+    }
+
+    DrawBitmap(bitmap, rectBmp);
+
+    wxControl *ctrl = wxStaticCast(m_window, wxControl);
+
+    m_renderer->DrawLabel(m_dc,
+                          label,
+                          rectLabel,
+                          m_window->GetStateFlags(),
+                          wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
+                          ctrl->GetAccelIndex());
 }

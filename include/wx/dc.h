@@ -256,7 +256,7 @@ public:
     void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle)
         { DoDrawRotatedText(text, pt.x, pt.y, angle); }
 
-    // this verson puts both optional bitmap and the text into the given
+    // this version puts both optional bitmap and the text into the given
     // rectangle and aligns is as specified by alignment parameter; it also
     // will emphasize the character with the given index if it is != -1 and
     // return the bounding rectangle if required

@@ -30,12 +30,15 @@
 #define wxACTION_LISTBOX_PAGEUP     _T("pageup")    // go page up
 #define wxACTION_LISTBOX_START      _T("start")     // go to first item
 #define wxACTION_LISTBOX_END        _T("end")       // go to last item
+#define wxACTION_LISTBOX_FIND       _T("find")      // find item by 1st letter
 
 // do something with the current item
 #define wxACTION_LISTBOX_ACTIVATE   _T("activate")  // activate (choose)
 #define wxACTION_LISTBOX_TOGGLE     _T("toggle")    // togglee selected state
-#define wxACTION_LISTBOX_SELECT     _T("select")    // select/focus
-#define wxACTION_LISTBOX_UNSELECT   _T("unselect")  // unselect/unfocus
+#define wxACTION_LISTBOX_SELECT     _T("select")    // sel this, unsel others
+#define wxACTION_LISTBOX_SELECTADD  _T("selectadd") // add to selection
+#define wxACTION_LISTBOX_UNSELECT   _T("unselect")  // unselect
+#define wxACTION_LISTBOX_ANCHOR     _T("selanchor") // anchor selection
 
 // do something with the selection globally (not for single selection ones)
 #define wxACTION_LISTBOX_SELECTALL   _T("selectall")   // select all items
@@ -123,12 +126,27 @@ public:
     // select the item which is diff items below the current one
     void ChangeCurrent(int diff);
 
-    // actions
-    void Activate(int item);
+    // activate (i.e. send a LISTBOX_DOUBLECLICKED message) the specified or
+    // current (if -1) item
+    void Activate(int item = -1);
+
+    // select or unselect the specified or current (if -1) item
     void Select(bool sel = TRUE, int item = -1);
+
+    // ensure that the current item is visible by scrolling it into view
     void EnsureVisible();
 
-    void ExtendSelection(int itemTo);
+    // find the first item after the current one which starts with the given
+    // string and make it the current one, return TRUE if the current item
+    // changed
+    bool FindItem(const wxString& prefix);
+
+    // extend the selection to span the range from the anchor (see below) to
+    // the specified or current item
+    void ExtendSelection(int itemTo = -1);
+
+    // make this item the new selection anchor: extending selection with
+    // ExtendSelection() will work with it
     void AnchorSelection(int itemFrom) { m_selAnchor = itemFrom; }
 
     // get, calculating it if necessary, the number of items per page, the

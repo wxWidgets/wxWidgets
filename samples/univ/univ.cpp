@@ -36,6 +36,7 @@
 
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
+    #include "wx/checkbox.h"
     #include "wx/listbox.h"
     #include "wx/scrolbar.h"
     #include "wx/scrolwin.h"
@@ -133,10 +134,17 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// event tables
+// misc macros
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_APP(MyUnivApp)
+
+WX_USE_THEME(win32);
+WX_USE_THEME(gtk);
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_BUTTON(-1, MyUnivFrame::OnButton)
@@ -325,6 +333,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
         lbox->Append(wxString::Format(_T("%sentry %d"),
                      i % 10 ? _T("") : _T("very very long "), i));
     }
+
+    new wxCheckBox(this, -1, _T("Check me"), wxPoint(10, 520));
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)

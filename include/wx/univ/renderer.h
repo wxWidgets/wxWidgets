@@ -80,12 +80,21 @@ public:
     // and optionally emphasize the character with the given index
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
-                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounds = NULL) = 0;
+
+    // same but also draw a bitmap if it is valid
+    virtual void DrawButtonLabel(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& image,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                                 int indexAccel = -1,
+                                 wxRect *rectBounds = NULL) = 0;
 
     // draw the border and optionally return the rectangle containing the
     // region inside the border
@@ -151,6 +160,14 @@ public:
     // get the dimensions of the border: rect.x/y contain the width/height of
     // the left/top side, width/heigh - of the right/bottom one
     virtual wxRect GetBorderDimensions(wxBorder border) const = 0;
+
+    // the scrollbar rectangle may need adjusting if the window has the border
+    // as the renderer might wish to combine the scrollbar border and the
+    // window one
+    virtual void AdjustScrollbar(wxOrientation orient,
+                                 wxBorder border,
+                                 bool hasOtherScrollbar,
+                                 wxRect* rect) const = 0;
 
     // adjust the size of the control of the given class: for most controls,
     // this just takes into account the border, but for some (buttons, for
@@ -230,14 +247,23 @@ public:
         { m_renderer->DrawBackground(dc, col, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
-                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int align = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounds = NULL)
-        { m_renderer->DrawLabel(dc, label, image, rect,
+        { m_renderer->DrawLabel(dc, label, rect,
                                 flags, align, indexAccel, rectBounds); }
+    virtual void DrawButtonLabel(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& image,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 int align = wxALIGN_LEFT | wxALIGN_TOP,
+                                 int indexAccel = -1,
+                                 wxRect *rectBounds = NULL)
+        { m_renderer->DrawButtonLabel(dc, label, image, rect,
+                                      flags, align, indexAccel, rectBounds); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -290,6 +316,11 @@ public:
         { m_renderer->AdjustSize(size, window); }
     virtual wxRect GetBorderDimensions(wxBorder border) const
         { return m_renderer->GetBorderDimensions(border); }
+    virtual void AdjustScrollbar(wxOrientation orient,
+                                 wxBorder border,
+                                 bool hasOtherScrollbar,
+                                 wxRect* rect) const
+        { m_renderer->AdjustScrollbar(orient, border, hasOtherScrollbar, rect); }
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
@@ -341,6 +372,7 @@ public:
                     wxStretch stretch = wxSTRETCH_NOT);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
+    void DrawLabelBox(const wxBitmap& bitmap, wxCoord margin);
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }

@@ -139,6 +139,13 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // the event handler executed when the window background must be painted
 void wxWindow::OnErase(wxEraseEvent& event)
 {
+    if ( !m_renderer )
+    {
+        event.Skip();
+
+        return;
+    }
+
     wxControlRenderer renderer(this, *event.GetDC(), m_renderer);
 
     DoDrawBackground(&renderer);
@@ -147,11 +154,16 @@ void wxWindow::OnErase(wxEraseEvent& event)
     // them which we must paint
     if ( m_scrollbarVert && m_scrollbarHorz )
     {
+        wxSize size = GetSize();
+        wxRect rectClient = GetClientRect(),
+               rectBorder = m_renderer->GetBorderDimensions(GetBorder());
+
         wxRect rectCorner;
-        rectCorner.x = m_scrollbarHorz->GetSize().x;
-        rectCorner.y = m_scrollbarVert->GetSize().y;
-        rectCorner.width = m_scrollbarVert->GetSize().x;
-        rectCorner.height = m_scrollbarHorz->GetSize().y;
+        rectCorner.x = rectClient.GetRight() + 1;
+        rectCorner.y = rectClient.GetBottom() + 1;
+        rectCorner.SetRight(size.x - rectBorder.width);
+        rectCorner.SetBottom(size.y - rectBorder.height);
+
         m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
     }
 }
@@ -309,27 +321,25 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
     if ( m_renderer )
         rectBorder = m_renderer->GetBorderDimensions(GetBorder());
 
-    // TODO these calculations suppose that we position the scrollbars in such
-    //      way that they overwrite some borders - when this is changed (see
-    //      the next todo item below) this code must be updated too
+    // TODO we should be smarter about combining the scrollbar borders with
+    //      the window ones - so far we just blend the right and bottom
+    //      borders of the vertical scrollbar (and left/bottom of the
+    //      horizontal one) into the window border, but this risks to look
+    //      ugly with other renderers/border styles
     if ( width )
     {
         if ( m_scrollbarVert )
             *width -= m_scrollbarVert->GetSize().x;
-        else
-            *width -= rectBorder.width;
 
-        *width -= rectBorder.x;
+        *width -= rectBorder.x + rectBorder.width;
     }
 
     if ( height )
     {
         if ( m_scrollbarHorz )
             *height -= m_scrollbarHorz->GetSize().y;
-        else
-            *height -= rectBorder.height;
 
-        *height -= rectBorder.y;
+        *height -= rectBorder.y + rectBorder.height;
     }
 }
 
@@ -342,29 +352,30 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 void wxWindow::PositionScrollbars()
 {
     wxRect rectClient = GetClientRect(),
-           rectTotal = wxRect(wxPoint(0, 0), GetSize());
+           rectBar;
 
-    // TODO we should be smarter about combining the scrollbar borders with
-    //      the window ones - so far we just blend the right and bottom
-    //      borders of the vertical scrollbar (and left/bottom of the
-    //      horizontal one) into the window border, but this risks to look
-    //      ugly with other renderers/border styles
     if ( m_scrollbarVert )
     {
-        m_scrollbarVert->SetSize(rectClient.GetRight() + 1,
-                                 rectTotal.GetTop(),
-                                 m_scrollbarVert->GetSize().x,
-                                 m_scrollbarHorz ? rectClient.GetBottom() + 1
-                                                 : rectTotal.GetBottom() + 1);
+        rectBar.x = rectClient.GetRight() + 1;
+        rectBar.y = rectClient.GetTop();
+        rectBar.width = m_scrollbarVert->GetSize().x;
+        rectBar.height = rectClient.GetHeight();
+        m_renderer->AdjustScrollbar(wxVERTICAL, GetBorder(),
+                                    m_scrollbarHorz != NULL, &rectBar);
+
+        m_scrollbarVert->SetSize(rectBar, wxSIZE_NO_ADJUSTMENTS);
     }
 
     if ( m_scrollbarHorz )
     {
-        m_scrollbarHorz->SetSize(rectTotal.GetLeft(),
-                                 rectClient.GetBottom() + 1,
-                                 m_scrollbarVert ? rectClient.GetRight() + 1
-                                                 : rectTotal.GetRight() + 1,
-                                 m_scrollbarHorz->GetSize().y);
+        rectBar.x = rectClient.GetLeft();
+        rectBar.y = rectClient.GetBottom() + 1;
+        rectBar.width = rectClient.GetWidth();
+        rectBar.height = m_scrollbarHorz->GetSize().y;
+        m_renderer->AdjustScrollbar(wxHORIZONTAL, GetBorder(),
+                                    m_scrollbarVert != NULL, &rectBar);
+
+        m_scrollbarHorz->SetSize(rectBar, wxSIZE_NO_ADJUSTMENTS);
     }
 }
 

@@ -24,6 +24,20 @@
     #pragma hdrstop
 #endif
 
+extern int foo = 0;
+
+static struct Foo
+{
+    Foo();
+} s_foo;
+
+Foo::Foo()
+{
+    int x;
+    x = 1;
+    x++;
+}
+
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
     #include "wx/intl.h"
@@ -76,12 +90,19 @@ public:
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
-                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounds = NULL);
+    virtual void DrawButtonLabel(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& image,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                                 int indexAccel = -1,
+                                 wxRect *rectBounds = NULL);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -122,6 +143,10 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
+    virtual void AdjustScrollbar(wxOrientation orient,
+                                 wxBorder border,
+                                 bool hasOtherScrollbar,
+                                 wxRect* rect) const;
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
@@ -138,6 +163,13 @@ public:
 protected:
     // common part of DrawLabel() and DrawItem()
     void DrawFocusRect(wxDC& dc, const wxRect& rect);
+
+    // DrawLabel() and DrawButtonLabel() helper
+    void DrawLabelShadow(wxDC& dc,
+                         const wxString& label,
+                         const wxRect& rect,
+                         int alignment,
+                         int indexAccel);
 
     // DrawButtonBorder() helper
     void DoDrawBackground(wxDC& dc,
@@ -250,8 +282,11 @@ protected:
 class wxWin32ColourScheme : public wxColourScheme
 {
 public:
-    virtual wxColour Get(StdColour col, int flags = 0) const;
-    virtual wxColour GetBackground(wxWindow *win);
+    virtual wxColour Get(StdColour col) const;
+    virtual wxColour GetBackground(wxWindow *win) const;
+#if wxUSE_CHECKBOX
+    virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status);
+#endif // wxUSE_CHECKBOX
 };
 
 // ----------------------------------------------------------------------------
@@ -268,7 +303,7 @@ public:
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
     virtual wxInputHandler *GetInputHandler(const wxString& control);
-    virtual wxColourScheme *GetColourScheme(const wxString& control);
+    virtual wxColourScheme *GetColourScheme();
 
 private:
     wxWin32Renderer *m_renderer;
@@ -280,7 +315,7 @@ private:
 
     wxWin32ColourScheme *m_scheme;
 
-    WX_DECLARE_THEME();
+    WX_DECLARE_THEME(win32)
 };
 
 // ============================================================================
@@ -335,9 +370,8 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
     return handler;
 }
 
-wxColourScheme *wxWin32Theme::GetColourScheme(const wxString& control)
+wxColourScheme *wxWin32Theme::GetColourScheme()
 {
-    // Win32 has only one colour scheme for all controls
     return m_scheme;
 }
 
@@ -345,31 +379,68 @@ wxColourScheme *wxWin32Theme::GetColourScheme(const wxString& control)
 // wxWin32ColourScheme
 // ============================================================================
 
-wxColour wxWin32ColourScheme::GetBackground(wxWindow *win)
+wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
 {
-    return win->GetBackgroundColour();
+    wxColour col;
+    if ( win->UseBgCol() )
+    {
+        // use the user specified colour
+        col = win->GetBackgroundColour();
+    }
+
+    if ( win->IsContainerWindow() )
+    {
+        // doesn't depend on the state
+        if ( !col.Ok() )
+        {
+            col = Get(WINDOW);
+        }
+    }
+    else
+    {
+        int flags = win->GetStateFlags();
+
+        // the colour set by the user should be used for the normal state
+        // and for the states for which we don't have any specific colours
+        if ( !col.Ok() || (flags != 0) )
+        {
+            if ( wxDynamicCast(win, wxScrollBar) )
+                col = Get(flags & wxCONTROL_PRESSED ? SCROLLBAR_PRESSED
+                                                    : SCROLLBAR);
+            else
+                col = Get(CONTROL);
+        }
+    }
+
+    return col;
 }
 
-wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
-                                  int flags) const
+wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 {
     switch ( col )
     {
         case WINDOW:            return *wxWHITE;
 
+        case CONTROL_PRESSED:
+        case CONTROL_CURRENT:
         case CONTROL:           return wxColour(0xc0c0c0);
+
         case CONTROL_TEXT:      return *wxBLACK;
-        case SCROLLBAR:         if ( flags & wxCONTROL_PRESSED )
-                                    return *wxBLACK;
-                                else
-                                    return wxColour(0xe0e0e0);
+
+        case SCROLLBAR:         return wxColour(0xe0e0e0);
+        case SCROLLBAR_PRESSED: return *wxBLACK;
 
         case HIGHLIGHT:         return wxColour(0x800000);
         case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
 
         case SHADOW_DARK:       return *wxBLACK;
+
+        case CONTROL_TEXT_DISABLED:
         case SHADOW_HIGHLIGHT:  return wxColour(0xe0e0e0);
+
         case SHADOW_IN:         return wxColour(0xc0c0c0);
+
+        case CONTROL_TEXT_DISABLED_SHADOW:
         case SHADOW_OUT:        return wxColour(0x7f7f7f);
 
         case MAX:
@@ -378,6 +449,18 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
             return *wxBLACK;
     }
 }
+
+#if wxUSE_CHECKBOX
+
+wxBitmap wxWin32ColourScheme::Get(wxCheckBox::State state,
+                                  wxCheckBox::Status status)
+{
+    return wxBitmap(status == wxCheckBox::Status_Checked ? _T("check.bmp")
+                                                         : _T("uncheck.bmp"),
+                    wxBITMAP_TYPE_BMP);
+}
+
+#endif // wxUSE_CHECKBOX
 
 // ============================================================================
 // wxWin32Renderer
@@ -394,14 +477,14 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     m_sizeScrollbarArrow = wxSize(16, 16);
 
     // init colours and pens
-    m_penBlack = wxPen(scheme->Get(wxColourScheme::SHADOW_DARK), 0, wxSOLID);
+    m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
 
-    m_colDarkGrey = scheme->Get(wxColourScheme::SHADOW_OUT);
+    m_colDarkGrey = wxSCHEME_COLOUR(scheme, SHADOW_OUT);
     m_penDarkGrey = wxPen(m_colDarkGrey, 0, wxSOLID);
 
-    m_penLightGrey = wxPen(scheme->Get(wxColourScheme::SHADOW_IN), 0, wxSOLID);
+    m_penLightGrey = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_IN), 0, wxSOLID);
 
-    m_colHighlight = scheme->Get(wxColourScheme::SHADOW_HIGHLIGHT);
+    m_colHighlight = wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT);
     m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
 
     // init the arrow bitmaps
@@ -771,6 +854,14 @@ wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
     return rect;
 }
 
+void wxWin32Renderer::AdjustScrollbar(wxOrientation orient,
+                                      wxBorder border,
+                                      bool hasOtherScrollbar,
+                                      wxRect* rect) const
+{
+    // don't do anything - we don't blend scrollbars into borders
+}
+
 // ----------------------------------------------------------------------------
 // button border
 // ----------------------------------------------------------------------------
@@ -872,8 +963,7 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
         }
 
         wxRect rectLabel;
-        DrawLabel(dc, label2, wxNullBitmap,
-                  rectText, flags, alignment, indexAccel, &rectLabel);
+        DrawLabel(dc, label2, rectText, flags, alignment, indexAccel, &rectLabel);
 
         StandardDrawFrame(dc, rectFrame, rectLabel);
     }
@@ -928,14 +1018,54 @@ void wxWin32Renderer::DrawFocusRect(wxDC& dc, const wxRect& rect)
 #endif // 0/1
 }
 
+void wxWin32Renderer::DrawLabelShadow(wxDC& dc,
+                                      const wxString& label,
+                                      const wxRect& rect,
+                                      int alignment,
+                                      int indexAccel)
+{
+    // make the text grey and draw a shadow of it
+    dc.SetTextForeground(m_colHighlight);
+    wxRect rectShadow = rect;
+    rectShadow.x++;
+    rectShadow.y++;
+    dc.DrawLabel(label, rectShadow, alignment, indexAccel);
+    dc.SetTextForeground(m_colDarkGrey);
+}
+
 void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 const wxString& label,
-                                const wxBitmap& image,
                                 const wxRect& rect,
                                 int flags,
                                 int alignment,
                                 int indexAccel,
                                 wxRect *rectBounds)
+{
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        DrawLabelShadow(dc, label, rect, alignment, indexAccel);
+    }
+
+    wxRect rectLabel;
+    dc.DrawLabel(label, wxNullBitmap, rect, alignment, indexAccel, &rectLabel);
+
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        DrawFocusRect(dc, rectLabel);
+    }
+
+    if ( rectBounds )
+        *rectBounds = rectLabel;
+}
+
+void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
+                                      const wxString& label,
+                                      const wxBitmap& image,
+                                      const wxRect& rect,
+                                      int flags,
+                                      int alignment,
+                                      int indexAccel,
+                                      wxRect *rectBounds)
 {
     // shift the label if a button is pressed
     wxRect rectLabel = rect;
@@ -947,13 +1077,7 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
 
     if ( flags & wxCONTROL_DISABLED )
     {
-        // make the text grey and draw a shadow of it
-        dc.SetTextForeground(m_colHighlight);
-        wxRect rectShadow = rectLabel;
-        rectShadow.x++;
-        rectShadow.y++;
-        dc.DrawLabel(label, rectShadow, alignment, indexAccel);
-        dc.SetTextForeground(m_colDarkGrey);
+        DrawLabelShadow(dc, label, rectLabel, alignment, indexAccel);
     }
 
     // leave enough space for the focus rectangle
@@ -989,9 +1113,9 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
     wxColour colFg;
     if ( flags & wxCONTROL_SELECTED )
     {
-        wxColour colBg = m_scheme->Get(wxColourScheme::HIGHLIGHT);
+        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
         colFg = dc.GetTextForeground();
-        dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
+        dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
         dc.SetBrush(wxBrush(colBg, wxSOLID));
         dc.SetPen(wxPen(colBg, 0, wxSOLID));
         dc.DrawRectangle(rect);
@@ -1033,11 +1157,9 @@ void wxWin32Renderer::DrawBackground(wxDC& dc,
                                      const wxRect& rect,
                                      int flags)
 {
-    // just fill it with the default bg colour
-    DoDrawBackground(dc,
-                     col.Ok() ? col
-                              : m_scheme->Get(wxColourScheme::CONTROL, flags),
-                     rect);
+    // just fill it with the given or default bg colour
+    wxColour colBg = col.Ok() ? col : wxSCHEME_COLOUR(m_scheme, CONTROL);
+    DoDrawBackground(dc, colBg, rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -1103,7 +1225,7 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
                                       wxArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
     DrawArrowBorder(dc, &rect, arrowStyle == Arrow_Pressed);
     DrawArrow(dc, rect, arrowDir, arrowStyle);
 }
@@ -1124,13 +1246,15 @@ void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
                                          const wxRect& rectBar,
                                          int flags)
 {
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR, flags),
-                     rectBar);
+    wxColourScheme::StdColour col = flags & wxCONTROL_PRESSED
+                                    ? wxColourScheme::SCROLLBAR_PRESSED
+                                    : wxColourScheme::SCROLLBAR;
+    DoDrawBackground(dc, m_scheme->Get(col), rectBar);
 }
 
 void wxWin32Renderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
 {
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
+    DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
 }
 
 wxRect wxWin32Renderer::GetScrollbarRect(const wxScrollBar *scrollbar,

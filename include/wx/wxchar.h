@@ -165,6 +165,7 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxStrcspn   _tcscspn
 #  define  wxStrftime  _tcsftime
 #  define  wxStricmp   _tcsicmp
+#  define  wxStrnicmp  _tcsnicmp
 #  define  wxStrlen_   _tcslen // used in wxStrlen inline function
 #  define  wxStrncat   _tcsncat
 #  define  wxStrncmp   _tcsncmp

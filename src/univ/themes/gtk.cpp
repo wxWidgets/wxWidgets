@@ -58,12 +58,19 @@ public:
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
-                           const wxBitmap& image,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounds = NULL);
+    virtual void DrawButtonLabel(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& image,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                                 int indexAccel = -1,
+                                 wxRect *rectBounds = NULL);
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
@@ -104,6 +111,10 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
+    virtual void AdjustScrollbar(wxOrientation orient,
+                                 wxBorder border,
+                                 bool hasOtherScrollbar,
+                                 wxRect* rect) const;
 
     // hit testing for the input handlers
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
@@ -273,6 +284,9 @@ class wxGTKColourScheme : public wxColourScheme
 public:
     virtual wxColour Get(StdColour col) const;
     virtual wxColour GetBackground(wxWindow *win) const;
+#if wxUSE_CHECKBOX
+    virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status);
+#endif // wxUSE_CHECKBOX
 };
 
 // ----------------------------------------------------------------------------
@@ -301,7 +315,7 @@ private:
 
     wxGTKColourScheme *m_scheme;
 
-    WX_DECLARE_THEME();
+    WX_DECLARE_THEME(gtk)
 };
 
 // ============================================================================
@@ -338,7 +352,7 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
             handler = new wxGTKScrollBarInputHandler(m_renderer,
                                                      GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxListBox") )
-            handler = new wxStdListboxInputHandler(GetInputHandler(_T("wxControl")));
+            handler = new wxStdListboxInputHandler(GetInputHandler(_T("wxControl")), FALSE);
         else
             handler = new wxGTKInputHandler(m_renderer);
 
@@ -429,6 +443,16 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
             return *wxBLACK;
     }
 }
+
+#if wxUSE_CHECKBOX
+
+wxBitmap wxGTKColourScheme::Get(wxCheckBox::State state,
+                                wxCheckBox::Status status)
+{
+    return wxNullBitmap;
+}
+
+#endif // wxUSE_CHECKBOX
 
 // ============================================================================
 // wxGTKRenderer
@@ -644,6 +668,34 @@ wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
     return rect;
 }
 
+void wxGTKRenderer::AdjustScrollbar(wxOrientation orient,
+                                    wxBorder border,
+                                    bool hasOtherScrollbar,
+                                    wxRect* rect) const
+{
+    wxRect rectBorder = GetBorderDimensions(border);
+
+    if ( orient == wxVERTICAL )
+    {
+        // blend the top and right scrollbar borders into the window border
+        rect->y -= rectBorder.y;
+        rect->x += rectBorder.width;
+
+        // if there is no horz scrollbar, also do it with the bottom one
+        if ( !hasOtherScrollbar )
+            rect->height += rectBorder.height;
+    }
+    else // wxHORIZONTAL
+    {
+        // the logic is the same as above
+        rect->x -= rectBorder.x;
+        rect->y += rectBorder.height;
+
+        if ( !hasOtherScrollbar )
+            rect->width += rectBorder.width;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // button border
 // ----------------------------------------------------------------------------
@@ -740,8 +792,7 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
         rectText.height = height;
 
         wxRect rectLabel;
-        DrawLabel(dc, label, wxNullBitmap,
-                  rectText, flags, alignment, indexAccel, &rectLabel);
+        DrawLabel(dc, label, rectText, flags, alignment, indexAccel, &rectLabel);
         rectLabel.x -= 1;
         rectLabel.width += 2;
 
@@ -766,12 +817,24 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
 
 void wxGTKRenderer::DrawLabel(wxDC& dc,
                               const wxString& label,
-                              const wxBitmap& image,
                               const wxRect& rect,
                               int flags,
                               int alignment,
                               int indexAccel,
                               wxRect *rectBounds)
+{
+    DrawButtonLabel(dc, label, wxNullBitmap, rect, flags,
+                    alignment, indexAccel, rectBounds);
+}
+
+void wxGTKRenderer::DrawButtonLabel(wxDC& dc,
+                                    const wxString& label,
+                                    const wxBitmap& image,
+                                    const wxRect& rect,
+                                    int flags,
+                                    int alignment,
+                                    int indexAccel,
+                                    wxRect *rectBounds)
 {
     if ( flags & wxCONTROL_DISABLED )
     {

@@ -206,7 +206,12 @@ protected:
 class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
 {
 public:
-    wxStdListboxInputHandler(wxInputHandler *inphand);
+    // if pressing the mouse button in a multiselection listbox should toggle
+    // the item under mouse immediately, then specify TRUE as the second
+    // parameter (this is the standard behaviour, under GTK the item is toggles
+    // only when the mouse is released in the multi selection listbox)
+    wxStdListboxInputHandler(wxInputHandler *inphand,
+                             bool toggleOnPressAlways = TRUE);
 
     virtual bool HandleKey(wxControl *control,
                            const wxKeyEvent& event,
@@ -224,6 +229,7 @@ protected:
 
     wxWindow *m_winCapture;
     int m_btnCapture;
+    bool m_toggleOnPressAlways;
 };
 
 #endif // _WX_UNIV_INPHAND_H_

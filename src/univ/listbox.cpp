@@ -94,6 +94,11 @@ bool wxListBox::Create(wxWindow *parent,
     if ( style & wxLB_ALWAYS_SB )
         style |= wxALWAYS_SHOW_SB;
 
+    // if we don't have neither multiple nor extended flag, we must have the
+    // single selection listbox
+    if ( !(style & (wxLB_MULTIPLE | wxLB_EXTENDED)) )
+        style |= wxLB_SINGLE;
+
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -708,27 +713,48 @@ void wxListBox::SetCurrentItem(int n)
 
         if ( m_current != -1 )
         {
-            if ( GetWindowStyle() & wxLB_EXTENDED )
-            {
-                // if we hadn't had any selection before, make the freshly
-                // selected item the new selection anchor
-                if ( m_selections.IsEmpty() )
-                    m_selAnchor = m_current;
-            }
-
-            if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
-            {
-                // for a single selection listbox, the current item is always
-                // the one selected
-                Select(TRUE);
-            }
-
             m_currentChanged = TRUE;
 
-            RefreshItem(n);
+            RefreshItem(m_current);
         }
     }
     //else: nothing to do
+}
+
+bool wxListBox::FindItem(const wxString& prefix)
+{
+    size_t len = prefix.length();
+    int count = GetCount();
+    for ( int item = m_current + 1; item != m_current; item++ )
+    {
+        if ( item == count )
+        {
+            // wrap
+            item = 0;
+
+            if ( m_current == -1 )
+                break;
+        }
+
+        if ( wxStrnicmp(m_strings[item], prefix, len) == 0 )
+        {
+            SetCurrentItem(item);
+
+            if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
+            {
+                DeselectAll(item);
+                Select(TRUE, item);
+
+                if ( GetWindowStyle() & wxLB_EXTENDED )
+                    AnchorSelection(item);
+            }
+
+            return TRUE;
+        }
+    }
+
+    // nothing found
+    return FALSE;
 }
 
 void wxListBox::EnsureVisible()
@@ -816,11 +842,6 @@ void wxListBox::ExtendSelection(int itemTo)
 
 void wxListBox::Select(bool sel, int item)
 {
-    if ( sel && !(GetWindowStyle() & wxLB_MULTIPLE) )
-    {
-        DeselectAll(item);
-    }
-
     if ( item != -1 )
         SetCurrentItem(item);
 
@@ -854,16 +875,23 @@ bool wxListBox::PerformAction(const wxControlAction& action,
                               const wxString& strArg)
 {
     int item = (int)numArg;
-    if ( item == -1 )
-        item = m_current;
 
     if ( action == wxACTION_LISTBOX_SETFOCUS )
         SetCurrentItem(item);
     else if ( action == wxACTION_LISTBOX_ACTIVATE )
         Activate(item);
     else if ( action == wxACTION_LISTBOX_TOGGLE )
+    {
+        if ( item == -1 )
+            item = m_current;
         Select(!IsSelected(item), item);
+    }
     else if ( action == wxACTION_LISTBOX_SELECT )
+    {
+        DeselectAll(item);
+        Select(TRUE, item);
+    }
+    else if ( action == wxACTION_LISTBOX_SELECTADD )
         Select(TRUE, item);
     else if ( action == wxACTION_LISTBOX_UNSELECT )
         Select(FALSE, item);
@@ -883,6 +911,10 @@ bool wxListBox::PerformAction(const wxControlAction& action,
         DeselectAll(item);
     else if ( action == wxACTION_LISTBOX_EXTENDSEL )
         ExtendSelection(item);
+    else if ( action == wxACTION_LISTBOX_FIND )
+        FindItem(strArg);
+    else if ( action == wxACTION_LISTBOX_ANCHOR )
+        AnchorSelection(item == -1 ? m_current : item);
     else if ( action == wxACTION_LISTBOX_SELECTALL ||
                 action == wxACTION_LISTBOX_SELTOGGLE )
         wxFAIL_MSG(_T("unimplemented yet"));
@@ -896,11 +928,13 @@ bool wxListBox::PerformAction(const wxControlAction& action,
 // implementation of wxStdListboxInputHandler
 // ============================================================================
 
-wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler)
+wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
+                                                   bool toggleOnPressAlways)
                         : wxStdInputHandler(handler)
 {
     m_winCapture = NULL;
     m_btnCapture = 0;
+    m_toggleOnPressAlways = toggleOnPressAlways;
 }
 
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
@@ -910,7 +944,7 @@ int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
     lbox->CalcUnscrolledPosition(0, event.GetPosition().y, NULL, &y);
     int item = y / lbox->GetLineHeight();
 
-    return item < lbox->GetCount() ? item : -1;
+    return (item >= 0) && (item < lbox->GetCount()) ? item : -1;
 }
 
 bool wxStdListboxInputHandler::HandleKey(wxControl *control,
@@ -920,8 +954,14 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
     // we're only interested in the key press events
     if ( pressed && !event.AltDown() )
     {
+        bool isMoveCmd = TRUE;
+        int style = control->GetWindowStyle();
+
         wxControlAction action;
-        switch ( event.GetKeyCode() )
+        wxString strArg;
+
+        int keycode = event.GetKeyCode();
+        switch ( keycode )
         {
             // movement
             case WXK_UP:    action = wxACTION_LISTBOX_MOVEUP; break;
@@ -932,18 +972,50 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
             case WXK_END:   action = wxACTION_LISTBOX_END; break;
 
             // selection
-            case WXK_SPACE: action = wxACTION_LISTBOX_TOGGLE; break;
-            case WXK_RETURN:action = wxACTION_LISTBOX_ACTIVATE; break;
+            case WXK_SPACE:
+                if ( style & wxLB_MULTIPLE )
+                {
+                    action = wxACTION_LISTBOX_TOGGLE;
+                    isMoveCmd = FALSE;
+                }
+                break;
+
+            case WXK_RETURN:
+                action = wxACTION_LISTBOX_ACTIVATE;
+                isMoveCmd = FALSE;
+                break;
+
+            default:
+                if ( (keycode < 255) && wxIsalnum(keycode) )
+                {
+                    action = wxACTION_LISTBOX_FIND;
+                    strArg = (wxChar)keycode;
+                }
         }
 
         if ( !!action )
         {
-            control->PerformAction(action);
+            control->PerformAction(action, -1, strArg);
 
-            if ( event.ShiftDown() &&
-                    (control->GetWindowStyle() & wxLB_EXTENDED) )
+            if ( isMoveCmd )
             {
-                control->PerformAction(wxACTION_LISTBOX_EXTENDSEL);
+                if ( style & wxLB_SINGLE )
+                {
+                    // the current item is always the one selected
+                    control->PerformAction(wxACTION_LISTBOX_SELECT);
+                }
+                else if ( style & wxLB_EXTENDED )
+                {
+                    if ( event.ShiftDown() )
+                        control->PerformAction(wxACTION_LISTBOX_EXTENDSEL);
+                    else
+                    {
+                        // select the item and make it the new selection anchor
+                        control->PerformAction(wxACTION_LISTBOX_SELECT);
+                        control->PerformAction(wxACTION_LISTBOX_ANCHOR);
+                    }
+                }
+                //else: nothing to do for multiple selection listboxes
             }
 
             return TRUE;
@@ -987,7 +1059,12 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                     wxFAIL_MSG(_T("logic error in listbox mosue handling"));
                 }
 
-                action = wxACTION_LISTBOX_TOGGLE;
+                if ( !m_toggleOnPressAlways )
+                {
+                    // in this mode we toggle the item state when the button is
+                    // released, i.e. now
+                    action = wxACTION_LISTBOX_TOGGLE;
+                }
             }
             else if ( event.ButtonDown() )
             {
@@ -1003,6 +1080,12 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                                         : event.RightDown()
                                             ? 3
                                             : 2;
+
+                        if ( m_toggleOnPressAlways )
+                        {
+                            // toggle the item right now
+                            action = wxACTION_LISTBOX_TOGGLE;
+                        }
                     }
                     else // wxLB_EXTENDED listbox
                     {
@@ -1011,7 +1094,8 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                         // shift-click adds a range
                         if ( event.ControlDown() )
                         {
-                            lbox->AnchorSelection(item);
+                            control->PerformAction(wxACTION_LISTBOX_ANCHOR,
+                                                   item);
 
                             action = wxACTION_LISTBOX_TOGGLE;
                         }
@@ -1021,9 +1105,8 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                         }
                         else // simple click
                         {
-                            lbox->AnchorSelection(item);
-                            lbox->PerformAction(wxACTION_LISTBOX_UNSELECTALL,
-                                                item);
+                            control->PerformAction(wxACTION_LISTBOX_ANCHOR,
+                                                   item);
 
                             action = wxACTION_LISTBOX_SELECT;
                         }

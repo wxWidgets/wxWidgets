@@ -14,31 +14,11 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_CHECKBOX
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxCheckBox;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxCheckBoxNameStr;
-
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxCheckBox
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class wxCheckBox: public wxControl
+class wxCheckBox : public wxCheckBoxBase
 {
 public:
     wxCheckBox();
@@ -74,7 +54,7 @@ public:
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
-    
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
