@@ -1230,7 +1230,7 @@ else:
 
 DATA_FILES += find_data_files('wxPython/tools/XRCed', '*.txt', '*.xrc')
 DATA_FILES += find_data_files('wxPython/py', '*.txt', '*.ico', '*.css', '*.html')
-DATA_FILES += find_data_files('wx', '*.txt', '*.ico', '*.css', '*.html', '*.jpg', '*.png')
+DATA_FILES += find_data_files('wx', '*.txt', '*.css', '*.html')
 
 
 #----------------------------------------------------------------------
@@ -1261,9 +1261,6 @@ if __name__ == "__main__":
                           'wxPython.tools.XRCed',
 
                           'wx',
-                          'wx.examples',
-                          'wx.examples.basic',
-                          'wx.examples.hello',
                           'wx.lib',
                           'wx.lib.colourchooser',
                           'wx.lib.editor',

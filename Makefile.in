@@ -1444,16 +1444,23 @@ PYTHON_DIST:
 		wxPython/demo/bmp_source \
 		wxPython/demo/data \
 		wxPython/demo/dllwidget \
+		wxPython/samples/StyleEditor \
+		wxPython/samples/doodle \
+		wxPython/samples/embedded \
+		wxPython/samples/frogedit \
+		wxPython/samples/pySketch \
+		wxPython/samples/pySketch/images \
+		wxPython/samples/wxProject \
+		wxPython/samples/wx_examples \
+		wxPython/samples/wx_examples/basic \
+		wxPython/samples/wx_examples/hello \
+		wxPython/samples/wx_examples/screenshots \
 		wxPython/distutils \
 		wxPython/distutils/command \
 		wxPython/scripts \
 		wxPython/src \
 		wxPython/src/gtk \
 		wxPython/wx \
-		wxPython/wx/examples \
-		wxPython/wx/examples/basic \
-		wxPython/wx/examples/hello \
-		wxPython/wx/examples/screenshots \
 		wxPython/wx/lib \
 		wxPython/wx/lib/colourchooser \
 		wxPython/wx/lib/editor \
