@@ -143,7 +143,7 @@ public:
 #endif
 
     MyFrame() : wxFrame(  NULL, -1, _("regextest - wxRegEx Testing App"),
-                            wxPoint(20,20), wxSize(300,400), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
+                            wxPoint(20,20), wxSize(300,450), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
     {
         //Set the background to something light gray-ish
         SetBackgroundColour(wxColour(150,150,150));
@@ -202,7 +202,13 @@ public:
         // Button
         OkButton.Create(this, OkButtonID, _("OK"), wxPoint(20, 120));
 
-        NumIters.Create(this, -1, _("15000"), wxPoint(100, 120));
+        NumIters.Create(this, -1, _("5000"), wxPoint(100, 120));
+
+        #if wxUSE_STATUSBAR && !defined(__WXWINCE__)
+            // create a status bar just for fun (by default with 1 pane only)
+            CreateStatusBar(1);
+            SetStatusText(_("Enter Some Values and Press the OK Button or Enter"));
+        #endif // wxUSE_STATUSBAR
     }
 
     void OnAbout(wxCommandEvent& WXUNUSED(evt))
@@ -318,7 +324,9 @@ public:
 
 
 #ifdef wxUSE_WXREGEX
-		wxRegEx Regex;
+        SetStatusText("Testing wxRegEx...");
+
+        wxRegEx Regex;
         //Regular Expressions must be compiled before
         //you can search a string with them, or
         //at least most implementations do.
@@ -350,6 +358,7 @@ public:
                 {
                     for(i = 0; i < n; ++i)
                     {
+                        SetStatusText(wxString::Format(_("wxRegEx Compile #%i"), i));
                         Regex.Compile(szPattern, nCompileFlags);
                     }
                 }
@@ -357,6 +366,7 @@ public:
                 {
                     for(i = 0; i < n; ++i)
                     {
+                        SetStatusText(wxString::Format(_("wxRegEx Match #%i"), i));
                         Regex.Matches(szSearch, nMatchFlags);
                     }
                 }
@@ -379,6 +389,8 @@ public:
 #endif //wxUSE_WXREGEX
 
 #ifdef wxUSE_RNWXRE
+        SetStatusText("Testing RNWXRE...");
+
         wxRe Re;
         wxRe::wxReError e;
         if ((e = Re.Comp(szPattern, nCompileFlags2)) != wxRe::wxRE_OK)
@@ -401,6 +413,7 @@ public:
                 {
                     for(i = 0; i < n; ++i)
                     {
+                        SetStatusText(wxString::Format(_("RNWXRE Compile #%i"), i));
                         Re.Comp(szPattern, nCompileFlags2);
                     }
                 }
@@ -408,6 +421,7 @@ public:
                 {
                     for(i = 0; i < n; ++i)
                     {
+                        SetStatusText(wxString::Format(_("RNWXRE Match #%i"), i));
                         Re.Exec(szSearch, nMatchFlags2);
                     }
                 }
@@ -425,6 +439,8 @@ public:
 #endif //wxUSE_RNWXRE
 
 #ifdef wxUSE_GRETA
+        SetStatusText("Testing GRETA...");
+
         std::string stdszPattern(szPattern);
         rpattern Greta (stdszPattern,EXTENDED,MODE_MIXED);
         match_results r;
@@ -449,6 +465,7 @@ public:
                     //so one can only surmize that it performs
                     //some kind of optimizations in the constructor
                     Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
+                    SetStatusText(wxString::Format(_("GRETA Compile #%i"), i));
                 }
             }
             if (OptionsMenu->IsChecked(MatchID))
@@ -456,6 +473,7 @@ public:
                 for(i = 0; i < n; ++i)
                 {
                     Greta.match(stdszSearch, r);
+                    SetStatusText(wxString::Format(_("GRETA Match #%i"), i));
                 }
             }
     
@@ -471,6 +489,8 @@ public:
 #endif //wxUSE_GRETA
 
 #ifdef wxUSE_PCRE
+        SetStatusText("Testing PCRE...");
+
         pcre* pPcre;
         const wxChar* szError;
         int nErrOff;
@@ -502,6 +522,7 @@ public:
                     for(i = 0; i < n; ++i)
                     {
                         pPcre = pcre_compile(szPattern, nCompileFlags4, &szError, &nErrOff, 0);
+                        SetStatusText(wxString::Format(_("PCRE Compile #%i"), i));
                     }
                 }
                 if (OptionsMenu->IsChecked(MatchID))
@@ -509,6 +530,7 @@ public:
                     for(i = 0; i < n; ++i)
                     {
                         pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize);
+                        SetStatusText(wxString::Format(_("PCRE Match #%i"), i));
                     }
                 }
 
@@ -523,6 +545,8 @@ public:
                             szStatus4
                                     );
 #endif //wxUSE_PCRE
+
+        SetStatusText("Regex Run Complete");
 
         ResultText.SetLabel(szResult + _("\n\n") + szResult2);
         ResultText2.SetLabel(szResult3 + _("\n\n") + szResult4);
