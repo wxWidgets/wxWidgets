@@ -1902,7 +1902,7 @@ if test "$wxUSE_GUI" = "yes"; then
   dnl TODO some samples are never built so far:
   dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                   forty fractal image notepad wxpoem"
+                   forty fractal image richedit wxpoem"
 fi
 
 dnl for convenience, sort the files to build in alphabetical order
@@ -2039,7 +2039,11 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
-            if test ! -e include/wx/${TOOLKIT_DIR}/setup.h; then
+dnl The following line is more elegant but test -e is not supported by all
+dnl test varieties.
+dnl            if test ! -e include/wx/${TOOLKIT_DIR}/setup.h; then
+            cat include/wx/${TOOLKIT_DIR}/setup.h >/dev/null 2>&1
+	    if test $? != 0; then
               ${LN_S} `pwd`/setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
           ],
