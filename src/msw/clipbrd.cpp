@@ -446,6 +446,7 @@ void wxClipboard::Clear()
 
 bool wxClipboard::Flush()
 {
+#if wxUSE_OLE_CLIPBOARD
     if ( FAILED(OleFlushClipboard()) )
     {
         wxLogLastError("OleFlushClipboard");
@@ -458,6 +459,9 @@ bool wxClipboard::Flush()
 
         return TRUE;
     }
+#else // !wxUSE_OLE_CLIPBOARD
+    return FALSE;
+#endif // wxUSE_OLE_CLIPBOARD/!wxUSE_OLE_CLIPBOARD
 }
 
 bool wxClipboard::Open()
