@@ -481,6 +481,8 @@ EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 #endif // wxUSE_SPINCTRL
 #if wxUSE_TOGGLEBTN
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
+#else
+EVT_CHECKBOX(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
 #endif // wxUSE_TOGGLEBTN
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
@@ -837,6 +839,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_TOGGLEBTN
     (void)new wxToggleButton(panel, ID_BUTTON_LABEL,
                              _T("&Toggle label"), wxPoint(250, 20));
+#else
+    (void)new wxCheckBox(panel, ID_BUTTON_LABEL,
+                         _T("&Toggle label"), wxPoint(250, 20));
 #endif // wxUSE_TOGGLEBTN
 
     m_label = new wxStaticText(panel, -1, _T("Label with some long text"),
