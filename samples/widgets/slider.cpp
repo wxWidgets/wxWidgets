@@ -497,7 +497,7 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
     static int s_numSliderEvents = 0;
 
     wxLogMessage(wxT("Slider event #%d: %s (pos = %d)"),
-                 numSliderEvents++,
+                 s_numSliderEvents++,
                  eventNames[index],
                  event.GetPosition());
 }
