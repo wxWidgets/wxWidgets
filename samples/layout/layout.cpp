@@ -105,56 +105,47 @@ MyFrame::MyFrame()
   // 1) top: create wxStaticText with minimum size equal to its default size
   topsizer->Add(
     new wxStaticText( this, wxID_ANY, _T("An explanation (wxALIGN_RIGHT).") ),
-    0,                         // make vertically unstretchable
-    wxALIGN_RIGHT |            // right align text
-    wxTOP | wxLEFT | wxRIGHT,  // make border all around except wxBOTTOM
-    5 );                      // set border width to 5
+    wxSizerFlags().Align(wxALIGN_RIGHT).Border(wxALL & ~wxBOTTOM, 5));
 
   // 2) top: create wxTextCtrl with minimum size (100x60)
   topsizer->Add(
     new wxTextCtrl( this, wxID_ANY, _T("My text (wxEXPAND)."), wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
-    1,            // make vertically stretchable
-    wxEXPAND |    // make horizontally stretchable
-    wxALL,        //   and make border all around
-    5 );         // set border width to 5
+    wxSizerFlags(1).Expand().Border(wxALL, 5));
 
   // 2.5) Gratuitous test of wxStaticBoxSizers
   wxBoxSizer *statsizer = new wxStaticBoxSizer(
-    new wxStaticBox(this, wxID_ANY, _T("A wxStaticBoxSizer")),
-    wxVERTICAL );
+    new wxStaticBox(this, wxID_ANY, _T("A wxStaticBoxSizer")), wxVERTICAL );
   statsizer->Add(
     new wxStaticText(this, wxID_ANY, _T("And some TEXT inside it")),
-    0,
-    wxCENTER |
-    wxALL,
-    30);
-  topsizer->Add(statsizer, 1, wxEXPAND | wxALL, 10);
+    wxSizerFlags().Center().Border(wxALL, 30));
+  topsizer->Add(
+    statsizer,
+    wxSizerFlags(1).Expand().Border(wxALL, 10));
 
     // 2.7) And a test of wxGridSizer
     wxGridSizer *gridsizer = new wxGridSizer(2, 5, 5);
-    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Label")), 0,
-                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
-    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("Grid sizer demo")), 1,
-                   wxGROW | wxALIGN_CENTER_VERTICAL);
-    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Another label")), 0,
-                   wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
-    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("More text")), 1,
-                   wxGROW | wxALIGN_CENTER_VERTICAL);
-    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Final label")), 0,
-                   wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
-    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("And yet more text")), 1,
-                   wxGROW | wxALIGN_CENTER_VERTICAL);
-    topsizer->Add(gridsizer, 1, wxGROW | wxALL, 10);
+    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Label")),
+                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("Grid sizer demo")),
+                   wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Another label")),
+                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("More text")),
+                   wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+    gridsizer->Add(new wxStaticText(this, wxID_ANY, _T("Final label")),
+                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+    gridsizer->Add(new wxTextCtrl(this, wxID_ANY, _T("And yet more text")),
+                   wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+    topsizer->Add(
+        gridsizer,
+        wxSizerFlags().Proportion(1).Expand().Border(wxALL, 10));
 
 
 #if wxUSE_STATLINE
   // 3) middle: create wxStaticLine with minimum size (3x3)
   topsizer->Add(
      new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL),
-     0,           // make vertically unstretchable
-     wxEXPAND |   // make horizontally stretchable
-     wxALL,       //   and make border all around
-     5 );         // set border width to 5
+     wxSizerFlags().Expand());
 #endif // wxUSE_STATLINE
 
 
@@ -162,19 +153,12 @@ MyFrame::MyFrame()
   wxBoxSizer *button_box = new wxBoxSizer( wxHORIZONTAL );
   button_box->Add(
      new wxButton( this, wxID_ANY, _T("Two buttons in a box") ),
-     0,           // make horizontally unstretchable
-     wxALL,       // make border all around
-     7 );         // set border width to 7
+     wxSizerFlags().Border(wxALL, 7));
   button_box->Add(
      new wxButton( this, wxID_ANY, _T("(wxCENTER)") ),
-     0,           // make horizontally unstretchable
-     wxALL,       // make border all around
-     7 );         // set border width to 7
+     wxSizerFlags().Border(wxALL, 7));
 
-  topsizer->Add(
-     button_box,
-     0,          // make vertically unstretchable
-     wxCENTER ); // no border and centre horizontally
+  topsizer->Add(button_box, wxSizerFlags().Center());
 
   // don't allow frame to get smaller than what the sizers tell it and also set
   // the initial size as calculated by the sizers
