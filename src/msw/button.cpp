@@ -95,19 +95,6 @@ bool wxButton::Create(wxWindow *parent,
 
     SetSize(pos.x, pos.y, size.x, size.y);
 
-    // bad hack added by Robert to make buttons at least
-    // 80 pixels wide. There are probably better ways...
-    // TODO. FIXME.
-    wxSize nsize( GetSize() );
-    if ((nsize.x < 80) || (nsize.y < 23))
-    {
-        if ((size.x == -1) && (nsize.x < 80))
-            nsize.x = 80;
-        if ((size.y == -1) && (nsize.y < 23))
-            nsize.y = 23;
-        SetSize( nsize );
-    }
-
     return TRUE;
 }
 
@@ -143,7 +130,11 @@ wxSize wxButton::DoGetBestSize() const
     // the button height is proportional to the height of the font used
     int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
-    return wxSize(wBtn, hBtn);
+    wxSize sz = GetDefaultSize();
+    if (wBtn > sz.x) sz.x = wBtn;
+    if (hBtn > sz.y) sz.y = hBtn;
+
+    return sz;
 }
 
 /* static */
