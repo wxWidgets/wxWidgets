@@ -121,8 +121,8 @@ install_all_native = $(install_all_arch) $(install_all_indep)
 install_all = $(install_all_native) $(install_all_cross)
 
 
-wxconfig     := $(shell pwd)/$(objdir_gtk_shared)/wx-config
-wxconfig-dbg := $(shell pwd)/$(objdir_gtk_debug)/wx-config
+wxconfig     := $(shell pwd)/$(objdir_gtk_shared)/wx-config --no_rpath
+wxconfig-dbg := $(shell pwd)/$(objdir_gtk_debug)/wx-config --no_rpath
 
 #contrib_libs := $(subst CVS,,$(notdir $(wildcard contrib/include/wx/*)))
 
@@ -529,7 +529,7 @@ install-gtk-py-lib: build-gtk-py-stamp
 		-name '*.py?' -exec rm '{}' ';'
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_py_lib)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)/wx/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_py_lib)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)-gtk2-unicode/wx/tools/XRCed/license.txt
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
 install-gtk-py: install-gtk-py-lib
@@ -639,7 +639,7 @@ install-gtk-dbg-py: build-gtk-dbg-py-stamp
 	       usr/lib/$(python_ver)/site-packages/wx.pth
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)/wx/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages/wx-$(sorelease)-gtk2-unicode/wx/tools/XRCed/license.txt
 
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)

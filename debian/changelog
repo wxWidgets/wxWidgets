@@ -1,3 +1,13 @@
+wxwidgets2.5 (2.5.3.2) unstable; urgency=low
+
+  * This time, really now.
+    A snapshot that is actually ready for wider release.
+    Thanks to all who've been patient.  We know who you are.
+  * Update path to wxPython site-packages, build them with
+    --no_rpath since we will install the in tree build.
+
+ -- Ron Lee <ron@debian.org>  Thu, 11 Nov 2004 11:01:00 +1030
+
 wxwidgets2.5 (2.5.3.1) unstable; urgency=low
 
   * Functioning concurrent installs for both the C++ libs
