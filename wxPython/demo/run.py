@@ -48,7 +48,6 @@ class RunDemoApp(wx.App):
 
 
     def OnInit(self):
-        wx.InitAllImageHandlers()
         wx.Log_SetActiveTarget(wx.LogStderr())
 
         self.SetAssertMode(assertMode)

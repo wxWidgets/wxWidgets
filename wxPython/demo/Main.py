@@ -921,14 +921,12 @@ class MyApp(wx.App):
         the main frame when it is time to do so.
         """
 
-        wx.InitAllImageHandlers()
-
         # Normally when using a SplashScreen you would create it, show
         # it and then continue on with the applicaiton's
         # initialization, finally creating and showing the main
         # application window(s).  In this case we have nothing else to
         # do so we'll delay showing the main frame until later (see
-        # OnClose above) so the users can see the SplashScrren effect.        
+        # OnClose above) so the users can see the SplashScreen effect.        
         splash = MySplashScreen()
         splash.Show()
 
