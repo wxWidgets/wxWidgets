@@ -476,11 +476,13 @@ private:
 
 // return the last system error code
 WXDLLEXPORT unsigned long wxSysErrorCode();
+
 // return the error message for given (or last if 0) error code
 WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
+// ----------------------------------------------------------------------------
 // define wxLog<level>
-// -------------------
+// ----------------------------------------------------------------------------
 
 #define DECLARE_LOG_FUNCTION(level)                                 \
 extern void WXDLLEXPORT wxVLog##level(const wxChar *szFormat,       \
@@ -559,6 +561,10 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
     inline void wxLogTrace(const wxChar *, const wxChar *, ...) { }
 #endif // debug/!debug
 
+// wxLogFatalError helper: show the (fatal) error to the user in a safe way,
+// i.e. without using wxMessageBox() for example because it could crash
+extern void wxSafeShowMessage(const wxString& title, const wxString& text);
+
 // ----------------------------------------------------------------------------
 // debug only logging functions: use them with API name and error code
 // ----------------------------------------------------------------------------
@@ -588,4 +594,3 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 #endif  // _WX_LOG_H_
 
-// vi:sts=4:sw=4:et

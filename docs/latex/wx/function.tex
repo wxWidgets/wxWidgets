@@ -180,6 +180,7 @@ the corresponding topic.
 \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}\\
 \helpref{wxResourceRegisterIconData}{wxresourceregistericondata}\\
 \helpref{wxRmdir}{wxrmdir}\\
+\helpref{wxSafeShowMessage}{wxsafeshowmessage}\\
 \helpref{wxSafeYield}{wxsafeyield}\\
 \helpref{wxSetClipboardData}{wxsetclipboarddata}\\
 \helpref{wxSetCursor}{wxsetcursor}\\
@@ -3167,6 +3168,32 @@ trace masks.
 \item wxTraceRefCount: trace various ref counting operations
 \item wxTraceOleCalls: trace OLE method calls (Win32 only)
 \end{itemize}
+
+\membersection{::wxSafeShowMessage}\label{wxsafeshowmessage}
+
+\func{void}{wxSafeShowMessage}{\param{const wxString\& }{title}, \param{const wxString\& }{text}}
+
+This function shows a message to the user in a safe way and should be safe to
+call even before the application has been initialized or if it is currently in
+some other strange state (for example, about to crash). Under Windows this
+function shows a message box using a native dialog instead of 
+\helpref{wxMessageBox}{wxmessagebox} (which might be unsafe to call), elsewhere
+it simply prints the message to the standard output using the title as prefix.
+
+\wxheading{Parameters}
+
+\docparam{title}{The title of the message box shown to the user or the prefix
+of the message string}
+
+\docparam{text}{The text to show to the user}
+
+\wxheading{See also}
+
+\helpref{wxLogFatalError}{wxlogfatalerror}
+
+\wxheading{Include files}
+
+<wx/log.h>
 
 \membersection{::wxSysErrorCode}\label{wxsyserrorcode}
 

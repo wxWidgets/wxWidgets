@@ -159,17 +159,22 @@ IMPLEMENT_LOG_FUNCTION(Message)
 IMPLEMENT_LOG_FUNCTION(Info)
 IMPLEMENT_LOG_FUNCTION(Status)
 
+void wxSafeShowMessage(const wxString& title, const wxString& text)
+{
+#ifdef __WINDOWS__
+    ::MessageBox(NULL, text, title, MB_OK | MB_ICONSTOP);
+#else
+    wxFprintf(stderr, _T("%s: %s\n"), title.c_str(), text.c_str());
+#endif
+}
+
 // fatal errors can't be suppressed nor handled by the custom log target and
 // always terminate the program
 void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
 {
     wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
-#if wxUSE_GUI
-    wxMessageBox(s_szBuf, _("Fatal Error"), wxID_OK | wxICON_STOP);
-#else
-    wxFprintf(stderr, _("Fatal error: %s\n"), s_szBuf);
-#endif
+    wxSafeShowMessage(_T("Fatal Error"), s_szBuf);
 
     abort();
 }
