@@ -62,6 +62,7 @@ class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );
+    void OnPaint(wxPaintEvent& rEvent);
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -79,6 +80,7 @@ protected:
     wxGDIImage*                     m_pImage;
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+    DECLARE_EVENT_TABLE()
 }; // end of wxStaticBitmap
 
 #endif

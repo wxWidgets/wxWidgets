@@ -410,6 +410,8 @@ void wxListBox::SetSelection(
                  ,MPFROMLONG(N)
                  ,(MPARAM)bSelect
                 );
+    if(m_windowStyle & wxLB_OWNERDRAW)
+        Refresh();
 } // end of wxListBox::SetSelection
 
 bool wxListBox::IsSelected(
@@ -807,21 +809,152 @@ bool wxListBox::OS2Command(
 //
 #define OWNER_DRAWN_LISTBOX_EXTRA_SPACE    (1)
 
-bool wxListBox::OS2OnMeasure(WXMEASUREITEMSTRUCT *item)
+bool wxListBox::OS2OnMeasure(
+  WXMEASUREITEMSTRUCT*              pItem
+)
 {
-    //
-    // TODO: Get to this eventually
-    //
-    return TRUE;
-}
+    if (!pItem)
+        pItem = (WXMEASUREITEMSTRUCT*)new OWNERITEM;
 
-bool wxListBox::OS2OnDraw(WXDRAWITEMSTRUCT *item)
+    POWNERITEM                      pMeasureStruct = (POWNERITEM)pItem;
+    wxScreenDC                      vDc;
+
+    //
+    // Only owner-drawn control should receive this message
+    //
+    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
+
+    vDc.SetFont(GetFont());
+
+    wxCoord                         vHeight;
+
+    pMeasureStruct->rclItem.xRight = 0;
+    pMeasureStruct->rclItem.xLeft  = 0;
+    pMeasureStruct->rclItem.yTop   = 0;
+    pMeasureStruct->rclItem.yBottom = 0;
+
+    vHeight = vDc.GetCharHeight() * 2.5;
+    pMeasureStruct->rclItem.yTop  = vHeight;
+
+    ::WinSendMsg( GetHWND()
+                 ,LM_SETITEMHEIGHT
+                 ,MPFROMLONG(vHeight)
+                 ,MPFROMLONG(pMeasureStruct->idItem)
+                );
+    return TRUE;
+} // end of wxListBox::OS2OnMeasure
+
+bool wxListBox::OS2OnDraw (
+  WXDRAWITEMSTRUCT*                 pItem
+)
 {
+    POWNERITEM                      pDrawStruct = (POWNERITEM)pItem;
+    LONG                            lItemID = pDrawStruct->idItem;
+    int                             eAction = 0;
+    int                             eStatus = 0;
+
     //
-    // TODO: Get to this eventually
+    // Only owner-drawn control should receive this message
     //
-    return FALSE;
-}
+    wxCHECK(((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE);
+
+
+    //
+    // The item may be -1 for an empty listbox
+    //
+    if (lItemID == -1L)
+        return FALSE;
+
+    wxListBoxItem*                   pData = (wxListBoxItem*)PVOIDFROMMR( ::WinSendMsg( GetHwnd()
+                                                                                       ,LM_QUERYITEMHANDLE
+                                                                                       ,MPFROMLONG(pDrawStruct->idItem)
+                                                                                       ,(MPARAM)0
+                                                                                      )
+                                                                        );
+
+    wxCHECK(pData, FALSE );
+
+    wxDC                              vDc;
+    wxRect                            vRect( wxPoint( pDrawStruct->rclItem.xLeft
+                                                     ,pDrawStruct->rclItem.yTop
+                                                    )
+                                            ,wxPoint( pDrawStruct->rclItem.xRight
+                                                     ,pDrawStruct->rclItem.yBottom
+                                                    )
+                                           );
+
+    vDc.SetHPS(pDrawStruct->hps);
+
+    if (pDrawStruct->fsAttribute == pDrawStruct->fsAttributeOld)
+    {
+        //
+        // Entire Item needs to be redrawn (either it has reappeared from
+        // behind another window or is being displayed for the first time
+        //
+        eAction = wxOwnerDrawn::wxODDrawAll;
+
+        if (pDrawStruct->fsAttribute & MIA_HILITED)
+        {
+            //
+            // If it is currently selected we let the system handle it
+            //
+            eStatus |= wxOwnerDrawn::wxODSelected;
+        }
+        if (pDrawStruct->fsAttribute & MIA_CHECKED)
+        {
+            //
+            // If it is currently checked we draw our own
+            //
+            eStatus |= wxOwnerDrawn::wxODChecked;
+            pDrawStruct->fsAttributeOld = pDrawStruct->fsAttribute &= ~MIA_CHECKED;
+        }
+        if (pDrawStruct->fsAttribute & MIA_DISABLED)
+        {
+            //
+            // If it is currently disabled we let the system handle it
+            //
+            eStatus |= wxOwnerDrawn::wxODDisabled;
+        }
+        //
+        // Don't really care about framed (indicationg focus) or NoDismiss
+        //
+    }
+    else
+    {
+        if (pDrawStruct->fsAttribute & MIA_HILITED)
+        {
+            eAction = wxOwnerDrawn::wxODDrawAll;
+            eStatus |= wxOwnerDrawn::wxODSelected;
+            //
+            // Keep the system from trying to highlight with its bogus colors
+            //
+            pDrawStruct->fsAttributeOld = pDrawStruct->fsAttribute &= ~MIA_HILITED;
+        }
+        else if (!(pDrawStruct->fsAttribute & MIA_HILITED))
+        {
+            eAction = wxOwnerDrawn::wxODDrawAll;
+            eStatus = 0;
+            //
+            // Keep the system from trying to highlight with its bogus colors
+            //
+            pDrawStruct->fsAttribute = pDrawStruct->fsAttributeOld &= ~MIA_HILITED;
+        }
+        else
+        {
+            //
+            // For now we don't care about anything else
+            // just ignore the entire message!
+            //
+            return TRUE;
+        }
+    }
+    return pData->OnDrawItem( vDc
+                             ,vRect
+                             ,(wxOwnerDrawn::wxODAction)eAction
+                             ,(wxOwnerDrawn::wxODStatus)eStatus
+                            );
+} // end of wxListBox::OS2OnDraw
+
 #endif // ndef for wxUSE_OWNER_DRAWN
 
 #endif // ndef for wxUSE_LISTBOX

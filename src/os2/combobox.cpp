@@ -49,7 +49,7 @@ bool wxComboBox::OS2Command(
 
     switch (uParam)
     {
-        case LN_SELECT:
+        case CBN_LBSELECT:
             if (GetSelection() > -1)
             {
                 wxCommandEvent      vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED
@@ -63,7 +63,7 @@ bool wxComboBox::OS2Command(
             }
             break;
 
-        case EN_CHANGE:
+        case CBN_EFCHANGE:
             {
                 wxCommandEvent      vEvent( wxEVT_COMMAND_TEXT_UPDATED
                                            ,GetId()

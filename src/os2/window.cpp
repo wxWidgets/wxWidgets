@@ -59,6 +59,10 @@
     #include "wx/tooltip.h"
 #endif
 
+#if wxUSE_NOTEBOOK
+    #include "wx/notebook.h"
+#endif
+
 #if wxUSE_CARET
     #include "wx/caret.h"
 #endif // wxUSE_CARET
@@ -301,7 +305,6 @@ void wxWindowOS2::Init()
     m_bUseCtl3D             = FALSE;
     m_bMouseInWindow        = FALSE;
     m_bLastKeydownProcessed = FALSE;
-    m_bIsActivePage         = TRUE;
     m_pChildrenDisabled     = NULL;
 
     //
@@ -2905,7 +2908,6 @@ MRESULT wxWindowOS2::OS2WindowProc(
                             // Avoid duplicate messages to OnChar for these ASCII keys: they
                             // will be translated by TranslateMessage() and received in WM_CHAR
                             case VK_ESC:
-                            case VK_SPACE:
                             case VK_ENTER:
                             case VK_BACKSPACE:
                             case VK_TAB:
@@ -2966,7 +2968,41 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_CONTROL:
             switch(SHORT2FROMMP(wParam))
             {
-                case BN_CLICKED:
+                case BKN_PAGESELECTEDPENDING:
+                    {
+                        PPAGESELECTNOTIFY  pPage = (PPAGESELECTNOTIFY)lParam;
+
+                        if ((pPage->ulPageIdNew != pPage->ulPageIdCur) &&
+                            (pPage->ulPageIdNew > 0L && pPage->ulPageIdCur > 0L))
+                        {
+                            wxWindowOS2*        pWin = wxFindWinFromHandle(pPage->hwndBook);
+                            wxNotebookEvent     vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+                                                       ,(int)SHORT1FROMMP(wParam)
+                                                       ,(int)pPage->ulPageIdNew
+                                                       ,(int)pPage->ulPageIdCur
+                                                      );
+                            if (!pWin)
+                            {
+                                bProcessed = FALSE;
+                                break;
+                            }
+                            if (pWin->IsKindOf(CLASSINFO(wxNotebook)))
+                            {
+                                wxNotebook*         pNotebook = wxDynamicCast(pWin, wxNotebook);
+
+                                vEvent.SetEventObject(pWin);
+                                pNotebook->OnSelChange(vEvent);
+                                bProcessed = TRUE;
+                            }
+                            else
+                                bProcessed = FALSE;
+                        }
+                        else
+                            bProcessed = FALSE;
+                    }
+                    break;
+
+                case BN_CLICKED: // Dups as LN_SELECT and CBN_LBSELECT
                     {
                         HWND                hWnd = ::WinWindowFromID((HWND)GetHwnd(), SHORT1FROMMP(wParam));
                         wxWindowOS2*        pWin = wxFindWinFromHandle(hWnd);
@@ -3001,6 +3037,61 @@ MRESULT wxWindowOS2::OS2WindowProc(
                             wxCheckBox*         pCheckBox = wxDynamicCast(pWin, wxCheckBox);
 
                             pCheckBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                 );
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxListBox)))
+                        {
+                            wxListBox*          pListBox = wxDynamicCast(pWin, wxListBox);
+
+                            pListBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                 ,(WXUINT)SHORT1FROMMP(wParam)
+                                                );
+                            if (pListBox->GetWindowStyle() & wxLB_OWNERDRAW)
+                                Refresh();
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxComboBox)))
+                        {
+                            wxComboBox*          pComboBox = wxDynamicCast(pWin, wxComboBox);
+
+                            pComboBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                 );
+                        }
+                        return 0;
+                    }
+                    break;
+
+                case LN_ENTER:   /* dups as CBN_EFCHANGE */
+                    {
+                        HWND                hWnd = HWNDFROMMP(lParam);
+                        wxWindowOS2*        pWin = wxFindWinFromHandle(hWnd);
+
+                        if (!pWin)
+                        {
+                            bProcessed = FALSE;
+                            break;
+                        }
+                        //
+                        // Simulate a WM_COMMAND here, as wxWindows expects all control
+                        // button clicks to generate WM_COMMAND msgs, not WM_CONTROL
+                        //
+                        if (pWin->IsKindOf(CLASSINFO(wxListBox)))
+                        {
+                            wxListBox*          pListBox = wxDynamicCast(pWin, wxListBox);
+
+                            pListBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
+                                                 ,(WXUINT)SHORT1FROMMP(wParam)
+                                                );
+                            if (pListBox->GetWindowStyle() & wxLB_OWNERDRAW)
+                                Refresh();
+
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxComboBox)))
+                        {
+                            wxComboBox*          pComboBox = wxDynamicCast(pWin, wxComboBox);
+
+                            pComboBox->OS2Command( (WXUINT)SHORT2FROMMP(wParam)
                                                   ,(WXUINT)SHORT1FROMMP(wParam)
                                                  );
                         }
@@ -3755,7 +3846,10 @@ bool wxWindowOS2::OS2OnMeasureItem(
 
     if (pItem && pItem->IsKindOf(CLASSINFO(wxControl)))
     {
-        return ((wxControl *)pItem)->OS2OnMeasure(pItemStruct);
+        OWNERITEM                   vItem;
+
+        vItem.idItem = (LONG)pItemStruct;
+        return ((wxControl *)pItem)->OS2OnMeasure((WXMEASUREITEMSTRUCT*)&vItem);
     }
 #else
     lId = lId;
@@ -3902,33 +3996,30 @@ bool wxWindowOS2::HandlePaint()
                                      ,0L
                                      ,NULL
                                     );
-
-            if (::WinIsWindowVisible(GetHWND()) && m_bIsActivePage)
-            {
+            if (::WinIsWindowVisible(GetHWND()))
                 ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
-                if (m_dwExStyle)
-                {
-                    LINEBUNDLE      vLineBundle;
+            if (m_dwExStyle)
+            {
+                LINEBUNDLE      vLineBundle;
 
-                    vLineBundle.lColor     = 0x00000000; // Black
-                    vLineBundle.usMixMode  = FM_OVERPAINT;
-                    vLineBundle.fxWidth    = 1;
-                    vLineBundle.lGeomWidth = 1;
-                    vLineBundle.usType     = LINETYPE_SOLID;
-                    vLineBundle.usEnd      = 0;
-                    vLineBundle.usJoin     = 0;
-                    ::GpiSetAttrs( hPS
-                                  ,PRIM_LINE
-                                  ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
-                                  ,0L
-                                  ,&vLineBundle
-                                 );
-                    ::WinQueryWindowRect(GetHwnd(), &vRect);
-                    wxDrawBorder( hPS
-                                 ,vRect
-                                 ,m_dwExStyle
-                                );
-                }
+                vLineBundle.lColor     = 0x00000000; // Black
+                vLineBundle.usMixMode  = FM_OVERPAINT;
+                vLineBundle.fxWidth    = 1;
+                vLineBundle.lGeomWidth = 1;
+                vLineBundle.usType     = LINETYPE_SOLID;
+                vLineBundle.usEnd      = 0;
+                vLineBundle.usJoin     = 0;
+                ::GpiSetAttrs( hPS
+                              ,PRIM_LINE
+                              ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                              ,0L
+                              ,&vLineBundle
+                             );
+                ::WinQueryWindowRect(GetHwnd(), &vRect);
+                wxDrawBorder( hPS
+                             ,vRect
+                             ,m_dwExStyle
+                            );
             }
         }
         ::WinEndPaint(hPS);
@@ -3967,7 +4058,7 @@ bool wxWindowOS2::HandlePaint()
                                      ,NULL
                                     );
 
-            if (::WinIsWindowVisible(GetHWND()) && m_bIsActivePage)
+            if (::WinIsWindowVisible(GetHWND()))
                 ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
         }
         ::WinEndPaint(hPS);
@@ -4327,7 +4418,7 @@ bool wxWindowOS2::HandleChar(
         // ctrlDown.  IOW, Ctrl-C should result in keycode == 3 and
         // ControlDown() == TRUE.
         //
-        vId = (int)wParam;
+        vId = SHORT1FROMMP(lParam);
         if ((vId > 0) && (vId < 27))
         {
             switch (vId)
@@ -4352,7 +4443,7 @@ bool wxWindowOS2::HandleChar(
     }
     else  // we're called from WM_KEYDOWN
     {
-        vId = wxCharCodeOS2ToWX((int)wParam);
+        vId = wxCharCodeOS2ToWX((int)SHORT2FROMMP(lParam));
         if (vId == 0)
             return FALSE;
     }
@@ -4374,14 +4465,14 @@ bool wxWindowOS2::HandleKeyDown(
 , WXLPARAM                          lParam
 )
 {
-    int                             nId = wxCharCodeOS2ToWX((int)wParam);
+    int                             nId = wxCharCodeOS2ToWX((int)SHORT2FROMMP(lParam));
 
     if (!nId)
     {
         //
         // Normal ASCII char
         //
-        nId = (int)wParam;
+        nId = SHORT1FROMMP(lParam);
     }
 
     if (nId != -1)
@@ -4405,7 +4496,7 @@ bool wxWindowOS2::HandleKeyUp(
 , WXLPARAM                          lParam
 )
 {
-    int                             nId = wxCharCodeOS2ToWX((int)wParam);
+    int                             nId = wxCharCodeOS2ToWX((int)SHORT2FROMMP(lParam));
 
     if (!nId)
     {

@@ -17,61 +17,87 @@
 
 #include "wx/setup.h"
 
-class wxOwnerDrawn;	// so the compiler knows, it is a class.
+class wxOwnerDrawn; // so the compiler knows, it is a class.
 
 class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
 
 class WXDLLEXPORT wxCheckListBox : public wxListBox
 {
-  DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
-  // ctors
-  wxCheckListBox();
-  wxCheckListBox(wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 int nStrings = 0,
-                 const wxString choices[] = NULL,
-                 long style = 0,
+    // 
+    // Ctors
+    //
+    wxCheckListBox();
+    wxCheckListBox( wxWindow*          pParent
+                   ,wxWindowID         vId
+                   ,const wxPoint&     rPos = wxDefaultPosition
+                   ,const wxSize&      vSize = wxDefaultSize
+                   ,int                nStrings = 0
+                   ,const wxString     asChoices[] = NULL
+                   ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-                 const wxValidator& validator = wxDefaultValidator,
+                   ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-                 const wxString& name = wxListBoxNameStr);
+                   ,const wxString&    rsName = wxListBoxNameStr
+                  );
 
-  // override base class virtuals
-  virtual void Delete(int n);
-  virtual void InsertItems(int nItems, const wxString items[], int pos);
+    // 
+    // Override base class virtuals
+    //
+    virtual void Delete(int n);
+    virtual void InsertItems( int            nItems
+                             ,const wxString asItems[]
+                             ,int            nPos
+                            );
 
-  virtual bool SetFont( const wxFont &font );
+    virtual bool SetFont(const wxFont &rFont);
 
-  // items may be checked
-  bool IsChecked(size_t uiIndex) const;
-  void Check(size_t uiIndex, bool bCheck = TRUE);
+    // 
+    // Items may be checked
+    //
+    bool IsChecked(size_t uiIndex) const;
+    void Check( size_t uiIndex
+               ,bool   bCheck = TRUE
+              );
 
-  // accessors
-  size_t GetItemHeight() const { return m_nItemHeight; }
+    // 
+    // Accessors
+    //
+    size_t GetItemHeight(void) const { return m_nItemHeight; }
 
 protected:
-  // we create our items ourselves and they have non-standard size,
-  // so we need to override these functions
-  virtual wxOwnerDrawn *CreateItem(size_t n);
-//  virtual bool          OS2OnMeasure(WXMEASUREITEMSTRUCT *item);
+    // 
+    // We create our items ourselves and they have non-standard size,
+    // so we need to override these functions
+    //
+    virtual wxOwnerDrawn* CreateItem(size_t n);
+    virtual bool          OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem);
 
-  // pressing space or clicking the check box toggles the item
-  void OnChar(wxKeyEvent& event);
-  void OnLeftClick(wxMouseEvent& event);
+    // 
+    // Pressing space or clicking the check box toggles the item
+    //
+    void OnChar(wxKeyEvent& rEvent);
+    void OnLeftClick(wxMouseEvent& rEvent);
 
 private:
-  size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
+    size_t                          m_nItemHeight;  // height of checklistbox items (the same for all)
 
-  //Virtual function hiding suppression, do not use
-  virtual wxControl *CreateItem(const wxItemResource* childResource,
-                                const wxItemResource* parentResource,
-                                const wxResourceTable *table = (const wxResourceTable *) NULL)
-  { return(wxWindowBase::CreateItem(childResource, parentResource, table));};
-
-  DECLARE_EVENT_TABLE()
-};
+    //
+    // Virtual function hiding suppression, do not use
+    //
+    virtual wxControl* CreateItem( const wxItemResource*  pChildResource
+                                  ,const wxItemResource*  pParentResource
+                                  ,const wxResourceTable* pTable = (const wxResourceTable *) NULL
+                                 )
+    { 
+        return(wxWindowBase::CreateItem( pChildResource
+                                        ,pParentResource
+                                        ,pTable
+                                       ));
+    }
+    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+    DECLARE_EVENT_TABLE()
+}; // end of CLASS wxCheckListBoxItem
 
 #endif
    // _WX_CHECKLST_H_

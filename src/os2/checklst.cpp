@@ -44,7 +44,7 @@
 // implementation
 // ============================================================================
 
-  IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
+IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class
@@ -52,187 +52,191 @@
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
-friend class wxCheckListBox;
+    friend class wxCheckListBox;
 public:
-  // ctor
-  wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
+    //
+    // ctor
+    //
+    wxCheckListBoxItem( wxCheckListBox* pParent
+                       ,size_t          nIndex
+                      );
 
-  // drawing functions
-  virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
+    //
+    // Drawing functions
+    //
+    virtual bool OnDrawItem( wxDC&         rDc
+                            ,const wxRect& rRect
+                            ,wxODAction    eAct
+                            ,wxODStatus    eStat
+                           );
 
-  // simple accessors
-  bool IsChecked() const  { return m_bChecked;        }
-  void Check(bool bCheck);
-  void Toggle() { Check(!IsChecked()); }
+    //
+    // Simple accessors
+    //
+    bool IsChecked(void) const  { return m_bChecked; }
+    void Check(bool bCheck);
+    void Toggle(void) { Check(!IsChecked()); }
 
 private:
-  bool            m_bChecked;
-  wxCheckListBox *m_pParent;
-  size_t            m_nIndex;
-};
+    bool                            m_bChecked;
+    wxCheckListBox*                 m_pParent;
+    size_t                          m_nIndex;
+}; // end of CLASS wxCheckListBoxItem
 
-wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn("", TRUE)   // checkable
+wxCheckListBoxItem::wxCheckListBoxItem (
+  wxCheckListBox*                   pParent
+, size_t                            nIndex
+)
+: wxOwnerDrawn( ""
+               ,TRUE // checkable
+              )
 {
-  m_bChecked = FALSE;
-  m_pParent  = pParent;
-  m_nIndex   = nIndex;
+    m_bChecked = FALSE;
+    m_pParent  = pParent;
+    m_nIndex   = nIndex;
 
-  // we don't initialize m_nCheckHeight/Width vars because it's
-  // done in OnMeasure while they are used only in OnDraw and we
-  // know that there will always be OnMeasure before OnDraw
+    //
+    // We don't initialize m_nCheckHeight/Width vars because it's
+    // done in OnMeasure while they are used only in OnDraw and we
+    // know that there will always be OnMeasure before OnDraw
+    //
+    SetMarginWidth(GetDefaultMarginWidth());
+} // end of wxCheckListBoxItem::wxCheckListBoxItem
 
-  // fix appearance
-  SetMarginWidth(GetDefaultMarginWidth());
-}
-
-/*
- * JACS - I've got the owner-draw stuff partially working with WIN16,
- * with a really horrible-looking cross for wxCheckListBox instead of a
- * check - could use a bitmap check-mark instead, defined in wx.rc.
- * Also there's a refresh problem whereby it doesn't always draw the
- * check until you click to the right of it, which is OK for WIN32.
- */
-
-bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
-                                    wxODAction act, wxODStatus stat)
+bool wxCheckListBoxItem::OnDrawItem (
+  wxDC&                             rDc
+, const wxRect&                     rRect
+, wxODAction                        eAct
+, wxODStatus                        eStat
+)
 {
-  if ( IsChecked() )
-    stat = (wxOwnerDrawn::wxODStatus)(stat | wxOwnerDrawn::wxODChecked);
+    wxRect                          vRect = rRect;
 
-// TODO:
-/*
+    if (IsChecked())
+        eStat = (wxOwnerDrawn::wxODStatus)(eStat | wxOwnerDrawn::wxODChecked);
 
-  if ( wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) ) {
-    // ## using native API for performance and precision
-    size_t nCheckWidth  = GetDefaultMarginWidth(),
-         nCheckHeight = m_pParent->GetItemHeight();
-
-    int x = rc.GetX(),
-        y = rc.GetY();
-
-    HDC hdc = (HDC)dc.GetHDC();
-
-    // create pens
-    HPEN hpenBack = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_WINDOW)),
-         hpenGray = CreatePen(PS_SOLID, 0, RGB(128, 128, 128)),
-         hpenPrev = (HPEN)SelectObject(hdc, hpenBack);
-
-    // we erase the 1-pixel border
-    Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
-
-    // shift check mark 1 pixel to the right (it looks better like this)
-    x++;
-
-    if ( IsChecked() ) {
-      // first create a monochrome bitmap in a memory DC
-      HDC hdcMem = CreateCompatibleDC(hdc);
-      HBITMAP hbmpCheck = CreateBitmap(nCheckWidth, nCheckHeight, 1, 1, 0);
-      HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
-
-      // then draw a check mark into it
-      RECT rect ;
-      rect.left   = 0 ;
-      rect.top    = 0 ;
-      rect.right  = nCheckWidth ;
-      rect.bottom = nCheckHeight ;
-
-#ifdef __WIN32__
-#ifndef __SC__
-      DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
-#endif
-#else
-      // In WIN16, draw a cross
-      HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-      HPEN whiteBrush = (HPEN)GetStockObject(WHITE_BRUSH);
-      HPEN hPenOld = (HPEN)::SelectObject(hdcMem, blackPen);
-      HPEN hBrushOld = (HPEN)::SelectObject(hdcMem, whiteBrush);
-      ::SetROP2(hdcMem, R2_COPYPEN);
-      Rectangle(hdcMem, 0, 0, nCheckWidth, nCheckHeight);
-      MoveTo(hdcMem, 0, 0);
-      LineTo(hdcMem, nCheckWidth, nCheckHeight);
-      MoveTo(hdcMem, nCheckWidth, 0);
-      LineTo(hdcMem, 0, nCheckHeight);
-      ::SelectObject(hdcMem, hPenOld);
-      ::SelectObject(hdcMem, hBrushOld);
-      ::DeleteObject(blackPen);
-#endif
-
-      // finally copy it to screen DC and clean up
-      BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight,
-             hdcMem, 0, 0, SRCCOPY);
-
-      SelectObject(hdcMem, hbmpOld);
-      DeleteObject(hbmpCheck);
-      DeleteDC(hdcMem);
-    }
-
-    // now we draw the smaller rectangle
-    y++;
-    nCheckWidth  -= 2;
-    nCheckHeight -= 2;
-
-    // draw hollow gray rectangle
-    (void)SelectObject(hdc, hpenGray);
-    HBRUSH hbrPrev  = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-    Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
-
-    // clean up
-    (void)SelectObject(hdc, hpenPrev);
-    (void)SelectObject(hdc, hbrPrev);
-
-    DeleteObject(hpenBack);
-    DeleteObject(hpenGray);
-
-//
-//    dc.DrawRectangle(x, y, nCheckWidth, nCheckHeight);
-//
-//    if ( IsChecked() ) {
-//      dc.DrawLine(x, y, x + nCheckWidth, y + nCheckHeight);
-//      dc.DrawLine(x, y + nCheckHeight, x + nCheckWidth, y);
-//    }
-//
-
-    return TRUE;
-  }
-*/
-  return FALSE;
-}
-
-// change the state of the item and redraw it
-void wxCheckListBoxItem::Check(bool check)
-{
-    m_bChecked = check;
-
-    // index may be chanegd because new items were added/deleted
-    if ( m_pParent->GetItemIndex(this) != (int)m_nIndex )
+    //
+    // Unfortunately PM doesn't quite get the text position exact.  We need to alter
+    // it down and to the right, just a little bit.  The coords in rRect are OS/2
+    // coords not wxWindows coords.
+    //
+    vRect.x += 5;
+    vRect.y -= 3;
+    if (wxOwnerDrawn::OnDrawItem( rDc
+                                 ,vRect
+                                 ,eAct
+                                 ,eStat))
     {
-        // update it
-        int index = m_pParent->GetItemIndex(this);
+        size_t                      nCheckWidth  = GetDefaultMarginWidth();
+        size_t                      nCheckHeight = m_pParent->GetItemHeight();
+        int                         nParentHeight;
+        int                         nX = rRect.GetX();
+        int                         nY = rRect.GetY();
+        int                         nOldY = nY;
+        wxColour                    vColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+        wxPen                       vPenBack;
+        wxPen                       vPenGray;
+        wxPen                       vPenPrev;
 
-        wxASSERT_MSG( index != wxNOT_FOUND, wxT("what does this item do here?") );
+        m_pParent->GetSize( NULL
+                           ,&nParentHeight
+                          );
+        ::WinQueryWindowRect( m_pParent->GetHWND()
+                             ,&rDc.m_vRclPaint
+                            );
 
-        m_nIndex = (size_t)index;
+        nY = nParentHeight - nY - nCheckHeight;
+        vPenBack = wxPen(vColour, 1, wxSOLID);
+        vPenGray = wxPen(wxColour(127, 127, 127), 1, wxSOLID);
+
+        //
+        // Erase the 1-pixel border
+        //
+        rDc.SetPen(vPenBack);
+        rDc.DrawRectangle( nX
+                          ,nY
+                          ,nCheckWidth
+                          ,nCheckHeight
+                         );
+
+        //
+        // Now we draw the smaller rectangle
+        //
+        nY++;
+        nCheckWidth  -= 2;
+        nCheckHeight -= 2;
+
+        //
+        // Draw hollow gray rectangle
+        //
+        rDc.SetPen(vPenGray);
+        rDc.DrawRectangle( nX
+                          ,nY
+                          ,nCheckWidth
+                          ,nCheckHeight
+                         );
+
+        nX++;
+        if (IsChecked())
+        {
+            //
+            // Draw the check by loading the sys standard bitmap and drawing it
+            //
+            HBITMAP                 hChkBmp = ::WinGetSysBitmap( HWND_DESKTOP
+                                                                ,SBMP_MENUCHECK
+                                                               );
+            POINTL                  vPoint = {nX, nOldY + 3};
+
+            ::WinDrawBitmap( rDc.GetHPS()
+                            ,hChkBmp
+                            ,NULL
+                            ,&vPoint
+                            ,NULL
+                            ,NULL
+                            ,DBM_NORMAL
+                           );
+        }
+        return TRUE;
     }
+    return FALSE;
+} // end of wxCheckListBoxItem::OnDrawItem
 
-    HWND hwndListbox = (HWND)m_pParent->GetHWND();
+//
+// Change the state of the item and redraw it
+//
+void wxCheckListBoxItem::Check (
+  bool                              bCheck
+)
+{
+    m_bChecked = bCheck;
 
-// TODO:
-/*
-    RECT rcUpdate;
-    if ( ::SendMessage(hwndListbox, LB_GETITEMRECT,
-                       m_nIndex, (LPARAM)&rcUpdate) == LB_ERR )
+    //
+    // Index may be chanegd because new items were added/deleted
+    //
+    if (m_pParent->GetItemIndex(this) != (int)m_nIndex)
     {
-        wxLogDebug(wxT("LB_GETITEMRECT failed"));
+        //
+        // Update it
+        //
+        int                         nIndex = m_pParent->GetItemIndex(this);
+
+        wxASSERT_MSG(nIndex != wxNOT_FOUND, wxT("what does this item do here?"));
+
+        m_nIndex = (size_t)nIndex;
     }
 
-    InvalidateRect(hwndListbox, &rcUpdate, FALSE);
-*/
-    wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
-    event.SetInt(m_nIndex);
-    event.SetEventObject(m_pParent);
-    m_pParent->ProcessCommand(event);
-}
+    HWND                            hWndListbox = (HWND)m_pParent->GetHWND();
+    RECTL                           rUpdate;
+    MRESULT                         mRc;
+
+    wxCommandEvent                  vEvent( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
+                                           ,m_pParent->GetId()
+                                          );
+
+    vEvent.SetInt(m_nIndex);
+    vEvent.SetEventObject(m_pParent);
+    m_pParent->ProcessCommand(vEvent);
+} // end of wxCheckListBoxItem::Check
 
 // ----------------------------------------------------------------------------
 // implementation of wxCheckListBox class
@@ -245,147 +249,228 @@ BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
   EVT_LEFT_DOWN(wxCheckListBox::OnLeftClick)
 END_EVENT_TABLE()
 
-// control creation
+//
+// Control creation
 // ----------------
+//
 
-// def ctor: use Create() to really create the control
-wxCheckListBox::wxCheckListBox() : wxListBox()
+//
+// Default ctor: use Create() to really create the control
+//
+wxCheckListBox::wxCheckListBox()
+: wxListBox()
 {
-}
+} // end of wxCheckListBox::wxCheckListBox
 
-// ctor which creates the associated control
-wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
-                               const wxPoint& pos, const wxSize& size,
-                               int nStrings, const wxString choices[],
+//
+// Ctor which creates the associated control
+//
+wxCheckListBox::wxCheckListBox (
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, int                               nStrings
+, const wxString                    asChoices[]
+, long                              lStyle
 #if wxUSE_VALIDATORS
-                               long style, const wxValidator& val,
+, const wxValidator&                rVal
 #endif
-                               const wxString& name)
+, const wxString&                   rsName
+)
               : wxListBox()
 {
-    Create(parent, id, pos, size, nStrings, choices,
-           style | wxLB_OWNERDRAW, val, name);
-}
+    Create( pParent
+           ,vId
+           ,rPos
+           ,rSize
+           ,nStrings
+           ,asChoices
+           ,lStyle | wxLB_OWNERDRAW
+#if wxUSE_VALIDATORS
+           ,rVal
+#endif
+           ,rsName
+          );
+} // end of wxCheckListBox::wxCheckListBox
 
-void wxCheckListBox::Delete(int N)
+void wxCheckListBox::Delete(
+  int                               N
+)
 {
     wxCHECK_RET( N >= 0 && N < m_nNumItems,
                  wxT("invalid index in wxListBox::Delete") );
-
     wxListBox::Delete(N);
 
-    // free memory
+    //
+    // Free memory
+    //
     delete m_aItems[N];
-
     m_aItems.RemoveAt(N);
-}
+} // end of wxCheckListBox::Delete
 
-void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
+void wxCheckListBox::InsertItems (
+  int                               nItems
+, const wxString                    asItems[]
+, int                               nPos
+)
 {
-    wxCHECK_RET( pos >= 0 && pos <= m_nNumItems,
+    int                             i;
+
+    wxCHECK_RET( nPos >= 0 && nPos <= m_nNumItems,
                  wxT("invalid index in wxCheckListBox::InsertItems") );
 
-    wxListBox::InsertItems(nItems, items, pos);
+    wxListBox::InsertItems( nItems
+                           ,asItems
+                           ,nPos
+                          );
+    for (i = 0; i < nItems; i++)
+    {
+        wxOwnerDrawn*               pNewItem = CreateItem((size_t)(nPos + i));
 
-    int i;
-    for ( i = 0; i < nItems; i++ ) {
-        wxOwnerDrawn *pNewItem = CreateItem((size_t)(pos + i));
-        pNewItem->SetName(items[i]);
-        m_aItems.Insert(pNewItem, (size_t)(pos + i));
-//        ListBox_SetItemData((HWND)GetHWND(), i + pos, pNewItem);
+        pNewItem->SetName(asItems[i]);
+        m_aItems.Insert(pNewItem, (size_t)(nPos + i));
+        ::WinSendMsg( (HWND)GetHWND()
+                     ,LM_SETITEMHANDLE
+                     ,(MPARAM)(i + nPos)
+                     ,MPFROMP(pNewItem)
+                    );
     }
-}
+} // end of wxCheckListBox::InsertItems
 
-
-bool wxCheckListBox::SetFont( const wxFont &font )
+bool wxCheckListBox::SetFont (
+  const wxFont&                     rFont
+)
 {
-    size_t i;
-    for (i=0; i < m_aItems.GetCount(); i++)
-        m_aItems[i]->SetFont(font);
-    wxListBox::SetFont(font);
-    return TRUE;
-}
+    size_t                          i;
 
-// create/retrieve item
+    for (i = 0; i < m_aItems.GetCount(); i++)
+        m_aItems[i]->SetFont(rFont);
+    wxListBox::SetFont(rFont);
+    return TRUE;
+} // end of wxCheckListBox::SetFont
+
+//
+// Create/retrieve item
 // --------------------
+//
 
-// create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
+//
+// Create a check list box item
+//
+wxOwnerDrawn* wxCheckListBox::CreateItem (
+  size_t                            nIndex
+)
 {
-  wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
-  return pItem;
-}
+    wxCheckListBoxItem*             pItem = new wxCheckListBoxItem( this
+                                                                   ,nIndex
+                                                                  );
+    return pItem;
+} // end of wxCheckListBox::CreateItem
 
-// return item size
+//
+// Return item size
 // ----------------
-// TODO:
-/*
-bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
+//
+bool wxCheckListBox::OS2OnMeasure (
+  WXMEASUREITEMSTRUCT*             pItem
+)
 {
-  if ( wxListBox::MSWOnMeasure(item) ) {
-    MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
+    if (!pItem)
+        pItem = (WXMEASUREITEMSTRUCT*)new OWNERITEM;
+    if (wxListBox::OS2OnMeasure(pItem) )
+    {
+        POWNERITEM                  pStruct = (POWNERITEM)pItem;
 
-    // save item height
-    m_nItemHeight = pStruct->itemHeight;
+        //
+        // Save item height
+        //
+        m_nItemHeight = pStruct->rclItem.yTop - pStruct->rclItem.yBottom;
 
-    // add place for the check mark
-    pStruct->itemWidth += wxOwnerDrawn::GetDefaultMarginWidth();
+        //
+        // Add place for the check mark
+        //
+        pStruct->rclItem.xRight += wxOwnerDrawn::GetDefaultMarginWidth();
+        return TRUE;
+    }
+    return FALSE;
+} // end of wxCheckListBox::CreateItem
 
-    return TRUE;
-  }
-
-  return FALSE;
-}
-*/
-// check items
+//
+// Check items
 // -----------
-
-bool wxCheckListBox::IsChecked(size_t uiIndex) const
+//
+bool wxCheckListBox::IsChecked (
+  size_t                            uiIndex
+) const
 {
-  return GetItem(uiIndex)->IsChecked();
-}
+    return GetItem(uiIndex)->IsChecked();
+} // end of wxCheckListBox::IsChecked
 
-void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
+void wxCheckListBox::Check (
+  size_t                            uiIndex
+, bool                              bCheck
+)
 {
-  GetItem(uiIndex)->Check(bCheck);
-}
+    GetItem(uiIndex)->Check(bCheck);
+} // end of wxCheckListBox::Check
 
-// process events
+//
+// Process events
 // --------------
-
-void wxCheckListBox::OnChar(wxKeyEvent& event)
+//
+void wxCheckListBox::OnChar (
+  wxKeyEvent&                       rEvent
+)
 {
-  if ( event.KeyCode() == WXK_SPACE )
-    GetItem(GetSelection())->Toggle();
-  else
-    event.Skip();
-}
+    if (rEvent.KeyCode() == WXK_SPACE)
+        GetItem(GetSelection())->Toggle();
+    else
+        rEvent.Skip();
+} // end of wxCheckListBox::OnChar
 
-void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
+void wxCheckListBox::OnLeftClick (
+  wxMouseEvent&                     rEvent
+)
 {
-  // clicking on the item selects it, clicking on the checkmark toggles
-  if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
-// TODO:
-/*
-      size_t nItem = (size_t)::SendMessage
-                               (
-                                (HWND)GetHWND(),
-                                LB_ITEMFROMPOINT,
-                                0,
-                                MAKELPARAM(event.GetX(), event.GetY())
-                               );
-*/
-    size_t nItem = 0;
+    //
+    // Clicking on the item selects it, clicking on the checkmark toggles
+    //
+    if (rEvent.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth())
+    {
+        int                         nParentHeight;
+        wxScreenDC                  vDc;
+        wxCoord                     vHeight;
 
-    if ( nItem < (size_t)m_nNumItems )
-      GetItem(nItem)->Toggle();
-    //else: it's not an error, just click outside of client zone
-  }
-  else {
-    // implement default behaviour: clicking on the item selects it
-    event.Skip();
-  }
-}
+        GetSize( NULL
+                ,&nParentHeight
+               );
+        vDc.SetFont(GetFont());
+        vHeight = vDc.GetCharHeight() * 2.5;
+
+        //
+        // This, of course, will not work if the LB is scrolled
+        //
+        int                         nY = rEvent.GetY();
+
+        nY = nParentHeight - (nY + vHeight);
+
+        size_t                      nItem = (size_t)(nY / vHeight);
+
+        if (nItem < (size_t)m_nNumItems)
+            GetItem(nItem)->Toggle();
+        //
+        // else: it's not an error, just click outside of client zone
+        //
+    }
+    else
+    {
+        //
+        // Implement default behaviour: clicking on the item selects it
+        //
+        rEvent.Skip();
+    }
+} // end of wxCheckListBox::OnLeftClick
 
 #endif
 

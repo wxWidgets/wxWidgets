@@ -32,6 +32,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 
+BEGIN_EVENT_TABLE(wxStaticBitmap, wxWindow)
+    EVT_PAINT(wxStaticBitmap::OnPaint)
+END_EVENT_TABLE()
+
 static wxGDIImage* ConvertImage(
   const wxGDIImage&                 rBitmap
 )
@@ -105,9 +109,8 @@ bool wxStaticBitmap::Create(
     //
     int                             nWinstyle = SS_ICON;
 
-    sprintf(zId, "#%d", rBitmap.GetId());
     m_hWnd = (WXHWND)::WinCreateWindow( pParent->GetHWND()
-                                       ,WC_STATIC
+                                       ,wxCanvasClassName
                                        ,zId
                                        ,nWinstyle | WS_VISIBLE
                                        ,0,0,0,0
@@ -129,6 +132,8 @@ bool wxStaticBitmap::Create(
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
+    SetSize(nX, nY, m_pImage->GetWidth(), m_pImage->GetHeight());
+
     return(TRUE);
 } // end of wxStaticBitmap::Create
 
@@ -152,6 +157,30 @@ wxSize wxStaticBitmap::DoGetBestSize() const
     //
     return wxWindow::DoGetBestSize();
 }
+
+void wxStaticBitmap::OnPaint (
+  wxPaintEvent&                     WXUNUSED(rEvent)
+)
+{
+    wxPaintDC                       vDc(this);
+    int                             i;
+    wxBitmap*                       pBitmap;
+
+    if (m_pImage->IsKindOf(CLASSINFO(wxIcon)))
+    {
+        wxIcon*                     pIcon;
+
+        pIcon = wxDynamicCast(m_pImage, wxIcon);
+        pBitmap = new wxBitmap(*pIcon);
+        vDc.DrawBitmap(*pBitmap, 0, 0);
+        delete pBitmap;
+    }
+    else
+    {
+        pBitmap = wxDynamicCast(m_pImage, wxBitmap);
+        vDc.DrawBitmap(*pBitmap, 0, 0);
+    }
+} // end of wxStaticBitmap::OnPaint
 
 void wxStaticBitmap::SetImage(
   const wxGDIImage&                 rBitmap

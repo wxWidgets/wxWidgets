@@ -679,8 +679,20 @@ void wxNotebook::OnSize(
   wxSizeEvent&                      rEvent
 )
 {
-    if (m_nSelection < m_pages.Count() && m_nSelection >= 0)
-        m_pages[m_nSelection]->Refresh();
+    int                             nPage;
+    int                             nCount = (int)m_pages.Count();
+
+    for (nPage = 0; nPage < nCount; nPage++)
+    {
+        if (m_nSelection == nPage)
+            m_pages[nPage]->Refresh();
+        else
+            ::WinSetWindowPos(m_pages[nPage]->GetHWND()
+                              ,NULLHANDLE
+                              ,0,0,0,0
+                              ,SWP_HIDE
+                             );
+    }
     rEvent.Skip();
 } // end of wxNotebook::OnSize
 
@@ -693,22 +705,44 @@ void wxNotebook::OnSelChange (
     //
     if (rEvent.GetEventObject() == this)
     {
-        int                         nSel = rEvent.GetOldSelection();
+        int                         nPageCount = GetPageCount();
+        int                         nSel;
+        ULONG                       ulOS2Sel = (ULONG)rEvent.GetOldSelection();
+        bool                        bFound = FALSE;
 
-        if (nSel != -1)
+        for (nSel = 0; nSel < nPageCount; nSel++)
         {
-            m_pages[nSel]->Show(FALSE);
-            m_pages[nSel]->SetActivePage(FALSE);
+            if (ulOS2Sel == m_alPageId[nSel])
+            {
+                bFound = TRUE;
+                break;
+            }
         }
-        nSel = rEvent.GetSelection();
-        if (nSel != -1)
-        {
-            wxNotebookPage*         pPage = m_pages[nSel];
 
-            pPage->Show(TRUE);
-            pPage->SetFocus();
-            m_pages[nSel]->SetActivePage(TRUE);
+        if (!bFound)
+            return;
+
+        m_pages[nSel]->Show(FALSE);
+
+        ulOS2Sel = (ULONG)rEvent.GetSelection();
+
+        bFound = FALSE;
+
+        for (nSel = 0; nSel < nPageCount; nSel++)
+        {
+            if (ulOS2Sel == m_alPageId[nSel])
+            {
+                bFound = TRUE;
+                break;
+            }
         }
+
+        if (!bFound)
+            return;
+
+        wxNotebookPage*         pPage = m_pages[nSel];
+
+        pPage->Show(TRUE);
         m_nSelection = nSel;
     }
 

@@ -227,9 +227,6 @@ public:
     void OnIdle(wxIdleEvent& rEvent);
 
 public:
-    // For hidden notebook pages, always TRUE for everything else
-    bool IsActivePage(void) const { return m_bIsActivePage; }
-    void SetActivePage(bool bActive) { m_bIsActivePage = bActive; }
 
     // For implementation purposes - sometimes decorations make the client area
     // smaller
@@ -606,7 +603,6 @@ private:
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;
     SWP                             m_vWinSwp;
-    bool                            m_bIsActivePage;
 
     DECLARE_DYNAMIC_CLASS(wxWindowOS2);
     DECLARE_NO_COPY_CLASS(wxWindowOS2)
