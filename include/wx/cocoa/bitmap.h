@@ -128,6 +128,7 @@ public:
     // raw bitmap access support functions
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
+    void UseAlpha();
 
     wxPalette* GetPalette() const;
     void SetPalette(const wxPalette& palette);
