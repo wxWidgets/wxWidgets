@@ -319,6 +319,8 @@ static const char * icon8_xpm[] = {
 
 bool wxIsDriveAvailable(const wxString& dirName)
 {
+    // FIXME_MGL - this method leads to hang up under Watcom for some reason
+#ifndef __WATCOMC__
     if ( dirName.Len() == 3 && dirName[1u] == wxT(':') )
     {
         wxString dirNameLower(dirName.Lower());
@@ -329,6 +331,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
                 wxPathExists(dirNameLower));
     }
     else
+#endif
         return TRUE;
 }
 
