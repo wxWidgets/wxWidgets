@@ -147,6 +147,9 @@ void wxStatusBar95::SetStatusWidths(int n, const int widths[])
 
 void wxStatusBar95::SetFieldsWidth()
 {
+    if ( !m_nFields )
+        return;
+
   int *pWidths = new int[m_nFields];
 
   int nWindowWidth, y;

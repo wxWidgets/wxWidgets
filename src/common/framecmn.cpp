@@ -305,8 +305,6 @@ wxStatusBar *wxFrameBase::OnCreateStatusBar(int number,
 
 void wxFrameBase::SetStatusText(const wxString& text, int number)
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
     wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
 
     m_frameStatusBar->SetStatusText(text, number);
@@ -314,8 +312,6 @@ void wxFrameBase::SetStatusText(const wxString& text, int number)
 
 void wxFrameBase::SetStatusWidths(int n, const int widths_field[] )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
     wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set widths for") );
 
     m_frameStatusBar->SetStatusWidths(n, widths_field);
