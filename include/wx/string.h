@@ -675,8 +675,6 @@ public:
 
 #if wxUSE_UNICODE
     // from multibyte string
-    // (NB: nLength is right now number of Unicode characters, not
-    //  characters in psz! So try not to use it yet!)
   wxString(const char *psz, wxMBConv& conv, size_t nLength = npos);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz) : wxStringBase(psz.data()) { }
