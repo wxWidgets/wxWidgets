@@ -78,6 +78,8 @@ class ListboxWidgetsPage : public WidgetsPage
 public:
     ListboxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
 
+    virtual wxControl *GetWidget() const { return m_lbox; }
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);

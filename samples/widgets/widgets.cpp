@@ -39,6 +39,7 @@
 
 #include "wx/notebook.h"
 #include "wx/sizer.h"
+#include "wx/colordlg.h"
 
 #include "widgets.h"
 
@@ -50,7 +51,9 @@
 enum
 {
     Widgets_ClearLog = 100,
-    Widgets_Quit
+    Widgets_Quit,
+    Widgets_SetFgColour,
+    Widgets_SetBgColour
 };
 
 // ----------------------------------------------------------------------------
@@ -83,7 +86,11 @@ protected:
 #if wxUSE_LOG
     void OnButtonClearLog(wxCommandEvent& event);
 #endif // wxUSE_LOG
-    void OnButtonQuit(wxCommandEvent& event);
+    void OnExit(wxCommandEvent& event);
+#if wxUSE_MENUS
+    void OnSetFgCol(wxCommandEvent& event);
+    void OnSetBgCol(wxCommandEvent& event);
+#endif // wxUSE_MENUS
 
     // initialize the notebook: add all pages to it
     void InitNotebook();
@@ -105,6 +112,12 @@ private:
 
     // and the image list for it
     wxImageList *m_imaglist;
+
+#if wxUSE_MENUS
+    // last chosen fg/bg colours
+    wxColour m_colFg,
+             m_colBg;
+#endif // wxUSE_MENUS
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -186,7 +199,11 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #if wxUSE_LOG
     EVT_BUTTON(Widgets_ClearLog, WidgetsFrame::OnButtonClearLog)
 #endif // wxUSE_LOG
-    EVT_BUTTON(Widgets_Quit, WidgetsFrame::OnButtonQuit)
+    EVT_BUTTON(Widgets_Quit, WidgetsFrame::OnExit)
+
+    EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
+    EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
+    EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -250,6 +267,18 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif // wxUSE_LOG
     m_notebook = (wxNotebook *)NULL;
     m_imaglist = (wxImageList *)NULL;
+
+#if wxUSE_MENUS
+    // create the menubar
+    wxMenuBar *mbar = new wxMenuBar;
+    wxMenu *menuWidget = new wxMenu;
+    menuWidget->Append(Widgets_SetFgColour, _T("Set &foreground...\tCtrl-F"));
+    menuWidget->Append(Widgets_SetBgColour, _T("Set &background...\tCtrl-B"));
+    menuWidget->AppendSeparator();
+    menuWidget->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
+    mbar->Append(menuWidget, _T("&Widget"));
+    SetMenuBar(mbar);
+#endif // wxUSE_MENUS
 
     // create controls
     m_panel = new wxPanel(this, wxID_ANY,
@@ -354,7 +383,7 @@ WidgetsFrame::~WidgetsFrame()
 // WidgetsFrame event handlers
 // ----------------------------------------------------------------------------
 
-void WidgetsFrame::OnButtonQuit(wxCommandEvent& WXUNUSED(event))
+void WidgetsFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
 }
@@ -365,6 +394,34 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
     m_lboxLog->Clear();
 }
 #endif // wxUSE_LOG
+
+#if wxUSE_MENUS
+
+void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_colFg);
+    if ( !col.Ok() )
+        return;
+
+    m_colFg = col;
+
+    WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
+    page->GetWidget()->SetForegroundColour(m_colFg);
+}
+
+void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_colBg);
+    if ( !col.Ok() )
+        return;
+
+    m_colBg = col;
+
+    WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
+    page->GetWidget()->SetBackgroundColour(m_colBg);
+}
+
+#endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // WidgetsPageInfo

@@ -86,6 +86,8 @@ class ComboboxWidgetsPage : public WidgetsPage
 public:
     ComboboxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
 
+    virtual wxControl *GetWidget() const { return m_combobox; }
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);

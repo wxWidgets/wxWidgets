@@ -116,6 +116,8 @@ public:
     TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~TextWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_text; }
+
 protected:
     // create an info text contorl
     wxTextCtrl *CreateInfoText();

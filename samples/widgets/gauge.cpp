@@ -74,6 +74,8 @@ public:
     GaugeWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
+    virtual wxControl *GetWidget() const { return m_gauge; }
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);

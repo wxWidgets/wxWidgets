@@ -74,6 +74,8 @@ public:
     SpinBtnWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~SpinBtnWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_spinbtn; }
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);

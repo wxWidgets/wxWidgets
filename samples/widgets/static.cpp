@@ -142,6 +142,8 @@ public:
     StaticWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~StaticWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_statText; }
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);

@@ -76,6 +76,8 @@ public:
     CheckBoxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~CheckBoxWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_checkbox; }
+
 protected:
     // event handlers
     void OnCheckBox(wxCommandEvent& event);

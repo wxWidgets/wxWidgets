@@ -90,6 +90,8 @@ public:
     SliderWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~SliderWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_slider; }
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);

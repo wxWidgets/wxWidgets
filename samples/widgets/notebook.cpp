@@ -93,6 +93,8 @@ public:
     NotebookWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~NotebookWidgetsPage();
 
+    virtual wxControl *GetWidget() const { return m_notebook; }
+
 protected:
     // event handlers
     void OnPageChanging(wxNotebookEvent& event);

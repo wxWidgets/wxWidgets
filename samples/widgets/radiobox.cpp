@@ -79,6 +79,8 @@ public:
     RadioWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~RadioWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_radio; }
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);

@@ -33,6 +33,9 @@ class WidgetsPage : public wxPanel
 public:
     WidgetsPage(wxNotebook *notebook);
 
+    // return the control shown by this page
+    virtual wxControl *GetWidget() const = 0;
+
 protected:
     // several helper functions for page creation
 

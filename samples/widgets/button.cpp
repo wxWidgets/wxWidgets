@@ -80,6 +80,8 @@ public:
     ButtonWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
     virtual ~ButtonWidgetsPage(){};
 
+    virtual wxControl *GetWidget() const { return m_button; }
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);
