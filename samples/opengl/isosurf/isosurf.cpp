@@ -28,7 +28,7 @@
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
 #   ifdef __DARWIN__
 #       include <OpenGL/gl.h>
 #       include <OpenGL/glu.h>
