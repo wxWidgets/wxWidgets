@@ -28,7 +28,7 @@ static inline bool isEiffelOperator(unsigned int ch) {
 	        ch == '{' || ch == '}' || ch == '~' ||
 	        ch == '[' || ch == ']' || ch == ';' ||
 	        ch == '<' || ch == '>' || ch == ',' ||
-	        ch == '.' || ch == '^' || ch == '%' || ch == ':' || 
+	        ch == '.' || ch == '^' || ch == '%' || ch == ':' ||
 		ch == '!' || ch == '@' || ch == '?';
 }
 
@@ -187,19 +187,19 @@ static void FoldEiffelDocKeyWords(unsigned int startPos, int length, int /* init
 			s[j] = '\0';
 
 			if (
-				(strcmp(s, "check") == 0) || 
-				(strcmp(s, "debug") == 0) || 
-				(strcmp(s, "deferred") == 0) || 
-				(strcmp(s, "do") == 0) || 
+				(strcmp(s, "check") == 0) ||
+				(strcmp(s, "debug") == 0) ||
+				(strcmp(s, "deferred") == 0) ||
+				(strcmp(s, "do") == 0) ||
 				(strcmp(s, "from") == 0) ||
 				(strcmp(s, "if") == 0) ||
-				(strcmp(s, "inspect") == 0) || 
+				(strcmp(s, "inspect") == 0) ||
 				(strcmp(s, "once") == 0)
 			)
 				levelCurrent++;
 			if (!lastDeferred && (strcmp(s, "class") == 0))
 				levelCurrent++;
-			if (strcmp(s, "end") == 0) 
+			if (strcmp(s, "end") == 0)
 				levelCurrent--;
 			lastDeferred = strcmp(s, "deferred") == 0;
 		}
