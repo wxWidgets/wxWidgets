@@ -61,6 +61,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= \
   $(GENDIR)/choicdgg.$(OBJSUFF) \
   $(GENDIR)/colrdlgg.$(OBJSUFF) \
+  $(GENDIR)/dirdlg.$(OBJSUFF) \
   $(GENDIR)/fontdlgg.$(OBJSUFF) \
   $(GENDIR)/gridg.$(OBJSUFF) \
   $(GENDIR)/laywin.$(OBJSUFF) \
@@ -169,7 +170,6 @@ MSWOBJS = \
   dde.$(OBJSUFF) \
   dialog.$(OBJSUFF) \
   dib.$(OBJSUFF) \
-  dirdlg.$(OBJSUFF) \
   filedlg.$(OBJSUFF) \
   font.$(OBJSUFF) \
   fontdlg.$(OBJSUFF) \
@@ -224,6 +224,9 @@ MSWOBJS = \
   utilsexc.$(OBJSUFF) \
   wave.$(OBJSUFF) \
   window.$(OBJSUFF)
+
+# Native wxDirDlg can't be compiled due to GnuWin32/OLE limitations
+#  dirdlg.$(OBJSUFF) \
 
 # OLE not supported yet by GnuWin32
 #  $(OLEDIR)/droptgt.$(OBJSUFF) \

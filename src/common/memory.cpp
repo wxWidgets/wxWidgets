@@ -532,6 +532,8 @@ bool wxDebugContext::SetFile(const wxString& file)
 
 bool wxDebugContext::SetStandardError(void)
 {
+    // Obsolete
+#if 0
 #if !defined(_WINDLL)
   wxDebugStreamBuf *buf = new wxDebugStreamBuf;
   ostream *stream = new ostream(m_streamBuf);
@@ -540,6 +542,8 @@ bool wxDebugContext::SetStandardError(void)
 #else
   return FALSE;
 #endif
+#endif
+  return FALSE;
 }
 
 
