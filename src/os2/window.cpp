@@ -2845,6 +2845,35 @@ bool wxWindow::HandlePaint()
 
     m_updateRegion = wxRegion(hRgn);
     vEvent.SetEventObject(this);
+    if (!GetEventHandler()->ProcessEvent(vEvent))
+    {
+        HPS                         hPS;
+
+        hPS = ::WinBeginPaint( GetHwnd()
+                              ,NULLHANDLE
+                              ,&vRect
+                             );
+        if(hPS)
+        {
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_CONSECRGB
+                                     ,0L
+                                     ,(LONG)wxTheColourDatabase->m_nSize
+                                     ,(PLONG)wxTheColourDatabase->m_palTable
+                                    );
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_RGB
+                                     ,0L
+                                     ,0L
+                                     ,NULL
+                                    );
+
+            ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
+            ::WinEndPaint(hPS);
+        }
+    }
     return (GetEventHandler()->ProcessEvent(vEvent));
 } // end of wxWindow::HandlePaint
 

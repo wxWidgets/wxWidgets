@@ -1030,10 +1030,10 @@ bool wxFrame::OS2Create(
     //
     if (!::WinSetWindowPos( m_hWnd
                            ,HWND_TOP
-                           ,nX + 20
-                           ,nY + 20
-                           ,nWidth - 60
-                           ,nHeight - 60
+                           ,nX // + 20
+                           ,nY // + 20
+                           ,nWidth // - 60
+                           ,nHeight // - 60
                            ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
                           ))
     {
