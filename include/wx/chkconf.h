@@ -331,6 +331,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATAOBJ) */
 
+#ifndef wxUSE_DISPLAY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DISPLAY must be defined."
+#   else
+#       define wxUSE_DISPLAY 0
+#   endif
+#endif /* !defined(wxUSE_DISPLAY) */
+
 #ifndef wxUSE_DOC_VIEW_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DOC_VIEW_ARCHITECTURE must be defined."
@@ -691,13 +699,13 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
-#ifndef wxUSE_DISPLAY
+#ifndef wxUSE_VALIDATORS
 #   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_DISPLAY must be defined."
+#       error "wxUSE_VALIDATORS must be defined."
 #   else
-#       define wxUSE_DISPLAY 0
+#       define wxUSE_VALIDATORS 0
 #   endif
-#endif /* !defined(wxUSE_TREECTRL) */
+#endif /* !defined(wxUSE_VALIDATORS) */
 
 #ifndef wxUSE_WXHTML_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
