@@ -1149,8 +1149,13 @@ void wxFrameLayout::PositionPanes()
 void wxFrameLayout::OnSize( wxSizeEvent& event )
 {
     if ( event.GetEventObject() == (wxObject*) mpFrame )
-    
+    {
+        GetUpdatesManager().OnStartChanges();
         RecalcLayout(TRUE);
+        GetUpdatesManager().OnFinishChanges();
+        GetUpdatesManager().UpdateNow();
+    }
+
 }
 
 /*** protected members ***/
@@ -1551,9 +1556,11 @@ void wxFrameLayout::SetPaneBackground( const wxColour& colour )
 
 void wxFrameLayout::RefreshNow( bool recalcLayout )
 {
-    if ( recalcLayout ) RecalcLayout( TRUE );
+    if ( recalcLayout )
+        RecalcLayout( TRUE );
 
-    if ( mpFrame ) mpFrame->Refresh();
+    if ( mpFrame )
+        mpFrame->Refresh();
 }
 
 /*** plugin-related methods ***/
