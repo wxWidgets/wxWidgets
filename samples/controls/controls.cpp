@@ -316,14 +316,22 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   tc->SetBackgroundColour("wheat");
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
   
+  wxString choices2[] =
+  {
+    "Wonderful",
+    "examples.",
+  };
+  
   panel = new wxPanel(m_notebook);
   panel->SetBackgroundColour("cadet blue");
-  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices );
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_HORIZONTAL );
+  m_radio->SetBackgroundColour("wheat");
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_VERTICAL );
   m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(180,130), wxSize(140,30) );
-  (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
+  (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(340,130), wxSize(140,30) );
   m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(160,30) );
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
   

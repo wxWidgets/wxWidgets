@@ -2,22 +2,16 @@
 -------------------- High priority ---------------------
 
 wxTreeCtrl
-  -> Keyboard handling, icon support.
+  -> Make it compile. Keyboard handling, icon support.
 
 wxListCtrl
-  -> Icon support in list mode.
+  -> Icon support in list mode. Backgroundcolour, font?
 
-Finish DnD
-  -> Only decoding filelist and visual feedback missing
-  
 wxClipboard
-  -> Urg.
+  -> Urgh.
   
 wxHelpController
   -> Karsten ?
-  
-Implement wxRadioBox layout
-  -> I'm so lazy.
   
 Fix printing of bitmaps
   -> No idea.
@@ -27,7 +21,10 @@ Add support SetForegroundColour in GTK widgets
 
 wxBitmapCheckBox
   -> Interface same as checkbox?
-    
+
+wxImage
+  -> 24-bit support
+  
 -------------------- Low priority ---------------------
     
 wxDebugContext <-> wxLogXXX functions

@@ -80,11 +80,11 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   int y = m_y+15;
   int maxLen = 0;
   int height = 20;
+  int width = 0;
   
   GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
   
-//  if (((m_style & wxRA_VERTICAL) == wxRA_VERTICAL) && (n > 0))
-  if (n > 0)
+  if (m_windowStyle & wxRA_VERTICAL)
   {
     GSList *radio_button_group = (GSList *) NULL;
     for (int i = 0; i < n; i++)
@@ -107,7 +107,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       int tmp = 22+gdk_string_measure( GTK_WIDGET(m_radio)->style->font, choices[i] );
       if (tmp > maxLen) maxLen = tmp;
       
-      int width = m_width-10;
+      width = m_width-10;
       if (size.x == -1) width = tmp;
       gtk_widget_set_usize( GTK_WIDGET(m_radio), width, 20 );
       
@@ -115,10 +115,47 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       height += 20;
       
     }
+    width = maxLen + 10;
+  }
+  else
+  {
+    int max = 0;
+    for (int i = 0; i < n; i++)
+    {
+      GdkFont *font = m_widget->style->font;
+      int len = 27+gdk_string_measure( font, choices[i] );
+      if (len > max) max = len;
+    }
+  
+    GSList *radio_button_group = (GSList *) NULL;
+    for (int i = 0; i < n; i++)
+    {
+      if (i) radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );
+      
+      m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i] ) );
+      
+      m_boxes.Append( (wxObject*) m_radio );
+      
+      ConnectWidget( GTK_WIDGET(m_radio) );
+  
+      if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
+      
+      gtk_signal_connect( GTK_OBJECT(m_radio), "clicked", 
+        GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+       
+      gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), GTK_WIDGET(m_radio), x, y );
+      
+      gtk_widget_set_usize( GTK_WIDGET(m_radio), max, 20 );
+      
+      x += max;
+    }
+    
+    width = max*n + 10;
+    height = 40;
   }
   
   wxSize newSize = size;
-  if (newSize.x == -1) newSize.x = maxLen+10;
+  if (newSize.x == -1) newSize.x = width;
   if (newSize.y == -1) newSize.y = height;
   SetSize( newSize.x, newSize.y );
   
@@ -151,19 +188,51 @@ void wxRadioBox::OnSize( wxSizeEvent &event )
   int x = m_x+5;
   int y = m_y+15;
   
-  wxNode *node = m_boxes.First();
-  while (node)
+  if (m_windowStyle & wxRA_VERTICAL)
   {
-    GtkWidget *button = GTK_WIDGET( node->Data() );
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+      GtkWidget *button = GTK_WIDGET( node->Data() );
     
-    gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
-    y += 20;
+      gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
+      y += 20;
     
-    int w = m_width-10;
-    if (w < 15) w = 15;
-    gtk_widget_set_usize( button, w, 20 );
+      int w = m_width-10;
+      if (w < 15) w = 15;
+      gtk_widget_set_usize( button, w, 20 );
       
-    node = node->Next();
+      node = node->Next();
+    }
+  }
+  else
+  {
+    int max = 0;
+
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+      GtkButton *button = GTK_BUTTON( node->Data() );
+      GtkLabel *label = GTK_LABEL( button->child );
+      
+      GdkFont *font = m_widget->style->font;
+      int len = 27+gdk_string_measure( font, label->label );
+      if (len > max) max = len;
+      
+      node = node->Next();
+    }
+    
+    node = m_boxes.First();
+    while (node)
+    {
+      GtkWidget *button = GTK_WIDGET( node->Data() );
+    
+      gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
+      x += max;
+      gtk_widget_set_usize( button, max, 20 );
+      
+      node = node->Next();
+    }
   }
 }
 

@@ -33,17 +33,18 @@ extern bool g_blockEventsOnDrag;
 
 wxDropTarget::wxDropTarget()
 {
+  m_size = 0;
 }
 
 wxDropTarget::~wxDropTarget()
 {
 }
 
-void wxDropTarget::Drop( GdkEvent *event, int x, int y )
+void wxDropTarget::Drop( GdkEventDropDataAvailable *event, int x, int y )
 {
-  printf( "Drop data is of type %s.\n", event->dropdataavailable.data_type );
+  printf( "Drop data is of type %s.\n", event->data_type );
   
-  OnDrop( x, y, (char *)event->dropdataavailable.data);
+  OnDrop( x, y, (char *)event->data);
 }
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -114,18 +115,42 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
+bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const aszFiles[] )
 {
   printf( "Got %d dropped files.\n", (int)nFiles );
   printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+  for (size_t i = 0; i < nFiles; i++)
+  {
+    printf( aszFiles[i] );
+    printf( "\n" );
+  }
   return TRUE;
 }
 
-bool wxFileDropTarget::OnDrop(long x, long y, const void *WXUNUSED(pData) )
+bool wxFileDropTarget::OnDrop(long x, long y, const void *pData )
 {
-  char *str = "/this/is/a/path.txt";
+  size_t number = 0;
+  char *text = (char*) pData;
+  for (int i = 0; i < m_size; i++)
+    if (text[i] == 0) number++;
 
-  return OnDropFiles(x, y, 1, &str ); 
+  if (number == 0) return TRUE;    
+    
+  char **files = new char*[number];
+  
+  text = (char*) pData;
+  for (size_t i = 0; i < number; i++)
+  {
+    files[i] = text;
+    int len = strlen( text );
+    text += len+1;
+  }
+
+  bool ret = OnDropFiles(x, y, 1, files ); 
+  
+  free( files );
+  
+  return ret;
 }
 
 size_t wxFileDropTarget::GetFormatCount() const

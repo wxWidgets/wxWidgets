@@ -123,7 +123,7 @@ public:
 
   wxFileDataObject(void) { }
   void AddFile( const wxString &file )
-    { m_files += file; m_files += ";"; }
+    { m_files += file; m_files += '\0'; }
 
   // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
@@ -131,7 +131,7 @@ public:
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDF_FILENAME; }
   virtual size_t GetDataSize() const
-    { return m_files.Len() + 1; } // +1 for trailing '\0'of course
+    { return m_files.Len(); } // no trailing '\0'
   virtual void GetDataHere(void *pBuf) const
     { memcpy(pBuf, m_files.c_str(), GetDataSize()); }
 
@@ -154,16 +154,16 @@ class wxDropTarget: public wxObject
     virtual void OnLeave() { }
     virtual bool OnDrop( long x, long y, const void *pData ) = 0;
 
-//  protected:
+  // implementation
       
-    friend wxWindow;
+    int  m_size;    
     
     // Override these to indicate what kind of data you support: 
   
     virtual size_t GetFormatCount() const = 0;
     virtual wxDataFormat GetFormat(size_t n) const = 0;
   
-    void Drop( GdkEvent *event, int x, int y );
+    void Drop( GdkEventDropDataAvailable *event, int x, int y );
     void RegisterWidget( GtkWidget *widget );
     void UnregisterWidget( GtkWidget *widget );
 };

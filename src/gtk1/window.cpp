@@ -841,7 +841,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventBut
 // "drop_data_available_event"
 //-----------------------------------------------------------------------------
 
-static void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWindow *win )
+static void gtk_window_drop_callback( GtkWidget *widget, GdkEventDropDataAvailable *event, wxWindow *win )
 {
   if (!win->HasVMT()) return;
 
@@ -850,6 +850,7 @@ static void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWind
     int x = 0;
     int y = 0;
     gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
+    win->GetDropTarget()->m_size = event->data_numbytes;
     win->GetDropTarget()->Drop( event, x, y );
   }
 
