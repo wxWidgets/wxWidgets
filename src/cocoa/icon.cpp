@@ -52,12 +52,7 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
 {
   UnRef();
 
-  wxBitmapHandler *handler = FindHandler(type);
-
-  if ( handler )
-	return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
-  else
-	return FALSE;
+  return FALSE;
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& icno)
