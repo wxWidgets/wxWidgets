@@ -1766,7 +1766,7 @@ static void TestMimeFilename()
                                      wxFileType::MessageParameters(fname, _T(""))) )
                 cmd = _T("<no command available>");
             else
-                cmd = wxString('"') + cmd + '"';
+                cmd = wxString(_T('"')) + cmd + _T('"');
 
             wxPrintf(_T("To open %s (%s) do %s.\n"),
                      fname.c_str(), desc.c_str(), cmd.c_str());
