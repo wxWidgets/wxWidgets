@@ -917,6 +917,7 @@ wxDefaultValidator = wx.core.DefaultValidator
 wxMenu = wx.core.Menu
 wxMenuBar = wx.core.MenuBar
 wxMenuItem_GetLabelFromText = wx.core.MenuItem_GetLabelFromText
+wxMenuItem_GetDefaultMarginWidth = wx.core.MenuItem_GetDefaultMarginWidth
 wxMenuItem = wx.core.MenuItem
 wxPreControl = wx.core.PreControl
 wxControl = wx.core.Control

@@ -372,6 +372,11 @@ public:
     // switch on/off owner-drawing the item
     void SetOwnerDrawn(bool ownerDrawn = TRUE);
     void ResetOwnerDrawn();
+#else
+    // just to keep the global  renamers in sync
+    %extend {
+        static int GetDefaultMarginWidth() { return 0; }
+    }
 #endif
 
     void SetBitmap(const wxBitmap& bitmap);
