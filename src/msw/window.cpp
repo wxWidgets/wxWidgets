@@ -1340,11 +1340,15 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
             pRect = NULL;
         }
 
+#ifndef __SMARTPHONE__
         UINT flags = RDW_INVALIDATE | RDW_ALLCHILDREN;
         if ( eraseBack )
             flags |= RDW_ERASE;
 
         ::RedrawWindow(hWnd, pRect, NULL, flags);
+#else
+        wxUnusedVar( eraseBack );
+#endif
     }
 }
 
