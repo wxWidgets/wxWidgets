@@ -172,7 +172,7 @@ all:	all_libs all_execs
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
         -erase $(LIBTARGET)
-	tlib $(LIBTARGET) /P1024 @&&!
+	tlib "$(LIBTARGET)" /P1024 @&&!
 +$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
 !
 
