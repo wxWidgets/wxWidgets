@@ -203,6 +203,7 @@ wxMSW:
 - set orientation for scrollbar events
 - fix for explicit keyword detection (VC++)
 - fix for sending event from wxCheckListBox::Check()
+- wxCaret::SetSize correction for showing caret
 
 wxMotif:
 
