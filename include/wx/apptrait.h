@@ -111,7 +111,12 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
 
 #if wxUSE_SOCKETS
-    // return table of GUI callbacks for GSocket code or NULL in wxBase
+    // return table of GUI callbacks for GSocket code or NULL in wxBase. This
+    // is needed because networking classes are in their own library and so 
+    // they can't directly call GUI functions (the same net library can be
+    // used in both GUI and base apps). To complicate it further, GUI library
+    // ("wxCore") doesn't depend on networking library and so only a functions
+    // table can be passed around
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
 #endif
 
