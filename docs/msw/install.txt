@@ -604,6 +604,7 @@ For example:
   cd build-debug
   ../configure --with-msw --enable-debug --enable-debug_gdb --disable-shared
   make
+  make install % This step is optional, see note (8) below.
   cd samples/minimal
   make
   ./minimal.exe
@@ -656,6 +657,16 @@ Notes:
      dlltool -k -d opengl32.def -llibopengl32.a
 
    and similarly for glu[32].def.
+
+8. The 'make install' step is optional, and copies files
+   as follows:
+
+   /usr/local/lib - wxmswXYZd.dll.a and wxmswXYZd.dll
+   /usr/local/include/wx - wxWindows header files
+   /usr/local/bin - wx-config
+
+   You may need to do this if using wx-config with the
+   default root path.
 
 OLD VERSIONS:
 
