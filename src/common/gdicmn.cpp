@@ -357,6 +357,9 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #ifdef __WXMAC__
   return NULL;
 #endif
+#ifdef __WXCOCOA__
+  return NULL;
+#endif
 #ifdef __WXSTUBS__
   return NULL;
 #endif
