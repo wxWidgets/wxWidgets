@@ -786,6 +786,10 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             }
 #endif // Win32
 
+        // VZ: this code breaks radiobox redrawing under Windows XP, don't use
+        //     it. If you need to get messages from the static controls,
+        //     create them as a child of another (non static) window
+#if 0
         // This is required for the radiobox to be sensitive to mouse input,
         // e.g. for Dialog Editor.
         case WM_NCHITTEST:
@@ -801,6 +805,7 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     return (long)HTCLIENT;
             }
             break;
+#endif // 0
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
