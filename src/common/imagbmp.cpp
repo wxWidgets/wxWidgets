@@ -47,7 +47,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// wxBMPHandler
+// wxBMPHandler & wxICOHandler
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
@@ -56,9 +56,219 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #if wxUSE_STREAMS
 
 
+#ifndef BI_RGB
+#define BI_RGB       0
+#define BI_RLE8      1
+#define BI_RLE4      2
+#endif
+
+#ifndef BI_BITFIELDS
+#define BI_BITFIELDS 3
+#endif
+
+#define poffset (line * width * 3 + column * 3)
+
+
+
+struct ICONDIRENTRY
+    {
+    wxUint8         bWidth;               // Width of the image
+    wxUint8         bHeight;              // Height of the image (times 2)
+    wxUint8         bColorCount;          // Number of colors in image (0 if >=8bpp)
+    wxUint8         bReserved;            // Reserved
+    wxUint16        wPlanes;              // Color Planes
+    wxUint16        wBitCount;            // Bits per pixel
+    wxUint32        dwBytesInRes;         // how many bytes in this resource?
+    wxUint32        dwImageOffset;        // where in the file is this image
+} ;
+
+
+struct ICONDIR
+{
+    wxUint16     idReserved;   // Reserved
+    wxUint16     idType;       // resource type (1 for icons)
+    wxUint16     idCount;      // how many images?
+} ;
+
+bool wxICOHandler::SaveFile(wxImage *image,
+                            wxOutputStream& stream,
+                            bool verbose)
+
+{
+    bool bResult = FALSE ;
+    //sanity check; icon must be less than 127 pixels high and 255 wide
+    if (image -> GetHeight () > 127 )
+    {
+        if (verbose)
+            wxLogError( _("ICO: Error Image too tall for an icon.") );
+        return FALSE;
+    }
+    if (image -> GetWidth () > 255 )
+    {
+        if (verbose)
+            wxLogError( _("ICO: Error Image too wide for an icon.") );
+        return FALSE;
+    }
+
+    // only generate one image
+    int m_images = 1 ;
+
+    // write a header, (ICONDIR)
+    // Calculate the header size
+    wxUint32 m_offset = 3 * sizeof(wxUint16);
+
+    ICONDIR m_IconDir ;
+    m_IconDir.idReserved = 0 ;
+    m_IconDir.idType = wxUINT16_SWAP_ON_BE (1);
+    m_IconDir.idCount = wxUINT16_SWAP_ON_BE (m_images);
+    stream.Write(&m_IconDir.idReserved, sizeof(m_IconDir.idReserved));
+    stream.Write(&m_IconDir.idType, sizeof(m_IconDir.idType));
+    stream.Write(&m_IconDir.idCount, sizeof(m_IconDir.idCount));
+    if ( !stream.IsOk () )
+    {
+        if (verbose)
+            wxLogError( _("ICO: Error writing ICONDIR header.") );
+        return FALSE;
+    }
+
+    // for each iamage write a description ICONDIRENTRY
+    ICONDIRENTRY m_icondirentry ;
+    int i ;
+    for ( i = 0; i < m_images; i++ )
+    {
+        wxImage mask ;
+        if (image->HasMask())
+        {            
+            //make another image with black/white 
+            mask = image -> ConvertToMono (image->GetMaskRed(), image->GetMaskGreen(), image->GetMaskBlue() );
+            //now we need to change the masked regions to black
+            unsigned char r = image -> GetMaskRed() ;
+            unsigned char g = image -> GetMaskGreen() ;
+            unsigned char b = image -> GetMaskBlue() ;
+            if ((r != 0) || (g != 0) || (b != 0) )
+                {
+                    //Go round and apply black to the masked bits
+                    int i,j;
+                    for (i=0; i < mask.GetWidth(); i++)
+                        for (j=0; j < mask.GetHeight(); j++)
+                        {
+                            if ((r == mask.GetRed(i, j)) && 
+                                (g == mask.GetGreen(i, j) ) && 
+                                (b == mask.GetBlue(i, j)) )
+                                    image -> SetRGB ( i, j, 0, 0, 0 );
+                        }
+
+                }
+        }
+        else
+        {
+            // just make a black mask all over
+            mask = image -> Copy ();
+            int i,j;
+            for (i=0; i < mask.GetWidth(); i++)
+                for (j=0; j < mask.GetHeight(); j++)
+                mask.SetRGB ( i, j, 0, 0, 0 );
+        }
+        //Set the formats for image and mask
+        // windows never saves with more than 8 colors
+        image -> SetOption (wxBMP_FORMAT, wxBMP_8BPP);
+        // monochome bitmap
+        mask . SetOption (wxBMP_FORMAT, wxBMP_1BPP_BW);
+        bool IsBmp = FALSE ;
+        bool IsMask = FALSE ;
+
+        //calculate size and offset of image and mask
+        wxCountingOutputStream cStream ;
+        bResult = SaveDib ( image, cStream, verbose, IsBmp, IsMask ) ;
+        if (!bResult)
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error calculating size of XOR DIB .") );
+            return FALSE;
+        }
+        IsMask = TRUE ;
+        bResult = SaveDib ( &mask, cStream, verbose, IsBmp, IsMask ) ;
+        if (!bResult)
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error calculating size of Mask DIB .") );
+            return FALSE;
+        }
+        wxUint32 m_Size = cStream.GetSize();
+        if (!cStream.Ok())
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error calculating size of DIB .") );
+            return FALSE;
+        }
+
+        m_offset = m_offset + sizeof(ICONDIRENTRY) ;
+
+        m_icondirentry. bWidth = image -> GetWidth () ;
+        m_icondirentry. bHeight = 2 * image -> GetHeight () ;
+        m_icondirentry. bColorCount = 0 ;
+        m_icondirentry. bReserved = 0 ;
+        m_icondirentry. wPlanes = wxUINT16_SWAP_ON_BE(1);
+        m_icondirentry. wBitCount = wxUINT16_SWAP_ON_BE(wxBMP_8BPP) ;
+        m_icondirentry. dwBytesInRes = wxUINT32_SWAP_ON_BE(m_Size);
+        m_icondirentry. dwImageOffset = wxUINT32_SWAP_ON_BE(m_offset);
+
+        //increase size to allow for the data wriitten
+        m_offset = m_offset + m_Size ;
+
+        //write to stream
+        stream.Write(&m_icondirentry. bWidth, sizeof(m_icondirentry. bWidth) );
+        stream.Write(&m_icondirentry. bHeight, sizeof(m_icondirentry. bHeight) );
+        stream.Write(&m_icondirentry. bColorCount, sizeof(m_icondirentry. bColorCount) );
+        stream.Write(&m_icondirentry. bReserved, sizeof(m_icondirentry. bReserved) );
+        stream.Write(&m_icondirentry. wPlanes, sizeof(m_icondirentry. wPlanes) );
+        stream.Write(&m_icondirentry. wBitCount, sizeof(m_icondirentry. wBitCount) );
+        stream.Write(&m_icondirentry. dwBytesInRes, sizeof(m_icondirentry. dwBytesInRes) );
+        stream.Write(&m_icondirentry. dwImageOffset, sizeof(m_icondirentry. dwImageOffset) );
+        if ( !stream.IsOk () )
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error writing ICONDIRENTRY header.") );
+            return FALSE;
+        }
+        //actually save it
+        IsMask = FALSE ;
+        bResult = SaveDib ( image, stream, verbose, IsBmp, IsMask ) ;
+        if (!bResult)
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error writing XOR DIB .") );
+            return FALSE;
+        }
+        IsMask = TRUE ;
+        bResult = SaveDib ( &mask, stream, verbose, IsBmp, IsMask ) ;
+        if (!bResult)
+        {
+            if (verbose)
+                wxLogError( _("ICO: Error writing Mask DIB .") );
+            return FALSE;
+        }
+
+    } // end of for loop
+    return TRUE ;
+}
+
+
 bool wxBMPHandler::SaveFile(wxImage *image,
                             wxOutputStream& stream,
                             bool verbose)
+{
+    bool IsBmp = TRUE;
+    bool IsMask = FALSE ;
+    return SaveDib( image, stream, verbose, IsBmp, IsMask ) ;
+}
+
+bool wxBMPHandler::SaveDib(wxImage *image,
+                            wxOutputStream& stream,
+                            bool verbose,
+                            bool IsBmp,
+                            bool IsMask)
+
 {
     wxCHECK_MSG( image, FALSE, _T("invalid pointer in wxBMPHandler::SaveFile") );
 
@@ -145,7 +355,14 @@ bool wxBMPHandler::SaveFile(wxImage *image,
 
     hdr.bih_size = wxUINT32_SWAP_ON_BE(hdr_size - 14);
     hdr.width = wxUINT32_SWAP_ON_BE(image->GetWidth());
+    if (IsBmp)
+    {
     hdr.height = wxUINT32_SWAP_ON_BE(image->GetHeight());
+    }
+    else
+    {
+        hdr.height = wxUINT32_SWAP_ON_BE(2 * image->GetHeight());
+    }    
     hdr.planes = wxUINT16_SWAP_ON_BE(1); // always 1 plane
     hdr.bpp = wxUINT16_SWAP_ON_BE(bpp);
     hdr.compression = 0; // RGB uncompressed
@@ -154,13 +371,25 @@ bool wxBMPHandler::SaveFile(wxImage *image,
     hdr.num_clrs = wxUINT32_SWAP_ON_BE(palette_size); // # colors in colormap
     hdr.num_signif_clrs = 0;     // all colors are significant
 
+    if (IsBmp)
+    {
     if (// VS: looks ugly but compilers tend to do ugly things with structs,
         //     like aligning hdr.filesize's ofset to dword :(
         // VZ: we should add padding then...
         !stream.Write(&hdr.magic, 2) ||
         !stream.Write(&hdr.filesize, 4) ||
         !stream.Write(&hdr.reserved, 4) ||
-        !stream.Write(&hdr.data_offset, 4) ||
+             !stream.Write(&hdr.data_offset, 4) 
+            )
+         {
+             if (verbose)
+                 wxLogError(_("BMP: Couldn't write the file (Bitmap) header."));
+             return FALSE;
+         }
+     }
+     if (!IsMask)
+     {
+        if (
         !stream.Write(&hdr.bih_size, 4) ||
         !stream.Write(&hdr.width, 4) ||
         !stream.Write(&hdr.height, 4) ||
@@ -175,9 +404,10 @@ bool wxBMPHandler::SaveFile(wxImage *image,
        )
     {
         if (verbose)
-            wxLogError(_("BMP: Couldn't write the file header."));
+                 wxLogError(_("BMP: Couldn't write the file (BitmapInfo) header."));
         return FALSE;
     }
+     }
 
     wxPalette *palette = NULL; // entries for quantized images
     wxUint8 *rgbquad = NULL;   // for the RGBQUAD bytes for the colormap
@@ -243,6 +473,8 @@ bool wxBMPHandler::SaveFile(wxImage *image,
     // if the colormap was made, then it needs to be written
     if (rgbquad)
     {
+        if (!IsMask)
+        {
         if (!stream.Write(rgbquad, palette_size*4))
         {
             if (verbose)
@@ -253,6 +485,7 @@ bool wxBMPHandler::SaveFile(wxImage *image,
 #endif // wxUSE_PALETTE
             delete q_image;
             return FALSE;
+        }
         }
         delete []rgbquad;
     }
@@ -396,40 +629,6 @@ bool wxBMPHandler::SaveFile(wxImage *image,
 }
 
 
-
-#ifndef BI_RGB
-#define BI_RGB       0
-#define BI_RLE8      1
-#define BI_RLE4      2
-#endif
-
-#ifndef BI_BITFIELDS
-#define BI_BITFIELDS 3
-#endif
-
-#define poffset (line * width * 3 + column * 3)
-
-
-
-struct ICONDIRENTRY
-    {
-    wxUint8         bWidth;               // Width of the image
-    wxUint8         bHeight;              // Height of the image (times 2)
-    wxUint8         bColorCount;          // Number of colors in image (0 if >=8bpp)
-    wxUint8         bReserved;            // Reserved
-    wxUint16        wPlanes;              // Color Planes
-    wxUint16        wBitCount;            // Bits per pixel
-    wxUint32        dwBytesInRes;         // how many bytes in this resource?
-    wxUint32        dwImageOffset;        // where in the file is this image
-} ;
-
-
-struct ICONDIR
-{
-    wxUint16     idReserved;   // Reserved
-    wxUint16     idType;       // resource type (1 for icons)
-    wxUint16     idCount;      // how many images?
-} ;
 
 
 bool wxBMPHandler::DoLoadDib (wxImage * image, int width, int height, int bpp, int ncolors, int comp,
@@ -911,16 +1110,9 @@ bool wxICOHandler::LoadFile ( wxImage *image, wxInputStream& stream, bool verbos
         bResult = LoadDib ( image,  stream, TRUE, IsBmp );
     }
     delete [] pIconDirEntry  ;
-    return bResult
-    ;
+    return bResult    ;
 }
 
-bool wxICOHandler::SaveFile(wxImage *image,
-                            wxOutputStream& stream,
-                            bool verbose)
-{
-    return FALSE ;
-}
 
 bool wxBMPHandler::DoCanRead( wxInputStream& stream )
 {

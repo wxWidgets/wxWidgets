@@ -32,6 +32,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolitem{\indexit{wxPNMHandler}}{For loading and saving (see below).}
 \twocolitem{\indexit{wxTIFFHandler}}{For loading and saving.}
 \twocolitem{\indexit{wxXPMHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxICOHandler}}{For loading and saving.}
 \end{twocollist}
 
 When saving in PCX format, {\bf wxPCXHandler} will count the number of
@@ -118,6 +119,7 @@ Loads an image from an input stream.
 \twocolitem{\indexit{wxBITMAP\_TYPE\_PNM}}{Load a PNM bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_TIF}}{Load a TIFF bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load a XPM bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a ICO Icon file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
 \end{twocollist}}
 
@@ -228,6 +230,30 @@ TRUE if the call succeeded, FALSE otherwise.
 \func{bool}{Destroy}{\void}
 
 Destroys the image data.
+
+\membersection{wxImage::FindFirstUnusedColour}\label{wximagefindfirstunusedcolour}
+
+\func{bool}{FindFirstUnusedColour}{\param{unsigned char *}{ r}, \param{unsigned char *}{ g}, \param{unsigned char *}{ b}, \param{unsigned char}{ startR = 1}, \param{unsigned char}{ startG = 0}, \param{unsigned char}{ startB = 0}}
+
+\wxheading{Parameters}
+
+\docparam{r,g,b}{Pointers to variables to save the colour.}
+
+\docparam{startR,startG,startB}{Initial values of the colour. Returned colour
+will have RGB values equal to or greater than these.}
+
+Finds the first colour that is never used in the image. The search begins at
+given initial colour and continues by increasing R, G and B components (in this
+order) by 1 until an unused colour is found or the colour space exhausted.
+
+\wxheading{Return value}
+
+Returns FALSE if there is no unused colour left, TRUE on success.
+
+\wxheading{Notes}
+
+Note that this method involves computing the histogram, which is
+computationally intensive operation.
 
 \membersection{wxImage::FindHandler}
 
@@ -455,6 +481,7 @@ Loads an image from an input stream.
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Load a PNM image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Load a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load a XPM image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Load a ICO icon file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
 \end{twocollist}}
 
@@ -463,6 +490,8 @@ Loads an image from an input stream.
 \wxheading{Remarks}
 
 Depending on how wxWindows has been configured, not all formats may be available.
+
+wxBITMAP\_TYPE\_ICO will laod the largest image found, with the most colours
 
 \wxheading{Return value}
 
@@ -543,6 +572,7 @@ Saves a image in the given stream.
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Save a PNM image file (as raw RGB always).}
 \twocolitem{{\bf wxBITMAP\_TYPE\_TIFF}}{Save a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save a XPM image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Save a ICO image file. (The size may be up to 255 wide by 127 high. A single image is saved in 8 colors at the size supplied.)}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type.}
@@ -675,6 +705,33 @@ Specifies whether there is a mask or not. The area of the mask is determined by 
 \func{void}{SetMaskColour}{\param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
 
 Sets the mask colour for this image (and tells the image to use the mask).
+
+\membersection{wxImage::SetMaskFromImage}\label{wximagesetmaskfromimage}
+
+\func{bool}{SetMaskFromImage}{\param{const wxImage\&}{ mask}, \param{unsigned char}{ mr}, \param{unsigned char}{ mg}, \param{unsigned char}{ mb}}
+
+\wxheading{Parameters}
+
+\docparam{mask}{The mask image to extract mask shape from. Must have same dimensions as the image.}
+
+\docparam{mr,mg,mb}{RGB value of pixels in {\it mask} that will be used to create the mask.}
+
+Sets image's mask so that the pixels that have RGB value of {\it mr,mg,mb}
+in {\it mask} will be masked in the image. This is done by first finding an
+unused colour in the image, setting this colour as the mask colour and then
+using this colour to draw all pixels in the image who corresponding pixel 
+in {\it mask} has given RGB value.
+
+\wxheading{Return value}
+
+Returns FALSE if {\it mask} does not have same dimensions as the image or if
+there is no unused colour left. Returns TRUE if the mask was successfully 
+applied.
+
+\wxheading{Notes}
+
+Note that this method involves computing the histogram, which is
+computationally intensive operation.
 
 \membersection{wxImage::SetOption}\label{wximagesetoption}
 

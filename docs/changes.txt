@@ -81,6 +81,7 @@ All (GUI):
 - wxDirSelector() added (Paul A. Thiessen)
 - wxGrid cell editing veto support (Roger Gammans)
 - wxListCtrl ITEM_FOCUSED event added
+- support for ICO files in wxImage added (Chris Elliott)
 
 wxMSW:
 
