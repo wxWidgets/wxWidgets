@@ -126,19 +126,12 @@ int dlclose(void *handle)
 
 void *dlsym(void *handle, const char *symbol)
 {
-    void *addr;
-
-    NSSymbol nsSymbol = NSLookupSymbolInModule( handle , symbol ) ;
-
-    if ( nsSymbol)
-    {
-        addr = NSAddressOfSymbol(nsSymbol);
-    }
-    else
-    {
-        addr = NULL;
-    }
-    return addr;
+    // as on many other systems, C symbols have prepended underscores under
+    // Darwin but unlike the normal dlopen(), NSLookupSymbolInModule() is not
+    // aware of this
+    NSSymbol nsSymbol = NSLookupSymbolInModule( handle,
+                                                wxString(_T('_')) + symbol );
+    return nsSymbol ? NSAddressOfSymbol(nsSymbol) : NULL;
 }
 
 #endif // defined(__DARWIN__)
@@ -159,7 +152,7 @@ void *dlsym(void *handle, const char *symbol)
     #if defined(__HPUX__)
         const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
     #elif defined(__DARWIN__)
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".dylib");
+        const wxChar *wxDynamicLibrary::ms_dllext = _T(".bundle");
     #else
         const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
     #endif
