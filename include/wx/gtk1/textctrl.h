@@ -73,6 +73,7 @@ class wxTextCtrl: public wxControl
     wxString GetValue() const;
     void SetValue( const wxString &value );
     void WriteText( const wxString &text );
+    void AppendText( const wxString &text );
 
     bool LoadFile( const wxString &file );
     bool SaveFile( const wxString &file );

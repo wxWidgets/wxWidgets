@@ -309,6 +309,23 @@ void wxTextCtrl::WriteText( const wxString &text )
     }
 }
 
+void wxTextCtrl::AppendText( const wxString &text )
+{
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        /* we'll insert at the last position */
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+    }
+    else
+    {
+        gtk_entry_append_text( GTK_ENTRY(m_text), text );
+    }
+}
+
 bool wxTextCtrl::LoadFile( const wxString &file )
 {
   wxCHECK_MSG( m_text != NULL, FALSE, "invalid text ctrl" );
@@ -721,7 +738,7 @@ int wxTextCtrl::underflow()
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
-    WriteText(s);
+    AppendText(s);
     return *this;
 }
 
@@ -729,7 +746,7 @@ wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
     static char buf[100];
     sprintf(buf, "%.2f", f);
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
@@ -737,7 +754,7 @@ wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
     static char buf[100];
     sprintf(buf, "%.2f", d);
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
@@ -745,7 +762,7 @@ wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
     static char buf[100];
     sprintf(buf, "%i", i);
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
@@ -753,7 +770,7 @@ wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
     static char buf[100];
     sprintf(buf, "%ld", i);
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
@@ -763,7 +780,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 
     buf[0] = c;
     buf[1] = 0;
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 #endif
