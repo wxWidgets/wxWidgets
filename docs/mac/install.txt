@@ -17,3 +17,14 @@ MSL from Metrowerks, at the time of writing, this meant applying the changes fro
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
+
+changing the type of the .xpm files
+
+if you have downloaded all the files and get errors like :
+
+Error   : the file 'wx/generic/tip.xpm' cannot be opened
+tipdlg.cpp line 201   #include "wx/generic/tip.xpm"
+
+then your cvs has changed the type of the .xpm files to something other than text, in order to fix this
+either change the type by using a resource editor or drag the files from /include/wx/generic/..xpm on 
+the MakeMetrowerksText application that is included in this folder
