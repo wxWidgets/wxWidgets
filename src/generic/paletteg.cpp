@@ -10,12 +10,11 @@
 
 
 #ifdef __GNUG__
-#pragma implementation "palette.h"
+#pragma implementation "paletteg.h"
 #endif
 
 #include "wx/palette.h"
 
-#include <gdk/gdk.h>
 
 //-----------------------------------------------------------------------------
 // wxPalette
@@ -35,26 +34,17 @@ class wxPaletteRefData: public wxObjectRefData
 
     int m_count;
     wxPaletteEntry *m_entries;
-#if 0
-    GdkColormap  *m_colormap;
-#endif
 };
 
 wxPaletteRefData::wxPaletteRefData()
 {
     m_count = 0;
     m_entries = NULL;
-#if 0
-    m_colormap = (GdkColormap *) NULL;
-#endif
 }
 
 wxPaletteRefData::~wxPaletteRefData()
 {
     delete[] m_entries;
-#if 0
-    if (m_colormap) gdk_colormap_unref( m_colormap );
-#endif
 }
 
 //-----------------------------------------------------------------------------
