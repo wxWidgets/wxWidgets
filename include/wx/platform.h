@@ -132,7 +132,7 @@
 
 /*
    some compilers don't support iostream.h any longer, while some of theme
-   are not updated with <iostream> yet, so override the users setting here 
+   are not updated with <iostream> yet, so override the users setting here
    in such case.
  */
 #if defined(_MSC_VER) && (_MSC_VER >= 1310)
@@ -140,7 +140,7 @@
 #    define wxUSE_IOSTREAMH 0
 #elif defined(__DMC__)
 #    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 1 
+#    define wxUSE_IOSTREAMH 1
 #endif /* compilers not supporting iostream.h */
 
 /*
@@ -209,9 +209,6 @@
 
 #    ifdef __EMX__
 #        define OS2EMX_PLAIN_CHAR
-#      ifdef __INNOTEK_LIBC__
-#        define wxSIZE_T_IS_UINT
-#      endif
 #    endif
 
     /* define __HPUX__ for HP-UX where standard macro is __hpux */
