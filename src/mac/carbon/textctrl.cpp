@@ -1985,21 +1985,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_TAB:
-            // always produce navigation event - even if we process TAB
-            // ourselves the fact that we got here means that the user code
-            // decided to skip processing of this TAB - probably to let it
-            // do its default job.
+            if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                wxNavigationKeyEvent eventNav;
-                eventNav.SetDirection(!event.ShiftDown());
-                eventNav.SetWindowChange(event.ControlDown());
-                eventNav.SetEventObject(this);
-
-                if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
+                if (Navigate(!event.ShiftDown(), event.ControlDown()))
                     return;
-
-                event.Skip() ;
-                return;
             }
             break;
     }

@@ -489,6 +489,9 @@ public:
         // set this child as temporary default
     virtual void SetTmpDefaultItem(wxWindow * WXUNUSED(win)) { }
 
+        // Navigates in the specified direction by sending a wxNavigationKeyEvent
+    virtual bool Navigate(bool direction = true, bool windowChange = false);
+
     // parent/children relations
     // -------------------------
 

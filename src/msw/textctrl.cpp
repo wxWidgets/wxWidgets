@@ -1689,11 +1689,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_TAB:
-            // always produce navigation event -- even if we process TAB
-            // ourselves the fact that we got here means that the user code
-            // decided to skip processing of this TAB -- probably to let it
-            // do its default job.
-
             // ok, so this is getting absolutely ridiculous but I don't see
             // any other way to fix this bug: when a multiline text control is
             // inside a wxFrame, we need to generate the navigation event as
@@ -1708,15 +1703,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // the right thing to do would, of course, be to understand what
             // the hell is IsDialogMessage() doing but this is beyond my feeble
             // forces at the moment unfortunately
-            if ( FindFocus() == this )
+            if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                wxNavigationKeyEvent eventNav;
-                eventNav.SetDirection(!event.ShiftDown());
-                eventNav.SetWindowChange(event.ControlDown());
-                eventNav.SetEventObject(this);
-
-                if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
-                    return;
+                if ( FindFocus() == this )
+                {
+                    if (Navigate(!event.ShiftDown(), event.ControlDown()))
+                        return;
+                }
+            }
+            else
+            {
+                // Insert tab since calling the default Windows handler
+                // doesn't seem to do it
+                WriteText(wxT("\t"));
             }
             break;
     }

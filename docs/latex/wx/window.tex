@@ -1448,6 +1448,26 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\membersection{wxWindow::Navigate}\label{wxwindownavigate}
+
+\func{bool}{Navigate}{\param{bool}{ direction = true}, \param{bool}{ windowChange = false}}
+
+Does keyboard navigation from this window to another, by sending
+a wxNavigationKeyEvent.
+
+\wxheading{Parameters}
+
+\docparam{direction}{{\tt true} to navigate forwards, {\tt false} to navigate backwards.}
+
+\docparam{windowChange}{{\tt true} if the navigation is a window change.}
+
+\wxheading{Remarks}
+
+You may wish to call this from a text control custom keypress handler to do the default
+navigation behaviour for the tab key, since the standard default behaviour for
+a multiline text control with the wxTE\_PROCESS\_TAB style is to insert a tab
+and not navigate to the next control.
+
 %% VZ: wxWindow::OnXXX() functions should not be documented but I'm leaving
 %%     the old docs here in case we want to move any still needed bits to
 %%     the right location (i.e. probably the corresponding events docs)

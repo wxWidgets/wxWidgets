@@ -111,6 +111,10 @@ All (GUI):
   is discouraged
 - Added ..._CMD_... variants for wxGrid event table entry macros
   taking window identifiers
+- Added wxWindowBase::Navigate for programmatic navigation to the next
+  control.
+- On most platforms, wxTextCtrl::OnChar now inserts a tab character if
+  wxTE_PROCESS_TAB is set, or navigates to the next control if not.
 
 Unix:
 

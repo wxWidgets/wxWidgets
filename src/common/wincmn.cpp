@@ -2401,6 +2401,24 @@ bool wxWindowBase::TryParent(wxEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// navigation
+// ----------------------------------------------------------------------------
+
+// Navigates in the specified direction.
+bool wxWindowBase::Navigate(bool direction, bool windowChange)
+{
+    wxNavigationKeyEvent eventNav;
+    eventNav.SetDirection(direction);
+    eventNav.SetWindowChange(windowChange);
+    eventNav.SetEventObject(this);
+    if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
+    {
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
 
