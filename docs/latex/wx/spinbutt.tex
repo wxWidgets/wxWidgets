@@ -1,7 +1,10 @@
 \section{\class{wxSpinButton}}\label{wxspinbutton}
 
-A wxSpinButton has two small up and down (or left and right) arrow buttons. It is often
-used next to a text control for increment and decrementing a value.
+A wxSpinButton has two small up and down (or left and right) arrow buttons. It
+is often used next to a text control for increment and decrementing a value.
+Portable programs should try to use \helpref{wxSpinCtrl}{wxspinctrl} instead
+as wxSpinButton is not implemented for all platforms (Win32 and GTK only
+currently).
 
 \wxheading{Derived from}
 
@@ -9,6 +12,10 @@ used next to a text control for increment and decrementing a value.
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxSpinCtrl}{wxspinctrl} 
 
 \wxheading{Include files}
 
@@ -28,23 +35,15 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \wxheading{Event handling}
 
-To process input from a spin button, use one of these event handler macros to direct input to member
-functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
+To process input from a spin button, use one of these event handler macros to
+direct input to member functions that take a 
+\helpref{wxSpinEvent}{wxspinevent} argument:
 
 \twocolwidtha{7cm}
 \begin{twocollist}
-\twocolitem{{\bf EVT\_SPIN(id, func)}}{Catch all scroll commands.}
-\twocolitem{{\bf EVT\_SPIN\_UP(id, func)}}{Catch up (or left) commands. Win32 only. }
-\twocolitem{{\bf EVT\_SPIN\_DOWN(id, func)}}{Catch down (or right) commands. Win32 only. }
-\twocolitem{{\bf EVT\_COMMAND\_TOP(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLL(id, func)}}{Catch all scroll commands.}
-\twocolitem{{\bf EVT\_COMMAND\_TOP(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_BOTTOM(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_LINEUP(id, func)}}{Catch a line up command.}
-\twocolitem{{\bf EVT\_COMMAND\_LINEDOWN(id, func)}}{Catch a line down command.}
-\twocolitem{{\bf EVT\_COMMAND\_PAGEUP(id, func)}}{Catch a page up command.}
-\twocolitem{{\bf EVT\_COMMAND\_PAGEDOWN(id, func)}}{Catch a page down command.}
-\twocolitem{{\bf EVT\_COMMAND\_THUMBTRACK(id, func)}}{Catch a thumbtrack command (continuous movement of the scroll thumb).}
+\twocolitem{{\bf EVT\_SPIN(id, func)}}{Generated whenever an arros is pressed.}
+\twocolitem{{\bf EVT\_SPIN\_UP(id, func)}}{Generated when left/up arrow is pressed.}
+\twocolitem{{\bf EVT\_SPIN\_DOWN(id, func)}}{Generated when right/down arrow is pressed.}
 \end{twocollist}%
 
 \wxheading{See also}
