@@ -219,7 +219,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
         # make SetValue behave the same as if you had typed the value in:
         try:
-            value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            value, replace_to = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             if self._isFloat:
                 self._isNeg = False     # (clear current assumptions)
                 value = self._adjustFloat(value)
@@ -240,9 +240,9 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
                 raise
 
         self._SetValue(value)
-####        dbg('queuing insertion after .SetValue', self._masklength)
-        wx.CallAfter(self._SetInsertionPoint, self._masklength)
-        wx.CallAfter(self._SetSelection, self._masklength, self._masklength)
+####        dbg('queuing insertion after .SetValue', replace_to)
+        wx.CallAfter(self._SetInsertionPoint, replace_to)
+        wx.CallAfter(self._SetSelection, replace_to, replace_to)
 
 
     def _Refresh(self):
@@ -506,6 +506,11 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         self._CheckValid()
 ##        dbg('field._autoCompleteIndex:', match_index)
 ##        dbg('self.GetSelection():', self.GetSelection())
+        end = self._goEnd(getPosOnly=True)
+##        dbg('scheduling set of end position to:', end)
+        # work around bug in wx 2.5
+        wx.CallAfter(self.SetInsertionPoint, 0)
+        wx.CallAfter(self.SetInsertionPoint, end)
 ##        dbg(indent=0)
 
 

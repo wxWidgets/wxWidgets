@@ -190,7 +190,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 
         # make SetValue behave the same as if you had typed the value in:
         try:
-            value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            value, replace_to = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             if self._isFloat:
                 self._isNeg = False     # (clear current assumptions)
                 value = self._adjustFloat(value)
@@ -206,16 +206,17 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
                 dateparts[0] = self._adjustDate(dateparts[0], fixcentury=True)
                 value = string.join(dateparts, ' ')
 ##                dbg('adjusted value: "%s"' % value)
-                value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+                value, replace_to = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             else:
 ##                dbg('exception thrown', indent=0)
                 raise
 
         self._SetValue(value)   # note: to preserve similar capability, .SetValue()
                                 # does not change IsModified()
-####        dbg('queuing insertion after .SetValue', self._masklength)
-        wx.CallAfter(self._SetInsertionPoint, self._masklength)
-        wx.CallAfter(self._SetSelection, self._masklength, self._masklength)
+####        dbg('queuing insertion after .SetValue', replace_to)
+        # set selection to last char replaced by paste
+        wx.CallAfter(self._SetInsertionPoint, replace_to)
+        wx.CallAfter(self._SetSelection, replace_to, replace_to)
 ##        dbg(indent=0)
 
 

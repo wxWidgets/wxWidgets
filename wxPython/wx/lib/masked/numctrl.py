@@ -1050,18 +1050,20 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##        dbg(indent=0)
 
 
-    def _OnErase( self, event ):
+    def _OnErase( self, event=None, just_return_value=False ):
         """
         This overrides the base control _OnErase, so that erasing around
         grouping characters auto selects the digit before or after the
         grouping character, so that the erasure does the right thing.
         """
 ##        dbg('NumCtrl::_OnErase', indent=1)
-
+        if event is None:   # called as action routine from Cut() operation.
+            key = wx.WXK_DELETE
+        else:
+            key = event.GetKeyCode()
         #if grouping digits, make sure deletes next to group char always
         # delete next digit to appropriate side:
         if self._groupDigits:
-            key = event.GetKeyCode()
             value = BaseMaskedTextCtrl.GetValue(self)
             sel_start, sel_to = self._GetSelection()
 
@@ -1088,7 +1090,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
                     self.SetInsertionPoint(sel_start)
                     self.SetSelection(sel_start, sel_to+1)
 
-        BaseMaskedTextCtrl._OnErase(self, event)
+        return BaseMaskedTextCtrl._OnErase(self, event, just_return_value)
 ##        dbg(indent=0)
 
 
@@ -1522,19 +1524,141 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
             paste_text = self._getClipboardContents()
         else:
             paste_text = value
-
-        # treat paste as "replace number", if appropriate:
         sel_start, sel_to = self._GetSelection()
-        if sel_start == sel_to or self._selectOnEntry and (sel_start, sel_to) == self._fields[0]._extent:
-            paste_text = self._toGUI(paste_text)
-            self._SetSelection(0, len(self._mask))
+        orig_sel_start = sel_start
+        orig_sel_to = sel_to
+##        dbg('selection:', (sel_start, sel_to))
+        old_value = self._GetValue()
 
-        return MaskedEditMixin._Paste(self,
+        #
+        field = self._FindField(sel_start)
+        edit_start, edit_end = field._extent
+        paste_text = paste_text.replace(self._groupChar, '').replace(self._decimalChar, '.').replace('(', '-').replace(')','')
+        if field._insertRight and self._groupDigits:
+            # want to paste to the left; see if it will fit:
+            left_text = old_value[edit_start:sel_start].lstrip()
+##            dbg('len(left_text):', len(left_text))
+##            dbg('len(paste_text):', len(paste_text))
+##            dbg('sel_start - (len(left_text) + len(paste_text)) >= edit_start?', sel_start - (len(left_text) + len(paste_text)) >= edit_start)
+            if sel_start - (len(left_text) + len(paste_text)) >= edit_start:
+                # will fit! create effective paste text, and move cursor back to do so:
+                paste_text = left_text + paste_text
+                sel_start -= len(paste_text)
+                sel_start += sel_to - orig_sel_start    # decrease by amount selected
+            else:
+##                dbg("won't fit left;", 'paste text remains: "%s"' % paste_text)
+##            dbg('adjusted start before accounting for grouping:', sel_start)
+##            dbg('adjusted paste_text before accounting for grouping: "%s"' % paste_text)
+                pass
+            if self._groupDigits and sel_start != orig_sel_start:
+                left_len = len(old_value[:sel_to].lstrip())
+                # remove group chars from adjusted paste string, and left pad to wipe out
+                # old characters, so that selection will remove the right chars, and
+                # readjust will do the right thing:
+                paste_text = paste_text.replace(self._groupChar,'')
+                adjcount = left_len - len(paste_text)
+                paste_text = ' ' * adjcount + paste_text
+                sel_start = sel_to - len(paste_text)
+##                dbg('adjusted start after accounting for grouping:', sel_start)
+##                dbg('adjusted paste_text after accounting for grouping: "%s"' % paste_text)
+            self.SetInsertionPoint(sel_to)
+            self.SetSelection(sel_start, sel_to)
+
+##        # treat paste as "replace number", if appropriate:
+##        sel_start, sel_to = self._GetSelection()
+##        if sel_start == sel_to or self._selectOnEntry and (sel_start, sel_to) == self._fields[0]._extent:
+##            paste_text = self._toGUI(paste_text)
+##            self._SetSelection(0, len(self._mask))
+
+        new_text, replace_to = MaskedEditMixin._Paste(self,
                                         paste_text,
                                         raise_on_invalid=raise_on_invalid,
-                                        just_return_value=just_return_value)
+                                        just_return_value=True)
+        self._SetInsertionPoint(orig_sel_to)
+        self._SetSelection(orig_sel_start, orig_sel_to)
+        if not just_return_value and new_text is not None:
+            if new_text != self._GetValue():
+                    self.modified = True
+            if new_text == '':
+                self.ClearValue()
+            else:
+                wx.CallAfter(self._SetValue, new_text)
+                wx.CallAfter(self._SetInsertionPoint, replace_to)
+##            dbg(indent=0)
+        else:
+##            dbg(indent=0)
+            return new_text, replace_to
 
+    def _Undo(self, value=None, prev=None):
+        '''numctrl's undo is more complicated than the base control's, due to
+        grouping characters; we don't want to consider them when calculating
+        the undone portion.'''
+##        dbg('NumCtrl::_Undo', indent=1)
+        if value is None: value = self._GetValue()
+        if prev is None: prev = self._prevValue
+        if not self._groupDigits:
+            ignore, (new_sel_start, new_sel_to) = BaseMaskedTextCtrl._Undo(self, value, prev, just_return_results = True)
+            self._SetValue(prev)
+            self._SetInsertionPoint(new_sel_start)
+            self._SetSelection(new_sel_start, new_sel_to)
+            self._prevSelection = (new_sel_start, new_sel_to)
+##            dbg('resetting "prev selection" to', self._prevSelection)
+##            dbg(indent=0)
+            return
+        # else...
+        sel_start, sel_to = self._prevSelection
+        edit_start, edit_end = self._FindFieldExtent(0)
 
+        adjvalue = self._GetNumValue(value).rjust(self._masklength)
+        adjprev  = self._GetNumValue(prev ).rjust(self._masklength)
+
+        # move selection to account for "ungrouped" value:
+        left_text = value[sel_start:].lstrip()
+        numleftgroups = len(left_text) - len(left_text.replace(self._groupChar, ''))
+        adjsel_start = sel_start + numleftgroups
+        right_text = value[sel_to:].lstrip()
+        numrightgroups = len(right_text) - len(right_text.replace(self._groupChar, ''))
+        adjsel_to = sel_to + numrightgroups
+##        dbg('adjusting "previous" selection from', (sel_start, sel_to), 'to:', (adjsel_start, adjsel_to))
+        self._prevSelection = (adjsel_start, adjsel_to)
+
+        # determine appropriate selection for ungrouped undo
+        ignore, (new_sel_start, new_sel_to) = BaseMaskedTextCtrl._Undo(self, adjvalue, adjprev, just_return_results = True)
+
+        # adjust new selection based on grouping:
+        left_len = edit_end - new_sel_start
+        numleftgroups = left_len / 3
+        new_sel_start -= numleftgroups
+        if numleftgroups and left_len % 3 == 0:
+            new_sel_start += 1
+
+        if new_sel_start < self._masklength and prev[new_sel_start] == self._groupChar:
+            new_sel_start += 1
+
+        right_len = edit_end - new_sel_to
+        numrightgroups = right_len / 3
+        new_sel_to -= numrightgroups
+
+        if new_sel_to and prev[new_sel_to-1] == self._groupChar:
+            new_sel_to -= 1
+
+        if new_sel_start > new_sel_to:
+            new_sel_to = new_sel_start
+
+        # for numbers, we don't care about leading whitespace; adjust selection if
+        # it includes leading space.
+        prev_stripped = prev.lstrip()
+        prev_start = self._masklength - len(prev_stripped)
+        if new_sel_start < prev_start:
+            new_sel_start = prev_start
+
+##        dbg('adjusted selection accounting for grouping:', (new_sel_start, new_sel_to))
+        self._SetValue(prev)
+        self._SetInsertionPoint(new_sel_start)
+        self._SetSelection(new_sel_start, new_sel_to)
+        self._prevSelection = (new_sel_start, new_sel_to)
+##        dbg('resetting "prev selection" to', self._prevSelection)
+##        dbg(indent=0)
 
 #===========================================================================
 
@@ -1606,6 +1730,10 @@ i=0
 ##   1. Add support for printf-style format specification.
 ##   2. Add option for repositioning on 'illegal' insertion point.
 ##
+## Version 1.2
+##   1. Allowed select/replace digits.
+##   2. Fixed undo to ignore grouping chars.
+##
 ## Version 1.1
 ##   1. Fixed .SetIntegerWidth() and .SetFractionWidth() functions.
 ##   2. Added autoSize parameter, to allow manual sizing of the control.
@@ -1613,4 +1741,4 @@ i=0
 ##      nonsensical parameter methods from the control, so it will work
 ##      properly with Boa.
 ##   4. Fixed allowNone bug found by user sameerc1@grandecom.net
-
+##

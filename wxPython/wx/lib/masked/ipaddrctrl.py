@@ -83,7 +83,7 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
         if not kwargs.has_key('mask'):
            kwargs['mask'] = mask = "###.###.###.###"
         if not kwargs.has_key('formatcodes'):
-            kwargs['formatcodes'] = 'F_Sr<'
+            kwargs['formatcodes'] = 'F_Sr<>'
         if not kwargs.has_key('validRegex'):
             kwargs['validRegex'] = "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}"
 
@@ -184,4 +184,6 @@ class IpAddrCtrl( BaseMaskedTextCtrl, IpAddrCtrlAccessorsMixin ):
             BaseMaskedTextCtrl.SetValue(self, value)
 ##        dbg(indent=0)
 
-
+i=0
+## Version 1.1
+##  Made ipaddrctrls allow right-insert in subfields, now that insert/cut/paste works better

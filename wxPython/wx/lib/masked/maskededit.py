@@ -3098,7 +3098,7 @@ class MaskedEditMixin:
         return False
 
 
-    def _OnErase(self, event=None):
+    def _OnErase(self, event=None, just_return_value=False):
         """ Handles backspace and delete keypress in control. Should return False to skip other processing."""
 ##        dbg("MaskedEditMixin::_OnErase", indent=1)
         sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
@@ -3316,6 +3316,11 @@ class MaskedEditMixin:
 ##            dbg(indent=0)
             return False
 
+        if just_return_value:
+##            dbg(indent=0)
+            return newstr
+
+        # else...
 ##        dbg('setting value (later) to', newstr)
         wx.CallAfter(self._SetValue, newstr)
 ##        dbg('setting insertion point (later) to', pos)
@@ -4710,11 +4715,28 @@ class MaskedEditMixin:
         newtext = ""
         newpos = pos
 
+        # if >= 2 chars selected in a right-insert field, do appropriate erase on field,
+        # then set selection to end, and do usual right insert.
+        if sel_start != sel_to and sel_to >= sel_start+2:
+            field = self._FindField(sel_start)
+            if( field._insertRight                          # if right-insert
+                and field._allowInsert                      # and allow insert at any point in field
+                and field == self._FindField(sel_to) ):     # and selection all in same field
+                text = self._OnErase(just_return_value=True)    # remove selection before insert
+##                dbg('text after (left)erase: "%s"' % text)
+                pos = sel_start = sel_to
+
         if pos != sel_start and sel_start == sel_to:
             # adjustpos must have moved the position; make selection match:
             sel_start = sel_to = pos
 
 ##        dbg('field._insertRight?', field._insertRight)
+##        dbg('field._allowInsert?', field._allowInsert)
+##        dbg('sel_start, end', sel_start, end)
+        if sel_start < end:
+##            dbg('text[sel_start] != field._fillChar?', text[sel_start] != field._fillChar)
+            pass
+
         if( field._insertRight                                  # field allows right insert
             and ((sel_start, sel_to) == field._extent           # and whole field selected
                  or (sel_start == sel_to                        # or nothing selected
@@ -4870,7 +4892,8 @@ class MaskedEditMixin:
                 if match_index is not None and partial_match:
                     matched_str = newtext
                     newtext = self._ctrl_constraints._choices[match_index]
-                    new_select_to = self._ctrl_constraints._extent[1]
+                    edit_end = self._ctrl_constraints._extent[1]
+                    new_select_to = min(edit_end, len(newvalue.rstrip()))
                     match_field = self._ctrl_constraints
                     if self._ctrl_constraints._insertRight:
                         # adjust position to just after partial match in control:
@@ -5423,11 +5446,31 @@ class MaskedEditMixin:
             field = self._FindField(sel_start)
             edit_start, edit_end = field._extent
             new_pos = None
-            if field._allowInsert and sel_to <= edit_end and sel_start + len(paste_text) < edit_end:
+            if field._allowInsert and sel_to <= edit_end and (sel_start + len(paste_text) < edit_end or field._insertRight):
+                if field._insertRight:
+                    # want to paste to the left; see if it will fit:
+                    left_text = self._GetValue()[edit_start:sel_start].lstrip()
+##                    dbg('len(left_text):', len(left_text))
+##                    dbg('len(paste_text):', len(paste_text))
+##                    dbg('sel_start - (len(left_text) + len(paste_text)) >= edit_start?', sel_start - (len(left_text) + len(paste_text)) >= edit_start)
+                    if sel_start - (len(left_text) - (sel_to - sel_start) + len(paste_text)) >= edit_start:
+                        # will fit! create effective paste text, and move cursor back to do so:
+                        paste_text = left_text + paste_text
+                        sel_start -= len(left_text)
+                        paste_text = paste_text.rjust(sel_to - sel_start)
+##                        dbg('modified paste_text to be: "%s"' % paste_text)
+##                        dbg('modified selection to:', (sel_start, sel_to))
+                    else:
+##                        dbg("won't fit left;", 'paste text remains: "%s"' % paste_text)
+                        pass
+                else:
+                    paste_text = paste_text + self._GetValue()[sel_to:edit_end].rstrip()
+##                    dbg("allow insert, but not insert right;", 'paste text set to: "%s"' % paste_text)
+
+
                 new_pos = sel_start + len(paste_text)   # store for subsequent positioning
-                paste_text = paste_text + self._GetValue()[sel_to:edit_end].rstrip()
 ##                dbg('paste within insertable field; adjusted paste_text: "%s"' % paste_text, 'end:', edit_end)
-                sel_to = sel_start + len(paste_text)
+##                dbg('expanded selection to:', (sel_start, sel_to))
 
             # Another special case: paste won't fit, but it's a right-insert field where entire
             # non-empty value is selected, and there's room if the selection is expanded leftward:
@@ -5490,7 +5533,7 @@ class MaskedEditMixin:
                 if not wx.Validator_IsSilent():
                     wx.Bell()
 ##                dbg(indent=0)
-                return False
+                return None, -1
             # else...
             text = self._eraseSelection()
 
@@ -5521,17 +5564,19 @@ class MaskedEditMixin:
                     wx.CallAfter(self._SetInsertionPoint, new_pos)
             else:
 ##                dbg(indent=0)
-                return new_text
+                return new_text, replace_to
         elif just_return_value:
 ##            dbg(indent=0)
-            return self._GetValue()
+            return self._GetValue(), sel_to
 ##        dbg(indent=0)
 
-    def _Undo(self):
+    def _Undo(self, value=None, prev=None, just_return_results=False):
         """ Provides an Undo() method in base controls. """
 ##        dbg("MaskedEditMixin::_Undo", indent=1)
-        value = self._GetValue()
-        prev = self._prevValue
+        if value is None:
+            value = self._GetValue()
+        if prev is None:
+            prev = self._prevValue
 ##        dbg('current value:  "%s"' % value)
 ##        dbg('previous value: "%s"' % prev)
         if prev is None:
@@ -5588,6 +5633,7 @@ class MaskedEditMixin:
                 for next_op in range(len(code_5tuples)-1, -1, -1):
                     op, i1, i2, j1, j2 = code_5tuples[next_op]
 ##                    dbg('value[i1:i2]: "%s"' % value[i1:i2], 'template[i1:i2] "%s"' % self._template[i1:i2])
+                    field = self._FindField(i2)
                     if op == 'insert' and prev[j1:j2] != self._template[j1:j2]:
 ##                        dbg('insert found: selection =>', (j1, j2))
                         sel_start = j1
@@ -5595,9 +5641,8 @@ class MaskedEditMixin:
                         diff_found = True
                         break
                     elif op == 'delete' and value[i1:i2] != self._template[i1:i2]:
-                        field = self._FindField(i2)
                         edit_start, edit_end = field._extent
-                        if field._insertRight and i2 == edit_end:
+                        if field._insertRight and (field._allowInsert or i2 == edit_end):
                             sel_start = i2
                             sel_to = i2
                         else:
@@ -5607,23 +5652,39 @@ class MaskedEditMixin:
                         diff_found = True
                         break
                     elif op == 'replace':
-##                        dbg('replace found: selection =>', (j1, j2))
-                        sel_start = j1
-                        sel_to = j2
+                        if not prev[i1:i2].strip() and field._insertRight:
+                            sel_start = sel_to = j2
+                        else:
+                            sel_start = j1
+                            sel_to = j2
+##                        dbg('replace found: selection =>', (sel_start, sel_to))
                         diff_found = True
                         break
 
 
                 if diff_found:
                     # now go forwards, looking for earlier changes:
+##                    dbg('searching forward...')
                     for next_op in range(len(code_5tuples)):
                         op, i1, i2, j1, j2 = code_5tuples[next_op]
                         field = self._FindField(i1)
                         if op == 'equal':
                             continue
                         elif op == 'replace':
-##                            dbg('setting sel_start to', i1)
-                            sel_start = i1
+                            if field._insertRight:
+                                # if replace with spaces in an insert-right control, ignore "forward" replace
+                                if not prev[i1:i2].strip():
+                                    continue
+                                elif j1 < i1:
+##                                    dbg('setting sel_start to', j1)
+                                    sel_start = j1
+                                else:
+##                                    dbg('setting sel_start to', i1)
+                                    sel_start = i1
+                            else:
+##                                dbg('setting sel_start to', i1)
+                                sel_start = i1
+##                            dbg('saw replace; breaking')
                             break
                         elif op == 'insert' and not value[i1:i2]:
 ##                            dbg('forward %s found' % op)
@@ -5635,9 +5696,21 @@ class MaskedEditMixin:
 ##                                dbg('setting sel_start to inserted space:', j1)
                                 sel_start = j1
                                 break
-                        elif op == 'delete' and field._insertRight and not value[i1:i2].lstrip():
-                            continue
+                        elif op == 'delete':
+##                            dbg('delete; field._insertRight?', field._insertRight, 'value[%d:%d].lstrip: "%s"' % (i1,i2,value[i1:i2].lstrip()))
+                            if field._insertRight:
+                                if value[i1:i2].lstrip():
+##                                    dbg('setting sel_start to ', j1)
+                                    sel_start = j1
+##                                    dbg('breaking loop')
+                                    break
+                                else:
+                                    continue
+                            else:
+##                                dbg('saw delete; breaking')
+                                break
                         else:
+##                            dbg('unknown code!')
                             # we've got what we need
                             break
 
@@ -5691,15 +5764,22 @@ class MaskedEditMixin:
 
                 prev_sel_start, prev_sel_to = self._prevSelection
                 field = self._FindField(sel_start)
-
-                if self._signOk and (self._prevValue[sel_start] in ('-', '(', ')')
-                                     or self._curValue[sel_start] in ('-', '(', ')')):
+                if( self._signOk
+                      and sel_start < self._masklength
+                      and (prev[sel_start] in ('-', '(', ')')
+                                     or value[sel_start] in ('-', '(', ')')) ):
                     # change of sign; leave cursor alone...
+##                    dbg("prev[sel_start] in ('-', '(', ')')?", prev[sel_start] in ('-', '(', ')'))
+##                    dbg("value[sel_start] in ('-', '(', ')')?", value[sel_start] in ('-', '(', ')'))
+##                    dbg('setting selection to previous one')
                     sel_start, sel_to = self._prevSelection
 
-                elif field._groupdigits and (self._curValue[sel_start:sel_to] == field._groupChar
-                                             or self._prevValue[sel_start:sel_to] == field._groupChar):
+                elif field._groupdigits and (value[sel_start:sel_to] == field._groupChar
+                                             or prev[sel_start:sel_to] == field._groupChar):
                     # do not highlight grouping changes
+##                    dbg('value[sel_start:sel_to] == field._groupChar?', value[sel_start:sel_to] == field._groupChar)
+##                    dbg('prev[sel_start:sel_to] == field._groupChar?', prev[sel_start:sel_to] == field._groupChar)
+##                    dbg('setting selection to previous one')
                     sel_start, sel_to = self._prevSelection
 
                 else:
@@ -5711,7 +5791,13 @@ class MaskedEditMixin:
 
                     if prev_select_len >= calc_select_len:
                         # old selection was bigger; trust it:
-                        sel_start, sel_to = self._prevSelection
+##                        dbg('prev_select_len >= calc_select_len?', prev_select_len >= calc_select_len)
+                        if not field._insertRight:
+##                            dbg('setting selection to previous one')
+                            sel_start, sel_to = self._prevSelection
+                        else:
+                            sel_to = self._prevSelection[1]
+##                            dbg('setting selection to', (sel_start, sel_to))
 
                     elif( sel_to > prev_sel_to                  # calculated select past last selection
                           and prev_sel_to < len(self._template) # and prev_sel_to not at end of control
@@ -5742,27 +5828,44 @@ class MaskedEditMixin:
                             test_sel_start, test_sel_to = prev_sel_start, prev_sel_to
 
 ##                        dbg('test selection:', (test_sel_start, test_sel_to))
-##                        dbg('calc change: "%s"' % self._prevValue[sel_start:sel_to])
-##                        dbg('test change: "%s"' % self._prevValue[test_sel_start:test_sel_to])
+##                        dbg('calc change: "%s"' % prev[sel_start:sel_to])
+##                        dbg('test change: "%s"' % prev[test_sel_start:test_sel_to])
 
                         # if calculated selection spans characters, and same characters
                         # "before" the previous insertion point are present there as well,
                         # select the ones related to the last known selection instead.
                         if( sel_start != sel_to
                             and test_sel_to < len(self._template)
-                            and self._prevValue[test_sel_start:test_sel_to] == self._prevValue[sel_start:sel_to] ):
+                            and prev[test_sel_start:test_sel_to] == prev[sel_start:sel_to] ):
 
                             sel_start, sel_to = test_sel_start, test_sel_to
 
+                # finally, make sure that the old and new values are
+                # different where we say they're different:
+                while( sel_to - 1 > 0
+                        and sel_to > sel_start
+                        and value[sel_to-1:] == prev[sel_to-1:]):
+                    sel_to -= 1
+                while( sel_start + 1 < self._masklength
+                        and sel_start < sel_to
+                        and value[:sel_start+1] == prev[:sel_start+1]):
+                    sel_start += 1
+
 ##            dbg('sel_start, sel_to:', sel_start, sel_to)
-##            dbg('previous value: "%s"' % self._prevValue)
-            self._SetValue(self._prevValue)
+##            dbg('previous value: "%s"' % prev)
+##            dbg(indent=0)
+            if just_return_results:
+                return prev, (sel_start, sel_to)
+            # else...
+            self._SetValue(prev)
             self._SetInsertionPoint(sel_start)
             self._SetSelection(sel_start, sel_to)
+
         else:
 ##            dbg('no difference between previous value')
-            pass
-##        dbg(indent=0)
+##            dbg(indent=0)
+            if just_return_results:
+                return prev, self._GetSelection()
 
 
     def _OnClear(self, event):
@@ -5790,8 +5893,8 @@ class MaskedEditMixin:
         wx.EVT_MENU(menu, wx.ID_SELECTALL, self._OnCtrl_A)
 
         # ## WSS: The base control apparently handles
-        # enable/disable of wID_CUT, wxID_COPY, wxID_PASTE
-        # and wxID_CLEAR menu items even if the menu is one
+        # enable/disable of wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE
+        # and wx.ID_CLEAR menu items even if the menu is one
         # we created.  However, it doesn't do undo properly,
         # so we're keeping track of previous values ourselves.
         # Therefore, we have to override the default update for
@@ -6283,6 +6386,17 @@ i=1
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.7
+##  1. Fixed intra-right-insert-field erase, such that it doesn't leave a hole, but instead
+##     shifts the text to the left accordingly.
+##  2. Fixed _SetValue() to place cursor after last character inserted, rather than end of
+##     mask.
+##  3. Fixed some incorrect undo behavior for right-insert fields, and allowed derived classes
+##     (eg. numctrl) to pass modified values for undo processing (to handle/ignore grouping
+##     chars properly.)
+##  4. Fixed autoselect behavior to work similarly to (2) above, so that combobox
+##     selection will only select the non-empty text, as per request.
+##
 ##  Version 1.6
 ##  1. Reorganized masked controls into separate package, renamed things accordingly
 ##  2. Split actual controls out of this file into their own files.
