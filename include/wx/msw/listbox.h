@@ -25,7 +25,13 @@ WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 
   // define the array of list box items
   #include  <wx/dynarray.h>
+
+  #undef WXDLLEXPORTLOCAL
+  #define WXDLLEXPORTLOCAL WXDLLEXPORT
   WX_DEFINE_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+  #undef  WXDLLEXPORTLOCAL
+  #define WXDLLEXPORTLOCAL
+
 #endif
 
 // forward decl for GetSelections()

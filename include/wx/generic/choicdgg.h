@@ -56,43 +56,43 @@ protected:
     char*       m_clientData;
 };
 
-wxString WXDLLEXPORT wxGetSingleChoice(const wxString& message, const wxString& caption,
+WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                         int n, const wxString *choices, wxWindow *parent = (wxWindow *) NULL,
                         int x = -1, int y = -1, bool centre = TRUE,
                         int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
-wxString WXDLLEXPORT wxGetSingleChoice(const wxString& message, const wxString& caption,
+WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                         int n, char *choices[], wxWindow *parent = (wxWindow *) NULL,
                         int x = -1, int y = -1, bool centre = TRUE,
                         int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 // Same as above but gets position in list of strings, instead of string,
 // or -1 if no selection
-int WXDLLEXPORT wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
+WXDLLEXPORT int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int n, const wxString *choices, wxWindow *parent = (wxWindow *) NULL,
                            int x = -1, int y = -1, bool centre = TRUE,
                            int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
-int WXDLLEXPORT wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
+WXDLLEXPORT int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int n, char *choices[], wxWindow *parent = (wxWindow *) NULL,
                            int x = -1, int y = -1, bool centre = TRUE,
                            int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 // Return client data instead
-char* WXDLLEXPORT wxGetSingleChoiceData(const wxString& message, const wxString& caption,
+WXDLLEXPORT char* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
                             int n, const wxString *choices, char **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
-char* WXDLLEXPORT wxGetSingleChoiceData(const wxString& message, const wxString& caption,
+WXDLLEXPORT char* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
                             int n, char *choices[], char **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 /*
-int WXDLLEXPORT wxGetMultipleChoice(const wxString& message, const wxString& caption,
+WXDLLEXPORT int wxGetMultipleChoice(const wxString& message, const wxString& caption,
 			  int n, const wxString *choices,
 			  int nsel, int * selection,
 			  wxWindow *parent = NULL, int x = -1 , int y = -1, bool centre = TRUE,

@@ -150,7 +150,7 @@ typedef int wxWindowID;
 #  ifdef WXMAKINGDLL
 #    define WXDLLEXPORT __declspec( dllexport )
 #    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN __declspec( dllexport )
+#    define WXDLLEXPORT_CTORFN // __declspec( dllexport )
 #  elif defined(WXUSINGDLL)
 #    define WXDLLEXPORT __declspec( dllimport )
 #    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type

@@ -30,7 +30,7 @@
 
 #define wxUSE_AUTOTRANS	1
 								// Define wxTString
-#define wxUSE_POSTSCRIPT  1
+#define wxUSE_POSTSCRIPT  0
                         	// 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent

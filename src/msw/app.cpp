@@ -125,6 +125,11 @@ bool wxApp::Initialize()
   #endif // debug build under MS VC++
 */
 
+
+// 22/11/98: we're converting to wxLogDebug instead of wxTrace,
+// so these are now obsolete.
+
+#if 0
   #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     #if defined(_WINDLL)
       streambuf* sBuf = NULL;
@@ -135,6 +140,7 @@ bool wxApp::Initialize()
     ostream* oStr = new ostream(sBuf) ;
     wxDebugContext::SetStream(oStr, sBuf);
   #endif  // wxUSE_MEMORY_TRACING
+#endif
 
   wxClassInfo::InitializeClasses();
 
@@ -494,6 +500,23 @@ void wxApp::CleanUp()
 
   wxClassInfo::CleanUpClasses();
 
+  delete wxTheApp;
+  wxTheApp = NULL;
+
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+  // At this point we want to check if there are any memory
+  // blocks that aren't part of the wxDebugContext itself,
+  // as a special case. Then when dumping we need to ignore
+  // wxDebugContext, too.
+  if (wxDebugContext::CountObjectsLeft() > 0)
+  {
+      wxLogDebug("There were memory leaks.");
+      wxDebugContext::Dump();
+      wxDebugContext::PrintStatistics();
+  }
+//  wxDebugContext::SetStream(NULL, NULL);
+#endif
+
   // do it as the very last thing because everything else can log messages
   wxLog::DontCreateOnDemand();
   delete wxLog::SetActiveTarget(NULL);
@@ -576,23 +599,6 @@ int wxEntry(WXHINSTANCE hInstance,
 
 
   wxApp::CleanUp();
-
-  delete wxTheApp;
-  wxTheApp = NULL;
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-  // At this point we want to check if there are any memory
-  // blocks that aren't part of the wxDebugContext itself,
-  // as a special case. Then when dumping we need to ignore
-  // wxDebugContext, too.
-  if (wxDebugContext::CountObjectsLeft() > 0)
-  {
-      wxTrace("There were memory leaks.\n");
-      wxDebugContext::Dump();
-      wxDebugContext::PrintStatistics();
-  }
-  wxDebugContext::SetStream(NULL, NULL);
-#endif
 
   return retValue;
 #ifndef __WXDEBUG__ // catch exceptions only in release build

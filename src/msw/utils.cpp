@@ -503,7 +503,7 @@ bool wxIsBusy(void)
   return (wxBusyCursorCount > 0);
 }    
 
-const char* WXDLLEXPORT wxGetHomeDir(wxString *pstr)
+const char* wxGetHomeDir(wxString *pstr)
 {
   wxString& strDir = *pstr;
 

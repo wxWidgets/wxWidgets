@@ -362,13 +362,14 @@ int wxEntry( int argc, char *argv[] )
 
   wxClassInfo::InitializeClasses();
 
+  /* Debug stream no longer used
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
   streambuf* sBuf = new wxDebugStreamBuf;
   ostream* oStr = new ostream(sBuf) ;
   wxDebugContext::SetStream(oStr, sBuf);
-
 #endif
+*/
 
   if (!wxTheApp)
   {
@@ -445,9 +446,6 @@ int wxEntry( int argc, char *argv[] )
 
   wxDELETE(wxTheApp);
 
-  wxLog *oldLog = wxLog::SetActiveTarget( NULL );
-  if (oldLog) delete oldLog;
-  
   wxClassInfo::CleanUpClasses();
   
   delete[] wxBuffer;
@@ -456,13 +454,17 @@ int wxEntry( int argc, char *argv[] )
   
   if (wxDebugContext::CountObjectsLeft() > 0)
   {
-    wxTrace("There were memory leaks.\n");
+    wxLogDebug("There were memory leaks.\n");
     wxDebugContext::Dump();
     wxDebugContext::PrintStatistics();
   }
-  wxDebugContext::SetStream(NULL, NULL);
+//  wxDebugContext::SetStream(NULL, NULL);
   
 #endif
+
+  wxLog *oldLog = wxLog::SetActiveTarget( NULL );
+  if (oldLog) delete oldLog;
+
 
   return retValue;
 }

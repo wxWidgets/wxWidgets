@@ -133,8 +133,6 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 	if (!old)
 		return FALSE;
 
-	RECT rect = lpDIS->rcItem;
-
 	int x = lpDIS->rcItem.left;
 	int y = lpDIS->rcItem.top;
 	int width = lpDIS->rcItem.right - x;

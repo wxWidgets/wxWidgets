@@ -728,15 +728,15 @@ inline int wxWindow::GetReturnCode(void) { return m_returnCode; }
 inline bool wxWindow::IsBeingDeleted(void) { return m_isBeingDeleted; }
 
 // Window specific (so far)
-wxWindow* WXDLLEXPORT wxGetActiveWindow(void);
+WXDLLEXPORT wxWindow* wxGetActiveWindow(void);
 
 WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
 
-int WXDLLEXPORT wxCharCodeMSWToWX(int keySym);
-int WXDLLEXPORT wxCharCodeWXToMSW(int id, bool *IsVirtual);
+WXDLLEXPORT int wxCharCodeMSWToWX(int keySym);
+WXDLLEXPORT int wxCharCodeWXToMSW(int id, bool *IsVirtual);
 
 // Allocates control ids
-int WXDLLEXPORT NewControlId(void);
+WXDLLEXPORT int NewControlId(void);
 
 #endif
     // _WX_WINDOW_H_

@@ -186,26 +186,26 @@ enum {
 };// ps_action = PS_PREVIEW;
 
 // PostScript printer settings
-void WXDLLEXPORT wxSetPrinterCommand(const char *cmd);
-void WXDLLEXPORT wxSetPrintPreviewCommand(const char *cmd);
-void WXDLLEXPORT wxSetPrinterOptions(const char *flags);
-void WXDLLEXPORT wxSetPrinterOrientation(int orientation);
-void WXDLLEXPORT wxSetPrinterScaling(double x, double y);
-void WXDLLEXPORT wxSetPrinterTranslation(long x, long y);
-void WXDLLEXPORT wxSetPrinterMode(int mode);
-void WXDLLEXPORT wxSetPrinterFile(const char *f);
-void WXDLLEXPORT wxSetAFMPath(const char *f);
+WXDLLEXPORT void wxSetPrinterCommand(const char *cmd);
+WXDLLEXPORT void wxSetPrintPreviewCommand(const char *cmd);
+WXDLLEXPORT void wxSetPrinterOptions(const char *flags);
+WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
+WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
+WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
+WXDLLEXPORT void wxSetPrinterMode(int mode);
+WXDLLEXPORT void wxSetPrinterFile(const char *f);
+WXDLLEXPORT void wxSetAFMPath(const char *f);
 
 // Get current values
-char* WXDLLEXPORT wxGetPrinterCommand(void);
-char* WXDLLEXPORT wxGetPrintPreviewCommand(void);
-char* WXDLLEXPORT wxGetPrinterOptions(void);
-int WXDLLEXPORT wxGetPrinterOrientation(void);
-void WXDLLEXPORT wxGetPrinterScaling(double* x, double* y);
-void WXDLLEXPORT wxGetPrinterTranslation(long *x, long *y);
-int WXDLLEXPORT wxGetPrinterMode(void);
-char* WXDLLEXPORT wxGetPrinterFile(void);
-char* WXDLLEXPORT wxGetAFMPath(void);
+WXDLLEXPORT char* wxGetPrinterCommand(void);
+WXDLLEXPORT char* wxGetPrintPreviewCommand(void);
+WXDLLEXPORT char* wxGetPrinterOptions(void);
+WXDLLEXPORT int wxGetPrinterOrientation(void);
+WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
+WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
+WXDLLEXPORT int wxGetPrinterMode(void);
+WXDLLEXPORT char* wxGetPrinterFile(void);
+WXDLLEXPORT char* wxGetAFMPath(void);
 
 /*
  * PostScript print setup information
@@ -264,8 +264,8 @@ class WXDLLEXPORT wxPrintSetupData: public wxObject
   void operator=(wxPrintSetupData& data);
 };
 
-extern wxPrintSetupData* WXDLLEXPORT wxThePrintSetupData;
-extern void WXDLLEXPORT wxInitializePrintSetupData(bool init = TRUE);
+WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
+WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
 
 /*
  * Again, this only really needed for non-Windows platforms

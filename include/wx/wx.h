@@ -15,6 +15,7 @@
 #include "wx/setup.h"           // Which features to include - user editable
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/log.h"
 #include "wx/window.h"
 #include "wx/panel.h"
 #include "wx/frame.h"
@@ -23,7 +24,6 @@
 #include "wx/dcmemory.h"
 #include "wx/dcprint.h"
 #include "wx/dcscreen.h"
-#include "wx/postscrp.h"
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"
 #include "wx/checkbox.h"

@@ -59,9 +59,9 @@ typedef bool (*wxExprErrorHandler) (int errorType, char *msg);
 
 WXDLLEXPORT_DATA(extern wxExprErrorHandler) currentwxExprErrorHandler;
 
-WXDLLEXPORT_DATA(extern "C" FILE*) yyin;
+extern "C" WXDLLEXPORT_DATA(FILE*) yyin;
 
-extern "C" int WXDLLEXPORT yyparse(void);
+extern "C" WXDLLEXPORT int yyparse(void);
 
 typedef enum {
     wxExprNull,
@@ -263,7 +263,7 @@ class WXDLLEXPORT wxExprDatabase: public wxList
 // Function call-style interface - some more convenience wrappers/unwrappers
 
 // Make a call
-wxExpr* WXDLLEXPORT wxExprMakeCall(const wxString& functor ...);
+WXDLLEXPORT wxExpr* wxExprMakeCall(const wxString& functor ...);
 
 #define wxExprMakeInteger(x) (new wxExpr((long)x))
 #define wxExprMakeReal(x) (new wxExpr((double)x))
@@ -272,13 +272,13 @@ wxExpr* WXDLLEXPORT wxExprMakeCall(const wxString& functor ...);
 #define wxExprMake(x)       (new wxExpr(x))
 
 // Checks functor
-bool WXDLLEXPORT wxExprIsFunctor(wxExpr *expr, const wxString& functor);
+WXDLLEXPORT bool wxExprIsFunctor(wxExpr *expr, const wxString& functor);
 
 // Temporary variable for communicating between wxexpr.cpp and YACC/LEX
 WXDLLEXPORT_DATA(extern wxExprDatabase*) thewxExprDatabase;
 
 // YACC/LEX can leave memory lying around...
-extern "C" int WXDLLEXPORT wxExprCleanUp();
+extern "C" WXDLLEXPORT int wxExprCleanUp();
 
 #endif
 

@@ -96,10 +96,10 @@ public:
    static wxHashTable*      sm_classTable;
 };
 
-wxObject* WXDLLEXPORT wxCreateDynamicObject(const char *name);
+WXDLLEXPORT wxObject* wxCreateDynamicObject(const char *name);
 
 #ifdef wxUSE_SERIAL
-wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
+WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 #endif
 
 #define DECLARE_DYNAMIC_CLASS(name) \

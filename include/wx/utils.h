@@ -55,21 +55,21 @@ class WXDLLEXPORT wxFrame;
 #define   wxToLower(C)      (((C) >= 'A' && (C) <= 'Z')? (C) - 'A' + 'a': (C))
 
 // Return a string with the current date/time
-wxString WXDLLEXPORT wxNow(void);
+WXDLLEXPORT wxString wxNow(void);
 
 // Make a copy of this string using 'new'
-char* WXDLLEXPORT copystring(const char *s);
+WXDLLEXPORT char* copystring(const char *s);
 
 // Generate a unique ID
-long WXDLLEXPORT wxNewId(void);
+WXDLLEXPORT long wxNewId(void);
 #define NewId wxNewId
 
 // Ensure subsequent IDs don't clash with this one
-void WXDLLEXPORT wxRegisterId(long id);
+WXDLLEXPORT void wxRegisterId(long id);
 #define RegisterId wxRegisterId
 
 // Return the current ID
-long WXDLLEXPORT wxGetCurrentId(void);
+WXDLLEXPORT long wxGetCurrentId(void);
 
 // Useful buffer
 WXDLLEXPORT_DATA(extern char*) wxBuffer;
@@ -78,50 +78,50 @@ WXDLLEXPORT_DATA(extern const char*) wxFloatToStringStr;
 WXDLLEXPORT_DATA(extern const char*) wxDoubleToStringStr;
 
 // Various conversions
-void WXDLLEXPORT StringToFloat(char *s, float *number);
-char* WXDLLEXPORT FloatToString(float number, const char *fmt = wxFloatToStringStr);
-void WXDLLEXPORT StringToDouble(char *s, double *number);
-char* WXDLLEXPORT DoubleToString(double number, const char *fmt = wxDoubleToStringStr);
-void WXDLLEXPORT StringToInt(char *s, int *number);
-void WXDLLEXPORT StringToLong(char *s, long *number);
-char* WXDLLEXPORT IntToString(int number);
-char* WXDLLEXPORT LongToString(long number);
+WXDLLEXPORT void StringToFloat(char *s, float *number);
+WXDLLEXPORT char* FloatToString(float number, const char *fmt = wxFloatToStringStr);
+WXDLLEXPORT void StringToDouble(char *s, double *number);
+WXDLLEXPORT char* DoubleToString(double number, const char *fmt = wxDoubleToStringStr);
+WXDLLEXPORT void StringToInt(char *s, int *number);
+WXDLLEXPORT void StringToLong(char *s, long *number);
+WXDLLEXPORT char* IntToString(int number);
+WXDLLEXPORT char* LongToString(long number);
 
 // Matches string one within string two regardless of case
-bool WXDLLEXPORT StringMatch(char *one, char *two, bool subString = TRUE, bool exact = FALSE);
+WXDLLEXPORT bool StringMatch(char *one, char *two, bool subString = TRUE, bool exact = FALSE);
 
 // A shorter way of using strcmp
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 
 // Convert 2-digit hex number to decimal
-int WXDLLEXPORT wxHexToDec(const wxString& buf);
+WXDLLEXPORT int wxHexToDec(const wxString& buf);
 
 // Convert decimal integer to 2-character hex string
-void WXDLLEXPORT wxDecToHex(int dec, char *buf);
-wxString WXDLLEXPORT wxDecToHex(int dec);
+WXDLLEXPORT void wxDecToHex(int dec, char *buf);
+WXDLLEXPORT wxString wxDecToHex(int dec);
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
-long WXDLLEXPORT wxExecute(char **argv, bool sync = FALSE,
+WXDLLEXPORT long wxExecute(char **argv, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
-long WXDLLEXPORT wxExecute(const wxString& command, bool sync = FALSE,
+WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 
 #define wxSIGTERM 1
 
-int WXDLLEXPORT wxKill(long pid, int sig=wxSIGTERM);
+WXDLLEXPORT int wxKill(long pid, int sig=wxSIGTERM);
 
 // Execute a command in an interactive shell window
 // If no command then just the shell
-bool WXDLLEXPORT wxShell(const wxString& command = "");
+WXDLLEXPORT bool wxShell(const wxString& command = "");
 
 // Sleep for nSecs seconds under UNIX, do nothing under Windows
-void WXDLLEXPORT wxSleep(int nSecs);
+WXDLLEXPORT void wxSleep(int nSecs);
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long WXDLLEXPORT wxGetFreeMemory(void);
+WXDLLEXPORT long wxGetFreeMemory(void);
 
 // Consume all events until no more left
-void WXDLLEXPORT wxFlushEvents(void);
+WXDLLEXPORT void wxFlushEvents(void);
 
 /*
  * Network and username functions.
@@ -129,33 +129,33 @@ void WXDLLEXPORT wxFlushEvents(void);
  */
 
 // Get eMail address
-bool WXDLLEXPORT wxGetEmailAddress(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetEmailAddress(char *buf, int maxSize);
 
 // Get hostname.
-bool WXDLLEXPORT wxGetHostName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetHostName(char *buf, int maxSize);
 
 // Get user ID e.g. jacs
-bool WXDLLEXPORT wxGetUserId(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserId(char *buf, int maxSize);
 
 // Get user name e.g. Julian Smart
-bool WXDLLEXPORT wxGetUserName(char *buf, int maxSize);
+WXDLLEXPORT bool wxGetUserName(char *buf, int maxSize);
 
 /*
  * Strip out any menu codes
  */
-char* WXDLLEXPORT wxStripMenuCodes(char *in, char *out = (char *) NULL);
-wxString WXDLLEXPORT wxStripMenuCodes(const wxString& str);
+WXDLLEXPORT char* wxStripMenuCodes(char *in, char *out = (char *) NULL);
+WXDLLEXPORT wxString wxStripMenuCodes(const wxString& str);
 
 // Find the window/widget with the given title or label.
 // Pass a parent to begin the search from, or NULL to look through
 // all windows.
-wxWindow* WXDLLEXPORT wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
+WXDLLEXPORT wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
 
 // Find window by name, and if that fails, by label.
-wxWindow* WXDLLEXPORT wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
+WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
 
 // Returns menu item id or -1 if none.
-int WXDLLEXPORT wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
+WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
 
 // A debugging stream buffer.
 // Under Windows, this writes to the Windows debug output.
@@ -208,70 +208,70 @@ class WXDLLEXPORT wxDebugStreamBuf: public streambuf
 #define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield(void);
+WXDLLEXPORT bool wxYield(void);
 
 // Format a message on the standard error (UNIX) or the debugging
 // stream (Windows)
-void WXDLLEXPORT wxDebugMsg(const char *fmt ...) ;
+WXDLLEXPORT void wxDebugMsg(const char *fmt ...) ;
  
 // Sound the bell
-void WXDLLEXPORT wxBell(void) ;
+WXDLLEXPORT void wxBell(void) ;
   
 // Get OS version
-int WXDLLEXPORT wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *) NULL) ;
+WXDLLEXPORT int wxGetOsVersion(int *majorVsn= (int *) NULL,int *minorVsn= (int *) NULL) ;
 
 // Set the cursor to the busy cursor for all windows
 class WXDLLEXPORT wxCursor;
 WXDLLEXPORT_DATA(extern wxCursor*) wxHOURGLASS_CURSOR;
-void WXDLLEXPORT wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
+WXDLLEXPORT void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
  
 // Restore cursor to normal
-void WXDLLEXPORT wxEndBusyCursor(void);
+WXDLLEXPORT void wxEndBusyCursor(void);
  
 // TRUE if we're between the above two calls
-bool WXDLLEXPORT wxIsBusy(void);
+WXDLLEXPORT bool wxIsBusy(void);
 
 /* Error message functions used by wxWindows */
 
 // Non-fatal error (continues)
 WXDLLEXPORT_DATA(extern const char*) wxInternalErrorStr;
-void WXDLLEXPORT wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
+WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
 
 // Fatal error (exits)
 WXDLLEXPORT_DATA(extern const char*) wxFatalErrorStr;
-void WXDLLEXPORT wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
+WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
-bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = "");
-bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = "");
-bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = "");
-bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = "");
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = "");
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = "");
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = "");
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = "");
 
-bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file = "");
-bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = "");
-bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = "");
-bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = "");
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file = "");
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = "");
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = "");
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = "");
 #endif // wxUSE_RESOURCES
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
-const char* WXDLLEXPORT wxGetHomeDir(wxString *pstr);
+WXDLLEXPORT const char* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy--- volatile)
 // returns NULL is no HOME dir is known
-char* WXDLLEXPORT wxGetUserHome(const wxString& user = "");
+WXDLLEXPORT char* wxGetUserHome(const wxString& user = "");
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
-bool WXDLLEXPORT wxCheckForInterrupt(wxWindow *wnd);
+WXDLLEXPORT bool wxCheckForInterrupt(wxWindow *wnd);
 
 void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
-extern const char* WXDLLEXPORT wxUserResourceStr;
-char* WXDLLEXPORT wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
+WXDLLEXPORT extern const char* wxUserResourceStr;
+WXDLLEXPORT char* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
 #endif
 
 // X only

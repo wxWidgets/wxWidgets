@@ -20,10 +20,10 @@
 
 class WXDLLEXPORT wxFont ;
 
-void WXDLLEXPORT wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
-void WXDLLEXPORT wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
-wxWindow* WXDLLEXPORT wxFindWinFromHandle(WXHWND hWnd);
-void WXDLLEXPORT wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
+WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
+WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
+WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
+WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
 
 WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
@@ -33,9 +33,9 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
-extern HINSTANCE WXDLLEXPORT wxGetInstance();
-void WXDLLEXPORT wxFillLogFont(LOGFONT *logFont, wxFont *font);
-wxFont WXDLLEXPORT wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNew = TRUE);
+WXDLLEXPORT HINSTANCE wxGetInstance();
+WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
+WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNew = TRUE);
 
 #ifdef __GNUWIN32__
 #  define CASTWNDPROC (long unsigned)
@@ -68,9 +68,9 @@ typedef signed short int SHORT ;
 #endif
 
 #if wxUSE_PENWIN
-void WXDLLEXPORT wxRegisterPenWin(void);
-void WXDLLEXPORT wxCleanUpPenWin(void);
-void WXDLLEXPORT wxEnablePenAppHooks (bool hook);
+WXDLLEXPORT void wxRegisterPenWin(void);
+WXDLLEXPORT void wxCleanUpPenWin(void);
+WXDLLEXPORT void wxEnablePenAppHooks (bool hook);
 #endif
 
 #if wxUSE_ITSY_BITSY
@@ -136,7 +136,7 @@ extern LONG APIENTRY _EXPORT
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 // Find maximum size of window/rectangle
-extern void WXDLLEXPORT wxFindMaxSize(WXHWND hwnd, RECT *rect);
+WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
 
 // List of scrollbar controls
 WXDLLEXPORT_DATA(extern wxList) wxScrollBarList;
@@ -145,14 +145,14 @@ WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern char*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
-wxWindow* WXDLLEXPORT wxFindControlFromHandle(WXHWND hWnd);
-void WXDLLEXPORT wxAddControlHandle(WXHWND hWnd, wxWindow *item);
+WXDLLEXPORT wxWindow* wxFindControlFromHandle(WXHWND hWnd);
+WXDLLEXPORT void wxAddControlHandle(WXHWND hWnd, wxWindow *item);
 
 // Safely get the window text (i.e. without using fixed size buffer)
-extern wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd);
+WXDLLEXPORT extern wxString wxGetWindowText(WXHWND hWnd);
 
 // Does this window style specify any border?
-inline bool WXDLLEXPORT wxStyleHasBorder(long style)
+inline bool wxStyleHasBorder(long style)
 {
   return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;

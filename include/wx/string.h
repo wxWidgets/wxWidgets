@@ -937,7 +937,7 @@ wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
 #  endif
 #endif
 
-istream& WXDLLEXPORT operator>>(istream& is, wxString& str);
+WXDLLEXPORT istream& operator>>(istream& is, wxString& str);
 
 #endif  //std::string compatibility
 

@@ -285,6 +285,9 @@ wxString wxLog::TimeStamp() const
 {
   wxString str;
 
+/* Let's disable TimeStamp and see if anyone complains.
+ * If not, we'll remove it, since it's probably unlikely
+ * to ever be used. -- JACS 22/11/98
   if ( !IsEmpty(m_szTimeFormat) ) {
     char szBuf[128];
     time_t timeNow;
@@ -296,6 +299,7 @@ wxString wxLog::TimeStamp() const
     strftime(szBuf, WXSIZEOF(szBuf), m_szTimeFormat, ptmNow);
     str = szBuf;
   }
+*/
 
   return str;
 }
@@ -496,7 +500,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
         {
           wxString strTime = TimeStamp();
 
-          #if defined(__WIN32__) && !defined(__WXSTUBS__)
+          #if (defined(__WIN32__) || defined(__WIN16__)) && !defined(__WXSTUBS__)
               // don't prepend debug/trace here: it goes to the debug window
               // anyhow, but do put a timestamp
               OutputDebugString(strTime + szString + "\n\r");

@@ -2,6 +2,19 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
+Alpha 17, November 22nd 1998
+----------------------------
+
+- More documentation updates, especially for
+  wxLayoutWindow classes and debugging facilities.
+- Changed wxDebugContext to use wxDebugLog instead
+  of wxTrace.
+- Now supports VC++ 6.0, and hopefully BC++ 5.0.
+  However, DLL support may be broken for BC++ since
+  VC++ 6 required changing of WXDLLEXPORT keyword
+  position.
+- Numerous miscellaneous changes.
+
 Alpha 16, September 8th 1998
 ----------------------------
 

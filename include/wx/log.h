@@ -379,9 +379,9 @@ WXDLLEXPORT_DATA(extern bool) g_bVerbose;
 // ----------------------------------------------------------------------------
 
 // return the last system error code
-unsigned long WXDLLEXPORT wxSysErrorCode();
+WXDLLEXPORT unsigned long wxSysErrorCode();
 // return the error message for given (or last if 0) error code
-const char* WXDLLEXPORT wxSysErrorMsg(unsigned long nErrCode = 0);
+WXDLLEXPORT const char* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 // ----------------------------------------------------------------------------
 // debug only logging functions: use them with API name and error code

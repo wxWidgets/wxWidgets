@@ -28,7 +28,7 @@ class WXDLLEXPORT wxOutputStream;
 typedef wxInputStream& (*__wxInputManip)(wxInputStream&);
 typedef wxOutputStream& (*__wxOutputManip)(wxOutputStream&);
 
-wxOutputStream& WXDLLEXPORT wxEndL(wxOutputStream& o_stream);
+WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 
 // ---------------------------------------------------------------------------
 // Stream buffer

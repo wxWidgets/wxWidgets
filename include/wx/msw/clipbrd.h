@@ -23,16 +23,16 @@
 
 #include "wx/list.h"
 
-bool WXDLLEXPORT wxOpenClipboard(void);
-bool WXDLLEXPORT wxClipboardOpen(void);
-bool WXDLLEXPORT wxCloseClipboard(void);
-bool WXDLLEXPORT wxEmptyClipboard(void);
-bool WXDLLEXPORT wxIsClipboardFormatAvailable(int dataFormat);
-bool WXDLLEXPORT wxSetClipboardData(int dataFormat, wxObject *obj, int width = 0, int height = 0);
-wxObject* WXDLLEXPORT wxGetClipboardData(int dataFormat, long *len = NULL);
-int  WXDLLEXPORT wxEnumClipboardFormats(int dataFormat);
-int  WXDLLEXPORT wxRegisterClipboardFormat(char *formatName);
-bool WXDLLEXPORT wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount);
+WXDLLEXPORT bool wxOpenClipboard(void);
+WXDLLEXPORT bool wxClipboardOpen(void);
+WXDLLEXPORT bool wxCloseClipboard(void);
+WXDLLEXPORT bool wxEmptyClipboard(void);
+WXDLLEXPORT bool wxIsClipboardFormatAvailable(int dataFormat);
+WXDLLEXPORT bool wxSetClipboardData(int dataFormat, wxObject *obj, int width = 0, int height = 0);
+WXDLLEXPORT wxObject* wxGetClipboardData(int dataFormat, long *len = NULL);
+WXDLLEXPORT int  wxEnumClipboardFormats(int dataFormat);
+WXDLLEXPORT int  wxRegisterClipboardFormat(char *formatName);
+WXDLLEXPORT bool wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount);
 
 /* The following is Matthew Flatt's implementation of the MSW
  * side of generic clipboard functionality.
@@ -101,7 +101,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
 };
 
 /* Initialize wxTheClipboard. Can be called repeatedly */
-void WXDLLEXPORT wxInitClipboard(void);
+WXDLLEXPORT void wxInitClipboard(void);
 
 /* The clipboard */
 WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;

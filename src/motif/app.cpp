@@ -67,6 +67,7 @@ bool wxApp::Initialize()
     wxBuffer = new char[BUFSIZ + 512];
 #endif
 
+/* No longer used
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
     streambuf* sBuf = new wxDebugStreamBuf;
@@ -74,6 +75,7 @@ bool wxApp::Initialize()
     wxDebugContext::SetStream(oStr, sBuf);
 
 #endif
+*/
   
     wxClassInfo::InitializeClasses();
 
@@ -151,6 +153,23 @@ void wxApp::CleanUp()
 
     wxClassInfo::CleanUpClasses();
 
+    delete wxTheApp;
+    wxTheApp = NULL;
+  
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    // At this point we want to check if there are any memory
+    // blocks that aren't part of the wxDebugContext itself,
+    // as a special case. Then when dumping we need to ignore
+    // wxDebugContext, too.
+    if (wxDebugContext::CountObjectsLeft() > 0)
+    {
+      wxLogDebug("There were memory leaks.\n");
+      wxDebugContext::Dump();
+      wxDebugContext::PrintStatistics();
+    }
+//    wxDebugContext::SetStream(NULL, NULL);
+#endif
+  
     // do it as the very last thing because everything else can log messages
     wxLog::DontCreateOnDemand();
     // do it as the very last thing because everything else can log messages
@@ -218,23 +237,6 @@ int wxEntry( int argc, char *argv[] )
   
     wxApp::CleanUp();
 
-    delete wxTheApp;
-    wxTheApp = NULL;
-  
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-    // At this point we want to check if there are any memory
-    // blocks that aren't part of the wxDebugContext itself,
-    // as a special case. Then when dumping we need to ignore
-    // wxDebugContext, too.
-    if (wxDebugContext::CountObjectsLeft() > 0)
-    {
-      wxTrace("There were memory leaks.\n");
-      wxDebugContext::Dump();
-      wxDebugContext::PrintStatistics();
-    }
-    wxDebugContext::SetStream(NULL, NULL);
-#endif
-  
     return retValue;
 };
 
