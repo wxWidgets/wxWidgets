@@ -63,7 +63,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #if wxUSE_WCSRTOMBS
   // don't know if it's really needed (or if we can pass NULL), but better safe
   // than quick
-  mbstate_t mbstate;  
+  mbstate_t mbstate;
   return mbsrtowcs((wchar_t *) NULL, &psz, 0, &mbstate);
 #else  // !GNU libc
   return mbstowcs((wchar_t *) NULL, psz, 0);
@@ -86,7 +86,7 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #if wxUSE_WCSRTOMBS
   // don't know if it's really needed (or if we can pass NULL), but better safe
   // than quick
-  mbstate_t mbstate;  
+  mbstate_t mbstate;
   return wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
 #else  // !GNU libc
   return wcstombs((char *) NULL, pwz, 0);
