@@ -14,12 +14,7 @@
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/setup.h"
 
-/* kludge for GTK..  gsockgtk.c craps out miserably if we include
-   defs.h ...  no idea how other files get away with it.. */
-
-#if !defined( __WXMSW__ ) && !defined(  WXDLLIMPEXP_NET )
-#define WXDLLIMPEXP_NET
-#endif
+#include "wx/dlimpexp.h" // for WXDLLIMPEXP_NET
 
 #endif
 

@@ -217,6 +217,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/debug.h
     wx/defs.h
     wx/dir.h
+    wx/dlimpexp.h
     wx/dynarray.h
     wx/dynlib.h
     wx/dynload.h
