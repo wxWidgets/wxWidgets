@@ -368,14 +368,6 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
 
 bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName)
 {
-    //Is this needed? As will be validated on SetValueAsXXXX
-    ValidateRow(row);
-
-    if (m_data->IsColNull(m_ColInfo[col].DbCol))
-    {
-        return FALSE;
-    }
-
     if (typeName == wxGRID_VALUE_STRING)
     {
         //FIXME ummm What about blob field etc.
