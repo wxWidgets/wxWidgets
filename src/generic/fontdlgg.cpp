@@ -197,15 +197,28 @@ void wxGenericFontDialog::CreateWidgets(void)
   fontRect.width = 350;
   fontRect.height = 100;
 
-/*
-  static char *families[] = { "Roman", "Decorative", "Modern", "Script", "Swiss" };
-  static char *styles[] = { "Normal", "Italic", "Slant" };
-  static char *weights[] = { "Normal", "Light", "Bold" };
-*/
-  static wxString families[] = { "Roman", "Decorative", "Modern", "Script", "Swiss" };
-  static wxString styles[] = { "Normal", "Italic", "Slant" };
-  static wxString weights[] = { "Normal", "Light", "Bold" };
-
+  /*
+    static char *families[] = { "Roman", "Decorative", "Modern", "Script", "Swiss" };
+    static char *styles[] = { "Normal", "Italic", "Slant" };
+    static char *weights[] = { "Normal", "Light", "Bold" };
+  */
+  
+  wxString
+     *families = new wxString[5],
+     *styles = new wxString[3],
+     *weights = new wxString[3];
+  families[0] =  _("Roman");
+  families[1] = _("Decorative");
+  families[2] = _("Modern");
+  families[3] = _("Script");
+  families[4] = _("Swiss" );
+  styles[0] = _("Normal");
+  styles[1] = _("Italic");
+  styles[2] = _("Slant");
+  weights[0] = _("Normal");
+  weights[1] = _("Light");
+  weights[2] = _("Bold");
+  
   int x=-1;
   int y=40;
   familyChoice = new wxChoice(this, wxID_FONT_FAMILY, wxPoint(10, 10), wxSize(120, -1), 5, families);
@@ -219,7 +232,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   y+=3;	//NL mod
 #endif
 
-  wxString pointSizes[40];
+  wxString *pointSizes = new wxString[40];
   int i;
   for ( i = 0; i < 40; i++)
   {
@@ -262,7 +275,11 @@ void wxGenericFontDialog::CreateWidgets(void)
   Centre(wxBOTH);
 
   wxEndBusyCursor();
-  
+
+  delete[] families;
+  delete[] styles;
+  delete[] weights;
+  delete[] pointSizes;
   m_useEvents = TRUE;
 }
 
