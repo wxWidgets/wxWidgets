@@ -680,7 +680,7 @@ bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
                 consumer->PerformAction(wxACTION_TOPLEVEL_BUTTON_PRESS, m_winPressed);
                 return TRUE;
             }
-            else if ( hit & wxHT_TOPLEVEL_TITLEBAR )
+            else if ( (hit & wxHT_TOPLEVEL_TITLEBAR) && !w->IsMaximized() )
             {
                 consumer->PerformAction(wxACTION_TOPLEVEL_MOVE);
                 return TRUE;
