@@ -817,8 +817,9 @@ int wxWindow::GetScrollRange(int orient) const
     Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
     wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
 
-    int range;
-    XtVaGetValues(scrollBar, XmNmaximum, &range, NULL);
+    int range = 0;
+    if (scrollBar) 
+        XtVaGetValues(scrollBar, XmNmaximum, &range, NULL);
     return range;
 }
 
