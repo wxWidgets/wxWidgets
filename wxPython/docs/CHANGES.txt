@@ -16,25 +16,30 @@ wx.grid.Grid fix allowing DoGetBestSize to be called before CreateGrid
 wxMac fix for not sending a native click to a control if it is not
 enabled (does an enable itself)
 
-Added wx.ogl.DrawShape
+Added wx.lib.ogl.DrawnShape
 
 Added support to XRC and XRCed for the 3-state checkbox flags and also
 for wx.ToggleButton.  Updated the generic window styles supported by
 XRCed. 
 
 It is now possible to create "stock" buttons.  Basically this means
-that you only have to provide one of the stock IDs (and an empty
-label) when creating the button and wxWidgets will choose the stock
-label to go with it automatically.  Additionally on the platforms that
-have a native concept of a stock button (currently only GTK2) then the
-native stock button will be used.  For example, the following will
-result in a button with "Cancel" as the label and an accelerator on
-the "C", and if on wxGTK2 there will be an image of a red X::
+that you only have to provide one of the stock IDs (and either an
+empty label or a label that matches the stock label) when creating the
+button and wxWidgets will choose the stock label to go with it
+automatically.  Additionally on the platforms that have a native
+concept of a stock button (currently only GTK2) then the native stock
+button will be used.  For example, the following will result in a
+button with "Cancel" as the label and an accelerator on the "C", and
+if run on wxGTK2 then there will also be an image of a red X::
 
        b = wx.Button(parent, wx.ID_CANCEL) 
 
 
 Added wx.lib.ticker.Ticker class from Chris Mellon.
+
+Fix some incorrect clipping regions in wxSTC on wxGTK.
+
+Added wrapper for wx.grid.Grid.GetOrCreateCellAttr.
 
 
 

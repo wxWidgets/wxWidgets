@@ -9097,9 +9097,10 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
 {
     wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
+    bool canHave = ((wxGrid*)this)->CanHaveAttributes();
 
-    wxCHECK_MSG( m_table, attr,
-                  _T("we may only be called if CanHaveAttributes() returned true and then m_table should be !NULL") );
+    wxCHECK_MSG( canHave, attr, _T("Cell attributes not allowed"));
+    wxCHECK_MSG( m_table, attr, _T("must have a table") );
 
     attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell);
     if ( !attr )

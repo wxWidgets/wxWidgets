@@ -1310,6 +1310,13 @@ public:
     void     SetRowAttr(int row, wxGridCellAttr *attr);
     void     SetColAttr(int col, wxGridCellAttr *attr);
 
+    // returns the attribute we may modify in place: a new one if this cell
+    // doesn't have any yet or the existing one if it does
+    //
+    // DecRef() must be called on the returned pointer, as usual
+    wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    
     // shortcuts for setting the column parameters
 
     // set the format for the data in the column: default is string
@@ -1793,12 +1800,6 @@ protected:
 
     // do we have some place to store attributes in?
     bool CanHaveAttributes();
-
-    // returns the attribute we may modify in place: a new one if this cell
-    // doesn't have any yet or the existing one if it does
-    //
-    // DecRef() must be called on the returned pointer, as usual
-    wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
 
     // cell attribute cache (currently we only cache 1, may be will do
     // more/better later)
