@@ -1187,7 +1187,9 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 
     gint from, to;
 #ifdef __WXGTK20__
-    if ( !gtk_editable_get_selection_bounds(GTK_EDITABLE(m_text), &from, &to) )
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (m_text));
+    GtkTextIter ifrom, ito;
+    if (!gtk_text_buffer_get_selection_bounds(buffer, &ifrom, &ito))
 #else
     if ( !(GTK_EDITABLE(m_text)->has_selection) )
 #endif
@@ -1197,7 +1199,10 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
     }
     else // got selection
     {
-#ifndef __WXGTK20__
+#ifdef __WXGTK20__
+        from = gtk_text_iter_get_offset(&ifrom);
+        to = gtk_text_iter_get_offset(&ito);
+#else
         from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
         to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
 #endif
