@@ -1771,7 +1771,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             PIC_FLAG="-fPIC"
         else
             SHARED_LD="${CXX} -G -o"
-            PIC_FLAG="PIC"
+            PIC_FLAG="-KPIC"
         fi
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
