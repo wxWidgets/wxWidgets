@@ -120,7 +120,7 @@
     // time.h functions  -- none defined in tchar.h
     #define  wxAsctime   asctime
     #define  wxCtime     ctime
-#elif defined(__MWERKS__)
+#elif defined(__MWERKS__) || defined(__VISAGECPP__)
     // for wcslen
     #if wxUSE_WCHAR_T
     #include <wchar.h>
@@ -327,7 +327,7 @@ typedef  _TUCHAR     wxUChar;
 
 // VS: wxWindows used to define wxChar as __WCHAR_TYPE__ here. However, this doesn't
 //     work with new GCC 3.x compilers because wchar_t is C++'s builtin type in the new
-//     standard. OTOH, old compilers (GCC 2.x) won't accept new definition 
+//     standard. OTOH, old compilers (GCC 2.x) won't accept new definition
 //     of wx{S,U}Char, therefore we have to define wxChar conditionally depending on
 //     detected compiler & compiler version.
 //     The most complicated case is the infamous so-called "gcc-2.96" which does not
