@@ -1781,15 +1781,18 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 #else // assume Unix
     const wxChar *pLastSeparator = wxStrrchr(pszFileName, wxFILE_SEP_PATH_UNIX);
 
-    if ( (pDot == pszFileName) || (*(pDot - 1) == wxFILE_SEP_PATH_UNIX) )
+    if ( pDot )
     {
-        // under Unix, dot may be (and commonly is) the first character of the
-        // filename, don't treat the entire filename as extension in this case
-        pDot = NULL;
+        if ( (pDot == pszFileName) || (*(pDot - 1) == wxFILE_SEP_PATH_UNIX) )
+        {
+            // under Unix, dot may be (and commonly is) the first character of the
+            // filename, don't treat the entire filename as extension in this case
+            pDot = NULL;
+        }
     }
 #endif // MSW/Unix
 
-    if ( pDot < pLastSeparator )
+    if ( pDot && (pDot < pLastSeparator) )
     {
         // the dot is part of the path, not the start of the extension
         pDot = NULL;
