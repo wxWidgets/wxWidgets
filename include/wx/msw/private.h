@@ -415,25 +415,38 @@ private:
    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
+// a class which cleans up any GDI object
+class AutoGDIObject
+{
+protected:
+    AutoGDIObject(HGDIOBJ gdiobj) : m_gdiobj(gdiobj) { }
+    ~AutoGDIObject() { if ( m_gdiobj ) ::DeleteObject(m_gdiobj); }
+
+    HGDIOBJ GetObject() const { return m_gdiobj; }
+
+private:
+    HGDIOBJ m_gdiobj;
+};
+
 // a class for temporary bitmaps
-class CompatibleBitmap
+class CompatibleBitmap : private AutoGDIObject
 {
 public:
     CompatibleBitmap(HDC hdc, int w, int h)
+        : AutoGDIObject(::CreateCompatibleBitmap(hdc, w, h))
     {
-        m_hbmp = ::CreateCompatibleBitmap(hdc, w, h);
     }
 
-    ~CompatibleBitmap()
-    {
-        if ( m_hbmp )
-            ::DeleteObject(m_hbmp);
-    }
+    operator HBITMAP() const { return (HBITMAP)GetObject(); }
+};
 
-    operator HBITMAP() const { return m_hbmp; }
+// class automatically destroys the region object
+class AutoHRGN : private AutoGDIObject
+{
+public:
+    AutoHRGN(HRGN hrgn) : AutoGDIObject(hrgn) { }
 
-private:
-    HBITMAP m_hbmp;
+    operator HRGN() const { return (HRGN)GetObject(); }
 };
 
 // when working with global pointers (which is unfortunately still necessary
@@ -557,8 +570,8 @@ private:
 #define GetHaccel()             ((HACCEL)GetHACCEL())
 #define GetHaccelOf(table)      ((HACCEL)((table).GetHACCEL()))
 
-#define GetHbrush()             ((HPEN)GetResourceHandle())
-#define GetHbrushOf(brush)      ((HPEN)(brush).GetResourceHandle())
+#define GetHbrush()             ((HBRUSH)GetResourceHandle())
+#define GetHbrushOf(brush)      ((HBRUSH)(brush).GetResourceHandle())
 
 #define GetHmenu()              ((HMENU)GetHMenu())
 #define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
@@ -740,5 +753,4 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 #endif // wxUSE_GUI
 
-#endif
-    // _WX_PRIVATE_H_
+#endif // _WX_PRIVATE_H_
