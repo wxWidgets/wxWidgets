@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="wxUSE_LIBPNG"/>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="wxUSE_LIBPNG">builtin</set>
+    </if>
+    <set var="LIB_PNG">
+        <if cond="wxUSE_LIBPNG=='builtin'">wxpng</if>
+    </set>
+
+    <lib id="wxpng" cond="wxUSE_LIBPNG=='builtin'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <sources>
+		    src/png/png.c
+		    src/png/pngerror.c
+		    src/png/pnggccrd.c
+		    src/png/pngget.c
+		    src/png/pngmem.c
+		    src/png/pngpread.c
+		    src/png/pngread.c
+		    src/png/pngrio.c
+		    src/png/pngrtran.c
+		    src/png/pngrutil.c
+		    src/png/pngset.c
+		    src/png/pngtrans.c
+		    src/png/pngvcrd.c
+		    src/png/pngwio.c
+		    src/png/pngwrite.c
+		    src/png/pngwtran.c
+		    src/png/pngwutil.c
+        </sources>
+    </lib>
+
+</makefile>

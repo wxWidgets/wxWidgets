@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<makefile>
+
+
+    <option name="UNICODE">
+        <values>0 1</values>
+        <default-value>0</default-value>
+        <description>
+            Compile Unicode build of wxWindows?
+        </description>
+    </option>
+
+    <option name="SHARED">
+        <values>0 1</values>
+        <default-value>1</default-value>
+        <description>
+            What type of library to build?
+        </description>
+    </option>
+    
+    <!-- FIXME - to be option, not hardcoded value!! -->
+    <option name="MONOLITHIC">
+        <values>0 1</values>
+        <default-value>0</default-value>
+        <description>
+            Multiple libraries or single huge monolithic one?
+        </description>
+    </option>
+    
+    <option name="USE_GUI">
+        <values>0 1</values>
+        <default-value>1</default-value>
+        <description>
+            Build GUI libraries?
+        </description>
+    </option>
+
+
+    <!-- Autoconf options: -->
+    <if cond="FORMAT=='autoconf'"> 
+        <option name="TOOLKIT"/>
+        <option name="TOOLKIT_LOWERCASE"/>
+        <option name="EXTRALIBS"/>
+        <option name="top_builddir"/>
+        <option name="SAMPLES_RPATH_FLAG"/>
+    </if>
+
+</makefile>

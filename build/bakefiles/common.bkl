@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <!-- load python module with wxwindows helpers: -->
+    <using module="wxwin"/>
+
+    <include file="config.bkl"/>
+    
+    <!-- ================================================================== -->
+    <!--                     wxWindows version numbers:                     -->
+    <!-- ================================================================== -->
+
+    <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
+    <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
+    <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
+    <set var="WX_VERSION">$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)</set>
+
+    <set var="WXSOVERSION">0.0.0</set>
+    
+    
+    <!-- ================================================================== -->
+    <!--                     Names of libraries and DLLs:                   -->
+    <!-- ================================================================== -->
+
+    <set var="PORTNAME">
+        <if cond="USE_GUI=='0'">base</if>
+        <if cond="USE_GUI=='1'">$(TOOLKIT_LOWERCASE)</if>
+    </set>
+
+    <set var="COMPILERORGCC">
+        <if cond="isdefined('COMPILER')">$(COMPILER)</if>
+        <if cond="not isdefined('COMPILER')">gcc</if>
+    </set>
+    <set var="WXCOMPILER">
+        <if cond="PLATFORM_WIN32=='1'">_$(COMPILERORGCC)</if>
+    </set>
+    
+    <set var="WXDEBUGFLAG">
+        <if cond="BUILD=='debug'">d</if>
+    </set>
+    <set var="WXUNICODEFLAG">
+        <if cond="UNICODE=='1'">u</if>
+    </set>
+    <set var="WXNAMESUFFIX">
+        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+    </set>
+
+    <set var="WXNAMEPREFIX">wx</set>
+    <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)</set>
+    <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
+    
+    
+    <!-- =============================================================== -->
+    <!--                    Names of component libraries:                -->
+    <!-- =============================================================== -->
+
+    <set var="WXLIB_CORE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
+
+    <set var="WXLIB_MONO">
+        <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
+    </set>
+    
+    
+    <!-- =============================================================== -->
+    <!--                   Where to store built libraries:               -->
+    <!-- =============================================================== -->
+
+    <set var="LIBDIRNAME">
+        <if cond="FORMAT=='autoconf'">$(top_builddir)/lib</if>
+    </set>
+
+    
+    <!-- =============================================================== -->
+    <!--                  Templates for wxWindows libs:                  -->
+    <!-- =============================================================== -->
+    
+    <set var="WXTOPDIR"></set>
+
+    <template id="wx">
+        <set var="wxid">$(wxwin.mk_wxid(id))</set>
+        
+        <define>__WX$(TOOLKIT)__</define>
+        <include>$(SRCDIR)$(WXTOPDIR)/include</include>
+        
+        <ldflags>$(EXTRALIBS)</ldflags>
+        <lib-path>$(LIBDIRNAME)</lib-path>
+    </template>
+
+    <template id="wx_lib" template="wx">
+        <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <libname>$(WXLIBNAME)</libname>
+        <install-to>$(LIBDIR)</install-to>
+    </template>
+    
+    <template id="wx_dll" template="wx_lib">
+        <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
+        <dllname>$(WXDLLNAME)</dllname>
+        <so_version>$(WXSOVERSION)</so_version>
+    </template>
+    
+    
+    <!-- =============================================================== -->
+    <!--                   Templates for wxWindows samples:              -->
+    <!-- =============================================================== -->
+
+    <template id="wx_sample" template="wx">
+        <include>$(SRCDIR)</include>
+        <!-- Always link against the wxWin library in monolithic build: -->
+        <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
+    </template>
+
+    <!-- Link against one wxWin library. Value must be literal! -->
+    <define-tag name="wx-lib" rules="exe">
+        <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+    </define-tag>
+
+</makefile>
