@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -140,33 +139,31 @@ static PyObject *_wrap_wxSizerItem_DeleteWindows(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxSizerItem_GetPosition(_swigobj)  (_swigobj->GetPosition())
-static PyObject *_wrap_wxSizerItem_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxSizerItem_DetachSizer(_swigobj)  (_swigobj->DetachSizer())
+static PyObject *_wrap_wxSizerItem_DetachSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxPoint * _result;
     wxSizerItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetPosition",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_DetachSizer",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetPosition. Expected _wxSizerItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_DetachSizer. Expected _wxSizerItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxPoint (wxSizerItem_GetPosition(_arg0));
+    wxSizerItem_DetachSizer(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -266,6 +263,66 @@ static PyObject *_wrap_wxSizerItem_SetDimension(PyObject *self, PyObject *args, 
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxSizerItem_SetDimension(_arg0,*_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_GetMinSize(_swigobj)  (_swigobj->GetMinSize())
+static PyObject *_wrap_wxSizerItem_GetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetMinSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetMinSize. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxSizerItem_GetMinSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxSizerItem_SetInitSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetInitSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSizerItem_SetInitSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxSizerItem_SetInitSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetInitSize. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_SetInitSize(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -481,6 +538,177 @@ static PyObject *_wrap_wxSizerItem_IsSpacer(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxSizerItem_SetProportion(_swigobj,_swigarg0)  (_swigobj->SetProportion(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetProportion(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","proportion", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetProportion",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetProportion. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_SetProportion(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_GetProportion(_swigobj)  (_swigobj->GetProportion())
+static PyObject *_wrap_wxSizerItem_GetProportion(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetProportion",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetProportion. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxSizerItem_GetProportion(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizerItem_SetFlag(_swigobj,_swigarg0)  (_swigobj->SetFlag(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetFlag",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetFlag. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_SetFlag(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_GetFlag(_swigobj)  (_swigobj->GetFlag())
+static PyObject *_wrap_wxSizerItem_GetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetFlag",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetFlag. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxSizerItem_GetFlag(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizerItem_SetBorder(_swigobj,_swigarg0)  (_swigobj->SetBorder(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","border", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetBorder",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetBorder. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_SetBorder(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_GetBorder(_swigobj)  (_swigobj->GetBorder())
+static PyObject *_wrap_wxSizerItem_GetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetBorder",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetBorder. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxSizerItem_GetBorder(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxSizerItem_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxSizerItem_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -611,27 +839,130 @@ static PyObject *_wrap_wxSizerItem_SetSizer(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxSizerItem_GetOption(_swigobj)  (_swigobj->GetOption())
-static PyObject *_wrap_wxSizerItem_GetOption(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxSizerItem_GetSpacer(_swigobj)  (_swigobj->GetSpacer())
+static PyObject *_wrap_wxSizerItem_GetSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    wxSize * _result;
     wxSizerItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetOption",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetSpacer",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetOption. Expected _wxSizerItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetSpacer. Expected _wxSizerItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxSizerItem_GetOption(_arg0);
+    const wxSize & _result_ref = wxSizerItem_GetSpacer(_arg0);
+    _result = (wxSize *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSize_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSizerItem_SetSpacer(_swigobj,_swigarg0)  (_swigobj->SetSpacer(_swigarg0))
+static PyObject *_wrap_wxSizerItem_SetSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizerItem_SetSpacer",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetSpacer. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_SetSpacer(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_Show(_swigobj,_swigarg0)  (_swigobj->Show(_swigarg0))
+static PyObject *_wrap_wxSizerItem_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_Show",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_Show. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizerItem_Show(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizerItem_IsShown(_swigobj)  (_swigobj->IsShown())
+static PyObject *_wrap_wxSizerItem_IsShown(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_IsShown",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_IsShown. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizerItem_IsShown(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -639,176 +970,33 @@ static PyObject *_wrap_wxSizerItem_GetOption(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxSizerItem_GetFlag(_swigobj)  (_swigobj->GetFlag())
-static PyObject *_wrap_wxSizerItem_GetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxSizerItem_GetPosition(_swigobj)  (_swigobj->GetPosition())
+static PyObject *_wrap_wxSizerItem_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    wxPoint * _result;
     wxSizerItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetFlag",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetPosition",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetFlag. Expected _wxSizerItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetPosition. Expected _wxSizerItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxSizerItem_GetFlag(_arg0);
+    _result = new wxPoint (wxSizerItem_GetPosition(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxSizerItem_GetBorder(_swigobj)  (_swigobj->GetBorder())
-static PyObject *_wrap_wxSizerItem_GetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxSizerItem * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_GetBorder",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_GetBorder. Expected _wxSizerItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxSizerItem_GetBorder(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxSizerItem_SetInitSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetInitSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxSizerItem_SetInitSize(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizerItem * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxSizerItem_SetInitSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetInitSize. Expected _wxSizerItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizerItem_SetInitSize(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxSizerItem_SetOption(_swigobj,_swigarg0)  (_swigobj->SetOption(_swigarg0))
-static PyObject *_wrap_wxSizerItem_SetOption(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizerItem * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","option", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetOption",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetOption. Expected _wxSizerItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizerItem_SetOption(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxSizerItem_SetFlag(_swigobj,_swigarg0)  (_swigobj->SetFlag(_swigarg0))
-static PyObject *_wrap_wxSizerItem_SetFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizerItem * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetFlag",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetFlag. Expected _wxSizerItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizerItem_SetFlag(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxSizerItem_SetBorder(_swigobj,_swigarg0)  (_swigobj->SetBorder(_swigarg0))
-static PyObject *_wrap_wxSizerItem_SetBorder(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizerItem * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","border", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizerItem_SetBorder",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_SetBorder. Expected _wxSizerItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizerItem_SetBorder(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -922,10 +1110,10 @@ static PyObject *_wrap_wxSizer_Destroy(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static void  wxSizer_AddWindow(wxSizer *self,wxWindow * window,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_AddWindow(wxSizer *self,wxWindow * window,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(window, option, flag, border, data);
+            self->Add(window, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_AddWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -938,7 +1126,7 @@ static PyObject *_wrap_wxSizer_AddWindow(PyObject *self, PyObject *args, PyObjec
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","window","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","window","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iiiO:wxSizer_AddWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_obj5)) 
@@ -972,10 +1160,10 @@ static PyObject *_wrap_wxSizer_AddWindow(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-static void  wxSizer_AddSizer(wxSizer *self,wxSizer * sizer,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_AddSizer(wxSizer *self,wxSizer * sizer,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(sizer, option, flag, border, data);
+            self->Add(sizer, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_AddSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -988,7 +1176,7 @@ static PyObject *_wrap_wxSizer_AddSizer(PyObject *self, PyObject *args, PyObject
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","sizer","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","sizer","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iiiO:wxSizer_AddSizer",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_obj5)) 
@@ -1022,10 +1210,10 @@ static PyObject *_wrap_wxSizer_AddSizer(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-static void  wxSizer_AddSpacer(wxSizer *self,int  width,int  height,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_AddSpacer(wxSizer *self,int  width,int  height,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(width, height, option, flag, border, data);
+            self->Add(width, height, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_AddSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1038,7 +1226,7 @@ static PyObject *_wrap_wxSizer_AddSpacer(PyObject *self, PyObject *args, PyObjec
     PyObject * _arg6 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","width","height","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","width","height","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|iiiO:wxSizer_AddSpacer",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_obj6)) 
@@ -1065,10 +1253,10 @@ static PyObject *_wrap_wxSizer_AddSpacer(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-static void  wxSizer_InsertWindow(wxSizer *self,int  before,wxWindow * window,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_InsertWindow(wxSizer *self,int  before,wxWindow * window,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, window, option, flag, border, data);
+            self->Insert(before, window, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_InsertWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1082,7 +1270,7 @@ static PyObject *_wrap_wxSizer_InsertWindow(PyObject *self, PyObject *args, PyOb
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","before","window","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","before","window","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|iiiO:wxSizer_InsertWindow",_kwnames,&_argo0,&_arg1,&_argo2,&_arg3,&_arg4,&_arg5,&_obj6)) 
@@ -1116,10 +1304,10 @@ static PyObject *_wrap_wxSizer_InsertWindow(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-static void  wxSizer_InsertSizer(wxSizer *self,int  before,wxSizer * sizer,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_InsertSizer(wxSizer *self,int  before,wxSizer * sizer,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, sizer, option, flag, border, data);
+            self->Insert(before, sizer, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_InsertSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1133,7 +1321,7 @@ static PyObject *_wrap_wxSizer_InsertSizer(PyObject *self, PyObject *args, PyObj
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","before","sizer","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","before","sizer","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|iiiO:wxSizer_InsertSizer",_kwnames,&_argo0,&_arg1,&_argo2,&_arg3,&_arg4,&_arg5,&_obj6)) 
@@ -1167,10 +1355,10 @@ static PyObject *_wrap_wxSizer_InsertSizer(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-static void  wxSizer_InsertSpacer(wxSizer *self,int  before,int  width,int  height,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_InsertSpacer(wxSizer *self,int  before,int  width,int  height,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, width, height, option, flag, border, data);
+            self->Insert(before, width, height, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_InsertSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1184,7 +1372,7 @@ static PyObject *_wrap_wxSizer_InsertSpacer(PyObject *self, PyObject *args, PyOb
     PyObject * _arg7 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj7 = 0;
-    char *_kwnames[] = { "self","before","width","height","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","before","width","height","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii|iiiO:wxSizer_InsertSpacer",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_obj7)) 
@@ -1211,10 +1399,10 @@ static PyObject *_wrap_wxSizer_InsertSpacer(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-static void  wxSizer_PrependWindow(wxSizer *self,wxWindow * window,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_PrependWindow(wxSizer *self,wxWindow * window,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(window, option, flag, border, data);
+            self->Prepend(window, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_PrependWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1227,7 +1415,7 @@ static PyObject *_wrap_wxSizer_PrependWindow(PyObject *self, PyObject *args, PyO
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","window","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","window","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iiiO:wxSizer_PrependWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_obj5)) 
@@ -1261,10 +1449,10 @@ static PyObject *_wrap_wxSizer_PrependWindow(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static void  wxSizer_PrependSizer(wxSizer *self,wxSizer * sizer,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_PrependSizer(wxSizer *self,wxSizer * sizer,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(sizer, option, flag, border, data);
+            self->Prepend(sizer, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_PrependSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1277,7 +1465,7 @@ static PyObject *_wrap_wxSizer_PrependSizer(PyObject *self, PyObject *args, PyOb
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","sizer","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","sizer","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iiiO:wxSizer_PrependSizer",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_obj5)) 
@@ -1311,10 +1499,10 @@ static PyObject *_wrap_wxSizer_PrependSizer(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-static void  wxSizer_PrependSpacer(wxSizer *self,int  width,int  height,int  option,int  flag,int  border,PyObject * userData) {
+static void  wxSizer_PrependSpacer(wxSizer *self,int  width,int  height,int  proportion,int  flag,int  border,PyObject * userData) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(width, height, option, flag, border, data);
+            self->Prepend(width, height, proportion, flag, border, data);
         }
 static PyObject *_wrap_wxSizer_PrependSpacer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1327,7 +1515,7 @@ static PyObject *_wrap_wxSizer_PrependSpacer(PyObject *self, PyObject *args, PyO
     PyObject * _arg6 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","width","height","option","flag","border","userData", NULL };
+    char *_kwnames[] = { "self","width","height","proportion","flag","border","userData", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|iiiO:wxSizer_PrependSpacer",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_obj6)) 
@@ -1457,30 +1645,160 @@ static PyObject *_wrap_wxSizer_RemovePos(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxSizer_SetDimension(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetDimension(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxSizer_SetDimension(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxSizer_DetachWindow(_swigobj,_swigarg0)  (_swigobj->Detach(_swigarg0))
+static PyObject *_wrap_wxSizer_DetachWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    bool  _result;
     wxSizer * _arg0;
-    int  _arg1;
-    int  _arg2;
-    int  _arg3;
-    int  _arg4;
+    wxWindow * _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y","width","height", NULL };
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii:wxSizer_SetDimension",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_DetachWindow",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetDimension. Expected _wxSizer_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DetachWindow. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_DetachWindow. Expected _wxWindow_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_SetDimension(_arg0,_arg1,_arg2,_arg3,_arg4);
+    _result = (bool )wxSizer_DetachWindow(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_DetachSizer(_swigobj,_swigarg0)  (_swigobj->Detach(_swigarg0))
+static PyObject *_wrap_wxSizer_DetachSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizer * _arg0;
+    wxSizer * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sizer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_DetachSizer",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DetachSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_DetachSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizer_DetachSizer(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_DetachPos(_swigobj,_swigarg0)  (_swigobj->Detach(_swigarg0))
+static PyObject *_wrap_wxSizer_DetachPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizer * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizer_DetachPos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DetachPos. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizer_DetachPos(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_Clear(_swigobj,_swigarg0)  (_swigobj->Clear(_swigarg0))
+static PyObject *_wrap_wxSizer_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    bool  _arg1 = (bool ) false;
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) false;
+    char *_kwnames[] = { "self","delete_windows", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxSizer_Clear",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_Clear. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_Clear(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_DeleteWindows(_swigobj)  (_swigobj->DeleteWindows())
+static PyObject *_wrap_wxSizer_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizer_DeleteWindows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DeleteWindows. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_DeleteWindows(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1525,19 +1843,20 @@ static PyObject *_wrap_wxSizer_SetMinSize(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxSizer_SetItemMinSizeWindow(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+#define wxSizer_SetItemMinSizeWindow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxSizer_SetItemMinSizeWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSizer * _arg0;
     wxWindow * _arg1;
-    int  _arg2;
-    int  _arg3;
+    wxSize * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","window","width","height", NULL };
+    wxSize  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","window","size", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxSizer_SetItemMinSizeWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxSizer_SetItemMinSizeWindow",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1554,8 +1873,13 @@ static PyObject *_wrap_wxSizer_SetItemMinSizeWindow(PyObject *self, PyObject *ar
         }
     }
 {
+    _arg2 = &temp;
+    if (! wxSize_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_SetItemMinSizeWindow(_arg0,_arg1,_arg2,_arg3);
+    wxSizer_SetItemMinSizeWindow(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1564,19 +1888,20 @@ static PyObject *_wrap_wxSizer_SetItemMinSizeWindow(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxSizer_SetItemMinSizeSizer(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+#define wxSizer_SetItemMinSizeSizer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxSizer_SetItemMinSizeSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSizer * _arg0;
     wxSizer * _arg1;
-    int  _arg2;
-    int  _arg3;
+    wxSize * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","sizer","width","height", NULL };
+    wxSize  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","sizer","size", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxSizer_SetItemMinSizeSizer",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxSizer_SetItemMinSizeSizer",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1593,8 +1918,13 @@ static PyObject *_wrap_wxSizer_SetItemMinSizeSizer(PyObject *self, PyObject *arg
         }
     }
 {
+    _arg2 = &temp;
+    if (! wxSize_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_SetItemMinSizeSizer(_arg0,_arg1,_arg2,_arg3);
+    wxSizer_SetItemMinSizeSizer(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1603,18 +1933,19 @@ static PyObject *_wrap_wxSizer_SetItemMinSizeSizer(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxSizer_SetItemMinSizePos(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+#define wxSizer_SetItemMinSizePos(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxSizer_SetItemMinSizePos(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSizer * _arg0;
     int  _arg1;
-    int  _arg2;
-    int  _arg3;
+    wxSize * _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","width","height", NULL };
+    wxSize  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","pos","size", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxSizer_SetItemMinSizePos",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxSizer_SetItemMinSizePos",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1624,8 +1955,122 @@ static PyObject *_wrap_wxSizer_SetItemMinSizePos(PyObject *self, PyObject *args,
         }
     }
 {
+    _arg2 = &temp;
+    if (! wxSize_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_SetItemMinSizePos(_arg0,_arg1,_arg2,_arg3);
+    wxSizer_SetItemMinSizePos(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_SetItemMinSizeWindowWH(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxSizer_SetItemMinSizeWindowWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxSizer_SetItemMinSizeWindowWH",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetItemMinSizeWindowWH. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_SetItemMinSizeWindowWH. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_SetItemMinSizeWindowWH(_arg0,_arg1,_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_SetItemMinSizeSizerWH(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxSizer_SetItemMinSizeSizerWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxSizer * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sizer","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxSizer_SetItemMinSizeSizerWH",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetItemMinSizeSizerWH. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_SetItemMinSizeSizerWH. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_SetItemMinSizeSizerWH(_arg0,_arg1,_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_SetItemMinSizePosWH(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemMinSize(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxSizer_SetItemMinSizePosWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxSizer_SetItemMinSizePosWH",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetItemMinSizePosWH. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_SetItemMinSizePosWH(_arg0,_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1902,67 +2347,8 @@ static PyObject *_wrap_wxSizer_SetVirtualSizeHints(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxSizer_Clear(_swigobj,_swigarg0)  (_swigobj->Clear(_swigarg0))
-static PyObject *_wrap_wxSizer_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizer * _arg0;
-    bool  _arg1 = (bool ) FALSE;
-    PyObject * _argo0 = 0;
-    int tempbool1 = (int) FALSE;
-    char *_kwnames[] = { "self","delete_windows", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxSizer_Clear",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_Clear. Expected _wxSizer_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_Clear(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxSizer_DeleteWindows(_swigobj)  (_swigobj->DeleteWindows())
-static PyObject *_wrap_wxSizer_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSizer * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizer_DeleteWindows",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DeleteWindows. Expected _wxSizer_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_DeleteWindows(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject * wxSizer_GetChildren(wxSizer *self) {
-            wxList& list = self->GetChildren();
+            wxSizerItemList& list = self->GetChildren();
             return wxPy_ConvertList(&list, "wxSizerItem");
         }
 static PyObject *_wrap_wxSizer_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1991,6 +2377,387 @@ static PyObject *_wrap_wxSizer_GetChildren(PyObject *self, PyObject *args, PyObj
 }{
   _resultobj = _result;
 }
+    return _resultobj;
+}
+
+#define wxSizer_SetDimension(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetDimension(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxSizer_SetDimension(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    int  _arg4;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii:wxSizer_SetDimension",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetDimension. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_SetDimension(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_ShowWindow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Show(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSizer_ShowWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    bool  _arg2 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "self","window","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxSizer_ShowWindow",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_ShowWindow. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_ShowWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_ShowWindow(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_ShowSizer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Show(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSizer_ShowSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxSizer * _arg1;
+    bool  _arg2 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "self","sizer","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxSizer_ShowSizer",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_ShowSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_ShowSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_ShowSizer(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_ShowPos(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Show(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSizer_ShowPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    size_t  _arg1;
+    bool  _arg2 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "self","index","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxSizer_ShowPos",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_ShowPos. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_ShowPos(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_HideWindow(_swigobj,_swigarg0)  (_swigobj->Hide(_swigarg0))
+static PyObject *_wrap_wxSizer_HideWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_HideWindow",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_HideWindow. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_HideWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_HideWindow(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_HideSizer(_swigobj,_swigarg0)  (_swigobj->Hide(_swigarg0))
+static PyObject *_wrap_wxSizer_HideSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxSizer * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sizer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_HideSizer",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_HideSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_HideSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_HideSizer(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_HidePos(_swigobj,_swigarg0)  (_swigobj->Hide(_swigarg0))
+static PyObject *_wrap_wxSizer_HidePos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizer_HidePos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_HidePos. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_HidePos(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_IsShownWindow(_swigobj,_swigarg0)  (_swigobj->IsShown(_swigarg0))
+static PyObject *_wrap_wxSizer_IsShownWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_IsShownWindow",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_IsShownWindow. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_IsShownWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizer_IsShownWindow(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_IsShownSizer(_swigobj,_swigarg0)  (_swigobj->IsShown(_swigarg0))
+static PyObject *_wrap_wxSizer_IsShownSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizer * _arg0;
+    wxSizer * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sizer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_IsShownSizer",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_IsShownSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_IsShownSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizer_IsShownSizer(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_IsShownPos(_swigobj,_swigarg0)  (_swigobj->IsShown(_swigarg0))
+static PyObject *_wrap_wxSizer_IsShownPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSizer * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizer_IsShownPos",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_IsShownPos. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSizer_IsShownPos(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSizer_ShowItems(_swigobj,_swigarg0)  (_swigobj->ShowItems(_swigarg0))
+static PyObject *_wrap_wxSizer_ShowItems(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxSizer_ShowItems",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_ShowItems. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_ShowItems(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2142,6 +2909,35 @@ static PyObject *_wrap_wxBoxSizer_GetOrientation(PyObject *self, PyObject *args,
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxBoxSizer_SetOrientation(_swigobj,_swigarg0)  (_swigobj->SetOrientation(_swigarg0))
+static PyObject *_wrap_wxBoxSizer_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBoxSizer * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orient", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBoxSizer_SetOrientation",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBoxSizer_SetOrientation. Expected _wxBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxBoxSizer_SetOrientation(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2930,16 +3726,17 @@ static PyObject *_wrap_wxFlexGridSizer_CalcMin(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxFlexGridSizer_AddGrowableRow(_swigobj,_swigarg0)  (_swigobj->AddGrowableRow(_swigarg0))
+#define wxFlexGridSizer_AddGrowableRow(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AddGrowableRow(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxFlexGridSizer_AddGrowableRow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFlexGridSizer * _arg0;
     size_t  _arg1;
+    int  _arg2 = (int ) 0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","idx", NULL };
+    char *_kwnames[] = { "self","idx","proportion", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFlexGridSizer_AddGrowableRow",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxFlexGridSizer_AddGrowableRow",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2950,7 +3747,7 @@ static PyObject *_wrap_wxFlexGridSizer_AddGrowableRow(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFlexGridSizer_AddGrowableRow(_arg0,_arg1);
+    wxFlexGridSizer_AddGrowableRow(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2988,16 +3785,17 @@ static PyObject *_wrap_wxFlexGridSizer_RemoveGrowableRow(PyObject *self, PyObjec
     return _resultobj;
 }
 
-#define wxFlexGridSizer_AddGrowableCol(_swigobj,_swigarg0)  (_swigobj->AddGrowableCol(_swigarg0))
+#define wxFlexGridSizer_AddGrowableCol(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AddGrowableCol(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxFlexGridSizer_AddGrowableCol(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFlexGridSizer * _arg0;
     size_t  _arg1;
+    int  _arg2 = (int ) 0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","idx", NULL };
+    char *_kwnames[] = { "self","idx","proportion", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFlexGridSizer_AddGrowableCol",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxFlexGridSizer_AddGrowableCol",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3008,7 +3806,7 @@ static PyObject *_wrap_wxFlexGridSizer_AddGrowableCol(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFlexGridSizer_AddGrowableCol(_arg0,_arg1);
+    wxFlexGridSizer_AddGrowableCol(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3046,7 +3844,125 @@ static PyObject *_wrap_wxFlexGridSizer_RemoveGrowableCol(PyObject *self, PyObjec
     return _resultobj;
 }
 
+#define wxFlexGridSizer_SetFlexibleDirection(_swigobj,_swigarg0)  (_swigobj->SetFlexibleDirection(_swigarg0))
+static PyObject *_wrap_wxFlexGridSizer_SetFlexibleDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFlexGridSizer * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","direction", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFlexGridSizer_SetFlexibleDirection",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFlexGridSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFlexGridSizer_SetFlexibleDirection. Expected _wxFlexGridSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFlexGridSizer_SetFlexibleDirection(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFlexGridSizer_GetFlexibleDirection(_swigobj)  (_swigobj->GetFlexibleDirection())
+static PyObject *_wrap_wxFlexGridSizer_GetFlexibleDirection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFlexGridSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFlexGridSizer_GetFlexibleDirection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFlexGridSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFlexGridSizer_GetFlexibleDirection. Expected _wxFlexGridSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxFlexGridSizer_GetFlexibleDirection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFlexGridSizer_SetNonFlexibleGrowMode(_swigobj,_swigarg0)  (_swigobj->SetNonFlexibleGrowMode(_swigarg0))
+static PyObject *_wrap_wxFlexGridSizer_SetNonFlexibleGrowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFlexGridSizer * _arg0;
+    wxFlexSizerGrowMode  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFlexGridSizer_SetNonFlexibleGrowMode",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFlexGridSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFlexGridSizer_SetNonFlexibleGrowMode. Expected _wxFlexGridSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFlexGridSizer_SetNonFlexibleGrowMode(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFlexGridSizer_GetNonFlexibleGrowMode(_swigobj)  (_swigobj->GetNonFlexibleGrowMode())
+static PyObject *_wrap_wxFlexGridSizer_GetNonFlexibleGrowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFlexSizerGrowMode  _result;
+    wxFlexGridSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFlexGridSizer_GetNonFlexibleGrowMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFlexGridSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFlexGridSizer_GetNonFlexibleGrowMode. Expected _wxFlexGridSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFlexSizerGrowMode )wxFlexGridSizer_GetNonFlexibleGrowMode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef sizerscMethods[] = {
+	 { "wxFlexGridSizer_GetNonFlexibleGrowMode", (PyCFunction) _wrap_wxFlexGridSizer_GetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFlexGridSizer_SetNonFlexibleGrowMode", (PyCFunction) _wrap_wxFlexGridSizer_SetNonFlexibleGrowMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFlexGridSizer_GetFlexibleDirection", (PyCFunction) _wrap_wxFlexGridSizer_GetFlexibleDirection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFlexGridSizer_SetFlexibleDirection", (PyCFunction) _wrap_wxFlexGridSizer_SetFlexibleDirection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFlexGridSizer_RemoveGrowableCol", (PyCFunction) _wrap_wxFlexGridSizer_RemoveGrowableCol, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFlexGridSizer_AddGrowableCol", (PyCFunction) _wrap_wxFlexGridSizer_AddGrowableCol, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFlexGridSizer_RemoveGrowableRow", (PyCFunction) _wrap_wxFlexGridSizer_RemoveGrowableRow, METH_VARARGS | METH_KEYWORDS },
@@ -3075,13 +3991,23 @@ static PyMethodDef sizerscMethods[] = {
 	 { "new_wxStaticBoxSizer", (PyCFunction) _wrap_new_wxStaticBoxSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_CalcMin", (PyCFunction) _wrap_wxBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_RecalcSizes", (PyCFunction) _wrap_wxBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBoxSizer_SetOrientation", (PyCFunction) _wrap_wxBoxSizer_SetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_GetOrientation", (PyCFunction) _wrap_wxBoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBoxSizer", (PyCFunction) _wrap_new_wxBoxSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPySizer__setCallbackInfo", (PyCFunction) _wrap_wxPySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPySizer", (PyCFunction) _wrap_new_wxPySizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_ShowItems", (PyCFunction) _wrap_wxSizer_ShowItems, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_IsShownPos", (PyCFunction) _wrap_wxSizer_IsShownPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_IsShownSizer", (PyCFunction) _wrap_wxSizer_IsShownSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_IsShownWindow", (PyCFunction) _wrap_wxSizer_IsShownWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_HidePos", (PyCFunction) _wrap_wxSizer_HidePos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_HideSizer", (PyCFunction) _wrap_wxSizer_HideSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_HideWindow", (PyCFunction) _wrap_wxSizer_HideWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_ShowPos", (PyCFunction) _wrap_wxSizer_ShowPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_ShowSizer", (PyCFunction) _wrap_wxSizer_ShowSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_ShowWindow", (PyCFunction) _wrap_wxSizer_ShowWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_SetDimension", (PyCFunction) _wrap_wxSizer_SetDimension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetChildren", (PyCFunction) _wrap_wxSizer_GetChildren, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizer_DeleteWindows", (PyCFunction) _wrap_wxSizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizer_Clear", (PyCFunction) _wrap_wxSizer_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetVirtualSizeHints", (PyCFunction) _wrap_wxSizer_SetVirtualSizeHints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetSizeHints", (PyCFunction) _wrap_wxSizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_FitInside", (PyCFunction) _wrap_wxSizer_FitInside, METH_VARARGS | METH_KEYWORDS },
@@ -3090,11 +4016,18 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizer_GetMinSize", (PyCFunction) _wrap_wxSizer_GetMinSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetPosition", (PyCFunction) _wrap_wxSizer_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetSize", (PyCFunction) _wrap_wxSizer_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_SetItemMinSizePosWH", (PyCFunction) _wrap_wxSizer_SetItemMinSizePosWH, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_SetItemMinSizeSizerWH", (PyCFunction) _wrap_wxSizer_SetItemMinSizeSizerWH, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_SetItemMinSizeWindowWH", (PyCFunction) _wrap_wxSizer_SetItemMinSizeWindowWH, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetItemMinSizePos", (PyCFunction) _wrap_wxSizer_SetItemMinSizePos, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetItemMinSizeSizer", (PyCFunction) _wrap_wxSizer_SetItemMinSizeSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetItemMinSizeWindow", (PyCFunction) _wrap_wxSizer_SetItemMinSizeWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetMinSize", (PyCFunction) _wrap_wxSizer_SetMinSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizer_SetDimension", (PyCFunction) _wrap_wxSizer_SetDimension, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_DeleteWindows", (PyCFunction) _wrap_wxSizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_Clear", (PyCFunction) _wrap_wxSizer_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_DetachPos", (PyCFunction) _wrap_wxSizer_DetachPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_DetachSizer", (PyCFunction) _wrap_wxSizer_DetachSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_DetachWindow", (PyCFunction) _wrap_wxSizer_DetachWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_RemovePos", (PyCFunction) _wrap_wxSizer_RemovePos, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_RemoveSizer", (PyCFunction) _wrap_wxSizer_RemoveSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_RemoveWindow", (PyCFunction) _wrap_wxSizer_RemoveWindow, METH_VARARGS | METH_KEYWORDS },
@@ -3110,17 +4043,21 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizer_Destroy", (PyCFunction) _wrap_wxSizer_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer__setOORInfo", (PyCFunction) _wrap_wxSizer__setOORInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetUserData", (PyCFunction) _wrap_wxSizerItem_GetUserData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_SetBorder", (PyCFunction) _wrap_wxSizerItem_SetBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_SetFlag", (PyCFunction) _wrap_wxSizerItem_SetFlag, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_SetOption", (PyCFunction) _wrap_wxSizerItem_SetOption, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_SetInitSize", (PyCFunction) _wrap_wxSizerItem_SetInitSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_GetBorder", (PyCFunction) _wrap_wxSizerItem_GetBorder, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_GetFlag", (PyCFunction) _wrap_wxSizerItem_GetFlag, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_GetOption", (PyCFunction) _wrap_wxSizerItem_GetOption, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetPosition", (PyCFunction) _wrap_wxSizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_IsShown", (PyCFunction) _wrap_wxSizerItem_IsShown, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_Show", (PyCFunction) _wrap_wxSizerItem_Show, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetSpacer", (PyCFunction) _wrap_wxSizerItem_SetSpacer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetSpacer", (PyCFunction) _wrap_wxSizerItem_GetSpacer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetSizer", (PyCFunction) _wrap_wxSizerItem_SetSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetSizer", (PyCFunction) _wrap_wxSizerItem_GetSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetWindow", (PyCFunction) _wrap_wxSizerItem_SetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetWindow", (PyCFunction) _wrap_wxSizerItem_GetWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetBorder", (PyCFunction) _wrap_wxSizerItem_GetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetBorder", (PyCFunction) _wrap_wxSizerItem_SetBorder, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetFlag", (PyCFunction) _wrap_wxSizerItem_GetFlag, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetFlag", (PyCFunction) _wrap_wxSizerItem_SetFlag, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetProportion", (PyCFunction) _wrap_wxSizerItem_GetProportion, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetProportion", (PyCFunction) _wrap_wxSizerItem_SetProportion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_IsSpacer", (PyCFunction) _wrap_wxSizerItem_IsSpacer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_IsSizer", (PyCFunction) _wrap_wxSizerItem_IsSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_IsWindow", (PyCFunction) _wrap_wxSizerItem_IsWindow, METH_VARARGS | METH_KEYWORDS },
@@ -3128,10 +4065,12 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizerItem_SetRatio", (PyCFunction) _wrap_wxSizerItem_SetRatio, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetRatioSize", (PyCFunction) _wrap_wxSizerItem_SetRatioSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetRatioWH", (PyCFunction) _wrap_wxSizerItem_SetRatioWH, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_SetInitSize", (PyCFunction) _wrap_wxSizerItem_SetInitSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_GetMinSize", (PyCFunction) _wrap_wxSizerItem_GetMinSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetDimension", (PyCFunction) _wrap_wxSizerItem_SetDimension, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_CalcMin", (PyCFunction) _wrap_wxSizerItem_CalcMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetSize", (PyCFunction) _wrap_wxSizerItem_GetSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSizerItem_GetPosition", (PyCFunction) _wrap_wxSizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_DetachSizer", (PyCFunction) _wrap_wxSizerItem_DetachSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_DeleteWindows", (PyCFunction) _wrap_wxSizerItem_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
@@ -3263,6 +4202,9 @@ SWIGEXPORT(void) initsizersc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("sizersc", sizerscMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFLEX_GROWMODE_NONE", PyInt_FromLong((long) wxFLEX_GROWMODE_NONE));
+	 PyDict_SetItemString(d,"wxFLEX_GROWMODE_SPECIFIED", PyInt_FromLong((long) wxFLEX_GROWMODE_SPECIFIED));
+	 PyDict_SetItemString(d,"wxFLEX_GROWMODE_ALL", PyInt_FromLong((long) wxFLEX_GROWMODE_ALL));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
