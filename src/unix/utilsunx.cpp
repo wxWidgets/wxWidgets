@@ -26,7 +26,7 @@
 #include "wx/process.h"
 #include "wx/thread.h"
 
-#include "wx/stream.h"
+#include "wx/wfstream.h"
 
 #ifdef HAVE_STATFS
 #  ifdef __BSD__
@@ -349,35 +349,20 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 
 #if wxUSE_STREAMS
 
-class wxProcessFileInputStream : public wxInputStream
+// ----------------------------------------------------------------------------
+// wxProcessFileInputStream: stream for reading from a pipe
+// ----------------------------------------------------------------------------
+
+class wxProcessFileInputStream : public wxFileInputStream
 {
 public:
-    wxProcessFileInputStream(int fd) { m_fd = fd; }
-    ~wxProcessFileInputStream() { close(m_fd); }
+    wxProcessFileInputStream(int fd) : wxFileInputStream(fd) { }
 
-    virtual bool Eof() const;
-
-protected:
-    size_t OnSysRead(void *buffer, size_t bufsize);
-
-protected:
-    int m_fd;
+    // return TRUE if we have anything to read, don't block
+    bool IsAvailable() const;
 };
 
-class wxProcessFileOutputStream : public wxOutputStream
-{
-public:
-    wxProcessFileOutputStream(int fd) { m_fd = fd; }
-    ~wxProcessFileOutputStream() { close(m_fd); }
-
-protected:
-    size_t OnSysWrite(const void *buffer, size_t bufsize);
-
-protected:
-    int m_fd;
-};
-
-bool wxProcessFileInputStream::Eof() const
+bool wxProcessFileInputStream::IsAvailable() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
         return TRUE;
@@ -387,10 +372,12 @@ bool wxProcessFileInputStream::Eof() const
     tv.tv_sec = 0;
     tv.tv_usec = 0;
 
+    const int fd = m_file->fd();
+
     fd_set readfds;
     FD_ZERO(&readfds);
-    FD_SET(m_fd, &readfds);
-    switch ( select(m_fd + 1, &readfds, NULL, NULL, &tv) )
+    FD_SET(fd, &readfds);
+    switch ( select(fd + 1, &readfds, NULL, NULL, &tv) )
     {
         case -1:
             wxLogSysError(_("Impossible to get child process input"));
@@ -404,49 +391,13 @@ bool wxProcessFileInputStream::Eof() const
             // still fall through
 
         case 1:
-            // input available: check if there is any
-            return wxInputStream::Eof();
+            // input available
+            return TRUE;
     }
-}
-
-size_t wxProcessFileInputStream::OnSysRead(void *buffer, size_t bufsize)
-{
-    int ret = read(m_fd, buffer, bufsize);
-    if ( ret == 0 )
-    {
-        m_lasterror = wxSTREAM_EOF;
-    }
-    else if ( ret == -1 )
-    {
-        m_lasterror = wxSTREAM_READ_ERROR;
-        ret = 0;
-    }
-    else
-    {
-        m_lasterror = wxSTREAM_NOERROR;
-    }
-
-    return ret;
-}
-
-size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
-{
-    int ret = write(m_fd, buffer, bufsize);
-    if ( ret == -1 )
-    {
-        m_lasterror = wxSTREAM_WRITE_ERROR;
-        ret = 0;
-    }
-    else
-    {
-        m_lasterror = wxSTREAM_NOERROR;
-    }
-
-    return ret;
 }
 
 // ----------------------------------------------------------------------------
-// wxStreamTempBuffer
+// wxStreamTempInputBuffer
 // ----------------------------------------------------------------------------
 
 /*
@@ -471,7 +422,7 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
     have a classical deadlock.
 
    Here is the fix: we now read the output as soon as it appears into a temp
-   buffer (wxStreamTempBuffer object) and later just stuff it back into the
+   buffer (wxStreamTempInputBuffer object) and later just stuff it back into the
    stream when the process terminates. See supporting code in wxExecute()
    itself as well.
 
@@ -480,23 +431,23 @@ size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
    needed!
 */
 
-class wxStreamTempBuffer
+class wxStreamTempInputBuffer
 {
 public:
-    wxStreamTempBuffer();
+    wxStreamTempInputBuffer();
 
     // call to associate a stream with this buffer, otherwise nothing happens
     // at all
-    void Init(wxInputStream *stream);
+    void Init(wxProcessFileInputStream *stream);
 
     // check for input on our stream and cache it in our buffer if any
     void Update();
 
-    ~wxStreamTempBuffer();
+    ~wxStreamTempInputBuffer();
 
 private:
     // the stream we're buffering, if NULL we don't do anything at all
-    wxInputStream *m_stream;
+    wxProcessFileInputStream *m_stream;
 
     // the buffer of size m_size (NULL if m_size == 0)
     void *m_buffer;
@@ -505,21 +456,21 @@ private:
     size_t m_size;
 };
 
-wxStreamTempBuffer::wxStreamTempBuffer()
+wxStreamTempInputBuffer::wxStreamTempInputBuffer()
 {
     m_stream = NULL;
     m_buffer = NULL;
     m_size = 0;
 }
 
-void wxStreamTempBuffer::Init(wxInputStream *stream)
+void wxStreamTempInputBuffer::Init(wxProcessFileInputStream *stream)
 {
     m_stream = stream;
 }
 
-void wxStreamTempBuffer::Update()
+void wxStreamTempInputBuffer::Update()
 {
-    if ( m_stream && !m_stream->Eof() )
+    if ( m_stream && m_stream->IsAvailable() )
     {
         // realloc in blocks of 4Kb: this is the default (and minimal) buffer
         // size of the Unix pipes so it should be the optimal step
@@ -540,7 +491,7 @@ void wxStreamTempBuffer::Update()
     }
 }
 
-wxStreamTempBuffer::~wxStreamTempBuffer()
+wxStreamTempInputBuffer::~wxStreamTempInputBuffer()
 {
     if ( m_buffer )
     {
@@ -552,7 +503,7 @@ wxStreamTempBuffer::~wxStreamTempBuffer()
 #endif // wxUSE_STREAMS
 
 // ----------------------------------------------------------------------------
-// wxPipe: this encpasulates pipe() system call
+// wxPipe: this encapsulates pipe() system call
 // ----------------------------------------------------------------------------
 
 class wxPipe
@@ -756,7 +707,7 @@ long wxExecute(wxChar **argv,
 #endif // !__VMS
         }
 
-        // redirect stdio, stdout and stderr
+        // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
         {
             if ( dup2(pipeIn[wxPipe::Read], STDIN_FILENO) == -1 ||
@@ -790,27 +741,30 @@ long wxExecute(wxChar **argv,
     {
         ARGS_CLEANUP;
 
-        // pipe initialization: construction of the wxStreams
+        // prepare for IO redirection
+
 #if wxUSE_STREAMS
-        wxStreamTempBuffer bufIn, bufErr;
+        // the input buffer bufOut is connected to stdout, this is why it is
+        // called bufOut and not bufIn
+        wxStreamTempInputBuffer bufOut,
+                                bufErr;
 #endif // wxUSE_STREAMS
 
         if ( process && process->IsRedirected() )
         {
 #if wxUSE_STREAMS
-            // in/out for subprocess correspond to our out/in
-            wxOutputStream *outStream =
-                new wxProcessFileOutputStream(pipeIn.Detach(wxPipe::Write));
+            wxOutputStream *inStream =
+                new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
 
-            wxInputStream *inStream =
+            wxProcessFileInputStream *outStream =
                 new wxProcessFileInputStream(pipeOut.Detach(wxPipe::Read));
 
-            wxInputStream *errStream =
+            wxProcessFileInputStream *errStream =
                 new wxProcessFileInputStream(pipeErr.Detach(wxPipe::Read));
 
-            process->SetPipeStreams(inStream, outStream, errStream);
+            process->SetPipeStreams(outStream, inStream, errStream);
 
-            bufIn.Init(inStream);
+            bufOut.Init(outStream);
             bufErr.Init(errStream);
 #endif // wxUSE_STREAMS
         }
@@ -850,7 +804,7 @@ long wxExecute(wxChar **argv,
             while ( data->pid != 0 )
             {
 #if wxUSE_STREAMS
-                bufIn.Update();
+                bufOut.Update();
                 bufErr.Update();
 #endif // wxUSE_STREAMS
 
