@@ -44,8 +44,8 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 
 // This must be part of the module you want to force:
 #define FORCE_LINK_ME(module_name)                                    \
-                int _link_dummy_func_##module_name ();                \
-                int _link_dummy_func_##module_name ()                 \
+                int _wx_link_dummy_func_##module_name ();             \
+                int _wx_link_dummy_func_##module_name ()              \
                 {                                                     \
                     return 1;                                         \
                 }
@@ -53,9 +53,9 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 
 // And this must be somewhere where it certainly will be linked:
 #define FORCE_LINK(module_name)                                       \
-                extern int _link_dummy_func_##module_name ();         \
-                static int _link_dummy_var_##module_name =            \
-                               _link_dummy_func_##module_name ();
+                extern int _wx_link_dummy_func_##module_name ();      \
+                static int _wx_link_dummy_var_##module_name =         \
+                               _wx_link_dummy_func_##module_name ();
 
 #define FORCE_WXHTML_MODULES() \
     FORCE_LINK(m_layout) \
