@@ -29,7 +29,6 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
 {
     ADD_STYLE(wxLC_LIST);
     ADD_STYLE(wxLC_REPORT);
-    ADD_STYLE(wxLC_REPORT);
     ADD_STYLE(wxLC_ICON);
     ADD_STYLE(wxLC_SMALL_ICON);
     ADD_STYLE(wxLC_ALIGN_TOP);
