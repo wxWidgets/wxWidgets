@@ -278,7 +278,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.DrawText( "This is text", 110, 10 );
 
-    dc.SetFont( wxFont( 18, wxSWISS, 0, 0 ) );
+    dc.SetFont( wxFont( 18, wxSWISS, wxNORMAL, wxNORMAL ) );
 
     dc.DrawText( "This is Swiss 18pt text.", 110, 40 );
 
