@@ -327,7 +327,9 @@ class TestWindow(ogl.ShapeCanvas):
         shape.SetY(y)
         if pen:    shape.SetPen(pen)
         if brush:  shape.SetBrush(brush)
-        if text:   shape.AddText(text)
+        if text:
+            for line in text.split('\n'):
+                shape.AddText(line)
         #shape.SetShadowMode(ogl.SHADOW_RIGHT)
         self.diagram.AddShape(shape)
         shape.Show(True)
