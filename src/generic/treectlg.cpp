@@ -1839,7 +1839,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
     int exposed_x = dc.LogicalToDeviceX( 0 );
     int exposed_y = dc.LogicalToDeviceY( item->GetY() );
 
-    bool drawLines = (HasFlag(wxTR_NO_LINES) && !HasFlag(wxTR_MAC_BUTTONS));
+    bool drawLines = (!HasFlag(wxTR_NO_LINES) && !HasFlag(wxTR_MAC_BUTTONS));
 
     if (IsExposed( exposed_x, exposed_y, 10000, GetLineHeight(item) ))  // 10000 = very much
     {
