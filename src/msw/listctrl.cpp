@@ -1105,7 +1105,7 @@ int wxListCtrl::GetItemCount() const
 
 wxSize wxListCtrl::GetItemSpacing() const
 {
-    const int spacing = GetItemSpacing(HasFlag(wxLC_SMALL_ICON));
+    const int spacing = ListView_GetItemSpacing(GetHwnd(), (BOOL)HasFlag(wxLC_SMALL_ICON));
 
     return wxSize(LOWORD(spacing), HIWORD(spacing));
 }

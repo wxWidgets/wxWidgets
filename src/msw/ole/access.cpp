@@ -427,7 +427,11 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         return S_FALSE;
     }
     
+    #if 0 
+    // all cases above already cause some return action so below line
+    // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
+    #endif
 }
 
 // Retrieves the specified object's current screen location. All visual objects must
@@ -487,7 +491,13 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         return E_FAIL;
     wxLogTrace(wxT("access"), wxString(wxT("accNavigate for ")) + m_pAccessible->GetWindow()->GetClassInfo()->GetClassName());
 
-    if ((varStart.vt != VT_I4 && varStart.vt != VT_EMPTY) || varStart.vt < 0)
+    if ((varStart.vt != VT_I4 && varStart.vt != VT_EMPTY) 
+                                                          #if 0
+                                                          // according to MSDN and sources varStart.vt is unsigned
+                                                          // so below line cause warning "Condition is always false"
+                                                          || varStart.vt < 0
+                                                          #endif
+                                                          )
     {
         wxLogTrace(wxT("access"), "Invalid arg for accNavigate");
         return E_INVALIDARG;
@@ -694,7 +704,11 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
         }
     }
 
+    #if 0 
+    // all cases above already cause some return action so below line
+    // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
+    #endif
 }
 
 // Retrieves the number of children that belong to this object.
@@ -734,7 +748,11 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
         return S_OK;
     }
 
+    #if 0 
+    // all cases above already cause some return action so below line
+    // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
+    #endif
 }
 
 // Retrieves the IDispatch interface of the object's parent.
@@ -794,7 +812,11 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
         }
     }
 
+    #if 0 
+    // all cases above already cause some return action so below line
+    // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
+    #endif
 }
 
 // Performs the object's default action. Not all objects have a default
@@ -1443,7 +1465,11 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         return S_FALSE;
     }
     
+    #if 0 
+    // all cases above already cause some return action so below line
+    // is unreachable and cause unnecessary warning
     return E_NOTIMPL;
+    #endif
 }
 
 // Retrieves the selected children of this object. All objects
@@ -1514,7 +1540,7 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
 
 // Get type info
 
-STDMETHODIMP wxIAccessible::GetTypeInfo(unsigned int typeInfo, LCID lcid, ITypeInfo** ppTypeInfo)
+STDMETHODIMP wxIAccessible::GetTypeInfo(unsigned int WXUNUSED(typeInfo), LCID WXUNUSED(lcid), ITypeInfo** ppTypeInfo)
 {
     *ppTypeInfo = NULL;
     return E_NOTIMPL;
@@ -1530,18 +1556,18 @@ STDMETHODIMP wxIAccessible::GetTypeInfoCount(unsigned int* typeInfoCount)
 
 // Get ids of names
 
-STDMETHODIMP wxIAccessible::GetIDsOfNames(REFIID riid, OLECHAR** names, unsigned int cNames,
-        LCID lcid, DISPID* dispId)
+STDMETHODIMP wxIAccessible::GetIDsOfNames(REFIID WXUNUSED(riid), OLECHAR** WXUNUSED(names), unsigned int WXUNUSED(cNames),
+        LCID WXUNUSED(lcid), DISPID* WXUNUSED(dispId))
 {
     return E_NOTIMPL;
 }
 
 // Invoke
 
-STDMETHODIMP wxIAccessible::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
-                        WORD wFlags, DISPPARAMS *pDispParams, 
-                        VARIANT *pVarResult, EXCEPINFO *pExcepInfo, 
-                        unsigned int *puArgErr )
+STDMETHODIMP wxIAccessible::Invoke(DISPID WXUNUSED(dispIdMember), REFIID WXUNUSED(riid), LCID WXUNUSED(lcid), 
+                        WORD WXUNUSED(wFlags), DISPPARAMS *WXUNUSED(pDispParams), 
+                        VARIANT *WXUNUSED(pVarResult), EXCEPINFO *WXUNUSED(pExcepInfo), 
+                        unsigned int *WXUNUSED(puArgErr) )
 {
     return E_NOTIMPL;
 }
@@ -1938,15 +1964,15 @@ int wxConvertToWindowsSelFlag(wxAccSelectionFlags wxsel)
 {
     int sel = 0;
 
-    if (sel & wxACC_SEL_TAKEFOCUS)
+    if (wxsel & wxACC_SEL_TAKEFOCUS)
         sel |= SELFLAG_TAKEFOCUS;
-    if (sel & wxACC_SEL_TAKESELECTION)
+    if (wxsel & wxACC_SEL_TAKESELECTION)
         sel |= SELFLAG_TAKESELECTION;
-    if (sel & wxACC_SEL_EXTENDSELECTION)
+    if (wxsel & wxACC_SEL_EXTENDSELECTION)
         sel |= SELFLAG_EXTENDSELECTION;
-    if (sel & wxACC_SEL_ADDSELECTION)
+    if (wxsel & wxACC_SEL_ADDSELECTION)
         sel |= SELFLAG_ADDSELECTION;
-    if (sel & wxACC_SEL_REMOVESELECTION)
+    if (wxsel & wxACC_SEL_REMOVESELECTION)
         sel |= SELFLAG_REMOVESELECTION;
     return sel;
 }

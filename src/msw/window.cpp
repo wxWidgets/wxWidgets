@@ -2790,7 +2790,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 //WPARAM dwFlags = (WPARAM) (DWORD) wParam;
                 LPARAM dwObjId = (LPARAM) (DWORD) lParam;
 
-                if (dwObjId == OBJID_CLIENT && GetOrCreateAccessible())
+                if (dwObjId == (LPARAM)OBJID_CLIENT && GetOrCreateAccessible())
                 {
                     return LresultFromObject(IID_IAccessible, wParam, (IUnknown*) GetAccessible()->GetIAccessible());
                 }
