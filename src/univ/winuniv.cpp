@@ -39,6 +39,7 @@
     #include "wx/frame.h"
 #endif // WX_PRECOMP
 
+#include "wx/log.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
