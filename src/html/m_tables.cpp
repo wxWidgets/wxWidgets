@@ -231,16 +231,16 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     // width:
     {
         if (tag.HasParam("WIDTH")) 
-	    {
+        {
             wxString wd = tag.GetParam("WIDTH");
 
             if (wd[wd.Length()-1] == '%') 
-	        {
+            {
                 wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
             }
             else 
-	        {
+            {
                 wxSscanf(wd.c_str(), wxT("%i"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].width = (int)(m_PixelScale * (double)m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
@@ -254,7 +254,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         if (tag.HasParam(wxT("COLSPAN"))) tag.ScanParam(wxT("COLSPAN"), wxT("%i"), &m_CellInfo[r][c].colspan);
         if (tag.HasParam(wxT("ROWSPAN"))) tag.ScanParam(wxT("ROWSPAN"), wxT("%i"), &m_CellInfo[r][c].rowspan);
         if ((m_CellInfo[r][c].colspan != 1) || (m_CellInfo[r][c].rowspan != 1)) 
-	    {
+        {
             int i, j;
 
             if (r + m_CellInfo[r][c].rowspan > m_NumRows) ReallocRows(r + m_CellInfo[r][c].rowspan);
@@ -271,7 +271,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         int bk = m_rBkg;
         if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &bk);
         if (bk != -1) 
-	    {
+        {
             wxColour clr = wxColour((bk & 0xFF0000) >> 16 , (bk & 0x00FF00) >> 8, (bk & 0x0000FF));
             cell->SetBackgroundColour(clr);
         }
@@ -353,7 +353,7 @@ void wxHtmlTableCell::Layout(int w)
     {
         int wpos = m_Spacing;
         for (int i = 0; i < m_NumCols; i++) 
-	    {
+        {
             m_ColsInfo[i].leftpos = wpos;
             wpos += m_ColsInfo[i].pixwidth + m_Spacing;
         }
@@ -367,11 +367,11 @@ void wxHtmlTableCell::Layout(int w)
         int fullwid;
         wxHtmlContainerCell *actcell;
 
-        for (actrow = 0; actrow <= m_NumRows; actrow++) ypos[actrow] = m_Spacing;
-
+        ypos[0] = m_Spacing;
+        for (actrow = 1; actrow <= m_NumRows; actrow++) ypos[actrow] = -1;
         for (actrow = 0; actrow < m_NumRows; actrow++) 
-	    {
-
+        {
+            if (ypos[actrow] == -1) ypos[actrow] = ypos[actrow-1];
             // 3a. sub-layout and detect max height:
 
             for (actcol = 0; actcol < m_NumCols; actcol++) {
@@ -390,14 +390,12 @@ void wxHtmlTableCell::Layout(int w)
             }
         }
 
-
         for (actrow = 0; actrow < m_NumRows; actrow++) 
-	    {
-
+        {
             // 3b. place cells in row & let'em all have same height:
 
             for (actcol = 0; actcol < m_NumCols; actcol++) 
-	        {
+            {
                 if (m_CellInfo[actrow][actcol].flag != cellUsed) continue;
                 actcell = m_CellInfo[actrow][actcol].cont;
                 actcell->SetMinHeight(
@@ -410,7 +408,6 @@ void wxHtmlTableCell::Layout(int w)
                 actcell->Layout(fullwid);
                 actcell->SetPos(m_ColsInfo[actcol].leftpos, ypos[actrow]);
             }
-
         }
         m_Height = ypos[m_NumRows];
         delete[] ypos;
@@ -448,7 +445,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
         // new table started, backup upper-level table (if any) and create new:
         if (tag.GetName() == wxT("TABLE")) 
-	    {
+        {
             wxHtmlTableCell *oldt = m_Table;
             wxHtmlContainerCell *oldcont;
             int m_OldAlign;
@@ -472,10 +469,10 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
 
         else if (m_Table && !tag.IsEnding()) 
-	    {
+        {
             // new row in table
             if (tag.GetName() == wxT("TR")) 
-	        {
+            {
                 m_Table->AddRow(tag);
                 m_rAlign = m_tAlign;
                 if (tag.HasParam(wxT("ALIGN"))) m_rAlign = tag.GetParam(wxT("ALIGN"));
@@ -483,7 +480,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
             // new cell
             else 
-	        {
+            {
                 m_WParser->SetAlign(m_OldAlign);
                 c = m_WParser->SetContainer(new wxHtmlContainerCell(m_Table));
                 m_Table->AddCell(c, tag);
@@ -491,7 +488,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 m_WParser->OpenContainer();
 
                 if (tag.GetName() == wxT("TH")) /*header style*/ 
-		        {
+                {
                     m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
                 }
 
