@@ -561,6 +561,7 @@ docview.h	W
 dragimag.h	W
 dynarray.h	W	B
 dynlib.h	W	B
+encconv.h	W
 event.h	W	B
 expr.h	W
 ffile.h	W	B
