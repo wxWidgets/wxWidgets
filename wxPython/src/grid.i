@@ -1455,8 +1455,12 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
 
 
 // Typemap to convert an array of cells coords to a list of tuples...
-%typemap(python, out) wxGridCellCoordsArray& {
+%typemap(python, out) wxGridCellCoordsArray {
     $target = wxGridCellCoordsArray_helper($source);
+}
+
+%typemap(python, ret) wxGridCellCoordsArray {
+    delete $source;
 }
 
 
@@ -1801,9 +1805,9 @@ public:
     bool IsInSelection( int row, int col );
     // TODO: ??? bool IsInSelection( const wxGridCellCoords& coords )
 
-    const wxGridCellCoordsArray& GetSelectedCells() const;
-    const wxGridCellCoordsArray& GetSelectionBlockTopLeft() const;
-    const wxGridCellCoordsArray& GetSelectionBlockBottomRight() const;
+    const wxGridCellCoordsArray GetSelectedCells() const;
+    const wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
+    const wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
     const wxArrayInt GetSelectedRows() const;
     const wxArrayInt GetSelectedCols() const;
 
