@@ -51,8 +51,7 @@ want to put them.
 The wxWave class has been renamed to wxSound, and now has a slightly
 different API.
 
-Updated the AnalogClockWindow with many enhancements from from
-E. A. Tacão.
+Updated the AnalogClockWindow with many enhancements from E. A. Tacão.
 
 
 
