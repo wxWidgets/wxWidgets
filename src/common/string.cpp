@@ -1788,6 +1788,8 @@ void wxArrayString::DoSort()
 // MBConv
 // ============================================================================
 
+WXDLLEXPORT_DATA(wxMBConv *) wxConv_current = &wxConv_libc;
+
 // ----------------------------------------------------------------------------
 // standard libc conversion
 // ----------------------------------------------------------------------------
@@ -1893,10 +1895,139 @@ size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // specified character set
 // ----------------------------------------------------------------------------
 
-// TODO: write actual implementation of character set conversion here
+class wxCharacterSet
+{
+public:
+  wxArrayString names;
+  wchar_t *data;
+};
+
+#ifndef WX_PRECOMP
+  #include "wx/dynarray.h"
+  #include "wx/filefn.h"
+  #include "wx/textfile.h"
+  #include "wx/tokenzr.h"
+  #include "wx/utils.h"
+#endif
+
+WX_DECLARE_OBJARRAY(wxCharacterSet, wxCSArray);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxCSArray);
+
+static wxCSArray wxCharsets;
+
+static void wxLoadCharacterSets(void)
+{
+  static bool already_loaded = FALSE;
+
+#ifdef __UNIX__
+  // search through files in /usr/share/i18n/charmaps
+  for (wxString fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));
+       !fname.IsEmpty();
+       fname = ::wxFindNextFile()) {
+    wxTextFile cmap(fname);
+    if (cmap.Open()) {
+      wxCharacterSet *cset = new wxCharacterSet;
+      wxString comchar,escchar;
+      bool in_charset = FALSE;
+
+      wxPrintf(_T("yup, loaded %s\n"),fname.c_str());
+
+      for (wxString line = cmap.GetFirstLine();
+	   !cmap.Eof();
+	   line = cmap.GetNextLine()) {
+	wxPrintf(_T("line contents: %s\n"),line.c_str());
+	wxStringTokenizer token(line);
+	wxString cmd = token.GetNextToken();
+	if (cmd == comchar) {
+	  if (token.GetNextToken() == _T("alias")) {
+	    wxStringTokenizer names(token.GetNextToken(),_T("/"));
+	    wxString name;
+	    while (!(name = names.GetNextToken()).IsEmpty())
+	      cset->names.Add(name);
+	  }
+	}
+	else if (cmd == _T("<code_set_name>"))
+	  cset->names.Add(token.GetNextToken());
+	else if (cmd == _T("<comment_char>"))
+	  comchar = token.GetNextToken();
+	else if (cmd == _T("<escape_char>"))
+	  escchar = token.GetNextToken();
+	else if (cmd == _T("<mb_cur_min")) {
+	  delete cset;
+	  goto forget_it; // we don't support multibyte charsets ourselves (yet)
+	}
+	else if (cmd == _T("CHARMAP")) {
+	  cset->data = (wchar_t *)calloc(256, sizeof(wxChar));
+	  in_charset = TRUE;
+	}
+	else if (cmd == _T("END")) {
+	  if (token.GetNextToken() == _T("CHARMAP"))
+	    in_charset = FALSE;
+	}
+	else if (in_charset) {
+	  // format: <NUL> /x00 <U0000> NULL (NUL)
+	  wxString hex = token.GetNextToken();
+	  wxString uni = token.GetNextToken();
+	  // just assume that we've got the right format
+	  int pos = ::wxHexToDec(hex.Mid(2,2));
+	  unsigned long uni1 = ::wxHexToDec(uni.Mid(2,2));
+	  unsigned long uni2 = ::wxHexToDec(uni.Mid(4,2));
+	  cset->data[pos] = (uni1 << 16) | uni2;
+	}
+      }
+      cset->names.Shrink();
+      wxCharsets.Add(cset);
+    forget_it:
+      continue;
+    }
+  }
+#endif
+  wxCharsets.Shrink();
+  already_loaded = TRUE;
+}
+
+static wxCharacterSet *wxFindCharacterSet(const wxString& charset)
+{
+  for (size_t n=0; n<wxCharsets.GetCount(); n++)
+    if (wxCharsets[n].names.Index(charset) != wxNOT_FOUND)
+      return &(wxCharsets[n]);
+  return (wxCharacterSet *)NULL;
+}
+
+WXDLLEXPORT_DATA(wxCSConv) wxConv_local((const wxChar *)NULL);
+
 wxCSConv::wxCSConv(const wxChar *charset)
 {
-  data = (wxChar *) NULL;
+  wxLoadCharacterSets();
+  if (!charset) {
+#ifdef __UNIX__
+    wxChar *lang = wxGetenv(_T("LANG"));
+    wxChar *dot = wxStrchr(lang, _T('.'));
+    if (dot) charset = dot+1;
+#endif
+  }
+  cset = (wxCharacterSet *) NULL;
+
+#ifdef __UNIX__
+  // first, convert the character set name to standard form
+  wxString codeset;
+  if (wxString(charset,3) == _T("ISO")) {
+    // make sure it's represented in the standard form: ISO_8859-1
+    codeset = _T("ISO_");
+    charset += 3;
+    if ((*charset == _T('-')) || (*charset == _T('_'))) charset++;
+    if (wxStrlen(charset)>4) {
+      if (wxString(charset,4) == _T("8859")) {
+	codeset << _T("8859-");
+	if (*charset == _T('-')) charset++;
+      }
+    }
+  }
+  codeset << charset;
+  codeset.MakeUpper();
+  cset = wxFindCharacterSet(codeset);
+#endif
 }
 
 wxCSConv::~wxCSConv(void)
@@ -1905,20 +2036,33 @@ wxCSConv::~wxCSConv(void)
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-  if (buf && !data) {
-    // latin-1 (direct)
-    for (size_t c=0; c<=n; c++)
-      buf[c] = psz[c];
+  if (buf) {
+    if (cset) {
+      for (size_t c=0; c<=n; c++)
+	buf[c] = cset->data[psz[c]];
+    } else {
+      // latin-1 (direct)
+      for (size_t c=0; c<=n; c++)
+	buf[c] = psz[c];
+    }
   }
   return n;
 }
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-  if (buf && !data) {
-    // latin-1 (direct)
-    for (size_t c=0; c<=n; c++)
-      buf[c] = (psz[c]>0xff) ? '?' : psz[c];
+  if (buf) {
+    if (cset) {
+      for (size_t c=0; c<=n; c++) {
+	size_t n;
+	for (n=0; (n<256) && (cset->data[n] != psz[c]); n++);
+	buf[c] = (n>0xff) ? '?' : n;
+      }
+    } else {
+      // latin-1 (direct)
+      for (size_t c=0; c<=n; c++)
+	buf[c] = (psz[c]>0xff) ? '?' : psz[c];
+    }
   }
   return n;
 }
