@@ -33,6 +33,38 @@ WX_NSLayoutManager wxDC::sm_cocoaNSLayoutManager = nil;
 WX_NSTextContainer wxDC::sm_cocoaNSTextContainer = nil;
 wxCocoaDCStack wxDC::sm_cocoaDCStack;
 
+inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
+{
+    [pen.GetNSColor() set];
+    const float *pattern;
+    [bezpath setLineDash:pattern count:pen.GetCocoaLineDash(&pattern) phase:0.0];
+    [bezpath setLineWidth:pen.GetWidth()];
+    switch(pen.GetJoin())
+    {
+    case wxJOIN_BEVEL:
+        [bezpath setLineJoinStyle:NSBevelLineJoinStyle];
+        break;
+    case wxJOIN_ROUND:
+        [bezpath setLineJoinStyle:NSRoundLineJoinStyle];
+        break;
+    case wxJOIN_MITER:
+        [bezpath setLineJoinStyle:NSMiterLineJoinStyle];
+        break;
+    }
+    switch(pen.GetCap())
+    {
+    case wxCAP_ROUND:
+        [bezpath setLineCapStyle:NSRoundLineCapStyle];
+        break;
+    case wxCAP_PROJECTING:
+        [bezpath setLineCapStyle:NSSquareLineCapStyle];
+        break;
+    case wxCAP_BUTT:
+        [bezpath setLineCapStyle:NSButtLineCapStyle];
+        break;
+    }
+}
+
 void wxDC::CocoaInitializeTextSystem()
 {
     wxASSERT_MSG(!sm_cocoaNSTextStorage && !sm_cocoaNSLayoutManager && !sm_cocoaNSTextContainer,"Text system already initalized!  BAD PROGRAMMER!");
@@ -106,6 +138,7 @@ wxDC::wxDC(void)
 {
     m_cocoaFlipped = false;
     m_cocoaHeight = 0.0;
+    m_pen = *wxBLACK_PEN;
 }
 
 wxDC::~wxDC(void)
@@ -148,7 +181,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     if(!CocoaTakeFocus()) return;
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,width,height)];
-    [m_textForegroundColour.GetNSColor() set];
+    CocoaSetPenForNSBezierPath(m_pen,bezpath);
     [bezpath stroke];
     [m_brush.GetNSColor() set];
     [bezpath fill];
@@ -161,7 +194,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     [bezpath moveToPoint:NSMakePoint(x1,y1)];
     [bezpath lineToPoint:NSMakePoint(x2,y2)];
 
-    [m_textForegroundColour.GetNSColor() set];
+    CocoaSetPenForNSBezierPath(m_pen,bezpath);
     [bezpath stroke];
 }
 
@@ -374,6 +407,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc,
     
 void wxDC::SetPen(const wxPen& pen)
 {
+    m_pen = pen;
 }
 
 void wxDC::SetBrush(const wxBrush& brush)
