@@ -21,12 +21,16 @@
 #include "wx/datetime.h"
 #include "wx/list.h"
 #include "wx/gdicmn.h"
+#include "wx/filesys.h"
+#include "wx/bitmap.h"
+#include "wx/icon.h"
 
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxDialog;
 class WXDLLEXPORT wxPanel;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxToolBar;
 
 class WXDLLEXPORT wxXmlResourceHandler;
 
@@ -82,6 +86,11 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         // Loads menubar from resource. Returns NULL on failure.
         wxMenuBar *LoadMenuBar(const wxString& name);
 
+#if wxUSE_TOOLBAR
+        // Loads toolbar
+        wxToolBar *LoadToolBar(wxWindow *parent, const wxString& name);
+#endif
+
         // Loads dialog. dlg points to parent window (if any). Second form
         // is used to finish creation of already existing instance (main reason
         // for this is that you may want to use derived class with new event table)
@@ -120,8 +129,12 @@ class WXDLLEXPORT wxXmlResource : public wxObject
     private:
         wxList m_Handlers;
         wxXmlResourceDataRecords m_Data;
-        
-    friend class wxXmlResourceHandler;
+#if wxUSE_FILESYSTEM
+        wxFileSystem m_CurFileSystem;
+        wxFileSystem& GetCurFileSystem() { return m_CurFileSystem; }
+#endif
+
+        friend class wxXmlResourceHandler;
 };
 
 
@@ -236,8 +249,13 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Get colour in HTML syntax (#RRGGBB)
         wxColour GetColour(const wxString& param);
         
+        // Get size/position:
         wxSize GetSize(const wxString& param = _T("size"));
         wxPoint GetPosition(const wxString& param = _T("pos"));
+        
+        // Get bitmap:
+        wxBitmap GetBitmap(const wxString& param = _T("bitmap"), wxSize size = wxDefaultSize);
+        wxIcon GetIcon(const wxString& param = _T("icon"), wxSize size = wxDefaultSize);
         
         // Sets common window options:
         void SetupWindow(wxWindow *wnd);
@@ -247,6 +265,9 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
                              GetParamNode("children")*/);
         wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL)
             { return m_Resource->CreateResFromNode(node, parent, instance); }
+
+        // helper
+        wxFileSystem& GetCurFileSystem() { return m_Resource->GetCurFileSystem(); }
 };
 
 #define ADD_STYLE(style) AddStyle(_T(#style), style)

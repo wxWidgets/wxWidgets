@@ -21,8 +21,6 @@
 
 #include "wx/xml/xh_stbmp.h"
 #include "wx/statbmp.h"
-#include "wx/image.h"
-#include "wx/bitmap.h"
 
 wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler() 
 : wxXmlResourceHandler() 
@@ -31,14 +29,9 @@ wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler()
 
 wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 { 
-    wxImage img(GetParamValue(_T("bitmap")));
-    wxSize sz = GetSize();
-    
-    if (!(sz == wxDefaultSize)) img.Rescale(sz.x, sz.y);
-    
     wxStaticBitmap *bmp = new wxStaticBitmap(m_ParentAsWindow,
                                     GetID(),
-                                    img.ConvertToBitmap(),
+                                    GetBitmap(_T("bitmap"), GetSize()),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
                                     GetName()

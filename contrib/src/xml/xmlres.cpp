@@ -27,6 +27,8 @@
 #include "wx/intl.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
+#include "wx/bitmap.h"
+#include "wx/image.h"
 
 #include "wx/xml/xml.h"
 #include "wx/xml/xmlres.h"
@@ -133,6 +135,13 @@ wxMenu *wxXmlResource::LoadMenu(const wxString& name)
 wxMenuBar *wxXmlResource::LoadMenuBar(const wxString& name)
 {
     return (wxMenuBar*)CreateResFromNode(FindResource(name, wxT("menubar")), NULL, NULL);
+}
+
+
+
+wxToolBar *wxXmlResource::LoadToolBar(wxWindow *parent, const wxString& name)
+{
+    return (wxToolBar*)CreateResFromNode(FindResource(name, wxT("toolbar")), parent, NULL);
 }
 
 
@@ -296,7 +305,12 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& typ
                     (!type || node->GetName() == type) &&
                     node->GetPropVal(wxT("name"), &dummy) &&
                     dummy == name)
+            {
+#if wxUSE_FILESYSTEM
+                m_CurFileSystem.ChangePathTo(m_Data[f].File);
+#endif
                 return node;
+            }
     }
 
     wxLogError(_("XML resource '%s' (type '%s') not found!"), 
@@ -508,6 +522,50 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
 }
 
 
+
+wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
+{
+    wxString name = GetParamValue(param);
+    if (name.IsEmpty()) return wxNullBitmap;
+#if wxUSE_FILESYSTEM
+    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
+    if (fsfile == NULL)
+    {
+        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.mb_str());
+        return wxNullBitmap;
+    }    
+    wxImage img(*(fsfile->GetStream()));
+    delete fsfile;
+#else
+    wxImage img(GetParamValue(_T("bitmap")));
+#endif
+    if (!img.Ok()) 
+    {
+        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.mb_str());
+        return wxNullBitmap;
+    }
+    if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
+    return img.ConvertToBitmap();
+}
+
+
+
+wxIcon wxXmlResourceHandler::GetIcon(const wxString& param, wxSize size)
+{
+#ifdef __WXMSW__
+    wxIcon icon;
+    icon.CopyFromBitmap(GetBitmap(param, size));
+#else
+    wxIcon *iconpt;
+    wxBitmap bmppt = GetBitmap(param, size);
+    iconpt = (wxIcon*)(&bmppt);
+    wxIcon icon(*iconpt);
+#endif
+    return icon;
+}
+
+
+
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
     wxXmlNode *n = m_Node->GetChildren();
@@ -617,9 +675,9 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent,
 {
     if (children_node == NULL) children_node = GetParamNode(_T("children"));
     if (children_node == NULL) return;
-    
+
     wxXmlNode *n = children_node->GetChildren();
-    
+
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE)
@@ -645,7 +703,6 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent,
 
 
 // --------------- XMLID implementation -----------------------------
-
 
 #define XMLID_TABLE_SIZE     1024
 
