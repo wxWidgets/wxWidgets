@@ -928,9 +928,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     Centre( wxBOTH );
 
+/*
     if (m_fileName.IsEmpty())
         m_list->SetFocus();
     else
+*/
         m_text->SetFocus();
 
     wxEndBusyCursor();

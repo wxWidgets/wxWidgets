@@ -30,7 +30,6 @@ extern "C" {
                           (y >= G_MINSHORT) && (y <= G_MAXSHORT))
 
 typedef struct _GtkPizzaAdjData  GtkPizzaAdjData;
-typedef struct _GtkPizzaChild    GtkPizzaChild;
 
 struct _GtkPizzaAdjData
 {
@@ -38,22 +37,13 @@ struct _GtkPizzaAdjData
     gint dy;
 };
 
-struct _GtkPizzaChild
-{
-    GtkWidget *widget;
-    gint x;
-    gint y;
-    gint width;
-    gint height;
-};
+static void gtk_pizza_class_init    (GtkPizzaClass    *klass);
+static void gtk_pizza_init          (GtkPizza         *pizza);
 
-static void gtk_pizza_class_init      (GtkPizzaClass  *klass);
-static void gtk_pizza_init            (GtkPizza       *pizza);
+static void gtk_pizza_realize       (GtkWidget        *widget);
+static void gtk_pizza_unrealize     (GtkWidget        *widget);
 
-static void gtk_pizza_realize         (GtkWidget        *widget);
-static void gtk_pizza_unrealize       (GtkWidget        *widget);
-
-static void gtk_pizza_map             (GtkWidget        *widget);
+static void gtk_pizza_map           (GtkWidget        *widget);
 
 static void gtk_pizza_size_request  (GtkWidget        *widget,
                                      GtkRequisition   *requisition);
@@ -67,42 +57,42 @@ static void gtk_pizza_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_pizza_remove        (GtkContainer     *container,
                                      GtkWidget        *widget);
-static void gtk_pizza_forall       (GtkContainer     *container,
-                                     gboolean              include_internals,
-                                     GtkCallback      callback,
-                                     gpointer         callback_data);
+static void gtk_pizza_forall        (GtkContainer     *container,
+                                     gboolean          include_internals,
+                                     GtkCallback       callback,
+                                     gpointer          callback_data);
 
 static void     gtk_pizza_position_child     (GtkPizza      *pizza,
-                                               GtkPizzaChild *child);
+                                              GtkPizzaChild *child);
 static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
-                                               GtkPizzaChild *child);
+                                              GtkPizzaChild *child);
 static void     gtk_pizza_position_children  (GtkPizza      *pizza);
 
 static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
-                                                       gpointer   cb_data);
-static void     gtk_pizza_adjust_allocations         (GtkPizza *pizza,
-                                                       gint       dx,
-                                                       gint       dy);
+                                                      gpointer   cb_data);
+static void     gtk_pizza_adjust_allocations         (GtkPizza  *pizza,
+                                                      gint       dx,
+                                                      gint       dy);
 
 
-static void     gtk_pizza_expose_area        (GtkPizza      *pizza,
-                                               gint            x,
-                                               gint            y,
-                                               gint            width,
-                                               gint            height);
+static void     gtk_pizza_expose_area        (GtkPizza       *pizza,
+                                              gint            x,
+                                              gint            y,
+                                              gint            width,
+                                              gint            height);
 static void     gtk_pizza_adjustment_changed (GtkAdjustment  *adjustment,
-                                               GtkPizza      *pizza);
+                                              GtkPizza       *pizza);
 static GdkFilterReturn gtk_pizza_filter      (GdkXEvent      *gdk_xevent,
-                                               GdkEvent       *event,
-                                               gpointer        data);
+                                              GdkEvent       *event,
+                                              gpointer        data);
 static GdkFilterReturn gtk_pizza_main_filter (GdkXEvent      *gdk_xevent,
-                                               GdkEvent       *event,
-                                               gpointer        data);
+                                              GdkEvent       *event,
+                                              gpointer        data);
 
 
 static GtkType gtk_pizza_child_type (GtkContainer     *container);
 
-static void  gtk_pizza_scroll_set_adjustments    (GtkPizza   *pizza,
+static void  gtk_pizza_scroll_set_adjustments (GtkPizza      *pizza,
                                                GtkAdjustment *hadj,
                                                GtkAdjustment *vadj);
 
@@ -200,7 +190,7 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->visibility = GDK_VISIBILITY_PARTIAL;
 
     pizza->clear_on_draw = TRUE;
-    pizza->use_filter = FALSE;
+    pizza->use_filter = TRUE;
 }
 
 GtkWidget*
@@ -222,7 +212,7 @@ gtk_pizza_scroll_set_adjustments (GtkPizza     *pizza,
 }
 
 void
-gtk_pizza_set_shadow_type (GtkPizza      *pizza,
+gtk_pizza_set_shadow_type (GtkPizza        *pizza,
                            GtkMyShadowType  type)
 {
     g_return_if_fail (pizza != NULL);
@@ -241,8 +231,8 @@ gtk_pizza_set_shadow_type (GtkPizza      *pizza,
 }
 
 void
-gtk_pizza_set_clear (GtkPizza     *pizza,
-                     gboolean        clear)
+gtk_pizza_set_clear (GtkPizza  *pizza,
+                     gboolean   clear)
 {
     g_return_if_fail (pizza != NULL);
     g_return_if_fail (GTK_IS_PIZZA (pizza));
@@ -251,8 +241,8 @@ gtk_pizza_set_clear (GtkPizza     *pizza,
 }
 
 void       
-gtk_pizza_set_filter (GtkPizza          *pizza,
-                      gboolean           use)
+gtk_pizza_set_filter (GtkPizza  *pizza,
+                      gboolean   use)
 {
     g_return_if_fail (pizza != NULL);
     g_return_if_fail (GTK_IS_PIZZA (pizza));
@@ -261,12 +251,12 @@ gtk_pizza_set_filter (GtkPizza          *pizza,
 }	
 					
 void
-gtk_pizza_put (GtkPizza    *pizza,
-                 GtkWidget     *widget,
-                 gint         x,
-                 gint         y,
-                 gint         width,
-                 gint         height)
+gtk_pizza_put (GtkPizza   *pizza,
+               GtkWidget  *widget,
+               gint        x,
+               gint        y,
+               gint        width,
+               gint        height)
 {
     GtkPizzaChild *child_info;
 
@@ -311,10 +301,10 @@ gtk_pizza_put (GtkPizza    *pizza,
 }
 
 void
-gtk_pizza_move (GtkPizza    *pizza,
-                  GtkWidget     *widget,
-                  gint         x,
-                  gint         y)
+gtk_pizza_move (GtkPizza     *pizza,
+                  GtkWidget  *widget,
+                  gint        x,
+                  gint        y)
 {
     GtkPizzaChild *child;
     GList *children;
@@ -345,10 +335,10 @@ gtk_pizza_move (GtkPizza    *pizza,
 }
 
 void
-gtk_pizza_resize (GtkPizza     *pizza,
-                    GtkWidget      *widget,
-                    gint         width,
-                    gint         height)
+gtk_pizza_resize (GtkPizza    *pizza,
+                  GtkWidget   *widget,
+                  gint         width,
+                  gint         height)
 {
     GtkPizzaChild *child;
     GList *children;
@@ -381,12 +371,12 @@ gtk_pizza_resize (GtkPizza     *pizza,
 }
 
 void
-gtk_pizza_set_size (GtkPizza    *pizza,
-                      GtkWidget     *widget,
-                      gint        x,
-                      gint         y,
-                      gint         width,
-                      gint         height)
+gtk_pizza_set_size (GtkPizza   *pizza,
+                    GtkWidget  *widget,
+                    gint        x,
+                    gint        y,
+                    gint        width,
+                    gint        height)
 {
     GtkPizzaChild *child;
     GList *children;
@@ -539,7 +529,7 @@ gtk_pizza_realize (GtkWidget *widget)
 
     widget->style = gtk_style_attach (widget->style, widget->window);
     gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-    gtk_style_set_background (widget->style, pizza->bin_window, GTK_STATE_NORMAL);
+    gtk_style_set_background (widget->style, pizza->bin_window, GTK_STATE_NORMAL );
 
     /* add filters for intercepting visibility and expose events */
     gdk_window_add_filter (widget->window, gtk_pizza_main_filter, pizza);
@@ -579,7 +569,7 @@ gtk_pizza_unrealize (GtkWidget *widget)
 
 static void
 gtk_pizza_size_request (GtkWidget      *widget,
-                          GtkRequisition *requisition)
+                        GtkRequisition *requisition)
 {
     GtkPizza *pizza;
     GtkPizzaChild *child;
@@ -612,7 +602,7 @@ gtk_pizza_size_request (GtkWidget      *widget,
 
 static void
 gtk_pizza_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+                         GtkAllocation *allocation)
 {
     GtkPizza *pizza;
     gint border;
@@ -660,70 +650,17 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
 
 static void
 gtk_pizza_draw (GtkWidget    *widget,
-                  GdkRectangle *area)
+                GdkRectangle *area)
 {
-    GtkPizza *pizza;
-    GtkPizzaChild *child;
-    GdkRectangle child_area;
-    GList *children;
-
-    g_return_if_fail (widget != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (widget));
-
-    pizza = GTK_PIZZA (widget);
-
-    children = pizza->children;
-    if ( !(GTK_WIDGET_APP_PAINTABLE (widget)) &&
-         (pizza->clear_on_draw))
-    {
-        gdk_window_clear_area( pizza->bin_window,
-                                area->x, area->y, area->width, area->height);
-    }
-
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
-
-        if (gtk_widget_intersect (child->widget, area, &child_area))
-            gtk_widget_draw (child->widget, &child_area);
-    }
+    /* We handle all draws events in window.cpp now. */
+    return;
 }
 
 static gint
 gtk_pizza_expose (GtkWidget      *widget,
-                    GdkEventExpose *event)
+                  GdkEventExpose *event)
 {
-    GtkPizza *pizza;
-    GtkPizzaChild *child;
-    GdkEventExpose child_event;
-    GList *children;
-
-    g_return_val_if_fail (widget != NULL, FALSE);
-    g_return_val_if_fail (GTK_IS_PIZZA (widget), FALSE);
-    g_return_val_if_fail (event != NULL, FALSE);
-
-    pizza = GTK_PIZZA (widget);
-
-    if (event->window != pizza->bin_window)
-        return FALSE;
-
-    children = pizza->children;
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
-
-        child_event = *event;
-
-        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-            GTK_WIDGET_DRAWABLE (child->widget) &&
-            gtk_widget_intersect (child->widget, &event->area, &child_event.area))
-        {
-            gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-        }
-    }
-
+    /* We handle all expose events in window.cpp now. */
     return FALSE;
 }
 
@@ -740,7 +677,7 @@ gtk_pizza_add (GtkContainer *container,
 
 static void
 gtk_pizza_remove (GtkContainer *container,
-                    GtkWidget    *widget)
+                  GtkWidget    *widget)
 {
     GtkPizza *pizza;
     GtkPizzaChild *child;
@@ -782,9 +719,9 @@ gtk_pizza_remove (GtkContainer *container,
 
 static void
 gtk_pizza_forall (GtkContainer *container,
-                   gboolean         include_internals,
-                   GtkCallback   callback,
-                   gpointer      callback_data)
+                  gboolean      include_internals,
+                  GtkCallback   callback,
+                  gpointer      callback_data)
 {
     GtkPizza *pizza;
     GtkPizzaChild *child;
@@ -812,7 +749,7 @@ gtk_pizza_forall (GtkContainer *container,
 
 static void
 gtk_pizza_position_child (GtkPizza      *pizza,
-                           GtkPizzaChild *child)
+                          GtkPizzaChild *child)
 {
     gint x;
     gint y;
@@ -844,7 +781,7 @@ gtk_pizza_position_child (GtkPizza      *pizza,
 
 static void
 gtk_pizza_allocate_child (GtkPizza      *pizza,
-                           GtkPizzaChild *child)
+                          GtkPizzaChild *child)
 {
     GtkAllocation allocation;
     GtkRequisition requisition;
@@ -1166,6 +1103,9 @@ gtk_pizza_filter (GdkXEvent *gdk_xevent,
     
     pizza = GTK_PIZZA (data);
     
+    if (!pizza->use_filter)
+        return GDK_FILTER_CONTINUE;
+
   switch (xevent->type)
     {
     case Expose:
@@ -1210,6 +1150,9 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
 
     xevent = (XEvent *)gdk_xevent;
     pizza = GTK_PIZZA (data);
+    
+    if (!pizza->use_filter)
+        return GDK_FILTER_CONTINUE;
 
     if (xevent->type == VisibilityNotify)
     {

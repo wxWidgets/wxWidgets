@@ -51,6 +51,7 @@ dnl
 #include <gtk/gtk.h>
 #include <gtk/gtkfeatures.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int
 main ()

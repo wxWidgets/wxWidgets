@@ -2019,7 +2019,10 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC( wxWindow *win )
   : wxWindowDC( win )
 {
-#if USE_PAINT_REGION    
+#if USE_PAINT_REGION
+    if (!win->m_clipPaintRegion)
+        return;
+        
     m_paintClippingRegion = win->GetUpdateRegion();
     m_currentClippingRegion.Union( m_paintClippingRegion );
         

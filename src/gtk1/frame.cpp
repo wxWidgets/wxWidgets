@@ -834,6 +834,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
+        gtk_widget_draw( m_frameStatusBar->m_widget, (GdkRectangle*) NULL );
     }
 #endif
 

@@ -95,8 +95,8 @@ bool wxYield()
 
     if (has_idle)
     {
-        /* re-add idle handler */
-        wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+        /* re-add idle handler (very low priority) */
+        wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
     }
 
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -177,9 +177,9 @@ void wxapp_install_idle_handler()
        indicating that the idle is over. It may also
        get called from other thread for sending events
        to the main thread (and processing these in
-       idle time). */
+       idle time). Very low priority. */
 
-    wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+    wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
 
     g_isIdle = FALSE;
 }

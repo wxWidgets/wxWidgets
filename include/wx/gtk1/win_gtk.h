@@ -33,8 +33,18 @@ typedef enum
     GTK_MYSHADOW_OUT
 } GtkMyShadowType;
 
+typedef struct _GtkPizzaChild    GtkPizzaChild;
 typedef struct _GtkPizza        GtkPizza;
 typedef struct _GtkPizzaClass   GtkPizzaClass;
+
+struct _GtkPizzaChild
+{
+    GtkWidget *widget;
+    gint x;
+    gint y;
+    gint width;
+    gint height;
+};
 
 struct _GtkPizza
 {

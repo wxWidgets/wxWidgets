@@ -128,7 +128,7 @@ enum
     Minimal_Test2,
 
     // controls start here (the numbers are, of course, arbitrary)
-    Minimal_Text = 1000,
+    Minimal_Text = 1000
 };
 
 // ----------------------------------------------------------------------------

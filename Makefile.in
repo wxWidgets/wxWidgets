@@ -751,6 +751,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/drawing/makefile.unx $(DISTDIR)/samples/drawing
 	cp $(SAMPDIR)/drawing/*.cpp $(DISTDIR)/samples/drawing
 	cp $(SAMPDIR)/drawing/*.xpm $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.bmp $(DISTDIR)/samples/drawing
 
 	mkdir $(DISTDIR)/samples/dynamic
 	cp $(SAMPDIR)/dynamic/Makefile.in $(DISTDIR)/samples/dynamic
@@ -806,6 +807,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.bmp $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.png $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.gif $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.htm $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.html $(DISTDIR)/samples/html/test
 	mkdir $(DISTDIR)/samples/html/virtual
@@ -839,10 +841,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.po $(DISTDIR)/samples/internat
-	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
 	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
-	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
 
 	mkdir $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
