@@ -2681,7 +2681,7 @@ void wxListMainWindow::CalculatePositions()
     }
 }
 
-void wxListMainWindow::RealizeChanges( void )
+void wxListMainWindow::RealizeChanges()
 {
     if (!m_current)
     {
@@ -2691,7 +2691,9 @@ void wxListMainWindow::RealizeChanges( void )
     if (m_current)
     {
         FocusLine( m_current );
-        if (m_mode & wxLC_SINGLE_SEL) m_current->Hilight( TRUE );
+        // TODO: MSW doesn't automatically hilight the
+        //       first item.
+        // if (m_mode & wxLC_SINGLE_SEL) m_current->Hilight( TRUE );
     }
 }
 
