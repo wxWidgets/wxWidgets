@@ -57,6 +57,8 @@
 #include "wx/filedlg.h"
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
+#include "wx/dynarray.h"
+#include "wx/choicdlg.h"
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100
@@ -125,6 +127,58 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 };
 
 
+//---------------------------------------------------------------------------
+// wxHtmlHelpFrame::m_mergedIndex
+//---------------------------------------------------------------------------
+
+WX_DEFINE_ARRAY(const wxHtmlHelpDataItem*, wxHtmlHelpDataItemPtrArray);
+
+struct wxHtmlHelpMergedIndexItem
+{
+    wxHtmlHelpMergedIndexItem *parent;
+    wxString                   name;
+    wxHtmlHelpDataItemPtrArray items;
+};
+
+WX_DECLARE_OBJARRAY(wxHtmlHelpMergedIndexItem, wxHtmlHelpMergedIndex);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxHtmlHelpMergedIndex)
+
+void wxHtmlHelpFrame::UpdateMergedIndex()
+{
+    delete m_mergedIndex;
+    m_mergedIndex = new wxHtmlHelpMergedIndex;
+    wxHtmlHelpMergedIndex& merged = *m_mergedIndex;
+
+    const wxHtmlHelpDataItems& items = m_Data->GetIndexArray();
+    size_t len = items.size();
+
+    wxHtmlHelpMergedIndexItem *history[128] = {NULL};
+    
+    for (size_t i = 0; i < len; i++)
+    {
+        const wxHtmlHelpDataItem& item = items[i];
+        wxASSERT_MSG( item.level < 128, _T("nested index entries too deep") );
+        
+        if (history[item.level] &&
+            history[item.level]->items[0]->name == item.name)
+        {
+            // same index entry as previous one, update list of items
+            history[item.level]->items.Add(&item);
+        }
+        else
+        {
+            // new index entry
+            wxHtmlHelpMergedIndexItem *mi = new wxHtmlHelpMergedIndexItem();
+            mi->name = item.GetIndentedName();
+            mi->items.Add(&item);
+            mi->parent = (item.level == 0) ? NULL : history[item.level - 1];
+            history[item.level] = mi;
+            merged.Add(mi);
+        }        
+    }
+}
+    
 
 //---------------------------------------------------------------------------
 // wxHtmlHelpFrame
@@ -200,6 +254,8 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Bookmarks = NULL;
     m_SearchCaseSensitive = NULL;
     m_SearchWholeWords = NULL;
+
+    m_mergedIndex = NULL;
 
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
@@ -675,7 +731,53 @@ bool wxHtmlHelpFrame::DisplayIndex()
 
     return true;
 }
+#include <gtk/gtk.h>
+void wxHtmlHelpFrame::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
+{
+    if (it->items.size() == 1)
+    {
+        if (!it->items[0]->page.empty())
+        {
+            m_HtmlWin->LoadPage(it->items[0]->GetFullPath());
+            NotifyPageChanged();
+        }
+    }
+    else
+    {
+        wxBusyCursor busy_cursor;
 
+        // more pages associated with this index item -- let the user choose
+        // which one she/he wants from a list:
+        wxArrayString arr;
+        size_t len = it->items.size();
+        for (size_t i = 0; i < len; i++)
+        {
+            wxString page = it->items[i]->page;
+            // try to find page's title in contents:
+            const wxHtmlHelpDataItems& contents = m_Data->GetContentsArray();
+            size_t clen = contents.size();
+            for (size_t j = 0; j < clen; j++)
+            {
+                if (contents[j].page == page)
+                {
+                    page = contents[j].name;
+                    break;
+                }
+            }
+            arr.push_back(page);
+        }
+
+        wxSingleChoiceDialog dlg(this,
+                                 _("Please choose the page to display:"),
+                                 _("Help Topics"),
+                                 arr, NULL, wxCHOICEDLG_STYLE & ~wxCENTRE);
+        if (dlg.ShowModal() == wxID_OK)
+        {
+            m_HtmlWin->LoadPage(it->items[dlg.GetSelection()]->GetFullPath());
+            NotifyPageChanged();
+        }
+    }
+}
 
 
 bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
@@ -743,7 +845,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
 #if wxUSE_PROGRESSDLG
                 progress.Update(status.GetCurIndex(), foundstr);
 #endif
-                m_SearchList->Append(status.GetName(), status.GetContentsItem());
+                m_SearchList->Append(status.GetName(), (void*)status.GetCurItem());
             }
         }
 
@@ -768,7 +870,6 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
 
     if (foundcnt)
     {
-        wxHtmlContentsItem *it;
         switch ( mode )
         {
             default:
@@ -776,19 +877,27 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
                 // fall back
 
             case wxHELP_SEARCH_ALL:
-                it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
+            {
+                wxHtmlHelpDataItem *it =
+                    (wxHtmlHelpDataItem*) m_SearchList->GetClientData(0);
+                if (it)
+                {
+                    m_HtmlWin->LoadPage(it->GetFullPath());
+                    NotifyPageChanged();
+                }
                 break;
+            }
 
             case wxHELP_SEARCH_INDEX:
-                it = (wxHtmlContentsItem*) m_IndexList->GetClientData(0);
+            {
+                wxHtmlHelpMergedIndexItem* it = 
+                    (wxHtmlHelpMergedIndexItem*) m_IndexList->GetClientData(0);
+                if (it)
+                    DisplayIndexItem(it);
                 break;
+            }
         }
 
-        if (it)
-        {
-            m_HtmlWin->LoadPage(it->GetFullPath());
-            NotifyPageChanged();
-        }
     }
 
     return foundcnt > 0;
@@ -804,12 +913,12 @@ void wxHtmlHelpFrame::CreateContents()
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
-    m_PagesHash = new wxHashTable(wxKEY_STRING, 2 * m_Data->GetContentsCnt());
+    
+    const wxHtmlHelpDataItems& contents = m_Data->GetContentsArray();
+    
+    size_t cnt = contents.size();
 
-    int cnt = m_Data->GetContentsCnt();
-    int i;
-
-    wxHtmlContentsItem *it;
+    m_PagesHash = new wxHashTable(wxKEY_STRING, 2 * cnt);
 
     const int MAX_ROOTS = 64;
     wxTreeItemId roots[MAX_ROOTS];
@@ -825,10 +934,11 @@ void wxHtmlHelpFrame::CreateContents()
     roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
     imaged[0] = true;
 
-    for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++)
+    for (size_t i = 0; i < cnt; i++)
     {
+        wxHtmlHelpDataItem *it = &contents[i];
         // Handle books:
-        if (it->m_Level == 0)
+        if (it->level == 0)
         {
             if (m_hfStyle & wxHF_MERGE_BOOKS)
                 // VS: we don't want book nodes, books' content should
@@ -840,7 +950,7 @@ void wxHtmlHelpFrame::CreateContents()
             else
             {
                 roots[1] = m_ContentsBox->AppendItem(roots[0],
-                                         it->m_Name, IMG_Book, -1,
+                                         it->name, IMG_Book, -1,
                                          new wxHtmlHelpTreeItemData(i));
                 m_ContentsBox->SetItemBold(roots[1], true);
             }
@@ -849,28 +959,28 @@ void wxHtmlHelpFrame::CreateContents()
         // ...and their contents:
         else
         {
-            roots[it->m_Level + 1] = m_ContentsBox->AppendItem(
-                                     roots[it->m_Level], it->m_Name, IMG_Page,
+            roots[it->level + 1] = m_ContentsBox->AppendItem(
+                                     roots[it->level], it->name, IMG_Page,
                                      -1, new wxHtmlHelpTreeItemData(i));
-            imaged[it->m_Level + 1] = false;
+            imaged[it->level + 1] = false;
         }
 
         m_PagesHash->Put(it->GetFullPath(),
-                           new wxHtmlHelpHashData(i, roots[it->m_Level + 1]));
+                         new wxHtmlHelpHashData(i, roots[it->level + 1]));
 
         // Set the icon for the node one level up in the hiearachy,
         // unless already done (see comment above imaged[] declaration)
-        if (!imaged[it->m_Level])
+        if (!imaged[it->level])
         {
             int image = IMG_Folder;
             if (m_hfStyle & wxHF_ICONS_BOOK)
                 image = IMG_Book;
             else if (m_hfStyle & wxHF_ICONS_BOOK_CHAPTER)
-                image = (it->m_Level == 1) ? IMG_Book : IMG_Folder;
-            m_ContentsBox->SetItemImage(roots[it->m_Level], image);
-            m_ContentsBox->SetItemImage(roots[it->m_Level], image,
+                image = (it->level == 1) ? IMG_Book : IMG_Folder;
+            m_ContentsBox->SetItemImage(roots[it->level], image);
+            m_ContentsBox->SetItemImage(roots[it->level], image,
                                         wxTreeItemIcon_Selected);
-            imaged[it->m_Level] = true;
+            imaged[it->level] = true;
         }
     }
 }
@@ -883,18 +993,20 @@ void wxHtmlHelpFrame::CreateIndex()
 
     m_IndexList->Clear();
 
-    int cnt = m_Data->GetIndexCnt();
+    size_t cnt = m_mergedIndex->size();
 
     wxString cnttext;
-    if (cnt > INDEX_IS_SMALL) cnttext.Printf(_("%i of %i"), 0, cnt);
-    else cnttext.Printf(_("%i of %i"), cnt, cnt);
+    if (cnt > INDEX_IS_SMALL)
+        cnttext.Printf(_("%i of %i"), 0, cnt);
+    else
+        cnttext.Printf(_("%i of %i"), cnt, cnt);
     m_IndexCountInfo->SetLabel(cnttext);
-    if (cnt > INDEX_IS_SMALL) return;
+    if (cnt > INDEX_IS_SMALL)
+        return;
 
-    wxHtmlContentsItem* index = m_Data->GetIndex();
-
-    for (int i = 0; i < cnt; i++)
-        m_IndexList->Append(index[i].m_Name, (char*)(index + i));
+    for (size_t i = 0; i < cnt; i++)
+        m_IndexList->Append((*m_mergedIndex)[i].name,
+                            (char*)(&(*m_mergedIndex)[i]));
 }
 
 void wxHtmlHelpFrame::CreateSearch()
@@ -914,6 +1026,9 @@ void wxHtmlHelpFrame::CreateSearch()
 
 void wxHtmlHelpFrame::RefreshLists()
 {
+    // Update m_mergedIndex:
+    UpdateMergedIndex();
+    // Update the controls
     CreateContents();
     CreateIndex();
     CreateSearch();
@@ -1275,10 +1390,10 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(m_HtmlWin->GetOpenedPage() + wxT("#") + an);
                 if (ha && ha->m_Index > 0)
                 {
-                    wxHtmlContentsItem *it = m_Data->GetContents() + (ha->m_Index - 1);
-                    if (!it->m_Page.empty())
+                    const wxHtmlHelpDataItem& it = m_Data->GetContentsArray()[ha->m_Index - 1];
+                    if (!it.page.empty())
                     {
-                        m_HtmlWin->LoadPage(it->GetFullPath());
+                        m_HtmlWin->LoadPage(it.GetFullPath());
                         NotifyPageChanged();
                     }
                 }
@@ -1296,15 +1411,20 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(m_HtmlWin->GetOpenedPage() + wxT("#") + an);
                 if (ha && ha->m_Index > 0)
                 {
-                    int level = m_Data->GetContents()[ha->m_Index].m_Level - 1;
-                    wxHtmlContentsItem *it;
+                    int level = 
+                        m_Data->GetContentsArray()[ha->m_Index].level - 1;
                     int ind = ha->m_Index - 1;
 
-                    it = m_Data->GetContents() + ind;
-                    while (ind >= 0 && it->m_Level != level) ind--, it--;
+                    const wxHtmlHelpDataItem *it = 
+                        &m_Data->GetContentsArray()[ind];
+                    while (ind >= 0 && it->level != level)
+                    {
+                        ind--, it--;
+                        it = &m_Data->GetContentsArray()[ind];
+                    }
                     if (ind >= 0)
                     {
-                        if (!it->m_Page.empty())
+                        if (!it->page.empty())
                         {
                             m_HtmlWin->LoadPage(it->GetFullPath());
                             NotifyPageChanged();
@@ -1326,15 +1446,16 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 
                 ha = (wxHtmlHelpHashData*) m_PagesHash->Get(adr);
 
-                if (ha && ha->m_Index < m_Data->GetContentsCnt() - 1)
+                const wxHtmlHelpDataItems& contents = m_Data->GetContentsArray();
+                if (ha && ha->m_Index < (int)contents.size() - 1)
                 {
-                    wxHtmlContentsItem *it = m_Data->GetContents() + (ha->m_Index + 1);
+                    size_t idx = ha->m_Index + 1;
 
-                    while (it->GetFullPath() == adr) it++;
+                    while (contents[idx].GetFullPath() == adr) idx++;
 
-                    if (!it->m_Page.empty())
+                    if (!contents[idx].page.empty())
                     {
-                        m_HtmlWin->LoadPage(it->GetFullPath());
+                        m_HtmlWin->LoadPage(contents[idx].GetFullPath());
                         NotifyPageChanged();
                     }
                 }
@@ -1455,16 +1576,15 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 {
     wxHtmlHelpTreeItemData *pg;
-    wxHtmlContentsItem *it;
 
     pg = (wxHtmlHelpTreeItemData*) m_ContentsBox->GetItemData(event.GetItem());
 
     if (pg && m_UpdateContents)
     {
-        it = m_Data->GetContents() + (pg->m_Id);
+        const wxHtmlHelpDataItems& contents = m_Data->GetContentsArray();
         m_UpdateContents = false;
-        if (!it->m_Page.empty())
-            m_HtmlWin->LoadPage(it->GetFullPath());
+        if (!contents[pg->m_Id].page.empty())
+            m_HtmlWin->LoadPage(contents[pg->m_Id].GetFullPath());
         m_UpdateContents = true;
     }
 }
@@ -1473,10 +1593,10 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexList->GetClientData(m_IndexList->GetSelection());
-    if (!it->m_Page.empty())
-        m_HtmlWin->LoadPage(it->GetFullPath());
-    NotifyPageChanged();
+    wxHtmlHelpMergedIndexItem *it = (wxHtmlHelpMergedIndexItem*) 
+        m_IndexList->GetClientData(m_IndexList->GetSelection());
+    if (it)
+        DisplayIndexItem(it);
 }
 
 
@@ -1491,33 +1611,39 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
     else
     {
         wxBusyCursor bcur;
-        const wxChar *cstr = sr.c_str();
-        wxChar mybuff[512];
-        wxChar *ptr;
-        bool first = true;
 
         m_IndexList->Clear();
-        int cnt = m_Data->GetIndexCnt();
-        wxHtmlContentsItem* index = m_Data->GetIndex();
+        const wxHtmlHelpMergedIndex& index = *m_mergedIndex;
+        size_t cnt = index.size();
 
         int displ = 0;
-        for (int i = 0; i < cnt; i++)
+        for (size_t i = 0; i < cnt; i++)
         {
-            wxStrncpy(mybuff, index[i].m_Name, 512);
-            mybuff[511] = _T('\0');
-            for (ptr = mybuff; *ptr != 0; ptr++)
-                if (*ptr >= _T('A') && *ptr <= _T('Z'))
-                    *ptr -= (wxChar)(_T('A') - _T('a'));
-            if (wxStrstr(mybuff, cstr) != NULL)
+            if (index[i].name.Lower().find(sr) != wxString::npos)
             {
-                m_IndexList->Append(index[i].m_Name, (char*)(index + i));
-                displ++;
-                if (first)
+                int pos = m_IndexList->Append(index[i].name,
+                                              (char*)(&index[i]));
+
+                if (displ++ == 0)
                 {
-                    if (!index[i].m_Page.empty())
-                        m_HtmlWin->LoadPage(index[i].GetFullPath());
-                    NotifyPageChanged();
-                    first = false;
+                    m_IndexList->SetSelection(0);
+                    DisplayIndexItem(&index[i]);
+                }
+
+                // if this is nested item of the index, show its parent(s)
+                // as well, otherwise it would not be clear what entry is
+                // shown:
+                wxHtmlHelpMergedIndexItem *parent = index[i].parent;
+                while (parent)
+                {
+                    if (pos == 0 || 
+                        (index.Index(*(wxHtmlHelpMergedIndexItem*)m_IndexList->GetClientData(pos-1))) < index.Index(*parent))
+                    {
+                        m_IndexList->Insert(parent->name,
+                                            pos, (char*)parent);
+                        parent = parent->parent;
+                    }
+                    else break;
                 }
             }
         }
@@ -1536,18 +1662,16 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
     wxBusyCursor bcur;
 
     m_IndexList->Clear();
-    int cnt = m_Data->GetIndexCnt();
+    const wxHtmlHelpMergedIndex& index = *m_mergedIndex;
+    size_t cnt = index.size();
     bool first = true;
-    wxHtmlContentsItem* index = m_Data->GetIndex();
 
-    for (int i = 0; i < cnt; i++)
+    for (size_t i = 0; i < cnt; i++)
     {
-        m_IndexList->Append(index[i].m_Name, (char*)(index + i));
+        m_IndexList->Append(index[i].name, (char*)(&index[i]));
         if (first)
         {
-            if (!index[i].m_Page.empty())
-                m_HtmlWin->LoadPage(index[i].GetFullPath());
-            NotifyPageChanged();
+            DisplayIndexItem(&index[i]);
             first = false;
         }
     }
@@ -1560,10 +1684,10 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
 
 void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_SearchList->GetClientData(m_SearchList->GetSelection());
+    wxHtmlHelpDataItem *it = (wxHtmlHelpDataItem*) m_SearchList->GetClientData(m_SearchList->GetSelection());
     if (it)
     {
-        if (!it->m_Page.empty())
+        if (!it->page.empty())
             m_HtmlWin->LoadPage(it->GetFullPath());
         NotifyPageChanged();
     }
@@ -1621,7 +1745,7 @@ void wxHtmlHelpFrame::OnClose(wxCommandEvent& event)
 
 void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox(wxT("wxWidgets HTML Help Viewer (c) 1998-2003, Vaclav Slavik et al"), wxT("HelpView"),
+    wxMessageBox(wxT("wxWidgets HTML Help Viewer (c) 1998-2004, Vaclav Slavik et al"), wxT("HelpView"),
         wxICON_INFORMATION|wxOK, this);
 }
 #endif

@@ -151,6 +151,11 @@ wxWinCE:
 
 - added automatized but customizable handling of native SmartPhone menus
 
+wxHTML:
+
+- added support for nested index entries and index entries pointing to more
+  than one page to wxHtmlHelpController
+
 
 2.5.2
 -----

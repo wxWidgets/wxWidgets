@@ -80,18 +80,50 @@ protected:
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray,
                                   WXDLLIMPEXP_HTML);
 
+struct WXDLLIMPEXP_HTML wxHtmlHelpDataItem
+{
+    wxHtmlHelpDataItem() : level(0), parent(NULL), id(-1), book(NULL) {}
 
+    short int level;
+    wxHtmlHelpDataItem *parent;
+    int id;
+    wxString name;
+    wxString page;
+    wxHtmlBookRecord *book;
+    
+    // returns full filename of m_Page, i.e. with book's basePath prepended
+    wxString GetFullPath() const { return book->GetFullPath(page); }
+
+    // returns item indented with spaces if it has level>1:
+    wxString GetIndentedName() const;
+};
+
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlHelpDataItem, wxHtmlHelpDataItems,
+                                  WXDLLIMPEXP_HTML);
+
+#if WXWIN_COMPATIBILITY_2_4
+// old interface to contents and index:
 struct wxHtmlContentsItem
 {
+    wxHtmlContentsItem();
+    wxHtmlContentsItem(const wxHtmlHelpDataItem& d);
+    wxHtmlContentsItem& operator=(const wxHtmlContentsItem& d);
+    ~wxHtmlContentsItem();
+
     short int m_Level;
     int m_ID;
-    wxString m_Name;
-    wxString m_Page;
+    wxChar *m_Name;
+    wxChar *m_Page;
     wxHtmlBookRecord *m_Book;
     
     // returns full filename of m_Page, i.e. with book's basePath prepended
     wxString GetFullPath() const { return m_Book->GetFullPath(m_Page); }
+
+private:
+    bool m_autofree;
 };
+#endif
+
 
 //------------------------------------------------------------------------------
 // wxHtmlSearchEngine
@@ -138,14 +170,18 @@ public:
     int GetCurIndex() { return m_CurIndex; }
     int GetMaxIndex() { return m_MaxIndex; }
     const wxString& GetName() { return m_Name; }
-    wxHtmlContentsItem* GetContentsItem() { return m_ContentsItem; }
+
+    const wxHtmlHelpDataItem *GetCurItem() const { return m_CurItem; }
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( wxHtmlContentsItem* GetContentsItem() );
+#endif
 
 private:
     wxHtmlHelpData* m_Data;
     wxHtmlSearchEngine m_Engine;
     wxString m_Keyword, m_Name;
     wxString m_LastPage;
-    wxHtmlContentsItem* m_ContentsItem;
+    wxHtmlHelpDataItem* m_CurItem;
     bool m_Active;   // search is not finished
     int m_CurIndex;  // where we are now
     int m_MaxIndex;  // number of files we search
@@ -186,21 +222,36 @@ public:
     // returns URL of page on basis of MS id
     wxString FindPageById(int id);
 
-    const wxHtmlBookRecArray& GetBookRecArray() { return m_BookRecords; }
-    wxHtmlContentsItem* GetContents() { return m_Contents; }
-    int GetContentsCnt() { return m_ContentsCnt; }
-    wxHtmlContentsItem* GetIndex() { return m_Index; }
-    int GetIndexCnt() { return m_IndexCnt; }
+    const wxHtmlBookRecArray& GetBookRecArray() const { return m_bookRecords; }
+
+    const wxHtmlHelpDataItems& GetContentsArray() const { return m_contents; }
+    const wxHtmlHelpDataItems& GetIndexArray() const { return m_index; }
+
+#if WXWIN_COMPATIBILITY_2_4
+    // deprecated interface, new interface is arrays-based (see above)
+    wxDEPRECATED( wxHtmlContentsItem* GetContents() );
+    wxDEPRECATED( int GetContentsCnt() );
+    wxDEPRECATED( wxHtmlContentsItem* GetIndex() );
+    wxDEPRECATED( int GetIndexCnt() );
+#endif
 
 protected:
-    wxString m_TempPath;
+    wxString m_tempPath;
 
-    wxHtmlBookRecArray m_BookRecords;
     // each book has one record in this array:
-    wxHtmlContentsItem* m_Contents;
-    int m_ContentsCnt;   
-    wxHtmlContentsItem* m_Index; // list of all available books and pages.
-    int m_IndexCnt;  // list of index items
+    wxHtmlBookRecArray m_bookRecords;
+
+    wxHtmlHelpDataItems m_contents; // list of all available books and pages
+    wxHtmlHelpDataItems m_index; // list of index itesm
+    
+#if WXWIN_COMPATIBILITY_2_4
+    // deprecated data structures, set only if GetContents(), GetIndex()
+    // called
+    wxHtmlContentsItem* m_cacheContents;
+    wxHtmlContentsItem* m_cacheIndex;
+private:
+    void CleanCompatibilityData();
+#endif
 
 protected:
     // Imports .hhp files (MS HTML Help Workshop)
