@@ -6,7 +6,8 @@
 //              reverse-engineering
 //              and guesswork at its best.
 // Author:      Petr Smilauer
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+//              Ron Lee
 // Created:     01/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Petr Smilauer
@@ -116,10 +117,10 @@ bool SHGToMap(wxChar *filename, wxChar *defaultFile)
   HotSpot *hotspots = NULL;
   int n = ParseSHG(filename, &hotspots);
   if (n == 0)
-    return FALSE;
+    return false;
 
   wxChar buf[100];
-  wxSprintf(buf, _T("Converting .SHG file to HTML map file: there are %d hotspots in %s."), n, filename);
+  wxSnprintf(buf, sizeof(buf), _T("Converting .SHG file to HTML map file: there are %d hotspots in %s."), n, filename);
   OnInform(buf);
 
   wxChar outBuf[256];
@@ -132,7 +133,7 @@ bool SHGToMap(wxChar *filename, wxChar *defaultFile)
   {
     OnError(_T("Could not open .map file for writing."));
     delete[] hotspots;
-    return FALSE;
+    return false;
   }
 
   wxFprintf(fd, _T("default %s\n"), defaultFile);
@@ -146,7 +147,7 @@ bool SHGToMap(wxChar *filename, wxChar *defaultFile)
     else
     {
       wxChar buf[300];
-      wxSprintf(buf, _T("Warning: could not find hotspot reference %s"), hotspots[i].szHlpTopic_Macro);
+      wxSnprintf(buf, sizeof(buf), _T("Warning: could not find hotspot reference %s"), hotspots[i].szHlpTopic_Macro);
       OnInform(buf);
     }
     wxFprintf(fd, _T("rect %s %d %d %d %d\n"), refFilename, (int)hotspots[i].left, (int)hotspots[i].top,
@@ -157,6 +158,6 @@ bool SHGToMap(wxChar *filename, wxChar *defaultFile)
   fclose(fd);
 
   delete[] hotspots;
-  return TRUE;
+  return true;
 }
 

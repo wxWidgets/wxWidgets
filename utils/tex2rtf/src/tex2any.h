@@ -147,20 +147,20 @@ extern wxStringList IgnorableInputFiles; // Ignorable \input files, e.g. psbox.t
 bool read_a_line(wxChar *buf);
 bool TexLoadFile(wxChar *filename);
 int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos,
-           wxChar *environment = NULL, bool parseArgToBrace = TRUE, TexChunk *customMacroArgs = NULL);
+           wxChar *environment = NULL, bool parseArgToBrace = true, TexChunk *customMacroArgs = NULL);
 int ParseMacroBody(const wxChar *macro_name, TexChunk *parent, int no_args,
-           wxChar *buffer, int pos, wxChar *environment = NULL, bool parseArgToBrace = TRUE, TexChunk *customMacroArgs = NULL);
+           wxChar *buffer, int pos, wxChar *environment = NULL, bool parseArgToBrace = true, TexChunk *customMacroArgs = NULL);
 void TraverseDocument(void);
-void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode = NULL, bool childrenOnly = FALSE);
-#define TraverseChildrenFromChunk(arg) TraverseFromChunk(arg, NULL, TRUE)
+void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode = NULL, bool childrenOnly = false);
+#define TraverseChildrenFromChunk(arg) TraverseFromChunk(arg, NULL, true)
 void SetCurrentOutput(FILE *fd);
 void SetCurrentOutputs(FILE *fd1, FILE *fd2);
 extern FILE *CurrentOutput1;
 extern FILE *CurrentOutput2;
-void AddMacroDef(int the_id, const wxChar *name, int n, bool ignore = FALSE, bool forbidden = FALSE);
+void AddMacroDef(int the_id, const wxChar *name, int n, bool ignore = false, bool forbidden = false);
 void TexInitialize(int bufSize);
 void TexCleanUp(void);
-void TexOutput(const wxChar *s, bool ordinaryText = FALSE);
+void TexOutput(const wxChar *s, bool ordinaryText = false);
 wxChar *GetArgData(TexChunk *chunk);
 wxChar *GetArgData(void);             // Get the string for the current argument
 int GetNoArgs(void);                // Get the number of arguments for the current macro
@@ -174,11 +174,11 @@ wxChar *ConvertCase(wxChar *s);         // Convert case, according to upperCaseN
 extern wxPathList TexPathList;      // Path list, can be used for file searching.
 
 #if !WXWIN_COMPATIBILITY_2
-extern bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
+extern bool StringMatch(const wxChar *one, const wxChar *two, bool subString = true, bool exact = false);
 #endif
 
 // Define a variable value from the .ini file
-wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interactive = TRUE);
+wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interactive = true);
 
 // Major document styles
 #define LATEX_REPORT    1
@@ -324,7 +324,7 @@ extern void OutputCurrentSectionToString(wxChar *buf);
 extern void OutputChunkToString(TexChunk *chunk, wxChar *buf);
 
 // Called by Tex2Any to simulate a section
-extern void FakeCurrentSection(wxChar *fakeSection, bool addToContents = TRUE);
+extern void FakeCurrentSection(wxChar *fakeSection, bool addToContents = true);
 
 /*
  * Local to Tex2Any library
@@ -362,7 +362,7 @@ void OnError(const wxChar *msg);
 void OnInform(const wxChar *msg);
 
 // Special yield wrapper
-void Tex2RTFYield(bool force = FALSE);
+void Tex2RTFYield(bool force = false);
 
 /*
  * Useful utilities

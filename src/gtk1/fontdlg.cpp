@@ -192,3 +192,4 @@ void wxFontDialog::SetChosenFont(const char *fontname)
 #endif // wxUSE_FONTDLG
 
 #endif // GPE
+

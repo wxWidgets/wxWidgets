@@ -1072,9 +1072,22 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	@# in other dist targets.  Ugly and hardly portable but it
 	@# will run on any Debian box and that's enough for now.
 
-	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
-			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
-			-print0 | xargs -0 rm -rf
+	rm -rf $(DISTDIR)/contrib/build
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp"    \
+			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
+			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
+			   -o -name "*.bkl" -o -name "*.pro" -o -name "*.def"    \
+			   -o -name "*.vpj" -o -name "*.sc"                      \
+			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
+			\) -print0 | xargs -0 rm -rf
+
+	rm -rf $(DISTDIR)/wxPython/SWIG
+	rm -rf $(DISTDIR)/wxPython/distrib
+	rm -rf $(DISTDIR)/wxPython/distutils
+	rm -rf $(DISTDIR)/wxPython/samples
+	rm -rf $(DISTDIR)/wxPython/contrib/iewin
+	find $(DISTDIR)/wxPython \( -name "mac" -o -name "msw" \) -print0 | xargs -0 rm -rf
+
 
 	@# We can't get at the individual components of the version here
 	@# anymore, so strip the major and minor version out of the blob.

@@ -415,7 +415,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     {
         char outbyte = 0;
         int old_x = -1;
-        guint32 old_pixval;
+        guint32 old_pixval = 0;
 
         for (int w = 0; w < width; w++)
         {
@@ -480,7 +480,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         {
             char outbyte = 0;
             int old_x = -1;
-            guint32 old_pixval;
+            guint32 old_pixval = 0;
     
             for (int w = 0; w < width; w++)
             {

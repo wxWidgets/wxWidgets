@@ -45,9 +45,9 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 int wxMessageDialog::ShowModal()
 {
     GtkWidget *dlg;
-    GtkMessageType type;
+    GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_OK;
-    
+
     if (m_dialogStyle & wxYES_NO)
     {
         buttons = GTK_BUTTONS_YES_NO;
@@ -60,7 +60,7 @@ int wxMessageDialog::ShowModal()
         else
             buttons = GTK_BUTTONS_OK;
     }
-    
+
     if (m_dialogStyle & wxICON_EXCLAMATION)
         type = GTK_MESSAGE_WARNING;
     else if (m_dialogStyle & wxICON_ERROR)
@@ -69,6 +69,8 @@ int wxMessageDialog::ShowModal()
         type = GTK_MESSAGE_INFO;
     else if (m_dialogStyle & wxICON_QUESTION)
         type = GTK_MESSAGE_QUESTION;
+    else
+        wxFAIL_MSG( _T("Unknown wxMessageDialog type") );
 
     dlg = gtk_message_dialog_new(m_parent ?
                                     GTK_WINDOW(m_parent->m_widget) : NULL,
@@ -88,7 +90,7 @@ int wxMessageDialog::ShowModal()
         else
             gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_YES);
     }
-    
+
     gint result = gtk_dialog_run(GTK_DIALOG(dlg));
     gtk_widget_destroy(dlg);
 
@@ -98,7 +100,7 @@ int wxMessageDialog::ShowModal()
             wxFAIL_MSG(_T("unexpected GtkMessageDialog return code"));
             // fall through
 
-        case GTK_RESPONSE_CANCEL: 
+        case GTK_RESPONSE_CANCEL:
             return wxID_CANCEL;
         case GTK_RESPONSE_OK:
             return wxID_OK;

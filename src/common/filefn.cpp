@@ -751,7 +751,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle User's home (ignore root homes!)
-  size_t len;
+  size_t len = 0;
   if ((val = wxGetUserHome (user)) != NULL &&
       (len = wxStrlen(val)) > 2 &&
       wxStrncmp(dest, val, len) == 0)

@@ -2,7 +2,8 @@
 // Name:        htmlutil.cpp
 // Purpose:     Converts Latex to HTML
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+//              Ron Lee
 // Created:     7.9.93
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -69,18 +70,18 @@ FILE *FrameContents = NULL;
 FILE *Titlepage = NULL;
 // FILE *FrameTitlepage = NULL;
 int fileId = 0;
-bool subsectionStarted = FALSE;
+bool subsectionStarted = false;
 
 // Which column of a row are we in? (Assumes no nested tables, of course)
 int currentColumn = 0;
 
 // Are we in verbatim mode? If so, format differently.
-static bool inVerbatim = FALSE;
+static bool inVerbatim = false;
 
 // Need to know whether we're in a table or figure for benefit
 // of listoffigures/listoftables
-static bool inFigure = FALSE;
-static bool inTable = FALSE;
+static bool inFigure = false;
+static bool inTable = false;
 
 // This is defined in the Tex2Any library.
 extern wxChar *BigBuffer;
@@ -198,13 +199,13 @@ void ReopenFile(FILE **fd, wxChar **fileName, const wxChar *label)
   wxChar buf[400];
   if (truncateFilenames)
   {
-    wxSprintf(buf, _T("%s%d.htm"), FileRoot, fileId);
+    wxSnprintf(buf, sizeof(buf), _T("%s%d.htm"), FileRoot, fileId);
   }
   else
   {
     if (fileId == 1)
       gs_filenames.Add(wxEmptyString);
-    wxSprintf(buf, _T("%s_%s.html"), FileRoot, label);
+    wxSnprintf(buf, sizeof(buf), _T("%s_%s.html"), FileRoot, label);
     gs_filenames.Add(buf);
   }
   if (*fileName) delete[] *fileName;
@@ -254,7 +255,7 @@ void ReopenSectionContentsFile(void)
 
 void ProcessText2HTML(TexChunk *chunk)
 {
-  bool changed = FALSE;
+  bool changed = false;
   int ptr = 0;
   int i = 0;
   char ch = 1;
@@ -270,19 +271,19 @@ void ProcessText2HTML(TexChunk *chunk)
     {
       BigBuffer[ptr] = 0; wxStrcat(BigBuffer, _T("<P>\n\n")); ptr += 5;
       i += 2;
-      changed = TRUE;
+      changed = true;
     }
     else if (!inVerbatim && ch == '`' && (len >= i+1 && chunk->value[i+1] == '`'))
     {
       BigBuffer[ptr] = '"'; ptr ++;
       i += 2;
-      changed = TRUE;
+      changed = true;
     }
     else if (!inVerbatim && ch == '`') // Change ` to '
     {
       BigBuffer[ptr] = 39; ptr ++;
       i += 1;
-      changed = TRUE;
+      changed = true;
     }
     else if (ch == '<') // Change < to &lt
     {
@@ -290,7 +291,7 @@ void ProcessText2HTML(TexChunk *chunk)
       wxStrcat(BigBuffer, _T("&lt;"));
       ptr += 4;
       i += 1;
-      changed = TRUE;
+      changed = true;
     }
     else if (ch == '>') // Change > to &gt
     {
@@ -298,7 +299,7 @@ void ProcessText2HTML(TexChunk *chunk)
       wxStrcat(BigBuffer, _T("&gt;"));
       ptr += 4;
       i += 1;
-      changed = TRUE;
+      changed = true;
     }
     else
     {
@@ -339,7 +340,7 @@ void Text2HTML(TexChunk *chunk)
         return;
 
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB || def->macroId == ltSPECIAL))
-        inVerbatim = TRUE;
+        inVerbatim = true;
 
       wxNode *node = chunk->children.GetFirst();
       while (node)
@@ -350,7 +351,7 @@ void Text2HTML(TexChunk *chunk)
       }
 
       if (def && (def->macroId == ltVERBATIM || def->macroId == ltVERB || def->macroId == ltSPECIAL))
-        inVerbatim = FALSE;
+        inVerbatim = false;
 
       break;
     }
@@ -398,7 +399,9 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   {
 //    contentsReference = "<img align=center src=\"contents.gif\" BORDER=0 ALT=\"Contents\">";
     contentsReference = contentsReferenceBuf;
-    wxSprintf(contentsReference, _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Contents\">"), ConvertCase(_T("contents.gif")));
+    wxSnprintf(contentsReference, sizeof(contentsReferenceBuf),
+               _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Contents\">"),
+               ConvertCase(_T("contents.gif")));
   }
 
   wxChar *upReference; // no need to initialize because always assigned below
@@ -408,7 +411,9 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   {
 //    upReference = "<img align=center src=\"up.gif\" ALT=\"Up\">";
     upReference = upReferenceBuf;
-    wxSprintf(upReference, _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Up\">"), ConvertCase(_T("up.gif")));
+    wxSnprintf(upReference, sizeof(upReferenceBuf),
+               _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Up\">"),
+               ConvertCase(_T("up.gif")));
   }
 
   wxChar *backReference; // no need to initialize because always assigned below
@@ -418,7 +423,9 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   {
 //    backReference = "<img align=center src=\"back.gif\" ALT=\"Previous\">";
     backReference = backReferenceBuf;
-    wxSprintf(backReference, _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Previous\">"), ConvertCase(_T("back.gif")));
+    wxSnprintf(backReference, sizeof(backReferenceBuf),
+               _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Previous\">"),
+               ConvertCase(_T("back.gif")));
   }
 
   wxChar *forwardReference; // no need to initialize because always assigned below
@@ -428,7 +435,9 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   {
 //    forwardReference = "<img align=center src=\"forward.gif\" ALT=\"Next\">";
     forwardReference = forwardReferenceBuf;
-    wxSprintf(forwardReference, _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Next\">"), ConvertCase(_T("forward.gif")));
+    wxSnprintf(forwardReference, sizeof(forwardReferenceBuf),
+               _T("<img align=center src=\"%s\" BORDER=0 ALT=\"Next\">"),
+               ConvertCase(_T("forward.gif")));
   }
 
   TexOutput(_T("<CENTER>"));
@@ -444,13 +453,17 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   {
     wxChar buf1[80];
     wxStrcpy(buf1, ConvertCase(wxFileNameFromPath(FileRoot)));
-    wxSprintf(buf, _T("\n<A HREF=\"%s.%s\">%s</A> "), buf1, ConvertCase(_T("htm")), contentsReference);
+    wxSnprintf(buf, sizeof(buf),
+               _T("\n<A HREF=\"%s.%s\">%s</A> "),
+               buf1, ConvertCase(_T("htm")), contentsReference);
   }
   else
   {
     wxChar buf1[80];
     wxStrcpy(buf1, ConvertCase(wxFileNameFromPath(FileRoot)));
-    wxSprintf(buf, _T("\n<A HREF=\"%s%s\">%s</A> "), buf1, ConvertCase(_T("_contents.html")), contentsReference);
+    wxSnprintf(buf, sizeof(buf),
+               _T("\n<A HREF=\"%s%s\">%s</A> "),
+               buf1, ConvertCase(_T("_contents.html")), contentsReference);
   }
 //  TexOutput(_T("<NOFRAMES>"));
   TexOutput(buf);
@@ -464,9 +477,13 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   if (upLabel && upFilename)
   {
     if (wxStrlen(upLabel) > 0)
-      wxSprintf(buf, _T("<A HREF=\"%s#%s\">%s</A> "), ConvertCase(upFilename), upLabel, upReference);
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s#%s\">%s</A> "),
+                 ConvertCase(upFilename), upLabel, upReference);
     else
-      wxSprintf(buf, _T("<A HREF=\"%s\">%s</A> "), ConvertCase(upFilename), upReference);
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s\">%s</A> "),
+                 ConvertCase(upFilename), upReference);
     if (wxStrcmp(upLabel, _T("contents")) == 0)
     {
 //      TexOutput(_T("<NOFRAMES>"));
@@ -484,7 +501,9 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
 
   if (previousLabel && previousFilename)
   {
-    wxSprintf(buf, _T("<A HREF=\"%s#%s\">%s</A> "), ConvertCase(previousFilename), previousLabel, backReference);
+    wxSnprintf(buf, sizeof(buf),
+               _T("<A HREF=\"%s#%s\">%s</A> "),
+               ConvertCase(previousFilename), previousLabel, backReference);
     if (wxStrcmp(previousLabel, _T("contents")) == 0)
     {
 //      TexOutput(_T("<NOFRAMES>"));
@@ -497,7 +516,7 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
   else
   {
     // A placeholder so the buttons don't keep moving position
-    wxSprintf(buf, _T("%s "), backReference);
+    wxSnprintf(buf, sizeof(buf), _T("%s "), backReference);
     TexOutput(buf);
   }
 
@@ -531,13 +550,15 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
 
   if (nextLabel && nextFilename)
   {
-    wxSprintf(buf, _T("<A HREF=\"%s#%s\">%s</A> "), ConvertCase(nextFilename), nextLabel, forwardReference);
+    wxSnprintf(buf, sizeof(buf),
+               _T("<A HREF=\"%s#%s\">%s</A> "),
+               ConvertCase(nextFilename), nextLabel, forwardReference);
     TexOutput(buf);
   }
   else
   {
     // A placeholder so the buttons don't keep moving position
-    wxSprintf(buf, _T("%s "), forwardReference);
+    wxSnprintf(buf, sizeof(buf), _T("%s "), forwardReference);
     TexOutput(buf);
   }
 
@@ -569,13 +590,13 @@ wxChar *ParseColourString(wxChar *bkStr, bool *isPicture)
     wxString token1 = tok.GetNextToken();
     if (!tok.HasMoreTokens())
     {
-      *isPicture = TRUE;
+      *isPicture = true;
       return resStr;
     }
     else
     {
       wxString token2 = tok.GetNextToken();
-      *isPicture = FALSE;
+      *isPicture = false;
       if (tok.HasMoreTokens())
       {
         wxString token3 = tok.GetNextToken();
@@ -622,7 +643,7 @@ void OutputBodyStart(void)
   TexOutput(_T("\n<BODY"));
   if (backgroundImageString)
   {
-    bool isPicture = FALSE;
+    bool isPicture = false;
     wxChar *s = ParseColourString(backgroundImageString, &isPicture);
     if (s)
     {
@@ -633,7 +654,7 @@ void OutputBodyStart(void)
   }
   if (backgroundColourString)
   {
-    bool isPicture = FALSE;
+    bool isPicture = false;
     wxChar *s = ParseColourString(backgroundColourString, &isPicture);
     if (s)
     {
@@ -645,7 +666,7 @@ void OutputBodyStart(void)
   // Set foreground text colour, if one is specified
   if (textColourString)
   {
-    bool isPicture = FALSE;
+    bool isPicture = false;
     wxChar *s = ParseColourString(textColourString, &isPicture);
     if (s)
     {
@@ -655,7 +676,7 @@ void OutputBodyStart(void)
   // Set link text colour, if one is specified
   if (linkColourString)
   {
-    bool isPicture = FALSE;
+    bool isPicture = false;
     wxChar *s = ParseColourString(linkColourString, &isPicture);
     if (s)
     {
@@ -665,7 +686,7 @@ void OutputBodyStart(void)
   // Set followed link text colour, if one is specified
   if (followedLinkColourString)
   {
-    bool isPicture = FALSE;
+    bool isPicture = false;
     wxChar *s = ParseColourString(followedLinkColourString, &isPicture);
     if (s)
     {
@@ -714,7 +735,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         chapterNo ++;
 
       SetCurrentOutput(NULL);
-      startedSections = TRUE;
+      startedSections = true;
 
       wxChar *topicName = FindTopicName(GetNextChunk());
       ReopenFile(&Chapters, &ChaptersName, topicName);
@@ -733,9 +754,9 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
       wxChar titleBuf[200];
       if (truncateFilenames)
-        wxSprintf(titleBuf, _T("%s.htm"), wxFileNameFromPath(FileRoot));
+        wxSnprintf(titleBuf, sizeof(titleBuf), _T("%s.htm"), wxFileNameFromPath(FileRoot));
       else
-        wxSprintf(titleBuf, _T("%s_contents.html"), wxFileNameFromPath(FileRoot));
+        wxSnprintf(titleBuf, sizeof(titleBuf), _T("%s_contents.html"), wxFileNameFromPath(FileRoot));
 
       wxFprintf(Chapters, _T("<A NAME=\"%s\"></A>"), topicName);
 
@@ -779,13 +800,13 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
     {
       subsectionNo = 0;
       subsubsectionNo = 0;
-      subsectionStarted = FALSE;
+      subsectionStarted = false;
 
       if (macroId != ltSECTIONSTAR)
         sectionNo ++;
 
       SetCurrentOutput(NULL);
-      startedSections = TRUE;
+      startedSections = true;
 
       wxChar *topicName = FindTopicName(GetNextChunk());
       ReopenFile(&Sections, &SectionsName, topicName);
@@ -875,8 +896,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             ReopenSectionContentsFile();
           }
 
-          startedSections = TRUE;
-          subsectionStarted = TRUE;
+          startedSections = true;
+          subsectionStarted = true;
 
           wxChar *topicName = FindTopicName(GetNextChunk());
 
@@ -957,7 +978,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         if (macroId != ltSUBSUBSECTIONSTAR)
           subsubsectionNo ++;
 
-        startedSections = TRUE;
+        startedSections = true;
 
         wxChar *topicName = FindTopicName(GetNextChunk());
 
@@ -1096,9 +1117,9 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
         wxChar buf[100];
         if (TableData[currentColumn].justification == 'c')
-          wxSprintf(buf, _T("\n<TD ALIGN=CENTER>"));
+          wxSnprintf(buf, sizeof(buf), _T("\n<TD ALIGN=CENTER>"));
         else if (TableData[currentColumn].justification == 'r')
-          wxSprintf(buf, _T("\n<TD ALIGN=RIGHT>"));
+          wxSnprintf(buf, sizeof(buf), _T("\n<TD ALIGN=RIGHT>"));
         else if (TableData[currentColumn].absWidth)
         {
           // Convert from points * 20 into pixels.
@@ -1107,10 +1128,10 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           // Say the display is 100 DPI (dots/pixels per inch).
           // There are 72 pts to the inch. So 1pt = 1/72 inch, or 100 * 1/72 dots.
           int pixels = (int)(points * 100.0 / 72.0);
-          wxSprintf(buf, _T("<TD ALIGN=CENTER WIDTH=%d>"), pixels);
+          wxSnprintf(buf, sizeof(buf), _T("<TD ALIGN=CENTER WIDTH=%d>"), pixels);
         }
         else
-          wxSprintf(buf, _T("\n<TD ALIGN=LEFT>"));
+          wxSnprintf(buf, sizeof(buf), _T("\n<TD ALIGN=LEFT>"));
         TexOutput(buf);
 		OutputFont();
       }
@@ -1145,9 +1166,9 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       // Start new row and cell, setting alignment for the first cell.
       wxChar buf[100];
       if (TableData[currentColumn].justification == 'c')
-        wxSprintf(buf, _T("<TR>\n<TD ALIGN=CENTER>"));
+        wxSnprintf(buf, sizeof(buf), _T("<TR>\n<TD ALIGN=CENTER>"));
       else if (TableData[currentColumn].justification == 'r')
-        wxSprintf(buf, _T("<TR>\n<TD ALIGN=RIGHT>"));
+        wxSnprintf(buf, sizeof(buf), _T("<TR>\n<TD ALIGN=RIGHT>"));
       else if (TableData[currentColumn].absWidth)
       {
         // Convert from points * 20 into pixels.
@@ -1156,10 +1177,10 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         // Say the display is 100 DPI (dots/pixels per inch).
         // There are 72 pts to the inch. So 1pt = 1/72 inch, or 100 * 1/72 dots.
         int pixels = (int)(points * 100.0 / 72.0);
-        wxSprintf(buf, _T("<TR>\n<TD ALIGN=CENTER WIDTH=%d>"), pixels);
+        wxSnprintf(buf, sizeof(buf), _T("<TR>\n<TD ALIGN=CENTER WIDTH=%d>"), pixels);
       }
       else
-        wxSprintf(buf, _T("<TR>\n<TD ALIGN=LEFT>"));
+        wxSnprintf(buf, sizeof(buf), _T("<TR>\n<TD ALIGN=LEFT>"));
       TexOutput(buf);
 	  OutputFont();
     }
@@ -1184,10 +1205,11 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      if (TRUE) // (inVerbatim)
+      #if (1) // if(inVerbatim)
         TexOutput(_T("~"));
-      else
+      #else
         TexOutput(_T(" "));
+      #endif
     }
     break;
   }
@@ -1300,7 +1322,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
     if (start)
     {
       wxChar buf[100];
-      wxSprintf(buf, _T("<PRE>\n"));
+      wxSnprintf(buf, sizeof(buf), _T("<PRE>\n"));
       TexOutput(buf);
     }
     else TexOutput(_T("</PRE>\n"));
@@ -1453,13 +1475,13 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   case ltCOPYRIGHT:
   {
     if (start)
-      TexOutput(_T("&copy;"), TRUE);
+      TexOutput(_T("&copy;"), true);
     break;
   }
   case ltREGISTERED:
   {
     if (start)
-      TexOutput(_T("&reg;"), TRUE);
+      TexOutput(_T("&reg;"), true);
     break;
   }
   // Arrows
@@ -1682,18 +1704,18 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           figureNo ++;
 
           if (DocumentStyle != LATEX_ARTICLE)
-            wxSprintf(figBuf, _T("%s %d.%d: "), FigureNameString, chapterNo, figureNo);
+            wxSnprintf(figBuf, sizeof(figBuf), _T("%s %d.%d: "), FigureNameString, chapterNo, figureNo);
           else
-            wxSprintf(figBuf, _T("%s %d: "), FigureNameString, figureNo);
+            wxSnprintf(figBuf, sizeof(figBuf), _T("%s %d: "), FigureNameString, figureNo);
       }
       else
       {
           tableNo ++;
 
           if (DocumentStyle != LATEX_ARTICLE)
-            wxSprintf(figBuf, _T("%s %d.%d: "), TableNameString, chapterNo, tableNo);
+            wxSnprintf(figBuf, sizeof(figBuf), _T("%s %d.%d: "), TableNameString, chapterNo, tableNo);
           else
-            wxSprintf(figBuf, _T("%s %d: "), TableNameString, tableNo);
+            wxSnprintf(figBuf, sizeof(figBuf), _T("%s %d: "), TableNameString, tableNo);
       }
 
       TexOutput(figBuf);
@@ -1720,14 +1742,14 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   }
   case ltFIGURE:
   {
-    if (start) inFigure = TRUE;
-    else inFigure = FALSE;
+    if (start) inFigure = true;
+    else inFigure = false;
     break;
   }
   case ltTABLE:
   {
-    if (start) inTable = TRUE;
-    else inTable = FALSE;
+    if (start) inTable = true;
+    else inTable = false;
     break;
   }
   default:
@@ -1757,7 +1779,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
   {
     if (!start && (arg_no == 1))
       currentSection = GetArgChunk();
-    return FALSE;
+    return false;
   }
   case ltFUNC:
   {
@@ -1882,19 +1904,19 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       {
         TexOutput(sec);
       }
-      return FALSE;
+      return false;
     }
     break;
   }
   case ltURLREF:
   {
     if (IsArgOptional())
-      return FALSE;
+      return false;
     else if ((GetNoArgs() - arg_no) == 1)
     {
       if (start)
         helpRefText = GetArgChunk();
-      return FALSE;
+      return false;
     }
     else if ((GetNoArgs() - arg_no) == 0) // Arg = 2, or 3 if first is optional
     {
@@ -1902,15 +1924,15 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       {
         TexChunk *ref = GetArgChunk();
         TexOutput(_T("<A HREF=\""));
-        inVerbatim = TRUE;
+        inVerbatim = true;
         TraverseChildrenFromChunk(ref);
-        inVerbatim = FALSE;
+        inVerbatim = false;
         TexOutput(_T("\">"));
         if (helpRefText)
           TraverseChildrenFromChunk(helpRefText);
         TexOutput(_T("</A>"));
       }
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -1922,13 +1944,13 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     {
       if (start)
         helpRefFilename = GetArgChunk();
-      return FALSE;
+      return false;
     }
     if ((GetNoArgs() - arg_no) == 1)
     {
       if (start)
         helpRefText = GetArgChunk();
-      return FALSE;
+      return false;
     }
     else if ((GetNoArgs() - arg_no) == 0) // Arg = 2, or 3 if first is optional
     {
@@ -1977,7 +1999,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
         else TexOutput(_T("??"));
       }
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -2064,12 +2086,12 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           TexOutput(_T("<A HREF=\""));
           TexOutput(ConvertCase(wxFileNameFromPath(filename)));
           TexOutput(_T("\">Picture</A>\n"));
-          wxSprintf(buf, _T("Warning: could not find an inline XBM/GIF for %s."), filename);
+          wxSnprintf(buf, sizeof(buf), _T("Warning: could not find an inline XBM/GIF for %s."), filename);
           OnInform(buf);
         }
       }
     }
-    return FALSE;
+    return false;
   }
   // First arg is PSBOX spec (ignored), second is image file, third is map name.
   case ltIMAGEMAP:
@@ -2096,7 +2118,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (f == _T(""))
       {
         wxChar buf[300];
-        wxSprintf(buf, _T("Warning: could not find an inline XBM/GIF for %s."), filename);
+        wxSnprintf(buf, sizeof(buf), _T("Warning: could not find an inline XBM/GIF for %s."), filename);
         OnInform(buf);
       }
       delete[] filename;
@@ -2140,15 +2162,15 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         imageFile = NULL;
       }
     }
-    return FALSE;
+    return false;
   }
   case ltINDENTED :
   {
     if ( arg_no == 1 )
-        return FALSE;
+        return false;
     else
     {
-        return TRUE;
+        return true;
     }
   }
   case ltITEM:
@@ -2156,9 +2178,9 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     if (start)
     {
       descriptionItemArg = GetArgChunk();
-      return FALSE;
+      return false;
     }
-    return TRUE;
+    return true;
   }
   case ltTWOCOLITEM:
   case ltTWOCOLITEMRULED:
@@ -2175,7 +2197,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         // DHS
 	if (TwoColWidthA > -1) {
           wxChar buf[100];
-          wxSprintf(buf,_T("\n<TR><TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthA);
+          wxSnprintf(buf, sizeof(buf), _T("\n<TR><TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthA);
           TexOutput(buf);
         } else
           TexOutput(_T("\n<TR><TD VALIGN=TOP>\n"));
@@ -2189,7 +2211,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if ( start ) {
 	if (TwoColWidthB > -1) {
           wxChar buf[100];
-          wxSprintf(buf,_T("\n<TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthB);
+          wxSnprintf(buf, sizeof(buf), _T("\n<TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthB);
           TexOutput(buf);
         } else 
            TexOutput(_T("\n<TD VALIGN=TOP>\n"));
@@ -2197,7 +2219,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       }  else
            TexOutput(_T("\n</FONT></TD></TR>\n"));
     }
-    return TRUE;
+    return true;
   }
   case ltNUMBEREDBIBITEM:
   {
@@ -2219,18 +2241,18 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (ref)
       {
         if (ref->sectionNumber) delete[] ref->sectionNumber;
-        wxSprintf(buf, _T("[%d]"), citeCount);
+        wxSnprintf(buf, sizeof(buf), _T("[%d]"), citeCount);
         ref->sectionNumber = copystring(buf);
       }
 
-      wxSprintf(buf, _T("\n<DT> [%d] "), citeCount);
+      wxSnprintf(buf, sizeof(buf), _T("\n<DT> [%d] "), citeCount);
       TexOutput(buf);
       citeCount ++;
-      return FALSE;
+      return false;
     }
     if (arg_no == 2 && !start)
       TexOutput(_T("<P>\n"));
-    return TRUE;
+    return true;
   }
   case ltMARGINPAR:
   case ltMARGINPARODD:
@@ -2241,7 +2263,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     if (start)
     {
       TexOutput(_T("<HR>\n"));
-      return TRUE;
+      return true;
     }
     else
       TexOutput(_T("<HR><P>\n"));
@@ -2256,7 +2278,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       float points = ParseUnitArgument(val);
       TwoColWidthA = (int)((points * 100.0) / 72.0);
     }
-    return FALSE;
+    return false;
   }
   // DHS
   case ltTWOCOLWIDTHB:
@@ -2267,7 +2289,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       float points = ParseUnitArgument(val);
       TwoColWidthB = (int)((points * 100.0) / 72.0);
     }
-    return FALSE;
+    return false;
   }
   /*
    * Accents
@@ -2317,7 +2339,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_ACUTE:
   {
@@ -2369,7 +2391,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_CARET:
   {
@@ -2415,7 +2437,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_TILDE:
   {
@@ -2452,7 +2474,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_UMLAUT:
   {
@@ -2504,7 +2526,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_DOT:
   {
@@ -2526,7 +2548,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltBACKGROUND:
   {
@@ -2535,7 +2557,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       wxChar *val = GetArgData();
       if (val)
       {
-        bool isPicture = FALSE;
+        bool isPicture = false;
         ParseColourString(val, &isPicture);
         if (isPicture)
         {
@@ -2551,7 +2573,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
   case ltBACKGROUNDIMAGE:
   {
@@ -2565,7 +2587,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         backgroundImageString = copystring(val);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltBACKGROUNDCOLOUR:
   {
@@ -2579,7 +2601,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         backgroundColourString = copystring(val);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltTEXTCOLOUR:
   {
@@ -2593,7 +2615,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         textColourString = copystring(val);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltLINKCOLOUR:
   {
@@ -2607,7 +2629,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         linkColourString = copystring(val);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltFOLLOWEDLINKCOLOUR:
   {
@@ -2621,7 +2643,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         followedLinkColourString = copystring(val);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltACCENT_CADILLA:
   {
@@ -2643,16 +2665,16 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
       }
     }
-    return FALSE;
+    return false;
   }
 /*
   case ltFOOTNOTE:
   case ltFOOTNOTEPOPUP:
   {
     if (arg_no == 1)
-      return TRUE;
+      return true;
     else
-      return FALSE;
+      return false;
     break;
   }
 */
@@ -2664,10 +2686,10 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (start)
       {
         currentRowNumber = 0;
-        inTabular = TRUE;
-        startRows = TRUE;
-        tableVerticalLineLeft = FALSE;
-        tableVerticalLineRight = FALSE;
+        inTabular = true;
+        startRows = true;
+        tableVerticalLineLeft = false;
+        tableVerticalLineRight = false;
 
         wxChar *alignString = copystring(GetArgData());
         ParseTableArgument(alignString);
@@ -2684,7 +2706,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           for (int i = 0; i < noColumns; i++)
           {
             currentWidth += TableData[i].width;
-            wxSprintf(buf, _T("\\cellx%d"), currentWidth);
+            wxSnprintf(buf, sizeof(buf), _T("\\cellx%d"), currentWidth);
             TexOutput(buf);
           }
           TexOutput(_T("\\pard\\intbl\n"));
@@ -2692,13 +2714,13 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
         delete[] alignString;
 
-        return FALSE;
+        return false;
       }
     }
     else if (arg_no == 2 && !start)
     {
       TexOutput(_T("</TABLE>\n"));
-      inTabular = FALSE;
+      inTabular = false;
     }
     break;
   }
@@ -2716,9 +2738,9 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
 
       wxChar titleBuf[150];
       if (truncateFilenames)
-        wxSprintf(titleBuf, _T("%s.htm"), wxFileNameFromPath(FileRoot));
+        wxSnprintf(titleBuf, sizeof(titleBuf), _T("%s.htm"), wxFileNameFromPath(FileRoot));
       else
-        wxSprintf(titleBuf, _T("%s_contents.html"), wxFileNameFromPath(FileRoot));
+        wxSnprintf(titleBuf, sizeof(titleBuf), _T("%s_contents.html"), wxFileNameFromPath(FileRoot));
 
       HTMLHead();
       TexOutput(_T("<title>"));
@@ -2738,12 +2760,12 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       wxFprintf(Chapters, _T("</H2>\n</A>\n"));
 
       SetCurrentOutput(Chapters);
-      return FALSE;
+      return false;
     }
     if (!start && (arg_no == 2))
     {
     }
-    return TRUE;
+    return true;
   }
   case ltINDEX:
   {
@@ -2758,7 +2780,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         AddKeyWordForTopic(CurrentTopic, buf, currentFileName);
       }
     }
-    return FALSE;
+    return false;
   }
   case ltFCOL:
 //  case ltBCOL:
@@ -2775,7 +2797,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           {
             wxStrcpy(buf2, _T("#000000"));
             wxChar buf[100];
-			wxSprintf(buf, _T("Could not find colour name %s"), name);
+			wxSnprintf(buf, sizeof(buf), _T("Could not find colour name %s"), name);
             OnError(buf);
           }
           TexOutput(_T("<FONT COLOR=\""));
@@ -2785,7 +2807,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         }
         case 2:
         {
-          return TRUE;
+          return true;
         }
         default:
           break;
@@ -2795,14 +2817,14 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     {
       if (arg_no == 2) TexOutput(_T("</FONT>"));
     }
-    return FALSE;
+    return false;
   }
   case ltINSERTATLEVEL:
   {
     // This macro allows you to insert text at a different level
     // from the current level, e.g. into the Sections from within a subsubsection.
     if (useWord)
-        return FALSE;
+        return false;
     static int currentLevelNo = 1;
     static FILE* oldLevelFile = Chapters;
     if (start)
@@ -2847,16 +2869,16 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           }
           if (outputFile)
             CurrentOutput1 = outputFile;
-          return FALSE;
+          return false;
         }
         case 2:
         {
-          return TRUE;
+          return true;
         }
         default:
           break;
       }
-      return TRUE;
+      return true;
     }
     else
     {
@@ -2864,24 +2886,24 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         {
             CurrentOutput1 = oldLevelFile;
         }
-        return TRUE;
+        return true;
     }
   }
   default:
     return DefaultOnArgument(macroId, arg_no, start);
   }
-  return TRUE;
+  return true;
 }
 
 bool HTMLGo(void)
 {
   fileId = 0;
-  inVerbatim = FALSE;
+  inVerbatim = false;
   indentLevel = 0;
-  inTabular = FALSE;
-  startRows = FALSE;
-  tableVerticalLineLeft = FALSE;
-  tableVerticalLineRight = FALSE;
+  inTabular = false;
+  startRows = false;
+  tableVerticalLineLeft = false;
+  tableVerticalLineRight = false;
   noColumns = 0;
 
   if (InputFile && OutputFile)
@@ -2892,17 +2914,17 @@ bool HTMLGo(void)
 
     wxChar buf[300];
     if (truncateFilenames)
-      wxSprintf(buf, _T("%s.htm"), FileRoot);
+      wxSnprintf(buf, sizeof(buf), _T("%s.htm"), FileRoot);
     else
-      wxSprintf(buf, _T("%s_contents.html"), FileRoot);
+      wxSnprintf(buf, sizeof(buf), _T("%s_contents.html"), FileRoot);
     if (TitlepageName) delete[] TitlepageName;
     TitlepageName = copystring(buf);
     Titlepage = wxFopen(buf, _T("w"));
 
     if (truncateFilenames)
-      wxSprintf(buf, _T("%s_fc.htm"), FileRoot);
+      wxSnprintf(buf, sizeof(buf), _T("%s_fc.htm"), FileRoot);
     else
-      wxSprintf(buf, _T("%s_fcontents.html"), FileRoot);
+      wxSnprintf(buf, sizeof(buf), _T("%s_fcontents.html"), FileRoot);
 
     contentsFrameName = copystring(buf);
 
@@ -2918,7 +2940,7 @@ bool HTMLGo(void)
     if (!Titlepage || !Contents)
     {
       OnError(_T("Cannot open output file!"));
-      return FALSE;
+      return false;
     }
     AddTexRef(_T("contents"), wxFileNameFromPath(TitlepageName), ContentsNameString);
 
@@ -3012,7 +3034,7 @@ bool HTMLGo(void)
       {
         wxChar firstFileName[300];
         if (truncateFilenames)
-          wxSprintf(firstFileName, _T("%s1.htm"), FileRoot);
+          wxSnprintf(firstFileName, sizeof(firstFileName), _T("%s1.htm"), FileRoot);
         else
           wxStrcpy(firstFileName, gs_filenames[1].c_str());
 
@@ -3075,7 +3097,7 @@ bool HTMLGo(void)
     if (htmlIndex)
     {
       wxChar htmlIndexName[300];
-      wxSprintf(htmlIndexName, _T("%s.htx"), FileRoot);
+      wxSnprintf(htmlIndexName, sizeof(htmlIndexName), _T("%s.htx"), FileRoot);
       GenerateHTMLIndexFile(htmlIndexName);
     }
 
@@ -3087,10 +3109,10 @@ bool HTMLGo(void)
     }
 
 
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 // Output .htx index file
@@ -3137,7 +3159,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
 
   /* Generate project file : */
 
-  wxSprintf(buf, _T("%s.hhp"), fname);
+  wxSnprintf(buf, sizeof(buf), _T("%s.hhp"), fname);
   f = wxFopen(buf, _T("wt"));
   wxFprintf(f,
       _T("[OPTIONS]\n")
@@ -3174,7 +3196,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
   wxFprintf(f, _T("%s\n"), wxFileNameFromPath(TitlepageName));
   for (int i = 1; i <= fileId; i++) {
     if (truncateFilenames)
-      wxSprintf(buf, _T("%s%d.htm"), wxFileNameFromPath(FileRoot), i);
+      wxSnprintf(buf, sizeof(buf), _T("%s%d.htm"), wxFileNameFromPath(FileRoot), i);
     else
       wxStrcpy(buf, wxFileNameFromPath(gs_filenames[i].c_str()));
     wxFprintf(f, _T("%s\n"), buf);
@@ -3183,7 +3205,7 @@ void GenerateHTMLWorkshopFiles(wxChar *fname)
 
   /* Generate index file : */
 
-  wxSprintf(buf, _T("%s.hhk"), fname);
+  wxSnprintf(buf, sizeof(buf), _T("%s.hhk"), fname);
   f = wxFopen(buf, _T("wt"));
 
   wxFprintf(f,
@@ -3261,7 +3283,7 @@ void HTMLWorkshopAddToContents(int level, wxChar *s, wxChar *file)
 void HTMLWorkshopStartContents()
 {
   wxChar buf[300];
-  wxSprintf(buf, _T("%s.hhc"), FileRoot);
+  wxSnprintf(buf, sizeof(buf), _T("%s.hhc"), FileRoot);
   HTMLWorkshopContents = wxFopen(buf, _T("wt"));
   HTMLWorkshopLastLevel = 0;
 

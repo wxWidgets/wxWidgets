@@ -93,6 +93,8 @@ wxconfig := $(shell pwd)/$(objdir_gtk_shared)/wx-config          \
                 --prefix=$(shell pwd)                            \
                 --exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
+contrib_libs := $(subst CVS,,$(notdir $(wildcard contrib/include/wx/*)))
+
 
 # The Rules:
 
@@ -119,12 +121,12 @@ control-files-stamp: debian/control
 	done;
 	@for f in docs doc-base; do                                          \
 		echo "generating control file $(package_doc).$$f";           \
-		sed -e 's/=V/$(release)/g' < debian/wxwin-doc.$$f            \
+		sed -e 's/=V/$(release)/g' < debian/wx-doc.$$f               \
 			> debian/$(package_doc).$$f;                         \
 	done;
 	@for f in examples; do                                               \
 		echo "generating control file $(package_examples).$$f";      \
-		cp debian/wxwin-examples.$$f debian/$(package_examples).$$f; \
+		cp debian/wx-examples.$$f debian/$(package_examples).$$f;    \
 	done;
 	@for f in dirs links postinst prerm; do                              \
 		echo "generating control file $(package_msw_dev).$$f";       \
@@ -138,7 +140,7 @@ control-files-stamp: debian/control
 	done;
 	@for f in dirs; do                                                   \
 		echo "generating control file $(package_headers_msw).$$f";   \
-		sed -e 's/=H/$(cross_host)/g' < debian/wxwin-headers-msw.$$f \
+		sed -e 's/=H/$(cross_host)/g' < debian/wx-headers-msw.$$f    \
 			> debian/$(package_headers_msw).$$f;                 \
 	done;
 	touch $@
@@ -163,6 +165,7 @@ configure-gtk-shared-stamp:
 				--cache-file=$(config_cache)	\
 				--with-gtk			\
 				--enable-gtk2			\
+				--enable-unicode		\
 				--with-opengl			\
 				--enable-soname			\
 				--with-zlib=sys			\
@@ -186,6 +189,7 @@ configure-gtk-static-stamp:
 				--cache-file=$(config_cache)	\
 				--with-gtk			\
 				--enable-gtk2			\
+				--enable-unicode		\
 				--with-opengl			\
 				--disable-shared		\
 				--with-zlib=sys			\
@@ -209,6 +213,7 @@ configure-gtk-debug-stamp:
 				--cache-file=$(config_cache)	\
 				--with-gtk			\
 				--enable-gtk2			\
+				--enable-unicode		\
 				--with-opengl			\
 				--enable-debug			\
 				--enable-soname			\
@@ -228,21 +233,30 @@ build-gtk-debug-stamp: configure-gtk-debug-stamp
 
 build-contrib-shared-stamp: build-gtk-shared-stamp
 	dh_testdir
-	cd $(objdir_gtk_shared)/contrib/src \
-		&& $(MAKE)
+	cd $(objdir_gtk_shared)/contrib/src && $(MAKE)
 	touch $@
 
 build-contrib-static-stamp: build-gtk-static-stamp
 	dh_testdir
-	cd $(objdir_gtk_static)/contrib/src \
-		&& $(MAKE)
+	cd $(objdir_gtk_static)/contrib/src && $(MAKE)
 	touch $@
 
 build-gtk-py-stamp: build-gtk-shared-stamp
 	dh_testdir
 	touch docs/lgpl.txt
+	cd wxPython/include/wx						\
+		&& for f in $(contrib_libs); do				\
+			$(RM) $$f;					\
+			ln -s ../../../contrib/include/wx/$$f .;	\
+		done
 	cd wxPython \
-		&& $(python_ver) ./setup.py build WX_CONFIG='$(wxconfig)'
+		&& $(python_ver) ./setup.py 	build			\
+						WX_CONFIG='$(wxconfig)'	\
+						WXPORT=gtk2		\
+						UNICODE=1
+	cd wxPython/include/wx						\
+		&& for f in $(contrib_libs); do $(RM) $$f; done
+
 	touch $@
 
 build-doc-stamp: build-gtk-shared-stamp
@@ -250,6 +264,7 @@ build-doc-stamp: build-gtk-shared-stamp
 	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
 		&& $(MAKE)
 	rm -rf $(objdir_doc)
+	rm -rf $(objdir_doc_cruft)
 	mkdir $(objdir_doc)
 	mkdir $(objdir_doc_cruft)
 	cd $(objdir_doc_cruft) \
@@ -409,9 +424,9 @@ install-gtk-dev: build-gtk-static-stamp install-gtk-shared-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	dh_install $(objdir_gtk_install)/bin/wxgtk2-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_install)/bin/wxgtk2u-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_install)/lib/{wx,*.so} 			usr/lib
-	dh_install $(objdir_gtk_static)/lib/libwx_gtk2{-,_gl}*.a 	usr/lib
+	dh_install $(objdir_gtk_static)/lib/libwx_gtk2u{-,_gl}*.a 	usr/lib
 
 install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
 install-gtk-dbg: build-gtk-debug-stamp
@@ -419,7 +434,7 @@ install-gtk-dbg: build-gtk-debug-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs usr/share/lintian/overrides
-	dh_install $(objdir_gtk_debug)/wxgtk2d-$(release)-config 	usr/bin
+	dh_install $(objdir_gtk_debug)/wxgtk2ud-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_debug)/lib 				usr
 	cp debian/lintian-override debian/$(package_gtk_dbg)/usr/share/lintian/overrides/$(package_gtk_dbg)
 
@@ -447,7 +462,7 @@ install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-contrib-stamp
 	dh_installdirs
 	dh_install $(objdir_gtk_contrib_install)/include 	usr
 	dh_install $(objdir_gtk_contrib_install)/lib/*.so 	usr/lib
-	dh_install -Xlibwx_gtk2- -Xlibwx_gtk2_gl- \
+	dh_install -Xlibwx_gtk2u- -Xlibwx_gtk2u_gl- \
 		   $(objdir_gtk_static)/lib/*.a 		usr/lib
 
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
@@ -459,7 +474,9 @@ install-gtk-py: build-gtk-py-stamp
 	cd wxPython 								\
 		&& $(python_ver) ./setup.py install 				\
 			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr 	\
-			      WX_CONFIG='$(wxconfig)'
+			      WX_CONFIG='$(wxconfig)'				\
+			      WXPORT=gtk2					\
+			      UNICODE=1
 
 	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython \
 		-name '*.py?' -exec rm '{}' ';'
@@ -477,7 +494,7 @@ install-gtk-py: build-gtk-py-stamp
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wx/tools/XRCed/license.txt
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-shared-stamp
@@ -580,7 +597,7 @@ binary-common:
 	dh_fixperms
 	dh_makeshlibs -N$(package_gtk_py) -V
 	dh_installdeb
-	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib
+	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib:debian/$(package_gtk_contrib)/usr/lib
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb

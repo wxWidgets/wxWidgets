@@ -3,7 +3,8 @@
 // Purpose:     Utilities for manipulating bitmap and metafile images for
 //              the purposes of conversion to RTF
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+//              Ron Lee
 // Created:     7.9.93
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -63,7 +64,7 @@ bool GetBMPHeader(FILE *fp, int *Width, int *Height, int *Planes, int *BitsPerPi
 
   /* read the file type (first two bytes) */
   int c = getc(fp); int c1 = getc(fp);
-  if (c!='B' || c1!='M') { return FALSE; }
+  if (c!='B' || c1!='M') { return false; }
 
   /* bfSize = */          getint(fp);
   getshort(fp);         /* reserved and ignored */
@@ -88,22 +89,22 @@ bool GetBMPHeader(FILE *fp, int *Width, int *Height, int *Planes, int *BitsPerPi
   *BitsPerPixel = (int)biBitCount;
 
 //  fseek(fp, bfOffBits, SEEK_SET);
-  
-  return TRUE;
+
+  return true;
 }
 
 static int scanLineWidth = 0;
 
-bool OutputBitmapHeader(FILE *fd, bool isWinHelp = FALSE)
+bool OutputBitmapHeader(FILE *fd, bool isWinHelp = false)
 {
   int Width, Height, Planes, BitsPerPixel;
   if (!GetBMPHeader(fd, &Width, &Height, &Planes, &BitsPerPixel))
-    return FALSE;
+    return false;
 
   scanLineWidth = (int)((float)Width/(8.0/(float)BitsPerPixel));
   if ((float)((int)(scanLineWidth/2.0)) != (float)(scanLineWidth/2.0))
     scanLineWidth ++;
-    
+
   int goalW = 15*Width;
   int goalH = 15*Height;
 
@@ -112,15 +113,15 @@ bool OutputBitmapHeader(FILE *fd, bool isWinHelp = FALSE)
   else TexOutput(_T("\\dibitmap)"));
 
   wxChar buf[50];
-  TexOutput(_T("\\picw")); wxSprintf(buf, _T("%d"), Width); TexOutput(buf);
-  TexOutput(_T("\\pich")); wxSprintf(buf, _T("%d"), Height); TexOutput(buf);
-  TexOutput(_T("\\wbmbitspixel")); wxSprintf(buf, _T("%d"), BitsPerPixel); TexOutput(buf);
-  TexOutput(_T("\\wbmplanes")); wxSprintf(buf, _T("%d"), Planes); TexOutput(buf);
-  TexOutput(_T("\\wbmwidthbytes")); wxSprintf(buf, _T("%d"), scanLineWidth); TexOutput(buf);
-  TexOutput(_T("\\picwgoal")); wxSprintf(buf, _T("%d"), goalW); TexOutput(buf);
-  TexOutput(_T("\\pichgoal")); wxSprintf(buf, _T("%d"), goalH); TexOutput(buf);
+  TexOutput(_T("\\picw")); wxSnprintf(buf, sizeof(buf), _T("%d"), Width); TexOutput(buf);
+  TexOutput(_T("\\pich")); wxSnprintf(buf, sizeof(buf), _T("%d"), Height); TexOutput(buf);
+  TexOutput(_T("\\wbmbitspixel")); wxSnprintf(buf, sizeof(buf), _T("%d"), BitsPerPixel); TexOutput(buf);
+  TexOutput(_T("\\wbmplanes")); wxSnprintf(buf, sizeof(buf), _T("%d"), Planes); TexOutput(buf);
+  TexOutput(_T("\\wbmwidthbytes")); wxSnprintf(buf, sizeof(buf), _T("%d"), scanLineWidth); TexOutput(buf);
+  TexOutput(_T("\\picwgoal")); wxSnprintf(buf, sizeof(buf), _T("%d"), goalW); TexOutput(buf);
+  TexOutput(_T("\\pichgoal")); wxSnprintf(buf, sizeof(buf), _T("%d"), goalH); TexOutput(buf);
   TexOutput(_T("\n"));
-  return TRUE;
+  return true;
 }
 
 
@@ -143,7 +144,7 @@ bool OutputBitmapData(FILE *fd)
     ch = getc(fd);
   }
   TexOutput(_T("\n}\n"));
-  return TRUE;
+  return true;
 }
 
 #ifdef __WXMSW__
@@ -164,21 +165,21 @@ bool GetMetafileHeader(FILE *handle, int *width, int *height)
   fread((void *)theHeader, sizeof(char), sizeof(mfPLACEABLEHEADER), handle);
   if (theHeader->key != 0x9AC6CDD7)
   {
-    return FALSE;
+    return false;
   }
 
   float widthInUnits = (float)theHeader->bbox.right - theHeader->bbox.left;
   float heightInUnits = (float)theHeader->bbox.bottom - theHeader->bbox.top;
   *width = (int)((widthInUnits*1440.0)/theHeader->inch);
   *height = (int)((heightInUnits*1440.0)/theHeader->inch);
-  return TRUE;
+  return true;
 }
 
 bool OutputMetafileHeader(FILE *handle, bool WXUNUSED(isWinHelp), int userWidth, int userHeight)
 {
   int Width, Height;
   if (!GetMetafileHeader(handle, &Width, &Height))
-    return FALSE;
+    return false;
 
   scanLineWidth = 64;
   int goalW = Width;
@@ -207,12 +208,12 @@ bool OutputMetafileHeader(FILE *handle, bool WXUNUSED(isWinHelp), int userWidth,
   TexOutput(_T("\\wmetafile8"));
 
   wxChar buf[50];
-  TexOutput(_T("\\picw")); wxSprintf(buf, _T("%d"), Width); TexOutput(buf);
-  TexOutput(_T("\\pich")); wxSprintf(buf, _T("%d"), Height); TexOutput(buf);
-  TexOutput(_T("\\picwgoal")); wxSprintf(buf, _T("%d"), goalW); TexOutput(buf);
-  TexOutput(_T("\\pichgoal")); wxSprintf(buf, _T("%d"), goalH); TexOutput(buf);
+  TexOutput(_T("\\picw")); wxSnprintf(buf, sizeof(buf), _T("%d"), Width); TexOutput(buf);
+  TexOutput(_T("\\pich")); wxSnprintf(buf, sizeof(buf), _T("%d"), Height); TexOutput(buf);
+  TexOutput(_T("\\picwgoal")); wxSnprintf(buf, sizeof(buf), _T("%d"), goalW); TexOutput(buf);
+  TexOutput(_T("\\pichgoal")); wxSnprintf(buf, sizeof(buf), _T("%d"), goalH); TexOutput(buf);
   TexOutput(_T("\n"));
-  return TRUE;
+  return true;
 }
 
 bool OutputMetafileData(FILE *handle)
@@ -236,7 +237,7 @@ bool OutputMetafileData(FILE *handle)
     }
   } while (ch != EOF);
   TexOutput(_T("\n}\n"));
-  return TRUE;
+  return true;
 }
 
 #endif

@@ -2,7 +2,8 @@
 // Name:        texutils.cpp
 // Purpose:     Miscellaneous utilities
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+//              Ron Lee
 // Created:     7.9.93
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -136,16 +137,16 @@ void FakeCurrentSection(wxChar *fakeSection, bool addToContents)
     int mac = ltSECTIONHEADING;
     if (!addToContents)
       mac = ltSECTIONHEADINGSTAR;
-    OnMacro(mac, 0, TRUE);
-    OnMacro(mac, 0, FALSE);
+    OnMacro(mac, 0, true);
+    OnMacro(mac, 0, false);
   }
   else
   {
     int mac = ltCHAPTERHEADING;
     if (!addToContents)
       mac = ltCHAPTERHEADINGSTAR;
-    OnMacro(mac, 0, TRUE);
-    OnMacro(mac, 0, FALSE);
+    OnMacro(mac, 0, true);
+    OnMacro(mac, 0, false);
   }
   if (fakeCurrentSection) delete[] fakeCurrentSection;
   fakeCurrentSection = NULL;
@@ -203,7 +204,7 @@ wxChar *FindTopicName(TexChunk *chunk)
     return topicName;
   else
   {
-    wxSprintf(topicBuf, _T("topic%ld"), topicCounter);
+    wxSnprintf(topicBuf, sizeof(topicBuf), _T("topic%ld"), topicCounter);
     topicCounter ++;
     return topicBuf;
   }
@@ -219,12 +220,12 @@ wxChar *FindTopicName(TexChunk *chunk)
 void StartSimulateArgument(wxChar *data)
 {
   wxStrcpy(currentArgData, data);
-  haveArgData = TRUE;
+  haveArgData = true;
 }
 
 void EndSimulateArgument(void)
 {
-  haveArgData = FALSE;
+  haveArgData = false;
 }
 
 /*
@@ -362,7 +363,7 @@ void AddTexRef(wxChar *name, wxChar *file, wxChar *sectionName,
   if (chapter)
   {
     wxChar buf2[10];
-    wxSprintf(buf2, _T("%d"), chapter);
+    wxSnprintf(buf2, sizeof(buf2), _T("%d"), chapter);
     wxStrcat(buf, buf2);
   }
   if (section)
@@ -371,21 +372,21 @@ void AddTexRef(wxChar *name, wxChar *file, wxChar *sectionName,
     if (chapter)
       wxStrcat(buf, _T("."));
 
-    wxSprintf(buf2, _T("%d"), section);
+    wxSnprintf(buf2, sizeof(buf2), _T("%d"), section);
     wxStrcat(buf, buf2);
   }
   if (subsection)
   {
     wxChar buf2[10];
     wxStrcat(buf, _T("."));
-    wxSprintf(buf2, _T("%d"), subsection);
+    wxSnprintf(buf2, sizeof(buf2), _T("%d"), subsection);
     wxStrcat(buf, buf2);
   }
   if (subsubsection)
   {
     wxChar buf2[10];
     wxStrcat(buf, _T("."));
-    wxSprintf(buf2, _T("%d"), subsubsection);
+    wxSnprintf(buf2, sizeof(buf2), _T("%d"), subsubsection);
     wxStrcat(buf, buf2);
   }
   wxChar *tmp = ((wxStrlen(buf) > 0) ? buf : (wxChar *)NULL);
@@ -394,9 +395,10 @@ void AddTexRef(wxChar *name, wxChar *file, wxChar *sectionName,
 
 void WriteTexReferences(wxChar *filename)
 {
-  wxSTD ofstream ostr(filename);
+  wxString converter;
+  wxString name = filename;
+  wxSTD ofstream ostr((char const *)name.fn_str());
   if (ostr.bad()) return;
-  wxChar buf[200];
   
   TexReferences.BeginFind();
   wxNode *node = TexReferences.Next();
@@ -404,12 +406,22 @@ void WriteTexReferences(wxChar *filename)
   {
     Tex2RTFYield();
     TexRef *ref = (TexRef *)node->GetData();
-    ostr << ref->refLabel << _T(" ") << (ref->refFile ? ref->refFile : _T("??")) << _T(" ");
-    ostr << (ref->sectionName ? ref->sectionName : _T("??")) << _T(" ");
-    ostr << (ref->sectionNumber ? ref->sectionNumber : _T("??")) << _T("\n");
+    converter = ref->refLabel;
+    ostr << converter.mb_str();
+    ostr << " ";
+    converter = (ref->refFile ? ref->refFile : _T("??"));
+    ostr << converter.mb_str();
+    ostr << " ";
+    converter = (ref->sectionName ? ref->sectionName : _T("??")) ;
+    ostr << converter.mb_str();
+    ostr << " ";
+    converter = (ref->sectionNumber ? ref->sectionNumber : _T("??")) ;
+    ostr << converter.mb_str();
+    ostr << "\n";
     if (!ref->sectionNumber || (wxStrcmp(ref->sectionNumber, _T("??")) == 0 && wxStrcmp(ref->sectionName, _T("??")) == 0))
     {
-      wxSprintf(buf, _T("Warning: reference %s not resolved."), ref->refLabel);
+      wxChar buf[200];
+      wxSnprintf(buf, sizeof(buf), _T("Warning: reference %s not resolved."), ref->refLabel);
       OnInform(buf);
     }
     node = TexReferences.Next();
@@ -421,14 +433,15 @@ void ReadTexReferences(wxChar *filename)
   if (!wxFileExists(filename))
       return;
 
-  wxSTD ifstream istr(filename, wxSTD ios::in);
+  wxString name = filename;
+  wxSTD ifstream istr((char const *)name.fn_str(), wxSTD ios::in);
 
   if (istr.bad()) return;
 
-  wxChar label[100];
-  wxChar file[400];
-  wxChar section[100];
-  wxChar sectionName[100];
+  char label[100];
+  char file[400];
+  char section[100];
+  char sectionName[100];
 
   while (!istr.eof())
   {
@@ -449,13 +462,26 @@ void ReadTexReferences(wxChar *filename)
       }
       section[i] = 0;
 
+      wxString label_string       = wxString::FromAscii(label);
+      wxString file_string        = wxString::FromAscii(file);
+      wxString sectionName_string = wxString::FromAscii(sectionName);
+      wxString section_string     = wxString::FromAscii(section);
+
       // gt - needed to trick the hash table "TexReferences" into deleting the key 
       // strings it creates in the Put() function, but not the item that is
       // created here, as that is destroyed elsewhere.  Without doing this, there
       // were massive memory leaks
-      TexReferences.DeleteContents(TRUE);
-      TexReferences.Put(label, new TexRef(label, file, section, sectionName));
-      TexReferences.DeleteContents(FALSE);
+      TexReferences.DeleteContents(true);
+      TexReferences.Put(
+        label_string.c_str(), 
+        new TexRef(
+              label_string.c_str(), 
+              file_string.c_str(), 
+              section_string.c_str(), 
+              sectionName_string.c_str()
+        )
+      );
+      TexReferences.DeleteContents(false);
     }
   }
 }
@@ -515,13 +541,13 @@ void BibReadToEOL(wxSTD istream& istr, wxChar *buffer)
 {
   int i = 0;
   buffer[i] = 0;
-  wxChar ch = istr.peek();
-  bool inQuotes = FALSE;
-  if (ch == _T('"'))
+  char ch = istr.peek();
+  bool inQuotes = false;
+  if (ch == '"')
   {
     istr.get(ch);
     ch = istr.peek();
-    inQuotes = TRUE;
+    inQuotes = true;
   }
   // If in quotes, read white space too. If not,
   // stop at white space or comment.
@@ -540,21 +566,21 @@ void BibReadToEOL(wxSTD istream& istr, wxChar *buffer)
 }
 
 // Read }-terminated value, taking nested braces into account.
-void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = TRUE,
-                  bool quotesMayTerminate = TRUE)
+void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
+                  bool quotesMayTerminate = true)
 {
   int braceCount = 1;
   int i = 0;
   buffer[i] = 0;
   char ch = istr.peek();
-  bool stopping = FALSE;
+  bool stopping = false;
   while (!istr.eof() && !stopping)
   {
 //    i ++;
     if (i >= 4000)
     {
       wxChar buf[100];
-      wxSprintf(buf, _T("Sorry, value > 4000 chars in bib file at line %ld."), BibLine);
+      wxSnprintf(buf, sizeof(buf), _T("Sorry, value > 4000 chars in bib file at line %ld."), BibLine);
       wxLogError(buf, "Tex2RTF Fatal Error");
       return;
     }
@@ -568,13 +594,13 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = TRUE,
       braceCount --;
       if (braceCount == 0)
       {
-        stopping = TRUE;
+        stopping = true;
         break;
       }
     }
     else if (quotesMayTerminate && ch == '"')
     {
-      stopping = TRUE;
+      stopping = true;
       break;
     }
     if (!stopping)
@@ -595,11 +621,12 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = TRUE,
 bool ReadBib(wxChar *filename)
 {
   if (!wxFileExists(filename))
-      return FALSE;
+      return false;
 
+  wxString name = filename;
   wxChar buf[300];
-  wxSTD ifstream istr(filename, wxSTD ios::in);
-  if (istr.bad()) return FALSE;
+  wxSTD ifstream istr((char const *)name.fn_str(), wxSTD ios::in);
+  if (istr.bad()) return false;
 
   BibLine = 1;
 
@@ -618,38 +645,38 @@ bool ReadBib(wxChar *filename)
     istr.get(ch);
     if (ch != '@')
     {
-      wxSprintf(buf, _T("Expected @: malformed bib file at line %ld (%s)"), BibLine, filename);
+      wxSnprintf(buf, sizeof(buf), _T("Expected @: malformed bib file at line %ld (%s)"), BibLine, filename);
       OnError(buf);
-      return FALSE;
+      return false;
     }
     BibReadWord(istr, recordType);
     BibEatWhiteSpace(istr);
     istr.get(ch);
     if (ch != '{' && ch != '(')
     {
-      wxSprintf(buf, _T("Expected { or ( after record type: malformed .bib file at line %ld (%s)"), BibLine, filename);
+      wxSnprintf(buf, sizeof(buf), _T("Expected { or ( after record type: malformed .bib file at line %ld (%s)"), BibLine, filename);
       OnError(buf);
-      return FALSE;
+      return false;
     }
     BibEatWhiteSpace(istr);
-    if (StringMatch(recordType, _T("string"), FALSE, TRUE))
+    if (StringMatch(recordType, _T("string"), false, true))
     {
       BibReadWord(istr, recordType);
       BibEatWhiteSpace(istr);
       istr.get(ch);
       if (ch != '=')
       {
-        wxSprintf(buf, _T("Expected = after string key: malformed .bib file at line %ld (%s)"), BibLine, filename);
+        wxSnprintf(buf, sizeof(buf), _T("Expected = after string key: malformed .bib file at line %ld (%s)"), BibLine, filename);
         OnError(buf);
-        return FALSE;
+        return false;
       }
       BibEatWhiteSpace(istr);
       istr.get(ch);
       if (ch != '"' && ch != '{')
       {
-        wxSprintf(buf, _T("Expected = after string key: malformed .bib file at line %ld (%s)"), BibLine, filename);
+        wxSnprintf(buf, sizeof(buf), _T("Expected = after string key: malformed .bib file at line %ld (%s)"), BibLine, filename);
         OnError(buf);
-        return FALSE;
+        return false;
       }
       BibReadValue(istr, fieldValue);
 
@@ -670,14 +697,14 @@ bool ReadBib(wxChar *filename)
       bibEntry->key = copystring(recordKey);
       bibEntry->type = copystring(recordType);
 
-      bool moreRecords = TRUE;
+      bool moreRecords = true;
       while (moreRecords && !istr.eof())
       {
         BibEatWhiteSpace(istr);
         istr.get(ch);
         if (ch == '}' || ch == ')')
         {
-          moreRecords = FALSE;
+          moreRecords = false;
         }
         else if (ch == ',')
         {
@@ -687,9 +714,9 @@ bool ReadBib(wxChar *filename)
           istr.get(ch);
           if (ch != '=')
           {
-            wxSprintf(buf, _T("Expected = after field type: malformed .bib file at line %ld (%s)"), BibLine, filename);
+            wxSnprintf(buf, sizeof(buf), _T("Expected = after field type: malformed .bib file at line %ld (%s)"), BibLine, filename);
             OnError(buf);
-            return FALSE;
+            return false;
           }
           BibEatWhiteSpace(istr);
           istr.get(ch);
@@ -706,64 +733,64 @@ bool ReadBib(wxChar *filename)
             }
           }
           else
-            BibReadValue(istr, fieldValue, TRUE, (ch == _T('"') ? TRUE : FALSE));
+            BibReadValue(istr, fieldValue, true, (ch == _T('"') ? true : false));
 
           // Now we can add a field
-          if (StringMatch(recordField, _T("author"), FALSE, TRUE))
+          if (StringMatch(recordField, _T("author"), false, true))
             bibEntry->author = copystring(fieldValue);
-          else if (StringMatch(recordField, _T("key"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("key"), false, true))
             {}
-          else if (StringMatch(recordField, _T("annotate"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("annotate"), false, true))
             {}
-          else if (StringMatch(recordField, _T("abstract"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("abstract"), false, true))
             {}
-          else if (StringMatch(recordField, _T("edition"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("edition"), false, true))
             {}
-          else if (StringMatch(recordField, _T("howpublished"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("howpublished"), false, true))
             {}
-          else if (StringMatch(recordField, _T("note"), FALSE, TRUE) || StringMatch(recordField, _T("notes"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("note"), false, true) || StringMatch(recordField, _T("notes"), false, true))
             {}
-          else if (StringMatch(recordField, _T("series"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("series"), false, true))
             {}
-          else if (StringMatch(recordField, _T("type"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("type"), false, true))
             {}
-          else if (StringMatch(recordField, _T("keywords"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("keywords"), false, true))
             {}
-          else if (StringMatch(recordField, _T("editor"), FALSE, TRUE) || StringMatch(recordField, _T("editors"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("editor"), false, true) || StringMatch(recordField, _T("editors"), false, true))
             bibEntry->editor= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("title"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("title"), false, true))
             bibEntry->title= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("booktitle"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("booktitle"), false, true))
             bibEntry->booktitle= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("journal"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("journal"), false, true))
             bibEntry->journal= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("volume"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("volume"), false, true))
             bibEntry->volume= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("number"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("number"), false, true))
             bibEntry->number= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("year"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("year"), false, true))
             bibEntry->year= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("month"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("month"), false, true))
             bibEntry->month= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("pages"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("pages"), false, true))
             bibEntry->pages= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("publisher"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("publisher"), false, true))
             bibEntry->publisher= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("address"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("address"), false, true))
             bibEntry->address= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("institution"), FALSE, TRUE) || StringMatch(recordField, _T("school"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("institution"), false, true) || StringMatch(recordField, _T("school"), false, true))
             bibEntry->institution= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("organization"), FALSE, TRUE) || StringMatch(recordField, _T("organisation"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("organization"), false, true) || StringMatch(recordField, _T("organisation"), false, true))
             bibEntry->organization= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("comment"), FALSE, TRUE) || StringMatch(recordField, _T("comments"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("comment"), false, true) || StringMatch(recordField, _T("comments"), false, true))
             bibEntry->comment= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("annote"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("annote"), false, true))
             bibEntry->comment= copystring(fieldValue);
-          else if (StringMatch(recordField, _T("chapter"), FALSE, TRUE))
+          else if (StringMatch(recordField, _T("chapter"), false, true))
             bibEntry->chapter= copystring(fieldValue);
           else
           {
-            wxSprintf(buf, _T("Unrecognised bib field type %s at line %ld (%s)"), recordField, BibLine, filename);
+            wxSnprintf(buf, sizeof(buf), _T("Unrecognised bib field type %s at line %ld (%s)"), recordField, BibLine, filename);
             OnError(buf);
           }
         }
@@ -772,26 +799,26 @@ bool ReadBib(wxChar *filename)
       BibEatWhiteSpace(istr);
     }
   }
-  return TRUE;
+  return true;
 }
 
 void OutputBibItem(TexRef *ref, BibEntry *bib)
 {
   Tex2RTFYield();
 
-  OnMacro(ltNUMBEREDBIBITEM, 2, TRUE);
-  OnArgument(ltNUMBEREDBIBITEM, 1, TRUE);
+  OnMacro(ltNUMBEREDBIBITEM, 2, true);
+  OnArgument(ltNUMBEREDBIBITEM, 1, true);
   TexOutput(ref->sectionNumber);
-  OnArgument(ltNUMBEREDBIBITEM, 1, FALSE);
-  OnArgument(ltNUMBEREDBIBITEM, 2, TRUE);
+  OnArgument(ltNUMBEREDBIBITEM, 1, false);
+  OnArgument(ltNUMBEREDBIBITEM, 2, true);
 
   TexOutput(_T(" "));
-  OnMacro(ltBF, 1, TRUE);
-  OnArgument(ltBF, 1, TRUE);
+  OnMacro(ltBF, 1, true);
+  OnArgument(ltBF, 1, true);
   if (bib->author)
     TexOutput(bib->author);
-  OnArgument(ltBF, 1, FALSE);
-  OnMacro(ltBF, 1, FALSE);
+  OnArgument(ltBF, 1, false);
+  OnMacro(ltBF, 1, false);
   if (bib->author && (wxStrlen(bib->author) > 0) && (bib->author[wxStrlen(bib->author) - 1] != '.'))
     TexOutput(_T(". "));
   else
@@ -810,7 +837,7 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
   if (bib->year || bib->month)
     TexOutput(_T(". "));
 
-  if (StringMatch(bib->type, _T("article"), FALSE, TRUE))
+  if (StringMatch(bib->type, _T("article"), false, true))
   {
     if (bib->title)
     {
@@ -819,20 +846,20 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
     }
     if (bib->journal)
     {
-      OnMacro(ltIT, 1, TRUE);
-      OnArgument(ltIT, 1, TRUE);
+      OnMacro(ltIT, 1, true);
+      OnArgument(ltIT, 1, true);
       TexOutput(bib->journal);
-      OnArgument(ltIT, 1, FALSE);
-      OnMacro(ltIT, 1, FALSE);
+      OnArgument(ltIT, 1, false);
+      OnMacro(ltIT, 1, false);
     }
     if (bib->volume)
     {
       TexOutput(_T(", "));
-      OnMacro(ltBF, 1, TRUE);
-      OnArgument(ltBF, 1, TRUE);
+      OnMacro(ltBF, 1, true);
+      OnArgument(ltBF, 1, true);
       TexOutput(bib->volume);
-      OnArgument(ltBF, 1, FALSE);
-      OnMacro(ltBF, 1, FALSE);
+      OnArgument(ltBF, 1, false);
+      OnMacro(ltBF, 1, false);
     }
     if (bib->number)
     {
@@ -847,27 +874,27 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
     }
     TexOutput(_T("."));
   }
-  else if (StringMatch(bib->type, _T("book"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("unpublished"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("manual"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("phdthesis"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("mastersthesis"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("misc"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("techreport"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("booklet"), FALSE, TRUE))
+  else if (StringMatch(bib->type, _T("book"), false, true) ||
+           StringMatch(bib->type, _T("unpublished"), false, true) ||
+           StringMatch(bib->type, _T("manual"), false, true) ||
+           StringMatch(bib->type, _T("phdthesis"), false, true) ||
+           StringMatch(bib->type, _T("mastersthesis"), false, true) ||
+           StringMatch(bib->type, _T("misc"), false, true) ||
+           StringMatch(bib->type, _T("techreport"), false, true) ||
+           StringMatch(bib->type, _T("booklet"), false, true))
   {
     if (bib->title || bib->booktitle)
     {
-      OnMacro(ltIT, 1, TRUE);
-      OnArgument(ltIT, 1, TRUE);
+      OnMacro(ltIT, 1, true);
+      OnArgument(ltIT, 1, true);
       TexOutput(bib->title ? bib->title : bib->booktitle);
       TexOutput(_T(". "));
-      OnArgument(ltIT, 1, FALSE);
-      OnMacro(ltIT, 1, FALSE);
+      OnArgument(ltIT, 1, false);
+      OnMacro(ltIT, 1, false);
     }
-    if (StringMatch(bib->type, _T("phdthesis"), FALSE, TRUE))
+    if (StringMatch(bib->type, _T("phdthesis"), false, true))
       TexOutput(_T("PhD thesis. "));
-    if (StringMatch(bib->type, _T("techreport"), FALSE, TRUE))
+    if (StringMatch(bib->type, _T("techreport"), false, true))
       TexOutput(_T("Technical report. "));
     if (bib->editor)
     {
@@ -896,10 +923,10 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
       TexOutput(_T(". "));
     }
   }
-  else if (StringMatch(bib->type, _T("inbook"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("inproceedings"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("incollection"), FALSE, TRUE) ||
-           StringMatch(bib->type, _T("conference"), FALSE, TRUE))
+  else if (StringMatch(bib->type, _T("inbook"), false, true) ||
+           StringMatch(bib->type, _T("inproceedings"), false, true) ||
+           StringMatch(bib->type, _T("incollection"), false, true) ||
+           StringMatch(bib->type, _T("conference"), false, true))
   {
     if (bib->title)
     {
@@ -908,12 +935,12 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
     if (bib->booktitle)
     {
       TexOutput(_T(", from "));
-      OnMacro(ltIT, 1, TRUE);
-      OnArgument(ltIT, 1, TRUE);
+      OnMacro(ltIT, 1, true);
+      OnArgument(ltIT, 1, true);
       TexOutput(bib->booktitle);
       TexOutput(_T("."));
-      OnArgument(ltIT, 1, FALSE);
-      OnMacro(ltIT, 1, FALSE);
+      OnArgument(ltIT, 1, false);
+      OnMacro(ltIT, 1, false);
     }
     if (bib->editor)
     {
@@ -937,11 +964,11 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
     if (bib->volume)
     {
       TexOutput(_T(" "));
-      OnMacro(ltBF, 1, TRUE);
-      OnArgument(ltBF, 1, TRUE);
+      OnMacro(ltBF, 1, true);
+      OnArgument(ltBF, 1, true);
       TexOutput(bib->volume);
-      OnArgument(ltBF, 1, FALSE);
-      OnMacro(ltBF, 1, FALSE);
+      OnArgument(ltBF, 1, false);
+      OnMacro(ltBF, 1, false);
     }
     if (bib->number)
     {
@@ -971,8 +998,8 @@ void OutputBibItem(TexRef *ref, BibEntry *bib)
       TexOutput(_T("."));
     }
   }
-  OnArgument(ltNUMBEREDBIBITEM, 2, FALSE);
-  OnMacro(ltNUMBEREDBIBITEM, 2, FALSE);
+  OnArgument(ltNUMBEREDBIBITEM, 2, false);
+  OnMacro(ltNUMBEREDBIBITEM, 2, false);
 }
 
 void OutputBib(void)
@@ -982,13 +1009,13 @@ void OutputBib(void)
   FakeCurrentSection(ReferencesNameString);
   ForceTopicName(NULL);
 
-  OnMacro(ltPAR, 0, TRUE);
-  OnMacro(ltPAR, 0, FALSE);
+  OnMacro(ltPAR, 0, true);
+  OnMacro(ltPAR, 0, false);
 
   if ((convertMode == TEX_RTF) && !winHelp)
   {
-    OnMacro(ltPAR, 0, TRUE);
-    OnMacro(ltPAR, 0, FALSE);
+    OnMacro(ltPAR, 0, true);
+    OnMacro(ltPAR, 0, false);
   }
 
   wxStringListNode *node = CitationList.GetFirst();
@@ -1029,13 +1056,13 @@ void ResolveBibReferences(void)
       // Unused Variable
       //BibEntry *entry = (BibEntry *)bibNode->GetData();
       if (ref->sectionNumber) delete[] ref->sectionNumber;
-      wxSprintf(buf, _T("[%d]"), citeCount);
+      wxSnprintf(buf, sizeof(buf), _T("[%d]"), citeCount);
       ref->sectionNumber = copystring(buf);
       citeCount ++;
     }
     else
     {
-      wxSprintf(buf, _T("Warning: bib ref %s not resolved."), citeKey);
+      wxSnprintf(buf, sizeof(buf), _T("Warning: bib ref %s not resolved."), citeKey);
       OnInform(buf);
     }
     node = node->GetNext();
@@ -1068,12 +1095,12 @@ bool StringTobool(wxChar *val)
 {
   if (wxStrncmp(val, _T("yes"), 3) == 0 || wxStrncmp(val, _T("YES"), 3) == 0 ||
       wxStrncmp(val, _T("on"), 2) == 0 || wxStrncmp(val, _T("ON"), 2) == 0 ||
-      wxStrncmp(val, _T("true"), 4) == 0 || wxStrncmp(val, _T("TRUE"), 4) == 0 ||
+      wxStrncmp(val, _T("true"), 4) == 0 || wxStrncmp(val, _T("true"), 4) == 0 ||
       wxStrncmp(val, _T("ok"), 2) == 0 || wxStrncmp(val, _T("OK"), 2) == 0 ||
       wxStrncmp(val, _T("1"), 1) == 0)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 // Define a variable value from the .ini file
@@ -1081,151 +1108,151 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
 {
   static wxChar errorCode[100];
   wxStrcpy(errorCode, _T("OK"));
-  if (StringMatch(settingName, _T("chapterName"), FALSE, TRUE))
+  if (StringMatch(settingName, _T("chapterName"), false, true))
   {
     delete[] ChapterNameString;
     ChapterNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("sectionName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("sectionName"), false, true))
   {
     delete[] SectionNameString;
     SectionNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("subsectionName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("subsectionName"), false, true))
   {
     delete[] SubsectionNameString;
     SubsectionNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("subsubsectionName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("subsubsectionName"), false, true))
   {
     delete[] SubsubsectionNameString;
     SubsubsectionNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("indexName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("indexName"), false, true))
   {
     delete[] IndexNameString;
     IndexNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("contentsName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("contentsName"), false, true))
   {
     delete[] ContentsNameString;
     ContentsNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("glossaryName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("glossaryName"), false, true))
   {
     delete[] GlossaryNameString;
     GlossaryNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("referencesName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("referencesName"), false, true))
   {
     delete[] ReferencesNameString;
     ReferencesNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("tablesName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("tablesName"), false, true))
   {
     delete[] TablesNameString;
     TablesNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("figuresName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("figuresName"), false, true))
   {
     delete[] FiguresNameString;
     FiguresNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("tableName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("tableName"), false, true))
   {
     delete[] TableNameString;
     TableNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("figureName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("figureName"), false, true))
   {
     delete[] FigureNameString;
     FigureNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("abstractName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("abstractName"), false, true))
   {
     delete[] AbstractNameString;
     AbstractNameString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("chapterFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("chapterFontSize"), false, true))
     StringToInt(settingValue, &chapterFont);
-  else if (StringMatch(settingName, _T("sectionFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("sectionFontSize"), false, true))
     StringToInt(settingValue, &sectionFont);
-  else if (StringMatch(settingName, _T("subsectionFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("subsectionFontSize"), false, true))
     StringToInt(settingValue, &subsectionFont);
-  else if (StringMatch(settingName, _T("titleFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("titleFontSize"), false, true))
     StringToInt(settingValue, &titleFont);
-  else if (StringMatch(settingName, _T("authorFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("authorFontSize"), false, true))
     StringToInt(settingValue, &authorFont);
-  else if (StringMatch(settingName, _T("ignoreInput"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("ignoreInput"), false, true))
     IgnorableInputFiles.Add(wxFileNameFromPath(settingValue));
-  else if (StringMatch(settingName, _T("mirrorMargins"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("mirrorMargins"), false, true))
     mirrorMargins = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("runTwice"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("runTwice"), false, true))
     runTwice = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("isInteractive"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("isInteractive"), false, true))
     isInteractive = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("headerRule"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("headerRule"), false, true))
     headerRule = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("footerRule"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("footerRule"), false, true))
     footerRule = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("combineSubSections"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("combineSubSections"), false, true))
     combineSubSections = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("listLabelIndent"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("listLabelIndent"), false, true))
     StringToInt(settingValue, &labelIndentTab);
-  else if (StringMatch(settingName, _T("listItemIndent"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("listItemIndent"), false, true))
     StringToInt(settingValue, &itemIndentTab);
-  else if (StringMatch(settingName, _T("useUpButton"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("useUpButton"), false, true))
     useUpButton = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("useHeadingStyles"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("useHeadingStyles"), false, true))
     useHeadingStyles = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("useWord"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("useWord"), false, true))
     useWord = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("contentsDepth"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("contentsDepth"), false, true))
     StringToInt(settingValue, &contentsDepth);
-  else if (StringMatch(settingName, _T("generateHPJ"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("generateHPJ"), false, true))
     generateHPJ = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("truncateFilenames"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("truncateFilenames"), false, true))
     truncateFilenames = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("winHelpVersion"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("winHelpVersion"), false, true))
     StringToInt(settingValue, &winHelpVersion);
-  else if (StringMatch(settingName, _T("winHelpContents"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("winHelpContents"), false, true))
     winHelpContents = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("htmlIndex"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlIndex"), false, true))
     htmlIndex = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("htmlWorkshopFiles"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlWorkshopFiles"), false, true))
     htmlWorkshopFiles = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("htmlFrameContents"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlFrameContents"), false, true))
     htmlFrameContents = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("htmlStylesheet"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlStylesheet"), false, true))
     {
       if (htmlStylesheet) delete[] htmlStylesheet;
       htmlStylesheet = copystring(settingValue);
     }
-  else if (StringMatch(settingName, _T("upperCaseNames"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("upperCaseNames"), false, true))
     upperCaseNames = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("ignoreBadRefs"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("ignoreBadRefs"), false, true))
     ignoreBadRefs = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("htmlFaceName"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlFaceName"), false, true))
   {
     delete[] htmlFaceName;
     htmlFaceName = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("winHelpTitle"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("winHelpTitle"), false, true))
   {
     if (winHelpTitle)
       delete[] winHelpTitle;
     winHelpTitle = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("indexSubsections"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("indexSubsections"), false, true))
     indexSubsections = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("compatibility"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("compatibility"), false, true))
     compatibilityMode = StringTobool(settingValue);
-  else if (StringMatch(settingName, _T("defaultColumnWidth"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("defaultColumnWidth"), false, true))
   {
     StringToInt(settingValue, &defaultTableColumnWidth);
     defaultTableColumnWidth = 20*defaultTableColumnWidth;
   }
-  else if (StringMatch(settingName, _T("bitmapMethod"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("bitmapMethod"), false, true))
   {
     if ((wxStrcmp(settingValue, _T("includepicture")) != 0) && (wxStrcmp(settingValue, _T("hex")) != 0) &&
         (wxStrcmp(settingValue, _T("import")) != 0))
@@ -1240,7 +1267,7 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
       bitmapMethod = copystring(settingValue);
     }
   }
-  else if (StringMatch(settingName, _T("htmlBrowseButtons"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("htmlBrowseButtons"), false, true))
   {
     if (wxStrcmp(settingValue, _T("none")) == 0)
       htmlBrowseButtons = HTML_BUTTONS_NONE;
@@ -1255,43 +1282,43 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
       wxStrcpy(errorCode, _T("Initialisation file error: htmlBrowseButtons must be one of none, bitmap, or text."));
     }
   }
-  else if (StringMatch(settingName, _T("backgroundImage"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("backgroundImage"), false, true))
   {
     backgroundImageString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("backgroundColour"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("backgroundColour"), false, true))
   {
     delete[] backgroundColourString;
     backgroundColourString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("textColour"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("textColour"), false, true))
   {
     textColourString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("linkColour"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("linkColour"), false, true))
   {
     linkColourString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("followedLinkColour"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("followedLinkColour"), false, true))
   {
     followedLinkColourString = copystring(settingValue);
   }
-  else if (StringMatch(settingName, _T("conversionMode"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("conversionMode"), false, true))
   {
-    if (StringMatch(settingValue, _T("RTF"), FALSE, TRUE))
+    if (StringMatch(settingValue, _T("RTF"), false, true))
     {
-      winHelp = FALSE; convertMode = TEX_RTF;
+      winHelp = false; convertMode = TEX_RTF;
     }
-    else if (StringMatch(settingValue, _T("WinHelp"), FALSE, TRUE))
+    else if (StringMatch(settingValue, _T("WinHelp"), false, true))
     {
-      winHelp = TRUE; convertMode = TEX_RTF;
+      winHelp = true; convertMode = TEX_RTF;
     }
-    else if (StringMatch(settingValue, _T("XLP"), FALSE, TRUE) ||
-             StringMatch(settingValue, _T("wxHelp"), FALSE, TRUE))
+    else if (StringMatch(settingValue, _T("XLP"), false, true) ||
+             StringMatch(settingValue, _T("wxHelp"), false, true))
     {
       convertMode = TEX_XLP;
     }
-    else if (StringMatch(settingValue, _T("HTML"), FALSE, TRUE))
+    else if (StringMatch(settingValue, _T("HTML"), false, true))
     {
       convertMode = TEX_HTML;
     }
@@ -1302,7 +1329,7 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
       wxStrcpy(errorCode, _T("Initialisation file error: conversionMode must be one of\nRTF, WinHelp, XLP (or wxHelp), HTML."));
     }
   }
-  else if (StringMatch(settingName, _T("documentFontSize"), FALSE, TRUE))
+  else if (StringMatch(settingName, _T("documentFontSize"), false, true))
   {
     int n;
     StringToInt(settingValue, &n);
@@ -1311,7 +1338,7 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
     else
     {
       wxChar buf[200];
-      wxSprintf(buf, _T("Initialisation file error: nonstandard document font size %d."), n);
+      wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: nonstandard document font size %d."), n);
       if (interactive)
         OnInform(buf);
       wxStrcpy(errorCode, buf);
@@ -1320,7 +1347,7 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
   else
   {
     wxChar buf[200];
-    wxSprintf(buf, _T("Initialisation file error: unrecognised setting %s."), settingName);
+    wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: unrecognised setting %s."), settingName);
     if (interactive)
       OnInform(buf);
     wxStrcpy(errorCode, buf);
@@ -1331,11 +1358,12 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
 bool ReadCustomMacros(wxChar *filename)
 {
   if (!wxFileExists(filename))
-      return FALSE;
+      return false;
 
-  wxSTD ifstream istr(filename, wxSTD ios::in);
+  wxString name = filename;
+  wxSTD ifstream istr((char const *)name.fn_str(), wxSTD ios::in);
 
-  if (istr.bad()) return FALSE;
+  if (istr.bad()) return false;
 
   CustomMacroList.Clear();
   char ch;
@@ -1360,7 +1388,7 @@ bool ReadCustomMacros(wxChar *filename)
       if (ch != '=')
       {
         OnError(_T("Expected = following name: malformed tex2rtf.ini file."));
-        return FALSE;
+        return false;
       }
       else
       {
@@ -1378,24 +1406,24 @@ bool ReadCustomMacros(wxChar *filename)
       if (ch != '[')
       {
         OnError(_T("Expected [ followed by number of arguments: malformed tex2rtf.ini file."));
-        return FALSE;
+        return false;
       }
       istr >> noArgs;
       istr.get(ch);
       if (ch != ']')
       {
         OnError(_T("Expected ] following number of arguments: malformed tex2rtf.ini file."));
-        return FALSE;
+        return false;
       }
       BibEatWhiteSpace(istr);
       istr.get(ch);
       if (ch != '{')
       {
         OnError(_T("Expected { followed by macro body: malformed tex2rtf.ini file."));
-        return FALSE;
+        return false;
       }
       CustomMacro *macro = new CustomMacro(macroName, noArgs, NULL);
-      BibReadValue(istr, macroBody, FALSE, FALSE); // Don't ignore extra braces
+      BibReadValue(istr, macroBody, false, false); // Don't ignore extra braces
       if (wxStrlen(macroBody) > 0)
         macro->macroBody = copystring(macroBody);
     
@@ -1405,9 +1433,9 @@ bool ReadCustomMacros(wxChar *filename)
     }
   }
   wxChar mbuf[200];
-  wxSprintf(mbuf, _T("Read initialization file %s."), filename);
+  wxSnprintf(mbuf, sizeof(mbuf), _T("Read initialization file %s."), filename);
   OnInform(mbuf);
-  return TRUE;
+  return true;
 }
  
 CustomMacro *FindCustomMacro(wxChar *name)
@@ -1435,7 +1463,7 @@ void ShowCustomMacros(void)
   while (node)
   {
     CustomMacro *macro = (CustomMacro *)node->GetData();
-    wxSprintf(buf, _T("\\%s[%d]\n    {%s}"), macro->macroName, macro->noArgs,
+    wxSnprintf(buf, sizeof(buf), _T("\\%s[%d]\n    {%s}"), macro->macroName, macro->noArgs,
      macro->macroBody ? macro->macroBody : _T(""));
     OnInform(buf);
     node = node->GetNext();
@@ -1450,7 +1478,7 @@ wxChar *ParseMultifieldString(wxChar *allFields, int *pos)
   int fieldIndex = *pos;
   int len = wxStrlen(allFields);
   int oldPos = *pos;
-  bool keepGoing = TRUE;
+  bool keepGoing = true;
   while ((fieldIndex <= len) && keepGoing)
   {
     if (allFields[fieldIndex] == _T(' '))
@@ -1461,12 +1489,12 @@ wxChar *ParseMultifieldString(wxChar *allFields, int *pos)
     else if (allFields[fieldIndex] == _T(','))
     {
       *pos = fieldIndex + 1;
-      keepGoing = FALSE;
+      keepGoing = false;
     }
     else if (allFields[fieldIndex] == 0)
     {
       *pos = fieldIndex + 1;
-      keepGoing = FALSE;
+      keepGoing = false;
     }
     else
     {
@@ -1556,11 +1584,11 @@ bool FindColourHTMLString(wxChar *theName, wxChar *buf)
         DecToHex(entry->blue, buf2);
         wxStrcat(buf, buf2);
 
-        return TRUE;
+        return true;
     }
     node = node->GetNext();
   }
-  return FALSE;
+  return false;
 }
 
   
@@ -1656,7 +1684,7 @@ TexTopic::TexTopic(wxChar *f)
     filename = copystring(f);
   else
     filename = NULL;
-  hasChildren = FALSE;
+  hasChildren = false;
   keywords = NULL;
 }
 

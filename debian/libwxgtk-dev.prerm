@@ -1,7 +1,7 @@
 #! /bin/sh
 set -e
 
-update-alternatives --remove wx-config /usr/bin/wxgtk2-=V-config
+update-alternatives --remove wx-config /usr/bin/wxgtk2u-=V-config
 
 #DEBHELPER#
 

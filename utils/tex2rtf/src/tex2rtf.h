@@ -2,25 +2,42 @@
 // Name:        tex2any.h
 // Purpose:     tex2RTF conversion header
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
 // Created:     7.9.93
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef NO_GUI
 #include "wx/app.h"
-#include "wx/frame.h"
 
-class WXDLLEXPORT wxTextCtrl;
+#ifndef NO_GUI
+    #include "wx/frame.h"
+    #include "wx/textctrl.h"
+
+#ifdef __WXMSW__
+    #include "wx/dde.h"
+#endif
+
+#endif
 
 // Define a new application type
-class MyApp: public wxApp
+class MyApp: public 
+                    #ifndef NO_GUI
+                        wxApp
+                    #else
+                        wxAppConsole
+                    #endif
 { public:
     bool OnInit();
+#ifdef NO_GUI
+    int OnRun() { return EXIT_SUCCESS; }
+#else
     int OnExit();
+#endif
 };
+
+#ifndef NO_GUI
 
 // Define a new frame type
 class MyFrame: public wxFrame
@@ -52,7 +69,6 @@ DECLARE_EVENT_TABLE()
 };
 
 #ifdef __WXMSW__
-#include "wx/dde.h"
 
 class Tex2RTFConnection: public wxDDEConnection
 {
@@ -147,8 +163,8 @@ extern wxChar *RefName;         // Reference file name
 extern wxChar *bulletFile;
 
 #ifndef NO_GUI
-void ChooseOutputFile(bool force = FALSE);
-void ChooseInputFile(bool force = FALSE);
+void ChooseOutputFile(bool force = false);
+void ChooseInputFile(bool force = false);
 #endif
 
 void RTFOnMacro(int macroId, int no_args, bool start);

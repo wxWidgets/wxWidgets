@@ -2,7 +2,8 @@
 // Name:        tex2any.cpp
 // Purpose:     Utilities for Latex conversion.
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+//              Ron Lee
 // Created:     01/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -107,16 +108,16 @@ int             sectionFont =    12; // LargeFont2;
 int             subsectionFont = 12; // largeFont1;
 int             titleFont = LARGEFont3;
 int             authorFont = LargeFont2;
-int             mirrorMargins = TRUE;
-bool            winHelp = FALSE;  // Output in Windows Help format if TRUE, linear otherwise
-bool            isInteractive = FALSE;
-bool            runTwice = FALSE;
+int             mirrorMargins = true;
+bool            winHelp = false;  // Output in Windows Help format if TRUE, linear otherwise
+bool            isInteractive = false;
+bool            runTwice = false;
 int             convertMode = TEX_RTF;
-bool            checkCurleyBraces = FALSE;
-bool            checkSyntax = FALSE;
-bool            headerRule = FALSE;
-bool            footerRule = FALSE;
-bool            compatibilityMode = FALSE; // If TRUE, maximum Latex compatibility
+bool            checkCurleyBraces = false;
+bool            checkSyntax = false;
+bool            headerRule = false;
+bool            footerRule = false;
+bool            compatibilityMode = false; // If TRUE, maximum Latex compatibility
                                 // (Quality of RTF generation deteriorate)
 bool            generateHPJ; // Generate WinHelp Help Project file
 wxChar         *winHelpTitle = NULL; // Windows Help title
@@ -125,31 +126,31 @@ int             defaultTableColumnWidth = 2000;
 int             labelIndentTab = 18;  // From left indent to item label (points)
 int             itemIndentTab = 40;   // From left indent to item (points)
 
-bool            useUpButton = TRUE;
+bool            useUpButton = true;
 int             htmlBrowseButtons = HTML_BUTTONS_TEXT;
 
-bool            truncateFilenames = FALSE; // Truncate for DOS
+bool            truncateFilenames = false; // Truncate for DOS
 int             winHelpVersion = 3; // WinHelp Version (3 for Windows 3.1, 4 for Win95)
-bool            winHelpContents = FALSE; // Generate .cnt file for WinHelp 4
-bool            htmlIndex = FALSE; // Generate .htx file for HTML
-bool            htmlFrameContents = FALSE; // Use frames for HTML contents page
+bool            winHelpContents = false; // Generate .cnt file for WinHelp 4
+bool            htmlIndex = false; // Generate .htx file for HTML
+bool            htmlFrameContents = false; // Use frames for HTML contents page
 wxChar         *htmlStylesheet = NULL; // Use this CSS stylesheet for HTML pages
-bool            useHeadingStyles = TRUE; // Insert \s1, s2 etc.
-bool            useWord = TRUE; // Insert proper Word table of contents, etc etc
+bool            useHeadingStyles = true; // Insert \s1, s2 etc.
+bool            useWord = true; // Insert proper Word table of contents, etc etc
 int             contentsDepth = 4; // Depth of Word table of contents
-bool            indexSubsections = TRUE; // Index subsections in linear RTF
+bool            indexSubsections = true; // Index subsections in linear RTF
 // Linear RTF method of including bitmaps. Can be "includepicture", "hex"
 wxChar         *bitmapMethod = copystring(_T("includepicture"));
-bool            upperCaseNames = FALSE;
+bool            upperCaseNames = false;
 // HTML background and text colours
 wxChar         *backgroundImageString = NULL;
 wxChar         *backgroundColourString = copystring(_T("255;255;255"));
 wxChar         *textColourString = NULL;
 wxChar         *linkColourString = NULL;
 wxChar         *followedLinkColourString = NULL;
-bool            combineSubSections = FALSE;
-bool            htmlWorkshopFiles = FALSE;
-bool            ignoreBadRefs = FALSE;
+bool            combineSubSections = false;
+bool            htmlWorkshopFiles = false;
+bool            ignoreBadRefs = false;
 wxChar			*htmlFaceName = NULL;
 
 extern int passNumber;
@@ -203,15 +204,15 @@ int CurrentInputIndex = 0;
 wxChar *TexFileRoot = NULL;
 wxChar *TexBibName = NULL;         // Bibliography output file name
 wxChar *TexTmpBibName = NULL;      // Temporary bibliography output file name
-bool isSync = FALSE;             // If TRUE, should not yield to other processes.
-bool stopRunning = FALSE;        // If TRUE, should abort.
+bool isSync = false;             // If TRUE, should not yield to other processes.
+bool stopRunning = false;        // If TRUE, should abort.
 
 static int currentColumn = 0;
 wxChar *currentArgData = NULL;
-bool haveArgData = FALSE; // If TRUE, we're simulating the data.
+bool haveArgData = false; // If TRUE, we're simulating the data.
 TexChunk *currentArgument = NULL;
 TexChunk *nextChunk = NULL;
-bool isArgOptional = FALSE;
+bool isArgOptional = false;
 int noArgs = 0;
 
 TexChunk *TopLevel = NULL;
@@ -304,7 +305,7 @@ void ForbidWarning(TexMacroDef *def)
  
 TexMacroDef *MatchMacro(wxChar *buffer, int *pos, wxChar **env, bool *parseToBrace)
 {
-  *parseToBrace = TRUE;
+  *parseToBrace = true;
   int i = (*pos);
   TexMacroDef *def = NULL;
   wxChar macroBuf[40];
@@ -372,7 +373,7 @@ TexMacroDef *MatchMacro(wxChar *buffer, int *pos, wxChar **env, bool *parseToBra
       if ((buffer[i] == 32) || (buffer[i] == '='))
         i ++;
 
-      *parseToBrace = FALSE;
+      *parseToBrace = false;
     }
     *pos = i;
     ForbidWarning(def);
@@ -385,8 +386,8 @@ void EatWhiteSpace(wxChar *buffer, int *pos)
 {
   int len = wxStrlen(buffer);
   int j = *pos;
-  bool keepGoing = TRUE;
-  bool moreLines = TRUE;
+  bool keepGoing = true;
+  bool moreLines = true;
   while ((j < len) && keepGoing &&
          (buffer[j] == 10 || buffer[j] == 13 || buffer[j] == ' ' || buffer[j] == 9))
   {
@@ -400,7 +401,7 @@ void EatWhiteSpace(wxChar *buffer, int *pos)
         j = 0;
       }
       else
-        keepGoing = FALSE;
+        keepGoing = false;
     }
   }
   *pos = j;
@@ -415,13 +416,13 @@ bool FindEndEnvironment(wxChar *buffer, int *pos, wxChar *env)
       (wxStrncmp(buffer+i+4, env, wxStrlen(env)) == 0))
   {
     *pos = i + 5 + wxStrlen(env);
-    return TRUE;
+    return true;
   }
-  else return FALSE;
+  else return false;
 }
 
-bool readingVerbatim = FALSE;
-bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
+bool readingVerbatim = false;
+bool readInVerbatim = false;  // Within a verbatim, but not nec. verbatiminput
 
 // Switched this off because e.g. \verb${$ causes it to fail. There is no
 // detection of \verb yet.
@@ -436,7 +437,7 @@ bool read_a_line(wxChar *buf)
   if (CurrentInputIndex < 0)
   {
     buf[0] = 0;
-    return FALSE;
+    return false;
   }
 
   int ch = -2;
@@ -451,12 +452,12 @@ bool read_a_line(wxChar *buf)
        errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
            LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(), MAX_LINE_BUFFER_SIZE);
        OnError((wxChar *)errBuf.c_str());
-       return FALSE;
+       return false;
     }
 
     if (((bufIndex == 14) && (wxStrncmp(buf, _T("\\end{verbatim}"), 14) == 0)) ||
          ((bufIndex == 16) && (wxStrncmp(buf, _T("\\end{toocomplex}"), 16) == 0)))
-      readInVerbatim = FALSE;
+      readInVerbatim = false;
 
     ch = getc(Inputs[CurrentInputIndex]);
 
@@ -501,7 +502,7 @@ bool read_a_line(wxChar *buf)
              errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
                  LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
              OnError((wxChar *)errBuf.c_str());
-             return FALSE;
+             return false;
           }
           wxStrcat(buf, _T("\\par"));
           bufIndex += 5;
@@ -516,7 +517,7 @@ bool read_a_line(wxChar *buf)
              errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
                  LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
              OnError((wxChar *)errBuf.c_str());
-             return FALSE;
+             return false;
           }
 
           buf[bufIndex] = ch;
@@ -541,7 +542,7 @@ bool read_a_line(wxChar *buf)
                    errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
                        LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
                    OnError((wxChar *)errBuf.c_str());
-                   return FALSE;
+                   return false;
                 }
                 buf[bufIndex++]='\\';
                 buf[bufIndex++]='"';
@@ -564,7 +565,7 @@ bool read_a_line(wxChar *buf)
               errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
                   LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
               OnError((wxChar *)errBuf.c_str());
-              return FALSE;
+              return false;
             }
             buf[bufIndex++]='\\';
             buf[bufIndex++]='s';
@@ -579,7 +580,7 @@ bool read_a_line(wxChar *buf)
               errBuf.Printf(_T("Line %lu of file %s is too long.  Lines can be no longer than %lu characters.  Truncated."),
                   LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str(),MAX_LINE_BUFFER_SIZE);
               OnError((wxChar *)errBuf.c_str());
-              return FALSE;
+              return false;
             }
             // If the current character read in is a '_', we need to check 
             // whether there should be a '\' before it or not
@@ -651,10 +652,10 @@ bool read_a_line(wxChar *buf)
 
       if (readingVerbatim)
       {
-        readingVerbatim = FALSE;
-        readInVerbatim = FALSE;
+        readingVerbatim = false;
+        readInVerbatim = false;
         wxStrcat(buf, _T("\\end{verbatim}\n"));
-        return FALSE;
+        return false;
       }
     }
     if (ch == 10)
@@ -716,13 +717,13 @@ bool read_a_line(wxChar *buf)
       }
       else
       {
-        readingVerbatim = TRUE;
-        readInVerbatim = TRUE;
+        readingVerbatim = true;
+        readInVerbatim = true;
         wxStrcpy(buf, _T("\\begin{verbatim}\n"));
-        return FALSE;
+        return false;
       }
     }
-    return FALSE;
+    return false;
   }
   else if (wxStrncmp(buf, _T("\\input"), 6) == 0 || wxStrncmp(buf, _T("\\helpinput"), 10) == 0 ||
       wxStrncmp(buf, _T("\\include"), 8) == 0)
@@ -767,7 +768,7 @@ bool read_a_line(wxChar *buf)
     if (actualFile == _T(""))
     {
       wxChar buf2[400];
-      wxSprintf(buf2, _T("%s.tex"), fileNameStr.c_str());
+      wxSnprintf(buf2, sizeof(buf2), _T("%s.tex"), fileNameStr.c_str());
       actualFile = TexPathList.FindValidPath(buf2);
     }
     currentFileName = actualFile;
@@ -841,10 +842,10 @@ bool read_a_line(wxChar *buf)
 
   if (wxStrncmp(buf, _T("\\begin{verbatim}"), 16) == 0 ||
       wxStrncmp(buf, _T("\\begin{toocomplex}"), 18) == 0)
-    readInVerbatim = TRUE;
+    readInVerbatim = true;
   else if (wxStrncmp(buf, _T("\\end{verbatim}"), 14) == 0 ||
            wxStrncmp(buf, _T("\\end{toocomplex}"), 16) == 0)
-    readInVerbatim = FALSE;
+    readInVerbatim = false;
 
   if (checkCurleyBraces)
   {
@@ -894,7 +895,7 @@ bool ParseNewCommand(wxChar *buffer, int *pos)
       noArgs = (int)(buffer[*pos]) - 48;
       *pos += 2; // read past argument and '['
     }
-    bool end = FALSE;
+    bool end = false;
     int braceCount = 0;
     while (!end)
     {
@@ -905,7 +906,7 @@ bool ParseNewCommand(wxChar *buffer, int *pos)
       {
         braceCount --;
         if (braceCount == 0)
-          end = TRUE;
+          end = true;
       }
       else if (ch == 0)
       {
@@ -928,9 +929,9 @@ bool ParseNewCommand(wxChar *buffer, int *pos)
       CustomMacroList.Append(commandName, macro);
       AddMacroDef(ltCUSTOM_MACRO, commandName, noArgs);
     }
-    return TRUE;
+    return true;
   }
-  else return FALSE;
+  else return false;
 }
 
 void MacroError(wxChar *buffer)
@@ -956,7 +957,7 @@ void MacroError(wxChar *buffer)
   if (wxStrcmp(macroBuf,_T("\\end{document}")) == 0)
   {
       OnInform( _T("Halted build due to unrecoverable error.") );
-      stopRunning = TRUE;
+      stopRunning = true;
   }
 }
 
@@ -973,7 +974,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
   Tex2RTFYield();
   if (stopRunning) return pos;
   
-  bool eof = FALSE;
+  bool eof = false;
   BigBuffer[0] = 0;
   int buf_ptr = 0;
   int len;
@@ -992,12 +993,12 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 
     if ((pos > 0) && (buffer[pos-1] != ' ') && (buffer[pos] == '[' || buffer[pos] == '('))
     {
-      isOptional = TRUE;
+      isOptional = true;
       pos ++;
     }
     else if ((pos > 1) && (buffer[pos-1] != ' ') && (buffer[pos+1] == '[' || buffer[pos+1] == '('))
     {
-      isOptional = TRUE;
+      isOptional = true;
       pos += 2;
     }
   }
@@ -1148,7 +1149,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 
           wxTex2RTFBuffer[0] = 0;
           int i = 0;
-          bool end = FALSE;
+          bool end = false;
           while (!end)
           {
             int ch = buffer[pos];
@@ -1158,7 +1159,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
               if (noBraces == 0)
               {
                 wxTex2RTFBuffer[i] = 0;
-                end = TRUE;
+                end = true;
               }
               else
               {
@@ -1191,7 +1192,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
               pos ++;
               i ++;
               if (ch == 0)
-                end = TRUE;
+                end = true;
             }
           }
           TexChunk *chunk = new TexChunk(CHUNK_TYPE_MACRO);
@@ -1256,7 +1257,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
     else
     {
           wxChar *env = NULL;
-          bool tmpParseToBrace = TRUE;
+          bool tmpParseToBrace = true;
           TexMacroDef *def = MatchMacro(buffer, &pos, &env, &tmpParseToBrace);
           if (def)
           {
@@ -1292,7 +1293,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 //              wxStrcpy(macroBuf, _T("{"));
               wxStrcpy(macroBuf, customMacro->macroBody);
               wxStrcat(macroBuf, _T("}"));
-              ParseArg(thisArg, children, macroBuf, 0, NULL, TRUE, chunk);
+              ParseArg(thisArg, children, macroBuf, 0, NULL, true, chunk);
             }
             
 //            delete chunk; // Might delete children
@@ -1337,7 +1338,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
               children.Append((wxObject *)chunk);
 
             pos = ParseMacroBody(def->name, chunk, chunk->no_args,
-                       buffer, pos, NULL, TRUE, customMacroArgs);
+                       buffer, pos, NULL, true, customMacroArgs);
 
             // If custom macro, parse the body substituting the above found args.
             if (customMacro)
@@ -1348,7 +1349,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 //                wxStrcpy(macroBuf, _T("{"));
                 wxStrcpy(macroBuf, customMacro->macroBody);
                 wxStrcat(macroBuf, _T("}"));
-                ParseArg(thisArg, children, macroBuf, 0, NULL, TRUE, chunk);
+                ParseArg(thisArg, children, macroBuf, 0, NULL, true, chunk);
               }
             
 //            delete chunk; // Might delete children
@@ -1368,7 +1369,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           */
           if (!SoloBlockDef)
           {
-            SoloBlockDef = new TexMacroDef(ltSOLO_BLOCK, _T("solo block"), 1, FALSE);
+            SoloBlockDef = new TexMacroDef(ltSOLO_BLOCK, _T("solo block"), 1, false);
           }
           // Save text so far
           if (buf_ptr > 0)
@@ -1392,7 +1393,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           arg->argn = 1;
           arg->macroId = chunk->macroId;
 
-          pos = ParseArg(arg, arg->children, buffer, pos, NULL, TRUE, customMacroArgs);
+          pos = ParseArg(arg, arg->children, buffer, pos, NULL, true, customMacroArgs);
     }
         break;
       }
@@ -1598,7 +1599,7 @@ int ParseMacroBody(const wxChar *WXUNUSED(macro_name), TexChunk *parent,
     else
       actualEnv = environment;
 
-    bool isOptional = FALSE;
+    bool isOptional = false;
 
     // Remove the first { of the argument so it doesn't get recognized as { ... }
 //    EatWhiteSpace(buffer, &pos);
@@ -1612,12 +1613,12 @@ int ParseMacroBody(const wxChar *WXUNUSED(macro_name), TexChunk *parent,
       else
       if ((pos > 0) && (buffer[pos-1] != ' ') && (buffer[pos] == '['))
       {
-        isOptional = TRUE;
+        isOptional = true;
         pos ++;
       }
       else if ((pos > 1) && (buffer[pos-1] != ' ') && (buffer[pos+1] == '['))
       {
-        isOptional = TRUE;
+        isOptional = true;
         pos += 2;
       }
       else if (i > 0)
@@ -1663,11 +1664,11 @@ int ParseMacroBody(const wxChar *WXUNUSED(macro_name), TexChunk *parent,
 bool TexLoadFile(wxChar *filename)
 {
   static wxChar *line_buffer;
-  stopRunning = FALSE;
+  stopRunning = false;
   wxStrcpy(TexFileRoot, filename);
   StripExtension(TexFileRoot);
-  wxSprintf(TexBibName, _T("%s.bb"), TexFileRoot);
-  wxSprintf(TexTmpBibName, _T("%s.bb1"), TexFileRoot);
+  wxSnprintf(TexBibName, 300, _T("%s.bb"), TexFileRoot);
+  wxSnprintf(TexTmpBibName, 300, _T("%s.bb1"), TexFileRoot);
 
   TexPathList.EnsureFileAccessible(filename);
 
@@ -1682,12 +1683,12 @@ bool TexLoadFile(wxChar *filename)
   if (Inputs[0])
   {
     read_a_line(line_buffer);
-    ParseMacroBody(_T("toplevel"), TopLevel, 1, line_buffer, 0, NULL, TRUE);
+    ParseMacroBody(_T("toplevel"), TopLevel, 1, line_buffer, 0, NULL, true);
     if (Inputs[0]) fclose(Inputs[0]);
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 TexMacroDef::TexMacroDef(int the_id, const wxChar *the_name, int n, bool ig, bool forbidLevel)
@@ -1713,7 +1714,7 @@ TexChunk::TexChunk(int the_type, TexMacroDef *the_def)
   def = the_def;
   macroId = 0;
   value = NULL;
-  optional = FALSE;
+  optional = false;
 }
 
 TexChunk::TexChunk(TexChunk& toCopy)
@@ -1825,7 +1826,7 @@ wxChar *GetArgData(TexChunk *WXUNUSED(chunk))
 {
   currentArgData[0] = 0;
   GetArgData1(currentArgument);
-  haveArgData = FALSE;
+  haveArgData = false;
   return currentArgData;
 }
 
@@ -1879,7 +1880,7 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
         return;
 
       if (!childrenOnly)
-        OnMacro(chunk->macroId, chunk->no_args, TRUE);
+        OnMacro(chunk->macroId, chunk->no_args, true);
 
       wxNode *node = chunk->children.GetFirst();
       while (node)
@@ -1893,7 +1894,7 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
           nextChunk = (TexChunk *)thisNode->GetNext()->GetData();
 
       if (!childrenOnly)
-        OnMacro(chunk->macroId, chunk->no_args, FALSE);
+        OnMacro(chunk->macroId, chunk->no_args, false);
       break;
     }
     case CHUNK_TYPE_ARG:
@@ -1903,9 +1904,9 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
       isArgOptional = chunk->optional;
       noArgs = chunk->no_args;
 
-      // If OnArgument returns FALSE, don't output.
+      // If OnArgument returns false, don't output.
 
-      if (childrenOnly || OnArgument(chunk->macroId, chunk->argn, TRUE))
+      if (childrenOnly || OnArgument(chunk->macroId, chunk->argn, true))
       {
         wxNode *node = chunk->children.GetFirst();
         while (node)
@@ -1925,7 +1926,7 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
       noArgs = chunk->no_args;
 
       if (!childrenOnly)
-        (void)OnArgument(chunk->macroId, chunk->argn, FALSE);
+        (void)OnArgument(chunk->macroId, chunk->argn, false);
       break;
     }
     case CHUNK_TYPE_STRING:
@@ -1938,9 +1939,9 @@ void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode, bool childrenOnly)
         if (issuedNewParagraph && !((chunk->value[0] == 10 || chunk->value[0] == 13 || chunk->value[0] == 32)
                                     && chunk->value[1] == 0))
         {
-          issuedNewParagraph = FALSE;
+          issuedNewParagraph = false;
         }
-        TexOutput(chunk->value, TRUE);
+        TexOutput(chunk->value, true);
       }
       break;
     }
@@ -2015,7 +2016,7 @@ void TexCleanUp(void)
   CurrentOutput1 = NULL;
   CurrentOutput2 = NULL;
   CurrentInputIndex = 0;
-  haveArgData = FALSE;
+  haveArgData = false;
   noArgs = 0;
 
   if (TopLevel)
@@ -2153,7 +2154,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltCLIPSFUNC,           _T("clipsfunc"), 3);
   AddMacroDef(ltCLUBSUIT,            _T("clubsuit"), 0);
   AddMacroDef(ltCOLUMNSEP,           _T("columnsep"), 1);
-  AddMacroDef(ltCOMMENT,             _T("comment"), 1, TRUE);
+  AddMacroDef(ltCOMMENT,             _T("comment"), 1, true);
   AddMacroDef(ltCONG,                _T("cong"), 0);
   AddMacroDef(ltCOPYRIGHT,           _T("copyright"), 0);
   AddMacroDef(ltCPARAM,              _T("cparam"), 2);
@@ -2221,7 +2222,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltHEADHEIGHT,          _T("headheight"), 1);
   AddMacroDef(ltHEARTSUIT,           _T("heartsuit"), 0);
   AddMacroDef(ltHELPGLOSSARY,        _T("helpglossary"), 1);
-  AddMacroDef(ltHELPIGNORE,          _T("helpignore"), 1, TRUE);
+  AddMacroDef(ltHELPIGNORE,          _T("helpignore"), 1, true);
   AddMacroDef(ltHELPONLY,            _T("helponly"), 1);
   AddMacroDef(ltHELPINPUT,           _T("helpinput"), 1);
   AddMacroDef(ltHELPFONTFAMILY,      _T("helpfontfamily"), 1);
@@ -2246,7 +2247,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltINCLUDE,             _T("include"), 1);
   AddMacroDef(ltINDENTED,            _T("indented"), 2);
   AddMacroDef(ltINDEX,               _T("index"), 1);
-  AddMacroDef(ltINPUT,               _T("input"), 1, TRUE);
+  AddMacroDef(ltINPUT,               _T("input"), 1, true);
   AddMacroDef(ltIOTA,                _T("iota"), 0);
   AddMacroDef(ltITEMIZE,             _T("itemize"), 1);
   AddMacroDef(ltITEM,                _T("item"), 0);
@@ -2314,7 +2315,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltNABLA,               _T("nabla"), 0);
   AddMacroDef(ltNEG,                 _T("neg"), 0);
   AddMacroDef(ltNEQ,                 _T("neq"), 0);
-  AddMacroDef(ltNEWCOUNTER,          _T("newcounter"), 1, FALSE, (bool)FORBID_ABSOLUTELY);
+  AddMacroDef(ltNEWCOUNTER,          _T("newcounter"), 1, false, (bool)FORBID_ABSOLUTELY);
   AddMacroDef(ltNEWLINE,             _T("newline"), 0);
   AddMacroDef(ltNEWPAGE,             _T("newpage"), 0);
   AddMacroDef(ltNI,                  _T("ni"), 0);
@@ -2367,8 +2368,8 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltPRECEQ,              _T("preceq"), 0);
   AddMacroDef(ltPRINTINDEX,          _T("printindex"), 0);
   AddMacroDef(ltPROPTO,              _T("propto"), 0);
-  AddMacroDef(ltPSBOXTO,             _T("psboxto"), 1, FALSE, (bool)FORBID_ABSOLUTELY);
-  AddMacroDef(ltPSBOX,               _T("psbox"), 1, FALSE, (bool)FORBID_ABSOLUTELY);
+  AddMacroDef(ltPSBOXTO,             _T("psboxto"), 1, false, (bool)FORBID_ABSOLUTELY);
+  AddMacroDef(ltPSBOX,               _T("psbox"), 1, false, (bool)FORBID_ABSOLUTELY);
   AddMacroDef(ltPSI,                 _T("psi"), 0);
   AddMacroDef(ltCAP_PSI,             _T("Psi"), 0);
 
@@ -2439,7 +2440,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltSUPSET,              _T("supset"), 0);
   AddMacroDef(ltSUBSUBSECTIONSTAR,   _T("subsubsection*"), 1);
   AddMacroDef(ltSUBSUBSECTION,       _T("subsubsection"), 1);
-  AddMacroDef(ltSUPERTABULAR,        _T("supertabular"), 2, FALSE);
+  AddMacroDef(ltSUPERTABULAR,        _T("supertabular"), 2, false);
   AddMacroDef(ltSURD,                _T("surd"), 0);
   AddMacroDef(ltSCRIPTSIZE,          _T("scriptsize"), 1);
   AddMacroDef(ltSETHEADER,           _T("setheader"), 6);
@@ -2453,7 +2454,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltTABBING,             _T("tabbing"), 2);
   AddMacroDef(ltTABLEOFCONTENTS,     _T("tableofcontents"), 0);
   AddMacroDef(ltTABLE,               _T("table"), 1);
-  AddMacroDef(ltTABULAR,             _T("tabular"), 2, FALSE);
+  AddMacroDef(ltTABULAR,             _T("tabular"), 2, false);
   AddMacroDef(ltTAB,                 _T("tab"), 0);
   AddMacroDef(ltTAU,                 _T("tau"), 0);
   AddMacroDef(ltTEXTRM,              _T("textrm"), 1);
@@ -2580,8 +2581,8 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
       {
         // Write the heading
         FakeCurrentSection(AbstractNameString);
-        OnMacro(ltPAR, 0, TRUE);
-        OnMacro(ltPAR, 0, FALSE);
+        OnMacro(ltPAR, 0, true);
+        OnMacro(ltPAR, 0, false);
       }
       else
       {
@@ -2600,12 +2601,12 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
       {
         // Write the heading
         FakeCurrentSection(GlossaryNameString);
-        OnMacro(ltPAR, 0, TRUE);
-        OnMacro(ltPAR, 0, FALSE);
+        OnMacro(ltPAR, 0, true);
+        OnMacro(ltPAR, 0, false);
         if ((convertMode == TEX_RTF) && !winHelp)
         {
-          OnMacro(ltPAR, 0, TRUE);
-          OnMacro(ltPAR, 0, FALSE);
+          OnMacro(ltPAR, 0, true);
+          OnMacro(ltPAR, 0, false);
         }
       }
       break;
@@ -2617,100 +2618,100 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
 
     case ltCINSERT:
       if (start)
-        TexOutput(_T("<<"), TRUE);
+        TexOutput(_T("<<"), true);
       break;
     case ltCEXTRACT:
       if (start)
-        TexOutput(_T(">>"), TRUE);
+        TexOutput(_T(">>"), true);
       break;
     case ltDESTRUCT:
       if (start)
-        TexOutput(_T("~"), TRUE);
+        TexOutput(_T("~"), true);
       break;
     case ltTILDE:
       if (start)
-        TexOutput(_T("~"), TRUE);
+        TexOutput(_T("~"), true);
       break;
     case ltSPECIALTILDE:
       if (start)
-        TexOutput(_T(" "), TRUE);
+        TexOutput(_T(" "), true);
       break;
     case ltUNDERSCORE:
       if (start)
-        TexOutput(_T("_"), TRUE);
+        TexOutput(_T("_"), true);
       break;
     case ltHASH:
       if (start)
-        TexOutput(_T("#"), TRUE);
+        TexOutput(_T("#"), true);
       break;
     case ltAMPERSAND:
       if (start)
-        TexOutput(_T("&"), TRUE);
+        TexOutput(_T("&"), true);
       break;
     case ltSPACE:
       if (start)
-        TexOutput(_T(" "), TRUE);
+        TexOutput(_T(" "), true);
       break;
     case ltPIPE:
       if (start)
-        TexOutput(_T("|"), TRUE);
+        TexOutput(_T("|"), true);
       break;
     case ltPERCENT:
       if (start)
-        TexOutput(_T("%"), TRUE);
+        TexOutput(_T("%"), true);
       break;
     case ltDOLLAR:
       if (start)
-        TexOutput(_T("$"), TRUE);
+        TexOutput(_T("$"), true);
       break;
     case ltLPARENTH:
       if (start)
-        TexOutput(_T(""), TRUE);
+        TexOutput(_T(""), true);
       break;
     case ltRPARENTH:
       if (start)
-        TexOutput(_T(""), TRUE);
+        TexOutput(_T(""), true);
       break;
     case ltLBRACE:
       if (start)
-        TexOutput(_T("{"), TRUE);
+        TexOutput(_T("{"), true);
       break;
     case ltRBRACE:
       if (start)
-        TexOutput(_T("}"), TRUE);
+        TexOutput(_T("}"), true);
       break;
     case ltCOPYRIGHT:
       if (start)
-        TexOutput(_T("(c)"), TRUE);
+        TexOutput(_T("(c)"), true);
       break;
     case ltREGISTERED:
       if (start)
-        TexOutput(_T("(r)"), TRUE);
+        TexOutput(_T("(r)"), true);
       break;
     case ltBACKSLASH:
       if (start)    
-        TexOutput(_T("\\"), TRUE);
+        TexOutput(_T("\\"), true);
       break;
     case ltLDOTS:
     case ltCDOTS:
       if (start)
-        TexOutput(_T("..."), TRUE);
+        TexOutput(_T("..."), true);
       break;
     case ltVDOTS:
       if (start)
-        TexOutput(_T("|"), TRUE);
+        TexOutput(_T("|"), true);
       break;
     case ltLATEX:
       if (start)
-        TexOutput(_T("LaTeX"), TRUE);
+        TexOutput(_T("LaTeX"), true);
       break;
     case ltTEX:
       if (start)
-        TexOutput(_T("TeX"), TRUE);
+        TexOutput(_T("TeX"), true);
       break;
     case ltPOUNDS:
       if (start)
-        TexOutput(_T("£"), TRUE);
+        TexOutput(_T("£"), true);
       break;
     case ltSPECIALDOUBLEDOLLAR:  // Interpret as center
       OnMacro(ltCENTER, no_args, start);
@@ -2733,7 +2734,7 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
       {
         time_t when;
         (void) time(&when);
-        TexOutput(wxCtime(&when), TRUE);
+        TexOutput(wxCtime(&when), true);
       }
       break;
     }
@@ -3166,7 +3167,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
               else i ++;
             }
           }
-          TexOutput(texRef->sectionNumber + i, TRUE);
+          TexOutput(texRef->sectionNumber + i, true);
         }
         else
         {
@@ -3175,32 +3176,32 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
            OnInform((wxChar *)informBuf.c_str());
         }
       }
-      else TexOutput(_T("??"), TRUE);
-      return FALSE;
+      else TexOutput(_T("??"), true);
+      return false;
     }
     break;
     }
     case ltLABEL:
     {
-      return FALSE;
+      return false;
     }
     case ltAUTHOR:
     {
       if (start && (arg_no == 1))
         DocumentAuthor = GetArgChunk();
-      return FALSE;
+      return false;
     }
     case ltDATE:
     {
       if (start && (arg_no == 1))
         DocumentDate = GetArgChunk();
-      return FALSE;
+      return false;
     }
     case ltTITLE:
     {
       if (start && (arg_no == 1))
         DocumentTitle = GetArgChunk();
-      return FALSE;
+      return false;
     }
   case ltDOCUMENTCLASS:
   case ltDOCUMENTSTYLE:
@@ -3227,13 +3228,13 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
       else if (StringMatch(_T("12"), DocumentStyleString))
         SetFontSizes(12);
 
-      OnMacro(ltHELPFONTSIZE, 1, TRUE);
-      wxSprintf(currentArgData, _T("%d"), normalFont);
-      haveArgData = TRUE;
-      OnArgument(ltHELPFONTSIZE, 1, TRUE);
-      OnArgument(ltHELPFONTSIZE, 1, FALSE);
-      haveArgData = FALSE;
-      OnMacro(ltHELPFONTSIZE, 1, FALSE);
+      OnMacro(ltHELPFONTSIZE, 1, true);
+      wxSnprintf(currentArgData, 2000, _T("%d"), normalFont);
+      haveArgData = true;
+      OnArgument(ltHELPFONTSIZE, 1, true);
+      OnArgument(ltHELPFONTSIZE, 1, false);
+      haveArgData = false;
+      OnMacro(ltHELPFONTSIZE, 1, false);
     }
     else if (start && IsArgOptional())
     {
@@ -3246,13 +3247,13 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
       else if (StringMatch(_T("12"), MinorDocumentStyleString))
         SetFontSizes(12);
     }
-    return FALSE;
+    return false;
   }
   case ltBIBLIOGRAPHYSTYLE:
   {
     if (start && !IsArgOptional())
       BibliographyStyleString = copystring(GetArgData());
-    return FALSE;
+    return false;
   }
   case ltPAGESTYLE:
   {
@@ -3261,49 +3262,49 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
       if (PageStyle) delete[] PageStyle;
       PageStyle = copystring(GetArgData());
     }
-    return FALSE;
+    return false;
   }
 /*
   case ltLHEAD:
   {
     if (start && !IsArgOptional())
       LeftHeader = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
   case ltLFOOT:
   {
     if (start && !IsArgOptional())
       LeftFooter = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
   case ltCHEAD:
   {
     if (start && !IsArgOptional())
       CentreHeader = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
   case ltCFOOT:
   {
     if (start && !IsArgOptional())
       CentreFooter = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
   case ltRHEAD:
   {
     if (start && !IsArgOptional())
       RightHeader = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
   case ltRFOOT:
   {
     if (start && !IsArgOptional())
       RightFooter = GetArgChunk();
-    return FALSE;
+    return false;
     break;
   }
 */
@@ -3321,7 +3322,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         TexRef *ref = FindReference(citeKey);
         if (ref)
         {
-          TexOutput(ref->sectionNumber, TRUE);
+          TexOutput(ref->sectionNumber, true);
           if (wxStrcmp(ref->sectionNumber, _T("??")) == 0)
           {
             wxString informBuf;
@@ -3332,10 +3333,10 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         citeKey = ParseMultifieldString(citeKeys, &pos);
         if (citeKey)
         {
-          TexOutput(_T(", "), TRUE);
+          TexOutput(_T(", "), true);
         }
       }
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3345,7 +3346,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
     {
       wxChar *citeKey = GetArgData();
       AddCitation(citeKey);
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3360,7 +3361,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         SetFontSizes(11);
       else if (wxStrcmp(data, _T("12")) == 0)
         SetFontSizes(12);
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3368,8 +3369,8 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
   {
     if (start)
     {
-      TexOutput(_T(" ??"), TRUE);
-      return FALSE;
+      TexOutput(_T(" ??"), true);
+      return false;
     }
     break;
   }
@@ -3379,7 +3380,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
     {
       wxChar *data = GetArgData();
       ParSkip = ParseUnitArgument(data);
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3389,7 +3390,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
     {
       wxChar *data = GetArgData();
       ParIndent = ParseUnitArgument(data);
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3417,9 +3418,9 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
   case ltFOOTNOTE:
   {
     if (start)
-      TexOutput(_T(" ("), TRUE);
+      TexOutput(_T(" ("), true);
     else
-      TexOutput(_T(")"), TRUE);
+      TexOutput(_T(")"), true);
     break;
   }
   case ltBIBLIOGRAPHY:
@@ -3494,7 +3495,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         wxRenameFile(TexTmpBibName, TexBibName);
       }
       SetCurrentOutputs(save1, save2);
-      return FALSE;
+      return false;
     }
     break;
   }
@@ -3515,12 +3516,12 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
           s1[i] = wxToupper(s[i]);
         TexOutput(s1);
         delete[] s1;
-        return FALSE;
+        return false;
       }
-      else return TRUE;
+      else return true;
 
     }
-    return TRUE;
+    return true;
   }
   case ltLOWERCASE:
   {
@@ -3535,12 +3536,12 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
           s1[i] = wxTolower(s[i]);
         TexOutput(s1);
         delete[] s1;
-        return FALSE;
+        return false;
       }
-      else return TRUE;
+      else return true;
 
     }
-    return TRUE;
+    return true;
   }
   case ltUPPERCASE:
   {
@@ -3555,37 +3556,37 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
           s1[i] = wxToupper(s[i]);
         TexOutput(s1);
         delete[] s1;
-        return FALSE;
+        return false;
       }
-      else return TRUE;
+      else return true;
 
     }
-    return TRUE;
+    return true;
   }
   case ltPOPREF:  // Ignore second argument by default
     return (start && (arg_no == 1));
   case ltTWOCOLUMN:
-    return TRUE;
+    return true;
   case ltXLPIGNORE:
-    return ((convertMode == TEX_XLP) ? FALSE : TRUE);
+    return ((convertMode == TEX_XLP) ? false : true);
   case ltXLPONLY:
-    return ((convertMode != TEX_XLP) ? FALSE : TRUE);
+    return ((convertMode != TEX_XLP) ? false : true);
   case ltHTMLIGNORE:
-    return ((convertMode == TEX_HTML) ? FALSE : TRUE);
+    return ((convertMode == TEX_HTML) ? false : true);
   case ltHTMLONLY:
-    return ((convertMode != TEX_HTML) ? FALSE : TRUE);
+    return ((convertMode != TEX_HTML) ? false : true);
   case ltRTFIGNORE:
-    return (((convertMode == TEX_RTF) && !winHelp) ? FALSE : TRUE);
+    return (((convertMode == TEX_RTF) && !winHelp) ? false : true);
   case ltRTFONLY:
-    return (!((convertMode == TEX_RTF) && !winHelp) ? FALSE : TRUE);
+    return (!((convertMode == TEX_RTF) && !winHelp) ? false : true);
   case ltWINHELPIGNORE:
-    return (winHelp ? FALSE : TRUE);
+    return (winHelp ? false : true);
   case ltWINHELPONLY:
-    return (!winHelp ? FALSE : TRUE);
+    return (!winHelp ? false : true);
   case ltLATEXIGNORE:
-    return TRUE;
+    return true;
   case ltLATEXONLY:
-    return FALSE;
+    return false;
   case ltCLINE:
   case ltARABIC:
   case ltALPH1:
@@ -3655,7 +3656,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
   case ltIMAGER:
   case ltPOPREFONLY:
   case ltINSERTATLEVEL:
-    return FALSE;
+    return false;
   case ltTABULAR:
   case ltSUPERTABULAR:
   case ltINDENTED:
@@ -3699,7 +3700,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
           break;
       }
     }
-    return FALSE;
+    return false;
   }
   case ltFIGURE:
   case ltFIGURESTAR:
@@ -3708,6 +3709,6 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
   default:
     return (!IsArgOptional());
   }
-  return TRUE;
+  return true;
 }
 

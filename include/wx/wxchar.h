@@ -2,7 +2,7 @@
  * Name:        wx/wxchar.h
  * Purpose:     Declarations common to wx char/wchar_t usage (wide chars)
  * Author:      Joel Farley, Ove Kåven
- * Modified by: Vadim Zeitlin, Robert Roebling
+ * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$
  * Copyright:   (c) 1998-2002 wxWindows dev team
@@ -922,6 +922,12 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
     WXDLLIMPEXP_BASE size_t wxStrftime(wxChar *s, size_t max,
                                   const wxChar *fmt, const struct tm *tm);
 #endif /* wxNEED_WX_TIME_H */
+
+#ifndef wxCtime
+#include <time.h>
+WXDLLIMPEXP_BASE wxChar *wxCtime(const time_t *timep);
+#endif
+
 
 /* missing functions in some WinCE versions */
 #ifdef _WIN32_WCE

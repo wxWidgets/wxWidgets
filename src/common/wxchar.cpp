@@ -2,7 +2,7 @@
 // Name:        wxchar.cpp
 // Purpose:     wxChar implementation
 // Author:      Ove Kåven
-// Modified by:
+// Modified by: Ron Lee
 // Created:     09/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows copyright
@@ -920,7 +920,18 @@ int wxSprintf( wxChar *str, const wxChar *format, ... )
     va_start(argptr, format);
 
     // callers of wxSprintf() deserve what they get
-    int ret = vswprintf( str, UINT_MAX, wxFormatConverter(format), argptr );
+    //int ret = vswprintf( str, UINT_MAX, wxFormatConverter(format), argptr );
+
+    // ... true, but if we are going to implement it, they probably still
+    // deserve something a little better than absolutely guaranteed silent
+    // failure.  For some (very mysterious) reason, this call fails under glibc
+    // 2.3.2 if str was allocated on the heap and maxsize is larger than this.
+    // Even more mysterious is that it does still succeed if str was allocated
+    // on the stack.  This should still be plenty large enough for people who
+    // want to overflow a buffer.  The bug was first noticed in unicode builds
+    // of tex2rtf, but I'm going to fix that to not use this unsafe function
+    // instead of wasting time diagnosing this further right now.
+    int ret = vswprintf( str, INT_MAX / 4, wxFormatConverter(format), argptr );
 
     va_end(argptr);
 
@@ -964,7 +975,7 @@ int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list argptr 
 int wxVsprintf( wxChar *str, const wxChar *format, va_list argptr )
 {
     // same as for wxSprintf()
-    return vswprintf(str, UINT_MAX, wxFormatConverter(format), argptr);
+    return vswprintf(str, INT_MAX / 4, wxFormatConverter(format), argptr);
 }
 
 #endif // wxNEED_PRINTF_CONVERSION
@@ -1344,6 +1355,18 @@ WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const 
   }
 }
 #endif // wxNEED_WX_TIME_H
+
+#ifndef wxCtime
+WXDLLEXPORT wxChar *wxCtime(const time_t *timep)
+{
+    static wxChar   buf[128];
+
+    wxStrncpy( buf, wxConvertMB2WX( ctime( timep ) ), sizeof( buf ) );
+    buf[ sizeof( buf ) - 1 ] = _T('\0');
+
+    return buf;
+}
+#endif // wxCtime
 
 #endif // wxUSE_WCHAR_T
 

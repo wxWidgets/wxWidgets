@@ -169,14 +169,14 @@ Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
                  [--cc] [--cxx] [--ld]
 
 wx-config returns configuration information about the installed
-version of wxWindows. It may be used to query its version and
+version of wxWidgets. It may be used to query its version and
 installation directories and also retrieve the C and C++ compilers
 and linker which were used for its building and the corresponding
 flags.
 
 Ordinarily it should be installed to the appropriate system location
 along with the headers and library files, but it is also possible to
-use it to enable builds with an uninstalled wxWindows version for
+use it to enable builds with an uninstalled wxWidgets version for
 package building and bleeding edge developers.  To do so, use it like
 this:
 
@@ -188,7 +188,7 @@ specification for it to take effect.
 --static must come before --libs and --gl-libs.
 
 --libs can take optional argument that contains comma-separated list of
-wxWindows libraries to link against. This list can include both core
+wxWidgets libraries to link against. This list can include both core
 and contrib libraries.
 
 --gl-libs option is deprecated, used --libs=gl instead.

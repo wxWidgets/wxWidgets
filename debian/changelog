@@ -7,7 +7,7 @@ wxwidgets2.5 (2.5.1) experimental; urgency=low
     in court.  Eleven or so years of unbroken, unquestioned usage
     was not nearly so interesting to these people as the fact we
     were a soft target and easy to deprive of due process.
-  * wxGTK is now built with gtk2.
+  * wxGTK is now built with gtk2 and unicode support.
   * wxBase is no longer a separate package, it is built with the
     GUI libs which now depend on it.  We might split it out again
     one day if there is a need for that.
@@ -19,6 +19,8 @@ wxwidgets2.5 (2.5.1) experimental; urgency=low
     improve either, but the logical separation may be beneficial.
   * Removed many elements of the build scripts that are no longer
     required due to improvements and changes elsewhere.
+  * Added README.examples for people who think these are packaged
+    as demos instead of as extended documentation.
 
  -- Ron Lee <ron@debian.org>  Fri, 27 Feb 2004 17:00:29 +1030
 
