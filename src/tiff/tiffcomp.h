@@ -51,7 +51,7 @@
 #define __acornriscos
 #endif
 
-#if defined(__MWERKS__) || defined(THINK_C)
+#if (defined(__MWERKS__) && !defined(__MACH__)) || defined(THINK_C)
 #include <unix.h>
 #include <math.h>
 #endif
