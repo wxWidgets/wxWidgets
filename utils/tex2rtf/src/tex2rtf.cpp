@@ -101,6 +101,9 @@ bool Go(void);
 void ShowOptions(void);
 
 #ifdef NO_GUI
+
+extern char *wxBuffer; // we must init it, otherwise tex2rtf will crash
+
 int main(int argc, char **argv)
 #else
 wxMenuBar *menuBar = NULL;
@@ -146,12 +149,16 @@ bool MyApp::OnInit()
   }
 
 #ifdef NO_GUI
+  wxBuffer = new char[1500];
+  // this is done in wxApp, but NO_GUI version doesn't call it :-(
+
   if (!InputFile || !OutputFile)
   {
     cout << "Tex2RTF: input or output file is missing.\n";
     ShowOptions();
     exit(1);
   }
+
 #endif
   if (InputFile)
   {
@@ -374,10 +381,12 @@ bool MyApp::OnInit()
   // Return the main frame window
   return TRUE;
 #else
+  delete[] wxBuffer;
   return FALSE;
 #endif
 }
 
+#ifndef NO_GUI
 int MyApp::OnExit()
 {
   wxNode *node = CustomMacroList.First();
@@ -411,7 +420,7 @@ int MyApp::OnExit()
 
   return 0;
 }
-
+#endif
 void ShowOptions(void)
 {
     char buf[100];
@@ -1073,3 +1082,13 @@ char *Tex2RTFConnection::OnRequest(const wxString& topic, const wxString& item, 
 
 #endif
 
+
+#ifndef NO_GUI
+void wxObject::Dump(ostream& str)
+{
+  if (GetClassInfo() && GetClassInfo()->GetClassName())
+    str << GetClassInfo()->GetClassName();
+  else
+    str << "unknown object class";
+}
+#endif
