@@ -675,7 +675,10 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXU
       palette = NULL;
     }
     if (palette)
-      M_BITMAPHANDLERDATA->m_bitmapPalette = *palette;
+    {
+        M_BITMAPHANDLERDATA->m_bitmapPalette = *palette;
+        delete palette;
+    }
     return success;
 #else
   return FALSE;
