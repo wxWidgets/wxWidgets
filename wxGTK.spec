@@ -69,8 +69,8 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk.*
-%attr(755, -, -) %{pref}/lib/libwx_gtk-2.2.*
+%attr(755, root, root) %{pref}/lib/libwx_gtk.*
+%attr(755, root, root) %{pref}/lib/libwx_gtk-2.2.*
 
 %files devel
 %defattr(-, root, root)
@@ -79,9 +79,9 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
-%attr(755, -, -) %{pref}/bin/wxgtk-config
-%attr(755, -, -) %{pref}/bin/wx-config
+%attr(755, root, root) %{pref}/bin/wxgtk-config
+%attr(755, root, root) %{pref}/bin/wx-config
 
 %files gl
 %defattr(-, root, root)
-%attr(755, -, -) %{pref}/lib/libwx_gtk_gl*
+%attr(755, root, root) %{pref}/lib/libwx_gtk_gl*

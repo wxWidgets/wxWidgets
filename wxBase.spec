@@ -58,7 +58,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr (644, root, root, 755)
 %doc COPYING.LIB LICENCE.txt README.txt SYMBOLS.txt
-%attr(755, -, -) %{pref}/lib/libwx_base*
+%attr(755, root, root) %{pref}/lib/libwx_base*
 %dir %{pref}/lib/wx
 %dir %{pref}/lib/wx/include
 %dir %{pref}/lib/wx/include/wx
@@ -66,5 +66,5 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel -f src/rpmfiles.lst
 %defattr (644, root, root, 755)
-%attr(755, -, -) %{pref}/bin/wx-config
+%attr(755, root, root) %{pref}/bin/wx-config
 

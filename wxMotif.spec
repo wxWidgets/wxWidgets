@@ -73,8 +73,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_motif.*
-%attr(755, -, -) %{pref}/lib/libwx_motif-2.1.*
+%attr(755, root, root) %{pref}/lib/libwx_motif.*
+%attr(755, root, root) %{pref}/lib/libwx_motif-2.1.*
 
 %files devel
 %defattr (644, root, root, 755)
@@ -82,8 +82,8 @@ rm -rf $RPM_BUILD_ROOT
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
-%attr(755, -, -) %{pref}/bin/wxmotif-config
-%attr(755, -, -) %{pref}/bin/wx-config
+%attr(755, root, root) %{pref}/bin/wxmotif-config
+%attr(755, root, root) %{pref}/bin/wx-config
 
 %files gl
-%attr(755, -, -) %{pref}/lib/libwx_motif_gl*
+%attr(755, root, root) %{pref}/lib/libwx_motif_gl*
