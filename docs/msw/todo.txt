@@ -42,17 +42,17 @@ Update manual.
     wxTabCtrl           DONE
     wxNotebook
     wxWave              DONE
-    wxJoystick
+    wxJoystick          DONE
     wxStatusBar95 and wxFrame status bar functions
     wxListBox changes (for ownerdraw functionality)
     wxThread            DONE (except for topic overview)
+    wxHelpController classes DONE (except for Unix ones)
     wxString
     wxTString
     Drag and drop (change API if required, e.g. const).
     wxCheckListBox
     wxBaseArray, other arrays
     (wxOwnerDrawn)
-    Various events
     Document the include file for each class
 
 Write tutorial.

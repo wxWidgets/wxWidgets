@@ -9,5 +9,13 @@
 #include "wx/generic/helpxlp.h"
 #endif
 
+#ifdef __WINDOWS__
+#define wxHelpController wxWinHelpController
+#elif defined(__GTK__)
+#define wxHelpController wxHTMLHelpController
+#else
+#define wxHelpController wxXLPHelpController
+#endif
+
 #endif
     // __HELPH_BASE__

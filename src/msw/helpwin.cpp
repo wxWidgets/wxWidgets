@@ -131,7 +131,13 @@ bool wxWinHelpController::KeywordSearch(const wxString& k)
 // Can't close the help window explicitly in WinHelp
 bool wxWinHelpController::Quit(void)
 {
-  return TRUE;
+  if (wxTheApp->GetTopWindow())
+  {
+    WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), 0, HELP_QUIT, 0L);
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 // Don't get notified of WinHelp quitting

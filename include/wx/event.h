@@ -900,11 +900,10 @@ class WXDLLEXPORT wxSysColourChangedEvent: public wxEvent
      { m_eventType = wxEVT_SYS_COLOUR_CHANGED; }
 };
 
-/* TODO, apart from events for individual controls...
+/* TODO
  wxEVT_POWER,
  wxEVT_CREATE,
  wxEVT_DESTROY,
- wxEVT_SHOW,
  wxEVT_MOUSE_CAPTURE_CHANGED,
  wxEVT_SETTING_CHANGED, // WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
  wxEVT_QUERY_NEW_PALETTE,

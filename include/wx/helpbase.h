@@ -32,7 +32,8 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   // Must call this to set the filename and server name.
   // server is only required when implementing TCP/IP-based
   // help controllers.
-  virtual bool Initialize(const wxString& file, int server = -1) = 0;
+  virtual bool Initialize(const wxString& file, int server) { return FALSE; };
+  virtual bool Initialize(const wxString& file) = 0;
 
   // If file is "", reloads file given  in Initialize
   virtual bool LoadFile(const wxString& file = "") = 0;
