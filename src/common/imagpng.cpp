@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagepng.cpp
+// Name:        src/common/imagepng.cpp
 // Purpose:     wxImage PNG handler
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -7,9 +7,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 #ifdef __GNUG__
 #pragma implementation "imagpng.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -44,13 +52,42 @@
 #endif
 #endif
 
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// wxPNGHandler
-//-----------------------------------------------------------------------------
+// image can not have any transparent pixels at all, have only 100% opaque
+// and/or 100% transparent pixels in which case a simple mask is enough to
+// store this information in wxImage or have a real alpha channel in which case
+// we need to have it in wxImage as well
+enum Transparency
+{
+    Transparency_None,
+    Transparency_Mask,
+    Transparency_Alpha
+};
+
+// ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+// return the kind of transparency needed for this image assuming that it does
+// have transparent pixels, i.e. either Transparency_Alpha or Transparency_Mask
+static Transparency
+CheckTransparency(const unsigned char *ptr,
+                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h);
+
+// init the alpha channel for the image and fill it with 1s up to (x, y)
+static unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y);
+
+// find a free colour for the mask in the PNG data array
+static void
+FindMaskColour(unsigned char **lines, png_uint_32 width, png_uint_32 height,
+               unsigned char& rMask, unsigned char& gMask, unsigned char& bMask);
+
+// ============================================================================
+// wxPNGHandler implementation
+// ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 
@@ -72,18 +109,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 
 
 // VS: wxPNGInfoStruct declared below is a hack that needs some explanation.
-//     First, let me describe what's the problem: libpng uses jmp_buf in 
-//     its png_struct structure. Unfortunately, this structure is 
-//     compiler-specific and may vary in size, so if you use libpng compiled 
+//     First, let me describe what's the problem: libpng uses jmp_buf in
+//     its png_struct structure. Unfortunately, this structure is
+//     compiler-specific and may vary in size, so if you use libpng compiled
 //     as DLL with another compiler than the main executable, it may not work
-//     (this is for example the case with wxMGL port and SciTech MGL library 
+//     (this is for example the case with wxMGL port and SciTech MGL library
 //     that provides custom runtime-loadable libpng implementation with jmpbuf
-//     disabled altogether). Luckily, it is still possible to use setjmp() & 
+//     disabled altogether). Luckily, it is still possible to use setjmp() &
 //     longjmp() as long as the structure is not part of png_struct.
 //
 //     Sadly, there's no clean way to attach user-defined data to png_struct.
 //     There is only one customizable place, png_struct.io_ptr, which is meant
-//     only for I/O routines and is set with png_set_read_fn or 
+//     only for I/O routines and is set with png_set_read_fn or
 //     png_set_write_fn. The hacky part is that we use io_ptr to store
 //     a pointer to wxPNGInfoStruct that holds I/O structures _and_ jmp_buf.
 
@@ -91,7 +128,7 @@ struct wxPNGInfoStruct
 {
     jmp_buf jmpbuf;
     bool verbose;
-    
+
     union
     {
         wxInputStream  *in;
@@ -101,6 +138,9 @@ struct wxPNGInfoStruct
 
 #define WX_PNG_INFO(png_ptr) ((wxPNGInfoStruct*)png_get_io_ptr(png_ptr))
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
 
 extern "C"
 {
@@ -145,20 +185,285 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 
 } // extern "C"
 
+// ----------------------------------------------------------------------------
+// LoadFile() helpers
+// ----------------------------------------------------------------------------
+
+Transparency
+CheckTransparency(const unsigned char *ptr,
+                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h)
+{
+    // suppose that a mask will suffice
+    Transparency transparency = Transparency_Mask;
+
+    // and check all the remaining alpha values to see if it does
+    unsigned char a2;
+    unsigned const char *ptr2 = ptr;
+    for ( png_uint_32 y2 = y; y2 < h; y2++ )
+    {
+        for ( png_uint_32 x2 = x + 1; x2 < w; x2++ )
+        {
+            // skip the grey byte
+            a2 = *++ptr2;
+
+            if ( a2 && a2 != 0xff )
+            {
+                // not fully opeaque nor fully transparent, hence need alpha
+                transparency = Transparency_Alpha;
+                break;
+            }
+
+            ++ptr2;
+        }
+
+        if ( transparency == Transparency_Alpha )
+        {
+            // no need to continue
+            break;
+        }
+    }
+
+    return transparency;
+}
+
+unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
+{
+    // create alpha channel
+    image->SetAlpha();
+
+    unsigned char *alpha = image->GetAlpha();
+
+    // set alpha for the pixels we had so far
+    for ( png_uint_32 y2 = 0; y2 <= y; y2++ )
+    {
+        for ( png_uint_32 x2 = 0; x2 < x; x2++ )
+        {
+            // all the previous pixels were opaque
+            *alpha++ = 0xff;
+        }
+    }
+
+    return alpha;
+}
+
+void
+FindMaskColour(unsigned char **lines, png_uint_32 width, png_uint_32 height,
+               unsigned char& rMask, unsigned char& gMask, unsigned char& bMask)
+{
+    // choosing the colour for the mask is more
+    // difficult: we need to iterate over the entire
+    // image for this in order to choose an unused
+    // colour (this is not very efficient but what else
+    // can we do?)
+    wxImageHistogram h;
+    unsigned nentries = 0;
+    unsigned char r2, g2, b2;
+    for ( png_uint_32 y2 = 0; y2 < height; y2++ )
+    {
+        const unsigned char *p = lines[y2];
+        for ( png_uint_32 x2 = 0; x2 < width; x2++ )
+        {
+            r2 = *p++;
+            g2 = *p++;
+            b2 = *p++;
+
+            wxImageHistogramEntry&
+                entry = h[wxImageHistogram:: MakeKey(r2, g2, b2)];
+
+            if ( entry.value++ == 0 )
+                entry.index = nentries++;
+        }
+    }
+
+    if ( !h.FindFirstUnusedColour(&rMask, &gMask, &bMask) )
+    {
+        wxLogWarning(_("Too many colours in PNG, the image may be slightly blurred."));
+
+        // use a fixed mask colour and we'll fudge
+        // the real pixels with this colour (see
+        // below)
+        rMask = 0xfe;
+        gMask = 0;
+        bMask = 0xff;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// reading PNGs
+// ----------------------------------------------------------------------------
+
+bool wxPNGHandler::DoCanRead( wxInputStream& stream )
+{
+    unsigned char hdr[4];
+
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+        return FALSE;
+
+    return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
+}
+
+// convert data from RGB to wxImage format
+static
+void CopyDataFromPNG(wxImage *image,
+                     unsigned char **lines,
+                     png_uint_32 width,
+                     png_uint_32 height,
+                     int color_type)
+{
+    Transparency transparency = Transparency_None;
+
+    // only non NULL if transparency == Transparency_Alpha
+    unsigned char *alpha = NULL;
+
+    // RGB of the mask colour if transparency == Transparency_Mask
+    // (but init them anyhow to avoid compiler warnings)
+    unsigned char rMask = 0,
+                  gMask = 0,
+                  bMask = 0;
+
+    unsigned char *ptrDst = image->GetData();
+    if ( !(color_type & PNG_COLOR_MASK_COLOR) )
+    {
+        // grey image: GAGAGA... where G == grey component and A == alpha
+        for ( png_uint_32 y = 0; y < height; y++ )
+        {
+            const unsigned char *ptrSrc = lines[y];
+            for ( png_uint_32 x = 0; x < width; x++ )
+            {
+                unsigned char g = *ptrSrc++;
+                unsigned char a = *ptrSrc++;
+
+                // the first time we encounter a transparent pixel we must
+                // decide about what to do about them
+                if ( a != 0xff && transparency == Transparency_None )
+                {
+                    // we'll need at least the mask for this image and
+                    // maybe even full alpha channel info: the former is
+                    // only enough if we have alpha values of 0 and 0xff
+                    // only, otherwisewe need the latter
+                    transparency = CheckTransparency(ptrSrc, x, y,
+                                                     width, height);
+
+                    if ( transparency == Transparency_Mask )
+                    {
+                        // let's choose this colour for the mask: this is
+                        // not a problem here as all the other pixels are
+                        // grey, i.e. R == G == B which is not the case for
+                        // this one so no confusion is possible
+                        rMask = 0xff;
+                        gMask = 0;
+                        bMask = 0xff;
+                    }
+                    else // transparency == Transparency_Alpha
+                    {
+                        alpha = InitAlpha(image, x, y);
+                    }
+                }
+
+                switch ( transparency )
+                {
+                    case Transparency_Alpha:
+                        *alpha++ = a;
+                        // fall through
+
+                    case Transparency_None:
+                        *ptrDst++ = g;
+                        *ptrDst++ = g;
+                        *ptrDst++ = g;
+                        break;
+
+                    case Transparency_Mask:
+                        *ptrDst++ = rMask;
+                        *ptrDst++ = bMask;
+                        *ptrDst++ = gMask;
+                }
+            }
+        }
+    }
+    else // colour image: RGBRGB...
+    {
+        for ( png_uint_32 y = 0; y < height; y++ )
+        {
+            const unsigned char *ptrSrc = lines[y];
+            for ( png_uint_32 x = 0; x < width; x++ )
+            {
+                unsigned char r = *ptrSrc++;
+                unsigned char g = *ptrSrc++;
+                unsigned char b = *ptrSrc++;
+                unsigned char a = *ptrSrc++;
+
+                // the logic here is the same as for the grey case except
+                // where noted
+                if ( a != 0xff && transparency == Transparency_None )
+                {
+                    transparency = CheckTransparency(ptrSrc, x, y,
+                                                     width, height);
+
+                    if ( transparency == Transparency_Mask )
+                    {
+                        FindMaskColour(lines, width, height,
+                                       rMask, gMask, bMask);
+                    }
+                    else // transparency == Transparency_Alpha
+                    {
+                        alpha = InitAlpha(image, x, y);
+                    }
+
+                }
+
+                switch ( transparency )
+                {
+                    case Transparency_Alpha:
+                        *alpha++ = a;
+                        // fall through
+
+                    case Transparency_None:
+                        *ptrDst++ = r;
+                        *ptrDst++ = g;
+                        *ptrDst++ = b;
+                        break;
+
+                    case Transparency_Mask:
+                        // if we couldn't find a unique colour for the mask, we
+                        // can have real pixels with the same value as the mask
+                        // and it's better to slightly change their colour than
+                        // to make them transparent
+                        if ( r == rMask && g == gMask && b == bMask )
+                        {
+                            r++;
+                        }
+
+                        *ptrDst++ = rMask;
+                        *ptrDst++ = bMask;
+                        *ptrDst++ = gMask;
+                }
+            }
+        }
+    }
+
+    if ( transparency == Transparency_Mask )
+    {
+        image->SetMaskColour(rMask, gMask, bMask);
+    }
+}
+
 // temporarily disable the warning C4611 (interaction between '_setjmp' and
 // C++ object destruction is non-portable) - I don't see any dtors here
 #ifdef __VISUALC__
     #pragma warning(disable:4611)
 #endif /* VC++ */
 
-bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
+bool
+wxPNGHandler::LoadFile(wxImage *image,
+                       wxInputStream& stream,
+                       bool verbose,
+                       int WXUNUSED(index))
 {
     // VZ: as this function uses setjmp() the only fool proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
 
-    unsigned char **lines;
-    unsigned int i;
-    png_infop info_ptr = (png_infop) NULL;   
+    unsigned char **lines = NULL;
+    png_infop info_ptr = (png_infop) NULL;
     wxPNGInfoStruct wxinfo;
 
     wxinfo.verbose = verbose;
@@ -171,7 +476,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         (png_error_ptr) NULL,
         (png_error_ptr) NULL );
     if (!png_ptr)
-        goto error_nolines;
+        goto error;
 
     png_set_error_fn(png_ptr, (png_voidp)NULL, wx_png_error, wx_png_warning);
 
@@ -181,16 +486,13 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
-        goto error_nolines;
+        goto error;
 
     if (setjmp(wxinfo.jmpbuf))
-        goto error_nolines;
+        goto error;
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-        goto error_nolines;
-
-    png_uint_32 width,height;
-    int bit_depth,color_type,interlace_type;
+    png_uint_32 i, width, height;
+    int bit_depth, color_type, interlace_type;
 
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
@@ -211,11 +513,11 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     image->Create( (int)width, (int)height );
 
     if (!image->Ok())
-        goto error_nolines;
+        goto error;
 
     lines = (unsigned char **)malloc( (size_t)(height * sizeof(unsigned char *)) );
-    if (lines == NULL)
-        goto error_nolines;
+    if ( !lines )
+        goto error;
 
     for (i = 0; i < height; i++)
     {
@@ -227,87 +529,20 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         }
     }
 
-    // loaded successfully!
-    {
-        int transp = 0;
-        png_read_image( png_ptr, lines );
-        png_read_end( png_ptr, info_ptr );
-        png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-        unsigned char *ptr = image->GetData();
-        if ((color_type == PNG_COLOR_TYPE_GRAY) ||
-            (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
-        {
-            for (unsigned int y = 0; y < height; y++)
-            {
-                unsigned char *ptr2 = lines[y];
-                for (unsigned int x = 0; x < width; x++)
-                {
-                    unsigned char r = *ptr2++;
-                    unsigned char a = *ptr2++;
-                    if (a < 128)
-                    {
-                        *ptr++ = 255;
-                        *ptr++ = 0;
-                        *ptr++ = 255;
-                        transp = 1;
-                    }
-                    else
-                    {
-                        *ptr++ = r;
-                        *ptr++ = r;
-                        *ptr++ = r;
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (unsigned int y = 0; y < height; y++)
-            {
-                unsigned char *ptr2 = lines[y];
-                for (unsigned int x = 0; x < width; x++)
-                {
-                    unsigned char r = *ptr2++;
-                    unsigned char g = *ptr2++;
-                    unsigned char b = *ptr2++;
-                    unsigned char a = *ptr2++;
-                    if (a < 128)
-                    {
-                        *ptr++ = 255;
-                        *ptr++ = 0;
-                        *ptr++ = 255;
-                        transp = 1;
-                    }
-                    else
-                    {
-                        if ((r == 255) && (g == 0) && (b == 255)) r = 254;
-                        *ptr++ = r;
-                        *ptr++ = g;
-                        *ptr++ = b;
-                    }
-                }
-            }
-        }
+    png_read_image( png_ptr, lines );
+    png_read_end( png_ptr, info_ptr );
+    png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
 
-        for ( unsigned int j = 0; j < height; j++ )
-            free( lines[j] );
-        free( lines );
+    // loaded successfully, now init wxImage with this data
+    CopyDataFromPNG(image, lines, width, height, color_type);
 
-        if (transp)
-        {
-            image->SetMaskColour( 255, 0, 255 );
-        }
-        else
-        {
-            image->SetMask( FALSE );
-        }
-    }
+    for ( i = 0; i < height; i++ )
+        free( lines[i] );
+    free( lines );
 
     return TRUE;
 
- error_nolines:
-    lines = NULL; // called from before it was set
- error:
+error:
     if (verbose)
        wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
 
@@ -333,6 +568,10 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     }
     return FALSE;
 }
+
+// ----------------------------------------------------------------------------
+// writing PNGs
+// ----------------------------------------------------------------------------
 
 bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
@@ -427,16 +666,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 #ifdef __VISUALC__
     #pragma warning(default:4611)
 #endif /* VC++ */
-
-bool wxPNGHandler::DoCanRead( wxInputStream& stream )
-{
-    unsigned char hdr[4];
-
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
-
-    return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
-}
 
 #endif  // wxUSE_STREAMS
 
