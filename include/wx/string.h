@@ -27,8 +27,11 @@
 #include <stdarg.h>
 #include <limits.h>
 
-#include "wx/defs.h"     // Robert Roebling
-#include "wx/object.h"
+#ifndef  WX_PRECOMP
+  #include "wx/defs.h"     // Robert Roebling
+  #include "wx/object.h"
+#endif
+
 #include "wx/debug.h"
 
 /** @name wxString library
@@ -84,7 +87,7 @@ int WXDLLEXPORT Stricmp(const char *, const char *);
 struct WXDLLEXPORT wxStringData
 {
   int     nRefs;        // reference count
-  size_t  nDataLength,  // actual string length
+  uint    nDataLength,  // actual string length
           nAllocLength; // allocated memory size
 
   // mimics declaration 'char data[nAllocLength]'
@@ -93,11 +96,15 @@ struct WXDLLEXPORT wxStringData
   // empty string has a special ref count so it's never deleted
   bool  IsEmpty()   const { return nRefs == -1; }
   bool  IsShared()  const { return nRefs > 1;   }
-  bool  IsValid()   const { return nRefs != 0;  }
 
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                             }
   void  Unlock() { if ( !IsEmpty() && --nRefs == 0) delete (char *)this;  }
+
+  // if we had taken control over string memory (GetWriteBuf), it's 
+  // intentionally put in invalid state
+  void  Validate(bool b)  { nRefs = b ? 1 : 0; }
+  bool  IsValid() const   { return nRefs != 0; }
 };
 
 extern const char *g_szNul; // global pointer to empty string
@@ -347,6 +354,9 @@ public:
       */
   uint Replace(const char *szOld, const char *szNew, bool bReplaceAll = TRUE);
     //@}
+
+    /// check if the string contents matches a mask containing '*' and '?'
+  bool Matches(const char *szMask) const;
   //@}
 
   /** @name formated input/output */
@@ -357,8 +367,17 @@ public:
   int PrintfV(const char* pszFormat, va_list argptr);
   //@}
   
-  // get writable buffer of at least nLen characters
-  char *GetWriteBuf(size_t nLen);
+  /** @name raw access to string memory */
+  //@{
+    /** 
+        get writable buffer of at least nLen bytes. 
+        Unget() *must* be called a.s.a.p. to put string back in a reasonable
+        state!
+     */
+  char *GetWriteBuf(int nLen);
+    /// call this immediately after GetWriteBuf() has been used
+  void UngetWriteBuf();
+  //@}
 
   /** @name wxWindows compatibility functions */
   //@{
