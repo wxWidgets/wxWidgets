@@ -33,7 +33,7 @@ class PPanel(wxPanel):
         wxPanel.Enable(self, value)
     def SetModified(self):
         self.modified = true
-        panel.SetModified(true)        
+        panel.SetModified(true)
 
 class ParamBinaryOr(PPanel):
     def __init__(self, parent, id, size, name):
@@ -90,7 +90,7 @@ class ParamBinaryOr(PPanel):
         dlg.SetSizer(topSizer)
         topSizer.Fit(dlg)
         dlg.Center()
-        if dlg.ShowModal() == wxID_OK: 
+        if dlg.ShowModal() == wxID_OK:
             value = []
             for i in range(listBox.Number()):
                 if listBox.IsChecked(i):
@@ -153,6 +153,7 @@ class ParamColour(PPanel):
         return self.value
     def SetValue(self, value):
         self.freeze = true
+        value = string.strip(value)
         if not value: value = '#FFFFFF'
         self.value = value
         self.text.SetValue(str(value))  # update text ctrl
@@ -282,6 +283,7 @@ class ParamInt(PPanel):
         return str(self.spin.GetValue())
     def SetValue(self, value):
         self.freeze = true
+        value = string.strip(value)
         if not value: value = 0
         self.spin.SetValue(int(value))
         self.freeze = false
@@ -395,7 +397,7 @@ class ParamContent(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return        
+        if self.freeze: return
         self.SetModified()
         self.textModified = true
         evt.Skip()
@@ -422,7 +424,7 @@ class ParamContent(PPanel):
             self.textModified = false
         dlg.Destroy()
 
-# Boxless radiobox 
+# Boxless radiobox
 class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, size=wxDefaultSize, name='radiobox'):
@@ -474,7 +476,7 @@ class ParamOrient(RadioBox):
         self.SetStringSelection(self.seulav[value])
 
 class ParamFile(PPanel):
-    def __init__(self, parent, id = -1, size = wxDefaultSize, name = ''):    
+    def __init__(self, parent, id = -1, size = wxDefaultSize, name = ''):
         PPanel.__init__(self, parent, id, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_BROWSE = wxNewId()
@@ -491,7 +493,7 @@ class ParamFile(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return        
+        if self.freeze: return
         self.SetModified()
         self.textModified = true
         evt.Skip()
