@@ -690,7 +690,7 @@ public:
 
     // from wxCharBuffer
   wxString(const wxCharBuffer& psz)
-      : wxStringBase(psz, npos) { }
+      : wxStringBase(psz) { }
 #endif // Unicode/ANSI
 
   // generic attributes & operations

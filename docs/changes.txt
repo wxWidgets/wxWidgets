@@ -116,6 +116,7 @@ All:
 - number of fixes to wxPluginManager (Rick Brice, Hans Van Leemputten)
 - fixed memory leak in wxURL when using a proxy (Steven Van Ingelgem)
 - fixed bug in wxDateTime::Set(jdn) when DST was in effect
+- fixed fatal bug in wxString when wxUSE_STL==1 (Kurt Granroth)
 - support msgids in charsets other than C and languages other than English
   (based on patch by Stefan Kowski)
 - added wxMicroSleep() and wxMilliSleep() replacing deprecated wxUsleep()
