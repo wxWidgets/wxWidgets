@@ -1449,7 +1449,12 @@ wxProperty *wxRadioBoxPropertyInfo::GetProperty(wxString& name)
     wxRadioBox *radioBox = (wxRadioBox *)m_propertyWindow;
     if (name == "numberRowsOrCols")
     {
+        // FIXME: Set/GetNumberOfRowsOrCols only implemented on Motif, MSW and Mac
+#if defined(__WXMSW__) || defined(__WXMOTIF__) || defined(__WXMAC__)
         return new wxProperty("numberRowsOrCols", (long)radioBox->GetNumberOfRowsOrCols(), "integer");
+#else
+        return new wxProperty("numberRowsOrCols", (long)1, "integer");
+#endif
     }
     if (name == "orientation")
     {
@@ -1480,10 +1485,13 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     wxRadioBox *radioBox = (wxRadioBox *)m_propertyWindow;
     if (name == "numberRowsOrCols")
     {
+        // FIXME: Set/GetNumberOfRowsOrCols only implemented on Motif, MSW and Mac
+#if defined(__WXMSW__) || defined(__WXMOTIF__) || defined(__WXMAC__)
         wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(radioBox);
         
         radioBox->SetNumberOfRowsOrCols((int)property->GetValue().IntegerValue());
         m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+#endif
         return TRUE;
     }
     else if (name == "orientation")
@@ -1587,7 +1595,12 @@ bool wxRadioBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
         resource->SetStringValues(slist);
         }
     */
+    // FIXME: Set/GetNumberOfRowsOrCols only implemented on Motif, MSW and Mac
+#if defined(__WXMSW__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     resource->SetValue1(rbox->GetNumberOfRowsOrCols());
+#else
+    resource->SetValue1(1);
+#endif
     return wxItemPropertyInfo::InstantiateResource(resource);
 }
 

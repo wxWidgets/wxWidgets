@@ -58,7 +58,7 @@
 
 wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if !defined(__WXMSW__)
 #include "bitmaps/load.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/new.xpm"
@@ -150,11 +150,9 @@ bool wxResourceManager::Initialize()
     windowsDir += "\\dialoged.ini" ;
     
     m_optionsResourceFilename = windowsDir;
-#elif defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMAC__) && defined(__DARWIN__))
+#else
     wxGetHomeDir( &m_optionsResourceFilename );
     m_optionsResourceFilename += "/.dialogedrc";
-#else
-#error "Unsupported platform."
 #endif
     
     LoadOptions();
@@ -174,8 +172,7 @@ bool wxResourceManager::Initialize()
     {
 #ifdef __WXMSW__
         m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
-#endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#else
         m_bitmapImage = new wxBitmap( wxwin_xpm );
 #endif
     }
@@ -768,8 +765,7 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
     wxBitmap ToolbarCopyHeightBitmap("COPYHEIGHTTOOL");
     wxBitmap ToolbarDistributeHorizBitmap("DISTHORIZTOOL");
     wxBitmap ToolbarDistributeVertBitmap("DISTVERTTOOL");
-#endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#else
     wxBitmap ToolbarLoadBitmap( load_xpm );
     wxBitmap ToolbarSaveBitmap( save_xpm);
     wxBitmap ToolbarNewBitmap( new_xpm );

@@ -325,7 +325,15 @@ void MyFrame::OnUpdateUI( wxUpdateUIEvent &event )
             event.Enable( FALSE );
             break;
         case ID_DELETE:
+#ifdef __WXUNIVERSAL__
             event.Enable( m_text->HasSelection() );
+#else
+            {
+              long selFrom, selTo;
+              m_text->GetSelection(& selFrom, & selTo);
+              event.Enable( selFrom != selTo );
+            }
+#endif            
             break;
         default:
             break;

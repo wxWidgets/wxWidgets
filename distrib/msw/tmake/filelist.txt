@@ -1199,7 +1199,6 @@ timer.h	MotifH
 toolbar.h	MotifH
 window.h	MotifH
 
-accel.h	X11H
 app.h	X11H
 bitmap.h	X11H
 brush.h	X11H
@@ -1220,7 +1219,6 @@ gdiobj.h	X11H
 glcanvas.h	X11H
 icon.h	X11H
 joystick.h	X11H
-mdi.h	X11H
 minifram.h	X11H
 palette.h	X11H
 pen.h	X11H
@@ -1228,9 +1226,7 @@ print.h	X11H
 private.h	X11H
 region.h	X11H
 reparent.h	X11H
-settings.h	X11H
 textctrl.h	X11H
-toolbar.h	X11H
 toplevel.h	X11H
 window.h	X11H
 
