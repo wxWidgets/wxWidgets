@@ -686,7 +686,7 @@ public:
           size_t find(char ch, size_t nStart = 0) const;
 
           // wxWin compatibility
-          inline bool Contains(const wxString& str) { return Find(str) != -1; }
+          inline bool Contains(const wxString& str) const { return Find(str) != -1; }
 
         //@}
 
