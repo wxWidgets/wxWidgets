@@ -15,6 +15,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/msw/private.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -28,7 +29,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
 
-    #include "wx/msw/private.h"
+//    #include "wx/msw/private.h"
 #endif
 
 #if !defined(__WIN32__) || defined(__SALFORDC__) || defined(__WXWINE__)

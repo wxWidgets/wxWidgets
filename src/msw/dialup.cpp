@@ -38,6 +38,8 @@
     #include "wx/event.h"
 #endif
 
+#include "wx/msw/private.h"  // must be before #include "dynlib.h"
+
 #if !wxUSE_DYNLIB_CLASS
     #error You need wxUSE_DYNLIB_CLASS to be 1 to compile dialup.cpp.
 #endif
@@ -53,8 +55,6 @@
 #include <raserror.h>
 
 #include <wininet.h>
-
-#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // constants

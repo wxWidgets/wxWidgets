@@ -75,6 +75,8 @@
 
 #define wxDEFINE_TIME_CONSTANTS // before including datetime.h
 
+#include <ctype.h>
+
 #include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------

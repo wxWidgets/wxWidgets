@@ -24,6 +24,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include <ctype.h>
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif

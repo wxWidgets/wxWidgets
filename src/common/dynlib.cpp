@@ -22,6 +22,9 @@
 #endif
 
 #include  "wx/wxprec.h"
+#if defined(__WINDOWS__)
+#include "wx/msw/private.h"
+#endif
 
 #ifdef __BORLANDC__
   #pragma hdrstop
@@ -42,10 +45,11 @@
 #   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
 #   define wxDllClose                    dlclose
+aaa=1
 #elif defined(HAVE_SHL_LOAD)
 #   define wxDllOpen(lib)                shl_load(lib.fn_str(), BIND_DEFERRED, 0)
 #   define wxDllClose      shl_unload
-
+bbb=1
     static inline void *wxDllGetSymbol(shl_t handle, const wxString& name)
     {
         void *sym;
@@ -55,8 +59,6 @@
             return (void *)0;
     }
 #elif defined(__WINDOWS__)
-#   include <windows.h>
-
     // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
 #   ifdef __WIN32__
 #      define wxDllOpen(lib)                  ::LoadLibraryEx(lib, 0, 0)

@@ -15,6 +15,9 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#if defined(__WINDOWS__)
+#include "wx/msw/private.h"
+#endif
 
 #include "wx/serbase.h"
 #include "wx/datstrm.h"

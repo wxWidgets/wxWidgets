@@ -23,6 +23,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -55,8 +56,6 @@
 #ifndef __WIN32__
     #include <print.h>
 #endif
-
-#include "wx/msw/private.h"
 
     IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 

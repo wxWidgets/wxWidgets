@@ -37,6 +37,8 @@
     #include "wx/filefn.h"
 #endif //WX_PRECOMP
 
+#include <ctype.h>
+
 #include "wx/datetime.h"
 #include "wx/cmdline.h"
 

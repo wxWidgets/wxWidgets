@@ -40,7 +40,7 @@
 #   include <dl.h>
     typedef shl_t wxDllType;
 #elif defined(__WINDOWS__)
-#   include <windows.h>
+//#   include <windows.h>  
     typedef HMODULE wxDllType;
 #elif defined(__OS2__)
 #   define INCL_DOS
