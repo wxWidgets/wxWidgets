@@ -396,11 +396,11 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
                         
             if ( m_macMinimumStatic )
                 m_macMinimumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT,
-                GetPosition().y + h - yborder - textheight);
+                GetPosition().y + h - yborder);
             if ( m_macMaximumStatic )
                 m_macMaximumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT, GetPosition().y + 0);
             if ( m_macValueStatic )
-                m_macValueStatic->Move(GetPosition().x, GetPosition().y + h - textheight);
+                m_macValueStatic->Move(GetPosition().x, GetPosition().y + h );
         }
         else
         {
