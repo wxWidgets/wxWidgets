@@ -171,7 +171,8 @@ public:
     virtual void SetFaceName( const wxString& faceName ) = 0;
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
-    virtual void SetNativeFontInfo(const wxNativeFontInfo& info);
+    void SetNativeFontInfo(const wxNativeFontInfo& info)
+        { DoSetNativeFontInfo(info); }
 
     void SetNativeFontInfo(const wxString& info);
     void SetNativeFontInfoUserDesc(const wxString& info);
@@ -195,7 +196,10 @@ protected:
     // get the internal data
     wxFontRefData *GetFontData() const
         { return (wxFontRefData *)m_refData; }
-    
+
+    // the function called by both overloads of SetNativeFontInfo()
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using

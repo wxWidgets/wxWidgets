@@ -856,7 +856,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
-void wxFont::SetNativeFontInfo( const wxNativeFontInfo& info )
+void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 {
     Unshare();
 

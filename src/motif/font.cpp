@@ -104,7 +104,7 @@ protected:
     wxFontEncoding m_encoding;
 
     wxNativeFontInfo m_nativeFontInfo;
-    
+
     // A list of wxXFonts
     wxList        m_fonts;
 };
@@ -319,7 +319,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         else
             return FALSE;
     }
-    return TRUE;    
+    return TRUE;
 }
 
 wxFont::~wxFont()
@@ -351,7 +351,7 @@ void wxFont::SetPointSize(int pointSize)
 
     M_FONTDATA->m_pointSize = pointSize;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
@@ -361,7 +361,7 @@ void wxFont::SetFamily(int family)
 
     M_FONTDATA->m_family = family;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
@@ -371,7 +371,7 @@ void wxFont::SetStyle(int style)
 
     M_FONTDATA->m_style = style;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
@@ -381,7 +381,7 @@ void wxFont::SetWeight(int weight)
 
     M_FONTDATA->m_weight = weight;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
@@ -391,7 +391,7 @@ void wxFont::SetFaceName(const wxString& faceName)
 
     M_FONTDATA->m_faceName = faceName;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
@@ -400,7 +400,7 @@ void wxFont::SetUnderlined(bool underlined)
     Unshare();
 
     M_FONTDATA->m_underlined = underlined;
-    
+
     RealizeResource();
 }
 
@@ -410,11 +410,11 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
     M_FONTDATA->m_encoding = encoding;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
-    
+
     RealizeResource();
 }
 
-void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
+void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
     Unshare();
 
@@ -428,7 +428,7 @@ void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
 int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
-    
+
     return M_FONTDATA->m_pointSize;
 }
 

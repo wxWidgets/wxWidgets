@@ -25,7 +25,7 @@ public:
     // ctors and such
     wxFont() { Init(); }
     wxFont(const wxFont& font) { Init(); Ref(font); }
-    
+
     wxFont(int size,
         int family,
         int style,
@@ -35,12 +35,12 @@ public:
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
         Init();
-        
+
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
-    
+
     wxFont(const wxNativeFontInfo& info);
-    
+
     bool Create(int size,
         int family,
         int style,
@@ -48,17 +48,17 @@ public:
         bool underlined = FALSE,
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    
+
     // wxMOTIF-specific
     bool Create(const wxString& fontname,
         wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
     bool Create(const wxNativeFontInfo& fontinfo);
-    
+
     virtual ~wxFont();
-    
+
     // assignment
     wxFont& operator=(const wxFont& font);
-    
+
     // implement base class pure virtuals
     virtual int GetPointSize() const;
     virtual int GetFamily() const;
@@ -68,7 +68,7 @@ public:
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual wxNativeFontInfo *GetNativeFontInfo() const;
-    
+
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(int family);
     virtual void SetStyle(int style);
@@ -76,39 +76,40 @@ public:
     virtual void SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
-    virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
-    
+
     // Implementation
-    
+
     // Find an existing, or create a new, XFontStruct
     // based on this wxFont and the given scale. Append the
     // font to list in the private data for future reference.
-    
+
     // TODO This is a fairly basic implementation, that doesn't
     // allow for different facenames, and also doesn't do a mapping
     // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
     // and the fonts that are available on a particular system.
     // Maybe we need to scan the user's machine to build up a profile
     // of the fonts and a mapping file.
-    
+
     // Return font struct, and optionally the Motif font list
     wxXFont *GetInternalFont(double scale = 1.0,
         WXDisplay* display = NULL) const;
-    
+
     // These two are helper functions for convenient access of the above.
     WXFontStructPtr GetFontStruct(double scale = 1.0,
         WXDisplay* display = NULL) const;
     WXFontList GetFontList(double scale = 1.0,
         WXDisplay* display = NULL) const;
-    
+
 protected:
+    virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
+
     // common part of all ctors
     void Init();
-    
+
     // VZ: IMHO, we don't need it at all...
     bool RealizeResource() { return TRUE; }
     void Unshare();
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };

@@ -144,7 +144,7 @@ wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 #endif
 }
 
-void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
+void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
 #ifdef wxNO_NATIVE_FONTINFO
     SetPointSize(info.pointSize);

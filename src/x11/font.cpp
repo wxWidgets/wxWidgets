@@ -105,10 +105,10 @@ public:
 
     // copy cstr
     wxFontRefData(const wxFontRefData& data);
-    
+
     // from XFLD
     wxFontRefData(const wxString& fontname);
-    
+
     // dstr
     virtual ~wxFontRefData();
 
@@ -124,10 +124,10 @@ public:
 
     void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
     bool GetNoAntiAliasing() { return m_noAA; }
-    
+
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
-    
+
 protected:
     // common part of all ctors
     void Init(int size,
@@ -140,7 +140,7 @@ protected:
 
     // set all fields from (already initialized and valid) m_nativeFontInfo
     void InitFromNative();
-    
+
     // font attributes
     int           m_pointSize;
     int           m_family;
@@ -152,7 +152,7 @@ protected:
     bool            m_noAA;      // No anti-aliasing
 
     wxNativeFontInfo m_nativeFontInfo;
-    
+
     void ClearX11Fonts();
 
 #if wxUSE_UNICODE
@@ -190,7 +190,7 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
-    
+
 #if wxUSE_UNICODE
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
@@ -396,7 +396,7 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
     m_encoding = data.m_encoding;
 
     m_noAA = data.m_noAA;
-    
+
     m_nativeFontInfo = data.m_nativeFontInfo;
 }
 
@@ -556,15 +556,15 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
-    
+
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, faceName, encoding);
 
     return TRUE;
 }
 
-#if wxUSE_UNICODE
-#else
+#if !wxUSE_UNICODE
+
 bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 {
     if( !fontname )
@@ -665,9 +665,9 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         else
             return FALSE;
     }
-    return TRUE;    
+    return TRUE;
 }
-#endif
+#endif // !wxUSE_UNICODE
 
 wxFont::~wxFont()
 {
@@ -839,7 +839,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
-void wxFont::SetNativeFontInfo( const wxNativeFontInfo& info )
+void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 {
     Unshare();
 

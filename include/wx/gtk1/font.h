@@ -94,11 +94,10 @@ public:
     virtual void SetFaceName( const wxString& faceName );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
-    virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
 
     virtual void SetNoAntiAliasing( bool no = TRUE );
     virtual bool GetNoAntiAliasing();
-    
+
     // implementation from now on
     void Unshare();
 
@@ -109,6 +108,8 @@ public:
     // no data :-)
 
 protected:
+    virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
+
     // common part of all ctors
     void Init();
 
