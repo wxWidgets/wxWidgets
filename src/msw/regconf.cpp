@@ -20,10 +20,25 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-#include <wx/wx.h>
+
+#ifdef __GNUG__
+  #pragma implementation "regconf.h"
+#endif
+
+#include  "wx/wxprec.h"
+
+#ifdef    __BORLANDC__
+  #pragma hdrstop
+#endif  //__BORLANDC__
+
+#ifndef WX_PRECOMP
+  #include  <wx/string.h>
+#endif //WX_PRECOMP
+
+#include <wx/log.h>
 #include <wx/config.h>
-#include <wx/regconf.h>
 #include <wx/msw/registry.h>
+#include <wx/msw/regconf.h>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -77,20 +92,20 @@ wxRegConfig::~wxRegConfig()
 // ----------------------------------------------------------------------------
 void wxRegConfig::SetPath(const wxString& strPath)
 {
-  ArrayString aParts;
+  wxArrayString aParts;
 
   if ( strPath.IsEmpty() )
     return;
 
   if ( strPath[0] == APPCONF_PATH_SEPARATOR ) {
     // absolute path
-    SplitPath(aParts, strPath);
+    wxSplitPath(aParts, strPath);
   }
   else {
     // relative path, combine with current one
     wxString strFullPath = GetPath();
     strFullPath << APPCONF_PATH_SEPARATOR << strPath;
-    SplitPath(aParts, strFullPath);
+    wxSplitPath(aParts, strFullPath);
   }
 
   // recombine path parts in one variable
@@ -125,13 +140,13 @@ void wxRegConfig::SetPath(const wxString& strPath)
 #define LOCAL_MASK        0x8000
 #define IS_LOCAL_INDEX(l) (((l) & LOCAL_MASK) != 0)
 
-bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex)
+bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex) const
 {
   lIndex = 0;
   return GetNextGroup(str, lIndex);
 }
 
-bool wxRegConfig::GetNextGroup (wxString& str, long& lIndex)
+bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
@@ -154,33 +169,67 @@ bool wxRegConfig::GetNextGroup (wxString& str, long& lIndex)
   return bOk;
 }
 
-bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex)
+bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex) const
 {
   lIndex = 0;
-  return GetNextGroup(str, lIndex);
+  return GetNextEntry(str, lIndex);
 }
 
-bool wxRegConfig::GetNextEntry (wxString& str, long& lIndex)
+bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
     // try to find a global entry which doesn't appear locally
     do {
-      if ( !m_keyGlobal.GetNextKey(str, lIndex) ) {
+      if ( !m_keyGlobal.GetNextValue(str, lIndex) ) {
         // no more global entries
         lIndex |= LOCAL_MASK;
         break;
       }
-    } while( m_keyLocal.HasSubKey(str) );
+    } while( m_keyLocal.HasValue(str) );
   }
 
   // much easier with local entries: get the next one we find
   // (don't forget to clear our flag bit and set it again later)
   lIndex &= ~LOCAL_MASK;
-  bool bOk = m_keyLocal.GetNextKey(str, lIndex);
+  bool bOk = m_keyLocal.GetNextValue(str, lIndex);
   lIndex |= LOCAL_MASK;
 
   return bOk;
+}
+
+uint wxRegConfig::GetNumberOfEntries() const
+{
+  uint nEntries = 0;
+
+  // dummy vars
+  wxString str;
+  long l;
+  bool bCont = GetFirstEntry(str, l);
+  while ( bCont ) {
+    nEntries++;
+
+    bCont = GetNextEntry(str, l);
+  }
+
+  return nEntries;
+}
+
+uint wxRegConfig::GetNumberOfGroups() const
+{
+  uint nGroups = 0;
+
+  // dummy vars
+  wxString str;
+  long l;
+  bool bCont = GetFirstGroup(str, l);
+  while ( bCont ) {
+    nGroups++;
+
+    bCont = GetNextGroup(str, l);
+  }
+
+  return nGroups;
 }
 
 // ----------------------------------------------------------------------------
@@ -305,7 +354,7 @@ bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
   if ( !m_keyLocal.DeleteValue(path.Name()) )
     return FALSE;
 
-  if ( m_keyLocal.IsEmpty() ) {
+  if ( !m_keyLocal.HasSubkeys() ) {
     wxString strKey = GetPath().Right(APPCONF_PATH_SEPARATOR);
     SetPath("..");  // changes m_keyLocal
     return m_keyLocal.DeleteKey(strKey);
@@ -323,9 +372,6 @@ bool wxRegConfig::DeleteGroup(const char *szKey)
 
 bool wxRegConfig::DeleteAll()
 {
-  // first of all, prevent the creation of new registry entries
-  Config::EnableAutosave(FALSE);
-
   m_keyLocal.Close();
   m_keyGlobal.Close();
 
