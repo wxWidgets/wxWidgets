@@ -1591,6 +1591,8 @@ TE_HT_BEFORE = _controls_.TE_HT_BEFORE
 TE_HT_ON_TEXT = _controls_.TE_HT_ON_TEXT
 TE_HT_BELOW = _controls_.TE_HT_BELOW
 TE_HT_BEYOND = _controls_.TE_HT_BEYOND
+OutOfRangeTextCoord = _controls_.OutOfRangeTextCoord
+InvalidTextCoord = _controls_.InvalidTextCoord
 class TextAttr(object):
     """Proxy of C++ TextAttr class"""
     def __repr__(self):
@@ -2655,6 +2657,17 @@ def RadioButton_GetClassDefaultAttributes(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+SL_HORIZONTAL = _controls_.SL_HORIZONTAL
+SL_VERTICAL = _controls_.SL_VERTICAL
+SL_AUTOTICKS = _controls_.SL_AUTOTICKS
+SL_LABELS = _controls_.SL_LABELS
+SL_LEFT = _controls_.SL_LEFT
+SL_TOP = _controls_.SL_TOP
+SL_RIGHT = _controls_.SL_RIGHT
+SL_BOTTOM = _controls_.SL_BOTTOM
+SL_BOTH = _controls_.SL_BOTH
+SL_SELRANGE = _controls_.SL_SELRANGE
+SL_INVERSE = _controls_.SL_INVERSE
 class Slider(_core.Control):
     """Proxy of C++ Slider class"""
     def __repr__(self):
@@ -3226,7 +3239,7 @@ EVT_NOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANG
 class NotebookPage(wx.Panel):
     """
     There is an old (and apparently unsolvable) bug when placing a
-    window with a nonstandard background colour in a wxNotebook on
+    window with a nonstandard background colour in a wx.Notebook on
     wxGTK, as the notbooks's background colour would always be used
     when the window is refreshed.  The solution is to place a panel in
     the notbook and the coloured window on the panel, sized to cover
@@ -3239,7 +3252,7 @@ class NotebookPage(wx.Panel):
                  style=wx.TAB_TRAVERSAL, name="panel"):
         wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.child = None
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def OnSize(self, evt):
         if self.child is None:
@@ -4423,8 +4436,6 @@ wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = _controls_.wxEVT_COMMAND_LIST_BEGIN_LABEL_
 wxEVT_COMMAND_LIST_END_LABEL_EDIT = _controls_.wxEVT_COMMAND_LIST_END_LABEL_EDIT
 wxEVT_COMMAND_LIST_DELETE_ITEM = _controls_.wxEVT_COMMAND_LIST_DELETE_ITEM
 wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = _controls_.wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
-wxEVT_COMMAND_LIST_GET_INFO = _controls_.wxEVT_COMMAND_LIST_GET_INFO
-wxEVT_COMMAND_LIST_SET_INFO = _controls_.wxEVT_COMMAND_LIST_SET_INFO
 wxEVT_COMMAND_LIST_ITEM_SELECTED = _controls_.wxEVT_COMMAND_LIST_ITEM_SELECTED
 wxEVT_COMMAND_LIST_ITEM_DESELECTED = _controls_.wxEVT_COMMAND_LIST_ITEM_DESELECTED
 wxEVT_COMMAND_LIST_KEY_DOWN = _controls_.wxEVT_COMMAND_LIST_KEY_DOWN
@@ -4439,6 +4450,8 @@ wxEVT_COMMAND_LIST_COL_BEGIN_DRAG = _controls_.wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
 wxEVT_COMMAND_LIST_COL_DRAGGING = _controls_.wxEVT_COMMAND_LIST_COL_DRAGGING
 wxEVT_COMMAND_LIST_COL_END_DRAG = _controls_.wxEVT_COMMAND_LIST_COL_END_DRAG
 wxEVT_COMMAND_LIST_ITEM_FOCUSED = _controls_.wxEVT_COMMAND_LIST_ITEM_FOCUSED
+wxEVT_COMMAND_LIST_GET_INFO = _controls_.wxEVT_COMMAND_LIST_GET_INFO
+wxEVT_COMMAND_LIST_SET_INFO = _controls_.wxEVT_COMMAND_LIST_SET_INFO
 EVT_LIST_BEGIN_DRAG        = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_DRAG       , 1)
 EVT_LIST_BEGIN_RDRAG       = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_RDRAG      , 1)
 EVT_LIST_BEGIN_LABEL_EDIT  = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT , 1)

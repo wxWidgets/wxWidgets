@@ -2019,11 +2019,6 @@ class JoystickEvent(_core.Event):
     """Proxy of C++ JoystickEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxJoystickEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    m_pos = property(_misc_.JoystickEvent_m_pos_get, _misc_.JoystickEvent_m_pos_set)
-    m_zPosition = property(_misc_.JoystickEvent_m_zPosition_get, _misc_.JoystickEvent_m_zPosition_set)
-    m_buttonChange = property(_misc_.JoystickEvent_m_buttonChange_get, _misc_.JoystickEvent_m_buttonChange_set)
-    m_buttonState = property(_misc_.JoystickEvent_m_buttonState_get, _misc_.JoystickEvent_m_buttonState_set)
-    m_joyStick = property(_misc_.JoystickEvent_m_joyStick_get, _misc_.JoystickEvent_m_joyStick_set)
     def __init__(self, *args, **kwargs):
         """
         __init__(self, wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
@@ -2096,6 +2091,12 @@ class JoystickEvent(_core.Event):
     def ButtonIsDown(*args, **kwargs):
         """ButtonIsDown(self, int but=JOY_BUTTON_ANY) -> bool"""
         return _misc_.JoystickEvent_ButtonIsDown(*args, **kwargs)
+
+    m_pos = property(GetPosition, SetPosition)
+    m_zPosition = property(GetZPosition, SetZPosition)
+    m_buttonChange = property(GetButtonChange, SetButtonChange)
+    m_buttonState = property(GetButtonState, SetButtonState)
+    m_joyStick = property(GetJoystick, SetJoystick)
 
 
 class JoystickEventPtr(JoystickEvent):
@@ -3759,7 +3760,7 @@ class DateTime(object):
         return _misc_.DateTime_ParseRfc822Date(*args, **kwargs)
 
     def ParseFormat(*args, **kwargs):
-        """ParseFormat(self, String date, String format=DateFormatStr, DateTime dateDef=DefaultDateTime) -> int"""
+        """ParseFormat(self, String date, String format=DefaultDateTimeFormat, DateTime dateDef=DefaultDateTime) -> int"""
         return _misc_.DateTime_ParseFormat(*args, **kwargs)
 
     def ParseDateTime(*args, **kwargs):
@@ -3775,7 +3776,7 @@ class DateTime(object):
         return _misc_.DateTime_ParseTime(*args, **kwargs)
 
     def Format(*args, **kwargs):
-        """Format(self, String format=DateFormatStr, wxDateTime::TimeZone tz=LOCAL_TZ) -> String"""
+        """Format(self, String format=DefaultDateTimeFormat, wxDateTime::TimeZone tz=LOCAL_TZ) -> String"""
         return _misc_.DateTime_Format(*args, **kwargs)
 
     def FormatDate(*args, **kwargs):
@@ -3812,8 +3813,8 @@ class DateTimePtr(DateTime):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = DateTime
 _misc_.DateTime_swigregister(DateTimePtr)
-DateFormatStr = cvar.DateFormatStr
-TimeSpanFormatStr = cvar.TimeSpanFormatStr
+DefaultDateTimeFormat = cvar.DefaultDateTimeFormat
+DefaultTimeSpanFormat = cvar.DefaultTimeSpanFormat
 
 def DateTime_SetCountry(*args, **kwargs):
     """DateTime_SetCountry(int country)"""
@@ -4117,7 +4118,7 @@ class TimeSpan(object):
         return _misc_.TimeSpan_GetMilliseconds(*args, **kwargs)
 
     def Format(*args, **kwargs):
-        """Format(self, String format=TimeSpanFormatStr) -> String"""
+        """Format(self, String format=DefaultTimeSpanFormat) -> String"""
         return _misc_.TimeSpan_Format(*args, **kwargs)
 
     def __repr__(self):
@@ -4965,12 +4966,6 @@ class FileDataObject(DataObjectSimple):
     Explorer and other compatible programs under Windows or GNOME/KDE
     filemanager under Unix which makes it possible to receive files from
     them using this class.
-
-    :Warning: Under all non-Windows platforms this class is currently
-        "input-only", i.e. you can receive the files from another
-        application, but copying (or dragging) file(s) from a wxWidgets
-        application is not currently supported.
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -5014,9 +5009,11 @@ class CustomDataObject(DataObjectSimple):
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCustomDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         """
-        __init__(self, DataFormat format=FormatInvalid) -> CustomDataObject
+        __init__(self, DataFormat format) -> CustomDataObject
+        __init__(self, String formatName) -> CustomDataObject
+        __init__(self) -> CustomDataObject
 
         wx.CustomDataObject is a specialization of `wx.DataObjectSimple` for
         some application-specific data in arbitrary format.  Python strings
@@ -5024,7 +5021,7 @@ class CustomDataObject(DataObjectSimple):
         easily be transfered via strings.  A copy of the data is stored in the
         data object.
         """
-        newobj = _misc_.new_CustomDataObject(*args, **kwargs)
+        newobj = _misc_.new_CustomDataObject(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

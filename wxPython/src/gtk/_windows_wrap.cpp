@@ -21784,6 +21784,35 @@ static PyObject *_wrap_new_PageSetupDialogData__SWIG_1(PyObject *, PyObject *arg
 }
 
 
+static PyObject *_wrap_new_PageSetupDialogData__SWIG_2(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = 0 ;
+    wxPageSetupDialogData *result;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_PageSetupDialogData",&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxPrintData");
+        }
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPageSetupDialogData *)new wxPageSetupDialogData((wxPrintData const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPageSetupDialogData, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_new_PageSetupDialogData(PyObject *self, PyObject *args) {
     int argc;
     PyObject *argv[2];
@@ -21809,6 +21838,21 @@ static PyObject *_wrap_new_PageSetupDialogData(PyObject *self, PyObject *args) {
         }
         if (_v) {
             return _wrap_new_PageSetupDialogData__SWIG_1(self,args);
+        }
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            void *ptr = 0;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintData, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = (ptr != 0);
+            }
+        }
+        if (_v) {
+            return _wrap_new_PageSetupDialogData__SWIG_2(self,args);
         }
     }
     
@@ -22714,6 +22758,56 @@ static PyObject *_wrap_PageSetupDialogData_SetPrintData(PyObject *, PyObject *ar
 }
 
 
+static PyObject *_wrap_PageSetupDialogData_CalculateIdFromPaperSize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPageSetupDialogData *arg1 = (wxPageSetupDialogData *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PageSetupDialogData_CalculateIdFromPaperSize",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPageSetupDialogData, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->CalculateIdFromPaperSize();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PageSetupDialogData_CalculatePaperSizeFromId(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPageSetupDialogData *arg1 = (wxPageSetupDialogData *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PageSetupDialogData_CalculatePaperSizeFromId",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPageSetupDialogData, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->CalculatePaperSizeFromId();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * PageSetupDialogData_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -22895,6 +22989,35 @@ static PyObject *_wrap_new_PrintDialogData__SWIG_1(PyObject *, PyObject *args) {
 }
 
 
+static PyObject *_wrap_new_PrintDialogData__SWIG_2(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxPrintDialogData *arg1 = 0 ;
+    wxPrintDialogData *result;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_PrintDialogData",&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxPrintDialogData");
+        }
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPrintDialogData *)new wxPrintDialogData((wxPrintDialogData const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintDialogData, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_new_PrintDialogData(PyObject *self, PyObject *args) {
     int argc;
     PyObject *argv[2];
@@ -22920,6 +23043,21 @@ static PyObject *_wrap_new_PrintDialogData(PyObject *self, PyObject *args) {
         }
         if (_v) {
             return _wrap_new_PrintDialogData__SWIG_1(self,args);
+        }
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            void *ptr = 0;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPrintDialogData, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = (ptr != 0);
+            }
+        }
+        if (_v) {
+            return _wrap_new_PrintDialogData__SWIG_2(self,args);
         }
     }
     
@@ -28020,6 +28158,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PageSetupDialogData_SetPaperId", (PyCFunction) _wrap_PageSetupDialogData_SetPaperId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialogData_SetPaperSize", (PyCFunction) _wrap_PageSetupDialogData_SetPaperSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialogData_SetPrintData", (PyCFunction) _wrap_PageSetupDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PageSetupDialogData_CalculateIdFromPaperSize", (PyCFunction) _wrap_PageSetupDialogData_CalculateIdFromPaperSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PageSetupDialogData_CalculatePaperSizeFromId", (PyCFunction) _wrap_PageSetupDialogData_CalculatePaperSizeFromId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialogData_swigregister", PageSetupDialogData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PageSetupDialog", (PyCFunction) _wrap_new_PageSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PageSetupDialog_GetPageSetupData", (PyCFunction) _wrap_PageSetupDialog_GetPageSetupData, METH_VARARGS | METH_KEYWORDS, NULL},

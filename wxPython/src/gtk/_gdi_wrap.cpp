@@ -1872,12 +1872,14 @@ SWIG_Check_long(PyObject* obj)
   return SWIG_AsVal_long(obj, (long*)0);
 }
 
-static wxCursor *new_wxCursor(wxString const *cursorName,long type,int hotSpotX=0,int hotSpotY=0){
+static wxCursor *new_wxCursor(wxString const &cursorName,long type,int hotSpotX=0,int hotSpotY=0){
 #ifdef __WXGTK__
-            wxCHECK_MSG(false, NULL,
-                        wxT("wx.Cursor constructor not implemented for wxGTK, use wx.StockCursor, wx.CursorFromImage, or wx.CursorFromBits instead."));
+            wxImage img(cursorName, type);
+            img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
+            img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY);
+            return new wxCursor(img);
 #else
-            return new wxCursor(*cursorName, type, hotSpotX, hotSpotY);
+            return new wxCursor(cursorName, type, hotSpotX, hotSpotY);
 #endif
         }
 
@@ -5897,7 +5899,7 @@ static PyObject * IconBundle_swigregister(PyObject *, PyObject *args) {
 }
 static PyObject *_wrap_new_Cursor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxString *arg1 = (wxString *) 0 ;
+    wxString *arg1 = 0 ;
     long arg2 ;
     int arg3 = (int) 0 ;
     int arg4 = (int) 0 ;
@@ -5936,7 +5938,7 @@ static PyObject *_wrap_new_Cursor(PyObject *, PyObject *args, PyObject *kwargs) 
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxCursor *)new_wxCursor((wxString const *)arg1,arg2,arg3,arg4);
+        result = (wxCursor *)new_wxCursor((wxString const &)*arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

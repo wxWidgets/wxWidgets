@@ -997,11 +997,8 @@ class Cursor(GDIObject):
         __init__(self, String cursorName, long type, int hotSpotX=0, int hotSpotY=0) -> Cursor
 
         Construct a Cursor from a file.  Specify the type of file using
-        wx.BITAMP_TYPE* constants, and specify the hotspot if not using a cur
+        wx.BITAMP_TYPE* constants, and specify the hotspot if not using a .cur
         file.
-
-        This constructor is not available on wxGTK, use ``wx.StockCursor``,
-        ``wx.CursorFromImage``, or ``wx.CursorFromBits`` instead.
         """
         newobj = _gdi_.new_Cursor(*args, **kwargs)
         self.this = newobj.this
@@ -1031,7 +1028,7 @@ def StockCursor(*args, **kwargs):
     StockCursor(int id) -> Cursor
 
     Create a cursor using one of the stock cursors.  Note that not all
-    cursors are available on all platforms.
+    stock cursors are available on all platforms.
     """
     val = _gdi_.new_StockCursor(*args, **kwargs)
     val.thisown = 1
@@ -1041,10 +1038,8 @@ def CursorFromImage(*args, **kwargs):
     """
     CursorFromImage(Image image) -> Cursor
 
-    Constructs a cursor from a wxImage. The cursor is monochrome, colors
-    with the RGB elements all greater than 127 will be foreground, colors
-    less than this background. The mask (if any) will be used as
-    transparent.
+    Constructs a cursor from a `wx.Image`. The mask (if any) will be used
+    as transparent.
     """
     val = _gdi_.new_CursorFromImage(*args, **kwargs)
     val.thisown = 1

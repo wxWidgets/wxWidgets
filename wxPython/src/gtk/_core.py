@@ -123,16 +123,6 @@ RA_SPECIFY_ROWS = _core_.RA_SPECIFY_ROWS
 RA_SPECIFY_COLS = _core_.RA_SPECIFY_COLS
 RB_GROUP = _core_.RB_GROUP
 RB_SINGLE = _core_.RB_SINGLE
-SL_HORIZONTAL = _core_.SL_HORIZONTAL
-SL_VERTICAL = _core_.SL_VERTICAL
-SL_AUTOTICKS = _core_.SL_AUTOTICKS
-SL_LABELS = _core_.SL_LABELS
-SL_LEFT = _core_.SL_LEFT
-SL_TOP = _core_.SL_TOP
-SL_RIGHT = _core_.SL_RIGHT
-SL_BOTTOM = _core_.SL_BOTTOM
-SL_BOTH = _core_.SL_BOTH
-SL_SELRANGE = _core_.SL_SELRANGE
 SB_HORIZONTAL = _core_.SB_HORIZONTAL
 SB_VERTICAL = _core_.SB_VERTICAL
 ST_SIZEGRIP = _core_.ST_SIZEGRIP
@@ -3953,8 +3943,9 @@ class MoveEvent(Event):
         """SetPosition(self, Point pos)"""
         return _core_.MoveEvent_SetPosition(*args, **kwargs)
 
-    m_pos = property(_core_.MoveEvent_m_pos_get, _core_.MoveEvent_m_pos_set)
-    m_rect = property(_core_.MoveEvent_m_rect_get, _core_.MoveEvent_m_rect_set)
+    m_pos =  property(GetPosition, SetPosition)
+    m_rect = property(GetRect, SetRect)
+
 
 class MoveEventPtr(MoveEvent):
     def __init__(self, this):
