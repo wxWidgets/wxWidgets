@@ -123,10 +123,7 @@ bool wxNotebook::Create(wxWindow *parent,
                         const wxString& name)
 {
   // base init
-  SetName(name);
-  SetParent(parent);
-
-  m_windowId = id == -1 ? NewControlId() : id;
+  CreateBase(parent, id, pos, size, style, name);
 
   // colors and font
   m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));

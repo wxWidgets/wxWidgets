@@ -34,9 +34,6 @@ public:
    // Calls the callback and appropriate event handlers
    bool ProcessCommand(wxCommandEvent& event);
 
-   // Places item in centre of panel - so can't be used BEFORE panel->Fit()
-   void Centre(int direction = wxHORIZONTAL);
-
    // MSW-specific
 #ifdef __WIN95__
    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);

@@ -66,8 +66,6 @@ public:
     void GetSize(int *x, int *y) const;
     void GetPosition(int *x, int *y) const;
 
-    wxString GetLabel() const;
-    void SetLabel(const wxString& label);
     void SetLabel(int item, const wxString& label);
     void SetLabel(int item, wxBitmap *bitmap);
     wxString GetLabel(int item) const;

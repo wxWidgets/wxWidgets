@@ -287,8 +287,17 @@ wxRadioBox::~wxRadioBox()
 
 }
 
+wxString wxRadioBox::GetLabel(int item) const
+{
+    wxCHECK_MSG( item >= 0 && item < m_noItems, "", "invalid radiobox index" );
+
+    return wxGetWindowText(m_radioButtons[item]);
+}
+
 void wxRadioBox::SetLabel(int item, const wxString& label)
 {
+    wxCHECK_RET( item >= 0 && item < m_noItems, "invalid radiobox index" );
+
     m_radioWidth[item] = m_radioHeight[item] = -1;
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
 }

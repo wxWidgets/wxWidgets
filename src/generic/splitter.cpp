@@ -263,11 +263,24 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // Erase old tracker
         DrawSashTracker(m_oldX, m_oldY);
 
-        // Draw new one
-        DrawSashTracker(x, y);
-
+#ifdef __WXMSW__
+        // As we captured the mouse, we may get the mouse events from outside
+        // our window - for example, negative values in x, y. This has a weird
+        // consequence under MSW where we use unsigned values sometimes and
+        // signed ones other times: the coordinates turn as big positive
+        // numbers and so the sash is drawn on the *right* side of the window
+        // instead of the left (or bottom instead of top). Correct this.
         m_oldX = x;
         m_oldY = y;
+
+        if ( (short)m_oldX < 0 )
+            m_oldX = 0;
+        if ( (short)m_oldY < 0 )
+            m_oldY = 0;
+#endif // __WXMSW__
+
+        // Draw new one
+        DrawSashTracker(m_oldX, m_oldY);
     }
     else if ( event.LeftDClick() )
     {
