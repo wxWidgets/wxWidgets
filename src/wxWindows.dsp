@@ -592,10 +592,6 @@ SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\odbc.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -2123,10 +2119,6 @@ SOURCE=..\include\wx\notebook.h
 # Begin Source File
 
 SOURCE=..\include\wx\object.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\odbc.h
 # End Source File
 # Begin Source File
 
