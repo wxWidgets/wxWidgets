@@ -14,7 +14,8 @@ usage()
 {
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--static]
-                 [--libs] [--gl-libs] [--cppflags] [--cflags] [--cxxflags] [--rezflags]
+                 [--libs] [--gl-libs]
+                 [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
 
 wx-config returns configuration information about the installed
@@ -87,6 +88,9 @@ while test $# -gt 0; do
       ;;
     --cxxflags)
       echo `cppflags` @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@
+      ;;
+    --ldflags)
+      echo @LDFLAGS_EXE@
       ;;
     --rezflags)
       echo @LIBWXMACRESWXCONFIG@

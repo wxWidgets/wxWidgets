@@ -2433,7 +2433,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
         dnl Executables must necessarily fully bind the wxWindows library at
         dnl program launch otherwise lazy binding breaks RTTI class info
-        LDFLAGS="$LDFLAGS -Wl,-bind_at_load"
+        LDFLAGS_EXE="$LDFLAGS_EXE -Wl,-bind_at_load"
         SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
         PIC_FLAG="-dynamic -fPIC"
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
@@ -4883,6 +4883,7 @@ AC_SUBST(SAMPLES_SUBDIRS)
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
 AC_SUBST(LDFLAGS_GL)
+AC_SUBST(LDFLAGS_EXE)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(EXTRADEFS)
