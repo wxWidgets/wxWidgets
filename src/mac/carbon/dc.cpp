@@ -1256,14 +1256,19 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	m_macFontInstalled = false ;
   return TRUE;
 }
+
+#ifndef IntToFixed
 inline Fixed	IntToFixed( int inInt )
-	{
-		return (((SInt32) inInt) << 16);
-	}
+{
+	return (((SInt32) inInt) << 16);
+}
+#endif
+#ifndef FixedToInt
 inline int	FixedToInt( Fixed inFixed )
-	{
-		return (((SInt32) inFixed) >> 16);
-	}
+{
+	return (((SInt32) inFixed) >> 16);
+}
+#endif
 
 void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
