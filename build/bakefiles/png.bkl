@@ -20,6 +20,7 @@
          cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include>$(INC_ZLIB)</include>
+        <cflags-borland>-w-8004</cflags-borland> 
         <sources>
 		    src/png/png.c
 		    src/png/pngerror.c

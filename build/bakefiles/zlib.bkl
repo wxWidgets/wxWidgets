@@ -17,6 +17,7 @@
     <lib id="wxzlib" template="3rdparty_lib"
          cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
+        <cflags-borland>-w-8004 -w-8012 -w-8057</cflags-borland> 
         <sources>
             src/zlib/adler32.c
             src/zlib/compress.c
