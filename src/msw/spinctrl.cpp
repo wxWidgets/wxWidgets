@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     22.07.99
 // RCS-ID:      $Id$
-// Copyright:   (c) Vadim Zeitlin
+// Copyright:   (c) 1999-2005 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,14 +35,13 @@
 
 #if wxUSE_SPINCTRL
 
-#if defined(__WIN95__)
-
 #include "wx/spinctrl.h"
 #include "wx/msw/private.h"
+#include "wx/msw/wrapcctl.h"
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif // wxUSE_TOOLTIPS
 
 #include <limits.h>         // for INT_MIN
 
@@ -502,6 +501,18 @@ void wxSpinCtrl::SetFocus()
     ::SetFocus(GetBuddyHwnd());
 }
 
+#if wxUSE_TOOLTIPS
+
+void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
+{
+    wxSpinButton::DoSetToolTip(tip);
+
+    if ( tip )
+        tip->Add(m_hwndBuddy);
+}
+
+#endif // wxUSE_TOOLTIPS
+
 // ----------------------------------------------------------------------------
 // event processing
 // ----------------------------------------------------------------------------
@@ -593,8 +604,5 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
     wxConstCast(this, wxSpinCtrl)->m_hWnd = hWnd;
 }
 
-#endif // __WIN95__
-
-#endif
-       // wxUSE_SPINCTRL
+#endif // wxUSE_SPINCTRL
 
