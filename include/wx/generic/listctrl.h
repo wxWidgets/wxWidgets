@@ -122,6 +122,8 @@ public:
     bool DeleteAllColumns();
     bool DeleteColumn( int col );
 
+    void SetItemCount(long count);
+
     void EditLabel( long item ) { Edit(item); }
     void Edit( long item );
 
@@ -140,6 +142,9 @@ public:
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
+
+    // returns true if it is a virtual list control
+    bool IsVirtual() const { return (GetWindowStyle() & wxLC_VIRTUAL) != 0; }
 
     void OnIdle( wxIdleEvent &event );
     void OnSize( wxSizeEvent &event );
@@ -172,6 +177,16 @@ public:
                          m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
+
+protected:
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
+
+    // return the icon for the given item
+    virtual int OnGetItemImage(long item) const;
+
+    // it calls our OnGetXXX() functions
+    friend wxListMainWindow;
 
 private:
     DECLARE_EVENT_TABLE()

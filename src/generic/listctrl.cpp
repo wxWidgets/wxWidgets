@@ -123,7 +123,8 @@ protected:
     wxString  m_text;
     int       m_format;
     int       m_width;
-    int       m_xpos,m_ypos;
+    int       m_xpos,
+              m_ypos;
     int       m_height;
 
 public:
@@ -155,10 +156,14 @@ private:
 //  wxListLineData (internal)
 //-----------------------------------------------------------------------------
 
+WX_DECLARE_LIST(wxListItemData, wxListItemDataList);
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxListItemDataList);
+
 class WXDLLEXPORT wxListLineData : public wxObject
 {
 public:
-    wxList              m_items;
+    wxListItemDataList  m_items;
     wxRect              m_bound_all;
     wxRect              m_bound_label;
     wxRect              m_bound_icon;
@@ -414,6 +419,8 @@ public:
 //    void AddColumn( wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
 
+    void SetItemCount(long count);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListMainWindow);
     DECLARE_EVENT_TABLE()
@@ -657,26 +664,31 @@ wxListLineData::wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hili
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 {
+    wxListItemDataList::Node *node = m_items.GetFirst();
+
     m_spacing = spacing;
     switch (m_mode)
     {
         case wxLC_ICON:
         {
             m_bound_all.width = m_spacing;
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 wxString s = item->GetText();
-                if (s.IsEmpty()) s = wxT("H");
+                if (s.IsEmpty())
+                    s = wxT("H");
+
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
-                if (lh < 15) lh = 15;
+                if (lh < 15)
+                    lh = 15;
                 lw += 4;
                 lh += 3;
 
                 m_bound_all.height = m_spacing+lh;
-                if (lw > m_spacing) m_bound_all.width = lw;
+                if (lw > m_spacing)
+                    m_bound_all.width = lw;
                 m_bound_label.width = lw;
                 m_bound_label.height = lh;
 
@@ -709,18 +721,21 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
         }
         case wxLC_LIST:
         {
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
 
                 wxString s = item->GetText();
-                if (s.IsEmpty()) s = wxT("H");
+                if (s.IsEmpty())
+                    s = wxT("H");
+
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
-                if (lh < 15) lh = 15;
+                if (lh < 15)
+                    lh = 15;
                 lw += 4;
                 lh += 3;
+
                 m_bound_label.width = lw;
                 m_bound_label.height = lh;
 
@@ -748,10 +763,9 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
         {
             m_bound_all.width = 0;
             m_bound_all.height = 0;
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 if (item->HasImage())
                 {
                     int w = 0;
@@ -766,21 +780,25 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                     m_bound_icon.height = 0;
                 }
             }
+
             while (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 wxString s = item->GetText();
-                if (s.IsEmpty()) s = wxT("H");
+                if (s.IsEmpty())
+                    s = wxT("H");
+
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
-                if (lh < 15) lh = 15;
+                if (lh < 15)
+                    lh = 15;
                 lw += 4;
                 lh += 3;
 
                 item->SetSize( item->GetWidth(), lh );
                 m_bound_all.width += lw;
                 m_bound_all.height = lh;
-                node = node->Next();
+                node = node->GetNext();
             }
             m_bound_label.width = m_bound_all.width;
             m_bound_label.height = m_bound_all.height;
@@ -792,16 +810,18 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
                                   int x, int y, int window_width )
 {
+    wxListItemDataList::Node *node = m_items.GetFirst();
+
     m_bound_all.x = x;
     m_bound_all.y = y;
+
     switch (m_mode)
     {
         case wxLC_ICON:
         {
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 if (item->HasImage())
                 {
                     m_bound_icon.x = m_bound_all.x + 4
@@ -831,10 +851,9 @@ void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
             m_bound_hilight.x = m_bound_all.x;
             m_bound_hilight.y = m_bound_all.y;
             m_bound_label.y = m_bound_all.y + 2;
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 if (item->HasImage())
                 {
                     m_bound_icon.x = m_bound_all.x + 2;
@@ -855,10 +874,9 @@ void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
             AssignRect( m_bound_hilight, m_bound_all );
             m_bound_label.x = m_bound_all.x + 2;
             m_bound_label.y = m_bound_all.y + 2;
-            wxNode *node = m_items.First();
             if (node)
             {
-                wxListItemData *item = (wxListItemData*)node->Data();
+                wxListItemData *item = node->GetData();
                 if (item->HasImage())
                 {
                     m_bound_icon.x = m_bound_all.x + 2;
@@ -873,10 +891,10 @@ void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
 
 void wxListLineData::SetColumnPosition( int index, int x )
 {
-    wxNode *node = m_items.Nth( (size_t)index );
+    wxListItemDataList::Node *node = m_items.Item( (size_t)index );
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
+        wxListItemData *item = node->GetData();
         item->SetPosition( x, m_bound_all.y+1 );
     }
 }
@@ -910,41 +928,46 @@ void wxListLineData::GetRect( wxRect &rect )
 
 long wxListLineData::IsHit( int x, int y )
 {
-    wxNode *node = m_items.First();
+    wxListItemDataList::Node *node = m_items.GetFirst();
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
-        if (item->HasImage() && IsInRect( x, y, m_bound_icon )) return wxLIST_HITTEST_ONITEMICON;
-        if (item->HasText() && IsInRect( x, y, m_bound_label )) return wxLIST_HITTEST_ONITEMLABEL;
-//      if (!(item->HasImage() || item->HasText())) return 0;
+        wxListItemData *item = node->GetData();
+        if (item->HasImage() && IsInRect( x, y, m_bound_icon ))
+            return wxLIST_HITTEST_ONITEMICON;
+        if (item->HasText() && IsInRect( x, y, m_bound_label ))
+            return wxLIST_HITTEST_ONITEMLABEL;
+
     }
+
     // if there is no icon or text = empty
-    if (IsInRect( x, y, m_bound_all )) return wxLIST_HITTEST_ONITEMICON;
+    if (IsInRect( x, y, m_bound_all ))
+        return wxLIST_HITTEST_ONITEMICON;
+
     return 0;
 }
 
 void wxListLineData::InitItems( int num )
 {
-    for (int i = 0; i < num; i++) m_items.Append( new wxListItemData() );
+    for (int i = 0; i < num; i++)
+        m_items.Append( new wxListItemData() );
 }
 
 void wxListLineData::SetItem( int index, const wxListItem &info )
 {
-    wxNode *node = m_items.Nth( index );
+    wxListItemDataList::Node *node = m_items.Item( index );
     if (node)
     {
-       wxListItemData *item = (wxListItemData*)node->Data();
+       wxListItemData *item = node->GetData();
        item->SetItem( info );
     }
 }
 
 void wxListLineData::GetItem( int index, wxListItem &info )
 {
-    int i = index;
-    wxNode *node = m_items.Nth( i );
+    wxListItemDataList::Node *node = m_items.Item( index );
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
+        wxListItemData *item = node->GetData();
         item->GetItem( info );
     }
 }
@@ -953,10 +976,10 @@ wxString wxListLineData::GetText(int index) const
 {
     wxString s;
 
-    wxNode *node = m_items.Nth( index );
+    wxListItemDataList::Node *node = m_items.Item( index );
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
+        wxListItemData *item = node->GetData();
         s = item->GetText();
     }
 
@@ -965,22 +988,20 @@ wxString wxListLineData::GetText(int index) const
 
 void wxListLineData::SetText( int index, const wxString s )
 {
-    int i = index;
-    wxNode *node = m_items.Nth( i );
+    wxListItemDataList::Node *node = m_items.Item( index );
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
+        wxListItemData *item = node->GetData();
         item->SetText( s );
     }
 }
 
 int wxListLineData::GetImage( int index )
 {
-    int i = index;
-    wxNode *node = m_items.Nth( i );
+    wxListItemDataList::Node *node = m_items.Item( index );
     if (node)
     {
-        wxListItemData *item = (wxListItemData*)node->Data();
+        wxListItemData *item = node->GetData();
         return item->GetImage();
     }
     return -1;
@@ -1044,7 +1065,7 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
     // VZ: currently we set the colours/fonts only once, but like this (i.e.
     //     using SetAttributes() inside the loop), it will be trivial to
     //     customize the subitems (in report mode) too.
-    wxListItemData *item = (wxListItemData*)m_items.First()->Data();
+    wxListItemData *item = m_items.GetFirst()->GetData();
     wxListItemAttr *attr = item->GetAttributes();
     SetAttributes(dc, attr, colText, font, hilight);
 
@@ -1068,12 +1089,13 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                            m_bound_hilight.width, m_bound_hilight.height );
     }
 
+    wxListItemDataList::Node *node = m_items.GetFirst();
+
     if (m_mode == wxLC_REPORT)
     {
-        wxNode *node = m_items.First();
         while (node)
         {
-            wxListItemData *item = (wxListItemData*)node->Data();
+            wxListItemData *item = node->GetData();
             int x = item->GetX();
             if (item->HasImage())
             {
@@ -1088,15 +1110,14 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                 dc->DrawText( item->GetText(), x, item->GetY()+1 );
             }
             dc->DestroyClippingRegion();
-            node = node->Next();
+            node = node->GetNext();
         }
     }
-    else
+    else // !report
     {
-        wxNode *node = m_items.First();
         if (node)
         {
-            wxListItemData *item = (wxListItemData*)node->Data();
+            wxListItemData *item = node->GetData();
             if (item->HasImage())
             {
                 m_owner->DrawImage( item->GetImage(), dc, m_bound_icon.x, m_bound_icon.y );
@@ -1216,9 +1237,9 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 #ifdef __WXGTK__
     GtkStateType state = GTK_STATE_NORMAL;
     if (!m_parent->IsEnabled()) state = GTK_STATE_INSENSITIVE;
-    
+
     x = dc->XLOG2DEV( x );
-    
+
     gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
                    (GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
 #else
@@ -1490,7 +1511,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl);
 
 BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxListTextCtrl::OnChar)
-    EVT_KEY_UP         (wxListTextCtrl::OnKeyUp)    
+    EVT_KEY_UP         (wxListTextCtrl::OnKeyUp)
     EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
@@ -1555,7 +1576,7 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
     if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
     if (mySize.x > sx) sx = mySize.x;
     SetSize(sx, -1);
-    
+
     event.Skip();
 }
 
@@ -1685,15 +1706,23 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // Note: a wxPaintDC must be constructed even if no drawing is
     // done (a Windows requirement).
     wxPaintDC dc( this );
+
+    if (m_dirty)
+    {
+        // postpone redrawing until the next OnIdle() call to minimize flicker
+        return;
+    }
+
     PrepareDC( dc );
 
-    int dev_x = 0;
-    int dev_y = 0;
+    int dev_x, dev_y;
     CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
 
-    if (m_dirty) return;
-
-    if (m_lines.GetCount() == 0) return;
+    if (m_lines.GetCount() == 0)
+    {
+        // empty control. nothing to draw
+        return;
+    }
 
     dc.BeginDrawing();
 
@@ -1724,7 +1753,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dc.SetPen(pen);
                 dc.SetBrush(* wxTRANSPARENT_BRUSH);
                 dc.DrawLine(0 - dev_x , i*lineSpacing , clientSize.x - dev_x , i*lineSpacing );
-	    }
+            }
         }
 
         // Draw last horizontal rule
@@ -1733,7 +1762,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
             dc.DrawLine(0 - dev_x , i*lineSpacing , clientSize.x - dev_x , i*lineSpacing );
-	}
+        }
 
         // Draw vertical rules if required
         if ((m_mode & wxLC_VRULES) && (GetItemCount() > 0))
@@ -1754,13 +1783,14 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
         }
     }
-    else
+    else // !report mode
     {
         for (size_t i = 0; i < m_lines.GetCount(); i++)
             m_lines[i].Draw( &dc );
     }
 
-    if (m_current) m_current->DrawRubberBand( &dc, m_hasFocus );
+    if (m_current)
+        m_current->DrawRubberBand( &dc, m_hasFocus );
 
     dc.EndDrawing();
 }
@@ -2508,10 +2538,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         for (size_t i = 0; i < m_lines.GetCount(); i++)
         {
             wxListLineData *line = &m_lines[i];
-            wxNode *n = line->m_items.Nth( col );
+            wxListItemDataList::Node *n = line->m_items.Item( col );
             if (n)
             {
-                wxListItemData *item = (wxListItemData*)n->Data();
+                wxListItemData *item = n->GetData();
                 int current = 0, ix = 0, iy = 0;
                 wxCoord lx = 0, ly = 0;
                 if (item->HasImage())
@@ -2525,7 +2555,8 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
                     dc.GetTextExtent( str, &lx, &ly );
                     current += lx;
                 }
-                if (current > max) max = current;
+                if (current > max)
+                    max = current;
             }
         }
         width = max+10;
@@ -2538,13 +2569,14 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         column->SetWidth( width );
     }
 
-    for (size_t i = 0; i < m_lines.GetCount(); i++)
+    size_t count = m_lines.GetCount();
+    for (size_t i = 0; i < count; i++)
     {
         wxListLineData *line = &m_lines[i];
-        wxNode *n = line->m_items.Nth( col );
+        wxListItemDataList::Node *n = line->m_items.Item( col );
         if (n)
         {
-            wxListItemData *item = (wxListItemData*)n->Data();
+            wxListItemData *item = n->GetData();
             item->SetSize( width, -1 );
         }
     }
@@ -2810,7 +2842,7 @@ void wxListMainWindow::CalculatePositions()
     {
          // scroll one line per step
          m_yScroll = lineSpacing;
-         
+
         int x = 4;
         int y = 1;
         int entireHeight = m_lines.GetCount() * lineSpacing + 2;
@@ -3911,6 +3943,34 @@ void wxListCtrl::SetFocus()
        window, so it checks against "this", but not m_mainWin. */
     if ( FindFocus() != this )
         m_mainWin->SetFocus();
+}
+
+// ----------------------------------------------------------------------------
+// virtual list control support
+// ----------------------------------------------------------------------------
+
+wxString wxListCtrl::OnGetItemText(long item, long col) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG( _T("not supposed to be called") );
+
+    return wxEmptyString;
+}
+
+int wxListCtrl::OnGetItemImage(long item) const
+{
+    // same as above
+    wxFAIL_MSG( _T("not supposed to be called") );
+
+    return -1;
+}
+
+void wxListCtrl::SetItemCount(long count)
+{
+    wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
+
+    m_mainWin->SetItemCount(count);
 }
 
 #endif // wxUSE_LISTCTRL
