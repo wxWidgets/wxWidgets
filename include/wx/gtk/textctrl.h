@@ -3,9 +3,9 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -45,51 +45,52 @@ extern const char *wxTextCtrlNameStr;
 
 class wxTextCtrl: public wxControl, public streambuf
 {
+  DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS(wxTextCtrl);
 
-  public:
-  
-    wxTextCtrl(void);
-    wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "", 
+public:
+    wxTextCtrl();
+    wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       int style = 0, const wxString &name = wxTextCtrlNameStr );
     bool Create( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       int style = 0, const wxString &name = wxTextCtrlNameStr );
-    wxString GetValue(void) const;
+    wxString GetValue() const;
     void SetValue( const wxString &value );
     void WriteText( const wxString &text );
-    
+
     bool LoadFile( const wxString &file );
     bool SaveFile( const wxString &file );
-    bool IsModified(void);
-    void DiscardEdits(void);
+    bool IsModified() const { return m_modified; }
+    void SetModified() { m_modified = TRUE; }
+    void DiscardEdits() { m_modified = FALSE; }
 /*
     wxString GetLineText( long lineNo ) const;
     void OnDropFiles( wxDropFilesEvent &event );
     long PositionToXY( long pos, long *x, long *y ) const;
     long XYToPosition( long x, long y );
-    int GetNumberOfLines(void);
+    int GetNumberOfLines();
 */
     virtual void SetInsertionPoint( long pos );
-    virtual void SetInsertionPointEnd(void);
+    virtual void SetInsertionPointEnd();
     virtual void SetEditable( bool editable );
     virtual void SetSelection( long from, long to );
     void ShowPosition( long pos );
-    virtual long GetInsertionPoint(void) const;
-    virtual long GetLastPosition(void) const;
+    virtual long GetInsertionPoint() const;
+    virtual long GetLastPosition() const;
     virtual void Remove( long from, long to );
     virtual void Replace( long from, long to, const wxString &value );
-    void Cut(void);
-    void Copy(void);
-    void Paste(void);
-    void Delete(void);
-    
+    void Cut();
+    void Copy();
+    void Paste();
+    void Delete();
+
     void OnChar( wxKeyEvent &event );
-    
+
     int overflow(int i);
-    int sync(void);
-    int underflow(void);
+    int sync();
+    int underflow();
 
     wxTextCtrl& operator<<(const wxString& s);
     wxTextCtrl& operator<<(int i);
@@ -97,13 +98,9 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(float f);
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
-    
-  public:
-  
-    bool  m_modified;
 
-  DECLARE_EVENT_TABLE()
-    
+private:
+  bool  m_modified;
 };
 
 #endif // __GTKTEXTCTRLH__
