@@ -331,7 +331,7 @@ $(build_libdir)/@WX_LIBRARY_NAME_SHARED@: $(OBJECTS)
 #     but this seems to result in problems with libwx_gtk being linked in twice
 $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@: glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
 	@$(INSTALL_DIR) $(build_libdir)
-	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o $(EXTRALIBS) $(OPENGLLIBS)
+	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o $(EXTRALIBS) $(LDFLAGS_GL) $(OPENGLLIBS)
 
 $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@: $(MACRESOURCES)
 	@$(INSTALL_DIR) $(build_libdir)
