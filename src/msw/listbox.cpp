@@ -258,8 +258,6 @@ wxListBox::~wxListBox(void)
       delete m_aItems[uiCount];
     }
 #endif
-
-  DELETEA(m_selections);
 }
 
 void wxListBox::SetupColours(void)
