@@ -19,6 +19,8 @@ linux-gnu.system.cache
 *.pro
 *.opt
 *.d
+*.swp
+*.swo
 Release
 Debug
 ReleaseDLL
