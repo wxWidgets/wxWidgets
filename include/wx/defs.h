@@ -209,7 +209,6 @@
     typedef unsigned int bool;
 #endif // bool
 
-typedef unsigned char wxByte;
 typedef short int WXTYPE;
 
 // special care should be taken with this type under Windows where the real
@@ -347,8 +346,133 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 // Callback function type definition
 typedef void (*wxFunction) (wxObject&, wxEvent&);
 
+// ----------------------------------------------------------------------------
+// machine specific settings
+// ----------------------------------------------------------------------------
+
+// fixed length types
+
+typedef  char    signed  wxInt8;
+typedef  char  unsigned  wxUint8;
+
+#ifdef __WIN16__
+typedef  int     signed  wxInt16;
+typedef  int   unsigned  wxUint16;
+typedef  long    signed  wxInt32;
+typedef  long  unsigned  wxUint32;
+#endif
+
+#ifdef __WIN32__
+typedef  short   signed  wxInt16;
+typedef  short unsigned  wxUint16;
+typedef  int     signed  wxInt32;
+typedef  int   unsigned  wxUint32;
+#endif
+
+#ifdef __WXMAC__
+typedef  short   signed  wxInt16;
+typedef  short unsigned  wxUint16;
+typedef  int     signed  wxInt32;
+typedef  int   unsigned  wxUint32;
+#endif
+
+#ifdef __WXOS2__
+typedef  short   signed  wxInt16;
+typedef  short unsigned  wxUint16;
+typedef  int     signed  wxInt32;
+typedef  int   unsigned  wxUint32;
+#endif
+
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
+  #if defined(SIZEOF_INT)
+    #if (SIZEOF_SHORT == 2)
+      typedef  short   signed  wxInt16;
+      typedef  short unsigned  wxUint16;
+    #else
+      #error "FIXME"
+    #endif
+    #if (SIZEOF_INT == 4)
+      typedef  int     signed  wxInt32;
+      typedef  int   unsigned  wxUint32;
+    #else
+      #error "FIXME"
+    #endif
+  #else
+    typedef  short   signed  wxInt16;
+    typedef  short unsigned  wxUint16;
+    typedef  int     signed  wxInt32;
+    typedef  int   unsigned  wxUint32;
+  #endif
+#endif
+
+typedef  wxUint8         wxByte;
+typedef  wxUint16        wxWord;
+
+// byte sex
+
+#define  wxBIG_ENDIAN     4321
+#define  wxLITTLE_ENDIAN  1234
+#define  wxPDP_ENDIAN     3412
+
+#ifdef WORDS_BIGENDIAN
+#define  wxBYTE_ORDER  wxBIG_ENDIAN
+#else
+#define  wxBYTE_ORDER  wxLITTLE_ENDIAN
+#endif
+
+// byte swapping
+
+#define wxUINT16_SWAP_ALWAYS(val) \
+   ((wxUint16) ( \
+    (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
+    (((wxUint16) (val) & (wxUint16) 0xff00U) >> 8)))
+    
+#define wxINT16_SWAP_ALWAYS(val) \
+   ((wxInt16) ( \
+    (((wxInt16) (val) & (wxInt16) 0x00ffU) << 8) | \
+    (((wxInt16) (val) & (wxInt16) 0xff00U) >> 8)))
+    
+#define wxUINT32_SWAP_ALWAYS(val) \
+   ((wxUint32) ( \
+    (((wxUint32) (val) & (wxUint32) 0x000000ffU) << 24) | \
+    (((wxUint32) (val) & (wxUint32) 0x0000ff00U) <<  8) | \
+    (((wxUint32) (val) & (wxUint32) 0x00ff0000U) >>  8) | \
+    (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
+
+#define wxINT32_SWAP_ALWAYS(val) \
+   ((wxInt32) ( \
+    (((wxInt32) (val) & (wxInt32) 0x000000ffU) << 24) | \
+    (((wxInt32) (val) & (wxInt32) 0x0000ff00U) <<  8) | \
+    (((wxInt32) (val) & (wxInt32) 0x00ff0000U) >>  8) | \
+    (((wxInt32) (val) & (wxInt32) 0xff000000U) >> 24)))
+
+// machine specific byte swapping
+
+#ifdef WORDS_BIGENDIAN
+  #define wxUINT16_SWAP_FROM_LE(val)  wxUINT16_SWAP_ALWAYS(val)
+  #define wxINT16_SWAP_FROM_LE(val)   wxINT16_SWAP_ALWAYS(val)
+  #define wxUINT16_SWAP_FROM_BE(val)  (val)
+  #define wxINT16_SWAP_FROM_BE(val)   (val)
+  #define wxUINT32_SWAP_FROM_LE(val)  wxUINT32_SWAP_ALWAYS(val)
+  #define wxINT32_SWAP_FROM_LE(val)   wxINT32_SWAP_ALWAYS(val)
+  #define wxUINT32_SWAP_FROM_BE(val)  (val)
+  #define wxINT32_SWAP_FROM_BE(val)   (val)
+#else
+  #define wxUINT16_SWAP_FROM_BE(val)  wxUINT16_SWAP_ALWAYS(val)
+  #define wxINT16_SWAP_FROM_BE(val)   wxINT16_SWAP_ALWAYS(val)
+  #define wxUINT16_SWAP_FROM_LE(val)  (val)
+  #define wxINT16_SWAP_FROM_LE(val)   (val)
+  #define wxUINT32_SWAP_FROM_BE(val)  wxUINT32_SWAP_ALWAYS(val)
+  #define wxINT32_SWAP_FROM_BE(val)   wxINT32_SWAP_ALWAYS(val)
+  #define wxUINT32_SWAP_FROM_LE(val)  (val)
+  #define wxINT32_SWAP_FROM_LE(val)   (val)
+#endif
+
+// ----------------------------------------------------------------------------
+// Window style flags
+// ----------------------------------------------------------------------------
+
 /*
- * Window style flags.
  * Values are chosen so they can be |'ed in a bit list.
  * Some styles are used across more than one group,
  * so the values mustn't clash with others in the group.
