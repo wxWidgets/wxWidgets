@@ -325,34 +325,34 @@ the programmer should use \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoin
 
 \func{virtual bool}{CanCopy}{\void}
 
-Returns TRUE if the selection can be copied to the clipboard.
+Returns {\tt TRUE} if the selection can be copied to the clipboard.
 
 \membersection{wxTextCtrl::CanCut}\label{wxtextctrlcancut}
 
 \func{virtual bool}{CanCut}{\void}
 
-Returns TRUE if the selection can be cut to the clipboard.
+Returns {\tt TRUE} if the selection can be cut to the clipboard.
 
 \membersection{wxTextCtrl::CanPaste}\label{wxtextctrlcanpaste}
 
 \func{virtual bool}{CanPaste}{\void}
 
-Returns TRUE if the contents of the clipboard can be pasted into the
+Returns {\tt TRUE} if the contents of the clipboard can be pasted into the
 text control. On some platforms (Motif, GTK) this is an approximation
-and returns TRUE if the control is editable, FALSE otherwise.
+and returns {\tt TRUE} if the control is editable, {\tt FALSE} otherwise.
 
 \membersection{wxTextCtrl::CanRedo}\label{wxtextctrlcanredo}
 
 \func{virtual bool}{CanRedo}{\void}
 
-Returns TRUE if there is a redo facility available and the last operation
+Returns {\tt TRUE} if there is a redo facility available and the last operation
 can be redone.
 
 \membersection{wxTextCtrl::CanUndo}\label{wxtextctrlcanundo}
 
 \func{virtual bool}{CanUndo}{\void}
 
-Returns TRUE if there is an undo facility available and the last operation
+Returns {\tt TRUE} if there is an undo facility available and the last operation
 can be undone.
 
 \membersection{wxTextCtrl::Clear}\label{wxtextctrlclear}
@@ -520,7 +520,8 @@ Windows where they are separated by a $\backslash$r$\backslash$n sequence in the
 
 \constfunc{bool}{IsModified}{\void}
 
-Returns TRUE if the text has been modified.
+Returns {\tt TRUE} if the text has been modified by user. Note that calling 
+\helpref{SetValue}{wxtextctrlsetvalue} doesn't make the control modified.
 
 \membersection{wxTextCtrl::LoadFile}\label{wxtextctrlloadfile}
 
@@ -534,7 +535,7 @@ Loads and displays the named file, if it exists.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise.
+{\tt TRUE} if successful, {\tt FALSE} otherwise.
 
 \membersection{wxTextCtrl::OnChar}\label{wxtextctrlonchar}
 
@@ -605,7 +606,7 @@ Converts given position to a zero-based column, line number pair.
 
 \wxheading{Return value}
 
-TRUE on success, FALSE on failure (most likely due to a too large position
+{\tt TRUE} on success, {\tt FALSE} on failure (most likely due to a too large position
 parameter).
 
 \wxheading{See also}
@@ -666,7 +667,7 @@ Saves the contents of the control in a text file.
 
 \wxheading{Return value}
 
-TRUE if the operation was successful, FALSE otherwise.
+{\tt TRUE} if the operation was successful, {\tt FALSE} otherwise.
 
 \membersection{wxTextCtrl::SetDefaultStyle}\label{wxtextctrlsetdefaultstyle}
 
@@ -706,7 +707,7 @@ Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY} f
 
 \wxheading{Parameters}
 
-\docparam{editable}{If TRUE, the control is editable. If FALSE, the control is read-only.}
+\docparam{editable}{If {\tt TRUE}, the control is editable. If {\tt FALSE}, the control is read-only.}
 
 \membersection{wxTextCtrl::SetInsertionPoint}\label{wxtextctrlsetinsertionpoint}
 
@@ -786,7 +787,9 @@ the styles are not supported under this platform.
 
 \func{virtual void}{SetValue}{\param{const wxString\& }{ value}}
 
-Sets the text value and marks the control as not-modified.
+Sets the text value and marks the control as not-modified (which means that 
+\helpref{IsModified}{wxtextctrlismodified} would return {\tt FALSE} immediately
+after the call to SetValue).
 
 \wxheading{Parameters}
 
