@@ -257,6 +257,11 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     if (pipe(end_proc_detect) == -1)
     {
         wxLogSysError( _("Pipe creation failed") );
+#if wxUSE_UNICODE
+	mb_argc = 0;
+	while (mb_argv[mb_argc])
+	  free(mb_argv[mb_argc++]);
+#endif
         return 0;
     }
 
@@ -269,6 +274,11 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     if (pid == -1)
     {
         wxLogSysError( _("Fork failed") );
+#if wxUSE_UNICODE
+	mb_argc = 0;
+	while (mb_argv[mb_argc])
+	  free(mb_argv[mb_argc++]);
+#endif
         return 0;
     }
     else if (pid == 0)
