@@ -11,7 +11,7 @@ resourceText = r'''<?xml version="1.0"?>
      subclass is specified as "moduleName.ClassName"  Try changing
      the classname to one that does not exist and see what happens -->
 
-<object class="wxPanel" subclass="XmlResourceSubclass.MyBluePanel" name="MyPanel">
+<object class="wxPanel" subclass="XmlResourceSubclass.MyCustomPanel" name="MyPanel">
     <size>200,100</size>
     <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wx.Panel
@@ -24,21 +24,32 @@ and is loaded by a using a subclass attribute of the object tag.</label>
 
 #----------------------------------------------------------------------
 
-class MyBluePanel(wx.Panel):
+class MyCustomPanel(wx.Panel):
     def __init__(self):
         p = wx.PrePanel()
         # the Create step is done by XRC.
         self.PostCreate(p)
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        
         
     def OnCreate(self, evt):
         # This is the little bit of customization that we do for this
         # silly example.  It could just as easily have been done in
         # the resource.  We do it in the EVT_WINDOW_CREATE handler 
         # because the window doesn't really exist yet in the __init__.
-        self.SetBackgroundColour("BLUE")
-        self.SetForegroundColour("WHITE")
+        t = wx.StaticText(self, -1, "MyCustomPanel")
+        f = t.GetFont()
+        f.SetWeight(wx.BOLD)
+        f.SetPointSize(f.GetPointSize()+2)
+        t.SetFont(f)
+        self.t = t
 
+    def OnSize(self, evt):
+        sz = self.GetSize()
+        w, h = self.t.GetTextExtent(self.t.GetLabel())
+        self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
+    
 #----------------------------------------------------------------------
 
 
