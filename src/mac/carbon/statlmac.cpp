@@ -30,6 +30,8 @@
 #include "wx/statline.h"
 #include "wx/statbox.h"
 
+#include <wx/mac/uma.h>
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -47,15 +49,15 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+	Rect bounds ;
+	Str255 title ;
+	
+	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-    // ok, this is ugly but it's better than nothing: use a thin static box to
-    // emulate static line
-
-    wxSize sizeReal = AdjustSize(size);
-
-//    m_statbox = new wxStaticBox(parent, id, wxT(""), pos, sizeReal, style, name);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlSeparatorLineProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
 
     return TRUE;
 }
