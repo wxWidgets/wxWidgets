@@ -26,7 +26,6 @@
 
 #include  "wx/ownerdrw.h"
 #include  "wx/menuitem.h"
-#include  "wx/image.h"
 #include  "wx/msw/checklst.h"
 
 // Define a new application type
@@ -46,6 +45,7 @@ public:
 
     // notifications
     void OnQuit             (wxCommandEvent& event);
+    void OnMenuToggle       (wxCommandEvent& event);
     void OnAbout            (wxCommandEvent& event);
     void OnListboxSelect    (wxCommandEvent& event);
     void OnCheckboxToggle   (wxCommandEvent& event);
@@ -58,6 +58,7 @@ private:
     void InitMenu();
 
     wxCheckListBox *m_pListBox;
+    wxMenuItem *pAboutItem;
 };
 
 enum 
@@ -67,11 +68,14 @@ enum
     Menu_Test1, Menu_Test2, Menu_Test3, 
     Menu_Bitmap, Menu_Bitmap2, 
     Menu_Submenu, Menu_Sub1, Menu_Sub2, Menu_Sub3,
+    Menu_Toggle, Menu_About,
     Control_First = 1000,
     Control_Listbox, Control_Listbox2,
 };
 
 BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
+    EVT_MENU(Menu_Toggle, OwnerDrawnFrame::OnMenuToggle)
+    EVT_MENU(Menu_About, OwnerDrawnFrame::OnAbout)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
     EVT_LISTBOX(Control_Listbox, OwnerDrawnFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
@@ -84,7 +88,6 @@ IMPLEMENT_APP(OwnerDrawnApp);
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)
 {
-    wxInitAllImageHandlers();
     OwnerDrawnFrame *pFrame
         = new OwnerDrawnFrame(NULL, _T("wxWindows Ownerdraw Sample"),
                               50, 50, 450, 340);
@@ -110,9 +113,8 @@ void OwnerDrawnFrame::InitMenu()
            fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 
     // sorry for my artistic skills...
-    wxBitmap bmpBell(_T("bell"));
-    wxBitmap bmpSound(_T("sound.png"), wxBITMAP_TYPE_PNG);
-    wxBitmap bmpNoSound(_T("nosound.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap bmpBell(_T("bell")), bmpSound(_T("sound")), bmpNoSound(_T("nosound"));
+    wxBitmap bmpInfo(_T("info")), bmpInfo_mono(_T("info_mono"));
 
     // construct submenu
     pItem = new wxMenuItem(sub_menu, Menu_Sub1, _T("Submenu &first"), _T("large"));
@@ -168,6 +170,20 @@ void OwnerDrawnFrame::InitMenu()
                            wxITEM_CHECK, sub_menu);
     pItem->SetFont(*wxSWISS_FONT);
     file_menu->Append(pItem);
+
+    file_menu->AppendSeparator();
+    pItem = new wxMenuItem(file_menu, Menu_Toggle, _T("&Disable/Enable\tCtrl+D"), 
+                          _T("enables/disables the About-Item"), wxITEM_NORMAL);
+    pItem->SetFont(*wxNORMAL_FONT);
+    file_menu->Append(pItem);
+
+    // Of course Ctrl+RatherLongAccel will not work in this example:
+    pAboutItem = new wxMenuItem(file_menu, Menu_About, _T("&About\tCtrl+RatherLongAccel"), 
+                                _T("display program information"), wxITEM_NORMAL);
+    pAboutItem->SetBitmap(bmpInfo);
+    pAboutItem->SetDisabledBitmap(bmpInfo_mono);
+    pAboutItem->SetOwnerDrawn(TRUE);
+    file_menu->Append(pAboutItem);
 
     file_menu->AppendSeparator();
     pItem = new wxMenuItem(file_menu, Menu_Quit, _T("&Quit"), _T("Normal item"),
@@ -287,6 +303,14 @@ OwnerDrawnFrame::~OwnerDrawnFrame()
 void OwnerDrawnFrame::OnQuit(wxCommandEvent& event)
 {
     Close(TRUE);
+}
+
+void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& event)
+{
+    // This example shows the use of bitmaps in ownerdrawn menuitems and is not a good
+    // example on how to enable and disable menuitems - this should be done with the help of
+    // EVT_UPDATE_UI and EVT_UPDATE_UI_RANGE !
+    pAboutItem->Enable( pAboutItem->IsEnabled() ? FALSE : TRUE );
 }
 
 void OwnerDrawnFrame::OnAbout(wxCommandEvent& event)
