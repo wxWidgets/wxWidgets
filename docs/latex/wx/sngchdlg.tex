@@ -1,8 +1,8 @@
 \section{\class{wxSingleChoiceDialog}}\label{wxsinglechoicedialog}
 
-This class represents a dialog that shows a list of strings, and allows
-the user to select one. Double-clicking on a list item is equivalent to single-clicking
-and then pressing OK.
+This class represents a dialog that shows a list of strings, and allows the
+user to select one. Double-clicking on a list item is equivalent to
+single-clicking and then pressing OK.
 
 \wxheading{Derived from}
 
@@ -17,7 +17,8 @@ and then pressing OK.
 
 \wxheading{See also}
 
-\helpref{wxSingleChoiceDialog overview}{wxsinglechoicedialogoverview}
+\helpref{wxSingleChoiceDialog overview}{wxsinglechoicedialogoverview},
+\helpref{wxMultiChoiceDialog}{wxmultichoicedialog}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -25,17 +26,15 @@ and then pressing OK.
 
 \func{}{wxSingleChoiceDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
 \param{const wxString\& }{caption}, \param{int }{n}, \param{const wxString* }{choices},\rtfsp
-\param{void**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
+\param{void**}{ clientData = NULL}, \param{long }{style = wxCHOICEDLG\_STYLE},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}}
+
+\func{}{wxSingleChoiceDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
+\param{const wxString\& }{caption}, \param{const wxArrayString\& }{choices},\rtfsp
+\param{void**}{ clientData = NULL}, \param{long }{style = wxCHOICEDLG\_STYLE},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Constructor, taking an array of wxString choices and optional client data.
-
-%\func{}{wxSingleChoiceDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
-%\param{const wxString\& }{caption}, \param{const wxStringList\& }{choices},\rtfsp
-%\param{void**}{ clientData = NULL}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
-%\param{const wxPoint\& }{pos = wxDefaultPosition}}
-%
-%Constructor, taking a string list and optional client data.
 
 \wxheading{Parameters}
 
@@ -49,7 +48,11 @@ Constructor, taking an array of wxString choices and optional client data.
 
 \docparam{choices}{An array of strings, or a string list, containing the choices.}
 
-\docparam{style}{A dialog style (bitlist) containing flags chosen from the following:
+\docparam{clientData}{An array of client data to be associated with the items.
+See \helpref{GetSelectionClientData}{wxsinglechoicedialoggetselectionclientdata}.}
+
+\docparam{style}{A dialog style (bitlist) containing flags chosen from standard
+dialog styles and the following:
 
 \twocolwidtha{5cm}
 \begin{twocollist}
@@ -57,6 +60,7 @@ Constructor, taking an array of wxString choices and optional client data.
 \twocolitem{{\bf wxCANCEL}}{Show a Cancel button.}
 \twocolitem{{\bf wxCENTRE}}{Centre the message. Not Windows.}
 \end{twocollist}
+The default value is equivalent to {\bf wxDEFAULT\_DIALOG\_STYLE \pipe wxRESIZE\_BORDER \pipe wxOK \pipe wxCANCEL \pipe wxCENTRE}.
 }
 
 \docparam{pos}{Dialog position. Not Windows.}
@@ -73,19 +77,13 @@ list of strings.}
 and {\tt choices}, and the client data array, if present, must have the
 same length as the choices array.}
 
-\membersection{wxSingleChoiceDialog::\destruct{wxSingleChoiceDialog}}
-
-\func{}{\destruct{wxSingleChoiceDialog}}{\void}
-
-Destructor.
-
 \membersection{wxSingleChoiceDialog::GetSelection}
 
 \constfunc{int}{GetSelection}{\void}
 
 Returns the index of selected item.
 
-\membersection{wxSingleChoiceDialog::GetSelectionClientData}
+\membersection{wxSingleChoiceDialog::GetSelectionClientData}\label{wxsinglechoicedialoggetselectionclientdata}
 
 \constfunc{char*}{GetSelectionClientData}{\void}
 
