@@ -2437,7 +2437,7 @@ msgstr "Relevante Einträge:"
 
 #: ../src/generic/progdlgg.cpp:199
 msgid "Remaining time : "
-msgstr "Verbleibne Zeit : "
+msgstr "Verbleibende Zeit : "
 
 #: ../src/html/helpfrm.cpp:329
 msgid "Remove current page from bookmarks"
