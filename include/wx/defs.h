@@ -1898,17 +1898,13 @@ typedef ControlHandle   WXWidget;
 
 #ifdef __WXCOCOA__
 
-#if defined(__OBJC__)
-    #include <objc/objc.h>
-    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
-    @class klass;                   typedef klass *WX_##klass
-#elif defined(wxI_LIKE_OBJC_ID)
-    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
-    typedef id WX_##klass
-#else // the goal is to get rid of this secion at some time!
-    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
-    typedef void *WX_##klass
-#endif
+// NOTE: typedef struct objc_object *id;
+// IOW, we're declaring these using the id type without using that name,
+// since "id" is used extensively not only within wxWindows itself, but
+// also in wxWindows application code.  The following works fine when
+// compiling C++ code, and works without typesafety for Obj-C++ code
+#define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+typedef struct objc_object *WX_##klass
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
