@@ -34,13 +34,13 @@ selection itself rather than depend on the user to setup the
 environment correctly.
 
 It works by searching the sys.path for directories matching wx-* and
-then comparing them to what was passed to the require function.  If a
+then comparing them to what was passed to the select function.  If a
 match is found then that path is inserted into sys.path.
 
 NOTE: If you are making a 'bundle' of your application with a tool
 like py2exe then you should *not* use the wxversion module since it
-looks at filesystem for the directories on sys.path, it will fail in a
-bundled environment.  Instead you should simply ensure that the
+looks at the filesystem for the directories on sys.path, it will fail
+in a bundled environment.  Instead you should simply ensure that the
 version of wxPython that you want is found by default on the sys.path
 when making the bundled version by setting PYTHONPATH.  Then that
 version will be included in your bundle and your app will work as
@@ -109,12 +109,12 @@ def select(versions):
     # If we get here then this is the first time wxversion is used, 
     # ensure that wxPython hasn't been imported yet.
     if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
-        raise VersionError("wxversion.require() must be called before wxPython is imported")
-
+        raise VersionError("wxversion.select() must be called before wxPython is imported")
+    
     # Look for a matching version and manipulate the sys.path as
     # needed to allow it to be imported.
-    packages = _find_installed(True)
-    bestMatch = _get_best_match(packages, versions)
+    installed = _find_installed(True)
+    bestMatch = _get_best_match(installed, versions)
     
     if bestMatch is None:
         raise VersionError("Requested version of wxPython not found")
@@ -122,6 +122,51 @@ def select(versions):
     sys.path.insert(0, bestMatch.pathname)
     _selected = bestMatch
         
+#----------------------------------------------------------------------
+
+def selectNewest(minVersion):
+    """
+    Selects a version of wxPython that has a version number greater
+    than or equal to the version given.  If a matching version is not
+    found then instead of raising an exception like select() does this
+    function will inform the user of that fact with a message dialog,
+    open the system's default web browser to the wxPython download
+    page, and then will exit the application.
+    """
+    assert type(minVersion) == str
+
+    # ensure that wxPython hasn't been imported yet.
+    if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
+        raise VersionError("wxversion.select() must be called before wxPython is imported")
+    
+    bestMatch = None
+    installed = _find_installed(True)
+    minv = _wxPackageInfo(minVersion)
+
+    if installed:
+        # The list is in reverse sorted order, so if the first one is
+        # big enough then choose it
+        if installed[0] >= minv:
+            bestMatch = installed[0]
+
+    if bestMatch is None:
+        import wx, webbrowser
+        versions = "\n".join(["      "+ver for ver in getInstalled()])
+        app = wx.PySimpleApp()
+        wx.MessageBox("This application requires a version of wxPython "
+                      "greater than or equal to %s but a matching version "
+                      "was not found.\n\n"
+                      "You currently have these version(s) installed:\n%s"
+                      % (minVersion, versions),
+                      "wxPython Upgrade Needed", style=wx.OK)
+        app.MainLoop()
+        webbrowser.open("http://sourceforge.net/project/showfiles.php?group_id=10718")
+        sys.exit()
+
+    sys.path.insert(0, bestMatch.pathname)
+    _selected = bestMatch
+        
+
 #----------------------------------------------------------------------
 
 def checkInstalled(versions):
@@ -137,8 +182,8 @@ def checkInstalled(versions):
     
     if type(versions) == str:
         versions = [versions]
-    packages = _find_installed()
-    bestMatch = _get_best_match(packages, versions)
+    installed = _find_installed()
+    bestMatch = _get_best_match(installed, versions)
     return bestMatch is not None
 
 #----------------------------------------------------------------------
@@ -148,18 +193,18 @@ def getInstalled():
     Returns a list of strings representing the installed wxPython
     versions that are found on the system.
     """
-    packages = _find_installed()
-    return [os.path.basename(p.pathname)[3:] for p in packages]
+    installed = _find_installed()
+    return [os.path.basename(p.pathname)[3:] for p in installed]
 
 
 
 #----------------------------------------------------------------------
 # private helpers...
 
-def _get_best_match(packages, versions):
+def _get_best_match(installed, versions):
     bestMatch = None
     bestScore = 0
-    for pkg in packages:
+    for pkg in installed:
         for ver in versions:
             score = pkg.Score(_wxPackageInfo(ver))
             if score > bestScore:
@@ -236,13 +281,23 @@ class _wxPackageInfo(object):
         return score
     
 
-    # TODO: factor self.options into the sort order?
+   
     def __lt__(self, other):
-        return self.version < other.version
+        return self.version < other.version or \
+               (self.version == other.version and self.options < other.options)
+    def __le__(self, other):
+        return self.version <= other.version or \
+               (self.version == other.version and self.options <= other.options)
+    
     def __gt__(self, other):
-        return self.version > other.version
+        return self.version > other.version or \
+               (self.version == other.version and self.options > other.options)
+    def __ge__(self, other):
+        return self.version >= other.version or \
+               (self.version == other.version and self.options >= other.options)
+    
     def __eq__(self, other):
-        return self.version == other.version
+        return self.version == other.version and self.options == other.options
         
     
 
@@ -250,6 +305,12 @@ class _wxPackageInfo(object):
 
 if __name__ == '__main__':
     import pprint
+    
+    #selectNewest('2.5')
+    #print sys.path[0]
+    #sys.exit()
+    
+    
     def test(version):
         # setup
         savepath = sys.path[:]
