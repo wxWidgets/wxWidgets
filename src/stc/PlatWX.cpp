@@ -15,7 +15,7 @@ Point Point::FromLong(long lpoint) {
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
     wxRect rc(prc.left, prc.top,
-              prc.right-prc.left+1, prc.bottom-prc.top+1);
+              prc.right-prc.left, prc.bottom-prc.top);
     return rc;
 }
 
@@ -169,7 +169,7 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     Release();
     hdc = new wxMemoryDC(surface_->hdc);
     hdcOwned = true;
-    bitmap = new wxBitmap(width, height+1);
+    bitmap = new wxBitmap(width, height);
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
     // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
@@ -183,12 +183,7 @@ void Surface::BrushColor(Colour back) {
 }
 
 void Surface::SetFont(Font &font_) {
-
-  // I think the following check is valid.
-  // It eliminates a crash for me.  -- eric@sourcegear.com
-
-  if (font_.GetID())
-    {
+  if (font_.GetID()) {
       hdc->SetFont(*font_.GetID());
     }
 }
@@ -361,9 +356,6 @@ void Surface::SetClip(PRectangle rc) {
 }
 
 void Surface::FlushCachedState() {
-  // TODO Is there anything we need to do here? eric@sourcegear.com
-  // TODO I had to add this method when I merged new Scintilla code
-  // TODO from Neil.
 }
 
 Window::~Window() {
@@ -395,7 +387,7 @@ void Window::SetPositionRelative(PRectangle rc, Window) {
 
 PRectangle Window::GetClientPosition() {
     wxSize sz = id->GetClientSize();
-    return  PRectangle(0, 0, sz.x - 1, sz.y - 1);
+    return  PRectangle(0, 0, sz.x, sz.y);
 }
 
 void Window::Show(bool show) {
@@ -487,10 +479,12 @@ int ListBox::GetSelection() {
 }
 
 int ListBox::Find(const char *prefix) {
-    for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
-        wxString text = ((wxListBox*)id)->GetString(x);
-        if (text.StartsWith(prefix))
-            return x;
+    if (prefix) {
+        for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
+            wxString text = ((wxListBox*)id)->GetString(x);
+            if (text.StartsWith(prefix))
+                return x;
+        }
     }
     return -1;
 }
