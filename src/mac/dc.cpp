@@ -1668,6 +1668,68 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     }
 }
 
+
+bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+{
+    wxCHECK_MSG(Ok(), false, wxT("Invalid DC"));
+
+    widths.Empty();
+    widths.Add(0, text.Length());
+
+    if (text.Length() == 0)
+        return false;
+    
+    wxMacFastPortSetter helper(this) ;
+    MacInstallFont() ;
+#if TARGET_CARBON    
+    bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
+    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
+        useGetThemeText = false ;
+
+    if ( useGetThemeText )
+    {
+        // If anybody knows how to do this more efficiently yet still handle
+        // the fractional glyph widths that may be present when using AA
+        // fonts, please change it.  Currently it is measuring from the
+        // begining of the string for each succeding substring, which is much
+        // slower than this should be.
+        for (size_t i=0; i<text.Length(); i++)
+        {
+            wxString str(text.Left(i+1));
+            Point bounds = {0,0};
+            SInt16 baseline ;
+            wxMacCFStringHolder mString(str, m_font.GetEncoding());
+            ::GetThemeTextDimensions( mString,
+                                      kThemeCurrentPortFont,
+                                      kThemeStateActive,
+                                      false,
+                                      &bounds,
+                                      &baseline );
+            widths[i] = XDEV2LOGREL(bounds.h);
+        }
+    }
+    else        
+#endif
+    {
+        wxCharBuffer buff = text.mb_str(wxConvLocal);
+        size_t len = strlen(buff);
+        short* measurements = new short[len+1];
+        MeasureText(len, buff.data(), measurements);
+
+        // Copy to widths, starting at measurements[1]
+        // NOTE: this doesn't take into account any multi-byte characters
+        // in buff, it probabkly should...
+        for (size_t i=0; i<text.Length(); i++)
+            widths[i] = XDEV2LOGREL(measurements[i+1]);
+
+        delete [] measurements;        
+    }
+
+    return true;
+}
+
+
+
 wxCoord   wxDC::GetCharWidth(void) const
 {
     wxCHECK_MSG(Ok(), 1, wxT("Invalid DC"));

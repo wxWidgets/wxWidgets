@@ -86,6 +86,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
                                  wxFont *theFont = NULL) const;
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;

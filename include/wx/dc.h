@@ -29,6 +29,7 @@
 #include "wx/pen.h"
 #include "wx/palette.h"
 #include "wx/list.h"            // we use wxList in inline functions
+#include "wx/dynarray.h"
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxDCBase;
@@ -427,6 +428,11 @@ public:
                                         wxCoord *heightLine = NULL,
                                         wxFont *font = NULL);
 
+    // Measure cumulative width of text after each character
+    bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+        { return DoGetPartialTextExtents(text, widths); }
+
+    
     // size and resolution
     // -------------------
 
@@ -734,7 +740,9 @@ protected:
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
                                  wxFont *theFont = NULL) const = 0;
-
+    
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
+    
 #if wxUSE_SPLINES
     virtual void DoDrawSpline(wxList *points);
 #endif

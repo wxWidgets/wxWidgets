@@ -366,6 +366,36 @@ void wxDCBase::DoDrawSpline( wxList *points )
 #endif // wxUSE_SPLINES
 
 // ----------------------------------------------------------------------------
+// Partial Text Extents
+// ----------------------------------------------------------------------------
+
+
+// Each element of the array will be the width of the string up to and
+// including the coresoponding character in text.  This is the generic
+// implementation, the port-specific classes should do this with native APIs
+// if available.
+
+bool wxDCBase::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+{
+    int totalWidth = 0;
+    size_t i;
+
+    widths.Empty();
+    widths.Add(0, text.Length());
+    
+    // Calculate the position of each character based on the widths of
+    // the previous characters
+    for (i=0; i<text.Length(); i++) {
+        int w, h;
+        GetTextExtent(text[i], &w, &h);
+        totalWidth += w;
+        widths[i] = totalWidth;
+    }
+    return true;
+}
+
+
+// ----------------------------------------------------------------------------
 // enhanced text drawing
 // ----------------------------------------------------------------------------
 
