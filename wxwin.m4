@@ -39,7 +39,7 @@ AC_DEFUN(AM_OPTIONS_WXCONFIG,
                wx_config_prefix="$withval", wx_config_prefix="")
    AC_ARG_WITH(wx-exec-prefix,[  --with-wx-exec-prefix=PREFIX Exec prefix where wxWindows is installed (optional)],
                wx_config_exec_prefix="$withval", wx_config_exec_prefix="")
-   AC_ARG_WITH(wx-exec-prefix,[  --with-wx-config=CONFIG   wx-config script to use (optional)],
+   AC_ARG_WITH(wx-config,[  --with-wx-config=CONFIG   wx-config script to use (optional)],
                wx_config_name="$withval", wx_config_name="")
 ])
 
