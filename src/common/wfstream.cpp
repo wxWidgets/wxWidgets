@@ -62,11 +62,6 @@ wxFileInputStream::~wxFileInputStream()
     delete m_file;
 }
 
-char wxFileInputStream::Peek()
-{
-  return 0;
-}
-
 size_t wxFileInputStream::GetSize() const
 {
   return m_file->Length();

@@ -32,7 +32,6 @@ class wxFileInputStream: public wxInputStream {
   wxFileInputStream(int fd);
   ~wxFileInputStream();
 
-  char Peek();
   size_t GetSize() const;
 
   bool Ok() const { return m_file->IsOpened(); }

@@ -1794,6 +1794,7 @@ AC_CHECK_FUNCS(uname gethostname, break)
 dnl check for inet_addr, inet_aton, ...
 AC_CHECK_FUNCS(inet_addr)
 AC_CHECK_FUNCS(inet_aton)
+AC_CHECK_LIB(resolv, inet_aton)
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
