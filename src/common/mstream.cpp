@@ -75,6 +75,10 @@ wxMemoryInputStream::wxMemoryInputStream(const char *data, size_t len)
   m_iolimit = 1;
 }
 
+wxMemoryInputStream::~wxMemoryInputStream()
+{
+}
+
 wxInputStream& wxMemoryInputStream::Read(void *buffer, size_t size)
 {
   if (m_iolimit == 2) {
@@ -131,6 +135,10 @@ wxMemoryOutputStream::wxMemoryOutputStream(char *data, size_t len)
   m_lastwrite = 0;
   m_bad = FALSE;
   m_iolimit = 2;
+}
+
+wxMemoryOutputStream::~wxMemoryOutputStream()
+{
 }
 
 wxOutputStream& wxMemoryOutputStream::Write(const void *buffer, size_t size)

@@ -43,6 +43,8 @@ class wxInputStream: virtual public wxObject {
 
   virtual bool Eof() const = 0;
   virtual size_t LastRead() const = 0;
+
+  wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
 };
 
 class wxOutputStream: virtual public wxObject {
@@ -63,12 +65,6 @@ class wxOutputStream: virtual public wxObject {
   virtual void Sync() {}
 };
 
-class wxStream: virtual public wxInputStream, virtual public wxOutputStream {
- public:
-  wxStream() {}
-  virtual ~wxStream() { }
-};
-
 /*
  * "Filter" streams
  */
@@ -83,6 +79,8 @@ class wxFilterInputStream: public wxInputStream {
      { return m_parent_i_stream->Read(buffer, size); }
   virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart)
      { return m_parent_i_stream->SeekI(pos, mode); }
+  virtual off_t TellI() const
+     { return m_parent_i_stream->TellI(); }
 
   virtual bool Eof() const { return m_parent_i_stream->Eof(); } 
   virtual size_t LastRead() const { return m_parent_i_stream->LastRead(); } 
@@ -101,6 +99,8 @@ class wxFilterOutputStream: public wxOutputStream {
      { return m_parent_o_stream->Write(buffer, size); }
   virtual off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart)
      { return m_parent_o_stream->SeekO(pos, mode); }
+  virtual off_t TellO() const
+     { return m_parent_o_stream->TellO(); }
 
   virtual bool Bad() const { return m_parent_o_stream->Bad(); }
   virtual size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }
