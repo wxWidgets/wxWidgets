@@ -985,6 +985,13 @@
 #  define wxUSE_TOGGLEBTN 0
 #endif
 
+/* wxMGL-specific dependencies */
+#ifdef __WXMGL__
+#   if !wxUSE_PALETTE
+#       error "wxMGL requires wxUSE_PALETTE=1"
+#   endif
+#endif /* wxMGL */
+
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 #   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG
