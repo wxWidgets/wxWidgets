@@ -612,7 +612,7 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
 		if ( event.m_metaDown )
 			modifiers |= cmdKey ;
 	
-		controlpart = FindControl( localwhere , window , &control ) ;
+		controlpart = ::FindControl( localwhere , window , &control ) ;
 		{
 			if ( control && ::IsControlActive( control ) )
 			{
