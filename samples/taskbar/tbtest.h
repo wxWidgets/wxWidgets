@@ -24,7 +24,8 @@ public:
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
     void OnMenuSetNewIcon(wxCommandEvent&);
-
+       void OnMenuCheckmark(wxCommandEvent&);
+       void OnMenuUICheckmark(wxUpdateUIEvent&);
     virtual wxMenu *CreatePopupMenu();
 
 DECLARE_EVENT_TABLE()
