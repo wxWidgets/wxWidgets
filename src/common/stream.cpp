@@ -68,8 +68,8 @@ void wxStreamBuffer::InitBuffer()
     m_buffer_pos = NULL;
     m_buffer_size = 0;
 
-    // there is nothing to destroy anyhow
-    m_destroybuf = FALSE;
+    // if we are going to allocate the buffer, we should free it later as well
+    m_destroybuf = TRUE;
 }
 
 void wxStreamBuffer::Init()
