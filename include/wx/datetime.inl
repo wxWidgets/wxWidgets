@@ -35,13 +35,6 @@
 // wxDateTime construction
 // ----------------------------------------------------------------------------
 
-// only define this once, when included from datetime.cpp
-// TODO: figure out why switching accessibility on causes link errors
-// if don't use this test.
-#if defined(wxDEFINE_TIME_CONSTANTS) || (defined(_MSC_VER) && wxUSE_ACCESSIBILITY)
-    const long wxDateTime::TIME_T_FACTOR = 1000l;
-#endif // wxDEFINE_TIME_CONSTANTS
-
 inline bool wxDateTime::IsInStdRange() const
 {
     return m_time >= 0l && (m_time / TIME_T_FACTOR) < LONG_MAX;
