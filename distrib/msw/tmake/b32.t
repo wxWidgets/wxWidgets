@@ -261,7 +261,7 @@ nul
 $(PERIPH_LIBS) $(LIBS)
 wxb32
 !
-        implib -c $(LIBTARGET) $(WXDLL)
+        implib -c -f $(LIBTARGET) $(WXDLL)
 !endif
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
