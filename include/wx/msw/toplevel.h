@@ -60,8 +60,8 @@ public:
     virtual bool Show(bool show = TRUE);
 
     // FIXME -- not yet moved from wxFrame to wxTLW
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) {}
-    virtual bool IsFullScreen() { return FALSE; }
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) { return FALSE; }
+    virtual bool IsFullScreen() const { return FALSE; }
 
     // implementation from now on
     // --------------------------
