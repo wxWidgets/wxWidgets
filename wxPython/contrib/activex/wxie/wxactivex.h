@@ -610,6 +610,8 @@ protected:
     NameMap         m_methodNames;
 
     long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    DECLARE_CLASS(wxActiveX)
 };
 
 // events

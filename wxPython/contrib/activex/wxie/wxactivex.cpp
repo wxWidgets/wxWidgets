@@ -85,6 +85,8 @@ BEGIN_EVENT_TABLE(wxActiveX, wxWindow)
     EVT_KILL_FOCUS(wxActiveX::OnKillFocus)
 END_EVENT_TABLE()
 
+IMPLEMENT_CLASS(wxActiveX, wxWindow)
+    
 class wxActiveX;
 
 class FrameSite : 
@@ -253,6 +255,7 @@ wxWindow(parent, id, pos, size, style, name)
     m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;
     CreateActiveX(clsid);
+    m_bestSize = GetSize();
 }
 
 wxActiveX::wxActiveX(wxWindow * parent, const wxString& progId, wxWindowID id,
@@ -265,6 +268,7 @@ wxActiveX::wxActiveX(wxWindow * parent, const wxString& progId, wxWindowID id,
     m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;
     CreateActiveX((LPOLESTR) (const wchar_t *) progId.wc_str(wxConvUTF8));
+    m_bestSize = GetSize();
 }
 
 wxActiveX::~wxActiveX()
