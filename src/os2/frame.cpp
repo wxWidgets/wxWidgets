@@ -469,17 +469,61 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
 )
 {
     wxStatusBar*                    pStatusBar = NULL;
+    SWP                             vSwp;
+    ERRORID                         vError;
+    wxString                        sError;
 
     pStatusBar = wxFrameBase::OnCreateStatusBar( nNumber
                                                 ,lulStyle
                                                 ,vId
                                                 ,rName
                                                );
+    //
+    // The default parent set for the Statusbar is m_hWnd which, of course,
+    // is the handle to the client window of the frame.  We don't want that,
+    // so we have to set the parent to actually be the Frame.
+    //
+    ::WinSetParent(pStatusBar->GetHWND(), m_hFrame, FALSE);
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        return NULL;
+    }
+
+    //
+    // Also we need to reset it positioning to enable the SHOW attribute
+    //
+    if (!::WinQueryWindowPos(pStatusBar->GetHWND(), &vSwp))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        return NULL;
+    }
+    if (!::WinSetWindowPos( pStatusBar->GetHWND()
+                           ,HWND_TOP
+                           ,vSwp.cx
+                           ,vSwp.cy
+                           ,vSwp.x
+                           ,vSwp.y
+                           ,SWP_SIZE | SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                          ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        return NULL;
+    }
     return pStatusBar;
 } // end of wxFrame::OnCreateStatusBar
 
 void wxFrame::PositionStatusBar()
 {
+    SWP                             vSwp;
+    ERRORID                         vError;
+    wxString                        sError;
+
     //
     // Native status bar positions itself
     //
@@ -509,6 +553,27 @@ void wxFrame::PositionStatusBar()
                                   ,nWidth
                                   ,nStatbarHeight
                                  );
+        if (!::WinQueryWindowPos(m_frameStatusBar->GetHWND(), &vSwp))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+            return;
+        }
+        if (!::WinSetWindowPos( m_frameStatusBar->GetHWND()
+                               ,HWND_TOP
+                               ,nStatbarWidth
+                               ,nStatbarHeight
+                               ,vSwp.x
+                               ,vSwp.y
+                               ,SWP_SIZE | SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                              ))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+            return;
+        }
     }
 } // end of wxFrame::PositionStatusBar
 #endif // wxUSE_STATUSBAR

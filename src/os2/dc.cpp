@@ -42,6 +42,11 @@ static const int VIEWPORT_EXTENT = 1000;
 static const int MM_POINTS = 9;
 static const int MM_METRIC = 10;
 
+// usually this is defined in math.h
+#ifndef M_PI
+    static const double M_PI = 3.14159265358979323846;
+#endif // M_PI
+
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
