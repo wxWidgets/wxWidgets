@@ -65,8 +65,13 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData;
 
-    M_BRUSHDATA->m_style = wxSTIPPLE;
+    M_BRUSHDATA->m_colour = *wxBLACK;
     M_BRUSHDATA->m_stipple = stipple;
+    
+    if (M_BRUSHDATA->m_stipple.GetMask())
+        M_BRUSHDATA->m_style = wxSTIPPLE_MASK_OPAQUE;
+    else
+        M_BRUSHDATA->m_style = wxSTIPPLE;
 
     RealizeResource();
 }
