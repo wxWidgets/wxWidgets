@@ -402,6 +402,7 @@ enum
     wxMGL_X,                  // MGL on X
     wxMGL_WIN32,              // MGL on Win32
     wxMGL_OS2,                // MGL on OS/2
+    wxMGL_DOS,                // MGL on MS-DOS
     wxWINDOWS_OS2,            // Native OS/2 PM
     wxUNIX                    // wxBase under Unix
 };
