@@ -19,6 +19,14 @@
 #include <stddef.h>
 
 #include "wx/setup.h"
+
+#ifdef PACKAGE
+  #undef PACKAGE
+#endif
+#ifdef VERSION
+  #undef VERSION
+#endif
+
 #include "wx/version.h"
 
 // ----------------------------------------------------------------------------

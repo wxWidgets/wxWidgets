@@ -1864,7 +1864,11 @@ if test "$wxUSE_STATBOX" = "yes"; then
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
-    AC_DEFINE(wxUSE_STATLINE)
+    if test "$wxUSE_WINE" = 1 ; then
+        AC_MSG_WARN([wxStaticLine is not supported under WINE])
+    else
+        AC_DEFINE(wxUSE_STATLINE)
+    fi
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then

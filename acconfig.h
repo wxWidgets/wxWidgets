@@ -583,7 +583,4 @@
 
 @BOTTOM@
 
-#undef PACKAGE
-#undef VERSION
-
 #endif /* __GTKSETUPH__ */
