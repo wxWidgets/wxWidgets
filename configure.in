@@ -7,6 +7,7 @@ dnl This script is under the wxWindows licence.
 dnl $Id$
 dnl ////////////////////////////////////////////////////////////////////////
 
+
 dnl AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl Test for GTK, and define GTK_CFLAGS and GTK_LIBS
 dnl
