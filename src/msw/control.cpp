@@ -46,9 +46,6 @@ END_EVENT_TABLE()
 // Item members
 wxControl::wxControl()
 {
-#if WXWIN_COMPATIBILITY
-    m_callback = 0;
-#endif // WXWIN_COMPATIBILITY
 }
 
 wxControl::~wxControl()
@@ -173,16 +170,6 @@ wxSize wxControl::DoGetBestSize() const
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-#if WXWIN_COMPATIBILITY
-    if ( m_callback )
-    {
-        (void)(*m_callback)(*this, event);
-
-        return TRUE;
-    }
-    else
-#endif // WXWIN_COMPATIBILITY
-
     return GetEventHandler()->ProcessEvent(event);
 }
 

@@ -83,16 +83,6 @@ public:
     //
     bool Ok(void) const {return m_bIsInit; }
 
-    //
-    // Let's remove this inelegant function
-    //
-#if WXWIN_COMPATIBILITY
-    void Get( unsigned char* pRed
-             ,unsigned char* pGreen
-             ,unsigned char* pBlue
-            ) const;
-#endif
-
     unsigned char Red(void) const { return m_cRed; }
     unsigned char Green(void) const { return m_cGreen; }
     unsigned char Blue(void) const { return m_cBlue; }

@@ -862,17 +862,6 @@ public:
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 
-    // backward compatibility
-    // ----------------------
-#if WXWIN_COMPATIBILITY
-    bool Enabled() const { return IsEnabled(); }
-
-    void SetButtonFont(const wxFont& font) { SetFont(font); }
-    void SetLabelFont(const wxFont& font) { SetFont(font); }
-    wxFont& GetLabelFont() { return GetFont(); };
-    wxFont& GetButtonFont() { return GetFont(); };
-#endif // WXWIN_COMPATIBILITY
-
     // implementation
     // --------------
 

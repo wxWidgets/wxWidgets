@@ -26,19 +26,6 @@ class WXDLLEXPORT wxDialog : public wxDialogBase
 public:
     wxDialog();
 
-#if WXWIN_COMPATIBILITY_2
-    // Constructor with a modal flag, but no window id - the old convention
-    wxDialog(wxWindow *parent,
-        const wxString& title, bool modal,
-        int x = -1, int y= -1, int width = 500, int height = 500,
-        long style = wxDEFAULT_DIALOG_STYLE,
-        const wxString& name = wxDialogNameStr)
-    {
-        long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
-        Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), style|modalStyle, name);
-    }
-#endif
-
     // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID id,
         const wxString& title,

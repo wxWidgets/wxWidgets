@@ -887,47 +887,5 @@ int wxFTP::GetFileSize(const wxString& fileName)
     return filesize;
 }
 
-
-#if WXWIN_COMPATIBILITY_2
-// deprecated
-wxList *wxFTP::GetList(const wxString& wildcard, bool details)
-{
- wxSocketBase *sock = GetPort();
- if (!sock)
-  return NULL;
- wxList *file_list = new wxList;
- wxString line;
- // NLST : List of Filenames (including Directory's !)
- // LIST : depending on BS of FTP-Server
- //        - Unix    : result like "ls" command
- //        - Windows : like "dir" command
- //        - others  : ?
- if (!details)
-  line = _T("NLST");   // Default
- else
-  line = _T("LIST");
- if (!wildcard.IsNull())
-  line += wildcard;
- if (!CheckCommand(line, '1'))
- {
-  delete sock;
-  delete file_list;
-  return NULL;
- }
- while (GetLine(sock, line) == wxPROTO_NOERR)
- {
-  file_list->Append((wxObject *)(new wxString(line)));
- }
- if (!CheckResult('2'))
- {
-  delete sock;
-  file_list->DeleteContents(TRUE);
-  delete file_list;
-  return NULL;
- }
- return file_list;
-}
-#endif // WXWIN_COMPATIBILITY_2
-
 #endif // wxUSE_PROTOCOL_FTP
 

@@ -331,9 +331,6 @@ bool wxWindowBase::Close(bool force)
 {
     wxCloseEvent event(wxEVT_CLOSE_WINDOW, m_windowId);
     event.SetEventObject(this);
-#if WXWIN_COMPATIBILITY
-    event.SetForce(force);
-#endif // WXWIN_COMPATIBILITY
     event.SetCanVeto(!force);
 
     // return FALSE if window wasn't closed because the application vetoed the

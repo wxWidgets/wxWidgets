@@ -779,7 +779,6 @@ WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ 
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
-WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWindows 2.0 compatibility], WXWIN_COMPATIBILITY_2)
 WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWindows 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWindows 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, disable)
 
@@ -4168,12 +4167,6 @@ dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
 
-if test "$WXWIN_COMPATIBILITY_2" = "yes"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_2)
-
-    WXWIN_COMPATIBILITY_2_2="yes"
-fi
-
 if test "x$WXWIN_COMPATIBILITY_2_2" = "xyes"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_2)
 
@@ -5920,7 +5913,6 @@ echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-
 echo "  Should wxWindows be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
 
 echo "  What level of wxWindows compatibility should be enabled?"
-echo "                                       wxWindows 2.0      ${WXWIN_COMPATIBILITY_2:-no}"
 echo "                                       wxWindows 2.2      ${WXWIN_COMPATIBILITY_2_2:-no}"
 echo "                                       wxWindows 2.4      ${WXWIN_COMPATIBILITY_2_4:-yes}"
 

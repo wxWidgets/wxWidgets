@@ -506,17 +506,6 @@ public:
     // more deprecated functions
     // -------------------------
 
-#if WXWIN_COMPATIBILITY
-    void SetDefaultSize(int w, int h) { SetDefaultSize(wxSize(w, h)); }
-    long GetDefaultWidth() const { return m_defaultWidth; }
-    long GetDefaultHeight() const { return m_defaultHeight; }
-    int GetDefaultButtonWidth() const { return (int) GetDefaultButtonSize().x; };
-    int GetDefaultButtonHeight() const { return (int) GetDefaultButtonSize().y; };
-    virtual void SetDefaultSize(const wxSize& size) { SetToolBitmapSize(size); }
-    virtual wxSize GetDefaultSize() const { return GetToolBitmapSize(); }
-    virtual wxSize GetDefaultButtonSize() const { return GetToolSize(); }
-#endif // WXWIN_COMPATIBILITY
-
     // use GetToolMargins() instead
     wxSize GetMargins() const { return GetToolMargins(); }
 

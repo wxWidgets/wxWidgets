@@ -39,12 +39,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 		pagesize( long , 1)
 */
 
-BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
-#if WXWIN_COMPATIBILITY
-  EVT_SCROLL(wxScrollBar::OnScroll)
-#endif
-END_EVENT_TABLE()
-
 
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
@@ -324,76 +318,6 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 }
 
 
-/* From the WIN32 documentation:
-In version 4.0 or later, the maximum value that a scroll bar can report
-(that is, the maximum scrolling position) depends on the page size.
-If the scroll bar has a page size greater than one, the maximum scrolling position
-is less than the maximum range value. You can use the following formula to calculate
-the maximum scrolling position:
-
-MaxScrollPos = MaxRangeValue - (PageSize - 1)
-*/
-
-#if WXWIN_COMPATIBILITY
-void wxScrollBar::SetPageSize(int pageLength)
-{
-  m_pageSize = pageLength;
-
-#if defined(__WIN95__)
-  SCROLLINFO info;
-  info.cbSize = sizeof(SCROLLINFO);
-  info.nPage = pageLength;
-  info.fMask = SIF_PAGE ;
-
-  ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
-#endif
-}
-
-void wxScrollBar::SetObjectLength(int objectLength)
-{
-  m_objectSize = objectLength;
-
-  // The range (number of scroll steps) is the
-  // object length minus the view size.
-  int range = wxMax((objectLength - m_viewSize), 0) ;
-
-#if defined(__WIN95__)
-  // Try to adjust the range to cope with page size > 1
-  // (see comment for SetPageLength)
-  if ( m_pageSize > 1 )
-  {
-    range += (m_pageSize - 1);
-  }
-
-  SCROLLINFO info;
-  info.cbSize = sizeof(SCROLLINFO);
-  info.nPage = 0;
-  info.nMin = 0;
-  info.nMax = range;
-  info.nPos = 0;
-  info.fMask = SIF_RANGE ;
-
-  ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
-#else
-  ::SetScrollRange((HWND)m_hWnd, SB_CTL, 0, range, TRUE);
-#endif
-}
-
-void wxScrollBar::SetViewLength(int viewLength)
-{
-    m_viewSize = viewLength;
-}
-
-void wxScrollBar::GetValues(int *viewStart, int *viewLength, int *objectLength,
-           int *pageLength) const
-{
-    *viewStart = ::GetScrollPos((HWND)m_hWnd, SB_CTL);
-    *viewLength = m_viewSize;
-    *objectLength = m_objectSize;
-    *pageLength = m_pageSize;
-}
-#endif
-
 WXHBRUSH wxScrollBar::OnCtlColor(WXHDC WXUNUSED(pDC), WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
             WXUINT WXUNUSED(message), WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
 {
@@ -405,20 +329,5 @@ void wxScrollBar::Command(wxCommandEvent& event)
     SetThumbPosition(event.m_commandInt);
     ProcessCommand(event);
 }
-
-#if WXWIN_COMPATIBILITY
-// Backward compatibility
-void wxScrollBar::OnScroll(wxScrollEvent& event)
-{
-    wxEventType oldEvent = event.GetEventType();
-    event.SetEventType( wxEVT_COMMAND_SCROLLBAR_UPDATED );
-    if ( !GetEventHandler()->ProcessEvent(event) )
-    {
-        event.SetEventType( oldEvent );
-        if (!GetParent()->GetEventHandler()->ProcessEvent(event))
-            event.Skip();
-    }
-}
-#endif
 
 #endif // wxUSE_SCROLLBAR

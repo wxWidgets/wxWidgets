@@ -330,16 +330,6 @@ public:
         Insert(0u, itemid, text, help, isCheckable);
     }
 
-#if WXWIN_COMPATIBILITY
-    bool Enabled(int itemid) const { return IsEnabled(itemid); }
-    bool Checked(int itemid) const { return IsChecked(itemid); }
-
-    wxMenuItem* FindItemForId(int itemId, wxMenu **itemMenu) const
-        { return FindItem(itemId, itemMenu); }
-
-    wxList& GetItems() const { return (wxList &)m_items; }
-#endif // WXWIN_COMPATIBILITY
-
 protected:
     // virtuals to override in derived classes
     // ---------------------------------------
@@ -481,18 +471,6 @@ public:
 
     // don't want menu bars to accept the focus by tabbing to them
     virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
-
-    // compatibility only: these functions are deprecated, use the new ones
-    // instead
-#if WXWIN_COMPATIBILITY
-    bool Enabled(int itemid) const { return IsEnabled(itemid); }
-    bool Checked(int itemid) const { return IsChecked(itemid); }
-
-    wxMenuItem* FindMenuItemById(int itemid) const
-        { return FindItem(itemid); }
-    wxMenuItem* FindItemForId(int itemid, wxMenu **menu = NULL) const
-        { return FindItem(itemid, menu); }
-#endif // WXWIN_COMPATIBILITY
 
 protected:
     // the list of all our menus

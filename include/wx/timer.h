@@ -90,12 +90,6 @@ public:
     // return TRUE if the timer is one shot
     bool IsOneShot() const { return m_oneShot; }
 
-#if WXWIN_COMPATIBILITY_2
-    // deprecated functions
-    int Interval() const { return GetInterval(); };
-    bool OneShot() const { return IsOneShot(); }
-#endif // WXWIN_COMPATIBILITY_2
-
 protected:
     // common part of all ctors
     void Init() { m_oneShot = FALSE; m_milli = 0; }

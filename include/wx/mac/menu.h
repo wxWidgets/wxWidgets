@@ -123,15 +123,6 @@ public:
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
 
-    // compatibility: these functions are deprecated
-#if WXWIN_COMPATIBILITY
-    void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-    wxEvtHandler *GetEventHandler() { return m_eventHandler; }
-
-    bool Enabled(int id) const { return IsEnabled(id); }
-    bool Checked(int id) const { return IsChecked(id); }
-#endif // WXWIN_COMPATIBILITY
-
     // implementation from now on
     WXHMENU Create();
     int  FindMenu(const wxString& title);
@@ -163,10 +154,6 @@ protected:
     // common part of all ctors
     void Init();
     wxWindow        *m_invokingWindow;
-
-#if WXWIN_COMPATIBILITY
-    wxEvtHandler *m_eventHandler;
-#endif // WXWIN_COMPATIBILITY
 
     wxArrayString m_titles;
 

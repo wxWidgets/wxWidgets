@@ -84,16 +84,6 @@ public:
    virtual void         Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL) ;
    WXWidget     GetMacControl() { return m_macControl ;}
 
-#if WXWIN_COMPATIBILITY
-   virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
-   wxColour* GetButtonColour() const { return NULL; }
-
-   inline virtual void SetLabelFont(const wxFont& font);
-   inline virtual void SetButtonFont(const wxFont& font);
-   inline wxFont& GetLabelFont() const;
-   inline wxFont& GetButtonFont() const;
-#endif // WXWIN_COMPATIBILITY
-
 protected:
    // For controls like radiobuttons which are really composite
    WXWidget m_macControl ;
@@ -109,13 +99,6 @@ private:
    DECLARE_EVENT_TABLE()
 };
 
-
-#if WXWIN_COMPATIBILITY
-    inline wxFont& wxControl::GetLabelFont() const { return GetFont(); }
-    inline wxFont& wxControl::GetButtonFont() const { return GetFont(); }
-    inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
-    inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
-#endif // WXWIN_COMPATIBILITY
 
 wxControl *wxFindControlFromMacControl(WXWidget inControl ) ;
 void wxAssociateControlWithMacControl(WXWidget inControl, wxControl *control) ;

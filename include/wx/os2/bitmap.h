@@ -194,19 +194,6 @@ public:
     inline bool operator!=(const wxBitmap& rBitmap) const
       { return m_refData != rBitmap.m_refData; }
 
-#if WXWIN_COMPATIBILITY_2
-    void SetOk(bool bIsOk);
-#endif // WXWIN_COMPATIBILITY_2
-
-#if WXWIN_COMPATIBILITY
-    inline wxPalette* GetColourMap() const
-      { return GetPalette(); }
-
-    inline void       SetColourMap(wxPalette* pCmap)
-      { SetPalette(*pCmap); };
-
-#endif // WXWIN_COMPATIBILITY
-
     // Implementation
 public:
     inline void SetHBITMAP(WXHBITMAP hBmp)

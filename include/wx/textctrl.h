@@ -337,11 +337,6 @@ public:
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
-    // obsolete functions
-#if WXWIN_COMPATIBILITY
-    bool Modified() const { return IsModified(); }
-#endif
-
 protected:
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default

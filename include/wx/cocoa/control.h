@@ -59,35 +59,8 @@ public:
     // Calls the callback and appropriate event handlers
     bool ProcessCommand(wxCommandEvent& event);
 
-#if WXWIN_COMPATIBILITY
-    virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
-    wxColour* GetButtonColour() const { return NULL; }
-
-    inline virtual void SetLabelFont(const wxFont& font);
-    inline virtual void SetButtonFont(const wxFont& font);
-    inline wxFont& GetLabelFont() const;
-    inline wxFont& GetButtonFont() const;
-
-   // Adds callback
-    inline void Callback(const wxFunction function);
-
-    wxFunction GetCallback() { return m_callback; }
-
-protected:
-    wxFunction       m_callback;     // Callback associated with the window
-#endif // WXWIN_COMPATIBILITY
-
 protected:
     virtual wxSize DoGetBestSize() const;
 };
-
-
-#if WXWIN_COMPATIBILITY
-    inline void wxControl::Callback(const wxFunction f) { m_callback = f; };
-    inline wxFont& wxControl::GetLabelFont() const { return GetFont(); }
-    inline wxFont& wxControl::GetButtonFont() const { return GetFont(); }
-    inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
-    inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
-#endif // WXWIN_COMPATIBILITY
 
 #endif // __WX_COCOA_CONTROL_H__

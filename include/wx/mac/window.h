@@ -115,33 +115,6 @@ public:
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
 
-#if WXWIN_COMPATIBILITY
-    // Set/get scroll attributes
-    virtual void SetScrollRange(int orient, int range, bool refresh = TRUE);
-    virtual void SetScrollPage(int orient, int page, bool refresh = TRUE);
-    virtual int OldGetScrollRange(int orient) const;
-    virtual int GetScrollPage(int orient) const;
-
-    // event handlers
-        // Handle a control command
-    virtual void OnCommand(wxWindowMac& win, wxCommandEvent& event);
-
-        // Override to define new behaviour for default action (e.g. double
-        // clicking on a listbox)
-    virtual void OnDefaultAction(wxControl * WXUNUSED(initiatingItem)) { }
-#endif // WXWIN_COMPATIBILITY
-
-#if wxUSE_CARET && WXWIN_COMPATIBILITY
-    // caret manipulation (old MSW only functions, see wxCaret class for the
-    // new API)
-    void CreateCaret(int w, int h);
-    void CreateCaret(const wxBitmap *bitmap);
-    void DestroyCaret();
-    void ShowCaret(bool show);
-    void SetCaretPos(int x, int y);
-    void GetCaretPos(int *x, int *y) const;
-#endif // wxUSE_CARET
-
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
     wxWindowMac* GetWindowChild1(wxWindowID id);
@@ -197,19 +170,8 @@ public:
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
- #if WXWIN_COMPATIBILITY
-    wxObject *GetChild(int number) const;
-    virtual void MSWDeviceToLogical(float *x, float *y) const;
-#endif // WXWIN_COMPATIBILITY
-
     // Setup background and foreground colours correctly
     virtual void SetupColours();
-
-
-#if WXWIN_COMPATIBILITY
-    void SetShowing(bool show) { (void)Show(show); }
-    bool IsUserEnabled() const { return IsEnabled(); }
-#endif // WXWIN_COMPATIBILITY
 
 public:
     static bool          MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;

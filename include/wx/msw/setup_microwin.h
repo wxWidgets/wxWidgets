@@ -28,24 +28,6 @@
 // compatibility settings
 // ----------------------------------------------------------------------------
 
-// This setting determines the compatibility with 1.68 API:
-// Level 0: no backward compatibility, all new features
-// Level 1: some extra methods are defined for compatibility.
-//
-// Default is 0.
-//
-// Recommended setting: 0 (in fact the compatibility code is now very minimal
-// so there is little advantage to setting it to 1.
-#define WXWIN_COMPATIBILITY  0
-
-// This setting determines the compatibility with 2.0 API: set it to 1 to
-// enable it
-//
-// Default is 0.
-//
-// Recommended setting: 0 (please update your code instead!)
-#define WXWIN_COMPATIBILITY_2 0
-
 // This setting determines the compatibility with 2.0 API: set it to 1 to
 // enable it
 //

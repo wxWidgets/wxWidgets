@@ -65,16 +65,6 @@ public:
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-#if WXWIN_COMPATIBILITY
-    virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
-    wxColour* GetButtonColour() const { return NULL; }
-
-    virtual void SetLabelFont(const wxFont& font);
-    virtual void SetButtonFont(const wxFont& font);
-    wxFont& GetLabelFont() const;
-    wxFont& GetButtonFont() const;
-#endif // WXWIN_COMPATIBILITY
-
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
@@ -122,14 +112,6 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
     DECLARE_EVENT_TABLE()
 };
-
-
-#if WXWIN_COMPATIBILITY
-    inline wxFont& wxControl::GetLabelFont() const { return (wxFont &)GetFont(); }
-    inline wxFont& wxControl::GetButtonFont() const { return (wxFont &)GetFont(); }
-    inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
-    inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
-#endif // WXWIN_COMPATIBILITY
 
 #endif
     // _WX_CONTROL_H_

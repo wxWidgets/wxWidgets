@@ -62,13 +62,6 @@ public:
         SetBitmapLabel(rBitmap);
     }
 
-#if WXWIN_COMPATIBILITY
-    wxBitmap* GetBitmap(void) const
-    {
-        return (wxBitmap *)&m_buttonBitmap;
-    }
-#endif
-
     //
     // Implementation
     //

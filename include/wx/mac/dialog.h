@@ -79,10 +79,6 @@ public:
     // returns TRUE if we're in a modal loop
     bool IsModalShowing() const;
 
-#if WXWIN_COMPATIBILITY
-    bool Iconized() const { return IsIconized(); };
-#endif
-
     // implementation
     // --------------
 

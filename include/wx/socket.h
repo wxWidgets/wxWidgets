@@ -95,11 +95,6 @@ enum wxSocketType
 typedef int wxSocketFlags;
 
 
-#if WXWIN_COMPATIBILITY
-  typedef wxSocketType wxSockType;
-  typedef wxSocketFlags wxSockFlags;
-#endif // WXWIN_COMPATIBILITY
-
 
 // --------------------------------------------------------------------------
 // wxSocketBase
@@ -108,29 +103,6 @@ typedef int wxSocketFlags;
 class WXDLLIMPEXP_NET wxSocketBase : public wxObject
 {
   DECLARE_CLASS(wxSocketBase)
-
-public:
-
-#if WXWIN_COMPATIBILITY
-  enum
-  {
-    NONE = wxSOCKET_NONE,
-    NOWAIT = wxSOCKET_NOWAIT,
-    WAITALL = wxSOCKET_WAITALL,
-    SPEED = wxSOCKET_BLOCK
-  };
-
-  enum
-  {
-    SOCK_UNINIT = wxSOCKET_UNINIT,
-    SOCK_CLIENT = wxSOCKET_CLIENT,
-    SOCK_SERVER = wxSOCKET_SERVER,
-    SOCK_INTERNAL = wxSOCKET_BASE,
-    SOCK_DATAGRAM = wxSOCKET_DATAGRAM
-  };
-
-  typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
-#endif // WXWIN_COMPATIBILITY
 
 public:
 
@@ -191,12 +163,6 @@ public:
   static bool Initialize();
   static void Shutdown();
 
-  // callbacks are deprecated, use events instead
-#if WXWIN_COMPATIBILITY
-  wxSockCbk Callback(wxSockCbk cbk_);
-  char *CallbackData(char *data);
-#endif // WXWIN_COMPATIBILITY
-
 
   // Implementation from now on
   // --------------------------
@@ -255,12 +221,6 @@ private:
 
   // the initialization count, GSocket is initialized if > 0
   static size_t m_countInit;
-
-  // callbacks are deprecated, use events instead
-#if WXWIN_COMPATIBILITY
-  wxSockCbk     m_cbk;              // callback
-  char         *m_cdata;            // callback data
-#endif // WXWIN_COMPATIBILITY
 
     DECLARE_NO_COPY_CLASS(wxSocketBase)
 };
@@ -348,12 +308,6 @@ public:
   wxSocketNotify  GetSocketEvent() const { return m_event; }
   wxSocketBase   *GetSocket() const      { return (wxSocketBase *) GetEventObject(); }
   void           *GetClientData() const  { return m_clientData; }
-
-  // backwards compatibility
-#if WXWIN_COMPATIBILITY_2
-  wxSocketNotify  SocketEvent() const    { return m_event; }
-  wxSocketBase   *Socket() const         { return (wxSocketBase *) GetEventObject(); }
-#endif // WXWIN_COMPATIBILITY_2
 
   virtual wxEvent *Clone() const { return new wxSocketEvent(*this); }
 

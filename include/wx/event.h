@@ -292,50 +292,6 @@ END_DECLARE_EVENT_TYPES()
     extern const wxEventType WXDLLIMPEXP_CORE wxEVT_COMMAND_TEXT_UPDATED;
 #endif
 
-#if WXWIN_COMPATIBILITY
-
-#define wxEVENT_TYPE_BUTTON_COMMAND             wxEVT_COMMAND_BUTTON_CLICKED
-#define wxEVENT_TYPE_CHECKBOX_COMMAND           wxEVT_COMMAND_CHECKBOX_CLICKED
-#define wxEVENT_TYPE_CHOICE_COMMAND             wxEVT_COMMAND_CHOICE_SELECTED
-#define wxEVENT_TYPE_LISTBOX_COMMAND            wxEVT_COMMAND_LISTBOX_SELECTED
-#define wxEVENT_TYPE_LISTBOX_DCLICK_COMMAND     wxEVT_COMMAND_LISTBOX_DOUBLECLICKED
-#define wxEVENT_TYPE_TEXT_COMMAND               wxEVT_COMMAND_TEXT_UPDATED
-#define wxEVENT_TYPE_MULTITEXT_COMMAND          wxEVT_COMMAND_TEXT_UPDATED
-#define wxEVENT_TYPE_MENU_COMMAND               wxEVT_COMMAND_MENU_SELECTED
-#define wxEVENT_TYPE_SLIDER_COMMAND             wxEVT_COMMAND_SLIDER_UPDATED
-#define wxEVENT_TYPE_RADIOBOX_COMMAND           wxEVT_COMMAND_RADIOBOX_SELECTED
-#define wxEVENT_TYPE_RADIOBUTTON_COMMAND        wxEVT_COMMAND_RADIOBUTTON_SELECTED
-#define wxEVENT_TYPE_TEXT_ENTER_COMMAND         wxEVT_COMMAND_TEXT_ENTER
-#define wxEVENT_TYPE_SET_FOCUS                  wxEVT_SET_FOCUS
-#define wxEVENT_TYPE_KILL_FOCUS                 wxEVT_KILL_FOCUS
-#define wxEVENT_TYPE_SCROLLBAR_COMMAND          wxEVT_COMMAND_SCROLLBAR_UPDATED
-#define wxEVENT_TYPE_VIRT_LISTBOX_COMMAND       wxEVT_COMMAND_VLBOX_SELECTED
-#define wxEVENT_TYPE_COMBOBOX_COMMAND           wxEVT_COMMAND_COMBOBOX_SELECTED
-
-#define wxEVENT_TYPE_LEFT_DOWN                  wxEVT_LEFT_DOWN
-#define wxEVENT_TYPE_LEFT_UP                    wxEVT_LEFT_UP
-#define wxEVENT_TYPE_MIDDLE_DOWN                wxEVT_MIDDLE_DOWN
-#define wxEVENT_TYPE_MIDDLE_UP                  wxEVT_MIDDLE_UP
-#define wxEVENT_TYPE_RIGHT_DOWN                 wxEVT_RIGHT_DOWN
-#define wxEVENT_TYPE_RIGHT_UP                   wxEVT_RIGHT_UP
-#define wxEVENT_TYPE_MOTION                     wxEVT_MOTION
-#define wxEVENT_TYPE_ENTER_WINDOW               wxEVT_ENTER_WINDOW
-#define wxEVENT_TYPE_LEAVE_WINDOW               wxEVT_LEAVE_WINDOW
-#define wxEVENT_TYPE_LEFT_DCLICK                wxEVT_LEFT_DCLICK
-#define wxEVENT_TYPE_MIDDLE_DCLICK              wxEVT_MIDDLE_DCLICK
-#define wxEVENT_TYPE_RIGHT_DCLICK               wxEVT_RIGHT_DCLICK
-#define wxEVENT_TYPE_CHAR                       wxEVT_CHAR
-#define wxEVENT_TYPE_SCROLL_TOP                 wxEVT_SCROLL_TOP
-#define wxEVENT_TYPE_SCROLL_BOTTOM              wxEVT_SCROLL_BOTTOM
-#define wxEVENT_TYPE_SCROLL_LINEUP              wxEVT_SCROLL_LINEUP
-#define wxEVENT_TYPE_SCROLL_LINEDOWN            wxEVT_SCROLL_LINEDOWN
-#define wxEVENT_TYPE_SCROLL_PAGEUP              wxEVT_SCROLL_PAGEUP
-#define wxEVENT_TYPE_SCROLL_PAGEDOWN            wxEVT_SCROLL_PAGEDOWN
-#define wxEVENT_TYPE_SCROLL_THUMBTRACK          wxEVT_SCROLL_THUMBTRACK
-#define wxEVENT_TYPE_SCROLL_ENDSCROLL           wxEVT_SCROLL_ENDSCROLL
-
-#endif // WXWIN_COMPATIBILITY
-
 // the predefined constants for the number of times we propagate event
 // upwards window child-parent chain
 enum Propagation_state
@@ -553,10 +509,6 @@ public:
     long GetInt() const { return m_commandInt; }
 
     virtual wxEvent *Clone() const { return new wxCommandEvent(*this); }
-
-#if WXWIN_COMPATIBILITY_2
-    bool Checked() const { return IsChecked(); }
-#endif // WXWIN_COMPATIBILITY_2
 
 public:
     wxString          m_commandString; // String event argument
@@ -800,22 +752,6 @@ public:
 
     // Find the logical position of the event given the DC
     wxPoint GetLogicalPosition(const wxDC& dc) const;
-
-    // Compatibility
-#if WXWIN_COMPATIBILITY
-    void Position(long *xpos, long *ypos) const
-    {
-        if (xpos)
-            *xpos = (long)m_x;
-        if (ypos)
-            *ypos = (long)m_y;
-    }
-
-    void Position(float *xpos, float *ypos) const
-    {
-        *xpos = (float) m_x; *ypos = (float) m_y;
-    }
-#endif // WXWIN_COMPATIBILITY
 
     // Get X position
     wxCoord GetX() const { return m_x; }
@@ -1312,22 +1248,13 @@ public:
         : wxEvent(winid, type),
           m_loggingOff(TRUE),
           m_veto(FALSE),      // should be FALSE by default
-          m_canVeto(TRUE)
-    {
-#if WXWIN_COMPATIBILITY
-        m_force = FALSE;
-#endif // WXWIN_COMPATIBILITY
-    }
+          m_canVeto(TRUE) {}
+
     wxCloseEvent(const wxCloseEvent & event)
         : wxEvent(event),
         m_loggingOff(event.m_loggingOff),
         m_veto(event.m_veto),
-        m_canVeto(event.m_canVeto)
-    {
-#if WXWIN_COMPATIBILITY
-        m_force = event.m_force;
-#endif // WXWIN_COMPATIBILITY
-    }
+        m_canVeto(event.m_canVeto) {}
 
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
@@ -1345,23 +1272,11 @@ public:
     bool CanVeto() const { return m_canVeto; }
     bool GetVeto() const { return m_canVeto && m_veto; }
 
-#if WXWIN_COMPATIBILITY
-    // This is probably obsolete now, since we use CanVeto instead, in
-    // both OnCloseWindow and OnQueryEndSession.
-    // m_force == ! m_canVeto i.e., can't veto means we must force it to close.
-    void SetForce(bool force) { m_force = force; }
-    bool GetForce() const { return m_force; }
-#endif
-
     virtual wxEvent *Clone() const { return new wxCloseEvent(*this); }
 
 protected:
     bool m_loggingOff;
     bool m_veto, m_canVeto;
-
-#if WXWIN_COMPATIBILITY
-    bool m_force;
-#endif
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCloseEvent)
@@ -2297,24 +2212,6 @@ public:
       m_eventsLocker = NULL;
 #endif
    };
-#endif
-
-    // old stuff
-
-#if WXWIN_COMPATIBILITY_2
-    virtual void OnCommand(wxWindow& WXUNUSED(win),
-                           wxCommandEvent& WXUNUSED(event))
-    {
-        wxFAIL_MSG(wxT("shouldn't be called any more"));
-    }
-
-    // Called if child control has no callback function
-    virtual long Default()
-        { return GetNextHandler() ? GetNextHandler()->Default() : 0; };
-#endif // WXWIN_COMPATIBILITY_2
-
-#if WXWIN_COMPATIBILITY
-    virtual bool OnClose();
 #endif
 
 private:

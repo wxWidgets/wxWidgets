@@ -119,28 +119,6 @@ wxString wxGetSingleChoice( const wxString& message,
     return res;
 }
 
-#if WXWIN_COMPATIBILITY_2
-// Overloaded for backward compatibility
-wxString wxGetSingleChoice( const wxString& message,
-                            const wxString& caption,
-                            int n, wxChar *choices[],
-                            wxWindow *parent,
-                            int x, int y, bool centre,
-                            int width, int height )
-{
-    wxString *strings = new wxString[n];
-    int i;
-    for ( i = 0; i < n; i++)
-    {
-        strings[i] = choices[i];
-    }
-    wxString ans(wxGetSingleChoice(message, caption, n, (const wxString *)strings, parent,
-        x, y, centre, width, height));
-    delete[] strings;
-    return ans;
-}
-#endif // WXWIN_COMPATIBILITY_2
-
 int wxGetSingleChoiceIndex( const wxString& message,
                             const wxString& caption,
                             int n, const wxString *choices,
@@ -175,25 +153,6 @@ int wxGetSingleChoiceIndex( const wxString& message,
 
     return res;
 }
-
-#if WXWIN_COMPATIBILITY_2
-// Overloaded for backward compatibility
-int wxGetSingleChoiceIndex( const wxString& message,
-                            const wxString& caption,
-                            int n, wxChar *choices[],
-                            wxWindow *parent,
-                            int x, int y, bool centre,
-                            int width, int height )
-{
-    wxString *strings = new wxString[n];
-    for ( int i = 0; i < n; i++)
-        strings[i] = choices[i];
-    int ans = wxGetSingleChoiceIndex(message, caption, n, (const wxString *)strings, parent,
-        x, y, centre, width, height);
-    delete[] strings;
-    return ans;
-}
-#endif // WXWIN_COMPATIBILITY_2
 
 void *wxGetSingleChoiceData( const wxString& message,
                              const wxString& caption,
@@ -233,30 +192,6 @@ void *wxGetSingleChoiceData( const wxString& message,
 
     return res;
 }
-
-#if WXWIN_COMPATIBILITY_2
-// Overloaded for backward compatibility
-void *wxGetSingleChoiceData( const wxString& message,
-                             const wxString& caption,
-                             int n, wxChar *choices[],
-                             void **client_data,
-                             wxWindow *parent,
-                             int x, int y, bool centre, int width, int height )
-{
-    wxString *strings = new wxString[n];
-    int i;
-    for ( i = 0; i < n; i++)
-    {
-        strings[i] = choices[i];
-    }
-    void *data = wxGetSingleChoiceData(message, caption,
-                                       n, (const wxString *)strings,
-                                       client_data, parent,
-                                       x, y, centre, width, height);
-    delete[] strings;
-    return data;
-}
-#endif // WXWIN_COMPATIBILITY_2
 
 size_t wxGetMultipleChoices(wxArrayInt& selections,
                             const wxString& message,
@@ -372,40 +307,6 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
 {
     Create(parent, message, caption, n, choices, clientData, style);
 }
-
-#if WXWIN_COMPATIBILITY_2
-
-wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
-                                           const wxString& message,
-                                           const wxString& caption,
-                                           const wxStringList& choices,
-                                           char **clientData,
-                                           long style,
-                                           const wxPoint& WXUNUSED(pos))
-{
-    Create(parent, message, caption, choices, clientData, style);
-}
-
-bool wxSingleChoiceDialog::Create(wxWindow *parent,
-                                  const wxString& message,
-                                  const wxString& caption,
-                                  const wxStringList& choices,
-                                  char **clientData,
-                                  long style,
-                                  const wxPoint& pos)
-{
-    wxString *strings = new wxString[choices.Number()];
-    int i;
-    for ( i = 0; i < choices.Number(); i++)
-    {
-        strings[i] = (char *)choices.Nth(i)->Data();
-    }
-    bool ans = Create(parent, message, caption, choices.Number(), strings, clientData, style, pos);
-    delete[] strings;
-    return ans;
-}
-
-#endif // WXWIN_COMPATIBILITY_2
 
 bool wxSingleChoiceDialog::Create( wxWindow *parent,
                                    const wxString& message,

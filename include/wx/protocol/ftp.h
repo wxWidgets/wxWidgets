@@ -120,11 +120,6 @@ public:
                  const wxString& wildcard = wxEmptyString,
                  bool details = FALSE);
 
-#if WXWIN_COMPATIBILITY_2
-    // deprecated
-    wxList *GetList(const wxString& wildcard, bool details = FALSE);
-#endif // WXWIN_COMPATIBILITY_2
-
 protected:
     // this executes a simple ftp command with the given argument and returns
     // TRUE if it its return code starts with '2'

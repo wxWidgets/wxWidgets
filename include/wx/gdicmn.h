@@ -275,11 +275,6 @@ public:
     wxPoint& operator-=(const wxPoint& p) { x -= p.x; y -= p.y; return *this; }
 };
 
-#if WXWIN_COMPATIBILITY
-    #define wxIntPoint wxPoint
-    #define wxRectangle wxRect
-#endif // WXWIN_COMPATIBILITY
-
 // ---------------------------------------------------------------------------
 // wxRect
 // ---------------------------------------------------------------------------

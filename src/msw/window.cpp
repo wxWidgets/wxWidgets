@@ -728,12 +728,6 @@ void wxWindowMSW::WarpPointer (int x, int y)
     }
 }
 
-#if WXWIN_COMPATIBILITY
-void wxWindowMSW::MSWDeviceToLogical (float *x, float *y) const
-{
-}
-#endif // WXWIN_COMPATIBILITY
-
 // ---------------------------------------------------------------------------
 // scrolling stuff
 // ---------------------------------------------------------------------------
@@ -743,48 +737,6 @@ static inline int wxDirToWinStyle(int orient)
 {
     return orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
 }
-
-#if WXWIN_COMPATIBILITY
-void wxWindowMSW::SetScrollRange(int orient, int range, bool refresh)
-{
-    int range1 = range;
-
-    // Try to adjust the range to cope with page size > 1
-    // - a Windows API quirk
-    int pageSize = GetScrollPage(orient);
-    if ( pageSize > 1 && range > 0)
-    {
-        range1 += (pageSize - 1);
-    }
-
-    WinStruct<SCROLLINFO> info;
-    info.nPage = pageSize; // Have to set this, or scrollbar goes awry
-    info.nMin = 0;
-    info.nMax = range1;
-    info.fMask = SIF_RANGE | SIF_PAGE;
-
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::SetScrollInfo(hWnd, wxDirToWinStyle(orient), &info, refresh);
-}
-
-void wxWindowMSW::SetScrollPage(int orient, int page, bool refresh)
-{
-    WinStruct<SCROLLINFO> info;
-    info.nPage = page;
-    info.fMask = SIF_PAGE;
-
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::SetScrollInfo(hWnd, wxDirToWinStyle(orient), &info, refresh);
-}
-
-int wxWindowMSW::GetScrollPage(int orient) const
-{
-    return orient == wxHORIZONTAL ? m_xThumbSize : m_yThumbSize;
-}
-
-#endif // WXWIN_COMPATIBILITY
 
 inline int GetScrollPosition(HWND hWnd, int wOrient)
 {
@@ -1191,37 +1143,6 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
     return style;
 }
-
-#if WXWIN_COMPATIBILITY
-// If nothing defined for this, try the parent.
-// E.g. we may be a button loaded from a resource, with no callback function
-// defined.
-void wxWindowMSW::OnCommand(wxWindow& win, wxCommandEvent& event)
-{
-    if ( GetEventHandler()->ProcessEvent(event)  )
-        return;
-    if ( m_parent )
-        m_parent->GetEventHandler()->OnCommand(win, event);
-}
-#endif // WXWIN_COMPATIBILITY_2
-
-#if WXWIN_COMPATIBILITY
-wxObject* wxWindowMSW::GetChild(int number) const
-{
-    // Return a pointer to the Nth object in the Panel
-    wxNode *node = GetChildren().First();
-    int n = number;
-    while (node && n--)
-        node = node->Next();
-    if ( node )
-    {
-        wxObject *obj = (wxObject *)node->Data();
-        return(obj);
-    }
-    else
-        return NULL;
-}
-#endif // WXWIN_COMPATIBILITY
 
 // Setup background and foreground colours correctly
 void wxWindowMSW::SetupColours()
@@ -1713,48 +1634,6 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
     if ( externalLeading )
         *externalLeading = tm.tmExternalLeading;
 }
-
-#if wxUSE_CARET && WXWIN_COMPATIBILITY
-// ---------------------------------------------------------------------------
-// Caret manipulation
-// ---------------------------------------------------------------------------
-
-void wxWindowMSW::CreateCaret(int w, int h)
-{
-    SetCaret(new wxCaret(this, w, h));
-}
-
-void wxWindowMSW::CreateCaret(const wxBitmap *WXUNUSED(bitmap))
-{
-    wxFAIL_MSG("not implemented");
-}
-
-void wxWindowMSW::ShowCaret(bool show)
-{
-    wxCHECK_RET( m_caret, "no caret to show" );
-
-    m_caret->Show(show);
-}
-
-void wxWindowMSW::DestroyCaret()
-{
-    SetCaret(NULL);
-}
-
-void wxWindowMSW::SetCaretPos(int x, int y)
-{
-    wxCHECK_RET( m_caret, "no caret to move" );
-
-    m_caret->Move(x, y);
-}
-
-void wxWindowMSW::GetCaretPos(int *x, int *y) const
-{
-    wxCHECK_RET( m_caret, "no caret to get position of" );
-
-    m_caret->GetPosition(x, y);
-}
-#endif // wxUSE_CARET
 
 // ---------------------------------------------------------------------------
 // popup menu

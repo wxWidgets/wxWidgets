@@ -63,11 +63,6 @@ class WXDLLIMPEXP_BASE wxPoint;
 WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 #endif
 
-#if WXWIN_COMPATIBILITY_2
-// Matches string one within string two regardless of case
-WXDLLIMPEXP_BASE bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
-#endif
-
 // A shorter way of using strcmp
 #define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
 
@@ -106,15 +101,9 @@ WXDLLEXPORT bool wxSetDetectableAutoRepeat( bool flag );
 
 // Generate a unique ID
 WXDLLEXPORT long wxNewId();
-#if !defined(NewId) && defined(WXWIN_COMPATIBILITY)
-    #define NewId wxNewId
-#endif
 
 // Ensure subsequent IDs don't clash with this one
 WXDLLEXPORT void wxRegisterId(long id);
-#if !defined(RegisterId) && defined(WXWIN_COMPATIBILITY)
-    #define RegisterId wxRegisterId
-#endif
 
 // Return the current ID
 WXDLLEXPORT long wxGetCurrentId();

@@ -787,10 +787,6 @@
  */
 #define wxUSE_APPLE_IEEE 0
 /*
- * Compatibility with 2.0 API.
- */
-#define WXWIN_COMPATIBILITY_2 0
-/*
  * Compatibility with 2.2 API
  */
 #define WXWIN_COMPATIBILITY_2_2 0

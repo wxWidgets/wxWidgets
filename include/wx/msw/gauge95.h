@@ -63,11 +63,6 @@ public:
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
 
-    // Backward compatibility
-#if WXWIN_COMPATIBILITY
-    void SetButtonColour(const wxColour& col) { SetForegroundColour(col); }
-#endif
-
     virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 
 protected:

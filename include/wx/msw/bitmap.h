@@ -162,17 +162,6 @@ public:
     wxDEPRECATED( void SetQuality(int quality) );
 #endif // WXWIN_COMPATIBILITY_2_4
 
-#if WXWIN_COMPATIBILITY_2
-    void SetOk(bool isOk);
-#endif // WXWIN_COMPATIBILITY_2
-
-#if WXWIN_COMPATIBILITY
-#if wxUSE_PALETTE
-    wxPalette *GetColourMap() const { return GetPalette(); }
-    void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
-#endif // wxUSE_PALETTE
-#endif // WXWIN_COMPATIBILITY
-
     // implementation only from now on
     // -------------------------------
 

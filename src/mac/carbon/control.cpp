@@ -147,9 +147,6 @@ wxControl::wxControl()
     m_macVerticalBorder = 0 ;
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
-#if WXWIN_COMPATIBILITY
-  m_callback = 0;
-#endif // WXWIN_COMPATIBILITY
 
     if ( wxMacLiveScrollbarActionUPP == NULL )
     {
@@ -265,22 +262,10 @@ wxSize wxControl::DoGetBestSize() const
 
 bool wxControl::ProcessCommand (wxCommandEvent & event)
 {
-  // Tries:
-  // 1) A callback function (to become obsolete)
-  // 2) OnCommand, starting at this window and working up parent hierarchy
-  // 3) OnCommand then calls ProcessEvent to search the event tables.
-#if WXWIN_COMPATIBILITY
-    if ( m_callback )
-    {
-        (void)(*m_callback)(this, event);
-
-        return TRUE;
-    }
-    else
-#endif // WXWIN_COMPATIBILITY
-    {
-      return GetEventHandler()->ProcessEvent(event);
-    }
+    // Tries:
+    // 1) OnCommand, starting at this window and working up parent hierarchy
+    // 2) OnCommand then calls ProcessEvent to search the event tables.
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 // ------------------------

@@ -81,16 +81,6 @@ public:
                                 ,WXLPARAM lParam
                                );
 
-#if WXWIN_COMPATIBILITY
-    virtual void SetButtonColour(const wxColour& WXUNUSED(rCol)) { }
-    wxColour*    GetButtonColour(void) const { return NULL; }
-
-    inline virtual void SetLabelFont(const wxFont& rFont);
-    inline virtual void SetButtonFont(const wxFont& rFont);
-    inline wxFont&      GetLabelFont(void) const;
-    inline wxFont&      GetButtonFont(void) const;
-#endif // WXWIN_COMPATIBILITY
-
 public:
     //
     // For controls like radiobuttons which are really composite
@@ -137,13 +127,6 @@ private:
     int                             m_nYComp;
    DECLARE_EVENT_TABLE()
 }; // end of wxControl
-
-#if WXWIN_COMPATIBILITY
-    inline wxFont& wxControl::GetLabelFont(void) const { return GetFont(); }
-    inline wxFont& wxControl::GetButtonFont(void) const { return GetFont(); }
-    inline void wxControl::SetLabelFont(const wxFont& rFont) { SetFont(rFont); }
-    inline void wxControl::SetButtonFont(const wxFont& rFont) { SetFont(rFont); }
-#endif // WXWIN_COMPATIBILITY
 
 #endif // _WX_CONTROL_H_
 

@@ -42,10 +42,6 @@ public:
         m_width = m_height = m_depth = 0;
 
         m_handle = 0;
-
-#if WXWIN_COMPATIBILITY_2
-        m_ok = FALSE;
-#endif // WXWIN_COMPATIBILITY_2
     }
 
     // accessors
@@ -72,14 +68,6 @@ public:
         WXHICON   m_hIcon;
         WXHCURSOR m_hCursor;
     };
-
-    // this filed is redundant and using it is error prone but keep it for
-    // backwards compatibility
-#if WXWIN_COMPATIBILITY_2
-    void SetOk() { m_ok = m_handle != 0; }
-
-    bool          m_ok;
-#endif // WXWIN_COMPATIBILITY_2
 };
 
 // ----------------------------------------------------------------------------

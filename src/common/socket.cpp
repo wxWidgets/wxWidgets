@@ -94,10 +94,6 @@ public:
   wxSocketEventFlags       m_eventmask;
   bool                     m_notify;
   void                    *m_clientData;
-#if WXWIN_COMPATIBILITY
-  wxSocketBase::wxSockCbk  m_cbk;
-  char                    *m_cdata;
-#endif // WXWIN_COMPATIBILITY
 
 public:
   wxSocketState() : wxObject() {}
@@ -184,10 +180,6 @@ void wxSocketBase::Init()
   m_clientData   = NULL;
   m_notify       = FALSE;
   m_eventmask    = 0;
-#if WXWIN_COMPATIBILITY
-  m_cbk          = NULL;
-  m_cdata        = NULL;
-#endif // WXWIN_COMPATIBILITY
 
   if ( !IsInitialized() )
   {
@@ -824,10 +816,6 @@ void wxSocketBase::SaveState()
   state->m_notify     = m_notify;
   state->m_eventmask  = m_eventmask;
   state->m_clientData = m_clientData;
-#if WXWIN_COMPATIBILITY
-  state->m_cbk        = m_cbk;
-  state->m_cdata      = m_cdata;
-#endif // WXWIN_COMPATIBILITY
 
   m_states.Append(state);
 }
@@ -847,11 +835,7 @@ void wxSocketBase::RestoreState()
   m_notify     = state->m_notify;
   m_eventmask  = state->m_eventmask;
   m_clientData = state->m_clientData;
-#if WXWIN_COMPATIBILITY
-  m_cbk        = state->m_cbk;
-  m_cdata      = state->m_cdata;
-#endif // WXWIN_COMPATIBILITY
-
+  
   m_states.Erase(node);
   delete state;
 }
@@ -873,30 +857,6 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
   m_flags = flags;
 }
 
-
-// --------------------------------------------------------------------------
-// Callbacks (now obsolete - use events instead)
-// --------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY
-
-wxSocketBase::wxSockCbk wxSocketBase::Callback(wxSockCbk cbk_)
-{
-  wxSockCbk old_cbk = cbk_;
-
-  m_cbk = cbk_;
-  return old_cbk;
-}
-
-char *wxSocketBase::CallbackData(char *data)
-{
-  char *old_data = m_cdata;
-
-  m_cdata = data;
-  return old_data;
-}
-
-#endif // WXWIN_COMPATIBILITY
 
 // --------------------------------------------------------------------------
 // Event handling
@@ -992,11 +952,6 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 
       m_handler->AddPendingEvent(event);
     }
-
-#if WXWIN_COMPATIBILITY
-    if (m_cbk)
-      m_cbk(*this, notification, m_cdata);
-#endif // WXWIN_COMPATIBILITY
   }
 }
 

@@ -1303,24 +1303,6 @@ wxGenericScrolledWindow::MSWWindowProc(WXUINT nMsg,
 
 #endif // __WXMSW__
 
-#if WXWIN_COMPATIBILITY
-
-void wxGenericScrolledWindow::GetScrollUnitsPerPage (int *x_page, int *y_page) const
-{
-      *x_page = GetScrollPageSize(wxHORIZONTAL);
-      *y_page = GetScrollPageSize(wxVERTICAL);
-}
-
-void wxGenericScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
-{
-    if ( xx )
-        *xx = (float)(x + m_xScrollPosition * m_xScrollPixelsPerLine);
-    if ( yy )
-        *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);
-}
-
-#endif // WXWIN_COMPATIBILITY
-
 #endif // !wxGTK
 
 // vi:sts=4:sw=4:et

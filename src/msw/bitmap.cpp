@@ -260,10 +260,6 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     // delete the old one now as we don't need it any more
     ::DeleteObject(iconInfo.hbmMask);
 
-#if WXWIN_COMPATIBILITY_2
-    refData->m_ok = TRUE;
-#endif // WXWIN_COMPATIBILITY_2
-
     return TRUE;
 #else
     return FALSE;
@@ -321,10 +317,6 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     refData->m_depth = wxDisplayDepth();
 
     refData->m_hBitmap = (WXHBITMAP)hbitmap;
-
-#if WXWIN_COMPATIBILITY_2
-    refData->m_ok = TRUE;
-#endif // WXWIN_COMPATIBILITY_2
 
     return TRUE;
 #else // Win32
@@ -558,10 +550,6 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
     SetHBITMAP((WXHBITMAP)hbmp);
 
-#if WXWIN_COMPATIBILITY_2
-    GetBitmapData()->m_ok = hbmp != 0;
-#endif // WXWIN_COMPATIBILITY_2
-
     return Ok();
 }
 
@@ -685,11 +673,6 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
     // Copy the palette from the source image
     SetPalette(image.GetPalette());
 #endif // wxUSE_PALETTE
-
-#if WXWIN_COMPATIBILITY_2
-    // check the wxBitmap object
-    GetBitmapData()->SetOk();
-#endif // WXWIN_COMPATIBILITY_2
 
     return TRUE;
 }
@@ -824,10 +807,6 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
 
     // validate this object
     SetHBITMAP((WXHBITMAP)hbitmap);
-
-#if WXWIN_COMPATIBILITY_2
-    m_refData->m_ok = TRUE;
-#endif // WXWIN_COMPATIBILITY_2
 
     // finally also set the mask if we have one
     if ( image.HasMask() )
@@ -1396,17 +1375,6 @@ void wxBitmap::SetMask(wxMask *mask)
 
     GetBitmapData()->SetMask(mask);
 }
-
-#if WXWIN_COMPATIBILITY_2
-
-void wxBitmap::SetOk(bool isOk)
-{
-    EnsureHasData();
-
-    GetBitmapData()->m_ok = isOk;
-}
-
-#endif // WXWIN_COMPATIBILITY_2
 
 #if WXWIN_COMPATIBILITY_2_4
 

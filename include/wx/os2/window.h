@@ -152,47 +152,6 @@ public:
     // Accept files for dragging
     virtual void DragAcceptFiles(bool bAccept);
 
-#if WXWIN_COMPATIBILITY
-    // Set/get scroll attributes
-    virtual void SetScrollRange( int  nOrient
-                                ,int  nRange
-                                ,bool bRefresh = TRUE
-                               );
-    virtual void SetScrollPage( int  nOrient
-                               ,int  nPage
-                               ,bool bRefresh = TRUE
-                              );
-    virtual int  OldGetScrollRange(int nOrient) const;
-    virtual int  GetScrollPage(int nOrient) const;
-
-    //
-    // event handlers
-    //
-        // Handle a control command
-    virtual void OnCommand( wxWindow&       rWin
-                           ,wxCommandEvent& rEvent
-                          );
-
-        // Override to define new behaviour for default action (e.g. double
-        // clicking on a listbox)
-    virtual void OnDefaultAction(wxControl* WXUNUSED(pInitiatingItem)) { }
-#endif // WXWIN_COMPATIBILITY
-
-#if wxUSE_CARET && WXWIN_COMPATIBILITY
-    void CreateCaret( int nWidth
-                     ,int nHeight
-                    );
-    void CreateCaret(const wxBitmap* pBitmap);
-    void DestroyCaret(void);
-    void ShowCaret(bool bShow);
-    void SetCaretPos( int nX
-                     ,int nY
-                    );
-    void GetCaretPos( int* pX
-                     ,int* pY
-                    ) const;
-#endif // wxUSE_CARET
-
 #ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/os2/nativdlg.cpp)
     // FIXME: should they really be all virtual?
@@ -292,13 +251,6 @@ public:
     virtual bool OS2Command( WXUINT uParam
                             ,WXWORD nId
                            );
-
-#if WXWIN_COMPATIBILITY
-    wxObject*    GetChild(int nNumber) const;
-    virtual void OS2DeviceToLogical( float* pfX
-                                    ,float* pfY
-                                   ) const;
-#endif // WXWIN_COMPATIBILITY
 
 #ifndef __WXUNIVERSAL__
     // Create an appropriate wxWindow from a HWND
@@ -468,11 +420,6 @@ public:
                                 ,WXWPARAM wParam
                                 ,WXLPARAM lParam
                                );
-
-#if WXWIN_COMPATIBILITY
-    void SetShowing(bool bShow) { (void)Show(show); }
-    bool IsUserEnabled(void) const { return IsEnabled(); }
-#endif // WXWIN_COMPATIBILITY
 
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& rEvent);

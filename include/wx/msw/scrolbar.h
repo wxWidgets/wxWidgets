@@ -48,37 +48,17 @@ public:
     virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
             bool refresh = TRUE);
 
-#if WXWIN_COMPATIBILITY
-    // Backward compatibility
-    int GetValue() const { return GetThumbPosition(); }
-    void SetValue(int viewStart) { SetThumbPosition(viewStart); }
-    void GetValues(int *viewStart, int *viewLength, int *objectLength,
-            int *pageLength) const ;
-    int GetViewLength() const { return m_viewSize; }
-    int GetObjectLength() const { return m_objectSize; }
-
-    void SetPageSize(int pageLength);
-    void SetObjectLength(int objectLength);
-    void SetViewLength(int viewLength);
-#endif
-
     void Command(wxCommandEvent& event);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 
-#if WXWIN_COMPATIBILITY
-    // Backward compatibility: generate an old-style scroll command
-    void OnScroll(wxScrollEvent& event);
-#endif // WXWIN_COMPATIBILITY
-
 protected:
     int m_pageSize;
     int m_viewSize;
     int m_objectSize;
 
-    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrollBar)
 };
 

@@ -113,11 +113,6 @@ public:
     // operation is successful.)
     virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return FALSE; }
 
-    // old functions, use the new ones instead!
-#if WXWIN_COMPATIBILITY_2
-    bool Iconized() const { return IsIconized(); }
-#endif // WXWIN_COMPATIBILITY_2
-
     // implementation only from now on
     // -------------------------------
 

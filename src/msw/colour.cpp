@@ -111,14 +111,3 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
   m_isInit = TRUE;
   m_pixel = PALETTERGB (m_red, m_green, m_blue);
 }
-
-// Obsolete
-#if WXWIN_COMPATIBILITY
-void wxColour::Get (unsigned char *r, unsigned char *g, unsigned char *b) const
-{
-  *r = m_red;
-  *g = m_green;
-  *b = m_blue;
-}
-#endif
-

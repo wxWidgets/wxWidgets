@@ -276,15 +276,6 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
     bool processed = FALSE;
 
-#if WXWIN_COMPATIBILITY
-    // Try a callback
-    if (m_callback)
-    {
-        (void)(*(m_callback))(*this, event);
-        processed = TRUE;
-    }
-#endif WXWIN_COMPATIBILITY
-
     // Try the menu's event handler
     if ( !processed && GetEventHandler())
     {

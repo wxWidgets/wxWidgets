@@ -922,48 +922,6 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
     }
 }
 
-#if wxUSE_CARET && WXWIN_COMPATIBILITY
-// ---------------------------------------------------------------------------
-// Caret manipulation
-// ---------------------------------------------------------------------------
-
-void wxWindowMac::CreateCaret(int w, int h)
-{
-    SetCaret(new wxCaret(this, w, h));
-}
-
-void wxWindowMac::CreateCaret(const wxBitmap *WXUNUSED(bitmap))
-{
-    wxFAIL_MSG("not implemented");
-}
-
-void wxWindowMac::ShowCaret(bool show)
-{
-    wxCHECK_RET( m_caret, "no caret to show" );
-
-    m_caret->Show(show);
-}
-
-void wxWindowMac::DestroyCaret()
-{
-    SetCaret(NULL);
-}
-
-void wxWindowMac::SetCaretPos(int x, int y)
-{
-    wxCHECK_RET( m_caret, "no caret to move" );
-
-    m_caret->Move(x, y);
-}
-
-void wxWindowMac::GetCaretPos(int *x, int *y) const
-{
-    wxCHECK_RET( m_caret, "no caret to get position of" );
-
-    m_caret->GetPosition(x, y);
-}
-#endif // wxUSE_CARET
-
 wxWindowMac *wxGetActiveWindow()
 {
     // actually this is a windows-only concept
@@ -1303,37 +1261,6 @@ wxWindowMac *wxWindowBase::FindFocus()
 {
     return gFocusWindow ;
 }
-
-#if WXWIN_COMPATIBILITY
-// If nothing defined for this, try the parent.
-// E.g. we may be a button loaded from a resource, with no callback function
-// defined.
-void wxWindowMac::OnCommand(wxWindowMac& win, wxCommandEvent& event)
-{
-    if ( GetEventHandler()->ProcessEvent(event)  )
-        return;
-    if ( m_parent )
-        m_parent->GetEventHandler()->OnCommand(win, event);
-}
-#endif // WXWIN_COMPATIBILITY_2
-
-#if WXWIN_COMPATIBILITY
-wxObject* wxWindowMac::GetChild(int number) const
-{
-    // Return a pointer to the Nth object in the Panel
-    wxNode *node = GetChildren().GetFirst();
-    int n = number;
-    while (node && n--)
-        node = node->GetNext();
-    if ( node )
-    {
-        wxObject *obj = (wxObject *)node->GetData();
-        return(obj);
-    }
-    else
-        return NULL;
-}
-#endif // WXWIN_COMPATIBILITY
 
 void wxWindowMac::OnSetFocus(wxFocusEvent& event)
 {

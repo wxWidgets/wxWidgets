@@ -54,11 +54,6 @@ public:
     // accessors
     bool Ok() const { return m_isInit; }
 
-    // Let's remove this inelegant function
-#if WXWIN_COMPATIBILITY
-    void Get(unsigned char *r, unsigned char *g, unsigned char *b) const;
-#endif
-
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
     unsigned char Blue() const { return m_blue; }

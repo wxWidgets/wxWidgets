@@ -383,10 +383,6 @@ bool wxBitmap::Create(
     }
     SetHBITMAP((WXHBITMAP)hBmp);
 
-#if WXWIN_COMPATIBILITY_2
-    GetBitmapData()->m_bOk = hBmp != 0;
-#endif // WXWIN_COMPATIBILITY_2
-
     return Ok();
 } // end of wxBitmap::Create
 
@@ -1170,17 +1166,6 @@ void wxBitmap::SetQuality(
 
     GetBitmapData()->m_nQuality = nQ;
 } // end of wxBitmap::SetQuality
-
-#if WXWIN_COMPATIBILITY_2
-void wxBitmap::SetOk(
-  bool                              bOk
-)
-{
-    EnsureHasData();
-
-    GetBitmapData()->m_bOk = bOk;
-} // end of wxBitmap::SetOk
-#endif // WXWIN_COMPATIBILITY_2
 
 void wxBitmap::SetPalette(
   const wxPalette&                  rPalette

@@ -202,11 +202,6 @@ public:
     // Override to do cleanup/veto close
     virtual bool OnClose(bool deleteWindow);
 
-#if WXWIN_COMPATIBILITY
-    // Defeat compiler warning
-    bool OnClose() { return wxEvtHandler::OnClose(); }
-#endif
-
     // Extend event processing to search the document's event table
     virtual bool ProcessEvent(wxEvent& event);
 

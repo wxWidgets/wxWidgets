@@ -47,10 +47,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
-#if WXWIN_COMPATIBILITY
-    wxBitmap *GetBitmap() const { return (wxBitmap *) &GetBitmapLabel(); }
-#endif
-
     // Implementation
     virtual void SetDefault();
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);

@@ -304,16 +304,6 @@ int wxNewEventType()
     // MT-FIXME
     static int s_lastUsedEventType = wxEVT_FIRST;
 
-#if WXWIN_COMPATIBILITY_2
-    // check that we don't overlap with the user-defined types: if it does
-    // happen, the best solution is probably to update the existing code to
-    // use wxNewEventType() instead of wxEVT_USER_FIRST
-    //
-    // due to the uncertainty
-    wxASSERT_MSG( s_lastUsedEventType < wxEVT_USER_FIRST - 1,
-                  _T("possible event type conflict") );
-#endif // WXWIN_COMPATIBILITY_2
-
     return s_lastUsedEventType++;
 }
 
@@ -1320,17 +1310,6 @@ void *wxEvtHandler::DoGetClientData() const
 
     return m_clientData;
 }
-
-
-#if WXWIN_COMPATIBILITY
-bool wxEvtHandler::OnClose()
-{
-    if (GetNextHandler())
-        return GetNextHandler()->OnClose();
-    else
-        return FALSE;
-}
-#endif // WXWIN_COMPATIBILITY
 
 #endif // wxUSE_BASE
 

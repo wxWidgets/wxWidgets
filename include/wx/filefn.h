@@ -271,16 +271,6 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 // compatibility defines, don't use in new code
 #define wxDirExists wxPathExists
 
-#if WXWIN_COMPATIBILITY_2
-    #define FileExists wxFileExists
-    #define DirExists wxDirExists
-    #define IsAbsolutePath wxIsAbsolutePath
-    #define FileNameFromPath wxFileNameFromPath
-    #define PathOnly wxPathOnly
-    #define Dos2UnixFilename wxDos2UnixFilename
-    #define Unix2DosFilename wxUnix2DosFilename
-#endif
-
 // ----------------------------------------------------------------------------
 // separators in file names
 // ----------------------------------------------------------------------------
