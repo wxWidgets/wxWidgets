@@ -46,15 +46,15 @@ enum wxTreeListColumnAlign {
 
 class GIZMODLLEXPORT wxTreeListColumnInfo: public wxObject {
 public:
-    static const size_t DEFAULT_COL_WIDTH = 100;
+    enum { DEFAULT_COL_WIDTH = 100 };
 
     wxTreeListColumnInfo(const wxChar* text = wxT(""),
-			 int image = -1,
-			 size_t width = DEFAULT_COL_WIDTH,
-			 wxTreeListColumnAlign alignment = wxTL_ALIGN_LEFT)
+                         int image = -1,
+                         size_t width = DEFAULT_COL_WIDTH,
+                         wxTreeListColumnAlign alignment = wxTL_ALIGN_LEFT)
     {
         m_image = image;
-	m_selected_image = -1;
+        m_selected_image = -1;
         m_text = text;
         m_width = width;
         m_alignment = alignment;
@@ -113,6 +113,7 @@ public:
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeListCtrlNameStr )
+        : m_header_win(0), m_main_win(0)
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -218,7 +219,7 @@ public:
                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const
     { return GetItemImage(item, GetMainColumn(), which); }
     int GetItemImage(const wxTreeItemId& item, size_t column,
-		     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
+                     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
 
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
@@ -230,7 +231,7 @@ public:
     void SetItemText(const wxTreeItemId& item, const wxString& text)
     { SetItemText(item, GetMainColumn(), text); }
     void SetItemText(const wxTreeItemId& item, size_t column,
-		     const wxString& text);
+                     const wxString& text);
 
     // get one of the images associated with the item (normal by default)
     void SetItemImage(const wxTreeItemId& item, int image,
@@ -238,7 +239,7 @@ public:
     { SetItemImage(item, GetMainColumn(), image, which); }
     // the which parameter is ignored for all columns but the main one
     void SetItemImage(const wxTreeItemId& item, size_t column, int image,
-		      wxTreeItemIcon which = wxTreeItemIcon_Normal);
+                      wxTreeItemIcon which = wxTreeItemIcon_Normal);
 
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
@@ -257,7 +258,7 @@ public:
 
         // set the item's background colour
     void SetItemBackgroundColour(const wxTreeItemId& item,
-				 const wxColour& col);
+                                 const wxColour& col);
 
         // set the item's font (should be of the same height for all items)
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
@@ -400,7 +401,7 @@ public:
     void UnselectAll();
         // select this item
     void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE,
-		    bool extended_select=FALSE);
+                    bool extended_select=FALSE);
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);

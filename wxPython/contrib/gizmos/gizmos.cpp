@@ -60,9 +60,10 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
 
-#include <wx/gizmos/treelistctrl.h>
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
+#include <wx/imaglist.h>
+#include "treelistctrl.h"
 #include "pytree.h"
 
 
