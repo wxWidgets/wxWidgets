@@ -165,7 +165,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     m_scrolledWindow = new wxSplitterScrolledWindow(this, idSCROLLED_WINDOW, wxDefaultPosition,
-		wxDefaultSize, wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL);
+		wxSize(300, 400), wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL);
     m_splitter = new wxThinSplitterWindow(m_scrolledWindow, idSPLITTER_WINDOW, wxDefaultPosition,
 		wxDefaultSize, wxSP_3DBORDER | wxCLIP_CHILDREN /* | wxSP_LIVE_UPDATE */);
 	m_splitter->SetSashSize(2);
