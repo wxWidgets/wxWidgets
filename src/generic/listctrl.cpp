@@ -1732,7 +1732,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         // for this we need the width of the text
         wxCoord wLabel;
-        dc.GetTextExtent(item.GetText(), &wLabel, NULL);
+	wxCoord hLabel;
+        dc.GetTextExtent(item.GetText(), &wLabel, &hLabel);
         wLabel += 2*EXTRA_WIDTH;
 
         // and the width of the icon, if any
@@ -1797,7 +1798,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
 
         dc.DrawText( item.GetText(),
-                     xAligned + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
+                     xAligned + EXTRA_WIDTH, h / 2 - hLabel / 2 ); //HEADER_OFFSET_Y + EXTRA_HEIGHT );
 
         x += wCol;
     }
@@ -1807,6 +1808,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void wxListHeaderWindow::DrawCurrent()
 {
+    return;
+    
     int x1 = m_currentX;
     int y1 = 0;
     m_owner->ClientToScreen( &x1, &y1 );
