@@ -140,9 +140,9 @@ wxSize wxBookCtrl::DoGetBestSize() const
 bool
 wxBookCtrl::InsertPage(size_t nPage,
                        wxWindow *page,
-                       const wxString& text,
-                       bool bSelect,
-                       int imageId)
+                       const wxString& WXUNUSED(text),
+                       bool WXUNUSED(bSelect),
+                       int WXUNUSED(imageId))
 {
     wxCHECK_MSG( page, false, _T("NULL page in wxBookCtrl::InsertPage()") );
     wxCHECK_MSG( nPage <= m_pages.size(), false,
