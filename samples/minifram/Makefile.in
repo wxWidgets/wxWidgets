@@ -7,7 +7,7 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=toolbar
+BIN_TARGET=minifram
 # define library sources
 BIN_SRC=\
 test.cpp

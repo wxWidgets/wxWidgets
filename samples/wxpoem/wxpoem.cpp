@@ -35,6 +35,13 @@
 
 #include "wxpoem.h"
 
+#ifdef __WXGTK__
+#include "corner1.xpm"
+#include "corner2.xpm"
+#include "corner3.xpm"
+#include "corner4.xpm"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -322,7 +329,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
                 int x = (int)((width - xx)/2.0);
                 dc->SetFont(* NormalFont);
                 dc->SetTextForeground(* wxBLACK);
-                dc->DrawText(line, (float)x, (float)y);
+                dc->DrawText(line, x, y);
               }
            }
         }
@@ -343,7 +350,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
          int x = (int)((width - xx)/2.0);
          dc->SetFont(* NormalFont);
          dc->SetTextForeground(* wxBLACK);
-         dc->DrawText(cont, (float)x, (float)y);
+         dc->DrawText(cont, x, y);
        }
        y += 2*char_height;
     }
@@ -405,16 +412,16 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
       dc->DrawLine(THICK_LINE_BORDER, THICK_LINE_BORDER,
                    width-THICK_LINE_BORDER, THICK_LINE_BORDER);
 
-#ifdef __WXMSW__
+//#ifdef __WXMSW__
       // Draw icons
-      dc->DrawIcon(* Corner1, 0.0, 0.0);
-      dc->DrawIcon(* Corner2, (float)(width-32.0), 0.0);
+      dc->DrawIcon(* Corner1, 0, 0);
+      dc->DrawIcon(* Corner2, int(width-32), 0);
 
       int y2 = height - 32;
       int x2 = (width-32);
-      dc->DrawIcon(* Corner3, 0.0, (float)y2);
-      dc->DrawIcon(* Corner4, (float)x2, (float)y2);
-#endif
+      dc->DrawIcon(* Corner3, 0, y2);
+      dc->DrawIcon(* Corner4, x2, y2);
+//#endif
     }
 }
 
@@ -632,6 +639,12 @@ bool MyApp::OnInit()
   Corner3 = new wxIcon("icon_3");
   Corner4 = new wxIcon("icon_4");
 #endif
+#ifdef __WXGTK__
+  Corner1 = new wxIcon( corner1_xpm );
+  Corner2 = new wxIcon( corner2_xpm );
+  Corner3 = new wxIcon( corner3_xpm );
+  Corner4 = new wxIcon( corner4_xpm );
+#endif
 
   TheMainWindow->GetIndexLoadPoem();
   TheMainWindow->Resize();
@@ -650,12 +663,13 @@ int MyApp::OnExit()
   delete DarkGreyPen;
   delete WhitePen;
 
-#ifdef __WXMSW__
+//#ifdef __WXMSW__
   delete Corner1;
   delete Corner2;
   delete Corner3;
   delete Corner4;
-#endif
+//#endif
+
   delete NormalFont;
   delete BoldFont;
   delete ItalicFont;
@@ -664,7 +678,7 @@ int MyApp::OnExit()
   return 0;
 }
 
-void MainWindow::OnCloseWindow(wxCloseEvent& event)
+void MainWindow::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   WritePreferences();
   this->Destroy();
@@ -688,7 +702,7 @@ MyCanvas::MyCanvas(wxFrame *frame, wxWindowID id, const wxPoint& pos, const wxSi
 }
 
 // Define the repainting behaviour
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
@@ -717,7 +731,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 #if 0 // wx_motif
     FakePopupMenu(popupMenu, x, y);
 #else
-    PopupMenu(popupMenu, x, y);
+    PopupMenu(popupMenu, (int)x, (int)y );
 #endif
   }
   else if (event.LeftDown())
@@ -839,8 +853,8 @@ bool LoadPoem(char *file_name, long position)
 {
     int ch = 0;
     int i = 0;
-    int j = 0;
-    int indexn = 0;
+//    int j = 0;
+//    int indexn = 0;
     char buf[100];
     long data;
     FILE *data_file;
@@ -1054,7 +1068,7 @@ bool Compile(void)
     return TRUE;
 }
 
-void PopupFunction(wxMenu& menu, wxCommandEvent& event)
+void PopupFunction(wxMenu& /*menu*/, wxCommandEvent& event)
 {
   switch (event.m_commandInt)
   {

@@ -86,7 +86,6 @@ void wxGetMousePosition( int* x, int* y )
 
 bool wxColourDisplay(void)
 {
-    wxFAIL_MSG( "wxColourDisplay always returns TRUE" );
     return TRUE;
 }
 

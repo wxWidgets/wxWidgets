@@ -78,7 +78,7 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
-void MyApp::DoTimeDemo(wxCommandEvent& event)
+void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
@@ -88,7 +88,7 @@ void MyApp::DoTimeDemo(wxCommandEvent& event)
     textCtrl << "It is now " << (wxString) now << "\n";
 }
 
-void MyApp::DoDateDemo(wxCommandEvent& event)
+void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
@@ -230,7 +230,7 @@ void MyApp::DoDateDemo(wxCommandEvent& event)
     textCtrl << "The last date of this year is " << v4.GetYearEnd() << "\n";
 }
 
-void MyApp::DoVariantDemo(wxCommandEvent& event)
+void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
