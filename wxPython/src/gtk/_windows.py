@@ -4256,7 +4256,7 @@ class PrintDialogDataPtr(PrintDialogData):
         self.__class__ = PrintDialogData
 _windows_.PrintDialogData_swigregister(PrintDialogDataPtr)
 
-class PrintDialog(Dialog):
+class PrintDialog(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4265,8 +4265,6 @@ class PrintDialog(Dialog):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORInfo(self)
-
     def ShowModal(*args, **kwargs):
         """ShowModal(self) -> int"""
         return _windows_.PrintDialog_ShowModal(*args, **kwargs)
@@ -4310,11 +4308,11 @@ class Printer(_core.Object):
         except: pass
 
     def CreateAbortWindow(*args, **kwargs):
-        """CreateAbortWindow(self, Window parent, wxPrintout printout) -> Window"""
+        """CreateAbortWindow(self, Window parent, Printout printout) -> Window"""
         return _windows_.Printer_CreateAbortWindow(*args, **kwargs)
 
     def ReportError(*args, **kwargs):
-        """ReportError(self, Window parent, wxPrintout printout, String message)"""
+        """ReportError(self, Window parent, Printout printout, String message)"""
         return _windows_.Printer_ReportError(*args, **kwargs)
 
     def Setup(*args, **kwargs):
@@ -4322,7 +4320,7 @@ class Printer(_core.Object):
         return _windows_.Printer_Setup(*args, **kwargs)
 
     def Print(*args, **kwargs):
-        """Print(self, Window parent, wxPrintout printout, bool prompt=True) -> bool"""
+        """Print(self, Window parent, Printout printout, bool prompt=True) -> bool"""
         return _windows_.Printer_Print(*args, **kwargs)
 
     def PrintDialog(*args, **kwargs):
@@ -4838,116 +4836,5 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
-
-class PrintFactory(object):
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPrintFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def CreatePrinter(*args, **kwargs):
-        """CreatePrinter(self, PrintDialogData data) -> wxPrinterBase"""
-        return _windows_.PrintFactory_CreatePrinter(*args, **kwargs)
-
-    def CreatePrintPreview(*args):
-        """
-        CreatePrintPreview(self, wxPrintout preview, wxPrintout printout=None, PrintDialogData data=None) -> wxPrintPreviewBase
-        CreatePrintPreview(self, wxPrintout preview, wxPrintout printout, PrintData data) -> wxPrintPreviewBase
-        """
-        return _windows_.PrintFactory_CreatePrintPreview(*args)
-
-    def CreatePrintDialog(*args):
-        """
-        CreatePrintDialog(self, Window parent, PrintDialogData data=None) -> wxPrintDialogBase
-        CreatePrintDialog(self, Window parent, PrintData data) -> wxPrintDialogBase
-        """
-        return _windows_.PrintFactory_CreatePrintDialog(*args)
-
-    def HasPrintSetupDialog(*args, **kwargs):
-        """HasPrintSetupDialog(self) -> bool"""
-        return _windows_.PrintFactory_HasPrintSetupDialog(*args, **kwargs)
-
-    def CreatePrintSetupDialog(*args, **kwargs):
-        """CreatePrintSetupDialog(self, Window parent, PrintData data) -> Dialog"""
-        return _windows_.PrintFactory_CreatePrintSetupDialog(*args, **kwargs)
-
-    def HasOwnPrintToFile(*args, **kwargs):
-        """HasOwnPrintToFile(self) -> bool"""
-        return _windows_.PrintFactory_HasOwnPrintToFile(*args, **kwargs)
-
-    def HasPrinterLine(*args, **kwargs):
-        """HasPrinterLine(self) -> bool"""
-        return _windows_.PrintFactory_HasPrinterLine(*args, **kwargs)
-
-    def CreatePrinterLine(*args, **kwargs):
-        """CreatePrinterLine(self) -> String"""
-        return _windows_.PrintFactory_CreatePrinterLine(*args, **kwargs)
-
-    def HasStatusLine(*args, **kwargs):
-        """HasStatusLine(self) -> bool"""
-        return _windows_.PrintFactory_HasStatusLine(*args, **kwargs)
-
-    def CreateStatusLine(*args, **kwargs):
-        """CreateStatusLine(self) -> String"""
-        return _windows_.PrintFactory_CreateStatusLine(*args, **kwargs)
-
-    def CreatePrintNativeData(*args, **kwargs):
-        """CreatePrintNativeData(self) -> PrintNativeDataBase"""
-        return _windows_.PrintFactory_CreatePrintNativeData(*args, **kwargs)
-
-    def SetPrintFactory(*args, **kwargs):
-        """SetPrintFactory(PrintFactory factory)"""
-        return _windows_.PrintFactory_SetPrintFactory(*args, **kwargs)
-
-    SetPrintFactory = staticmethod(SetPrintFactory)
-    def GetFactory(*args, **kwargs):
-        """GetFactory() -> PrintFactory"""
-        return _windows_.PrintFactory_GetFactory(*args, **kwargs)
-
-    GetFactory = staticmethod(GetFactory)
-
-class PrintFactoryPtr(PrintFactory):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PrintFactory
-_windows_.PrintFactory_swigregister(PrintFactoryPtr)
-
-def PrintFactory_SetPrintFactory(*args, **kwargs):
-    """PrintFactory_SetPrintFactory(PrintFactory factory)"""
-    return _windows_.PrintFactory_SetPrintFactory(*args, **kwargs)
-
-def PrintFactory_GetFactory(*args, **kwargs):
-    """PrintFactory_GetFactory() -> PrintFactory"""
-    return _windows_.PrintFactory_GetFactory(*args, **kwargs)
-
-class PrintNativeDataBase(_core.Object):
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPrintNativeDataBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __del__(self, destroy=_windows_.delete_PrintNativeDataBase):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def TransferTo(*args, **kwargs):
-        """TransferTo(self, PrintData data) -> bool"""
-        return _windows_.PrintNativeDataBase_TransferTo(*args, **kwargs)
-
-    def TransferFrom(*args, **kwargs):
-        """TransferFrom(self, PrintData data) -> bool"""
-        return _windows_.PrintNativeDataBase_TransferFrom(*args, **kwargs)
-
-    def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
-        return _windows_.PrintNativeDataBase_Ok(*args, **kwargs)
-
-    m_ref = property(_windows_.PrintNativeDataBase_m_ref_get, _windows_.PrintNativeDataBase_m_ref_set)
-
-class PrintNativeDataBasePtr(PrintNativeDataBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PrintNativeDataBase
-_windows_.PrintNativeDataBase_swigregister(PrintNativeDataBasePtr)
 
 

@@ -5852,7 +5852,7 @@ class StandardPaths(object):
         """
         GetInstallPrefix(self) -> String
 
-        Get the program installation prefix.
+        Get the program installation prefix. (Unix only.)
         """
         return _misc_.StandardPaths_GetInstallPrefix(*args, **kwargs)
 

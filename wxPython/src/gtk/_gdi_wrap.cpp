@@ -883,12 +883,38 @@ PyObject *wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self){
                 return PyList_New(0);
         }
 
+#include <locale.h>
 
 wxLocale *new_wxLocale(int language,int flags){
+            wxLocale* loc;
             if (language == -1)
-                return new wxLocale();
+                loc = new wxLocale();
             else
-                return new wxLocale(language, flags);
+                loc = new wxLocale(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return loc;
+        }
+bool wxLocale_Init1(wxLocale *self,wxString const &szName,wxString const &szShort,wxString const &szLocale,bool bLoadDefault,bool bConvertEncoding){
+            bool rc = self->Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return rc;
+        }
+bool wxLocale_Init2(wxLocale *self,int language,int flags){
+            bool rc = self->Init(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return rc;
         }
 
 #include "wx/wxPython/pydrawxxx.h"
@@ -9589,7 +9615,7 @@ static PyObject *_wrap_Locale_Init1(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Init((wxString const &)*arg2,(wxString const &)*arg3,(wxString const &)*arg4,arg5,arg6);
+        result = (bool)wxLocale_Init1(arg1,(wxString const &)*arg2,(wxString const &)*arg3,(wxString const &)*arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -9653,7 +9679,7 @@ static PyObject *_wrap_Locale_Init2(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Init(arg2,arg3);
+        result = (bool)wxLocale_Init2(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
