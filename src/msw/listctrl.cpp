@@ -1256,9 +1256,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
+                wxConvertFromMSWListItem(this, event.m_item, info->item);
                 if ( info->item.pszText == NULL || info->item.iItem == -1 )
-                    event.m_cancelled = TRUE;
+                    return FALSE;
                 break;
             }
         case LVN_GETDISPINFO:
@@ -1341,7 +1341,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
             // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
-            eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+            {
+                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
+                event.m_itemIndex = hdr->iItem;
+            }
             break;
 
         case NM_RCLICK:
@@ -1417,18 +1421,29 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     if ( !GetEventHandler()->ProcessEvent(event) )
         return FALSE;
 
-    if ( (int)hdr1->code == LVN_GETDISPINFO)
+    switch ((int)hdr1->code)
     {
-        LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-        if ( info->item.mask & LVIF_TEXT )
-        {
-            if ( !event.m_item.m_text.IsNull() )
+        case LVN_GETDISPINFO:
             {
-                info->item.pszText = AddPool(event.m_item.m_text);
-                info->item.cchTextMax = wxStrlen(info->item.pszText) + 1;
+                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+                if ( info->item.mask & LVIF_TEXT )
+                {
+                    if ( !event.m_item.m_text.IsNull() )
+                    {
+                        info->item.pszText = AddPool(event.m_item.m_text);
+                        info->item.cchTextMax = wxStrlen(info->item.pszText) + 1;
+                    }
+                }
+                //    wxConvertToMSWListItem(this, event.m_item, info->item);
+                break;
             }
-        }
-        //    wxConvertToMSWListItem(this, event.m_item, info->item);
+        case LVN_ENDLABELEDIT:
+            {
+                *result = event.IsAllowed();
+                return TRUE;
+            }
+        default:
+            break;
     }
 
     *result = !event.IsAllowed();

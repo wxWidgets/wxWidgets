@@ -1409,6 +1409,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = (WXHTREEITEM)info->item.hItem;
                 event.m_label = info->item.pszText;
+                if (info->item.pszText == NULL)
+                    return FALSE;
                 break;
             }
 
