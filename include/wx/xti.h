@@ -316,19 +316,6 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( wxSet<T> * )
     template<> const wxTypeInfo* wxGetTypeInfo( e ** ){ static wxBuiltInTypeInfo s_typeInfo(wxT_VOID) ; assert(0) ; return &s_typeInfo ; } \
     template<> const wxTypeInfo* wxGetTypeInfo( e * ){ static wxCustomTypeInfo s_typeInfo(#e) ; return &s_typeInfo ; }
 
-// ----------------------------------------------------------------------------
-// value streaming
-//
-// streaming is defined for xml constructs right now, the aim is to make this
-// pluggable in the future
-// ----------------------------------------------------------------------------
-
-// convenience function (avoids including xml headers in users code)
-
-class wxXmlNode ;
-void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data ) ;
-wxString wxXmlGetContentFromNode( wxXmlNode *node ) ;
-
 // templated streaming, every type must have their specialization for these methods
 
 template<typename T>
@@ -337,22 +324,13 @@ void wxStringReadValue( const wxString &s , T &data );
 template<typename T>
 void wxStringWriteValue( wxString &s , const T &data);
 
-// for simple types this default implementation is ok, composited structures will have to
-// loop through their properties
+// sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
 
-template<typename T>
-void wxXmlReadValue( wxXmlNode *node , T &data )
-{
-    wxStringReadValue<T>( wxXmlGetContentFromNode( node ) , data ) ;
-}
-
-template<typename T>
-void wxXmlWriteValue( wxXmlNode *node , const T &data)
-{
-    wxString s ;
-    wxStringWriteValue<T>( s, data ) ;
-    wxXmlAddContentToNode( node ,s ) ;
-}
+#define WX_ILLEGAL_TYPE_SPECIALIZATION( a ) \
+template<> const wxTypeInfo* wxGetTypeInfo( a * ) { assert(0) ; \
+    static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ; return &s_typeInfo ; } \
+template<> void wxStringReadValue(const wxString & , a & ) { assert(0) ; }\
+template<> void wxStringWriteValue(wxString & , a const & ) { assert(0) ; }
 
 // ----------------------------------------------------------------------------
 // wxxVariant as typesafe data holder
@@ -368,12 +346,6 @@ public:
 
     // returns the type info of the contentc
     virtual const wxTypeInfo* GetTypeInfo() const = 0 ;
-
-    // write the value into an xml node
-    virtual void Write( wxXmlNode* node ) const = 0 ;
-
-    // read the value from the xml node
-    virtual void Read( wxXmlNode* node ) = 0 ;
 
     // write the value into a string
     virtual void Write( wxString &s ) const = 0 ;
@@ -402,12 +374,6 @@ public:
 
     // returns the type info of the contentc
     virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) NULL ) ; }
-
-    // write the value into an xml node
-    virtual void Write( wxXmlNode* node ) const { wxXmlWriteValue( node , m_data ) ; }
-
-    // read the value from the xml node
-    virtual void Read( wxXmlNode* node ) { wxXmlReadValue( node , m_data ) ; }
 
     // write the value into a string
     virtual void Write( wxString &s ) const { wxStringWriteValue( s , m_data ) ; }
@@ -466,13 +432,7 @@ public :
 	// get the typeinfo of the stored object
 	const wxTypeInfo* GetTypeInfo() const { return m_data->GetTypeInfo() ; }
 
-	// write the value into an xml node
-	void Write( wxXmlNode* node ) const { m_data->Write( node ) ; }
-
-	// read the value from the xml node
-	void Read( wxXmlNode* node ) { m_data->Read( node ) ; }
-
-	// write the value into a string
+ 	// write the value into a string
 	void Write( wxString &s ) const { m_data->Write( s ) ; }
 
 	// read the value from a string
@@ -513,25 +473,17 @@ public :
     class SetAndGetByRefRetBool ;
     class GetByRef ;
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
-    virtual wxxVariant GetProperty(wxObject *object) const = 0 ;
+    virtual wxxVariant GetProperty(const wxObject *object) const = 0 ;
     virtual bool HasSetter() const = 0 ;
     virtual bool HasGetter() const = 0 ;
     const wxChar * GetGetterName() const { return m_setterName ; }
     const wxChar * GetSetterName() const { return m_getterName ; }
-    virtual wxxVariant ReadValue( wxXmlNode* node ) const = 0 ;
-    virtual void WriteValue( wxXmlNode* node , wxObject *o ) const = 0 ;
     virtual wxxVariant ReadValue( const wxString &value ) const = 0 ;
-    virtual void WriteValue( wxString& value , wxObject *o ) const = 0 ;
+    virtual void WriteValue( wxString& value , const wxObject *o ) const = 0 ;
 protected :
     const wxChar *m_setterName ;
     const wxChar *m_getterName ;
 };
-
-template<typename T>
-void wxXmlReadValue( wxXmlNode *node , T &data ) ;
-
-template<typename T>
-void wxXmlWriteValue( wxXmlNode *node , const T &data) ;
 
 template<class Klass, typename T>
 class WXDLLIMPEXP_BASE wxPropertyAccessorT : public wxPropertyAccessor
@@ -611,32 +563,16 @@ public:
    }
 
     // gets the property this accessor is responsible for from an object
-    wxxVariant GetProperty(wxObject *o) const
+    wxxVariant GetProperty(const wxObject *o) const
     {
         return wxxVariant( (wxxVariantData* ) DoGetProperty( o ) ) ;
      }
 
     // write the property this accessor is responsible for from an object into
-    // a xml node
-    void WriteValue( wxXmlNode* node , wxObject *o ) const
-    {
-        DoGetProperty( o )->Write( node ) ;
-    }
-
-    // write the property this accessor is responsible for from an object into
     // a string
-    void WriteValue( wxString& s , wxObject *o ) const
+    void WriteValue( wxString& s , const wxObject *o ) const
     {
         DoGetProperty( o )->Write( s ) ;
-    }
-
-    // read a wxxVariant having the correct type for the property this accessor
-    // is responsible for from an xml node
-    wxxVariant ReadValue( wxXmlNode* node ) const
-    {
-        T data ;
-        wxXmlReadValue( node , data ) ;
-        return wxxVariant( data ) ;
     }
 
     // read a wxxVariant having the correct type for the property this accessor
@@ -649,9 +585,9 @@ public:
     }
 
 private :
-    wxxVariantDataT<T>* DoGetProperty(wxObject *o) const
+    wxxVariantDataT<T>* DoGetProperty(const wxObject *o) const
     {
-        Klass *obj = dynamic_cast<Klass*>(o);
+        const Klass *obj = dynamic_cast<const Klass*>(o);
         if ( m_getter )
             return new wxxVariantDataT<T>( (obj->*(m_getter))() ) ;
         else
@@ -1021,7 +957,7 @@ public:
 			m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) , m_next(sm_first)
 	{
 		sm_first = this;
-		Register( m_className , this ) ;
+		Register() ;
 	}
 
     virtual ~wxClassInfo() ;
@@ -1056,16 +992,14 @@ public:
         return false ;
     }
 
+#ifdef WXWIN_COMPATIBILITY_2_4
     // Initializes parent pointers and hash table for fast searching.
-    // this is going to be removed by Register/Unregister calls
-    // in Constructor / Destructor together with making the hash map private
-
-    static void     InitializeClasses();
-
+    wxDEPRECATED( static void     InitializeClasses() );
     // Cleans up hash table used for fast searching.
-
-    static void     CleanUpClasses();
-
+    wxDEPRECATED( static void     CleanUpClasses() );
+#endif
+    static void     CleanUp();
+ 
     // returns the first property
     const wxPropertyInfo* GetFirstProperty() const { return m_firstProperty ; }
 
