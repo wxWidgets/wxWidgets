@@ -1143,6 +1143,7 @@ public:
     void SetCurrentFocus(wxWindow *win);
 
     enum {
+        IsBackward,
         IsForward,
         WinChange
     };

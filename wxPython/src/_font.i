@@ -506,7 +506,7 @@ public:
 
     // Unofficial API, don't use
     virtual void SetNoAntiAliasing( bool no = True );
-    virtual bool GetNoAntiAliasing();
+    virtual bool GetNoAntiAliasing() const;
 
     // the default encoding is used for creating all fonts with default
     // encoding parameter
@@ -558,12 +558,18 @@ public:
     %extend {
         PyObject* GetEncodings() {
             wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(*arr);
+            if (arr)
+                return wxArrayString2PyList_helper(*arr);
+            else
+                return PyList_New(0);
         }
 
         PyObject* GetFacenames() {
             wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(*arr);
+            if (arr)
+                return wxArrayString2PyList_helper(*arr);
+            else
+                return PyList_New(0);
         }
     }
 };
