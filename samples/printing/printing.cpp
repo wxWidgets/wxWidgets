@@ -495,7 +495,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
 
     dc->SetBackgroundMode(wxTRANSPARENT);
-
+    dc->SetBrush(*wxTRANSPARENT_BRUSH);
 
     { // GetTextExtent demo:
         wxString words[7] = {_T("This "), _T("is "), _T("GetTextExtent "), _T("testing "), _T("string. "), _T("Enjoy "), _T("it!")};
