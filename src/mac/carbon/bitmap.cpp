@@ -367,7 +367,6 @@ PicHandle wxBitmapRefData::GetPictHandle()
     {
         CGrafPtr        origPort = NULL ;
         GDHandle        origDev = NULL ;
-        PicHandle       pict = NULL ;
         GWorldPtr       wp = NULL ;
         GWorldPtr       mask = NULL ;
         int height = GetHeight() ;
