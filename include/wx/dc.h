@@ -48,9 +48,8 @@ public:
     {
         m_clipping = FALSE;
         m_ok = TRUE;
-        m_isBBoxValid = FALSE;
 
-        m_minX = m_minY = m_maxX = m_maxY = 0;
+        ResetBoundingBox();
 
         m_signX = m_signY = 1;
 
@@ -417,6 +416,13 @@ public:
          m_maxX = x;
          m_maxY = y;
       }
+    }
+
+    void ResetBoundingBox()
+    {
+        m_isBBoxValid = FALSE;
+
+        m_minX = m_maxX = m_minY = m_maxY = 0;
     }
 
     // Get the final bounding box of the PostScript or Metafile picture.

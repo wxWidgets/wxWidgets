@@ -108,6 +108,18 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
 \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 
+\membersection{wxDC::CalcBoundingBox}\label{wxdccalcboundingbox}
+
+\func{void}{CalcBoundingBox}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+Adds the specified point to the bounding box which can be retrieved with 
+\helpref{MinX}{wxdcminx}, \helpref{MaxX}{wxdcmaxx} and 
+\helpref{MinY}{wxdcminy}, \helpref{MaxY}{wxdcmaxy} functions.
+
+\wxheading{See also}
+
+\helpref{ResetBoundingBox}{wxdcresetboundingbox}
+
 \membersection{wxDC::Clear}\label{wxdcclear}
 
 \func{void}{Clear}{\void}
@@ -578,6 +590,17 @@ Gets the minimum vertical extent used in drawing commands so far.
 \func{bool}{Ok}{\void}
 
 Returns TRUE if the DC is ok to use.
+
+\membersection{wxDC::ResetBoundingBox}\label{wxdcresetboundingbox}
+
+\func{void}{ResetBoundingBox}{\void}
+
+Resets the bounding box: after a call to this function, the bounding box
+doesn't contain anything.
+
+\wxheading{See also}
+
+\helpref{CalcBoundingBox}{wxdccalcboundingbox}
 
 \membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
 
