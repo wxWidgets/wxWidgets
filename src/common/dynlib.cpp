@@ -29,7 +29,7 @@
 
 // TODO should be done by configure
 #if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHLLOAD))
-    #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__)
+    #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
         #ifndef HAVE_DLOPEN
             #define HAVE_DLOPEN
         #endif
