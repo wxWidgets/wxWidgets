@@ -532,7 +532,7 @@ msgstr "ο χειριστής CHM προς το παρόν υποστηρίζει μόνο τοπικά αρχεία!"
 
 #: ../src/os2/thread.cpp:121
 msgid "Can not create mutex."
-msgstr "Δεν είναι δυνατή η δημιουργία του mutex." 
+msgstr "Δεν είναι δυνατή η δημιουργία του mutex."
 
 #: ../src/common/filefn.cpp:1462
 #, c-format
@@ -686,7 +686,8 @@ msgstr "Αδύνατη η ανάγνωση από την ροή inflate: %s\n"
 
 #: ../src/common/zstream.cpp:121
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
-msgstr "Αδύνατη η ανάγνωση της ροής inflate: απρόσμενο EOF στην υποκείμενη ροή."
+msgstr ""
+"Αδύνατη η ανάγνωση της ροής inflate: απρόσμενο EOF στην υποκείμενη ροή."
 
 #: ../src/msw/registry.cpp:930
 #, c-format
@@ -2631,7 +2632,8 @@ msgstr "Αφαίρεση τρέχουσας σελίδας από τους σελιδοδείκτες"
 #: ../src/common/rendcmn.cpp:193
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr "Ο Renderer \"%s\" είναι σε ασύμβατη έκδοση %d.%d και δεν μπορεί να φορτωθεί."
+msgstr ""
+"Ο Renderer \"%s\" είναι σε ασύμβατη έκδοση %d.%d και δεν μπορεί να φορτωθεί."
 
 #: ../src/generic/fdrepdlg.cpp:171
 msgid "Replace &all"
@@ -2793,7 +2795,8 @@ msgstr "Συγνώμη, δεν υπάρχει αρκετή μνήμη για την δημιουργία προεπισκόπησης."
 
 #: ../src/common/docview.cpp:959
 msgid "Sorry, print preview needs a printer to be installed."
-msgstr "Συγγνώμη, η προεπισκόπηση εκτύπωσης χρειάζεται έναν εγκατεστημένο εκτυπωτή."
+msgstr ""
+"Συγγνώμη, η προεπισκόπηση εκτύπωσης χρειάζεται έναν εγκατεστημένο εκτυπωτή."
 
 #: ../src/common/docview.cpp:1196 ../src/common/docview.cpp:1524
 msgid "Sorry, the format for this file is unknown."
@@ -2818,7 +2821,8 @@ msgstr "Κατάσταση: "
 
 #: ../src/common/xtistrm.cpp:251
 msgid "Streaming delegates for not already streamed objects not yet supported"
-msgstr "Οι εκπροσωπήσεις ροών για μη ροοποιημένα αντικείμενα δεν υποστηρίζονται ακόμα"
+msgstr ""
+"Οι εκπροσωπήσεις ροών για μη ροοποιημένα αντικείμενα δεν υποστηρίζονται ακόμα"
 
 #: ../src/msw/colour.cpp:38
 #, c-format
@@ -3655,7 +3659,7 @@ msgstr "η εισαγωγή(entry) '%s' εμφανίζεται πάνω από μία φορά στο γκρούπ '%s'"
 
 #: ../src/html/chm.cpp:344
 msgid "error in data format"
-msgstr "σφάλμα στη μορφή των δεδομένων" 
+msgstr "σφάλμα στη μορφή των δεδομένων"
 
 #: ../src/html/chm.cpp:332
 msgid "error opening file"
