@@ -316,10 +316,28 @@ Gets the item text for this item.
 
 \constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
 
-Searches for an item with the given goemetry or state, starting from {\it item}. {\it item} can be -1
-to find the first item that matches the specified flags.
+Searches for an item with the given goemetry or state, starting from 
+{\it item} but excluding the {\it item} itself. If {\it item} is -1,
+the first item that matches the specified flags will be returned.
 
-Returns the item or -1 if unsuccessful.
+Returns the first item with given state following {\it item} or -1 if
+no such item found.
+
+This function may be used to find all selected items in the control like this:
+\begin{verbatim}
+    long item = -1;
+    for ( ;; )
+    {
+        item = listctrl->GetNextItem(item,
+                                     wxLIST_NEXT_ALL,
+                                     wxLIST_STATE_SELECTED);
+        if ( item == -1 )
+            break;
+
+        // this item is selected - do whatever is needed with it
+        wxLogMessage("Item %ld is selected."), item);
+    }
+\end{verbatim}
 
 {\it geometry} can be one of:
 
@@ -331,6 +349,9 @@ Returns the item or -1 if unsuccessful.
 \twocolitem{wxLIST\_NEXT\_LEFT}{Searches for an item to the left of the specified item.}
 \twocolitem{wxLIST\_NEXT\_RIGHT}{Searches for an item to the right of the specified item.}
 \end{twocollist}
+
+{\bf NB:} this parameters is only supported by wxMSW currently and ignored on
+other platforms.
 
 {\it state} can be a bitlist of the following:
 
