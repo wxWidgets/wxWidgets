@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -59,6 +58,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/busyinfo.h>
+#include <wx/geometry.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -102,7 +102,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         if (dest != wxRect(0,0,0,0)) {
             wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
-            obj = wxPyConstructObject((void*)newRect, "wxRect");
+            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"));
             PyObject* one = PyInt_FromLong(1);
             PyObject_SetAttrString(obj, "thisown", one);
             Py_DECREF(one);
@@ -111,13 +111,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         }
         Py_INCREF(Py_None);
         return Py_None;
-    }
-
-    wxString wxGetResource(const wxString& section, const wxString& entry,
-                           const wxString& file = wxPyEmptyString) {
-        wxChar * retval;
-        wxGetResource(section, entry, &retval, file);
-        return retval;
     }
 
 #if 0  // we want to use the definition from the header, not the
@@ -189,43 +182,6 @@ static PyObject *_wrap_wxRegisterId(PyObject *self, PyObject *args, PyObject *kw
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxRegisterId",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxRegisterId(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_NewId(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":NewId",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (long )wxNewId();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_RegisterId(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _arg0;
-    char *_kwnames[] = { "id", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:RegisterId",_kwnames,&_arg0)) 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -403,7 +359,7 @@ static PyObject *_wrap_wxNow(PyObject *self, PyObject *args, PyObject *kwargs) {
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -516,7 +472,7 @@ static PyObject *_wrap_wxGetOsDescription(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -641,67 +597,6 @@ static PyObject *_wrap_wxEnableTopLevelWindows(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-static PyObject *_wrap_wxGetResource(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxString * _arg0;
-    wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyString;
-    PyObject * _obj0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "section","entry","file", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxGetResource",_kwnames,&_obj0,&_obj1,&_obj2)) 
-        return NULL;
-{
-    _arg0 = wxString_in_helper(_obj0);
-    if (_arg0 == NULL)
-        return NULL;
-}
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-    if (_obj2)
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxGetResource(*_arg0,*_arg1,*_arg2));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    if (_obj0)
-        delete _arg0;
-}
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
@@ -725,7 +620,7 @@ static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -756,7 +651,7 @@ static PyObject *_wrap_wxGetEmailAddress(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -783,7 +678,7 @@ static PyObject *_wrap_wxGetHostName(PyObject *self, PyObject *args, PyObject *k
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -810,7 +705,7 @@ static PyObject *_wrap_wxGetFullHostName(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -837,7 +732,7 @@ static PyObject *_wrap_wxGetUserId(PyObject *self, PyObject *args, PyObject *kwa
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -864,7 +759,7 @@ static PyObject *_wrap_wxGetUserName(PyObject *self, PyObject *args, PyObject *k
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -891,7 +786,7 @@ static PyObject *_wrap_wxGetHomeDir(PyObject *self, PyObject *args, PyObject *kw
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -926,7 +821,7 @@ static PyObject *_wrap_wxGetUserHome(PyObject *self, PyObject *args, PyObject *k
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1038,7 +933,7 @@ static PyObject *_wrap_wxObject_GetClassName(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1473,24 +1368,26 @@ static PyObject *_wrap_wxSize_asTuple(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static int  wxSize___cmp__(wxSize *self,const wxSize * sz) {
-            if (! sz) return 1;
-            if (*self == *sz) return 0;
-            return -1;
+static bool  wxSize___eq__(wxSize *self,PyObject * obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
         }
-static PyObject *_wrap_wxSize___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxSize___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    bool  _result;
     wxSize * _arg0;
-    wxSize * _arg1;
+    PyObject * _arg1;
     wxSize  temp;
     PyObject * _obj0 = 0;
-    wxSize  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","sz", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize___cmp__",_kwnames,&_obj0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize___eq__",_kwnames,&_obj0,&_obj1)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -1498,13 +1395,50 @@ static PyObject *_wrap_wxSize___cmp__(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxSize_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxSize___cmp__(_arg0,_arg1);
+    _result = (bool )wxSize___eq__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxSize___ne__(wxSize *self,PyObject * obj) {
+            wxSize  tmp;
+            wxSize* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
+static PyObject *_wrap_wxSize___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSize * _arg0;
+    PyObject * _arg1;
+    wxSize  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxSize_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSize___ne__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1745,9 +1679,8 @@ static PyObject *_wrap_wxRealPoint_asTuple(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-static wxRealPoint  wxRealPoint___add__(wxRealPoint *self,const wxRealPoint * p) {
-            if (! p) return *self;
-            return *self + *p;
+static wxRealPoint  wxRealPoint___add__(wxRealPoint *self,const wxRealPoint & p) {
+            return *self + p;
         }
 static PyObject *_wrap_wxRealPoint___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1776,7 +1709,7 @@ static PyObject *_wrap_wxRealPoint___add__(PyObject *self, PyObject *args, PyObj
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxRealPoint (wxRealPoint___add__(_arg0,_arg1));
+    _result = new wxRealPoint (wxRealPoint___add__(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1785,9 +1718,8 @@ static PyObject *_wrap_wxRealPoint___add__(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-static wxRealPoint  wxRealPoint___sub__(wxRealPoint *self,const wxRealPoint * p) {
-            if (! p) return *self;
-            return *self - *p;
+static wxRealPoint  wxRealPoint___sub__(wxRealPoint *self,const wxRealPoint & p) {
+            return *self - p;
         }
 static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1816,7 +1748,7 @@ static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObj
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxRealPoint (wxRealPoint___sub__(_arg0,_arg1));
+    _result = new wxRealPoint (wxRealPoint___sub__(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1825,24 +1757,26 @@ static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-static int  wxRealPoint___cmp__(wxRealPoint *self,const wxRealPoint * p) {
-            if (! p) return 1;
-            if (*self == *p) return 0;
-            return -1;
+static bool  wxRealPoint___eq__(wxRealPoint *self,PyObject * obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
         }
-static PyObject *_wrap_wxRealPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxRealPoint___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    bool  _result;
     wxRealPoint * _arg0;
-    wxRealPoint * _arg1;
+    PyObject * _arg1;
     wxRealPoint  temp;
     PyObject * _obj0 = 0;
-    wxRealPoint  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","p", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___cmp__",_kwnames,&_obj0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___eq__",_kwnames,&_obj0,&_obj1)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -1850,13 +1784,50 @@ static PyObject *_wrap_wxRealPoint___cmp__(PyObject *self, PyObject *args, PyObj
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxRealPoint_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxRealPoint___cmp__(_arg0,_arg1);
+    _result = (bool )wxRealPoint___eq__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxRealPoint___ne__(wxRealPoint *self,PyObject * obj) {
+            wxRealPoint  tmp;
+            wxRealPoint* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
+static PyObject *_wrap_wxRealPoint___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRealPoint * _arg0;
+    PyObject * _arg1;
+    wxRealPoint  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRealPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRealPoint___ne__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2097,9 +2068,8 @@ static PyObject *_wrap_wxPoint_asTuple(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static wxPoint  wxPoint___add__(wxPoint *self,const wxPoint * p) {
-            if (! p) return *self;
-            return *self + *p;
+static wxPoint  wxPoint___add__(wxPoint *self,const wxPoint & p) {
+            return *self + p;
         }
 static PyObject *_wrap_wxPoint___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2128,7 +2098,7 @@ static PyObject *_wrap_wxPoint___add__(PyObject *self, PyObject *args, PyObject 
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxPoint (wxPoint___add__(_arg0,_arg1));
+    _result = new wxPoint (wxPoint___add__(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2137,9 +2107,8 @@ static PyObject *_wrap_wxPoint___add__(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static wxPoint  wxPoint___sub__(wxPoint *self,const wxPoint * p) {
-            if (! p) return *self;
-            return *self - *p;
+static wxPoint  wxPoint___sub__(wxPoint *self,const wxPoint & p) {
+            return *self - p;
         }
 static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2168,7 +2137,7 @@ static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject 
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxPoint (wxPoint___sub__(_arg0,_arg1));
+    _result = new wxPoint (wxPoint___sub__(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2177,24 +2146,26 @@ static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-static int  wxPoint___cmp__(wxPoint *self,const wxPoint * p) {
-            if (! p) return 1;
-            if (*self == *p) return 0;
-            return -1;
+static bool  wxPoint___eq__(wxPoint *self,PyObject * obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
         }
-static PyObject *_wrap_wxPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxPoint___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    bool  _result;
     wxPoint * _arg0;
-    wxPoint * _arg1;
+    PyObject * _arg1;
     wxPoint  temp;
     PyObject * _obj0 = 0;
-    wxPoint  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","p", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___cmp__",_kwnames,&_obj0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___eq__",_kwnames,&_obj0,&_obj1)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -2202,13 +2173,50 @@ static PyObject *_wrap_wxPoint___cmp__(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxPoint_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPoint___cmp__(_arg0,_arg1);
+    _result = (bool )wxPoint___eq__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxPoint___ne__(wxPoint *self,PyObject * obj) {
+            wxPoint  tmp;
+            wxPoint* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
+static PyObject *_wrap_wxPoint___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPoint * _arg0;
+    PyObject * _arg1;
+    wxPoint  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPoint___ne__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2224,7 +2232,7 @@ static PyObject *_wrap_new_wxRect(PyObject *self, PyObject *args, PyObject *kwar
     int  _arg1 = (int ) 0;
     int  _arg2 = (int ) 0;
     int  _arg3 = (int ) 0;
-    char *_kwnames[] = { "x","y","w","h", NULL };
+    char *_kwnames[] = { "x","y","width","height", NULL };
     char _ptemp[128];
 
     self = self;
@@ -2841,6 +2849,35 @@ static PyObject *_wrap_wxRect_SetBottom(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define wxRect_Deflate(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Deflate(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_Deflate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","dx","dy", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_Deflate",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Deflate(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxRect_Inflate(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inflate(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxRect_Inflate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2870,8 +2907,8 @@ static PyObject *_wrap_wxRect_Inflate(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxRect_Inside(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inside(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxRect_InsideXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Inside(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_InsideXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxRect * _arg0;
@@ -2882,7 +2919,7 @@ static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *k
     char *_kwnames[] = { "self","cx","cy", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_Inside",_kwnames,&_obj0,&_arg1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_InsideXY",_kwnames,&_obj0,&_arg1,&_arg2)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -2891,11 +2928,145 @@ static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *k
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxRect_Inside(_arg0,_arg1,_arg2);
+    _result = (bool )wxRect_InsideXY(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_Inside(_swigobj,_swigarg0)  (_swigobj->Inside(_swigarg0))
+static PyObject *_wrap_wxRect_Inside(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRect * _arg0;
+    wxPoint * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Inside",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRect_Inside(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_Intersects(_swigobj,_swigarg0)  (_swigobj->Intersects(_swigarg0))
+static PyObject *_wrap_wxRect_Intersects(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRect * _arg0;
+    wxRect * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxRect  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rect", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Intersects",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRect_Intersects(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRect_OffsetXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Offset(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRect_OffsetXY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1;
+    int  _arg2;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","dx","dy", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxRect_OffsetXY",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_OffsetXY(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxRect_Offset(_swigobj,_swigarg0)  (_swigobj->Offset(_swigarg0))
+static PyObject *_wrap_wxRect_Offset(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    wxPoint * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect_Offset",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Offset(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3119,6 +3290,42 @@ static PyObject *_wrap_wxRect_height_get(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static void  wxRect_Set(wxRect *self,int  x,int  y,int  width,int  height) {
+            self->x = x;
+            self->y = y;
+            self->width = width;
+            self->height = height;
+        }
+static PyObject *_wrap_wxRect_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 0;
+    int  _arg3 = (int ) 0;
+    int  _arg4 = (int ) 0;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iiii:wxRect_Set",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxRect_Set(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject * wxRect_asTuple(wxRect *self) {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
@@ -3157,9 +3364,8 @@ static PyObject *_wrap_wxRect_asTuple(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static wxRect  wxRect___add__(wxRect *self,const wxRect * rect) {
-            if (! rect) return *self;
-            return *self + *rect;
+static wxRect  wxRect___add__(wxRect *self,const wxRect & rect) {
+            return *self + rect;
         }
 static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3188,7 +3394,7 @@ static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxRect (wxRect___add__(_arg0,_arg1));
+    _result = new wxRect (wxRect___add__(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3197,24 +3403,26 @@ static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static int  wxRect___cmp__(wxRect *self,const wxRect * rect) {
-            if (! rect) return 1;
-            if (*self == *rect) return 0;
-            return -1;
+static bool  wxRect___eq__(wxRect *self,PyObject * obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
         }
-static PyObject *_wrap_wxRect___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxRect___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    int  _result;
+    bool  _result;
     wxRect * _arg0;
-    wxRect * _arg1;
+    PyObject * _arg1;
     wxRect  temp;
     PyObject * _obj0 = 0;
-    wxRect  temp0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","rect", NULL };
+    char *_kwnames[] = { "self","obj", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect___cmp__",_kwnames,&_obj0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect___eq__",_kwnames,&_obj0,&_obj1)) 
         return NULL;
 {
     _arg0 = &temp;
@@ -3222,17 +3430,951 @@ static PyObject *_wrap_wxRect___cmp__(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
 {
-    _arg1 = &temp0;
-    if (! wxRect_helper(_obj1, &_arg1))
-        return NULL;
+  _arg1 = _obj1;
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxRect___cmp__(_arg0,_arg1);
+    _result = (bool )wxRect___eq__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxRect___ne__(wxRect *self,PyObject * obj) {
+            wxRect  tmp;
+            wxRect* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
+static PyObject *_wrap_wxRect___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRect * _arg0;
+    PyObject * _arg1;
+    wxRect  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRect___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRect_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRect___ne__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_m_x_set(_swigobj,_swigval) (_swigobj->m_x = _swigval,_swigval)
+static PyObject *_wrap_wxPoint2DDouble_m_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    double  _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","m_x", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Od:wxPoint2DDouble_m_x_set",_kwnames,&_obj0,&_arg1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_m_x_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_m_x_get(_swigobj) ((double ) _swigobj->m_x)
+static PyObject *_wrap_wxPoint2DDouble_m_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_m_x_get",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_m_x_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_m_y_set(_swigobj,_swigval) (_swigobj->m_y = _swigval,_swigval)
+static PyObject *_wrap_wxPoint2DDouble_m_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    double  _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","m_y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Od:wxPoint2DDouble_m_y_set",_kwnames,&_obj0,&_arg1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_m_y_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_m_y_get(_swigobj) ((double ) _swigobj->m_y)
+static PyObject *_wrap_wxPoint2DDouble_m_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_m_y_get",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_m_y_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define new_wxPoint2DDouble(_swigarg0,_swigarg1) (new wxPoint2DDouble(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxPoint2DDouble(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    double  _arg0 = (double ) 0;
+    double  _arg1 = (double ) 0;
+    char *_kwnames[] = { "x","y", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|dd:new_wxPoint2DDouble",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPoint2DDouble *)new_wxPoint2DDouble(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxPoint2DDoubleCopy(_swigarg0) (new wxPoint2DDouble(_swigarg0))
+static PyObject *_wrap_new_wxPoint2DDoubleCopy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPoint2DDoubleCopy",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPoint2DDouble *)new_wxPoint2DDoubleCopy(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxPoint2DDoubleFromPoint(_swigarg0) (new wxPoint2DDouble(_swigarg0))
+static PyObject *_wrap_new_wxPoint2DDoubleFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint * _arg0;
+    wxPoint  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxPoint2DDoubleFromPoint",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPoint2DDouble *)new_wxPoint2DDoubleFromPoint(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetFloor(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetFloor(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPoint2DDouble_GetFloor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    wxPoint2DDouble  temp1;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_GetFloor",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp1;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_GetFloor(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetRounded(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetRounded(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPoint2DDouble_GetRounded(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    wxPoint2DDouble  temp1;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_GetRounded",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp1;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_GetRounded(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetVectorLength(_swigobj)  (_swigobj->GetVectorLength())
+static PyObject *_wrap_wxPoint2DDouble_GetVectorLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_GetVectorLength",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetVectorLength(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetVectorAngle(_swigobj)  (_swigobj->GetVectorAngle())
+static PyObject *_wrap_wxPoint2DDouble_GetVectorAngle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_GetVectorAngle",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetVectorAngle(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_SetVectorLength(_swigobj,_swigarg0)  (_swigobj->SetVectorLength(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_SetVectorLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    double  _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","length", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Od:wxPoint2DDouble_SetVectorLength",_kwnames,&_obj0,&_arg1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_SetVectorLength(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_SetVectorAngle(_swigobj,_swigarg0)  (_swigobj->SetVectorAngle(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_SetVectorAngle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    double  _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","degrees", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Od:wxPoint2DDouble_SetVectorAngle",_kwnames,&_obj0,&_arg1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_SetVectorAngle(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetDistance(_swigobj,_swigarg0)  (_swigobj->GetDistance(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_GetDistance(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble_GetDistance",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetDistance(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetDistanceSquare(_swigobj,_swigarg0)  (_swigobj->GetDistanceSquare(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_GetDistanceSquare(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble_GetDistanceSquare",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetDistanceSquare(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetDotProduct(_swigobj,_swigarg0)  (_swigobj->GetDotProduct(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_GetDotProduct(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","vec", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble_GetDotProduct",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetDotProduct(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+#define wxPoint2DDouble_GetCrossProduct(_swigobj,_swigarg0)  (_swigobj->GetCrossProduct(_swigarg0))
+static PyObject *_wrap_wxPoint2DDouble_GetCrossProduct(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    double  _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","vec", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble_GetCrossProduct",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (double )wxPoint2DDouble_GetCrossProduct(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+static void  wxPoint2DDouble_Set(wxPoint2DDouble *self,double  x,double  y) {
+            self->m_x = x;
+            self->m_y = y;
+        }
+static PyObject *_wrap_wxPoint2DDouble_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _arg0;
+    double  _arg1 = (double ) 0;
+    double  _arg2 = (double ) 0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|dd:wxPoint2DDouble_Set",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble_Set(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static wxPoint2DDouble  wxPoint2DDouble___neg__(wxPoint2DDouble *self) { return -(*self); }
+static PyObject *_wrap_wxPoint2DDouble___neg__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble___neg__",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxPoint2DDouble (wxPoint2DDouble___neg__(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint2DDouble_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static wxPoint2DDouble & wxPoint2DDouble___iadd__(wxPoint2DDouble *self,const wxPoint2DDouble & pt) { return (*self) += pt; }
+static PyObject *_wrap_wxPoint2DDouble___iadd__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___iadd__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble & _result_ref = wxPoint2DDouble___iadd__(_arg0,*_arg1);
+    _result = (wxPoint2DDouble *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static wxPoint2DDouble & wxPoint2DDouble___isub__(wxPoint2DDouble *self,const wxPoint2DDouble & pt) { return (*self) -= pt; }
+static PyObject *_wrap_wxPoint2DDouble___isub__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___isub__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble & _result_ref = wxPoint2DDouble___isub__(_arg0,*_arg1);
+    _result = (wxPoint2DDouble *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static wxPoint2DDouble & wxPoint2DDouble___imul__(wxPoint2DDouble *self,const wxPoint2DDouble & pt) { return (*self) *= pt; }
+static PyObject *_wrap_wxPoint2DDouble___imul__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___imul__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble & _result_ref = wxPoint2DDouble___imul__(_arg0,*_arg1);
+    _result = (wxPoint2DDouble *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static wxPoint2DDouble & wxPoint2DDouble___idiv__(wxPoint2DDouble *self,const wxPoint2DDouble & pt) { return (*self) /= pt; }
+static PyObject *_wrap_wxPoint2DDouble___idiv__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint2DDouble * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    wxPoint2DDouble  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___idiv__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint2DDouble_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPoint2DDouble & _result_ref = wxPoint2DDouble___idiv__(_arg0,*_arg1);
+    _result = (wxPoint2DDouble *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint2DDouble_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static bool  wxPoint2DDouble___eq__(wxPoint2DDouble *self,PyObject * obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
+        }
+static PyObject *_wrap_wxPoint2DDouble___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPoint2DDouble * _arg0;
+    PyObject * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___eq__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPoint2DDouble___eq__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static bool  wxPoint2DDouble___ne__(wxPoint2DDouble *self,PyObject * obj) {
+            wxPoint2DDouble  tmp;
+            wxPoint2DDouble* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
+static PyObject *_wrap_wxPoint2DDouble___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPoint2DDouble * _arg0;
+    PyObject * _arg1;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","obj", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint2DDouble___ne__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPoint2DDouble___ne__(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject * wxPoint2DDouble_asTuple(wxPoint2DDouble *self) {
+            wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
+            PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->m_y));
+            wxPyEndBlockThreads();
+            return tup;
+        }
+static PyObject *_wrap_wxPoint2DDouble_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPoint2DDouble * _arg0;
+    wxPoint2DDouble  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPoint2DDouble_asTuple",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint2DDouble_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (PyObject *)wxPoint2DDouble_asTuple(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
@@ -4272,9 +5414,41 @@ static PyMethodDef misccMethods[] = {
 	 { "wxIndividualLayoutConstraint_AsIs", (PyCFunction) _wrap_wxIndividualLayoutConstraint_AsIs, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIndividualLayoutConstraint_Absolute", (PyCFunction) _wrap_wxIndividualLayoutConstraint_Absolute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIndividualLayoutConstraint_Above", (PyCFunction) _wrap_wxIndividualLayoutConstraint_Above, METH_VARARGS | METH_KEYWORDS },
-	 { "wxRect___cmp__", (PyCFunction) _wrap_wxRect___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_asTuple", (PyCFunction) _wrap_wxPoint2DDouble_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___ne__", (PyCFunction) _wrap_wxPoint2DDouble___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___eq__", (PyCFunction) _wrap_wxPoint2DDouble___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___idiv__", (PyCFunction) _wrap_wxPoint2DDouble___idiv__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___imul__", (PyCFunction) _wrap_wxPoint2DDouble___imul__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___isub__", (PyCFunction) _wrap_wxPoint2DDouble___isub__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___iadd__", (PyCFunction) _wrap_wxPoint2DDouble___iadd__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble___neg__", (PyCFunction) _wrap_wxPoint2DDouble___neg__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_Set", (PyCFunction) _wrap_wxPoint2DDouble_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetCrossProduct", (PyCFunction) _wrap_wxPoint2DDouble_GetCrossProduct, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetDotProduct", (PyCFunction) _wrap_wxPoint2DDouble_GetDotProduct, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetDistanceSquare", (PyCFunction) _wrap_wxPoint2DDouble_GetDistanceSquare, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetDistance", (PyCFunction) _wrap_wxPoint2DDouble_GetDistance, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_SetVectorAngle", (PyCFunction) _wrap_wxPoint2DDouble_SetVectorAngle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_SetVectorLength", (PyCFunction) _wrap_wxPoint2DDouble_SetVectorLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetVectorAngle", (PyCFunction) _wrap_wxPoint2DDouble_GetVectorAngle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetVectorLength", (PyCFunction) _wrap_wxPoint2DDouble_GetVectorLength, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetRounded", (PyCFunction) _wrap_wxPoint2DDouble_GetRounded, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_GetFloor", (PyCFunction) _wrap_wxPoint2DDouble_GetFloor, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPoint2DDoubleFromPoint", (PyCFunction) _wrap_new_wxPoint2DDoubleFromPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPoint2DDoubleCopy", (PyCFunction) _wrap_new_wxPoint2DDoubleCopy, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPoint2DDouble", (PyCFunction) _wrap_new_wxPoint2DDouble, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_y_get", (PyCFunction) _wrap_wxPoint2DDouble_m_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_y_set", (PyCFunction) _wrap_wxPoint2DDouble_m_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_x_get", (PyCFunction) _wrap_wxPoint2DDouble_m_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_x_set", (PyCFunction) _wrap_wxPoint2DDouble_m_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_m_y_get", (PyCFunction) _wrap_wxPoint2DDouble_m_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_m_y_set", (PyCFunction) _wrap_wxPoint2DDouble_m_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_m_x_get", (PyCFunction) _wrap_wxPoint2DDouble_m_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint2DDouble_m_x_set", (PyCFunction) _wrap_wxPoint2DDouble_m_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect___ne__", (PyCFunction) _wrap_wxRect___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect___eq__", (PyCFunction) _wrap_wxRect___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect___add__", (PyCFunction) _wrap_wxRect___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_asTuple", (PyCFunction) _wrap_wxRect_asTuple, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Set", (PyCFunction) _wrap_wxRect_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_height_get", (PyCFunction) _wrap_wxRect_height_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_height_set", (PyCFunction) _wrap_wxRect_height_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_width_get", (PyCFunction) _wrap_wxRect_width_get, METH_VARARGS | METH_KEYWORDS },
@@ -4283,8 +5457,13 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_y_set", (PyCFunction) _wrap_wxRect_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_x_get", (PyCFunction) _wrap_wxRect_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_x_set", (PyCFunction) _wrap_wxRect_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Offset", (PyCFunction) _wrap_wxRect_Offset, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_OffsetXY", (PyCFunction) _wrap_wxRect_OffsetXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Intersects", (PyCFunction) _wrap_wxRect_Intersects, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_Inside", (PyCFunction) _wrap_wxRect_Inside, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_InsideXY", (PyCFunction) _wrap_wxRect_InsideXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_Inflate", (PyCFunction) _wrap_wxRect_Inflate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRect_Deflate", (PyCFunction) _wrap_wxRect_Deflate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetBottom", (PyCFunction) _wrap_wxRect_SetBottom, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetTop", (PyCFunction) _wrap_wxRect_SetTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_SetRight", (PyCFunction) _wrap_wxRect_SetRight, METH_VARARGS | METH_KEYWORDS },
@@ -4307,7 +5486,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_GetX", (PyCFunction) _wrap_wxRect_GetX, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRect", (PyCFunction) _wrap_delete_wxRect, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRect", (PyCFunction) _wrap_new_wxRect, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPoint___cmp__", (PyCFunction) _wrap_wxPoint___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint___ne__", (PyCFunction) _wrap_wxPoint___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint___eq__", (PyCFunction) _wrap_wxPoint___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint___sub__", (PyCFunction) _wrap_wxPoint___sub__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint___add__", (PyCFunction) _wrap_wxPoint___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_asTuple", (PyCFunction) _wrap_wxPoint_asTuple, METH_VARARGS | METH_KEYWORDS },
@@ -4318,7 +5498,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxPoint_y_set", (PyCFunction) _wrap_wxPoint_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_x_get", (PyCFunction) _wrap_wxPoint_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_x_set", (PyCFunction) _wrap_wxPoint_x_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxRealPoint___cmp__", (PyCFunction) _wrap_wxRealPoint___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRealPoint___ne__", (PyCFunction) _wrap_wxRealPoint___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRealPoint___eq__", (PyCFunction) _wrap_wxRealPoint___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint___sub__", (PyCFunction) _wrap_wxRealPoint___sub__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint___add__", (PyCFunction) _wrap_wxRealPoint___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_asTuple", (PyCFunction) _wrap_wxRealPoint_asTuple, METH_VARARGS | METH_KEYWORDS },
@@ -4329,7 +5510,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRealPoint_y_set", (PyCFunction) _wrap_wxRealPoint_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_x_get", (PyCFunction) _wrap_wxRealPoint_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_x_set", (PyCFunction) _wrap_wxRealPoint_x_set, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSize___cmp__", (PyCFunction) _wrap_wxSize___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSize___ne__", (PyCFunction) _wrap_wxSize___ne__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSize___eq__", (PyCFunction) _wrap_wxSize___eq__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_asTuple", (PyCFunction) _wrap_wxSize_asTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetHeight", (PyCFunction) _wrap_wxSize_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetWidth", (PyCFunction) _wrap_wxSize_SetWidth, METH_VARARGS | METH_KEYWORDS },
@@ -4360,7 +5542,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetHostName", (PyCFunction) _wrap_wxGetHostName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetEmailAddress", (PyCFunction) _wrap_wxGetEmailAddress, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYieldIfNeeded", (PyCFunction) _wrap_wxYieldIfNeeded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },
@@ -4379,8 +5560,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxEndBusyCursor", (PyCFunction) _wrap_wxEndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBell", (PyCFunction) _wrap_wxBell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetCurrentId", (PyCFunction) _wrap_wxGetCurrentId, METH_VARARGS | METH_KEYWORDS },
-	 { "RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },
-	 { "NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegisterId", (PyCFunction) _wrap_wxRegisterId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNewId", (PyCFunction) _wrap_wxNewId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIntersectRect", (PyCFunction) _wrap_wxIntersectRect, METH_VARARGS | METH_KEYWORDS },
