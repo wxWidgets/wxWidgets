@@ -576,5 +576,9 @@ typedef struct {
     #define UISF_HIDEACCEL 2
 #endif
 
+#ifndef WC_NO_BEST_FIT_CHARS
+    #define WC_NO_BEST_FIT_CHARS 0x400
+#endif
+
 #endif
     // _WX_MISSING_H_
