@@ -10,6 +10,21 @@ wxMSW:
   (starting item is now included in the search, use 0 to search from the
    beginning)
 
+2.2.3
+-----
+
+wxGTK:
+
+- frames created with wxDefaultSize will have some reasonable default size and
+  not be created with 0 size
+
+2.2.2
+-----
+
+wxGTK:
+
+- better (implicit) themes support
+
 2.2.1
 -----
 
