@@ -176,9 +176,11 @@ Returns TRUE if the current line is the last one.
 \constfunc{static const char*}{GetEOL}{\param{wxTextFileType }{type = typeDefault}}
 
 Get the line termination string corresponding to given constant. {\it typeDefault} is
-the value defined during the compilation and corresponds to the native format of the
-platform, i.e. it will be wxTextFileType\_Dos under Windows, wxTextFileType\_Unix under
-Unix and wxTextFileType\_Mac under Mac.
+the value defined during the compilation and corresponds to the native format
+of the platform, i.e. it will be wxTextFileType\_Dos under Windows,
+wxTextFileType\_Unix under Unix (including Mac OS X when compiling with the
+Apple Developer Tools) and wxTextFileType\_Mac under Mac OS (including
+Mac OS X when compiling with CodeWarrior).
 
 \membersection{wxTextFile::GetFirstLine}\label{wxtextfilegetfirstline}
 
