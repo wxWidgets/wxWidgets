@@ -81,7 +81,7 @@ void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 }
 
 bool
-wxExtHelpController::DisplayHelp(wxString const &relativeURL)
+wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 {
    wxBusyCursor b; // display a busy cursor
 

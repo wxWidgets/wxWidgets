@@ -80,13 +80,8 @@ bool wxCHMHelpController::DisplaySection(const wxString& section)
 
     wxString str = GetValidFilename(m_helpFile);
 
-    bool isFilename = TRUE;
-
     // Is this an HTML file or a keyword?
-    wxString path, filename, ext;
-    wxSplitPath(section, & path, & filename, & ext);
-    if (ext != wxT("htm") && ext != wxT("html"))
-        isFilename = FALSE;
+    bool isFilename = (section.Find(wxT(".htm")) != -1);
 
     if (isFilename)
         HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, (DWORD) (const wxChar*) section);

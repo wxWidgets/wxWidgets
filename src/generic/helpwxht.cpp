@@ -266,7 +266,7 @@ wxHelpControllerHtml::~wxHelpControllerHtml(void)
 #endif
 
 bool
-wxHelpControllerHtml::DisplayHelp(wxString const &relativeURL)
+wxHelpControllerHtml::DisplayHelp(const wxString &relativeURL)
 {
    wxBusyCursor b; // display a busy cursor
 

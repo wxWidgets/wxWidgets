@@ -101,9 +101,13 @@ If the help viewer is not running, runs it and displays the file at the given bl
 
 {\it WinHelp:} Refers to the context number.
 
+{\it MS HTML Help:} Refers to the context number.
+
 {\it External HTML help:} the same as for \helpref{wxHelpController::DisplaySection}{wxhelpcontrollerdisplaysection}.
 
 {\it wxHtmlHelpController:} {\it sectionNo} is an identifier as specified in the {\tt .hhc} file. See \helpref{Help files format}{helpformat}.
+
+This function is for backward compatibility only, and applications should use \helpref{wxHelpController}{wxhelpcontrollerwxdisplaysection} instead.
 
 \membersection{wxHelpController::DisplayContents}\label{wxhelpcontrollerdisplaycontents}
 
@@ -119,8 +123,9 @@ contents.
 If the help viewer is not running, runs it and displays the given section.
 
 The interpretation of {\it section} differs between help viewers. For most viewers,
-this call is equivalent to KeywordSearch. For MS HTML Help, if {\it section} has a .htm
-or .html extension, that HTML file within the .chm file will be displayed; otherwise
+this call is equivalent to KeywordSearch. For MS HTML Help, external HTML help
+and simple wxHTML help, if {\it section} has a .htm
+or .html extension, that HTML file will be displayed; otherwise
 a keyword search is done.
 
 \func{virtual bool}{DisplaySection}{\param{int}{ sectionNo}}
@@ -129,7 +134,7 @@ If the help viewer is not running, runs it and displays the given section.
 
 {\it WinHelp, MS HTML Help:} {\it sectionNo} is a context id.
 
-{\it External HTML help/wxHTML based help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
+{\it External HTML help/simple wxHTML help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
 
 \begin{verbatim}
 0  wx.html             ; Index
@@ -176,7 +181,7 @@ match is found, the file is displayed at this section.
 {\it WinHelp, MS HTML Help:} If more than one match is found, 
 the first topic is displayed.
 
-{\it External HTML help:} If more than one match is found, 
+{\it External HTML help, simple wxHTML help:} If more than one match is found, 
 a choice of topics is displayed.
 
 {\it wxHtmlHelpController:} see \helpref{wxHtmlHelpController::KeywordSearch}{wxhtmlhelpcontrollerkeywordsearch}.

@@ -257,6 +257,10 @@ samples/help/*.hlp
 samples/help/*.cnt
 samples/help/*.zip
 samples/help/*.htb
+samples/help/*.chm
+samples/help/*.hhp
+samples/help/*.hhk
+samples/help/*.hhc
 samples/help/*.hpj
 samples/help/*.tex
 samples/help/*.ini

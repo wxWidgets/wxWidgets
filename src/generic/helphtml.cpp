@@ -251,6 +251,16 @@ wxHTMLHelpControllerBase::DisplaySection(int sectionNo)
    return FALSE;
 }
 
+bool wxHTMLHelpControllerBase::DisplaySection(const wxString& section)
+{
+    bool isFilename = (section.Find(wxT(".htm")) != -1);
+
+    if (isFilename)
+        return DisplayHelp(section);
+    else
+        return KeywordSearch(section);
+}
+
 bool
 wxHTMLHelpControllerBase::DisplayBlock(long blockNo)
 {
