@@ -24,7 +24,7 @@ import images
 
 _treeList = [
     # new stuff
-    ('New since last release', [
+    ('Recent Additions', [
         'wxIntCtrl',
         'wxPyColourChooser',
         ]),
@@ -295,15 +295,28 @@ class wxPythonDemo(wxFrame):
 
         # Make a Help menu
         helpID = wxNewId()
+        findID = wxNewId()
+        findnextID = wxNewId()
         menu = wxMenu()
         menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
+        menu.Append(findID, '&Find\tCtrl-F', 'Find in the Demo Code')
+        menu.Append(findnextID, 'Find &Next\tF3', 'Find Next')
         EVT_MENU(self, helpID, self.OnHelpAbout)
+        EVT_MENU(self, findID, self.OnHelpFind)
+        EVT_MENU(self, findnextID, self.OnFindNext)
+        EVT_COMMAND_FIND(self, -1, self.OnFind)
+        EVT_COMMAND_FIND_NEXT(self, -1, self.OnFind)
+        EVT_COMMAND_FIND_CLOSE(self, -1 , self.OnFindClose)
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
 
+        self.finddata = wxFindReplaceData()
+
         # set the menu accellerator table...
         aTable = wxAcceleratorTable([(wxACCEL_ALT,  ord('X'), exitID),
-                                     (wxACCEL_CTRL, ord('H'), helpID)])
+                                     (wxACCEL_CTRL, ord('H'), helpID),
+                                     (wxACCEL_CTRL, ord('F'), findID),
+                                     (wxACCEL_NORMAL, WXK_F3, findnextID)])
         self.SetAcceleratorTable(aTable)
 
 
@@ -360,7 +373,8 @@ class wxPythonDemo(wxFrame):
 
         # Set up a TextCtrl on the Demo Code Notebook page
         self.txt = wxTextCtrl(self.nb, -1,
-                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL|wxTE_RICH2)
+                              style = wxTE_MULTILINE|wxTE_READONLY|
+                              wxHSCROLL|wxTE_RICH2|wxTE_NOHIDESEL)
         self.nb.AddPage(self.txt, "Demo Code")
 
 
@@ -521,12 +535,56 @@ class wxPythonDemo(wxFrame):
     def OnFileExit(self, *event):
         self.Close()
 
-
     def OnHelpAbout(self, event):
         from About import MyAboutBox
         about = MyAboutBox(self)
         about.ShowModal()
         about.Destroy()
+
+    def OnHelpFind(self, event):
+        self.nb.SetSelection(1)
+        self.finddlg = wxFindReplaceDialog(self, self.finddata, "Find",
+                        wxFR_NOUPDOWN |
+                        wxFR_NOMATCHCASE |
+                        wxFR_NOWHOLEWORD)
+        self.finddlg.Show(true)
+
+    def OnFind(self, event):
+        self.nb.SetSelection(1)
+        end = self.txt.GetLastPosition()
+        textstring = self.txt.GetRange(0, end).lower()
+        start = self.txt.GetSelection()[1]
+        findstring = self.finddata.GetFindString().lower()
+        loc = textstring.find(findstring, start)
+        if loc == -1 and start != 0:
+            # string not found, start at beginning
+            start = 0
+            loc = textstring.find(findstring, start)
+        if loc == -1:
+            dlg = wxMessageDialog(self, 'Find String Not Found',
+                          'Find String Not Found in Demo File',
+                          wxOK | wxICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+        if self.finddlg:
+            if loc == -1:
+                self.finddlg.SetFocus()
+                return
+            else:
+                self.finddlg.Destroy()
+        self.txt.SetSelection(loc, loc + len(findstring))
+        self.txt.ShowPosition(loc)
+
+
+
+    def OnFindNext(self, event):
+        if self.finddata.GetFindString():
+            self.OnFind(event)
+        else:
+            self.OnHelpFind(event)
+
+    def OnFindClose(self, event):
+        event.GetDialog().Destroy()
 
 
     #---------------------------------------------
