@@ -230,7 +230,21 @@ cp winstyle.h ~/wxgtk_dist/wxGTK/utils/dialoged
 cd bitmaps
 mkdir ~/wxgtk_dist/wxGTK/utils/dialoged/bitmaps
 cp *.xpm ~/wxgtk_dist/wxGTK/utils/dialoged/bitmaps
-cd ../../../..
+cd ../../..
+
+cd wxPython
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython
+cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
+cp TODO.txt ~/wxgtk_dist/wxGTK/utils/wxPython
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/src
+cp ./src/* ~/wxgtk_dist/wxGTK/utils/wxPython/src
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/src/gtk
+cp ./src/gtk/* ~/wxgtk_dist/wxGTK/utils/wxPython/src/gtk
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests
+cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/tests
+mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
+cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
+cd ../..
 
 echo Samples dir..
 

@@ -21,16 +21,16 @@ Penguin: penguin.o trackball.o lw.o glcanvas.o
 	`wx-config --libs` -lMesaGL -lMesaGLU
 
 penguin.o: penguin.cpp
-	$(CPP) `wx-config --cflags` -I../../src -c penguin.cpp
+	$(CPP) `wx-config --cflags` -I../../gtk -c penguin.cpp
 
 lw.o: lw.cpp
-	$(CPP) `wx-config --cflags` -I../../src -c lw.cpp
+	$(CPP) `wx-config --cflags` -I../../gtk -c lw.cpp
 
 trackball.o: trackball.c
-	$(CC) `wx-config --cflags` -I../../src -c trackball.c
+	$(CC) `wx-config --cflags` -I../../gtk -c trackball.c
 
-glcanvas.o: ../../src/glcanvas.cpp
-	$(CPP) `wx-config --cflags` `gtk-config --cflags` -I../../src -c ../../src/glcanvas.cpp
+glcanvas.o: ../../gtk/glcanvas.cpp
+	$(CPP) `wx-config --cflags` `gtk-config --cflags` -I../../gtk -c ../../gtk/glcanvas.cpp
 
 clean: 
 	rm -f *.o Penguin

@@ -1,6 +1,9 @@
 \section{\class{wxPrivateDataObject}}\label{wxprivatedataobject}
 
- wxPrivateDataObject is a specialization of wxDataObject for application-specific data.
+wxPrivateDataObject is a specialization of wxDataObject for application-specific or standard
+format data. The format of the data contained in an instance of this class must be identified
+with a string literal corresponding to the mime-type of the data. Typically this would be
+"image/png" or "text/html" or "application/word".
 
 \wxheading{Derived from}
 
@@ -20,17 +23,13 @@
 
 \func{}{\destruct{wxPrivateDataObject}}{\void}
 
-\membersection{wxPrivateDataObject::GetFormat}\label{wxprivatedataobjectgetformat}
-
-\constfunc{virtual wxDataFormat}{GetFormat}{\void}
-
 \membersection{wxPrivateDataObject::SetId}\label{wxprivatedataobjectsetid}
 
 \func{virtual void}{SetId}{\param{const wxString\& }{id}}
 
 The string ID identifies the format of clipboard or DnD data. A word
 processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-to the clipboard - the latter with the Id "WXWORD\_FORMAT".
+to the clipboard - the latter with the Id "application/word".
 
 \membersection{wxPrivateDataObject::GetId}\label{wxprivatedataobjectgetid}
 
@@ -42,9 +41,9 @@ Returns the ID of the clipboard or DnD data format.
 
 \func{virtual void}{SetData}{\param{const char }{*data}, \param{size\_t }{size}}
 
-Set the data. The data object will make internal copy.
+Set the data. The data object will make an internal copy.
 
-\membersection{wxPrivateDataObject::GetDataSize}\label{wxprivatedataobjectgetdatasize}
+\membersection{wxPrivateDataObject::GetSize}\label{wxprivatedataobjectgetsize}
 
 \constfunc{virtual size\_t}{GetDataSize}{\void}
 
@@ -54,5 +53,23 @@ Returns the data size.
 
 \func{virtual char*}{GetData}{\void}
 
-Returns the data.
+Returns a pointer to the data.
+
+\membersection{wxPrivateDataObject::WriteData}\label{wxprivatedataobjectwritedata}
+
+\constfunc{virtual void}{WriteData}{\param{void}{*dest} }
+
+Write the data owned by this class to {\it dest}. By default, this
+calls \helpref{WriteData}{wxprivatedataobjectwritedata2} with data 
+set using \helpref{SetData}{wxprivatedataobjectsetdata}.
+This can be overridden to provide data on-demand; in this case
+\helpref{WriteData(data,dest)}{wxprivatedataobjectwritedata2} (see below) must be called from
+within the overriding WriteData() method.
+
+\membersection{wxPrivateDataObject::WriteData}\label{wxprivatedataobjectwritedata2}
+
+\constfunc{void}{WriteData}{\param{const char* }{data}, \param{void}{*dest} }
+
+Writes the data {\it data} to {\it dest}. This method must be called
+from \helpref{WriteData}{wxprivatedataobjectwritedata}.
 
