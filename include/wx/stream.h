@@ -150,7 +150,7 @@ class WXDLLEXPORT wxInputStream: public wxStreamBase {
   // IO functions
   virtual char Peek();
   char GetC();
-  wxInputStream& Read(void *buffer, size_t size);
+  virtual wxInputStream& Read(void *buffer, size_t size);
   wxInputStream& Read(wxOutputStream& stream_out);
 
   // Position functions
@@ -191,7 +191,7 @@ class WXDLLEXPORT wxOutputStream: public wxStreamBase {
   wxOutputStream(wxStreamBuffer *sbuf);
   virtual ~wxOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
+  virtual wxOutputStream& Write(const void *buffer, size_t size);
   wxOutputStream& Write(wxInputStream& stream_in);
 
   off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);

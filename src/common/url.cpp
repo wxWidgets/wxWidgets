@@ -64,6 +64,7 @@ wxURL::wxURL(const wxString& url)
   }
   m_url = url;
   m_error = wxURL_NOERR;
+  ParseURL();
 }
 
 bool wxURL::ParseURL()

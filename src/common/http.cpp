@@ -125,6 +125,7 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
+    printf("Header: %s\n", WXSTRINGCAST line);
     int pos = line.Find(':');
     if (pos == -1)
       return FALSE;
@@ -192,6 +193,10 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     return FALSE;
   }
 
+  SaveState();
+  Notify(FALSE);
+  SetFlags(WAITALL);
+
   sprintf(buf, "%s %s HTTP/1.0\n\r", tmp_buf, (const char *)path);
   Write(buf, strlen(buf));
   SendHeaders();
@@ -201,18 +206,22 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   wxString tmp_str;
 
   m_error = GetLine(this, tmp_str);
-  if (m_error != wxPROTO_NOERR)
+  if (m_error != wxPROTO_NOERR) {
+    RestoreState();
     return FALSE;
+  }
 
   if (!tmp_str.Contains("HTTP/")) {
     // TODO: support HTTP v0.9 which can have no header.
     SetHeader("Content-Length", "-1");
     SetHeader("Content-Type", "none/none");
+    RestoreState();
     return TRUE;
   }
 
   wxStringTokenizer token(tmp_str,' ');
   wxString tmp_str2;
+  bool ret_value;
 
   token.NextToken();
   tmp_str2 = token.NextToken();
@@ -222,10 +231,13 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     break;
   default:
     m_error = wxPROTO_NOFILE;
+    RestoreState();
     return FALSE;
   }
 
-  return ParseHeaders();
+  ret_value = ParseHeaders();
+  RestoreState();
+  return ret_value;
 }
 
 class wxHTTPStream : public wxSocketInputStream {
@@ -234,7 +246,7 @@ public:
   size_t m_httpsize;
 
   wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http), m_http(http) {}
-  size_t StreamSize() { return m_httpsize; }
+  size_t StreamSize() const { return m_httpsize; }
   virtual ~wxHTTPStream(void) { m_http->Abort(); }
 };
 
@@ -258,7 +270,8 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
 
-  if (GetHeader("Content-Length").IsEmpty())
+  printf("Len = %s\n", WXSTRINGCAST GetHeader("Content-Length"));
+  if (!GetHeader("Content-Length").IsEmpty())
     inp_stream->m_httpsize = atoi(WXSTRINGCAST GetHeader("Content-Length"));
 
   return inp_stream;

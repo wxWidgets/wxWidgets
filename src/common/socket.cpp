@@ -11,8 +11,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__
 #pragma implementation "socket.h"
-// #pragma interface
-// #pragma implementation "socket.cpp"
 #endif
 
 #ifdef __MWERKS__
@@ -357,31 +355,40 @@ bool wxSocketBase::Close()
 
 wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
 {
-  m_lcount = GetPushback(buffer, nbytes, FALSE);
-  nbytes -= m_lcount;
+  size_t count;
+
+  count = GetPushback(buffer, nbytes, FALSE);
+  nbytes -= count;
+  buffer += count;
 
   // If we have got the whole needed buffer or if we don't want to
   // wait then it returns immediately.
   if (!nbytes || (m_lcount && !(m_flags & WAITALL)) )
     return *this;
 
+  m_lcount = 0;
   WantBuffer(buffer, nbytes, EVT_READ);
+  m_lcount += count;
 
   return *this;
 }
 
 wxSocketBase& wxSocketBase::Peek(char* buffer, size_t nbytes)
 {
-  size_t nbytes_old = nbytes;
+  size_t count;
 
-  nbytes -= GetPushback(buffer, nbytes, TRUE);
-  if (!nbytes) 
+  count = GetPushback(buffer, nbytes, TRUE);
+  if (nbytes-count == 0) 
   {
-    m_lcount = nbytes_old;
+    m_lcount = nbytes;
     return *this;
   }
+  buffer += count;
+  nbytes -= count;
 
+  m_lcount = 0;
   WantBuffer(buffer, nbytes, EVT_PEEK);
+  m_lcount += count;
 
   return *this;
 }
@@ -1127,9 +1134,10 @@ void wxSocketBase::CreatePushbackBefore(const char *buffer, size_t size)
   curr_pos = new_buf + size;
 
   memcpy(new_buf, buffer, size);
-  memcpy(curr_pos, m_unread, m_unrd_size);
-
-  free(m_unread);
+  if (m_unrd_size != 0) {
+    memcpy(curr_pos, m_unread, m_unrd_size);
+    free(m_unread);
+  }
   m_unread = new_buf;
   m_unrd_size += size;
 }
@@ -1145,7 +1153,7 @@ size_t wxSocketBase::GetPushback(char *buffer, size_t size, bool peek)
 
   if (!peek) {
     m_unrd_size -= size;
-    if (!m_unrd_size) {
+    if (m_unrd_size == 0) {
       free(m_unread);
       m_unread = NULL;
     }
