@@ -30,19 +30,26 @@
     builds, running under 10.2 + only
 */
 #ifdef __WXMAC__
-    #if defined(__MACH__)
-        #define __WXMAC_OSX__ 1
-        #define __WXMAC_CARBON__ 1
-        #ifdef __WXMAC_XCODE__
-            #include "wx/mac/carbon/config_xcode.h"
-        #endif
-    #else
-        #if TARGET_CARBON
-            #define __WXMAC_CARBON__ 1
-        #else
-            #define __WXMAC_CLASSIC__ 1
-        #endif
-    #endif
+#    if defined(__MACH__)
+#        define __WXMAC_OSX__ 1
+#        define __WXMAC_CARBON__ 1
+#        ifdef __WXMAC_XCODE__
+#            include "wx/mac/carbon/config_xcode.h"
+#        endif
+#    else
+#        if TARGET_CARBON
+#            define __WXMAC_CARBON__ 1
+#        else
+#            define __WXMAC_CLASSIC__ 1
+#        endif
+#    endif
+#endif
+
+/*
+    __WXOSX__ is a common define to wxMac (Carbon) and wxCocoa ports under OS X.
+ */
+#if defined(__WXMAC_OSX__) || defined(__WXCOCOA__)
+#   define __WXOSX__
 #endif
 
 /*
