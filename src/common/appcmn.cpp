@@ -112,6 +112,7 @@ wxAppBase::~wxAppBase()
 }
 
 #if wxUSE_GUI
+
 bool wxAppBase::OnInitGui()
 {
 #ifdef __WXUNIVERSAL__
@@ -124,7 +125,6 @@ bool wxAppBase::OnInitGui()
 
     return TRUE;
 }
-#endif // wxUSE_GUI
 
 int wxAppBase::OnRun()
 {
@@ -138,6 +138,8 @@ int wxAppBase::OnRun()
 
     return MainLoop();
 }
+
+#endif // wxUSE_GUI
 
 int wxAppBase::OnExit()
 {

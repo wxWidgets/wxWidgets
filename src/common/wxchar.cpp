@@ -40,8 +40,6 @@
   #include "wx/hash.h"
 #endif
 
-#include "wx/msgdlg.h"
-
 #if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
   #include <windef.h>
   #include <winbase.h>
