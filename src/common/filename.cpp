@@ -1484,7 +1484,10 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
             // the path equal to something like '/', not empty, for the files
             // immediately under root directory
             size_t len = posLastSlash;
-            if ( !len )
+
+            // this rule does not apply to mac since we do not start with colons (sep)
+            // except for relative paths
+            if ( !len && format != wxPATH_MAC)
                 len++;
 
             *pstrPath = fullpath.Left(len);
