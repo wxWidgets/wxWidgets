@@ -475,6 +475,8 @@ class wxGrid : public wxPanel
     bool MoveCursorDown();
     bool MoveCursorLeft();
     bool MoveCursorRight();
+    bool MovePageDown();
+    bool MovePageUp();
     bool MoveCursorUpBlock();
     bool MoveCursorDownBlock();
     bool MoveCursorLeftBlock();

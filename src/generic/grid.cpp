@@ -1860,6 +1860,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& ev )
                 }
                 break;
                 
+            case WXK_PRIOR:
+                MovePageUp();
+                break;
+
+            case WXK_NEXT:
+                MovePageDown();
+                break;
+                
             default:
                 // now try the cell edit control
                 //
@@ -2360,6 +2368,54 @@ bool wxGrid::MoveCursorRight()
         return TRUE;
     }
 
+    return FALSE;
+}
+
+bool wxGrid::MovePageUp()
+{
+    if ( m_currentCellCoords != wxGridNoCellCoords  &&
+         m_scrollPosY > 0 )
+    {
+        int row = m_currentCellCoords.GetRow();
+        int y = m_rowBottoms[ row ] - m_rowHeights[ row ];
+        while ( row > 0 )
+        {
+            if ( y + m_rowHeights[row-1] > m_bottom ) break;
+            y += m_rowHeights[ --row ];
+        }
+        SetVerticalScrollPos( row );
+
+        SelectCell( row, m_currentCellCoords.GetCol() );
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+bool wxGrid::MovePageDown()
+{
+    if ( m_currentCellCoords != wxGridNoCellCoords  &&
+         m_scrollPosY + m_wholeRowsVisible < m_numRows )
+    {
+        if ( m_wholeRowsVisible > 0 )
+        {
+            SetVerticalScrollPos( m_scrollPosY + m_wholeRowsVisible );
+        }
+        else if ( m_scrollPosY < m_numRows - 1 )
+        {
+            SetVerticalScrollPos( m_scrollPosY + 1 );
+        }
+        else
+        {
+            return FALSE;
+        }
+        
+        // m_scrollPosY will have been updated
+        //
+        SelectCell( m_scrollPosY, m_currentCellCoords.GetCol() );
+        return TRUE;
+    }
+    
     return FALSE;
 }
 
