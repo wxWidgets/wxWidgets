@@ -702,6 +702,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
+  DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_TEXTFILE=no
@@ -822,6 +823,7 @@ else
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
+  DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
@@ -1010,8 +1012,9 @@ WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derive
 
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
 
-WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+
+WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(timedate,      [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
 WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
@@ -1031,6 +1034,8 @@ WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
+
+WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass them to wxApp::OnFatalException], wxUSE_ON_FATAL_EXCEPTION)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -2283,6 +2288,16 @@ AC_LANG_RESTORE
 dnl under MSW we always have Sleep()
 if test "$TOOLKIT" != "MSW"; then
 
+dnl check for POSIX signals if we need them
+if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
+    AC_CHECK_FUNCS(sigaction)
+
+    if test "$ac_cv_func_sigaction" = "no"; then
+        AC_MSG_WARN([No POSIX signal functions on this system, wxApp::OnFatalException will not be called])
+        wxUSE_ON_FATAL_EXCEPTION=no
+    fi
+fi
+
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
@@ -2752,6 +2767,10 @@ if test "$wxUSE_ZIPSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_ZIPSTREAM)
 fi
 
+if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
+  AC_DEFINE(wxUSE_ON_FATAL_EXCEPTION)
+fi
+
 if test "$wxUSE_BUSYINFO" = "yes"; then
   AC_DEFINE(wxUSE_BUSYINFO)
 fi
@@ -3209,6 +3228,10 @@ dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_IPC" = "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        AC_MSG_WARN(wxWindows IPC classes require sockets, disabled)
+    fi
+
     AC_DEFINE(wxUSE_IPC)
 fi
 

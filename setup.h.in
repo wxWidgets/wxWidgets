@@ -166,6 +166,11 @@
 #define wxUSE_NOGUI 0
 
 /*
+ * Catch fatal program exceptions
+ */
+#define wxUSE_ON_FATAL_EXCEPTION 0
+
+/*
  * Use constraints mechanism
  */
 #define wxUSE_CONSTRAINTS 0
@@ -656,6 +661,12 @@
 /* Define if you have pthread_cancel */
 #undef HAVE_PTHREAD_CANCEL
 
+/* Define if you have sigaction() */
+#undef HAVE_SIGACTION
+
+/* Define if you have sigemptyset() */
+#undef HAVE_SIGEMPTYSET
+
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
@@ -723,7 +734,7 @@
 #undef HAVE_STRTOK_R
 
 /* Define if you have thr_setconcurrency function */
-#undef HaVE_THR_SETCONCURRENCY
+#undef HAVE_THR_SETCONCURRENCY
 
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME
