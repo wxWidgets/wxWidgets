@@ -283,6 +283,7 @@ int wxListBox::DoAppend(const wxString& item)
         pNewItem->SetName(item);
         m_aItems.Add(pNewItem);
         ListBox_SetItemData(GetHwnd(), index, pNewItem);
+        pNewItem->SetFont(GetFont());
     }
 #endif
 
