@@ -10,17 +10,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Save (device dependent) wxBitmap as a DIB
-bool             wxSaveBitmap(char *filename, wxBitmap *bitmap, wxColourMap *colourmap = NULL);
+bool             wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap *colourmap = NULL);
 
 // Load device independent bitmap into device dependent bitmap
-wxBitmap         *wxLoadBitmap(char *filename, wxColourMap **colourmap = NULL);
+wxBitmap         *wxLoadBitmap(wxChar *filename, wxColourMap **colourmap = NULL);
 
 // Load into existing bitmap;
-bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxColourMap **pal = NULL);
+bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap **pal = NULL);
 
 HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
-BOOL   ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
-HANDLE ReadDIB2(LPSTR lpFileName);
-LPSTR FindDIBBits (LPSTR lpbi);
+BOOL   ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
+HANDLE ReadDIB2(LPTSTR lpFileName);
+LPSTR FindDIBBits (LPTSTR lpbi);
 HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo);
 

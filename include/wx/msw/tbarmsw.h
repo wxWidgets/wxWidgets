@@ -20,7 +20,7 @@
 
 #include "wx/tbarbase.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxButtonBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxButtonBarNameStr;
 
 class WXDLLEXPORT wxMemoryDC;
 

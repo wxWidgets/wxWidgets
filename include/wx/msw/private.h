@@ -132,17 +132,17 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
  * for this combination of CTl3D/FAFA settings
  */
 
-#define STATIC_CLASS     "STATIC"
+#define STATIC_CLASS     _T("STATIC")
 #define STATIC_FLAGS     (SS_LEFT|WS_CHILD|WS_VISIBLE)
-#define CHECK_CLASS      "BUTTON"
+#define CHECK_CLASS      _T("BUTTON")
 #define CHECK_FLAGS      (BS_AUTOCHECKBOX|WS_TABSTOP|WS_CHILD)
 #define CHECK_IS_FAFA   FALSE
-#define RADIO_CLASS      "BUTTON"
+#define RADIO_CLASS      _T("BUTTON")
 #define RADIO_FLAGS      (BS_AUTORADIOBUTTON|WS_CHILD|WS_VISIBLE)
 #define RADIO_SIZE       20
 #define RADIO_IS_FAFA   FALSE
 #define PURE_WINDOWS
-#define GROUP_CLASS      "BUTTON"
+#define GROUP_CLASS      _T("BUTTON")
 #define GROUP_FLAGS      (BS_GROUPBOX|WS_CHILD|WS_VISIBLE)
 
 /*

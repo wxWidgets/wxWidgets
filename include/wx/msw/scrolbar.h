@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxScrollBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxScrollBarNameStr;
 
 // Scrollbar item
 class WXDLLEXPORT wxScrollBar: public wxControl

@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 
 // List box item
 class WXDLLEXPORT wxBitmap;

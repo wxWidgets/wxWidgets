@@ -113,7 +113,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 
 public:
   int               argc;
-  char **           argv;
+  wxChar **         argv;
 
 protected:
   bool              m_wantDebugOutput ;

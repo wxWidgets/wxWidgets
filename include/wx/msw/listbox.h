@@ -84,8 +84,8 @@ public:
 #endif // wxUSE_OWNER_DRAWN
 
     virtual void Append(const wxString& item);
-    virtual void Append(const wxString& item, char *clientData);
-    virtual void Set(int n, const wxString* choices, char **clientData = NULL);
+    virtual void Append(const wxString& item, void *clientData);
+    virtual void Set(int n, const wxString* choices, void **clientData = NULL);
     virtual int FindString(const wxString& s) const ;
     virtual void Clear();
     virtual void SetSelection(int n, bool select = TRUE);
@@ -95,8 +95,8 @@ public:
     // For single choice list item only
     virtual int GetSelection() const ;
     virtual void Delete(int n);
-    virtual char *GetClientData(int n) const ;
-    virtual void SetClientData(int n, char *clientData);
+    virtual void *GetClientData(int n) const ;
+    virtual void SetClientData(int n, void *clientData);
     virtual void SetString(int n, const wxString& s);
 
     // For single or multiple choice list item

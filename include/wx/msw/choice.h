@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
 
 // Choice item
 class WXDLLEXPORT wxChoice: public wxControl

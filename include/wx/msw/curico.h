@@ -9,13 +9,13 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-HICON    ReadIconFile(    char *szFileName, HINSTANCE hInst,
+HICON    ReadIconFile(    wxChar *szFileName, HINSTANCE hInst,
                           int *W = 0, int *H = 0);
-HCURSOR  ReadCursorFile(  char *szFileName, HINSTANCE hInst,
+HCURSOR  ReadCursorFile(  wxChar *szFileName, HINSTANCE hInst,
                           int *W = 0, int *H = 0, int *XHot = 0, int *YHot = 0);
-HCURSOR  IconToCursor(    char *szFileName, HINSTANCE hInst, int XHot, int YHot,
+HCURSOR  IconToCursor(    wxChar *szFileName, HINSTANCE hInst, int XHot, int YHot,
                           int *W = 0, int *H = 0);
-HICON    CursorToIcon(    char *szFileName, HINSTANCE hInst,
+HICON    CursorToIcon(    wxChar *szFileName, HINSTANCE hInst,
                           int *W = 0, int *H = 0);
 
 HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint);

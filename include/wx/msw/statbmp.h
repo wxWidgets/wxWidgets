@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 
 // a control showing an icon or a bitmap
 class WXDLLEXPORT wxStaticBitmap : public wxControl

@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxCheckBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxCheckBoxNameStr;
 
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxBitmap;

@@ -45,9 +45,9 @@ WXDLLEXPORT void* wxGetClipboardData(wxDataFormat dataFormat,
 // clipboard formats
 WXDLLEXPORT bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
 WXDLLEXPORT wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat);
-WXDLLEXPORT int  wxRegisterClipboardFormat(char *formatName);
+WXDLLEXPORT int  wxRegisterClipboardFormat(wxChar *formatName);
 WXDLLEXPORT bool wxGetClipboardFormatName(wxDataFormat dataFormat,
-                                          char *formatName,
+                                          wxChar *formatName,
                                           int maxCount);
 
 //-----------------------------------------------------------------------------
