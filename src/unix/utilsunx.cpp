@@ -800,7 +800,12 @@ char *wxGetUserHome( const wxString &user )
 
         if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
         {
+#if wxUSE_UNICODE
+            wxWCharBuffer buffer( ptr );
+            return buffer;
+#else
             return ptr;
+#endif
         }
         if ((ptr = wxGetenv(wxT("USER"))) != NULL || (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
         {
