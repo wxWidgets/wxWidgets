@@ -37,6 +37,9 @@ public:
     virtual void SetValue(int val) = 0;
     virtual void SetRange(int minVal, int maxVal) = 0;
 
+    // as the wxTextCtrl method
+    virtual void SetSelection(long from, long to) = 0;
+
 protected:
     // initialize m_min/max with the default values
     void Init() { m_min = 0; m_max = 100; }
