@@ -216,6 +216,9 @@ class wxTipProviderPtr :
     def GetCurrentTip(self, *_args, **_kwargs):
         val = apply(misc2c.wxTipProvider_GetCurrentTip,(self,) + _args, _kwargs)
         return val
+    def PreprocessTip(self, *_args, **_kwargs):
+        val = apply(misc2c.wxTipProvider_PreprocessTip,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTipProvider instance at %s>" % (self.this,)
 class wxTipProvider(wxTipProviderPtr):
@@ -1026,6 +1029,92 @@ class wxFileHistory(wxFileHistoryPtr):
 
 
 
+class wxEffectsPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetHighlightColour(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_GetHighlightColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetLightShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_GetLightShadow,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetFaceColour(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_GetFaceColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetMediumShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_GetMediumShadow,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def GetDarkShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_GetDarkShadow,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def SetHighlightColour(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_SetHighlightColour,(self,) + _args, _kwargs)
+        return val
+    def SetLightShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_SetLightShadow,(self,) + _args, _kwargs)
+        return val
+    def SetFaceColour(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_SetFaceColour,(self,) + _args, _kwargs)
+        return val
+    def SetMediumShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_SetMediumShadow,(self,) + _args, _kwargs)
+        return val
+    def SetDarkShadow(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_SetDarkShadow,(self,) + _args, _kwargs)
+        return val
+    def Set(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_Set,(self,) + _args, _kwargs)
+        return val
+    def DrawSunkenEdge(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_DrawSunkenEdge,(self,) + _args, _kwargs)
+        return val
+    def TileBitmap(self, *_args, **_kwargs):
+        val = apply(misc2c.wxEffects_TileBitmap,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxEffects instance at %s>" % (self.this,)
+class wxEffects(wxEffectsPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxEffects,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxSingleInstanceCheckerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxSingleInstanceChecker(self)
+    def Create(self, *_args, **_kwargs):
+        val = apply(misc2c.wxSingleInstanceChecker_Create,(self,) + _args, _kwargs)
+        return val
+    def IsAnotherRunning(self, *_args, **_kwargs):
+        val = apply(misc2c.wxSingleInstanceChecker_IsAnotherRunning,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxSingleInstanceChecker instance at %s>" % (self.this,)
+class wxSingleInstanceChecker(wxSingleInstanceCheckerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxSingleInstanceChecker,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPreSingleInstanceChecker(*_args,**_kwargs):
+    val = wxSingleInstanceCheckerPtr(apply(misc2c.new_wxPreSingleInstanceChecker,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -1238,6 +1327,8 @@ wxLog_AddTraceMask = misc2c.wxLog_AddTraceMask
 wxLog_RemoveTraceMask = misc2c.wxLog_RemoveTraceMask
 
 wxLog_ClearTraceMasks = misc2c.wxLog_ClearTraceMasks
+
+wxLog_GetTraceMasks = misc2c.wxLog_GetTraceMasks
 
 wxLog_SetTimestamp = misc2c.wxLog_SetTimestamp
 
