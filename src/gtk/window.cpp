@@ -1739,7 +1739,7 @@ wxString wxWindow::GetName(void) const
   return (wxString&)m_windowName;
 };
 
-bool wxWindow::IsShown(void)
+bool wxWindow::IsShown(void) const
 {
   return m_isShown;
 };
@@ -2393,7 +2393,7 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
     GetPosition(x, y);
 }
 
-void wxWindow::AcceptsFocus() const
+bool wxWindow::AcceptsFocus() const
 {
   return IsEnabled() && IsShown();
 }

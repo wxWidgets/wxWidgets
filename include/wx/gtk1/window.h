@@ -152,7 +152,7 @@ class wxWindow: public wxEvtHandler
     
     void OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event) ) {};
     
-    virtual bool IsShown(void);
+    virtual bool IsShown(void) const;
     virtual bool IsRetained(void);
     virtual wxWindow *FindWindow( long id );
     virtual wxWindow *FindWindow( const wxString& name );
