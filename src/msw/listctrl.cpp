@@ -777,7 +777,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     rect.x = rect2.left;
     rect.y = rect2.top;
     rect.width = rect2.right - rect2.left;
-    rect.height = rect2.bottom - rect2.left;
+    rect.height = rect2.bottom - rect2.top;
     return success;
 }
 
