@@ -118,9 +118,9 @@ void wxSpinButton::MacHandleValueChanged( int inc )
       m_value = m_max;
     }
 
-    if ( oldValue - m_value == -1 )
+    if ( m_value - oldValue == -1 )
         scrollEvent = wxEVT_SCROLL_LINEDOWN ;
-    else if ( oldValue - m_value == 1 )
+    else if ( m_value - oldValue == 1 )
         scrollEvent = wxEVT_SCROLL_LINEUP ;
     else
         scrollEvent = wxEVT_SCROLL_THUMBTRACK ;
