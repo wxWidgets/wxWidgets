@@ -14,7 +14,7 @@
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 //----------------------------------------------------------------------------------------
-extern struct DbStuff DbConnectInf;
+extern struct wxDbConnectInf DbConnectInf;
 class MainDoc;
 //----------------------------------------------------------------------------------------
 class BrowserDB

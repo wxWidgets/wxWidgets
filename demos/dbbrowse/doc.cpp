@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------------------
 //-- Some Global Vars for all Files (extern in ?.h needed) -------------------------------
 // Global structure for holding ODBC connection information
-struct DbStuff DbConnectInf;
+struct wxDbConnectInf DbConnectInf;
 //----------------------------------------------------------------------------------------
 wxConfigBase   *p_ProgramCfg;       // All Config and Path information
 wxLogTextCtrl  *p_LogBook;          // All Log messages
@@ -165,7 +165,7 @@ bool MainDoc::OnInitODBC()
  // The key will be removed after sorting
  wxString KeyString;
  //---------------------------------------------------------------------------------------
- while(GetDataSource(DbConnectInf.Henv, Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
+ while(wxDbGetDataSource(DbConnectInf.Henv, Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
  {
   i_DSN++;   // How many Dsn have we ?
   KeyString.Printf("%s%c%s",Dsn, sep, DsDesc);

@@ -32,9 +32,9 @@
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
-struct DbStuff ConnectInf;      // Für DBase
+struct wxDbConnectInf ConnectInf;      // Für DBase
 //----------------------------------------------------------------------------------------
-extern DbList* WXDLLEXPORT PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+extern wxDbList* WXDLLEXPORT PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 //----------------------------------------------------------------------------------------
 char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 {
@@ -53,7 +53,8 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
  // msg += "\n";
  /* Scan through each database connection displaying
   * any ODBC errors that have occured. */
- for (DbList *pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
+ wxDbList *pDbList;
+ for (pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
  {
   // Skip over any free connections
   if (pDbList->Free)
@@ -144,7 +145,7 @@ bool BrowserDB::OnStartDB(int Quite)
   strcpy(ConnectInf.Dsn, ODBCSource);           // ODBC data source name (created with ODBC Administrator under Win95/NT)
   strcpy(ConnectInf.Uid, UserName);             // database username - must already exist in the data source
   strcpy(ConnectInf.AuthStr, Password);         // password database username
-  db_BrowserDB = GetDbConnection(&ConnectInf);
+  db_BrowserDB = wxDbGetConnection(&ConnectInf);
   // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
   if (db_BrowserDB == NULL)
   {
@@ -177,7 +178,7 @@ bool BrowserDB::OnCloseDB(int Quite)
  if (db_BrowserDB)
  {
   db_BrowserDB->Close();
-  FreeDbConnection(db_BrowserDB);
+  wxDbFreeConnection(db_BrowserDB);
 
   // Free Environment Handle that ODBC uses
   if (SQLFreeEnv(&ConnectInf.Henv) != SQL_SUCCESS)
@@ -422,7 +423,7 @@ void BrowserDB::Zeiger_auf_NULL(int Art)
   {
    db_BrowserDB->CommitTrans();
    db_BrowserDB->Close();
-   CloseDbConnections();
+   wxDbCloseConnections();
    delete db_BrowserDB;
   }
  }
