@@ -191,7 +191,6 @@ public:
 
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
-    //
     virtual void SendSizeEvent();
 
 
