@@ -131,25 +131,6 @@ bool wxFontBase::IsFixedWidth() const
     return GetFamily() == wxFONTFAMILY_TELETYPE;
 }
 
-wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
-{
-#ifdef wxNO_NATIVE_FONTINFO
-    wxNativeFontInfo *fontInfo = new wxNativeFontInfo();
-
-    fontInfo->SetPointSize(GetPointSize());
-    fontInfo->SetFamily((wxFontFamily)GetFamily());
-    fontInfo->SetStyle((wxFontStyle)GetStyle());
-    fontInfo->SetWeight((wxFontWeight)GetWeight());
-    fontInfo->SetUnderlined(GetUnderlined());
-    fontInfo->SetFaceName(GetFaceName());
-    fontInfo->SetEncoding(GetEncoding());
-
-    return fontInfo;
-#else
-    return (wxNativeFontInfo *)NULL;
-#endif
-}
-
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
 #ifdef wxNO_NATIVE_FONTINFO
@@ -168,11 +149,10 @@ void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 wxString wxFontBase::GetNativeFontInfoDesc() const
 {
     wxString fontDesc;
-    wxNativeFontInfo *fontInfo = GetNativeFontInfo();
+    const wxNativeFontInfo *fontInfo = GetNativeFontInfo();
     if ( fontInfo )
     {
         fontDesc = fontInfo->ToString();
-        delete fontInfo;
     }
 
     return fontDesc;
@@ -181,11 +161,10 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
 wxString wxFontBase::GetNativeFontInfoUserDesc() const
 {
     wxString fontDesc;
-    wxNativeFontInfo *fontInfo = GetNativeFontInfo();
+    const wxNativeFontInfo *fontInfo = GetNativeFontInfo();
     if ( fontInfo )
     {
         fontDesc = fontInfo->ToUserString();
-        delete fontInfo;
     }
 
     return fontDesc;
@@ -362,7 +341,7 @@ wxString wxNativeFontInfo::ToString() const
 
 void wxNativeFontInfo::Init()
 {
-    pointSize = wxNORMAL_FONT->GetPointSize();
+    pointSize = 0;
     family = wxFONTFAMILY_DEFAULT;
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;

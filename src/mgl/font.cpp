@@ -74,6 +74,8 @@ private:
     wxMGLFontLibrary *m_library;
     bool              m_valid;
 
+    wxNativeFontInfo  m_info;
+
     friend class wxFont;
 };
 
@@ -264,6 +266,14 @@ bool wxFont::IsFixedWidth() const
     return (bool)(M_FONTDATA->m_library->GetFamily()->GetInfo()->isFixed);
 }
 
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+{
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
+
+    M_FONTDATA->m_info.InitFromFont(*this);
+
+    return &(M_FONTDATA->m_info);
+}
 
 // ----------------------------------------------------------------------------
 // change font attributes

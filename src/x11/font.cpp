@@ -752,7 +752,7 @@ bool wxFont::GetNoAntiAliasing()
     return M_FONTDATA->m_noAA;
 }
 
-wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
@@ -762,7 +762,7 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
         GetInternalFont();
 #endif
 
-    return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
+    return &(M_FONTDATA->m_nativeFontInfo);
 }
 
 bool wxFont::IsFixedWidth() const

@@ -156,7 +156,7 @@ public:
     virtual bool GetUnderlined() const = 0;
     virtual wxString GetFaceName() const = 0;
     virtual wxFontEncoding GetEncoding() const = 0;
-    virtual wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const = 0;
 
     virtual bool IsFixedWidth() const;
 

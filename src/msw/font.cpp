@@ -948,12 +948,10 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->GetEncoding();
 }
 
-wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    if ( M_FONTDATA->HasNativeFontInfo() )
-        return new wxNativeFontInfo(M_FONTDATA->GetNativeFontInfo());
-
-    return 0;
+    return M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
+                                           : NULL;
 }
 
 bool wxFont::IsFixedWidth() const

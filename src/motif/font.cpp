@@ -485,14 +485,14 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
-wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
     if(M_FONTDATA->m_nativeFontInfo.GetXFontName().IsEmpty())
         GetInternalFont();
 
-    return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
+    return &(M_FONTDATA->m_nativeFontInfo);
 }
 
 // ----------------------------------------------------------------------------

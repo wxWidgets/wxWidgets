@@ -139,6 +139,28 @@ public:
     // reset to the default state
     void Init();
 
+    // init with the parameters of the given font
+    void InitFromFont(const wxFont& font)
+    {
+        // translate all font parameters
+        SetStyle((wxFontStyle)font.GetStyle());
+        SetWeight((wxFontWeight)font.GetWeight());
+        SetUnderlined(font.GetUnderlined());
+        SetPointSize(font.GetPointSize());
+
+        // set the family/facename
+        SetFamily((wxFontFamily)font.GetFamily());
+        const wxString& facename = font.GetFaceName();
+        if ( !facename.empty() )
+        {
+            SetFaceName(facename);
+        }
+
+        // deal with encoding now (it may override the font family and facename
+        // so do it after setting them)
+        SetEncoding(font.GetEncoding());
+    }
+
     // accessors and modifiers for the font elements
     int GetPointSize() const;
     wxFontStyle GetStyle() const;

@@ -93,7 +93,7 @@ public:
     virtual bool              GetUnderlined(void) const;
     virtual wxString          GetFaceName(void) const;
     virtual wxFontEncoding    GetEncoding(void) const;
-    virtual wxNativeFontInfo* GetNativeFontInfo() const;
+    virtual const wxNativeFontInfo* GetNativeFontInfo() const;
 
     virtual void SetPointSize(int nPointSize);
     virtual void SetFamily(int nFamily);

@@ -80,6 +80,11 @@ int wxFont::GetWeight() const
     return 0;
 }
 
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+{
+    return NULL;
+}
+
 void wxGetNativeFontEncoding(wxFontEncoding, wxNativeEncodingInfo*);
 
 bool wxFont::Create(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)

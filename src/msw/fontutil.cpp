@@ -234,36 +234,20 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
 
 void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 {
+    wxNativeFontInfo fi;
+
     // maybe we already have LOGFONT for this font?
-    wxNativeFontInfo *fontinfo = font->GetNativeFontInfo();
-    if ( !fontinfo )
+    const wxNativeFontInfo *pFI = font->GetNativeFontInfo();
+    if ( !pFI )
     {
         // use wxNativeFontInfo methods to build a LOGFONT for this font
-        fontinfo = new wxNativeFontInfo;
+        fi.InitFromFont(*font);
 
-        // translate all font parameters
-        fontinfo->SetStyle((wxFontStyle)font->GetStyle());
-        fontinfo->SetWeight((wxFontWeight)font->GetWeight());
-        fontinfo->SetUnderlined(font->GetUnderlined());
-        fontinfo->SetPointSize(font->GetPointSize());
-
-        // set the family/facename
-        fontinfo->SetFamily((wxFontFamily)font->GetFamily());
-        wxString facename = font->GetFaceName();
-        if ( !facename.empty() )
-        {
-            fontinfo->SetFaceName(facename);
-        }
-
-        // deal with encoding now (it may override the font family and facename
-        // so do it after setting them)
-        fontinfo->SetEncoding(font->GetEncoding());
+        pFI = &fi;
     }
 
     // transfer all the data to LOGFONT
-    *logFont = fontinfo->lf;
-
-    delete fontinfo;
+    *logFont = pFI->lf;
 }
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)

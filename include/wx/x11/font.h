@@ -71,7 +71,7 @@ public:
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
-    virtual wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
     virtual bool IsFixedWidth() const;
 

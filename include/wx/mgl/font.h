@@ -81,6 +81,7 @@ public:
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual bool IsFixedWidth() const;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(int family);
