@@ -1118,7 +1118,7 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 
             //Do the actual conversion & Set the length of the buffer
             internalBuffer.SetLength(
-                   conv.WC2MB(*this, pwz, dwConvLen + 1, nLen)
+                   conv.WC2MB(internalBuffer, pwz, dwConvLen + 1, nLen)
                                     );
         }
     }
