@@ -293,7 +293,8 @@ enum dbms
 	dbmsMY_SQL,
 	dbmsPOSTGRES,
 	dbmsACCESS,
-	dbmsDBASE
+	dbmsDBASE,
+	dbmsINFORMIX
 };
 
 typedef enum dbms DBMS;
