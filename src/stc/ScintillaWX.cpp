@@ -253,18 +253,23 @@ void ScintillaWX::SetHorizontalScrollPos() {
     }
 }
 
+
 const int H_SCROLL_STEP = 20;
 
 bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     bool modified = false;
+
+    int vertEnd = nMax;
+    if (!verticalScrollBarVisible)
+        vertEnd = 0;
 
     // Check the vertical scrollbar
     if (stc->m_vScrollBar == NULL) {  // Use built-in scrollbar
         int  sbMax    = stc->GetScrollRange(wxVERTICAL);
         int  sbThumb  = stc->GetScrollThumb(wxVERTICAL);
         int  sbPos    = stc->GetScrollPos(wxVERTICAL);
-        if (sbMax != nMax || sbThumb != nPage) {
-            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, nMax+1);
+        if (sbMax != vertEnd || sbThumb != nPage) {
+            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, vertEnd+1);
             modified = true;
         }
     }
@@ -272,8 +277,8 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int  sbMax    = stc->m_vScrollBar->GetRange();
         int  sbPage   = stc->m_vScrollBar->GetPageSize();
         int  sbPos    = stc->m_vScrollBar->GetThumbPosition();
-        if (sbMax != nMax || sbPage != nPage) {
-            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, nMax+1, nPage);
+        if (sbMax != vertEnd || sbPage != nPage) {
+            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, vertEnd+1, nPage);
             modified = true;
         }
     }
@@ -293,7 +298,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int sbThumb  = stc->GetScrollThumb(wxHORIZONTAL);
         int sbPos    = stc->GetScrollPos(wxHORIZONTAL);
         if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
-            stc->SetScrollbar(wxHORIZONTAL, 0, pageWidth, horizEnd);
+            stc->SetScrollbar(wxHORIZONTAL, sbPos, pageWidth, horizEnd);
             modified = true;
             if (scrollWidth < pageWidth) {
                 HorizontalScrollTo(0);
@@ -305,7 +310,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int sbThumb  = stc->m_hScrollBar->GetPageSize();
         int sbPos    = stc->m_hScrollBar->GetThumbPosition();
         if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
-            stc->m_hScrollBar->SetScrollbar(0, pageWidth, horizEnd, pageWidth);
+            stc->m_hScrollBar->SetScrollbar(sbPos, pageWidth, horizEnd, pageWidth);
             modified = true;
             if (scrollWidth < pageWidth) {
                 HorizontalScrollTo(0);
