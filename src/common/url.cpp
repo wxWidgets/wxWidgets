@@ -35,6 +35,11 @@ IMPLEMENT_CLASS(wxURL, wxObject)
 // Protocols list
 wxProtoInfo *wxURL::ms_protocols = NULL;
 
+// Enforce linking of protocol classes:
+USE_PROTOCOL(wxHTTP)
+USE_PROTOCOL(wxFTP)
+USE_PROTOCOL(wxFileProto)
+
 #if wxUSE_SOCKETS
     wxHTTP *wxURL::ms_proxyDefault = NULL;
     bool wxURL::ms_useDefaultProxy = FALSE;
