@@ -45,8 +45,6 @@
 // icons
 // ----------------------------------------------------------------------------
 
-
-
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
         EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
@@ -57,46 +55,6 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
 
-#ifdef _WXGTK__
-#   include "wx/gtk/info.xpm"
-#   include "wx/gtk/error.xpm"
-#   include "wx/gtk/question.xpm"
-#   include "wx/gtk/warning.xpm"
-#else
-   // MSW icons are in the ressources, for all other platforms - in XPM files
-#   ifndef __WXMSW__
-#      include "wx/generic/info.xpm"
-#      include "wx/generic/question.xpm"
-#      include "wx/generic/warning.xpm"
-#      include "wx/generic/error.xpm"
-#   endif // __WXMSW__
-#endif
-   
-wxIcon
-wxApp::GetStdIcon(int which) const
-{
-   switch(which)
-   {
-   case wxICON_INFORMATION:
-      return wxIcon(info_xpm);
-      break;
-   case wxICON_HAND:
-      return wxIcon(error_xpm);
-      break;
-   case wxICON_QUESTION:
-      return wxIcon(question_xpm);
-      break;
-   case wxICON_EXCLAMATION:
-      return wxIcon(warning_xpm);
-      break;
-   default:
-      wxFAIL_MSG("requested non existent standard icon");
-      return wxIcon(error_xpm);
-      break;
-   }
-}
-
-   
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& message,
                                                 const wxString& caption,

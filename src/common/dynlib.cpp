@@ -176,11 +176,12 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 wxDllType
 wxDllLoader::GetProgramHandle(void)
 {
-#ifdef __WXGTK__
-   return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
+#ifdef __UNIX__
+    return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
 #else
-#pragma warning "Not implemented, please fix!"
-   return 0;
+    wxFAIL_MSG(_("This method is not implemented under Windows"));
+
+    return 0;
 #endif   
 }
 

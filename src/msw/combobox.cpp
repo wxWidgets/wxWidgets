@@ -323,15 +323,6 @@ void wxComboBox::DoSetSize(int x, int y,
                            int sizeFlags)
 {
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
-
-    // VZ: for unknown (to me) reasons, if we don't do this, the combobox
-    //     somehow is hidden by the static boxes, although static boxes do
-    //     put themselves at the very end of Z-order.
-    if ( !::SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0,
-                         SWP_NOMOVE | SWP_NOSIZE) )
-    {
-        wxLogLastError(_T("SetWindowPos"));
-    }
 }
 
 #endif

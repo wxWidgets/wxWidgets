@@ -1062,21 +1062,6 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     }
 }
 
-wxLog* wxApp::CreateLogTarget()
-{
-    return new wxLogGui;
-}
-
-wxWindow* wxApp::GetTopWindow() const
-{
-    if (m_topWindow)
-        return m_topWindow;
-    else if (wxTopLevelWindows.GetCount() > 0)
-        return wxTopLevelWindows.GetFirst()->GetData();
-    else
-        return NULL;
-}
-
 int wxApp::GetComCtl32Version() const
 {
     // have we loaded COMCTL32 yet?
@@ -1149,28 +1134,28 @@ bool wxYield()
 
     return TRUE;
 }
+
 wxIcon
 wxApp::GetStdIcon(int which) const
 {
-   switch(which)
-   {
-   case wxICON_INFORMATION:
-      return wxIcon("wxICON_INFO");
-      break;
-   case wxICON_HAND:
-      return wxIcon("wxICON_ERROR");
-      break;
-   case wxICON_QUESTION:
-      return wxIcon("wxICON_QUESTION");
-      break;
-   case wxICON_EXCLAMATION:
-      return wxIcon("wxICON_WARNING");
-      break;
-   default:
-      wxFAIL_MSG("requested non existent standard icon");
-      return wxIcon("wxICON_ERROR");
-      break;
-   }
+    switch(which)
+    {
+        case wxICON_INFORMATION:
+            return wxIcon("wxICON_INFO");
+
+        case wxICON_QUESTION:
+            return wxIcon("wxICON_QUESTION");
+
+        case wxICON_EXCLAMATION:
+            return wxIcon("wxICON_WARNING");
+
+        default:
+            wxFAIL_MSG(_T("requested non existent standard icon"));
+            // still fall through
+
+        case wxICON_HAND:
+            return wxIcon("wxICON_ERROR");
+    }
 }
 
 

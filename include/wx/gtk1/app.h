@@ -50,71 +50,33 @@ bool wxYield(void);
 // wxApp
 //-----------------------------------------------------------------------------
 
-class wxApp: public wxEvtHandler
+class wxApp: public wxAppBase
 {
-  DECLARE_DYNAMIC_CLASS(wxApp)
+DECLARE_DYNAMIC_CLASS(wxApp)
 
-  public:
-
+public:
     wxApp();
     ~wxApp();
 
-    static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
-    static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
-
-    /* override for altering the way wxGTK intializes the GUI (palette/visual/colorcube).
-     * under wxMSW, OnInitGui() does nothing by default. when overriding this method,
-     * the code in it is likely to be platform dependent, otherwise use OnInit(). */
+    /* override for altering the way wxGTK intializes the GUI
+     * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by
+     * default. when overriding this method, the code in it is likely to be
+     * platform dependent, otherwise use OnInit(). */
     virtual bool OnInitGui();
-    
-    /* override to create top level frame, display splash screen etc. */
-    virtual bool OnInit() { return FALSE; }
-    
-    virtual int OnRun() { return MainLoop(); }
-    virtual int OnExit() { return 0; }
 
-    wxWindow *GetTopWindow();
-    void SetTopWindow( wxWindow *win );
-    
+    // override base class (pure) virtuals
     virtual int MainLoop();
-    void ExitMainLoop();
-    bool Initialized();
+    virtual void ExitMainLoop();
+    virtual bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
 
-    /** Returns the standard icons for the msg dialogs, implemented in 
-        src/generic/msgdlgg.cpp and src/gtk/app.cpp. */
     virtual wxIcon GetStdIcon(int which) const;
-    inline void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
-    inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
 
+    // implementation only from now on
     void OnIdle( wxIdleEvent &event );
     bool SendIdleEvents();
     bool SendIdleEvents( wxWindow* win );
-
-    inline wxString GetAppName() const 
-      { if (m_appName != "") return m_appName; else return m_className; }
-    inline void SetAppName( const wxString& name ) { m_appName = name; }
-    
-    inline wxString GetClassName() const { return m_className; }
-    inline void SetClassName( const wxString& name ) { m_className = name; }
-    
-    const wxString& GetVendorName() const { return m_vendorName; }
-    void SetVendorName( const wxString& name ) { m_vendorName = name; }
-
-    inline void SetExitOnFrameDelete( bool flag ) { m_exitOnFrameDelete = flag; }
-    inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
-
-    void SetPrintMode( int WXUNUSED(mode) ) {}
-    int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
-
-#if wxUSE_LOG
-    /* override this function to create default log target of arbitrary
-     * user-defined classv (default implementation creates a wxLogGui object) */
-    virtual wxLog *CreateLogTarget();
-#endif // wxUSE_LOG
-
-  // implementation 
 
     static bool Initialize();
     static bool InitialzeVisual();
@@ -126,33 +88,23 @@ class wxApp: public wxEvtHandler
 #endif
     void DeletePendingObjects();
 
-    /// This can be used to suppress the generation of Idle events.
-    inline void SuppressIdleEvents(bool arg = TRUE) { m_suppressIdleEvents = arg; }
-    inline bool GetSuppressIdleEvents() const { return m_suppressIdleEvents; }
-    
+    // This can be used to suppress the generation of Idle events.
+    void SuppressIdleEvents(bool arg = TRUE) { m_suppressIdleEvents = arg; }
+    bool GetSuppressIdleEvents() const { return m_suppressIdleEvents; }
+
     bool            m_initialized;
-    bool            m_exitOnFrameDelete;
-    bool            m_wantDebugOutput;
-    wxWindow       *m_topWindow;
-    
+
     gint            m_idleTag;
 #if wxUSE_THREADS
     gint            m_wakeUpTimerTag;
 #endif
     unsigned char  *m_colorCube;
 
-    int             argc;
-    char          **argv;
-
-    wxString        m_vendorName;
-    wxString        m_appName;
-    wxString        m_className;
-
-    static wxAppInitializerFunction m_appInitFn;
- private:
+private:
     /// Set to TRUE while we are in wxYield().
     bool m_suppressIdleEvents;
-  DECLARE_EVENT_TABLE()
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKAPPH__

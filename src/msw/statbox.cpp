@@ -117,6 +117,8 @@ void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
+    return;
+
     // the static box should always be on the bottom of the Z-order, otherwise
     // it may hide controls which are positioned inside it
     if ( !::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
@@ -172,7 +174,7 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
     // Alternatively, just make sure that wxStaticBox is always at the back! There are probably
     // few other circumstances where it matters about child clipping. But what about painting onto
     // to panel, inside a groupbox? Doesn't appear, because the box wipes it out.
-  wxWindow *parent = GetParent();
+  wxWindow *parent = 0; //GetParent();
   if ( parent && parent->GetHWND() && (::GetWindowLong((HWND) parent->GetHWND(), GWL_STYLE) & WS_CLIPCHILDREN) )
   {
         // TODO: May in fact need to generate a paint event for inside this
@@ -196,7 +198,7 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( 0 )//nMsg == WM_NCHITTEST)
+    if ( nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor
         int yPos = HIWORD(lParam);  // vertical position of cursor
