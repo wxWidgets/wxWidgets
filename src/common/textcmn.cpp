@@ -115,8 +115,13 @@ bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
 // change default text attributes
 bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 {
-    // keep the old attributes if the new style doesn't specify them
-    m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
+    // keep the old attributes if the new style doesn't specify them unless the
+    // new style is empty - then reset m_defaultStyle (as there is no other way
+    // to do it)
+    if ( style.IsDefault() )
+        m_defaultStyle = style;
+    else
+        m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
 
     return TRUE;
 }

@@ -681,6 +681,10 @@ If either of the font, foreground, or background colour is not set in\rtfsp
 the previous default style didn't set them neither, the global font or colours
 of the text control itself are used as fall back.
 
+However if the {\it style} parameter is the default wxTextAttr, then the
+default style is just reset (instead of being combined with the new style which
+wouldn't change it at all).
+
 \wxheading{Parameters}
 
 \docparam{style}{The style for the new text.}
