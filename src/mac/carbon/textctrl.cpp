@@ -629,29 +629,34 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
     int hText;
 
+    // these are the numbers from the HIG, we reduce them by the borders
+    // first
+
     switch( m_windowVariant )
     {
         case wxWINDOW_VARIANT_NORMAL :
-            hText = 22 ;
+            hText = 22 - 6 ;
             break ;
         case wxWINDOW_VARIANT_SMALL :
-            hText = 19 ;
+            hText = 19 - 6 ;
             break ;
         case wxWINDOW_VARIANT_MINI :
-            hText= 15 ;
+            hText= 15 - 6 ;
             break ;
         default :
-            hText = 22 ;
+            hText = 22 - 6;
             break ; 
     }
 
-    if ( HasFlag(wxNO_BORDER) )
-        hText -= 6 ;
-
+    // as the above numbers have some free space around the text
+    // we get 5 lines like this anyway
     if ( m_windowStyle & wxTE_MULTILINE )
     {
          hText *= 5 ;
     }
+
+    if ( !HasFlag(wxNO_BORDER) )
+        hText += 6 ;
 
     return wxSize(wText, hText);
 }
