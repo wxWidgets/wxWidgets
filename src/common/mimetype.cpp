@@ -1401,8 +1401,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         while ( wxIsspace(*pc) )
             pc++;
 
-        // comment?
-        if ( *pc == wxT('#') ) {
+        // comment or blank line?
+        if ( *pc == wxT('#') || !*pc ) {
             // skip the whole line
             pc = NULL;
             continue;
@@ -1681,21 +1681,27 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
                                 if ( !ok )
                                 {
-                                    // don't flood the user with error messages
-                                    // if we don't understand something in his
-                                    // mailcap, but give them in debug mode
-                                    // because this might be useful for the
-                                    // programmer
-                                    wxLogDebug
-                                    (
-                                      wxT("Mailcap file %s, line %d: unknown "
-                                      "field '%s' for the MIME type "
-                                      "'%s' ignored."),
-                                      strFileName.c_str(),
-                                      nLine + 1,
-                                      curField.c_str(),
-                                      strType.c_str()
-                                    );
+                                    // we don't understand this field, but
+                                    // Netscape stores info in it, so don't warn
+                                    // about it
+                                    if ( curField.Left(16u) != "x-mozilla-flags=" )
+                                    {
+                                        // don't flood the user with error
+                                        // messages if we don't understand
+                                        // something in his mailcap, but give
+                                        // them in debug mode because this might
+                                        // be useful for the programmer
+                                        wxLogDebug
+                                        (
+                                          wxT("Mailcap file %s, line %d: "
+                                              "unknown field '%s' for the "
+                                              "MIME type '%s' ignored."),
+                                              strFileName.c_str(),
+                                              nLine + 1,
+                                              curField.c_str(),
+                                              strType.c_str()
+                                        );
+                                    }
                                 }
                             }
 
@@ -1801,9 +1807,21 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
-    mimetypes = m_aTypes;
+    mimetypes.Empty();
 
-    return m_aTypes.GetCount();
+    wxString type;
+    size_t count = m_aTypes.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        // don't return template types from here (i.e. anything containg '*')
+        type = m_aTypes[n];
+        if ( type.Find(_T('*')) == wxNOT_FOUND )
+        {
+            mimetypes.Add(type);
+        }
+    }
+
+    return mimetypes.GetCount();
 }
 
 #endif

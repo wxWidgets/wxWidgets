@@ -82,7 +82,8 @@ static void TestMimeEnum()
             extsAll += exts[e];
         }
 
-        printf("\t%s: %s (%s)\n", mimetypes[n], desc, extsAll);
+        printf("\t%s: %s (%s)\n",
+               mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
     }
 }
 
