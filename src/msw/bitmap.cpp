@@ -128,7 +128,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 wxBitmapRefData::wxBitmapRefData()
 {
+#ifdef __WXDEBUG__
     m_selectedInto = NULL;
+#endif
     m_bitmapMask = NULL;
     m_hBitmap = (WXHBITMAP) NULL;
     m_hasAlpha = FALSE;
@@ -1043,10 +1045,14 @@ wxMask *wxBitmap::GetMask() const
     return GetBitmapData() ? GetBitmapData()->GetMask() : (wxMask *) NULL;
 }
 
+#ifdef __WXDEBUG__
+
 wxDC *wxBitmap::GetSelectedInto() const
 {
     return GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC *) NULL;
 }
+
+#endif
 
 #if WXWIN_COMPATIBILITY_2_4
 
@@ -1066,11 +1072,15 @@ bool wxBitmap::HasAlpha() const
 // wxBitmap setters
 // ----------------------------------------------------------------------------
 
+#ifdef __WXDEBUG__
+
 void wxBitmap::SetSelectedInto(wxDC *dc)
 {
     if ( GetBitmapData() )
         GetBitmapData()->m_selectedInto = dc;
 }
+
+#endif
 
 #if wxUSE_PALETTE
 
