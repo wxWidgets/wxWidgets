@@ -375,12 +375,10 @@ int wxComboBox::GetCount() const
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    int s = FindString (value);
-    if (s == wxNOT_FOUND && !HasFlag(wxCB_READONLY) )
-    {
-        m_choice->Append(value) ;
-    }
-    SetStringSelection( value ) ;
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection( value ) ;
+    else
+        m_text->SetValue( value );
 }
 
 // Clipboard operations
