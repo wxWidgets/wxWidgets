@@ -652,7 +652,6 @@ void wxPy_ReinitStockObjects(bool init)
 
 
     REINITOBJ(wxTheClipboard, wxClipboard);
-    REINITOBJ(wxTheMimeTypesManager, wxMimeTypesManager);
     REINITOBJ2(wxDefaultValidator, wxValidator);
     REINITOBJ2(wxNullImage, wxImage);
     REINITOBJ2(wxNullAcceleratorTable, wxAcceleratorTable);
