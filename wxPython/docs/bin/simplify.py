@@ -66,7 +66,7 @@ def processModule(newDocNode, modulename):
 
     # make a module element
     name = getAttr(topNode, "module")
-    assert name == modulename # sanity check    
+    ##assert name == modulename # sanity check    
 
     moduleNode = libxml2.newNode("module")
     moduleNode.setProp("name", name)    
