@@ -225,31 +225,52 @@ executables.
 Borland C++ 4.5/5.0/5.5 compilation
 -------------------------------
 
-Compiling using the makefiles:
+Compiling using the makefiles (updated 24 Seot 02):
 
-0. If downloading from CVS, copy include\wx\msw\setup0.h to
-   include\wx\setup.h.
 1. Make sure your WXWIN variable is set [e.g add
    set WXWIN=c:\wxwindows
    to your autoexec.bat file], and that it uses the FAT (short
    name) form with no spaces.
    Reboot if needed for the changes to autoexec.bat to take effect.   
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
-   make the wxWindows core library. Ignore the warnings about
-   'XXX' not found in library.
+   make the wxWindows core library. Ignore the compiler warnings.
+   This produces a library in the wxwindows\lib directory called
+   wx32ds.lib
 3. Change directory to a sample or demo such as samples\minimal, and type
-  'make -f makefile.b32'.
+  'make -f makefile.b32'. This produces a windows exe file
 4. For release versions, recompile wxWindows and samples using
    'make -f makefile.b32 clean'
    'make -f makefile.b32 FINAL=1'
-   for the library and samples.
+   for the library and samples. This produces a library wx32s.lib eliminating
+   all debugging information - if you wish to retain reduced debugging information
+   'make -f makefile.b32 clean'
+   'make -f makefile.b32 FINAL=hybrid'
+
 5. To make and use wxWindows as a DLL, type
    'make -f makefile.b32 clean'
    'make -f makefile.b32 DLL=1'
+   which generates a DLL (wx32d.dll) and import library (wx32d.lib), 
    and then for each sample,
    'make -f makefile.b32 WXUSINGDLL=1'
    Please note that the samples have not been exhaustively tested
-   with this configuration.
+   with this configuration. You may also generate a sepratae library
+   and second DLL using the commands
+   'make -f makefile.b32 clean'
+   'make -f makefile.b32 DLL=1 FINAL=1'
+   which generates a DLL (wx32.dll) and import library (wx32.lib), 
+   and then for each sample,
+   'make -f makefile.b32 WXUSINGDLL=1 FINAL=1'
+
+6. To make console mode applications with wxWindows functions go
+   to the src\msw directory
+   'make -f makebase.b32 clean'
+   'make -f makebase.b32'
+   There is a sample\console directory and in this type
+   'make -f makefile.b32 wxUSE_GUI=0'
+
+Note (0): This provides the ability to produce separate wxwindows libraries
+   for different purposes, and only have to rebuild the applications
+
 
 Note (1): In Borland 4.5 and earleir, using bcc.exe you also need to define BCCDIR
 in the autoexec.bat file; like this:

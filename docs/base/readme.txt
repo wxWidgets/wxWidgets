@@ -57,7 +57,11 @@ b) Cygwin
 
    Please refer to the Unix section below
 
-c) Other compilers
+c) Borland
+   Please refer to the docs/msw/install.txt. The console sample compiles and runs
+   but does not pass all tests (04 sept 02)
+
+d) Other compilers
 
    Unfortunately we don't have the makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
