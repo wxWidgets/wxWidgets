@@ -627,12 +627,12 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 
 #if wxUSE_STATUSBAR
         /* status bar */
-        if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
+        if (m_frameStatusBar && m_frameStatusBar->IsShown()) (*height) -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
         /* tool bar */
-        if (m_frameToolBar)
+        if (m_frameToolBar && m_frameToolBar->IsShown())
         {
             if (m_toolBarDetached)
             {
@@ -678,12 +678,12 @@ void wxFrame::DoSetClientSize( int width, int height )
 
 #if wxUSE_STATUSBAR
         /* status bar */
-        if (m_frameStatusBar) height += wxSTATUS_HEIGHT;
+        if (m_frameStatusBar && m_frameStatusBar->IsShown()) height += wxSTATUS_HEIGHT;
 #endif
 
 #if wxUSE_TOOLBAR
         /* tool bar */
-        if (m_frameToolBar)
+        if (m_frameToolBar && m_frameToolBar->IsShown())
         {
             if (m_toolBarDetached)
             {
@@ -781,7 +781,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         }
 
 #if wxUSE_TOOLBAR
-        if ((m_frameToolBar) &&
+        if ((m_frameToolBar) && m_frameToolBar->IsShown() &&
             (m_frameToolBar->m_widget->parent == m_mainWidget))
         {
             int xx = m_miniEdge;
@@ -837,7 +837,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     }
 
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar)
+    if (m_frameStatusBar && m_frameStatusBar->IsShown())
     {
         int xx = 0 + m_miniEdge;
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
