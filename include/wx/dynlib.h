@@ -222,7 +222,7 @@ protected:
 // Global variables
 // ----------------------------------------------------------------------------
 
-extern wxLibraries wxTheLibraries;
+extern WXDLLEXPORT_DATA(wxLibraries) wxTheLibraries;
 
 // ----------------------------------------------------------------------------
 // Interesting defines
