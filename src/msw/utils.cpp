@@ -829,6 +829,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
         if ( ok && rc == STILL_ACTIVE )
         {
             // there is such process => success
+            if ( krc )
+                *krc = wxKILL_OK;
+
             return 0;
         }
     }
@@ -837,6 +840,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
         if ( ok && rc != STILL_ACTIVE )
         {
             // killed => success
+            if ( krc )
+                *krc = wxKILL_OK;
+
             return 0;
         }
     }
