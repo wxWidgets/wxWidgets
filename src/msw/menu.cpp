@@ -179,13 +179,13 @@ void wxMenu::Append(wxMenuItem *pItem)
         else {
             if ( current.Len() == 1 ) {
                 // it's a letter
-                keyCode = wxToupper(current[0]);
+                keyCode = wxToupper(current[0U]);
             }
             else {
                 // it should be a function key
-                if ( current[0] == 'f' && isdigit(current[1]) &&
+                if ( current[0U] == 'f' && isdigit(current[1U]) &&
                      (current.Len() == 2 ||
-                     (current.Len() == 3 && isdigit(current[2]))) ) {
+                     (current.Len() == 3 && isdigit(current[2U]))) ) {
                     int n;
                     sscanf(current.c_str() + 1, "%d", &n);
 
