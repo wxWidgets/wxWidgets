@@ -276,15 +276,14 @@ void ScintillaBase::Colourise(int start, int end) {
 		end = lengthDoc;
 	int len = end - start;
 
-	PropSet props;
-	
 	StylingContext styler(wMain.GetID(), props);
 
 	int styleStart = 0;
 	if (start > 0)
 		styleStart = styler.StyleAt(start - 1);
-
-	ColouriseDoc(pdoc->dbcsCodePage, start, len, styleStart, lexLanguage, keyWordLists, styler);
+	styler.SetCodePage(pdoc->dbcsCodePage);
+	
+	LexerModule::Colourise(start, len, styleStart, lexLanguage, keyWordLists, styler);
 	styler.Flush();
 }
 #endif

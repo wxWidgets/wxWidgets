@@ -344,6 +344,186 @@ void Action::Grab(Action *source) {
 	source->lenData = 0;
 }
 
+// The undo history stores a sequence of user operations that represent the user's view of the 
+// commands executed on the text. 
+// Each user operation contains a sequence of text insertion and text deletion actions.
+// All the user operations are stored in a list of individual actions with 'start' actions used
+// as delimiters between user operations.
+// Initially there is one start action in the history. 
+// As each action is performed, it is recorded in the history. The action may either become 
+// part of the current user operation or may start a new user operation. If it is to be part of the
+// current operation, then it overwrites the current last action. If it is to be part of a new 
+// operation, it is appended after the current last action.
+// After writing the new action, a new start action is appended at the end of the history.
+// The decision of whether to start a new user operation is based upon two factors. If a 
+// compound operation has been explicitly started by calling BeginUndoAction and no matching
+// EndUndoAction (these calls nest) has been called, then the action is coalesced into the current 
+// operation. If there is no outstanding BeginUndoAction call then a new operation is started 
+// unless it looks as if the new action is caused by the user typing or deleting a stream of text.
+// Sequences that look like typing or deletion are coalesced into a single user operation.
+
+UndoHistory::UndoHistory() {
+
+	lenActions = 100;
+	actions = new Action[lenActions];
+	maxAction = 0;
+	currentAction = 0;
+	undoSequenceDepth = 0;
+	savePoint = 0;
+
+	actions[currentAction].Create(startAction);
+}
+
+UndoHistory::~UndoHistory() {
+	delete []actions;
+	actions = 0;
+}
+
+void UndoHistory::EnsureUndoRoom() {
+	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, length, currentAction);
+	if (currentAction >= 2) {
+		// Have to test that there is room for 2 more actions in the array
+		// as two actions may be created by this function
+		if (currentAction >= (lenActions - 2)) {
+			// Run out of undo nodes so extend the array
+			int lenActionsNew = lenActions * 2;
+			Action *actionsNew = new Action[lenActionsNew];
+			if (!actionsNew)
+				return;
+			for (int act = 0; act <= currentAction; act++)
+				actionsNew[act].Grab(&actions[act]);
+			delete []actions;
+			lenActions = lenActionsNew;
+			actions = actionsNew;
+		}
+	}
+}
+
+void UndoHistory::AppendAction(actionType at, int position, char *data, int lengthData) {
+	EnsureUndoRoom();
+	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, lengthData, currentAction);
+	//Platform::DebugPrintf("^ %d action %d %d\n", actions[currentAction - 1].at, 
+	//	actions[currentAction - 1].position, actions[currentAction - 1].lenData);
+	if (currentAction >= 1) {
+		if (0 == undoSequenceDepth) {
+		// Top level actions may not always be coalesced
+			Action &actPrevious = actions[currentAction - 1];
+			// See if current action can be coalesced into previous action
+			// Will work if both are inserts or deletes and position is same
+			if (at != actPrevious.at) {
+				currentAction++;
+			} else if (currentAction == savePoint) {
+				currentAction++;
+			} else if ((at == removeAction) && 
+				((position + lengthData * 2) != actPrevious.position)) {
+				// Removals must be at same position to coalesce
+				currentAction++;
+			} else if ((at == insertAction) && 
+				(position != (actPrevious.position + actPrevious.lenData*2))) {
+				// Insertions must be immediately after to coalesce
+				currentAction++;
+			} else {
+				//Platform::DebugPrintf("action coalesced\n");
+			}
+		} else {
+			currentAction++;
+		} 
+	} else {
+		currentAction++;
+	}
+	actions[currentAction].Create(at, position, data, lengthData);
+	currentAction++;
+	actions[currentAction].Create(startAction);
+	maxAction = currentAction;
+}
+
+void UndoHistory::BeginUndoAction() {
+	EnsureUndoRoom();
+	if (undoSequenceDepth == 0) {
+		if (actions[currentAction].at != startAction) {
+			currentAction++;
+			actions[currentAction].Create(startAction);
+			maxAction = currentAction;
+		}
+	}
+	undoSequenceDepth++;
+}
+
+void UndoHistory::EndUndoAction() {
+	EnsureUndoRoom();
+	undoSequenceDepth--;
+	if (0 == undoSequenceDepth) {
+		if (actions[currentAction].at != startAction) {
+			currentAction++;
+			actions[currentAction].Create(startAction);
+			maxAction = currentAction;
+		}
+	}
+}
+	
+void UndoHistory::DropUndoSequence() {
+	undoSequenceDepth = 0;
+}
+
+void UndoHistory::DeleteUndoHistory() {
+	for (int i = 1; i < maxAction; i++)
+		actions[i].Destroy();
+	maxAction = 0;
+	currentAction = 0;
+	actions[currentAction].Create(startAction);
+	savePoint = 0;
+}
+
+void UndoHistory::SetSavePoint() {
+	savePoint = currentAction;
+}
+
+bool UndoHistory::IsSavePoint() const {
+	return savePoint == currentAction;
+}
+
+bool UndoHistory::CanUndo() const {
+	return (currentAction > 0) && (maxAction > 0);
+}
+
+int UndoHistory::StartUndo() {
+	// Drop any trailing startAction
+	if (actions[currentAction].at == startAction && currentAction > 0)
+		currentAction--;
+	
+	// Count the steps in this action
+	int act = currentAction; 
+	while (actions[act].at != startAction && act > 0) {
+		act--;
+	}
+	return currentAction - act;
+}
+
+const Action &UndoHistory::UndoStep() {
+	return actions[currentAction--];
+}
+
+bool UndoHistory::CanRedo() const {
+	return maxAction > currentAction;
+}
+
+int UndoHistory::StartRedo() {
+	// Drop any leading startAction
+	if (actions[currentAction].at == startAction && currentAction < maxAction)
+		currentAction++;
+	
+	// Count the steps in this action
+	int act = currentAction; 
+	while (actions[act].at != startAction && act < maxAction) {
+		act++;
+	}
+	return act - currentAction;
+}
+
+const Action &UndoHistory::RedoStep() {
+	return actions[currentAction++];
+}
+
 CellBuffer::CellBuffer(int initialLength) {
 	body = new char[initialLength];
 	size = initialLength;
@@ -352,23 +532,12 @@ CellBuffer::CellBuffer(int initialLength) {
 	gaplen = initialLength;
 	part2body = body + gaplen;
 	readOnly = false;
-
-	lenActions = 100;
-	actions = new Action[lenActions];
-	maxAction = 0;
-	currentAction = 0;
 	collectingUndo = undoCollectAutoStart;
-	undoSequenceDepth = 0;
-	savePoint = 0;
-
-	actions[currentAction].Create(startAction);
 }
 
 CellBuffer::~CellBuffer() {
 	delete []body;
 	body = 0;
-	delete []actions;
-	actions = 0;
 }
 
 void CellBuffer::GapTo(int position) {
@@ -486,7 +655,7 @@ const char *CellBuffer::InsertString(int position, char *s, int insertLength) {
 			for (int i = 0; i < insertLength / 2; i++) {
 				data[i] = s[i * 2];
 			}
-			AppendAction(insertAction, position, data, insertLength / 2);
+			uh.AppendAction(insertAction, position, data, insertLength / 2);
 		}
 
 		BasicInsertString(position, s, insertLength);
@@ -525,48 +694,6 @@ bool CellBuffer::SetStyleFor(int position, int lengthStyle, char style, char mas
 	return changed;
 }
 
-void CellBuffer::EnsureUndoRoom() {
-	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, length, currentAction);
-	if (currentAction >= 2) {
-		// Have to test that there is room for 2 more actions in the array
-		// as two actions may be created by this function
-		if (currentAction >= (lenActions - 2)) {
-			// Run out of undo nodes so extend the array
-			int lenActionsNew = lenActions * 2;
-			Action *actionsNew = new Action[lenActionsNew];
-			if (!actionsNew)
-				return;
-			for (int act = 0; act <= currentAction; act++)
-				actionsNew[act].Grab(&actions[act]);
-			delete []actions;
-			lenActions = lenActionsNew;
-			actions = actionsNew;
-		}
-	}
-}
-
-void CellBuffer::AppendAction(actionType at, int position, char *data, int lengthData) {
-	EnsureUndoRoom();
-	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, lengthData, currentAction);
-	if (currentAction >= 2) {
-		// See if current action can be coalesced into previous action
-		// Will work if both are inserts or deletes and position is same or two different
-		if ((at != actions[currentAction - 1].at) || (abs(position - actions[currentAction - 1].position) > 2)) {
-			currentAction++;
-		} else if (currentAction == savePoint) {
-			currentAction++;
-		}
-	} else {
-		currentAction++;
-	}
-	actions[currentAction].Create(at, position, data, lengthData);
-	if ((collectingUndo == undoCollectAutoStart) && (0 == undoSequenceDepth)) {
-		currentAction++;
-		actions[currentAction].Create(startAction);
-	}
-	maxAction = currentAction;
-}
-
 const char *CellBuffer::DeleteChars(int position, int deleteLength) {
 	// InsertString and DeleteChars are the bottleneck though which all changes occur
 	char *data = 0;
@@ -577,7 +704,7 @@ const char *CellBuffer::DeleteChars(int position, int deleteLength) {
 			for (int i = 0; i < deleteLength / 2; i++) {
 				data[i] = ByteAt(position + i * 2);
 			}
-			AppendAction(removeAction, position, data, deleteLength / 2);
+			uh.AppendAction(removeAction, position, data, deleteLength / 2);
 		}
 
 		BasicDeleteChars(position, deleteLength);
@@ -616,11 +743,11 @@ void CellBuffer::SetReadOnly(bool set) {
 }
 
 void CellBuffer::SetSavePoint() {
-	savePoint = currentAction;
+	uh.SetSavePoint();
 }
 
 bool CellBuffer::IsSavePoint() {
-	return savePoint == currentAction;
+	return uh.IsSavePoint();
 }
 
 int CellBuffer::AddMark(int line, int markerNum) {
@@ -792,7 +919,7 @@ void CellBuffer::BasicDeleteChars(int position, int deleteLength) {
 
 undoCollectionType CellBuffer::SetUndoCollection(undoCollectionType collectUndo) {
 	collectingUndo = collectUndo;
-	undoSequenceDepth = 0;
+	uh.DropUndoSequence();
 	return collectingUndo;
 }
 
@@ -800,69 +927,28 @@ bool CellBuffer::IsCollectingUndo() {
 	return collectingUndo;
 }
 
-void CellBuffer::AppendUndoStartAction() {
-	EnsureUndoRoom();
-	// Finish any currently active undo sequence
-	undoSequenceDepth = 0;
-	if (actions[currentAction].at != startAction) {
-		undoSequenceDepth++;
-		currentAction++;
-		actions[currentAction].Create(startAction);
-		maxAction = currentAction;
-	}
-}
-
 void CellBuffer::BeginUndoAction() {
-	EnsureUndoRoom();
-	if (undoSequenceDepth == 0) {
-		if (actions[currentAction].at != startAction) {
-			currentAction++;
-			actions[currentAction].Create(startAction);
-			maxAction = currentAction;
-		}
-	}
-	undoSequenceDepth++;
+	uh.BeginUndoAction();
 }
 
 void CellBuffer::EndUndoAction() {
-	EnsureUndoRoom();
-	undoSequenceDepth--;
-	if (0 == undoSequenceDepth) {
-		if (actions[currentAction].at != startAction) {
-			currentAction++;
-			actions[currentAction].Create(startAction);
-			maxAction = currentAction;
-		}
-	}
+	uh.EndUndoAction();
 }
 
 void CellBuffer::DeleteUndoHistory() {
-	for (int i = 1; i < maxAction; i++)
-		actions[i].Destroy();
-	maxAction = 0;
-	currentAction = 0;
-	savePoint = 0;
+	uh.DeleteUndoHistory();
 }
 
 bool CellBuffer::CanUndo() {
-	return (!readOnly) && ((currentAction > 0) && (maxAction > 0));
+	return (!readOnly) && (uh.CanUndo());
 }
 
 int CellBuffer::StartUndo() {
-	// Drop any trailing startAction
-	if (actions[currentAction].at == startAction && currentAction > 0)
-		currentAction--;
-	
-	// Count the steps in this action
-	int act = currentAction; 
-	while (actions[act].at != startAction && act > 0) {
-		act--;
-	}
-	return currentAction - act;
+	return uh.StartUndo();
 }
 
 const Action &CellBuffer::UndoStep() {
-	const Action &actionStep = actions[currentAction];
+	const Action &actionStep = uh.UndoStep();
 	if (actionStep.at == insertAction) {
 		BasicDeleteChars(actionStep.position, actionStep.lenData*2);
 	} else if (actionStep.at == removeAction) {
@@ -874,29 +960,19 @@ const Action &CellBuffer::UndoStep() {
 		BasicInsertString(actionStep.position, styledData, actionStep.lenData*2);
 		delete []styledData;
 	}
-	currentAction--;
 	return actionStep;
 }
 
 bool CellBuffer::CanRedo() {
-	return (!readOnly) && (maxAction > currentAction);
+	return (!readOnly) && (uh.CanRedo());
 }
 
 int CellBuffer::StartRedo() {
-	// Drop any leading startAction
-	if (actions[currentAction].at == startAction && currentAction < maxAction)
-		currentAction++;
-	
-	// Count the steps in this action
-	int act = currentAction; 
-	while (actions[act].at != startAction && act < maxAction) {
-		act++;
-	}
-	return act - currentAction;
+	return uh.StartRedo();
 }
 
 const Action &CellBuffer::RedoStep() {
-	const Action &actionStep = actions[currentAction];
+	const Action &actionStep = uh.RedoStep();
 	if (actionStep.at == insertAction) {
 		char *styledData = new char[actionStep.lenData * 2];
 		for (int i = 0; i < actionStep.lenData; i++) {
@@ -908,7 +984,6 @@ const Action &CellBuffer::RedoStep() {
 	} else if (actionStep.at == removeAction) {
 		BasicDeleteChars(actionStep.position, actionStep.lenData*2);
 	}
-	currentAction++;
 	return actionStep;
 }
 

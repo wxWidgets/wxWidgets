@@ -25,6 +25,13 @@ OBJECTS = \
 	$(S)/ScintillaBase.$(OBJSUFF) \
 	$(S)/Style.$(OBJSUFF) \
 	$(S)/ViewStyle.$(OBJSUFF) \
+	$(S)/LexCPP.$(OBJSUFF)	\
+	$(S)/LexHTML.$(OBJSUFF)	\
+	$(S)/LexOthers.$(OBJSUFF) \
+	$(S)/LexPerl.$(OBJSUFF)	\
+	$(S)/LexPython.$(OBJSUFF) \
+	$(S)/LexSQL.$(OBJSUFF)	\
+	$(S)/LexVB.$(OBJSUFF)	\
 	PlatWX.$(OBJSUFF) \
 	ScintillaWX.$(OBJSUFF) \
 	stc.$(OBJSUFF)

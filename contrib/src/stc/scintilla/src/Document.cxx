@@ -65,8 +65,46 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
+int Document::AddMark(int line, int markerNum) { 
+	int prev = cb.AddMark(line, markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
+	NotifyModified(mh);
+	return prev;
+}
+
+void Document::DeleteMark(int line, int markerNum) { 
+	cb.DeleteMark(line, markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
+	NotifyModified(mh);
+}
+
+void Document::DeleteMarkFromHandle(int markerHandle) { 
+	cb.DeleteMarkFromHandle(markerHandle); 
+	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	NotifyModified(mh);
+}
+
+void Document::DeleteAllMarks(int markerNum) { 
+	cb.DeleteAllMarks(markerNum); 
+	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	NotifyModified(mh);
+}
+
 int Document::LineStart(int line) {
 	return cb.LineStart(line);
+}
+
+int Document::LineEnd(int line) {
+	if (line == LinesTotal() - 1) {
+		return LineStart(line + 1);
+	} else {
+		int position = LineStart(line + 1) - 1;
+		// When line terminator is CR+LF, may need to go back one more
+		if ((position > LineStart(line)) && (cb.CharAt(position - 1) == '\r')) {
+			position--;
+		}
+		return position;
+	}
 }
 
 int Document::LineFromPosition(int pos) {
@@ -74,17 +112,7 @@ int Document::LineFromPosition(int pos) {
 }
 
 int Document::LineEndPosition(int position) {
-	int line = LineFromPosition(position);
-	if (line == LinesTotal() - 1) {
-		position = LineStart(line + 1);
-	} else {
-		position = LineStart(line + 1) - 1;
-		// When line terminator is CR+LF, may need to go back one more
-		if ((position > LineStart(line)) && (cb.CharAt(position - 1) == '\r')) {
-			position--;
-		}
-	}
-	return position;
+	return LineEnd(LineFromPosition(position));
 }
 
 int Document::VCHomePosition(int position) {
@@ -124,7 +152,10 @@ int Document::GetLastChild(int lineParent, int level) {
 		level = GetLevel(lineParent) & SC_FOLDLEVELNUMBERMASK;
 	int maxLine = LinesTotal();
 	int lineMaxSubord = lineParent;
-	while ((lineMaxSubord < maxLine-1) && IsSubordinate(level, GetLevel(lineMaxSubord+1))) {
+	while (lineMaxSubord < maxLine-1) {
+		EnsureStyledTo(LineStart(lineMaxSubord+2));
+		if (!IsSubordinate(level, GetLevel(lineMaxSubord+1)))
+			break;
 		lineMaxSubord++;
 	}
 	if (lineMaxSubord > lineParent) {
@@ -307,6 +338,7 @@ int Document::Undo() {
 		enteredCount++;
 		bool startSavePoint = cb.IsSavePoint();
 		int steps = cb.StartUndo();
+		//Platform::DebugPrintf("Steps=%d\n", steps);
 		for (int step=0; step<steps; step++) {
 			int prevLinesTotal = LinesTotal();
 			const Action &action = cb.UndoStep();
@@ -393,6 +425,11 @@ void Document::InsertString(int position, const char *s, int insertLength) {
 		InsertStyledString(position*2, sWithStyle, insertLength*2);
 		delete []sWithStyle;
 	}
+}
+
+void Document::ChangeChar(int pos, char ch) {
+	DeleteChars(pos, 1);
+	InsertChar(pos, ch);
 }
 
 void Document::DelChar(int pos) {
@@ -605,6 +642,25 @@ int Document::LinesTotal() {
 	return cb.Lines();
 }
 
+void Document::ChangeCase(Range r, bool makeUpperCase) {
+	for (int pos=r.start; pos<r.end; pos++) {
+		char ch = CharAt(pos);
+		if (dbcsCodePage && IsDBCS(pos)) {
+			pos++;
+		} else {
+			if (makeUpperCase) {
+				if (islower(ch)) {
+					ChangeChar(pos, toupper(ch));
+				}
+			} else {
+				if (isupper(ch)) {
+					ChangeChar(pos, tolower(ch));
+				}
+			}
+		}
+	}
+}
+
 void Document::SetWordChars(unsigned char *chars) {
 	int ch;
 	for (ch = 0; ch < 256; ch++) {
@@ -669,6 +725,13 @@ void Document::SetStyles(int length, char *styles) {
 		}
 		enteredCount--;
 	}
+}
+
+bool Document::EnsureStyledTo(int pos) {
+	// Ask the watchers to style, and stop as soon as one responds.
+	for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++)
+		watchers[i].watcher->NotifyStyleNeeded(this, watchers[i].userData, pos);
+	return pos <= GetEndStyled();
 }
 
 bool Document::AddWatcher(DocWatcher *watcher, void *userData) {

@@ -2,7 +2,7 @@
 # File:		makefile.b32
 # Author:	Julian Smart
 # Created:	1999
-# Updated:	
+# Updated:
 # Copyright:
 #
 # Makefile : Builds wxMMedia library for 32-bit BC++
@@ -36,6 +36,13 @@ OBJECTS = \
 	ScintillaBase.obj	\
 	Style.obj		\
 	ViewStyle.obj	\
+	LexCPP.obj		\
+	LexHTML.obj		\
+	LexOthers.obj		\
+	LexPerl.obj		\
+	LexPython.obj		\
+	LexSQL.obj		\
+	LexVB.obj		\
 				\
 	PlatWX.obj		\
 	ScintillaWX.obj	\

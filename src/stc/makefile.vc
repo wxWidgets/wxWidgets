@@ -30,6 +30,13 @@ OBJECTS = \
 	$(D)\ScintillaBase.obj	\
 	$(D)\Style.obj		\
 	$(D)\ViewStyle.obj	\
+	$(D)\LexCPP.obj		\
+	$(D)\LexHTML.obj	\
+	$(D)\LexOthers.obj	\
+	$(D)\LexPerl.obj	\
+	$(D)\LexPython.obj	\
+	$(D)\LexSQL.obj		\
+	$(D)\LexVB.obj		\
 				\
 	$(D)\PlatWX.obj		\
 	$(D)\ScintillaWX.obj	\
