@@ -190,7 +190,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     if ( hasAbortButton )
     {
-        m_btnAbort = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        m_btnAbort = new wxButton(this, wxID_CANCEL, wxSTOCK_CANCEL);
 
         // Windows dialogs usually have buttons in the lower right corner
 #if defined(__WXMSW__) || defined(__WXPM__)
