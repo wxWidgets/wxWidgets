@@ -34,6 +34,9 @@
 #include "wx/menu.h"
 #include "wx/list.h"
 #include "wx/filedlg.h"
+#endif
+
+#ifdef __WXGTK__
 #include "wx/mdi.h"
 #endif
 
@@ -490,9 +493,11 @@ void wxView::OnChangeFilename(void)
     
     wxFrame *frame = NULL;
     wxMDIChildFrame *mdi_frame = NULL;
+#ifdef __WXGTK__
     if (GetFrame()->IsKindOf(CLASSINFO(wxMDIChildFrame)))
       mdi_frame = (wxMDIChildFrame*)GetFrame();
     else
+#endif
       frame = GetFrame();
       
     if (frame)
@@ -500,7 +505,7 @@ void wxView::OnChangeFilename(void)
       frame->SetTitle(name);
       return;
     }
-    
+#ifdef __WXGTK__
     if (mdi_frame)
     {
       if (wxTheApp->GetAppName() != "")
@@ -512,6 +517,7 @@ void wxView::OnChangeFilename(void)
       else
         mdi_frame->SetTitle(name);
     }
+#endif
   }
 }
 
@@ -1399,7 +1405,7 @@ bool wxDocChildFrame::OnClose(void)
 
 BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
     EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
-    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE2, wxDocParentFrame::OnMRUFile)
+    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
 END_EVENT_TABLE()
 
 wxDocParentFrame::wxDocParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,

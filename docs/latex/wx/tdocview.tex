@@ -2,6 +2,7 @@
 
 Classes: \helpref{wxDocument}{wxdocument}, \helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate},\rtfsp
 \helpref{wxDocManager}{wxdocmanager}, \helpref{wxDocParentFrame}{wxdocparentframe}, \helpref{wxDocChildFrame}{wxdocchildframe},
+\rtfsp\helpref{wxDocMDIParentFrame}{wxdocmdiparentframe}, \helpref{wxDocMDIChildFrame}{wxdocmdichildframe},
 \rtfsp\helpref{wxCommand}{wxcommand}, \helpref{wxCommandProcessor}{wxcommandprocessor}
 
 The document/view framework is found in most application frameworks, because it
@@ -254,42 +255,28 @@ the file history, that will be used for appending the filenames. They are
 appended using menu identifiers in the range wxID\_FILE1 to wxID\_FILE9.
 
 In order to respond to a file load command from one of these identifiers,
-you need to handle them in your wxFrame::OnMenuCommand. Below is the
-code used by the default document/view parent frame.
+you need to handle them using an event handler, for example:
 
+{\small
 \begin{verbatim}
-void wxDocParentFrame::OnMenuCommand(int id)
+BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
+    EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
+    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
+END_EVENT_TABLE()
+
+void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
-  switch (id)
-  {
-    case wxID_EXIT:
-    {
-      if (GetEventHandler()->OnClose())
-        delete this;
-      break;
-    }
-    case wxID_FILE1:
-    case wxID_FILE2:
-    case wxID_FILE3:
-    case wxID_FILE4:
-    case wxID_FILE5:
-    case wxID_FILE6:
-    case wxID_FILE7:
-    case wxID_FILE8:
-    case wxID_FILE9:
-    {
-      char *f = docManager->GetHistoryFile(id-wxID_FILE1);
-      if (f)
-        (void)docManager->CreateDocument(f, wxDOC_SILENT);
-      break;
-    }
-    default:
-    {
-      docManager->OnMenuCommand(id);
-    }
-  }
+    Close();
+}
+
+void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
+{
+      wxString f(m_docManager->GetHistoryFile(event.GetSelection() - wxID_FILE1));
+      if (f != "")
+        (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
 }
 \end{verbatim}
+}
 
 \subsection{wxWindows predefined command identifiers}\label{predefinedids}
 

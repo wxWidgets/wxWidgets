@@ -1366,6 +1366,16 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWDefWindowProc(message, wParam, lParam );
           break;
         }
+        case WM_PALETTECHANGED:
+        {
+            return MSWOnPaletteChanged((WXHWND) (HWND) wParam);
+            break;
+        }
+        case WM_QUERYNEWPALETTE:
+        {
+            return MSWOnQueryNewPalette();
+            break;
+        }
         case WM_ERASEBKGND:
         {
           // Prevents flicker when dragging
@@ -1862,7 +1872,7 @@ WXHBRUSH wxWindow::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 bool wxWindow::MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
   wxSysColourChangedEvent event;
-  event.m_eventObject = this;
+  event.SetEventObject(this);
 
   // Check if app handles this.
   if (GetEventHandler()->ProcessEvent(event))
@@ -1870,6 +1880,27 @@ bool wxWindow::MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WX
 
   // We didn't process it
   return 1;
+}
+
+long wxWindow::MSWOnPaletteChanged(WXHWND hWndPalChange)
+{
+    wxPaletteChangedEvent event(GetId());
+    event.SetEventObject(this);
+    event.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
+    GetEventHandler()->ProcessEvent(event);
+    return 0;
+}
+
+long wxWindow::MSWOnQueryNewPalette()
+{
+    wxQueryNewPaletteEvent event(GetId());
+    event.SetEventObject(this);
+    if (!GetEventHandler()->ProcessEvent(event) || !event.GetPaletteRealized())
+    {
+        return (long) FALSE;
+    }
+    else
+        return (long) TRUE;
 }
 
 // Responds to colour changes: passes event on to children.

@@ -40,7 +40,7 @@ IMPLEMENT_CLASS(wxDocMDIParentFrame, wxMDIParentFrame)
 
 BEGIN_EVENT_TABLE(wxDocMDIParentFrame, wxMDIParentFrame)
     EVT_MENU(wxID_EXIT, wxDocMDIParentFrame::OnExit)
-    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE2, wxDocMDIParentFrame::OnMRUFile)
+    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocMDIParentFrame::OnMRUFile)
 END_EVENT_TABLE()
 
 wxDocMDIParentFrame::wxDocMDIParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,

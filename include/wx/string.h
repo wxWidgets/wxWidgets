@@ -112,10 +112,10 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 // ----------------------------------------------------------------------------
 
 // global pointer to empty string
-extern const char *g_szNul;
+WXDLLEXPORT_DATA(extern const char*) g_szNul;
 
 // return an empty wxString
-class wxString; // not yet defined
+class WXDLLEXPORT wxString; // not yet defined
 inline const wxString& wxGetEmptyString() { return *(wxString *)&g_szNul; }
 
 // ---------------------------------------------------------------------------
@@ -375,13 +375,13 @@ public:
   /** @name string comparison */
   //@{
     /**
-    case-sensitive comparaison
+    case-sensitive comparison
     @return 0 if equal, +1 if greater or -1 if less
     @see CmpNoCase, IsSameAs
     */
   int  Cmp(const char *psz) const { return strcmp(c_str(), psz); }
     /**
-    case-insensitive comparaison, return code as for wxString::Cmp()
+    case-insensitive comparison, return code as for wxString::Cmp()
     @see: Cmp, IsSameAs
     */
   int  CmpNoCase(const char *psz) const { return Stricmp(c_str(), psz); }
@@ -758,14 +758,14 @@ public:
       //@{
         /// just like strcmp()
         int compare(const wxString& str) const { return Cmp(str); }
-        /// comparaison with a substring
+        /// comparison with a substring
         int compare(size_t nStart, size_t nLen, const wxString& str) const;
-        /// comparaison of 2 substrings
+        /// comparison of 2 substrings
         int compare(size_t nStart, size_t nLen,
                     const wxString& str, size_t nStart2, size_t nLen2) const;
         /// just like strcmp()
         int compare(const char* sz) const { return Cmp(sz); }
-        /// substring comparaison with first nCount characters of sz
+        /// substring comparison with first nCount characters of sz
         int compare(size_t nStart, size_t nLen,
                     const char* sz, size_t nCount = npos) const;
       //@}
@@ -843,7 +843,7 @@ public:
     /**
       Search the element in the array, starting from the either side
       @param if bFromEnd reverse search direction
-      @param if bCase, comparaison is case sensitive (default)
+      @param if bCase, comparison is case sensitive (default)
       @return index of the first item matched or NOT_FOUND
       @see NOT_FOUND
      */
@@ -872,8 +872,8 @@ private:
 };
 
 // ---------------------------------------------------------------------------
-/** @name wxString comparaison functions
-    @memo Comparaisons are case sensitive
+/** @name wxString comparison functions
+    @memo Comparisons are case sensitive
  */
 // ---------------------------------------------------------------------------
 //@{

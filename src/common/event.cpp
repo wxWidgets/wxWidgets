@@ -56,6 +56,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
 
 const wxEventTable *wxEvtHandler::GetEventTable() const { return &wxEvtHandler::sm_eventTable; }
 

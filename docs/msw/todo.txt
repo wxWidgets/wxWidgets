@@ -5,8 +5,6 @@ Todo on wxWin 2.0, Windows platform
 HIGH PRIORITY
 -------------
 
-Integrate Robert's wxGrid enhancements.
-
 Find/add wxThread sample - Arthur T-D?
 
 wxControl dimensions should be optionally based on dialog font
@@ -14,15 +12,12 @@ size for portability (dialog units as per Windows).
 
 Implement wxDC floating point transformations.
 
-Remove transformation from device to logical coordinates from
-events e.g. mouse events.
-
 Add wxDC::DeviceToLogical -> wxPoint etc (convenience accessors).
 
 Revamp Dialog Editor for new controls and properties (e.g.
 window id).
 
-Registry classes (check out wxConfig class - see issues.txt).
+Tidy wxConfig API.
 
 Change DnD classes to use global symbols, and wxString.
 
@@ -47,18 +42,19 @@ Update manual.
     wxListBox changes (for ownerdraw functionality)
     wxThread            DONE (except for topic overview)
     wxHelpController classes DONE (except for Unix ones)
-    wxString
-    wxTString
+    wxString            PARTLY DONE
     Drag and drop (change API if required, e.g. const).
     wxCheckListBox
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class
     Macros, e.g. wxASSERT
+    Stream classes
+    Functions
 
 Write tutorial.
 
-Other static classes.
+A wxDC function (or two) for drawing 3D edges.
 
 Makefiles for other compilers. Generic makefiles?
 Rewrite makefiles to maintain simultaneous debug/release
@@ -68,30 +64,14 @@ More wxSystemSettings (see comment in settings.cpp).
 
 wxSocket integration.
 
-wxListCtrl, wxTreeCtrl, wxImageList integration with Robert
-Roebling's classes.
-
-Convert OGL, other utilities and samples.
+Convert remaining utilities e.g. (GLCanvas; wxGraphLayout) and samples
 
 Check TODO entries.
 
-Change #include "wx/xxx.h" to #include <wx/xxx.h>
-
-Tidy code further, e.g. formatting from DevStudio, plus
-standard header.
-
 Shell function to invoke a document with open, print, whatever...
-
-wxTextCtrl (and wxMultiText/wxTextWindow in wxWin 1.xx) - differences between Edit
-and RichEdit controls.
 
 Make use of Vadim's gettext implementation throughout wxWin code.
 Document it.
-
-Change wxUpdateIterator to use wxRegion; or scrap
-wxUpdateIterator? See wxGTK.
-
-Check WXWIN_COMPATIBILITY mode, remove any unnecessary #ifdefs.
 
 Retain callback functions; have semi-compatible callback function prototypes
 for all controls, at least in WXWIN_COMPATIBLE mode, but
@@ -100,18 +80,10 @@ panicky response to losing callbacks.
 
 Merge dib.cpp, dibutils.cpp.
 
-Simplify the toolbar samples.
-
 Add a wxTabCtrl sample.
 
-EVT_ENTER/LEAVE_WINDOW: Perhaps one approach to reliable implementation of
-EVT_LEAVE_WINDOW is to set a flag when the mouse pointer is in a window,
-then in idle time, check this window.
-If the flag is set but the mouse pointer is outside the window, then
-it's time to generate an EVT_LEAVE_WINDOW. This would be necessary at
-least for the case when the mouse cursor goes off the application windows,
-and no motion event was generated (i.e. you moved the mouse quickly!).
-If it goes from one app window to another, you could generate the event sooner.
+Improve printing. More API functions for printer DCs (to get
+printer characteristics) and more reliable printing framework.
 
 LOW PRIORITY
 ------------
@@ -132,11 +104,7 @@ BS_BITMAP, SS_BITMAP - but this may not allow wxBitmap
 argument, so instead just allow controls loaded from native
 resource to deal with this style and call default processing.
 
-Completion of drag and drop support (Vadim).
-
 Better clipboard support.
-
-Toolbars: use event tables not virtual functions.
 
 wxWizard class?
 
@@ -152,10 +120,6 @@ wxImage or replacement; further wxBitmap/wxIcon etc. functions
 Integrate existing multimedia classes.
 
 Rich text class?
-
-Optimize size further.
-
-wxThread integration.
 
 Look at WinCE stuff incl. database classes.
 

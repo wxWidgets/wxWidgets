@@ -503,6 +503,8 @@ public:
   virtual WXHBRUSH MSWOnCtlColor(WXHDC dc, WXHWND pWnd, WXUINT nCtlColor,
                               WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
   virtual bool MSWOnColorChange(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+  virtual long MSWOnPaletteChanged(WXHWND hWndPalChange);
+  virtual long MSWOnQueryNewPalette();
   virtual bool MSWOnEraseBkgnd(WXHDC pDC);
   virtual void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   virtual void MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem);
