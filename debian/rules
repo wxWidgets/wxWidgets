@@ -484,7 +484,6 @@ clean: debian/control
 	rm -f $(objdir_i18n)/*.mo
 
 	cd wxPython \
-		&& ./setup.py clean \
 		&& rm -rf licence \
 		&& rm -rf build \
 		&& rm -rf contrib/gizmos/contrib \
@@ -492,6 +491,10 @@ clean: debian/control
 		&& rm -rf contrib/stc/contrib \
 		&& rm -rf contrib/xrc/contrib \
 		&& rm -rf *.pyc
+
+# We do the equivalent of this above by removing build, unfortunately
+# its not enough by itself to get the tree properly clean again.
+#		&& ./setup.py clean
 
 	dh_clean
 	rm -f debian/$(package_wxbase_lib).*
