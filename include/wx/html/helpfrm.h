@@ -180,7 +180,8 @@ protected:
     // below are various pointers to GUI components
     wxHtmlWindow *m_HtmlWin;
     wxSplitterWindow *m_Splitter;
-    wxNotebook *m_NavigPan;
+    wxPanel *m_NavigPan;
+    wxNotebook *m_NavigNotebook;
     wxTreeCtrl *m_ContentsBox;
     wxTextCtrl *m_IndexText;
     wxButton *m_IndexButton;

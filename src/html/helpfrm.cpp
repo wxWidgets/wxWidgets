@@ -28,7 +28,6 @@
     #include "wx/log.h"
 
     #include "wx/object.h"
-    #include "wx/layout.h"
     #include "wx/sizer.h"
 
     #include "wx/bmpbuttn.h"
@@ -211,6 +210,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_IndexCountInfo = NULL;
     m_Splitter = NULL;
     m_NavigPan = NULL;
+    m_NavigNotebook = NULL;
     m_HtmlWin = NULL;
     m_Bookmarks = NULL;
     m_SearchCaseSensitive = NULL;
@@ -263,7 +263,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     if (m_Config)
         ReadCustomization(m_Config, m_ConfigRoot);
 
-    wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h), wxDEFAULT_FRAME_STYLE, "wxHtmlHelp");
+    wxFrame::Create(parent, id, _("Help"), 
+                    wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h), 
+                    wxDEFAULT_FRAME_STYLE, wxT("wxHtmlHelp"));
 
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
@@ -284,6 +286,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         toolBar->Realize();
     }
 
+    wxSizer *navigSizer = NULL;
+
     if (style & (wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH))
     {
         // traditional help controller; splitter window with html page on the
@@ -291,8 +295,16 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         m_Splitter = new wxSplitterWindow(this);
 
         m_HtmlWin = new wxHtmlHelpHtmlWindow(this, m_Splitter);
-        m_NavigPan = new wxNotebook(m_Splitter, wxID_HTML_NOTEBOOK,
-                                    wxDefaultPosition, wxDefaultSize);
+        m_NavigPan = new wxPanel(m_Splitter, -1);
+        m_NavigNotebook = new wxNotebook(m_NavigPan, wxID_HTML_NOTEBOOK,
+                                         wxDefaultPosition, wxDefaultSize);
+        wxNotebookSizer *nbs = new wxNotebookSizer(m_NavigNotebook);
+        
+        navigSizer = new wxBoxSizer(wxVERTICAL);
+        navigSizer->Add(nbs, 1, wxEXPAND);
+
+        m_NavigPan->SetAutoLayout(TRUE);
+        m_NavigPan->SetSizer(navigSizer);
     }
     else
     { // only html window, no notebook with index,contents etc
@@ -301,219 +313,160 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     m_HtmlWin->SetRelatedFrame(this, m_TitleFormat);
     m_HtmlWin->SetRelatedStatusBar(0);
-    if (m_Config)
+    if ( m_Config )
         m_HtmlWin->ReadCustomization(m_Config, m_ConfigRoot);
 
     // contents tree panel?
-    if (style & wxHF_CONTENTS)
+    if ( style & wxHF_CONTENTS )
     {
-        wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
+        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
+        wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
         
+        topsizer->Add(0, 10);
+        
+        dummy->SetAutoLayout(TRUE);
+        dummy->SetSizer(topsizer);
+
         long treeStyle = wxSUNKEN_BORDER | wxTR_HAS_BUTTONS;
         #ifndef __WXMSW__ // FIXME - temporary, till MSW supports wxTR_HIDE_ROOT
         treeStyle |= wxTR_HIDE_ROOT;
         #endif
 
-        if (style & wxHF_BOOKMARKS)
+        if ( style & wxHF_BOOKMARKS )
         {
-            wxLayoutConstraints *b1 = new wxLayoutConstraints;
-            wxBitmapButton *bmpbt = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxDefaultPosition, wxSize(20,20));
-
-            b1->top.SameAs (dummy, wxTop, 10);
-            b1->right.SameAs (dummy, wxRight, 10);
-            b1->height.AsIs();
-            b1->width.AsIs();
-            bmpbt->SetConstraints(b1);
-
-            wxLayoutConstraints *b2 = new wxLayoutConstraints;
-            wxBitmapButton *bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxDefaultPosition, wxSize(20,20));
-
-            b2->top.SameAs (dummy, wxTop, 10);
-            b2->right.LeftOf (bmpbt, 2);
-            b2->height.AsIs();
-            b2->width.AsIs();
-            bmpbt2->SetConstraints(b2);
-
-#if wxUSE_TOOLTIPS
-            bmpbt->SetToolTip(_("Remove current page from bookmarks"));
-            bmpbt2->SetToolTip(_("Add current page to bookmarks"));
-#endif //wxUSE_TOOLTIPS
-
-            wxLayoutConstraints *b3 = new wxLayoutConstraints;
-            m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST, wxEmptyString,
-                                         wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_SORT);
+            m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST, 
+                                         wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 
+                                         0, NULL, wxCB_READONLY | wxCB_SORT);
             m_Bookmarks->Append(_("(bookmarks)"));
             for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
                 m_Bookmarks->Append(m_BookmarksNames[i]);
             m_Bookmarks->SetSelection(0);
 
-            b3->centreY.SameAs (bmpbt2, wxCentreY);
-            b3->left.SameAs (dummy, wxLeft, 10);
-            b3->right.LeftOf (bmpbt2, 5);
-            b3->height.AsIs();
-            m_Bookmarks->SetConstraints(b3);
+            wxBitmapButton *bmpbt1, *bmpbt2;
+            bmpbt1 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD, 
+                                        wxBITMAP(wbkadd), 
+                                        wxDefaultPosition, wxSize(20,20));
+            bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, 
+                                        wxBITMAP(wbkdel), 
+                                        wxDefaultPosition, wxSize(20,20));
+#if wxUSE_TOOLTIPS
+            bmpbt1->SetToolTip(_("Add current page to bookmarks"));
+            bmpbt2->SetToolTip(_("Remove current page from bookmarks"));
+#endif // wxUSE_TOOLTIPS
 
-
-            wxLayoutConstraints *b4 = new wxLayoutConstraints;
-            m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
-                                           wxDefaultPosition, wxDefaultSize,
-                                           treeStyle);
-            m_ContentsBox->AssignImageList(ContentsImageList);
-
-            b4->top.Below (m_Bookmarks, 10);
-            b4->left.SameAs (dummy, wxLeft, 0);
-            b4->right.SameAs (dummy, wxRight, 0);
-            b4->bottom.SameAs (dummy, wxBottom, 0);
-            m_ContentsBox->SetConstraints(b4);
-
-            dummy->SetAutoLayout(TRUE);
-            dummy->Layout();
-
-            m_NavigPan->AddPage(dummy, _("Contents"));
+            wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+            
+            sizer->Add(m_Bookmarks, 1, wxRIGHT, 5);
+            sizer->Add(bmpbt1, 0, wxRIGHT, 2);
+            sizer->Add(bmpbt2, 0, 0, 0);
+            
+            topsizer->Add(sizer, 0, wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT, 10);
         }
 
-        else
-        {
-            m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
-                                           wxDefaultPosition, wxDefaultSize,
-                                           treeStyle);
-            m_ContentsBox->AssignImageList(ContentsImageList);
-            m_NavigPan->AddPage(m_ContentsBox, _("Contents"));
-        }
+        m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
+                                       wxDefaultPosition, wxDefaultSize,
+                                       treeStyle);
+        m_ContentsBox->AssignImageList(ContentsImageList);
+        
+        topsizer->Add(m_ContentsBox, 1, wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT, 2);
 
+        m_NavigNotebook->AddPage(dummy, _("Contents"));
         m_ContentsPage = notebook_page++;
     }
 
     // index listbox panel?
-    if (style & wxHF_INDEX)
+    if ( style & wxHF_INDEX )
     {
-        wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
-
-        wxLayoutConstraints *b1 = new wxLayoutConstraints;
-        m_IndexText = new wxTextCtrl(dummy, wxID_HTML_INDEXTEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
-        b1->top.SameAs (dummy, wxTop, 10);
-        b1->left.SameAs (dummy, wxLeft, 10);
-        b1->right.SameAs (dummy, wxRight, 10);
-        b1->height.AsIs();
-        m_IndexText->SetConstraints(b1);
-
-        wxLayoutConstraints *b4 = new wxLayoutConstraints;
-        m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL, _("Show all"));
-
-        b4->top.Below (m_IndexText, 10);
-        b4->right.SameAs (dummy, wxRight, 10);
-        b4->width.AsIs();
-        b4->height.AsIs();
-        m_IndexButtonAll->SetConstraints(b4);
-
-        wxLayoutConstraints *b2 = new wxLayoutConstraints;
-        m_IndexButton = new wxButton(dummy, wxID_HTML_INDEXBUTTON, _("Find"));
-        b2->top.Below (m_IndexText, 10);
-        b2->right.LeftOf (m_IndexButtonAll, 10);
-        b2->width.AsIs();
-        b2->height.AsIs();
-        m_IndexButton->SetConstraints(b2);
-
-        wxLayoutConstraints *b5 = new wxLayoutConstraints;
-        m_IndexCountInfo = new wxStaticText(dummy, wxID_HTML_COUNTINFO, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
-
-        b5->top.Below (m_IndexButton, 5);
-        b5->right.SameAs (dummy, wxRight, 10);
-        b5->left.SameAs (dummy, wxLeft, 10);
-        b5->height.AsIs();
-        m_IndexCountInfo->SetConstraints(b5);
-
-        wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE);
-        b3->top.Below (m_IndexCountInfo, 5);
-        b3->left.SameAs (dummy, wxLeft, 0);
-        b3->right.SameAs (dummy, wxRight, 0);
-        b3->bottom.SameAs (dummy, wxBottom, 0);
-        m_IndexList->SetConstraints(b3);
-
-#if wxUSE_TOOLTIPS
-        m_IndexButtonAll->SetToolTip(_("Show all items in index"));
-        m_IndexButton->SetToolTip(_("Display all index items that contain given substring. Search is case insensitive."));
-#endif //wxUSE_TOOLTIPS
+        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);       
+        wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
 
         dummy->SetAutoLayout(TRUE);
-        dummy->Layout();
+        dummy->SetSizer(topsizer);
 
-        m_NavigPan->AddPage(dummy, _("Index"));
+        m_IndexText = new wxTextCtrl(dummy, wxID_HTML_INDEXTEXT, wxEmptyString, 
+                                     wxDefaultPosition, wxDefaultSize, 
+                                     wxTE_PROCESS_ENTER);
+        m_IndexButton = new wxButton(dummy, wxID_HTML_INDEXBUTTON, _("Find"));
+        m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL, 
+                                        _("Show all"));
+        m_IndexCountInfo = new wxStaticText(dummy, wxID_HTML_COUNTINFO, 
+                                            wxEmptyString, wxDefaultPosition,
+                                            wxDefaultSize, 
+                                            wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
+        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, 
+                                    wxDefaultPosition, wxDefaultSize, 
+                                    0, NULL, wxLB_SINGLE);
+
+#if wxUSE_TOOLTIPS
+        m_IndexButton->SetToolTip(_("Display all index items that contain given substring. Search is case insensitive."));
+        m_IndexButtonAll->SetToolTip(_("Show all items in index"));
+#endif //wxUSE_TOOLTIPS
+
+        topsizer->Add(m_IndexText, 0, wxEXPAND | wxALL, 10);
+        wxSizer *btsizer = new wxBoxSizer(wxHORIZONTAL);
+        btsizer->Add(m_IndexButton, 0, wxRIGHT, 2);
+        btsizer->Add(m_IndexButtonAll);
+        topsizer->Add(btsizer, 0, 
+                      wxALIGN_RIGHT | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+        topsizer->Add(m_IndexCountInfo, 0, wxEXPAND | wxLEFT | wxRIGHT, 2);
+        topsizer->Add(m_IndexList, 1, wxEXPAND | wxALL, 2);
+
+        m_NavigNotebook->AddPage(dummy, _("Index"));
         m_IndexPage = notebook_page++;
     }
 
     // search list panel?
-    if (style & wxHF_SEARCH)
+    if ( style & wxHF_SEARCH )
     {
-        wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_SEARCHPAGE);
+        wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);       
+        wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-        wxLayoutConstraints *b1 = new wxLayoutConstraints;
-        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
-        b1->top.SameAs (dummy, wxTop, 10);
-        b1->left.SameAs (dummy, wxLeft, 10);
-        b1->right.SameAs (dummy, wxRight, 10);
-        b1->height.AsIs();
-        m_SearchText->SetConstraints(b1);
+        dummy->SetAutoLayout(TRUE);
+        dummy->SetSizer(sizer);
 
-        wxLayoutConstraints *b4 = new wxLayoutConstraints;
-        m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE, wxDefaultPosition,
-                                      wxDefaultSize);
-        b4->top.Below (m_SearchText, 10);
-        b4->left.SameAs (dummy, wxLeft, 10);
-        b4->right.SameAs (dummy, wxRight, 10);
-        b4->height.AsIs();
-        m_SearchChoice->SetConstraints(b4);
-
-        wxLayoutConstraints *b5 = new wxLayoutConstraints;
+        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT, 
+                                      wxEmptyString, 
+                                      wxDefaultPosition, wxDefaultSize, 
+                                      wxTE_PROCESS_ENTER);
+        m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE, 
+                                      wxDefaultPosition, wxDefaultSize);
         m_SearchCaseSensitive = new wxCheckBox(dummy, -1, _("Case sensitive"));
-        b5->top.Below (m_SearchChoice, 10);
-        b5->left.SameAs (dummy, wxLeft, 10);
-        b5->width.AsIs();
-        b5->height.AsIs ();
-        m_SearchCaseSensitive->SetConstraints(b5);
-
-        wxLayoutConstraints *b6 = new wxLayoutConstraints;
         m_SearchWholeWords = new wxCheckBox(dummy, -1, _("Whole words only"));
-        b6->top.Below (m_SearchCaseSensitive, 0);
-        b6->left.SameAs (dummy, wxLeft, 10);
-        b6->width.AsIs();
-        b6->height.AsIs ();
-        m_SearchWholeWords->SetConstraints(b6);
-
-        wxLayoutConstraints *b2 = new wxLayoutConstraints;
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
 #if wxUSE_TOOLTIPS
         m_SearchButton->SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
 #endif //wxUSE_TOOLTIPS
-        b2->top.Below (m_SearchWholeWords, 0);
-        b2->right.SameAs (dummy, wxRight, 10);
-        b2->width.AsIs();
-        b2->height.AsIs();
-        m_SearchButton->SetConstraints(b2);
+        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, 
+                                     wxDefaultPosition, wxDefaultSize, 
+                                     0, NULL, wxLB_SINGLE);
+                                     
+        sizer->Add(m_SearchText, 0, wxEXPAND | wxALL, 10);
+        sizer->Add(m_SearchChoice, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+        sizer->Add(m_SearchCaseSensitive, 0, wxLEFT | wxRIGHT, 10);
+        sizer->Add(m_SearchWholeWords, 0, wxLEFT | wxRIGHT, 10);
+        sizer->Add(m_SearchButton, 0, wxALL | wxALIGN_RIGHT, 8);
+        sizer->Add(m_SearchList, 1, wxALL | wxEXPAND, 2);
 
-        wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE);
-        b3->top.Below (m_SearchButton, 10);
-        b3->left.SameAs (dummy, wxLeft, 0);
-        b3->right.SameAs (dummy, wxRight, 0);
-        b3->bottom.SameAs (dummy, wxBottom, 0);
-        m_SearchList->SetConstraints(b3);
-
-        dummy->SetAutoLayout(TRUE);
-        dummy->Layout();
-        m_NavigPan->AddPage(dummy, _("Search"));
+        m_NavigNotebook->AddPage(dummy, _("Search"));
         m_SearchPage = notebook_page++;
     }
+
     m_HtmlWin->Show(TRUE);
 
     RefreshLists();
 
+    if ( navigSizer )
+    {
+        navigSizer->SetSizeHints(m_NavigPan);
+        m_NavigPan->Layout();
+    }
+
     // showtime
-    if (m_NavigPan && m_Splitter)
+    if ( m_NavigPan && m_Splitter )
     {
         m_Splitter->SetMinimumPaneSize(20);
-        if (m_Cfg.navig_on)
+        if ( m_Cfg.navig_on )
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
         else
         {
@@ -521,7 +474,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
             m_Splitter->Unsplit();
         }
 
-        if (m_Cfg.navig_on)
+        if ( m_Cfg.navig_on )
         {
             m_NavigPan->Show(TRUE);
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
@@ -532,6 +485,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
             m_Splitter->Initialize(m_HtmlWin);
         }
     }
+    
     return TRUE;
 }
 
@@ -656,7 +610,7 @@ bool wxHtmlHelpFrame::DisplayContents()
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
         m_Cfg.navig_on = TRUE;
     }
-    m_NavigPan->SetSelection(0);
+    m_NavigNotebook->SetSelection(0);
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
@@ -678,7 +632,7 @@ bool wxHtmlHelpFrame::DisplayIndex()
         m_HtmlWin->Show(TRUE);
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
-    m_NavigPan->SetSelection(1);
+    m_NavigNotebook->SetSelection(1);
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
@@ -705,7 +659,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
         m_HtmlWin->Show(TRUE);
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
-    m_NavigPan->SetSelection(m_SearchPage);
+    m_NavigNotebook->SetSelection(m_SearchPage);
     m_SearchList->Clear();
     m_SearchText->SetValue(keyword);
     m_SearchButton->Enable(FALSE);
