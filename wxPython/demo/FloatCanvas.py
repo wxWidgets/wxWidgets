@@ -264,7 +264,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.ClearAll()
             Canvas.SetProjectionFun(None)
 
-            ##		Random tests of everything:
+            ##          Random tests of everything:
 
             # Rectangles
             for i in range(3):
@@ -381,7 +381,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.ClearAll()
             Canvas.SetProjectionFun(None)
 
-            ##		Random tests of everything:
+            ##          Random tests of everything:
             colors = self.colors
             # Rectangles
             for i in range(3):
