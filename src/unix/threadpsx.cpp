@@ -675,9 +675,9 @@ void wxThread::Exit(void *status)
 
     // next wake up the threads waiting for us (OTOH, this function won't return
     // until someone waited for us!)
-    p_internal->SignalExit();
-
     p_internal->SetState(STATE_EXITED);
+
+    p_internal->SignalExit();
 
     // delete both C++ thread object and terminate the OS thread object
     // GL: This is very ugly and buggy ...

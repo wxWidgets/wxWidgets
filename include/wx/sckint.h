@@ -115,12 +115,10 @@ class wxSocketInternal {
 
   int GetFD() { return m_fd; }
   
-  void InitializeSocket();
-  void FinalizeSocket();
-  void PauseSocket();
-  void ResumeSocket();
-  void EnableWaiter();
-  void DisableWaiter();
+  void ResumeWaiter();
+  void StopWaiter();
+  void ResumeRequester();
+  void StopRequester();
 
   void QueueRequest(SockRequest *request, bool async);
   void WaitForEnd(SockRequest *request);

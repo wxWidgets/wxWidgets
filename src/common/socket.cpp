@@ -209,8 +209,6 @@ wxSocketBase::~wxSocketBase()
   // First, close the file descriptor.
   Close();
 
-  m_internal->FinalizeSocket();
-
   if (m_unread)
     free(m_unread);
   // Unregister from the handler database.
@@ -228,8 +226,8 @@ bool wxSocketBase::Close()
 {
   if (m_fd != INVALID_SOCKET) 
   {
-    // Pause all running socket thread.
-    m_internal->PauseSocket();
+    if (m_notify_state == TRUE)
+      Notify(FALSE);
 
     // Shutdown the connection.
     shutdown(m_fd, 2);
@@ -547,7 +545,7 @@ void wxSocketBase::SetNotify(wxRequestNotify flags)
 
   m_neededreq = flags;
   if (m_neededreq == 0)
-    m_internal->DisableWaiter();
+    m_internal->StopWaiter();
   else
     Notify(m_notify_state);
 }
@@ -559,9 +557,9 @@ void wxSocketBase::Notify(bool notify)
     return;
 
   if (notify)
-    m_internal->EnableWaiter();
+    m_internal->ResumeWaiter();
   else
-    m_internal->DisableWaiter();
+    m_internal->StopWaiter();
 }
 
 void wxSocketBase::OnRequest(wxRequestEvent req_evt)
@@ -577,7 +575,7 @@ void wxSocketBase::OnRequest(wxRequestEvent req_evt)
     // OldOnNotify(req_evt);
 
     // We disable the event reporting.
-    SetNotify(m_neededreq & ~notify);
+    m_neededreq &= ~notify;
   }
 }
 
@@ -682,7 +680,7 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
   SockRequest *buf = new SockRequest;
 
   SaveState();
-  m_internal->DisableWaiter(); 
+  m_internal->StopWaiter(); 
   buf->buffer = buffer;
   buf->size = nbytes;
   buf->done = FALSE;
@@ -738,7 +736,7 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
     return;
   }
 
-  m_internal->InitializeSocket();
+  Notify(TRUE);
 }
 
 // --------------------------------------------------------------
@@ -769,7 +767,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock)
   sock.m_fd = fd2;
   sock.m_connected = TRUE;
 
-  sock.m_internal->InitializeSocket();
+  sock.m_internal->ResumeWaiter();
 
   return TRUE;
 }
@@ -851,10 +849,6 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
   if (connect(m_fd, remote, len) != 0)
     return FALSE;
 
-  // Initializes the background threads ...
-  // --------------------------------------
-  m_internal->InitializeSocket();
-
   // Enables bg events.
   // ------------------
   Notify(TRUE);
@@ -879,11 +873,10 @@ void wxSocketClient::OnRequest(wxRequestEvent evt)
   {
     if (m_connected) 
     {
-      SetNotify(m_neededreq & ~REQ_CONNECT);
+      m_neededreq &= ~REQ_CONNECT;
       return;
     }
     m_connected = TRUE;
-    OldOnNotify(EVT_CONNECT);
     return;
   }
   wxSocketBase::OnRequest(evt);
