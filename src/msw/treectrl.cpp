@@ -2239,7 +2239,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 {
     bool processed = false;
     WXLRESULT rc = 0;
-    bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
+    bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
 #ifdef WM_CONTEXTMENU
     if ( nMsg == WM_CONTEXTMENU )
@@ -2248,12 +2248,11 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         event.m_item = GetSelection();
         event.SetEventObject( this );
         if ( GetEventHandler()->ProcessEvent(event) )
-            return true;
+            processed = true;
         //else: continue with generating wxEVT_CONTEXT_MENU in base class code
     }
-#endif // __SMARTPHONE__
-
-    if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
+#endif // WM_CONTEXTMENU
+    else if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {
         // we only process mouse messages here and these parameters have the
         // same meaning for all of them
@@ -2276,6 +2275,13 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 // newly selected item
                 ::SelectItem(GetHwnd(), htItem);
                 ::SetFocus(GetHwnd(), htItem);
+
+                // default WM_RBUTTONUP handler enters modal loop inside
+                // DefWindowProc() waiting for WM_RBUTTONDOWN and then sends
+                // the resulting WM_CONTEXTMENU to the parent window, not us,
+                // which completely breaks everything so simply don't let it
+                // see this message at all
+                processed = true;
                 break;
 
 #if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
@@ -2426,9 +2432,9 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             // TreeView_GetItemRect() will return false if item is not visible,
             // which may happen perfectly well
             if ( TreeView_GetItemRect(GetHwnd(), HITEM_PTR(selections[n]),
-                                      &rect, true) )
+                                      &rect, TRUE) )
             {
-                ::InvalidateRect(GetHwnd(), &rect, false);
+                ::InvalidateRect(GetHwnd(), &rect, FALSE);
             }
         }
     }
