@@ -2198,9 +2198,24 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     if( IsTopLevel() )
         return ;
         
-    int w , h ;
-    GetSize( &w , &h ) ;
-    Rect rect = { top , left , h + top , w + left } ;
+    Rect rect ;
+    m_peer->GetRect( &rect ) ; 
+    InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+
+    if ( !IsTopLevel() )
+    {
+        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        if (top)
+        {
+            wxPoint pt(0,0) ;
+            wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
+            rect.left += pt.x ;
+            rect.right += pt.x ;
+            rect.top += pt.y ;
+            rect.bottom += pt.y ;
+        }
+    }
+    
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
         Rect srect = rect ;
