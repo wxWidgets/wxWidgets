@@ -1272,7 +1272,11 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         strExtensions.Replace(wxT(","), wxT(" "));
 
         // also deal with the leading dot
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+        if ( !strExtensions.IsEmpty() && strExtensions[size_t(0)] == wxT('.') ) {
+#else
         if ( !strExtensions.IsEmpty() && strExtensions[0] == wxT('.') ) {
+#endif
             strExtensions.erase(0, 1);
         }
 
