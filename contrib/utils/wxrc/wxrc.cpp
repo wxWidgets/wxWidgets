@@ -59,7 +59,7 @@ private:
     {
         wxString classValue;
         wxString nameValue;
-        wxXmlNode* children;	
+        wxXmlNode* children;    
         while (node)
         {
             if (node->GetName() == _T("object")
@@ -70,62 +70,62 @@ private:
             }
             children = node->GetChildren();
             if (children)
-                    BrowseXmlNode(children);	
+                    BrowseXmlNode(children);    
             node = node->GetNext();
         }
     }
     
 public:
-	XRCWndClassData(const wxString& className,const wxString& parentClassName, const wxXmlNode* node) :
-			m_className(className) , m_parentClassName(parentClassName) { 
-			
-			BrowseXmlNode(node->GetChildren());
-		
-		}
-		
-		const ArrayOfXRCWidgetData& GetWidgetData(){
-			return m_wdata;
-		}
-		void GenerateHeaderCode(wxFFile& file){
+    XRCWndClassData(const wxString& className,const wxString& parentClassName, const wxXmlNode* node) :
+        m_className(className) , m_parentClassName(parentClassName) { 
+                        
+        BrowseXmlNode(node->GetChildren());
+                
+    }
+                
+    const ArrayOfXRCWidgetData& GetWidgetData(){
+        return m_wdata;
+    }
+    void GenerateHeaderCode(wxFFile& file){
 
-  		file.Write(_T("class ") + m_className + _T(" : public ") + m_parentClassName
-		+ _T(" {\nprotected:\n"));
-		for(size_t i=0;i<m_wdata.Count();++i){
-			const XRCWidgetData& w = m_wdata.Item(i);
-			file.Write(
-			_T(" ") + w.GetClass() + _T("* ") + w.GetName()
-			+ _T(";\n"));
-		}
-	file.Write(_T("\nprivate:\n void InitWidgetsFromXRC(){\n")
-	   _T("  wxXmlResource::Get()->LoadObject(this,NULL,\"")
-	+  m_className 
-	+  +_T("\",\"")
-	+  m_parentClassName 
-	+  _T("\");\n"));	
-	for(size_t i=0;i<m_wdata.Count();++i){
-		const XRCWidgetData& w = m_wdata.Item(i);
-		file.Write(
-			_T("  ") 
-			+ w.GetName() 
-			+ _T(" = XRCCTRL(*this,\"")
-			+ w.GetName() 
-			+ _T("\",")
-			+ w.GetClass()
-			+ _T(");\n")
-		);
-	}
+        file.Write(_T("class ") + m_className + _T(" : public ") + m_parentClassName
+                   + _T(" {\nprotected:\n"));
+        size_t i;
+        for(i=0;i<m_wdata.Count();++i){
+            const XRCWidgetData& w = m_wdata.Item(i);
+            file.Write(
+                _T(" ") + w.GetClass() + _T("* ") + w.GetName()
+                + _T(";\n"));
+        }
+        file.Write(_T("\nprivate:\n void InitWidgetsFromXRC(){\n")
+                   _T("  wxXmlResource::Get()->LoadObject(this,NULL,\"")
+                   +  m_className 
+                   +  _T("\",\"")
+                   +  m_parentClassName 
+                   +  _T("\");\n"));       
+        for(i=0;i<m_wdata.Count();++i){
+            const XRCWidgetData& w = m_wdata.Item(i);
+            file.Write( _T("  ") 
+                        + w.GetName() 
+                        + _T(" = XRCCTRL(*this,\"")
+                        + w.GetName() 
+                        + _T("\",")
+                        + w.GetClass()
+                        + _T(");\n")
+                );
+        }
 file.Write(_T(" }\n"));
-	
+        
 file.Write(
-	_T("public:\n")
-	+ m_className 
-	+ _T("::")
-	+ m_className
-	+ _T("(){\n")
-	+ _T("  InitWidgetsFromXRC();\n")
-	 _T(" }\n")
-	_T("};\n"));
-	};
+        _T("public:\n")
+        + m_className 
+        + _T("::")
+        + m_className
+        + _T("(){\n")
+        + _T("  InitWidgetsFromXRC();\n")
+         _T(" }\n")
+        _T("};\n"));
+        };
 };
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
 WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData);
@@ -160,8 +160,8 @@ private:
     int retCode;
 
     ArrayOfXRCWndClassData aXRCWndClassData;
-	bool flagH;
-	void GenCPPHeader();
+        bool flagH;
+        void GenCPPHeader();
 };
 
 IMPLEMENT_APP_CONSOLE(XmlResApp)
@@ -173,7 +173,7 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, _T("h"), _T("help"),  _T("show help message"), 
               wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_SWITCH, _T("v"), _T("verbose"), _T("be verbose") },
-		{ wxCMD_LINE_SWITCH, _T("e"), _T("extra-cpp-code"),  _T("output C++ header file with XRC derived classes") },
+        { wxCMD_LINE_SWITCH, _T("e"), _T("extra-cpp-code"),  _T("output C++ header file with XRC derived classes") },
         { wxCMD_LINE_SWITCH, _T("c"), _T("cpp-code"),  _T("output C++ source rather than .rsc file") },
         { wxCMD_LINE_SWITCH, _T("p"), _T("python-code"),  _T("output wxPython source rather than .rsc file") },
         { wxCMD_LINE_SWITCH, _T("g"), _T("gettext"),  _T("output list of translatable strings (to stdout or file if -o used)") },
@@ -350,17 +350,17 @@ wxArrayString XmlResApp::PrepareTempFiles()
         if (flagH)
         {
             wxXmlNode* node = (doc.GetRoot())->GetChildren();
-        	wxString classValue,nameValue;
-        	while(node){
+                wxString classValue,nameValue;
+                while(node){
                     if(node->GetName() == _T("object")
-            	     && node->GetPropVal(_T("class"),&classValue)
-            	     && node->GetPropVal(_T("name"),&nameValue)){
+                     && node->GetPropVal(_T("class"),&classValue)
+                     && node->GetPropVal(_T("name"),&nameValue)){
 
                       aXRCWndClassData.Add(
-                    	XRCWndClassData(nameValue,classValue,node)
+                        XRCWndClassData(nameValue,classValue,node)
                       );
                     }
-            	    node = node -> GetNext();
+                    node = node -> GetNext();
             }
         }
         wxString internalName = GetInternalFileName(parFiles[i], flist);
@@ -594,7 +594,7 @@ void XmlResApp::GenCPPHeader()
 {
     wxString fileSpec = (parOutput.BeforeLast('.')).AfterLast('/');
     wxString heaFileName = fileSpec + _T(".h");
-	
+        
     wxFFile file(heaFileName, wxT("wt"));
     file.Write(
 _T("//\n")
@@ -602,14 +602,14 @@ _T("// This file was automatically generated by wxrc, do not edit by hand.\n")
 _T("//\n\n")
 _T("#ifndef __")  + fileSpec + _T("_h__\n")
 _T("#define __")  + fileSpec + _T("_h__\n")
-);	
+);      
     for(size_t i=0;i<aXRCWndClassData.Count();++i){
-		aXRCWndClassData.Item(i).GenerateHeaderCode(file);		
+                aXRCWndClassData.Item(i).GenerateHeaderCode(file);              
     } 
     file.Write(
-		_T("\nvoid \n")
-		+ parFuncname
-		+ _T("();\n#endif\n"));
+                _T("\nvoid \n")
+                + parFuncname
+                + _T("();\n#endif\n"));
 }
 
 static wxString FileToPythonArray(wxString filename, int num)
