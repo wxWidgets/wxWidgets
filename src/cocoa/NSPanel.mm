@@ -24,7 +24,7 @@
 
 #include "wx/cocoa/NSPanel.h"
 
-#import <Appkit/NSPanel.h>
+#import <AppKit/NSPanel.h>
 
 // ----------------------------------------------------------------------------
 // globals

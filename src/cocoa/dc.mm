@@ -24,7 +24,7 @@
 #import <AppKit/NSGraphicsContext.h>
 #import <AppKit/NSAffineTransform.h>
 #import <AppKit/NSColor.h>
-#import <AppKit/NSTypeSetter.h>
+#import <AppKit/NSTypesetter.h>
 #import <AppKit/NSImage.h>
 
 #include <wx/listimpl.cpp>

@@ -17,7 +17,7 @@ Objective-C Poser class initialization
 -------------------------------------------------------------------------*/
 #ifdef __OBJC__
 #import <objc/objc-class.h>
-#import <Foundation/NSObjcRuntime.h>
+#import <Foundation/NSObjCRuntime.h>
 
 class wxPoseAsInitializer
 {

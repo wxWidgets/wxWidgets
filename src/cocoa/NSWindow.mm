@@ -26,7 +26,7 @@
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/NSWindow.h"
 
-#import <Appkit/NSWindow.h>
+#import <AppKit/NSWindow.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>
 

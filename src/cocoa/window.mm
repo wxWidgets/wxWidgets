@@ -17,7 +17,7 @@
 
 #include "wx/cocoa/autorelease.h"
 
-#import <Appkit/NSView.h>
+#import <AppKit/NSView.h>
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSScrollView.h>
 #import <AppKit/NSColor.h>
