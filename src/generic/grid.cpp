@@ -3354,8 +3354,26 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         //
         if ( ok )
         {
+            if ( m_numCols == 0 ) 
+            {
+                m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
+                //
+                // TODO: perhaps instead of appending the default number of cols
+                // we should remember what the last non-zero number of cols was ?
+                //
+            }
+            
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SelectCell( 0, 0 );  
+            }
+            
             if ( !GetBatchCount() ) Refresh();
         }
+
         SetEditControlValue();
         return ok;
     }
@@ -3377,6 +3395,14 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
     
     if ( m_table && m_table->AppendRows( numRows ) )
     {
+        if ( m_currentCellCoords == wxGridNoCellCoords )
+        {
+            // if we have just inserted cols into an empty grid the current
+            // cell will be undefined...
+            //
+            SelectCell( 0, 0 );  
+        }
+        
         // the table will have sent the results of the append row
         // operation to this view object as a grid table message
         //
@@ -3432,13 +3458,23 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
     {
         HideCellEditControl();
         bool ok = m_table->InsertCols( pos, numCols );
+            
+        // the table will have sent the results of the insert col
+        // operation to this view object as a grid table message
+        //
         if ( ok )
         {
-            // the table will have sent the results of the insert col
-            // operation to this view object as a grid table message
-            //
+            if ( m_currentCellCoords == wxGridNoCellCoords )
+            {
+                // if we have just inserted cols into an empty grid the current
+                // cell will be undefined...
+                //
+                SelectCell( 0, 0 );  
+            }
+
             if ( !GetBatchCount() ) Refresh();
         }
+        
         SetEditControlValue();
         return ok;
     }
@@ -3463,6 +3499,13 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
 	// the table will have sent the results of the append col
 	// operation to this view object as a grid table message
 	//
+        if ( m_currentCellCoords == wxGridNoCellCoords )
+        {
+            // if we have just inserted cols into an empty grid the current
+            // cell will be undefined...
+            //
+            SelectCell( 0, 0 );  
+        }
 	if ( !GetBatchCount() ) Refresh();
 	return TRUE;
     }
