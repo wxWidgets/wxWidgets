@@ -59,6 +59,9 @@ public:
   inline int GetMin() const { return m_rangeMin; }
   inline int GetMax() const { return m_rangeMax; }
 
+  void SetMin(int minValue) { SetRange(minValue, m_rangeMax); }
+  void SetMax(int maxValue) { SetRange(m_rangeMin, maxValue); }
+    
   // For trackbars only
   void SetTickFreq(int n, int pos);
   inline int GetTickFreq() const { return m_tickFreq; }
