@@ -141,7 +141,7 @@ static struct InitData
     // them to Unicode ourselves (this is the case under Unix but not Windows,
     // for example), we remember the converted argv here because we'll have to
     // free it when doing cleanup to avoid memory leaks
-    wchar_t *argv;
+    wchar_t **argv;
 #endif // wxUSE_UNICODE
 } gs_initData;
 
@@ -168,9 +168,15 @@ static void ConvertArgsToUnicode(int argc, char **argv)
 
 static void FreeConvertedArgs()
 {
-    for ( int mb_argc = 0; mb_argc < wxTheApp->argc; mb_argc++ )
+    if ( gs_initData.argv )
     {
-        free(wxTheApp->argv[mb_argc]);
+        for ( int i = 0; i < gs_initData.argc; i++ )
+        {
+            free(gs_initData.argv[i]);
+        }
+
+        delete [] gs_initData.argv;
+        gs_initData.argv = NULL;
     }
 }
 
