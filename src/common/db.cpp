@@ -257,7 +257,7 @@ int wxDbColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnS
     {
         if ((i_sqlDataType == SQL_VARCHAR) || (i_sqlDataType == SQL_LONGVARCHAR))
             i_dbDataType = DB_DATA_TYPE_VARCHAR;
-        if (i_sqlDataType == SQL_C_DATE)
+        if ((i_sqlDataType == SQL_C_DATE) || (i_sqlDataType == SQL_C_TIMESTAMP))
             i_dbDataType = DB_DATA_TYPE_DATE;
         if (i_sqlDataType == SQL_C_BIT)
             i_dbDataType = DB_DATA_TYPE_INTEGER;
