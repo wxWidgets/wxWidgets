@@ -397,6 +397,14 @@
 #   endif
 #endif /* !defined(wxUSE_SPINCTRL) */
 
+#ifndef wxUSE_SPLASH
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SPLASH must be defined."
+#   else
+#       define wxUSE_SPLASH 0
+#   endif
+#endif /* !defined(wxUSE_SPLASH) */
+
 #ifndef wxUSE_SPLITTER
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SPLITTER must be defined."
