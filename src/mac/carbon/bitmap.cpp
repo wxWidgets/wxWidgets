@@ -263,73 +263,62 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     M_BITMAPDATA->m_height = the_height ;
     M_BITMAPDATA->m_depth = no_bits ;
     M_BITMAPDATA->m_numColors = 0;
-		if ( no_bits == 1 )
+    if ( no_bits == 1 )
+    {
+	M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
+	M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
+	M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
+	
+	CGrafPtr 	origPort ;
+	GDHandle	origDevice ;
+	
+	GetGWorld( &origPort , &origDevice ) ;
+	SetGWorld( M_BITMAPDATA->m_hBitmap , NULL ) ;
+	LockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
+	
+	// bits is a char array
+	
+	unsigned char* linestart = (unsigned char*) bits ;
+	int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
+	if ( the_width % (sizeof(unsigned char) * 8) ) {
+	    linesize += sizeof(unsigned char);
+	}
+	
+	RGBColor colors[2] = { 
+	    { 0xFFFF , 0xFFFF , 0xFFFF } ,
+	    { 0, 0 , 0 } 
+	} ;
+	
+	for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
+	{
+	    for ( int x = 0 ; x < the_width ; ++x )
+	    {
+		int index = x / 8 ;
+		int bit = x % 8 ;
+		int mask = 1 << bit ;
+		if ( linestart[index] & mask )
 		{
-	    	M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-	    	M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
-			M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
+		    SetCPixel( x , y , &colors[1] ) ;
+		}
+		else
+		{
+		    SetCPixel( x , y , &colors[0] ) ;
+		}
+	    }
+	    
+	}
+	UnlockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
 	
-			CGrafPtr 	origPort ;
-			GDHandle	origDevice ;
-			
-			GetGWorld( &origPort , &origDevice ) ;
-			SetGWorld( M_BITMAPDATA->m_hBitmap , NULL ) ;
-			LockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
-
-#ifdef __UNIX__
-           // bits is a word aligned array?? Don't think so
-           // bits is a char array on MAC OS X however using the benefit of the
-           // doubt I replaced references to 16 with sizeof(unsigned char)*8
-           unsigned char* linestart = (unsigned char*) bits ;
-           int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
-           if ( the_width % (sizeof(unsigned char) * 8) ) {
-               linesize += sizeof(unsigned char);
-           }
-#else
-			// bits is a word aligned array
-			
-			unsigned char* linestart = (unsigned char*) bits ;
-			int linesize = ( the_width / 16 ) * 2  ;
-			if ( the_width % 16 )
-			{
-				linesize += 2 ;
-			}
-#endif
-			
-			RGBColor colors[2] = { 
-				{ 0xFFFF , 0xFFFF , 0xFFFF } ,
-				{ 0, 0 , 0 } 
-				} ;
-			
-			for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
-			{
-				for ( int x = 0 ; x < the_width ; ++x )
-				{
-					int index = x / 8 ;
-					int bit = x % 8 ;
-					int mask = 1 << bit ;
-					if ( linestart[index] & mask )
-					{
-						SetCPixel( x , y , &colors[1] ) ;
-					}
-					else
-					{
-						SetCPixel( x , y , &colors[0] ) ;
-					}
-				}
-				
-			}
-		UnlockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
-	
-	   	SetGWorld( origPort , origDevice ) ;
-	   }
-	   else
-	   {
-         wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
-	   }
-
-    if ( wxTheBitmapList )
+	SetGWorld( origPort , origDevice ) ;
+    }
+    else
+    {
+	wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
+    }
+    
+    if ( wxTheBitmapList ) {
         wxTheBitmapList->AddBitmap(this);
+    }
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
