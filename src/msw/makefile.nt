@@ -61,10 +61,12 @@ GENERICOBJS= \
   $(GENDIR)\fontdlgg.obj \
   $(GENDIR)\gridg.obj \
   $(GENDIR)\helpxlp.obj \
+  $(GENDIR)\laywin.obj \
   $(GENDIR)\msgdlgg.obj \
   $(GENDIR)\panelg.obj \
   $(GENDIR)\printps.obj \
   $(GENDIR)\prntdlgg.obj \
+  $(GENDIR)\sashwin.obj \
   $(GENDIR)\scrolwin.obj \
   $(GENDIR)\splitter.obj \
   $(GENDIR)\statusbr.obj \
@@ -1074,6 +1076,11 @@ $(GENDIR)/helpxlp.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(GENDIR)/laywin.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(GENDIR)/msgdlgg.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
@@ -1090,6 +1097,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(GENDIR)/prntdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/sashwin.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
