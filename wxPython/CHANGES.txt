@@ -67,6 +67,8 @@ DrawPointList.
 
 Added a set of sophisticated Error Dialogs from Chris Fama.
 
+Added wxRightTextCtrl from Josu Oyanguren to wxPython.lib for aligning
+text in a wxTextCtrl to the right side.
 
 
 

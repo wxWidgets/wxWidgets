@@ -32,6 +32,7 @@ _treeList = [
                                 'wxFindReplaceDialog',
                                 'DrawXXXList',
                                 'ErrorDialogs',
+                                'wxRightTextCtrl',
                                 ##'wxPopupWindow',
                                 ]),
 
@@ -74,6 +75,7 @@ _treeList = [
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
                           'ColourSelect', 'ImageBrowser',
                           'infoframe', 'ColourDB', 'PyCrust', 'TablePrint',
+                          'wxRightTextCtrl',
                           ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
