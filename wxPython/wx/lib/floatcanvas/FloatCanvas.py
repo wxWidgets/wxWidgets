@@ -1,8 +1,7 @@
-
 try:
-    from Numeric import array,asarray,Float,cos,pi,sum,minimum,maximum,Int32,zeros
+    from Numeric import array,asarray,Float,cos,pi,sum,minimum,maximum,Int32,zeros, ones, concatenate, sqrt, argmin, power, absolute
 except ImportError:
-    from numarray import array, asarray, Float, cos, pi, sum, minimum, maximum, Int32, zeros
+    from numarray import array, asarray, Float, cos, pi, sum, minimum, maximum, Int32, zeros, concatenate
 
 from time import clock, sleep
 
@@ -11,19 +10,17 @@ import wx
 import types
 import os        
 
-import Resources
-
 ## A global variable to hold the Pixels per inch that wxWindows thinks is in use
 ## This is used for scaling fonts.
 ## This can't be computed on module __init__, because a wx.App might not have iniitalized yet.
-global ScreenPPI 
+global ScreenPPI
 
 ## a custom Exceptions:
 
 class FloatCanvasException(Exception):
     pass
 
-## All the mouse events
+## Create all the mouse events
 #EVT_FC_ENTER_WINDOW = wx.NewEventType()
 #EVT_FC_LEAVE_WINDOW = wx.NewEventType()
 EVT_FC_LEFT_DOWN = wx.NewEventType() 
@@ -41,6 +38,7 @@ EVT_FC_MOUSEWHEEL = wx.NewEventType()
 EVT_FC_ENTER_OBJECT = wx.NewEventType()
 EVT_FC_LEAVE_OBJECT = wx.NewEventType()
 
+##Create all mouse event binding functions
 #def EVT_ENTER_WINDOW( window, function ):
 #    window.Connect( -1, -1, EVT_FC_ENTER_WINDOW, function ) 
 #def EVT_LEAVE_WINDOW( window, function ):
@@ -68,7 +66,7 @@ def EVT_MOTION( window, function ):
 def EVT_MOUSEWHEEL( window, function ):
     window.Connect( -1, -1,EVT_FC_MOUSEWHEEL , function )
 
-class MouseEvent(wx.PyCommandEvent):
+class _MouseEvent(wx.PyCommandEvent):
 
     """
 
@@ -82,7 +80,7 @@ class MouseEvent(wx.PyCommandEvent):
 
     GetCoords() , which returns and (x,y) tuple in world coordinates.
 
-    Another differnce is that it is a CommandEvent, which propagates up
+    Another difference is that it is a CommandEvent, which propagates up
     the window hierarchy until it is handled.
 
     """
@@ -104,74 +102,27 @@ class MouseEvent(wx.PyCommandEvent):
         #return eval(self.NativeEvent.__getattr__(name) )
         return getattr(self._NativeEvent, name)
 
-#### ColorGEnerator class is now obsolete. I'm using a python generator function instead.
-##class ColorGenerator:
+def _cycleidxs(indexcount, maxvalue, step):
 
-##    """
+    """
+    Utility function used by _colorGenerator
 
-##    An instance of this class generates a unique color each time
-##    GetNextColor() is called. Someday I will use a proper Python
-##    generator for this class.
-
-##    The point of this generator is for the hit-test bitmap, each object
-##    needs to be a unique color. Also, each system can be running a
-##    different number of colors, and it doesn't appear to be possible to
-##    have a wxMemDC with a different colordepth as the screen so this
-##    generates colors far enough apart that they can be distinguished on
-##    a 16bit screen. Anything less than 16bits won't work. It could, but
-##    I havn't written the code that way. You also wouldn't get many
-##    distict colors
-    
-##    """
-
-##    def __init__(self):
-##        import sys
-##        ## figure out the color depth of the screen
-##        ## for some bizare reason, thisdoesn't work on OS-X
-##        if sys.platform == 'darwin':
-##            depth = 24
-##        else:
-##            b = wx.EmptyBitmap(1,1)
-##            depth = b.GetDepth()
-##        self.r = 0
-##        self.g = 0
-##        self.b = 0
-##        if depth == 16:
-##            self.step = 8
-##        elif depth >= 24:
-##            self.step = 1
-##        else:
-##            raise FloatCanvasException("ColorGenerator does not work with depth = %s"%depth )
-
-##    def GetNextColor(self):
-##        step = self.step
-##        ##r,g,b = self.r,self.g,self.b
-##        self.r += step
-##        if self.r > 255:
-##            self.r = step
-##            self.g += step
-##            if self.g > 255:
-##                self.g = step
-##                self.b += step
-##                if self.b > 255:
-##                    ## fixme: this should be a derived exception
-##                    raise FloatCanvasException("Too many objects in colorgenerator for HitTest")
-##        return (self.r,self.g,self.b)
-
-##    def Reset(self):
-##        self.r = 0
-##        self.g = 0
-##        self.b = 0
-
-def cycleidxs(indexcount, maxvalue, step):
+    """
     if indexcount == 0:
         yield ()
     else:
         for idx in xrange(0, maxvalue, step):
-            for tail in cycleidxs(indexcount - 1, maxvalue, step):
+            for tail in _cycleidxs(indexcount - 1, maxvalue, step):
                 yield (idx, ) + tail
 
-def colorGenerator():
+def _colorGenerator():
+
+    """
+
+    Generates a seris of unique colors used to do hit-tests with the HIt
+    Test bitmap
+
+    """
     import sys
     if sys.platform == 'darwin':
         depth = 24
@@ -184,12 +135,13 @@ def colorGenerator():
         step = 1
     else:
         raise "ColorGenerator does not work with depth = %s" % depth
-    return cycleidxs(indexcount=3, maxvalue=256, step=step)
+    return _cycleidxs(indexcount=3, maxvalue=256, step=step)
 
 
-#### I don't know if the Set objects are useful, beyond the pointset object
-#### The problem is that when zoomed in, the BB is checked to see whether to draw the object.
-#### A Set object can defeat this
+#### I don't know if the Set objects are useful, beyond the pointset
+#### object The problem is that when zoomed in, the BB is checked to see
+#### whether to draw the object.  A Set object can defeat this. ONe day
+#### I plan to write some custon C++ code to draw sets of objects
 
 ##class ObjectSetMixin:
 ##    """
@@ -246,11 +198,12 @@ def colorGenerator():
 ##        if length == 1:
 ##            self.Pens = self.Pens[0]
 
-
-
 class DrawObject:
     """
     This is the base class for all the objects that can be drawn.
+
+    One must subclass from this (and an assortment of Mixins) to create
+    a new DrawObject.
 
     """
 
@@ -268,6 +221,11 @@ class DrawObject:
         self.HitFill = True
         self.MinHitLineWidth = 3
         self.HitLineWidth = 3 ## this gets re-set by the subclasses if necessary
+
+        self.Brush = None
+        self.Pen = None
+
+        self.FillStyle = "Solid"
         
     # I pre-define all these as class variables to provide an easier
     # interface, and perhaps speed things up by caching all the Pens
@@ -326,7 +284,7 @@ class DrawObject:
             self._Canvas.MakeNewHTdc()
         if not self.HitColor:
             if not self._Canvas.HitColorGenerator:
-                self._Canvas.HitColorGenerator = colorGenerator()
+                self._Canvas.HitColorGenerator = _colorGenerator()
                 self._Canvas.HitColorGenerator.next() # first call to prevent the background color from being used.
             self.HitColor = self._Canvas.HitColorGenerator.next()
             self.SetHitPen(self.HitColor,self.HitLineWidth)
@@ -346,6 +304,7 @@ class DrawObject:
                 except ValueError:
                     pass
         self.HitAble = False
+
 
     def SetBrush(self,FillColor,FillStyle):
         if FillColor is None or FillStyle is None:
@@ -371,7 +330,7 @@ class DrawObject:
         if not self.HitLine:
             self.HitPen = wx.TRANSPARENT_PEN
         else:
-             self.HitPen = self.PenList.setdefault( (HitColor, "solid", LineWidth),  wx.Pen(HitColor, LineWidth, self.LineStyleList["Solid"]) )
+            self.HitPen = self.PenList.setdefault( (HitColor, "solid", self.HitLineWidth),  wx.Pen(HitColor, self.HitLineWidth, self.LineStyleList["Solid"]) )
 
     def PutInBackground(self):
         if self._Canvas and self.InForeground:
@@ -387,6 +346,55 @@ class DrawObject:
             self._Canvas._BackgroundDirty = True
             self.InForeground = True
 
+class ColorOnlyMixin:
+    """
+
+    Mixin class for objects that have just one color, rather than a fill
+    color and line color
+
+    """
+
+    def SetColor(self, Color):
+        self.SetPen(Color,"Solid",1)
+        self.SetBrush(Color,"Solid")
+
+    SetFillColor = SetColor # Just to provide a consistant interface 
+
+class LineOnlyMixin:
+    """
+
+    Mixin class for objects that have just one color, rather than a fill
+    color and line color
+
+    """
+
+    def SetLineColor(self, LineColor):
+        self.LineColor = LineColor
+        self.SetPen(LineColor,self.LineStyle,self.LineWidth)
+
+    def SetLineStyle(self, LineStyle):
+        self.LineStyle = LineStyle
+        self.SetPen(self.LineColor,LineStyle,self.LineWidth)
+
+    def SetLineWidth(self, LineWidth):
+        self.LineWidth = LineWidth
+        self.SetPen(self.LineColor,self.LineStyle,LineWidth)
+
+class LineAndFillMixin(LineOnlyMixin):
+    """
+
+    Mixin class for objects that have both a line and a fill color and
+    style.
+
+    """
+    def SetFillColor(self, FillColor):
+        self.FillColor = FillColor
+        self.SetBrush(FillColor,self.FillStyle)
+
+    def SetFillStyle(self, FillStyle):
+        self.FillStyle = FillStyle
+        self.SetBrush(self.FillColor,FillStyle)
+    
 class XYObjectMixin:
     """
 
@@ -409,6 +417,15 @@ class XYObjectMixin:
         if self._Canvas:
             self._Canvas.BoundingBoxDirty = True      
 
+    def SetXY(self, x, y):
+        self.XY = array( (x, y), Float)
+        self.CalcBoundingBox()
+
+    def SetPoint(self, xy):
+        self.XY = array( xy, Float)
+        self.XY.shape = (2,)
+        self.CalcBoundingBox()
+
 class PointsObjectMixin:
     """
 
@@ -417,12 +434,15 @@ class PointsObjectMixin:
 
     """
 
-## This is code for the XYMixin object, it needs to be adapeted and tested.
+
+## This is code for the PointsObjectMixin object, it needs to be adapted and tested.
+## Is the neccesary at all: you can always do:
+##    Object.SetPoints( Object.Points + delta, copy = False)    
 ##    def Move(self, Delta ):
 ##        """
 
 ##        Move(Delta): moves the object by delta, where delta is an (dx,
-##        dy) pair. Ideally a Numpy array or shape (2,)
+##        dy) pair. Ideally a Numpy array of shape (2,)
 
 ##        """
         
@@ -432,15 +452,38 @@ class PointsObjectMixin:
 ##        if self._Canvas:
 ##            self._Canvas.BoundingBoxDirty = True      
 
-    def SetPoints(self,Points):
-        self.Points = Points
-        self.BoundingBox = array(((min(self.Points[:,0]),min(self.Points[:,1])),(max(self.Points[:,0]),max(self.Points[:,1]))),Float)
+    def CalcBoundingBox(self):
+        self.BoundingBox = array(((min(self.Points[:,0]),
+                                   min(self.Points[:,1]) ),
+                                  (max(self.Points[:,0]),
+                                   max(self.Points[:,1]) ) ), Float )
         if self._Canvas:
             self._Canvas.BoundingBoxDirty = True
 
+    def SetPoints(self, Points, copy = True):
+        """
+        Sets the coordinates of the points of the object to Points (NX2 array).
+
+        By default, a copy is made, if copy is set to False, a reference
+        is used, iff Points is a NumPy array of Floats. This allows you
+        to change some or all of the points without making any copies.
+
+        For example:
+
+        Points = Object.Points
+        Points += (5,10) # shifts the points 5 in the x dir, and 10 in the y dir.
+        Object.SetPoints(Points, False) # Sets the points to the same array as it was
+        
+        """
+        if copy:
+            self.Points = array(Points, Float)
+            self.Points.shape = (-1,2) # Make sure it is a NX2 array, even if there is only one point
+        else:
+            self.Points = asarray(Points, Float)
+        self.CalcBoundingBox()
 
      
-class Polygon(DrawObject,PointsObjectMixin):
+class Polygon(DrawObject,PointsObjectMixin,LineAndFillMixin):
 
     """
 
@@ -449,6 +492,9 @@ class Polygon(DrawObject,PointsObjectMixin):
     point N and Points[N][1] is the y-coordinate or Points[N,0] is the
     x-coordinate of point N and Points[N,1] is the y-coordinate for
     arrays.
+
+    The other parameters specify various properties of the Polygon, and
+    should be self explanatory.
 
     """
     def __init__(self,
@@ -461,7 +507,7 @@ class Polygon(DrawObject,PointsObjectMixin):
                  InForeground = False):
         DrawObject.__init__(self,InForeground)
         self.Points = array(Points,Float) # this DOES need to make a copy
-        self.BoundingBox = array(((min(self.Points[:,0]),min(self.Points[:,1])),(max(self.Points[:,0]),max(self.Points[:,1]))),Float)
+        self.CalcBoundingBox()
 
         self.LineColor = LineColor
         self.LineStyle = LineStyle
@@ -517,13 +563,14 @@ class Polygon(DrawObject,PointsObjectMixin):
 ##        dc.DrawLineList(Points,self.Pens)
  
 
-class Line(DrawObject,PointsObjectMixin):
+class Line(DrawObject,PointsObjectMixin,LineOnlyMixin):
     """
-    The Line class takes a list of 2-tuples, or a NX2 NumPy array of point coordinates.
-    so that Points[N][0] is the x-coordinate of point N and Points[N][1] is the y-coordinate
-    or  Points[N,0] is the x-coordinate of point N and Points[N,1] is the y-coordinate for arrays.
 
-    It will draw a straight line if there are two points, and a polyline if there are more than two.
+    The Line class takes a list of 2-tuples, or a NX2 NumPy Float array
+    of point coordinates.
+
+    It will draw a straight line if there are two points, and a polyline
+    if there are more than two.
 
     """
     def __init__(self,Points,
@@ -535,7 +582,7 @@ class Line(DrawObject,PointsObjectMixin):
 
 
         self.Points = array(Points,Float)
-        self.BoundingBox = array(((min(self.Points[:,0]),min(self.Points[:,1])),(max(self.Points[:,0]),max(self.Points[:,1]))),Float)
+        self.CalcBoundingBox()
 
         self.LineColor = LineColor
         self.LineStyle = LineStyle
@@ -585,18 +632,24 @@ class Line(DrawObject,PointsObjectMixin):
 ##        Points.shape = (-1,4)
 ##        dc.DrawLineList(Points,self.Pens)
 
-class PointSet(DrawObject):
+class PointSet(DrawObject,PointsObjectMixin, ColorOnlyMixin):
     """
-    The PointSet class takes a list of 2-tuples, or a NX2 NumPy array of point coordinates.
-    so that Points[N][0] is the x-coordinate of point N and Points[N][1] is the y-coordinate
-    or  Points[N,0] is the x-coordinate of point N and Points[N,1] is the y-coordinate for arrays.
 
-    Each point will be drawn the same color and Diameter. The Diameter is in screen points,
-    not world coordinates.
+    The PointSet class takes a list of 2-tuples, or a NX2 NumPy array of
+    point coordinates.
 
-    At this point, the hit-test code does not distingish between the
-    points, you will only know that one of the poins got hit, not which
-    one.
+    If Points is a sequence of tuples: Points[N][0] is the x-coordinate of
+    point N and Points[N][1] is the y-coordinate.
+
+    If Points is a NumPy array: Points[N,0] is the x-coordinate of point
+    N and Points[N,1] is the y-coordinate for arrays.
+
+    Each point will be drawn the same color and Diameter. The Diameter
+    is in screen pixels, not world coordinates.
+
+    The hit-test code does not distingish between the points, you will
+    only know that one of the points got hit, not which one. You can use
+    PointSet.FindClosestPoint(WorldPoint) to find out which one
 
     In the case of points, the HitLineWidth is used as diameter.
 
@@ -606,27 +659,34 @@ class PointSet(DrawObject):
 
         self.Points = array(Points,Float)
         self.Points.shape = (-1,2) # Make sure it is a NX2 array, even if there is only one point
-        self.BoundingBox = array(((min(self.Points[:,0]),
-                                   min(self.Points[:,1])),
-                                  (max(self.Points[:,0]),
-                                   max(self.Points[:,1]))),Float)
-
-        self.Color = Color
+        self.CalcBoundingBox()
         self.Diameter = Diameter
 
         self.HitLineWidth = self.MinHitLineWidth
-        self.SetPen(Color,"Solid",1)
-        self.SetBrush(Color,"Solid")
+        self.SetColor(Color)
 
-    def SetPoints(self,Points):
-        self.Points = array(Points, Float)
-        self.Points.shape = (-1,2) # Make sure it is a NX2 array, even if there is only one point
-        self.BoundingBox = array(((min(self.Points[:,0]),
-                                   min(self.Points[:,1]) ),
-                                  (max(self.Points[:,0]),
-                                   max(self.Points[:,1]) ) ) )
-        if self._Canvas:
-            self._Canvas.BoundingBoxDirty = True
+    def SetDiameter(self,Diameter):
+            self.Diameter = Diameter
+            
+
+    def FindClosestPoint(self, XY):
+        """
+        
+        Returns the index of the closest point to the point, XY, given
+        in World coordinates. It's essentially random which you get if
+        there are more than one that are the same.
+
+        This can be used to figure out which point got hit in a mouse
+        binding callback, for instance. It's a lot faster that using a
+        lot of separate points.
+
+        """
+        ## kind of ugly to minimize data copying
+        d = self.Points - XY
+        d = sum( power(d,2,d), 1 )
+        d = absolute( d, d ) # don't need the real distance, just which is smallest
+        #dist = sqrt( sum( (self.Points - XY)**2), 1) )
+        return argmin(d)
 
     def DrawD2(self, dc, Points):
         # A Little optimization for a diameter2 - point
@@ -645,57 +705,77 @@ class PointSet(DrawObject):
         else:
             dc.SetBrush(self.Brush)
             radius = int(round(self.Diameter/2))
-            for xy in Points:
-                dc.DrawEllipsePointSize( (xy - radius), (self.Diameter, self.Diameter) )
+            if len(Points) > 100:
+                xy = Points
+                xywh = concatenate((xy-radius, ones(xy.shape) * self.Diameter ), 1 )
+                dc.DrawEllipseList(xywh)
+            else:
+                for xy in Points:
+                    dc.DrawCircle(xy[0],xy[1], radius)
         if HTdc and self.HitAble:
             HTdc.SetPen(self.HitPen)
+            HTdc.SetBrush(self.HitBrush)
             if self.Diameter <= 1:
                 HTdc.DrawPointList(Points)
             elif self.Diameter <= 2:
                 self.DrawD2(HTdc, Points)
             else:
+                if len(Points) > 100:
+                    xy = Points
+                    xywh = concatenate((xy-radius, ones(xy.shape) * self.Diameter ), 1 )
+                    HTdc.DrawEllipseList(xywh)
+                else:
+                    for xy in Points:
+                        HTdc.DrawCircle(xy[0],xy[1], radius)
+
+class Point(DrawObject,XYObjectMixin,ColorOnlyMixin):
+    """
+    
+    The Point class takes a 2-tuple, or a (2,) NumPy array of point
+    coordinates.
+
+    The Diameter is in screen points, not world coordinates, So the
+    Bounding box is just the point, and doesn't include the Diameter.
+
+    The HitLineWidth is used as diameter for the
+    Hit Test.
+
+    """
+    def __init__(self, XY, Color = "Black", Diameter =  1, InForeground = False):
+        DrawObject.__init__(self, InForeground)
+
+        self.XY = array(XY, Float)
+        self.XY.shape = (2,) # Make sure it is a 1X2 array, even if there is only one point
+        self.CalcBoundingBox()
+        self.SetColor(Color)
+        self.Diameter = Diameter
+
+        self.HitLineWidth = self.MinHitLineWidth
+
+    def SetDiameter(self,Diameter):
+            self.Diameter = Diameter
+
+    def CalcBoundingBox(self):
+        self.BoundingBox = array( (self.XY, self.XY), Float )
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        dc.SetPen(self.Pen)
+        xy = WorldToPixel(self.XY)
+        if self.Diameter <= 1:
+            dc.DrawPoint(xy[0], xy[1])
+        else:
+            dc.SetBrush(self.Brush)
+            radius = int(round(self.Diameter/2))
+            dc.DrawCircle(xy[0],xy[1], radius)
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            if self.Diameter <= 1:
+                HTdc.DrawPoint(xy[0], xy[1])
+            else:
                 HTdc.SetBrush(self.HitBrush)
-                radius = int(round(self.Diameter/2))
-                for xy in Points:
-                    HTdc.DrawEllipsePointSize(  (xy - radius), (self.Diameter, self.Diameter) )
-            
-#### Does anyone need this?                    
-##class Dot(DrawObject):
-##    """
-##    The Dot class takes an x.y coordinate pair, and the Diameter of the circle.
-##    The Diameter is in pixels, so it won't change with zoom.
+                HTdc.DrawCircle(xy[0],xy[1], radius)
 
-##    Also Fill and line data
-
-##    """
-##    def __init__(self,x,y,Diameter,LineColor,LineStyle,LineWidth,FillColor,FillStyle,InForeground = False):
-##        DrawObject.__init__(self,InForeground)
-
-##        self.X = x
-##        self.Y = y
-##        self.Diameter = Diameter
-##        # NOTE: the bounding box does not include the diameter of the dot, as that is in pixel coords.
-##        # If this is  a problem, perhaps you should use a circle, instead!
-##        self.BoundingBox = array(((x,y),(x,y)),Float)
-
-##        self.LineColor = LineColor
-##        self.LineStyle = LineStyle
-##        self.LineWidth = LineWidth
-##        self.FillColor = FillColor
-##        self.FillStyle = FillStyle
-
-##        self.SetPen(LineColor,LineStyle,LineWidth)
-##        self.SetBrush(FillColor,FillStyle)
-
-##    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
-##    #def _Draw(self,dc,WorldToPixel,ScaleWorldToPixel):
-##        dc.SetPen(self.Pen)
-##        dc.SetBrush(self.Brush)
-##        radius = int(round(self.Diameter/2))
-##        (X,Y) = WorldToPixel((self.X,self.Y))
-##        dc.DrawEllipse((X - radius), (Y - radius), self.Diameter, self.Diameter)
-
-class RectEllipse(DrawObject, XYObjectMixin):
+class RectEllipse(DrawObject, XYObjectMixin,LineAndFillMixin):
     def __init__(self,x,y,width,height,
                  LineColor = "Black",
                  LineStyle = "Solid",
@@ -720,6 +800,11 @@ class RectEllipse(DrawObject, XYObjectMixin):
         self.SetPen(LineColor,LineStyle,LineWidth)
         self.SetBrush(FillColor,FillStyle)
 
+    def SetShape(self,x,y,width,height):
+        self.XY = array( (x, y), Float)
+        self.WH = array( (width, height), Float )
+        self.CalcBoundingBox()
+
 
     def SetUpDraw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc):
         dc.SetPen(self.Pen)
@@ -730,11 +815,9 @@ class RectEllipse(DrawObject, XYObjectMixin):
         return ( WorldToPixel(self.XY),
                  ScaleWorldToPixel(self.WH) )
 
-    def SetXY(self, x, y):
-        self.XY = array( (x, y), Float)
+    def CalcBoundingBox(self):
         self.BoundingBox = array((self.XY, (self.XY + self.WH) ), Float)
-        if self._Canvas:
-            self._Canvas.BoundingBoxDirty = True
+        self._Canvas.BoundingBoxDirty = True
 
 
 class Rectangle(RectEllipse):
@@ -766,14 +849,22 @@ class Ellipse(RectEllipse):
 
 class Circle(Ellipse):
     def __init__(self, x ,y, Diameter, **kwargs):
+        self.Center = array((x,y),Float)
         RectEllipse.__init__(self ,
                              x-Diameter/2.,
                              y-Diameter/2.,
                              Diameter,
                              Diameter,
                              **kwargs)
+
+    def SetDiameter(self, Diameter):
+        x,y = self.Center - (Diameter/2.)
+        self.SetShape(x,
+                      y,
+                      Diameter,
+                      Diameter)
         
-class TextObjectMixin:
+class TextObjectMixin(XYObjectMixin):
     """
 
     A mix in class that holds attributes and methods that are needed by
@@ -801,6 +892,12 @@ class TextObjectMixin:
                                                        Underline,
                                                        FaceName) )
         return self.Font
+
+    def SetColor(self, Color):
+        self.Color = Color
+
+    def SetBackgroundColor(self, BackgroundColor):
+        self.BackgroundColor = BackgroundColor
 
     ## store the function that shift the coords for drawing text. The
     ## "c" parameter is the correction for world coordinates, rather
@@ -893,20 +990,12 @@ class Text(DrawObject, TextObjectMixin):
 
         self.XY = ( x,y )
 
-	# use a memDC --  ScreenDC doesn't work with 2.5.1 and GTK2
-        #dc = wx.MemoryDC()
-        #bitmap = wx.EmptyBitmap(1, 1)
-        #dc.SelectObject(bitmap)  		
-        #dc.SetFont(self.Font)
-        #(self.TextWidth, self.TextHeight) = dc.GetTextExtent(self.String)
         (self.TextWidth, self.TextHeight) = (None, None)
         self.ShiftFun = self.ShiftFunDict[Position]
 
-    def SetXY(self, x, y):
-        self.XY = ( x,y )
+    def CalcBoundingBox(self):
         self.BoundingBox = array((self.XY, self.XY),Float)
-        if self._Canvas:
-            self._Canvas.BoundingBoxDirty = True
+        
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         XY = WorldToPixel(self.XY)
@@ -926,7 +1015,7 @@ class Text(DrawObject, TextObjectMixin):
             HTdc.SetBrush(self.HitBrush)
             HTdc.DrawRectanglePointSize(XY, (self.TextWidth, self.TextHeight) )
 
-class ScaledText(DrawObject, TextObjectMixin, XYObjectMixin):
+class ScaledText(DrawObject, TextObjectMixin):
     """
     This class creates a text object that is scaled when zoomed.  It is
     placed at the coordinates, x,y. the "Position" argument is a two
@@ -942,22 +1031,18 @@ class ScaledText(DrawObject, TextObjectMixin, XYObjectMixin):
 
     Family:
         Font family, a generic way of referring to fonts without
-        specifying actual facename. One of::
+        specifying actual facename. One of:
             wx.DEFAULT:  Chooses a default font. 
             wx.DECORATI: A decorative font. 
             wx.ROMAN: A formal, serif font. 
             wx.SCRIPT: A handwriting font. 
             wx.SWISS: A sans-serif font. 
             wx.MODERN: A fixed pitch font.
-            
         NOTE: these are only as good as the wxWindows defaults, which aren't so good.
-        
     Style:
         One of wx.NORMAL, wx.SLANT and wx.ITALIC.
-        
     Weight:
         One of wx.NORMAL, wx.LIGHT and wx.BOLD.
-        
     Underline:
         The value can be True or False. At present this may have an an
         effect on Windows only.
@@ -1019,31 +1104,36 @@ class ScaledText(DrawObject, TextObjectMixin, XYObjectMixin):
             self.Weight             =  Font.GetWeight()    
 
         # Experimental max font size value on wxGTK2: this works OK on
-        # my system If it's any larger, there is a crash, with the
-        # message: The application 'FloatCanvasDemo.py' lost its
+        # my system. If it's a lot  larger, there is a crash, with the
+        # message:
+        #
+        # The application 'FloatCanvasDemo.py' lost its
         # connection to the display :0.0; most likely the X server was
         # shut down or you killed/destroyed the application.
-        self.MaxSize = 2750
+        #
+        # Windows and OS-X seem to be better behaved in this regard.
+        # They may not draw it, but they don't crash either!
+        self.MaxFontSize = 1000
         
         self.ShiftFun = self.ShiftFunDict[Position]
 
-        ## Compute the BB
+        self.CalcBoundingBox()
+
+
+    def CalcBoundingBox(self):
         ## this isn't exact, as fonts don't scale exactly.
         dc = wx.MemoryDC()
         bitmap = wx.EmptyBitmap(1, 1)
         dc.SelectObject(bitmap) #wxMac needs a Bitmap selected for GetTextExtent to work.
         DrawingSize = 40 # pts This effectively determines the resolution that the BB is computed to.
-        ScaleFactor = float(Size) / DrawingSize
+        ScaleFactor = float(self.Size) / DrawingSize
         dc.SetFont(self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underline, self.FaceName) )
         (w,h) = dc.GetTextExtent(self.String)
         w = w * ScaleFactor
         h = h * ScaleFactor
-        x, y = self.ShiftFun(x, y, w, h, world = 1)
+        x, y = self.ShiftFun(self.XY[0], self.XY[1], w, h, world = 1)
         self.BoundingBox = array(((x, y-h ),(x + w, y)),Float)
-
-        # the new coords are set to the corner of the BB:
-        #self.X = self.BoundingBox[0,0]
-        #self.Y = self.BoundingBox[1,1]
+        
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         (X,Y) = WorldToPixel( (self.XY) )
 
@@ -1052,8 +1142,7 @@ class ScaledText(DrawObject, TextObjectMixin, XYObjectMixin):
         ## Check to see if the font size is large enough to blow up the X font server
         ## If so, limit it. Would it be better just to not draw it?
         ## note that this limit is dependent on how much memory you have, etc.
-        if Size > self.MaxSize:
-            Size = self.MaxSize
+        Size = min(Size, self.MaxFontSize)
         dc.SetFont(self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underline, self.FaceName))
         dc.SetTextForeground(self.Color)
         if self.BackgroundColor:
@@ -1258,13 +1347,13 @@ class FloatCanvas(wx.Panel):
                         EVT_FC_LEAVE_OBJECT: {},
                         }        
             
-    def RaiseMouseEvent(self, Event, EventType):
+    def _RaiseMouseEvent(self, Event, EventType):
         """
         This is called in various other places to raise a Mouse Event
         """
         #print "in Raise Mouse Event", Event
         pt = self.PixelToWorld( Event.GetPosition() )
-        evt = MouseEvent(EventType, Event, self.GetId(), pt)
+        evt = _MouseEvent(EventType, Event, self.GetId(), pt)
         self.GetEventHandler().ProcessEvent(evt)       
 
     def HitTest(self, event, HitEvent):
@@ -1342,42 +1431,42 @@ class FloatCanvas(wx.Panel):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_LEFT_DCLICK
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
 
     def MiddleDownEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_MIDDLE_DOWN
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
     def MiddleUpEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_MIDDLE_UP
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
     def MiddleDoubleClickEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_MIDDLE_DCLICK
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
     def RightUpEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_RIGHT_UP
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
     def RightDoubleCLickEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_RIGHT_DCLICK
             if not self.HitTest(event, EventType):
-                self.RaiseMouseEvent(event, EventType)
+                self._RaiseMouseEvent(event, EventType)
 
     def WheelEvent(self,event):
         if self.GUIMode == "Mouse":
-            self.RaiseMouseEvent(event, EVT_FC_MOUSEWHEEL)
+            self._RaiseMouseEvent(event, EVT_FC_MOUSEWHEEL)
 
 
     def LeftDownEvent(self,event):
@@ -1395,7 +1484,7 @@ class FloatCanvas(wx.Panel):
             elif self.GUIMode == "Mouse":
                 ## check for a hit
                 if not self.HitTest(event, EVT_FC_LEFT_DOWN):
-                   self.RaiseMouseEvent(event,EVT_FC_LEFT_DOWN)
+                   self._RaiseMouseEvent(event,EVT_FC_LEFT_DOWN)
         else: 
             pass
 
@@ -1432,7 +1521,7 @@ class FloatCanvas(wx.Panel):
             elif self.GUIMode == "Mouse":
                 EventType = EVT_FC_LEFT_UP
                 if not self.HitTest(event, EventType):
-                   self.RaiseMouseEvent(event, EventType)
+                   self._RaiseMouseEvent(event, EventType)
         else:
             pass
 
@@ -1515,10 +1604,10 @@ class FloatCanvas(wx.Panel):
                 ## Only do something if there are mouse over events bound
                 if self.HitDict and (self.HitDict[ EVT_FC_ENTER_OBJECT ] or self.HitDict[ EVT_FC_LEAVE_OBJECT ] ):
                     if not self.MouseOverTest(event):
-                        self.RaiseMouseEvent(event,EVT_FC_MOTION)
+                        self._RaiseMouseEvent(event,EVT_FC_MOTION)
             else:
                     pass
-            self.RaiseMouseEvent(event,EVT_FC_MOTION)
+            self._RaiseMouseEvent(event,EVT_FC_MOTION)
         else:
             pass
 
@@ -1533,7 +1622,7 @@ class FloatCanvas(wx.Panel):
             elif self.GUIMode == "Mouse":
                 EventType = EVT_FC_RIGHT_DOWN
                 if not self.HitTest(event, EventType):
-                   self.RaiseMouseEvent(event, EventType)
+                   self._RaiseMouseEvent(event, EventType)
         else:
             pass
         
@@ -1606,7 +1695,7 @@ class FloatCanvas(wx.Panel):
         
         """
         #print "In Draw"
-        if self.PanelSize < (1,1): 
+        if self.PanelSize < (1,1): # it's possible for this to get called before being properly initialized.
             return
         if self.Debug: start = clock()
         ScreenDC =  wx.ClientDC(self)
@@ -1868,7 +1957,9 @@ class FloatCanvas(wx.Panel):
         a 2-tuple, or sequence of 2-tuples.
         """
         #Note: this can be called by users code for various reasons, so asarray is needed.
-        return  (((asarray(Coordinates,Float) - self.ViewPortCenter)*self.TransformVector)+(self.HalfPanelSize)).astype('i')
+        return  (((asarray(Coordinates,Float) -
+                   self.ViewPortCenter)*self.TransformVector)+
+                 (self.HalfPanelSize)).astype('i')
 
     def ScaleWorldToPixel(self,Lengths):
         """
@@ -1944,7 +2035,7 @@ class FloatCanvas(wx.Panel):
 
 def _makeFloatCanvasAddMethods(): ## lrk's code for doing this in module __init__
     classnames = ["Circle", "Ellipse", "Rectangle", "ScaledText", "Polygon",
-               "Line", "Text", "PointSet"]
+               "Line", "Text", "PointSet","Point"]
     for classname in classnames:
         klass = globals()[classname]
         def getaddshapemethod(klass=klass):
@@ -1956,8 +2047,8 @@ def _makeFloatCanvasAddMethods(): ## lrk's code for doing this in module __init_
         addshapemethod = getaddshapemethod()
         methodname = "Add" + classname
         setattr(FloatCanvas, methodname, addshapemethod)
-        docstring = "        Creates %s and adds its reference to the canvas.\n" % classname
-        docstring += "        Argument protocol same as %s class" % classname
+        docstring = "Creates %s and adds its reference to the canvas.\n" % classname
+        docstring += "Argument protocol same as %s class" % classname
         if klass.__doc__:
             docstring += ", whose docstring is:\n%s" % klass.__doc__
         FloatCanvas.__dict__[methodname].__doc__ = docstring

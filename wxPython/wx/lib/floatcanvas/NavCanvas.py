@@ -100,7 +100,8 @@ class NavCanvas(wx.Panel):
         wx.EVT_BUTTON(self, ID_ZOOM_TO_FIT_BUTTON, self.ZoomToFit)
 
         tb.Realize()
-        tb.SetSizeHints(tb.GetSize())
+        S = tb.GetSize()
+        tb.SetSizeHints(S[0],S[1])
         return tb
 
     def SetToolMode(self,event):
