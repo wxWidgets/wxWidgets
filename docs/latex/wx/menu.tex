@@ -41,7 +41,8 @@ this window.
 
 \membersection{wxMenu::wxMenu}\label{wxmenuconstr}
 
-\func{}{wxMenu}{\param{const wxString\& }{title = ""}, \param{const wxFunction}{ func = NULL}}
+\func{}{wxMenu}{\param{const wxString\& }{title = ""},
+  \param{const wxFunction}{ func = NULL}\param{long}{ style = 0}}
 
 Constructs a wxMenu object.
 
@@ -51,6 +52,8 @@ Constructs a wxMenu object.
 
 \docparam{func}{A callback function if the menu is used as a popup using \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}.}
 
+\docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
+
 \pythonnote{The wxPython version of the \tt{wxMenu} constructor
 doesn't accept the callback argument because of reference counting
 issues.  There is a specialized wxMenu constructor called
@@ -59,6 +62,13 @@ are needed.  You must retain a reference to the menu while useing it
 otherwise your callback function will get dereferenced when the menu
 does.
 }
+
+\func{}{wxMenu}{\param{long}{ style }}
+
+Constructs a wxMenu object.
+
+\wxheading{Parameters}
+\docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
 
 \membersection{wxMenu::\destruct{wxMenu}}
 
@@ -681,3 +691,8 @@ Use only after the menubar has been associated with a frame.
 
 \helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop}
 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
