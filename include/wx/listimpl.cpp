@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define _DEFINE_LIST(T, name)                   \
-    inline void wx##name##Node::DeleteData()    \
+    void wx##name##Node::DeleteData()    \
     {                                           \
         delete (T *)GetData();                  \
     }
