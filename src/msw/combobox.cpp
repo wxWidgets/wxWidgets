@@ -366,54 +366,46 @@ void wxComboBox::SetEditable(bool editable)
 
 void wxComboBox::SetInsertionPoint(long pos)
 {
-/*
-  HWND hWnd = GetHwnd();
 #ifdef __WIN32__
-  SendMessage(hWnd, EM_SETSEL, pos, pos);
-  SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-#else
-  SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(pos, pos));
+  HWND hWnd = GetHwnd();
+  SendMessage(hWnd, CB_SETEDITSEL, 0, MAKELPARAM(pos, pos));
+  HWND hEditWnd = (HWND) GetEditHWND() ;
+  if (hEditWnd)
+  {
+    // Scroll insertion point into view
+    SendMessage(hEditWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
+    // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
+    static const wxChar *nothing = _T("");
+    SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
+  }
 #endif
-  char *nothing = "";
-  SendMessage(hWnd, EM_REPLACESEL, 0, (LPARAM)nothing);
-*/
 }
 
 void wxComboBox::SetInsertionPointEnd()
 {
-/*
   long pos = GetLastPosition();
   SetInsertionPoint(pos);
-*/
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-/*
-  DWORD Pos=(DWORD)SendMessage(GetHwnd(), EM_GETSEL, 0, 0L);
-  return Pos&0xFFFF;
-*/
-  return 0;
+#ifdef __WIN32__
+    DWORD Pos=(DWORD)SendMessage(GetHwnd(), CB_GETEDITSEL, 0, 0L);
+    return Pos&0xFFFF;
+#else
+    return 0;
+#endif
 }
 
 long wxComboBox::GetLastPosition() const
 {
-/*
-    HWND hWnd = GetHwnd();
+    HWND hEditWnd = (HWND) GetEditHWND();
 
-    // Will always return a number > 0 (according to docs)
-    int noLines = (int)SendMessage(hWnd, EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0L);
-
-    // This gets the char index for the _beginning_ of the last line
-    int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)(noLines-1), (LPARAM)0L);
-
-    // Get number of characters in the last line. We'll add this to the character
+    // Get number of characters in the last (only) line. We'll add this to the character
     // index for the last line, 1st position.
-    int lineLength = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0L);
+    int lineLength = (int)SendMessage(hEditWnd, EM_LINELENGTH, (WPARAM) 0, (LPARAM)0L);
 
-    return (long)(charIndex + lineLength);
-*/
-  return 0;
+    return (long)(lineLength);
 }
 
 void wxComboBox::Replace(long from, long to, const wxString& value)
