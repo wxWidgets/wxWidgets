@@ -227,7 +227,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                         (char *)"base",
                         0, 0, -1, -1);
 
-    return TRUE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -386,13 +386,16 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
-    // for m_mainWidget themes
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
+    if (m_miniEdge == 0) // wxMiniFrame has its own version.
+    {
+       // For m_mainWidget themes
+       gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
                 GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 #ifndef __WXGTK20__
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
+       gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 #endif
+    }
 
     // m_wxwindow only represents the client area without toolbar and menubar
     m_wxwindow = gtk_pizza_new();
