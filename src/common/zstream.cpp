@@ -30,8 +30,8 @@
 // When using configure, the path must be "zlib.h" I don't know
 // what other ports (wxMac, wxMotif without configure) need here.
 // If we are building with ./configure, we trust the zlib path is 
-// given as a -I option.
-#if defined(__WXMSW__) && !defined(HAVE_CONFIG_H)
+// given as a -I option. (confusingly configure defines __GTKSETUPH__)
+#if defined(__WXMSW__) && !defined(__GTKSETUPH__)
    #include "..\zlib\zlib.h"
 #else
    #include "zlib.h"
