@@ -29,17 +29,35 @@
  * GLContext implementation
  */
 
-wxGLContext::wxGLContext(bool isRGB, wxWindow *win, const wxPalette& palette)
+wxGLContext::wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette)
 {
   m_window = win;
 
-  m_hDC = (WXHDC) ::GetDC((HWND) win->GetHWND());
-
-  SetupPixelFormat();
-  SetupPalette(palette);
+  m_hDC = win->GetHDC();
 
   m_glContext = wglCreateContext((HDC) m_hDC);
+  wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+
   wglMakeCurrent((HDC) m_hDC, m_glContext);
+}
+
+wxGLContext::wxGLContext( 
+               bool isRGB, wxGLCanvas *win, 
+               const wxPalette& palette,
+               const wxGLContext *other        /* for sharing display lists */
+)
+{
+    m_window = win;
+
+    m_hDC = win->GetHDC();
+
+    m_glContext = wglCreateContext((HDC) m_hDC);
+    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+
+    if( other != 0 )
+      wglShareLists( other->m_glContext, m_glContext );
+
+    wglMakeCurrent((HDC) m_hDC, m_glContext);
 }
 
 wxGLContext::~wxGLContext()
@@ -47,10 +65,8 @@ wxGLContext::~wxGLContext()
   if (m_glContext)
   {
     wglMakeCurrent(NULL, NULL);
-	wglDeleteContext(m_glContext);
+  	wglDeleteContext(m_glContext);
   }
-
-  ::ReleaseDC((HWND) m_window->GetHWND(), (HDC) m_hDC);
 }
 
 void wxGLContext::SwapBuffers()
@@ -90,7 +106,54 @@ void wxGLContext::SetColour(const char *colour)
   }
 }
 
-void wxGLContext::SetupPixelFormat() // (HDC hDC)
+
+/*
+ * wxGLCanvas implementation
+ */
+
+IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
+
+BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
+    EVT_SIZE(wxGLCanvas::OnSize)
+    EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
+    EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
+END_EVENT_TABLE()
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
+    const wxPoint& pos, const wxSize& size, long style, const wxString& name,
+    int *attribList /* not used yet! */, const wxPalette& palette):
+  wxScrolledWindow(parent, id, pos, size, style, name)
+{
+  m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+
+  SetupPixelFormat();
+  SetupPalette(palette);
+
+  m_glContext = new wxGLContext(TRUE, this, palette);
+}
+wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+              const wxGLContext *shared, wxWindowID id,
+              const wxPoint& pos, const wxSize& size, long style, const wxString& name,
+              int *attribList, const wxPalette& palette ) :
+  wxScrolledWindow(parent, id, pos, size, style, name)
+{			
+  m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+
+  SetupPixelFormat();
+  SetupPalette(palette);
+
+  m_glContext = new wxGLContext(TRUE, this, palette, shared );
+}
+
+wxGLCanvas::~wxGLCanvas()
+{
+  if (m_glContext)
+    delete m_glContext;
+
+  ::ReleaseDC((HWND) GetHWND(), (HDC) m_hDC);
+}
+
+void wxGLCanvas::SetupPixelFormat() // (HDC hDC)
 {
     PIXELFORMATDESCRIPTOR pfd = {
 	sizeof(PIXELFORMATDESCRIPTOR),	/* size */
@@ -128,7 +191,7 @@ void wxGLContext::SetupPixelFormat() // (HDC hDC)
     }
 }
 
-void wxGLContext::SetupPalette(const wxPalette& palette)
+void wxGLCanvas::SetupPalette(const wxPalette& palette)
 {
     int pixelFormat = GetPixelFormat((HDC) m_hDC);
     PIXELFORMATDESCRIPTOR pfd;
@@ -157,7 +220,7 @@ void wxGLContext::SetupPalette(const wxPalette& palette)
     }
 }
 
-wxPalette wxGLContext::CreateDefaultPalette()
+wxPalette wxGLCanvas::CreateDefaultPalette()
 {
     PIXELFORMATDESCRIPTOR pfd;
     int paletteSize;
@@ -197,32 +260,6 @@ wxPalette wxGLContext::CreateDefaultPalette()
     palette.SetHPALETTE((WXHPALETTE) hPalette);
 
     return palette;
-}
-
-/*
- * wxGLCanvas implementation
- */
-
-IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
-
-BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
-    EVT_SIZE(wxGLCanvas::OnSize)
-    EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
-    EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
-END_EVENT_TABLE()
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
-    const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-    int *attribList /* not used yet! */, const wxPalette& palette):
-  wxScrolledWindow(parent, id, pos, size, style, name)
-{
-  m_glContext = new wxGLContext(TRUE, this, palette);
-}
-
-wxGLCanvas::~wxGLCanvas()
-{
-  if (m_glContext)
-    delete m_glContext;
 }
 
 void wxGLCanvas::SwapBuffers()
@@ -267,10 +304,10 @@ void wxGLCanvas::SetColour(const char *colour)
 void wxGLCanvas::OnQueryNewPalette(wxQueryNewPaletteEvent& event)
 {
 	/* realize palette if this is the current window */
-	if (m_glContext && m_glContext->GetPalette()->Ok()) {
-	    ::UnrealizeObject((HPALETTE) m_glContext->GetPalette()->GetHPALETTE());
-	    ::SelectPalette((HDC) m_glContext->GetHDC(), (HPALETTE) m_glContext->GetPalette()->GetHPALETTE(), FALSE);
-	    ::RealizePalette((HDC) m_glContext->GetHDC());
+	if ( GetPalette()->Ok() ) {
+	    ::UnrealizeObject((HPALETTE) GetPalette()->GetHPALETTE());
+	    ::SelectPalette((HDC) GetHDC(), (HPALETTE) GetPalette()->GetHPALETTE(), FALSE);
+	    ::RealizePalette((HDC) GetHDC());
 	    Refresh();
 	    event.SetPaletteRealized(TRUE);
     }
@@ -282,14 +319,12 @@ void wxGLCanvas::OnQueryNewPalette(wxQueryNewPaletteEvent& event)
 void wxGLCanvas::OnPaletteChanged(wxPaletteChangedEvent& event)
 {
 	/* realize palette if this is *not* the current window */
-	if ( m_glContext &&
-         m_glContext->GetPalette() &&
-         m_glContext->GetPalette()->Ok() &&
-         (this != event.GetChangedWindow()) )
+	if ( GetPalette() &&
+       GetPalette()->Ok() && (this != event.GetChangedWindow()) )
     {
-	    ::UnrealizeObject((HPALETTE) m_glContext->GetPalette()->GetHPALETTE());
-	    ::SelectPalette((HDC) m_glContext->GetHDC(), (HPALETTE) m_glContext->GetPalette()->GetHPALETTE(), FALSE);
-	    ::RealizePalette((HDC) m_glContext->GetHDC());
+	    ::UnrealizeObject((HPALETTE) GetPalette()->GetHPALETTE());
+	    ::SelectPalette((HDC) GetHDC(), (HPALETTE) GetPalette()->GetHPALETTE(), FALSE);
+	    ::RealizePalette((HDC) GetHDC());
 	    Refresh();
 	}
 }

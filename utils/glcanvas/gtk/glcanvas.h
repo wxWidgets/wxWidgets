@@ -26,6 +26,21 @@ extern "C" {
 }
 
 //---------------------------------------------------------------------------
+// Constants for attriblist
+//---------------------------------------------------------------------------
+
+enum
+{
+  WX_GL_RGBA=1,          /* use true color palette */
+  WX_GL_DEPTH_SIZE,      /* bits for Z-buffer (0,16,32) */
+  WX_GL_DOUBLEBUFFER,    /* use doublebuffer */
+  WX_GL_MIN_RED,         /* use red buffer with most bits (> MIN_RED bits) */
+  WX_GL_MIN_GREEN,       /* use green buffer with most bits (> MIN_GREEN bits) */
+  WX_GL_MIN_BLUE         /* use blue buffer with most bits (> MIN_BLUE bits) */
+/* these are enough constants for now, the remaining will be added later */
+};
+
+//---------------------------------------------------------------------------
 // classes
 //---------------------------------------------------------------------------
 
@@ -44,6 +59,11 @@ class wxGLContext: public wxObject
   public:
   
     wxGLContext( bool isRGB, wxWindow *win, const wxPalette& palette = wxNullPalette );
+    wxGLContext( 
+               bool WXUNUSED(isRGB), wxWindow *win, 
+               const wxPalette& WXUNUSED(palette),
+               const wxGLContext *other        /* for sharing display lists */
+    );
     ~wxGLContext();
 
     void SetCurrent();
@@ -80,11 +100,19 @@ class wxGLCanvas: public wxScrolledWindow
    wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
-	long style = 0, const wxString& name = "GLCanvas", 
-	int *attribList = (int*) NULL, 
-	const wxPalette& palette = wxNullPalette );
-	
-   bool Create( wxWindow *parent, wxWindowID id = -1, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
+   wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+        wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
+
+   bool Create( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+        wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
 	long style = 0, const wxString& name = "GLCanvas", 

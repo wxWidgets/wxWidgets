@@ -1048,7 +1048,7 @@ void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
-    wxDC::SetClippingRegion( x, y, width, height );
+    wxDC::DoSetClippingRegion( x, y, width, height );
   
     GdkRectangle rect;
     rect.x = XLOG2DEV(x);

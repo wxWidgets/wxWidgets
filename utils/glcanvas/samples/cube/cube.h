@@ -30,6 +30,10 @@ public:
         long style = wxDEFAULT_FRAME_STYLE);
 
     void OnExit(wxCommandEvent& event);
+    void OnNewWindow();
+    void OnDefRotateLeftKey();
+    void OnDefRotateRightKey();
+    
 public:
     TestGLCanvas*    m_canvas;
 
@@ -38,19 +42,31 @@ DECLARE_EVENT_TABLE()
 
 class TestGLCanvas: public wxGLCanvas
 {
+   friend class MyFrame;
+   
  public:
    TestGLCanvas(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
       const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "TestGLCanvas");
+   TestGLCanvas(wxWindow *parent, const TestGLCanvas &other,
+          const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+          const wxSize& size = wxDefaultSize, long style = 0,
+          const wxString& name = "TestGLCanvas" );
+   
    ~TestGLCanvas(void);
 
    void OnPaint(wxPaintEvent& event);
    void OnSize(wxSizeEvent& event);
    void OnEraseBackground(wxEraseEvent& event);
+   void OnKeyDown(wxKeyEvent& event);
+   void OnKeyUp(wxKeyEvent& event);
    void InitGL(void);
+   void Rotate( double deg );
    
  private:
- 
-   bool m_init;
+   bool   m_init;
+   GLuint m_gllist;
+   long   m_rleft;
+   long   m_rright;
 
 DECLARE_EVENT_TABLE()
 };

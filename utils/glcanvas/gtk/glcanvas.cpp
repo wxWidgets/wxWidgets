@@ -52,6 +52,26 @@ wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, const wxPalette& 
     wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
 }
 
+wxGLContext::wxGLContext( 
+               bool WXUNUSED(isRGB), wxWindow *win, 
+               const wxPalette& WXUNUSED(palette),
+               const wxGLContext *other        /* for sharing display lists */
+)
+{
+    m_window = win;
+    m_widget = ((wxGLCanvas*)win)->m_glWidget;
+  
+    wxCHECK_RET( g_vi, "invalid visual for OpenGl" );
+    
+    if( other != 0 )
+      m_glContext = glXCreateContext( GDK_DISPLAY(), g_vi, other->m_glContext,
+                                      GL_TRUE );
+    else
+      m_glContext = glXCreateContext( GDK_DISPLAY(), g_vi, None, GL_TRUE );
+    
+    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+}
+
 wxGLContext::~wxGLContext()
 {
     if (!m_glContext) return;
@@ -170,22 +190,62 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
                         int *attribList, 
 			const wxPalette& palette )
 {
-    Create( parent, id, pos, size, style, name, attribList, palette );
+    Create( parent, NULL, id, pos, size, style, name, attribList, palette );
 }
 
-bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
+wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+                        const wxGLContext *shared,
+                        wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, 
+			long style, const wxString& name,
+                        int *attribList, 
+			const wxPalette& palette )
+{			
+    Create( parent, shared, id, pos, size, style, name, attribList, palette );
+}
+
+bool wxGLCanvas::Create( wxWindow *parent, 
+                         const wxGLContext *shared,
+                         wxWindowID id,
                          const wxPoint& pos, const wxSize& size, 
 			 long style, const wxString& name,
                          int *attribList, 
-			 const wxPalette& palette )
+			 const wxPalette& palette)
 {
     if (!attribList)
     {
         int data[] = { GLX_RGBA, 
 	               GLX_DOUBLEBUFFER, 
-		       GLX_DEPTH_SIZE, 1,
+		       GLX_DEPTH_SIZE, 1,  /* use largest available depth buffer */
 		       None };
 	attribList = (int*) data;
+        printf( "using default values\n" );
+    }
+    else
+    {
+      int data[512], arg=0, p=0;
+       
+      while( (attribList[arg]!=0) && (p<512) )
+      {
+        switch( attribList[arg++] )
+        {
+          case WX_GL_RGBA: data[p++] = GLX_RGBA; break;
+          case WX_GL_DOUBLEBUFFER: data[p++] = GLX_DOUBLEBUFFER; break;
+          case WX_GL_DEPTH_SIZE: 
+            data[p++]=GLX_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_RED:
+            data[p++]=GLX_RED_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_GREEN:
+            data[p++]=GLX_GREEN_SIZE; data[p++]=attribList[arg++]; break;
+          case WX_GL_MIN_BLUE:
+            data[p++]=GLX_BLUE_SIZE; data[p++]=attribList[arg++]; break;
+          default:
+            break;
+        }
+      }       
+      data[p] = 0; 
+
+      attribList = (int*) data;
     }
     
     Display *dpy = GDK_DISPLAY();
@@ -209,7 +269,7 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
     GTK_WIDGET_SET_FLAGS( m_glWidget, GTK_CAN_FOCUS );
     
     gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0, m_width, m_height );
-    
+
     gtk_signal_connect( GTK_OBJECT(m_glWidget), "expose_event",
       GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
@@ -219,16 +279,19 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
     /* connect to key press and mouse handlers etc. */  
     ConnectWidget( m_glWidget );
     
+
     /* must be realized for OpenGl output */
     gtk_widget_realize( m_glWidget );
-    
+ 
     gtk_widget_show( m_glWidget );
     
-    m_glContext = new wxGLContext( TRUE, this, palette );
+    m_glContext = new wxGLContext( TRUE, this, palette, shared );
     
     XFree( g_vi );
     g_vi = (XVisualInfo*) NULL;
-    
+
+    gdk_window_set_back_pixmap( m_glWidget->window, None, 0 );
+     
     return TRUE;
 }
 
@@ -249,6 +312,7 @@ void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
     if (m_glContext && GTK_WIDGET_REALIZED(m_glWidget) )
     {
         SetCurrent(); 
+//        gdk_window_set_back_pixmap( gtk_widget_get_parent_window(m_glWidget), None, 0 );
 	
         glViewport(0, 0, (GLint)width, (GLint)height );
         glMatrixMode(GL_PROJECTION);
