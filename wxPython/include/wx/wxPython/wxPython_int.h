@@ -35,7 +35,6 @@
 #include <wx/sashwin.h>
 #include <wx/laywin.h>
 #include <wx/imaglist.h>
-#include <wx/metafile.h>
 #include <wx/stream.h>
 #include <wx/filesys.h>
 #include <wx/fs_inet.h>

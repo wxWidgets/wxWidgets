@@ -619,6 +619,10 @@ public:
 
 #ifdef __WXMSW__
 
+%{
+#include <wx/metafile.h>
+%}
+
 class wxMetaFile : public wxObject {
 public:
     wxMetaFile(const wxString& filename = wxPyEmptyString);
