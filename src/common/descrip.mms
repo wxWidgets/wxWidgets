@@ -98,6 +98,7 @@ OBJECTS1=fs_inet.obj,\
 		helpbase.obj,\
 		http.obj,\
 		iconbndl.obj,\
+		init.obj,\
 		imagall.obj,\
 		imagbmp.obj,\
 		image.obj,\
@@ -227,6 +228,7 @@ SOURCES = \
 		helpbase.cpp,\
 		http.cpp,\
 		iconbndl.cpp,\
+		init.cpp,\
 		imagall.cpp,\
 		imagbmp.cpp,\
 		image.cpp,\
@@ -376,6 +378,7 @@ hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
 iconbndl.obj : iconbndl.cpp
+init.obj : init.cpp
 imagall.obj : imagall.cpp
 imagbmp.obj : imagbmp.cpp
 image.obj : image.cpp
