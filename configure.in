@@ -979,11 +979,9 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   # Generic notebook requires tab dialog
   DEFAULT_wxUSE_TABDIALOG=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
-  DEFAULT_wxUSE_PROGRESSDLG=no
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
