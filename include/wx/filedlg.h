@@ -21,11 +21,7 @@ enum
 #elif defined(__WXGTK__)
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXMAC__)
-#ifdef __DARWIN__
-#include "wx/generic/filedlgg.h"
-#else
 #include "wx/mac/filedlg.h"
-#endif
 #elif defined(__WXPM__)
 #include "wx/os2/filedlg.h"
 #elif defined(__WXSTUBS__)
