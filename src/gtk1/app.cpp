@@ -186,8 +186,14 @@ void wxapp_install_idle_handler()
 
 #if wxUSE_THREADS
 
+static int g_threadUninstallLevel = 0;
+
 void wxapp_install_thread_wakeup()
 {
+    g_threadUninstallLevel++;
+    
+    if (g_threadUninstallLevel != 1) return;
+
     if (wxTheApp->m_wakeUpTimerTag) return;
 
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
@@ -195,6 +201,10 @@ void wxapp_install_thread_wakeup()
 
 void wxapp_uninstall_thread_wakeup()
 {
+    g_threadUninstallLevel--;
+    
+    if (g_threadUninstallLevel != 0) return;
+
     if (!wxTheApp->m_wakeUpTimerTag) return;
 
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
