@@ -29,6 +29,7 @@ class MyCanvas: public wxScrolledWindow
     void OnPaint( wxPaintEvent &event );
     
     wxBitmap  *my_horse;
+    wxBitmap  *my_square;
     
   DECLARE_EVENT_TABLE()
 };
@@ -83,20 +84,24 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   wxMemoryDC dc;
   dc.SelectObject( bitmap );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-  dc.SetPen( *wxTRANSPARENT_PEN );
+  dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
   
   image = bitmap.ConvertToImage();
   image.SaveFile( "../test.png", wxBITMAP_TYPE_PNG );
   
-  image.LoadFile( "../test.png", wxBITMAP_TYPE_PNG );
+  image.LoadFile( "../horse.png", wxBITMAP_TYPE_PNG );
   my_horse = new wxBitmap( image );
+  
+  image.LoadFile( "../test.png", wxBITMAP_TYPE_PNG );
+  my_square = new wxBitmap( image );
 }
 
 MyCanvas::~MyCanvas(void)
 {
   delete my_horse;
+  delete my_square;
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -105,12 +110,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   PrepareDC( dc );
 
   dc.DrawText( "Loaded image", 30, 100 );
-  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 120 );
+  if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 120 );
   
   dc.DrawText( "Drawn directly", 150, 100 );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-  dc.SetPen( *wxTRANSPARENT_PEN );
+  dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 120, 100, 100 );
+  
+  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 240 );
 }
 
 // MyFrame

@@ -137,7 +137,6 @@ wxBitmap::wxBitmap( char **bits )
     gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
   
     M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;  // ?
-   
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
   
@@ -411,17 +410,18 @@ wxBitmap::wxBitmap( const wxImage &image )
   
     // Retrieve depth  
   
-    M_BMPDATA->m_bpp = data_image->depth;
-  
-    int render_depth = 8;
-    if (M_BMPDATA->m_bpp > 8) render_depth = M_BMPDATA->m_bpp;
-  
+    GdkVisual *visual = gdk_window_get_visual( M_BMPDATA->m_pixmap );
+    if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
+    int bpp = visual->depth;
+    if ((bpp == 16) && (visual->red_mask == 0xfc00)) bpp = 15;
+    if (bpp < 8) bpp = 8;
+    
     // Render
 
     enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
     byte_order b_o = RGB;
   
-    if (render_depth >= 24)
+    if (bpp >= 24)
     {
         GdkVisual *visual = gdk_visual_get_system();
         if ((visual->red_mask > visual->green_mask) && (visual->green_mask > visual->blue_mask))      b_o = RGB;
@@ -458,7 +458,7 @@ wxBitmap::wxBitmap( const wxImage &image )
 	            gdk_image_put_pixel( mask_image, x, y, 0 );
 	    }
 	
-	    switch (render_depth)
+	    switch (bpp)
 	    {
 	        case 8:
 	        {
@@ -554,7 +554,8 @@ wxImage wxBitmap::ConvertToImage() const
     GdkVisual *visual = gdk_window_get_visual( M_BMPDATA->m_pixmap );
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
-  
+    if ((bpp == 16) && (visual->red_mask == 0xfc00)) bpp = 15;
+
     GdkColormap *cmap = gtk_widget_get_default_colormap();
   
     long pos = 0;

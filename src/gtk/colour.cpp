@@ -208,6 +208,8 @@ void wxColour::CalcPixel( GdkColormap *cmap )
     M_COLDATA->m_hasPixel = gdk_color_alloc( cmap, &M_COLDATA->m_color );
   }
   
+  int p = M_COLDATA->m_color.pixel;
+  
   M_COLDATA->m_colormap = cmap;
 }
 
