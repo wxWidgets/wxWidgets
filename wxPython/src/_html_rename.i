@@ -22,6 +22,13 @@
 %rename(HTML_COND_ISANCHOR)                 wxHTML_COND_ISANCHOR;
 %rename(HTML_COND_ISIMAGEMAP)               wxHTML_COND_ISIMAGEMAP;
 %rename(HTML_COND_USER)                     wxHTML_COND_USER;
+%rename(HTML_FONT_SIZE_1)                   wxHTML_FONT_SIZE_1;
+%rename(HTML_FONT_SIZE_2)                   wxHTML_FONT_SIZE_2;
+%rename(HTML_FONT_SIZE_3)                   wxHTML_FONT_SIZE_3;
+%rename(HTML_FONT_SIZE_4)                   wxHTML_FONT_SIZE_4;
+%rename(HTML_FONT_SIZE_5)                   wxHTML_FONT_SIZE_5;
+%rename(HTML_FONT_SIZE_6)                   wxHTML_FONT_SIZE_6;
+%rename(HTML_FONT_SIZE_7)                   wxHTML_FONT_SIZE_7;
 %rename(HW_SCROLLBAR_NEVER)                 wxHW_SCROLLBAR_NEVER;
 %rename(HW_SCROLLBAR_AUTO)                  wxHW_SCROLLBAR_AUTO;
 %rename(HW_NO_SELECTION)                    wxHW_NO_SELECTION;

@@ -75,6 +75,15 @@ enum {
     wxHTML_COND_ISANCHOR,
     wxHTML_COND_ISIMAGEMAP,
     wxHTML_COND_USER,
+
+
+    wxHTML_FONT_SIZE_1,
+    wxHTML_FONT_SIZE_2,
+    wxHTML_FONT_SIZE_3,
+    wxHTML_FONT_SIZE_4,
+    wxHTML_FONT_SIZE_5,
+    wxHTML_FONT_SIZE_6,
+    wxHTML_FONT_SIZE_7,
 };
 
 
