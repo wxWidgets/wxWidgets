@@ -7,5 +7,6 @@ TN0006   Making and installing RPMs for wxWindows
 TN0007   Using and modifying the BC++ IDE files
 TN0008   How to learn wxWindows programming
 TN0009   Creating and converting icons
+TN0010   Compiling wxWindows applications in the VC++ IDE
 
 Version: $Id$
