@@ -1,2 +1,3 @@
 @echo off
-call bash.bat b.win32 %*
+
+call bash.bat -c "b.win32 %*"
