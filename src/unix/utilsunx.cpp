@@ -342,7 +342,7 @@ bool wxGetHostName(char *buf, int sz)
 
     // we're using uname() which is POSIX instead of less standard sysinfo()
 #if defined(HAVE_UNAME)
-    utsname uts;
+    struct utsname uts;
     bool ok = uname(&uts) != -1;
     if ( ok )
     {
