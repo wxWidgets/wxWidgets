@@ -585,10 +585,6 @@ SOURCE=.\generic\dragimgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\fdrepdlg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
@@ -915,6 +911,10 @@ SOURCE=.\msw\dummy.cpp
 # Begin Source File
 
 SOURCE=.\msw\enhmeta.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\fdrepdlg.cpp
 # End Source File
 # Begin Source File
 
