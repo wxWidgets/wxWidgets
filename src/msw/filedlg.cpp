@@ -458,6 +458,7 @@ int wxFileDialog::ShowModal()
             if ( m_dir.Last() != _T('\\') )
                 dir += _T('\\');
 
+            m_filterIndex = (int)of.nFilterIndex - 1;
             m_fileNames.Sort();
             m_path = dir + m_fileName;
         }
