@@ -15,11 +15,25 @@
 #include "wx/tbarbase.h"     // the base class for all toolbars
 
 #if wxUSE_TOOLBAR
-    #if !wxUSE_TOOLBAR_NATIVE
-        // the wxToolBarSimple is *the* toolbar class in this case
-        #define wxToolBarSimple wxToolBar
-    
+    #if !wxUSE_TOOLBAR_NATIVE || defined(__WXUNIVERSAL__)
         #include "wx/tbarsmpl.h"
+
+        class WXDLLEXPORT wxToolBar : public wxToolBarSimple
+        {
+        public:
+            wxToolBar() { }
+
+            wxToolBar(wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                      const wxString& name = wxToolBarNameStr)
+                : wxToolBarSimple(parent, id, pos, size, style, name) { }
+
+        private:
+            DECLARE_DYNAMIC_CLASS(wxToolBar)
+        };
     #else // wxUSE_TOOLBAR_NATIVE
         #if defined(__WXMSW__) && defined(__WIN95__)
            #include "wx/msw/tbar95.h"

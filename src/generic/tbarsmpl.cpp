@@ -85,6 +85,12 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
+#if !wxUSE_TOOLBAR_NATIVE || defined(__WXUNIVERSAL__)
+    #include "wx/toolbar.h"
+
+    IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarSimple)
+#endif
+
 BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
     EVT_SIZE(wxToolBarSimple::OnSize)
     EVT_SCROLL(wxToolBarSimple::OnScroll)
