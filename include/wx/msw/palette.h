@@ -32,13 +32,13 @@ protected:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
 public:
   wxPalette(void);
-  inline wxPalette(const wxPalette& palette) : wxGDIObject(palette) { Ref(palette); }
+  inline wxPalette(const wxPalette& palette) : wxPaletteBase(palette) { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette(void);
@@ -57,9 +57,6 @@ public:
   inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
   void SetHPALETTE(WXHPALETTE pal);
 };
-
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
 
 #endif
     // _WX_PALETTE_H_

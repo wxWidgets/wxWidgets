@@ -24,7 +24,7 @@ class WXDLLEXPORT wxPalette;
 class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 {
     DECLARE_NO_COPY_CLASS(wxPaletteRefData)
-    
+
     friend class WXDLLEXPORT wxPalette;
 public:
     wxPaletteRefData();
@@ -36,14 +36,14 @@ protected:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
 public:
   wxPalette();
   wxPalette(const wxPalette& palette)
-      : wxGDIObject()
+      : wxPaletteBase()
   { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);

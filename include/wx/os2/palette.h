@@ -30,7 +30,7 @@ public:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
     DECLARE_DYNAMIC_CLASS(wxPalette)
 
@@ -68,15 +68,12 @@ public:
     inline bool       operator != (const wxPalette& rPalette) const
         { return m_refData != rPalette.m_refData; }
 
-    virtual bool FreeResource(bool bForce = FALSE);
+    virtual bool FreeResource(bool bForce = false);
 
     inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
     void              SetHPALETTE(WXHPALETTE hPalette);
     void              SetPS(HPS hPS);
 }; // end of CLASS wxPalette
-
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
 
 #endif
     // _WX_PALETTE_H_

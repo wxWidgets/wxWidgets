@@ -31,7 +31,7 @@ class wxPalette;
 // wxPalette
 //-----------------------------------------------------------------------------
 
-class wxPalette: public wxGDIObject
+class wxPalette: public wxPaletteBase
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
@@ -44,7 +44,7 @@ class wxPalette: public wxGDIObject
     wxPalette& operator = ( const wxPalette& palette );
     bool operator == ( const wxPalette& palette );
     bool operator != ( const wxPalette& palette );
-    bool Ok() const;
+    virtual bool Ok() const;
 
     bool Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     int GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const;
@@ -52,8 +52,5 @@ class wxPalette: public wxGDIObject
 
     // no data
 };
-
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
 
 #endif // __WX_PALETTEG_H__

@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ protected:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
@@ -52,14 +52,11 @@ public:
   inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
-  virtual bool FreeResource(bool force = FALSE);
+  virtual bool FreeResource(bool force = false);
 
   inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
   void SetHPALETTE(WXHPALETTE pal);
 };
-
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
 
 #endif
     // _WX_PALETTE_H_

@@ -23,7 +23,7 @@ I have implemented basic colormap support for the X11 versions of
 wxWidgets, notably wxPalette::Create().  The way I did it is to
 allocate additional read-only color cells in the default colormap.  In
 general you will get arbitrary pixel values assigned to these new
-cells and therefore I added a method wxColourMap::TransferBitmap()
+cells and therefore I added a method wxPalette::TransferBitmap()
 which maps the pixel values 0..n to the real ones obtained with
 Create().  This is only implemented for the popular case of 8-bit
 depth.
@@ -66,7 +66,7 @@ wxXPalette::wxXPalette()
     m_pix_array_n = 0;
     m_pix_array = (unsigned long*) 0;
     m_display = (WXDisplay*) 0;
-    m_destroyable = FALSE;
+    m_destroyable = false;
 }
 
 wxPaletteRefData::wxPaletteRefData()
@@ -101,7 +101,7 @@ wxPaletteRefData::~wxPaletteRefData()
 #endif
             delete [] pix_array;
         }
-        
+
         if (destroyable)
             XFreeColormap(display, cmap);
 
@@ -129,7 +129,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     UnRef();
 
     if (!n) {
-        return FALSE;
+        return false;
     }
 
     m_refData = new wxPaletteRefData;
@@ -145,7 +145,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 
     pix_array = new unsigned long[n];
     if (!pix_array)
-        return FALSE;
+        return false;
 
     pix_array_n = n;
     xcol.flags = DoRed | DoGreen | DoBlue;
@@ -162,10 +162,10 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     c->m_pix_array = pix_array;
     c->m_cmap = (WXColormap) cmap;
     c->m_display = (WXDisplay*) display;
-    c->m_destroyable = FALSE;
+    c->m_destroyable = false;
     M_PALETTEDATA->m_palettes.Append(c);
 
-    return TRUE;
+    return true;
 }
 
 int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
@@ -180,13 +180,13 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
 bool wxPalette::GetRGB(int index, unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue)) const
 {
     if ( !m_refData )
-        return FALSE;
+        return false;
 
     if (index < 0 || index > 255)
-        return FALSE;
+        return false;
 
     // TODO
-    return FALSE;
+    return false;
 }
 
 WXColormap wxPalette::GetXColormap(WXDisplay* display) const
@@ -219,7 +219,7 @@ WXColormap wxPalette::GetXColormap(WXDisplay* display) const
     c->m_pix_array = new unsigned long[pix_array_n];
     c->m_display = display;
     c->m_cmap = wxTheApp->GetMainColormap(display);
-    c->m_destroyable = FALSE;
+    c->m_destroyable = false;
 
     xcol.flags = DoRed | DoGreen | DoBlue;
     int i;
@@ -253,10 +253,10 @@ bool wxPalette::TransferBitmap(void *data, int depth, int size)
                 uptr++;
             }
 
-            return TRUE;
+            return true;
         }
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -310,9 +310,9 @@ bool wxPalette::TransferBitmap8(unsigned char *data, unsigned long sz,
         break;
              }
     default:
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)

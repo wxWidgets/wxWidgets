@@ -32,7 +32,7 @@ struct palette_t;
 // wxPalette
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
     DECLARE_DYNAMIC_CLASS(wxPalette)
 
@@ -44,21 +44,16 @@ public:
     wxPalette& operator = (const wxPalette& palette);
     bool operator == (const wxPalette& palette) const;
     bool operator != (const wxPalette& palette) const;
-    bool Ok() const;
+    virtual bool Ok() const;
 
     bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     int GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const;
     bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
     // implementation
-    int GetColoursCount() const;   
-    // FIXME_MGL -- make this method standard part of wx API
-    // FIXME_MGL -- create wxXXXBase classes for all GDI stuff (Vadim wants that)
-    
+    virtual int GetColoursCount() const;
+
     palette_t *GetMGLpalette_t() const;
 };
-
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
 
 #endif // __WX_PALETTE_H__

@@ -1,12 +1,26 @@
 #ifndef _WX_PALETTE_H_BASE_
 #define _WX_PALETTE_H_BASE_
 
-// include it to get wxUSE_PALETTE value
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_PALETTE
 
-#if defined(__WXMSW__)
+#include "wx/object.h"
+#include "wx/gdiobj.h"
+
+// wxBrushBase
+class WXDLLEXPORT wxPaletteBase: public wxGDIObject
+{
+public:
+    virtual ~wxPaletteBase() { }
+
+    virtual bool Ok() const = 0;
+    virtual int GetColoursCount() const { wxFAIL_MSG( _T("not implemented") ); return 0; };
+};
+
+#if defined(__PALMOS__)
+    #include "wx/palmos/palette.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/palette.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/palette.h"
@@ -20,6 +34,11 @@
     #include "wx/mac/palette.h"
 #elif defined(__WXPM__)
     #include "wx/os2/palette.h"
+#endif
+
+#if WXWIN_COMPATIBILITY_2_4
+    #define wxColorMap wxPalette
+    #define wxColourMap wxPalette
 #endif
 
 #endif // wxUSE_PALETTE
