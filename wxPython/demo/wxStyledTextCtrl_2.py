@@ -29,8 +29,8 @@ else:
               'mono' : 'Courier',
               'helv' : 'Helvetica',
               'other': 'new century schoolbook',
-              'size' : 10,
-              'size2': 18,
+              'size' : 12,
+              'size2': 10,
              }
 
 
