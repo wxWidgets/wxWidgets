@@ -5610,6 +5610,9 @@ if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     USE_HTML=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+    if test "$wxUSE_MAC" = 1; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
+    fi
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
@@ -5821,7 +5824,7 @@ dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
 
 if test "$wxUSE_MAC" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Carbon -framework System"
+    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework WebKit -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
