@@ -368,48 +368,6 @@ local uLong unzlocal_SearchCentralDir(fin)
 	return uPosFound;
 }
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-void wxUnix2MacFilename (char *s) ;
-void
-wxUnix2MacFilename (char *s)
-{
-        if (s)
-        {
-                if ( *s == '.' )
-                {
-                        /* relative path , since it goes on with slash which is translated to a : */
-                        memmove( s , s+1 ,strlen( s ) ) ;
-                }
-                else if ( *s == '/' )
-                {
-                        /* absolute path -> on mac just start with the drive name */
-                        memmove( s , s+1 ,strlen( s ) ) ;
-                }
-                else
-                {
-/*                        wxASSERT_MSG( 1 , "unkown path beginning" ) ; */
-                }
-                while (*s)
-                {
-                        if (*s == '/' || *s == '\\')
-                        {
-                        	/* convert any back-directory situations */
-                        	if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
-                        	{
-                              *s = ':';
-                        			memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
-                        	}
-                        	else
-                              *s = ':';
-                        }
-
-                        s++ ;
-                }
-        }
-}
-extern char * wxBuffer ;
-#endif
-
 /*
   Open a Zip file. path contain the full pathname (by example,
      on a Windows NT computer "c:\\test\\zlib109.zip" or on an Unix computer
@@ -440,13 +398,8 @@ extern unzFile ZEXPORT unzOpen (path)
     if (unz_copyright[0]!=' ')
         return NULL;
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-	strcpy( wxBuffer , path ) ;
-	wxUnix2MacFilename( wxBuffer ) ;
-	fin=fopen(wxBuffer,"rb");
-#else
     fin=fopen(path,"rb");
-#endif
+
 	if (fin==NULL)
 		return NULL;
 
