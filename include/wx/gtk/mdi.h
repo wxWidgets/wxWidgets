@@ -116,6 +116,7 @@ public:
     virtual void SetMenuBar( wxMenuBar *menu_bar );
     virtual wxMenuBar *GetMenuBar() const;
 
+    wxSize GetClientSize() const { return wxFrame::GetClientSize(); }
     virtual void GetClientSize( int *width, int *height ) const;
     virtual void AddChild( wxWindowBase *child );
 
