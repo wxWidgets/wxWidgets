@@ -131,6 +131,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_thread.o \
 	$(OBJS)\basedll_utils.o \
 	$(OBJS)\basedll_utilsexc.o \
+	$(OBJS)\basedll_bookctrl.o \
 	$(OBJS)\basedll_event.o \
 	$(OBJS)\basedll_fs_mem.o \
 	$(OBJS)\basedll_msgout.o \
@@ -211,6 +212,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_thread.o \
 	$(OBJS)\baselib_utils.o \
 	$(OBJS)\baselib_utilsexc.o \
+	$(OBJS)\baselib_bookctrl.o \
 	$(OBJS)\baselib_event.o \
 	$(OBJS)\baselib_fs_mem.o \
 	$(OBJS)\baselib_msgout.o \
@@ -232,6 +234,7 @@ COREDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.o \
+	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_event.o \
 	$(OBJS)\coredll_fs_mem.o \
 	$(OBJS)\coredll_msgout.o \
@@ -252,6 +255,7 @@ CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-I..\..\src\expat\lib -DwxUSE_BASE=0 $(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.o \
+	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_event.o \
 	$(OBJS)\corelib_fs_mem.o \
 	$(OBJS)\corelib_msgout.o \
@@ -431,6 +435,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_thread.o \
 	$(OBJS)\monodll_utils.o \
 	$(OBJS)\monodll_utilsexc.o \
+	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_event.o \
 	$(OBJS)\monodll_fs_mem.o \
 	$(OBJS)\monodll_msgout.o \
@@ -524,6 +529,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_thread.o \
 	$(OBJS)\monolib_utils.o \
 	$(OBJS)\monolib_utilsexc.o \
+	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_event.o \
 	$(OBJS)\monolib_fs_mem.o \
 	$(OBJS)\monolib_msgout.o \
@@ -2776,6 +2782,9 @@ $(OBJS)\basedll_appbase.o: ..\..\src\common\appbase.cpp
 $(OBJS)\basedll_basemsw.o: ..\..\src\msw\basemsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_bookctrl.o: ..\..\src\common\bookctrl.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_clntdata.o: ..\..\src\common\clntdata.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -2981,6 +2990,9 @@ $(OBJS)\baselib_appbase.o: ..\..\src\common\appbase.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_basemsw.o: ..\..\src\msw\basemsw.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_bookctrl.o: ..\..\src\common\bookctrl.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_clntdata.o: ..\..\src\common\clntdata.cpp
@@ -3254,6 +3266,9 @@ $(OBJS)\coredll_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 endif
+
+$(OBJS)\coredll_bookctrl.o: ..\..\src\common\bookctrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_brush.o: ..\..\src\msw\brush.cpp
@@ -4463,6 +4478,9 @@ $(OBJS)\corelib_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 endif
+
+$(OBJS)\corelib_bookctrl.o: ..\..\src\common\bookctrl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_brush.o: ..\..\src\msw\brush.cpp
@@ -5840,6 +5858,9 @@ $(OBJS)\monodll_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 endif
+
+$(OBJS)\monodll_bookctrl.o: ..\..\src\common\bookctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_brush.o: ..\..\src\msw\brush.cpp
@@ -7388,6 +7409,9 @@ $(OBJS)\monolib_bmpbuttn.o: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 endif
+
+$(OBJS)\monolib_bookctrl.o: ..\..\src\common\bookctrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_brush.o: ..\..\src\msw\brush.cpp

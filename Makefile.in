@@ -277,6 +277,7 @@ ALL_BASE_SOURCES =  \
 	src/os2/dir.cpp \
 	src/os2/utils.cpp \
 	src/os2/utilsexc.cpp \
+	src/common/bookctrl.cpp \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
@@ -368,6 +369,7 @@ BASEDLL_OBJECTS =  \
 	basedll_zipstrm.o \
 	basedll_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
+	basedll_bookctrl.o \
 	basedll_event.o \
 	basedll_fs_mem.o \
 	basedll_msgout.o \
@@ -434,6 +436,7 @@ BASELIB_OBJECTS =  \
 	baselib_zipstrm.o \
 	baselib_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
+	baselib_bookctrl.o \
 	baselib_event.o \
 	baselib_fs_mem.o \
 	baselib_msgout.o \
@@ -451,6 +454,7 @@ COREDLL_CXXFLAGS = $(__coredll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_CORE \
 	-DwxUSE_BASE=0 $(CXXFLAGS) $(PIC_FLAG)
 COREDLL_OBJECTS =  \
+	coredll_bookctrl.o \
 	coredll_event.o \
 	coredll_fs_mem.o \
 	coredll_msgout.o \
@@ -467,6 +471,7 @@ CORELIB_CXXFLAGS = $(__corelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_BASE=0 $(CXXFLAGS)
 CORELIB_OBJECTS =  \
+	corelib_bookctrl.o \
 	corelib_event.o \
 	corelib_fs_mem.o \
 	corelib_msgout.o \
@@ -619,6 +624,7 @@ MONODLL_OBJECTS =  \
 	monodll_zipstrm.o \
 	monodll_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
+	monodll_bookctrl.o \
 	monodll_event.o \
 	monodll_fs_mem.o \
 	monodll_msgout.o \
@@ -698,6 +704,7 @@ MONOLIB_OBJECTS =  \
 	monolib_zipstrm.o \
 	monolib_zstream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
+	monolib_bookctrl.o \
 	monolib_event.o \
 	monolib_fs_mem.o \
 	monolib_msgout.o \
@@ -1676,7 +1683,6 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/gauge.h \
 	wx/os2/gdiimage.h \
 	wx/os2/gdiobj.h \
-	wx/os2/gsockos2.h \
 	wx/os2/helpwin.h \
 	wx/os2/icon.h \
 	wx/os2/iniconf.h \
@@ -1787,7 +1793,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = wx/msw/gsockmsw.h
-@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = 
+@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_TOOLKIT_MAC@NET_PLATFORM_HDR = wx/mac/gsockmac.h
 @COND_TOOLKIT_COCOA@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
@@ -3401,7 +3407,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_gauge.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
-	monodll_gsocket.o \
 	monodll_gsockpm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
@@ -3438,6 +3443,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
+	monodll_utilsgui.o \
 	monodll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
@@ -3789,7 +3795,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_gauge.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
-	monolib_gsocket.o \
 	monolib_gsockpm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
@@ -3826,6 +3831,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
+	monolib_utilsgui.o \
 	monolib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
@@ -4177,7 +4183,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_gauge.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
-	coredll_gsocket.o \
 	coredll_gsockpm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
@@ -4214,6 +4219,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
+	coredll_utilsgui.o \
 	coredll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
@@ -4565,7 +4571,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_gauge.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
-	corelib_gsocket.o \
 	corelib_gsockpm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
@@ -4602,6 +4607,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
+	corelib_utilsgui.o \
 	corelib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
@@ -5410,22 +5416,22 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS)
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = 
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_1)
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = 
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_2)
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = 
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_3)
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = 
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_TOOLKIT_GTK@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
@@ -6234,6 +6240,9 @@ basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6517,6 +6526,9 @@ baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -6990,6 +7002,9 @@ coredll_aga.o: $(srcdir)/src/mac/aga.cpp
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+coredll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_brush.o: $(srcdir)/src/os2/brush.cpp
@@ -7819,9 +7834,6 @@ coredll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@coredll_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-coredll_gsocket.o: $(srcdir)/src/os2/gsocket.c
-	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
 @COND_TOOLKIT_GTK_USE_GUI_1@coredll_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
@@ -8810,6 +8822,9 @@ coredll_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_utilsgui.o: $(srcdir)/src/os2/utilsgui.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -9047,6 +9062,9 @@ corelib_aga.o: $(srcdir)/src/mac/aga.cpp
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_brush.o: $(srcdir)/src/os2/brush.cpp
@@ -9876,9 +9894,6 @@ corelib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@corelib_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-corelib_gsocket.o: $(srcdir)/src/os2/gsocket.c
-	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
 @COND_TOOLKIT_GTK_USE_GUI_1@corelib_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.c
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
@@ -10867,6 +10882,9 @@ corelib_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_utilsgui.o: $(srcdir)/src/os2/utilsgui.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 corelib_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -11524,6 +11542,9 @@ monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_brush.o: $(srcdir)/src/os2/brush.cpp
@@ -12477,8 +12498,8 @@ monodll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_gsocket.o: $(srcdir)/src/os2/gsocket.c
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+@COND_PLATFORM_OS2_1@monodll_gsocket.o: $(srcdir)/src/os2/gsocket.c
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monodll_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
@@ -13749,6 +13770,9 @@ monodll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_utilsgui.o: $(srcdir)/src/os2/utilsgui.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -14046,6 +14070,9 @@ monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_bmpmotif.o: $(srcdir)/src/motif/bmpmotif.cpp
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_brush.o: $(srcdir)/src/os2/brush.cpp
@@ -14999,8 +15026,8 @@ monolib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_gsocket.o: $(srcdir)/src/os2/gsocket.c
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+@COND_PLATFORM_OS2_1@monolib_gsocket.o: $(srcdir)/src/os2/gsocket.c
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monolib_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
@@ -16271,6 +16298,9 @@ monolib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_utilsgui.o: $(srcdir)/src/os2/utilsgui.cpp
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -16422,6 +16452,9 @@ netdll_ftp.o: $(srcdir)/src/common/ftp.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
+@COND_PLATFORM_OS2_1@netdll_gsocket.o: $(srcdir)/src/os2/gsocket.c
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
 @COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
@@ -16471,6 +16504,9 @@ netlib_ftp.o: $(srcdir)/src/common/ftp.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+@COND_PLATFORM_OS2_1@netlib_gsocket.o: $(srcdir)/src/os2/gsocket.c
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/msw/gsocket.c
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<

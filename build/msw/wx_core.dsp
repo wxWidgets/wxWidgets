@@ -472,6 +472,10 @@ SOURCE=..\..\src\common\bmpbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\bookctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\choiccmn.cpp
 # End Source File
 # Begin Source File

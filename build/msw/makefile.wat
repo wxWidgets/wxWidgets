@@ -2111,6 +2111,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_thread.obj &
 	$(OBJS)\basedll_utils.obj &
 	$(OBJS)\basedll_utilsexc.obj &
+	$(OBJS)\basedll_bookctrl.obj &
 	$(OBJS)\basedll_event.obj &
 	$(OBJS)\basedll_fs_mem.obj &
 	$(OBJS)\basedll_msgout.obj &
@@ -2192,6 +2193,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_thread.obj &
 	$(OBJS)\baselib_utils.obj &
 	$(OBJS)\baselib_utilsexc.obj &
+	$(OBJS)\baselib_bookctrl.obj &
 	$(OBJS)\baselib_event.obj &
 	$(OBJS)\baselib_fs_mem.obj &
 	$(OBJS)\baselib_msgout.obj &
@@ -2213,6 +2215,7 @@ COREDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(CXXFLAGS) /fh=$(OBJS)\wxprec_coredll.pch
 COREDLL_OBJECTS =  &
 	$(OBJS)\coredll_dummy.obj &
+	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_event.obj &
 	$(OBJS)\coredll_fs_mem.obj &
 	$(OBJS)\coredll_msgout.obj &
@@ -2234,6 +2237,7 @@ CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	/fh=$(OBJS)\wxprec_corelib.pch
 CORELIB_OBJECTS =  &
 	$(OBJS)\corelib_dummy.obj &
+	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_event.obj &
 	$(OBJS)\corelib_fs_mem.obj &
 	$(OBJS)\corelib_msgout.obj &
@@ -2416,6 +2420,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_thread.obj &
 	$(OBJS)\monodll_utils.obj &
 	$(OBJS)\monodll_utilsexc.obj &
+	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_event.obj &
 	$(OBJS)\monodll_fs_mem.obj &
 	$(OBJS)\monodll_msgout.obj &
@@ -2510,6 +2515,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_thread.obj &
 	$(OBJS)\monolib_utils.obj &
 	$(OBJS)\monolib_utilsexc.obj &
+	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_event.obj &
 	$(OBJS)\monolib_fs_mem.obj &
 	$(OBJS)\monolib_msgout.obj &
@@ -2869,6 +2875,9 @@ $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 $(OBJS)\basedll_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -3074,6 +3083,9 @@ $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
@@ -3347,6 +3359,9 @@ $(OBJS)\coredll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
+
+$(OBJS)\coredll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
@@ -4556,6 +4571,9 @@ $(OBJS)\corelib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
+
+$(OBJS)\corelib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
@@ -5933,6 +5951,9 @@ $(OBJS)\monodll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
+
+$(OBJS)\monodll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
@@ -7481,6 +7502,9 @@ $(OBJS)\monolib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
+
+$(OBJS)\monolib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
