@@ -107,7 +107,7 @@ long      wxApp::s_lastModifiers = 0 ;
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
 bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
-long      wxApp::s_macPreferencesMenuItemId = 0 ;
+long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
@@ -570,7 +570,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #ifndef __DARWIN__
 #  if __option(profile)
-    ProfilerInit( collectDetailed, bestTimeBase , 20000 , 40 ) ;
+    ProfilerInit( collectDetailed, bestTimeBase , 40000 , 50 ) ;
 #  endif
 #endif
 
