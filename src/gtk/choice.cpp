@@ -111,6 +111,9 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_strings = new wxSortedArrayString;
     }
 
+    // begin with no selection
+    m_selection_hack = wxNOT_FOUND;
+
     GtkWidget *menu = gtk_menu_new();
 
     for (int i = 0; i < n; i++)
@@ -153,6 +156,13 @@ int wxChoice::DoInsert( const wxString &item, int pos )
         return DoAppend(item);
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
+
+    // if the item to insert is at or before the selection, and the selection is valid
+    if ((pos <= m_selection_hack) && (m_selection_hack != wxNOT_FOUND))
+    {
+        // move the selection forward one
+        m_selection_hack++;
+    }
 
     return GtkAddHelper(menu, pos, item);
 }
@@ -224,6 +234,9 @@ void wxChoice::Clear()
 
     if ( m_strings )
         m_strings->Clear();
+
+    // begin with no selection
+    m_selection_hack = wxNOT_FOUND;
 }
 
 void wxChoice::Delete( int n )
@@ -236,6 +249,18 @@ void wxChoice::Delete( int n )
         count = GetCount();
 
     wxCHECK_RET( n >= 0 && n < count, _T("invalid index in wxChoice::Delete") );
+
+    // if the item to delete is before the selection, and the selection is valid
+    if ((n < m_selection_hack) && (m_selection_hack != wxNOT_FOUND))
+    {
+        // move the selection back one
+        m_selection_hack--;
+    }
+    else if (n == m_selection_hack)
+    {
+        // invalidate the selection
+        m_selection_hack = wxNOT_FOUND;
+    }
 
     const bool hasClientData = m_clientDataItemsType != wxClientData_None;
     const bool hasObjectData = m_clientDataItemsType == wxClientData_Object;
@@ -329,6 +354,10 @@ int wxChoice::GetSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
 
+    // this has the same (if not better) behaviour as the following commented code
+    return m_selection_hack;
+
+    /*
 #ifdef __WXGTK20__
 
     return gtk_option_menu_get_history( GTK_OPTION_MENU(m_widget) );
@@ -348,6 +377,7 @@ int wxChoice::GetSelection() const
 
     return -1;
 #endif
+    */
 }
 
 void wxChoice::SetString( int n, const wxString& str )
@@ -435,6 +465,24 @@ void wxChoice::SetSelection( int n )
 
     int tmp = n;
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
+
+    // set the local selection variable manually
+    if ((n >= 0) && (n < GetCount()))
+    {
+        // a valid selection has been made
+        m_selection_hack = n;
+    }
+    else if ((n == wxNOT_FOUND) || (GetCount() == 0))
+    {
+        // invalidates the selection if there are no items
+        // or if it is specifically set to wxNOT_FOUND
+        m_selection_hack = wxNOT_FOUND;
+    }
+    else
+    {
+        // this selects the first item by default if the selection is out of bounds
+        m_selection_hack = 0;
+    }
 }
 
 void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
