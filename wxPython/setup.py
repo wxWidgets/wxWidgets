@@ -17,7 +17,7 @@ VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 5
 VER_RELEASE      = 1
 VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWindows
-VER_FLAGS        = "p7"   # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = "p8"   # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -1220,7 +1220,6 @@ if __name__ == "__main__":
                           'wx.lib.editor',
                           'wx.lib.mixins',
                           'wx.py',
-                          'wx.py.wxd',
                           'wx.tools',
                           'wx.tools.XRCed',
                           ],
