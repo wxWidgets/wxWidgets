@@ -115,8 +115,8 @@ inline void operator delete[] (void * buf)
 }
 #endif
 
-// VC++ 6.0
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+// VC++ 6.0 and MWERKS
+#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || defined(__MWERKS__)
 inline void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
   wxDebugFree(pData, FALSE);

@@ -513,7 +513,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
         /* sck->m_error is set in _GSocket_Connect_Timeout */
       }
 
-      return err;
+      return (GSocketError) err;
     }
 
     /* If connect failed with EWOULDBLOCK and the GSocket object

@@ -14,9 +14,12 @@
     #define __MAC__
     #define __WXMAC__
 #elif (__MWERKS__ >= 0x0900) && __INTEL__
+    #define WIN32
+    #define _WINDOWS
     #define __WXMSW__
     #define __WINDOWS__
     #define __WIN95__
+    #define __WIN32__
     #define STRICT
     #define NOMINMAX
 #elif __BEOS__
@@ -30,7 +33,7 @@
     #include <ansi_prefix.win32.h>
     #include <ansi_parms.h>
     #ifdef __MWERKS__
-    #if defined( __MSL__ ) && __MSL__ >= 0x5012
+    #if defined( __MSL__ ) && __MSL__ >= 0x5012 && __MSL__ < 0x7000
 			#define	fileno	_fileno
 			#define	fdopen	_fdopen
 			#define	tell	_tell
@@ -66,6 +69,6 @@ extern "C"
 	char *strdup(const char *s) ;
 	int	isascii( int c ) ;
 #ifdef __cplusplus
-} ;
+}
 #endif
 

@@ -309,7 +309,7 @@ GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 #ifdef __cplusplus
-};
+}
 #endif /* __cplusplus */
 
 

@@ -62,7 +62,7 @@
 #if defined(__VISUALC__) || \
     (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__)) || \
-    defined(__WATCOMC__)
+    defined(__WATCOMC__) || defined(__MWERKS__)
 
     #undef wxUSE_BEGIN_THREAD
     #define wxUSE_BEGIN_THREAD

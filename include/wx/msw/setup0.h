@@ -129,7 +129,7 @@
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
 // this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for mingw / cygwin
+// ignored for mingw / cygwin / CodeWarrior
 //
 // Default is 0
 //
@@ -1054,6 +1054,12 @@
 #else
 #   define wxUSE_NORLANDER_HEADERS 0
 #endif
+#endif
+
+// wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior
+#if defined(__MWERKS__)
+    #undef wxUSE_DEBUG_NEW_ALWAYS
+    #define wxUSE_DEBUG_NEW_ALWAYS      0
 #endif
 
 #if defined(__GNUWIN32__)

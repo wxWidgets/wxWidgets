@@ -696,7 +696,7 @@ bool wxDebugContext::Dump(void)
 
 //  if (TRUE)
   {
-    wxChar* appName = wxT("application");
+    wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr("");
     if (wxTheApp)
     {
@@ -755,7 +755,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
 //  if (TRUE)
   {
-    wxChar* appName = wxT("application");
+    wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr(wxT(""));
     if (wxTheApp)
     {
@@ -789,7 +789,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 //    if (detailed && (data != (void*)m_debugStream) && (data != (void*) m_streamBuf))
       if (detailed && (data != (void*) wxLog::GetActiveTarget()))
     {
-      wxChar *className = wxT("nonobject");
+      wxChar *className = (wxChar*) wxT("nonobject");
       if (st->m_isObject && st->GetActualData())
       {
         wxObject *obj = (wxObject *)st->GetActualData();
@@ -855,7 +855,7 @@ bool wxDebugContext::PrintClasses(void)
 
 //  if (TRUE)
   {
-    wxChar* appName = wxT("application");
+    wxChar* appName = (wxChar*) wxT("application");
     wxString appNameStr(wxT(""));
     if (wxTheApp)
     {

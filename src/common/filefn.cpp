@@ -1396,7 +1396,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     }
 
     wxString result;
-    gs_dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
+    gs_dir->GetFirst(&result, wxFileNameFromPath((wxChar) spec), dirFlags);
     if ( result.IsEmpty() )
     {
         wxDELETE(gs_dir);

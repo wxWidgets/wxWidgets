@@ -52,7 +52,7 @@
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
                                      UINT wParam, LONG lParam );
 
-wxChar *wxTaskBarWindowClass = wxT("wxTaskBarWindowClass");
+wxChar *wxTaskBarWindowClass = (wxChar*) wxT("wxTaskBarWindowClass");
 
 wxList wxTaskBarIcon::sm_taskBarIcons;
 bool   wxTaskBarIcon::sm_registeredClass = FALSE;

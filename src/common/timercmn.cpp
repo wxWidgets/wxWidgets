@@ -49,7 +49,7 @@
     #include <windows.h>
 #endif
 
-#if defined(__WIN32__) && !defined(HAVE_FTIME)
+#if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__)
     #define HAVE_FTIME
 #endif
 
@@ -294,7 +294,24 @@ wxLongLong wxGetLocalTimeMillis()
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
 
-#if defined(HAVE_GETTIMEOFDAY)
+#if defined(__WXMSW__) && defined(__MWERKS__)
+    // This should probably be the way all WXMSW compilers should do it
+    // Go direct to the OS for time
+
+    SYSTEMTIME thenst = { 1970, 1, 4, 1, 0, 0, 0, 0 };  // 00:00:00 Jan 1st 1970
+    FILETIME thenft;
+    SystemTimeToFileTime( &thenst, &thenft );
+    wxLongLong then( thenft.dwHighDateTime, thenft.dwLowDateTime );   // time in 100 nanoseconds
+
+    SYSTEMTIME nowst;
+    GetLocalTime( &nowst );
+    FILETIME nowft;
+    SystemTimeToFileTime( &nowst, &nowft );
+    wxLongLong now( nowft.dwHighDateTime, nowft.dwLowDateTime );   // time in 100 nanoseconds
+
+    return ( now - then ) / 10000.0;  // time from 00:00:00 Jan 1st 1970 to now in milliseconds
+    
+#elif defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
     {

@@ -188,7 +188,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
   {
     EnterCriticalSection(&critical);
     socket = socketList[(uMsg - WM_USER)];
-    event = -1;
+    event = (GSocketEvent) -1;
     cback = NULL;
     data = NULL;
 

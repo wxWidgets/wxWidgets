@@ -126,7 +126,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // VZ: I don't know it's not done for compilers other than VC++ but I leave it
 //     as is. Please note, though, that tracing OLE interface calls may be
 //     incredibly useful when debugging OLE programs.
-#if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ >= 1000)
+#if defined(__WXDEBUG__) && ( ( defined(__VISUALC__) && (__VISUALC__ >= 1000) ) || defined(__MWERKS__) )
 // ----------------------------------------------------------------------------
 // All OLE specific log functions have DebugTrace level (as LogTrace)
 // ----------------------------------------------------------------------------

@@ -175,7 +175,7 @@ void wxColourDialog::SetTitle(const wxString& title)
     m_title = title;
 }
 
-wxString wxColourDialog::GetTitle()
+wxString wxColourDialog::GetTitle() const
 {
     return m_title;
 }

@@ -36,7 +36,7 @@ public:
 
     // override some base class virtuals
     virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle();
+    virtual wxString GetTitle() const;
 
     virtual int ShowModal();
 
