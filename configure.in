@@ -4653,23 +4653,8 @@ if test "$wxUSE_CONSTRAINTS" = "yes"; then
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-    if test "$wxUSE_COCOA" = "1"; then
-        AC_MSG_WARN([MDI not yet supported under Cocoa... disabled])
-    fi
-fi
-
-if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-
-dnl     There is now experimental generic MDI support
-dnl     if test "$wxUSE_UNIVERSAL" = "yes"; then
-dnl         AC_MSG_WARN(MDI not yet supported for wxUniversal... disabled)
-dnl         wxUSE_MDI_ARCHITECTURE=no
-dnl     fi
-
-   if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-       AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
-       SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
-   fi
+   AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
 fi
 
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
