@@ -1109,6 +1109,15 @@ void wxFrame::OnActivate(
     }
 } // end of wxFrame::OnActivate
 
+void wxFrame::RemoveChild(
+  wxWindowBase*                     pChild
+)
+{
+    if (pChild == m_pWinLastFocused)
+        m_pWinLastFocused = NULL;
+    wxFrameBase::RemoveChild(pChild);
+} // end of wxFrame::RemoveChild
+
 // ----------------------------------------------------------------------------
 // wxFrame size management: we exclude the areas taken by menu/status/toolbars
 // from the client area, so the client area is what's really available for the

@@ -142,6 +142,12 @@ wxWindowDC::wxWindowDC(
 
 void wxWindowDC::InitDC()
 {
+    wxColour                        vColor;
+
+    vColor.InitFromName("BLACK");
+    m_pen.SetColour(vColor);
+    vColor.Set("WHITE");
+    m_brush.SetColour(vColor);
     //
     // The background mode is only used for text background and is set in
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT,

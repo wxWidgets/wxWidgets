@@ -11507,6 +11507,8 @@ EXPORTS
       Iconize__7wxFrameFUl
       ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
       HandleMenuSelect__7wxFrameFUsT1Ul
+      ;wxFrame::RemoveChild(wxWindowBase*)
+      RemoveChild__7wxFrameFP12wxWindowBase
       ;wxFrame::OS2TranslateMessage(void**)
       OS2TranslateMessage__7wxFrameFPPv
       ;wxFrame::HandlePaint()
