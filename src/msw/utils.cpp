@@ -454,7 +454,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     if ( path.empty() )
         return FALSE;
 
-#if defined(__WIN32__) && !defined(__GNUWIN32__)
+// old w32api don't have ULARGE_INTEGER
+#if defined(__WIN32__) && \
+    (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION( 0, 3 ))
     // GetDiskFreeSpaceEx() is not available under original Win95, check for
     // it
     typedef BOOL (*GetDiskFreeSpaceEx_t)(LPCTSTR,
