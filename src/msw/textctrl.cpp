@@ -1693,16 +1693,16 @@ bool wxRichEditModule::Load(int version)
     // make it the index in the array
     version--;
 
-    if ( ms_hRichEdit[version] )
-    {
-        // we've already got this one
-        return TRUE;
-    }
-
     if ( ms_hRichEdit[version] == (HINSTANCE)-1 )
     {
         // we had already tried to load it and failed
         return FALSE;
+    }
+
+    if ( ms_hRichEdit[version] )
+    {
+        // we've already got this one
+        return TRUE;
     }
 
     wxString dllname = version ? _T("riched20") : _T("riched32");
