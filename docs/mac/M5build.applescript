@@ -1,10 +1,13 @@
---
--- File: BuildSamplesM5.as
--- Purpose: Automatic build of samples with CodeWarrior 5
--- Author: Gilles Depeyrot
--- Created: 06.10.2001
---
-
+-----------------------------------------------------------------------------
+-- Name:        docs/mac/M5build.applescript
+-- Purpose:     Automatic build of projects with CodeWarrior 5
+-- Author:      Gilles Depeyrot
+-- Modified by:
+-- Created:     06.10.2001
+-- RCS-ID:      $Id$
+-- Copyright:   (c) 2001 Gilles Depeyrot
+-- Licence:     wxWindows licence
+-----------------------------------------------------------------------------
 --
 -- This AppleScript automatically recurses through the selected folder looking for
 -- and building CodeWarrior projects.
@@ -115,51 +118,54 @@ end tell
 on BuildProjects(inLogFileRef, inFolder, inTarget, inRebuild)
 	global theProjectCount, theProjectSuccessCount
 	
-	tell application "Finder" to set theSubFolders to every folder of inFolder
+	try
+		tell application "Finder" to set theProject to ((the first file of inFolder whose name ends with gProjectSuffix) as string)
+	on error
+		set theProject to ""
+	end try
 	
+	if theProject is not "" then
+		set theProjectCount to theProjectCount + 1
+		
+		write "building project '" & (theProject as string) & "'" & gEol to inLogFileRef
+		
+		tell application "CodeWarrior IDE 4.0.4"
+			--
+			-- Open the project in CodeWarrior
+			--
+			open theProject as string
+			--
+			-- Change to the requested target
+			--
+			Set Current Target inTarget
+			--
+			-- Remove object code if rebuild requested
+			--
+			if inRebuild then
+				Remove Binaries
+			end if
+			--
+			-- Build/Rebuild the selected target
+			--
+			set theBuildInfo to Make Project with ExternalEditor
+			--
+			-- Close the project
+			--
+			Close Project
+		end tell
+		--
+		-- Report errors to build log file
+		--
+		write gEol to inLogFileRef
+		ReportBuildInfo(inLogFileRef, theBuildInfo)
+		write gSeparator to inLogFileRef
+	end if
+	
+	tell application "Finder" to set theSubFolders to every folder of inFolder
 	repeat with theFolder in theSubFolders
-		
-		tell application "Finder" to set theProject to (the first file of theFolder whose name ends with gProjectSuffix)
-		
-		if theProject as string is not "" then
-			set theProjectCount to theProjectCount + 1
-			write "building project '" & (theProject as string) & "'" & gEol to inLogFileRef
-			
-			tell application "CodeWarrior IDE 4.0.4"
-				--
-				-- Open the project in CodeWarrior
-				--
-				open theProject as string
-				--
-				-- Change to the requested target
-				--
-				Set Current Target inTarget
-				--
-				-- Remove object code if rebuild requested
-				--
-				if inRebuild then
-					Remove Binaries
-				end if
-				--
-				-- Build/Rebuild the selected target
-				--
-				set theBuildInfo to Make Project with ExternalEditor
-				--
-				-- Close the project
-				--
-				Close Project
-			end tell
-			--
-			-- Report errors to build log file
-			--
-			write gEol to inLogFileRef
-			ReportBuildInfo(inLogFileRef, theBuildInfo)
-			write gSeparator to inLogFileRef
-		else
-			BuildProjects(inLogFileRef, theFolder, inTarget, inRebuild)
-		end if
-		
+		BuildProjects(inLogFileRef, theFolder, inTarget, inRebuild)
 	end repeat
+	
 end BuildProjects
 
 --
