@@ -17,12 +17,12 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = tolower(styler[start + i]);
+		s[i] = static_cast<char>(tolower(styler[start + i]));
 		s[i + 1] = '\0';
 	}
 	char chAttr = SCE_C_DEFAULT;
@@ -43,7 +43,7 @@ static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywor
 }
 
 static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
-                           WordList *keywordlists[], StylingContext &styler) {
+                           WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	

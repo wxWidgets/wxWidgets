@@ -17,7 +17,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static void ColouriseBatchLine(char *lineBuffer, int endLine, StylingContext &styler) {
+static void ColouriseBatchLine(char *lineBuffer, int endLine, Accessor &styler) {
 	if (0 == strncmp(lineBuffer, "REM", 3)) {
 		styler.ColourTo(endLine, 1);
 	} else if (0 == strncmp(lineBuffer, "rem", 3)) {
@@ -33,7 +33,7 @@ static void ColouriseBatchLine(char *lineBuffer, int endLine, StylingContext &st
 	}
 }
 
-static void ColouriseBatchDoc(unsigned int startPos, int length, int, WordList *[], StylingContext &styler) {
+static void ColouriseBatchDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
@@ -49,7 +49,7 @@ static void ColouriseBatchDoc(unsigned int startPos, int length, int, WordList *
 		ColouriseBatchLine(lineBuffer, startPos + length, styler);
 }
 
-static void ColourisePropsLine(char *lineBuffer, int lengthLine, int startLine, int endPos, StylingContext &styler) {
+static void ColourisePropsLine(char *lineBuffer, int lengthLine, int startLine, int endPos, Accessor &styler) {
 	int i = 0;
 	while (isspace(lineBuffer[i]) && (i < lengthLine))	// Skip initial spaces
 		i++;
@@ -75,7 +75,7 @@ static void ColourisePropsLine(char *lineBuffer, int lengthLine, int startLine, 
 	}
 }
 
-static void ColourisePropsDoc(unsigned int startPos, int length, int, WordList *[], StylingContext &styler) {
+static void ColourisePropsDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
@@ -96,7 +96,7 @@ static void ColourisePropsDoc(unsigned int startPos, int length, int, WordList *
 		ColourisePropsLine(lineBuffer, linePos, startLine, startPos + length, styler);
 }
 
-static void ColouriseMakeLine(char *lineBuffer, int lengthLine, int endPos, StylingContext &styler) {
+static void ColouriseMakeLine(char *lineBuffer, int lengthLine, int endPos, Accessor &styler) {
 	int i = 0;
 	while (isspace(lineBuffer[i]) && (i < lengthLine))
 		i++;
@@ -107,7 +107,7 @@ static void ColouriseMakeLine(char *lineBuffer, int lengthLine, int endPos, Styl
 	}
 }
 
-static void ColouriseMakeDoc(unsigned int startPos, int length, int, WordList *[], StylingContext &styler) {
+static void ColouriseMakeDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
@@ -123,7 +123,7 @@ static void ColouriseMakeDoc(unsigned int startPos, int length, int, WordList *[
 		ColouriseMakeLine(lineBuffer, linePos, startPos + length, styler);
 }
 
-static void ColouriseErrorListLine(char *lineBuffer, int lengthLine, int endPos, StylingContext &styler) {
+static void ColouriseErrorListLine(char *lineBuffer, int lengthLine, int endPos, Accessor &styler) {
 	if (lineBuffer[0] == '>') {
 		// Command or return status
 		styler.ColourTo(endPos, 4);
@@ -158,7 +158,6 @@ static void ColouriseErrorListLine(char *lineBuffer, int lengthLine, int endPos,
 				state = 14;
 			} else if (state == 11 && lineBuffer[i] == ')') {
 				state = 12;
-				break;
 			} else if (state == 12 && lineBuffer[i] == ':') {
 				state = 13;
 			} else if (state == 14 && lineBuffer[i] == ')') {
@@ -170,7 +169,7 @@ static void ColouriseErrorListLine(char *lineBuffer, int lengthLine, int endPos,
 		}
 		if (state == 3) {
 			styler.ColourTo(endPos, 2);
-		} else if ((state == 14) || (state == 15)) {
+		} else if ((state == 13) || (state == 14) || (state == 15)) {
 			styler.ColourTo(endPos, 3);
 		} else {
 			styler.ColourTo(endPos, 0);
@@ -178,7 +177,7 @@ static void ColouriseErrorListLine(char *lineBuffer, int lengthLine, int endPos,
 	}
 }
 
-static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordList *[], StylingContext &styler) {
+static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
 	char lineBuffer[1024];
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);

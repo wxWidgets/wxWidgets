@@ -17,7 +17,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static void classifyWordPy(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler, char *prevWord) {
+static void ClassifyWordPy(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]);
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -37,56 +37,70 @@ static void classifyWordPy(unsigned int start, unsigned int end, WordList &keywo
 	strcpy(prevWord, s);
 }
 
-static bool IsPyComment(StylingContext &styler, int pos, int len) {
+static bool IsPyComment(Accessor &styler, int pos, int len) {
 	return len>0 && styler[pos]=='#';
 }
 
 static void ColourisePyDoc(unsigned int startPos, int length, int initStyle, 
-						   WordList *keywordlists[], StylingContext &styler) {
+						   WordList *keywordlists[], Accessor &styler) {
 
+	int lengthDoc = startPos + length;
+
+	// Backtrack to previous line in case need to fix its fold status or tab whinging
+	int lineCurrent = styler.GetLine(startPos);
+	if (startPos > 0) {
+		if (lineCurrent > 0) {
+			lineCurrent--;
+			startPos = styler.LineStart(lineCurrent);
+		}
+	}
+	
 	// Python uses a different mask because bad indentation is marked by oring with 32
 	styler.StartAt(startPos, 127);
 	
 	WordList &keywords = *keywordlists[0];
 	
-	//Platform::DebugPrintf("Python coloured\n");
-	bool fold = styler.GetPropSet().GetInt("fold");
-	int whingeLevel = styler.GetPropSet().GetInt("tab.timmy.whinge.level");
+	bool fold = styler.GetPropertyInt("fold");
+	int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
 	char prevWord[200];
 	prevWord[0] = '\0';
 	if (length == 0)
 		return ;
-	int lineCurrent = styler.GetLine(startPos);
 	int spaceFlags = 0;
-	// TODO: Need to check previous line for indentation for both folding and bad indentation
-	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
 
 	int state = initStyle & 31;
+
+	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
+	if ((state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE)) 
+		indentCurrent |= SC_FOLDLEVELWHITEFLAG;
+
 	char chPrev = ' ';
 	char chPrev2 = ' ';
 	char chNext = styler[startPos];
-	char chNext2 = styler[startPos];
 	styler.StartSegment(startPos);
-	int lengthDoc = startPos + length;
 	bool atStartLine = true;
-	for (int i = startPos; i <= lengthDoc; i++) {
+	for (int i = startPos; i < lengthDoc; i++) {
 	
 		if (atStartLine) {
+			char chBad = static_cast<char>(64);
+			char chGood = static_cast<char>(0);
+			char chFlags = chGood;
 			if (whingeLevel == 1) {
-				styler.SetFlags((spaceFlags & wsInconsistent) ? 64 : 0, state);
+				chFlags = (spaceFlags & wsInconsistent) ? chBad : chGood;
 			} else if (whingeLevel == 2) {
-				styler.SetFlags((spaceFlags & wsSpaceTab) ? 64 : 0, state);
+				chFlags = (spaceFlags & wsSpaceTab) ? chBad : chGood;
 			} else if (whingeLevel == 3) {
-				styler.SetFlags((spaceFlags & wsSpace) ? 64 : 0, state);
+				chFlags = (spaceFlags & wsSpace) ? chBad : chGood;
 			} else if (whingeLevel == 4) {
-				styler.SetFlags((spaceFlags & wsTab) ? 64 : 0, state);
+				chFlags = (spaceFlags & wsTab) ? chBad : chGood;
 			}
+			styler.SetFlags(chFlags, static_cast<char>(state));
 			atStartLine = false;
 		}
 		
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
-		chNext2 = styler.SafeGetCharAt(i + 2);
+		char chNext2 = styler.SafeGetCharAt(i + 2);
 		
 		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == lengthDoc)) {
 			if ((state == SCE_P_DEFAULT) || (state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE)) {
@@ -97,6 +111,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 
 			int lev = indentCurrent;
 			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsPyComment);
+			if ((state == SCE_P_TRIPLE) || (state == SCE_P_TRIPLEDOUBLE)) 
+				indentNext |= SC_FOLDLEVELWHITEFLAG;
 			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
 				// Only non whitespace lines can be headers
 				if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK)) {
@@ -167,7 +183,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			}
 		} else if (state == SCE_P_WORD) {
 			if (!iswordchar(ch)) {
-				classifyWordPy(styler.GetStartSegment(), i - 1, keywords, styler, prevWord);
+				ClassifyWordPy(styler.GetStartSegment(), i - 1, keywords, styler, prevWord);
 				state = SCE_P_DEFAULT;
 				if (ch == '#') {
 					state = chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE;
@@ -245,7 +261,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 		chPrev = ch;
 	}
 	if (state == SCE_P_WORD) {
-		classifyWordPy(styler.GetStartSegment(), lengthDoc, keywords, styler, prevWord);
+		ClassifyWordPy(styler.GetStartSegment(), lengthDoc, keywords, styler, prevWord);
 	} else {
 		styler.ColourTo(lengthDoc, state);
 	}

@@ -31,7 +31,7 @@ inline bool isPerlOperator(char ch) {
 	return false;
 }
 
-static int classifyWordPerl(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static int classifyWordPerl(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -54,7 +54,7 @@ static bool isEndVar(char ch) {
 	       ch != '_' && ch != '\'';
 }
 
-static bool isMatch(StylingContext &styler, int lengthDoc, int pos, const char *val) {
+static bool isMatch(Accessor &styler, int lengthDoc, int pos, const char *val) {
 	if ((pos + static_cast<int>(strlen(val))) >= lengthDoc) {
 		return false;
 	}
@@ -64,16 +64,6 @@ static bool isMatch(StylingContext &styler, int lengthDoc, int pos, const char *
 		}
 		val++;
 	}
-	return true;
-}
-
-static bool isOKQuote(char ch) {
-	if (isalnum(ch))
-		return false;
-	if (isspace(ch))
-		return false;
-	if (iscntrl(ch))
-		return false;
 	return true;
 }
 
@@ -90,7 +80,7 @@ static char opposite(char ch) {
 }
 
 static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
-                             WordList *keywordlists[], StylingContext &styler) {
+                             WordList *keywordlists[], Accessor &styler) {
 
 	// Lexer for perl often has to backtrack to start of current style to determine
 	// which characters are being used as quotes, how deeply nested is the
@@ -120,7 +110,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 	char chPrev = ' ';
 	char chNext = styler[startPos];
 	styler.StartSegment(startPos);
-	for (int i = startPos; i <= lengthDoc; i++) {
+	for (int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
 		char chNext2 = styler.SafeGetCharAt(i + 2);

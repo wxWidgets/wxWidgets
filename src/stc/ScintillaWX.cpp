@@ -195,9 +195,8 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 void ScintillaWX::Copy() {
     if (currentPos != anchor) {
         char* text = CopySelectionRange();
-        textDO.SetText(text);
         wxTheClipboard->Open();
-        wxTheClipboard->SetData(&textDO);
+        wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
 }

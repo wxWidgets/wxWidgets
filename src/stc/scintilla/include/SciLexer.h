@@ -21,6 +21,7 @@
 #define SCLEX_ERRORLIST 10
 #define SCLEX_MAKEFILE 11
 #define SCLEX_BATCH 12
+#define SCLEX_XCODE 13
 
 // Lexical states for SCLEX_PYTHON
 #define SCE_P_DEFAULT 0

@@ -196,6 +196,12 @@ int Surface::LogPixelsY() {
     return hdc->GetPPI().y;
 }
 
+
+int Surface::DeviceHeightFont(int points) {
+    return points * LogPixelsY() / 72;
+}
+
+
 void Surface::MoveTo(int x_, int y_) {
     x = x_;
     y = y_;

@@ -4,7 +4,7 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 typedef void (*LexerFunction)(unsigned int startPos, int lengthDoc, int initStyle,
-                  WordList *keywordlists[], StylingContext &styler);
+                  WordList *keywordlists[], Accessor &styler);
                   
 class LexerModule {
 	static LexerModule *base;
@@ -14,7 +14,7 @@ class LexerModule {
 public:
 	LexerModule(int language_, LexerFunction fn_);
 	static void Colourise(unsigned int startPos, int lengthDoc, int initStyle,
-                  int language, WordList *keywordlists[], StylingContext &styler);
+                  int language, WordList *keywordlists[], Accessor &styler);
 };
 
 inline bool iswordchar(char ch) {

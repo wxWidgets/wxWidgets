@@ -26,6 +26,7 @@ public:
 	unsigned int spaceWidth;
 
 	Style();
+	Style(const Style &source);
 	~Style();
 	Style &operator=(const Style &source);
 	void Clear(Colour fore_, Colour back_,

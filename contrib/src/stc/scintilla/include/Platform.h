@@ -45,6 +45,7 @@
 #pragma warning(disable: 4800 4244 4309)
 #endif
 #include <windows.h>
+#include <commctrl.h>
 #include <richedit.h>
 #endif
 
@@ -221,6 +222,7 @@ public:
 // A surface abstracts a place to draw
 class Surface {
 private:
+	bool unicodeMode;
 #if PLAT_GTK
 	GdkDrawable *drawable;
 	GdkGC *gc;
@@ -268,6 +270,7 @@ public:
 	bool Initialised();
 	void PenColour(Colour fore);
 	int LogPixelsY();
+	int DeviceHeightFont(int points);
 	void MoveTo(int x_, int y_);
 	void LineTo(int x_, int y_);
 	void Polygon(Point *pts, int npts, Colour fore, Colour back);
@@ -293,6 +296,10 @@ public:
 	int SetPalette(Palette *pal, bool inBackGround);
 	void SetClip(PRectangle rc);
 	void FlushCachedState();
+
+	void SetUnicodeMode(bool unicodeMode_) {
+		unicodeMode=unicodeMode_;
+	}
 };
 
 // Class to hide the details of window manipulation
@@ -303,6 +310,7 @@ protected:
 	WindowID id;
 public:
 	Window() : id(0) {}
+	Window(const Window &source) : id(source.id) {}
 	virtual ~Window();
 	Window &operator=(WindowID id_) {
 		id = id_;

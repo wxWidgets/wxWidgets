@@ -116,7 +116,7 @@ wxStyledTextCtrl::~wxStyledTextCtrl() {
 
 //----------------------------------------------------------------------
 
-inline long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
+long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 
     return m_swx->WndProc(msg, wp, lp);
 }
@@ -146,8 +146,9 @@ wxString wxStyledTextCtrl::GetLine(int line) {
     int   len  = GetLineLength(line);
     char* buff = text.GetWriteBuf(len+1);
 
-    *((WORD*)buff) = len+1;
+    *((WORD*)buff) = len;
     SendMsg(EM_GETLINE, line, (long)buff);
+    buff[len] = 0;
     text.UngetWriteBuf();
     return text;
 }
@@ -426,16 +427,16 @@ int wxStyledTextCtrl::GetCurrentLine() {
 }
 
 
-wxString wxStyledTextCtrl::GetCurrentLineText(/*int* linePos*/) {
+wxString wxStyledTextCtrl::GetCurrentLineText(int* linePos) {
     wxString text;
     int   len  = GetLineLength(GetCurrentLine());
     char* buff = text.GetWriteBuf(len+1);
 
-    int pos = SendMsg(SCI_GETCURLINE, len+1, (long)buff);
+    int pos = SendMsg(SCI_GETCURLINE, len, (long)buff);
     text.UngetWriteBuf();
 
-    /* if (linePos)
-     *linePos = pos; */
+    if (linePos)
+        *linePos = pos;
 
     return text;
 }
@@ -457,7 +458,7 @@ int wxStyledTextCtrl::LineFromPoint(wxPoint pt) {
 
 wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
     Point pt;
-    SendMsg(EM_POSFROMCHAR, pos, (long)&pt);
+    SendMsg(EM_POSFROMCHAR, (long)&pt, pos);
     return wxPoint(pt.x, pt.y);
 }
 
@@ -536,6 +537,27 @@ void wxStyledTextCtrl::SetCaretPolicy(int policy, int slop) {
 int wxStyledTextCtrl::GetSelectionType() {
     return SendMsg(EM_SELECTIONTYPE);
 }
+
+
+int wxStyledTextCtrl::GetLinesOnScreen() {
+    return SendMsg(SCI_LINESONSCREEN);
+}
+
+
+bool wxStyledTextCtrl::IsSelectionRectangle() {
+    return SendMsg(SCI_SELECTIONISRECTANGLE) != 0;
+}
+
+
+void wxStyledTextCtrl::SetUseHorizontalScrollBar(bool use) {
+    SendMsg(SCI_SETHSCROLLBAR, use);
+}
+
+
+bool wxStyledTextCtrl::GetUseHorizontalScrollBar() {
+    return SendMsg(SCI_GETHSCROLLBAR) != 0;
+}
+
 
 
 
@@ -642,6 +664,16 @@ void wxStyledTextCtrl::SetStyleFor(int length, int style) {
 
 void wxStyledTextCtrl::SetStyleBytes(int length, char* styleBytes) {
     SendMsg(SCI_SETSTYLINGEX, length, (long)styleBytes);
+}
+
+
+void wxStyledTextCtrl::SetLineState(int line, int value) {
+    SendMsg(SCI_SETLINESTATE, line, value);
+}
+
+
+int  wxStyledTextCtrl::GetLineState(int line) {
+    return SendMsg(SCI_GETLINESTATE, line);
 }
 
 
@@ -905,8 +937,38 @@ void wxStyledTextCtrl::SetTabWidth(int numChars) {
 }
 
 
+void wxStyledTextCtrl::SetIndent(int numChars) {
+    SendMsg(SCI_SETINDENT, numChars);
+}
+
+
+void wxStyledTextCtrl::SetUseTabs(bool usetabs) {
+    SendMsg(SCI_SETUSETABS, usetabs);
+}
+
+
+void wxStyledTextCtrl::SetLineIndentation(int line, int indentation) {
+    SendMsg(SCI_SETLINEINDENTATION, line, indentation);
+}
+
+
+int wxStyledTextCtrl:: GetLineIndentation(int line) {
+    return SendMsg(SCI_GETLINEINDENTATION, line);
+}
+
+
+int  wxStyledTextCtrl::GetLineIndentationPos(int line) {
+    return SendMsg(SCI_GETLINEINDENTPOSITION, line);
+}
+
+
 void wxStyledTextCtrl::SetWordChars(const wxString& wordChars) {
     SendMsg(SCI_SETTABWIDTH, 0, (long)wordChars.c_str());
+}
+
+
+void wxStyledTextCtrl::SetUsePop(bool usepopup) {
+    SendMsg(SCI_USEPOPUP, usepopup);
 }
 
 
@@ -1050,6 +1112,21 @@ void wxStyledTextCtrl::AutoCompComplete() {
 
 void wxStyledTextCtrl::AutoCompStopChars(const wxString& stopChars) {
     SendMsg(SCI_AUTOCSHOW, 0, (long)stopChars.c_str());
+}
+
+
+void wxStyledTextCtrl::AutoCompSetSeparator(char separator) {
+    SendMsg(SCI_AUTOCSETSEPARATOR, separator);
+}
+
+
+char wxStyledTextCtrl::AutoCompGetSeparator() {
+    return SendMsg(SCI_AUTOCGETSEPARATOR);
+}
+
+
+void wxStyledTextCtrl::AutoCompSelect(const wxString& stringtoselect) {
+    SendMsg(SCI_AUTOCSELECT, (long)stringtoselect.c_str());
 }
 
 

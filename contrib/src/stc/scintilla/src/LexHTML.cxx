@@ -18,11 +18,11 @@
 #include "SciLexer.h"
 
 enum { eScriptNone, eScriptJS, eScriptVBS, eScriptPython };
-static int segIsScriptingIndicator(StylingContext &styler, unsigned int start, unsigned int end, int prevValue) {
+static int segIsScriptingIndicator(Accessor &styler, unsigned int start, unsigned int end, int prevValue) {
 	char s[100];
 	s[0] = '\0';
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = tolower(styler[start + i]);
+		s[i] = static_cast<char>(tolower(styler[start + i]));
 		s[i + 1] = '\0';
 	}
 //Platform::DebugPrintf("Scripting indicator [%s]\n", s);
@@ -38,7 +38,7 @@ static int segIsScriptingIndicator(StylingContext &styler, unsigned int start, u
 	return prevValue;
 }
 
-static void classifyAttribHTML(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static void classifyAttribHTML(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.') ||
 	                    (styler[start] == '-') || (styler[start] == '#');
 	char chAttr = SCE_H_ATTRIBUTEUNKNOWN;
@@ -48,7 +48,7 @@ static void classifyAttribHTML(unsigned int start, unsigned int end, WordList &k
 		char s[100];
 		s[0] = '\0';
 		for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-			s[i] = tolower(styler[start + i]);
+			s[i] = static_cast<char>(tolower(styler[start + i]));
 			s[i + 1] = '\0';
 		}
 		if (keywords.InList(s))
@@ -58,14 +58,14 @@ static void classifyAttribHTML(unsigned int start, unsigned int end, WordList &k
 }
 
 static int classifyTagHTML(unsigned int start, unsigned int end,
-                         WordList &keywords, StylingContext &styler) {
+                         WordList &keywords, Accessor &styler) {
 	char s[100];
 	// Copy after the '<'
 	unsigned int i = 0;
 	for (unsigned int cPos=start; cPos <= end && i < 30; cPos++) {
 		char ch = styler[cPos];
 		if (ch != '<')
-			s[i++] = tolower(ch);
+			s[i++] = static_cast<char>(tolower(ch));
 	}
 	s[i] = '\0';
 	char chAttr = SCE_H_TAGUNKNOWN;
@@ -86,7 +86,7 @@ static int classifyTagHTML(unsigned int start, unsigned int end,
 }
 
 static void classifyWordHTJS(unsigned int start, unsigned int end,
-                             WordList &keywords, StylingContext &styler) {
+                             WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -104,7 +104,7 @@ static void classifyWordHTJS(unsigned int start, unsigned int end,
 }
 
 static void classifyWordHTJSA(unsigned int start, unsigned int end,
-                             WordList &keywords, StylingContext &styler) {
+                             WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -121,11 +121,11 @@ static void classifyWordHTJSA(unsigned int start, unsigned int end,
 	styler.ColourTo(end, chAttr);
 }
 
-static int classifyWordHTVB(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static int classifyWordHTVB(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = tolower(styler[start + i]);
+		s[i] = static_cast<char>(tolower(styler[start + i]));
 		s[i + 1] = '\0';
 	}
 	char chAttr = SCE_HB_IDENTIFIER;
@@ -145,11 +145,11 @@ static int classifyWordHTVB(unsigned int start, unsigned int end, WordList &keyw
 		return SCE_HB_DEFAULT;
 }
 
-static int classifyWordHTVBA(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static int classifyWordHTVBA(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = tolower(styler[start + i]);
+		s[i] = static_cast<char>(tolower(styler[start + i]));
 		s[i + 1] = '\0';
 	}
 	char chAttr = SCE_HBA_IDENTIFIER;
@@ -169,7 +169,7 @@ static int classifyWordHTVBA(unsigned int start, unsigned int end, WordList &key
 		return SCE_HBA_DEFAULT;
 }
 
-static void classifyWordHTPy(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler, char *prevWord) {
+static void classifyWordHTPy(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]);
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -189,7 +189,7 @@ static void classifyWordHTPy(unsigned int start, unsigned int end, WordList &key
 	strcpy(prevWord, s);
 }
 
-static void classifyWordHTPyA(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler, char *prevWord) {
+static void classifyWordHTPyA(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]);
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
@@ -226,7 +226,7 @@ static bool isLineEnd(char ch) {
 }
 
 static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[], 
-	StylingContext &styler) {
+	Accessor &styler) {
 	
 	WordList &keywords=*keywordlists[0];
 	WordList &keywords2=*keywordlists[1];
@@ -261,7 +261,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	char chPrev2 = ' ';
 	styler.StartSegment(startPos);
 	int lengthDoc = startPos + length;
-	for (int i = startPos; i <= lengthDoc; i++) {
+	for (int i = startPos; i < lengthDoc; i++) {
 		char ch = styler[i];
 		char chNext = styler.SafeGetCharAt(i + 1);
 		char chNext2 = styler.SafeGetCharAt(i + 2);

@@ -139,7 +139,6 @@ private:
     bool                capturedMouse;
     wxStyledTextCtrl*   stc;
 
-    wxTextDataObject    textDO;
     wxSTCDropTarget*    dropTarget;
     wxDragResult        dragResult;
 };

@@ -38,6 +38,9 @@ public:
 };
 
 class Editor : public DocWatcher {
+	// Private so Editor objects can not be copied
+	Editor(const Editor &) : DocWatcher() {}
+	Editor &operator=(const Editor &) { return *this; }
 protected:	// ScintillaBase subclass needs access to much of Editor
 
 	// On GTK+, Scintilla is a container widget holding two scroll bars and a drawing area
@@ -61,13 +64,14 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	int xOffset;				// Horizontal scrolled amount in pixels
 	int xCaretMargin;	// Ensure this many pixels visible on both sides of caret
+	bool horizontalScrollBarVisible;
 	
 	Surface pixmapLine;
 	Surface pixmapSelMargin;
 	Surface pixmapSelPattern;
 	// Intellimouse support - currently only implemented for Windows
 	unsigned int ucWheelScrollLines;
-	short cWheelDelta; //wheel delta from roll
+	int cWheelDelta; //wheel delta from roll
 
 	KeyMap kmap;
 
@@ -171,6 +175,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void ScrollTo(int line);
 	virtual void ScrollText(int linesToMove);
 	void HorizontalScrollTo(int xPos);
+	void MoveCaretInsideView();
 	void EnsureCaretVisible(bool useMargin=true);
 	void ShowCaretAtCurrentPosition();
 	void DropCaret();
@@ -186,10 +191,12 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void SetVerticalScrollPos() = 0;
 	virtual void SetHorizontalScrollPos() = 0;
 	virtual bool ModifyScrollBars(int nMax, int nPage) = 0;
+	virtual void ReconfigureScrollBars();
 	void SetScrollBarsTo(PRectangle rsClient);
 	void SetScrollBars();
 
-	virtual void AddChar(char ch);
+	void AddChar(char ch);
+	virtual void AddCharUTF(char *s, unsigned int len);
 	void ClearSelection();
 	void ClearAll();
 	void Cut();
@@ -207,7 +214,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void NotifyChange() = 0;
 	virtual void NotifyFocus(bool focus);
 	virtual void NotifyParent(SCNotification scn) = 0;
-	virtual void NotifyStyleNeeded(int endStyleNeeded);
+	virtual void NotifyStyleToNeeded(int endStyleNeeded);
 	void NotifyChar(char ch);
 	void NotifySavePoint(bool isSavePoint);
 	void NotifyModifyAttempt();

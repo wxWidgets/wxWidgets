@@ -11,20 +11,29 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "WindowAccessor.h"
 #include "Scintilla.h"
 
-bool Accessor::InternalIsLeadByte(char ch) {
+WindowAccessor::~WindowAccessor() {
+}
+
+bool WindowAccessor::InternalIsLeadByte(char ch) {
 #if PLAT_GTK
 	// TODO: support DBCS under GTK+
 	return false;
 #elif PLAT_WIN 
-	return IsDBCSLeadByteEx(codePage, ch);
+	if (SC_CP_UTF8 == codePage)
+		// For lexing, all characters >= 0x80 are treated the
+		// same so none is considered a lead byte.
+		return false;	
+	else
+		return IsDBCSLeadByteEx(codePage, ch);
 #elif PLAT_WX 
 	return false;
 #endif 
 }
 
-void Accessor::Fill(int position) {
+void WindowAccessor::Fill(int position) {
 	if (lenDoc == -1)
 		lenDoc = Platform::SendScintilla(id, WM_GETTEXTLENGTH, 0, 0);
 	startPos = position - slopSize;
@@ -40,46 +49,46 @@ void Accessor::Fill(int position) {
 	Platform::SendScintilla(id, EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
 }
 
-char Accessor::StyleAt(int position) {
+char WindowAccessor::StyleAt(int position) {
 	return static_cast<char>(Platform::SendScintilla(
 		id, SCI_GETSTYLEAT, position, 0));
 }
 
-int Accessor::GetLine(int position) {
+int WindowAccessor::GetLine(int position) {
 	return Platform::SendScintilla(id, EM_LINEFROMCHAR, position, 0);
 }
 
-int Accessor::LineStart(int line) {
+int WindowAccessor::LineStart(int line) {
 	return Platform::SendScintilla(id, EM_LINEINDEX, line, 0);
 }
 
-int Accessor::LevelAt(int line) {
+int WindowAccessor::LevelAt(int line) {
 	return Platform::SendScintilla(id, SCI_GETFOLDLEVEL, line, 0);
 }
 
-int Accessor::Length() { 
+int WindowAccessor::Length() { 
 	if (lenDoc == -1) 
 		lenDoc = Platform::SendScintilla(id, WM_GETTEXTLENGTH, 0, 0);
 	return lenDoc; 
 }
 
-int Accessor::GetLineState(int line) {
+int WindowAccessor::GetLineState(int line) {
 	return Platform::SendScintilla(id, SCI_GETLINESTATE, line);
 }
 
-int Accessor::SetLineState(int line, int state) {
+int WindowAccessor::SetLineState(int line, int state) {
 	return Platform::SendScintilla(id, SCI_SETLINESTATE, line, state);
 }
 
-void StylingContext::StartAt(unsigned int start, char chMask) {
+void WindowAccessor::StartAt(unsigned int start, char chMask) {
 	Platform::SendScintilla(id, SCI_STARTSTYLING, start, chMask);
 }
 
-void StylingContext::StartSegment(unsigned int pos) {
+void WindowAccessor::StartSegment(unsigned int pos) {
 	startSeg = pos;
 }
 
-void StylingContext::ColourTo(unsigned int pos, int chAttr) {
+void WindowAccessor::ColourTo(unsigned int pos, int chAttr) {
 	// Only perform styling if non empty range
 	if (pos != startSeg - 1) {
 		if (pos < startSeg) {
@@ -96,22 +105,20 @@ void StylingContext::ColourTo(unsigned int pos, int chAttr) {
 				chFlags = 0;
 			chAttr |= chFlags;
 			for (unsigned int i = startSeg; i <= pos; i++) {
-				styleBuf[validLen++] = chAttr;
+				styleBuf[validLen++] = static_cast<char>(chAttr);
 			}
 		}
 	}
 	startSeg = pos+1;
 }
 
-int StylingContext::GetLine(int position) {
-	return Platform::SendScintilla(id, EM_LINEFROMCHAR, position, 0);
-}
-
-void StylingContext::SetLevel(int line, int level) {
+void WindowAccessor::SetLevel(int line, int level) {
 	Platform::SendScintilla(id, SCI_SETFOLDLEVEL, line, level);
 }
 
-void StylingContext::Flush() {
+void WindowAccessor::Flush() {
+	startPos = extremePosition;
+	lenDoc = -1;
 	if (validLen > 0) {
 		Platform::SendScintilla(id, SCI_SETSTYLINGEX, validLen, 
 			reinterpret_cast<LPARAM>(styleBuf));
@@ -119,7 +126,7 @@ void StylingContext::Flush() {
 	}
 }
 
-int StylingContext::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader) {
+int WindowAccessor::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader) {
 	int end = Length();
 	int spaceFlags = 0;
 	

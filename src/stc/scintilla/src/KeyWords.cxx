@@ -3,11 +3,11 @@
 // Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <stdlib.h> 
+#include <string.h> 
+#include <ctype.h> 
+#include <stdio.h> 
+#include <stdarg.h> 
 
 #include "Platform.h"
 
@@ -26,7 +26,7 @@ LexerModule::LexerModule(int language_, LexerFunction fn_) :
 }
 
 void LexerModule::Colourise(unsigned int startPos, int lengthDoc, int initStyle,
-		int language, WordList *keywordlists[], StylingContext &styler) {
+		int language, WordList *keywordlists[], Accessor &styler) {
 	LexerModule *lm = base;
 	while (lm) {
 		if (lm->language == language) {
@@ -43,5 +43,3 @@ void LexerModule::Colourise(unsigned int startPos, int lengthDoc, int initStyle,
 		styler.ColourTo(startPos + lengthDoc - 1, 0);
 	}
 }
-
-

@@ -30,7 +30,6 @@ void ContractionState::MakeValid() const {
 	if (!valid) {
 		// Could be cleverer by keeping the index of the last still valid entry 
 		// rather than invalidating all.
-		int linePrev = -1;
 		int lineDisplay = 0;
 		for (int line=0; line<linesInDoc; line++) {
 			lines[line].displayLine = lineDisplay;
@@ -113,7 +112,7 @@ void ContractionState::InsertLines(int lineDoc, int lineCount) {
 	}
 	linesInDoc += lineCount;
 	linesInDisplay += lineCount;
-	for (int i = linesInDoc + 1; i >= lineDoc + lineCount; i--) {
+	for (int i = linesInDoc; i >= lineDoc + lineCount; i--) {
 		lines[i].visible = lines[i - lineCount].visible;
 		lines[i].expanded = lines[i - lineCount].expanded;
 	}
@@ -130,16 +129,18 @@ void ContractionState::DeleteLines(int lineDoc, int lineCount) {
 		linesInDisplay -= lineCount;
 		return;
 	}
-	int delta = 0;
-	for (int d=0;d<lineCount;d++)
+	int deltaDisplayed = 0;
+	for (int d=0;d<lineCount;d++) {
 		if (lines[lineDoc+d].visible)
-			delta--;
+			deltaDisplayed--;
+	}
 	for (int i = lineDoc; i < linesInDoc-lineCount; i++) {
-		lines[i].visible = lines[i + lineCount].visible;
+		if (i != 0) // Line zero is always visible
+			lines[i].visible = lines[i + lineCount].visible;
 		lines[i].expanded = lines[i + lineCount].expanded;
 	}
 	linesInDoc -= lineCount;
-	linesInDisplay += delta;
+	linesInDisplay += deltaDisplayed;
 	valid = false;
 }
 
@@ -154,6 +155,10 @@ bool ContractionState::GetVisible(int lineDoc) const {
 }
 
 bool ContractionState::SetVisible(int lineDocStart, int lineDocEnd, bool visible) {
+    if (lineDocStart == 0)
+        lineDocStart++;
+    if (lineDocStart > lineDocEnd)
+        return false;
 	if (size == 0) {
 		Grow(linesInDoc + growSize);
 	}

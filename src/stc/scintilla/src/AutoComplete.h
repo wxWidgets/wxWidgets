@@ -9,6 +9,7 @@
 class AutoComplete {
 	bool active;
 	char stopChars[256];
+	char separator;
 public:
 	ListBox lb;
 	int posStart;
@@ -27,7 +28,11 @@ public:
 	void SetStopChars(const char *stopChars_);
 	bool IsStopChar(char ch);
 	
-	// The list string contains a sequence of words separated by spaces
+	// The separator character is used when interpreting the list in SetList
+	void SetSeparator(char separator_);
+	char GetSeparator();
+	
+	// The list string contains a sequence of words separated by the separator character
 	int SetList(const char *list);
 	
 	void Show();

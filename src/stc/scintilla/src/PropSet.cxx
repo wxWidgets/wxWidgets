@@ -39,7 +39,7 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 					fpc++;
 					lenData--;
 				}
-				*s++ = '\0';
+				*s = '\0';
 				return true;
 			}
 		} else if ((ch == '\\') && (lenData > 0) && ((*fpc == '\r') || (*fpc == '\n'))) {
@@ -122,7 +122,7 @@ SString PropSet::Get(const char *key) {
 int PropSet::GetInt(const char *key, int defaultValue) {
 	SString val = Get(key);
 	if (val.length())
-		return Get(key).value();
+		return val.value();
 	else
 		return defaultValue;
 }
@@ -376,7 +376,7 @@ bool WordList::InList(const char *s) {
 		for (int i = 0; words[i][0]; i++)
 			len++;
 		SortWordList(words, len);
-		for (int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
+		for (unsigned int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
 			starts[k] = -1;
 		for (int l = len - 1; l >= 0; l--) {
 			unsigned char indexChar = words[l][0];

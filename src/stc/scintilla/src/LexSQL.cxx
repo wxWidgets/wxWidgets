@@ -17,11 +17,11 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static void classifyWordSQL(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static void classifyWordSQL(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
-		s[i] = toupper(styler[start + i]);
+		s[i] = static_cast<char>(toupper(styler[start + i]));
 		s[i + 1] = '\0';
 	}
 	char chAttr = SCE_C_IDENTIFIER;
@@ -35,29 +35,27 @@ static void classifyWordSQL(unsigned int start, unsigned int end, WordList &keyw
 }
 
 static void ColouriseSQLDoc(unsigned int startPos, int length,
-                            int initStyle, WordList *keywordlists[], StylingContext &styler) {
+                            int initStyle, WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	
 	styler.StartAt(startPos);
 
-	bool fold = styler.GetPropSet().GetInt("fold");
+	bool fold = styler.GetPropertyInt("fold");
 	int lineCurrent = styler.GetLine(startPos);
 	int spaceFlags = 0;
-	int indentCurrent = 0;
 
 	int state = initStyle;
 	char chPrev = ' ';
 	char chNext = styler[startPos];
 	styler.StartSegment(startPos);
 	unsigned int lengthDoc = startPos + length;
-	bool prevCr = false;
-	for (unsigned int i = startPos; i <= lengthDoc; i++) {
+	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
 
 		if ((ch == '\r' && chNext != '\n') || (ch == '\n')) {
-			indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags);
+			int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags);
 			int lev = indentCurrent;
 			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
 				// Only non whitespace lines can be headers

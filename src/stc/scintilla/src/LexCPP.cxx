@@ -17,7 +17,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static bool classifyWordCpp(unsigned int start, unsigned int end, WordList &keywords, StylingContext &styler) {
+static bool classifyWordCpp(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char s[100];
 	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
 	bool wordIsUUID = false;
@@ -39,38 +39,47 @@ static bool classifyWordCpp(unsigned int start, unsigned int end, WordList &keyw
 }
 
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[], 
-	StylingContext &styler) {
+	Accessor &styler) {
 	
 	WordList &keywords = *keywordlists[0];
 	
 	styler.StartAt(startPos);
 	
-	bool fold = styler.GetPropSet().GetInt("fold");
+	bool fold = styler.GetPropertyInt("fold");
 	int lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
 
 	int state = initStyle;
+	if (state == SCE_C_STRINGEOL)	// Does not leak onto next line
+		state = SCE_C_DEFAULT;
 	char chPrev = ' ';
 	char chNext = styler[startPos];
 	unsigned int lengthDoc = startPos + length;
 	int visChars = 0;
 	styler.StartSegment(startPos);
 	bool lastWordWasUUID = false;
-	for (unsigned int i = startPos; i <= lengthDoc; i++) {
+	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
 
-		if ((fold) && ((ch == '\r' && chNext != '\n') || (ch == '\n'))) {
-			int lev = levelPrev;
-			if (visChars == 0)
-				lev |= SC_FOLDLEVELWHITEFLAG;
-			if ((levelCurrent > levelPrev) && (visChars > 0))
-				lev |= SC_FOLDLEVELHEADERFLAG;
-			styler.SetLevel(lineCurrent, lev);
-			lineCurrent++;
-			visChars = 0;
-			levelPrev = levelCurrent;
+		if ((ch == '\r' && chNext != '\n') || (ch == '\n')) {
+			// End of line
+			if (state == SCE_C_STRINGEOL) {
+				styler.ColourTo(i, state);
+				state = SCE_C_DEFAULT;
+			}
+			if (fold) {
+				int lev = levelPrev;
+				if (visChars == 0)
+					lev |= SC_FOLDLEVELWHITEFLAG;
+				if ((levelCurrent > levelPrev) && (visChars > 0))
+					lev |= SC_FOLDLEVELHEADERFLAG;
+				styler.SetLevel(lineCurrent, lev);
+				lineCurrent++;
+				visChars = 0;
+				levelPrev = levelCurrent;
+			}
 		}
 		if (!isspace(ch))
 			visChars++;
@@ -82,12 +91,6 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 			continue;
 		}
 
-		if (state == SCE_C_STRINGEOL) {
-			if (ch != '\r' && ch != '\n') {
-				styler.ColourTo(i-1, state);
-				state = SCE_C_DEFAULT;
-			}
-		}
 		if (state == SCE_C_DEFAULT) {
 			if (iswordstart(ch)) {
 				styler.ColourTo(i-1, state);
@@ -148,7 +151,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 		} else {
 			if (state == SCE_C_PREPROCESSOR) {
-				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
+				if ((ch == '\r' || ch == '\n') && !(chPrev == '\\' || chPrev == '\r')) {
 					styler.ColourTo(i-1, state);
 					state = SCE_C_DEFAULT;
 				}
@@ -163,7 +166,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 			} else if (state == SCE_C_COMMENTDOC) {
 				if (ch == '/' && chPrev == '*') {
-					if (((i > styler.GetStartSegment() + 3) || (
+					if (((i > styler.GetStartSegment() + 2) || (
 						(initStyle == SCE_C_COMMENTDOC) && 
 						(styler.GetStartSegment() == static_cast<unsigned int>(startPos))))) {
 						styler.ColourTo(i, state);
@@ -177,7 +180,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 			} else if (state == SCE_C_STRING) {
 				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
-					styler.ColourTo(i-1, state);
+					styler.ColourTo(i-1, SCE_C_STRINGEOL);
 					state = SCE_C_STRINGEOL;
 				} else if (ch == '\\') {
 					if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
@@ -194,7 +197,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 			} else if (state == SCE_C_CHARACTER) {
 				if ((ch == '\r' || ch == '\n') && (chPrev != '\\')) {
-					styler.ColourTo(i-1, state);
+					styler.ColourTo(i-1, SCE_C_STRINGEOL);
 					state = SCE_C_STRINGEOL;
 				} else if (ch == '\\') {
 					if (chNext == '\"' || chNext == '\'' || chNext == '\\') {

@@ -74,9 +74,10 @@ private:
 	CellBuffer cb;
 	bool wordchars[256];
 	int stylingPos;
-	int stylingMask;
+	char stylingMask;
 	int endStyled;
 	int enteredCount;
+	int enteredReadOnlyCount;
 	
 	WatcherWithUserData *watchers;
 	int lenWatchers;
@@ -86,8 +87,11 @@ public:
 	int stylingBitsMask;
 	
 	int eolMode;
+	// dbcsCodePage can also be SC_CP_UTF8 to enable UTF-8 mode
 	int dbcsCodePage;
 	int tabInChars;
+	int indentInChars;
+	bool useTabs;
 	
 	Document();
 	virtual ~Document();
@@ -98,6 +102,7 @@ public:
 	int LineFromPosition(int pos);
 	int ClampPositionIntoDocument(int pos);
 	bool IsCrLf(int pos);
+	int LenChar(int pos);
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true);
 
 	// Gateways to modifying document
@@ -115,6 +120,10 @@ public:
 	void EndUndoAction() { cb.EndUndoAction(); }
 	void SetSavePoint();
 	bool IsSavePoint() { return cb.IsSavePoint(); }
+
+	int GetLineIndentation(int line);
+	void SetLineIndentation(int line, int indent);
+	int GetLineIndentPosition(int line);
 	void Indent(bool forwards, int lineBottom, int lineTop);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
@@ -179,10 +188,12 @@ private:
 	bool IsWordChar(unsigned char ch);
 	bool IsWordAt(int start, int end);
 	void ModifiedAt(int pos);
-		
+	
 	void NotifyModifyAttempt();
 	void NotifySavePoint(bool atSavePoint);
 	void NotifyModified(DocModification mh);
+	
+	int IndentSize() { return indentInChars ? indentInChars : tabInChars; }
 };
 
 // To optimise processing of document modifications by DocWatchers, a hint is passed indicating the 
@@ -206,6 +217,16 @@ public:
 		length(length_),
 		linesAdded(linesAdded_),
 		text(text_),
+		line(0),
+		foldLevelNow(0),
+		foldLevelPrev(0) {}
+
+    DocModification(int modificationType_, const Action &act, int linesAdded_=0) :
+		modificationType(modificationType_),
+		position(act.position / 2),
+		length(act.lenData),
+		linesAdded(linesAdded_),
+		text(act.data),
 		line(0),
 		foldLevelNow(0),
 		foldLevelPrev(0) {}

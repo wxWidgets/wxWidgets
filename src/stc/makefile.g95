@@ -32,6 +32,9 @@ OBJECTS = \
 	$(S)/LexPython.$(OBJSUFF) \
 	$(S)/LexSQL.$(OBJSUFF)	\
 	$(S)/LexVB.$(OBJSUFF)	\
+	$(S)/DocumentAccessor.$(OBJSUFF)\
+	$(S)/UniConversion.$(OBJSUFF)	\
+	$(S)/WindowAccessor.$(OBJSUFF)	\
 	PlatWX.$(OBJSUFF) \
 	ScintillaWX.$(OBJSUFF) \
 	stc.$(OBJSUFF)
