@@ -38,8 +38,8 @@ class MegaTable(Grid.PyGridTableBase):
     def GetColLabelValue(self, col):
         return self.colnames[col]
 
-    def GetRowLabelValues(self, row):
-        return self.data[row][0]
+    def GetRowLabelValue(self, row):
+        return "row %03d" % int(self.data[row][0])
 
     def GetValue(self, row, col):
         return str(self.data[row][1].get(self.GetColLabelValue(col), ""))
