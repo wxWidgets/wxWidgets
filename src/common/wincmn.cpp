@@ -40,6 +40,7 @@
     #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/dialog.h"
+    #include "wx/msgdlg.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_CONSTRAINTS
@@ -74,6 +75,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
     EVT_SYS_COLOUR_CHANGED(wxWindowBase::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowBase::OnInitDialog)
+    EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -1360,6 +1362,60 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 {
     TransferDataToWindow();
+}
+
+// process Ctrl-Alt-mclick
+void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
+{
+    if ( event.ControlDown() && event.AltDown() )
+    {
+        // don't translate these strings
+        wxString port;
+        switch ( wxGetOsVersion() )
+        {
+            case wxMOTIF_X:     port = _T("Motif"); break;
+            case wxMACINTOSH:   port = _T("Mac"); break;
+            case wxBEOS:        port = _T("BeOS"); break;
+            case wxGTK:
+            case wxGTK_WIN32:
+            case wxGTK_OS2:
+            case wxGTK_BEOS:    port = _T("GTK"); break;
+            case wxWINDOWS:
+            case wxPENWINDOWS:
+            case wxWINDOWS_NT:
+            case wxWIN32S:
+            case wxWIN95:
+            case wxWIN386:      port = _T("MS Windows"); break;
+            case wxMGL_UNIX:
+            case wxMGL_X:
+            case wxMGL_WIN32:
+            case wxMGL_OS2:     port = _T("MGL"); break;
+            case wxWINDOWS_OS2:
+            case wxOS2_PM:      port = _T("OS/2"); break;
+            default:            port = _T("unknown"); break;
+        }
+
+        wxMessageBox(wxString::Format(
+                                      _T(
+                                        "       wxWindows Library (%s port)\n"
+                                        "Version %u.%u.%u, compiled at %s %s\n"
+                                        "   Copyright (c) 1995-2000 wxWindows team"
+                                        ),
+                                      port.c_str(),
+                                      wxMAJOR_VERSION,
+                                      wxMINOR_VERSION,
+                                      wxRELEASE_NUMBER,
+                                      __DATE__,
+                                      __TIME__
+                                     ),
+                     _T("wxWindows information"),
+                     wxICON_INFORMATION | wxOK,
+                     (wxWindow *)this);
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 // ----------------------------------------------------------------------------
