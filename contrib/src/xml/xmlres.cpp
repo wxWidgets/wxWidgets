@@ -44,11 +44,13 @@ wxXmlResource::wxXmlResource(bool use_locale)
 {
     m_handlers.DeleteContents(TRUE);
     m_useLocale = use_locale;
+    m_version = -1;
 }
     
 wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale)
 {
     m_useLocale = use_locale;
+    m_version = -1;
     m_handlers.DeleteContents(TRUE);
     Load(filemask);
 }
@@ -64,6 +66,7 @@ bool wxXmlResource::Load(const wxString& filemask)
     wxString fnd;
     wxXmlResourceDataRecord *drec;
     bool iswild = wxIsWild(filemask);
+    bool rt = TRUE;
     
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
@@ -83,17 +86,8 @@ bool wxXmlResource::Load(const wxString& filemask)
         if (filemask.Lower().Matches("*.zip") ||
             filemask.Lower().Matches("*.rsc"))
         {
-            wxFileSystem fs2;
-            wxString fnd2;
-            
-            fnd2 = fs2.FindFirst(fnd + wxT("#zip:*.xmb"), wxFILE);
-            while (!!fnd2)
-            {
-                drec = new wxXmlResourceDataRecord;
-                drec->File = fnd2;
-                m_data.Add(drec);
-                fnd2 = fs2.FindNext();
-            }
+            rt = rt && Load(fnd + wxT("#zip:*.xmb"));
+            rt = rt && Load(fnd + wxT("#zip:*.xrc"));
         }
         else
 #endif
@@ -110,7 +104,7 @@ bool wxXmlResource::Load(const wxString& filemask)
     }
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
-    return TRUE;
+    return rt;
 }
 
 
@@ -305,6 +299,20 @@ void wxXmlResource::UpdateResources()
             }
             else
 			{
+                long version;
+                int v1, v2, v3, v4;
+                wxString verstr = m_data[i].Doc->GetRoot()->GetPropVal(
+                                      wxT("version"), wxT("0.0.0.0"));
+                if (wxSscanf(verstr.c_str(), wxT("%i.%i.%i.%i"), 
+                    &v1, &v2, &v3, &v4) == 4)
+                    version = v1*256*256*256+v2*256*256+v3*256+v4;
+                else
+                    version = 0;
+                if (m_version == -1)
+                    m_version = version;
+                if (m_version != version)
+                    wxLogError(_("Resource files must have same version number!"));
+                
                 ProcessPlatformProperty(m_data[i].Doc->GetRoot());
 				m_data[i].Time = file->GetModificationTime();
 			}
@@ -472,25 +480,35 @@ wxString wxXmlResourceHandler::GetText(const wxString& param)
     wxString str1 = GetParamValue(param);
     wxString str2;
     const wxChar *dt;
+    wxChar amp_char;
+    
+    // VS: First version of XML resources used $ instead of & (which is illegal in XML),
+    //     but later I realized that '_' fits this purpose much better (because
+    //     &File means "File with F underlined").
+    if (m_resource->CompareVersion(2,3,0,1) < 0)
+        amp_char = wxT('$');
+    else
+        amp_char = wxT('_');
 
     for (dt = str1.c_str(); *dt; dt++)
     {
-        // Remap $ to &, map $$ to $ (for things like "&File..." -- 
-        // this is illegal in XML, so we use "$File..."):
-        if (*dt == '$')
+        // Remap amp_char to &, map double amp_char to amp_char (for things 
+        // like "&File..." -- this is illegal in XML, so we use "_File..."):
+        if (*dt == amp_char)
+        {
+            if ( *(++dt) == amp_char )
+                str2 << amp_char;
+            else
+                str2 << wxT('&') << *dt;
+        }
+        // Remap \n to CR, \r to LF, \t to TAB:
+        else if (*dt == wxT('\\'))
             switch (*(++dt))
             {
-                case '$' : str2 << '$'; break;
-                default  : str2 << '&' << *dt; break;
-            }
-        // Remap \n to CR, \r LF, \t to TAB:
-        else if (*dt == '\\')
-            switch (*(++dt))
-            {
-                case 'n' : str2 << '\n'; break;
-                case 't' : str2 << '\t'; break;
-                case 'r' : str2 << '\r'; break;
-                default  : str2 << '\\' << *dt; break;
+                case wxT('n') : str2 << wxT('\n'); break;
+                case wxT('t') : str2 << wxT('\t'); break;
+                case wxT('r') : str2 << wxT('\r'); break;
+                default       : str2 << wxT('\\') << *dt; break;
             }
         else str2 << *dt;
     }
