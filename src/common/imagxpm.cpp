@@ -128,12 +128,16 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         chars_per_pixel++;
 
     // 2. write the header:
-    tmp.Printf("/* XPM */\n"
+    char tmpbuf[200];
+    // VS: 200b is safe upper bound for anything produced by sprintf bellow
+    //     (101 bytes the string, neither %i can expand into more than 10 chars)
+    sprintf(tmpbuf, 
+               "/* XPM */\n"
                "static char *xpm_data[] = {\n"
                "/* columns rows colors chars-per-pixel */\n"
                "\"%i %i %i %i\",\n",
                image->GetWidth(), image->GetHeight(), cols, chars_per_pixel);
-    stream.Write(tmp.mb_str(), tmp.Length());
+    stream.Write(tmpbuf, strlen(tmpbuf));
 
     // 3. create color symbols table:
     wxHashTable table(wxKEY_INTEGER);

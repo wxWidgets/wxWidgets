@@ -641,8 +641,8 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     wxImage img;
     int count;
     unsigned width, height, colors_cnt, chars_per_pixel;
-    unsigned i, j;
-    char key[64];
+    size_t i, j, i_key;
+    wxChar key[64];
     const char *clr_def;
     bool hasMask;
     wxXPMColourMapData *clr_data;
@@ -669,7 +669,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     if ( !img.Ok() ) return img;
 
     img.SetMask(FALSE);
-    key[chars_per_pixel] = '\0';
+    key[chars_per_pixel] = wxT('\0');
     hasMask = FALSE;
     clr_tbl.DeleteContents(TRUE);
 
@@ -678,7 +678,8 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
      */
     for (i = 0; i < colors_cnt; i++)
     {
-        memcpy(key, xpm_data[1 + i], chars_per_pixel);
+        for (i_key = 0; i_key < chars_per_pixel; i_key++)
+            key[i_key] = (wxChar)xpm_data[1 + i][i_key];
         clr_def = ParseColor(xpm_data[1 + i]);
         clr_data = new wxXPMColourMapData;
 
@@ -725,9 +726,9 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     {
         for (i = 0; i < width; i++, img_data += 3)
         {
-            memcpy(key,
-                   xpm_data[1 + colors_cnt + j] + chars_per_pixel * i,
-                   chars_per_pixel);
+            for (i_key = 0; i_key < chars_per_pixel; i_key++)
+                key[i_key] = (wxChar)xpm_data[1 + colors_cnt + j]
+                                             [chars_per_pixel * i + i_key];
             clr_data = (wxXPMColourMapData*) clr_tbl.Get(key);
             if ( clr_data == NULL )
             {
