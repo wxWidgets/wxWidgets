@@ -73,9 +73,6 @@ public:
     // implementation from now on
     // --------------------------
 
-        // responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
         // calls layout for layout constraints and sizers
     void OnSize(wxSizeEvent& event);
 

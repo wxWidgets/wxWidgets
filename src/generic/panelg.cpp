@@ -93,8 +93,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 #endif
 
 BEGIN_EVENT_TABLE(wxPanel, wxWindow)
-    EVT_SYS_COLOUR_CHANGED(wxPanel::OnSysColourChanged)
-
     EVT_SIZE(wxPanel::OnSize)
 
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxPanel)
@@ -144,16 +142,6 @@ void wxPanel::InitDialog()
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
-
-// Responds to colour changes, and passes event on to children.
-void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    Refresh();
-
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
-}
 
 void wxPanel::OnSize(wxSizeEvent& event)
 {

@@ -380,7 +380,6 @@ void wxStatusBarGeneric::InitColours()
 void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     InitColours();
-    Refresh();
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
