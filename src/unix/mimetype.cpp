@@ -2190,8 +2190,9 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 // built in icons which are useless for us anyhow
                 if ( strLHS != _T("icon") )
                 {
-                    wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
-                                 strFileName.c_str(), nLine + 1, strLHS.c_str());
+                    // This crashes for some reason in wcslen() in libc. RR.
+                    // wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
+                    //                strFileName.c_str(), nLine + 1, strLHS.c_str());
                 }
             }
 
