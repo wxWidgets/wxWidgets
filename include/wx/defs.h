@@ -426,7 +426,8 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxREADONLY          wxTE_READONLY
 #define wxEDITABLE          0
 
-// #define wxTE_RICHTEXT       0x0020
+// MSW-only
+#define wxTE_RICHTEXT       0x0020
 
 /*
  * wxComboBox style flags
@@ -883,7 +884,7 @@ typedef unsigned long   WXHCONV;
 typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
-typedef int (*WXFARPROC)();
+typedef int (__stdcall *WXFARPROC)();
 
 #endif
 
