@@ -517,7 +517,7 @@ public:
     virtual const wxTypeInfo* GetTypeInfo() const = 0 ;
 } ;
 
-template<typename T> class WXDLLIMPEXP_BASE wxxVariantDataT : public wxxVariantData
+template<typename T> class wxxVariantDataT : public wxxVariantData
 {
 public:
     wxxVariantDataT(const T& d) : m_data(d) {}
