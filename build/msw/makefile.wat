@@ -241,6 +241,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
+	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
 	$(OBJS)\monodll_containr.obj &
@@ -438,6 +439,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
+	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
 	$(OBJS)\monodll_containr.obj &
@@ -686,6 +688,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
+	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
 	$(OBJS)\monolib_containr.obj &
@@ -883,6 +886,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
+	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
 	$(OBJS)\monolib_containr.obj &
@@ -1116,6 +1120,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
+	$(OBJS)\coredll_clntdata.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
 	$(OBJS)\coredll_containr.obj &
@@ -1313,6 +1318,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
+	$(OBJS)\coredll_clntdata.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
 	$(OBJS)\coredll_containr.obj &
@@ -1518,6 +1524,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
+	$(OBJS)\corelib_clntdata.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
 	$(OBJS)\corelib_containr.obj &
@@ -1715,6 +1722,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
+	$(OBJS)\corelib_clntdata.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
 	$(OBJS)\corelib_containr.obj &
@@ -2187,7 +2195,6 @@ MONODLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dummy.obj &
 	$(OBJS)\monodll_appbase.obj &
-	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdline.obj &
 	$(OBJS)\monodll_config.obj &
 	$(OBJS)\monodll_datetime.obj &
@@ -2285,7 +2292,6 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
 	$(OBJS)\monolib_appbase.obj &
-	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdline.obj &
 	$(OBJS)\monolib_config.obj &
 	$(OBJS)\monolib_datetime.obj &
@@ -2384,7 +2390,6 @@ BASEDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dummy.obj &
 	$(OBJS)\basedll_appbase.obj &
-	$(OBJS)\basedll_clntdata.obj &
 	$(OBJS)\basedll_cmdline.obj &
 	$(OBJS)\basedll_config.obj &
 	$(OBJS)\basedll_datetime.obj &
@@ -2468,7 +2473,6 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dummy.obj &
 	$(OBJS)\baselib_appbase.obj &
-	$(OBJS)\baselib_clntdata.obj &
 	$(OBJS)\baselib_cmdline.obj &
 	$(OBJS)\baselib_config.obj &
 	$(OBJS)\baselib_datetime.obj &
@@ -3596,9 +3600,6 @@ $(OBJS)\monodll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
@@ -4740,6 +4741,11 @@ $(OBJS)\monodll_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -5173,9 +5179,6 @@ $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
@@ -6317,6 +6320,11 @@ $(OBJS)\monolib_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -6752,9 +6760,6 @@ $(OBJS)\basedll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
-$(OBJS)\basedll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
-	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
-
 $(OBJS)\basedll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6966,9 +6971,6 @@ $(OBJS)\baselib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
-
-$(OBJS)\baselib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
@@ -8043,6 +8045,11 @@ $(OBJS)\coredll_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -9269,6 +9276,11 @@ $(OBJS)\corelib_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

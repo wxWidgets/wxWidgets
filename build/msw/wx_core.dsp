@@ -484,6 +484,10 @@ SOURCE=..\..\src\common\clipcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\clntdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\cmdproc.cpp
 # End Source File
 # Begin Source File
@@ -7989,6 +7993,10 @@ SOURCE=..\..\include\wx\choice.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\clipbrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\clntdata.h
 # End Source File
 # Begin Source File
 

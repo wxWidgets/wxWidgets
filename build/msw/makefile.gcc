@@ -174,7 +174,6 @@ MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.o \
 	$(OBJS)\monodll_appbase.o \
-	$(OBJS)\monodll_clntdata.o \
 	$(OBJS)\monodll_cmdline.o \
 	$(OBJS)\monodll_config.o \
 	$(OBJS)\monodll_datetime.o \
@@ -272,7 +271,6 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.o \
 	$(OBJS)\monolib_appbase.o \
-	$(OBJS)\monolib_clntdata.o \
 	$(OBJS)\monolib_cmdline.o \
 	$(OBJS)\monolib_config.o \
 	$(OBJS)\monolib_datetime.o \
@@ -370,7 +368,6 @@ BASEDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.o \
 	$(OBJS)\basedll_appbase.o \
-	$(OBJS)\basedll_clntdata.o \
 	$(OBJS)\basedll_cmdline.o \
 	$(OBJS)\basedll_config.o \
 	$(OBJS)\basedll_datetime.o \
@@ -454,7 +451,6 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.o \
 	$(OBJS)\baselib_appbase.o \
-	$(OBJS)\baselib_clntdata.o \
 	$(OBJS)\baselib_cmdline.o \
 	$(OBJS)\baselib_config.o \
 	$(OBJS)\baselib_datetime.o \
@@ -1001,6 +997,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
+	$(OBJS)\monodll_clntdata.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -1198,6 +1195,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_bookctrl.o \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
+	$(OBJS)\monodll_clntdata.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -1443,6 +1441,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
+	$(OBJS)\monolib_clntdata.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -1640,6 +1639,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_bookctrl.o \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
+	$(OBJS)\monolib_clntdata.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -1867,6 +1867,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
+	$(OBJS)\coredll_clntdata.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -2064,6 +2065,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_bookctrl.o \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
+	$(OBJS)\coredll_clntdata.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -2267,6 +2269,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
+	$(OBJS)\corelib_clntdata.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -2464,6 +2467,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_bookctrl.o \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
+	$(OBJS)\corelib_clntdata.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -3408,9 +3412,6 @@ $(OBJS)\monodll_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_appbase.o: ../../src/common/appbase.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_cmdline.o: ../../src/common/cmdline.cpp
@@ -4552,6 +4553,11 @@ $(OBJS)\monodll_clipcmn.o: ../../src/common/clipcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_clntdata.o: ../../src/common/clntdata.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
@@ -4985,9 +4991,6 @@ $(OBJS)\monolib_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_appbase.o: ../../src/common/appbase.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_cmdline.o: ../../src/common/cmdline.cpp
@@ -6129,6 +6132,11 @@ $(OBJS)\monolib_clipcmn.o: ../../src/common/clipcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_clntdata.o: ../../src/common/clntdata.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
@@ -6564,9 +6572,6 @@ $(OBJS)\basedll_dummy.o: ../../src/msw/dummy.cpp
 $(OBJS)\basedll_appbase.o: ../../src/common/appbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-$(OBJS)\basedll_clntdata.o: ../../src/common/clntdata.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 $(OBJS)\basedll_cmdline.o: ../../src/common/cmdline.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6778,9 +6783,6 @@ $(OBJS)\baselib_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_appbase.o: ../../src/common/appbase.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-$(OBJS)\baselib_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_cmdline.o: ../../src/common/cmdline.cpp
@@ -7855,6 +7857,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_clipcmn.o: ../../src/common/clipcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -9081,6 +9088,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_clipcmn.o: ../../src/common/clipcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
