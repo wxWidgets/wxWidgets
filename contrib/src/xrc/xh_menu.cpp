@@ -65,17 +65,25 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         else if (m_class == wxT("break"))
             p_menu->Break();
         else /*wxMenuItem*/
-        {
+        {          
             int id = GetID();
-            bool checkable = GetBool(wxT("checkable"));
             wxString label = GetText(wxT("label"));
             wxString accel = GetText(wxT("accel"), FALSE);
             wxString fullLabel = label;
             if (!accel.IsEmpty())
                 fullLabel << wxT("\t") << accel;
 
+            wxItemKind kind = wxITEM_NORMAL;
+            if (GetBool(wxT("radio")))
+                kind = wxITEM_RADIO;
+            if (GetBool(wxT("checkable")))
+            {
+                wxASSERT_MSG( kind == wxITEM_NORMAL, _T("can't have both checkable and radion button at once") );
+                kind = wxITEM_CHECK;
+            }
+
             wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
-                                               GetText(wxT("help")), checkable);
+                                               GetText(wxT("help")), kind);
                                                
 #if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
                 if (HasParam(wxT("bitmap")))
@@ -83,7 +91,8 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 #endif
             p_menu->Append(mitem);
             mitem->Enable(GetBool(wxT("enabled"), TRUE));
-            if (checkable) mitem->Check(GetBool(wxT("checked")));
+            if (kind == wxITEM_CHECK)
+                mitem->Check(GetBool(wxT("checked")));
         }
         return NULL;
     }
