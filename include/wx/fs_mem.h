@@ -24,8 +24,10 @@
 #endif
 
 #include "wx/filesys.h"
+#if wxUSE_GUI
 #include "wx/image.h"
 #include "wx/bitmap.h"
+#endif
 
 //--------------------------------------------------------------------------------
 // wxMemoryFSHandler
@@ -39,8 +41,10 @@ class WXDLLEXPORT wxMemoryFSHandler : public wxFileSystemHandler
 
         // Add file to list of files stored in memory. Stored data (bitmap, text or raw data)
         // will be copied into private memory stream and available under name "memory:" + filename
+#if wxUSE_GUI
         static void AddFile(const wxString& filename, wxImage& image, long type);
         static void AddFile(const wxString& filename, const wxBitmap& bitmap, long type);
+#endif
         static void AddFile(const wxString& filename, const wxString& textdata);        
         static void AddFile(const wxString& filename, const void *binarydata, size_t size);
         

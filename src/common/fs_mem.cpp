@@ -149,6 +149,8 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
 
 
+#if wxUSE_GUI
+
 /*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
 {
     if (!CheckHash(filename)) return;
@@ -173,6 +175,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
     AddFile(filename, img, type);
 }
 
+#endif
 
 /*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxString& textdata)
 {
