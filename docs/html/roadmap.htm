@@ -51,6 +51,9 @@ available at dates convenient to the developers.<P>
 <li>This beta is intended to be the last stable snapshot before wxWindows
 is split into base and GUI libraries.
 <li>New wxGrid in beta.
+<li>wxWizard (beta)
+<li>wxDialUpManager and wxPhoneDialer (beta)
+<li>wxFontEnumerator (beta)
 </ul>
 
 <P>
@@ -65,8 +68,9 @@ combined base/GUI library for GUI applications only.
 <li>New wxGrid.
 <li>wxSocket working.
 <li>wxHTML printing (possibly).
-<li>Animation classes (possibly).
-<li>PCX writing capability (possibly).
+<li>Better i18n support (i.e. more translations)
+<li>Animation classes (possibly, low priority).
+<li>PCX writing capability (possibly, low priority).
 <li>wxImage handlers in separate .h and .cpp files.
 <li>Rewritten timer.cpp, possible wxChrono class.
 <li>Bug tracking system in place.
@@ -144,7 +148,13 @@ and GUI (classes and functions usable by GUI application only).
 that can handle multiple formats).
 <li>Expand the number of controls that can be specified in a WXR file;
 add constraint specification to WXR syntax and Dialog Editor; add multilanguage support to WXR.
+May be we'd better change the format completely and replace WXR with XML
+(providing conversion utility for old files)?
 <li>Rewrite Dialog Editor.
+<li>Modem-oriented classes: wxDialUpManager for dialing up the ISP and
+determining if there is a connection to Internet on the machine and
+wxPhoneDialer for dialing arbitrary phone numbers and otherwise communicating
+with the modem.
 <li>PCX writing code.
 <li>GIF animation code.
 <li>Tidying of timer code, addition of wxChrono class.
@@ -186,6 +196,8 @@ default buttons (heavy black border).
 <B><I>wxMotif</I></B><P>
 
 <ul>
+<li>Fix menu accelerators
+<li>Fix refresh problems
 <li>Allow wxSystemSettings to be configurable, perhaps via a control
 panel application.
 </ul>
