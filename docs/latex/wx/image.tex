@@ -95,14 +95,14 @@ initialization in order to work with JPEGs.
 
 \pythonnote{Constructors supported by wxPython are:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{wxImage(name, flag)}}{Loads an image from a file}
-\twocolitem{\bf{wxNullImage()}}{Create a null image (has no size or
+\twocolitem{{\bf wxImage(name, flag)}}{Loads an image from a file}
+\twocolitem{{\bf wxNullImage()}}{Create a null image (has no size or
 image data)}
-\twocolitem{\bf{wxEmptyImage(width, height)}}{Creates an empty image
+\twocolitem{{\bf wxEmptyImage(width, height)}}{Creates an empty image
 of the given size}
-\twocolitem{\bf{wxImageFromMime(name, mimetype}}{Creates an image from
+\twocolitem{{\bf wxImageFromMime(name, mimetype}}{Creates an image from
 the given file of the given mimetype}
-\twocolitem{\bf{wxImageFromBitmap(bitmap)}}{Creates an image from a
+\twocolitem{{\bf wxImageFromBitmap(bitmap)}}{Creates an image from a
 platform-dependent bitmap}
 \end{twocollist}}
 }
@@ -126,7 +126,7 @@ of a given handler class in an application session.}
 
 \helpref{wxImageHandler}{wximagehandler}
 
-\pythonnote{In wxPython this static method is named \tt{wxImage_AddHandler}.}
+\pythonnote{In wxPython this static method is named {\tt wxImage_AddHandler}.}
 \membersection{wxImage::CleanUpHandlers}
 
 \func{static void}{CleanUpHandlers}{\void}
@@ -363,9 +363,9 @@ TRUE if the operation succeeded, FALSE otherwise.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{LoadFile(filename, type)}}{Loads an image of the given
+\twocolitem{{\bf LoadFile(filename, type)}}{Loads an image of the given
 type from a file}
-\twocolitem{\bf{LoadMimeFile(filename, mimetype)}}{Loads an image of the given
+\twocolitem{{\bf LoadMimeFile(filename, mimetype)}}{Loads an image of the given
 mimetype from a file}
 \end{twocollist}}
 }
@@ -442,9 +442,9 @@ Depending on how wxWindows has been configured, not all formats may be available
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{SaveFile(filename, type)}}{Saves the image using the given
+\twocolitem{{\bf SaveFile(filename, type)}}{Saves the image using the given
 type to the named file}
-\twocolitem{\bf{SaveMimeFile(filename, mimetype)}}{Saves the image using the given
+\twocolitem{{\bf SaveMimeFile(filename, mimetype)}}{Saves the image using the given
 mimetype to the named file}
 \end{twocollist}}
 }

@@ -134,9 +134,9 @@ a recent version of SWIG from their CVS or from a daily build. See
 
 wxPython is organized as a Python package. This means that the
 directory containing the results of the build process should be a
-subdirectory of a directory on the \tt{PYTHONPATH}. (And preferably should
+subdirectory of a directory on the {\tt PYTHONPATH}. (And preferably should
 be named wxPython.) You can control where the build process will dump
-wxPython by setting the \tt{TARGETDIR} variable for the build utility (see
+wxPython by setting the {\tt TARGETDIR} variable for the build utility (see
 below).
 
 \begin{enumerate}\itemsep=0pt
@@ -160,14 +160,14 @@ You can use whatever flags you want, but I know these work.
 For Win32 systems I use Visual C++ 6.0, but 5.0 should work also. The
 build utility currently does not support any other Win32 compilers.
 \item At this point you may want to make an alias or symlink, script,
-batch file, whatever on the PATH that invokes \tt{\$(WXWIN)/utils/wxPython/distrib/build.py} to
+batch file, whatever on the PATH that invokes {\tt \$(WXWIN)/utils/wxPython/distrib/build.py} to
 help simplify matters somewhat. For example, on my Win32 system I have a file named
- \tt{build}.bat in a directory on the PATH that contains:
+ {\tt build}.bat in a directory on the PATH that contains:
 
-\tt{python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
-\item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
-\item Type "\tt{build -b}" to build wxPython and "\tt{build -i}" to
-install it, or "\tt{build -bi}" to do both steps at once.
+{\tt python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
+\item Change into the {\tt \$(WXWIN)/utils/wxPython/src} directory.
+\item Type "{\tt build -b}" to build wxPython and "{\tt build -i}" to
+install it, or "{\tt build -bi}" to do both steps at once.
 
 The build.py script actually generates a Makefile based on what it
 finds on your system and information found in the build.cfg file.
@@ -176,15 +176,15 @@ a different way, take a look at the docstring in build.py. You are
 able to to override many configuration options in a file named
 build.local.
 \item To build and install the add-on modules, change to the appropriate
-directory under \tt{\$(WXWIN)/utils/wxPython/modules} and run the build
+directory under {\tt \$(WXWIN)/utils/wxPython/modules} and run the build
 utility again.
-\item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
+\item Change to the {\tt \$(WXWIN)/utils/wxPython/demo} directory.
 \item Try executing the demo program. For example:
 
-\tt{python demo.py}
+{\tt python demo.py}
 
 To run it without requiring a console on Win32, you can use the
-\tt{pythonw.exe} version of Python either from the command line or from a
+{\tt pythonw.exe} version of Python either from the command line or from a
 shortcut.
 \end{enumerate}
 
@@ -199,7 +199,7 @@ I'm also going to assume that you know a bit about wxWindows already,
 enough to notice the similarities in the classes used.
 
 Take a look at the following wxPython program. You can find a similar
-program in the \tt{wxPython/demo} directory, named \tt{DialogUnits.py}. If your
+program in the {\tt wxPython/demo} directory, named {\tt DialogUnits.py}. If your
 Python and wxPython are properly installed, you should be able to run
 it by issuing this command:
 
@@ -292,9 +292,9 @@ it by issuing this command:
 \begin{enumerate}\itemsep=11pt
 \item At line 2 the wxPython classes, constants, and etc. are imported
 into the current module's namespace. If you prefer to reduce
-namespace pollution you can use "\tt{from wxPython import wx}" and
+namespace pollution you can use "{\tt from wxPython import wx}" and
 then access all the wxPython identifiers through the wx module, for
-example, "\tt{wx.wxFrame}".
+example, "{\tt wx.wxFrame}".
 \item At line 13 the frame's sizing and moving events are connected to
 methods of the class. These helper functions are intended to be like
 the event table macros that wxWindows employs. But since static event
@@ -302,15 +302,15 @@ tables are impossible with wxPython, we use helpers that are named the
 same to dynamically build the table. The only real difference is
 that the first arguemnt to the event helpers is always the window that
 the event table entry should be added to.
-\item Notice the use of \tt{wxDLG\_PNT} and \tt{wxDLG\_SZE} in lines 19
+\item Notice the use of {\tt wxDLG\_PNT} and {\tt wxDLG\_SZE} in lines 19
 - 29 to convert from dialog units to pixels. These helpers are unique
 to wxPython since Python can't do method overloading like C++.
-\item There is an \tt{OnCloseWindow} method at line 34 but no call to
+\item There is an {\tt OnCloseWindow} method at line 34 but no call to
 EVT\_CLOSE to attach the event to the method. Does it really get
 called?  The answer is, yes it does. This is because many of the
-\em{standard} events are attached to windows that have the associated
-\em{standard} method names. I have tried to follow the lead of the
-C++ classes in this area to determine what is \em{standard} but since
+{\em standard} events are attached to windows that have the associated
+{\em standard} method names. I have tried to follow the lead of the
+C++ classes in this area to determine what is {\em standard} but since
 that changes from time to time I can make no guarentees, nor will it
 be fully documented. When in doubt, use an EVT\_*** function.
 \item At lines 17 to 21 notice that there are no saved references to
@@ -325,15 +325,15 @@ have a \_\_del\_\_ method that explicitly causes the C++ object to be
 deleted. If you ever have the need to forcibly delete a window, use
 the Destroy() method as shown on line 36.
 \item Just like wxWindows in C++, wxPython apps need to create a class
-derived from \tt{wxApp} (line 56) that implements a method named
-\tt{OnInit}, (line 59.) This method should create the application's
-main window (line 62) and use \tt{wxApp.SetTopWindow()} (line 66) to
+derived from {\tt wxApp} (line 56) that implements a method named
+{\tt OnInit}, (line 59.) This method should create the application's
+main window (line 62) and use {\tt wxApp.SetTopWindow()} (line 66) to
 inform wxWindows about it.
 \item And finally, at line 72 an instance of the application class is
 created. At this point wxPython finishes initializing itself, and calls
-the \tt{OnInit} method to get things started. (The zero parameter here is
+the {\tt OnInit} method to get things started. (The zero parameter here is
 a flag for functionality that isn't quite implemented yet. Just
-ignore it for now.)  The call to \tt{MainLoop} at line 73 starts the event
+ignore it for now.)  The call to {\tt MainLoop} at line 73 starts the event
 loop which continues until the application terminates or all the top
 level windows are closed.
 \end{enumerate}

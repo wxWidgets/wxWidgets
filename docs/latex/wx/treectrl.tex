@@ -204,8 +204,8 @@ if it was not (in this case {\it rect} is not changed) - for example, if the
 item is currently invisible.
 
 \pythonnote{The wxPython version of this method requires only the
-\tt{item} and \tt{textOnly} parameters.  The return value is either a
-\tt{wxRect} object or \tt{None}.}
+{\tt item} and {\tt textOnly} parameters.  The return value is either a
+{\tt wxRect} object or {\tt None}.}
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
@@ -277,7 +277,7 @@ Returns the tree item data associated with the item.
 
 \pythonnote{wxPython provides the following shortcut method:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{GetPyData(item)}}{Returns the Python Object
+\twocolitem{{\bf GetPyData(item)}}{Returns the Python Object
 associated with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
 }
@@ -361,7 +361,7 @@ Returns the next visible item.
 
 Returns the item's parent.
 
-\pythonnote{This method is named \tt{GetItemParent} to avoid a name
+\pythonnote{This method is named {\tt GetItemParent} to avoid a name
 clash with wxWindow::GetParent.}
 
 \membersection{wxTreeCtrl::GetPrevSibling}\label{wxtreectrlgetprevsibling}
@@ -414,7 +414,7 @@ function can be called only if the control has the wxTR\_MULTIPLE style.
 Returns the number of selected items.
 
 \pythonnote{The wxPython version of this method accepts no parameters
-and returns a Python list of \tt{wxTreeItemId}'s.}
+and returns a Python list of {\tt wxTreeItemId}'s.}
 
 \membersection{wxTreeCtrl::GetStateImageList}\label{wxtreectrlgetstateimagelist}
 
@@ -556,7 +556,7 @@ Sets the item client data.
 
 \pythonnote{wxPython provides the following shortcut method:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{SetPyData(item, obj)}}{Associate the given Python
+\twocolitem{{\bf SetPyData(item, obj)}}{Associate the given Python
 Object with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
 }
@@ -691,8 +691,8 @@ container.
 In addition, the following methods are added in wxPython for accessing
 the object:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{\bf{GetData()}}{Returns a reference to the Python Object}
-\twocolitem{\bf{SetData(obj)}}{Associates a new Python Object with the
+\twocolitem{{\bf GetData()}}{Returns a reference to the Python Object}
+\twocolitem{{\bf SetData(obj)}}{Associates a new Python Object with the
 wxTreeItemData}
 \end{twocollist}}
 }
