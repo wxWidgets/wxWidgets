@@ -79,7 +79,7 @@ public:
   // event handlers for Protocols menu
   void OnTestURL(wxCommandEvent& event);
 
-  // event handlers for DatagramSocket menu
+  // event handlers for DatagramSocket menu (stub)
   void OnDatagram(wxCommandEvent& event);
 
   // socket event handler
@@ -210,7 +210,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   CreateStatusBar(2);
 
   // Make a panel with a textctrl in it
-  m_panel = new wxPanel(this, -1, wxPoint(0, 0), GetClientSize());
+  m_panel = new wxPanel(this, -1);
   m_text  = new wxTextCtrl(m_panel, -1,
                            _("Welcome to wxSocket demo: Client\n"
                              "Client ready\n"),
@@ -302,10 +302,10 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   //
   //   Connect(addr, FALSE);
   //   WaitOnConnect(seconds, millis);
-  //   success = IsConnected();
+  //   bool success = IsConnected();
   // 
   // And that's all :-)
-  //
+
   m_text->AppendText(_("\nTrying to connect (timeout = 10 sec) ...\n"));
   m_sock->Connect(addr, FALSE);
   m_sock->WaitOnConnect(10);
@@ -349,7 +349,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   // value larger than a byte "as is" across the network, or
   // you might be in trouble! Ever heard about big and little
   // endian computers?)
-  //
+
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   buf1 = _("Test string (less than 256 chars!)");
@@ -405,7 +405,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   //
   // We need to set no flags here (ReadMsg and WriteMsg are
   // not affected by flags)
-  //
+
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   wxString s = wxGetTextFromUser(
@@ -472,7 +472,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   // large buffer so that wxSocket is actually forced to split
   // it into pieces and take care of sending everything before
   // returning.
-  //
+
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   // Note that len is in kbytes here!
@@ -518,6 +518,9 @@ void MyFrame::OnCloseConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 {
+  m_text->AppendText(_("=== Datagram test begins ==="));
+  m_text->AppendText(_("Sorry, not implemented"));
+  m_text->AppendText(_("=== Datagram test ends ==="));
 }
 
 void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))

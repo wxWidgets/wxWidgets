@@ -171,7 +171,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   CreateStatusBar(2);
 
   // Make a panel with a textctrl in it
-  m_panel = new wxPanel(this, -1, wxPoint(0, 0), GetClientSize());
+  m_panel = new wxPanel(this, -1);
   m_text  = new wxTextCtrl(m_panel, -1,
                            _T("Welcome to wxSocket demo: Server\n"),
                            wxPoint(0, 0), m_panel->GetClientSize(),
@@ -230,7 +230,7 @@ void MyFrame::Test1(wxSocketBase *sock)
   // exact size and use the wxSOCKET_WAITALL flag. Also, we
   // disabled input events so we won't have unwanted reentrance.
   // This way we can avoid the infamous wxSOCKET_BLOCK flag.
-  //
+
   sock->SetFlags(wxSOCKET_WAITALL);
 
   sock->Read((char *)&len, 1);
@@ -255,7 +255,7 @@ void MyFrame::Test2(wxSocketBase *sock)
 
   // We don't need to set flags because ReadMsg and WriteMsg
   // are not affected by them anyway.
-  //
+
   len = sock->ReadMsg(buf, MAX_MSG_SIZE).LastCount();
 
   s.Printf(_T("Client says: %s\n"), buf);
@@ -278,7 +278,7 @@ void MyFrame::Test3(wxSocketBase *sock)
 
   // This test is similar to the first one, but the len is   
   // expressed in kbytes - this tests large data transfers.
-  //
+
   sock->SetFlags(wxSOCKET_WAITALL);
 
   sock->Read((char *)&len, 1);
@@ -307,7 +307,7 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
   // connections queue, else exit. We use Accept(FALSE) for
   // non-blocking accept (although if we got here, there
   // should ALWAYS be a pending connection).
-  //
+
   sock = m_server->Accept(FALSE);
 
   if (sock)
@@ -375,6 +375,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
       // We cannot delete the socket right now because we can
       // be in the middle of a test or something. So we append
       // it to the list of objects to be deleted.
+
       m_text->AppendText(_T("Deleting socket.\n"));
       wxPendingDelete.Append(sock);
       break;
