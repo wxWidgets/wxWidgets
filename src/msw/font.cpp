@@ -465,7 +465,7 @@ void wxNativeFontInfo::SetUnderlined(bool underlined)
 
 void wxNativeFontInfo::SetFaceName(wxString facename)
 {
-    wxStrncpy(lf.lfFaceName, facename, sizeof(lf.lfFaceName)/sizeof(WCHAR));
+    wxStrncpy(lf.lfFaceName, facename, WXSIZEOF(lf.lfFaceName));
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
