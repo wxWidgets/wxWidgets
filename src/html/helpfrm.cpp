@@ -13,7 +13,8 @@
 #pragma implementation
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
+// For compilers that support precompilation, includes "wx.h"
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -23,7 +24,6 @@
 #include "wx/defs.h"
 
 #if wxUSE_HTML
-
 #ifndef WXPRECOMP
 #include "wx/wx.h"
 #endif
@@ -48,6 +48,7 @@
 #include "bitmaps/book.xpm"
 #include "bitmaps/folder.xpm"
 #include "bitmaps/page.xpm"
+#include "bitmaps/help.xpm"
 #endif
 
 #include "wx/stream.h"
@@ -140,10 +141,12 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
 #ifdef __WXMSW__
-    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE);
+    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE, 32, 32);
+#else
+    wxIcon frameIcon(help_xpm);
+#endif
     if (frameIcon.Ok())
         SetIcon(frameIcon);
-#endif
 
     int notebook_page = 0;
 
@@ -276,21 +279,22 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_NavigPan -> AddPage(dummy, _("Search"));
         m_SearchPage = notebook_page++;
     }
+    m_HtmlWin -> Show(TRUE);
 
     //RefreshLists();
 
     // showtime
     if (m_NavigPan && m_Splitter) {
-        m_NavigPan -> Show(TRUE);
         m_Splitter -> SetMinimumPaneSize(20);
-        if (m_Cfg.navig_on)
+        if (m_Cfg.navig_on) {
+            m_NavigPan -> Show(TRUE);
             m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+        }
         else {
-            m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
-            m_Splitter -> Unsplit();
+            m_NavigPan -> Show(FALSE);
+            m_Splitter -> Initialize(m_HtmlWin);
         }
     }
-    m_HtmlWin -> Show(TRUE);
     return TRUE;
 }
 
@@ -331,6 +335,7 @@ bool wxHtmlHelpFrame::DisplayContents()
         m_NavigPan -> Show(TRUE);
         m_HtmlWin -> Show(TRUE);
         m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+        m_Cfg.navig_on = TRUE;
     }
     m_NavigPan -> SetSelection(0);
     return TRUE;
@@ -609,8 +614,8 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());
-    if (it) m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
+    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());    
+    m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
 }
 
 
