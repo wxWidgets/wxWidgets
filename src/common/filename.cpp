@@ -493,22 +493,23 @@ wxString wxFileName::GetShortPath() const
 {
 #if defined(__WXMSW__) && defined(__WIN32__)
     wxString path(GetFullPath());
-
-    wxChar outBuf[MAX_PATH];
-
-    // TODO: can't work out how to determine if the function failed
-    // (positive value if either it succeeded or the buffer was too small)
-
-    int bufSz = ::GetShortPathName((const wxChar*) path, outBuf, MAX_PATH*sizeof(wxChar));
-
-    if (bufSz == 0)
+    wxString pathOut;
+    DWORD sz = ::GetShortPathName(path, NULL, 0);
+    bool ok = sz != 0;
+    if ( ok )
     {
-        return wxEmptyString;
+        ok = ::GetShortPathName
+               (
+                path,
+                pathOut.GetWriteBuf(sz),
+                sz
+               ) != 0;
+        pathOut.UngetWriteBuf();
     }
+    if (ok)
+        return pathOut;
     else
-    {
-        return wxString(outBuf);
-    }
+        return path;
 #else
     return GetFullPath();
 #endif
@@ -519,22 +520,23 @@ wxString wxFileName::GetLongPath() const
 {
 #if defined(__WXMSW__) && defined(__WIN32__)
     wxString path(GetFullPath());
-
-    wxChar outBuf[MAX_PATH];
-
-    // TODO: can't work out how to determine if the function failed
-    // (positive value if either it succeeded or the buffer was too small)
-
-    int bufSz = ::GetLongPathName((const wxChar*) path, outBuf, MAX_PATH*sizeof(wxChar));
-
-    if (bufSz == 0)
+    wxString pathOut;
+    DWORD sz = ::GetLongPathName(path, NULL, 0);
+    bool ok = sz != 0;
+    if ( ok )
     {
-        return wxEmptyString;
+        ok = ::GetLongPathName
+               (
+                path,
+                pathOut.GetWriteBuf(sz),
+                sz
+               ) != 0;
+        pathOut.UngetWriteBuf();
     }
+    if (ok)
+        return pathOut;
     else
-    {
-        return wxString(outBuf);
-    }
+        return path;
 #else
     return GetFullPath();
 #endif
