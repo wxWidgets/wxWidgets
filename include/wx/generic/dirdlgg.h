@@ -1,51 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dirdlgg.h
-// Purpose:     wxDirDialog
-// Author:      Harm van der Heijden and Robert Roebling
+// Purpose:     wxGenericDirCtrl class
+//              Builds on wxDirCtrl class written by Robert Roebling for the
+//              wxFile application, modified by Harm van der Heijden.
+//              Further modified for Windows.
+// Author:      Robert Roebling, Harm van der Heijden, Julian Smart et al
 // Modified by:
-// Created:     12/12/98
-// Copyright:   (c) Harm van der Heijden and Robert Roebling
+// Created:     21/3/2000
 // RCS-ID:      $Id$
-// Licence:           wxWindows licence
-//
-// Notes:       wxDirDialog class written by Harm van der Heijden,
-//              uses wxDirCtrl class written by Robert Roebling for the
-//              wxFile application, modified by Harm van der Heijden
-//
-// Description: This generic dirdialog implementation defines three classes:
-//              1) wxDirItemData(public wxTreeItemData) stores pathname and
-//              displayed name for each item in the directory tree
-//              2) wxDirCtrl(public wxTreeCtrl) is a tree widget that
-//              displays a directory tree. It is possible to define sections
-//              for fast access to parts of the file system (such as the
-//              user's homedir, /usr/local, /tmp ...etc), similar to
-//              Win95 Explorer's shortcuts to 'My Computer', 'Desktop', etc.
-//              3) wxDirDialog is the dialog box itself. The user can choose
-//              a directory by navigating the tree, or by typing a dir
-//              in an inputbox. The inputbox displays paths selected in the
-//              tree. It is possible to create new directories. The user
-//              will automatically be prompted for dir creation if he
-//              enters a non-existing dir.
-//
-// TODO/BUGS:   - standard sections only have reasonable defaults for Unix
-//                (but others are easily added in wxDirCtrl::SetupSections)
-//              - No direct support for "show hidden" toggle. Partly due
-//                to laziness on my part and partly because
-//                wxFindFirst/NextFile never seems to find hidden dirs
-//                anyway.
-//              - No automatic update of the tree (branch) after directory
-//                creation.
-//              - I call wxBeginBusyCursor while expanding items (creating
-//                a new branch might take a few seconds, especially if a
-//                CDROM drive or something is involved) but that doesn't
-//                seem to do anything. Need to look into that.
-//              - Am still looking for an efficient way to delete wxTreeCtrl
-//                branches. DeleteChildren has disappeared and
-//                CollapseAndReset( parent ) deletes the parent as well.
-//              - The dialog window layout is done using wxConstraints. It
-//                works, but it's not as simple as I'd like it to be (see
-//                comments in wxDirDialog::doSize)
-//
+// Copyright:   (c) Robert Roebling, Harm van der Heijden, Julian Smart
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DIRDLGG_H_
@@ -60,124 +24,60 @@
 #if wxUSE_DIRDLG
 
 #include "wx/dialog.h"
-#include "wx/treectrl.h"
-
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxCheckBox;
+class WXDLLEXPORT wxGenericDirCtrl;
 class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxTreeEvent;
 
 //-----------------------------------------------------------------------------
-// data
+// wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxDirItemData;
-class wxDirCtrl;
-class wxDirDialog;
-
-//-----------------------------------------------------------------------------
-// wxDirItemData
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDirItemData : public wxTreeItemData
+class wxGenericDirDialog: public wxDialog
 {
 public:
-  wxDirItemData(wxString& path, wxString& name);
-  ~wxDirItemData();
-  bool HasSubDirs();
-  void SetNewDirName( wxString path );
-  wxString m_path, m_name;
-  bool m_isHidden;
-  bool m_hasSubDirs;
-};
+    wxGenericDirDialog(): wxDialog() {}
+    wxGenericDirDialog(wxWindow* parent, const wxString& title,
+                       const wxString& defaultPath = wxEmptyString, 
+                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
+                       const wxPoint& pos = wxDefaultPosition, 
+                       const wxSize& sz = wxSize(450, 550), 
+                       const wxString& name = _T("dialog"));
 
-//-----------------------------------------------------------------------------
-// wxDirCtrl
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDirCtrl: public wxTreeCtrl
-{
-public:
-    bool           m_showHidden;
-    wxTreeItemId   m_rootId;
-
-    wxDirCtrl();
-    wxDirCtrl(wxWindow *parent, const wxWindowID id = -1,
-              const wxString &dir = wxDirDialogDefaultFolderStr,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              const long style = wxTR_HAS_BUTTONS,
-              const wxString& name = wxTreeCtrlNameStr );
-    void ShowHidden( const bool yesno );
-    void OnExpandItem(wxTreeEvent &event );
-    void OnCollapseItem(wxTreeEvent &event );
-    void OnBeginEditItem(wxTreeEvent &event );
-    void OnEndEditItem(wxTreeEvent &event );
-
-protected:
-    friend class wxDirDialog;
-
-    void CreateItems(const wxTreeItemId &parent);
-    void SetupSections();
-    wxArrayString m_paths, m_names;
-
-private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxDirCtrl)
-};
-
-//-----------------------------------------------------------------------------
-// wxDirDialog
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDirDialog: public wxDialog
-{
-public:
-    wxDirDialog() {}
-    wxDirDialog(wxWindow *parent,
-                const wxString& message = wxFileSelectorPromptStr,
-                const wxString& defaultPath = wxEmptyString,
-                long style = 0, const wxPoint& pos = wxDefaultPosition);
+    //// Accessors
     inline void SetMessage(const wxString& message) { m_message = message; }
-    inline void SetPath(const wxString& path) { m_path = path; }
+    void SetPath(const wxString& path);
     inline void SetStyle(long style) { m_dialogStyle = style; }
 
-    inline wxString GetMessage() const { return m_message; }
-    inline wxString GetPath() const { return m_path; }
-    inline long GetStyle() const { return m_dialogStyle; }
+    inline wxString GetMessage(void) const { return m_message; }
+    wxString GetPath(void) const;
+    inline long GetStyle(void) const { return m_dialogStyle; }
 
+    wxTextCtrl* GetInputCtrl() const { return m_input; }
+
+    //// Overrides
     int ShowModal();
 
-    void OnTreeSelected( wxTreeEvent &event );
-    void OnTreeKeyDown( wxTreeEvent &event );
-    void OnOK(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-    void OnNew(wxCommandEvent& event);
-    // void OnCheck(wxCommandEvent& event);
-
 protected:
-    // implementation
-    wxString       m_message;
-    long           m_dialogStyle;
-    wxString       m_path;
-    wxDirCtrl     *m_dir;
-    wxTextCtrl    *m_input;
-    wxCheckBox    *m_check;  // not yet used
-    wxButton      *m_ok, *m_cancel, *m_new;
+    //// Event handlers
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnOK(wxCommandEvent& event);
+    void OnTreeSelected(wxTreeEvent &event);
+    void OnTreeKeyDown(wxTreeEvent &event);
+    void OnNew(wxCommandEvent& event);
 
-private:
+    wxString          m_message;
+    long              m_dialogStyle;
+    wxString          m_path;
+    wxGenericDirCtrl* m_dirCtrl;
+    wxTextCtrl*       m_input;
+
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
 
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)
+    #define wxDirDialog wxGenericDirDialog
 #endif
 
-#endif
-    // _WX_DIRDLGG_H_
+#endif // wxUSE_DIRDLG
 
+#endif // _WX_DIRDLGG_H_

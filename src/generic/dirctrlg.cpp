@@ -311,14 +311,15 @@ static char * icon8_xpm[] = {
 "                ",
 "                "};
 
-static const int ID_DIRCTRL = 1000;
-static const int ID_TEXTCTRL = 1001;
-static const int ID_OK = 1002;
-static const int ID_CANCEL = 1003;
-static const int ID_NEW = 1004;
-//static const int ID_CHECK = 1005;
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__)
+#define wxID_TREECTRL          7000
+#define wxID_FILTERLISTCTRL    7001
+
+#if defined(__DOS__)
+  #ifdef __DJGPP__
+    #define setdrive(drive) setdisk(drive)
+  #endif
+#elif defined(__WXMSW__) || defined(__WXPM__)
 int setdrive(int drive)
 {
 #if defined(__GNUWIN32__) && \
@@ -394,11 +395,11 @@ static int LINKAGEMODE wxDirCtrlStringCompareFunction(const void *first, const v
 }
 
 //-----------------------------------------------------------------------------
-// wxDirItemDataEx
+// wxDirItemData
 //-----------------------------------------------------------------------------
 
-wxDirItemDataEx::wxDirItemDataEx(const wxString& path, const wxString& name,
-                                 bool isDir)
+wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
+                             bool isDir)
 {
     m_path = path;
     m_name = name;
@@ -407,20 +408,48 @@ wxDirItemDataEx::wxDirItemDataEx(const wxString& path, const wxString& name,
      * For FileNameFromPath read LastDirNameInThisPath ;-) */
     // m_isHidden = (bool)(wxFileNameFromPath(*m_path)[0] == '.');
     m_isHidden = FALSE;
-    // m_hasSubDirs is no longer needed
-    m_hasSubDirs = TRUE; // HasSubDirs();
     m_isExpanded = FALSE;
     m_isDir = isDir;
 }
 
-wxDirItemDataEx::~wxDirItemDataEx()
+wxDirItemData::~wxDirItemData()
 {
 }
 
-void wxDirItemDataEx::SetNewDirName( wxString path )
+void wxDirItemData::SetNewDirName(const wxString& path)
 {
     m_path = path;
-    m_name = wxFileNameFromPath( path );
+    m_name = wxFileNameFromPath(path);
+}
+
+bool wxDirItemData::HasSubDirs() const
+{
+    if (m_path.IsEmpty())
+        return FALSE;
+
+    wxDir dir;
+    {
+        wxLogNull nolog;
+        if ( !dir.Open(m_path) )
+            return FALSE;
+    }
+
+    return dir.HasSubDirs();
+}
+
+bool wxDirItemData::HasFiles(const wxString& spec) const
+{
+    if (m_path.IsEmpty())
+        return FALSE;
+
+    wxDir dir;
+    {
+        wxLogNull nolog;
+        if ( !dir.Open(m_path) )
+            return FALSE;
+    }
+
+    return dir.HasFiles();
 }
 
 //-----------------------------------------------------------------------------
@@ -443,14 +472,14 @@ wxGenericDirCtrl::wxGenericDirCtrl(void)
 }
 
 bool wxGenericDirCtrl::Create(wxWindow *parent,
-                     const wxWindowID id,
-                     const wxString& dir,
-                     const wxPoint& pos,
-                     const wxSize& size,
-                     long style,
-                     const wxString& filter,
-                     int defaultFilter,
-                     const wxString& name )
+                              const wxWindowID id,
+                              const wxString& dir,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& filter,
+                              int defaultFilter,
+                              const wxString& name)
 {
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return FALSE;
@@ -459,7 +488,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     Init();
 
-    long treeStyle = wxTR_HAS_BUTTONS ; // | wxTR_EDIT_LABELS;
+    long treeStyle = wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxTR_HIDE_ROOT;
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
 
@@ -489,10 +518,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_imageList->Add(wxIcon(icon6_xpm));
     m_imageList->Add(wxIcon(icon7_xpm));
     m_imageList->Add(wxIcon(icon8_xpm));
-    m_treeCtrl->SetImageList(m_imageList);
+    m_treeCtrl->AssignImageList(m_imageList);
 
     m_showHidden = FALSE;
-    wxDirItemDataEx* rootData = new wxDirItemDataEx(wxT(""), wxT(""), TRUE);
+    wxDirItemData* rootData = new wxDirItemData(wxT(""), wxT(""), TRUE);
 
     wxString rootName;
 
@@ -517,8 +546,6 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
 wxGenericDirCtrl::~wxGenericDirCtrl()
 {
-   m_treeCtrl->SetImageList(NULL);
-   delete m_imageList;
 }
 
 void wxGenericDirCtrl::Init()
@@ -533,17 +560,9 @@ void wxGenericDirCtrl::Init()
 
 void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
 {
-    wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,name,TRUE);
+    wxDirItemData *dir_item = new wxDirItemData(path,name,TRUE);
 
-#if defined(__WXMSW__) || defined(__WXPM__)
-    // Windows and OS/2: sections are displayed as drives
     wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, imageId, -1, dir_item);
-#else
-    // Unix: sections are displayed as folders
-    wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, 0, -1, dir_item);
-    m_treeCtrl->SetItemImage( id, 1, wxTreeItemIcon_Expanded );
-#endif
-    // TODO: other operating systems.
 
     m_treeCtrl->SetItemHasChildren(id);
 }
@@ -552,7 +571,7 @@ void wxGenericDirCtrl::SetupSections()
 {
 #if defined(__WXMSW__) || defined(__WXPM__)
 
-# ifdef __WIN32__
+#ifdef __WIN32__
     wxChar driveBuffer[256];
     size_t n = (size_t) GetLogicalDriveStrings(255, driveBuffer);
     size_t i = 0;
@@ -624,14 +643,7 @@ void wxGenericDirCtrl::SetupSections()
       AddSection(name + wxFILE_SEP_PATH, name, 0);
     }
 #else
-  AddSection(wxT("/"), _("The Computer"), 0);
-  AddSection(wxGetHomeDir(), _("My Home"), 0 );
-  AddSection(wxT("/mnt"), _("Mounted Devices"), 0 );
-  AddSection(wxT("/usr/local"), _("User Local"), 0 );
-  AddSection(wxT("/usr"), _("User"), 0 );
-  AddSection(wxT("/var"), _("Variables"), 0 );
-  AddSection(wxT("/etc"), _("Etcetera"), 0 );
-  AddSection(wxT("/tmp"), _("Temporary"), 0 );
+    AddSection(wxT("/"), wxT("/"), 3/*computer icon*/);
 #endif
 }
 
@@ -666,7 +678,7 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     }
 
     wxTreeItemId id = event.GetItem();
-    wxDirItemDataEx *data = (wxDirItemDataEx*)m_treeCtrl->GetItemData( id );
+    wxDirItemData *data = (wxDirItemData*)m_treeCtrl->GetItemData( id );
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
@@ -698,6 +710,11 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 {
     wxTreeItemId parentId = event.GetItem();
 
+    // VS: this is needed because the event handler is called from wxTreeCtrl
+    //     ctor when wxTR_HIDE_ROOT was specified
+    if (m_rootId == 0)
+        m_rootId = m_treeCtrl->GetRootItem();
+
     ExpandDir(parentId);
 }
 
@@ -705,7 +722,7 @@ void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
 {
     wxTreeItemId child, parent = event.GetItem();
 
-    wxDirItemDataEx *data = (wxDirItemDataEx *) m_treeCtrl->GetItemData(event.GetItem());
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(event.GetItem());
     if (!data->m_isExpanded)
         return;
 
@@ -725,14 +742,14 @@ void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
 
 void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 {
-    wxDirItemDataEx *data = (wxDirItemDataEx *) m_treeCtrl->GetItemData(parentId);
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
 
     if (data->m_isExpanded)
         return;
 
     data->m_isExpanded = TRUE;
 
-    if (parentId == m_rootId)
+    if (parentId == m_treeCtrl->GetRootItem())
     {
         SetupSections();
         return;
@@ -774,7 +791,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     if (d.IsOpened())
     {
-        if (d.GetFirst(& eachFilename, wxEmptyString, wxDIR_DIRS))
+        if (d.GetFirst(& eachFilename, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN))
         {
             do
             {
@@ -783,7 +800,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                     dirs.Add(eachFilename);
                 }
             }
-            while (d.GetNext(& eachFilename)) ;
+            while (d.GetNext(& eachFilename));
         }
     }
     dirs.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
@@ -806,7 +823,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                         filenames.Add(eachFilename);
                     }
                 }
-                while (d.GetNext(& eachFilename)) ;
+                while (d.GetNext(& eachFilename));
             }
         }
         filenames.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
@@ -822,29 +839,20 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             path += wxString(wxFILE_SEP_PATH);
         path += eachFilename;
 
-        wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,eachFilename,TRUE);
+        wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,TRUE);
         wxTreeItemId id = m_treeCtrl->AppendItem( parentId, eachFilename, 0, -1, dir_item);
         m_treeCtrl->SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 
         // Has this got any children? If so, make it expandable.
-        int options = wxDIR_DEFAULT;
-        if (GetWindowStyle() & wxDIRCTRL_DIR_ONLY) // If only showing dirs, then we specify dirs only here
+        // (There are two situations when a dir has children: either it
+        // has subdirectories or it contains files that weren't filtered
+        // out. The latter only applies to dirctrl with files.)
+        if ( dir_item->HasSubDirs() ||
+             (((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0) &&
+               dir_item->HasFiles(m_currentFilterStr)) )
         {
-            options = wxDIR_DIRS;
+            m_treeCtrl->SetItemHasChildren(id);
         }
-
-        wxLogNull log;
-        wxDir dir2;
-        if (dir2.Open(path))
-        {
-            wxString str;
-            // Have to test for wxDIR_DIRS separately in case m_currentFilterStr is non-empty and
-            // and filters out any directories
-            if (dir2.GetFirst(& str, m_currentFilterStr, options) || dir2.GetFirst(& str, wxEmptyString, wxDIR_DIRS))
-            {
-                m_treeCtrl->SetItemHasChildren(id);
-            }
-    }
     }
 
     // Add the sorted filenames
@@ -858,7 +866,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
             //path = dirName + wxString(wxT("/")) + eachFilename;
-            wxDirItemDataEx *dir_item = new wxDirItemDataEx(path,eachFilename,FALSE);
+            wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,FALSE);
             (void)m_treeCtrl->AppendItem( parentId, eachFilename, 2, -1, dir_item);
         }
     }
@@ -887,9 +895,9 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
-        wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
 
-        if (data && data->m_path != "")
+        if (data && !data->m_path.IsEmpty())
         {
             wxString childPath(data->m_path);
             if (childPath.Last() != wxFILE_SEP_PATH)
@@ -914,7 +922,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
             }
         }
 
-        childId = m_treeCtrl->GetNextChild(childId, cookie);
+        childId = m_treeCtrl->GetNextChild(parentId, cookie);
     }
     wxTreeItemId invalid;
     return invalid;
@@ -937,7 +945,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     }
     if (lastId.IsOk())
     {
-        wxDirItemDataEx *data = (wxDirItemDataEx *) m_treeCtrl->GetItemData(lastId);
+        wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(lastId);
         if (data->m_isDir)
         {
             m_treeCtrl->Expand(lastId);
@@ -950,7 +958,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
             bool selectedChild = FALSE;
             while (childId.IsOk())
             {
-                wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(childId);
+                wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
 
                 if (data && data->m_path != "" && !data->m_isDir)
                 {
@@ -984,7 +992,7 @@ wxString wxGenericDirCtrl::GetPath() const
     wxTreeItemId id = m_treeCtrl->GetSelection();
     if (id)
     {
-        wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(id);
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
         return data->m_path;
     }
     else
@@ -996,7 +1004,7 @@ wxString wxGenericDirCtrl::GetFilePath() const
     wxTreeItemId id = m_treeCtrl->GetSelection();
     if (id)
     {
-        wxDirItemDataEx* data = (wxDirItemDataEx*) m_treeCtrl->GetItemData(id);
+        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(id);
         if (data->m_isDir)
             return wxEmptyString;
         else
@@ -1017,7 +1025,7 @@ void wxGenericDirCtrl::SetPath(const wxString& path)
 #if 0
 void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayString& filenames)
 {
-    wxDirItemDataEx *data = (wxDirItemDataEx *) m_treeCtrl->GetItemData(id);
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(id);
 
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
@@ -1216,204 +1224,5 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
     }
 }
 
-// wxGenericDirDialog implementation
-// This should be moved into dirdlgg.cpp eventually
-
-BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
-    EVT_BUTTON(wxID_OK,  wxGenericDirDialog::OnOK)
-    EVT_BUTTON(wxID_NEW,  wxGenericDirDialog::OnNew)
-    EVT_BUTTON               (wxID_NEW,     wxGenericDirDialog::OnNew)
-    EVT_CLOSE(wxGenericDirDialog::OnCloseWindow)
-    EVT_TREE_KEY_DOWN        (-1,   wxGenericDirDialog::OnTreeKeyDown)
-    EVT_TREE_SEL_CHANGED     (-1,   wxGenericDirDialog::OnTreeSelected)
-    EVT_TEXT_ENTER           (ID_TEXTCTRL,  wxGenericDirDialog::OnOK)
-END_EVENT_TABLE()
-
-wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
-        const wxString& defaultPath, long style, const wxPoint& pos, const wxSize& sz, const wxString& name):
-   wxDialog(parent, ID_DIRCTRL, title, pos, sz, style, name)
-{
-    m_dirCtrl = NULL;
-    m_path = defaultPath;
-
-    wxBusyCursor cursor;
-
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
-    // 1) dir ctrl
-    m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
-        defaultPath, wxPoint(5, 5),
-        wxSize(300, 200), wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER);
-
-    topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
-
-    // 2) text ctrl
-    m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
-    topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
-
-#if wxUSE_STATLINE
-    // 3) Static line
-    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif
-
-    // 4) Buttons
-    wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-    wxButton* okButton = new wxButton(this, wxID_OK, _("OK"));
-    buttonsizer->Add( okButton, 0, wxLEFT|wxRIGHT, 10 );
-    wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
-    buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
-
-    // I'm not convinced we need a New button, and we tend to get annoying
-    // accidental-editing with label editing enabled.
-#if 0
-    wxButton* newButton = new wxButton( this, wxID_NEW, _("New...") );
-    buttonsizer->Add( newButton, 0, wxLEFT|wxRIGHT, 10 );
-#endif
-
-    topsizer->Add( buttonsizer, 0, wxALL | wxCENTER, 10 );
-
-    okButton->SetDefault();
-    m_dirCtrl->SetFocus();
-
-    SetAutoLayout( TRUE );
-    SetSizer( topsizer );
-
-    topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
-
-    Centre( wxBOTH );
-}
-
-void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-    EndModal(wxID_CANCEL);
-}
-
-void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
-{
-    m_path = m_input->GetValue();
-    // Does the path exist? (User may have typed anything in m_input)
-    if (wxPathExists(m_path)) {
-        // OK, path exists, we're done.
-        EndModal(wxID_OK);
-        return;
-    }
-    // Interact with user, find out if the dir is a typo or to be created
-    wxString msg( _("The directory ") );
-    msg = msg + m_path;
-    msg = msg + _("\ndoes not exist\nCreate it now?") ;
-    wxMessageDialog dialog(this, msg, _("Directory does not exist"), wxYES_NO | wxICON_WARNING );
-    if ( dialog.ShowModal() == wxID_YES ) {
-        // Okay, let's make it
-        wxLogNull log;
-        if (wxMkdir(m_path)) {
-            // The new dir was created okay.
-            EndModal(wxID_OK);
-            return;
-        }
-        else {
-            // Trouble...
-            msg = _("Failed to create directory ")+m_path+
-                _("\n(Do you have the required permissions?)");
-            wxMessageDialog errmsg(this, msg, _("Error creating directory"), wxOK | wxICON_ERROR);
-            errmsg.ShowModal();
-            // We still don't have a valid dir. Back to the main dialog.
-        }
-    }
-    // User has answered NO to create dir.
-}
-
-void wxGenericDirDialog::SetPath(const wxString& path)
-{
-    m_dirCtrl->SetPath(path);
-    m_path = path;
-}
-
-wxString wxGenericDirDialog::GetPath(void) const
-{
-    return m_path;
-}
-
-int wxGenericDirDialog::ShowModal()
-{
-    //m_input->SetValue( m_path );
-    return wxDialog::ShowModal();
-}
-
-void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
-{
-    if (!m_dirCtrl)
-        return;
-
-    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(event.GetItem());
-    if (data)
-       m_input->SetValue( data->m_path );
-};
-
-void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
-{
-    if (!m_dirCtrl)
-        return;
-
-    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(m_dirCtrl->GetTreeCtrl()->GetSelection());
-    if (data)
-        m_input->SetValue( data->m_path );
-};
-
-void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
-{
-    wxTreeItemId id = m_dirCtrl->GetTreeCtrl()->GetSelection();
-    if ((id == m_dirCtrl->GetTreeCtrl()->GetRootItem()) ||
-        (m_dirCtrl->GetTreeCtrl()->GetParent(id) == m_dirCtrl->GetTreeCtrl()->GetRootItem()))
-    {
-        wxMessageDialog msg(this, _("You cannot add a new directory to this section."),
-                            _("Create directory"), wxOK | wxICON_INFORMATION );
-        msg.ShowModal();
-        return;
-    }
-
-    wxTreeItemId parent = id ; // m_dirCtrl->GetTreeCtrl()->GetParent( id );
-    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData( parent );
-    wxASSERT( data );
-
-    wxString new_name( wxT("NewName") );
-    wxString path( data->m_path );
-    if (path.Last() != wxFILE_SEP_PATH)
-        path += wxFILE_SEP_PATH;
-    path += new_name;
-    if (wxFileExists(path))
-    {
-        // try NewName0, NewName1 etc.
-        int i = 0;
-        do {
-            new_name = wxT("NewName");
-            wxString num;
-            num.Printf( wxT("%d"), i );
-            new_name += num;
-
-            path = data->m_path;
-            if (path.Last() != wxFILE_SEP_PATH)
-                path += wxFILE_SEP_PATH;
-            path += new_name;
-            i++;
-        } while (wxFileExists(path));
-    }
-
-    wxLogNull log;
-    if (!wxMkdir(path))
-    {
-        wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-        dialog.ShowModal();
-        return;
-    }
-
-    wxDirItemDataEx *new_data = new wxDirItemDataEx( path, new_name, TRUE );
-
-    // TODO: THIS CODE DOESN'T WORK YET. We need to avoid duplication of the first child
-    // of the parent.
-    wxTreeItemId new_id = m_dirCtrl->GetTreeCtrl()->AppendItem( parent, new_name, 0, 0, new_data );
-    m_dirCtrl->GetTreeCtrl()->EnsureVisible( new_id );
-    m_dirCtrl->GetTreeCtrl()->EditLabel( new_id );
-}
 
 #endif // wxUSE_DIRDLG

@@ -4,11 +4,11 @@
 //              Builds on wxDirCtrl class written by Robert Roebling for the
 //              wxFile application, modified by Harm van der Heijden.
 //              Further modified for Windows.
-// Author:      Julian Smart et al
+// Author:      Robert Roebling, Harm van der Heijden, Julian Smart et al
 // Modified by:
 // Created:     21/3/2000
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Robert Roebling, Harm van der Heijden, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +22,7 @@
 #if wxUSE_DIRDLG
 
 #include "wx/treectrl.h"
+#include "wx/dialog.h"
 #include "wx/dirdlg.h"
 #include "wx/choice.h"
 
@@ -29,34 +30,42 @@
 // classes
 //-----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxTextCtrl;
+
 //-----------------------------------------------------------------------------
 // Extra styles for wxGenericDirCtrl
 //-----------------------------------------------------------------------------
 
-// Only allow directory viewing/selection, no files
-#define wxDIRCTRL_DIR_ONLY       0x0010
-// When setting the default path, select the first file in the directory
-#define wxDIRCTRL_SELECT_FIRST   0x0020
-// Show the filter list
-#define wxDIRCTRL_SHOW_FILTERS   0x0040
-// Use 3D borders on internal controls
-#define wxDIRCTRL_3D_INTERNAL    0x0080
+enum
+{
+    // Only allow directory viewing/selection, no files
+    wxDIRCTRL_DIR_ONLY       = 0x0010,
+    // When setting the default path, select the first file in the directory
+    wxDIRCTRL_SELECT_FIRST   = 0x0020,
+    // Show the filter list
+    wxDIRCTRL_SHOW_FILTERS   = 0x0040,
+    // Use 3D borders on internal controls
+    wxDIRCTRL_3D_INTERNAL    = 0x0080
+};
 
 //-----------------------------------------------------------------------------
 // wxDirItemData
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirItemDataEx : public wxTreeItemData
+class WXDLLEXPORT wxDirItemData : public wxTreeItemData
 {
 public:
-  wxDirItemDataEx(const wxString& path, const wxString& name, bool isDir);
-  ~wxDirItemDataEx();
-  void SetNewDirName( wxString path );
-  wxString m_path, m_name;
-  bool m_isHidden;
-  bool m_hasSubDirs;
-  bool m_isExpanded;
-  bool m_isDir;
+    wxDirItemData(const wxString& path, const wxString& name, bool isDir);
+    ~wxDirItemData();
+    void SetNewDirName(const wxString& path);
+
+    bool HasSubDirs() const;
+    bool HasFiles(const wxString& spec = wxEmptyString) const;
+
+    wxString m_path, m_name;
+    bool m_isHidden;
+    bool m_isExpanded;
+    bool m_isDir;
 };
 
 //-----------------------------------------------------------------------------
@@ -127,7 +136,7 @@ public:
     wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
     wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
 
-//// Helpers
+    //// Helpers
     void SetupSections();
     // Parse the filter into an array of filters and an array of descriptions
     int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
@@ -190,10 +199,10 @@ public:
 
     ~wxDirFilterListCtrl() {};
 
-//// Operations
+    //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);
 
-//// Events
+    //// Events
     void OnSelFilter(wxCommandEvent& event);
 
 protected:
@@ -203,51 +212,9 @@ protected:
     DECLARE_CLASS(wxDirFilterListCtrl)
 };
 
-#define wxID_TREECTRL          7000
-#define wxID_FILTERLISTCTRL    7001
-
-//-----------------------------------------------------------------------------
-// wxGenericDirDialog
-//
-//-----------------------------------------------------------------------------
-
-class wxGenericDirDialog: public wxDialog
-{
-DECLARE_EVENT_TABLE()
-public:
-    wxGenericDirDialog(): wxDialog() {}
-    wxGenericDirDialog(wxWindow* parent, const wxString& title,
-        const wxString& defaultPath = wxEmptyString, long style = wxDEFAULT_DIALOG_STYLE, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxSize(450, 550), const wxString& name = "dialog");
-
-//// Event handlers
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnOK(wxCommandEvent& event);
-    void OnTreeSelected( wxTreeEvent &event );
-    void OnTreeKeyDown( wxTreeEvent &event );
-    void OnNew(wxCommandEvent& event);
-
-//// Accessors
-    inline void SetMessage(const wxString& message) { m_message = message; }
-    void SetPath(const wxString& path) ;
-    inline void SetStyle(long style) { m_dialogStyle = style; }
-
-    inline wxString GetMessage(void) const { return m_message; }
-    wxString GetPath(void) const ;
-    inline long GetStyle(void) const { return m_dialogStyle; }
-
-    wxTextCtrl* GetInputCtrl() const { return m_input; }
-
-//// Overrides
-    int ShowModal();
-
-protected:
-    wxString    m_message;
-    long        m_dialogStyle;
-    wxString    m_path;
-    wxGenericDirCtrl* m_dirCtrl;
-    wxTextCtrl* m_input;
-
-};
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)
+    #define wxDirCtrl wxGenericDirCtrl
+#endif
 
 #endif // wxUSE_DIRDLG
 
