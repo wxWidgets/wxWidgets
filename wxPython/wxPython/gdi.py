@@ -42,7 +42,6 @@ wxBitmapFromXPMData = wx.gdi.BitmapFromXPMData
 wxBitmapFromBits = wx.gdi.BitmapFromBits
 wxMask = wx.gdi.Mask
 wxMaskPtr = wx.gdi.MaskPtr
-wxMaskColour = wx.gdi.MaskColour
 wxIcon = wx.gdi.Icon
 wxIconPtr = wx.gdi.IconPtr
 wxEmptyIcon = wx.gdi.EmptyIcon
@@ -592,5 +591,6 @@ wxMirrorDC_old = wx.gdi.MirrorDC_old
 wxPostScriptDC_old = wx.gdi.PostScriptDC_old
 wxMetaFileDC_old = wx.gdi.MetaFileDC_old
 wxPrinterDC_old = wx.gdi.PrinterDC_old
+wxMaskColour = wx.gdi.MaskColour
 
 

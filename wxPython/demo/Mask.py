@@ -40,7 +40,7 @@ class TestMaskWindow(wx.ScrolledWindow):
         self.bmp_withmask  = images.getTestStar2Bitmap()
 
         # this mask comes from a monochrome bitmap
-        self.bmp_themask = wx.BitmapFromImage(images.getTestMaskImage(), 1)
+        self.bmp_themask = images.getTestMaskBitmap()
         mask = wx.Mask(self.bmp_themask)
 
         # set the mask on our bitmap

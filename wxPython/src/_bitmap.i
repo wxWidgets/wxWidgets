@@ -201,19 +201,29 @@ DocStr(wxMask,
 
 class wxMask : public wxObject {
 public:
+#if 0
     DocCtorStr(
         wxMask(const wxBitmap& bitmap),
         "Constructs a mask from a monochrome bitmap.");
+#endif
 
-    DocCtorStrName(
-        wxMask(const wxBitmap& bitmap, const wxColour& colour),
-        "Constructs a mask from a bitmap and a colour in that bitmap that indicates the\n"
-        "background.",
-        MaskColour);
+    DocStr(wxMask,
+           "Constructs a mask from a bitmap and a colour in that bitmap that indicates\n"
+           "the transparent portions of the mask, by default BLACK is used.");
+    
+    %extend {
+        wxMask(const wxBitmap& bitmap, const wxColour& colour = wxNullColour) {
+            if ( !colour.Ok() )
+                return new wxMask(bitmap, *wxBLACK);
+            else
+                return new wxMask(bitmap, colour);
+        }
+    }
     
     //~wxMask();
-
 };
+
+%pythoncode { MaskColour = Mask }
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
