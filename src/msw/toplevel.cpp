@@ -159,8 +159,11 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
                         (style & ~wxBORDER_MASK) | wxBORDER_NONE, exflags
                       ) & ~WS_CHILD & ~WS_VISIBLE;
 
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+    // For some reason, WS_VISIBLE needs to be defined on creation for
+    // SmartPhone 2003. The title can fail to be displayed otherwise.
+#if defined(__SMARTPHONE__) || (defined(__WXWINCE__) && _WIN32_WCE < 400)
     msflags |= WS_VISIBLE;
+    ((wxTopLevelWindowMSW*)this)->wxWindowBase::Show(true);
 #endif
 
     // first select the kind of window being created
@@ -402,6 +405,11 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     }
 
     SubclassWin(m_hWnd);
+    
+#ifdef __SMARTPHONE__
+    // Work around title non-display glitch
+    Show(false);
+#endif    
 
     return true;
 #endif // __WXMICROWIN__/!__WXMICROWIN__
@@ -424,7 +432,13 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     wxSize sz(size);
 #endif
 
-    return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
+    bool result = MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
+
+#ifdef __SMARTPHONE__
+    // Work around title non-display glitch
+    Show(false);
+#endif
+    return result;
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,
@@ -574,7 +588,7 @@ bool wxTopLevelWindowMSW::Show(bool show)
             nShowCmd = SW_MAXIMIZE;
 
             // This is necessary, or no window appears
-#ifdef __WINCE_STANDARDSDK__
+#if defined( __WINCE_STANDARDSDK__) || defined(__SMARTPHONE__)
             DoShowWindow(SW_SHOW);
 #endif
 
