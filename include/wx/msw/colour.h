@@ -23,6 +23,7 @@ class WXDLLEXPORT wxColour: public wxObject
 public:
   wxColour(void);
   wxColour(const unsigned char r, const unsigned char g, const unsigned char b);
+  wxColour(unsigned long colRGB) { Set(colRGB); }
   wxColour(const wxColour& col);
   wxColour(const wxString& col);
   ~wxColour(void) ;
@@ -31,6 +32,14 @@ public:
   inline int Ok(void) const { return (m_isInit) ; }
 
   void Set(unsigned char r, unsigned char g, unsigned char b);
+  void Set(unsigned long colRGB) 
+  { 
+    // we don't need to know sizeof(long) here because we assume that the three
+    // least significant bytes contain the R, G and B values
+    Set((unsigned char)colRGB, 
+        (unsigned char)(colRGB >> 8),
+        (unsigned char)(colRGB >> 16)); 
+  }
 
   // Let's remove this inelegant function
 #if WXWIN_COMPATIBILITY
