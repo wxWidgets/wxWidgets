@@ -53,7 +53,7 @@ wxAcceleratorTable::wxAcceleratorTable( int n, wxAcceleratorEntry entries[] )
         int flag    = entries[i].GetFlags();
         int keycode = entries[i].GetKeyCode();
         int command = entries[i].GetCommand();
-        if ((keycode >= (int)'A') && (keycode <= (int)'Z')) keycode = (int)tolower( (char)keycode );
+        if ((keycode >= (int)'a') && (keycode <= (int)'z')) keycode = (int)toupper( (char)keycode );
         M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( flag, keycode, command ) );
     }
 }
