@@ -113,6 +113,9 @@ Add-ons
 -------
 
 wxWindows-x.y.z-cw.zip             Metrowerks CodeWarrior 4.1 project files
+wxWindows-x.y.z-wat.zip            Watcom C++ project files
+wxWindows-x.y.z-vc.zip             Visual C++ project files (in wxMSW distr.)
+wxWindows-x.y.z-bc.zip             Borland C++ project files (in wxMSW distr.)
 jpeg.zip                           JPEG library (already included
                                    in most distributions)
 tiff.zip                           TIFF library (already included
