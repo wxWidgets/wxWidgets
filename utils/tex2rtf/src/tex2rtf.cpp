@@ -119,7 +119,7 @@ char *ContentsName = NULL;    // Contents page from last time around
 char *TmpContentsName = NULL; // Current contents page
 char *TmpFrameContentsName = NULL; // Current frame contents page
 char *WinHelpContentsFileName = NULL; // WinHelp .cnt file
-char *RefName = NULL;         // Reference file name
+char *RefFileName = NULL;         // Reference file name
 
 char *RTFCharset = copystring("ansi");
 
@@ -161,7 +161,7 @@ bool MyApp::OnInit()
   TmpContentsName = new char[300];
   TmpFrameContentsName = new char[300];
   WinHelpContentsFileName = new char[300];
-  RefName = new char[300];
+  RefFileName = new char[300];
 
   ColourTable.DeleteContents(TRUE);
 
@@ -530,10 +530,10 @@ int MyApp::OnExit()
       delete WinHelpContentsFileName;
       WinHelpContentsFileName = NULL;
     }
-    if (RefName)
+    if (RefFileName)
     {
-      delete RefName;
-      RefName = NULL;
+      delete RefFileName;
+      RefFileName = NULL;
     }
     if (TopLevel)
     {
@@ -954,7 +954,7 @@ bool Go(void)
   sprintf(TmpContentsName, "%s.cn1", FileRoot);
   sprintf(TmpFrameContentsName, "%s.frc", FileRoot);
   sprintf(WinHelpContentsFileName, "%s.cnt", FileRoot);
-  sprintf(RefName, "%s.ref", FileRoot);
+  sprintf(RefFileName, "%s.ref", FileRoot);
 
   TexPathList.EnsureFileAccessible(InputFile);
   if (!bulletFile)
@@ -967,8 +967,8 @@ bool Go(void)
     }
   }
 
-  if (wxFileExists(RefName))
-    ReadTexReferences(RefName);
+  if (wxFileExists(RefFileName))
+    ReadTexReferences(RefFileName);
 
   bool success = FALSE;
 
@@ -1027,7 +1027,7 @@ bool Go(void)
 
   if (success)
   {
-    WriteTexReferences(RefName);
+    WriteTexReferences(RefFileName);
     TexCleanUp();
     startedSections = FALSE;
 
