@@ -683,11 +683,27 @@ bool wxLocale::Init(const wxChar *szName,
 static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
 {
     wxMB2WXbuf l = wxSetlocale(c, lc);
-    if ( lc && lc[0] != 0 && !l )
+    if ( !l && lc && lc[0] != 0 )
     {
     	wxString buf(lc);
-    	buf += wxT(".utf8");
-    	l = wxSetlocale(c, buf.c_str());
+        wxString buf2;
+    	buf2 = buf + wxT(".UTF-8");
+    	l = wxSetlocale(c, buf2.c_str());
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf-8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".UTF8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
     }
     return l;
 }

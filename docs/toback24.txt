@@ -216,10 +216,14 @@ done
 24. Fix wxLocale::Init to try xx_YY.utf8 on systems where xx_YY fails
 (presumably RedHat; do it in Unicode mode only)
 
-See: Patch [ 766893 ]
+See: Patch [ 766893 ], [ 775994 ]
 Checking in intl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
 new revision: 1.97; previous revision: 1.96
+done
+Checking in intl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
+new revision: 1.100; previous revision: 1.99
 done
 Checking in changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
