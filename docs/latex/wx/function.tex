@@ -2,7 +2,51 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
 
-The functions defined in wxWindows are described here.
+The functions and macros defined in wxWindows are described here.
+
+\section{Version macros}\label{versionfunctions}
+
+The following constants are defined in wxWindows:
+
+\begin{itemize}\itemsep=0pt
+\item {\tt wxMAJOR\_VERSION} is the major version of wxWindows
+\item {\tt wxMINOR\_VERSION} is the minor version of wxWindows
+\item {\tt wxRELASE\_NUMBER} is the release number
+\end{itemize}
+
+For example, the values or these constants for wxWindows 2.1.15 are 2, 1 and
+15.
+
+Additionally, {\tt wxVERSION\_STRING} is a user-readable string containing
+the full wxWindows version and {\tt wxVERSION\_NUMBER} is a combination of the
+three version numbers above: for 2.1.15, it is 2115 and it is 2200 for
+wxWindows 2.2.
+
+\wxheading{Include files}
+
+<wx/version.h> or <wx/defs.h>
+
+\membersection{wxCHECK\_VERSION}\label{wxcheckversion}
+
+\func{bool}{wxCHECK\_VERSION}{\param{major, minor, release}}
+
+This is a macro which evaluates to true if the current wxWindows version is at
+least major.minor.release.
+
+For example, to test if the program is compiled with wxWindows 2.2 or higher,
+the following can be done:
+
+\begin{verbatim}
+wxString s;
+#if wxCHECK_VERSION(2, 2, 0)
+    if ( s.StartsWith("foo") )
+#else // replacement code for old version
+    if ( strncmp(s, "foo", 3) == 0 )
+#endif
+    {
+        ...
+    }
+\end{verbatim}
 
 \section{Thread functions}\label{threadfunctions}
 
@@ -45,7 +89,7 @@ Note that under GTK, no creation of top-level windows is allowed in any
 thread but the main one.
 
 This function is only defined on platforms which support preemptive
-threads. 
+threads.
 
 \membersection{::wxMutexGuiLeave}\label{wxmutexguileave}
 
