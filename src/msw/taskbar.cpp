@@ -170,11 +170,13 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     // if we try to exit right now.
     wxTopLevelWindows.DeleteObject(win);
 
+    menu->UpdateUI();
+
     rval = win->PopupMenu(menu, 0, 0);
 
     win->PopEventHandler(FALSE);
     win->Destroy();
-    delete win;
+    //delete win;
 
     return rval;
 }
