@@ -94,6 +94,34 @@ the image data.  (Patch #546009)
 Added a sample that shows how to embed wxPython in a wxWindows C++
 application.
 
+Added wxPyWindow and wxPyControl which are just like their wx
+counterparts except they allow some of the more common C++ virtual
+methods to be overridden in Python derived classes.  The methods
+supported are:
+
+    DoMoveWindow
+    DoSetSize
+    DoSetClientSize
+    DoSetVirtualSize
+    DoGetSize
+    DoGetClientSize
+    DoGetPosition
+    DoGetVirtualSize
+    DoGetBestSize
+    InitDialog
+    TransferDataFromWindow
+    TransferDataToWindow
+    Validate
+    AcceptsFocus
+    AcceptsFocusFromKeyboard
+    GetMaxSize
+
+    If there are other methods that should be supported please let me
+    know.
+
+Changed wxGenButton to derive from wxPyControl and overload
+DoGetBestSize and AcceptsFocus.
+
 
 
 2.3.2.1

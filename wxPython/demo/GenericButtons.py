@@ -11,35 +11,42 @@ class TestPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
         self.log = log
 
-        b = wxButton(self, -1, "A real button", (10,10))
+        sizer = wxFlexGridSizer(1, 3, 20, 20)
+        b = wxButton(self, -1, "A real button")
         b.SetDefault()
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b = wxButton(self, -1, "non-default", (140, 10))
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
-        #wxTextCtrl(self, -1, "", (10,40))
+        sizer.Add(b)
 
-        b = wxGenButton(self, -1, 'Hello', (10,65))
+        b = wxButton(self, -1, "non-default")
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b = wxGenButton(self, -1, 'disabled', (140,65))
+        sizer.Add(b)
+        sizer.Add(10,10)
+
+        b = wxGenButton(self, -1, 'Hello')
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        sizer.Add(b)
+
+        b = wxGenButton(self, -1, 'disabled')
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         b.Enable(false)
+        sizer.Add(b)
 
-        b = wxGenButton(self, -1, 'bigger', (250,50))
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        b = wxGenButton(self, -1, 'bigger')
+        EVT_BUTTON(self, b.GetId(), self.OnBiggerButton)
         b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, false))
         b.SetBezelWidth(5)
-        b.SetBestSize()
-        b.SetBackgroundColour(wxNamedColour("Navy"))
+        ###b.SetBestSize()
+        b.SetBackgroundColour("Navy")
         b.SetForegroundColour(wxWHITE)
-        #b.SetUseFocusIndicator(false)
         b.SetToolTipString("This is a BIG button...")
+        sizer.Add(b, flag=wxADJUST_MINSIZE)  # let the sizer set best size
 
         bmp = images.getTest2Bitmap()
-        b = wxGenBitmapButton(self, -1, bmp, (10, 130))
+        b = wxGenBitmapButton(self, -1, bmp)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
+        sizer.Add(b)
 
-
-        b = wxGenBitmapButton(self, -1, None, (140, 130))
+        b = wxGenBitmapButton(self, -1, None)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = images.getBulb1Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
@@ -50,12 +57,14 @@ class TestPanel(wxPanel):
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetBestSize()
+        sizer.Add(b)
+        sizer.Add(10,10)
 
-        b = wxGenToggleButton(self, -1, "Toggle Button", (10, 230))
+        b = wxGenToggleButton(self, -1, "Toggle Button")
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
+        sizer.Add(b)
 
-
-        b = wxGenBitmapToggleButton(self, -1, None, (140, 230))
+        b = wxGenBitmapToggleButton(self, -1, None)
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
         bmp = images.getBulb1Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
@@ -67,8 +76,9 @@ class TestPanel(wxPanel):
         b.SetBitmapSelected(bmp)
         b.SetToggle(true)
         b.SetBestSize()
+        sizer.Add(b)
 
-        b = wxGenBitmapTextButton(self, -1, None, "Bitmapped Text", (220, 230), size = (200, 45))
+        b = wxGenBitmapTextButton(self, -1, None, "Bitmapped Text", size = (200, 45))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = images.getBulb1Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
@@ -80,10 +90,24 @@ class TestPanel(wxPanel):
         b.SetBitmapSelected(bmp)
         b.SetUseFocusIndicator(false)
         b.SetBestSize()
+        sizer.Add(b)
+
+        border = wxBoxSizer(wxVERTICAL)
+        border.Add(sizer, 0, wxALL, 25)
+        self.SetSizer(border)
 
 
     def OnButton(self, event):
         self.log.WriteText("Button Clicked: %d\n" % event.GetId())
+
+
+    def OnBiggerButton(self, event):
+        self.log.WriteText("Bigger Button Clicked: %d\n" % event.GetId())
+        b = event.GetEventObject()
+        txt = "big " + b.GetLabel()
+        b.SetLabel(txt)
+        self.GetSizer().Layout()
+
 
     def OnToggleButton(self, event):
         msg = (event.GetIsDown() and "on") or "off"

@@ -52,7 +52,7 @@ class wxGenButtonEvent(wxPyCommandEvent):
 
 #----------------------------------------------------------------------
 
-class wxGenButton(wxControl):
+class wxGenButton(wxPyControl):
     labelDelta = 1
 
     def __init__(self, parent, ID, label,
@@ -61,7 +61,7 @@ class wxGenButton(wxControl):
                  name = "genbutton"):
         if style == 0:
             style = wxNO_BORDER
-        wxControl.__init__(self, parent, ID, pos, size, style, validator, name)
+        wxPyControl.__init__(self, parent, ID, pos, size, style, validator, name)
 
         self.up = true
         self.bezelWidth = 2
@@ -79,6 +79,7 @@ class wxGenButton(wxControl):
 
         EVT_LEFT_DOWN(self,        self.OnLeftDown)
         EVT_LEFT_UP(self,          self.OnLeftUp)
+        EVT_LEFT_DCLICK(self,      self.OnLeftDown)
         EVT_MOTION(self,           self.OnMotion)
         EVT_SET_FOCUS(self,        self.OnGainFocus)
         EVT_KILL_FOCUS(self,       self.OnLoseFocus)
@@ -97,25 +98,36 @@ class wxGenButton(wxControl):
             size = wxSize(-1,-1)
         if type(size) == type(()):
             size = wxSize(size[0], size[1])
+        size = wxSize(size.width, size.height)  # make a copy
 
-        # make a new size so we don't mess with the one passed in
-        size = wxSize(size.width, size.height)
-
-        w, h, useMin = self._GetLabelSize()
-        defSize = wxButton_GetDefaultSize()
+        best = self.GetBestSize()
         if size.width == -1:
-            size.width = 12 + w
-            if useMin and size.width < defSize.width:
-                size.width = defSize.width
+            size.width = best.width
         if size.height == -1:
-            size.height = 11 + h
-            if useMin and size.height < defSize.height:
-                size.height = defSize.height
-
-        size.width = size.width + self.bezelWidth - 1
-        size.height = size.height + self.bezelWidth - 1
+            size.height = best.height
 
         self.SetSize(size)
+
+
+    def DoGetBestSize(self):
+        """Overridden base class virtual.  Determines the best size of the
+        button based on the label and bezel size."""
+        w, h, useMin = self._GetLabelSize()
+        defSize = wxButton_GetDefaultSize()
+        width = 12 + w
+        if useMin and width < defSize.width:
+           width = defSize.width
+        height = 11 + h
+        if useMin and height < defSize.height:
+            height = defSize.height
+        width = width + self.bezelWidth - 1
+        height = height + self.bezelWidth - 1
+        return (width, height)
+
+
+    def AcceptsFocus(self):
+        """Overridden base class virtual."""
+        return self.IsShown() and self.IsEnabled()
 
 
     def SetBezelWidth(self, width):
@@ -151,7 +163,8 @@ class wxGenButton(wxControl):
 
 
     def SetBackgroundColour(self, colour):
-        wxControl.SetBackgroundColour(self, colour)
+        wxPyControl.SetBackgroundColour(self, colour)
+        colour = self.GetBackgroundColour()
 
         # Calculate a new set of highlight and shadow colours based on
         # the new background colour.  Works okay if the colour is dark...
@@ -174,6 +187,7 @@ class wxGenButton(wxControl):
         evt = wxGenButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
         evt.SetIsDown(not self.up)
         evt.SetButtonObj(self)
+        evt.SetEventObject(self)
         self.GetEventHandler().ProcessEvent(evt)
 
 
@@ -262,6 +276,7 @@ class wxGenButton(wxControl):
         self.up = true
         self.Refresh()
         event.Skip()
+
 
     def OnMotion(self, event):
         if not self.IsEnabled():
