@@ -829,6 +829,10 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
     TransferDataFromWindow();
 
     // Transfer the current print settings from this dialog to the page setup dialog.
+    
+#if 0
+    // Use print factory later    
+    
     wxPrintDialogData data;
     data = GetPageSetupData().GetPrintData();
     data.SetSetupDialog(true);
@@ -842,6 +846,7 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 
     // Now update the dialog in case the page setup dialog changed some of our settings.
     TransferDataToWindow();
+#endif
 }
 
 wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,

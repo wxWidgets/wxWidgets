@@ -46,7 +46,6 @@
 #include "wx/thread.h"
 #include "wx/utils.h"
 #include "wx/ptr_scpd.h"
-#include "wx/prntbase.h"
 
 #if defined(__WXMSW__) && !defined(__PALMOS__)
   #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
@@ -141,8 +140,6 @@ void wxAppBase::CleanUp()
         delete wxTopLevelWindows.GetFirst()->GetData();
     }
     
-    wxPrintFactory::SetPrintFactory( NULL );
-
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
 
