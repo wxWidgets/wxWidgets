@@ -1757,10 +1757,16 @@ void wxWindowBase::UpdateWindowUI()
 #if wxUSE_TEXTCTRL
                 wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
                 if ( text )
-                    text->SetValue(event.GetText());
+                {
+                	if ( event.GetText() != text->GetValue() )
+                    	text->SetValue(event.GetText());
+                }
                 else
 #endif // wxUSE_TEXTCTRL
-                    control->SetLabel(event.GetText());
+				{
+					if ( event.GetText() != control->GetLabel() )
+                    	control->SetLabel(event.GetText());
+                }
             }
         }
 
