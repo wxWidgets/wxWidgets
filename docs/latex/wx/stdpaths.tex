@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Name:        fileloc.tex
-%% Purpose:     wxFileLocator documentation
+%% Name:        stdpaths.tex
+%% Purpose:     wxStandardPaths documentation
 %% Author:      Vadim Zeitlin
 %% Modified by:
 %% Created:     2004-10-17
@@ -9,14 +9,14 @@
 %% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxFileLocator}}\label{wxfilelocator}
+\section{\class{wxStandardPaths}}\label{wxstandardsaths}
 
-wxFileLocator returns the standard locations in the file system and should be
+wxStandardPaths returns the standard locations in the file system and should be
 used by the programs to find their data files in a portable way.
 
 Please note that this is not a real class because object of this type are never
 created but more a namespace containing the class methods which are all static,
-so to use wxFileLocator simply call its methods directly.
+so to use wxStandardPaths simply call its methods directly.
 
 In the description of the methods below, the example return values are given
 for the Unix, Windows and Mac OS X systems, however please note that these are
@@ -36,7 +36,7 @@ replaced with the value returned by \helpref{wxApp::GetAppName}{wxappgetappname}
 and the name of the currently logged in user, respectively.
 
 The directories returned by the methods of this class may or may not exist. If
-they don't exist, it's up to the caller to create them, wxFileLocator doesn't
+they don't exist, it's up to the caller to create them, wxStandardPaths doesn't
 do it.
 
 Finally note that under Mac, these functions only work for the bundled
@@ -54,7 +54,7 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxFileLocator::GetConfigDir}\label{wxfilelocatorgetconfigdir}
+\membersection{wxStandardPaths::GetConfigDir}\label{wxstandardsathsgetconfigdir}
 
 \func{static wxString}{GetConfigDir}{\void}
 
@@ -72,7 +72,7 @@ Example return values:
 \helpref{wxFileConfig}{wxfileconfig}
 
 
-\membersection{wxFileLocator::GetDataDir}\label{wxfilelocatorgetdatadir}
+\membersection{wxStandardPaths::GetDataDir}\label{wxstandardsathsgetdatadir}
 
 \func{static wxString}{GetDataDir}{\void}
 
@@ -88,21 +88,21 @@ Example return values:
 
 \wxheading{See also}
 
-\helpref{GetLocalDataDir}{wxfilelocatorgetlocaldatadir}
+\helpref{GetLocalDataDir}{wxstandardsathsgetlocaldatadir}
 
 
-\membersection{wxFileLocator::GetLocalDataDir}\label{wxfilelocatorgetlocaldatadir}
+\membersection{wxStandardPaths::GetLocalDataDir}\label{wxstandardsathsgetlocaldatadir}
 
 \func{static wxString}{GetLocalDataDir}{\void}
 
 Return the location for application data files which are host-specific and
 can't, or shouldn't, be shared with the other machines.
 
-This is the same as \helpref{GetDataDir()}{wxfilelocatorgetdatadir} except
+This is the same as \helpref{GetDataDir()}{wxstandardsathsgetdatadir} except
 under Unix where it returns \texttt{/etc/\textit{appname}}.
 
 
-\membersection{wxFileLocator::GetPluginsDir}\label{wxfilelocatorgetpluginsdir}
+\membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardsathsgetpluginsdir}
 
 \func{static wxString}{GetPluginsDir}{\void}
 
@@ -120,7 +120,7 @@ Example return values:
 \helpref{wxDynamicLibrary}{wxdynamiclibrary}
 
 
-\membersection{wxFileLocator::GetUserConfigDir}\label{wxfilelocatorgetuserconfigdir}
+\membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardsathsgetuserconfigdir}
 
 \func{static wxString}{GetUserConfigDir}{\void}
 
@@ -132,36 +132,31 @@ Return the directory for the user config files:
 \end{itemize}
 
 Only use this method if you have a single configuration file to put in this
-directory, otherwise \helpref{GetUserDataDir()}{wxfilelocatorgetuserdatadir} is
+directory, otherwise \helpref{GetUserDataDir()}{wxstandardsathsgetuserdatadir} is
 more appropriate.
 
 
-\membersection{wxFileLocator::GetUserDataDir}\label{wxfilelocatorgetuserdatadir}
+\membersection{wxStandardPaths::GetUserDataDir}\label{wxstandardsathsgetuserdatadir}
 
 \func{static wxString}{GetUserDataDir}{\void}
 
 Return the directory for the user-dependent application data files:
 \begin{itemize}
     \item Unix: \texttt{\verb|~|/.\textit{appname}}
-    \item Windows: \texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}
-                             $\backslash$Application Data
-                             $\backslash$\textit{appname}}
+    \item Windows: \texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}$\backslash$Application Data$\backslash$\textit{appname}}
     \item Mac: \texttt{\verb|~|/Library/\textit{appname}}
 \end{itemize}
 
 
-\membersection{wxFileLocator::GetUserLocalDataDir}\label{wxfilelocatorgetuserlocaldatadir}
+\membersection{wxStandardPaths::GetUserLocalDataDir}\label{wxstandardsathsgetuserlocaldatadir}
 
 \func{static wxString}{GetUserLocalDataDir}{\void}
 
 Return the directory for user data files which shouldn't be shared with
 the other machines.
 
-This is the same as \helpref{GetUserDataDir()}{wxfilelocatorgetuserdatadir} for
+This is the same as \helpref{GetUserDataDir()}{wxstandardsathsgetuserdatadir} for
 all platforms except Windows where it returns 
-\texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}
-                             $\backslash$Local Settings
-                             $\backslash$Application Data
-                             $\backslash$\textit{appname}}
+\texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}$\backslash$Local Settings$\backslash$Application Data$\backslash$\textit{appname}}
 
 

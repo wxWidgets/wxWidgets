@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/fileloc.h
-// Purpose:     declaration of wxFileLocator class
+// Name:        wx/stdpaths.h
+// Purpose:     declaration of wxStandardPaths class
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-10-17
@@ -13,10 +13,10 @@
 #define _WX_FILELOC_H_
 
 // ----------------------------------------------------------------------------
-// wxFileLocator returns the standard locations in the file system
+// wxStandardPaths returns the standard locations in the file system
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxFileLocator
+class WXDLLIMPEXP_BASE wxStandardPaths
 {
 public:
     // return the directory with system config files:
