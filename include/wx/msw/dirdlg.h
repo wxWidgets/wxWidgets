@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.h
+// Name:        wx/msw/dirdlg.h
 // Purpose:     wxDirDialog class
 // Author:      Julian Smart
 // Modified by:
@@ -20,29 +20,32 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
 
-class WXDLLEXPORT wxDirDialog: public wxDialog
+class WXDLLEXPORT wxDirDialog : public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxDirDialog)
 public:
-    wxDirDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultPath = wxEmptyString,
-        long style = 0, const wxPoint& pos = wxDefaultPosition);
+    wxDirDialog(wxWindow *parent,
+                const wxString& message = wxFileSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = 0,
+                const wxPoint& pos = wxDefaultPosition);
 
-    inline void SetMessage(const wxString& message) { m_message = message; }
-    inline void SetPath(const wxString& path) { m_path = path; }
-    inline void SetStyle(long style) { m_dialogStyle = style; }
+    void SetMessage(const wxString& message) { m_message = message; }
+    void SetPath(const wxString& path) { m_path = path; }
+    void SetStyle(long style) { m_dialogStyle = style; }
 
-    inline wxString GetMessage(void) const { return m_message; }
-    inline wxString GetPath(void) const { return m_path; }
-    inline long GetStyle(void) const { return m_dialogStyle; }
+    wxString GetMessage() const { return m_message; }
+    wxString GetPath() const { return m_path; }
+    long GetStyle() const { return m_dialogStyle; }
 
-    int ShowModal(void);
+    virtual int ShowModal();
 
 protected:
     wxString    m_message;
     long        m_dialogStyle;
-    wxWindow *  m_parent;
     wxString    m_path;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
 
 #endif

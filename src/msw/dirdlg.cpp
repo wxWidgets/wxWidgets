@@ -85,20 +85,38 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 {
     m_message = message;
     m_parent = parent;
-    m_path = defaultPath;
+    
+    SetPath(defaultPath);
+}
+
+void wxDirDialog::SetPath(const wxString& path)
+{
+    m_path = path;
 
     // SHBrowseForFolder doesn't like '/'s nor the trailing backslashes
     m_path.Replace(_T("/"), _T("\\"));
-    if ( *m_path.end() == _T('\\') )
+    if ( !m_path.empty() )
     {
-        m_path.erase(m_path.length() - 1);
+        while ( *(m_path.end() - 1) == _T('\\') )
+        {
+            size_t len = m_path.length();
+            if ( len == 1 )
+            {
+                // leave '/' alone
+                break;
+            }
+
+            m_path.erase(len - 1);
+        }
     }
 }
 
 int wxDirDialog::ShowModal()
 {
+    wxWindow *parent = GetParent();
+
     BROWSEINFO bi;
-    bi.hwndOwner      = m_parent ? GetHwndOf(m_parent) : NULL;
+    bi.hwndOwner      = parent ? GetHwndOf(parent) : NULL;
     bi.pidlRoot       = NULL;
     bi.pszDisplayName = NULL;
     bi.lpszTitle      = m_message.c_str();
