@@ -733,8 +733,8 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   if (!m_data) return (wxDragResult) wxDragNone;
   
-  static GtkWidget *drag_icon = NULL;
-  static GtkWidget *drop_icon = NULL;
+  static GtkWidget *drag_icon = (GtkWidget*) NULL;
+  static GtkWidget *drop_icon = (GtkWidget*) NULL;
 
   GdkPoint hotspot_1 = {0,-5 };
       
@@ -872,7 +872,7 @@ void wxDropSource::UnregisterWindow(void)
 /*
  * Shaped Windows
  */
-static GdkWindow *root_win = NULL;
+static GdkWindow *root_win = (GdkWindow*) NULL;
 
 typedef struct _cursoroffset {gint x,y;} CursorOffset;
 
@@ -895,7 +895,8 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
 		      (GDK_BUTTON_RELEASE_MASK |
 		       GDK_BUTTON_MOTION_MASK |
 		       GDK_POINTER_MOTION_HINT_MASK),
-		    NULL, NULL, 0);
+		    (GdkWindow*)NULL, 
+		    (GdkCursor*) NULL, 0);
 }
 
 

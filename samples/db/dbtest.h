@@ -40,7 +40,11 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
+#ifdef __WXGTK__
+const char paramFilename[] = "../database.cfg";
+#else
 const char paramFilename[] = "database.cfg";
+#endif
 
 
 /*

@@ -49,7 +49,7 @@ IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
 
 wxExtHelpController::wxExtHelpController(void)
 {
-   m_MapList = NULL;
+   m_MapList = (wxList*) NULL;
    m_BrowserName = WXEXTHELP_DEFAULTBROWSER;
    m_BrowserIsNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE;
    m_NumOfEntries = 0;
@@ -76,7 +76,7 @@ wxExtHelpController::DeleteList(void)
          node = m_MapList->First();
       }
       delete m_MapList;
-      m_MapList = NULL;
+      m_MapList = (wxList*) NULL;
    }
 }
 

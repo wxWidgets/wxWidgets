@@ -854,7 +854,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
      }
 
    /*
-    * REading the image data
+    * Reading the image data
     */
    fseek(file, offset, SEEK_SET);
    data = ptr;

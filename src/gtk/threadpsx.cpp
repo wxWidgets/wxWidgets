@@ -64,7 +64,7 @@ public:
 wxMutex::wxMutex()
 {
     p_internal = new wxMutexInternal;
-    pthread_mutex_init(&(p_internal->p_mutex), NULL);
+    pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) NULL );
     m_locked = 0;
 }
 
@@ -73,46 +73,54 @@ wxMutex::~wxMutex()
     if (m_locked > 0)
         wxLogDebug( "wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked );
 
-    pthread_mutex_destroy(&(p_internal->p_mutex));
+    pthread_mutex_destroy( &(p_internal->p_mutex) );
     delete p_internal;
 }
 
 wxMutexError wxMutex::Lock()
 {
-    int err;
-
-    err = pthread_mutex_lock(&(p_internal->p_mutex));
+    int err = pthread_mutex_lock( &(p_internal->p_mutex) );
     if (err == EDEADLK)
+    {
         return wxMUTEX_DEAD_LOCK;
+    }
 	
     m_locked++;
+    
     return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
 {
-    int err;
-
     if (m_locked)
+    {
         return wxMUTEX_BUSY;
+    }
 	
-    err = pthread_mutex_trylock(&(p_internal->p_mutex));
+    int err = pthread_mutex_trylock( &(p_internal->p_mutex) );
     switch (err) 
     {
         case EBUSY: return wxMUTEX_BUSY;
     }
+    
     m_locked++;
+    
     return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
 {
     if (m_locked > 0)
+    {
         m_locked--;
+    }
     else
+    {
         return wxMUTEX_UNLOCKED;
+    }
 	
-    pthread_mutex_unlock(&(p_internal->p_mutex));
+    pthread_mutex_unlock( &(p_internal->p_mutex) );
+    
     return wxMUTEX_NO_ERROR;
 }
 
@@ -129,37 +137,38 @@ public:
 wxCondition::wxCondition()
 {
     p_internal = new wxConditionInternal;
-    pthread_cond_init(&(p_internal->p_condition), NULL);
+    pthread_cond_init( &(p_internal->p_condition), (const pthread_condattr_t *) NULL );
 }
 
 wxCondition::~wxCondition()
 {
-    pthread_cond_destroy(&(p_internal->p_condition));
+    pthread_cond_destroy( &(p_internal->p_condition) );
+    
     delete p_internal;
 }
 
 void wxCondition::Wait(wxMutex& mutex)
 {
-    pthread_cond_wait(&(p_internal->p_condition), &(mutex.p_internal->p_mutex));
+    pthread_cond_wait( &(p_internal->p_condition), &(mutex.p_internal->p_mutex) );
 }
 
 bool wxCondition::Wait(wxMutex& mutex, unsigned long sec, unsigned long nsec)
 {
     struct timespec tspec;
 
-    tspec.tv_sec = time(NULL)+sec;
+    tspec.tv_sec = time(0L)+sec;
     tspec.tv_nsec = nsec;
     return (pthread_cond_timedwait(&(p_internal->p_condition), &(mutex.p_internal->p_mutex), &tspec) != ETIMEDOUT);
 }
 
 void wxCondition::Signal()
 {
-    pthread_cond_signal(&(p_internal->p_condition));
+    pthread_cond_signal( &(p_internal->p_condition) );
 }
 
 void wxCondition::Broadcast()
 {
-    pthread_cond_broadcast(&(p_internal->p_condition));
+    pthread_cond_broadcast( &(p_internal->p_condition) );
 }
 
 //--------------------------------------------------------------------
@@ -183,7 +192,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     wxThread *thread = (wxThread *)ptr;
 
     /* Call the main entry */
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, (int*) NULL );
     void* status = thread->Entry();
 
     thread->Exit(status);
@@ -246,9 +255,9 @@ int wxThread::GetPriority() const
 void wxThread::DeferDestroy(bool on)
 {
     if (on)
-        pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+        pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, (int*) NULL);
     else
-        pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+        pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, (int*) NULL);
 }
 
 wxThreadError wxThread::Destroy()

@@ -33,6 +33,9 @@
 #include "wx/file.h"
 #include "wx/wave.h"
 
+//-----------------------------------------------------------------
+// wxWave
+//-----------------------------------------------------------------
 
 wxWave::wxWave()
   : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
@@ -42,101 +45,106 @@ wxWave::wxWave()
 wxWave::wxWave(const wxString& sFileName, bool isResource)
   : m_waveLength(0), m_isResource(isResource), m_waveData(NULL)
 {
-  Create(sFileName, isResource);
+    Create(sFileName, isResource);
 }
 
 wxWave::wxWave(int size, const byte* data)
   : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
 {
-  Create(size, data);
+    Create(size, data);
 }
 
 wxWave::~wxWave()
 {
-  Free();
+    Free();
 }
 
 bool wxWave::Create(const wxString& fileName, bool isResource)
 {
-  Free();
+    Free();
   
-  if (isResource)
-  {
-    //  todo
+    if (isResource)
+    {
+        //  todo
+        return (m_waveData ? TRUE : FALSE);
+    }
+    else
+    {
+        m_isResource = FALSE;
 
-    return (m_waveData ? TRUE : FALSE);
-  }
-  else
-  {
-    m_isResource = FALSE;
+        wxFile fileWave;
+        if (!fileWave.Open(fileName, wxFile::read))
+	{
+            return FALSE;
+	}
 
-    wxFile fileWave;
-    if (!fileWave.Open(fileName, wxFile::read))
-      return FALSE;
-
-    m_waveLength = (int) fileWave.Length();
+        m_waveLength = (int) fileWave.Length();
     
-    m_waveData = new byte[m_waveLength];
-    if (!m_waveData)
-      return FALSE;
+        m_waveData = new byte[m_waveLength];
+        if (!m_waveData)
+	{
+            return FALSE;
+	}
     
-    fileWave.Read(m_waveData, m_waveLength);
+        fileWave.Read(m_waveData, m_waveLength);
     
-    return TRUE;
-  }
+        return TRUE;
+    }
 }
 
 bool wxWave::Create(int size, const byte* data)
 {
-  Free();
-  m_isResource = FALSE;
-  m_waveLength=size;
-  m_waveData = new byte[size];
-  if (!m_waveData)
-    return FALSE;
+    Free();
+    m_isResource = FALSE;
+    m_waveLength=size;
+    m_waveData = new byte[size];
+    if (!m_waveData)
+    {
+        return FALSE;
+    }
   
-  for (int i=0; i<size; i++) m_waveData[i] = data[i];
-  return TRUE;
+    for (int i=0; i<size; i++) m_waveData[i] = data[i];
+    
+    return TRUE;
 }
 
 bool wxWave::Play(bool async, bool looped)
 {
-  if (!IsOk())
-    return FALSE;
+    if (!IsOk()) return FALSE;
 
-  int dev=OpenDSP();
-  if(dev<0)
-    return FALSE;
+    int dev = OpenDSP();
+    
+    if (dev<0) return FALSE;
 
-  ioctl(dev,SNDCTL_DSP_SYNC,0);
+    ioctl(dev,SNDCTL_DSP_SYNC,0);
   
-  bool play=TRUE;
-  int i,l=0;
-  do
+    bool play=TRUE;
+    int i,l=0;
+    do
     {
-      i= (int)((l+m_DSPblkSize) < m_sizeData ? m_DSPblkSize : (m_sizeData-l));
-      if ( write(dev,&m_data[l],i) != i )
-	play=FALSE;
-      l +=i;
-    }while(play == TRUE && l<m_sizeData);
+        i= (int)((l+m_DSPblkSize) < m_sizeData ? m_DSPblkSize : (m_sizeData-l));
+        if ( write(dev,&m_data[l],i) != i )
+	{
+	    play=FALSE;
+	}
+        l +=i;
+    } while (play == TRUE && l<m_sizeData);
 
-
-  close(dev);
-  return TRUE;
- 
+    close(dev);
+    return TRUE;
 }
 
 bool wxWave::Free()
 {
-  if (m_waveData)
+    if (m_waveData)
     {
-      delete[] m_waveData;
-      m_waveData = NULL;
-      m_waveLength = 0;
-      return TRUE;
+        delete[] m_waveData;
+        m_waveData = NULL;
+        m_waveLength = 0;
+        return TRUE;
     }
   
-  return FALSE;
+    return FALSE;
 }
 
 typedef  struct
@@ -148,8 +156,7 @@ typedef  struct
   unsigned long   ulAvgBytesPerSec;
   unsigned short  uiBlockAlign;
   unsigned short  uiBitsPerSample;
-}WAVEFORMAT;    
-
+} WAVEFORMAT;    
 
 #define MONO 1  // and stereo is 2 by wav format
 #define WAVE_FORMAT_PCM 1

@@ -58,6 +58,13 @@ public:
   bool Enabled( int id ) const;
   inline bool IsEnabled(int Id) const { return Enabled(Id); };
   inline bool IsChecked(int Id) const { return Checked(Id); };
+  
+  wxString GetLabel( int id ) const;
+  void SetLabel( int id, const wxString &label );
+  
+  void EnableTop( int pos, bool flag );
+  void SetLabelTop( int pos, const wxString& label );
+  wxString GetLabelTop( int pos ) const;
 
   int     GetMenuCount() const { return m_menus.Number(); }
   wxMenu *GetMenu(int n) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
@@ -102,7 +109,7 @@ public:
   bool IsChecked( int id ) const;
 
   void SetLabel( int id, const wxString &label );
-  wxString GetLabel(int id) const;
+  wxString GetLabel( int id ) const;
 
   // helpstring
   virtual void SetHelpString(int id, const wxString& helpString);

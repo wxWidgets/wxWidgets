@@ -12,6 +12,7 @@ WORDCHAR	[^'\\]
  *               either lex and flex.
  */
 #include <string.h>
+#include <unistd.h>
 
 /* +++steve162e: added, otherwise, PROIO_input will be undefined (at least under LINUX)
              please check, if this is also TRUE under other UNIXes.

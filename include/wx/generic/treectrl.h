@@ -456,6 +456,7 @@ protected:
     wxBrush             *m_hilightBrush;
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
+    int                  m_dragCount;
 
     // the common part of all ctors
     void Init();

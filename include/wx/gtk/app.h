@@ -31,6 +31,9 @@ class wxLog;
 
 extern wxApp *wxTheApp;
 
+extern GdkVisual *wxVisualSetByExternal;
+extern GdkColormap *wxColormapSetByExternal;
+
 //-----------------------------------------------------------------------------
 // global functions
 //-----------------------------------------------------------------------------
@@ -55,48 +58,56 @@ class wxApp: public wxEvtHandler
 
   public:
 
-    wxApp(void);
-    ~wxApp(void);
+    wxApp();
+    ~wxApp();
 
     static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
-    static wxAppInitializerFunction GetInitializerFunction(void) { return m_appInitFn; }
+    static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
 
-    virtual bool OnInit(void);
-    virtual bool OnInitGui(void);
-    virtual int OnRun(void);
-    virtual int OnExit(void);
+    /* this may have to be overwritten when special, non-default visuals have
+       to be set. it is also platform dependent as only X knows about displays
+       and visuals. by standard, this routine looks at wxVisualSetByExternal
+       which might have been set in the wxModule code of the OpenGL canvas */
+    virtual bool InitVisual();
 
-    wxWindow *GetTopWindow(void);
+    virtual bool OnInit();
+    virtual bool OnInitGui();
+    virtual int OnRun();
+    virtual int OnExit();
+
+    wxWindow *GetTopWindow();
     void SetTopWindow( wxWindow *win );
-    virtual int MainLoop(void);
-    void ExitMainLoop(void);
-    bool Initialized(void);
-    virtual bool Pending(void);
-    virtual void Dispatch(void);
+    virtual int MainLoop();
+    void ExitMainLoop();
+    bool Initialized();
+    virtual bool Pending();
+    virtual void Dispatch();
 
     inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
-    inline bool GetWantDebugOutput(void) { return m_wantDebugOutput; }
+    inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
 
     void OnIdle( wxIdleEvent &event );
-    bool SendIdleEvents(void);
+    bool SendIdleEvents();
     bool SendIdleEvents( wxWindow* win );
 
-    inline wxString GetAppName(void) const {
+    inline wxString GetAppName() const 
+    {
       if (m_appName != "")
         return m_appName;
       else return m_className;
     }
+    
     inline void SetAppName(const wxString& name) { m_appName = name; };
-    inline wxString GetClassName(void) const { return m_className; }
+    inline wxString GetClassName() const { return m_className; }
     inline void SetClassName(const wxString& name) { m_className = name; }
     const wxString& GetVendorName() const { return m_vendorName; }
     void SetVendorName(const wxString& name) { m_vendorName = name; }
 
     inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
-    inline bool GetExitOnFrameDelete(void) const { return m_exitOnFrameDelete; }
+    inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
     void SetPrintMode(int WXUNUSED(mode) ) {};
-    int GetPrintMode(void) const { return wxPRINT_POSTSCRIPT; };
+    int GetPrintMode() const { return wxPRINT_POSTSCRIPT; };
 
     // override this function to create default log target of arbitrary
     // user-defined classv (default implementation creates a wxLogGui object)
@@ -104,11 +115,11 @@ class wxApp: public wxEvtHandler
 
   // GTK implementation
 
-    static void CommonInit(void);
-    static void CommonCleanUp(void);
+    static void CommonInit();
+    static void CommonCleanUp();
 
-    bool ProcessIdle(void);
-    void DeletePendingObjects(void);
+    bool ProcessIdle();
+    void DeletePendingObjects();
 
     bool          m_initialized;
     bool          m_exitOnFrameDelete;

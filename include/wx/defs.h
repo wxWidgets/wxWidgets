@@ -976,6 +976,7 @@ typedef void*          gpointer;
 
 /* Stand-ins for GDK types */
 typedef gulong                  GdkAtom;
+typedef struct _GdkVisual       GdkVisual;
 typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
@@ -994,9 +995,7 @@ typedef struct _GtkList         GtkList;
 typedef struct _GtkToolbar      GtkToolbar;
 typedef struct _GtkNotebook     GtkNotebook;
 typedef struct _GtkNotebookPage GtkNotebookPage;
-
 #endif
-
 
 #endif
     // _WX_DEFS_H_

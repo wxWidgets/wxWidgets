@@ -510,8 +510,12 @@ void wxSocketBase::Discard()
 // If what? Who seems to need unsigned int?
 // BTW uint isn't even defined on wxMSW for VC++ for some reason. Even if it
 // were, getpeername/getsockname don't take unsigned int*, they take int*.
-#if 0
-#define wxSOCKET_INT unsigned int
+//
+// Under glibc 2.0.7, socketbits.h declares socklen_t to be unsigned int
+// and it uses *socklen_t as the 3rd parameter. Robert.
+
+#ifdef __LINUX__
+#define wxSOCKET_INT socklen_t
 #else
 #define wxSOCKET_INT int
 #endif

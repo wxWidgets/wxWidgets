@@ -83,7 +83,7 @@ class WXDLLEXPORT wxDatabase: public wxObject
   bool err_occured;
 
   wxList recordSets; // Record sets: Added by JACS
-
+  
  public:
   wxDatabase(void);
   ~wxDatabase(void);

@@ -303,7 +303,7 @@ bool wxTextCtrl::LoadFile( const wxString &file )
 
   Clear();
 
-  FILE *fp = NULL;
+  FILE *fp = (FILE*) NULL;
   struct stat statb;
 
   if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
@@ -358,7 +358,7 @@ bool wxTextCtrl::SaveFile( const wxString &file )
     }
   else
     {
-      char *text = NULL;
+      char *text = (char*) NULL;
       gint len = 0;
 
       if (m_windowStyle & wxTE_MULTILINE)

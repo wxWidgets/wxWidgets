@@ -429,7 +429,7 @@ bool wxNotebook::SetPageImage( int page, int image )
     if (image == -1 && nb_page->m_image == -1)
         return TRUE; /* Case 1): Nothing to do. */
  
-    GtkWidget *pixmapwid = NULL;
+    GtkWidget *pixmapwid = (GtkWidget*) NULL;
  
     if (nb_page->m_image != -1) 
     {

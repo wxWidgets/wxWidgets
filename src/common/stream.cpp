@@ -157,7 +157,9 @@ char *wxStreamBuffer::AllocSpaceWBack(size_t needed_size)
   if (!temp_b)
     return NULL;
   m_wback = temp_b;
-  printf("Buffer(0x%x)->Write: 0x%x, %d\n", this, m_wback, m_wbacksize); 
+  
+  /* printf("Buffer(0x%x)->Write: 0x%x, %d\n", this, m_wback, m_wbacksize); */
+  
   return (char *)(m_wback+(m_wbacksize-needed_size));
 }
 
@@ -165,7 +167,8 @@ size_t wxStreamBuffer::GetWBack(char *buf, size_t bsize)
 {
   size_t s_toget = m_wbacksize-m_wbackcur;
 
-  printf("Buffer(0x%x): 0x%x, %d\n", this, m_wback, m_wbacksize);
+  /* printf("Buffer(0x%x): 0x%x, %d\n", this, m_wback, m_wbacksize); */
+ 
   if (bsize < s_toget)
     s_toget = bsize;
 

@@ -155,14 +155,38 @@ bool wxMenuBar::Enabled( int id ) const
     return FALSE;
 }
 
+wxString wxMenuBar::GetLabel( int id ) const
+{
+    wxMenuItem* item = FindMenuItemById( id );
+    if (item) return item->GetText();
+    return "";
+}
+
+void wxMenuBar::SetLabel( int id, const wxString &label )
+{
+    wxMenuItem* item = FindMenuItemById( id );
+    if (item) return item->SetText( label );
+}
+
+void wxMenuBar::EnableTop( int WXUNUSED(pos), bool WXUNUSED(flag) )
+{
+}
+
+wxString wxMenuBar::GetLabelTop( int WXUNUSED(pos) ) const
+{
+  return "menu";
+}
+
+void wxMenuBar::SetLabelTop( int WXUNUSED(pos), const wxString& WXUNUSED(label) )
+{
+}
+
 //-----------------------------------------------------------------------------
 // "activate"
 //-----------------------------------------------------------------------------
 
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
-    wxYield();
-
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */

@@ -44,6 +44,9 @@ wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 extern wxList wxPendingDelete;
 extern wxResourceCache *wxTheResourceCache;
 
+GdkVisual *wxVisualSetByExternal = (GdkVisual*) NULL;
+GdkColormap *wxColormapSetByExternal = (GdkColormap*) NULL;
+
 unsigned char g_palette[64*3] =
 {
   0x0,  0x0,  0x0,
@@ -169,14 +172,60 @@ wxApp::~wxApp(void)
     gtk_idle_remove( m_idleTag );
 }
 
-bool wxApp::OnInit(void)
+bool wxApp::InitVisual()
 {
+    if (wxVisualSetByExternal)
+    {
+        /* this happens in the wxModule code of the OpenGl canvas. 
+	   it chooses the best display for OpenGl and stores it 
+	   in wxDisplaySetByExternal. we then have to make it the
+	   default for the system */
+	   
+	gtk_widget_set_default_visual( wxVisualSetByExternal );
+    }
+    
+    if (wxColormapSetByExternal)
+    {
+        /* OpenGl also gives us a colormap */
+	
+	gtk_widget_set_default_colormap( wxColormapSetByExternal );
+    }
+    else
+    {
+        /* this initiates the standard palette as defined by GdkImlib
+	   in the GNOME libraries. it ensures that all GNOME applications
+	   use the same 64 colormap entries on 8-bit displays so you
+	   can use several rather graphics-heavy applications at the
+	   same time */
+    
+        GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
+
+        for (int i = 0; i < 64; i++)
+        {
+            GdkColor col;
+            col.red    = g_palette[i*3 + 0] << 8;
+            col.green  = g_palette[i*3 + 1] << 8;
+            col.blue   = g_palette[i*3 + 2] << 8;
+            col.pixel  = 0;
+
+            gdk_color_alloc( cmap, &col );
+        }
+	
+        gtk_widget_set_default_colormap( cmap );
+    }
+    
     return TRUE;
 }
 
 bool wxApp::OnInitGui(void)
 {
     m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
+    
+    return TRUE;
+}
+
+bool wxApp::OnInit(void)
+{
     return TRUE;
 }
 
@@ -320,12 +369,6 @@ void wxApp::SetTopWindow( wxWindow *win )
 
 void wxApp::CommonInit(void)
 {
-
-/*
-#if wxUSE_RESOURCES
-  (void) wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
-#endif
-*/
   wxSystemSettings::Init();
   
   wxTheFontNameDirectory =  new wxFontNameDirectory;
@@ -350,14 +393,19 @@ void wxApp::CommonInit(void)
 
 void wxApp::CommonCleanUp(void)
 {
-    wxDELETE(wxTheColourDatabase);
-    wxDELETE(wxTheFontNameDirectory);
+    if (wxTheColourDatabase) delete wxTheColourDatabase;
+    wxTheColourDatabase = (wxColourDatabase*) NULL;
+    
+    if (wxTheFontNameDirectory) delete wxTheFontNameDirectory;
+    wxTheFontNameDirectory = (wxFontNameDirectory*) NULL;
+    
     wxDeleteStockObjects();
 
 #if wxUSE_WX_RESOURCES
     wxFlushResources();
 
-    wxDELETE(wxTheResourceCache);
+    if (wxTheResourceCache) delete wxTheResourceCache;
+    wxTheResourceCache = (wxResourceCache*) NULL;
     
     wxCleanUpResourceSystem();
 #endif
@@ -419,29 +467,14 @@ int wxEntry( int argc, char *argv[] )
 
     gtk_init( &argc, &argv );
 
-    GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
-
-    for (int i = 0; i < 64; i++)
-    {
-        GdkColor col;
-        col.red    = g_palette[i*3 + 0] << 8;
-        col.green  = g_palette[i*3 + 1] << 8;
-        col.blue   = g_palette[i*3 + 2] << 8;
-        col.pixel  = 0;
-
-        gdk_color_alloc( cmap, &col );
-    }
-
-    gtk_widget_push_colormap( cmap );
-
-    gtk_widget_set_default_colormap( cmap );
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules()) return FALSE;
+    
+    if (!wxTheApp->InitVisual()) return 0;
 
     wxApp::CommonInit();
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
-
-    wxTheApp->OnInitGui();
+    if (!wxTheApp->OnInitGui()) return 0;
 
     // Here frames insert themselves automatically
     // into wxTopLevelWindows by getting created
@@ -481,11 +514,9 @@ int wxEntry( int argc, char *argv[] )
 
 #endif
 
-    wxLog *oldLog = wxLog::SetActiveTarget( NULL );
+    wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
     if (oldLog) delete oldLog;
 
     return retValue;
 }
-
-//-----------------------------------------------------------------------------
 

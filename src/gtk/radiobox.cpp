@@ -7,7 +7,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifdef __GNUG__
 #pragma implementation "radiobox.h"
 #endif
@@ -148,8 +147,8 @@ void wxRadioBox::OnSize( wxSizeEvent &event )
 
 wxSize wxRadioBox::LayoutItems()
 {
-    int x = m_x+7;
-    int y = m_y+15;
+    int x = 7;
+    int y = 15;
     
     int num_per_major = (m_boxes.GetCount() - 1) / m_majorDim +1;
     
@@ -160,7 +159,7 @@ wxSize wxRadioBox::LayoutItems()
 	
         for (int j = 0; j < m_majorDim; j++)
 	{
-            y = m_y+15;
+            y = 15;
 	    
             int max_len = 0;
             wxNode *node = m_boxes.Nth( j*num_per_major );
@@ -169,10 +168,10 @@ wxSize wxRadioBox::LayoutItems()
                 GtkWidget *button = GTK_WIDGET( node->Data() );
                 GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
                 GdkFont *font = m_widget->style->font;
-                int len = 27+gdk_string_measure( font, label->label );
+                int len = 22+gdk_string_measure( font, label->label );
                 if (len > max_len) max_len = len;
 		
-                gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
+                gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
                 y += 22;
 		
 	        node = node->Next();
@@ -197,8 +196,8 @@ wxSize wxRadioBox::LayoutItems()
 	    x += max_len + 2;
         }
 	
-	res.y -= 3;
-	res.x = x-2;
+	res.x = x+4;
+	res.y += 9;
     }
     else
     {
@@ -211,7 +210,7 @@ wxSize wxRadioBox::LayoutItems()
             GtkLabel *label = GTK_LABEL( button->child );
       
             GdkFont *font = m_widget->style->font;
-            int len = 27+gdk_string_measure( font, label->label );
+            int len = 22+gdk_string_measure( font, label->label );
             if (len > max) max = len;
       
             node = node->Next();
@@ -222,13 +221,13 @@ wxSize wxRadioBox::LayoutItems()
         {
             GtkWidget *button = GTK_WIDGET( node->Data() );
     
-            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
+            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
             x += max;
             gtk_widget_set_usize( button, max, 20 );
       
             node = node->Next();
         }
-	res.x = x-2;
+	res.x = x+4;
 	res.y = 42;
     }
     

@@ -14,7 +14,6 @@
 #pragma interface
 #endif
 
-
 #include "wx/defs.h"
 
 #if wxUSE_POSTSCRIPT

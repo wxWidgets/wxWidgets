@@ -255,7 +255,7 @@ void wxComboBox::Delete( int n )
         return;
     }
   
-    GList *list = g_list_append( NULL, child->data );
+    GList *list = g_list_append( (GList*) NULL, child->data );
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
   

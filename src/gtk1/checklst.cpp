@@ -27,14 +27,15 @@ wxCheckListBox::wxCheckListBox() :
 {
     m_hasCheckBoxes = TRUE;
 }
+
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 int nStrings = 0, 
-                 const wxString choices[] = NULL,
-                 long style = 0,
-                 const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxListBoxNameStr)
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 int nStrings, 
+                 const wxString choices[],
+                 long style,
+                 const wxValidator& validator,
+                 const wxString& name )
 {
     m_hasCheckBoxes = TRUE;
     wxListBox::Create( parent, id, pos, size, nStrings, choices, style, validator, name );

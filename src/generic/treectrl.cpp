@@ -359,6 +359,8 @@ void wxTreeCtrl::Init()
 
   m_imageListNormal =
   m_imageListState = (wxImageList *) NULL;
+  
+  m_dragCount = 0;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -926,15 +928,15 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& WXUNUSED(item))
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 }
 
 wxTextCtrl *wxTreeCtrl::EditLabel( const wxTreeItemId& WXUNUSED(item),
                                    wxClassInfo* WXUNUSED(textCtrlClass) )
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 
-  return (wxTextCtrl*)NULL;
+    return (wxTextCtrl*)NULL;
 }
 
 wxTextCtrl *wxTreeCtrl::GetEditControl() const
@@ -1031,160 +1033,160 @@ void wxTreeCtrl::AdjustMyScrollbars()
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
-  // render bold items in bold
-  wxFont fontOld;
-  wxFont fontNew;
+    /* render bold items in bold */
+    wxFont fontOld;
+    wxFont fontNew;
   
-  if ( item->IsBold() )
-  {
-      fontOld = dc.GetFont();
-      if (fontOld.Ok())
-      {
-        // @@ is there any better way to make a bold variant of old font?
-        fontNew = wxFont( fontOld.GetPointSize(),
-                          fontOld.GetFamily(),
-                          fontOld.GetStyle(),
-                          wxBOLD,
-                          fontOld.GetUnderlined());
-        dc.SetFont(fontNew);
-      }
-      else
-      {
-        wxFAIL_MSG("wxDC::GetFont() failed!");
-      }
-  }
+    if (item->IsBold())
+    {
+        fontOld = dc.GetFont();
+        if (fontOld.Ok())
+        {
+          /* @@ is there any better way to make a bold variant of old font? */
+          fontNew = wxFont( fontOld.GetPointSize(),
+                            fontOld.GetFamily(),
+                            fontOld.GetStyle(),
+                            wxBOLD,
+                            fontOld.GetUnderlined());
+          dc.SetFont(fontNew);
+        }
+        else
+        {
+            wxFAIL_MSG("wxDC::GetFont() failed!");
+        }
+    }
 
-  long text_w = 0;
-  long text_h = 0;
-  dc.GetTextExtent( item->GetText(), &text_w, &text_h );
+    long text_w = 0;
+    long text_h = 0;
+    dc.GetTextExtent( item->GetText(), &text_w, &text_h );
 
-  int image_h = 0;
-  int image_w = 0;
-  if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
-  {
-    m_imageListNormal->GetSize( item->GetSelectedImage(), image_w, image_h );
-    image_w += 4;
-  } 
-  else if (item->GetImage() != -1)
-  {
-    m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
-    image_w += 4;
-  }
+    int image_h = 0;
+    int image_w = 0;
+    if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+    {
+        m_imageListNormal->GetSize( item->GetSelectedImage(), image_w, image_h );
+        image_w += 4;
+    } 
+    else if (item->GetImage() != -1)
+    {
+        m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );
+        image_w += 4;
+    }
 
-  dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
+    dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, text_h+4 );
 
-  if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
-  {
-    dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
-    m_imageListNormal->Draw( item->GetSelectedImage(), dc,
-                             item->GetX(), item->GetY()-1,
-                             wxIMAGELIST_DRAW_TRANSPARENT );
-    dc.DestroyClippingRegion();
-  }
-  else if (item->GetImage() != -1)
-  {
-    dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
-    m_imageListNormal->Draw( item->GetImage(), dc,
-                             item->GetX(), item->GetY()-1,
-                             wxIMAGELIST_DRAW_TRANSPARENT );
-    dc.DestroyClippingRegion();
-  }
+    if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
+    {
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+        m_imageListNormal->Draw( item->GetSelectedImage(), dc,
+                                 item->GetX(), item->GetY()-1,
+                                 wxIMAGELIST_DRAW_TRANSPARENT );
+        dc.DestroyClippingRegion();
+    }
+    else if (item->GetImage() != -1)
+    {
+        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, text_h );
+        m_imageListNormal->Draw( item->GetImage(), dc,
+                                 item->GetX(), item->GetY()-1,
+                                 wxIMAGELIST_DRAW_TRANSPARENT );
+        dc.DestroyClippingRegion();
+    }
 
-  dc.SetBackgroundMode(wxTRANSPARENT);
-  dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
 
-  // restore normal font for bold items
-  if (fontOld.Ok())
-  {
-      dc.SetFont( fontOld);
-  }
+    /* restore normal font for bold items */
+    if (fontOld.Ok())
+    {
+        dc.SetFont( fontOld);
+    }
 }
 
 void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
-  int horizX = level*m_indent;
+    int horizX = level*m_indent;
 
-  item->SetX( horizX+33 );
-  item->SetY( y-m_lineHeight/3 );
-  item->SetHeight( m_lineHeight );
+    item->SetX( horizX+33 );
+    item->SetY( y-m_lineHeight/3 );
+    item->SetHeight( m_lineHeight );
 
-  item->SetCross( horizX+15, y );
+    item->SetCross( horizX+15, y );
 
-  int oldY = y;
+    int oldY = y;
 
-  int exposed_x = dc.LogicalToDeviceX( 0 );
-  int exposed_y = dc.LogicalToDeviceY( item->GetY()-2 );
+    int exposed_x = dc.LogicalToDeviceX( 0 );
+    int exposed_y = dc.LogicalToDeviceY( item->GetY()-2 );
 
-  if (IsExposed( exposed_x, exposed_y, 10000, m_lineHeight+4 ))  // 10000 = very much
-  {
-    int startX = horizX;
-    int endX = horizX + 10;
-
-    if (!item->HasChildren()) endX += 20;
-
-    dc.DrawLine( startX, y, endX, y );
-
-    if (item->HasPlus())
+    if (IsExposed( exposed_x, exposed_y, 10000, m_lineHeight+4 ))  // 10000 = very much
     {
-      dc.DrawLine( horizX+20, y, horizX+30, y );
-      dc.SetPen( *wxGREY_PEN );
-      dc.SetBrush( *wxWHITE_BRUSH );
-      dc.DrawRectangle( horizX+10, y-4, 11, 9 );
-      dc.SetPen( *wxBLACK_PEN );
-      dc.DrawLine( horizX+13, y, horizX+18, y );
+        int startX = horizX;
+        int endX = horizX + 10;
 
-      if (!item->IsExpanded())
-        dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
+        if (!item->HasChildren()) endX += 20;
+
+        dc.DrawLine( startX, y, endX, y );
+
+        if (item->HasPlus())
+        {
+            dc.DrawLine( horizX+20, y, horizX+30, y );
+            dc.SetPen( *wxGREY_PEN );
+            dc.SetBrush( *wxWHITE_BRUSH );
+            dc.DrawRectangle( horizX+10, y-4, 11, 9 );
+            dc.SetPen( *wxBLACK_PEN );
+            dc.DrawLine( horizX+13, y, horizX+18, y );
+
+            if (!item->IsExpanded())
+	    {
+                dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
+	    }
+        }
+
+        if (item->HasHilight())
+        {
+            dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+
+            dc.SetBrush( *m_hilightBrush );
+
+            if (m_hasFocus)
+                dc.SetPen( *wxBLACK_PEN );
+            else
+                dc.SetPen( *wxTRANSPARENT_PEN );
+
+            PaintItem(item, dc);
+
+            dc.SetPen( *wxBLACK_PEN );
+            dc.SetTextForeground( *wxBLACK );
+            dc.SetBrush( *wxWHITE_BRUSH );
+        }
+        else
+        {
+            dc.SetBrush( *wxWHITE_BRUSH );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+
+            PaintItem(item, dc);
+
+            dc.SetPen( *wxBLACK_PEN );
+        }
     }
 
-    if (item->HasHilight())
+    if (item->IsExpanded())
     {
-      dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+        int semiOldY = y;
 
-      dc.SetBrush( *m_hilightBrush );
+        wxArrayTreeItems& children = item->GetChildren();
+        size_t count = children.Count();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            y += m_lineHeight;
+            semiOldY = y;
+            PaintLevel( children[n], dc, level+1, y );
+        }
 
-      if (m_hasFocus)
-        dc.SetPen( *wxBLACK_PEN );
-      else
-        dc.SetPen( *wxTRANSPARENT_PEN );
-
-      PaintItem(item, dc);
-
-      dc.SetPen( *wxBLACK_PEN );
-      dc.SetTextForeground( *wxBLACK );
-      dc.SetBrush( *wxWHITE_BRUSH );
+        /* it may happen that the item is expanded but has no items (when you
+         * delete all its children for example) - don't draw the vertical line
+         * in this case */
+        if (count > 0) dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
     }
-    else
-    {
-      dc.SetBrush( *wxWHITE_BRUSH );
-      dc.SetPen( *wxTRANSPARENT_PEN );
-
-      PaintItem(item, dc);
-
-      dc.SetPen( *wxBLACK_PEN );
-    }
-  }
-
-  if ( item->IsExpanded() )
-  {
-      int semiOldY = y;
-
-      wxArrayTreeItems& children = item->GetChildren();
-      size_t count = children.Count();
-      for ( size_t n = 0; n < count; n++ )
-      {
-        y += m_lineHeight;
-        semiOldY = y;
-
-        PaintLevel( children[n], dc, level+1, y );
-      }
-
-      // it may happen that the item is expanded but has no items (when you
-      // delete all its children for example) - don't draw the vertical line
-      // in this case
-      if ( count > 0 )
-          dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1211,15 +1213,15 @@ void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 void wxTreeCtrl::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = TRUE;
-    if ( m_current )
-        RefreshLine( m_current );
+    
+    if (m_current) RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = FALSE;
-    if ( m_current )
-        RefreshLine( m_current );
+    
+    if (m_current) RefreshLine( m_current );
 }
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
@@ -1363,130 +1365,149 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
 
 wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& WXUNUSED(flags))
 {
-  bool onButton = FALSE;
-  return m_anchor->HitTest( point, onButton );
+    bool onButton = FALSE;
+    return m_anchor->HitTest( point, onButton );
 }
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-  if ( !(event.LeftDown() || event.LeftDClick()) )
-    return;
+    if (!event.LeftIsDown()) m_dragCount = 0;
 
-  if ( !m_anchor )
-    return;
+    if ( !(event.LeftDown() || event.LeftDClick() || event.Dragging()) ) return;
 
-  wxClientDC dc(this);
-  PrepareDC(dc);
-  long x = dc.DeviceToLogicalX( (long)event.GetX() );
-  long y = dc.DeviceToLogicalY( (long)event.GetY() );
+    if ( !m_anchor ) return;
+    
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    long x = dc.DeviceToLogicalX( (long)event.GetX() );
+    long y = dc.DeviceToLogicalY( (long)event.GetY() );
 
-  bool onButton = FALSE;
-  wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), onButton );
-  if ( item == NULL )
-    return;
+    bool onButton = FALSE;
+    wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), onButton );
+    
+    if (item == NULL) return;  /* we hit the blank area */
 
-  if (!IsSelected(item)) SelectItem(item);
+    if (event.Dragging())
+    {
+        if (m_dragCount == 2)  /* small drag latency (3?) */
+        {
+            m_dragCount = 0;
+       
+            wxTreeEvent nevent(wxEVT_COMMAND_TREE_BEGIN_DRAG, GetId());
+            nevent.m_item = m_current;
+            nevent.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(nevent);
+        }
+        else
+        {
+            m_dragCount++;
+        }
+        return;
+    }
+  
+    if (!IsSelected(item)) SelectItem(item);  /* we dont support multiple selections, BTW */
 
-  if ( event.LeftDClick() )
-  {
-    wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
-    event.m_item = item;
-    event.m_code = 0;
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
-  }
+    if (event.LeftDClick())
+    {
+        wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
+        event.m_item = item;
+        event.m_code = 0;
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    }
 
-  if ( onButton )
-  {
-    Toggle( item );
-  }
+    if (onButton)
+    {
+        Toggle( item );
+    }
 }
 
 void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 {
-  if (!m_dirty) return;
+    /* after all changes have been done to the tree control,
+     * we actually redraw the tree when everything is over */
 
-  m_dirty = FALSE;
+    if (!m_dirty) return;
 
-  CalculatePositions();
+    m_dirty = FALSE;
 
-  AdjustMyScrollbars();
+    CalculatePositions();
+
+    AdjustMyScrollbars();
 }
 
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item,
-                                 wxDC &dc,
-                                 int level,
-                                 int &y )
+
+void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
-  int horizX = level*m_indent;
+    int horizX = level*m_indent;
 
-  item->SetX( horizX+33 );
-  item->SetY( y-m_lineHeight/3-2 );
-  item->SetHeight( m_lineHeight );
+    item->SetX( horizX+33 );
+    item->SetY( y-m_lineHeight/3-2 );
+    item->SetHeight( m_lineHeight );
 
-  //  if ( item->IsExpanded() )
-  //    return;
-  if ( !item->IsExpanded() ) // Surely this is correct? JACS
-     return;
+    if ( !item->IsExpanded() )
+    {
+        /* we dont need to calculate collapsed branches */ 
+        return;
+    }
 
-  wxArrayTreeItems& children = item->GetChildren();
-  size_t count = children.Count();
-  for ( size_t n = 0; n < count; n++ )
-  {
-    y += m_lineHeight;
-    CalculateLevel( children[n], dc, level+1, y );
-  }
+    wxArrayTreeItems& children = item->GetChildren();
+    size_t count = children.Count();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        y += m_lineHeight;
+        CalculateLevel( children[n], dc, level+1, y );  /* recurse */
+    }
 }
 
 void wxTreeCtrl::CalculatePositions()
 {
-  if ( !m_anchor )
-    return;
+    if ( !m_anchor ) return;
 
-  wxClientDC dc(this);
-  PrepareDC( dc );
+    wxClientDC dc(this);
+    PrepareDC( dc );
 
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) );
 
-  dc.SetPen( m_dottedPen );
-  m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    dc.SetPen( m_dottedPen );
+    m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
-  int y = m_lineHeight / 2 + 2;
-  CalculateLevel( m_anchor, dc, 0, y );
+    int y = m_lineHeight / 2 + 2;
+    CalculateLevel( m_anchor, dc, 0, y ); /* start recursion */
 }
 
 void wxTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
-  wxClientDC dc(this);
-  PrepareDC(dc);
+    wxClientDC dc(this);
+    PrepareDC(dc);
 
-  int cw = 0;
-  int ch = 0;
-  GetClientSize( &cw, &ch );
+    int cw = 0;
+    int ch = 0;
+    GetClientSize( &cw, &ch );
 
-  wxRect rect;
-  rect.x = dc.LogicalToDeviceX( 0 );
-  rect.width = cw;
-  rect.y = dc.LogicalToDeviceY( item->GetY() );
-  rect.height = ch;
+    wxRect rect;
+    rect.x = dc.LogicalToDeviceX( 0 );
+    rect.width = cw;
+    rect.y = dc.LogicalToDeviceY( item->GetY() );
+    rect.height = ch;
 
-  Refresh( TRUE, &rect );
+    Refresh( TRUE, &rect );
 
-  AdjustMyScrollbars();
+    AdjustMyScrollbars();
 }
 
 void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
-  wxClientDC dc(this);
-  PrepareDC( dc );
+    wxClientDC dc(this);
+    PrepareDC( dc );
 
-  wxRect rect;
-  rect.x = dc.LogicalToDeviceX( item->GetX() - 2 );
-  rect.y = dc.LogicalToDeviceY( item->GetY() - 2 );
-  rect.width = 1000;
-  rect.height = dc.GetCharHeight() + 6;
-  Refresh( TRUE, &rect );
+    wxRect rect;
+    rect.x = dc.LogicalToDeviceX( item->GetX() - 2 );
+    rect.y = dc.LogicalToDeviceY( item->GetY() - 2 );
+    rect.width = 1000;
+    rect.height = dc.GetCharHeight() + 6;
+    
+    Refresh( TRUE, &rect );
 }
 

@@ -423,7 +423,7 @@ void wxListBox::Delete( int n )
 
     wxCHECK_RET( child, "wrong listbox index" );
 
-    GList *list = g_list_append( NULL, child->data );
+    GList *list = g_list_append( (GList*) NULL, child->data );
     gtk_list_remove_items( m_list, list );
     g_list_free( list );
 

@@ -1,5 +1,5 @@
 #
-#  wGLCanvas source makefile for Unix
+#  wxGLCanvas source makefile for Unix
 #
 #  Copyright 1998, Robert Roebling
 #
@@ -18,8 +18,8 @@ NONE=
 
 # define library name
 LIB_TARGET=wx_opengl_gtk
-LIB_MAJOR=0
-LIB_MINOR=1
+LIB_MAJOR=1
+LIB_MINOR=0
 
 # define library sources
 

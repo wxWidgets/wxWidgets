@@ -30,13 +30,10 @@
 #include <netdb.h>
 #include <signal.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xresource.h>
-
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#include "gtk/gtkfeatures.h"
 #include "gdk/gdkx.h"
 
 #ifdef __SVR4__
@@ -79,12 +76,7 @@ void wxDisplaySize( int *width, int *height )
 
 void wxGetMousePosition( int* x, int* y )
 {
-    Window       dumw;
-    int          dumi;
-    unsigned int dumu;
-    
-    XQueryPointer( GDK_DISPLAY(),GDK_ROOT_WINDOW(),
-                   &dumw,&dumw,x,y,&dumi,&dumi,&dumu );
+    gdk_window_get_pointer( (GdkWindow*) NULL, x, y, (GdkModifierType*) NULL );
 }
 
 bool wxColourDisplay(void)
@@ -95,6 +87,14 @@ bool wxColourDisplay(void)
 int wxDisplayDepth(void)
 {
     return gdk_window_get_visual( (GdkWindow*) &gdk_root_parent )->depth;
+}
+
+int wxGetOsVersion(int *majorVsn, int *minorVsn)
+{
+  if (majorVsn) *majorVsn = GTK_MAJOR_VERSION;
+  if (minorVsn) *minorVsn = GTK_MINOR_VERSION;
+  
+  return wxGTK;
 }
 
 //------------------------------------------------------------------------
@@ -124,7 +124,8 @@ char *wxGetUserHome( const wxString &user )
 	{
             who = getpwnam(ptr);
         }
-        // We now make sure the the user exists!
+	
+        /* We now make sure the the user exists! */
         if (who == NULL)
 	{
             who = getpwuid(getuid());
@@ -250,37 +251,37 @@ bool wxDirExists( const wxString& dir )
 
 struct wxEndProcessData
 {
-  gint pid, tag;
-  wxProcess *process;
+    gint pid, tag;
+    wxProcess *process;
 };
 
 static void GTK_EndProcessDetector(gpointer data, gint source,
                                    GdkInputCondition WXUNUSED(condition) )
 {
-  wxEndProcessData *proc_data = (wxEndProcessData *)data;
-  int pid;
+    wxEndProcessData *proc_data = (wxEndProcessData *)data;
+    int pid;
 
-  pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
+    pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
-  /* wait4 is not part of any standard, use at own risk
-   * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
-   * --- offer@sgi.com */
+    /* wait4 is not part of any standard, use at own risk
+     * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
+     * --- offer@sgi.com */
 #if !defined(__sgi)
-  wait4(proc_data->pid, NULL, 0, NULL);
+    wait4(proc_data->pid, (int*) NULL, 0, (rusage *) NULL);
 #else
-  wait3((int *) NULL, 0, (rusage *) NULL);
+    wait3((int *) NULL, 0, (rusage *) NULL);
 #endif
 
-  close(source);
-  gdk_input_remove(proc_data->tag);
+    close(source);
+    gdk_input_remove(proc_data->tag);
 
-  if (proc_data->process)
-    proc_data->process->OnTerminate(proc_data->pid);
+    if (proc_data->process)
+        proc_data->process->OnTerminate(proc_data->pid);
 
-  if (proc_data->pid > 0)
-    delete proc_data;
-  else
-    proc_data->pid = 0;
+    if (proc_data->pid > 0)
+        delete proc_data;
+    else
+        proc_data->pid = 0;
 }
 
 long wxExecute( char **argv, bool sync, wxProcess *process )
@@ -291,8 +292,9 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     wxCHECK_MSG( *argv, 0, "can't exec empty command" );
 
     /* Create pipes */
-    if (pipe(end_proc_detect) == -1) {
-      wxLogSysError(_("Pipe creation failed"));
+    if (pipe(end_proc_detect) == -1) 
+    {
+      wxLogSysError( "Pipe creation failed" );
       return 0;
     }
 
@@ -302,12 +304,13 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 #else
     pid_t pid = fork();
 #endif
-    if (pid == -1) {
-        // error
-        wxLogSysError(_("Fork failed"));
+    if (pid == -1) 
+    {
+        wxLogSysError( "Fork failed" );
         return 0;
     }
-    else if (pid == 0) {
+    else if (pid == 0) 
+    {
         // we're in child
         close(end_proc_detect[0]); // close reading side
 	// These three lines close the open file descriptors to
@@ -325,20 +328,23 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         execvp (*argv, argv);
 #endif
         // there is no return after successful exec()
-        wxLogSysError(_("Can't execute '%s'"), *argv);
+        wxLogSysError( "Can't execute '%s'", *argv);
 
         _exit(-1);
     }
-    else {
+    else 
+    {
       // we're in parent
       close(end_proc_detect[1]); // close writing side
       data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
                                 GTK_EndProcessDetector, (gpointer)data);
       data->pid = pid;
-      if (!sync) {
+      if (!sync) 
+      {
         data->process = process;
       }
-      else {
+      else 
+      {
         data->process = (wxProcess *) NULL;
         data->pid = -(data->pid);
 
