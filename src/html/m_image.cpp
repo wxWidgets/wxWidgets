@@ -500,7 +500,8 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
             wxBitmap bmp(img);
             wxMemoryDC dc;
             dc.SelectObject(*m_bitmap);
-            dc.DrawBitmap(bmp, m_gifDecoder->GetLeft(), m_gifDecoder->GetTop());
+            dc.DrawBitmap(bmp, m_gifDecoder->GetLeft(), m_gifDecoder->GetTop(),
+                          TRUE /* use mask */);
         }
         else
             SetImage(img);
