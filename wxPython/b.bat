@@ -6,12 +6,15 @@ set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 
 rem  Use non-default python?
 iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" then
-	set SETUP=c:\tools\python%1%\python.exe -u setup.py
+	set PYTHON=c:\tools\python%1%\python.exe
 	shift
 else
-	set SETUP=python -u setup.py
+	set PYTHON=python
 endiff
+set SETUP=%PYTHON% -u setup.py
 
+
+%PYTHON% -c "import sys;print '\n', sys.version, '\n'"
 
 
 rem "c" --> clean
