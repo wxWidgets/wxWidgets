@@ -63,6 +63,9 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
                  "<a href=\"%s-3\">sub-3</a><br>"
                  "</blockquote></body></html>",
                  location.GetData(), location.GetData(), location.GetData(), location.GetData());
+
+    // WARNING: wxMemoryInputStream will not free buf.
+    // There is a memory leak here.
     str = new wxMemoryInputStream(buf, strlen(buf));
     f = new wxFSFile(str, location, "text/html", wxEmptyString);
     return f;

@@ -195,6 +195,10 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   wxChar buf[200]; // 200 is arbitrary.
   wxString tmp_str = path;
 
+  // If there is no User-Agent defined, define it.
+  if (GetHeader(_T("User-Agent")).IsNull())
+    SetHeader(_T("User-Agent"), _T("wxWindows 2.x")); 
+
   switch (req) {
   case wxHTTP_GET:
     tmp_buf = _T("GET");
@@ -221,6 +225,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   if (!tmp_str.Contains(_T("HTTP/"))) {
     // TODO: support HTTP v0.9 which can have no header.
+    // FIXME: tmp_str is not put back in the in-queue of the socket.
     SetHeader(_T("Content-Length"), _T("-1"));
     SetHeader(_T("Content-Type"), _T("none/none"));
     RestoreState();
@@ -234,8 +239,15 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   token.NextToken();
   tmp_str2 = token.NextToken();
 
-  switch (wxAtoi(tmp_str2)) {
-  case 200:
+  switch (tmp_str2[0]) {
+  case _T('1'):
+    /* INFORMATION / SUCCESS */
+    break;
+  case _T('2'):
+    /* SUCCESS */
+    break;
+  case _T('3'):
+    /* REDIRECTION */
     break;
   default:
     m_perr = wxPROTO_NOFILE;

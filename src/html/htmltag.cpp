@@ -25,6 +25,7 @@
 #endif
 
 #include <wx/html/htmltag.h>
+#include <stdio.h> // for vsscanf
 #include <stdarg.h>
 
 

@@ -102,7 +102,7 @@ GSocketError GSocket_SetNonOriented(GSocket *socket);
 /* Server specific parts */
 
 /*
-  GSocket_SetServer() setup the socket as a server. It uses the "Local" field
+  GSocket_SetServer() setups the socket as a server. It uses the "Local" field
   of GSocket. "Local" must be set by GSocket_SetLocal() before
   GSocket_SetServer() is called. In the other case, it returns GSOCK_INVADDR.
 */
