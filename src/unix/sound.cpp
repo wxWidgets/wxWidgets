@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     25/10/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart, Vaclav Slavik
+// Copyright:   (c) Julian Smart, Open Source Applications Foundation
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,7 +23,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #include <stdio.h>
 #include <unistd.h>
@@ -515,10 +515,8 @@ bool wxSound::Create(int size, const wxByte* data)
     }
 }
 
-bool wxSound::DoPlay(unsigned flags)
+bool wxSound::DoPlay(unsigned flags) const
 {
-    wxASSERT_MSG( (flags & wxSOUND_LOOP) == 0 || (flags & wxSOUND_ASYNC) != 0,
-                  _T("sound can only be looped asynchronously") );
     wxCHECK_MSG( IsOk(), false, _T("Attempt to play invalid wave data") );
 
     EnsureBackend();

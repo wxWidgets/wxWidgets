@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     2004/01/31
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004, Vaclav Slavik
+// Copyright:   (c) 2004, Open Source Applications Foundation
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_WAVE && wxUSE_LIBSDL
+#if wxUSE_SOUND && wxUSE_LIBSDL
 
 #include <SDL.h>
 
@@ -335,4 +335,4 @@ extern "C" wxSoundBackend *wxCreateSoundBackendSDL()
     return new wxSoundBackendSDL();
 }
 
-#endif // wxUSE_WAVE && wxUSE_LIBSDL
+#endif // wxUSE_SOUND && wxUSE_LIBSDL
