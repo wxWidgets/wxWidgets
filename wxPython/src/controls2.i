@@ -559,6 +559,10 @@ public:
     // view, otherwise the large icon view.
     int GetItemSpacing(bool isSmall) const;
 
+#ifndef __WXMSW__
+    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+#endif
+
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
 
