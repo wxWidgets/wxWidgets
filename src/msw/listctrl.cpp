@@ -1295,19 +1295,20 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
         case LVN_DELETEALLITEMS:
-            // what's the sense of generating a wxWin event for this when
-            // it's absolutely not portable?
-#if 0
-            eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+            // What's the sense of generating a wxWin event for this when
+	    // it's absolutely not portable?
+            // This is perfectly portable, RR
+#if 1
+	    eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
             event.m_itemIndex = -1;
-#endif // 0
+#endif // 1
 
             // return TRUE to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
             // much faster
             *result = TRUE;
 
-            return TRUE;
+	    break;
 
         case LVN_DELETEITEM:
             {
@@ -1577,6 +1578,14 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     if ( !GetEventHandler()->ProcessEvent(event) )
         return FALSE;
+
+    if (eventType == wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS)
+    {
+	// No postprocessing, because we want *return to
+	// be TRUE so that no further DeleteItem events
+	// are sent, RR.
+        return TRUE;
+    }
 
     // post processing
     // ---------------
