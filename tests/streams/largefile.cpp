@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //
-// Were interested in what happens around offsets 0x7fffffff and 0xffffffff
+// We're interested in what happens around offsets 0x7fffffff and 0xffffffff
 // so the test writes a small chunk of test data just before and just after
 // these offsets, then reads them back.
 //
@@ -292,9 +292,9 @@ CppUnit::Test *largeFile::suite()
 // are picked up. However this is only possible when sparse files are
 // supported otherwise the tests require too much disk space.
 //
-// On unix most filesystems support sparse files, so right now I'm just
-// assuming sparse file support on unix. On Windows it's possible to test, and
-// sparse files should be available on Win 5+ with NTFS.
+// On unix, most filesystems support sparse files, though not all. So for now
+// I'm not assuming sparse file support on unix. On Windows it's possible to
+// test, and sparse files should be available on Win 5+ with NTFS.
 
 #ifdef __WXMSW__
 
@@ -365,7 +365,7 @@ void MakeSparse(const wxString& path, int fd)
         if (!::DeviceIoControl((HANDLE)_get_osfhandle(fd),
                                FSCTL_SET_SPARSE,
                                NULL, 0, NULL, 0, &cb, NULL))
-            volumeFlags &= ~ FILE_SUPPORTS_SPARSE_FILES;
+            volumeFlags &= ~FILE_SUPPORTS_SPARSE_FILES;
 }
 
 CppUnit::Test* GetlargeFileSuite()
@@ -388,11 +388,7 @@ CppUnit::Test* GetlargeFileSuite()
 bool IsFAT(const wxString& WXUNUSED(path)) { return false; }
 void MakeSparse(const wxString& WXUNUSED(path), int WXUNUSED(fd)) { }
 
-#ifdef __UNIX__
-CppUnit::Test* GetlargeFileSuite() { return largeFile::suite(); }
-#else
 CppUnit::Test* GetlargeFileSuite() { return NULL; }
-#endif
 
 #endif // __WXMSW__
 
