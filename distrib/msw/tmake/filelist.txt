@@ -514,6 +514,7 @@ scrolwin.h	W
 serbase.h	W
 settings.h	W
 setup.h	W
+sizer.h	W
 slider.h	W
 socket.h	W
 spinbutt.h	W
@@ -600,7 +601,6 @@ listbox.h	K
 mdi.h	K
 menu.h	K
 menuitem.h	K
-msgdlg.h	K
 minifram.h	K
 notebook.h	K
 palette.h	K

@@ -1535,6 +1535,9 @@ dnl the symbol which allows conditional compilation for the given toolkit
 TOOLKIT_DEF="-D__WX${TOOLKIT}__"
 
 dnl the name of the (libtool) library
+WX_LIBRARY="wx_${TOOLKIT_DIR}"
+
+dnl the name of the (libtool) library
 WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}.la"
 
 dnl the name of the static library
@@ -1542,9 +1545,6 @@ WX_LIBRARY_NAME_STATIC="libwx_${TOOLKIT_DIR}.a"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-
-dnl the name of the library we actually want to build
-WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
 
 dnl the name of the links to the shared library
 WX_LIBRARY_LINK1="libwx_${TOOLKIT_DIR}-${WX_RELEASE}.so.${WX_CURRENT}"
@@ -1556,6 +1556,10 @@ SHARED_LD=
 PIC_FLAG=
 WX_CREATE_LINKS=
 
+if test "$wxUSE_SHARED" = "yes"; then
+    dnl set target to shared
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
+
 case "${host}" in
   *-hp-hpux* )
     WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
@@ -1565,40 +1569,48 @@ case "${host}" in
   *-*-linux* )
     SHARED_LD="${CC} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-irix5* | *-*-irix6* )
     SHARED_LD="${CXX} -shared -o"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-solaris2* )
     SHARED_LD="${CXX} -G -o"
     PIC_FLAG="PIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-sunos4* )
     SHARED_LD="${CXX} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-freebsd* | *-*-netbsd*)
     SHARED_LD="${CXX} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-osf* )
     SHARED_LD="${CXX} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-dgux5* )
     SHARED_LD="${CXX} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-sysv5* )
     SHARED_LD="${CXX} -shared -o"
     PIC_FLAG="-fPIC"
+    WX_CREATE_INSTALLED_LINKS="CREATE_INSTALLED_LINKS"
     WX_CREATE_LINKS="CREATE_LINKS"
   ;;
   *-*-aix* )
@@ -1613,6 +1625,11 @@ case "${host}" in
   *)
     AC_MSG_ERROR(unknown system type ${host}.)
 esac
+
+else
+    dnl set target to static
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+fi
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -2606,6 +2623,7 @@ AC_SUBST(WX_LIBRARY_LINK3)
 
 dnl are we supposed to create the links?
 AC_SUBST(WX_CREATE_LINKS)
+AC_SUBST(WX_CREATE_INSTALLED_LINKS)
 
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)

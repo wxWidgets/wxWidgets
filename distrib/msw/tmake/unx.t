@@ -358,13 +358,21 @@ $(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDI
 @WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
 	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
 	
-CREATE_LINKS:  $(OBJECTS)
+CREATE_LINKS:  ./lib/@WX_TARGET_LIBRARY@
 	@if test -e ./lib/@WX_LIBRARY_LINK1@; then rm -f ./lib/@WX_LIBRARY_LINK1@; fi
 	@if test -e ./lib/@WX_LIBRARY_LINK2@; then rm -f ./lib/@WX_LIBRARY_LINK2@; fi
 	@if test -e ./lib/@WX_LIBRARY_LINK3@; then rm -f ./lib/@WX_LIBRARY_LINK3@; fi
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK1@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK2@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK3@
+	
+CREATE_INSTALLED_LINKS:  $(libdir)/@WX_TARGET_LIBRARY@
+	@if test -e $(libdir)/@WX_LIBRARY_LINK1@; then rm -f $(libdir)/@WX_LIBRARY_LINK1@; fi
+	@if test -e $(libdir)/@WX_LIBRARY_LINK2@; then rm -f $(libdir)/@WX_LIBRARY_LINK2@; fi
+	@if test -e $(libdir)/@WX_LIBRARY_LINK3@; then rm -f $(libdir)/@WX_LIBRARY_LINK3@; fi
+	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK1@
+	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK2@
+	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK3@
 	
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 
@@ -394,7 +402,10 @@ samples: $(OBJECTS)
 	    then cp -f -r $(WXDIR)/samples .;  \
 	fi
 
-install: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top_builddir)/setup.h
+preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top_builddir)/setup.h
+	@echo " "
+	@echo " Installing wxWindows..."
+	@echo " "
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
@@ -403,7 +414,7 @@ install: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top
 	@if test ! -d $(libdir)/wx/include; then mkdir $(libdir)/wx/include; fi
 	@if test ! -d $(libdir)/wx/include/wx; then mkdir $(libdir)/wx/include/wx; fi
 	@if test ! -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@; then mkdir $(libdir)/wx/include/wx/@TOOLKIT_DIR@; fi
-	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@
+	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
 	@if test ! -d $(includedir)/wx; then mkdir $(includedir)/wx; fi
 	@if test ! -d $(includedir)/wx/gtk; then mkdir $(includedir)/wx/gtk; fi
@@ -413,15 +424,52 @@ install: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top
 	@if test ! -d $(includedir)/wx/unix; then mkdir $(includedir)/wx/unix; fi
 	@if test ! -d $(includedir)/wx/generic; then mkdir $(includedir)/wx/generic; fi
 	@list='$(HEADERS)'; for p in $$list; do \
-	  echo '$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p;' \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
-	@done
+	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
+	done
+	
+write_message:
+	@echo " "
+	@echo " The installation of wxWindows is finished.  On certain"
+	@echo " platforms (e.g. Linux, Solaris) you'll now have to run"
+	@echo " ldconfig if you installed a shared library."
+	@echo " "
+	@echo " wxWindows comes with  no guarantees  and doesn't claim"
+	@echo " to be suitable for any purpose."
+	@echo " "
+	@echo " Read the wxWindows Licence on licencing conditions."
+	@echo " "
+
+install: preinstall @WX_CREATE_INSTALLED_LINKS@ write_message
 
 uninstall:
-	rm -f $(bindir)/wx-config
-	rm -f $(libdir)/@WX_TARGET_LIBRARY@
-	rm -f -r -d $(libdir)/wx
-	rm -f -r -d $(includedir)/wx
+	@echo " "
+	@echo " Uninstalling wxWindows..."
+	@echo " "
+	@echo " Removing library..."
+	@rm -f $(libdir)/@WX_TARGET_LIBRARY@
+	@rm -f $(libdir)/@WX_LIBRARY_LINK1@
+	@rm -f $(libdir)/@WX_LIBRARY_LINK2@
+	@rm -f $(libdir)/@WX_LIBRARY_LINK3@
+	@echo " Removing helper files..."
+	@rm -f $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
+	@rm -f $(bindir)/wx-config
+	@echo " Removing headers..."
+	@list='$(HEADERS)'; for p in $$list; do \
+	  rm -f $(includedir)/wx/$$p; \
+	done
+	@echo " Removing directories..."
+	@if test -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@; then rmdir $(libdir)/wx/include/wx/@TOOLKIT_DIR@; fi
+	@if test -d $(libdir)/wx/include/wx; then rmdir $(libdir)/wx/include/wx; fi
+	@if test -d $(libdir)/wx/include; then rmdir $(libdir)/wx/include; fi
+	@if test -d $(libdir)/wx; then rmdir $(libdir)/wx; fi
+	@if test -d $(includedir)/wx/gtk; then rmdir $(includedir)/wx/gtk; fi
+	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/motif; fi
+	@if test -d $(includedir)/wx/html; then rmdir $(includedir)/wx/html; fi
+	@if test -d $(includedir)/wx/unix; then rmdir $(includedir)/wx/unix; fi
+	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi
+	@if test -d $(includedir)/wx/protocol; then rmdir $(includedir)/wx/protocol; fi
+	@if test -d $(includedir)/wx; then rmdir $(includedir)/wx; fi
 
 clean:
 	rm -f ./src/msw/*.o
@@ -431,6 +479,9 @@ clean:
 	rm -f ./src/common/*.o
 	rm -f ./src/unix/*.o
 	rm -f ./src/generic/*.o
+	rm -f ./src/png/*.o
+	rm -f ./src/jpeg/*.o
+	rm -f ./src/zlib/*.o
 	rm -f *.o
 	rm -f parser.c
 	rm -f lexer.c
