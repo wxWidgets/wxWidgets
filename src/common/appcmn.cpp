@@ -395,9 +395,6 @@ void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
 // this function is called when an assert fails
 void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 {
-    wxMessageBox( "ttest", "test", wxOK );
-    return;
-    
     if ( !wxTheApp )
     {
         // by default, show the assert dialog box - we can't customize this
