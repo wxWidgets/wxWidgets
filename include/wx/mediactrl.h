@@ -58,6 +58,7 @@ enum wxMediaState
 #define wxMEDIABACKEND_DIRECTSHOW   wxT("wxAMMediaBackend")
 #define wxMEDIABACKEND_MCI          wxT("wxMCIMediaBackend")
 #define wxMEDIABACKEND_QUICKTIME    wxT("wxQTMediaBackend")
+#define wxMEDIABACKEND_GSTREAMER    wxT("wxGStreamerMediaBackend")
 
 // ----------------------------------------------------------------------------
 //

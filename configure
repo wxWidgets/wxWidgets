@@ -20801,6 +20801,11 @@ SEARCH_INCLUDE="\
     /usr/include/wine         \
     /usr/local/include/wine   \
                               \
+    /usr/include/gstreamer-0.8 \
+    /usr/local/include/gstreamer-0.8 \
+    /usr/include/libxml2       \
+    /usr/local/include/libxml2 \
+                              \
     /usr/unsupported/include  \
     /usr/athena/include       \
     /usr/local/x11r5/include  \
@@ -27889,94 +27894,6 @@ fi
 done
 
     fi
-fi
-
-
-if test "$wxUSE_MEDIACTRL" = "yes"; then
-    if test "$wxUSE_MSW" = 1; then
-        wxUSE_DIRECTSHOW="yes"
-
-for ac_header in dshow.h
-do
-as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $ac_header" >&5
-echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
-if eval "test \"\${$as_ac_Header+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <windows.h>
-
-#include <$ac_header>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  eval "$as_ac_Header=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-eval "$as_ac_Header=no"
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-if test `eval echo '${'$as_ac_Header'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-
-                wxUSE_DIRECTSHOW="no"
-                { echo "$as_me:$LINENO: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&5
-echo "$as_me: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&2;}
-
-fi
-
-done
-
-
-       if test "$wxUSE_DIRECTSHOW" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define wxUSE_DIRECTSHOW 1
-_ACEOF
-
-            LIBS="$LIBS -lstrmiids"
-       fi
-    fi
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_MEDIACTRL 1
-_ACEOF
-
 fi
 
 
@@ -38592,6 +38509,351 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wizard"
+fi
+
+
+if test "$wxUSE_MEDIACTRL" = "yes"; then
+    if test "$wxUSE_MSW" = 1; then
+                    wxUSE_DIRECTSHOW="yes"
+
+for ac_header in dshow.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <windows.h>
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval "$as_ac_Header=no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+                wxUSE_DIRECTSHOW="no"
+                { echo "$as_me:$LINENO: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&5
+echo "$as_me: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&2;}
+
+fi
+
+done
+
+
+       if test "$wxUSE_DIRECTSHOW" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define wxUSE_DIRECTSHOW 1
+_ACEOF
+
+            LIBS="$LIBS -lstrmiids"
+       fi
+    fi
+
+                if test "$wxUSE_GTK" = 1; then
+        wxUSE_GSTREAMER="yes"
+
+                                echo "$as_me:$LINENO: checking for libxml2" >&5
+echo $ECHO_N "checking for libxml2... $ECHO_C" >&6
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libxml2.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "$ac_find_libraries" != "" ; then
+                                                            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            echo "$as_me:$LINENO: checking for libxml2 headers" >&5
+echo $ECHO_N "checking for libxml2 headers... $ECHO_C" >&6
+
+ac_find_includes=
+for ac_dir in $SEARCH_INCLUDE /usr/include;
+  do
+    if test -f "$ac_dir/libxml/xmlstring.h"; then
+      ac_find_includes=$ac_dir
+      break
+    fi
+  done
+
+            if test "$ac_find_includes" != "" ; then
+                echo "$as_me:$LINENO: result: found in $ac_find_includes" >&5
+echo "${ECHO_T}found in $ac_find_includes" >&6
+
+    if test "x$ac_find_includes" = "x/usr/include"; then
+    ac_path_to_include=""
+  else
+    echo "$TOOLKIT_INCLUDE" | grep "\-I$ac_find_includes" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$ac_find_includes"
+    fi
+  fi
+
+                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+            else
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <libxml/xmlstring.h>
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: found in default search path" >&5
+echo "${ECHO_T}found in default search path" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wxUSE_GSTREAMER="no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+            fi
+        else
+                                                wxUSE_GSTREAMER="no"
+        fi
+
+        if test "$wxUSE_GSTREAMER" = "yes"; then
+                                                echo "$as_me:$LINENO: checking for gstreamer 0.8" >&5
+echo $ECHO_N "checking for gstreamer 0.8... $ECHO_C" >&6
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libgstreamer-0.8.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+            if test "$ac_find_libraries" != "" ; then
+                                                                echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+                echo "$as_me:$LINENO: checking for gstplay 0.8" >&5
+echo $ECHO_N "checking for gstplay 0.8... $ECHO_C" >&6
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libgstplay-0.8.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+                if test "$ac_find_libraries" != "" ; then
+                                                                                echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+                    echo "$as_me:$LINENO: checking for gstinterfaces 0.8" >&5
+echo $ECHO_N "checking for gstinterfaces 0.8... $ECHO_C" >&6
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libgstinterfaces-0.8.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+                    if test "$ac_find_libraries" != "" ; then
+                                                                                                                        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+                        echo "$as_me:$LINENO: checking for GStreamer headers" >&5
+echo $ECHO_N "checking for GStreamer headers... $ECHO_C" >&6
+
+ac_find_includes=
+for ac_dir in $SEARCH_INCLUDE /usr/include;
+  do
+    if test -f "$ac_dir/gst/gst.h"; then
+      ac_find_includes=$ac_dir
+      break
+    fi
+  done
+
+                        if test "$ac_find_includes" != "" ; then
+                            echo "$as_me:$LINENO: result: found in $ac_find_includes" >&5
+echo "${ECHO_T}found in $ac_find_includes" >&6
+
+    if test "x$ac_find_includes" = "x/usr/include"; then
+    ac_path_to_include=""
+  else
+    echo "$TOOLKIT_INCLUDE" | grep "\-I$ac_find_includes" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$ac_find_includes"
+    fi
+  fi
+
+                            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+                        else
+                            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                    #include <gst/gst.h>
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: found in default search path" >&5
+echo "${ECHO_T}found in default search path" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wxUSE_GSTREAMER="no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                        fi
+                    else
+                                                                                                wxUSE_GSTREAMER="no"
+                    fi
+                else
+                                                                                wxUSE_GSTREAMER="no"
+                fi
+            else
+                                                                wxUSE_GSTREAMER="no"
+            fi
+
+                                                            if test "$wxUSE_GSTREAMER" = "yes"; then
+                                                                                                                cat >>confdefs.h <<\_ACEOF
+#define wxUSE_GSTREAMER 1
+_ACEOF
+
+                LIBS="$LIBS -lgstreamer-0.8 -lgstplay-0.8"
+                LIBS="$LIBS -lgstinterfaces-0.8 -lxml2"
+            else
+                                                                                echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+            fi
+        fi
+    fi
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_MEDIACTRL 1
+_ACEOF
+
 fi
 
 

@@ -18,8 +18,6 @@ wxMediaCtrl uses native backends to render media, for example on Windows
 there is a ActiveMovie/DirectShow backend, and on Macintosh there is a 
 QuickTime backend.
 
-wxMediaCtrl is not currently available on unix systems. 
-
 \wxheading{Derived from}
 
 \helpref{wxControl}{wxcontrol}
@@ -107,6 +105,8 @@ and is available on Windows Only.}
 Use QuickTime.  Windows and Mac Only. WARNING: On Mac Systems lower than OSX 10.2 this defaults to emulating window positioning and suffers from several bugs, including not working correctly embedded in a wxNotebook. }
 \twocolitem{{\bf wxMEDIABACKEND\_MCI}}{
 Use Media Command Interface.  Windows Only. }
+\twocolitem{{\bf wxMEDIABACKEND\_GSTREAMER}}{
+Use GStreamer.  Unix Only. }
 \end{twocollist}
 
 \membersection{wxMediaCtrl::wxMediaCtrl}\label{wxmediactrlwxmediactrl}
