@@ -487,7 +487,7 @@ bool GSocket_DataAvailable(GSocket *socket)
   GSocket_SetNonBlocking() puts the socket in non-blocking mode. This is useful
   if we don't want to wait.
 */
-void GSocket_SetNonBlocking(GSocket *socket, bool block)
+void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
   assert(socket != NULL);
 
