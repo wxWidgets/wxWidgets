@@ -20,6 +20,10 @@
 #pragma implementation "notebook.h"
 #endif
 
+#ifdef __VMS
+#pragma message disable unscomzer
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

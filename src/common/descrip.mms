@@ -48,6 +48,7 @@ OBJECTS = \
 		appcmn.obj,\
 		artprov.obj,\
 		artstd.obj,\
+		bookctrl.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
 		clntdata.obj,\
@@ -179,6 +180,7 @@ SOURCES = \
 		artprov.cpp,\
 		artstd.cpp,\
 		bmpbase.cpp,\
+		bookctrl.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
 		clntdata.cpp,\
@@ -330,6 +332,7 @@ appcmn.obj : appcmn.cpp
 artprov.obj : artprov.cpp
 artstd.obj : artstd.cpp
 bmpbase.obj : bmpbase.cpp
+bookctrl.obj : bookctrl.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
 clntdata.obj : clntdata.cpp

@@ -210,6 +210,7 @@
  * Use iODBC
  */
 #define wxUSE_ODBC 1
+#define wxUSE_BUILTIN_IODBC 0
 #define wxODBC_FWD_ONLY_CURSORS 1
 #define wxODBC_BACKWARD_COMPATABILITY 0
 /*
@@ -533,17 +534,6 @@
 #define wxUSE_TOOLBAR_NATIVE 1
 
 /*
- * Use generic wxToolBar instead of/together with the native one?
- */
-#define wxUSE_TOOLBAR_SIMPLE 1
-
-#if defined(__WXWINE__) || defined(__GNUWIN32__) || defined(__WXPM__)
-  #if wxUSE_TOOLBAR
-    #define wxUSE_BUTTONBAR 1
-  #endif
-#endif
-
-/*
  * Use wxTreeLayout class
  */
 #define wxUSE_TREELAYOUT 1
@@ -820,10 +810,6 @@
  */
 #define wxUSE_APPLE_IEEE 0
 
-/*
- * Compatibility with 2.0 API.
- */
-#define WXWIN_COMPATIBILITY_2 1
 /*
  * Compatibility with 2.2 API
  */

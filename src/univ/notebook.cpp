@@ -21,6 +21,10 @@
     #pragma implementation "univnotebook.h"
 #endif
 
+#ifdef __VMS
+#pragma message disable unscomzer
+#endif
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
