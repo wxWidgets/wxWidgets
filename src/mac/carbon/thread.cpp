@@ -1420,7 +1420,7 @@ bool wxThreadModule::OnInit()
     
 	if ( !hasThreadManager )
     {
-		wxMessageBox( wxT("Error") , wxT("MP Thread Support is not available on this System" ), wxOK ) ;
+		wxLogError( _("MP Thread Support is not available on this System" ) ) ;
 		return FALSE ;
     }
 	
