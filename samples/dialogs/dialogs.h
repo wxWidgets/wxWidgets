@@ -15,7 +15,7 @@
 #define USE_COLOURDLG_GENERIC                                                     \
     (                                                                             \
         wxUSE_COLOURDLG &&                                                        \
-        ( defined(__WXMSW__) || defined(__WXMAC__) ) &&   \
+        ( defined(__WXMSW__) || defined(__WXMAC__) ) &&                           \
         !defined(__WXUNIVERSAL__)                                                 \
     )
 
@@ -23,11 +23,17 @@
 #define USE_FONTDLG_GENERIC                                                       \
     (                                                                             \
         wxUSE_FONTDLG &&                                                          \
-        ( defined(__WXMSW__) || defined(__WXPM__) ) &&      \
+        ( defined(__WXMSW__) || defined(__WXPM__) ) &&                            \
         !defined(__WXUNIVERSAL__)                                                 \
     )
 
-#define USE_DIRDLG_GENERIC       0
+#define USE_DIRDLG_GENERIC                                                        \
+    (                                                                             \
+        wxUSE_DIRDLG &&                                                           \
+        ( defined(__WXMSW__) || defined(__WXMAC__) ) &&                           \
+        !defined(__WXUNIVERSAL__)                                                 \
+    )
+
 
 #define USE_MODAL_PRESENTATION   1
 

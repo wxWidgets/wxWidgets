@@ -3,8 +3,26 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
+    <set var="GENERIC_FILES">
+        <if cond="TOOLKIT=='MSW' and WXUNIV=='0'">
+            ../../src/generic/colrdlgg.cpp
+            ../../src/generic/dirdlgg.cpp
+            ../../src/generic/fontdlgg.cpp
+        </if>
+        <if cond="TOOLKIT=='MAC' and WXUNIV=='0'">
+            ../../src/generic/colrdlgg.cpp
+            ../../src/generic/dirdlgg.cpp
+        </if>
+        <if cond="TOOLKIT=='PM' and WXUNIV=='0'">
+            ../../src/generic/fontdlgg.cpp
+        </if>
+    </set>
+
     <exe id="dialogs" template="wx_sample" template_append="wx_append">
-        <sources>dialogs.cpp</sources>
+        <sources>
+            dialogs.cpp
+            $(GENERIC_FILES)
+        </sources>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

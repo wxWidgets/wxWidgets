@@ -110,6 +110,13 @@ __EXCEPTIONSFLAG_7 =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_7 = -xs
 !endif
+____GENERIC_FILES_FILENAMES_OBJECTS =
+!ifeq WXUNIV 0
+____GENERIC_FILES_FILENAMES_OBJECTS =  &
+	$(OBJS)\dialogs_colrdlgg.obj &
+	$(OBJS)\dialogs_dirdlgg.obj &
+	$(OBJS)\dialogs_fontdlgg.obj
+!endif
 __WXLIB_ADV_p =
 !ifeq MONOLITHIC 0
 __WXLIB_ADV_p = &
@@ -181,7 +188,8 @@ DIALOGS_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) 
 	-i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
 	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 DIALOGS_OBJECTS =  &
-	$(OBJS)\dialogs_dialogs.obj
+	$(OBJS)\dialogs_dialogs.obj &
+	$(____GENERIC_FILES_FILENAMES_OBJECTS)
 
 
 all : $(OBJS)
@@ -215,6 +223,15 @@ data : .SYMBOLIC
 	for %f in (tips.txt) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\dialogs_dialogs.obj :  .AUTODEPEND .\dialogs.cpp
+	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+
+$(OBJS)\dialogs_colrdlgg.obj :  .AUTODEPEND .\..\..\src\generic\colrdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+
+$(OBJS)\dialogs_dirdlgg.obj :  .AUTODEPEND .\..\..\src\generic\dirdlgg.cpp
+	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+
+$(OBJS)\dialogs_fontdlgg.obj :  .AUTODEPEND .\..\..\src\generic\fontdlgg.cpp
 	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dialogs.res :  .AUTODEPEND .\dialogs.rc
