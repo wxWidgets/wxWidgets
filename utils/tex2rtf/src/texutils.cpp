@@ -36,6 +36,7 @@
 #else
 #include <iostream>
 #include <fstream>
+using namespace std;
 #endif
 
 #include <ctype.h>
