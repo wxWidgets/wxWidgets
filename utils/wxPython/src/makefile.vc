@@ -268,7 +268,11 @@ dist:
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.1  1999/02/06 23:47:03  RD
+# Changing makefile.nt to makefile.vc as in rest of wxWindows
+#
 # Revision 1.10  1999/02/01 00:10:40  RD
+#
 # Added the missing EVT_LIST_ITEM_SELECTED and friends.
 #
 # Revision 1.9  1999/01/30 07:30:13  RD
