@@ -369,6 +369,20 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   m_nSelection = -1;
   SetSelection(nSel);
 
+  // fit the notebook page to the tab control's display area
+  RECT rc;
+  rc.left = rc.top = 0;
+  GetSize((int *)&rc.right, (int *)&rc.bottom);
+
+  TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
+  uint nCount = m_aPages.Count();
+  for ( uint nPage = 0; nPage < nCount; nPage++ ) {
+    wxNotebookPage *pPage = m_aPages[nPage];
+    pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    if ( pPage->GetAutoLayout() )
+      pPage->Layout();
+  }
+
   event.Skip();
 }
 
@@ -409,6 +423,20 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 // ----------------------------------------------------------------------------
 // wxNotebook base class virtuals
 // ----------------------------------------------------------------------------
+
+// override these 2 functions to do nothing: everything is done in OnSize
+
+void wxNotebook::SetConstraintSizes(bool /* recurse */)
+{
+  // don't set the sizes of the pages - their correct size is not yet known
+  wxControl::SetConstraintSizes(FALSE);
+}
+
+bool wxNotebook::DoPhase(int /* nPhase */)
+{
+  return TRUE;
+}
+
 void wxNotebook::Command(wxCommandEvent& event)
 {
   wxFAIL_MSG("wxNotebook::Command not implemented");
@@ -453,28 +481,8 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
   }
 
   wxNotebookPage *pPage = m_aPages[nSel];
-  FitPage(pPage);
   pPage->Show(TRUE);
-
-  // set focus to the currently selected page
-  wxWindow *win = m_aPages[nSel];
-  if ( win->IsKindOf(CLASSINFO(wxPanel)) ) {
-    wxList *children = win->GetChildren();
-    if ( children->First() != NULL );
-      win = (wxWindow *)children->First()->Data();
-  }
-  win->SetFocus();
+  pPage->SetFocus();
 
   m_nSelection = nSel;
-}
-
-// fit the notebook page to the tab control's display area
-void wxNotebook::FitPage(wxNotebookPage *pPage)
-{
-  RECT rc;
-  rc.left = rc.top = 0;
-  GetSize((int *)&rc.right, (int *)&rc.bottom);
-
-  TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
-  pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
