@@ -23,6 +23,7 @@
 #include "wx/app.h"
 #include "wx/listctrl.h"
 #include "wx/generic/imaglist.h"
+#include "wx/dynarray.h"
 
 #ifndef wxUSE_GENERIC_LIST_EXTENSIONS
 #define wxUSE_GENERIC_LIST_EXTENSIONS 1
@@ -167,6 +168,11 @@ private:
     DECLARE_DYNAMIC_CLASS(wxListLineData);
 };
 
+
+WX_DECLARE_EXPORTED_OBJARRAY(wxListLineData, wxListLineDataArray);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxListLineDataArray);
+
 //-----------------------------------------------------------------------------
 //  wxListHeaderWindow (internal)
 //-----------------------------------------------------------------------------
@@ -268,7 +274,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 {
 public:
     long                 m_mode;
-    wxList               m_lines;
+    wxListLineDataArray  m_lines;
     wxList               m_columns;
     wxListLineData      *m_current;
     wxListLineData      *m_currentEdit;
@@ -1510,7 +1516,6 @@ END_EVENT_TABLE()
 wxListMainWindow::wxListMainWindow()
 {
     m_mode = 0;
-    m_lines.DeleteContents( TRUE );
     m_columns.DeleteContents( TRUE );
     m_current = (wxListLineData *) NULL;
     m_visibleLines = 0;
@@ -1539,7 +1544,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
   wxScrolledWindow( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name )
 {
     m_mode = style;
-    m_lines.DeleteContents( TRUE );
     m_columns.DeleteContents( TRUE );
     m_current = (wxListLineData *) NULL;
     m_dirty = TRUE;
@@ -1622,32 +1626,24 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (m_mode & wxLC_REPORT)
     {
         int lineSpacing = 0;
-        wxListLineData *line = (wxListLineData*)m_lines.First()->Data();
+        wxListLineData *line = &m_lines[0];
         int dummy = 0;
         line->GetSize( dummy, lineSpacing );
         lineSpacing += 1;
 
         int y_s = m_yScroll*GetScrollPos( wxVERTICAL );
 
-        wxNode *node = m_lines.Nth( y_s / lineSpacing );
-        for (int i = 0; i < m_visibleLines+2; i++)
+        size_t i_to = y_s / lineSpacing + m_visibleLines+2;
+        if (i_to >= m_lines.GetCount()) i_to = m_lines.GetCount();
+        for (size_t i = y_s / lineSpacing; i < i_to; i++)
         {
-            if (!node) break;
-
-            line = (wxListLineData*)node->Data();
-            line->Draw( &dc );
-            node = node->Next();
+            m_lines[i].Draw( &dc );
         }
     }
     else
     {
-        wxNode *node = m_lines.First();
-        while (node)
-        {
-            wxListLineData *line = (wxListLineData*)node->Data();
-            line->Draw( &dc );
-            node = node->Next();
-        }
+        for (size_t i = 0; i < m_lines.GetCount(); i++)
+            m_lines[i].Draw( &dc );
     }
 
     if (m_current) m_current->DrawRubberBand( &dc, m_hasFocus );
@@ -1657,16 +1653,14 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void wxListMainWindow::HilightAll( bool on )
 {
-    wxNode *node = m_lines.First();
-    while (node)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData *)node->Data();
+        wxListLineData *line = &m_lines[i];
         if (line->IsHilighted() != on)
         {
             line->Hilight( on );
             RefreshLine( line );
         }
-        node = node->Next();
     }
 }
 
@@ -1709,10 +1703,10 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 
 void wxListMainWindow::EditLabel( long item )
 {
-    wxNode *node = m_lines.Nth( (size_t)item );
-    wxCHECK_RET( node, wxT("wrong index in wxListCtrl::Edit()") );
+    wxCHECK_RET( ((size_t)item < m_lines.GetCount()), 
+                 wxT("wrong index in wxListCtrl::Edit()") );
 
-    m_currentEdit = (wxListLineData*) node->Data();
+    m_currentEdit = &m_lines[(size_t)item];
 
     wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
@@ -1750,7 +1744,7 @@ void wxListMainWindow::OnRenameTimer()
 {
     wxCHECK_RET( m_current, wxT("invalid m_current") );
 
-    Edit( m_lines.IndexOf( m_current ) );
+    Edit( m_lines.Index( *m_current ) );
 }
 
 void wxListMainWindow::OnRenameAccept()
@@ -1786,15 +1780,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     /* Did we actually hit an item ? */
     long hitResult = 0;
-    wxNode *node = m_lines.First();
     wxListLineData *line = (wxListLineData *) NULL;
-    while (node)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        line = (wxListLineData*)node->Data();
+        line = &m_lines[i];
         hitResult = line->IsHit( x, y );
         if (hitResult) break;
         line = (wxListLineData *) NULL;
-        node = node->Next();
     }
 
     if (event.Dragging())
@@ -1894,26 +1886,25 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else if (event.ShiftDown())
             {
+                size_t j;
+                
                 m_current = line;
 
                 int numOfCurrent = -1;
-                node = m_lines.First();
-                while (node)
+                for (j = 0; j < m_lines.GetCount(); j++)
                 {
-                    wxListLineData *test_line = (wxListLineData*)node->Data();
+                    wxListLineData *test_line = &m_lines[j];
                     numOfCurrent++;
                     if (test_line == oldCurrent) break;
-                    node = node->Next();
                 }
 
                 int numOfLine = -1;
-                node = m_lines.First();
-                while (node)
+
+                for (j = 0; j < m_lines.GetCount(); j++)
                 {
-                    wxListLineData *test_line = (wxListLineData*)node->Data();
+                    wxListLineData *test_line = &m_lines[j];
                     numOfLine++;
                     if (test_line == line) break;
-                    node = node->Next();
                 }
 
                 if (numOfLine < numOfCurrent)
@@ -1923,13 +1914,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     numOfCurrent = i;
                 }
 
-                wxNode *node = m_lines.Nth( numOfCurrent );
                 for (int i = 0; i <= numOfLine-numOfCurrent; i++)
                 {
-                    wxListLineData *test_line= (wxListLineData*)node->Data();
+                    wxListLineData *test_line= &m_lines[numOfCurrent + i];
                     test_line->Hilight(TRUE);
                     RefreshLine( test_line );
-                    node = node->Next();
                 }
             }
             else
@@ -2067,29 +2056,31 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     {
         case WXK_UP:
         {
-            wxNode *node = m_lines.Member( m_current )->Previous();
-            if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+            int index = m_lines.Index(*m_current);
+            if (index != wxNOT_FOUND && index > 0)
+                OnArrowChar( &m_lines[index-1], event.ShiftDown() );
             break;
         }
         case WXK_DOWN:
         {
-            wxNode *node = m_lines.Member( m_current )->Next();
-            if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+            int index = m_lines.Index(*m_current);
+            if (index != wxNOT_FOUND && (size_t)index < m_lines.GetCount()-2)
+                OnArrowChar( &m_lines[index+1], event.ShiftDown() );
             break;
         }
         case WXK_END:
         {
-            wxNode *node = m_lines.Last();
-            OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+            if (!m_lines.IsEmpty())
+                OnArrowChar( &m_lines.Last(), event.ShiftDown() );
             break;
         }
         case WXK_HOME:
         {
-            wxNode *node = m_lines.First();
-            OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
+            if (!m_lines.IsEmpty())
+                OnArrowChar( &m_lines[0], event.ShiftDown() );
             break;
         }
-        case WXK_PRIOR:
+/*        case WXK_PRIOR: FIXME - finish porting
         {
             int steps = 0;
             if (m_mode & wxLC_REPORT)
@@ -2188,7 +2179,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             m_current->GetItem( 0, le.m_item );
             GetParent()->GetEventHandler()->ProcessEvent( le );
             break;
-        }
+        }*/
         default:
         {
             event.Skip();
@@ -2292,15 +2283,9 @@ int wxListMainWindow::GetTextLength( wxString &s )
 
 int wxListMainWindow::GetIndexOfLine( const wxListLineData *line )
 {
-    int i = 0;
-    wxNode *node = m_lines.First();
-    while (node)
-    {
-        if (line == (wxListLineData*)node->Data()) return i;
-        i++;
-        node = node->Next();
-    }
-    return -1;
+    int i = m_lines.Index(*line);
+    if (i == wxNOT_FOUND) return -1;
+    else return i;
 }
 
 void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
@@ -2381,10 +2366,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         wxClientDC dc(this);
         dc.SetFont( GetFont() );
         int max = 10;
-        node = m_lines.First();
-        while (node)
+        
+        for (size_t i = 0; i < m_lines.GetCount(); i++)
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[i];
             wxNode *n = line->m_items.Nth( col );
             if (n)
             {
@@ -2405,7 +2390,6 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
                 }
                 if (current > max) max = current;
             }
-            node = node->Next();
         }
         width = max+10;
     }
@@ -2417,17 +2401,15 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         column->SetWidth( width );
     }
 
-    node = m_lines.First();
-    while (node)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[i];
         wxNode *n = line->m_items.Nth( col );
         if (n)
         {
             wxListItemData *item = (wxListItemData*)n->Data();
             item->SetSize( width, -1 );
         }
-        node = node->Next();
     }
 
     wxListHeaderWindow *headerWin = ((wxListCtrl*) GetParent())->m_headerWin;
@@ -2480,10 +2462,9 @@ int wxListMainWindow::GetCountPerPage()
 void wxListMainWindow::SetItem( wxListItem &item )
 {
     m_dirty = TRUE;
-    wxNode *node = m_lines.Nth( (size_t)item.m_itemId );
-    if (node)
+    if (item.m_itemId >= 0 && (size_t)item.m_itemId < m_lines.GetCount())
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[(size_t)item.m_itemId];
         if (m_mode & wxLC_REPORT) item.m_width = GetColumnWidth( item.m_col )-3;
         line->SetItem( item.m_col, item );
     }
@@ -2497,10 +2478,9 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
 
     if (stateMask & wxLIST_STATE_FOCUSED)
     {
-        wxNode *node = m_lines.Nth( (size_t)item );
-        if (node)
+        if (item >= 0 && (size_t)item < m_lines.GetCount())
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[(size_t)item];
             UnfocusLine( m_current );
             m_current = line;
             FocusLine( m_current );
@@ -2514,10 +2494,9 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
         bool on = (state & wxLIST_STATE_SELECTED) != 0;
         if (!on && (m_mode & wxLC_SINGLE_SEL)) return;
 
-        wxNode *node = m_lines.Nth( (size_t)item );
-        if (node)
+        if (item >= 0 && (size_t)item < m_lines.GetCount())
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[(size_t)item];
             if (m_mode & wxLC_SINGLE_SEL)
             {
                 UnfocusLine( m_current );
@@ -2542,19 +2521,17 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
     int ret = wxLIST_STATE_DONTCARE;
     if (stateMask & wxLIST_STATE_FOCUSED)
     {
-        wxNode *node = m_lines.Nth( (size_t)item );
-        if (node)
+        if (item >= 0 && (size_t)item < m_lines.GetCount())
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[(size_t)item];
             if (line == m_current) ret |= wxLIST_STATE_FOCUSED;
         }
     }
     if (stateMask & wxLIST_STATE_SELECTED)
     {
-        wxNode *node = m_lines.Nth( (size_t)item );
-        if (node)
+        if (item >= 0 && (size_t)item < m_lines.GetCount())
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[(size_t)item];
             if (line->IsHilighted()) ret |= wxLIST_STATE_FOCUSED;
         }
     }
@@ -2563,10 +2540,9 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
 
 void wxListMainWindow::GetItem( wxListItem &item )
 {
-    wxNode *node = m_lines.Nth( (size_t)item.m_itemId );
-    if (node)
+    if (item.m_itemId >= 0 && (size_t)item.m_itemId < m_lines.GetCount())
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[(size_t)item.m_itemId];
         line->GetItem( item.m_col, item );
     }
     else
@@ -2580,16 +2556,14 @@ void wxListMainWindow::GetItem( wxListItem &item )
 
 int wxListMainWindow::GetItemCount()
 {
-    return m_lines.Number();
+    return m_lines.GetCount();
 }
 
 void wxListMainWindow::GetItemRect( long index, wxRect &rect )
 {
-    wxNode *node = m_lines.Nth( (size_t)index );
-    if (node)
+    if (index >= 0 && (size_t)index < m_lines.GetCount())
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
-        line->GetRect( rect );
+        m_lines[(size_t)index].GetRect( rect );
     }
     else
     {
@@ -2602,12 +2576,10 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
 
 bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 {
-    wxNode *node = m_lines.Nth( (size_t)item );
-    if (node)
+    if (item >= 0 && (size_t)item < m_lines.GetCount())
     {
         wxRect rect;
-        wxListLineData *line = (wxListLineData*)node->Data();
-        line->GetRect( rect );
+        m_lines[(size_t)item].GetRect( rect );
         pos.x = rect.x;
         pos.y = rect.y;
     }
@@ -2622,12 +2594,9 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 int wxListMainWindow::GetSelectedItemCount()
 {
     int ret = 0;
-    wxNode *node = m_lines.First();
-    while (node)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
-        if (line->IsHilighted()) ret++;
-        node = node->Next();
+        if (m_lines[i].IsHilighted()) ret++;
     }
     return ret;
 }
@@ -2662,7 +2631,7 @@ long wxListMainWindow::GetMode() const
 
 void wxListMainWindow::CalculatePositions()
 {
-    if (!m_lines.First()) return;
+    if (m_lines.IsEmpty()) return;
 
     wxClientDC dc( this );
     dc.SetFont( GetFont() );
@@ -2679,7 +2648,7 @@ void wxListMainWindow::CalculatePositions()
     int lineHeight = 0;
     int lineSpacing = 0;
 
-    wxListLineData *line = (wxListLineData*)m_lines.First()->Data();
+    wxListLineData *line = &m_lines[0];
     line->CalculateSize( &dc, iconSpacing );
     int dummy = 0;
     line->GetSize( dummy, lineSpacing );
@@ -2692,7 +2661,7 @@ void wxListMainWindow::CalculatePositions()
     {
         int x = 4;
         int y = 1;
-        int entireHeight = m_lines.Number() * lineSpacing + 2;
+        int entireHeight = m_lines.GetCount() * lineSpacing + 2;
         int scroll_pos = GetScrollPos( wxVERTICAL );
 #if wxUSE_GENERIC_LIST_EXTENSIONS
         int x_scroll_pos = GetScrollPos( wxHORIZONTAL );
@@ -2701,11 +2670,10 @@ void wxListMainWindow::CalculatePositions()
 #endif
         GetClientSize( &clientWidth, &clientHeight );
 
-        wxNode* node = m_lines.First();
         int entireWidth = 0 ;
-        while (node)
+        for (size_t j = 0; j < m_lines.GetCount(); j++)
         {
-            wxListLineData *line = (wxListLineData*)node->Data();
+            wxListLineData *line = &m_lines[j];
             line->CalculateSize( &dc, iconSpacing );
             line->SetPosition( &dc, x, y, clientWidth );
             int col_x = 2;
@@ -2719,7 +2687,6 @@ void wxListMainWindow::CalculatePositions()
             line->SetPosition( &dc, x, y, col_x );
 #endif
             y += lineSpacing;  // one pixel blank line between items
-            node = node->Next();
         }
                 m_visibleLines = clientHeight / lineSpacing;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
@@ -2745,11 +2712,10 @@ void wxListMainWindow::CalculatePositions()
             int maxWidth = 0;
             m_visibleLines = 0;
             int m_currentVisibleLines = 0;
-            wxNode *node = m_lines.First();
-            while (node)
+            for (size_t i = 0; i < m_lines.GetCount(); i++)
             {
                 m_currentVisibleLines++;
-                wxListLineData *line = (wxListLineData*)node->Data();
+                wxListLineData *line = &m_lines[i];
                 line->CalculateSize( &dc, iconSpacing );
                 line->SetPosition( &dc, x, y, clientWidth );
                 line->GetSize( lineWidth, lineHeight );
@@ -2765,8 +2731,7 @@ void wxListMainWindow::CalculatePositions()
                     entireWidth += maxWidth+6;
                     maxWidth = 0;
                 }
-                node = node->Next();
-                if (!node) entireWidth += maxWidth;
+                if (i == m_lines.GetCount()-1) entireWidth += maxWidth;
                 if ((tries == 0) && (entireWidth > clientWidth))
                 {
                     clientHeight -= 15; // scrollbar height
@@ -2774,7 +2739,7 @@ void wxListMainWindow::CalculatePositions()
                     m_currentVisibleLines = 0;
                     break;
                 }
-                if (!node) tries = 1;  // everything fits, no second try required
+                if (i == m_lines.GetCount()-1) tries = 1;  // everything fits, no second try required
             }
         }
 
@@ -2787,8 +2752,8 @@ void wxListMainWindow::RealizeChanges()
 {
     if (!m_current)
     {
-        wxNode *node = m_lines.First();
-        if (node) m_current = (wxListLineData*)node->Data();
+        if (!m_lines.IsEmpty())
+            m_current = &m_lines[0];
     }
     if (m_current)
     {
@@ -2819,10 +2784,9 @@ long wxListMainWindow::GetNextItem( long item,
         return -1;
     }
 
-    wxNode *node = m_lines.Nth( (size_t)ret );
-    while (node)
+    for (size_t i = (size_t)ret; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[i];
         if ((state & wxLIST_STATE_FOCUSED) && (line == m_current))
             return ret;
         if ((state & wxLIST_STATE_SELECTED) && (line->IsHilighted()))
@@ -2830,8 +2794,6 @@ long wxListMainWindow::GetNextItem( long item,
         if (!state)
             return ret;
         ret++;
-
-        node = node->Next();
     }
 
     return -1;
@@ -2840,13 +2802,12 @@ long wxListMainWindow::GetNextItem( long item,
 void wxListMainWindow::DeleteItem( long index )
 {
     m_dirty = TRUE;
-    wxNode *node = m_lines.Nth( (size_t)index );
-    if (node)
+    if (index >= 0 && (size_t)index < m_lines.GetCount())
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[(size_t)index];
         if (m_current == line) m_current = (wxListLineData *) NULL;
         DeleteLine( line );
-        m_lines.DeleteNode( node );
+        m_lines.RemoveAt( (size_t)index );
     }
 }
 
@@ -2892,8 +2853,8 @@ void wxListMainWindow::EnsureVisible( long index )
 
     wxListLineData *oldCurrent = m_current;
     m_current = (wxListLineData *) NULL;
-    wxNode *node = m_lines.Nth( (size_t)index );
-    if (node) m_current = (wxListLineData*)node->Data();
+    if (index >= 0 && (size_t)index < m_lines.GetCount())
+        m_current = &m_lines[(size_t)index];
     if (m_current) MoveToFocus();
     m_current = oldCurrent;
 }
@@ -2903,14 +2864,12 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(p
     long pos = start;
     wxString tmp = str;
     if (pos < 0) pos = 0;
-    wxNode *node = m_lines.Nth( (size_t)pos );
-    while (node)
+    for (size_t i = pos; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[i];
         wxString s = "";
         line->GetText( 0, s );
         if (s == tmp) return pos;
-        node = node->Next();
         pos++;
     }
     return -1;
@@ -2920,14 +2879,12 @@ long wxListMainWindow::FindItem(long start, long data)
 {
     long pos = start;
     if (pos < 0) pos = 0;
-    wxNode *node = m_lines.Nth( (size_t)pos );
-    while (node)
+    for (size_t i = pos; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[i];
         wxListItem item;
         line->GetItem( 0, item );
         if (item.m_data == data) return pos;
-        node = node->Next();
         pos++;
     }
     return -1;
@@ -2937,18 +2894,16 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
     CalcUnscrolledPosition( x, y, &x, &y );
 
-    wxNode *node = m_lines.First();
     int count = 0;
-    while (node)
+    for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
-        wxListLineData *line = (wxListLineData*)node->Data();
+        wxListLineData *line = &m_lines[i];
         long ret = line->IsHit( x, y );
         if (ret & flags)
         {
             flags = (int)ret;
             return count;
         }
-        node = node->Next();
         count++;
     }
     return -1;
@@ -2976,14 +2931,13 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     }
 
     line->SetItem( 0, item );
-    if ((item.m_itemId >= 0) && (item.m_itemId < (int)m_lines.GetCount()))
+    if ((item.m_itemId >= 0) && ((size_t)item.m_itemId < m_lines.GetCount()))
     {
-        wxNode *node = m_lines.Nth( (size_t)item.m_itemId );
-        if (node) m_lines.Insert( node, line );
+        m_lines.Insert( line, (size_t)item.m_itemId );
     }
     else
     {
-        m_lines.Append( line );
+        m_lines.Add( line );
     }
 }
 
@@ -3010,10 +2964,10 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
 wxListCtrlCompare list_ctrl_compare_func_2;
 long              list_ctrl_compare_data;
 
-int LINKAGEMODE list_ctrl_compare_func_1( const void *arg1, const void *arg2 )
+int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData **arg2 )
 {
-    wxListLineData *line1 = *((wxListLineData**)arg1);
-    wxListLineData *line2 = *((wxListLineData**)arg2);
+    wxListLineData *line1 = *arg1;
+    wxListLineData *line2 = *arg2;
     wxListItem item;
     line1->GetItem( 0, item );
     long data1 = item.m_data;
