@@ -87,7 +87,7 @@ public:
      virtual void   DoMoveWindow(int x, int y, int w, int h);
  
   void Command(wxCommandEvent& event);
-    void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
     virtual void            MacUpdateDimensions() ;
 
      wxStaticText*    m_macMinimumStatic ;

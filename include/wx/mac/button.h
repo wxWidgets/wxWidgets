@@ -42,7 +42,7 @@ class WXDLLEXPORT wxButton: public wxButtonBase
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-    virtual void MacHandleControlClick( WXWidget control , short controlpart ) ;
+    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
     static wxSize GetDefaultSize();
 
   virtual void SetDefault();

@@ -37,7 +37,7 @@ public:
             const wxString& name = wxCheckBoxNameStr);
     virtual void SetValue(bool);
     virtual bool GetValue() const;
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart );
+    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown );
     virtual void Command(wxCommandEvent& event);
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)

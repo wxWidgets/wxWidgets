@@ -68,24 +68,8 @@ public:
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
   virtual void SetString( int , const wxString& s ) ;
-    void        MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
-/*
-  virtual void Append(const wxString& item);
-  // Added min Append and GetClientData
-  virtual void Append(const wxString& item, void *client_data);
-  virtual void *GetClientData(int index) const;
-  virtual inline void Select( int n ) { SetSelection( n ); }
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual wxString GetStringSelection() const ;
-  virtual bool SetStringSelection(const wxString& sel);
-
-  // Mac specific
-  virtual void Command(wxCommandEvent& event);
-  void        MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
-
-  virtual inline int GetColumns() const { return 1 ; };
-*/
 protected:
     virtual wxSize DoGetBestSize() const ;
     virtual void DoSetItemClientData( int n, void* clientData );

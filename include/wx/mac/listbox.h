@@ -111,7 +111,7 @@ public:
     // Windows callbacks
 
     virtual void    SetupColours();
-    virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
        virtual bool MacCanFocus() const { return true ; }
     void OnChar(wxKeyEvent& event);
 

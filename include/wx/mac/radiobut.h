@@ -44,7 +44,7 @@ public:
 
     // implementation 
     
-      virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ); 
+      virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ); 
     void Command(wxCommandEvent& event);
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     inline wxRadioButton *NextInCycle() {return m_cycle;}

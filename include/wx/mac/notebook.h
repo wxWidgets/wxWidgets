@@ -135,7 +135,7 @@ public:
   virtual void Command(wxCommandEvent& event);
 protected:
     virtual wxNotebookPage *DoRemovePage(int page) ;
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
   // common part of all ctors
   void Init();
 

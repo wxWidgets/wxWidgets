@@ -59,7 +59,7 @@ public:
    virtual bool             Show(bool show = TRUE) ;
 
    virtual void         MacRedrawControl () ;
-   virtual void      MacHandleControlClick( WXWidget control , short controlpart ) ;
+   virtual void      MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
    virtual void             MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString label ,
                           const wxPoint& pos,
                           const wxSize& size, long style,

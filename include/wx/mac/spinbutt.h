@@ -64,7 +64,7 @@ public:
 
     // implementation
     
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
 protected:
     void         MacHandleValueChanged( int inc ) ;
