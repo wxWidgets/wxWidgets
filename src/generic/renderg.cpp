@@ -34,6 +34,8 @@
 #include "wx/settings.h"
 #include "wx/splitter.h"
 
+#include "wx/dcmirror.h"
+
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
@@ -62,7 +64,8 @@ public:
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
-                                  wxCoord position);
+                                  wxCoord position,
+                                  wxOrientation orient);
 
 
     virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
@@ -227,10 +230,17 @@ wxRendererGeneric::DrawSplitterBorder(wxWindow *win,
 
 void
 wxRendererGeneric::DrawSplitterSash(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxSize& size,
-                                    wxCoord position)
+                                    wxDC& dcReal,
+                                    const wxSize& sizeReal,
+                                    wxCoord position,
+                                    wxOrientation orient)
 {
+    // to avoid duplicating the same code for horizontal and vertical sashes,
+    // simply mirror the DC instead if needed (i.e. if horz splitter)
+    wxMirrorDC dc(dcReal, orient != wxVERTICAL);
+    wxSize size = dc.Reflect(sizeReal);
+
+
     // we draw a Win32-like grey sash with possible 3D border here:
     //
     //   ---- this is position

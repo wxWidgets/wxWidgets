@@ -89,7 +89,8 @@ public:
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
-                                  wxCoord position) = 0;
+                                  wxCoord position,
+                                  wxOrientation orient) = 0;
 
 
     // geometry functions
@@ -144,8 +145,9 @@ public:
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
-                                  wxCoord position)
-        { m_rendererNative.DrawSplitterSash(win, dc, size, position); }
+                                  wxCoord position,
+                                  wxOrientation orient)
+        { m_rendererNative.DrawSplitterSash(win, dc, size, position, orient); }
 
 
     virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win)

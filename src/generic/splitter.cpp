@@ -36,7 +36,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/dcmirror.h"
 #include "wx/renderer.h"
 
 #include "wx/splitter.h"
@@ -382,7 +381,8 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
 
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
 
-    return z >= m_sashPosition - tolerance && z <= m_sashPosition + tolerance;
+    return z >= m_sashPosition - tolerance &&
+            z <= m_sashPosition + GetSashSize() + tolerance;
 }
 
 int wxSplitterWindow::GetSashSize() const
@@ -413,13 +413,15 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
     if ( HasFlag(wxSP_NOSASH) )
         return;
 
-    wxMirrorDC dcMirror(dc, m_splitMode != wxSPLIT_VERTICAL);
     wxRendererNative::Get().DrawSplitterSash
                             (
                                 this,
-                                dcMirror,
-                                dcMirror.Reflect(GetClientSize()),
-                                m_sashPosition
+                                dc,
+                                GetClientSize(),
+                                m_sashPosition,
+                                m_splitMode == wxSPLIT_VERTICAL
+                                    ? wxVERTICAL
+                                    : wxHORIZONTAL
                             );
 }
 
