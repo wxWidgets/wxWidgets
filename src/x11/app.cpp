@@ -197,11 +197,11 @@ int wxEntryStart( int& argc, char *argv[] )
             if (i < (argc - 1))
             {
                 i ++;
-                windowGeometry = argv[i];
+                wxString windowGeometry = argv[i];
                 int w, h;
                 if (wxSscanf(windowGeometry.c_str(), _T("%dx%d"), &w, &h) != 2)
                 {
-                    wxLogError(_("Invalid geometry specification '%s'", windowGeometry.c_str());
+                    wxLogError(_("Invalid geometry specification '%s'"), windowGeometry.c_str());
                 }
                 else
                 {
