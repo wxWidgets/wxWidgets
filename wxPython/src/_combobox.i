@@ -157,7 +157,7 @@ combobox text field.", "");
         "Selects the text between the two positions in the combobox text field.", "",
         SetMark);    
 
-#ifdef __WXMSW__
+#ifndef __WXMAC__
     DocDeclAStrName(
         virtual void , GetSelection(long* OUTPUT, long* OUTPUT),
         "GetMark(self) -> (from, to)",
