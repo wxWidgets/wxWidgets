@@ -35,6 +35,7 @@
 
 #include "wx/ptr_scpd.h"
 #include "wx/module.h"
+#include "wx/except.h"
 
 #if defined(__WXMSW__) && defined(__WXDEBUG__)
     #include "wx/msw/msvcrt.h"
@@ -393,20 +394,24 @@ int wxEntryReal(int& argc, wxChar **argv)
 
     WX_SUPPRESS_UNUSED_WARN(cleanupOnExit);
 
-    // app initialization
-    if ( !wxTheApp->CallOnInit() )
+    wxTRY
     {
-        // don't call OnExit() if OnInit() failed
-        return -1;
+        // app initialization
+        if ( !wxTheApp->CallOnInit() )
+        {
+            // don't call OnExit() if OnInit() failed
+            return -1;
+        }
+
+        // app execution
+        int retValue = wxTheApp->OnRun();
+
+        // app clean up
+        wxTheApp->OnExit();
+
+        return retValue;
     }
-
-    // app execution
-    int retValue = wxTheApp->OnRun();
-
-    // app clean up
-    wxTheApp->OnExit();
-
-    return retValue;
+    wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
 
 // wrap real wxEntry in a try-except block to be able to call
