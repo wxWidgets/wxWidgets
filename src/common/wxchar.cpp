@@ -1329,7 +1329,7 @@ long     WXDLLEXPORT wxAtol(const wxChar *psz)
 
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 {
-  static wxHashTable env;
+  static wxHashTable env(wxKEY_STRING);
 
   // check if we already have stored the converted env var
   wxObject *data = env.Get(name);
