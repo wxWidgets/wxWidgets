@@ -248,5 +248,20 @@ bool wxHtmlHelpController::Quit()
     return TRUE;
 }
 
+// Sets the specified book or all books to have the given base path
+void wxHtmlHelpController::SetBookBasePath(const wxString& basePath, int which)
+{
+    size_t i;
+    for (i = 0; i < m_helpData.GetBookRecArray().Count(); i++ )
+    {
+        if (i == (size_t) which || which == -1)
+        {
+            wxHtmlBookRecord& book = m_helpData.GetBookRecArray()[i];
+            book.SetBasePath(basePath);
+        }
+        if (i == (size_t) which)
+            return;
+    }
+}
 
 #endif

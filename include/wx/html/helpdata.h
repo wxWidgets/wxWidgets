@@ -54,6 +54,10 @@ class WXDLLEXPORT wxHtmlBookRecord : public wxObject
         int GetContentsStart() const { return m_ContentsStart; }
         int GetContentsEnd() const { return m_ContentsEnd; }
 
+        void SetTitle(const wxString& title) { m_Title = title; }
+        void SetBasePath(const wxString& path) { m_BasePath = path; }
+        void SetStart(const wxString& start) { m_Start = start; }
+
     protected:
         wxString m_BasePath;
         wxString m_Title;

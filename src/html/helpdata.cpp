@@ -91,11 +91,12 @@ class HP_TagHandler : public wxHtmlTagHandler
         wxHtmlContentsItem *m_Items;
         int m_ItemsCnt;
         wxHtmlBookRecord *m_Book;
+        bool m_firstTime; // For checking if we're adding sections at level zero, so we 'delete' the first one
 
     public:
         HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() 
 	        { m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; 
-		      m_Level = 0; m_ID = -1; }
+		      m_Level = 0; m_ID = -1; m_firstTime = TRUE; }
         wxString GetSupportedTags() { return wxT("UL,OBJECT,PARAM"); }
         bool HandleTag(const wxHtmlTag& tag);
         void WriteOut(wxHtmlContentsItem*& array, int& size);
@@ -117,10 +118,10 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
 
-        if (!m_Page.IsEmpty())
-        /* should be 'if (tag.GetParam("TYPE") == "text/sitemap")'
-           but this works fine. Valid HHW's file may contain only two
-           object tags:
+        if (tag.GetParam("TYPE") == "text/sitemap")
+
+        // if (!m_Page.IsEmpty())
+        /* Valid HHW's file may contain only two object tags:
            
            <OBJECT type="text/site properties">
                <param name="ImageType" value="Folder">
@@ -137,8 +138,18 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
            condition because text/site properties does not contain Local param
         */
         {
-            if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
-                m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+            // We're reading in items at level zero, which must mean we want to specify
+            // our own 'books', so chuck out the first (empty) one that AddBook already
+            // created
+            if (m_firstTime && (m_Level == 0) && (m_ItemsCnt > 0))
+            {
+                m_ItemsCnt --;
+            }
+            else
+            {
+                if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
+                    m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+            }
             m_Items[m_ItemsCnt].m_Level = m_Level;
             m_Items[m_ItemsCnt].m_ID = m_ID;
             m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
@@ -147,6 +158,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
             wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
             m_Items[m_ItemsCnt].m_Book = m_Book;
             m_ItemsCnt++;
+
+            m_firstTime = FALSE;
         }
 
         return TRUE;
