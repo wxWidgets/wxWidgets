@@ -1783,16 +1783,18 @@ wxColDataPtr* wxTable::SetColDefs (wxColInf *pColInfs, ULONG numCols)
                 case DB_DATA_TYPE_VARCHAR:
                 {
 
-		  // Be sure to allocate enough memory
-		  if (pColInfs[index].bufferLength >= pColInfs[index].columnSize)
-		    {
-		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
-		      pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength;
-		    }
-		  else
+		  // Tentative fix for Access. Relative to UNICODE?
+		  if (pColInfs[index].bufferLength == 2*pColInfs[index].columnSize)
 		    {
 		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].columnSize+1];
 		      pColDataPtrs[index].SzDataObj  = pColInfs[index].columnSize;
+		      
+		    }
+		  else
+		    {
+		      // Still needed because iodbc (unix) returns 0 in columnSize
+		      pColDataPtrs[index].PtrDataObj = new char[pColInfs[index].bufferLength+1];
+		      pColDataPtrs[index].SzDataObj  = pColInfs[index].bufferLength; 
 		    }
 		  pColDataPtrs[index].SqlCtype   = SQL_C_CHAR;
 		  break;
