@@ -64,13 +64,14 @@
 //#define TEST_BUTTON
 //#define TEST_CHECKBOX
 //#define TEST_CHECKLISTBOX
-//#define TEST_COMBO
+#define TEST_COMBO
 //#define TEST_GAUGE
 //#define TEST_LISTBOX
 //#define TEST_NOTEBOOK
+//#define TEST_POPUP
 //#define TEST_RADIO
 //#define TEST_SCROLL
-#define TEST_SLIDER
+//#define TEST_SLIDER
 //#define TEST_SPIN
 //#define TEST_STATIC_BMP
 //#define TEST_STATIC_BOX
@@ -145,6 +146,10 @@ protected:
     void OnSpinCtrl(wxSpinEvent& event);
 #endif // TEST_SPIN
 
+#ifdef TEST_POPUP
+    void OnRightUp(wxMouseEvent& event);
+#endif // TEST_POPUP
+
 private:
     void TestTextCtrlReplace(wxTextCtrl *text, const wxString& value);
 
@@ -183,6 +188,55 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+#ifdef TEST_POPUP
+
+#include "wx/popupwin.h"
+#include "wx/univ/renderer.h"
+
+class MyPopupWindow : public wxPopupTransientWindow
+{
+public:
+    MyPopupWindow(wxWindow *parent)
+    {
+        m_label = NULL;
+
+        Create(parent, wxBORDER_RAISED);
+
+        SetBackgroundColour(*wxLIGHT_GREY);
+
+        m_label = new wxStaticText(this, _T("This is a popup"));
+    }
+
+    virtual void Popup(wxWindow *focus = NULL)
+    {
+        wxPopupTransientWindow::Popup(m_label);
+    }
+
+    virtual void OnDismiss()
+    {
+        Destroy();
+    }
+
+protected:
+    void OnSize(wxSizeEvent& event)
+    {
+        if ( m_label )
+        {
+            wxSize sizeTotal = GetClientSize(),
+                   sizeLabel = m_label->GetSize();
+            m_label->Move((sizeTotal.x - sizeLabel.x)/2,
+                          (sizeTotal.y - sizeLabel.y)/2);
+        }
+    }
+
+private:
+    wxStaticText *m_label;
+
+    DECLARE_EVENT_TABLE()
+};
+
+#endif // TEST_POPUP
+
 // ----------------------------------------------------------------------------
 // misc macros
 // ----------------------------------------------------------------------------
@@ -207,12 +261,24 @@ BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_SPIN(-1, MyUnivFrame::OnSpinCtrl)
 #endif // TEST_SPIN
 
+#ifdef TEST_POPUP
+    EVT_RIGHT_UP(MyUnivFrame::OnRightUp)
+#endif // TEST_POPUP
+
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyUnivCanvas, wxScrolledWindow)
     EVT_PAINT(MyUnivCanvas::OnPaint)
 END_EVENT_TABLE()
+
+#ifdef TEST_POPUP
+
+BEGIN_EVENT_TABLE(MyPopupWindow, wxPopupTransientWindow)
+    EVT_SIZE(MyPopupWindow::OnSize)
+END_EVENT_TABLE()
+
+#endif // TEST_POPUP
 
 // ============================================================================
 // implementation
@@ -706,6 +772,18 @@ void MyUnivFrame::OnSpinCtrl(wxSpinEvent& event)
 }
 
 #endif // TEST_SPIN
+
+#ifdef TEST_POPUP
+
+void MyUnivFrame::OnRightUp(wxMouseEvent& event)
+{
+    wxPopupTransientWindow *popup = new MyPopupWindow(this);
+    popup->SetClientSize(200, 150);
+    popup->Position(ClientToScreen(event.GetPosition()), wxSize(0, 0));
+    popup->Popup();
+}
+
+#endif // TEST_POPUP
 
 // ----------------------------------------------------------------------------
 // MyUnivCanvas

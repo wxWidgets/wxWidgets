@@ -21,11 +21,11 @@
     #pragma interface "window.h"
 #endif
 
-// VZ: apparently some version of Windows send extra mouse move messages after
-//     a mouse click. My tests under NT 4.0 and 95 didn't show it so I'm
-//     tempted to think that it was just an effect of a poor mouse and so the
-//     code to work around this is currently disabled - just define this as 1
-//     to reenable it
+// [at least] some version of Windows send extra mouse move messages after
+// a mouse click or a key press - to temporarily fix this problem, set the
+// define below to 1
+//
+// a better solution should be found later...
 #define wxUSE_MOUSEEVENT_HACK 0
 
 // when building wxUniv/MSW we don't want the code for native menu use to be

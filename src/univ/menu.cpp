@@ -30,7 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
-    #include "wx/controlh"      // for FindAccelIndex()
+    #include "wx/control.h"      // for FindAccelIndex()
     #include "wx/menu.h"
     #include "wx/settings.h"
 #endif // WX_PRECOMP
@@ -102,6 +102,9 @@ public:
     // refresh the given item
     void RefreshItem(wxMenuItem *item);
 
+    // process the key event, return TRUE if done
+    bool ProcessKeyDown(int key);
+
 protected:
     // draw the menu inside this window
     virtual void DoDraw(wxControlRenderer *renderer);
@@ -151,6 +154,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
+BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
+    EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
+
+    EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
+    EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
+    EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
     EVT_SET_FOCUS(wxMenuBar::OnSetFocus)
 
@@ -158,14 +169,6 @@ BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
 
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
     EVT_MOTION(wxMenuBar::OnMouseMove)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
-    EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
-
-    EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
-    EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
-    EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -280,6 +283,8 @@ void wxPopupMenuWindow::RefreshItem(wxMenuItem *item)
 {
     wxCHECK_RET( item, _T("can't refresh NULL item") );
 
+    wxASSERT_MSG( IsShown(), _T("can't refresh menu which is not shown") );
+
     // FIXME: -1 here because of SetLogicalOrigin(1, 1) in DoDraw()
     RefreshRect(wxRect(0, item->GetPosition() - 1,
                 m_menu->GetGeometryInfo().GetSize().x, item->GetHeight()));
@@ -393,21 +398,37 @@ void wxPopupMenuWindow::OnLeftUp(wxMouseEvent& event)
     {
         wxMenuItem *item = node->GetData();
 
-        // normal menu items generate commands, submenus can be opened and the
-        // separators don't do anything
-        if ( item->IsSubMenu() )
+        // clicking disabled items doesn't work
+        if ( item->IsEnabled() )
         {
-            OpenSubmenu(item);
-        }
-        else if ( !item->IsSeparator() )
-        {
-            ClickItem(item);
+            // normal menu items generate commands, submenus can be opened and the
+            // separators don't do anything
+            if ( item->IsSubMenu() )
+            {
+                OpenSubmenu(item);
+            }
+            else if ( !item->IsSeparator() )
+            {
+                ClickItem(item);
+            }
         }
     }
 }
 
 void wxPopupMenuWindow::OnMouseMove(wxMouseEvent& event)
 {
+    wxMenuBar *menubar = m_menu->GetMenuBar();
+    if ( menubar )
+    {
+        // we need to translate coords to the client coords of the menubar
+        wxPoint pt = ClientToScreen(event.GetPosition());
+        if ( menubar->ProcessMouseEvent(menubar->ScreenToClient(pt)) )
+        {
+            // menubar has closed this menu and opened another one, probably
+            return;
+        }
+    }
+
     wxMenuItemList::Node *node = GetMenuItemFromPoint(event.GetPosition());
 
     // don't reset current to NULL here, we only do it when the mouse leaves
@@ -417,7 +438,7 @@ void wxPopupMenuWindow::OnMouseMove(wxMouseEvent& event)
         ChangeCurrent(node);
 
         wxMenuItem *item = GetCurrentItem();
-        if ( item->IsSubMenu() )
+        if ( item->IsEnabled() && item->IsSubMenu() )
         {
             OpenSubmenu(item);
         }
@@ -428,28 +449,52 @@ void wxPopupMenuWindow::OnMouseMove(wxMouseEvent& event)
 
 void wxPopupMenuWindow::OnMouseLeave(wxMouseEvent& event)
 {
-    ChangeCurrent(NULL);
+    // due to the artefact of mouse events generation under MSW, we actually
+    // may get the mouse leave event after the menu had been already dismissed
+    // and calling ChangeCurrent() would then assert, so don't do it
+    if ( IsShown() )
+    {
+        ChangeCurrent(NULL);
+    }
 
     event.Skip();
 }
 
 void wxPopupMenuWindow::OnKeyDown(wxKeyEvent& event)
 {
+    if ( !ProcessKeyDown(event.GetKeyCode()) )
+    {
+        event.Skip();
+    }
+}
+
+bool wxPopupMenuWindow::ProcessKeyDown(int key)
+{
+    wxMenuItem *item = GetCurrentItem();
+
+    // first let the opened submenu to have it (no test for IsEnabled() here,
+    // the keys navigate even in a disabled submenu if we had somehow managed
+    // to open it inspit of this)
+    if ( item && item->IsSubMenu() && item->GetSubMenu()->ProcessKeyDown(key) )
+    {
+        return TRUE;
+    }
+
+    bool processed = TRUE;
+
     // handle the up/down arrows, home, end, esc and return here, pass the
     // left/right arrows to the menu bar except when the right arrow can be
     // used to open a submenu
-    int key = event.GetKeyCode();
     switch ( key )
     {
         case WXK_ESCAPE:
-            // clkose just this menu
+            // close just this menu
             HideMenu(FALSE);
             break;
 
         case WXK_RETURN:
-            if ( m_nodeCurrent )
+            if ( item && item->IsEnabled() )
             {
-                wxMenuItem *item = m_nodeCurrent->GetData();
                 if ( item->IsSubMenu() )
                 {
                     OpenSubmenu(item);
@@ -458,7 +503,14 @@ void wxPopupMenuWindow::OnKeyDown(wxKeyEvent& event)
                 {
                     ClickItem(item);
                 }
-                //else: separator, nothing to do
+                else // separator, nothing to do
+                {
+                    processed = FALSE;
+                }
+            }
+            else // no item or item is disabled, nothing to do
+            {
+                processed = FALSE;
             }
             break;
 
@@ -517,14 +569,22 @@ void wxPopupMenuWindow::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_RIGHT:
-        case WXK_LEFT:
-            // TODO: we should either open the submenu or pass to the
-            //       next/previous menu in the menubar
+            if ( item && item->IsEnabled() && item->IsSubMenu() )
+            {
+                OpenSubmenu(item);
+            }
+            else
+            {
+                processed = FALSE;
+            }
+            break;
 
         default:
             // TODO: look for the menu item starting with this letter
-            event.Skip();
+            processed = FALSE;
     }
+
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
@@ -553,26 +613,18 @@ wxMenuGeometryInfo::~wxMenuGeometryInfo()
 {
 }
 
-// this method is inline so put it in the beginning to allow it to be inlined
-wxWindow *wxMenu::GetParentWindow() const
-{
-    return m_menuBar ? m_menuBar : m_invokingWindow;
-}
-
 const wxMenuGeometryInfo& wxMenu::GetGeometryInfo() const
 {
     if ( !m_geometry )
     {
-        wxWindow *win = GetParentWindow();
-
-        if ( win )
+        if ( m_popupMenu )
         {
             wxConstCast(this, wxMenu)->m_geometry =
-                win->GetRenderer()->GetMenuGeometry(win, *this);
+                m_popupMenu->GetRenderer()->GetMenuGeometry(m_popupMenu, *this);
         }
         else
         {
-            wxFAIL_MSG( _T("neither popup nor menubar menu?") );
+            wxFAIL_MSG( _T("can't get geometry without window") );
         }
     }
 
@@ -648,12 +700,10 @@ void wxMenu::Detach()
 
 wxRenderer *wxMenu::GetRenderer() const
 {
-    wxWindow *win = GetParentWindow();
-
     // we're going to crash without renderer!
-    wxCHECK_MSG( win, NULL, _T("neither popup nor menubar menu?") );
+    wxCHECK_MSG( m_popupMenu, NULL, _T("neither popup nor menubar menu?") );
 
-    return win->GetRenderer();
+    return m_popupMenu->GetRenderer();
 }
 
 void wxMenu::RefreshItem(wxMenuItem *item)
@@ -711,7 +761,16 @@ void wxMenu::Popup(const wxPoint& pos, const wxSize& size)
     // create the popup window if not done yet
     if ( !m_popupMenu )
     {
-        m_popupMenu = new wxPopupMenuWindow(GetParentWindow(), this);
+        // find the parent window
+        wxWindow *parent = m_menuParent ? m_menuParent->m_popupMenu : NULL;
+        if ( !parent )
+        {
+            parent = GetRootWindow();
+        }
+
+        wxCHECK_RET( parent, _T("no parent menu, no menu bar, no window??") );
+
+        m_popupMenu = new wxPopupMenuWindow(parent, this);
     }
 
     // the geometry might have changed since the last time we were shown, so
@@ -721,8 +780,14 @@ void wxMenu::Popup(const wxPoint& pos, const wxSize& size)
     // position it as specified
     m_popupMenu->Position(pos, size);
 
+    // the menu can't have the focus itself (it is a Windows limitation), so
+    // always keep the focus at the originating window
+    wxWindow *focus = GetRootWindow();
+
+    wxASSERT_MSG( focus, _T("no window to keep focus on?") );
+
     // and show it
-    m_popupMenu->Popup();
+    m_popupMenu->Popup(focus);
 
     m_isShown = TRUE;
 }
@@ -732,6 +797,18 @@ void wxMenu::Dismiss()
     wxCHECK_RET( IsShown(), _T("can't dismiss hidden menu") );
 
     m_popupMenu->Dismiss();
+}
+
+// ----------------------------------------------------------------------------
+// wxMenu event processing
+// ----------------------------------------------------------------------------
+
+bool wxMenu::ProcessKeyDown(int key)
+{
+    wxCHECK_MSG( m_popupMenu, FALSE,
+                 _T("can't process key events if not shown") );
+
+    return m_popupMenu->ProcessKeyDown(key);
 }
 
 // ----------------------------------------------------------------------------
@@ -868,6 +945,8 @@ void wxMenuBar::Init()
     m_current = -1;
 
     m_menuShown = NULL;
+
+    m_shouldShowMenu = FALSE;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
@@ -1225,18 +1304,66 @@ void wxMenuBar::OnMouseMove(wxMouseEvent& event)
 {
     if ( HasCapture() )
     {
-        int currentNew = GetMenuFromPoint(event.GetPosition());
-        if ( currentNew != m_current )
-        {
-            if ( m_current != -1 )
-                RefreshItem(m_current);
-
-            m_current = currentNew;
-
-            if ( m_current != -1 )
-                RefreshItem(m_current);
-        }
+        (void)ProcessMouseEvent(event.GetPosition());
     }
+    else
+    {
+        event.Skip();
+    }
+}
+
+bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
+{
+    // a hack to ignore the extra mouse events MSW sends us: this is similar to
+    // wxUSE_MOUSEEVENT_HACK in wxWin itself but it isn't enough for us here as
+    // we get the messages from different windows (old and new popup menus for
+    // example)
+#ifdef __WXMSW__
+    static wxPoint s_ptLast;
+    if ( pt == s_ptLast )
+    {
+        return FALSE;
+    }
+
+    s_ptLast = pt;
+#endif // __WXMSW__
+
+    int currentNew = GetMenuFromPoint(pt);
+    if ( (currentNew == -1) || (currentNew == m_current) )
+    {
+        return FALSE;
+    }
+
+    if ( m_current != -1 )
+    {
+        // close the previous menu
+        if ( IsShowingMenu() )
+        {
+            // restore m_shouldShowMenu flag after DismissMenu() which resets
+            // it to FALSE
+            bool old = m_shouldShowMenu;
+
+            DismissMenu();
+
+            m_shouldShowMenu = old;
+        }
+
+        RefreshItem(m_current);
+    }
+
+    m_current = currentNew;
+
+    RefreshItem(m_current);
+
+    // show the menu if we know that we should, even if we hadn't been showing
+    // it before (this may happen if the previous menu was disabled)
+    if ( m_shouldShowMenu )
+    {
+        // open the new menu if the old one we closed had been opened
+        PopupMenu();
+    }
+
+    return TRUE;
 }
 
 void wxMenuBar::OnKeyDown(wxKeyEvent& event)
@@ -1244,9 +1371,16 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
     // the current item must have been set before
     wxCHECK_RET( m_current != -1, _T("where is current item?") );
 
+    int key = event.GetKeyCode();
+
+    // first let the menu have it
+    if ( IsShowingMenu() && m_menuShown->ProcessKeyDown(key) )
+    {
+        return;
+    }
+
     // cycle through the menu items when left/right arrows are pressed and open
     // the menu when up/down one is
-    int key = event.GetKeyCode();
     switch ( key )
     {
         case WXK_ESCAPE:
@@ -1328,15 +1462,22 @@ void wxMenuBar::PopupMenu()
     // forgot to call DismissMenu()?
     wxASSERT_MSG( !m_menuShown, _T("shouldn't show two menu at once!") );
 
-    // remember the menu we show
-    m_menuShown = GetMenu(m_current);
+    // in any case, we should show it - even if we won't
+    m_shouldShowMenu = TRUE;
 
-    // position it correctly: note that we must use screen coords and that we
-    // pass 0 as width to position the menu exactly below the item, not to the
-    // right of it
-    wxRect rectItem = GetItemRect(m_current);
-    m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
-                       wxSize(0, rectItem.GetHeight()));
+    if ( IsEnabledTop(m_current) )
+    {
+        // remember the menu we show
+        m_menuShown = GetMenu(m_current);
+
+        // position it correctly: note that we must use screen coords and that we
+        // pass 0 as width to position the menu exactly below the item, not to the
+        // right of it
+        wxRect rectItem = GetItemRect(m_current);
+        m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
+                           wxSize(0, rectItem.GetHeight()));
+    }
+    //else: don't show disabled menu
 }
 
 void wxMenuBar::DismissMenu()
@@ -1349,6 +1490,7 @@ void wxMenuBar::DismissMenu()
 
 void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 {
+    m_shouldShowMenu = FALSE;
     m_menuShown = NULL;
     if ( dismissMenuBar )
     {
@@ -1358,6 +1500,8 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 
 void wxMenuBar::OnDismiss()
 {
+    ReleaseCapture();
+
     if ( m_current != -1 )
     {
         RefreshItem(m_current);

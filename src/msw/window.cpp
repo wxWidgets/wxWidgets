@@ -384,22 +384,24 @@ bool wxWindowMSW::Create(wxWindow *parent,
 void wxWindowMSW::SetFocus()
 {
     HWND hWnd = GetHwnd();
-    if ( hWnd )
-    {
-        ::SetLastError(0);
+    wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
 
-        if ( !::SetFocus(hWnd) )
+    ::SetLastError(0);
+
+    if ( !::SetFocus(hWnd) )
+    {
+        // was there really an error?
+        DWORD dwRes = ::GetLastError();
+        if ( dwRes )
         {
-            // was there really an error?
-            DWORD dwRes = ::GetLastError();
-            if ( dwRes )
-            {
-                wxLogApiError(_T("SetFocus"), dwRes);
-            }
+            wxLogApiError(_T("SetFocus"), dwRes);
         }
 
+        // VZ: just why does this happen sometimes?? any idea?
+#if 0
         HWND hwndFocus = ::GetFocus();
         wxASSERT_MSG( hwndFocus == hWnd, _T("SetFocus() didn't work?") );
+#endif // 0
     }
 }
 
@@ -3438,7 +3440,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
     if ( (m_lastMouseEvent == wxEVT_RIGHT_DOWN ||
           m_lastMouseEvent == wxEVT_LEFT_DOWN ||
           m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-         (m_lastMouseX == event.m_x && m_lastMouseY == event.m_y) )
+         (m_lastMouseX == x && m_lastMouseY == y) )
     {
         m_lastMouseEvent = wxEVT_MOTION;
 

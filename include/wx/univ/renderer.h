@@ -40,6 +40,10 @@ class WXDLLEXPORT wxWindow;
 #include "wx/gdicmn.h"
 #include "wx/scrolbar.h"            // for wxScrollBar::Element
 
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"            // for wxMenuGeometryInfo
+#endif // WX_PRECOMP
+
 // ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------

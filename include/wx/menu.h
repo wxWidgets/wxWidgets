@@ -230,6 +230,10 @@ public:
     // menu or associated window will be used.
     void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
 
+    // get the menu bar this menu is attached to (may be NULL, always NULL for
+    // popup menus)
+    wxMenuBar *GetMenuBar() const { return m_menuBar; }
+
     // called when the menu is attached/detached to/from a menu bar
     virtual void Attach(wxMenuBarBase *menubar);
     virtual void Detach();

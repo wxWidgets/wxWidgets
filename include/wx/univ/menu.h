@@ -68,6 +68,11 @@ public:
     virtual void Attach(wxMenuBarBase *menubar);
     virtual void Detach();
 
+    // implementation only from here
+
+    // process the key event, return TRUE if done
+    bool ProcessKeyDown(int key);
+
 protected:
     // implement base class virtuals
     virtual bool DoAppend(wxMenuItem *item);
@@ -86,8 +91,9 @@ protected:
     // forget old menu geometry info
     void InvalidateGeometryInfo();
 
-    // get the parent window: either the menu bar or invoking window
-    inline wxWindow *GetParentWindow() const;
+    // return either the menubar or the invoking window, normally never NULL
+    wxWindow *GetRootWindow() const
+        { return m_menuBar ? (wxWindow *)m_menuBar : m_invokingWindow; }
 
     // get the renderer we use for drawing: either the one of the menu bar or
     // the one of the window if we're a popup menu
@@ -152,6 +158,12 @@ protected:
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
 
+    // process the mouse move event, return TRUE if we did, FALSE to continue
+    // processing as usual
+    //
+    // the coordinates are client coordinates of menubar, convert if necessary
+    bool ProcessMouseEvent(const wxPoint& pt);
+
     // called when the menu bar loses mouse capture - it is not hidden unlike
     // menus, but it doesn't have modal status any longer
     void OnDismiss();
@@ -207,6 +219,14 @@ private:
 
     // the currently shown menu or NULL
     wxMenu *m_menuShown;
+
+    // should be showing the menu? this is subtly different from m_menuShown !=
+    // NULL as the menu which should be shown may be disabled in which case we
+    // don't show it - but will do as soon as the focus shifts to another menu
+    bool m_shouldShowMenu;
+
+    // it calls out ProcessMouseEvent()
+    friend wxPopupMenuWindow;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMenuBar)

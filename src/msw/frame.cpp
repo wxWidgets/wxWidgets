@@ -29,10 +29,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
     #include "wx/frame.h"
-    #include "wx/menu.h"
     #include "wx/app.h"
+    #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/settings.h"

@@ -37,8 +37,8 @@
 
     #if wxUSE_GUI
         #include "wx/window.h"
-        #include "wx/menu.h"
         #include "wx/frame.h"
+        #include "wx/menu.h"
         #include "wx/msgdlg.h"
         #include "wx/textdlg.h"
         #if wxUSE_ACCEL

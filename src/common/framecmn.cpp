@@ -27,10 +27,12 @@
     #pragma hdrstop
 #endif
 
-#include "wx/frame.h"
-#include "wx/menu.h"
-#include "wx/menuitem.h"
-#include "wx/dcclient.h"
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/menuitem.h"
+    #include "wx/dcclient.h"
+#endif // WX_PRECOMP
 
 #if wxUSE_TOOLBAR
     #include "wx/toolbar.h"

@@ -1667,12 +1667,14 @@ void wxWin32Renderer::DrawLabelShadow(wxDC& dc,
                                       int alignment,
                                       int indexAccel)
 {
-    // make the text grey and draw a shadow of it
+    // draw shadow of the text
     dc.SetTextForeground(m_colHighlight);
     wxRect rectShadow = rect;
     rectShadow.x++;
     rectShadow.y++;
     dc.DrawLabel(label, rectShadow, alignment, indexAccel);
+
+    // make the text grey
     dc.SetTextForeground(m_colDarkGrey);
 }
 
@@ -1704,7 +1706,18 @@ void wxWin32Renderer::DoDrawLabel(wxDC& dc,
 
     if ( flags & wxCONTROL_DISABLED )
     {
-        DrawLabelShadow(dc, label, rect, alignment, indexAccel);
+        // the combination of wxCONTROL_SELECTED and wxCONTROL_DISABLED
+        // currently only can happen for a menu item and it seems that Windows
+        // doesn't draw the shadow in this case, so we don't do it neither
+        if ( flags & wxCONTROL_SELECTED )
+        {
+            // just make the label text greyed out
+            dc.SetTextForeground(m_colDarkGrey);
+        }
+        else // draw normal disabled label
+        {
+            DrawLabelShadow(dc, label, rect, alignment, indexAccel);
+        }
     }
 
     wxRect rectLabel;

@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/menu.h"
 #endif //WX_PRECOMP
 
 #include "wx/cmdproc.h"
