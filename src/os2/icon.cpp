@@ -43,8 +43,8 @@
 
 void wxIconRefData::Free()
 {
-    if ( m_hIcon )
-        ::DestroyIcon((HICON) m_hIcon);
+    if (m_hIcon)
+        ::WinFreeFileIcon((HPOINTER)m_hIcon);
 }
 
 // ----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ bool wxIcon::LoadFile(
 , int                               nDesiredHeight
 )
 {
-    wxGDIImageHandler*              pHandler = FindHandler(type);
+    wxGDIImageHandler*              pHandler = FindHandler(lType);
 
     UnRef();
     m_refData = new wxIconRefData;

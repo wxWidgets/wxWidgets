@@ -47,22 +47,23 @@ bool wxStaticBitmap::Create(
     Init();
 
     SetName(rName);
-    if (pParent) parent->AddChild(this);
+    if (pParent)
+        pParent->AddChild(this);
 
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
+    m_backgroundColour = pParent->GetBackgroundColour() ;
+    m_foregroundColour = pParent->GetForegroundColour() ;
 
-    if ( id == -1 )
+    if (nId == -1)
         m_windowId = (int)NewControlId();
     else
         m_windowId = nId;
 
     m_windowStyle = lStyle;
 
-    int                             nX= pos.x;
-    int                             nY = pos.y;
-    int                             nWidth = size.x;
-    int                             nHeight = size.y;
+    int                             nX= rPos.x;
+    int                             nY = rPos.y;
+    int                             nWidth = rSize.x;
+    int                             nHeight = rSize.y;
 
     m_windowStyle = lStyle;
 
@@ -70,9 +71,9 @@ bool wxStaticBitmap::Create(
 
     // TODO: create static bitmap control
     const wxChar*                   zClassname = wxT("WX_STATIC");
-    int                             nWinstyle ? SS_ICON : SS_BITMAP;
+    int                             nWinstyle = m_bIsIcon ? SS_ICON : SS_BITMAP;
 
-    m_hWnd = (WXWHND)::WinCreateWindow( pParent->GetHWND()
+    m_hWnd = (WXHWND)::WinCreateWindow( pParent->GetHWND()
                                        ,zClassname
                                        ,wxT("")
                                        ,nWinstyle | WS_VISIBLE
@@ -97,7 +98,7 @@ bool wxStaticBitmap::Create(
 
 bool wxStaticBitmap::ImageIsOk() const
 {
-    return(m_pImage ** m_pImage->Ok());
+    return(m_pImage && m_pImage->Ok());
 }
 
 void wxStaticBitmap::Free()
@@ -131,7 +132,7 @@ void wxStaticBitmap::SetImage(
     int                             nH;
 
     GetPosition(&nX, &nY);
-    GetSize(&nW, &nHh);
+    GetSize(&nW, &nH);
 
     ::WinSendMsg( GetHwnd()
                  ,SM_SETHANDLE

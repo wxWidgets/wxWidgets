@@ -56,8 +56,7 @@ extern "C" void png_write_init PNGARG((png_structp png_ptr));
 #endif
 
 
-void
-ima_png_error(png_struct *png_ptr, char *message)
+void ima_png_error(png_struct *png_ptr, char *message)
 {
 //        wxMessageBox(message, "PNG error");
 

@@ -272,6 +272,9 @@ public:
 protected:
     WXHBITMAP                       m_hMaskBitmap;
     DECLARE_DYNAMIC_CLASS(wxMask)
+private:
+    HDC                             m_hDc;
+    HPS                             m_hPs;
 };
 
 // ----------------------------------------------------------------------------

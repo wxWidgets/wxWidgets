@@ -32,7 +32,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 
 wxCursorRefData::wxCursorRefData(void)
 {
-  m_width = 32; m_height = 32;
+  m_nWidth = 32;
+  m_nHeight = 32;
   m_hCursor = 0 ;
   m_destroyCursor = FALSE;
 }
@@ -59,9 +60,9 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 
   M_CURSORDATA->m_destroyCursor = FALSE;
   M_CURSORDATA->m_hCursor = 0;
-  M_CURSORDATA->m_ok = FALSE;
 // TODO:
 /*
+  M_CURSORDATA->m_bOK = FALSE;
   if (flags & wxBITMAP_TYPE_CUR_RESOURCE)
   {
     M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), cursor_file, IMAGE_CURSOR, 0, 0, 0);

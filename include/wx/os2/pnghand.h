@@ -18,18 +18,26 @@
 
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)
+    DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)
 public:
-  inline wxPNGFileHandler(void)
-  {
-	m_name = "PNG bitmap file";
-	m_extension = "bmp";
-	m_type = wxBITMAP_TYPE_PNG;
-  };
+    inline wxPNGFileHandler(void)
+    {
+        m_sName = "PNG bitmap file";
+        m_sExtension = "bmp";
+        m_lType = wxBITMAP_TYPE_PNG;
+    };
 
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-      int desiredWidth, int desiredHeight);
-  virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+    virtual bool LoadFile( wxBitmap*       pBitmap
+                          ,const wxString& rName
+                          ,long            lFlags
+                          ,int             nDesiredWidth
+                          ,int             nDesiredHeight
+                         );
+    virtual bool SaveFile( wxBitmap*        pBitmap
+                          ,const wxString&  rName
+                          ,int              nType
+                          ,const wxPalette* pPalette = NULL
+                         );
 };
 
 #endif

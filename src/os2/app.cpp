@@ -68,6 +68,7 @@ extern wxCursor*                    g_globalCursor;
 HINSTANCE                           wxhInstance = 0;
 QMSG                                svCurrentMsg;
 wxApp*                              wxTheApp = NULL;
+HAB                                 vHabmain = NULL;
 
 // FIXME why not const? and not static?
 
@@ -481,8 +482,8 @@ int wxEntry(
 
 bool wxApp::OnInitGui()
 {
-    m_vHab = WinInitialize(0);
-    m_hMq  = WinCreateMsgQueue(m_vHab, 0);
+    vHabmain = WinInitialize(0);
+    m_hMq    = WinCreateMsgQueue(vHabmain, 0);
 
     return TRUE;
 }
@@ -530,7 +531,7 @@ bool wxApp::Initialized()
 //
 bool wxApp::DoMessage()
 {
-    BOOL                            bRc = ::WinGetMsg(m_vHab, &m_vMsg, HWND(NULL), 0, 0);
+    BOOL                            bRc = ::WinGetMsg(vHabmain, &m_vMsg, HWND(NULL), 0, 0);
 
     if (bRc == 0)
     {
@@ -592,7 +593,7 @@ bool wxApp::DoMessage()
 
                     if ( !ProcessMessage((WXMSG *)&vMsg) )
                     {
-                        ::WinDispatchMsg(m_vHab, &vMsg);
+                        ::WinDispatchMsg(vHabmain, &vMsg);
                     }
                 }
                 svSavedMessages.Empty();
@@ -603,7 +604,7 @@ bool wxApp::DoMessage()
         // Process the message
         if (!ProcessMessage((WXMSG *)&svCurrentMsg) )
         {
-            ::WinDispatchMsg(m_vHab, (PQMSG)&svCurrentMsg);
+            ::WinDispatchMsg(vHabmain, (PQMSG)&svCurrentMsg);
         }
     }
     return TRUE;
@@ -633,7 +634,7 @@ int wxApp::MainLoop()
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
-        while (!::WinPeekMsg(m_vHab, &svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) &&
+        while (!::WinPeekMsg(vHabmain, &svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) &&
                 ProcessIdle() )
         {
         }
@@ -678,7 +679,7 @@ void wxApp::ExitMainLoop()
 
 bool wxApp::Pending()
 {
-    return (::WinPeekMsg(m_vHab, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
+    return (::WinPeekMsg(vHabmain, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
 }
 
 void wxApp::Dispatch()

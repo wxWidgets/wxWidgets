@@ -596,20 +596,20 @@ enum
 #define  wxByte   wxUint8
 #define  wxWord   wxUint16
 
-// base floating point types 
+// base floating point types
 // wxFloat32 : 32 bit IEEE float ( 1 sign , 8 exponent bits , 23 fraction bits
 // wxFloat64 : 64 bit IEEE float ( 1 sign , 11 exponent bits , 52 fraction bits
 // wxDouble : native fastest representation that has at least wxFloat64
 //            precision, so use the IEEE types for storage , and this for calculations
 
-typedef float wxFloat32 ; 
-#if defined( __WXMAC__ )  && defined (__MWERKS__) 
+typedef float wxFloat32 ;
+#if defined( __WXMAC__ )  && defined (__MWERKS__)
 	typedef short double	wxFloat64;
 #else
 	typedef double			wxFloat64;
 #endif
 
-#if defined( __WXMAC__ )  && !defined( __POWERPC__ ) 
+#if defined( __WXMAC__ )  && !defined( __POWERPC__ )
 	typedef long double wxDouble;
 #else
 	typedef double wxDouble ;
@@ -636,13 +636,13 @@ typedef float wxFloat32 ;
 #if defined (__MWERKS__) && ( (__MWERKS__ < 0x0900) || macintosh )
 // assembler versions for these
 #ifdef __POWERPC__
-	inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i ) 
+	inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
 		{return (__lhbrx( &i , 0 ) ) ;}
-	inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i ) 
+	inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
 		{return (__lhbrx( &i , 0 ) ) ;}
-	inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i ) 
+	inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
 		{return (__lwbrx( &i , 0 ) ) ;}
-	inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i ) 
+	inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
 		{return (__lwbrx( &i , 0 ) ) ;}
 #else
 	#pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
@@ -1686,7 +1686,6 @@ typedef unsigned long   WXMSGID;
 typedef void*           WXRESULT;
 typedef int             (*WXFARPROC)();
 // some windows handles not defined by PM
-typedef unsigned long   COLORREF;
 typedef unsigned long   HANDLE;
 typedef unsigned long   HICON;
 typedef unsigned long   HFONT;
@@ -1700,7 +1699,33 @@ typedef unsigned long   HIMAGELIST;
 typedef unsigned long   HGLOBAL;
 typedef unsigned long   DWORD;
 typedef unsigned short  WORD;
-#endif
+
+// WIN32 graphics types for OS/2 GPI
+
+// RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
+#define OS2RGB(r,g,b) ((DWORD ((BYTE) (r) | ((WORD) (g) << 8)) | (((DWORD)(BYTE)(b)) << 16)))
+
+typedef unsigned long COLORREF;
+#define GetBValue(rgb) ((BYTE)((rgb) >> 16))
+#define GetGValue(rgb) ((BYTE)(((WORD)(rgb)) >> 8))
+#define GetRValue(rgb) ((BYTE)(rgb))
+#define PALETTEINDEX(i) ((COLORREF)(0x01000000 | (DWORD)(WORD)(i)))
+#define PALETTERGB(r,g,b) (0x02000000 | OS2RGB(r,g,b))
+// OS2's RGB/RGB2 is backwards from this
+typedef struct tagPALETTEENTRY
+{
+    char bRed;
+    char bGreen;
+    char bBlue;
+    char bFlags;
+} PALETTEENTRY;
+typedef struct tagLOGPALETTE
+{
+    WORD palVersion;
+    WORD palNumentries;
+    WORD PALETTEENTRY[1];
+} LOGPALETTE;
+#endif //__WXPM__
 
 #if defined(__GNUWIN32__) || defined(__WXWINE__)
     typedef int (*WXFARPROC)();

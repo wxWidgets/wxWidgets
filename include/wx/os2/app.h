@@ -22,7 +22,7 @@ class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
-HAB                             vHabmain;
+WXDLLEXPORT_DATA(extern HAB)    vHabmain;
 
 // Force an exit from main loop
 void WXDLLEXPORT wxExit(void);

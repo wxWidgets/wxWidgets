@@ -53,21 +53,21 @@ wxMutex*                            p_wxMainMutex;
 wxThread*                           m_pThread;    // pointer to the wxWindows thread object
 
 // if it's FALSE, some secondary thread is holding the GUI lock
-static bool s_bGuiOwnedByMainThread = TRUE;
+static bool gs_bGuiOwnedByMainThread = TRUE;
 
 // critical section which controls access to all GUI functions: any secondary
 // thread (i.e. except the main one) must enter this crit section before doing
 // any GUI calls
-static wxCriticalSection *s_pCritsectGui = NULL;
+static wxCriticalSection *gs_pCritsectGui = NULL;
 
 // critical section which protects s_nWaitingForGui variable
-static wxCriticalSection *s_pCritsectWaitingForGui = NULL;
+static wxCriticalSection *gs_pCritsectWaitingForGui = NULL;
 
 // number of threads waiting for GUI in wxMutexGuiEnter()
-static size_t s_nWaitingForGui = 0;
+static size_t gs_nWaitingForGui = 0;
 
 // are we waiting for a thread termination?
-static bool s_bWaitingForThread = FALSE;
+static bool gs_bWaitingForThread = FALSE;
 
 // ============================================================================
 // OS/2 implementation of thread classes
@@ -232,7 +232,7 @@ wxCondition::~wxCondition()
 
 void wxCondition::Wait()
 {
-    (void)m_internal->Wait(SEM_INFINITE_WAIT);
+    (void)m_internal->Wait(SEM_INDEFINITE_WAIT);
 }
 
 bool wxCondition::Wait(
@@ -356,10 +356,10 @@ ULONG wxThreadInternal::OS2ThreadStart(
     // enter m_critsect before changing the thread state
     pThread->m_critsect.Enter();
 
-    bool                            bWasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
+    bool                            bWasCancelled = pThread->m_internal->GetState() == STATE_CANCELED;
 
     pThread->m_internal->SetState(STATE_EXITED);
-    thread->m_critsect.Leave();
+    pThread->m_critsect.Leave();
 
     pThread->OnExit();
 
@@ -368,7 +368,7 @@ ULONG wxThreadInternal::OS2ThreadStart(
     if (pThread->IsDetached() && !bWasCancelled)
     {
         // auto delete
-        delete thread;
+        delete pThread;
     }
     //else: the joinable threads handle will be closed when Wait() is done
     return dwRet;
@@ -380,6 +380,7 @@ void wxThreadInternal::SetPriority(
 {
     // translate wxWindows priority to the PM one
     ULONG                           ulOS2_Priority;
+    ULONG                           ulrc;
 
     m_nPriority = nPriority;
 
@@ -582,7 +583,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         if (IsMain())
         {
             // set flag for wxIsWaitingForThread()
-            gs_waitingForThread = TRUE;
+            gs_bWaitingForThread = TRUE;
 
 #if wxUSE_GUI
             wxBeginBusyCursor();
@@ -611,7 +612,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
         if ( IsMain() )
         {
-            gs_waitingForThread = FALSE;
+            gs_bWaitingForThread = FALSE;
 
 #if wxUSE_GUI
             wxEndBusyCursor();
@@ -625,9 +626,6 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     {
         delete this;
     }
-
-    wxASSERT_MSG( (DWORD)rc != STILL_ACTIVE,
-                  wxT("thread must be already terminated.") );
 
     if ( pRc )
         *pRc = rc;
@@ -729,10 +727,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
 bool wxThreadModule::OnInit()
 {
-    s_pCritsectWaitingForGui = new wxCriticalSection();
+    gs_pCritsectWaitingForGui = new wxCriticalSection();
 
-    s_pCritsectGui = new wxCriticalSection();
-    s_pCritsectGui->Enter();
+    gs_pCritsectGui = new wxCriticalSection();
+    gs_pCritsectGui->Enter();
 
     PTIB                            ptib;
     PPIB                            ppib;
@@ -745,14 +743,14 @@ bool wxThreadModule::OnInit()
 
 void wxThreadModule::OnExit()
 {
-    if (s_pCritsectGui)
+    if (gs_pCritsectGui)
     {
-        s_pCritsectGui->Leave();
-        delete s_pCritsectGui;
-        s_pCritsectGui = NULL;
+        gs_pCritsectGui->Leave();
+        delete gs_pCritsectGui;
+        gs_pCritsectGui = NULL;
     }
 
-    wxDELETE(s_pCritsectWaitingForGui);
+    wxDELETE(gs_pCritsectWaitingForGui);
 }
 
 // ----------------------------------------------------------------------------
@@ -766,24 +764,24 @@ void WXDLLEXPORT wxWakeUpMainThread()
 
 void WXDLLEXPORT wxMutexGuiLeave()
 {
-    wxCriticalSectionLocker enter(*s_pCritsectWaitingForGui);
+    wxCriticalSectionLocker enter(*gs_pCritsectWaitingForGui);
 
     if ( wxThread::IsMain() )
     {
-        s_bGuiOwnedByMainThread = FALSE;
+        gs_bGuiOwnedByMainThread = FALSE;
     }
     else
     {
         // decrement the number of waiters now
-        wxASSERT_MSG( s_nWaitingForGui > 0,
+        wxASSERT_MSG(gs_nWaitingForGui > 0,
                       wxT("calling wxMutexGuiLeave() without entering it first?") );
 
-        s_nWaitingForGui--;
+        gs_nWaitingForGui--;
 
         wxWakeUpMainThread();
     }
 
-    s_pCritsectGui->Leave();
+    gs_pCritsectGui->Leave();
 }
 
 void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
@@ -791,17 +789,17 @@ void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
     wxASSERT_MSG( wxThread::IsMain(),
                   wxT("only main thread may call wxMutexGuiLeaveOrEnter()!") );
 
-    wxCriticalSectionLocker enter(*s_pCritsectWaitingForGui);
+    wxCriticalSectionLocker enter(*gs_pCritsectWaitingForGui);
 
-    if ( s_nWaitingForGui == 0 )
+    if (gs_nWaitingForGui == 0)
     {
         // no threads are waiting for GUI - so we may acquire the lock without
         // any danger (but only if we don't already have it)
         if (!wxGuiOwnedByMainThread())
         {
-            s_pCritsectGui->Enter();
+            gs_pCritsectGui->Enter();
 
-            s_bGuiOwnedByMainThread = TRUE;
+            gs_bGuiOwnedByMainThread = TRUE;
         }
         //else: already have it, nothing to do
     }
@@ -818,12 +816,12 @@ void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
 
 bool WXDLLEXPORT wxGuiOwnedByMainThread()
 {
-    return s_bGuiOwnedByMainThread;
+    return gs_bGuiOwnedByMainThread;
 }
 
 bool WXDLLEXPORT wxIsWaitingForThread()
 {
-    return s_bWaitingForThread;
+    return gs_bWaitingForThread;
 }
 
 #endif

@@ -59,7 +59,7 @@ enum
     wxLIST_NEXT_ALL,            // Searches for subsequent item by index
     wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
     wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
-    wxLIST_NEXT_RIGHT,          // Searches for an item to the right of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
 };
 
 // Alignment flags for Arrange (MSW only except wxLIST_ALIGN_LEFT)
