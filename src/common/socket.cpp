@@ -131,10 +131,10 @@ bool wxSocketBase::Close()
 
     // Shutdown the connection
     GSocket_Shutdown(m_socket);
-    m_connected = FALSE;
-    m_establishing = FALSE;
   }
 
+  m_connected = FALSE;              // (GRG)
+  m_establishing = FALSE;
   return TRUE;
 }
 
@@ -155,7 +155,7 @@ public:
 
   void Notify()
   {
-    *m_state = (int)m_new_val;  // Change the value
+    *m_state = (int)m_new_val;      // Change the value
   }
 };
 
@@ -183,14 +183,13 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   int total;
   int ret = 1;
 
-  // we try this even if the connection has already been closed.
+  // Try the pushback buffer first
   total = GetPushback(buffer, nbytes, FALSE);
   nbytes -= total;
   buffer += total;
 
-  // If the socket is not connected, or we have got the whole
-  // needed buffer, return immedately
-  if (!m_socket || !m_connected || !nbytes)
+  // If the socket is invalid or we got all the data, return now (GRG)
+  if (!m_socket || !nbytes)
     return total;
 
   // Possible combinations (they are checked in this order)
@@ -262,14 +261,14 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   if (_Read((char *)&msg, sizeof(msg)) != sizeof(msg))
     goto exit;
 
-  sig = (wxUint32)msg.sig[0];
+  sig =  (wxUint32)msg.sig[0];
   sig |= (wxUint32)(msg.sig[1] << 8);
   sig |= (wxUint32)(msg.sig[2] << 16);
   sig |= (wxUint32)(msg.sig[3] << 24);
 
   if (sig != 0xfeeddead)
   {
-    wxLogWarning( _("TCP: invalid signature returned to ReadMsg."));
+    wxLogWarning( _("wxSocket: invalid signature in ReadMsg."));
     goto exit;
   }
 
@@ -277,9 +276,6 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   len |= (wxUint32)(msg.len[1] << 8);
   len |= (wxUint32)(msg.len[2] << 16);
   len |= (wxUint32)(msg.len[3] << 24);
-
-  //wxLogMessage("Readmsg: %d  %d  %d  %d -> len == %d",
-  //  msg.len[0], msg.len[1], msg.len[2], msg.len[3], len);
 
   if (len > nbytes)
   {
@@ -289,8 +285,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   else
     len2 = 0;
 
-  // This check is necessary so that we don't attemp to read if
-  // the msg was zero bytes long.
+  // Don't attemp to read if the msg was zero bytes long.
   if (len)
   {
     total = _Read(buffer, len);
@@ -327,7 +322,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 
   if (sig != 0xdeadfeed)
   {
-    //wxLogMessage(wxT("Warning: invalid signature returned to ReadMsg"));
+    wxLogWarning( _("wxSocket: invalid signature in ReadMsg."));
     goto exit;
   }
 
@@ -387,7 +382,8 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   wxUint32 total = 0;
   int ret = 1;
 
-  if (!m_connected || !m_socket)
+  // If the socket is invalid, return immediately (GRG)
+  if (!m_socket)
     return 0;
 
   // Possible combinations (they are checked in this order)
@@ -455,28 +451,15 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   old_flags = m_flags;
   SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
-  // warning about 'cast truncates constant value'
-#ifdef __VISUALC__
-#  pragma warning(disable: 4310)
-#endif // __VISUALC__
-
   msg.sig[0] = (unsigned char) 0xad;
   msg.sig[1] = (unsigned char) 0xde;
   msg.sig[2] = (unsigned char) 0xed;
   msg.sig[3] = (unsigned char) 0xfe;
 
-  msg.len[0] = (unsigned char) nbytes & 0xff;
-  msg.len[1] = (unsigned char) (nbytes >> 8) & 0xff;
-  msg.len[2] = (unsigned char) (nbytes >> 16) & 0xff;
-  msg.len[3] = (unsigned char) (nbytes >> 24) & 0xff;
-
-  //wxLogMessage("Writemsg: %d  %d  %d  %d -> %d",
-  //  nbytes & 0xff,
-  //  (nbytes >> 8) & 0xff,
-  //  (nbytes >> 16) & 0xff,
-  //  (nbytes >> 24) & 0xff,
-  //  nbytes
-  //  );
+  msg.len[0] = (unsigned char) (nbytes & 0xff);
+  msg.len[1] = (unsigned char) ((nbytes >> 8) & 0xff);
+  msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
+  msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
 
   if (_Write((char *)&msg, sizeof(msg)) < sizeof(msg))
     goto exit;
@@ -504,10 +487,6 @@ exit:
   m_writing = FALSE;
 
   return *this;
-
-#ifdef __VISUALC__
-#  pragma warning(default: 4310)
-#endif // __VISUALC__
 }
 
 wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
@@ -524,8 +503,8 @@ wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
 wxSocketBase& wxSocketBase::Discard()
 {
   int old_flags;
-  char *my_data = new char[MAX_DISCARD_SIZE];
-  wxUint32 recv_size = MAX_DISCARD_SIZE;
+  char *buffer = new char[MAX_DISCARD_SIZE];
+  wxUint32 ret;
   wxUint32 total = 0;
 
   // Mask read events
@@ -534,15 +513,16 @@ wxSocketBase& wxSocketBase::Discard()
   old_flags = m_flags;
   SetFlags(wxSOCKET_NOWAIT);
 
-  while (recv_size == MAX_DISCARD_SIZE)
+  do
   {
-    recv_size = _Read(my_data, MAX_DISCARD_SIZE);
-    total += recv_size;
+    ret = _Read(buffer, MAX_DISCARD_SIZE);
+    total += ret;
   }
+  while (ret == MAX_DISCARD_SIZE);
 
-  delete [] my_data;
+  delete[] buffer;
   m_lcount = total;
-  m_error = FALSE;
+  m_error  = FALSE;
 
   // Allow read events again
   m_reading = FALSE;
@@ -632,9 +612,7 @@ void wxSocketBase::RestoreState()
 // to check for the specified combination of event flags, until
 // an event occurs or until the timeout ellapses. The polling
 // loop calls PROCESS_EVENTS(), so this won't block the GUI.
-//
-// XXX: Should it honour the wxSOCKET_BLOCK flag ?
-//
+
 bool wxSocketBase::_Wait(long seconds, long milliseconds,
                          wxSocketEventFlags flags)
 {
@@ -646,12 +624,8 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
   // Set this to TRUE to interrupt ongoing waits
   m_interrupt = FALSE;
 
-  // Check for valid socket
+  // Check for valid socket (GRG)
   if (!m_socket)
-    return FALSE;
-
-  // If it is not a server, it must be connected or establishing connection
-  if ((m_type != SOCK_SERVER) && (!m_connected && !m_establishing))
     return FALSE;
 
   // Check for valid timeout value
@@ -692,6 +666,7 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
       return TRUE;
     }
 
+    // Data available or output buffer ready
     if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
       timer.Stop();
@@ -702,7 +677,9 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
     if (result & GSOCK_LOST_FLAG)
     {
       timer.Stop();
-      return TRUE;  // XXX: should be FALSE if !(flags & GSOCK_LOST_FLAG) !
+      m_connected = FALSE;                  // (GRG)
+      m_establishing = FALSE;
+      return (flags & GSOCK_LOST_FLAG);     // (GRG) <--- Maybe here???
     }
 
     // Wait more?
@@ -823,36 +800,43 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   wxSocketEvent event(m_id);
   wxSocketEventFlags flag = EventToNotify(req_evt);
 
-  // dbg("Entering OnRequest (evt %d)\n", req_evt);
-
   // This duplicates some code in _Wait(), but this doesn't
   // hurt. It has to be here because we don't know whether
   // WaitXXX will be used, and it has to be in _Wait as well
   // because the event might be a bit delayed.
   //
-  if (req_evt == wxSOCKET_CONNECTION)
+  switch(req_evt)
   {
-    m_establishing = FALSE;
-    m_connected = TRUE;
-  }
-  else if (req_evt == wxSOCKET_INPUT)
-  {
+    case wxSOCKET_CONNECTION:
+      m_establishing = FALSE;
+      m_connected = TRUE;
+      break;
+
     // If we are in the middle of a R/W operation, do not
     // propagate events to users. Also, filter 'late' events
     // which are no longer valid.
     //
-    if (m_reading || !GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
-      return;
-  }
-  else if (req_evt == wxSOCKET_OUTPUT)
-  {
-    if (m_writing || !GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
-      return;
+    case wxSOCKET_INPUT:
+      if (m_reading || !GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
+        return;
+      break;
+
+    case wxSOCKET_OUTPUT:
+      if (m_writing || !GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
+        return;
+      break;
+
+    case wxSOCKET_LOST:
+      m_connected = FALSE;
+      m_establishing = FALSE;
+      break;
+
+    default:
+      break;
   }
 
   if (((m_neededreq & flag) == flag) && m_notify_state)
   {
-    // dbg("Evt %d delivered\n", req_evt);
     event.m_socket = this;
     event.m_skevt  = req_evt;
 
@@ -866,10 +850,7 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
     OldOnNotify(req_evt);
     if (m_cbk)
       m_cbk(*this, req_evt, m_cdata);
-
   }
-
-  // dbg("Exiting OnRequest (evt %d)\n", req_evt);
 }
 
 void wxSocketBase::OldOnNotify(wxSocketNotify WXUNUSED(evt))
@@ -948,7 +929,7 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
 // --------------------------------------------------------------
 
 wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
-             wxSockFlags flags) :
+                               wxSockFlags flags) :
   wxSocketBase(flags, SOCK_SERVER)
 {
   // Create the socket
@@ -984,7 +965,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   if (!m_socket)
     return FALSE;
 
-  // GRG: If wait == FALSE, then the call should be nonblocking.
+  // If wait == FALSE, then the call should be nonblocking.
   // When we are finished, we put the socket to blocking mode
   // again.
 
@@ -996,8 +977,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   if (!wait)
     GSocket_SetNonBlocking(m_socket, FALSE);
 
-  // GRG: this was not being handled!
-  if (child_socket == NULL)
+  if (!child_socket)
     return FALSE;
 
   sock.m_type = SOCK_INTERNAL;
@@ -1054,13 +1034,13 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 {
   GSocketError err;
 
-  if (IsConnected())
+  if (m_socket)         // (GRG)
+  {
+    // Shutdown and destroy the socket
     Close();
-
-  if (m_socket)
     GSocket_destroy(m_socket);
+  }
 
-  // Initialize all socket stuff ...
   m_socket = GSocket_new();
   m_connected = FALSE;
   m_establishing = FALSE;
@@ -1073,7 +1053,7 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
                                 GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                 wx_socket_callback, (char *)this);
 
-  // GRG: If wait == FALSE, then the call should be nonblocking.
+  // If wait == FALSE, then the call should be nonblocking.
   // When we are finished, we put the socket to blocking mode
   // again.
 
@@ -1165,6 +1145,8 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
 // wxSocketEvent
 // --------------------------------------------------------------
 
+// XXX: Should be moved to event.cpp ?
+
 wxSocketEvent::wxSocketEvent(int id)
   : wxEvent(id)
 {
@@ -1190,15 +1172,10 @@ void wxSocketEvent::CopyObject(wxObject& obj_d) const
 class WXDLLEXPORT wxSocketModule: public wxModule
 {
   DECLARE_DYNAMIC_CLASS(wxSocketModule)
+
 public:
-  bool OnInit()
-  {
-    return GSocket_Init();
-  }
-  void OnExit()
-  {
-    GSocket_Cleanup();
-  }
+  bool OnInit() { return GSocket_Init(); }
+  void OnExit() { GSocket_Cleanup(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)

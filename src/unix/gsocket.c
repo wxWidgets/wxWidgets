@@ -92,13 +92,13 @@ struct	sockaddr_un {
 
 #ifndef __GSOCKET_STANDALONE__
 
-#include "wx/gsocket.h"
 #include "wx/unix/gsockunx.h"
+#include "wx/gsocket.h"
 
 #else
 
-#include "gsocket.h"
 #include "gsockunx.h"
+#include "gsocket.h"
 
 #endif /* __GSOCKET_STANDALONE__ */
 
@@ -751,9 +751,20 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
+  GSocketEventFlags result = 0;
+  char c;
+
   assert(socket != NULL);
 
-  return (flags & socket->m_detected);
+  result = flags & socket->m_detected;
+
+  if ((flags & GSOCK_INPUT_FLAG) &&
+      (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0))
+  {
+    result |= GSOCK_INPUT_FLAG;
+  }
+
+  return result;
 }
 
 /* Flags */
@@ -933,13 +944,7 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
 
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 {
-  int ret;
-
-  MASK_SIGNAL();
-  ret = recv(socket->m_fd, buffer, size, 0);
-  UNMASK_SIGNAL();
-
-  return ret;
+  return recv(socket->m_fd, buffer, size, 0);
 }
 
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
@@ -951,9 +956,7 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 
   fromlen = sizeof(from);
 
-  MASK_SIGNAL();
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
-  UNMASK_SIGNAL();
 
   if (ret == -1)
     return -1;

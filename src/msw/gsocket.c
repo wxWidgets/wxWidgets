@@ -766,9 +766,20 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
+  GSocketEventFlags result = 0;
+  char c;
+
   assert(socket != NULL);
 
-  return (flags & socket->m_detected);
+  result = flags & socket->m_detected;
+
+  if ((flags & GSOCK_INPUT_FLAG) &&
+      (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0))
+  {
+    result |= GSOCK_INPUT_FLAG;
+  }
+
+  return result;
 }
 
 /* Attributes */
