@@ -75,11 +75,9 @@ enum {
 };
 
 // Flags for InsertItem
-enum {
-    wxTREE_INSERT_LAST = -1,
-    wxTREE_INSERT_FIRST = -2,
-    wxTREE_INSERT_SORT = -3
-};
+#define wxTREE_INSERT_FIRST 0xFFFF0001
+#define wxTREE_INSERT_LAST  0xFFFF0002
+#define wxTREE_INSERT_SORT  0xFFFF0003
 
 class WXDLLEXPORT wxTreeItem: public wxObject
 {
