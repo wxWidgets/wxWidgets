@@ -166,7 +166,7 @@
     <!-- ================================================================ -->
     
     <dll id="htmldll" template="wx_dll"
-         cond="SHARED=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_HTML</define>
         <sources>$(HTML_SRC)</sources>
@@ -177,7 +177,7 @@
     </dll>
     
     <lib id="htmllib" template="wx_lib"
-         cond="SHARED=='0' and USE_HTML=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='0' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
         <sources>$(HTML_SRC)</sources>
         <msvc-headers>$(HTML_HDR)</msvc-headers>
     </lib>
