@@ -24,6 +24,8 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - also, OnExit() is not called if OnInit() fails
 - wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
+- wxColourDatabase doesn't derive from wxList anymore: use AddColour to add
+  new colours
 - wxWindow::Clear() is now called ClearBackground()
 - pointer returned by wxFont::GetNativeFontInfo() must not be deleted now
 
@@ -49,7 +51,7 @@ versions, please update your code to not use them.
 - wxTreeItemId conversion to long is deprecated and shouldn't be used
 - [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
              SetTransparent() as well as wxNO_3D and wxUSER_COLOURS styles
-
+- wxList keyed interface: use wxHashMap instead
 
 OTHER CHANGES
 =============
@@ -119,6 +121,13 @@ All:
 - wxDataStreams can read/write many elements at once (Mickael Gilabert)
 - added wxRecursionGuard class
 - added wxThreadHelper class (Daniel Howard)
+- Added STL support (--enable-stl for configure, wxUSE_STL in setup.h).
+  When enabled, wxString will derive from std::string, wxArray from,
+  std::vector, wxList from std::list. In addition wxHashTable will be
+  implemented in terms of wxHashMap.
+- Added wxList::compatibility_iterator. Can be used like wxNode* (except
+  it can't be delete()d). It permits writing code which will work
+  both with wxUSE_STL==1 and wxUSE_STL==0.
 
 wxBase:
 
