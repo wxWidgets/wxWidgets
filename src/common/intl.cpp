@@ -475,9 +475,20 @@ void wxMsgCatalog::ConvertEncoding()
     wxFontEncoding enc;
 
     // first, find encoding header:
-    const char *hdr = GetString("$ENCODING");   
-    if (hdr == NULL) return; // not supported by this catalog
-    if ((enc = wxTheFontMapper -> CharsetToEncoding(hdr, FALSE)) == wxFONTENCODING_SYSTEM) return;
+    const char *hdr = StringAtOfs(m_pOrigTable, 0);
+    if (hdr == NULL) return; // not supported by this catalog, does not have non-fuzzy header
+    if (hdr[0] != 0) return; // ditto
+    
+    /* we support catalogs with header (msgid "") that is _not_ marked as "#, fuzzy" (otherwise
+       the string would not be included into compiled catalog) */
+    wxString header(StringAtOfs(m_pTransTable, 0));
+    wxString charset;
+    int pos = header.Find("Content-Type: text/plain; charset=");
+    if (pos == -1) return; // incorrectly filled Content-Type header
+    pos += 34 ; /*strlen("Content-Type: text/plain; charset=")*/
+    while (header[pos] != '\n') charset << header[pos++];
+    
+    if ((enc = wxTheFontMapper -> CharsetToEncoding(charset, FALSE)) == wxFONTENCODING_SYSTEM) return;
 
     wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
     if (a[0] == enc) return; // no conversion needed, locale uses native encoding
