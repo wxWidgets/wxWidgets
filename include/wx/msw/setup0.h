@@ -173,6 +173,14 @@
 #define wxUSE_ODBC          0
                                 // Define 1 to use ODBC classes
 
+#define wxODBC_FWD_ONLY_CURSORS 1
+                                // Some databases/ODBC drivers only allow forward scrolling cursors.
+                                // Unless you specifically want to use backward scrolling
+                                // cursors, and you know that all of the databases/ODBC drivers
+                                // that you will use these odbc classes with allow backward 
+                                // scrolling cursors, this setting should remain set to 1
+                                // for maximum database/driver compatibilty
+
 #ifndef __MWERKS__
 #define wxUSE_IOSTREAMH     1
 #else

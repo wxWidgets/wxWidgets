@@ -77,6 +77,7 @@
  * Use iODBC
  */
 #define wxUSE_ODBC 0
+#define wxODBC_FWD_ONLY_CURSORS 1
 /*
  * Use Threads
  */

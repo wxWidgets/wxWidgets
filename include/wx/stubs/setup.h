@@ -99,8 +99,17 @@
 #define wxUSE_C_MAIN 0
                                   // Set to 1 to use main.c instead of main.cpp (UNIX only)
 
-#define wxUSE_ODBC                   0
-                                    // Define 1 to use ODBC classes
+#define wxUSE_ODBC                0
+                                  // Define 1 to use ODBC classes
+
+#define wxODBC_FWD_ONLY_CURSORS   1
+                                  // Some databases/ODBC drivers only allow forward scrolling cursors.
+                                  // Unless you specifically want to use backward scrolling
+                                  // cursors, and you know that all of the databases/ODBC drivers
+                                  // that you will use these odbc classes with allow backward 
+                                  // scrolling cursors, this setting should remain set to 1
+                                  // for maximum database/driver compatibilty
+
 
 #define wxUSE_IOSTREAMH     1
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
