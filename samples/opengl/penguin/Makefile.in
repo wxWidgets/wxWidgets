@@ -17,7 +17,7 @@ DATAFILES = penguin.lwo
 
 PROGRAM=penguin
 
-LIBRARIES=$(OPENGLLIBS) ../../../lib/libwx_gtk_gl.so
+LIBRARIES=$(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@ $(OPENGLLIBS)
 
 OBJECTS=$(PROGRAM).o lw.o trackball.o
 
