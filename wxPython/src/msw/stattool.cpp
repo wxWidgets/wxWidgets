@@ -120,26 +120,20 @@ static void *SwigwxStatusBarTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+#define new_wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStatusBar * _result;
     wxWindow * _arg0;
-    wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) wxST_SIZEGRIP;
-    char * _arg5 = (char *) "statusBar";
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    long  _arg2 = (long ) wxST_SIZEGRIP;
+    char * _arg3 = (char *) "statusBar";
     PyObject * _argo0 = 0;
-    wxPoint  temp;
-    PyObject * _obj2 = 0;
-    wxSize  temp0;
-    PyObject * _obj3 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
+    char *_kwnames[] = { "parent","id","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ils:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -148,21 +142,9 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
-    if (_obj2)
-{
-    _arg2 = &temp;
-    if (! wxPoint_helper(_obj2, &_arg2))
-        return NULL;
-}
-    if (_obj3)
-{
-    _arg3 = &temp0;
-    if (! wxSize_helper(_obj3, &_arg3))
-        return NULL;
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+        _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;

@@ -41,9 +41,7 @@
 
 class wxStatusBar : public wxWindow {
 public:
-    wxStatusBar(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
+    wxStatusBar(wxWindow* parent, wxWindowID id = -1,
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
     %name(wxPreStatusBar)wxStatusBar();
