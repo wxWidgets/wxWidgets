@@ -27,6 +27,10 @@ All (GUI):
   but this is strongly discouraged, please consider changing your codei
   instead!
 
+- wxDialog does not derive from wxPanel any longer - if you were using it in
+  your code, please update it. The quick fix for the most cases is to replace
+  the occurences of wxPanel with wxWindow.
+
 - wxYES_NO is now wxYES | wxNO and the manifest values of both wxYES and wxNO
   have changed (to fix some unfortunate clashes), please check your code to
   ensure that no tests for wxYES or wxNO are broken: for example, the following
