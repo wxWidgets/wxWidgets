@@ -35,6 +35,7 @@
 #include "wx/spinctrl.h"
 #include "wx/log.h"
 #include "wx/geometry.h"
+#include "wx/textctrl.h"
 
 #include "wx/toolbar.h"
 #include "wx/dc.h"
