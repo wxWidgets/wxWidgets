@@ -264,9 +264,19 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // button or not (initially the label is "Next")
     bool btnLabelWasNext = TRUE;
 
-    // and this tells us whether we already had the default bitmap before
-    int bmpWasDefault;
+    // Modified 10-20-2001 Robert Cavanaugh.
+    // Fixed bug for displaying a new bitmap
+    // in each *consecutive* page
 
+    // flag to indicate if this page uses a new bitmap
+    bool bmpIsDefault = TRUE;
+
+    // use these labels to determine if we need to change the bitmap
+    // for this page
+    wxBitmap   PreviousBitmap = wxNullBitmap;
+    wxBitmap   ThisBitmap = wxNullBitmap;
+
+    // check for previous page
     if ( m_page )
     {
         // send the event to the old page
@@ -281,15 +291,15 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         m_page->Hide();
 
         btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
-        bmpWasDefault = !m_page->GetBitmap().Ok();
-    }
-    else // no previous page
+
+        // Get the bitmap of the previous page (if it exists)
+        if(m_page->GetBitmap().Ok())
     {
-        // always set the bitmap
-        bmpWasDefault = -1;
+            PreviousBitmap = m_page->GetBitmap();
+        }
     }
 
-    // set the new one
+    // set the new page
     m_page = page;
 
     // is this the end?
@@ -297,11 +307,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         // terminate successfully
         EndModal(wxID_OK);
-
         return TRUE;
     }
 
-    // send the event to the new page now
+    // send the change event to the new page now
     wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGED, GetId(), goingForward);
     (void)m_page->GetEventHandler()->ProcessEvent(event);
 
@@ -310,9 +319,19 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     m_page->SetSize(m_x, m_y, m_width, m_height);
     m_page->Show();
 
-    // change the bitmap if necessary (and if we have it at all)
-    int bmpIsDefault = !m_page->GetBitmap().Ok();
-    if ( m_statbmp && (bmpIsDefault != bmpWasDefault) )
+    // check if bitmap needs to be updated
+    // update default flag as well
+    if(m_page->GetBitmap().Ok())
+    {
+        ThisBitmap = m_page->GetBitmap();
+        bmpIsDefault = FALSE;
+    }
+
+    // change the bitmap if:
+    // 1) a default bitmap was selected in constructor
+    // 2) this page was constructed with a bitmap
+    // 3) this bitmap is not the previous bitmap
+    if( m_statbmp && (ThisBitmap != PreviousBitmap) )
     {
         wxBitmap bmp;
         if ( bmpIsDefault )
