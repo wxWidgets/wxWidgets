@@ -78,6 +78,9 @@ wxRegConfig::wxRegConfig(const wxString& strRoot)
   // Create() will Open() if key already exists
   m_keyLocalRoot.Create();
 
+  // as it's the same key, Open() shouldn't fail (i.e. no need for Create())
+  m_keyLocal.Open();
+
   wxLogNull nolog;
   m_keyGlobalRoot.Open();
 }
@@ -94,10 +97,9 @@ void wxRegConfig::SetPath(const wxString& strPath)
 {
   wxArrayString aParts;
 
-  if ( strPath.IsEmpty() )
-    return;
-
-  if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
+  // because GetPath() returns "" when we're at root, we must understand
+  // empty string as "/"
+  if ( strPath.IsEmpty() || (strPath[0] == wxCONFIG_PATH_SEPARATOR) ) {
     // absolute path
     wxSplitPath(aParts, strPath);
   }
@@ -278,14 +280,19 @@ bool wxRegConfig::Read(wxString *pStr,
   // first try local key
   if ( TryGetValue(m_keyLocal, path.Name(), *pStr) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
-    return TRUE;
+    // nothing to do
+  }
+  else {
+    if ( IsRecordingDefaults() ) {
+      ((wxRegConfig*)this)->Write(szKey, szDefault);
+    }
+
+    // default value
+    *pStr = szDefault;
   }
 
-  if(IsRecordingDefaults())
-     ((wxRegConfig*)this)->Write(szKey,szDefault);
+  *pStr = wxConfigBase::ExpandEnvVars(*pStr);
 
-  // default value
-  *pStr = szDefault;
   return FALSE;
 }
 

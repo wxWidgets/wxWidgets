@@ -32,6 +32,8 @@
 #include  "wx/intl.h"
 #include  "wx/log.h"
 
+#include  "wx/config.h"    // for wxExpandEnvVars
+
 // Windows headers
 /*
 #define   STRICT
@@ -804,7 +806,7 @@ bool GetExtensionFromMimeType(wxString *pExt, const wxString& strMimeType)
   // suppress possible error messages
   wxLogNull nolog;
   wxRegKey key(wxRegKey::HKCR, strKey);
-  if ( key.IsOpened() ) {
+  if ( key.Open() ) {
     if ( key.QueryValue("Extension", *pExt) )
       return TRUE;
   }
@@ -827,7 +829,7 @@ bool GetMimeTypeFromExtension(wxString *pMimeType, const wxString& strExt)
   // suppress possible error messages
   wxLogNull nolog;
   wxRegKey key(wxRegKey::HKCR, str);
-  if ( key.IsOpened() ) {
+  if ( key.Open() ) {
     if ( key.QueryValue("Content Type", *pMimeType) )
       return TRUE;
   }
@@ -850,11 +852,74 @@ bool GetFileTypeFromExtension(wxString *pFileType, const wxString& strExt)
   // suppress possible error messages
   wxLogNull nolog;
   wxRegKey key(wxRegKey::HKCR, str);
-  if ( key.IsOpened() ) {
+  if ( key.Open() ) {
     if ( key.QueryValue("", *pFileType) )  // it's the default value of the key
       return TRUE;
   }
 
   // no such extension or no value
+  return FALSE;
+}
+
+bool GetFileTypeIcon(wxIcon *pIcon, const wxString& strFileType)
+{
+  wxCHECK( !strFileType.IsEmpty(), FALSE );
+
+  wxString strIconKey;
+  strIconKey << strFileType << REG_SEPARATOR << "DefaultIcon";
+
+  // suppress possible error messages
+  wxLogNull nolog;
+  wxRegKey key(wxRegKey::HKCR, strIconKey);
+
+  if ( key.Open() ) {
+    wxString strIcon;
+    if ( key.QueryValue("", strIcon) ) { // it's the default value of the key
+      // the format is the following: <full path to file>, <icon index>
+      // NB: icon index may be negative as well as positive and the full path
+      //     may contain the environment variables inside '%'
+      wxString strFullPath = strIcon.Before(','),
+               strIndex = strIcon.After(',');
+
+      // unless I misunderstand the format (may be index may be ommited, I
+      // don't know)
+      wxASSERT( !(strFullPath.IsEmpty() || strIndex.IsEmpty()) );
+
+      wxString strExpPath = wxExpandEnvVars(strFullPath);
+      int nIndex = atoi(strIndex);
+
+      HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
+      switch ( (int)hIcon ) {
+        case 0: // means no icons were found
+        case 1: // means no such file or it wasn't a DLL/EXE/OCX/ICO/...
+          wxLogDebug("incorrect registry entry '%s': no such icon.",
+                     GetFullName(&key));
+          break;
+
+        default:
+          pIcon->SetHICON((WXHICON)hIcon);
+          return TRUE;
+      }
+    }
+  }
+
+  // no such file type or no value or incorrect icon entry
+  return FALSE;
+}
+
+bool GetFileTypeDescription(wxString *pDesc, const wxString& strFileType)
+{
+  wxCHECK( !strFileType.IsEmpty(), FALSE );
+
+  // suppress possible error messages
+  wxLogNull nolog;
+  wxRegKey key(wxRegKey::HKCR, strFileType);
+
+  if ( key.Open() ) {
+    if ( key.QueryValue("", *pDesc) )  // it's the default value of the key
+      return TRUE;
+  }
+
+  // no such file type or no value
   return FALSE;
 }
