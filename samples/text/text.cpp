@@ -624,6 +624,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( "Prepended. " );
+    m_multitext->SetForegroundColour(*wxRED);
+    m_multitext->SetBackgroundColour(*wxLIGHT_GREY);
 
 #if wxUSE_TOOLTIPS
     m_multitext->SetToolTip("Press F1 here for statitics, F4 for capture and uncapture mouse.");
@@ -644,6 +646,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
+    m_textrich->SetForegroundColour(wxColour(0, 255, 255));
+    m_textrich->SetBackgroundColour(*wxBLUE);
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
