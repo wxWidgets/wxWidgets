@@ -1,6 +1,9 @@
 #ifndef _WX_PALETTE_H_BASE_
 #define _WX_PALETTE_H_BASE_
 
+// include it to get wxUSE_PALETTE value
+#include "wx/setup.h"
+
 #if wxUSE_PALETTE
 
 #if defined(__WXMSW__)
