@@ -2774,8 +2774,8 @@ public:
     //
     //      bold                    turns on bold
     //      italic                  turns on italics
-    //      fore:#RRGGBB            sets the foreground colour
-    //      back:#RRGGBB            sets the background colour
+    //      fore:[name or #RRGGBB]  sets the foreground colour
+    //      back:[name or #RRGGBB]  sets the background colour
     //      face:[facename]         sets the font face name to use
     //      size:[num]              sets the font size in points
     //      eol                     turns on eol filling

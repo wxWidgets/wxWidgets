@@ -52,13 +52,18 @@ static wxColour wxColourFromLong(long c) {
 
 
 static wxColour wxColourFromSpec(const wxString& spec) {
-    // spec should be "#RRGGBB"
-    long red, green, blue;
-    red = green = blue = 0;
-    spec.Mid(1,2).ToLong(&red,   16);
-    spec.Mid(3,2).ToLong(&green, 16);
-    spec.Mid(5,2).ToLong(&blue,  16);
-    return wxColour(red, green, blue);
+    // spec should be a colour name or "#RRGGBB"
+    if (spec.GetChar(0) == wxT('#')) {
+        
+        long red, green, blue;
+        red = green = blue = 0;
+        spec.Mid(1,2).ToLong(&red,   16);
+        spec.Mid(3,2).ToLong(&green, 16);
+        spec.Mid(5,2).ToLong(&blue,  16);
+        return wxColour(red, green, blue);
+    }
+    else
+        return wxColour(spec);
 }
 
 //----------------------------------------------------------------------
@@ -2436,8 +2441,8 @@ int wxStyledTextCtrl::GetCurrentLine() {
 //
 //      bold                    turns on bold
 //      italic                  turns on italics
-//      fore:#RRGGBB            sets the foreground colour
-//      back:#RRGGBB            sets the background colour
+//      fore:[name or #RRGGBB]  sets the foreground colour
+//      back:[name or #RRGGBB]  sets the background colour
 //      face:[facename]         sets the font face name to use
 //      size:[num]              sets the font size in points
 //      eol                     turns on eol filling
