@@ -31,7 +31,8 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - (most) controls now inherit parents colours by default, override
   ShouldInheritColours() to return false if you don't want this to happen
 - wxApp::SendIdleEvent() now takes 2 arguments
-
+- wxTabView::GetLayers() changed return type from wxList& to wxTabLayerList&
+  (when WXWIN_COMPATIBILITY_2_4 == 0)
 
 
 DEPRECATED METHODS SINCE 2.4.x
@@ -57,6 +58,9 @@ versions, please update your code to not use them.
              SetTransparent() as well as wxNO_3D and wxUSER_COLOURS styles
 - wxList keyed interface: use wxHashMap instead
 - wxColourDatabase::FindColour(): use Find() instead (NB: different ret type)
+- wxHashTable::Next: use wxHashTable::Node* or
+                     wxHashTable::compatibility_iterator to store the return
+                     value
 
 
 OTHER CHANGES
