@@ -33,6 +33,7 @@
     #endif // wxUSE_LOG
 #endif //WX_PRECOMP
 
+#include "wx/utils.h"
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
@@ -753,7 +754,7 @@ void ShowAssertDialog(const wxChar *szFile,
     if ( !s_bNoAsserts )
     {
         // send it to the normal log destination
-        wxLogDebug(_T("%s"), msg);
+        wxLogDebug(_T("%s"), msg.c_str());
 
         if ( traits )
         {
