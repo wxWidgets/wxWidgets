@@ -294,9 +294,12 @@ or small icon view).
 
 \membersection{wxListCtrl::GetEditControl}\label{wxlistctrlgeteditcontrol}
 
-\constfunc{wxTextCtrl\&}{GetEditControl}{\void}
+\constfunc{wxTextCtrl *}{GetEditControl}{\void}
 
-Gets the edit control for editing labels.
+Returns the edit control being currently used to edit a label. Returns {\tt NULL}
+if no label is being edited.
+
+{\bf NB:} It is currently only implemented for wxMSW.
 
 \membersection{wxListCtrl::GetImageList}\label{wxlistctrlgetimagelist}
 

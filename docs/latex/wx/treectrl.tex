@@ -122,7 +122,7 @@ Constructor, creating and showing a tree control.
 
 \wxheading{Parameters}
 
-\docparam{parent}{Parent window. Must not be NULL.}
+\docparam{parent}{Parent window. Must not be {\tt NULL}.}
 
 \docparam{id}{Window identifier. A value of -1 indicates a default value.}
 
@@ -150,7 +150,7 @@ Destructor, destroying the list control.
 \membersection{wxTreeCtrl::AddRoot}\label{wxtreectrladdroot}
 
 \func{wxTreeItemId}{AddRoot}{\param{const wxString\&}{ text},
- \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = {\tt NULL}}}
 
 Adds the root node to the tree, returning the new item.
 
@@ -163,7 +163,7 @@ both selected and unselected items.
 \membersection{wxTreeCtrl::AppendItem}\label{wxtreectrlappenditem}
 
 \func{wxTreeItemId}{AppendItem}{\param{const wxTreeItemId\& }{parent}, \param{const wxString\&}{ text},
- \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = {\tt NULL}}}
 
 Appends an item to the end of the branch identified by {\it parent}, return a new item id.
 
@@ -183,7 +183,7 @@ be automatically deleted by wxTreeCtrl as appropriate
 
 Setting or assigning the button image list enables the display of image buttons.
 Once enabled, the only way to disable the display of button images is to set
-the button image list to NULL.
+the button image list to {\tt NULL}.
 
 This function is only available in the generic version.
 
@@ -273,7 +273,7 @@ will be sent which can be vetoed as well.
 
 \func{void}{EndEditLabel}{\param{bool }{cancelEdit}}
 
-Ends label editing. If {\it cancelEdit} is TRUE, the edit will be cancelled.
+Ends label editing. If {\it cancelEdit} is {\tt TRUE}, the edit will be cancelled.
 
 This function is currently supported under Windows only.
 
@@ -295,13 +295,13 @@ Expands the given item.
 
 \membersection{wxTreeCtrl::GetBoundingRect}\label{wxtreectrlgetitemrect}
 
-\constfunc{bool}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = FALSE}}
+\constfunc{bool}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = {\tt FALSE}}}
 
-Retrieves the rectangle bounding the {\it item}. If {\it textOnly} is TRUE,
+Retrieves the rectangle bounding the {\it item}. If {\it textOnly} is {\tt TRUE},
 only the rectangle around the item's label will be returned, otherwise the
 item's image is also taken into account.
 
-The return value is TRUE if the rectangle was successfully retrieved or FALSE
+The return value is {\tt TRUE} if the rectangle was successfully retrieved or {\tt FALSE}
 if it was not (in this case {\it rect} is not changed) - for example, if the
 item is currently invisible.
 
@@ -322,9 +322,9 @@ This function is only available in the generic version.
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
-\constfunc{size\_t}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = TRUE}}
+\constfunc{size\_t}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = {\tt TRUE}}}
 
-Returns the number of items in the branch. If {\it recursively} is TRUE, returns the total number
+Returns the number of items in the branch. If {\it recursively} is {\tt TRUE}, returns the total number
 of descendants, otherwise only one level of children is counted.
 
 \membersection{wxTreeCtrl::GetCount}\label{wxtreectrlgetcount}
@@ -335,9 +335,12 @@ Returns the number of items in the control.
 
 \membersection{wxTreeCtrl::GetEditControl}\label{wxtreectrlgeteditcontrol}
 
-\constfunc{wxTextCtrl\&}{GetEditControl}{\void}
+\constfunc{wxTextCtrl *}{GetEditControl}{\void}
 
-Returns the edit control used to edit a label.
+Returns the edit control being currently used to edit a label. Returns {\tt NULL}
+if no label is being edited.
+
+{\bf NB:} It is currently only implemented for wxMSW.
 
 \membersection{wxTreeCtrl::GetFirstChild}\label{wxtreectrlgetfirstchild}
 
@@ -606,10 +609,10 @@ returned as a tuple.}
 \membersection{wxTreeCtrl::InsertItem}\label{wxtreectrlinsertitem}
 
 \func{wxTreeItemId}{InsertItem}{\param{const wxTreeItemId\& }{parent}, \param{const wxTreeItemId\& }{previous}, \param{const wxString\&}{ text},
- \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = {\tt NULL}}}
 
 \func{wxTreeItemId}{InsertItem}{\param{const wxTreeItemId\& }{parent}, \param{size\_t}{ before}, \param{const wxString\&}{ text},
- \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = {\tt NULL}}}
 
 Inserts an item after a given one ({\it previous}) or before one identified by its position ({\it before}).
 
@@ -626,7 +629,7 @@ both selected and unselected items.
 
 \constfunc{bool}{IsBold}{\param{const wxTreeItemId\& }{item}}
 
-Returns TRUE if the given item is in bold state.
+Returns {\tt TRUE} if the given item is in bold state.
 
 See also: \helpref{SetItemBold}{wxtreectrlsetitembold}
 
@@ -634,25 +637,25 @@ See also: \helpref{SetItemBold}{wxtreectrlsetitembold}
 
 \constfunc{bool}{IsExpanded}{\param{const wxTreeItemId\&}{ item}}
 
-Returns TRUE if the item is expanded (only makes sense if it has children).
+Returns {\tt TRUE} if the item is expanded (only makes sense if it has children).
 
 \membersection{wxTreeCtrl::IsSelected}\label{wxtreectrlisselected}
 
 \constfunc{bool}{IsSelected}{\param{const wxTreeItemId\&}{ item}}
 
-Returns TRUE if the item is selected.
+Returns {\tt TRUE} if the item is selected.
 
 \membersection{wxTreeCtrl::IsVisible}\label{wxtreectrlisvisible}
 
 \constfunc{bool}{IsVisible}{\param{const wxTreeItemId\&}{ item}}
 
-Returns TRUE if the item is visible (it might be outside the view, or not expanded).
+Returns {\tt TRUE} if the item is visible (it might be outside the view, or not expanded).
 
 \membersection{wxTreeCtrl::ItemHasChildren}\label{wxtreectrlitemhaschildren}
 
 \constfunc{bool}{ItemHasChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Returns TRUE if the item has children.
+Returns {\tt TRUE} if the item has children.
 
 \membersection{wxTreeCtrl::OnCompareItems}\label{wxtreectrloncompareitems}
 
@@ -670,7 +673,7 @@ See also: \helpref{SortChildren}{wxtreectrlsortchildren}
 \membersection{wxTreeCtrl::PrependItem}\label{wxtreectrlprependitem}
 
 \func{wxTreeItemId}{PrependItem}{\param{const wxTreeItemId\& }{parent}, \param{const wxString\&}{ text},
- \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
+ \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = {\tt NULL}}}
 
 Appends an item as the first child of {\it parent}, return a new item id.
 
@@ -702,7 +705,7 @@ The button images assigned with this method will
 
 Setting or assigning the button image list enables the display of image buttons.
 Once enabled, the only way to disable the display of button images is to set
-the button image list to NULL.
+the button image list to {\tt NULL}.
 
 This function is only available in the generic version.
 
@@ -732,9 +735,9 @@ Sets the colour of the item's background.
 
 \membersection{wxTreeCtrl::SetItemBold}\label{wxtreectrlsetitembold}
 
-\func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = TRUE}}
+\func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = {\tt TRUE}}}
 
-Makes item appear in bold font if {\it bold} parameter is TRUE or resets it to
+Makes item appear in bold font if {\it bold} parameter is {\tt TRUE} or resets it to
 the normal state.
 
 See also: \helpref{IsBold}{wxtreectrlisbold}
@@ -775,7 +778,7 @@ although font attributes may vary.
 
 \membersection{wxTreeCtrl::SetItemHasChildren}\label{wxtreectrlsetitemhaschildren}
 
-\func{void}{SetItemHasChildren}{\param{const wxTreeItemId\&}{ item}, \param{bool }{hasChildren = TRUE}}
+\func{void}{SetItemHasChildren}{\param{const wxTreeItemId\&}{ item}, \param{bool }{hasChildren = {\tt TRUE}}}
 
 Force appearance of the button next to the item. This is useful to
 allow the user to expand the items which don't have any children now,
