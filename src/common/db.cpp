@@ -596,6 +596,8 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
         else
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
+#else
+        wxUnusedVar( retcode );
 #endif
     }
 
@@ -798,6 +800,8 @@ bool wxDb::Open(wxDb *copyDb)
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
         else
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
+#else
+        wxUnusedVar( retcode );
 #endif
     }
 
@@ -2194,7 +2198,6 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     /*  primary keys in other tables that are referred to by foreign       */
     /*  keys in the tableName table.                                       */
     /*---------------------------------------------------------------------*/
-    i = 0;
     while ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO))
     {
         retcode = SQLFetch(hstmt);
@@ -3012,7 +3015,6 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
  *       to avoid undesired unbinding of columns.
  */
 {
-    wxDbInf *pDbInf = NULL; // Array of catalog entries
     int      noTab = 0;     // Counter while filling table entries
     int      pass;
     RETCODE  retcode;
@@ -3023,7 +3025,10 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
     convertUserID(userID,UserID);
 
     //-------------------------------------------------------------
-    pDbInf = new wxDbInf;          // Create the Database Array
+    // Create the Database Array of catalog entries
+
+    wxDbInf *pDbInf = new wxDbInf;
+
     //-------------------------------------------------------------
     // Table Information
     // Pass 1 - Determine how many Tables there are.
@@ -3801,7 +3806,7 @@ wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnly
 
     pList->PtrDb = new wxDb(pDbConfig->GetHenv(), FwdOnlyCursors);
 
-    bool opened = FALSE;
+    bool opened;
 
     if (!matchingDbConnection)
         opened = pList->PtrDb->Open(pDbConfig->GetDsn(), pDbConfig->GetUserID(), pDbConfig->GetPassword());
