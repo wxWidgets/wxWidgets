@@ -67,7 +67,7 @@ void  wxSTCDropTarget::OnLeave() {
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
 #define wxSTCCallTipBase wxWindow
-#define param2 -1 // wxWindows 2nd param is ID
+#define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
 class wxSTCCallTip : public wxSTCCallTipBase {
@@ -438,9 +438,9 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
       switch (iMessage) {
       case SCI_CALLTIPSHOW: {
           // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
-          // because of the little tweak that needs done below.  When updating
-          // new versions double check that this is still needed, and that any
-          // new code there is copied here too.
+          // because of the little tweak that needs done below for wxGTK.
+          // When updating new versions double check that this is still
+          // needed, and that any new code there is copied here too.
           AutoCompleteCancel();
           if (!ct.wCallTip.Created()) {
               Point pt = LocationFromPosition(wParam);
@@ -470,20 +470,6 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
           break;
       }
 
-      case SCI_SETCARETWIDTH:
-          // NOTE: Allows a caet width of zero.  This one has been added to
-          // Scintilla CVS so it can be removed from here when we update to
-          // version 1.50.
-          if (wParam <= 0)
-              vs.caretWidth = 0;
-          else if (wParam >= 3)
-              vs.caretWidth = 3;
-          else
-              vs.caretWidth = wParam;
-          InvalidateStyleRedraw();
-          break;
-
-
       default:
           return ScintillaBase::WndProc(iMessage, wParam, lParam);
       }
@@ -500,21 +486,21 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
     paintState = painting;
     Surface* surfaceWindow = Surface::Allocate();
     surfaceWindow->Init(dc);
-    PRectangle rcPaint = PRectangleFromwxRect(rect);
+    rcPaint = PRectangleFromwxRect(rect);
+    PRectangle rcClient = GetClientRectangle();
+    paintingAllText = rcPaint.Contains(rcClient);
+
     dc->BeginDrawing();
+    ClipChildren(*dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
     dc->EndDrawing();
+
     delete surfaceWindow;
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace highlight positions
         FullPaint();
     }
     paintState = notPainting;
-#ifdef __WXGTK__
-    // On wxGTK the editor window paints can overwrite the listbox...
-    if (ac.Active())
-        ((wxWindow*)ac.lb.GetID())->Refresh(TRUE);
-#endif
 }
 
 
@@ -791,16 +777,18 @@ void ScintillaWX::DoDragLeave() {
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaWX::FullPaint() {
     paintState = painting;
-    rcPaint = GetTextRectangle();
+    rcPaint = GetClientRectangle();
     paintingAllText = true;
     wxClientDC dc(stc);
     Surface* surfaceWindow = Surface::Allocate();
     surfaceWindow->Init(&dc);
+
+    dc.BeginDrawing();
+    ClipChildren(dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
+    dc.EndDrawing();
+
     delete surfaceWindow;
-
-//     stc->Refresh(FALSE);
-
     paintState = notPainting;
 }
 
@@ -814,6 +802,21 @@ void ScintillaWX::DoScrollToColumn(int column) {
     HorizontalScrollTo(column * vs.spaceWidth);
 }
 
+void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
+#ifdef __WXGTK__
+    wxRegion rgn(wxRectFromPRectangle(rect));
+    if (ac.Active()) {
+        wxRect childRect = ((wxWindow*)ac.lb->GetID())->GetRect();
+        rgn.Subtract(childRect);
+    }
+    if (ct.inCallTipMode) {
+        wxRect childRect = ((wxWindow*)ct.wCallTip.GetID())->GetRect();
+        rgn.Subtract(childRect);
+    }
+
+    dc.SetClippingRegion(rgn);
+#endif
+}
 
 
 //----------------------------------------------------------------------
