@@ -44,7 +44,7 @@ class wxHtmlListmarkCell : public wxHtmlCell
     public:
         wxHtmlListmarkCell(wxDC *dc, const wxColour& clr);
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                  wxHtmlRenderingState& state);
+                  wxHtmlRenderingInfo& info);
 };
 
 wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxSOLID)
@@ -58,7 +58,7 @@ wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCe
 
 void wxHtmlListmarkCell::Draw(wxDC& dc, int x, int y,
                               int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                              wxHtmlRenderingState& WXUNUSED(state))
+                              wxHtmlRenderingInfo& WXUNUSED(info))
 {
     dc.SetBrush(m_Brush);
     dc.DrawEllipse(x + m_PosX + m_Width / 3, y + m_PosY + m_Height / 3, 

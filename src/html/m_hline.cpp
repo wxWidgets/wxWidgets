@@ -43,7 +43,7 @@ class wxHtmlLineCell : public wxHtmlCell
     public:
         wxHtmlLineCell(int size, bool shading) : wxHtmlCell() {m_Height = size; m_HasShading = shading;}
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                  wxHtmlRenderingState& state);
+                  wxHtmlRenderingInfo& info);
         void Layout(int w)
             { m_Width = w; wxHtmlCell::Layout(w); }
 
@@ -55,7 +55,7 @@ class wxHtmlLineCell : public wxHtmlCell
 
 void wxHtmlLineCell::Draw(wxDC& dc, int x, int y,
                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                          wxHtmlRenderingState& WXUNUSED(state))
+                          wxHtmlRenderingInfo& WXUNUSED(info))
 {
     wxBrush mybrush(wxT("GREY"), (m_HasShading) ? wxTRANSPARENT : wxSOLID);
     wxPen mypen(wxT("GREY"), 1, wxSOLID);

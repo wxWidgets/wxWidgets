@@ -70,7 +70,7 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingState& WXUNUSED(state)) {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) {}
 };
 
 
@@ -246,7 +246,7 @@ class wxHtmlImageMapCell : public wxHtmlCell
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingState& WXUNUSED(state)) {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) {}
 };
 
 
@@ -291,7 +291,7 @@ public:
                     const wxString& mapname = wxEmptyString);
     ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-              wxHtmlRenderingState& state);
+              wxHtmlRenderingInfo& info);
     virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const;
 
     void SetImage(const wxImage& img);
@@ -530,7 +530,7 @@ wxHtmlImageCell::~wxHtmlImageCell()
 
 void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
                            int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                           wxHtmlRenderingState& WXUNUSED(state))
+                           wxHtmlRenderingInfo& WXUNUSED(info))
 {
     if ( m_showFrame )
     {
