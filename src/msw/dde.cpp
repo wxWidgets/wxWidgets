@@ -194,8 +194,10 @@ extern void wxDDEInitialize()
 
 void wxDDECleanUp()
 {
-    WX_CLEAR_LIST(wxDDEClientList, wxDDEClientObjects);
-    WX_CLEAR_LIST(wxDDEServerList, wxDDEServerObjects);
+    // deleting them later won't work as DDE won't be initialized any more
+    wxASSERT_MSG( wxDDEServerObjects.empty() &&
+                    wxDDEClientObjects.empty(),
+                    _T("all DDE objects should be deleted by now") );
 
     wxAtomTable.clear();
 
