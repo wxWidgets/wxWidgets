@@ -676,6 +676,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
 	cp $(SAMPDIR)/listctrl/bitmaps/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
 
+	mkdir $(DISTDIR)/samples/mediaplayer
+	cp $(SAMPDIR)/mediaplayer/Makefile.in $(DISTDIR)/samples/mediaplayer
+	cp $(SAMPDIR)/mediaplayer/*.cpp $(DISTDIR)/samples/mediaplayer
+
 	mkdir $(DISTDIR)/samples/mdi
 	mkdir $(DISTDIR)/samples/mdi/bitmaps
 	cp $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
@@ -762,6 +766,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/png/*.cpp $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.h $(DISTDIR)/samples/png
 	cp $(SAMPDIR)/png/*.png $(DISTDIR)/samples/png
+
+	mkdir $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/Makefile.in $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/makefile.unx $(DISTDIR)/samples/popup
+	cp $(SAMPDIR)/popup/*.cpp $(DISTDIR)/samples/popup
 
 	mkdir $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
@@ -906,6 +915,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
 
+	mkdir $(DISTDIR)/samples/vscroll
+	cp $(SAMPDIR)/vscroll/Makefile.in $(DISTDIR)/samples/vscroll
+	cp $(SAMPDIR)/vscroll/*.cpp $(DISTDIR)/samples/vscroll
+
 	mkdir $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/makefile.unx $(DISTDIR)/samples/wizard
@@ -919,6 +932,17 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
 	cp $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
 	cp $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
+
+	mkdir $(DISTDIR)/samples/xrc
+	mkdir $(DISTDIR)/samples/xrc/rc
+	cp $(SAMPDIR)/xrc/Makefile.in $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.cpp $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.h $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/*.rc $(DISTDIR)/samples/xrc
+	cp $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/widgets/rc
+	cp $(SAMPDIR)/xrc/rc/*.ico $(DISTDIR)/samples/widgets/rc
 
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
