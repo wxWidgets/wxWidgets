@@ -98,6 +98,7 @@ NONESSENTIALOBJS= \
 COMMONOBJS = \
   ..\common\$D\cmndata.obj \
   ..\common\$D\config.obj \
+  ..\common\$D\dcbase.obj \
   ..\common\$D\db.obj \
   ..\common\$D\dbtable.obj \
   ..\common\$D\docview.obj \

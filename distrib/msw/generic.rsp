@@ -701,3 +701,27 @@ samples/scroll/*.png
 samples/scroll/*.ico
 samples/scroll/*.txt
 
+samples/caret/*.cpp
+samples/caret/*.h
+samples/caret/makefile*
+samples/caret/*.rc
+samples/caret/*.def
+samples/caret/*.bmp
+samples/caret/*.xpm
+samples/caret/*.xbm
+samples/caret/*.png
+samples/caret/*.ico
+samples/caret/*.txt
+
+samples/drawing/*.cpp
+samples/drawing/*.h
+samples/drawing/makefile*
+samples/drawing/*.rc
+samples/drawing/*.def
+samples/drawing/*.bmp
+samples/drawing/*.xpm
+samples/drawing/*.xbm
+samples/drawing/*.png
+samples/drawing/*.ico
+samples/drawing/*.txt
+

@@ -54,6 +54,7 @@ NONESSENTIALOBJS= \
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
   $(COMMDIR)\config.obj \
+  $(COMMDIR)\dcbase.obj \
   $(COMMDIR)\docview.obj \
   $(COMMDIR)\docmdi.obj \
   $(COMMDIR)\dynarray.obj \

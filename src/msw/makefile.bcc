@@ -97,6 +97,7 @@ GENERICOBJS= \
 COMMONOBJS = \
   $(MSWDIR)\config.obj \
   $(MSWDIR)\cmndata.obj \
+  $(MSWDIR)\dcbase.obj \
   $(MSWDIR)\docview.obj \
   $(MSWDIR)\docmdi.obj \
   $(MSWDIR)\dynarray.obj \
@@ -471,6 +472,8 @@ $(MSWDIR)\automtn.obj:     $(OLEDIR)\automtn.$(SRCSUFF)
 $(MSWDIR)\config.obj:     $(COMMDIR)\config.$(SRCSUFF)
 
 $(MSWDIR)\cmndata.obj:     $(COMMDIR)\cmndata.$(SRCSUFF)
+
+$(MSWDIR)\dcbase.obj:     $(COMMDIR)\dcbase.$(SRCSUFF)
 
 $(MSWDIR)\docview.obj:     $(COMMDIR)\docview.$(SRCSUFF)
 

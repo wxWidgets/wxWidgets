@@ -78,6 +78,7 @@ GENERICOBJS= \
 COMMONOBJS = \
   $(COMMDIR)/config.$(OBJSUFF) \
   $(COMMDIR)/cmndata.$(OBJSUFF) \
+  $(COMMDIR)/dcbase.$(OBJSUFF) \
   $(COMMDIR)/docview.$(OBJSUFF) \
   $(COMMDIR)/docmdi.$(OBJSUFF) \
   $(COMMDIR)/dynarray.$(OBJSUFF) \

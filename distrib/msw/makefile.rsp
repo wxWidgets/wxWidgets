@@ -76,6 +76,10 @@ samples/wxsocket/Makefile.in
 samples/wxsocket/Makefile
 samples/scroll/Makefile.in
 samples/scroll/Makefile
+samples/caret/Makefile.in
+samples/caret/Makefile
+samples/drawing/Makefile.in
+samples/drawing/Makefile
 src/Makefile.in
 src/Makefile
 utils/ogl/samples/ogledit/Makefile.in

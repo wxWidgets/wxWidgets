@@ -51,6 +51,7 @@ NONESSENTIALOBJS= printps.obj &
 
 COMMONOBJS = cmndata.obj &
   config.obj &
+  dcbase.obj &
   docview.obj &
   docmdi.obj &
   dynarray.obj &
@@ -522,6 +523,9 @@ cmndata.obj:     $(COMMDIR)\cmndata.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 config.obj:     $(COMMDIR)\config.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+dcbase.obj:     $(COMMDIR)\dcbase.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 db.obj:     $(COMMDIR)\db.cpp
