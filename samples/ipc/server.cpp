@@ -57,7 +57,6 @@ END_EVENT_TABLE()
 // global variables
 // ----------------------------------------------------------------------------
 
-char ipc_buffer[4000];
 MyConnection *the_connection = NULL;
 
 // ============================================================================
@@ -134,6 +133,9 @@ void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
     if (listBox)
     {
         wxString value = listBox->GetStringSelection();
+
+        /* Because the_connection only holds one connection, in this sample only
+           one connection can receive advise messages */
         if (the_connection)
         {
             the_connection->Advise(IPC_ADVISE_NAME, (wxChar *)value.c_str());
@@ -161,6 +163,14 @@ IPCDialogBox::IPCDialogBox(wxWindow *parent, const wxString& title,
     Fit();
 }
 
+IPCDialogBox::~IPCDialogBox( )
+{
+    // wxWindows exit code destroys dialog before destroying the connection in
+    // OnExit, so make sure connection won't try to delete the dialog later.
+    if (m_connection)
+        m_connection->dialog = NULL;
+}
+
 void IPCDialogBox::OnQuit(wxCommandEvent& event)
 {
     m_connection->Disconnect();
@@ -174,7 +184,7 @@ void IPCDialogBox::OnQuit(wxCommandEvent& event)
 wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 {
     if ( topic == IPC_TOPIC )
-        return new MyConnection(ipc_buffer, WXSIZEOF(ipc_buffer));
+        return new MyConnection();
 
     // unknown topic
     return NULL;
@@ -184,8 +194,8 @@ wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 // MyConnection
 // ----------------------------------------------------------------------------
 
-MyConnection::MyConnection(char *buf, int size)
-            : wxConnection(buf, size)
+MyConnection::MyConnection()
+            : wxConnection()
 {
     dialog = new IPCDialogBox(wxTheApp->GetTopWindow(), "Connection",
                               wxPoint(100, 100), wxSize(500, 500), this);
@@ -197,7 +207,11 @@ MyConnection::~MyConnection()
 {
     if (the_connection)
     {
-        dialog->Destroy();
+        if (dialog)
+        {
+            dialog->m_connection = NULL;
+            dialog->Destroy();
+        }
         the_connection = NULL;
     }
 }

@@ -37,8 +37,6 @@ private:
 class MyConnection: public wxConnection
 {
 public:
-    MyConnection();
-
     bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
     bool OnDisconnect();
 };

@@ -49,6 +49,8 @@ wxBase:
   must modify YourApp::OnAssert() signature if you were using it to override
   the default assert handling.
 
+- IPC classes improved and memory leaks fixed (Michael Fielding).
+  Global buffer removed, duplication in docs removed.
 
 All (GUI):
 

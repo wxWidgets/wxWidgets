@@ -61,7 +61,7 @@ class WXDLLEXPORT wxTCPConnection: public wxConnectionBase
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
 
 public:
-  wxTCPConnection(char *buffer, int size);
+  wxTCPConnection(wxChar *buffer, int size);
   wxTCPConnection();
   virtual ~wxTCPConnection();
 

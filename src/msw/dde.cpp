@@ -133,8 +133,6 @@ static wxList wxAtomTable(wxKEY_STRING);
 static wxList wxDDEClientObjects;
 static wxList wxDDEServerObjects;
 
-char *DDEDefaultIPCBuffer = NULL;
-int DDEDefaultIPCBufferSize = 0;
 static bool DDEInitialized = FALSE;
 
 // ----------------------------------------------------------------------------
@@ -198,8 +196,6 @@ void wxDDECleanUp()
         DdeUninitialize(DDEIdInst);
         DDEIdInst = 0;
     }
-
-    delete [] DDEDefaultIPCBuffer;
 }
 
 // ----------------------------------------------------------------------------
@@ -314,6 +310,7 @@ wxDDEServer::~wxDDEServer()
     {
         wxDDEConnection *connection = (wxDDEConnection *)node->Data();
         wxNode *next = node->Next();
+        connection->SetConnected(false);
         connection->OnDisconnect(); // May delete the node implicitly
         node = next;
     }
@@ -463,20 +460,8 @@ bool wxDDEClient::DeleteConnection(WXHCONV conv)
 // ----------------------------------------------------------------------------
 
 wxDDEConnection::wxDDEConnection(char *buffer, int size)
+     : wxConnectionBase(buffer, size)
 {
-    if (buffer == NULL)
-    {
-        if (DDEDefaultIPCBuffer == NULL)
-            DDEDefaultIPCBuffer = new char[DDEDefaultIPCBufferSize];
-        m_bufPtr = DDEDefaultIPCBuffer;
-        m_bufSize = DDEDefaultIPCBufferSize;
-    }
-    else
-    {
-        m_bufPtr = buffer;
-        m_bufSize = size;
-    }
-
     m_client = NULL;
     m_server = NULL;
 
@@ -485,20 +470,17 @@ wxDDEConnection::wxDDEConnection(char *buffer, int size)
 }
 
 wxDDEConnection::wxDDEConnection()
+     : wxConnectionBase()
 {
     m_hConv = 0;
     m_sendingData = NULL;
     m_server = NULL;
     m_client = NULL;
-    if (DDEDefaultIPCBuffer == NULL)
-        DDEDefaultIPCBuffer = new char[DDEDefaultIPCBufferSize];
-
-    m_bufPtr = DDEDefaultIPCBuffer;
-    m_bufSize = DDEDefaultIPCBufferSize;
 }
 
 wxDDEConnection::~wxDDEConnection()
 {
+    Disconnect();
     if (m_server)
         m_server->GetConnections().DeleteObject(this);
     else
@@ -508,6 +490,9 @@ wxDDEConnection::~wxDDEConnection()
 // Calls that CLIENT can make
 bool wxDDEConnection::Disconnect()
 {
+    if ( !GetConnected() )
+        return true;
+
     DDEDeleteConnection(GetHConv());
 
     bool ok = DdeDisconnect(GetHConv()) != 0;
@@ -515,6 +500,8 @@ bool wxDDEConnection::Disconnect()
     {
         DDELogError(_T("Failed to disconnect from DDE server gracefully"));
     }
+
+    SetConnected( false );  // so we don't try and disconnect again
 
     return ok;
 }
@@ -546,6 +533,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
 char *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat format)
 {
     DWORD result;
+
     HSZ atom = DDEGetAtom(item);
 
     HDDEDATA returned_data = DdeClientTransaction(NULL, 0,
@@ -561,14 +549,19 @@ char *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat form
         return NULL;
     }
 
-    DWORD len = DdeGetData(returned_data, (LPBYTE)m_bufPtr, m_bufSize, 0);
+    DWORD len = DdeGetData(returned_data, NULL, 0, 0);
+
+    wxChar *data = GetBufferAtLeast( len );
+    wxASSERT_MSG(data != NULL,
+                 _T("Buffer too small in wxDDEConnection::Request") );
+    DdeGetData(returned_data, (LPBYTE)data, len, 0);
 
     DdeFreeDataHandle(returned_data);
 
     if (size)
         *size = (int)len;
 
-    return m_bufPtr;
+    return data;
 }
 
 bool wxDDEConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFormat format)
@@ -645,7 +638,7 @@ bool wxDDEConnection::Advise(const wxString& item,
 
     HSZ item_atom = DDEGetAtom(item);
     HSZ topic_atom = DDEGetAtom(m_topicName);
-    m_sendingData = data;
+    m_sendingData = data;  // mrf: potential for scope problems here?
     m_dataSize = size;
     m_dataType = format;
 
@@ -718,10 +711,14 @@ _DDECallback(WORD wType,
         case XTYP_DISCONNECT:
             {
                 wxDDEConnection *connection = DDEFindConnection(hConv);
-                if (connection && connection->OnDisconnect())
+                if (connection)
                 {
-                    DDEDeleteConnection(hConv);  // Delete mapping: hConv => connection
-                    return (DDERETURN)(DWORD)TRUE;
+                    connection->SetConnected( false );
+                    if (connection->OnDisconnect())
+                    {
+                        DDEDeleteConnection(hConv);  // Delete mapping: hConv => connection
+                        return (DDERETURN)(DWORD)TRUE;
+                    }
                 }
                 break;
             }
@@ -732,13 +729,18 @@ _DDECallback(WORD wType,
 
                 if (connection)
                 {
-                    DWORD len = DdeGetData(hData,
-                                           (LPBYTE)connection->m_bufPtr,
-                                           connection->m_bufSize,
-                                           0);
+                    DWORD len = DdeGetData(hData, NULL, 0, 0);
+
+                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxASSERT_MSG(data != NULL,
+                                 _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
+
+                    DdeGetData(hData, (LPBYTE)data, len, 0);
+
                     DdeFreeDataHandle(hData);
+
                     if ( connection->OnExecute(connection->m_topicName,
-                                               connection->m_bufPtr,
+                                               data,
                                                (int)len,
                                                (wxIPCFormat) wFmt) )
                     {
@@ -788,15 +790,19 @@ _DDECallback(WORD wType,
                 {
                     wxString item_name = DDEStringFromAtom(hsz2);
 
-                    DWORD len = DdeGetData(hData,
-                                           (LPBYTE)connection->m_bufPtr,
-                                           connection->m_bufSize,
-                                           0);
+                    DWORD len = DdeGetData(hData, NULL, 0, 0);
+
+                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxASSERT_MSG(data != NULL,
+                                 _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
+
+                    DdeGetData(hData, (LPBYTE)data, len, 0);
+
                     DdeFreeDataHandle(hData);
 
                     connection->OnPoke(connection->m_topicName,
                                        item_name,
-                                       (wxChar*)connection->m_bufPtr,
+                                       data,
                                        (int)len,
                                        (wxIPCFormat) wFmt);
 
@@ -871,14 +877,18 @@ _DDECallback(WORD wType,
                 {
                     wxString item_name = DDEStringFromAtom(hsz2);
 
-                    DWORD len = DdeGetData(hData,
-                                           (LPBYTE)connection->m_bufPtr,
-                                           connection->m_bufSize,
-                                           0);
+                    DWORD len = DdeGetData(hData, NULL, 0, 0);
+
+                    wxChar *data = connection->GetBufferAtLeast( len );
+                    wxASSERT_MSG(data != NULL,
+                                 _T("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
+
+                    DdeGetData(hData, (LPBYTE)data, len, 0);
+
                     DdeFreeDataHandle(hData);
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
-                                              connection->m_bufPtr,
+                                              data,
                                               (int)len,
                                               (wxIPCFormat) wFmt) )
                     {

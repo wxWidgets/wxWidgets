@@ -30,7 +30,6 @@
 
 // Settings common to both executables: determines whether
 // we're using TCP/IP or real DDE.
-
 #include "ddesetup.h"
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
@@ -56,7 +55,6 @@ END_EVENT_TABLE()
 // globals
 // ----------------------------------------------------------------------------
 
-char ipc_buffer[4000];
 wxListBox *the_list = NULL;
 
 MyConnection *the_connection = NULL;
@@ -119,16 +117,11 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
-    if (the_connection)
-    {
-        the_connection->Disconnect();
-        delete the_connection;
-        the_connection = NULL;
-    }
-
     // will delete the connection too
     // Update: Seems it didn't delete the_connection, because there's a leak.
     // Deletion is now explicitly done a few lines up.
+    // another Update: in fact it's because OnDisconnect should delete it, but
+    // it wasn't
     delete my_client;
 
 
@@ -203,11 +196,6 @@ wxConnectionBase *MyClient::OnMakeConnection()
     return new MyConnection;
 }
 
-MyConnection::MyConnection()
-            : wxConnection(ipc_buffer, WXSIZEOF(ipc_buffer))
-{
-}
-
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)
 {
     if (the_list)
@@ -221,10 +209,13 @@ bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, char *d
 
 bool MyConnection::OnDisconnect()
 {
+    // when connection is terminated, quit whole program
     wxWindow *win = wxTheApp->GetTopWindow();
     if ( win )
         win->Destroy();
 
-    return TRUE;
+    // delete self
+    the_connection = NULL;
+    return wxConnection::OnDisconnect();
 }
 

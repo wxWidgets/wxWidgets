@@ -6,7 +6,7 @@
 // Created:     4/1/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IPCBASEH__
@@ -50,8 +50,13 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   DECLARE_CLASS(wxConnectionBase)
 
 public:
-  inline wxConnectionBase(void) {}
-  inline ~wxConnectionBase(void) {}
+  wxConnectionBase(wxChar *buffer, int size); // use external buffer
+  wxConnectionBase(); // use internal, adaptive buffer
+  wxConnectionBase(wxConnectionBase& copy);
+  ~wxConnectionBase(void);
+
+  void SetConnected( bool c ) { m_connected = c; }
+  bool GetConnected() { return m_connected; }
 
   // Calls that CLIENT can make
   virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
@@ -106,7 +111,19 @@ public:
   // Callbacks to BOTH - override at will
   // Default behaviour is to delete connection and return TRUE
   virtual bool OnDisconnect(void) = 0;
+
+  // return a buffer at least this size, reallocating buffer if needed
+  // returns NULL if using an inadequate user buffer - it can't be resized
+  wxChar *      GetBufferAtLeast( size_t bytes );
+
+protected:
+  bool          m_connected;
+private:
+  wxChar *      m_buffer;
+  size_t        m_buffersize;
+  bool          m_deletebufferwhendone;
 };
+
 
 class WXDLLEXPORT wxServerBase: public wxObject
 {

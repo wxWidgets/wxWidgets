@@ -211,7 +211,7 @@ An event object contains information about a specific event. Event handlers
 \twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{A drop files event}
 \twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{An erase background event}
 \twocolitem{\helpref{wxEvent}{wxevent}}{The event base class}
-\twocolitem{\helpref{wxFindDialogEvent}{wxfinddialogevent}}{Event sent by 
+\twocolitem{\helpref{wxFindDialogEvent}{wxfinddialogevent}}{Event sent by
 \helpref{wxFindReplaceDialog}{wxfindreplacedialog}}
 \twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{A window focus event}
 \twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{A keypress event}
@@ -366,17 +366,14 @@ wxWindows provides its own classes for socket based networking.
 
 \overview{Overview}{ipcoverview}
 
-wxWindows provides a simple interprocess communications facilities
-based on DDE.
+wxWindows provides simple interprocess communications facilities
+based on Windows DDE, but available on most platforms using TCP.
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxDDEClient}{wxddeclient}}{Represents a client}
-\twocolitem{\helpref{wxDDEConnection}{wxddeconnection}}{Represents the connection between a client and a server}
-\twocolitem{\helpref{wxDDEServer}{wxddeserver}}{Represents a server}
-\twocolitem{\helpref{wxTCPClient}{wxtcpclient}}{Represents a client}
-\twocolitem{\helpref{wxTCPConnection}{wxtcpconnection}}{Represents the connection between a client and a server}
-\twocolitem{\helpref{wxTCPServer}{wxtcpserver}}{Represents a server}
+\twocolitem{\helpref{wxClient}{wxddeclient}}{Represents a client}
+\twocolitem{\helpref{wxConnection}{wxddeconnection}}{Represents the connection between a client and a server}
+\twocolitem{\helpref{wxServer}{wxddeserver}}{Represents a server}
 %\twocolitem{\helpref{wxSocketHandler}{wxsockethandler}}{Represents a socket handler}
 \end{twocollist}
 
@@ -623,4 +620,3 @@ using any of them in new programs:
 \twocolitem{\helpref{wxQuantize}{wxquantize}}{Class to perform quantization, or colour reduction}
 \twocolitem{\helpref{wxSingleInstanceChecker}{wxsingleinstancechecker}}{Check that only single program instance is running}
 \end{twocollist}
-

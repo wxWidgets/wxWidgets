@@ -48,10 +48,12 @@ skipped.
 You can easily add runtime-translation capacity by placing each line of the 
 tips.txt file inside the usual translation macro. For example, your tips.txt 
 file would look like this:
+
 \begin{verbatim}
 _("This is my first tip")
 _("This is my second tip")
 \end{verbatim}
+
 Now add your tips.txt file into the list of files that gettext searches 
 for translatable strings. The tips will thus get included into your 
 generated .po file catalog and be translated at runtime along with the rest of 
@@ -64,3 +66,4 @@ a backslash-doublequote.
 
 See the dialogs program in your samples folder for a working example inside a 
 program.
+
