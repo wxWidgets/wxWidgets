@@ -76,6 +76,13 @@ void wxFrame::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+void wxFrame::SendSizeEvent()
+{    
+    wxSizeEvent event(GetSize(), GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+}
+
 #if wxUSE_MENUS
 
 void wxFrame::PositionMenuBar()
@@ -90,6 +97,18 @@ void wxFrame::PositionMenuBar()
     }
 }
 
+void wxFrame::DetachMenuBar()
+{
+    wxFrameBase::DetachMenuBar();
+    SendSizeEvent();
+}
+
+void wxFrame::AttachMenuBar(wxMenuBar *menubar)
+{
+    wxFrameBase::AttachMenuBar(menubar);
+    SendSizeEvent();
+}
+
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -102,6 +121,14 @@ void wxFrame::PositionStatusBar()
         m_frameStatusBar->SetSize(0, GetClientSize().y,
                                   GetClientSize().x, heightBar);
     }
+}
+
+wxStatusBar* wxFrame::CreateStatusBar(int number, long style,
+                                      wxWindowID id, const wxString& name)
+{
+    wxStatusBar *bar = wxFrameBase::CreateStatusBar(number, style, id, name);
+    SendSizeEvent();
+    return bar;
 }
 
 #endif // wxUSE_STATUSBAR

@@ -46,15 +46,28 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
     virtual bool Enable(bool enable = TRUE);
 
+#if wxUSE_STATUSBAR
+    virtual wxStatusBar* CreateStatusBar(int number = 1,
+                                         long style = wxST_SIZEGRIP,
+                                         wxWindowID id = 0,
+                                         const wxString& name = wxStatusLineNameStr);
+#endif // wxUSE_STATUSBAR
+
+
 protected:
     void OnSize(wxSizeEvent& event);
-
+    
+    // sends wxSizeEvent to itself (used after attaching xxxBar)
+    void SendSizeEvent();
+    
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
     virtual void PositionMenuBar();
+    virtual void DetachMenuBar();
+    virtual void AttachMenuBar(wxMenuBar *menubar);
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
