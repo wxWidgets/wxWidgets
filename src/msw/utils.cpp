@@ -1033,8 +1033,7 @@ void wxSleep(int nSecs)
 }
 
 #endif // wxUSE_GUI/!wxUSE_GUI
-#endif
-  // __WXMICROWIN__
+#endif // __WXMICROWIN__
 
 // ----------------------------------------------------------------------------
 // deprecated (in favour of wxLog) log functions
@@ -1227,7 +1226,7 @@ void wxEndBusyCursor()
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (gs_wxBusyCursorCount > 0);
+  return gs_wxBusyCursorCount > 0;
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
@@ -1283,7 +1282,7 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
 
     return s;
 }
-#endif
+#endif // __WXMICROWIN__
 
 // ----------------------------------------------------------------------------
 // get display info
@@ -1340,26 +1339,35 @@ void wxDisplaySize(int *width, int *height)
     HWND hWnd = GetDesktopWindow();
     ::GetWindowRect(hWnd, & rect);
 
-    *width = rect.right - rect.left;
-    *height = rect.bottom - rect.top;
-#else
+    if ( width )
+        *width = rect.right - rect.left;
+    if ( height )
+        *height = rect.bottom - rect.top;
+#else // !__WXMICROWIN__
     ScreenHDC dc;
 
-    if ( width ) *width = GetDeviceCaps(dc, HORZRES);
-    if ( height ) *height = GetDeviceCaps(dc, VERTRES);
-#endif
+    if ( width )
+        *width = ::GetDeviceCaps(dc, HORZRES);
+    if ( height )
+        *height = ::GetDeviceCaps(dc, VERTRES);
+#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
 #ifdef __WXMICROWIN__
     // MICROWIN_TODO
-    *width = 0; * height = 0;
+    if ( width )
+        *width = 0;
+    if ( height )
+        *height = 0;
 #else
     ScreenHDC dc;
 
-    if ( width ) *width = GetDeviceCaps(dc, HORZSIZE);
-    if ( height ) *height = GetDeviceCaps(dc, VERTSIZE);
+    if ( width )
+        *width = ::GetDeviceCaps(dc, HORZSIZE);
+    if ( height )
+        *height = ::GetDeviceCaps(dc, VERTSIZE);
 #endif
 }
 
@@ -1380,7 +1388,6 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     if (height) *height = r.bottom - r.top;
 #endif
 }
-
 
 // ---------------------------------------------------------------------------
 // window information functions
@@ -1481,229 +1488,6 @@ extern void HIMETRICToPixel(LONG *x, LONG *y)
 
 #endif // wxUSE_GUI
 
-#if 0
-//------------------------------------------------------------------------
-// wild character routines
-//------------------------------------------------------------------------
-
-bool wxIsWild( const wxString& pattern )
-{
-  wxString tmp = pattern;
-  char *pat = WXSTRINGCAST(tmp);
-    while (*pat) {
-  switch (*pat++) {
-  case '?': case '*': case '[': case '{':
-      return TRUE;
-  case '\\':
-      if (!*pat++)
-    return FALSE;
-  }
-    }
-    return FALSE;
-};
-
-
-bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
-{
-  wxString tmp1 = pat;
-  char *pattern = WXSTRINGCAST(tmp1);
-  wxString tmp2 = text;
-  char *str = WXSTRINGCAST(tmp2);
-    char c;
-    char *cp;
-    bool done = FALSE, ret_code, ok;
-    // Below is for vi fans
-    const char OB = '{', CB = '}';
-
-    // dot_special means '.' only matches '.'
-    if (dot_special && *str == '.' && *pattern != *str)
-  return FALSE;
-
-    while ((*pattern != '\0') && (!done)
-    && (((*str=='\0')&&((*pattern==OB)||(*pattern=='*')))||(*str!='\0'))) {
-  switch (*pattern) {
-  case '\\':
-      pattern++;
-      if (*pattern != '\0')
-    pattern++;
-      break;
-  case '*':
-      pattern++;
-      ret_code = FALSE;
-      while ((*str!='\0')
-      && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
-    /*loop*/;
-      if (ret_code) {
-    while (*str != '\0')
-        str++;
-    while (*pattern != '\0')
-        pattern++;
-      }
-      break;
-  case '[':
-      pattern++;
-    repeat:
-      if ((*pattern == '\0') || (*pattern == ']')) {
-    done = TRUE;
-    break;
-      }
-      if (*pattern == '\\') {
-    pattern++;
-    if (*pattern == '\0') {
-        done = TRUE;
-        break;
-    }
-      }
-      if (*(pattern + 1) == '-') {
-    c = *pattern;
-    pattern += 2;
-    if (*pattern == ']') {
-        done = TRUE;
-        break;
-    }
-    if (*pattern == '\\') {
-        pattern++;
-        if (*pattern == '\0') {
-      done = TRUE;
-      break;
-        }
-    }
-    if ((*str < c) || (*str > *pattern)) {
-        pattern++;
-        goto repeat;
-    }
-      } else if (*pattern != *str) {
-    pattern++;
-    goto repeat;
-      }
-      pattern++;
-      while ((*pattern != ']') && (*pattern != '\0')) {
-    if ((*pattern == '\\') && (*(pattern + 1) != '\0'))
-        pattern++;
-    pattern++;
-      }
-      if (*pattern != '\0') {
-    pattern++, str++;
-      }
-      break;
-  case '?':
-      pattern++;
-      str++;
-      break;
-  case OB:
-      pattern++;
-      while ((*pattern != CB) && (*pattern != '\0')) {
-    cp = str;
-    ok = TRUE;
-    while (ok && (*cp != '\0') && (*pattern != '\0')
-    &&  (*pattern != ',') && (*pattern != CB)) {
-        if (*pattern == '\\')
-      pattern++;
-        ok = (*pattern++ == *cp++);
-    }
-    if (*pattern == '\0') {
-        ok = FALSE;
-        done = TRUE;
-        break;
-    } else if (ok) {
-        str = cp;
-        while ((*pattern != CB) && (*pattern != '\0')) {
-      if (*++pattern == '\\') {
-          if (*++pattern == CB)
-        pattern++;
-      }
-        }
-    } else {
-        while (*pattern!=CB && *pattern!=',' && *pattern!='\0') {
-      if (*++pattern == '\\') {
-                            if (*++pattern == CB || *pattern == ',')
-        pattern++;
-      }
-        }
-    }
-    if (*pattern != '\0')
-        pattern++;
-      }
-      break;
-  default:
-      if (*str == *pattern) {
-    str++, pattern++;
-      } else {
-    done = TRUE;
-      }
-  }
-    }
-    while (*pattern == '*')
-  pattern++;
-    return ((*str == '\0') && (*pattern == '\0'));
-};
-
-#endif // 0
-
-#if 0
-
-// maximum mumber of lines the output console should have
-static const WORD MAX_CONSOLE_LINES = 500;
-
-BOOL WINAPI MyConsoleHandler( DWORD dwCtrlType ) {   //  control signal type
-  FreeConsole();
-  return TRUE;
-}
-
-void wxRedirectIOToConsole()
-{
-    int                        hConHandle;
-    long                       lStdHandle;
-    CONSOLE_SCREEN_BUFFER_INFO coninfo;
-    FILE                       *fp;
-
-    // allocate a console for this app
-    AllocConsole();
-
-    // set the screen buffer to be big enough to let us scroll text
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),
-                               &coninfo);
-    coninfo.dwSize.Y = MAX_CONSOLE_LINES;
-    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE),
-                               coninfo.dwSize);
-
-    // redirect unbuffered STDOUT to the console
-    lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    if(hConHandle <= 0) return;
-    fp = _fdopen( hConHandle, "w" );
-    *stdout = *fp;
-    setvbuf( stdout, NULL, _IONBF, 0 );
-
-    // redirect unbuffered STDIN to the console
-    lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    if(hConHandle <= 0) return;
-    fp = _fdopen( hConHandle, "r" );
-    *stdin = *fp;
-    setvbuf( stdin, NULL, _IONBF, 0 );
-
-    // redirect unbuffered STDERR to the console
-    lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    if(hConHandle <= 0) return;
-    fp = _fdopen( hConHandle, "w" );
-    *stderr = *fp;
-    setvbuf( stderr, NULL, _IONBF, 0 );
-
-    // make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
-    // point to console as well
-    ios::sync_with_stdio();
-
-    SetConsoleCtrlHandler(MyConsoleHandler, TRUE);
-}
-#else
-// Not supported
-void wxRedirectIOToConsole()
-{
-}
-#endif
-
 #ifdef __WXMICROWIN__
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
@@ -1712,5 +1496,101 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
     if (minorVsn) *minorVsn = 0;
     return wxUNIX;
 }
-#endif
+#endif // __WXMICROWIN__
+
+// ----------------------------------------------------------------------------
+// Win32 codepage conversion functions
+// ----------------------------------------------------------------------------
+
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+
+#if wxUSE_GUI
+
+#include "wx/fontmap.h"
+
+// VZ: the new version of wxCharsetToCodepage() is more politically correct
+//     and should work on other Windows versions as well but the old version is
+//     still needed for !wxUSE_FONTMAP || !wxUSE_GUI case
+
+extern long wxEncodingToCodepage(wxFontEncoding encoding)
+{
+    // translate encoding into the Windows CHARSET
+    wxNativeEncodingInfo natveEncInfo;
+    if ( !wxGetNativeFontEncoding(encoding, &natveEncInfo) )
+        return -1;
+
+    // translate CHARSET to code page
+    CHARSETINFO csetInfo;
+    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)natveEncInfo.charset,
+                                 &csetInfo,
+                                 TCI_SRCCHARSET) )
+    {
+        wxLogLastError(_T("TranslateCharsetInfo(TCI_SRCCHARSET)"));
+
+        return -1;
+    }
+
+    return csetInfo.ciACP;
+}
+
+#if wxUSE_FONTMAP
+
+extern long wxCharsetToCodepage(const wxChar *name)
+{
+    // first get the font encoding for this charset
+    if ( !name )
+        return -1;
+
+    wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
+    if ( enc == wxFONTENCODING_SYSTEM )
+        return -1;
+
+    // the use the helper function
+    return wxEncodingToCodepage(enc);
+}
+
+#endif // wxUSE_FONTMAP
+
+#endif // wxUSE_GUI
+
+// include old wxCharsetToCodepage() by OK if needed
+#if !wxUSE_GUI || !wxUSE_FONTMAP
+
+#include "wx/msw/registry.h"
+
+// this should work if Internet Exploiter is installed
+extern long wxCharsetToCodepage(const wxChar *name)
+{
+    if (!name)
+        return GetACP();
+
+    long CP=-1;
+
+    wxString cn(name);
+    do {
+        wxString path(wxT("MIME\\Database\\Charset\\"));
+        path += cn;
+        wxRegKey key(wxRegKey::HKCR, path);
+
+        if (!key.Exists()) break;
+
+        // two cases: either there's an AliasForCharset string,
+        // or there are Codepage and InternetEncoding dwords.
+        // The InternetEncoding gives us the actual encoding,
+        // the Codepage just says which Windows character set to
+        // use when displaying the data.
+        if (key.HasValue(wxT("InternetEncoding")) &&
+            key.QueryValue(wxT("InternetEncoding"), &CP)) break;
+
+        // no encoding, see if it's an alias
+        if (!key.HasValue(wxT("AliasForCharset")) ||
+            !key.QueryValue(wxT("AliasForCharset"), cn)) break;
+    } while (1);
+
+    return CP;
+}
+
+#endif // !wxUSE_GUI || !wxUSE_FONTMAP
+
+#endif // Win32
 

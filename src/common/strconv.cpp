@@ -28,8 +28,13 @@
   #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif // WX_PRECOMP
+
 #ifdef __WXMSW__
-  #include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif
 
 #include <errno.h>
@@ -37,36 +42,42 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-#include "wx/debug.h"
 #include "wx/strconv.h"
-#include "wx/intl.h"
-#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
+#if wxUSE_WCHAR_T
+    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
+    WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
+#else
+    // stand-ins in absence of wchar_t
+    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile;
+#endif // wxUSE_WCHAR_T
+
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
 
-
-// ============================================================================
-// implementation
-// ============================================================================
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #if wxUSE_WCHAR_T
 
 #ifdef __SALFORDC__
-  #include <clib.h>
+    #include <clib.h>
 #endif
 
 #ifdef HAVE_ICONV
-  #include <iconv.h>
+    #include <iconv.h>
 #endif
 
-#ifdef __WXMSW__
-  #include <windows.h>
-#endif
+#include "wx/encconv.h"
+#include "wx/fontmap.h"
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 #define BSWAP_UCS4(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT32_SWAP_ALWAYS(str[_c]); }
 #define BSWAP_UTF16(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT16_SWAP_ALWAYS(str[_c]); }
@@ -99,6 +110,13 @@ WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
     #error "Weird sizeof(wchar_t): please report your platform details to wx-users mailing list"
 #endif
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// UTF-16 en/decoding
+// ----------------------------------------------------------------------------
 
 #ifdef WC_UTF16
 
@@ -148,8 +166,6 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 // ----------------------------------------------------------------------------
 // wxMBConv
 // ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
 
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
@@ -341,11 +357,11 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                 if (buf)
                     buf += pa;
                 len += pa;
-#else
+#else // !WC_UTF16
                 if (buf)
                     *buf++ = res;
                 len++;
-#endif
+#endif // WC_UTF16/!WC_UTF16
             }
         }
     }
@@ -392,110 +408,6 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     if (buf && (len<n)) *buf = 0;
     return len;
 }
-
-// ----------------------------------------------------------------------------
-// specified character set
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
-
-#include "wx/encconv.h"
-#include "wx/fontmap.h"
-
-// TODO: add some tables here
-// - perhaps common encodings to common codepages (for Win32)
-// - perhaps common encodings to objects ("UTF8" -> wxConvUTF8)
-// - move wxEncodingConverter meat in here
-
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
-
-#if wxUSE_GUI
-
-// VZ: the new version of wxCharsetToCodepage() is more politically correct
-//     and should work on other Windows versions as well but the old version is
-//     still needed for !wxUSE_FONTMAP || !wxUSE_GUI case
-
-extern long wxEncodingToCodepage(wxFontEncoding encoding)
-{
-    // translate encoding into the Windows CHARSET
-    wxNativeEncodingInfo natveEncInfo;
-    if ( !wxGetNativeFontEncoding(encoding, &natveEncInfo) )
-        return -1;
-
-    // translate CHARSET to code page
-    CHARSETINFO csetInfo;
-    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)natveEncInfo.charset,
-                                 &csetInfo,
-                                 TCI_SRCCHARSET) )
-    {
-        wxLogLastError(_T("TranslateCharsetInfo(TCI_SRCCHARSET)"));
-
-        return -1;
-    }
-
-    return csetInfo.ciACP;
-}
-
-#if wxUSE_FONTMAP
-
-extern long wxCharsetToCodepage(const wxChar *name)
-{
-    // first get the font encoding for this charset
-    if ( !name )
-        return -1;
-
-    wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
-    if ( enc == wxFONTENCODING_SYSTEM )
-        return -1;
-
-    // the use the helper function
-    return wxEncodingToCodepage(enc);
-}
-
-#endif // wxUSE_FONTMAP
-
-#endif // wxUSE_GUI
-
-// include old wxCharsetToCodepage() by OK if needed
-#if !wxUSE_GUI || !wxUSE_FONTMAP
-
-#include "wx/msw/registry.h"
-
-// this should work if Internet Exploiter is installed
-extern long wxCharsetToCodepage(const wxChar *name)
-{
-    if (!name)
-        return GetACP();
-
-    long CP=-1;
-
-    wxString cn(name);
-    do {
-        wxString path(wxT("MIME\\Database\\Charset\\"));
-        path += cn;
-        wxRegKey key(wxRegKey::HKCR, path);
-
-        if (!key.Exists()) break;
-
-        // two cases: either there's an AliasForCharset string,
-        // or there are Codepage and InternetEncoding dwords.
-        // The InternetEncoding gives us the actual encoding,
-        // the Codepage just says which Windows character set to
-        // use when displaying the data.
-        if (key.HasValue(wxT("InternetEncoding")) &&
-            key.QueryValue(wxT("InternetEncoding"), &CP)) break;
-
-        // no encoding, see if it's an alias
-        if (!key.HasValue(wxT("AliasForCharset")) ||
-            !key.QueryValue(wxT("AliasForCharset"), cn)) break;
-    } while (1);
-
-    return CP;
-}
-
-#endif // !wxUSE_GUI || !wxUSE_FONTMAP
-
-#endif // Win32
 
 // ============================================================================
 // wxCharacterSet and derived classes
@@ -655,7 +567,7 @@ IC_CharSet::IC_CharSet(const wxChar *name)
             else
             {
                 ms_wcCharsetName = NULL;
-                
+
                 // VS: we must not output an error here, since wxWindows will safely
                 //     fall back to using wxEncodingConverter.
                 wxLogTrace(wxT("strconv"), wxT("Impossible to convert to/from charset '%s' with iconv, falling back to wxEncodingConverter."), name);
@@ -807,6 +719,9 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 // ============================================================================
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
+
+extern long wxCharsetToCodepage(const wxChar *charset); // from utils.cpp
+
 class CP_CharSet : public wxCharacterSet
 {
 public:
@@ -1054,14 +969,6 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
     return len;
 }
-
-#else // !wxUSE_WCHAR_T
-
-// ----------------------------------------------------------------------------
-// stand-ins in absence of wchar_t
-// ----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile;
 
 #endif // wxUSE_WCHAR_T
 

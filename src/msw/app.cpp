@@ -213,12 +213,6 @@ bool wxApp::Initialize()
     }
 #endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
 
-    // Some people may wish to use this, but
-    // probably it shouldn't be here by default.
-#ifdef __WXDEBUG__
-    //    wxRedirectIOToConsole();
-#endif
-
     wxBuffer = new wxChar[1500]; // FIXME
 
     wxClassInfo::InitializeClasses();
