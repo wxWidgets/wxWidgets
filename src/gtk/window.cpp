@@ -3907,6 +3907,8 @@ void wxWindowGTK::DoReleaseMouse()
 
     wxCHECK_RET( g_captureWindow, wxT("can't release mouse - not captured") );
 
+    g_captureWindow = (wxWindowGTK*) NULL;
+
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
         window = GTK_PIZZA(m_wxwindow)->bin_window;
@@ -3917,7 +3919,6 @@ void wxWindowGTK::DoReleaseMouse()
         return;
 
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
-    g_captureWindow = (wxWindowGTK*) NULL;
 }
 
 /* static */
