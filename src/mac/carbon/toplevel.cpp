@@ -424,7 +424,8 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     short windowPart = ::FindWindow(screenMouseLocation, &window);
 
     wxWindow* currentMouseWindow = NULL ;
-
+    ControlRef control = NULL ;
+    
     if ( window )
     {
         QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
@@ -436,14 +437,15 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         else if ( (IsWindowActive(window) && windowPart == inContent) )
         {
             ControlPartCode part ;
-            ControlRef control = wxMacFindControlUnderMouse( windowMouseLocation , window , &part ) ;
+            control = wxMacFindControlUnderMouse( windowMouseLocation , window , &part ) ;
+            // if there is no control below the mouse position, send the event to the toplevel window itself
             if ( control == 0 )
                 currentMouseWindow = (wxWindow*) data ;
             else
                 currentMouseWindow = wxFindControlFromMacControl( control ) ;
         }        
     }
-
+    
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent( wxevent , cEvent ) ;
 
@@ -549,6 +551,29 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             // update cursor ?
          }
     } // else if ( currentMouseWindow )
+    else
+    {
+        // don't mess with controls we don't know about
+        // for some reason returning eventNotHandledErr does not lead to the correct behaviour
+        // so we try sending them the correct control directly
+        wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
+        if ( toplevelWindow && control )
+        {
+            EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
+            Point clickLocation = windowMouseLocation ;
+#if TARGET_API_MAC_OSX
+            HIPoint hiPoint ;
+            hiPoint.x = clickLocation.h ;
+            hiPoint.y = clickLocation.v ;
+            HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
+            clickLocation.h = (int)hiPoint.x ;
+            clickLocation.v = (int)hiPoint.y ;
+#endif
+            HandleControlClick( control , clickLocation ,
+                modifiers , (ControlActionUPP ) -1 ) ;
+            result = noErr ;
+        }
+    }
     return result ;
 }
 
