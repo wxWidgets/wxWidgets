@@ -145,7 +145,9 @@ class GIZMODLLEXPORT wxTreeListCtrl : public wxControl
 public:
     // creation
     // --------
-    wxTreeListCtrl() {}
+    wxTreeListCtrl()
+        : m_header_win(0), m_main_win(0), m_headerHeight(0)
+    {}
 
     wxTreeListCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
@@ -153,7 +155,7 @@ public:
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeListCtrlNameStr )
-        : m_header_win(0), m_main_win(0)
+        : m_header_win(0), m_main_win(0), m_headerHeight(0)
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -542,10 +544,12 @@ protected:
 //     void Init();
 
     void OnSize(wxSizeEvent& event);
-
+    void CalculateAndSetHeaderHeight();
+    
 
 private:
     size_t fill_column;
+    size_t m_headerHeight;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTreeListCtrl)
