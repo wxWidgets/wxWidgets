@@ -506,7 +506,7 @@ public:
     void CopyObject(wxObject& object_dest) const;
 public:
     int               m_commandInt;    // Additional information
-    long              m_extraLong;     
+    long              m_extraLong;
 };
 
 // Mouse event class
@@ -605,10 +605,10 @@ public:
     bool Leaving() const { return (m_eventType == wxEVT_LEAVE_WINDOW); }
 
     // Find the position of the event
-    void GetPosition(wxCoord *xpos, wxCoord *ypos) const 
+    void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
         if (xpos)
-            *xpos = m_x; 
+            *xpos = m_x;
         if (ypos)
             *ypos = m_y;
     }
@@ -617,7 +617,7 @@ public:
     void GetPosition(long *xpos, long *ypos) const
     {
         if (xpos)
-            *xpos = (long)m_x; 
+            *xpos = (long)m_x;
         if (ypos)
             *ypos = (long)m_y;
     }
@@ -631,10 +631,10 @@ public:
 
     // Compatibility
 #if WXWIN_COMPATIBILITY
-    void Position(long *xpos, long *ypos) const 
+    void Position(long *xpos, long *ypos) const
     {
         if (xpos)
-            *xpos = (long)m_x; 
+            *xpos = (long)m_x;
         if (ypos)
             *ypos = (long)m_y;
     }
@@ -692,14 +692,14 @@ public:
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
-        if (xpos) *xpos = m_x; 
+        if (xpos) *xpos = m_x;
         if (ypos) *ypos = m_y;
     }
 
 #ifndef __WIN16__
     void GetPosition(long *xpos, long *ypos) const
     {
-        if (xpos) *xpos = (long)m_x; 
+        if (xpos) *xpos = (long)m_x;
         if (ypos) *ypos = (long)m_y;
     }
 #endif
@@ -1363,7 +1363,7 @@ public:
     // process all pending events
     void ProcessPendingEvents();
 
-    // add a 
+    // add a
 #if wxUSE_THREADS
     bool ProcessThreadEvent(wxEvent& event);
 #endif
@@ -1395,7 +1395,13 @@ public:
     bool SearchDynamicEventTable( wxEvent& event );
 
 #if wxUSE_THREADS
-    void ClearEventLocker() { delete m_eventsLocker; m_eventsLocker = NULL; };
+    void ClearEventLocker()
+   {
+#  if !defined(__VISAGECPP__)
+      delete m_eventsLocker;
+      m_eventsLocker = NULL;
+#endif
+   };
 #endif
 
     // old stuff
@@ -1430,7 +1436,11 @@ protected:
     wxList*             m_dynamicEvents;
     wxList*             m_pendingEvents;
 #if wxUSE_THREADS
+#if defined (__VISAGECPP__)
+    wxCriticalSection   m_eventsLocker;
+#  else
     wxCriticalSection*  m_eventsLocker;
+#  endif
 #endif
 
     // optimization: instead of using costly IsKindOf() to decide whether we're

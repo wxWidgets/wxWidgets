@@ -359,7 +359,7 @@ public:
 // be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
 // code if required.
 
-#if defined(__AIX__) || defined(__HPUX__) || defined( __VMS__ )
+#if defined(__AIX__) || defined(__HPUX__) || defined( __VMS__ ) || defined(__WXPM__)
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char *argv[] ); \
         int main(int argc, char *argv[]) { return wxEntry(argc, argv); }

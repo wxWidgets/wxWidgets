@@ -14,10 +14,9 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
-#define INCL_DOSPROCESS
-#define INCL_DOSERRORS
 #define INCL_BASE
 #define INCL_PM
+#define INCL_GPI
 #include <os2.h>
 
 class WXDLLEXPORT wxFont;

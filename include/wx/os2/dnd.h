@@ -13,13 +13,13 @@
 #ifndef __OS2DNDH__
 #define __OS2DNDH__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #if !wxUSE_DRAG_AND_DROP
     #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
 #endif  //WX_DRAG_DROP
+
+#define INCL_WINSTDDRAG
+#include <os2.h>
+#include <pmstddlg.h>
 
 //-------------------------------------------------------------------------
 // wxDropSource
