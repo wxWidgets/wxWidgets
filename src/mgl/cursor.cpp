@@ -203,12 +203,14 @@ void wxSetCursor(const wxCursor& cursor)
 {
     if ( cursor.Ok() )
     {
-        MGL_wmSetGlobalCursor(g_winMng, *cursor.GetMGLCursor());
+        if ( g_winMng )
+            MGL_wmSetGlobalCursor(g_winMng, *cursor.GetMGLCursor());
         gs_globalCursor = cursor;
     }
     else
     {
-        MGL_wmSetGlobalCursor(g_winMng, NULL);
+        if ( g_winMng )
+            MGL_wmSetGlobalCursor(g_winMng, NULL);
         gs_globalCursor = wxNullCursor;        
     }
 }
