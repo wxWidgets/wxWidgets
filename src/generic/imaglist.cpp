@@ -28,6 +28,15 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject)
 
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+/*
+ * wxImageList has to be a real class or we have problems with
+ * the run-time information.
+ */
+
+IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList)
+#endif
+
 wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int initialCount )
 {
     (void)Create(width, height, mask, initialCount);

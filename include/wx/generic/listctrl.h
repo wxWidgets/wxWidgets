@@ -220,7 +220,29 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
 };
 
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+/*
+ * wxListCtrl has to be a real class or we have problems with
+ * the run-time information.
+ */
+
+class WXDLLEXPORT wxListCtrl: public wxGenericListCtrl
+{
+    DECLARE_DYNAMIC_CLASS(wxListCtrl)
+
+public:
+    wxListCtrl() {}
+
+    wxListCtrl(wxWindow *parent, wxWindowID id = -1,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxLC_ICON,
+               const wxValidator &validator = wxDefaultValidator,
+               const wxString &name = "listctrl" )
+    : wxGenericListCtrl(parent, id, pos, size, style, validator, name)
+    {
+    }
+};
+#endif // !__WXMSW__ || __WIN16__ || __WXUNIVERSAL__
 
 #endif // __LISTCTRLH_G__
-
-// vi:sts=4:sw=4:et

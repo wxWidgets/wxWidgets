@@ -4521,6 +4521,15 @@ BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
   EVT_IDLE(wxGenericListCtrl::OnIdle)
 END_EVENT_TABLE()
 
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+/*
+ * wxListCtrl has to be a real class or we have problems with
+ * the run-time information.
+ */
+
+IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
+#endif
+
 wxGenericListCtrl::wxGenericListCtrl()
 {
     m_imageListNormal = (wxGenericImageList *) NULL;
