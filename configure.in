@@ -3870,7 +3870,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     else
         AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
             [
-                AC_TRY_COMPILE([#include <cxxabi.h>],
+                AC_TRY_LINK([#include <cxxabi.h>],
                     [
                         int rc;
                         __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
