@@ -4,14 +4,18 @@ wxWindows 2 Change Log
 INCOMPATIBLE CHANGES SINCE 2.2.x
 ================================
 
+wxBase:
+
+- wxArray<T>::Remove(size_t) has been removed to fix compilation problems
+  under 64 bit architectures, please replace it with RemoveAt() in your
+  code.
+
 All (GUI):
 
 - wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
 
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
-
-wxMSW:
 
 - the event type constants are not constants any more but are dynamically
   allocated during run-time which means that they can't be used as case labels
@@ -21,12 +25,21 @@ wxMSW:
   but this is strongly discouraged, please consider changing your codei
   instead!
 
+wxMSW:
+
+- build system changed: setup.h is not a static file in include/wx any more
+  but is created as part of the build process under lib/<toolkit>/wx/include
+  where <toolkit> is of the form (msw|univ)[dll][u][d]. You'll need to update
+  the include path in your make/project files appropriately.
+
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
   style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
   effect
 
 2.3.2
 -----
+
+New port: wxUniv for Win32/GTK+ is now included in the distribution.
 
 wxBase:
 
