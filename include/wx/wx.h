@@ -59,12 +59,10 @@
 #include "wx/radiobut.h"
 #include "wx/textctrl.h"
 #include "wx/slider.h"
-#if !defined(__VISAGECPP__) // cyclic dependency
 #include "wx/gauge.h"
 #include "wx/scrolwin.h"
 #include "wx/dirdlg.h"
 #include "wx/toolbar.h"
-#endif
 #include "wx/combobox.h"
 #include "wx/layout.h"
 #include "wx/sizer.h"
@@ -78,8 +76,6 @@
 
 #include "wx/validate.h"        // always include, even if !wxUSE_VALIDATORS
 
-#if !defined(__VISAGECPP__) // cyclic dependency
-
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
 #endif // wxUSE_VALIDATORS
@@ -88,8 +84,6 @@
     #include "wx/objstrm.h"
     #include "wx/serbase.h"
 #endif // wxUSE_SERIAL
-
-#endif // __VISAGECPP__
 
 #endif // wxUSE_GUI
 
