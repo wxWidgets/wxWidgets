@@ -236,6 +236,7 @@ public:
 
 #ifdef WXLAYOUT_DEBUG
    void Debug(void);
+   void ShowCurrentObject();
 #endif
 
    

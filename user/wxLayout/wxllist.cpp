@@ -34,30 +34,40 @@
 #  include   <wx/dc.h>
 #  include   <wx/postscrp.h>
 #  include   <wx/print.h>
+#  include   <wx/log.h>
 #endif
 
 #define   BASELINESTRETCH   12
 
 #ifdef WXLAYOUT_DEBUG
-static const char *_t[] = { "invalid", "text", "cmd", "icon",
-                            "linebreak"};
+static const char *g_aTypeStrings[] = 
+{ 
+   "invalid", "text", "cmd", "icon", "linebreak"
+};
+   
+#  define   wxLayoutDebug        wxLogDebug
+#  define   WXL_VAR(x)           wxLogDebug(#x " = ", x)
+#  define   WXL_DBG_POINT(p)     wxLogDebug(#p ": (%d, %d)", p.x, p.y)
+#  define   WXL_TRACE(f)         wxLogDebug(#f ": ")
+#  define   TypeString(t)        g_aTypeStrings[t]
 
 void
 wxLayoutObjectBase::Debug(void)
 {
    CoordType bl = 0;
-   cerr << _t[GetType()] << ": size=" << GetSize(&bl).x << ","
-        << GetSize(&bl).y << " bl=" << bl; 
+   wxLogDebug("%s: size = %dx%d, bl = %d",
+              TypeString(GetType()), GetSize(&bl).x, GetSize(&bl).y, bl); 
 }
 
-#  define   WXL_VAR(x)   cerr << #x"=" << x << endl
-#  define   WXL_DBG_POINT(p)   cerr << #p << ": " << p.x << ',' << p.y << endl
-#  define   WXL_TRACE(f)   cerr << #f":" << endl
 #else 
 #  define   WXL_VAR(x)   
 #  define   WXL_DBG_POINT(p)   
-#  define   WXL_TRACE(f)   
+#  define   WXL_TRACE(f)
+#  define   ShowCurrentObject()
+#  define   TypeString(t)        ""
+inline void wxLayoutDebug(const char *, ...) { }
 #endif
+
 
 //-------------------------- wxLayoutObjectText
 
@@ -89,6 +99,7 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint position, CoordType baseLine,
    position.y += baseLine-m_BaseLine;
    if(draw)
       dc.DrawText(Str(m_Text),position.x,position.y);
+   // Don't remove this, important help for debugging layout.
 #   ifdef   WXLAYOUT_DEBUG
 //   dc.DrawRectangle(position.x, position.y, m_Width, m_Height);
 #   endif
@@ -99,14 +110,14 @@ void
 wxLayoutObjectText::Debug(void)
 {
    wxLayoutObjectBase::Debug();
-   cerr << " `" << m_Text << '\'';
+   wxLogDebug(" `%s`", m_Text.c_str());
 }
 #endif
 
 //-------------------------- wxLayoutObjectIcon
 
 wxLayoutObjectIcon::wxLayoutObjectIcon(wxIcon *icon)
-                  : m_Icon(icon)
+   : m_Icon(icon)
 {
 }
 
@@ -193,8 +204,8 @@ wxLayoutList::~wxLayoutList()
 {
    if(m_DefaultSetting)
       delete m_DefaultSetting;
+   // no deletion of objects, they are owned by the list
 }
-
 
 void
 wxLayoutList::LineBreak(void)
@@ -398,8 +409,11 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
          }
          else
          {
-            cursorPosition = wxPoint(position.x, position.y);
-            cursorSize = wxPoint(size.x > 0 ? size.x : 1,size.y > 0 ? size.y : baseLineSkip);
+            // this is not necessarily the most "beautiful" solution:
+            //cursorPosition = wxPoint(position.x, position.y);
+            //cursorSize = wxPoint(size.x > 0 ? size.x : 1,size.y > 0 ? size.y : baseLineSkip);
+            cursorPosition = wxPoint(position.x+size.x, position.y+(size.y-baseLineSkip));
+            cursorSize = wxPoint(1, baseLineSkip);
          }
       }
 
@@ -482,38 +496,53 @@ wxLayoutList::Debug(void)
    CoordType               offs;
    wxLayoutObjectList::iterator i;
 
-   cerr <<
-      "------------------------debug start-------------------------" << endl;
+   wxLogDebug("------------------------debug start-------------------------"); 
    for(i = begin(); i != end(); i++)
-   {
       (*i)->Debug();
-      cerr << endl;
-   }
-   cerr <<
-      "-----------------------debug end----------------------------"
-        << endl;
-   // show current object:
-   cerr << "Cursor: "
-        << m_CursorPosition.x << ','
-        << m_CursorPosition.y;
+   wxLogDebug("-----------------------debug end----------------------------");
    
+   // show current object:
+   ShowCurrentObject();
    i = FindCurrentObject(&offs);
-   cerr << " line length: " << GetLineLength(i,offs) << "  ";
+   wxLogDebug(" line length: %l", (long int) GetLineLength(i,offs));
    if(i == end())
    {
-      cerr << "<<no object found>>" << endl;
+      wxLogDebug("<<no object found>>");
       return;  // FIXME we should set cursor position to maximum allowed
       // value then
    }
    if((*i)->GetType() == WXLO_TYPE_TEXT)
-   {
-      cerr << " \"" << ((wxLayoutObjectText *)(*i))->GetText() << "\", offs: "
-           << offs << endl;
-   }
+      wxLogDebug(" \"%s\", offs=%d",((wxLayoutObjectText *)(*i))->GetText().c_str(), (int) offs);
    else
-      cerr << ' ' << _t[(*i)->GetType()] << endl;
+      wxLogDebug(g_aTypeStrings[(*i)->GetType()]);
 
 }
+
+void
+wxLayoutList::ShowCurrentObject()
+{
+   CoordType offs;
+   wxLayoutObjectList::iterator i = FindCurrentObject(&offs);
+
+   wxLayoutDebug("Cursor is at (%d, %d)",
+                 m_CursorPosition.x, m_CursorPosition.y);
+
+   i = FindCurrentObject(&offs);
+   wxLogDebug(" Line length: %d", GetLineLength(i));
+
+   if(i == end())
+   {
+      wxLogDebug("<<no object found>>");
+      return;  // FIXME we should set cursor position to maximum allowed
+// value then
+   }
+   if((*i)->GetType() == WXLO_TYPE_TEXT)
+      wxLogDebug(" \"%s\", offs: %d",
+                 ((wxLayoutObjectText *)(*i))->GetText().c_str(), offs);
+   else
+      wxLogDebug(" %s", TypeString((*i)->GetType()));
+}
+
 #endif
 
 /******************** editing stuff ********************/
@@ -540,8 +569,7 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
    wxLayoutObjectList::iterator i;
 
 #ifdef WXLAYOUT_DEBUG
-   cerr << "Looking for object at " << cpos->x << ',' << cpos->y <<
-      endl;
+   wxLayoutDebug("Looking for object at (%d, %d)", cpos->x, cpos->y);
 #endif
    for(i = begin(); i != end() && object.y <= cpos->y; i++)
    {
@@ -563,13 +591,13 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
          {
             if(offset) *offset = cpos->x-object.x;
 #ifdef WXLAYOUT_DEBUG
-            cerr << "   found object at " << object.x << ',' <<
-               object.y << ", type:" << _t[(*i)->GetType()] <<endl;
+            wxLayoutDebug("   found object at (%d, %d), type: %s",
+                          object.x,  object.y, TypeString((*i)->GetType()));
 #endif      
             return i;
          }
       }
-      // no overlap, increment coordinates
+// no overlap, increment coordinates
       object.x += width;
       if((**i).GetType() == WXLO_TYPE_LINEBREAK)
       {
@@ -578,9 +606,9 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
       }
    }
 #ifdef WXLAYOUT_DEBUG
-   cerr << "   not found" << endl;
+   wxLayoutDebug("   not found");
 #endif
-   // return last object, coordinates of that one:
+// return last object, coordinates of that one:
    i = tail();
    if(i == end())
       return i;
@@ -686,7 +714,7 @@ wxLayoutList::MoveCursor(int dx, int dy)
          }
       }
    }
-   // final adjustment:
+// final adjustment:
    i = FindCurrentObject(&offs);
    lineLength = GetLineLength(i,offs);
    if(m_CursorPosition.x > lineLength)
@@ -695,24 +723,7 @@ wxLayoutList::MoveCursor(int dx, int dy)
       rc = false;
    }
 #ifdef   WXLAYOUT_DEBUG
-   i = FindCurrentObject(&offs);
-   cerr << "Cursor: "
-        << m_CursorPosition.x << ','
-        << m_CursorPosition.y;
-
-   if(i == end())
-   {
-      cerr << "<<no object found>>" << endl;
-      return rc;  // FIXME we should set cursor position to maximum allowed
-      // value then
-   }
-   if((*i)->GetType() == WXLO_TYPE_TEXT)
-   {
-      cerr << " \"" << ((wxLayoutObjectText *)(*i))->GetText() << "\", offs: "
-           << offs << endl;
-   }
-   else
-      cerr << ' ' << _t[(*i)->GetType()] << endl;
+   ShowCurrentObject();
 #endif
    return rc;
 }
@@ -737,8 +748,8 @@ wxLayoutList::Delete(CoordType count)
       if(i == end())
          return; // we cannot delete anything more
 
-      /* Here we need to treat linebreaks differently.
-         If offs==0 we are before the linebreak, otherwise behind.  */
+/* Here we need to treat linebreaks differently.
+   If offs==0 we are before the linebreak, otherwise behind.  */
       if((*i)->GetType() == WXLO_TYPE_LINEBREAK)
       {
          if(offs == 0)
@@ -759,8 +770,8 @@ wxLayoutList::Delete(CoordType count)
       {
          wxLayoutObjectText *tobj = (wxLayoutObjectText *)*i;
          CoordType len = tobj->CountPositions();
-         // If we find the end of a text object, this means that we
-         // have to delete from the object following it.
+// If we find the end of a text object, this means that we
+// have to delete from the object following it.
          if(len == offs)
          {
             i++;
@@ -780,11 +791,23 @@ wxLayoutList::Delete(CoordType count)
             return; // we are done
          }
       }
-      else // all other objects: delete the object
+      else// all other objects: delete the object
+// this only works as expected  if the non-text object has 0/1
+// as offset values. Not tested with "longer" objects.
       {
          CoordType len = (*i)->CountPositions();
-         erase(i); // after this, i is the iterator for the following object
-         count = count > len ? count -= len : 0;
+         if(offs == 0)
+         {
+            count = count > len ? count -= len : 0;
+            erase(i); // after this, i is the iterator for the following object
+            continue;
+         }
+         else // delete the following object
+         {
+            i++; // we increment and continue as normal
+            offs=0;
+            goto startover; 
+         }
       }
    }
    while(count && i != end());      
@@ -803,24 +826,24 @@ wxLayoutList::Insert(wxLayoutObjectBase *obj)
       push_back(obj);
    else if(offs == 0)
       insert(i,obj);
-   // do we have to split a text object?
+// do we have to split a text object?
    else if((*i)->GetType() == WXLO_TYPE_TEXT && offs != (*i)->CountPositions())
    {
       wxLayoutObjectText *tobj = (wxLayoutObjectText *) *i;
 #ifdef WXLAYOUT_DEBUG
-      cerr << "text: '" << tobj->GetText() << "'" << endl;
+      wxLayoutDebug("text: %s", tobj->GetText().c_str());
       WXL_VAR(offs);
 #endif
       String left = tobj->GetText().substr(0,offs); // get part before cursor
-      WXL_VAR(left);
+      WXL_VAR(left.c_str());
       tobj->GetText() = tobj->GetText().substr(offs,(*i)->CountPositions()-offs); // keeps the right half
-      WXL_VAR(tobj->GetText());
+      WXL_VAR(tobj->GetText().c_str());
       insert(i,obj);
       insert(i,new wxLayoutObjectText(left)); // inserts before
    }
    else
    {
-     // all other cases, append after object:
+// all other cases, append after object:
       wxLayoutObjectList::iterator j = i; // we want to apend after this object
       j++;
       if(j != end())
@@ -857,13 +880,14 @@ wxLayoutList::Insert(String const &text)
    switch((**i).GetType())
    {
    case WXLO_TYPE_TEXT:
-      // insert into an existing text object:
+// insert into an existing text object:
       WXL_TRACE(inserting into existing object);
       tobj = (wxLayoutObjectText *)*i ;
       wxASSERT(tobj);
       tobj->GetText().insert(offs,text);
       break;
    case WXLO_TYPE_LINEBREAK:
+   default:
       j = i;
       if(offs == 0) // try to append to previous object
       {
@@ -893,6 +917,7 @@ wxLayoutList::Insert(String const &text)
          }
       }
       break;
+#if 0
    default:
       j = i; j--;
       WXL_TRACE(checking previous object);
@@ -907,6 +932,7 @@ wxLayoutList::Insert(String const &text)
          Insert(new wxLayoutObjectText(text));  //FIXME not too optimal, slow
          return;  // position gets incremented in Insert(obj)
       }
+#endif
    }
    m_CursorPosition.x += strlen(text.c_str());
 }
@@ -920,14 +946,14 @@ wxLayoutList::GetLineLength(wxLayoutObjectList::iterator i, CoordType offs)
    CoordType len = 0;
 
    if(offs == 0 && (**i).GetType() == WXLO_TYPE_LINEBREAK)
-      // we are before a linebrak
+// we are before a linebrak
       return 0;
-   // search backwards for beginning of line:
+// search backwards for beginning of line:
    while(i != begin() && (*i)->GetType() != WXLO_TYPE_LINEBREAK)
       i--;
    if((*i)->GetType() == WXLO_TYPE_LINEBREAK)
       i++;
-   // now we can start counting:
+// now we can start counting:
    while(i != end() && (*i)->GetType() != WXLO_TYPE_LINEBREAK)
    {
       len += (*i)->CountPositions();
@@ -945,7 +971,7 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
    while(i != end()) // == while valid
       erase(i);
 
-   // set defaults
+// set defaults
    m_FontPtSize = size;
    m_FontUnderline = false;
    m_FontFamily = family;

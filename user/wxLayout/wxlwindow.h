@@ -47,11 +47,10 @@ public:
 
    void UpdateScrollbars(void);
    void Print(void);
-   void Erase(void) { m_llist.Clear(); Clear(); }
    void SetEventId(int id) { m_EventId = id; }
-   wxPoint const &GetClickPosition(void) const { return m_ClickPosition; }
+   // what for? Caller doesn't even know object's positions in window
+   //wxPoint const &GetClickPosition(void) const { return m_ClickPosition; }
    virtual ~wxLayoutWindow() {}
-
 private:
    /// for sending events
    wxWindow *m_Parent;

@@ -15,21 +15,35 @@
 #define   VAR(x)   cout << #x"=" << x << endl;
 
 BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
-   EVT_PAINT  (wxLayoutWindow::OnPaint)
-   EVT_CHAR   (wxLayoutWindow::OnChar)
+   EVT_PAINT    (wxLayoutWindow::OnPaint)
+   EVT_CHAR     (wxLayoutWindow::OnChar)
    EVT_LEFT_DOWN(wxLayoutWindow::OnMouse)
 END_EVENT_TABLE()
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
-   : wxScrolledWindow(parent)
+   : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
+                      wxHSCROLL | wxVSCROLL | wxBORDER)
+
 {
    m_ScrollbarsSet = false;
    m_EventId = -1;
 }
 
+#ifdef __WXMSW__
+long
+wxLayoutWindow::MSWGetDlgCode()
+{
+   // if we don't return this, we won't get OnChar() events
+   return DLGC_WANTCHARS | DLGC_WANTARROWS | DLGC_WANTMESSAGE;
+}
+#endif //MSW
+
+
 void
 wxLayoutWindow::OnMouse(wxMouseEvent& event)
 {
+   SetFocus();
+
    if(m_EventId == -1) // nothing to do
       return;
    
@@ -38,7 +52,8 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    m_FoundObject = NULL;
 
 #ifdef   WXLAYOUT_DEBUG
-   cerr << "OnMouse: " << m_FindPos.x << ',' << m_FindPos.y << endl;
+   //doesn't work, undefined functions
+   //wxLogTrace("OnMouse: (%d, %d)", m_FindPos.x, m_FindPos.y);
 #endif
    Refresh();
    if(m_FoundObject)

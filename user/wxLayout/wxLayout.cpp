@@ -159,7 +159,7 @@ MyFrame::AddSampleText(wxLayoutList &llist)
 void
 MyFrame::Clear(void)
 {
-   m_lwin->Erase();
+   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->UpdateScrollbars();
 }
 
