@@ -329,8 +329,8 @@ bool wxTable::bindInsertParams(void)
 	SWORD   scale		= 0;
 
 	// Bind each column (that can be inserted) of the table to a parameter marker
-	int i;
-	for (i = 0; i < noCols; i++)
+	int i,colNo;
+	for (i = 0, colNo = 1; i < noCols; i++)
 	{
 		if (! colDefs[i].InsertAllowed)
 			continue;
@@ -372,7 +372,7 @@ bool wxTable::bindInsertParams(void)
 			colDefs[i].CbValue = SQL_NULL_DATA;
 			colDefs[i].Null = FALSE;
 		}
-		if (SQLBindParameter(hstmtInsert, i+1, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
+		if (SQLBindParameter(hstmtInsert, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
 									fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
 									precision+1,&colDefs[i].CbValue) != SQL_SUCCESS)
 			return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
