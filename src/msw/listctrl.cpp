@@ -79,7 +79,7 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
 
 // We have to handle both fooW and fooA notifications in several cases
 // because of broken commctl.dll and/or unicows.dll. This class is used to
-// convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or 
+// convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or
 // LV_ITEMW depending on wxUSE_UNICODE setting), so that it can be processed
 // by wxConvertToMSWListItem().
 class wxLV_ITEM
@@ -100,7 +100,7 @@ public:
         }
         else
             m_buf = NULL;
-    }   
+    }
 private:
     wxMB2WXbuf *m_buf;
 
@@ -115,7 +115,7 @@ private:
         }
         else
             m_buf = NULL;
-    }   
+    }
     wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
 private:
     wxWC2WXbuf *m_buf;
@@ -126,32 +126,32 @@ private:
 
 ///////////////////////////////////////////////////////
 // Problem:
-// The MSW version had problems with SetTextColour() et 
-// al as the wxListItemAttr's were stored keyed on the 
-// item index. If a item was inserted anywhere but the end 
-// of the list the the text attributes (colour etc) for 
+// The MSW version had problems with SetTextColour() et
+// al as the wxListItemAttr's were stored keyed on the
+// item index. If a item was inserted anywhere but the end
+// of the list the the text attributes (colour etc) for
 // the following items were out of sync.
-// 
+//
 // Solution:
-// Under MSW the only way to associate data with a List 
-// item independant of its position in the list is to 
-// store a pointer to it in its lParam attribute. However 
-// user programs are already using this (via the 
+// Under MSW the only way to associate data with a List
+// item independant of its position in the list is to
+// store a pointer to it in its lParam attribute. However
+// user programs are already using this (via the
 // SetItemData() GetItemData() calls).
-// 
-// However what we can do is store a pointer to a 
-// structure which contains the attributes we want *and* 
+//
+// However what we can do is store a pointer to a
+// structure which contains the attributes we want *and*
 // a lParam for the users data, e.g.
-// 
+//
 // class wxListItemInternalData
 // {
 // public:
-//   wxListItemAttr *attr; 
+//   wxListItemAttr *attr;
 //   long lParam; // user data
 // };
-// 
-// To conserve memory, a wxListItemInternalData is 
-// only allocated for a LV_ITEM if text attributes or 
+//
+// To conserve memory, a wxListItemInternalData is
+// only allocated for a LV_ITEM if text attributes or
 // user data(lparam) are being set.
 
 
@@ -159,7 +159,7 @@ private:
 class wxListItemInternalData
 {
 public:
-   wxListItemAttr *attr; 
+   wxListItemAttr *attr;
    LPARAM lParam; // user data
 
    wxListItemInternalData() : attr(NULL), lParam(0) {}
@@ -359,7 +359,7 @@ void wxListCtrl::UpdateStyle()
 void wxListCtrl::FreeAllInternalData()
 {
     if (m_AnyInternalData)
-        {
+    {
         int n = GetItemCount();
         int i = 0;
 
@@ -367,9 +367,18 @@ void wxListCtrl::FreeAllInternalData()
         {
             wxListItemInternalData *data = GetInternalData(this, i);
             if (data)
+            {
                 delete data;
-        };
-    };
+                LV_ITEM item;
+                memset(&item, 0, sizeof(item));
+                item.iItem = i;
+                item.mask = LVIF_PARAM;
+                item.lParam = (LPARAM) 0;
+                BOOL result = ListView_SetItem(GetHwnd(), &item);
+            }
+        }
+        m_AnyInternalData = FALSE;
+    }
 }
 
 wxListCtrl::~wxListCtrl()
@@ -724,7 +733,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
         // get internal item data
         // perhaps a cache here ?
         wxListItemInternalData *data = GetInternalData(this, info.m_itemId);
-        
+
         if (! data)
         {
             // need to set it
@@ -1196,6 +1205,7 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
+    FreeAllInternalData();
     return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
@@ -1728,7 +1738,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                     wxLV_ITEM item(((LV_DISPINFOA *)lParam)->item);
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
-                    if ( ((LV_ITEM)item).pszText == NULL || 
+                    if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
                         return FALSE;
 
@@ -1740,7 +1750,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                     wxLV_ITEM item(((LV_DISPINFOW *)lParam)->item);
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
-                    if ( ((LV_ITEM)item).pszText == NULL || 
+                    if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
                         return FALSE;
 
@@ -1765,7 +1775,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 // delete the assoicated internal data
                 {
-                    wxListItemInternalData *data = 
+                    wxListItemInternalData *data =
                         GetInternalData(this, nmLV->iItem);
                     if (data)
                         delete data;
@@ -2289,7 +2299,7 @@ static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
                                      LV_ITEM& lvItem)
 {
-    wxListItemInternalData *internaldata = 
+    wxListItemInternalData *internaldata =
         (wxListItemInternalData *) lvItem.lParam;
 
     if (internaldata)
