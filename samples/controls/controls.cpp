@@ -1232,11 +1232,6 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxBusyCursor bc;
 
-#if 1 // VZ: my temp test code, will remove
-    wxGetTextFromUser("msg", "caption", "val", this);
-    return;
-#endif // 0
-
     wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
     dialog.ShowModal();
 }
