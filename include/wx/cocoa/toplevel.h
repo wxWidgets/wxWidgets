@@ -28,7 +28,9 @@ class WXDLLEXPORT wxTopLevelWindowCocoa : public wxTopLevelWindowBase, protected
 // initialization
 // ------------------------------------------------------------------------
 public:
-    inline wxTopLevelWindowCocoa() { Init(); }
+    inline wxTopLevelWindowCocoa()
+    :   wxCocoaNSWindow(this)
+    {   Init(); }
 
     inline wxTopLevelWindowCocoa(wxWindow *parent,
                         wxWindowID winid,
@@ -37,6 +39,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = wxFrameNameStr)
+    :   wxCocoaNSWindow(this)
     {
         Init();
         Create(parent, winid, title, pos, size, style, name);
