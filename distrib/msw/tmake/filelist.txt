@@ -1366,6 +1366,7 @@ prntdlgg.h	GenericH
 progdlgg.h	GenericH
 sashwin.h	GenericH
 scrolwin.h	GenericH
+spinctlg.h	GenericH
 splash.h	GenericH
 splitter.h	GenericH
 statusbr.h	GenericH
