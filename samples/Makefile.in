@@ -5,7 +5,7 @@
 SAMPLES_SUBDIRS=@SAMPLES_SUBDIRS@
 
 all:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && make); done
+	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE)); done
 
 clean:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && make clean); done
+	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) clean); done
