@@ -194,7 +194,10 @@ bool wxDialog::DoCreate( wxWindow* parent, wxWindowID id,
 
 void wxDialog::SetModal(bool flag)
 {
-    if ( flag )
+#ifdef __VMS
+#pragma message disable codcauunr
+#endif
+   if ( flag )
         m_windowStyle |= wxDIALOG_MODAL ;
     else
         if ( m_windowStyle & wxDIALOG_MODAL )
@@ -203,6 +206,9 @@ void wxDialog::SetModal(bool flag)
         wxModelessWindows.DeleteObject(this);
         if (!flag)
             wxModelessWindows.Append(this);
+#ifdef __VMS
+#pragma message enable codcauunr
+#endif
 }
 
 wxDialog::~wxDialog()
