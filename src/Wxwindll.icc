@@ -284,6 +284,6 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
    target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
    {
       source type(cpp) "..\\SAMPLES\\MINIMAL\\MINIMAL.CPP"
-      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RCO"
+      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RC4"
    }
 }
