@@ -815,14 +815,14 @@ bool wxClipboard::GetData( wxDataObject& data )
         }
 #endif // wxUSE_METAFILE
     }
-#else // !wxUSE_DATAOBJ
-    wxFAIL_MSG( wxT("no clipboard implementation") );
-#endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 
     return FALSE;
+#else // !wxUSE_DATAOBJ
+    wxFAIL_MSG( wxT("no clipboard implementation") );
+
+    return FALSE;
+#endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 }
 
-#else
-//    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
 

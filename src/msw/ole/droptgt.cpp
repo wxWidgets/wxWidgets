@@ -309,7 +309,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
 {
     HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
     if ( FAILED(hr) ) {
-        wxLogApiError("CoLockObjectExternal", hr);
+        wxLogApiError(_T("CoLockObjectExternal"), hr);
         return FALSE;
     }
 
@@ -317,7 +317,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
     if ( FAILED(hr) ) {
         ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
 
-        wxLogApiError("RegisterDragDrop", hr);
+        wxLogApiError(_T("RegisterDragDrop"), hr);
         return FALSE;
     }
 
@@ -332,7 +332,7 @@ void wxDropTarget::Revoke(WXHWND hwnd)
     HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
     if ( FAILED(hr) ) {
-        wxLogApiError("RevokeDragDrop", hr);
+        wxLogApiError(_T("RevokeDragDrop"), hr);
     }
 
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);

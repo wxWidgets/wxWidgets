@@ -551,7 +551,7 @@ void wxDialUpManagerMSW::CleanUpThreadData()
     {
         if ( !SetEvent(m_data.hEventQuit) )
         {
-            wxLogLastError("SetEvent(RasThreadQuit)");
+            wxLogLastError(_T("SetEvent(RasThreadQuit)"));
         }
 
         CloseHandle(m_hThread);

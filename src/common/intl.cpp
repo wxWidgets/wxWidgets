@@ -665,11 +665,9 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
 
     return (wxMB2WXbuf)(szOrigString);
   }
-  else
-  {
-    return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
-                                     // a macro similar to wxConvertMB2WX could be written for that
-  }
+
+  return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
+                                   // a macro similar to wxConvertMB2WX could be written for that
 
   #undef szOrgString
 }
@@ -677,7 +675,7 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
 // find catalog by name in a linked list, return NULL if !found
 wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {
-// linear search in the linked list
+  // linear search in the linked list
   wxMsgCatalog *pMsgCat;
   for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
     if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )

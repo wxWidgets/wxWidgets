@@ -1329,7 +1329,8 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
         if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
         {
             wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x; y += pt.y;
+            x += pt.x;
+            y += pt.y;
         }
     }
 }
