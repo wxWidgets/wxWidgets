@@ -137,7 +137,6 @@ TMPDIR=$PWD/_build_dmg
 BUILDROOT=$TMPDIR/build
 
 INSTALLROOT=$TMPDIR/install-root
-INSTALLCOMMON=$TMPDIR/install-common
 INSTALLAPPS=$TMPDIR/install-apps
 
 DMGDIR=$TMPDIR/dmg
@@ -154,7 +153,6 @@ SRCROOT=$BUILDROOT/wxPython-src-$VERSION
 
 mkdir -p $BUILDROOT
 mkdir -p $INSTALLROOT
-mkdir -p $INSTALLCOMMON
 mkdir -p $INSTALLAPPS
 
 rm -rf $DMGDIR
@@ -286,15 +284,10 @@ if [ $skipinstall != yes ]; then
 	SITEPACKAGES=/Library/Python/$PYVER
     fi
 
-    # move the common files to $INSTALLCOMMON
-    mkdir -p $INSTALLCOMMON$SITEPACKAGES
-    mv $INSTALLROOT$SITEPACKAGES/wx.pth       $INSTALLCOMMON$SITEPACKAGES
-    mv $INSTALLROOT$SITEPACKAGES/wxversion.py $INSTALLCOMMON$SITEPACKAGES
-
-    # install wxPython's tool scripts in COMMON too
-    mkdir -p $INSTALLCOMMON$BINPREFIX
+    # install wxPython's tool scripts
+    mkdir -p $INSTALLROOT$BINPREFIX
     cd $WXDIR/wxPython/scripts
-    python$PYVER CreateMacScripts.py $INSTALLCOMMON $BINPREFIX
+    python$PYVER CreateMacScripts.py $INSTALLROOT $BINPREFIX
 
 
     # Remove the .pyc/.pyo files they just take up space and can be recreated
@@ -303,17 +296,17 @@ if [ $skipinstall != yes ]; then
     $PYTHON $PROGDIR/../zappycfiles.py $INSTALLROOT > /dev/null
     popd
 
-    # Set premissions for files in $INSTALLROOT and $INSTALLCOMMON
+    # Set premissions for files in $INSTALLROOT
     if [ "$UID" = "0" ]; then
-	chown -R root:admin $INSTALLROOT $INSTALLCOMMON
-	chmod -R g+w        $INSTALLROOT $INSTALLCOMMON
+	chown -R root:admin $INSTALLROOT
+	chmod -R g+w        $INSTALLROOT
     fi
 fi
 
 if [ "$KIND" = "panther" ]; then
     SITEPACKAGES=/Library/Python/$PYVER
 fi
-PKGDIR=`cat $INSTALLCOMMON$SITEPACKAGES/wx.pth`
+PKGDIR=`cat $INSTALLROOT$SITEPACKAGES/wx.pth`
 
 popd
 
@@ -339,10 +332,11 @@ This Installer package will install the wxPython $CHARTYPE runtime $VERSION for 
 
     * The wxPython packages and modules
     * The wxWidgets shared libraries and headers
+    * Some command line tool scripts, installed to /usr/local/bin.
 
 You must install onto your current boot disk, eventhough the installer does not enforce this, otherwise things will not work.
 
-You can install more than one version of the wxPython runtime if you desire.  You also need to install one instance of the wxPython-common package, which will determine which of the installed runtimes will be the default.
+You can install more than one version of the wxPython runtime if you desire.  The most recently installed version will be the default wxPython, but you can choose another by setting the PYTHONPATH or by using the wxversion module.  See http://wiki.wxpython.org/index.cgi/MultiVersionInstalls for more details.
 
 Build date:   `date`
 EOF
@@ -395,35 +389,6 @@ EOF
 
 
     #-----------------------------------------------
-    # The common files package
-
-    # Make the welcome message
-    cat > $RESOURCEDIR/Welcome.txt <<EOF
-Welcome!
-
-This package contains the common files that are shared between versions of the wxPython runtime.  This includes some command line scripts installed to /usr/local/bin as well as a Python .pth file for site-packages that will determine which version of the installed runtimes is the default version.
-
-EOF
-
-    # Build the common Installer Package...
-    rm -rf wxPython-common-osx-$KIND.pkg
-    python $PROGDIR/../buildpkg.py \
-	--Title=wxPython-common-osx-$KIND \
-	--Version=$VERSION \
-	--Description="Common files for the wxPython runtime ($CHARTYPE-$VERSION)" \
-	--NeedsAuthorization="YES" \
-	--Relocatable="NO" \
-	--InstallOnly="YES" \
-	$INSTALLCOMMON \
-	$RESOURCEDIR
-
-    mv wxPython-common-osx-$KIND.pkg $DMGROOT
-
-    rm $RESOURCEDIR/Welcome.txt
-
-
-
-    #-----------------------------------------------
     # Make a README to go on the disk image
     cat > "$DMGROOT/README 1st.txt" <<EOF
 Welcome to wxPython!
@@ -432,24 +397,18 @@ This disk image contains the following items:
 
     wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$KIND
 
-        This is the main component of the wxPython runtime.  It
-        includes the Python modules and extension modules, as well as
-        the wxWidgets libraries.  It is possible to have more than one
-        version of the runtime installed at once if you wish, See
-        http://wkik.wxpython.org/index.cgi/MultiVersionInstalls
-        for details on how to choose which version is installed.
+        This Installer contains the wxPython runtime, compiled on a
+        $KIND OS X system, using the $CHARTYPE build of the wxWidgets
+        library.  It includes the Python modules and extension
+        modules, as well as the wxWidgets libraries.
 
+        It is possible to have more than one version of the runtime
+        installed at once if you wish.  The most recently installed
+        version will be the default wxPython, but you can choose
+        another by setting the PYTHONPATH or by using the wxversion
+        module.  For more details see:
+        http://wiki.wxpython.org/index.cgi/MultiVersionInstalls 
 
-    wxPython-common-osx-$CHARTYPE-$VERSION-$KIND
-
-        This is the common files for the runtime that are shared
-        between all versions of the runtime.  You need to have one of
-        these installed and it will determine which of the runtimes is
-        the default one that is imported with "import wx", so it
-        should match the version and character type of one of the
-        installed runtimes.  If you are wanting to have only one
-        wxPython installed then be sure to install both of the
-        packages in this disk image.
 
     uninstall_wxPython.py
 
@@ -600,15 +559,17 @@ EOF
     $PYTHONW $PROGDIR/../buildapp.py \
 	--builddir=$DMGAPPS \
 	--name=PyCrust \
-	--mainprogram=$INSTALLCOMMON$BINPREFIX/pycrust.py \
+	--mainprogram=$INSTALLROOT$BINPREFIX/pycrust.py \
 	--iconfile=$PROGDIR/PieShell.icns \
 	build
 
+## TODO: PyAlaMode needs tweaked to be able to run from a bundle.  It
+## needs to know to ignore command line parameters and etc...
 #      # and PyAlaMode
 #      $PYTHONW $PROGDIR/../buildapp.py \
 #  	--builddir=$DMGAPPS \
 #  	--name=PyAlaMode \
-#  	--mainprogram=$INSTALLCOMMON$BINPREFIX/pyalamode.py \
+#  	--mainprogram=$INSTALLROOT$BINPREFIX/pyalamode.py \
 #  	--iconfile=$PROGDIR/PieShell.icns \
 #  	build
 
@@ -616,7 +577,7 @@ EOF
     $PYTHONW $PROGDIR/../buildapp.py \
  	--builddir=$DMGAPPS \
  	--name=XRCed \
- 	--mainprogram=$INSTALLCOMMON$BINPREFIX/xrced.py \
+ 	--mainprogram=$INSTALLROOT$BINPREFIX/xrced.py \
  	--iconfile=$PROGDIR/XRCed.icns \
  	build
 
