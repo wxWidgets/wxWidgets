@@ -739,7 +739,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
         return;
     }
 
-    //No sheme - inherit
+    //No scheme - inherit
     m_scheme = base.m_scheme;
     m_fields |= wxURI_SCHEME;
 
@@ -802,7 +802,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
         //             T.query = R.query;
         if (m_path[0u] != wxT('/'))
         {
-            //Marge paths
+            //Merge paths
             const wxChar* op = m_path.c_str();
             const wxChar* bp = base.m_path.c_str() + base.m_path.Length();
 
