@@ -1279,7 +1279,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates)
 {
-    const wxChar **strings = new wxChar *[noTemplates];
+    wxChar **strings = new wxChar *[noTemplates];
     wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
@@ -1287,7 +1287,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     {
         if (templates[i]->IsVisible())
         {
-            strings[n] = templates[i]->m_description;
+            strings[n] = (wxChar *)templates[i]->m_description.c_str();
             data[n] = (wxChar *)templates[i];
             n ++;
         }
@@ -1316,7 +1316,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         int noTemplates)
 {
-    const wxChar **strings = new wxChar *[noTemplates];
+    wxChar **strings = new wxChar *[noTemplates];
     wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
@@ -1324,7 +1324,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
     {
         if (templates[i]->IsVisible() && (templates[i]->GetViewName() != T("")))
         {
-            strings[n] = templates[i]->m_viewTypeName;
+            strings[n] = (wxChar *)templates[i]->m_viewTypeName.c_str();
             data[n] = (wxChar *)templates[i];
             n ++;
         }

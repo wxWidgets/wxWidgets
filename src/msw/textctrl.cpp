@@ -167,14 +167,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_lDlgCode |= DLGC_WANTTAB;
 
     // do create the control - either an EDIT or RICHEDIT
-    const wxChar *windowClass = T("EDIT(");
+    const wxChar *windowClass = T("EDIT");
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_RICH )
     {
         msStyle |= ES_AUTOVSCROLL;
         m_isRich = TRUE;
-        windowClass = T("RICHEDIT(");
+        windowClass = T("RICHEDIT");
     }
     else
         m_isRich = FALSE;

@@ -37,6 +37,7 @@ class WXDLLEXPORT wxList;
     class WXDLLEXPORT wxClientData;
     class WXDLLEXPORT wxDC;
     class WXDLLEXPORT wxMenu;
+    class WXDLLEXPORT wxWindow;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TIMER_H_
@@ -37,9 +37,9 @@ public:
     bool OneShot() const { return oneShot; }
 
 protected:
-    bool oneShot ;
-    int  milli ;
-    int  lastMilli ;
+    bool oneShot;
+    int  milli;
+    int  lastMilli;
 
     long id;
 

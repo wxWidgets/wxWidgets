@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -54,7 +54,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 // ----------------------------------------------------------------------------
 
 #ifdef __WIN32__
-    #define _EXPORT /**/
+    #define _EXPORT
 #else
     #define _EXPORT _export
 #endif
@@ -70,14 +70,15 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 // ----------------------------------------------------------------------------
 // wxTimer class
 // ----------------------------------------------------------------------------
-wxTimer::wxTimer(void)
+
+wxTimer::wxTimer()
 {
-    milli = 0 ;
-    lastMilli = -1 ;
+    milli = 0;
+    lastMilli = -1;
     id = 0;
 }
 
-wxTimer::~wxTimer(void)
+wxTimer::~wxTimer()
 {
     Stop();
 
@@ -86,7 +87,7 @@ wxTimer::~wxTimer(void)
 
 bool wxTimer::Start(int milliseconds, bool mode)
 {
-    oneShot = mode ;
+    oneShot = mode;
     if (milliseconds < 0)
         milliseconds = lastMilli;
 
@@ -114,19 +115,21 @@ bool wxTimer::Start(int milliseconds, bool mode)
     }
 }
 
-void wxTimer::Stop(void)
+void wxTimer::Stop()
 {
-    if (id) {
+    if ( id )
+    {
         KillTimer(NULL, (UINT)id);
-        wxTimerList.DeleteObject(this); /* @@@@ */
+        wxTimerList.DeleteObject(this);
     }
-    id = 0 ;
-    milli = 0 ;
+    id = 0;
+    milli = 0;
 }
 
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
 void wxProcessTimer(wxTimer& timer)
 {
     // Avoid to process spurious timer events

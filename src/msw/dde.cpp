@@ -441,7 +441,7 @@ bool wxDDEConnection::Disconnect(void)
   return (DdeDisconnect((HCONV) m_hConv) != 0);
 }
 
-bool wxDDEConnection::Execute(wxChar *data, int size, wxIPCFormat format)
+bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
 {
   DWORD result;
   if (size < 0)

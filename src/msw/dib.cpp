@@ -83,14 +83,14 @@
 #define PALVERSION		0x300
 #define MAXPALETTE	256	  /* max. # supported palette entries */
 
-DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul);
-DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul);
+static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul);
+static DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul);
 
-BOOL		 WriteDIB (LPTSTR szFile,HANDLE hdib);
-WORD		 PaletteSize (VOID FAR * pv);
-WORD		 DibNumColors (VOID FAR * pv);
-// HANDLE		 DibFromBitmap (HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal);
-BOOL             PASCAL MakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
+static BOOL	WriteDIB (LPTSTR szFile,HANDLE hdib);
+static WORD	PaletteSize (VOID FAR * pv);
+static WORD	DibNumColors (VOID FAR * pv);
+// HANDLE	DibFromBitmap (HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal);
+static BOOL PASCAL MakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
 
 /****************************************************************************
  *									    *

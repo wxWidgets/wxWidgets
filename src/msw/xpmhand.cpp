@@ -60,7 +60,7 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     if (dc)
     {
       xpmAttr.valuemask = XpmReturnPixels;
-      int errorStatus = XpmReadFileToImage(&dc, wxMBSTRINGCAST name.mb_str(wxConvFile), &ximage, (XImage **) NULL, &xpmAttr);
+      int errorStatus = XpmReadFileToImage(&dc, wxMBSTRINGCAST name.fn_str(), &ximage, (XImage **) NULL, &xpmAttr);
       DeleteDC(dc);
       if (errorStatus == XpmSuccess)
       {
@@ -108,7 +108,7 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type
             ximage.height = M_BITMAPHANDLERDATA->m_height;
             ximage.depth = M_BITMAPHANDLERDATA->m_depth; 
             ximage.bitmap = (HBITMAP)M_BITMAPHANDLERDATA->m_hBitmap;
-            int errorStatus = XpmWriteFileFromImage(&dc, wxMBSTRINGCAST name.mb_str(wxConvFile),
+            int errorStatus = XpmWriteFileFromImage(&dc, wxMBSTRINGCAST name.fn_str(),
                 &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
             
             if (dc)

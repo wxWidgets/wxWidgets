@@ -386,35 +386,30 @@ wxMask *wxPNGReader::CreateMask()
 
 bool wxPNGReader::ReadFile(wxChar * ImageFileName)
 {
-    int number_passes;
-
     if (ImageFileName)
         wxStrcpy(filename, ImageFileName);
 
-    FILE *fp;
-    png_struct *png_ptr;
-    png_info *info_ptr;
-
     /* open the file */
-    fp = fopen(wxConvFile.cWX2MB(filename), "rb");
+    FILE *fp = fopen(wxConvFile.cWX2MB(filename), "rb");
     if (!fp)
         return FALSE;
 
     /* allocate the necessary structures */
-    png_ptr = new (png_struct);
+    png_struct *png_ptr = new (png_struct);
     if (!png_ptr)
     {
         fclose(fp);
         return FALSE;
     }
 
-    info_ptr = new (png_info);
+    png_info *info_ptr = new (png_info);
     if (!info_ptr)
     {
         fclose(fp);
         delete(png_ptr);
         return FALSE;
     }
+
     /* set error handling */
     if (setjmp(png_ptr->jmpbuf))
     {
@@ -478,6 +473,7 @@ bool wxPNGReader::ReadFile(wxChar * ImageFileName)
     byte *row_pointers = new byte[row_stride];
 
     /* turn on interlace handling */
+    int number_passes;
     if (info_ptr->interlace_type)
         number_passes = png_set_interlace_handling(png_ptr);
     else

@@ -47,6 +47,9 @@
 #  define HAVE_WCSLEN 1
 
 #  include <tchar.h>
+
+#  define T(x)       _T(x)
+
 #  if wxUSE_UNICODE // temporary - preserve binary compatibility
 typedef  _TCHAR      wxChar;
 typedef  _TSCHAR     wxSChar;

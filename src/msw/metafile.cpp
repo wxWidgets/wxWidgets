@@ -340,7 +340,7 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 	p < (WORD *)&pMFHead ->checksum; ++p)
        pMFHead ->checksum ^= *p;
 
-  FILE *fd = fopen(filename.mb_str(wxConvFile), "rb");
+  FILE *fd = fopen(filename.fn_str(), "rb");
   if (!fd) return FALSE;
   
   wxChar tempFileBuf[256];

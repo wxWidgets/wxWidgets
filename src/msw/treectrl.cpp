@@ -463,7 +463,7 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 {
     TraverseCounter counter(this, item, recursively);
 
-    return counter.GetCount();
+    return counter.GetCount() - 1;
 }
 
 // ----------------------------------------------------------------------------
