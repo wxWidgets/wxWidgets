@@ -36,9 +36,6 @@
 #include "wx/image.h"
 #endif
 
-// For the purposes of forcing this module to link
-extern char g_ArtProviderModule;
-
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -86,9 +83,6 @@ bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
 
 void wxArtProviderCache::Clear()
 {
-    // Hack to make the default provider link
-    // with the application
-    g_ArtProviderModule = 0;
     m_bitmapsHash.clear();
 }
 
