@@ -4,6 +4,58 @@
 
 The functions defined in wxWindows are described here.
 
+\section{Thread functions}\label{threadfunctions}
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex}, \helpref{Multithreading overview}{wxthreadoverview}
+
+\membersection{::wxMutexGuiEnter}\label{wxmutexguienter}
+
+\func{void}{wxMutexGuiEnter}{\void}
+
+This function must be called when any thread other than the main GUI thread
+wants to get access to the GUI library. This function will block the execution
+of the calling thread until the main thread (or any other thread holding the
+main GUI lock) leaves the GUI library and no other other thread will enter
+the GUI library until the calling thread calls \helpref{::wxMutexGuiLeave()}{wxmutexguileave}.
+
+Typically, these functions are used like this:
+
+\begin{verbatim}
+void MyThread::Foo(void)
+{
+    // before doing any GUI calls we must ensure that this thread is the only
+    // one doing it!
+
+    wxMutexGuiEnter();
+
+    // Call GUI here:
+    my_window->DrawSomething();
+    
+    wxMutexGuiLeave();
+}
+\end{verbatim}
+
+Note that under GTK, no creation of top-level windows is allowed in any
+thread but the main one.
+
+This function is only defined on platforms which support preemptive
+threads. 
+
+\membersection{::wxMutexGuiLeave}\label{wxmutexguileave}
+
+\func{void}{wxMutexGuiLeave}{\void}
+
+See \helpref{::wxMutexGuiEnter()}{wxmutexguienter}.
+
+This function is only defined on platforms which support preemptive
+threads.
+
 \section{File functions}\label{filefunctions}
 
 \wxheading{Include files}

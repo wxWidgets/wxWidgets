@@ -129,6 +129,26 @@ documents without much work. In fact, only few function calls are sufficient.
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
 
+\subsection{Thread sample}\label{samplethread}
+
+This sample demonstrates the use of threads in connection with GUI programs.
+There are two fundamentally different ways to use threads in GUI programs and
+either way has to take care of the fact that the GUI library itself usually
+is not multi-threading safe, i.e. that it might crash if two threads try to
+access the GUI class simultaneously. One way to prevent that is have a normal
+GUI program in the main thread and some worker threads which work in the 
+background. In order to make communication between the main thread and the
+worker threads possible, wxWindows offers the \helpref{wxPostEvent}{wxpostevent}
+function and this sample makes use of this function.
+
+The other way to use a so called Mutex (such as those offered in the \helpref{wxMutex}{wxmutex}
+class) that prevent threads from accessing the GUI classes as long as any other
+thread accesses them. For this, wxWindows has the \helpref{wxMutexGuiEnter}{wxmutexguienter}
+and \helpref{wxMutexGuiLeave}{wxmutexguileave} functions, both of which are
+used and tested in the sample as well.
+
+See also \helpref{Multithreading overview}{wxthreadoverview} and \helpref{wxThread}{wxthread}.
+
 \subsection{Toolbar sample}\label{sampletoolbar}
 
 The toolbar sample shows the \helpref{wxToolBar}{wxtoolbar} class in action.

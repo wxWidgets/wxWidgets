@@ -155,7 +155,6 @@ void MyThread::WriteText(const wxString& text)
     wxMutexGuiEnter();
 
     msg << text;
-
     m_frame->WriteText(msg);
     
     wxMutexGuiLeave();
