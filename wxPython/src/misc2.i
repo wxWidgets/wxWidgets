@@ -670,6 +670,7 @@ long wxExecute(const wxString& command,
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxJoystick {
 public:
     wxJoystick(int joystick = wxJOYSTICK1);
@@ -719,6 +720,7 @@ public:
     bool SetCapture(wxWindow* win, int pollingFreq = 0);
     bool ReleaseCapture();
 };
+#endif
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

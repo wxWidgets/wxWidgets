@@ -270,6 +270,9 @@ class wxPyGridCellEditorPtr(wxGridCellEditorPtr):
     def base_PaintBackground(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellEditor_base_PaintBackground,(self,) + _args, _kwargs)
         return val
+    def base_IsAcceptedKey(self, *_args, **_kwargs):
+        val = apply(gridc.wxPyGridCellEditor_base_IsAcceptedKey,(self,) + _args, _kwargs)
+        return val
     def base_StartingKey(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellEditor_base_StartingKey,(self,) + _args, _kwargs)
         return val
