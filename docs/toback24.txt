@@ -136,25 +136,6 @@ Checking in include/wx/msw/setup0.h;
 new revision: 1.128; previous revision: 1.127
 done
 
-11 wxMotif filedialog/wildcard corrections
-
-  Documented wxMotif filedialog limitations WRT wildcard syntax.
-Modified filedialog to either extract the wildcard (if only one wildcard
-is present) or assert (if more than one is present).
-
-Checking in docs/latex/wx/filedlg.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/filedlg.tex,v  <--  filedlg.tex
-new revision: 1.14; previous revision: 1.13
-done
-Checking in samples/dialogs/dialogs.cpp;
-/pack/cvsroots/wxwindows/wxWindows/samples/dialogs/dialogs.cpp,v  <--  dialogs.cpp
-new revision: 1.88; previous revision: 1.87
-done
-cvs diff: [15:36:24] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx
-Checking in src/motif/filedlg.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/motif/filedlg.cpp,v  <--  filedlg.cpp
-new revision: 1.16; previous revision: 1.15
-
 12. wxStopWatch::Start() didn't resume it contrary to the docs
 
 Checking in src/common/timercmn.cpp;
