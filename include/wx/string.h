@@ -838,8 +838,8 @@ public:
   wxString& replace(size_t nStart, size_t nLen,
                     const wxString& str, size_t nStart2, size_t nLen2);
     // replaces the substring with first nCount chars of sz
-    wxString& replace(size_t nStart, size_t nLen,
-                      const wxChar* sz, size_t nCount);
+  wxString& replace(size_t nStart, size_t nLen,
+                    const wxChar* sz, size_t nCount);
 
     // swap two strings
   void swap(wxString& str);
@@ -855,7 +855,7 @@ public:
 #if !defined(__VISUALC__) || defined(__WIN32__)
     // find first n characters of sz
   size_t find(const wxChar* sz, size_t nStart = 0, size_t n = npos) const;
-#endif
+#endif // VC++ 1.5
 
   // Gives a duplicate symbol (presumably a case-insensitivity problem)
 #if !defined(__BORLANDC__)
@@ -874,7 +874,7 @@ public:
           size_t n = npos) const;
     // as find, but from the end
   size_t rfind(wxChar ch, size_t nStart = npos) const;
-#endif
+#endif // VC++ 1.5
 
     // find first/last occurence of any character in the set
 
@@ -905,7 +905,8 @@ public:
     // same as above
   size_t find_first_not_of(wxChar ch, size_t nStart = 0) const;
     //  as strcspn()
-  size_t find_last_not_of(const wxString& str, size_t nStart=npos) const;
+  size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
+    { return find_first_not_of(str.c_str(), nStart); }
     // same as above
   size_t find_last_not_of(const wxChar* sz, size_t nStart = npos) const;
     // same as above
@@ -917,15 +918,18 @@ public:
     // just like strcmp()
   int compare(const wxString& str) const { return Cmp(str); }
     // comparison with a substring
-  int compare(size_t nStart, size_t nLen, const wxString& str) const;
+  int compare(size_t nStart, size_t nLen, const wxString& str) const
+    { return Mid(nStart, nLen).Cmp(str); }
     // comparison of 2 substrings
   int compare(size_t nStart, size_t nLen,
-              const wxString& str, size_t nStart2, size_t nLen2) const;
+              const wxString& str, size_t nStart2, size_t nLen2) const
+    { return Mid(nStart, nLen).Cmp(str.Mid(nStart2, nLen2)); }
     // just like strcmp()
   int compare(const wxChar* sz) const { return Cmp(sz); }
     // substring comparison with first nCount characters of sz
   int compare(size_t nStart, size_t nLen,
-              const wxChar* sz, size_t nCount = npos) const;
+              const wxChar* sz, size_t nCount = npos) const
+    { return Mid(nStart, nLen).Cmp(wxString(sz, nCount)); }
 
   // substring extraction
   wxString substr(size_t nStart = 0, size_t nLen = npos) const

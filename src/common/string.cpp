@@ -1536,7 +1536,33 @@ int wxString::sprintf(const wxChar *pszFormat, ...)
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------
+
 #ifdef  wxSTD_STRING_COMPATIBILITY
+
+void wxString::resize(size_t nSize, wxChar ch)
+{
+    size_t len = length();
+
+    if ( nSize < len )
+    {
+        Truncate(nSize);
+    }
+    else if ( nSize > len )
+    {
+        *this += wxString(ch, len - nSize);
+    }
+    //else: we have exactly the specified length, nothing to do
+}
+
+void wxString::swap(wxString& str)
+{
+    // this is slightly less efficient than fiddling with m_pchData directly,
+    // but it is still quite efficient as we don't copy the string here because
+    // ref count always stays positive
+    wxString tmp = str;
+    str = *this;
+    *this = str;
+}
 
 wxString& wxString::insert(size_t nPos, const wxString& str)
 {
