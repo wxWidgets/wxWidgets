@@ -349,7 +349,10 @@ void wxMenuItem::SetText(const wxString& text)
 
 #ifdef __WXWINCE__
         // FIXME: complete this, applying the old
-        // flags
+        // flags.
+        // However, the WinCE doc for SetMenuItemInfo
+        // says that you can't use it to set the menu
+        // item state; only data, id and type.
         MENUITEMINFO info;
         wxZeroMemory(info);
         info.cbSize = sizeof(info);

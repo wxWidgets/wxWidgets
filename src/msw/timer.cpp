@@ -98,7 +98,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 
 #ifdef __WXWINCE__
     m_id = ::SetTimer(NULL, (UINT)(m_id ? m_id : 1),
-                      (UINT)m_milli, (void (__stdcall *)(struct HWND__ *,unsigned int,unsigned int,unsigned long)) wxTimerProc);
+                      (UINT)m_milli, (TIMERPROC) wxTimerProc);
 #else
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());

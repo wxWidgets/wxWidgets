@@ -302,14 +302,23 @@ void wxFrame::InternalSetMenuBar()
 #elif defined(__WXWINCE__)
     if (!m_commandBar)
     {
-        // TODO: what identifer shall we use?
         // TODO: eventually have a wxCommandBar class
-        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), 999);
+        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), NewControlId());
+        if (!m_commandBar)
+        {
+            wxFAIL_MSG( _T("failed to create commandbar") );
+            return;
+        }
     }
     if (m_commandBar)
     {
-        CommandBar_InsertMenubarEx((HWND) m_commandBar, wxGetInstance(),
-            (LPTSTR) (HMENU) m_hMenu, 0);
+        if (!CommandBar_InsertMenubarEx((HWND) m_commandBar, NULL,
+            (LPTSTR) (HMENU) m_hMenu, 0))
+        {
+            wxFAIL_MSG( _T("failed to set menubar") );
+            return;
+        }
+        CommandBar_DrawMenuBar((HWND) m_commandBar, 0);
     }
 #else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
@@ -349,6 +358,9 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     if (show)
     {
 #if wxUSE_TOOLBAR
+#ifdef __WXWINCE__
+        // TODO: hide commandbar
+#else
         wxToolBar *theToolBar = GetToolBar();
         if (theToolBar)
             theToolBar->GetSize(NULL, &m_fsToolBarHeight);
@@ -360,6 +372,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             theToolBar->SetSize(-1,0);
             theToolBar->Show(FALSE);
         }
+#endif // __WXWINCE__
 #endif // wxUSE_TOOLBAR
 
         // TODO: make it work for WinCE
@@ -388,6 +401,9 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     else
     {
 #if wxUSE_TOOLBAR
+#ifdef __WXWINCE__
+        // TODO: show commandbar
+#else
         wxToolBar *theToolBar = GetToolBar();
 
         // restore the toolbar, menubar, and statusbar
@@ -396,6 +412,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             theToolBar->SetSize(-1, m_fsToolBarHeight);
             theToolBar->Show(TRUE);
         }
+#endif // __WXWINCE__
 #endif // wxUSE_TOOLBAR
 
 #if wxUSE_STATUSBAR
@@ -441,6 +458,12 @@ void wxFrame::PositionToolBar()
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
+#ifdef __WXWINCE__
+        // We want to do something different in WinCE, because
+        // the toolbar should be associated with the commandbar,
+        // and not an independent window.
+        // TODO
+#else
         // don't call our (or even wxTopLevelWindow) version because we want
         // the real (full) client area size, not excluding the tool/status bar
         int width, height;
@@ -471,6 +494,7 @@ void wxFrame::PositionToolBar()
         // use the 'real' MSW position here, don't offset relativly to the
         // client area origin
         toolbar->SetSize(0, 0, tw, th, wxSIZE_NO_ADJUSTMENTS);
+#endif // __WXWINCE__
     }
 }
 
