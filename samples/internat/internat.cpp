@@ -207,7 +207,7 @@ bool MyApp::OnInit()
     test_menu->AppendSeparator();
     test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"));
     test_menu->Append(INTERNAT_TEST_2, _("&2 _N() (ngettext)"));
-    test_menu->Append(INTERNAT_TEST_3, _("&3 N_() (gettext_noop)"));
+    test_menu->Append(INTERNAT_TEST_3, _("&3 wxTRANSLATE() (gettext_noop)"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
@@ -322,7 +322,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* title = _("Testing _() (gettext)");
     wxTextEntryDialog d(this, _("Please enter text to translate"),
-		title, N_("default value"));
+		title, wxTRANSLATE("default value"));
     if (d.ShowModal() == wxID_OK)
     {
     	wxString v = d.GetValue();
@@ -348,8 +348,8 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     	s << _T("\n");
     	for (int n = first; n <= last; ++n)
         {
-        	    s << n << _T(" ") << _N("file deleted", "files deleted", n)
-        		<< _T("\n");
+        	    s << n << _T(" ") << 
+                     ngettext("file deleted", "files deleted", n) << _T("\n");
     	}
         wxMessageBox(s);
     }
@@ -359,11 +359,11 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* lines[] =
     {
-    	N_("line 1"),
-    	N_("line 2"),
-    	N_("line 3"),
+    	wxTRANSLATE("line 1"),
+    	wxTRANSLATE("line 2"),
+    	wxTRANSLATE("line 3"),
     };
-    wxString s(_("Testing N_() (gettext_noop)"));
+    wxString s(_("Testing wxTRANSLATE() (gettext_noop)"));
     s << _T("\n");
     for (size_t i = 0; i < WXSIZEOF(lines); ++i)
     {
