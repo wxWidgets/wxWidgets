@@ -36,7 +36,7 @@
 
 
 %{
-#if defined(SEPARATE) && defined(__WXMSW__)
+#if defined(__WXMSW__)
     static wxString wxPyEmptyStr("");
     static wxPoint  wxPyDefaultPosition(-1, -1);
     static wxSize   wxPyDefaultSize(-1, -1);
@@ -824,7 +824,7 @@ void glDrawBuffer (GLenum mode);
 void glDrawElements (GLenum mode, GLsizei count, GLenum type, const GLvoid *indices);
 void glDrawPixels (GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels);
 void glEdgeFlag (GLboolean flag);
-void glEdgeFlagPointer (GLsizei stride, const GLvoid *pointer);
+void glEdgeFlagPointer (GLsizei stride, const GLboolean *pointer);
 void glEdgeFlagv (const GLboolean *flag);
 void glEnable (GLenum cap);
 void glEnableClientState (GLenum array);
