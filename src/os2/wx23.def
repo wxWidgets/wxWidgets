@@ -13469,6 +13469,8 @@ EXPORTS
       wxGetResource__FRC8wxStringT1PfT1
       ;wxGetMousePosition(int*,int*)
       wxGetMousePosition__FPiT1
+      ;wxDrawBorder(unsigned long,_RECTL&,unsigned long)
+      wxDrawBorder__FUlR6_RECTLT1
       ;wxPathExists(const wxString&)
       wxPathExists__FRC8wxString
       ;wxGetWindowText(unsigned long)
@@ -13786,8 +13788,8 @@ EXPORTS
       GetCharWidth__8wxWindowCFv
       ;wxWindowBase::FindFocus()
       FindFocus__12wxWindowBaseFv
-      ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*)
-      OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_
+      ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*,unsigned long)
+      OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_T1
       ;wxWindow::sm_eventTableEntries
       sm_eventTableEntries__8wxWindow
       ;wxWindow::SetTitle(const wxString&)

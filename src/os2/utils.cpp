@@ -950,4 +950,82 @@ wxString WXDLLEXPORT wxPMErrorToStr(
     return(sError);
 } // end of wxPMErrorToStr
 
+void wxDrawBorder(
+  HPS                               hPS
+, RECTL&                            rRect
+, WXDWORD                           dwStyle
+)
+{
+    POINTL                          vPoint[2];
+
+    vPoint[0].x = rRect.xLeft;
+    vPoint[0].y = rRect.yBottom;
+    ::GpiMove(hPS, &vPoint[0]);
+    if (dwStyle & wxSIMPLE_BORDER ||
+        dwStyle & wxSTATIC_BORDER)
+    {
+        vPoint[1].x = rRect.xRight;
+        vPoint[1].y = rRect.yTop;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+    }
+    if (dwStyle & wxSUNKEN_BORDER)
+    {
+        LINEBUNDLE                      vLineBundle;
+
+        vLineBundle.lColor     = 0x00FFFFFF; // White
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[1].x = rRect.xRight;
+        vPoint[1].y = rRect.yTop;
+        ::GpiBox( hPS
+                 ,DRO_OUTLINE
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+        vLineBundle.lColor     = 0x00000000; // BLACK
+        vLineBundle.usMixMode  = FM_OVERPAINT;
+        vLineBundle.fxWidth    = 2;
+        vLineBundle.lGeomWidth = 2;
+        vLineBundle.usType     = LINETYPE_SOLID;
+        vLineBundle.usEnd      = 0;
+        vLineBundle.usJoin     = 0;
+        ::GpiSetAttrs( hPS
+                      ,PRIM_LINE
+                      ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                      ,0L
+                      ,&vLineBundle
+                     );
+        vPoint[0].x = rRect.xLeft + 2;
+        vPoint[0].y = rRect.yBottom + 2;
+        ::GpiMove(hPS, &vPoint[0]);
+        vPoint[1].x = rRect.xLeft + 2;
+        vPoint[1].y = rRect.yTop - 2;
+        ::GpiLine(hPS, &vPoint[1]);
+        vPoint[1].x = rRect.xRight - 2;
+        vPoint[1].y = rRect.yTop - 2;
+        ::GpiLine(hPS, &vPoint[1]);
+    }
+    if (dwStyle & wxDOUBLE_BORDER)
+    {
+    }
+    if (dwStyle & wxRAISED_BORDER)
+    {
+    }
+} // end of wxDrawBorder
 

@@ -399,11 +399,18 @@ bool wxWindow::Create(
         ulCreateFlags |= WS_CLIPCHILDREN;
 
     //
-    // Empty stuff for now since PM has no custome 3D effects
-    // Doesn't mean someone cannot make some up though
+    //
     //
     bool                            bWant3D;
-    WXDWORD                         dwExStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
+    WXDWORD                         dwExStyle = Determine3DEffects( WS_EX_CLIENTEDGE
+                                                                   ,&bWant3D
+                                                                  );
+
+    //
+    // Add the simple border style as we'll use this to draw borders
+    //
+    if (lStyle & wxSIMPLE_BORDER)
+        dwExStyle |= wxSIMPLE_BORDER;
 
     //
     // Generic OS/2 Windows are created with no owner, no Z Order, no Control data,
@@ -420,6 +427,9 @@ bool wxWindow::Create(
               ,NULLHANDLE
               ,NULLHANDLE
               ,m_windowId
+              ,NULL
+              ,NULL
+              ,dwExStyle
              );
 
     return(TRUE);
@@ -992,16 +1002,32 @@ WXDWORD wxWindow::MakeExtendedStyle(
 )
 {
    //
-   // PM does not support extended style
+   // Simply fill out with wxWindow extended styles.  We'll conjure
+   // something up in OS2Create and all window redrawing pieces later
    //
-    WXDWORD                         exStyle = 0;
-    return exStyle;
+    WXDWORD                         dwStyle = 0;
+
+    if (lStyle & wxTRANSPARENT_WINDOW )
+        dwStyle |= wxTRANSPARENT_WINDOW;
+
+    if (!bEliminateBorders)
+    {
+        if (lStyle & wxSUNKEN_BORDER)
+            dwStyle |= wxSUNKEN_BORDER;
+        if (lStyle & wxDOUBLE_BORDER)
+            dwStyle |= wxDOUBLE_BORDER;
+        if (lStyle & wxRAISED_BORDER )
+            dwStyle |= wxRAISED_BORDER;
+        if (lStyle & wxSTATIC_BORDER)
+            dwStyle |= wxSTATIC_BORDER;
+    }
+    return dwStyle;
 } // end of wxWindow::MakeExtendedStyle
 
 //
-// Determines whether native 3D effects or CTL3D should be used,
+// Determines whether simulated 3D effects or CTL3D should be used,
 // applying a default border style if required, and returning an extended
-// style to pass to CreateWindowEx.
+// style to pass to OS2Create.
 //
 WXDWORD wxWindow::Determine3DEffects(
   WXDWORD                           dwDefaultBorderStyle
@@ -1011,9 +1037,65 @@ WXDWORD wxWindow::Determine3DEffects(
     WXDWORD                         dwStyle = 0L;
 
     //
-    // Native PM does not have any specialize 3D effects like WIN32 does
+    // Native PM does not have any specialize 3D effects like WIN32 does,
+    // so we have to try and invent them.
     //
-    *pbWant3D = FALSE;
+
+    //
+    // If matches certain criteria, then assume no 3D effects
+    // unless specifically requested (dealt with in MakeExtendedStyle)
+    //
+    if (!GetParent()                    ||
+        !IsKindOf(CLASSINFO(wxControl)) ||
+        (m_windowStyle & wxNO_BORDER)
+       )
+    {
+        *pbWant3D = FALSE;
+        return MakeExtendedStyle(m_windowStyle, FALSE);
+    }
+
+    //
+    // 1) App can specify global 3D effects
+    //
+    *pbWant3D = wxTheApp->GetAuto3D();
+
+    //
+    // 2) If the parent is being drawn with user colours, or simple border
+    //    specified, switch effects off.
+    //
+    if (GetParent() &&
+        (GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) ||
+        (m_windowStyle & wxSIMPLE_BORDER)
+       )
+        *pbWant3D = FALSE;
+
+    //
+    // 3) Control can override this global setting by defining
+    //    a border style, e.g. wxSUNKEN_BORDER
+    //
+    if ((m_windowStyle & wxDOUBLE_BORDER) ||
+        (m_windowStyle & wxRAISED_BORDER) ||
+        (m_windowStyle & wxSTATIC_BORDER) ||
+        (m_windowStyle & wxSUNKEN_BORDER)
+       )
+        *pbWant3D = TRUE;
+
+    dwStyle = MakeExtendedStyle( m_windowStyle
+                                ,FALSE
+                               );
+
+    //
+    // If we want 3D, but haven't specified a border here,
+    // apply the default border style specified.
+    //
+    if (dwDefaultBorderStyle && (*pbWant3D) &&
+        !((m_windowStyle & wxDOUBLE_BORDER) ||
+          (m_windowStyle & wxRAISED_BORDER) ||
+          (m_windowStyle & wxSTATIC_BORDER) ||
+          (m_windowStyle & wxSIMPLE_BORDER)
+         )
+        )
+        dwStyle |= dwDefaultBorderStyle;
     return dwStyle;
 } // end of wxWindow::Determine3DEffects
 
@@ -2581,6 +2663,7 @@ bool wxWindow::OS2Create(
 , unsigned long                     ulId
 , void*                             pCtlData
 , void*                             pPresParams
+, WXDWORD                           dwExStyle
 )
 {
     ERRORID                         vError;
@@ -2669,6 +2752,7 @@ bool wxWindow::OS2Create(
         wxLogError("Can't create window of class %s!. Error: %s\n", zClass, sError);
         return FALSE;
     }
+    m_dwExStyle = dwExStyle;
     ::WinSetWindowULong(m_hWnd, QWL_USER, (ULONG) this);
     wxWndHook = NULL;
 
@@ -3236,6 +3320,29 @@ bool wxWindow::HandlePaint()
                                     );
 
             ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
+
+            if (m_dwExStyle)
+            {
+                LINEBUNDLE                      vLineBundle;
+
+                vLineBundle.lColor     = 0x00000000; // Black
+                vLineBundle.usMixMode  = FM_OVERPAINT;
+                vLineBundle.fxWidth    = 1;
+                vLineBundle.lGeomWidth = 1;
+                vLineBundle.usType     = LINETYPE_SOLID;
+                vLineBundle.usEnd      = 0;
+                vLineBundle.usJoin     = 0;
+                ::GpiSetAttrs( hPS
+                              ,PRIM_LINE
+                              ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                              ,0L
+                              ,&vLineBundle
+                             );
+                wxDrawBorder( hPS
+                             ,vRect
+                             ,m_dwExStyle
+                            );
+            }
             ::WinEndPaint(hPS);
         }
     }

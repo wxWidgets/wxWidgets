@@ -117,7 +117,7 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 // ---------------------------------------------------------------------------
 
 #if !defined(WS_EX_CLIENTEDGE)
-    #define WS_EX_CLIENTEDGE 0
+    #define WS_EX_CLIENTEDGE 0x00000200L
 #endif
 
 #ifndef ENDSESSION_LOGOFF
@@ -183,6 +183,11 @@ extern "C"
 WXDLLEXPORT HINSTANCE wxGetInstance();
 }
 
+WXDLLEXPORT void wxDrawBorder( HPS     hPS
+                              ,RECTL&  rRect
+                              ,WXDWORD dwStyle
+                             );
+
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
@@ -226,6 +231,7 @@ inline bool wxStyleHasBorder(long style)
   return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
+
 
 #endif
     // _WX_PRIVATE_H_
