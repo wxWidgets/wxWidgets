@@ -107,9 +107,11 @@ END_EVENT_TABLE()
 wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
                           const wxString& label,
                           const wxPoint& pos, const wxSize& size,
+                          long style,
                           const wxString& name)
    : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
 {
+    m_style = style;
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *subp = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
@@ -132,8 +134,8 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
 
 #ifdef __WXMSW__
     #define BTN_BORDER 4
-    // FIXME - why is this needed? There's some reason why sunken border is 
-    //         ignored by sizers in wxMSW but not in wxGTK that I can't 
+    // FIXME - why is this needed? There's some reason why sunken border is
+    //         ignored by sizers in wxMSW but not in wxGTK that I can't
     //         figure out...
 #else
     #define BTN_BORDER 0
@@ -142,6 +144,14 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+
+    if (!(m_style & wxEL_ALLOW_EDIT))
+        m_bEdit->Show(FALSE);
+    if (!(m_style & wxEL_ALLOW_NEW))
+        m_bNew->Show(FALSE);
+    if (!(m_style & wxEL_ALLOW_DELETE))
+        m_bDel->Show(FALSE);
+
     subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
 
@@ -150,11 +160,12 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     subsizer->Fit(subp);
 
     sizer->Add(subp, 0, wxEXPAND);
+
+    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
+    if (style & wxEL_ALLOW_EDIT)
+        st |= wxLC_EDIT_LABELS;
     m_listCtrl = new CleverListCtrl(this, wxID_ELD_LISTCTRL,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    wxLC_REPORT | wxLC_NO_HEADER |
-                                    wxLC_SINGLE_SEL | wxSUNKEN_BORDER |
-                                    wxLC_EDIT_LABELS);
+                                    wxDefaultPosition, wxDefaultSize, st);
     wxArrayString empty_ar;
     SetStrings(empty_ar);
 
@@ -190,8 +201,10 @@ void wxEditableListBox::OnItemSelected(wxListEvent& event)
     m_selection = event.GetIndex();
     m_bUp->Enable(m_selection != 0 && m_selection < m_listCtrl->GetItemCount()-1);
     m_bDown->Enable(m_selection < m_listCtrl->GetItemCount()-2);
-    m_bEdit->Enable(m_selection < m_listCtrl->GetItemCount()-1);
-    m_bDel->Enable(m_selection < m_listCtrl->GetItemCount()-1);
+    if (m_style & wxEL_ALLOW_EDIT)
+        m_bEdit->Enable(m_selection < m_listCtrl->GetItemCount()-1);
+    if (m_style & wxEL_ALLOW_DELETE)
+        m_bDel->Enable(m_selection < m_listCtrl->GetItemCount()-1);
 }
 
 void wxEditableListBox::OnNewItem(wxCommandEvent& event)

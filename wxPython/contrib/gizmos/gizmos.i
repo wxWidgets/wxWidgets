@@ -155,6 +155,11 @@ def EVT_DYNAMIC_SASH_UNIFY(win, id, func):
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+enum {
+    wxEL_ALLOW_NEW,
+    wxEL_ALLOW_EDIT,
+    wxEL_ALLOW_DELETE,
+};
 
 // This class provides a composite control that lets the
 // user easily enter list of strings
@@ -165,6 +170,7 @@ public:
                       const wxString& label,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
+                      long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,
                       const char* name = "editableListBox");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"

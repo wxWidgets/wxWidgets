@@ -530,7 +530,7 @@ static void *SwigwxEditableListBoxTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+#define new_wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
 static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxEditableListBox * _result;
@@ -539,18 +539,19 @@ static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyO
     wxString * _arg2;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    char * _arg5 = (char *) "editableListBox";
+    long  _arg5 = (long ) (wxEL_ALLOW_NEW)|(wxEL_ALLOW_EDIT)|(wxEL_ALLOW_DELETE);
+    char * _arg6 = (char *) "editableListBox";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
-    char *_kwnames[] = { "parent","id","label","pos","size","name", NULL };
+    char *_kwnames[] = { "parent","id","label","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOs:new_wxEditableListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxEditableListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -591,7 +592,7 @@ static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyO
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxEditableListBox *)new_wxEditableListBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5);
+        _result = (wxEditableListBox *)new_wxEditableListBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1913,6 +1914,9 @@ SWIGEXPORT(void) initgizmosc() {
 	 PyDict_SetItemString(d,"wxEVT_DYNAMIC_SASH_UNIFY", PyInt_FromLong((long) wxEVT_DYNAMIC_SASH_UNIFY));
 	 PyDict_SetItemString(d,"wxDS_MANAGE_SCROLLBARS", PyInt_FromLong((long) wxDS_MANAGE_SCROLLBARS));
 	 PyDict_SetItemString(d,"wxDS_DRAG_CORNER", PyInt_FromLong((long) wxDS_DRAG_CORNER));
+	 PyDict_SetItemString(d,"wxEL_ALLOW_NEW", PyInt_FromLong((long) wxEL_ALLOW_NEW));
+	 PyDict_SetItemString(d,"wxEL_ALLOW_EDIT", PyInt_FromLong((long) wxEL_ALLOW_EDIT));
+	 PyDict_SetItemString(d,"wxEL_ALLOW_DELETE", PyInt_FromLong((long) wxEL_ALLOW_DELETE));
 	 PyDict_SetItemString(d,"wxLED_ALIGN_LEFT", PyInt_FromLong((long) wxLED_ALIGN_LEFT));
 	 PyDict_SetItemString(d,"wxLED_ALIGN_RIGHT", PyInt_FromLong((long) wxLED_ALIGN_RIGHT));
 	 PyDict_SetItemString(d,"wxLED_ALIGN_CENTER", PyInt_FromLong((long) wxLED_ALIGN_CENTER));

@@ -28,6 +28,10 @@ class WXDLLEXPORT wxBitmapButton;
 class WXDLLEXPORT wxListCtrl;
 class WXDLLEXPORT wxListEvent;
 
+#define wxEL_ALLOW_NEW          0x0100
+#define wxEL_ALLOW_EDIT         0x0200
+#define wxEL_ALLOW_DELETE       0x0400
+
 // This class provides a composite control that lets the
 // user easily enter list of strings
 
@@ -40,6 +44,7 @@ public:
                       const wxString& label,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
+                      long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,
                       const wxString& name = wxT("editableListBox"));
 
     void SetStrings(const wxArrayString& strings);
@@ -50,6 +55,7 @@ protected:
     wxListCtrl *m_listCtrl;
     int m_selection;
     bool m_edittingNew;
+    long m_style;
 
     void OnItemSelected(wxListEvent& event);
     void OnEndLabelEdit(wxListEvent& event);
