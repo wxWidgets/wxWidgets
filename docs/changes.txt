@@ -263,6 +263,7 @@ wxUniv:
 
 - wxBU_... button align flags support
 - vertical notebook orientation support
+- 3rd state support for checkboxes
 
 
 2.5.3

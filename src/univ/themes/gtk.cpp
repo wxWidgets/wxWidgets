@@ -329,6 +329,7 @@ public:
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
     void DrawUncheckBitmap(wxDC& dc, const wxRect& rect, bool isPressed);
+    void DrawUndeterminedBitmap(wxDC& dc, const wxRect& rect, bool isPressed);
 
 protected:
     // DrawBackground() helpers
@@ -469,9 +470,9 @@ private:
           m_penHighlight;
 
     // the checkbox bitmaps: first row is for the normal, second for the
-    // pressed state and the columns are for checked and unchecked status
-    // respectively
-    wxBitmap m_bitmapsCheckbox[2][2];
+    // pressed state and the columns are for checked, unchecked and
+    // undeterminated respectively
+    wxBitmap m_bitmapsCheckbox[2][3];
 
     // the line wrap bitmap (drawn at the end of wrapped lines)
     wxBitmap m_bmpLineWrap;
@@ -1346,6 +1347,35 @@ void wxGTKRenderer::DrawCheckItem(wxDC& dc,
 // check/radion buttons
 // ----------------------------------------------------------------------------
 
+void wxGTKRenderer::DrawUndeterminedBitmap(wxDC& dc,
+                                           const wxRect& rectTotal,
+                                           bool isPressed)
+{
+    // FIXME: For sure it is not GTK look but it is better than nothing.
+    // Show me correct look and I will immediatelly make it better (ABX)
+    wxRect rect = rectTotal;
+
+    wxColour col1, col2;
+
+    if ( isPressed )
+    {
+        col1 = wxSCHEME_COLOUR(m_scheme, SHADOW_DARK);
+        col2 = wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED);
+    }
+    else
+    {
+        col1 = wxSCHEME_COLOUR(m_scheme, SHADOW_DARK);
+        col2 = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
+    }
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(col1, wxSOLID));
+    dc.DrawRectangle(rect);
+    rect.Deflate(1);
+    dc.SetBrush(wxBrush(col2, wxSOLID));
+    dc.DrawRectangle(rect);
+}
+
 void wxGTKRenderer::DrawUncheckBitmap(wxDC& dc,
                                       const wxRect& rectTotal,
                                       bool isPressed)
@@ -1471,7 +1501,7 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         rect.height = size.y;
         for ( int i = 0; i < 2; i++ )
         {
-            for ( int j = 0; j < 2; j++ )
+            for ( int j = 0; j < 3; j++ )
                 m_bitmapsCheckbox[i][j].Create(rect.width, rect.height);
         }
 
@@ -1485,16 +1515,30 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
         dc.SelectObject(m_bitmapsCheckbox[0][1]);
         DrawUncheckBitmap(dc, rect, false);
 
+        // normal undeterminated
+        dc.SelectObject(m_bitmapsCheckbox[0][2]);
+        DrawUndeterminedBitmap(dc, rect, false);
+
         // pressed checked
         m_bitmapsCheckbox[1][0] = m_bitmapsCheckbox[0][0];
 
         // pressed unchecked
         dc.SelectObject(m_bitmapsCheckbox[1][1]);
         DrawUncheckBitmap(dc, rect, true);
+
+        // pressed undeterminated
+        dc.SelectObject(m_bitmapsCheckbox[1][2]);
+        DrawUndeterminedBitmap(dc, rect, true);
     }
 
-    int row = flags & wxCONTROL_PRESSED ? 1 : 0;
-    int col = flags & wxCONTROL_CHECKED ? 0 : 1;
+    int row = flags & wxCONTROL_PRESSED
+                  ? 1
+                  : 0;
+    int col = flags & wxCONTROL_CHECKED
+                  ? 0
+                  : ( flags & wxCONTROL_UNDETERMINED
+                          ? 2
+                          : 1 );
 
     return m_bitmapsCheckbox[row][col];
 }

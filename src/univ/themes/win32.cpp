@@ -110,6 +110,7 @@ enum IndicatorStatus
 {
     IndicatorStatus_Checked,
     IndicatorStatus_Unchecked,
+    IndicatorStatus_Undeterminated,
     IndicatorStatus_Max
 };
 
@@ -1009,6 +1010,54 @@ static const char *unchecked_item_xpm[] = {
 "wwwwwwwwwwwww"
 };
 
+static const char *undetermined_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"A c #030303",
+"B c #838383",
+"C c #C3C3C3",
+"D c #FBFBFB",
+"E c #DBDBDB",
+/* pixels */
+"BBBBBBBBBBBBD",
+"BAAAAAAAAAAED",
+"BACDCDCDCDCED",
+"BADCDCDCDBDED",
+"BACDCDCDBBCED",
+"BADBDCEBBBDED",
+"BACBBDBBBDCED",
+"BADBBBBBDCDED",
+"BACDBBBDCDCED",
+"BADCDBDCDCDED",
+"BACDCDCDCDCED",
+"BEEEEEEEEEEED",
+"DDDDDDDDDDDDD"
+};
+
+static const char *pressed_undetermined_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"A c #040404",
+"B c #848484",
+"C c #C4C4C4",
+"D c #FCFCFC",
+"E c #DCDCDC",
+/* pixels */
+"BBBBBBBBBBBBD",
+"BAAAAAAAAAAED",
+"BACCCCCCCCCCD",
+"BACCCCCCCACED",
+"BACCCCCCAACED",
+"BACACCCAAACED",
+"BACAACAAACCED",
+"BACAAAAACCCED",
+"BACCAAACCCCCD",
+"BACCCACCCCCED",
+"BACCCCCCCCCED",
+"BEEEEEEEEEEED",
+"DDDDDDDDDDDDD"
+};
+
 static const char *checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "12 12 6 1",
@@ -1135,40 +1184,40 @@ static const char **
     // checkboxes first
     {
         // normal state
-        { checked_xpm, unchecked_xpm },
+        { checked_xpm, unchecked_xpm, undetermined_xpm },
 
         // pressed state
-        { pressed_checked_xpm, pressed_unchecked_xpm },
+        { pressed_checked_xpm, pressed_unchecked_xpm, pressed_undetermined_xpm },
 
         // disabled state
-        { pressed_disabled_checked_xpm, pressed_unchecked_xpm },
+        { pressed_disabled_checked_xpm, pressed_unchecked_xpm, pressed_disabled_checked_xpm },
     },
 
     // radio
     {
         // normal state
-        { checked_radio_xpm, unchecked_radio_xpm },
+        { checked_radio_xpm, unchecked_radio_xpm, NULL },
 
         // pressed state
-        { pressed_checked_radio_xpm, pressed_unchecked_radio_xpm },
+        { pressed_checked_radio_xpm, pressed_unchecked_radio_xpm, NULL },
 
         // disabled state
-        { pressed_disabled_checked_radio_xpm, pressed_unchecked_radio_xpm },
+        { pressed_disabled_checked_radio_xpm, pressed_unchecked_radio_xpm, NULL },
     },
 
     // menu
     {
         // normal state
-        { checked_menu_xpm, NULL },
+        { checked_menu_xpm, NULL, NULL },
 
         // selected state
-        { selected_checked_menu_xpm, NULL },
+        { selected_checked_menu_xpm, NULL, NULL },
 
         // disabled state
-        { disabled_checked_menu_xpm, NULL },
+        { disabled_checked_menu_xpm, NULL, NULL },
 
         // disabled selected state
-        { selected_disabled_checked_menu_xpm, NULL },
+        { selected_disabled_checked_menu_xpm, NULL, NULL },
     }
 };
 
@@ -2315,7 +2364,9 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
 
     IndicatorStatus indStatus = flags & wxCONTROL_CHECKED
                                     ? IndicatorStatus_Checked
-                                    : IndicatorStatus_Unchecked;
+                                    : ( flags & wxCONTROL_UNDETERMINED
+                                          ? IndicatorStatus_Undeterminated
+                                          : IndicatorStatus_Unchecked );
 
     wxBitmap bmp = m_bmpIndicators[indType][indState][indStatus];
     if ( !bmp.Ok() )

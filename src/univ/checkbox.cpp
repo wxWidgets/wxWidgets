@@ -84,24 +84,12 @@ bool wxCheckBox::Create(wxWindow *parent,
 
 bool wxCheckBox::GetValue() const
 {
-    return m_status == Status_Checked;
+    return (Get3StateValue() != wxCHK_UNCHECKED);
 }
 
 void wxCheckBox::SetValue(bool value)
 {
-    Status status = value ? Status_Checked : Status_Unchecked;
-    if ( status != m_status )
-    {
-        m_status = status;
-
-        if ( m_status == Status_Checked )
-        {
-            // invoke the hook
-            OnCheck();
-        }
-
-        Refresh();
-    }
+    Set3StateValue( value ? wxCHK_CHECKED : wxCHK_UNCHECKED );
 }
 
 void wxCheckBox::OnCheck()
@@ -151,8 +139,11 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
     dc.SetFont(GetFont());
     dc.SetTextForeground(GetForegroundColour());
 
-    if ( m_status == Status_Checked )
-        flags |= wxCONTROL_CHECKED;
+    switch ( Get3StateValue() )
+    {
+        case wxCHK_CHECKED:      flags |= wxCONTROL_CHECKED;
+        case wxCHK_UNDETERMINED: flags |= wxCONTROL_UNDETERMINED;
+    }
 
     wxBitmap bitmap(GetBitmap(GetState(flags), m_status));
 
@@ -203,6 +194,40 @@ wxSize wxCheckBox::DoGetBestClientSize() const
 // checkbox actions
 // ----------------------------------------------------------------------------
 
+void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
+{
+    Status status;
+    switch ( state )
+    {
+        case wxCHK_UNCHECKED:    status = Status_Unchecked;   break;
+        case wxCHK_CHECKED:      status = Status_Checked; break;
+        default:                 wxFAIL_MSG(_T("Unknown checkbox state"));
+        case wxCHK_UNDETERMINED: status = Status_3rdState;  break;
+    }
+    if ( status != m_status )
+    {
+        m_status = status;
+
+        if ( m_status == Status_Checked )
+        {
+            // invoke the hook
+            OnCheck();
+        }
+
+        Refresh();
+    }
+}
+
+wxCheckBoxState wxCheckBox::DoGet3StateValue() const
+{
+    switch ( m_status )
+    {
+        case Status_Checked:    return wxCHK_CHECKED;
+        case Status_Unchecked:  return wxCHK_UNCHECKED;
+    }
+    return wxCHK_UNDETERMINED;
+}
+
 void wxCheckBox::Press()
 {
     if ( !m_isPressed )
@@ -227,7 +252,25 @@ void wxCheckBox::Toggle()
 {
     m_isPressed = false;
 
-    ChangeValue(!GetValue());
+    Status status = m_status;
+
+    switch ( Get3StateValue() )
+    {
+        case wxCHK_CHECKED:
+            Set3StateValue(Is3rdStateAllowedForUser() ? wxCHK_UNDETERMINED : wxCHK_UNCHECKED);
+            break;
+
+        case wxCHK_UNCHECKED:
+            Set3StateValue(wxCHK_CHECKED);
+            break;
+
+        case wxCHK_UNDETERMINED:
+            Set3StateValue(wxCHK_UNCHECKED);
+            break;
+    }
+
+    if( status != m_status )
+        SendEvent();
 }
 
 void wxCheckBox::ChangeValue(bool value)
@@ -241,7 +284,17 @@ void wxCheckBox::SendEvent()
 {
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
     InitCommandEvent(event);
-    event.SetInt(IsChecked());
+    wxCheckBoxState state = Get3StateValue();
+
+    // If the style flag to allow the user setting the undetermined state
+    // is not set, then skip the undetermined state and set it to unchecked.
+    if ( state == wxCHK_UNDETERMINED && !Is3rdStateAllowedForUser() )
+    {
+        state = wxCHK_UNCHECKED;
+        Set3StateValue(state);
+    }
+
+    event.SetInt(state);
     Command(event);
 }
 
