@@ -63,6 +63,11 @@ void  wxSTCDropTarget::OnLeave() {
 #endif
 
 
+#ifdef __WXGTK__
+#undef wxSTC_USE_POPUP
+#define wxSTC_USE_POPUP 0
+#endif
+
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
 #include <wx/popupwin.h>
 #define wxSTCCallTipBase wxPopupWindow
