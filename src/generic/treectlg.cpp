@@ -1512,13 +1512,13 @@ void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
         if ( !IsExpanded(item) )
             return;
     }
-    
+
     long cookie;
     wxTreeItemId child = GetFirstChild(item, cookie);
     while ( child.IsOk() )
     {
         ExpandAll(child);
-        
+
         child = GetNextChild(item, cookie);
     }
 }
@@ -2515,12 +2515,20 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
         case ' ':
         case WXK_RETURN:
+            if ( !event.HasModifiers() )
             {
                 wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 event.m_item = (long) m_current;
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( event );
             }
+
+            // in any case, also generate the normal key event for this key,
+            // even if we generated the ACTIVATED event above: this is what
+            // wxMSW does and it makes sense because you might not want to
+            // process ACTIVATED event at all and handle Space and Return
+            // directly (and differently) which would be impossible otherwise
+            event.Skip();
             break;
 
             // up goes to the previous sibling or to the last
@@ -2664,14 +2672,14 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
         default:
             // do not use wxIsalnum() here
-            if ( !event.HasModifiers() && 
+            if ( !event.HasModifiers() &&
                  ((keyCode >= '0' && keyCode <= '9') ||
                   (keyCode >= 'a' && keyCode <= 'z') ||
                   (keyCode >= 'A' && keyCode <= 'Z' )))
             {
                 // find the next item starting with the given prefix
                 char ch = (char)keyCode;
-                
+
                 wxTreeItemId id = FindItem(m_current, m_findPrefix + (wxChar)ch);
                 if ( !id.IsOk() )
                 {
