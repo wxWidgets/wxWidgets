@@ -896,7 +896,7 @@ wxString& wxString::insert(size_t nPos, const wxString& str)
   wxASSERT( nPos <= Len() );
 
   wxString strTmp;
-  char *pc = strTmp.GetWriteBuf(Len() + str.Len() + 1);
+  char *pc = strTmp.GetWriteBuf(Len() + str.Len());
   strncpy(pc, c_str(), nPos);
   strcpy(pc + nPos, str);
   strcpy(pc + nPos + str.Len(), c_str() + nPos);
