@@ -339,11 +339,11 @@ SOURCE=.\msw\dummy.cpp
 # End Source File
 #$ ExpandGlue("WXMSWSRCS", "# Begin Source File\n\nSOURCE=.\\msw\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\msw\\", "\n# End Source File\n");
 #$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
-# End Group
 # Begin Group "OLE Files"
 
 # PROP Default_Filter ""
 #$ ExpandGlue("WXOLESRCS", "# Begin Source File\n\nSOURCE=.\\msw\\ole\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\msw\\ole\\", "\n# End Source File\n");
+# End Group
 # End Group
 # Begin Group "Headers"
 

@@ -1419,7 +1419,6 @@ SOURCE=.\msw\gsockmsw.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 
-# End Group
 # Begin Group "OLE Files"
 
 # PROP Default_Filter ""
@@ -1448,6 +1447,7 @@ SOURCE=.\msw\ole\oleutils.cpp
 SOURCE=.\msw\ole\uuid.cpp
 # End Source File
 
+# End Group
 # End Group
 # Begin Group "Headers"
 
@@ -1983,6 +1983,10 @@ SOURCE=..\include\wx\imagxpm.h
 # Begin Source File
 
 SOURCE=..\include\wx\intl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\iosfwrap.h
 # End Source File
 # Begin Source File
 
