@@ -250,7 +250,7 @@ GridFrame::GridFrame()
     grid->AppendRows(100);
     grid->AppendCols(100);
     int ir = grid->GetNumberRows();
-    grid->DeleteRows(ir);
+    grid->DeleteRows(0, ir);
     grid->AppendRows(ir);
 
     grid->SetRowSize( 0, 60 );
