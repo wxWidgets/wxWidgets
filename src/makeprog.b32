@@ -23,19 +23,19 @@ EXEDIR = BORL
 !if "$(wxUSE_GUI)" == "0"
 IMGLIBS=
 !else
-IMGLIBS= png_$(DEBUG_SUFFIX) jpeg_$(DEBUG_SUFFIX) tiff_$(DEBUG_SUFFIX)
+IMGLIBS= png_bc$(DEBUG_SUFFIX) jpeg_bc$(DEBUG_SUFFIX) tiff_bc$(DEBUG_SUFFIX)
 !endif
 
 !if "$(FINAL)" == "0"
-EX_LIBS=$(EXTRALIBS:.lib=_d.lib)
+EX_LIBS=$(EXTRALIBS:.lib=_bcd.lib)
 !else
-EX_LIBS=$(EXTRALIBS)
+EX_LIBS=$(EXTRALIBS:.lib=_bc.lib)
 !endif
 
 !if "$(WXUSINGDLL)" == "1"
-LIBS=$(WXLIB) $(EX_LIBS) cw32mti import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS) 
+LIBS=$(WXLIB) $(EX_LIBS) cw32mti import32 ole2w32 regex_bc$(DEBUG_SUFFIX) zlib_bc$(DEBUG_SUFFIX) $(IMGLIBS) 
 !else
-LIBS=$(WXLIB) $(EX_LIBS) cw32mt import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS)
+LIBS=$(WXLIB) $(EX_LIBS) cw32mt import32 ole2w32 regex_bc$(DEBUG_SUFFIX) zlib_bc$(DEBUG_SUFFIX) $(IMGLIBS)
 !endif
 
 !if "$(wxUSE_ODBC)" == "1"
