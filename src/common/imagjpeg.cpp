@@ -365,13 +365,13 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( image->HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
          image->HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
     {
-        resX = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX);
-        resY = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
+        resX = (UINT16)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX);
+        resY = (UINT16)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
     }
     else if ( image->HasOption(wxIMAGE_OPTION_RESOLUTION) )
     {
         resX =
-        resY = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
+        resY = (UINT16)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
     }
     else
     {

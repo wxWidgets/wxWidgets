@@ -738,9 +738,15 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     int iHeight = image->GetHeight();
     int iWidth = image->GetWidth();
 
-    unsigned char uchMaskRed = bHasMask ? image->GetMaskRed() : 0;
-    unsigned char uchMaskGreen = bHasMask ? image->GetMaskGreen() : 0;
-    unsigned char uchMaskBlue = bHasMask ? image->GetMaskBlue() : 0;
+    unsigned char uchMaskRed = 0, uchMaskGreen = 0, uchMaskBlue = 0;
+
+    if ( bHasMask )
+    {
+        uchMaskRed = image->GetMaskRed();
+        uchMaskGreen = image->GetMaskGreen();
+        uchMaskBlue = image->GetMaskBlue();
+    }
+
     unsigned char *pColors = image->GetData();
 
     for (int y = 0; y != iHeight; ++y)
