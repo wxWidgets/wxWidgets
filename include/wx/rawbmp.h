@@ -144,11 +144,13 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
 // the (most common) native bitmap format without alpha support
 typedef wxPixelFormat<unsigned char, 24,
-                      #ifdef __WXMSW__
+                      #if defined(__WXMSW__)
                                 2, 1, 0
-                      #else // !__WXMSW__
+                      #elif defined(__WXMAC__)
+                                1, 2, 3
+                      #else // default for the others (not supported anyhow)
                                 0, 1, 2
-                      #endif // __WXMSW__/!__WXMSW__
+                      #endif // platform
                      > wxNativePixelFormat;
 
 // the (most common) native format for bitmaps with alpha channel
@@ -156,7 +158,14 @@ typedef wxPixelFormat<unsigned char, 32,
                       wxNativePixelFormat::RED,
                       wxNativePixelFormat::GREEN,
                       wxNativePixelFormat::BLUE,
-                      3> wxAlphaPixelFormat;
+                      #if defined(__WXMSW__)
+                          3
+                      #elif defined(__WXMAC__)
+                          0
+                      #else // default for the others (not supported anyhow)
+                          3
+                      #endif // platform
+                     > wxAlphaPixelFormat;
 
 // we also define the (default/best) pixel format for the given class: this is
 // used as default value for the pixel format in wxPixelIterator template
