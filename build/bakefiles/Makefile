@@ -18,6 +18,7 @@ AUTOCONF_ALL = \
 	../../contrib/src/ogl/Makefile.in \
 	../../contrib/src/stc/Makefile.in \
 	../../contrib/src/xrc/Makefile.in \
+	../../contrib/utils/wxrc/Makefile.in \
 	../../samples/Makefile.in \
 	../../samples/access/Makefile.in \
 	../../samples/artprov/Makefile.in \
@@ -110,6 +111,7 @@ BORLAND_ALL = \
 	../../contrib/build/xrc/makefile.bcc \
 	../../contrib/samples/animate/makefile.bcc \
 	../../contrib/samples/xrc/makefile.bcc \
+	../../contrib/utils/wxrc/makefile.bcc \
 	../../samples/access/makefile.bcc \
 	../../samples/artprov/makefile.bcc \
 	../../samples/calendar/makefile.bcc \
@@ -203,6 +205,7 @@ MINGW_ALL = \
 	../../contrib/build/xrc/makefile.gcc \
 	../../contrib/samples/animate/makefile.gcc \
 	../../contrib/samples/xrc/makefile.gcc \
+	../../contrib/utils/wxrc/makefile.gcc \
 	../../samples/access/makefile.gcc \
 	../../samples/artprov/makefile.gcc \
 	../../samples/calendar/makefile.gcc \
@@ -296,6 +299,7 @@ MSVC_ALL = \
 	../../contrib/build/xrc/makefile.vc \
 	../../contrib/samples/animate/makefile.vc \
 	../../contrib/samples/xrc/makefile.vc \
+	../../contrib/utils/wxrc/makefile.vc \
 	../../samples/access/makefile.vc \
 	../../samples/artprov/makefile.vc \
 	../../samples/calendar/makefile.vc \
@@ -389,6 +393,7 @@ WATCOM_ALL = \
 	../../contrib/build/xrc/makefile.wat \
 	../../contrib/samples/animate/makefile.wat \
 	../../contrib/samples/xrc/makefile.wat \
+	../../contrib/utils/wxrc/makefile.wat \
 	../../samples/access/makefile.wat \
 	../../samples/artprov/makefile.wat \
 	../../samples/calendar/makefile.wat \
@@ -493,6 +498,7 @@ clean:
 	rm -f ../../contrib/src/ogl/Makefile.in
 	rm -f ../../contrib/src/stc/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
+	rm -f ../../contrib/utils/wxrc/Makefile.in
 	rm -f ../../samples/Makefile.in
 	rm -f ../../samples/access/Makefile.in
 	rm -f ../../samples/artprov/Makefile.in
@@ -584,6 +590,7 @@ clean:
 	rm -f ../../contrib/build/xrc/makefile.bcc
 	rm -f ../../contrib/samples/animate/makefile.bcc
 	rm -f ../../contrib/samples/xrc/makefile.bcc
+	rm -f ../../contrib/utils/wxrc/makefile.bcc
 	rm -f ../../samples/access/makefile.bcc
 	rm -f ../../samples/artprov/makefile.bcc
 	rm -f ../../samples/calendar/makefile.bcc
@@ -676,6 +683,7 @@ clean:
 	rm -f ../../contrib/build/xrc/makefile.gcc
 	rm -f ../../contrib/samples/animate/makefile.gcc
 	rm -f ../../contrib/samples/xrc/makefile.gcc
+	rm -f ../../contrib/utils/wxrc/makefile.gcc
 	rm -f ../../samples/access/makefile.gcc
 	rm -f ../../samples/artprov/makefile.gcc
 	rm -f ../../samples/calendar/makefile.gcc
@@ -768,6 +776,7 @@ clean:
 	rm -f ../../contrib/build/xrc/makefile.vc
 	rm -f ../../contrib/samples/animate/makefile.vc
 	rm -f ../../contrib/samples/xrc/makefile.vc
+	rm -f ../../contrib/utils/wxrc/makefile.vc
 	rm -f ../../samples/access/makefile.vc
 	rm -f ../../samples/artprov/makefile.vc
 	rm -f ../../samples/calendar/makefile.vc
@@ -860,6 +869,7 @@ clean:
 	rm -f ../../contrib/build/xrc/makefile.wat
 	rm -f ../../contrib/samples/animate/makefile.wat
 	rm -f ../../contrib/samples/xrc/makefile.wat
+	rm -f ../../contrib/utils/wxrc/makefile.wat
 	rm -f ../../samples/access/makefile.wat
 	rm -f ../../samples/artprov/makefile.wat
 	rm -f ../../samples/calendar/makefile.wat
@@ -1095,6 +1105,23 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/samples/xrc/makefile.wat: $(SDEPS) ../../contrib/samples/xrc/xrcdemo.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/xrc/xrcdemo.bkl
+	touch $@
+
+
+../../contrib/utils/wxrc/Makefile.in: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
+../../contrib/utils/wxrc/makefile.bcc: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
+../../contrib/utils/wxrc/makefile.vc: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
+../../contrib/utils/wxrc/makefile.gcc: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
+../../contrib/utils/wxrc/makefile.wat: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
 	touch $@
 
 

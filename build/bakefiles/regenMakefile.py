@@ -135,6 +135,8 @@ os.path.walk(os.path.join('..','..','contrib','build'),
              onSubmakefile, CONTRIB_DIR)
 os.path.walk(os.path.join('..','..','contrib','samples'),
              onSubmakefile, SAMPLES_DIR)
+os.path.walk(os.path.join('..','..','contrib','utils'),
+             onSubmakefile, SAMPLES_DIR)
 
 
 cleanCmds = ''
