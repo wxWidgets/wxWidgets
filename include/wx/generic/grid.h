@@ -31,6 +31,7 @@
 #include "wx/combobox.h"
 #include "wx/dynarray.h"
 #include "wx/timer.h"
+#include "wx/clntdata.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -98,7 +99,7 @@ class WXDLLEXPORT wxSpinCtrl;
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellWorker
+class WXDLLEXPORT wxGridCellWorker : public wxClientDataContainer
 {
 public:
     wxGridCellWorker() { m_nRef = 1; }
@@ -569,7 +570,7 @@ private:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellAttr
+class WXDLLEXPORT wxGridCellAttr : public wxClientDataContainer
 {
 public:
     enum wxAttrKind
@@ -711,7 +712,7 @@ private:
 // the default implementation is reasonably efficient for the generic case,
 // but you might still wish to implement your own for some specific situations
 // if you have performance problems with the stock one
-class WXDLLEXPORT wxGridCellAttrProvider
+class WXDLLEXPORT wxGridCellAttrProvider : public wxClientDataContainer
 {
 public:
     wxGridCellAttrProvider();
@@ -745,7 +746,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 
 
-class WXDLLEXPORT wxGridTableBase : public wxObject
+class WXDLLEXPORT wxGridTableBase : public wxObject, public wxClientDataContainer
 {
 public:
     wxGridTableBase();
