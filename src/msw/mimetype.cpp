@@ -144,6 +144,8 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
                 commands->Add(command);
         }
 
+        count++;
+
         ok = rkey.GetNextKey(verb, dummy);
     }
 
