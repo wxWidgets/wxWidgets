@@ -60,12 +60,12 @@ extern PyObject *SWIG_newvarlink(void);
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyList_Check(target)) {
             o2 = target;
             target = PyList_New(0);
@@ -82,23 +82,23 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -703,11 +703,11 @@ static PyObject *_wrap_wxPseudoMetaFile_SetFillBrush(PyObject *self, PyObject *a
     wxPseudoMetaFile * _arg0;
     wxBrush * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","brush", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetFillBrush",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetFillBrush",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -716,13 +716,20 @@ static PyObject *_wrap_wxPseudoMetaFile_SetFillBrush(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_SetFillBrush. Expected _wxBrush_p.");
+{
+    wxBrush* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxBrush_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxTheBrushList->FindOrCreateBrush(temp->GetColour(), temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPseudoMetaFile_SetFillBrush(_arg0,_arg1);
@@ -773,11 +780,11 @@ static PyObject *_wrap_wxPseudoMetaFile_SetOutlinePen(PyObject *self, PyObject *
     wxPseudoMetaFile * _arg0;
     wxPen * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","pen", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetOutlinePen",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetOutlinePen",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -786,13 +793,22 @@ static PyObject *_wrap_wxPseudoMetaFile_SetOutlinePen(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_SetOutlinePen. Expected _wxPen_p.");
+{
+    wxPen* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPseudoMetaFile_SetOutlinePen(_arg0,_arg1);
@@ -1464,12 +1480,12 @@ static PyObject *_wrap_wxPseudoMetaFile_SetPen(PyObject *self, PyObject *args, P
     wxPen * _arg1;
     bool  _arg2 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     int tempbool2 = (int) FALSE;
     char *_kwnames[] = { "self","pen","isOutline", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPseudoMetaFile_SetPen",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPseudoMetaFile_SetPen",_kwnames,&_argo0,&_obj1,&tempbool2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1478,13 +1494,22 @@ static PyObject *_wrap_wxPseudoMetaFile_SetPen(PyObject *self, PyObject *args, P
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_SetPen. Expected _wxPen_p.");
+{
+    wxPen* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
     _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1503,12 +1528,12 @@ static PyObject *_wrap_wxPseudoMetaFile_SetBrush(PyObject *self, PyObject *args,
     wxBrush * _arg1;
     bool  _arg2 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     int tempbool2 = (int) FALSE;
     char *_kwnames[] = { "self","brush","isFill", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPseudoMetaFile_SetBrush",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPseudoMetaFile_SetBrush",_kwnames,&_argo0,&_obj1,&tempbool2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1517,13 +1542,20 @@ static PyObject *_wrap_wxPseudoMetaFile_SetBrush(PyObject *self, PyObject *args,
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_SetBrush. Expected _wxBrush_p.");
+{
+    wxBrush* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxBrush_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxTheBrushList->FindOrCreateBrush(temp->GetColour(), temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
     _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1541,11 +1573,11 @@ static PyObject *_wrap_wxPseudoMetaFile_SetFont(PyObject *self, PyObject *args, 
     wxPseudoMetaFile * _arg0;
     wxFont * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","font", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetFont",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPseudoMetaFile_SetFont",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1554,13 +1586,26 @@ static PyObject *_wrap_wxPseudoMetaFile_SetFont(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_SetFont. Expected _wxFont_p.");
+{
+    wxFont* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxFont_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxTheFontList->FindOrCreateFont(temp->GetPointSize(),
+                                                  temp->GetFamily(),
+                                                  temp->GetStyle(),
+                                                  temp->GetWeight(),
+                                                  temp->GetUnderlined(),
+                                                  temp->GetFaceName(),
+                                                  temp->GetEncoding());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPseudoMetaFile_SetFont(_arg0,_arg1);
@@ -6056,12 +6101,12 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnBrush(PyObject *self, PyObject *ar
     wxBrush * _arg1;
     bool  _arg2 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     int tempbool2 = (int) FALSE;
     char *_kwnames[] = { "self","pen","isOutline", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPyDrawnShape_SetDrawnBrush",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPyDrawnShape_SetDrawnBrush",_kwnames,&_argo0,&_obj1,&tempbool2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6070,13 +6115,20 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnBrush(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBrush_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyDrawnShape_SetDrawnBrush. Expected _wxBrush_p.");
+{
+    wxBrush* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxBrush_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxTheBrushList->FindOrCreateBrush(temp->GetColour(), temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
     _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -6094,11 +6146,11 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnFont(PyObject *self, PyObject *arg
     wxPyDrawnShape * _arg0;
     wxFont * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","font", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDrawnShape_SetDrawnFont",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDrawnShape_SetDrawnFont",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6107,13 +6159,26 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnFont(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyDrawnShape_SetDrawnFont. Expected _wxFont_p.");
+{
+    wxFont* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxFont_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxTheFontList->FindOrCreateFont(temp->GetPointSize(),
+                                                  temp->GetFamily(),
+                                                  temp->GetStyle(),
+                                                  temp->GetWeight(),
+                                                  temp->GetUnderlined(),
+                                                  temp->GetFaceName(),
+                                                  temp->GetEncoding());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPyDrawnShape_SetDrawnFont(_arg0,_arg1);
@@ -6131,12 +6196,12 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnPen(PyObject *self, PyObject *args
     wxPen * _arg1;
     bool  _arg2 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     int tempbool2 = (int) FALSE;
     char *_kwnames[] = { "self","pen","isOutline", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPyDrawnShape_SetDrawnPen",_kwnames,&_argo0,&_argo1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxPyDrawnShape_SetDrawnPen",_kwnames,&_argo0,&_obj1,&tempbool2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6145,13 +6210,22 @@ static PyObject *_wrap_wxPyDrawnShape_SetDrawnPen(PyObject *self, PyObject *args
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyDrawnShape_SetDrawnPen. Expected _wxPen_p.");
+{
+    wxPen* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
     _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -10960,11 +11034,11 @@ static PyObject *_wrap_wxPyDivisionShape_SetLeftSidePen(PyObject *self, PyObject
     wxPyDivisionShape * _arg0;
     wxPen * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","pen", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDivisionShape_SetLeftSidePen",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDivisionShape_SetLeftSidePen",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10973,13 +11047,22 @@ static PyObject *_wrap_wxPyDivisionShape_SetLeftSidePen(PyObject *self, PyObject
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyDivisionShape_SetLeftSidePen. Expected _wxPen_p.");
+{
+    wxPen* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPyDivisionShape_SetLeftSidePen(_arg0,_arg1);
@@ -11119,11 +11202,11 @@ static PyObject *_wrap_wxPyDivisionShape_SetTopSidePen(PyObject *self, PyObject 
     wxPyDivisionShape * _arg0;
     wxPen * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","pen", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDivisionShape_SetTopSidePen",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDivisionShape_SetTopSidePen",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -11132,13 +11215,22 @@ static PyObject *_wrap_wxPyDivisionShape_SetTopSidePen(PyObject *self, PyObject 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyDivisionShape_SetTopSidePen. Expected _wxPen_p.");
+{
+    wxPen* temp;
+    if (_obj1) {
+        if (_obj1 == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj(_obj1, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
         return NULL;
         }
     }
+    if (temp)
+        _arg1 = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        _arg1 = NULL;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPyDivisionShape_SetTopSidePen(_arg0,_arg1);
@@ -12572,6 +12664,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyRectangleShape","_class_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
     { "_class_wxPyRectangleShape","_wxPyControlPoint",SwigwxPyControlPointTowxPyRectangleShape},
     { "_class_wxPyRectangleShape","_wxPyRectangleShape",0},
+    { "_wxMutexGuiLocker","_class_wxMutexGuiLocker",0},
     { "_wxLog","_class_wxLog",0},
     { "_class_wxToolBarBase","_wxToolBarBase",0},
     { "_wxMask","_class_wxMask",0},
@@ -12589,6 +12682,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObject","_class_wxDataObject",0},
     { "_class_wxPyFontEnumerator","_wxPyFontEnumerator",0},
     { "_wxStaticBox","_class_wxStaticBox",0},
+    { "_wxColourDatabase","_class_wxColourDatabase",0},
     { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
     { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_wxChoice","_class_wxChoice",0},
@@ -12724,6 +12818,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxZipFSHandler","_wxZipFSHandler",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
+    { "_wxPenList","_class_wxPenList",0},
     { "_wxTaskBarIcon","_class_wxTaskBarIcon",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
     { "_wxPyControlPoint","_class_wxPyControlPoint",0},
@@ -12740,6 +12835,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMessageDialog","_class_wxMessageDialog",0},
     { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
+    { "_class_wxMutexGuiLocker","_wxMutexGuiLocker",0},
     { "_wxTextEntryDialog","_class_wxTextEntryDialog",0},
     { "_wxConfig","_class_wxConfig",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
@@ -12754,6 +12850,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxToolBar","_wxToolBar",0},
     { "_wxDropTarget","_class_wxDropTarget",0},
     { "_class_wxStaticLine","_wxStaticLine",0},
+    { "_class_wxColourDatabase","_wxColourDatabase",0},
     { "_wxScrollEvent","_class_wxScrollEvent",0},
     { "_wxToolBarToolBase","_class_wxToolBarToolBase",0},
     { "_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0},
@@ -12783,9 +12880,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
     { "_wxGenericDragImage","_class_wxGenericDragImage",0},
     { "_class_wxProgressDialog","_wxProgressDialog",0},
+    { "_class_wxBrushList","_wxBrushList",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_wxPyInputStream","_class_wxPyInputStream",0},
     { "_wxPyApp","_class_wxPyApp",0},
+    { "_class_wxPenList","_wxPenList",0},
     { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
     { "_class_wxOutputStream","_wxOutputStream",0},
     { "_wxLogTextCtrl","_class_wxLogTextCtrl",0},
@@ -12845,6 +12944,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCloseEvent","_wxCloseEvent",0},
     { "_wxSashEvent","_class_wxSashEvent",0},
     { "_wxBusyInfo","_class_wxBusyInfo",0},
+    { "_wxFontList","_class_wxFontList",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
     { "_wxJoystick","_class_wxJoystick",0},
@@ -13060,12 +13160,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxFontList","_wxFontList",0},
     { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
     { "_class_wxListCtrl","_wxListCtrl",0},
     { "_class_wxPyDividedShape","_wxPyDividedShape",0},
+    { "_wxBrushList","_class_wxBrushList",0},
     { "_wxCustomDataObject","_class_wxCustomDataObject",0},
     { "_class_wxLogNull","_wxLogNull",0},
     { "_class_wxSize","_wxSize",0},

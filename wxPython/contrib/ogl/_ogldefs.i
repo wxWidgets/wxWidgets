@@ -54,6 +54,68 @@ class wxPyControlPoint;
 
 
 //---------------------------------------------------------------------------
+// Typemaps just for OGL
+
+
+// wxOGL doesn't use a ref-counted copy of pens and brushes, so we'll
+// use the pen and brush lists to simulate that...
+
+
+%typemap(python, in) wxPen* {
+    wxPen* temp;
+    if ($source) {
+        if ($source == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj($source, (void **) &temp,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxPen_p.");
+        return NULL;
+        }
+    }
+    if (temp)
+        $target = wxThePenList->FindOrCreatePen(temp->GetColour(),
+                                                temp->GetWidth(),
+                                                temp->GetStyle());
+    else
+        $target = NULL;
+}
+
+%typemap(python, in) wxBrush* {
+    wxBrush* temp;
+    if ($source) {
+        if ($source == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj($source, (void **) &temp,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+    if (temp)
+        $target = wxTheBrushList->FindOrCreateBrush(temp->GetColour(), temp->GetStyle());
+    else
+        $target = NULL;
+}
+
+
+%typemap(python, in) wxFont* {
+    wxFont* temp;
+    if ($source) {
+        if ($source == Py_None) { temp = NULL; }
+        else if (SWIG_GetPtrObj($source, (void **) &temp,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error, expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    if (temp)
+        $target = wxTheFontList->FindOrCreateFont(temp->GetPointSize(),
+                                                  temp->GetFamily(),
+                                                  temp->GetStyle(),
+                                                  temp->GetWeight(),
+                                                  temp->GetUnderlined(),
+                                                  temp->GetFaceName(),
+                                                  temp->GetEncoding());
+    else
+        $target = NULL;
+}
+
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 

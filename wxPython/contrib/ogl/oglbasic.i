@@ -231,8 +231,10 @@ public:
     int GetAttachmentMode();
     void SetId(long i);
     long GetId();
+
     void SetPen(wxPen *pen);
     void SetBrush(wxBrush *brush);
+
 
     // void SetClientData(wxObject *client_data);
     // wxObject *GetClientData();
