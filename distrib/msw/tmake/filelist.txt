@@ -202,6 +202,7 @@ memory.cpp	Common	Base
 menucmn.cpp	Common
 mimecmn.cpp	Common	Win32Only,Base
 module.cpp	Common	Base
+msgout.cpp	Common	Base
 mstream.cpp	Common	Base
 nbkbase.cpp	Common
 object.cpp	Common	Base
@@ -891,6 +892,7 @@ mimetype.h	WXH	Base
 minifram.h	WXH
 module.h	WXH	Base
 msgdlg.h	WXH
+msgout.h	WXH	Base
 mslu.cpp	MSW
 mstream.h	WXH	Base
 notebook.h	WXH

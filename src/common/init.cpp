@@ -109,6 +109,7 @@ bool WXDLLEXPORT wxInitialize()
         return FALSE;
     }
 
+    wxTheApp->DoInit();
     gs_nInitCount++;
 
     return TRUE;

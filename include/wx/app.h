@@ -108,6 +108,10 @@ public:
         // Override: always in GUI application, rarely in console ones.
     virtual bool OnInit();
 
+        // initializes wxMessageOutput; other responsibilities
+        // may be added later
+    virtual void DoInit();
+
 #if wxUSE_GUI
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.

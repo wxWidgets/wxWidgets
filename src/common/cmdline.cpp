@@ -44,6 +44,7 @@
 #include <ctype.h>
 
 #include "wx/datetime.h"
+#include "wx/msgout.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -513,6 +514,7 @@ int wxCmdLineParser::Parse(bool showUsage)
     size_t currentParam = 0;    // the index in m_paramDesc
 
     size_t countParam = m_data->m_paramDesc.GetCount();
+    wxString errorMsg;
 
     Reset();
 
@@ -559,7 +561,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                     optInd = m_data->FindOptionByLongName(name);
                     if ( optInd == wxNOT_FOUND )
                     {
-                        wxLogError(_("Unknown long option '%s'"), name.c_str());
+                        errorMsg << wxString::Format(_("Unknown long option '%s'"), name.c_str()) << "\n";
                     }
                 }
                 else
@@ -568,7 +570,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                     // Print the argument including leading "--"
                     name.Prepend( wxT("--") );
-                    wxLogError(_("Unknown option '%s'"), name.c_str());
+                    errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << "\n";
                 }
 
             }
@@ -589,7 +591,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                     {
                         // we couldn't find a valid option name in the
                         // beginning of this string
-                        wxLogError(_("Unknown option '%s'"), name.c_str());
+                        errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << "\n";
 
                         break;
                     }
@@ -661,7 +663,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                     if ( *p++ != _T('=') )
                     {
-                        wxLogError(_("Option '%s' requires a value, '=' expected."), name.c_str());
+                        errorMsg << wxString::Format(_("Option '%s' requires a value, '=' expected."), name.c_str()) << "\n";
 
                         ok = FALSE;
                     }
@@ -681,8 +683,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                             if ( ++n == count )
                             {
                                 // ... but there is none
-                                wxLogError(_("Option '%s' requires a value."),
-                                           name.c_str());
+                                errorMsg << wxString::Format(_("Option '%s' requires a value."),
+                                                             name.c_str()) << "\n";
 
                                 ok = FALSE;
                             }
@@ -698,8 +700,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                             // not depending on the option style
                             if ( opt.flags & wxCMD_LINE_NEEDS_SEPARATOR )
                             {
-                                wxLogError(_("Separator expected after the option '%s'."),
-                                           name.c_str());
+                                errorMsg << wxString::Format(_("Separator expected after the option '%s'."),
+                                                             name.c_str()) << "\n";
 
                                 ok = FALSE;
                             }
@@ -728,8 +730,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 }
                                 else
                                 {
-                                    wxLogError(_("'%s' is not a correct numeric value for option '%s'."),
-                                               value.c_str(), name.c_str());
+                                    errorMsg << wxString::Format(_("'%s' is not a correct numeric value for option '%s'."),
+                                                                 value.c_str(), name.c_str()) << "\n";
 
                                     ok = FALSE;
                                 }
@@ -742,8 +744,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 const wxChar *res = dt.ParseDate(value);
                                 if ( !res || *res )
                                 {
-                                    wxLogError(_("Option '%s': '%s' cannot be converted to a date."),
-                                               name.c_str(), value.c_str());
+                                    errorMsg << wxString::Format(_("Option '%s': '%s' cannot be converted to a date."),
+                                                                 name.c_str(), value.c_str()) << "\n";
 
                                     ok = FALSE;
                                 }
@@ -783,7 +785,7 @@ int wxCmdLineParser::Parse(bool showUsage)
             }
             else
             {
-                wxLogError(_("Unexpected parameter '%s'"), arg.c_str());
+                errorMsg << wxString::Format(_("Unexpected parameter '%s'"), arg.c_str()) << "\n";
 
                 ok = FALSE;
             }
@@ -811,8 +813,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                                    opt.longName.c_str());
                 }
 
-                wxLogError(_("The value for the option '%s' must be specified."),
-                           optName.c_str());
+                errorMsg << wxString::Format(_("The value for the option '%s' must be specified."),
+                                             optName.c_str()) << "\n";
 
                 ok = FALSE;
             }
@@ -832,17 +834,21 @@ int wxCmdLineParser::Parse(bool showUsage)
 
             if ( !(param.flags & wxCMD_LINE_PARAM_OPTIONAL) )
             {
-                wxLogError(_("The required parameter '%s' was not specified."),
-                           param.description.c_str());
+                errorMsg << wxString::Format(_("The required parameter '%s' was not specified."),
+                                             param.description.c_str()) << "\n";
 
                 ok = FALSE;
             }
         }
     }
 
-    if ( !ok && showUsage )
+    if ( !ok && errorMsg.length() != 0 )
     {
-        Usage();
+        wxString usage;
+        wxMessageOutput* msgOut = wxMessageOutput::Get();
+        if ( showUsage ) usage = GetUsageString();
+        if ( msgOut )
+            msgOut->Printf( wxT("%s%s"), usage.c_str(), errorMsg.c_str() );
     }
 
     return ok ? 0 : helpRequested ? -1 : 1;
@@ -854,10 +860,19 @@ int wxCmdLineParser::Parse(bool showUsage)
 
 void wxCmdLineParser::Usage()
 {
+    wxString usage = GetUsageString();
+    wxMessageOutput* msgOut = wxMessageOutput::Get();
+    if ( msgOut )
+        msgOut->Printf( wxT("%s"), usage.c_str() );
+}
+
+wxString wxCmdLineParser::GetUsageString()
+{
     wxString appname = wxTheApp->GetAppName();
     if ( !appname )
     {
-        wxCHECK_RET( !m_data->m_arguments.IsEmpty(), _T("no program name") );
+        wxCHECK_MSG( !m_data->m_arguments.IsEmpty(), wxEmptyString,
+                     _T("no program name") );
 
         appname = wxFileNameFromPath(m_data->m_arguments[0]);
         wxStripExtension(appname);
@@ -866,9 +881,15 @@ void wxCmdLineParser::Usage()
     // we construct the brief cmd line desc on the fly, but not the detailed
     // help message below because we want to align the options descriptions
     // and for this we must first know the longest one of them
-    wxString brief;
+    wxString usage;
     wxArrayString namesOptions, descOptions;
-    brief.Printf(_("Usage: %s"), appname.c_str());
+
+    if ( !!m_data->m_logo )
+    {
+        usage << m_data->m_logo << _T('\n');
+    }
+
+    usage << wxString::Format(_("Usage: %s"), appname.c_str());
 
     // the switch char is usually '-' but this can be changed with
     // SetSwitchChars() and then the first one of possible chars is used
@@ -881,19 +902,19 @@ void wxCmdLineParser::Usage()
     {
         wxCmdLineOption& opt = m_data->m_options[n];
 
-        brief << _T(' ');
+        usage << _T(' ');
         if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
         {
-            brief << _T('[');
+            usage << _T('[');
         }
 
         if ( !opt.shortName.empty() )
         {
-            brief << chSwitch << opt.shortName;
+            usage << chSwitch << opt.shortName;
         }
         else if ( areLongOptionsEnabled && !opt.longName.empty() )
         {
-            brief << _T("--") << opt.longName;
+            usage << _T("--") << opt.longName;
         }
         else
         {
@@ -925,13 +946,13 @@ void wxCmdLineParser::Usage()
         {
             wxString val;
             val << _T('<') << GetTypeName(opt.type) << _T('>');
-            brief << _T(' ') << val;
+            usage << _T(' ') << val;
             option << (!opt.longName ? _T(':') : _T('=')) << val;
         }
 
         if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
         {
-            brief << _T(']');
+            usage << _T(']');
         }
 
         namesOptions.Add(option);
@@ -943,37 +964,26 @@ void wxCmdLineParser::Usage()
     {
         wxCmdLineParam& param = m_data->m_paramDesc[n];
 
-        brief << _T(' ');
+        usage << _T(' ');
         if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
         {
-            brief << _T('[');
+            usage << _T('[');
         }
 
-        brief << param.description;
+        usage << param.description;
 
         if ( param.flags & wxCMD_LINE_PARAM_MULTIPLE )
         {
-            brief << _T("...");
+            usage << _T("...");
         }
 
         if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
         {
-            brief << _T(']');
+            usage << _T(']');
         }
     }
 
-    if ( !!m_data->m_logo )
-    {
-        wxLogMessage(m_data->m_logo);
-    }
-
-    // in console mode we want to show the brief usage message first, then the
-    // detailed one but in GUI build we give the details first and then the
-    // summary - like this, the brief message appears in the wxLogGui dialog,
-    // as expected
-#if !wxUSE_GUI
-    wxLogMessage(brief);
-#endif // !wxUSE_GUI
+    usage << _T('\n');
 
     // now construct the detailed help message
     size_t len, lenMax = 0;
@@ -985,22 +995,16 @@ void wxCmdLineParser::Usage()
             lenMax = len;
     }
 
-    wxString detailed;
     for ( n = 0; n < count; n++ )
     {
         len = namesOptions[n].length();
-        detailed << namesOptions[n]
-                 << wxString(_T(' '), lenMax - len) << _T('\t')
-                 << descOptions[n]
-                 << _T('\n');
+        usage << namesOptions[n]
+              << wxString(_T(' '), lenMax - len) << _T('\t')
+              << descOptions[n]
+              << _T('\n');
     }
 
-    wxLogMessage(detailed);
-
-    // do it now if not done above
-#if wxUSE_GUI
-    wxLogMessage(brief);
-#endif // wxUSE_GUI
+    return usage;
 }
 
 // ----------------------------------------------------------------------------

@@ -42,6 +42,7 @@
 #include "wx/confbase.h"
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
+#include "wx/msgout.h"
 
 #if wxUSE_GUI
     #include "wx/artprov.h"
@@ -188,12 +189,27 @@ int wxAppBase::FilterEvent(wxEvent& WXUNUSED(event))
     return -1;
 }
 
+void wxAppBase::DoInit()
+{
+    if(wxMessageOutput::Get()) return;
+#if wxUSE_GUI
+    #ifdef __WXMOTIF__
+    wxMessageOutput::Set(new wxMessageOutputLog);
+    #else
+    wxMessageOutput::Set(new wxMessageOutputMessageBox);
+    #endif
+#else
+    wxMessageOutput::Set(new wxMessageOutputStderr);
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // cmd line parsing
 // ----------------------------------------------------------------------------
 
 bool wxAppBase::OnInit()
 {
+    DoInit();
 #if wxUSE_CMDLINE_PARSER
     wxCmdLineParser parser(argc, argv);
 

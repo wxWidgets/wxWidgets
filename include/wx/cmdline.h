@@ -202,6 +202,9 @@ public:
     static wxArrayString ConvertStringToArgs(const wxChar *cmdline);
 
 private:
+    // get usage string
+    wxString GetUsageString();
+
     // common part of all ctors
     void Init();
 
