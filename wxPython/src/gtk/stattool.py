@@ -102,17 +102,20 @@ class wxToolBarToolBasePtr(wxObjectPtr):
     def CanBeToggled(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_CanBeToggled,(self,) + _args, _kwargs)
         return val
-    def GetBitmap1(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarToolBase_GetBitmap1,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+    def GetNormalBitmap(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_GetNormalBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def GetBitmap2(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarToolBase_GetBitmap2,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+    def GetDisabledBitmap(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_GetDisabledBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetBitmap,(self,) + _args, _kwargs)
         if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
+    def GetLabel(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_GetLabel,(self,) + _args, _kwargs)
         return val
     def GetShortHelp(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetShortHelp,(self,) + _args, _kwargs)
@@ -135,11 +138,14 @@ class wxToolBarToolBasePtr(wxObjectPtr):
     def SetLongHelp(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_SetLongHelp,(self,) + _args, _kwargs)
         return val
-    def SetBitmap1(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarToolBase_SetBitmap1,(self,) + _args, _kwargs)
+    def SetNormalBitmap(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_SetNormalBitmap,(self,) + _args, _kwargs)
         return val
-    def SetBitmap2(self, *_args, **_kwargs):
-        val = apply(stattoolc.wxToolBarToolBase_SetBitmap2,(self,) + _args, _kwargs)
+    def SetDisabledBitmap(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_SetDisabledBitmap,(self,) + _args, _kwargs)
+        return val
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_SetLabel,(self,) + _args, _kwargs)
         return val
     def Detach(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_Detach,(self,) + _args, _kwargs)
@@ -155,6 +161,12 @@ class wxToolBarToolBasePtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<C wxToolBarToolBase instance at %s>" % (self.this,)
+    
+    GetBitmap1 = GetNormalBitmap
+    GetBitmap2 = GetDisabledBitmap
+    SetBitmap1 = SetNormalBitmap
+    SetBitmap2 = SetDisabledBitmap
+    
 class wxToolBarToolBase(wxToolBarToolBasePtr):
     def __init__(self,this):
         self.this = this
@@ -286,6 +298,12 @@ class wxToolBarBasePtr(wxControlPtr):
     def GetToolSize(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_GetToolSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def FindToolForPosition(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_FindToolForPosition,(self,) + _args, _kwargs)
+        return val
+    def IsVertical(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_IsVertical,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxToolBarBase instance at %s>" % (self.this,)

@@ -2564,6 +2564,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MENU_OPEN", PyInt_FromLong((long) wxEVT_MENU_OPEN));
 	 PyDict_SetItemString(d,"wxEVT_MENU_CLOSE", PyInt_FromLong((long) wxEVT_MENU_CLOSE));
 	 PyDict_SetItemString(d,"wxEVT_MENU_HIGHLIGHT", PyInt_FromLong((long) wxEVT_MENU_HIGHLIGHT));
+	 PyDict_SetItemString(d,"wxEVT_CONTEXT_MENU", PyInt_FromLong((long) wxEVT_CONTEXT_MENU));
 	 PyDict_SetItemString(d,"wxEVT_SYS_COLOUR_CHANGED", PyInt_FromLong((long) wxEVT_SYS_COLOUR_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_DISPLAY_CHANGED", PyInt_FromLong((long) wxEVT_DISPLAY_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_SETTING_CHANGED", PyInt_FromLong((long) wxEVT_SETTING_CHANGED));

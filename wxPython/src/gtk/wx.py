@@ -851,6 +851,7 @@ wxEVT_PAINT_ICON = wxc.wxEVT_PAINT_ICON
 wxEVT_MENU_OPEN = wxc.wxEVT_MENU_OPEN
 wxEVT_MENU_CLOSE = wxc.wxEVT_MENU_CLOSE
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
+wxEVT_CONTEXT_MENU = wxc.wxEVT_CONTEXT_MENU
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
 wxEVT_DISPLAY_CHANGED = wxc.wxEVT_DISPLAY_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
@@ -1436,19 +1437,6 @@ def EVT_TOGGLEBUTTON(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, func)
 
 
-
-# Help events
-def EVT_HELP(win, id, func):
-    win.Connect(id, -1, wxEVT_HELP, func)
-
-def EVT_HELP_RANGE(win, id, id2, func):
-    win.Connect(id, id2, wxEVT_HELP, func)
-
-def EVT_DETAILED_HELP(win, id, func):
-    win.Connect(id, -1, wxEVT_DETAILED_HELP, func)
-
-def EVT_DETAILED_HELP_RANGE(win, id, id2, func):
-    win.Connect(id, id2, wxEVT_DETAILED_HELP, func)
 
 def EVT_CONTEXT_MENU(win, func):
     win.Connect(-1, -1, wxEVT_CONTEXT_MENU, func)

@@ -1455,7 +1455,7 @@ static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     wxBitmap * _result;
     wxString * _arg0;
-    wxBitmapType  _arg1 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
+    wxBitmapType  _arg1 = (wxBitmapType ) wxBITMAP_TYPE_ANY;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "name","type", NULL };
     char _ptemp[128];
@@ -1605,7 +1605,7 @@ static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxBitmap * _arg0;
     wxString * _arg1;
-    wxBitmapType  _arg2 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
+    wxBitmapType  _arg2 = (wxBitmapType ) wxBITMAP_TYPE_ANY;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","name","type", NULL };
