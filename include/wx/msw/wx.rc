@@ -90,7 +90,6 @@ wxICON_WARNING	ICON "wx/msw/warning.ico"
 wxICON_ERROR	ICON "wx/msw/error.ico"
 wxICON_INFO	ICON "wx/msw/info.ico"
 */
-wxICON_TIP	ICON "wx/msw/tip.ico"
 
 // Standard small icons
 wxICON_SMALL_CLOSED_FOLDER      ICON "wx/msw/folder1.ico"
