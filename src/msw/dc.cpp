@@ -1271,7 +1271,27 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     SRCCOPY;
 
     bool success = TRUE;
-    if (useMask && source->m_selectedBitmap.Ok() && source->m_selectedBitmap.GetMask())
+    bool needsPixelCopy = FALSE ;
+    bool isPrinter = FALSE ;
+
+    if (IsKindOf(CLASSINFO(wxPrinterDC)) )
+    {
+        isPrinter = TRUE ;
+        if ( ::GetDeviceCaps((HDC) m_hDC, RASTERCAPS) & RC_STRETCHDIB )
+       	{
+        }
+       	else
+       	{
+            needsPixelCopy = TRUE ;
+       	}
+    }
+    if (useMask && !source->m_selectedBitmap.Ok())
+        return FALSE;
+
+    if (useMask && !source->m_selectedBitmap.GetMask())
+        useMask = FALSE;
+
+    if (useMask)
     {
 
 #if 0 // __WIN32__
@@ -1288,7 +1308,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             // New code from Chris Breeze, 15/7/98
             // Blit bitmap with mask
 
-            if (IsKindOf(CLASSINFO(wxPrinterDC)))
+            if (isPrinter)
             {
                 // If we are printing source colours are screen colours
                 // not printer colours and so we need copy the bitmap
@@ -1360,12 +1380,12 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             }
         }
     }
-    else
+    else if (needsPixelCopy) // not masked, but we need pixel copy. Only true if it's a printer
     {
         // If we are printing, source colours are screen colours
         // not printer colours and so we need copy the bitmap
         // pixel by pixel.
-        if (IsKindOf(CLASSINFO(wxPrinterDC)))
+        if (isPrinter)
         {
             HDC dc_src = (HDC) source->m_hDC;
 	        RECT rect;
@@ -1373,8 +1393,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	        {
                 // This is Stefan Csomor's optimisation, where
                 // identical adjacent pixels are drawn together.
-                // We still need a faster way of drawing bitmaps,
-                // perhaps converting to a DIB first and using SetDIBitsToDevice.
 	      	    for (int x = 0; x < width; x++)
 	            {
 	                COLORREF col = ::GetPixel(dc_src, x, y) ;
@@ -1392,27 +1410,47 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	                ::DeleteObject(brush);
                 }
 	        }
-/*
-            HDC dc_src = (HDC) source->m_hDC;
-            RECT rect;
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
-                    rect.left = xdest1 + x;   rect.right = rect.left + 1;
-                    rect.top = ydest1 + y;    rect.bottom = rect.top + 1;
-                    ::FillRect(GetHdc(), &rect, brush);
-                    ::DeleteObject(brush);
-                }
-            }
-*/
 	    }
         else
         {
-            success = (BitBlt(GetHdc(), xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,
-                xsrc1, ysrc1, dwRop) != 0);
+            wxFAIL_MSG( "If needsPixelCopy is true, isPrinter should be true also." );
         }
+    }
+    else if (isPrinter) // not masked, not pixel copy
+    {
+        wxBitmap& bmp = source->m_selectedBitmap ;
+        BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) ) ;
+        int iBitsSize = ((bmp.GetWidth() + 3 ) & ~3 ) * bmp.GetHeight() ;
+            
+        void* bits = malloc( iBitsSize ) ;
+            
+        memset( info , 0 , sizeof( BITMAPINFOHEADER ) ) ;
+            
+        info->bmiHeader.biSize = sizeof( BITMAPINFOHEADER ) ;
+        info->bmiHeader.biWidth = bmp.GetWidth() ;
+        info->bmiHeader.biHeight = bmp.GetHeight() ;
+        info->bmiHeader.biPlanes = 1 ;
+        info->bmiHeader.biBitCount = 8 ;
+        info->bmiHeader.biCompression = BI_RGB ;
+            
+        HDC display = GetDC( NULL ) ;
+        if ( GetDIBits( display , (HBITMAP) bmp.GetHBITMAP( ) , 0 , bmp.GetHeight() , bits , info , DIB_RGB_COLORS ) )
+        {
+            success = (GDI_ERROR != StretchDIBits( (HDC) m_hDC,
+                    xdest1, ydest1, bmp.GetWidth(), bmp.GetHeight() ,
+                    xsrc1 , ysrc1 ,bmp.GetWidth(), bmp.GetHeight() ,
+                    bits , info , DIB_RGB_COLORS , SRCCOPY )) ;
+        }
+        else
+            success = FALSE;
+        ReleaseDC( NULL , display ) ;
+        free ( bits ) ;
+        free( info ) ;
+    }
+    else // Not masked, not printer, not pixel copy
+    {
+        success = (BitBlt(GetHdc(), xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,
+             xsrc1, ysrc1, dwRop) != 0);
     }
     ::SetTextColor(GetHdc(), old_textground);
     ::SetBkColor(GetHdc(), old_background);
