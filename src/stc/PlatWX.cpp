@@ -289,7 +289,7 @@ void SurfaceImpl::Init() {
     hdc = new wxMemoryDC();
     hdcOwned = true;
 #else
-    // On Mac and GTK(?) the DC is not really valid until it has a bitmap
+    // On Mac and GTK the DC is not really valid until it has a bitmap
     // selected into it.  So instead of just creating the DC with no bitmap,
     // go ahead and give it one.
     InitPixMap(1,1,NULL);
