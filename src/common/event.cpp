@@ -382,6 +382,9 @@ wxEvent::wxEvent(const wxEvent &src)
 
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
               : wxEvent(theId, commandType)
+#if WXWIN_COMPATIBILITY_2_4
+              , m_commandString(this)
+#endif
 {
     m_clientData = (char *) NULL;
     m_clientObject = (wxClientData *) NULL;
@@ -391,6 +394,20 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
 
     // the command events are propagated upwards by default
     m_propagationLevel = wxEVENT_PROPAGATE_MAX;
+}
+
+wxString wxCommandEvent::GetString() const
+{
+    if(m_eventType != wxEVT_COMMAND_TEXT_UPDATED || !m_eventObject)
+        return m_cmdString;
+    else
+    {
+        wxTextCtrl *txt = wxDynamicCast(m_eventObject, wxTextCtrl);
+        if(txt)
+            return txt->GetValue();
+        else
+            return m_cmdString;
+    }
 }
 
 /*
@@ -1345,7 +1362,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
-        if ((event.m_eventType == entry->m_eventType) && (entry->m_fn != 0))
+        if ((event.GetEventType() == entry->m_eventType) && (entry->m_fn != 0))
         {
             wxEvtHandler *handler =
 #if !WXWIN_COMPATIBILITY_EVENT_TYPES
