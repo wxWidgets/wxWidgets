@@ -30,9 +30,9 @@ public:
             const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 
     void OnExit(wxCommandEvent& event);
-    void OnNewWindow();
-    void OnDefRotateLeftKey();
-    void OnDefRotateRightKey();
+    void OnNewWindow(wxCommandEvent& event);
+    void OnDefRotateLeftKey(wxCommandEvent& event);
+    void OnDefRotateRightKey(wxCommandEvent& event);
     
 public:
     TestGLCanvas*    m_canvas;

@@ -365,10 +365,7 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 
     unsigned long currTime = event.m_timeStamp - m_xsynct;
 
-    // we have to test for m_Key != 0 because otherwise the test would be
-    // always true because it is set to 0 in OnKeyUp() below - I don't know
-    // why is it like this, just fixing blindly (VZ)
-    if (evkey != m_Key && m_Key != 0)
+    if (evkey != m_Key)
     {
         m_Key = evkey;
         m_LastRedraw = m_StartTime = m_LastTime = currTime;
@@ -430,7 +427,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
     Destroy();
 }
 
-void MyFrame::OnNewWindow()
+void MyFrame::OnNewWindow(wxCommandEvent& event)
 {
   MyFrame *frame = new MyFrame(NULL, "Cube OpenGL Demo Clone",
                                wxPoint(50, 50), wxSize(400, 300));
@@ -461,7 +458,7 @@ void MyFrame::OnNewWindow()
   frame->Show(TRUE);
 }
 
-void MyFrame::OnDefRotateLeftKey()
+void MyFrame::OnDefRotateLeftKey(wxCommandEvent& event)
 {
   ScanCodeDialog dial( this, -1, m_canvas->m_rleft,
                        wxString("Left"), "Define key" );
@@ -469,7 +466,7 @@ void MyFrame::OnDefRotateLeftKey()
   if( result == wxID_OK )
     m_canvas->m_rleft = dial.GetValue();
 }
-void MyFrame::OnDefRotateRightKey()
+void MyFrame::OnDefRotateRightKey(wxCommandEvent& event)
 {
   ScanCodeDialog dial( this, -1, m_canvas->m_rright,
                        wxString("Right"), "Define key" );
