@@ -201,11 +201,11 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
 
         if ( status == wxHTML_BLOCK )
             return NULL;
-        else
-            return GetFS()->OpenFile(myurl);
+
+        return GetFS()->OpenFile(myurl);
     }
-    else
-        return wxHtmlParser::OpenURL(type, url);
+
+    return wxHtmlParser::OpenURL(type, url);
 }
 
 void wxHtmlWinParser::AddText(const wxChar* txt)
