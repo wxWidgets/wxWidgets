@@ -655,12 +655,16 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
      * if the socket is in non-blocking mode (which is always
      * the case here, no matter the setting of GSocket itself)
      * a call to send() can fail with EWOULDBLOCK even when
-     * select() says that the socket is readable.
+     * select() says that the socket is writable.
      *
      * This can break several things because, usually, if
      * select() says that the socket is writable, it is
      * assumed that send() won't fail. To avoid this, we
      * return 0 instead of -1 for this special case.
+     *
+     * XXX - this comment seems not to belong here, and also
+     * the code is not consistent with the unix version of
+     * gsocket... what to do? (GRG)
      */
     if (WSAGetLastError() != WSAEWOULDBLOCK)
     {
