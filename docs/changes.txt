@@ -116,6 +116,10 @@ wxGTK:
 - fixed wrong colour of tooltips under some themes
 - implemented wxColourDialog as native dialog
 
+wxMotif:
+
+- added 3 state checkbox
+
 
 2.5.2
 -----

@@ -16,8 +16,6 @@
 #pragma interface "checkbox.h"
 #endif
 
-#include "wx/control.h"
-
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxCheckBox: public wxCheckBoxBase
 {
@@ -53,6 +51,10 @@ private:
     {
         m_evtType = wxEVT_COMMAND_CHECKBOX_CLICKED;
     }
+
+    virtual void DoSet3StateValue(wxCheckBoxState state);
+
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
     // public for the callback
 public:
