@@ -50,7 +50,7 @@ wxColour::wxColour(
   const wxColour&                   rCol
 )
 {
-    *this = col;
+    *this = rCol;
 } // end of wxColour::wxColour
 
 wxColour& wxColour::operator =(
