@@ -58,12 +58,12 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 %name(DropSource) class wxPyDropSource {
 public:
 #ifndef __WXGTK__
-     wxPyDropSource(wxWindow *win = NULL,
+     wxPyDropSource(wxWindow *win,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,
                     const wxCursor &none = wxNullCursor);
 #else
-    wxPyDropSource(wxWindow *win = NULL,
+    wxPyDropSource(wxWindow *win,
                    const wxIcon& copy = wxNullIcon,
                    const wxIcon& move = wxNullIcon,
                    const wxIcon& none = wxNullIcon);
