@@ -772,6 +772,16 @@ int wxSlider::GetSelStart() const
     return 0;
 } // end of wxSlider::GetSelStart
 
+void wxSlider::DoGetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
+{
+    GetSize( pnWidth
+            ,pnHeight
+           );
+} // end of wxSlider::DoGetSize
+
 void wxSlider::GetSize(
   int*                              pnWidth
 , int*                              pnHeight

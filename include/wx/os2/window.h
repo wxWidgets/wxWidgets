@@ -95,6 +95,7 @@ public:
     virtual bool     Show(bool bShow = TRUE);
     virtual bool     Enable(bool bEnable = TRUE);
     virtual void     SetFocus(void);
+    virtual void     SetFocusFromKbd(void);
     virtual bool     Reparent(wxWindow* pNewParent);
     virtual void     WarpPointer( int x
                                  ,int y

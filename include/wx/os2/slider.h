@@ -66,6 +66,9 @@ public:
          virtual int  GetValue(void) const ;
          virtual void SetValue(int);
 
+         virtual void DoGetSize( int* pnWidth
+                                ,int* pnHeight
+                               ) const;
                  void GetSize( int* pnX
                               ,int* pnY
                              ) const;

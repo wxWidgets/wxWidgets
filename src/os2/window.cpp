@@ -465,6 +465,14 @@ void wxWindowOS2::SetFocus()
         ::WinSetFocus(HWND_DESKTOP, hWnd);
 } // end of wxWindowOS2::SetFocus
 
+void wxWindowOS2::SetFocusFromKbd()
+{
+    //
+    // Nothing else to do under OS/2
+    //
+    wxWindowBase::SetFocusFromKbd();
+} // end of wxWindowOS2::SetFocus
+
 wxWindow* wxWindowBase::FindFocus()
 {
     HWND                            hWnd = ::WinQueryFocus(HWND_DESKTOP);

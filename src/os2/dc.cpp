@@ -1040,54 +1040,6 @@ void wxDC::DoDrawRectangle(
                  ,0L
                  ,0L
                 );
-        //
-        // Debug testing:
-        //
-        if (m_vSelectedBitmap != wxNullBitmap)
-        {
-            BITMAPINFOHEADER2           vHeader;
-            BITMAPINFO2                 vInfo;
-
-            vHeader.cbFix = 16L;
-            if (::GpiQueryBitmapInfoHeader(m_hPS, &vHeader))
-            {
-                int                     nBytesPerLine = vHeader.cBitCount/8;
-                unsigned char*          pucData = NULL;
-                unsigned char*          pucBits;
-                LONG                    lScans = 0L;
-
-                vInfo.cbFix = 16;
-                vInfo.cx              = vHeader.cx;
-                vInfo.cy              = vHeader.cy;
-                vInfo.cPlanes         = vHeader.cPlanes;
-                vInfo.cBitCount       = vHeader.cBitCount;
-                pucData = (unsigned char*)malloc(nBytesPerLine * vHeight);
-                pucBits = pucData;
-                for (int i = 0; i < vHeight; i++)
-                {
-                    if (i <= m_vSelectedBitmap.GetHeight())
-                    {
-                        for (int j = 0; j < vWidth; j++)
-                        {
-                            if (j <= m_vSelectedBitmap.GetWidth())
-                            {
-                                vPoint[0].x = j; vPoint[0].y = i;
-                                lColor = ::GpiQueryPel(m_hPS, &vPoint[0]);
-                                *(pucBits++) = lColor >> 24;
-                                *(pucBits++) = lColor >> 16;
-                                *(pucBits++) = lColor >> 8;
-                            }
-                        }
-                    }
-                }
-                lScans = ::GpiSetBitmapBits( m_hPS
-                                            ,0             // Start at the bottom
-                                            ,(LONG)vHeight // One line per scan
-                                            ,(PBYTE)pucData
-                                            ,&vInfo
-                                           );
-            }
-        }
     }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);

@@ -548,7 +548,7 @@ bool wxBitmap::CreateFromImage (
     SetWidth(nWidth);
     SetHeight(nBmpHeight);
     if (nDepth == -1)
-        nDepth = 16; // wxDisplayDepth();
+        nDepth = wxDisplayDepth();
     SetDepth(nDepth);
 
 #if wxUSE_PALETTE
@@ -817,6 +817,7 @@ bool wxBitmap::CreateFromImage (
 wxImage wxBitmap::ConvertToImage() const
 {
     wxImage                         vImage;
+    wxDC*                           pDC;
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
@@ -836,12 +837,13 @@ wxImage wxBitmap::ConvertToImage() const
     long                            lScans;
     BITMAPINFOHEADER2               vDIBh;
     BITMAPINFO2                     vDIBInfo;
-    HDC                             hDCMem;
-    PSZ                             pszData[4] = { "Display", NULL, NULL, NULL };
     HPS                             hPSMem;
     HPS                             hPS;
-    SIZEL                           vSizlPage = {0,0};
     HBITMAP                         hBitmap;
+    HBITMAP                         hOldBitmap;
+    DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    SIZEL                           vSizlPage = {0,0};
+    HDC                             hDCMem;
 
     vImage.Create( nWidth
                   ,nHeight
@@ -886,33 +888,53 @@ wxImage wxBitmap::ConvertToImage() const
     }
 
     //
+    // May already be selected into a PS
+    //
+    if ((pDC = GetSelectedInto()) != NULL)
+    {
+        hPSMem = pDC->GetHPS();
+    }
+    else
+    {
+        hDCMem = ::DevOpenDC( vHabmain
+                             ,OD_MEMORY
+                             ,"*"
+                             ,5L
+                             ,(PDEVOPENDATA)&vDop
+                             ,NULLHANDLE
+                            );
+        hPSMem = ::GpiCreatePS( vHabmain
+                               ,hDCMem
+                               ,&vSizlPage
+                               ,PU_PELS | GPIA_ASSOC
+                              );
+        hBitmap = (HBITMAP)GetHBITMAP();
+        if ((hOldBitmap = ::GpiSetBitmap(hPSMem, hBitmap)) == HBM_ERROR)
+        {
+            ERRORID                 vError;
+            wxString                sError;
+
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+        }
+    }
+
+    //
     // Copy data from the device-dependent bitmap to the DIB
     //
-    hDCMem = ::DevOpenDC( vHabmain
-                         ,OD_MEMORY
-                         ,"*"
-                         ,4
-                         ,(PDEVOPENDATA)pszData
-                         ,NULLHANDLE
-                        );
-    hPSMem = ::GpiCreatePS( vHabmain
-                           ,hDCMem
-                           ,&vSizlPage
-                           ,PU_PELS | GPIA_ASSOC | GPIT_MICRO
-                          );
-    hBitmap = ::GpiCreateBitmap( hPSMem
-                                ,&vDIBh
-                                ,0L
-                                ,NULL
-                                ,NULL
-                               );
-    ::GpiSetBitmap(hPSMem, hBitmap);
-    lScans = ::GpiQueryBitmapBits( hPSMem
-                                  ,0L
-                                  ,(LONG)nHeight
-                                  ,(PBYTE)lpBits
-                                  ,&vDIBInfo
-                                 );
+    if ((lScans = ::GpiQueryBitmapBits( hPSMem
+                                       ,0L
+                                       ,(LONG)nHeight
+                                       ,(PBYTE)lpBits
+                                       ,&vDIBInfo
+                                      )) == GPI_ALTERROR)
+    {
+        ERRORID                     vError;
+        wxString                    sError;
+
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+    }
 
     //
     // Copy DIB data into the wxImage object
@@ -933,7 +955,12 @@ wxImage wxBitmap::ConvertToImage() const
         }
         ptbits += nPadding;
     }
-    ::GpiSetBitmap(hPSMem, NULLHANDLE);
+    if ((pDC = GetSelectedInto()) == NULL)
+    {
+        ::GpiSetBitmap(hPSMem, NULLHANDLE);
+        ::GpiDestroyPS(hPSMem);
+        ::DevCloseDC(hDCMem);
+    }
 
     //
     // Similarly, set data according to the possible mask bitmap
@@ -945,13 +972,13 @@ wxImage wxBitmap::ConvertToImage() const
         //
         // Memory DC/PS created, color set, data copied, and memory DC/PS deleted
         //
-        HDC                         hMemDC = ::DevOpenDC( vHabmain
-                                                         ,OD_MEMORY
-                                                         ,"*"
-                                                         ,4
-                                                         ,(PDEVOPENDATA)pszData
-                                                         ,NULLHANDLE
-                                                        );
+        HDC                        hMemDC = ::DevOpenDC( vHabmain
+                                                        ,OD_MEMORY
+                                                        ,"*"
+                                                        ,5L
+                                                        ,(PDEVOPENDATA)&vDop
+                                                        ,NULLHANDLE
+                                                       );
         HPS                         hMemPS = ::GpiCreatePS( vHabmain
                                                            ,hMemDC
                                                            ,&vSizlPage
@@ -1009,8 +1036,6 @@ wxImage wxBitmap::ConvertToImage() const
     //
     // Free allocated resources
     //
-    ::GpiDestroyPS(hPSMem);
-    ::DevCloseDC(hDCMem);
     free(lpBits);
     return vImage;
 } // end of wxBitmap::ConvertToImage

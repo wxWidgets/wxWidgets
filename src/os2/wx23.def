@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\dev\wx2\wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1925,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6037,7 +6037,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6983,6 +6983,8 @@ EXPORTS
       DeleteRelatedConstraints__12wxWindowBaseFv
       ;wxWindowBase::SetHelpText(const wxString&)
       SetHelpText__12wxWindowBaseFRC8wxString
+      ;wxGetTopLevelParent(wxWindow*)
+      wxGetTopLevelParent__FP8wxWindow
   ;From object file:  ..\common\wxchar.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxOKlibc()
@@ -10762,6 +10764,8 @@ EXPORTS
       wxConstructorForwxHtmlFilterHTML__Fv
       ;wxHtmlFilterHTML::sm_classwxHtmlFilterHTML
       sm_classwxHtmlFilterHTML__16wxHtmlFilterHTML
+      ;wxPrivate_ReadString(wxString&,wxInputStream*)
+      wxPrivate_ReadString__FR8wxStringP13wxInputStream
       ;wxHtmlFilterPlainText::ReadFile(const wxFSFile&) const
       ReadFile__21wxHtmlFilterPlainTextCFRC8wxFSFile
       ;wxHtmlFilterHTML::ReadFile(const wxFSFile&) const
@@ -14297,8 +14301,6 @@ EXPORTS
       Copy__10wxTextCtrlFv
       ;wxTextCtrl::SetStyle(long,long,const wxTextAttr&)
       SetStyle__10wxTextCtrlFlT1RC10wxTextAttr
-      ;wxTextCtrl::SetFocus()
-      SetFocus__10wxTextCtrlFv
       ;wxTextCtrl::CanRedo() const
       CanRedo__10wxTextCtrlCFv
       ;wxTextCtrl::OS2GetStyle(long,unsigned long*) const
@@ -14799,14 +14801,16 @@ EXPORTS
       wxCharCodeOS2ToWX__Fi
       ;wxWindow::HandleMouseMove(int,int,unsigned int)
       HandleMouseMove__8wxWindowFiT1Ui
-      ;wxWindow::Raise()
-      Raise__8wxWindowFv
+      ;wxWindow::SetFocusFromKbd()
+      SetFocusFromKbd__8wxWindowFv
       ;wxWindowCreationHook::~wxWindowCreationHook()
       __dt__20wxWindowCreationHookFv
       ;wxWindow::Update()
       Update__8wxWindowFv
       ;wxWindow::UnsubclassWin()
       UnsubclassWin__8wxWindowFv
+      ;wxWindow::Raise()
+      Raise__8wxWindowFv
       ;wxWindow::Lower()
       Lower__8wxWindowFv
       ;wxWindow::HandleMaximize()

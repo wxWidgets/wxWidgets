@@ -190,4 +190,82 @@ void wxMemoryDC::DoDrawRectangle(
 )
 {
     wxDC::DoDrawRectangle(vX, vY, vWidth, vHeight);
+
+    //
+    // Debug testing:
+    //
+    if (m_vSelectedBitmap.GetHBITMAP() != NULLHANDLE)
+    {
+        BITMAPINFOHEADER2           vHeader;
+        BITMAPINFO2                 vInfo;
+
+        vHeader.cbFix = 16L;
+        if (::GpiQueryBitmapInfoHeader(m_vSelectedBitmap.GetHBITMAP(), &vHeader))
+        {
+            unsigned char*          pucData = NULL;
+            unsigned char*          pucBits;
+            int                     nBytesPerLine = vWidth * 3;
+            LONG                    lScans = 0L;
+            POINTL                  vPoint;
+            LONG                    lColor;
+
+            vInfo.cbFix     = 16;
+            vInfo.cx        = vHeader.cx;
+            vInfo.cy        = vHeader.cy;
+            vInfo.cPlanes   = vHeader.cPlanes;
+            vInfo.cBitCount = 24;
+            pucData = (unsigned char*)malloc(nBytesPerLine * m_vSelectedBitmap.GetHeight());
+            if ((lScans = ::GpiQueryBitmapBits( m_hPS
+                                               ,0L
+                                               ,(LONG)m_vSelectedBitmap.GetHeight()
+                                               ,(PBYTE)pucData
+                                               ,&vInfo
+                                              )) == GPI_ALTERROR)
+            {
+                ERRORID                     vError;
+                wxString                    sError;
+
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+            }
+            pucBits = pucData;
+            for (int i = 0; i < m_vSelectedBitmap.GetHeight(); i++)
+            {
+                for (int j = vX; j < m_vSelectedBitmap.GetWidth(); j++)
+                {
+                    if (i >= vY && j >= vX && i < vHeight && j < vWidth)
+                    {
+                        vPoint.x = j; vPoint.y = i;
+                        if (i == vY || j == vX ||
+                            i == m_vSelectedBitmap.GetWidth() -1 ||
+                            j == m_vSelectedBitmap.GetHeight()
+                           )
+                            lColor = m_pen.GetColour().GetPixel();
+                        else
+                            lColor = m_brush.GetColour().GetPixel();
+                        *(pucBits++) = (unsigned char)lColor;
+                        *(pucBits++) = (unsigned char)(lColor >> 8);
+                        *(pucBits++) = (unsigned char)(lColor >> 16);
+                    }
+                    else
+                        pucBits += 3;
+                }
+            }
+            if ((lScans = ::GpiSetBitmapBits( m_hPS
+                                             ,0
+                                             ,(LONG)m_vSelectedBitmap.GetHeight()
+                                             ,(PBYTE)pucData
+                                             ,&vInfo
+                                            )) == GPI_ALTERROR)
+            {
+                ERRORID             vError;
+                wxString            sError;
+
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+            }
+            free(pucData);
+        }
+    }
 } // end of wxMemoryDC::DoDrawRectangle
+
