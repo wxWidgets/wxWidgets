@@ -4,6 +4,23 @@
 # Created:      20.08.2001
 # RCS-ID:       $Id$
 
+"""
+
+xrced -- Simple resource editor for XRC format used by wxWindows/wxPython
+         GUI toolkit.
+
+Usage:
+
+    xrced [ -h ] [ -v ] [ XRC-file ]
+
+Options:
+
+    -h          Print short usage info.
+
+    -v          Print version info.
+"""
+    
+
 from globals import *
 
 # Additional wx modules
