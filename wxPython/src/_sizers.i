@@ -1289,6 +1289,10 @@ method in the base class.", "");
         "This funciton needs to be called after all the buttons have been added
 to the sizer.  It will reorder them and position them in a platform
 specifc manner.", "");
+
+    void SetAffirmativeButton( wxButton *button );
+    void SetNegativeButton( wxButton *button );
+    void SetCancelButton( wxButton *button );
     
     wxButton* GetAffirmativeButton() const;
     wxButton* GetApplyButton() const;
