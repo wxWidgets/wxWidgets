@@ -398,7 +398,25 @@ int wxFileDialog::ShowModal()
                                             : (GetOpenFileName(&of) != 0);
         }
     }
-#endif
+
+#if wxUSE_UNICODE_MSLU && defined(OFN_EXPLORER)
+    // VS: these's a bug in unicows.dll - when multiple files are
+    //     selected, of.nFileOffset doesn't point to the first 
+    //     filename but rather to the last component of directory
+    //     name. Let's try to fix it:
+    if ( (m_dialogStyle & wxMULTIPLE) &&
+         (fileNameBuffer[of.nFileOffset-1] != wxT('\0')) &&
+         wxGetOsVersion() == wxWIN95 /*using unicows.dll*/)
+    {
+        if ( wxDirExists(fileNameBuffer) )
+        {
+            // 1st component is dir => multiple files selected
+            of.nFileOffset = wxStrlen(fileNameBuffer)+1;
+        }
+    }
+#endif // wxUSE_UNICODE_MSLU
+
+#endif // __WIN32__
 
     if ( success )
     {
@@ -424,7 +442,7 @@ int wxFileDialog::ShowModal()
                 i += wxStrlen(&fileNameBuffer[i]) + 1;
             }
 #else
-            wxStringTokenizer toke(fileNameBuffer, " \t\r\n");
+            wxStringTokenizer toke(fileNameBuffer, _T(" \t\r\n"));
             m_dir = toke.GetNextToken();
             m_fileName = toke.GetNextToken();
             m_fileNames.Add(m_fileName);
@@ -448,9 +466,10 @@ int wxFileDialog::ShowModal()
 
             m_filterIndex = (int)of.nFilterIndex - 1;
 
-            if ( !of.nFileExtension || (of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.')) )
-            {                                    // user has typed an filename
-                // without an extension:
+            if ( !of.nFileExtension || 
+                 (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
+            {
+                // User has typed a filename without an extension:
 
                 int   maxFilter = (int)(of.nFilterIndex*2L-1L);
                 extension = filterBuffer;
