@@ -19,7 +19,7 @@ WXLIB = $(WXDIR)\lib\wx32.lib
 WXINC = $(WXDIR)\include\msw
 WXBASESRC = $(WXDIR)\src\base
 WXBASEINC = $(WXDIR)\include\base
-LIBS=$(WXLIB) cw32 import32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 
 !ifndef DEBUG
 DEBUG=0

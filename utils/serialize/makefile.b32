@@ -20,7 +20,7 @@ WXUSINGDLL=1
 !include $(WXDIR)\src\makeb32.env
 
 WXLIBDIR = $(WXDIR)\lib
-LIBS=$(WXLIB) cw32 import32
+LIBS=$(WXLIB) cw32 import32 ole2w32
 
 !ifndef DEBUG
 DEBUG=0

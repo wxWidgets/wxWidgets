@@ -31,7 +31,7 @@ OGLINC = $(OGLDIR)\src
 OGLLIB = $(WXDIR)\lib\ogl.lib
 
 WXLIB = $(WXDIR)\lib\wx32.lib
-LIBS=$(WXLIB) $(OGLLIB) cw32 import32
+LIBS=$(WXLIB) $(OGLLIB) cw32 import32 ole2w32
 INC=/I$(OGLINC)
 CFG=$(WXDIR)\src\wxwin32.cfg
 

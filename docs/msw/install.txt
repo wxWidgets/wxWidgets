@@ -159,4 +159,4 @@ Notes
 
         http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
 
-  and it's also on the wxWindows CD-ROM.
+  and it's also on the wxWindows CD-ROM under Packages.

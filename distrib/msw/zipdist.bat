@@ -24,6 +24,7 @@ zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
 zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp
 zip32 -@ %dest\wx200htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx200pdf.zip < %src\distrib\msw\wx_pdf.rsp
+zip32 -@ %dest\wx200wrd.zip < %src\distrib\msw\wx_word.rsp
 
 zip32 -@ %dest\wx200vc.zip < %src\distrib\msw\vc.rsp
 

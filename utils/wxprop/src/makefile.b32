@@ -17,7 +17,7 @@ WXINC = $(WXDIR)\include
 TARGET=test
 TESTOBJECTS=test.obj
 LIBTARGET= $(WXLIBDIR)\wxprop.lib
-LIBS=$(WXLIB)\wx32.lib $(LIBTARGET) cw32 import32
+LIBS=$(WXLIB)\wx32.lib $(LIBTARGET) cw32 import32 ole2w32
 
 !ifndef DEBUG
 DEBUG=0

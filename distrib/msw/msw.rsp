@@ -110,6 +110,15 @@ samples/joytest/*.bmp
 samples/joytest/*.wav
 samples/joytest/*.ico
 
+samples/oleauto/*.h
+samples/oleauto/*.cpp
+samples/oleauto/*.def
+samples/oleauto/*.rc
+samples/oleauto/makefile.*
+samples/oleauto/*.txt
+samples/oleauto/*.bmp
+samples/oleauto/*.ico
+
 utils/nplugin/make*.*
 utils/nplugin/src/*.cpp
 utils/nplugin/src/*.h
