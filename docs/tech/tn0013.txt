@@ -1,0 +1,103 @@
+		      How to prepare wxGTK distribution
+		      =================================
+
+0. Introduction
+---------------
+
+This note explains what should be done, step by step, to prepare the packages
+for a wxGTK distribution.
+
+1. Preparing the sources
+------------------------
+
+a) Do a fresh checkout using the command
+
+	cvs -d :pserver:anoncvs@cvs.wxwindows.org:/home/wxcvs co wxGTK
+
+   NB: if you realize later that some needed files were not checked out
+       by this command, please modify CVSROOT/modules to include the missing
+       files so that it works for the next release!
+
+   You also need the samples, demos and contrib directories, so change to
+   wxWindows directory created by the first cvs command and do "cvs up -d"
+   for each of them.
+
+b) Create a build directory under wxWindows, e.g. I use "gtk-release",
+   "cd" to it and type "make -j1 dist bzip-dist-only". This should create
+   the  following files;
+
+   wxGTK-${version}.tar.bz2
+   wxGTK-demos-${version}.tar.bz2
+   wxGTK-samples-${version}.tar.bz2
+   wxGTK-${version}.tar.gz
+   wxGTK-demos-${version}.tar.gz
+   wxGTK-samples-${version}.tar.gz
+
+   where version is something like 2.3.2.
+
+   Note 1: "-j1" is needed now because make dist target is broken and doesn't
+           allow parallelizing, if your make is aliased to "make -j4" (like
+	   mine), it simply won't work.
+
+   Note 2; there are also dist-only and bzip-dist targets, the "-only" suffix
+           means to just create the archive supposing that the files
+	   themselves are already under _dist_dir/wxGTK-${version} where
+	   "make dist" creates them
+
+2. Building the RPMs
+--------------------
+
+Note that we didn't check if the library actually could be built - this is
+because it is done during this step, during the RPM generation. If, for
+whatever reason, you don't build the RPMs, you must have checked previously
+that the library could be built - nothing worse than a release which doesn't
+even compile!
+
+The rest of this section applies to a system with RPM installed (Redhat in my
+case).
+
+a) Setting up the RPM tree: you should have the RPM tree set up properly
+   before doing anything else. If you are going to build the RPMs as root,
+   you already have one under /usr/src/redhat and can just build there.
+   Otherwise you may do it (without root rights) in any directory RPM_ROOT.
+   RPM_ROOT should have the following subdirectories: BUILD, RPMS, SOURCES,
+   SPECS and SRPMS. RPMS should contain i386, i686 and noarch. You should
+   also create the file ~/.rpmmacros containing at least the following line:
+   "%_topdir /biton/zeitlin/rpm".
+
+   In either case, put the file wxGTK-${version}.tar.bz2 in SOURCES
+   subdirectory and wxGTK.spec in SPECS one (hint: you can just link them from
+   there - like this you won't forget to update them after redoing "make
+   dist").
+
+b) Start RPM build by going to RPM_ROOT directory and typing "rpm -bb
+   SPECS/wxGTK.spec". It may be a good idea to append "2&>1 | tee wxGTK.out"
+   (or "|& tee" if you're using the one true shell ;-) as it might be not
+   easy to detect errors in the verbose rpm output if anything goes wrong.
+
+   Then wait (and pray that nothing goes wrong because if anything does
+   you'll have to restart from the very beginning because rpm doesn't allow
+   to short circuit the package generation).
+
+   If everything goes well, the following files are produced:
+
+   SRPMS/wxGTK-${version}-1.src.rpm
+   RPMS/i386/wxGTK-${version}-1.i386.rpm
+   RPMS/i386/wxGTK-devel-${version}-1.i386.rpm
+   RPMS/i386/wxGTK-gl-${version}-1.i386.rpm
+   RPMS/i386/wxGTK-static-${version}-1.i386.rpm
+
+3. Uploading the files
+----------------------
+
+All 11 files should be uploaded (via FTP) to several locations.
+
+a) incoming.sourceforge.net, go to project admin page on sf.net and choose
+   add/edit releases for more details
+
+b) ftp.remstar.com
+
+4. Announcing the release
+-------------------------
+
+TODO
