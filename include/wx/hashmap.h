@@ -512,12 +512,10 @@ class WXDLLIMPEXP_BASE wxPointerHash
 public:
     wxPointerHash() { }
 
-    // TODO: this might not work well on architectures with 64 bit pointers but
-    //       32 bit longs, we should use % ULONG_MAX there
 #if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
     size_t operator()( const void* k ) const { return (size_t)k; }
 #else
-    unsigned long operator()( const void* k ) const { return (unsigned long)wxPtrToULong(k); }
+    wxUIntPtr operator()( const void* k ) const { return wxPtrToUInt(k); }
 #endif
 
     wxPointerHash& operator=(const wxPointerHash&) { return *this; }
