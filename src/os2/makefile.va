@@ -300,6 +300,7 @@ COMMONOBJS = \
   ..\common\$D\textfile.obj \
   ..\common\$D\timercmn.obj \
   ..\common\$D\tokenzr.obj \
+  ..\common\$D\toplvcmn.obj \
   ..\common\$D\treebase.obj \
   ..\common\$D\txtstrm.obj \
   ..\common\$D\unzip.obj \
@@ -426,6 +427,7 @@ COMLIBOBJS3 = \
   textfile.obj \
   timercmn.obj \
   tokenzr.obj \
+  toplvcmn.obj \
   treebase.obj \
   txtstrm.obj \
   unzip.obj \
@@ -780,6 +782,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
+  copy ..\common\$D\toplvcmn.obj
   copy ..\common\$D\treebase.obj
   copy ..\common\$D\txtstrm.obj
   copy ..\common\$D\unzip.obj
