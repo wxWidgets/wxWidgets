@@ -151,7 +151,11 @@ public:
                  wxHashTableEqual( keyType ) ),
           m_keyType( keyType ) { }
 
-    ~wxHashTableBase()
+    ~wxHashTableBase() { Clear(); }
+
+    size_t GetCount() const { return m_map.size(); }
+
+    void Clear()
     {
         if( m_keyType == wxKEY_STRING )
         {
@@ -164,26 +168,39 @@ public:
                 delete[] tmp; // used in operator++
             }
         }
+        m_map.clear();
     }
-
-    size_t GetCount() const { return m_map.size(); }
 protected:
     void DoPut( long key, void* data )
     {
+        wxASSERT( m_keyType == wxKEY_INTEGER );
+
         wxHashKeyValue k; k.integer = key;
         m_map[k] = data;
     }
 
     void DoPut( const wxChar* key, void* data )
     {
+        wxASSERT( m_keyType == wxKEY_STRING );
+
         wxHashKeyValue k;
-        k.string = new wxChar[wxStrlen(key) + 1];
-        wxStrcpy(k.string, key);
-        m_map[k] = data;
+        k.string = (wxChar*)key;
+        wxHashTableBaseBase::iterator it = m_map.find(k);
+
+        if( it == m_map.end() )
+        {
+            k.string = new wxChar[wxStrlen(key) + 1];
+            wxStrcpy(k.string, key);
+            m_map[k] = data;
+        }
+        else
+            it->second = data;
     }
 
     void* DoGet( long key ) const
     {
+        wxASSERT( m_keyType == wxKEY_INTEGER );
+
         wxHashKeyValue k; k.integer = key;
         wxHashTableBaseBase::const_iterator it = m_map.find( k );
 
@@ -192,6 +209,8 @@ protected:
 
     void* DoGet( const wxChar* key ) const
     {
+        wxASSERT( m_keyType == wxKEY_STRING );
+
         wxHashKeyValue k; k.string = (wxChar*)key;
         wxHashTableBaseBase::const_iterator it = m_map.find( k );
 
@@ -200,6 +219,8 @@ protected:
 
     void* DoDelete( long key )
     {
+        wxASSERT( m_keyType == wxKEY_INTEGER );
+
         wxHashKeyValue k; k.integer = key;
         wxHashTableBaseBase::iterator it = m_map.find( k );
         
@@ -216,6 +237,8 @@ protected:
 
     void* DoDelete( const wxChar* key )
     {
+        wxASSERT( m_keyType == wxKEY_STRING );
+
         wxHashKeyValue k; k.string = (wxChar*)key;
         wxHashTableBaseBase::iterator it = m_map.find( k );
         
@@ -410,7 +433,7 @@ public:
         return it;
     }
 
-    void Clear() { m_map.clear(); }
+    void Clear() { wxHashTableBase::Clear(); }
 private:
     compatibility_iterator m_iter;
 };
