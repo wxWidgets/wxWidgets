@@ -362,7 +362,8 @@ bool wxControlContainer::DoSetFocus()
         if ( win == m_winParent )
         {
             // our child already has focus, don't take it away from it
-            return TRUE;
+            m_inSetFocus = false;
+            return true;
         }
 
         if ( win->IsTopLevel() )
