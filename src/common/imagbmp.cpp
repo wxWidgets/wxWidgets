@@ -450,6 +450,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0;
     int             rshift = 0, gshift = 0, bshift = 0;
+    int             rbits = 0, gbits = 0, bbits = 0;
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
     wxUint8         aByte;
@@ -529,11 +530,11 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         {
             int bit = 0;
             stream.Read(dbuf, 4 * 3);
-            bmask = wxINT32_SWAP_ON_BE(dbuf[0]);
+            rmask = wxINT32_SWAP_ON_BE(dbuf[0]);
             gmask = wxINT32_SWAP_ON_BE(dbuf[1]);
-            rmask = wxINT32_SWAP_ON_BE(dbuf[2]);
-            // find shift amount.. ugly, but i can't think of a better way:
-            for (bit = 0; bit < bpp; bit++)
+            bmask = wxINT32_SWAP_ON_BE(dbuf[2]);
+            // find shift amount (Least significant bit of mask)
+            for (bit = bpp-1; bit>=0; bit--)
             {
                 if (bmask & (1 << bit))
                     bshift = bit;
@@ -541,6 +542,16 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                     gshift = bit;
                 if (rmask & (1 << bit))
                     rshift = bit;
+            }
+            // Find number of bits in mask (MSB-LSB+1)
+            for (bit = 0; bit < bpp; bit++)
+            {
+                if (bmask & (1 << bit))
+                    bbits = bit-bshift+1;
+                if (gmask & (1 << bit))
+                    gbits = bit-gshift+1;
+                if (rmask & (1 << bit))
+                    rbits = bit-rshift+1;
             }
         }
         else if ( bpp == 16 )
@@ -551,6 +562,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             rshift = 10;
             gshift = 5;
             bshift = 0;
+            rbits = 5;
+            gbits = 5;
+            bbits = 5;
         }
         else if ( bpp == 32 )
         {
@@ -560,6 +574,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             rshift = 16;
             gshift = 8;
             bshift = 0;
+            rbits = 8;
+            gbits = 8;
+            bbits = 8;
         }
     }
 
@@ -714,11 +731,15 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                    stream.Read(&aWord, 2);
                    aWord = wxUINT16_SWAP_ON_BE(aWord);
                    linepos += 2;
-                   temp = (aWord & rmask) >> rshift;
+                   /* use the masks and calculated amonut of shift
+                   to retrieve the color data out of the word.  Then
+                   shift it left by (8 - number of bits) such that
+                   the image has the proper dynamic range */
+                   temp = (aWord & rmask) >> rshift << (8-rbits);
                    ptr[poffset] = temp;
-                   temp = (aWord & gmask) >> gshift;
+                   temp = (aWord & gmask) >> gshift << (8-gbits);
                    ptr[poffset + 1] = temp;
-                   temp = (aWord & bmask) >> bshift;
+                   temp = (aWord & bmask) >> bshift << (8-bbits);
                    ptr[poffset + 2] = temp;
                    column++;
                }
