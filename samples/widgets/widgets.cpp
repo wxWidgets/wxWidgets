@@ -28,7 +28,6 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
-    #include "wx/panel.h"
     #include "wx/frame.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"

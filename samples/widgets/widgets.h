@@ -19,6 +19,8 @@ class WXDLLEXPORT wxTextCtrl;
 
 class WXDLLEXPORT WidgetsPageInfo;
 
+#include "wx/panel.h"
+
 // all source files use wxImageList
 #include "wx/imaglist.h"
 
