@@ -108,7 +108,7 @@ public:
     //
     // Returned value : true if pagebreak was modified, false otherwise
     // Usage : while (container->AdjustPagebreak(&p)) {}
-    virtual bool AdjustPagebreak(int *pagebreak) const;
+    virtual bool AdjustPagebreak(int *pagebreak, int *known_pagebreaks = NULL, int number_of_pages = 0) const;
 
     // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
     // is true - the cell can be split on two pages
@@ -191,7 +191,7 @@ public:
     virtual void Layout(int w);
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
     virtual void DrawInvisible(wxDC& dc, int x, int y);
-    virtual bool AdjustPagebreak(int *pagebreak) const;
+    virtual bool AdjustPagebreak(int *pagebreak, int *known_pagebreaks = NULL, int number_of_pages = 0) const;
 
     // insert cell at the end of m_Cells list
     void InsertCell(wxHtmlCell *cell);

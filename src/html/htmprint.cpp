@@ -100,15 +100,17 @@ void wxHtmlDCRenderer::SetFonts(wxString normal_face, wxString fixed_face,
 }
 
 
-int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
+int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, int *known_pagebreaks, int number_of_pages)
 {
     int pbreak, hght;
 
     if (m_Cells == NULL || m_DC == NULL) return 0;
 
     pbreak = (int)(from + m_Height);
-    while (m_Cells->AdjustPagebreak(&pbreak)) {}
+    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, number_of_pages)) {}
     hght = pbreak - from;
+    if(to < hght)
+        hght = to;
 
     if (!dont_render)
     {
@@ -335,7 +337,7 @@ void wxHtmlPrintout::CountPages()
     {
         pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft),
                                    (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                                   pos, TRUE);
+                                   pos, TRUE, INT_MAX, m_PageBreaks, m_NumPages);
         m_PageBreaks[++m_NumPages] = pos;
     } while (pos < m_Renderer->GetTotalHeight());
 }
@@ -369,7 +371,7 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 
     m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                         m_PageBreaks[page-1]);
+                         m_PageBreaks[page-1], FALSE, m_PageBreaks[page]-m_PageBreaks[page-1]);
 
     m_RendererHdr->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString)

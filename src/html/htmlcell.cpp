@@ -68,7 +68,7 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 
 
-bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
+bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks), int WXUNUSED(number_of_pages)) const
 {
     if ((!m_CanLiveOnPagebreak) &&
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
@@ -215,10 +215,10 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 
-bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
+bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks, int number_of_pages) const
 {
     if (!m_CanLiveOnPagebreak)
-        return wxHtmlCell::AdjustPagebreak(pagebreak);
+        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, number_of_pages);
 
     else
     {
@@ -228,7 +228,7 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 
         while (c)
         {
-            if (c->AdjustPagebreak(&pbrk))
+            if (c->AdjustPagebreak(&pbrk, known_pagebreaks, number_of_pages))
                 rt = TRUE;
             c = c->GetNext();
         }
