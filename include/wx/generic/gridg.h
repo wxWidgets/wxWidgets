@@ -352,6 +352,12 @@ public:
         : wxGenericGrid(parent, x, y, width, height, style, name)
         {
         }
+    wxGrid(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+           const wxSize& size, long style = 0, const wxString& name = "grid")
+        : wxGenericGrid(parent, id, pos, size, style, name)
+        {
+        }
+
 };
 
 class WXDLLEXPORT wxGridEvent : public wxCommandEvent
