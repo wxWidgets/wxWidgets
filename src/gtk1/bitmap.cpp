@@ -351,12 +351,12 @@ wxBitmap& wxBitmap::operator = ( const wxBitmap& bmp )
     return *this;
 }
 
-bool wxBitmap::operator == ( const wxBitmap& bmp )
+bool wxBitmap::operator == ( const wxBitmap& bmp ) const
 {
     return m_refData == bmp.m_refData;
 }
 
-bool wxBitmap::operator != ( const wxBitmap& bmp )
+bool wxBitmap::operator != ( const wxBitmap& bmp ) const
 {
     return m_refData != bmp.m_refData;
 }

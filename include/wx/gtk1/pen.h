@@ -45,8 +45,8 @@ public:
     wxPen( const wxPen& pen );
     ~wxPen();
     wxPen& operator = ( const wxPen& pen );
-    bool operator == ( const wxPen& pen );
-    bool operator != ( const wxPen& pen );
+    bool operator == ( const wxPen& pen ) const;
+    bool operator != ( const wxPen& pen ) const;
 
     void SetColour( const wxColour &colour );
     void SetColour( int red, int green, int blue );

@@ -636,9 +636,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     }
 */
                                 
-    if (!win->m_queuedFullRedraw)
-    {
-
         win->GetUpdateRegion().Union( gdk_event->area.x,
                                       gdk_event->area.y,
                                       gdk_event->area.width,
@@ -683,7 +680,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                 gtk_widget_event (child->widget, (GdkEvent*) &child_event);
             }
         }
-    }
         
     return TRUE;
 }
@@ -738,9 +734,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
    
     GtkPizza *pizza = GTK_PIZZA (widget);
         
-    if (!win->m_queuedFullRedraw)
-    {
-    
         if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
              (pizza->clear_on_draw))
         {
@@ -777,7 +770,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
                 gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
             }
         }
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -2062,7 +2054,6 @@ void wxWindow::Init()
     m_acceptsFocus = FALSE;
 
     m_clipPaintRegion = FALSE;
-    m_queuedFullRedraw = FALSE;
 
     m_cursor = *wxSTANDARD_CURSOR;
 
@@ -2403,24 +2394,6 @@ bool wxWindow::Destroy()
 
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
-    if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
-    {
-        /* Normally, GTK will send expose events only for the regions
-           which actually got exposed. Sadly, wxMSW invalidates
-           the whole window so we have to do that, too. We could
-           simply add a complete refresh, but we would then get
-           the normal GTK expose events in surplus, so we shut
-           off the expose events and schedule a full redraw to
-           be done in OnInternalIdle, where we restore the handling
-           of expose events. */
-    
-        m_queuedFullRedraw = TRUE;
-        
-        GdkEventMask mask = gdk_window_get_events( GTK_PIZZA(m_wxwindow)->bin_window );
-        mask = (GdkEventMask)(mask & ~GDK_EXPOSURE_MASK);
-        gdk_window_set_events( GTK_PIZZA(m_wxwindow)->bin_window, mask );
-    }
-
     gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), m_widget, x, y, width, height );
 }
 
@@ -2568,39 +2541,6 @@ void wxWindow::OnInternalIdle()
     }
 
     UpdateWindowUI();
-    
-    if (m_queuedFullRedraw)
-    {
-        /* See also wxWindow::DoMoveWindow for explanation of this code. What
-           we test here is if the requested size of the window is the same as 
-           the actual size of window, in which case all expose events that resulted
-           from resizing the window have been sent (and discarded) and we can
-           now do our full redraw and switch on expose event handling again. */
-        
-        bool child_already_resized = FALSE;
-        if (IsTopLevel() && !m_isFrame)
-        {
-            child_already_resized = ((m_wxwindow->parent) &&
-                                     (gtk_pizza_child_resized( GTK_PIZZA(m_wxwindow->parent), m_wxwindow )));
-        }
-        else
-        {
-            child_already_resized = ((m_widget->parent) &&
-                                     (gtk_pizza_child_resized( GTK_PIZZA(m_widget->parent), m_widget )));
-        }
-        
-        if (child_already_resized)
-        {
-            m_queuedFullRedraw = FALSE;
-            m_updateRegion.Clear();
-            m_updateRegion.Union( 0,0,m_width,m_height );
-            gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
-
-            GdkEventMask mask = gdk_window_get_events( GTK_PIZZA(m_wxwindow)->bin_window );
-            mask = (GdkEventMask)(mask | GDK_EXPOSURE_MASK);
-            gdk_window_set_events( GTK_PIZZA(m_wxwindow)->bin_window, mask );
-        }
-    }
 }
 
 void wxWindow::DoGetSize( int *width, int *height ) const
