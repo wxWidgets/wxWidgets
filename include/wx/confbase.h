@@ -27,7 +27,7 @@
 
 /// shall we be case sensitive in parsing variable names?
 #ifndef wxCONFIG_CASE_SENSITIVE
-  #define  wxCONFIG_CASE_SENSITIVE       FALSE
+  #define  wxCONFIG_CASE_SENSITIVE       0
 #endif
 
 /// separates group and entry names (probably shouldn't be changed)
