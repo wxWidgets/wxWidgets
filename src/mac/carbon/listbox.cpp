@@ -62,6 +62,58 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                   style, validator, name);
 }
 
+#if TARGET_API_MAC_OSX
+static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+    DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
+#else
+static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+    DataBrowserItemNotification message)
+#endif
+{
+    long ref = GetControlReference( browser ) ;
+    if ( ref )
+    {
+        wxListBox* list = wxDynamicCast( ref , wxListBox ) ;
+        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
+            if ( list->m_idArray[i] == (long) itemID )
+            {
+                bool trigger = false ;
+                wxCommandEvent event(
+                    wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+                switch( message )
+                {
+                    case kDataBrowserItemDeselected :
+                        if ( list->HasMultipleSelection() )
+                            trigger = true ;
+                        break ;
+                    case kDataBrowserItemSelected :
+                        trigger = true ;
+                        break ;
+                    case kDataBrowserItemDoubleClicked :
+                        event.SetEventType(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED) ;
+                        trigger = true ;
+                        break ;
+                    default :
+                        break ;
+                }
+                if ( trigger )
+                {
+                    event.SetEventObject( list );
+                    if ( list->HasClientObjectData() )
+                        event.SetClientObject( list->GetClientObject(i) );
+                    else if ( list->HasClientUntypedData() )
+                        event.SetClientData( list->GetClientData(i) );
+                    event.SetString( list->GetString(i) );
+                    event.SetInt(i) ;
+                    event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
+                    list->GetEventHandler()->ProcessEvent(event) ;
+                } 
+                break ;
+            }
+    }
+}
+
+
 static pascal OSStatus ListBoxGetSetItemData(ControlRef browser, 
     DataBrowserItemID itemID, DataBrowserPropertyID property, 
     DataBrowserItemDataRef itemData, Boolean changeValue)
@@ -178,6 +230,12 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     callbacks.u.v1.itemDataCallback = 
         NewDataBrowserItemDataUPP(ListBoxGetSetItemData);
 	
+	callbacks.u.v1.itemNotificationCallback =
+#if TARGET_API_MAC_OSX
+	    (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
+#else
+	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
+#endif
     SetDataBrowserCallbacks(browser, &callbacks);
 
     MacPostControlCreate(pos,size) ;
@@ -308,11 +366,6 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         }
     }
 #endif // wxUSE_OWNER_DRAWN
-}
-
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
 }
 
 int wxListBox::FindString(const wxString& s) const
@@ -587,7 +640,7 @@ void wxListBox::MacAppend( const wxString& text)
 void wxListBox::MacClear()
 {
     verify_noerr(::RemoveDataBrowserItems((ControlRef) m_macControl , kDataBrowserNoItem , 0 , NULL , kDataBrowserItemNoProperty ) ) ;
-    m_dataArray.Empty() ;
+    m_idArray.Empty() ;
 }
 
 void wxListBox::MacSetSelection( int n , bool select )
@@ -651,6 +704,7 @@ void wxListBox::OnSize( wxSizeEvent &event)
 
 void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown))
 {
+    /*
     Boolean wasDoubleClick = false ;
     long    result ;
     
@@ -663,6 +717,7 @@ void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart , 
     {
         MacDoDoubleClick() ;
     }
+    */
 }
 
 void wxListBox::MacSetRedraw( bool doDraw )
@@ -671,7 +726,7 @@ void wxListBox::MacSetRedraw( bool doDraw )
 }
 
 void wxListBox::MacDoClick()
-{
+{/*
     wxArrayInt aSelections;
     int n ;
     size_t count = GetSelections(aSelections);
@@ -715,13 +770,16 @@ void wxListBox::MacDoClick()
     event.m_commandInt = n;
     
     GetEventHandler()->ProcessEvent(event);
+*/
 }
 
 void wxListBox::MacDoDoubleClick()
 {
+/*
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event) ;
+*/
 }
 
 void wxListBox::OnChar(wxKeyEvent& event)
