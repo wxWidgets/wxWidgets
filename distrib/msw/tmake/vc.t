@@ -461,8 +461,9 @@ rtf:    $(DOCDIR)/winhelp/wx.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
 html:	wxhtml
-wxhtml:	$(DOCDIR)\html\wx\wx.htm htb
-htmlhelp: $(DOCDIR)\html\wx\wx.chm
+htb:	$(DOCDIR)\htb\wx.htb
+wxhtml:	$(DOCDIR)\html\wx\wx.htm
+htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
 ps:     wxps referencps
 wxps:	$(WXDIR)\docs\ps\wx.ps
 referencps:	$(WXDIR)\docs\ps\referenc.ps
@@ -573,6 +574,7 @@ $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
+        copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
@@ -580,7 +582,7 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
-$(DOCDIR)\html\wx\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
 	cd $(DOCDIR)\html\wx
 	-hhc wx.hhp
     -mkdir ..\..\htmlhelp
@@ -623,7 +625,7 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 # files, renamed to htb.
 # This can then be used with e.g. helpview.
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
-htb:
+$(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx.htm
 	cd $(WXDIR)\docs\html\wx
     -erase /Y wx.zip wx.htb
     zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk

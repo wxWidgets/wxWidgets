@@ -2870,7 +2870,11 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         // take this date as default
         tmDef = dateDef.GetTm();
     }
+#ifdef __WIN16__
+    else if ( m_time != 0 )
+#else
     else if ( m_time != wxLongLong(0) )
+#endif
     {
         // if this date is valid, don't change it
         tmDef = GetTm();

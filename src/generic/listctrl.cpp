@@ -1258,9 +1258,9 @@ void wxListHeaderWindow::DrawCurrent()
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
-    wxCoord x = (wxCoord)event.GetX();
-    wxCoord y = (wxCoord)event.GetY();
-    
+    int x = event.GetX();
+    int y = event.GetY();
+
     m_owner->CalcUnscrolledPosition( x, 0, &x, NULL );
     
     if (m_isDragging)

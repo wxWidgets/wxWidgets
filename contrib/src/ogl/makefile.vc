@@ -133,6 +133,7 @@ DOCSOURCES=$(LOCALDOCDIR)\ogl.tex \
 
 html: $(DOCDIR)\html\ogl\ogl.htm
 htmlhelp: $(DOCDIR)\htmlhelp\ogl.chm
+htb:	$(DOCDIR)\htb\ogl.htb
 hlp: $(DOCDIR)\winhelp\ogl.hlp
 pdfrtf: $(DOCDIR)\pdf\ogl.rtf
 ps: $(DOCDIR)\ps\ogl.ps
@@ -175,6 +176,18 @@ $(DOCDIR)\htmlhelp\ogl.chm: $(DOCDIR)\html\ogl\ogl.htm $(DOCDIR)\html\ogl\ogl.hh
 	-hhc ogl.hhp
     move ogl.chm $(DOCDIR)\htmlhelp\ogl.chm
 	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\ogl.htb: $(DOCDIR)\html\ogl\ogl.htm
+	cd $(DOCDIR)\html\ogl
+    -erase /Y ogl.zip ogl.htb
+    zip32 ogl.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move ogl.zip $(DOCDIR)\htb\ogl.htb
+    cd $(THISDIR)
 
 $(LOCALDOCDIR)\ogl.dvi:	$(DOCSOURCES)
 	cd $(LOCALDOCDIR)
