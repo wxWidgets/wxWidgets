@@ -229,6 +229,7 @@ wxMSW:
   hotkey
 - fix for multiple consecutive groups of radiobuttons
 - fix for incorrect display of tooltips in non English locales (Niki Spahiev)
+- fixed memory leak when setting new wxMask for wxBitmap
 
 wxMotif:
 

@@ -1088,6 +1088,7 @@ void wxBitmap::SetMask(wxMask *mask)
 {
     EnsureHasData();
 
+    delete GetBitmapData()->m_bitmapMask ;
     GetBitmapData()->m_bitmapMask = mask;
 }
 
