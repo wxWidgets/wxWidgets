@@ -46,21 +46,15 @@
 #define OLD_GETCOLUMNS 1
 #define EXPERIMENTAL_WXDB_FUNCTIONS 1
 
-// Use this line for wxWindows v1.x
-//#include "wx_ver.h"
-// Use this line for wxWindows v2.x
 #include "wx/version.h"
 
-#if wxMAJOR_VERSION == 2
-    #ifdef __GNUG__
-        #pragma interface "db.h"
-    #endif
+#ifdef __GNUG__
+    #pragma interface "db.h"
 #endif
 
 #include "wx/setup.h"
 
-#if wxMAJOR_VERSION == 2
-    extern "C" {
+extern "C" {
 #ifdef __VISUALC__
 // If you use the wxDbCreateDataSource() function with MSW/VC6,
 // you cannot use the iODBC headers, you must use the VC headers,
@@ -75,22 +69,7 @@
     #include "wx/isql.h"
     #include "wx/isqlext.h"
 #endif
-    }
-#else  // version == 1
-    extern "C" {
-#ifdef __VISUALC__
-// If you use the wxDbCreateDataSource() function with MSW/VC6,
-// you cannot use the iODBC headers, you must use the VC headers,
-// plus the odbcinst.h header - gt Nov 2 2000
-    #include "sql.h"
-    #include "sqlext.h"
-    #include "odbcinst.h"
-#else
-    #include "iodbc.h"
-    #include "isqlext.h"
-#endif
-    }
-#endif
+}
 
 typedef float SFLOAT;
 typedef double SDOUBLE;
@@ -105,10 +84,13 @@ enum enumDummy {enumDum1};
 
 #ifndef SQL_C_BOOLEAN
 #define SQL_C_BOOLEAN(datatype) (sizeof(datatype) == 1 ? SQL_C_UTINYINT : (sizeof(datatype) == 2 ? SQL_C_USHORT : SQL_C_ULONG))
+//#  define SQL_C_BOOLEAN (sizeof(int) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
 #endif
+
 #ifndef SQL_C_ENUM
 #define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)
 #endif
+
 #ifndef SQL_C_BLOB
     #ifdef SQL_LONGVARBINARY
         #define SQL_C_BLOB SQL_LONGVARBINARY
@@ -118,11 +100,11 @@ enum enumDummy {enumDum1};
 #endif
 
 #ifndef TRUE
-#define TRUE 1
+#define TRUE true
 #endif
 
 #ifndef FALSE
-#define FALSE 0
+#define FALSE false
 #endif
 
 const int wxDB_PATH_MAX                 = 254;
@@ -396,8 +378,6 @@ public:
 };
 
 
-
-
 class WXDLLEXPORT wxDbTableInf        // Description of a Table
 {
 public:
@@ -471,6 +451,7 @@ class WXDLLEXPORT wxDb
 {
 private:
     bool             dbIsOpen;
+    bool             dbIsCached;      // Was connection created by caching functions
     wxString         dsn;             // Data source name
     wxString         uid;             // User ID
     wxString         authStr;         // Authorization string (password)
@@ -513,6 +494,9 @@ private:
 #endif
 
 public:
+
+    void             setCached(bool cached)  { dbIsCached = cached; };  // This function must only be called by wxDbGetConnection() and wxDbCloseConnections!!!
+    bool             IsCached() { return dbIsCached; };
 
     bool             GetDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
                             { return getDataTypeInfo(fSqlType, structSQLTypeInfo); }
@@ -591,6 +575,7 @@ public:
 
     // Public member functions
     wxDb(const HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+    ~wxDb();
 
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr);  // Data Source Name, User ID, Password
     bool         Open(wxDbConnectInf *dbConnectInf);
@@ -601,7 +586,7 @@ public:
     bool         DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     bool         GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     void         DispNextError(void);
-    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=TRUE);
+    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=true);
     bool         DropView(const wxString &viewName);
     bool         ExecSql(const wxString &pSqlStmt);
     bool         GetNext(void);
@@ -643,7 +628,7 @@ public:
                         { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, 
-                               bool append = FALSE);
+                               bool append = false);
     bool         WriteSqlLog(const wxString &logMsg);
 
     wxDBMS       Dbms(void);
@@ -698,14 +683,21 @@ void  WXDLLEXPORT  wxDbCloseConnections(void);
 int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 
+//TODO: document
+// Writes a message to the wxLog window (stdout usually) when an internal error
+// situation occurs.  This function only works in DEBUG builds
+const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText, wxDb *pDb,
+                                                  char *ErrFile, int ErrLine);
+//TODO: end document
+
 // This function sets the sql log state for all open wxDb objects
-bool wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);
+bool  WXDLLEXPORT  wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);
 
 
 #if 0
 // MSW/VC6 ONLY!!!  Experimental
 int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const wxString &description=wxEmptyString,
-                                     bool sysDSN=FALSE, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
+                                     bool sysDSN=false, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
 #endif
 
 // This routine allows you to query a driver manager
@@ -713,7 +705,7 @@ int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString 
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
 bool WXDLLEXPORT wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMax, wxChar *DsDesc,
-                                   SWORD DsDescMax, UWORD direction = SQL_FETCH_NEXT);
+                                   SWORD DsDescMax, DWORD direction = SQL_FETCH_NEXT);
 
 
 // Change this to 0 to remove use of all deprecated functions
