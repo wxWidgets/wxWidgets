@@ -1788,11 +1788,11 @@ void wxArrayString::DoSort()
 // MBConv
 // ============================================================================
 
-WXDLLEXPORT_DATA(wxMBConv) wxConv_libc;
-
 // ----------------------------------------------------------------------------
 // standard libc conversion
 // ----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(wxMBConv) wxConv_libc;
 
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
@@ -1805,18 +1805,61 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 }
 
 // ----------------------------------------------------------------------------
+// standard file conversion
+// ----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(wxMBConv_file) wxConv_file;
+
+// just use the libc conversion for now
+size_t wxMBConv_file::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+  return wxMB2WC(buf, psz, n);
+}
+
+size_t wxMBConv_file::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+  return wxWC2MB(buf, psz, n);
+}
+
+// ----------------------------------------------------------------------------
+// standard gdk conversion
+// ----------------------------------------------------------------------------
+
+#ifdef __WXGTK__
+WXDLLEXPORT_DATA(wxMBConv_gdk) wxConv_gdk;
+
+#include <gdk/gdk.h>
+
+size_t wxMBConv_gdk::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+{
+  if (buf) {
+    return gdk_mbstowcs((GdkWChar *)buf, psz, n);
+  } else {
+    GdkWChar *nbuf = new GdkWChar[n=strlen(psz)];
+    size_t len = gdk_mbstowcs(nbuf, psz, n);
+    delete [] nbuf;
+    return len;
+  }
+}
+
+size_t wxMBConv_gdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+{
+  char *mbstr = gdk_wcstombs((GdkWChar *)psz);
+  size_t len = mbstr ? strlen(mbstr) : 0;
+  if (buf) {
+    if (len > n) len = n;
+    memcpy(buf, psz, len);
+    if (len < n) buf[len] = 0;
+  }
+  return len;
+}
+#endif
+
+// ----------------------------------------------------------------------------
 // UTF-7
 // ----------------------------------------------------------------------------
 
-class wxMBConv_UTF7
-{
-public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-};
-
-// WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
-WXDLLEXPORT_DATA(wxMBConv) wxConv_UTF7;
+WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
 
 // TODO: write actual implementations of UTF-7 here
 size_t wxMBConv_UTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
@@ -1833,15 +1876,7 @@ size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF-8
 // ----------------------------------------------------------------------------
 
-class wxMBConv_UTF8
-{
-public:
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-};
-
-// WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
-WXDLLEXPORT_DATA(wxMBConv) wxConv_UTF8;
+WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
 
 // TODO: write actual implementations of UTF-8 here
 size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
@@ -1862,6 +1897,10 @@ size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 wxCSConv::wxCSConv(const wxChar *charset)
 {
   data = (wxChar *) NULL;
+}
+
+wxCSConv::~wxCSConv(void)
+{
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
