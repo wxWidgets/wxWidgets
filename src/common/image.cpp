@@ -2846,7 +2846,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 	                    for (int i = 0; i < 3; i++)     // repeat calculation for R, G, and B
     	                {
         	                result_data[y][x].rgb[i] =
-            	                static_cast<unsigned char> ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
+            	                (unsigned char) ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
                 	                                         w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
                     	                                     (w1 + w2 + w3 + w4) );
 	                    }
