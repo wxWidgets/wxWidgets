@@ -48,9 +48,13 @@
 
 #ifdef __WXMSW__
 #include <windows.h>
+
+#ifndef __GNUWIN32__
 #include <direct.h>
 #include <stdlib.h>
 #include <ctype.h>
+#endif
+
 #endif
 
 #ifdef __BORLANDC__
@@ -293,7 +297,7 @@ static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 //static const int ID_CHECK = 1005;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
 static bool wxIsDriveAvailable(const wxString dirName)
 {
 #ifdef __WIN32__
@@ -306,6 +310,9 @@ static bool wxIsDriveAvailable(const wxString dirName)
     if (dirName.Len() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
+#if defined(__GNUWIN32__)
+        success = wxPathExists(dirNameLower);
+#else
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = _chdrive( thisDrive ) ;
@@ -315,6 +322,7 @@ static bool wxIsDriveAvailable(const wxString dirName)
         {
             success = FALSE;
         }
+#endif
     }
 #ifdef __WIN32__
     (void) SetErrorMode(errorMode);
@@ -352,32 +360,6 @@ void wxDirItemDataEx::SetNewDirName( wxString path )
 {
     m_path = path;
     m_name = wxFileNameFromPath( path );
-}
-
-// No longer used, and takes a very long time
-bool wxDirItemDataEx::HasSubDirs()
-{
-    if (m_path.IsEmpty())
-        return TRUE;
-
-    // On WIN32, must check if this volume is mounted or
-    // we get an error dialog for e.g. drive a:
-#ifdef __WIN32__
-    if (!wxIsDriveAvailable(m_path))
-        return FALSE;
-#endif
-
-    wxString search = m_path;
-    
-    if (m_path.Last() != wxFILE_SEP_PATH)
-    {
-        search += wxString(wxFILE_SEP_PATH);
-    }
-    search += wxT("*");
-
-    wxLogNull log;
-    wxString path = wxFindFirstFile( search, wxDIR );
-    return (bool)(!path.IsNull());
 }
 
 //-----------------------------------------------------------------------------
@@ -710,8 +692,8 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     if (!wxIsDriveAvailable(dirName))
     {
         data->m_isExpanded = FALSE;
-        wxMessageBox(wxT("Sorry, this drive is not available."));
-          return;
+        //wxMessageBox(wxT("Sorry, this drive is not available."));
+        return;
     }
 #endif
 
