@@ -42,7 +42,8 @@ private:
         CPPUNIT_TEST( ConstructorsWithConversion );
         CPPUNIT_TEST( Conversion );
         CPPUNIT_TEST( ConversionUTF7 );
-#endif
+        CPPUNIT_TEST( ConversionUTF8 );
+#endif // wxUSE_WCHAR_T
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Tokenizer );
@@ -62,7 +63,8 @@ private:
     void ConstructorsWithConversion();
     void Conversion();
     void ConversionUTF7();
-#endif
+    void ConversionUTF8();
+#endif // wxUSE_WCHAR_T
     void Extraction();
     void Find();
     void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
@@ -246,6 +248,24 @@ void StringTestCase::ConversionUTF7()
     CPPUNIT_ASSERT( memcmp(theWBufferAlt, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
 
 #endif // wxUSE_UNICODE
+}
+
+void StringTestCase::ConversionUTF8()
+{
+    const wchar_t wcs[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
+    const char *utf8 = "\xc2\xa3\xc2\xa3\xc2\xa3\xc2\xa3";
+
+    wxCSConv conv(_T("utf-8"));
+
+#if wxUSE_UNICODE
+    wxCharBuffer buf(wxString(wcs).mb_str(conv));
+
+    CPPUNIT_ASSERT( strcmp(buf, utf8) == 0 );
+#else // !wxUSE_UNICODE
+    wxWCharBuffer wbuf(wxString(utf8).wc_str(conv));
+
+    CPPUNIT_ASSERT( wcscmp(wbuf, wcs) == 0 );
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 #endif // wxUSE_WCHAR_T
