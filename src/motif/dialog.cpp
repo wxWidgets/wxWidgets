@@ -352,8 +352,7 @@ int wxDialog::ShowModal()
     XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
     while (XtAppPending((XtAppContext) wxTheApp->GetAppContext()))
     {
-        // MBN: is this necessary? why?
-        // XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
+        XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
         XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
 
         wxTheApp->ProcessXEvent((WXEvent*) &event);
