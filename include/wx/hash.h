@@ -41,6 +41,11 @@ class WXDLLEXPORT wxHashTable: public wxObject
   wxHashTable(int the_key_type = wxKEY_INTEGER, int size = 1000);
   ~wxHashTable(void);
   
+  // copy ctor and assignment operator
+  wxHashTable(const wxHashTable& table) { DoCopy(table); }
+  wxHashTable& operator=(const wxHashTable& table) { Clear(); DoCopy(table); return *this; }
+  void DoCopy(const wxHashTable& table);
+  
   void Destroy(void);  // Robert Roebling
 
   bool Create(int the_key_type = wxKEY_INTEGER, int size = 1000);

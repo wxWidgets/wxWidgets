@@ -78,6 +78,25 @@ bool wxHashTable::Create(int the_key_type, int size)
   return TRUE;
 }
 
+
+void wxHashTable::DoCopy(const wxHashTable& table)
+{
+  n = table.n;
+  current_position = table.current_position;
+  current_node = NULL; // doesn't matter - Next() will reconstruct it
+  key_type = table.key_type;
+
+  hash_table = new wxList *[n];
+  for (int i = 0; i < n; i++) {
+    if (table.hash_table[i] == NULL)
+      hash_table[i] = NULL;
+    else {
+      hash_table[i] = new wxList(key_type);
+      *(hash_table[i]) = *(table.hash_table[i]);
+    }
+  }
+}
+
 void wxHashTable::Put (long key, long value, wxObject * object)
 {
   // Should NEVER be
