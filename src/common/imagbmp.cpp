@@ -1255,7 +1255,7 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
     {
         // we always have a data size
         stream.Read(&datalen, 4);
-
+        datalen = wxINT32_SWAP_ON_BE(datalen) ;
         //now either data or a FCC
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
@@ -1301,11 +1301,11 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
     // we have a riff file:
     while ( stream.IsOk() )
     {
-        if ( FCC1 != *anih32 )
+        if ( FCC1 == *anih32 )
             return TRUE;
         // we always have a data size:
         stream.Read(&datalen, 4);
-
+        datalen = wxINT32_SWAP_ON_BE(datalen) ;  
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
@@ -1345,7 +1345,7 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     {
         // we always have a data size:
         stream.Read(&datalen, 4);
-
+        datalen = wxINT32_SWAP_ON_BE(datalen) ;
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
     	{
@@ -1357,7 +1357,7 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
             {
                 wxUint32 *pData = new wxUint32[datalen/4];
                 stream.Read(pData, datalen);
-                int nIcons = *(pData + 1);
+                int nIcons = wxINT32_SWAP_ON_BE(*(pData + 1));
                 delete[] pData;
                 return nIcons;
             }
