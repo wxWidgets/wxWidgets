@@ -178,13 +178,22 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         // the fg ROP is applied for the pixels of the mask bitmap which are 1
         // (for a wxMask this means that this is a non transparent pixel), the
         // bg ROP is applied for all the others
+
+        wxColour colBg = GetBackgroundColour();
+        HBRUSH hbrBackground =
+            ::CreateSolidBrush(RGB(colBg.Red(), colBg.Green(), colBg.Blue()));
+        HBRUSH hbrOld = (HBRUSH)::SelectObject(hDC, hbrBackground);
+
         ok = ::MaskBlt(
                        hDC, x1, y1, wBmp, hBmp,                 // dst
                        memDC, 0, 0,                             // src
                        (HBITMAP)mask->GetMaskBitmap(), 0, 0,    // mask
                        MAKEROP4(SRCCOPY,                        // fg ROP
-                                SRCPAINT)                       // bg ROP
+                                PATCOPY)                        // bg ROP
                       );
+
+        ::SelectObject(hDC, hbrOld);
+        ::DeleteObject(hbrBackground);
     }
     else
     {
