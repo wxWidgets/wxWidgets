@@ -30,6 +30,7 @@ you can still use Ctrl-Enter to pass to the next control from the keyboard.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}
 \twocolitem{\windowstyle{wxTE\_PASSWORD}}{The text will be echoed as asterisks.}
 \twocolitem{\windowstyle{wxTE\_READONLY}}{The text will not be user-editable.}
+\twocolitem{\windowstyle{wxTE\_RICH}}{create rich edit control instead of a normal one under Windows, does nothing elsewhere}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
 \end{twocollist}
 
@@ -122,9 +123,10 @@ controls don't have a horizontal scrollbar, the text is automatically scrolled
 so that the \helpref{insertion point}{wxtextctrlgetinsertionpoint} is always
 visible.
 
-Under Windows, if the {\bf wxTE\_MULTILINE} style is used, the window is implemented
-as a Windows rich text control with unlimited capacity. Otherwise, normal edit control limits
-apply.
+Under Windows, if the {\bf wxTE\_RICH} style is used, the window is implemented
+as a Windows rich text control with (practically) unlimited capacity.
+Otherwise, normal edit control limits apply (only about 32Kb of total data
+under Windows 9x).
 
 \wxheading{See also}
 
