@@ -25,13 +25,14 @@
 #if wxUSE_SASH
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/dialog.h"
+    #include "wx/frame.h"
+    #include "wx/settings.h"
 #endif
 
 #include <math.h>
 #include <stdlib.h>
 
-#include "wx/string.h"
 #include "wx/dcscreen.h"
 #include "wx/sashwin.h"
 #include "wx/laywin.h"

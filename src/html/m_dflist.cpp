@@ -22,9 +22,7 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
 #endif
-
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
@@ -43,10 +41,10 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
         wxHtmlContainerCell *c;
 
 
-        if (tag.GetName() == wxT("DL")) 
-	    {
-            if (m_WParser->GetContainer()->GetFirstCell() != NULL) 
-	        {
+        if (tag.GetName() == wxT("DL"))
+        {
+            if (m_WParser->GetContainer()->GetFirstCell() != NULL)
+            {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
             }
@@ -54,8 +52,8 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
 
             ParseInner(tag);
 
-            if (m_WParser->GetContainer()->GetFirstCell() != NULL) 
-	        {
+            if (m_WParser->GetContainer()->GetFirstCell() != NULL)
+            {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
             }
@@ -63,11 +61,10 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
 
             return TRUE;
         }
-        
-        else if (tag.GetName() == wxT("DT")) 
-	    {
-            if (!tag.IsEnding()) 
-	        {
+        else if (tag.GetName() == wxT("DT"))
+        {
+            if (!tag.IsEnding())
+            {
                 m_WParser->CloseContainer();
                 c = m_WParser->OpenContainer();
                 c->SetAlignHor(wxHTML_ALIGN_LEFT);
@@ -75,15 +72,14 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
             }
             return FALSE;
         }
-        
         else if (!tag.IsEnding()) // "DD"
-	    {
+        {
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
             return FALSE;
         }
-            
+
         else return FALSE;
     }
 

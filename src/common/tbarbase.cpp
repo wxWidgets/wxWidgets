@@ -31,7 +31,6 @@
 #if wxUSE_TOOLBAR
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
 #endif
 
 #include "wx/frame.h"

@@ -8,7 +8,7 @@
 
 /*
 
-REMARKS : 
+REMARKS :
 
 This FS creates local cache (in /tmp directory). The cache is freed
 on program exit.
@@ -31,12 +31,7 @@ limitation)
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
 
-#ifndef WXPRECOMP
-#include "wx/wx.h"
-#endif
-
 #include "wx/filesys.h"
-
 
 //--------------------------------------------------------------------------------
 // wxInternetFSHandler

@@ -21,10 +21,10 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/brush.h"
+    #include "wx/pen.h"
+    #include "wx/dc.h"
 #endif
-
-
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"

@@ -23,7 +23,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
@@ -82,7 +83,7 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     if (m_DC == NULL) return;
 
     if (m_Cells != NULL) delete m_Cells;
-    
+
     m_FS->ChangePathTo(basepath, isdir);
     m_Cells = (wxHtmlContainerCell*) m_Parser->Parse(html);
     m_Cells->SetIndent(0, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
@@ -94,24 +95,24 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
 int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
 {
     int pbreak, hght;
-    
+
     if (m_Cells == NULL || m_DC == NULL) return 0;
-    
+
     pbreak = (int)(from + m_Height);
     while (m_Cells->AdjustPagebreak(&pbreak)) {}
     hght = pbreak - from;
-    
-    if (!dont_render) 
+
+    if (!dont_render)
     {
         m_DC->SetBrush(*wxWHITE_BRUSH);
-        
+
         m_DC->SetClippingRegion(x, y, m_Width, hght);
-        m_Cells->Draw(*m_DC, 
+        m_Cells->Draw(*m_DC,
                         x, (y - from),
                         y, pbreak + (y /*- from*/));
         m_DC->DestroyClippingRegion();
     }
-    
+
     if (pbreak < m_Cells->GetHeight()) return pbreak;
     else return GetTotalHeight();
 }
@@ -171,7 +172,7 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 {
     int pageWidth, pageHeight, mm_w, mm_h, scr_w, scr_h, dc_w, dc_h;
     float ppmm_h, ppmm_v;
-    
+
     if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
 
     GetPageSizePixels(&pageWidth, &pageHeight);
@@ -190,35 +191,35 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     GetDC()->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
 
     /* prepare headers/footers renderer: */
-    
+
     m_RendererHdr->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)), 
+    m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
-    if (m_Headers[0] != wxEmptyString) 
+    if (m_Headers[0] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[0], 1));
         m_HeaderHeight = m_RendererHdr->GetTotalHeight();
     }
-    else if (m_Headers[1] != wxEmptyString) 
+    else if (m_Headers[1] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[1], 1));
         m_HeaderHeight = m_RendererHdr->GetTotalHeight();
     }
-    if (m_Footers[0] != wxEmptyString) 
+    if (m_Footers[0] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[0], 1));
         m_FooterHeight = m_RendererHdr->GetTotalHeight();
     }
-    else if (m_Footers[1] != wxEmptyString) 
+    else if (m_Footers[1] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[1], 1));
         m_FooterHeight = m_RendererHdr->GetTotalHeight();
     }
-    
+
     /* prepare main renderer: */
     m_Renderer->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
     m_Renderer->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
-                          (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) - 
+                          (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) -
                           m_FooterHeight - m_HeaderHeight -
                           ((m_HeaderHeight == 0) ? 0 : m_MarginSpace * ppmm_v) -
                           ((m_FooterHeight == 0) ? 0 : m_MarginSpace * ppmm_v)
@@ -232,12 +233,12 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 bool wxHtmlPrintout::OnPrintPage(int page)
 {
     wxDC *dc = GetDC();
-    if (dc) 
+    if (dc)
     {
         if (HasPage(page))
             RenderPage(dc, page);
         return TRUE;
-    } 
+    }
     else return FALSE;
 }
 
@@ -272,22 +273,22 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
     wxFSFile *ff = fs.OpenFile(htmlfile);
-    
+
     if (ff == NULL)
-    {   
+    {
         wxLogError(htmlfile + _(": file does not exist!"));
         return;
     }
-    
+
     wxInputStream *st = ff->GetStream();
     char *t = new char[st->GetSize() + 1];
     st->Read(t, st->GetSize());
     t[st->GetSize()] = 0;
-    
+
     wxString doc = wxString(t);
     delete t;
     delete ff;
-    
+
     SetHtmlText(doc, htmlfile, FALSE);
 }
 
@@ -295,9 +296,9 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 
 void wxHtmlPrintout::SetHeader(const wxString& header, int pg)
 {
-    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN)
         m_Headers[0] = header;
-    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD)
         m_Headers[1] = header;
 }
 
@@ -305,9 +306,9 @@ void wxHtmlPrintout::SetHeader(const wxString& header, int pg)
 
 void wxHtmlPrintout::SetFooter(const wxString& footer, int pg)
 {
-    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN)
         m_Footers[0] = footer;
-    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD)
         m_Footers[1] = footer;
 }
 
@@ -327,11 +328,11 @@ void wxHtmlPrintout::CountPages()
     int pos = 0;
 
     m_NumPages = 0;
-    
+
     m_PageBreaks[0] = 0;
-    do 
+    do
     {
-        pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft), 
+        pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft),
                                    (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
                                    pos, TRUE);
         m_PageBreaks[++m_NumPages] = pos;
@@ -360,22 +361,22 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
 
     dc->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
-    
+
     m_Renderer->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
-    
+
     dc->SetBackgroundMode(wxTRANSPARENT);
 
-    m_Renderer->Render((int) (ppmm_h * m_MarginLeft), 
+    m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
                          m_PageBreaks[page-1]);
-    
+
     m_RendererHdr->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
-    if (m_Headers[page % 2] != wxEmptyString) 
+    if (m_Headers[page % 2] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
         m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop));
     }
-    if (m_Footers[page % 2] != wxEmptyString) 
+    if (m_Footers[page % 2] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
         m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight));
@@ -388,7 +389,7 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
 {
     wxString r = instr;
     wxString num;
-    
+
     num.Printf(wxT("%i"), page);
     r.Replace(wxT("@PAGENUM@"), num);
 
@@ -429,9 +430,9 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_fra
 #endif
     m_PageSetupData = new wxPageSetupDialogData;
     m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
-    
+
     m_PageSetupData->EnableMargins(TRUE);
-    m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));    
+    m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
 }
 
@@ -494,14 +495,14 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(*m_PrintData);
     wxPrintPreview *preview = new wxPrintPreview(printout1, printout2, &printDialogData);
-    if (!preview->Ok()) 
+    if (!preview->Ok())
     {
         delete preview;
         return FALSE;
     }
 
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
-                                               m_Name + _(" Preview"), 
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame,
+                                               m_Name + _(" Preview"),
                                                wxPoint(100, 100), wxSize(650, 500));
     frame->Centre(wxBOTH);
     frame->Initialize();
@@ -531,7 +532,7 @@ void wxHtmlEasyPrinting::PrinterSetup()
 {
     wxPrintDialogData printDialogData(*m_PrintData);
     wxPrintDialog printerDialog(m_Frame, &printDialogData);
-    
+
     printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
 
     if (printerDialog.ShowModal() == wxID_OK)
@@ -545,7 +546,7 @@ void wxHtmlEasyPrinting::PageSetup()
     m_PageSetupData->SetPrintData(*m_PrintData);
     wxPageSetupDialog pageSetupDialog(m_Frame, m_PageSetupData);
 
-    if (pageSetupDialog.ShowModal() == wxID_OK) 
+    if (pageSetupDialog.ShowModal() == wxID_OK)
     {
         (*m_PrintData) = pageSetupDialog.GetPageSetupData().GetPrintData();
         (*m_PageSetupData) = pageSetupDialog.GetPageSetupData();
@@ -556,9 +557,9 @@ void wxHtmlEasyPrinting::PageSetup()
 
 void wxHtmlEasyPrinting::SetHeader(const wxString& header, int pg)
 {
-    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN)
         m_Headers[0] = header;
-    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD)
         m_Headers[1] = header;
 }
 
@@ -566,9 +567,9 @@ void wxHtmlEasyPrinting::SetHeader(const wxString& header, int pg)
 
 void wxHtmlEasyPrinting::SetFooter(const wxString& footer, int pg)
 {
-    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_EVEN)
         m_Footers[0] = footer;
-    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD) 
+    if (pg == wxPAGE_ALL || pg == wxPAGE_ODD)
         m_Footers[1] = footer;
 }
 
@@ -577,7 +578,7 @@ void wxHtmlEasyPrinting::SetFooter(const wxString& footer, int pg)
 wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 {
     wxHtmlPrintout *p = new wxHtmlPrintout(m_Name);
-    
+
     p->SetHeader(m_Headers[0], wxPAGE_EVEN);
     p->SetHeader(m_Headers[1], wxPAGE_ODD);
     p->SetFooter(m_Footers[0], wxPAGE_EVEN);
@@ -587,7 +588,7 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
                     m_PageSetupData->GetMarginBottomRight().y,
                     m_PageSetupData->GetMarginTopLeft().x,
                     m_PageSetupData->GetMarginBottomRight().x);
-    
+
     return p;
 }
 

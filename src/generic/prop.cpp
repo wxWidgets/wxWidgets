@@ -23,7 +23,6 @@
 #if wxUSE_PROPSHEET
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
 #endif
 
 #include "wx/debug.h"

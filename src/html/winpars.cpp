@@ -22,7 +22,8 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/intl.h"
+    #include "wx/dc.h"
 #endif
 
 #include "wx/html/htmldefs.h"

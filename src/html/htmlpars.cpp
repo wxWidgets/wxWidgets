@@ -22,7 +22,8 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/tokenzr.h"
@@ -40,8 +41,8 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlParser,wxObject)
 
-wxHtmlParser::wxHtmlParser() 
-    : wxObject(), m_Cache(NULL), m_HandlersHash(wxKEY_STRING), 
+wxHtmlParser::wxHtmlParser()
+    : wxObject(), m_Cache(NULL), m_HandlersHash(wxKEY_STRING),
       m_FS(NULL), m_HandlersStack(NULL)
 {
     m_entitiesParser = new wxHtmlEntitiesParser;
@@ -97,22 +98,22 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
     templen = 0;
     i = begin_pos;
 
-    while (i < end_pos) 
+    while (i < end_pos)
     {
         c = m_Source[(unsigned int) i];
 
         // continue building word:
-        if (c != '<') 
+        if (c != '<')
 	    {
             temp[templen++] = c;
             i++;
         }
 
-        else if (c == '<')  
+        else if (c == '<')
 	    {
             wxHtmlTag tag(m_Source, i, end_pos, m_Cache, m_entitiesParser);
 
-            if (templen) 
+            if (templen)
 	        {
                 temp[templen] = 0;
                 AddText(temp);
@@ -124,7 +125,7 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
         }
     }
 
-    if (templen) 
+    if (templen)
     { // last word of block :-(
         temp[templen] = 0;
         AddText(temp);
@@ -140,7 +141,7 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
     h = (wxHtmlTagHandler*) m_HandlersHash.Get(tag.GetName());
     if (h)
         inner = h->HandleTag(tag);
-    if (!inner) 
+    if (!inner)
     {
         if (tag.HasEnding())
             DoParsing(tag.GetBeginPos(), tag.GetEndPos1());
@@ -166,7 +167,7 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
     wxStringTokenizer tokenizer(tags, ", ");
     wxString key;
 
-    if (m_HandlersStack == NULL) 
+    if (m_HandlersStack == NULL)
     {
         m_HandlersStack = new wxList;
         m_HandlersStack->DeleteContents(TRUE);
@@ -174,7 +175,7 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
 
     m_HandlersStack->Insert(new wxHashTable(m_HandlersHash));
 
-    while (tokenizer.HasMoreTokens()) 
+    while (tokenizer.HasMoreTokens())
     {
         key = tokenizer.NextToken();
         m_HandlersHash.Delete(key);
@@ -185,9 +186,9 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
 void wxHtmlParser::PopTagHandler()
 {
     wxNode *first;
-    
-    if (m_HandlersStack == NULL || 
-        (first = m_HandlersStack->GetFirst()) == NULL) 
+
+    if (m_HandlersStack == NULL ||
+        (first = m_HandlersStack->GetFirst()) == NULL)
     {
         wxLogWarning(_("Warning: attempt to remove HTML tag handler from empty stack."));
         return;
@@ -238,7 +239,7 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
     const wxChar *c, *last;
     const wxChar *in_str = input.c_str();
     wxString output;
-    
+
     for (c = in_str, last = in_str; *c != wxT('\0'); c++)
     {
         if (*c == wxT('&'))
@@ -295,12 +296,12 @@ wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
 wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
 {
     unsigned code = 0;
-    
+
     if (entity[0] == wxT('#'))
     {
         const wxChar *ent_s = entity.c_str();
         const wxChar *format;
-        
+
         if (ent_s[1] == wxT('x') || ent_s[1] == wxT('X'))
         {
             format = wxT("%x");
@@ -570,20 +571,20 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
             { wxT("zwnj"),8204 },
             {NULL, 0}};
         static size_t substitutions_cnt = 0;
-        
+
         if (substitutions_cnt == 0)
             while (substitutions[substitutions_cnt].code != 0)
                 substitutions_cnt++;
 
         wxHtmlEntityInfo *info;
-        info = (wxHtmlEntityInfo*) bsearch(entity.c_str(), substitutions, 
+        info = (wxHtmlEntityInfo*) bsearch(entity.c_str(), substitutions,
                                            substitutions_cnt,
                                            sizeof(wxHtmlEntityInfo),
                                            compar_entity);
         if (info)
             code = info->code;
     }
-    
+
     if (code == 0)
         return wxT('?');
     else

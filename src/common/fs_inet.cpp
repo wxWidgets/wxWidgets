@@ -37,7 +37,6 @@ limitation)
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
 #endif
 
 #include "wx/wfstream.h"
@@ -74,7 +73,7 @@ static wxString StripProtocolAnchor(const wxString& location)
     else myloc = myloc.AfterFirst(wxT(':'));
 
     // fix malformed url:
-    if (myloc.Left(2) != wxT("//")) 
+    if (myloc.Left(2) != wxT("//"))
     {
         if (myloc.GetChar(0) != wxT('/')) myloc = wxT("//") + myloc;
         else myloc = wxT("/") + myloc;
@@ -89,7 +88,7 @@ static wxString StripProtocolAnchor(const wxString& location)
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    if ((p == wxT("http")) || (p == wxT("ftp"))) 
+    if ((p == wxT("http")) || (p == wxT("ftp")))
     {
         wxURL url(p + wxT(":") + StripProtocolAnchor(location));
         return (url.GetError() == wxURL_NOERR);
@@ -112,7 +111,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     if (info == NULL)
     {
         wxURL url(right);
-        if (url.GetError() == wxURL_NOERR) 
+        if (url.GetError() == wxURL_NOERR)
         {
             s = url.GetInputStream();
             content = url.GetProtocol().GetContentType();

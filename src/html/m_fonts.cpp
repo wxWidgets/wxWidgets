@@ -21,7 +21,6 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
 #endif
 
 #include "wx/html/forcelnk.h"
@@ -44,21 +43,21 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         wxString oldface = m_WParser->GetFontFace();
 
         if (tag.HasParam(wxT("COLOR")))
-	    {
+        {
             wxColour clr;
             if (tag.GetParamAsColour(wxT("COLOR"), &clr))
-	        {
+            {
                 m_WParser->SetActualColor(clr);
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
             }
         }
 
         if (tag.HasParam(wxT("SIZE")))
-	    {
+        {
             int tmp = 0;
             wxChar c = tag.GetParam(wxT("SIZE")).GetChar(0);
             if (tag.GetParamAsInt(wxT("SIZE"), &tmp))
-	        {
+            {
                 if (c == wxT('+') || c == wxT('-'))
                     m_WParser->SetFontSize(oldsize+tmp);
                 else
@@ -69,9 +68,9 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         }
 
         if (tag.HasParam(wxT("FACE")))
-	    {
+        {
             if (m_Faces.GetCount() == 0)
-	        {
+            {
                 wxFontEnumerator enu;
                 enu.EnumerateFacenames();
                 m_Faces = *enu.GetFacenames();
@@ -80,30 +79,30 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
             int index;
 
             while (tk.HasMoreTokens())
-	        {
+            {
                 if ((index = m_Faces.Index(tk.GetNextToken())) != wxNOT_FOUND)
-		        {
+                {
                     m_WParser->SetFontFace(m_Faces[index]);
                     m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
                     break;
                 }
-        	}
+            }
         }
 
         ParseInner(tag);
 
         if (oldface != m_WParser->GetFontFace())
-	    {
+        {
             m_WParser->SetFontFace(oldface);
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
         }
         if (oldsize != m_WParser->GetFontSize())
-	    {
+        {
             m_WParser->SetFontSize(oldsize);
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
         }
         if (oldclr != m_WParser->GetActualColor())
-	    {
+        {
             m_WParser->SetActualColor(oldclr);
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(oldclr));
         }
@@ -232,7 +231,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         else if (tag.GetName() == wxT("H3"))
                 m_WParser->SetFontSize(5);
         else if (tag.GetName() == wxT("H4"))
-	    {
+        {
                 m_WParser->SetFontSize(5);
                 m_WParser->SetFontItalic(TRUE);
                 m_WParser->SetFontBold(FALSE);
@@ -240,7 +239,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         else if (tag.GetName() == wxT("H5"))
                 m_WParser->SetFontSize(4);
         else if (tag.GetName() == wxT("H6"))
-	    {
+        {
                 m_WParser->SetFontSize(4);
                 m_WParser->SetFontItalic(TRUE);
                 m_WParser->SetFontBold(FALSE);
@@ -248,7 +247,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
 
         c = m_WParser->GetContainer();
         if (c->GetFirstCell())
-	    {
+        {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
             c = m_WParser->GetContainer();

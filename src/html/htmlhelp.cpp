@@ -23,9 +23,7 @@ file is only left to point out the problem and will be removed r.s.n.
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
 #endif
-
 
 #include <wx/notebook.h>
 #include <wx/imaglist.h>

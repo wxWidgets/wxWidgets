@@ -20,7 +20,8 @@
 #if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/filesys.h"
@@ -30,7 +31,7 @@
 class MemFSHashObj : public wxObject
 {
     public:
-        
+
         MemFSHashObj(const void *data, size_t len)
         {
             m_Data = new char[len];
@@ -38,7 +39,7 @@ class MemFSHashObj : public wxObject
             m_Len = len;
             m_Time = wxDateTime::Now();
         }
-        
+
         MemFSHashObj(wxMemoryOutputStream& stream)
         {
             m_Len = stream.GetSize();
@@ -46,12 +47,12 @@ class MemFSHashObj : public wxObject
             stream.CopyTo(m_Data, m_Len);
             m_Time = wxDateTime::Now();
         }
-        
+
         ~MemFSHashObj()
         {
             delete[] m_Data;
         }
-        
+
         char *m_Data;
         size_t m_Len;
         wxDateTime m_Time;
@@ -78,8 +79,8 @@ wxMemoryFSHandler::~wxMemoryFSHandler()
     // as only one copy of FS handler is supposed to exist, we may silently
     // delete static data here. (There is no way how to remove FS handler from
     // wxFileSystem other than releasing _all_ handlers.)
-    
-    if (m_Hash) delete m_Hash; 
+
+    if (m_Hash) delete m_Hash;
     m_Hash = NULL;
 }
 
@@ -131,12 +132,12 @@ wxString wxMemoryFSHandler::FindNext()
 
 bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 {
-    if (m_Hash == NULL) 
+    if (m_Hash == NULL)
     {
         m_Hash = new wxHashTable(wxKEY_STRING);
         m_Hash -> DeleteContents(TRUE);
     }
-    
+
     if (m_Hash -> Get(filename) != NULL)
     {
         wxString s;
@@ -156,7 +157,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 {
     if (!CheckHash(filename)) return;
 
-    
+
     wxMemoryOutputStream mems;
     if (image.Ok() && image.SaveFile(mems, (int)type))
         m_Hash -> Put(filename, new MemFSHashObj(mems));

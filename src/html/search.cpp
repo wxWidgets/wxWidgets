@@ -23,11 +23,9 @@
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
 #endif
 
 #include "wx/html/helpdata.h"
-
 
 
 //--------------------------------------------------------------------------------

@@ -16,8 +16,7 @@
 #pragma interface "helpxlp.h"
 #endif
 
-#include <stdio.h>
-#include "wx/wx.h"
+#include "wx/defs.h"
 
 #if wxUSE_HELP
 

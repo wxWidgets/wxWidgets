@@ -23,29 +23,10 @@ I STRONGLY recommend reading and understanding these macros!!
 #define _WX_M_TEMPL_H_
 
 #include "wx/defs.h"
+
 #if wxUSE_HTML
 
-
-#ifdef __GNUG__
-#pragma interface "m_templ.h"
-#pragma implementation
-#endif
-
-#include <wx/wxprec.h>
-
-#ifdef __BORDLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WXPRECOMP
-#include <wx/wx.h>
-#endif
-
-
-
-
 #include "wx/html/winpars.h"
-
 
 #define TAG_HANDLER_BEGIN(name,tags)                                      \
     class HTML_Handler_##name : public wxHtmlWinTagHandler                \

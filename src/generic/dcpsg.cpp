@@ -21,8 +21,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
-    #include "wx/defs.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_PRINTING_ARCHITECTURE

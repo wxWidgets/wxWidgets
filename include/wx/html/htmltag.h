@@ -16,8 +16,12 @@
 #endif
 
 #include "wx/defs.h"
+
 #if wxUSE_HTML
 
+#include "wx/object.h"
+
+class WXDLLEXPORT wxColour;
 class WXDLLEXPORT wxHtmlEntitiesParser;
 
 //-----------------------------------------------------------------------------
@@ -60,7 +64,7 @@ public:
     // constructs wxHtmlTag object based on HTML tag.
     // The tag begins (with '<' character) at position pos in source
     // end_pos is position where parsing ends (usually end of document)
-    wxHtmlTag(const wxString& source, int pos, int end_pos, 
+    wxHtmlTag(const wxString& source, int pos, int end_pos,
               wxHtmlTagsCache *cache,
               wxHtmlEntitiesParser *entParser = NULL);
 
@@ -79,7 +83,7 @@ public:
     //                           (or ("WhaT.jpg") if with_commas == TRUE)
     wxString GetParam(const wxString& par, bool with_commas = FALSE) const;
 
-    // Convenience functions:    
+    // Convenience functions:
     bool GetParamAsColour(const wxString& par, wxColour *clr) const;
     bool GetParamAsInt(const wxString& par, int *clr) const;
 

@@ -24,7 +24,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/mdi.h"
+    #include "wx/frame.h"
+    #include "wx/mdi.h"
 #endif
 
 #include "wx/laywin.h"
@@ -218,6 +219,11 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
 }
 
 #endif // wxUSE_MDI_ARCHITECTURE
+
+bool wxLayoutAlgorithm::LayoutFrame(wxFrame* frame, wxWindow* mainWindow)
+{
+    return LayoutWindow(frame, mainWindow);
+}
 
 // Layout algorithm for any window. mainWindow gets what's left over.
 bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)

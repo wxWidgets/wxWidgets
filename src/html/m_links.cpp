@@ -21,9 +21,7 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
 #endif
-
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
@@ -55,12 +53,12 @@ TAG_HANDLER_BEGIN(A, "A")
     TAG_HANDLER_PROC(tag)
     {
         if (tag.HasParam("NAME"))
-	    {
+        {
             m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(tag.GetParam("NAME")));
         }
 
-        if (tag.HasParam("HREF")) 
-	    {
+        if (tag.HasParam("HREF"))
+        {
             wxHtmlLinkInfo oldlnk = m_WParser->GetLink();
             wxColour oldclr = m_WParser->GetActualColor();
             int oldund = m_WParser->GetFontUnderlined();

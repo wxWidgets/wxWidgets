@@ -22,7 +22,8 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/html/htmlfilt.h"
@@ -141,7 +142,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     char *src;
     wxString doc;
 
-    if (s == NULL) 
+    if (s == NULL)
     {
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
@@ -152,7 +153,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     doc = src;
     delete[] src;
 
-    // add meta tag if we obtained this through http:    
+    // add meta tag if we obtained this through http:
     if (file.GetMimeType().Find(_T("; charset=")) == 0)
     {
         wxString s(_T("<meta http-equiv=\"Content-Type\" content=\""));

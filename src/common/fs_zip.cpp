@@ -22,7 +22,8 @@
 #if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_ZIPSTREAM
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/hash.h"

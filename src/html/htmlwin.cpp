@@ -23,15 +23,18 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
+    #include "wx/dcclient.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/forcelnk.h"
 #include "wx/html/htmlproc.h"
-#include "wx/log.h"
-#include "wx/arrimpl.cpp"
 #include "wx/list.h"
+
+#include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
 
 //-----------------------------------------------------------------------------

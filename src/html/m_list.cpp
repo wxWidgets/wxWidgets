@@ -21,9 +21,9 @@
 #endif
 
 #ifndef WXPRECOMP
-#include "wx/wx.h"
+    #include "wx/brush.h"
+    #include "wx/dc.h"
 #endif
-
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
@@ -86,10 +86,10 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         wxHtmlContainerCell *c;
 
         // List Item:
-        if (tag.GetName() == wxT("LI")) 
-	    {
-            if (!tag.IsEnding()) 
-	        {
+        if (tag.GetName() == wxT("LI"))
+        {
+            if (!tag.IsEnding())
+            {
                 m_WParser->GetContainer()->SetIndent(0, wxHTML_INDENT_TOP);
                     // this is to prevent indetation in <li><p> case
                 m_WParser->CloseContainer();
@@ -100,8 +100,8 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
                 c->SetAlignHor(wxHTML_ALIGN_RIGHT);
                 if (m_Numbering == 0)
                     c->InsertCell(new wxHtmlListmarkCell(m_WParser->GetDC(), m_WParser->GetActualColor()));
-                else 
-		        {
+                else
+                {
                     wxString mark;
                     mark.Printf(wxT("%i."), m_Numbering);
                     c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
@@ -120,16 +120,16 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         }
 
         // Begin of List (not-numbered): "UL", "OL"
-        else 
-	    {
+        else
+        {
             int oldnum = m_Numbering;
 
             if (tag.GetName() == wxT("UL")) m_Numbering = 0;
             else m_Numbering = 1;
 
             c = m_WParser->GetContainer();
-            if (c->GetFirstCell() != NULL) 
-	        {
+            if (c->GetFirstCell() != NULL)
+            {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
                 c = m_WParser->GetContainer();
