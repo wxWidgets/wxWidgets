@@ -268,13 +268,13 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     m_hAdjust->upper = noUnitsX;
     m_hAdjust->value = xPos;
     m_hAdjust->step_increment = 1.0;
-    m_hAdjust->page_increment = 1.0;
+    m_hAdjust->page_increment = 2.0;
 
     m_vAdjust->lower = 0.0;
     m_vAdjust->upper = noUnitsY;
     m_vAdjust->value = yPos;
     m_vAdjust->step_increment = 1.0;
-    m_vAdjust->page_increment = 1.0;
+    m_vAdjust->page_increment = 2.0;
     
     AdjustScrollbars();
 }
@@ -293,6 +293,9 @@ void wxScrolledWindow::AdjustScrollbars()
         m_vAdjust->page_size = 1.0;
     else
         m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
+    
+    m_xScrollLinesPerPage = (int)(m_hAdjust->page_size + 0.5);
+    m_yScrollLinesPerPage = (int)(m_vAdjust->page_size + 0.5);
     
     gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
@@ -348,7 +351,7 @@ void wxScrolledWindow::SetScrollPageSize(int orient, int pageSize)
 void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
 {
     int orient = event.GetOrientation();
-    
+
     int nScrollInc = CalcScrollInc(event);
     if (nScrollInc == 0) return;
 
@@ -442,11 +445,8 @@ void wxScrolledWindow::GtkVScroll( float value )
     if (y_pos == m_yScrollPosition)
         return;
     
-    int old_y = m_yScrollPosition;
-    m_yScrollPosition = y_pos;
-
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
-    GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
+    GtkRange *range = GTK_RANGE(scrolledWindow->vscrollbar);
     
     wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
     if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
@@ -454,28 +454,30 @@ void wxScrolledWindow::GtkVScroll( float value )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
 
-    wxScrollWinEvent event( command, m_yScrollPosition, wxVERTICAL );
+    wxScrollWinEvent event( command, y_pos, wxVERTICAL );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
     
+/*
+    int old_y = m_yScrollPosition;
+    m_yScrollPosition = y_pos;
+
     m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+*/
 }
 
 void wxScrolledWindow::GtkHScroll( float value )
 {
     if (!m_targetWindow)
         return;
-
+        
     if (m_xScrollPixelsPerLine == 0)
         return;
     
     int x_pos = (int)(value+0.5);
-    
+
     if (x_pos == m_xScrollPosition)
         return;
-    
-    int old_x = m_xScrollPosition;
-    m_xScrollPosition = x_pos;
 
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
     GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
@@ -486,11 +488,16 @@ void wxScrolledWindow::GtkHScroll( float value )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
 
-    wxScrollWinEvent event( command, m_xScrollPosition, wxHORIZONTAL );
+    wxScrollWinEvent event( command, x_pos, wxHORIZONTAL );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
     
+/*
+    int old_x = m_xScrollPosition;
+    m_xScrollPosition = x_pos;
+
     m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+*/
 }
 
 void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
@@ -589,11 +596,9 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
         {
             int w, h;
             m_targetWindow->GetClientSize(&w, &h);
-
-            int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
-            int noPositions = (int) ( ((nMaxWidth - w)/(double)m_xScrollPixelsPerLine) + 0.5 );
-            if (noPositions < 0)
-                noPositions = 0;
+            
+            int noPositions = (int)(m_hAdjust->upper - m_hAdjust->page_size + 0.5);
+            if (noPositions < 0) noPositions = 0;
 
             if ( (m_xScrollPosition + nScrollInc) < 0 )
                 nScrollInc = -m_xScrollPosition; // As -ve as we can go
@@ -610,10 +615,8 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
             int w, h;
             m_targetWindow->GetClientSize(&w, &h);
 
-            int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
-            int noPositions = (int) ( ((nMaxHeight - h)/(double)m_yScrollPixelsPerLine) + 0.5 );
-            if (noPositions < 0)
-                noPositions = 0;
+            int noPositions = (int)(m_vAdjust->upper - m_vAdjust->page_size + 0.5);
+            if (noPositions < 0) noPositions = 0;
 
             if ( (m_yScrollPosition + nScrollInc) < 0 )
                 nScrollInc = -m_yScrollPosition; // As -ve as we can go
@@ -625,6 +628,56 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
     }
 
     return nScrollInc;
+}
+
+void wxScrolledWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
+
+    wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
+
+    if (orient == wxHORIZONTAL)
+    {
+        float fpos = (float)pos;
+        if (fpos > m_hAdjust->upper - m_hAdjust->page_size) fpos = m_hAdjust->upper - m_hAdjust->page_size;
+        if (fpos < 0.0) fpos = 0.0;
+
+        if (fabs(fpos-m_hAdjust->value) < 0.2) return;
+        m_hAdjust->value = fpos;
+    }
+    else
+    {
+        float fpos = (float)pos;
+        if (fpos > m_vAdjust->upper - m_vAdjust->page_size) fpos = m_vAdjust->upper - m_vAdjust->page_size;
+        if (fpos < 0.0) fpos = 0.0;
+
+        if (fabs(fpos-m_vAdjust->value) < 0.2) return;
+        m_vAdjust->value = fpos;
+    }
+
+    if (m_wxwindow->window)
+    {
+        if (orient == wxHORIZONTAL)
+        {
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_hAdjust),
+                (GtkSignalFunc) gtk_scrolled_window_hscroll_callback, (gpointer) this );
+
+            gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
+
+            gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
+                (GtkSignalFunc) gtk_scrolled_window_hscroll_callback, (gpointer) this );
+        }
+        else
+        {
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
+                (GtkSignalFunc) gtk_scrolled_window_vscroll_callback, (gpointer) this );
+
+            gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+
+            gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
+                (GtkSignalFunc) gtk_scrolled_window_vscroll_callback, (gpointer) this );
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------

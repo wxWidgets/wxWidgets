@@ -128,6 +128,9 @@ public:
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
     
+    // Overridden from wxWindows due callback being static
+    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+    
 protected:
     wxWindow             *m_targetWindow;
     int                   m_xScrollPixelsPerLine;

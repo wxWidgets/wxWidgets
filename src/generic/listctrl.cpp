@@ -3129,9 +3129,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-#ifndef __WXGTK__
      wxScrolledWindow::OnScroll( event ) ;
-#endif
 
 #if wxUSE_GENERIC_LIST_EXTENSIONS
 
