@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX- /O2 /Ob1 /I "../../../lib/msw" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "../../../lib/msw" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -67,7 +67,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /GX- /Zi /Od /I "../../../lib/mswd" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MDd /W3 /Zi /Od /I "../../../lib/mswd" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -87,12 +87,12 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "XrcVC___Win32_Debug_DLL"
-# PROP Intermediate_Dir "XrcVC___Win32_Debug_DLL"
+# PROP Output_Dir "DebugDLL"
+# PROP Intermediate_Dir "DebugDLL"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /GX- /Zi /Od /I "../../../lib/mswd" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /Zi /Od /I "../../../lib/mswd" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MDd /W3 /GX- /Zi /Od /I "../../../lib/mswdlld" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "_MT" /D "WXUSINGDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MDd /W3 /Zi /Od /I "../../../lib/mswdlld" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "_MT" /D "WXUSINGDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -101,7 +101,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxxrcd.lib"
-# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrcd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrc24d.lib"
 
 !ELSEIF  "$(CFG)" == "XrcVC - Win32 Release DLL"
 
@@ -112,12 +112,12 @@ LIB32=link.exe -lib
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "XrcVC___Win32_Release_DLL"
-# PROP Intermediate_Dir "XrcVC___Win32_Release_DLL"
+# PROP Output_Dir "ReleaseDLL"
+# PROP Intermediate_Dir "ReleaseDLL"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX- /O2 /Ob1 /I "../../../lib/msw" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD BASE CPP /nologo /MD /W3 /O2 /I "../../../lib/msw" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W3 /GX- /O2 /Ob1 /I "../../../lib/mswdll" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "_MT" /D "WXUSINGDLL" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "../../../lib/mswdll" /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "_MT" /D "WXUSINGDLL" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -126,7 +126,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxxrc.lib"
-# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrc.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxxrc24.lib"
 
 !ENDIF 
 
