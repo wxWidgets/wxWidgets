@@ -303,9 +303,9 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
             }
             else
             {
-                *(target_data++) = avgRed / counter ;
-                *(target_data++) = avgGreen / counter ;
-                *(target_data++) = avgBlue / counter ;
+                *(target_data++) = (unsigned char)(avgRed / counter);
+                *(target_data++) = (unsigned char)(avgGreen / counter);
+                *(target_data++) = (unsigned char)(avgBlue / counter);
             }
         }
     }
