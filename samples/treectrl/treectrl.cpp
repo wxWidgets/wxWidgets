@@ -9,9 +9,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// important: the #pragma argument must be different from treectrl.cpp,
+// otherwise gcc gets confused (as there is also treectrl.cpp in the library
+// which has identical #pragma) and the sample crashes on startup!
 #ifdef __GNUG__
-  #pragma implementation
-  #pragma interface
+  #pragma interface "treetest.cpp"
+  #pragma implementation "treetest.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
