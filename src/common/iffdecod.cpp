@@ -102,9 +102,9 @@ bool wxIFFDecoder::ConvertToImage(wxImage *image) const
 #if wxUSE_PALETTE
     if (pal && colors > 0)
     {
-        unsigned char r[colors];
-        unsigned char g[colors];
-        unsigned char b[colors];
+        unsigned char* r = new unsigned char[colors];
+        unsigned char* g = new unsigned char[colors];
+        unsigned char* b = new unsigned char[colors];
 
         for (i = 0; i < colors; i++)
         {
@@ -114,6 +114,10 @@ bool wxIFFDecoder::ConvertToImage(wxImage *image) const
         }
 
         image->SetPalette(wxPalette(colors, r, g, b));
+
+        delete [] r;
+        delete [] g;
+        delete [] b;
     }
 #endif // wxUSE_PALETTE
 
@@ -170,10 +174,10 @@ typedef unsigned char byte;
 
 /*************************************************************************
   void decomprle(source, destination, source length, buffer size)
-  
+
   Decompress run-length encoded data from source to destination. Terminates
   when source is decoded completely or destination buffer is full.
-  
+
   The decruncher is as optimized as I could make it, without risking
   safety in case of corrupt BODY chunks.
 **************************************************************************/
@@ -181,11 +185,11 @@ typedef unsigned char byte;
 static void decomprle(const byte *sptr, byte *dptr, long slen, long dlen)
 {
     byte codeByte, dataByte;
-  
+
     while ((slen > 0) && (dlen > 0)) {
     // read control byte
     codeByte = *sptr++;
-    
+
     if (codeByte < 0x80) {
         codeByte++;
         if ((slen > (long) codeByte) && (dlen >= (long) codeByte)) {
@@ -296,9 +300,9 @@ int wxIFFDecoder::ReadIFF()
 
     dataptr = dataptr + 4;                                // skip ID
 
-    // 
-    // main decoding loop. searches IFF chunks and handles them. 
-    // terminates when BODY chunk was found or dataptr ran over end of file 
+    //
+    // main decoding loop. searches IFF chunks and handles them.
+    // terminates when BODY chunk was found or dataptr ran over end of file
     //
     bool BMHDok = false, CMAPok = false, CAMGok = false;
     int bmhd_width = 0, bmhd_height = 0, bmhd_bitplanes = 0, bmhd_transcol = -1;
@@ -307,7 +311,7 @@ int wxIFFDecoder::ReadIFF()
     int colors = 0;
     while (dataptr + 8 <= dataend) {
     // get chunk length and make even
-    size_t chunkLen = (iff_getlong(dataptr + 4) + 1) & 0xfffffffe; 
+    size_t chunkLen = (iff_getlong(dataptr + 4) + 1) & 0xfffffffe;
     if (chunkLen < 0) {     // format error?
        break;
     }
@@ -332,7 +336,7 @@ int wxIFFDecoder::ReadIFF()
         }
         const byte *cmapptr = dataptr + 8;
         colors = chunkLen / 3;                  // calc no of colors
-      
+
         delete m_image->pal;
         m_image->pal = 0;
         m_image->colors = colors;
@@ -342,7 +346,7 @@ int wxIFFDecoder::ReadIFF()
             Destroy();
             return wxIFF_MEMERR;
         }
-        
+
         // copy colors to color map
         for (int i=0; i < colors; i++) {
             m_image->pal[3*i + 0] = *cmapptr++;
@@ -353,7 +357,7 @@ int wxIFFDecoder::ReadIFF()
 
         wxLogTrace(_T("iff"), _T("Read %d colors from IFF file."),
             colors);
-        
+
         CMAPok = true;                              // got CMAP
         dataptr += 8 + chunkLen;                    // to next chunk
     } else if (strncmp((char *)dataptr, "CAMG", 4) == 0) { // CAMG ?
@@ -373,23 +377,23 @@ int wxIFFDecoder::ReadIFF()
         if (truncated) {
         chunkLen = dataend - dataptr;
         }
-        
+
         //
             // if BODY is compressed, allocate buffer for decrunched BODY
         // and decompress it (run length encoding)
         //
         if (bmhd_compression == 1) {
-        // calc size of decrunch buffer - (size of the actual pic. 
+        // calc size of decrunch buffer - (size of the actual pic.
         // decompressed in interleaved Amiga bitplane format)
 
-        size_t decomp_bufsize = (((bmhd_width + 15) >> 4) << 1) 
+        size_t decomp_bufsize = (((bmhd_width + 15) >> 4) << 1)
             * bmhd_height * bmhd_bitplanes;
-            
+
         if ((decomp_mem = new byte[decomp_bufsize]) == 0) {
             Destroy();
             return wxIFF_MEMERR;
         }
-            
+
         decomprle(bodyptr, decomp_mem, chunkLen, decomp_bufsize);
         bodyptr = decomp_mem;                 // -> uncompressed BODY
         chunkLen = decomp_bufsize;
@@ -399,7 +403,7 @@ int wxIFFDecoder::ReadIFF()
 
         // the following determines the type of the ILBM file.
         // it's either NORMAL, EHB, HAM, HAM8 or 24BIT
-    
+
         int fmt = ILBM_NORMAL;                 // assume normal ILBM
         if (bmhd_bitplanes == 24) {
         fmt = ILBM_24BIT;
@@ -415,18 +419,18 @@ int wxIFFDecoder::ReadIFF()
         }
         }
 
-        wxLogTrace(_T("iff"), 
+        wxLogTrace(_T("iff"),
             _T("LoadIFF: %s %dx%d, planes=%d (%d cols), comp=%d"),
             (fmt==ILBM_NORMAL) ? "Normal ILBM" :
             (fmt==ILBM_HAM)    ? "HAM ILBM" :
             (fmt==ILBM_HAM8)   ? "HAM8 ILBM" :
             (fmt==ILBM_EHB)    ? "EHB ILBM" :
             (fmt==ILBM_24BIT)  ? "24BIT ILBM" : "unknown ILBM",
-            bmhd_width, bmhd_height, bmhd_bitplanes, 
+            bmhd_width, bmhd_height, bmhd_bitplanes,
             1<<bmhd_bitplanes, bmhd_compression);
 
         if ((fmt==ILBM_NORMAL) || (fmt==ILBM_EHB) || (fmt==ILBM_HAM)) {
-        wxLogTrace(_T("iff"), 
+        wxLogTrace(_T("iff"),
             _T("Converting CMAP from normal ILBM CMAP"));
 
         switch(fmt) {
@@ -562,21 +566,21 @@ int wxIFFDecoder::ReadIFF()
         }  else if ((fmt == ILBM_NORMAL) || (fmt == ILBM_EHB)) {
         if (fmt == ILBM_EHB) {
             wxLogTrace(_T("iff"), _T("Doubling CMAP for EHB mode"));
-        
+
             for (int i=0; i<32; i++) {
             pal[3*(i + 32) + 0] = pal[3*i + 0] >> 1;
             pal[3*(i + 32) + 1] = pal[3*i + 1] >> 1;
             pal[3*(i + 32) + 2] = pal[3*i + 2] >> 1;
             }
         }
-      
+
         byte *pic = picptr;         // ptr to buffer
         const byte *workptr = bodyptr;  // ptr to pic, planar format
 
         if (bmhd_height < height) {
             height = bmhd_height;
         }
-      
+
         for (int i=0; i < height; i++) {
             byte bitmsk = 0x80;                 // left most bit (mask)
             const byte *workptr2 = workptr;     // work ptr to source
@@ -584,7 +588,7 @@ int wxIFFDecoder::ReadIFF()
             long col = 0;
             long colbit = 1;
             const byte *workptr3 = workptr2;  // 1st byte in 1st pln
-          
+
             for (int k=0; k < bmhd_bitplanes; k++) {
                 if (*workptr3 & bitmsk) { // if bit set in this pln
                 col = col + colbit; // add bit to chunky byte
@@ -592,7 +596,7 @@ int wxIFFDecoder::ReadIFF()
                 workptr3 += lineskip;   // go to next line
                 colbit <<= 1;           // shift color bit
             }
-          
+
             if (col >= 0 && col < colors) {
                 pic[0] = pal[3*col + 0];
                 pic[1] = pal[3*col + 1];
@@ -607,7 +611,7 @@ int wxIFFDecoder::ReadIFF()
                 workptr2++;         // mv ptr to next byte
             }
             }
-        
+
             workptr += lineskip * bmhd_bitplanes;  // to next line
         }
         } else {
@@ -617,7 +621,7 @@ int wxIFFDecoder::ReadIFF()
         m_image->w = bmhd_width;
         m_image->h = height;
         m_image->transparent = bmhd_transcol;
-        
+
         wxLogTrace(_T("iff"), _T("Loaded IFF picture %s"),
             truncated? "truncated" : "completely");
 
