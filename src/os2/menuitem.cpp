@@ -135,6 +135,8 @@ wxMenuItem::wxMenuItem(
 #endif // owner drawn
 {
     wxASSERT_MSG(pParentMenu != NULL, wxT("a menu item should have a parent"));
+    memset(&m_vMenuData, '\0', sizeof(m_vMenuData));
+    m_vMenuData.id = (USHORT)nId;
 
     Init();
 } // end of wxMenuItem::wxMenuItem

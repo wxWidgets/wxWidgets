@@ -73,9 +73,11 @@ static wxString TextToLabel(
   const wxString&                   rsTitle
 )
 {
-    wxString                        sTitle;
+    wxString                        sTitle = "";
     const wxChar*                   zPc;
 
+    if (rsTitle.IsEmpty())
+        return sTitle;
     for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++ )
     {
         if (*zPc == wxT('&') )
@@ -291,6 +293,7 @@ bool wxMenu::DoInsertOrAppend(
     ERRORID                         vError;
     wxString                        sError;
     char                            zMsg[128];
+
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
 #endif // wxUSE_ACCEL
