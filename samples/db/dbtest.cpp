@@ -438,6 +438,20 @@ bool DatabaseDemoApp::OnInit()
 }  // DatabaseDemoApp::OnInit()
 
 
+/*
+* Remove CR or CR/LF from a character string.
+*/
+char* wxRemoveLineTerminator(char* aString)
+{
+    int len = strlen(aString);
+    while (len > 0 && (aString[len-1] == '\r' || aString[len-1] == '\n')) {
+        aString[len-1] = '\0';
+        len--;
+    }
+    return aString;
+}
+
+
 bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
 {
     FILE *paramFile;
@@ -452,19 +466,19 @@ bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
 
     wxChar buffer[1000+1];
     fgets(buffer, sizeof(params.ODBCSource), paramFile);
-    buffer[wxStrlen(buffer)-1] = wxT('\0');
+    wxRemoveLineTerminator(buffer);
     wxStrcpy(params.ODBCSource,buffer);
 
     fgets(buffer, sizeof(params.UserName), paramFile);
-    buffer[wxStrlen(buffer)-1] = wxT('\0');
+    wxRemoveLineTerminator(buffer);
     wxStrcpy(params.UserName,buffer);
 
     fgets(buffer, sizeof(params.Password), paramFile);
-    buffer[wxStrlen(buffer)-1] = wxT('\0');
+    wxRemoveLineTerminator(buffer);
     wxStrcpy(params.Password,buffer);
 
     fgets(buffer, sizeof(params.DirPath), paramFile);
-    buffer[wxStrlen(buffer)-1] = wxT('\0');
+    wxRemoveLineTerminator(buffer);
     wxStrcpy(params.DirPath,buffer);
 
     fclose(paramFile);
@@ -1488,7 +1502,7 @@ bool CeditorDlg::GetData()
     }
 
     bool   invalid = FALSE;
-    int    mm,dd,yyyy;
+    int    mm = 1,dd = 1,yyyy = 2001;
     int    first, second;
 
     tStr = pJoinDateTxt->GetValue();
@@ -1868,7 +1882,11 @@ bool CparameterDlg::PutData()
 
     // Fill in the fields from the params object
     if (wxGetApp().params.ODBCSource && wxStrlen(wxGetApp().params.ODBCSource))
-        pParamODBCSourceList->SetStringSelection(wxGetApp().params.ODBCSource);
+    {
+        int index = pParamODBCSourceList->FindString(wxGetApp().params.ODBCSource);
+        if (index != -1)
+            pParamODBCSourceList->SetSelection(index);
+    }
     pParamUserNameTxt->SetValue(wxGetApp().params.UserName);
     pParamPasswordTxt->SetValue(wxGetApp().params.Password);
     pParamDirPathTxt->SetValue(wxGetApp().params.DirPath);
