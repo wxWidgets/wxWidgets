@@ -19,6 +19,9 @@ End Project Dependency
 Begin Project Dependency
 Project_Dep_Name base
 End Project Dependency
+Begin Project Dependency
+Project_Dep_Name media
+End Project Dependency
 }}}
 
 ###############################################################################
@@ -48,6 +51,18 @@ Package=<4>
 ###############################################################################
 
 Project: "base"=..\..\build\msw\wx_base.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "media"=..\..\build\msw\wx_media.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -122,6 +122,10 @@ __WXLIB_CORE_p = \
 __WXLIB_BASE_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_MEDIA_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -178,12 +182,12 @@ clean:
 
 $(OBJS)\splash.exe: $(SPLASH_OBJECTS)  $(OBJS)\splash_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(SPLASH_OBJECTS),$@,, $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\splash_sample.res
+	c0w32.obj $(SPLASH_OBJECTS),$@,, $(__WXLIB_ADV_p)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\splash_sample.res
 |
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (splash.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (splash.png press.mpg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\splash_splash.obj: .\splash.cpp
 	$(CXX) -q -c -P -o$@ $(SPLASH_CXXFLAGS) $**

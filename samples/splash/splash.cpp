@@ -203,7 +203,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         wxWindow *win = splash->GetSplashWindow();
 #if wxUSE_MEDIACTRL
         wxMediaCtrl *media = new wxMediaCtrl( win, wxID_EXIT, _T("press.mpg"), wxPoint(2,2));
-        media->SetSize(wxSize(80,60));
         media->Play();
 #else
         wxStaticText *text = new wxStaticText( win, wxID_EXIT, _T("click somewhere\non image"), wxPoint(13,11) );

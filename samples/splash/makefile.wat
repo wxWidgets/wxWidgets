@@ -132,6 +132,11 @@ __WXLIB_BASE_p =
 __WXLIB_BASE_p = &
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
+__WXLIB_MEDIA_p =
+!ifeq MONOLITHIC 0
+__WXLIB_MEDIA_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
@@ -187,7 +192,7 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 SPLASH_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	-i=.\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) &
 	$(CXXFLAGS)
 SPLASH_OBJECTS =  &
@@ -216,13 +221,13 @@ $(OBJS)\splash.exe :  $(SPLASH_OBJECTS) $(OBJS)\splash_sample.res
 	@%append $(OBJS)\splash.lbc option caseexact
 	@%append $(OBJS)\splash.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SPLASH_OBJECTS)) do @%append $(OBJS)\splash.lbc file %i
-	@for %i in ( $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\splash.lbc library %i
+	@for %i in ( $(__WXLIB_ADV_p)   $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\splash.lbc library %i
 	@%append $(OBJS)\splash.lbc option resource=$(OBJS)\splash_sample.res
 	wlink @$(OBJS)\splash.lbc
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (splash.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (splash.png press.mpg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\splash_splash.obj :  .AUTODEPEND .\splash.cpp
 	$(CXX) -zq -fo=$^@ $(SPLASH_CXXFLAGS) $<
