@@ -263,6 +263,12 @@ public:
     // options of the library and abort if it doesn't
     static bool CheckBuildOptions(const char *optionsSignature,
                                   const char *componentName);
+#if WXWIN_COMPATIBILITY_2_4
+    static bool CheckBuildOptions(const wxBuildOptions& buildOptions)
+    {
+        return CheckBuildOptions(buildOptions.m_signature, "your program");
+    }
+#endif
 
     // implementation only from now on
     // -------------------------------

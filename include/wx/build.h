@@ -84,6 +84,9 @@
      ")"
 
 
+// ----------------------------------------------------------------------------
+// WX_CHECK_BUILD_OPTIONS
+// ----------------------------------------------------------------------------
 
 // Use this macro to check build options. Adding it to a file in DLL will
 // ensure that the DLL checks build options in same way IMPLEMENT_APP() does.
@@ -95,5 +98,30 @@
         return true;                                                    \
     };                                                                  \
     static bool gs_buildOptionsCheck = wxCheckBuildOptions();
+
+
+#if WXWIN_COMPATIBILITY_2_4
+
+// ----------------------------------------------------------------------------
+// wxBuildOptions
+// ----------------------------------------------------------------------------
+
+// NB: Don't use this class in new code, it relies on the ctor being always
+//     inlined. WX_BUILD_OPTIONS_SIGNATURE always works.
+class wxBuildOptions
+{
+public:
+    // the ctor must be inline to get the compilation settings of the code
+    // which included this header
+    wxBuildOptions() : m_signature(WX_BUILD_OPTIONS_SIGNATURE) {}
+
+private:
+    const char *m_signature;
+
+    // actually only CheckBuildOptions() should be our friend but well...
+    friend class wxAppConsole;
+};
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 #endif // _WX_BUILD_H_
