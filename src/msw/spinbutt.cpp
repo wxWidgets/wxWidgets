@@ -151,7 +151,11 @@ bool wxSpinButton::MSWOnScroll(int orientation, WXWORD wParam,
 bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
 #ifndef __GNUWIN32__
+#ifdef __BORLANDC__
+    LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
+#else
     LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
+#endif
 
     wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
                                          : wxEVT_SCROLL_LINEDOWN,
