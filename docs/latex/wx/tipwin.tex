@@ -1,0 +1,34 @@
+\section{\class{wxTipWindow}}\label{wxtipwindow}
+
+Shows simple text in a popup tip window on creation. This is used by \helpref{wxSimpleHelpProvider}{wxsimplehelpprovider} to
+show popup help. The window automatically destroys itself when the user clicks on it or it loses
+the focus.
+
+You should not normally need to use it explicitly in your application since a help provider class
+will create it when required.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/tipwin.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTipWindow::wxTipWindow}\label{wxtipwindowwxtipwindow}
+
+\func{}{wxTipWindow}{\param{wxWindow* }{parent}, \param{const wxString\& }{text}, \param{wxCoord }{maxLength = 100}}
+
+Constructor. The tip is shown immediately the window is constructed.
+
+\membersection{wxTipWindow::Adjust}\label{wxtipwindowadjust}
+
+\func{void}{Adjust}{\param{const wxString\& }{text}, \param{wxCoord }{maxLength}}
+
+Calculates the client rect we need to display the text.
+
