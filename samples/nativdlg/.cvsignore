@@ -1,1 +1,4 @@
 Makefile.in
+makemac?Data
+PPC?Debug*
+PPC?Release*
