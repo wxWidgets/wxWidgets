@@ -189,7 +189,9 @@ sys.argv = filter(None, sys.argv)
 
 def Verify_WX_CONFIG():
     """ Called below for the builds that need wx-config,
-        assumes POSIX $PATH in environment.
+        if WX_CONFIG is not set then tries to select the specific
+        wx*-config script based on build options.  If not found
+        then it defaults to 'wx-config'.
     """
     # if WX_CONFIG hasn't been set to an explicit value then construct one.
     global WX_CONFIG
@@ -205,14 +207,18 @@ def Verify_WX_CONFIG():
         ver2 = VERSION[:3]
         WX_CONFIG = 'wx%s%s%s-%s-config' % (WXPORT, uf, df, ver2)
 
-    searchpath = os.environ["PATH"]
-    for p in string.split(searchpath, ':'):
-        fp = os.path.join(p, WX_CONFIG)
-        if os.path.exists(fp) and os.access(fp, os.X_OK):
-            # success
-            print "Found wx-config: " + fp
-            return fp
-    raise SystemExit, "%s not found on $PATH" % WX_CONFIG
+        searchpath = os.environ["PATH"]
+        for p in string.split(searchpath, ':'):
+            fp = os.path.join(p, WX_CONFIG)
+            if os.path.exists(fp) and os.access(fp, os.X_OK):
+                # success
+                print "Found wx-config: " + fp
+                WX_CONFIG = fp
+                break
+        else:
+            print "WX_CONFIG not specified and %s not found on $PATH " \
+                  "defaulting to \"wx-config\"" % WX_CONFIG
+            WX_CONFIG = 'wx-config'
 
 #----------------------------------------------------------------------
 # sanity checks
