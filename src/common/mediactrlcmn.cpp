@@ -93,7 +93,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
         if (!fileName.empty())
         {
-            if (!m_imp->Load(fileName))
+            if (!Load(fileName))
             {
                 delete m_imp;
                 m_imp = NULL;
@@ -101,6 +101,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             }
         }
 
+        SetBestFittingSize(size);
         return true;
     }
     else
@@ -117,13 +118,19 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
             if (!fileName.empty())
             {
-                if (m_imp->Load(fileName))
+                if (Load(fileName))
+                {
+                    SetBestFittingSize(size);
                     return true;
+                }
                 else
                     delete m_imp;
             }
             else
+            {
+                SetBestFittingSize(size);
                 return true;
+            }
 
             classInfo = NextBackend();
         }
@@ -151,13 +158,14 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
             return false;
         }
 
-        if (!m_imp->Load(location))
+        if (!Load(location))
         {
             delete m_imp;
             m_imp = NULL;
             return false;
         }
 
+        SetBestFittingSize(size);
         return true;
     }
     else
@@ -172,8 +180,11 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
                          pos, size, style, validator, name))
                 continue;
 
-            if (m_imp->Load(location))
+            if (Load(location))
+            {
+                SetBestFittingSize(size);
                 return true;
+            }
             else
                 delete m_imp;
 
