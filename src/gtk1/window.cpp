@@ -1061,13 +1061,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         }
     }
 
-/*
-    wxPrintf( wxT("2) OnButtonPress from ") );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( wxT(".\n") );
-*/
-
     wxEventType event_type = wxEVT_LEFT_DOWN;
 
     if (gdk_event->button == 1)
@@ -1116,6 +1109,15 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (!g_captureWindow)
     {
+        int x = event.m_x;
+        int y = event.m_y;
+        if (win->m_wxwindow)
+        {
+            GtkMyFixed *myfixed = GTK_MYFIXED(win->m_wxwindow);
+	    x += myfixed->xoffset;
+	    y += myfixed->yoffset;
+        }
+
         wxNode *node = win->GetChildren().First();
         while (node)
         {
@@ -1124,8 +1126,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
             if (child->m_isStaticBox)
             {
                 // wxStaticBox is transparent in the box itself
-                int x = event.m_x;
-                int y = event.m_y;
                 int xx1 = child->m_x;
                 int yy1 = child->m_y;
                 int xx2 = child->m_x + child->m_width;
@@ -1150,10 +1150,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
             else
             {
                 if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= event.m_x) &&
-                    (child->m_y <= event.m_y) &&
-                    (child->m_x+child->m_width  >= event.m_x) &&
-                    (child->m_y+child->m_height >= event.m_y))
+                    (child->m_x <= x) &&
+                    (child->m_y <= y) &&
+                    (child->m_x+child->m_width  >= x) &&
+                    (child->m_y+child->m_height >= y))
                 {
                     win = child;
                     event.m_x -= child->m_x;
@@ -1168,6 +1168,13 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     event.SetEventObject( win );
 
     gs_timeLastClick = gdk_event->time;
+
+/*
+    wxPrintf( wxT("2) OnButtonPress from ") );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        wxPrintf( win->GetClassInfo()->GetClassName() );
+    wxPrintf( wxT(".\n") );
+*/
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1226,6 +1233,15 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
     if (!g_captureWindow)
     {
+        int x = event.m_x;
+        int y = event.m_y;
+        if (win->m_wxwindow)
+        {
+            GtkMyFixed *myfixed = GTK_MYFIXED(win->m_wxwindow);
+	    x += myfixed->xoffset;
+	    y += myfixed->yoffset;
+        }
+
         wxNode *node = win->GetChildren().First();
         while (node)
         {
@@ -1234,8 +1250,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
             if (child->m_isStaticBox)
             {
                 // wxStaticBox is transparent in the box itself
-                int x = event.m_x;
-                int y = event.m_y;
                 int xx1 = child->m_x;
                 int yy1 = child->m_y;
                 int xx2 = child->m_x + child->m_width;
@@ -1260,10 +1274,10 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
             else
             {
                 if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= event.m_x) &&
-                    (child->m_y <= event.m_y) &&
-                    (child->m_x+child->m_width  >= event.m_x) &&
-                    (child->m_y+child->m_height >= event.m_y))
+                    (child->m_x <= x) &&
+                    (child->m_y <= y) &&
+                    (child->m_x+child->m_width  >= x) &&
+                    (child->m_y+child->m_height >= y))
                 {
                     win = child;
                     event.m_x -= child->m_x;
@@ -1336,6 +1350,15 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
     if (!g_captureWindow)
     {
+        int x = event.m_x;
+        int y = event.m_y;
+        if (win->m_wxwindow)
+        {
+            GtkMyFixed *myfixed = GTK_MYFIXED(win->m_wxwindow);
+	    x += myfixed->xoffset;
+	    y += myfixed->yoffset;
+        }
+
         wxNode *node = win->GetChildren().First();
         while (node)
         {
@@ -1344,8 +1367,6 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
             if (child->m_isStaticBox)
             {
                 // wxStaticBox is transparent in the box itself
-                int x = event.m_x;
-                int y = event.m_y;
                 int xx1 = child->m_x;
                 int yy1 = child->m_y;
                 int xx2 = child->m_x + child->m_width;
@@ -1370,10 +1391,10 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
             else
             {
                 if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                    (child->m_x <= event.m_x) &&
-                    (child->m_y <= event.m_y) &&
-                    (child->m_x+child->m_width  >= event.m_x) &&
-                    (child->m_y+child->m_height >= event.m_y))
+                    (child->m_x <= x) &&
+                    (child->m_y <= y) &&
+                    (child->m_x+child->m_width  >= x) &&
+                    (child->m_y+child->m_height >= y))
                 {
                     win = child;
                     event.m_x -= child->m_x;

@@ -126,7 +126,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     SetMenuBar(menu_bar);
 
     // make a panel with some controls
-    wxPanel *panel = new wxScrolledWindow(this, -1, wxPoint(0, 0),
+    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0),
                                  wxSize(400, 200), wxTAB_TRAVERSAL);
 
     // check list box

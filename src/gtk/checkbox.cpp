@@ -30,7 +30,8 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool       g_blockEventsOnDrag;
+extern wxCursor   g_globalCursor;
 
 //-----------------------------------------------------------------------------
 // "clicked"
@@ -184,6 +185,29 @@ void wxCheckBox::ApplyWidgetStyle()
     SetWidgetStyle();
     gtk_widget_set_style( m_widgetCheckbox, m_widgetStyle );
     gtk_widget_set_style( m_widgetLabel, m_widgetStyle );
+}
+
+bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
+{
+    return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
+}
+
+void wxCheckBox::OnInternalIdle()
+{
+    wxCursor cursor = m_cursor;
+    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+
+    if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok())
+    {
+        /* I now set the cursor the anew in every OnInternalIdle call
+	   as setting the cursor in a parent window also effects the
+	   windows above so that checking for the current cursor is
+	   not possible. */
+	   
+	gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
+    }
+
+    UpdateWindowUI();
 }
 
 #endif

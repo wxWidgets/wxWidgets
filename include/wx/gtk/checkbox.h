@@ -67,6 +67,8 @@ public:
 
     // implementation
     void ApplyWidgetStyle();
+    bool IsOwnGtkWindow( GdkWindow *window );
+    void OnInternalIdle();
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;

@@ -21,7 +21,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/window.h"
+    #include "wx/dialog.h"
+    #include "wx/frame.h"
 #endif
 
 #include <stdlib.h>
