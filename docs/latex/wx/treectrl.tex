@@ -24,6 +24,9 @@ To intercept events from a tree control, use the event table macros described in
 left of parent items.}
 \twocolitem{\windowstyle{wxTR\_EDIT\_LABELS}}{Use this style if you wish the user to be
 able to edit labels in the tree control.}
+\twocolitem{\windowstyle{wxTR\_MULTIPLE}}{Use this style to allow the user to
+select more than one item in the control - by default, only one item may be
+selected.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -385,6 +388,18 @@ Gets the selected item image.
 \constfunc{wxTreeItemId}{GetSelection}{\void}
 
 Returns the selection, or an invalid item if there is no selection.
+This function only works with the controls without wxTR\_MULTIPLE style, use 
+\helpref{GetSelections}{wxtreectrlgetselections} for the controls which do have
+this style.
+
+\membersection{wxTreeCtrl::GetSelections}\label{wxtreectrlgetselections}
+
+\constfunc{size\_t}{GetSelections}{\param{wxArrayTreeItemIds\& }{selection}}
+
+Fills the array of tree items passed in with the currently selected items. This
+function can be called only if the control has the wxTR\_MULTIPLE style.
+
+Returns the number of selected items.
 
 \membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
 
@@ -571,6 +586,14 @@ Toggles the given item between collapsed and expanded states.
 \func{void}{Unselect}{\void}
 
 Removes the selection from the currently selected item (if any).
+
+\membersection{wxTreeCtrl::UnselectAll}\label{wxtreectrlunselectall}
+
+\func{void}{UnselectAll}{\void}
+
+This function either behaves the same as \helpref{Unselect}{wxtreectrlunselect} 
+if the control doesn't have wxTR\_MULTIPLE style, or removes the selection from
+all items if it does have this style.
 
 \section{\class{wxTreeItemData}}\label{wxtreeitemdata}
 

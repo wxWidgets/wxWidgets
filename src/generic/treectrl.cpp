@@ -203,14 +203,14 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
-	m_owner->SetFocus();
+        m_owner->SetFocus();
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-	m_owner->SetFocus();
+        m_owner->SetFocus();
         return;
     }
     event.Skip();
@@ -221,7 +221,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
     if (wxPendingDelete.Member(this)) return;
 
     wxPendingDelete.Append(this);
-    
+
     if ((*m_accept) && ((*m_res) != m_startValue))
         m_owner->OnRenameAccept();
 }
@@ -232,7 +232,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 // -----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
-  
+
 wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
            : wxNotifyEvent( commandType, id )
 {
@@ -463,7 +463,7 @@ void wxTreeCtrl::Init()
   m_imageListState = (wxImageList *) NULL;
 
   m_dragCount = 0;
-  
+
   m_renameTimer = new wxTreeRenameTimer( this );
 }
 
@@ -493,7 +493,7 @@ wxTreeCtrl::~wxTreeCtrl()
   wxDELETE( m_hilightBrush );
 
   DeleteAllItems();
-  
+
   delete m_renameTimer;
 }
 
@@ -1143,16 +1143,18 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     GetEventHandler()->ProcessEvent( event );
 }
 
-void wxTreeCtrl::FillArray(wxGenericTreeItem *item, wxArrayTreeItemIds &array) const
+void wxTreeCtrl::FillArray(wxGenericTreeItem *item,
+                           wxArrayTreeItemIds &array) const
 {
-  if (item->HasHilight()) array.Add(wxTreeItemId(item));
+    if ( item->HasHilight() )
+        array.Add(wxTreeItemId(item));
 
-  if (item->HasChildren())
+    if ( item->HasChildren() )
     {
-      wxArrayGenericTreeItems& children = item->GetChildren();
-      size_t count = children.Count();
-      for ( size_t n = 0; n < count; ++n )
-        FillArray(children[n],array);
+        wxArrayGenericTreeItems& children = item->GetChildren();
+        size_t count = children.GetCount();
+        for ( size_t n = 0; n < count; ++n )
+            FillArray(children[n],array);
     }
 }
 
@@ -1445,12 +1447,12 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( *wxGREY_PEN );
             dc.SetBrush( *wxWHITE_BRUSH );
             dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
-            
+
             dc.SetPen( *wxBLACK_PEN );
             dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
             if (!item->IsExpanded())
                 dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
-                
+
             dc.SetPen( m_dottedPen );
         }
 
@@ -1793,20 +1795,20 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     if (!item.IsOk()) return;
 
     m_currentEdit = item.m_pItem;
-    
+
     wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, GetId() );
     te.m_item = m_currentEdit;
     te.SetEventObject( this );
     GetEventHandler()->ProcessEvent( te );
 
     if (!te.IsAllowed()) return;
-    
+
     wxString s = m_currentEdit->GetText();
     int x = m_currentEdit->GetX();
     int y = m_currentEdit->GetY();
     int w = m_currentEdit->GetWidth();
     int h = m_currentEdit->GetHeight();
-    
+
     int image_h = 0;
     int image_w = 0;
     if ((m_currentEdit->IsExpanded()) && (m_currentEdit->GetSelectedImage() != -1))
@@ -1844,12 +1846,12 @@ void wxTreeCtrl::OnRenameAccept()
     le.SetEventObject( this );
     le.m_label = m_renameRes;
     GetEventHandler()->ProcessEvent( le );
-    
+
     if (!le.IsAllowed()) return;
-    
+
     SetItemText( m_currentEdit, m_renameRes );
 }
-    
+
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
     if (!event.LeftIsDown()) m_dragCount = 0;
@@ -1887,14 +1889,14 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if (event.LeftUp() && (item == m_current) && 
-        (flags & wxTREE_HITTEST_ONITEMLABEL) && 
-	HasFlag(wxTR_EDIT_LABELS) )
+    if (event.LeftUp() && (item == m_current) &&
+        (flags & wxTREE_HITTEST_ONITEMLABEL) &&
+        HasFlag(wxTR_EDIT_LABELS) )
     {
         m_renameTimer->Start( 100, TRUE );
         return;
     }
-    
+
     bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
     bool extended_select=(event.ShiftDown() && is_multiple);
     bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
@@ -1937,7 +1939,7 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 {
     long text_w = 0;
     long text_h = 0;
-    
+
     wxFont fontOld;
     wxFont fontNew;
     if (item->IsBold())
@@ -1958,14 +1960,14 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
             wxFAIL_MSG(_T("wxDC::GetFont() failed!"));
         }
     }
-    
+
     dc.GetTextExtent( item->GetText(), &text_w, &text_h );
     text_h+=2;
 
     // restore normal font for bold items
     if (fontOld.Ok())
         dc.SetFont( fontOld);
-    
+
     int image_h = 0;
     int image_w = 0;
     if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))

@@ -32,7 +32,7 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/dynarray.h"
 #include "wx/timer.h"
 
-//those defines should only be done in generic/treectrl.h, 
+//those defines should only be done in generic/treectrl.h,
 //because wxMSW doesn't allow mutiple selection
 
 #ifndef wxTR_SINGLE
@@ -177,7 +177,7 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 
   public:
     wxTreeTextCtrl(void) {};
-    wxTreeTextCtrl( wxWindow *parent, const wxWindowID id, 
+    wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
                     bool *accept, wxString *res, wxTreeCtrl *owner,
                     const wxString &value = "",
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -185,7 +185,7 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
                     const wxString &name = "wxTreeTextCtrlText" );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
-    
+
   DECLARE_EVENT_TABLE()
 };
 
@@ -231,10 +231,10 @@ public:
     unsigned int GetIndent() const { return m_indent; }
     void SetIndent(unsigned int indent);
 
-    	// spacing is the number of pixels between the start and the Text
+        // spacing is the number of pixels between the start and the Text
     unsigned int GetSpacing() const { return m_spacing; }
     void SetSpacing(unsigned int spacing);
-    
+
         // image list: these functions allow to associate an image list with
         // the control and retrieve it. Note that the control does _not_ delete
         // the associated image list when it's deleted in order to allow image
@@ -420,7 +420,7 @@ public:
         // been before.
     void EditLabel( const wxTreeItemId& item ) { Edit( item ); }
     void Edit( const wxTreeItemId& item );
-    
+
     // sorting
         // this function is called to compare 2 items and should return -1, 0
         // or +1 if the first item is less than, equal to or greater than the
@@ -447,7 +447,7 @@ public:
     // Draw Special Information
     void DrawBorder(wxTreeItemId& item);
     void DrawLine(wxTreeItemId& item, bool below);
-    
+
 protected:
     friend class wxGenericTreeItem;
     friend class wxTreeRenameTimer;
@@ -491,7 +491,7 @@ protected:
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
-    
+
     void OnRenameTimer();
     void OnRenameAccept();
 

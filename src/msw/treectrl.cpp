@@ -30,10 +30,6 @@
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/settings.h"
-#endif
-
 // Mingw32 is a bit mental even though this is done in winundef
 #ifdef GetFirstChild
     #undef GetFirstChild
@@ -70,13 +66,43 @@
 // a convenient wrapper around TV_ITEM struct which adds a ctor
 struct wxTreeViewItem : public TV_ITEM
 {
-    wxTreeViewItem(const wxTreeItemId& item,
-                   UINT mask_, UINT stateMask_ = 0)
+    wxTreeViewItem(const wxTreeItemId& item,    // the item handle
+                   UINT mask_,                  // fields which are valid
+                   UINT stateMask_ = 0)         // for TVIF_STATE only
     {
-        mask = mask_;
+        // hItem member is always valid
+        mask = mask_ | TVIF_HANDLE;
         stateMask = stateMask_;
         hItem = (HTREEITEM) (WXHTREEITEM) item;
     }
+};
+
+// a class which encapsulates the tree traversal logic: it vists all (unless
+// OnVisit() returns FALSE) items under the given one
+class wxTreeTraversal
+{
+public:
+    wxTreeTraversal(const wxTreeCtrl *tree)
+    {
+        m_tree = tree;
+    }
+
+    // do traverse the tree: visit all items (recursively by default) under the
+    // given one; return TRUE if all items were traversed or FALSE if the
+    // traversal was aborted because OnVisit returned FALSE
+    bool DoTraverse(const wxTreeItemId& root, bool recursively = TRUE);
+
+    // override this function to do whatever is needed for each item, return
+    // FALSE to stop traversing
+    virtual bool OnVisit(const wxTreeItemId& item) = 0;
+
+protected:
+    const wxTreeCtrl *GetTree() const { return m_tree; }
+
+private:
+    bool Traverse(const wxTreeItemId& root, bool recursively);
+
+    const wxTreeCtrl *m_tree;
 };
 
 // ----------------------------------------------------------------------------
@@ -103,6 +129,37 @@ static const wxEventType g_events[2][2] =
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// tree traversal
+// ----------------------------------------------------------------------------
+
+bool wxTreeTraversal::DoTraverse(const wxTreeItemId& root, bool recursively)
+{
+    if ( !OnVisit(root) )
+        return FALSE;
+
+    return Traverse(root, recursively);
+}
+
+bool wxTreeTraversal::Traverse(const wxTreeItemId& root, bool recursively)
+{
+    long cookie;
+    wxTreeItemId child = m_tree->GetFirstChild(root, cookie);
+    while ( child.IsOk() )
+    {
+        // depth first traversal
+        if ( recursively && !Traverse(child, TRUE) )
+            return FALSE;
+
+        if ( !OnVisit(child) )
+            return FALSE;
+
+        child = m_tree->GetNextChild(root, cookie);
+    }
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
 // construction and destruction
 // ----------------------------------------------------------------------------
 
@@ -113,36 +170,21 @@ void wxTreeCtrl::Init()
     m_textCtrl = NULL;
 }
 
-bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
-                        const wxPoint& pos, const wxSize& size,
-                        long style, const wxValidator& validator,
+bool wxTreeCtrl::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxValidator& validator,
                         const wxString& name)
 {
     Init();
 
-    wxSystemSettings settings;
-
-    SetName(name);
-    SetValidator(validator);
-
-    m_windowStyle = style;
-
-    SetParent(parent);
-
-    m_windowId = (id == -1) ? NewControlId() : id;
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return FALSE;
 
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
                    TVS_HASLINES | TVS_SHOWSELALWAYS;
-
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
-
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    {
-        wstyle |= WS_BORDER;
-    }
 
     if ( m_windowStyle & wxTR_HAS_BUTTONS )
         wstyle |= TVS_HASBUTTONS;
@@ -153,26 +195,67 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
 
+    // we emulate the multiple selection tree controls by using checkboxes: set
+    // up the image list we need for this if we do have multiple selections
+    if ( m_windowStyle & wxTR_MULTIPLE )
+        wstyle |= TVS_CHECKBOXES;
+
     // Create the tree control.
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        exStyle,
-                        WC_TREEVIEW,
-                        _T(""),
-                        wstyle,
-                        pos.x, pos.y, size.x, size.y,
-                        (HWND)parent->GetHWND(),
-                        (HMENU)m_windowId,
-                        wxGetInstance(),
-                        NULL
-                       );
+    if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
+        return FALSE;
 
-    wxCHECK_MSG( m_hWnd, FALSE, _T("Failed to create tree ctrl") );
+    // VZ: this is some experimental code which may be used to get the
+    //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.
+    //     AFAIK, the standard DLL does about the same thing anyhow.
+#if 0
+    if ( m_windowStyle & wxTR_MULTIPLE )
+    {
+        wxBitmap bmp;
 
-    if ( parent )
-        parent->AddChild(this);
+        // create the DC compatible with the current screen
+        HDC hdcMem = CreateCompatibleDC(NULL);
 
-    SubclassWin(m_hWnd);
+        // create a mono bitmap of the standard size
+        int x = GetSystemMetrics(SM_CXMENUCHECK);
+        int y = GetSystemMetrics(SM_CYMENUCHECK);
+        wxImageList imagelistCheckboxes(x, y, FALSE, 2);
+        HBITMAP hbmpCheck = CreateBitmap(x, y,   // bitmap size
+                                         1,      // # of color planes
+                                         1,      // # bits needed for one pixel
+                                         0);     // array containing colour data
+        SelectObject(hdcMem, hbmpCheck);
+
+        // then draw a check mark into it
+        RECT rect = { 0, 0, x, y };
+        if ( !::DrawFrameControl(hdcMem, &rect,
+                                 DFC_BUTTON,
+                                 DFCS_BUTTONCHECK | DFCS_CHECKED) )
+        {
+            wxLogLastError(_T("DrawFrameControl(check)"));
+        }
+
+        bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
+        imagelistCheckboxes.Add(bmp);
+
+        if ( !::DrawFrameControl(hdcMem, &rect,
+                                 DFC_BUTTON,
+                                 DFCS_BUTTONCHECK) )
+        {
+            wxLogLastError(_T("DrawFrameControl(uncheck)"));
+        }
+
+        bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
+        imagelistCheckboxes.Add(bmp);
+
+        // clean up
+        ::DeleteDC(hdcMem);
+
+        // set the imagelist
+        SetStateImageList(&imagelistCheckboxes);
+    }
+#endif // 0
+
+    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -254,29 +337,36 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
     SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
 }
 
-size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
+size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
+                                    bool recursively) const
 {
-    long cookie;
-
-    size_t result = 0;
-
-    wxArrayLong children;
-    wxTreeItemId child = GetFirstChild(item, cookie);
-    while ( child.IsOk() )
+    class TraverseCounter : public wxTreeTraversal
     {
-        if ( recursively )
+    public:
+        TraverseCounter(const wxTreeCtrl *tree,
+                        const wxTreeItemId& root,
+                        bool recursively)
+            : wxTreeTraversal(tree)
+            {
+                m_count = 0;
+
+                DoTraverse(root, recursively);
+            }
+
+        virtual bool OnVisit(const wxTreeItemId& item)
         {
-            // recursive call
-            result += GetChildrenCount(child, TRUE);
+            m_count++;
+
+            return TRUE;
         }
 
-        // add the child to the result in any case
-        result++;
+        size_t GetCount() const { return m_count; }
 
-        child = GetNextChild(item, cookie);
-    }
+    private:
+        size_t m_count;
+    } counter(this, item, recursively);
 
-    return result;
+    return counter.GetCount();
 }
 
 // ----------------------------------------------------------------------------
@@ -306,6 +396,16 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     DoSetItem(&tvItem);
 }
 
+void wxTreeCtrl::DoSetItemImages(const wxTreeItemId& item,
+                                 int image,
+                                 int imageSel)
+{
+    wxTreeViewItem tvItem(item, TVIF_IMAGE | TVIF_SELECTEDIMAGE);
+    tvItem.iSelectedImage = imageSel;
+    tvItem.iImage = image;
+    DoSetItem(&tvItem);
+}
+
 int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const
 {
     wxTreeViewItem tvItem(item, TVIF_IMAGE);
@@ -316,9 +416,10 @@ int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image)
 {
-    wxTreeViewItem tvItem(item, TVIF_IMAGE);
-    tvItem.iImage = image;
-    DoSetItem(&tvItem);
+    // NB: at least in version 5.00.0518.9 of comctl32.dll we need to always
+    //     change both normal and selected image - otherwise the change simply
+    //     doesn't take place!
+    DoSetItemImages(item, image, GetItemSelectedImage(item));
 }
 
 int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
@@ -331,9 +432,10 @@ int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
 {
-    wxTreeViewItem tvItem(item, TVIF_SELECTEDIMAGE);
-    tvItem.iSelectedImage = image;
-    DoSetItem(&tvItem);
+    // NB: at least in version 5.00.0518.9 of comctl32.dll we need to always
+    //     change both normal and selected image - otherwise the change simply
+    //     doesn't take place!
+    DoSetItemImages(item, GetItemImage(item), image);
 }
 
 wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
@@ -433,6 +535,9 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
+    wxCHECK_MSG( !(m_windowStyle & wxTR_MULTIPLE), (WXHTREEITEM)0,
+                 _T("this only works with single selection controls") );
+
     return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
 }
 
@@ -505,6 +610,62 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
                                       "for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
+}
+
+// ----------------------------------------------------------------------------
+// multiple selections emulation
+// ----------------------------------------------------------------------------
+
+bool wxTreeCtrl::IsItemChecked(const wxTreeItemId& item) const
+{
+    // receive the desired information.
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+    DoGetItem(&tvItem);
+
+    // state image indices are 1 based
+    return ((tvItem.state >> 12) - 1) == 1;
+}
+
+void wxTreeCtrl::SetItemCheck(const wxTreeItemId& item, bool check)
+{
+    // receive the desired information.
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+
+    // state images are one-based
+    tvItem.state = (check ? 2 : 1) << 12;
+
+    DoSetItem(&tvItem);
+}
+
+size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
+{
+    class TraverseSelections : public wxTreeTraversal
+    {
+    public:
+        TraverseSelections(const wxTreeCtrl *tree,
+                           wxArrayTreeItemIds& selections)
+            : wxTreeTraversal(tree), m_selections(selections)
+            {
+                m_selections.Empty();
+
+                DoTraverse(tree->GetRootItem());
+            }
+
+        virtual bool OnVisit(const wxTreeItemId& item)
+        {
+            if ( GetTree()->IsItemChecked(item) )
+            {
+                m_selections.Add(item);
+            }
+
+            return TRUE;
+        }
+
+    private:
+        wxArrayTreeItemIds& m_selections;
+    } selector(this, selections);
+
+    return selections.GetCount();
 }
 
 // ----------------------------------------------------------------------------
@@ -721,38 +882,67 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 
 void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
 {
-	DoExpand(item, action);
+    DoExpand(item, action);
 }
 
 void wxTreeCtrl::Unselect()
 {
+    wxASSERT_MSG( !(m_windowStyle & wxTR_MULTIPLE), _T("doesn't make sense") );
+
+    // just remove the selection
     SelectItem(wxTreeItemId((WXHTREEITEM) 0));
+}
+
+void wxTreeCtrl::UnselectAll()
+{
+    if ( m_windowStyle & wxTR_MULTIPLE )
+    {
+        wxArrayTreeItemIds selections;
+        size_t count = GetSelections(selections);
+        for ( size_t n = 0; n < count; n++ )
+        {
+            SetItemCheck(selections[n], FALSE);
+        }
+    }
+    else
+    {
+        // just remove the selection
+        Unselect();
+    }
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
 {
-    // inspite of the docs (MSDN Jan 99 edition), we don't seem to receive
-    // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
-    // send them ourselves
-
-    wxTreeEvent event(wxEVT_NULL, m_windowId);
-    event.m_item = item;
-    event.SetEventObject(this);
-
-    event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGING);
-    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    if ( m_windowStyle & wxTR_MULTIPLE )
     {
-        if ( !TreeView_SelectItem(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item) )
-        {
-            wxLogLastError("TreeView_SelectItem");
-        }
-        else
-        {
-            event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
-        }
+        // selecting the item means checking it
+        SetItemCheck(item);
     }
-    //else: program vetoed the change
+    else
+    {
+        // inspite of the docs (MSDN Jan 99 edition), we don't seem to receive
+        // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
+        // send them ourselves
+
+        wxTreeEvent event(wxEVT_NULL, m_windowId);
+        event.m_item = item;
+        event.SetEventObject(this);
+
+        event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGING);
+        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        {
+            if ( !TreeView_SelectItem(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item) )
+            {
+                wxLogLastError("TreeView_SelectItem");
+            }
+            else
+            {
+                event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+                (void)GetEventHandler()->ProcessEvent(event);
+            }
+        }
+        //else: program vetoed the change
+    }
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)

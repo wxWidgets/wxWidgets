@@ -121,6 +121,8 @@ protected:
     long m_itemId;
 };
 
+WX_DEFINE_ARRAY(wxTreeItemId, wxArrayTreeItemIds);
+
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item. The
 // main advantage of having this class (compared to old untyped interface) is
@@ -275,7 +277,8 @@ public:
 
         // if 'recursively' is FALSE, only immediate children count, otherwise
         // the returned number is the number of all items in this branch
-    size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
+    size_t GetChildrenCount(const wxTreeItemId& item,
+                            bool recursively = TRUE) const;
 
     // navigation
     // ----------
@@ -287,6 +290,12 @@ public:
 
         // get the item currently selected (may return NULL if no selection)
     wxTreeItemId GetSelection() const;
+
+        // get the items currently selected, return the number of such item
+        //
+        // NB: this operation is expensive and can take a long time for a
+        //     control with a lot of items (~ O(number of items)).
+    size_t GetSelections(wxArrayTreeItemIds& selections) const;
 
         // get the parent of this item (may return NULL if root)
     wxTreeItemId GetParent(const wxTreeItemId& item) const;
@@ -365,6 +374,8 @@ public:
 
         // remove the selection from currently selected item (if any)
     void Unselect();
+        // unselect all items (only makes sense for multiple selection control)
+    void UnselectAll();
         // select this item
     void SelectItem(const wxTreeItemId& item);
         // make sure this item is visible (expanding the parent item and/or
@@ -445,6 +456,10 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
+    // get/set the check state for the item (only for wxTR_MULTIPLE)
+    bool IsItemChecked(const wxTreeItemId& item) const;
+    void SetItemCheck(const wxTreeItemId& item, bool check = TRUE);
+
 protected:
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
@@ -468,6 +483,8 @@ private:
                               const wxString& text,
                               int image, int selectedImage,
                               wxTreeItemData *data);
+
+    void DoSetItemImages(const wxTreeItemId& item, int image, int imageSel);
 
     void DeleteTextCtrl();
 

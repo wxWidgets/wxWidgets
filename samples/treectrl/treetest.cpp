@@ -33,11 +33,12 @@
 
 #include "math.h"
 
-#include "treetest.h"
-
 #ifdef __WXMSW__
-    #define NO_ADVANCED_FEATURES
+    //#define NO_MULTIPLE_SELECTION
+    #define NO_VARIABLE_HEIGHT
 #endif
+
+#include "treetest.h"
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
@@ -59,7 +60,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
     EVT_MENU(TreeTest_About, MyFrame::OnAbout)
     EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
-    EVT_MENU(TreeTest_Dump_Selected, MyFrame::OnDumpSelected)
+#ifndef NO_MULTIPLE_SELECTION
+    EVT_MENU(TreeTest_DumpSelected, MyFrame::OnDumpSelected)
+    EVT_MENU(TreeTest_Select, MyFrame::OnSelect)
+    EVT_MENU(TreeTest_Unselect, MyFrame::OnUnselect)
+#endif // NO_MULTIPLE_SELECTION
     EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
     EVT_MENU(TreeTest_Sort, MyFrame::OnSort)
     EVT_MENU(TreeTest_SortRev, MyFrame::OnSortRev)
@@ -76,6 +81,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_DecIndent, MyFrame::OnDecIndent)
     EVT_MENU(TreeTest_IncSpacing, MyFrame::OnIncSpacing)
     EVT_MENU(TreeTest_DecSpacing, MyFrame::OnDecSpacing)
+    EVT_MENU(TreeTest_ToggleIcon, MyFrame::OnToggleIcon)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -153,14 +159,20 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
 
     item_menu->Append(TreeTest_Dump, "&Dump item children");
-#ifndef NO_ADVANCED_FEATURES
-    item_menu->Append(TreeTest_Dump_Selected, "Dump selected items\tAlt-S");
-#endif
     item_menu->Append(TreeTest_Rename, "&Rename item...");
 
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_Bold, "Make item &bold");
     item_menu->Append(TreeTest_UnBold, "Make item &not bold");
+    item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_ToggleIcon, "Toggle the items &icon");
+
+#ifndef NO_MULTIPLE_SELECTION
+    item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_DumpSelected, "Dump selected items\tAlt-D");
+    item_menu->Append(TreeTest_Select, "Select current item\tAlt-S");
+    item_menu->Append(TreeTest_Unselect, "Unselect everything\tAlt-U");
+#endif
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
@@ -172,10 +184,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
-#ifndef NO_ADVANCED_FEATURES
                                 wxTR_MULTIPLE |
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
-#endif
                                 wxSUNKEN_BORDER);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
@@ -268,19 +278,32 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
     m_treeCtrl->GetItemsRecursively(root, -1);
 }
 
+#ifndef NO_MULTIPLE_SELECTION
+
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 {
-#ifndef NO_ADVANCED_FEATURES
-   wxArrayTreeItemIds array;
+    wxArrayTreeItemIds array;
 
-    m_treeCtrl->GetSelections(array);
-    size_t nos=array.Count();
-    wxLogMessage(wxString("items selected : ")<< (int)nos);
+    size_t count = m_treeCtrl->GetSelections(array);
+    wxLogMessage(_T("%u items selected"), count);
 
-    for (size_t n=0; n<nos; ++n)
-      wxLogMessage(m_treeCtrl->GetItemText(array.Item(n)));
-#endif
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxLogMessage("\t%s", m_treeCtrl->GetItemText(array.Item(n)).c_str());
+    }
 }
+
+void MyFrame::OnSelect(wxCommandEvent& event)
+{
+    m_treeCtrl->SelectItem(m_treeCtrl->GetSelection());
+}
+
+void MyFrame::OnUnselect(wxCommandEvent& event)
+{
+    m_treeCtrl->UnselectAll();
+}
+
+#endif // NO_MULTIPLE_SELECTION
 
 void MyFrame::DoSetBold(bool bold)
 {
@@ -370,6 +393,15 @@ void MyFrame::OnDecSpacing(wxCommandEvent& WXUNUSED(event))
         m_treeCtrl->SetSpacing( indent-5 );
 }
 
+void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId item = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( item );
+
+    m_treeCtrl->DoToggleIcon(item);
+}
+
 // MyTreeCtrl implementation
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 
@@ -379,7 +411,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
           : wxTreeCtrl(parent, id, pos, size, style)
 {
 #if (USE_TR_HAS_VARIABLE_ROW_HIGHT && wxUSE_LIBJPEG)
-    wxImage::AddHandler(new wxJPEGHandler); 
+    wxImage::AddHandler(new wxJPEGHandler);
     wxImage image;
 
     image.LoadFile(wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
@@ -450,8 +482,7 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
             else
                 str.Printf("%s child %d", "Folder", n + 1);
 
-//            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
-            int image = depth == 1 ? -1 : TreeCtrlIcon_Folder;
+            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
             wxTreeItemId id = AppendItem(idParent, str, image, image,
                                          new MyTreeItemData(str));
 
@@ -489,13 +520,21 @@ void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent, long cookie)
     if(id <= 0)
         return;
 
-    wxString text=GetItemText(id);
+    wxString text = GetItemText(id);
     wxLogMessage(text);
 
     if (ItemHasChildren(id))
         GetItemsRecursively(id,-1);
 
     GetItemsRecursively(idParent, cookie);
+}
+
+void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
+{
+    int image = GetItemImage(item) == TreeCtrlIcon_Folder ? TreeCtrlIcon_File
+                                                          : TreeCtrlIcon_Folder;
+
+    SetItemImage(item, image);
 }
 
 

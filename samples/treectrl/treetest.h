@@ -65,8 +65,10 @@ public:
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
     void DoSortChildren(const wxTreeItemId& item, bool reverse = FALSE)
-    { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
+        { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
     void DoEnsureVisible() { EnsureVisible(m_lastItem); }
+
+    void DoToggleIcon(const wxTreeItemId& item);
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
@@ -109,7 +111,11 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void OnDump(wxCommandEvent& event);
+#ifndef NO_MULTIPLE_SELECTION
     void OnDumpSelected(wxCommandEvent& event);
+    void OnSelect(wxCommandEvent& event);
+    void OnUnselect(wxCommandEvent& event);
+#endif // NO_MULTIPLE_SELECTION
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
@@ -126,12 +132,14 @@ public:
     void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
 
     void OnAddItem(wxCommandEvent& event);
-    
+
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
 
     void OnIncSpacing(wxCommandEvent& event);
     void OnDecSpacing(wxCommandEvent& event);
+
+    void OnToggleIcon(wxCommandEvent& event);
 
 private:
     void DoSort(bool reverse = FALSE);
@@ -149,7 +157,7 @@ enum
     TreeTest_Quit,
     TreeTest_About,
     TreeTest_Dump,
-    TreeTest_Dump_Selected,
+    TreeTest_DumpSelected,
     TreeTest_Sort,
     TreeTest_SortRev,
     TreeTest_Bold,
@@ -166,5 +174,8 @@ enum
     TreeTest_DecIndent,
     TreeTest_IncSpacing,
     TreeTest_DecSpacing,
-    TreeTest_Ctrl = 100
+    TreeTest_ToggleIcon,
+    TreeTest_Select,
+    TreeTest_Unselect,
+    TreeTest_Ctrl = 1000
 };
