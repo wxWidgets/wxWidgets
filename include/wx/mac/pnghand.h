@@ -29,7 +29,7 @@ public:
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth, int desiredHeight);
-  virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+  virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 };
 
 #endif

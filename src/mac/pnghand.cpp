@@ -887,7 +887,7 @@ bool wxPNGFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
         return FALSE;
 }
 
-bool wxPNGFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *pal)
+bool wxPNGFileHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *pal)
 {
     return FALSE;
 }
