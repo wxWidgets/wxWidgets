@@ -246,7 +246,19 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
     {
         // do change the path
         m_bChanged = true;
-        m_strOldPath = m_pContainer->GetPath();
+
+        /* JACS: work around a memory bug that causes an assert
+           when using wxRegConfig, related to reference-counting.
+           Can be reproduced by removing (const wxChar*) below and
+           adding the following code to the config sample OnInit under
+           Windows:
+
+           pConfig->SetPath(wxT("MySettings"));
+           pConfig->SetPath(wxT(".."));
+           int value;
+           pConfig->Read(_T("MainWindowX"), & value);
+        */
+        m_strOldPath = (const wxChar*) m_pContainer->GetPath();
         if ( *m_strOldPath.c_str() != wxCONFIG_PATH_SEPARATOR )
           m_strOldPath += wxCONFIG_PATH_SEPARATOR;
         m_pContainer->SetPath(strPath);
