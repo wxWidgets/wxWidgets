@@ -97,6 +97,7 @@ static const EventTypeSpec eventList[] =
 
     { kEventClassMouse , kEventMouseDown } ,
     { kEventClassMouse , kEventMouseUp } ,
+    { kEventClassMouse , kEventMouseWheelMoved } ,
     { kEventClassMouse , kEventMouseMoved } ,
     { kEventClassMouse , kEventMouseDragged } ,
 
@@ -294,6 +295,39 @@ pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef event 
             case kEventMouseDragged :
                 toplevelWindow->MacFireMouseEvent( nullEvent , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
                 result = noErr ;
+                break ;
+            case kEventMouseWheelMoved :
+                {
+                    //bClearTooltip = false;
+                    EventMouseWheelAxis axis = kEventMouseWheelAxisY;
+                    SInt32 delta = 0;
+                    Point mouseLoc = {0, 0};
+                    if (::GetEventParameter(event, kEventParamMouseWheelAxis, typeMouseWheelAxis,
+                                        NULL, sizeof(EventMouseWheelAxis), NULL, &axis) == noErr &&
+                        ::GetEventParameter(event, kEventParamMouseWheelDelta, typeLongInteger,
+                                        NULL, sizeof(SInt32), NULL, &delta) == noErr &&
+                        ::GetEventParameter(event, kEventParamMouseLocation, typeQDPoint,
+                                        NULL, sizeof(Point), NULL, &mouseLoc) == noErr)
+                    {
+                        wxMouseEvent wheelEvent(wxEVT_MOUSEWHEEL);
+                       
+                        wheelEvent.m_x = mouseLoc.h;
+                        wheelEvent.m_y = mouseLoc.v;
+                       
+                        wheelEvent.m_wheelRotation = delta;
+                        wheelEvent.m_wheelDelta = 1;
+                        wheelEvent.m_linesPerAction = 1;
+
+                        wxWindow* currentMouseWindow = NULL;
+                        wxWindow::MacGetWindowFromPoint(wxPoint(mouseLoc.h, mouseLoc.v), &currentMouseWindow);
+                       
+                        if (currentMouseWindow)
+                        {
+                            currentMouseWindow->GetEventHandler()->ProcessEvent(wheelEvent);
+                            result = noErr;
+                        }
+                    }
+                }
                 break ;
             default :
                 break ;
