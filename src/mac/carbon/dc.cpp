@@ -24,6 +24,7 @@
 
 #if __MSL__ >= 0x6000
 #include "math.h"
+namespace std {}
 using namespace std ;
 #endif
 
