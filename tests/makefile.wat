@@ -178,6 +178,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_filesys.obj &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_longlong.obj &
+	$(OBJS)\test_strings.obj &
 	$(OBJS)\test_bstream.obj &
 	$(OBJS)\test_ffilestream.obj &
 	$(OBJS)\test_filestream.obj &
@@ -230,6 +231,9 @@ $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_bstream.obj :  .AUTODEPEND .\streams\bstream.cpp

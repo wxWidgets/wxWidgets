@@ -15,6 +15,7 @@
             filesys/filesys.cpp
             arrays/arrays.cpp
             longlong/longlong.cpp
+            strings/strings.cpp
             streams/bstream.cpp
             streams/ffilestream.cpp
             streams/filestream.cpp

@@ -37,6 +37,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filesys.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_longlong.obj \
+	$(OBJS)\test_strings.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_filestream.obj \
@@ -180,6 +181,9 @@ $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_strings.obj: .\strings\strings.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp
