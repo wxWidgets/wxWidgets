@@ -2048,7 +2048,7 @@ enum wxKeyCode
     WXK_WINDOWS_MENU ,
     WXK_COMMAND,
 
-    // Hardware-specific buttons
+    /* Hardware-specific buttons */
     WXK_SPECIAL1 = 193,
     WXK_SPECIAL2,
     WXK_SPECIAL3,
@@ -2254,8 +2254,6 @@ enum wxUpdateUI
 typedef unsigned char WXCOLORREF[6];
 typedef void*       WXCGIMAGEREF;
 typedef void*       WXHBITMAP;
-//typedef void*       WXHMETAFILE;
-//typedef void*       WXHICON;
 typedef void*       WXHCURSOR;
 typedef void*       WXHRGN;
 typedef void*       WXRECTPTR;
