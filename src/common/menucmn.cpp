@@ -153,51 +153,38 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                 else {
                     // several special cases
                     current.MakeUpper();
-                    if ( current == wxT("DEL") ) {
+                    if ( current == wxT("DEL") )
                         keyCode = WXK_DELETE;
-                    }
-                    else if ( current == wxT("DELETE") ) {
+                    else if ( current == wxT("DELETE") )
                         keyCode = WXK_DELETE;
-                    }
-                    else if ( current == wxT("INS") ) {
+                    else if ( current == wxT("INS") )
                         keyCode = WXK_INSERT;
-                    }
-                    else if ( current == wxT("INSERT") ) {
+                    else if ( current == wxT("INSERT") )
                         keyCode = WXK_INSERT;
-                    }
-                    else if ( current == wxT("ENTER") || current == wxT("RETURN") ) {
+                    else if ( current == wxT("ENTER") || current == wxT("RETURN") )
                         keyCode = WXK_RETURN;
-                    }
-                    else if ( current == wxT("PGUP") ) {
+                    else if ( current == wxT("PGUP") )
                         keyCode = WXK_PRIOR;
-                    }
-                    else if ( current == wxT("PGDN") ) {
+                    else if ( current == wxT("PGDN") )
                         keyCode = WXK_NEXT;
-                    }
-                    else if ( current == wxT("LEFT") ) {
+                    else if ( current == wxT("LEFT") )
                         keyCode = WXK_LEFT;
-                    }
-                    else if ( current == wxT("RIGHT") ) {
+                    else if ( current == wxT("RIGHT") )
                         keyCode = WXK_RIGHT;
-                    }
-                    else if ( current == wxT("UP") ) {
+                    else if ( current == wxT("UP") )
                         keyCode = WXK_UP;
-                    }
-                    else if ( current == wxT("DOWN") ) {
+                    else if ( current == wxT("DOWN") )
                         keyCode = WXK_DOWN;
-                    }
-                    else if ( current == wxT("HOME") ) {
+                    else if ( current == wxT("HOME") )
                         keyCode = WXK_HOME;
-                    }
-                    else if ( current == wxT("END") ) {
+                    else if ( current == wxT("END") )
                         keyCode = WXK_END;
-                    }
-                    else if ( current == wxT("SPACE") ) {
+                    else if ( current == wxT("SPACE") )
                         keyCode = WXK_SPACE;
-                    }
-                    else if ( current == wxT("TAB") ) {
+                    else if ( current == wxT("TAB") )
                         keyCode = WXK_TAB;
-                    }
+                    else if ( current == wxT("ESC") || current == wxT("ESCAPE") ) {
+                        keyCode = WXK_ESCAPE;
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
