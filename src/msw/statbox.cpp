@@ -194,12 +194,8 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
     wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
 
-    // if not using correct (but backwards cojmpatible) text metrics
-    // calculations, we need to add some extra margin or otherwise static box
-    // title is clipped
-#if !wxDIALOG_UNIT_COMPATIBILITY
+    // need extra space, don't know how much but this seems to be enough
     *borderTop += GetCharHeight()/3;
-#endif // !wxDIALOG_UNIT_COMPATIBILITY
 }
 
 // MSWGetRegionWithoutSelf helper: removes the given rectangle from region
