@@ -99,7 +99,7 @@ wxBitmapRefData::~wxBitmapRefData(void)
 {
 #ifdef USE_GDK_IMLIB
   if (m_pixmap) gdk_imlib_free_pixmap( m_pixmap );
-  if (m_image) gdk_imlib_destroy_image( m_image );
+  if (m_image) gdk_imlib_kill_image( m_image );
 #else
   if (m_pixmap) gdk_pixmap_unref( m_pixmap );
 #endif

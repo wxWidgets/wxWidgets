@@ -605,11 +605,11 @@ class wxListCtrl: public wxControl
     wxColour GetBackgroundColour() const
       { return m_mainWin->GetBackgroundColour(); }
     void SetBackgroundColour( const wxColour &colour )
-      { m_mainWin->SetBackgroundColour(colour); }
+      { m_mainWin->SetBackgroundColour( colour ); }
     wxColour GetForegroundColour() const
       { return m_mainWin->GetForegroundColour(); }
     void SetForegroundColour( const wxColour &colour )
-      { m_mainWin->SetForegroundColour(colour); }
+      { m_mainWin->SetForegroundColour( colour ); }
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
 

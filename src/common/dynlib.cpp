@@ -22,7 +22,7 @@
 // System dependent include
 // ---------------------------------------------------------------------------
 
-#if defined(__LINUX__) || defined(__SGI__)
+#ifdef __UNIX__ 
 #include <dlfcn.h>
 #endif
 
@@ -63,7 +63,7 @@ wxLibrary::~wxLibrary()
     else
       delete m_liblist;
 
-#if defined(__LINUX__) || defined(__SGI__)
+#ifdef __UNIX__
     dlclose(m_handle);
 #endif
 #ifdef __WINDOWS__
@@ -79,7 +79,7 @@ wxObject *wxLibrary::CreateObject(const wxString& name)
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
 {
-#if defined(__LINUX__) || defined(__SGI__)
+#ifdef __UNIX__
   return dlsym(m_handle, WXSTRINGCAST symbname);
 #endif
 #ifdef __WINDOWS__
@@ -117,7 +117,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   if ( (node = m_loaded.Find(name.GetData())) )
     return ((wxLibrary *)node->Data());
 
-#if defined(__LINUX__) || defined(__SGI__)
+#ifdef __UNIX__
   lib_name.Prepend("lib");
   lib_name += ".so";
 
@@ -127,21 +127,18 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 
   if (!handle)
     return NULL;
-#elif defined( __WINDOWS__ )
+#endif
+#ifdef __WINDOWS__
   lib_name += ".dll";
 
   HMODULE handle = LoadLibrary(lib_name);
   if (!handle)
     return NULL;
-#else
-    return NULL;
 #endif
-#if defined(__LINUX__) || defined(__SGI__) || defined (__WINDOWS__)
   lib = new wxLibrary((void *)handle);
 
   m_loaded.Append(name.GetData(), lib);
   return lib;
-#endif
 }
 
 wxObject *wxLibraries::CreateObject(const wxString& path)
