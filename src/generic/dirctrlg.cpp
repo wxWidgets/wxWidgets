@@ -604,6 +604,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if (!m_defaultPath.IsEmpty())
         ExpandPath(m_defaultPath);
 
+    SetBestSize(size);
     DoResize();
 
     return TRUE;
