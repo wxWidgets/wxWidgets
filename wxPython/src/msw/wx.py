@@ -1545,6 +1545,9 @@ wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
+# workarounds for bad wxRTTI names
+wxGauge95    = wxGauge
+wxGauge95Ptr = wxGaugePtr
 
 wxPyAssertionError = wxc.wxPyAssertionError
 

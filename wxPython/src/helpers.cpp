@@ -540,8 +540,8 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
         if (! target) {
             // Otherwise make it the old fashioned way by making a
             // new shadow object and putting this pointer in it.
-            wxClassInfo* info = source->GetClassInfo();
-            wxChar*      name = (wxChar*)info->GetClassName();
+            wxClassInfo* info  = source->GetClassInfo();
+            wxString     name  = info->GetClassName();
             PyObject*    klass = wxPyClassExists(name);
             while (info && !klass) {
                 name = (wxChar*)info->GetBaseClassName1();
