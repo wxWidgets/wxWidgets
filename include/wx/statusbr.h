@@ -47,6 +47,9 @@ public:
     virtual int GetBorderX() const = 0;
     virtual int GetBorderY() const = 0;
 
+    // don't want status bars to accept the focus at all
+    virtual bool AcceptsFocus() const { return FALSE; }
+
 protected:
     int     m_nFields;      // the current number of fields
     int    *m_statusWidths; // the width (if !NULL) of the fields

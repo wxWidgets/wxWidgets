@@ -64,14 +64,17 @@ enum IndicatorType
 {
     IndicatorType_Check,
     IndicatorType_Radio,
+    IndicatorType_Menu,
     IndicatorType_Max
 };
 
 enum IndicatorState
 {
     IndicatorState_Normal,
-    IndicatorState_Pressed,
+    IndicatorState_Pressed, // this one is for check/radioboxes
+    IndicatorState_Selected = IndicatorState_Pressed, // for menus
     IndicatorState_Disabled,
+    IndicatorState_SelectedDisabled,    // only for the menus
     IndicatorState_Max
 };
 
@@ -528,7 +531,7 @@ private:
 
 // menu bitmaps
 
-static const char *menu_checked_xpm[] = {
+static const char *checked_menu_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "9 9 2 1",
 "w c None",
@@ -545,11 +548,46 @@ static const char *menu_checked_xpm[] = {
 "wwwwwwwww"
 };
 
-static const char *menu_checked_inversed_xpm[] = {
+static const char *selected_checked_menu_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "9 9 2 1",
 "w c None",
 "b c white",
+/* pixels */
+"wwwwwwwww",
+"wwwwwwwbw",
+"wwwwwwbbw",
+"wbwwwbbbw",
+"wbbwbbbww",
+"wbbbbbwww",
+"wwbbbwwww",
+"wwwbwwwww",
+"wwwwwwwww"
+};
+
+static const char *disabled_checked_menu_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"9 9 3 1",
+"w c None",
+"b c #7f7f7f",
+"W c #e0e0e0",
+/* pixels */
+"wwwwwwwww",
+"wwwwwwwbw",
+"wwwwwwbbW",
+"wbwwwbbbW",
+"wbbwbbbWW",
+"wbbbbbWWw",
+"wwbbbWWww",
+"wwwbWWwww",
+"wwwwWwwww"
+};
+
+static const char *selected_disabled_checked_menu_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"9 9 2 1",
+"w c None",
+"b c #7f7f7f",
 /* pixels */
 "wwwwwwwww",
 "wwwwwwwbw",
@@ -870,6 +908,21 @@ static const char **
         // disabled state
         { pressed_disabled_checked_radio_xpm, pressed_unchecked_radio_xpm },
     },
+
+    // menu
+    {
+        // normal state
+        { checked_menu_xpm, NULL },
+
+        // selected state
+        { selected_checked_menu_xpm, NULL },
+
+        // disabled state
+        { disabled_checked_menu_xpm, NULL },
+
+        // disabled selected state
+        { selected_disabled_checked_menu_xpm, NULL },
+    }
 };
 
 // ============================================================================
@@ -1229,8 +1282,9 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
             dcInverse.Blit(0, 0, w, h,
                           &dcNormal, 0, 0,
                           wxXOR);
+            dcInverse.SelectObject(wxNullBitmap);
 
-            mask = new wxMask(m_bmpArrows[Arrow_Inversed][n], *wxWHITE);
+            mask = new wxMask(m_bmpArrows[Arrow_Inversed][n], *wxBLACK);
             m_bmpArrows[Arrow_Inversed][n].SetMask(mask);
         }
 
@@ -1873,7 +1927,10 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
 wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
 {
     IndicatorState indState;
-    if ( flags & wxCONTROL_DISABLED )
+    if ( flags & wxCONTROL_SELECTED )
+        indState = flags & wxCONTROL_DISABLED ? IndicatorState_SelectedDisabled
+                                              : IndicatorState_Selected;
+    else if ( flags & wxCONTROL_DISABLED )
         indState = IndicatorState_Disabled;
     else if ( flags & wxCONTROL_PRESSED )
         indState = IndicatorState_Pressed;
@@ -1883,7 +1940,9 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
     IndicatorStatus indStatus = flags & wxCONTROL_CHECKED
                                     ? IndicatorStatus_Checked
                                     : IndicatorStatus_Unchecked;
-    return wxBitmap(bmpIndicators[indType][indState][indStatus]);
+
+    const char **xpm = bmpIndicators[indType][indState][indStatus];
+    return xpm ? wxBitmap(xpm) : wxNullBitmap;
 }
 
 void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
@@ -2454,9 +2513,7 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
     wxBitmap bmp = bitmap;
     if ( !bmp.Ok() && (flags & wxCONTROL_CHECKED) )
     {
-        bmp = wxBitmap(flags & wxCONTROL_SELECTED
-                        ? menu_checked_inversed_xpm
-                        : menu_checked_xpm);
+        bmp = GetIndicator(IndicatorType_Menu, flags);
     }
 
     if ( bmp.Ok() )
@@ -2475,13 +2532,14 @@ void wxWin32Renderer::DrawMenuItem(wxDC& dc,
     rect.x = geometryInfo.GetAccelOffset();
     rect.SetRight(geometryInfo.GetSize().x);
 
-    // no accel index here
+    // NB: no accel index here
     DrawLabel(dc, accel, rect, flags, wxALIGN_CENTRE_VERTICAL);
 
     // draw the submenu indicator
     if ( flags & wxCONTROL_ISSUBMENU )
     {
-        rect.x = rect.GetRight() - MENU_RIGHT_MARGIN;
+        rect.x = geometryInfo.GetSize().x - MENU_RIGHT_MARGIN;
+        rect.width = MENU_RIGHT_MARGIN;
 
         wxArrowStyle arrowStyle;
         if ( flags & wxCONTROL_DISABLED )

@@ -110,9 +110,6 @@ private:
     // the menu shown on screen or NULL if not currently shown
     wxPopupMenuWindow *m_popupMenu;
 
-    // is the popup window currently shown?
-    bool m_isShown;
-
     // it calls out OnDismiss()
     friend wxPopupMenuWindow;
 
@@ -153,7 +150,6 @@ protected:
     void Init();
 
     // event handlers
-    void OnSetFocus(wxFocusEvent& event);
     void OnLeftDown(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
@@ -204,6 +200,9 @@ protected:
     // do we show a menu currently?
     bool IsShowingMenu() const { return m_menuShown != 0; }
 
+    // we don't want to have focus except while selecting from menu
+    void GiveAwayFocus();
+
     // the array containing extra menu info we need
     wxMenuInfoArray m_menuInfos;
 
@@ -213,9 +212,6 @@ protected:
 private:
     // the last frame to which we were attached, NULL initially
     wxFrame *m_frameLast;
-
-    // the last window which had focus before us
-    wxWindow *m_focusOld;
 
     // the currently shown menu or NULL
     wxMenu *m_menuShown;

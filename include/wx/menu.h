@@ -413,6 +413,9 @@ public:
     virtual void SetLabel(const wxString& s) { wxWindow::SetLabel(s); }
     virtual wxString GetLabel() const { return wxWindow::GetLabel(); }
 
+    // don't want menu bars to accept the focus by tabbing to them
+    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+
     // compatibility only: these functions are deprecated, use the new ones
     // instead
 #if WXWIN_COMPATIBILITY

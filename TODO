@@ -14,11 +14,12 @@ TODO
 
 wxMenuXXX
 
-* SetFocus(popup) doesn't work!!
-* test mouse capturing
-* menus draws over the submenu
-* kbd interface (letters as accels!)
+* menmonicsi n the menubar
+* accelerators, Alt-letter and F10 (?)
 * popup menus
+
+* menubar menus don't popup in the same place as under MSW when there is not
+  enough space to the right (pretty minor but still)
 
 Misc
 

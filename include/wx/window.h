@@ -362,6 +362,11 @@ public:
         // can this window have focus?
     virtual bool AcceptsFocus() const { return IsShown() && IsEnabled(); }
 
+        // can this window be given focus by keyboard navigation? if not, the
+        // only way to give it focus (provided it accepts it at all) is to
+        // click it
+    virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+
     // parent/children relations
     // -------------------------
 

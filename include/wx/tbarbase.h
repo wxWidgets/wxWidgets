@@ -409,6 +409,9 @@ public:
     // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
     virtual void DoToolbarUpdates();
 
+    // don't want toolbars to accept the focus by tabbing to them
+    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
+
 protected:
     // to implement in derived classes
     // -------------------------------

@@ -36,7 +36,9 @@
     #include "wx/combobox.h"        // wxComboControl
 #endif //WX_PRECOMP
 
-#include "wx/univ/renderer.h"
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/renderer.h"
+#endif // __WXUNIVERSAL__
 
 // ----------------------------------------------------------------------------
 // private classes
