@@ -664,6 +664,9 @@ class wxHtmlDCRendererPtr(wxObjectPtr):
     def SetHtmlText(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlDCRenderer_SetHtmlText,(self,) + _args, _kwargs)
         return val
+    def SetFonts(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_SetFonts,(self,) + _args, _kwargs)
+        return val
     def Render(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlDCRenderer_Render,(self,) + _args, _kwargs)
         return val
@@ -695,6 +698,9 @@ class wxHtmlPrintoutPtr(wxPrintoutPtr):
         return val
     def SetFooter(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlPrintout_SetFooter,(self,) + _args, _kwargs)
+        return val
+    def SetFonts(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetFonts,(self,) + _args, _kwargs)
         return val
     def SetMargins(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlPrintout_SetMargins,(self,) + _args, _kwargs)
@@ -742,6 +748,9 @@ class wxHtmlEasyPrintingPtr(wxObjectPtr):
         return val
     def SetFooter(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlEasyPrinting_SetFooter,(self,) + _args, _kwargs)
+        return val
+    def SetFonts(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_SetFonts,(self,) + _args, _kwargs)
         return val
     def GetPrintData(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlEasyPrinting_GetPrintData,(self,) + _args, _kwargs)

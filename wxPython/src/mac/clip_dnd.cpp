@@ -204,7 +204,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 
 class wxPyDropSource : public wxDropSource {
 public:
-#ifdef __WXMSW__
+#ifndef __WXGTK__
      wxPyDropSource(wxWindow *win = NULL,
                     const wxCursor &copy = wxNullCursor,
                     const wxCursor &move = wxNullCursor,
@@ -2461,9 +2461,9 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
     PyObject * _resultobj;
     wxPyDropSource * _result;
     wxWindow * _arg0 = (wxWindow *) NULL;
-    wxIcon * _arg1 = (wxIcon *) &wxNullIcon;
-    wxIcon * _arg2 = (wxIcon *) &wxNullIcon;
-    wxIcon * _arg3 = (wxIcon *) &wxNullIcon;
+    wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
+    wxCursor * _arg2 = (wxCursor *) &wxNullCursor;
+    wxCursor * _arg3 = (wxCursor *) &wxNullCursor;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
@@ -2482,20 +2482,20 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDropSource. Expected _wxIcon_p.");
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxDropSource. Expected _wxIcon_p.");
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxDropSource. Expected _wxIcon_p.");
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxDropSource. Expected _wxCursor_p.");
         return NULL;
         }
     }

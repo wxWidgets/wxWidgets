@@ -2224,6 +2224,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxICONIZE", PyInt_FromLong((long) wxICONIZE));
 	 PyDict_SetItemString(d,"wxMINIMIZE", PyInt_FromLong((long) wxMINIMIZE));
 	 PyDict_SetItemString(d,"wxMAXIMIZE", PyInt_FromLong((long) wxMAXIMIZE));
+	 PyDict_SetItemString(d,"wxCLOSE_BOX", PyInt_FromLong((long) wxCLOSE_BOX));
 	 PyDict_SetItemString(d,"wxTHICK_FRAME", PyInt_FromLong((long) wxTHICK_FRAME));
 	 PyDict_SetItemString(d,"wxSYSTEM_MENU", PyInt_FromLong((long) wxSYSTEM_MENU));
 	 PyDict_SetItemString(d,"wxMINIMIZE_BOX", PyInt_FromLong((long) wxMINIMIZE_BOX));
@@ -2678,6 +2679,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"WXK_NUMPAD_SUBTRACT", PyInt_FromLong((long) WXK_NUMPAD_SUBTRACT));
 	 PyDict_SetItemString(d,"WXK_NUMPAD_DECIMAL", PyInt_FromLong((long) WXK_NUMPAD_DECIMAL));
 	 PyDict_SetItemString(d,"WXK_NUMPAD_DIVIDE", PyInt_FromLong((long) WXK_NUMPAD_DIVIDE));
+	 PyDict_SetItemString(d,"WXK_WINDOWS_LEFT", PyInt_FromLong((long) WXK_WINDOWS_LEFT));
+	 PyDict_SetItemString(d,"WXK_WINDOWS_RIGHT", PyInt_FromLong((long) WXK_WINDOWS_RIGHT));
+	 PyDict_SetItemString(d,"WXK_WINDOWS_MENU", PyInt_FromLong((long) WXK_WINDOWS_MENU));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_INVALID", PyInt_FromLong((long) wxBITMAP_TYPE_INVALID));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP", PyInt_FromLong((long) wxBITMAP_TYPE_BMP));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_BMP_RESOURCE));
