@@ -17,6 +17,10 @@
 
 #include "wx/renderer.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
+
 class MyDllRenderer : public wxRendererNative
 {
 public:
