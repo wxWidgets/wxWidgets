@@ -578,7 +578,7 @@ public:
     void EndDoc();
     void EndDrawing();
     void EndPage();
-    void FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
+    bool FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
     wxBrush  GetBackground();
     wxBrush  GetBrush();
     long GetCharHeight();
