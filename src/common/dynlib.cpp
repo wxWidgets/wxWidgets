@@ -477,7 +477,7 @@ void *dlopen(const char *path, int mode /* mode is ignored */)
 
 int dlclose(void *handle)
 {
-    NSUnLinkModule( m_handle, NSUNLINKMODULE_OPTION_NONE);
+    NSUnLinkModule( handle, NSUNLINKMODULE_OPTION_NONE);
     return 0;
 }
 
