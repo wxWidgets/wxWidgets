@@ -1097,6 +1097,18 @@ void wxFileDialog::HandleAction( const wxString &fn )
 
     SetPath( filename );
 
+    // change to the directory where the user went if asked
+    if ( style & wxCHANGE_DIR )
+    {
+        wxString cwd;
+        wxSplitPath(filename, &cwd, NULL, NULL);
+
+        if ( cwd != wxGetWorkingDirectory() )
+        {
+            wxSetWorkingDirectory(cwd);
+        }
+    }
+
     wxCommandEvent event;
     wxDialog::OnOK(event);
 }
@@ -1262,19 +1274,17 @@ wxString wxFileSelector( const wxChar *title,
     }
 }
 
-wxString wxLoadFileSelector( const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent )
+wxString wxLoadFileSelector( const wxChar *what, const wxChar *ext, const wxChar *default_name, wxWindow *parent )
 {
-    wxChar *ext = (wxChar *)extension;
+    wxString prompt = wxString::Format(_("Load %s file"), what);
 
-    wxChar prompt[50];
-    wxString str = _("Load %s file");
-    wxSprintf(prompt, str, what);
+    if (*ext == wxT('.'))
+        ext++;
 
-    if (*ext == wxT('.')) ext++;
-    wxChar wild[60];
-    wxSprintf(wild, wxT("*.%s"), ext);
+    wxString wild = wxString::Format(_T("*.%s"), ext);
 
-    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
+    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
+                          ext, wild, 0, parent);
 }
 
 wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name,
@@ -1282,15 +1292,15 @@ wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const w
 {
     wxChar *ext = (wxChar *)extension;
 
-    wxChar prompt[50];
-    wxString str = _("Save %s file");
-    wxSprintf(prompt, str, what);
+    wxString prompt = wxString::Format(_("Save %s file"), what);
 
-    if (*ext == wxT('.')) ext++;
-    wxChar wild[60];
-    wxSprintf(wild, wxT("*.%s"), ext);
+    if (*ext == wxT('.'))
+        ext++;
 
-    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
+    wxString wild = wxString::Format(_T("*.%s"), ext);
+
+    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
+                          ext, wild, 0, parent);
 }
 
 

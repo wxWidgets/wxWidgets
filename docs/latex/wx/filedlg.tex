@@ -67,12 +67,21 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 \twocolitem{{\bf wxOPEN}}{This is an open dialog.}
 \twocolitem{{\bf wxSAVE}}{This is a save dialog.}
 \twocolitem{{\bf wxHIDE\_READONLY}}{Hide read-only files.}
-\twocolitem{{\bf wxOVERWRITE\_PROMPT}}{Prompt for a conformation if a file will be overridden.}
-\twocolitem{{\bf wxMULTIPLE}}{For open dialog only: allows selecting multiple files}
+\twocolitem{{\bf wxOVERWRITE\_PROMPT}}{For save dialog only: prompt for a conformation if a file will be overridden.}
+\twocolitem{{\bf wxMULTIPLE}}{For open dialog only: allows selecting multiple files.}
+\twocolitem{{\bf wxCHANGE\_DIR}}{Change the current working directory to the
+directory where the file(s) chosen by the user are.}
 \end{twocollist}%
 }
 
 \docparam{pos}{Dialog position. Not implemented.}
+
+{\bf NB:} Previous versions of wxWindows used {\tt wxCHANGE\_DIR} by default
+under MS Windows which allowed the program to simply remember the last
+directory where user selected the files to open/save. This (desired)
+functionality must be implemented in the program itself now (manually remember
+the last path used and pass it to the dialog the next time it is called) or
+by using this flag.
 
 \membersection{wxFileDialog::\destruct{wxFileDialog}}
 

@@ -3,12 +3,13 @@
 
 enum
 {
-    wxOPEN  = 1,
-    wxSAVE = 2,
-    wxOVERWRITE_PROMPT = 4,
-    wxHIDE_READONLY = 8,
-    wxFILE_MUST_EXIST = 16,
-    wxMULTIPLE = 32
+    wxOPEN              = 0x0001,
+    wxSAVE              = 0x0002,
+    wxOVERWRITE_PROMPT  = 0x0004,
+    wxHIDE_READONLY     = 0x0008,
+    wxFILE_MUST_EXIST   = 0x0010,
+    wxMULTIPLE          = 0x0020,
+    wxCHANGE_DIR        = 0x0040
 };
 
 #if defined(__WXMSW__)

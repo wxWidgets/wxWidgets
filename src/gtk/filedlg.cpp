@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        gtk/filedlg.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -83,6 +83,18 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
         }
     }
 
+    // change to the directory where the user went if asked
+    if ( style & wxCHANGE_DIR )
+    {
+        wxString cwd;
+        wxSplitPath(filename, &cwd, NULL, NULL);
+
+        if ( cwd != wxGetWorkingDirectory() )
+        {
+            wxSetWorkingDirectory(cwd);
+        }
+    }
+
     dialog->SetPath( filename );
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
@@ -121,9 +133,9 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
         !CreateBase( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, wxDefaultValidator, wxT("filedialog") ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-	return;
+        return;
     }
-    
+
     m_message = message;
     m_path = wxT("");
     m_fileName = defaultFileName;
@@ -156,10 +168,10 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
 
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_filedialog_cancel_callback), (gpointer*)this );
-      
+
     // strange way to internationalize
     gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->cancel_button)->child ), wxConvCurrent->cWX2MB(_("Cancel")) );
-    
+
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
 }
@@ -172,11 +184,11 @@ void wxFileDialog::SetPath(const wxString& path)
     {
         wxString ext;
         wxSplitPath(path, &m_dir, &m_fileName, &ext);
-	if (!ext.IsEmpty())
-	{
-	    m_fileName += wxT(".");
+        if (!ext.IsEmpty())
+        {
+            m_fileName += wxT(".");
             m_fileName += ext;
-	}
+        }
     }
 }
 
@@ -234,15 +246,15 @@ wxString wxLoadFileSelector( const wxChar *what, const wxChar *extension, const 
 {
     wxChar *ext = (wxChar *)extension;
 
-    wxChar prompt[50];
-    wxString str = _("Load %s file");
-    wxSprintf(prompt, str, what);
+    wxString prompt = wxString::Format(_("Load %s file"), what);
 
-    if (*ext == wxT('.')) ext++;
-    wxChar wild[60];
-    wxSprintf(wild, wxT("*.%s"), ext);
+    if (*ext == wxT('.'))
+        ext++;
 
-    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
+    wxString wild = wxString::Format(_T("*.%s"), ext);
+
+    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
+                          ext, wild, 0, parent);
 }
 
 wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name,
@@ -250,14 +262,14 @@ wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const w
 {
     wxChar *ext = (wxChar *)extension;
 
-    wxChar prompt[50];
-    wxString str = _("Save %s file");
-    wxSprintf(prompt, str, what);
+    wxString prompt = wxString::Format(_("Save %s file"), what);
 
-    if (*ext == wxT('.')) ext++;
-    wxChar wild[60];
-    wxSprintf(wild, wxT("*.%s"), ext);
+    if (*ext == wxT('.'))
+        ext++;
 
-    return wxFileSelector (prompt, (const wxChar *) NULL, default_name, ext, wild, 0, parent);
+    wxString wild = wxString::Format(_T("*.%s"), ext);
+
+    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
+                          ext, wild, 0, parent);
 }
 
