@@ -177,7 +177,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         m_radioWidth[i] =
         m_radioHeight[i] = wxDefaultCoord;
         long styleBtn = BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
-        if ( i == 0 && style == 0 )
+        if ( i == 0 )
             styleBtn |= WS_GROUP;
 
         long newId = NewControlId();
