@@ -28,8 +28,8 @@ rm -f `find  _distrib_tgz/wxPython-$1 -name *.so`
 
 cd _distrib_tgz
 
-tar cvf ../dist/wxPython-demo-$1.tar wxPython-$1
-gzip ../dist/wxPython-demo-$1.tar
+tar cvf ../dist/wxPythonDemo-$1.tar wxPython-$1
+gzip ../dist/wxPythonDemo-$1.tar
 
 cd ..
 rm -r _distrib_tgz
