@@ -45,6 +45,7 @@
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
+#include "wx/sysopt.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
   #include <alloc.h>
@@ -422,7 +423,15 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 #ifdef __WXMAC_OSX__
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    if ( UMAGetSystemVersion() >= 0x1050 )
+
+    bool tryHIView = UMAGetSystemVersion() >= 0x1030 ;
+#if wxUSE_SYSTEM_OPTIONS
+    if ( (wxSystemOptions::HasOption(wxMAC_TEXTCONTROL_USE_MLTE) ) && ( wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_MLTE ) == 1) )
+    {
+        tryHIView = false ;
+    }
+#endif
+    if ( tryHIView )
     {
         m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
@@ -2213,7 +2222,7 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
             destRect.bottom = destRect.top + 0x40000000 ;
             
         SectRect( &viewRect , &visBounds , &viewRect ) ; 
-        TXNSetRectBounds( m_txn , &viewRect , &destRect , false ) ;
+        TXNSetRectBounds( m_txn , &viewRect , &destRect , true ) ;
 /*
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
             m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ), m_txnFrameID);

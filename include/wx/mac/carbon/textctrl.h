@@ -16,6 +16,14 @@
 #pragma interface "textctrl.h"
 #endif
 
+#if wxUSE_SYSTEM_OPTIONS
+    // set this to true if you want to use the 'classic' mlte based implementation
+    // instead of the HIView based implementation in 10.3 and upwards, the former
+    // has more features (backgrounds etc.) but may show redraw artefacts and other 
+    // problems depending on your usage, default is 'false'
+    #define wxMAC_TEXTCONTROL_USE_MLTE _T("mac.textcontrol-use-mlte")
+#endif
+
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
