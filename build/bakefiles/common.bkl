@@ -166,6 +166,12 @@
         <optimize>$(OPTIMIZEFLAG)</optimize>
         <threading>multi</threading>
         <runtime-libs>dynamic</runtime-libs>
+
+        <if cond="FORMAT!='autoconf'">
+            <define>WINVER=0x0400</define>
+            <define>_WIN32_IE=0x0400</define>
+            <define>STRICT</define>
+        </if>
     </template>
 
     <template id="3rdparty_lib" template="anylib">
@@ -222,6 +228,25 @@
         <if cond="FORMAT!='autoconf'">
             <if cond="COMPILER=='bcc'">
                 <sys-lib>import32</sys-lib>
+                <sys-lib>ole2w32</sys-lib>
+            </if>
+            <if cond="COMPILER!='bcc'">
+                <sys-lib>kernel32</sys-lib>
+                <sys-lib>user32</sys-lib>
+                <sys-lib>gdi32</sys-lib>
+                <sys-lib>comdlg32</sys-lib>
+                <sys-lib>winspool</sys-lib>
+                <sys-lib>winmm</sys-lib>
+                <sys-lib>shell32</sys-lib>
+                <sys-lib>oldnames</sys-lib>
+                <sys-lib>comctl32</sys-lib>
+                <sys-lib>odbc32</sys-lib>
+                <sys-lib>ole32</sys-lib>
+                <sys-lib>oleaut32</sys-lib>
+                <sys-lib>uuid</sys-lib>
+                <sys-lib>rpcrt4</sys-lib>
+                <sys-lib>advapi32</sys-lib>
+                <sys-lib>wsock32</sys-lib>
             </if>
         </if>        
     </template>
@@ -229,10 +254,16 @@
     <template id="wx_lib_b" template="wx,anylib">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <libname>$(WXLIBNAME)</libname>
+
+        <if cond="FORMAT!='autoconf'">
+            <sources>src/msw/dummy.cpp</sources>
+            <precomp-headers-gen>src/msw/dummy.cpp</precomp-headers-gen>
+        </if>
+        <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
         <precomp-headers>on</precomp-headers>
-        <precomp-headers-file>wxprec</precomp-headers-file>
+        <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
     </template>
-    
+
     <template id="wx_dll_b" template="wx_lib_b">
         <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
         <dllname>$(WXDLLNAME)</dllname>
