@@ -246,7 +246,7 @@ void wxFrame::DoGetClientSize(
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() && GetStatusBar()->IsShown() )
     {
-        int                         nStatusX
+        int                         nStatusX;
         int                         nStatusY;
 
         GetStatusBar()->GetClientSize( &nStatusX
