@@ -1991,6 +1991,7 @@ PIC_FLAG=
 WX_ALL=
 WX_ALL_INSTALLED=
 BURNT_LIBRARY_NAME=
+WX_TARGET_LIBRARY_SONAME=
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
@@ -2021,6 +2022,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
             BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
             BURNT_LIBRARY_NAME_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
+            dnl substitute this in makelib.env for the contrib libs
+            WX_TARGET_LIBRARY_SONAME="-Wl,-soname,\$(TARGETLIB_LINK1)"
         fi
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
@@ -3638,7 +3641,7 @@ if test "$GXX" = yes ; then
 fi
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
 
-CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS | sed 's/ \\+/ /g'`
+CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 
 LDFLAGS="$LDFLAGS $PROFILE"
@@ -3706,6 +3709,7 @@ AC_SUBST(DEP_INFO_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(BURNT_LIBRARY_NAME)
 AC_SUBST(BURNT_LIBRARY_NAME_GL)
+AC_SUBST(WX_TARGET_LIBRARY_SONAME)
 AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
 dnl debugging options
