@@ -15,20 +15,25 @@
 #define _EDITOR_H_
 
 
-class wxXmlNode;
-class WXDLLEXPORT wxTreeCtrl;
-class WXDLLEXPORT wxScrolledWindow;
-class WXDLLEXPORT wxSplitterWindow;
-
 #include "wx/frame.h"
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
 
+class wxXmlNode;
+class wxTreeCtrl;
+class wxScrolledWindow;
+class wxSplitterWindow;
 class NodeHandler;
 class wxXmlNode;
 class wxXmlDocument;
 class EditorTreeCtrl;
+class wxTreeCtrl;
+class wxListCtrl;
+class wxTreeItemId;
+class wxImageList;
+class wxTreeEvent;
+class wxListEvent;
 
 enum ChangeType
 {

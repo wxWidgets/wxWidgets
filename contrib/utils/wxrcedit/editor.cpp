@@ -24,6 +24,8 @@
 #include "wx/splitter.h"
 #include "wx/config.h"
 #include "wx/dir.h"
+#include "wx/listctrl.h"
+#include "wx/imaglist.h"
 
 #include "treedt.h"
 #include "editor.h"
@@ -114,6 +116,8 @@ END_EVENT_TABLE()
 #include "bitmaps/vsizer.xpm"
 #include "bitmaps/hsizer.xpm"
 #include "bitmaps/panel.xpm"
+#include "bitmaps/gsizer.xpm"
+#include "bitmaps/resicon.xpm"
 
 #include "bitmaps/unused.xpm"
 #include "bitmaps/used.xpm"
@@ -170,10 +174,8 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     
     // Create toolbar:
     wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT);
-#ifdef __WXMSW__
-    toolBar->SetToolBitmapSize(wxSize(24, 24));
-#endif
     toolBar->SetMargins(2, 2);
+    toolBar->SetToolBitmapSize(wxSize(24, 24));
     toolBar -> AddTool(ID_EXIT, wxBITMAP(close), wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Quit the editor"));
@@ -205,6 +207,8 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     m_ImgList->Add(wxICON(panel));
     m_ImgList->Add(wxICON(vsizer));
     m_ImgList->Add(wxICON(hsizer));
+    m_ImgList->Add(wxICON(gsizer));
+    m_ImgList->Add(wxICON(resicon));
 
     m_TreeCtrl->SetImageList(m_ImgList);
  
@@ -422,7 +426,7 @@ void EditorFrame::RefreshTree()
     wxXmlNode *sel = m_SelectedNode;
     
     m_TreeCtrl->DeleteAllItems(); 
-    wxTreeItemId root = m_TreeCtrl->AddRoot("Resource: " + m_FileName);
+    wxTreeItemId root = m_TreeCtrl->AddRoot("Resource: " + m_FileName, 5, 5);
 
     wxXmlNode *n = m_Resource->GetRoot()->GetChildren();  
     while (n)

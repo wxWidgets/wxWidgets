@@ -27,7 +27,7 @@
 
 #include "wx/xml/xml.h"
 #include "wx/image.h"
-
+#include "wx/wx.h"
 
 #include "editor.h"
 
