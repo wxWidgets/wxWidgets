@@ -397,6 +397,8 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
 
       // calculate next object's position:
       position.x += size.x;
+      if(position.x > m_MaxX)
+         m_MaxX = position.x;
       
       // do we need to increase the line's height?
       if(size.y > baseLineSkip)
@@ -440,8 +442,6 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
             draw = false;
       }
 
-      if(position.x+size.x > m_MaxX)
-         m_MaxX = position.x+size.x;
       // is it a linebreak?
       if(type == WXLO_TYPE_LINEBREAK || i == tail())
       {
@@ -503,6 +503,9 @@ wxLayoutList::Debug(void)
 #endif
 
 /******************** editing stuff ********************/
+
+// don't change this, I know how to optimise this and will do it real 
+// soon (KB)
 
 wxLayoutObjectList::iterator 
 wxLayoutList::FindObjectCursor(wxPoint const &cpos, CoordType *offset)
