@@ -44,6 +44,7 @@ wxGTK:
 
 - wxToolbar::InsertSeparator() fixed
 - foreign (non US) characters input problem fixed
+- assorted wxActivateEvent fixes
 
 wxHTML:
 

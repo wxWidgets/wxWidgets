@@ -4,11 +4,13 @@ ports.
 
 *** next release ***
 
+*** 22th May 2001: wxWindows 2.2.7 released ***
+
 Applied patch to allow using non-Latin keyboards.
 
 Added wxActivateEvent for top level windows.
 
-Corrected wxActiavteEvents for app (now wxEVT_ACTIAVTE_APP).
+Corrected wxActivateEvent for app (now wxEVT_ACTIAVTE_APP).
 
 wxTextCtrl sends focus events.
 
