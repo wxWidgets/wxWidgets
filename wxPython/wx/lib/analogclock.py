@@ -136,7 +136,8 @@ class AnalogClockWindow(wx.PyWindow):
 
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self)
-        self._doDrawHands(dc, True)
+        if hasattr(self, 'coords'):
+            self._doDrawHands(dc, True)
 
 
     def OnTimerExpire(self, event):
