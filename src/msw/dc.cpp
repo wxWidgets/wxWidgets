@@ -71,6 +71,18 @@ static const int VIEWPORT_EXTENT = 1000;
 static const int MM_POINTS = 9;
 static const int MM_METRIC = 10;
 
+// usually this is defined in math.h
+#ifndef M_PI
+    static const double M_PI = 3.14159265358979323846;
+#endif // M_PI
+
+// ---------------------------------------------------------------------------
+// private functions
+// ---------------------------------------------------------------------------
+
+// convert degrees to radians
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -538,15 +550,18 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
     wxCoord x2 = (x+w);
     wxCoord y2 = (y+h);
 
-    const double deg2rad = 3.14159265359 / 180.0;
     int rx1 = XLOG2DEV(x+w/2);
     int ry1 = YLOG2DEV(y+h/2);
     int rx2 = rx1;
     int ry2 = ry1;
-    rx1 += (int)(100.0 * abs(w) * cos(sa * deg2rad));
-    ry1 -= (int)(100.0 * abs(h) * m_signY * sin(sa * deg2rad));
-    rx2 += (int)(100.0 * abs(w) * cos(ea * deg2rad));
-    ry2 -= (int)(100.0 * abs(h) * m_signY * sin(ea * deg2rad));
+
+    sa = DegToRad(sa);
+    ea = DegToRad(ea);
+
+    rx1 += (int)(100.0 * abs(w) * cos(sa));
+    ry1 -= (int)(100.0 * abs(h) * m_signY * sin(sa));
+    rx2 += (int)(100.0 * abs(w) * cos(ea));
+    ry2 -= (int)(100.0 * abs(h) * m_signY * sin(ea));
 
     // draw pie with NULL_PEN first and then outline otherwise a line is
     // drawn from the start and end points to the centre
@@ -625,41 +640,97 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-    if (m_textForegroundColour.Ok())
-        SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
+    DrawAnyText(text, x, y);
 
-    DWORD old_background = 0;
-    if (m_textBackgroundColour.Ok())
-    {
-        old_background = SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-    }
-
-    if (m_backgroundMode == wxTRANSPARENT)
-        SetBkMode(GetHdc(), TRANSPARENT);
-    else
-        SetBkMode(GetHdc(), OPAQUE);
-
-    (void)TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), WXSTRINGCAST text, wxStrlen(WXSTRINGCAST text));
-
-    if (m_textBackgroundColour.Ok())
-        (void)SetBkColor(GetHdc(), old_background);
-
-    // background colour is used only for DrawText, otherwise
-    // always TRANSPARENT, RR
-    SetBkMode(GetHdc(), TRANSPARENT);
-
+    // update the bounding box
     CalcBoundingBox(x, y);
 
     wxCoord w, h;
     GetTextExtent(text, &w, &h);
-    CalcBoundingBox((x + w), (y + h));
+    CalcBoundingBox(x + w, y + h);
+}
+
+void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+{
+    // prepare for drawing the text
+    if ( m_textForegroundColour.Ok() )
+        SetTextColor(GetHdc(), m_textForegroundColour.GetPixel());
+
+    DWORD old_background = 0;
+    if ( m_textBackgroundColour.Ok() )
+    {
+        old_background = SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
+    }
+
+    SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+                                                          : OPAQUE);
+
+    if ( ::TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
+                   text.c_str(), text.length()) != 0 )
+    {
+        wxLogLastError("TextOut");
+    }
+
+    // restore the old parameters (text foreground colour may be left because
+    // it never is set to anything else, but background should remain
+    // transparent even if we just drew an opaque string)
+    if ( m_textBackgroundColour.Ok() )
+        (void)SetBkColor(GetHdc(), old_background);
+
+    SetBkMode(GetHdc(), TRANSPARENT);
 }
 
 void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
-    wxFAIL_MSG( _T("TODO") );
+    if ( angle == 0.0 )
+    {
+        DoDrawText(text, x, y);
+    }
+    else
+    {
+        LOGFONT lf;
+        wxFillLogFont(&lf, &m_font);
+
+        // GDI wants the angle in tenth of degree
+        long angle10 = (long)(angle * 10);
+        lf.lfEscapement = angle10;
+        lf. lfOrientation = angle10;
+
+        HFONT hfont = ::CreateFontIndirect(&lf);
+        if ( !hfont )
+        {
+            wxLogLastError("CreateFont");
+        }
+        else
+        {
+            HFONT hfontOld = ::SelectObject(GetHdc(), hfont);
+
+            DrawAnyText(text, x, y);
+
+            (void)::SelectObject(GetHdc(), hfontOld);
+        }
+
+        // call the bounding box by adding all four vertices of the rectangle
+        // containing the text to it (simpler and probably not slower than
+        // determining which of them is really topmost/leftmost/...)
+        wxCoord w, h;
+        GetTextExtent(text, &w, &h);
+
+        double rad = DegToRad(angle);
+
+        // "upper left" and "upper right"
+        CalcBoundingBox(x, y);
+        CalcBoundingBox(x + w*cos(rad), y - h*sin(rad));
+        CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
+
+        // "bottom left" and "bottom right"
+        x += (wxCoord)(h*sin(rad));
+        y += (wxCoord)(h*cos(rad));
+        CalcBoundingBox(x, y);
+        CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
+    }
 }
 
 // ---------------------------------------------------------------------------
