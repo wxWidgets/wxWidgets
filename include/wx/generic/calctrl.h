@@ -30,6 +30,9 @@
 
 class WXDLLEXPORT wxCalendarCtrl : public wxControl
 {
+friend class wxMonthComboBox;
+friend class wxYearSpinCtrl;
+
 public:
     // construction
     wxCalendarCtrl() { Init(); }
@@ -62,9 +65,12 @@ public:
     void SetDate(const wxDateTime& date);
     const wxDateTime& GetDate() const { return m_date; }
 
-    // returns TRUE if the given point is on a day and fills date with its
-    // value
-    bool HitTest(const wxPoint& pos, wxDateTime *date);
+    // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
+    // with the corresponding value (none for NOWHERE, the date for DAY and wd
+    // for HEADER)
+    wxCalendarHitTestResult HitTest(const wxPoint& pos,
+                                    wxDateTime *date = NULL,
+                                    wxDateTime::WeekDay *wd = NULL);
 
     // implementation only from now on
     // -------------------------------
@@ -73,16 +79,17 @@ public:
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
 
-    // event handlers
-    void OnPaint(wxPaintEvent& event);
-    void OnClick(wxMouseEvent& event);
-    void OnChar(wxKeyEvent& event);
-    void OnMonthChange(wxCommandEvent& event);
-    void OnYearChange(wxSpinEvent& event);
-
 private:
     // common part of all ctors
     void Init();
+
+    // event handlers
+    void OnPaint(wxPaintEvent& event);
+    void OnClick(wxMouseEvent& event);
+    void OnDClick(wxMouseEvent& event);
+    void OnChar(wxKeyEvent& event);
+    void OnMonthChange(wxCommandEvent& event);
+    void OnYearChange(wxSpinEvent& event);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
@@ -112,8 +119,9 @@ private:
     // change the date inside the same month/year
     void ChangeDay(const wxDateTime& date);
 
-    // generate a calendar event
-    void GenerateEvent(wxEventType type);
+    // generate the given calendar event and a "selection changed" one if
+    // selChanged is TRUE
+    void GenerateEvent(wxEventType type, bool selChanged = TRUE);
 
     // the subcontrols
     wxComboBox *m_comboMonth;

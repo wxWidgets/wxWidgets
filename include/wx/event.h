@@ -255,8 +255,10 @@ const wxEventType wxEVT_CALENDAR_SEL_CHANGED = wxEVT_FIRST + 950;
 const wxEventType wxEVT_CALENDAR_DAY_CHANGED = wxEVT_FIRST + 951;
 const wxEventType wxEVT_CALENDAR_MONTH_CHANGED = wxEVT_FIRST + 952;
 const wxEventType wxEVT_CALENDAR_YEAR_CHANGED = wxEVT_FIRST + 953;
+const wxEventType wxEVT_CALENDAR_DOUBLECLICKED = wxEVT_FIRST + 954;
+const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED = wxEVT_FIRST + 955;
 
-const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
+const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
 /* Compatibility */
 

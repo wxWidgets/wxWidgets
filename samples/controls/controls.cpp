@@ -113,6 +113,8 @@ public:
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
 
+    void OnCalendar(wxCalendarEvent& event);
+    void OnCalendarWeekDayClick(wxCalendarEvent& event);
     void OnCalendarChange(wxCalendarEvent& event);
 
     wxListBox     *m_listbox,
@@ -380,7 +382,11 @@ EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
-EVT_CALENDAR  (ID_CALENDAR,             MyPanel::OnCalendarChange)
+
+EVT_CALENDAR            (ID_CALENDAR,   MyPanel::OnCalendar)
+EVT_CALENDAR_SEL_CHANGED(ID_CALENDAR,   MyPanel::OnCalendarChange)
+EVT_CALENDAR_WEEKDAY_CLICKED(ID_CALENDAR, MyPanel::OnCalendarWeekDayClick)
+
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
@@ -758,12 +764,25 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
     *m_text << "Notebook selection is " << event.GetSelection() << "\n";
 }
 
+void MyPanel::OnCalendar(wxCalendarEvent& event)
+{
+    *m_text << "Selected " << event.GetDate().FormatISODate() <<
+               " from calendar\n";
+}
+
 void MyPanel::OnCalendarChange(wxCalendarEvent& event)
 {
     wxString s;
     s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
 
     m_date->SetLabel(s);
+}
+
+void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
+{
+    *m_text << "Clicked on "
+            << wxDateTime::GetWeekDayName(event.GetWeekDay())
+            << "\n";
 }
 
 void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))

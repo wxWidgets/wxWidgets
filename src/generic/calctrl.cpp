@@ -78,6 +78,7 @@ BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
     EVT_CHAR(wxCalendarCtrl::OnChar)
 
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
+    EVT_LEFT_DCLICK(wxCalendarCtrl::OnDClick)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMonthComboBox, wxComboBox)
@@ -551,44 +552,91 @@ void wxCalendarCtrl::RefreshDate(const wxDateTime& date)
 // mouse handling
 // ----------------------------------------------------------------------------
 
-void wxCalendarCtrl::OnClick(wxMouseEvent& event)
+void wxCalendarCtrl::OnDClick(wxMouseEvent& event)
 {
-    RecalcGeometry();
-
-    wxDateTime date;
-    if ( !HitTest(event.GetPosition(), &date) )
+    if ( HitTest(event.GetPosition()) != wxCAL_HITTEST_DAY )
     {
         event.Skip();
     }
     else
     {
-        ChangeDay(date);
-
-        GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+        GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED, FALSE);
     }
 }
 
-bool wxCalendarCtrl::HitTest(const wxPoint& pos, wxDateTime *date)
+void wxCalendarCtrl::OnClick(wxMouseEvent& event)
+{
+    wxDateTime date;
+    wxDateTime::WeekDay wday;
+    switch ( HitTest(event.GetPosition(), &date, &wday) )
+    {
+        case wxCAL_HITTEST_DAY:
+            ChangeDay(date);
+
+            GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+            break;
+
+        case wxCAL_HITTEST_HEADER:
+            {
+                wxCalendarEvent event(this, wxEVT_CALENDAR_WEEKDAY_CLICKED);
+                event.m_wday = wday;
+                (void)GetEventHandler()->ProcessEvent(event);
+            }
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown hittest code"));
+            // fall through
+
+        case wxCAL_HITTEST_NOWHERE:
+            event.Skip();
+            break;
+    }
+}
+
+wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
+                                                wxDateTime *date,
+                                                wxDateTime::WeekDay *wd)
 {
     RecalcGeometry();
 
+    int wday = pos.x / m_widthCol;
+
     wxCoord y = pos.y;
     if ( y < m_heightRow )
-        return FALSE;
+    {
+        if ( wd )
+        {
+            if ( GetWindowStyle() & wxCAL_MONDAY_FIRST )
+            {
+                wday = wday == 6 ? 0 : wday + 1;
+            }
 
-    y -= m_heightRow;
-    int week = y / m_heightRow,
-        wday = pos.x / m_widthCol;
+            *wd = (wxDateTime::WeekDay)wday;
+        }
 
+        return wxCAL_HITTEST_HEADER;
+    }
+
+    int week = (y - m_heightRow) / m_heightRow;
     if ( week >= 6 || wday >= 7 )
-        return FALSE;
+    {
+        return wxCAL_HITTEST_NOWHERE;
+    }
 
-    wxCHECK_MSG( date, FALSE, _T("bad pointer in wxCalendarCtrl::HitTest") );
+    wxDateTime dt = GetStartDate() + wxDateSpan::Days(7*week + wday);
 
-    *date = GetStartDate();
-    *date += wxDateSpan::Days(7*week + wday);
+    if ( IsDateShown(dt) )
+    {
+        if ( date )
+            *date = dt;
 
-    return IsDateShown(*date);
+        return wxCAL_HITTEST_DAY;
+    }
+    else
+    {
+        return wxCAL_HITTEST_NOWHERE;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -697,15 +745,24 @@ void wxCalendarCtrl::OnChar(wxKeyEvent& event)
 // wxCalendarEvent
 // ----------------------------------------------------------------------------
 
-void wxCalendarCtrl::GenerateEvent(wxEventType type)
+void wxCalendarCtrl::GenerateEvent(wxEventType type, bool selChanged)
 {
     // we're called for a change in some particular date field but we always
     // also generate a generic "changed" event
     wxCalendarEvent event(this, type);
-    wxCalendarEvent event2(this, wxEVT_CALENDAR_SEL_CHANGED);
-
     (void)GetEventHandler()->ProcessEvent(event);
-    (void)GetEventHandler()->ProcessEvent(event2);
+
+    if ( selChanged )
+    {
+        wxCalendarEvent event2(this, wxEVT_CALENDAR_SEL_CHANGED);
+
+        (void)GetEventHandler()->ProcessEvent(event2);
+    }
+}
+
+void wxCalendarEvent::Init()
+{
+    m_wday = wxDateTime::Inv_WeekDay;
 }
 
 wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
