@@ -49,6 +49,7 @@
 #include "bitmaps/folder.xpm"
 #include "bitmaps/page.xpm"
 #include "bitmaps/help.xpm"
+#include "bitmaps/helproot.xpm"
 #endif
 
 #include "wx/stream.h"
@@ -101,6 +102,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_ContentsImageList -> Add(wxICON(book));
     m_ContentsImageList -> Add(wxICON(folder));
     m_ContentsImageList -> Add(wxICON(page));
+    m_ContentsImageList -> Add(wxICON(helproot));
 
     m_ContentsBox = NULL;
     m_IndexBox = NULL;
@@ -140,13 +142,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
-#ifdef __WXMSW__
-    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE, 32, 32);
-#else
-    wxIcon frameIcon(help_xpm);
-#endif
-    if (frameIcon.Ok())
-        SetIcon(frameIcon);
+    GetPosition(&m_Cfg.x, &m_Cfg.y);
+
+    SetIcon(wxICON(help));
 
     int notebook_page = 0;
 
@@ -433,6 +431,8 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
 
     m_ContentsBox -> DeleteAllItems();
     roots[0] = m_ContentsBox -> AddRoot(_("(Help)"));
+    m_ContentsBox -> SetItemImage(roots[0], IMG_RootFolder);
+    m_ContentsBox -> SetItemSelectedImage(roots[0], IMG_RootFolder);
     imaged[0] = TRUE;
 
     for (i = 0; i < cnt; i++, it++) {
@@ -637,6 +637,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 {
     GetSize(&m_Cfg.w, &m_Cfg.h);
     GetPosition(&m_Cfg.x, &m_Cfg.y);
+
     if (m_Splitter && m_Cfg.navig_on) m_Cfg.sashpos = m_Splitter -> GetSashPosition();
 
     if (m_Config)

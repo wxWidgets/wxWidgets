@@ -151,7 +151,8 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         enum {
             IMG_Book = 0,
             IMG_Folder,
-            IMG_Page
+            IMG_Page,
+            IMG_RootFolder
         };
 
     protected:

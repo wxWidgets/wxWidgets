@@ -1,0 +1,27 @@
+/* XPM */
+static char *helproot_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1",
+"  c Gray0",
+". c #808000000000",
+"X c #808080800000",
+"o c Yellow",
+"O c None",
+/* pixels */
+"OOOOOO    OOOOOO",
+"OOOO  oooo .OOOO",
+"OOO oooooooo OOO",
+"OO  oooXXooo OOO",
+"OO oooXOOXooo OO",
+"OO     OOXooo OO",
+"OOOOOOOO  ooo OO",
+"OOOOOOO  ooo OOO",
+"OOOOOO oooo OOOO",
+"OOOOO oooo OOOOO",
+"OOOOO      OOOOO",
+"OOOOOOOOOOOOOOOO",
+"OOOOO      OOOOO",
+"OOOOO oooo OOOOO",
+"OOOOO oooo OOOOO",
+"OOOOO      OOOOO"
+};
