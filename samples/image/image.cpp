@@ -184,7 +184,7 @@ public:
                 wxBMP_24BPP
             };
 
-            static const wxString bppchoices[] =
+            const wxString bppchoices[] =
             {
                 _T("1 bpp color"),
                 _T("1 bpp B&W"),
@@ -229,7 +229,7 @@ public:
                 wxPNG_TYPE_GREY_RED,
             };
 
-            static const wxString pngchoices[] =
+            const wxString pngchoices[] =
             {
                 _T("Colour 8bpp"),
                 _T("Colour 16bpp"),
