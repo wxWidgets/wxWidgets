@@ -81,6 +81,7 @@ BEGIN_EVENT_TABLE(wxFrameMSW, wxFrameBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrameMSW, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameMSW)
 
 // ============================================================================
 // implementation
@@ -403,7 +404,7 @@ void wxFrameMSW::SetIcon(const wxIcon& icon)
 }
 
 // generate an artificial resize event
-void wxFrame::SendSizeEvent()
+void wxFrameMSW::SendSizeEvent()
 {
     RECT r;
 #ifdef __WIN16__

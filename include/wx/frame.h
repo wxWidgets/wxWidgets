@@ -239,19 +239,55 @@ protected:
 
 // include the real class declaration
 #if defined(__WXMSW__)
-    #ifndef __WXUNIVERSAL__
-        #define wxFrameMSW wxFrame
-        #define sm_classwxFrameMSW sm_classwxFrame
-    #endif
     #include "wx/msw/frame.h"
+    #ifndef __WXUNIVERSAL__
+
+    class WXDLLEXPORT wxFrame : public wxFrameMSW
+    {
+    public:
+        // construction
+        wxFrame() { Init(); }
+        wxFrame(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& title,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxDEFAULT_FRAME_STYLE,
+                   const wxString& name = wxFrameNameStr)
+        {
+            Init();
+            Create(parent, id, title, pos, size, style, name);
+        }
+        DECLARE_DYNAMIC_CLASS(wxFrame)
+    };
+
+    #endif
 #elif defined(__WXMOTIF__)
     #include "wx/motif/frame.h"
 #elif defined(__WXGTK__)
-    #ifndef __WXUNIVERSAL__
-        #define wxFrameGTK wxFrame
-        #define sm_classwxFrameGTK sm_classwxFrame
-    #endif
     #include "wx/gtk/frame.h"
+    #ifndef __WXUNIVERSAL__
+
+    class WXDLLEXPORT wxFrame : public wxFrameGTK
+    {
+    public:
+        // construction
+        wxFrame() { Init(); }
+        wxFrame(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& title,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxDEFAULT_FRAME_STYLE,
+                   const wxString& name = wxFrameNameStr)
+        {
+            Init();
+            Create(parent, id, title, pos, size, style, name);
+        }
+        DECLARE_DYNAMIC_CLASS(wxFrame)
+    };
+
+    #endif
 #elif defined(__WXMGL__)
     #include "wx/mgl/frame.h"
 #elif defined(__WXQT__)

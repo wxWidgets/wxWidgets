@@ -67,7 +67,8 @@ extern int g_openDialogs;
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_DYNAMIC_CLASS(wxFrameGTK, wxWindow)
 #else
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameGTK)
+    IMPLEMENT_DYNAMIC_CLASS(wxFrameGTK, wxWindow)
 #endif
 
 // ----------------------------------------------------------------------------
