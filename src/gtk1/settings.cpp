@@ -69,6 +69,7 @@ wxColour *g_systemBtnHighlightColour  = (wxColour *) NULL;
 wxColour *g_systemHighlightColour     = (wxColour *) NULL;
 wxColour *g_systemHighlightTextColour = (wxColour *) NULL;
 wxColour *g_systemListBoxColour       = (wxColour *) NULL;
+wxColour *g_systemBtnTextColour       = (wxColour *) NULL;
 
 wxFont *g_systemFont = (wxFont *) NULL;
 
@@ -82,6 +83,7 @@ void wxSystemSettings::Done()
     delete g_systemHighlightTextColour;
     delete g_systemListBoxColour;
     delete g_systemFont;
+    delete g_systemBtnTextColour;
 }
 
 wxColour wxSystemSettings::GetSystemColour( int index )
@@ -97,7 +99,36 @@ wxColour wxSystemSettings::GetSystemColour( int index )
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
+        case wxSYS_COLOUR_3DLIGHT:
         {
+            if (!g_systemBtnFaceColour)
+            {
+                GtkWidget *widget = gtk_button_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                if (!def)
+                    def = gtk_widget_get_default_style();
+                if (def)
+                {
+                    int red = def->bg[GTK_STATE_NORMAL].red;
+                    int green = def->bg[GTK_STATE_NORMAL].green;
+                    int blue = def->bg[GTK_STATE_NORMAL].blue;
+                    g_systemBtnFaceColour = 
+	                    new wxColour( red    >> SHIFT,
+	                                  green  >> SHIFT,
+			                          blue   >> SHIFT );
+                }
+                else
+                {
+                    g_systemBtnFaceColour = 
+	                    new wxColour( 0      >> SHIFT,
+	                                  0      >> SHIFT,
+			                          0x9c40 >> SHIFT );
+                }
+                gtk_widget_destroy( widget );
+
+            }
+            return *g_systemBtnFaceColour;
+	    /*
             if (!g_systemBtnFaceColour)
             {
                 g_systemBtnFaceColour = 
@@ -106,14 +137,29 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 			                      0xd6d6 >> SHIFT );
             }
             return *g_systemBtnFaceColour;
+	    */
         }
         case wxSYS_COLOUR_WINDOW:
         {
             return *wxWHITE;
         }
+        case wxSYS_COLOUR_3DDKSHADOW:
+        {
+            return *wxBLACK;
+        }
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_BTNSHADOW:
+        //case wxSYS_COLOUR_3DSHADOW:
         {
+            if (!g_systemBtnShadowColour)
+            {
+                wxColour faceColour(GetSystemColour(wxSYS_COLOUR_3DFACE));
+                g_systemBtnShadowColour =
+                   new wxColour(faceColour.Red() * 0.666,
+                                faceColour.Green() * 0.666,
+                                faceColour.Blue() * 0.666);
+	    }
+  /*
             if (!g_systemBtnShadowColour)
             {
                 g_systemBtnShadowColour = 
@@ -121,10 +167,14 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 	                              0x7530 >> SHIFT,
 			                      0x7530 >> SHIFT );
             }
+  */
             return *g_systemBtnShadowColour;
         }
-        case wxSYS_COLOUR_BTNHIGHLIGHT:
+        case wxSYS_COLOUR_3DHIGHLIGHT:
+        //case wxSYS_COLOUR_BTNHIGHLIGHT:
         {
+            return * wxWHITE;
+/* I think this should normally be white (JACS 8/2000)
             if (!g_systemBtnHighlightColour)
             {
                 g_systemBtnHighlightColour = 
@@ -133,6 +183,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 			                      0xea60 >> SHIFT );
             }
             return *g_systemBtnHighlightColour;
+*/
         }
         case wxSYS_COLOUR_HIGHLIGHT:
         {
@@ -195,7 +246,30 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     case wxSYS_COLOUR_BTNTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     {
-      return *wxBLACK;
+            if (!g_systemBtnTextColour)
+            {
+                GtkWidget *widget = gtk_button_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                if (!def)
+                    def = gtk_widget_get_default_style();
+                if (def)
+                {
+                    int red = def->fg[GTK_STATE_NORMAL].red;
+                    int green = def->fg[GTK_STATE_NORMAL].green;
+                    int blue = def->fg[GTK_STATE_NORMAL].blue;
+                    g_systemBtnTextColour = 
+	                    new wxColour( red    >> SHIFT,
+	                                  green  >> SHIFT,
+			                          blue   >> SHIFT );
+                }
+                else
+                {
+                    g_systemBtnTextColour = 
+		      new wxColour(0, 0, 0);
+                }
+                gtk_widget_destroy( widget );
+            }
+            return *g_systemBtnTextColour;
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {

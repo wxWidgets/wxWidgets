@@ -25,6 +25,11 @@
 #include "wx/generic/imaglist.h"
 #include "wx/dynarray.h"
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#include "wx/gtk/win_gtk.h"
+#endif
+
 #ifndef wxUSE_GENERIC_LIST_EXTENSIONS
 #define wxUSE_GENERIC_LIST_EXTENSIONS 1
 #endif
@@ -730,6 +735,23 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             m_bound_all.width = 0;
             m_bound_all.height = 0;
             wxNode *node = m_items.First();
+            if (node)
+            {
+                wxListItemData *item = (wxListItemData*)node->Data();
+                if (item->HasImage())
+                {
+                    int w = 0;
+                    int h = 0;
+                    m_owner->GetImageSize( item->GetImage(), w, h );
+                    m_bound_icon.width = w;
+                    m_bound_icon.height = h;
+                }
+                else
+                {
+                    m_bound_icon.width = 0;
+                    m_bound_icon.height = 0;
+                }
+            }
             while (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
@@ -1173,6 +1195,15 @@ wxListHeaderWindow::~wxListHeaderWindow( void )
 
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
+#ifdef __WXGTK__
+    GtkStateType state = GTK_STATE_NORMAL;
+    if (!m_parent->IsEnabled()) state = GTK_STATE_INSENSITIVE;
+    
+    x = dc->XLOG2DEV( x );
+    
+	gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
+		(GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
+#else
     const int m_corner = 1;
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
@@ -1192,6 +1223,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawRectangle( x, y, 1, h );              // left (outer)
     dc->DrawLine( x, y+h-1, x+1, y+h-1 );
     dc->DrawLine( x+w-1, y, x+w-1, y+1 );
+#endif
 }
 
 // shift the DC origin to match the position of the main window horz
@@ -1231,7 +1263,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
-    dc.SetTextForeground( *wxBLACK );
+    // dc.SetTextForeground( *wxBLACK );
+    dc.SetTextForeground(wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOWTEXT ));
 
     int x = 1;          // left of the header rect
     const int y = 1;    // top
@@ -2500,6 +2533,7 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
             UnfocusLine( m_current );
             m_current = line;
             FocusLine( m_current );
+            if ((m_mode & wxLC_SINGLE_SEL) && oldCurrent) oldCurrent->Hilight( FALSE );
             RefreshLine( m_current );
             if (oldCurrent) RefreshLine( oldCurrent );
         }
@@ -2915,7 +2949,7 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
     {
         wxListLineData *line = &m_lines[i];
         long ret = line->IsHit( x, y );
-        if (ret & flags)
+        if (ret) //  & flags) // No: flags is output-only so may be garbage at this point
         {
             flags = (int)ret;
             return count;

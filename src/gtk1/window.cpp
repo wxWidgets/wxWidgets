@@ -662,10 +662,46 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     }
 */
 
-        win->GetUpdateRegion().Union( gdk_event->area.x,
-                                      gdk_event->area.y,
-                                      gdk_event->area.width,
-                                      gdk_event->area.height );
+    GtkPizza *pizza = GTK_PIZZA (widget);
+
+    wxWindow *parent = win;
+    if (win->IsTopLevel())
+    {
+        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+    } 
+    else
+    {
+        parent = win->GetParent();
+        if (parent)
+        {
+            if (parent->m_isFrame)
+            {
+                wxFrame *frame = (wxFrame*) parent;
+                if (frame->GetStatusBar() == win)
+                {
+                    gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		                GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+                }
+            }
+            else
+            if (GTK_IS_NOTEBOOK(parent->m_widget))
+            {
+                while (parent && !parent->IsTopLevel())
+                    parent = parent->GetParent();
+                    
+                if (!parent) parent = win;
+                    
+                gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+		            GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+            }
+        }
+    }
+        
+    win->GetUpdateRegion().Union( gdk_event->area.x,
+                                  gdk_event->area.y,
+                                  gdk_event->area.width,
+                                  gdk_event->area.height );
 
         if (gdk_event->count == 0)
         {
@@ -684,8 +720,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
            being redrawn if the wxWindows class is given a chance to
            paint *anything* because it will then be allowed to paint
            over the window-less widgets */
-
-        GtkPizza *pizza = GTK_PIZZA (widget);
 
         GList *children = pizza->children;
         while (children)
