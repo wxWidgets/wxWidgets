@@ -1,4 +1,4 @@
-## Purpose: The automake makefile for wxWindows.
+## Purpose: The automake makefile for wxWindows (src/gtk subdirectory)
 ## Author:  Phil Blecker, Vadim Zeitlin
 ## Version: $Id$
 ##

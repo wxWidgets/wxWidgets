@@ -755,10 +755,10 @@ dnl macros to find the a file in the list of include/lib paths
 dnl ===========================================================================
 
 dnl ---------------------------------------------------------------------------
-dnl call AC_PATH_FIND_INCLUDES(search path, header name), sets ac_find_includes
+dnl call WX_PATH_FIND_INCLUDES(search path, header name), sets ac_find_includes
 dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(AC_PATH_FIND_INCLUDES,
+AC_DEFUN(WX_PATH_FIND_INCLUDES,
 [
 ac_find_includes=
 for ac_dir in $1;
@@ -771,10 +771,10 @@ for ac_dir in $1;
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl call AC_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_includes
+dnl call WX_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_includes
 dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(AC_PATH_FIND_LIBRARIES,
+AC_DEFUN(WX_PATH_FIND_LIBRARIES,
 [
 ac_find_libraries=
 for ac_dir in $1;
@@ -791,7 +791,7 @@ for ac_dir in $1;
 dnl ---------------------------------------------------------------------------
 dnl Path to include, already defined
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(AC_INCLUDE_PATH_EXIST,
+AC_DEFUN(WX_INCLUDE_PATH_EXIST,
 [
   ac_path_to_include=$1
   echo "$2" | grep "\-I$1" > /dev/null
@@ -806,7 +806,7 @@ AC_DEFUN(AC_INCLUDE_PATH_EXIST,
 dnl ---------------------------------------------------------------------------
 dnl Path to link, already defined
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(AC_LINK_PATH_EXIST,
+AC_DEFUN(WX_LINK_PATH_EXIST,
 [
   echo "$2" | grep "\-L$1" > /dev/null
   result=$?
@@ -968,3 +968,97 @@ if test $ac_cv_c_bigendian = yes; then
   AC_DEFINE(WORDS_BIGENDIAN)
 fi
 ])
+
+dnl ---------------------------------------------------------------------------
+dnl override AC_ARG_ENABLE/WITH to cache the results in .cache file
+dnl ---------------------------------------------------------------------------
+
+AC_DEFUN(WX_ARG_CACHE_INIT,
+        [
+          wx_arg_cache_file="./configarg.cache"
+          echo "loading argument cache $wx_arg_cache_file"
+          rm -f ${wx_arg_cache_file}.tmp
+          touch ${wx_arg_cache_file}.tmp
+          touch ${wx_arg_cache_file}
+        ])
+
+AC_DEFUN(WX_ARG_CACHE_FLUSH,
+        [
+          echo "saving argument cache $wx_arg_cache_file"
+          mv ${wx_arg_cache_file}.tmp ${wx_arg_cache_file}
+        ])
+
+dnl this macro checks for a command line argument and caches the result
+dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
+AC_DEFUN(WX_ARG_WITH,
+        [
+          AC_MSG_CHECKING("for --with-$1")
+          no_cache=0
+          AC_ARG_WITH($1, $2,
+                      [
+                        if test "$withval" = yes; then
+                          ac_cv_use_$1='$3=yes'
+                        else
+                          ac_cv_use_$1='$3=no'
+                        fi
+                      ],
+                      [
+                        LINE=`grep "$3" ${wx_arg_cache_file}`
+                        if test "x$LINE" != x ; then
+                          eval "DEFAULT_$LINE"
+                        else
+                          no_cache=1
+                        fi
+
+                        ac_cv_use_$1='$3='$DEFAULT_$3
+                      ])
+
+          eval "$ac_cv_use_$1"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$$3" = yes; then
+            AC_MSG_RESULT(yes)
+          else
+            AC_MSG_RESULT(no)
+          fi
+        ])
+
+dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
+dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name)
+AC_DEFUN(WX_ARG_ENABLE,
+        [
+          AC_MSG_CHECKING("for --enable-$1")
+          no_cache=0
+          AC_ARG_ENABLE($1, $2,
+                        [
+                          if test "$enableval" = yes; then
+                            ac_cv_use_$1='$3=yes'
+                          else
+                            ac_cv_use_$1='$3=no'
+                          fi
+                        ],
+                        [
+                          LINE=`grep "$3" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_$1='$3='$DEFAULT_$3
+                        ])
+
+          eval "$ac_cv_use_$1"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$$3" = yes; then
+            AC_MSG_RESULT(yes)
+          else
+            AC_MSG_RESULT(no)
+          fi
+        ])
+

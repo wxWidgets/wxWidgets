@@ -1,4 +1,4 @@
-## Purpose: The automake makefile for wxWindows (src/gtk subdirectory)
+## Purpose: The automake makefile for wxWindows (src/motif subdirectory)
 ## Author:  Phil Blecker, Vadim Zeitlin
 ## Version: $Id$
 ##
@@ -17,9 +17,8 @@ lib_LTLIBRARIES = @WX_LIBRARY_NAME@
 EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la
 
 # these are the common files which always make part of the library
-libwx_gtk_la_SOURCES = \
+libwx_motif_la_SOURCES = \
 \
- win_gtk.c \
  extended.c \
  parser.c \
 \
@@ -173,11 +172,9 @@ libwx_gtk_la_SOURCES = \
  statbox.cpp \
  statline.cpp \
  stattext.cpp \
- tbargtk.cpp \
  textctrl.cpp \
  timer.cpp \
  tooltip.cpp \
- utilsgtk.cpp \
  utilsres.cpp \
  wave.cpp \
  window.cpp
@@ -206,8 +203,8 @@ lexer.c: $(srcdir)/../common/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) lex.yy.c
 
-libwx_gtk_la_LDFLAGS = -rpath @libdir@ \
+libwx_motif_la_LDFLAGS = -rpath @libdir@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	-release $(LT_RELEASE)
-libwx_gtk_la_LIBADD = $(LTLIBOBJS)
-libwx_gtk_la_DEPENDENCIES = $(libwx_gtk_la_LIBADD) lexer.l parser.y
+libwx_motif_la_LIBADD = $(LTLIBOBJS)
+libwx_motif_la_DEPENDENCIES = $(libwx_motif_la_LIBADD) lexer.l parser.y

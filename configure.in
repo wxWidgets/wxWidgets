@@ -89,10 +89,17 @@ DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 
+dnl these are the values which are really default for the given platform -
+dnl they're not cached and are only used if no --with-toolkit was given *and*
+dnl nothing was found in the cache
+DEFAULT_DEFAULT_wxUSE_GTK=0
+DEFAULT_DEFAULT_wxUSE_MOTIF=0
+DEFAULT_DEFAULT_wxUSE_MSW=0
+
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
     AC_DEFINE(__HPUX__)
   ;;
   *-*-linux* )
@@ -103,14 +110,14 @@ case "${host}" in
       USE_ALPHA=1
       AC_DEFINE(__ALPHA__)
     fi
-    DEFAULT_wxUSE_GTK=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-irix5* | *-*-irix6* )
     USE_SGI=1
     USE_SVR4=1
     AC_DEFINE(__SGI__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-solaris2* )
     USE_SUN=1
@@ -119,7 +126,7 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SOLARIS__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-sunos4* )
     USE_SUN=1
@@ -128,35 +135,35 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SUNOS__)
     AC_DEFINE(__BSD__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-freebsd* | *-*-netbsd*)
     USE_BSD=1
     USE_FREEBSD=1
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
-    DEFAULT_wxUSE_GTK=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-osf* )
     USE_ALPHA=1
     USE_OSF=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-dgux5* )
     USE_ALPHA=1
     USE_SVR4=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-sysv5* )
     USE_SYSV=1
     USE_SVR4=1
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *-*-aix* )
     USE_AIX=1
@@ -165,7 +172,7 @@ case "${host}" in
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
   *)
     AC_MSG_ERROR(unknown system type $(host).)
@@ -204,6 +211,8 @@ dnl platform should be changed, it can be done here too)
 dnl
 dnl NB: see also DEFAULT_wxUSE<toolkit> variables defined above
 
+WX_ARG_CACHE_INIT
+
 dnl useful to test the compilation with minimum options, define as 0 for normal
 dnl usage
 DEBUG_CONFIGURE=0
@@ -216,6 +225,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DEBUG_INFO=yes
   DEFAULT_wxUSE_DEBUG_GDB=yes
   DEFAULT_wxUSE_MEM_TRACING=no
+  DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
   DEFAULT_wxUSE_APPLE_IEEE=no
 
@@ -305,6 +315,7 @@ else
   DEFAULT_wxUSE_DEBUG_INFO=no
   DEFAULT_wxUSE_DEBUG_GDB=no
   DEFAULT_wxUSE_MEM_TRACING=no
+  DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
@@ -387,41 +398,44 @@ else
   DEFAULT_wxUSE_WCSRTOMBS=no
 fi
 
-dnl AC_ARG_WITH should be used to select whether an external package will be
+dnl WX_ARG_WITH should be used to select whether an external package will be
 dnl used or not, to configure compile-time features of this package itself,
-dnl use AC_ARG_ENABLE instead
+dnl use WX_ARG_ENABLE instead
 
 dnl ============================
 dnl external package dependecies
 dnl ============================
 
-AC_ARG_WITH(gtk-prefix,        [  --with-gtk-prefix=PFX   prefix where GTK is installed],
-            gtk_config_prefix="$withval", gtk_config_prefix="")
-AC_ARG_WITH(gtk-exec-prefix,    [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed],
-            gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
-AC_ARG_WITH(gtk,        [  --with-gtk              use GTK+],
-            [wxUSE_GTK="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(motif,        [  --with-motif            use Motif/Lesstif],
-            [wxUSE_MOTIF="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows],
-            [wxUSE_CYGWIN="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mingw,        [  --with-mingw            use GCC Minimal MS-Windows],
-            [wxUSE_MINGW="$withval" TOOLKIT_GIVEN=1])
+dnl TODO should support these options!
+dnl
+dnl AC_ARG_WITH(gtk-prefix,    [  --with-gtk-prefix=PFX   prefix where GTK is installed],
+dnl             gtk_config_prefix="$withval", gtk_config_prefix="")
+dnl AC_ARG_WITH(gtk-exec-prefix,
+dnl                            [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed], gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 
-AC_ARG_WITH(dmalloc,        [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)],
-            wxUSE_DMALLOC="$withval",wxUSE_DMALLOC=$DEFAULT_wxUSE_DMALLOC)
-AC_ARG_WITH(zlib,        [  --with-zlib             use zlib for LZW compression],
-            wxUSE_ZLIB="$withval",wxUSE_ZLIB=$DEFAULT_wxUSE_ZLIB)
-AC_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)],
-            wxUSE_LIBPNG="$withval",wxUSE_LIBPNG=$DEFAULT_wxUSE_LIBPNG)
-AC_ARG_WITH(libgif,     [  --with-libgif          use libgif (GIF file format)],
-            wxUSE_LIBGIF="${withval}",wxUSE_LIBGIF=$DEFAULT_wxUSE_LIBGIF)
-AC_ARG_WITH(libjpeg,     [  --with-libjpeg          use libjpeg (JPEG file format)],
-            wxUSE_LIBJPEG="${withval}",wxUSE_LIBJPEG=$DEFAULT_wxUSE_LIBJPEG)
-AC_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)],
-            wxUSE_OPENGL="$withval",wxUSE_OPENGL=$DEFAULT_wxUSE_OPENGL)
-AC_ARG_WITH(odbc,        [  --with-odbc             use the IODBC and wxODBC classes],
-            wxUSE_ODBC="$withval",wxUSE_ODBC=$DEFAULT_wxUSE_ODBC)
+dnl these options use AC_ARG_WITH and not WX_ARG_WITH on purpose - we cache
+dnl these values manually
+for toolkit in GTK MOTIF MSW; do
+  LINE=`grep "wxUSE_$toolkit" ${wx_arg_cache_file}`
+  if test "x$LINE" != x ; then
+    has_toolkit_in_cache=1
+    eval "DEFAULT_$LINE"
+    echo $LINE >> ${wx_arg_cache_file}.tmp
+  fi
+done
+
+AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" TOOLKIT_GIVEN=1])
+
+WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
+WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
+WX_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
+WX_ARG_WITH(libgif,        [  --with-libgif           use libgif (GIF file format)], wxUSE_LIBGIF)
+WX_ARG_WITH(libjpeg,       [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
+WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
+WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
 dnl ====================
 dnl compile-time options
@@ -431,12 +445,9 @@ dnl ---------------------------------------------------------------------------
 dnl compile options
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(optimise,        [  --enable-optimise       create optimised code],
-            wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
-AC_ARG_ENABLE(optimize,        [  --enable-optimize       create optimized code],
-            wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
-AC_ARG_ENABLE(debug, [  --enable-debug          same as debug_flag and debug_info],
-            wxUSE_DEBUG="${enableval}",wxUSE_DEBUG=$DEFAULT_wxUSE_DEBUG)
+WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
+WX_ARG_ENABLE(optimize,    [  --enable-optimize       create optimized code], wxUSE_OPTIMISE)
+WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
 if test "$wxUSE_DEBUG" = "yes"; then
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -446,18 +457,12 @@ elif test "$wxUSE_DEBUG" = "no"; then
   DEFAULT_wxUSE_DEBUG_INFO=no
 fi
 
-AC_ARG_ENABLE(debug_flag,    [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)],
-            wxUSE_DEBUG_FLAG="$enableval",wxUSE_DEBUG_FLAG=$DEFAULT_wxUSE_DEBUG_FLAG)
-AC_ARG_ENABLE(debug_info,    [  --enable-debug_info     create code with debugging information],
-            wxUSE_DEBUG_INFO="$enableval",wxUSE_DEBUG_INFO=$DEFAULT_wxUSE_DEBUG_INFO)
-AC_ARG_ENABLE(debug_gdb,    [  --enable-debug_gdb      create code with extra GDB debugging information],
-            wxUSE_DEBUG_GDB="$enableval",wxUSE_DEBUG_GDB=$DEFAULT_wxUSE_DEBUG_GDB)
-AC_ARG_ENABLE(debug_cntxt,    [  --enable-debug_cntxt    use wxDebugContext],
-             AC_DEFINE(wxUSE_DEBUG_CONTEXT))
-AC_ARG_ENABLE(mem_tracing,    [  --enable-mem_tracing    create code with memory tracing],
-            wxUSE_MEM_TRACING="$enableval", wxUSE_MEM_TRACING=$DEFAULT_wxUSE_MEM_TRACING)
-AC_ARG_ENABLE(profile,        [  --enable-profile        create code with profiling information],
-            wxUSE_PROFILE="$enableval",wxUSE_PROFILE=$DEFAULT_wxUSE_PROFILE)
+WX_ARG_ENABLE(debug_flag,  [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)], wxUSE_DEBUG_FLAG)
+WX_ARG_ENABLE(debug_info,  [  --enable-debug_info     create code with debugging information], wxUSE_DEBUG_INFO)
+WX_ARG_ENABLE(debug_gdb,   [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
+WX_ARG_ENABLE(debug_cntxt, [  --enable-debug_cntxt    use wxDebugContext], wxUSE_DEBUG_CONTEXT)
+WX_ARG_ENABLE(mem_tracing, [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
+WX_ARG_ENABLE(profile,     [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
 
 dnl ---------------------------------------------------------------------------
 dnl --disable-gui will build only non-GUI part of wxWindows
@@ -466,112 +471,78 @@ dnl NB: this is still in testing stage, don't use if you don't know what you're
 dnl     doing
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(gui,        [  --enable-gui            use GUI classes],
-            wxUSE_GUI="$enableval",wxUSE_GUI=$DEFAULT_wxUSE_GUI)
+WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(intl,        [  --enable-intl           use internationalization system],
-            wxUSE_INTL="$enableval",wxUSE_INTL=$DEFAULT_wxUSE_INTL)
-AC_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes],
-            wxUSE_CONFIG="$enableval",wxUSE_CONFIG=$DEFAULT_wxUSE_CONFIG)
-AC_ARG_ENABLE(sockets,        [  --enable-sockets        use socket/network classes],
-              wxUSE_SOCKETS="$enableval",wxUSE_SOCKETS=$DEFAULT_wxUSE_SOCKETS)
-AC_ARG_ENABLE(ipc,        [  --enable-ipc            use interprocess communication (wxSocket etc.)],
-            wxUSE_IPC="$enableval",wxUSE_IPC=$DEFAULT_wxUSE_IPC)
-AC_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec],
-            wxUSE_APPLE_IEEE="$enableval",wxUSE_APPLE_IEEE=$DEFAULT_wxUSE_APPLE_IEEE)
-AC_ARG_ENABLE(timedate,        [  --enable-timedate       use date/time classes],
-            wxUSE_TIMEDATE="$enableval",wxUSE_TIMEDATE=$DEFAULT_wxUSE_TIMEDATE)
-AC_ARG_ENABLE(fraction,        [  --enable-fraction       use wxFraction class],
-            wxUSE_FRACTION="$enableval",wxUSE_FRACTION=$DEFAULT_wxUSE_FRACTION)
-AC_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading],
-            wxUSE_DYNLIB_CLASS="$enableval",wxUSE_DYNLIB_CLASS=$DEFAULT_wxUSE_DYNLIB_CLASS)
-AC_ARG_ENABLE(longlong, [  --enable-longlong       use wxLongLong class],
-            wxUSE_LONGLONG="${enableval}",wxUSE_LONGLONG=$DEFAULT_wxUSE_LONGLONG)
-AC_ARG_ENABLE(log,        [  --enable-log            use logging system],
-            wxUSE_LOG="$enableval",wxUSE_LOG=$DEFAULT_wxUSE_LOG)
-AC_ARG_ENABLE(streams,        [  --enable-streams        use wxStream etc classes],
-            wxUSE_STREAMS="$enableval",wxUSE_STREAMS=$DEFAULT_wxUSE_STREAMS)
-AC_ARG_ENABLE(file,        [  --enable-file           use wxFile classes],
-            wxUSE_FILE="$enableval",wxUSE_FILE=$DEFAULT_wxUSE_FILE)
-AC_ARG_ENABLE(textfile,        [  --enable-textfile       use wxTextFile classes],
-            wxUSE_TEXTFILE="$enableval",wxUSE_TEXTFILE=$DEFAULT_wxUSE_TEXTFILE)
-AC_ARG_ENABLE(unicode,        [  --enable-unicode        compile wxString with Unicode support],
-            wxUSE_UNICODE="$enableval",wxUSE_UNICODE=$DEFAULT_wxUSE_UNICODE)
-AC_ARG_ENABLE(wcsrtombs,    [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs],
-            wxUSE_WCSRTOMBS="$enableval",wxUSE_WCSRTOMBS=$DEFAULT_wxUSE_WCSRTOMBS)
-AC_ARG_ENABLE(joystick,        [  --enable-joystick       compile in joystick support (Linux only)],
-            wxUSE_JOYSTICK="$enableval", wxUSE_JOYSTICK=$DEFAULT_wxUSE_JOYSTICK)
+WX_ARG_ENABLE(intl,        [  --enable-intl           use internationalization system], wxUSE_INTL)
+WX_ARG_ENABLE(config,      [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
+WX_ARG_ENABLE(sockets,     [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_ENABLE(ipc,         [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+WX_ARG_ENABLE(apple_ieee,  [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
+WX_ARG_ENABLE(timedate,    [  --enable-timedate       use date/time classes], wxUSE_TIMEDATE)
+WX_ARG_ENABLE(fraction,    [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
+WX_ARG_ENABLE(dynlib,      [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
+WX_ARG_ENABLE(longlong,    [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
+WX_ARG_ENABLE(log,         [  --enable-log            use logging system], wxUSE_LOG)
+WX_ARG_ENABLE(streams,     [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
+WX_ARG_ENABLE(file,        [  --enable-file           use wxFile classes], wxUSE_FILE)
+WX_ARG_ENABLE(textfile,    [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
+WX_ARG_ENABLE(unicode,     [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(wcsrtombs,   [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
+WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(threads,        [  --enable-threads        use threads],
-            wxUSE_THREADS="${enableval}",wxUSE_THREADS=$DEFAULT_wxUSE_THREADS)
-AC_ARG_ENABLE(serial,        [  --enable-serial         use class serialization],
-            wxUSE_SERIAL="${enableval}",wxUSE_SERIAL=$DEFAULT_wxUSE_SERIAL)
+WX_ARG_ENABLE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
+WX_ARG_ENABLE(serial,      [  --enable-serial         use class serialization], wxUSE_SERIAL)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" GUI options
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(docview,        [  --enable-docview        use document view architecture],
-            wxUSE_DOC_VIEW_ARCHITECTURE="$enableval",wxUSE_DOC_VIEW_ARCHITECTURE=$DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE)
-AC_ARG_ENABLE(help,        [  --enable-help           use help (using external browser at present)],
-            wxUSE_HELP="$enableval",wxUSE_HELP=$DEFAULT_wxUSE_HELP)
-AC_ARG_ENABLE(constraints,    [  --enable-constraints    use layout-constraints system],
-            wxUSE_CONSTRAINTS="$enableval",wxUSE_CONSTRAINTS=$DEFAULT_wxUSE_CONSTRAINTS)
-AC_ARG_ENABLE(printarch,    [  --enable-printarch      use printing architecture],
-            wxUSE_PRINTING_ARCHITECTURE="${enableval}",wxUSE_PRINTING_ARCHITECTURE=$DEFAULT_wxUSE_PRINTING_ARCHITECTURE)
-AC_ARG_ENABLE(mdi,        [  --enable-mdi            use multiple document interface architecture],
-            wxUSE_MDI_ARCHITECTURE="${enableval}",wxUSE_MDI_ARCHITECTURE=$DEFAULT_wxUSE_MDI_ARCHITECTURE)
+WX_ARG_ENABLE(docview,     [  --enable-docview        use document view architecture], wxUSE_DOC_VIEW_ARCHITECTURE)
+WX_ARG_ENABLE(help,        [  --enable-help           use help (using external browser at present)], wxUSE_HELP)
+WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
+WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
+WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI_ARCHITECTURE)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(postscript,    [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)],
-              wxUSE_POSTSCRIPT="$enableval",wxUSE_POSTSCRIPT=$DEFAULT_wxUSE_POSTSCRIPT)
+WX_ARG_ENABLE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 
 dnl VZ: these options seem to be always on, if someone wants to change it please do
-dnl AC_ARG_ENABLE(PS-normalized,    [  --enable-PS-normalized  use normalized PS fonts],
-dnl             wxUSE_NORMALIZED_PS_FONTS="${enableval}",wxUSE_NORMALIZED_PS_FONTS=$DEFAULT_wxUSE_NORMALIZED_PS_FONTS)
-dnl AC_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Metric Font table],
-dnl             wxUSE_AFM_FOR_POSTSCRIPT="${enableval}",wxUSE_AFM_FOR_POSTSCRIPT=$DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT)
+dnl WX_ARG_ENABLE(PS-normalized,    [  --enable-PS-normalized  use normalized PS fonts], dnl             wxUSE_NORMALIZED_PS_FONTS)
+dnl WX_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Metric Font table], dnl             wxUSE_AFM_FOR_POSTSCRIPT)
 
 dnl ---------------------------------------------------------------------------
 dnl resources
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(prologio,        [  --enable-prologio       use Prolog IO library],
-            wxUSE_PROLOGIO="${enableval}",wxUSE_PROLOGIO=$DEFAULT_wxUSE_PROLOGIO)
-AC_ARG_ENABLE(resources,    [  --enable-resources      use wxWindows resources],
-            wxUSE_RESOURCES="${enableval}",wxUSE_RESOURCES=$DEFAULT_wxUSE_RESOURCES)
+WX_ARG_ENABLE(prologio,    [  --enable-prologio       use Prolog IO library], wxUSE_PROLOGIO)
+WX_ARG_ENABLE(resources,   [  --enable-resources      use wxWindows resources], wxUSE_RESOURCES)
 
-AC_ARG_ENABLE(xresources, [  --enable-xresources     use X resources for save (default for gtk+)],
-            wxUSE_X_RESOURCES="${enableval}",wxUSE_X_RESOURCES=$DEFAULT_wxUSE_X_RESOURCES)
+WX_ARG_ENABLE(xresources,  [  --enable-xresources     use X resources for save (default for gtk+)], wxUSE_X_RESOURCES)
+
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(clipboard,    [  --enable-clipboard      use wxClipboard classes],
-            wxUSE_CLIPBOARD="${enableval}",wxUSE_CLIPBOARD=$DEFAULT_wxUSE_CLIPBOARD)
-AC_ARG_ENABLE(dnd,        [  --enable-dnd            use Drag'n'Drop classes],
-            wxUSE_DRAG_AND_DROP="${enableval}",wxUSE_DRAG_AND_DROP=$DEFAULT_wxUSE_DRAG_AND_DROP)
 
-dnl ---------------------------------------------------------------------------
-dnl options which don't work yet
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(wxtree,        [  --enable-wxtree         make wxTree library],
-            wxUSE_WXTREE="${enableval}",wxUSE_WXTREE=$DEFAULT_wxUSE_WXTREE)
+WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard classes], wxUSE_CLIPBOARD)
+WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
+
+dnl TODO: doesn't work yet
+WX_ARG_ENABLE(wxtree,      [  --enable-wxtree         make wxTree library], wxUSE_WXTREE)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(controls, [  --enable-controls       use all usual controls],
-            wxUSE_CONTROLS="${enableval}")
+WX_ARG_ENABLE(controls,    [  --enable-controls       use all usual controls], wxUSE_CONTROLS)
 
 dnl even with --enable-controls, some may be disabled by giving
 dnl --disable-<control> later on the command line - but by default all will be
@@ -634,87 +605,68 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TREECTRL=no
 fi
 
-AC_ARG_ENABLE(accel, [  --enable-accel          use accelerators],
-            wxUSE_ACCEL="${enableval}",wxUSE_ACCEL=$DEFAULT_wxUSE_ACCEL)
-AC_ARG_ENABLE(caret, [  --enable-caret          use wxCaret class],
-            wxUSE_CARET="${enableval}",wxUSE_CARET=$DEFAULT_wxUSE_CARET)
-AC_ARG_ENABLE(bmpbutton, [  --enable-bmpbutton      use wxBitmapButton class],
-            wxUSE_BMPBUTTON="${enableval}",wxUSE_BMPBUTTON=$DEFAULT_wxUSE_BMPBUTTON)
-AC_ARG_ENABLE(checkbox, [  --enable-checkbox       use wxCheckBox class],
-            wxUSE_CHECKBOX="${enableval}",wxUSE_CHECKBOX=$DEFAULT_wxUSE_CHECKBOX)
-AC_ARG_ENABLE(checklst, [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class],
-            wxUSE_CHECKLST="${enableval}",wxUSE_CHECKLST=$DEFAULT_wxUSE_CHECKLST)
-AC_ARG_ENABLE(combobox, [  --enable-combobox       use wxChoice and wxComboBox classes],
-            wxUSE_COMBOBOX="${enableval}",wxUSE_COMBOBOX=$DEFAULT_wxUSE_COMBOBOX)
-AC_ARG_ENABLE(gauge, [  --enable-gauge          use wxGauge class],
-            wxUSE_GAUGE="${enableval}",wxUSE_GAUGE=$DEFAULT_wxUSE_GAUGE)
-AC_ARG_ENABLE(grid, [  --enable-grid           use wxGrid class],
-            wxUSE_GRID="${enableval}",wxUSE_GRID=$DEFAULT_wxUSE_GRID)
-AC_ARG_ENABLE(imaglist, [  --enable-imaglist       use wxImageList class],
-            wxUSE_IMAGLIST="${enableval}",wxUSE_IMAGLIST=$DEFAULT_wxUSE_IMAGLIST)
-AC_ARG_ENABLE(listbox, [  --enable-listbox        use wxListBox class],
-            wxUSE_LISTBOX="${enableval}",wxUSE_LISTBOX=$DEFAULT_wxUSE_LISTBOX)
-AC_ARG_ENABLE(listctrl, [  --enable-listctrl       use wxListCtrl class],
-            wxUSE_LISTCTRL="${enableval}",wxUSE_LISTCTRL=$DEFAULT_wxUSE_LISTCTRL)
-AC_ARG_ENABLE(notebook, [  --enable-notebook       use wxNotebook class],
-            wxUSE_NOTEBOOK="${enableval}",wxUSE_NOTEBOOK=$DEFAULT_wxUSE_NOTEBOOK)
-AC_ARG_ENABLE(radiobox, [  --enable-radiobox       use wxRadioBox class],
-            wxUSE_RADIOBOX="${enableval}",wxUSE_RADIOBOX=$DEFAULT_wxUSE_RADIOBOX)
-AC_ARG_ENABLE(radiobtn, [  --enable-radiobtn       use wxRadioButton class],
-            wxUSE_RADIOBTN="${enableval}",wxUSE_RADIOBTN=$DEFAULT_wxUSE_RADIOBTN)
-AC_ARG_ENABLE(sash, [  --enable-sash           use wxSashWindow class],
-            wxUSE_SASH="${enableval}",wxUSE_SASH=$DEFAULT_wxUSE_SASH)
-AC_ARG_ENABLE(scrollbar, [  --enable-scrollbar      use wxScrollBar class and scrollable windows],
-            wxUSE_SCROLLBAR="${enableval}",wxUSE_SCROLLBAR=$DEFAULT_wxUSE_SCROLLBAR)
-AC_ARG_ENABLE(slider, [  --enable-slider         use wxSlider class],
-            wxUSE_SLIDER="${enableval}",wxUSE_SLIDER=$DEFAULT_wxUSE_SLIDER)
-AC_ARG_ENABLE(spinbtn, [  --enable-spinbtn        use wxSpinButton class],
-            wxUSE_SPINBTN="${enableval}",wxUSE_SPINBTN=$DEFAULT_wxUSE_SPINBTN)
-AC_ARG_ENABLE(splitter, [  --enable-splitter       use wxSplitterWindow class],
-            wxUSE_SPLITTER="${enableval}",wxUSE_SPLITTER=$DEFAULT_wxUSE_SPLITTER)
-AC_ARG_ENABLE(statbmp, [  --enable-statbmp         use wxStaticBitmap class],
-            wxUSE_STATBMP="${enableval}",wxUSE_STATBMP=$DEFAULT_wxUSE_STATBMP)
-AC_ARG_ENABLE(statbox, [  --enable-statbox       use wxStaticBox class],
-            wxUSE_STATBOX="${enableval}",wxUSE_STATBOX=$DEFAULT_wxUSE_STATBOX)
-AC_ARG_ENABLE(statline, [  --enable-statline       use wxStaticLine class],
-            wxUSE_STATLINE="${enableval}",wxUSE_STATLINE=$DEFAULT_wxUSE_STATLINE)
-AC_ARG_ENABLE(statusbar, [  --enable-statusbar      use wxStatusBar class],
-            wxUSE_STATUSBAR="${enableval}",wxUSE_STATUSBAR=$DEFAULT_wxUSE_STATUSBAR)
-AC_ARG_ENABLE(tabdialog, [  --enable-tabdialog        use wxTabControl class],
-            wxUSE_TABDIALOG="${enableval}",wxUSE_TABDIALOG=$DEFAULT_wxUSE_TABDIALOG)
-AC_ARG_ENABLE(toolbar, [  --enable-toolbar      use wxToolBar class],
-            wxUSE_TOOLBAR="${enableval}",wxUSE_TOOLBAR=$DEFAULT_wxUSE_TOOLBAR)
-AC_ARG_ENABLE(treectrl, [  --enable-treectrl       use wxTreeCtrl class],
-            wxUSE_TREECTRL="${enableval}",wxUSE_TREECTRL=$DEFAULT_wxUSE_TREECTRL)
+WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
+WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
+WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
+WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
+WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
+WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxChoice and wxComboBox classes], wxUSE_COMBOBOX)
+WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
+WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
+WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
+WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
+WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
+WX_ARG_ENABLE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
+WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
+WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
+WX_ARG_ENABLE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
+WX_ARG_ENABLE(slider,      [  --enable-slider         use wxSlider class], wxUSE_SLIDER)
+WX_ARG_ENABLE(spinbtn,     [  --enable-spinbtn        use wxSpinButton class], wxUSE_SPINBTN)
+WX_ARG_ENABLE(splitter,    [  --enable-splitter       use wxSplitterWindow class], wxUSE_SPLITTER)
+WX_ARG_ENABLE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
+WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
+WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
+WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
+WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TABDIALOG)
+WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
+WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
 
 dnl ---------------------------------------------------------------------------
 dnl misc GUI options
 dnl ---------------------------------------------------------------------------
 
-AC_ARG_ENABLE(commondlg,        [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)],
-            wxUSE_COMMONDLGS="${enableval}",wxUSE_COMMONDLGS=$DEFAULT_wxUSE_COMMONDLGS)
-AC_ARG_ENABLE(miniframe, [  --enable-miniframe      use wxMiniFrame class],
-            wxUSE_MINIFRAME="${enableval}",wxUSE_MINIFRAME=$DEFAULT_wxUSE_MINIFRAME)
-AC_ARG_ENABLE(tooltips, [  --enable-tooltips       use wxToolTip class],
-            wxUSE_TOOLTIPS="${enableval}",wxUSE_TOOLTIPS=$DEFAULT_wxUSE_TOOLTIPS)
-AC_ARG_ENABLE(splines, [  --enable-splines        use spline drawing code],
-            wxUSE_SPLINES="${enableval}",wxUSE_SPLINES=$DEFAULT_wxUSE_SPLINES)
-AC_ARG_ENABLE(validators, [  --enable-validators     use wxValidator and derived classes],
-            wxUSE_VALIDATORS="${enableval}",wxUSE_VALIDATORS=$DEFAULT_wxUSE_VALIDATORS)
+WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
+WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
+WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
+WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
+WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
+
+dnl cache the options values before (may be) aborting below
+WX_ARG_CACHE_FLUSH
 
 dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
 
+AC_MSG_CHECKING(for toolkit)
+
 if test "$TOOLKIT_GIVEN" = 1; then
   dnl convert "yes" to 1 and "no" to 0
-  wxUSE_GTK=`echo $wxUSE_GTK | sed -e 's/yes/1/' -e 's/no/0/'`
-  wxUSE_MOTIF=`echo $wxUSE_MOTIF | sed -e 's/yes/1/' -e 's/no/0/'`
-  wxUSE_MSW=`echo $wxUSE_MSW | sed -e 's/yes/1/' -e 's/no/0/'`
+  for toolkit in GTK MOTIF MSW; do
+    var=wxUSE_$toolkit
+    eval "value=\$${var}"
+    eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
+  done
 else
   dnl try to guess the most apropriate toolkit for this platform
-  wxUSE_GTK=$DEFAULT_wxUSE_GTK
-  wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF
-  wxUSE_MSW=$DEFAULT_wxUSE_MSW
+  for toolkit in GTK MOTIF MSW; do
+    if test "$has_toolkit_in_cache" != 1; then
+      var=DEFAULT_DEFAULT_wxUSE_$toolkit
+    else
+      var=DEFAULT_wxUSE_$toolkit
+    fi
+    eval "wxUSE_$toolkit=\$${var}"
+  done
 fi
 
 dnl NB: this supposes that the shell is able to handle arithmetic expansion and
@@ -725,11 +677,23 @@ case "$NUM_TOOLKITS" in
   1)
   ;;
   0)
-    AC_MSG_ERROR(Please specify a toolkit)
+    AC_MSG_ERROR(Please specify a toolkit - cannot determine the default for ${host})
   ;;
   *)
-    AC_MSG_ERROR(Please specify at most one toolkit)
+    AC_MSG_ERROR(Please specify at most one toolkit (may be some are cached?))
 esac
+
+dnl cache the wxUSE_<TOOLKIT> values too
+for toolkit in GTK MOTIF MSW; do
+  var=wxUSE_$toolkit
+  eval "value=\$${var}"
+  if test "x$value" != x; then
+    echo "$var=$value" >> ${wx_arg_cache_file}
+    if test "$value" = 1; then
+      AC_MSG_RESULT(`echo $toolkit | tr [[A-Z]] [[a-z]]`)
+    fi
+  fi
+done
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for programs
@@ -923,19 +887,8 @@ dnl ------------------------------------------------------------------------
 dnl Check for libraries
 dnl ------------------------------------------------------------------------
 
-dnl flush the cache because checking for libraries might abort
+dnl flush the cache because checking for libraries below might abort
 AC_CACHE_SAVE
-
-dnl find the X11 include and library files
-dnl   defines x_includes and x_libraries
-AC_PATH_XTRA
-
-if test "$no_x" = "yes"; then
-  AC_MSG_ERROR(X11 libraries not found, aborting)
-fi
-
-CHECK_INCLUDE="-I/usr/include $X_CFLAGS"
-CHECK_LIB="-L/lib -L/usr/lib $X_LIBS"
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
@@ -965,8 +918,19 @@ if test "$wxUSE_GTK" = 1; then
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
+    dnl find the X11 include and library files
+    dnl   defines x_includes and x_libraries
+    AC_PATH_XTRA
+
+    if test "$no_x" = "yes"; then
+      AC_MSG_ERROR(X11 libraries not found, aborting)
+    fi
+
+    TOOLKIT_INCLUDE="$X_CFLAGS"
+    GUI_TK_LIBRARY="$X_LIBS"
+
     AC_MSG_CHECKING(for Motif/Lesstif includes)
-    AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
+    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
     if test "$ac_find_includes" != "" ; then
         AC_MSG_RESULT(found $ac_find_includes)
     else
@@ -975,13 +939,13 @@ if test "$wxUSE_MOTIF" = 1; then
     fi
 
     AC_MSG_CHECKING(for Motif/Lesstif library)
-    AC_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
     if test "$ac_find_libraries" != "" ; then
-        AC_INCLUDE_PATH_EXIST($ac_find_includes, $CHECK_INCLUDE)
-        AC_LINK_PATH_EXIST($ac_find_libraries, $CHECK_LIB)
+        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
-        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
+        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
+        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
         AC_MSG_RESULT(no)
@@ -989,10 +953,10 @@ if test "$wxUSE_MOTIF" = 1; then
     fi
 
     AC_MSG_CHECKING(for Xt library)
-    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
     if test "$ac_find_libraries" != "" ; then
-        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
         AC_MSG_RESULT(no)
@@ -1001,10 +965,10 @@ if test "$wxUSE_MOTIF" = 1; then
 
     XPM_LINK=""
     AC_MSG_CHECKING(for Xpm library)
-    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
     if test "$ac_find_libraries" != "" ; then
-        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
+        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
         XPM_LINK="-lXpm "
         AC_DEFINE(wxHAVE_LIB_XPM)
         AC_MSG_RESULT(found at $ac_find_libraries)
@@ -1014,7 +978,7 @@ if test "$wxUSE_MOTIF" = 1; then
     fi
 
     GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXt -lX11 -lm"
-    GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
+    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
 fi
 
@@ -1325,7 +1289,7 @@ if test "$wxUSE_ZLIB" = "yes" ; then
   ZLIB_INCLUDE="-I\${srcdir}/../zlib"
   LTLIBOBJS="$LTLIBOBJS adler32.lo compress.lo crc32.lo gzio.lo uncompr.lo deflate.lo \
                         trees.lo zutil.lo inflate.lo infblock.lo inftrees.lo infcodes.lo \
-			infutil.lo inffast.lo"
+                        infutil.lo inffast.lo"
 fi
 
 PNG_INCLUDE=
@@ -1333,7 +1297,7 @@ if test "$wxUSE_LIBPNG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBPNG)
   LTLIBOBJS="$LTLIBOBJS png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo \
                         pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo \
-			pngmem.lo pngerror.lo pngpread.lo"
+                        pngmem.lo pngerror.lo pngpread.lo"
   EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/../png"
   PNG_INCLUDE="-I\${srcdir}/../png"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
@@ -1879,7 +1843,7 @@ if test "$wxUSE_GUI" = "yes"; then
   dnl TODO some samples are never built so far:
   dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                   forty fractal image wxpoem"
+                   forty fractal image notepad wxpoem"
 fi
 
 dnl for convenience, sort the files to build in alphabetical order
@@ -1950,6 +1914,7 @@ AC_OUTPUT([
             Makefile
             src/Makefile
             src/gtk/Makefile
+            src/motif/Makefile
             include/Makefile
             include/wx/Makefile
             include/wx/generic/Makefile
@@ -1958,9 +1923,9 @@ AC_OUTPUT([
             include/wx/msw/Makefile
             include/wx/protocol/Makefile
             include/wx/unix/Makefile
-	    misc/Makefile
-	    misc/afm/Makefile
-	    misc/gs_afm/Makefile
+            misc/Makefile
+            misc/afm/Makefile
+            misc/gs_afm/Makefile
             samples/Makefile
             samples/bombs/Makefile
             samples/caret/Makefile
