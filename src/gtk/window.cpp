@@ -1521,7 +1521,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         GdkEvent *peek_event = gdk_event_peek();
         if (peek_event)
         {
-            if (peek_event->type == GDK_2BUTTON_PRESS)
+            if ((peek_event->type == GDK_2BUTTON_PRESS) ||
+                (peek_event->type == GDK_3BUTTON_PRESS))
             {
                 gdk_event_free( peek_event );
                 return TRUE;
@@ -1541,6 +1542,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         {
             case GDK_BUTTON_PRESS: event_type = wxEVT_LEFT_DOWN; break;
             case GDK_2BUTTON_PRESS: event_type = wxEVT_LEFT_DCLICK; break;
+            case GDK_3BUTTON_PRESS: return FALSE;
             default:  break;
         }
     }
