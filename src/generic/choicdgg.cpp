@@ -86,7 +86,7 @@ int ConvertWXArrayToC(const wxArrayString& aChoices, wxString **choices)
 
     for ( int i = 0; i < n; i++ )
     {
-        (*choices)[i] = aChoices[i];   
+        (*choices)[i] = aChoices[i];
     }
 
     return n;
@@ -317,7 +317,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxString& message,
                                const wxString& caption,
                                int n, const wxString *choices,
-                               long WXUNUSED(styleDlg), // FIXME: why unused?
+                               long styleDlg,
                                const wxPoint& pos,
                                long styleLbox)
 {
@@ -346,7 +346,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 #endif
 
     // 4) buttons
-    topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
+    topsizer->Add( CreateButtonSizer( styleDlg & (wxOK|wxCANCEL) ), 0, wxCENTRE | wxALL, 10 );
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
