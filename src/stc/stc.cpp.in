@@ -327,7 +327,6 @@ void wxStyledTextCtrl::OnScroll(wxScrollEvent& evt) {
 void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
     wxSize sz = GetClientSize();
     m_swx->DoSize(sz.x, sz.y);
-    Refresh(FALSE);
 }
 
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
