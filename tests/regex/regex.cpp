@@ -45,6 +45,10 @@
 #include "wx/cppunit.h"
 #include <stdexcept>
 
+#ifdef __DMC__
+    #include <locale.h>
+#endif
+
 using namespace std;
 using namespace CppUnit;
 

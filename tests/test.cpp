@@ -157,10 +157,10 @@ void TestApp::List(Test *test, const string& parent /*=""*/) const
             cout << "  " << name.substr(i + 1) << "\n";
         }
 
-        typedef const vector<Test*> Tests;
+        typedef vector<Test*> Tests;
         typedef Tests::const_iterator Iter;
 
-        Tests& tests = suite->getTests();
+        const Tests& tests = suite->getTests();
 
         for (Iter it = tests.begin(); it != tests.end(); ++it)
             List(*it, name);
