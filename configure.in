@@ -2387,6 +2387,7 @@ case "${host}" in
 
         dnl If we are cross compiling we want to use the 'full' unix type name for the
         dnl lib, but for a native install use the windows style naming convention.
+        dnl (excepting again that we strip the ELF style version numbers off it).
 
         dnl FIXME: is this GL stuff actually even used for wxMSW?  should it be??
 
@@ -2395,6 +2396,9 @@ case "${host}" in
             WX_LIBRARY_GL="wxmsw_gl${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
             WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
             WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.${SO_SUFFIX}"
+        else
+            WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}"
+            WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
         fi
 
 esac
@@ -2506,12 +2510,12 @@ if test "$wxUSE_SHARED" = "yes"; then
 
       *-*-cygwin* | *-*-mingw32* )
 
-        WX_LIBRARY_IMPORTLIB="lib${WX_LIBRARY}.lib"
+        WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
         dnl  FIXME: this is a hack..  do we need a --static flag to wx-config?
         dnl  or is this just plain wrong?
         dnl  This is NOT compatible with both static and dynamic linking
-        WXCONFIG_LIBS="${WX_LIBRARY_IMPORTLIB}"
+        WXCONFIG_LIBS="-l${WX_LIBRARY_NAME_SHARED}"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
