@@ -748,6 +748,10 @@
  */
 #define WXWIN_COMPATIBILITY_2_2 0
 /*
+ * Compatibility with 2.4 API
+ */
+#define WXWIN_COMPATIBILITY_2_4 0
+/*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
 #define WXDEBUG 0

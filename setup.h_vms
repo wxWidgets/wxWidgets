@@ -772,7 +772,11 @@
 /*
  * Compatibility with 2.2 API
  */
-#define WXWIN_COMPATIBILITY_2_2 1
+#define WXWIN_COMPATIBILITY_2_2 0
+/*
+ * Compatibility with 2.4 API
+ */
+#define WXWIN_COMPATIBILITY_2_4 1
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
