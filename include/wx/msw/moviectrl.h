@@ -26,12 +26,12 @@ enum wxMovieCtrlState
 class wxMovieCtrl : public wxControl
 {
 public:
-    wxMovieCtrl() 
+    wxMovieCtrl() : m_bLoaded(false)
     {                                                                   }
 
     wxMovieCtrl(wxWindow* parent, wxWindowID id, const wxString& fileName, const wxString& label = wxT(""),
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, 
-                long style = 0, const wxString& name = wxPanelNameStr)
+                long style = 0, const wxString& name = wxPanelNameStr) : m_bLoaded(false)
     {   Create(parent, id, fileName, label, pos, size, style, name);    } 
 
     ~wxMovieCtrl();
@@ -43,6 +43,8 @@ public:
     bool Play();
     bool Pause();
     bool Stop();
+
+    bool Load(const wxString& fileName);
     
     wxMovieCtrlState GetState();
 
@@ -60,7 +62,10 @@ public:
 protected:
     void OnSize(wxSizeEvent& evt);
     wxSize DoGetBestSize() const;
+    void Cleanup();
+
     bool m_bVideo;
+    bool m_bLoaded;
 
     //msw-specific - we need to overload the window proc
     WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

@@ -38,7 +38,7 @@ Contructors
 
 \docparam{parent}{parent of this control.  Must not be NULL.}
 \docparam{id}{id to use for events}
-\docparam{fileName}{File the movie is located at.}
+\docparam{fileName}{If not empty, loads this file and starts playing it immediately.}
 \docparam{label}{Control label - possible caption for the movie.}
 \docparam{pos}{Position to put control at.}
 \docparam{size}{Size to put the control at and to stretch movie to.}
@@ -55,7 +55,7 @@ Creates this control.  Returns \tt{false} if it can't load the movie located at 
 
 \docparam{parent}{parent of this control.  Must not be NULL.}
 \docparam{id}{id to use for events}
-\docparam{fileName}{File the movie is located at.}
+\docparam{fileName}{If not empty, loads this file and starts playing it immediately.}
 \docparam{label}{Control label - possible caption for the movie.}
 \docparam{pos}{Position to put control at.}
 \docparam{size}{Size to put the control at and to stretch movie to.}
@@ -90,6 +90,13 @@ Obtains the state the playback of the movie is in -
 
 Obtains the length - the total amount of time the movie has
 
+\membersection{wxMovieCtrl::Load}\label{wxmoviectrlload}
+
+\func{bool}{Load}{\param{const wxString\& }{fileName}}
+
+Loads the file that \tt{fileName} refers to.
+
+Unlike Create, you must manually call Play() to start playing the file.
 
 \membersection{wxMovieCtrl::Pause}\label{wxmoviectrlpause}
 

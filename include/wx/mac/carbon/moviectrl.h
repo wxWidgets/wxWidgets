@@ -26,12 +26,12 @@ enum wxMovieCtrlState
 class wxMovieCtrl : public wxControl
 {
 public:
-    wxMovieCtrl() 
+    wxMovieCtrl() : m_bLoaded(false)
     {                                                                   }
 
     wxMovieCtrl(wxWindow* parent, wxWindowID id, const wxString& fileName, const wxString& label = wxT(""),
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, 
-                long style = 0, const wxString& name = wxPanelNameStr)
+                long style = 0, const wxString& name = wxPanelNameStr) : m_bLoaded(false)
     {   Create(parent, id, fileName, label, pos, size, style, name);    } 
 
     ~wxMovieCtrl();
@@ -49,6 +49,8 @@ public:
     double GetPlaybackRate();
     bool SetPlaybackRate(double dRate);
 
+    bool Load(const wxString& fileName);
+
 #if wxUSE_DATETIME
     bool Seek(const wxTimeSpan& where);
     wxTimeSpan Tell();
@@ -59,6 +61,9 @@ protected:
     void OnSize(wxSizeEvent& evt);
     wxSize DoGetBestSize() const;
     bool InitQT();
+    void Cleanup();
+
+    bool m_bLoaded;
 
     struct MovieRecord* m_movie;
     wxSize m_bestSize;

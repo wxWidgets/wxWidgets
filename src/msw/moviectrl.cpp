@@ -51,6 +51,35 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
                          const wxString& label, const wxPoint& pos, const wxSize& size, 
                          long style, const wxString& name)
 {
+    //do some window stuff - ORDER IS IMPORTANT
+    //base create
+    if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER | wxCLIP_CHILDREN, wxDefaultValidator, name) )
+        return false;
+
+    //Set our background color to black by default
+    SetBackgroundColour(*wxBLACK);
+
+    if(!fileName.empty())
+    {
+        if (!Load(fileName))
+            return false;
+
+        SetLabel(label);
+
+        if(!Play())
+            return false;
+    }
+    else
+        wxControl::SetLabel(label);
+
+    return true;
+}
+
+bool wxMovieCtrl::Load(const wxString& fileName)
+{
+    if(m_bLoaded)
+        Cleanup();                
+
     //cast helpers
     IGraphBuilder*& pGB = (IGraphBuilder*&) m_pGB;
     IMediaControl*& pMC = (IMediaControl*&) m_pMC;
@@ -95,17 +124,6 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     m_bestSize.x = nSX;
     m_bestSize.y = nSY;
 
-
-    //do some window stuff - ORDER IS IMPORTANT
-    //base create
-    if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER | wxCLIP_CHILDREN, wxDefaultValidator, name) )
-        return false;
-
-    //TODO:  Connect() here instead of message maps
-
-    //Set our background color to black by default
-    SetBackgroundColour(*wxBLACK);
-
     if (m_bVideo)
     {
         wxDSVERIFY( pVW->put_Owner((OAHWND)this->GetHandle()) );
@@ -117,9 +135,7 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     //set the time format
     wxDSVERIFY( pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME) );
 
-    SetLabel(label);
-    Play();
-
+    m_bLoaded = true;
     return true;
 }
 
@@ -277,8 +293,13 @@ WXLRESULT wxMovieCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-wxMovieCtrl::~wxMovieCtrl()
+void wxMovieCtrl::Cleanup()
 {
+    if(m_bVideo)
+        this->Disconnect( wxID_ANY,
+        wxEVT_SIZE,
+        (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) &wxMovieCtrl::OnSize );
+
     //cast helpers
     IGraphBuilder*& pGB = (IGraphBuilder*&) m_pGB;
     IMediaControl*& pMC = (IMediaControl*&) m_pMC;
@@ -303,6 +324,12 @@ wxMovieCtrl::~wxMovieCtrl()
     SAFE_RELEASE(pBV);
     SAFE_RELEASE(pVW);
     SAFE_RELEASE(pGB);
+}
+
+wxMovieCtrl::~wxMovieCtrl()
+{
+    if (m_bLoaded)
+        Cleanup();
 }
 
 wxSize wxMovieCtrl::DoGetBestSize() const

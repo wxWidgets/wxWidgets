@@ -130,6 +130,34 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
                          const wxString& label, const wxPoint& pos, const wxSize& size, 
                          long WXUNUSED(style), const wxString& name)
 {
+     //do some window stuff
+    if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER, wxDefaultValidator, name) )
+        return false;
+
+    //Set our background color to black by default
+    SetBackgroundColour(*wxBLACK);
+
+    if(!fileName.empty())
+    {
+        if (!Load(fileName))
+            return false;
+
+        SetLabel(label);
+
+        if(!Play())
+            return false;
+    }
+    else
+        wxControl::SetLabel(label);
+
+    return true;
+}
+
+bool wxMovieCtrl::Load(const wxString& fileName)
+{
+    if(m_bLoaded)
+        Cleanup();
+
     if ( !InitQT() )
         return false;
 
@@ -186,13 +214,6 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     wxEVT_SIZE,
     (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) &wxMovieCtrl::OnSize );
         
-     //do some window stuff
-    if ( !wxControl::Create(parent, id, pos, size, wxNO_BORDER, wxDefaultValidator, name) )
-        return false;
-
-    //Set our background color to black by default
-    SetBackgroundColour(*wxBLACK);
-
     //reparent movie
 #ifdef __WXMSW__
     CreatePortAssociation(this->GetHWND(), NULL, 0L);
@@ -206,12 +227,9 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
 #endif
     , nil);
 
-    //go!
-    SetLabel(label);
-    Play();
-
     return true;
 }
+
 
 bool wxMovieCtrl::Play()
 {
@@ -290,23 +308,31 @@ wxMovieCtrlState wxMovieCtrl::GetState()
         return wxMOVIECTRL_PAUSED;
 }
 
+void wxMovieCtrl::Cleanup()
+{
+    //soldier in OnSize
+    this->Disconnect( wxID_ANY,
+    wxEVT_SIZE,
+    (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) &wxMovieCtrl::OnSize );
+
+    delete m_timer;
+
+    StopMovie(m_movie);
+    DisposeMovie(m_movie);
+    
+    //Note that ExitMovies() is not neccessary, but
+    //the docs are fuzzy on whether or not TerminateQTML is
+    ExitMovies();
+
+#ifndef __WXMAC__
+    TerminateQTML();
+#endif
+}
+
 wxMovieCtrl::~wxMovieCtrl()
 {
-    if (m_timer)
-    {
-        delete m_timer;
-
-        StopMovie(m_movie);
-        DisposeMovie(m_movie);
-        
-        //Note that ExitMovies() is not neccessary, but
-        //the docs are fuzzy on whether or not TerminateQTML is
-        ExitMovies();
-
-    #ifndef __WXMAC__
-        TerminateQTML();
-    #endif
-    }
+    if(m_bLoaded)
+        Cleanup();
 }
 
 wxSize wxMovieCtrl::DoGetBestSize() const
