@@ -113,7 +113,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 
 #elif defined(__WXPM__) || defined(__EMX__)
     char    err[256] = "";
-    DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle)
+    DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
 
 #elif defined(HAVE_DLOPEN)
 
@@ -183,7 +183,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     if ( m_handle == 0 )
     {
         wxString msg(_("Failed to load shared library '%s'"));
-#ifdef HAVE_DLERROR
+#if defined(HAVE_DLERROR) && !defined(__EMX__)
         const wxChar  *err = dlerror();
         if( err )
             wxLogError( msg, err );
@@ -261,7 +261,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     if ( !symbol )
     {
         wxString msg(_("wxDynamicLibrary failed to GetSymbol '%s'"));
-#ifdef HAVE_DLERROR
+#if defined(HAVE_DLERROR) && !defined(__EMX__)
         const wxChar *err = dlerror();
         if( err )
         {
