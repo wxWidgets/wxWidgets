@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "treectrlgtk.h"
+#pragma implementation "treectrl.h"
 #endif
 
 #include "wx/gtk/treectrl.h"
