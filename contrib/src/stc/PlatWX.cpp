@@ -603,8 +603,10 @@ Window::~Window() {
 }
 
 void Window::Destroy() {
-    if (id)
+    if (id) {
+        Show(FALSE);
         GETWIN(id)->Destroy();
+    }
     id = 0;
 }
 
@@ -736,7 +738,7 @@ public:
 
         SetBackgroundColour(*wxBLUE);
         lv = new wxSTCListBox(this, id, wxDefaultPosition, wxDefaultSize,
-                              wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER);
+                              wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxNO_BORDER);
         lv->SetCursor(wxCursor(wxCURSOR_ARROW));
         lv->InsertColumn(0, wxEmptyString);
         lv->InsertColumn(1, wxEmptyString);
@@ -770,7 +772,7 @@ public:
         wxSize sz = GetClientSize();
         lv->SetSize(1, 1, sz.x-2, sz.y-2);
         lv->SetColumnWidth(0, IconWidth()+4);
-        lv->SetColumnWidth(1, sz.x - lv->GetColumnWidth(0) -
+        lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
                            wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
         event.Skip();
     }
