@@ -34,6 +34,7 @@
 #include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/dynarray.h"
+#include "wx/log.h"
 
 #include <math.h>
 #include <float.h>
@@ -327,13 +328,13 @@ class wxGIFTimer : public wxTimer
 /* XPM */
 static const char * broken_image_xpm[] = {
 "29 31 7 1",
-" 	c None",
-".	c #808080",
-"+	c #FFFFFF",
-"@	c #C0C0C0",
-"#	c #000000",
-"$	c #333366",
-"%	c #B2B2B2",
+"   c None",
+".  c #808080",
+"+  c #FFFFFF",
+"@  c #C0C0C0",
+"#  c #000000",
+"$  c #333366",
+"%  c #B2B2B2",
 ".....................        ",
 ".+++++++++++++++++++..       ",
 ".+++++++++++++++++++.@.      ",
