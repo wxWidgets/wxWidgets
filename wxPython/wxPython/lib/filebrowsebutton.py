@@ -13,7 +13,7 @@
 #----------------------------------------------------------------------
 
 from wxPython.wx import *
-import os
+import os, types
 
 #----------------------------------------------------------------------
 
@@ -109,6 +109,8 @@ class FileBrowseButton(wxPanel):
         self.SetAutoLayout(true)
         self.SetSizer( outsidebox )
         self.Layout()
+        if type( size ) == types.TupleType:
+            size = apply( wxSize, size)
         if size.width != -1 or size.height != -1:
             self.SetSize(size)
 
