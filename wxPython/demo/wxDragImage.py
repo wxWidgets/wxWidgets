@@ -100,7 +100,11 @@ class DragCanvas(wxScrolledWindow):
         EVT_LEFT_DOWN(self, self.OnLeftDown)
         EVT_LEFT_UP(self, self.OnLeftUp)
         EVT_MOTION(self, self.OnMotion)
+        EVT_LEAVE_WINDOW(self, self.OnLeaveWindow)
 
+
+    def OnLeaveWindow(self, evt):
+        pass
 
 
     def TileBackground(self, dc):
