@@ -180,6 +180,8 @@ static inline void wxBringWindowToTop(HWND hwnd)
     }
 }
 
+#ifndef __WXWINCE__
+
 // ensure that all our parent windows have WS_EX_CONTROLPARENT style
 static void EnsureParentHasControlParentStyle(wxWindow *parent)
 {
@@ -196,7 +198,6 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
        but if the parent doesn't have it, it wouldn't recurse inside it later
        on and so wouldn't have a chance of getting back to this window neither.
      */
-#ifndef __WXWINCE__
     while ( parent && !parent->IsTopLevel() )
     {
         LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
@@ -209,8 +210,9 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
 
         parent = parent->GetParent();
     }
-#endif // !__WXWINCE__
 }
+
+#endif // !__WXWINCE__
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -3096,6 +3098,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
+    // VZ: anyonce cares to explain why is this done for CE?
 #ifdef __WXWINCE__
     if (extendedStyle == 0)
     {
@@ -3112,7 +3115,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
             );
     }
     else
-#endif
+#endif // __WXWINCE__
     {
         m_hWnd = (WXHWND)::CreateWindowEx
             (
