@@ -101,6 +101,9 @@ int _System soclose(int);
 #ifdef sgi
 #  include <bstring.h>
 #endif
+#ifdef _AIX
+#  include <strings.h>
+#endif
 #include <signal.h>
 
 #ifndef SOCKLEN_T
