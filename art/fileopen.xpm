@@ -22,5 +22,4 @@ static char *fileopen_xpm[] = {
 " .X.OOOOOOOOO.  ",
 " ..OOOOOOOOO.   ",
 " ...........    ",
-"                "
-};
+"                "};

@@ -1,7 +1,7 @@
 /* XPM */
 static char *cdrom_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 16 10 1",
+"16 15 10 1",
 "     s None    c None",
 ".    c #808080",
 "X    c #c0c0c0",
@@ -26,5 +26,4 @@ static char *cdrom_xpm[] = {
 ".@++++..XoX+++  ",
 ".@$%@@XX+++X.+  ",
 ".............+  ",
-" ++++++++++++   ",
-"                "};
+" ++++++++++++   "};

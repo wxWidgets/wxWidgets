@@ -1,7 +1,7 @@
 /* XPM */
 static char *removable_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 16 7 1",
+"16 15 7 1",
 "     s None    c None",
 ".    c #808080",
 "X    c #c0c0c0",
@@ -9,7 +9,6 @@ static char *removable_xpm[] = {
 "O    c Gray100",
 "+    c Red",
 "@    c #800000",
-"                ",
 "                ",
 "                ",
 "  ............. ",

@@ -1,7 +1,7 @@
 /* XPM */
 static char *dir_up_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 16 4 1",
+"16 15 4 1",
 "@ c #000000",
 "  c None",
 "* c Yellow",
@@ -21,6 +21,4 @@ static char *dir_up_xpm[] = {
 " @*:*:*:*:*:*:*@",
 " @:*:*:*:*:*:*:@",
 " @@@@@@@@@@@@@@@",
-"                ",
-"                ",
-};
+"                "};

@@ -1,10 +1,9 @@
 /* XPM */
 static char * home_xpm[] = {
-"16 16 3 1",
+"16 15 3 1",
 " 	c None",
 ".	c #000000000000",
 "X	c #FFFFFFFFFFFF",
-"                ",
 "       ..       ",
 "  .   .XX.      ",
 "  .  .XXXX.     ",

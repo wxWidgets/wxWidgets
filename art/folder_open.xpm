@@ -1,7 +1,7 @@
 /* XPM */
 static char * folder_open_xpm[] = {
 /* width height ncolors chars_per_pixel */
-"16 16 6 1",
+"16 15 6 1",
 /* colors */
 "   s None  c None",
 ".  c #000000",
@@ -24,5 +24,4 @@ static char * folder_open_xpm[] = {
 "  @$+#+#+#+##@..",
 "  @@@@@@@@@@@@@.",
 "   .............",
-"                ",
 "                "};
