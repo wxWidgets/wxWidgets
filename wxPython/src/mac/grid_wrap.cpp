@@ -3416,15 +3416,27 @@ static PyObject * GridCellNumberEditor_swigregister(PyObject *, PyObject *args) 
 }
 static PyObject *_wrap_new_GridCellFloatEditor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
+    int arg1 = (int) -1 ;
+    int arg2 = (int) -1 ;
     wxGridCellFloatEditor *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        NULL 
+        (char *) "width",(char *) "precision", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_GridCellFloatEditor",kwnames)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_GridCellFloatEditor",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        arg1 = (int) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxGridCellFloatEditor *)new wxGridCellFloatEditor();
+        result = (wxGridCellFloatEditor *)new wxGridCellFloatEditor(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8782,6 +8794,7 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *, PyObject *args, PyObject 
 #else
             PyObject* str  = PyObject_Str(item);
 #endif
+            if (PyErr_Occurred())  SWIG_fail;
             arg3->Add(Py2wxString(str));
             Py_DECREF(item);
             Py_DECREF(str);

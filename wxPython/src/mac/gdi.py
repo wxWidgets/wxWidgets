@@ -51,13 +51,13 @@ class Colour(core.Object):
     etc.  Valid RGB values are in the range 0 to 255.
 
     In wxPython there are typemaps that will automatically convert from a colour
-    name, or from a "#RRGGBB" colour hex value string to a wx.Colour object when
+    name, or from a '#RRGGBB' colour hex value string to a wx.Colour object when
     calling C++ methods that expect a wxColour.  This means that the following are
     all equivallent:
 
         win.SetBackgroundColour(wxColour(0,0,255))
-        win.SetBackgroundColour("BLUE")
-        win.SetBackgroundColour("#0000FF")
+        win.SetBackgroundColour('BLUE')
+        win.SetBackgroundColour('#0000FF')
 
     You can retrieve the various current system colour settings with
     wx.SystemSettings.GetColour.
@@ -421,13 +421,13 @@ class Brush(GDIObject):
         """Ok() -> bool"""
         return _gdi.Brush_Ok(*args, **kwargs)
 
-    def GetMacTheme(*args, **kwargs):
-        """GetMacTheme() -> short"""
-        return _gdi.Brush_GetMacTheme(*args, **kwargs)
+    def MacGetTheme(*args, **kwargs):
+        """MacGetTheme() -> short"""
+        return _gdi.Brush_MacGetTheme(*args, **kwargs)
 
-    def SetMacTheme(*args, **kwargs):
-        """SetMacTheme(short macThemeBrush)"""
-        return _gdi.Brush_SetMacTheme(*args, **kwargs)
+    def MacSetTheme(*args, **kwargs):
+        """MacSetTheme(short macThemeBrush)"""
+        return _gdi.Brush_MacSetTheme(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
 
@@ -485,6 +485,14 @@ class Bitmap(GDIObject):
         monochrome bitmap.
         """
         return _gdi.Bitmap_GetDepth(*args, **kwargs)
+
+    def GetSize(*args, **kwargs):
+        """
+        GetSize() -> Size
+
+        Get the size of the bitmap.
+        """
+        return _gdi.Bitmap_GetSize(*args, **kwargs)
 
     def ConvertToImage(*args, **kwargs):
         """
@@ -574,6 +582,14 @@ class Bitmap(GDIObject):
         """
         return _gdi.Bitmap_SetDepth(*args, **kwargs)
 
+    def SetSize(*args, **kwargs):
+        """
+        SetSize(Size size)
+
+        Set the bitmap size
+        """
+        return _gdi.Bitmap_SetSize(*args, **kwargs)
+
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
         """__eq__(Bitmap other) -> bool"""
@@ -590,18 +606,6 @@ class BitmapPtr(Bitmap):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Bitmap
 _gdi.Bitmap_swigregister(BitmapPtr)
-
-def EmptyBitmap(*args, **kwargs):
-    """
-    EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
-
-    Creates a new bitmap of the given size.  A depth of -1 indicates the depth of
-    the current screen or visual. Some platforms only support 1 for monochrome and
-    -1 for the current colour setting.
-    """
-    val = _gdi.new_EmptyBitmap(*args, **kwargs)
-    val.thisown = 1
-    return val
 
 def BitmapFromIcon(*args, **kwargs):
     """
@@ -646,6 +650,19 @@ def BitmapFromBits(*args, **kwargs):
     platform dependent.
     """
     val = _gdi.new_BitmapFromBits(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def EmptyBitmap(*args):
+    """
+    EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
+    EmptyBitmap(Size size, int depth=-1) -> Bitmap
+
+    Creates a new bitmap of the given size.  A depth of -1 indicates
+    the depth of the current screen or visual. Some platforms only
+    support 1 for monochrome and -1 for the current colour setting.
+    """
+    val = _gdi.new_EmptyBitmap(*args)
     val.thisown = 1
     return val
 
@@ -1167,6 +1184,7 @@ FONTENCODING_ISO8859_14 = _gdi.FONTENCODING_ISO8859_14
 FONTENCODING_ISO8859_15 = _gdi.FONTENCODING_ISO8859_15
 FONTENCODING_ISO8859_MAX = _gdi.FONTENCODING_ISO8859_MAX
 FONTENCODING_KOI8 = _gdi.FONTENCODING_KOI8
+FONTENCODING_KOI8_U = _gdi.FONTENCODING_KOI8_U
 FONTENCODING_ALTERNATIVE = _gdi.FONTENCODING_ALTERNATIVE
 FONTENCODING_BULGARIAN = _gdi.FONTENCODING_BULGARIAN
 FONTENCODING_CP437 = _gdi.FONTENCODING_CP437
@@ -1445,6 +1463,11 @@ class FontMapper(object):
         return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
+    def GetEncodingFromName(*args, **kwargs):
+        """GetEncodingFromName(String name) -> int"""
+        return _gdi.FontMapper_GetEncodingFromName(*args, **kwargs)
+
+    GetEncodingFromName = staticmethod(GetEncodingFromName)
     def SetConfig(*args, **kwargs):
         """SetConfig(ConfigBase config)"""
         return _gdi.FontMapper_SetConfig(*args, **kwargs)
@@ -1505,6 +1528,10 @@ def FontMapper_GetEncodingName(*args, **kwargs):
 def FontMapper_GetEncodingDescription(*args, **kwargs):
     """FontMapper_GetEncodingDescription(int encoding) -> String"""
     return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
+
+def FontMapper_GetEncodingFromName(*args, **kwargs):
+    """FontMapper_GetEncodingFromName(String name) -> int"""
+    return _gdi.FontMapper_GetEncodingFromName(*args, **kwargs)
 
 def FontMapper_GetDefaultConfigPath(*args, **kwargs):
     """FontMapper_GetDefaultConfigPath() -> String"""

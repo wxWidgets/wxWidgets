@@ -24,8 +24,8 @@ class Panel(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
 
         Create the GUI part of the Window for 2-phase creation mode.
@@ -33,7 +33,12 @@ class Panel(core.Window):
         return _windows.Panel_Create(*args, **kwargs)
 
     def InitDialog(*args, **kwargs):
-        """InitDialog()"""
+        """
+        InitDialog()
+
+        Sends an EVT_INIT_DIALOG event, whose handler usually transfers
+        data to the dialog via validators.
+        """
         return _windows.Panel_InitDialog(*args, **kwargs)
 
 
@@ -190,6 +195,27 @@ def PreScrolledWindow(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+STAY_ON_TOP = _windows.STAY_ON_TOP
+ICONIZE = _windows.ICONIZE
+MINIMIZE = _windows.MINIMIZE
+MAXIMIZE = _windows.MAXIMIZE
+CLOSE_BOX = _windows.CLOSE_BOX
+THICK_FRAME = _windows.THICK_FRAME
+SYSTEM_MENU = _windows.SYSTEM_MENU
+MINIMIZE_BOX = _windows.MINIMIZE_BOX
+MAXIMIZE_BOX = _windows.MAXIMIZE_BOX
+TINY_CAPTION_HORIZ = _windows.TINY_CAPTION_HORIZ
+TINY_CAPTION_VERT = _windows.TINY_CAPTION_VERT
+RESIZE_BOX = _windows.RESIZE_BOX
+RESIZE_BORDER = _windows.RESIZE_BORDER
+DIALOG_NO_PARENT = _windows.DIALOG_NO_PARENT
+DEFAULT_FRAME_STYLE = _windows.DEFAULT_FRAME_STYLE
+DEFAULT_DIALOG_STYLE = _windows.DEFAULT_DIALOG_STYLE
+FRAME_TOOL_WINDOW = _windows.FRAME_TOOL_WINDOW
+FRAME_FLOAT_ON_PARENT = _windows.FRAME_FLOAT_ON_PARENT
+FRAME_NO_WINDOW_MENU = _windows.FRAME_NO_WINDOW_MENU
+FRAME_NO_TASKBAR = _windows.FRAME_NO_TASKBAR
+FRAME_SHAPED = _windows.FRAME_SHAPED
 FULLSCREEN_NOMENUBAR = _windows.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows.FULLSCREEN_NOSTATUSBAR
@@ -260,6 +286,14 @@ class TopLevelWindow(core.Window):
     def SetShape(*args, **kwargs):
         """SetShape(Region region) -> bool"""
         return _windows.TopLevelWindow_SetShape(*args, **kwargs)
+
+    def MacSetMetalAppearance(*args, **kwargs):
+        """MacSetMetalAppearance(bool on)"""
+        return _windows.TopLevelWindow_MacSetMetalAppearance(*args, **kwargs)
+
+    def MacGetMetalAppearance(*args, **kwargs):
+        """MacGetMetalAppearance() -> bool"""
+        return _windows.TopLevelWindow_MacGetMetalAppearance(*args, **kwargs)
 
 
 class TopLevelWindowPtr(TopLevelWindow):
@@ -683,8 +717,8 @@ class SplitterWindow(core.Window):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
 
         Constructor.  Creates and shows a SplitterWindow.
         """
@@ -697,8 +731,8 @@ class SplitterWindow(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_3D, String name=SplitterNameStr) -> bool
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> bool
 
         Create the GUI part of the SplitterWindow for the 2-phase create.
         """
@@ -1814,6 +1848,14 @@ class TaskBarIcon(core.EvtHandler):
         try:
             if self.thisown: destroy(self)
         except: pass
+
+    def Destroy(*args, **kwargs):
+        """
+        Destroy()
+
+        Deletes the C++ object this Python object is a proxy for.
+        """
+        return _windows.TaskBarIcon_Destroy(*args, **kwargs)
 
 
 class TaskBarIconPtr(TaskBarIcon):

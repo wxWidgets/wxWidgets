@@ -820,6 +820,11 @@ enum {
 };
 #endif
 
+void wxTaskBarIcon_Destroy(wxTaskBarIcon *self){
+        
+
+
+        }
  static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
  static const wxString wxPyDirDialogNameStr(wxDirDialogNameStr); 
@@ -1368,7 +1373,7 @@ static PyObject *_wrap_Panel_Create(PyObject *, PyObject *args, PyObject *kwargs
     PyObject *resultobj;
     wxPanel *arg1 = (wxPanel *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) (int)-1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -1391,13 +1396,15 @@ static PyObject *_wrap_Panel_Create(PyObject *, PyObject *args, PyObject *kwargs
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Panel_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:Panel_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPanel,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -2981,6 +2988,63 @@ static PyObject *_wrap_TopLevelWindow_SetShape(PyObject *, PyObject *args, PyObj
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetShape((wxRegion const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TopLevelWindow_MacSetMetalAppearance(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "on", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_MacSetMetalAppearance",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTopLevelWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (bool) SWIG_AsBool(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->MacSetMetalAppearance(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TopLevelWindow_MacGetMetalAppearance(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TopLevelWindow_MacGetMetalAppearance",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTopLevelWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxTopLevelWindow const *)arg1)->MacGetMetalAppearance();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -5419,7 +5483,7 @@ static PyObject *_wrap_SplitterNameStr_get() {
 static PyObject *_wrap_new_SplitterWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -5441,11 +5505,13 @@ static PyObject *_wrap_new_SplitterWindow(PyObject *, PyObject *args, PyObject *
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_SplitterWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_SplitterWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -5517,7 +5583,7 @@ static PyObject *_wrap_SplitterWindow_Create(PyObject *, PyObject *args, PyObjec
     PyObject *resultobj;
     wxSplitterWindow *arg1 = (wxSplitterWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -5540,13 +5606,15 @@ static PyObject *_wrap_SplitterWindow_Create(PyObject *, PyObject *args, PyObjec
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:SplitterWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:SplitterWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSplitterWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -10468,6 +10536,31 @@ static PyObject *_wrap_delete_TaskBarIcon(PyObject *, PyObject *args, PyObject *
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TaskBarIcon_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTaskBarIcon *arg1 = (wxTaskBarIcon *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TaskBarIcon_Destroy",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTaskBarIcon,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxTaskBarIcon_Destroy(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24001,6 +24094,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_SetTitle", (PyCFunction) _wrap_TopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_GetTitle", (PyCFunction) _wrap_TopLevelWindow_GetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_SetShape", (PyCFunction) _wrap_TopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TopLevelWindow_MacSetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacSetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacGetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_PreFrame", (PyCFunction) _wrap_new_PreFrame, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -24226,6 +24321,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlListBox_swigregister", HtmlListBox_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_TaskBarIcon", (PyCFunction) _wrap_new_TaskBarIcon, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_TaskBarIcon", (PyCFunction) _wrap_delete_TaskBarIcon, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TaskBarIcon_Destroy", (PyCFunction) _wrap_TaskBarIcon_Destroy, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TaskBarIcon_swigregister", TaskBarIcon_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_TaskBarIconEvent", (PyCFunction) _wrap_new_TaskBarIconEvent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TaskBarIconEvent_swigregister", TaskBarIconEvent_swigregister, METH_VARARGS, NULL },
@@ -25874,6 +25970,27 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"DialogNameStr",_wrap_DialogNameStr_get, _wrap_DialogNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"StatusLineNameStr",_wrap_StatusLineNameStr_get, _wrap_StatusLineNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ToolBarNameStr",_wrap_ToolBarNameStr_get, _wrap_ToolBarNameStr_set);
+    PyDict_SetItemString(d,"STAY_ON_TOP", SWIG_FromInt((int)wxSTAY_ON_TOP));
+    PyDict_SetItemString(d,"ICONIZE", SWIG_FromInt((int)wxICONIZE));
+    PyDict_SetItemString(d,"MINIMIZE", SWIG_FromInt((int)wxMINIMIZE));
+    PyDict_SetItemString(d,"MAXIMIZE", SWIG_FromInt((int)wxMAXIMIZE));
+    PyDict_SetItemString(d,"CLOSE_BOX", SWIG_FromInt((int)wxCLOSE_BOX));
+    PyDict_SetItemString(d,"THICK_FRAME", SWIG_FromInt((int)wxTHICK_FRAME));
+    PyDict_SetItemString(d,"SYSTEM_MENU", SWIG_FromInt((int)wxSYSTEM_MENU));
+    PyDict_SetItemString(d,"MINIMIZE_BOX", SWIG_FromInt((int)wxMINIMIZE_BOX));
+    PyDict_SetItemString(d,"MAXIMIZE_BOX", SWIG_FromInt((int)wxMAXIMIZE_BOX));
+    PyDict_SetItemString(d,"TINY_CAPTION_HORIZ", SWIG_FromInt((int)wxTINY_CAPTION_HORIZ));
+    PyDict_SetItemString(d,"TINY_CAPTION_VERT", SWIG_FromInt((int)wxTINY_CAPTION_VERT));
+    PyDict_SetItemString(d,"RESIZE_BOX", SWIG_FromInt((int)wxRESIZE_BOX));
+    PyDict_SetItemString(d,"RESIZE_BORDER", SWIG_FromInt((int)wxRESIZE_BORDER));
+    PyDict_SetItemString(d,"DIALOG_NO_PARENT", SWIG_FromInt((int)wxDIALOG_NO_PARENT));
+    PyDict_SetItemString(d,"DEFAULT_FRAME_STYLE", SWIG_FromInt((int)wxDEFAULT_FRAME_STYLE));
+    PyDict_SetItemString(d,"DEFAULT_DIALOG_STYLE", SWIG_FromInt((int)wxDEFAULT_DIALOG_STYLE));
+    PyDict_SetItemString(d,"FRAME_TOOL_WINDOW", SWIG_FromInt((int)wxFRAME_TOOL_WINDOW));
+    PyDict_SetItemString(d,"FRAME_FLOAT_ON_PARENT", SWIG_FromInt((int)wxFRAME_FLOAT_ON_PARENT));
+    PyDict_SetItemString(d,"FRAME_NO_WINDOW_MENU", SWIG_FromInt((int)wxFRAME_NO_WINDOW_MENU));
+    PyDict_SetItemString(d,"FRAME_NO_TASKBAR", SWIG_FromInt((int)wxFRAME_NO_TASKBAR));
+    PyDict_SetItemString(d,"FRAME_SHAPED", SWIG_FromInt((int)wxFRAME_SHAPED));
     PyDict_SetItemString(d,"FULLSCREEN_NOMENUBAR", SWIG_FromInt((int)wxFULLSCREEN_NOMENUBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOTOOLBAR", SWIG_FromInt((int)wxFULLSCREEN_NOTOOLBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOSTATUSBAR", SWIG_FromInt((int)wxFULLSCREEN_NOSTATUSBAR));

@@ -1189,6 +1189,7 @@ static PyObject *_wrap_EditableListBox_SetStrings(PyObject *, PyObject *args, Py
 #else
             PyObject* str  = PyObject_Str(item);
 #endif
+            if (PyErr_Occurred())  SWIG_fail;
             arg2->Add(Py2wxString(str));
             Py_DECREF(item);
             Py_DECREF(str);
