@@ -103,7 +103,7 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxDockEventHandler );
 
 wxTaskBarIcon::wxTaskBarIcon(const wxTaskBarIconType& nType)
-	: m_nType(nType), m_pEvent(NULL), m_pMenu(NULL)
+    : m_nType(nType), m_pEvent(NULL), m_pMenu(NULL), m_iconAdded(false)
 {
     //Register the events that will return the dock menu
 	EventTypeSpec tbEventList[] = { { kEventClassCommand, kEventProcessCommand },
@@ -166,6 +166,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 		
 	wxASSERT(err == 0);
 
+        m_iconAdded = true;
 	return true;
     #endif
 }
