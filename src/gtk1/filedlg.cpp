@@ -21,6 +21,7 @@
 #include "wx/intl.h"
 #include "wx/filename.h"
 #include "wx/msgdlg.h"
+#include "wx/log.h"
 
 #include <gtk/gtk.h>
 
@@ -44,6 +45,12 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     int style = dialog->GetStyle();
     gchar* text = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
     wxString filename(wxGTK_CONV_BACK(text));
+    if ( filename.empty() )
+    {
+        // this is totally lame but better than silent error
+        wxLogWarning(_("This filename can't be used by wxWidgets because it contains invalid UTF-8 characters, please rename the file."));
+        return;
+    }
 
     if ((style & wxSAVE) && (style & wxOVERWRITE_PROMPT))
     {
