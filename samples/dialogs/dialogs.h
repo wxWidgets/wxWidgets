@@ -12,42 +12,72 @@
 #ifndef __DIALOGSH__
 #define __DIALOGSH__
 
-#define USE_COLOURDLG_GENERIC                                                     \
-    (                                                                             \
-        wxUSE_COLOURDLG &&                                                        \
-        ( defined(__WXMSW__) || defined(__WXMAC__) ) &&                           \
-        !defined(__WXUNIVERSAL__)                                                 \
+#ifdef __WXUNIVERSAL__
+    #define USE_WXUNIVERSAL 1
+#else
+    #define USE_WXUNIVERSAL 0
+#endif
+
+#ifdef __WXMSW__
+    #define USE_WXMSW 1
+#else
+    #define USE_WXMSW 0
+#endif
+
+#ifdef __WXMAC__
+    #define USE_WXMAC 1
+#else
+    #define USE_WXMAC 0
+#endif
+
+#ifdef __WXGTK__
+    #define USE_WXGTK 1
+#else
+    #define USE_WXGTK 0
+#endif
+
+#ifdef __WXPM__
+    #define USE_WXPM 1
+#else
+    #define USE_WXPM 0
+#endif
+
+#define USE_COLOURDLG_GENERIC                       \
+    (                                               \
+        wxUSE_COLOURDLG &&                          \
+        ( USE_WXMSW || USE_WXMAC ) &&               \
+        !USE_WXUNIVERSAL                            \
     )
 
 
-#define USE_DIRDLG_GENERIC                                                        \
-    (                                                                             \
-        wxUSE_DIRDLG &&                                                           \
-        ( defined(__WXMSW__) || defined(__WXMAC__) ) &&                           \
-        !defined(__WXUNIVERSAL__)                                                 \
+#define USE_DIRDLG_GENERIC                          \
+    (                                               \
+        wxUSE_DIRDLG &&                             \
+        ( USE_WXMSW || USE_WXMAC ) &&               \
+        !USE_WXUNIVERSAL                            \
     )
 
-#define USE_FILEDLG_GENERIC                                                       \
-    (                                                                             \
-        wxUSE_FILEDLG &&                                                          \
-        ( defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXPM__) ) &&      \
-        !defined(__WXUNIVERSAL__)                                                 \
+#define USE_FILEDLG_GENERIC                         \
+    (                                               \
+        wxUSE_FILEDLG &&                            \
+        ( USE_WXMSW || USE_WXMAC || USE_WXPM ) &&   \
+        !USE_WXUNIVERSAL                            \
     )
 
-#define USE_FONTDLG_GENERIC                                                       \
-    (                                                                             \
-        wxUSE_FONTDLG &&                                                          \
-        ( defined(__WXMSW__) || defined(__WXPM__) ) &&                            \
-        !defined(__WXUNIVERSAL__)                                                 \
+#define USE_FONTDLG_GENERIC                         \
+    (                                               \
+        wxUSE_FONTDLG &&                            \
+        ( USE_WXMSW || USE_WXPM ) &&                \
+        !USE_WXUNIVERSAL                            \
     )
 
 
-#define USE_MODAL_PRESENTATION                                                    \
-    (                                                                             \
-        defined(__WXMSW__) ||                                                     \
-        defined(__WXMAC__) ||                                                     \
-        defined(__WXGTK__) ||                                                     \
-        defined(__WXPM__)                                                         \
+#define USE_MODAL_PRESENTATION                      \
+    (                                               \
+        USE_WXMSW ||                                \
+        USE_WXMAC ||                                \
+        USE_WXGTK ||                                \
+        USE_WXPM                                    \
     )
 
 // Define a new application type
