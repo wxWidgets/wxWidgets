@@ -127,7 +127,9 @@ void wxHtmlHelpController::LoadMSProject(HtmlBookRecord *book, wxFileSystem& fsy
     HP_TagHandler *handler = new HP_TagHandler(book);
     parser.AddTagHandler(handler);
 
-    f = fsys.OpenFile(contentsfile);
+    // Don't panic if no index or contensfile is supplied.
+    // (without contents is a bit useless, but leaving out the index is sometimes handy)
+    f = ( contentsfile.IsEmpty() ? NULL : fsys.OpenFile(contentsfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
         buf = new char[sz+1];
@@ -140,7 +142,7 @@ void wxHtmlHelpController::LoadMSProject(HtmlBookRecord *book, wxFileSystem& fsy
         delete[] buf;
     }
 
-    f = fsys.OpenFile(indexfile);
+    f = ( indexfile.IsEmpty() ? NULL : fsys.OpenFile(indexfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
         buf = new  char[sz+1];
