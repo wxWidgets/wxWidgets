@@ -576,10 +576,10 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
             default:
                 wxFAIL_MSG( _T("invalid seek mode") );
 
-                return wxInvalidOffset;
+                return (wxFileOffset) wxInvalidOffset;
         }
         if (diff < 0 || diff > last_access)
-            return wxInvalidOffset;
+            return (wxFileOffset) wxInvalidOffset;
         SetIntPosition(diff);
         return diff;
     }
@@ -616,7 +616,7 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
             return ret_off;
     }
 
-    return wxInvalidOffset;
+    return (wxFileOffset) wxInvalidOffset;
 }
 
 wxFileOffset wxStreamBuffer::Tell() const
@@ -628,7 +628,7 @@ wxFileOffset wxStreamBuffer::Tell() const
     {
         pos = m_stream->OnSysTell();
         if ( pos == wxInvalidOffset )
-            return wxInvalidOffset;
+            return (wxFileOffset) wxInvalidOffset;
     }
     else // no associated stream
     {
@@ -659,12 +659,12 @@ wxStreamBase::~wxStreamBase()
 
 wxFileOffset wxStreamBase::OnSysSeek(wxFileOffset WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
 {
-    return wxInvalidOffset;
+    return (wxFileOffset) wxInvalidOffset;
 }
 
 wxFileOffset wxStreamBase::OnSysTell() const
 {
-    return wxInvalidOffset;
+    return (wxFileOffset) wxInvalidOffset;
 }
 
 // ----------------------------------------------------------------------------
@@ -990,7 +990,7 @@ wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode
 
         default:
             wxFAIL_MSG( _T("invalid seek mode") );
-            return wxInvalidOffset;
+            return (wxFileOffset) wxInvalidOffset;
     }
 
     if (m_currentPos > m_lastcount)
