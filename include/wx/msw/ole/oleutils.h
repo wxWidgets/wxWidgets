@@ -74,6 +74,12 @@ public:
 
     operator ULONG&() { return m_Value; }
     ULONG& operator=(ULONG value) { return m_Value = value; }
+    
+    wxAutoULong& operator++() { ++m_Value; return *this; }
+    const wxAutoULong operator++( int ) { wxAutoULong temp = *this; ++m_Value; return temp; }
+
+    wxAutoULong& operator--() { --m_Value; return *this; }
+    const wxAutoULong operator--( int ) { wxAutoULong temp = *this; --m_Value; return temp; }
 
 private:
     ULONG m_Value;
