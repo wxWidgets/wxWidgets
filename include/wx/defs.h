@@ -1925,6 +1925,17 @@ typedef struct _GtkItemFactory    GtkItemFactory;
 typedef struct _GtkSelectionData  GtkSelectionData;
 
 typedef GtkWidget *WXWidget;
+
+#ifndef __WXGTK20__
+#define GTK_OBJECT_GET_CLASS(object) (GTK_OBJECT(object)->klass)
+#endif
+
+#ifdef __WXGTK20__
+/* Stand-ins for Pango types */
+typedef struct _PangoContext         PangoContext;
+typedef struct _PangoLayout          PangoLayout;
+typedef struct _PangoFontDescription PangoFontDescription;
+#endif
 #endif // GTK
 
 // This is required because of clashing macros in windows.h, which may be
