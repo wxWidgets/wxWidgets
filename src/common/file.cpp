@@ -123,7 +123,6 @@
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
     #include  "wx/intl.h"
-    #include  "wx/file.h"
     #include  "wx/log.h"
 #endif // !WX_PRECOMP
 
@@ -474,6 +473,13 @@ bool wxTempFile::Open(const wxString& strName)
     if ( m_strTemp.empty() )
     {
         // CreateTempFileName() failed
+        return FALSE;
+    }
+
+    // actually open the file now (it must already exist)
+    if ( !m_file.Open(m_strTemp, wxFile::write) )
+    {
+        // opening existing file failed?
         return FALSE;
     }
 
