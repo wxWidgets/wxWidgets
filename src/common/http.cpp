@@ -24,7 +24,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifndef WX_PRECOMP
 #include "wx/string.h"
+#include "wx/app.h"
+#endif
+
 #include "wx/tokenzr.h"
 #include "wx/socket.h"
 #include "wx/protocol/protocol.h"
