@@ -240,7 +240,9 @@ public:
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
+#ifdef __WXMSW__
     wxSize GetPixelSize() const;
+#endif
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
     bool GetUnderlined() const;
@@ -249,7 +251,9 @@ public:
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
+#ifdef __WXMSW__
     void SetPixelSize(const wxSize& pixelSize);
+#endif
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
