@@ -183,6 +183,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 //---------------------------------------------------------------------------
 // Resource System
 
+#ifdef wxUSE_WX_RESOURCES
 bool wxResourceAddIdentifier(char* name, int value);
 void wxResourceClear(void);
 wxBitmap  wxResourceCreateBitmap(char* resource);
@@ -192,6 +193,7 @@ int wxResourceGetIdentifier(char* name);
 bool wxResourceParseData(char* resource, wxResourceTable *table = NULL);
 bool wxResourceParseFile(char* filename, wxResourceTable *table = NULL);
 bool wxResourceParseString(char* resource, wxResourceTable *table = NULL);
+#endif
 
 //---------------------------------------------------------------------------
 // System Settings

@@ -295,7 +295,7 @@ public:
     bool IsShown();
     bool IsTopLevel();
     void Layout();
-#ifdef INCLUDE_DEPRECATED
+#ifdef wxUSE_WX_RESOURCES
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
 #endif
     void Lower();
