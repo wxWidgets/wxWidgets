@@ -5838,6 +5838,26 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetBestSizeTuple(*args, **kwargs)
 
+    def InvalidateBestSize(*args, **kwargs):
+        """
+        InvalidateBestSize(self)
+
+        Reset the cached best size value so it will be recalculated the next
+        time it is needed.
+        """
+        return _core_.Window_InvalidateBestSize(*args, **kwargs)
+
+    def GetBestFittingSize(*args, **kwargs):
+        """
+        GetBestFittingSize(self) -> Size
+
+        This function will merge the window's best size into the window's
+        minimum size, giving priority to the min size components, and returns
+        the results.
+
+        """
+        return _core_.Window_GetBestFittingSize(*args, **kwargs)
+
     def GetAdjustedBestSize(*args, **kwargs):
         """
         GetAdjustedBestSize(self) -> Size
@@ -8181,40 +8201,8 @@ class Control(Window):
         """
         return _core_.Control_SetLabel(*args, **kwargs)
 
-    def GetAdjustMinSizeFlag(*args, **kwargs):
-        """
-        GetAdjustMinSizeFlag(self) -> bool
-
-        Returns whether the minsize should be adjusted for this control when
-        `SetLabel` or `SetFont` are called.
-        """
-        return _core_.Control_GetAdjustMinSizeFlag(*args, **kwargs)
-
-    def SetAdjustMinSizeFlag(*args, **kwargs):
-        """
-        SetAdjustMinSizeFlag(self, bool adjust)
-
-        By default controls will readjust their size and minsize when
-        `SetLabel` or `SetFont` are called.  This flag will allow you to
-        control this behavior.
-        """
-        return _core_.Control_SetAdjustMinSizeFlag(*args, **kwargs)
-
     def GetClassDefaultAttributes(*args, **kwargs):
-        """
-        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
-
-        Get the default attributes for this class.  This is useful if you want
-        to use the same font or colour in your own control as in a standard
-        control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the
-        user's system, especially if it uses themes.
-
-        The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See `wx.Window.SetWindowVariant` for more about
-        this.
-        """
+        """GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes"""
         return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
@@ -8238,20 +8226,7 @@ def PreControl(*args, **kwargs):
     return val
 
 def Control_GetClassDefaultAttributes(*args, **kwargs):
-    """
-    Control_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
-
-    Get the default attributes for this class.  This is useful if you want
-    to use the same font or colour in your own control as in a standard
-    control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the
-    user's system, especially if it uses themes.
-
-    The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See `wx.Window.SetWindowVariant` for more about
-    this.
-    """
+    """Control_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes"""
     return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -8523,6 +8498,15 @@ class SizerItem(Object):
         Get the minimum size needed for the item.
         """
         return _core_.SizerItem_GetMinSize(*args, **kwargs)
+
+    def GetMinSizeWithBorder(*args, **kwargs):
+        """
+        GetMinSizeWithBorder(self) -> Size
+
+        Get the minimum size needed for the item with space for the borders
+        added, if needed.
+        """
+        return _core_.SizerItem_GetMinSizeWithBorder(*args, **kwargs)
 
     def SetInitSize(*args, **kwargs):
         """SetInitSize(self, int x, int y)"""
@@ -10434,7 +10418,7 @@ def CallAfter(callable, *args, **kw):
     :see: `wx.FutureCall`
     """
     app = wx.GetApp()
-    assert app, 'No wxApp created yet'
+    assert app is not None, 'No wx.App created yet'
 
     global _wxPyCallAfterId
     if _wxPyCallAfterId is None:

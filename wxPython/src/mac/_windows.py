@@ -137,7 +137,11 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_SetScrollRate(*args, **kwargs)
 
     def GetScrollPixelsPerUnit(*args, **kwargs):
-        """GetScrollPixelsPerUnit() -> (xUnit, yUnit)"""
+        """
+        GetScrollPixelsPerUnit() -> (xUnit, yUnit)
+
+        Get the size of one logical unit in physical units.
+        """
         return _windows_.ScrolledWindow_GetScrollPixelsPerUnit(*args, **kwargs)
 
     def EnableScrolling(*args, **kwargs):
@@ -145,7 +149,11 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_EnableScrolling(*args, **kwargs)
 
     def GetViewStart(*args, **kwargs):
-        """GetViewStart() -> (x,y)"""
+        """
+        GetViewStart() -> (x,y)
+
+        Get the view start
+        """
         return _windows_.ScrolledWindow_GetViewStart(*args, **kwargs)
 
     def SetScale(*args, **kwargs):
@@ -1736,14 +1744,7 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_ScrollToLine(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """
-        ScrollLines(self, int lines) -> bool
-
-        If the platform and window class supports it, scrolls the window by
-        the given number of lines down, if lines is positive, or up if lines
-        is negative.  Returns True if the window was scrolled, False if it was
-        already on top/bottom and nothing was done.
-        """
+        """ScrollLines(self, int lines) -> bool"""
         return _windows_.VScrolledWindow_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):
@@ -1766,19 +1767,11 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
     def HitTestXT(*args, **kwargs):
-        """
-        HitTestXT(self, int x, int y) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTestXT(self, int x, int y) -> int"""
         return _windows_.VScrolledWindow_HitTestXT(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(self, Point pt) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTest(self, Point pt) -> int"""
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
@@ -2445,7 +2438,12 @@ class MultiChoiceDialog(Dialog):
         self._setOORInfo(self)
 
     def SetSelections(*args, **kwargs):
-        """SetSelections(List selections)"""
+        """
+        SetSelections(List selections)
+
+        Specify the items in the list that should be selected, using a list of
+        integers.
+        """
         return _windows_.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
     def GetSelections(*args, **kwargs):

@@ -451,6 +451,8 @@ class Choice(_core.ControlWithItems):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
+
+        Actually create the GUI Choice control for 2-phase creation
         """
         return _controls_.Choice_Create(*args, **kwargs)
 
@@ -567,6 +569,8 @@ class ComboBox(_core.Control,_core.ItemContainer):
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
+
+        Actually create the GUI wxComboBox control for 2-phase creation
         """
         return _controls_.ComboBox_Create(*args, **kwargs)
 
@@ -1662,7 +1666,11 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_IsMultiLine(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection() -> (from, to)"""
+        """
+        GetSelection() -> (from, to)
+
+        If the return values from and to are the same, there is no selection.
+        """
         return _controls_.TextCtrl_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
@@ -1742,7 +1750,12 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_ShowPosition(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> (result, row, col)"""
+        """
+        HitTest(Point pt) -> (result, row, col)
+
+        Find the character at position given in pixels. NB: pt is in device
+        coords but is not adjusted for the client area origin nor scrolling
+        """
         return _controls_.TextCtrl_HitTest(*args, **kwargs)
 
     def Copy(*args, **kwargs):
@@ -2956,7 +2969,12 @@ class Notebook(BookCtrl):
         return _controls_.Notebook_SetTabSize(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> (tab, where)"""
+        """
+        HitTest(Point pt) -> (tab, where)
+
+        Returns the tab which is hit, and flags indicating where using
+        wx.NB_HITTEST flags.
+        """
         return _controls_.Notebook_HitTest(*args, **kwargs)
 
     def CalcSizeFromPage(*args, **kwargs):
@@ -4430,7 +4448,12 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_FindItemAtPos(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point) -> (item, where)"""
+        """
+        HitTest(Point point) -> (item, where)
+
+        Determines which item (if any) is at the specified point, giving
+         in the second return value (see wxLIST_HITTEST_... flags.)
+        """
         return _controls_.ListCtrl_HitTest(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
@@ -5220,7 +5243,14 @@ class TreeCtrl(_core.Control):
         return _controls_.TreeCtrl_SortChildren(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point) -> (item, where)"""
+        """
+        HitTest(Point point) -> (item, where)
+
+        Determine which item (if any) belongs the given point.  The coordinates
+        specified are relative to the client area of tree ctrl and the where return
+        value is set to a bitmask of wxTREE_HITTEST_xxx constants.
+
+        """
         return _controls_.TreeCtrl_HitTest(*args, **kwargs)
 
     def GetBoundingRect(*args, **kwargs):
@@ -5371,7 +5401,15 @@ class GenericDirCtrl(_core.Control):
         return _controls_.GenericDirCtrl_GetFilterListCtrl(*args, **kwargs)
 
     def FindChild(*args, **kwargs):
-        """FindChild(wxTreeItemId parentId, wxString path) -> (item, done)"""
+        """
+        FindChild(wxTreeItemId parentId, wxString path) -> (item, done)
+
+        Find the child that matches the first part of 'path'.  E.g. if a child
+        path is "/usr" and 'path' is "/usr/include" then the child for
+        /usr is returned.  If the path string has been used (we're at the
+        leaf), done is set to True.
+
+        """
         return _controls_.GenericDirCtrl_FindChild(*args, **kwargs)
 
     def DoResize(*args, **kwargs):

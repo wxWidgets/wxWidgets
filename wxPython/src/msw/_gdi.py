@@ -2699,7 +2699,12 @@ class DC(_core.Object):
         return _gdi_.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(wxString string) -> (width, height)"""
+        """
+        GetTextExtent(wxString string) -> (width, height)
+
+        Get the width and height of the text using the current font. Only
+        works for single line strings.
+        """
         return _gdi_.DC_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
@@ -2716,6 +2721,10 @@ class DC(_core.Object):
         """
         GetMultiLineTextExtent(wxString string, Font font=None) ->
            (width, height, descent, externalLeading)
+
+        Get the width, height, decent and leading of the text using the
+        current or specified font. Works for single as well as multi-line
+        strings.
         """
         return _gdi_.DC_GetMultiLineTextExtent(*args, **kwargs)
 

@@ -3273,7 +3273,11 @@ class DateTime(object):
 
     GetWeekDayName = staticmethod(GetWeekDayName)
     def GetAmPmStrings(*args, **kwargs):
-        """GetAmPmStrings() -> (am, pm)"""
+        """
+        GetAmPmStrings() -> (am, pm)
+
+        Get the AM and PM strings in the current locale (may be empty)
+        """
         return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
@@ -3747,7 +3751,11 @@ def DateTime_GetWeekDayName(*args, **kwargs):
     return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
 
 def DateTime_GetAmPmStrings(*args, **kwargs):
-    """GetAmPmStrings() -> (am, pm)"""
+    """
+    GetAmPmStrings() -> (am, pm)
+
+    Get the AM and PM strings in the current locale (may be empty)
+    """
     return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
@@ -4854,7 +4862,11 @@ class FileDataObject(DataObjectSimple):
         self.thisown = 1
         del newobj.thisown
     def GetFilenames(*args, **kwargs):
-        """GetFilenames(self) -> [names]"""
+        """
+        GetFilenames(self) -> [names]
+
+        Returns a list of file names.
+        """
         return _misc_.FileDataObject_GetFilenames(*args, **kwargs)
 
     def AddFile(*args, **kwargs):
@@ -5340,6 +5352,15 @@ class Clipboard(_core.Object):
         """
         return _misc_.Clipboard_UsePrimarySelection(*args, **kwargs)
 
+    def Get(*args, **kwargs):
+        """
+        Get() -> Clipboard
+
+        Returns global instance (wxTheClipboard) of the object.
+        """
+        return _misc_.Clipboard_Get(*args, **kwargs)
+
+    Get = staticmethod(Get)
 
 class ClipboardPtr(Clipboard):
     def __init__(self, this):
@@ -5347,6 +5368,31 @@ class ClipboardPtr(Clipboard):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Clipboard
 _misc_.Clipboard_swigregister(ClipboardPtr)
+
+def Clipboard_Get(*args, **kwargs):
+    """
+    Clipboard_Get() -> Clipboard
+
+    Returns global instance (wxTheClipboard) of the object.
+    """
+    return _misc_.Clipboard_Get(*args, **kwargs)
+
+class _wxPyDelayedInitWrapper(object):
+    def __init__(self, initfunc, *args, **kwargs):
+        self._initfunc = initfunc
+        self._args = args
+        self._kwargs = kwargs
+        self._instance = None
+    def _checkInstance(self):
+        if self._instance is None:
+            self._instance = self._initfunc(*self._args, **self._kwargs)        
+    def __getattr__(self, name):
+        self._checkInstance()
+        return getattr(self._instance, name)
+    def __repr__(self):
+        self._checkInstance()
+        return repr(self._instance)
+TheClipboard = _wxPyDelayedInitWrapper(Clipboard.Get)
 
 class ClipboardLocker(object):
     """
@@ -5388,7 +5434,6 @@ class ClipboardLockerPtr(ClipboardLocker):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ClipboardLocker
 _misc_.ClipboardLocker_swigregister(ClipboardLockerPtr)
-TheClipboard = cvar.TheClipboard
 
 #---------------------------------------------------------------------------
 

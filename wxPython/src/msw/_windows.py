@@ -137,7 +137,11 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_SetScrollRate(*args, **kwargs)
 
     def GetScrollPixelsPerUnit(*args, **kwargs):
-        """GetScrollPixelsPerUnit() -> (xUnit, yUnit)"""
+        """
+        GetScrollPixelsPerUnit() -> (xUnit, yUnit)
+
+        Get the size of one logical unit in physical units.
+        """
         return _windows_.ScrolledWindow_GetScrollPixelsPerUnit(*args, **kwargs)
 
     def EnableScrolling(*args, **kwargs):
@@ -145,7 +149,11 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_EnableScrolling(*args, **kwargs)
 
     def GetViewStart(*args, **kwargs):
-        """GetViewStart() -> (x,y)"""
+        """
+        GetViewStart() -> (x,y)
+
+        Get the view start
+        """
         return _windows_.ScrolledWindow_GetViewStart(*args, **kwargs)
 
     def SetScale(*args, **kwargs):
@@ -2471,7 +2479,12 @@ class MultiChoiceDialog(Dialog):
         self._setOORInfo(self)
 
     def SetSelections(*args, **kwargs):
-        """SetSelections(List selections)"""
+        """
+        SetSelections(List selections)
+
+        Specify the items in the list that should be selected, using a list of
+        integers.
+        """
         return _windows_.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
     def GetSelections(*args, **kwargs):
