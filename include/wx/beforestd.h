@@ -20,10 +20,27 @@
     it can be included several times.
  */
 
-#ifdef _MSC_VER
+// VC 7.x isn't as bad as VC6 and doesn't give these warnings
+#if defined(__VISUALC__) && __VISUALC__ <= 1200
+    // MSVC 5 does not have this
+    #if __VISUALC__ > 1100
+        #pragma warning(push, 1)
+    #else // VC 5
+        // 'expression' : signed/unsigned mismatch 
+        #pragma warning(disable:4018) 
+
+        // 'conversion' : conversion from 'type1' to 'type2', 
+        // possible loss of data 
+        #pragma warning(disable:4244) 
+
+        // C++ language change: to explicitly specialize class template 
+        // 'identifier' use the following syntax 
+        #pragma warning(disable:4663) 
+    #endif
+
     // these warning have to be disabled and not just temporarily disabled
-    // because they will be given at the end of the compilation of the current
-    // source -- and there is absolutely nothing we can do about them
+    // because they will be given at the end of the compilation of the
+    // current source and there is absolutely nothing we can do about them
 
     // 'foo': unreferenced inline function has been removed
     #pragma warning(disable:4514)
@@ -33,20 +50,5 @@
 
     // 'id': identifier was truncated to 'num' characters in the debug info
     #pragma warning(disable:4786)
+#endif // VC++ < 7
 
-    // MSVC 5 does not have this
-    #if _MSC_VER > 1100
-        #pragma warning(push, 1)
-    #else
-        // 'expression' : signed/unsigned mismatch
-        #pragma warning(disable:4018)
-
-        // 'conversion' : conversion from 'type1' to 'type2',
-        // possible loss of data
-        #pragma warning(disable:4244)
-
-        // C++ language change: to explicitly specialize class template
-        // 'identifier' use the following syntax
-        #pragma warning(disable:4663)
-    #endif
-#endif
