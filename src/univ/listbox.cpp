@@ -1061,7 +1061,7 @@ int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
         // mouse is above the first item
         item = 0;
     }
-    else if ( item > lbox->GetCount() )
+    else if ( item >= lbox->GetCount() )
     {
         // mouse is below the last item
         item = lbox->GetCount() - 1;
