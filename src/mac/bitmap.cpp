@@ -593,7 +593,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
       {
           for (int x = 0; x < width; x++)
           {
-              if ( data[0] == image.GetMaskRed() && data[1] == image.GetMaskRed() && data[2] == image.GetMaskRed() )
+              if ( data[0] == image.GetMaskRed() && data[1] == image.GetMaskGreen() && data[2] == image.GetMaskBlue() )
               {
                 SetCPixel(x,y, &white);
               }
