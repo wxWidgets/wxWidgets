@@ -304,7 +304,7 @@
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>
-            <if cond="FORMAT!='bcc'">
+            <if cond="FORMAT!='borland'">
                 <sys-lib>kernel32</sys-lib>
                 <sys-lib>user32</sys-lib>
                 <sys-lib>gdi32</sys-lib>
@@ -321,7 +321,7 @@
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
-            <if cond="FORMAT=='vc' or FORMAT=='bcc'">
+            <if cond="FORMAT=='msvc' or FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
         </if>        
