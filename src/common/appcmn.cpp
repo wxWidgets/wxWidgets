@@ -205,6 +205,72 @@ void wxAppBase::DeletePendingObjects()
     }
 }
 
+// Returns TRUE if more time is needed.
+bool wxAppBase::ProcessIdle()
+{
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        win->ProcessInternalIdle();
+        node = node->GetNext();
+    }
+
+    wxIdleEvent event;
+    event.SetEventObject(this);
+    bool processed = ProcessEvent(event);
+
+    wxUpdateUIEvent::ResetUpdateTime();
+    
+    return processed && event.MoreRequested();
+}
+
+// Send idle event to all top-level windows
+bool wxAppBase::SendIdleEvents()
+{
+    bool needMore = FALSE;
+
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        if (SendIdleEvents(win))
+            needMore = TRUE;
+        node = node->GetNext();
+    }
+
+    return needMore;
+}
+
+// Send idle event to window and all subwindows
+bool wxAppBase::SendIdleEvents(wxWindow* win)
+{
+    bool needMore = FALSE;
+    
+    if (wxIdleEvent::CanSend(win))
+    {
+        wxIdleEvent event;
+        event.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(event);
+
+        needMore = event.MoreRequested();
+    }
+
+    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow *win = node->GetData();
+        if (SendIdleEvents(win))
+            needMore = TRUE;
+
+        node = node->GetNext();
+    }
+
+    return needMore;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxGUIAppTraitsBase
 // ----------------------------------------------------------------------------

@@ -155,9 +155,6 @@ public:
     // OnInternalIdle
     virtual void OnInternalIdle();
     
-    // For compatibility across platforms (not in event table)
-    void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
-    
 protected:
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);

@@ -75,7 +75,6 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
   EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
   EVT_SYS_COLOUR_CHANGED(wxWindowMac::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindowMac::OnInitDialog)
-  EVT_IDLE(wxWindowMac::OnIdle)
   EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
   EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
@@ -1367,12 +1366,12 @@ void wxWindowMac::SetupColours()
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
-void wxWindowMac::OnIdle(wxIdleEvent& event)
+void wxWindowMac::OnInternalIdle()
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // Raise the window to the top of the Z order

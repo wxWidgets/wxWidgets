@@ -971,18 +971,6 @@ int wxApp::MainLoop()
     return 0;
 }
 
-// Returns TRUE if more time is needed.
-bool wxApp::ProcessIdle()
-{
-    wxIdleEvent event;
-    event.SetEventObject(this);
-    ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return event.MoreRequested();
-}
-
 void wxApp::ExitMainLoop()
 {
       m_keepGoing = FALSE;
@@ -996,7 +984,7 @@ bool wxApp::Pending()
 #else
     EventRecord event ;
 
-      return EventAvail( everyEvent , &event ) ;
+    return EventAvail( everyEvent , &event ) ;
 #endif
 }
 
@@ -1042,46 +1030,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
 void wxApp::WakeUpIdle()
 {
     wxMacWakeUp() ;
-}
-
-// Send idle event to all top-level windows
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-    wxWindowListNode* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-    return needMore;
-}
-
-// Send idle event to window and all subwindows
-bool wxApp::SendIdleEvents(wxWindow* win)
-{
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-    win->ProcessEvent(event);
-
-    if (event.MoreRequested())
-        needMore = TRUE;
-
-    wxWindowListNode* node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-    return needMore ;
 }
 
 void wxApp::Exit()

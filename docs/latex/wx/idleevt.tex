@@ -2,6 +2,15 @@
 
 This class is used for idle events, which are generated when the system is idle.
 
+By default, idle events are sent to all windows. If this is causing a significant
+overhead in your application, you can call \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode} with
+the value wxIDLE\_PROCESS\_SPECIFIED, and set the wxWS\_EX\_PROCESS\_IDLE extra
+window style for every window which should receive idle events.
+
+The function \helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle} is
+also provided for internal purposes, and cannot be disabled. wxUpdateUIEvents
+are sent from OnInternalIdle.
+
 \wxheading{Derived from}
 
 \helpref{wxEvent}{wxevent}\\
@@ -27,7 +36,8 @@ Idle events can be caught by the wxApp class, or by top-level window classes.
 
 \wxheading{See also}
 
-\helpref{Event handling overview}{eventhandlingoverview}
+\helpref{Event handling overview}{eventhandlingoverview}, \helpref{wxUpdateUIEvent}{wxupdateuievent}, 
+\helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -36,6 +46,33 @@ Idle events can be caught by the wxApp class, or by top-level window classes.
 \func{}{wxIdleEvent}{\void}
 
 Constructor.
+
+\membersection{wxIdleEvent::CanSend}\label{wxidleeventcansend}
+
+\func{static bool}{CanSend}{\param{wxWindow*}{ window}}
+
+Returns {\tt true} if it is appropriate to send idle events to
+this window.
+
+This function looks at the mode used (see \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode}),
+and the wxWS\_EX\_PROCESS\_IDLE style in {\it window} to determine whether idle events should be sent to
+this window now. By default this will always return {\tt true} because
+the update mode is initially wxIDLE\_PROCESS\_ALL. You can change the mode
+to only send idle events to windows with the wxWS\_EX\_PROCESS\_IDLE extra window style set.
+
+\wxheading{See also}
+
+\helpref{wxIdleEvent::SetMode}{wxidlesetmode}
+
+\membersection{wxIdleEvent::GetMode}\label{wxidleeventgetmode}
+
+\func{static wxIdleMode}{GetMode}{\void}
+
+Static function returning a value specifying how wxWindows
+will send idle events: to all windows, or only to those which specify that they
+will process the events.
+
+See \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode}.
 
 \membersection{wxIdleEvent::RequestMore}\label{wxidleeventrequestmore}
 
@@ -60,4 +97,27 @@ Returns true if the OnIdle function processing this event requested more process
 \wxheading{See also}
 
 \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}
+
+\membersection{wxIdleEvent::SetMode}\label{wxidleeventsetmode}
+
+\func{static void}{SetMode}{\param{wxIdleMode }{mode}}
+
+Static function for specifying how wxWindows will send idle events: to
+all windows, or only to those which specify that they
+will process the events.
+
+{\it mode} can be one of the following values.
+The default is wxIDLE\_PROCESS\_ALL.
+
+\begin{verbatim}
+enum wxIdleMode
+{
+        // Send idle events to all windows
+    wxIDLE_PROCESS_ALL,
+
+        // Send idle events to windows that have
+        // the wxWS_EX_PROCESS_IDLE flag specified
+    wxIDLE_PROCESS_SPECIFIED
+};
+\end{verbatim}
 

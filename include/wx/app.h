@@ -379,7 +379,15 @@ public:
         // parties
         //
         // it should return TRUE if more idle events are needed, FALSE if not
-    virtual bool ProcessIdle() = 0;
+    virtual bool ProcessIdle() ;
+
+        // Send idle event to all top-level windows.
+        // Returns TRUE if more idle time is requested.
+    virtual bool SendIdleEvents();
+
+        // Send idle event to window and all subwindows
+        // Returns TRUE if more idle time is requested.
+    virtual bool SendIdleEvents(wxWindow* win);
 
 
     // top level window functions

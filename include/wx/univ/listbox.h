@@ -169,6 +169,8 @@ public:
     // let wxColourScheme choose the right colours for us
     virtual bool IsContainerWindow() const { return TRUE; }
 
+    // idle processing
+    virtual void OnInternalIdle();
 protected:
     // geometry
     virtual wxSize DoGetBestClientSize() const;
@@ -183,7 +185,6 @@ protected:
     void Init();
 
     // event handlers
-    void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
     // common part of Clear() and DoSetItems(): clears everything

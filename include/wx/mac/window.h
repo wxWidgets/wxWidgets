@@ -173,7 +173,6 @@ public:
     void OnSetFocus(wxFocusEvent& event) ;
     void OnNcPaint(wxNcPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
-    void OnIdle(wxIdleEvent& event);
     void OnMouseEvent( wxMouseEvent &event ) ;
 
     void MacOnScroll(wxScrollEvent&event ) ;
@@ -181,6 +180,8 @@ public:
     bool AcceptsFocus() const ;
 
 public:
+    void OnInternalIdle();
+
     // For implementation purposes - sometimes decorations make the client area
     // smaller
     virtual wxPoint GetClientAreaOrigin() const;

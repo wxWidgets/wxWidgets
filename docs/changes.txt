@@ -103,6 +103,20 @@ All GUI ports:
 - Added m_ prefix to wxColourData and wxFontData members
 - Added wxHtmlPrintout::AddFilter so HTML printing can be subject to
   custom filters as well as HTML viewing.
+- Moved wxApp::SendIdleEvents and wxApp::ProcessIdle into common code.
+- wxWindow::OnInternalIdle is now used in all ports, and ensures that
+  user OnIdle events do not interfere with crucial internal processing.
+- wxWindow::UpdateWindowUI is now a documented function that
+  sends wxUpdateUIEvents, and can be overridden. It has a helper function
+  DoUpdateWindowUI for taking appropriate wxUpdateUIEvent action.
+- Added functions to wxUpdateUIEvent: Set/GetMode, Set/GetUpdateInterval,
+  CanUpdate, to assist with optimising update event frequency.
+- Added functions to wxIdleEvent: Set/GetMode, CanSend, to
+  determine whether a window should receive idle events.
+- Added wxWS_EX_PROCESS_IDLE, wxWS_EX_PROCESS_UI_UPDATES window
+  styles for use with conservative idle and update event modes.
+- wxMSW and wxGTK now send menu update events only when a menu is
+  about to be used.
 
 Unix:
 

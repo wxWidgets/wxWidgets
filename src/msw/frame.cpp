@@ -191,12 +191,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 
 void wxFrame::Raise()
 {
-#ifdef __WIN16__
-    // no SetForegroundWindow() in Win16
-    wxFrameBase::Raise();
-#else // Win32
     ::SetForegroundWindow(GetHwnd());
-#endif // Win16/32
 }
 
 // generate an artificial resize event
@@ -749,6 +744,10 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
+        case WM_INITMENU:
+            processed = HandleInitMenu();
+            break;
+
         case WM_PAINT:
             processed = HandlePaint();
             break;
@@ -763,16 +762,18 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
             break;
-
-#ifndef __WIN16__
+            
+        // We don't need to send the wxEVT_MENU_OPEN
+        // when we get WM_ENTERMENULOOP now, because we send
+        // it when we get WM_INITMENU.
+#if 0
         case WM_ENTERMENULOOP:
             processed = HandleMenuLoop(wxEVT_MENU_OPEN, wParam);
             break;
-
+#endif
         case WM_EXITMENULOOP:
             processed = HandleMenuLoop(wxEVT_MENU_CLOSE, wParam);
             break;
-#endif // __WIN16__
 
         case WM_QUERYDRAGICON:
             {
@@ -791,4 +792,16 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     return rc;
 }
+
+// handle WM_INITMENU message
+bool wxFrame::HandleInitMenu()
+{
+    wxMenuEvent event(wxEVT_MENU_OPEN, 0);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+    
+    return TRUE;
+}
+
 

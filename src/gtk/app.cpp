@@ -534,27 +534,6 @@ GdkVisual *wxApp::GetGdkVisual()
     return visual;
 }
 
-bool wxApp::ProcessIdle()
-{
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        CallInternalIdle( win );
-
-        node = node->GetNext();
-    }
-
-    wxIdleEvent event;
-    event.SetEventObject( this );
-    ProcessEvent( event );
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return event.MoreRequested();
-}
-
 void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
@@ -579,64 +558,6 @@ void wxApp::OnIdle( wxIdleEvent &event )
         event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
-}
-
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-
-    return needMore;
-}
-
-bool wxApp::CallInternalIdle( wxWindow* win )
-{
-    win->OnInternalIdle();
-
-    wxWindowList::Node  *node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow    *win = node->GetData();
-
-        CallInternalIdle( win );
-        node = node->GetNext();
-    }
-
-    return TRUE;
-}
-
-bool wxApp::SendIdleEvents( wxWindow* win )
-{
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-
-    win->GetEventHandler()->ProcessEvent(event);
-
-    if (event.MoreRequested())
-        needMore = TRUE;
-
-    wxWindowList::Node  *node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow    *win = node->GetData();
-
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-        node = node->GetNext();
-    }
-
-    return needMore;
 }
 
 int wxApp::MainLoop()

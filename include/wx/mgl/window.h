@@ -135,7 +135,7 @@ protected:
     // themselves inside the given rectangle
     virtual void DoMoveWindow(int x, int y, int width, int height);
     
-    void OnIdle(wxIdleEvent& event);
+    void OnInternalIdle();
 
 private:
     // common part of all ctors

@@ -46,7 +46,6 @@ public:
     virtual void Dispatch();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool ProcessIdle();
     virtual void WakeUpIdle();
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -56,14 +55,6 @@ public:
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
-
-    // Send idle event to all top-level windows.
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents();
-
-    // Send idle event to window and all subwindows
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents(wxWindow* win);
 
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT

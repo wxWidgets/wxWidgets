@@ -215,4 +215,17 @@ bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+// do the window-specific processing after processing the update event
+void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetSetEnabled() )
+        Enable(event.GetEnabled());
+    
+    if ( event.GetSetText() )
+    {
+        if ( event.GetText() != GetTitle() )
+            SetTitle(event.GetText());
+    }
+}
+
 // vi:sts=4:sw=4:et

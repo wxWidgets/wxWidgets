@@ -524,7 +524,6 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
 IMPLEMENT_ABSTRACT_CLASS(wxWindowMGL, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowMGL, wxWindowBase)
-    EVT_IDLE(wxWindowMGL::OnIdle)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -1276,8 +1275,8 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 // idle events processing
 // ---------------------------------------------------------------------------
 
-void wxWindowMGL::OnIdle(wxIdleEvent& WXUNUSED(event))
+void wxWindowMGL::OnInternalIdle()
 {
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }

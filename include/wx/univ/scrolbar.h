@@ -119,13 +119,13 @@ public:
     // for wxControlRenderer::DrawScrollbar() only
     const wxScrollArrows& GetArrows() const { return m_arrows; }
 
+    // idle processing
+    virtual void OnInternalIdle();
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-
-    // event handlers
-    void OnIdle(wxIdleEvent& event);
 
     // forces update of thumb's visual appearence (does nothing if m_dirty=FALSE)
     void UpdateThumb();

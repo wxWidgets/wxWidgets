@@ -233,7 +233,6 @@ BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
-    EVT_IDLE(wxWindowMSW::OnIdle)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -1146,7 +1145,7 @@ bool wxWindowMSW::IsMouseInWindow() const
     return hwnd != NULL;
 }
 
-void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
+void wxWindowMSW::OnInternalIdle()
 {
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
@@ -1159,7 +1158,7 @@ void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
             m_mouseInWindow = FALSE;
 
             // Unfortunately the mouse button and keyboard state may have
-            // changed by the time the OnIdle function is called, so 'state'
+            // changed by the time the OnInternalIdle function is called, so 'state'
             // may be meaningless.
             int state = 0;
             if ( wxIsShiftDown() )
@@ -1192,8 +1191,8 @@ void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // Set this window to be the child of 'parent'.
@@ -1266,7 +1265,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
     (void)::GdiFlush();
@@ -2030,10 +2029,8 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* WXUNUSED(pMsg))
 }
 
 // ---------------------------------------------------------------------------
-// message params unpackers (different for Win16 and Win32)
+// message params unpackers
 // ---------------------------------------------------------------------------
-
-#ifdef __WIN32__
 
 void wxWindowMSW::UnpackCommand(WXWPARAM wParam, WXLPARAM lParam,
                              WORD *id, WXHWND *hwnd, WORD *cmd)
@@ -2076,50 +2073,6 @@ void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
     *flags = HIWORD(wParam);
     *hmenu = (WXHMENU)lParam;
 }
-
-#else // Win16
-
-void wxWindowMSW::UnpackCommand(WXWPARAM wParam, WXLPARAM lParam,
-                             WXWORD *id, WXHWND *hwnd, WXWORD *cmd)
-{
-    *id = (WXWORD)wParam;
-    *hwnd = (WXHWND)LOWORD(lParam);
-    *cmd = HIWORD(lParam);
-}
-
-void wxWindowMSW::UnpackActivate(WXWPARAM wParam, WXLPARAM lParam,
-                              WXWORD *state, WXWORD *minimized, WXHWND *hwnd)
-{
-    *state = (WXWORD)wParam;
-    *minimized = LOWORD(lParam);
-    *hwnd = (WXHWND)HIWORD(lParam);
-}
-
-void wxWindowMSW::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
-                            WXWORD *code, WXWORD *pos, WXHWND *hwnd)
-{
-    *code = (WXWORD)wParam;
-    *pos = LOWORD(lParam);
-    *hwnd = (WXHWND)HIWORD(lParam);
-}
-
-void wxWindowMSW::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
-                              WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
-{
-    *hwnd = (WXHWND)LOWORD(lParam);
-    *nCtlColor = (int)HIWORD(lParam);
-    *hdc = (WXHDC)wParam;
-}
-
-void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
-                                WXWORD *item, WXWORD *flags, WXHMENU *hmenu)
-{
-    *item = (WXWORD)wParam;
-    *flags = LOWORD(lParam);
-    *hmenu = (WXHMENU)HIWORD(lParam);
-}
-
-#endif // Win32/16
 
 // ---------------------------------------------------------------------------
 // Main wxWindows window proc and the window proc for wxWindow
@@ -2612,7 +2565,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors#ifndef __WXMICROWIN__
 #ifndef __WXMICROWIN__
-#ifdef __WIN32__
         case WM_CTLCOLORMSGBOX:
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORLISTBOX:
@@ -2620,9 +2572,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_CTLCOLORDLG:
         case WM_CTLCOLORSCROLLBAR:
         case WM_CTLCOLORSTATIC:
-#else // Win16
-        case WM_CTLCOLOR:
-#endif // Win32/16
             {
                 WXWORD nCtlColor;
                 WXHDC hdc;
@@ -2724,7 +2673,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
 #endif
 
-#if defined(__WIN32__) && defined(WM_HELP)
+#if defined(WM_HELP)
         case WM_HELP:
             {
                 HELPINFO* info = (HELPINFO*) lParam;
@@ -2785,7 +2734,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
             }
             break;
-#endif // __WIN32__
+#endif
     }
 
     if ( !processed )
@@ -3356,15 +3305,10 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     // first ask the user code - it may wish to set the cursor in some very
     // specific way (for example, depending on the current position)
     POINT pt;
-#ifdef __WIN32__
     if ( !::GetCursorPos(&pt) )
     {
         wxLogLastError(wxT("GetCursorPos"));
     }
-#else
-    // In WIN16 it doesn't return a value.
-    ::GetCursorPos(&pt);
-#endif
 
     int x = pt.x,
         y = pt.y;
@@ -3769,7 +3713,6 @@ bool wxWindowMSW::HandlePaint()
 //    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
 //        return FALSE;
 
-#ifdef __WIN32__
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
         wxLogLastError(wxT("CreateRectRgn"));
@@ -3777,14 +3720,6 @@ bool wxWindowMSW::HandlePaint()
         wxLogLastError(wxT("GetUpdateRgn"));
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
-#else // Win16
-    RECT updateRect;
-    ::GetUpdateRect(GetHwnd(), &updateRect, FALSE);
-
-    m_updateRegion = wxRegion(updateRect.left, updateRect.top,
-                              updateRect.right - updateRect.left,
-                              updateRect.bottom - updateRect.top);
-#endif // Win32/16
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
@@ -4120,7 +4055,6 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //
     HWND hwnd = GetHwndOf(win),
          hwndUnderMouse;
 
-#ifdef __WIN32__
     hwndUnderMouse = ::ChildWindowFromPointEx
                        (
                         hwnd,
@@ -4131,7 +4065,6 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //
                        );
 
     if ( !hwndUnderMouse || hwndUnderMouse == hwnd )
-#endif // __WIN32__
     {
         // now try any child window at all
         hwndUnderMouse = ::ChildWindowFromPoint(hwnd, pt);
@@ -4234,7 +4167,6 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
 
-#ifdef __WIN32__
     static int s_linesPerRotation = -1;
     if ( s_linesPerRotation == -1 )
     {
@@ -4248,10 +4180,6 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
             s_linesPerRotation = 3;
         }
     }
-#else // Win16
-    // no SystemParametersInfo() under Win16
-    static const int s_linesPerRotation = 3;
-#endif
 
     event.m_linesPerAction = s_linesPerRotation;
     return GetEventHandler()->ProcessEvent(event);
@@ -4408,8 +4336,6 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return FALSE;
 }
 
-#ifdef __WIN32__
-
 int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
 {
     const HMENU hmenu = (HMENU)lParam;
@@ -4458,7 +4384,7 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
                 }
             }
         }
-        else // failed ot get the menu text?
+        else // failed to get the menu text?
         {
             // it's not fatal, so don't show error, but still log
             // it
@@ -4468,8 +4394,6 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
 
     return wxNOT_FOUND;
 }
-
-#endif // __WIN32__
 
 // ---------------------------------------------------------------------------
 // joystick
@@ -4606,7 +4530,6 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
 
     case SB_THUMBPOSITION:
     case SB_THUMBTRACK:
-#ifdef __WIN32__
         // under Win32, the scrollbar range and position are 32 bit integers,
         // but WM_[HV]SCROLL only carry the low 16 bits of them, so we must
         // explicitly query the scrollbar for the correct position (this must
@@ -4626,7 +4549,6 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
 
             event.SetPosition(scrollInfo.nTrackPos);
         }
-#endif // Win32
 
         event.m_eventType = wParam == SB_THUMBPOSITION
                                 ? wxEVT_SCROLLWIN_THUMBRELEASE
@@ -4874,9 +4796,6 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle((WXHWND)hwnd);
         if ( !win )
         {
-            // all these hacks only work under Win32 anyhow
-#ifdef __WIN32__
-
 #if wxUSE_RADIOBOX
             // native radiobuttons return DLGC_RADIOBUTTON here and for any
             // wxWindow class which overrides WM_GETDLGCODE processing to
@@ -4896,8 +4815,6 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
                 win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
             }
 #endif // wxUSE_SPINCTRL
-
-#endif // Win32
         }
     }
 
@@ -4942,23 +4859,13 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHookProc = MakeProcInstance((FARPROC) wxKeyboardHook, wxGetInstance());
         wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
 
-#if defined(__WIN32__)
             GetCurrentThreadId()
         //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
-#else
-            GetCurrentTask()
-#endif
             );
     }
     else
     {
         UnhookWindowsHookEx(wxTheKeyboardHook);
-
-        // avoids warning about statement with no effect (FreeProcInstance
-        // doesn't do anything under Win32)
-#if !defined(__WIN32__) && !defined(__NT__)
-        FreeProcInstance(wxTheKeyboardHookProc);
-#endif
     }
 }
 
@@ -5066,7 +4973,6 @@ const char *wxGetMessageName(int message)
         case 0x0047: return "WM_WINDOWPOSCHANGED";
         case 0x0048: return "WM_POWER";
 
-#ifdef  __WIN32__
         case 0x004A: return "WM_COPYDATA";
         case 0x004B: return "WM_CANCELJOURNAL";
         case 0x004E: return "WM_NOTIFY";
@@ -5082,7 +4988,6 @@ const char *wxGetMessageName(int message)
         case 0x007E: return "WM_DISPLAYCHANGE";
         case 0x007F: return "WM_GETICON";
         case 0x0080: return "WM_SETICON";
-#endif  //WIN32
 
         case 0x0081: return "WM_NCCREATE";
         case 0x0082: return "WM_NCDESTROY";
@@ -5111,11 +5016,9 @@ const char *wxGetMessageName(int message)
         case 0x0107: return "WM_SYSDEADCHAR";
         case 0x0108: return "WM_KEYLAST";
 
-#ifdef  __WIN32__
         case 0x010D: return "WM_IME_STARTCOMPOSITION";
         case 0x010E: return "WM_IME_ENDCOMPOSITION";
         case 0x010F: return "WM_IME_COMPOSITION";
-#endif  //WIN32
 
         case 0x0110: return "WM_INITDIALOG";
         case 0x0111: return "WM_COMMAND";
@@ -5143,14 +5046,12 @@ const char *wxGetMessageName(int message)
         case 0x0211: return "WM_ENTERMENULOOP";
         case 0x0212: return "WM_EXITMENULOOP";
 
-#ifdef  __WIN32__
         case 0x0213: return "WM_NEXTMENU";
         case 0x0214: return "WM_SIZING";
         case 0x0215: return "WM_CAPTURECHANGED";
         case 0x0216: return "WM_MOVING";
         case 0x0218: return "WM_POWERBROADCAST";
         case 0x0219: return "WM_DEVICECHANGE";
-#endif  //WIN32
 
         case 0x0220: return "WM_MDICREATE";
         case 0x0221: return "WM_MDIDESTROY";
@@ -5165,7 +5066,6 @@ const char *wxGetMessageName(int message)
         case 0x0230: return "WM_MDISETMENU";
         case 0x0233: return "WM_DROPFILES";
 
-#ifdef  __WIN32__
         case 0x0281: return "WM_IME_SETCONTEXT";
         case 0x0282: return "WM_IME_NOTIFY";
         case 0x0283: return "WM_IME_CONTROL";
@@ -5174,7 +5074,6 @@ const char *wxGetMessageName(int message)
         case 0x0286: return "WM_IME_CHAR";
         case 0x0290: return "WM_IME_KEYDOWN";
         case 0x0291: return "WM_IME_KEYUP";
-#endif  //WIN32
 
         case 0x0300: return "WM_CUT";
         case 0x0301: return "WM_COPY";
@@ -5195,7 +5094,6 @@ const char *wxGetMessageName(int message)
         case 0x0310: return "WM_PALETTEISCHANGING";
         case 0x0311: return "WM_PALETTECHANGED";
 
-#ifdef __WIN32__
         // common controls messages - although they're not strictly speaking
         // standard, it's nice to decode them nevertheless
 
@@ -5416,8 +5314,6 @@ const char *wxGetMessageName(int message)
         case WM_USER+60: return "TB_SETMAXTEXTROWS";
         case WM_USER+61: return "TB_GETTEXTROWS";
         case WM_USER+41: return "TB_GETBITMAPFLAGS";
-
-#endif //WIN32
 
         default:
             static char s_szBuf[128];

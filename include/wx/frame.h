@@ -141,7 +141,6 @@ public:
     // -------------------------------
 
     // event handlers
-    void OnIdle(wxIdleEvent& event);
     void OnMenuOpen(wxMenuEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
 
@@ -150,6 +149,12 @@ public:
     void DoMenuUpdates();
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 #endif // wxUSE_MENUS
+
+    // do the UI update processing for this window
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    // Implement internal behaviour (menu updating on some platforms)
+    virtual void OnInternalIdle();
 
     // if there is no real wxTopLevelWindow on this platform we have to define
     // some wxTopLevelWindowBase pure virtual functions here to avoid breaking

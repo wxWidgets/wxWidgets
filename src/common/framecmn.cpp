@@ -46,9 +46,6 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
-#if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
-    EVT_IDLE(wxFrameBase::OnIdle)
-#endif
 #if wxUSE_MENUS && !wxUSE_IDLEMENUUPDATES
     EVT_MENU_OPEN(wxFrameBase::OnMenuOpen)
 #endif
@@ -211,6 +208,34 @@ bool wxFrameBase::ProcessCommand(int id)
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 }
 
+// Do the UI update processing for this window. This is
+// provided for the application to call if it wants to
+// force a UI update, particularly for the menus and toolbar.
+void wxFrameBase::UpdateWindowUI(long flags)
+{
+    wxWindowBase::UpdateWindowUI(flags);
+    
+#if wxUSE_TOOLBAR
+    if (GetToolBar())
+        GetToolBar()->UpdateWindowUI(flags);
+#endif
+
+#if wxUSE_MENUS
+    if (GetMenuBar())
+    {
+        if ((flags & wxUPDATE_UI_FROMIDLE) && !wxUSE_IDLEMENUUPDATES)
+        {
+            // If coming from an idle event, we only
+            // want to update the menus if we're
+            // in the wxUSE_IDLEMENUUPDATES configuration:
+            // so if we're not, do nothing
+        }
+        else
+            DoMenuUpdates();
+    }
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
@@ -222,10 +247,11 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-void wxFrameBase::OnIdle(wxIdleEvent& WXUNUSED(event) )
+// Implement internal behaviour (menu updating on some platforms)
+void wxFrameBase::OnInternalIdle()
 {
 #if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
-    if (wxUpdateUIEvent::CanUpdate())
+    if (wxUpdateUIEvent::CanUpdate(this))
         DoMenuUpdates();
 #endif
 }

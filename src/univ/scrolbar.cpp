@@ -83,7 +83,6 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxScrollBar, wxScrollBarBase)
-    EVT_IDLE(wxScrollBar::OnIdle)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -322,10 +321,9 @@ wxScrollArrows::Arrow wxScrollBar::HitTest(const wxPoint& pt) const
 // drawing
 // ----------------------------------------------------------------------------
 
-void wxScrollBar::OnIdle(wxIdleEvent& event)
+void wxScrollBar::OnInternalIdle()
 {
     UpdateThumb();
-    event.Skip();
 }
 
 void wxScrollBar::UpdateThumb()

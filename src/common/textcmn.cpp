@@ -469,6 +469,20 @@ wxString wxTextCtrlBase::GetRange(long from, long to) const
     return sel;
 }
 
+// do the window-specific processing after processing the update event
+void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetSetEnabled() )
+        Enable(event.GetEnabled());
+    
+    if ( event.GetSetText() )
+    {
+        if ( event.GetText() != GetValue() )
+            SetValue(event.GetText());
+    }    
+}
+
+
 #else // !wxUSE_TEXTCTRL
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other

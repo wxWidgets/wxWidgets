@@ -128,6 +128,9 @@ protected:
     // window proc for the frames
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
+    // handle WM_INITMENU message
+    bool HandleInitMenu();
+
     virtual bool IsMDIChild() const { return FALSE; }
 
     // get default (wxWindows) icon for the frame

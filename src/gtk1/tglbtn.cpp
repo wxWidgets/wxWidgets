@@ -166,8 +166,8 @@ void wxToggleButton::OnInternalIdle()
         gdk_window_set_cursor(win, cursor.GetCursor());
     }
 
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // wxSize DoGetBestSize() const

@@ -47,7 +47,6 @@
 IMPLEMENT_CLASS(wxToolBarBase, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
-    EVT_IDLE(wxToolBarBase::OnIdle)
 END_EVENT_TABLE()
 
 #include "wx/listimpl.cpp"
@@ -581,17 +580,11 @@ void wxToolBarBase::OnMouseEnter(int id)
 // UI updates
 // ----------------------------------------------------------------------------
 
-void wxToolBarBase::OnIdle(wxIdleEvent& event)
-{
-    if (wxUpdateUIEvent::CanUpdate())
-        DoToolbarUpdates();
-
-    event.Skip();
-}
-
 // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
-void wxToolBarBase::DoToolbarUpdates()
+void wxToolBarBase::UpdateWindowUI(long flags)
 {
+    wxWindowBase::UpdateWindowUI(flags);
+
     wxEvtHandler* evtHandler = GetEventHandler() ;
 
     for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();

@@ -50,13 +50,10 @@ public:
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool ProcessIdle();
     virtual void WakeUpIdle();
 
     // implementation only from now on
     void OnIdle( wxIdleEvent &event );
-    bool SendIdleEvents();
-    bool SendIdleEvents( wxWindow* win );
 
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
@@ -89,8 +86,6 @@ private:
 #ifdef __WXDEBUG__
     bool m_isInAssert;
 #endif // __WXDEBUG__
-
-    bool CallInternalIdle( wxWindow* win );
 
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()

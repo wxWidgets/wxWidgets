@@ -525,10 +525,8 @@ public:
 
     size_t GetToolsCount() const { return m_tools.GetCount(); }
 
-    void OnIdle(wxIdleEvent& event);
-
     // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
-    virtual void DoToolbarUpdates();
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) ;
 
     // don't want toolbars to accept the focus
     virtual bool AcceptsFocus() const { return FALSE; }

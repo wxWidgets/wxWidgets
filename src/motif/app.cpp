@@ -170,19 +170,6 @@ int wxApp::MainLoop()
     return 0;
 }
 
-// Processes an idle event.
-// Returns TRUE if more time is needed.
-bool wxApp::ProcessIdle()
-{
-    wxIdleEvent event;
-
-    bool processed = ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return processed && event.MoreRequested();
-}
-
 void wxApp::ExitMainLoop()
 {
     if( m_eventLoop->IsRunning() )
@@ -253,47 +240,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
         event.RequestMore(TRUE);
 
     inOnIdle = FALSE;
-}
-
-// Send idle event to all top-level windows
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-        node = node->GetNext();
-    }
-
-    return needMore;
-}
-
-// Send idle event to window and all subwindows
-bool wxApp::SendIdleEvents(wxWindow* win)
-{
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-    win->GetEventHandler()->ProcessEvent(event);
-
-    if (event.MoreRequested())
-        needMore = TRUE;
-
-    wxWindowList::Node* node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-    return needMore ;
 }
 
 static char *fallbackResources[] = {

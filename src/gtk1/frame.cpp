@@ -508,7 +508,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
 
 void wxFrame::OnInternalIdle()
 {
-    wxTopLevelWindow::OnInternalIdle();
+    wxFrameBase::OnInternalIdle();
 
 #if wxUSE_MENUS_NATIVE
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();

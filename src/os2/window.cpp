@@ -1364,8 +1364,8 @@ void wxWindowOS2::OnIdle(
             (void)GetEventHandler()->ProcessEvent(rEvent);
         }
     }
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 } // end of wxWindowOS2::OnIdle
 
 //

@@ -135,7 +135,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_MOUSE_EVENTS(wxTextCtrl::OnMouse)
-    EVT_IDLE(wxTextCtrl::OnIdle)
     EVT_KILL_FOCUS(wxTextCtrl::OnKillFocus)
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
     
@@ -1962,14 +1961,12 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxTextCtrl::OnIdle( wxIdleEvent &event )
+void wxTextCtrl::OnInternalIdle()
 {
     m_ignoreInput = FALSE;
     
     if (m_lang != wxSOURCE_LANG_NONE)
         SearchForBrackets();
-    
-    event.Skip( TRUE );
 }
 
 void wxTextCtrl::Indent()

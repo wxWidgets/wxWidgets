@@ -151,11 +151,11 @@ public:
     // For implementation purposes - sometimes decorations make the client area
     // smaller
     virtual wxPoint GetClientAreaOrigin() const;
+
+    // Process idle (send update events)
+    void OnInternalIdle();
     
 protected:
-    // event handlers (not virtual by design)
-    void OnIdle(wxIdleEvent& event);
-    
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     

@@ -248,10 +248,10 @@ public:
     void OnEraseBackground( wxEraseEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnChar( wxKeyEvent &event );
-    void OnIdle( wxIdleEvent &event );
     void OnSetFocus( wxFocusEvent& event );
     void OnKillFocus( wxFocusEvent& event );
 
+    void OnInternalIdle();
     void RefreshLine( int n );
     void RefreshDown( int n );
     void MoveCursor( int new_x, int new_y, bool shift = FALSE, bool centre = FALSE );

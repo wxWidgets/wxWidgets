@@ -334,6 +334,9 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const wxChar c);
 
+    // do the window-specific processing after processing the update event
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
+
     // obsolete functions
 #if WXWIN_COMPATIBILITY
     bool Modified() const { return IsModified(); }

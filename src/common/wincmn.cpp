@@ -1770,42 +1770,46 @@ void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) co
 // do Update UI processing for child controls
 // ----------------------------------------------------------------------------
 
-// TODO: should this be implemented for the child window rather
-// than the parent? Then you can override it e.g. for wxCheckBox
-// to do the Right Thing rather than having to assume a fixed number
-// of control classes.
-void wxWindowBase::UpdateWindowUI()
+void wxWindowBase::UpdateWindowUI(long flags)
 {
-#if wxUSE_CONTROLS
     wxUpdateUIEvent event(GetId());
     event.m_eventObject = this;
 
     if ( GetEventHandler()->ProcessEvent(event) )
     {
-        if ( event.GetSetEnabled() )
-            Enable(event.GetEnabled());
+        DoUpdateWindowUI(event);
+    }
 
-        if ( event.GetSetText() )
+    if (flags & wxUPDATE_UI_RECURSE)
+    {
+        wxWindowList::Node* node = GetChildren().GetFirst();
+        while (node)
         {
-            wxControl *control = wxDynamicCastThis(wxControl);
-            if ( control )
-            {
-#if wxUSE_TEXTCTRL
-                wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
-                if ( text )
-                {
-                	if ( event.GetText() != text->GetValue() )
-                    	text->SetValue(event.GetText());
-                }
-                else
-#endif // wxUSE_TEXTCTRL
-				{
-					if ( event.GetText() != control->GetLabel() )
-                    	control->SetLabel(event.GetText());
-                }
-            }
+            wxWindow* child = (wxWindow*) node->GetData();
+            child->UpdateWindowUI(flags);
+            node = node->GetNext();
         }
+    }
+}
 
+// do the window-specific processing after processing the update event
+// TODO: take specific knowledge out of this function and
+// put in each control's base class. Unfortunately we don't
+// yet have base implementation files for wxCheckBox and wxRadioButton.
+void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetSetEnabled() )
+        Enable(event.GetEnabled());
+    
+#if wxUSE_CONTROLS
+    if ( event.GetSetText() )
+    {
+        wxControl *control = wxDynamicCastThis(wxControl);
+        if ( control )
+        {
+            if ( event.GetText() != control->GetLabel() )
+                control->SetLabel(event.GetText());
+        }
 #if wxUSE_CHECKBOX
         wxCheckBox *checkbox = wxDynamicCastThis(wxCheckBox);
         if ( checkbox )
@@ -1823,8 +1827,22 @@ void wxWindowBase::UpdateWindowUI()
                 radiobtn->SetValue(event.GetChecked());
         }
 #endif // wxUSE_RADIOBTN
+    }    
+#endif
+}
+
+// call internal idle recursively
+void wxWindowBase::ProcessInternalIdle()
+{
+    OnInternalIdle();
+
+    wxWindowList::Node  *node = GetChildren().GetFirst();
+    while (node)
+    {
+        wxWindow *child = node->GetData();
+        child->ProcessInternalIdle();
+        node = node->GetNext();
     }
-#endif // wxUSE_CONTROLS
 }
 
 // ----------------------------------------------------------------------------
@@ -1880,10 +1898,15 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
-// the default action is to populate dialog with data when it's created
+// the default action is to populate dialog with data when it's created,
+// and nudge the UI into displaying itself correctly in case
+// we've turned the wxUpdateUIEvents frequency down low.
 void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 {
     TransferDataToWindow();
+    
+    // Update the UI at this point
+    UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
 // process Ctrl-Alt-mclick

@@ -59,7 +59,6 @@ public:
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool ProcessIdle();
     virtual void WakeUpIdle();
     
     virtual bool OnInitGui();
@@ -68,14 +67,6 @@ public:
     // --------------------------
     
     void OnIdle(wxIdleEvent& event);
-    
-    // Send idle event to all top-level windows.
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents();
-    
-    // Send idle event to window and all subwindows
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents(wxWindow* win);
     
     // Processes an X event.
     virtual bool ProcessXEvent(WXEvent* event);

@@ -80,7 +80,6 @@ public:
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool ProcessIdle(void);
     virtual void WakeUpIdle(void);
 
     virtual void SetPrintMode(int mode) { m_nPrintMode = mode; }
@@ -90,14 +89,6 @@ public:
     void OnIdle(wxIdleEvent& rEvent);
     void OnEndSession(wxCloseEvent& rEvent);
     void OnQueryEndSession(wxCloseEvent& rEvent);
-
-    // Send idle event to all top-level windows.
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents(void);
-
-    // Send idle event to window and all subwindows
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents(wxWindow* pWin);
 
     void SetAuto3D(bool bFlag) { m_bAuto3D = bFlag; }
     bool GetAuto3D(void) const { return m_bAuto3D; }

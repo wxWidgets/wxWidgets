@@ -49,8 +49,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
     EVT_SIZE(wxListBox::OnSize)
-
-    EVT_IDLE(wxListBox::OnIdle)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -601,7 +599,7 @@ void wxListBox::UpdateItems()
     }
 }
 
-void wxListBox::OnIdle(wxIdleEvent& event)
+void wxListBox::OnInternalIdle()
 {
     if ( m_updateScrollbarY || m_updateScrollbarX )
     {
@@ -624,8 +622,6 @@ void wxListBox::OnIdle(wxIdleEvent& event)
 
         m_updateCount = 0;
     }
-
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

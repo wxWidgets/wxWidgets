@@ -191,7 +191,6 @@ public:
     // --------------
 
     void OnEraseBackground(wxEraseEvent& event);
-    void OnIdle(wxIdleEvent& event);
     void OnPaint(wxPaintEvent& event);
 
 public:
@@ -414,6 +413,10 @@ public:
 
     // check if mouse is in the window
     bool IsMouseInWindow() const;
+
+    // virtual function for implementing internal idle
+    // behaviour
+    virtual void OnInternalIdle() ;
 
 protected:
     // the window handle

@@ -1033,6 +1033,12 @@ enum wxBorder
 // possibly be made to work in the future, at least on Windows
 #define wxWS_EX_THEMED_BACKGROUND       0x00000008
 
+// this window should always process idle events
+#define wxWS_EX_PROCESS_IDLE            0x00000010
+
+// this window should always process UI update events
+#define wxWS_EX_PROCESS_UI_UPDATES      0x00000020
+
 // Use this style to add a context-sensitive help to the window (currently for
 // Win32 only and it doesn't work if wxMINIMIZE_BOX or wxMAXIMIZE_BOX are used)
 #define wxFRAME_EX_CONTEXTHELP  0x00000004
@@ -1858,6 +1864,17 @@ enum wxPrintMode
     wxPRINT_MODE_PREVIEW = 1,   // Preview in external application
     wxPRINT_MODE_FILE =    2,   // Print to file
     wxPRINT_MODE_PRINTER = 3    // Send to printer
+};
+
+// ----------------------------------------------------------------------------
+// UpdateWindowUI flags
+// ----------------------------------------------------------------------------
+
+enum wxUpdateUI
+{
+    wxUPDATE_UI_NONE          = 0x0000,
+    wxUPDATE_UI_RECURSE       = 0x0001,
+    wxUPDATE_UI_FROMIDLE      = 0x0002 // Invoked from On(Internal)Idle
 };
 
 // ----------------------------------------------------------------------------

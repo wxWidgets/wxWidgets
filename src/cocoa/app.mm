@@ -249,18 +249,6 @@ int wxApp::MainLoop()
     return 0;
 }
 
-// Returns TRUE if more time is needed.
-bool wxApp::ProcessIdle()
-{
-    wxIdleEvent event;
-    event.SetEventObject(this);
-    ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return event.MoreRequested();
-}
-
 void wxApp::ExitMainLoop()
 {
     wxLogDebug("wxApp::ExitMailLoop m_isIdle=%d, isRunning=%d",(int)m_isIdle,(int)[m_cocoaApp isRunning]);
@@ -312,48 +300,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
       event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
-}
-
-// Send idle event to all top-level windows
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-    return needMore;
-}
-
-// Send idle event to window and all subwindows
-bool wxApp::SendIdleEvents(wxWindow* win)
-{
-//    wxLogDebug("SendIdleEvents win=%p",win);
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-    win->ProcessEvent(event);
-
-    if (event.MoreRequested())
-        needMore = TRUE;
-
-    wxWindowList::Node* node = win->GetChildren().GetFirst();
-    while (node)
-    {
-//        wxLogDebug("child=%p",node->Data());
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-    return needMore;
 }
 
 // Yield to other processes

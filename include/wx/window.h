@@ -688,7 +688,11 @@ public:
     // get border for the flags of this window
     wxBorder GetBorder() const { return GetBorder(GetWindowStyleFlag()); }
 
-    void UpdateWindowUI();
+    // send wxUpdateUIEvents to this window, and children if recurse is TRUE
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    // do the window-specific processing after processing the update event
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
 #if wxUSE_MENUS
     bool PopupMenu( wxMenu *menu, const wxPoint& pos )
@@ -858,7 +862,14 @@ public:
     void OnHelp(wxHelpEvent& event);
 #endif // wxUSE_HELP
 
-        // get the haqndle of the window for the underlying window system: this
+        // virtual function for implementing internal idle
+        // behaviour
+        virtual void OnInternalIdle() {}
+
+        // call internal idle recursively
+        void ProcessInternalIdle() ;
+
+        // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs
     virtual WXWidget GetHandle() const = 0;

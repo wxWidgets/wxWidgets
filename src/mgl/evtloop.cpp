@@ -97,13 +97,7 @@ void wxEventLoopImpl::Dispatch()
 
 bool wxEventLoopImpl::SendIdleEvent()
 {
-    wxIdleEvent event;
-
-    bool processed = wxTheApp->ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();    
-    
-    return processed && event.MoreRequested();
+    return wxTheApp->ProcessIdle();
 }
 
 // ============================================================================

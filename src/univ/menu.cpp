@@ -2463,8 +2463,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     wxLog::FlushActive();
 
     // some controls update themselves from OnIdle() call - let them do it
-    wxIdleEvent event;
-    wxTheApp->ProcessEvent(event);
+    wxTheApp->ProcessIdle();
 
     // if the window hadn't been refreshed yet, the menu can adversely affect
     // its next OnPaint() handler execution - i.e. scrolled window refresh

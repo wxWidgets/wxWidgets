@@ -672,20 +672,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
     return FALSE;
 }
 
-// Returns TRUE if more time is needed.
-// Note that this duplicates wxEventLoopImpl::SendIdleEvent
-// but ProcessIdle may be needed by apps, so is kept.
-bool wxApp::ProcessIdle()
-{
-    wxIdleEvent event;
-    event.SetEventObject(this);
-    ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return event.MoreRequested();
-}
-
 void wxApp::ExitMainLoop()
 {
     if (m_mainLoop)
@@ -747,51 +733,6 @@ void wxApp::WakeUpIdle()
     // Wake up the idle handler processor, even if it is in another thread...
 }
 
-
-// Send idle event to all top-level windows
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-        node = node->GetNext();
-    }
-
-    return needMore;
-}
-
-// Send idle event to window and all subwindows
-bool wxApp::SendIdleEvents(wxWindow* win)
-{
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-
-    win->GetEventHandler()->ProcessEvent(event);
-
-    if (event.MoreRequested())
-        needMore = TRUE;
-
-    wxWindowListNode* node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow* win = (wxWindow*) node->GetData();
-        if (SendIdleEvents(win))
-            needMore = TRUE;
-
-        node = node->GetNext();
-    }
-
-    win->OnInternalIdle();
-
-    return needMore;
-}
 
 // Create display, and other initialization
 bool wxApp::OnInitGui()

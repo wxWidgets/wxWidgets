@@ -272,17 +272,6 @@ bool wxApp::OnInitGui()
     return TRUE;
 }
 
-bool wxApp::ProcessIdle()
-{
-    wxIdleEvent event;
-    event.SetEventObject(this);
-    ProcessEvent(event);
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return event.MoreRequested();
-}
-
 void wxApp::OnIdle(wxIdleEvent &event)
 {
     static bool s_inOnIdle = FALSE;
@@ -310,46 +299,6 @@ void wxApp::OnIdle(wxIdleEvent &event)
         event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
-}
-
-bool wxApp::SendIdleEvents()
-{
-    bool needMore = FALSE;
-
-    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        if ( SendIdleEvents(win) )
-            needMore = TRUE;
-        node = node->GetNext();
-    }
-
-    return needMore;
-}
-
-bool wxApp::SendIdleEvents(wxWindow* win)
-{
-    bool needMore = FALSE;
-
-    wxIdleEvent event;
-    event.SetEventObject(win);
-
-    win->GetEventHandler()->ProcessEvent(event);
-
-    if ( event.MoreRequested() )
-        needMore = TRUE;
-
-    wxNode* node = win->GetChildren().First();
-    while (node)
-    {
-        wxWindow* win = (wxWindow*) node->Data();
-        if ( SendIdleEvents(win) )
-            needMore = TRUE;
-
-        node = node->Next();
-    }
-    return needMore;
 }
 
 int wxApp::MainLoop()

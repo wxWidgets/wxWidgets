@@ -1496,6 +1496,20 @@ private:
  wxEVT_UPDATE_UI
  */
 
+// Whether to always send update events to windows, or
+// to only send update events to those with the
+// wxWS_EX_PROCESS_UI_UPDATES style.
+
+enum wxUpdateUIMode
+{
+        // Send UI update events to all windows
+    wxUPDATE_UI_PROCESS_ALL,
+
+        // Send UI update events to windows that have
+        // the wxWS_EX_PROCESS_UI_UPDATES flag specified
+    wxUPDATE_UI_PROCESS_SPECIFIED
+};
+
 class WXDLLIMPEXP_CORE wxUpdateUIEvent : public wxCommandEvent
 {
 public:
@@ -1531,17 +1545,25 @@ public:
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
-    static void SetUpdateInterval(long updateInterval) { m_updateInterval = updateInterval; }
+    static void SetUpdateInterval(long updateInterval) { sm_updateInterval = updateInterval; }
 
     // Returns the current interval between updates in milliseconds
-    static long GetUpdateInterval() { return m_updateInterval ; }
+    static long GetUpdateInterval() { return sm_updateInterval ; }
 
-    // Can we update?
-    static bool CanUpdate() ;
+    // Can we update this window?
+    static bool CanUpdate(wxWindow* win) ;
 
     // Reset the update time to provide a delay until the next
     // time we should update
     static void ResetUpdateTime() ;
+
+    // Specify how wxWindows will send update events: to
+    // all windows, or only to those which specify that they
+    // will process the events.
+    static void SetMode(wxUpdateUIMode mode) { sm_updateMode = mode; }
+
+    // Returns the UI update mode
+    static wxUpdateUIMode GetMode() { return sm_updateMode ; }
 
     virtual wxEvent *Clone() const { return new wxUpdateUIEvent(*this); }
 
@@ -1553,9 +1575,10 @@ protected:
     bool          m_setChecked;
     wxString      m_text;
 #if wxUSE_LONGLONG
-    static wxLongLong   m_lastUpdate;
+    static wxLongLong       sm_lastUpdate;
 #endif
-    static long         m_updateInterval;
+    static long             sm_updateInterval;
+    static wxUpdateUIMode   sm_updateMode;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxUpdateUIEvent)
@@ -1875,6 +1898,20 @@ private:
  wxEVT_IDLE
  */
 
+// Whether to always send idle events to windows, or
+// to only send update events to those with the
+// wxWS_EX_PROCESS_IDLE style.
+
+enum wxIdleMode
+{
+        // Send idle events to all windows
+    wxIDLE_PROCESS_ALL,
+
+        // Send idle events to windows that have
+        // the wxWS_EX_PROCESS_IDLE flag specified
+    wxIDLE_PROCESS_SPECIFIED
+};
+
 class WXDLLIMPEXP_CORE wxIdleEvent : public wxEvent
 {
 public:
@@ -1892,8 +1929,20 @@ public:
 
     virtual wxEvent *Clone() const { return new wxIdleEvent(*this); }
 
+    // Specify how wxWindows will send idle events: to
+    // all windows, or only to those which specify that they
+    // will process the events.
+    static void SetMode(wxIdleMode mode) { sm_idleMode = mode; }
+
+    // Returns the idle event mode
+    static wxIdleMode GetMode() { return sm_idleMode ; }
+
+    // Can we send an idle event?
+    static bool CanSend(wxWindow* win) ;
+
 protected:
     bool m_requestMore;
+    static wxIdleMode sm_idleMode;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIdleEvent)

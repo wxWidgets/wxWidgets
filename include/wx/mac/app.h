@@ -56,7 +56,6 @@ class WXDLLEXPORT wxApp: public wxAppBase
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
-    virtual bool ProcessIdle();
     virtual void WakeUpIdle();
     
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -70,14 +69,6 @@ class WXDLLEXPORT wxApp: public wxAppBase
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
-    
-    // Send idle event to all top-level windows.
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents();
-    
-    // Send idle event to window and all subwindows
-    // Returns TRUE if more idle time is requested.
-    bool SendIdleEvents(wxWindowMac* win);
     
     // Windows only, but for compatibility...
     inline void SetAuto3D(bool flag) { m_auto3D = flag; }

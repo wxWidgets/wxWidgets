@@ -47,12 +47,9 @@ public:
     virtual bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
-    virtual bool ProcessIdle();
 
     // implementation only from now on
     void OnIdle(wxIdleEvent &event);
-    bool SendIdleEvents();
-    bool SendIdleEvents(wxWindow* win);
 
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();

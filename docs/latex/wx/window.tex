@@ -57,6 +57,30 @@ repainted, then children being painted over them. Windows only.}
 
 See also \helpref{window styles overview}{windowstyles}.
 
+\wxheading{Extra window styles}
+
+The following are extra styles, set using \helpref{wxWindow::SetExtraStyle}{wxwindowsetextrastyle}.
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxWS\_EX\_VALIDATE\_RECURSIVELY}}{By default, Validate/TransferDataTo/FromWindow()
+only work on direct children of the window (compatible behaviour). Set this flag to make them recursively
+descend into all subwindows.}
+\twocolitem{\windowstyle{wxWS\_EX\_BLOCK\_EVENTS}}{wxCommandEvents and the objects of the derived classes are forwarded to the
+parent window and so on recursively by default. Using this flag for the
+given window allows to block this propagation at this window, i.e. prevent
+the events from being propagated further upwards. Dialogs have this
+flag on by default.}
+\twocolitem{\windowstyle{wxWS\_EX\_TRANSIENT}}{Don't use this window as an implicit parent for the other windows: this must
+be used with transient windows as otherwise there is the risk of creating a
+dialog/frame with this window as a parent which would lead to a crash if the
+parent is destroyed before the child.}
+\twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_IDLE}}{This window should always process idle events, even
+if the mode set by \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode} is wxIDLE\_PROCESS\_SPECIFIED.}
+\twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_UI\_UPDATES}}{This window should always process UI update events,
+even if the mode set by \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} is wxUPDATE\_UI\_PROCESS\_SPECIFIED.}
+\end{twocollist}
+
 \wxheading{See also}
 
 \helpref{Event handling overview}{eventhandlingoverview}
@@ -407,6 +431,31 @@ Disables the window, same as \helpref{Enable({\tt false})}{wxwindowenable}.
 
 Returns {\tt true} if the window has been disabled, {\tt false} if it had been
 already disabled before the call to this function.
+
+\membersection{wxWindow::DoUpdateWindowUI}\label{wxwindowdoupdatewindowui}
+
+\func{virtual void}{DoUpdateWindowUI}{\param{wxUpdateUIEvent\&}{ event}}
+
+Does the window-specific updating after processing the update event.
+This function is called by \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
+in order to check return values in the \helpref{wxUpdateUIEvent}{wxupdateuievent} and
+act appropriately. For example, to allow frame and dialog title updating, wxWindows
+implements this function as follows:
+
+\begin{verbatim}
+// do the window-specific processing after processing the update event
+void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetSetEnabled() )
+        Enable(event.GetEnabled());
+    
+    if ( event.GetSetText() )
+    {
+        if ( event.GetText() != GetTitle() )
+            SetTitle(event.GetText());
+    }
+}
+\end{verbatim}
 
 \membersection{wxWindow::DragAcceptFiles}\label{wxwindowdragacceptfiles}
 
@@ -1684,6 +1733,19 @@ implements the following methods:\par
 %% \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent},\rtfsp
 %% \helpref{Event handling overview}{eventhandlingoverview}
 
+\membersection{wxWindow::OnInternalIdle}\label{wxwindowoninternalidle}
+
+\func{virtual void}{OnInternalIdle}{\void}
+
+This virtual function is normally only used internally, but
+sometimes an application may need it to implement functionality
+that should not be disabled by an application defining an OnIdle
+handler in a derived class.
+
+This function may be used to do delayed painting, for example,
+and most implementations call \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
+in order to send update events to the window in idle time.
+
 \membersection{wxWindow::PageDown}\label{wxwindowpagedown}
 
 This is just a wrapper for \helpref{ScrollPages()}{wxwindowscrollpages}$(1)$.
@@ -2750,6 +2812,54 @@ event loop. Notice that this function doesn't refresh the window and does
 nothing if the window hadn't been already repainted. Use 
 \helpref{Refresh}{wxwindowrefresh} first if you want to immediately redraw the
 window unconditionally.
+
+\membersection{wxWindow::UpdateWindowUI}\label{wxwindowupdatewindowui}
+
+\func{virtual void}{UpdateWindowUI}{\param{long}{ flags = wxUPDATE_UI_NONE}}
+
+This function sends \helpref{wxUpdateUIEvents}{wxupdateuievent} to
+the window. The particular implementation depends on the window; for
+example a wxToolBar will send an update UI event for each toolbar button,
+and a wxFrame will send an update UI event for each menubar menu item.
+You can call this function from your application to ensure that your
+UI is up-to-date at this point (as far as your wxUpdateUIEvent handlers
+are concerned). This may be necessary if you have called 
+\helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} or 
+\helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval} to
+limit the overhead that wxWindows incurs by sending update UI events in idle time.
+
+{\it flags} should be a bitlist of one or more of the following values.
+
+\begin{verbatim}
+enum wxUpdateUI
+{
+    wxUPDATE_UI_NONE          = 0x0000, // No particular value
+    wxUPDATE_UI_RECURSE       = 0x0001, // Call the function for descendants
+    wxUPDATE_UI_FROMIDLE      = 0x0002  // Invoked from On(Internal)Idle
+};
+\end{verbatim}
+
+If you are calling this function from an OnInternalIdle or OnIdle
+function, make sure you pass the wxUPDATE\_UI\_FROMIDLE flag, since
+this tells the window to only update the UI elements that need
+to be updated in idle time. Some windows update their elements
+only when necessary, for example when a menu is about to be shown.
+The following is an example of how to call UpdateWindowUI from
+an idle function.
+
+\begin{verbatim}
+void MyWindow::OnInternalIdle()
+{
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+}
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxUpdateUIEvent}{wxupdateuievent}, 
+\helpref{wxWindow::DoUpdateWindowUI}{wxwindowdoupdatewindowui}, 
+\helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle}
 
 \membersection{wxWindow::Validate}\label{wxwindowvalidate}
 

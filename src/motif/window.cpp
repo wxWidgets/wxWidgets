@@ -145,7 +145,6 @@ static int str16len(const char *s)
 
     BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
         EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
-        EVT_IDLE(wxWindow::OnIdle)
     END_EVENT_TABLE()
 
 // ============================================================================
@@ -1683,12 +1682,12 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
-void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
+void wxWindow::OnInternalIdle()
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate())
-        UpdateWindowUI();
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // ----------------------------------------------------------------------------

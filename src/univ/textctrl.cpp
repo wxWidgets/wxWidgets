@@ -608,8 +608,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
 
     EVT_SIZE(wxTextCtrl::OnSize)
-
-    EVT_IDLE(wxTextCtrl::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -3571,7 +3569,7 @@ void wxTextCtrl::UpdateScrollbars()
     MData().m_updateScrollbarY = FALSE;
 }
 
-void wxTextCtrl::OnIdle(wxIdleEvent& event)
+void wxTextCtrl::OnInternalIdle()
 {
     // notice that single line text control never has scrollbars
     if ( !IsSingleLine() &&
@@ -3579,8 +3577,6 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
     {
         UpdateScrollbars();
     }
-
-    event.Skip();
 }
 
 bool wxTextCtrl::SendAutoScrollEvents(wxScrollWinEvent& event) const

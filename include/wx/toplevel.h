@@ -134,6 +134,9 @@ public:
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
+    // do the window-specific processing after processing the update event
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
+
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area

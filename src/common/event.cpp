@@ -370,23 +370,32 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
  */
 
 #if wxUSE_LONGLONG
-wxLongLong wxUpdateUIEvent::m_lastUpdate = 0;
+wxLongLong wxUpdateUIEvent::sm_lastUpdate = 0;
 #endif
 
-long wxUpdateUIEvent::m_updateInterval = 0;
+long wxUpdateUIEvent::sm_updateInterval = 0;
+
+wxUpdateUIMode wxUpdateUIEvent::sm_updateMode = wxUPDATE_UI_PROCESS_ALL;
 
 // Can we update?
-bool wxUpdateUIEvent::CanUpdate()
+bool wxUpdateUIEvent::CanUpdate(wxWindow* win)
 {
-    if (m_updateInterval == -1)
+    // Don't update if we've switched global updating off
+    // and this window doesn't support updates.
+    if (win &&
+       (GetMode() == wxUPDATE_UI_PROCESS_SPECIFIED &&
+       ((win->GetExtraStyle() & wxWS_EX_PROCESS_UI_UPDATES) == 0)))
         return FALSE;
-    else if (m_updateInterval == 0)
+    
+    if (sm_updateInterval == -1)
+        return FALSE;
+    else if (sm_updateInterval == 0)
         return TRUE;
     else
     {
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
         wxLongLong now = wxGetLocalTimeMillis();
-        if (now > (m_lastUpdate + m_updateInterval))
+        if (now > (sm_lastUpdate + sm_updateInterval))
         {
             return TRUE;
         }
@@ -404,17 +413,35 @@ bool wxUpdateUIEvent::CanUpdate()
 void wxUpdateUIEvent::ResetUpdateTime()
 {
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
-    if (m_updateInterval > 0)
+    if (sm_updateInterval > 0)
     {
         wxLongLong now = wxGetLocalTimeMillis();
-        if (now > (m_lastUpdate + m_updateInterval))
+        if (now > (sm_lastUpdate + sm_updateInterval))
         {
-            m_lastUpdate = now;
+            sm_lastUpdate = now;
         }
     }
 #endif
 }
 
+/*
+ * Idle events
+ */
+ 
+wxIdleMode wxIdleEvent::sm_idleMode = wxIDLE_PROCESS_ALL;
+
+// Can we send an idle event?
+bool wxIdleEvent::CanSend(wxWindow* win)
+{
+    // Don't update if we've switched global updating off
+    // and this window doesn't support updates.
+    if (win &&
+       (GetMode() == wxIDLE_PROCESS_SPECIFIED &&
+       ((win->GetExtraStyle() & wxWS_EX_PROCESS_IDLE) == 0)))
+        return FALSE;
+    
+    return TRUE;
+}
 
 /*
  * Scroll events

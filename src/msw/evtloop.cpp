@@ -137,13 +137,7 @@ bool wxEventLoopImpl::PreProcessMessage(MSG *msg)
 
 bool wxEventLoopImpl::SendIdleMessage()
 {
-    wxIdleEvent event;
-
-    bool processed = wxTheApp->ProcessEvent(event) ;
-
-    wxUpdateUIEvent::ResetUpdateTime();
-    
-    return processed && event.MoreRequested();
+    return wxTheApp->ProcessIdle();
 }
 
 // ============================================================================
