@@ -278,9 +278,22 @@ void wxDC::SelectOldObjects(WXHDC dc)
 void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     m_clipping = TRUE;
-    IntersectClipRect(GetHdc(), XLOG2DEV(cx), YLOG2DEV(cy),
+
+    HRGN hrgn = ::CreateRectRgn(XLOG2DEV(cx), YLOG2DEV(cy),
                                 XLOG2DEV(cx + cw), YLOG2DEV(cy + ch));
-    DO_SET_CLIPPING_BOX()
+    if ( !hrgn )
+    {
+        wxLogLastError(_T("CreateRectRgn"));
+    }
+    else
+    {
+        if ( ::SelectClipRgn(GetHdc(), hrgn) == ERROR )
+        {
+            wxLogLastError(_T("SelectClipRgn"));
+        }
+
+        DO_SET_CLIPPING_BOX()
+    }
 }
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
