@@ -114,9 +114,14 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             else
             {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
-
+                
                 if (wxIsCDATAElement(tagBuffer))
                 {
+                    // store the orig pos in case we are missing the closing
+                    // tag (see below)
+                    wxInt32 old_pos = pos; 
+                    bool foundCloseTag = false;
+                    
                     // find next matching tag
                     int tag_len = wxStrlen(tagBuffer);
                     while (pos < lng)
@@ -147,13 +152,24 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                         }
 
                         // found a match
-                        if (match_pos == tag_len) {
+                        if (match_pos == tag_len) 
+                        {
                             pos = pos - tag_len - 3;
+                            foundCloseTag = true;
                             break;
                         }
-                        else {
+                        else // keep looking for the closing tag
+                        {
                             ++pos;
                         }
+                    }
+                    if (!foundCloseTag)
+                    {
+                        // we didn't find closing tag; this means the markup
+                        // is incorrect and the best thing we can do is to
+                        // ignore the unclosed tag and continue parsing as if
+                        // it didn't exist:
+                        pos = old_pos;
                     }
                 }
             }
