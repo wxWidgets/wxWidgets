@@ -54,17 +54,17 @@ cd $1
 echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
-rm -f $2/wx*-${WXVER}*.tgz
-rm -f $2/tex2rtf2-*.tgz
-rm -f $2/dialoged-*.tgz
-rm -f $2/ogl3-*.tgz
-rm -f $2/jpeg-*.tgz
-rm -f $2/tiff-*.tgz
-rm -f $2/stc-*.tgz
-rm -f $2/canvas-*.tgz
-rm -f $2/contrib-*.tgz
-rm -f $2/applet-*.tgz
-rm -f $2/wxxrc-*.tgz
+rm -f $2/wx*-${WXVER}*.tar.gz
+rm -f $2/tex2rtf2-*.tar.gz
+rm -f $2/dialoged-*.tar.gz
+rm -f $2/ogl3-*.tar.gz
+rm -f $2/jpeg-*.tar.gz
+rm -f $2/tiff-*.tar.gz
+rm -f $2/stc-*.tar.gz
+rm -f $2/canvas-*.tar.gz
+rm -f $2/contrib-*.tar.gz
+rm -f $2/applet-*.tar.gz
+rm -f $2/wxxrc-*.tar.gz
 
 echo Tarring...
 
@@ -78,72 +78,77 @@ mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
 ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxgtk.txt
 tar cvf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
 gzip $2/wxGTK-${WXVER}.tar
-mv $2/wxGTK-${WXVER}.tar.gz $2/wxGTK-${WXVER}.tgz
 
 ### wxMotif
 ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmotif.txt
 tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
-mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz
 
 ### wxX: combined wxMotif and wxX11 distributions
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxx.txt
-tar cvf $2/wxWindows-X-${WXVER}.tar -T /tmp/wxx.txt
-gzip $2/wxWindows-X-${WXVER}.tar
-mv $2/wxWindows-X-${WXVER}.tar.gz $2/wxWindows-X-${WXVER}.tgz
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxx.txt
+tar cvf $2/wxX11-${WXVER}.tar -T /tmp/wxx.txt
+gzip $2/wxX11-${WXVER}.tar
 
 ### wxMSW
 ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmsw.txt
 tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
 gzip $2/wxMSW-${WXVER}.tar
-mv $2/wxMSW-${WXVER}.tar.gz $2/wxMSW-${WXVER}.tgz
 
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
 tar cvf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
 gzip $2/wxWindows-${WXVER}-doc.tar
-mv $2/wxWindows-${WXVER}-doc.tar.gz $2/wxWindows-${WXVER}-doc.tgz
 
 ### HTML docs
 ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
 tar cvf $2/wxWindows-${WXVER}-htm.tar -T /tmp/html.txt
 gzip $2/wxWindows-${WXVER}-htm.tar
-mv $2/wxWindows-${WXVER}-htm.tar.gz $2/wxWindows-${WXVER}-htm.tgz
 
 ### PDF docs
 ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
 tar cvf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
 gzip $2/wxWindows-${WXVER}-pdf.tar
-mv $2/wxWindows-${WXVER}-pdf.tar.gz $2/wxWindows-${WXVER}-pdf.tgz
 
 ### Stubs files
 #ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
 #tar cvf $2/wxWindows-${WXVER}-stubs.tar -T /tmp/stubs.txt
 #gzip $2/wxWindows-${WXVER}-stubs.tar
-#mv $2/wxWindows-${WXVER}-stubs.tar.gz $2/wxWindows-${WXVER}-stubs.tgz
 
 ### Tex2RTF
 ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt
 tar cvf $2/tex2rtf2-${WXVER}.tar -T /tmp/tex2rtf.txt
 gzip $2/tex2rtf2-${WXVER}.tar
-mv $2/tex2rtf2-${WXVER}.tar.gz $2/tex2rtf2-${WXVER}.tgz
 
 ### OGL
 ls `cat $1/distrib/msw/ogl.rsp` > /tmp/ogl.txt
 tar cvf $2/ogl3-${WXVER}.tar -T /tmp/ogl.txt
 gzip $2/ogl3-${WXVER}.tar
-mv $2/ogl3-${WXVER}.tar.gz $2/ogl3-${WXVER}.tgz
 
 ### JPEG
 ls `cat $1/distrib/msw/jpeg.rsp` > /tmp/jpeg.txt
 tar cvf $2/jpeg-${WXVER}.tar -T /tmp/jpeg.txt
 gzip $2/jpeg-${WXVER}.tar
-mv $2/jpeg-${WXVER}.tar.gz $2/jpeg-${WXVER}.tgz
 
 ### TIFF
 ls `cat $1/distrib/msw/tiff.rsp` > /tmp/tiff.txt
 tar cvf $2/tiff-${WXVER}.tar -T /tmp/tiff.txt
 gzip $2/tiff-${WXVER}.tar
-mv $2/tiff-${WXVER}.tar.gz $2/tiff-${WXVER}.tgz
+
+# Copy readme and other files
+copy $1/docs/readme.txt $2/readme-${WXVER}.txt
+copy $1/docs/changes.txt $2/changes-${WXVER}.txt
+copy $1/docs/mgl/readme.txt $2/readme_mgl-${WXVER}.txt
+copy $1/docs/mgl/install.txt $2/install_mgl-${WXVER}.txt
+copy $1/docs/x11/readme.txt $2/readme_x11-${WXVER}.txt
+copy $1/docs/x11/readme-nanox.txt $2/readme_nanox-${WXVER}.txt
+copy $1/docs/x11/install.txt $2/install_x11-${WXVER}.txt
+copy $1/docs/motif/readme.txt $2/readme_motif-${WXVER}.txt
+copy $1/docs/motif/install.txt $2/install_motif-${WXVER}.txt
+copy $1/docs/msw/readme.txt $2/readme_msw-${WXVER}.txt
+copy $1/docs/msw/install.txt $2/install_msw-${WXVER}.txt
+copy $1/docs/gtk/readme.txt $2/readme_gtk-${WXVER}.txt
+copy $1/docs/gtk/install.txt $2/install_gtk-${WXVER}.txt
+copy $1/docs/mac/readme.txt $2/readme_mac-${WXVER}.txt
+copy $1/docs/mac/install.txt $2/install_mac-${WXVER}.txt
 
 echo Done!

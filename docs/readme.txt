@@ -1,4 +1,4 @@
-wxWindows 2.3.2
+wxWindows 2.3.3
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
@@ -37,6 +37,8 @@ wxWindows 2 currently supports the following platforms:
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
 - MacOS
+- Most Unix variants with X11 (beta)
+- DOS with MGL (beta)
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
@@ -66,8 +68,13 @@ wxGTK-devel-x.y.z-0.i386.rpm       wxGTK Linux minimum development system as an 
 wxWindows for Motif distribution
 --------------------------------
 
-wxMotif-x.y.z.tgz                  wxMotif source distribution. Contains
-                                   TIFF, JPEG, Tex2RTF source plus HTML
+wxMotif-x.y.z.tgz                  wxMotif source distribution, without
+                                   documentation.
+
+wxWindows for X11 distribution
+------------------------------
+
+wxX11-x.y.z.tgz                    wxX11 source distribution, without
                                    documentation.
 
 wxWindows for MS Windows distribution
@@ -140,6 +147,8 @@ in the individual directories:
   docs/gtk
   docs/motif
   docs/mac
+  docs/x11
+  docs/mgl
 
 Licence information
 -------------------
@@ -201,11 +210,6 @@ Further information
 The wxWindows Web site is located at:
 
   http://www.wxwindows.org
-
-The wxGTK Web site (with further wxGTK-specific files and
-information) is located at:
-
-  http://www.freiburg.linux.de/~wxxt
 
 The main wxWindows ftp site is at:
 
