@@ -79,6 +79,8 @@ bool wxTimer::Start(int milliseconds,bool mode)
 #endif
     m_info.m_task.tmWakeUp = 0 ;
     m_info.m_task.tmReserved = 0 ;
+	m_info.m_task.qType = 0 ;
+	m_info.m_timer = this ;
     InsXTime((QElemPtr) &m_info.m_task ) ;
     PrimeTime( (QElemPtr) &m_info.m_task , m_milli ) ;
     return FALSE;
