@@ -197,9 +197,6 @@ protected:
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
 
-#if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points);
-#endif // wxUSE_SPLINES
 
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);

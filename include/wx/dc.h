@@ -654,7 +654,7 @@ protected:
                                  wxFont *theFont = NULL) const = 0;
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points) = 0;
+    virtual void DoDrawSpline(wxList *points);
 #endif
 
 protected:

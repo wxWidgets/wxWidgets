@@ -287,9 +287,6 @@ protected:
                                ,int     nFillStyle = wxODDEVEN_RULE
                               );
 
-#if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList* pPoints);
-#endif // wxUSE_SPLINES
 
     //
     // common part of DoDrawText() and DoDrawRotatedText()

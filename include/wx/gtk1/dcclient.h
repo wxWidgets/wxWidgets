@@ -100,10 +100,6 @@ public:
     virtual void DestroyClippingRegion();
     virtual void DoSetClippingRegionAsRegion( const wxRegion &region  );
 
-#if wxUSE_SPLINES
-    virtual void DoDrawSpline( wxList *points );
-#endif
-
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;
     virtual int GetDepth() const;
