@@ -16,6 +16,7 @@
 #endif
 
 #include "wx/helpbase.h"
+#include "wx/frame.h"
 
 /// Name for map file.
 #define WXEXTHELP_MAPFILE   "wxhelp.map"
@@ -132,7 +133,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
                                    wxPoint *pos = NULL,
                                    bool *newFrameEachTime = NULL)
       {
-         return NULL;// does nothing by default
+         return (wxFrame*) NULL;// does nothing by default
       }
 
  protected:

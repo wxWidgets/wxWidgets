@@ -21,7 +21,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include "wx/settings.h"
+#include "wx/window.h"
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 #endif
 
 #if wxUSE_TOOLBAR

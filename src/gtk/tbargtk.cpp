@@ -381,9 +381,32 @@ void wxToolBar::ToggleTool( int toolIndex, bool toggle )
         wxToolBarTool *tool = (wxToolBarTool*)node->Data();
         if (tool->m_index == toolIndex)
         { 
-            tool->m_toggleState = toggle;
             if ((tool->m_item) && (GTK_IS_TOGGLE_BUTTON(tool->m_item)))
+	    {
+                tool->m_toggleState = toggle;
+		
+	        if (tool->m_bitmap2.Ok())
+	        {
+	            wxBitmap bitmap = tool->m_bitmap1;
+	            if (tool->m_toggleState) bitmap = tool->m_bitmap2;
+	    
+                    GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
+	    
+                    GdkBitmap *mask = (GdkBitmap *) NULL;
+                    if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
+  
+                    gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
+	        }
+		
+                gtk_signal_disconnect_by_func( GTK_OBJECT(tool->m_item), 
+                  GTK_SIGNAL_FUNC(gtk_toolbar_callback), (gpointer*)tool );
+		
                 gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(tool->m_item), toggle );
+		
+                gtk_signal_connect( GTK_OBJECT(tool->m_item), "clicked",
+                  GTK_SIGNAL_FUNC(gtk_toolbar_callback), (gpointer*)tool );
+	    }
+
             return;
         }
         node = node->Next();

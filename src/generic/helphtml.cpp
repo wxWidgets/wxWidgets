@@ -27,6 +27,8 @@
     #include "wx/utils.h"
     #include "wx/list.h"
     #include "wx/intl.h"
+    #include "wx/msgdlg.h"
+    #include "wx/choicdlg.h"
 #endif
 
 #include "wx/helpbase.h"

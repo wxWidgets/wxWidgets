@@ -129,9 +129,9 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Copy");
+  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Disable/Enable print button");
   currentX += width + 5;
-  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Cut");
+  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
   currentX += width + 5;
   toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
   currentX += width + 5;
@@ -157,9 +157,8 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
-    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
     EVT_CLOSE(MyFrame::OnCloseWindow)
-    EVT_TOOL_RANGE(wxID_OPEN, wxID_PASTE, MyFrame::OnToolLeftClick)
+    EVT_MENU(-1, MyFrame::OnToolLeftClick)
     EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
 END_EVENT_TABLE()
 
@@ -168,7 +167,7 @@ MyFrame::MyFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wx
         const wxSize& size, long style):
   wxFrame(parent, id, title, pos, size, style)
 {
-  m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
+    m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -185,14 +184,37 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // - must delete all frames except for the main one.
 void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-  Destroy();
+    Destroy();
 }
 
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 {
-  wxString str;
-  str.Printf( _T("Clicked on tool %d"), event.GetId());
-  SetStatusText(str);
+    wxString str;
+    str.Printf( _T("Clicked on tool %d\n"), event.GetId());
+    m_textWindow->WriteText( str );
+  
+    if (event.GetId() == wxID_HELP)
+    {
+        if ((bool)event.GetExtraLong())
+            m_textWindow->WriteText( _T("Help button down now.\n") );
+        else
+            m_textWindow->WriteText( _T("Help button up now.\n") );
+    }
+  
+    if (event.GetId() == wxID_COPY)
+    {
+        wxToolBar *tb = GetToolBar();
+        if (tb->GetToolEnabled(wxID_PRINT))
+            tb->EnableTool( wxID_PRINT, FALSE );
+        else
+            tb->EnableTool( wxID_PRINT, TRUE );
+    }
+    
+    if (event.GetId() == wxID_CUT)
+    {
+        wxToolBar *tb = GetToolBar();
+        tb->ToggleTool( wxID_HELP, !tb->GetToolState( wxID_HELP ) );
+    }
 }
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)

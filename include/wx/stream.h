@@ -58,6 +58,7 @@ class WXDLLEXPORT wxStreamBase {
   bool operator!() const { return (LastError() != wxSTR_NOERROR); }
   wxStreamError LastError() const { return m_lasterror; }
   virtual size_t GetSize() const { return ~((size_t)0); }
+  size_t StreamSize() const { return GetSize(); }
 
  protected:
 

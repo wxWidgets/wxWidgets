@@ -44,7 +44,7 @@
 #endif  //__BORLANDC__
 
 #ifndef WX_PRECOMP
-  #include  <wx/wx.h>
+  #include  "wx/string.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_ODBC

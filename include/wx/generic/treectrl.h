@@ -30,6 +30,7 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/textctrl.h"
 #include "wx/pen.h"
 #include "wx/dynarray.h"
+#include "wx/timer.h"
 
 //those defines should only be done in generic/treectrl.h, 
 //because wxMSW doesn't allow mutiple selection
@@ -80,10 +81,13 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
 // forward declaration
 // -----------------------------------------------------------------------------
 
-class wxImageList;
-class wxGenericTreeItem;
+class WXDLLEXPORT wxImageList;
+class WXDLLEXPORT wxGenericTreeItem;
 
-class wxTreeItemData;
+class WXDLLEXPORT wxTreeItemData;
+
+class WXDLLEXPORT wxTreeRenameTimer;
+class WXDLLEXPORT wxTreeTextCtrl;
 
 // -----------------------------------------------------------------------------
 // wxTreeItemId - unique identifier of a tree element
@@ -123,6 +127,7 @@ WX_DECLARE_OBJARRAY(wxTreeItemId, wxArrayTreeItemIds);
 // Because the objects of this class are deleted by the tree, they should
 // always be allocated on the heap!
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxTreeItemData: public wxClientData
 {
 friend class wxTreeCtrl;
@@ -140,6 +145,47 @@ public:
 
 protected:
     wxTreeItemId m_pItem;
+};
+
+//-----------------------------------------------------------------------------
+// wxTreeRenameTimer (internal)
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
+{
+ private:
+   wxTreeCtrl   *m_owner;
+
+ public:
+   wxTreeRenameTimer( wxTreeCtrl *owner );
+   void Notify();
+};
+
+//-----------------------------------------------------------------------------
+//  wxTreeTextCtrl (internal)
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
+{
+  DECLARE_DYNAMIC_CLASS(wxTreeTextCtrl);
+
+  private:
+    bool               *m_accept;
+    wxString           *m_res;
+    wxTreeCtrl        *m_owner;
+
+  public:
+    wxTreeTextCtrl(void) {};
+    wxTreeTextCtrl( wxWindow *parent, const wxWindowID id, 
+                    bool *accept, wxString *res, wxTreeCtrl *owner,
+                    const wxString &value = "",
+                    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+                    int style = 0, const wxValidator& validator = wxDefaultValidator,
+                    const wxString &name = "wxTreeTextCtrlText" );
+    void OnChar( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    
+  DECLARE_EVENT_TABLE()
 };
 
 // -----------------------------------------------------------------------------
@@ -368,19 +414,12 @@ public:
         { int dummy; return HitTest(point, dummy); }
     wxTreeItemId HitTest(const wxPoint& point, int& flags);
 
-        // start editing the item label: this (temporarily) replaces the item
+        // Start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
-        // been before. textCtrlClass parameter allows you to create an edit
-        // control of arbitrary user-defined class deriving from wxTextCtrl.
-    wxTextCtrl* EditLabel(const wxTreeItemId& item,
-                          wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
-        // returns the same pointer as StartEdit() if the item is being edited,
-        // NULL otherwise (it's assumed that no more than one item may be
-        // edited simultaneously)
-    wxTextCtrl* GetEditControl() const;
-        // end editing and accept or discard the changes to item label
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
-
+        // been before.
+    void EditLabel( const wxTreeItemId& item ) { Edit( item ); }
+    void Edit( const wxTreeItemId& item );
+    
     // sorting
         // this function is called to compare 2 items and should return -1, 0
         // or +1 if the first item is less than, equal to or greater than the
@@ -410,9 +449,11 @@ public:
     
 protected:
     friend class wxGenericTreeItem;
+    friend class wxTreeRenameTimer;
+    friend class wxTreeTextCtrl;
 
     wxGenericTreeItem   *m_anchor;
-    wxGenericTreeItem   *m_current, *m_key_current;
+    wxGenericTreeItem   *m_current, *m_key_current, *m_currentEdit;
     bool                 m_hasFocus;
     bool                 m_dirty;
     int                  m_xScroll,m_yScroll;
@@ -424,6 +465,9 @@ protected:
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
     int                  m_dragCount;
+    wxTimer             *m_renameTimer;
+    bool                 m_renameAccept;
+    wxString             m_renameRes;
 
     // the common part of all ctors
     void Init();
@@ -446,6 +490,9 @@ protected:
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
+    
+    void OnRenameTimer();
+    void OnRenameAccept();
 
     void FillArray(wxGenericTreeItem*, wxArrayTreeItemIds&) const;
     void SelectItemRange( wxGenericTreeItem *item1, wxGenericTreeItem *item2 );

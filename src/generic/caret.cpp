@@ -29,7 +29,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/window.h"
+    #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
 #include "wx/caret.h"

@@ -908,16 +908,14 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
         m_owner->OnRenameAccept();
-//      Show( FALSE );
-        Destroy();
+        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-//      Show( FALSE );
-        Destroy();
+        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
         return;
     }
     event.Skip();
@@ -927,8 +925,7 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
     (*m_accept) = FALSE;
     (*m_res) = "";
-//  Show( FALSE );
-    Destroy();
+    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
     return;
 }
 
@@ -1140,31 +1137,30 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
     SendNotify( line, wxEVT_COMMAND_LIST_DELETE_ITEM );
 }
 
-void wxListMainWindow::StartLabelEdit( wxListLineData *line )
-{
-    SendNotify( line, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT );
-}
+/* *** */
 
-void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName )
+void wxListMainWindow::Edit( long item )
 {
+    wxNode *node = m_lines.Nth( item );
+    wxCHECK_RET( node, "wrong index in wxListCtrl::Edit() ");
+    
+    m_currentEdit = (wxListLineData*) node->Data();
+
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
-    le.m_itemIndex = GetIndexOfLine( line );
-    line->GetItem( 0, le.m_item );
-    le.m_item.m_text = newName;
+    le.m_itemIndex = GetIndexOfLine( m_currentEdit );
+    m_currentEdit->GetItem( 0, le.m_item );
     GetParent()->GetEventHandler()->ProcessEvent( le );
-}
-
-void wxListMainWindow::OnRenameTimer()
-{
-    StartLabelEdit( m_current );
+    
+    if (!le.IsAllowed()) return;
+    
     wxString s;
-    m_current->GetText( 0, s );
+    m_currentEdit->GetText( 0, s );
     int x = 0;
     int y = 0;
     int w = 0;
     int h = 0;
-    m_current->GetLabelExtent( x, y, w, h );
+    m_currentEdit->GetLabelExtent( x, y, w, h );
 
     wxClientDC dc(this);
     PrepareDC( dc );
@@ -1176,9 +1172,25 @@ void wxListMainWindow::OnRenameTimer()
     text->SetFocus();
 }
 
+void wxListMainWindow::OnRenameTimer()
+{
+    wxCHECK_RET( m_current, "invalid m_current" );
+    
+    Edit( m_lines.IndexOf( m_current ) );
+}
+
 void wxListMainWindow::OnRenameAccept()
 {
-    RenameLine( m_current, m_renameRes );
+    wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
+    le.SetEventObject( GetParent() );
+    le.m_itemIndex = GetIndexOfLine( m_currentEdit );
+    m_currentEdit->GetItem( 0, le.m_item );
+    le.m_item.m_text = m_renameRes;
+    GetParent()->GetEventHandler()->ProcessEvent( le );
+    
+    if (!le.IsAllowed()) return;
+    
+    /* DO CHANGE LABEL */
 }
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
@@ -1340,7 +1352,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
-void wxListMainWindow::MoveToFocus( void )
+void wxListMainWindow::MoveToFocus()
 {
     if (!m_current) return;
   
@@ -1788,12 +1800,12 @@ int wxListMainWindow::GetColumnWidth( int col )
     }
 }
 
-int wxListMainWindow::GetColumnCount( void )
+int wxListMainWindow::GetColumnCount()
 {
     return m_columns.Number();
 }
 
-int wxListMainWindow::GetCountPerPage( void )
+int wxListMainWindow::GetCountPerPage()
 {
     return m_visibleLines;
 }
@@ -1899,7 +1911,7 @@ void wxListMainWindow::GetItem( wxListItem &item )
     }
 }
 
-int wxListMainWindow::GetItemCount( void )
+int wxListMainWindow::GetItemCount()
 {
     return m_lines.Number();
 }
@@ -1940,7 +1952,7 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
     return TRUE;
 }
 
-int wxListMainWindow::GetSelectedItemCount( void )
+int wxListMainWindow::GetSelectedItemCount()
 {
     int ret = 0;
     wxNode *node = m_lines.First();
@@ -1972,12 +1984,12 @@ void wxListMainWindow::SetMode( long mode )
     }
 }
 
-long wxListMainWindow::GetMode( void ) const
+long wxListMainWindow::GetMode() const
 {
     return m_mode;
 }
 
-void wxListMainWindow::CalculatePositions( void )
+void wxListMainWindow::CalculatePositions()
 {
     if (!m_lines.First()) return;
 
@@ -2505,12 +2517,6 @@ int wxListCtrl::GetCountPerPage(void) const
   return m_mainWin->GetCountPerPage();  // different from Windows ?
 }
 
-/*
-wxText& wxListCtrl::GetEditControl(void) const
-{
-}
-*/
-
 bool wxListCtrl::GetItem( wxListItem &info ) const
 {
     m_mainWin->GetItem( info );
@@ -2715,11 +2721,10 @@ bool wxListCtrl::DeleteColumn( int col )
     return TRUE;
 }
 
-/*
-wxText& wxListCtrl::Edit( long WXUNUSED(item ) )
+void wxListCtrl::Edit( long item )
 {
+    m_mainWin->Edit( item );
 }
-*/
 
 bool wxListCtrl::EnsureVisible( long item )
 {

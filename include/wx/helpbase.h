@@ -16,7 +16,10 @@
 #pragma interface "helpbase.h"
 #endif
 
-#include "wx/wx.h"
+#include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/string.h"
+#include "wx/gdicmn.h"
 
 #if wxUSE_HELP
 
@@ -29,8 +32,8 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   DECLARE_CLASS(wxHelpControllerBase)
 
  public:
-  inline wxHelpControllerBase(void) {}
-  inline ~wxHelpControllerBase(void) {};
+  inline wxHelpControllerBase() {}
+  inline ~wxHelpControllerBase() {};
 
   // Must call this to set the filename and server name.
   // server is only required when implementing TCP/IP-based

@@ -157,12 +157,77 @@ private:
 // implementation
 // =============================================================================
 
+
+// -----------------------------------------------------------------------------
+// wxTreeRenameTimer (internal)
+// -----------------------------------------------------------------------------
+
+wxTreeRenameTimer::wxTreeRenameTimer( wxTreeCtrl *owner )
+{
+    m_owner = owner;
+}
+
+void wxTreeRenameTimer::Notify()
+{
+    m_owner->OnRenameTimer();
+}
+
+//-----------------------------------------------------------------------------
+// wxTreeTextCtrl (internal)
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxTreeTextCtrl,wxTextCtrl);
+
+BEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
+    EVT_CHAR           (wxTreeTextCtrl::OnChar)
+    EVT_KILL_FOCUS     (wxTreeTextCtrl::OnKillFocus)
+END_EVENT_TABLE()
+
+wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
+    bool *accept, wxString *res, wxTreeCtrl *owner,
+    const wxString &value, const wxPoint &pos, const wxSize &size,
+    int style, const wxValidator& validator, const wxString &name ) :
+  wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+{
+    m_res = res;
+    m_accept = accept;
+    m_owner = owner;
+}
+
+void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
+{
+    if (event.m_keyCode == WXK_RETURN)
+    {
+        (*m_accept) = TRUE;
+        (*m_res) = GetValue();
+        m_owner->OnRenameAccept();
+        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+        return;
+    }
+    if (event.m_keyCode == WXK_ESCAPE)
+    {
+        (*m_accept) = FALSE;
+        (*m_res) = "";
+        if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+        return;
+    }
+    event.Skip();
+}
+
+void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
+{
+    (*m_accept) = FALSE;
+    (*m_res) = "";
+    if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
+}
+
 #define PIXELS_PER_UNIT 10
 // -----------------------------------------------------------------------------
 // wxTreeEvent
 // -----------------------------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
+  
 wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
            : wxNotifyEvent( commandType, id )
 {
@@ -393,6 +458,8 @@ void wxTreeCtrl::Init()
   m_imageListState = (wxImageList *) NULL;
 
   m_dragCount = 0;
+  
+  m_renameTimer = new wxTreeRenameTimer( this );
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -421,6 +488,8 @@ wxTreeCtrl::~wxTreeCtrl()
   wxDELETE( m_hilightBrush );
 
   DeleteAllItems();
+  
+  delete m_renameTimer;
 }
 
 // -----------------------------------------------------------------------------
@@ -1153,26 +1222,6 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
     }
 }
 
-wxTextCtrl *wxTreeCtrl::EditLabel( const wxTreeItemId& WXUNUSED(item),
-                                   wxClassInfo* WXUNUSED(textCtrlClass) )
-{
-    wxFAIL_MSG(_T("not implemented"));
-
-    return (wxTextCtrl*)NULL;
-}
-
-wxTextCtrl *wxTreeCtrl::GetEditControl() const
-{
-    wxFAIL_MSG(_T("not implemented"));
-
-    return (wxTextCtrl*)NULL;
-}
-
-void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool WXUNUSED(discardChanges))
-{
-    wxFAIL_MSG(_T("not implemented"));
-}
-
 // FIXME: tree sorting functions are not reentrant and not MT-safe!
 static wxTreeCtrl *s_treeBeingSorted = NULL;
 
@@ -1732,6 +1781,55 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     return m_anchor->HitTest( wxPoint(x, y), this, flags);
 }
 
+/* **** */
+
+void wxTreeCtrl::Edit( const wxTreeItemId& item )
+{
+    if (!item.IsOk()) return;
+
+    m_currentEdit = item.m_pItem;
+    
+    wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, GetId() );
+    te.m_item = m_currentEdit;
+    te.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( te );
+
+    if (!te.IsAllowed()) return;
+    
+    wxString s = m_currentEdit->GetText();
+    int x = m_currentEdit->GetX();
+    int y = m_currentEdit->GetY();
+    int w = m_currentEdit->GetWidth();
+    int h = m_currentEdit->GetHeight();
+
+    wxClientDC dc(this);
+    PrepareDC( dc );
+    x = dc.LogicalToDeviceX( x );
+    y = dc.LogicalToDeviceY( y );
+
+    wxTreeTextCtrl *text = new wxTreeTextCtrl(
+      this, -1, &m_renameAccept, &m_renameRes, this, s, wxPoint(x-4,y-4), wxSize(w+11,h+8) );
+    text->SetFocus();
+}
+
+void wxTreeCtrl::OnRenameTimer()
+{
+    Edit( m_current );
+}
+
+void wxTreeCtrl::OnRenameAccept()
+{
+    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
+    le.m_item = m_currentEdit;
+    le.SetEventObject( this );
+    le.m_label = m_renameRes;
+    GetEventHandler()->ProcessEvent( le );
+    
+    if (!le.IsAllowed()) return;
+    
+    /* DO CHANGE LABEL */
+}
+    
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
     if (!event.LeftIsDown()) m_dragCount = 0;
@@ -1769,6 +1867,14 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
+    if (event.LeftUp() && (item == m_current) && 
+        (flags & wxTREE_HITTEST_ONITEMLABEL) && 
+	HasFlag(wxTR_EDIT_LABELS) )
+    {
+        m_renameTimer->Start( 100, TRUE );
+        return;
+    }
+    
     bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
     bool extended_select=(event.ShiftDown() && is_multiple);
     bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
