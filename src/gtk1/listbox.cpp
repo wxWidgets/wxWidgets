@@ -486,19 +486,38 @@ void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
         GList *child = m_list->children;
         while (child)
         {
+#ifdef NEW_GTK_DND_CODE
+            GtkBin *item = GTK_BIN( child->data );
+	    m_dropTarget->UnregisterWidget( item->child );
+#else
 	    m_dropTarget->UnregisterWidget( GTK_WIDGET( child->data ) );
+#endif
             child = child->next;
         }
     }
 
-    wxWindow::SetDropTarget( dropTarget  );
+#ifndef NEW_GTK_DND_CODE
+    if (m_dropTarget) m_dropTarget->UnregisterWidget( m_list );
+#endif
+
+    if (m_dropTarget) delete m_dropTarget;
+    m_dropTarget = dropTarget;
+
+#ifndef NEW_GTK_DND_CODE
+    if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
+#endif
 
     if (m_dropTarget)
     {
         GList *child = m_list->children;
         while (child)
         {
+#ifdef NEW_GTK_DND_CODE
+            GtkBin *item = GTK_BIN( child->data );
+	    m_dropTarget->RegisterWidget( item->child );
+#else
 	    m_dropTarget->RegisterWidget( GTK_WIDGET( child->data ) );
+#endif
             child = child->next;
         }
     }

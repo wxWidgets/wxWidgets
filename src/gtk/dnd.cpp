@@ -27,13 +27,6 @@
 
 extern bool g_blockEventsOnDrag;
 
-
-#if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 3)
-#define NEW_GTK_DND_CODE
-#endif
-#endif
-
 #ifdef NEW_GTK_DND_CODE
 
 #include "gtk/gtkdnd.h"

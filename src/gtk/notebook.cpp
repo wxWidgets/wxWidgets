@@ -370,12 +370,32 @@ bool wxNotebook::DeletePage( int page )
     child = child->next;
   }
 
-  wxASSERT( child );
+  wxCHECK_MSG( child != NULL, FALSE, "illegal notebook index" );
 
   delete nb_page->m_client;
 
-//  Amazingly, this is not necessary
-//  gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page_num );
+  m_pages.DeleteObject( nb_page );
+
+  return TRUE;
+}
+
+bool wxNotebook::RemovePage( int page )
+{
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return FALSE;
+
+  int page_num = 0;
+  GList *child = GTK_NOTEBOOK(m_widget)->children;
+  while (child)
+  {
+    if (nb_page->m_page == (GtkNotebookPage*)child->data) break;
+    page_num++;
+    child = child->next;
+  }
+
+  wxCHECK_MSG( child != NULL, FALSE, "illegal notebook index" );
+
+  gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page_num );
 
   m_pages.DeleteObject( nb_page );
 

@@ -122,6 +122,8 @@ public:
 
   // operations
   // ----------
+    // remove one page from the notebook but do not destroy it
+  bool RemovePage(int nPage);
     // remove one page from the notebook
   bool DeletePage(int nPage);
     // remove all pages
