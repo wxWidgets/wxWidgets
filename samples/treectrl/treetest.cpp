@@ -126,7 +126,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame("wxTreeCtrl Test", 50, 50, 450, 340);
+    MyFrame *frame = new MyFrame("wxTreeCtrl Test", 50, 50, 450, 600);
 
     // Show the frame
     frame->Show(TRUE);
@@ -758,10 +758,10 @@ void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
     }
 }
 
-void MyTreeCtrl::OnItemActivated(wxTreeEvent&WXUNUSED(event))
+void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
 {
     // show some info about this item
-    wxTreeItemId itemId = GetSelection();
+    wxTreeItemId itemId = event.GetItem();
     MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
 
     if ( item != NULL )

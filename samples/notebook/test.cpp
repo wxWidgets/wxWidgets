@@ -32,7 +32,7 @@ MyFrame*  frame = (MyFrame *) NULL;
 
 IMPLEMENT_APP(MyApp)
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the main window
 #if USE_TABBED_DIALOG
@@ -60,17 +60,13 @@ bool MyApp::OnInit(void)
 void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
 {
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
-  m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "Delete page", wxPoint(-1, -1), wxSize(80, 25));
-  m_addPageButton = new wxButton(window, ID_ADD_PAGE, "Add page", wxPoint(-1, -1), wxSize(80, 25));
-  m_nextPageButton = new wxButton(window, ID_NEXT_PAGE, "Next page", wxPoint(-1, -1), wxSize(80, 25));
+  m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "&Delete page", wxPoint(-1, -1), wxSize(80, 25));
+  m_addPageButton = new wxButton(window, ID_ADD_PAGE, "&Add page", wxPoint(-1, -1), wxSize(80, 25));
+  m_insertPageButton = new wxButton(window, ID_INSERT_PAGE, "&Insert page", wxPoint(-1, -1), wxSize(80, 25));
+  m_nextPageButton = new wxButton(window, ID_NEXT_PAGE, "&Next page", wxPoint(-1, -1), wxSize(80, 25));
   m_okButton->SetDefault();
 
-  wxLayoutConstraints* c = new wxLayoutConstraints;
-  c->right.SameAs(m_addPageButton, wxLeft, 4);
-  c->bottom.SameAs(window, wxBottom, 4);
-  c->height.AsIs();
-  c->width.AsIs();
-  m_nextPageButton->SetConstraints(c);
+  wxLayoutConstraints *c;
 
   c = new wxLayoutConstraints;
   c->right.SameAs(window, wxRight, 4);
@@ -81,6 +77,20 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
 
   c = new wxLayoutConstraints;
   c->right.SameAs(m_addPageButton, wxLeft, 4);
+  c->bottom.SameAs(window, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  m_insertPageButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->right.SameAs(m_insertPageButton, wxLeft, 4);
+  c->bottom.SameAs(window, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  m_nextPageButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->right.SameAs(m_nextPageButton, wxLeft, 4);
   c->bottom.SameAs(window, wxBottom, 4);
   c->height.AsIs();
   c->width.AsIs();
@@ -171,7 +181,7 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
     EndModal(wxID_CANCEL);
 }
 
-void MyDialog::Init(void)
+void MyDialog::Init()
 {
   m_notebook = new wxNotebook(this, ID_NOTEBOOK);
 
@@ -197,6 +207,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_OK, MyFrame::OnOK)
     EVT_BUTTON(ID_DELETE_PAGE, MyFrame::OnDeletePage)
     EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
+    EVT_BUTTON(ID_INSERT_PAGE, MyFrame::OnInsertPage)
     EVT_BUTTON(ID_NEXT_PAGE, MyFrame::OnNextPage)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -212,10 +223,23 @@ MyFrame::MyFrame(wxFrame* parent, const wxWindowID id, const wxString& title,
 
 void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
 {
-  wxPanel *panel = new wxPanel( m_notebook, -1 );
-  (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
-  m_notebook->AddPage( panel, "Added" );
-//  m_notebook->SetSelection( m_notebook->GetPageCount()-1 );
+    static size_t s_pageAdded = 0;
+
+    wxPanel *panel = new wxPanel( m_notebook, -1 );
+    (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
+
+    m_notebook->AddPage( panel, wxString::Format("Added %u", ++s_pageAdded) );
+}
+
+void MyFrame::OnInsertPage(wxCommandEvent& WXUNUSED(event))
+{
+    static size_t s_pageIns = 0;
+
+    wxPanel *panel = new wxPanel( m_notebook, -1 );
+    (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
+
+    m_notebook->InsertPage(0, panel, wxString::Format("Inserted %u", ++s_pageIns) );
+    m_notebook->SetSelection(0);
 }
 
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
@@ -238,7 +262,7 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
     Destroy();
 }
 
-void MyFrame::Init(void)
+void MyFrame::Init()
 {
   m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxCLIP_CHILDREN);
 

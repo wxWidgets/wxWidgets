@@ -15,12 +15,12 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit(void);
+    bool OnInit();
     void InitTabView(wxNotebook* notebook, wxPanel* window);
 
     wxButton*   m_okButton;
     wxButton*   m_cancelButton;
-    wxButton*   m_addPageButton;
+    wxButton*   m_addPageButton, *m_insertPageButton;
     wxButton*   m_nextPageButton;
 };
 
@@ -36,7 +36,7 @@ public:
 
     void OnOK(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
-    void Init(void);
+    void Init();
 
 protected:
     wxNotebook* m_notebook;
@@ -55,6 +55,7 @@ public:
     void OnOK(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
     void OnAddPage(wxCommandEvent& event);
+    void OnInsertPage(wxCommandEvent& event);
     void OnNextPage(wxCommandEvent& event);
     void OnDeletePage(wxCommandEvent& event);
     void OnIdle(wxIdleEvent& event);
@@ -91,4 +92,5 @@ protected:
 #define ID_ADD_PAGE         1200
 #define ID_DELETE_PAGE      1201
 #define ID_NEXT_PAGE        1202
+#define ID_INSERT_PAGE      1203
 
