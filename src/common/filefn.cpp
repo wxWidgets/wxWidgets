@@ -873,14 +873,56 @@ wxString wxPathOnly (const wxString& path)
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
 #ifdef __DARWIN__
-    FSRef theRef;
-    char  thePath[FILENAME_MAX];
+    int         i;
+    int         j;
+    OSErr       theErr;
+    OSStatus    theStatus;
+    Boolean 	isDirectory = false;
+    Str255	theParentPath = "\p";
+    FSSpec      theParentSpec;
+    FSRef       theParentRef;
+    char        theFileName[FILENAME_MAX];
+    char        thePath[FILENAME_MAX];
 
-    // convert the FSSpec to an FSRef
-    (void) FSpMakeFSRef( spec, &theRef );
-    // get the POSIX path associated with the FSRef
-    (void) FSRefMakePath( &theRef, (UInt8 *)thePath, sizeof(thePath) );
+    strcpy(thePath, "");
 
+    // GD: Separate file name from path and make a FSRef to the parent
+    //     directory. This is necessary since FSRefs cannot reference files
+    //     that have not yet been created.
+    //     Based on example code from Apple Technical Note TN2022
+    //       http://developer.apple.com/technotes/tn/tn2022.html
+
+    // check whether we are converting a directory
+    isDirectory = ((spec->name)[spec->name[0]] == ':');
+    // count length of file name
+    for (i = spec->name[0] - (isDirectory ? 1 : 0); ((spec->name[i] != ':') && (i > 0)); i--);
+    // copy file name
+    //   prepend path separator since it will later be appended to the path
+    theFileName[0] = wxFILE_SEP_PATH;
+    for (j = i + 1; j <= spec->name[0] - (isDirectory ? 1 : 0); j++) {
+        theFileName[j - i] = spec->name[j];
+    }
+    theFileName[j - i] = '\0';
+    // copy path if any
+    for (j = 1; j <= i; j++) {
+        theParentPath[++theParentPath[0]] = spec->name[j];
+    }
+    theErr = FSMakeFSSpec(spec->vRefNum, spec->parID, theParentPath, &theParentSpec);
+    if (theErr == noErr) {
+        // convert the FSSpec to an FSRef
+        theErr = FSpMakeFSRef(&theParentSpec, &theParentRef);
+    }
+    if (theErr == noErr) {
+        // get the POSIX path associated with the FSRef
+        theStatus = FSRefMakePath(&theParentRef,
+                                  (UInt8 *)thePath, sizeof(thePath));
+    }
+    if (theStatus == noErr) {
+        // append file name to path
+        //   includes previously prepended path separator
+        strcat(thePath, theFileName);
+    }
+    
     // create path string for return value
     wxString result( thePath ) ;
 #else
