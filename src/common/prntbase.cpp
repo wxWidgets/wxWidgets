@@ -188,7 +188,14 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
 wxScrolledWindow(parent, -1, pos, size, style, name)
 {
     m_printPreview = preview;
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+#ifdef __WXMAC__
+    // The app workspace colour is always white, but we should have
+    // a contrast with the page.
+    wxSystemColour colourIndex = wxSYS_COLOUR_BTNFACE;
+#else
+    wxSystemColour colourIndex = wxSYS_COLOUR_APPWORKSPACE;
+#endif    
+    SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
 
     SetScrollbars(15, 18, 100, 100);
 }
@@ -218,7 +225,14 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 // Responds to colour changes, and passes event on to children.
 void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+#ifdef __WXMAC__
+    // The app workspace colour is always white, but we should have
+    // a contrast with the page.
+    wxSystemColour colourIndex = wxSYS_COLOUR_BTNFACE;
+#else
+    wxSystemColour colourIndex = wxSYS_COLOUR_APPWORKSPACE;
+#endif    
+    SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
     Refresh();
 
     // Propagate the event to the non-top-level children
@@ -496,6 +510,13 @@ wxFrame(parent, -1, title, pos, size, style, name)
     m_printPreview = preview;
     m_controlBar = NULL;
     m_previewCanvas = NULL;
+
+    // Looks silly on Windows with a standard Windows icon    
+#ifdef __WXMSW__
+    wxFrame* topFrame = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
+    if (topFrame)
+        SetIcon(topFrame->GetIcon());
+#endif    
 }
 
 wxPreviewFrame::~wxPreviewFrame()
