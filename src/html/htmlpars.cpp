@@ -375,7 +375,12 @@ void wxHtmlParser::PopTagHandler()
     wxList::compatibility_iterator first;
 
     if ( !m_HandlersStack ||
-         !(first = m_HandlersStack->GetFirst()) )
+#if wxUSE_STL
+         !(first = m_HandlersStack->GetFirst())
+#else // !wxUSE_STL
+         ((first = m_HandlersStack->GetFirst()) == NULL)
+#endif // wxUSE_STL/!wxUSE_STL
+        )
     {
         wxLogWarning(_("Warning: attempt to remove HTML tag handler from empty stack."));
         return;
