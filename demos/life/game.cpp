@@ -20,12 +20,11 @@
 #include "wx/log.h"
 #include "game.h"
 
-#include <stdlib.h>           // for abort
 #include <string.h>           // for memset
-
 
 #define ARRAYSIZE  1024       // size of the static array for BeginFind & co.
 #define ALLOCBOXES 16         // number of cellboxes to alloc at once
+
 
 // ==========================================================================
 // CellBox
@@ -229,10 +228,7 @@ CellBox* Life::CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv)
                 // gracefully.
                 wxLogFatalError(_("Out of memory! Aborting..."));
 
-                // the above call should abort, but it doesn't :-?
-                abort();
-
-                break;
+                // NOTREACHED
             }
 
             c->m_next = m_available;
@@ -263,8 +259,8 @@ CellBox* Life::CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv)
 
 // LinkBox:
 //  Returns a pointer to the box (x, y); if it didn't exist yet,
-//  it returns NULL or creates a new one, depending on the 'create'
-//  parameter.
+//  it returns NULL or creates a new one, depending on the value
+//  of the 'create' parameter.
 //
 CellBox* Life::LinkBox(wxInt32 x, wxInt32 y, bool create)
 {
@@ -449,7 +445,7 @@ extern int g_tab2[];
 bool Life::NextTic()
 {
     CellBox  *c, *up, *dn, *lf, *rt;
-    wxUint32 t1, t2, t3;
+    wxUint32 t1, t2, t3, t4;
     bool     changed = FALSE;
 
     m_numcells = 0;
@@ -691,57 +687,61 @@ bool Life::NextTic()
     // Stage 2:
     // Stabilize
     //
-    // WARNING: to be optimized and unrolled soon.
-    //
     c = m_head;
 
     while (c)
     {
-        t1 = c->m_live1;
-        c->m_old1 = t1;
+        t1 = 0;
         t2 = 0;
 
-        t3 = c->m_on[0];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1      ) & 0xf) ];
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 4 ) & 0xf) ] << 4;
-        t3 = c->m_on[1];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 8 ) & 0xf) ] << 8;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 12) & 0xf) ] << 12;
-        t3 = c->m_on[2];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 16) & 0xf) ] << 16;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 20) & 0xf) ] << 20;
-        t3 = c->m_on[3];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 24) & 0xf) ] << 24;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 28) & 0xf) ] << 28;
+        t3 = c->m_live1;
+        c->m_old1 = t3;
 
-        c->m_on[0] = c->m_on[1] = c->m_on[2] = c->m_on[3] = 0;
-        c->m_live1 = t2;
+        t4 = c->m_on[0];
+        t1 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3      ) & 0xf) ];
+        t1 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 4 ) & 0xf) ] << 4;
+        t4 = c->m_on[1];
+        t1 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 8 ) & 0xf) ] << 8;
+        t1 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 12) & 0xf) ] << 12;
+        t4 = c->m_on[2];
+        t1 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 16) & 0xf) ] << 16;
+        t1 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 20) & 0xf) ] << 20;
+        t4 = c->m_on[3];
+        t1 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 24) & 0xf) ] << 24;
+        t1 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 28) & 0xf) ] << 28;
 
-        t1 = c->m_live2;
-        c->m_old2 = t1;
-        t2 = 0;
+        t3 = c->m_live2;
+        c->m_old2 = t3;
 
-        t3 = c->m_on[4];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1      ) & 0xf) ];
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 4 ) & 0xf) ] << 4;
-        t3 = c->m_on[5];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 8 ) & 0xf) ] << 8;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 12) & 0xf) ] << 12;
-        t3 = c->m_on[6];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 16) & 0xf) ] << 16;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 20) & 0xf) ] << 20;
-        t3 = c->m_on[7];
-        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 24) & 0xf) ] << 24;
-        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 28) & 0xf) ] << 28;
+        t4 = c->m_on[4];
+        t2 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3      ) & 0xf) ];
+        t2 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 4 ) & 0xf) ] << 4;
+        t4 = c->m_on[5];
+        t2 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 8 ) & 0xf) ] << 8;
+        t2 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 12) & 0xf) ] << 12;
+        t4 = c->m_on[6];
+        t2 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 16) & 0xf) ] << 16;
+        t2 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 20) & 0xf) ] << 20;
+        t4 = c->m_on[7];
+        t2 |= g_tab[ ((t4 & 0x0000ffff) << 4 ) + ((t3 >> 24) & 0xf) ] << 24;
+        t2 |= g_tab[ ((t4 & 0xffff0000) >> 12) + ((t3 >> 28) & 0xf) ] << 28;
 
+        c->m_on[0] = c->m_on[1] = c->m_on[2] = c->m_on[3] = 
         c->m_on[4] = c->m_on[5] = c->m_on[6] = c->m_on[7] = 0;
+        c->m_live1 = t1;
         c->m_live2 = t2;
 
-        // keep track of changes
-        changed |= ((c->m_live1 ^ c->m_old1) || (c->m_live2 ^ c->m_old2));
+        // count alive cells (TODO: find a better way to do this)
+        for (int i = 0; i < 32; i++)
+        {
+            if (t1 & (1 << i)) m_numcells++;
+            if (t2 & (1 << i)) m_numcells++;
+        }
+
+        changed |= ((t1 ^ c->m_old1) || (t2 ^ c->m_old2));
 
         // mark, and discard if necessary, dead boxes
-        if (c->m_live1 || c->m_live2)
+        if (t1 || t2)
         {
             c->m_dead = 0;
             c = c->m_next;
