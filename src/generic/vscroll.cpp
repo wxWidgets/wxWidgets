@@ -202,6 +202,35 @@ void wxVScrolledWindow::RefreshLine(size_t line)
     RefreshRect(rect);
 }
 
+void wxVScrolledWindow::RefreshLines(size_t from, size_t to)
+{
+    wxASSERT_MSG( from <= to, _T("RefreshLines(): empty range") );
+
+    // clump the range to just the visible lines -- it is useless to refresh
+    // the other ones
+    if ( from < GetFirstVisibleLine() )
+        from = GetFirstVisibleLine();
+
+    if ( to > GetLastVisibleLine() )
+        to = GetLastVisibleLine();
+
+    // calculate the rect occupied by these lines on screen
+    wxRect rect;
+    rect.width = GetClientSize().x;
+    for ( size_t nBefore = GetFirstVisibleLine(); nBefore < from; nBefore++ )
+    {
+        rect.y += OnGetLineHeight(nBefore);
+    }
+
+    for ( size_t nBetween = from; nBetween < to; nBetween++ )
+    {
+        rect.height += OnGetLineHeight(nBetween);
+    }
+
+    // do refresh it
+    RefreshRect(rect);
+}
+
 void wxVScrolledWindow::RefreshAll()
 {
     UpdateScrollbar();

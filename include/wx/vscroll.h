@@ -93,6 +93,9 @@ public:
     // redraw the specified line
     void RefreshLine(size_t line);
 
+    // redraw all lines in the specified range (inclusive)
+    void RefreshLines(size_t from, size_t to);
+
     // return the item at the specified (in physical coordinates) position or
     // wxNOT_FOUND if none, i.e. if it is below the last item
     int HitTest(wxCoord x, wxCoord y) const;
