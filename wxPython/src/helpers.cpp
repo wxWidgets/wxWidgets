@@ -1902,7 +1902,7 @@ wxString* wxString_in_helper(PyObject* source) {
     size_t len = PyUnicode_GET_SIZE(uni);
     if (len) {
         PyUnicode_AsWideChar((PyUnicodeObject*)uni, target->GetWriteBuf(len), len);
-        target->UngetWriteBuf();
+        target->UngetWriteBuf(len);
     }
 
     if (PyString_Check(source))
