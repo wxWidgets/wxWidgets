@@ -266,19 +266,45 @@ void wxDC::Clear()
    // TODO
 }
 
-void wxDC::DoFloodFill( wxCoord x
-                       ,wxCoord y
-                       ,const wxColour& col
-                       ,int style
-                      )
+void wxDC::DoFloodFill(
+  wxCoord                           vX
+, wxCoord                           vY
+, const wxColour&                   rCol
+, int                               nStyle
+)
 {
-   // TODO
+    POINTL                          vPtlPos;
+    LONG                            lColor;
+    LONG                            lOptions;
+
+    vPtlPos.x = vX;             // Loads x-coordinate
+    vPtlPos.y = vY;             // Loads y-coordinate
+    ::GpiMove(m_hPS, &vPtlPos); // Sets current position
+    lColor = rCol.GetPixel();
+    lOptions = FF_BOUNDARY;
+    if(wxFLOOD_SURFACE == nStyle)
+        lOptions = FF_SURFACE;
+
+    ::GpiFloodFill(m_hPS, lOptions, lColor);
 }
 
-bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxDC::DoGetPixel(
+  wxCoord                           vX
+, wxCoord                           vY
+, wxColour*                         pCol
+) const
 {
-   // TODO
-   return(TRUE);
+    POINTL                          vPoint;
+    LONG                            lColor;
+
+    vPoint.x = vX;
+    vPoint.y = vY;
+    lColor = ::GpiSetPel(m_hPS, &vPoint);
+//    *pCol.Set(lColor);
+    if(lColor>= 0)
+        return(TRUE);
+   else
+        return(FALSE);
 }
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
@@ -304,38 +330,250 @@ void wxDC::DoDrawLine(
     ::GpiLine(m_hPS, &vPoint[1]);
 }
 
-void wxDC::DoDrawArc( wxCoord x1, wxCoord y1
-                     ,wxCoord x2, wxCoord y2
-                     ,wxCoord xc, wxCoord yc
-                    )
+//////////////////////////////////////////////////////////////////////////////
+// Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
+// and ending at (x2, y2). The current pen is used for the outline and the
+// current brush for filling the shape. The arc is drawn in an anticlockwise
+// direction from the start point to the end point.
+//////////////////////////////////////////////////////////////////////////////
+void wxDC::DoDrawArc(
+  wxCoord                           vX1
+, wxCoord                           vY1
+, wxCoord                           vX2
+, wxCoord                           vY2
+, wxCoord                           vXc
+, wxCoord                           vYc
+)
 {
-   // TODO
+     POINTL                         vPtlPos;
+     POINTL                         vPtlArc[2]; // Structure for current position
+     int                            nDx;
+     int                            nDy;
+     double                         dRadius;
+     double                         dAngl1;
+     double                         dAngl2;
+     double                         dAnglmid;
+     wxCoord                        vXm;
+     wxCoord                        vYm;
+     ARCPARAMS                      vArcp; // Structure for arc parameters
+
+    if((vX1 == vXc && vY1 == vXc) || (vX2 == vXc && vY2 == vXc))
+        return; // Draw point ??
+    dRadius = 0.5 * ( hypot( (double)(vY1 - vYc)
+                            ,(double)(vX1 - vXc)
+                           ) +
+                      hypot( (double)(vY2 - vYc)
+                            ,(double)(vX2 - vXc)
+                           )
+                     );
+
+    dAngl1 = atan2( (double)(vY1 - vYc)
+                   ,(double)(vX1 - vXc)
+                  );
+    dAngl2 = atan2( (double)(vY2 - vYc)
+                   ,(double)(vX2 - vXc)
+                  );
+    if(dAngl2 < dAngl1)
+        dAngl2 += M_PI * 2;
+
+    //
+    // GpiPointArc can't draw full arc
+    //
+     if(dAngl2 == dAngl1 || (vX1 == vX2 && vY1 == vY2) )
+     {
+        //
+        // Medium point
+        //
+        dAnglmid = (dAngl1 + dAngl2)/2. + M_PI;
+        vXm      = vXc + dRadius * cos(dAnglmid);
+        vYm      = vYc + dRadius * sin(dAnglmid);
+        DoDrawArc( vX1
+                  ,vY1
+                  ,vXm
+                  ,vYm
+                  ,vXc
+                  ,vYc
+                 );
+        DoDrawArc( vXm
+                  ,vYm
+                  ,vX2
+                  ,vY2
+                  ,vXc
+                  ,vYc
+                 );
+        return;
+    }
+
+    //
+    // Medium point
+    //
+    dAnglmid = (dAngl1 + dAngl2)/2.;
+    vXm      = vXc + dRadius * cos(dAnglmid);
+    vYm      = vYc + dRadius * sin(dAnglmid);
+
+    //
+    // Ellipse main axis (r,q), (p,s) with center at (0,0) */
+    //
+    vArcp.lR = 0;
+    vArcp.lQ = 1;
+    vArcp.lP = 1;
+    vArcp.lS = 0;
+    ::GpiSetArcParams(m_hPS, &vArcp); // Sets parameters to default
+
+    vPtlPos.x = vX1; // Loads x-coordinate
+    vPtlPos.y = vY1; // Loads y-coordinate
+    ::GpiMove(m_hPS, &vPtlPos); // Sets current position
+    vPtlArc[0].x =  vXm;
+    vPtlArc[0].y =  vYm;
+    vPtlArc[1].x = vX2;
+    vPtlArc[1].y = vY2;
+    ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
 }
 
-void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
-                           wxCoord width, wxCoord height)
+void wxDC::DoDrawCheckMark(
+  wxCoord                           vX1
+, wxCoord                           vY1
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+)
 {
-    // TODO
+    POINTL                          vPoint[2];
+
+    vPoint[0].x = vX1;
+    vPoint[0].y = vY1;
+    vPoint[1].x = vX1 + vWidth;
+    vPoint[1].y = vY1 + vHeight;
+
+    ::GpiMove(m_hPS, &vPoint[0]);
+    ::GpiBox( m_hPS       // handle to a presentation space
+             ,DRO_OUTLINE // draw the box outline ? or ?
+             ,&vPoint[1]  // address of the corner
+             ,0L          // horizontal corner radius
+             ,0L          // vertical corner radius
+            );
+    if(vWidth > 4 && vHeight > 4)
+    {
+        int                         nTmp;
+
+        vPoint[0].x += 2; vPoint[0].y += 2;
+        vPoint[1].x -= 2; vPoint[1].y -= 2;
+        ::GpiMove(m_hPS, &vPoint[0]);
+        ::GpiLine(m_hPS, &vPoint[1]);
+        nTmp = vPoint[0].x;
+        vPoint[0].x = vPoint[1].x;
+        vPoint[1].x = nTmp;
+        ::GpiMove(m_hPS, &vPoint[0]);
+        ::GpiLine(m_hPS, &vPoint[1]);
+    }
 }
 
-void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
+void wxDC::DoDrawPoint(
+  wxCoord                           vX
+, wxCoord                           vY
+)
 {
-   // TODO
+    POINTL                          vPoint;
+
+    vPoint.x = vX;
+    vPoint.y = vY;
+    ::GpiSetPel(m_hPS, &vPoint);
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[]
-                         ,wxCoord xoffset, wxCoord yoffset
-                         ,int fillStyle
-                        )
+void wxDC::DoDrawPolygon(
+  int                               n
+, wxPoint                           vPoints[]
+, wxCoord                           vXoffset
+, wxCoord                           vYoffset
+, int                               nFillStyle
+)
 {
-   // TODO
+    ULONG                           ulCount = 1;    // Number of polygons.
+    POLYGON                         vPlgn;          // polygon.
+    ULONG                           flOptions = 0L; // Drawing options.
+
+//////////////////////////////////////////////////////////////////////////////
+// This contains fields of option bits... to draw boundary lines as well as
+// the area interior.
+//
+// Drawing boundary lines:
+//   POLYGON_NOBOUNDARY              Does not draw boundary lines.
+//   POLYGON_BOUNDARY                Draws boundary lines (the default).
+//
+// Construction of the area interior:
+//   POLYGON_ALTERNATE               Constructs interior in alternate mode
+//                                   (the default).
+//   POLYGON_WINDING                 Constructs interior in winding mode.
+//////////////////////////////////////////////////////////////////////////////
+
+    ULONG                           flModel = 0L; // Drawing model.
+
+//////////////////////////////////////////////////////////////////////////////
+// Drawing model.
+//   POLYGON_INCL  Fill is inclusive of bottom right (the default).
+//   POLYGON_EXCL  Fill is exclusive of bottom right.
+//       This is provided to aid migration from other graphics models.
+//////////////////////////////////////////////////////////////////////////////
+
+    LONG                            lHits = 0L; // Correlation/error indicator.
+    POINTL                          vPoint;
+    int                             i;
+    int                             nIsTRANSPARENT = 0;
+    LONG                            lBorderColor = 0L;
+    LONG                            lColor = 0L;
+
+    lBorderColor = m_pen.GetColour().GetPixel();
+    lColor       = m_brush.GetColour().GetPixel();
+    if(m_brush.GetStyle() == wxTRANSPARENT)
+        nIsTRANSPARENT = 1;
+
+    vPlgn.ulPoints = n;
+    vPlgn.aPointl = (POINTL*) calloc( n + 1
+                                     ,sizeof(POINTL)
+                                    ); // well, new will call malloc
+
+    for(i = 0; i < n; i++)
+    {
+        vPlgn.aPointl[i].x = vPoints[i].x; // +xoffset;
+        vPlgn.aPointl[i].y = vPoints[i].y; // +yoffset;
+    }
+    flModel = POLYGON_BOUNDARY;
+    if(nFillStyle == wxWINDING_RULE)
+        flModel |= POLYGON_WINDING;
+    else
+        flModel |= POLYGON_ALTERNATE;
+
+    vPoint.x = vXoffset;
+    vPoint.y = vYoffset;
+
+    ::GpiSetColor(m_hPS, lBorderColor);
+    ::GpiMove(m_hPS, &vPoint);
+    lHits = ::GpiPolygons(m_hPS, ulCount, &vPlgn, flOptions, flModel);
+    free(vPlgn.aPointl);
 }
 
-void wxDC::DoDrawLines( int n, wxPoint points[]
-                       ,wxCoord xoffset, wxCoord yoffset
-                      )
+void wxDC::DoDrawLines(
+  int                               n
+, wxPoint                           vPoints[]
+, wxCoord                           vXoffset
+, wxCoord                           vYoffset
+)
 {
-   // TODO
+    int                             i;
+    POINTL                          vPoint;
+
+    vPoint.x = vPoints[0].x + vXoffset;
+    vPoint.y = vPoints[0].y + vYoffset;
+    ::GpiMove(m_hPS, &vPoint);
+
+    LONG                            lBorderColor = m_pen.GetColour().GetPixel();
+
+    ::GpiSetColor(m_hPS, lBorderColor);
+    for(i = 1; i < n; i++)
+    {
+        vPoint.x = vPoints[0].x + vXoffset;
+        vPoint.y = vPoints[0].y + vYoffset;
+        ::GpiLine(m_hPS, &vPoint);
+    }
 }
 
 void wxDC::DoDrawRectangle(
@@ -346,19 +584,58 @@ void wxDC::DoDrawRectangle(
 )
 {
     POINTL                          vPoint[2];
+    LONG                            lControl;
+    LONG                            lColor;
+    LONG                            lBorderColor;
+    int                             nIsTRANSPARENT = 0;
 
     vPoint[0].x = vX;
     vPoint[0].y = vY;
     vPoint[1].x = vX + vWidth;
     vPoint[1].y = vY - vHeight;      //mustdie !!! ??
-
     ::GpiMove(m_hPS, &vPoint[0]);
-    ::GpiBox( m_hPS       // handle to a presentation space
-             ,DRO_OUTLINE // draw the box outline ? or ?
-             ,&vPoint[1]  // address of the corner
-             ,0L          // horizontal corner radius
-             ,0L          // vertical corner radius
-            );
+    lColor       = m_brush.GetColour().GetPixel();
+    lBorderColor = m_pen.GetColour().GetPixel();
+    if (m_brush.GetStyle() == wxTRANSPARENT)
+        nIsTRANSPARENT = 1;
+    if(lColor == lBorderColor || nIsTRANSPARENT)
+    {
+        lControl = DRO_OUTLINEFILL; //DRO_FILL;
+        if(m_brush.GetStyle() == wxTRANSPARENT)
+            lControl = DRO_OUTLINE;
+
+//EK    ::GpiSetColor(m_hPS,lBorderColor);
+        ::GpiSetColor(m_hPS,CLR_GREEN);
+        ::GpiBox( m_hPS       // handle to a presentation space
+                 ,lControl   // draw the box outline ? or ?
+                 ,&vPoint[1]  // address of the corner
+                 ,0L          // horizontal corner radius
+                 ,0L          // vertical corner radius
+                );
+    }
+    else
+    {
+        lControl = DRO_OUTLINE;
+        ::GpiSetColor( m_hPS
+                      ,lBorderColor
+                     );
+        ::GpiBox( m_hPS
+                 ,lControl
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+        lControl = DRO_FILL;
+        ::GpiSetColor( m_hPS
+                      ,lColor
+                     );
+        ::GpiBox( m_hPS
+                 ,lControl
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+    }
 }
 
 void wxDC::DoDrawRoundedRectangle(
@@ -370,13 +647,17 @@ void wxDC::DoDrawRoundedRectangle(
 )
 {
     POINTL                          vPoint[2];
+    LONG                            lControl;
 
     vPoint[0].x = vX;
     vPoint[0].y = vY;
     vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY + vHeight;      //or -height aka mustdie !!! ??
-
+    vPoint[1].y = vY + vHeight;
     ::GpiMove(m_hPS, &vPoint[0]);
+
+    lControl = DRO_OUTLINEFILL; //DRO_FILL;
+    if (m_brush.GetStyle() == wxTRANSPARENT)
+        lControl = DRO_OUTLINE;
     ::GpiBox( m_hPS         // handle to a presentation space
              ,DRO_OUTLINE   // draw the box outline ? or ?
              ,&vPoint[1]    // address of the corner
@@ -385,25 +666,97 @@ void wxDC::DoDrawRoundedRectangle(
             );
 }
 
-void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+// Draw Ellipse within box (x,y) - (x+width, y+height)
+void wxDC::DoDrawEllipse(
+  wxCoord                           vX
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+)
 {
-   // TODO
+    POINTL                          vPtlPos; // Structure for current position
+    FIXED                           vFxMult; // Multiplier for ellipse
+    ARCPARAMS                       vArcp;   // Structure for arc parameters
+
+    vArcp.lR = 0;
+    vArcp.lQ = vHeight/2;
+    vArcp.lP = vWidth/2;
+    vArcp.lS = 0;
+    ::GpiSetArcParams( m_hPS
+                      ,&vArcp
+                     ); // Sets parameters to default
+    vPtlPos.x = vX + vWidth/2;  // Loads x-coordinate
+    vPtlPos.y = vY + vHeight/2; // Loads y-coordinate
+    ::GpiMove( m_hPS
+              ,&vPtlPos
+             ); // Sets current position
+    vFxMult = MAKEFIXED(1, 0);             /* Sets multiplier            */
+
+    //
+    // DRO_FILL, DRO_OTLINEFILL - where to get
+    //
+    ::GpiFullArc( m_hPS
+                 ,DRO_OUTLINE
+                 ,vFxMult
+                ); // Draws full arc with center at current position
 }
 
-void wxDC::DoDrawEllipticArc( wxCoord x
-                             ,wxCoord y
-                             ,wxCoord w
-                             ,wxCoord h
-                             ,double sa
-                             ,double ea
-                            )
+void wxDC::DoDrawEllipticArc(
+  wxCoord                           vX
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+, double                            dSa
+, double                            dEa
+)
 {
-   // TODO
+    POINTL                          vPtlPos; // Structure for current position
+    FIXED                           vFxMult; // Multiplier for ellipse
+    ARCPARAMS                       vArcp;   // Structure for arc parameters
+    FIXED                           vFSa;
+    FIXED                           vFSweepa; // Start angle, sweep angle
+    double                          dIntPart;
+    double                          dFractPart;
+    double                          dRadius;
+
+    dFractPart = modf(dSa,&dIntPart);
+    vFSa = MAKEFIXED((int)dIntPart, (int)(dFractPart * 0xffff) );
+    dFractPart = modf(dEa - dSa, &dIntPart);
+    vFSweepa = MAKEFIXED((int)dIntPart, (int)(dFractPart * 0xffff) );
+
+    //
+    // Ellipse main axis (r,q), (p,s) with center at (0,0)
+    //
+    vArcp.lR = 0;
+    vArcp.lQ = vHeight/2;
+    vArcp.lP = vWidth/2;
+    vArcp.lS = 0;
+    ::GpiSetArcParams(m_hPS, &vArcp); // Sets parameters to default
+    vPtlPos.x = vX + vWidth/2  * (1. + cos(DegToRad(dSa))); // Loads x-coordinate
+    vPtlPos.y = vY + vHeight/2 * (1. + sin(DegToRad(dSa))); // Loads y-coordinate
+    ::GpiMove(m_hPS, &vPtlPos); // Sets current position
+
+    //
+    // May be not to the center ?
+    //
+    vPtlPos.x = vX + vWidth/2 ; // Loads x-coordinate
+    vPtlPos.y = vY + vHeight/2; // Loads y-coordinate
+    vFxMult = MAKEFIXED(1, 0);  // Sets multiplier
+
+    //
+    // DRO_FILL, DRO_OTLINEFILL - where to get
+    //
+    ::GpiPartialArc( m_hPS
+                    ,&vPtlPos
+                    ,vFxMult
+                    ,vFSa
+                    ,vFSweepa
+                   );
 }
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
-   // TODO
+    // TODO:
 }
 
 void wxDC::DoDrawBitmap( const wxBitmap &bmp
@@ -628,9 +981,52 @@ void wxDC::SetPen(
     ::GpiSetColor( m_hPS
                   ,vColor.GetPixel()
                  ); //DEbug ??
+
+    int                             nLinetype;
+    int                             nStyle = m_pen.GetStyle();
+
+    nLinetype = LINETYPE_DEFAULT;
+    switch(nStyle)
+    {
+        case wxDOT:
+            nLinetype = LINETYPE_DOT;
+            break;
+
+        case wxLONG_DASH:
+            nLinetype = LINETYPE_LONGDASH;
+            break;
+
+        case wxSHORT_DASH:
+            nLinetype = LINETYPE_SHORTDASH;
+            break;
+
+        case wxDOT_DASH:
+            nLinetype = LINETYPE_DASHDOT;
+            break;
+
+        case wxTRANSPARENT:
+            nLinetype = LINETYPE_INVISIBLE;
+            break;
+
+        case wxSOLID:
+            nLinetype = LINETYPE_SOLID;
+            break;
+    }
+    ::GpiSetLineType( m_hPS
+                     ,nLinetype
+                    );
+
+    nWidth =  m_pen.GetWidth();
+    ::GpiSetLineWidth( m_hPS
+                      ,MAKEFIXED( nWidth
+                                 ,0
+                                )
+                     );
 }
 
-void wxDC::SetBrush(const wxBrush& brush)
+void wxDC::SetBrush(
+  const wxBrush&                    rBrush
+)
 {
    // TODO
 }

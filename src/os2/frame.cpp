@@ -13,6 +13,15 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/defs.h"
+    #include "wx/object.h"
+    #include "wx/dynarray.h"
+    #include "wx/list.h"
+    #include "wx/hash.h"
+    #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/event.h"
     #include "wx/setup.h"
     #include "wx/frame.h"
     #include "wx/menu.h"
@@ -45,6 +54,8 @@ extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxChar wxFrameClassName[];
 extern wxMenu *wxCurrentPopupMenu;
+
+extern void  wxAssociateWinWithHandle( HWND hWnd,wxWindow* pWin);
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -96,6 +107,11 @@ void wxFrame::Init()
     m_bIsShown           = FALSE;
     m_pWinLastFocused    = (wxWindow *)NULL;
 
+    m_hFrame    = NULL;
+    m_hTitleBar = NULL;
+    m_hHScroll  = NULL;
+    m_hVScroll  = NULL;
+
     //
     // Initialize SWP's
     //
@@ -123,6 +139,7 @@ bool wxFrame::Create(
     int                             nY      = rPos.y;
     int                             nWidth  = rSize.x;
     int                             nHeight = rSize.y;
+    bool                            bOk = FALSE;
 
     SetName(rsName);
     m_windowStyle    = lulStyle;
@@ -150,23 +167,24 @@ bool wxFrame::Create(
     if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
         pParent = NULL;
 
-    if (!pParent)
-        wxTopLevelWindows.Append(this);
-
-    OS2Create( m_windowId
-              ,pParent
-              ,wxFrameClassName
-              ,this
-              ,rsTitle
-              ,nX
-              ,nY
-              ,nWidth
-              ,nHeight
-              ,lulStyle
-             );
-
-    wxModelessWindows.Append(this);
-    return TRUE;
+    bOk = OS2Create( m_windowId
+                    ,pParent
+                    ,wxFrameClassName
+                    ,this
+                    ,rsTitle
+                    ,nX
+                    ,nY
+                    ,nWidth
+                    ,nHeight
+                    ,lulStyle
+                   );
+    if (bOk)
+    {
+        if (!pParent)
+            wxTopLevelWindows.Append(this);
+        wxModelessWindows.Append(this);
+    }
+    return(bOk);
 } // end of wxFrame::Create
 
 wxFrame::~wxFrame()
@@ -221,40 +239,12 @@ void wxFrame::DoGetClientSize(
 , int*                              pY
 ) const
 {
-    //
-    // OS/2 PM's coordinates go from bottom-left not
-    // top-left thus the += instead of the -=
-    //
     RECTL                           vRect;
-
-    //
-    // PM has no GetClientRect that inherantly knows about the client window
-    // We have to explicitly go fetch it!
-    //
     ::WinQueryWindowRect(GetHwnd(), &vRect);
-
-#if wxUSE_STATUSBAR
-    if ( GetStatusBar() )
-    {
-        int                         nStatusX;
-        int                         nStatusY;
-
-        GetStatusBar()->GetClientSize( &nStatusX
-                                      ,&nStatusY
-                                     );
-        vRect.yBottom += nStatusY;
-    }
-#endif // wxUSE_STATUSBAR
-
-    wxPoint                         vPoint(GetClientAreaOrigin());
-
-    vRect.yBottom += vPoint.y;
-    vRect.xRight -= vPoint.x;
-
     if (pX)
-        *pX = vRect.xRight;
+        *pX = vRect.xRight - vRect.xLeft;
     if (pY)
-        *pY = vRect.yBottom;
+        *pY = vRect.yTop - vRect.yBottom;
 } // end of wxFrame::DoGetClientSize
 
 //
@@ -271,8 +261,7 @@ void wxFrame::DoSetClientSize(
     RECTL                           vRect2;
 
     ::WinQueryWindowRect(GetHwnd(), &vRect);
-
-    ::WinQueryWindowRect(GetHWND(), &vRect2);
+    ::WinQueryWindowRect(GetHwnd(), &vRect2);
 
     //
     // Find the difference between the entire window (title bar and all)
@@ -329,7 +318,7 @@ void wxFrame::DoGetSize(
 {
     RECTL                           vRect;
 
-    ::WinQueryWindowRect(GetHWND(), &vRect);
+    ::WinQueryWindowRect(m_hFrame, &vRect);
     *pWidth = vRect.xRight - vRect.xLeft;
     *pHeight = vRect.yTop - vRect.yBottom;
 } // end of wxFrame::DoGetSize
@@ -342,7 +331,7 @@ void wxFrame::DoGetPosition(
     RECTL                           vRect;
     POINTL                          vPoint;
 
-    ::WinQueryWindowRect(GetHWND(), &vRect);
+    ::WinQueryWindowRect(m_hFrame, &vRect);
     vPoint.x = vRect.xLeft;
 
     //
@@ -362,7 +351,7 @@ void wxFrame::DoShowWindow(
   int                               bShowCmd
 )
 {
-    ::WinShowWindow(GetHWND(), (BOOL)bShowCmd);
+    ::WinShowWindow(m_hFrame, (BOOL)bShowCmd);
     m_bIconized = bShowCmd == SWP_MINIMIZE;
 } // end of wxFrame::DoShowWindow
 
@@ -378,10 +367,10 @@ bool wxFrame::Show(
     {
         wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
-        ::WinQueryWindowPos(GetHWND(), &vSwp);
+        ::WinQueryWindowPos(m_hFrame, &vSwp);
         m_bIconized = vSwp.fl & SWP_MINIMIZE;
-        ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
-        ::WinEnableWindow(GetHWND(), TRUE);
+        ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
+        ::WinEnableWindow(m_hFrame, TRUE);
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
     }
@@ -433,7 +422,7 @@ bool wxFrame::IsIconized() const
 {
     SWP                             vSwp;
 
-    ::WinQueryWindowPos(GetHwnd(), &vSwp);
+    ::WinQueryWindowPos(m_hFrame, &vSwp);
 
     if (vSwp.fl & SWP_MINIMIZE)
         ((wxFrame*)this)->m_bIconized = TRUE;
@@ -448,7 +437,7 @@ bool wxFrame::IsMaximized() const
     SWP                             vSwp;
     bool                            bIconic;
 
-    ::WinQueryWindowPos(GetHWND(), &vSwp);
+    ::WinQueryWindowPos(m_hFrame, &vSwp);
     return (vSwp.fl & SWP_MAXIMIZE);
 } // end of wxFrame::IsMaximized
 
@@ -460,12 +449,12 @@ void wxFrame::SetIcon(
 
     if ((m_icon.GetHICON()) != NULLHANDLE)
     {
-        ::WinSendMsg( GetHWND()
+        ::WinSendMsg( m_hFrame
                      ,WM_SETICON
                      ,(MPARAM)((HPOINTER)m_icon.GetHICON())
                      ,NULL
                     );
-        ::WinSendMsg( GetHWND()
+        ::WinSendMsg( m_hFrame
                      ,WM_UPDATEFRAME
                      ,(MPARAM)FCF_ICON
                      ,(MPARAM)0
@@ -495,11 +484,18 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     if( !pStatusBar )
         return NULL;
 
+    ::WinSetParent( pStatusBar->GetHWND()
+                   ,m_hFrame
+                   ,FALSE
+                  );
+    ::WinSetOwner( pStatusBar->GetHWND()
+                  ,m_hFrame
+                 );
     //
     // to show statusbar
     //
-    if( ::WinIsWindowShowing(GetHWND()) )
-        ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
+    if(::WinIsWindowShowing(m_hFrame))
+        ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
 
     return pStatusBar;
 } // end of wxFrame::OnCreateStatusBar
@@ -516,15 +512,17 @@ void wxFrame::PositionStatusBar()
     if (m_frameStatusBar)
     {
         int                         nWidth;
-        int                         nHeight;
         int                         nStatbarWidth;
         int                         nStatbarHeight;
         HWND                        hWndClient;
         RECTL                       vRect;
+        RECTL                       vFRect;
 
-        ::WinQueryWindowRect(GetHwnd(), &vRect);
+        ::WinQueryWindowRect(m_hFrame, &vRect);
+        ::WinMapWindowPoints(m_hFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
+        vFRect = vRect;
+        ::WinCalcFrameRect(m_hFrame, &vRect, TRUE);
         nWidth = vRect.xRight - vRect.xLeft;
-        nHeight = vRect.yTop - vRect.yBottom;
 
         m_frameStatusBar->GetSize( &nStatbarWidth
                                   ,&nStatbarHeight
@@ -534,8 +532,8 @@ void wxFrame::PositionStatusBar()
         // Since we wish the status bar to be directly under the client area,
         // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
         //
-        m_frameStatusBar->SetSize( 0
-                                  ,nHeight
+        m_frameStatusBar->SetSize( vRect.xLeft - vFRect.xLeft
+                                  ,vRect.yBottom - vFRect.yBottom
                                   ,nWidth
                                   ,nStatbarHeight
                                  );
@@ -543,21 +541,7 @@ void wxFrame::PositionStatusBar()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
-            return;
-        }
-        if (!::WinSetWindowPos( m_frameStatusBar->GetHWND()
-                               ,HWND_TOP
-                               ,vSwp.x
-                               ,vSwp.y
-                               ,nStatbarWidth
-                               ,nStatbarHeight
-                               ,SWP_SIZE | SWP_MOVE | SWP_SHOW | SWP_ZORDER
-                              ))
-        {
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-            wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+            wxLogError("Error setting parent for StautsBar. Error: %s\n", sError);
             return;
         }
     }
@@ -579,8 +563,6 @@ void wxFrame::SetMenuBar(
 {
     ERRORID                         vError;
     wxString                        sError;
-    HWND                            hClient = NULLHANDLE;
-    HWND                            hFrame = NULLHANDLE;
     HWND                            hTitlebar = NULLHANDLE;
     HWND                            hHScroll = NULLHANDLE;
     HWND                            hVScroll = NULLHANDLE;
@@ -626,27 +608,6 @@ void wxFrame::SetMenuBar(
         m_frameMenuBar = pMenuBar;
         pMenuBar->Attach(this);
     }
-
-    //
-    // Now resize the client to fit the new frame
-    //
-    WinQueryWindowPos(GetHWND(), &vSwp);
-    hTitlebar = WinWindowFromID(GetHWND(), FID_TITLEBAR);
-    WinQueryWindowPos(hTitlebar, &vSwpTitlebar);
-    hHScroll = WinWindowFromID(GetHWND(), FID_HORZSCROLL);
-    WinQueryWindowPos(hHScroll, &vSwpHScroll);
-    hVScroll = WinWindowFromID(GetHWND(), FID_VERTSCROLL);
-    WinQueryWindowPos(hVScroll, &vSwpVScroll);
-    hMenuBar = WinWindowFromID(GetHWND(), FID_MENU);
-    WinQueryWindowPos(hMenuBar, &vSwpMenu);
-    WinSetWindowPos( GetHwnd()
-                    ,HWND_TOP
-                    ,SV_CXSIZEBORDER/2
-                    ,(SV_CYSIZEBORDER/2) + vSwpHScroll.cy/2
-                    ,vSwp.cx - ((SV_CXSIZEBORDER + 1) + vSwpVScroll.cx)
-                    ,vSwp.cy - ((SV_CYSIZEBORDER + 1) + vSwpTitlebar.cy + vSwpMenu.cy + vSwpHScroll.cy/2)
-                    ,SWP_SIZE | SWP_MOVE
-                   );
 } // end of wxFrame::SetMenuBar
 
 void wxFrame::InternalSetMenuBar()
@@ -656,20 +617,20 @@ void wxFrame::InternalSetMenuBar()
     //
     // Set the parent and owner of the menubar to be the frame
     //
-    if (!::WinSetParent(m_hMenu, GetHWND(), FALSE))
+    if (!::WinSetParent(m_hMenu, m_hFrame, FALSE))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError("Error setting parent for submenu. Error: %s\n", sError);
     }
 
-    if (!::WinSetOwner(m_hMenu, GetHWND()))
+    if (!::WinSetOwner(m_hMenu, m_hFrame))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError("Error setting parent for submenu. Error: %s\n", sError);
     }
-    WinSendMsg((HWND)GetHWND(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+    WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrame::InternalSetMenuBar
 
 //
@@ -909,14 +870,16 @@ bool wxFrame::OS2Create(
     ULONG                           ulExtraFlags = 0L;
     FRAMECDATA                      vFrameCtlData;
     HWND                            hParent = NULLHANDLE;
-    HWND                            hClient = NULLHANDLE;
-    HWND                            hFrame = NULLHANDLE;
     HWND                            hTitlebar = NULLHANDLE;
     HWND                            hHScroll = NULLHANDLE;
     HWND                            hVScroll = NULLHANDLE;
+    HWND                            hFrame = NULLHANDLE;
+    HWND                            hClient = NULLHANDLE;
     SWP                             vSwp[10];
     RECTL                           vRect[10];
     USHORT                          uCtlCount;
+    ERRORID                         vError;
+    wxString                        sError;
 
     m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
 
@@ -987,37 +950,50 @@ bool wxFrame::OS2Create(
     vFrameCtlData.idResources   = 0;
 
     //
-    // Create the frame window
+    // Create the frame window:  We break ranks with other ports now
+    // and instead of calling down into the base wxWindow class' OS2Create
+    // we do all our own stuff here.  We will set the needed pieces
+    // of wxWindow manually, here.
     //
 
-    if (!wxWindow::OS2Create( hParent
-                             ,WC_FRAME
-                             ,(PSZ)zTitle
-                             ,0
-                             ,0, 0, 0, 0
-                             ,NULLHANDLE
-                             ,HWND_TOP
-                             ,(ULONG)nId
-                             ,(PVOID)&vFrameCtlData
-                             ,NULL
-                            ))
+     hFrame = ::WinCreateStdWindow( hParent
+                                   ,ulStyleFlags   // frame-window style
+                                   ,&ulCreateFlags // window style
+                                   ,(PSZ)zWclass   // class name
+                                   ,(PSZ)zTitle    // window title
+                                   ,0L             // default client style
+                                   ,NULLHANDLE     // resource in executable file
+                                   ,0              // resource id
+                                   ,&hClient       // receives client window handle
+                                  );
+    if (!hFrame)
     {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error creating frame. Error: %s\n", sError);
         return FALSE;
     }
 
     //
-    // Now need to subclass window.
+    // wxWindow class' m_hWnd set here and needed associations
     //
+    m_hFrame = hFrame;
+    m_hWnd   = hClient;
+    wxAssociateWinWithHandle(m_hWnd, this);
+    wxAssociateWinWithHandle(m_hFrame, this);
 
-  //SubclassWin(GetHWND());
+    //
+    // Now need to subclass window.  Instead of calling the SubClassWin in wxWindow
+    // we manually subclass here because we don't want to use the main wxWndProc
+    // by default
+    //
+    m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(m_hFrame, (PFNWP)wxFrameMainWndProc);
 
-//  ::WinCreateWindow(GetHWND(), WC_LISTBOX, "", WS_VISIBLE, 0, 0,
-//                    0, 0, GetHWND(), HWND_TOP, FID_CLIENT, NULL, NULL);
     //
     // Now size everything.  If adding a menu the client will need to be resized.
     //
 
-    if (!::WinSetWindowPos( GetHWND()
+    if (!::WinSetWindowPos( m_hFrame
                            ,HWND_TOP
                            ,nX
                            ,nY
@@ -1025,7 +1001,30 @@ bool wxFrame::OS2Create(
                            ,nHeight
                            ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
                           ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error sizing frame. Error: %s\n", sError);
         return FALSE;
+    }
+    //
+    // We may have to be smarter here when variable sized toolbars are added!
+    //
+    if (!::WinSetWindowPos( m_hWnd
+                           ,HWND_TOP
+                           ,nX + 20
+                           ,nY + 20
+                           ,nWidth - 60
+                           ,nHeight - 60
+                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
+                          ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error sizing client. Error: %s\n", sError);
+        return FALSE;
+    }
+
 /*
     uCtlCount = SHORT1FROMMP(::WinSendMsg(GetHWND(), WM_FORMATFRAME, (MPARAM)vSwp, (MPARAM)vRect));
     for (int i = 0; i < uCtlCount; i++)
@@ -1289,14 +1288,6 @@ bool wxFrame::HandlePaint()
         }
         else
         {
-/*          DosBeep(500,500);
-            HPS                             hPS;
-            RECTL                           vRect;
-
-            hPS = WinBeginPaint(GetHwnd(), 0L, &vRect);
-            WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
-            WinEndPaint(hPS);*/
-
             return wxWindow::HandlePaint();
         }
     }
@@ -1367,7 +1358,7 @@ bool wxFrame::HandleSize(
         }
 #endif // wxUSE_NATIVE_STATUSBAR
 
-//      PositionStatusBar();
+        PositionStatusBar();
 #if  wxUSE_TOOLBAR
         PositionToolBar();
 #endif // wxUSE_TOOLBAR
@@ -1433,36 +1424,12 @@ bool wxFrame::HandleMenuSelect(
 , WXHMENU                           hMenu
 )
 {
-//    int                             nMenuItem;
-
-/*  This is wrong section according to IBM's documentation
-    if (nFlags == 0xFFFF && hMenu == 0)
-    {
-        //
-        // Menu was removed from screen
-        //
-        nMenuItem = -1;
-    }
-    else if (!(nFlags & MIS_SUBMENU) && !(nFlags & MIS_SEPARATOR))
-    {
-        nMenuItem = nItem;
-    }
-    else
-    {
-        //
-        // Don't give hints for separators (doesn't make sense) nor for the
-        // items opening popup menus (they don't have them anyhow)
-        //
-        return FALSE;
-    }
-*/
-
     if( !nFlags )
     {
         MENUITEM mItem;
         MRESULT  rc;
 
-        rc = WinSendMsg(hMenu, MM_QUERYITEM, MPFROM2SHORT(nItem, TRUE), (MPARAM)&mItem);
+        rc = ::WinSendMsg(hMenu, MM_QUERYITEM, MPFROM2SHORT(nItem, TRUE), (MPARAM)&mItem);
 
         if(rc && !(mItem.afStyle & (MIS_SUBMENU | MIS_SEPARATOR)))
         {
@@ -1476,8 +1443,222 @@ bool wxFrame::HandleMenuSelect(
 } // end of wxFrame::HandleMenuSelect
 
 // ---------------------------------------------------------------------------
-// the window proc for wxFrame
+// Main Frame window proc
 // ---------------------------------------------------------------------------
+MRESULT EXPENTRY wxFrameMainWndProc(
+  HWND                              hWnd
+, ULONG                             ulMsg
+, MPARAM                            wParam
+, MPARAM                            lParam
+)
+{
+    MRESULT                         rc = (MRESULT)0;
+    bool                            bProcessed = FALSE;
+    wxFrame*                        pWnd  = NULL;
+
+    pWnd = (wxFrame*) wxFindWinFromHandle((WXHWND) hWnd);
+    switch (ulMsg)
+    {
+        case WM_QUERYFRAMECTLCOUNT:
+            if(pWnd && pWnd->m_fnOldWndProc)
+            {
+                USHORT              uItemCount = SHORT1FROMMR(pWnd->m_fnOldWndProc(hWnd, ulMsg, wParam, lParam));
+
+                rc = MRFROMSHORT(uItemCount);
+            }
+            break;
+
+        case WM_FORMATFRAME:
+/////////////////////////////////////////////////////////////////////////////////
+// Applications that subclass frame controls may find that the frame is already
+// subclassed the number of frame controls is variable.
+// The WM_FORMATFRAME and WM_QUERYFRAMECTLCOUNT messages must always be
+// subclassed by calling the previous window procedure and modifying its result.
+////////////////////////////////////////////////////////////////////////////////
+            {
+                int                 nItemCount;
+                int                 i;
+                PSWP                pSWP = NULL;
+                SWP                 vSwpStb;
+                RECTL               vRectl;
+                RECTL               vRstb;
+                int                 nHeight=0;
+
+                pSWP = (PSWP)PVOIDFROMMP(wParam);
+                nItemCount = SHORT1FROMMR(pWnd->m_fnOldWndProc(hWnd, ulMsg, wParam, lParam));
+                if(pWnd->m_frameStatusBar)
+                {
+                    ::WinQueryWindowRect(pWnd->m_frameStatusBar->GetHWND(), &vRstb);
+                    pWnd->m_frameStatusBar->GetSize(NULL, &nHeight);
+                    ::WinQueryWindowRect(pWnd->m_hFrame, &vRectl);
+                    ::WinMapWindowPoints(pWnd->m_hFrame, HWND_DESKTOP, (PPOINTL)&vRectl, 2);
+                    vRstb = vRectl;
+                    ::WinCalcFrameRect(pWnd->m_hFrame, &vRectl, TRUE);
+
+                    vSwpStb.x                = vRectl.xLeft - vRstb.xLeft;
+                    vSwpStb.y                = vRectl.yBottom - vRstb.yBottom;
+                    vSwpStb.cx               = vRectl.xRight - vRectl.xLeft - 1; //?? -1 ??
+                    vSwpStb.cy               = nHeight;
+                    vSwpStb.fl               = SWP_SIZE |SWP_MOVE | SWP_SHOW;
+                    vSwpStb.hwnd             = pWnd->m_frameStatusBar->GetHWND();
+                    vSwpStb.hwndInsertBehind = HWND_TOP;
+                }
+                ::WinQueryWindowRect(pWnd->m_hFrame, &vRectl);
+                ::WinMapWindowPoints(pWnd->m_hFrame, HWND_DESKTOP, (PPOINTL)&vRectl, 2);
+                ::WinCalcFrameRect(pWnd->m_hFrame, &vRectl, TRUE);
+                ::WinMapWindowPoints(HWND_DESKTOP, pWnd->m_hFrame, (PPOINTL)&vRectl, 2);
+                for(i = 0; i < nItemCount; i++)
+                {
+                    if(pWnd->m_hWnd && pSWP[i].hwnd == pWnd->m_hWnd)
+                    {
+                        pSWP[i].x    = vRectl.xLeft;
+                        pSWP[i].y    = vRectl.yBottom + nHeight;
+                        pSWP[i].cx   = vRectl.xRight - vRectl.xLeft;
+                        pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;
+                        pSWP[i].fl   = SWP_SIZE | SWP_MOVE | SWP_SHOW;
+                        pSWP[i].hwndInsertBehind = HWND_TOP;
+                    }
+                }
+                bProcessed = TRUE;
+                rc = MRFROMSHORT(nItemCount);
+            }
+            break;
+
+       default:
+            if(pWnd && pWnd->m_fnOldWndProc)
+                rc = pWnd->m_fnOldWndProc(hWnd, ulMsg, wParam, lParam);
+            else
+                rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
+    }
+    return rc;
+} // end of wxFrameMainWndProc
+
+MRESULT EXPENTRY wxFrameWndProc(
+  HWND                              hWnd
+, ULONG                             ulMsg
+, MPARAM                            wParam
+, MPARAM                            lParam
+)
+{
+    //
+    // Trace all ulMsgs - useful for the debugging
+    //
+    HWND                            parentHwnd;
+    wxFrame*                        pWnd  = NULL;
+
+    parentHwnd  = WinQueryWindow(hWnd,QW_PARENT);
+    pWnd = (wxFrame*) wxFindWinFromHandle((WXHWND) hWnd);
+
+    //
+    // When we get the first message for the HWND we just created, we associate
+    // it with wxWindow stored in wxWndHook
+    //
+//    if (!pWnd && wxWndHook)
+//    {
+//        wxAssociateWinWithHandle(hWnd, wxWndHook);
+//        pWnd = wxWndHook;
+//        wxWndHook = NULL;
+//        pWnd->SetHWND((WXHWND)hWnd);
+//    }
+
+    MRESULT                         rc = (MRESULT)0;
+    bool                            bProcessed = FALSE;
+
+    //
+    // Stop right here if we don't have a valid handle in our wxWindow object.
+    //
+    if (pWnd && !pWnd->GetHWND())
+    {
+        pWnd->SetHWND((WXHWND) hWnd);
+        rc = pWnd->OS2DefWindowProc(ulMsg, wParam, lParam );
+        pWnd->SetHWND(0);
+    }
+    else
+    {
+        switch (ulMsg)
+        {
+            case WM_CLOSE:
+                //
+                // If we can't close, tell the system that we processed the
+                // message - otherwise it would close us
+                //
+                bProcessed = !pWnd->Close();
+                break;
+
+            case WM_PAINT:
+                {
+                    HPS                             hPS;
+                    RECTL                           vRect;
+
+                    hPS = WinBeginPaint(hWnd, 0L, &vRect);
+                    WinFillRect(hPS, &vRect,  CLR_BLUE  /* SYSCLR_WINDOW */);
+                    WinEndPaint(hPS);
+                    rc = FALSE;
+                    break;
+                }
+                break;
+
+            case WM_COMMAND:
+                {
+                    WORD                wId;
+                    WORD                wCmd;
+                    WXHWND              hWnd;
+
+                    pWnd->UnpackCommand( (WXWPARAM)wParam
+                                        ,(WXLPARAM)lParam
+                                        ,&wId
+                                        ,&hWnd
+                                        ,&wCmd
+                                       );
+                    rc = (MRESULT) pWnd->HandleCommand( wId
+                                                       ,wCmd
+                                                       ,(WXHWND)hWnd
+                                                      );
+                }
+                break;
+
+            case WM_MENUSELECT:
+                {
+                    WXWORD              wItem;
+                    WXWORD              wFlags;
+                    WXHMENU             hMenu;
+
+                    pWnd->UnpackMenuSelect( wParam
+                                           ,lParam
+                                           ,&wItem
+                                           ,&wFlags
+                                           ,&hMenu
+                                          );
+                    bProcessed = pWnd->HandleMenuSelect( wItem
+                                                        ,wFlags
+                                                        ,hMenu
+                                                       );
+                    rc = (MRESULT)TRUE;
+                }
+                break;
+
+            case WM_SIZE:
+                {
+                    SHORT           nScxold = SHORT1FROMMP(wParam); // Old horizontal size.
+                    SHORT           nScyold = SHORT2FROMMP(wParam); // Old vertical size.
+                    SHORT           nScxnew = SHORT1FROMMP(lParam); // New horizontal size.
+                    SHORT           nScynew = SHORT2FROMMP(lParam); // New vertical size.
+
+                    lParam = MRFROM2SHORT( nScxnew - 20
+                                          ,nScynew - 30
+                                         );
+                }
+
+                bProcessed = pWnd->HandleSize(LOWORD(lParam), HIWORD(lParam), (WXUINT)wParam);
+                rc = (MRESULT)FALSE;
+                break;
+
+            default:
+                rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
+        }
+    }
+    return rc;
+} // end of wxFrameWndProc
 
 MRESULT wxFrame::OS2WindowProc(
   WXUINT                            uMessage
@@ -1658,63 +1839,62 @@ MRESULT wxFrame::OS2WindowProc(
     return (MRESULT)mRc;
 } // wxFrame::OS2WindowProc
 
-
 void wxFrame::SetClient(WXHWND c_Hwnd)
 {
-   // Are we really need to implement it?
+   // Duh...nothing to do under OS/2
 }
 
-void wxFrame::SetClient(wxWindow* c_Window)
+void wxFrame::SetClient(
+  wxWindow*                         pWindow
+)
 {
-     wxWindow *oldClient      = this->GetClient();
-     bool      clientHasFocus = oldClient && (oldClient == wxWindow::FindFocus());
+    wxWindow*                       pOldClient      = this->GetClient();
+    bool                            bClientHasFocus = pOldClient && (pOldClient == wxWindow::FindFocus());
 
-     if(oldClient == c_Window)  // nothing to do
+    if(pOldClient == pWindow)  // nothing to do
         return;
+    if(pWindow == NULL) // just need to remove old client
+    {
+        if(pOldClient == NULL) // nothing to do
+            return;
 
-     if(c_Window == NULL) // just need to remove old client
-     {
-        if(oldClient == NULL) // nothing to do
-           return;
-
-        if( clientHasFocus )
+        if(bClientHasFocus )
             this->SetFocus();
 
-        oldClient->Enable( FALSE );
-        oldClient->Show( FALSE );
-        ::WinSetWindowUShort(oldClient->GetHWND(), QWS_ID, (USHORT)oldClient->GetId());
+        pOldClient->Enable( FALSE );
+        pOldClient->Show( FALSE );
+        ::WinSetWindowUShort(pOldClient->GetHWND(), QWS_ID, (USHORT)pOldClient->GetId());
         // to avoid OS/2 bug need to update frame
         ::WinSendMsg((HWND)this->GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
         return;
-     }
+    }
 
-     // else need to change client
-     if( clientHasFocus )
+    //
+    // Else need to change client
+    //
+    if(bClientHasFocus)
          this->SetFocus();
 
-     ::WinEnableWindowUpdate((HWND)GetHWND(), FALSE);
-     if( oldClient )
-     {
-         oldClient->Enable( FALSE );
-         oldClient->Show( FALSE );
-         ::WinSetWindowUShort(oldClient->GetHWND(), QWS_ID, (USHORT)oldClient->GetId());
-     }
-
-     c_Window->Reparent( this );
-     ::WinSetWindowUShort(c_Window->GetHWND(), QWS_ID, FID_CLIENT);
-
-     ::WinEnableWindowUpdate((HWND)GetHWND(), TRUE);
-     c_Window->Enable();
-     c_Window->Show();   // ensure client is showing
-
-     if( this->IsShown() )
-     {
-         this->Show();
-         ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
-     }
+    ::WinEnableWindowUpdate((HWND)GetHWND(), FALSE);
+    if(pOldClient)
+    {
+        pOldClient->Enable(FALSE);
+        pOldClient->Show(FALSE);
+        ::WinSetWindowUShort(pOldClient->GetHWND(), QWS_ID, (USHORT)pOldClient->GetId());
+    }
+    pWindow->Reparent(this);
+    ::WinSetWindowUShort(pWindow->GetHWND(), QWS_ID, FID_CLIENT);
+    ::WinEnableWindowUpdate((HWND)GetHWND(), TRUE);
+    pWindow->Enable();
+    pWindow->Show();   // ensure client is showing
+    if( this->IsShown() )
+    {
+        this->Show();
+        ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
+    }
 }
 
-wxWindow *wxFrame::GetClient()
+wxWindow* wxFrame::GetClient()
 {
-   return wxFindWinFromHandle((WXHWND)::WinWindowFromID(GetHWND(), FID_CLIENT));
+    return wxFindWinFromHandle((WXHWND)::WinWindowFromID(GetHWND(), FID_CLIENT));
 }

@@ -158,6 +158,7 @@ BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindow::OnInitDialog)
     EVT_IDLE(wxWindow::OnIdle)
+    EVT_SET_FOCUS(wxWindow::OnSetFocus)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -321,8 +322,6 @@ DEBUG_PRINTF(wxWindow::~wxWindow-Start);
 
     if (m_hWnd)
     {
-//      UnsubclassWin();
-
         if(!::WinDestroyWindow(GetHWND()))
             wxLogLastError(wxT("DestroyWindow"));
         //
@@ -372,6 +371,12 @@ bool wxWindow::Create(
     // set in those class create procs.  PM's basic windows styles are
     // very limited.
     //
+    ulCreateFlags |=  WS_VISIBLE;
+
+
+    if ( lStyle & wxCLIP_SIBLINGS )
+        ulCreateFlags |= WS_CLIPSIBLINGS;
+
     if (lStyle & wxCLIP_CHILDREN )
         ulCreateFlags |= WS_CLIPCHILDREN;
 
@@ -729,19 +734,12 @@ void wxWindow::SubclassWin(
     HWND                            hwnd = (HWND)hWnd;
 
     wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
-
     wxCHECK_RET(::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in SubclassWin") );
-
-//  wxAssociateWinWithHandle(hwnd, this);
-
     m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, (PFNWP)wxWndProc);
-//    ::WinSetWindowULong(hwnd, QWL_USER, (ULONG)wxWndProc);
 } // end of wxWindow::SubclassWin
 
 void wxWindow::UnsubclassWin()
 {
-//    wxRemoveHandleAssociation(this);
-
     //
     // Restore old Window proc
     //
@@ -749,11 +747,10 @@ void wxWindow::UnsubclassWin()
 
     if (m_hWnd)
     {
-//        m_hWnd = 0;
-
         wxCHECK_RET( ::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in UnsubclassWin") );
 
         PFNWP                       fnProc = (PFNWP)::WinQueryWindowPtr(hwnd, QWP_PFNWP);
+
         if ( (m_fnOldWndProc != 0) && (fnProc != (PFNWP) m_fnOldWndProc))
         {
             WinSubclassWindow(hwnd, (PFNWP)m_fnOldWndProc);
@@ -1114,7 +1111,10 @@ void wxWindow::DoGetClientSize(
     RECTL                           vRect;
 
     hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-    ::WinQueryWindowRect(hWndClient, &vRect);
+    if( hWndClient == NULLHANDLE)
+       ::WinQueryWindowRect(GetHwnd(), &vRect);
+    else
+       ::WinQueryWindowRect(hWndClient, &vRect);
 
     if (pWidth)
         *pWidth  = vRect.xRight;
@@ -1533,8 +1533,6 @@ bool wxWindow::OS2ProcessMessage(
 {
     QMSG*                           pQMsg = (QMSG*)pMsg;
 
-DEBUG_PRINTF(OS2ProcessMessage);
-
     if (m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL))
     {
         //
@@ -1740,11 +1738,6 @@ void wxWindow::UnpackCommand(
 , WORD*                             pCmd
 )
 {
-/*
-    *pId = LOWORD(wParam);
-    *phWnd = (WXHWND)lParam;
-    *pCmd = HIWORD(wParam);
-*/
     *pId = LOWORD(wParam);
     *phWnd = NULL;  // or may be GetHWND() ?
     *pCmd = LOWORD(lParam);
@@ -1871,17 +1864,6 @@ MRESULT wxWindow::OS2WindowProc(
     MRESULT                         mResult;
     WXHICON                         hIcon;
     WXHBRUSH                        hBrush;
-
-    //
-    // The return value
-    //
-//  union
-//  {
-//      bool                        bAllow;
-//      MRESULT                     mResult;
-//      WXHICON                     hIcon;
-//      WXHBRUSH                    hBrush;
-//  } vRc;
 
     //
     // For most messages we should return 0 when we do process the message
@@ -2375,6 +2357,8 @@ bool wxWindow::OS2Create(
     long                            lWidth1  = 20L;
     long                            lHeight1 = 20L;
     int                             nControlId = 0;
+    int                             nNeedsubclass = 0;
+    PCSZ                            pszClass = zClass;
 
     //
     // Find parent's size, if it exists, to set up a possible default
@@ -2414,6 +2398,21 @@ bool wxWindow::OS2Create(
     {
             nControlId = ulId;
     }
+    else
+    {
+        // no standard controls
+        if(wxString (wxT("wxFrameClass")) == wxString(zClass) )
+        {
+            pszClass =  WC_FRAME;
+            nNeedsubclass = 1;
+        }
+        else
+        {
+            nControlId = ulId;
+            if(nControlId < 0)
+                nControlId = FID_CLIENT;
+        }
+    }
 
     //
     // We will either have a registered class via string name or a standard PM Class via a long
@@ -2426,9 +2425,9 @@ bool wxWindow::OS2Create(
                                        ,(LONG)lY1
                                        ,(LONG)lWidth
                                        ,(LONG)lHeight
-                                       ,NULLHANDLE
+                                       ,hOwner
                                        ,HWND_TOP
-                                       ,(ULONG)ulId
+                                       ,(ULONG)nControlId
                                        ,pCtlData
                                        ,pPresParams
                                       );
@@ -2462,9 +2461,14 @@ bool wxWindow::OS2Create(
     //
     // Now need to subclass window.
     //
-
-    SubclassWin(GetHWND());
-
+    if(!nNeedsubclass)
+    {
+         wxAssociateWinWithHandle((HWND)m_hWnd,this);
+    }
+    else
+    {
+        SubclassWin(GetHWND());
+    }
     return TRUE;
 } // end of wxWindow::OS2Create
 
