@@ -40,7 +40,7 @@
 #include <sys/stat.h>
 #endif
 
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__) && !defined(__OS2__)
 #   include   <unistd.h>
 #endif
 
@@ -69,7 +69,7 @@ public:
          delete [] src;
          return doc;
       }
-   
+
     virtual bool CanRead(const wxFSFile& file) const
       {
          wxString filename = file.GetLocation();
@@ -158,7 +158,7 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
    wxButton *btn_contents = new wxButton(this, m_IdContents, _("Contents"));
    m_combo = new wxComboBox(this, m_IdCombo);
    wxButton *btn_search = new wxButton(this, m_IdSearch, _("Search"));
-   
+
    m_filter = new wxForceHtmlFilter;
 
    wxLayoutConstraints *c;
@@ -176,7 +176,7 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
    c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
    c->height.AsIs();
    btn_fwd->SetConstraints(c);
-   
+
    c = new wxLayoutConstraints;
    c->left.SameAs(btn_fwd, wxRight, 2*LAYOUT_X_MARGIN);
    c->width.Absolute(BUTTON_WIDTH);
@@ -207,7 +207,7 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
    m_htmlwin->SetConstraints(c);
    SetAutoLayout(TRUE);
    CreateStatusBar();
- 
+
    m_htmlwin->SetRelatedFrame(this, title);
    m_htmlwin->SetRelatedStatusBar(0);
    m_htmlwin->AddFilter(m_filter);

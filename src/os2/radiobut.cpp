@@ -27,6 +27,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapRadioButton, wxRadioButton)
 #endif
 
 bool wxRadioButton::OS2Command(WXUINT param, WXWORD id)

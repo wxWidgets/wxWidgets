@@ -963,7 +963,7 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
   wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, GetId() );
   event.m_item = item;
   event.SetEventObject( this );
-  
+
 //  if ( ProcessEvent( event ) && event.m_code )  TODO: Was this a typo ?
   if ( ProcessEvent( event ) && !event.IsAllowed() )
   {
@@ -1285,7 +1285,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
 // FIXME: tree sorting functions are not reentrant and not MT-safe!
 static wxTreeCtrl *s_treeBeingSorted = NULL;
 
-static int tree_ctrl_compare_func(wxGenericTreeItem **item1,
+static int LINKAGEMODE tree_ctrl_compare_func(wxGenericTreeItem **item1,
                                   wxGenericTreeItem **item2)
 {
     wxCHECK_MSG( s_treeBeingSorted, 0, wxT("bug in wxTreeCtrl::SortChildren()") );
@@ -1939,7 +1939,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
     if (item == NULL) return;  /* we hit the blank area */
 
-    if (event.RightDown()) { 
+    if (event.RightDown()) {
 	wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,GetId());
 	nevent.m_item=item;
 	nevent.m_code=0;

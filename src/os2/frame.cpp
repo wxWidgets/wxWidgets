@@ -51,7 +51,9 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 wxFrame::wxFrame()
 {
+#if wxUSE_TOOLBAR
   m_frameToolBar = NULL ;
+#endif
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
 
@@ -74,7 +76,9 @@ bool wxFrame::Create( wxWindow *parent
   SetName(name);
   m_windowStyle = style;
   m_frameMenuBar = NULL;
+#if wxUSE_TOOLBAR
   m_frameToolBar = NULL ;
+#endif
   m_frameStatusBar = NULL;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -666,6 +670,7 @@ bool wxFrame::ProcessCommand(int id)
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt(0, 0);
+#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int w, h;
@@ -680,6 +685,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
             pt.y += h;
         }
     }
+#endif
     return pt;
 }
 
@@ -905,7 +911,9 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
     if ( !m_iconized )
     {
         PositionStatusBar();
+#if wxUSE_TOOLBAR
         PositionToolBar();
+#endif
 
         wxSizeEvent event(wxSize(x, y), m_windowId);
         event.SetEventObject( this );

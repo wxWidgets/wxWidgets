@@ -30,7 +30,7 @@
 // General features
 // ----------------------------------------------------------------------------
 
-#define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's
+#define wxUSE_NET_API          0 // Utilize OS/2's UPM netapi's
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
@@ -70,8 +70,6 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
-#define wxUSE_TOOLBAR       1
-                                    // Define 1 to use toolbar classes
 #define wxUSE_BUTTONBAR     1
                                     // Define 1 to use buttonbar classes (enhanced toolbar
                                     // for MS Windows)

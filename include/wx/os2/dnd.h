@@ -65,6 +65,7 @@ public:
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual bool OnData(wxCoord x, wxCoord y);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
     virtual bool GetData();
 
   // implementation
@@ -94,6 +95,7 @@ public:
     virtual bool OnData( wxCoord x
                         ,wxCoord y
                        );
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
 };
 
 // ----------------------------------------------------------------------------
@@ -115,6 +117,7 @@ public:
     virtual bool OnData( wxCoord x
                         ,wxCoord y
                        );
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
 };
 
 #endif //__OS2DNDH__

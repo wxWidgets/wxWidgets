@@ -88,7 +88,6 @@ GENERICOBJS= \
   ..\generic\$D\colrdlgg.obj \
   ..\generic\$D\dcpsg.obj \
   ..\generic\$D\grid.obj \
-  ..\generic\$D\gridg.obj \
   ..\generic\$D\helpext.obj \
   ..\generic\$D\helphtml.obj \
   ..\generic\$D\helpwxht.obj \
@@ -114,6 +113,7 @@ GENERICOBJS= \
   ..\generic\$D\treectrl.obj \
   ..\generic\$D\tipdlg.obj
 
+#  ..\generic\$D\gridg.obj \
 #  ..\generic\$D\notebook.obj \
 
 GENLIBOBJS= \
@@ -123,7 +123,6 @@ GENLIBOBJS= \
   colrdlgg.obj \
   dcpsg.obj \
   grid.obj \
-  gridg.obj \
   helpext.obj \
   helphtml.obj \
   helpwxht.obj \
@@ -462,22 +461,20 @@ OS2LIBOBJS1 = \
   gsocket.obj \
   helpwin.obj \
   icon.obj \
-  imaglist.obj \
   iniconf.obj \
   joystick.obj \
   listbox.obj \
-  listctrl.obj \
   main.obj \
   mdi.obj \
   menu.obj \
   menuitem.obj \
   metafile.obj \
   minifram.obj \
-  msgdlg.obj
+  msgdlg.obj \
+  nativdlg.obj \
+  notebook.obj
 
 OS2LIBOBJS2 = \
-  nativdlg.obj \
-  notebook.obj \
   ownerdrw.obj \
   palette.obj \
   pen.obj \
@@ -495,15 +492,13 @@ OS2LIBOBJS2 = \
   statbox.obj \
   stattext.obj \
   statline.obj \
-  statbrpm.obj \
   tabctrl.obj \
   taskbar.obj \
   textctrl.obj \
   thread.obj \
   timer.obj \
-  toolbar.obj \
+#  toolbar.obj \
   tooltip.obj \
-  treectrl.obj \
   utils.obj \
   utilsexc.obj \
   wave.obj \
@@ -663,7 +658,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\colrdlgg.obj
   copy ..\generic\$D\dcpsg.obj
   copy ..\generic\$D\grid.obj
-  copy ..\generic\$D\gridg.obj
   copy ..\generic\$D\helpext.obj
   copy ..\generic\$D\helphtml.obj
   copy ..\generic\$D\helpwxht.obj
@@ -723,11 +717,9 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\gsocket.obj
   copy ..\os2\$D\helpwin.obj
   copy ..\os2\$D\icon.obj
-  copy ..\os2\$D\imaglist.obj
   copy ..\os2\$D\iniconf.obj
   copy ..\os2\$D\joystick.obj
   copy ..\os2\$D\listbox.obj
-  copy ..\os2\$D\listctrl.obj
   copy ..\os2\$D\main.obj
   copy ..\os2\$D\mdi.obj
   copy ..\os2\$D\menu.obj
@@ -735,10 +727,10 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\metafile.obj
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
-
-$(OS2LIBOBJS2):
   copy ..\os2\$D\nativdlg.obj
   copy ..\os2\$D\notebook.obj
+
+$(OS2LIBOBJS2):
   copy ..\os2\$D\ownerdrw.obj
   copy ..\os2\$D\palette.obj
   copy ..\os2\$D\pen.obj
@@ -756,15 +748,13 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\statbox.obj
   copy ..\os2\$D\statline.obj
   copy ..\os2\$D\stattext.obj
-  copy ..\os2\$D\statbrpm.obj
   copy ..\os2\$D\tabctrl.obj
   copy ..\os2\$D\taskbar.obj
   copy ..\os2\$D\textctrl.obj
   copy ..\os2\$D\thread.obj
   copy ..\os2\$D\timer.obj
-  copy ..\os2\$D\toolbar.obj
+#  copy ..\os2\$D\toolbar.obj
   copy ..\os2\$D\tooltip.obj
-  copy ..\os2\$D\treectrl.obj
   copy ..\os2\$D\utils.obj
   copy ..\os2\$D\utilsexc.obj
   copy ..\os2\$D\wave.obj

@@ -65,17 +65,17 @@ bool wxGetHostName(
 #if wxUSE_NET_API
     char                            zServer[256];
     char                            zComputer[256];
-    unsigned long                   ulLevel;
+    unsigned short                  nLevel = 0;
     unsigned char*                  zBuffer;
-    unsigned long                   ulBuffer;
-    unsigned long*                  pulTotalAvail;
+    unsigned short                  nBuffer;
+    unsigned short*                 pnTotalAvail;
 
     NetBiosGetInfo( (const unsigned char*)zServer
                    ,(const unsigned char*)zComputer
-                   ,ulLevel
+                   ,nLevel
                    ,zBuffer
-                   ,ulBuffer
-                   ,pulTotalAvail
+                   ,nBuffer
+                   ,pnTotalAvail
                   );
     strcpy(zBuf, zServer);
 #else

@@ -25,7 +25,7 @@
 #include "wx/os2/tabctrl.h"
 #include "wx/app.h"
 #include "wx/os2/private.h"
-#include "wx/os2/imaglist.h"
+#include "wx/generic/imaglist.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)

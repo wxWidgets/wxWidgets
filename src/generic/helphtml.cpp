@@ -40,7 +40,7 @@
 #include <sys/stat.h>
 #endif
 
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__) && !defined(__OS2__)
     #include   <unistd.h>
 #endif
 
@@ -227,7 +227,7 @@ wxHTMLHelpControllerBase::DisplayContents()
       file = file.BeforeLast(wxT('#'));
    if(contents.Length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
-   
+
    // if not found, open homemade toc:
    return rc ? TRUE : KeywordSearch(wxT(""));
 }
@@ -296,7 +296,7 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
          node = node->Next();
       }
    }
-   
+
    if(idx == 1)
       rc = DisplayHelp(urls[0]);
    else if(idx == 0)

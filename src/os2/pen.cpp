@@ -24,6 +24,10 @@
 #include "wx/os2/private.h"
 #include "assert.h"
 
+#if !USE_SHARED_LIBRARIES
+IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+#endif
+
 wxPenRefData::wxPenRefData()
 {
     m_style = wxSOLID;

@@ -419,7 +419,7 @@ void wxPostScriptDC::DestroyClippingRegion()
         m_clipping = FALSE;
         fprintf( m_pstream, "grestore\n" );
     }
-    
+
     wxDC::DestroyClippingRegion();
 }
 
@@ -1329,8 +1329,8 @@ void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signX = (xLeftRight ? 1 : -1);
     m_signY = (yBottomUp  ? 1 : -1);
 
-    // FIXME there is no such function in MSW
-#ifndef __WXMSW__
+    // FIXME there is no such function in MSW nor in OS2/PM
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     ComputeScaleAndOrigin();
 #endif
 }

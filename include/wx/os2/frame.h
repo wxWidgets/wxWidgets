@@ -24,8 +24,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 
-class WXDLLEXPORT wxFrame: public wxWindow {
-
+class WXDLLEXPORT wxFrame: public wxWindow
+{
   DECLARE_DYNAMIC_CLASS(wxFrame)
 
 public:

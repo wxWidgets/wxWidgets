@@ -36,7 +36,7 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__) && !defined(__OS2__)
     #include   <unistd.h>
 #endif
 
@@ -82,7 +82,7 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    wxBusyCursor b; // display a busy cursor
 
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
    wxString url;
    url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
    bool bOk = (int)ShellExecute(NULL, "open", url,
@@ -94,6 +94,19 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    }
    else
       return true;
+#elif  defined(__WXPM__)
+   wxString url;
+   url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
+//   will have to fix for OS/2, later.....DW
+//   bool bOk = (int)ShellExecute(NULL, "open", url,
+//                                NULL, NULL, SW_SHOWNORMAL ) > 32;
+//   if ( !bOk )
+//   {
+//      wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());
+//      return false;
+//   }
+//   else
+      return TRUE;
 #else
    // assume UNIX
    wxString command;

@@ -29,6 +29,10 @@
 #include <osfcn.h>
 #endif
 
+#ifdef __VISAGECPP__
+#include <io.h>
+#endif
+
 #ifdef __cplusplus
 static int yyinput()
 #else
@@ -131,6 +135,7 @@ int read();
  * done when it reached the ';' after the YY_FATAL_ERROR() call.
  */
 
+#if !defined(__VISAGECPP__)
 #define YY_FATAL_ERROR(msg) \
 	do \
 		{ \
@@ -139,6 +144,18 @@ int read();
 		exit( 1 ); \
 		} \
 	while ( 0 )
+#else
+// suppress expression always false warning
+int os2var = 0;
+#define YY_FATAL_ERROR(msg) \
+	do \
+		{ \
+		(void) fputs( msg, stderr ); \
+		(void) putc( '\n', stderr ); \
+		exit( 1 ); \
+		} \
+	while ( os2var == 0 )
+#endif
 
 /* default yywrap function - always treat EOF as an EOF */
 int yywrap(void) { return 1; }
@@ -154,6 +171,7 @@ int yywrap(void) { return 1; }
 #define YY_STATE_EOF(state) (YY_END_OF_BUFFER + state + 1)
 
 /* special action meaning "start processing a new file" */
+#if !defined(__VISAGECPP__)
 #define YY_NEW_FILE \
 	do \
 		{ \
@@ -161,11 +179,20 @@ int yywrap(void) { return 1; }
 		yy_load_buffer_state(); \
 		} \
 	while ( 0 )
+#else
+#define YY_NEW_FILE \
+	do \
+		{ \
+		yy_init_buffer( yy_current_buffer, yyin ); \
+		yy_load_buffer_state(); \
+		} \
+	while ( os2var == 0 )
+#endif
 
 /* default declaration of generated scanner - a define so the user can
  * easily add parameters
  */
-#define YY_DECL int yylex YY_PROTO(( void )) 
+#define YY_DECL int yylex YY_PROTO(( void ))
 
 /* code executed at the end of each rule */
 #define YY_BREAK break;
@@ -246,6 +273,7 @@ static int my_unput(char);
 #define EOB_ACT_LAST_MATCH 2
 
 /* return all but the first 'n' matched characters back to the input stream */
+#if !defined(__VISAGECPP__)
 #define yyless(n) \
 	do \
 		{ \
@@ -255,6 +283,17 @@ static int my_unput(char);
 		YY_DO_BEFORE_ACTION; /* set up yytext again */ \
 		} \
 	while ( 0 )
+#else
+#define yyless(n) \
+	do \
+		{ \
+		/* undo effects of setting up yytext */ \
+		*yy_cp = yy_hold_char; \
+		yy_c_buf_p = yy_cp = yy_bp + n; \
+		YY_DO_BEFORE_ACTION; /* set up yytext again */ \
+		} \
+	while ( os2var == 0 )
+#endif
 
 #undef unput
 #define unput(c) yyunput( c, yytext )
@@ -477,7 +516,13 @@ YY_DECL
 	yy_init = 0;
 	}
 
+#if !defined(__VISAGECPP__)
     while ( 1 )		/* loops until end-of-file is reached */
+#else
+    os2var = 1;
+    if (os2var == 0) return 0;
+    while ( os2var == 1 )		/* loops until end-of-file is reached */
+#endif
 	{
 	yy_cp = yy_c_buf_p;
 
@@ -729,6 +774,10 @@ case YY_STATE_EOF(INITIAL):
 			"fatal flex scanner internal error--no action found" );
 	    }
 	}
+#if defined(__VISAGECPP__)
+// VA complains about proc maybe not returning a value so return one
+return 0;
+#endif
     }
 
 
@@ -736,9 +785,9 @@ case YY_STATE_EOF(INITIAL):
  *
  * synopsis
  *     int yy_get_next_buffer();
- *     
+ *
  * returns a code representing an action
- *     EOB_ACT_LAST_MATCH - 
+ *     EOB_ACT_LAST_MATCH -
  *     EOB_ACT_CONTINUE_SCAN - continue scanning from current position
  *     EOB_ACT_END_OF_FILE - end of file
  */
@@ -1175,7 +1224,7 @@ static int my_unput(char c)
 
 #endif
 
-/* Public */ 
+/* Public */
 void LexFromFile(FILE *fd)
 {
   lex_read_from_string = 0;

@@ -64,7 +64,7 @@ static int my_input(void);
 
 "'"{WORDCHAR}*"'"	          {int len = strlen(yytext);
                                    yytext[len-1] = 0;
-                                   yylval.s = strdup(yytext+1); 
+                                   yylval.s = strdup(yytext+1);
                                    Return(WORD);}
 
 \"({STRINGCHAR}|\\\"|\|\\\\|\\)*\"  {yylval.s = strdup(yytext); Return(STRING);}
@@ -123,7 +123,7 @@ static int lex_input() {
 # define input() my_input()
 static int my_unput(char c)
 {
-  if (lex_read_from_string) {
+  if (lex_read_from_string != 0) {
     /* Make sure we have something */
     if (lex_string_ptr) {
       if (c == '\n') yylineno--;
@@ -138,7 +138,7 @@ static int my_unput(char c)
 
 #endif
 
-/* Public */ 
+/* Public */
 void LexFromFile(FILE *fd)
 {
   lex_read_from_string = 0;

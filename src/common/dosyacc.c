@@ -4,7 +4,7 @@ static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #define YYBYACC 1
 #line 2 "parser.y"
 #include "string.h"
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__VISAGECPP__)
 #include <io.h>
 #endif
 #include "wx/expr.h"
@@ -262,7 +262,8 @@ yyparse()
     register char *yys;
     extern char *getenv();
 
-    if (yys = getenv("YYDEBUG"))
+    yys = getenv("YYDEBUG");
+    if (yys)
     {
         yyn = *yys;
         if (yyn >= '0' && yyn <= '9')
@@ -279,7 +280,8 @@ yyparse()
     *yyssp = yystate = 0;
 
 yyloop:
-    if (yyn = yydefred[yystate]) goto yyreduce;
+    yyn = yydefred[yystate];
+    if (yyn != 0) goto yyreduce;
     if (yychar < 0)
     {
         if ((yychar = yylex()) < 0) yychar = 0;

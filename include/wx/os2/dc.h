@@ -216,6 +216,8 @@ protected:
     WXHBRUSH          m_oldBrush;
     WXHFONT           m_oldFont;
     WXHPALETTE        m_oldPalette;
+
+    float             m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
 };
 #endif
     // _WX_DC_H_
