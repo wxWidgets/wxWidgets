@@ -106,6 +106,12 @@
     #include <unix.h>
 #endif
 
+#ifdef __WATCOMC__
+    #include <io.h>
+    #include <sys/utime.h>
+    #include <sys/stat.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -456,8 +462,8 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
     #ifndef __WATCOMC__
         ::DosCreateDir(wxStringBuffer(MAX_PATH), NULL);
     #endif
-
-#else // !Windows, !OS/2
+    
+#else // !Windows, !OS/2, !DOS
     if ( dir.empty() )
     {
         dir = wxGetenv(_T("TMP"));
@@ -469,7 +475,11 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
         if ( dir.empty() )
         {
             // default
+            #ifdef __DOS__
+            dir = _T(".");
+            #else
             dir = _T("/tmp");
+            #endif
         }
     }
 
@@ -478,12 +488,24 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
     if ( !wxEndsWithPathSeparator(dir) &&
             (name.empty() || !wxIsPathSeparator(name[0u])) )
     {
-        path += _T('/');
+        path += wxFILE_SEP_PATH;
     }
 
     path += name;
 
-#ifdef HAVE_MKSTEMP
+#if defined(__DOS__) && defined(__WATCOMC__)
+    // scratch space for mkstemp()
+    path += _T("XXXXXX");
+
+    // can use the cast here because the length doesn't change and the string
+    // is not shared
+    if ( !_mktemp((char *)path.mb_str()) )
+    {
+        // this might be not necessary as mkstemp() on most systems should have
+        // already done it but it doesn't hurt neither...
+        path.clear();
+    }
+#elif defined(HAVE_MKSTEMP)
     // scratch space for mkstemp()
     path += _T("XXXXXX");
 
@@ -1207,7 +1229,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 {
     if (format == wxPATH_NATIVE)
     {
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__)
         format = wxPATH_DOS;
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
         format = wxPATH_MAC;
@@ -1395,7 +1417,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtCreate,
                           const wxDateTime *dtAccess,
                           const wxDateTime *dtMod)
 {
-#if defined(__UNIX_LIKE__)
+#if defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
     if ( !dtAccess && !dtMod )
     {
         // can't modify the creation time anyhow, don't try
@@ -1464,20 +1486,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtChange) const
 {
-#if defined(__UNIX_LIKE__)
-    wxStructStat stBuf;
-    if ( wxStat(GetFullPath(), &stBuf) == 0 )
-    {
-        if ( dtAccess )
-            dtAccess->Set(stBuf.st_atime);
-        if ( dtMod )
-            dtMod->Set(stBuf.st_mtime);
-        if ( dtChange )
-            dtChange->Set(stBuf.st_ctime);
-
-        return TRUE;
-    }
-#elif defined(__WXMAC__)
+#if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
     if ( wxStat(GetFullPath(), &stBuf) == 0 )
     {
