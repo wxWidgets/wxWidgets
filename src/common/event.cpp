@@ -542,7 +542,9 @@ wxEvtHandler::wxEvtHandler()
     m_isWindow = FALSE;
     m_pendingEvents = (wxList *) NULL;
 #if wxUSE_THREADS
+#  if !defined(__VISAGECPP__)
     m_eventsLocker = new wxCriticalSection;
+#  endif
 #endif
 }
 
@@ -571,7 +573,9 @@ wxEvtHandler::~wxEvtHandler()
     delete m_pendingEvents;
 
 #if wxUSE_THREADS
+#  if !defined(__VISAGECPP__)
     delete m_eventsLocker;
+#  endif
 #endif
 }
 
@@ -579,7 +583,11 @@ wxEvtHandler::~wxEvtHandler()
 
 bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 {
+#if defined(__VISAGECPP__)
+    wxCriticalSectionLocker locker(m_eventsLocker);
+#else
     wxCriticalSectionLocker locker(*m_eventsLocker);
+#endif
 
     // check that we are really in a child thread
     wxASSERT_MSG( !wxThread::IsMain(),
@@ -614,7 +622,11 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
+#if defined(__VISAGECPP__)
+    wxCRIT_SECT_LOCKER(locker, &m_eventsLocker);
+#else
     wxCRIT_SECT_LOCKER(locker, m_eventsLocker);
+#endif
 
     wxNode *node = m_pendingEvents->First();
     wxEvent *event;
@@ -779,6 +791,8 @@ void wxEvtHandler::Connect( int id, int lastId,
     m_dynamicEvents->Append( (wxObject*) entry );
 }
 
+#if 0
+// DW: not in header anymore???
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
                   wxObjectEventFunction func,
                   wxObject *userData )
@@ -805,6 +819,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     }
     return FALSE;
 }
+#endif
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
