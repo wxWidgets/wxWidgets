@@ -185,7 +185,7 @@ class wxPopupDialog(wxDialog):
 
 class wxPopupControl(wxPyControl):
     def __init__(self,*_args,**_kwargs):
-        if 'value' in _kwargs:
+        if _kwargs.has_key('value'):
             del _kwargs['value']
         apply(wxPyControl.__init__,(self,) + _args,_kwargs)
 

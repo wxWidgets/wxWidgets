@@ -118,7 +118,7 @@ class TestPanel(wxPanel):
         sizer.SetSizeHints(self)
         sizer.Fit(self)
 
-        for t in self.throbbers:
+        for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Start()
         self.otherThrobber.Start()
         self.otherThrobber.Reverse()
@@ -130,11 +130,11 @@ class TestPanel(wxPanel):
         event.Skip()
 
     def OnStartAnimation(self, event):
-        for t in self.throbbers:
+        for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Start()
 
     def OnStopAnimation(self, event):
-        for t in self.throbbers:
+        for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
 
     def OnClickThrobber(self, event):
