@@ -290,7 +290,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         }
     }
 
-    if ((event.GetKeyCode() == WXK_RETURN))
+    if ((event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
     {
         wxCommandEvent evt( wxEVT_COMMAND_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
