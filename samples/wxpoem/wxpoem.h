@@ -51,6 +51,7 @@ class MainWindow: public wxFrame
 
     void OnCloseWindow(wxCloseEvent& event);
     void OnChar(wxKeyEvent& event);
+    void OnPopup(wxCommandEvent& event);
 
     // Display next page or poem
     void NextPage(void);

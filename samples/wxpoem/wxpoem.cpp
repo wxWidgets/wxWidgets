@@ -131,7 +131,6 @@ void            CopyToClipboard(HWND, char *);
 #endif
 
 wxMenu    *popupMenu = NULL;
-void PopupFunction(wxMenu& menu, wxCommandEvent& event);
 
 #if wxUSE_HELP
     wxHelpController *HelpController = NULL;
@@ -152,6 +151,7 @@ void CreateFonts()
 BEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_CLOSE(MainWindow::OnCloseWindow)
     EVT_CHAR(MainWindow::OnChar)
+    EVT_MENU(-1, MainWindow::OnPopup)
 END_EVENT_TABLE()
 
 MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
@@ -616,7 +616,7 @@ bool MyApp::OnInit()
 
   TheMainWindow->canvas = new MyCanvas(TheMainWindow, 501, wxDefaultPosition, wxDefaultSize);
 
-  popupMenu = new wxMenu("", (wxFunction)PopupFunction);
+  popupMenu = new wxMenu;
   popupMenu->Append(POEM_NEXT, "Next poem/page");
   popupMenu->Append(POEM_PREVIOUS, "Previous page");
   popupMenu->AppendSeparator();
@@ -729,11 +729,10 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
-  long x, y;
-  event.Position(&x, &y);
   static int startPosX, startPosY, startFrameX, startFrameY;
 
-  event.Position(&x, &y);
+  long x, y;
+  event.GetPosition(&x, &y);
 
   if (event.RightDown())
   {
@@ -1074,7 +1073,7 @@ bool Compile(void)
     return TRUE;
 }
 
-void PopupFunction(wxMenu& /*menu*/, wxCommandEvent& event)
+void MainWindow::OnPopup(wxCommandEvent& event)
 {
   switch (event.GetId())
   {
