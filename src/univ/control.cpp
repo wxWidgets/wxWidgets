@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     14.08.00
 // RCS-ID:      $Id$
-// Copyright:   (c) 2000 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 

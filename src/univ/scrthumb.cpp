@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     13.02.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 Vadim Zeitlin
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
