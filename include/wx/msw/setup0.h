@@ -132,7 +132,7 @@
 #ifndef __MWERKS__
 #define wxUSE_IOSTREAMH     1
 #else
-#define wxUSE_IOSTREAMH     0
+#define wxUSE_IOSTREAMH     1
 #endif
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,

@@ -1,106 +1,18 @@
 #
 # File:		makefile.b32
 # Author:	Julian Smart
-# Created:	1996
+# Created:	1999
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# Copyright:
 #
-# "%W% %G%"
-#
-# Makefile : Builds OGL for BC++, 32-bit.
+# Makefile : Builds OGL library for 32-bit BC++
 
-!if "$(BCCDIR)" == ""
-!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
-!endif
-
-!if "$(WXWIN)" == ""
-!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
-!endif
-
-# Change WXDIR to wherever wxWindows is found
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makeb32.env
 
-WXLIB = $(WXDIR)\lib\wx32.lib
-WXINC = $(WXDIR)\include
-CFG=$(WXWIN)\src\wxwin32.cfg
-
-OGLDIR = $(WXDIR)\utils\ogl
-OGLLIB = $(WXDIR)\lib\ogl.lib
-DOCDIR = $(OGLDIR)\docs
-
-INC=/DPROLOGIO=1 # /I$(WXDIR)\include\base /I$(WXDIR)\include\msw
-
-LIBS=$(WXLIB) $(OGLLIB) mathwl cwl import mathwl
-
-!ifndef FINAL
-FINAL=0
-!endif
-
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v -DDEBUG=$(DEBUG)
-!else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
-OPT = -O2
-DEBUG_FLAGS = -DDEBUG=$(DEBUG)
-!endif
-
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
-CFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+LIBTARGET=$(WXDIR)\lib\ogl.lib
 
 OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj misc.obj divided.obj constrnt.obj\
  composit.obj drawn.obj bmpshape.obj mfutils.obj
 
-all:    $(OGLLIB)
-
-.$(SRCSUFF).obj:
-	bcc32 $(CPPFLAGS) $(INC) -c {$< }
-
-$(OGLLIB):      $(OBJECTS)
-        erase $(OGLLIB)
-        tlib /P128 @&&!
-$(OGLLIB) &
-+$(OBJECTS:.obj =.obj +)
-!
-
-# Making documents
-docs:   hlp
-hlp: $(DOCDIR)/ogl.hlp
-hlp32: $(DOCDIR)/hlp32/ogl.hlp
-rtf:    $(DOCDIR)/ogl.rtf
-
-$(DOCDIR)/ogl.hlp:         $(DOCDIR)/ogl.rtf $(DOCDIR)/ogl.hpj
-        cd $(DOCDIR)
-        -erase ogl.ph
-        hc ogl
-        cd $(THISDIR)
-
-$(DOCDIR)/hlp32/ogl.hlp:         $(DOCDIR)/hlp32/ogl.rtf $(DOCDIR)/hlp32/ogl.hpj
-        cd $(DOCDIR)/hlp32
-        -erase ogl.ph
-        start /w hcw /c /e ogl.hpj
-        cd $(THISDIR)
-
-$(DOCDIR)/ogl.rtf:         $(DOCDIR)/classes.tex $(DOCDIR)/intro.tex $(DOCDIR)/ogl.tex
-        cd $(DOCDIR)
-        start /w tex2rtf $(DOCDIR)/ogl.tex $(DOCDIR)/ogl.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)/hlp32/ogl.rtf:         $(DOCDIR)/classes.tex $(DOCDIR)/intro.tex $(DOCDIR)/ogl.tex
-        cd $(DOCDIR)
-        start /w tex2rtf $(DOCDIR)/ogl.tex $(DOCDIR)/hlp32/ogl.rtf -twice -winhelp -macros $(DOCDIR)/t2rtf32.ini
-        cd $(THISDIR)
-
-wordrtf: 
-        cd $(DOCDIR)
-        -wx /W tex2rtf $(DOCDIR)/ogl.tex $(DOCDIR)/ogl.rtf -twice -rtf
-        cd $(THISDIR)
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-	-erase ..\lib\*.lib $(OGLLIB)
+!include $(WXDIR)\src\makelib.b32
 

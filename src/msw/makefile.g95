@@ -51,11 +51,6 @@ XPMDIR=../xpm
 OLEDIR=ole
 MSWDIR=.
 
-GENERICOBJDIR=../generic/$(OBJDIR)
-COMMOBJDIR=../common/$(OBJDIR)
-OLEOBJDIR=ole/$(OBJDIR)
-MSWDIR=$(OBJDIR)
-
 DOCDIR = $(WXDIR)\docs
 
 GENERICOBJS= \
@@ -95,6 +90,7 @@ COMMONOBJS = \
   $(COMMDIR)/helpbase.$(OBJSUFF) \
   $(COMMDIR)/image.$(OBJSUFF) \
   $(COMMDIR)/intl.$(OBJSUFF) \
+  $(COMMDIR)/ipcbase.$(OBJSUFF) \
   $(COMMDIR)/layout.$(OBJSUFF) \
   $(COMMDIR)/log.$(OBJSUFF) \
   $(COMMDIR)/memory.$(OBJSUFF) \
@@ -262,15 +258,6 @@ base:
 $(WXLIB): $(OBJECTS) $(EXTRAOBJS)
 	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
 	$(RANLIB) $@
-
-#$(MSWOBJDIR):
-#	mkdir $(OBJDIR)
-
-#$(COMMOBJDIR):
-#	mkdir $(COMMDIR)/$(OBJDIR)
-
-#$(GENERICOBJDIR):
-#	mkdir $(GENDIR)/$(OBJDIR)
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
 

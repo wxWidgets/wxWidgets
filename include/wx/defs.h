@@ -160,11 +160,8 @@
 #elif defined(__WATCOMC__)
 //    typedef unsigned int bool;
 
- #if __WATCOMC__<1100
- typedef enum _tagbool {
-     false,
-     true
- } bool ;
+ #if (__WATCOMC__ < 1100)
+    typedef unsigned int bool;
  #endif
 
 #elif defined(__SUNCC__)

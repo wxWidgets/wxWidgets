@@ -14,7 +14,8 @@
 WXDIR = $(WXWIN)
 
 TARGET=dialoged
-OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj symbtable.obj winstyle.obj
+OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj\
+ edtree.obj edlist.obj symbtabl.obj winstyle.obj
 
-!include $(WXDIR)\src\makeb32.env
+!include $(WXDIR)\src\makeprog.b32
 

@@ -47,6 +47,7 @@
     #include "wx/metafile.h"
 #endif
 
+#include "wx/log.h"
 #include "wx/clipbrd.h"
 
 #include <windows.h>

@@ -50,6 +50,8 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 #include "wx/tooltip.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 
 #include "wx/msw/private.h"
 
@@ -1223,10 +1225,19 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         }
 
     case WM_KEYDOWN:
-        MSWOnKeyDown((WORD) wParam, lParam);
-        // we consider these message "not interesting"
+    {
+        // If this has been processed by an event handler,
+        // return 0 now (we've handled it).
+        if (MSWOnKeyDown((WORD) wParam, lParam))
+        {
+            return 0;
+        }
+
+        // we consider these message "not interesting" to OnChar
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
+        {
             return Default();
+        }
 
         // Avoid duplicate messages to OnChar for these special keys
         switch ( wParam )
@@ -1240,27 +1251,36 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             case VK_RIGHT:
             case VK_DOWN:
             case VK_UP:
-                if ( ::GetKeyState(VK_CONTROL) & 0x100 )
-                    MSWOnChar((WORD)wParam, lParam);
+/*
+//            if ( ::GetKeyState(VK_CONTROL) & 0x100 ) // Don't understand purpose of this test
+                if (!MSWOnChar((WORD)wParam, lParam))
+                    return Default();
                 break;
-
+*/
             default:
-                MSWOnChar((WORD)wParam, lParam);
+                if (!MSWOnChar((WORD)wParam, lParam))
+                {
+                    return Default();
+                }
+/*
                 if ( ::GetKeyState(VK_CONTROL) & 0x100 )
                     return Default();
+*/
                 break;
         }
 
         break;
-
+    }
     case WM_KEYUP:
     {
-        MSWOnKeyUp((WORD) wParam, lParam);
+        if (!MSWOnKeyUp((WORD) wParam, lParam))
+            return Default();
         break;
     }
     case WM_CHAR: // Always an ASCII character
         {
-            MSWOnChar((WORD)wParam, lParam, TRUE);
+            if (!MSWOnChar((WORD)wParam, lParam, TRUE))
+                return Default();
             break;
         }
 
@@ -2456,7 +2476,7 @@ void wxWindow::MSWOnMouseLeave(int x, int y, WXUINT flags)
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
     int id;
     bool tempControlDown = FALSE;
@@ -2518,12 +2538,16 @@ void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 
         event.m_x = pt.x; event.m_y = pt.y;
 
-        if (!GetEventHandler()->ProcessEvent(event))
-            Default();
+        if (GetEventHandler()->ProcessEvent(event))
+            return TRUE;
+        else
+            return FALSE;
     }
+    else
+        return FALSE;
 }
 
-void wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
     int id;
 
@@ -2552,12 +2576,19 @@ void wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 
         event.m_x = pt.x; event.m_y = pt.y;
 
-        if (!GetEventHandler()->ProcessEvent(event))
-            Default();
+        if (GetEventHandler()->ProcessEvent(event))
+        {
+            return TRUE;
+        }
+        else return FALSE;
+    }
+    else
+    {
+        return FALSE;
     }
 }
 
-void wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
     int id;
 
@@ -2586,9 +2617,13 @@ void wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 
         event.m_x = pt.x; event.m_y = pt.y;
 
-        if (!GetEventHandler()->ProcessEvent(event))
-            Default();
+        if (GetEventHandler()->ProcessEvent(event))
+            return TRUE;
+        else
+            return FALSE;
     }
+    else
+        return FALSE;
 }
 
 void wxWindow::MSWOnJoyDown(int joystick, int x, int y, WXUINT flags)
@@ -3666,7 +3701,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
     if ( id == -1 )
         id= m_lastWParam;
 
-    if ( !event.ControlDown() )
+    if ( !event.ControlDown() ) // Why this test?
         (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
 }
 

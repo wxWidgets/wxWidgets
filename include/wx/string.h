@@ -70,7 +70,7 @@ const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 //---------------------------------------------------------------------------
 
 // checks whether the passed in pointer is NULL and if the string is empty
-inline bool WXDLLEXPORT IsEmpty(const char *p) { return !p || !*p; }
+inline bool WXDLLEXPORT IsEmpty(const char *p) { return (!p || !*p); }
 
 // safe version of strlen() (returns 0 if passed NULL pointer)
 inline size_t WXDLLEXPORT Strlen(const char *psz)
@@ -144,8 +144,8 @@ struct WXDLLEXPORT wxStringData
   char* data() const { return (char*)(this + 1); }
 
   // empty string has a special ref count so it's never deleted
-  bool  IsEmpty()   const { return nRefs == -1; }
-  bool  IsShared()  const { return nRefs > 1;   }
+  bool  IsEmpty()   const { return (nRefs == -1); }
+  bool  IsShared()  const { return (nRefs > 1);   }
 
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                    }
@@ -153,8 +153,8 @@ struct WXDLLEXPORT wxStringData
 
   // if we had taken control over string memory (GetWriteBuf), it's
   // intentionally put in invalid state
-  void  Validate(bool b)  { nRefs = b ? 1 : 0; }
-  bool  IsValid() const   { return nRefs != 0; }
+  void  Validate(bool b)  { nRefs = (b ? 1 : 0); }
+  bool  IsValid() const   { return (nRefs != 0); }
 };
 
 // ---------------------------------------------------------------------------

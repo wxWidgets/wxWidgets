@@ -1,37 +1,18 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for cube example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
-WXDIR = ../..
+WXDIR = ../../../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=cube
+EXTRACPPFLAGS=-I../../win
+EXTRALIBS=-lglcanvas -lopengl32 -lglu32
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/cube.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) cube$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-cube$(GUISUFFIX)$(EXESUFF):	$(OBJDIR)/cube.$(OBJSUFF) cube.res $(WXLIB)
-	$(CC) $(LDFLAGS) -o cube$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/cube.$(OBJSUFF) $(LDLIBS)
-	$(RSRC) cube.$(RESSUFF) cube.exe
-
-$(OBJDIR)/cube.$(OBJSUFF):	cube.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ cube.$(SRCSUFF)
-
-cube.res:  cube.rc
-
-clean:
-	rm -f $(OBJECTS) cube$(GUISUFFIX).exe core *.rsc *.res

@@ -1,18 +1,16 @@
 #
 # File:		makefile.b32
-# Author:	Patrick Halke
-# Created:	1995
+# Author:	Julian Smart
+# Created:	1999
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
-# "%W% %G%"
 #
-# Makefile : Builds 32bit wxtree library for 32-bit BC++
+# Makefile : Builds wxTree sample for 32-bit BC++
 
 WXDIR = $(WXWIN)
 
 TARGET=test
-OBJECTS=$(TARGET)
+OBJECTS=$(TARGET).obj wxtree.obj
 
 !include $(WXDIR)\src\makeprog.b32
 

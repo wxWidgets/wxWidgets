@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/log.h"
 
 #if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>

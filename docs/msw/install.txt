@@ -2,6 +2,12 @@
 Installing wxWindows 2.0
 ------------------------
 
+IMPORTANT NOTE: If you experience problems installing, please
+re-read this instructions and other related files (todo.txt,
+bugs.txt etc.) carefully before mailing wxwin-users or
+the author. Preferably, try to fix the problem first and
+then send a patch to the author.
+
 Unarchiving
 -----------
 
@@ -22,8 +28,7 @@ wx200vc.zip             MS VC++ 5.0 project files
 wx200cw.zip             Metrowerks CodeWarrior project files
 
 Unarchive the required files plus any optional documentation
-files into a suitable directory such as c:\wx. Alter your
-WXWIN environment variable to point to this directory.
+files into a suitable directory such as c:\wx.
 
 Other add-on packages are available from the wxWindows Web site, such as:
 
@@ -32,13 +37,21 @@ Other add-on packages are available from the wxWindows Web site, such as:
 - tex2rtf3.zip. Tex2RTF: create Windows Help, HTML, and Word RTF files from
   the same document source.
 
+General installation notes
+--------------------------
+
+Alter your WXWIN environment variable to point to this directory.
+For Cygwin or Mingw32 compilation, make sure WXWIN contains only
+forward slashes.
+
+If installing from the CVS server, copy include/wx/msw/setup0.h to
+include/wx/msw/setup.h.
+
 Compilation
 -----------
 
-At present, wxWindows compiles with VC++ 4.0/5.0/6.0,
-BC++ 4.5/5.0, Cygwin b19/b20, and Mingw32. It may compile
-with 16-bit compilers (BC++ and VC++ 1.5) but this hasn't
-been tested lately.
+The following sections explain how to compile wxWindows with each supported
+compiler.
 
 Visual C++ 4.0/5.0/6.0 compilation
 ----------------------------------
@@ -77,6 +90,9 @@ Note (1): if you wish to use templates, please edit
 include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
 Without this, the redefinition of 'new' will cause problems in
 the headers. Alternatively, #undef new before including template headers.
+You will also need to set wxUSE_IOSTREAMH to 0 if you will be
+using templates, to avoid the non-template stream files being included
+within wxWindows.
 
 Note (2): libraries and applications generated with makefiles and
 project files are unlikely to be compatible, so use one method or
@@ -231,6 +247,9 @@ Here are the steps required:
 
 - Mingw32 may not support winsock.h, so comment out
   socket-related files in src/msw/makefile.g95.
+
+- Set your WXWIN variable to where wxWindows is installed.
+  For Cygwin/Mingw32, use forward slashes in the path, not backslashes.
 
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g.:

@@ -21,6 +21,15 @@
 #include "wx/string.h"
 
 #if wxUSE_TIMEDATE
+// These lines necessary to stop VC++ 6 being confused about namespaces
+class WXDLLEXPORT wxDate;
+bool WXDLLEXPORT operator<(const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator<(const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator <= (const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator >  (const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator >= (const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator == (const wxDate &dt1, const wxDate &dt2);
+bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2);
 
 enum wxdate_format_type {wxMDY, wxDAY, wxMONTH, wxFULL, wxEUROPEAN};
 

@@ -92,6 +92,7 @@ COMMONOBJS = \
   $(COMMDIR)/helpbase.$(OBJSUFF) \
   $(COMMDIR)/image.$(OBJSUFF) \
   $(COMMDIR)/intl.$(OBJSUFF) \
+  $(COMMDIR)/ipcbase.$(OBJSUFF) \
   $(COMMDIR)/layout.$(OBJSUFF) \
   $(COMMDIR)/log.$(OBJSUFF) \
   $(COMMDIR)/memory.$(OBJSUFF) \

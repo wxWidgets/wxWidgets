@@ -1,0 +1,25 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+#
+# Builds a BC++ 16-bit sample
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+
+TARGET=isosurf
+EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+EXTRACPPFLAGS=-I$(WXDIR)\utils\glcanvas\win
+OBJECTS = $(TARGET).obj
+EXTRATARGETS=isosurf.dat
+
+!include $(WXDIR)\src\makeprog.bcc
+
+isosurf.dat:    isosurf.dat.gz
+    gzip -c -d isosurf.dat.gz > isosurf.dat
+

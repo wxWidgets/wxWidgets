@@ -402,11 +402,11 @@ void WriteTexReferences(char *filename)
 
 void ReadTexReferences(char *filename)
 {
-#if !wxUSE_IOSTREAMH && __WXMSW__
+  if (!wxFileExists(filename))
+      return;
+
   ifstream istr(filename, ios::in);
-#else
-  ifstream istr(filename, ios::nocreate | ios::in);
-#endif  
+
   if (istr.bad()) return;
 
   char label[100];
@@ -569,12 +569,11 @@ void BibReadValue(istream& istr, char *buffer, bool ignoreBraces = TRUE,
  
 bool ReadBib(char *filename)
 {
+  if (!wxFileExists(filename))
+      return FALSE;
+
   char buf[300];
-#if !wxUSE_IOSTREAMH && __WXMSW__
   ifstream istr(filename, ios::in);
-#else  
-  ifstream istr(filename, ios::nocreate | ios::in);
-#endif  
   if (istr.bad()) return FALSE;
 
   BibLine = 1;
@@ -1291,11 +1290,11 @@ char *RegisterSetting(char *settingName, char *settingValue, bool interactive)
 
 bool ReadCustomMacros(char *filename)
 {
-#if !wxUSE_IOSTREAMH && __WXMSW__
+  if (!wxFileExists(filename))
+      return FALSE;
+
   ifstream istr(filename, ios::in);
-#else  
-  ifstream istr(filename, ios::nocreate | ios::in);
-#endif  
+
   if (istr.bad()) return FALSE;
 
   CustomMacroList.Clear();

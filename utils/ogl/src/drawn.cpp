@@ -1158,16 +1158,16 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
   wxString hexString = expr->Nth(2)->StringValue();
   while (i < m_noPoints)
   {
-    buf1[0] = hexString[bufPtr];
-    buf1[1] = hexString[bufPtr + 1];
-    buf1[2] = hexString[bufPtr + 2];
-    buf1[3] = hexString[bufPtr + 3];
+    buf1[0] = hexString[(size_t)bufPtr];
+    buf1[1] = hexString[(size_t)(bufPtr + 1)];
+    buf1[2] = hexString[(size_t)(bufPtr + 2)];
+    buf1[3] = hexString[(size_t)(bufPtr + 3)];
     buf1[4] = 0;
     
-    buf2[0] = hexString[bufPtr + 4];
-    buf2[1] = hexString[bufPtr + 5];
-    buf2[2] = hexString[bufPtr + 6];
-    buf2[3] = hexString[bufPtr + 7];
+    buf2[0] = hexString[(size_t)(bufPtr + 4)];
+    buf2[1] = hexString[(size_t)(bufPtr + 5)];
+    buf2[2] = hexString[(size_t)(bufPtr + 6)];
+    buf2[3] = hexString[(size_t)(bufPtr + 7)];
     buf2[4] = 0;
 
     bufPtr += 8;

@@ -27,6 +27,7 @@
 #include "wx/list.h"
 #include "wx/region.h"
 #include "wx/accel.h"
+#include "wx/intl.h"
 
 #define wxKEY_SHIFT     1
 #define wxKEY_CTRL      2

@@ -2007,7 +2007,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
   if (brush_string == "")
     brush_string = "WHITE";
 
-  if (pen_string[0] == '#')
+  if (pen_string.GetChar(0) == '#')
   {
     wxColour col(oglHexToColour(pen_string.After('#')));
     m_pen = wxThePenList->FindOrCreatePen(col, pen_width, pen_style);
@@ -2018,7 +2018,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
   if (!m_pen)
     m_pen = wxBLACK_PEN;
 
-  if (brush_string[0] == '#')
+  if (brush_string.GetChar(0) == '#')
   {
     wxColour col(oglHexToColour(brush_string.After('#')));
     m_brush = wxTheBrushList->FindOrCreateBrush(col, brush_style);

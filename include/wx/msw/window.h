@@ -27,6 +27,7 @@
 #include "wx/list.h"
 #include "wx/region.h"
 #include "wx/msw/accel.h"
+#include "wx/intl.h"
 
 #define wxKEY_SHIFT     1
 #define wxKEY_CTRL      2
@@ -621,9 +622,10 @@ public:
   virtual void MSWOnMouseEnter(int x, int y, WXUINT flags);
   virtual void MSWOnMouseLeave(int x, int y, WXUINT flags);
 
-  virtual void MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-  virtual void MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-  virtual void MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+  // These return TRUE if an event handler was found, FALSE otherwise (not processed)
+  virtual bool MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+  virtual bool MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+  virtual bool MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
 
   virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
   virtual long MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);

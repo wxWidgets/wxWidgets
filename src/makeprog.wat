@@ -5,7 +5,7 @@ WXDIR = $(%WXWIN)
 WXLIB = $(WXDIR)\lib
 LNK = $(PROGRAM).lnk
 
-all: $(PROGRAM).exe
+all: $(PROGRAM).exe $(EXTRATARGETS)
 
 $(PROGRAM).exe : $(OBJECTS) $(PROGRAM).res $(LNK) $(WXLIB)\wx.lib
     wlink @$(LNK)
@@ -20,7 +20,7 @@ $(LNK) : makefile.wat
     @%append $(LNK) system $(LINKOPTION)
     @%append $(LNK) $(STACK)
     @%append $(LNK) name $(PROGRAM).exe
-    @%append $(LNK) file $(WXLIB)\wx.lib
+    @for %i in ($(LIBS)) do @%append $(LNK) file %i
     @for %i in ($(EXTRALIBS)) do @%append $(LNK) file %i
     @for %i in ($(OBJECTS)) do @%append $(LNK) file %i
 #    @%append $(LNK) $(MINDATA)

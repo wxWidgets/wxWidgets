@@ -1,61 +1,17 @@
 #
-# File:		makefile.g95
-# Author:	Julian Smart
-# Created:	1996
-# Updated:	
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for Dialog Editor (GNU-WIN32)
+# Makefile for wxWindows Dialog Editor (Cygwin/Mingw32).
 
 WXDIR = ../../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=dialoged
+OBJECTS = $(TARGET).o reseditr.o dlghndlr.o reswrite.o\
+  winprop.o edtree.o edlist.o symbtabl.o winstyle.o
 
-OBJECTS = $(OBJDIR)/dialoged.$(OBJSUFF) $(OBJDIR)/reseditr.$(OBJSUFF)\
- $(OBJDIR)/dlghndlr.$(OBJSUFF) $(OBJDIR)/reswrite.$(OBJSUFF) $(OBJDIR)/winprop.$(OBJSUFF)\
- $(OBJDIR)/edlist.$(OBJSUFF) $(OBJDIR)/edtree.$(OBJSUFF) $(OBJDIR)/winstyle.$(OBJSUFF) $(OBJDIR)/symbtabl.$(OBJSUFF)\
- $(OBJDIR)/dialoged_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) dialoged$(GUISUFFIX)$(EXESUFF)
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-dialoged$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o dialoged$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
-
-$(OBJDIR)/dialoged.$(OBJSUFF):	dialoged.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ dialoged.$(SRCSUFF)
-
-$(OBJDIR)/winprop.$(OBJSUFF):	winprop.h reseditr.h winprop.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ winprop.$(SRCSUFF)
-
-$(OBJDIR)/reswrite.$(OBJSUFF):	winprop.h reseditr.h reswrite.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ reswrite.$(SRCSUFF)
-
-$(OBJDIR)/reseditr.$(OBJSUFF):	winprop.h reseditr.h reseditr.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ reseditr.$(SRCSUFF)
-
-$(OBJDIR)/dlghndlr.$(OBJSUFF):	winprop.h reseditr.h dlghndlr.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ dlghndlr.$(SRCSUFF)
-
-$(OBJDIR)/edlist.$(OBJSUFF):	winprop.h edlist.h edlist.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ edlist.$(SRCSUFF)
-
-$(OBJDIR)/edtree.$(OBJSUFF):	winprop.h edtree.h edtree.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
-
-$(OBJDIR)/winstyle.$(OBJSUFF):	winstyle.h winstyle.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ winstyle.$(SRCSUFF)
-
-$(OBJDIR)/symbtabl.$(OBJSUFF):	symbtabl.h symbtabl.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ symbtabl.$(SRCSUFF)
-
-$(OBJDIR)/dialoged_resources.o:  dialoged.rc
-	$(RESCOMP) -i dialoged.rc -o $(OBJDIR)/dialoged_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) dialoged$(GUISUFFIX).exe core *.rsc *.res

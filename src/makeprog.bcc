@@ -4,9 +4,9 @@
 !include $(WXDIR)\src\makebcc.env
 
 WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) mathwl cwl import ole2w16
+LIBS=$(WXLIB) $(EXTRALIBS) mathwl cwl import ole2w16
 
-all:    $(TARGET).exe
+all:    $(TARGET).exe $(EXTRATARGETS)
 
 $(TARGET).exe:      $(WXLIB) $(OBJECTS) $(TARGET).def $(TARGET).res
         tlink $(LINKFLAGS) @&&!
@@ -20,6 +20,9 @@ $(TARGET).def
 
 .$(SRCSUFF).obj:
 	bcc $(CPPFLAGS) -c {$< }
+
+.c.obj:
+	bcc $(CPPFLAGS) -P- -c {$< }
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)

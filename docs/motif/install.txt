@@ -1,6 +1,12 @@
 wxWindows 2.0 for Motif installation
 ------------------------------------
 
+IMPORTANT NOTE: If you experience problems installing, please
+re-read this instructions and other related files (todo.txt,
+bugs.txt etc.) carefully before mailing wxwin-users or
+the author. Preferably, try to fix the problem first and
+then send a patch to the author.
+
 - Prerequisites: Motif 1.2 or above, or Lesstif
   (not yet tested). Motif 2.0 and above may also be suitable.
 

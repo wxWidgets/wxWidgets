@@ -38,7 +38,7 @@ public:
 
   // Called when the value in the window must be validated.
   // This function can pop up an error message.
-  virtual bool Validate(wxWindow *parent)	{return true;}
+  virtual bool Validate(wxWindow *parent)	{return TRUE;}
 
   // Called to transfer data to the window
   virtual bool TransferToWindow(void);

@@ -110,6 +110,10 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
     #warning "Using sprintf() because no snprintf()-like function defined"
 #elif defined(__MWERKS__)
  	#warning "Using sprintf() because no snprintf()-like function defined"
+#elif defined(__WATCOMC__)
+    // No warning
+#elif defined(__BORLANDC__)
+ 	// No warning
 #elif defined(__SUNCC__)
     // nothing -- I don't know about "#warning" for Sun's CC
 #else
