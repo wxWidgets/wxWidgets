@@ -323,9 +323,6 @@ and the remaining area, by calling SHSipInfo. We also may need to be able to sho
 the SIP programmatically, with SHSipPreference. See also the {\it Input Dialogs} topic in
 the {\it Programming Windows CE} guide for more on this, and how to have dialogs
 show the SIP automatically using the WC\_SIPREF control.
-\item {\bf Drawing.} The "Life!" demo shows some droppings being left on the window,
-indicating that drawing works a bit differently between desktop and mobile versions of
-Win32.
 \item {\bf wxStaticBitmap.} The About box in the "Life!" demo shows a bitmap that is
 the correct size on the emulator, but too small on a VGA Pocket Loox device.
 \item {\bf wxStaticLine.} Lines don't show up, and the documentation suggests that
@@ -342,6 +339,9 @@ control, or have a separately-named control (wxHtmlCtrl), with a syntax as close
 tooltips, with the tooltip separated from the label with a double tilde. We need to support this using SetToolTip.
 (Unfortunately it does not seem possible to dynamically remove the tooltip, so an extra style may
 be required.)
+\item {\bf Focus.} In the wxPropertySheetDialog demo on Smartphone, it's not possible to navigate
+between controls. The focus handling in wxWidgets needs investigation. See in particular src/common/containr.cpp,
+and note that the default OnActivate handler in src/msw/toplevel.cpp sets the focus to the first child of the dialog.
 \item {\bf OK button.} We should allow the OK button on a dialog to be optional, perhaps
 by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more
