@@ -649,6 +649,10 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
+    // Note: this totally doesn't work on Smartphone,
+    // since you have to use resources.
+    // We'll have to find another way to add a menu
+    // by changing/adding menu items to an existing menu.
 #ifdef __WXWINCE__
     if ( m_hMenu != 0 )
         return m_hMenu;
@@ -673,9 +677,11 @@ WXHMENU wxMenuBar::Create()
             tbButton.dwData = (DWORD)hPopupMenu;
             wxString label = wxStripMenuCodes(GetLabelTop(i));
             tbButton.iString = (int) label.c_str();
+
+            int position = i;
             
             tbButton.idCommand = NewControlId();
-            if (!::SendMessage(hCommandBar, TB_INSERTBUTTON, i, (LPARAM)&tbButton))
+            if (!::SendMessage(hCommandBar, TB_INSERTBUTTON, position, (LPARAM)&tbButton))
             {
                 wxLogLastError(wxT("TB_INSERTBUTTON"));
             }
