@@ -18,6 +18,22 @@
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
  */
+#if defined(__CYGWIN32__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) \
+    && !defined(__WXX11__)
+    /* for Cygwin, default to wxMSW unless otherwise specified */
+    #ifndef __WXMSW__
+        #define __WXMSW__
+    #endif
+
+    #ifndef _WIN32
+        #define _WIN32
+    #endif
+
+    #ifndef WIN32
+        #define WIN32
+    #endif
+#endif
+
 #if defined(_WIN32) || defined(WIN32) || defined(__NT__) || defined(__WXWINCE__)
     #ifndef __WXMSW__
         #define __WXMSW__

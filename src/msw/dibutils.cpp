@@ -183,7 +183,7 @@ PDIB wxDibOpenFile(LPTSTR szFile)
    LPVOID              p;
    OFSTRUCT            of;
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(__WIN32__)
    #define GetCurrentInstance()    GetModuleHandle(NULL)
 #else
    #define GetCurrentInstance()    (HINSTANCE)SELECTOROF((LPVOID)&of)

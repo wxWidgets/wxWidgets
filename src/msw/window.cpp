@@ -5025,7 +5025,7 @@ void wxSetKeyboardHook(bool doIt)
 
         // avoids warning about statement with no effect (FreeProcInstance
         // doesn't do anything under Win32)
-#if !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(__NT__) && !defined(__GNUWIN32__)
+#if !defined(__WIN32__) && !defined(__NT__)
         FreeProcInstance(wxTheKeyboardHookProc);
 #endif
     }
