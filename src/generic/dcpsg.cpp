@@ -1835,7 +1835,7 @@ bool wxPostScriptDC::DoBlit( wxCoord xdest, wxCoord ydest,
                            wxCoord fwidth, wxCoord fheight,
                            wxDC *source,
                            wxCoord xsrc, wxCoord ysrc,
-                           int rop, bool WXUNUSED(useMask) )
+                           int rop, bool WXUNUSED(useMask), wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask) )
 {
     wxCHECK_MSG( m_ok && m_pstream, FALSE, wxT("invalid postscript dc") );
 

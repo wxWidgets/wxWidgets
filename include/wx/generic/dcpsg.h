@@ -79,7 +79,8 @@ public:
   void DoDrawSpline(wxList *points);
 
   bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = FALSE);
+            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = FALSE,
+            wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
   bool CanDrawBitmap() const { return TRUE; }
 
   void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
