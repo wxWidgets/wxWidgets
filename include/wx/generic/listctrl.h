@@ -624,6 +624,8 @@ class wxListCtrl: public wxControl
         else return wxColour(); }
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
+    void SetFocus()
+      { m_mainWin->SetFocus(); }
 
   // implementation
 

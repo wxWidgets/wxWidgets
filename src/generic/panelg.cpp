@@ -46,28 +46,24 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
                      long style,
                      const wxString& name)
 {
-  bool ret = wxWindow::Create(parent, id, pos, size, style, name);
+    bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
-  if ( ret ) {
+    if ( ret ) 
+    {
 #ifndef __WXGTK__
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+        SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 #endif
-  }
+    }
 
-  return ret;
+    return ret;
 }
 
 void wxPanel::InitDialog(void)
 {
- 	wxInitDialogEvent event(GetId());
- 	event.SetEventObject(this);
- 	GetEventHandler()->ProcessEvent(event);
-}
-
-void wxPanel::SetFocus()
-{
-  SetFocusToNextChild();
+    wxInitDialogEvent event(GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -80,97 +76,68 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
-void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
+void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 {
-  // don't process these ones here
-  if ( event.IsWindowChange() ) {
-    event.Skip();
-    return;
-  }
-
-  // first of all, find the window which currently has the focus
-  wxNode *node = GetChildren().First();
-  wxWindow *winFocus = event.GetCurrentFocus();
-  
-  // @@@ no FindFocus() in wxGTK
-  #ifndef __WXGTK__
-    if ( winFocus == NULL )
-      winFocus = wxWindow::FindFocus();
-  #endif
-  
-  while ( node != NULL ) {
-    if ( node->Data() == winFocus )
-      break;
-
-    node = node->Next();
-  }
-
-  if ( !SetFocusToNextChild(node, event.GetDirection()) )
-    event.Skip();
-}
-
-// set focus to the next child which accepts it (or first/last if node == NULL)
-bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
-{
-  // @@ using typed list would be better...
-  #define WIN(node) ((wxWindow *)(node->Data()))
-
-  bool bFound = FALSE;  // have we found a window we will set focus to?
-
-  wxList *children = & GetChildren();
-  if ( node == NULL ) {
-    // we've never had focus before
-    node = bForward ? children->First() : children->Last();
-    if ( node == NULL ) {
-      // no children
-      return FALSE;
+    if (m_children.GetCount() < 2) 
+    {
+        event.Skip();
+        return;
     }
 
-    bFound = WIN(node)->AcceptsFocus();
-  }
-#if 0 // to restore when it will really work (now it's triggered all the time)
-  else {
-    // just to be sure it's the right one
-    wxASSERT( WIN(node)->AcceptsFocus() );
-  }
-#endif // 0
-
-  // find the next child which accepts focus
-  bool bParentWantsIt = TRUE;
-  while ( !bFound ) {
-    node = bForward ? node->Next() : node->Previous();
-    if ( node == NULL ) {
-      if ( !bParentWantsIt ) {
-        // we've already been here which means that we've done a whole
-        // cycle without success - get out from the infinite loop
-        return FALSE;
-      }
-
-      // ask parent if he doesn't want to advance focus to the next panel
-      if ( GetParent() != NULL ) {
-        wxNavigationKeyEvent event;
-        event.SetDirection(bForward);
-        event.SetWindowChange(FALSE);
-        event.SetCurrentFocus(this);
-
-        if ( GetParent()->ProcessEvent(event) )
-          return TRUE;
-      }
-
-      // a sentinel to avoid infinite loops
-      bParentWantsIt = FALSE;
-
-      // wrap around
-      node = bForward ? children->First() : children->Last();
+    // don't process these ones here
+    if (event.IsWindowChange()) 
+    {
+        event.Skip();
+        return;
     }
 
-    bFound = WIN(node)->AcceptsFocus();
-  }
+    wxWindow *winFocus = event.GetCurrentFocus();
+    if (!winFocus) winFocus = wxWindow::FindFocus();
+    
+    if (!winFocus)
+    {
+        event.Skip();
+        return;
+    }
+    
+    wxNode *start_node = m_children.Find( winFocus );
+    if (!start_node) start_node = m_children.First();
+    
+    wxNode *node = event.GetDirection() ? start_node->Next() : start_node->Previous();
+	    
+    while (node != start_node)
+    {
+	if (!node)
+	{
+/*
+            if (GetParent() != NULL) 
+	    {
+                wxNavigationKeyEvent new_event;
+                new_event.SetDirection( event.GetDirection() );
+                new_event.SetWindowChange(FALSE);
+                new_event.SetCurrentFocus( this );
 
-  WIN(node)->SetFocus();
-
-  #undef WIN
-
-  return TRUE;
+                if (GetParent()->GetEventHandler()->ProcessEvent(new_event))
+		{  
+		    return;
+		}
+            }
+*/
+	    
+	    node = event.GetDirection() ? m_children.First() : m_children.Last();
+	}
+	        
+	wxWindow *child = (wxWindow*) node->Data();
+		
+	if (child->AcceptsFocus())
+	{
+	    child->SetFocus();
+	    return;
+	}
+		
+	node = node->Next();
+    }
+    
+    event.Skip();
 }
 

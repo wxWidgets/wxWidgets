@@ -121,14 +121,50 @@
 #endif
 
 //-----------------------------------------------------------------------------
+// (debug)
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget), 
+                                         GdkEvent *WXUNUSED(event), 
+					 const char *name )
+{
+    printf( "FOCUS NOW AT: " );
+    printf( name );
+    printf( "\n" );
+    
+    return FALSE;
+}
+
+void debug_focus_in( GtkWidget* widget, const char* name, const char *window )
+{
+    return;
+
+    wxString tmp = name;
+    tmp += " FROM ";
+    tmp += window;
+    
+    char *s = new char[tmp.Length()+1];
+    
+    strcpy( s, WXSTRINGCAST tmp );
+
+    gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
+      GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
+}
+
+#endif
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
-extern wxList wxPendingDelete;
-extern wxList wxTopLevelWindows;
-extern bool   g_blockEventsOnDrag;
-extern bool   g_blockEventsOnScroll;
-static bool   g_capturing = FALSE;
+extern wxList     wxPendingDelete;
+extern wxList     wxTopLevelWindows;
+extern bool       g_blockEventsOnDrag;
+extern bool       g_blockEventsOnScroll;
+static bool       g_capturing = FALSE;
+static wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
 // hack: we need something to pass to gtk_menu_popup, so we store the time of
 // the last click here
@@ -181,7 +217,7 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
 }
 
 //-----------------------------------------------------------------------------
-// "key_press_event"
+// "key_press_event" from any window
 //-----------------------------------------------------------------------------
 
 static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
@@ -303,11 +339,41 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
             ancestor = ancestor->GetParent();
         }
     }
-
+    
+    // win is a control: tab can be propagated up
+    if ((!ret) && (gdk_event->keyval == GDK_Tab))
+    {
+        wxNavigationKeyEvent new_event;
+        new_event.SetDirection( !(gdk_event->state & GDK_SHIFT_MASK) );
+	new_event.SetWindowChange( FALSE );
+        new_event.SetCurrentFocus( win );
+	ret = win->GetEventHandler()->ProcessEvent( new_event );
+    }
+    
+/*
+    // win is a panel: up can be propagated to the panel
+    if ((!ret) && (win->m_wxwindow) && (win->m_parent) && (win->m_parent->AcceptsFocus()) &&
+        (gdk_event->keyval == GDK_Up))
+    {
+        win->m_parent->SetFocus();
+	ret = TRUE;
+    }
+    
+    // win is a panel: left/right can be propagated to the panel
+    if ((!ret) && (win->m_wxwindow) && 
+        ((gdk_event->keyval == GDK_Right) || (gdk_event->keyval == GDK_Left) || 
+         (gdk_event->keyval == GDK_Up) || (gdk_event->keyval == GDK_Down)))
+    {
+        wxNavigationKeyEvent new_event;
+        new_event.SetDirection( (gdk_event->keyval == GDK_Right) || (gdk_event->keyval == GDK_Down) );
+        new_event.SetCurrentFocus( win );
+	ret = win->GetEventHandler()->ProcessEvent( new_event );
+    }
+*/
+    
     if (ret)
     {
-        if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF))
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
     }
 
     return ret;
@@ -658,6 +724,9 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
     if (g_blockEventsOnDrag) return TRUE;
+    
+    g_focusWindow = win;
+    
     if (win->m_wxwindow)
     {
         if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
@@ -729,9 +798,12 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
 static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
-    if (widget->window != gdk_event->window) return TRUE;
-
     if (g_blockEventsOnDrag) return TRUE;
+
+    if ((widget->window) && (win->m_cursor))
+        gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
+
+    if (widget->window != gdk_event->window) return TRUE;
 
     if (!win->HasVMT()) return TRUE;
 
@@ -741,9 +813,6 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
-
-    if ((widget->window) && (win->m_cursor))
-        gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
     event.SetEventObject( win );
@@ -777,9 +846,12 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
-    if (widget->window != gdk_event->window) return TRUE;
-
     if (g_blockEventsOnDrag) return TRUE;
+
+    if ((widget->window) && (win->m_cursor))
+        gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
+
+    if (widget->window != gdk_event->window) return TRUE;
 
     if (!win->HasVMT()) return TRUE;
 
@@ -789,9 +861,6 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
-
-    if ((widget->window) && (win->m_cursor))
-        gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
     event.SetEventObject( win );
@@ -1104,6 +1173,7 @@ wxWindow::wxWindow()
     m_clientData = NULL;
     
     m_isStaticBox = FALSE;
+    m_acceptsFocus = FALSE;
 }
 
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
@@ -1126,8 +1196,17 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+    
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, "wxWindow::m_widget", name );
+#endif
 
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
+
+#ifdef __WXDEBUG__
+    debug_focus_in( s_window->hscrollbar, "wxWindow::hsrcollbar", name );
+    debug_focus_in( s_window->vscrollbar, "wxWindow::vsrcollbar", name );
+#endif
 
     GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
     scroll_class->scrollbar_spacing = 0;
@@ -1142,12 +1221,20 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     m_wxwindow = gtk_myfixed_new();
 
+#ifdef __WXDEBUG__
+    debug_focus_in( m_wxwindow, "wxWindow::m_wxwindow", name );
+#endif
+
 #ifdef NEW_GTK_SCROLL_CODE
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), m_wxwindow );
     GtkViewport *viewport = GTK_VIEWPORT(s_window->child);
 #else
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
     GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
+#endif
+
+#ifdef __WXDEBUG__
+    debug_focus_in( GTK_WIDGET(viewport), "wxWindow::viewport", name );
 #endif
 
     if (m_windowStyle & wxRAISED_BORDER)
@@ -1163,10 +1250,16 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
     }
 
-    if (m_windowStyle & wxTAB_TRAVERSAL == wxTAB_TRAVERSAL)
+    if ((m_windowStyle & wxTAB_TRAVERSAL) != 0)
+    {
         GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+        m_acceptsFocus = FALSE;
+    }
     else
+    {
         GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+        m_acceptsFocus = TRUE;
+    }
 
     // shut the viewport up
     gtk_viewport_set_hadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
@@ -1902,15 +1995,32 @@ void wxWindow::MakeModal( bool modal )
 void wxWindow::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), "invalid window" );
-
+    
     GtkWidget *connect_widget = GetConnectWidget();
     if (connect_widget)
     {
-        if (GTK_WIDGET_CAN_FOCUS(connect_widget) && !GTK_WIDGET_HAS_FOCUS (connect_widget) )
+        if (GTK_WIDGET_CAN_FOCUS(connect_widget) /*&& !GTK_WIDGET_HAS_FOCUS (connect_widget)*/ )
         {
             gtk_widget_grab_focus (connect_widget);
         }
+	else if (GTK_IS_CONTAINER(connect_widget))
+	{
+	    gtk_container_focus( GTK_CONTAINER(connect_widget), GTK_DIR_TAB_FORWARD );
+	}
+	else
+	{
+	}
     }
+}
+
+wxWindow *wxWindow::FindFocus()
+{
+    return g_focusWindow;
+}
+
+bool wxWindow::AcceptsFocus() const
+{
+    return IsEnabled() && IsShown() && m_acceptsFocus;
 }
 
 bool wxWindow::OnClose()
@@ -3154,8 +3264,8 @@ void wxWindow::GetClientSizeConstraint(int *w, int *h) const
 
 void wxWindow::GetPositionConstraint(int *x, int *y) const
 {
-  wxLayoutConstraints *constr = GetConstraints();
-  if (constr)
+ wxLayoutConstraints *constr = GetConstraints();
+    if (constr)
   {
     *x = constr->left.GetValue();
     *y = constr->top.GetValue();
@@ -3164,12 +3274,7 @@ void wxWindow::GetPositionConstraint(int *x, int *y) const
     GetPosition(x, y);
 }
 
-bool wxWindow::AcceptsFocus() const
-{
-  return IsEnabled() && IsShown();
-}
-
 void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
-  UpdateWindowUI();
+    UpdateWindowUI();
 }

@@ -20,7 +20,7 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
 
-// Dialog boxes
+
 class WXDLLEXPORT wxPanel: public wxWindow
 {
 public:
@@ -56,17 +56,12 @@ public:
   // to the dialog via validators.
   virtual void InitDialog();
 
-  // overriden base class virtuals
-  virtual void SetFocus();
-
-  // callbacks
     // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
+  
     // Process a keyboard navigation message (Tab traversal)
   void OnNavigationKey(wxNavigationKeyEvent& event);
   
-protected:
-  bool SetFocusToNextChild(wxNode *nodeCurrent = (wxNode *) NULL, bool bForward = TRUE);
 
 DECLARE_DYNAMIC_CLASS(wxPanel)
 DECLARE_EVENT_TABLE()

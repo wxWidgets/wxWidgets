@@ -58,37 +58,38 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxValidator& validator, const wxString &name )
 {
-  m_clientData = (wxClientData*) NULL;
-  m_needParent = TRUE;
+    m_clientData = (wxClientData*) NULL;
+    m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
 
-  wxSize newSize = size;
+    wxSize newSize = size;
 
-  PreCreation( parent, id, pos, newSize, style, name );
+    PreCreation( parent, id, pos, newSize, style, name );
   
-  SetValidator( validator );
+    SetValidator( validator );
 
-  m_widget = gtk_button_new_with_label( m_label );
-  SetLabel(label);
+    m_widget = gtk_button_new_with_label( m_label );
+    SetLabel(label);
 
-  if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label );
-  if (newSize.y == -1) newSize.y = 26;
-  SetSize( newSize.x, newSize.y );
+    if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label );
+    if (newSize.y == -1) newSize.y = 26;
+    SetSize( newSize.x, newSize.y );
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
-    GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
+      GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
   
-  PostCreation();
+    PostCreation();
   
-  SetBackgroundColour( parent->GetBackgroundColour() );
-  SetForegroundColour( parent->GetForegroundColour() );
+    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetForegroundColour( parent->GetForegroundColour() );
 
-  Show( TRUE );
+    Show( TRUE );
 
-  return TRUE;
+    return TRUE;
 }
 
 void wxButton::SetDefault(void)
@@ -101,27 +102,27 @@ void wxButton::SetDefault(void)
 
 void wxButton::SetLabel( const wxString &label )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid button" );
+    wxCHECK_RET( m_widget != NULL, "invalid button" );
   
-  wxControl::SetLabel( label );
+    wxControl::SetLabel( label );
   
-  gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel() );
+    gtk_label_set( GTK_LABEL( GTK_BUTTON(m_widget)->child ), GetLabel() );
 }
 
 void wxButton::Enable( bool enable )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid button" );
+    wxCHECK_RET( m_widget != NULL, "invalid button" );
   
-  wxControl::Enable( enable );
+    wxControl::Enable( enable );
   
-  gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
+    gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
 void wxButton::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
+    SetWidgetStyle();
+    gtk_widget_set_style( m_widget, m_widgetStyle );
+    gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 
 

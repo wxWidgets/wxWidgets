@@ -84,7 +84,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 
-  bool success = wxWindow::Create(parent, id, pos, size, style, name);
+  bool success = wxWindow::Create(parent, id, pos, size, style | wxTAB_TRAVERSAL, name);
 
   // Don't wish this to be found as a child
   parent->GetChildren().DeleteObject(this);

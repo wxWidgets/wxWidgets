@@ -24,9 +24,15 @@
   #include "wx/wx.h"
 #endif
 
+#ifdef __WXMSW__
 #include  "wx/ownerdrw.h"
+#endif
 #include  "wx/menuitem.h"
-#include  "wx/msw/checklst.h"
+#include  "wx/checklst.h"
+
+#ifdef __WXGTK__
+#include "mondrian.xpm"
+#endif
 
 // Define a new application type
 class CheckListBoxApp: public wxApp
@@ -89,7 +95,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
          : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
   // set the icon
-  SetIcon(wxIcon("mondrian"));
+  SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -127,9 +133,11 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
 
   delete [] astrChoices;
 
+#ifdef __WXMSW__
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
     m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
   }
+#endif
 
   m_pListBox->Check(2);
 
@@ -163,7 +171,7 @@ void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
   wxString strSelection;
   unsigned int nSel = event.GetSelection();
   strSelection.sprintf("item %d selected (%schecked)", nSel,
-                       m_pListBox->IsChecked(nSel) ? "" : "not ");
+                       m_pListBox->IsChecked((int)nSel) ? "" : "not ");
   SetStatusText(strSelection);
 }
 

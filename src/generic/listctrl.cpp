@@ -2301,7 +2301,7 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
   m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
 
   if (GetWindowStyleFlag() & wxLC_REPORT)
-    m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23) );
+    m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
   else
     m_headerWin = (wxListHeaderWindow *) NULL;
 
@@ -2355,7 +2355,7 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
 //      m_mainWin->SetSize( 0, 24, width, height-24 );
       if (!m_headerWin)
       {
-        m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(width,23) );
+        m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
       }
       else
       {

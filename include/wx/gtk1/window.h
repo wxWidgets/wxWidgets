@@ -89,6 +89,16 @@ private:
 };
 
 //-----------------------------------------------------------------------------
+// (debug)
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+void debug_focus_in( GtkWidget* widget, const char* name, const char* window );
+
+#endif
+
+//-----------------------------------------------------------------------------
 // wxWindow
 //-----------------------------------------------------------------------------
 
@@ -151,9 +161,11 @@ public:
   virtual void MakeModal( bool modal );
   virtual bool IsEnabled() const { return m_isEnabled; }
   inline bool Enabled() const { return IsEnabled(); }
-  virtual void SetFocus();
   virtual bool OnClose();
 
+  virtual void SetFocus();
+  static wxWindow *FindFocus();
+  
   virtual void AddChild( wxWindow *child );
   wxList& GetChildren() { return m_children; }
 
@@ -331,6 +343,7 @@ public:
   GdkGC               *m_scrollGC;
   GtkStyle            *m_widgetStyle;
   bool                 m_isStaticBox;
+  bool                 m_acceptsFocus;
 
   wxInsertChildFunction  m_insertCallback;
 

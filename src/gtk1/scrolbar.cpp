@@ -116,6 +116,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            long style, const wxValidator& validator, const wxString& name )
 {
   m_needParent = TRUE;
+  m_acceptsFocus = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
   

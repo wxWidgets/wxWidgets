@@ -21,7 +21,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl,wxWindow)
 
 wxControl::wxControl(void)
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
 }
 
 wxControl::wxControl( wxWindow *parent, wxWindowID id,
@@ -37,24 +37,23 @@ void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
 
 void wxControl::SetLabel( const wxString &label )
 {
-  m_label = "";
-  for ( const char *pc = label; *pc != '\0'; pc++ ) {
-    if ( *pc == '&' ) {
-      pc++; // skip it
+    m_label = "";
+    for ( const char *pc = label; *pc != '\0'; pc++ ) 
+    {
+        if ( *pc == '&' ) 
+	{
+            pc++; // skip it
 #if 0 // it would be unused anyhow for now - kbd interface not done yet
-      if ( *pc != '&' )
-        m_chAccel = *pc;
+            if ( *pc != '&' ) m_chAccel = *pc;
 #endif
+        }
+        m_label << *pc;
     }
-
-    m_label << *pc;
-  }
 }
 
 wxString wxControl::GetLabel(void) const
 {
-  return m_label;
+    return m_label;
 }
-
 
 

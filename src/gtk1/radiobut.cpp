@@ -53,6 +53,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   const wxPoint& pos,  const wxSize& size, long style,
   const wxValidator& validator, const wxString& name )
 {
+    m_acceptsFocus = TRUE;
     m_needParent = TRUE;
 
     wxSize newSize = size;

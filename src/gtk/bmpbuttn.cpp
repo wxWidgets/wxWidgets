@@ -102,6 +102,7 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
                              long style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
   
     wxSize newSize = size;
 

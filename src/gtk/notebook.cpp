@@ -17,6 +17,13 @@
 #include "wx/imaglist.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "gdk/gdkkeysyms.h"
+
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
 // wxNotebookPage
@@ -72,16 +79,16 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               gint nPage,
                                               gpointer data)
 {
-  wxNotebook *notebook = (wxNotebook *)data;
+    wxNotebook *notebook = (wxNotebook *)data;
 
-  int old = notebook->GetSelection();
+    int old = notebook->GetSelection();
 
-  // TODO: emulate PAGE_CHANGING event
+    // TODO: emulate PAGE_CHANGING event
 
-  wxNotebookEvent event( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-                         notebook->GetId(),  nPage, old );
-  event.SetEventObject( notebook );
-  notebook->GetEventHandler()->ProcessEvent( event );
+    wxNotebookEvent event( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+                           notebook->GetId(),  nPage, old );
+    event.SetEventObject( notebook );
+    notebook->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -90,17 +97,48 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
-  if ((win->m_x == alloc->x) &&
-      (win->m_y == alloc->y) &&
-      (win->m_width == alloc->width) &&
-      (win->m_height == alloc->height))
-  {
-    return;
-  }
+    if ((win->m_x == alloc->x) &&
+        (win->m_y == alloc->y) &&
+        (win->m_width == alloc->width) &&
+        (win->m_height == alloc->height))
+    {
+        return;
+    }
 
-  win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
+    win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
   
-  if (win->GetAutoLayout()) win->Layout();
+    if (win->GetAutoLayout()) win->Layout();
+}
+
+//-----------------------------------------------------------------------------
+// "key_press_event"
+//-----------------------------------------------------------------------------
+
+static gint 
+gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
+{
+    if (g_blockEventsOnDrag) return FALSE;
+
+    if (!notebook->HasVMT()) return FALSE;
+
+    if (gdk_event->keyval != GDK_Down) return FALSE;
+    
+    if (notebook != notebook->FindFocus()) return FALSE;
+    
+    if (notebook->m_pages.GetCount() == 0) return FALSE;
+    
+    wxNode *node = notebook->m_pages.Nth( notebook->GetSelection() );
+    
+    if (!node) return FALSE;
+    
+    wxNotebookPage *page = (wxNotebookPage*) node->Data();
+    
+    // don't let others the key event
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+    
+    page->m_client->SetFocus();
+    
+    return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -109,32 +147,28 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 
 static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 {
-  wxNotebookPage *page = new wxNotebookPage();
+    wxNotebookPage *page = new wxNotebookPage();
 
-  page->m_id = parent->GetPageCount();
+    page->m_id = parent->GetPageCount();
 
-  page->m_box = gtk_hbox_new (FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
+    page->m_box = gtk_hbox_new (FALSE, 0);
+    gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
-  GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
+    GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
 
-  page->m_client = child;
-  gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
+    page->m_client = child;
+    gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
 
-  page->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
+    page->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
-  page->m_parent = notebook;
+    page->m_parent = notebook;
 
-  gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
-    GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
+    gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
+      GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
 
-  if (!page->m_page)
-  {
-     wxLogFatalError( "Notebook page creation error" );
-     return;
-  }
+    wxASSERT_MSG( page->m_page, "Notebook page creation error" );
 
-  parent->m_pages.Append( page );
+    parent->m_pages.Append( page );
 }
 
 //-----------------------------------------------------------------------------
@@ -145,155 +179,164 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 
 void wxNotebook::Init()
 {
-  m_imageList = (wxImageList *) NULL;
-  m_pages.DeleteContents( TRUE );
-  m_idHandler = 0;
+    m_imageList = (wxImageList *) NULL;
+    m_pages.DeleteContents( TRUE );
+    m_idHandler = 0;
 }
 
 wxNotebook::wxNotebook()
 {
-  Init();
+    Init();
 }
 
 wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
       long style, const wxString& name )
 {
-  Init();
-  Create( parent, id, pos, size, style, name );
+    Init();
+    Create( parent, id, pos, size, style, name );
 }
 
 wxNotebook::~wxNotebook()
 {
-  // don't generate change page events any more
-  if (m_idHandler != 0)
-    gtk_signal_disconnect(GTK_OBJECT(m_widget), m_idHandler);
+    // don't generate change page events any more
+    if (m_idHandler != 0)
+      gtk_signal_disconnect(GTK_OBJECT(m_widget), m_idHandler);
 
-  DeleteAllPages();
+    DeleteAllPages();
 }
 
 bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
       long style, const wxString& name )
 {
-  m_needParent = TRUE;
-  m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
+    m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
+    m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
 
-  m_widget = gtk_notebook_new();
+    m_widget = gtk_notebook_new();
 
-  gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, "wxNotebook::m_widget", name );
+#endif
 
-  m_idHandler = gtk_signal_connect (
+    gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
+
+    m_idHandler = gtk_signal_connect (
                   GTK_OBJECT(m_widget), "switch_page",
                   GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback),
                   (gpointer)this );
 
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
 
-  PostCreation();
+    gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
+      GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
 
-  Show( TRUE );
+    PostCreation();
 
-  return TRUE;
+    Show( TRUE );
+
+    return TRUE;
 }
 
 int wxNotebook::GetSelection() const
 {
-  wxCHECK_MSG( m_widget != NULL, -1, "invalid notebook" );
+    wxCHECK_MSG( m_widget != NULL, -1, "invalid notebook" );
 
-  if (m_pages.Number() == 0) return -1;
+    if (m_pages.Number() == 0) return -1;
 
-  GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
-  if (!g_page) return -1;
+    GtkNotebookPage *g_page = GTK_NOTEBOOK(m_widget)->cur_page;
+    if (!g_page) return -1;
 
-  wxNotebookPage *page = (wxNotebookPage *) NULL;
+    wxNotebookPage *page = (wxNotebookPage *) NULL;
 
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    page = (wxNotebookPage*)node->Data();
-
-    if ((page->m_page == g_page) || (page->m_page == (GtkNotebookPage*)NULL))
+    wxNode *node = m_pages.First();
+    while (node)
     {
-        // page->m_page is NULL directly after gtk_notebook_append. gtk emits
-        // "switch_page" then and we ask for GetSelection() in the handler for
-        // "switch_page". otherwise m_page should never be NULL. all this
-        // might also be wrong.
-        break;
+        page = (wxNotebookPage*)node->Data();
+
+        if ((page->m_page == g_page) || (page->m_page == (GtkNotebookPage*)NULL))
+        {
+            // page->m_page is NULL directly after gtk_notebook_append. gtk emits
+            // "switch_page" then and we ask for GetSelection() in the handler for
+            // "switch_page". otherwise m_page should never be NULL. all this
+            // might also be wrong.
+            break;
+        }
+        node = node->Next();
     }
-    node = node->Next();
-  }
 
-  wxCHECK_MSG( node != NULL, -1, "wxNotebook: no selection?" );
+    wxCHECK_MSG( node != NULL, -1, "wxNotebook: no selection?" );
 
-  return page->m_id;
+    return page->m_id;
 }
 
 int wxNotebook::GetPageCount() const
 {
-  // count only the pages which were already added to the notebook for MSW
-  // compatibility (and, in fact, this behaviour makes more sense anyhow
-  // because only the added pages are shown)
-  int n = 0;
-  for ( wxNode *node = m_pages.First(); node; node = node->Next() )
-  {
-    wxNotebookPage *page = (wxNotebookPage*)node->Data();
-    if ( page->WasAdded() )
-        n++;
-  }
+    // count only the pages which were already added to the notebook for MSW
+    // compatibility (and, in fact, this behaviour makes more sense anyhow
+    // because only the added pages are shown)
+    
+    int n = 0;
+    for ( wxNode *node = m_pages.First(); node; node = node->Next() )
+    {
+        wxNotebookPage *page = (wxNotebookPage*)node->Data();
+	
+        if (page->WasAdded()) n++;
+    }
 
-  return n;
+    return n;
 }
 
 int wxNotebook::GetRowCount() const
 {
-  return 1;
+    return 1;
 }
 
 wxString wxNotebook::GetPageText( int page ) const
 {
-  wxCHECK_MSG( m_widget != NULL, "", "invalid notebook" );
+    wxCHECK_MSG( m_widget != NULL, "", "invalid notebook" );
 
-  wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (nb_page)
-    return nb_page->m_text;
-  else
-    return "";
+    wxNotebookPage* nb_page = GetNotebookPage(page);
+    if (nb_page)
+        return nb_page->m_text;
+    else
+        return "";
 }
 
 int wxNotebook::GetPageImage( int page ) const
 {
-  wxCHECK_MSG( m_widget != NULL, 0, "invalid notebook" );
+    wxCHECK_MSG( m_widget != NULL, 0, "invalid notebook" );
 
-  wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (nb_page)
-    return nb_page->m_image;
-  else
-    return 0;
+    wxNotebookPage* nb_page = GetNotebookPage(page);
+    if (nb_page)
+        return nb_page->m_image;
+    else
+        return 0;
 }
 
 wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 {
-  wxCHECK_MSG( m_widget != NULL, (wxNotebookPage*)NULL, "invalid notebook" );
+    wxCHECK_MSG( m_widget != NULL, (wxNotebookPage*)NULL, "invalid notebook" );
 
-  wxNotebookPage *nb_page = (wxNotebookPage *) NULL;
+    wxNotebookPage *nb_page = (wxNotebookPage *) NULL;
 
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page)
-      return nb_page;
-    node = node->Next();
-  }
+    wxNode *node = m_pages.First();
+    while (node)
+    {
+        nb_page = (wxNotebookPage*)node->Data();
+        if (nb_page->m_id == page)
+            return nb_page;
+        node = node->Next();
+    }
 
-  wxLogDebug( "Notebook page %d not found!", page );
+    wxFAIL_MSG( "Notebook page not found!" );
 
-  return (wxNotebookPage *) NULL;
+    return (wxNotebookPage *) NULL;
 }
 
 int wxNotebook::SetSelection( int page )
@@ -437,7 +480,7 @@ bool wxNotebook::RemovePage( int page )
 }
 
 bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
-                         bool bSelect, int imageId)
+                         bool select, int imageId)
 {
   wxCHECK_MSG( m_widget != NULL, FALSE, "invalid notebook" );
 
@@ -491,38 +534,38 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
 
   gtk_widget_show((GtkWidget *)page->m_label);
 
-  if (bSelect) SetSelection(GetPageCount());
+  if (select) SetSelection( GetPageCount()-1 );
 
   return TRUE;
 }
 
 wxWindow *wxNotebook::GetPage( int page ) const
 {
-  wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, "invalid notebook" );
+    wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, "invalid notebook" );
 
-  wxNotebookPage* nb_page = GetNotebookPage(page);
-  if (!nb_page)
-    return (wxWindow *) NULL;
-  else
-    return nb_page->m_client;
+    wxNotebookPage* nb_page = GetNotebookPage(page);
+    if (!nb_page)
+        return (wxWindow *) NULL;
+    else
+        return nb_page->m_client;
 }
 
 // override these 2 functions to do nothing: everything is done in OnSize
 void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )
 {
-  // don't set the sizes of the pages - their correct size is not yet known
-  wxControl::SetConstraintSizes(FALSE);
+    // don't set the sizes of the pages - their correct size is not yet known
+    wxControl::SetConstraintSizes(FALSE);
 }
 
 bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 {
-  return TRUE;
+    return TRUE;
 }
 
 void wxNotebook::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
-  gtk_widget_set_style( m_widget, m_widgetStyle );
+    SetWidgetStyle();
+    gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
 //-----------------------------------------------------------------------------

@@ -142,6 +142,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_widget = gtk_window_new( win_type );
 
+#ifdef __WXDEBUG__
+        debug_focus_in( m_widget, "wxFrame::m_widget", name );
+#endif
+
     if ((size.x != -1) && (size.y != -1))
         gtk_widget_set_usize( m_widget, m_width, m_height );
     if ((pos.x != -1) && (pos.y != -1))
@@ -158,6 +162,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+
+#ifdef __WXDEBUG__
+        debug_focus_in( m_wxwindow, "wxFrame::m_wxwindow", name );
+#endif
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 

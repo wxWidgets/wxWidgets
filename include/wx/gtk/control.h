@@ -7,7 +7,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKCONTROLH__
 #define __GTKCONTROLH__
 
@@ -46,10 +45,11 @@ public:
     // char (the one immediately after '&') into m_chAccel (@@ not yet)
   virtual void SetLabel( const wxString &label );
   virtual wxString GetLabel() const;
-
+  
 protected:
   wxString   m_label;
   char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
+  
 };
 
 #endif // __GTKCONTROLH__

@@ -71,6 +71,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 {
     m_alreadySent = FALSE;
     m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
   
     PreCreation( parent, id, pos, size, style, name );
 
@@ -280,6 +281,27 @@ int wxRadioBox::FindString( const wxString &s ) const
     }
   
     return -1;
+}
+
+void wxRadioBox::SetFocus()
+{
+    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    
+    if (m_boxes.GetCount() == 0) return;
+    
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+        GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
+        if (button->active)
+	{
+            gtk_widget_grab_focus( GTK_WIDGET(button) );
+	    
+	    return;
+	}
+        node = node->Next();
+    }
+    
 }
 
 void wxRadioBox::SetSelection( int n )

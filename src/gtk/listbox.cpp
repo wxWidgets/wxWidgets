@@ -130,6 +130,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
 
     PreCreation( parent, id, pos, size, style, name );
 
@@ -138,7 +139,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
       GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-
+      
     m_list = GTK_LIST( gtk_list_new() );
 
     GtkSelectionMode mode = GTK_SELECTION_BROWSE;
@@ -153,6 +154,25 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), GTK_WIDGET(m_list) );
 #else
     gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
+#endif
+
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, "wxListBox::m_widget", name );
+    
+    debug_focus_in( GTK_WIDGET(m_list), "wxListBox::m_list", name );
+
+    GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
+
+    debug_focus_in( s_window->hscrollbar, "wxWindow::hsrcollbar", name );
+    debug_focus_in( s_window->vscrollbar, "wxWindow::vsrcollbar", name );
+
+#ifdef NEW_GTK_SCROLL_CODE
+    GtkViewport *viewport = GTK_VIEWPORT(s_window->child);
+#else
+    GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
+#endif
+
+    debug_focus_in( GTK_WIDGET(viewport), "wxWindow::viewport", name );
 #endif
 
     gtk_widget_show( GTK_WIDGET(m_list) );
@@ -180,6 +200,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
             list_item = gtk_list_item_new_with_label( choices[i] );
 	}
 
+#ifdef __WXDEBUG__
+        debug_focus_in( list_item, "wxListBox::list_item", name );
+#endif    
+    
         gtk_container_add( GTK_CONTAINER(m_list), list_item );
 
         gtk_signal_connect( GTK_OBJECT(list_item), "select",

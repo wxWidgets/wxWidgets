@@ -80,6 +80,7 @@ class wxRadioBox: public wxControl
     void SetNumberOfRowsOrCols( int n );
     
     void OnSize( wxSizeEvent &event );
+    void SetFocus();
     
   // implementation    
     

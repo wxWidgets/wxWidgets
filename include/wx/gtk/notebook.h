@@ -146,7 +146,7 @@ public:
     // don't delete it yourself). If bSelect, this page becomes active.
   bool AddPage(wxWindow *pPage,
                const wxString& strText,
-               bool bSelect = FALSE,
+               bool select = FALSE,
                int imageId = -1);
     // @@@@ VZ: I don't know how to implement InsertPage()
 

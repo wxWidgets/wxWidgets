@@ -20,6 +20,14 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
+#include "gdk/gdkkeysyms.h"
+
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
 //-----------------------------------------------------------------------------
 //  "changed"
 //-----------------------------------------------------------------------------
@@ -47,7 +55,6 @@ gtk_text_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* WXUNUSED(all
 {
     win->CalculateScrollbar();
 }
-
 
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
@@ -81,6 +88,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
       int style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
 
     PreCreation( parent, id, pos, size, style, name );
 
@@ -152,9 +160,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     }
 
     // we want to be notified about text changes
-    gtk_signal_connect(GTK_OBJECT(m_text), "changed",
-                     GTK_SIGNAL_FUNC(gtk_text_changed_callback),
-                     (gpointer)this);
+    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
     if (!value.IsNull())
     {
@@ -608,15 +615,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
         event.SetEventObject(this);
         if (GetEventHandler()->ProcessEvent(event)) return;
     }
-    else if (key_event.KeyCode() == WXK_TAB)
-    {
-        wxNavigationKeyEvent event;
-        event.SetDirection( key_event.m_shiftDown );
-        event.SetWindowChange(FALSE);
-        event.SetEventObject(this);
 
-        if (GetEventHandler()->ProcessEvent(event)) return;
-    }
     key_event.Skip();
 }
 
