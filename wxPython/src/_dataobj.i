@@ -791,7 +791,8 @@ public:
             PyObject* obj;
             bool blocked = wxPyBeginBlockThreads();
             obj = PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
-            wxPyEndBlockThreads(blocked);      
+            wxPyEndBlockThreads(blocked);
+            return obj;
         }
     }
 };
