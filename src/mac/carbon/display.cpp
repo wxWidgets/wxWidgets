@@ -120,7 +120,26 @@ int wxDisplay::GetDepth() const
 wxString wxDisplay::GetName() const
 {
     // Macs don't name their displays...
-    return wxT("");
+    return wxEmptyString;
+}
+
+ wxArrayVideoModes
+    wxDisplay::GetModes(const wxVideoMode& mode) const
+{
+    // Not implemented
+    return wxArrayVideoModes();
+}
+
+wxVideoMode wxDisplay::GetCurrentMode() const
+{
+    // Not implemented
+    return wxVideoMode();
+}
+
+bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+{
+    // Not implemented
+    return false;
 }
 
 wxDisplay::~wxDisplay()
