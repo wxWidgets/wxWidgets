@@ -63,7 +63,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
     }
 
     dialog->SetPath( gtk_file_selection_get_filename( GTK_FILE_SELECTION(dialog->m_widget) ) );
-    
+
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_OK);
     event.SetEventObject( dialog );
     dialog->GetEventHandler()->ProcessEvent( event );
@@ -74,7 +74,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
 //-----------------------------------------------------------------------------
 
 static
-void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
+void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFileDialog *dialog )
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
     event.SetEventObject( dialog );
