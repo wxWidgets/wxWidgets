@@ -63,7 +63,7 @@ protected:
 // platform-specific wxFontDialog implementation
 // ----------------------------------------------------------------------------
 
-#if defined(__WXUNIVERSAL__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXUNIVERSAL__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXCOCOA__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
     #define sm_classwxFontDialog sm_classwxGenericFontDialog
