@@ -7,9 +7,11 @@ __revision__ = "$Revision$"[11:-2]
 import wx
 
 import os
+import pprint
 import sys
 
 import dispatcher
+import editwindow
 from filling import Filling
 import frame
 from shell import Shell
@@ -50,6 +52,10 @@ class Crust(wx.SplitterWindow):
         # Add 'filling' to the interpreter's locals.
         self.shell.interp.locals['filling'] = self.filling
         self.notebook.AddPage(page=self.filling, text='Namespace', select=True)
+        self.display = Display(parent=self.notebook)
+        self.notebook.AddPage(page=self.display, text='Display')
+        # Add 'pp' (pretty print) to the interpreter's locals.
+        self.shell.interp.locals['pp'] = self.display.setItem
         self.calltip = Calltip(parent=self.notebook)
         self.notebook.AddPage(page=self.calltip, text='Calltip')
         self.sessionlisting = SessionListing(parent=self.notebook)
@@ -72,6 +78,39 @@ class Crust(wx.SplitterWindow):
         self.notebook.AddPage(page=self.stcdocs, text='StyledTextCtrl Docs')
         self.SplitHorizontally(self.shell, self.notebook, 300)
         self.SetMinimumPaneSize(1)
+
+
+class Display(editwindow.EditWindow):
+    """STC used to display an object using Pretty Print."""
+
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
+                 style=wx.CLIP_CHILDREN | wx.SUNKEN_BORDER,
+                 static=False):
+        """Create Display instance."""
+        editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
+        # Configure various defaults and user preferences.
+        self.SetReadOnly(True)
+        self.SetWrapMode(False)
+        if not static:
+            dispatcher.connect(receiver=self.push, signal='Interpreter.push')
+
+    def push(self, command, more):
+        """Receiver for Interpreter.push signal."""
+        self.Refresh()
+
+    def Refresh(self):
+        if not hasattr(self, "item"):
+            return
+        self.SetReadOnly(False)
+        text = pprint.pformat(self.item)
+        self.SetText(text)
+        self.SetReadOnly(True)
+
+    def setItem(self, item):
+        """Set item to pretty print in the notebook Display tab."""
+        self.item = item
+        self.Refresh()
 
 
 class Calltip(wx.TextCtrl):
@@ -174,7 +213,7 @@ class CrustFrame(frame.Frame):
                'Shell Revision: %s\n' % self.shell.revision + \
                'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
                'Python Version: %s\n' % sys.version.split()[0] + \
-               'wxPython Version: %s\n' % wx.__version__ + \
+               'wxPython Version: %s\n' % wx.VERSION_STRING + \
                'Platform: %s\n' % sys.platform
         dialog = wx.MessageDialog(self, text, title,
                                   wx.OK | wx.ICON_INFORMATION)
