@@ -140,10 +140,10 @@ void wxAppBase::CleanUp()
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
 
-#if wxUSE_THREADS
     delete wxPendingEvents;
     wxPendingEvents = NULL;
 
+#if wxUSE_THREADS
     delete wxPendingEventsLocker;
     wxPendingEventsLocker = NULL;
 
