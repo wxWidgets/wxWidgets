@@ -260,6 +260,10 @@ SOURCE=.\common\ftp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gaugecmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\gdicmn.cpp
 # End Source File
 # Begin Source File
