@@ -44,7 +44,7 @@
 // JACS: needed for FD_SETSIZE
 #include <sys/time.h>
 
-#if HAVE_UNAME
+#ifdef HAVE_UNAME
     #include <sys/utsname.h> // for uname()
 #endif // HAVE_UNAME
 
@@ -95,14 +95,14 @@ void wxSleep(int nSecs)
 
 void wxUsleep(unsigned long milliseconds)
 {
-#if HAVE_NANOSLEEP
+#ifdef HAVE_NANOSLEEP
     timespec tmReq;
     tmReq.tv_sec = milliseconds / 1000;
     tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
 
     // we're not interested in remaining time nor in return value
     (void)nanosleep(&tmReq, (timespec *)NULL);
-#elif HAVE_USLEEP
+#elif defined( HAVE_USLEEP )
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
     // is known to lead to crashes in MT programs in Solaris 2.[67] and is not
@@ -286,7 +286,7 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
 #endif // wxUSE_GUI
 
     // fork the process
-#if HAVE_VFORK
+#ifdef HAVE_VFORK
     pid_t pid = vfork();
 #else
     pid_t pid = fork();
@@ -550,10 +550,14 @@ bool wxGetUserName(wxChar *buf, int sz)
 
     *buf = wxT('\0');
     if ((who = getpwuid (getuid ())) != NULL) {
+#ifndef __VMS__
        comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
        wxStrncpy (buf, wxConvertMB2WX(who->pw_gecos), sz - 1);
+#else
+       wxStrncpy (buf, wxConvertMB2WX(who->pw_name), sz - 1);
+#endif
        return TRUE;
     }
 
