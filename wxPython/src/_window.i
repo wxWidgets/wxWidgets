@@ -871,7 +871,29 @@ control custom keypress handler to do the default navigation behaviour
 for the tab key, since the standard default behaviour for a multiline
 text control with the wx.TE_PROCESS_TAB style is to insert a tab and
 not navigate to the next control.");
+
     
+
+    DocDeclStr(
+        void , MoveAfterInTabOrder(wxWindow *win),
+        "Moves this window in the tab navigation order after the specified
+sibling window.  This means that when the user presses the TAB key on
+that other window, the focus switches to this window.
+
+The default tab order is the same as creation order.  This function
+and `MoveBeforeInTabOrder` allow to change it after creating all the
+windows.
+", "");
+
+    
+    DocDeclStr(
+        void , MoveBeforeInTabOrder(wxWindow *win),
+        "Same as `MoveAfterInTabOrder` except that it inserts this window just
+before win instead of putting it right after it.", "");
+    
+
+    
+
 
 
 

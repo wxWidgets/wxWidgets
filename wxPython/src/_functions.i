@@ -80,7 +80,10 @@ bool wxShutdown(wxShutdownFlags wFlags);
 
 
 void wxSleep(int secs);
-void wxUsleep(unsigned long milliseconds);
+void wxMilliSleep(unsigned long milliseconds);
+void wxMicroSleep(unsigned long microseconds);
+%pythoncode { Usleep = MilliSleep }
+
 void wxEnableTopLevelWindows(bool enable);
 
 wxString wxStripMenuCodes(const wxString& in);

@@ -178,7 +178,7 @@ public:
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
     //
-    virtual void SendSizeEvent() { }
+    virtual void SendSizeEvent();
 
 
     // menu bar functions
@@ -286,8 +286,8 @@ public:
 
     // the modal dialogs have a return code - usually the id of the last
     // pressed button
-    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
-    int GetReturnCode() const { return m_returnCode; }
+    void SetReturnCode(int returnCode);
+    int GetReturnCode() const;
 
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
@@ -311,6 +311,11 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    %pythoncode {
+        def SendSizeEvent(self):
+            self.ProcessEvent(wx.SizeEvent((-1,-1)))
+    }
 };
 
 //---------------------------------------------------------------------------

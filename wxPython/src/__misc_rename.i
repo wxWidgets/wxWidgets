@@ -114,7 +114,8 @@
 %rename(SHUTDOWN_REBOOT)                    wxSHUTDOWN_REBOOT;
 %rename(Shutdown)                           wxShutdown;
 %rename(Sleep)                              wxSleep;
-%rename(Usleep)                             wxUsleep;
+%rename(MilliSleep)                         wxMilliSleep;
+%rename(MicroSleep)                         wxMicroSleep;
 %rename(EnableTopLevelWindows)              wxEnableTopLevelWindows;
 %rename(StripMenuCodes)                     wxStripMenuCodes;
 %rename(GetEmailAddress)                    wxGetEmailAddress;
