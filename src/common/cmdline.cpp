@@ -1153,7 +1153,7 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
         {
             switch ( *p )
             {
-            case _T('"'):
+                case _T('"'):
                     if ( !lastBS )
                     {
                         isInsideQuotes = !isInsideQuotes;
@@ -1178,7 +1178,9 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
 
                 case _T('\0'):
                     endParam = TRUE;
-                    break;
+
+                    // exit from the loop directly, without changing arg
+                    continue;
             }
 
             lastBS = *p == _T('\\');
