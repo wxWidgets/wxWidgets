@@ -377,7 +377,12 @@ public:
     // operator version of GetChar
     wxChar  operator[](int n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
-
+#ifdef __alpha__
+    // operator version of GetChar
+    wxChar  operator[](unsigned int n) const
+      { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+#endif
+    
     // operator version of GetWriteableChar
     wxChar& operator[](size_t n)
       { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
