@@ -66,7 +66,7 @@ top_builddir = .
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
-INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_SCRIPT = @INSTALL@ # what is this supposed to be?
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -1258,30 +1258,33 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	@echo " Installing wxWindows..."
 	@echo " "
 
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) -d $(libdir)
+	$(INSTALL) -d $(libdir)/wx
+	$(INSTALL) -d $(libdir)/wx/include
+	$(INSTALL) -d $(libdir)/wx/include/wx
+	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@
+
 	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 	
-	@if test ! -d $(libdir)/wx; then mkdir $(libdir)/wx; fi
-	@if test ! -d $(libdir)/wx/include; then mkdir $(libdir)/wx/include; fi
-	@if test ! -d $(libdir)/wx/include/wx; then mkdir $(libdir)/wx/include/wx; fi
-	@if test ! -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@; then mkdir $(libdir)/wx/include/wx/@TOOLKIT_DIR@; fi
 	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
-	@if test ! -d $(includedir)/wx; then mkdir $(includedir)/wx; fi
-	@if test ! -d $(includedir)/wx/msw; then mkdir $(includedir)/wx/msw; fi
-	@if test ! -d $(includedir)/wx/gtk; then mkdir $(includedir)/wx/gtk; fi
-	@if test ! -d $(includedir)/wx/motif; then mkdir $(includedir)/wx/motif; fi
-	@if test ! -d $(includedir)/wx/html; then mkdir $(includedir)/wx/html; fi
-	@if test ! -d $(includedir)/wx/protocol; then mkdir $(includedir)/wx/protocol; fi
-	@if test ! -d $(includedir)/wx/unix; then mkdir $(includedir)/wx/unix; fi
-	@if test ! -d $(includedir)/wx/generic; then mkdir $(includedir)/wx/generic; fi
+	$(INSTALL) -d $(includedir)/wx
+	$(INSTALL) -d $(includedir)/wx/msw
+	$(INSTALL) -d $(includedir)/wx/gtk
+	$(INSTALL) -d $(includedir)/wx/motif
+	$(INSTALL) -d $(includedir)/wx/html
+	$(INSTALL) -d $(includedir)/wx/protocol
+	$(INSTALL) -d $(includedir)/wx/unix
+	$(INSTALL) -d $(includedir)/wx/generic
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p; \
 	  echo "$(INSTALL_DATA) $(top_srcdir)/include/wx/$$p $(includedir)/wx/$$p"; \
 	done
 	
 write_message:
-	@echo " "
+	echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux, Solaris) you'll now have to run"
 	@echo " ldconfig if you installed a shared library."
