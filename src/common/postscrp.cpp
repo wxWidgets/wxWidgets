@@ -304,6 +304,10 @@ void wxPostScriptDC::SetClippingRegion (long cx, long cy, long cw, long ch)
   *m_pstream << "closepath clip newpath\n";
 }
 
+void wxPostScriptDC::SetClippingRegion( const wxRegion &WXUNUSED(region) )
+{
+}
+
 void wxPostScriptDC::DestroyClippingRegion ()
 {
   if (!m_pstream)
@@ -319,7 +323,7 @@ void wxPostScriptDC::Clear ()
 {
 }
 
-void wxPostScriptDC::FloodFill (long WXUNUSED(x), long WXUNUSED(y), wxColour * WXUNUSED(col), int WXUNUSED(style))
+void wxPostScriptDC::FloodFill (long WXUNUSED(x), long WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
 {
 }
 
@@ -683,6 +687,10 @@ void wxPostScriptDC::DrawIcon (const wxIcon& icon, long x, long y)
   memDC.SelectObject(icon);
   Blit(x, y, icon.GetWidth(), icon.GetHeight(), &memDC, 0, 0);
 #endif
+}
+
+void wxPostScriptDC::DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask )
+{
 }
 
 void wxPostScriptDC::SetFont (const wxFont& the_font)

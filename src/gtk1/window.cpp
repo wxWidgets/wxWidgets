@@ -1729,38 +1729,38 @@ int wxWindow::GetCharHeight() const
 
 int wxWindow::GetCharWidth() const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (!m_font.Ok())
-  {
-    wxFAIL_MSG( "invalid font" );
-    return -1;
-  }
+    if (!m_font.Ok())
+    {
+      wxFAIL_MSG( "invalid font" );
+      return -1;
+    }
 
-  GdkFont *font = m_font.GetInternalFont( 1.0 );
-  return gdk_string_width( font, "H" );
+    GdkFont *font = m_font.GetInternalFont( 1.0 );
+    return gdk_string_width( font, "H" );
 }
 
 void wxWindow::GetTextExtent( const wxString& string, int *x, int *y,
   int *descent, int *externalLeading, const wxFont *theFont, bool WXUNUSED(use16) ) const
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  wxFont fontToUse = m_font;
-  if (theFont) fontToUse = *theFont;
+    wxFont fontToUse = m_font;
+    if (theFont) fontToUse = *theFont;
 
-  if (!fontToUse.Ok())
-  {
-    wxFAIL_MSG( "invalid font" );
-    return;
-  }
-  wxASSERT_MSG( (m_font.Ok()), "invalid font" );
+    if (!fontToUse.Ok())
+    {
+      wxFAIL_MSG( "invalid font" );
+      return;
+    }
+    wxASSERT_MSG( (m_font.Ok()), "invalid font" );
 
-  GdkFont *font = fontToUse.GetInternalFont( 1.0 );
-  if (x) (*x) = gdk_string_width( font, string );
-  if (y) (*y) = font->ascent + font->descent;
-  if (descent) (*descent) = font->descent;
-  if (externalLeading) (*externalLeading) = 0;  // ??
+    GdkFont *font = fontToUse.GetInternalFont( 1.0 );
+    if (x) (*x) = gdk_string_width( font, string );
+    if (y) (*y) = font->ascent + font->descent;
+    if (descent) (*descent) = font->descent;
+    if (externalLeading) (*externalLeading) = 0;  // ??
 }
 
 void wxWindow::MakeModal( bool modal )
@@ -1783,105 +1783,122 @@ void wxWindow::MakeModal( bool modal )
 
 void wxWindow::SetFocus()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  GtkWidget *connect_widget = GetConnectWidget();
-  if (connect_widget)
-  {
-    if (GTK_WIDGET_CAN_FOCUS(connect_widget) && !GTK_WIDGET_HAS_FOCUS (connect_widget) )
+    GtkWidget *connect_widget = GetConnectWidget();
+    if (connect_widget)
     {
-      gtk_widget_grab_focus (connect_widget);
+        if (GTK_WIDGET_CAN_FOCUS(connect_widget) && !GTK_WIDGET_HAS_FOCUS (connect_widget) )
+        {
+            gtk_widget_grab_focus (connect_widget);
+        }
     }
-  }
 }
 
 bool wxWindow::OnClose()
 {
-  return TRUE;
+    return TRUE;
 }
 
 void wxWindow::AddChild( wxWindow *child )
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-  wxASSERT_MSG( (child != NULL), "invalid child" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (child != NULL), "invalid child" );
 
-  m_children.Append( child );
+    m_children.Append( child );
 }
 
 wxList *wxWindow::GetChildren()
 {
-  return (&m_children);
+    return (&m_children);
+}
+
+wxWindow *wxWindow::ReParent( wxWindow *newParent )
+{
+  wxWindow *oldParent = GetParent();
+  
+  if (oldParent) oldParent->RemoveChild( this );
+  
+  gtk_widget_unparent( m_widget );
+  
+  if (newParent)
+  {
+     newParent->AddChild( this );
+     (newParent->m_insertCallback)( newParent, this );
+  }
+  
+  return oldParent;
 }
 
 void wxWindow::RemoveChild( wxWindow *child )
 {
-  if (GetChildren()) GetChildren()->DeleteObject( child );
-  child->m_parent = (wxWindow *) NULL;
+    if (GetChildren()) GetChildren()->DeleteObject( child );
+    child->m_parent = (wxWindow *) NULL;
 }
 
 void wxWindow::SetReturnCode( int retCode )
 {
-  m_retCode = retCode;
+    m_retCode = retCode;
 }
 
 int wxWindow::GetReturnCode()
 {
-  return m_retCode;
+    return m_retCode;
 }
 
 void wxWindow::Raise()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (m_widget) gdk_window_raise( m_widget->window );
+    if (m_widget) gdk_window_raise( m_widget->window );
 }
 
 void wxWindow::Lower()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (m_widget) gdk_window_lower( m_widget->window );
+    if (m_widget) gdk_window_lower( m_widget->window );
 }
 
 wxEvtHandler *wxWindow::GetEventHandler()
 {
-  return m_eventHandler;
+    return m_eventHandler;
 }
 
 void wxWindow::SetEventHandler( wxEvtHandler *handler )
 {
-  m_eventHandler = handler;
+    m_eventHandler = handler;
 }
 
 void wxWindow::PushEventHandler(wxEvtHandler *handler)
 {
-  handler->SetNextHandler(GetEventHandler());
-  SetEventHandler(handler);
+    handler->SetNextHandler(GetEventHandler());
+    SetEventHandler(handler);
 }
 
 wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 {
-  if (GetEventHandler())
-  {
-    wxEvtHandler *handlerA = GetEventHandler();
-    wxEvtHandler *handlerB = handlerA->GetNextHandler();
-    handlerA->SetNextHandler((wxEvtHandler *) NULL);
-    SetEventHandler(handlerB);
-    if (deleteHandler)
+    if (GetEventHandler())
     {
-      delete handlerA;
-      return (wxEvtHandler*) NULL;
-    }
-    else
-      return handlerA;
-  }
-  else
-   return (wxEvtHandler *) NULL;
+        wxEvtHandler *handlerA = GetEventHandler();
+        wxEvtHandler *handlerB = handlerA->GetNextHandler();
+        handlerA->SetNextHandler((wxEvtHandler *) NULL);
+        SetEventHandler(handlerB);
+        if (deleteHandler)
+        {
+            delete handlerA;
+            return (wxEvtHandler*) NULL;
+        }
+        else
+            return handlerA;
+     }
+     else
+        return (wxEvtHandler *) NULL;
 }
 
 wxValidator *wxWindow::GetValidator()
 {
-  return m_windowValidator;
+    return m_windowValidator;
 }
 
 void wxWindow::SetValidator( const wxValidator& validator )

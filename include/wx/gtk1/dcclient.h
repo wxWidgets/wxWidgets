@@ -40,7 +40,7 @@ public:
     
   ~wxWindowDC(void);
     
-  virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE );
+  virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE );
   virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
 
   virtual void DrawLine( long x1, long y1, long x2, long y2 );
@@ -61,7 +61,8 @@ public:
   virtual void DrawEllipse( long x, long y, long width, long height );
     
   virtual bool CanDrawBitmap(void) const;
-  virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
+  virtual void DrawIcon( const wxIcon &icon, long x, long y );
+  virtual void DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask=FALSE );
   virtual bool Blit( long xdest, long ydest, long width, long height,
                       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
 
@@ -87,6 +88,7 @@ public:
     
   virtual void SetClippingRegion( long x, long y, long width, long height );
   virtual void DestroyClippingRegion(void);
+  virtual void SetClippingRegion( const wxRegion &region  );
     
   virtual void DrawSpline( wxList *points );
     

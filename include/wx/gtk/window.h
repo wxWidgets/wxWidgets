@@ -165,6 +165,7 @@ public:
     { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
   void SetParent( wxWindow *p )
     { m_parent = p; }
+  virtual wxWindow *ReParent( wxWindow *newParent );
 
   wxEvtHandler *GetEventHandler();
   void SetEventHandler( wxEvtHandler *handler );

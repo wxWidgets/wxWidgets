@@ -61,7 +61,7 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   inline virtual void BeginDrawing(void) {} ;
   inline virtual void EndDrawing(void) {} ;
 
-  void FloodFill(long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE) ;
+  void FloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE) ;
   bool GetPixel(long x1, long y1, wxColour *col) const;
 
   void DrawLine(long x1, long y1, long x2, long y2);
@@ -85,11 +85,8 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   void DrawSpline(wxList *points);
 
-  void DrawIcon(const wxIcon& icon, long x, long y);
-#ifdef __WXGTK__
-  void DrawIcon(const wxIcon& icon, long x, long y, bool WXUNUSED(usemask) ) 
-    { DrawIcon( icon, x, y ); }
-#endif
+  void DrawIcon( const wxIcon& icon, long x, long y );
+  void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
   void Clear();
@@ -98,7 +95,9 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   void SetBrush(const wxBrush& brush);
   void SetLogicalFunction(int function);
   void SetBackground(const wxBrush& brush);
+  
   void SetClippingRegion(long x, long y, long width, long height);
+  void SetClippingRegion( const wxRegion &region );
   void DestroyClippingRegion();
 
   bool StartDoc(const wxString& message);

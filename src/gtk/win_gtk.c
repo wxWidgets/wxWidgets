@@ -211,7 +211,7 @@ gtk_myfixed_move (GtkMyFixed       *myfixed,
 
       if (child->widget == widget)
         {
-/*	  if ((child->x == x) && (child->y == y)) return; */
+	  if ((child->x == x) && (child->y == y)) return;
 	  
           child->x = x;
           child->y = y;

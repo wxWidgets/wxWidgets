@@ -57,133 +57,211 @@ class wxDC: public wxObject
 {
   DECLARE_ABSTRACT_CLASS(wxDC)
 
-  public:
+public:
 
-    wxDC(void);
-    ~wxDC(void);
+  wxDC(void);
+  ~wxDC(void);
     
-    void BeginDrawing(void) {};
-    void EndDrawing(void) {};
+  void BeginDrawing(void) {};
+  void EndDrawing(void) {};
     
-    virtual bool Ok(void) const;
+  virtual bool Ok(void) const;
 
-    virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE ) = 0;
-    virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;
+  virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE ) = 0;
+  inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
+  {
+      FloodFill(pt.x, pt.y, col, style);
+  }
+  virtual bool GetPixel( long x, long y, wxColour *col ) const = 0;
+  inline bool GetPixel(const wxPoint& pt, wxColour *col) const
+  {
+      return GetPixel(pt.x, pt.y, col);
+  }
 
-    virtual void DrawLine( long x1, long y1, long x2, long y2 ) = 0;
-    virtual void CrossHair( long x, long y ) = 0;
-    virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc );
-    virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea ) = 0;
-    virtual void DrawPoint( long x, long y ) = 0;
-    virtual void DrawPoint( wxPoint& point );
+  virtual void DrawLine( long x1, long y1, long x2, long y2 ) = 0;
+  inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
+  {
+      DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
+  }
+  virtual void CrossHair( long x, long y ) = 0;
+  inline void CrossHair(const wxPoint& pt)
+  {
+      CrossHair(pt.x, pt.y);
+  }
+  virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc );
+  inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
+  {
+      DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
+  }
+  virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea ) = 0;
+  virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
+  {
+      DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
+  }
+  virtual void DrawPoint( long x, long y ) = 0;
+  inline void DrawPoint(const wxPoint& pt)
+  {
+      DrawPoint(pt.x, pt.y);
+  }
+  virtual void DrawPoint( wxPoint& point );
     
-    virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 ) = 0;
-    virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
-    virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0, 
+  virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 ) = 0;
+  virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
+  virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0, 
                               int fillStyle=wxODDEVEN_RULE ) = 0;
-    virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0, 
+  virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0, 
                               int fillStyle=wxODDEVEN_RULE );
     
-    virtual void DrawRectangle( long x, long y, long width, long height ) = 0;
-    virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 ) = 0;
-    virtual void DrawEllipse( long x, long y, long width, long height ) = 0;
+  virtual void DrawRectangle( long x, long y, long width, long height ) = 0;
+  inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
+  {
+      DrawRectangle(pt.x, pt.y, sz.x, sz.y);
+  }
+  inline void DrawRectangle(const wxRect& rect)
+  {
+      DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+  }
+  virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 ) = 0;
+  inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
+  {
+      DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
+  }
+  inline void DrawRoundedRectangle(const wxRect& rect, double radius = 20.0)
+  {
+      DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
+  }
+  virtual void DrawEllipse( long x, long y, long width, long height ) = 0;
+  inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
+  {
+      DrawEllipse(pt.x, pt.y, sz.x, sz.y);
+  }
+  inline void DrawEllipse(const wxRect& rect)
+  {
+      DrawEllipse(rect.x, rect.y, rect.width, rect.height);
+  }
     
-    virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
-    virtual void DrawSpline( wxList *points ) = 0;
-    virtual void DrawSpline( int n, wxPoint points[] );
+  virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
+  virtual void DrawSpline( wxList *points ) = 0;
+  virtual void DrawSpline( int n, wxPoint points[] );
     
-    virtual bool CanDrawBitmap(void) const = 0;
-    virtual void DrawIcon( const wxIcon &icon, long x, long y )
-      { DrawIcon( icon, x, y, TRUE ); }
-    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask );
-            void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
-	    { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
-    virtual bool Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE ) = 0;
+  virtual bool CanDrawBitmap(void) const = 0;
+  virtual void DrawIcon( const wxIcon &icon, long x, long y ) = 0;
+  inline void DrawIcon( const wxIcon& icon, const wxPoint& pt )
+  {
+      DrawIcon(icon, pt.x, pt.y);
+  }
+  virtual void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE ) = 0;
+  inline void DrawBitmap( const wxBitmap& bitmap, const wxPoint& pt, bool useMask=FALSE )
+  {
+      DrawBitmap(bitmap, pt.x, pt.y, useMask );
+  }
+  virtual bool Blit( long xdest, long ydest, 
+                     long width, long height,
+                     wxDC *source, 
+		     long xsrc, long ysrc, 
+		     int logical_func=wxCOPY, 
+		     bool useMask=FALSE ) = 0;
+  inline bool Blit( const wxPoint& destPt, 
+                    const wxSize& sz,
+                    wxDC *source, 
+		    const wxPoint& srcPt, 
+		    int rop = wxCOPY, 
+		    bool useMask=FALSE)
+  {
+    return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
+  }
 
-    virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE ) = 0;
-    virtual bool CanGetTextExtent(void) const = 0;
-    virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = (long *) NULL, long *externalLeading = (long *) NULL,
-                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE ) = 0;
-    virtual long GetCharWidth(void) = 0;
-    virtual long GetCharHeight(void) = 0;
+  virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE ) = 0;
+  inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE )
+  {
+      DrawText(text, pt.x, pt.y, use16bit);
+  }
+  virtual bool CanGetTextExtent(void) const = 0;
+  virtual void GetTextExtent( const wxString &string, 
+                              long *width, long *height,
+                              long *descent = (long *) NULL, 
+			      long *externalLeading = (long *) NULL,
+                              wxFont *theFont = (wxFont *) NULL, 
+			      bool use16 = FALSE ) = 0;
+  virtual long GetCharWidth(void) = 0;
+  virtual long GetCharHeight(void) = 0;
     
-    virtual void Clear(void) = 0;
+  virtual void Clear(void) = 0;
             
-    virtual void SetFont( const wxFont &font ) = 0;
-    virtual wxFont *GetFont(void) { return &m_font; };
+  virtual void SetFont( const wxFont &font ) = 0;
+  virtual wxFont *GetFont(void) { return &m_font; };
     
-    virtual void SetPen( const wxPen &pen ) = 0;
-    virtual wxPen *GetPen(void) { return &m_pen; };
+  virtual void SetPen( const wxPen &pen ) = 0;
+  virtual wxPen *GetPen(void) { return &m_pen; };
     
-    virtual void SetBrush( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBrush(void) { return &m_brush; };
+  virtual void SetBrush( const wxBrush &brush ) = 0;
+  virtual wxBrush *GetBrush(void) { return &m_brush; };
 
-    virtual void SetBackground( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBackground(void) { return &m_backgroundBrush; };
+  virtual void SetBackground( const wxBrush &brush ) = 0;
+  virtual wxBrush *GetBackground(void) { return &m_backgroundBrush; };
 
-    virtual void SetLogicalFunction( int function ) = 0;
-    virtual int GetLogicalFunction(void) { return m_logicalFunction; };
+  virtual void SetLogicalFunction( int function ) = 0;
+  virtual int GetLogicalFunction(void) { return m_logicalFunction; };
     
-    virtual void SetTextForeground( const wxColour &col );
-    virtual void SetTextBackground( const wxColour &col );
-    virtual wxColour& GetTextBackground(void) const { return (wxColour&)m_textBackgroundColour; };
-    virtual wxColour& GetTextForeground(void) const { return (wxColour&)m_textForegroundColour; };
+  virtual void SetTextForeground( const wxColour &col );
+  virtual void SetTextBackground( const wxColour &col );
+  virtual wxColour& GetTextBackground(void) const { return (wxColour&)m_textBackgroundColour; };
+  virtual wxColour& GetTextForeground(void) const { return (wxColour&)m_textForegroundColour; };
     
-    virtual void SetBackgroundMode( int mode ) = 0;
-    virtual int GetBackgroundMode(void) { return m_backgroundMode; };
+  virtual void SetBackgroundMode( int mode ) = 0;
+  virtual int GetBackgroundMode(void) { return m_backgroundMode; };
     
-    virtual void SetPalette( const wxPalette& palette ) = 0;
-      void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
+  virtual void SetPalette( const wxPalette& palette ) = 0;
+  void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
     
     // the first two must be overridden and called
-    virtual void SetClippingRegion( long x, long y, long width, long height );
-    virtual void DestroyClippingRegion(void);
-    virtual void GetClippingBox( long *x, long *y, long *width, long *height ) const;
+  virtual void DestroyClippingRegion(void);
+  virtual void SetClippingRegion( long x, long y, long width, long height );
+  virtual void GetClippingBox( long *x, long *y, long *width, long *height ) const;
+  virtual void SetClippingRegion( const wxRegion &region  ) = 0;
     
-    virtual inline long MinX(void) const { return m_minX; }
-    virtual inline long MaxX(void) const { return m_maxX; }
-    virtual inline long MinY(void) const { return m_minY; }
-    virtual inline long MaxY(void) const { return m_maxY; }
+  virtual inline long MinX(void) const { return m_minX; }
+  virtual inline long MaxX(void) const { return m_maxX; }
+  virtual inline long MinY(void) const { return m_minY; }
+  virtual inline long MaxY(void) const { return m_maxY; }
 
-    virtual void GetSize( int* width, int* height ) const;
-    inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
-    virtual void GetSizeMM( long* width, long* height ) const;
+  virtual void GetSize( int* width, int* height ) const;
+  inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
+  virtual void GetSizeMM( long* width, long* height ) const;
     
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
-    virtual void EndDoc(void) {};
-    virtual void StartPage(void) {};
-    virtual void EndPage(void) {};
+  virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
+  virtual void EndDoc(void) {};
+  virtual void StartPage(void) {};
+  virtual void EndPage(void) {};
     
-    virtual void SetMapMode( int mode );
-    virtual int GetMapMode(void) const { return m_mappingMode; };
+  virtual void SetMapMode( int mode );
+  virtual int GetMapMode(void) const { return m_mappingMode; };
     
-    virtual void SetUserScale( double x, double y );
-    virtual void GetUserScale( double *x, double *y );
-    virtual void SetLogicalScale( double x, double y );
-    virtual void GetLogicalScale( double *x, double *y );
+  virtual void SetUserScale( double x, double y );
+  virtual void GetUserScale( double *x, double *y );
+  virtual void SetLogicalScale( double x, double y );
+  virtual void GetLogicalScale( double *x, double *y );
     
-    virtual void SetLogicalOrigin( long x, long y );
-    virtual void GetLogicalOrigin( long *x, long *y );
-    virtual void SetDeviceOrigin( long x, long y );
-    virtual void GetDeviceOrigin( long *x, long *y );
+  virtual void SetLogicalOrigin( long x, long y );
+  virtual void GetLogicalOrigin( long *x, long *y );
+  virtual void SetDeviceOrigin( long x, long y );
+  virtual void GetDeviceOrigin( long *x, long *y );
 
-    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+  virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     
-    virtual void SetOptimization( bool WXUNUSED(optimize) ) {};
-    virtual bool GetOptimization(void) { return m_optimize; };
+  virtual void SetOptimization( bool WXUNUSED(optimize) ) {};
+  virtual bool GetOptimization(void) { return m_optimize; };
     
-    virtual long DeviceToLogicalX(long x) const;
-    virtual long DeviceToLogicalY(long y) const;
-    virtual long DeviceToLogicalXRel(long x) const;
-    virtual long DeviceToLogicalYRel(long y) const;
-    virtual long LogicalToDeviceX(long x) const;
-    virtual long LogicalToDeviceY(long y) const;
-    virtual long LogicalToDeviceXRel(long x) const;
-    virtual long LogicalToDeviceYRel(long y) const;
+  virtual long DeviceToLogicalX(long x) const;
+  virtual long DeviceToLogicalY(long y) const;
+  virtual long DeviceToLogicalXRel(long x) const;
+  virtual long DeviceToLogicalYRel(long y) const;
+  virtual long LogicalToDeviceX(long x) const;
+  virtual long LogicalToDeviceY(long y) const;
+  virtual long LogicalToDeviceXRel(long x) const;
+  virtual long LogicalToDeviceYRel(long y) const;
 
-  public:
+  // implementation
   
     void CalcBoundingBox( long x, long y );
     void ComputeScaleAndOrigin(void);
@@ -279,7 +357,7 @@ class wxDC: public wxObject
     // not sure what for, but what is a mm on a screen you don't know the size of?
     double       m_mm_to_pix_x,m_mm_to_pix_y; 
     
-    long         m_deviceOriginX,m_deviceOriginY;                   // Sum of the two above.
+    long         m_deviceOriginX,m_deviceOriginY; 
     
     long         m_logicalOriginX,m_logicalOriginY;                 // User defined.
 

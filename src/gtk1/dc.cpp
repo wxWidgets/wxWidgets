@@ -93,10 +93,6 @@ void wxDC::DrawArc( long WXUNUSED(x1), long WXUNUSED(y1), long WXUNUSED(x2), lon
 {
 }
 
-void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) ) 
-{
-}
-
 void wxDC::DrawPoint( wxPoint& point ) 
 { 
   DrawPoint( point.x, point.y ); 

@@ -116,15 +116,6 @@ wxWindowDC::wxWindowDC( wxWindow *window )
         
     SetUpDC();
     
-/*
-    wxRegion update = window->GetUpdateRegion();
-    if (update.Empty()) return;
-    
-    gdk_gc_set_clip_region( m_penGC, update.GetRegion() );
-    gdk_gc_set_clip_region( m_brushGC, update.GetRegion() );
-    gdk_gc_set_clip_region( m_textGC, update.GetRegion() );
-    gdk_gc_set_clip_region( m_bgGC, update.GetRegion() );
-*/
 }
 
 wxWindowDC::~wxWindowDC(void)
@@ -132,8 +123,8 @@ wxWindowDC::~wxWindowDC(void)
     Destroy();
 }
 
-void wxWindowDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
-                           wxColour *WXUNUSED(col), int WXUNUSED(style) )
+void wxWindowDC::FloodFill( long WXUNUSED(x), long WXUNUSED(y), 
+                           const wxColour &WXUNUSED(col), int WXUNUSED(style) )
 {
     wxFAIL_MSG( "wxWindowDC::FloodFill not implemented" );
 }
@@ -505,7 +496,7 @@ bool wxWindowDC::CanDrawBitmap(void) const
   return TRUE;
 }
 
-void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
+void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y )
 {
     if (!Ok()) return;
   
@@ -517,13 +508,46 @@ void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (icon.GetMask()) mask = icon.GetMask()->GetBitmap();
     
-    if (useMask && mask) 
+    if (mask) 
     {
         gdk_gc_set_clip_mask( m_penGC, mask );
         gdk_gc_set_clip_origin( m_penGC, xx, yy );
     }
   
     GdkPixmap *pm = icon.GetPixmap();
+    gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
+  
+    if (mask) 
+    {
+        gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
+        gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+    }
+    
+    CalcBoundingBox( x, y );
+    int width = icon.GetWidth();
+    int height = icon.GetHeight();
+    CalcBoundingBox( x + width, y + height );
+}
+
+void wxWindowDC::DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask )
+{
+    if (!Ok()) return;
+  
+    if (!bitmap.Ok()) return;
+  
+    int xx = XLOG2DEV(x);
+    int yy = YLOG2DEV(y);
+  
+    GdkBitmap *mask = (GdkBitmap *) NULL;
+    if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
+    
+    if (useMask && mask) 
+    {
+        gdk_gc_set_clip_mask( m_penGC, mask );
+        gdk_gc_set_clip_origin( m_penGC, xx, yy );
+    }
+  
+    GdkPixmap *pm = bitmap.GetPixmap();
     gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
   
     if (useMask && mask) 
@@ -533,8 +557,8 @@ void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
     }
     
     CalcBoundingBox( x, y );
-    int width = icon.GetWidth();
-    int height = icon.GetHeight();
+    int width = bitmap.GetWidth();
+    int height = bitmap.GetHeight();
     CalcBoundingBox( x + width, y + height );
 }
 
@@ -939,6 +963,20 @@ void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
     gdk_gc_set_clip_rectangle( m_brushGC, &rect );
     gdk_gc_set_clip_rectangle( m_textGC, &rect );
     gdk_gc_set_clip_rectangle( m_bgGC, &rect );
+}
+
+void wxWindowDC::SetClippingRegion( const wxRegion &region  )
+{
+    if (region.Empty())
+    {
+        DestroyClippingRegion();
+        return;
+    }
+    
+    gdk_gc_set_clip_region( m_penGC, region.GetRegion() );
+    gdk_gc_set_clip_region( m_brushGC, region.GetRegion() );
+    gdk_gc_set_clip_region( m_textGC, region.GetRegion() );
+    gdk_gc_set_clip_region( m_bgGC, region.GetRegion() );
 }
 
 void wxWindowDC::DestroyClippingRegion(void)

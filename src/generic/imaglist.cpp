@@ -113,8 +113,7 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
   if (!node) return FALSE;
   wxBitmap *bm = (wxBitmap*)node->Data();
   
-  wxIcon *icon = (wxIcon*)bm;
-  dc.DrawIcon( *icon, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
+  dc.DrawBitmap( *bm, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
 
   return TRUE;
 }
