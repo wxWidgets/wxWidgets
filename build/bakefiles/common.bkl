@@ -524,9 +524,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     
     <set var="PLUGINSUFFIX">
         <if cond="UNICODE=='0' and BUILD=='release'"></if>
-        <if cond="UNICODE=='0' and BUILD=='debug'">_d</if>
-        <if cond="UNICODE=='1' and BUILD=='release'">_u</if>
-        <if cond="UNICODE=='1' and BUILD=='debug'">_ud</if>
+        <if cond="UNICODE=='0' and BUILD=='debug'">d</if>
+        <if cond="UNICODE=='1' and BUILD=='release'">u</if>
+        <if cond="UNICODE=='1' and BUILD=='debug'">ud</if>
     </set>
 
     <set var="PLUGINS_INST_DIR" make_var="1">

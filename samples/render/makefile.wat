@@ -58,12 +58,12 @@ WXDLLFLAG = dll
 PLUGINSUFFIX =
 !ifeq BUILD debug
 !ifeq UNICODE 0
-PLUGINSUFFIX = _d
+PLUGINSUFFIX = d
 !endif
 !endif
 !ifeq BUILD debug
 !ifeq UNICODE 1
-PLUGINSUFFIX = _ud
+PLUGINSUFFIX = ud
 !endif
 !endif
 !ifeq BUILD release
@@ -73,7 +73,7 @@ PLUGINSUFFIX =
 !endif
 !ifeq BUILD release
 !ifeq UNICODE 1
-PLUGINSUFFIX = _u
+PLUGINSUFFIX = u
 !endif
 !endif
 __renddll___depname =

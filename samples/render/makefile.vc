@@ -59,16 +59,16 @@ WXUNIVNAME = univ
 WXDLLFLAG = dll
 !endif
 !if "$(BUILD)" == "debug" && "$(UNICODE)" == "0"
-PLUGINSUFFIX = _d
+PLUGINSUFFIX = d
 !endif
 !if "$(BUILD)" == "debug" && "$(UNICODE)" == "1"
-PLUGINSUFFIX = _ud
+PLUGINSUFFIX = ud
 !endif
 !if "$(BUILD)" == "release" && "$(UNICODE)" == "0"
 PLUGINSUFFIX = 
 !endif
 !if "$(BUILD)" == "release" && "$(UNICODE)" == "1"
-PLUGINSUFFIX = _u
+PLUGINSUFFIX = u
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p = 
