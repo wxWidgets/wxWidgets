@@ -60,10 +60,13 @@ class MySTC(wxStyledTextCtrl):
         EVT_STC_START_DRAG(self, ID, self.OnStartDrag)
         EVT_STC_MODIFIED(self, ID, self.OnModified)
 
-##         EVT_WINDOW_DESTROY(self, self.OnDestroy)
-##     def OnDestroy(self, evt):
-##         wxTheClipboard.Flush()
-##         evt.Skip()
+        EVT_WINDOW_DESTROY(self, self.OnDestroy)
+
+    def OnDestroy(self, evt):
+        # This is how the clipboard contents can be preserved after
+        # the app has exited.
+        wxTheClipboard.Flush()
+        evt.Skip()
 
 
     def OnStartDrag(self, evt):
@@ -151,7 +154,7 @@ def runTest(frame, nb, log):
         ed = p = MySTC(nb, -1, log)
 
     else:
-        p = wxPanel(nb, -1)
+        p = wxPanel(nb, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
         ed = MySTC(p, -1, log)
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
@@ -248,9 +251,11 @@ def runTest(frame, nb, log):
         ed.SetSelection(25, 35)
         print "GetSelectedText(): ", repr(ed.GetSelectedText())
         print "GetTextRange(25, 35): ", repr(ed.GetTextRange(25, 35))
-
+        print "FindText(0, max, 'indicators'): ",
+        print ed.FindText(0, ed.GetTextLength(), "indicators")
 
         ed.GotoPos(0)
+
 
     return p
 

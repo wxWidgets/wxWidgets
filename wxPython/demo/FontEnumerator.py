@@ -44,7 +44,10 @@ class TestPanel(wxPanel):
         self.txt.SetFont(font)
         self.txt.SetSize(self.txt.GetBestSize())
 
-
+##         st = font.GetNativeFontInfo().ToString()
+##         ni2 = wxNativeFontInfo()
+##         ni2.FromString(st)
+##         font2 = wxFontFromNativeInfo(ni2)
 
 #----------------------------------------------------------------------
 
@@ -61,11 +64,14 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
 overview = """\
 wxFontEnumerator enumerates either all available fonts on the system or only the ones with given attributes - either only fixed-width (suited for use in programs such as terminal emulators and the like) or the fonts available in the given encoding.
 
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

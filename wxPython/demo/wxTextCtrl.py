@@ -47,16 +47,13 @@ class TestPanel(wxPanel):
 
         l4 = wxStaticText(self, -1, "Rich Text")
         t4 = wxTextCtrl(self, 40, "If supported by the native control, this is red, and this is a different font.",
-                        size=(200, 100), style=wxTE_MULTILINE|wxTE_RICH)
+                        size=(200, 100), style=wxTE_MULTILINE|wxTE_RICH2)
         t4.SetInsertionPoint(0)
         t4.SetStyle(44, 47, wxTextAttr("RED", "YELLOW"))
 
         points = t4.GetFont().GetPointSize()  # get the current size
         f = wxFont(points+3, wxROMAN, wxITALIC, wxBOLD, true)
-##         print 'a1', sys.getrefcount(f)
-##         t4.SetStyle(63, 77, wxTextAttr("BLUE", font=f))
         t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))
-##         print 'a2', sys.getrefcount(f)
 
         bsizer = wxBoxSizer(wxVERTICAL)
         bsizer.Add(b, 0, wxGROW)
@@ -113,3 +110,12 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

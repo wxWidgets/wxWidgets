@@ -64,7 +64,10 @@ class TestPanel(wxPanel):
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
 
-    def __del__(self):
+        EVT_WINDOW_DESTROY(self, self.OnDestroy)
+
+
+    def OnDestroy(self, evt):
         if self.pdf:
             self.pdf.Cleanup()
             self.pdf = None
@@ -114,12 +117,6 @@ if __name__ == '__main__':
             wxFrame.__init__(self, None, -1, "ActiveX test -- Acrobat", size=(640, 480),
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.tp = TestPanel(self, sys.stdout)
-            EVT_CLOSE(self, self.OnCloseWindow)
-
-        def OnCloseWindow(self, event):
-
-            self.tp.pdf.Cleanup()
-            self.Destroy()
 
 
     app = wxPySimpleApp()

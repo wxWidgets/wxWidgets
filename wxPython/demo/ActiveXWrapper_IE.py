@@ -104,14 +104,18 @@ class TestPanel(wxWindow):
         self.SetAutoLayout(true)
         EVT_SIZE(self, self.OnSize)
 
+        EVT_WINDOW_DESTROY(self, self.OnDestroy)
+
+
+    def OnDestroy(self, evt):
+        if self.ie:
+            self.ie.Cleanup()
+            self.ie = None
+
 
     def OnSize(self, evt):
         self.Layout()
 
-    def __del__(self):
-        if self.ie:
-            self.ie.Cleanup()
-            self.ie = None
 
     def OnLocationSelect(self, evt):
         url = self.location.GetStringSelection()
@@ -211,11 +215,6 @@ if __name__ == '__main__':
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.CreateStatusBar()
             self.tp = TestPanel(self, sys.stdout, self)
-            EVT_CLOSE(self, self.OnCloseWindow)
-
-        def OnCloseWindow(self, event):
-            self.tp.ie.Cleanup()
-            self.Destroy()
 
 
     app = wxPySimpleApp()

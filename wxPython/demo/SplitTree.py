@@ -72,6 +72,7 @@ class TestPanel(wxPanel):
         tree = TestTree(splitter, -1, style = wxTR_HAS_BUTTONS |
                                               wxTR_NO_LINES |
                                               wxTR_ROW_LINES |
+                                              #wxTR_HIDE_ROOT |
                                               wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
@@ -110,4 +111,10 @@ wxThinSplitterWindow, and wxSplitterScrolledWindow, some of which may
 also be useful by themselves.
 """
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

@@ -105,7 +105,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
         #  Why doesn't this show up on MSW???
-        self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
+        #self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
 
         if 0:
             # for normal, simple columns, you can add them like this:
@@ -280,6 +280,8 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")
+        print "FindItem:", self.list.FindItem(-1, "Billy Joel")
+        print "FindItemData:", self.list.FindItemData(-1, 20)
 
     def OnPopupTwo(self, event):
         self.log.WriteText("Popup two\n")

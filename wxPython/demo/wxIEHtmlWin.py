@@ -54,16 +54,17 @@ class TestPanel(wxWindow):
         txt = wxStaticText(self, -1, "Location:")
         btnSizer.Add(txt, 0, wxCENTER|wxALL, 2)
 
-        self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
+        self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN|wxPROCESS_ENTER)
         EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
         EVT_KEY_UP(self.location, self.OnLocationKey)
         EVT_CHAR(self.location, self.IgnoreReturn)
         btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 2)
 
+
         sizer.Add(btnSizer, 0, wxEXPAND)
         sizer.Add(self.ie, 1, wxEXPAND)
 
-        self.ie.LoadUrl(self.current)
+        self.ie.Navigate(self.current)
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
@@ -82,22 +83,23 @@ class TestPanel(wxWindow):
     def OnSize(self, evt):
         self.Layout()
 
+
     def OnLocationSelect(self, evt):
         url = self.location.GetStringSelection()
         self.log.write('OnLocationSelect: %s\n' % url)
-        self.ie.LoadUrl(url)
+        self.ie.Navigate(url)
 
     def OnLocationKey(self, evt):
         if evt.KeyCode() == WXK_RETURN:
             URL = self.location.GetValue()
             self.location.Append(URL)
-            self.ie.LoadUrl(URL)
+            self.ie.Navigate(URL)
         else:
             evt.Skip()
 
+
     def IgnoreReturn(self, evt):
-        print 'IgnoreReturn'
-        if evt.KeyCode() != WXK_RETURN:
+        if evt.GetKeyCode() != WXK_RETURN:
             evt.Skip()
 
     def OnOpenButton(self, event):
@@ -107,7 +109,7 @@ class TestPanel(wxWindow):
         dlg.CentreOnParent()
         if dlg.ShowModal() == wxID_OK:
             self.current = dlg.GetValue()
-            self.ie.LoadUrl(self.current)
+            self.ie.Navigate(self.current)
         dlg.Destroy()
 
     def OnHomeButton(self, event):
@@ -132,7 +134,7 @@ class TestPanel(wxWindow):
 
     def logEvt(self, name, event):
         self.log.write('%s: %s\n' %
-                       (name, (event.GetLong1(), event.GetLong2(), event.GetText())))
+                       (name, (event.GetLong1(), event.GetLong2(), event.GetText1())))
 
     def OnBeforeNavigate2(self, evt):
         self.logEvt('OnBeforeNavigate2', evt)
@@ -143,18 +145,18 @@ class TestPanel(wxWindow):
 
     def OnDocumentComplete(self, evt):
         self.logEvt('OnDocumentComplete', evt)
-        self.current = evt.GetText()
+        self.current = evt.GetText1()
         self.location.SetValue(self.current)
 
     def OnTitleChange(self, evt):
         self.logEvt('OnTitleChange', evt)
         if self.frame:
-            self.frame.SetTitle(self.titleBase + ' -- ' + evt.GetText())
+            self.frame.SetTitle(self.titleBase + ' -- ' + evt.GetText1())
 
     def OnStatusTextChange(self, evt):
         self.logEvt('OnStatusTextChange', evt)
         if self.frame:
-            self.frame.SetStatusText(evt.GetText())
+            self.frame.SetStatusText(evt.GetText1())
 
 
 #----------------------------------------------------------------------
