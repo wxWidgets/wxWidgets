@@ -237,39 +237,6 @@ void wxApp::Exit()
     wxAppConsole::Exit();
 }
 
-int wxApp::MainLoop()
-{
-    [m_cocoaApp run];
-    return 0;
-}
-
-void wxApp::ExitMainLoop()
-{
-    wxLogDebug("wxApp::ExitMailLoop m_isIdle=%d, isRunning=%d",(int)m_isIdle,(int)[m_cocoaApp isRunning]);
-//    CocoaInstallRequestedIdleHandler();
-//    if(m_isIdle)
-//        [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaApp argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode, NSModalPanelRunLoopMode, NSEventTrackingRunLoopMode,*/ nil] ];
-// actually.. we WANT the idle event
-// or not
-#if 0
-    if(!m_isIdle)
-        [[ NSRunLoop currentRunLoop ] cancelPerformSelector:@selector(doIdle:) target:m_cocoaApp argument:NULL];
-#endif
-    [m_cocoaApp stop: m_cocoaApp];
-}
-
-// Is a message/event pending?
-bool wxApp::Pending()
-{
-    return 0;
-}
-
-// Dispatch a message.
-bool wxApp::Dispatch()
-{
-    return true;
-}
-
 // Yield to other processes
 bool wxApp::Yield(bool onlyIfNeeded)
 {

@@ -46,11 +46,6 @@ protected:
 // ------------------------------------------------------------------------
 public:
     // Implement wxAppBase pure virtuals
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
-    virtual bool Pending();
-    virtual bool Dispatch();
-
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
