@@ -119,6 +119,7 @@ datstrm.cpp	C	B
 db.cpp	C	32,B
 dbtable.cpp	C	32,B
 dcbase.cpp	C
+dircmn.cpp	C	B
 dlgcmn.cpp	C
 dobjcmn.cpp	C
 dndcmn.cpp	C

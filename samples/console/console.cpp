@@ -36,10 +36,10 @@
 // what to test (in alphabetic order)?
 
 //#define TEST_ARRAYS
-#define TEST_CHARSET
+//#define TEST_CHARSET
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
-//#define TEST_DIR
+#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
@@ -206,6 +206,16 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
 
 #include <wx/dir.h>
 
+#ifdef __UNIX__
+    static const wxChar *ROOTDIR = _T("/");
+    static const wxChar *TESTDIR = _T("/usr");
+#elif defined(__WXMSW__)
+    static const wxChar *ROOTDIR = _T("c:\\");
+    static const wxChar *TESTDIR = _T("d:\\");
+#else
+    #error "don't know where the root directory is"
+#endif
+
 static void TestDirEnumHelper(wxDir& dir,
                               int flags = wxDIR_DEFAULT,
                               const wxString& filespec = wxEmptyString)
@@ -228,6 +238,8 @@ static void TestDirEnumHelper(wxDir& dir,
 
 static void TestDirEnum()
 {
+    puts("*** Testing wxDir::GetFirst/GetNext ***");
+
     wxDir dir(wxGetCwd());
 
     puts("Enumerating everything in current directory:");
@@ -248,13 +260,7 @@ static void TestDirEnum()
     puts("Enumerating files including hidden in current directory:");
     TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
 
-#ifdef __UNIX__
-    dir.Open("/");
-#elif defined(__WXMSW__)
-    dir.Open("c:\\");
-#else
-    #error "don't know where the root directory is"
-#endif
+    dir.Open(ROOTDIR);
 
     puts("Enumerating everything in root directory:");
     TestDirEnumHelper(dir, wxDIR_DEFAULT);
@@ -271,6 +277,55 @@ static void TestDirEnum()
     puts("Enumerating files in non existing directory:");
     wxDir dirNo("nosuchdir");
     TestDirEnumHelper(dirNo);
+}
+
+class DirPrintTraverser : public wxDirTraverser
+{
+public:
+    virtual wxDirTraverseResult OnFile(const wxString& filename)
+    {
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir(const wxString& dirname)
+    {
+        wxString path, name, ext;
+        wxSplitPath(dirname, &path, &name, &ext);
+
+        if ( !ext.empty() )
+            name << _T('.') << ext;
+
+        wxString indent;
+        for ( const wxChar *p = path.c_str(); *p; p++ )
+        {
+            if ( wxIsPathSeparator(*p) )
+                indent += _T("    ");
+        }
+
+        printf("%s%s\n", indent.c_str(), name.c_str());
+
+        return wxDIR_CONTINUE;
+    }
+};
+
+static void TestDirTraverse()
+{
+    puts("*** Testing wxDir::Traverse() ***");
+
+    // enum all files
+    wxArrayString files;
+    size_t n = wxDir::GetAllFiles(TESTDIR, &files);
+    printf("There are %u files under '%s'\n", n, TESTDIR);
+    if ( n > 1 )
+    {
+        printf("First one is '%s'\n", files[0u]);
+        printf(" last one is '%s'\n", files[n - 1]);
+    }
+
+    // enum again with custom traverser
+    wxDir dir(TESTDIR);
+    DirPrintTraverser traverser;
+    dir.Traverse(traverser, _T(""), wxDIR_DIRS | wxDIR_HIDDEN);
 }
 
 #endif // TEST_DIR
@@ -4601,7 +4656,9 @@ int main(int argc, char **argv)
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
-    TestDirEnum();
+    if ( 0 )
+        TestDirEnum();
+    TestDirTraverse();
 #endif // TEST_DIR
 
 #ifdef TEST_DLLLOADER

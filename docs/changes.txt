@@ -8,14 +8,15 @@ wxBase:
 
 - fixed problem with wxURL when using static version of the library
 - wxZipFSHandler::FindFirst() and FindNext() now correctly list directories
-- wxMimeTypesManager now can create file associations too
+- wxMimeTypesManager now can create file associations too (Chris Elliott)
 - wxCopyFile() respects the file permissions (Roland Scholz)
 - wxFTP::GetFileSize() added (Søren Erland Vestø)
 - wxDateTime::IsSameDate() bug fixed
 - wxTimeSpan::Format() now behaves more as expected, see docs
-- wxLocale now provides much more convenient API for setting language and detecting
-  current system language. New API is more abstracted and truly cross-platform,
-  independent of underlying C runtime library.
+- wxLocale now provides much more convenient API for setting language and
+  detecting current system language. New API is more abstracted and truly
+  cross-platform, independent of underlying C runtime library.
+- wxDir::Traverse() added
 
 All (GUI):
 
@@ -25,7 +26,7 @@ All (GUI):
 - FindOrCreateBrush/Pen() bug fix for invalid colour values
 - new wxXPMHandler for reading and writing XPM images
 - added new (now recommended) API for conversion between wxImage and wxBitmap
-  (wxBitmap::ConvertToImage() and wxBitmap::wxBitmap(wxImage&) instead of 
+  (wxBitmap::ConvertToImage() and wxBitmap::wxBitmap(wxImage&) instead of
   wxImage methods and ctor)
 
 wxMSW:
@@ -34,7 +35,7 @@ wxMSW:
 - fixed bug in MDI children flags (mis)handling
 - it is possible to compile wxCHMHelpController with other compilers than VisualC++
   now and hhctrl.ocx is loaded at runtime.
-  
+
 wxGTK:
 
 - added support for wchar_t (wxUSE_WCHAR_T) under Unix
@@ -238,7 +239,7 @@ wxHTML:
 
 - almost complete rewrite of wxHtmlHelpController,
   including faster search, bookmarks, printing, setup dialog
-  and cross-platform binary compatible .cached files for faster 
+  and cross-platform binary compatible .cached files for faster
   loading of large helpbooks, case insensitive search
   splitted into 3 parts: wxHtmlHelpData, Frame and Controller
 - added support for charsets and <meta> tag
