@@ -57,8 +57,13 @@ static void GetGtkStyle(long style,
 
     if ( style & wxTB_TEXT )
     {
-        *gtkStyle = style & wxTB_NOICONS ? GTK_TOOLBAR_TEXT : 
-            ( style & wxTB_HORZ_LAYOUT ? GTK_TOOLBAR_BOTH_HORIZ: GTK_TOOLBAR_BOTH );
+        *gtkStyle = style & wxTB_NOICONS
+                        ? GTK_TOOLBAR_TEXT
+                        : (
+#ifdef __WXGTK20__
+                          style & wxTB_HORZ_LAYOUT ? GTK_TOOLBAR_BOTH_HORIZ :
+#endif // __WXGTK20__
+                          GTK_TOOLBAR_BOTH);
     }
     else // no text, hence we must have the icons or what would we show?
     {
@@ -279,7 +284,7 @@ bool wxToolBar::Create( wxWindow *parent,
 #ifdef __WXGTK20__
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     GtkSetStyle();
-    
+
     // Doesn't work this way.
     // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
     // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
@@ -474,7 +479,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                     return FALSE;
                 }
-                
+
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
                                     "enter_notify_event",
                                     GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
