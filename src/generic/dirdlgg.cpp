@@ -173,8 +173,8 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
  :
   wxTreeCtrl( parent, id, pos, size, style, wxDefaultValidator, name )
 {
- #ifdef __WXMSW__
-   m_imageListNormal = new wxImageList(16, 16, TRUE);
+ #ifndef __WXMSW__
+    m_imageListNormal = new wxImageList(16, 16, TRUE);
     m_imageListNormal->Add(wxICON(icon1));
     m_imageListNormal->Add(wxICON(icon2));
     SetImageList(m_imageListNormal);
