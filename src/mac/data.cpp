@@ -21,9 +21,6 @@
 
 #define _MAXPATHLEN 500
 
-// Useful buffer, initialized in CommonInit
-char *wxBuffer = NULL;
-
 // Windows List
 wxWindowList wxTopLevelWindows;
 
