@@ -431,6 +431,7 @@ wxString wxFileSystem::URLToNativePath( const wxString& url )
 		path = path.Mid(7) ;
 	}
 
+/*
 	// file urls either start with a forward slash (local harddisk),
     // otherwise they have a servername/sharename notation,
     // which only exists on msw and corresponds to a unc
@@ -446,6 +447,8 @@ wxString wxFileSystem::URLToNativePath( const wxString& url )
 		path = wxT("\\\\") + path ;
 	}
 #endif
+*/
+
 	path.Replace(g_unixPathString, g_nativePathString) ;
 
 	return path ;
@@ -455,6 +458,8 @@ wxString wxFileSystem::URLToNativePath( const wxString& url )
 wxString wxFileSystem::NativePathToURL( const wxString& path ) 
 {
 	wxString url = path ;
+
+/*
 #ifdef __WXMSW__
 	// unc notation
 	if ( url.Find(wxT("\\\\")) == 0 ) 
@@ -466,6 +471,8 @@ wxString wxFileSystem::NativePathToURL( const wxString& path )
 	{
 		url = wxT("/") + url ;
 	}
+*/
+
 	url.Replace(g_nativePathString, g_unixPathString) ;
 	url = wxT("file://") + url ;
 	return url ;
