@@ -1221,12 +1221,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 #ifdef __WXDEBUG__
 
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
+void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
 {
     // While the GUI isn't working that well, just print out the
     // message.
 #if 1
-    wxAppBase::OnAssert(file, line, msg);
+    wxAppBase::OnAssert(file, line, cond, msg);
 #else
     wxString msg2;
     msg2.Printf("At file %s:%d: %s", file, line, msg);

@@ -75,7 +75,7 @@ public:
     virtual bool ProcessXEvent(WXEvent* event);
     
 #ifdef __WXDEBUG__
-    virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
+    virtual void OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg);
 #endif // __WXDEBUG__
     
 protected:
