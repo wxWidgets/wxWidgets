@@ -1197,7 +1197,7 @@ bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
                 // FIXME: 6 is hardcoded separator line height...
                 //h += 6;
                 if (HasFlag(wxTB_NODIVIDER))
-                    h += 3;
+                    h += 4;
                 else
                     h += 6;
                 h *= m_maxRows;
