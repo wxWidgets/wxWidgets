@@ -892,6 +892,9 @@ public:
     MemoryCriticalSection() {
         memSectionOk = true;
     }
+    ~MemoryCriticalSection() {
+        memSectionOk = false;
+    }
 };
 
 class MemoryCriticalSectionLocker
@@ -910,7 +913,7 @@ private:
     bool m_locked;
 };
 
-    static MemoryCriticalSection memLocker;
+static MemoryCriticalSection memLocker;
 
 #endif
 
