@@ -1,7 +1,10 @@
-#include <Types.r>
-
-#if UNIVERSAL_INTERFACES_VERSION > 0x320
-	#include <ControlDefinitions.r>
+#ifdef __UNIX__
+  #include <Carbon.r>
+#else
+  #include <Types.r>
+  #if UNIVERSAL_INTERFACES_VERSION > 0x320
+    #include <ControlDefinitions.r>
+  #endif
 #endif
 
 #define kMacOKAlertResourceID 128
