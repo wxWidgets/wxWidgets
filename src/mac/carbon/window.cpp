@@ -1741,7 +1741,9 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
     {
         RgnHandle update = NewRgn() ;
         SetRectRgn( update , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
-        SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;        
+        SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;
+        wxPoint origin = GetClientAreaOrigin() ;
+        OffsetRgn( update, origin.x , origin.y ) ;        
         HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , update , true ) ;
     }
 #else
