@@ -409,6 +409,7 @@ ALL_HEADERS = \
 		imagtiff.h \
 		imagxpm.h \
 		intl.h \
+		iosfwrap.h \
 		ioswrap.h \
 		ipc.h \
 		ipcbase.h \

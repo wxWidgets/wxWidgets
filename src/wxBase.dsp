@@ -817,6 +817,10 @@ SOURCE=..\include\wx\intl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\iosfwrap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\ioswrap.h
 # End Source File
 # Begin Source File
