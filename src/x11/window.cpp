@@ -227,7 +227,7 @@ void wxWindowX11::SetFocus()
 
     if (wxWindowIsVisible(xwindow))
     {
-        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+        // XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
         m_needsInputFocus = FALSE;
     }
     else
@@ -251,6 +251,19 @@ wxWindow *wxWindowBase::FindFocus()
     }
 
     return NULL;
+}
+
+wxWindow *wxWindowX11::GetFocusWidget()
+{
+   wxWindow *win = (wxWindow*) this;
+   while (!win->IsTopLevel())
+   {
+       win = win->GetParent();
+       if (!win)
+           return (wxWindow*) NULL;
+   }
+   
+   return win;
 }
 
 // Enabling/disabling handled by event loop, and not sending events
@@ -460,6 +473,29 @@ void wxWindowX11::WarpPointer (int x, int y)
 // Does a physical scroll
 void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    // No scrolling requested.
+    if ((dx == 0) && (dy == 0)) return;
+    
+    if (!m_updateRegion.IsEmpty())
+    {
+        m_updateRegion.Offset( dx, dy );
+        
+        int cw = 0;
+        int ch = 0;
+        GetSize( &cw, &ch );  // GetClientSize() ??
+        m_updateRegion.Intersect( 0, 0, cw, ch );
+    }
+    
+    if (!m_clearRegion.IsEmpty())
+    {
+        m_clearRegion.Offset( dx, dy );
+        
+        int cw = 0;
+        int ch = 0;
+        GetSize( &cw, &ch );  // GetClientSize() ??
+        m_clearRegion.Intersect( 0, 0, cw, ch );
+    }
+    
     Window xwindow = (Window) GetMainWindow();
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
