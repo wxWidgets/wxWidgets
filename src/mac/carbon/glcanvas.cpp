@@ -273,12 +273,7 @@ void wxGLCanvas::MacUpdateView()
   {
     UpdateContext();
     m_glContext->SetCurrent();
-
     SetViewport();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 15.0 );
-    glMatrixMode(GL_MODELVIEW);
   }
 }
 

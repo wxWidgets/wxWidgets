@@ -426,19 +426,6 @@ void wxGLCanvas::SwapBuffers()
 
 void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    int width, height;
-    GetClientSize( &width, &height );
-    
-    if (m_glContext && GTK_WIDGET_REALIZED(m_glWidget) )
-    {
-        SetCurrent(); 
-	
-        glViewport(0, 0, (GLint)width, (GLint)height );
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 15.0 );
-        glMatrixMode(GL_MODELVIEW);
-    }
 }
 
 void wxGLCanvas::SetCurrent()
