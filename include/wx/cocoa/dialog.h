@@ -79,7 +79,7 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    bool Show(bool show);
+    bool Show(bool show = true);
 
     void SetModal(bool flag);
     virtual bool IsModal() const;
