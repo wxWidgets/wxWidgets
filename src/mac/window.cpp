@@ -1072,6 +1072,16 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     }
 }
 
+void wxWindowMac::RemoveChild( wxWindowBase *child )
+{
+    if ( child == m_hScrollBar )
+        m_hScrollBar = NULL ;
+    if ( child == m_vScrollBar )
+        m_vScrollBar = NULL ;
+      
+    wxWindowBase::RemoveChild( child ) ;
+}
+
 // New function that will replace some of the above.
 void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh)
