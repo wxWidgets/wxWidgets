@@ -12,9 +12,8 @@ a) If using Microsoft Visual C++ 5.0 or 6.0
 
 Ensure that the command-line compiler and tools (including
 nmake) are installed and ready to run.  Depending on your
-installation there may be a batch file (named something like
-VCVARS32.BAT) that needs to be run to set correct environment
-varaibles and PATH entries.
+installation there may be a batch file (commonly named VCVARS32.BAT)
+that needs to be run to set correct environment variables and PATH entries.
 
 Continue with item c) below.
 
@@ -23,7 +22,7 @@ b) If using the MinGW or Cygwin compilers
 
 You can get MinGW from  http://www.mingw.org/
 
-Cygwin is available at  http://sources.redhat.com/cygwin/
+Cygwin is available at  http://www.cygwin.com/
 
 If you are using Cygwin or MinGW together with the MSYS environment, you
 can build the library using configure (see "Unix ports" and
@@ -31,7 +30,7 @@ can build the library using configure (see "Unix ports" and
 build wxWindows without configure using native makefile, but only with
 MinGW. Using Cygwin together with Windows makefile is no longer supported.
 
-If building with Mingw without configure:
+If building with MinGW without configure:
 
 -> Set your path so that it includes the directory
    where your compiler and tools reside
@@ -50,17 +49,18 @@ If using configure, Unix instructions apply.
 
 c) Build instructions
 
--> Assumming that you installed the wxWindows sources
-   into c:\wxWin
--> Copy c:\wxWin\include\wx\msw\setup0.h
-   to   c:\wxWin\include\wx\msw\setup.h
--> Edit c:\wxWin\include\wx\msw\setup.h to choose
+Assumming that you installed the wxWindows sources
+into c:\wxWindows:
+
+-> Copy c:\wxWindows\include\wx\msw\setup0.h
+   to   c:\wxWindows\include\wx\msw\setup.h
+-> Edit c:\wxWindows\include\wx\msw\setup.h to choose
    the features you would like to compile wxWindows with[out].
 
    and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
  
--> type: cd c:\wxWin\build\win32
+-> type: cd c:\wxWindows\build\msw
 -> type: make -f makefile.gcc  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
 etc.
@@ -70,9 +70,9 @@ etc.
 d) Borland (including free command line tools)
    Download tools from http://www.borland.com/downloads/
    
-   See docs/msw/install.txt for details; in brief
+   See docs/msw/install.txt for details; in brief:
 
--> type cd %WXWIN%\build\win32
+-> type cd c:\wxWindows\build\msw
 -> type make -f makefile.bcc
 
 You can customize many things in the build process, detailed description is
@@ -92,7 +92,7 @@ GNU autoconf package (version > 2.54) installed
 on your system and type run "autoconf" in the base
 directory (or run the autogen.sh script in the same
 directory, which just calls autoconf). Note that you usually don't
-need to do this because configure is included in cVS.
+need to do this because configure is included in CVS.
 
 Set WXWIN environment variable to the base directory such
 as ~/wxWindows (this is actually not really needed).
@@ -162,6 +162,7 @@ or type: ../configure
 
 VI) OS/2
 ----------------------------------------
+No notes.
 
 VII) Unix->Windows cross-compiling using configure
 --------------------------------------------------
