@@ -25,6 +25,8 @@
 #define XtParent XTPARENT
 #endif
 
+#include "wx/defs.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream.h>
