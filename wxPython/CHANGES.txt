@@ -8,6 +8,45 @@ Added missing wxRect methods
 
 Add OOR support for wxApp objects too.
 
+Added wxCursorFromImage, which works on wxMSW and wxGTK so far.
+
+All platforms now send EVT_DESTROY_WINDOW.  Be warned that at the time
+the event is sent the window is in the process of being deconstructed,
+and so calling some (most?) methods of the window itself may cause
+problems.
+
+Fixed SF Bug #689481, a method in the OGL wrappers was using the wrong
+return type.
+
+Fixed SF Bug #689958, an endless loop in printout.py.
+
+Added EVT_WINDOW_CREATE_ID and EVT_WINDOW_DESTROY_ID so these events
+can be associated with a specific window ID and more easily caught by
+the parent window.
+
+Fixed copy-paste error in wxListCtrl.GetFirstSelected.
+
+Added missing Init method (and an overloading wrapper) to wxLocale
+wrapper.
+
+Added a wxBitmap.SetMaskColour convenience method.
+
+Changed how the dynamic event tables (used for all Python wx classes,
+C++ wx classes typically use static event tables) are searched such
+that they behave from a Python perspective more like the static tables
+in C++.  Namely that if there are identical event bindings in a base
+Python class and a derived Python class that the one in the derived
+class will be found first and that if Skip is called that the one in
+the base class will still be found instead of skipping directly to the
+static stable in the C++ class.
+
+Switched to using True/False in the wxPython lib and demo instead of
+true/false or TRUE/FALSE to prepare for the new boolean type and
+constants being added to Python.  Added code to wx.py to test for the
+existence of the new constants and to create suitable values if not
+present.
+
+
 
 
 2.4.0.2
