@@ -31,6 +31,7 @@
 #include <wx/toolbar.h>
 #include <wx/log.h>
 #include <wx/image.h>
+#include <wx/spinctrl.h>
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -298,12 +299,15 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO);
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, "", wxDefaultPosition, wxSize(200,-1) );
         combo->Append("This");
         combo->Append("is a");
         combo->Append("combobox");
         combo->Append("in a");
         combo->Append("toolbar");
+/*
+        wxTextCtrl *combo = new wxTextCtrl( toolBar, -1, "", wxDefaultPosition, wxSize(80,-1) );
+*/
         toolBar->AddControl(combo);
     }
 #endif // toolbars which don't support controls

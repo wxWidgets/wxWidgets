@@ -141,35 +141,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
     
     wxToolBar *tb = (wxToolBar *)tool->GetToolBar();
     
-#if (GTK_MINOR_VERSION == 0)
-    /* we grey-out the tip text of disabled tool in GTK 1.0 */
-    if (tool->IsEnabled())
-    {
-        if (tb->m_fg->red != 0)
-        {
-            tb->m_fg->red = 0;
-            tb->m_fg->green = 0;
-            tb->m_fg->blue = 0;
-            gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
-            
-            gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
-        }
-    }
-    else
-    {
-        if (tb->m_fg->red == 0)
-        {
-            tb->m_fg->red = 33000;
-            tb->m_fg->green = 33000;
-            tb->m_fg->blue = 33000;
-            gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
-            gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
-        }
-    }
-#endif
-    
-    /* emit the event */
-  
+    // emit the event
     tb->OnMouseEnter( tool->GetId() );
   
     return FALSE;
@@ -182,7 +154,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
                                     wxWindow* WXUNUSED(child) )
 {
-    /* we don't do anything here but pray */
+    // we don't do anything here
 }
 
 // ----------------------------------------------------------------------------
@@ -260,10 +232,8 @@ bool wxToolBar::Create( wxWindow *parent,
         gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
         gtk_widget_show( GTK_WIDGET(m_toolbar) );
 
-#if (GTK_MINOR_VERSION > 0)
         if (style & wxTB_FLAT)
             gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
-#endif
     }
     else
     {     
