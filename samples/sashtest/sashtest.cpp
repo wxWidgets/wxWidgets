@@ -146,7 +146,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   // Another window to the left of the client window
   win = new wxSashLayoutWindow(this, ID_WINDOW_LEFT2,
                                wxDefaultPosition, wxSize(200, 30),
-                               wxNO_BORDER | wxSW_3 | wxCLIP_CHILDREND);
+                               wxNO_BORDER | wxSW_3D | wxCLIP_CHILDREN);
   win->SetDefaultSize(wxSize(120, 1000));
   win->SetOrientation(wxLAYOUT_VERTICAL);
   win->SetAlignment(wxLAYOUT_LEFT);
