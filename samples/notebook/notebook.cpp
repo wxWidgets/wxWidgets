@@ -137,8 +137,7 @@ wxPanel *MyNotebook::CreateBigButtonPage()
 {
     wxPanel *panel = new wxPanel(this);
 
-    wxButton *buttonBig = new wxButton( panel, wxID_ANY, wxT("Maximized button"),
-        wxPoint(0, 0), wxSize(480, 360) );
+    wxButton *buttonBig = new wxButton(panel, wxID_ANY, wxT("Maximized button"));
 
     wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
     sizerPanel->Add(buttonBig, 1, wxEXPAND);
@@ -319,6 +318,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_panel->SetAutoLayout(true);
 
     m_sizerFrame->Fit(this);
+    m_sizerFrame->SetSizeHints(this);
 
     Centre(wxBOTH);
 
