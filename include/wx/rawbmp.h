@@ -251,7 +251,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
 {
     // NB: this is a template class even though it doesn't use its template
     //     parameter because otherwise wxPixelData couldn't compile
-    template <class PixelFormat>
+    template <class dummyPixelFormat>
     class WXDLLEXPORT wxPixelDataIn : public wxPixelDataBase
     {
         // the type of the class we're working with
