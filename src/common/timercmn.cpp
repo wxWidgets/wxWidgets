@@ -334,7 +334,7 @@ wxLongLong wxGetLocalTimeMillis()
         #pragma message("wxStopWatch will be up to second resolution!")
     #elif defined(__BORLANDC__)
         #pragma message "wxStopWatch will be up to second resolution!"
-    #elif
+    #else
         #warning "wxStopWatch will be up to second resolution!"
     #endif // compiler
 #endif
