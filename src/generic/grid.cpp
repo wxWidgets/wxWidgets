@@ -967,7 +967,7 @@ wxString wxGridCellNumberEditor::GetValue() const
 
   if( HasRange() )
   {
-    int value = Spin()->GetValue();
+    long value = Spin()->GetValue();
     s.Printf(wxT("%ld"), value);
   }
   else
