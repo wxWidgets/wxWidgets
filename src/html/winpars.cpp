@@ -59,7 +59,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
                 for (k = 0; k < 2; k++)
                     for (l = 0; l < 2; l++)
                         for (m = 0; m < 7; m++)
-                                    {
+                        {
                             m_FontsTable[i][j][k][l][m] = NULL;
                             m_FontsFacesTable[i][j][k][l][m] = wxEmptyString;
                             m_FontsEncTable[i][j][k][l][m] = wxFONTENCODING_DEFAULT;
@@ -94,7 +94,7 @@ wxHtmlWinParser::~wxHtmlWinParser()
             for (k = 0; k < 2; k++)
                 for (l = 0; l < 2; l++)
                     for (m = 0; m < 7; m++)
-                            {
+                    {
                         if (m_FontsTable[i][j][k][l][m] != NULL)
                             delete m_FontsTable[i][j][k][l][m];
                     }
@@ -133,7 +133,7 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const 
                 for (l = 0; l < 2; l++)
                     for (m = 0; m < 7; m++) {
                         if (m_FontsTable[i][j][k][l][m] != NULL)
-                                    {
+                        {
                             delete m_FontsTable[i][j][k][l][m];
                             m_FontsTable[i][j][k][l][m] = NULL;
                         }
@@ -196,8 +196,9 @@ wxObject* wxHtmlWinParser::GetProduct()
 void wxHtmlWinParser::AddText(const wxChar* txt)
 {
     wxHtmlCell *c;
-    int i = 0, x;
-    size_t lng = wxStrlen(txt);
+    size_t i = 0,
+           x,
+           lng = wxStrlen(txt);
     register wxChar d;
     int templen = 0;
 
@@ -221,7 +222,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         x = 0;
         d = temp[templen++] = txt[i];
         if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
-            {
+        {
             i++, x++;
             while ((i < lng) && ((txt[i] == wxT('\n')) || (txt[i] == wxT('\r')) ||
                                  (txt[i] == wxT(' ')) || (txt[i] == wxT('\t')))) i++, x++;
@@ -229,7 +230,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         else i++;
 
         if (x)
-            {
+        {
             temp[templen-1] = wxT(' ');
             temp[templen] = 0;
             templen = 0;
