@@ -133,7 +133,10 @@ bool wxNotebook::Create(wxWindow *parent,
   // style
   m_windowStyle = style | wxTAB_TRAVERSAL;
 
-  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS | WS_CLIPCHILDREN;
+  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
+
+  if (m_windowStyle & wxCLIP_CHILDREN)
+    tabStyle |= WS_CLIPCHILDREN;
   if ( m_windowStyle & wxTC_MULTILINE )
     tabStyle |= TCS_MULTILINE;
   if ( m_windowStyle & wxBORDER )
