@@ -670,7 +670,8 @@ used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
 
 \func{void}{SetPalette}{\param{const wxPalette\&}{ palette}}
 
-Associates a palette with the image. Currently, the palette is not used.
+Associates a palette with the image. The palette may be used in ConvertToBitmap (MSW only at present)
+or in file save operations (none as yet).
 
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 
