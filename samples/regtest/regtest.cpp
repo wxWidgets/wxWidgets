@@ -576,8 +576,14 @@ void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 bool RegTreeCtrl::TreeNode::OnExpand()
 {
   // remove dummy item
-  if ( m_lDummy != 0 )
+  if ( m_lDummy != 0 ) {
     m_pTree->DeleteItem(m_lDummy);
+    m_lDummy = 0;
+  }
+  else {
+    // we've been already expanded
+    return TRUE;
+  }
 
   if ( IsRoot() ) {
     // we're the root key
@@ -595,7 +601,6 @@ bool RegTreeCtrl::TreeNode::OnExpand()
   }
 
   if ( !m_pKey->Open() ) {
-    m_lDummy = 0;
     wxLogError("The key '%s' can't be opened.", FullName());
     return false;
   }
