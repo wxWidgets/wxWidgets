@@ -67,7 +67,7 @@ public:
     bool CanGetPageSource();
     wxString GetPageSource();
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
-    
+
     //we need to resize the webview when the control size changes
     void OnSize(wxSizeEvent &event);
 protected:
@@ -79,7 +79,7 @@ private:
     wxWindowID m_windowID;
     wxString m_currentURL;
     wxString m_pageTitle;
-    void* m_webView;
+    objc_object* m_webView;
     //It should be WebView, but WebView is Cocoa only, so any class which included
     //this header would have to link to Cocoa, so for now use void* instead.
 };

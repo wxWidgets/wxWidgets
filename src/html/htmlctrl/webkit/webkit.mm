@@ -200,17 +200,17 @@ bool wxWebKitCtrl::CanGoForward(){
 bool wxWebKitCtrl::GoBack(){
     if ( !m_webView )
         return false;
-        
-    [m_webView goBack];
-    return true;
+    
+    bool result = [(WebView*)m_webView goBack];
+    return result;
 }
 
 bool wxWebKitCtrl::GoForward(){ 
     if ( !m_webView )
         return false;
         
-    [m_webView goForward];
-    return true;
+    bool result = [(WebView*)m_webView goForward];
+    return result;
 }
 
 void wxWebKitCtrl::Reload(){ 
@@ -236,14 +236,13 @@ bool wxWebKitCtrl::CanGetPageSource(){
 }
 
 wxString wxWebKitCtrl::GetPageSource(){
-    if ( !m_webView )
-        return wxT("");
     
     if (CanGetPageSource()){
         WebDataSource* dataSource = [[m_webView mainFrame] dataSource];
         return wxStringWithNSString( [[dataSource representation] documentSource] );
     }
     
+    return wxT("");
 }
 
 void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
@@ -263,7 +262,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     wxWindow* parent = GetParent();
     bool inNotebook = false;
     int x = 0;
-    int y = 18; 
+    int y = 18;
     while(parent != NULL)
     {
         // keep adding the position until we hit the notebook
