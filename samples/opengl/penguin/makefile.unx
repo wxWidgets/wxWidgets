@@ -7,13 +7,17 @@
 #
 # Makefile for penguin example (UNIX).
 
+OPENGL_LIBS=-lGL -lGLU
+#if you have old Mesa, try this:
+#OPENGL_LIBS=-lMesaGL -lMesaGLU
+
 CPP = g++
 CC = gcc
 
 Penguin: penguin.o trackball.o lw.o
 	$(CPP) -o Penguin \
 	penguin.o trackball.o lw.o \
-	`wx-config --libs` -lwx_gtk_gl -lMesaGL -lMesaGLU
+	`wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
 
 penguin.o: penguin.cpp
 	$(CPP) `wx-config --cflags` -I../../gtk -c penguin.cpp

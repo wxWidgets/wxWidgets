@@ -9,6 +9,10 @@
 #
 # Makefile for isosurf example (UNIX).
 
+OPENGL_LIBS=-lGL -lGLU
+#if you have old Mesa, try this:
+#OPENGL_LIBS=-lMesaGL -lMesaGLU
+
 PROGRAM=isosurf
 
 CC = gcc
@@ -25,7 +29,7 @@ OBJECTS = $(PROGRAM).o
 all: $(PROGRAM) isosurf.dat
 
 $(PROGRAM):	$(OBJECTS)
-	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl -lMesaGL -lMesaGLU
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
 
 clean: 
 	rm -f *.o $(PROGRAM)
