@@ -450,6 +450,7 @@ public:
     void Check(int itemid, bool check);
     bool IsChecked(int itemid) const;
     bool IsEnabled(int itemid) const;
+    virtual bool IsEnabled() const { return wxWindow::IsEnabled(); }
 
     void SetLabel(int itemid, const wxString &label);
     wxString GetLabel(int itemid) const;
