@@ -308,6 +308,10 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
         button = kEventMouseButtonSecondary ;
     }
     
+    // otherwise we report double clicks by connecting a left click with a ctrl-left click
+    if ( clickCount > 1 && button != lastButton )
+        clickCount = 1 ;
+        
     // we must make sure that our synthetic 'right' button corresponds in
     // mouse down, moved and mouse up, and does not deliver a right down and left up
     
