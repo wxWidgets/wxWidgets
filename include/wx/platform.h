@@ -14,6 +14,21 @@
 #ifndef _WX_PLATFORM_H_
 #define _WX_PLATFORM_H_
 
+
+/*
+    Codewarrior doesn't define any Windows symbols until some headers
+    are included
+*/
+#if __MWERKS__
+    #include <stddef.h>
+    #if defined(WIN32) || defined(_WIN32)
+        #ifndef WINVER
+            #define WINVER  0x0400
+        #endif
+    #endif
+#endif
+
+
 /*
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
