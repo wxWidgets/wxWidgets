@@ -99,7 +99,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
             }
             break;
 
-#if 0
+#if 1
         case WM_GETDLGCODE:
             {
                 wxCHECK_MSG( win, 0, _T("should have a parent") );
