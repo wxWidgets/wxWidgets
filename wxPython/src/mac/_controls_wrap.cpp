@@ -15739,6 +15739,32 @@ static PyObject *_wrap_Listbook_IsVertical(PyObject *, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_Listbook_GetListView(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxListbook *arg1 = (wxListbook *) 0 ;
+    wxListView *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Listbook_GetListView",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxListbook,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxListView *)(arg1)->GetListView();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxListView, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Listbook_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -31681,6 +31707,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PreListbook", (PyCFunction) _wrap_new_PreListbook, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Listbook_Create", (PyCFunction) _wrap_Listbook_Create, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Listbook_IsVertical", (PyCFunction) _wrap_Listbook_IsVertical, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Listbook_GetListView", (PyCFunction) _wrap_Listbook_GetListView, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Listbook_swigregister", Listbook_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_ListbookEvent", (PyCFunction) _wrap_new_ListbookEvent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListbookEvent_swigregister", ListbookEvent_swigregister, METH_VARARGS, NULL },
