@@ -2170,21 +2170,21 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         case WM_MOVING:
-			{
-				LPRECT pRect = (LPRECT)lParam;
-				wxRect rc;
-				rc.SetLeft(pRect->left);
-				rc.SetTop(pRect->top);
-				rc.SetRight(pRect->right);
-				rc.SetBottom(pRect->bottom);
-				processed = HandleMoving(rc);
-				if (processed) {
-					pRect->left = rc.GetLeft();
-					pRect->top = rc.GetTop();
-					pRect->right = rc.GetRight();
-					pRect->bottom = rc.GetBottom();
-				}
-			}
+            {
+                LPRECT pRect = (LPRECT)lParam;
+                wxRect rc;
+                rc.SetLeft(pRect->left);
+                rc.SetTop(pRect->top);
+                rc.SetRight(pRect->right);
+                rc.SetBottom(pRect->bottom);
+                processed = HandleMoving(rc);
+                if (processed) {
+                    pRect->left = rc.GetLeft();
+                    pRect->top = rc.GetTop();
+                    pRect->right = rc.GetRight();
+                    pRect->bottom = rc.GetBottom();
+                }
+            }
             break;
 
         case WM_SIZE:
@@ -2553,7 +2553,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_HOTKEY:
             processed = HandleHotKey((WORD)wParam, lParam);
             break;
-#endif
+#endif // wxUSE_HOTKEY
 
         case WM_HSCROLL:
         case WM_VSCROLL:
@@ -5421,49 +5421,56 @@ wxPoint wxGetMousePosition()
 }
 
 #if wxUSE_HOTKEY
-bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode)
+
+bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 {
     UINT win_modifiers=0;
-    if (modifiers & wxMOD_ALT)
-        win_modifiers|=MOD_ALT;
-    if (modifiers & wxMOD_SHIFT)
-        win_modifiers|=MOD_SHIFT;
-    if (modifiers & wxMOD_CONTROL)
-        win_modifiers|=MOD_CONTROL;
-    if (modifiers & wxMOD_WIN)
-        win_modifiers|=MOD_WIN;
+    if ( modifiers & wxMOD_ALT )
+        win_modifiers |= MOD_ALT;
+    if ( modifiers & wxMOD_SHIFT )
+        win_modifiers |= MOD_SHIFT;
+    if ( modifiers & wxMOD_CONTROL )
+        win_modifiers |= MOD_CONTROL;
+    if ( modifiers & wxMOD_WIN )
+        win_modifiers |= MOD_WIN;
 
-    return ::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, virtualKeyCode)!=FALSE;
+    if ( !::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, keycode) )
+    {
+        wxLogLastError(_T("RegisterHotKey"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
 {
-    return ::UnregisterHotKey(GetHwnd(), hotkeyId)!=FALSE;
+    if ( !::UnregisterHotKey(GetHwnd(), hotkeyId) )
+    {
+        wxLogLastError(_T("UnregisterHotKey"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 {
-    int hotkeyId=wParam;
-     int virtualKey=HIWORD(lParam);
-    int win_modifiers=LOWORD(lParam);
-    /*
-    wxHotkeyModifier modifiers=wxMOD_NONE;
-    if (win_modifiers & MOD_ALT)
-        modifiers|=wxMOD_ALT;
-    if (win_modifiers & MOD_SHIFT)
-        modifiers|=wxMOD_SHIFT;
-    if (win_modifiers & MOD_CONTROL)
-        modifiers|=wxMOD_CONTROL;
-    if (win_modifiers & MOD_WIN)
-        modifiers|=wxMOD_WIN;
-*/
+    int hotkeyId = wParam;
+    int virtualKey = HIWORD(lParam);
+    int win_modifiers = LOWORD(lParam);
+
     wxKeyEvent event(CreateKeyEvent(wxEVT_HOTKEY, virtualKey, wParam, lParam));
     event.SetId(hotkeyId);
     event.m_shiftDown = (win_modifiers & MOD_SHIFT) != 0;
     event.m_controlDown = (win_modifiers & MOD_CONTROL) != 0;
     event.m_altDown = (win_modifiers & MOD_ALT) != 0;
     event.m_metaDown = (win_modifiers & MOD_WIN) != 0;
-    return GetEventHandler()->ProcessEvent(event);    
+
+    return GetEventHandler()->ProcessEvent(event);
 }
-#endif
+
+#endif // wxUSE_HOTKEY
 

@@ -517,11 +517,16 @@ public:
     wxAcceleratorTable *GetAcceleratorTable()
         { return &m_acceleratorTable; }
 
-    // install and deinstall a system wide hotkey
-    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode);
-    virtual bool UnregisterHotKey(int hotkeyId);
-
 #endif // wxUSE_ACCEL
+
+#if wxUSE_HOTKEY
+    // hot keys (system wide accelerators)
+    // -----------------------------------
+
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int keycode);
+    virtual bool UnregisterHotKey(int hotkeyId);
+#endif // wxUSE_HOTKEY
+
 
     // dialog units translations
     // -------------------------

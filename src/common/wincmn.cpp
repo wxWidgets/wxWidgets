@@ -2107,18 +2107,23 @@ void wxWindowBase::ReleaseMouse()
 }
 
 #if wxUSE_HOTKEY
-bool wxWindowBase::RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode)
+
+bool
+wxWindowBase::RegisterHotKey(int WXUNUSED(hotkeyId),
+                             int WXUNUSED(modifiers),
+                             int WXUNUSED(keycode))
 {
     // not implemented
     return false;
 }
 
-bool wxWindowBase::UnregisterHotKey(int hotkeyId)
+bool wxWindowBase::UnregisterHotKey(int WXUNUSED(hotkeyId))
 {
     // not implemented
     return false;
 }
-#endif
+
+#endif // wxUSE_HOTKEY
 
 void wxWindowBase::SendDestroyEvent()
 {

@@ -177,11 +177,11 @@ public:
     wxWindow* GetWindowChild(wxWindowID id);
 #endif // __WXUNIVERSAL__
 
-#if wxUSE_ACCEL
+#if wxUSE_HOTKEY
     // install and deinstall a system wide hotkey
-    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int virtualKeyCode);
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers, int keycode);
     virtual bool UnregisterHotKey(int hotkeyId);
-#endif
+#endif // wxUSE_HOTKEY
 
     // implementation from now on
     // --------------------------
