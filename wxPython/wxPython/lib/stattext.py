@@ -26,7 +26,8 @@ class wxGenStaticText(wxPyControl):
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0,
                  name = "genstattext"):
-        wxPyControl.__init__(self, parent, ID, pos, size, style, wxDefaultValidator, name)
+        wxPyControl.__init__(self, parent, ID, pos, size, style|wxNO_BORDER,
+                             wxDefaultValidator, name)
 
         wxPyControl.SetLabel(self, label) # don't check wxST_NO_AUTORESIZE yet
         self.SetPosition(pos)
