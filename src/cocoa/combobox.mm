@@ -9,6 +9,10 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
+#if wxUSE_COMBOBOX
+
 #include "wx/app.h"
 #include "wx/combobox.h"
 #include "wx/log.h"
@@ -123,3 +127,4 @@ wxClientData* wxComboBox::DoGetItemClientObject(int) const
     return NULL;
 }
 
+#endif //wxUSE_COMBOBOX
