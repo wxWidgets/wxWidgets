@@ -48,6 +48,8 @@ toolkit.
 a) Using Visual C++ 6.0
 
    Simply open the src/wxUniv.dsw file in DevStudio and build it.
+   Then open the widgetsUniv.dsp file in samples/widgets to build
+   the widgets sample.
 
 b) Cygwin
 

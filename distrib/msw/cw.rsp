@@ -87,4 +87,7 @@ samples/widgets/*W7.xml
 samples/wizard/*W7.xml
 samples/wxtest/*W7.xml
 
+utils/dialoged/src/*.xml
+utils/helpview/src/*.xml
+utils/tex2rtf/src/*.xml
 

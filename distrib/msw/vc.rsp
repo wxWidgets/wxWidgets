@@ -283,6 +283,9 @@ utils/hhp2cached/hhp2cached.dsw
 utils/helpgen/src/HelpGenVC.dsp
 utils/helpgen/src/HelpGenVC.dsw
 
+utils/helpview/src/helpview.dsp
+utils/helpview/src/helpview.dsw
+
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw
 

@@ -462,7 +462,9 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
     {
         int image = m_images[n];
 
-#ifdef __WXMSW__    // FIXME
+        // Not needed now that wxGenericImageList is being
+        // used for wxUniversal under MSW
+#if 0 // def __WXMSW__    // FIXME
         int w, h;
         m_imageList->GetSize(n, w, h);
         bmp.Create(w, h);
