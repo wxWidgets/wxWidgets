@@ -7,10 +7,10 @@ LIBTARGET=$(WXDIR)\lib\regexd.lib
 !endif
 
 OBJECTS= \
-		regcomp.o \
-		regexec.o \
-		regerror.o \
-		regfree.o
+		regcomp.obj \
+		regexec.obj \
+		regerror.obj \
+		regfree.obj
 
 # Pull in standard variable definitions
 

@@ -16,10 +16,10 @@ WXLIB = $(WXDIR)\lib
 LIBTARGET   = $(WXLIB)\regex.lib
 
 OBJECTS= &
-		regcomp.o &
-		regexec.o &
-		regerror.o &
-		regfree.o
+		regcomp.obj &
+		regexec.obj &
+		regerror.obj &
+		regfree.obj
 
 all:        $(OBJECTS) $(LIBTARGET)
 
