@@ -371,11 +371,11 @@ all: @WX_ALL@
 	@$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME_GL) glcanvas.o $(EXTRALIBS)
 
-lib@WX_LIBRARY@-${VER_SUFFIX}.r: ./lib/lib@WX_LIBRARY@-${VER_SUFFIX}.rsrc
-	$(DEREZ) $^ $(DEREZFLAGS) > ./lib/$@
+./lib/lib@WX_LIBRARY@-${VER_SUFFIX}.r: ./lib/lib@WX_LIBRARY@-${VER_SUFFIX}.rsrc
+	$(DEREZ) $^ $(DEREZFLAGS) > $@
 
-lib@WX_LIBRARY@-${VER_SUFFIX}.rsrc: $(MACRESOURCES)
-	$(REZ) $(REZFLAGS) $^ -o ./lib/$@
+./lib/lib@WX_LIBRARY@-${VER_SUFFIX}.rsrc: $(MACRESOURCES)
+	$(REZ) $(REZFLAGS) $^ -o $@
 
 CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
