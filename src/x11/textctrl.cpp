@@ -249,6 +249,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     // We create an input handler since it might be useful
     CreateInputHandler(wxINP_HANDLER_TEXTCTRL);
     
+    MyAdjustScrollbars();
+    
     return TRUE;
 }
 
@@ -271,7 +273,7 @@ wxString wxTextCtrl::GetValue() const
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    m_modified = TRUE;
+    m_modified = FALSE;
 
     if ((GetWindowStyle() & wxTE_MULTILINE) == 0)
     {
