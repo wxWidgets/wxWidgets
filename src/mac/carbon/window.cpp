@@ -1856,6 +1856,13 @@ bool wxWindowMac::MacIsReallyHilited()
     return IsControlActive( (ControlRef) m_macControl ) ;
 }
 
+void wxWindowMac::MacFlashInvalidAreas() 
+{
+#if TARGET_API_MAC_OSX
+    HIViewFlashDirtyArea( (WindowRef) MacGetTopLevelWindowRef() ) ;
+#endif
+}
+
 //
 //
 //
@@ -2278,11 +2285,29 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         int width , height ;
         GetClientSize( &width , &height ) ;
 #if TARGET_API_MAC_OSX
-        HIRect scrollrect = CGRectMake( MacGetLeftBorderSize() , MacGetTopBorderSize() , width , height ) ;
+        // note there currently is a bug in OSX which makes inefficient refreshes in case an entire control
+        // area is scrolled, this does not occur if width and height are 2 pixels less, 
+        // TODO write optimal workaround
+        HIRect scrollrect = CGRectMake( MacGetLeftBorderSize() , MacGetTopBorderSize() , width , height ) ;       
         if ( rect ) 
         {
             HIRect scrollarea = CGRectMake( rect->x , rect->y , rect->width , rect->height) ;
             scrollrect = CGRectIntersection( scrollrect , scrollarea ) ;
+        }
+        if ( HIViewGetNeedsDisplay( (ControlRef) m_macControl ) )
+        {
+            // becuase HIViewScrollRect does not scroll the already invalidated area we have two options
+            // either immediate redraw or full invalidate
+#if 1
+            // is the better overall solution, as it does not slow down scrolling
+            HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ;
+#else
+            // this would be the preferred version for fast drawing controls       
+            if( UMAGetSystemVersion() < 0x1030 )
+                Update() ;
+            else
+                HIViewRender((ControlRef) m_macControl) ;
+#endif
         }
         HIViewScrollRect ( (ControlRef) m_macControl , &scrollrect , dx ,dy ) ;
 #else
@@ -2337,9 +2362,6 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             child->SetSize( x+dx, y+dy, w, h );	    	
         }        
     }
-    
-// TODO remove, was moved higher up    Update() ;
-
 }
 
 void wxWindowMac::MacOnScroll(wxScrollEvent &event )
