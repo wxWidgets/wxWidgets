@@ -119,23 +119,27 @@ public:
     wxLog();
 
     // Internal buffer.
-        // Allow replacement of the fixed size static buffer with
-        // a user allocated one.  Pass in NULL to restore the
-        // built in static buffer.
+
+    // Allow replacement of the fixed size static buffer with
+    // a user allocated one.  Pass in NULL to restore the
+    // built in static buffer.
     static wxChar *SetLogBuffer( wxChar *buf, size_t size = 0 );
 
     // these functions allow to completely disable all log messages
-        // is logging disabled now?
+
+    // is logging disabled now?
     static bool IsEnabled() { return ms_doLog; }
-        // change the flag state, return the previous one
-    static bool EnableLogging(bool doIt = TRUE)
-        { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
+
+    // change the flag state, return the previous one
+    static bool EnableLogging(bool doIt = true)
+    { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
 
     // static sink function - see DoLog() for function to overload in the
     // derived classes
     static void OnLog(wxLogLevel level, const wxChar *szString, time_t t)
     {
-        if ( IsEnabled() && ms_logLevel >= level ) {
+        if ( IsEnabled() && ms_logLevel >= level )
+        {
             wxLog *pLogger = GetActiveTarget();
             if ( pLogger )
                 pLogger->DoLog(level, szString, t);
@@ -143,12 +147,13 @@ public:
     }
 
     // message buffering
-        // flush shows all messages if they're not logged immediately (FILE
-        // and iostream logs don't need it, but wxGuiLog does to avoid showing
-        // 17 modal dialogs one after another)
+
+    // flush shows all messages if they're not logged immediately (FILE
+    // and iostream logs don't need it, but wxGuiLog does to avoid showing
+    // 17 modal dialogs one after another)
     virtual void Flush();
 
-        // flush the active target if any
+    // flush the active target if any
     static void FlushActive()
     {
         if ( !ms_suspendCount )
@@ -160,66 +165,77 @@ public:
     }
 
     // only one sink is active at each moment
-        // get current log target, will call wxApp::CreateLogTarget() to
-        // create one if none exists
+    // get current log target, will call wxApp::CreateLogTarget() to
+    // create one if none exists
     static wxLog *GetActiveTarget();
-        // change log target, pLogger may be NULL
+
+    // change log target, pLogger may be NULL
     static wxLog *SetActiveTarget(wxLog *pLogger);
 
-        // suspend the message flushing of the main target until the next call
-        // to Resume() - this is mainly for internal use (to prevent wxYield()
-        // from flashing the messages)
+    // suspend the message flushing of the main target until the next call
+    // to Resume() - this is mainly for internal use (to prevent wxYield()
+    // from flashing the messages)
     static void Suspend() { ms_suspendCount++; }
-        // must be called for each Suspend()!
+
+    // must be called for each Suspend()!
     static void Resume() { ms_suspendCount--; }
 
     // functions controlling the default wxLog behaviour
-        // verbose mode is activated by standard command-line '-verbose'
-        // option
-    static void SetVerbose(bool bVerbose = TRUE) { ms_bVerbose = bVerbose; }
+    // verbose mode is activated by standard command-line '-verbose'
+    // option
+    static void SetVerbose(bool bVerbose = true) { ms_bVerbose = bVerbose; }
 
-        // Set log level.  Log messages with level > logLevel will not be logged.
+    // Set log level.  Log messages with level > logLevel will not be logged.
     static void SetLogLevel(wxLogLevel logLevel) { ms_logLevel = logLevel; }
 
-        // should GetActiveTarget() try to create a new log object if the
-        // current is NULL?
+    // should GetActiveTarget() try to create a new log object if the
+    // current is NULL?
     static void DontCreateOnDemand();
 
-        // trace mask (see wxTraceXXX constants for details)
+    // trace mask (see wxTraceXXX constants for details)
     static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
-        // add string trace mask
+
+    // add string trace mask
     static void AddTraceMask(const wxString& str)
-        { ms_aTraceMasks.push_back(str); }
-        // add string trace mask
+    { ms_aTraceMasks.push_back(str); }
+
+    // add string trace mask
     static void RemoveTraceMask(const wxString& str);
-        // remove all string trace masks
+
+    // remove all string trace masks
     static void ClearTraceMasks();
-    	// get string trace masks
+
+    // get string trace masks
     static const wxArrayString &GetTraceMasks() { return ms_aTraceMasks; }
 
-        // sets the timestamp string: this is used as strftime() format string
-        // for the log targets which add time stamps to the messages - set it
-        // to NULL to disable time stamping completely.
+    // sets the timestamp string: this is used as strftime() format string
+    // for the log targets which add time stamps to the messages - set it
+    // to NULL to disable time stamping completely.
     static void SetTimestamp(const wxChar *ts) { ms_timestamp = ts; }
 
 
     // accessors
-        // gets the verbose status
+
+    // gets the verbose status
     static bool GetVerbose() { return ms_bVerbose; }
-        // get trace mask
+
+    // get trace mask
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
-        // is this trace mask in the list?
+
+    // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxChar *mask);
-        // return the current loglevel limit
+
+    // return the current loglevel limit
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
-        // get the current timestamp format string (may be NULL)
+    // get the current timestamp format string (may be NULL)
     static const wxChar *GetTimestamp() { return ms_timestamp; }
 
 
     // helpers
-        // put the time stamp into the string if ms_timestamp != NULL (don't
-        // change it otherwise)
+
+    // put the time stamp into the string if ms_timestamp != NULL (don't
+    // change it otherwise)
     static void TimeStamp(wxString *str);
 
     // make dtor virtual for all derived classes
@@ -227,15 +243,17 @@ public:
 
 
     // this method exists for backwards compatibility only, don't use
-    bool HasPendingMessages() const { return TRUE; }
+    bool HasPendingMessages() const { return true; }
 
 protected:
     // the logging functions that can be overriden
-        // default DoLog() prepends the time stamp and a prefix corresponding
-        // to the message to szString and then passes it to DoLogString()
+
+    // default DoLog() prepends the time stamp and a prefix corresponding
+    // to the message to szString and then passes it to DoLogString()
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
-        // default DoLogString does nothing but is not pure virtual because if
-        // you override DoLog() you might not need it at all
+
+    // default DoLogString does nothing but is not pure virtual because if
+    // you override DoLog() you might not need it at all
     virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:
@@ -243,9 +261,9 @@ private:
     // ----------------
 
     static wxLog      *ms_pLogger;      // currently active log sink
-    static bool        ms_doLog;        // FALSE => all logging disabled
+    static bool        ms_doLog;        // false => all logging disabled
     static bool        ms_bAutoCreate;  // create new log targets on demand?
-    static bool        ms_bVerbose;     // FALSE => ignore LogInfo messages
+    static bool        ms_bVerbose;     // false => ignore LogInfo messages
 
     static wxLogLevel  ms_logLevel;     // limit logging to levels <= ms_logLevel
 
@@ -321,7 +339,7 @@ protected:
 class WXDLLIMPEXP_BASE wxLogNull
 {
 public:
-    wxLogNull() : m_flagOld(wxLog::EnableLogging(FALSE)) { }
+    wxLogNull() : m_flagOld(wxLog::EnableLogging(false)) { }
     ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld); }
 
 private:
@@ -538,8 +556,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 
 #else   //!debug
-    inline void wxLogApiError(const wxChar *, long) { }
-    inline void wxLogLastError(const wxChar *) { }
+    #define wxLogApiError(api, rc) {}
+    #define wxLogLastError(api) {}
 #endif  //debug/!debug
 
 #endif  // _WX_LOG_H_

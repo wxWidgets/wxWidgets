@@ -196,7 +196,6 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 #endif
 
     wxButton *ok = (wxButton *) NULL;
-    wxButton *cancel = (wxButton *) NULL;
     wxButton *yes = (wxButton *) NULL;
     wxButton *no = (wxButton *) NULL;
 
@@ -238,7 +237,7 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 
     if (flags & wxCANCEL)
     {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
+        wxButton *cancel = new wxButton( this, wxID_CANCEL, _("Cancel"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         inner_rest->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
     }
 

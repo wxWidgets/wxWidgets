@@ -128,20 +128,20 @@ bool wxFrameBase::IsOneOfBars(const wxWindow *win) const
 {
 #if wxUSE_MENUS
     if ( win == GetMenuBar() )
-        return TRUE;
+        return true;
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     if ( win == GetStatusBar() )
-        return TRUE;
+        return true;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
     if ( win == GetToolBar() )
-        return TRUE;
+        return true;
 #endif // wxUSE_TOOLBAR
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -185,7 +185,7 @@ bool wxFrameBase::ProcessCommand(int id)
 #if wxUSE_MENUS
     wxMenuBar *bar = GetMenuBar();
     if ( !bar )
-        return FALSE;
+        return false;
 
     wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
     commandEvent.SetEventObject(this);
@@ -194,7 +194,7 @@ bool wxFrameBase::ProcessCommand(int id)
     if (item)
     {
         if (!item->IsEnabled())
-            return TRUE;
+            return true;
 
         if (item->IsCheckable())
         {
@@ -206,9 +206,9 @@ bool wxFrameBase::ProcessCommand(int id)
     }
 
     GetEventHandler()->ProcessEvent(commandEvent);
-    return TRUE;
+    return true;
 #else // !wxUSE_MENUS
-    return FALSE;
+    return false;
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 }
 
@@ -253,7 +253,11 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
+#if !wxUSE_IDLEMENUUPDATES
 void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
+#else
+void wxFrameBase::OnMenuOpen(wxMenuEvent& WXUNUSED(event))
+#endif
 {
 #if !wxUSE_IDLEMENUUPDATES
     DoMenuUpdates(event.GetMenu());
@@ -378,7 +382,7 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 
     return !helpString.IsEmpty();
 #else // !wxUSE_MENUS
-    return FALSE;
+    return false;
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 }
 
