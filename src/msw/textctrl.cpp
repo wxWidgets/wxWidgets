@@ -300,10 +300,17 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        // have to enable events manually
-        LPARAM mask = ENM_CHANGE | ENM_DROPFILES | ENM_SELCHANGE | ENM_UPDATE;
+        // enable the events we're interested in: we want to get EN_CHANGE and
+        // EN_UPDATE as for the normal controls
+        LPARAM mask = ENM_CHANGE | ENM_UPDATE;
 
-        if ( m_windowStyle & wxTE_AUTO_URL )
+        if ( GetRichVersion() == 1 )
+        {
+            // we also need EN_MSGFILTER for richedit 1.0 for the reasons
+            // explained in its handler
+           mask |= ENM_MOUSEEVENTS;
+        }
+        else if ( m_windowStyle & wxTE_AUTO_URL )
         {
             mask |= ENM_LINK;
 
@@ -1291,6 +1298,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_HSCROLL:
         case EN_VSCROLL:
             return FALSE;
+
         default:
             return FALSE;
     }
@@ -1506,59 +1514,90 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHDR *hdr = (NMHDR* )lParam;
-    if ( hdr->code == EN_LINK )
+    switch ( hdr->code )
     {
-        ENLINK *enlink = (ENLINK *)hdr;
+        case EN_MSGFILTER:
+            {
+                const MSGFILTER *msgf = (MSGFILTER *)lParam;
+                UINT msg = msgf->msg;
 
-        switch ( enlink->msg )
-        {
-            case WM_SETCURSOR:
-                // ok, so it is hardcoded - do we really nee to customize it?
-                ::SetCursor(GetHcursorOf(wxCursor(wxCURSOR_HAND)));
-                *result = TRUE;
-                break;
-
-            case WM_MOUSEMOVE:
-            case WM_LBUTTONDOWN:
-            case WM_LBUTTONUP:
-            case WM_LBUTTONDBLCLK:
-            case WM_RBUTTONDOWN:
-            case WM_RBUTTONUP:
-            case WM_RBUTTONDBLCLK:
-                // send a mouse event
+                // this is a bit crazy but richedit 1.0 sends us all mouse
+                // events _except_ WM_LBUTTONUP (don't ask me why) so we have
+                // generate the wxWin events for this message manually
+                //
+                // NB: in fact, this is still not totally correct as it does
+                //     send us WM_LBUTTONUP if the selection was cleared by the
+                //     last click -- so currently we get 2 events in this case,
+                //     but as I don't see any obvious way to check for this I
+                //     leave this code in place because it's still better than
+                //     not getting left up events at all
+                if ( msg == WM_LBUTTONUP )
                 {
-                    static const wxEventType eventsMouse[] =
-                    {
-                        wxEVT_MOTION,
-                        wxEVT_LEFT_DOWN,
-                        wxEVT_LEFT_UP,
-                        wxEVT_LEFT_DCLICK,
-                        wxEVT_RIGHT_DOWN,
-                        wxEVT_RIGHT_UP,
-                        wxEVT_RIGHT_DCLICK,
-                    };
+                    WXUINT flags = msgf->wParam;
+                    int x = GET_X_LPARAM(msgf->lParam),
+                        y = GET_Y_LPARAM(msgf->lParam);
 
-                    // the event ids are consecutive
-                    wxMouseEvent
-                        evtMouse(eventsMouse[enlink->msg - WM_MOUSEMOVE]);
-
-                    InitMouseEvent(evtMouse,
-                                   GET_X_LPARAM(enlink->lParam),
-                                   GET_Y_LPARAM(enlink->lParam),
-                                   enlink->wParam);
-
-                    wxTextUrlEvent event(m_windowId, evtMouse,
-                                         enlink->chrg.cpMin,
-                                         enlink->chrg.cpMax);
-
-                    InitCommandEvent(event);
-
-                    *result = ProcessCommand(event);
+                    HandleMouseEvent(msg, x, y, flags);
                 }
-                break;
-        }
+            }
 
-        return TRUE;
+            // return TRUE to process the event (and FALSE to ignore it)
+            return TRUE;
+
+        case EN_LINK:
+            {
+                const ENLINK *enlink = (ENLINK *)hdr;
+
+                switch ( enlink->msg )
+                {
+                    case WM_SETCURSOR:
+                        // ok, so it is hardcoded - do we really nee to
+                        // customize it?
+                        ::SetCursor(GetHcursorOf(wxCursor(wxCURSOR_HAND)));
+                        *result = TRUE;
+                        break;
+
+                    case WM_MOUSEMOVE:
+                    case WM_LBUTTONDOWN:
+                    case WM_LBUTTONUP:
+                    case WM_LBUTTONDBLCLK:
+                    case WM_RBUTTONDOWN:
+                    case WM_RBUTTONUP:
+                    case WM_RBUTTONDBLCLK:
+                        // send a mouse event
+                        {
+                            static const wxEventType eventsMouse[] =
+                            {
+                                wxEVT_MOTION,
+                                wxEVT_LEFT_DOWN,
+                                wxEVT_LEFT_UP,
+                                wxEVT_LEFT_DCLICK,
+                                wxEVT_RIGHT_DOWN,
+                                wxEVT_RIGHT_UP,
+                                wxEVT_RIGHT_DCLICK,
+                            };
+
+                            // the event ids are consecutive
+                            wxMouseEvent
+                                evtMouse(eventsMouse[enlink->msg - WM_MOUSEMOVE]);
+
+                            InitMouseEvent(evtMouse,
+                                           GET_X_LPARAM(enlink->lParam),
+                                           GET_Y_LPARAM(enlink->lParam),
+                                           enlink->wParam);
+
+                            wxTextUrlEvent event(m_windowId, evtMouse,
+                                                 enlink->chrg.cpMin,
+                                                 enlink->chrg.cpMax);
+
+                            InitCommandEvent(event);
+
+                            *result = ProcessCommand(event);
+                        }
+                        break;
+                }
+            }
+            return TRUE;
     }
 
     // not processed, leave it to the base class
