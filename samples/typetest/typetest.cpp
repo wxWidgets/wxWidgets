@@ -172,7 +172,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
     text_output << str << "\n";
     std_file_output << str.c_str() << "\n";
-    
+
     textCtrl.WriteText( "\nReading from ifstream:\n" );
 
     wxSTD ifstream std_file_input( "test_std.dat" );
@@ -298,7 +298,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     for (ch = 0; ch < 10; ch++)
         buf_output.Write( &ch, 1 );
     buf_output.Sync();
-    
+
     wxFileInputStream file_input( wxString("test_wx.dat") );
     for (ch2 = 0; ch2 < 10; ch2++)
     {
@@ -306,7 +306,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
         textCtrl.WriteText( (wxChar)(ch + '0') );
     }
     textCtrl.WriteText( "\n\n\n" );
-    
+
     textCtrl.WriteText( "Writing number 0 to 9 to buffered wxFileOutputStream, then\n" );
     textCtrl.WriteText( "seeking back to #3 and writing 0:\n\n" );
 
@@ -318,7 +318,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     ch = 0;
     buf_output2.Write( &ch, 1 );
     buf_output2.Sync();
-    
+
     wxFileInputStream file_input2( wxString("test_wx2.dat") );
     for (ch2 = 0; ch2 < 10; ch2++)
     {
@@ -326,14 +326,14 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
         textCtrl.WriteText( (wxChar)(ch + '0') );
     }
     textCtrl.WriteText( "\n\n\n" );
-    
+
     // now append 2000 bytes to file (bigger than buffer)
     buf_output2.SeekO( 0, wxFromEnd );
     ch = 1;
     for (int i = 0; i < 2000; i++)
        buf_output2.Write( &ch, 1 );
     buf_output2.Sync();
-    
+
     textCtrl.WriteText( "Reading number 0 to 9 from buffered wxFileInputStream, then\n" );
     textCtrl.WriteText( "seeking back to #3 and reading the 0:\n\n" );
 
@@ -351,7 +351,7 @@ void MyApp::DoStreamDemo2(wxCommandEvent& WXUNUSED(event))
     buf_input3.Read( &ch, 1 );
     textCtrl.WriteText( (wxChar)(ch + '0') );
     textCtrl.WriteText( "\n\n\n" );
-    
+
 }
 
 void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
@@ -370,7 +370,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         file_output.Write( &ch, 1 );
 
     // Testing wxFileInputStream
-    
+
     textCtrl.WriteText( "Reading 0 to 10 to wxFileInputStream:\n\n" );
 
     wxFileInputStream file_input( wxString("test_wx.dat") );
@@ -379,10 +379,10 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         file_input.Read( &ch, 1 );
         textCtrl.WriteText( "Value read: " );
         textCtrl.WriteText( (wxChar)(ch + '0') );
-        textCtrl.WriteText( ";  stream.LastError() returns: " );
-        switch (file_input.LastError())
+        textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+        switch (file_input.GetLastError())
         {
-            case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+            case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
             case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
             case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
             case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -390,26 +390,26 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         }
     }
     textCtrl.WriteText( "\n" );
-    
-    textCtrl.WriteText( "Seeking to 0;  stream.LastError() returns: " );
+
+    textCtrl.WriteText( "Seeking to 0;  stream.GetLastError() returns: " );
     file_input.SeekI( 0 );
-    switch (file_input.LastError())
+    switch (file_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
         default: textCtrl.WriteText( "Huh?\n" ); break;
     }
     textCtrl.WriteText( "\n" );
-    
+
     file_input.Read( &ch, 1 );
     textCtrl.WriteText( "Value read: " );
     textCtrl.WriteText( (wxChar)(ch + '0') );
-    textCtrl.WriteText( ";  stream.LastError() returns: " );
-    switch (file_input.LastError())
+    textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+    switch (file_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -417,9 +417,9 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
     }
     textCtrl.WriteText( "\n\n" );
 
-    
+
     // Testing wxFFileInputStream
-    
+
     textCtrl.WriteText( "Reading 0 to 10 to wxFFileInputStream:\n\n" );
 
     wxFFileInputStream ffile_input( wxString("test_wx.dat") );
@@ -428,10 +428,10 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         ffile_input.Read( &ch, 1 );
         textCtrl.WriteText( "Value read: " );
         textCtrl.WriteText( (wxChar)(ch + '0') );
-        textCtrl.WriteText( ";  stream.LastError() returns: " );
-        switch (ffile_input.LastError())
+        textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+        switch (ffile_input.GetLastError())
         {
-            case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+            case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
             case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
             case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
             case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -439,26 +439,26 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         }
     }
     textCtrl.WriteText( "\n" );
-    
-    textCtrl.WriteText( "Seeking to 0;  stream.LastError() returns: " );
+
+    textCtrl.WriteText( "Seeking to 0;  stream.GetLastError() returns: " );
     ffile_input.SeekI( 0 );
-    switch (ffile_input.LastError())
+    switch (ffile_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
         default: textCtrl.WriteText( "Huh?\n" ); break;
     }
     textCtrl.WriteText( "\n" );
-    
+
     ffile_input.Read( &ch, 1 );
     textCtrl.WriteText( "Value read: " );
     textCtrl.WriteText( (wxChar)(ch + '0') );
-    textCtrl.WriteText( ";  stream.LastError() returns: " );
-    switch (ffile_input.LastError())
+    textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+    switch (ffile_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -467,7 +467,7 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( "\n\n" );
 
     // Testing wxFFileInputStream
-    
+
     textCtrl.WriteText( "Reading 0 to 10 to buffered wxFFileInputStream:\n\n" );
 
     wxFFileInputStream ffile_input2( wxString("test_wx.dat") );
@@ -477,10 +477,10 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         buf_input.Read( &ch, 1 );
         textCtrl.WriteText( "Value read: " );
         textCtrl.WriteText( (wxChar)(ch + '0') );
-        textCtrl.WriteText( ";  stream.LastError() returns: " );
-        switch (buf_input.LastError())
+        textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+        switch (buf_input.GetLastError())
         {
-            case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+            case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
             case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
             case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
             case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -488,26 +488,26 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
         }
     }
     textCtrl.WriteText( "\n" );
-    
-    textCtrl.WriteText( "Seeking to 0;  stream.LastError() returns: " );
+
+    textCtrl.WriteText( "Seeking to 0;  stream.GetLastError() returns: " );
     buf_input.SeekI( 0 );
-    switch (buf_input.LastError())
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
         default: textCtrl.WriteText( "Huh?\n" ); break;
     }
     textCtrl.WriteText( "\n" );
-    
+
     buf_input.Read( &ch, 1 );
     textCtrl.WriteText( "Value read: " );
     textCtrl.WriteText( (wxChar)(ch + '0') );
-    textCtrl.WriteText( ";  stream.LastError() returns: " );
-    switch (buf_input.LastError())
+    textCtrl.WriteText( ";  stream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -520,7 +520,7 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
     wxString msg;
-    
+
     textCtrl.Clear();
     textCtrl << "\nTesting wxStreamBuffer:\n\n";
 
@@ -538,11 +538,11 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
 
     wxFileInputStream file_input( wxString("test_wx.dat") );
     wxBufferedInputStream buf_input( file_input );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
+
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -553,16 +553,16 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     msg.Printf( wxT("wxBufferedInputStream.TellI() returns: %d\n"), (int)buf_input.TellI() );
     textCtrl.WriteText( msg );
     textCtrl.WriteText( "\n\n" );
-    
+
 
     textCtrl.WriteText( "Seeking to position 300:\n\n" );
 
     buf_input.SeekI( 300 );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
+
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -573,37 +573,18 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     msg.Printf( wxT("wxBufferedInputStream.TellI() returns: %d\n"), (int)buf_input.TellI() );
     textCtrl.WriteText( msg );
     textCtrl.WriteText( "\n\n" );
-    
+
 
     char buf[2000];
 
     textCtrl.WriteText( "Reading 500 bytes:\n\n" );
 
     buf_input.Read( buf, 500 );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
-    {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
-        case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
-        case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
-        case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
-        default: textCtrl.WriteText( "Huh?\n" ); break;
-    }
-    msg.Printf( wxT("wxBufferedInputStream.LastRead() returns: %d\n"), (int)buf_input.LastRead() );
-    textCtrl.WriteText( msg );
-    msg.Printf( wxT("wxBufferedInputStream.TellI() returns: %d\n"), (int)buf_input.TellI() );
-    textCtrl.WriteText( msg );
-    textCtrl.WriteText( "\n\n" );
-    
-    textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
 
-    buf_input.Read( buf, 500 );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -618,11 +599,11 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
 
     buf_input.Read( buf, 500 );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
+
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -637,11 +618,30 @@ void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
 
     buf_input.Read( buf, 500 );
-    
-    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
-    switch (buf_input.LastError())
+
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
     {
-        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
+        case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+        case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+        case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+        default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( wxT("wxBufferedInputStream.LastRead() returns: %d\n"), (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( wxT("wxBufferedInputStream.TellI() returns: %d\n"), (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+
+    textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
+
+    buf_input.Read( buf, 500 );
+
+    textCtrl.WriteText( "wxBufferedInputStream.GetLastError() returns: " );
+    switch (buf_input.GetLastError())
+    {
+        case wxSTREAM_NO_ERROR:      textCtrl.WriteText( "wxSTREAM_NO_ERROR\n" ); break;
         case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
         case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
         case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
@@ -669,61 +669,61 @@ void MyApp::DoStreamDemo5(wxCommandEvent& WXUNUSED(event))
     wxFileOutputStream file_output( wxString("test_wx.dat") );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
-        
+
     file_output.Sync();
-    
+
     wxFileInputStream file_input( wxString("test_wx.dat") );
-    
+
     ch = file_input.Peek();
     str.Printf( wxT("First char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = file_input.GetC();
     str.Printf( wxT("First char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = file_input.Peek();
     str.Printf( wxT("Second char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = file_input.GetC();
     str.Printf( wxT("Second char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = file_input.Peek();
     str.Printf( wxT("Third char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = file_input.GetC();
     str.Printf( wxT("Third char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
-    
+
+
     textCtrl << "\n\n\nTesting wxMemoryInputStream's Peek():\n\n";
-    
+
     char buf[] = { 0,1,2,3,4,5,6,7,8,9,10 };
     wxMemoryInputStream input( buf, 10 );
-    
+
     ch = input.Peek();
     str.Printf( wxT("First char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = input.GetC();
     str.Printf( wxT("First char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = input.Peek();
     str.Printf( wxT("Second char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = input.GetC();
     str.Printf( wxT("Second char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = input.Peek();
     str.Printf( wxT("Third char peeked: %d\n"), (int) ch );
     textCtrl.WriteText( str );
-    
+
     ch = input.GetC();
     str.Printf( wxT("Third char read: %d\n"), (int) ch );
     textCtrl.WriteText( str );
@@ -735,7 +735,7 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.Clear();
     textCtrl.WriteText( "\nTesting Ungetch():\n\n" );
-    
+
     char ch = 0;
     size_t pos = 0;
     wxString str;
@@ -745,62 +745,62 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
     wxFileOutputStream file_output( wxString("test_wx.dat") );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
-        
+
     file_output.Sync();
-    
+
     textCtrl.WriteText( "Reading char from wxFileInputStream:\n\n" );
 
     wxFileInputStream file_input( wxString("test_wx.dat") );
-    
+
     ch = file_input.GetC();
     pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading another char from wxFileInputStream:\n\n" );
 
     ch = file_input.GetC();
     pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading yet another char from wxFileInputStream:\n\n" );
 
     ch = file_input.GetC();
     pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Now calling Ungetch( 5 ) from wxFileInputStream...\n\n" );
 
     file_input.Ungetch( 5 );
     pos = file_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading char from wxFileInputStream:\n\n" );
 
     ch = file_input.GetC();
     pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading another char from wxFileInputStream:\n\n" );
 
     ch = file_input.GetC();
     pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Now calling Ungetch( 5 ) from wxFileInputStream again...\n\n" );
 
     file_input.Ungetch( 5 );
     pos = file_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Seeking to pos 3 in wxFileInputStream. This invalidates the writeback buffer.\n\n" );
-    
+
     file_input.SeekI( 3 );
 
     ch = file_input.GetC();
@@ -815,7 +815,7 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.Clear();
     textCtrl.WriteText( "\nTesting Ungetch() in buffered input stream:\n\n" );
-    
+
     char ch = 0;
     size_t pos = 0;
     wxString str;
@@ -825,63 +825,63 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     wxFileOutputStream file_output( wxString("test_wx.dat") );
     for (ch = 0; ch < 10; ch++)
         file_output.Write( &ch, 1 );
-        
+
     file_output.Sync();
-    
+
     textCtrl.WriteText( "Reading char from wxBufferedInputStream via wxFileInputStream:\n\n" );
 
     wxFileInputStream file_input( wxString("test_wx.dat") );
     wxBufferedInputStream buf_input( file_input );
-    
+
     ch = buf_input.GetC();
     pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading another char from wxBufferedInputStream:\n\n" );
 
     ch = buf_input.GetC();
     pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading yet another char from wxBufferedInputStream:\n\n" );
 
     ch = buf_input.GetC();
     pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Now calling Ungetch( 5 ) from wxBufferedInputStream...\n\n" );
 
     buf_input.Ungetch( 5 );
     pos = buf_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading char from wxBufferedInputStream:\n\n" );
 
     ch = buf_input.GetC();
     pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Reading another char from wxBufferedInputStream:\n\n" );
 
     ch = buf_input.GetC();
     pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Now calling Ungetch( 5 ) from wxBufferedInputStream again...\n\n" );
 
     buf_input.Ungetch( 5 );
     pos = buf_input.TellI();
     str.Printf( wxT("Now at position %d\n\n"), (int) pos );
     textCtrl.WriteText( str );
-    
+
     textCtrl.WriteText( "Seeking to pos 3 in wxBufferedInputStream. This invalidates the writeback buffer.\n\n" );
-    
+
     buf_input.SeekI( 3 );
 
     ch = buf_input.GetC();

@@ -1,1 +1,1 @@
-/* Placeholder so makefile doesn't complain */
+#include "wx/msw/wx.rc"
