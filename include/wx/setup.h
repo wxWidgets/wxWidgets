@@ -24,15 +24,28 @@
 #elif defined(__WXMAC__)
 #include "wx/mac/setup.h"
 #elif defined(__WXQT__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/qtd/setup.h"
+#else
+#include "wx/qt/setup.h"
+#endif
 #include "wx/qt/setup.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/setup.h"
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/motifd/setup.h"
+#else
+#include "wx/motifd/setup.h"
+#endif
 #elif defined(__WXPM__)
 #include "wx/os2/setup.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/setup.h"
 #elif defined(__WXGTK__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/gtkd/setup.h"
+#else
 #include "wx/gtk/setup.h"
+#endif
 #endif
 
 #endif
