@@ -255,8 +255,8 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
     //----------------------------------------------------------------------
     if (rc = s_pWNetOpenEnum(scope, RESOURCETYPE_DISK, 0, pResSrc, &hEnum), rc == NO_ERROR)
     {
-        unsigned long count = 1;
-        unsigned long size = 256;
+        DWORD count = 1;
+        DWORD size = 256;
         NETRESOURCE* pRes = (NETRESOURCE*)malloc(size);
         memset(pRes, 0, sizeof(NETRESOURCE));
         while (rc = s_pWNetEnumResource(hEnum, &count, pRes, &size), rc == NO_ERROR || rc == ERROR_MORE_DATA)
