@@ -119,7 +119,12 @@ XDefaultScreen(Display *d)
 }
 
 /* I get only 1 plane but 8 bits per pixel,
-   so I think BITSPIXEL should be depth */
+   so I think BITSPIXEL should be depth
+
+   TRS: I assume that all "displays" have the same number of
+        planes later in the code, which is based on the assumption
+        that the display variable is ignored below. :)
+ */
 int
 XDefaultDepth(Display *display, Screen *screen)
 {
@@ -261,8 +266,12 @@ XCreateImage(Display *d, Visual *v,
 
     if (img) {
 	/* *img = CreateCompatibleBitmap(*d, width, height); */
+        
 #if !defined(__VISAGECPP__) /* fixme for OS/2 */
-	img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,
+    /* create the bitmap with the same number of planes as the default display
+     * (otherwise it wouldn't work for 16 color mode) */
+	img->bitmap = CreateBitmap(width, height,
+				   GetDeviceCaps(*d, PLANES),
 				   depth /* bits per pixel */ , NULL);
 #endif
 	img->width = width;

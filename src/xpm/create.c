@@ -1447,6 +1447,7 @@ MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int h
 			for (x = 0; x < width; x++) {
 				SetPixel(*dc, x, y, (pixels[*(data++)] ? RGB(255,255,255) : 0)); /* data is [x+y*width] */
 			}
+      }
 		}
 	}
 	else
