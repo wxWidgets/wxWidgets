@@ -21,8 +21,6 @@
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase
 {
-    DECLARE_ABSTRACT_CLASS(wxControl)
-
 public:
    wxControl();
    wxControl(wxWindow *parent, wxWindowID id,
@@ -78,9 +76,8 @@ public:
 #endif // WXWIN_COMPATIBILITY
 
 protected:
-    // for controls like radiobuttons which are really composite this array
-    // holds the ids (not HWNDs!) of the sub controls
-    wxArrayLong m_subControls;
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
 
     virtual wxSize DoGetBestSize() const;
 
@@ -117,7 +114,12 @@ protected:
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    // for controls like radiobuttons which are really composite this array
+    // holds the ids (not HWNDs!) of the sub controls
+    wxArrayLong m_subControls;
+
 private:
+    DECLARE_ABSTRACT_CLASS(wxControl)
     DECLARE_EVENT_TABLE()
 };
 

@@ -80,6 +80,7 @@ public:
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
+    virtual wxBorder GetDefaultBorder() const;
     virtual wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 

@@ -42,10 +42,6 @@ bool wxStaticText::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-    // By default, a static text should have no border.
-    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
-        style |= wxBORDER_NONE;
-
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -53,6 +49,11 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
 
     return TRUE;
+}
+
+wxBorder wxStaticText::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
 }
 
 WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const

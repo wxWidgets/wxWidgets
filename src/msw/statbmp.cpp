@@ -98,12 +98,6 @@ bool wxStaticBitmap::Create(wxWindow *parent,
                             long style,
                             const wxString& name)
 {
-    // default border for this control is none
-    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-    {
-        style |= wxBORDER_NONE;
-    }
-    
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -138,6 +132,11 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     SetImageNoCopy(image);
 
     return TRUE;
+}
+
+wxBorder wxStaticBitmap::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
 }
 
 WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const

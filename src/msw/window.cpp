@@ -1028,23 +1028,10 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxHSCROLL )
         style |= WS_HSCROLL;
 
-    wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
+    const wxBorder border = GetBorder(flags);
 
-    // Check if we want to automatically give it a sunken style.
-    // Note than because 'sunken' actually maps to WS_EX_CLIENTEDGE, which
-    // is a more neutral term, we don't necessarily get a sunken effect in
-    // Windows XP. Instead we get the appropriate style for the theme.
-
-    if (border == wxBORDER_DEFAULT &&
-        IsKindOf(CLASSINFO(wxControl)) &&
-        GetParent() &&
-        ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
-    {
-        border = (wxBorder)((flags & wxBORDER_MASK) | wxBORDER_SUNKEN);
-    }
-
-    // Only give it WS_BORDER for wxBORDER_SIMPLE
-    if (border & wxBORDER_SIMPLE)
+    // WS_BORDER is only required for wxBORDER_SIMPLE
+    if ( border == wxBORDER_SIMPLE )
         style |= WS_BORDER;
 
     // now deal with ext style if the caller wants it
@@ -1058,12 +1045,12 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         switch ( border )
         {
             default:
+            case wxBORDER_DEFAULT:
                 wxFAIL_MSG( _T("unknown border style") );
                 // fall through
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
-            case wxBORDER_DEFAULT:
                 break;
 
             case wxBORDER_STATIC:

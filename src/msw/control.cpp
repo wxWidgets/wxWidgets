@@ -96,9 +96,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // if no extended style given, determine it ourselves
     if ( exstyle == (WXDWORD)-1 )
     {
-//        exstyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
         exstyle = 0;
-        (void) MSWGetStyle(GetWindowStyle(), & exstyle) ;
+        (void) MSWGetStyle(GetWindowStyle(), &exstyle);
     }
 
     // all controls should have this style
@@ -157,6 +156,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 
     return TRUE;
+}
+
+wxBorder wxControl::GetDefaultBorder() const
+{
+    // we want to automatically give controls a sunken style (confusingly,
+    // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
+    // which is not sunken at all under Windows XP -- rather, just the default)
+    return wxBORDER_SUNKEN;
 }
 
 wxSize wxControl::DoGetBestSize() const
