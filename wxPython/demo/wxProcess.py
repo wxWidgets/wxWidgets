@@ -62,6 +62,7 @@ class TestPanel(wxPanel):
         if self.process is not None:
             self.process.Detach()
             self.process.CloseOutput()
+            self.process = None
 
 
     def OnExecuteBtn(self, evt):
@@ -85,6 +86,7 @@ class TestPanel(wxPanel):
         self.inp.SetValue('')
         self.log.write('OnSendText: "%s"\n' % text)
         self.process.GetOutputStream().write(text + '\n')
+        self.inp.SetFocus()
 
 
     def OnCloseStream(self, evt):
