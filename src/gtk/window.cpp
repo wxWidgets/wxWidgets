@@ -503,7 +503,7 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-            if (keysym <= 0xFF)
+            if ((keysym & 0xF000) == 0)
             {
                 guint upper = gdk_keyval_to_upper( (guint)keysym );
                 keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
@@ -602,7 +602,7 @@ static long map_to_wx_keysym( KeySym keysym )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-            if (keysym <= 0xFF)
+            if ((keysym & 0xF000) == 0)
             {
                 key_code = (guint)keysym;
             }
@@ -793,6 +793,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
+
 
 /*
     wxString tmp;
