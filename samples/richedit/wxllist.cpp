@@ -449,7 +449,11 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 {
    m_Icon = icon;
    if(! m_Icon)
+#if wxICON_IS_BITMAP
       m_Icon = new wxIcon;
+#else
+      m_Icon = new wxBitmap;
+#endif
 }
 
 void

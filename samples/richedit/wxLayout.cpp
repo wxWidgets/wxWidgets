@@ -171,7 +171,11 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("The quick brown fox jumps over the lazy dog.");
    llist->LineBreak();
    llist->Insert("Hello ");
+#if wxICON_IS_BITMAP
    llist->Insert(new wxLayoutObjectIcon(new wxICON(Micon)));
+#else
+   llist->Insert(new wxLayoutObjectIcon(new wxBitmap (wxICON(Micon))));
+#endif
    llist->SetFontWeight(wxBOLD);
    llist->Insert("World! ");
    llist->SetFontWeight(wxNORMAL);
