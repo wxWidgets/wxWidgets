@@ -67,31 +67,6 @@ class WXDLLEXPORT wxTextCtrlCommandProcessor;
 #define wxACTION_TEXT_REDO          _T("redo")
 
 // ----------------------------------------------------------------------------
-// wxTextCtrl types
-// ----------------------------------------------------------------------------
-
-// wxTextPos is the position in the text
-typedef long wxTextPos;
-
-// wxTextCoord is the line or row number (which should have been unsigned but
-// is long for backwards compatibility)
-typedef long wxTextCoord;
-
-// ----------------------------------------------------------------------------
-// wxTextCtrl::HitTest return values
-// ----------------------------------------------------------------------------
-
-// the point asked is ...
-enum wxTextCtrlHitTestResult
-{
-    wxTE_HT_BEFORE = -1,    // either to the left or upper
-    wxTE_HT_ON_TEXT,        // directly on
-    wxTE_HT_BELOW,          // below [the last line]
-    wxTE_HT_BEYOND          // after [the end of line]
-};
-// ... the character returned
-
-// ----------------------------------------------------------------------------
 // wxTextCtrl
 // ----------------------------------------------------------------------------
 
@@ -216,16 +191,9 @@ public:
     void RemoveSelection();
     wxString GetSelectionText() const;
 
-    // find the character at this position, return 0 if the character is
-    // really there, -1 if the point is before the beginning of the text/line
-    // and the returned character is the first one to follow it or +1 if it the
-    // position is beyond the end of line/text and the returned character is
-    // the last one
-    //
-    // NB: pt is in device coords (not adjusted for the client area origin nor
-    //     for the scrolling)
-    wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                    wxTextCoord *col, wxTextCoord *row) const;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const;
 
     // find the character at this position in the given line, return value as
     // for HitTest()
