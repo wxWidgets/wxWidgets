@@ -74,7 +74,7 @@ public:
     bool SendIdleEvents(wxWindow* win);
     
     // Processes an X event.
-    virtual void ProcessXEvent(WXEvent* event);
+    virtual bool ProcessXEvent(WXEvent* event);
     
     virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
     
@@ -94,7 +94,7 @@ public:
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
     
     // This handler is called when a property change event occurs
-    virtual void   HandlePropertyChange(WXEvent *event);
+    virtual bool HandlePropertyChange(WXEvent *event);
     
     // We need this before create the app
     static   WXDisplay* GetDisplay() { return ms_display; }

@@ -449,10 +449,10 @@ static Bool expose_predicate (Display *display, XEvent *xevent, XPointer arg)
     // wxUSE_NANOX
 
 //-----------------------------------------------------------------------
-// Processes an X event.
+// Processes an X event, returning TRUE if the event was processed.
 //-----------------------------------------------------------------------
 
-void wxApp::ProcessXEvent(WXEvent* _event)
+bool wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
 
@@ -479,7 +479,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case KeyPress:
         {
             if (!win->IsEnabled())
-                return;
+                return FALSE;
 
             wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
             wxTranslateKeyEvent(keyEvent, win, window, event);
@@ -491,20 +491,20 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
             {
                 keyEvent.SetEventType(wxEVT_CHAR);
-                win->GetEventHandler()->ProcessEvent( keyEvent );
+                if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
+                    return FALSE;
             }
-            return;
+            return TRUE;
         }
         case KeyRelease:
         {
             if (!win->IsEnabled())
-                return;
+                return FALSE;
 
             wxKeyEvent keyEvent(wxEVT_KEY_UP);
             wxTranslateKeyEvent(keyEvent, win, window, event);
         
-            win->GetEventHandler()->ProcessEvent( keyEvent );
-            return;
+            return win->GetEventHandler()->ProcessEvent( keyEvent );
         }
         case ConfigureNotify:
         {
@@ -516,21 +516,21 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                 sizeEvent.SetEventObject( win );
                 
-                win->GetEventHandler()->ProcessEvent( sizeEvent );
+                return win->GetEventHandler()->ProcessEvent( sizeEvent );
             }
+            return FALSE;
             break;
         }
 #if !wxUSE_NANOX
         case PropertyNotify:
         {
             //wxLogDebug("PropertyNotify: %s", windowClass.c_str());
-            HandlePropertyChange(_event);
-            return;
+            return HandlePropertyChange(_event);
         }
         case ClientMessage:
         {
             if (!win->IsEnabled())
-                return;
+                return FALSE;
 
             Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);
             Atom wm_protocols = XInternAtom(wxGlobalDisplay(), "WM_PROTOCOLS", True);
@@ -540,9 +540,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 if ((Atom) (event->xclient.data.l[0]) == wm_delete_window)
                 {
                     win->Close(FALSE);
+                    return TRUE;
                 }
             }
-            return;
+            return FALSE;
         }
         case ResizeRequest:
         {
@@ -564,10 +565,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 wxSizeEvent sizeEvent(sz, win->GetId());
                 sizeEvent.SetEventObject(win);
 
-                win->GetEventHandler()->ProcessEvent( sizeEvent );
+                return win->GetEventHandler()->ProcessEvent( sizeEvent );
             }
 
-            return;
+            return FALSE;
         }
 #endif
 #if wxUSE_NANOX
@@ -576,7 +577,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (win)
             {
                 win->Close(FALSE);
+                return TRUE;
             }
+            return FALSE;
             break;
         }
 #endif
@@ -607,7 +610,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             win->SendEraseEvents();
 
-            return;
+            return TRUE;
         }
 #if !wxUSE_NANOX
         case GraphicsExpose:
@@ -628,7 +631,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 win->SendEraseEvents();
             }
 
-            return;
+            return TRUE;
         }
 #endif
         case EnterNotify:
@@ -638,7 +641,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case MotionNotify:
         {
             if (!win->IsEnabled())
-                return;
+                return FALSE;
                 
             // Here we check if the top level window is
             // disabled, which is one aspect of modality.
@@ -646,7 +649,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             while (tlw && !tlw->IsTopLevel())
                 tlw = tlw->GetParent();
             if (tlw && !tlw->IsEnabled())
-                return;
+                return FALSE;
                 
             if (event->type == ButtonPress)
             {
@@ -658,6 +661,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                     g_nextFocus = win;
                     
                     win->SetFocus();
+                    return TRUE;
                 }
             }
             
@@ -666,14 +670,12 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             {
                 // Throw out NotifyGrab and NotifyUngrab
                 if (event->xcrossing.mode != NotifyNormal)
-                    return;
+                    return FALSE;
             }
 #endif
             wxMouseEvent wxevent;
             wxTranslateMouseEvent(wxevent, win, window, event);
-            win->GetEventHandler()->ProcessEvent( wxevent );
-                
-            return;
+            return win->GetEventHandler()->ProcessEvent( wxevent );
         }
         case FocusIn:
             {
@@ -689,8 +691,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                     focusEvent.SetWindow( g_prevFocus );
                     g_prevFocus = NULL;
                     
-                    win->GetEventHandler()->ProcessEvent(focusEvent);
+                    return win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
+                return FALSE;
                 break;
             }
         case FocusOut:
@@ -706,8 +709,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_nextFocus );
                     g_nextFocus = NULL;
-                    win->GetEventHandler()->ProcessEvent(focusEvent);
+                    return win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
+                return FALSE;
                 break;
             }
 #ifndef wxUSE_NANOX
@@ -715,6 +719,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             {
                 // Do we want to process this (for top-level windows)?
                 // But we want to be able to veto closes, anyway
+                return FALSE;
                 break;
             }
 #endif
@@ -724,9 +729,11 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             //wxString eventName = wxGetXEventName(XEvent& event);
             //wxLogDebug(wxT("Event %s not handled"), eventName.c_str());
 #endif
+            return FALSE;
             break;
         }
     }
+    return FALSE;
 }
 
 // Returns TRUE if more time is needed.
@@ -761,11 +768,12 @@ void wxApp::Dispatch()
 
 // This should be redefined in a derived class for
 // handling property change events for XAtom IPC.
-void wxApp::HandlePropertyChange(WXEvent *event)
+bool wxApp::HandlePropertyChange(WXEvent *event)
 {
     // by default do nothing special
     // TODO: what to do for X11
     // XtDispatchEvent((XEvent*) event);
+    return FALSE;
 }
 
 void wxApp::OnIdle(wxIdleEvent& event)

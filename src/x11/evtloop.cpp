@@ -42,8 +42,8 @@ public:
     // ctor
     wxEventLoopImpl() { SetExitCode(0); m_keepGoing = FALSE; }
 
-    // process an XEvent
-    void ProcessEvent(XEvent* event);
+    // process an XEvent, return TRUE if it was processed
+    bool ProcessEvent(XEvent* event);
 
     // generate an idle message, return TRUE if more idle time requested
     bool SendIdleEvent();
@@ -71,15 +71,17 @@ public:
 // wxEventLoopImpl message processing
 // ----------------------------------------------------------------------------
 
-void wxEventLoopImpl::ProcessEvent(XEvent *event)
+bool wxEventLoopImpl::ProcessEvent(XEvent *event)
 {
     // give us the chance to preprocess the message first
-    if ( !PreProcessEvent(event) )
-    {
-        // if it wasn't done, dispatch it to the corresponding window
-        if (wxTheApp)
-            wxTheApp->ProcessXEvent((WXEvent*) event);
-    }
+    if ( PreProcessEvent(event) )
+        return TRUE;
+    
+    // if it wasn't done, dispatch it to the corresponding window
+    if (wxTheApp)
+        return wxTheApp->ProcessXEvent((WXEvent*) event);
+
+    return FALSE;
 }
 
 bool wxEventLoopImpl::PreProcessEvent(XEvent *event)
@@ -222,7 +224,7 @@ bool wxEventLoop::Dispatch()
     // TODO allowing for threads, as per e.g. wxMSW
 
     XNextEvent((Display*) wxGetDisplay(), & event);
-    m_impl->ProcessEvent(& event);
+    (void) m_impl->ProcessEvent(& event);
     return TRUE;
 }
 
