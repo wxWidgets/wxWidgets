@@ -736,10 +736,17 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     return wxTreeItemId((WXHTREEITEM) hitTestInfo.hItem);
 }
 
-void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
-                              wxTreeItemCmpFunc *cmpFunction)
+int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2)
 {
-    if ( cmpFunction == NULL )
+    return strcmp(GetItemText(item1), GetItemText(item2));
+}
+
+void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
+{
+    // rely on the fact that TreeView_SortChildren does the same thing as our
+    // default behaviour, i.e. sorts items alphabetically
+    if ( wxIS_KIND_OF(this, wxTreeCtrl) )
     {
         TreeView_SortChildren(wxhWnd, (HTREEITEM) (WXHTREEITEM) item, 0);
     }
@@ -750,9 +757,11 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item,
     }
 }
 
-// TODO
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
 {
+    // TODO
+    wxFAIL_MSG("wxTreeCtrl::GetChildrenCount not implemented");
+
     return 0;
 }
 
@@ -761,6 +770,7 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
     // TODO
+    wxFAIL_MSG("wxTreeCtrl::DeleteChildren not implemented");
 }
 
 // ----------------------------------------------------------------------------
