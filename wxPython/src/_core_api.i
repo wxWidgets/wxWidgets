@@ -23,7 +23,10 @@
 #include <wx/hashmap.h>
 WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
- 
+
+// Maintains a hashmap of className to swig_type_info pointers.  Given the
+// name of a class either looks up the type info in the cache, or scans the
+// SWIG tables for it.
 static
 swig_type_info* wxPyFindSwigType(const wxChar* className) {
 
