@@ -683,7 +683,7 @@ class SplitterWindow(core.Window):
 
         Constructor.  Creates and shows a SplitterWindow.
         """
-        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
         newobj = _windows.new_SplitterWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

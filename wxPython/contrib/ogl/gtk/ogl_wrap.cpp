@@ -312,17 +312,15 @@ static swig_type_info *swig_types[42];
 SWIGSTATICINLINE(double)
 SWIG_AsDouble(PyObject *obj)
 {
-  double val = (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
-#if HAVE_LONG_LONG
-    ((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
-#else
-    ((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLong(obj));
-#endif
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    PyErr_SetString(PyExc_TypeError, "a double is expected");
-  }
-  return val;
+    if (PyNumber_Check(obj))
+        return PyFloat_AsDouble(obj);
+    else {
+        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
+                                               obj->ob_type->tp_name);
+        PyErr_SetObject(PyExc_TypeError, errmsg);
+        Py_DECREF(errmsg);
+        return 0;
+    }
 }
 
 
@@ -369,7 +367,15 @@ SWIG_CheckLongInRange(long value, const char* type,
 SWIGSTATICINLINE(long)
 SWIG_AsLong(PyObject * obj)
 {
-  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+    if (PyNumber_Check(obj))
+        return PyInt_AsLong(obj);
+    else {
+        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
+                                               obj->ob_type->tp_name);
+        PyErr_SetObject(PyExc_TypeError, errmsg);
+        Py_DECREF(errmsg);
+        return 0;
+    }
 }
 
 

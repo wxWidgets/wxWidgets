@@ -1783,7 +1783,7 @@ class RadioBox(core.Control):
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> RadioBox
         """
-        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1929,7 +1929,7 @@ class Slider(core.Control):
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> Slider
         """
-        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
