@@ -15,6 +15,7 @@ wxEVT\_COMMAND\_LISTBOX\_DOUBLE\_CLICKED for double clicks.
 
 \wxheading{Derived from}
 
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
@@ -113,34 +114,6 @@ and {\tt choices}.}
 
 Destructor, destroying the list box.
 
-\membersection{wxListBox::Append}\label{wxlistboxappend}
-
-\func{int}{Append}{\param{const wxString\& }{ item}}
-
-Adds the item to the end of the list box.
-
-\func{int}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
-
-Adds the item to the end of the list box, associating the given data
-with the item.
-
-\wxheading{Parameters}
-
-\docparam{item}{String to add.}
-
-\docparam{clientData}{Client data to associate with the item.}
-
-\wxheading{Return value}
-
-The index of the newly added item, may be different from the last one if the
-control has {\tt wxLB\_SORT} style.
-
-\membersection{wxListBox::Clear}\label{wxlistboxclear}
-
-\func{void}{Clear}{\void}
-
-Clears all strings from the list box.
-
 \membersection{wxListBox::Create}\label{wxlistboxcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
@@ -150,16 +123,6 @@ Clears all strings from the list box.
 
 Creates the listbox for two-step construction. See \helpref{wxListBox::wxListBox}{wxlistboxconstr}\rtfsp
 for further details.
-
-\membersection{wxListBox::Delete}\label{wxlistboxdelete}
-
-\func{void}{Delete}{\param{int}{ n}}
-
-Deletes an item from the listbox.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based item index.}
 
 \membersection{wxListBox::Deselect}\label{wxlistboxdeselect}
 
@@ -174,60 +137,6 @@ Deselects an item in the list box.
 \wxheading{Remarks}
 
 This applies to multiple selection listboxes only.
-
-\membersection{wxListBox::FindString}\label{wxlistboxfindstring}
-
-\func{int}{FindString}{\param{const wxString\& }{string}}
-
-Finds an item matching the given string.
-
-\wxheading{Parameters}
-
-\docparam{string}{String to find.}
-
-\wxheading{Return value}
-
-The zero-based position of the item, or -1 if the string was not found.
-
-\membersection{wxListBox::GetClientData}\label{wxlistboxgetclientdata}
-
-\constfunc{void*}{GetClientData}{\param{int}{ n}}
-
-Returns a pointer to the client data associated with the given item (if any).
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based position of the item.}
-
-\wxheading{Return value}
-
-A pointer to the client data, or NULL if not present.
-
-\membersection{wxListBox::GetCount}\label{wxlistboxgetcount}
-
-\constfunc{int}{GetCount}{\void}
-
-Returns the number of items in the listbox.
-
-\membersection{wxListBox::GetSelection}\label{wxlistboxgetselection}
-
-\constfunc{int}{GetSelection}{\void}
-
-Gets the position of the selected item.
-
-\wxheading{Return value}
-
-The position of the current selection.
-
-\wxheading{Remarks}
-
-Applicable to single selection list boxes only.
-
-\wxheading{See also}
-
-\helpref{wxListBox::SetSelection}{wxlistboxsetselection},\rtfsp
-\helpref{wxListBox::GetStringSelection}{wxlistboxgetstringselection},\rtfsp
-\helpref{wxListBox::GetSelections}{wxlistboxgetselections}
 
 \membersection{wxListBox::GetSelections}\label{wxlistboxgetselections}
 
@@ -249,43 +158,15 @@ Use this with a multiple selection listbox.
 
 \wxheading{See also}
 
-\helpref{wxListBox::GetSelection}{wxlistboxgetselection},\rtfsp
-\helpref{wxListBox::GetStringSelection}{wxlistboxgetstringselection},\rtfsp
-\helpref{wxListBox::SetSelection}{wxlistboxsetselection}
+\helpref{wxControlWithItems::GetSelection}{wxcontrolwithitemsgetselection},\rtfsp
+\helpref{wxControlWithItems::GetStringSelection}{wxcontrolwithitemsgetstringselection},\rtfsp
+\helpref{wxControlWithItems::SetSelection}{wxcontrolwithitemssetselection}
 
 \pythonnote{The wxPython version of this method takes no parameters
 and returns a tuple of the selected items.}
 
 \perlnote{In wxPerl this method takes no parameters and return the
 selected items as a list.}
-
-\membersection{wxListBox::GetString}\label{wxlistboxgetstring}
-
-\constfunc{wxString}{GetString}{\param{int}{ n}}
-
-Returns the string at the given position.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based position.}
-
-\wxheading{Return value}
-
-The string, or an empty string if the position was invalid.
-
-\membersection{wxListBox::GetStringSelection}\label{wxlistboxgetstringselection}
-
-\constfunc{wxString}{GetStringSelection}{\void}
-
-Gets the selected string - for single selection list boxes only. This
-must be copied by the calling program if long term use is to be made of
-it.
-
-\wxheading{See also}
-
-\helpref{wxListBox::GetSelection}{wxlistboxgetselection},\rtfsp
-\helpref{wxListBox::GetSelections}{wxlistboxgetselections},\rtfsp
-\helpref{wxListBox::SetSelection}{wxlistboxsetselection}
 
 \membersection{wxListBox::InsertItems}\label{wxlistboxinsertitems}
 
@@ -307,18 +188,6 @@ parameter for wxPython, which is a list of strings.}
 
 \perlnote{In wxPerl there is just an array reference in place of {\tt nItems}
 and {\tt items}.}
-
-\membersection{wxListBox::Number}\label{wxlistboxnumber}
-
-\constfunc{int}{Number}{\void}
-
-{\bf Obsolescence note:} This method is obsolete and was replaced with 
-\helpref{GetCount}{wxlistboxgetcount}, please use the new method in the new
-code. This method is only available if wxWindows was compiled with 
-{\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
-future versions.
-
-Returns the number of items in the listbox.
 
 \membersection{wxListBox::Selected}\label{wxlistboxselected}
 
@@ -355,18 +224,6 @@ Clears the list box and adds the given strings to it.
 You may free the array from the calling program after this function has been
 called.
 
-\membersection{wxListBox::SetClientData}\label{wxlistboxsetclientdata}
-
-\func{void}{SetClientData}{\param{int}{ n}, \param{void* }{data}}
-
-Associates the given client data pointer with the given item.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based item index.}
-
-\docparam{data}{The client data to associate with the item.}
-
 \membersection{wxListBox::SetFirstItem}\label{wxlistboxsetfirstitem}
 
 \func{void}{SetFirstItem}{\param{int}{ n}}
@@ -380,42 +237,4 @@ Set the specified item to be the first visible item. Windows only.
 \docparam{n}{The zero-based item index.}
 
 \docparam{string}{The string that should be visible.}
-
-\membersection{wxListBox::SetSelection}\label{wxlistboxsetselection}
-
-\func{void}{SetSelection}{\param{int}{ n}, \param{const bool }{select = TRUE}}
-
-Selects or deselects the given item. This does not cause a
-wxEVT\_COMMAND\_LISTBOX\_SELECT event to get emitted.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based item index.}
-
-\docparam{select}{If TRUE, will select the item. If FALSE, will deselect it.}
-
-\membersection{wxListBox::SetString}\label{wxlistboxsetstring}
-
-\func{void}{SetString}{\param{int}{ n}, \param{const wxString\& }{ string}}
-
-Sets the string value of an item.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based item index.}
-
-\docparam{string}{The string to set.}
-
-\membersection{wxListBox::SetStringSelection}\label{wxlistboxsetstringselection}
-
-\func{void}{SetStringSelection}{\param{const wxString\& }{ string}, \param{const bool}{ select = TRUE}}
-
-Sets the current selection. This does not cause a
-wxEVT\_COMMAND\_LISTBOX\_SELECT event to get emitted.
-
-\wxheading{Parameters}
-
-\docparam{string}{The item to select.}
-
-\docparam{select}{If TRUE, will select the item. If FALSE, will deselect it.}
 

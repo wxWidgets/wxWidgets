@@ -8,6 +8,7 @@ A combobox permits a single selection only. Combobox items are numbered from zer
 
 \wxheading{Derived from}
 
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
 \helpref{wxChoice}{wxchoice}\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
@@ -101,34 +102,6 @@ and {\tt choices}.}
 
 Destructor, destroying the combobox.
 
-\membersection{wxComboBox::Append}\label{wxcomboboxappend}
-
-\func{int}{Append}{\param{const wxString\& }{item}}
-
-Adds the item to the end of the combobox.
-
-\func{int}{Append}{\param{const wxString\& }{ item}, \param{void* }{clientData}}
-
-Adds the item to the end of the combobox, associating the given data
-with the item.
-
-\wxheading{Parameters}
-
-\docparam{item}{The string to add.}
-
-\docparam{clientData}{Client data to associate with the item.}
-
-\wxheading{Return value}
-
-The index of the newly added item, may be different from the last one if the
-control has {\tt wxLB\_SORT} style.
-
-\membersection{wxComboBox::Clear}\label{wxcomboboxclear}
-
-\func{void}{Clear}{\void}
-
-Clears all strings from the combobox.
-
 \membersection{wxComboBox::Create}\label{wxcomboboxcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
@@ -152,50 +125,6 @@ Copies the selected text to the clipboard.
 
 Copies the selected text to the clipboard and removes the selection.
 
-\membersection{wxComboBox::Delete}\label{wxcomboboxdelete}
-
-\func{void}{Delete}{\param{int}{ n}}
-
-Deletes an item from the combobox.
-
-\wxheading{Parameters}
-
-\docparam{n}{The item to delete, starting from zero.}
-
-\membersection{wxComboBox::FindString}\label{wxcomboboxfindstring}
-
-\func{int}{FindString}{\param{const wxString\& }{string}}
-
-Finds a choice matching the given string.
-
-\wxheading{Parameters}
-
-\docparam{string}{The item to find.}
-
-\wxheading{Return value}
-
-The position if found, or -1 if not found.
-
-\membersection{wxComboBox::GetClientData}\label{wxcomboboxgetclientdata}
-
-\constfunc{void*}{GetClientData}{\param{int}{ n}}
-
-Returns a pointer to the client data associated with the given item (if any).
-
-\wxheading{Parameters}
-
-\docparam{n}{An item, starting from zero.}
-
-\wxheading{Return value}
-
-A pointer to the client data, or NULL if the item was not found.
-
-\membersection{wxComboBox::GetCount}\label{wxcomboboxgetcount}
-
-\constfunc{int}{GetCount}{\void}
-
-Returns the number of items in the combobox.
-
 \membersection{wxComboBox::GetInsertionPoint}\label{wxcomboboxgetinsertionpoint}
 
 \constfunc{long}{GetInsertionPoint}{\void}
@@ -208,49 +137,11 @@ Returns the insertion point for the combobox's text field.
 
 Returns the last position in the combobox text field.
 
-\membersection{wxComboBox::GetSelection}\label{wxcomboboxgetselection}
-
-\constfunc{int}{GetSelection}{\void}
-
-Gets the position of the selected string, or -1 if there is no selection.
-
-\membersection{wxComboBox::GetString}\label{wxcomboboxgetstring}
-
-\constfunc{wxString}{GetString}{\param{int}{ n}}
-
-Returns the string at position {\it n}.
-
-\wxheading{Parameters}
-
-\docparam{n}{The item position, starting from zero.}
-
-\wxheading{Return value}
-
-The string if the item is found, otherwise the empty string.
-
-\membersection{wxComboBox::GetStringSelection}\label{wxcomboboxgetstringselection}
-
-\constfunc{wxString}{GetStringSelection}{\void}
-
-Gets the selected string.
-
 \membersection{wxComboBox::GetValue}\label{wxcomboboxgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
 
 Returns the current value in the combobox text field.
-
-\membersection{wxComboBox::Number}\label{wxcomboboxnumber}
-
-\constfunc{int}{Number}{\void}
-
-{\bf Obsolescence note:} This method is obsolete and was replaced with 
-\helpref{GetCount}{wxcomboboxgetcount}, please use the new method in the new
-code. This method is only available if wxWindows was compiled with 
-{\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
-future versions.
-
-Returns the number of items in the combobox list.
 
 \membersection{wxComboBox::Paste}\label{wxcomboboxpaste}
 
@@ -284,18 +175,6 @@ Removes the text between the two positions in the combobox text field.
 
 \docparam{to}{The last position.}
 
-\membersection{wxComboBox::SetClientData}\label{wxcomboboxsetclientdata}
-
-\func{void}{SetClientData}{\param{int}{ n}, \param{void* }{data}}
-
-Associates the given client data pointer with the given item.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based item.}
-
-\docparam{data}{The client data.}
-
 \membersection{wxComboBox::SetInsertionPoint}\label{wxcomboboxsetinsertionpoint}
 
 \func{void}{SetInsertionPoint}{\param{long}{ pos}}
@@ -314,39 +193,19 @@ Sets the insertion point at the end of the combobox text field.
 
 \membersection{wxComboBox::SetSelection}\label{wxcomboboxsetselection}
 
-\func{void}{SetSelection}{\param{int}{ n}}
-
-Selects the given item in the combobox list. This does not cause a
-wxEVT\_COMMAND\_COMBOBOX\_SELECTED event to get emitted.
-
 \func{void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 
 Selects the text between the two positions, in the combobox text field.
 
 \wxheading{Parameters}
 
-\docparam{n}{The zero-based item to select.}
-
 \docparam{from}{The first position.}
 
 \docparam{to}{The second position.}
 
-\pythonnote{The second form of this method is called {\tt SetMark} in
-wxPython.}
-
-\membersection{wxComboBox::SetString}\label{wxcomboboxsetstring}
-
-\func{void}{SetString}{\param{int }{n}, \param{const wxString\& }{text}}
-
-Replaces the specified string in the control with another one.
-
-\wxheading{Parameters}
-
-\docparam{n}{The zero-based index of the string to replace}
-
-\docparam{text}{The new value for this item}
-
-{\bf NB:} This method is currently not implemented in wxGTK.
+\pythonnote{This method is called {\tt SetMark} in wxPython, {\tt SetSelection}
+name is kept for 
+\helpref{wxControlWithItems::SetSelection}{wxcontrolwithitemssetselection}.}
 
 \membersection{wxComboBox::SetValue}\label{wxcomboboxsetvalue}
 
