@@ -24,6 +24,7 @@
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
+#include "gdk/gdkkeysyms.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -132,7 +133,8 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 
 static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
     

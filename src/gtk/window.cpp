@@ -630,12 +630,43 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
 
+    /* generate wxID_CANCEL if <esc> has been pressed (typically in dialogs) */
     if ( (!ret) &&
          (gdk_event->keyval == GDK_Escape) )
     {
         wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
         new_event.SetEventObject( win );
         ret = win->GetEventHandler()->ProcessEvent( new_event );
+    }
+    
+    /* pressing F10 will activate the menu bar of the top frame */
+    if ( (!ret) &&
+         (gdk_event->keyval == GDK_F10) )
+    {
+        wxWindow *ancestor = win;
+        while (ancestor)
+        {
+            if (wxIsKindOf(ancestor,wxFrame))
+	    {
+	        wxFrame *frame = (wxFrame*) ancestor;
+                wxMenuBar *menubar = frame->GetMenuBar();
+		if (menubar)
+		{
+                    wxNode *node = menubar->GetMenus().First();
+		    if (node)
+		    {
+                        wxMenu *firstMenu = (wxMenu*) node->Data();
+                        gtk_menu_shell_select_item(
+		          GTK_MENU_SHELL(menubar->m_menubar),
+		          firstMenu->m_owner );
+			  
+			ret = TRUE;
+			break;
+		    }
+		}
+	    }
+            ancestor = ancestor->GetParent();
+        }
     }
 
 /*

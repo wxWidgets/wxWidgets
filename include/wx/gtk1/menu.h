@@ -95,8 +95,6 @@ public:
 
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
-    
-private:
     wxList           m_menus;
     GtkWidget       *m_menubar;
 };
