@@ -87,6 +87,7 @@ bool wxIcon::LoadFile(
 )
 {
     wxGDIImageHandler*              pHandler = FindHandler(lType);
+    HPS                             hPs = NULLHANDLE;
 
     UnRef();
     m_refData = new wxIconRefData;
@@ -94,6 +95,7 @@ bool wxIcon::LoadFile(
     if (pHandler)
         return(pHandler->Load( this
                               ,rFilename
+                              ,hPs
                               ,lType
                               ,nDesiredWidth
                               ,nDesiredHeight

@@ -340,6 +340,8 @@ bool wxBitmap::LoadFile(
 , long                              lType
 )
 {
+    HPS                             hPs;
+
     UnRef();
 
     wxBitmapHandler*                pHandler = wxDynamicCast( FindHandler(lType)
@@ -352,6 +354,7 @@ bool wxBitmap::LoadFile(
 
         return(pHandler->LoadFile( this
                                   ,rFilename
+                                  ,hPs
                                   ,lType
                                   , -1
                                   , -1
@@ -739,6 +742,7 @@ bool wxBitmapHandler::Create(
 bool wxBitmapHandler::Load(
   wxGDIImage*                       pImage
 , const wxString&                   rName
+, HPS                               hPs
 , long                              lFlags
 , int                               nWidth
 , int                               nHeight
@@ -750,6 +754,7 @@ bool wxBitmapHandler::Load(
 
     return(pBitmap ? LoadFile( pBitmap
                               ,rName
+                              ,hPs
                               ,lFlags
                               ,nWidth
                               ,nHeight
@@ -787,6 +792,7 @@ bool wxBitmapHandler::Create(
 bool wxBitmapHandler::LoadFile(
   wxBitmap*                         WXUNUSED(pBitmap)
 , const wxString&                   WXUNUSED(rName)
+, HPS                               WXUNUSED(hPs)
 , long                              WXUNUSED(lType)
 , int                               WXUNUSED(nDesiredWidth)
 , int                               WXUNUSED(nDesiredHeight)

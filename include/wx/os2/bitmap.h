@@ -306,6 +306,7 @@ public:
                        );
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,const wxString& rName
+                          ,HPS             hPs
                           ,long            lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
@@ -325,6 +326,7 @@ public:
                        );
     virtual bool Load( wxGDIImage*     pImage
                       ,const wxString& rName
+                      ,HPS             hPs
                       ,long            lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
