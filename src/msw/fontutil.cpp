@@ -41,12 +41,6 @@
 
 #include "wx/tokenzr.h"
 
-// If 1, use the screen resolution to calculate font sizes.
-// This is OK for screen fonts but might have implications when the
-// same font is used for printing.
-// If 0, assume 96 DPI.
-#define wxUSE_SCREEN_DPI 1
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -339,24 +333,28 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
             break;
     }
 
-#if wxUSE_SCREEN_DPI
-    HDC dc = ::GetDC(NULL);
-    static const int ppInch = ::GetDeviceCaps(dc, LOGPIXELSY);
-    ::ReleaseDC(NULL, dc);
-#else
+    // VZ: I'm reverting this as we clearly must use the real screen
+    //     resolution instead of hardcoded one or it surely will fail to work
+    //     in some cases.
+    //
+    //     If there are any problems with this code, please let me know about
+    //     it instead of reverting this change, thanks!
+#if 1 // wxUSE_SCREEN_DPI
+    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+#else // 0
     // New behaviour: apparently ppInch varies according to Large/Small Fonts
     // setting in Windows. This messes up fonts. So, set ppInch to a constant
     // 96 dpi.
     static const int ppInch = 96;
-#endif // 0/1
+#endif // 1/0
 
+    int pointSize = font->GetPointSize();
 #if wxFONT_SIZE_COMPATIBILITY
     // Incorrect, but compatible with old wxWindows behaviour
-    int nHeight = (font->GetPointSize()*ppInch/72);
+    int nHeight = (pointSize*ppInch)/72;
 #else
     // Correct for Windows compatibility
-//    int nHeight = - (font->GetPointSize()*ppInch/72);
-    int nHeight = - (int) ( (font->GetPointSize()*((double)ppInch)/72.0) + 0.5);
+    int nHeight = -(int)((pointSize*((double)ppInch)/72.0) + 0.5);
 #endif
 
     wxString facename = font->GetFaceName();

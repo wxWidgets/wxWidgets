@@ -218,16 +218,10 @@ void wxFontRefData::Init(const wxNativeFontInfo& info)
 
     m_faceName = info.lf.lfFaceName;
 
-    // remember that 1pt = 1/72inch
     int height = abs(info.lf.lfHeight);
 
-#if wxUSE_SCREEN_DPI
-    HDC dc = ::GetDC(NULL);
-    static const int ppInch = GetDeviceCaps(dc, LOGPIXELSY);
-    ::ReleaseDC(NULL, dc);
-#else
-    static const int ppInch = 96;
-#endif
+    // remember that 1pt = 1/72inch
+    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
     m_pointSize = (int) (((72.0*((double)height))/(double) ppInch) + 0.5);
 
     m_encoding = wxGetFontEncFromCharSet(info.lf.lfCharSet);
