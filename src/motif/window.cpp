@@ -1840,21 +1840,13 @@ static void wxCanvasRepaintProc(Widget drawingArea,
     {
     case Expose:
         {
+            win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
+                               event->xexpose.width, event->xexpose.height);
+            
             if (event -> xexpose.count == 0)
             {
-#if 0
-                wxPaintEvent event(win->GetId());
-                event.SetEventObject(win);
-                win->GetEventHandler()->ProcessEvent(event);
-#endif // 0
-
                 win->DoPaint();
                 win->ClearUpdateRects();
-            }
-            else
-            {
-                win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
-                                   event->xexpose.width, event->xexpose.height);
             }
             break;
         }
