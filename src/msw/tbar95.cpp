@@ -540,7 +540,7 @@ bool wxToolBar::Realize()
         MemoryHDC memoryDC2;
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
-        if (wxSystemOptions::GetOptionInt(wxT("no-remap")) == 1)
+        if (wxSystemOptions::HasOption(wxT("msw.remap")) && wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 0)
         {
 #if USE_BITMAP_MASKS
             dcAllButtons.SelectObject(wxNullBitmap);
@@ -606,7 +606,7 @@ bool wxToolBar::Realize()
         bitmap.SetHBITMAP(0);
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
-        if (!wxSystemOptions::HasOption(wxT("no-remap")) || wxSystemOptions::GetOptionInt(wxT("no-remap")) == 0)
+        if (!wxSystemOptions::HasOption(wxT("msw.remap")) || wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 1)
         {
             // Map to system colours
             hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
