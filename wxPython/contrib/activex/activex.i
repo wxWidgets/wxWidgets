@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-%module activex
+%module(package="wx") activex
 
 %{
 #include "wx/wxPython/wxPython.h"

@@ -14,7 +14,7 @@
 "Classes for a simple HTML rendering window, HTML Help Window, etc."
 %enddef
 
-%module(docstring=DOCSTRING) html
+%module(package="wx", docstring=DOCSTRING) html
 
 %{
 #include "wx/wxPython/wxPython.h"

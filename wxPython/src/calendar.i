@@ -13,7 +13,8 @@
 %define DOCSTRING
 "Classes for an interactive Calendar control."
 %enddef
-%module(docstring=DOCSTRING) calendar
+
+%module(package="wx", docstring=DOCSTRING) calendar
 
 
 %{

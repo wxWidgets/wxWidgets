@@ -15,7 +15,8 @@
 highlighting source code editor, or similar.  Lexers for several programming
 languages are built-in."
 %enddef
-%module(docstring=DOCSTRING) stc
+
+%module(package="wx", docstring=DOCSTRING) stc
 
 
 %{

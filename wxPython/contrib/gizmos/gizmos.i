@@ -15,7 +15,7 @@
 `LEDNumberCtrl`, `TreeListCtrl`, etc."
 %enddef
 
-%module(docstring=DOCSTRING) gizmos
+%module(package="wx", docstring=DOCSTRING) gizmos
 
 
 %{

@@ -10,7 +10,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module _core
+%module(package="wx") _core
 
 %{
 #include "wx/wxPython/wxPython_int.h"

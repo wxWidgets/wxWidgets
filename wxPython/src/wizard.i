@@ -14,7 +14,8 @@
 "`Wizard` is a dialog class that guides the user through a sequence of steps,
 or pages."
 %enddef
-%module(docstring=DOCSTRING) wizard
+
+%module(package="wx", docstring=DOCSTRING) wizard
 
 %{
 #include "wx/wxPython/wxPython.h"

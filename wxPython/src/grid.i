@@ -13,7 +13,8 @@
 %define DOCSTRING
 "Classes for implementing a spreadsheet-like control."
 %enddef
-%module(docstring=DOCSTRING) grid
+
+%module(package="wx", docstring=DOCSTRING) grid
 
 
 %{

@@ -290,7 +290,6 @@ static swig_type_info *swig_types[23];
 #include <wx/xml/xml.h>
 #include <wx/xrc/xmlres.h>
 
-
  static const wxString wxPyEmptyString(wxEmptyString); 
  static const wxString wxPyUTF8String(wxT("UTF-8")); 
  static const wxString wxPyStyleString(wxT("style")); 

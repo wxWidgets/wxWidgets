@@ -14,7 +14,8 @@
 "The Object Graphics Library provides for simple drawing and manipulation
 of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)"
 %enddef
-%module(docstring=DOCSTRING) ogl
+
+%module(package="wx", docstring=DOCSTRING) ogl
 
 %{
 #include "wx/wxPython/wxPython.h"
