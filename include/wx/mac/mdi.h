@@ -54,6 +54,10 @@ public:
            long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
            const wxString& name = wxFrameNameStr);
 
+  // Mac OS activate event
+  virtual void MacActivate(long timestamp, bool activating);
+
+  // wxWindows activate event
   void OnActivate(wxActivateEvent& event);
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
@@ -118,6 +122,9 @@ public:
            const wxSize& size = wxDefaultSize,
            long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr);
+
+  // Mac OS activate event
+  virtual void MacActivate(long timestamp, bool activating);
 
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
