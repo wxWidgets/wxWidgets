@@ -956,7 +956,7 @@ void wxWindowMac::MacUpdateControlFont()
 
 bool wxWindowMac::SetFont(const wxFont& font)
 {
-    bool retval = !wxWindowBase::SetFont( font ) ;
+    bool retval = wxWindowBase::SetFont( font ) ;
     
     MacUpdateControlFont() ;
     
