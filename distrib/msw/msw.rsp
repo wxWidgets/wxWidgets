@@ -82,6 +82,7 @@ include/wx/msw/*.rc
 include/wx/msw/ctl3d/*.h
 include/wx/msw/gnuwin32/*.h
 include/wx/msw/gnuwin32/*.def
+include/wx/msw/gnuwin32/gl/*.h
 include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico

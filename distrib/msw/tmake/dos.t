@@ -14,7 +14,7 @@
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
         if ( $wxGeneric{$file} =~ /\b(PS|G|U)\b/ ) {
-            #! this file for some reason wasn't compiled for VC++ 1.52
+            #! Need this file too since it has wxGenericPageSetupDialog
             next unless $file =~ /^prntdlgg\./;
         }
 

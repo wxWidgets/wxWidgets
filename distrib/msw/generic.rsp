@@ -50,7 +50,7 @@ docs/gpl.txt
 docs/lgpl.txt
 docs/symbols.txt
 docs/bugs.txt
-docs/*.htm
+docs/index.htm
 docs/html/*.htm
 docs/html/*.gif
 docs/html/*.png

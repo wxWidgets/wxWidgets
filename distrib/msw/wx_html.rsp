@@ -14,3 +14,10 @@ docs/html/odbc/*.htm
 
 docs/html/gettext/*.htm
 
+contrib/docs/html/ogl/*.htm
+contrib/docs/html/ogl/*.gif
+contrib/docs/html/mmedia/*.htm
+contrib/docs/html/mmedia/*.gif
+contrib/docs/html/stc/*.htm
+contrib/docs/html/stc/*.gif
+

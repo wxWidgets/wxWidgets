@@ -63,12 +63,17 @@ end
 item: Create Shortcut
   Source=%MAINDIR%\bin\dialoged.exe
   Destination=%GROUP%\Dialog Editor.lnk
-  Working Directory=%MAINDIR%
+  Working Directory=%MAINDIR%\bin
+end
+item: Create Shortcut
+  Source=%MAINDIR%\bin\tex2rtf.exe
+  Destination=%GROUP%\Tex2RTF.lnk
+  Working Directory=%MAINDIR%\bin
 end
 item: Create Shortcut
   Source=%MAINDIR%\bin\dbgview.exe
   Destination=%GROUP%\DebugView.lnk
-  Working Directory=%MAINDIR%
+  Working Directory=%MAINDIR%\bin
 end
 item: Create Shortcut
   Source=%MAINDIR%\bin\life.exe
@@ -129,7 +134,13 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Dialog Editor
   Command Line=%MAINDIR%\bin\dialoged.exe
-  Default Directory=%MAINDIR%
+  Default Directory=%MAINDIR%\bin
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Tex2RTF
+  Command Line=%MAINDIR%\bin\tex2rtf.exe
+  Default Directory=%MAINDIR%\bin
 end
 item: Add ProgMan Icon
   Group=%GROUP%
@@ -141,7 +152,7 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Life! Demo
   Command Line=%MAINDIR%\bin\life.exe
-  Default Directory=%MAINDIR%
+  Default Directory=%MAINDIR%\bin
 end
 item: End Block
 end

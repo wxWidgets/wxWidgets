@@ -28,6 +28,7 @@ erase %dest\jpeg.zip
 erase %dest\tiff.zip
 erase %dest\dialoged.zip
 erase %dest\utils.zip
+erase %dest\extradoc.zip
 
 if direxist %dest\wx deltree /Y %dest\wx
 
@@ -50,6 +51,10 @@ zip32 -@ %dest\wx%version%_hlp.zip < %src\distrib\msw\wx_hlp.rsp
 zip32 -@ %dest\wx%version%_htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx%version%_pdf.zip < %src\distrib\msw\wx_pdf.rsp
 zip32 -@ %dest\wx%version%_wrd.zip < %src\distrib\msw\wx_word.rsp
+
+Rem PDF/HTML docs that should go into the Windows setup because
+Rem there are no WinHelp equivalents
+zip32 -@ %dest\extradoc.zip < %src\distrib\msw\extradoc.rsp
 
 rem VC++ project files
 zip32 -@ %dest\wx%version%_vc.zip < %src\distrib\msw\vc.rsp
@@ -119,6 +124,7 @@ unzip32 -o ..\wx%version%_gen.zip
 unzip32 -o ..\wx%version%_vc.zip
 unzip32 -o ..\wx%version%_bc.zip
 unzip32 -o ..\wx%version%_hlp.zip
+unzip32 -o ..\extradoc.zip
 Rem Need Word file, for Remstar DB classes
 unzip32 -o ..\wx%version%_wrd.zip
 unzip32 -o ..\ogl3.zip
@@ -132,15 +138,20 @@ erase /Y BuildCVS.txt *.in *.spec *.guess *.sub mkinstalldirs modules install-sh
 erase /Y configure samples\configure samples\*.in demos\configure demos\*.in contrib\configure contrib\*.in
 erase /Y setup.h.in setup.h_vms
 erase /SY Makefile.in
-rem erase /Y docs\pdf\ogl.pdf
-rem deltree /Y docs\html\ogl
+erase /Y docs\html\wxbook.htm docs\html\roadmap.htm
+erase /Y contrib\docs\winhelp\mmedia.*
+erase /Y contrib\docs\winhelp\stc.*
+erase /Y contrib\docs\pdf\*.*
+deltree /Y contrib\docs\latex\ogl
 
 rem Now copy some binary files to 'bin'
 if not isdir bin mkdir bin
 copy %src\bin\dialoged.exe bin
+copy %src\bin\tex2rtf.exe bin
 copy %src\bin\dbgview.* bin
 copy %src\bin\life.exe bin
 copy %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt bin
+copy %src\docs\winhelp\tex2rtf.hlp %src\docs\winhelp\tex2rtf.cnt bin
 
 rem Time to regenerate the WISE install script, wxwin2.wse.
 rem NB: if you've changed wxwin2.wse using WISE, call splitwise.exe

@@ -170,6 +170,7 @@ bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
     return wxTheClipboard->AddData(new wxEnhMetaFileDataObject(*this));
 #else // !wxUSE_DRAG_AND_DROP
     wxFAIL_MSG(_T("not implemented"));
+    return FALSE;
 #endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
 }
 

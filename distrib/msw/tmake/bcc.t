@@ -20,7 +20,10 @@
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
         my $tag = "";
-        next if $wxGeneric{$file} =~ /\b(PS|G|U)\b/;
+        if ( $wxGeneric{$file} =~ /\b(PS|G|U)\b/ ) {
+            #! Need this file too since it has wxGenericPageSetupDialog
+            next unless $file =~ /^prntdlgg\./;
+        }
 
         $file =~ s/cp?p?$/obj/;
         $project{"WXGENERICOBJS"} .= "\$(MSWDIR)\\" . $file . " "
@@ -106,7 +109,7 @@ PERIPH_LIBS=$(WXDIR)\lib\bcc16\ctl3dv2.lib $(PERIPH_LIBS)
 !endif
 
 !if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\xpm.lib $(PERIPH_LIBS)
+PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
 PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
