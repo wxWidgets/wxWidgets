@@ -5,7 +5,7 @@
 
 \section{\class{wxMBConvFile}}\label{wxmbconvfile}
 
-This class used to be used for defining the class instance
+This class used to define the class instance 
 {\bf wxConvFileName}, but nowadays {\bf wxConvFileName} is
 either of type wxConvLibc (on most platforms) or wxConvUTF8
 (on MacOS X). {\bf wxConvFileName} converts filenames between 
@@ -17,8 +17,8 @@ should not be interpreted as UTF8 and also for converting
 invalid UTF8 characters (e.g. if there is a filename in iso8859_1)
 to strings with octal values. 
 
-Since some platforms (e.g. Win32) use Unicode in the filenames,
-and others (e.g. Unix) use multibyte encodings, this class should only
+Since some platforms (such as Win32) use Unicode in the filenames,
+and others (such as Unix) use multibyte encodings, this class should only
 be used directly if wxMBFILES is defined to 1. A convenience macro,
 wxFNCONV, is defined to wxConvFileName->cWX2MB in this case. You could
 use it like this:

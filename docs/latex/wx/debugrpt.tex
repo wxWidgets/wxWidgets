@@ -16,17 +16,17 @@ the program current state. It is usually used from
 \helpref{wxApp::OnFatalException()}{wxapponfatalexception} as shown in the 
 \helpref{sample}{sampledebugrpt}.
 
-wxDebugReport contains one or more files. A few of them can be created by the
+A wxDebugReport object contains one or more files. A few of them can be created by the
 class itself but more can be created from the outside and then added to the
 report. Also note that several virtual functions may be overridden to further
 customize the class behaviour.
 
-Once report is fully assembled, it can be simply left in the temporary
+Once a report is fully assembled, it can simply be left in the temporary
 directory so that the user can email it to the developers (in which case you
 should still use \helpref{wxDebugReportCompress}{wxdebugreportcompress} to
 compress it in a single file) or uploaded to a Web server using 
 \helpref{wxDebugReportUpload}{wxdebugreportupload} (setting up the Web server
-to accept uploads is your responsibility, of course). Other handlers, e.g. for
+to accept uploads is your responsibility, of course). Other handlers, for example for
 automatically emailing the report, can be defined as well but are not currently
 included in wxWidgets.
 
@@ -37,7 +37,7 @@ included in wxWidgets.
     wxDebugReportPreviewStd preview;
 
     report.AddCurrentContext();  // could also use AddAll()
-    report.AddCurrentDump();     //     to do both at once
+    report.AddCurrentDump();     // to do both at once
 
     if ( preview.Show(report) )
         report.Process();
@@ -53,8 +53,9 @@ No base class
 
 \wxheading{Data structures}
 
-This enum used for the functions which may report either the current state
+This enum is used for functions that report either the current state
 or the state during the last (fatal) exception:
+
 \begin{verbatim}
 enum wxDebugReport::Context
 {
@@ -70,7 +71,7 @@ enum wxDebugReport::Context
 
 \func{}{wxDebugReport}{\void}
 
-Constructor creates a temporary directory where the files which will
+The constructor creates a temporary directory where the files that will
 be included in the report are created. Use 
 \helpref{IsOk()}{wxdebugreportisok} to check for errors.
 
@@ -79,8 +80,8 @@ be included in the report are created. Use
 
 \func{}{\destruct{wxDebugReport}}{\void}
 
-Destructor normally destroys the temporary directory created in the constructor
-with all the files it contains, call \helpref{Reset()}{wxdebugreportreset} to
+The destructor normally destroys the temporary directory created in the constructor
+with all the files it contains. Call \helpref{Reset()}{wxdebugreportreset} to
 prevent this from happening.
 
 
@@ -88,7 +89,7 @@ prevent this from happening.
 
 \func{void}{AddAll}{\param{Context }{context = Context\_Exception}}
 
-Add all available information to the report. Currently this includes a
+Adds all available information to the report. Currently this includes a
 text (XML) file describing the process context and, under Win32, a minidump
 file.
 
@@ -105,23 +106,23 @@ stack trace.
 
 \func{bool}{AddCurrentContext}{\void}
 
-Same as \helpref{AddContext(Context\_Current)}{wxdebugreportaddcontext}.
+The same as \helpref{AddContext(Context\_Current)}{wxdebugreportaddcontext}.
 
 
 \membersection{wxDebugReport::AddCurrentDump}\label{wxdebugreportaddcurrentdump}
 
 \func{bool}{AddCurrentDump}{\void}
 
-Same as \helpref{AddDump(Context\_Current)}{wxdebugreportadddump}.
+The same as \helpref{AddDump(Context\_Current)}{wxdebugreportadddump}.
 
 
 \membersection{wxDebugReport::AddDump}\label{wxdebugreportadddump}
 
 \func{bool}{AddDump}{\param{Context }{ctx}}
 
-Adds minidump file to the debug report.
+Adds the minidump file to the debug report.
 
-Minidumps are only available under recent Win32 versions (\texttt{dbghlp32.dll}
+Minidumps are only available under recent Win32 versions (\texttt{dbghlp32.dll} 
 can be installed under older systems to make minidumps available).
 
 
@@ -129,14 +130,14 @@ can be installed under older systems to make minidumps available).
 
 \func{bool}{AddExceptionContext}{\void}
 
-Same as \helpref{AddContext(Context\_Exception)}{wxdebugreportaddcontext}.
+The same as \helpref{AddContext(Context\_Exception)}{wxdebugreportaddcontext}.
 
 
 \membersection{wxDebugReport::AddExceptionDump}\label{wxdebugreportaddexceptiondump}
 
 \func{bool}{AddExceptionDump}{\void}
 
-Same as \helpref{AddDump(Context\_Exception)}{wxdebugreportadddump}.
+The same as \helpref{AddDump(Context\_Exception)}{wxdebugreportadddump}.
 
 
 \membersection{wxDebugReport::AddFile}\label{wxdebugreportaddfile}
@@ -187,7 +188,7 @@ the XML context file.
 
 \constfunc{const wxString\&}{GetDirectory}{\void}
 
-Return the name of the temporary directory used for the files in this report.
+Returns the name of the temporary directory used for the files in this report.
 
 This method should be used to construct the full name of the files which you
 wish to add to the report using \helpref{AddFile}{wxdebugreportaddfile}.
@@ -197,7 +198,7 @@ wish to add to the report using \helpref{AddFile}{wxdebugreportaddfile}.
 
 \constfunc{bool}{GetFile}{\param{size\_t }{n}, \param{wxString* }{name}, \param{wxString* }{desc}}
 
-Retrieve the name (relative to 
+Retrieves the name (relative to 
 \helpref{GetDirectory()}{wxdebugreportgetdirectory}) and the description of the
 file with the given index. If \arg{n} is greater than or equal to the number of
 filse, \false is returned.
@@ -207,14 +208,14 @@ filse, \false is returned.
 
 \constfunc{size\_t}{GetFilesCount}{\void}
 
-Get the current number files in this report.
+Gets the current number files in this report.
 
 
 \membersection{wxDebugReport::GetReportName}\label{wxdebugreportgetreportname}
 
 \constfunc{wxString}{GetReportName}{\void}
 
-Get the name used as base name for various files, by default 
+Gets the name used as a base name for various files, by default 
 \helpref{wxApp::GetAppName()}{wxappgetappname} is used.
 
 
@@ -222,7 +223,7 @@ Get the name used as base name for various files, by default
 
 \constfunc{bool}{IsOk}{\void}
 
-Return \true if the object was successfully initialized, if this method returns 
+Returns \true if the object was successfully initialized. If this method returns 
 \false the report can't be used.
 
 
@@ -230,8 +231,8 @@ Return \true if the object was successfully initialized, if this method returns
 
 \func{bool}{Process}{\void}
 
-Process this report: the base class simply notifies the user that the
-report has been generated, this is usually not enough -- instead you
+Processes this report: the base class simply notifies the user that the
+report has been generated. This is usually not enough -- instead you
 should override this method to do something more useful to you.
 
 
@@ -239,7 +240,7 @@ should override this method to do something more useful to you.
 
 \func{void}{RemoveFile}{\param{const wxString\& }{name}}
 
-Remove the file from report: this is used by 
+Removes the file from report: this is used by 
 \helpref{wxDebugReportPreview}{wxdebugreportpreview} to allow the user to
 remove files potentially containing private information from the report.
 
@@ -248,6 +249,6 @@ remove files potentially containing private information from the report.
 
 \func{void}{Reset}{\void}
 
-Reset the directory name we use, the object can't be used any more after
-this as it becomes invalid/uninitialized.
+Resets the directory name we use. The object can't be used any more after
+this as it becomes uninitialized and invalid.
 
