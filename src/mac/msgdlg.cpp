@@ -120,7 +120,8 @@ int wxMessageDialog::ShowModal()
                 param.cancelButton     = 0;
             }
         }
-        else if (m_dialogStyle & wxOK)
+        // the msw implementation even shows an ok button if it is not specified, we'll do the same
+        else 
         {
             if (m_dialogStyle & wxCANCEL)
             {
@@ -142,10 +143,12 @@ int wxMessageDialog::ShowModal()
                 param.cancelButton     = 0;
             }
         }
+        /*
         else
         {
             skipDialog = true ;
         }
+        */
         
         param.position = kWindowDefaultPosition;
         if ( !skipDialog )
