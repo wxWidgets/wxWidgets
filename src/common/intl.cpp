@@ -1376,7 +1376,7 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 }
 
 
-wxLocale::wxLocale()
+void wxLocale::DoCommonInit()
 {
   m_pszOldLocale = NULL;
   m_pMsgCat = NULL;

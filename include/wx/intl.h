@@ -371,29 +371,36 @@ public:
     // -----------
 
         // call Init() if you use this ctor
-    wxLocale();
+    wxLocale() { DoCommonInit(); }
+
         // the ctor has a side effect of changing current locale
     wxLocale(const wxChar *szName,                               // name (for messages)
              const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
              const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
-             bool bLoadDefault = TRUE,                           // preload wxstd.mo?
-             bool bConvertEncoding = FALSE)                      // convert Win<->Unix if neccessary?
+             bool bLoadDefault = true,                           // preload wxstd.mo?
+             bool bConvertEncoding = false)                      // convert Win<->Unix if neccessary?
         {
+            DoCommonInit();
+
             Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding);
         }
 
     wxLocale(int language, // wxLanguage id or custom language
              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING)
-        { Init(language, flags); }
+        {
+            DoCommonInit();
 
-        // the same as a function (returns TRUE on success)
+            Init(language, flags);
+        }
+
+        // the same as a function (returns true on success)
     bool Init(const wxChar *szName,
               const wxChar *szShort = (const wxChar *) NULL,
               const wxChar *szLocale = (const wxChar *) NULL,
-              bool bLoadDefault = TRUE,
-              bool bConvertEncoding = FALSE);
+              bool bLoadDefault = true,
+              bool bConvertEncoding = false);
 
-        // same as second ctor (returns TRUE on success)
+        // same as second ctor (returns true on success)
     bool Init(int language = wxLANGUAGE_DEFAULT,
               int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
 
@@ -416,7 +423,7 @@ public:
     // is used, the US default value is returned if everything else fails
     static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
 
-    // return TRUE if the locale was set successfully
+    // return true if the locale was set successfully
     bool IsOk() const { return m_pszOldLocale != NULL; }
 
     // returns locale name
@@ -508,6 +515,9 @@ private:
     // copy default table of languages from global static array to
     // m_langugagesInfo, called by InitLanguagesDB
     static void InitLanguagesDB();
+
+    // initialize the member fields to default values
+    void DoCommonInit();
 
     wxString       m_strLocale,       // this locale name
                    m_strShort;        // short name for the locale
