@@ -78,8 +78,10 @@
 </set>
 
 <set var="BASE_MAC_SRC">
+    src/unix/baseunix.cpp
 </set>
 <set var="BASE_AND_GUI_MAC_SRC">
+    src/unix/utilsunx.cpp
 </set>
 <set var="BASE_MAC_HDR">
 </set>
@@ -1332,7 +1334,6 @@
     src/generic/fontdlgg.cpp
     <!-- Unix files used by wxMac: -->
     src/unix/snglinst.cpp
-    src/unix/utilsunx.cpp
 </set>
 <set var="MAC_HDR">
     wx/mac/accel.h
