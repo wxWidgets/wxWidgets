@@ -195,6 +195,7 @@ void StringTestCase::Conversion()
         CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );
 
         wxString szTheString2("The\0String", wxConvLocal, 10);
+        CPPUNIT_ASSERT( szTheString2.length() == 11 );
         CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );
 #else
         wxString szTheString(wxT("TheString"));
