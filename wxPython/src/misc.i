@@ -375,6 +375,10 @@ wxString wxGetUserName();
 wxString wxGetHomeDir();
 wxString wxGetUserHome(const char* user = "");
 
+
+// When wxApp gets the virtual method magic then enable this.
+// bool wxHandleFatalExceptions(bool doIt = TRUE);
+
 //----------------------------------------------------------------------
 
 enum wxEdge { wxLeft, wxTop, wxRight, wxBottom, wxWidth, wxHeight,
