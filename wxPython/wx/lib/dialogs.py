@@ -14,13 +14,18 @@
 #
 # o Updated for 2.5 compatability.
 #
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledMessageDialog -> ScrolledMessageDialog
+# o wxMultipleChoiceDialog -> MultipleChoiceDialog
+#
 
 import  wx
 import  layoutf
 
 #----------------------------------------------------------------------
 
-class wxScrolledMessageDialog(wx.Dialog):
+class ScrolledMessageDialog(wx.Dialog):
     def __init__(self, parent, msg, caption, pos = wx.DefaultPosition, 
                  size = (500,300)):
         wx.Dialog.__init__(self, parent, -1, caption, pos, size)
@@ -41,7 +46,7 @@ class wxScrolledMessageDialog(wx.Dialog):
         self.Layout()
 
 
-class wxMultipleChoiceDialog(wx.Dialog):
+class MultipleChoiceDialog(wx.Dialog):
     def __init__(self, parent, msg, title, lst, pos = wx.DefaultPosition,
                  size = (200,200), style = wx.DEFAULT_DIALOG_STYLE):
         wx.Dialog.__init__(self, parent, -1, title, pos, size, style)
@@ -263,7 +268,7 @@ def alertDialog(parent=None, message='', title='Alert', pos=wx.DefaultPosition):
 def scrolledMessageDialog(parent=None, message='', title='', pos=wx.DefaultPosition,
                           size=(500,300)):
 
-    dialog = wxScrolledMessageDialog(parent, message, title, pos, size)
+    dialog = ScrolledMessageDialog(parent, message, title, pos, size)
     result = DialogResults(dialog.ShowModal())
     dialog.Destroy()
     return result
@@ -324,7 +329,7 @@ def singleChoiceDialog(parent=None, message='', title='', lst=[],
 def multipleChoiceDialog(parent=None, message='', title='', lst=[], pos=wx.DefaultPosition, 
                          size=(200,200)):
 
-    dialog = wxMultipleChoiceDialog(parent, message, title, lst, pos, size)
+    dialog = MultipleChoiceDialog(parent, message, title, lst, pos, size)
     result = DialogResults(dialog.ShowModal())
     result.selection = dialog.GetValueString()
     dialog.Destroy()

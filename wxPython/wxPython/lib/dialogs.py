@@ -23,5 +23,5 @@ saveFileDialog = wx.lib.dialogs.saveFileDialog
 scrolledMessageDialog = wx.lib.dialogs.scrolledMessageDialog
 singleChoiceDialog = wx.lib.dialogs.singleChoiceDialog
 textEntryDialog = wx.lib.dialogs.textEntryDialog
-wxMultipleChoiceDialog = wx.lib.dialogs.wxMultipleChoiceDialog
-wxScrolledMessageDialog = wx.lib.dialogs.wxScrolledMessageDialog
+wxMultipleChoiceDialog = wx.lib.dialogs.MultipleChoiceDialog
+wxScrolledMessageDialog = wx.lib.dialogs.ScrolledMessageDialog

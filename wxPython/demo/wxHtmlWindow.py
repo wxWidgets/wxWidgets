@@ -6,6 +6,10 @@
 #
 # o got the wxpTag stuff working right.
 # 
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledMessageDialog -> ScrolledMessageDialog
+# 
 
 import  os
 import  sys
@@ -182,11 +186,11 @@ class TestHtmlPanel(wx.Panel):
 
 
     def OnViewSource(self, event):
-        import  wx.lib.dialogs  as  dlgs
+        import  wx.lib.dialogs
 
         source = self.html.GetParser().GetSource()
 
-        dlg = dlgs.wxScrolledMessageDialog(self, source, 'HTML Source')
+        dlg = wx.lib.dialogs.ScrolledMessageDialog(self, source, 'HTML Source')
         dlg.ShowModal()
         dlg.Destroy()
 

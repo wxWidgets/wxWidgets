@@ -14,6 +14,10 @@
 #
 # o Added deprecation warning.
 #
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxFloatBar -> FloatBar
+#
 
 """
 NOTE: This module is *not* supported in any way.  Use it however you
@@ -42,7 +46,7 @@ if wx.Platform == '__WXGTK__':
     #
     # For wxGTK all we have to do is set the wxTB_DOCKABLE flag
     #
-    class wxFloatBar(wx.ToolBar):
+    class FloatBar(wx.ToolBar):
         def __init__(self, parent, ID,
                      pos = wx.DefaultPosition,
                      size = wx.DefaultSize,
@@ -68,7 +72,7 @@ if wx.Platform == '__WXGTK__':
 else:
     _DOCKTHRESHOLD = 25
 
-    class wxFloatBar(wx.ToolBar):
+    class FloatBar(wx.ToolBar):
         """
         wxToolBar subclass which can be dragged off its frame and later
         replaced there.  Drag on the toolbar to release it, close it like

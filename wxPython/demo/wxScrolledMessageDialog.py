@@ -10,9 +10,13 @@
 #
 # o dialogs library converted. All is well.
 # 
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledMessageDialog -> ScrolledMessageDialog
+# 
 
 import  wx
-import  wx.lib.dialogs  as  dlgs
+import  wx.lib.dialogs
 
 #---------------------------------------------------------------------------
 
@@ -21,7 +25,7 @@ def runTest(frame, nb, log):
     msg = f.read()
     f.close()
     
-    dlg = dlgs.wxScrolledMessageDialog(frame, msg, "message test")
+    dlg = wx.lib.dialogs.ScrolledMessageDialog(frame, msg, "message test")
     dlg.ShowModal()
 
 #---------------------------------------------------------------------------
@@ -30,7 +34,7 @@ def runTest(frame, nb, log):
 
 overview = """\
 
-<code><b>wxScrolledMessageDialog</b>(parent, msg, caption, pos=wx.DefaultPosition, size=(500,300))</code>
+<code><b>ScrolledMessageDialog</b>(parent, msg, caption, pos=wx.DefaultPosition, size=(500,300))</code>
 
 This class represents a message dialog that uses a wxTextCtrl to display the
 message. This allows more flexible information display without having to be

@@ -16,6 +16,10 @@
 # o Reworked test frame to work with wx demo framework. This saves a bit
 #   of tedious cut and paste, and the test app is excellent.
 #
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledMessageDialog -> ScrolledMessageDialog
+#
 
 """
 This is a simple light weight plotting module that can be used with
@@ -1455,8 +1459,8 @@ class TestFrame(wx.Frame):
         self.client.Reset()
 
     def OnHelpAbout(self, event):
-        from wx.lib.dialogs import wxScrolledMessageDialog
-        about = wxScrolledMessageDialog(self, __doc__, "About...")
+        from wx.lib.dialogs import ScrolledMessageDialog
+        about = ScrolledMessageDialog(self, __doc__, "About...")
         about.ShowModal()
 
     def resetDefaults(self):

@@ -9,9 +9,13 @@
 # o Issues - library has to be converted to work properly
 #   with new namespace.
 #
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxFloatBar -> FloatBar
+#
 
 import  wx
-import  wx.lib.floatbar as  float
+import  wx.lib.floatbar
 
 import  images
 
@@ -31,7 +35,7 @@ class TestFloatBar(wx.Frame):
             "Toggle the last tool to remove\nthe title.", (15,15)
             )
 
-        tb = float.wxFloatBar(self, -1)
+        tb = wx.lib.floatbar.FloatBar(self, -1)
         self.SetToolBar(tb)
         tb.SetFloatable(1)
         tb.SetTitle("Floating!")
@@ -73,7 +77,7 @@ class TestFloatBar(wx.Frame):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
 
         if event.GetId() == 60:
-            print event.GetExtraLong(), event.Checked(), event.GetInt(), self.tb.GetToolState(60)
+            print event.GetExtraLong(), event.IsChecked(), event.GetInt(), self.tb.GetToolState(60)
 
             if event.GetExtraLong():
                 self.tb.SetTitle("")
@@ -93,7 +97,7 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 overview = """\
-wxFloatBar is a subclass of wxToolBar, implemented in Python, which
+FloatBar is a subclass of wx.ToolBar, implemented in Python, which
 can be detached from its frame.
 
 Drag the toolbar with the mouse to make it float, and drag it back, or

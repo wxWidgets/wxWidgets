@@ -176,16 +176,12 @@ class DragableGrid(gridlib.Grid):
         self.SetTable(table, True)
 
         # Enable Column moving
-        #>> TODO - renamer didn't get this one
-        gridmovers.wxGridColMover(self)
-        #>> TODO - Bind() not working here
-        gridmovers.EVT_GRID_COL_MOVE(self,self.GetId(),self.OnColMove)
+        gridmovers.GridColMover(self)
+        self.Bind(gridmovers.EVT_GRID_COL_MOVE, self.OnColMove, self)
 
         # Enable Row moving
-        #>> TODO - renamer didn't get this one
-        gridmovers.wxGridRowMover(self)
-        #>> TODO - Bind() not working here
-        gridmovers.EVT_GRID_ROW_MOVE(self,self.GetId(),self.OnRowMove)
+        gridmovers.GridRowMover(self)
+        self.Bind(gridmovers.EVT_GRID_ROW_MOVE, self.OnRowMove, self)
 
     # Event method called when a column move needs to take place
     def OnColMove(self,evt):

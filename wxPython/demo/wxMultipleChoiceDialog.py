@@ -6,9 +6,13 @@
 #
 # o wx renamer not applied to lib.
 # 
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMultipleChoiceDialog -> MultipleChoiceDialog
+# 
 
 import  wx
-import  wx.lib.dialogs  as  dlgs
+import  wx.lib.dialogs
 
 #---------------------------------------------------------------------------
 
@@ -16,9 +20,10 @@ def runTest(frame, nb, log):
     lst = [ 'apple', 'pear', 'banana', 'coconut', 'orange',
             'etc', 'etc..', 'etc...' ]
 
-    dlg = dlgs.wxMultipleChoiceDialog(frame,
-                                 "Pick some from\n this list\nblah blah...",
-                                 "m.s.d.", lst)
+    dlg = wx.lib.dialogs.MultipleChoiceDialog(
+                                frame,
+                                "Pick some from\n this list\nblah blah...",
+                                "m.s.d.", lst)
 
     if (dlg.ShowModal() == wx.ID_OK):
         print "Selection:", dlg.GetValue(), " -> ", dlg.GetValueString()
@@ -34,7 +39,7 @@ overview = """\
 This is a Python implementation of a dialog that is not yet implemented in wxWindows
 proper, so don't let the wxWindows documentation mislead you.
 
-<p><code><b>wxMultipleChoiceDialog</b>(self, parent, msg, title, lst, 
+<p><code><b>MultipleChoiceDialog</b>(self, parent, msg, title, lst, 
 pos = wx.wxDefaultPosition, size = (200,200), style = wx.wxDEFAULT_DIALOG_STYLE)
 </code>
 
@@ -74,7 +79,7 @@ available.
 
 </dl>
 
-Additionally, wxMultipleChoiceDialog.lbox is a standard wxListBox which supports all
+Additionally, MultipleChoiceDialog.lbox is a standard wx.ListBox which supports all
 methods applicable to that class.
 
 </body>

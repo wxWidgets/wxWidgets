@@ -2,6 +2,10 @@
 #
 # o Updated for wx namespace
 # 
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledMessageDialog -> ScrolledMessageDialog
+# 
 
 import  re
 import  wx
@@ -240,7 +244,7 @@ if __name__=='__main__':
 
         def OnAbout(self, event):
             import  wx.lib.dialogs
-            msg = wx.lib.dialogs.wxScrolledMessageDialog(self, Layoutf.__doc__, "about")
+            msg = wx.lib.dialogs.ScrolledMessageDialog(self, Layoutf.__doc__, "about")
             msg.ShowModal()
             msg.Destroy()
 

@@ -6,4 +6,4 @@ import wx.lib.floatbar
 
 __doc__ =  wx.lib.floatbar.__doc__
 
-wxFloatBar = wx.lib.floatbar.wxFloatBar
+wxFloatBar = wx.lib.floatbar.FloatBar

@@ -13,6 +13,14 @@
 #
 # o 2.5 Compatability changes
 #
+# 12/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxGridColMoveEvent -> GridColMoveEvent
+# o wxGridRowMoveEvent -> GridRowMoveEvent
+# o wxGridColMover -> GridColMover
+# o wxGridRowMover -> GridRowMover
+#
+
 
 import  wx
 import  wx.grid
@@ -31,7 +39,7 @@ EVT_GRID_ROW_MOVE = wx.PyEventBinder(wxEVT_COMMAND_GRID_ROW_MOVE, 1)
 
 #----------------------------------------------------------------------------
 
-class wxGridColMoveEvent(wx.PyCommandEvent):
+class GridColMoveEvent(wx.PyCommandEvent):
     def __init__(self, id, dCol, bCol):
         wx.PyCommandEvent.__init__(self, id = id)
         self.SetEventType(wxEVT_COMMAND_GRID_COL_MOVE)
@@ -45,7 +53,7 @@ class wxGridColMoveEvent(wx.PyCommandEvent):
         return self.beforeColumn
 
 
-class wxGridRowMoveEvent(wx.PyCommandEvent):
+class GridRowMoveEvent(wx.PyCommandEvent):
     def __init__(self, id, dRow, bRow):
         wx.PyCommandEvent.__init__(self,id = id)
         self.SetEventType(wxEVT_COMMAND_GRID_ROW_MOVE)
@@ -223,7 +231,7 @@ class RowDragWindow(wx.Window):
 
 #----------------------------------------------------------------------------
 
-class wxGridColMover(wx.EvtHandler):
+class GridColMover(wx.EvtHandler):
     def __init__(self,grid):
         wx.EvtHandler.__init__(self)
 
@@ -328,7 +336,7 @@ class wxGridColMover(wx.EvtHandler):
                 bCol = self.colWin.GetInsertionColumn()
                 dCol = self.colWin.GetMoveColumn()
                 wx.PostEvent(self,
-                             wxGridColMoveEvent(self.grid.GetId(), dCol, bCol))
+                             GridColMoveEvent(self.grid.GetId(), dCol, bCol))
 
             self.colWin.Destroy()
         evt.Skip()
@@ -343,7 +351,7 @@ class wxGridColMover(wx.EvtHandler):
         return bmp
 
 
-class wxGridRowMover(wx.EvtHandler):
+class GridRowMover(wx.EvtHandler):
     def __init__(self,grid):
         wx.EvtHandler.__init__(self)
 
@@ -451,7 +459,7 @@ class wxGridRowMover(wx.EvtHandler):
                 dRow = self.rowWin.GetMoveRow()
 
                 wx.PostEvent(self,
-                             wxGridRowMoveEvent(self.grid.GetId(), dRow, bRow))
+                             GridRowMoveEvent(self.grid.GetId(), dRow, bRow))
 
             self.rowWin.Destroy()
         evt.Skip()
