@@ -1466,8 +1466,10 @@ wxString* wxString_in_helper(PyObject* source) {
     if (PyUnicode_Check(source)) {
         target = new wxString();
         size_t len = PyUnicode_GET_SIZE(source);
-        PyUnicode_AsWideChar((PyUnicodeObject*)source, target->GetWriteBuf(len), len);
-        target->UngetWriteBuf();
+        if (len) {
+            PyUnicode_AsWideChar((PyUnicodeObject*)source, target->GetWriteBuf(len), len);
+            target->UngetWriteBuf();
+        }
     } else {
         // It is a string, get pointers to it and transform to unicode
         char* tmpPtr; int tmpSize;
@@ -1510,8 +1512,10 @@ wxString Py2wxString(PyObject* source)
 #if wxUSE_UNICODE
     if (PyUnicode_Check(source)) {
         size_t len = PyUnicode_GET_SIZE(source);
-        PyUnicode_AsWideChar((PyUnicodeObject*)source, target.GetWriteBuf(len), len);
-        target.UngetWriteBuf();
+        if (len) {
+            PyUnicode_AsWideChar((PyUnicodeObject*)source, target.GetWriteBuf(len), len);
+            target.UngetWriteBuf();
+        }
     } else {
         // It is a string, get pointers to it and transform to unicode
         char* tmpPtr; int tmpSize;
