@@ -642,6 +642,8 @@ wxString wxHtmlWindow::SelectionToText()
     if ( !m_selection )
         return wxEmptyString;
 
+    wxClientDC dc(this);
+
     const wxHtmlCell *end = m_selection->GetToCell();
     wxString text;
     wxHtmlTerminalCellsInterator i(m_selection->GetFromCell(), end);
@@ -714,11 +716,14 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
-    wxHtmlRenderingState rstate(m_selection);
+    wxHtmlRenderingInfo rinfo;
+    wxDefaultHtmlRenderingStyle rstyle;
+    rinfo.SetSelection(m_selection);
+    rinfo.SetStyle(&rstyle);
     m_Cell->Draw(dc, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
-                 rstate);
+                 rinfo);
 }
 
 
@@ -765,6 +770,9 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
         // did the user move the mouse far enough from starting point?
         if ( m_selection )
         {
+#ifdef __UNIX__
+            CopySelection(Primary);
+#endif
             // we don't want mouse up event that ended selecting to be
             // handled as mouse click and e.g. follow hyperlink:
             return;
@@ -870,17 +878,20 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                     if ( m_tmpSelFromCell->IsBefore(selcell) )
                     {
                         m_selection->Set(m_tmpSelFromPos, m_tmpSelFromCell,
-                                         wxPoint(x,y), selcell);
-                    }
+                                         wxPoint(x,y), selcell);                                    }
                     else
                     {
                         m_selection->Set(wxPoint(x,y), selcell,
                                          m_tmpSelFromPos, m_tmpSelFromCell);
                     }
+                    {
+                        wxClientDC dc(this);
+                        m_selection->GetFromCell()->SetSelectionPrivPos(
+                                dc, m_selection);
+                        m_selection->GetToCell()->SetSelectionPrivPos(
+                                dc, m_selection);
+                    }
                     Refresh(); // FIXME - optimize!
-#ifdef __UNIX__
-                    CopySelection(Primary);
-#endif
                 }
             }
         }

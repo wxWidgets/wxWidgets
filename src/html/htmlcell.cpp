@@ -57,6 +57,19 @@ void wxHtmlSelection::Set(wxHtmlCell *fromCell, wxHtmlCell *toCell)
     Set(p1, fromCell, p2, toCell);
 }
 
+wxColour wxDefaultHtmlRenderingStyle::GetSelectedTextColour(
+                                        const wxColour& WXUNUSED(clr))
+{
+    return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+}
+
+wxColour wxDefaultHtmlRenderingStyle::GetSelectedTextBgColour(
+                                        const wxColour& WXUNUSED(clr))
+{
+    return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+}
+
+
 //-----------------------------------------------------------------------------
 // wxHtmlCell
 //-----------------------------------------------------------------------------
@@ -238,8 +251,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 // where s2 and s3 start:
 void wxHtmlWordCell::Split(wxDC& dc, 
                            const wxPoint& selFrom, const wxPoint& selTo,
-                           wxString& s1, wxString& s2, wxString& s3,
-                           unsigned& pos1, unsigned& pos2)
+                           unsigned& pos1, unsigned& pos2) const
 {
     wxPoint pt1 = (selFrom == wxDefaultPosition) ?
                    wxDefaultPosition : selFrom - GetAbsPos();
@@ -250,7 +262,6 @@ void wxHtmlWordCell::Split(wxDC& dc,
     unsigned len = m_Word.length();
     unsigned i = 0;
     pos1 = 0;
-    s1 = s2 = s3 = wxEmptyString;
 
     // before selection:
     while ( pt1.x > 0 && i < len )
@@ -267,7 +278,7 @@ void wxHtmlWordCell::Split(wxDC& dc,
     // in selection:
     unsigned j = i;
     pos2 = pos1;
-        pt2.x -= pos2;
+    pt2.x -= pos2;
     while ( pt2.x > 0 && j < len )
     {
         dc.GetTextExtent(m_Word[j], &charW, &charH);
@@ -278,96 +289,129 @@ void wxHtmlWordCell::Split(wxDC& dc,
             j++;
         }
     }
+
+    pos1 = i;
+    pos2 = j;
+}
+
+void wxHtmlWordCell::SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const
+{
+    unsigned p1, p2;
+        
+    Split(dc, 
+          this == s->GetFromCell() ? s->GetFromPos() : wxDefaultPosition,
+          this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
+          p1, p2);
+
+    wxPoint p(0, m_Word.length());
     
-    s1 = m_Word.Mid(0, i);
-    s2 = m_Word.Mid(i, j-i);
-    s3 = m_Word.Mid(j);
-#if 0 // FIXME
-    printf("  '%s' %i '%s' %i '%s'\n", s1.mb_str(), pos1,
-            s2.mb_str(), pos2,s3.mb_str());
-#endif
+    if ( this == s->GetFromCell() )
+        p.x = p1; // selection starts here
+    if ( this == s->GetToCell() )
+        p.y = p2; // selection ends here
+    
+    if ( this == s->GetFromCell() )
+        s->SetFromPrivPos(p);
+    if ( this == s->GetToCell() )
+        s->SetToPrivPos(p);
 }
 
 
-static void SwitchSelState(wxDC& dc, wxHtmlRenderingState& state,
+static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
                            bool toSelection)
 {
+    wxColour fg = info.GetState().GetFgColour();
+    wxColour bg = info.GetState().GetBgColour();
+    
     if ( toSelection )
     {
         dc.SetBackgroundMode(wxSOLID);
-        dc.SetTextBackground(
-                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        dc.SetTextForeground(
-                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+        dc.SetTextForeground(info.GetStyle().GetSelectedTextColour(fg));
+        dc.SetTextBackground(info.GetStyle().GetSelectedTextBgColour(bg));
     }
     else
     {
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.SetTextForeground(state.GetFgColour());
-        dc.SetTextBackground(state.GetBgColour());
+        dc.SetTextForeground(fg);
+        dc.SetTextBackground(bg);
     }
 }
 
 
 void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                          wxHtmlRenderingState& state)
+                          wxHtmlRenderingInfo& info)
 {
 #if 0 // useful for debugging
     dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
 #endif
 
-    if ( state.GetSelectionState() == wxHTML_SEL_CHANGING )
+    if ( info.GetState().GetSelectionState() == wxHTML_SEL_CHANGING )
     {
         // Selection changing, we must draw the word piecewise:
-    
-        unsigned ofs1, ofs2;
-        wxString textBefore, textInside, textAfter;
-        wxHtmlSelection *s = state.GetSelection();
+        wxHtmlSelection *s = info.GetSelection();
+        wxString txt;
+        int w, h;
+        int ofs = 0;
         
-        Split(dc, 
-              this == s->GetFromCell() ? s->GetFromPos() : wxDefaultPosition,
-              this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
-              textBefore, textInside, textAfter, ofs1, ofs2);
-        dc.DrawText(textBefore, x + m_PosX, y + m_PosY);
-        int w1,w2,w3,h123;
-        dc.GetTextExtent(textBefore, &w1,&h123);
-        dc.GetTextExtent(textInside, &w2,&h123);
-        dc.GetTextExtent(textAfter, &w3,&h123);
-        if ( !textInside.empty() )
+        wxPoint priv = (this == s->GetFromCell()) ? 
+                           s->GetFromPrivPos() : s->GetToPrivPos();
+        int part1 = priv.x;
+        int part2 = priv.y;
+
+        if ( part1 > 0 )
         {
-            SwitchSelState(dc, state, true);
-            dc.DrawText(textInside, x + m_PosX + ofs1, y + m_PosY);
+            txt = m_Word.Mid(0, part1);
+            dc.DrawText(txt, x + m_PosX, y + m_PosY);
+            dc.GetTextExtent(txt, &w, &h);
+            ofs += w;
         }
-        if ( !textAfter.empty() )
+        
+        SwitchSelState(dc, info, true);
+        
+        txt = m_Word.Mid(part1, part2-part1);
+        dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
+
+        if ( part2 < m_Word.length() )
         {
-            SwitchSelState(dc, state, false);
-            dc.DrawText(textAfter, x + m_PosX + ofs2, y + m_PosY);
+            dc.GetTextExtent(txt, &w, &h);
+            ofs += w;
+            SwitchSelState(dc, info, false);
+            txt = m_Word.Mid(part2);
+            dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
         }
     }
     else
     {
         // Not changing selection state, draw the word in single mode:
 
-        if ( state.GetSelectionState() != wxHTML_SEL_OUT &&
+        if ( info.GetState().GetSelectionState() != wxHTML_SEL_OUT &&
              dc.GetBackgroundMode() != wxSOLID )
         {
-            SwitchSelState(dc, state, true);
+            SwitchSelState(dc, info, true);
         }
-        else if ( state.GetSelectionState() == wxHTML_SEL_OUT &&
+        else if ( info.GetState().GetSelectionState() == wxHTML_SEL_OUT &&
                   dc.GetBackgroundMode() == wxSOLID )
         {
-            SwitchSelState(dc, state, false);
+            SwitchSelState(dc, info, false);
         }
         dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
     }
 }
     
 
-wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *sel) const
+wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 {
-    // FIXME - use selection
-    return m_Word;
+    if ( s && (this == s->GetFromCell() || this == s->GetToCell()) )
+    {
+        wxPoint priv = (this == s->GetFromCell()) ? 
+                           s->GetFromPrivPos() : s->GetToPrivPos();
+        int part1 = priv.x;
+        int part2 = priv.y;
+        return m_Word.Mid(part1, part2-part1);
+    }
+    else
+        return m_Word;
 }
 
 
@@ -629,33 +673,33 @@ void wxHtmlContainerCell::Layout(int w)
     m_LastLayout = w;
 }
 
-void wxHtmlContainerCell::UpdateRenderingStatePre(wxHtmlRenderingState& state,
+void wxHtmlContainerCell::UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
                                                   wxHtmlCell *cell) const
 {
-    wxHtmlSelection *s = state.GetSelection();
+    wxHtmlSelection *s = info.GetSelection();
     if (!s) return;
     if (s->GetFromCell() == cell || s->GetToCell() == cell)
     {
-        state.SetSelectionState(wxHTML_SEL_CHANGING);
+        info.GetState().SetSelectionState(wxHTML_SEL_CHANGING);
     }
 }
 
-void wxHtmlContainerCell::UpdateRenderingStatePost(wxHtmlRenderingState& state,
+void wxHtmlContainerCell::UpdateRenderingStatePost(wxHtmlRenderingInfo& info,
                                                    wxHtmlCell *cell) const
 {
-    wxHtmlSelection *s = state.GetSelection();
+    wxHtmlSelection *s = info.GetSelection();
     if (!s) return;
     if (s->GetToCell() == cell)
-        state.SetSelectionState(wxHTML_SEL_OUT);
+        info.GetState().SetSelectionState(wxHTML_SEL_OUT);
     else if (s->GetFromCell() == cell)
-        state.SetSelectionState(wxHTML_SEL_IN);
+        info.GetState().SetSelectionState(wxHTML_SEL_IN);
 }
 
 #define mMin(a, b) (((a) < (b)) ? (a) : (b))
 #define mMax(a, b) (((a) < (b)) ? (b) : (a))
 
 void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                               wxHtmlRenderingState& state)
+                               wxHtmlRenderingInfo& info)
 {
     // container visible, draw it:
     if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
@@ -690,33 +734,33 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
             // draw container's contents:
             for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             {
-                UpdateRenderingStatePre(state, cell);
+                UpdateRenderingStatePre(info, cell);
                 cell->Draw(dc,
                            x + m_PosX, y + m_PosY, view_y1, view_y2,
-                           state);
-                UpdateRenderingStatePost(state, cell);
+                           info);
+                UpdateRenderingStatePost(info, cell);
             }
         }
     }
     // container invisible, just proceed font+color changing:
     else
     {
-        DrawInvisible(dc, x, y, state);
+        DrawInvisible(dc, x, y, info);
     }
 }
 
 
 
 void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y,
-                                        wxHtmlRenderingState& state)
+                                        wxHtmlRenderingInfo& info)
 {
     if (m_Cells)
     {
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
         {
-            UpdateRenderingStatePre(state, cell);
-            cell->DrawInvisible(dc, x + m_PosX, y + m_PosY, state);
-            UpdateRenderingStatePost(state, cell);
+            UpdateRenderingStatePre(info, cell);
+            cell->DrawInvisible(dc, x + m_PosX, y + m_PosY, info);
+            UpdateRenderingStatePost(info, cell);
         }
     }
 }
@@ -945,15 +989,16 @@ wxHtmlCell *wxHtmlContainerCell::GetLastTerminal() const
 void wxHtmlColourCell::Draw(wxDC& dc,
                             int x, int y,
                             int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                            wxHtmlRenderingState& state)
+                            wxHtmlRenderingInfo& info)
 {
-    DrawInvisible(dc, x, y, state);
+    DrawInvisible(dc, x, y, info);
 }
 
 void wxHtmlColourCell::DrawInvisible(wxDC& dc,
                                      int WXUNUSED(x), int WXUNUSED(y),
-                                     wxHtmlRenderingState& state)
+                                     wxHtmlRenderingInfo& info)
 {
+    wxHtmlRenderingState& state = info.GetState();
     if (m_Flags & wxHTML_CLR_FOREGROUND)
     {
         state.SetFgColour(m_Colour);
@@ -979,13 +1024,13 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
 void wxHtmlFontCell::Draw(wxDC& dc,
                           int WXUNUSED(x), int WXUNUSED(y),
                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                          wxHtmlRenderingState& WXUNUSED(state))
+                          wxHtmlRenderingInfo& WXUNUSED(info))
 {
     dc.SetFont(m_Font);
 }
 
 void wxHtmlFontCell::DrawInvisible(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y),
-                                   wxHtmlRenderingState& WXUNUSED(state))
+                                   wxHtmlRenderingInfo& WXUNUSED(info))
 {
     dc.SetFont(m_Font);
 }
@@ -1014,7 +1059,7 @@ wxHtmlWidgetCell::wxHtmlWidgetCell(wxWindow *wnd, int w)
 void wxHtmlWidgetCell::Draw(wxDC& WXUNUSED(dc),
                             int WXUNUSED(x), int WXUNUSED(y),
                             int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                            wxHtmlRenderingState& WXUNUSED(state))
+                            wxHtmlRenderingInfo& WXUNUSED(info))
 {
     int absx = 0, absy = 0, stx, sty;
     wxHtmlCell *c = this;
@@ -1034,7 +1079,7 @@ void wxHtmlWidgetCell::Draw(wxDC& WXUNUSED(dc),
 
 void wxHtmlWidgetCell::DrawInvisible(wxDC& WXUNUSED(dc),
                                      int WXUNUSED(x), int WXUNUSED(y),
-                                     wxHtmlRenderingState& WXUNUSED(state))
+                                     wxHtmlRenderingInfo& WXUNUSED(info))
 {
     int absx = 0, absy = 0, stx, sty;
     wxHtmlCell *c = this;
