@@ -256,7 +256,10 @@ void wxHtmlWindow::CreateLayout()
 
     else {
         GetClientSize(&ClientWidth, &ClientHeight);
+#ifndef __WXMSW__
+        // VS : this looks extremely ugly under windoze, better fix needed!
         SetScrollbars(1, 1, 0, ClientHeight * 2); // always on          
+#endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
      	if (ClientHeight < m_Cell -> GetHeight()) {
@@ -267,6 +270,7 @@ void wxHtmlWindow::CreateLayout()
         }
 	    else { /* we fit into window, no need for scrollbars */
 	        SetScrollbars(1, 1, 0, 0); // disable...
+                GetClientSize(&ClientWidth, &ClientHeight);
 	        m_Cell -> Layout(ClientWidth); // ...and relayout
 	    }
     }
