@@ -1,0 +1,81 @@
+*** /home/julians/microwindows/original/microwin/src/mwin/winuser.c	Wed Jul  5 00:36:42 2000
+--- winuser.c	Tue May 22 00:42:01 2001
+***************
+*** 136,150 ****
+  	return FALSE;
+  }
+  
+  BOOL WINAPI
+! PeekMessage(LPMSG lpMsg, HWND hwnd, UINT uMsgFilterMin, UINT uMsgFilterMax,
+! 	UINT wRemoveMsg)
+  {
+  	HWND	wp;
+  	PMSG	pNxtMsg;
+  
+  	/* check if no messages in queue*/
+  	if(mwMsgHead.head == NULL) {
+  #if PAINTONCE
+  		/* check all windows for pending paint messages*/
+  		for(wp=listwp; wp; wp=wp->next) {
+--- 136,158 ----
+  	return FALSE;
+  }
+  
++ /*
++  * A helper function for sharing code between PeekMessage and GetMessage
++  */
++ 
+  BOOL WINAPI
+! PeekMessageHelper(LPMSG lpMsg, HWND hwnd, UINT uMsgFilterMin, UINT uMsgFilterMax,
+! 	UINT wRemoveMsg, BOOL returnIfEmptyQueue)
+  {
+  	HWND	wp;
+  	PMSG	pNxtMsg;
+  
+  	/* check if no messages in queue*/
+  	if(mwMsgHead.head == NULL) {
++                 /* Added by JACS so it doesn't reach MwSelect */
++                 if (returnIfEmptyQueue)
++                     return FALSE;
++ 
+  #if PAINTONCE
+  		/* check all windows for pending paint messages*/
+  		for(wp=listwp; wp; wp=wp->next) {
+***************
+*** 176,188 ****
+  }
+  
+  BOOL WINAPI
+  GetMessage(LPMSG lpMsg,HWND hwnd,UINT wMsgFilterMin,UINT wMsgFilterMax)
+  {
+  	/*
+  	 * currently MwSelect() must poll for VT switch reasons,
+  	 * so this code will work
+  	 */
+! 	while(!PeekMessage(lpMsg, hwnd, wMsgFilterMin, wMsgFilterMax,PM_REMOVE))
+  		continue;
+  	return lpMsg->message != WM_QUIT;
+  }
+--- 184,205 ----
+  }
+  
+  BOOL WINAPI
++ PeekMessage(LPMSG lpMsg, HWND hwnd, UINT uMsgFilterMin, UINT uMsgFilterMax,
++ 	UINT wRemoveMsg)
++ {
++         /* Never wait in MwSelect: pass TRUE */
++         return PeekMessageHelper(lpMsg, hwnd, uMsgFilterMin, uMsgFilterMax, wRemoveMsg, TRUE);
++ }
++ 
++ BOOL WINAPI
+  GetMessage(LPMSG lpMsg,HWND hwnd,UINT wMsgFilterMin,UINT wMsgFilterMax)
+  {
+  	/*
+  	 * currently MwSelect() must poll for VT switch reasons,
+  	 * so this code will work
+  	 */
+!         /* Always wait in MwSelect if there are messages: pass FALSE */
+! 	while(!PeekMessageHelper(lpMsg, hwnd, wMsgFilterMin, wMsgFilterMax,PM_REMOVE, FALSE))
+  		continue;
+  	return lpMsg->message != WM_QUIT;
+  }
