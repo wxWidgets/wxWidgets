@@ -566,7 +566,7 @@
 
 // For backward compatibility reasons, this parameter now only controls the
 // default scrolling method used by cursors.  This default behavior can be
-// overriden by setting the second param of wxDB::GetDbConnection() to indicate
+// overriden by setting the second param of wxDB::wxDbGetConnection() to indicate
 // whether the connection (and any wxTable()s that use the connection) should
 // support forward only scrolling of cursors, or both forward and backward
 // Support for backward scrolling cursors is dependent on the data source as
@@ -835,7 +835,7 @@
 #define wxUSE_MS_HTML_HELP 0
 #endif
 
-// wxUSE_DBEUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
+// wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
 #if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
 #undef wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS 0
