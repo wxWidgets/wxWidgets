@@ -1470,7 +1470,7 @@ size_t wxString::find_last_of(const wxChar* sz, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    for ( const char *p = c_str() + length() - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + length() - 1; p >= c_str(); p-- )
     {
         if ( wxStrchr(sz, *p) )
             return p - c_str();
@@ -1490,7 +1490,7 @@ size_t wxString::find_first_not_of(const wxChar* sz, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    size_t nAccept = strspn(c_str() + nStart, sz);
+    size_t nAccept = wxStrspn(c_str() + nStart, sz);
     if ( nAccept >= length() - nStart )
         return npos;
     else
@@ -1501,7 +1501,7 @@ size_t wxString::find_first_not_of(wxChar ch, size_t nStart) const
 {
     wxASSERT( nStart <= Len() );
 
-    for ( const char *p = c_str() + nStart; *p; p++ )
+    for ( const wxChar *p = c_str() + nStart; *p; p++ )
     {
         if ( *p != ch )
             return p - c_str();
@@ -1521,7 +1521,7 @@ size_t wxString::find_last_not_of(const wxChar* sz, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    for ( const char *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
     {
         if ( !wxStrchr(sz, *p) )
             return p - c_str();
@@ -1541,7 +1541,7 @@ size_t wxString::find_last_not_of(wxChar ch, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    for ( const char *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
     {
         if ( *p != ch )
             return p - c_str();
