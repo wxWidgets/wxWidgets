@@ -37,6 +37,7 @@ enum
    WXLOWIN_MENU_SANSSERIF,
    WXLOWIN_MENU_RCLICK,
    WXLOWIN_MENU_DBLCLICK,
+   WXLOWIN_MENU_MDOWN,
    WXLOWIN_MENU_LDOWN,
    WXLOWIN_MENU_LUP,
    WXLOWIN_MENU_MOUSEMOVE,
@@ -89,7 +90,7 @@ public:
       m_CursorVisibility = visibility; return v;}
 
    /// Pastes text from clipboard.
-   void Paste(void);
+   void Paste(bool usePrimarySelection = FALSE);
    /** Copies selection to clipboard.
        @param invalidate used internally, see wxllist.h for details
    */
@@ -138,6 +139,7 @@ public:
    void OnLeftMouseDown(wxMouseEvent& event)   { OnMouse(WXLOWIN_MENU_LDOWN, event); }
    void OnLeftMouseUp(wxMouseEvent& event)     { OnMouse(WXLOWIN_MENU_LUP, event); }
    void OnRightMouseClick(wxMouseEvent& event) { OnMouse(WXLOWIN_MENU_RCLICK, event); }
+   void OnMiddleMouseDown(wxMouseEvent& event) { OnMouse(WXLOWIN_MENU_MDOWN, event); }
    void OnMouseDblClick(wxMouseEvent& event)   { OnMouse(WXLOWIN_MENU_DBLCLICK, event); }
    void OnMouseMove(wxMouseEvent &event)       { OnMouse(WXLOWIN_MENU_MOUSEMOVE, event) ; }
    void OnSetFocus(wxFocusEvent &ev);

@@ -1071,6 +1071,7 @@ wxLayoutLine::Layout(wxDC &dc,
                      wxLayoutList *llist,
                      wxPoint *cursorPos,
                      wxPoint *cursorSize,
+                     wxLayoutStyleInfo *cursorStyle,
                      int cx,
                      bool suppressSIupdate)
 {
@@ -1134,6 +1135,8 @@ wxLayoutLine::Layout(wxDC &dc,
                   str = WXLO_CURSORCHAR;
                dc.GetTextExtent(str, &width, &height, &descent);
 
+               if(cursorStyle) // set style info
+                  *cursorStyle = llist->GetStyleInfo();
                if ( cursorSize )
                {
                   // Just in case some joker inserted an empty string object:
@@ -1144,14 +1147,15 @@ wxLayoutLine::Layout(wxDC &dc,
                   cursorSize->x = width;
                   cursorSize->y = height;
                }
-
+               
                cursorFound = true; // no more checks
             }
             else
             {
                // on some other object
                CoordType top, bottom; // unused
-               *cursorSize = obj->GetSize(&top,&bottom);
+               if(cursorSize)
+                  *cursorSize = obj->GetSize(&top,&bottom);
                cursorPos->y = m_Position.y;
                cursorFound = true; // no more checks
             }
@@ -1554,6 +1558,7 @@ wxLayoutList::InternalClear(void)
    m_DefaultStyleInfo.m_bg = *wxWHITE;
 
    m_CurrentStyleInfo = m_DefaultStyleInfo;
+   m_CursorStyleInfo = m_DefaultStyleInfo;
 }
 
 void
@@ -2153,11 +2158,13 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
          if(line == m_CursorLine)
             line->Layout(dc, this,
                          (wxPoint *)&m_CursorScreenPos,
-                         (wxPoint *)&m_CursorSize, m_CursorPos.x);
+                         (wxPoint *)&m_CursorSize,
+                         &m_CursorStyleInfo,
+                         m_CursorPos.x);
          if(cpos && line->GetLineNumber() == cpos->y)
             line->Layout(dc, this,
                          cpos,
-                         csize, cpos->x);
+                         csize, NULL, cpos->x);
          else
             line->Layout(dc, this);
          // little condition to speed up redrawing:

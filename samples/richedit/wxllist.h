@@ -580,6 +580,7 @@ public:
        @param llist th   e wxLayoutList
        @param cursorPos if not NULL, set cursor screen position in there
        @param cursorSize if not cursorPos != NULL, set cursor size in there
+       @param cursorStyle if non NULL where to store styleinfo for cursor pos
        @param cx if cursorPos != NULL, the cursor x position
        @param suppressStyleUpdate FALSe normally, only to suppress updating of m_StyleInfo
    */
@@ -587,6 +588,7 @@ public:
                wxLayoutList *llist,
                wxPoint *cursorPos = NULL,
                wxPoint *cursorSize = NULL,
+               wxLayoutStyleInfo *cursorStyle = NULL,
                int cx = 0,
                bool suppressStyleUpdate = FALSE);
    /** This function finds an object belonging to a given cursor
@@ -919,13 +921,14 @@ public:
    wxLayoutStyleInfo &GetDefaultStyleInfo(void) { return m_DefaultStyleInfo ; }
    wxLayoutStyleInfo &GetStyleInfo(void) { return m_CurrentStyleInfo ; }
    const wxLayoutStyleInfo &GetStyleInfo(void) const { return m_CurrentStyleInfo ; }
+   const wxLayoutStyleInfo &GetCursorStyleInfo(void) const { return m_CursorStyleInfo ; }
 
    /// is the current font underlined?
-   bool IsFontUnderlined() const { return GetStyleInfo().underline != 0; }
+   bool IsFontUnderlined() const { return GetCursorStyleInfo().underline != 0; }
    /// is the current font bold?
-   bool IsFontBold() const { return GetStyleInfo().weight == wxBOLD; }
+   bool IsFontBold() const { return GetCursorStyleInfo().weight == wxBOLD; }
    /// is the current font italic?
-   bool IsFontItalic() const { return GetStyleInfo().style == wxITALIC; }
+   bool IsFontItalic() const { return GetCursorStyleInfo().style == wxITALIC; }
 
    /// set underline if it was off, turn it off if it was on
    void ToggleFontUnderline()
@@ -1162,6 +1165,8 @@ private:
    wxLayoutStyleInfo m_DefaultStyleInfo;
    /// the current setting:
    wxLayoutStyleInfo m_CurrentStyleInfo;
+   /// the current setting:
+   wxLayoutStyleInfo m_CursorStyleInfo;
    //@}
 };
 

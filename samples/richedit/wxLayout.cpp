@@ -36,7 +36,9 @@ IMPLEMENT_APP(MyApp)
    enum ids{ ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT, ID_FIND,
+             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT,
+             ID_PASTE_PRIMARY,
+             ID_FIND,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
              ID_TEST, ID_LINEBREAKS_TEST, ID_LONG_TEST, ID_URL_TEST };
 
@@ -99,7 +101,10 @@ MyFrame::MyFrame(void) :
    edit_menu->AppendSeparator();
    edit_menu->Append(ID_COPY, "&Copy", "Copy text to clipboard.");
    edit_menu->Append(ID_CUT, "Cu&t", "Cut text to clipboard.");
+#ifdef __WXGTK__
    edit_menu->Append(ID_PASTE,"&Paste", "Paste text from clipboard.");
+#endif
+   edit_menu->Append(ID_PASTE_PRIMARY,"&Paste primary", "Paste text from primary selection.");
    edit_menu->Append(ID_FIND, "&Find", "Find text.");
    menu_bar->Append(edit_menu, "&Edit" );
 
@@ -267,6 +272,12 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       m_lwin->Paste();
       m_lwin->Refresh(FALSE);
       break;
+#ifdef __WXGTK__
+   case ID_PASTE_PRIMARY:
+      m_lwin->Paste(TRUE);
+      m_lwin->Refresh(FALSE);
+      break;
+#endif
    case ID_COPY:
       m_lwin->Copy();
       m_lwin->Refresh(FALSE);

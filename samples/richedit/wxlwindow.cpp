@@ -95,6 +95,7 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_LEFT_UP(wxLayoutWindow::OnLeftMouseUp)
    EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
    EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
+   EVT_MIDDLE_DOWN(wxLayoutWindow::OnMiddleMouseDown)
    EVT_MOTION    (wxLayoutWindow::OnMouseMove)
 
    EVT_UPDATE_UI(WXLOWIN_MENU_UNDERLINE, wxLayoutWindow::OnUpdateMenuUnderline)
@@ -340,8 +341,8 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          }
          break;
 
-      case WXLOWIN_MENU_RCLICK:
-         // remove the selection if mouse click is outside it (TODO)
+      case WXLOWIN_MENU_MDOWN:
+         Paste(TRUE);
          break;
 
       case WXLOWIN_MENU_DBLCLICK:
@@ -911,14 +912,19 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 
 // ----------------------------------------------------------------------------
 // clipboard operations
+//
 // ----------------------------------------------------------------------------
 
 void
-wxLayoutWindow::Paste(void)
+wxLayoutWindow::Paste(bool primary)
 {
    // Read some text
    if (wxTheClipboard->Open())
    {
+#if __WXGTK__
+      if(primary)
+         wxTheClipboard->UsePrimarySelection();
+#endif
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
       wxLayoutDataObject wxldo;
       if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
@@ -1089,28 +1095,21 @@ void wxLayoutWindow::OnMenu(wxCommandEvent& event)
    switch (event.GetId())
    {
    case WXLOWIN_MENU_LARGER:
-      m_llist->SetFontLarger();
-      break;
+      m_llist->SetFontLarger(); Refresh(FALSE); break;
    case WXLOWIN_MENU_SMALLER:
-      m_llist->SetFontSmaller();
-      break;
-
+      m_llist->SetFontSmaller(); Refresh(FALSE); break;
    case WXLOWIN_MENU_UNDERLINE:
-      m_llist->ToggleFontUnderline();
-      break;
+      m_llist->ToggleFontUnderline(); Refresh(FALSE); break;
    case WXLOWIN_MENU_BOLD:
-      m_llist->ToggleFontWeight();
-      break;
+      m_llist->ToggleFontWeight(); Refresh(FALSE); break;
    case WXLOWIN_MENU_ITALICS:
-      m_llist->ToggleFontItalics();
-      break;
-
+      m_llist->ToggleFontItalics(); Refresh(FALSE); break;
    case WXLOWIN_MENU_ROMAN:
-      m_llist->SetFontFamily(wxROMAN); break;
+      m_llist->SetFontFamily(wxROMAN); Refresh(FALSE); break;
    case WXLOWIN_MENU_TYPEWRITER:
-      m_llist->SetFontFamily(wxFIXED); break;
+      m_llist->SetFontFamily(wxFIXED); Refresh(FALSE); break;
    case WXLOWIN_MENU_SANSSERIF:
-      m_llist->SetFontFamily(wxSWISS); break;
+      m_llist->SetFontFamily(wxSWISS); Refresh(FALSE); break;
    }
 }
 
