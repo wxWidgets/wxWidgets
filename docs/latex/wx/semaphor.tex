@@ -57,28 +57,78 @@ Destructor is not virtual, don't use this class polymorphically.
 
 \membersection{wxSemaphore::Post}\label{wxsemaphorepost}
 
-\func{void}{Post}{\void}
+\func{wxSemaError }{Post}{\void}
 
-Increments the semaphore count and signals one of the waiting threads in an
-atomic way.
+Increments the semaphore count and signals one of the waiting
+threads in an atomic way. Returns wxSEMA_OVERFLOW if the count
+would increase the counter past the maximum.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_OVERFLOW}}{Post() would increase counter past the max.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
 
 \membersection{wxSemaphore::TryWait}\label{wxsemaphoretrywait}
 
-\func{bool}{TryWait}{\void}
+\func{wxSemaError }{TryWait}{\void}
 
-Same as \helpref{Wait()}{wxsemaphorewait}, but does not block, returns
-{\tt TRUE} if the semaphore was successfully acquired and {\tt FALSE} if the
-count is zero and it couldn't be done.
+Same as \helpref{Wait()}{wxsemaphorewait}, but returns immediately.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_BUSY}}{Returned by TryWait() if Wait() would block, i.e. the count is zero.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
 
 \membersection{wxSemaphore::Wait}\label{wxsemaphorewait}
 
-\func{void}{Wait}{\void}
+\func{wxSemaError }{Wait}{\void}
 
 Wait indefinitely until the semaphore count becomes strictly positive
 and then decrement it and return.
 
-\func{bool}{Wait}{\param{unsigned long }{timeout\_millis}}
+\wxheading{Return value}
 
-Same as the version above, but with a timeout limit: returns {\tt TRUE} if the
-semaphore was acquired and {\tt FALSE} if the timeout has elapsed
+One of:
 
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
+\membersection{wxSemaphore::WaitTimeout}\label{wxsemaphorewaittimeout}
+
+\func{wxSemaError }{WaitTimeout}{\param{unsigned
+long}{timeout\_millis}}
+
+Same as \helpref{Wait()}{wxsemaphorewait}, but with a timeout
+limit.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_TIMEOUT}}{Timeout occurred without receiving semaphore.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
