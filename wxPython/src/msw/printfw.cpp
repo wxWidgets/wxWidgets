@@ -1083,11 +1083,10 @@ static PyObject *_wrap_wxPrintData_GetPrinterTranslateY(PyObject *self, PyObject
 #define wxPrintData_GetPrintMode(_swigobj)  (_swigobj->GetPrintMode())
 static PyObject *_wrap_wxPrintData_GetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxPrintMode * _result;
+    wxPrintMode  _result;
     wxPrintData * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintData_GetPrintMode",_kwnames,&_argo0)) 
@@ -1101,12 +1100,11 @@ static PyObject *_wrap_wxPrintData_GetPrintMode(PyObject *self, PyObject *args, 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxPrintMode (wxPrintData_GetPrintMode(_arg0));
+    _result = (wxPrintMode )wxPrintData_GetPrintMode(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPrintMode_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1485,13 +1483,12 @@ static PyObject *_wrap_wxPrintData_SetPrinterTranslation(PyObject *self, PyObjec
 static PyObject *_wrap_wxPrintData_SetPrintMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintData * _arg0;
-    wxPrintMode * _arg1;
+    wxPrintMode  _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","printMode", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintData_SetPrintMode",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintData_SetPrintMode",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1500,16 +1497,9 @@ static PyObject *_wrap_wxPrintData_SetPrintMode(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPrintMode_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintData_SetPrintMode. Expected _wxPrintMode_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintData_SetPrintMode(_arg0,*_arg1);
+    wxPrintData_SetPrintMode(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5803,6 +5793,10 @@ SWIGEXPORT(void) initprintfwc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("printfwc", printfwcMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxPRINT_MODE_NONE", PyInt_FromLong((long) wxPRINT_MODE_NONE));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_PREVIEW", PyInt_FromLong((long) wxPRINT_MODE_PREVIEW));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_FILE", PyInt_FromLong((long) wxPRINT_MODE_FILE));
+	 PyDict_SetItemString(d,"wxPRINT_MODE_PRINTER", PyInt_FromLong((long) wxPRINT_MODE_PRINTER));
 	 PyDict_SetItemString(d,"wxPRINTER_NO_ERROR", PyInt_FromLong((long) wxPRINTER_NO_ERROR));
 	 PyDict_SetItemString(d,"wxPRINTER_CANCELLED", PyInt_FromLong((long) wxPRINTER_CANCELLED));
 	 PyDict_SetItemString(d,"wxPRINTER_ERROR", PyInt_FromLong((long) wxPRINTER_ERROR));

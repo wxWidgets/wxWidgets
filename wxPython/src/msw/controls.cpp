@@ -1990,7 +1990,7 @@ static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args, PyObject *
     PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     PyObject * _obj7 = 0;
-    char *_kwnames[] = { "parent","id","label","pos","size","style","val","name", NULL };
+    char *_kwnames[] = { "parent","id","label","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
@@ -2104,7 +2104,7 @@ static PyObject *_wrap_wxCheckBox_Create(PyObject *self, PyObject *args, PyObjec
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
     PyObject * _obj8 = 0;
-    char *_kwnames[] = { "self","parent","id","label","pos","size","style","val","name", NULL };
+    char *_kwnames[] = { "self","parent","id","label","pos","size","style","validator","name", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiO|OOlOO:wxCheckBox_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_obj5,&_arg6,&_argo7,&_obj8)) 
