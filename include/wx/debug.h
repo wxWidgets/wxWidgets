@@ -178,9 +178,10 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   get a warning about an unnamed struct not used to define an object!).
  */
 
-#define wxMAKE_ASSERT_NAME_HELPER(line) wxAssert_ ## line
-#define wxMAKE_ASSERT_NAME(line)        wxMAKE_ASSERT_NAME_HELPER(line)
-#define wxMAKE_UNIQUE_ASSERT_NAME       wxMAKE_ASSERT_NAME(__LINE__)
+#define wxMAKE_ASSERT_NAME_HELPER(line)     wxAssert_ ## line
+#define wxMAKE_ASSERT_NAME(line)            wxMAKE_ASSERT_NAME_HELPER(line)
+#define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(__LINE__)
+#define wxMAKE_UNIQUE_ASSERT_NAME2(text)    wxMAKE_ASSERT_NAME(text)
 
 /*
   The second argument of this macro must be a valid C++ identifier and not a
@@ -192,6 +193,9 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 */
 #define wxCOMPILE_TIME_ASSERT(expr, msg) \
     struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
+
+#define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
+    struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
 
 // helpers for wxCOMPILE_TIME_ASSERT below, for private use only
 #define wxMAKE_BITSIZE_MSG(type, size) type ## SmallerThan ## size ## Bits

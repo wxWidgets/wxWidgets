@@ -186,8 +186,9 @@ private:
 // ----------------------------------------------------------------------------
 
 #define  _WX_DEFINE_ARRAY(T, name, classexp)                        \
-wxCOMPILE_TIME_ASSERT(sizeof(T) <= sizeof(long),                    \
-                      TypeIsTooBigToBeStoredInWxArray);             \
+wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(long),                   \
+                       TypeIsTooBigToBeStoredInWxArray,             \
+                       name);                                       \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
 classexp name : public wxBaseArray                                  \
 {                                                                   \
@@ -230,8 +231,9 @@ public:                                                             \
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_ARRAY(T, name, defcomp, classexp)         \
-wxCOMPILE_TIME_ASSERT(sizeof(T) <= sizeof(long),                    \
-                      TypeIsTooBigToBeStoredInWxArray);             \
+wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(long),                   \
+                       TypeIsTooBigToBeStoredInWxArray,             \
+                       name);                                       \
 typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);        \
 classexp name : public wxBaseArray                                  \
 {                                                                   \
