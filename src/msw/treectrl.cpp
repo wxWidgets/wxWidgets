@@ -2218,9 +2218,11 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case NM_DBLCLK:
-            // return TRUE to prevent the default processing which consists in
-            // toggling the state of the item under the mouse
-            *result = processed;
+            // we translate NM_DBLCLK into ACTIVATED event, so don't interpret
+            // the return code of this event handler as the return value for
+            // NM_DBLCLK - otherwise, double clicking the item to toggle its
+            // expanded status would never work
+            *result = FALSE;
             break;
 
         case TVN_BEGINDRAG:

@@ -398,7 +398,8 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_STREAMS
     // the first elements are reading ends, the second are the writing ones
     HANDLE hpipeStdin[2],
-           hpipeStdout[2];
+           hpipeStdout[2],
+           hpipeStderr[2];
 
     // open the pipes to which child process IO will be redirected if needed
     if ( handler && handler->IsRedirected() )
@@ -430,6 +431,8 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
             return sync ? -1 : 0;
         }
 
+        (void)::CreatePipe(&hpipeStderr[0], &hpipeStderr[1], &security, 0);
+
         redirect = TRUE;
     }
 #endif // wxUSE_STREAMS
@@ -442,9 +445,15 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_STREAMS
     if ( redirect )
     {
-        si.dwFlags = STARTF_USESTDHANDLES;
+        // when the std IO is redirected, we don't show the (console) process
+        // window
+        si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+
         si.hStdInput = hpipeStdin[0];
         si.hStdOutput = hpipeStdout[1];
+        si.hStdError = hpipeStderr[1];
+
+        si.wShowWindow = SW_HIDE;
     }
 #endif // wxUSE_STREAMS
 
@@ -472,6 +481,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     {
         ::CloseHandle(hpipeStdin[0]);
         ::CloseHandle(hpipeStdout[1]);
+        ::CloseHandle(hpipeStderr[1]);
     }
 #endif // wxUSE_STREAMS
 
@@ -483,6 +493,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         {
             ::CloseHandle(hpipeStdin[1]);
             ::CloseHandle(hpipeStdout[0]);
+            ::CloseHandle(hpipeStderr[0]);
         }
 #endif // wxUSE_STREAMS
 
@@ -495,10 +506,11 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     if ( redirect )
     {
         // We can now initialize the wxStreams
-        wxInputStream *inStream = new wxPipeInputStream(hpipeStdout[0]);
+        wxInputStream *inStream = new wxPipeInputStream(hpipeStdout[0]),
+                      *errStream = new wxPipeInputStream(hpipeStderr[0]);
         wxOutputStream *outStream = new wxPipeOutputStream(hpipeStdin[1]);
 
-        handler->SetPipeStreams(inStream, outStream, NULL);
+        handler->SetPipeStreams(inStream, outStream, errStream);
     }
 #endif // wxUSE_STREAMS
 

@@ -148,7 +148,13 @@ WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 
 // execute the command capturing its output into an array line by line
-WXDLLEXPORT long wxExecute(const wxString& command, wxArrayString& output);
+WXDLLEXPORT long wxExecute(const wxString& command,
+                           wxArrayString& output);
+
+// also capture stderr
+WXDLLEXPORT long wxExecute(const wxString& command,
+                           wxArrayString& output,
+                           wxArrayString& error);
 
 enum wxSignal
 {

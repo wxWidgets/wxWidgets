@@ -1319,6 +1319,8 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
+
 Executes another program in Unix or Windows.
 
 The first form takes a command string, such as {\tt "emacs file.txt"}.
@@ -1326,8 +1328,8 @@ The first form takes a command string, such as {\tt "emacs file.txt"}.
 The second form takes an array of values: a command, any number of
 arguments, terminated by NULL.
 
-The semantics of the third version is different from the first two and is
-described in more details below.
+The semantics of the third and fourth versions is different from the first two
+and is described in more details below.
 
 If {\it sync} is FALSE (the default), flow of control immediately returns.
 If TRUE, the current application waits until the other program has terminated.
@@ -1350,7 +1352,8 @@ the process finishes.
 
 Finally, you may use the third overloaded version of this function to execute
 a process (always synchronously) and capture its output in the array 
-{\it output}.
+{\it output}. The fourth version adds the possibility to additionally capture
+the messages from standard error output in the {\it errors} array.
 
 See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess}, 
 \helpref{Exec sample}{sampleexec}.
