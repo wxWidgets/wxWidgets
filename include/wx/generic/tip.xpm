@@ -1,5 +1,5 @@
 /* XPM */
-static char *magick[] = {
+static char *tipIcon[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 7 1",
 "  c Gray0",

@@ -145,6 +145,11 @@
 #define wxUSE_TEXTDLG 0
 
 /*
+ * Use startup tips
+ */
+#define wxUSE_STARTUP_TIPS 0
+
+/*
  * Use progress dialog
  */
 #define wxUSE_PROGRESSDLG 0

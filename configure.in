@@ -289,6 +289,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_DIRDLG=no
   DEFAULT_wxUSE_TEXTDLG=no
+  DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_VALIDATORS=yes
@@ -387,6 +388,7 @@ else
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_DIRDLG=yes
   DEFAULT_wxUSE_TEXTDLG=yes
+  DEFAULT_wxUSE_STARTUP_TIPS=yes
   DEFAULT_wxUSE_PROGRESSDLG=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_VALIDATORS=yes
@@ -670,6 +672,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
 WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
 WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
+WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
@@ -1967,6 +1970,14 @@ fi
 
 if test "$wxUSE_TEXTDLG" = "yes"; then
     AC_DEFINE(wxUSE_TEXTDLG)
+fi
+
+if test "$wxUSE_STARTUP_TIPS" = "yes"; then
+    if test "$wxUSE_CONSTRAINTS" != "yes"; then
+       AC_MSG_WARN(Startup tips requires constraints and won't be compiled without them)
+    else
+        AC_DEFINE(wxUSE_STARTUP_TIPS)
+    fi
 fi
 
 if test "$wxUSE_PROGRESSDLG" = "yes"; then
