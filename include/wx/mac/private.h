@@ -182,11 +182,11 @@ public:
     	m_release = false ;                                                                 
 	}
 	                                                               
-    wxMacCFStringHolder(const wxString &str)                                          
+    wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )                                          
     {      
     	m_cfs = NULL ;
     	m_release = false ;  
-    	Assign( str ) ;                                                               
+    	Assign( str , encoding ) ;
     }                                                                       
                                                                             
     wxMacCFStringHolder(CFStringRef ref , bool release = true )                                                   
@@ -199,14 +199,7 @@ public:
     { 
     	Release() ;
     }                                           
-      
-    wxMacCFStringHolder& operator=(const wxString& str)                               
-    {                                                                       
-        Release() ;                                                        
-		Assign( str ) ;
-        return *this;                                                       
-    }                                                                       
-             
+
     CFStringRef Detach()
     {
     	CFStringRef retval = m_cfs ;
@@ -222,11 +215,12 @@ public:
     	m_cfs = NULL ;
     }         
 
+	void Assign( const wxString &str , wxFontEncoding encoding ) ;
+
     operator CFStringRef () { return m_cfs; }   
-    wxString AsString() ;
+    wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
              
 private:             
-	void Assign( const wxString &str ) ;
     	                                                       
     CFStringRef m_cfs;
     bool m_release ;                                                        
