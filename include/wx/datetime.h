@@ -1520,6 +1520,24 @@ inline bool WXDLLEXPORT operator!=(const wxTimeSpan &t1, const wxTimeSpan &t2)
 // wxDateSpan
 // ----------------------------------------------------------------------------
 
+// comparison
+// ----------
+
+// ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
+inline WXDLLEXPORT bool operator==(const wxDateSpan& ds1,
+                                   const wxDateSpan& ds2)
+{
+    return ds1.GetYears() == ds2.GetYears() &&
+           ds1.GetMonths() == ds2.GetMonths() &&
+           ds1.GetTotalDays() == ds2.GetTotalDays();
+}
+
+inline WXDLLEXPORT bool operator!=(const wxDateSpan& ds1,
+                                   const wxDateSpan& ds2)
+{
+  return !(ds1 == ds2);
+}
+
 // arithmetics
 // -----------
 
