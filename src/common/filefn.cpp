@@ -514,7 +514,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
         /* prefix ~ */
         if (nm[1] == SEP || nm[1] == 0)
         {        /* ~/filename */
-            if ((s = wxGetUserHome(_T(""))) != NULL) {
+            if ((s = WXSTRINGCAST wxGetUserHome(_T(""))) != NULL) {
                 if (*++nm)
                     nm++;
             }
@@ -527,7 +527,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             was_sep = (*s == SEP);
             nnm = *s ? s + 1 : s;
             *s = 0;
-            if ((home = wxGetUserHome(wxString(nm + 1))) == NULL) {
+            if ((home = WXSTRINGCAST wxGetUserHome(wxString(nm + 1))) == NULL) {
                if (was_sep) /* replace only if it was there: */
                    *s = SEP;
                 s = _T("");
@@ -577,7 +577,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle environment
-  wxChar *val = (wxChar *) NULL;
+  const wxChar *val = (const wxChar *) NULL;
   wxChar *tcp = (wxChar *) NULL;
   if (envname != WXSTRINGCAST NULL && (val = wxGetenv (WXSTRINGCAST envname)) != NULL &&
      (tcp = wxStrstr (dest, val)) != NULL)
