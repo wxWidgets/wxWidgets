@@ -300,7 +300,8 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
-    Centre( wxBOTH );
+    if ( styleDlg & wxCENTRE )
+        Centre(wxBOTH);
 
     m_listbox->SetFocus();
 
