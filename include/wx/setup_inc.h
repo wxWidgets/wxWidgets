@@ -31,13 +31,14 @@
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_4 1
 
-// Set to 0 for accurate dialog units, else 1 to be as per 2.1.16 and before.
-// If migrating between versions, your dialogs may seem to shrink.
+// MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
+// default system font is used for wxWindow::GetCharWidth/Height() instead of
+// the current font.
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 0 (the new calculations are more correct!)
-#define wxDIALOG_UNIT_COMPATIBILITY   1
+// Recommended setting: 0
+#define wxDIALOG_UNIT_COMPATIBILITY   0
 
 // ----------------------------------------------------------------------------
 // debugging settings
