@@ -69,15 +69,19 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 // "configure_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
+static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDialog *win )
 {
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
 
-    win->m_x = event->x;
-    win->m_y = event->y;
+    int x = 0;
+    int y = 0;
+    gdk_window_get_root_origin( win->m_widget->window, &x, &y );
+    
+    win->m_x = x;
+    win->m_y = y;
 
     wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );

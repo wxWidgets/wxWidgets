@@ -146,15 +146,19 @@ static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSE
 // "configure_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
+static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxFrame *win )
 {
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
     
-    win->m_x = event->x;
-    win->m_y = event->y;
+    int x = 0;
+    int y = 0;
+    gdk_window_get_root_origin( win->m_widget->window, &x, &y );
+    
+    win->m_x = x;
+    win->m_y = y;
 
     wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );
