@@ -75,6 +75,8 @@ public:
     int GetRange() const;
     int GetValue() const;
 
+    bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
+    
     // implementation
     // -------------
 
