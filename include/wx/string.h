@@ -32,10 +32,6 @@
     #include <ctype.h>
 #endif
 
-#ifdef __EMX__
-    #include <std.h>
-#endif
-
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
    // problem in VACPP V4 with including stdlib.h multiple times
    // strconv includes it anyway
