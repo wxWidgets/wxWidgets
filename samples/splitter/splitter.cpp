@@ -37,7 +37,7 @@
 #endif
 
 #include "wx/splitter.h"
-#include "wx/dc.h"
+#include "wx/dcmirror.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -62,7 +62,11 @@ enum
 class MyApp: public wxApp
 {
 public:
-    bool OnInit();
+    MyApp() { }
+
+    virtual bool OnInit();
+
+    DECLARE_NO_COPY_CLASS(MyApp)
 };
 
 class MyFrame: public wxFrame
@@ -92,6 +96,7 @@ private:
     wxSplitterWindow* m_splitter;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(MyFrame)
 };
 
 class MySplitterWindow : public wxSplitterWindow
@@ -109,15 +114,21 @@ private:
     wxFrame *m_frame;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(MySplitterWindow)
 };
 
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxWindow* parent);
+    MyCanvas(wxWindow* parent, bool mirror);
     virtual ~MyCanvas();
 
     virtual void OnDraw(wxDC& dc);
+
+private:
+    bool m_mirror;
+
+    DECLARE_NO_COPY_CLASS(MyCanvas)
 };
 
 // ============================================================================
@@ -202,14 +213,14 @@ MyFrame::MyFrame()
     m_splitter = new MySplitterWindow(this);
 
 #if 1
-    m_left = new MyCanvas(m_splitter);
+    m_left = new MyCanvas(m_splitter, true);
     m_left->SetBackgroundColour(*wxRED);
-    m_left->SetScrollbars(20, 20, 50, 50);
+    m_left->SetScrollbars(20, 20, 5, 5);
     m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
-    m_right = new MyCanvas(m_splitter);
+    m_right = new MyCanvas(m_splitter, false);
     m_right->SetBackgroundColour(*wxCYAN);
-    m_right->SetScrollbars(20, 20, 50, 50);
+    m_right->SetScrollbars(20, 20, 5, 5);
 #else // for testing kbd navigation inside the splitter
     m_left = new wxTextCtrl(m_splitter, -1, _T("first text"));
     m_right = new wxTextCtrl(m_splitter, -1, _T("second text"));
@@ -345,7 +356,7 @@ END_EVENT_TABLE()
 MySplitterWindow::MySplitterWindow(wxFrame *parent)
                 : wxSplitterWindow(parent, -1,
                                    wxDefaultPosition, wxDefaultSize,
-                                   wxSP_3D | wxSP_LIVE_UPDATE | wxCLIP_CHILDREN)
+                                   0x700| wxSP_LIVE_UPDATE | wxCLIP_CHILDREN)
 {
     m_frame = parent;
 }
@@ -384,19 +395,23 @@ void MySplitterWindow::OnUnsplit(wxSplitterEvent& event)
 // MyCanvas
 // ----------------------------------------------------------------------------
 
-MyCanvas::MyCanvas(wxWindow* parent)
-        : wxScrolledWindow(parent, -1)
+MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
+        : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
+                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
+    m_mirror = mirror;
 }
 
 MyCanvas::~MyCanvas()
 {
 }
 
-void MyCanvas::OnDraw(wxDC& dc)
+void MyCanvas::OnDraw(wxDC& dcOrig)
 {
+    wxMirrorDC dc(dcOrig, m_mirror);
+
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(0, 0, 100, 100);
+    dc.DrawLine(0, 0, 100, 200);
 
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText(_T("Testing"), 50, 50);
