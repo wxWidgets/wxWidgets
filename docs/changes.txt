@@ -104,6 +104,10 @@ wxGTK:
 - wxButton now honours wxBU_EXACTFIT
 - wxStaticBox now honours wxALIGN_XXX styles
 
+wxHTML:
+
+- fixed wxHtmlHelpController's cache files on big endian machines
+
 2.3.2
 -----
 
