@@ -148,7 +148,6 @@ bool wxWindow::Show(bool show)
         // But since we also retained it ourselves
         [m_dummyNSView release];
         m_dummyNSView = nil;
-        return true;
     }
     else
     {
@@ -157,8 +156,9 @@ bool wxWindow::Show(bool show)
         // NOTE: replaceSubView will cause m_cocaNSView to be released
         [[m_cocoaNSView superview] replaceSubview:m_cocoaNSView with:m_dummyNSView];
         // m_coocaNSView is now only retained by us
-        return true;
     }
+    m_isShown = show;
+    return true;
 }
 
 void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags)
