@@ -433,15 +433,50 @@ mimetype to the named file}
 \end{twocollist}}
 }
 
+\membersection{wxImage::Rescale}\label{wximagerescale}
+
+\func{wxImage}{Rescale}{\param{int}{ width}, \param{int}{ height}}
+
+Changes the size of the image in-place: after a call to this function, thei
+mage will have the given width and height.
+
+\wxheading{See also}
+
+\helpref{Scale}{wximagescale}
+
 \membersection{wxImage::Scale}\label{wximagescale}
 
-\func{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}
+\constfunc{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}
 
 Returns a scaled version of the image. This is also useful for
 scaling bitmaps in general as the only other way to scale bitmaps
-is to blit a wxMemoryDC into another wxMemoryDC. Windows can do such
-scaling itself but in the GTK port, scaling bitmaps is done using
-this routine internally.
+is to blit a wxMemoryDC into another wxMemoryDC.
+
+NB: although Windows can do such scaling itself but in the GTK port, scaling
+bitmaps is done using this routine internally.
+
+Example:
+
+\begin{verbatim}
+    // get the bitmap from somewhere
+    wxBitmap bmp = ...;
+
+    // rescale it to have size of 32*32
+    if ( bmp.GetWidth() != 32 || bmp.GetHeight() != 32 )
+    {
+        wxImage image(bmp);
+        bmp = image.Scale(32, 32).ConvertToBitmap();
+
+        // another possibility:
+        image.Rescale(32, 32);
+        bmp = image;
+    }
+
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{Rescale}{wximagerescale}
 
 \membersection{wxImage::SetData}\label{wximagesetdata}
 

@@ -150,7 +150,7 @@ void wxImage::Destroy()
     UnRef();
 }
 
-wxImage wxImage::Scale( int width, int height )
+wxImage wxImage::Scale( int width, int height ) const
 {
     wxImage image;
 

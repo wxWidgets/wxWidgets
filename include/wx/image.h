@@ -195,13 +195,18 @@ public:
   
   // these functions get implemented in /src/(platform)/bitmap.cpp 
   wxImage( const wxBitmap &bitmap );
+  operator wxBitmap() const { return ConvertToBitmap(); }
   wxBitmap ConvertToBitmap() const;
 
   void Create( int width, int height );
   void Destroy();
   
-  wxImage Scale( int width, int height );
-  
+  // return the new image with size width*height
+  wxImage Scale( int width, int height ) const;
+
+  // rescales the image in place
+  wxImage Rescale( int width, int height ) { *this = Scale(width, height); }
+
   // these routines are slow but safe  
   void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
   unsigned char GetRed( int x, int y );
@@ -238,18 +243,19 @@ public:
   void SetMask( bool mask = TRUE );
   bool HasMask() const;
 
-  inline wxImage& operator = (const wxImage& image)
-    { if ((*this) == image)
-          return (*this);
+  wxImage& operator = (const wxImage& image)
+  {
+    if ( (*this) != image )
       Ref(image);
-      return *this; }
+    return *this;
+  }
 
-  inline bool operator == (const wxImage& image)
+  bool operator == (const wxImage& image)
     { return m_refData == image.m_refData; }
-  inline bool operator != (const wxImage& image) 
+  bool operator != (const wxImage& image) 
     { return m_refData != image.m_refData; }
 
-  static inline wxList& GetHandlers() { return sm_handlers; }
+  static wxList& GetHandlers() { return sm_handlers; }
   static void AddHandler( wxImageHandler *handler );
   static void InsertHandler( wxImageHandler *handler );
   static bool RemoveHandler( const wxString& name );
