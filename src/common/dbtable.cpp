@@ -1727,24 +1727,18 @@ void wxTable::SetColDefs (int index, const char *fieldName, int dataType, void *
 
 
 /********** wxTable::SetColDef() **********/
-bool wxTable::SetColDefs(wxColInf *pColInfs, ULONG numCols, wxColDataPtr *pColDataPtrs)
+// BJO20000121 : changed prototype in order to return proper pointer on wxColDataPtr's array
+//bool wxTable::SetColDefs(wxColInf *pColInfs, ULONG numCols, wxColDataPtr *pColDataPtrs)
+wxColDataPtr* wxTable::SetColDefs (wxColInf *pColInfs, ULONG numCols)
 {
 	assert(pColInfs);
+        wxColDataPtr *pColDataPtrs;
 
 	if (pColInfs)
 	{
 		ULONG index;
 
-        // BJO 991210: This doesn't seem to work. I solved this
-        // by allocating memory in the tables ctor:
-        //
-        // MyTable::MyTable(wxDB *pDB, char *Name, int NbCols, wxColInf *ColInfo):
-        //          wxTable(pDB, Name, NbCols)
-        // {
-        //   m_FreeDbConn = !pDB;
-        //   m_DataPtrs = new wxColDataPtr[NbCols];
-        //   SetColDefs(ColInfo, NbCols, m_DataPtrs);
-        // }
+       
 		pColDataPtrs = new wxColDataPtr[numCols+1];
 
         for (index = 0; index < numCols; index++)
@@ -1824,7 +1818,7 @@ bool wxTable::SetColDefs(wxColInf *pColInfs, ULONG numCols, wxColDataPtr *pColDa
          SetColDefs (index,pColInfs[index].colName,pColInfs[index].dbDataType, pColDataPtrs[index].PtrDataObj, pColDataPtrs[index].SqlCtype, pColDataPtrs[index].SzDataObj);
 		}
 	}
-	return (TRUE);
+	return (pColDataPtrs);
 } // wxTable::SetColDef()
 
 

@@ -194,7 +194,10 @@ public:
 	void  SetColDefs (int index, const char *fieldName, int dataType, void *pData, int cType,
 							int size, bool keyField = FALSE, bool upd = TRUE,
 							bool insAllow = TRUE, bool derivedCol = FALSE);
-	bool	SetColDefs (wxColInf *colInfs, ULONG numCols, wxColDataPtr *pColDataPtrs);
+	// BJO20000121 : new prototype
+	//	bool	SetColDefs (wxColInf *colInfs, ULONG numCols, wxColDataPtr *pColDataPtrs);
+	wxColDataPtr*   SetColDefs (wxColInf *colInfs, ULONG numCols);
+
 	HSTMT *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
 	bool	DeleteCursor(HSTMT *hstmtDel);
 	void	SetCursor(HSTMT *hstmtActivate = (void **) DEFAULT_CURSOR);
