@@ -713,7 +713,7 @@
 #endif /* wxUSE_DOC_VIEW_ARCHITECTURE */
 
 #if !wxUSE_FILEDLG
-#   if wxUSE_DOC_VIEW_ARCHITECTURE || wxUSE_HTML
+#   if wxUSE_DOC_VIEW_ARCHITECTURE || wxUSE_WXHTML_HELP
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxFileDialog must be compiled as well"
 #       else
