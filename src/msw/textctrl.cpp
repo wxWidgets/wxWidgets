@@ -1006,6 +1006,26 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
+        // richedit 3.0 (i.e. the version living in riched20.dll distributed
+        // with Windows 2000 and beyond) doesn't honour EM_SCROLLCARET when
+        // emulating richedit 2.0 unless the control has focus or ECO_NOHIDESEL
+        // option is set (but it does work ok in richedit 1.0 mode...)
+        //
+        // so to make it work we either need to give focus to it here which
+        // will probably create many problems (dummy focus events; window
+        // containing the text control being brought to foreground
+        // unexpectedly; ...) or to temporarily set ECO_NOHIDESEL which may
+        // create other problems too -- or it might not, so let's try to do it
+        if ( GetRichVersion() > 1 )
+        {
+            if ( !HasFlag(wxTE_NOHIDESEL) )
+            {
+                ::SendMessage(GetHwnd(), EM_SETOPTIONS,
+                              ECOOP_OR, ECO_NOHIDESEL);
+            }
+            //else: everything is already ok
+        }
+
         CHARRANGE range;
         range.cpMin = from;
         range.cpMax = to;
@@ -1021,6 +1041,16 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
     {
         SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
     }
+
+#if wxUSE_RICHEDIT
+    // restore ECO_NOHIDESEL if we changed it
+    if ( GetRichVersion() > 1 && !HasFlag(wxTE_NOHIDESEL) )
+    {
+        ::SendMessage(GetHwnd(), EM_SETOPTIONS,
+                      ECOOP_AND, ~ECO_NOHIDESEL);
+    }
+#endif // wxUSE_RICHEDIT
+
 #else // Win16
     // WPARAM is 0: selection is scrolled into view
     SendMessage(hWnd, EM_SETSEL, (WPARAM)0, (LPARAM)MAKELONG(from, to));
