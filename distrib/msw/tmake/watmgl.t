@@ -127,8 +127,8 @@ $(ARCHINCDIR)\wx:
     mkdir $(ARCHINCDIR)
     mkdir $(ARCHINCDIR)\wx
 
-$(SETUP_H): $(WXDIR)\include\wx\mgl\setup.h $(ARCHINCDIR)\wx
-    copy $(WXDIR)\include\wx\mgl\setup.h $@
+$(SETUP_H): $(WXDIR)\include\wx\univ\setup.h $(ARCHINCDIR)\wx
+    copy $(WXDIR)\include\wx\univ\setup.h $@
 
 $(LIBTARGET) : $(OBJECTS)
     %create tmp.lbc
