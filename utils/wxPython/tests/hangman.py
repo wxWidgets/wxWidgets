@@ -105,7 +105,10 @@ class HangmanWnd(wxWindow):
     def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
 	wxWindow.__init__(self, parent, id, pos, size)
 	self.SetBackgroundColour(wxNamedColour('white'))
-	self.font = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
+	if wxPlatform == '__WXGTK__':
+	    self.font = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL)
+	else:
+	    self.font = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 	self.SetFocus()
     def StartGame(self, word):
 	self.word = word
@@ -257,8 +260,10 @@ class MyFrame(wxFrame):
 	urls = [ 'wxPython home', 'http://208.240.253.245/wxPython/main.html',
 		 'slashdot.org', 'http://slashdot.org/',
 		 'cnn.com', 'http://cnn.com',
-		 'The new york Times', 'http://www.nytimes.com',
-		 'De Volkskrant', 'http://www.volkskrant.nl/frameless/25000006.html']
+		 'The New York Times', 'http://www.nytimes.com',
+		 'De Volkskrant', 'http://www.volkskrant.nl/frameless/25000006.html',
+		 'Gnu GPL', 'http://www.fsf.org/copyleft/gpl.html',
+		 'Bijbel: Genesis', 'http://www.coas.com/bijbel/gn1.htm']
 	urlmenu = wxMenu()
 	for item in range(0,len(urls),2):
 	    urlmenu.Append(1020+item/2, urls[item], urls[item+1])
