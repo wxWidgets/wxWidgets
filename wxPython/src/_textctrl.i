@@ -105,9 +105,7 @@ enum wxTextCtrlHitTestResult
 class wxTextAttr
 {
 public:    
-    %nokwargs wxTextAttr;
-    wxTextAttr();
-    wxTextAttr(const wxColour& colText,
+    wxTextAttr(const wxColour& colText = wxNullColour,
                const wxColour& colBack = wxNullColour,
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
