@@ -73,6 +73,9 @@ public:
     
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
+
+    void DrawCurve( wxDC *dc, wxPlotCurve *curve, int from = -1, int to = -1 );
+    void DeleteCurve( wxPlotCurve *curve, int from = -1, int to = -1 );
     
 private:
     wxPlotWindow   *m_owner;
@@ -99,11 +102,24 @@ public:
     void SetCurrent( wxPlotCurve* current );
     wxPlotCurve *GetCurrent();
     
+    void Move( wxPlotCurve* curve, int pixels_up );
+    void Enlarge( wxPlotCurve *curve, double factor );
+
+    void OnMoveUp( wxCommandEvent& event );
+    void OnMoveDown( wxCommandEvent& event );
+    
+    void OnEnlarge100( wxCommandEvent& event );
+    void OnEnlarge50( wxCommandEvent& event );
+    void OnShrink50( wxCommandEvent& event );
+    void OnShrink33( wxCommandEvent& event );
+    
     void OnPaint( wxPaintEvent &event );
+
+    void RedrawYAxis();
     
 private:
     friend wxPlotArea;
-
+    
     wxList         m_curves;
     wxPlotArea    *m_area;
     wxPlotCurve   *m_current;

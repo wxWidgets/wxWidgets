@@ -106,11 +106,57 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     }
 }
 
-void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
+void wxPlotArea::DeleteCurve( wxPlotCurve *curve, int from, int to )
 {
+    wxClientDC dc(this);
+    m_owner->PrepareDC( dc );
+    dc.SetPen( *wxWHITE_PEN );
+    DrawCurve( &dc, curve, from, to );
+}
+
+void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
+{
+    int view_x;
+    int view_y;
+    m_owner->GetViewStart( &view_x, &view_y );
+    view_x *= 10;
+    
+    if (from == -1)
+        from = view_x;
+
     int client_width;
     int client_height;
     GetClientSize( &client_width, &client_height);
+    
+    if (to == -1)
+        to = view_x + client_width;
+        
+    int start_x = wxMax( from, curve->GetStartX() );
+    int end_x = wxMin( to, curve->GetEndX() );
+
+    start_x = wxMax( view_x, start_x );
+    end_x = wxMin( view_x + client_width, end_x );
+
+    double double_client_height = (double)client_height;
+    double range = curve->GetEndY() - curve->GetStartY();
+    double end = curve->GetEndY();
+    wxCoord offset_y = curve->GetOffsetY();
+            
+    wxCoord y=0,last_y=0;
+    for (int x = start_x; x < end_x; x++)
+    {
+        double dy = (end - curve->GetY( x )) / range;
+        y = (wxCoord)(dy * double_client_height) - offset_y - 1;
+            
+        if (x != start_x)
+           dc->DrawLine( x-1, last_y, x, y );
+            
+        last_y = y;
+    }
+}
+
+void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
+{
     int view_x;
     int view_y;
     m_owner->GetViewStart( &view_x, &view_y );
@@ -149,26 +195,9 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dc.SetPen( *wxBLACK_PEN );
             else
                 dc.SetPen( *wxLIGHT_GREY_PEN );
+                
+            DrawCurve( &dc, curve, update_x-1, update_x+update_width+2 );
 
-            int start_x = wxMax( update_x-1, curve->GetStartX() );
-            int end_x = wxMin( update_x+update_width+2, curve->GetEndX() );
-            
-            double double_client_height = (double)client_height;
-            double range = curve->GetEndY() - curve->GetStartY();
-            double end = curve->GetEndY();
-            wxCoord offset_y = curve->GetOffsetY();
-            
-            wxCoord y=0,last_y=0;
-            for (int x = start_x; x < end_x; x++)
-            {
-                double dy = (end - curve->GetY( x )) / range;
-                y = (wxCoord)(dy * double_client_height) - offset_y - 1;
-            
-                if (x != start_x)
-                    dc.DrawLine( x-1, last_y, x, y );
-            
-                last_y = y;
-            }
             node = node->Next();
         }
         upd ++;
@@ -191,7 +220,14 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
 IMPLEMENT_DYNAMIC_CLASS(wxPlotWindow, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxPlotWindow, wxScrolledWindow)
-  EVT_PAINT(        wxPlotWindow::OnPaint)
+  EVT_PAINT(                   wxPlotWindow::OnPaint)
+  EVT_BUTTON(  ID_MOVE_UP,     wxPlotWindow::OnMoveUp)
+  EVT_BUTTON(  ID_MOVE_DOWN,   wxPlotWindow::OnMoveDown)
+  
+  EVT_BUTTON(  ID_ENLARGE_100, wxPlotWindow::OnEnlarge100)
+  EVT_BUTTON(  ID_ENLARGE_50,  wxPlotWindow::OnEnlarge50)
+  EVT_BUTTON(  ID_SHRINK_50,   wxPlotWindow::OnShrink50)
+  EVT_BUTTON(  ID_SHRINK_33,   wxPlotWindow::OnShrink33)
 END_EVENT_TABLE()
 
 wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, int flag )
@@ -254,18 +290,92 @@ void wxPlotWindow::SetCurrent( wxPlotCurve* current )
     m_current = current;
     m_area->Refresh( FALSE );
     
-    wxPoint pos( m_area->GetPosition() );
-    
-    int client_width;
-    int client_height;
-    GetClientSize( &client_width, &client_height);
-    wxRect rect(pos.x-45,0,45,client_height);
-    Refresh(TRUE,&rect);
+    RedrawYAxis();
 }
 
 wxPlotCurve *wxPlotWindow::GetCurrent()
 {
     return m_current;
+}
+
+void wxPlotWindow::Move( wxPlotCurve* curve, int pixels_up )
+{
+    m_area->DeleteCurve( curve );
+    
+    curve->SetOffsetY( curve->GetOffsetY() + pixels_up );
+    
+    m_area->Refresh( FALSE );
+    
+    RedrawYAxis();
+}
+
+void wxPlotWindow::OnMoveUp( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Move( m_current, 25 );
+}
+
+void wxPlotWindow::OnMoveDown( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Move( m_current, -25 );
+}
+
+void wxPlotWindow::Enlarge( wxPlotCurve *curve, double factor )
+{
+    m_area->DeleteCurve( curve );
+    
+    double range = curve->GetEndY() - curve->GetStartY();
+    double new_range = range * factor;
+    double middle = curve->GetEndY() - range/2;
+    curve->SetStartY( middle - new_range / 2 );
+    curve->SetEndY( middle + new_range / 2 );
+    
+    m_area->Refresh( FALSE );
+    
+    RedrawYAxis();
+}
+
+void wxPlotWindow::OnEnlarge100( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Enlarge( m_current, 2.0 );
+}
+
+void wxPlotWindow::OnEnlarge50( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Enlarge( m_current, 1.5 );
+}
+
+void wxPlotWindow::OnShrink50( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Enlarge( m_current, 0.5 );
+}
+
+void wxPlotWindow::OnShrink33( wxCommandEvent& WXUNUSED(event) )
+{
+    if (!m_current) return;
+    
+    Enlarge( m_current, 0.6666666 );
+}
+
+void wxPlotWindow::RedrawYAxis()
+{
+    int client_width;
+    int client_height;
+    GetClientSize( &client_width, &client_height);
+    
+    wxPoint pos( m_area->GetPosition() );
+    
+    wxRect rect(pos.x-45,0,45,client_height);
+    Refresh(TRUE,&rect);
 }
 
 void wxPlotWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -300,11 +410,23 @@ void wxPlotWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
     double lower = ceil(start / step) * step;
     double upper = floor(end / step) * step;
+    
+    // if too few values, shrink size
     int steps = (int)ceil((upper-lower)/step);
-    if (steps < 3)
+    if (steps < 4)
     {
         step /= 2;
         if (lower-step > start) lower -= step;
+        if (upper+step < end) upper += step;
+    }
+    
+    // if still too few, again
+    steps = (int)ceil((upper-lower)/step);
+    if (steps < 4)
+    {
+        step /= 2;
+        if (lower-step > start) lower -= step;
+        if (upper+step < end) upper += step;
     }
     
     double current = lower;
@@ -323,9 +445,9 @@ void wxPlotWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         current += step;
     }
     
-    dc.DrawLine( pos.x-15, 5, pos.x-15, client_height-5 );
-    dc.DrawLine( pos.x-19, 9, pos.x-15, 5 );
-    dc.DrawLine( pos.x-10, 10, pos.x-15, 5 );
+    dc.DrawLine( pos.x-15, 6, pos.x-15, client_height-5 );
+    dc.DrawLine( pos.x-19, 8, pos.x-15, 2 );
+    dc.DrawLine( pos.x-10, 9, pos.x-15, 2 );
     
 }
 
