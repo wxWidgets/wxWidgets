@@ -63,8 +63,11 @@
 
 #include <QuickTimeComponents.h>
 
-//Time inbetween timer calls
+//Time between timer calls
 #define MOVIE_DELAY 100
+
+static wxTimer* lastSoundTimer=NULL;
+static bool lastSoundIsPlaying=false;
 
 // ------------------------------------------------------------------
 //          wxQTTimer - Handle Asyncronous Playing
@@ -72,8 +75,8 @@
 class wxQTTimer : public wxTimer
 {
 public:
-    wxQTTimer(Movie movie, bool bLoop, bool& playing) :
-        m_movie(movie), m_bLoop(bLoop), m_pbPlaying(&playing)
+    wxQTTimer(Movie movie, bool bLoop, bool* playing) :
+        m_movie(movie), m_bLoop(bLoop), m_pbPlaying(playing)
     {
     }
 
@@ -138,8 +141,8 @@ public:
 class wxSMTimer : public wxTimer
 {
 public:
-    wxSMTimer(void* hSnd, void* pSndChannel, const bool& bLoop, bool& playing)
-        : m_hSnd(hSnd), m_pSndChannel(pSndChannel), m_bLoop(bLoop), m_pbPlaying(&playing)
+    wxSMTimer(void* hSnd, void* pSndChannel, bool bLoop, bool* playing)
+        : m_hSnd(hSnd), m_pSndChannel(pSndChannel), m_bLoop(bLoop), m_pbPlaying(playing)
     {
     }
 
@@ -196,8 +199,6 @@ public:
 // ------------------------------------------------------------------
 //          wxSound
 // ------------------------------------------------------------------
-wxTimer* lastSoundTimer=NULL;
-bool lastSoundIsPlaying=false;
 
 //Determines whether version 4 of QT is installed
 Boolean wxIsQuickTime4Installed (void)
@@ -251,13 +252,6 @@ wxSound::wxSound(int size, const wxByte* data)
 
 wxSound::~wxSound()
 {
-    if(lastSoundIsPlaying)
-    {
-        if(m_type == wxSound_RESOURCE)
-            ((wxSMTimer*)lastSoundTimer)->m_pbPlaying = NULL;
-        else
-            ((wxQTTimer*)lastSoundTimer)->m_pbPlaying = NULL;
-    }
 }
 
 bool wxSound::Create(const wxString& fileName, bool isResource)
@@ -365,7 +359,8 @@ bool wxSound::DoPlay(unsigned flags) const
             {
                 lastSoundTimer = ((wxSMTimer*&)m_pTimer)
                     = new wxSMTimer(pSndChannel, m_hSnd, flags & wxSOUND_LOOP ? 1 : 0,
-                        lastSoundIsPlaying=true);
+                                    &lastSoundIsPlaying);
+                lastSoundIsPlaying = true;
 
                 ((wxTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
             }
@@ -429,11 +424,19 @@ bool wxSound::DoPlay(unsigned flags) const
         return false;
     }//end switch(m_type)
 
-
     //Start the movie!
     StartMovie(movie);
 
-    if (flags & wxSOUND_SYNC)
+    if (flags & wxSOUND_ASYNC)
+    {
+        //Start timer and play movie asyncronously
+        lastSoundTimer = ((wxQTTimer*&)m_pTimer) =
+            new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0,
+                          &lastSoundIsPlaying);
+        lastSoundIsPlaying = true;
+        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
+    }
+    else
     {
         wxASSERT_MSG(!(flags & wxSOUND_LOOP), wxT("Can't loop and play syncronously at the same time"));
 
@@ -442,12 +445,6 @@ bool wxSound::DoPlay(unsigned flags) const
             MoviesTask(movie, 0);
 
         DisposeMovie(movie);
-    }
-    else
-    {
-        //Start timer and play movie asyncronously
-        lastSoundTimer = ((wxQTTimer*&)m_pTimer) = new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0,lastSoundIsPlaying=true);
-        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
     }
 
     return true;
@@ -460,10 +457,11 @@ bool wxSound::IsPlaying()
 
 void wxSound::Stop()
 {
-    if(lastSoundIsPlaying)
+    if (lastSoundIsPlaying)
     {
         delete (wxTimer*&) lastSoundTimer;
         lastSoundIsPlaying = false;
+        lastSoundTimer = NULL;
     }
 }
 
