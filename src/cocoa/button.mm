@@ -18,9 +18,10 @@
 
 #include "wx/stockitem.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSButton.h>
-#include "wx/cocoa/string.h"
+#import <math.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 BEGIN_EVENT_TABLE(wxButton, wxButtonBase)
@@ -79,9 +80,32 @@ void wxButton::SetLabel(const wxString& label)
     [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
 }
 
+wxSize wxButton::DoGetBestSize() const
+{
+    wxSize size = wxButtonBase::DoGetBestSize();
+    if(!HasFlag(wxBU_EXACTFIT))
+    {
+        if(size.x<68)
+            size.x = 68;
+    }
+    return size;
+}
+
+static NSRect MakeNSButtonDefaultRect()
+{
+    // create at (10.0,10.0) with size 20.0x20.0 (just bogus values)
+    wxObjcAutoRefFromAlloc<NSButton*> defaultButton = [[NSButton alloc]
+            initWithFrame:NSMakeRect(10.0,10.0,20.0,20.0)];
+    [defaultButton setBezelStyle:NSRoundedBezelStyle];
+    [defaultButton setTitle:@""];
+    [defaultButton sizeToFit];
+    return [defaultButton frame];
+}
+
 wxSize wxButtonBase::GetDefaultSize()
 {
-    // FIXME: stub
-    return wxDefaultSize;
+    static NSRect cocoaRect = MakeNSButtonDefaultRect();
+    // Apple HIG says OK/Cancel buttons have default width of 68.
+    return wxSize(68,(int)ceilf(cocoaRect.size.height));
 }
 

@@ -58,6 +58,7 @@ protected:
 public:
     wxString GetLabel() const;
     void SetLabel(const wxString& label);
+    wxSize DoGetBestSize() const;
 };
 
 #endif // __WX_COCOA_BUTTON_H__
