@@ -14,7 +14,7 @@ class TestPanel(wx.Panel):
 
         wx.StaticText(self, -1, "This example uses the wxCheckListBox control.", (45, 15))
 
-        lb = wx.CheckListBox(self, -1, (80, 50), (80, 120), sampleList)
+        lb = wx.CheckListBox(self, -1, (80, 50), wx.DefaultSize, sampleList)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, lb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, lb)
         lb.SetSelection(0)

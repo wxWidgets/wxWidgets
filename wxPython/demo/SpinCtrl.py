@@ -10,7 +10,7 @@ class TestPanel(wx.Panel):
         self.count = 0
 
         wx.StaticText(self, -1, "This example uses the wx.SpinCtrl control.", (45, 15))
-        sc = wx.SpinCtrl(self, -1, "", (30, 50), (80, -1))
+        sc = wx.SpinCtrl(self, -1, "", (30, 50))
         sc.SetRange(1,100)
         sc.SetValue(5)
 
