@@ -1,4 +1,78 @@
 
+25th October '99: My birthday, wxWindows 2.1.10 released
+
+Enlightment has struck the majority of the developers and
+they have chosen ti use the Linux kernel numbering scheme
+for wxWindows from now on. This means that the next stable
+release will be called wxWindows 2.2.X, development snapshots
+will be called 2.1.X.
+
+A lot of discussion has been wasted on how to maintain a
+once released stable version will be maintained. It was
+almost universally agreed that only a commercial entity
+will have the motivation ($$$) to do that - so far there
+is no wxWindows Inc.
+
+Support for GTK 1.0 has been dropped.
+
+Many build fixes for various platforms have been applied,
+try again, poor HP-UX and *BSD users, but don't reckon
+with immediate success.
+
+My total rewrite of the wxWindows underlying GTK widget
+has turned scrolling including subwindows from barely
+functional to pretty and fast.
+
+wxSocket and Co. have been improved up to the point of
+calling it a rewrite. It works on wxMSW now too and
+seems pretty stable, but testing is still welcome.
+
+The ODBC classes contributed by Remstar Inc. have been
+overhauled (incl the sample) and have been tested with
+all relevant SQL databases (even DBase). For that reason
+I have reawakened the iODBC code from wxGTK 2.0 so you
+can now use wxODBC from wxMSW and wxGTK.
+
+Several printing things fixed.
+
+HTML widget and its wxWindows' help system based upon
+it have been reorganized and improved for easier use
+from Python and C++.
+
+wxSpinCtrl added. Like a wxSpinButton and a wxTextCtrl.
+
+Changed the beaviour of the popular new wxFileDialog to
+not forget the once typed file name when changing the
+directory.
+
+Implemented the wxSIMPLE_BORDER flag (simple black line
+without shadow affect).
+
+Michael is writing a complete rewrite of the antiquated
+wxGrid. This is still work-in-progress and might not make
+it into wxWindows 2.2, we'll see. Help would be welcome
+to make that happen.
+
+Made wxMenu code lose less memory, also added wxMenu::Delete().
+
+Added code to send wxActivateEvent to MDI windows.
+
+Vadim added configure things to compile wxWindows without any
+GUI library. This is probably work in progress. He'll also add
+a wxFontEnumerator class and has enhanced wxFont to make use
+of char-encodings.
+
+wxSlider, wxWindow, wxScrollBar now emit the correct events
+for scrolling (like page up, line up etc) instead of just
+"thumb-track" as before.
+
+Corrected bug in Reparent() code.
+
+A handler to read PCX file (in most variants) has been added.
+
+A number of problems with compressed and socket streams have
+been solved.
+
 28th August '99: Ninth wxGTK 2.1 snapshot released
 
 As the old makefile system didn't work, I trashed it and wrote

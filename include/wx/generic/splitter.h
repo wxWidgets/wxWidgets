@@ -281,11 +281,7 @@ public:
     }
 
 private:
-#ifdef __MWERKS__
-    friend class wxSplitterWindow;
-#else
-    friend wxSplitterWindow;
-#endif
+    friend class WXDLLEXPORT wxSplitterWindow;
 
     // data for the different types of event
     union

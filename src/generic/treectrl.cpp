@@ -963,7 +963,9 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
   wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, GetId() );
   event.m_item = item;
   event.SetEventObject( this );
-  if ( ProcessEvent( event ) && event.m_code )
+  
+//  if ( ProcessEvent( event ) && event.m_code )  TODO: Was this a typo ?
+  if ( ProcessEvent( event ) && !event.IsAllowed() )
   {
     // cancelled by program
     return;

@@ -1,7 +1,7 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.0
-%define rel 9
+%define ver 2.1.10
+%define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
 Name: wxGTK
@@ -9,10 +9,9 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK-2.1.0-b9.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK-2.1.10.tgz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
-Requires: gtk+ >= 1.2.1
 BuildRoot: /tmp/wxgtk_root
 
 # all packages providing an implementation of wxWindows library (regardless of
