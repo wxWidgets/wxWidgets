@@ -912,7 +912,9 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
     if ( m_macWindow )
     {
+#if wxUSE_TOOLTIPS
         wxToolTip::NotifyWindowDelete(m_macWindow) ;
+#endif
         wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_macWindow ) ) ;
     }
 
