@@ -575,24 +575,6 @@ void wxListBase::DeleteNodes(wxNodeBase* first, wxNodeBase* last)
 #ifdef wxLIST_COMPATIBILITY
 
 // -----------------------------------------------------------------------------
-// wxNodeBase deprecated methods
-// -----------------------------------------------------------------------------
-
-wxNode *wxNodeBase::Next() const { return (wxNode *)GetNext(); }
-wxNode *wxNodeBase::Previous() const { return (wxNode *)GetPrevious(); }
-wxObject *wxNodeBase::Data() const { return (wxObject *)GetData(); }
-
-// -----------------------------------------------------------------------------
-// wxListBase deprecated methods
-// -----------------------------------------------------------------------------
-
-int wxListBase::Number() const { return GetCount(); }
-wxNode *wxListBase::First() const { return (wxNode *)GetFirst(); }
-wxNode *wxListBase::Last() const { return (wxNode *)GetLast(); }
-wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
-wxListBase::operator wxList&() const { return *(wxList*)this; }
-
-// -----------------------------------------------------------------------------
 // wxList (a.k.a. wxObjectList)
 // -----------------------------------------------------------------------------
 

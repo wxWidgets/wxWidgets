@@ -990,6 +990,27 @@ private:
 
 #ifdef wxLIST_COMPATIBILITY
 
+// inline compatibility functions
+
+// -----------------------------------------------------------------------------
+// wxNodeBase deprecated methods
+// -----------------------------------------------------------------------------
+
+inline wxNode *wxNodeBase::Next() const { return (wxNode *)GetNext(); }
+inline wxNode *wxNodeBase::Previous() const { return (wxNode *)GetPrevious(); }
+inline wxObject *wxNodeBase::Data() const { return (wxObject *)GetData(); }
+
+// -----------------------------------------------------------------------------
+// wxListBase deprecated methods
+// -----------------------------------------------------------------------------
+
+inline int wxListBase::Number() const { return (int)GetCount(); }
+inline wxNode *wxListBase::First() const { return (wxNode *)GetFirst(); }
+inline wxNode *wxListBase::Last() const { return (wxNode *)GetLast(); }
+inline wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
+inline wxListBase::operator wxList&() const { return *(wxList*)this; }
+
+
 // define this to make a lot of noise about use of the old wxList classes.
 //#define wxWARN_COMPAT_LIST_USE
 
