@@ -240,30 +240,30 @@ void LongLongTestCase::BitOperations()
         for ( size_t n = 0; n < 33; n++ )
         {
             wxLongLong b(a.GetHi(), a.GetLo()), c, d = b, e;
-            d >>= n; 
-            c = b >> n; 
+            d >>= n;
+            c = b >> n;
             CPPUNIT_ASSERT( c == d );
-            d <<= n; 
-            e = c << n; 
+            d <<= n;
+            e = c << n;
             CPPUNIT_ASSERT( d == e );
 
 #if wxUSE_LONGLONG_WX
             wxLongLongWx b1(a.GetHi(), a.GetLo()), c1, d1 = b1, e1;
-            d1 >>= n; 
-            c1 = b1 >> n; 
+            d1 >>= n;
+            c1 = b1 >> n;
             CPPUNIT_ASSERT( c1 == d1 );
-            d1 <<= n; 
-            e1 = c1 << n; 
+            d1 <<= n;
+            e1 = c1 << n;
             CPPUNIT_ASSERT( d1 == e1 );
 #endif
 
 #if wxUSE_LONGLONG_NATIVE
             wxLongLongNative b2(a.GetHi(), a.GetLo()), c2, d2 = b2, e2;
-            d2 >>= n; 
-            c2 = b2 >> n; 
+            d2 >>= n;
+            c2 = b2 >> n;
             CPPUNIT_ASSERT( c2 == d2 );
-            d2 <<= n; 
-            e2 = c2 << n; 
+            d2 <<= n;
+            e2 = c2 << n;
             CPPUNIT_ASSERT( d2 == e2 );
 #endif
         }
@@ -279,6 +279,10 @@ void LongLongTestCase::ToString()
         wxLongLong a = testLongs[n];
         s1 = wxString::Format(_T("%ld"), testLongs[n]);
         s2 = a.ToString();
+        CPPUNIT_ASSERT( s1 == s2 );
+
+        s2 = wxEmptyString;
+        s2 << a;
         CPPUNIT_ASSERT( s1 == s2 );
 
 #if wxUSE_LONGLONG_WX

@@ -304,6 +304,8 @@ public:
     friend wxSTD ostream& operator<<(wxSTD ostream&, const wxLongLongNative&);
 #endif
 
+    friend wxString& operator<<(wxString&, const wxLongLongNative&);
+
 private:
     wxLongLong_t  m_ll;
 };
@@ -486,6 +488,8 @@ public:
         // input/output
     friend wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongNative&);
 #endif
+
+    friend wxString& operator<<(wxString&, const wxULongLongNative&);
 
 private:
     unsigned wxLongLong_t  m_ll;
@@ -679,6 +683,8 @@ public:
     friend wxSTD ostream& operator<<(wxSTD ostream&, const wxLongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
 
+    friend wxString& operator<<(wxString&, const wxLongLongWx&);
+
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
 
@@ -860,6 +866,8 @@ public:
 #if wxUSE_STD_IOSTREAM
     friend wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
+
+    friend wxString& operator<<(wxString&, const wxULongLongWx&);
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs

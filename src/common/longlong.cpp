@@ -1162,4 +1162,14 @@ wxSTD ostream& operator<< (wxSTD ostream& o, const wxULongLong& ll)
 
 #endif // wxUSE_STD_IOSTREAM
 
+wxString& operator<< (wxString& s, const wxLongLong& ll)
+{
+    return s << ll.ToString();
+}
+
+wxString& operator<< (wxString& s, const wxULongLong& ll)
+{
+    return s << ll.ToString();
+}
+
 #endif // wxUSE_LONGLONG
