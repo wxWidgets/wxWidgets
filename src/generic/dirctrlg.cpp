@@ -20,10 +20,9 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_DIRDLG
+#if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 #include "wx/generic/dirctrlg.h"
-
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/button.h"
@@ -396,6 +395,11 @@ bool wxIsDriveAvailable(const wxString& dirName)
 }
 #endif // __WINDOWS__ || __OS2__
 
+#endif // wxUSE_DIRDLG || wxUSE_FILEDLG
+
+
+
+#if wxUSE_DIRDLG
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
@@ -1270,7 +1274,9 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
         SetSelection(defaultFilter);
     }
 }
+#endif // wxUSE_DIRDLG
 
+#if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable icons
@@ -1719,4 +1725,4 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 #endif // wxUSE_MIMETYPE/!wxUSE_MIMETYPE
 }
 
-#endif // wxUSE_DIRDLG
+#endif // wxUSE_DIRDLG || wxUSE_FILEDLG

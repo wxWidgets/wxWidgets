@@ -19,6 +19,10 @@
 #pragma interface "dirctrlg.h"
 #endif
 
+#if wxUSE_DIRDLG || wxUSE_FILEDLG
+    #include "wx/imaglist.h"
+#endif
+
 #if wxUSE_DIRDLG
 
 #include "wx/treectrl.h"
@@ -242,9 +246,13 @@ protected:
 #define wxID_TREECTRL          7000
 #define wxID_FILTERLISTCTRL    7001
 
+#endif // wxUSE_DIRDLG
+
 //-------------------------------------------------------------------------
 // wxFileIconsTable - use wxTheFileIconsTable which is created as necessary
 //-------------------------------------------------------------------------
+
+#if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 class WXDLLEXPORT wxFileIconsTable
 {
@@ -278,7 +286,7 @@ protected:
 // The global fileicons table
 WXDLLEXPORT_DATA(extern wxFileIconsTable *) wxTheFileIconsTable;
 
-#endif // wxUSE_DIRDLG
+#endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 
 #endif
     // _WX_DIRCTRLG_H_
