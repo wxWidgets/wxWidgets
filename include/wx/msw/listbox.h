@@ -29,6 +29,9 @@ WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
   WX_DEFINE_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
 #endif
 
+// forward decl for GetSelections()
+class wxArrayInt;
+
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // List box item
@@ -82,14 +85,14 @@ class WXDLLEXPORT wxListBox: public wxControl
   virtual void Deselect(const int n);
 
   // For single choice list item only
-  virtual int GetSelection(void) const ;
+  virtual int GetSelection() const ;
   virtual void Delete(const int n);
   virtual char *GetClientData(const int n) const ;
   virtual void SetClientData(const int n, char *clientData);
   virtual void SetString(const int n, const wxString& s);
 
   // For single or multiple choice list item
-  virtual int GetSelections(int **listSelections) const ;
+  virtual int GetSelections(wxArrayInt& aSelections) const;
   virtual bool Selected(const int n) const ;
   virtual wxString GetString(const int n) const ;
   virtual void SetSize(const int x, const int y, const int width, const int height, const int sizeFlags = wxSIZE_AUTO);
@@ -122,7 +125,6 @@ class WXDLLEXPORT wxListBox: public wxControl
  protected:
   int m_noItems;
   int m_selected;
-  int *m_selections;
 
 #if USE_OWNER_DRAWN
   // control items
