@@ -145,7 +145,6 @@ public:
 #endif // wxUSE_RICHEDIT
 
     virtual void AdoptAttributesFromHWND();
-    virtual void SetupColours();
 
     virtual bool AcceptsFocus() const;
 

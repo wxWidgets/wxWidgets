@@ -185,7 +185,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // translate wxWin style flags to MSW ones, checking for consistency while
     // doing it
-    long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
+    long msStyle = ES_LEFT | WS_TABSTOP;
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
@@ -297,36 +297,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_isRich = FALSE;
 #endif // wxUSE_RICHEDIT
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
-        msStyle |= WS_BORDER;
-
-    // NB: don't use pos and size as CreateWindowEx arguments because they
-    //     might be -1 in which case we should use the default values (and
-    //     SetSize called below takes care of it)
-    m_hWnd = (WXHWND)::CreateWindowEx(exStyle,
-                                      windowClass.c_str(),
-                                      NULL,
-                                      msStyle,
-                                      0, 0, 0, 0,
-                                      GetHwndOf(parent),
-                                      (HMENU)m_windowId,
-                                      wxGetInstance(),
-                                      NULL);
-
-    wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create text ctrl") );
-
-#if wxUSE_CTL3D
-    if ( want3D )
-    {
-        Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = TRUE;
-    }
-#endif
+    if ( !MSWCreateControl(windowClass, msStyle, pos, size, value) )
+        return FALSE;
 
 #if wxUSE_RICHEDIT
     if (m_isRich)
@@ -344,32 +316,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
 #endif // wxUSE_RICHEDIT
-
-    SubclassWin(GetHWND());
-
-    // set font, position, size and initial value
-    wxFont& fontParent = parent->GetFont();
-    if ( fontParent.Ok() )
-    {
-        SetFont(fontParent);
-    }
-    else
-    {
-        SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
-    }
-
-    // Causes a crash for Symantec C++ and WIN32 for some reason
-#if !(defined(__SC__) && defined(__WIN32__))
-    if ( !value.IsEmpty() )
-    {
-        SetValue(value);
-    }
-#endif
-
-    // set colours
-    SetupColours();
-
-    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -402,18 +348,6 @@ void wxTextCtrl::AdoptAttributesFromHWND()
     m_windowStyle |= wxTE_READONLY;
   if (style & ES_WANTRETURN)
     m_windowStyle |= wxTE_PROCESS_ENTER;
-}
-
-void wxTextCtrl::SetupColours()
-{
-    wxColour bkgndColour;
-//    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
-        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
-//    else
-//        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
-
-    SetBackgroundColour(bkgndColour);
-    SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
 // ----------------------------------------------------------------------------
