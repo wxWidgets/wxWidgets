@@ -183,7 +183,7 @@ void wxStatusBarUniv::SetStatusText(const wxString& text, int number)
 
 wxString wxStatusBarUniv::GetStatusText(int number) const
 {
-    wxCHECK_MSG( number >= 0 && number < m_nFields, _T(""),
+    wxCHECK_MSG( number >= 0 && number < m_nFields, wxEmptyString,
                  _T("invalid status bar field index") );
 
     return m_statusText[number];

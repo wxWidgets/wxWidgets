@@ -821,7 +821,7 @@ wxString wxTextCtrl::GetValue() const
 
 void wxTextCtrl::Clear()
 {
-    SetValue(_T(""));
+    SetValue(wxEmptyString);
 }
 
 bool wxTextCtrl::ReplaceLine(wxTextCoord line,
@@ -1249,7 +1249,7 @@ void wxTextCtrl::Remove(wxTextPos from, wxTextPos to)
     // if necessary
     OrderPositions(from, to);
 
-    Replace(from, to, _T(""));
+    Replace(from, to, wxEmptyString);
 }
 
 void wxTextCtrl::WriteText(const wxString& text)
@@ -1651,7 +1651,7 @@ wxString wxTextCtrl::GetLineText(wxTextCoord line) const
         //this is called during DoGetBestSize
         if (line == 0 && GetLineCount() == 0) return wxEmptyString ;
 
-        wxCHECK_MSG( (size_t)line < GetLineCount(), _T(""),
+        wxCHECK_MSG( (size_t)line < GetLineCount(), wxEmptyString,
                      _T("line index out of range") );
 
         return GetLines()[line];

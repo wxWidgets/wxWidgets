@@ -64,7 +64,7 @@ bool wxBitmapButton::Create(wxWindow *parent,
     // we add wxBU_EXACTFIT because the bitmap buttons are not the standard
     // ones and so shouldn't be forced to be of the standard size which is
     // typically too big for them
-    if ( !wxButton::Create(parent, id, bitmap, _T(""),
+    if ( !wxButton::Create(parent, id, bitmap, wxEmptyString,
                            pos, size, style | wxBU_EXACTFIT, validator, name) )
         return false;
 

@@ -33,7 +33,7 @@ wxBitmapXmlHandler::wxBitmapXmlHandler()
 
 wxObject *wxBitmapXmlHandler::DoCreateResource()
 {
-    return new wxBitmap(GetBitmap(wxT("")));
+    return new wxBitmap(GetBitmap(wxEmptyString));
 }
 
 bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)
@@ -50,7 +50,7 @@ wxIconXmlHandler::wxIconXmlHandler()
 
 wxObject *wxIconXmlHandler::DoCreateResource()
 {
-    return new wxIcon(GetIcon(wxT("")));
+    return new wxIcon(GetIcon(wxEmptyString));
 }
 
 bool wxIconXmlHandler::CanHandle(wxXmlNode *node)

@@ -1832,7 +1832,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
 wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
-    wxCHECK_MSG( pos < GetCount(), _T(""), _T("invalid index in GetLabelTop") );
+    wxCHECK_MSG( pos < GetCount(), wxEmptyString, _T("invalid index in GetLabelTop") );
 
     return m_menuInfos[pos].GetLabel();
 }

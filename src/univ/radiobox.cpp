@@ -112,7 +112,7 @@ wxRadioBox::wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
 
     Init();
 
-    (void)Create(parent, id, title, pos, size, chs.GetCount(), 
+    (void)Create(parent, id, title, pos, size, chs.GetCount(),
                  chs.GetStrings(), majorDim, style, val, name);
 }
 
@@ -129,7 +129,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 {
     wxCArrayString chs(choices);
 
-    return Create(parent, id, title, pos, size, chs.GetCount(), 
+    return Create(parent, id, title, pos, size, chs.GetCount(),
                   chs.GetStrings(), majorDim, style, val, name);
 }
 
@@ -309,7 +309,7 @@ void wxRadioBox::OnRadioButton(wxEvent& event)
 
 wxString wxRadioBox::GetString(int n) const
 {
-    wxCHECK_MSG( IsValid(n), _T(""),
+    wxCHECK_MSG( IsValid(n), wxEmptyString,
                  _T("invalid index in wxRadioBox::GetString") );
 
     return m_buttons[n]->GetLabel();

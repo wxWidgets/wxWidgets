@@ -144,7 +144,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
 wxString wxNotebook::GetPageText(size_t nPage) const
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), _T(""), _T("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, _T("invalid notebook page") );
 
     return m_titles[nPage];
 }
