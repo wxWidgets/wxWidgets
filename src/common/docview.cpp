@@ -43,7 +43,7 @@
     #include "wx/menu.h"
     #include "wx/list.h"
     #include "wx/filedlg.h"
-    #include <wx/intl.h>
+    #include "wx/intl.h"
 #endif
 
 #ifdef __WXGTK__
@@ -178,14 +178,14 @@ bool wxDocument::DeleteAllViews()
     return TRUE;
 }
 
-wxView *wxDocument::GetFirstView(void) const
+wxView *wxDocument::GetFirstView() const
 {
     if (m_documentViews.Number() == 0)
         return (wxView *) NULL;
     return (wxView *)m_documentViews.First()->Data();
 }
 
-wxDocManager *wxDocument::GetDocumentManager(void) const
+wxDocManager *wxDocument::GetDocumentManager() const
 {
     return m_documentTemplate->GetDocumentManager();
 }
@@ -372,7 +372,7 @@ bool wxDocument::GetPrintableName(wxString& buf) const
     }
 }
 
-wxWindow *wxDocument::GetDocumentWindow(void) const
+wxWindow *wxDocument::GetDocumentWindow() const
 {
     wxView *view = GetFirstView();
     if (view)
@@ -576,7 +576,7 @@ wxPrintout *wxView::OnCreatePrintout()
 {
     return new wxDocPrintout(this);
 }
-#endif
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 // ----------------------------------------------------------------------------
 // wxDocTemplate
@@ -647,6 +647,13 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
         delete view;
         return (wxView *) NULL;
     }
+}
+
+// The default (very primitive) format detection: check is the extension is
+// that of the template
+bool wxDocTemplate::FileMatchesTemplate(const wxString& path)
+{
+    return GetDefaultExtension().IsSameAs(FindExtension(path));
 }
 
 // ----------------------------------------------------------------------------
@@ -847,7 +854,7 @@ void wxDocManager::OnRedo(wxCommandEvent& WXUNUSED(event))
         doc->GetCommandProcessor()->Redo();
 }
 
-wxView *wxDocManager::GetCurrentView(void) const
+wxView *wxDocManager::GetCurrentView() const
 {
     if (m_currentView)
         return m_currentView;
@@ -1034,7 +1041,7 @@ bool wxDocManager::FlushDoc(wxDocument *WXUNUSED(doc))
     return FALSE;
 }
 
-wxDocument *wxDocManager::GetCurrentDocument(void) const
+wxDocument *wxDocManager::GetCurrentDocument() const
 {
     if (m_currentView)
         return m_currentView->GetDocument();
@@ -1112,7 +1119,7 @@ void wxDocManager::FileHistoryAddFilesToMenu()
         m_fileHistory->AddFilesToMenu();
 }
 
-int wxDocManager::GetNoHistoryFiles(void) const
+int wxDocManager::GetNoHistoryFiles() const
 {
     if (m_fileHistory)
         return m_fileHistory->GetNoHistoryFiles();
@@ -1121,24 +1128,18 @@ int wxDocManager::GetNoHistoryFiles(void) const
 }
 
 
-// Given a path, try to find a matching template. Won't always work, of
-// course.
+// Find out the document template via matching in the document file format
+// against that of the template
 wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 {
-    wxString theExt = FindExtension(path);
-    if (!theExt)
-        return (wxDocTemplate *) NULL;
     wxDocTemplate *theTemplate = (wxDocTemplate *) NULL;
-
-    if (m_templates.Number() == 1)
-        return (wxDocTemplate *)m_templates.First()->Data();
 
     // Find the template which this extension corresponds to
     int i;
     for (i = 0; i < m_templates.Number(); i++)
     {
         wxDocTemplate *temp = (wxDocTemplate *)m_templates.Nth(i)->Data();
-        if (wxStrcmp(temp->GetDefaultExtension(), theExt) == 0)
+        if ( temp->FileMatchesTemplate(path) )
         {
             theTemplate = temp;
             break;
@@ -1180,8 +1181,11 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     wxString descrBuf = _T("*.*");
 #endif
 
-    wxString pathTmp = wxFileSelector(_("Select a file"), _T(""), _T(""), _T(""),
-            descrBuf, 0, wxTheApp->GetTopWindow());
+    int FilterIndex = 0;
+    wxString pathTmp = wxFileSelectorEx(_("Select a file"),
+                                        _T(""), _T(""), _T(""),
+                                        &FilterIndex,
+                                        descrBuf, 0, wxTheApp->GetTopWindow());
 
     if (!pathTmp.IsEmpty())
     {
@@ -1195,6 +1199,9 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         // one. We really want to know exactly which template was
         // chosen by using a more advanced file selector.
         wxDocTemplate *theTemplate = FindTemplateForPath(path);
+        if ( !theTemplate )
+            theTemplate = templates[FilterIndex];
+
         return theTemplate;
     }
     else
@@ -1654,14 +1661,14 @@ bool wxCommandProcessor::Redo()
     return FALSE;
 }
 
-bool wxCommandProcessor::CanUndo(void) const
+bool wxCommandProcessor::CanUndo() const
 {
     if (m_currentCommand)
         return ((wxCommand *)m_currentCommand->Data())->CanUndo();
     return FALSE;
 }
 
-bool wxCommandProcessor::CanRedo(void) const
+bool wxCommandProcessor::CanRedo() const
 {
     if ((m_currentCommand != (wxNode*) NULL) && (m_currentCommand->Next() == (wxNode*) NULL))
         return FALSE;
