@@ -13,6 +13,7 @@
 
 #include "wx/font.h"
 #include "wx/utils.h"
+#include "wx/log.h"
 #include <strings.h>
 
 //-----------------------------------------------------------------------------
@@ -356,13 +357,6 @@ GdkFont *wxFont::GetInternalFont(float scale) const
     }
     else
     {
-        /*
-           if (int_scale == 100) printf( "int_scale.\n" );
-           if (M_FONTDATA->m_style == wxSWISS) printf( "swiss.\n" );
-           if (M_FONTDATA->m_pointSize == 12) printf( "12.\n" );
-           if (M_FONTDATA->m_weight == wxNORMAL) printf( "normal.\n" );
-           if (M_FONTDATA->m_underlined == FALSE) printf( "false.\n" );
-         */
         if ((int_scale == 100) &&
                 (M_FONTDATA->m_family == wxSWISS) &&
                 (M_FONTDATA->m_style == wxNORMAL) &&
@@ -380,8 +374,8 @@ GdkFont *wxFont::GetInternalFont(float scale) const
         M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
     }
     if (!font)
-        printf("could not load any font");
-    //    wxError("could not load any font", "wxFont");
+        wxLogError("could not load any font");
+	
     return font;
 }
 
@@ -547,7 +541,8 @@ enum {wxSTYLE_NORMAL,  wxSTYLE_ITALIC, wxSTYLE_SLANT,  wxNUM_STYLES};
 
 static int WCoordinate(int w)
 {
-    switch (w) {
+    switch (w) 
+    {
         case wxBOLD:   return wxWEIGHT_BOLD;
         case wxLIGHT:  return wxWEIGHT_LIGHT;
         case wxNORMAL:
@@ -557,7 +552,8 @@ static int WCoordinate(int w)
 
 static int SCoordinate(int s)
 {
-    switch (s) {
+    switch (s) 
+    {
         case wxITALIC: return wxSTYLE_ITALIC;
         case wxSLANT:  return wxSTYLE_SLANT;
         case wxNORMAL:
@@ -569,7 +565,8 @@ static int SCoordinate(int s)
 // wxSuffixMap
 //-----------------------------------------------------------------------------
 
-class wxSuffixMap {
+class wxSuffixMap 
+{
 public:
     ~wxSuffixMap();
 
@@ -582,10 +579,6 @@ public:
     void Initialize(const char *, const char *);
 };
 
-//#if !USE_RESOURCES
-#define wxGetResource(a, b, c) 0
-//#endif
-
 static void SearchResource(const char *prefix, const char **names, int count, char **v)
 {
     int k, i, j;
@@ -596,20 +589,33 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
     *v = (char *) NULL;
     internal = (char *) NULL;
 
-    for (i = 0; i < k; i++) {
+    for (i = 0; i < k; i++) 
+    {
         strcpy(resource, prefix);
-        for (j = 0; j < count; j++) {
+        for (j = 0; j < count; j++) 
+	{
+	    /* upon failure to find a matching fontname 
+	       in the default fonts above, we substitute more
+	       and more values by _ so that at last ScreenMyFontBoldNormal
+	       would turn into Screen___ and this will then get
+	       converted to -${ScreenDefaultBase}${ScreenStdSuffix}
+	    */
+	
             if (!(i & (1 << j)))
                 strcat(resource, names[j]);
             else
                 strcat(resource, "_");
         }
-        if (wxGetResource(wxAPP_CLASS, (char *)resource, v))
-            return;
-        if (!internal) {
+	
+        /* we previously search the Xt-resources here */
+
+        if (!internal) 
+	{
             defaults = font_defaults;
-            while (*defaults) {
-                if (!strcmp(*defaults, resource)) {
+            while (*defaults) 
+	    {
+                if (!strcmp(*defaults, resource)) 
+		{
                     internal = defaults[1];
                     break;
                 }
@@ -617,8 +623,26 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
             }
         }
     }
+    
     if (internal)
-        *v = copystring(internal);
+    {
+        if (strcmp(internal,"-${ScreenDefaultBase}${ScreenStdSuffix}") == 0)
+	{
+	    /* we did not find any font name in the standard list.
+	       this can (hopefully does) mean that someone supplied
+	       the facename in the wxFont constructor so we insert
+	       it here */
+	
+	    strcpy( resource,"-*-" );                  /* any producer               */
+	    strcat( resource, names[0] );              /* facename                   */
+	    strcat( resource, "${ScreenStdSuffix}" );  /* add size params later on   */
+	    *v = copystring(resource);
+	}
+	else
+	{
+            *v = copystring(internal);
+	}
+    }
 }
 
 wxSuffixMap::~wxSuffixMap()
@@ -627,7 +651,8 @@ wxSuffixMap::~wxSuffixMap()
 
     for (k = 0; k < wxNUM_WEIGHTS; ++k)
         for (j = 0; j < wxNUM_STYLES; ++j)
-            if (map[k][j]) {
+            if (map[k][j]) 
+	    {
                 delete[] map[k][j];
                 map[k][j] = (char *) NULL;
             }
@@ -640,15 +665,19 @@ void wxSuffixMap::Initialize(const char *resname, const char *devresname)
     int i, j, k;
     const char *names[3];
 
-    for (k = 0; k < wxNUM_WEIGHTS; k++) {
-        switch (k) {
+    for (k = 0; k < wxNUM_WEIGHTS; k++) 
+    {
+        switch (k) 
+	{
             case wxWEIGHT_NORMAL: weight = "Medium"; break;
             case wxWEIGHT_LIGHT:  weight = "Light"; break;
             case wxWEIGHT_BOLD:
-            default:          weight = "Bold";
+            default:              weight = "Bold";
         }
-        for (j = 0; j < wxNUM_STYLES; j++) {
-            switch (j) {
+        for (j = 0; j < wxNUM_STYLES; j++) 
+	{
+            switch (j) 
+	    {
                 case wxSTYLE_NORMAL: style = "Straight"; break;
                 case wxSTYLE_ITALIC: style = "Italic"; break;
                 case wxSTYLE_SLANT:
@@ -659,18 +688,22 @@ void wxSuffixMap::Initialize(const char *resname, const char *devresname)
             names[2] = style;
 
             SearchResource(devresname, names, 3, &v);
-
+	    
             /* Expand macros in the found string: */
 found:
             int len, closer = 0, startpos = 0;
 
             len = (v ? strlen(v) : 0);
-            for (i = 0; i < len; i++) {
-                if (v[i] == '$' && ((v[i+1] == '[') || (v[i+1] == '{'))) {
+            for (i = 0; i < len; i++) 
+	    {
+                if (v[i] == '$' && ((v[i+1] == '[') || (v[i+1] == '{'))) 
+		{
                     startpos = i;
                     closer   = (v[i+1] == '[') ? ']' : '}';
                     ++i;
-                } else if (v[i] == closer) {
+                } 
+		else if (v[i] == closer) 
+		{
                     int newstrlen;
                     const char *r = (char *) NULL; bool delete_r = FALSE;
                     char *name;
@@ -678,7 +711,8 @@ found:
                     name = v + startpos + 2;
                     v[i] = 0;
 
-                    if (closer == '}') {
+                    if (closer == '}') 
+		    {
                         int i, count, len;
                         char **names;
 
@@ -691,7 +725,8 @@ found:
                         names = new char*[count];
                         names[0] = name;
                         for (i = 0, count = 1; i < len; i++)
-                            if (name[i] == ',') {
+                            if (name[i] == ',') 
+			    {
                                 names[count++] = name + i + 1;
                                 name[i] = 0;
                             }
@@ -700,12 +735,13 @@ found:
                         delete_r = (r != 0);
                         delete[] names;
 
-                        if (!r) {
+                        if (!r) 
+			{
                             for (i = 0; i < len; i++)
                                 if (!name[i])
                                     name[i] = ',';
                             r = "";
-                            printf("Bad resource name \"%s\" in font lookup\n", name);
+                            wxLogError( "Bad resource name in font lookup." );
                         }
                     } else if (!strcmp(name, "weight")) {
                         r = weight;
@@ -715,7 +751,7 @@ found:
                         r = resname;
                     } else {
                         r = "";
-                        printf("Bad font macro name \"%s\"\n", name);
+                        wxLogError( "Bad font macro name." );
                     }
 
                     // add r to v
@@ -842,6 +878,7 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
 
     sprintf(resource, "Family%s", resname);
     SearchResource((const char *)resource, (const char **) NULL, 0, (char **)&fam);
+    
     if (fam) 
     {
         if      (!strcmp(fam, "Default"))    family = wxDEFAULT;
@@ -859,7 +896,7 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
 int wxFontNameDirectory::FindOrCreateFontId(const char *name, int family)
 {
     int id;
-
+    
     // font exists -> return id
     if ( (id = GetFontId(name)) ) return id;
     
