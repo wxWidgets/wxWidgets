@@ -63,7 +63,7 @@ WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT wxChar* copystring(const wxChar *s);
 
 // Matches string one within string two regardless of case
-WXDLLEXPORT bool StringMatch(wxChar *one, wxChar *two, bool subString = TRUE, bool exact = FALSE);
+WXDLLEXPORT bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
 
 // A shorter way of using strcmp
 #define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
@@ -123,12 +123,12 @@ WXDLLEXPORT long wxGetCurrentId();
 WXDLLEXPORT_DATA(extern const wxChar*) wxFloatToStringStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxDoubleToStringStr;
 
-WXDLLEXPORT void StringToFloat(wxChar *s, float *number);
+WXDLLEXPORT void StringToFloat(const wxChar *s, float *number);
 WXDLLEXPORT wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr);
-WXDLLEXPORT void StringToDouble(wxChar *s, double *number);
+WXDLLEXPORT void StringToDouble(const wxChar *s, double *number);
 WXDLLEXPORT wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr);
-WXDLLEXPORT void StringToInt(wxChar *s, int *number);
-WXDLLEXPORT void StringToLong(wxChar *s, long *number);
+WXDLLEXPORT void StringToInt(const wxChar *s, int *number);
+WXDLLEXPORT void StringToLong(const wxChar *s, long *number);
 WXDLLEXPORT wxChar* IntToString(int number);
 WXDLLEXPORT wxChar* LongToString(long number);
 
@@ -287,7 +287,7 @@ WXDLLEXPORT bool wxGetDiskSpace(const wxString& path,
 // Menu accelerators related things
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT wxChar* wxStripMenuCodes(wxChar *in, wxChar *out = (wxChar *) NULL);
+WXDLLEXPORT wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = (wxChar *) NULL);
 WXDLLEXPORT wxString wxStripMenuCodes(const wxString& str);
 
 #if wxUSE_ACCEL

@@ -249,14 +249,14 @@ wxRegisterId (long id)
 }
 
 void
-StringToFloat (wxChar *s, float *number)
+StringToFloat (const wxChar *s, float *number)
 {
   if (s && *s && number)
     *number = (float) wxStrtod (s, (wxChar **) NULL);
 }
 
 void
-StringToDouble (wxChar *s, double *number)
+StringToDouble (const wxChar *s, double *number)
 {
   if (s && *s && number)
     *number = wxStrtod (s, (wxChar **) NULL);
@@ -281,14 +281,14 @@ DoubleToString (double number, const wxChar *fmt)
 }
 
 void
-StringToInt (wxChar *s, int *number)
+StringToInt (const wxChar *s, int *number)
 {
   if (s && *s && number)
     *number = (int) wxStrtol (s, (wxChar **) NULL, 10);
 }
 
 void
-StringToLong (wxChar *s, long *number)
+StringToLong (const wxChar *s, long *number)
 {
   if (s && *s && number)
     *number = wxStrtol (s, (wxChar **) NULL, 10);
@@ -353,7 +353,7 @@ wxString wxDecToHex(int dec)
 
 // Match a string INDEPENDENT OF CASE
 bool
-StringMatch (char *str1, char *str2, bool subString, bool exact)
+StringMatch (const char *str1, const char *str2, bool subString, bool exact)
 {
   if (str1 == NULL || str2 == NULL)
     return FALSE;
@@ -409,7 +409,7 @@ wxString wxNow()
 // Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
-wxChar *wxStripMenuCodes(wxChar *in, wxChar *out)
+wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 {
     wxString s = wxMenuItem::GetLabelFromText(in);
     if ( out )
