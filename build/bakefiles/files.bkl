@@ -944,7 +944,6 @@
     src/msw/treectrl.cpp
 </set>
 <set var="MSW_HDR">
-    wx/msw/access.h
     wx/msw/accel.h
     wx/msw/app.h
     wx/msw/bitmap.h
@@ -1031,15 +1030,15 @@
     wx/msw/treectrl.h
     wx/msw/wave.h
     wx/msw/window.h
-    wx/msw/access.h
-    wx/msw/automtn.h
-    wx/msw/dataform.h
-    wx/msw/dataobj.h
-    wx/msw/dataobj2.h
-    wx/msw/dropsrc.h
-    wx/msw/droptgt.h
-    wx/msw/oleutils.h
-    wx/msw/uuid.h
+    wx/msw/ole/access.h
+    wx/msw/ole/automtn.h
+    wx/msw/ole/dataform.h
+    wx/msw/ole/dataobj.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/ole/droptgt.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/uuid.h
     wx/msw/helpbest.h
 </set>
 
