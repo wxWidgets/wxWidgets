@@ -715,21 +715,29 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
                                   m_SearchWholeWords->GetValue(),
                                   book);
 
+#if wxUSE_PROGRESSDLG
         wxProgressDialog progress(_("Searching..."),
                                   _("No matching page found yet"),
                                   status.GetMaxIndex(), this,
                                   wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
+#endif
 
         int curi;
         while (status.IsActive())
         {
             curi = status.GetCurIndex();
-            if (curi % 32 == 0 && progress.Update(curi) == FALSE)
+            if (curi % 32 == 0 
+#if wxUSE_PROGRESSDLG
+                && progress.Update(curi) == FALSE
+#endif
+               )
                 break;
             if (status.Search())
             {
                 foundstr.Printf(_("Found %i matches"), ++foundcnt);
+#if wxUSE_PROGRESSDLG
                 progress.Update(status.GetCurIndex(), foundstr);
+#endif
                 m_SearchList->Append(status.GetName(), status.GetContentsItem());
             }
         }
