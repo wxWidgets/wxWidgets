@@ -404,8 +404,8 @@ private:
         Menu_Clear = wxID_CLEAR
     };
 
-    // instead of closing just hide the window to be able to Show() it later
-    void DoClose() { Show(FALSE); }
+    // common part of OnClose() and OnCloseWindow()
+    void DoClose();
 
     wxTextCtrl  *m_pTextCtrl;
     wxLogWindow *m_log;
@@ -453,6 +453,16 @@ wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle
 #endif // wxUSE_STATUSBAR
 
     m_log->OnFrameCreate(this);
+}
+
+void wxLogFrame::DoClose()
+{
+    if ( m_log->OnFrameClose(this) )
+    {
+        // instead of closing just hide the window to be able to Show() it
+        // later
+        Show(FALSE);
+    }
 }
 
 void wxLogFrame::OnClose(wxCommandEvent& WXUNUSED(event))
@@ -641,6 +651,12 @@ wxFrame *wxLogWindow::GetFrame() const
 
 void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
 {
+}
+
+bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
+{
+    // allow to close
+    return TRUE;
 }
 
 void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))

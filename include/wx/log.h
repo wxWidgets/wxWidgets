@@ -327,15 +327,15 @@ public:
     ~wxLogWindow();
 
     // window operations
-    // show/hide the log window
+        // show/hide the log window
     void Show(bool bShow = TRUE);
-    // retrieve the pointer to the frame
+        // retrieve the pointer to the frame
     wxFrame *GetFrame() const;
 
     // accessors
-    // the previous log target (may be NULL)
+        // the previous log target (may be NULL)
     wxLog *GetOldLog() const { return m_pOldLog; }
-    // are we passing the messages to the previous log target?
+        // are we passing the messages to the previous log target?
     bool IsPassingMessages() const { return m_bPassMessages; }
 
     // we can pass the messages to the previous log target (we're in this mode by
@@ -344,14 +344,20 @@ public:
     void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 
     // base class virtuals
-    // we don't need it ourselves, but we pass it to the previous logger
+        // we don't need it ourselves, but we pass it to the previous logger
     virtual void Flush();
 
     // overridables
-    // called immediately after the log frame creation allowing for
-    // any extra initializations
+        // called immediately after the log frame creation allowing for
+        // any extra initializations
     virtual void OnFrameCreate(wxFrame *frame);
-    // called right before the log frame is going to be deleted
+        // called if the user closes the window interactively, will not be
+        // called if it is destroyed for another reason (such as when program
+        // exits) - return TRUE from here to allow the frame to close, FALSE
+        // to prevent this from happening
+    virtual bool OnFrameClose(wxFrame *frame);
+        // called right before the log frame is going to be deleted: will
+        // always be called unlike OnFrameClose()
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
