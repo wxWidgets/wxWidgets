@@ -188,7 +188,7 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend Destructor
+// wxQTMediaBackend Constructor
 //
 // Sets m_timer to NULL signifying we havn't loaded anything yet
 //---------------------------------------------------------------------------
@@ -299,7 +299,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::Load
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -343,7 +343,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::FinishLoad
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -391,7 +391,7 @@ void wxQTMediaBackend::FinishLoad()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::Play
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -404,7 +404,7 @@ bool wxQTMediaBackend::Play()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::Pause
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -417,7 +417,7 @@ bool wxQTMediaBackend::Pause()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::Stop
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -435,7 +435,7 @@ bool wxQTMediaBackend::Stop()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetPlaybackRate
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -445,7 +445,7 @@ double wxQTMediaBackend::GetPlaybackRate()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::SetPlaybackRate
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -456,7 +456,7 @@ bool wxQTMediaBackend::SetPlaybackRate(double dRate)
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::SetPosition
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -476,7 +476,7 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetPosition
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -486,7 +486,7 @@ wxLongLong wxQTMediaBackend::GetPosition()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetDuration
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -496,7 +496,7 @@ wxLongLong wxQTMediaBackend::GetDuration()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetState
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -513,7 +513,7 @@ wxMediaState wxQTMediaBackend::GetState()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::Cleanup
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -527,7 +527,7 @@ void wxQTMediaBackend::Cleanup()
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetVideoSize
 //
 // TODO
 //---------------------------------------------------------------------------
@@ -545,6 +545,11 @@ void wxQTMediaBackend::Move(int x, int y, int w, int h)
 {
     if(m_timer)
     {
+        if ( m_ctrl )
+        {
+            m_ctrl->GetParent()->MacWindowToRootWindow(&x, &y);
+        }
+        
         Rect theRect = {y, x, y+h, x+w};
 
         ::SetMovieBox(m_movie, &theRect);
