@@ -24,13 +24,13 @@ wxObject
 
 Constructor. You will probably never have to construct a wxHtmlTag object
 yourself. Feel free to ignore the constructor parameters.
-Have a look at lib/htmlparser.cpp if you're interested in creating it.
+Have a look at src/html/htmlpars.cpp if you're interested in creating it.
 
 \membersection{wxHtmlTag::GetAllParams}\label{wxhtmltaggetallparams}
 
 \constfunc{const wxString\&}{GetAllParams}{\void}
 
-Returns string with all params. 
+Returns a string containing all parameters.
 
 Example : tag contains {\tt <FONT SIZE=+2 COLOR="\#000000">}. Call to
 tag.GetAllParams() would return {\tt SIZE=+2 COLOR="\#000000"}.
@@ -90,12 +90,12 @@ and name of {\tt </table>} is "TABLE")
 
 \constfunc{wxString}{GetParam}{\param{const wxString\& }{par}, \param{bool }{with\_commas = FALSE}}
 
-Retuns the value of the parameter. You should check whether the
-param exists or not (use \helpref{HasParam}{wxhtmltaghasparam}) first.
+Returns the value of the parameter. You should check whether the
+parameter exists or not (use \helpref{HasParam}{wxhtmltaghasparam}) first.
 
 \wxheading{Parameters}
 
-\docparam{par}{The parameter's name in uppercase}
+\docparam{par}{The parameter's name.}
 
 \docparam{with\_commas}{TRUE if you want to get commas as well. See example.}
 
@@ -144,7 +144,7 @@ Example : {\tt <FONT SIZE=+2 COLOR="\#FF00FF">} has two parameters named
 
 \wxheading{Parameters}
 
-\docparam{par}{the parameter you're looking for. It must {\it always} be in uppercase!}
+\docparam{par}{the parameter you're looking for.}
 
 \membersection{wxHtmlTag::IsEnding}\label{wxhtmltagisending}
 
@@ -155,22 +155,19 @@ Returns TRUE if this tag is ending one.
 
 \membersection{wxHtmlTag::ScanParam}\label{wxhtmltagscanparam}
 
-\constfunc{wxString}{ScanParam}{\param{const wxString\& }{par}, \param{const char *}{format}, fuck}
+\constfunc{wxString}{ScanParam}{\param{const wxString\& }{par}, \param{const wxChar *}{format}, \param{void *}{value}}
 
 This method scans given parameter. Usage is exactly the same as sscanf's 
-usage except that you don't pass string but param name as the first parameter.
+usage except that you don't pass string but parameter name as the first parameter
+and that you can only retrieve one value (i.e. you can use only one "\%" element
+in {\it format}).
+
 
 \wxheading{Parameters}
 
-\docparam{par}{The name of tag you want to query (in uppercase)}
+\docparam{par}{The name of tag you want to query}
 
 \docparam{format}{scanf()-like format string.}
 
-\wxheading{Cygwin and Mingw32}
-
-If you're using Cygwin beta 20 or Mingw32 compiler please remember
-that ScanParam() is only partially implemented! The problem is
-that under Cygnus' GCC vsscanf() function is not implemented. I worked around
-this in a way which causes that you can use only one parameter in ...
-(and only one \% in {\it format}).
+\docparam{value}{pointer to a variable to store value in }
 
