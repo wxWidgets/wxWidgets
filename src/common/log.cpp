@@ -419,83 +419,188 @@ wxLogStderr::wxLogStderr(FILE *fp)
 }
 
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-#define kDebuggerSignature        'MWDB'
 
-static Boolean FindProcessBySignature(OSType signature, ProcessInfoRec* info)
+#ifndef __MetroNubUtils__
+#include "MetroNubUtils.h"
+#endif
+
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
+#ifndef __GESTALT__
+#include <Gestalt.h>
+#endif
+
+#ifndef true
+#define true 1
+#endif
+
+#ifndef false
+#define false 0
+#endif
+
+#if TARGET_API_MAC_CARBON
+
+	#include <CodeFragments.h>
+
+	EXTERN_API_C( long )
+	CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
+
+	ProcPtr gCallUniversalProc_Proc = NULL;
+	
+#endif
+
+static MetroNubUserEntryBlock*	gMetroNubEntry = NULL;
+
+static long fRunOnce = false;
+
+Boolean IsCompatibleVersion(short inVersion);
+
+/* ---------------------------------------------------------------------------
+		IsCompatibleVersion
+   --------------------------------------------------------------------------- */
+
+Boolean IsCompatibleVersion(short inVersion)
 {
-    OSErr err;
-    ProcessSerialNumber psn;
-    Boolean found = false;
-    psn.highLongOfPSN = 0;
-    psn.lowLongOfPSN = kNoProcess;
-
-    if (!info) return false;
-
-    info->processInfoLength = sizeof(ProcessInfoRec);
-    info->processName = NULL;
-    info->processAppSpec = NULL;
-
-    err = noErr;
-    while (!found && err == noErr)
-    {
-        err = GetNextProcess(&psn);
-        if (err == noErr)
-        {
-            err = GetProcessInformation(&psn, info);
-            found = err == noErr && info->processSignature == signature;
-        }
-    }
-    return found;
+	Boolean result = false;
+	
+	if (fRunOnce)
+	{
+		MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
+		
+		result = (inVersion <= block->apiHiVersion);
+	}
+	
+	return result;	
 }
 
-pascal Boolean MWDebuggerIsRunning(void)
+/* ---------------------------------------------------------------------------
+		IsMetroNubInstalled
+   --------------------------------------------------------------------------- */
+
+Boolean IsMetroNubInstalled()
 {
-    ProcessInfoRec info;
-    return FindProcessBySignature(kDebuggerSignature, &info);
+	if (!fRunOnce)
+	{
+		long result, value;
+		
+		fRunOnce = true;
+		gMetroNubEntry = NULL;
+		
+		if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
+		{
+			/* look for MetroNub's Gestalt selector */
+			if (Gestalt(kMetroNubUserSignature, &result) == noErr)
+			{
+			
+			#if TARGET_API_MAC_CARBON
+				if (gCallUniversalProc_Proc == NULL)
+				{
+					CFragConnectionID	connectionID;
+					Ptr					mainAddress;
+					Str255				errorString;
+					ProcPtr				symbolAddress;
+					OSErr				err;
+					CFragSymbolClass	symbolClass;
+					
+					symbolAddress = NULL;
+					err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
+											&connectionID, &mainAddress, errorString);
+					
+					if (err != noErr)
+					{
+						gCallUniversalProc_Proc = NULL;
+						goto end;
+					}
+
+					err = FindSymbol(connectionID, "\pCallUniversalProc",
+									(Ptr *) &gCallUniversalProc_Proc, &symbolClass);
+					
+					if (err != noErr)
+					{
+						gCallUniversalProc_Proc = NULL;
+						goto end;
+					}
+				}
+			#endif
+			
+				{
+					MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
+					
+					/* make sure the version of the API is compatible */
+					if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
+						kMetroNubUserAPIVersion <= block->apiHiVersion)
+						gMetroNubEntry = block;		/* success! */
+				}
+
+			}
+		}
+	}
+
+end:
+
+#if TARGET_API_MAC_CARBON
+	return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
+#else
+	return (gMetroNubEntry != NULL);
+#endif
 }
 
-pascal OSErr AmIBeingMWDebugged(Boolean* result)
+/* ---------------------------------------------------------------------------
+		IsMWDebuggerRunning											[v1 API]
+   --------------------------------------------------------------------------- */
+
+Boolean IsMWDebuggerRunning()
 {
-    OSErr err;
-    ProcessSerialNumber psn;
-    OSType sig = kDebuggerSignature;
-    AppleEvent    theAE = {typeNull, NULL};
-    AppleEvent    theReply = {typeNull, NULL};
-    AEAddressDesc addr  = {typeNull, NULL};
-    DescType actualType;
-    Size actualSize;
-
-    if (!result) return paramErr;
-
-    err = AECreateDesc(typeApplSignature, &sig, sizeof(sig), &addr);
-    if (err != noErr) goto exit;
-
-    err = AECreateAppleEvent(kDebuggerSignature, 'Dbg?', &addr,
-                kAutoGenerateReturnID, kAnyTransactionID, &theAE);
-    if (err != noErr) goto exit;
-
-    GetCurrentProcess(&psn);
-    err = AEPutParamPtr(&theAE, keyDirectObject, typeProcessSerialNumber,
-            &psn, sizeof(psn));
-    if (err != noErr) goto exit;
-
-    err = AESend(&theAE, &theReply, kAEWaitReply, kAENormalPriority,
-                    kAEDefaultTimeout, NULL, NULL);
-    if (err != noErr) goto exit;
-
-    err = AEGetParamPtr(&theReply, keyAEResult, typeBoolean, &actualType, result,
-                sizeof(Boolean), &actualSize);
-
-exit:
-    if (addr.dataHandle)
-        AEDisposeDesc(&addr);
-    if (theAE.dataHandle)
-        AEDisposeDesc(&theAE);
-    if (theReply.dataHandle)
-        AEDisposeDesc(&theReply);
-
-    return err;
+	if (IsMetroNubInstalled())
+		return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
+	else
+		return false;
 }
+
+/* ---------------------------------------------------------------------------
+		AmIBeingMWDebugged											[v1 API]
+   --------------------------------------------------------------------------- */
+
+Boolean AmIBeingMWDebugged()
+{
+	if (IsMetroNubInstalled())
+		return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
+	else
+		return false;
+}
+
+/* ---------------------------------------------------------------------------
+		UserSetWatchPoint											[v2 API]
+   --------------------------------------------------------------------------- */
+
+OSErr UserSetWatchPoint (Ptr address, long length, WatchPointIDT* watchPointID)
+{
+	if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
+		return CallUserSetWatchPointProc(gMetroNubEntry->userSetWatchPoint,
+											address, length, watchPointID);
+	else
+		return errProcessIsNotClient;
+}
+
+/* ---------------------------------------------------------------------------
+		ClearWatchPoint												[v2 API]
+   --------------------------------------------------------------------------- */
+
+OSErr ClearWatchPoint (WatchPointIDT watchPointID)
+{
+	if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
+		return CallClearWatchPointProc(gMetroNubEntry->clearWatchPoint,
+											watchPointID);
+	else
+		return errProcessIsNotClient;
+}
+
+#ifdef __cplusplus
+	}
+#endif
+
 #endif
 
 void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
@@ -519,30 +624,20 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     strcpy( (char*) pstr , str.c_str() ) ;
     strcat( (char*) pstr , ";g" ) ;
     c2pstr( (char*) pstr ) ;
-#if __WXDEBUG__
+
     Boolean running = false ;
 
-/*
-    if ( MWDebuggerIsRunning() )
+    if ( IsMWDebuggerRunning() && AmIBeingMWDebugged() )
     {
-        AmIBeingMWDebugged( &running ) ;
+        running = true ;
     }
-*/
+
     if (running)
     {
 #ifdef __powerc
         DebugStr(pstr);
 #else
         SysBreakStr(pstr);
-#endif
-    }
-    else
-#endif
-    {
-#ifdef __powerc
-        DebugStr(pstr);
-#else
-        DebugStr(pstr);
 #endif
     }
 #endif // Mac
