@@ -130,7 +130,7 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 #ifdef __WXMAC__
     int major,minor;
     wxGetOsVersion( &major, &minor );
-    
+
     if (major >= 10)
     {
         Refresh();
@@ -146,7 +146,7 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
     dc.SetClippingRegion( rect.x+1, rect.y+1, rect.width-1, rect.height-1 );
     dc.Clear();
     dc.DestroyClippingRegion();
-
+    dc.SetFont(GetFont());
     DrawFieldText( dc, number );
 }
 
@@ -210,7 +210,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #ifdef __WXPM__
   wxColour                          vColor;
 
-  vColor.InitFromName("GREY");
+  vColor.InitFromName("LIGHT GREY");
   ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
 #endif
 
@@ -386,15 +386,25 @@ void wxStatusBarGeneric::InitColours()
     wxColour hilightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
     m_hilightPen = wxPen(hilightColour, 1, wxSOLID);
 #elif defined(__WXPM__)
-    m_mediumShadowPen = wxPen("LIGHT GREY", 1, wxSOLID);
+    m_mediumShadowPen = wxPen("DARK GREY", 1, wxSOLID);
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
+
+    wxColour                        vColour;
+
+    vColour.Set(DawStr_CString("LIGHT GREY"));
+    SetBackgroundColour(vColour);
+    vColour.Set(DawStr_CString("BLACK"));
+    SetForegroundColour(vColour);
+    m_defaultStatusBarFont = *wxSMALL_FONT;
 #else
     m_mediumShadowPen = wxPen("GREY", 1, wxSOLID);
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
 #endif
 
+#ifndef __WXPM__
     m_defaultStatusBarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+#endif
 }
 
 // Responds to colour changes, and passes event on to children.
