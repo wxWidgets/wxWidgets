@@ -270,7 +270,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     wxYield();
 
 #ifdef __WXMAC__
-    MacUpdateImmediately();
+    Update();
 #endif
 }
 
@@ -284,7 +284,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 
     // VZ: I like the labels be centered - if the others don't mind, you may
     //     remove "#ifdef __WXMSW__" and use it for all ports
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
     c->left.SameAs(this, wxCentreX, LAYOUT_X_MARGIN);
 #else // !MSW
     c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
@@ -391,7 +391,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     }
 
 #ifdef __WXMAC__
-    MacUpdateImmediately();
+    Update();
 #endif
 
     return m_state != Canceled;

@@ -40,6 +40,10 @@
 
 #include "wx/renderer.h"
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+    
 // -----------------------------------------------------------------------------
 // array types
 // -----------------------------------------------------------------------------
@@ -734,7 +738,11 @@ void wxGenericTreeCtrl::Init()
 
     m_lastOnSame = FALSE;
 
+#if defined( __WXMAC__ ) && __WXMAC_CARBON__
+    m_normalFont.MacCreateThemeFont( kThemeViewsFont ) ;
+#else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+#endif
     m_boldFont = wxFont(m_normalFont.GetPointSize(),
                         m_normalFont.GetFamily(),
                         m_normalFont.GetStyle(),
@@ -1898,8 +1906,12 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
-
+    if (m_dirty) 
+#if defined( __WXMSW__ ) || defined(__WXMAC__)
+        Update();
+#else
+        wxYieldIfNeeded();
+#endif
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
     // now scroll to the item
@@ -2831,7 +2843,11 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
     // question might just have been added and no screen
     // update taken place.
     if ( m_dirty )
+#if defined( __WXMSW__ ) || defined(__WXMAC__)
+        Update();
+#else
         wxYieldIfNeeded();
+#endif
 
     m_textCtrl = new wxTreeTextCtrl(this, itemEdit);
 
@@ -3016,7 +3032,11 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
+#if defined( __WXMSW__ ) || defined(__WXMAC__)
+            Update();
+#else
             wxYieldIfNeeded();
+#endif
         }
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
@@ -3047,7 +3067,11 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
+#if defined( __WXMSW__ ) || defined(__WXMAC__)
+        Update();
+#else
         wxYieldIfNeeded();
+#endif
     }
     else
     {
