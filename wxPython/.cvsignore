@@ -4,6 +4,9 @@
 MANIFEST
 _build_rpm
 build
+build-gtk
+build-gtk2
+build-gtk2.unicode
 build-pkg
 build-pkg-debug
 build.local
