@@ -634,6 +634,10 @@ SOURCE=.\html\m_dflist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\m_meta.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File

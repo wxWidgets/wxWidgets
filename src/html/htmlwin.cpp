@@ -589,6 +589,7 @@ FORCE_LINK(m_pre)
 FORCE_LINK(m_hline)
 FORCE_LINK(m_links)
 FORCE_LINK(m_tables)
+FORCE_LINK(m_meta)
 
 
 #endif

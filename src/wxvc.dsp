@@ -636,6 +636,10 @@ SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\m_meta.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\m_hline.cpp
 # End Source File
 # Begin Source File

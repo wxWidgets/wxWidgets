@@ -513,6 +513,7 @@ m_list.cpp	H
 m_dflist.cpp	H
 m_pre.cpp	H
 m_tables.cpp	H
+m_meta.cpp	H
 htmprint.cpp	H
 
 arrimpl.cpp	W
