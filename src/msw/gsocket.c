@@ -6,7 +6,6 @@
  * -------------------------------------------------------------------------
  */
 
-#if defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS)
 
 #ifndef __GSOCKET_STANDALONE__
 
@@ -29,6 +28,8 @@
 
 #endif /* __GSOCKET_STANDALONE__ */
 
+
+#if defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS)
 
 #include <assert.h>
 #include <string.h>
