@@ -1107,6 +1107,15 @@ void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 #endif
 }
 
+bool wxTopLevelWindowMac::MacGetMetalAppearance() const 
+{
+#if TARGET_API_MAC_OSX
+    return MacGetWindowAttributes() & kWindowMetalAttribute ;
+#else
+    return false ;
+#endif
+}
+
 void wxTopLevelWindowMac::MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) 
 {
     ChangeWindowAttributes ( (WindowRef) m_macWindow , attributesToSet, attributesToClear ) ;
