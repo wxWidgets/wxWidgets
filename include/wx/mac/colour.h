@@ -28,6 +28,8 @@ public:
   wxColour();
     // from RGB
   wxColour( unsigned char red, unsigned char green, unsigned char blue );
+  wxColour( unsigned long colRGB ) { Set(colRGB); }
+  
     // implicit conversion from the colour name
   wxColour( const wxString &colourName ) { InitFromName(colourName); }
   wxColour( const char *colourName ) { InitFromName(colourName); }
