@@ -287,16 +287,16 @@ bool
 wxIsAbsolutePath (const wxString& filename)
 {
 #ifdef __WXMAC__
-  if (filename != wxT(""))
-  {
-//  This seems wrong to me, RR. FIXME.
+    if (filename != wxT(""))
+    {
+        // This seems wrong to me, but there is no fix. since
+        // "MacOS:MyText.txt" is absolute whereas "MyDir:MyText.txt"
+        // is not. Or maybe ":MyDir:MyText.txt" has to be used? RR.
     
-    if( filename.Find(':') != wxNOT_FOUND && filename[0] != ':' )
-      return TRUE ;
-      
-//    if (filename[0] == ':')  return TRUE ;
-  }
-  return FALSE ;
+        if (filename.Find(':') != wxNOT_FOUND && filename[0] != ':')
+            return TRUE ;
+    }
+    return FALSE ;
 #else
   if (filename != wxT(""))
     {
