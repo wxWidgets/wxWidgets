@@ -36,8 +36,9 @@
 #endif
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
+    #ifdef wxHAVE_RAW_BITMAP
     #include "wx/rawbmp.h"
-    #define wxHAVE_RAW_BITMAP
+    #endif
 #endif
 
 // derived classes
@@ -896,7 +897,7 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
 
 #ifdef wxHAVE_RAW_BITMAP
 
-void MyFrame::OnTestRawBitmap( wxCommandEvent &event )
+void MyFrame::OnTestRawBitmap( wxCommandEvent &WXUNUSED(event) )
 {
     (new MyRawBitmapFrame(this))->Show();
 }
