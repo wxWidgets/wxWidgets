@@ -502,7 +502,8 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
     m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize
 #if defined(__WXMSW__)
-                               , wxTE_MULTILINE | wxTE_NO_VSCROLL | wxTE_AUTO_SCROLL
+                               , wxTE_PROCESS_TAB | wxTE_MULTILINE |
+                                 wxTE_NO_VSCROLL | wxTE_AUTO_SCROLL
 #endif
                               );
 
@@ -538,9 +539,9 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
     }
 #else // !GTK
     int extra_x = ( rect.x > 2 )? 2 : 1;
-    
-// MB: treat MSW separately here otherwise the caret doesn't show 
-// when the editor is in the first row. 
+
+// MB: treat MSW separately here otherwise the caret doesn't show
+// when the editor is in the first row.
 #if defined(__WXMSW__)
     int extra_y = 2;
 #else
@@ -2411,14 +2412,16 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
 wxGridCellRenderer* wxGridTypeRegistry::GetRenderer(int index)
 {
     wxGridCellRenderer* renderer = m_typeinfo[index]->m_renderer;
-    renderer->IncRef();
+    if (renderer)
+        renderer->IncRef();
     return renderer;
 }
 
 wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
 {
     wxGridCellEditor* editor = m_typeinfo[index]->m_editor;
-    editor->IncRef();
+    if (renderer)
+        editor->IncRef();
     return editor;
 }
 
@@ -3825,8 +3828,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrRows( pos, -((int)numRows) );
-// ifdef'd out following patch from Paul Gammans                
-#if 0                
+// ifdef'd out following patch from Paul Gammans
+#if 0
                 // No need to touch column attributes, unless we
                 // removed _all_ rows, in this case, we remove
                 // all column attributes.
@@ -3834,7 +3837,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 // needed data is not available inside UpdateAttrRows.
                 if ( !GetNumberRows() )
                     attrProvider->UpdateAttrCols( 0, -GetNumberCols() );
-#endif                    
+#endif
             }
             if ( !GetBatchCount() )
             {
@@ -3961,8 +3964,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrCols( pos, -((int)numCols) );
-// ifdef'd out following patch from Paul Gammans                
-#if 0                
+// ifdef'd out following patch from Paul Gammans
+#if 0
                 // No need to touch row attributes, unless we
                 // removed _all_ columns, in this case, we remove
                 // all row attributes.
@@ -3970,7 +3973,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 // needed data is not available inside UpdateAttrCols.
                 if ( !GetNumberCols() )
                     attrProvider->UpdateAttrRows( 0, -GetNumberRows() );
-#endif                    
+#endif
             }
             if ( !GetBatchCount() )
             {
@@ -5607,7 +5610,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             }
 
             CalcCellsExposed( r );
-    
+
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
@@ -8203,14 +8206,14 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 }
 
 
-void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol, 
+void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
                           bool addToSelected )
 {
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol, 
-                              FALSE, addToSelected );    
+    m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol,
+                              FALSE, addToSelected );
 }
 
 
