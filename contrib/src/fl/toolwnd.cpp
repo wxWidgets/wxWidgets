@@ -165,15 +165,17 @@ void wxToolWindow::OnPaint( wxPaintEvent& event )
 	int w,h;
 	GetSize( &w, &h );
 
-	dc.SetBrush( *wxLIGHT_GREY_BRUSH );
-	dc.SetPen( *wxTRANSPARENT_PEN );
+    wxBrush backGround( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID );
+    //dc.SetBrush( *wxLIGHT_GREY_BRUSH );
+    dc.SetBrush( backGround ); 
+    dc.SetPen( *wxTRANSPARENT_PEN );
 
-	int y = mWndVertGap + mTitleHeight + mClntVertGap + 1;
-	dc.DrawRectangle( 0,0, w, y );
-	dc.DrawRectangle( 0,y-1, mWndHorizGap + mClntHorizGap + 1, h - y );
-	dc.DrawRectangle( w - ( mWndHorizGap + mClntHorizGap ), y-1,
-					  mWndHorizGap + mClntHorizGap, h - y );
-	dc.DrawRectangle( 0, h - mWndVertGap - mClntVertGap, w, mWndVertGap + mClntVertGap );
+    int y = mWndVertGap + mTitleHeight + mClntVertGap;
+    dc.DrawRectangle( 0,0, w, y );                                      // Top grey part.
+    dc.DrawRectangle( 0,y-1, mWndHorizGap + mClntHorizGap, h - y );     // Left grey part.
+    dc.DrawRectangle( w - ( mWndHorizGap + mClntHorizGap ), y-1,
+                      mWndHorizGap + mClntHorizGap, h - y );            // Right grey part.
+    dc.DrawRectangle( 0, h - mWndVertGap - mClntVertGap, w, mWndVertGap + mClntVertGap ); // Bottom grey part.
 
 	// draw shades
 	dc.SetPen( *wxLIGHT_GREY_PEN );
@@ -679,14 +681,12 @@ void wxToolWindow::OnSize( wxSizeEvent& event )
 		int x = mWndHorizGap + mClntHorizGap;
 		int y = mWndVertGap  + mTitleHeight + mClntVertGap;
 
-#if 1
-		mpClientWnd->SetSize( x -1, y -1, 
-							  w - 2*(mWndHorizGap + mClntHorizGap),
-							  h - y - mClntVertGap - mWndVertGap, 
-							  0  
-							);
-#endif
-	}
+        mpClientWnd->SetSize( x-1, y-1, 
+                              w - 2*(mWndHorizGap + mClntHorizGap),
+                              h - y - mClntVertGap - mWndVertGap, 
+                              0  
+                            );
+    }
 
 	LayoutMiniButtons();
 }
