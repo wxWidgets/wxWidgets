@@ -31,6 +31,8 @@
     #include "wx/msw/winundef.h"
 #endif
 
+struct WXDLLEXPORT wxNativeEncodingInfo;
+
 #if defined(_WX_X_FONTLIKE)
 
 // the symbolic names for the XLFD fields (with examples for their value)

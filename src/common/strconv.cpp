@@ -521,7 +521,6 @@ const char *IC_CharSet::ms_wcCharsetName = NULL;
 bool IC_CharSet::ms_wcNeedsSwap = FALSE;
 
 IC_CharSet::IC_CharSet(const wxChar *name)
-          : wxCharacterSet(name)
 {
     // Do it the hard way
     char cname[100];

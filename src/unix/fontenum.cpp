@@ -32,6 +32,7 @@
 #include "wx/fontmap.h"
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
+#include "wx/encinfo.h"
 
 // ----------------------------------------------------------------------------
 // Pango

@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/encinfo.h"
 #endif // PCH
 
 #include "wx/fontutil.h"
