@@ -30,7 +30,7 @@ enum
 
 
     // flags used by default
-    wxBUFFER_DC_DEFAULT = wxBUFFER_DC_PRESERVE_BG
+    wxBUFFER_DC_DEFAULT = wxBUFFER_DC_OVERWRITE_BG
 };
 
 // ----------------------------------------------------------------------------
@@ -89,11 +89,15 @@ private:
         }
     }
 
-    // Without the existence of a wxNullDC, this must be
-    // a pointer, else it could probably be a reference.
-    wxDC       *m_dc;
+    // the underlying DC to which we copy everything drawn on this one in
+    // UnMask()
+    //
+    // NB: Without the existence of a wxNullDC, this must be a pointer, else it
+    //     could probably be a reference.
+    wxDC *m_dc;
 
-    wxBitmap    m_buffer;
+    // the buffer (selected in this DC)
+    wxBitmap m_buffer;
 
     DECLARE_NO_COPY_CLASS(wxBufferedDC)
 };
@@ -112,18 +116,18 @@ public:
     wxBufferedPaintDC(wxWindow *window, int flags = wxBUFFER_DC_DEFAULT)
         : m_paintdc(window)
     {
-        Prepare(window);
-
         Init(&m_paintdc, window->GetClientSize(), flags);
+
+        Prepare(window);
     }
 
     // the bitmap must be valid here
     wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer)
         : m_paintdc(window)
     {
-        Prepare(window);
-
         Init(&m_paintdc, buffer);
+
+        Prepare(window);
     }
 
     // default copy ctor ok.
