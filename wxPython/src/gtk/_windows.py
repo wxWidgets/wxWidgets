@@ -1938,8 +1938,8 @@ EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
 class ColourData(_core.Object):
     """
     This class holds a variety of information related to the colour
-    chooser dialog.  This class is used to transfer settings and results
-    to and from the `wx.ColourDialog`.
+    chooser dialog, used to transfer settings and results to and from the
+    `wx.ColourDialog`.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

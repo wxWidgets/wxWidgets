@@ -2410,160 +2410,176 @@ class DC(_core.Object):
         """EndDrawing(self)"""
         return _gdi_.DC_EndDrawing(*args, **kwargs)
 
-    def FloodFillXY(*args, **kwargs):
-        """FloodFillXY(self, int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool"""
-        return _gdi_.DC_FloodFillXY(*args, **kwargs)
-
     def FloodFill(*args, **kwargs):
-        """FloodFill(self, Point pt, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        """FloodFill(self, int x, int y, Colour col, int style=FLOOD_SURFACE) -> bool"""
         return _gdi_.DC_FloodFill(*args, **kwargs)
 
-    def GetPixelXY(*args, **kwargs):
-        """GetPixelXY(self, int x, int y) -> Colour"""
-        return _gdi_.DC_GetPixelXY(*args, **kwargs)
+    def FloodFillPoint(*args, **kwargs):
+        """FloodFillPoint(self, Point pt, Colour col, int style=FLOOD_SURFACE) -> bool"""
+        return _gdi_.DC_FloodFillPoint(*args, **kwargs)
 
     def GetPixel(*args, **kwargs):
-        """GetPixel(self, Point pt) -> Colour"""
+        """GetPixel(self, int x, int y) -> Colour"""
         return _gdi_.DC_GetPixel(*args, **kwargs)
 
-    def DrawLineXY(*args, **kwargs):
-        """DrawLineXY(self, int x1, int y1, int x2, int y2)"""
-        return _gdi_.DC_DrawLineXY(*args, **kwargs)
+    def GetPixelPoint(*args, **kwargs):
+        """GetPixelPoint(self, Point pt) -> Colour"""
+        return _gdi_.DC_GetPixelPoint(*args, **kwargs)
 
     def DrawLine(*args, **kwargs):
-        """DrawLine(self, Point pt1, Point pt2)"""
+        """DrawLine(self, int x1, int y1, int x2, int y2)"""
         return _gdi_.DC_DrawLine(*args, **kwargs)
 
-    def CrossHairXY(*args, **kwargs):
-        """CrossHairXY(self, int x, int y)"""
-        return _gdi_.DC_CrossHairXY(*args, **kwargs)
+    def DrawLinePoint(*args, **kwargs):
+        """DrawLinePoint(self, Point pt1, Point pt2)"""
+        return _gdi_.DC_DrawLinePoint(*args, **kwargs)
 
     def CrossHair(*args, **kwargs):
-        """CrossHair(self, Point pt)"""
+        """CrossHair(self, int x, int y)"""
         return _gdi_.DC_CrossHair(*args, **kwargs)
 
-    def DrawArcXY(*args, **kwargs):
-        """DrawArcXY(self, int x1, int y1, int x2, int y2, int xc, int yc)"""
-        return _gdi_.DC_DrawArcXY(*args, **kwargs)
+    def CrossHairPoint(*args, **kwargs):
+        """CrossHairPoint(self, Point pt)"""
+        return _gdi_.DC_CrossHairPoint(*args, **kwargs)
 
     def DrawArc(*args, **kwargs):
-        """DrawArc(self, Point pt1, Point pt2, Point centre)"""
+        """DrawArc(self, int x1, int y1, int x2, int y2, int xc, int yc)"""
         return _gdi_.DC_DrawArc(*args, **kwargs)
 
-    def DrawCheckMarkXY(*args, **kwargs):
-        """DrawCheckMarkXY(self, int x, int y, int width, int height)"""
-        return _gdi_.DC_DrawCheckMarkXY(*args, **kwargs)
+    def DrawArcPoint(*args, **kwargs):
+        """DrawArcPoint(self, Point pt1, Point pt2, Point centre)"""
+        return _gdi_.DC_DrawArcPoint(*args, **kwargs)
 
     def DrawCheckMark(*args, **kwargs):
-        """DrawCheckMark(self, Rect rect)"""
+        """DrawCheckMark(self, int x, int y, int width, int height)"""
         return _gdi_.DC_DrawCheckMark(*args, **kwargs)
 
-    def DrawEllipticArcXY(*args, **kwargs):
-        """DrawEllipticArcXY(self, int x, int y, int w, int h, double sa, double ea)"""
-        return _gdi_.DC_DrawEllipticArcXY(*args, **kwargs)
+    def DrawCheckMarkRect(*args, **kwargs):
+        """DrawCheckMarkRect(self, Rect rect)"""
+        return _gdi_.DC_DrawCheckMarkRect(*args, **kwargs)
 
     def DrawEllipticArc(*args, **kwargs):
-        """DrawEllipticArc(self, Point pt, Size sz, double sa, double ea)"""
+        """DrawEllipticArc(self, int x, int y, int w, int h, double sa, double ea)"""
         return _gdi_.DC_DrawEllipticArc(*args, **kwargs)
 
-    def DrawPointXY(*args, **kwargs):
-        """DrawPointXY(self, int x, int y)"""
-        return _gdi_.DC_DrawPointXY(*args, **kwargs)
+    def DrawEllipticArcPointSize(*args, **kwargs):
+        """DrawEllipticArcPointSize(self, Point pt, Size sz, double sa, double ea)"""
+        return _gdi_.DC_DrawEllipticArcPointSize(*args, **kwargs)
 
     def DrawPoint(*args, **kwargs):
-        """DrawPoint(self, Point pt)"""
+        """DrawPoint(self, int x, int y)"""
         return _gdi_.DC_DrawPoint(*args, **kwargs)
 
-    def DrawRectangleXY(*args, **kwargs):
-        """DrawRectangleXY(self, int x, int y, int width, int height)"""
-        return _gdi_.DC_DrawRectangleXY(*args, **kwargs)
+    def DrawPointPoint(*args, **kwargs):
+        """DrawPointPoint(self, Point pt)"""
+        return _gdi_.DC_DrawPointPoint(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
-        """DrawRectangle(self, Point pt, Size sz)"""
+        """DrawRectangle(self, int x, int y, int width, int height)"""
         return _gdi_.DC_DrawRectangle(*args, **kwargs)
 
     def DrawRectangleRect(*args, **kwargs):
         """DrawRectangleRect(self, Rect rect)"""
         return _gdi_.DC_DrawRectangleRect(*args, **kwargs)
 
-    def DrawRoundedRectangleXY(*args, **kwargs):
-        """DrawRoundedRectangleXY(self, int x, int y, int width, int height, double radius)"""
-        return _gdi_.DC_DrawRoundedRectangleXY(*args, **kwargs)
+    def DrawRectanglePointSize(*args, **kwargs):
+        """DrawRectanglePointSize(self, Point pt, Size sz)"""
+        return _gdi_.DC_DrawRectanglePointSize(*args, **kwargs)
 
     def DrawRoundedRectangle(*args, **kwargs):
-        """DrawRoundedRectangle(self, Point pt, Size sz, double radius)"""
+        """DrawRoundedRectangle(self, int x, int y, int width, int height, double radius)"""
         return _gdi_.DC_DrawRoundedRectangle(*args, **kwargs)
 
     def DrawRoundedRectangleRect(*args, **kwargs):
         """DrawRoundedRectangleRect(self, Rect r, double radius)"""
         return _gdi_.DC_DrawRoundedRectangleRect(*args, **kwargs)
 
-    def DrawCircleXY(*args, **kwargs):
-        """DrawCircleXY(self, int x, int y, int radius)"""
-        return _gdi_.DC_DrawCircleXY(*args, **kwargs)
+    def DrawRoundedRectanglePointSize(*args, **kwargs):
+        """DrawRoundedRectanglePointSize(self, Point pt, Size sz, double radius)"""
+        return _gdi_.DC_DrawRoundedRectanglePointSize(*args, **kwargs)
 
     def DrawCircle(*args, **kwargs):
-        """DrawCircle(self, Point pt, int radius)"""
+        """DrawCircle(self, int x, int y, int radius)"""
         return _gdi_.DC_DrawCircle(*args, **kwargs)
 
-    def DrawEllipseXY(*args, **kwargs):
-        """DrawEllipseXY(self, int x, int y, int width, int height)"""
-        return _gdi_.DC_DrawEllipseXY(*args, **kwargs)
+    def DrawCirclePoint(*args, **kwargs):
+        """DrawCirclePoint(self, Point pt, int radius)"""
+        return _gdi_.DC_DrawCirclePoint(*args, **kwargs)
 
     def DrawEllipse(*args, **kwargs):
-        """DrawEllipse(self, Point pt, Size sz)"""
+        """DrawEllipse(self, int x, int y, int width, int height)"""
         return _gdi_.DC_DrawEllipse(*args, **kwargs)
 
     def DrawEllipseRect(*args, **kwargs):
         """DrawEllipseRect(self, Rect rect)"""
         return _gdi_.DC_DrawEllipseRect(*args, **kwargs)
 
-    def DrawIconXY(*args, **kwargs):
-        """DrawIconXY(self, Icon icon, int x, int y)"""
-        return _gdi_.DC_DrawIconXY(*args, **kwargs)
+    def DrawEllipsePointSize(*args, **kwargs):
+        """DrawEllipsePointSize(self, Point pt, Size sz)"""
+        return _gdi_.DC_DrawEllipsePointSize(*args, **kwargs)
 
     def DrawIcon(*args, **kwargs):
-        """DrawIcon(self, Icon icon, Point pt)"""
+        """DrawIcon(self, Icon icon, int x, int y)"""
         return _gdi_.DC_DrawIcon(*args, **kwargs)
 
-    def DrawBitmapXY(*args, **kwargs):
-        """DrawBitmapXY(self, Bitmap bmp, int x, int y, bool useMask=False)"""
-        return _gdi_.DC_DrawBitmapXY(*args, **kwargs)
+    def DrawIconPoint(*args, **kwargs):
+        """DrawIconPoint(self, Icon icon, Point pt)"""
+        return _gdi_.DC_DrawIconPoint(*args, **kwargs)
 
     def DrawBitmap(*args, **kwargs):
-        """DrawBitmap(self, Bitmap bmp, Point pt, bool useMask=False)"""
+        """DrawBitmap(self, Bitmap bmp, int x, int y, bool useMask=False)"""
         return _gdi_.DC_DrawBitmap(*args, **kwargs)
 
-    def DrawTextXY(*args, **kwargs):
-        """DrawTextXY(self, String text, int x, int y)"""
-        return _gdi_.DC_DrawTextXY(*args, **kwargs)
+    def DrawBitmapPoint(*args, **kwargs):
+        """DrawBitmapPoint(self, Bitmap bmp, Point pt, bool useMask=False)"""
+        return _gdi_.DC_DrawBitmapPoint(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
-        """DrawText(self, String text, Point pt)"""
+        """DrawText(self, String text, int x, int y)"""
         return _gdi_.DC_DrawText(*args, **kwargs)
 
-    def DrawRotatedTextXY(*args, **kwargs):
-        """DrawRotatedTextXY(self, String text, int x, int y, double angle)"""
-        return _gdi_.DC_DrawRotatedTextXY(*args, **kwargs)
+    def DrawTextPoint(*args, **kwargs):
+        """DrawTextPoint(self, String text, Point pt)"""
+        return _gdi_.DC_DrawTextPoint(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(self, String text, Point pt, double angle)"""
+        """DrawRotatedText(self, String text, int x, int y, double angle)"""
         return _gdi_.DC_DrawRotatedText(*args, **kwargs)
 
-    def BlitXY(*args, **kwargs):
-        """
-        BlitXY(self, int xdest, int ydest, int width, int height, DC source, 
-            int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
-            int xsrcMask=-1, int ysrcMask=-1) -> bool
-        """
-        return _gdi_.DC_BlitXY(*args, **kwargs)
+    def DrawRotatedTextPoint(*args, **kwargs):
+        """DrawRotatedTextPoint(self, String text, Point pt, double angle)"""
+        return _gdi_.DC_DrawRotatedTextPoint(*args, **kwargs)
 
     def Blit(*args, **kwargs):
         """
-        Blit(self, Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
-            bool useMask=False, Point srcPtMask=DefaultPosition) -> bool
+        Blit(self, int xdest, int ydest, int width, int height, DC source, 
+            int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
+            int xsrcMask=-1, int ysrcMask=-1) -> bool
         """
         return _gdi_.DC_Blit(*args, **kwargs)
+
+    def BlitPointSize(*args, **kwargs):
+        """
+        BlitPointSize(self, Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
+            bool useMask=False, Point srcPtMask=DefaultPosition) -> bool
+        """
+        return _gdi_.DC_BlitPointSize(*args, **kwargs)
+
+    def SetClippingRegion(*args, **kwargs):
+        """SetClippingRegion(self, int x, int y, int width, int height)"""
+        return _gdi_.DC_SetClippingRegion(*args, **kwargs)
+
+    def SetClippingRegionPointSize(*args, **kwargs):
+        """SetClippingRegionPointSize(self, Point pt, Size sz)"""
+        return _gdi_.DC_SetClippingRegionPointSize(*args, **kwargs)
+
+    def SetClippingRegionAsRegion(*args, **kwargs):
+        """SetClippingRegionAsRegion(self, Region region)"""
+        return _gdi_.DC_SetClippingRegionAsRegion(*args, **kwargs)
+
+    def SetClippingRect(*args, **kwargs):
+        """SetClippingRect(self, Rect rect)"""
+        return _gdi_.DC_SetClippingRect(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
         """DrawLines(self, int points, Point points_array, int xoffset=0, int yoffset=0)"""
@@ -2637,22 +2653,6 @@ class DC(_core.Object):
     def SetPalette(*args, **kwargs):
         """SetPalette(self, Palette palette)"""
         return _gdi_.DC_SetPalette(*args, **kwargs)
-
-    def SetClippingRegionXY(*args, **kwargs):
-        """SetClippingRegionXY(self, int x, int y, int width, int height)"""
-        return _gdi_.DC_SetClippingRegionXY(*args, **kwargs)
-
-    def SetClippingRegion(*args, **kwargs):
-        """SetClippingRegion(self, Point pt, Size sz)"""
-        return _gdi_.DC_SetClippingRegion(*args, **kwargs)
-
-    def SetClippingRect(*args, **kwargs):
-        """SetClippingRect(self, Rect rect)"""
-        return _gdi_.DC_SetClippingRect(*args, **kwargs)
-
-    def SetClippingRegionAsRegion(*args, **kwargs):
-        """SetClippingRegionAsRegion(self, Region region)"""
-        return _gdi_.DC_SetClippingRegionAsRegion(*args, **kwargs)
 
     def DestroyClippingRegion(*args, **kwargs):
         """DestroyClippingRegion(self)"""
@@ -2863,6 +2863,10 @@ class DC(_core.Object):
         """SetLogicalOrigin(self, int x, int y)"""
         return _gdi_.DC_SetLogicalOrigin(*args, **kwargs)
 
+    def SetLogicalOriginPoint(*args, **kwargs):
+        """SetLogicalOriginPoint(self, Point point)"""
+        return _gdi_.DC_SetLogicalOriginPoint(*args, **kwargs)
+
     def GetDeviceOrigin(*args, **kwargs):
         """GetDeviceOrigin(self) -> Point"""
         return _gdi_.DC_GetDeviceOrigin(*args, **kwargs)
@@ -2874,6 +2878,10 @@ class DC(_core.Object):
     def SetDeviceOrigin(*args, **kwargs):
         """SetDeviceOrigin(self, int x, int y)"""
         return _gdi_.DC_SetDeviceOrigin(*args, **kwargs)
+
+    def SetDeviceOriginPoint(*args, **kwargs):
+        """SetDeviceOriginPoint(self, Point point)"""
+        return _gdi_.DC_SetDeviceOriginPoint(*args, **kwargs)
 
     def SetAxisOrientation(*args, **kwargs):
         """SetAxisOrientation(self, bool xLeftRight, bool yBottomUp)"""
@@ -2898,6 +2906,10 @@ class DC(_core.Object):
     def CalcBoundingBox(*args, **kwargs):
         """CalcBoundingBox(self, int x, int y)"""
         return _gdi_.DC_CalcBoundingBox(*args, **kwargs)
+
+    def CalcBoundingBoxPoint(*args, **kwargs):
+        """CalcBoundingBoxPoint(self, Point point)"""
+        return _gdi_.DC_CalcBoundingBoxPoint(*args, **kwargs)
 
     def ResetBoundingBox(*args, **kwargs):
         """ResetBoundingBox(self)"""
@@ -3345,246 +3357,6 @@ class PrinterDCPtr(PrinterDC):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PrinterDC
 _gdi_.PrinterDC_swigregister(PrinterDCPtr)
-
-class DC_old(DC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = DC.FloodFillXY
-    GetPixel = DC.GetPixelXY
-    DrawLine = DC.DrawLineXY
-    CrossHair = DC.CrossHairXY
-    DrawArc = DC.DrawArcXY
-    DrawCheckMark = DC.DrawCheckMarkXY
-    DrawEllipticArc = DC.DrawEllipticArcXY
-    DrawPoint = DC.DrawPointXY
-    DrawRectangle = DC.DrawRectangleXY
-    DrawRoundedRectangle = DC.DrawRoundedRectangleXY
-    DrawCircle = DC.DrawCircleXY
-    DrawEllipse = DC.DrawEllipseXY
-    DrawIcon = DC.DrawIconXY
-    DrawBitmap = DC.DrawBitmapXY
-    DrawText = DC.DrawTextXY
-    DrawRotatedText = DC.DrawRotatedTextXY
-    Blit = DC.BlitXY
-
-class MemoryDC_old(MemoryDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = MemoryDC.FloodFillXY
-    GetPixel = MemoryDC.GetPixelXY
-    DrawLine = MemoryDC.DrawLineXY
-    CrossHair = MemoryDC.CrossHairXY
-    DrawArc = MemoryDC.DrawArcXY
-    DrawCheckMark = MemoryDC.DrawCheckMarkXY
-    DrawEllipticArc = MemoryDC.DrawEllipticArcXY
-    DrawPoint = MemoryDC.DrawPointXY
-    DrawRectangle = MemoryDC.DrawRectangleXY
-    DrawRoundedRectangle = MemoryDC.DrawRoundedRectangleXY
-    DrawCircle = MemoryDC.DrawCircleXY
-    DrawEllipse = MemoryDC.DrawEllipseXY
-    DrawIcon = MemoryDC.DrawIconXY
-    DrawBitmap = MemoryDC.DrawBitmapXY
-    DrawText = MemoryDC.DrawTextXY
-    DrawRotatedText = MemoryDC.DrawRotatedTextXY
-    Blit = MemoryDC.BlitXY
-
-class BufferedDC_old(BufferedDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = BufferedDC.FloodFillXY
-    GetPixel = BufferedDC.GetPixelXY
-    DrawLine = BufferedDC.DrawLineXY
-    CrossHair = BufferedDC.CrossHairXY
-    DrawArc = BufferedDC.DrawArcXY
-    DrawCheckMark = BufferedDC.DrawCheckMarkXY
-    DrawEllipticArc = BufferedDC.DrawEllipticArcXY
-    DrawPoint = BufferedDC.DrawPointXY
-    DrawRectangle = BufferedDC.DrawRectangleXY
-    DrawRoundedRectangle = BufferedDC.DrawRoundedRectangleXY
-    DrawCircle = BufferedDC.DrawCircleXY
-    DrawEllipse = BufferedDC.DrawEllipseXY
-    DrawIcon = BufferedDC.DrawIconXY
-    DrawBitmap = BufferedDC.DrawBitmapXY
-    DrawText = BufferedDC.DrawTextXY
-    DrawRotatedText = BufferedDC.DrawRotatedTextXY
-    Blit = BufferedDC.BlitXY
-
-class BufferedPaintDC_old(BufferedPaintDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = BufferedPaintDC.FloodFillXY
-    GetPixel = BufferedPaintDC.GetPixelXY
-    DrawLine = BufferedPaintDC.DrawLineXY
-    CrossHair = BufferedPaintDC.CrossHairXY
-    DrawArc = BufferedPaintDC.DrawArcXY
-    DrawCheckMark = BufferedPaintDC.DrawCheckMarkXY
-    DrawEllipticArc = BufferedPaintDC.DrawEllipticArcXY
-    DrawPoint = BufferedPaintDC.DrawPointXY
-    DrawRectangle = BufferedPaintDC.DrawRectangleXY
-    DrawRoundedRectangle = BufferedPaintDC.DrawRoundedRectangleXY
-    DrawCircle = BufferedPaintDC.DrawCircleXY
-    DrawEllipse = BufferedPaintDC.DrawEllipseXY
-    DrawIcon = BufferedPaintDC.DrawIconXY
-    DrawBitmap = BufferedPaintDC.DrawBitmapXY
-    DrawText = BufferedPaintDC.DrawTextXY
-    DrawRotatedText = BufferedPaintDC.DrawRotatedTextXY
-    Blit = BufferedPaintDC.BlitXY
-
-class ScreenDC_old(ScreenDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = ScreenDC.FloodFillXY
-    GetPixel = ScreenDC.GetPixelXY
-    DrawLine = ScreenDC.DrawLineXY
-    CrossHair = ScreenDC.CrossHairXY
-    DrawArc = ScreenDC.DrawArcXY
-    DrawCheckMark = ScreenDC.DrawCheckMarkXY
-    DrawEllipticArc = ScreenDC.DrawEllipticArcXY
-    DrawPoint = ScreenDC.DrawPointXY
-    DrawRectangle = ScreenDC.DrawRectangleXY
-    DrawRoundedRectangle = ScreenDC.DrawRoundedRectangleXY
-    DrawCircle = ScreenDC.DrawCircleXY
-    DrawEllipse = ScreenDC.DrawEllipseXY
-    DrawIcon = ScreenDC.DrawIconXY
-    DrawBitmap = ScreenDC.DrawBitmapXY
-    DrawText = ScreenDC.DrawTextXY
-    DrawRotatedText = ScreenDC.DrawRotatedTextXY
-    Blit = ScreenDC.BlitXY
-
-class ClientDC_old(ClientDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = ClientDC.FloodFillXY
-    GetPixel = ClientDC.GetPixelXY
-    DrawLine = ClientDC.DrawLineXY
-    CrossHair = ClientDC.CrossHairXY
-    DrawArc = ClientDC.DrawArcXY
-    DrawCheckMark = ClientDC.DrawCheckMarkXY
-    DrawEllipticArc = ClientDC.DrawEllipticArcXY
-    DrawPoint = ClientDC.DrawPointXY
-    DrawRectangle = ClientDC.DrawRectangleXY
-    DrawRoundedRectangle = ClientDC.DrawRoundedRectangleXY
-    DrawCircle = ClientDC.DrawCircleXY
-    DrawEllipse = ClientDC.DrawEllipseXY
-    DrawIcon = ClientDC.DrawIconXY
-    DrawBitmap = ClientDC.DrawBitmapXY
-    DrawText = ClientDC.DrawTextXY
-    DrawRotatedText = ClientDC.DrawRotatedTextXY
-    Blit = ClientDC.BlitXY
-
-class PaintDC_old(PaintDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = PaintDC.FloodFillXY
-    GetPixel = PaintDC.GetPixelXY
-    DrawLine = PaintDC.DrawLineXY
-    CrossHair = PaintDC.CrossHairXY
-    DrawArc = PaintDC.DrawArcXY
-    DrawCheckMark = PaintDC.DrawCheckMarkXY
-    DrawEllipticArc = PaintDC.DrawEllipticArcXY
-    DrawPoint = PaintDC.DrawPointXY
-    DrawRectangle = PaintDC.DrawRectangleXY
-    DrawRoundedRectangle = PaintDC.DrawRoundedRectangleXY
-    DrawCircle = PaintDC.DrawCircleXY
-    DrawEllipse = PaintDC.DrawEllipseXY
-    DrawIcon = PaintDC.DrawIconXY
-    DrawBitmap = PaintDC.DrawBitmapXY
-    DrawText = PaintDC.DrawTextXY
-    DrawRotatedText = PaintDC.DrawRotatedTextXY
-    Blit = PaintDC.BlitXY
-
-class WindowDC_old(WindowDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = WindowDC.FloodFillXY
-    GetPixel = WindowDC.GetPixelXY
-    DrawLine = WindowDC.DrawLineXY
-    CrossHair = WindowDC.CrossHairXY
-    DrawArc = WindowDC.DrawArcXY
-    DrawCheckMark = WindowDC.DrawCheckMarkXY
-    DrawEllipticArc = WindowDC.DrawEllipticArcXY
-    DrawPoint = WindowDC.DrawPointXY
-    DrawRectangle = WindowDC.DrawRectangleXY
-    DrawRoundedRectangle = WindowDC.DrawRoundedRectangleXY
-    DrawCircle = WindowDC.DrawCircleXY
-    DrawEllipse = WindowDC.DrawEllipseXY
-    DrawIcon = WindowDC.DrawIconXY
-    DrawBitmap = WindowDC.DrawBitmapXY
-    DrawText = WindowDC.DrawTextXY
-    DrawRotatedText = WindowDC.DrawRotatedTextXY
-    Blit = WindowDC.BlitXY
-
-class MirrorDC_old(MirrorDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = MirrorDC.FloodFillXY
-    GetPixel = MirrorDC.GetPixelXY
-    DrawLine = MirrorDC.DrawLineXY
-    CrossHair = MirrorDC.CrossHairXY
-    DrawArc = MirrorDC.DrawArcXY
-    DrawCheckMark = MirrorDC.DrawCheckMarkXY
-    DrawEllipticArc = MirrorDC.DrawEllipticArcXY
-    DrawPoint = MirrorDC.DrawPointXY
-    DrawRectangle = MirrorDC.DrawRectangleXY
-    DrawRoundedRectangle = MirrorDC.DrawRoundedRectangleXY
-    DrawCircle = MirrorDC.DrawCircleXY
-    DrawEllipse = MirrorDC.DrawEllipseXY
-    DrawIcon = MirrorDC.DrawIconXY
-    DrawBitmap = MirrorDC.DrawBitmapXY
-    DrawText = MirrorDC.DrawTextXY
-    DrawRotatedText = MirrorDC.DrawRotatedTextXY
-    Blit = MirrorDC.BlitXY
-
-class PostScriptDC_old(PostScriptDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = PostScriptDC.FloodFillXY
-    GetPixel = PostScriptDC.GetPixelXY
-    DrawLine = PostScriptDC.DrawLineXY
-    CrossHair = PostScriptDC.CrossHairXY
-    DrawArc = PostScriptDC.DrawArcXY
-    DrawCheckMark = PostScriptDC.DrawCheckMarkXY
-    DrawEllipticArc = PostScriptDC.DrawEllipticArcXY
-    DrawPoint = PostScriptDC.DrawPointXY
-    DrawRectangle = PostScriptDC.DrawRectangleXY
-    DrawRoundedRectangle = PostScriptDC.DrawRoundedRectangleXY
-    DrawCircle = PostScriptDC.DrawCircleXY
-    DrawEllipse = PostScriptDC.DrawEllipseXY
-    DrawIcon = PostScriptDC.DrawIconXY
-    DrawBitmap = PostScriptDC.DrawBitmapXY
-    DrawText = PostScriptDC.DrawTextXY
-    DrawRotatedText = PostScriptDC.DrawRotatedTextXY
-    Blit = PostScriptDC.BlitXY
-
-class MetaFileDC_old(MetaFileDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = MetaFileDC.FloodFillXY
-    GetPixel = MetaFileDC.GetPixelXY
-    DrawLine = MetaFileDC.DrawLineXY
-    CrossHair = MetaFileDC.CrossHairXY
-    DrawArc = MetaFileDC.DrawArcXY
-    DrawCheckMark = MetaFileDC.DrawCheckMarkXY
-    DrawEllipticArc = MetaFileDC.DrawEllipticArcXY
-    DrawPoint = MetaFileDC.DrawPointXY
-    DrawRectangle = MetaFileDC.DrawRectangleXY
-    DrawRoundedRectangle = MetaFileDC.DrawRoundedRectangleXY
-    DrawCircle = MetaFileDC.DrawCircleXY
-    DrawEllipse = MetaFileDC.DrawEllipseXY
-    DrawIcon = MetaFileDC.DrawIconXY
-    DrawBitmap = MetaFileDC.DrawBitmapXY
-    DrawText = MetaFileDC.DrawTextXY
-    DrawRotatedText = MetaFileDC.DrawRotatedTextXY
-    Blit = MetaFileDC.BlitXY
-
-class PrinterDC_old(PrinterDC):
-    """DC class that has methods with 2.4 compatible parameters."""
-    FloodFill = PrinterDC.FloodFillXY
-    GetPixel = PrinterDC.GetPixelXY
-    DrawLine = PrinterDC.DrawLineXY
-    CrossHair = PrinterDC.CrossHairXY
-    DrawArc = PrinterDC.DrawArcXY
-    DrawCheckMark = PrinterDC.DrawCheckMarkXY
-    DrawEllipticArc = PrinterDC.DrawEllipticArcXY
-    DrawPoint = PrinterDC.DrawPointXY
-    DrawRectangle = PrinterDC.DrawRectangleXY
-    DrawRoundedRectangle = PrinterDC.DrawRoundedRectangleXY
-    DrawCircle = PrinterDC.DrawCircleXY
-    DrawEllipse = PrinterDC.DrawEllipseXY
-    DrawIcon = PrinterDC.DrawIconXY
-    DrawBitmap = PrinterDC.DrawBitmapXY
-    DrawText = PrinterDC.DrawTextXY
-    DrawRotatedText = PrinterDC.DrawRotatedTextXY
-    Blit = PrinterDC.BlitXY
 
 #---------------------------------------------------------------------------
 

@@ -1663,21 +1663,27 @@ PyObject *wxSizer_GetChildren(wxSizer *self){
             return wxPy_ConvertList(&list);
         }
 void wxSizer_Show(wxSizer *self,PyObject *item,bool show){
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->Show(info.window, show);
             else if ( info.sizer )
                 self->Show(info.sizer, show);
         }
 void wxSizer_Hide(wxSizer *self,PyObject *item){
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->Hide(info.window);
             else if ( info.sizer )
                 self->Hide(info.sizer);
         }
 bool wxSizer_IsShown(wxSizer *self,PyObject *item){
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window ) 
                 return self->IsShown(info.window);
             else if ( info.sizer ) 
