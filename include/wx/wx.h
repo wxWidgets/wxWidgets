@@ -77,7 +77,6 @@
 #include "wx/choicdlg.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
-#include "wx/treectrl.h"
 #include "wx/validate.h"        // always include, even if !wxUSE_VALIDATORS
 
 #if wxUSE_VALIDATORS
