@@ -306,10 +306,15 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     {
         int c = m_History->GetCount() - (m_HistoryPos + 1);
 
-        m_HistoryPos++;
-        for (int i = 0; i < c; i++)
-            m_History->Remove(m_HistoryPos);
-        m_History->Add(new wxHtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
+        if (m_HistoryPos < 0 || 
+            (*m_History)[m_HistoryPos].GetPage() != m_OpenedPage ||
+            (*m_History)[m_HistoryPos].GetAnchor() != m_OpenedAnchor)
+        {
+            m_HistoryPos++;
+            for (int i = 0; i < c; i++)
+                m_History->Remove(m_HistoryPos);
+            m_History->Add(new wxHtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
+        }
     }
 
     if (m_OpenedPageTitle == wxEmptyString)
