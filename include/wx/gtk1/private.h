@@ -23,8 +23,22 @@
     #define GTK_CHECK_VERSION(a, b, c) 0
 #endif
 
-// GTK+ 2.0 compatibility define is broken when used from C++ as it casts enum
-// to int implicitly
+#ifdef __WXGTK20__
+#if wxUSE_UNICODE
+    #define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
+    #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
+#else
+    #define wxGTK_CONV(s) wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC(s) )
+    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( (wxConvUTF8.cMB2WC( s ) ) )
+#endif
+#else
+    #define wxGTK_CONV(s) s.c_str()
+    #define wxGTK_CONV_BACK(s) s
+#endif
+
+
+// GTK+ 2.0 compatibility define is broken when used from C++ as it
+// casts enum to int implicitly
 #ifdef __WXGTK20__
     #undef gtk_signal_disconnect_by_func
     #define gtk_signal_disconnect_by_func(object,func,data) \
