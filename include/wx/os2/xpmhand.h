@@ -38,6 +38,18 @@ public:
                           ,int              nType
                           ,const wxPalette* pPalette = NULL
                          );
+private:
+    inline bool LoadFile( wxBitmap*       pBitmap
+                         ,const wxString& rsName
+                         ,HPS             hPs
+                         ,long            lFlags
+                         ,int             nDesiredWidth
+                         ,int             nDesiredHeight
+                        )
+    {
+        return(wxBitmapHandler::LoadFile(pBitmap, rsName, hPs, lFlags, nDesiredWidth, nDesiredHeight));
+    }
+
 }; // end of CLASS wxWPMFileHandler
 
 class WXDLLEXPORT wxXPMDataHandler: public wxBitmapHandler
@@ -57,6 +69,18 @@ public:
                         ,int       lHeight
                         ,int       lDepth = 1
                        );
+private:
+    bool Create( wxGDIImage* pImage
+                ,void*       pData
+                ,long        lFlags
+                ,int         nWidth
+                ,int         nHeight
+                ,int         nDepth = 1
+               )
+    {
+        return(wxBitmapHandler::Create(pImage, pData, lFlags, nWidth, nHeight, nDepth));
+    }
+
 }; // end of wxXPMDataHandler
 
 #endif
