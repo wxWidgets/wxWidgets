@@ -58,6 +58,7 @@ makefiles, e.g. wx24dsp or rpmspec ones.
         <define-tag name="so_version"/>
         <define-tag name="mac_version"/>
         <define-tag name="depends"/>
+        <define-tag name="objects-depend"/>
         <define-tag name="sys-lib"/>
         <define-tag name="library"/>
         <define-tag name="command"/>
