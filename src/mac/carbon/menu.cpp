@@ -550,6 +550,7 @@ void wxMenuBar::MacInstallMenuBar()
 
     verify_noerr( CreateNewMenu( kwxMacAppleMenuId , 0 , &appleMenu ) ) ;
     verify_noerr( SetMenuTitle( appleMenu , (ConstStr255Param) appleMenuTitle ) );
+    MacInsertMenuItem( appleMenu , "\p-" , 0 ) ;
     MacInsertMenuItem( appleMenu , "\pAbout..." , 0 ) ;
     MacInsertMenu( appleMenu , 0 ) ;
 
