@@ -4021,7 +4021,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                             (char *)"base",
                             0, 0, -1, -1 );
 
-                upd ++;
+                ++upd;
             }
         }
     }

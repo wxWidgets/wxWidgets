@@ -227,13 +227,13 @@ public:
     reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
     pointer operator->() const { return m_ptr; }
-    itor operator++() { --m_ptr; return *this; }
-    itor operator++(int)
+    itor& operator++() { --m_ptr; return *this; }
+    const itor operator++(int)
       { reverse_iterator tmp = *this; --m_ptr; return tmp; }
-    itor operator--() { ++m_ptr; return *this; }
-    itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
-    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }
-    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }
+    itor& operator--() { ++m_ptr; return *this; }
+    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
+    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }
+    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }
   };
 
   class const_reverse_iterator
@@ -254,13 +254,13 @@ public:
     const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
     pointer operator->() const { return m_ptr; }
-    itor operator++() { --m_ptr; return *this; }
-    itor operator++(int)
+    itor& operator++() { --m_ptr; return *this; }
+    const itor operator++(int)
       { itor tmp = *this; --m_ptr; return tmp; }
-    itor operator--() { ++m_ptr; return *this; }
-    itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
-    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }
-    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }
+    itor& operator--() { ++m_ptr; return *this; }
+    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
+    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }
+    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }
   };
 
   wxArrayString(const_iterator first, const_iterator last)

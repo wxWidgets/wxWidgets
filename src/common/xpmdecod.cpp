@@ -742,7 +742,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
      */
     if (hasMask)
     {
-        for (it = clr_tbl.begin(); it != clr_tbl.end(); it++)
+        for (it = clr_tbl.begin(); it != clr_tbl.end(); ++it)
         {
             if (it->second.R == 255 && it->second.G == 0 &&
                 it->second.B == 255 &&

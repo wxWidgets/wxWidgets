@@ -4713,7 +4713,7 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
             rowlabels.Add( row );
         }
 
-        iter++ ;
+        ++iter;
     }
 
     return rowlabels;
@@ -4764,7 +4764,7 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg )
             colLabels.Add( col );
         }
 
-        iter++ ;
+        ++iter;
     }
     return colLabels;
 }
@@ -4824,7 +4824,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg )
             }
         }
 
-        iter++;
+        ++iter;
     }
 
     return cellsExposed;

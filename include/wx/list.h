@@ -170,9 +170,9 @@ private:
             compatibility_iterator* operator->() { return this; }             \
             const compatibility_iterator* operator->() const { return this; } \
                                                                               \
-            bool operator==(const compatibility_iterator& i)                  \
+            bool operator==(const compatibility_iterator& i) const            \
                 { return (m_list == i.m_list) && (m_iter == i.m_iter); }      \
-            bool operator!=(const compatibility_iterator& i)                  \
+            bool operator!=(const compatibility_iterator& i) const            \
                 { return !( operator==( i ) ); }                              \
             operator bool() const                                             \
                 { return m_list ? m_iter != m_list->end() : false; }          \
@@ -329,7 +329,6 @@ extern WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 #endif
 
 class WXDLLEXPORT wxObjectListNode;
-typedef wxObjectListNode wxNode;
 
 // undef it to get rid of old, deprecated functions
 #define wxLIST_COMPATIBILITY
@@ -672,6 +671,7 @@ private:
         void SetData(T *data)                                               \
             { wxNodeBase::SetData(data); }                                  \
                                                                             \
+    protected:                                                              \
         virtual void DeleteData();                                          \
                                                                             \
         DECLARE_NO_COPY_CLASS(nodetype)                                     \
@@ -786,14 +786,14 @@ private:
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
             itor& operator++() { m_node = m_node->GetNext(); return *this; }\
-            itor operator++(int)                                            \
+            const itor operator++(int)                                      \
                 { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
             itor& operator--()                                              \
             {                                                               \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
                 return *this;                                               \
             }                                                               \
-            itor operator--(int)                                            \
+            const itor operator--(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
@@ -829,14 +829,14 @@ private:
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
             itor& operator++() { m_node = m_node->GetNext(); return *this; }\
-            itor operator++(int)                                            \
+            const itor operator++(int)                                      \
                 { itor tmp = *this; m_node = m_node->GetNext(); return tmp; }\
             itor& operator--()                                              \
             {                                                               \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
                 return *this;                                               \
             }                                                               \
-            itor operator--(int)                                            \
+            const itor operator--(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
                 m_node = m_node ? m_node->GetPrevious() : m_init;           \
@@ -871,11 +871,11 @@ private:
             ptrop                                                           \
             itor& operator++()                                              \
                 { m_node = m_node->GetPrevious(); return *this; }           \
-            itor operator++(int)                                            \
+            const itor operator++(int)                                      \
             { itor tmp = *this; m_node = m_node->GetPrevious(); return tmp; }\
             itor& operator--()                                              \
             { m_node = m_node ? m_node->GetNext() : m_init; return *this; } \
-            itor operator--(int)                                            \
+            const itor operator--(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
                 m_node = m_node ? m_node->GetNext() : m_init;               \
@@ -912,11 +912,11 @@ private:
             ptrop                                                           \
             itor& operator++()                                              \
                 { m_node = m_node->GetPrevious(); return *this; }           \
-            itor operator++(int)                                            \
+            const itor operator++(int)                                      \
             { itor tmp = *this; m_node = m_node->GetPrevious(); return tmp; }\
             itor& operator--()                                              \
                 { m_node = m_node ? m_node->GetNext() : m_init; return *this;}\
-            itor operator--(int)                                            \
+            const itor operator--(int)                                      \
             {                                                               \
                 itor tmp = *this;                                           \
                 m_node = m_node ? m_node->GetNext() : m_init;               \
@@ -930,7 +930,7 @@ private:
                                                                             \
         wxEXPLICIT name(size_type n, const_reference v = value_type())      \
             { assign(n, v); }                                               \
-        name(const_iterator first, const_iterator last)                     \
+        name(const const_iterator& first, const const_iterator& last)       \
             { assign(first, last); }                                        \
         iterator begin() { return iterator(GetFirst(), GetLast()); }        \
         const_iterator begin() const                                        \
@@ -956,15 +956,15 @@ private:
         bool empty() const { return IsEmpty(); }                            \
         reference front() { return *begin(); }                              \
         const_reference front() const { return *begin(); }                  \
-        reference back() { return *--end(); }                               \
-        const_reference back() const { return *--end(); }                   \
+        reference back() { iterator tmp = end(); return *--tmp; }           \
+        const_reference back() const { const_iterator tmp = end(); return *--tmp; }\
         void push_front(const_reference v = value_type())                   \
             { Insert(GetFirst(), (const_base_reference)v); }                \
         void pop_front() { DeleteNode(GetFirst()); }                        \
         void push_back(const_reference v = value_type())                    \
             { Append((const_base_reference)v); }                            \
         void pop_back() { DeleteNode(GetLast()); }                          \
-        void assign(const_iterator first, const_iterator last)              \
+        void assign(const_iterator first, const const_iterator& last)       \
         {                                                                   \
             clear();                                                        \
             for(; first != last; ++first)                                   \
@@ -976,38 +976,38 @@ private:
             for(size_type i = 0; i < n; ++i)                                \
                 Append((const_base_reference)v);                            \
         }                                                                   \
-        iterator insert(iterator it, const_reference v = value_type())      \
+        iterator insert(const iterator& it, const_reference v = value_type())\
         {                                                                   \
             Insert(it.m_node, (const_base_reference)v);                     \
             return iterator(it.m_node->GetPrevious(), GetLast());           \
         }                                                                   \
-        void insert(iterator it, size_type n, const_reference v = value_type())\
+        void insert(const iterator& it, size_type n, const_reference v = value_type())\
         {                                                                   \
             for(size_type i = 0; i < n; ++i)                                \
                 Insert(it.m_node, (const_base_reference)v);                 \
         }                                                                   \
-        void insert(iterator it, const_iterator first, const_iterator last) \
+        void insert(const iterator& it, const_iterator first, const const_iterator& last)\
         {                                                                   \
             for(; first != last; ++first)                                   \
                 Insert(it.m_node, (const_base_reference)*first);            \
         }                                                                   \
-        iterator erase(iterator it)                                         \
+        iterator erase(const iterator& it)                                  \
         {                                                                   \
             iterator next = iterator(it.m_node->GetNext(), GetLast());      \
             DeleteNode(it.m_node); return next;                             \
         }                                                                   \
-        iterator erase(iterator first, iterator last)                       \
+        iterator erase(const iterator& first, const iterator& last)         \
         {                                                                   \
             iterator next = last; ++next;                                   \
             DeleteNodes(first.m_node, last.m_node);                         \
             return next;                                                    \
         }                                                                   \
         void clear() { Clear(); }                                           \
-        void splice(iterator it, name& l, iterator first, iterator last)    \
+        void splice(const iterator& it, name& l, const iterator& first, const iterator& last)\
             { insert(it, first, last); l.erase(first, last); }              \
-        void splice(iterator it, name& l)                                   \
+        void splice(const iterator& it, name& l)                            \
             { splice(it, l, l.begin(), l.end() ); }                         \
-        void splice(iterator it, name& l, iterator first)                   \
+        void splice(const iterator& it, name& l, const iterator& first)     \
         {                                                                   \
             iterator tmp = first; ++tmp;                                    \
             if(it == first || it == tmp) return;                            \

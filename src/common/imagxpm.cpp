@@ -180,7 +180,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
 
     // 2b. generate colour table:
     for (wxImageHistogram::iterator entry = histogram.begin();
-         entry != histogram.end(); entry++ )
+         entry != histogram.end(); ++entry )
     {
         unsigned long index = entry->second.index;
         symbols[index] = symbols_data + index * (chars_per_pixel+1);

@@ -418,7 +418,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         unsigned long index;
 
         for (wxImageHistogram::iterator entry = histogram.begin();
-             entry != histogram.end(); entry++ )
+             entry != histogram.end(); ++entry )
         {
             key = entry->first;
             index = entry->second.index;
