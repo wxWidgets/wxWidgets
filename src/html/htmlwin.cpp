@@ -128,7 +128,9 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 {
     wxFSFile *f;
     bool rt_val;
-    wxBusyCursor b;
+
+    SetCursor(*wxHOURGLASS_CURSOR);
+    wxYield();
 
     m_tmpCanDraw = FALSE;
     if (m_HistoryOn && (m_HistoryPos != -1)) { // store scroll position into history item
@@ -158,6 +160,8 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_tmpCanDraw = TRUE;
             Refresh();
             wxMessageBox(err, "Error");
+
+            SetCursor(*wxSTANDARD_CURSOR);
             return FALSE;
         }
 
@@ -208,6 +212,8 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_History.Remove(m_HistoryPos);
         m_History.Add(new HtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
     }
+
+    SetCursor(*wxSTANDARD_CURSOR);
 
     m_tmpCanDraw = TRUE;
     Refresh();
