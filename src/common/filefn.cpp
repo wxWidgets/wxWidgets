@@ -214,7 +214,9 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 
         delete [] s;
     }
-#endif
+#else // __WXWINCE__
+    wxUnusedVar(envVariable);
+#endif // !__WXWINCE__/__WXWINCE__
 }
 
 // Given a full filename (with path), ensure that that file can
@@ -681,6 +683,8 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
         wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
+#else
+  wxUnusedVar(envname);
 #endif
 
   // Handle User's home (ignore root homes!)
@@ -1330,6 +1334,9 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     // TODO ?
     return NULL;
 #elif defined(__WXWINCE__)
+    // TODO
+    wxUnusedVar(buf);
+    wxUnusedVar(sz);
     return NULL;
 #else
     if ( !buf )
@@ -1471,6 +1478,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 #ifdef __WIN32__
 #ifdef __WXWINCE__
     // No equivalent in WinCE
+    wxUnusedVar(d);
     return false;
 #else
     return (bool)(SetCurrentDirectory(d) != 0);

@@ -154,9 +154,9 @@ wxSize wxStaticBox::DoGetBestSize() const
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+#ifndef __WXWINCE__
     switch ( nMsg )
     {
-#ifndef __WXWINCE__
         case WM_NCHITTEST:
             {
                 // This code breaks some other processing such as enter/leave tracking
@@ -179,8 +179,8 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
                 }
             }
             break;
-#endif
     }
+#endif // !__WXWINCE__
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }

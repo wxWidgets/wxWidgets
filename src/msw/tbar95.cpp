@@ -1012,6 +1012,8 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
     return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
 #else
+    wxUnusedVar(lParam);
+
     return false;
 #endif
 }

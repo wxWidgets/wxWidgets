@@ -335,6 +335,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
     // Or maybe we can dynamically load them from ceshell.dll
     // or similar.
 #if defined(__WXWINCE__) && _WIN32_WCE >= 400
+    wxUnusedVar(hwnd);
     return false;
 #else
     HRESULT hr;
@@ -369,6 +370,7 @@ void wxDropTarget::Revoke(WXHWND hwnd)
 {
 #if defined(__WXWINCE__) && _WIN32_WCE >= 400
     // Not available, see note above
+    wxUnusedVar(hwnd);
 #else
     HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
