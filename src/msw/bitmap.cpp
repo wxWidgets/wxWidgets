@@ -1204,24 +1204,28 @@ void wxBitmap::UngetRawData(wxRawBitmapData *data)
 
     // AlphaBlend() wants to have premultiplied source alpha but wxRawBitmap
     // API uses normal, not premultiplied, colours, so adjust them here now
-    wxRawBitmapIterator p(data);
-    unsigned char *pixels = data->GetPixels();
+    wxRawBitmapIterator p(*data);
 
     const int w = data->GetWidth();
     const int h = data->GetHeight();
 
     for ( int y = 0; y < h; y++ )
     {
+        wxRawBitmapIterator rowStart = p;
+
         for ( int x = 0; x < w; x++ )
         {
             const unsigned alpha = p.Alpha();
-            p.Red() *= alpha;
-            p.Red() /= 255
-            p.Blue() *= alpha;
-            p.Blue() /= 255
-            p.Green() *= alpha;
-            p.Green() /= 255
+
+            p.Red() = (p.Red() * alpha) / 255;
+            p.Blue() = (p.Blue() * alpha) / 255;
+            p.Green() = (p.Green() * alpha) / 255;
+
+            ++p;
         }
+
+        p = rowStart;
+        p.OffsetY(1);
     }
 }
 
