@@ -86,7 +86,7 @@ public:
     bool Ok() { return m_widget != NULL; }
 
     virtual int SendCommand(int cmd, const wxString& param = wxEmptyString);
-    virtual wxWindow* GetEmbeddedWindow() { return m_widget; }
+    virtual wxWindow* GetWidgetWindow() { return m_widget; }
 
     virtual void AddChild(wxWindowBase *child);
 

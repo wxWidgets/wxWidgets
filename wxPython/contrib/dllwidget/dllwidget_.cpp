@@ -309,8 +309,8 @@ static PyObject *_wrap_wxDllWidget_SendCommand(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxDllWidget_GetEmbeddedWindow(_swigobj)  (_swigobj->GetEmbeddedWindow())
-static PyObject *_wrap_wxDllWidget_GetEmbeddedWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxDllWidget_GetWidgetWindow(_swigobj)  (_swigobj->GetWidgetWindow())
+static PyObject *_wrap_wxDllWidget_GetWidgetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _result;
     wxDllWidget * _arg0;
@@ -318,18 +318,18 @@ static PyObject *_wrap_wxDllWidget_GetEmbeddedWindow(PyObject *self, PyObject *a
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDllWidget_GetEmbeddedWindow",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDllWidget_GetWidgetWindow",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDllWidget_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDllWidget_GetEmbeddedWindow. Expected _wxDllWidget_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDllWidget_GetWidgetWindow. Expected _wxDllWidget_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxWindow *)wxDllWidget_GetEmbeddedWindow(_arg0);
+        _result = (wxWindow *)wxDllWidget_GetWidgetWindow(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }{ _resultobj = wxPyMake_wxObject(_result); }
@@ -360,7 +360,7 @@ static PyObject *_wrap_wxDllWidget_GetDllExt(PyObject *self, PyObject *args, PyO
 
 static PyMethodDef dllwidget_cMethods[] = {
 	 { "wxDllWidget_GetDllExt", (PyCFunction) _wrap_wxDllWidget_GetDllExt, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDllWidget_GetEmbeddedWindow", (PyCFunction) _wrap_wxDllWidget_GetEmbeddedWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDllWidget_GetWidgetWindow", (PyCFunction) _wrap_wxDllWidget_GetWidgetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDllWidget_SendCommand", (PyCFunction) _wrap_wxDllWidget_SendCommand, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDllWidget_Ok", (PyCFunction) _wrap_wxDllWidget_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDllWidget", (PyCFunction) _wrap_new_wxDllWidget, METH_VARARGS | METH_KEYWORDS },

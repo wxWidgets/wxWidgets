@@ -93,7 +93,7 @@ public:
     bool Ok();
 
     int SendCommand(int cmd, const wxString& param = wxEmptyString);
-    wxWindow* GetEmbeddedWindow();
+    wxWindow* GetWidgetWindow();
 
     static wxString GetDllExt();
 };

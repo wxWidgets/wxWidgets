@@ -50,8 +50,8 @@ class wxDllWidgetPtr(wxPanelPtr):
     def SendCommand(self, *_args, **_kwargs):
         val = apply(dllwidget_c.wxDllWidget_SendCommand,(self,) + _args, _kwargs)
         return val
-    def GetEmbeddedWindow(self, *_args, **_kwargs):
-        val = apply(dllwidget_c.wxDllWidget_GetEmbeddedWindow,(self,) + _args, _kwargs)
+    def GetWidgetWindow(self, *_args, **_kwargs):
+        val = apply(dllwidget_c.wxDllWidget_GetWidgetWindow,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxDllWidget instance at %s>" % (self.this,)

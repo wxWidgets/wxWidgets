@@ -319,6 +319,7 @@ enum {
     wxSP_BORDER,
     wxSP_LIVE_UPDATE,
     wxSP_PERMIT_UNSPLIT,
+    //wxSP_SASH_AQUA,
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
     wxODDEVEN_RULE,
