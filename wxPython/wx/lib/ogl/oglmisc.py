@@ -5,8 +5,8 @@
 #
 # Author:       Pierre Hjälm (from C++ original by Julian Smart)
 #
-# Created:      20040508
-# RCS-ID:       
+# Created:      2004-05-08
+# RCS-ID:       $Id$
 # Copyright:    (c) 2004 Pierre Hjälm - 1998 Julian Smart
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------

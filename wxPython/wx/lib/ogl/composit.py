@@ -5,8 +5,8 @@
 #
 # Author:       Pierre Hjälm (from C++ original by Julian Smart)
 #
-# Created:      20040508
-# RCS-ID:       
+# Created:      2004-05-08
+# RCS-ID:       $Id$
 # Copyright:    (c) 2004 Pierre Hjälm - 1998 Julian Smart
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -21,8 +21,8 @@ from oglmisc import *
 
 KEY_SHIFT, KEY_CTRL = 1, 2
 
-objectStartX = 0.0
-objectStartY = 0.0
+_objectStartX = 0.0
+_objectStartY = 0.0
 
 CONSTRAINT_CENTRED_VERTICALLY   = 1
 CONSTRAINT_CENTRED_HORIZONTALLY = 2
@@ -42,6 +42,24 @@ CONSTRAINT_MIDALIGNED_TOP       = 12
 CONSTRAINT_MIDALIGNED_BOTTOM    = 13
 CONSTRAINT_MIDALIGNED_LEFT      = 14
 CONSTRAINT_MIDALIGNED_RIGHT     = 15
+
+
+# Backwards compatibility names.  These should be removed eventually.
+gyCONSTRAINT_CENTRED_VERTICALLY   = CONSTRAINT_CENTRED_VERTICALLY   
+gyCONSTRAINT_CENTRED_HORIZONTALLY = CONSTRAINT_CENTRED_HORIZONTALLY 
+gyCONSTRAINT_CENTRED_BOTH         = CONSTRAINT_CENTRED_BOTH         
+gyCONSTRAINT_LEFT_OF              = CONSTRAINT_LEFT_OF              
+gyCONSTRAINT_RIGHT_OF             = CONSTRAINT_RIGHT_OF             
+gyCONSTRAINT_ABOVE                = CONSTRAINT_ABOVE                
+gyCONSTRAINT_BELOW                = CONSTRAINT_BELOW                
+gyCONSTRAINT_ALIGNED_TOP          = CONSTRAINT_ALIGNED_TOP          
+gyCONSTRAINT_ALIGNED_BOTTOM       = CONSTRAINT_ALIGNED_BOTTOM       
+gyCONSTRAINT_ALIGNED_LEFT         = CONSTRAINT_ALIGNED_LEFT         
+gyCONSTRAINT_ALIGNED_RIGHT        = CONSTRAINT_ALIGNED_RIGHT        
+gyCONSTRAINT_MIDALIGNED_TOP       = CONSTRAINT_MIDALIGNED_TOP       
+gyCONSTRAINT_MIDALIGNED_BOTTOM    = CONSTRAINT_MIDALIGNED_BOTTOM    
+gyCONSTRAINT_MIDALIGNED_LEFT      = CONSTRAINT_MIDALIGNED_LEFT      
+gyCONSTRAINT_MIDALIGNED_RIGHT     = CONSTRAINT_MIDALIGNED_RIGHT     
 
 
 
@@ -353,6 +371,8 @@ class Constraint(object):
         
         return False
     
+OGLConstraint = wx._core._deprecated(Constraint,
+                     "The OGLConstraint name is deprecated, use `ogl.Constraint` instead.")
 
 
 class CompositeShape(RectangleShape):
@@ -412,8 +432,8 @@ class CompositeShape(RectangleShape):
 
     def OnDragLeft(self, draw, x, y, keys = 0, attachment = 0):
         xx, yy = self._canvas.Snap(x, y)
-        offsetX = xx-objectStartX
-        offsetY = yy-objectStartY
+        offsetX = xx - _objectStartX
+        offsetY = yy - _objectStartY
 
         dc = wx.ClientDC(self.GetCanvas())
         self.GetCanvas().PrepareDC(dc)
@@ -426,10 +446,10 @@ class CompositeShape(RectangleShape):
         self.GetEventHandler().OnDrawOutline(dc, self.GetX() + offsetX, self.GetY() + offsetY, self.GetWidth(), self.GetHeight())
 
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
-        global objectStartX, objectStartY
+        global _objectStartX, _objectStartY
 
-        objectStartX = x
-        objectStartY = y
+        _objectStartX = x
+        _objectStartY = y
 
         dc = wx.ClientDC(self.GetCanvas())
         self.GetCanvas().PrepareDC(dc)
@@ -443,8 +463,8 @@ class CompositeShape(RectangleShape):
         self._canvas.CaptureMouse()
 
         xx, yy = self._canvas.Snap(x, y)
-        offsetX = xx-objectStartX
-        offsetY = yy-objectStartY
+        offsetX = xx - _objectStartX
+        offsetY = yy - _objectStartY
 
         self.GetEventHandler().OnDrawOutline(dc, self.GetX() + offsetX, self.GetY() + offsetY, self.GetWidth(), self.GetHeight())
 
@@ -465,8 +485,8 @@ class CompositeShape(RectangleShape):
         dc.SetLogicalFunction(wx.COPY)
         
         xx, yy = self._canvas.Snap(x, y)
-        offsetX = xx-objectStartX
-        offsetY = yy-objectStartY
+        offsetX = xx - _objectStartX
+        offsetY = yy - _objectStartY
 
         self.Move(dc, self.GetX() + offsetX, self.GetY() + offsetY)
 
