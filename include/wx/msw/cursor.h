@@ -12,8 +12,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#include "wx/image.h"
-
 #ifdef __GNUG__
     #pragma interface "cursor.h"
 #endif
@@ -35,6 +33,8 @@
     #define wxCursorRefDataBase   wxGDIImageRefData
     #define wxCursorBase          wxGDIImage
 #endif
+
+class WXDLLEXPORT wxImage;
 
 class WXDLLEXPORT wxCursorRefData : public wxCursorRefDataBase
 {
