@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBJPEG=='builtin'">wxjpeg</if>
     </set>
 
-    <lib id="wxjpeg" cond="wxUSE_LIBJPEG=='builtin'">
+    <lib id="wxjpeg" cond="wxUSE_LIBJPEG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/jpeg/jcomapi.c

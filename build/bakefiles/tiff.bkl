@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBTIFF=='builtin'">wxtiff</if>
     </set>
 
-    <lib id="wxtiff" cond="wxUSE_LIBTIFF=='builtin'">
+    <lib id="wxtiff" cond="wxUSE_LIBTIFF=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
 		    src/tiff/tif_aux.c

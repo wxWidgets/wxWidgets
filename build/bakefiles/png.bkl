@@ -11,7 +11,7 @@
         <if cond="wxUSE_LIBPNG=='builtin'">wxpng</if>
     </set>
 
-    <lib id="wxpng" cond="wxUSE_LIBPNG=='builtin'">
+    <lib id="wxpng" cond="wxUSE_LIBPNG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
 		    src/png/png.c

@@ -3,6 +3,7 @@
 
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
+        <define>WXMAKINGDLL</define>
         <sources>$(BASE_SRC) $(PORT_SRC)</sources>
       
         <library>$(LIB_ZLIB)</library>

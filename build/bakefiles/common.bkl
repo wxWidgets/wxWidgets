@@ -6,6 +6,7 @@
 
     <include file="config.bkl"/>
     
+    
     <!-- ================================================================== -->
     <!--                     wxWindows version numbers:                     -->
     <!-- ================================================================== -->
@@ -71,6 +72,18 @@
         <if cond="FORMAT=='autoconf'">$(top_builddir)/lib</if>
     </set>
 
+    <!-- =============================================================== -->
+    <!--                         3rd party libs:                         -->
+    <!-- =============================================================== -->
+    
+    <!-- 3rd party libraries: -->
+    <include file="regex.bkl"/>
+    <include file="zlib.bkl"/>
+    <include file="png.bkl"/>
+    <include file="jpeg.bkl"/>
+    <include file="tiff.bkl"/>
+    <include file="odbc.bkl"/>
+
     
     <!-- =============================================================== -->
     <!--                  Templates for wxWindows libs:                  -->
@@ -80,12 +93,17 @@
 
     <template id="wx">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
-        
         <define>__WX$(TOOLKIT)__</define>
         <include>$(SRCDIR)$(WXTOPDIR)/include</include>
-        
-        <ldflags>$(EXTRALIBS)</ldflags>
         <lib-path>$(LIBDIRNAME)</lib-path>
+        <ldflags-end>$(EXTRALIBS)</ldflags-end>
+        <!-- link against builtin 3rd party libs, if needed: -->
+        <sys-lib>$(LIB_JPEG)</sys-lib>
+        <sys-lib>$(LIB_PNG)</sys-lib>
+        <sys-lib>$(LIB_ZLIB)</sys-lib>
+        <sys-lib>$(LIB_TIFF)</sys-lib>
+        <sys-lib>$(LIB_ODBC)</sys-lib>
+        <sys-lib>$(LIB_REGEX)</sys-lib>
     </template>
 
     <template id="wx_lib" template="wx">

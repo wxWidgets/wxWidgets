@@ -11,7 +11,7 @@
         <if cond="wxUSE_ODBC=='builtin'">wxodbc</if>
     </set>
 
-    <lib id="wxodbc" cond="wxUSE_ODBC=='builtin'">
+    <lib id="wxodbc" cond="wxUSE_ODBC=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
  		    src/iodbc/catalog.c

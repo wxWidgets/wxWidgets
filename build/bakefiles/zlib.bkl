@@ -11,7 +11,7 @@
         <if cond="wxUSE_ZLIB=='builtin'">wxzlib</if>
     </set>
 
-    <lib id="wxzlib" cond="wxUSE_ZLIB=='builtin'">
+    <lib id="wxzlib" cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/zlib/adler32.c
