@@ -25,19 +25,21 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
 
 #if wxUSE_CONSTRAINTS
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
-    #include "wx/utils.h"
-    #include "wx/dialog.h"
-    #include "wx/msgdlg.h"
-    #include "wx/intl.h"
+  #include "wx/window.h"
+  #include "wx/utils.h"
+  #include "wx/dialog.h"
+  #include "wx/msgdlg.h"
+  #include "wx/intl.h"
 #endif
 
 #include "wx/layout.h"

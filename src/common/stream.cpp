@@ -15,14 +15,21 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+  #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_STREAMS
+
 #include <ctype.h>
 #include <wx/stream.h>
 #include <wx/datstrm.h>
 #include <wx/objstrm.h>
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #define BUF_TEMP_SIZE 10000
 
@@ -855,3 +862,6 @@ wxOutputStream& wxEndL(wxOutputStream& stream)
   return stream.Write("\n", 1);
 #endif
 }
+
+#endif
+  // wxUSE_STREAMS

@@ -10,10 +10,6 @@
 /*
    We don't put pragma implement in this file because it is already present in
    src/common/image.cpp
-
-#ifdef __GNUG__
-#pragma implementation "image.h"
-#endif
 */
 
 // For compilers that support precompilation, includes "wx.h".
@@ -23,16 +19,18 @@
 #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_LIBJPEG
+
 #include "wx/image.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "wx/app.h"
-#if wxUSE_LIBJPEG
-extern "C" {
-#include "../jpeg/jpeglib.h"
+extern "C" { 
+#include "jpeglib.h"
 }
-#endif
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
@@ -57,14 +55,11 @@ extern "C" {
 // wxJPEGHandler
 //-----------------------------------------------------------------------------
 
-#if wxUSE_LIBJPEG
-
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
 #endif
 
 #if wxUSE_STREAMS
-
 
 //------------- JPEG Data Source Manager
 
@@ -310,12 +305,12 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     
     return TRUE;
 }
-#endif // wxUSE_STREAMS
 
-#endif
+#endif 
+  // wxUSE_STREAMS
 
-// wxUSE_LIBJPEG
-
+#endif 
+  // wxUSE_LIBJPEG
 
 
 

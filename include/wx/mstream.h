@@ -13,6 +13,8 @@
 
 #include <wx/stream.h>
 
+#if wxUSE_STREAMS
+
 class wxMemoryInputStream: public wxInputStream {
  private:
   size_t m_length;
@@ -32,3 +34,7 @@ class wxMemoryOutputStream:  public wxOutputStream {
 };
 
 #endif
+  // wxUSE_STREAMS
+
+#endif
+  // _WX_WXMMSTREAM_H__

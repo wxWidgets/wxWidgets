@@ -15,6 +15,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CHOICE
+
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -95,5 +98,7 @@ public:
     void AppendCommon( const wxString &item );
     void ApplyWidgetStyle();
 };
+
+#endif
 
 #endif // __GTKCHOICEH__

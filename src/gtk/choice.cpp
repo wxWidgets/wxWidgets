@@ -14,6 +14,8 @@
 
 #include "wx/choice.h"
 
+#if wxUSE_CHOICE
+
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
@@ -71,7 +73,9 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     PreCreation( parent, id, pos, size, style, name );
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
 
     m_widget = gtk_option_menu_new();
 
@@ -388,3 +392,4 @@ void wxChoice::ApplyWidgetStyle()
     }
 }
 
+#endif

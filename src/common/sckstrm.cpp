@@ -16,13 +16,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
-
-#if wxUSE_SOCKETS
 
 #ifndef WX_PRECOMP
+  #include "wx/defs.h"
 #endif
+
+#if wxUSE_SOCKETS && wxUSE_STREAMS
 
 #include "wx/stream.h"
 #include "wx/socket.h"
@@ -90,3 +91,4 @@ wxSocketStream::~wxSocketStream()
 }
 
 #endif
+  // wxUSE_STREAMS && wxUSE_SOCKETS

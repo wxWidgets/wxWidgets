@@ -22,6 +22,8 @@
   #include  "wx/filefn.h"
 #endif
 
+#if wxUSE_FILE
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -177,6 +179,8 @@ private:
             m_strTemp;  // temporary file name
   wxFile    m_file;     // the temporary file
 };
+
+#endif
 
 #endif
         // _WX_FILEH__

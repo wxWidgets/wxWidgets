@@ -17,50 +17,66 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/intl.h"
-#include "wx/wx.h"
-#include "wx/dynarray.h"
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_VALIDATORS
+
+#ifndef WX_PRECOMP
+  #include "wx/utils.h"
+  #include "wx/intl.h"
+  #include "wx/dynarray.h"
+  #include "wx/choice.h"
+  #include "wx/combobox.h"
+  #include "wx/radiobox.h"
+  #include "wx/radiobut.h"
+  #include "wx/checkbox.h"
+  #include "wx/scrolbar.h"
+  #include "wx/gauge.h"
+  #include "wx/stattext.h"
+  #include "wx/textctrl.h"
+  #include "wx/button.h"
+  #include "wx/listbox.h"
 #endif
 
 #ifndef __WIN16__
-#include "wx/spinbutt.h"
-#include "wx/checklst.h"
+  #include "wx/spinbutt.h"
+  #include "wx/checklst.h"
 #endif
 
 #include "wx/valgen.h"
 
 wxGenericValidator::wxGenericValidator(bool *val)
 {
-  Initialize();
-  m_pBool = val;
+    Initialize();
+    m_pBool = val;
 }
 
 wxGenericValidator::wxGenericValidator(int *val)
 {
-  Initialize();
-  m_pInt = val;
+    Initialize();
+    m_pInt = val;
 }
 
 wxGenericValidator::wxGenericValidator(wxString *val)
 {
-  Initialize();
-  m_pString = val;
+    Initialize();
+    m_pString = val;
 }
 
 wxGenericValidator::wxGenericValidator(wxArrayInt *val)
 {
-  Initialize();
-  m_pArrayInt = val;
+    Initialize();
+    m_pArrayInt = val;
 }
 
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
 {
-  Copy(val);
+    Copy(val);
 }
 
 bool wxGenericValidator::Copy(const wxGenericValidator& val)
@@ -176,9 +192,10 @@ bool wxGenericValidator::TransferToWindow(void)
       pControl->SetValue(*m_pString) ;
       return TRUE;
     }
-  }
+  } else
 #endif
-  else if (m_validatorWindow->IsKindOf(CLASSINFO(wxChoice)) )
+#if wxUSE_CHOICE
+  if (m_validatorWindow->IsKindOf(CLASSINFO(wxChoice)) )
   {
     wxChoice* pControl = (wxChoice*) m_validatorWindow;
 	if (m_pInt)
@@ -187,6 +204,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
+#endif
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
     wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
@@ -352,6 +370,7 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
   } else 
 #endif
+#if wxUSE_CHOICE
  if (m_validatorWindow->IsKindOf(CLASSINFO(wxChoice)) )
   {
     wxChoice* pControl = (wxChoice*) m_validatorWindow;
@@ -361,6 +380,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   } else 
+#endif
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
     wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
@@ -431,9 +451,12 @@ bool wxGenericValidator::TransferFromWindow(void)
 */
 void wxGenericValidator::Initialize()
 {
-  m_pBool = 0;
-  m_pInt = 0;
-  m_pString = 0;
-  m_pArrayInt = 0;
+    m_pBool = 0;
+    m_pInt = 0;
+    m_pString = 0;
+    m_pArrayInt = 0;
 }
 
+#endif
+  // wxUSE_VALIDATORS
+  

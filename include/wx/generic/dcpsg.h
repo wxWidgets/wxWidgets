@@ -17,6 +17,8 @@
 
 #include "wx/dc.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #if wxUSE_POSTSCRIPT
 
 #include "wx/dialog.h"
@@ -275,6 +277,9 @@ WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
 
 #endif
     // wxUSE_POSTSCRIPT
+    
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
         // _WX_DCPSG_H_

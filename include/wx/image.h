@@ -95,7 +95,6 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
 #endif
-
 };
 #endif
 
@@ -118,8 +117,10 @@ public:
       m_mime = "image/jpeg";
   };
 
+#if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+#endif
 };
 #endif
 
@@ -150,9 +151,25 @@ public:
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
-/* why an extra headers for GIF, RR */
+class WXDLLEXPORT wxGIFHandler : public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxGIFHandler)
 
-#include "wx/imaggif.h"
+public:
+
+  inline wxGIFHandler()
+  {
+      m_name = "GIF file";
+      m_extension = "gif";
+      m_type = wxBITMAP_TYPE_GIF;
+      m_mime = "image/gif";
+  };
+
+#if wxUSE_STREAMS
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+#endif
+};
 
 //-----------------------------------------------------------------------------
 // wxImage

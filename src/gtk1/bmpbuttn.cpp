@@ -122,7 +122,9 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     PreCreation( parent, id, pos, newSize, style, name );
   
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
 
     m_bitmap   = bitmap;
     m_disabled = bitmap;

@@ -54,8 +54,12 @@
 #pragma interface "dirdlgg.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_DIRDLG
+
 #include "wx/dialog.h"
-//#include "wx/checkbox.h"
+#include "wx/checkbox.h"
 #include "wx/treectrl.h"
 
 //-----------------------------------------------------------------------------
@@ -115,6 +119,8 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
     wxButton   *m_ok, *m_cancel, *m_new;
     void doSize();
 };
+
+#endif
 
 #endif
     // _WX_DIRDLGG_H_

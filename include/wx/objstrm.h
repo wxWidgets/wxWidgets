@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STREAMS && wxUSE_SERIAL
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/stream.h"
@@ -81,3 +84,7 @@ class wxObjectInputStream : public wxFilterInputStream {
 };
 
 #endif
+  // wxUSE_STREAMS && wxUSE_SERIAL
+
+#endif
+  // _WX_WXOBJSTRM_H__

@@ -66,6 +66,9 @@
 #define wxUSE_COMBOBOX      1
                                     // Define 1 to use COMBOXBOX control (Windows)
                                     // or FWW's ComboBox widget (Motif).
+#define wxUSE_CHOICE      1
+                                    // Define 1 to use CHOICE
+
 #define wxUSE_RADIOBUTTON   1
                                     // Define 1 to use radio button control
 
@@ -181,6 +184,8 @@
 #define wxUSE_TEXTDLG 1
 #define wxUSE_TOOLBAR 1
 #define wxUSE_STATUSBAR 1
+#define wxUSE_PROGRESSDLG 1
+#define wxUSE_DIRDLG 1
 
 /*
  * Finer detail

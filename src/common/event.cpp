@@ -591,26 +591,27 @@ void wxEvtHandler::ProcessPendingEvents()
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
-    // check that our flag corresponds to reality
+    /* check that our flag corresponds to reality */
     wxASSERT( m_isWindow == IsKindOf(CLASSINFO(wxWindow)) );
 
-    // An event handler can be enabled or disabled
+    /* An event handler can be enabled or disabled */
     if ( GetEvtHandlerEnabled() )
     {
 #if wxUSE_THREADS
-	// Check whether we are in a child thread.
+	/* Check whether we are in a child thread. */
         if (!wxThread::IsMain())
           return ProcessThreadEvent(event);
 #endif
-        // Handle per-instance dynamic event tables first
+        /* Handle per-instance dynamic event tables first */
 
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
             return TRUE;
 
-        // Then static per-class event tables
+        /* Then static per-class event tables */
 
         const wxEventTable *table = GetEventTable();
 
+#if wxUSE_VALIDATORS
         // Try the associated validator first, if this is a window.
         // Problem: if the event handler of the window has been replaced,
         // this wxEvtHandler may no longer be a window.
@@ -619,7 +620,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         // THIS CAN BE CURED if PushEventHandler is used instead of
         // SetEventHandler, and then processing will be passed down the
         // chain of event handlers.
-        if ( m_isWindow )
+        if (m_isWindow)
         {
             wxWindow *win = (wxWindow *)this;
 
@@ -634,9 +635,10 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
                 }
             }
         }
+#endif
 
         // Search upwards through the inheritance hierarchy
-        while ( table )
+        while (table)
         {
             if ( SearchEventTable((wxEventTable&)*table, event) )
                 return TRUE;

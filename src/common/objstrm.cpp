@@ -16,15 +16,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/setup.h"
+  #include "wx/defs.h"
 #endif
 
-#if wxUSE_SERIAL
+#if wxUSE_SERIAL && wxUSE_STREAMS
 
 #include "wx/object.h"
 #include "wx/objstrm.h"

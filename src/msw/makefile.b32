@@ -113,6 +113,7 @@ COMMONOBJS = \
   $(MSWDIR)\gdicmn.obj \
   $(MSWDIR)\helpbase.obj \
   $(MSWDIR)\image.obj \
+  $(MSWDIR)\imagbmp.obj \
   $(MSWDIR)\imagpng.obj \
   $(MSWDIR)\imagjpeg.obj \
   $(MSWDIR)\imaggif.obj \
@@ -516,6 +517,8 @@ $(MSWDIR)\framecmn.obj:     $(COMMDIR)\framecmn.$(SRCSUFF)
 $(MSWDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.$(SRCSUFF)
 
 $(MSWDIR)\image.obj:     $(COMMDIR)\image.$(SRCSUFF)
+
+$(MSWDIR)\imagbmp.obj:     $(COMMDIR)\imagbmp.$(SRCSUFF)
 
 $(MSWDIR)\imagpng.obj:     $(COMMDIR)\imagpng.$(SRCSUFF)
 

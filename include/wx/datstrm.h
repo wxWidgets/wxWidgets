@@ -18,6 +18,8 @@
 
 #include <wx/stream.h>
 
+#if wxUSE_STREAMS
+
 class WXDLLEXPORT wxDataInputStream: public wxFilterInputStream {
 public:
   wxDataInputStream(wxInputStream& s);
@@ -43,6 +45,9 @@ class WXDLLEXPORT wxDataOutputStream: public wxFilterOutputStream {
   void WriteLine(const wxString& line);
   void WriteString(const wxString& string);
 };
+
+#endif
+  // wxUSE_STREAMS
 
 #endif
     // _WX_DATSTREAM_H_

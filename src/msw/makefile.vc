@@ -114,6 +114,7 @@ COMMONOBJS = \
   ..\common\$D\ftp.obj \
   ..\common\$D\gdicmn.obj \
   ..\common\$D\image.obj \
+  ..\common\$D\imagbmp.obj \
   ..\common\$D\imagjpeg.obj \
   ..\common\$D\imagpng.obj \
   ..\common\$D\imaggif.obj \

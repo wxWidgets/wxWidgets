@@ -246,7 +246,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     PreCreation( parent, id, pos, size, style, name );
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
     if (style & wxLB_ALWAYS_SB)

@@ -20,6 +20,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_DIRDLG
+
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/button.h"
@@ -501,3 +504,5 @@ void wxDirDialog::OnCheck( wxCommandEvent& WXUNUSED(event) )
   printf("Checkbox clicked: %s\n", ( m_check->GetValue() ? "on" : "off" ) );
 }
 */
+
+#endif

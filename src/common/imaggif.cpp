@@ -6,24 +6,30 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "imaggif.h"
-#endif
+/*
+   We don't put pragma implement in this file because it is already present in
+   src/common/image.cpp
+*/
 
 // For compilers that support precompilation, includes "wx.h".
 #include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
-#include <wx/wx.h>
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
 
-#include <wx/image.h>
-#include <wx/wfstream.h>
-#include <wx/module.h>
+#include "wx/image.h"
+#include "wx/wfstream.h"
+#include "wx/module.h"
+#include "wx/log.h"
 
-#include <wx/imaggif.h>
+IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
+
+#if wxUSE_STREAMS
 
 /*
 
@@ -361,8 +367,6 @@ FOLLOWING CODE IS BY V.S. :
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
-
 bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
     unsigned char *ptr, *src, *pal;
@@ -420,8 +424,4 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
     return FALSE;
 }
 
-
-
-
-
-
+#endif

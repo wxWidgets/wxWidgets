@@ -100,7 +100,9 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   
     PreCreation( parent, id, pos, size, style, name );
   
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
 
     m_oldPos = 0.0;
 

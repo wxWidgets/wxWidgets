@@ -20,11 +20,16 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/defs.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_FILE
 
 // standard
 #if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__)
@@ -573,3 +578,5 @@ void wxTempFile::Discard()
     if ( remove(m_strTemp.fn_str()) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 }
+
+#endif

@@ -17,13 +17,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
 #endif
 
 #if wxUSE_SOCKETS
-
-#ifndef WX_PRECOMP
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>

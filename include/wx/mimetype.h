@@ -9,13 +9,17 @@
 // Licence:     wxWindows license (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _MIMETYPE_H
-#define   _MIMETYPE_H
+#ifndef _MIMETYPE_H
+#define _MIMETYPE_H
 
 // fwd decls
 class wxIcon;
 class wxFileTypeImpl;
 class wxMimeTypesManagerImpl;
+
+#include "wx/defs.h"
+
+#if wxUSE_FILE
 
 // the things we really need
 #include "wx/string.h"
@@ -155,6 +159,10 @@ private:
     wxMimeTypesManagerImpl *m_impl;
 };
 
-#endif  //_MIMETYPE_H
+#endif
+  // wxUSE_FILE
+
+#endif  
+  //_MIMETYPE_H
 
 /* vi: set cin tw=80 ts=4 sw=4: */

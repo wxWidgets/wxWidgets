@@ -87,7 +87,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     PreCreation( parent, id, pos, size, style, name );
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
 
     m_widget = gtk_frame_new( title.mbc_str() );
 

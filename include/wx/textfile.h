@@ -11,14 +11,17 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _TEXTFILE_H
-#define   _TEXTFILE_H
+#ifndef _TEXTFILE_H
+#define _TEXTFILE_H
 
 #ifdef __GNUG__
 #pragma interface "textfile.h"
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_TEXTFILE && wxUSE_FILE
+
 #include "wx/string.h"
 #include "wx/file.h"
 #include "wx/dynarray.h"
@@ -137,4 +140,9 @@ private:
   wxString      m_strFile;  // name of the file
 };
 
-#endif  //_TEXTFILE_H
+#endif
+  // wxUSE_TEXTFILE && wxUSE_FILE
+
+#endif  
+  // _TEXTFILE_H
+  

@@ -15,13 +15,20 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+  #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_STREAMS && wxUSE_FILE
+
 #include <stdio.h>
 #include <wx/stream.h>
 #include <wx/wfstream.h>
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 // ----------------------------------------------------------------------------
 // wxFileInputStream
@@ -163,3 +170,6 @@ wxFileStream::wxFileStream(const wxString& fileName)
  : wxFileInputStream(fileName), wxFileOutputStream(*wxFileInputStream::m_file)
 {
 }
+
+#endif
+  // wxUSE_STREAMS && wxUSE_FILE

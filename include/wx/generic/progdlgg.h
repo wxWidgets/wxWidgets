@@ -17,9 +17,10 @@
 #endif
 
 #include "wx/setup.h"
+
+#if wxUSE_PROGRESSDLG
+
 #include "wx/frame.h"
-
-
 
 /** Progress dialog which shows a moving progress bar.
     Taken from the Mahogany project.*/
@@ -88,5 +89,7 @@ private:
 
    DECLARE_EVENT_TABLE()
 };
+#endif
+
 #endif
     // __PROGDLGH_G__

@@ -82,7 +82,10 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     m_blockFirstEvent = FALSE;
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
+
     wxControl::SetLabel( label );
 
     if ( style & wxALIGN_RIGHT )

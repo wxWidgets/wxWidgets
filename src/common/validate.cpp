@@ -10,18 +10,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "validate.h"
+#pragma implementation "validate.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_VALIDATORS
+
+#ifndef WX_PRECOMP
+  #include "wx/window.h"
 #endif
 
 #include "wx/validate.h"
@@ -45,4 +51,5 @@ wxValidator::~wxValidator()
 {
 }
 
-
+#endif
+  // wxUSE_VALIDATORS

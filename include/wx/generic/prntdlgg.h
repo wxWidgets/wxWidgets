@@ -18,6 +18,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/dialog.h"
 #include "wx/dialog.h"
 
@@ -186,6 +189,8 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 #endif
 // __PRINTDLGH_G__

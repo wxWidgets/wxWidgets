@@ -50,11 +50,14 @@
     #include "wx/mdi.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+  #include "wx/prntbase.h"
+  #include "wx/printdlg.h"
+#endif
+
 #include "wx/msgdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/docview.h"
-#include "wx/prntbase.h"
-#include "wx/printdlg.h"
 #include "wx/confbase.h"
 
 #include <stdio.h>
@@ -668,9 +671,11 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_SAVEAS, wxDocManager::OnFileSaveAs)
     EVT_MENU(wxID_UNDO, wxDocManager::OnUndo)
     EVT_MENU(wxID_REDO, wxDocManager::OnRedo)
+#if wxUSE_PRINTING_ARCHITECTURE
     EVT_MENU(wxID_PRINT, wxDocManager::OnPrint)
     EVT_MENU(wxID_PRINT_SETUP, wxDocManager::OnPrintSetup)
     EVT_MENU(wxID_PREVIEW, wxDocManager::OnPreview)
+#endif
 END_EVENT_TABLE()
 
 wxDocManager::wxDocManager(long flags, bool initialize)
@@ -804,6 +809,7 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_PRINTING_ARCHITECTURE
     wxWindow *parentWin = wxTheApp->GetTopWindow();
     wxView *view = GetCurrentView();
     if (view)
@@ -814,6 +820,7 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
     wxPrintDialog printerDialog(parentWin, & data);
     printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
     printerDialog.ShowModal();
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))

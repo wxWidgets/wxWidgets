@@ -8,6 +8,7 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
 #ifdef __GNUG__
 #pragma implementation "zstream.h"
 #endif
@@ -15,18 +16,21 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+  #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_ZLIB && wxUSE_STREAMS
+
 #include "wx/zstream.h"
-
-#if wxUSE_ZLIB
-
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/log.h"
-#include "../zlib/zlib.h"   // don't change this, Robert
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+#include "zlib.h"
 
 #define ZSTREAM_BUFFER_SIZE 1024
 
@@ -186,6 +190,5 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 }
 
 #endif
-
-  // wxUSE_ZLIB
+  // wxUSE_ZLIB && wxUSE_STREAMS
   

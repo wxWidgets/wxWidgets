@@ -16,6 +16,10 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_STREAMS
+
 #include <stdio.h>
 #include "wx/object.h"
 #include "wx/string.h"
@@ -259,3 +263,7 @@ class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
 };
 
 #endif
+  // wxUSE_STREAMS
+
+#endif
+  // _WX_WXSTREAM_H__

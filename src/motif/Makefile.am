@@ -56,6 +56,7 @@ libwx_motif_la_SOURCES = \
  helpbase.cpp \
  http.cpp \
  image.cpp \
+ imagbmp.cpp \
  imaggif.cpp \
  imagjpeg.cpp \
  imagpng.cpp \

@@ -93,6 +93,7 @@ COMMONOBJS = \
   $(COMMDIR)/gdicmn.$(OBJSUFF) \
   $(COMMDIR)/helpbase.$(OBJSUFF) \
   $(COMMDIR)/image.$(OBJSUFF) \
+  $(COMMDIR)/imagbmp.$(OBJSUFF) \
   $(COMMDIR)/imagpng.$(OBJSUFF) \
   $(COMMDIR)/imagjpeg.$(OBJSUFF) \
   $(COMMDIR)/intl.$(OBJSUFF) \

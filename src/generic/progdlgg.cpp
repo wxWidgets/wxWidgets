@@ -31,6 +31,8 @@
 #include "wx/intl.h"
 #endif
 
+#if wxUSE_PROGRESSDLG
+
 #include "wx/generic/progdlgg.h"
 
 #define LAYOUT_X_MARGIN 8
@@ -172,3 +174,5 @@ wxProgressDialog::~wxProgressDialog()
    else
       wxEnableTopLevelWindows(TRUE);
 }
+
+#endif

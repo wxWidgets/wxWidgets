@@ -18,6 +18,8 @@
 
 #include "wx/validate.h"
 
+#if wxUSE_VALIDATORS
+
 class WXDLLEXPORT wxGenericValidator: public wxValidator
 {
 public:
@@ -55,4 +57,8 @@ protected:
   wxArrayInt* m_pArrayInt;
 };
 
-#endif    // _WX_VALGENH__
+#endif
+  // wxUSE_VALIDATORS
+
+#endif    
+  // _WX_VALGENH__

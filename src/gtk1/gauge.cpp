@@ -32,7 +32,9 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
   
   PreCreation( parent, id, pos, size, style, name );
   
-  SetValidator( validator );
+#if wxUSE_VALIDATORS
+    SetValidator( validator );
+#endif
 
   m_rangeMax = range;
   m_gaugePos = 0;

@@ -19,6 +19,8 @@
 
 #include "wx/prntbase.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 // ----------------------------------------------------------------------------
 // Represents the printer: manages printing a wxPrintout object
 // ----------------------------------------------------------------------------
@@ -61,6 +63,8 @@ public:
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
 };
+
+#endif
 
 #endif
 // __PRINTPSH__

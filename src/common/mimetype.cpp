@@ -10,34 +10,32 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef    __GNUG__
-    #pragma implementation "mimetype.h"
+#pragma implementation "mimetype.h"
 #endif
-
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
 
-// wxWindows
 #ifndef WX_PRECOMP
-    #include  "wx/string.h"
-    #include  "wx/icon.h"
+  #include "wx/defs.h"
+#endif
+
+#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
+
+#ifndef WX_PRECOMP
+  #include "wx/string.h"
+  #include "wx/icon.h"
 #endif //WX_PRECOMP
 
 // Doesn't compile in WIN16 mode
 #ifndef __WIN16__
 
 #include "wx/log.h"
+#include "wx/file.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
@@ -1341,7 +1339,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     return TRUE;
 }
 
-#endif // OS type
+#endif 
+  // OS type
+
+#endif  
+  // wxUSE_FILE && wxUSE_TEXTFILE
 
 #endif
   // __WIN16__

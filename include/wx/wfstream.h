@@ -16,6 +16,10 @@
 #pragma interface "wfstream.h"
 #endif
 
+#include "defs.h"
+
+#if wxUSE_STREAMS && wxUSE_FILE
+
 #include <wx/object.h>
 #include <wx/string.h>
 #include <wx/stream.h>
@@ -79,3 +83,7 @@ class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
 };
 
 #endif
+  // wxUSE_STREAMS && wxUSE_FILE
+
+#endif
+  // _WX_WXFSTREAM_H__

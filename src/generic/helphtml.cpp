@@ -104,6 +104,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
       else
          file = ifile;
 
+#if wxUSE_INTL
       // If a locale is set, look in file/localename, i.e.
       // If passed "/usr/local/myapp/help" and the current wxLocale is
       // set to be "de", then look in "/usr/local/myapp/help/de/"
@@ -125,6 +126,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
                file = newfile;
          }
       }
+#endif
 
       if(! wxDirExists(file))
          return FALSE;

@@ -403,7 +403,9 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
   wxScrolledWindow::Create( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name );
 
+#if wxUSE_VALIDATORS
   SetValidator( validator );
+#endif
 
   SetBackgroundColour( *wxWHITE );
   m_dottedPen = wxPen( *wxBLACK, 0, 0 );

@@ -18,17 +18,11 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 #include "wx/textfile.h"
 #include "wx/string.h"
-
-// ----------------------------------------------------------------------------
-// compile options
-// ----------------------------------------------------------------------------
-
-// it won't compile without it anyhow
-#ifndef wxUSE_CONFIG
-  #error "Please define wxUSE_CONFIG or remove fileconf.cpp from your makefile"
-#endif // wxUSE_CONFIG
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -349,5 +343,9 @@ public:
   void SetLastGroup(ConfigGroup *pGroup) { m_pLastGroup = pGroup; }
 };
 
-#endif  //_FILECONF_H
+#endif
+  // wxUSE_CONFIG
+
+#endif  
+  //_FILECONF_H
 

@@ -17,12 +17,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+  #include "wx/defs.h"
 #endif
+
+#if wxUSE_STREAMS
 
 #include "wx/datstrm.h"
 
@@ -200,3 +202,7 @@ void wxDataOutputStream::WriteDouble(double d)
 #endif
   Write(buf, 10);
 }
+
+#endif
+  // wxUSE_STREAMS
+  

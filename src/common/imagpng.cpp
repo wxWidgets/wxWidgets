@@ -10,27 +10,27 @@
 /*
    We don't put pragma implement in this file because it is already present in
    src/common/image.cpp
-
-#ifdef __GNUG__
-#pragma implementation "image.h"
-#endif
 */
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_LIBPNG
 
 #include "wx/image.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "wx/app.h"
-#if wxUSE_LIBPNG
-#include "../png/png.h"
-#endif
+#include "png.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
@@ -53,14 +53,12 @@
 // wxPNGHandler
 //-----------------------------------------------------------------------------
 
-#if wxUSE_LIBPNG
-
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #endif
 
-
 #if wxUSE_STREAMS
+
 static void _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
 {
     ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
@@ -315,9 +313,10 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     }
     return TRUE;
 }
-#endif // wxUSE_STREAMS
 
-#endif
+#endif 
+  // wxUSE_STREAMS
 
-// wxUSE_LIBPNG
+#endif 
+  // wxUSE_LIBPNG
 

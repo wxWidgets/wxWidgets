@@ -23,6 +23,12 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
+#ifndef WX_PRECOMP
+#include "wx/defs.h"
+#endif
+
+#if wxUSE_TEXTFILE && wxUSE_FILE
+
 #include  <wx/string.h>
 #include  <wx/intl.h>
 #include  <wx/file.h>
@@ -250,7 +256,7 @@ bool wxTextFile::Write(wxTextFileType typeNew)
 }
 
 const wxChar *wxTextFile::GetEOL(wxTextFileType type)
-  {
+{
     switch ( type ) {
       case wxTextFileType_None: return _T("");
       case wxTextFileType_Unix: return _T("\n");
@@ -261,5 +267,6 @@ const wxChar *wxTextFile::GetEOL(wxTextFileType type)
         wxFAIL_MSG(_T("bad file type in wxTextFile::GetEOL."));
         return (const wxChar *) NULL;
     }
-  }
+}
 
+#endif

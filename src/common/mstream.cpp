@@ -15,13 +15,20 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+  #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_STREAMS
+
 #include <stdlib.h>
 #include <wx/stream.h>
 #include <wx/mstream.h>
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 // ----------------------------------------------------------------------------
 // wxMemoryInputStream
@@ -60,3 +67,5 @@ wxMemoryOutputStream::wxMemoryOutputStream(char *data, size_t len)
 wxMemoryOutputStream::~wxMemoryOutputStream()
 {
 }
+
+#endif

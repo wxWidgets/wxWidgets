@@ -16,6 +16,9 @@
 #endif
 
 #include "wx/stream.h"
+
+#if wxUSE_SOCKETS && wxUSE_STREAMS
+
 #include "wx/socket.h"
 
 class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
@@ -63,3 +66,7 @@ class WXDLLEXPORT wxSocketStream : public wxSocketInputStream,
 };
 
 #endif
+  // wxUSE_SOCKETS && wxUSE_STREAMS
+
+#endif
+  // __SCK_STREAM_H__

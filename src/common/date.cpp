@@ -23,10 +23,12 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
-#include "wx/setup.h"
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
 
 #if wxUSE_TIMEDATE
 

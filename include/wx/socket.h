@@ -16,6 +16,10 @@
 #pragma interface "socket.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SOCKETS
+
 // ---------------------------------------------------------------------------
 // Windows(tm) specific
 // ---------------------------------------------------------------------------
@@ -278,3 +282,7 @@ typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
   (wxObject *) NULL  },
 
 #endif
+  // wxUSE_SOCKETS
+
+#endif
+  // _WX_NETWORK_SOCKET_H

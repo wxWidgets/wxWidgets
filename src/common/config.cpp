@@ -19,21 +19,24 @@
 
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
-    #include  "wx/wx.h"
-#endif
-
-#if wxUSE_CONFIG
-
 #ifdef    __BORLANDC__
   #pragma hdrstop
 #endif  //__BORLANDC__
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || defined(wxCONFIG_WIN32_NATIVE))
 
 #include "wx/app.h"
 #include "wx/file.h"
 #include "wx/log.h"
 #include "wx/textfile.h"
 #include "wx/utils.h"
+#include "wx/log.h"
+#include "wx/utils.h"
+#include "wx/intl.h"
 
 #include "wx/config.h"
 

@@ -10,22 +10,28 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "valtext.h"
+#pragma implementation "valtext.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-    #include "wx/textctrl.h"
-    #include "wx/utils.h"
-    #include "wx/msgdlg.h"
-    #include "wx/intl.h"
+  #include "wx/defs.h"
+#endif
+
+#if wxUSE_VALIDATORS
+
+#ifndef WX_PRECOMP
+  #include <stdio.h>
+  #include "wx/textctrl.h"
+  #include "wx/utils.h"
+  #include "wx/msgdlg.h"
+  #include "wx/intl.h"
 #endif
 
 #include "wx/valtext.h"
@@ -306,3 +312,6 @@ static bool wxIsNumeric(const wxString& val)
     return TRUE;
 }
 
+#endif
+  // wxUSE_VALIDATORS
+  

@@ -25,6 +25,8 @@
     #include "wx/defs.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #if wxUSE_POSTSCRIPT
 
 #include "wx/dcmemory.h"
@@ -2267,3 +2269,6 @@ void wxPostScriptModule::OnExit()
 
 #endif
   // wxUSE_POSTSCRIPT
+
+#endif 
+  // wxUSE_PRINTING_ARCHITECTURE

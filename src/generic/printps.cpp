@@ -30,6 +30,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dc.h"
@@ -345,3 +347,4 @@ void wxPostScriptPrintPreview::DetermineScaling()
     }
 }
 
+#endif

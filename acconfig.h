@@ -145,6 +145,11 @@
 #define wxUSE_TEXTDLG 0
 
 /*
+ * Use progress dialog
+ */
+#define wxUSE_PROGRESSDLG 0
+
+/*
  * Use directory chooser dialog
  */
 #define wxUSE_DIRDLG 0
@@ -178,6 +183,10 @@
  * Use this control
  */
 #define wxUSE_COMBOBOX 0
+/*
+ * Use this control
+ */
+#define wxUSE_CHOICE 0
 /*
  * Use this control
  */
@@ -288,7 +297,7 @@
 /*
  * Use log classes and logging functions
  */
-#define wxUSE_LOG 1
+#define wxUSE_LOG 0
 /*
  * Use time and date classes
  */

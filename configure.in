@@ -284,6 +284,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_METAFILE=no
 
   DEFAULT_wxUSE_COMMONDLGS=no
+  DEFAULT_wxUSE_DIRDLG=no
+  DEFAULT_wxUSE_PROGRESSDLG=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
@@ -292,6 +294,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
+  DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
@@ -375,6 +378,8 @@ else
   DEFAULT_wxUSE_METAFILE=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
+  DEFAULT_wxUSE_DIRDLG=yes
+  DEFAULT_wxUSE_PROGRESSDLG=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
@@ -383,6 +388,7 @@ else
   DEFAULT_wxUSE_BMPBUTTON=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
+  DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
@@ -565,6 +571,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_BMPBUTTON=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLISTBOX=yes
+  DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
@@ -593,6 +600,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLISTBOX=no
+  DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
@@ -621,7 +629,8 @@ WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
-WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxChoice and wxComboBox classes], wxUSE_COMBOBOX)
+WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
+WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox classes], wxUSE_COMBOBOX)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
 WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
@@ -648,6 +657,8 @@ dnl misc GUI options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
+WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
+WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
@@ -1368,7 +1379,7 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
   OPTIMISE=
 else
   if test "$GCC" = yes ; then
-    OPTIMISE="-O2"
+    OPTIMISE="-O2 -fno-rtti -fno-exceptions"
     case "${host}" in
       i586-*-*|i686-*-* )
         OPTIMISE="${OPTIMISE} "
@@ -1666,48 +1677,52 @@ dnl big GUI components: MDI, doc/view, printing, help, ...
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_CONSTRAINTS" = "yes"; then
-  AC_DEFINE(wxUSE_CONSTRAINTS)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
+    AC_DEFINE(wxUSE_CONSTRAINTS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-  AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
+    AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
 fi
 
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
-  AC_DEFINE(wxUSE_DOC_VIEW_ARCHITECTURE)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docview"
-  if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docvwmdi"
-  fi
+    AC_DEFINE(wxUSE_DOC_VIEW_ARCHITECTURE)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docview"
+    if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docvwmdi"
+    fi
 fi
 
 if test "$wxUSE_HELP" = "yes"; then
-  AC_DEFINE(wxUSE_HELP)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
+    AC_DEFINE(wxUSE_HELP)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
 fi
 
 if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-  AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
+    if test "$wxUSE_CONSTRAINTS" != "yes"; then
+        AC_MSG_WARN(Printing support cannot be used without constraints so it won't be compiled without it)
+    else
+        AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
+    fi
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
 if test "$wxUSE_PROLOGIO" = "yes" ; then
-  AC_DEFINE(wxUSE_PROLOGIO)
+    AC_DEFINE(wxUSE_PROLOGIO)
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
-  if test "$wxUSE_PROLOGIO" = "yes" ; then
-    AC_DEFINE(wxUSE_RESOURCES)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
-  else
-    AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
-  fi
+    if test "$wxUSE_PROLOGIO" = "yes" ; then
+        AC_DEFINE(wxUSE_RESOURCES)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    else
+        AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
+    fi
 fi
 
 if test "$wxUSE_X_RESOURCES" = "yes"; then
-  AC_DEFINE(wxUSE_X_RESOURCES)
+    AC_DEFINE(wxUSE_X_RESOURCES)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1715,28 +1730,28 @@ dnl IPC: IPC, d-n-d, clipboard, ...
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_IPC" = "yes"; then
-  AC_DEFINE(wxUSE_IPC)
+    AC_DEFINE(wxUSE_IPC)
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-  AC_DEFINE(wxUSE_CLIPBOARD)
+    AC_DEFINE(wxUSE_CLIPBOARD)
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-  if test "$wxUSE_GTK" = 1; then
-    if test "$WXGTK12" != 1; then
-      AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+    if test "$wxUSE_GTK" = 1; then
+        if test "$WXGTK12" != 1; then
+            AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+        fi
     fi
-  fi
 
-  if test "$wxUSE_MOTIF" = 1; then
-    AC_MSG_WARN([Drag and drop is not yet supported under Motif])
-  fi
+    if test "$wxUSE_MOTIF" = 1; then
+        AC_MSG_WARN([Drag and drop is not yet supported under Motif])
+    fi
 
-  if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
-    AC_DEFINE(wxUSE_DRAG_AND_DROP)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
-  fi
+    if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
+        AC_DEFINE(wxUSE_DRAG_AND_DROP)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
+    fi
 fi
 
 if test "$wxUSE_SPLINES" = "yes" ; then
@@ -1758,6 +1773,10 @@ fi
 
 if test "$wxUSE_COMBOBOX" = "yes"; then
   AC_DEFINE(wxUSE_COMBOBOX)
+fi
+
+if test "$wxUSE_CHOICE" = "yes"; then
+  AC_DEFINE(wxUSE_CHOICE)
 fi
 
 if test "$wxUSE_BMPBUTTON" = "yes"; then
@@ -1783,103 +1802,103 @@ if test "$wxUSE_GRID" = "yes"; then
 fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
-  AC_DEFINE(wxUSE_IMAGLIST)
+    AC_DEFINE(wxUSE_IMAGLIST)
 fi
 
 if test "$wxUSE_LISTBOX" = "yes"; then
-  AC_DEFINE(wxUSE_LISTBOX)
+    AC_DEFINE(wxUSE_LISTBOX)
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
-  if test "$wxUSE_IMAGLIST" = "yes"; then
-    AC_DEFINE(wxUSE_LISTCTRL)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
-  else
-    AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
-  fi
+    if test "$wxUSE_IMAGLIST" = "yes"; then
+        AC_DEFINE(wxUSE_LISTCTRL)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
+    else
+        AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
+    fi
 fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then
-  AC_DEFINE(wxUSE_NOTEBOOK)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
+    AC_DEFINE(wxUSE_NOTEBOOK)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
-  AC_DEFINE(wxUSE_RADIOBOX)
+    AC_DEFINE(wxUSE_RADIOBOX)
 fi
 
 if test "$wxUSE_RADIOBTN" = "yes"; then
-  AC_DEFINE(wxUSE_RADIOBTN)
+    AC_DEFINE(wxUSE_RADIOBTN)
 fi
 
 if test "$wxUSE_SASH" = "yes"; then
-  AC_DEFINE(wxUSE_SASH)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"
+    AC_DEFINE(wxUSE_SASH)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"
 fi
 
 if test "$wxUSE_SCROLLBAR" = "yes"; then
-  AC_DEFINE(wxUSE_SCROLLBAR)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
+    AC_DEFINE(wxUSE_SCROLLBAR)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
-  AC_DEFINE(wxUSE_SLIDER)
+    AC_DEFINE(wxUSE_SLIDER)
 fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
-  AC_DEFINE(wxUSE_SPINBTN)
+    AC_DEFINE(wxUSE_SPINBTN)
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
-  AC_DEFINE(wxUSE_SPLITTER)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS splitter"
+    AC_DEFINE(wxUSE_SPLITTER)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS splitter"
 fi
 
 if test "$wxUSE_STATBMP" = "yes"; then
-  AC_DEFINE(wxUSE_STATBMP)
+    AC_DEFINE(wxUSE_STATBMP)
 fi
 
 if test "$wxUSE_STATBOX" = "yes"; then
-  AC_DEFINE(wxUSE_STATBOX)
+    AC_DEFINE(wxUSE_STATBOX)
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
-  AC_DEFINE(wxUSE_STATLINE)
+    AC_DEFINE(wxUSE_STATLINE)
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
-  AC_DEFINE(wxUSE_STATUSBAR)
+    AC_DEFINE(wxUSE_STATUSBAR)
 fi
 
 if test "$wxUSE_TABDIALOG" = "yes"; then
-  AC_DEFINE(wxUSE_TAB_DIALOG)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
+    AC_DEFINE(wxUSE_TAB_DIALOG)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
-  AC_DEFINE(wxUSE_TOOLBAR)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
+    AC_DEFINE(wxUSE_TOOLBAR)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-      AC_MSG_WARN(Tooltips are not supported yet under Motif)
+        AC_MSG_WARN(Tooltips are not supported yet under Motif)
     else
-      if test "$wxUSE_WINE" = 1; then
-        AC_MSG_WARN(Tooltips are not supported yet under WINE)
-      else
-        AC_DEFINE(wxUSE_TOOLTIPS)
-      fi
+        if test "$wxUSE_WINE" = 1; then
+            AC_MSG_WARN(Tooltips are not supported yet under WINE)
+        else
+            AC_DEFINE(wxUSE_TOOLTIPS)
+        fi
     fi
 fi
 
 if test "$wxUSE_TREECTRL" = "yes"; then
-  if test "$wxUSE_IMAGLIST" = "yes"; then
-    AC_DEFINE(wxUSE_TREECTRL)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
-  else
-    AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
-  fi
+    if test "$wxUSE_IMAGLIST" = "yes"; then
+        AC_DEFINE(wxUSE_TREECTRL)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
+    else
+        AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1892,38 +1911,37 @@ dnl   AC_DEFINE(wxUSE_WXTREE)
 dnl fi
 
 if test "$wxUSE_METAFILE" = "yes"; then
-  AC_DEFINE(wxUSE_METAFILE)
+    AC_DEFINE(wxUSE_METAFILE)
 fi
 
-if test "$wxUSE_COMMONDLGS" = "yes"; then
-  dnl these classes don't depend on anything at all
-
-  if test "$wxUSE_CONSTRAINTS" != "yes"; then
-    AC_MSG_WARN(many common dialogs cannot be used without constraints so they won't be compiled without them)
-  else
-    AC_DEFINE(wxUSE_CONSTRAINTS)
-    AC_DEFINE(wxUSE_TEXTDLG)
-
-    if test "$wxUSE_TREECTRL" != "yes"; then
-      AC_MSG_WARN(wxDirDialog cannot be used without wxTreeCtrl and it won't be compiled without it)
+if test "$wxUSE_DIRDLG" = "yes"; then
+    if test "$wxUSE_CONSTRAINTS" != "yes"; then
+       AC_MSG_WARN(wxDirDialog requires constraints so it won't be compiled without them)
     else
-      AC_DEFINE(wxUSE_DIRDLG)
+        if test "$wxUSE_TREECTRL" != "yes"; then
+            AC_MSG_WARN(wxDirDialog requires wxTreeCtrl so it won't be compiled without it)
+        else
+            AC_DEFINE(wxUSE_DIRDLG)
+        fi
     fi
-  fi
+fi
 
-  if test "$wxUSE_PRINTING_ARCHITECTURE" = "no"; then
-    AC_MSG_WARN([wxPrintDialog class won't be compiled without printing support])
-  fi
+if test "$wxUSE_PROGRESSDLG" = "yes"; then
+    if test "$wxUSE_CONSTRAINTS" != "yes"; then
+       AC_MSG_WARN(wxProgressDialog requires constraints so it won't be compiled without them)
+    else
+        AC_DEFINE(wxUSE_PROGRESSDLG)
+    fi
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
-  AC_DEFINE(wxUSE_MINIFRAME)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
+    AC_DEFINE(wxUSE_MINIFRAME)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
-  AC_DEFINE(wxUSE_VALIDATORS)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+    AC_DEFINE(wxUSE_VALIDATORS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1946,11 +1964,11 @@ INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE 
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$ac_cv_prog_gcc" = "yes"; then
-  dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
-  CXXWARNINGS="-Wall"
-  dnl there is one weird warning in docview.h:71 which prevents me from doing
-  dnl this...
-  dnl CXXWARNINGS="-Wall -Werror"
+    dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
+    CXXWARNINGS="-Wall"
+    dnl there is one weird warning in docview.h:71 which prevents me from doing
+    dnl this...
+    dnl CXXWARNINGS="-Wall -Werror"
 fi
 EXTRA_CFLAGS="$WXDEBUG $PROFILE $OPTIMISE $INCLUDES"
 
@@ -1958,13 +1976,13 @@ CFLAGS="$CFLAGS $EXTRA_CFLAGS"
 CXXFLAGS="$CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS"
 
 if test "$wxUSE_GUI" = "yes"; then
-  dnl TODO add checks that these samples will really compile (i.e. all the
-  dnl      library features they need are present)
+    dnl TODO add checks that these samples will really compile (i.e. all the
+    dnl      library features they need are present)
 
-  dnl TODO some samples are never built so far:
-  dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                   forty fractal image richedit wxpoem"
+    dnl TODO some samples are never built so far:
+    dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
+                     forty fractal image richedit wxpoem"
 fi
 
 dnl for convenience, sort the files to build in alphabetical order

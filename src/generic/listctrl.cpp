@@ -2390,7 +2390,9 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
 
     bool ret = wxControl::Create( parent, id, pos, size, s, name );
 
+#if wxUSE_VALIDATORS
     SetValidator( validator );
+#endif
   
     if (s & wxSUNKEN_BORDER) s -= wxSUNKEN_BORDER;
 

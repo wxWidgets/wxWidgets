@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_ZLIB
+#if wxUSE_ZLIB && wxUSE_STREAMS
 
 #include <wx/stream.h>
 
@@ -52,5 +52,7 @@ class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
 };
 
 #endif
+  // wxUSE_ZLIB && wxUSE_STREAMS
 
 #endif
+   // _WX_WXZSTREAM_H__
