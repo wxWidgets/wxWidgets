@@ -76,9 +76,9 @@ real position in the stream.
 
 See \helpref{OnSysRead}{wxstreambaseonsysread}.
 
-\membersection{wxStreamBase::StreamSize}
+\membersection{wxStreamBase::GetSize}
 
-\constfunc{size\_t}{StreamSize}{\void}
+\constfunc{size\_t}{GetSize}{\void}
 
 This function returns the size of the stream. For example, for a file it is the size of
 the file).
@@ -86,7 +86,7 @@ the file).
 \wxheading{Warning}
 
 There are streams which do not have size by definition, such as socket streams.
-In that cases, StreamSize returns an invalid size represented by
+In that cases, GetSize returns an invalid size represented by
 
 \begin{verbatim}
 ~(size_t)0

@@ -74,6 +74,12 @@ public:
         return (const wxIcon &)m_bitmap;
     }
 
+    // for compatibility with wxMSW
+    void  SetIcon(const wxIcon& icon)
+    {
+        SetBitmap( icon );
+    }
+
 private:
     // creates the new pixmap widget
     void CreatePixmapWidget();

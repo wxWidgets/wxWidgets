@@ -48,7 +48,7 @@ wxDC::wxDC()
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
-    m_brush = *wxTRANSPARENT_BRUSH;
+    m_brush = *wxWHITE_BRUSH;
 }
 
 void wxDC::DoSetClippingRegion( long x, long y, long width, long height )
