@@ -659,7 +659,7 @@ public:
     %pragma(python) addtoclass = "
     # Some helpers...
 
-    def Select(self, idx, on=true):
+    def Select(self, idx, on=1):
         '''[de]select an item'''
         if on: state = wxLIST_STATE_SELECTED
         else: state = 0
