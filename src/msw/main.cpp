@@ -61,6 +61,9 @@
     #define HINSTANCE HANDLE
 #endif
 
+// defined in common/init.cpp
+extern int wxEntryReal(int& argc, wxChar **argv);
+
 // ============================================================================
 // implementation: various entry points
 // ============================================================================
@@ -96,9 +99,6 @@
 // wrap real wxEntry in a try-except block to be able to call
 // OnFatalException() if necessary
 #if wxUSE_ON_FATAL_EXCEPTION
-
-// defined in common/init.cpp
-extern int wxEntryReal(int& argc, wxChar **argv);
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
@@ -226,12 +226,16 @@ int wxEntry(int& argc, wxChar **argv)
 
 #else // !wxUSE_ON_FATAL_EXCEPTION
 
+#ifdef __VISUALC__
+
 static void
 wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
 {
     // see wxSETranslator() version for wxUSE_ON_FATAL_EXCEPTION above
     throw;
 }
+
+#endif // __VISUALC__
 
 int wxEntry(int& argc, wxChar **argv)
 {
