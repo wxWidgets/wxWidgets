@@ -486,10 +486,21 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 static long map_to_unmodified_wx_keysym( GdkEventKey *event )
 {
+    // VZ: it seems that GDK_KEY_RELEASE event doesn't set event->string
+    //     but only event->keyval which is quite useless to us, so remember
+    //     the last character from GDK_KEY_PRESS and resue it as last resort
+    //
+    // NB: should be MT-neutral as always called from main thread only
+    static struct
+    {
+        KeySym keysym;
+        long   keycode;
+    } s_lastKeyPress = { 0, 0 };
+
     KeySym keysym = event->keyval;
     long key_code;
 
-    switch (keysym)
+    switch ( keysym )
     {
         case GDK_Shift_L:
         case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
@@ -581,16 +592,43 @@ static long map_to_unmodified_wx_keysym( GdkEventKey *event )
         case GDK_F11:           key_code = WXK_F11;         break;
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
-            if ( (keysym & 0xFF) == keysym )
+        {
+            // do we have the translation?
+            if ( event->length == 1 )
             {
-                guint upper = gdk_keyval_to_upper( (guint)keysym );
-                key_code = upper ? upper : keysym;
+                keysym = (KeySym)event->string[0];
             }
-            else
+            else if ( (keysym & 0xFF) != keysym )
             {
-                // unknown key code
-                key_code = 0;
+                // non ASCII key, what to do?
+
+                if ( event->type == GDK_KEY_RELEASE )
+                {
+                    // reuse the one from the last keypress if any
+                    if ( keysym == s_lastKeyPress.keysym )
+                    {
+                        key_code = s_lastKeyPress.keycode;
+
+                        // skip "return 0"
+                        break;
+                    }
+                }
+
+                // ignore this one, we don't know it
+                return 0;
             }
+            //else: ASCII key, ok
+
+            guint upper = gdk_keyval_to_upper( (guint)keysym );
+            key_code = upper ? upper : keysym;
+
+            if ( event->type == GDK_KEY_PRESS )
+            {
+                // remember it to be reused below later
+                s_lastKeyPress.keysym = keysym;
+                s_lastKeyPress.keycode = key_code;
+            }
+        }
     }
 
     return key_code;
