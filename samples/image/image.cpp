@@ -608,24 +608,33 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( wxT("BLACK") );
     }
 
-    dc.DrawText(_T("XPM bitmap"), 30, 2230);
+    // For testing transparency
+    dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawRectangle( 20, 2220, 560, 68 );
+    
+    dc.DrawText(_T("XPM bitmap"), 30, 2230 );
     if ( m_bmpSmileXpm.Ok() )
         dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, TRUE);
 
-    dc.DrawText(_T("XPM icon"), 150, 2230);
+    dc.DrawText(_T("XPM icon"), 110, 2230 );
     if ( m_iconSmileXpm.Ok() )
-        dc.DrawIcon(m_iconSmileXpm, 150, 2250);
+        dc.DrawIcon(m_iconSmileXpm, 110, 2250);
     
-    dc.DrawText(_T("Enlarged"), 250, 2230);
     // testing icon -> bitmap conversion    
     wxBitmap to_blit( m_iconSmileXpm );
-    dc.SetUserScale( 1.5, 1.5 );
-    dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5) );
-    dc.SetUserScale( 2, 2 );
-    dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2) );
-    dc.SetUserScale( 1.0, 1.0 );
 
-    dc.DrawText(_T("Blit"), 400, 2230);
+    dc.DrawText( _T("SubBitmap"), 170, 2230 );
+    wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
+    dc.DrawBitmap( sub, 170, 2250, TRUE );
+
+    dc.DrawText( _T("Enlarged"), 250, 2230 );
+    dc.SetUserScale( 1.5, 1.5 );
+    dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), TRUE );
+    dc.SetUserScale( 2, 2 );
+    dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), TRUE );
+    dc.SetUserScale( 1.0, 1.0 );
+    
+    dc.DrawText( _T("Blit"), 400, 2230);
     wxMemoryDC blit_dc;
     blit_dc.SelectObject( to_blit );
     dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );

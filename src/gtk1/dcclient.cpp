@@ -1187,7 +1187,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         xsrcMask = xsrc;
         ysrcMask = ysrc;
     }
-
+    
     if (srcDC->m_isMemDC)
     {
         if (!memDC->m_selected.Ok()) return FALSE;
