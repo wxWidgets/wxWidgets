@@ -419,6 +419,7 @@ bool MyApp::OnInit()
 #ifdef NO_GUI
     return true;
 #else
+    OnExit(); // Do cleanup since OnExit won't be called now
     return false;
 #endif
   }
