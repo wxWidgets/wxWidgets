@@ -7,7 +7,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 #endif
 
 // standard
-#if 	defined(__WXMSW__) && !defined(__GNUWIN32__)
+#if   defined(__WXMSW__) && !defined(__GNUWIN32__)
   #include  <io.h>
 
   #define   WIN32_LEAN_AND_MEAN
@@ -54,7 +54,7 @@
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
   #include  <unistd.h>
 #else
-	#error	"Please specify the header with file functions declarations."
+  #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
 
 #include  <stdio.h>       // SEEK_xxx constants
@@ -87,17 +87,14 @@
 
   #define   S_IFDIR     _S_IFDIR
   #define   S_IFREG     _S_IFREG
-
-  #define   S_IREAD     _S_IREAD
-  #define   S_IWRITE    _S_IWRITE
 #else
   #define   tell(fd)    lseek(fd, 0, SEEK_CUR)
 #endif  //_MSC_VER
 
 // there is no distinction between text and binary files under Unix
-#ifdef		__UNIX__
-	#define 	O_BINARY		(0)
-#endif	//__UNIX__
+#ifdef    __UNIX__
+  #define   O_BINARY    (0)
+#endif  //__UNIX__
 
 // wxWindows
 #include  <wx/string.h>
@@ -114,8 +111,8 @@
 // static functions
 // ----------------------------------------------------------------------------
 bool wxFile::Exists(const char *sz)
-{ 
-  struct stat st; 
+{
+  struct stat st;
   return !access(sz, 0) && !stat(sz, &st) && (st.st_mode & S_IFREG);
 }
 
@@ -139,11 +136,11 @@ wxFile::~wxFile()
 }
 
 // create the file, fail if it already exists and bOverwrite
-bool wxFile::Create(const char *szFileName, bool bOverwrite)
+bool wxFile::Create(const char *szFileName, bool bOverwrite, int access)
 {
   // if bOverwrite we create a new file or truncate the existing one,
   // otherwise we only create the new file and fail if it already exists
-  int fd = open(szFileName, O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL));
+  int fd = open(szFileName, O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
 
   if ( fd == -1 ) {
     wxLogSysError(_("can't create file '%s'"), szFileName);
@@ -156,29 +153,29 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite)
 }
 
 // open the file
-bool wxFile::Open(const char *szFileName, OpenMode mode)
+bool wxFile::Open(const char *szFileName, OpenMode mode, int access)
 {
   int flags = O_BINARY;
 
   switch ( mode ) {
-    case read:      
-      flags |= O_RDONLY; 
+    case read:
+      flags |= O_RDONLY;
       break;
 
-    case write:     
-      flags |= O_WRONLY | O_CREAT | O_TRUNC; 
+    case write:
+      flags |= O_WRONLY | O_CREAT | O_TRUNC;
       break;
 
     case write_append:
       flags |= O_WRONLY | O_APPEND;
       break;
 
-    case read_write: 
+    case read_write:
       flags |= O_RDWR;
       break;
   }
 
-  int fd = open(szFileName, flags, S_IREAD | S_IWRITE);
+  int fd = open(szFileName, flags, access);
 
   if ( fd == -1 ) {
     wxLogSysError(_("can't open file '%s'"), szFileName);
@@ -314,7 +311,7 @@ off_t wxFile::Length() const
   #else
     int iRc = tell(m_fd);
     if ( iRc != -1 ) {
-			// @ have to use const_cast :-(
+      // @ have to use const_cast :-(
       int iLen = ((wxFile *)this)->SeekEnd();
       if ( iLen != -1 ) {
         // restore old position
@@ -390,7 +387,7 @@ wxTempFile::wxTempFile(const wxString& strName)
 bool wxTempFile::Open(const wxString& strName)
 {
   m_strName = strName;
-  
+
   // we want to create the file in the same directory as strName because
   // otherwise rename() in Commit() might not work (if the files are on
   // different partitions for example). Unfortunately, the only standard
@@ -408,7 +405,7 @@ bool wxTempFile::Open(const wxString& strName)
       wxLogLastError("GetTempFileName");
     m_strTemp.UngetWriteBuf();
   #endif  // Windows/Unix
-    
+
   return m_file.Open(m_strTemp, wxFile::write);
 }
 

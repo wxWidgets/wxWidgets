@@ -7,7 +7,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   __FILEH__
@@ -27,6 +27,23 @@
 // error return value for Seek() functions
 const off_t ofsInvalid = (off_t)-1;
 
+// we redefine these constants here because S_IREAD &c are _not_ standard
+// however, we do assume that the values correspond to the Unix umask bits
+#define wxS_IRUSR 00400
+#define wxS_IWUSR 00200
+#define wxS_IXUSR 00100
+
+#define wxS_IRGRP 00040
+#define wxS_IWGRP 00020
+#define wxS_IXGRP 00010
+
+#define wxS_IROTH 00004
+#define wxS_IWOTH 00002
+#define wxS_IXOTH 00001
+
+// default mode for the new files: corresponds to umask 022
+#define wxS_DEFAULT   (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IROTH)
+
 // ----------------------------------------------------------------------------
 // class wxFile: raw file IO
 //
@@ -38,7 +55,7 @@ class WXDLLEXPORT wxFile
 public:
   // more file constants
   // -------------------
-    
+
     // opening mode
   enum OpenMode { read, write, read_write, write_append };
     // standard values for file descriptor
@@ -58,8 +75,12 @@ public:
   wxFile(int fd) { m_fd = fd; }
 
   // open/close
-  bool Create(const char *szFileName, bool bOverwrite = FALSE);
-  bool Open(const char *szFileName, OpenMode mode = read);
+    // create a new file (with the default value of bOverwrite, it will fail if
+    // the file already exists, otherwise it will overwrite it and succeed)
+  bool Create(const char *szFileName, bool bOverwrite = FALSE,
+              int access = wxS_DEFAULT);
+  bool Open(const char *szFileName, OpenMode mode = read,
+            int access = wxS_DEFAULT);
   bool Close();  // Close is a NOP if not opened
 
   // assign an existing file descriptor and get it back from wxFile object
@@ -94,7 +115,7 @@ public:
   bool Eof() const;
     // is an error occured?
   bool Error() const { return m_error; }
-    
+
   // dtor closes the file if opened
  ~wxFile();
 
@@ -116,7 +137,7 @@ private:
 // file (and close this one) or call Discard() to cancel the modification. If
 // you call neither of them, dtor will call Discard().
 // ----------------------------------------------------------------------------
-class wxTempFile
+class WXDLLEXPORT wxTempFile
 {
 public:
   // ctors
