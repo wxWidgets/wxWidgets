@@ -816,8 +816,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
-        m_macControl = (WXWidget) ::NewControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, "\p", true , featurSet, 0, featurSet, kControlUserPaneProc,  (long) this );
-            /* set up the mUP specific features and data */
+        verify_noerr( CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, featurSet , (ControlRef*) &m_macControl) ) ;
+        
         wxMacWindowClipper c(this) ;
         STPTextPaneVars *varsp ;
         mUPOpenControl( varsp, (ControlRef) m_macControl, m_windowStyle );
@@ -1239,9 +1239,9 @@ long wxTextCtrl::GetInsertionPoint() const
 
 long wxTextCtrl::GetLastPosition() const
 {
-    Handle theText ;
     long actualsize = 0 ;
 #if wxMAC_USE_MLTE
+    Handle theText ;
     OSErr err = TXNGetDataEncoded( (TXNObject) m_macTXN, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
     /* all done */
     if ( err )
@@ -1320,41 +1320,138 @@ bool wxTextCtrl::LoadFile(const wxString& file)
     return FALSE;
 }
 
+class wxMacFunctor
+{
+public :  
+    wxMacFunctor(){}
+    virtual ~wxMacFunctor() {}
+    virtual void* operator()() = 0 ;
+    static void* CallBackProc(void *param) 
+    {
+        wxMacFunctor* f = (wxMacFunctor*) param ;
+        void *result = (*f)() ;
+        return result ;
+    }
+} ;
+
+template<typename classtype,typename param1type>
+class wxMacObjectFunctor1 : public wxMacFunctor
+{
+    typedef void (classtype::*function)( param1type p1 ) ;
+    typedef void (classtype::*ref_function)( const param1type& p1 ) ;
+public :   
+    wxMacObjectFunctor1( classtype *obj , function f , param1type p1 ) :
+        wxMacFunctor(  )
+    {
+        m_object = obj ;
+        m_function = f ;
+        m_param1 = p1 ;
+    }
+
+    wxMacObjectFunctor1( classtype *obj , ref_function f , param1type p1 ) :
+        wxMacFunctor(  )
+    {
+        m_object = obj ;
+        m_refFunction = f ;
+        m_param1 = p1 ;
+    }
+
+    ~wxMacObjectFunctor1() {}
+    
+    virtual void* operator()() 
+    {
+        (m_object->*m_function)(m_param1) ;
+        return NULL ;
+    }
+private :
+    classtype* m_object ;
+    param1type m_param1 ;
+    union
+    {
+    function m_function ;
+    ref_function m_refFunction ;
+    } ;
+} ;
+
+template<typename classtype, typename param1type> 
+void* wxMacMPRemoteCall( classtype *object , void (classtype::*function)( param1type p1 ) , param1type p1 )
+{
+    wxMacObjectFunctor1<classtype,param1type> params(object,function,p1) ;   
+    void *result = 
+        MPRemoteCall( wxMacFunctor::CallBackProc , &params  , kMPOwningProcessRemoteContext ) ;
+    return result ;
+}
+
+template<typename classtype, typename param1type> 
+void* wxMacMPRemoteCall( classtype *object , void (classtype::*function)( const param1type& p1 ) , param1type p1 )
+{
+    wxMacObjectFunctor1<classtype,param1type> params(object,function,p1) ;   
+    void *result = 
+        MPRemoteCall( wxMacFunctor::CallBackProc , &params  , kMPOwningProcessRemoteContext ) ;
+    return result ;
+}
+
+template<typename classtype, typename param1type> 
+void* wxMacMPRemoteGUICall( classtype *object , void (classtype::*function)( param1type p1 ) , param1type p1 )
+{
+    wxMutexGuiLeave() ;
+    void *result = wxMacMPRemoteCall( object , function , p1 ) ;
+    wxMutexGuiEnter() ;
+    return result ;
+}
+
+template<typename classtype, typename param1type> 
+void* wxMacMPRemoteGUICall( classtype *object , void (classtype::*function)( const param1type& p1 ) , param1type p1 )
+{
+    wxMutexGuiLeave() ;
+    void *result = wxMacMPRemoteCall( object , function , p1 ) ;
+    wxMutexGuiEnter() ;
+    return result ;
+}
+
 void wxTextCtrl::WriteText(const wxString& str)
 {
-    wxString st = str ;
-    wxMacConvertNewlines13To10( &st ) ;
-#if wxMAC_USE_MLTE
-    bool formerEditable = m_editable ;
-    if ( !formerEditable )
-        SetEditable(true) ;
+    if ( !wxIsMainThread() )
     {
-        wxMacWindowStateSaver( this ) ;
-        long start , end , dummy ;
-        GetSelection( &start , &dummy ) ;
-        SetTXNData( (STPTextPaneVars *)m_macTXNvars , (TXNObject) m_macTXN , st , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
-        GetSelection( &dummy , &end ) ;
-        SetStyle( start , end , GetDefaultStyle() ) ;
+        wxMacMPRemoteGUICall( this , &wxTextCtrl::WriteText , str ) ;
+        return ;
     }
-    if ( !formerEditable )
-        SetEditable( formerEditable ) ;
+    else
+    {
+        wxString st = str ;
+        wxMacConvertNewlines13To10( &st ) ;
+    #if wxMAC_USE_MLTE
+        bool formerEditable = m_editable ;
+        if ( !formerEditable )
+            SetEditable(true) ;
+        {
+            wxMacWindowStateSaver s( this ) ;
+            long start , end , dummy ;
+            GetSelection( &start , &dummy ) ;
+            SetTXNData( (STPTextPaneVars *)m_macTXNvars , (TXNObject) m_macTXN , st , kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
+            GetSelection( &dummy , &end ) ;
+            SetStyle( start , end , GetDefaultStyle() ) ;
+        }
+        if ( !formerEditable )
+            SetEditable( formerEditable ) ;
 
-    MacRedrawControl() ;
-#else
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
-    CFStringRef value = cf ;
-    SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextInsertCFStringRefTag, 
-        sizeof(CFStringRef), &value );
-#else
-    wxString val = GetValue() ;
-    long start , end ;
-    GetSelection( &start , &end ) ;
-    val.Remove( start, end - start ) ;
-    val.insert( start , str ) ;
-    SetValue( val ) ;
-#endif    
-#endif
+        MacRedrawControl() ;
+    #else
+    #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+        wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
+        CFStringRef value = cf ;
+        SetControlData(  (ControlRef) m_macControl , 0, kControlEditTextInsertCFStringRefTag, 
+            sizeof(CFStringRef), &value );
+    #else
+        wxString val = GetValue() ;
+        long start , end ;
+        GetSelection( &start , &end ) ;
+        val.Remove( start , end - start ) ;
+        val.insert( start , str ) ;
+        SetValue( val ) ;
+    #endif
+    #endif
+    }
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
@@ -1645,9 +1742,9 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    Point curpt ;
     wxString line ;
 #if wxMAC_USE_MLTE
+    Point curpt ;
     wxString content = GetValue() ;
 
     if ( lineNo < GetNumberOfLines() )
