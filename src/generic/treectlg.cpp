@@ -420,7 +420,7 @@ void wxTreeTextCtrl::Finish()
         wxPendingDelete.Append(this);
 
         m_finished = true;
-        
+
         m_owner->SetFocusIgnoringChildren();
     }
 }
@@ -914,7 +914,7 @@ void wxGenericTreeCtrl::SetWindowStyle(const long styles)
 
 wxString wxGenericTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG( item.IsOk(), wxT(""), wxT("invalid tree item") );
+    wxCHECK_MSG( item.IsOk(), wxEmptyString, wxT("invalid tree item") );
 
     return ((wxGenericTreeItem*) item.m_pItem)->GetText();
 }

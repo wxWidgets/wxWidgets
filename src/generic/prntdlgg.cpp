@@ -82,7 +82,7 @@ IMPLEMENT_CLASS(wxPostScriptPrintNativeData, wxPrintNativeDataBase)
 
 wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
 {
-    m_previewCommand = wxT("");
+    m_previewCommand = wxEmptyString;
 #ifdef __VMS__
     m_printerCommand = wxT("print");
     m_printerOptions = wxT("/nonotify/queue=psqueue");
@@ -91,14 +91,14 @@ wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
 
 #ifdef __WXMSW__
     m_printerCommand = wxT("print");
-    m_printerOptions = wxT("");
+    m_printerOptions = wxEmptyString;
     m_afmPath = wxT("c:\\windows\\system\\");
 #endif
 
 #if !defined(__VMS__) && !defined(__WXMSW__)
     m_printerCommand = wxT("lpr");
-    m_printerOptions = wxT("");
-    m_afmPath = wxT("");
+    m_printerOptions = wxEmptyString;
+    m_afmPath = wxEmptyString);
 #endif
 
     m_printerScaleX = 1.0;
@@ -565,7 +565,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
                 wxStringTokenizer tok2( tmp, wxT(" ") );
                 tmp = tok2.GetNextToken();  // "printer"
                 tmp = tok2.GetNextToken();  // "hp_deskjet930c"
-                tmp = wxT("");
+                tmp = wxEmptyString;
                 while (tok2.HasMoreTokens())
                 {
                     tmp += tok2.GetNextToken();
@@ -629,7 +629,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     item13->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    m_printerCommandText = new wxTextCtrl( this, wxPRINTID_COMMAND, wxT(""), wxDefaultPosition, wxSize(160,wxDefaultCoord) );
+    m_printerCommandText = new wxTextCtrl( this, wxPRINTID_COMMAND, wxEmptyString, wxDefaultPosition, wxSize(160,wxDefaultCoord) );
     item13->Add( m_printerCommandText, 0, wxALIGN_CENTER|wxALL, 5 );
 
     item10->Add( item13, 0, wxALIGN_CENTER|wxALL, 0 );
@@ -641,7 +641,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     item16->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    m_printerOptionsText = new wxTextCtrl( this, wxPRINTID_OPTIONS, wxT(""), wxDefaultPosition, wxSize(160,wxDefaultCoord) );
+    m_printerOptionsText = new wxTextCtrl( this, wxPRINTID_OPTIONS, wxEmptyString, wxDefaultPosition, wxSize(160,wxDefaultCoord) );
     item16->Add( m_printerOptionsText, 0, wxALIGN_CENTER|wxALL, 5 );
 
     item10->Add( item16, 0, wxALIGN_CENTER|wxALL, 0 );
@@ -732,7 +732,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
     long id = m_printerListCtrl->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
     if (id == 0)
     {
-        m_printData.SetPrinterName( wxT("") );
+        m_printData.SetPrinterName( wxEmptyString );
     }
     else
     {

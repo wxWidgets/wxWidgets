@@ -995,7 +995,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         style2 |= wxLC_SINGLE_SEL;
 
     m_list = new wxFileCtrl( this, ID_LIST_CTRL,
-                             _T(""), ms_lastShowHidden,
+                             wxEmptyString, ms_lastShowHidden,
                              wxDefaultPosition, wxSize(540,200),
                              style2);
 

@@ -193,7 +193,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
                  */
 
     m_UseLink = false;
-    m_Link = wxHtmlLinkInfo( wxT(""), wxT("") );
+    m_Link = wxHtmlLinkInfo( wxEmptyString );
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;

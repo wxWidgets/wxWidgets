@@ -108,12 +108,12 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
     m_currentURL = strURL;
     //m_pageTitle = _("Untitled Page");
- 
+
  //still needed for wxCocoa??
 /*
     int width, height;
     wxSize sizeInstance;
-    if (size.x == -1 || size.y == -1)
+    if (size.x == wxDefaultCoord || size.y == wxDefaultCoord)
     {
         m_parent->GetClientSize(&width, &height);
         sizeInstance.x = width;
@@ -124,12 +124,12 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
         sizeInstance.x = size.x;
         sizeInstance.y = size.y;
     }
-*/  
+*/
     // now create and attach WebKit view...
 #ifdef __WXCOCOA__
     wxControl::Create(parent, m_windowID, pos, sizeInstance, style , validator , name);
     SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
-    
+
     wxTopLevelWindowCocoa *topWin = wxDynamicCast(this, wxTopLevelWindowCocoa);
     NSWindow* nsWin = topWin->GetNSWindow();
     NSRect rect;
@@ -149,17 +149,17 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     WebInitForCarbon();
     HIWebViewCreate( m_peer->GetControlRefAddr() );
-    
+
     m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
     MacPostControlCreate(pos, size);
-    HIViewSetVisible( m_peer->GetControlRef(), true );           
+    HIViewSetVisible( m_peer->GetControlRef(), true );
     [m_webView setHidden:false];
 #endif
 
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: (wxWindow*)this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
-    
+
     LoadURL(m_currentURL);
     return true;
 }
@@ -177,7 +177,7 @@ void wxWebKitCtrl::LoadURL(const wxString &url)
 {
     if( !m_webView )
         return;
-        
+
     [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wxNSStringWithWxString(url)]]];
 
     m_currentURL = url;
@@ -186,69 +186,69 @@ void wxWebKitCtrl::LoadURL(const wxString &url)
 bool wxWebKitCtrl::CanGoBack(){
     if ( !m_webView )
         return false;
-        
+
     return [m_webView canGoBack];
 }
 
 bool wxWebKitCtrl::CanGoForward(){
     if ( !m_webView )
         return false;
-        
+
     return [m_webView canGoForward];
 }
 
 bool wxWebKitCtrl::GoBack(){
     if ( !m_webView )
         return false;
-    
+
     bool result = [(WebView*)m_webView goBack];
     return result;
 }
 
-bool wxWebKitCtrl::GoForward(){ 
+bool wxWebKitCtrl::GoForward(){
     if ( !m_webView )
         return false;
-        
+
     bool result = [(WebView*)m_webView goForward];
     return result;
 }
 
-void wxWebKitCtrl::Reload(){ 
+void wxWebKitCtrl::Reload(){
     if ( !m_webView )
         return;
-        
+
     [[m_webView mainFrame] reload];
 }
 
 void wxWebKitCtrl::Stop(){
     if ( !m_webView )
         return;
-        
+
     [[m_webView mainFrame] stopLoading];
 }
 
 bool wxWebKitCtrl::CanGetPageSource(){
     if ( !m_webView )
         return false;
-        
+
     WebDataSource* dataSource = [[m_webView mainFrame] dataSource];
     return ( [[dataSource representation] canProvideDocumentSource] );
 }
 
 wxString wxWebKitCtrl::GetPageSource(){
-    
+
     if (CanGetPageSource()){
         WebDataSource* dataSource = [[m_webView mainFrame] dataSource];
         return wxStringWithNSString( [[dataSource representation] documentSource] );
     }
-    
-    return wxT("");
+
+    return wxEmptyString;
 }
 
 void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
     if ( !m_webView )
         return;
-    
+
     if (CanGetPageSource()){
         [[m_webView mainFrame] loadHTMLString:(NSString*)wxNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxNSStringWithWxString( baseUrl )]];
     }
@@ -258,19 +258,19 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
-        
+
     wxWindow* parent = GetParent();
     bool isParentTopLevel = true;
     if (!parent->IsTopLevel())
         isParentTopLevel = false;
-        
+
     int x = GetPosition().x;
     // we must take into account the title bar size as well, which is 26 pixels
     int y = GetPosition().y + 26;
-        
+
     NSRect bounds = [m_webView frame];
     wxWindow* tlw = NULL;
-    
+
     while(parent != NULL)
     {
         if (parent->IsTopLevel())
@@ -278,19 +278,19 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
         x += parent->GetPosition().x;
         y += parent->GetPosition().y;
-        
+
         if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
             //manually account for the size the tabs take up
             y += 14;
         }
-        
+
         //if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
         //    x += 3;
         //}
-        
+
         parent = parent->GetParent();
     }
-    
+
     if (!isParentTopLevel){
         if (tlw){
             //x = tlw->GetSize().x - (GetSize().x + x);
@@ -303,7 +303,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
         //printf("Added to bounds x=%d, y=%d\n", x, y);
         [m_webView setFrame:bounds];
     }
-    
+
     //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
     if (IsShown())
         [m_webView display];
@@ -314,7 +314,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
     bool isHidden = !IsControlVisible( m_peer->GetControlRef());
     if (!isHidden)
         [m_webView display];
-    
+
     [m_webView setHidden:isHidden];
 }
 
