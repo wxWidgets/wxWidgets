@@ -65,6 +65,8 @@ LIB_CPP_SRC=\
  common/mstream.cpp \
  common/zstream.cpp \
  common/objstrm.cpp \
+ common/framecmn.cpp \
+ common/wincmn.cpp \
 \
  gtk/app.cpp \
  gtk/bitmap.cpp \
