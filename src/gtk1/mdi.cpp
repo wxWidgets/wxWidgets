@@ -52,7 +52,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 }
 
 //-----------------------------------------------------------------------------
-// page change callback
+// "switch_page"
 //-----------------------------------------------------------------------------
 
 static void gtk_page_change_callback( GtkNotebook *WXUNUSED(widget),
@@ -135,8 +135,12 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
 
 void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
 {
+    /* hide old child menu bar */
     if (m_mdiMenuBar) m_mdiMenuBar->Show( FALSE );
+    
     m_mdiMenuBar = menu_bar;
+    
+    /* show and resize new menu child menu bar */
     if (m_mdiMenuBar)
     {
         m_mdiMenuBar->m_x = 0;  
@@ -147,6 +151,9 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
         gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width, wxMENU_HEIGHT );
         m_mdiMenuBar->Show( TRUE );
     }
+    
+    /* show/hide parent menu bar as required */
+    if (m_frameMenuBar) m_frameMenuBar->Show( (m_mdiMenuBar == NULL) );
 }
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height ) const
@@ -283,10 +290,11 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 
             m_menuBar->m_parent = mdi_frame;
         }
-        mdi_frame->SetMDIMenuBar( m_menuBar );
-
+	
         gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_wxwindow),
           m_menuBar->m_widget, m_menuBar->m_x, m_menuBar->m_y );
+	  
+        mdi_frame->SetMDIMenuBar( m_menuBar );
     }
 }
 

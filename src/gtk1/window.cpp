@@ -1537,18 +1537,27 @@ wxWindow::~wxWindow()
     m_hasVMT = FALSE;
 
 #if wxUSE_DRAG_AND_DROP
-    wxDELETE(m_dropTarget);
+    if (m_dropTarget)
+    {
+        delete m_dropTarget;
+	m_dropTarget = (wxDropTarget*) NULL;
+    }
 #endif
 
 #if wxUSE_TOOLTIPS
-    wxDELETE(m_toolTip);
+    if (m_toolTip)
+    {
+        delete m_toolTip;
+	m_toolTip = (wxToolTip*) NULL;
+    }
 #endif // wxUSE_TOOLTIPS
 
-    if (m_parent) m_parent->RemoveChild( this );
     if (m_widget) Show( FALSE );
 
     DestroyChildren();
 
+    if (m_parent) m_parent->RemoveChild( this );
+    
     if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
 
     if (m_scrollGC) gdk_gc_unref( m_scrollGC );
@@ -1562,28 +1571,29 @@ wxWindow::~wxWindow()
     DeleteRelatedConstraints();
     if (m_constraints)
     {
-        // This removes any dangling pointers to this window
-        // in other windows' constraintsInvolvedIn lists.
+        /* This removes any dangling pointers to this window
+         * in other windows' constraintsInvolvedIn lists. */
         UnsetConstraints(m_constraints);
         delete m_constraints;
         m_constraints = (wxLayoutConstraints *) NULL;
     }
+    
     if (m_windowSizer)
     {
         delete m_windowSizer;
         m_windowSizer = (wxSizer *) NULL;
     }
-    // If this is a child of a sizer, remove self from parent
+    /* If this is a child of a sizer, remove self from parent */
     if (m_sizerParent) m_sizerParent->RemoveChild((wxWindow *)this);
 
-    // Just in case the window has been Closed, but
-    // we're then deleting immediately: don't leave
-    // dangling pointers.
+    /* Just in case the window has been Closed, but
+     * we're then deleting immediately: don't leave
+     * dangling pointers. */
     wxPendingDelete.DeleteObject(this);
 
-    // Just in case we've loaded a top-level window via
-    // wxWindow::LoadNativeDialog but we weren't a dialog
-    // class
+    /* Just in case we've loaded a top-level window via
+     * wxWindow::LoadNativeDialog but we weren't a dialog
+     * class */
     wxTopLevelWindows.DeleteObject(this);
 
     if (m_windowValidator) delete m_windowValidator;
@@ -1611,7 +1621,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
     m_x = (int)pos.x;
     m_y = (int)pos.y;
 
-    if (!m_needParent)  // some reasonable defaults
+    if (!m_needParent)  /* some reasonable defaults */
     {
         if (m_x == -1)
         {
@@ -1744,8 +1754,8 @@ bool wxWindow::Close( bool force )
     event.SetEventObject(this);
     event.SetCanVeto(!force);
 
-    // return FALSE if window wasn't closed because the application vetoed the
-    // close event
+    /* return FALSE if window wasn't closed because the application vetoed the
+     * close event */
     return GetEventHandler()->ProcessEvent(event) && !event.GetVeto();
 }
 
@@ -1798,12 +1808,12 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
     wxASSERT_MSG( (m_parent != NULL), "wxWindow::SetSize requires parent.\n" );
 
-    if (m_resizing) return; // I don't like recursions
+    if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
 
-    if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
+    if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
     {
-        // don't set the size for children of wxNotebook, just take the values.
+        /* don't set the size for children of wxNotebook, just take the values. */
         m_x = x;
         m_y = y;
         m_width = width;
@@ -2159,6 +2169,8 @@ void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 bool wxWindow::Show( bool show )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, "invalid window" );
+
+    if (show == m_isShown) return TRUE;
 
     if (show)
         gtk_widget_show( m_widget );

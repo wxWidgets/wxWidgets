@@ -113,6 +113,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 wxFrame::wxFrame()
 {
     m_frameMenuBar = (wxMenuBar *) NULL;
+    m_mdiMenuBar = (wxMenuBar *) NULL;
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
@@ -125,6 +126,7 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       long style, const wxString &name )
 {
     m_frameMenuBar = (wxMenuBar *) NULL;
+    m_mdiMenuBar = (wxMenuBar *) NULL;
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
@@ -193,8 +195,13 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 wxFrame::~wxFrame()
 {
     if (m_frameMenuBar) delete m_frameMenuBar;
+    m_frameMenuBar = (wxMenuBar *) NULL;
+    
     if (m_frameStatusBar) delete m_frameStatusBar;
+    m_frameStatusBar = (wxStatusBar *) NULL;
+    
     if (m_frameToolBar) delete m_frameToolBar;
+    m_frameToolBar = (wxToolBar *) NULL;
 
     wxTopLevelWindows.DeleteObject( this );
 
@@ -215,10 +222,10 @@ bool wxFrame::Show( bool show )
 
     if (show && !m_sizeSet)
     {
-  // by calling GtkOnSize here, we don't have to call
-  // either after showing the frame, which would entail
-  // much ugly flicker nor from within the size_allocate
-  // handler, because GTK 1.1.X forbids that.
+        /* by calling GtkOnSize here, we don't have to call
+           either after showing the frame, which would entail
+           much ugly flicker nor from within the size_allocate
+           handler, because GTK 1.1.X forbids that. */
 
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
@@ -257,7 +264,7 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-    // Don't do anything for children of wxMDIChildFrame
+    /* Don't do anything for children of wxMDIChildFrame */
     if (!m_wxwindow) return;
 
     if (m_resizing) return; // I don't like recursions
@@ -413,12 +420,12 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, xx, yy );
         gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
     }
-
+    
     if (m_frameToolBar)
     {
         int xx = m_miniEdge;
         int yy = m_miniEdge + m_miniTitle;
-        if (m_frameMenuBar) yy += wxMENU_HEIGHT;
+        if ((m_frameMenuBar) || (m_mdiMenuBar)) yy += wxMENU_HEIGHT;
         int ww = m_width - 2*m_miniEdge;
         int hh = m_frameToolBar->m_height;
 
@@ -556,6 +563,9 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             m_frameMenuBar->m_parent = this;
             gtk_myfixed_put( GTK_MYFIXED(m_wxwindow),
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+
+	    /* an mdi child menu bar might be underneath */
+	    if (m_mdiMenuBar) m_frameMenuBar->Show( FALSE );
         }
     }
 

@@ -90,7 +90,6 @@ class wxMDIParentFrame: public wxFrame
  
     wxMDIClientWindow              *m_clientWindow;
     bool                            m_parentFrameActive;
-    wxMenuBar                      *m_mdiMenuBar;
 
   DECLARE_EVENT_TABLE()    
 };

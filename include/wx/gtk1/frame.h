@@ -114,6 +114,7 @@ public:
   virtual void OnInternalIdle();
 
   wxMenuBar    *m_frameMenuBar;
+  wxMenuBar    *m_mdiMenuBar;
   wxStatusBar  *m_frameStatusBar;
   wxToolBar    *m_frameToolBar;
   wxString      m_title;
