@@ -210,9 +210,10 @@ class CustomDnDPanel(wxPanel):
         # Make the controls
         text1 = wxStaticText(self, -1,
                             "Draw a little picture in this window\n"
-                            "then Ctrl-Drag it to the lower \n"
-                            "window or to another application\n"
-                            "that accepts BMP's as a drop target.\n"
+                            "then switch the mode below and drag the\n"
+                            "picture to the lower window or to another\n"
+                            "application that accepts BMP's as a drop\n"
+                             "target.\n"
                             )
 
         rb1 = wxRadioButton(self, -1, "Draw", style=wxRB_GROUP)
