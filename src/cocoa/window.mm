@@ -506,6 +506,8 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 
     NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
     [nsview setFrame: cocoaRect];
+    // Be sure to redraw the parent to reflect the changed position
+    [superview setNeedsDisplay:YES];
 }
 
 void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
