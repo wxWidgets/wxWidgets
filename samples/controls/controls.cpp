@@ -710,7 +710,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1),
                              wxSL_AUTOTICKS | wxSL_LABELS );
     m_slider->SetTickFreq(40, 0);
+#if wxUSE_TOOLTIPS
     m_slider->SetToolTip(_T("This is a sliding slider"));
+#endif // wxUSE_TOOLTIPS
 
     (void)new wxStaticBox( panel, -1, "&Explanation",
                            wxPoint(230,10), wxSize(270,130),
