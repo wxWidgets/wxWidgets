@@ -2503,12 +2503,19 @@ fi
 if test "$wxUSE_THREADS" = "yes" ; then
     dnl find if POSIX threads are available
 
+    dnl AIX calls the library libpthreads - thanks IBM!
+    if test "$wxUSE_AIX" = 1; then
+        THREADS_LIB=pthreads
+    else
+        THREADS_LIB=pthread
+    fi
+
     dnl standard lib name is pthread
     dnl We no longer test for pthread-0.7 as it breaks compilation on some
     dnl glibc2 systems, especially for static linkage.
-    AC_CHECK_LIB(pthread, pthread_create, [
+    AC_CHECK_LIB($THREADS_LIB, pthread_create, [
             THREADS_OBJ="threadpsx.lo"
-            THREADS_LINK="pthread"
+            THREADS_LINK=$THREADS_LIB
         ], [
             dnl thread functions are in libc_r under FreeBSD
             AC_CHECK_LIB(c_r, pthread_create, [
@@ -2557,20 +2564,32 @@ if test "$wxUSE_THREADS" = "yes" ; then
                 )]
                )
 
-  dnl VZ: we should be checking for all of the following functions instead:
+  dnl to be able to set the thread priority, we need to have all of the
+  dnl following functions:
   dnl   1. pthread_attr_getschedpolicy
   dnl   2. sched_get_priority_min and sched_get_priority_max
   dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
-  dnl but it seems that if the first one is there, the other ones are too (of
-  dnl course the proper solution would be to implement AC_FUNC_THREAD above
-  dnl and do test for them all - anyone?)
+  dnl
+  dnl all of them can be either in libpthread or libposix4 (under Solaris)
+  HAVE_PRIOR_FUNCS=0
   AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
-               AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS),
-               [AC_CHECK_LIB("posix4", pthread_attr_getschedpolicy,
-                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) POSIX4_LINK="-lposix4"],
-                   AC_MSG_WARN(Setting thread priority will not work)
-                )]
+               AC_CHECK_LIB($THREADS_LINK, sched_get_priority_max,
+                 AC_CHECK_LIB($THREADS_LINK, pthread_attr_setschedparam,
+                   HAVE_PRIOR_FUNCS=1))
+               ,
+                 AC_CHECK_LIB("posix4", pthread_attr_getschedpolicy,
+                 [
+                    HAVE_PRIOR_FUNCS=1
+                    POSIX4_LINK="-lposix4"
+                 ],
+                 )
                )
+
+  if test "$HAVE_PRIOR_FUNCS" = 1; then
+    AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS)
+  else
+    AC_MSG_WARN(Setting thread priority will not work)
+  fi
 
   AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
                AC_DEFINE(HAVE_PTHREAD_CANCEL),
