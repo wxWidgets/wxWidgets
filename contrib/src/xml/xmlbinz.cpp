@@ -52,7 +52,7 @@ bool wxXmlIOHandlerBinZ::Load(wxInputStream& stream, wxXmlDocument& doc)
 {
     ReadHeader(stream);
     wxZlibInputStream costr(stream);
-    return wxXmlIOHandlerBin::Load(stream, doc);
+    return wxXmlIOHandlerBin::Load(costr, doc);
 }
 
 
