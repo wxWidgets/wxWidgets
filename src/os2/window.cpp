@@ -1988,13 +1988,6 @@ MRESULT wxWindow::OS2WindowProc(
 
                 if ( uMsg == WM_DRAWITEM )
                 {
-                    // DEBUG
-                    sprintf(zMsg, "In OS2OnDrawItem, id: %d", nIdCtrl);
-                    (void)wxMessageBox( "wxWindows Menu sample"
-                                       ,zMsg
-                                       ,wxICON_INFORMATION
-                                      );
-                    // end DEBUG
                     bProcessed = OS2OnDrawItem(nIdCtrl,
                                               (WXDRAWITEMSTRUCT *)lParam);
                 }
@@ -2672,48 +2665,75 @@ bool wxWindow::OS2OnDrawItem(
     if (vId == 0)
     {
         POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
-        BYTE*                       pData;
-        wxMenuItem*                 pMenuItem;
+        wxFrame*                    pFrame = (wxFrame*)this;
+        wxMenuItem*                 pMenuItem = pFrame->GetMenuBar()->FindItem(pMeasureStruct->idItem, pMeasureStruct->hItem);
         HDC                         hDC = ::GpiQueryDevice(pMeasureStruct->hps);
-
+        wxRect                      vRect( pMeasureStruct->rclItem.xLeft
+                                          ,pMeasureStruct->rclItem.yBottom
+                                          ,pMeasureStruct->rclItem.xRight - pMeasureStruct->rclItem.xLeft
+                                          ,pMeasureStruct->rclItem.yTop - pMeasureStruct->rclItem.yBottom
+                                         );
         vDc.SetHDC( hDC
                    ,FALSE
                   );
         vDc.SetHPS(pMeasureStruct->hps);
-#if 0
-        //
-        // We stored the CMenuItem itself into the menuitem text field so now
-        // we need to extract it.
-        //
-        ::WinSendMsg( pMeasureStruct->hItem
-                     ,MM_QUERYITEMTEXT
-                     ,MPFROM2SHORT( (USHORT)pMeasureStruct->idItem
-                                   ,(SHORT)(sizeof(wxMenuItem))
-                                  )
-                     ,(PSZ)pData
-                    );
-        wxRect                      vRect( pMeasureStruct->rclItem.xLeft
-                                          ,pMeasureStruct->rclItem.yTop
-                                          ,pMeasureStruct->rclItem.xRight
-                                          ,pMeasureStruct->rclItem.yBottom
-                                         );
 
-        wxOwnerDrawn::wxODAction eAction;
+        wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
-        //
-        // Attribute applies to menuitems, fsState to listbox and other controls
-        //
+
+        int                         eAction = 0;
+        int                         eStatus = 0;
+
         if (pMeasureStruct->fsAttribute == pMeasureStruct->fsAttributeOld)
+        {
+            //
+            // Entire Item needs to be redrawn (either it has reappeared from
+            // behind another window or is being displayed for the first time
+            //
             eAction = wxOwnerDrawn::wxODDrawAll;
+
+            if (pMeasureStruct->fsAttribute & MIA_HILITED)
+            {
+                //
+                // If it is currently selected we let the system handle it
+                //
+                eStatus |= wxOwnerDrawn::wxODSelected;
+            }
+            if (pMeasureStruct->fsAttribute & MIA_CHECKED)
+            {
+                //
+                // If it is currently checked we draw our own
+                //
+                eStatus |= wxOwnerDrawn::wxODChecked;
+                pMeasureStruct->fsAttributeOld = pMeasureStruct->fsAttribute &= ~MIA_CHECKED;
+            }
+            if (pMeasureStruct->fsAttribute & MIA_DISABLED)
+            {
+                //
+                // If it is currently disabled we let the system handle it
+                //
+                eStatus |= wxOwnerDrawn::wxODDisabled;
+            }
+            //
+            // Don't really care about framed (indicationg focus) or NoDismiss
+            //
+        }
         else
-            eAction = wxOwnerDrawn::wxODSelectChanged;
-        pMenuItem = (wxMenuItem*)pData;
+        {
+            //
+            // For now we don't care about doing our own highlighting so we'll
+            // just ignore the entie message!
+            //
+            return TRUE;
+        }
+        //
+        // Now redraw the item
+        //
         return(pMenuItem->OnDrawItem( vDc
                                      ,vRect
-                                     ,eAction
-                                     ,(wxOwnerDrawn::wxODStatus)pMeasureStruct->fsAttribute
+                                     ,(wxOwnerDrawn::wxODAction)eAction
+                                     ,(wxOwnerDrawn::wxODStatus)eStatus
                                     ));
-#endif
         //
         // leave the fsAttribute and fsOldAttribute unchanged.  If different,
         // the system will do the highlight or fraeming or disabling for us,

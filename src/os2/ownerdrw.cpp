@@ -75,38 +75,26 @@ bool wxOwnerDrawn::OnMeasureItem(
 
     wxString                        sStr = wxStripMenuCodes(m_strName);
 
-    //
-    // # without this menu items look too tightly packed (at least under Windows)
-    //
-    sStr += wxT('W'); // 'W' is typically the widest letter
+    wxString                        sTgt = "\t";
+    size_t                          nIndex;
+
+    nIndex = sStr.Find(sTgt.c_str());
+    if (nIndex != -1)
+        sStr.Remove(nIndex);
+    sTgt = "~";
+    nIndex = sStr.Find(sTgt.c_str());
+    if (nIndex != -1)
+        sStr.Replace(sTgt.c_str(), "", TRUE);
+
     vDC.GetTextExtent( sStr
                       ,(long *)pWidth
                       ,(long *)pHeight
                      );
-    // DEBUG
-    char                            zMsg[128];
-    sprintf(zMsg, "GetTextExtent for %s: Width: %ld, Height: %ld", m_strName.c_str(), *pWidth, *pHeight);
-    (void)wxMessageBox( "wxWindows Menu sample"
-                       ,zMsg
-                       ,wxICON_INFORMATION
-                      );
-    // end DEBUG
 
-    //
-    // JACS: items still look too tightly packed, so adding 2 pixels.
-    //
     (*pHeight) = (*pHeight) + 2;
     m_nHeight = *pHeight;        // remember height for use in OnDrawItem
     return TRUE;
 } // end of wxOwnerDrawn::OnMeasureItem
-
-// searching for this macro you'll find all the code where I'm using the native
-// Win32 GDI functions and not wxWindows ones. Might help to whoever decides to
-// port this code to X. (VZ)
-
-// JACS: TODO. Why does a disabled but highlighted item still
-// get drawn embossed? How can we tell DrawState that we don't want the
-// embossing?
 
 // draw the item
 bool wxOwnerDrawn::OnDrawItem(
@@ -117,12 +105,9 @@ bool wxOwnerDrawn::OnDrawItem(
 )
 {
     //
-    // For now we let PM deal with highlighting and framing and such in a
-    // default manner.  So we leave fsAttribute and fsOldAttribute ( or
-    // fsState and fsOldState ) the same and pass it on. We may want to add
-    // code later to draw theseattributes in a more custom manner.
-    //
-
+    // We do nothing on focus change
+    if (eAction == wxODFocusChanged )
+        return TRUE;
     //
     // WxWinGdi_CColour <-> RGB
     //
@@ -137,22 +122,22 @@ bool wxOwnerDrawn::OnDrawItem(
 
     if (eStatus & wxODSelected)
     {
-        lColBack = (DWORD)::WinQuerySysColor( HWND_DESKTOP
+        lColBack = (ULONG)::WinQuerySysColor( HWND_DESKTOP
                                              ,SYSCLR_MENUHILITEBGND // Light gray
                                              ,0L
                                             );
-        lColText = (DWORD)::WinQuerySysColor( HWND_DESKTOP
+        lColText = (ULONG)::WinQuerySysColor( HWND_DESKTOP
                                              ,SYSCLR_MENUTEXT // Black
                                              ,0L
                                             );
     }
     else if (eStatus & wxODDisabled)
     {
-        lColBack = (DWORD)::WinQuerySysColor( HWND_DESKTOP
+        lColBack = (ULONG)::WinQuerySysColor( HWND_DESKTOP
                                              ,SYSCLR_MENU // Light gray
                                              ,0L
                                             );
-        lColText = (DWORD)::WinQuerySysColor( HWND_DESKTOP
+        lColText = (ULONG)::WinQuerySysColor( HWND_DESKTOP
                                              ,SYSCLR_MENUDISABLEDTEXT // dark gray
                                              ,0L
                                             );
@@ -217,11 +202,27 @@ bool wxOwnerDrawn::OnDrawItem(
     // to handle them ourselves. Notice Win32 can't handle \t in ownerdrawn
     // strings either.
 
+    //
+    // Manually replace the tab with spaces
+    //
+    wxString                        sTgt = "\t";
+    wxString                        sReplace = " ";
+    size_t                          nIndex;
+
+    nIndex = m_strName.Find(sTgt.c_str());
+    if (nIndex != -1)
+        m_strName.Replace(sTgt.c_str(), sReplace.c_str(), TRUE);
+    sTgt = "~";
+    nIndex = m_strName.Find(sTgt.c_str());
+    if (nIndex != -1)
+        m_strName.Replace(sTgt.c_str(), "", TRUE);
+
     rDC.DrawText( m_strName
                  ,nX
-                 ,rRect.y
+                 ,rRect.y + 4
                 );
 
+#if 0
     //
     // Draw the bitmap
     // ---------------
@@ -311,8 +312,8 @@ bool wxOwnerDrawn::OnDrawItem(
             }
         }
     }
-
-  return TRUE;
-}
+#endif
+    return TRUE;
+} // end of wxOwnerDrawn::OnDrawItem
 
 #endif //wxUSE_OWNER_DRAWN

@@ -330,7 +330,7 @@ bool wxMenu::DoInsertOrAppend(
         // Will eventually need to set the image handle somewhere into vItem.hItem
         //
         rItem.afStyle |= MIS_OWNERDRAW;
-        pData = (BYTE*)pItem;
+        pData = (BYTE*)NULL;
         rItem.hItem = (HBITMAP)pItem->GetBitmap().GetHBITMAP();
         pItem->m_vMenuData.afStyle = rItem.afStyle;
         pItem->m_vMenuData.hItem = rItem.hItem;

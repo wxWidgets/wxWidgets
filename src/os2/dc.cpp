@@ -1208,17 +1208,6 @@ void wxDC::DoGetTextExtent(
         if(vPtMax.x < avPoint[i].x) vPtMax.x = avPoint[i].x;
         if(vPtMax.y < avPoint[i].y) vPtMax.y = avPoint[i].y;
     }
-#if 0
-    sprintf(zMsg, "Extents for %s, are: Minx: %ld, Miny: %ld, Maxx: %ld, Maxy: %ld", vPtMin.x
-                                                                                   , vPtMin.y
-                                                                                   , vPtMax.x
-                                                                                   , vPtMax.y
-                                                                                  );
-    (void)wxMessageBox( "wxWindows Menu sample"
-                       ,zMsg
-                       ,wxICON_INFORMATION
-                      );
-#endif
     ::GpiQueryFontMetrics( m_hPS
                           ,sizeof(FONTMETRICS)
                           ,&vFM

@@ -22,68 +22,163 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
-/*
- * Memory DC
- *
- */
+/////////////////////////////////////////////////////////////////////////////
+// Memory DC
+/////////////////////////////////////////////////////////////////////////////
 
 wxMemoryDC::wxMemoryDC(void)
 {
-  // TODO:
-/*
-  m_hDC = (WXHDC) ::CreateCompatibleDC((HDC) NULL);
-  m_ok = (m_hDC != 0);
-  m_bOwnsDC = TRUE;
+    HDC                             hDC;
+    HPS                             hPS;
+    DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    SIZEL                           vSize = {0, 0};
 
-  SetBrush(*wxWHITE_BRUSH);
-  SetPen(*wxBLACK_PEN);
+    //
+    // Create a memory device context
+    //
+    hDC = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
+    if (hDC != DEV_ERROR)
+    {
+        hPS = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+        if (hPS != GPI_ERROR)
+        {
+            m_hPS = hPS;
+            m_hDC = hDC;
+            m_ok = TRUE;
+            m_bOwnsDC = TRUE;
+            SetBrush(*wxWHITE_BRUSH);
+            SetPen(*wxBLACK_PEN);
+        }
+        else
+        {
+            m_hPS = NULLHANDLE;
+            m_hDC = NULLHANDLE;
+            m_ok  = FALSE;
+            m_bOwnsDC = FALSE;
+        }
+    }
+    else
+    {
+        m_hPS = NULLHANDLE;
+        m_hDC = NULLHANDLE;
+        m_ok  = FALSE;
+        m_bOwnsDC = FALSE;
+    }
+} // end of wxMemoryDC::wxMemoryDC
 
-  // the background mode is only used for text background
-  // and is set in DrawText() to OPAQUE as required, other-
-  // wise always TRANSPARENT, RR
-  ::SetBkMode( GetHdc(), TRANSPARENT );
-*/
-}
-
-wxMemoryDC::wxMemoryDC(wxDC *old_dc)
+wxMemoryDC::wxMemoryDC(
+  wxDC*                             pOldDC
+)
 {
-  // TODO:
-/*
-  old_dc->BeginDrawing();
+    HDC                             hDC;
+    HPS                             hPS;
+    DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    SIZEL                           vSize = {0, 0};
 
-  m_hDC = (WXHDC) ::CreateCompatibleDC((HDC) old_dc->GetHDC());
-  m_ok = (m_hDC != 0);
+    pOldDC->BeginDrawing();
 
-  old_dc->EndDrawing();
+    //
+    // Create a memory device context
+    //
+    hDC = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, GetHdcOf(*pOldDC));
+    if (hDC != DEV_ERROR)
+    {
+        hPS = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+        if (hPS != GPI_ERROR)
+        {
+            m_hPS = hPS;
+            m_hDC = hDC;
+            m_ok = TRUE;
+            m_bOwnsDC = TRUE;
+            pOldDC->EndDrawing();
+            SetBrush(*wxWHITE_BRUSH);
+            SetPen(*wxBLACK_PEN);
+        }
+        else
+        {
+            pOldDC->EndDrawing();
+            m_hPS = NULLHANDLE;
+            m_hDC = NULLHANDLE;
+            m_ok  = FALSE;
+            m_bOwnsDC = FALSE;
+        }
+    }
+    else
+    {
+        pOldDC->EndDrawing();
+        m_hPS = NULLHANDLE;
+        m_hDC = NULLHANDLE;
+        m_ok  = FALSE;
+        m_bOwnsDC = FALSE;
+    }
+} // end of wxMemoryDC::wxMemoryDC
 
-  SetBrush(*wxWHITE_BRUSH);
-  SetPen(*wxBLACK_PEN);
-
-  // the background mode is only used for text background
-  // and is set in DrawText() to OPAQUE as required, other-
-  // wise always TRANSPARENT, RR
-  ::SetBkMode( GetHdc(), TRANSPARENT );
-*/
-}
-
-wxMemoryDC::~wxMemoryDC(void)
+wxMemoryDC::~wxMemoryDC()
 {
-};
+    if (m_hPS != NULLHANDLE)
+        ::GpiDestroyPS(m_hPS);
+    if (m_hDC != NULLHANDLE)
+        ::DevCloseDC(m_hDC);
+} // end of wxMemoryDC::~wxMemoryDC
 
-void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
+void wxMemoryDC::SelectObject(
+  const wxBitmap&                   rBitmap
+)
 {
-   // TODO:
-};
+    //
+    // Select old bitmap out of the device context
+    //
+    if (m_hOldBitmap)
+    {
+        ::GpiSetBitmap(m_hPS, NULLHANDLE);
+        if (m_vSelectedBitmap.Ok())
+        {
+            m_vSelectedBitmap.SetSelectedInto(NULL);
+            m_vSelectedBitmap = wxNullBitmap;
+        }
+    }
 
-void wxMemoryDC::DoGetSize( int *width, int *height ) const
+    //
+    // Check for whether the bitmap is already selected into a device context
+    //
+    wxCHECK_RET( !rBitmap.GetSelectedInto() ||
+                 (rBitmap.GetSelectedInto() == this),
+                 wxT("Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)") );
+
+    m_vSelectedBitmap = rBitmap;
+
+    WXHBITMAP                       hBmp = m_vSelectedBitmap.GetHBITMAP();
+
+    if (!hBmp)
+        return;
+
+    m_vSelectedBitmap.SetSelectedInto(this);
+    hBmp = (WXHBITMAP)::GpiSetBitmap(m_hPS, (HBITMAP)hBmp);
+
+    if (hBmp != HBM_ERROR)
+    {
+        wxLogLastError(wxT("SelectObject(memDC, bitmap)"));
+        wxFAIL_MSG(wxT("Couldn't select a bitmap into wxMemoryDC"));
+    }
+    else if (!m_hOldBitmap)
+    {
+        m_hOldBitmap = hBmp;
+    }
+} // end of wxMemoryDC::SelectObject
+
+void wxMemoryDC::DoGetSize(
+  int*                              pWidth
+, int*                              pHeight
+) const
 {
-  if (!m_vSelectedBitmap.Ok())
-  {
-    *width = 0; *height = 0;
-    return;
-  }
-  *width = m_vSelectedBitmap.GetWidth();
-  *height = m_vSelectedBitmap.GetHeight();
-};
+    if (!m_vSelectedBitmap.Ok())
+    {
+        *pWidth  = 0;
+        *pHeight = 0;
+        return;
+    }
+    *pWidth = m_vSelectedBitmap.GetWidth();
+    *pHeight = m_vSelectedBitmap.GetHeight();
+} // end of wxMemoryDC::DoGetSize
 
 
