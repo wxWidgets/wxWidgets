@@ -110,3 +110,6 @@ a) FreshMeat: http://freshmeat.net/projects/wxwindowsgtk/
 b) wx-announce mailing list: mailto:wx-announce@lists.wxwindows.org
 
    [where is the announcement text? TODO]
+
+c) update www.wxwindows.org
+
