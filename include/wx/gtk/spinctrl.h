@@ -51,6 +51,7 @@ public:
                 const wxString& name = _T("wxSpinCtrl"));
 
     void SetValue(const wxString& text);
+    void SetSelection(long from, long to);
 
     virtual int GetValue() const;
     virtual void SetValue( int value );

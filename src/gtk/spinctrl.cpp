@@ -228,6 +228,19 @@ void wxSpinCtrl::SetValue( int value )
     GtkEnableEvents();
 }
 
+void wxSpinCtrl::SetSelection(long from, long to)
+{
+    // translate from wxWindows conventions to GTK+ ones: (-1, -1) means the
+    // entire range
+    if ( from == -1 && to == -1 )
+    {
+        from = 0;
+        to = INT_MAX;
+    }
+
+    gtk_editable_select_region( GTK_EDITABLE(m_widget), (gint)from, (gint)to );
+}
+
 void wxSpinCtrl::SetRange(int minVal, int maxVal)
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
