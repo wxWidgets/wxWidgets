@@ -820,58 +820,101 @@ static void TestTimeFormat()
 {
     puts("\n*** wxDateTime formatting test ***");
 
-    static const char *formatTestFormats[] =
+    // some information may be lost during conversion, so store what kind
+    // of info should we recover after a round trip
+    enum CompareKind
     {
-        "---> %c",
-        "Date is %A, %d of %B, in year %Y",
-        "Date is %x, time is %X",
-        "Time is %H:%M:%S or %I:%M:%S %p",
-        "The day of year: %j, the week of year: %W",
+        CompareNone,        // don't try comparing
+        CompareBoth,        // dates and times should be identical
+        CompareDate,        // dates only
+        CompareTime         // time only
+    };
+
+    static const struct
+    {
+        CompareKind compareKind;
+        const char *format;
+    } formatTestFormats[] =
+    {
+       { CompareBoth, "---> %c" },
+       { CompareDate, "Date is %A, %d of %B, in year %Y" },
+       { CompareBoth, "Date is %x, time is %X" },
+       { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
+       { CompareNone, "The day of year: %j, the week of year: %W" },
     };
 
     static const Date formatTestDates[] =
     {
-        {                                       },    // unused
         { 29, wxDateTime::May, 1976, 18, 30, 00 },
         { 31, wxDateTime::Dec, 1999, 23, 30, 00 },
+#if 0
+        // this test can't work for other centuries because it uses two digit
+        // years in formats, so don't even try it
         { 29, wxDateTime::May, 2076, 18, 30, 00 },
         { 29, wxDateTime::Feb, 2400, 02, 15, 25 },
         { 01, wxDateTime::Jan,  -52, 03, 16, 47 },
+#endif
     };
 
     // an extra test (as it doesn't depend on date, don't do it in the loop)
     printf("%s\n", wxDateTime::Now().Format("Our timezone is %Z").c_str());
 
-    for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
+    for ( size_t d = 0; d < WXSIZEOF(formatTestDates) + 1; d++ )
     {
         puts("");
 
-        wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d].DT();
+        wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d - 1].DT();
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
-            wxString s = dt.Format(formatTestFormats[n]);
+            wxString s = dt.Format(formatTestFormats[n].format);
             printf("%s", s.c_str());
+
+            // what can we recover?
+            int kind = formatTestFormats[n].compareKind;
 
             // convert back
             wxDateTime dt2;
-            const wxChar *result = dt2.ParseFormat(s, formatTestFormats[n]);
+            const wxChar *result = dt2.ParseFormat(s, formatTestFormats[n].format);
             if ( !result )
             {
-                puts(" (ERROR: conversion back failed)");
+                // converion failed - should it have?
+                if ( kind == CompareNone )
+                    puts(" (ok)");
+                else
+                    puts(" (ERROR: conversion back failed)");
             }
             else if ( *result )
             {
                 // should have parsed the entire string
                 puts(" (ERROR: conversion back stopped too soon)");
             }
-            else if ( dt2 != dt )
-            {
-                printf(" (ERROR: got back '%s' instead of '%s')\n",
-                       dt2.Format().c_str(), dt.Format().c_str());
-            }
             else
             {
-                puts(" (ok)");
+                bool equal = FALSE; // suppress compilaer warning
+                switch ( kind )
+                {
+                    case CompareBoth:
+                        equal = dt2 == dt;
+                        break;
+
+                    case CompareDate:
+                        equal = dt.IsSameDate(dt2);
+                        break;
+
+                    case CompareTime:
+                        equal = dt.IsSameTime(dt2);
+                        break;
+                }
+
+                if ( !equal )
+                {
+                    printf(" (ERROR: got back '%s' instead of '%s')\n",
+                           dt2.Format().c_str(), dt.Format().c_str());
+                }
+                else
+                {
+                    puts(" (ok)");
+                }
             }
         }
     }
