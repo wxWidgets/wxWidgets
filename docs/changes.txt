@@ -91,6 +91,8 @@ OTHER CHANGES
 
 All:
 
+- Hindi translations added (Dhananjaya Sharma)
+
 All (GUI):
 
 - wxHtmlWindow now delays image scaling until rendering,
