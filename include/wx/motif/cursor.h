@@ -32,8 +32,9 @@ public:
     // Copy constructors
     wxCursor(const wxCursor& cursor) { Ref(cursor); }
     
-    wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
-        const char maskBits[] = NULL);
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = NULL);
     
     wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_XBM,
         int hotSpotX = 0, int hotSpotY = 0);
@@ -58,6 +59,11 @@ public:
     // Create/get a cursor for the current display
     WXCursor GetXCursor(WXDisplay* display) ;
 private:
+    void Create(const char bits[], int width, int height,
+                int hotSpotX = -1, int hotSpotY = -1,
+                const char maskBits[] = NULL);
+    void Create(WXPixmap cursor, WXPixmap mask, int hotSpotX, int hotSpotY);
+
     // Make a cursor from standard id
     WXCursor MakeCursor(WXDisplay* display, wxStockCursor id);
 };

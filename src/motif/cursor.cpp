@@ -98,18 +98,18 @@ wxCursor::wxCursor(const wxImage & image)
     int i, j, i8; unsigned char c, cMask;
     for (i=0; i<imagebitcount; i++)
     {
-        bits[i] = 0;
+        bits[i] = 0xff;
         i8 = i * 8;
 
-        cMask = 1;
+        cMask = 0xfe; // 11111110
         for (j=0; j<8; j++)
         {
             // possible overflow if we do the summation first ?
             c = rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3;
             //if average value is > mid grey
             if (c>127)
-                bits[i] = bits[i] | cMask;
-            cMask = cMask * 2;
+                bits[i] = bits[i] & cMask;
+            cMask = (cMask << 1) | 1;
         }
     }
 
@@ -125,12 +125,12 @@ wxCursor::wxCursor(const wxImage & image)
             maskBits[i] = 0x0;
             i8 = i * 8;
 
-            cMask = 1;
+            cMask = 0x1;
             for (j=0; j<8; j++)
             {
                 if (rgbBits[(i8+j)*3] != r || rgbBits[(i8+j)*3+1] != g || rgbBits[(i8+j)*3+2] != b)
                     maskBits[i] = maskBits[i] | cMask;
-                cMask = cMask * 2;
+                cMask = (cMask << 1);
             }
         }
     }
@@ -157,25 +157,55 @@ wxCursor::wxCursor(const wxImage & image)
         hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= h)
         hotSpotY = 0;
-   
-    m_refData = new wxCursorRefData;
+
+    Create( (const char*)bits, w, h, hotSpotX, hotSpotY,
+            (const char*)maskBits );
+
+    delete[] bits;
+    delete[] maskBits;
+}
+#endif
+
+void wxCursor::Create(const char bits[], int width, int height,
+                      int hotSpotX, int hotSpotY, const char maskBits[])
+{
+    if( !m_refData )
+        m_refData = new wxCursorRefData;
 
     Display *dpy = (Display*) wxGetDisplay();
     int screen_num =  DefaultScreen (dpy);
 
     Pixmap pixmap = XCreatePixmapFromBitmapData (dpy,
-                                          RootWindow (dpy, DefaultScreen(dpy)),
-                                          (char*) bits, w, h,
+                                          RootWindow (dpy, screen_num),
+                                          (char*) bits, width, height,
                                           1 , 0 , 1);
 
     Pixmap mask_pixmap = None;
     if (maskBits != NULL)
     {
         mask_pixmap = XCreatePixmapFromBitmapData (dpy,
-                                          RootWindow (dpy, DefaultScreen(dpy)),
-                                          (char*) maskBits, w, h,
+                                          RootWindow (dpy, screen_num),
+                                          (char*) maskBits, width, height,
                                           1 , 0 , 1);
     }
+
+    Create( (WXPixmap)pixmap, (WXPixmap)mask_pixmap, hotSpotX, hotSpotY );
+
+    XFreePixmap( dpy, pixmap );
+    if (mask_pixmap != None)
+    {
+        XFreePixmap( dpy, mask_pixmap );
+    }
+}
+
+void wxCursor::Create(WXPixmap pixmap, WXPixmap mask_pixmap,
+                      int hotSpotX, int hotSpotY)
+{
+    if( !m_refData )
+        m_refData = new wxCursorRefData;
+
+    Display *dpy = (Display*) wxGetDisplay();
+    int screen_num =  DefaultScreen (dpy);
 
     XColor foreground_color;
     XColor background_color;
@@ -186,18 +216,12 @@ wxCursor::wxCursor(const wxImage & image)
     XQueryColor(dpy, cmap, &background_color);
 
     Cursor cursor = XCreatePixmapCursor (dpy,
-                                  pixmap,
-                                  mask_pixmap,
+                                  (Pixmap)pixmap,
+                                  (Pixmap)mask_pixmap,
                                   &foreground_color,
                                   &background_color,
                                   hotSpotX , 
                                   hotSpotY);
-
-    XFreePixmap( dpy, pixmap );
-    if (mask_pixmap != None)
-    {
-        XFreePixmap( dpy, mask_pixmap );
-    }
 
     if (cursor)
     {
@@ -208,60 +232,11 @@ wxCursor::wxCursor(const wxImage & image)
         M_CURSORDATA->m_cursors.Append(c);
     }
 }
-#endif
 
 wxCursor::wxCursor(const char bits[], int width, int height,
-    int hotSpotX, int hotSpotY, const char maskBits[])
+                   int hotSpotX, int hotSpotY, const char maskBits[])
 {
-    m_refData = new wxCursorRefData;
-
-    Display *dpy = (Display*) wxGetDisplay();
-    int screen_num =  DefaultScreen (dpy);
-
-    Pixmap pixmap = XCreatePixmapFromBitmapData (dpy,
-                                          RootWindow (dpy, DefaultScreen(dpy)),
-                                          (char*) bits, width, height,
-                                          1 , 0 , 1);
-
-    Pixmap mask_pixmap = None;
-    if (maskBits != NULL)
-    {
-        mask_pixmap = XCreatePixmapFromBitmapData (dpy,
-                                          RootWindow (dpy, DefaultScreen(dpy)),
-                                          (char*) maskBits, width, height,
-                                          1 , 0 , 1);
-    }
-
-    XColor foreground_color;
-    XColor background_color;
-    foreground_color.pixel = BlackPixel(dpy, screen_num);
-    background_color.pixel = WhitePixel(dpy, screen_num);
-    Colormap cmap = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dpy);
-    XQueryColor(dpy, cmap, &foreground_color);
-    XQueryColor(dpy, cmap, &background_color);
-
-    Cursor cursor = XCreatePixmapCursor (dpy,
-                                  pixmap,
-                                  mask_pixmap,
-                                  &foreground_color,
-                                  &background_color,
-                                  hotSpotX , 
-                                  hotSpotY);
-
-    XFreePixmap( dpy, pixmap );
-    if (mask_pixmap != None)
-    {
-        XFreePixmap( dpy, mask_pixmap );
-    }
-
-    if (cursor)
-    {
-        wxXCursor *c = new wxXCursor;
-
-        c->m_cursor = (WXCursor) cursor;
-        c->m_display = (WXDisplay*) dpy;
-        M_CURSORDATA->m_cursors.Append(c);
-    }
+    Create(bits, width, height, hotSpotX, hotSpotY, maskBits);
 }
 
 wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
@@ -274,30 +249,17 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
 
     int hotX = -1, hotY = -1;
     unsigned int w, h;
-    Pixmap pixmap;
+    Pixmap pixmap = None, mask_pixmap = None;
 
     Display *dpy = (Display*) wxGetDisplay();
     int screen_num =  DefaultScreen (dpy);
 
-    int value = XReadBitmapFile (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+    int value = XReadBitmapFile (dpy, RootWindow (dpy, screen_num),
                                  wxConstCast(name.c_str(), char),
                                  &w, &h, &pixmap, &hotX, &hotY);
 
-    if ((value == BitmapFileInvalid) ||
-        (value == BitmapOpenFailed) ||
-        (value == BitmapNoMemory))
+    if (value == BitmapSuccess)
     {
-    }
-    else
-    {
-        XColor foreground_color;
-        XColor background_color;
-        foreground_color.pixel = BlackPixel(dpy, screen_num);
-        background_color.pixel = WhitePixel(dpy, screen_num);
-        Colormap cmap = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dpy);
-        XQueryColor(dpy, cmap, &foreground_color);
-        XQueryColor(dpy, cmap, &background_color);
-
         // TODO: how do we determine whether hotX, hotY were read correctly?
         if (hotX < 0 || hotY < 0)
         {
@@ -310,26 +272,10 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
             hotY = 0;
         }
 
-        Pixmap mask_pixmap = None;
-        Cursor cursor = XCreatePixmapCursor (dpy,
-                                      pixmap,
-                                      mask_pixmap,
-                                      &foreground_color,
-                                      &background_color,
-                                      hotX,
-                                      hotY);
+        Create( (WXPixmap)pixmap, (WXPixmap)mask_pixmap, hotX, hotY );
 
         XFreePixmap( dpy, pixmap );
-        if (cursor)
-        {
-            wxXCursor *c = new wxXCursor;
-
-            c->m_cursor = (WXCursor) cursor;
-            c->m_display = (WXDisplay*) dpy;
-            M_CURSORDATA->m_cursors.Append(c);
-        }
     }
-
 }
 
 // Cursors by stock number
