@@ -2399,6 +2399,12 @@ def ImageFromData(*args, **kwargs):
     val.thisown = 1
     return val
 
+def ImageFromDataWithAlpha(*args, **kwargs):
+    """ImageFromDataWithAlpha(int width, int height, unsigned char data, unsigned char alpha) -> Image"""
+    val = _core_.new_ImageFromDataWithAlpha(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 def Image_CanRead(*args, **kwargs):
     """Image_CanRead(String name) -> bool"""
     return _core_.Image_CanRead(*args, **kwargs)
@@ -10288,6 +10294,8 @@ class GridBagSizer(FlexGridSizer):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setOORInfo(self)
+
     def Add(*args, **kwargs):
         """
         Add(self, item, GBPosition pos, GBSpan span=DefaultSpan, int flag=0,

@@ -108,21 +108,21 @@ class MediaCtrl(_core.Control):
         """SetPlaybackRate(self, double dRate) -> bool"""
         return _media.MediaCtrl_SetPlaybackRate(*args, **kwargs)
 
-    def SetPosition(*args, **kwargs):
-        """SetPosition(self, wxLongLong where) -> bool"""
-        return _media.MediaCtrl_SetPosition(*args, **kwargs)
+    def SetMediaPosition(*args, **kwargs):
+        """SetMediaPosition(self, wxLongLong where) -> bool"""
+        return _media.MediaCtrl_SetMediaPosition(*args, **kwargs)
 
-    def GetPosition(*args, **kwargs):
+    def GetMediaPosition(*args, **kwargs):
         """
-        GetPosition(self) -> wxLongLong
+        GetMediaPosition(self) -> wxLongLong
 
         Get the window's position.
         """
-        return _media.MediaCtrl_GetPosition(*args, **kwargs)
+        return _media.MediaCtrl_GetMediaPosition(*args, **kwargs)
 
-    def GetDuration(*args, **kwargs):
-        """GetDuration(self) -> wxLongLong"""
-        return _media.MediaCtrl_GetDuration(*args, **kwargs)
+    def GetMediaDuration(*args, **kwargs):
+        """GetMediaDuration(self) -> wxLongLong"""
+        return _media.MediaCtrl_GetMediaDuration(*args, **kwargs)
 
 
 class MediaCtrlPtr(MediaCtrl):

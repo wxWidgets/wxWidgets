@@ -235,11 +235,11 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxLogTextCtrl swig_types[24] 
 #define  SWIGTYPE_p_wxTextCtrl swig_types[25] 
 #define  SWIGTYPE_p_wxBusyCursor swig_types[26] 
-#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[27] 
-#define  SWIGTYPE_p_wxPyTextDataObject swig_types[28] 
-#define  SWIGTYPE_p_wxBitmapDataObject swig_types[29] 
-#define  SWIGTYPE_p_wxTextDataObject swig_types[30] 
-#define  SWIGTYPE_p_wxDataObject swig_types[31] 
+#define  SWIGTYPE_p_wxPyTextDataObject swig_types[27] 
+#define  SWIGTYPE_p_wxBitmapDataObject swig_types[28] 
+#define  SWIGTYPE_p_wxTextDataObject swig_types[29] 
+#define  SWIGTYPE_p_wxDataObject swig_types[30] 
+#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[31] 
 #define  SWIGTYPE_p_wxFileDataObject swig_types[32] 
 #define  SWIGTYPE_p_wxCustomDataObject swig_types[33] 
 #define  SWIGTYPE_p_wxURLDataObject swig_types[34] 
@@ -278,24 +278,25 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxOutputStream swig_types[67] 
 #define  SWIGTYPE_p_wxDateTime swig_types[68] 
 #define  SWIGTYPE_p_wxPyDropSource swig_types[69] 
-#define  SWIGTYPE_p_wxWindow swig_types[70] 
-#define  SWIGTYPE_p_wxString swig_types[71] 
-#define  SWIGTYPE_p_wxPyProcess swig_types[72] 
-#define  SWIGTYPE_p_wxBitmap swig_types[73] 
-#define  SWIGTYPE_p_wxConfig swig_types[74] 
-#define  SWIGTYPE_p_wxChar swig_types[75] 
-#define  SWIGTYPE_p_wxBusyInfo swig_types[76] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[77] 
-#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[78] 
-#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[79] 
-#define  SWIGTYPE_p_wxProcessEvent swig_types[80] 
-#define  SWIGTYPE_p_wxPyLog swig_types[81] 
-#define  SWIGTYPE_p_wxLogNull swig_types[82] 
-#define  SWIGTYPE_p_wxColour swig_types[83] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[84] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[85] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[86] 
-static swig_type_info *swig_types[88];
+#define  SWIGTYPE_p_wxKillError swig_types[70] 
+#define  SWIGTYPE_p_wxWindow swig_types[71] 
+#define  SWIGTYPE_p_wxString swig_types[72] 
+#define  SWIGTYPE_p_wxPyProcess swig_types[73] 
+#define  SWIGTYPE_p_wxBitmap swig_types[74] 
+#define  SWIGTYPE_p_wxConfig swig_types[75] 
+#define  SWIGTYPE_p_wxChar swig_types[76] 
+#define  SWIGTYPE_p_wxBusyInfo swig_types[77] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[78] 
+#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[79] 
+#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[80] 
+#define  SWIGTYPE_p_wxProcessEvent swig_types[81] 
+#define  SWIGTYPE_p_wxPyLog swig_types[82] 
+#define  SWIGTYPE_p_wxLogNull swig_types[83] 
+#define  SWIGTYPE_p_wxColour swig_types[84] 
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[85] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[86] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[87] 
+static swig_type_info *swig_types[89];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -9348,23 +9349,29 @@ static PyObject *_wrap_Process_Kill(PyObject *, PyObject *args, PyObject *kwargs
     PyObject *resultobj;
     int arg1 ;
     int arg2 = (int) wxSIGTERM ;
+    int arg3 = (int) wxKILL_NOCHILDREN ;
     int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "pid",(char *) "sig", NULL 
+        (char *) "pid",(char *) "sig",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Process_Kill",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:Process_Kill",kwnames,&obj0,&obj1,&obj2)) goto fail;
     arg1 = (int)SWIG_As_int(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     if (obj1) {
         arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
+    if (obj2) {
+        arg3 = (int)SWIG_As_int(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)wxPyProcess::Kill(arg1,(wxSignal )arg2);
+        result = (int)wxPyProcess::Kill(arg1,(wxSignal )arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -10068,6 +10075,54 @@ static PyObject *_wrap_Execute(PyObject *, PyObject *args, PyObject *kwargs) {
         if (temp1)
         delete arg1;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_Kill(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    long arg1 ;
+    int arg2 = (int) wxSIGTERM ;
+    wxKillError *arg3 = (wxKillError *) 0 ;
+    int arg4 = (int) wxKILL_NOCHILDREN ;
+    int result;
+    wxKillError temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "pid",(char *) "sig",(char *) "flags", NULL 
+    };
+    
+    {
+        arg3 = &temp3; 
+    }
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:Kill",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    arg1 = (long)SWIG_As_long(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int)SWIG_As_int(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        arg4 = (int)SWIG_As_int(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)wxKill(arg1,(wxSignal )arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((int)result);
+    {
+        PyObject* o;
+        o = PyInt_FromLong((long) (*arg3));
+        resultobj = t_output_helper(resultobj, o);
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -29383,6 +29438,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ProcessEvent_m_exitcode_get", (PyCFunction) _wrap_ProcessEvent_m_exitcode_get, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ProcessEvent_swigregister", ProcessEvent_swigregister, METH_VARARGS, NULL },
 	 { (char *)"Execute", (PyCFunction) _wrap_Execute, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Kill", (PyCFunction) _wrap_Kill, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_Joystick", (PyCFunction) _wrap_new_Joystick, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_Joystick", (PyCFunction) _wrap_delete_Joystick, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Joystick_GetPosition", (PyCFunction) _wrap_Joystick_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -30466,11 +30522,11 @@ static swig_type_info _swigt__p_wxLogStderr[] = {{"_p_wxLogStderr", 0, "wxLogStd
 static swig_type_info _swigt__p_wxLogTextCtrl[] = {{"_p_wxLogTextCtrl", 0, "wxLogTextCtrl *", 0, 0, 0, 0},{"_p_wxLogTextCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTextCtrl[] = {{"_p_wxTextCtrl", 0, "wxTextCtrl *", 0, 0, 0, 0},{"_p_wxTextCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBusyCursor[] = {{"_p_wxBusyCursor", 0, "wxBusyCursor *", 0, 0, 0, 0},{"_p_wxBusyCursor", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyTextDataObject[] = {{"_p_wxPyTextDataObject", 0, "wxPyTextDataObject *", 0, 0, 0, 0},{"_p_wxPyTextDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBitmapDataObject[] = {{"_p_wxBitmapDataObject", 0, "wxBitmapDataObject *", 0, 0, 0, 0},{"_p_wxBitmapDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxBitmapDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTextDataObject[] = {{"_p_wxTextDataObject", 0, "wxTextDataObject *", 0, 0, 0, 0},{"_p_wxTextDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxTextDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDataObject[] = {{"_p_wxDataObject", 0, "wxDataObject *", 0, 0, 0, 0},{"_p_wxDataObjectSimple", _p_wxDataObjectSimpleTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxDataObjectComposite", _p_wxDataObjectCompositeTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxDataObject", 0, 0, 0, 0, 0, 0},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0, 0, 0, 0},{"_p_wxFileDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCustomDataObject[] = {{"_p_wxCustomDataObject", 0, "wxCustomDataObject *", 0, 0, 0, 0},{"_p_wxCustomDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxURLDataObject[] = {{"_p_wxURLDataObject", 0, "wxURLDataObject *", 0, 0, 0, 0},{"_p_wxURLDataObject", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -30509,6 +30565,7 @@ static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0
 static swig_type_info _swigt__p_wxOutputStream[] = {{"_p_wxOutputStream", 0, "wxOutputStream *", 0, 0, 0, 0},{"_p_wxOutputStream", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDateTime[] = {{"_p_wxDateTime", 0, "wxDateTime *", 0, 0, 0, 0},{"_p_wxDateTime", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyDropSource[] = {{"_p_wxPyDropSource", 0, "wxPyDropSource *", 0, 0, 0, 0},{"_p_wxPyDropSource", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxKillError[] = {{"_p_wxKillError", 0, "enum wxKillError *|wxKillError *", 0, 0, 0, 0},{"_p_wxKillError", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0, 0, 0, 0},{"_p_wxString", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyProcess[] = {{"_p_wxPyProcess", 0, "wxPyProcess *", 0, 0, 0, 0},{"_p_wxPyProcess", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -30555,11 +30612,11 @@ _swigt__p_wxLogStderr,
 _swigt__p_wxLogTextCtrl, 
 _swigt__p_wxTextCtrl, 
 _swigt__p_wxBusyCursor, 
-_swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxPyTextDataObject, 
 _swigt__p_wxBitmapDataObject, 
 _swigt__p_wxTextDataObject, 
 _swigt__p_wxDataObject, 
+_swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxFileDataObject, 
 _swigt__p_wxCustomDataObject, 
 _swigt__p_wxURLDataObject, 
@@ -30598,6 +30655,7 @@ _swigt__p_wxObject,
 _swigt__p_wxOutputStream, 
 _swigt__p_wxDateTime, 
 _swigt__p_wxPyDropSource, 
+_swigt__p_wxKillError, 
 _swigt__p_wxWindow, 
 _swigt__p_wxString, 
 _swigt__p_wxPyProcess, 
@@ -30785,6 +30843,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"KILL_ACCESS_DENIED", SWIG_From_int((int)wxKILL_ACCESS_DENIED));
     PyDict_SetItemString(d,"KILL_NO_PROCESS", SWIG_From_int((int)wxKILL_NO_PROCESS));
     PyDict_SetItemString(d,"KILL_ERROR", SWIG_From_int((int)wxKILL_ERROR));
+    PyDict_SetItemString(d,"KILL_NOCHILDREN", SWIG_From_int((int)wxKILL_NOCHILDREN));
+    PyDict_SetItemString(d,"KILL_CHILDREN", SWIG_From_int((int)wxKILL_CHILDREN));
     PyDict_SetItemString(d,"SIGNONE", SWIG_From_int((int)wxSIGNONE));
     PyDict_SetItemString(d,"SIGHUP", SWIG_From_int((int)wxSIGHUP));
     PyDict_SetItemString(d,"SIGINT", SWIG_From_int((int)wxSIGINT));

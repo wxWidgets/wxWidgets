@@ -1586,6 +1586,8 @@ KILL_BAD_SIGNAL = _misc_.KILL_BAD_SIGNAL
 KILL_ACCESS_DENIED = _misc_.KILL_ACCESS_DENIED
 KILL_NO_PROCESS = _misc_.KILL_NO_PROCESS
 KILL_ERROR = _misc_.KILL_ERROR
+KILL_NOCHILDREN = _misc_.KILL_NOCHILDREN
+KILL_CHILDREN = _misc_.KILL_CHILDREN
 SIGNONE = _misc_.SIGNONE
 SIGHUP = _misc_.SIGHUP
 SIGINT = _misc_.SIGINT
@@ -1607,7 +1609,7 @@ class Process(_core.EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Kill(*args, **kwargs):
-        """Kill(int pid, int sig=SIGTERM) -> int"""
+        """Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
         return _misc_.Process_Kill(*args, **kwargs)
 
     Kill = staticmethod(Kill)
@@ -1686,7 +1688,7 @@ class ProcessPtr(Process):
 _misc_.Process_swigregister(ProcessPtr)
 
 def Process_Kill(*args, **kwargs):
-    """Process_Kill(int pid, int sig=SIGTERM) -> int"""
+    """Process_Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
     return _misc_.Process_Kill(*args, **kwargs)
 
 def Process_Exists(*args, **kwargs):
@@ -1735,6 +1737,10 @@ EXEC_MAKE_GROUP_LEADER = _misc_.EXEC_MAKE_GROUP_LEADER
 def Execute(*args, **kwargs):
     """Execute(String command, int flags=EXEC_ASYNC, Process process=None) -> long"""
     return _misc_.Execute(*args, **kwargs)
+
+def Kill(*args, **kwargs):
+    """Kill(long pid, int sig=SIGTERM, int rc, int flags=KILL_NOCHILDREN) -> int"""
+    return _misc_.Kill(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 JOYSTICK1 = _misc_.JOYSTICK1
