@@ -142,6 +142,26 @@ Returns the virtual key code. ASCII events return normal ASCII values,
 while non-ASCII events return values such as {\bf WXK\_LEFT} for the
 left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual key codes.
 
+\membersection{wxKeyEvent::GetRawKeyCode}
+
+\constfunc{wxUint32}{GetRawKeyCode}{\void}
+
+Returns the raw key code for this event. This is a platform-dependent scan code
+which should only be used in advanced applications.
+
+{\bf NB:} Currently the raw key codes are not supported by all ports, use
+{\tt #ifdef wxHAS\_RAW\_KEY\_CODES} to determine if this feature is available.
+
+\membersection{wxKeyEvent::GetRawKeyFlags}
+
+\constfunc{wxUint32}{GetRawKeyFlags}{\void}
+
+Returns the low level key flags for this event. The flags are
+platform-dependent and should only be used in advanced applications.
+
+{\bf NB:} Currently the raw key flags are not supported by all ports, use
+{\tt #ifdef wxHAS\_RAW\_KEY\_CODES} to determine if this feature is available.
+
 \membersection{wxKeyEvent::GetX}
 
 \constfunc{long}{GetX}{\void}
