@@ -77,6 +77,8 @@ Constructor.
 
 \docparam{parent}{Pointer to a parent window.}
 
+\docparam{sharedcontext}{Context to share object resources with.}
+
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
 \docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
@@ -103,6 +105,12 @@ and so on.
 
 \docparam{palette}{If the window has the palette, it should by pass this value.
 Note: palette and WX\_GL\_RGBA are mutually exclusive.}
+
+\membersection{wxGLCanvas::GetContext}\label{wxglcanvasgetcontext}
+
+\func{wxGLContext*}{GetContext}{\void}
+
+Obtains the context that is associated with this canvas.
 
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
