@@ -138,7 +138,7 @@ class WXDLLEXPORT wxHtmlPrintout : public wxPrintout
         bool OnPrintPage(int page);
         bool HasPage(int page);
         void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
-        void OnBeginPrinting();
+        bool OnBeginDocument(int startPage, int endPage);
         
     private:
 

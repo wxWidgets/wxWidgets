@@ -1,3 +1,4 @@
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        htmprint.cpp
 // Purpose:     html printing classes
@@ -183,12 +184,12 @@ wxHtmlPrintout::~wxHtmlPrintout()
 
 
 
-void wxHtmlPrintout::OnBeginPrinting()
+bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 {
     int pageWidth, pageHeight, mm_w, mm_h;
     float ppmm_h, ppmm_v;
     
-    wxPrintout::OnBeginPrinting();
+    if (!wxPrintout::OnBeginDocument(startPage, endPage)) return FALSE;
 
     GetPageSizePixels(&pageWidth, &pageHeight);
     GetPageSizeMM(&mm_w, &mm_h);
@@ -227,6 +228,7 @@ void wxHtmlPrintout::OnBeginPrinting()
                           );
     m_Renderer -> SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
     CountPages();
+    return TRUE;
 }
 
 
