@@ -37,7 +37,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 
 DESTDIR = 
 WX_RELEASE = 2.5
-WX_VERSION = $(WX_RELEASE).2
+WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(top_builddir)lib
 FL_DEMO1_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
 	$(__DLLFLAG_p) -I$(srcdir)/../../../samples -I$(srcdir)/../../include \
@@ -150,31 +150,31 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_5 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_2) -i $(srcdir) $(__DLLFLAG_p_1_2) -i \
 	$(srcdir)/../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../include -d BMP_DIR="bitmaps/" -o fl_demo1$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_5 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_5)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_6 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_2) -i $(srcdir) $(__DLLFLAG_p_1_2) -i \
 	$(srcdir)/../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../include -d BMP_DIR="bitmaps/" -o fl_demo2$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_6 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_6)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_7 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_2) -i $(srcdir) $(__DLLFLAG_p_1_2) -i \
 	$(srcdir)/../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../include -d BMP_DIR="bitmaps/" -o fl_sample1$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_7 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_7)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_8 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_2) -i $(srcdir) $(__DLLFLAG_p_1_2) -i \
 	$(srcdir)/../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../include -d BMP_DIR="bitmaps/" -o fl_sample2$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_8 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_8)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_9 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_2) -i $(srcdir) $(__DLLFLAG_p_1_2) -i \
 	$(srcdir)/../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../include -d BMP_DIR="bitmaps/" -o fl_sample3$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_9 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_9)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1_2 = -d __WXUNIVERSAL__
@@ -204,7 +204,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = \
-@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 	-lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = $(COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p)
@@ -245,7 +245,7 @@ fl_demo1$(EXEEXT): $(FL_DEMO1_OBJECTS) $(__fl_demo1___win32rc)
 	$(__fl_demo1___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p fl_demo1.app/Contents
 	mkdir -p fl_demo1.app/Contents/MacOS
 	mkdir -p fl_demo1.app/Contents/Resources
@@ -263,7 +263,7 @@ fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 	ln -f fl_demo1$(EXEEXT) fl_demo1.app/Contents/MacOS/fl_demo1
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc fl_demo1.app/Contents/Resources/fl_demo1.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc fl_demo1.app/Contents/Resources/fl_demo1.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns fl_demo1.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@fl_demo1_bundle: $(____fl_demo1_BUNDLE_TGT_REF_DEP)
@@ -275,7 +275,7 @@ fl_demo2$(EXEEXT): $(FL_DEMO2_OBJECTS) $(__fl_demo2___win32rc)
 	$(__fl_demo2___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p fl_demo2.app/Contents
 	mkdir -p fl_demo2.app/Contents/MacOS
 	mkdir -p fl_demo2.app/Contents/Resources
@@ -293,7 +293,7 @@ fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 	ln -f fl_demo2$(EXEEXT) fl_demo2.app/Contents/MacOS/fl_demo2
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc fl_demo2.app/Contents/Resources/fl_demo2.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc fl_demo2.app/Contents/Resources/fl_demo2.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns fl_demo2.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@fl_demo2_bundle: $(____fl_demo2_BUNDLE_TGT_REF_DEP)
@@ -305,7 +305,7 @@ fl_sample1$(EXEEXT): $(FL_SAMPLE1_OBJECTS) $(__fl_sample1___win32rc)
 	$(__fl_sample1___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p fl_sample1.app/Contents
 	mkdir -p fl_sample1.app/Contents/MacOS
 	mkdir -p fl_sample1.app/Contents/Resources
@@ -323,7 +323,7 @@ fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/carbo
 	ln -f fl_sample1$(EXEEXT) fl_sample1.app/Contents/MacOS/fl_sample1
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc fl_sample1.app/Contents/Resources/fl_sample1.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc fl_sample1.app/Contents/Resources/fl_sample1.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns fl_sample1.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@fl_sample1_bundle: $(____fl_sample1_BUNDLE_TGT_REF_DEP)
@@ -335,7 +335,7 @@ fl_sample2$(EXEEXT): $(FL_SAMPLE2_OBJECTS) $(__fl_sample2___win32rc)
 	$(__fl_sample2___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p fl_sample2.app/Contents
 	mkdir -p fl_sample2.app/Contents/MacOS
 	mkdir -p fl_sample2.app/Contents/Resources
@@ -353,7 +353,7 @@ fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/carbo
 	ln -f fl_sample2$(EXEEXT) fl_sample2.app/Contents/MacOS/fl_sample2
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc fl_sample2.app/Contents/Resources/fl_sample2.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc fl_sample2.app/Contents/Resources/fl_sample2.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns fl_sample2.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@fl_sample2_bundle: $(____fl_sample2_BUNDLE_TGT_REF_DEP)
@@ -365,7 +365,7 @@ fl_sample3$(EXEEXT): $(FL_SAMPLE3_OBJECTS) $(__fl_sample3___win32rc)
 	$(__fl_sample3___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p fl_sample3.app/Contents
 	mkdir -p fl_sample3.app/Contents/MacOS
 	mkdir -p fl_sample3.app/Contents/Resources
@@ -383,7 +383,7 @@ fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/carbo
 	ln -f fl_sample3$(EXEEXT) fl_sample3.app/Contents/MacOS/fl_sample3
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc fl_sample3.app/Contents/Resources/fl_sample3.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc fl_sample3.app/Contents/Resources/fl_sample3.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns fl_sample3.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@fl_sample3_bundle: $(____fl_sample3_BUNDLE_TGT_REF_DEP)

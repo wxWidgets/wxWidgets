@@ -65,8 +65,8 @@ HOST_SUFFIX = @HOST_SUFFIX@
 DESTDIR = 
 WX_RELEASE = 2.5
 WX_RELEASE_NODOT = 25
-WX_VERSION = $(WX_RELEASE).2
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
+WX_VERSION = $(WX_RELEASE).3
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 LIBDIRNAME = $(top_builddir)lib
 WXREGEX_CFLAGS = -D__WX$(TOOLKIT)__ $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
@@ -6430,9 +6430,9 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_WITH_PLUGIN_SDL_1@__install_sound_sdl___depname = install_sound_sdl
 @COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
-@COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).2.r
+@COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).3.r
 @COND_TOOLKIT_MAC@__macos_res_install___depname = macos-res-install
-@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).2.r
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).3.r
 @COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -7316,13 +7316,13 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_utilsx.o \
 	corelib_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9)
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).2
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .2.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).3
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .3.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).2.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).3.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .2.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .3.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_1@dll___macver = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
@@ -7339,7 +7339,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = \
-@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 	-lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = $(COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p)
@@ -7458,8 +7458,8 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	(cd samples && $(MAKE) clean)
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).2.rsrc lib/libwx_$(TOOLCHAIN_NAME).2.r
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).2.rsrc lib/libwx_$(TOOLCHAIN_NAME).2.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).3.rsrc lib/libwx_$(TOOLCHAIN_NAME).3.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).3.rsrc lib/libwx_$(TOOLCHAIN_NAME).3.r
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -7847,21 +7847,21 @@ locale_install:
 	fi ; \
 	done
 
-@COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).2.r: 
-@COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/carbon/apprsrc.r $(top_srcdir)/src/mac/carbon/carbrsrc.r $(top_srcdir)/src/mac/carbon/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).2.rsrc
-@COND_TOOLKIT_MAC@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc Carbon.r -useDF >lib/libwx_$(TOOLCHAIN_NAME).2.r
+@COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).3.r: 
+@COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/carbon/apprsrc.r $(top_srcdir)/src/mac/carbon/carbrsrc.r $(top_srcdir)/src/mac/carbon/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).3.rsrc
+@COND_TOOLKIT_MAC@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).3.rsrc Carbon.r -useDF >lib/libwx_$(TOOLCHAIN_NAME).3.r
 
 @COND_TOOLKIT_MAC@macos-res-install: $(__macos_res___depname)
-@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.r $(libdir)
-@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc $(libdir)
+@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).3.r $(libdir)
+@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).3.rsrc $(libdir)
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).2.r: 
-@COND_TOOLKIT_COCOA@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).2.rsrc
-@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).2.r
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).3.r: 
+@COND_TOOLKIT_COCOA@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).3.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).3.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).3.r
 
 @COND_TOOLKIT_COCOA@cocoa-res-install: $(__macos_res___depname)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.r $(libdir)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).3.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).3.rsrc $(libdir)
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $<

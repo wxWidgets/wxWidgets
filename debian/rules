@@ -327,8 +327,7 @@ build-doc-stamp: build-gtk-shared-stamp
 		   -twice -html
 	cp docs/latex/wx/*.gif $(objdir_doc)
 	rm -rf $(objdir_doc_cruft)
-	rm -f $(objdir_doc)/wxwin.con $(objdir_doc)/wxwin.hh* \
-	      $(objdir_doc)/wxwin.htx $(objdir_doc)/wxwin.ref
+	rm -f $(objdir_doc)/wx$(release)-manual.{con,hh*,htx,ref}
 	touch $@
 
 build-examples-stamp: build-gtk-shared-stamp
