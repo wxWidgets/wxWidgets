@@ -28,6 +28,7 @@
 #include "wx/window.h"
 #include "wx/log.h"
 #include "wx/utils.h"
+#include "wx/frame.h"
 
 #include "wx/mac/uma.h"
 
@@ -209,10 +210,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 			if ( pos == (size_t)-1 )
 			{
 				UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), label,key,modifiers);
+				SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , CountMenuItems(MAC_WXHMENU(m_hMenu))  , pItem->GetId() ) ;
 				if ( pItem->GetBitmap().Ok() )
 				{
 					ControlButtonContentInfo info ;
-					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , true ) ;
+					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , kControlContentCIconHandle ) ;
 					if ( info.contentType != kControlNoContent )
 					{
 						if ( info.contentType == kControlContentCIconHandle )
@@ -225,10 +227,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 			else
 			{
 				UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), label , pos,key,modifiers);
+				SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , pItem->GetId() ) ;
 				if ( pItem->GetBitmap().Ok() )
 				{
 					ControlButtonContentInfo info ;
-					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , true ) ;
+					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , kControlContentCIconHandle ) ;
 					if ( info.contentType != kControlNoContent )
 					{
 						if ( info.contentType == kControlContentCIconHandle )
@@ -429,114 +432,6 @@ void wxMenu::MacEnableMenu( bool bDoEnable )
 	::DrawMenuBar() ;
 }
 
-bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum )
-{
-    int pos;
-    wxNode *node;
-
-    if ( m_macMenuId == macMenuId )
-    {
-        node = GetMenuItems().Nth(macMenuItemNum-1);
-        if (node) 
-        {
-            wxMenuItem *pItem = (wxMenuItem*)node->Data();
-            
-            if (pItem->IsCheckable())
-                pItem->Check(! pItem->IsChecked());
-            
-            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
-            event.m_timeStamp = when;
-            event.SetEventObject(handler);
-            event.SetInt( pItem->GetId() );
-            {
-                bool processed = false ;
-                
-#if WXWIN_COMPATIBILITY
-                // Try a callback
-                if (m_callback)
-                {
-                    (void) (*(m_callback)) (*this, event);
-                    processed = TRUE;
-                }
-#endif			
-                // Try the menu's event handler
-                if ( !processed && handler)
-                {
-                    processed = handler->ProcessEvent(event);
-                }
-                
-                // Try the window the menu was popped up from (and up
-                // through the hierarchy)
-                if ( !processed && GetInvokingWindow())
-                    processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
-            }
-            return true ;
-        }
-    }
-    else if ( macMenuId == kHMHelpMenuID )
-    {
-        int menuItem = firstUserHelpMenuItem-1 ;
-        for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
-        {	
-            wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
-            
-            wxMenu *pSubMenu = pItem->GetSubMenu() ;
-            if ( pSubMenu != NULL )
-            {
-            }
-            else
-            {
-                if ( pItem->GetId() != wxApp::s_macAboutMenuItemId )
-                    ++menuItem ;
-                
-                if ( menuItem == macMenuItemNum )
-                {
-                    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
-                    event.m_timeStamp = when;
-                    event.SetEventObject(handler);
-                    event.SetInt( pItem->GetId() );
-                    {
-                        bool processed = false ;
-#if WXWIN_COMPATIBILITY
-                        // Try a callback
-                        if (m_callback)
-                        {
-                            (void) (*(m_callback)) (*this, event);
-                            processed = TRUE;
-                        }
-#endif					
-                        // Try the menu's event handler
-                        if ( !processed && handler)
-                        {
-                            processed = handler->ProcessEvent(event);
-                        }
-                        
-                        // Try the window the menu was popped up from (and up
-                        // through the hierarchy)
-                        if ( !processed && GetInvokingWindow())
-                            processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
-                    }
-                    return true ;
-                }
-            }
-        }
-    }
-    
-    for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
-    {	
-        wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
-  	
-        wxMenu *pSubMenu = pItem->GetSubMenu() ;
-        if ( pSubMenu != NULL )
-        {
-            if ( pSubMenu->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
-                return true ;
-        }
-    }
-    
-    return false ;
-}
-
 // Menu Bar
 
 /* 
@@ -664,89 +559,93 @@ void wxMenuBar::MacInstallMenuBar()
  
    	for (size_t i = 0; i < m_menus.GetCount(); i++)
   	{
-            Str255 	label;
-            wxNode *node;
-            wxMenuItem *item;
-            int pos ;
-			wxMenu* menu = m_menus[i] , *subMenu = NULL ;
-		
-			if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
+        Str255 	label;
+        wxNode *node;
+        wxMenuItem *item;
+        int pos ;
+    	wxMenu* menu = m_menus[i] , *subMenu = NULL ;
+
+    	if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
+    	{
+			MenuHandle mh = NULL ;
+			if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
 			{
-				MenuHandle mh = NULL ;
-			  if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
-			  {
 			    continue ;
-			  }
+			}
 
 		    for ( int i = CountMenuItems( mh ) ; i >= firstUserHelpMenuItem ; --i )
 		    {
-		      DeleteMenuItem( mh , i ) ;
+		        DeleteMenuItem( mh , i ) ;
 		    }
-					
-			  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
-		  		{
-		 			item = (wxMenuItem *)node->Data();
-		 			subMenu = item->GetSubMenu() ;
-					if (subMenu)	 		
+				
+		  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+	  		{
+	 			item = (wxMenuItem *)node->Data();
+	 			subMenu = item->GetSubMenu() ;
+				if (subMenu)	 		
+				{
+					// we don't support hierarchical menus in the help menu yet
+				}
+				else		
+				{
+					if ( item->IsSeparator() )
 					{
-						// we don't support hierarchical menus in the help menu yet
+						if ( mh )
+							MacAppendMenu(mh, "\p-" );
 					}
-					else		
+					else
 					{
-						if ( item->IsSeparator() )
+						Str255 label ;
+						UInt8 modifiers ;
+						SInt16 key ;
+						wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
+						if ( label[0] == 0 )
 						{
-							if ( mh )
-								MacAppendMenu(mh, "\p-" );
+							// we cannot add empty menus on mac
+							label[0] = 1 ;
+							label[1] = ' ' ;
 						}
+						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
+						{ 
+								::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+								UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
+								SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , item->GetId() ) ;
+ 						}
 						else
 						{
-							Str255 label ;
-							UInt8 modifiers ;
-							SInt16 key ;
-							wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
-							if ( label[0] == 0 )
+							if ( mh )
 							{
-								// we cannot add empty menus on mac
-								label[0] = 1 ;
-								label[1] = ' ' ;
-							}
-							if ( item->GetId() == wxApp::s_macAboutMenuItemId )
-							{ 
-									::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
-									UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
-	 						}
-							else
-							{
-								if ( mh )
-									UMAAppendMenuItem(mh, label , key , modifiers );
+								UMAAppendMenuItem(mh, label , key , modifiers );
+								SetMenuItemCommandID( mh , CountMenuItems(mh) , item->GetId() ) ;
 							}
 						}
 					}
 				}
 			}
-			else
-			{
-				wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
-				UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
-					wxArrayPtrVoid submenus ;
-					
-		  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
-	  			{
-		 			item = (wxMenuItem *)node->Data();
-		 			subMenu = item->GetSubMenu() ;
-					if (subMenu)	 		
-					{
-  					  submenus.Add(subMenu) ;
-					}
-				}
-				::InsertMenu(MAC_WXHMENU(m_menus[i]->GetHMenu()), 0);
-				for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
+		}
+		else
+		{
+			wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
+			UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
+				wxArrayPtrVoid submenus ;
+				
+	  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+  			{
+	 			item = (wxMenuItem *)node->Data();
+	 			subMenu = item->GetSubMenu() ;
+				if (subMenu)	 		
 				{
-				  wxMenu* submenu = (wxMenu*) submenus[i] ;
-        	wxNode *subnode;
-        	wxMenuItem *subitem;
-        	int subpos ;
-          for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
+				  submenus.Add(subMenu) ;
+				}
+			}
+			::InsertMenu(MAC_WXHMENU(m_menus[i]->GetHMenu()), 0);
+			for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
+			{
+			    wxMenu* submenu = (wxMenu*) submenus[i] ;
+    	        wxNode *subnode;
+    	        wxMenuItem *subitem;
+    	        int subpos ;
+                for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
 		  		{
   		 			subitem = (wxMenuItem *)subnode->Data();
   		 			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
@@ -755,11 +654,11 @@ void wxMenuBar::MacInstallMenuBar()
   						submenus.Add(itsSubMenu) ;
   					}  				
   				}
-					::InsertMenu( MAC_WXHMENU(submenu->GetHMenu()) , -1 ) ;
-  			}
-			}
+				::InsertMenu( MAC_WXHMENU(submenu->GetHMenu()) , -1 ) ;
+		    }
 		}
-		::DrawMenuBar() ;
+	}
+	::DrawMenuBar() ;
 	s_macInstalledMenuBar = this;
 }
 
@@ -900,44 +799,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     return TRUE;
 }
 
-void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum)
-{
-    // first scan fast for direct commands, i.e. menus which have these commands directly in their own list
-    
-    if ( macMenuId == kwxMacAppleMenuId && macMenuItemNum == 1 )
-    {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macAboutMenuItemId );
-        event.m_timeStamp = when;
-        event.SetEventObject(handler);
-        event.SetInt( wxApp::s_macAboutMenuItemId );
-        handler->ProcessEvent(event);
-    }
-    else
-    {		
-        for (size_t i = 0; i < m_menus.GetCount() ; i++)
-        {
-            if ( m_menus[i]->MacGetMenuId() == macMenuId || ( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) ) )
-            {
-                if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
-                    return ;
-                else
-                {
-                    //TODO flag this as an error since it must contain the item
-                    return ;
-                }
-            }
-        }
-	
-	  for (size_t i = 0; i < m_menus.GetCount(); i++)
-	  {
-	  	if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
-	  	{
-	  		break ;
-	  	}
-	  }
-	}
-}
-
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
@@ -1004,6 +865,56 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     return TRUE;
 }
 
+static void wxMenubarUnsetInvokingWindow( wxMenu *menu )
+{
+    menu->SetInvokingWindow( (wxWindow*) NULL );
+
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu() );
+        node = node->GetNext();
+    }
+}
+
+static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
+{
+    menu->SetInvokingWindow( win );
+
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+            wxMenubarSetInvokingWindow( menuitem->GetSubMenu() , win );
+        node = node->GetNext();
+    }
+}
+
+void wxMenuBar::UnsetInvokingWindow()
+{
+    wxMenuList::Node *node = m_menus.GetFirst();
+    while (node)
+    {
+        wxMenu *menu = node->GetData();
+        wxMenubarUnsetInvokingWindow( menu );
+        node = node->GetNext();
+    }
+}
+
+void wxMenuBar::SetInvokingWindow(wxFrame *frame)
+{
+    wxMenuList::Node *node = m_menus.GetFirst();
+    while (node)
+    {
+        wxMenu *menu = node->GetData();
+        wxMenubarSetInvokingWindow( menu, frame );
+        node = node->GetNext();
+    }
+}
+
 void wxMenuBar::Detach()
 {
     wxMenuBarBase::Detach() ;
@@ -1012,7 +923,6 @@ void wxMenuBar::Detach()
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach( frame ) ;
-
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL

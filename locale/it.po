@@ -874,7 +874,7 @@ msgstr "Sommario"
 
 #: ../src/common/strconv.cpp:593
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr "La conversione nella codifica '%s' non funziona."
 
 #: ../src/generic/prntdlgg.cpp:193

@@ -1,24 +1,24 @@
-#!/usr/bin/env python
 """PyCrustApp is a python shell and namespace browser application."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython.wx import *
+from wxPython import wx
 from crust import CrustFrame
 
+True, False = 1, 0
 
-class App(wxApp):
+
+class App(wx.wxApp):
     """PyCrust standalone application."""
 
     def OnInit(self):
-        wxInitAllImageHandlers()
+        wx.wxInitAllImageHandlers()
         locals = {'__app__': 'PyCrust Standalone Application'}
         self.crustFrame = CrustFrame(locals=locals)
         self.crustFrame.SetSize((750, 525))
-        self.crustFrame.Show(true)
-        self.crustFrame.crust.shell.SetFocus()
+        self.crustFrame.Show(True)
         self.SetTopWindow(self.crustFrame)
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:
@@ -26,11 +26,11 @@ class App(wxApp):
         # >>> sys.application.whatever
         import sys
         sys.application = self
-        return true
+        return True
 
 
 def main():
-    application = App(1)
+    application = App(0)
     application.MainLoop()
 
 if __name__ == '__main__':

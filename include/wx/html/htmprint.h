@@ -98,7 +98,7 @@ enum {
 class WXDLLEXPORT wxHtmlPrintout : public wxPrintout
 {
 public:
-    wxHtmlPrintout(const wxString& title = "Printout");
+    wxHtmlPrintout(const wxString& title = wxT("Printout"));
     ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = TRUE); 
@@ -176,7 +176,7 @@ private:
 class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
 {
 public:
-    wxHtmlEasyPrinting(const wxString& name = "Printing", wxFrame *parent_frame = NULL);
+    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxFrame *parent_frame = NULL);
     ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);

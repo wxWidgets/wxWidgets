@@ -111,8 +111,8 @@ void
 PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if ( info->verbose )
-        wxLogError(wxString(message));
+    if (info->verbose)
+        wxLogError( wxString::FromAscii(message) );
 
 #ifdef USE_FAR_KEYWORD
     {
@@ -129,8 +129,8 @@ void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if ( info->verbose )
-        wxLogWarning(wxString(message));
+    if (info->verbose)
+        wxLogWarning( wxString::FromAscii(message) );
 }
 
 } // extern "C"
@@ -186,6 +186,10 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_expand( png_ptr );
+
+    // Fix for Bug [ 439207 ] Monochrome PNG images come up black
+    if (bit_depth < 8)
         png_set_expand( png_ptr );
 
     png_set_strip_16( png_ptr );

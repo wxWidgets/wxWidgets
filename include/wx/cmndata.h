@@ -218,9 +218,11 @@ public:
 #elif defined(__WXMAC__)
     void*           m_macPageFormat ;
     void*           m_macPrintSettings ;
+    void*			m_macPrintSession ;
 #endif
 
 private:
+
     int             m_printNoCopies;
     int             m_printOrientation;
     bool            m_printCollate;

@@ -217,8 +217,9 @@ void wxCursor::MacInstall() const
 {
 	if ( m_refData && M_CURSORDATA->m_hCursor )
 	{
-		::SetCursor(  *((CursHandle)M_CURSORDATA->m_hCursor) ) ;
-		gMacCurrentCursor = (CursHandle)M_CURSORDATA->m_hCursor ;
+		CursHandle ch = ((CursHandle)M_CURSORDATA->m_hCursor) ;
+		::SetCursor(  *ch ) ;
+		gMacCurrentCursor = ch ;
 	}
 	else
 	{

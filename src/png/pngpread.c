@@ -1,7 +1,7 @@
 
 /* pngpread.c - read a png file in push mode
  *
- * libpng 1.2.4 - July 8, 2002
+ * libpng 1.2.5rc3 - September 18, 2002
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -668,8 +668,8 @@ png_push_read_IDAT(png_structp png_ptr)
          save_size = png_ptr->save_buffer_size;
 
       png_calculate_crc(png_ptr, png_ptr->save_buffer_ptr, save_size);
-      png_process_IDAT_data(png_ptr, png_ptr->save_buffer_ptr, save_size);
-
+      if (!(png_ptr->flags & PNG_FLAG_ZLIB_FINISHED))
+         png_process_IDAT_data(png_ptr, png_ptr->save_buffer_ptr, save_size);
       png_ptr->idat_size -= save_size;
       png_ptr->buffer_size -= save_size;
       png_ptr->save_buffer_size -= save_size;
@@ -690,7 +690,8 @@ png_push_read_IDAT(png_structp png_ptr)
          save_size = png_ptr->current_buffer_size;
 
       png_calculate_crc(png_ptr, png_ptr->current_buffer_ptr, save_size);
-      png_process_IDAT_data(png_ptr, png_ptr->current_buffer_ptr, save_size);
+      if (!(png_ptr->flags & PNG_FLAG_ZLIB_FINISHED))
+        png_process_IDAT_data(png_ptr, png_ptr->current_buffer_ptr, save_size);
 
       png_ptr->idat_size -= save_size;
       png_ptr->buffer_size -= save_size;
@@ -707,6 +708,7 @@ png_push_read_IDAT(png_structp png_ptr)
 
       png_crc_finish(png_ptr, 0);
       png_ptr->mode &= ~PNG_HAVE_CHUNK_HEADER;
+      png_ptr->mode |= PNG_AFTER_IDAT;
    }
 }
 
@@ -752,7 +754,12 @@ png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
              (!png_ptr->interlaced &&
 #endif
              png_ptr->row_number == png_ptr->num_rows-1))
-           png_error(png_ptr, "Too much data in IDAT chunks");
+         {
+           if (png_ptr->zstream.avail_in)
+             png_warning(png_ptr, "Too much data in IDAT chunks");
+           png_ptr->flags |= PNG_FLAG_ZLIB_FINISHED;
+           break;
+         }
          png_push_process_row(png_ptr);
          png_ptr->zstream.avail_out = (uInt)png_ptr->irowbytes;
          png_ptr->zstream.next_out = png_ptr->row_buf;
@@ -987,6 +994,8 @@ png_read_push_finish_row(png_structp png_ptr)
              (png_ptr->pass == 5 && png_ptr->width < 2))
            png_ptr->pass++;
 
+         if (png_ptr->pass > 7)
+            png_ptr->pass--;
          if (png_ptr->pass >= 7)
             break;
 

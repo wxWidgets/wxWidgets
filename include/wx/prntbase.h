@@ -53,8 +53,6 @@ enum wxPrinterError
 
 class WXDLLEXPORT wxPrinterBase: public wxObject
 {
-    DECLARE_CLASS(wxPrinterBase)
-
 public:
     wxPrinterBase(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
     virtual ~wxPrinterBase();
@@ -85,6 +83,8 @@ public:
     static wxWindow*      sm_abortWindow;
     static bool           sm_abortIt;
 
+private:
+    DECLARE_CLASS(wxPrinterBase)
 };
 
 /*
@@ -97,10 +97,8 @@ public:
 
 class WXDLLEXPORT wxPrintout: public wxObject
 {
-DECLARE_ABSTRACT_CLASS(wxPrintout)
-
 public:
-    wxPrintout(const wxString& title = "Printout");
+    wxPrintout(const wxString& title = wxT("Printout"));
     virtual ~wxPrintout();
 
     virtual bool OnBeginDocument(int startPage, int endPage);
@@ -149,6 +147,9 @@ private:
     int              m_PPIPrinterY;
 
     bool             m_isPreview;
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxPrintout)
 };
 
 /*
@@ -158,15 +159,13 @@ private:
 
 class WXDLLEXPORT wxPreviewCanvas: public wxScrolledWindow
 {
-    DECLARE_CLASS(wxPreviewCanvas)
-
 public:
     wxPreviewCanvas(wxPrintPreviewBase *preview,
                     wxWindow *parent,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
-                    const wxString& name = "canvas");
+                    const wxString& name = wxT("canvas"));
     ~wxPreviewCanvas();
 
     void OnPaint(wxPaintEvent& event);
@@ -177,6 +176,7 @@ public:
 private:
     wxPrintPreviewBase* m_printPreview;
 
+    DECLARE_CLASS(wxPreviewCanvas)
     DECLARE_EVENT_TABLE()
 };
 
@@ -187,16 +187,14 @@ private:
 
 class WXDLLEXPORT wxPreviewFrame: public wxFrame
 {
-    DECLARE_CLASS(wxPreviewFrame)
-
 public:
     wxPreviewFrame(wxPrintPreviewBase *preview,
                    wxFrame *parent,
-                   const wxString& title = "Print Preview",
+                   const wxString& title = wxT("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
-                   const wxString& name = "frame");
+                   const wxString& name = wxT("frame"));
     ~wxPreviewFrame();
 
     void OnCloseWindow(wxCloseEvent& event);
@@ -209,6 +207,7 @@ protected:
     wxPrintPreviewBase*   m_printPreview;
 
 private:
+    DECLARE_CLASS(wxPreviewFrame)
     DECLARE_EVENT_TABLE()
 };
 
@@ -251,7 +250,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
-                        const wxString& name = "panel");
+                        const wxString& name = wxT("panel"));
     ~wxPreviewControlBar();
 
     virtual void CreateButtons();
@@ -392,7 +391,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
-                       const wxString& name = "dialog")
+                       const wxString& name = wxT("dialog"))
         : wxDialog(parent, -1, title, pos, size, style, name)
         {
         }

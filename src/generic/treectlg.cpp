@@ -762,11 +762,13 @@ void wxGenericTreeCtrl::Init()
     m_lastOnSame = FALSE;
 
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    m_boldFont = wxFont( m_normalFont.GetPointSize(),
-                         m_normalFont.GetFamily(),
-                         m_normalFont.GetStyle(),
-                         wxBOLD,
-                         m_normalFont.GetUnderlined());
+    m_boldFont = wxFont(m_normalFont.GetPointSize(),
+                        m_normalFont.GetFamily(),
+                        m_normalFont.GetStyle(),
+                        wxBOLD,
+                        m_normalFont.GetUnderlined(),
+                        m_normalFont.GetFaceName(),
+                        m_normalFont.GetEncoding());
 }
 
 bool wxGenericTreeCtrl::Create(wxWindow *parent,
@@ -919,6 +921,30 @@ wxTreeItemData *wxGenericTreeCtrl::GetItemData(const wxTreeItemId& item) const
     return ((wxGenericTreeItem*) item.m_pItem)->GetData();
 }
 
+wxColour wxGenericTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetTextColour();
+}
+
+wxColour wxGenericTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetBackgroundColour();
+}
+
+wxFont wxGenericTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullFont, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->Attr().GetFont();
+}
+
 void wxGenericTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
@@ -1007,11 +1033,13 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
     wxScrolledWindow::SetFont(font);
 
     m_normalFont = font ;
-    m_boldFont = wxFont( m_normalFont.GetPointSize(),
-                            m_normalFont.GetFamily(),
-                            m_normalFont.GetStyle(),
-                            wxBOLD,
-                            m_normalFont.GetUnderlined());
+    m_boldFont = wxFont(m_normalFont.GetPointSize(),
+                        m_normalFont.GetFamily(),
+                        m_normalFont.GetStyle(),
+                        wxBOLD,
+                        m_normalFont.GetUnderlined(),
+                        m_normalFont.GetFaceName(),
+                        m_normalFont.GetEncoding());
 
     return TRUE;
 }

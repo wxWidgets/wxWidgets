@@ -964,7 +964,7 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
@@ -981,7 +981,7 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) con
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);
@@ -1092,7 +1092,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
 
     handler = FindHandler(type);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
@@ -1110,7 +1110,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
@@ -1126,7 +1126,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
 
     wxImageHandler *handler = FindHandler(type);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
@@ -1142,7 +1142,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
@@ -1158,7 +1158,23 @@ void wxImage::AddHandler( wxImageHandler *handler )
     // make sure that the memory will be freed at the program end
     sm_handlers.DeleteContents(TRUE);
 
-    sm_handlers.Append( handler );
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Append( handler );
+    }
+    else
+    {
+        // This is not documented behaviour, merely the simplest 'fix'
+        // for preventing duplicate additions.  If someone ever has
+        // a good reason to add and remove duplicate handlers (and they
+        // may) we should probably refcount the duplicates.
+        //   also an issue in InsertHandler below.
+
+        wxLogDebug( _T("Adding duplicate image handler for '%s'"),
+                    handler->GetName().c_str() );
+        delete handler;
+    }
 }
 
 void wxImage::InsertHandler( wxImageHandler *handler )
@@ -1166,7 +1182,18 @@ void wxImage::InsertHandler( wxImageHandler *handler )
     // make sure that the memory will be freed at the program end
     sm_handlers.DeleteContents(TRUE);
 
-    sm_handlers.Insert( handler );
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Insert( handler );
+    }
+    else
+    {
+        // see AddHandler for additional comments.
+        wxLogDebug( _T("Inserting duplicate image handler for '%s'"),
+                    handler->GetName().c_str() );
+        delete handler;
+    }
 }
 
 bool wxImage::RemoveHandler( const wxString& name )
@@ -1191,7 +1218,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
 
         node = node->Next();
     }
-    return (wxImageHandler *)NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
@@ -1205,7 +1232,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType
             return handler;
         node = node->Next();
     }
-    return (wxImageHandler*)NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandler( long bitmapType )
@@ -1217,7 +1244,7 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
         if (handler->GetType() == bitmapType) return handler;
         node = node->Next();
     }
-    return NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
@@ -1229,7 +1256,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
         if (handler->GetMimeType().IsSameAs(mimetype, FALSE)) return handler;
         node = node->Next();
     }
-    return NULL;
+    return 0;
 }
 
 void wxImage::InitStandardHandlers()
@@ -1319,7 +1346,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 
 
 //-----------------------------------------------------------------------------
-// Deprecated wxBitmap convertion routines
+// Deprecated wxBitmap conversion routines
 //-----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI

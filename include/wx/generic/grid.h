@@ -1824,7 +1824,7 @@ protected:
     bool GetModelValues();
     bool SetModelValues();
 
-        friend class wxGridSelection;
+    friend class WXDLLEXPORT wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()

@@ -3,13 +3,13 @@
 wxWindow is the base class for all windows. Any children of the window will be deleted
 automatically by the destructor before the window itself is deleted.
 
-Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
-help text. These must not be called by a user program and are documented only for illustration.
-On several platforms, only a few of these handlers are actually written (they are not always
-needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
-the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
-platform can implement its native behaviour or just ignore the event if nothing needs to be
-done.
+%Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
+%help text. These must not be called by a user program and are documented only for illustration.
+%On several platforms, only a few of these handlers are actually written (they are not always
+%needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
+%the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
+%platform can implement its native behaviour or just ignore the event if nothing needs to be
+%done.
 
 \wxheading{Derived from}
 
@@ -521,6 +521,16 @@ The search is recursive in both cases.
 Sizes the window so that it fits around its subwindows. This function won't do
 anything if there are no subwindows.
 
+\membersection{wxWindow::FitInside}\label{wxwindowfitinside}
+
+\func{virtual void}{FitInside}{\void}
+
+Similar to \helpref{Fit}{wxwindowfit}, but sizes the interior (virtual) size
+of a window.  Mainly useful with scrolled windows to reset scrollbars after
+sizing changes that do not trigger a size event, and/or scrolled windows without
+an interior sizer.  This function similarly won't do anything if there are no
+subwindows.
+
 \membersection{wxWindow::Freeze}\label{wxwindowfreeze}
 
 \func{virtual void}{Freeze}{\void}
@@ -534,6 +544,16 @@ is a good idea to use it before inserting large amount of text into a
 wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
 controls so it is mostly just a hint to wxWindows and not a mandatory
 directive.
+
+\membersection{wxWindow::GetAdjustedBestSize}\label{wxwindowgetadjustedbestsize}
+
+\constfunc{wxSize}{GetAdjustedBestSize}{\void}
+
+This method is similar to \helpref{GetBestSize}{wxwindowgetbestsize}, except
+in one thing.  GetBestSize should return the minimum untruncated size of the
+window, while this method will return the largest of BestSize and any user
+specified minimum size.  ie. it is the minimum size the window should currently
+be drawn at, not the minimal size it can possibly tolerate.
 
 \membersection{wxWindow::GetBackgroundColour}\label{wxwindowgetbackgroundcolour}
 
@@ -1759,6 +1779,19 @@ erased.}
 \docparam{rect}{If non-NULL, only the given rectangle will
 be treated as damaged.}
 
+\wxheading{See also}
+
+\helpref{wxWindow::RefreshRect}{wxwindowrefreshrect}
+
+\membersection{wxWindow::RefreshRect}\label{wxwindowrefreshrect}
+
+\func{virtual void}{Refresh}{\param{const wxRect\& }{rect}}
+
+Redraws the contents of the given rectangle: the area inside it will be
+repainted.
+
+This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax.
+
 \membersection{wxWindow::ReleaseMouse}\label{wxwindowreleasemouse}
 
 \func{virtual void}{ReleaseMouse}{\void}
@@ -2681,6 +2714,17 @@ Returns {\tt FALSE} if a transfer failed.
 
 \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
 \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::Validate}{wxwindowvalidate}
+
+\membersection{wxWindow::Update}\label{wxwindowupdate}
+
+\func{virtual void}{Update}{\void}
+
+Calling this method immediately repaints the invalidated area of the window
+while this would usually only happen when the flow of control returns to the
+event loop. Notice that this function doesn't refresh the window and does
+nothing if the window hadn't been already repainted. Use 
+\helpref{Refresh}{wxwindowrefresh} first if you want to immediately redraw the
+window unconditionally.
 
 \membersection{wxWindow::Validate}\label{wxwindowvalidate}
 

@@ -63,7 +63,6 @@ public:
     // implementation only from now on
     // -------------------------------
 
-  	bool MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
   	int	MacGetIndexFromId( int id ) ; 
   	int	MacGetIndexFromItem( wxMenuItem *pItem ) ; 
   	void MacEnableMenu( bool bDoEnable ) ;
@@ -163,6 +162,11 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame);
 
+		// clear the invoking window for all menus and submenus
+	void UnsetInvokingWindow() ;
+
+		// set the invoking window for all menus and submenus
+	void SetInvokingWindow( wxFrame* frame ) ;
 #if wxUSE_ACCEL
     // get the accel table for all the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
@@ -176,7 +180,6 @@ public:
     void Refresh(bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL);
 
   void MacInstallMenuBar() ;
-  void MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
   static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
 
 protected:

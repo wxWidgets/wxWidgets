@@ -324,8 +324,8 @@ void CheckListBoxFrame::OnButtonMove(bool up)
 
 void CheckListBoxFrame::AdjustColour(size_t index)
 {
-    // not implemented in other ports yet
-#ifdef __WXMSW__
+    // not implemented in ports other than (native) MSW yet
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // even items have grey backround, odd ones - white
     unsigned char c = index % 2 ? 255 : 200;
     m_pListBox->GetItem(index)->SetBackgroundColour(wxColor(c, c, c));

@@ -95,6 +95,14 @@
 #   endif
 #endif /* !defined(wxUSE_MIMETYPE) */
 
+#ifndef wxUSE_PROLOGIO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROLOGIO must be defined."
+#   else
+#       define wxUSE_PROLOGIO 0
+#   endif
+#endif /* !defined(wxUSE_PROLOGIO) */
+
 #ifndef wxUSE_PROTOCOL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_PROTOCOL must be defined."
@@ -675,6 +683,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_WX_RESOURCES
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WX_RESOURCES must be defined."
+#   else
+#       define wxUSE_WX_RESOURCES 0
+#   endif
+#endif /* !defined(wxUSE_WX_RESOURCES) */
+
 #ifndef wxUSE_WXHTML_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WXHTML_HELP must be defined."
@@ -1167,6 +1183,15 @@
 #       define wxUSE_DATAOBJ 1
 #   endif
 #endif /* wxUSE_CLIPBOARD */
+
+#if wxUSE_WX_RESOURCES && !wxUSE_PROLOGIO
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxr resources require PrologIO"
+#   else
+#       undef wxUSE_PROLOGIO
+#       define wxUSE_PROLOGIO 1
+#   endif
+#endif /* wxUSE_WX_RESOURCES */
 
 #endif /* wxUSE_GUI */
 

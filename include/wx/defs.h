@@ -1099,6 +1099,7 @@ enum wxBorder
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
+#define wxRB_SINGLE         0x0008
 
 /*
  * wxGauge flags
@@ -1172,8 +1173,12 @@ enum wxBorder
  */
 #define wxTC_RIGHTJUSTIFY     0x0010
 #define wxTC_FIXEDWIDTH       0x0020
-#define wxTC_OWNERDRAW        0x0040
+#define wxTC_TOP              0x0000    // default
+#define wxTC_LEFT             0x0020
+#define wxTC_RIGHT            0x0040
+#define wxTC_BOTTOM           0x0080
 #define wxTC_MULTILINE        wxNB_MULTILINE
+#define wxTC_OWNERDRAW        0x0200
 
 // wxToolBar style flags
 #define wxTB_HORIZONTAL     wxHORIZONTAL    // == 0x0004
@@ -1794,11 +1799,11 @@ enum wxPrintMode
 
 // macro to specify "All Files" on different platforms
 #if defined(__WXMSW__) || defined(__WXPM__)
-#   define wxALL_FILES_PATTERN   "*.*"
-#   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
+#   define wxALL_FILES_PATTERN   wxT("*.*")
+#   define wxALL_FILES           gettext_noop(wxT("All files (*.*)|*.*"))
 #else
-#   define wxALL_FILES_PATTERN   "*"
-#   define wxALL_FILES           gettext_noop("All files (*)|*")
+#   define wxALL_FILES_PATTERN   wxT("*")
+#   define wxALL_FILES           gettext_noop(wxT("All files (*)|*"))
 #endif
 
 // ---------------------------------------------------------------------------
@@ -2083,13 +2088,24 @@ typedef GtkWidget *WXWidget;
 #endif
 
 #ifdef __WXGTK20__
+/* Input method thing */
+typedef struct _GtkIMMulticontext    GtkIMMulticontext;
+#endif // __WXGTK20__
+
+#endif // __WXGTK__
+
+#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#define wxUSE_PANGO 1
+#else
+#define wxUSE_PANGO 0
+#endif
+
+#if wxUSE_PANGO
 /* Stand-ins for Pango types */
 typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
-#endif // GTK+ 2.0
-
-#endif // GTK
+#endif
 
 #ifdef __WXMGL__
 typedef struct window_t *WXWidget;

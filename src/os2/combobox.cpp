@@ -173,37 +173,8 @@ void wxComboBox::SetValue(
   const wxString&                   rsValue
 )
 {
-    //
-    // If newlines are denoted by just 10, must stick 13 in front.
-    //
-    int                             nSingletons = 0;
-    int                             nLen = rsValue.Length();
-    int                             i;
-
-    for (i = 0; i < nLen; i ++)
-    {
-        if ((i > 0) && (rsValue[i] == 10) && (rsValue[i - 1] != 13))
-            nSingletons ++;
-    }
-    if (nSingletons > 0)
-    {
-        wxChar*                     zTmp = new wxChar[nLen + nSingletons + 1];
-        int                         j = 0;
-
-        for (i = 0; i < nLen; i ++)
-        {
-            if ((i > 0) && (rsValue[i] == 10) && (rsValue[i - 1] != 13))
-            {
-                zTmp[j] = 13;
-                j++;
-            }
-            zTmp[j] = rsValue[i];
-            j++;
-        }
-        zTmp[j] = 0;
-        ::WinSetWindowText(GetHwnd(), zTmp);
-        delete[] zTmp;
-    }
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(rsValue);
     else
         ::WinSetWindowText(GetHwnd(), rsValue.c_str());
 } // end of wxComboBox::SetValue

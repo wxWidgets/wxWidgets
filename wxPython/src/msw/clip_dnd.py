@@ -56,11 +56,11 @@ class wxDataObjectPtr :
     def GetAllFormats(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetAllFormats,(self,) + _args, _kwargs)
         return val
-    def GetDataSize(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetDataSize,(self,) + _args, _kwargs)
-        return val
     def GetDataHere(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_GetDataHere,(self,) + _args, _kwargs)
+        return val
+    def GetDataSize(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxDataObject_GetDataSize,(self,) + _args, _kwargs)
         return val
     def SetData(self, *_args, **_kwargs):
         val = apply(clip_dndc.wxDataObject_SetData,(self,) + _args, _kwargs)

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows 2.3.3\n"
 "POT-Creation-Date: 2001-12-17 16:47+0100\n"
-"PO-Revision-Date: 2002-09-09 18:07--800\n"
+"PO-Revision-Date: 2002-09-16 17:41--800\n"
 "Last-Translator: Hakki Dogusan <dogusanh@tr.net>\n"
 "Language-Team: Hakki Dogusan <dogusanh@tr.net>\n"
 "MIME-Version: 1.0\n"
@@ -893,7 +893,7 @@ msgstr "Ýçerik"
 
 #: ../src/common/strconv.cpp:608
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr "'%s' karakter kümesine dönüþüm çalýþmýyor."
 
 #: ../src/generic/prntdlgg.cpp:194
@@ -1295,7 +1295,7 @@ msgstr "Geçici dosya adý yaratýlamadý"
 #: ../src/msw/dde.cpp:401
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "'%s' merkezine '%s' konusunda baðlantý kurulamadý"
+msgstr "'%s' sunucusuna '%s' konusunda baðlantý kurulamadý"
 
 #: ../src/generic/dirctrlg.cpp:1302
 #: ../src/generic/dirdlgg.cpp:543
@@ -1324,7 +1324,7 @@ msgstr "Pano temizlenemedi."
 
 #: ../src/msw/dde.cpp:606
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "DDE merkeziyle danýþma döngüsü saðlanamadý"
+msgstr "DDE sunucusuyla danýþma döngüsü saðlanamadý"
 
 #: ../src/msw/dialup.cpp:646
 #, c-format
@@ -1456,7 +1456,7 @@ msgstr "Alt iþ girdi/çýktýsý yönlendirilemedi"
 #: ../src/msw/dde.cpp:285
 #, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "'%s' DDE merkezine kaydolunamadý"
+msgstr "'%s' DDE sunucusuna kaydolunamadý"
 
 #: ../src/common/fontmap.cpp:654
 #, c-format
@@ -1533,7 +1533,7 @@ msgstr "Ýþ parçacýðý sonlandýrýlamadý."
 
 #: ../src/msw/dde.cpp:625
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "DDE merkeziyle danýþma döngüsü sonlandýrýlamadý"
+msgstr "DDE sunucusuyla danýþma döngüsü sonlandýrýlamadý"
 
 #: ../src/msw/dialup.cpp:948
 #, c-format
@@ -1553,7 +1553,7 @@ msgstr "'%s' kilit dosyasýnýn kilidi kaldýrýlamadý"
 #: ../src/msw/dde.cpp:301
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "'%s' DDE merkeziyle kayýt iptali yapýlamadý"
+msgstr "'%s' DDE sunucusuyla kayýt iptali yapýlamadý"
 
 #: ../src/unix/snglinst.cpp:174
 #, c-format
@@ -2669,7 +2669,7 @@ msgstr "Bilgisayar"
 
 #: ../src/common/ftp.cpp:569
 msgid "The FTP server doesn't support passive mode."
-msgstr "FTP merkezi pasif durumu desteklemiyor."
+msgstr "FTP sunucusu pasif durumu desteklemiyor."
 
 #: ../src/common/fontmap.cpp:610
 #, c-format
@@ -3166,7 +3166,7 @@ msgid ""
 "terminated before completing a transaction."
 msgstr ""
 "istemci tarafýndan sonlandýrýlmýþ bir görüþme üstünde\n"
-"merkez-tarafý iþ denendi, veya merkez\n"
+"sunucu-tarafý iþ denendi, veya sunucu\n"
 "iþ bitmeden sonlandýrýldý."
 
 #: ../src/msw/dde.cpp:996
@@ -3187,7 +3187,7 @@ msgstr ""
 "APPCLASS_MONITOR olarak baþlatýlmýþ bir uygulama\n"
 "DDE iþi gerçekleþtirmeyi denedi,\n"
 "veya APPCMD_CLIENTONLY olarak baþlatýlmýþ bir uygulama\n"
-"merkez iþi gerçekleþtirmeyi denedi."
+"sunucu iþi gerçekleþtirmeyi denedi."
 
 #: ../src/msw/dde.cpp:1002
 msgid "an internal call to the PostMessage function has failed. "

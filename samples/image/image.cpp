@@ -60,12 +60,14 @@ public:
     wxBitmap  *my_horse_ico16;
     wxBitmap  *my_horse_ico;
     wxBitmap  *my_horse_cur;
+    wxBitmap  *my_horse_ani;
 
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
     int xH, yH ;
+    int m_ani_images ;
 
 protected:
     wxBitmap m_bmpSmileXpm;
@@ -264,10 +266,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_ico16 = (wxBitmap*) NULL;
     my_horse_ico = (wxBitmap*) NULL;
     my_horse_cur = (wxBitmap*) NULL;
+    my_horse_ani = (wxBitmap*) NULL;
 
     my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
+
+    m_ani_images = 0 ;
 
     SetBackgroundColour(* wxWHITE);
 
@@ -285,9 +290,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     // try to find the directory with our images
     wxString dir;
     if ( wxFile::Exists(wxT("./horse.png")) )
-        dir = "./";
+        dir = wxT("./");
     else if ( wxFile::Exists(wxT("../horse.png")) )
-        dir = "../";
+        dir = wxT("../");
     else
         wxLogWarning(wxT("Can't find image files in either '.' or '..'!"));
 
@@ -322,7 +327,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_GIF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxString("horse.gif")))
+    if ( !image.LoadFile( dir + _T("horse.gif" )) )
         wxLogError(wxT("Can't load GIF image"));
     else
         my_horse_gif = new wxBitmap( image );
@@ -417,6 +422,27 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         xH = 30 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) ;
         yH = 2420 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ;
     }
+
+    m_ani_images = wxImage::GetImageCount ( dir + _T("horse.ani"), wxBITMAP_TYPE_ANI );
+    if (m_ani_images==0)
+        wxLogError(wxT("No ANI-format images found"));
+    else
+        my_horse_ani = new wxBitmap [m_ani_images];
+    int i ;
+    for (i=0; i < m_ani_images; i++)
+    {
+        image.Destroy();
+        if (!image.LoadFile( dir + _T("horse.ani"), wxBITMAP_TYPE_ANI, i ))
+        {
+            wxString tmp = wxT("Can't load image number ");
+            tmp << i ;
+            wxLogError(tmp);
+        }
+        else    
+            my_horse_ani [i] = wxBitmap( image );
+    }
+    
+    
 #endif
 
     image.Destroy();
@@ -454,6 +480,7 @@ MyCanvas::~MyCanvas()
     delete my_horse_ico16;
     delete my_horse_ico;
     delete my_horse_cur;
+    delete [] my_horse_ani;
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;
@@ -611,6 +638,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawLine (xH-10,yH,xH+10,yH);
         dc.DrawLine (xH,yH-10,xH,yH+10);
     }
+    dc.DrawText( _T("ANI handler"), 230, 2390 );
+    int i ;
+    for (i=0; i < m_ani_images; i ++)
+        if (my_horse_ani[i].Ok())
+        {
+            dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, TRUE );
+        }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -768,6 +802,7 @@ bool MyApp::OnInit()
 #if wxUSE_ICO_CUR
   wxImage::AddHandler( new wxICOHandler );
   wxImage::AddHandler( new wxCURHandler );
+  wxImage::AddHandler( new wxANIHandler );
 #endif
 
   wxFrame *frame = new MyFrame();

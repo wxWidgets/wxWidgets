@@ -21,9 +21,25 @@
 // Include common declarations
 #include "wx/x11/privx.h"
 
+#if wxUSE_UNICODE
+#include "pango/pango.h"
+#endif
+
 class wxMouseEvent;
 class wxKeyEvent;
 class wxWindow;
+
+// ----------------------------------------------------------------------------
+// Some Unicode <-> UTF8 macros stolen from GTK
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE
+    #define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
+    #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
+#else
+    #define wxGTK_CONV(s) s.c_str()
+    #define wxGTK_CONV_BACK(s) s
+#endif
 
 // ----------------------------------------------------------------------------
 // we maintain a hash table which contains the mapping from Widget to wxWindow
@@ -42,7 +58,7 @@ extern bool wxAddClientWindowToTable(Window w, wxWindow *win);
 // TranslateXXXEvent() functions - translate X event to wxWindow one
 // ----------------------------------------------------------------------------
 extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
-extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
+extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window window, XEvent *xevent, bool isAscii = FALSE);
 
 extern Window wxGetWindowParent(Window window);
 

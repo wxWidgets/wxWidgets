@@ -55,12 +55,6 @@ class wxPseudoMetaFilePtr(wxObjectPtr):
     def Draw(self, *_args, **_kwargs):
         val = apply(oglshapesc.wxPseudoMetaFile_Draw,(self,) + _args, _kwargs)
         return val
-    def WriteAttributes(self, *_args, **_kwargs):
-        val = apply(oglshapesc.wxPseudoMetaFile_WriteAttributes,(self,) + _args, _kwargs)
-        return val
-    def ReadAttributes(self, *_args, **_kwargs):
-        val = apply(oglshapesc.wxPseudoMetaFile_ReadAttributes,(self,) + _args, _kwargs)
-        return val
     def Clear(self, *_args, **_kwargs):
         val = apply(oglshapesc.wxPseudoMetaFile_Clear,(self,) + _args, _kwargs)
         return val

@@ -525,7 +525,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
     
 #ifdef __WXMSW__
     // Map to system colours
-    (void) MapBitmap(destBmp->GetHBITMAP(), destBmp->GetWidth(), destBmp->GetHeight());
+    (void) wxToolBar::MapBitmap(destBmp->GetHBITMAP(), destBmp->GetWidth(), destBmp->GetHeight());
 #endif    
 }
 
@@ -799,49 +799,3 @@ void wxNewBitmapButton::OnKillFocus( wxFocusEvent& event )
     wxMessageBox("kill-focus for button!");
 }
 
-#ifdef __WXMSW__
-WXHBITMAP wxNewBitmapButton::MapBitmap(WXHBITMAP bitmap, int width, int height)
-{
-    MemoryHDC hdcMem;
-
-    if ( !hdcMem )
-    {
-        wxLogLastError(_T("CreateCompatibleDC"));
-
-        return bitmap;
-    }
-
-    SelectInHDC bmpInHDC(hdcMem, (HBITMAP)bitmap);
-
-    if ( !bmpInHDC )
-    {
-        wxLogLastError(_T("SelectObject"));
-
-        return bitmap;
-    }
-
-    wxCOLORMAP *cmap = wxGetStdColourMap();
-
-    for ( int i = 0; i < width; i++ )
-    {
-        for ( int j = 0; j < height; j++ )
-        {
-            COLORREF pixel = ::GetPixel(hdcMem, i, j);
-
-            for ( size_t k = 0; k < wxSTD_COL_MAX; k++ )
-            {
-                COLORREF col = cmap[k].from;
-                if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
-                     abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
-                     abs(GetBValue(pixel) - GetBValue(col)) < 10 )
-                {
-                    ::SetPixel(hdcMem, i, j, cmap[k].to);
-                    break;
-                }
-            }
-        }
-    }
-
-    return bitmap;
-}
-#endif

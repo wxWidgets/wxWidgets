@@ -56,6 +56,13 @@ Add styles common to all wxWindow-derived classes.
 Returns TRUE if it understands this node and can create
 a resource from it, FALSE otherwise.
 
+\wxheading{Note}
+
+You must {\bf not} call any wxXmlResourceHandler methods except 
+\helpref{IsOfClass}{wxxmlresourcehandlerisofclass} from this method! The instance
+is not yet initialized with node data at the time CanHandle is called and it is only
+safe to operate on {\it node} directly or to call IsOfClass.
+
 \membersection{wxXmlResourceHandler::CreateChildren}\label{wxxmlresourcehandlercreatechildren}
 
 \func{void}{CreateChildren}{\param{wxObject* }{parent}, \param{bool }{this\_hnd\_only = FALSE}}

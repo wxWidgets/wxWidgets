@@ -134,9 +134,9 @@ also \helpref{GetBitmap}{wxwizardpagegetbitmap}.}
 \docparam{pos}{The position of the dialog, it will be centered on the screen
 by default.}
 
-\membersection{wxWizard::Fit}\label{wxwizardfit}
+\membersection{wxWizard::FitToPage}\label{wxwizardfittopage}
 
-\func{void}{Fit}{\param{const wxWizardPage* }{firstPage}}
+\func{void}{FittoPage}{\param{const wxWizardPage* }{firstPage}}
 
 Sets the page size to be big enough for all the pages accessible via the
 given {\it firstPage}, i.e. this page, its next page and so on.
@@ -159,6 +159,32 @@ Get the current page while the wizard is running. {\tt NULL} is returned if
 \constfunc{wxSize}{GetPageSize}{\void}
 
 Returns the size available for the pages.
+
+\membersection{wxWizard::HasNextPage}\label{wxwizardhasnextpage}
+
+\func{virtual bool}{HasNextPage}{\param{wxWizardPage *}{page}}
+
+Return {\tt TRUE} if this page is not the last one in the wizard. The base
+class version implements this by calling 
+\helpref{page->GetNext}{wxwizardpagegetnext} but this could be undesirable if,
+for example, the pages are created on demand only.
+
+\wxheading{See also}
+
+\helpref{HasPrevPage}{wxwizardhasprevpage}
+
+\membersection{wxWizard::HasPrevPage}\label{wxwizardhasprevpage}
+
+\func{virtual bool}{HasPrevPage}{\param{wxWizardPage *}{page}}
+
+Return {\tt TRUE} if this page is not the last one in the wizard. The base
+class version implements this by calling 
+\helpref{page->GetPrev}{wxwizardpagegetprev} but this could be undesirable if,
+for example, the pages are created on demand only.
+
+\wxheading{See also}
+
+\helpref{HasNextPage}{wxwizardhasnextpage}
 
 \membersection{wxWizard::RunWizard}\label{wxwizardrunwizard}
 

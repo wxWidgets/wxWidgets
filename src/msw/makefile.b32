@@ -24,6 +24,7 @@
 WXDIR = $(WXWIN)
 THISDIR = $(WXDIR)\src\msw
 
+
 # Set all these to 1 if you want to build a dynamic library
 !if "$(DLL)" == "1"
 WXMAKINGDLL=1
@@ -65,6 +66,8 @@ GENDIR=..\generic
 COMMDIR=..\common
 HTMLDIR=..\html
 OLEDIR=.\ole
+UNIVDIR=..\univ
+UNIVTHEMEDIR=..\univ\themes
 MSWDIR=.
 
 DOCDIR = $(WXDIR)\docs
@@ -101,15 +104,265 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\treelay.obj \
 		$(MSWDIR)\wizard.obj
 
-# Not needed:
-#  $(MSWDIR)\colrdlgg.obj \
-#  $(MSWDIR)\fontdlgg.obj \
-#  $(MSWDIR)\msgdlgg.obj \
-#  $(MSWDIR)\printps.obj \
-#  $(MSWDIR)\prntdlgg.obj \
-#  $(MSWDIR)\listctrl.obj \
-#  $(MSWDIR)\notebook.obj \
-#  $(MSWDIR)\treectrl.obj
+MSWOBJS = $(MSWDIR)\accel.obj \
+		$(MSWDIR)\app.obj \
+		$(MSWDIR)\automtn.obj \
+		$(MSWDIR)\bitmap.obj \
+		$(MSWDIR)\bmpbuttn.obj \
+		$(MSWDIR)\brush.obj \
+		$(MSWDIR)\button.obj \
+		$(MSWDIR)\caret.obj \
+		$(MSWDIR)\checkbox.obj \
+		$(MSWDIR)\checklst.obj \
+		$(MSWDIR)\choice.obj \
+		$(MSWDIR)\clipbrd.obj \
+		$(MSWDIR)\colordlg.obj \
+		$(MSWDIR)\colour.obj \
+		$(MSWDIR)\combobox.obj \
+		$(MSWDIR)\control.obj \
+		$(MSWDIR)\curico.obj \
+		$(MSWDIR)\cursor.obj \
+		$(MSWDIR)\data.obj \
+		$(MSWDIR)\dataobj.obj \
+		$(MSWDIR)\dc.obj \
+		$(MSWDIR)\dcclient.obj \
+		$(MSWDIR)\dcmemory.obj \
+		$(MSWDIR)\dcprint.obj \
+		$(MSWDIR)\dcscreen.obj \
+		$(MSWDIR)\dde.obj \
+		$(MSWDIR)\dialog.obj \
+		$(MSWDIR)\dialup.obj \
+		$(MSWDIR)\dib.obj \
+		$(MSWDIR)\dibutils.obj \
+		$(MSWDIR)\dir.obj \
+		$(MSWDIR)\dirdlg.obj \
+		$(MSWDIR)\dragimag.obj \
+		$(MSWDIR)\dropsrc.obj \
+		$(MSWDIR)\droptgt.obj \
+		$(MSWDIR)\enhmeta.obj \
+		$(MSWDIR)\evtloop.obj \
+		$(MSWDIR)\fdrepdlg.obj \
+		$(MSWDIR)\filedlg.obj \
+		$(MSWDIR)\font.obj \
+		$(MSWDIR)\fontdlg.obj \
+		$(MSWDIR)\fontenum.obj \
+		$(MSWDIR)\fontutil.obj \
+		$(MSWDIR)\frame.obj \
+		$(MSWDIR)\gauge95.obj \
+		$(MSWDIR)\gdiimage.obj \
+		$(MSWDIR)\gdiobj.obj \
+		$(MSWDIR)\glcanvas.obj \
+		$(MSWDIR)\gsocket.obj \
+		$(MSWDIR)\gsockmsw.obj \
+		$(MSWDIR)\helpbest.obj \
+		$(MSWDIR)\helpchm.obj \
+		$(MSWDIR)\helpwin.obj \
+		$(MSWDIR)\icon.obj \
+		$(MSWDIR)\imaglist.obj \
+		$(MSWDIR)\iniconf.obj \
+		$(MSWDIR)\joystick.obj \
+		$(MSWDIR)\listbox.obj \
+		$(MSWDIR)\listctrl.obj \
+		$(MSWDIR)\main.obj \
+		$(MSWDIR)\mdi.obj \
+		$(MSWDIR)\menu.obj \
+		$(MSWDIR)\menuitem.obj \
+		$(MSWDIR)\metafile.obj \
+		$(MSWDIR)\mimetype.obj \
+		$(MSWDIR)\minifram.obj \
+		$(MSWDIR)\msgdlg.obj \
+		$(MSWDIR)\mslu.obj \
+		$(MSWDIR)\nativdlg.obj \
+		$(MSWDIR)\notebook.obj \
+		$(MSWDIR)\oleutils.obj \
+		$(MSWDIR)\ownerdrw.obj \
+		$(MSWDIR)\palette.obj \
+		$(MSWDIR)\pen.obj \
+		$(MSWDIR)\penwin.obj \
+		$(MSWDIR)\popupwin.obj \
+		$(MSWDIR)\printdlg.obj \
+		$(MSWDIR)\printwin.obj \
+		$(MSWDIR)\radiobox.obj \
+		$(MSWDIR)\radiobut.obj \
+		$(MSWDIR)\regconf.obj \
+		$(MSWDIR)\region.obj \
+		$(MSWDIR)\registry.obj \
+		$(MSWDIR)\scrolbar.obj \
+		$(MSWDIR)\settings.obj \
+		$(MSWDIR)\slider95.obj \
+		$(MSWDIR)\snglinst.obj \
+		$(MSWDIR)\spinbutt.obj \
+		$(MSWDIR)\spinctrl.obj \
+		$(MSWDIR)\statbmp.obj \
+		$(MSWDIR)\statbox.obj \
+		$(MSWDIR)\statbr95.obj \
+		$(MSWDIR)\statline.obj \
+		$(MSWDIR)\stattext.obj \
+		$(MSWDIR)\tabctrl.obj \
+		$(MSWDIR)\taskbar.obj \
+		$(MSWDIR)\tbar95.obj \
+		$(MSWDIR)\textctrl.obj \
+		$(MSWDIR)\tglbtn.obj \
+		$(MSWDIR)\thread.obj \
+		$(MSWDIR)\timer.obj \
+		$(MSWDIR)\tooltip.obj \
+		$(MSWDIR)\toplevel.obj \
+		$(MSWDIR)\treectrl.obj \
+		$(MSWDIR)\utils.obj \
+		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\uuid.obj \
+		$(MSWDIR)\volume.obj \
+		$(MSWDIR)\wave.obj \
+		$(MSWDIR)\window.obj
+
+GENERICUNIVOBJS= $(MSWDIR)\accel.obj \
+		$(MSWDIR)\busyinfo.obj \
+		$(MSWDIR)\calctrl.obj \
+		$(MSWDIR)\choicdgg.obj \
+		$(MSWDIR)\colrdlgg.obj \
+		$(MSWDIR)\dcbuffer.obj \
+		$(MSWDIR)\dcpsg.obj \
+		$(MSWDIR)\dirctrlg.obj \
+		$(MSWDIR)\dirdlgg.obj \
+		$(MSWDIR)\dragimgg.obj \
+		$(MSWDIR)\fdrepdlg.obj \
+		$(MSWDIR)\filedlgg.obj \
+		$(MSWDIR)\fontdlgg.obj \
+		$(MSWDIR)\grid.obj \
+		$(MSWDIR)\gridctrl.obj \
+		$(MSWDIR)\gridsel.obj \
+		$(MSWDIR)\helpext.obj \
+		$(MSWDIR)\helphtml.obj \
+		$(MSWDIR)\imaglist.obj \
+		$(MSWDIR)\laywin.obj \
+		$(MSWDIR)\listctrl.obj \
+		$(MSWDIR)\logg.obj \
+		$(MSWDIR)\mdig.obj \
+		$(MSWDIR)\msgdlgg.obj \
+		$(MSWDIR)\numdlgg.obj \
+		$(MSWDIR)\panelg.obj \
+		$(MSWDIR)\printps.obj \
+		$(MSWDIR)\prntdlgg.obj \
+		$(MSWDIR)\progdlgg.obj \
+		$(MSWDIR)\prop.obj \
+		$(MSWDIR)\propform.obj \
+		$(MSWDIR)\proplist.obj \
+		$(MSWDIR)\sashwin.obj \
+		$(MSWDIR)\scrlwing.obj \
+		$(MSWDIR)\spinctlg.obj \
+		$(MSWDIR)\splash.obj \
+		$(MSWDIR)\splitter.obj \
+		$(MSWDIR)\tabg.obj \
+		$(MSWDIR)\tbarsmpl.obj \
+		$(MSWDIR)\textdlgg.obj \
+		$(MSWDIR)\tipdlg.obj \
+		$(MSWDIR)\tipwin.obj \
+		$(MSWDIR)\treectlg.obj \
+		$(MSWDIR)\treelay.obj \
+		$(MSWDIR)\wizard.obj
+
+MSWUNIVOBJS = $(MSWDIR)\app.obj \
+		$(MSWDIR)\bitmap.obj \
+		$(MSWDIR)\brush.obj \
+		$(MSWDIR)\caret.obj \
+		$(MSWDIR)\clipbrd.obj \
+		$(MSWDIR)\colour.obj \
+		$(MSWDIR)\cursor.obj \
+		$(MSWDIR)\data.obj \
+		$(MSWDIR)\dc.obj \
+		$(MSWDIR)\dcclient.obj \
+		$(MSWDIR)\dcmemory.obj \
+		$(MSWDIR)\dcprint.obj \
+		$(MSWDIR)\dcscreen.obj \
+		$(MSWDIR)\dde.obj \
+		$(MSWDIR)\dib.obj \
+		$(MSWDIR)\dir.obj \
+		$(MSWDIR)\evtloop.obj \
+		$(MSWDIR)\font.obj \
+		$(MSWDIR)\fontenum.obj \
+		$(MSWDIR)\fontutil.obj \
+		$(MSWDIR)\gdiimage.obj \
+		$(MSWDIR)\gdiobj.obj \
+		$(MSWDIR)\gsocket.obj \
+		$(MSWDIR)\gsockmsw.obj \
+		$(MSWDIR)\icon.obj \
+		$(MSWDIR)\main.obj \
+		$(MSWDIR)\mimetype.obj \
+		$(MSWDIR)\palette.obj \
+		$(MSWDIR)\pen.obj \
+		$(MSWDIR)\popupwin.obj \
+		$(MSWDIR)\regconf.obj \
+		$(MSWDIR)\region.obj \
+		$(MSWDIR)\registry.obj \
+		$(MSWDIR)\settings.obj \
+		$(MSWDIR)\snglinst.obj \
+		$(MSWDIR)\thread.obj \
+		$(MSWDIR)\timer.obj \
+		$(MSWDIR)\toplevel.obj \
+		$(MSWDIR)\utils.obj \
+		$(MSWDIR)\utilsexc.obj \
+		$(MSWDIR)\volume.obj \
+		$(MSWDIR)\window.obj
+
+UNIVOBJS = $(MSWDIR)\bmpbuttn.obj \
+		$(MSWDIR)\button.obj \
+		$(MSWDIR)\checkbox.obj \
+		$(MSWDIR)\checklst.obj \
+		$(MSWDIR)\choice.obj \
+		$(MSWDIR)\colschem.obj \
+		$(MSWDIR)\combobox.obj \
+		$(MSWDIR)\control.obj \
+		$(MSWDIR)\dialog.obj \
+		$(MSWDIR)\framuniv.obj \
+		$(MSWDIR)\gauge.obj \
+		$(MSWDIR)\inpcons.obj \
+		$(MSWDIR)\inphand.obj \
+		$(MSWDIR)\listbox.obj \
+		$(MSWDIR)\menu.obj \
+		$(MSWDIR)\notebook.obj \
+		$(MSWDIR)\radiobox.obj \
+		$(MSWDIR)\radiobut.obj \
+		$(MSWDIR)\renderer.obj \
+		$(MSWDIR)\scrarrow.obj \
+		$(MSWDIR)\scrolbar.obj \
+		$(MSWDIR)\scrthumb.obj \
+		$(MSWDIR)\slider.obj \
+		$(MSWDIR)\spinbutt.obj \
+		$(MSWDIR)\statbmp.obj \
+		$(MSWDIR)\statbox.obj \
+		$(MSWDIR)\statline.obj \
+		$(MSWDIR)\stattext.obj \
+		$(MSWDIR)\statusbr.obj \
+		$(MSWDIR)\textctrl.obj \
+		$(MSWDIR)\theme.obj \
+		$(MSWDIR)\toolbar.obj \
+		$(MSWDIR)\topluniv.obj \
+		$(MSWDIR)\winuniv.obj
+
+UNIVTHEMEOBJS = $(MSWDIR)\gtk.obj \
+		$(MSWDIR)\metal.obj \
+		$(MSWDIR)\win32.obj
+
+HTMLOBJS = $(MSWDIR)\helpctrl.obj \
+		$(MSWDIR)\helpdata.obj \
+		$(MSWDIR)\helpfrm.obj \
+		$(MSWDIR)\htmlcell.obj \
+		$(MSWDIR)\htmlfilt.obj \
+		$(MSWDIR)\htmlpars.obj \
+		$(MSWDIR)\htmltag.obj \
+		$(MSWDIR)\htmlwin.obj \
+		$(MSWDIR)\htmprint.obj \
+		$(MSWDIR)\m_dflist.obj \
+		$(MSWDIR)\m_fonts.obj \
+		$(MSWDIR)\m_hline.obj \
+		$(MSWDIR)\m_image.obj \
+		$(MSWDIR)\m_layout.obj \
+		$(MSWDIR)\m_links.obj \
+		$(MSWDIR)\m_list.obj \
+		$(MSWDIR)\m_pre.obj \
+		$(MSWDIR)\m_style.obj \
+		$(MSWDIR)\m_tables.obj \
+		$(MSWDIR)\winpars.obj
 
 COMMONOBJS = \
         $(MSWDIR)\y_tab.obj \
@@ -244,140 +497,11 @@ COMMONOBJS = \
 		$(MSWDIR)\zipstrm.obj \
 		$(MSWDIR)\zstream.obj
 
-MSWOBJS = $(MSWDIR)\accel.obj \
-		$(MSWDIR)\app.obj \
-		$(MSWDIR)\automtn.obj \
-		$(MSWDIR)\bitmap.obj \
-		$(MSWDIR)\bmpbuttn.obj \
-		$(MSWDIR)\brush.obj \
-		$(MSWDIR)\button.obj \
-		$(MSWDIR)\caret.obj \
-		$(MSWDIR)\checkbox.obj \
-		$(MSWDIR)\checklst.obj \
-		$(MSWDIR)\choice.obj \
-		$(MSWDIR)\clipbrd.obj \
-		$(MSWDIR)\colordlg.obj \
-		$(MSWDIR)\colour.obj \
-		$(MSWDIR)\combobox.obj \
-		$(MSWDIR)\control.obj \
-		$(MSWDIR)\curico.obj \
-		$(MSWDIR)\cursor.obj \
-		$(MSWDIR)\data.obj \
-		$(MSWDIR)\dataobj.obj \
-		$(MSWDIR)\dc.obj \
-		$(MSWDIR)\dcclient.obj \
-		$(MSWDIR)\dcmemory.obj \
-		$(MSWDIR)\dcprint.obj \
-		$(MSWDIR)\dcscreen.obj \
-		$(MSWDIR)\dde.obj \
-		$(MSWDIR)\dialog.obj \
-		$(MSWDIR)\dialup.obj \
-		$(MSWDIR)\dib.obj \
-		$(MSWDIR)\dibutils.obj \
-		$(MSWDIR)\dir.obj \
-		$(MSWDIR)\dirdlg.obj \
-		$(MSWDIR)\dragimag.obj \
-		$(MSWDIR)\dropsrc.obj \
-		$(MSWDIR)\droptgt.obj \
-		$(MSWDIR)\enhmeta.obj \
-		$(MSWDIR)\evtloop.obj \
-		$(MSWDIR)\fdrepdlg.obj \
-		$(MSWDIR)\filedlg.obj \
-		$(MSWDIR)\font.obj \
-		$(MSWDIR)\fontdlg.obj \
-		$(MSWDIR)\fontenum.obj \
-		$(MSWDIR)\fontutil.obj \
-		$(MSWDIR)\frame.obj \
-		$(MSWDIR)\gauge95.obj \
-		$(MSWDIR)\gdiimage.obj \
-		$(MSWDIR)\gdiobj.obj \
-		$(MSWDIR)\glcanvas.obj \
-		$(MSWDIR)\gsocket.obj \
-		$(MSWDIR)\gsockmsw.obj \
-		$(MSWDIR)\helpbest.obj \
-		$(MSWDIR)\helpchm.obj \
-		$(MSWDIR)\helpwin.obj \
-		$(MSWDIR)\icon.obj \
-		$(MSWDIR)\imaglist.obj \
-		$(MSWDIR)\iniconf.obj \
-		$(MSWDIR)\joystick.obj \
-		$(MSWDIR)\listbox.obj \
-		$(MSWDIR)\listctrl.obj \
-		$(MSWDIR)\main.obj \
-		$(MSWDIR)\mdi.obj \
-		$(MSWDIR)\menu.obj \
-		$(MSWDIR)\menuitem.obj \
-		$(MSWDIR)\metafile.obj \
-		$(MSWDIR)\mimetype.obj \
-		$(MSWDIR)\minifram.obj \
-		$(MSWDIR)\msgdlg.obj \
-		$(MSWDIR)\mslu.obj \
-		$(MSWDIR)\nativdlg.obj \
-		$(MSWDIR)\notebook.obj \
-		$(MSWDIR)\oleutils.obj \
-		$(MSWDIR)\ownerdrw.obj \
-		$(MSWDIR)\palette.obj \
-		$(MSWDIR)\pen.obj \
-		$(MSWDIR)\penwin.obj \
-		$(MSWDIR)\popupwin.obj \
-		$(MSWDIR)\printdlg.obj \
-		$(MSWDIR)\printwin.obj \
-		$(MSWDIR)\radiobox.obj \
-		$(MSWDIR)\radiobut.obj \
-		$(MSWDIR)\regconf.obj \
-		$(MSWDIR)\region.obj \
-		$(MSWDIR)\registry.obj \
-		$(MSWDIR)\scrolbar.obj \
-		$(MSWDIR)\settings.obj \
-		$(MSWDIR)\slider95.obj \
-		$(MSWDIR)\snglinst.obj \
-		$(MSWDIR)\spinbutt.obj \
-		$(MSWDIR)\spinctrl.obj \
-		$(MSWDIR)\statbmp.obj \
-		$(MSWDIR)\statbox.obj \
-		$(MSWDIR)\statbr95.obj \
-		$(MSWDIR)\statline.obj \
-		$(MSWDIR)\stattext.obj \
-		$(MSWDIR)\tabctrl.obj \
-		$(MSWDIR)\taskbar.obj \
-		$(MSWDIR)\tbar95.obj \
-		$(MSWDIR)\textctrl.obj \
-		$(MSWDIR)\tglbtn.obj \
-		$(MSWDIR)\thread.obj \
-		$(MSWDIR)\timer.obj \
-		$(MSWDIR)\tooltip.obj \
-		$(MSWDIR)\toplevel.obj \
-		$(MSWDIR)\treectrl.obj \
-		$(MSWDIR)\utils.obj \
-		$(MSWDIR)\utilsexc.obj \
-		$(MSWDIR)\uuid.obj \
-		$(MSWDIR)\volume.obj \
-		$(MSWDIR)\wave.obj \
-		$(MSWDIR)\window.obj
-
-HTMLOBJS = $(MSWDIR)\helpctrl.obj \
-		$(MSWDIR)\helpdata.obj \
-		$(MSWDIR)\helpfrm.obj \
-		$(MSWDIR)\htmlcell.obj \
-		$(MSWDIR)\htmlfilt.obj \
-		$(MSWDIR)\htmlpars.obj \
-		$(MSWDIR)\htmltag.obj \
-		$(MSWDIR)\htmlwin.obj \
-		$(MSWDIR)\htmprint.obj \
-		$(MSWDIR)\m_dflist.obj \
-		$(MSWDIR)\m_fonts.obj \
-		$(MSWDIR)\m_hline.obj \
-		$(MSWDIR)\m_image.obj \
-		$(MSWDIR)\m_layout.obj \
-		$(MSWDIR)\m_links.obj \
-		$(MSWDIR)\m_list.obj \
-		$(MSWDIR)\m_meta.obj \
-		$(MSWDIR)\m_pre.obj \
-		$(MSWDIR)\m_style.obj \
-		$(MSWDIR)\m_tables.obj \
-		$(MSWDIR)\winpars.obj
-
+!if "$(WXUSINGUNIV)" == "1"
+OBJECTS = $(COMMONOBJS) $(GENERICUNIVOBJS) $(MSWUNIVOBJS) $(HTMLOBJS) $(UNIVOBJS) $(UNIVTHEMEOBJS)
+!else
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
+!endif
 
 default:    wx
 
@@ -393,7 +517,7 @@ makesetuph:
 
 # Copy include\wx\msw\setup.h to the architecture-specific location
 makearchsetuph:
-     copy $(WXDIR)\include\wx\msw\setup.h $(ARCHSETUPH)
+     copy $(SETUPSRCDIR)\setup.h $(ARCHSETUPH)
      cd $(WXDIR)\src\msw
 
 $(ARCHINCDIR)\wx:
@@ -443,6 +567,101 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 # $(OBJECTS):   $(WXDIR)\include\wx\setup.h
+
+!if "$(WXUSINGUNIV)" == "1"
+########################################################
+# MSW objects (compile Native or UNIV) - UNIV
+
+$(MSWDIR)\app.obj: $(MSWDIR)\app.$(SRCSUFF)
+
+$(MSWDIR)\bitmap.obj: $(MSWDIR)\bitmap.$(SRCSUFF)
+
+$(MSWDIR)\brush.obj: $(MSWDIR)\brush.$(SRCSUFF)
+
+$(MSWDIR)\caret.obj: $(MSWDIR)\caret.$(SRCSUFF)
+
+$(MSWDIR)\clipbrd.obj: $(MSWDIR)\clipbrd.$(SRCSUFF)
+
+$(MSWDIR)\colour.obj: $(MSWDIR)\colour.$(SRCSUFF)
+
+$(MSWDIR)\cursor.obj: $(MSWDIR)\cursor.$(SRCSUFF)
+
+$(MSWDIR)\data.obj: $(MSWDIR)\data.$(SRCSUFF)
+
+$(MSWDIR)\dc.obj: $(MSWDIR)\dc.$(SRCSUFF)
+
+$(MSWDIR)\dcclient.obj: $(MSWDIR)\dcclient.$(SRCSUFF)
+
+$(MSWDIR)\dcmemory.obj: $(MSWDIR)\dcmemory.$(SRCSUFF)
+
+$(MSWDIR)\dcprint.obj: $(MSWDIR)\dcprint.$(SRCSUFF)
+
+$(MSWDIR)\dcscreen.obj: $(MSWDIR)\dcscreen.$(SRCSUFF)
+
+$(MSWDIR)\dde.obj: $(MSWDIR)\dde.$(SRCSUFF)
+
+$(MSWDIR)\dib.obj: $(MSWDIR)\dib.$(SRCSUFF)
+
+$(MSWDIR)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
+
+$(MSWDIR)\evtloop.obj: $(MSWDIR)\evtloop.$(SRCSUFF)
+
+$(MSWDIR)\font.obj: $(MSWDIR)\font.$(SRCSUFF)
+
+$(MSWDIR)\fontenum.obj: $(MSWDIR)\fontenum.$(SRCSUFF)
+
+$(MSWDIR)\fontutil.obj: $(MSWDIR)\fontutil.$(SRCSUFF)
+
+$(MSWDIR)\gdiimage.obj: $(MSWDIR)\gdiimage.$(SRCSUFF)
+
+$(MSWDIR)\gdiobj.obj: $(MSWDIR)\gdiobj.$(SRCSUFF)
+
+$(MSWDIR)\gsocket.obj: $(MSWDIR)\gsocket.c
+
+$(MSWDIR)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
+
+$(MSWDIR)\icon.obj: $(MSWDIR)\icon.$(SRCSUFF)
+
+$(MSWDIR)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
+
+$(MSWDIR)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
+
+$(MSWDIR)\palette.obj: $(MSWDIR)\palette.$(SRCSUFF)
+
+$(MSWDIR)\pen.obj: $(MSWDIR)\pen.$(SRCSUFF)
+
+$(MSWDIR)\popupwin.obj: $(MSWDIR)\popupwin.$(SRCSUFF)
+
+$(MSWDIR)\regconf.obj: $(MSWDIR)\regconf.$(SRCSUFF)
+
+$(MSWDIR)\region.obj: $(MSWDIR)\region.$(SRCSUFF)
+
+$(MSWDIR)\registry.obj: $(MSWDIR)\registry.$(SRCSUFF)
+
+$(MSWDIR)\settings.obj: $(MSWDIR)\settings.$(SRCSUFF)
+
+$(MSWDIR)\snglinst.obj: $(MSWDIR)\snglinst.$(SRCSUFF)
+
+$(MSWDIR)\thread.obj: $(MSWDIR)\thread.$(SRCSUFF)
+
+$(MSWDIR)\timer.obj: $(MSWDIR)\timer.$(SRCSUFF)
+
+$(MSWDIR)\toplevel.obj: $(MSWDIR)\toplevel.$(SRCSUFF)
+
+$(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
+
+$(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
+
+$(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
+
+$(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
+
+
+
+
+!else
+########################################################
+# MSW objects (compile Native or UNIV) - Native
 
 $(MSWDIR)\accel.obj: $(MSWDIR)\accel.$(SRCSUFF)
 
@@ -665,6 +884,94 @@ $(MSWDIR)\wave.obj: $(MSWDIR)\wave.$(SRCSUFF)
 $(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
 
 
+!endif
+
+!if "$(WXUSINGUNIV)" == "1"
+########################################################
+# UNIV objects 
+$(MSWDIR)\bmpbuttn.obj: $(UNIVDIR)\bmpbuttn.$(SRCSUFF)
+
+$(MSWDIR)\button.obj: $(UNIVDIR)\button.$(SRCSUFF)
+
+$(MSWDIR)\checkbox.obj: $(UNIVDIR)\checkbox.$(SRCSUFF)
+
+$(MSWDIR)\checklst.obj: $(UNIVDIR)\checklst.$(SRCSUFF)
+
+$(MSWDIR)\choice.obj: $(UNIVDIR)\choice.$(SRCSUFF)
+
+$(MSWDIR)\colschem.obj: $(UNIVDIR)\colschem.$(SRCSUFF)
+
+$(MSWDIR)\combobox.obj: $(UNIVDIR)\combobox.$(SRCSUFF)
+
+$(MSWDIR)\control.obj: $(UNIVDIR)\control.$(SRCSUFF)
+
+$(MSWDIR)\dialog.obj: $(UNIVDIR)\dialog.$(SRCSUFF)
+
+$(MSWDIR)\framuniv.obj: $(UNIVDIR)\framuniv.$(SRCSUFF)
+
+$(MSWDIR)\gauge.obj: $(UNIVDIR)\gauge.$(SRCSUFF)
+
+$(MSWDIR)\inpcons.obj: $(UNIVDIR)\inpcons.$(SRCSUFF)
+
+$(MSWDIR)\inphand.obj: $(UNIVDIR)\inphand.$(SRCSUFF)
+
+$(MSWDIR)\listbox.obj: $(UNIVDIR)\listbox.$(SRCSUFF)
+
+$(MSWDIR)\menu.obj: $(UNIVDIR)\menu.$(SRCSUFF)
+
+$(MSWDIR)\notebook.obj: $(UNIVDIR)\notebook.$(SRCSUFF)
+
+$(MSWDIR)\radiobox.obj: $(UNIVDIR)\radiobox.$(SRCSUFF)
+
+$(MSWDIR)\radiobut.obj: $(UNIVDIR)\radiobut.$(SRCSUFF)
+
+$(MSWDIR)\renderer.obj: $(UNIVDIR)\renderer.$(SRCSUFF)
+
+$(MSWDIR)\scrarrow.obj: $(UNIVDIR)\scrarrow.$(SRCSUFF)
+
+$(MSWDIR)\scrolbar.obj: $(UNIVDIR)\scrolbar.$(SRCSUFF)
+
+$(MSWDIR)\scrthumb.obj: $(UNIVDIR)\scrthumb.$(SRCSUFF)
+
+$(MSWDIR)\slider.obj: $(UNIVDIR)\slider.$(SRCSUFF)
+
+$(MSWDIR)\spinbutt.obj: $(UNIVDIR)\spinbutt.$(SRCSUFF)
+
+$(MSWDIR)\statbmp.obj: $(UNIVDIR)\statbmp.$(SRCSUFF)
+
+$(MSWDIR)\statbox.obj: $(UNIVDIR)\statbox.$(SRCSUFF)
+
+$(MSWDIR)\statline.obj: $(UNIVDIR)\statline.$(SRCSUFF)
+
+$(MSWDIR)\stattext.obj: $(UNIVDIR)\stattext.$(SRCSUFF)
+
+$(MSWDIR)\statusbr.obj: $(UNIVDIR)\statusbr.$(SRCSUFF)
+
+$(MSWDIR)\textctrl.obj: $(UNIVDIR)\textctrl.$(SRCSUFF)
+
+$(MSWDIR)\theme.obj: $(UNIVDIR)\theme.$(SRCSUFF)
+
+$(MSWDIR)\toolbar.obj: $(UNIVDIR)\toolbar.$(SRCSUFF)
+
+$(MSWDIR)\topluniv.obj: $(UNIVDIR)\topluniv.$(SRCSUFF)
+
+$(MSWDIR)\winuniv.obj: $(UNIVDIR)\winuniv.$(SRCSUFF)
+
+
+
+
+########################################################
+# UNIV THEME objects 
+
+$(MSWDIR)\gtk.obj: $(UNIVTHEMEDIR)\gtk.$(SRCSUFF)
+
+$(MSWDIR)\metal.obj: $(UNIVTHEMEDIR)\metal.$(SRCSUFF)
+
+$(MSWDIR)\win32.obj: $(UNIVTHEMEDIR)\win32.$(SRCSUFF)
+
+
+
+!endif
 
 ########################################################
 # Common objects (always compiled)
@@ -931,9 +1238,110 @@ $(MSWDIR)\zstream.obj: $(COMMDIR)\zstream.$(SRCSUFF)
 
 
 
+!if "$(WXUSINGUNIV)" == "1"
 ########################################################
 # Generic objects (not always compiled, depending on
 # whether platforms have native implementations)
+# Native
+
+
+$(MSWDIR)\accel.obj: $(GENDIR)\accel.$(SRCSUFF)
+
+$(MSWDIR)\busyinfo.obj: $(GENDIR)\busyinfo.$(SRCSUFF)
+
+$(MSWDIR)\calctrl.obj: $(GENDIR)\calctrl.$(SRCSUFF)
+
+$(MSWDIR)\choicdgg.obj: $(GENDIR)\choicdgg.$(SRCSUFF)
+
+$(MSWDIR)\colrdlgg.obj: $(GENDIR)\colrdlgg.$(SRCSUFF)
+
+$(MSWDIR)\dcbuffer.obj: $(GENDIR)\dcbuffer.$(SRCSUFF)
+
+$(MSWDIR)\dcpsg.obj: $(GENDIR)\dcpsg.$(SRCSUFF)
+
+$(MSWDIR)\dirctrlg.obj: $(GENDIR)\dirctrlg.$(SRCSUFF)
+
+$(MSWDIR)\dirdlgg.obj: $(GENDIR)\dirdlgg.$(SRCSUFF)
+
+$(MSWDIR)\dragimgg.obj: $(GENDIR)\dragimgg.$(SRCSUFF)
+
+$(MSWDIR)\fdrepdlg.obj: $(GENDIR)\fdrepdlg.$(SRCSUFF)
+
+$(MSWDIR)\filedlgg.obj: $(GENDIR)\filedlgg.$(SRCSUFF)
+
+$(MSWDIR)\fontdlgg.obj: $(GENDIR)\fontdlgg.$(SRCSUFF)
+
+$(MSWDIR)\grid.obj: $(GENDIR)\grid.$(SRCSUFF)
+
+$(MSWDIR)\gridctrl.obj: $(GENDIR)\gridctrl.$(SRCSUFF)
+
+$(MSWDIR)\gridsel.obj: $(GENDIR)\gridsel.$(SRCSUFF)
+
+$(MSWDIR)\helpext.obj: $(GENDIR)\helpext.$(SRCSUFF)
+
+$(MSWDIR)\helphtml.obj: $(GENDIR)\helphtml.$(SRCSUFF)
+
+$(MSWDIR)\imaglist.obj: $(GENDIR)\imaglist.$(SRCSUFF)
+
+$(MSWDIR)\laywin.obj: $(GENDIR)\laywin.$(SRCSUFF)
+
+$(MSWDIR)\listctrl.obj: $(GENDIR)\listctrl.$(SRCSUFF)
+
+$(MSWDIR)\logg.obj: $(GENDIR)\logg.$(SRCSUFF)
+
+$(MSWDIR)\mdig.obj: $(GENDIR)\mdig.$(SRCSUFF)
+
+$(MSWDIR)\msgdlgg.obj: $(GENDIR)\msgdlgg.$(SRCSUFF)
+
+$(MSWDIR)\numdlgg.obj: $(GENDIR)\numdlgg.$(SRCSUFF)
+
+$(MSWDIR)\panelg.obj: $(GENDIR)\panelg.$(SRCSUFF)
+
+$(MSWDIR)\printps.obj: $(GENDIR)\printps.$(SRCSUFF)
+
+$(MSWDIR)\prntdlgg.obj: $(GENDIR)\prntdlgg.$(SRCSUFF)
+
+$(MSWDIR)\progdlgg.obj: $(GENDIR)\progdlgg.$(SRCSUFF)
+
+$(MSWDIR)\prop.obj: $(GENDIR)\prop.$(SRCSUFF)
+
+$(MSWDIR)\propform.obj: $(GENDIR)\propform.$(SRCSUFF)
+
+$(MSWDIR)\proplist.obj: $(GENDIR)\proplist.$(SRCSUFF)
+
+$(MSWDIR)\sashwin.obj: $(GENDIR)\sashwin.$(SRCSUFF)
+
+$(MSWDIR)\scrlwing.obj: $(GENDIR)\scrlwing.$(SRCSUFF)
+
+$(MSWDIR)\spinctlg.obj: $(GENDIR)\spinctlg.$(SRCSUFF)
+
+$(MSWDIR)\splash.obj: $(GENDIR)\splash.$(SRCSUFF)
+
+$(MSWDIR)\splitter.obj: $(GENDIR)\splitter.$(SRCSUFF)
+
+$(MSWDIR)\tabg.obj: $(GENDIR)\tabg.$(SRCSUFF)
+
+$(MSWDIR)\tbarsmpl.obj: $(GENDIR)\tbarsmpl.$(SRCSUFF)
+
+$(MSWDIR)\textdlgg.obj: $(GENDIR)\textdlgg.$(SRCSUFF)
+
+$(MSWDIR)\tipdlg.obj: $(GENDIR)\tipdlg.$(SRCSUFF)
+
+$(MSWDIR)\tipwin.obj: $(GENDIR)\tipwin.$(SRCSUFF)
+
+$(MSWDIR)\treectlg.obj: $(GENDIR)\treectlg.$(SRCSUFF)
+
+$(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
+
+$(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
+
+
+
+!else
+########################################################
+# Generic objects (not always compiled, depending on
+# whether platforms have native implementations)
+# Native
 
 $(MSWDIR)\busyinfo.obj: $(GENDIR)\busyinfo.$(SRCSUFF)
 
@@ -998,6 +1406,7 @@ $(MSWDIR)\treelay.obj: $(GENDIR)\treelay.$(SRCSUFF)
 $(MSWDIR)\wizard.obj: $(GENDIR)\wizard.$(SRCSUFF)
 
 
+!endif
 
 ########################################################
 # HTML objects (always compiled)
@@ -1034,8 +1443,6 @@ $(MSWDIR)\m_links.obj: $(HTMLDIR)\m_links.$(SRCSUFF)
 
 $(MSWDIR)\m_list.obj: $(HTMLDIR)\m_list.$(SRCSUFF)
 
-$(MSWDIR)\m_meta.obj: $(HTMLDIR)\m_meta.$(SRCSUFF)
-
 $(MSWDIR)\m_pre.obj: $(HTMLDIR)\m_pre.$(SRCSUFF)
 
 $(MSWDIR)\m_style.obj: $(HTMLDIR)\m_style.$(SRCSUFF)
@@ -1064,7 +1471,7 @@ all_execs:
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\src\msw
 
 clean_png:
@@ -1074,7 +1481,7 @@ clean_png:
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_zlib:
@@ -1084,7 +1491,7 @@ clean_zlib:
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
@@ -1094,7 +1501,7 @@ clean_jpeg:
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_regex:
@@ -1104,7 +1511,7 @@ clean_regex:
 
 tiff:   $(CFG)
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_tiff:
@@ -1131,7 +1538,7 @@ $(CFG): makefile.b32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
 -D__WXWIN__
--D__WXMSW__
+-D$(PORT)
 -D__WINDOWS__
 -DWIN32
 $(OPT)
