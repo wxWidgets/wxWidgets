@@ -687,22 +687,19 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 
   // retrieve text and save it
   // -------------------------
-#ifdef __WXGTK__
-  // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
-  wxLogError(_("Sorry, this function is not implemented under GTK"));
-#else
   int nLines = m_pTextCtrl->GetNumberOfLines();
   for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {
     bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + wxTextFile::GetEOL());
   }
-#endif //GTK
 
   if ( bOk )
     bOk = file.Close();
 
   if ( !bOk ) {
     wxLogError(_("Can't save log contents to file."));
-    return;
+  }
+  else {
+    wxLogStatus(this, _("Log saved to the file '%s'."), szFileName);
   }
 }
 

@@ -174,7 +174,8 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite, int access)
 {
   // if bOverwrite we create a new file or truncate the existing one,
   // otherwise we only create the new file and fail if it already exists
-  int fd = open(szFileName, O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+  int fd = open(szFileName, O_WRONLY | O_CREAT | 
+                (bOverwrite ? O_TRUNC : O_EXCL), access);
 
   if ( fd == -1 ) {
     wxLogSysError(_("can't create file '%s'"), szFileName);
