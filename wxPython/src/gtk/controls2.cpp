@@ -6032,8 +6032,8 @@ static PyObject * wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self) {
             size_t              num, x;
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
-                PyObject* item = wxPyConstructObject((void*)&array.Item(x),
-                                                     "wxTreeItemId");
+                wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
+                PyObject* item = wxPyConstructObject((void*)tii, "wxTreeItemId", TRUE);
                 PyList_Append(rval, item);
             }
             wxPySaveThread(doSave);

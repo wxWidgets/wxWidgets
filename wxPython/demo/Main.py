@@ -225,12 +225,13 @@ class wxPythonDemo(wxFrame):
     def OnItemExpanded(self, event):
         item = event.GetItem()
         wxLogMessage("OnItemExpanded: %s" % self.tree.GetItemText(item))
+        event.Skip()
 
     #---------------------------------------------
     def OnItemCollapsed(self, event):
         item = event.GetItem()
         wxLogMessage("OnItemCollapsed: %s" % self.tree.GetItemText(item))
-
+        event.Skip()
 
     #---------------------------------------------
     def OnTreeLeftDown(self, event):
