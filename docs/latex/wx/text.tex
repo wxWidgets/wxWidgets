@@ -567,6 +567,28 @@ read-only mode by a previous call to
 Returns {\tt TRUE} if the text has been modified by user. Note that calling 
 \helpref{SetValue}{wxtextctrlsetvalue} doesn't make the control modified.
 
+\membersection{wxTextCtrl::IsMultiLine}\label{wxtextctrlismultiline}
+
+\constfunc{bool}{IsMultiLine}{\void}
+
+Returns {\tt TRUE} if this is a multi line edit control and {\tt FALSE}
+otherwise.
+
+\wxheading{See also}
+
+\helpref{IsSingleLine}{wxtextctrlissingleline}
+
+\membersection{wxTextCtrl::IsSingleLine}\label{wxtextctrlissingleline}
+
+\constfunc{bool}{IsSingleLine}{\void}
+
+Returns {\tt TRUE} if this is a single line edit control and {\tt FALSE}
+otherwise.
+
+\wxheading{See also}
+
+\helpref{IsMultiLine}{wxtextctrlissingleline}
+
 \membersection{wxTextCtrl::LoadFile}\label{wxtextctrlloadfile}
 
 \func{bool}{LoadFile}{\param{const wxString\& }{ filename}}

@@ -174,6 +174,10 @@ public:
     virtual bool IsModified() const = 0;
     virtual bool IsEditable() const = 0;
 
+    // more readable flag testing methods
+    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
+    bool IsMultiLine() const { return !IsSingleLine(); }
+
     // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const = 0;
 
