@@ -279,7 +279,9 @@
         <define>$(WXUNIV_DEFINE)</define>
         <define>$(DEBUG_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
-        <include>$(TOP_SRCDIR)include</include>
+        <!-- this include is added by configure, we need to put other
+             includes before it: -->
+        <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>        
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <warnings>max</warnings>
