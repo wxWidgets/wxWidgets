@@ -136,7 +136,16 @@ Makefile notes:
   doesn't occur when using project files to build wxWindows.
 
   To build Unicode versions of the libraries, add UNICODE=1
-  to the nmake invocation ( default is UNICODE=0 ).
+  to the nmake invocation ( default is UNICODE=0 ). If you want to
+  be able to use Unicode version on Windows9x, you will need 
+  MSLU (Microsoft Layer for Unicode) runtime DLL and import lib.
+  The former can be downloaded from Microsoft, the latter is part
+  of the latest Platform SDK from Microsoft (see msdn.microsoft.com 
+  for details). An alternative implementation of import library can
+  be downloaded from http://libunicows.sourceforge.net - unlike the
+  official one, this one works with other compilers and does not
+  require 300+ MB Platform SDK update. Add MSLU=1 to the nmake
+  invocation to enable MSLU.
 
   Note that the wxWindows core library allows you to have debug
   and release libraries available simultaneously, by compiling the
