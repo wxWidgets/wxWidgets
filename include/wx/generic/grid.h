@@ -82,6 +82,7 @@ public:
     // prepare the DC using the given attribute: it will draw the rectangle
     // with the bg colour from attr and set the text colour and font
     virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
@@ -94,10 +95,93 @@ class WXDLLEXPORT wxGridCellStringRenderer : public wxGridCellRenderer
 public:
     // draw the string
     virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
+};
+
+
+// ----------------------------------------------------------------------------
+// wxGridCellEditor:  This class is responsible for providing and manipulating
+// the in-place edit controls for the grid.  Instances of wxGridCellEditor
+// (actually, instances of derived classes since it is an ABC) can be
+// associated with the cell attributes for individual cells, rows, columns, or
+// even for the entire grid.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGridCellEditor
+{
+public:
+    wxGridCellEditor();
+    virtual ~wxGridCellEditor();
+
+    bool IsCreated() { return m_control != NULL; }
+
+    // Creates the actual edit control
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        wxEvtHandler* evtHandler) = 0;
+
+    // Size and position the edit control
+    virtual void SetSize(const wxRect& rect);
+
+    // Show or hide the edit control
+    virtual void Show(bool show);
+
+    // Fetch the value from the table and prepare the edit control
+    // to begin editing.  Set the focus to the edit control.
+    virtual void BeginEdit(int row, int col, wxGrid* grid,
+                           wxGridCellAttr* attr) = 0;
+
+    // Complete the editing of the current cell.  If saveValue is
+    // true then send the new value back to the table.  Returns true
+    // if the value has changed.  If necessary, the control may be
+    // destroyed.
+    virtual bool EndEdit(int row, int col,  bool saveValue,
+                         wxGrid* grid, wxGridCellAttr* attr) = 0;
+
+    // Reset the value in the control back to its starting value
+    virtual void Reset() = 0;
+
+    // Some types of controls on some platforms may need some help
+    // with the Return key.
+    virtual void HandleReturn(wxKeyEvent& event);
+
+    // Final cleanup
+    virtual void Destroy();
+
+protected:
+    wxControl*  m_control;
+};
+
+
+class WXDLLEXPORT wxGridCellTextEditor : public wxGridCellEditor
+{
+public:
+    wxGridCellTextEditor();
+
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        wxEvtHandler* evtHandler);
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid,
+                           wxGridCellAttr* attr);
+
+    virtual bool EndEdit(int row, int col,  bool saveValue,
+                         wxGrid* grid, wxGridCellAttr* attr);
+
+    virtual void Reset();
+    virtual void HandleReturn(wxKeyEvent& event);
+
+
+private:
+    wxString m_startValue;
 };
 
 // ----------------------------------------------------------------------------
@@ -156,17 +240,15 @@ public:
     bool HasBackgroundColour() const { return m_colBack.Ok(); }
     bool HasFont() const { return m_font.Ok(); }
     bool HasAlignment() const { return m_hAlign || m_vAlign; }
+    bool HasRenderer() const { return m_renderer != NULL; }
 
-    const wxColour& GetTextColour() const { return m_colText; }
-    const wxColour& GetBackgroundColour() const { return m_colBack; }
-    const wxFont& GetFont() const { return m_font; }
-    void GetAlignment(int *hAlign, int *vAlign)
-    {
-        if ( hAlign ) *hAlign = m_hAlign;
-        if ( vAlign ) *vAlign = m_vAlign;
-    }
+    const wxColour& GetTextColour() const;
+    const wxColour& GetBackgroundColour() const;
+    const wxFont& GetFont() const;
+    void GetAlignment(int *hAlign, int *vAlign) const;
+    wxGridCellRenderer *GetRenderer() const;
 
-    wxGridCellRenderer *GetRenderer() const { return m_renderer; }
+    void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
 private:
     // the common part of all ctors
@@ -185,6 +267,7 @@ private:
              m_vAlign;
 
     wxGridCellRenderer *m_renderer;
+    wxGridCellAttr* m_defGridAttr;
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
@@ -543,7 +626,7 @@ public:
     void DoEndDragResizeCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
-    void SetTable( wxGridTableBase *table ) { m_table = table; }
+    bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE );
 
     void ClearGrid();
     bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
@@ -720,12 +803,11 @@ public:
     void     SetCellAlignment( int row, int col, int horiz, int vert );
 
     // takes ownership of the pointer
-    void SetDefaultRenderer(wxGridCellRenderer *renderer)
-        { delete m_defaultRenderer; m_defaultRenderer = renderer; }
-    wxGridCellRenderer *GetDefaultRenderer() const
-        { return m_defaultRenderer; }
-
+    void SetDefaultRenderer(wxGridCellRenderer *renderer);
     void SetCellRenderer(int row, int col, wxGridCellRenderer *renderer);
+    wxGridCellRenderer *GetDefaultRenderer() const;
+    wxGridCellRenderer* GetCellRenderer(int row, int col);
+
 
     // ------ cell value accessors
     //
@@ -808,6 +890,16 @@ public:
             return BlockToDeviceRect( m_selectedTopLeft,
                                       m_selectedBottomRight );
         }
+
+    // Access or update the selection fore/back colours
+    wxColour GetSelectionBackground() const
+        { return m_selectionBackground; }
+    wxColour GetSelectionForeground() const
+        { return m_selectionForeground; }
+
+    void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
+    void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
+
 
 
     // ------ For compatibility with previous wxGrid only...
@@ -919,10 +1011,10 @@ public:
         }
 
     wxFont GetCellTextFont() const
-        { return m_defaultCellFont; }
+        { return m_defaultCellAttr->GetFont(); }
 
     wxFont GetCellTextFont(int WXUNUSED(row), int WXUNUSED(col)) const
-        { return m_defaultCellFont; }
+        { return m_defaultCellAttr->GetFont(); }
 
     void SetCellTextFont(const wxFont& fnt)
         { SetDefaultCellFont( fnt ); }
@@ -981,6 +1073,7 @@ protected:
     wxGridCornerLabelWindow  *m_cornerLabelWin;
 
     wxGridTableBase          *m_table;
+    bool                      m_ownTable;
 
     int m_left;
     int m_top;
@@ -994,6 +1087,8 @@ protected:
 
     wxGridCellCoords m_selectedTopLeft;
     wxGridCellCoords m_selectedBottomRight;
+    wxColour    m_selectionBackground;
+    wxColour    m_selectionForeground;
 
     int        m_defaultRowHeight;
     wxArrayInt m_rowHeights;
@@ -1021,16 +1116,6 @@ protected:
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
 
-    // get the renderer for the given cell - if it has no special one, the
-    // default one will be returned, never NULL
-    wxGridCellRenderer *GetCellRenderer(int row, int col);
-
-    wxGridCellRenderer *m_defaultRenderer;
-
-    // default cell attributes
-    wxFont     m_defaultCellFont;
-    int        m_defaultCellHAlign,
-               m_defaultCellVAlign;
 
     // do we have some place to store attributes in?
     bool CanHaveAttributes();
@@ -1061,6 +1146,10 @@ protected:
     // looks for the attr in cache, if not found asks the table and caches the
     // result
     wxGridCellAttr *GetCellAttr(int row, int col) const;
+
+    // the default cell attr object for cells that don't have their own
+    wxGridCellAttr*     m_defaultCellAttr;
+
 
     wxGridCellCoordsArray  m_cellsExposed;
     wxArrayInt             m_rowsExposed;
@@ -1126,6 +1215,7 @@ protected:
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
+    void OnEraseBackground( wxEraseEvent& );
 
 
     void SetCurrentCell( const wxGridCellCoords& coords );
