@@ -22,6 +22,7 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(WXDIR)/src/motif/files.lst \
      $(WXDIR)/src/os2/files.lst \
      $(WXDIR)/src/mgl/files.lst \
+     $(WXDIR)/src/mgl/makefile.wat \
      $(WXDIR)/src/microwin/files.lst \
      $(WXDIR)/src/x11/files.lst \
      $(WXDIR)/src/univ/files.lst \
@@ -58,6 +59,9 @@ $(WXDIR)/src/msw/files.lst: msw.t filelist.txt wxwin.pro
 
 $(WXDIR)/src/mgl/files.lst: mgl.t filelist.txt wxwin.pro
 	$(TMAKE) -t mgl wxwin.pro -o $@
+
+$(WXDIR)/src/mgl/makefile.wat: watmgl.t filelist.txt wxwin.pro
+	$(TMAKE) -t watmgl wxwin.pro -o $@
 
 $(WXDIR)/src/microwin/files.lst: micro.t filelist.txt wxwin.pro
 	$(TMAKE) -t micro wxwin.pro -o $@
