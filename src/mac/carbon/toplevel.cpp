@@ -322,7 +322,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
         else
         {
+#if TARGET_CARBON
             wclass = kPlainWindowClass ;
+#else
+            wclass = kFloatingWindowClass ;
+#endif
         }
     }
     else if ( HasFlag( wxCAPTION ) )
@@ -345,7 +349,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
         else
         {
+#if TARGET_CARBON
             wclass = kPlainWindowClass ;
+#else
+            wclass = kModalWindowClass ;
+#endif
         }
     }
     
@@ -604,8 +612,8 @@ bool wxTopLevelWindowMac::Show(bool show)
         return FALSE;
 
     if (show)
-    {
-      ::ShowWindow( (WindowRef)m_macWindow ) ;
+    { 
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
       ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
       // actually they should be , but apparently they are not
@@ -616,7 +624,7 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-      ::HideWindow( (WindowRef)m_macWindow ) ;
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
     }
 
     if ( !show )
