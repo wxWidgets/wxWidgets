@@ -80,12 +80,9 @@ BASEDLL_OBJECTS =  \
 	basedll_filename.o \
 	basedll_filesys.o \
 	basedll_fmapbase.o \
-	basedll_fs_inet.o \
 	basedll_fs_zip.o \
-	basedll_ftp.o \
 	basedll_hash.o \
 	basedll_hashmap.o \
-	basedll_http.o \
 	basedll_init.o \
 	basedll_intl.o \
 	basedll_ipcbase.o \
@@ -98,13 +95,7 @@ BASEDLL_OBJECTS =  \
 	basedll_mstream.o \
 	basedll_object.o \
 	basedll_process.o \
-	basedll_protocol.o \
 	basedll_regex.o \
-	basedll_sckaddr.o \
-	basedll_sckfile.o \
-	basedll_sckipc.o \
-	basedll_sckstrm.o \
-	basedll_socket.o \
 	basedll_stopwatch.o \
 	basedll_strconv.o \
 	basedll_stream.o \
@@ -115,7 +106,6 @@ BASEDLL_OBJECTS =  \
 	basedll_tokenzr.o \
 	basedll_txtstrm.o \
 	basedll_unzip.o \
-	basedll_url.o \
 	basedll_variant.o \
 	basedll_wfstream.o \
 	basedll_wxchar.o \
@@ -157,12 +147,9 @@ BASELIB_OBJECTS =  \
 	baselib_filename.o \
 	baselib_filesys.o \
 	baselib_fmapbase.o \
-	baselib_fs_inet.o \
 	baselib_fs_zip.o \
-	baselib_ftp.o \
 	baselib_hash.o \
 	baselib_hashmap.o \
-	baselib_http.o \
 	baselib_init.o \
 	baselib_intl.o \
 	baselib_ipcbase.o \
@@ -175,13 +162,7 @@ BASELIB_OBJECTS =  \
 	baselib_mstream.o \
 	baselib_object.o \
 	baselib_process.o \
-	baselib_protocol.o \
 	baselib_regex.o \
-	baselib_sckaddr.o \
-	baselib_sckfile.o \
-	baselib_sckipc.o \
-	baselib_sckstrm.o \
-	baselib_socket.o \
 	baselib_stopwatch.o \
 	baselib_strconv.o \
 	baselib_stream.o \
@@ -192,7 +173,6 @@ BASELIB_OBJECTS =  \
 	baselib_tokenzr.o \
 	baselib_txtstrm.o \
 	baselib_unzip.o \
-	baselib_url.o \
 	baselib_variant.o \
 	baselib_wfstream.o \
 	baselib_wxchar.o \
@@ -331,12 +311,9 @@ MONODLL_OBJECTS =  \
 	monodll_filename.o \
 	monodll_filesys.o \
 	monodll_fmapbase.o \
-	monodll_fs_inet.o \
 	monodll_fs_zip.o \
-	monodll_ftp.o \
 	monodll_hash.o \
 	monodll_hashmap.o \
-	monodll_http.o \
 	monodll_init.o \
 	monodll_intl.o \
 	monodll_ipcbase.o \
@@ -349,13 +326,7 @@ MONODLL_OBJECTS =  \
 	monodll_mstream.o \
 	monodll_object.o \
 	monodll_process.o \
-	monodll_protocol.o \
 	monodll_regex.o \
-	monodll_sckaddr.o \
-	monodll_sckfile.o \
-	monodll_sckipc.o \
-	monodll_sckstrm.o \
-	monodll_socket.o \
 	monodll_stopwatch.o \
 	monodll_strconv.o \
 	monodll_stream.o \
@@ -366,7 +337,6 @@ MONODLL_OBJECTS =  \
 	monodll_tokenzr.o \
 	monodll_txtstrm.o \
 	monodll_unzip.o \
-	monodll_url.o \
 	monodll_variant.o \
 	monodll_wfstream.o \
 	monodll_wxchar.o \
@@ -378,6 +348,17 @@ MONODLL_OBJECTS =  \
 	monodll_msgout.o \
 	monodll_utilscmn.o \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS) \
+	monodll_fs_inet.o \
+	monodll_ftp.o \
+	monodll_http.o \
+	monodll_protocol.o \
+	monodll_url.o \
+	monodll_sckfile.o \
+	monodll_sckaddr.o \
+	monodll_sckipc.o \
+	monodll_sckstrm.o \
+	monodll_socket.o \
+	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o
 MONOLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -410,12 +391,9 @@ MONOLIB_OBJECTS =  \
 	monolib_filename.o \
 	monolib_filesys.o \
 	monolib_fmapbase.o \
-	monolib_fs_inet.o \
 	monolib_fs_zip.o \
-	monolib_ftp.o \
 	monolib_hash.o \
 	monolib_hashmap.o \
-	monolib_http.o \
 	monolib_init.o \
 	monolib_intl.o \
 	monolib_ipcbase.o \
@@ -428,13 +406,7 @@ MONOLIB_OBJECTS =  \
 	monolib_mstream.o \
 	monolib_object.o \
 	monolib_process.o \
-	monolib_protocol.o \
 	monolib_regex.o \
-	monolib_sckaddr.o \
-	monolib_sckfile.o \
-	monolib_sckipc.o \
-	monolib_sckstrm.o \
-	monolib_socket.o \
 	monolib_stopwatch.o \
 	monolib_strconv.o \
 	monolib_stream.o \
@@ -445,7 +417,6 @@ MONOLIB_OBJECTS =  \
 	monolib_tokenzr.o \
 	monolib_txtstrm.o \
 	monolib_unzip.o \
-	monolib_url.o \
 	monolib_variant.o \
 	monolib_wfstream.o \
 	monolib_wxchar.o \
@@ -457,8 +428,59 @@ MONOLIB_OBJECTS =  \
 	monolib_msgout.o \
 	monolib_utilscmn.o \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1) \
+	monolib_fs_inet.o \
+	monolib_ftp.o \
+	monolib_http.o \
+	monolib_protocol.o \
+	monolib_url.o \
+	monolib_sckfile.o \
+	monolib_sckaddr.o \
+	monolib_sckipc.o \
+	monolib_sckstrm.o \
+	monolib_socket.o \
+	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o
+NETDLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CFLAGS) $(PIC_FLAG)
+NETDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CXXFLAGS) $(PIC_FLAG)
+NETDLL_OBJECTS =  \
+	netdll_fs_inet.o \
+	netdll_ftp.o \
+	netdll_http.o \
+	netdll_protocol.o \
+	netdll_url.o \
+	netdll_sckfile.o \
+	netdll_sckaddr.o \
+	netdll_sckipc.o \
+	netdll_sckstrm.o \
+	netdll_socket.o \
+	$(__NET_PLATFORM_SRC_OBJECTS_2)
+NETLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CFLAGS)
+NETLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CXXFLAGS)
+NETLIB_OBJECTS =  \
+	netlib_fs_inet.o \
+	netlib_ftp.o \
+	netlib_http.o \
+	netlib_protocol.o \
+	netlib_url.o \
+	netlib_sckfile.o \
+	netlib_sckaddr.o \
+	netlib_sckipc.o \
+	netlib_sckstrm.o \
+	netlib_socket.o \
+	$(__NET_PLATFORM_SRC_OBJECTS_3)
 WXEXPAT_CFLAGS = $(CPPFLAGS)   -I./src/expat $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
@@ -1045,8 +1067,7 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/generic/accel.h \
 	wx/generic/listctrl.h
 @COND_USE_GUI_1_WXUNIV_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS)
-@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = \
-@COND_PLATFORM_UNIX_1@	wx/unix/gsockunx.h wx/unix/mimetype.h
+@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/mimetype.h
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/dde.h \
 	wx/msw/gccpriv.h \
@@ -1635,6 +1656,10 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/window.h \
 	src/generic/timer.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
+@COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
+@COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = wx/msw/gsockmsw.h
+@COND_TOOLKIT_COCOA@NET_PLATFORM_HDR = wx/unix/gsockunx.h
+@COND_TOOLKIT_MAC@NET_PLATFORM_HDR = wx/mac/gsockmac.h
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
 @COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/glcanvas.h
 @COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/motif/glcanvas.h
@@ -1694,7 +1719,6 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dir.o \
-	monodll_gsocket.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
 	monodll_threadpsx.o
@@ -1702,7 +1726,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dir.o \
-	monodll_gsocket.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
 	monodll_threadpsx.o
@@ -1710,7 +1733,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dirmac.o \
-	monodll_gsocket.o \
 	monodll_mimetmac.o \
 	monodll_utils.o \
 	monodll_utilsexc.o
@@ -1718,7 +1740,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dir.o \
-	monolib_gsocket.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
 	monolib_threadpsx.o
@@ -1726,7 +1747,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dir.o \
-	monolib_gsocket.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
 	monolib_threadpsx.o
@@ -1734,7 +1754,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dirmac.o \
-	monolib_gsocket.o \
 	monolib_mimetmac.o \
 	monolib_utils.o \
 	monolib_utilsexc.o
@@ -1742,7 +1761,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dir.o \
-	basedll_gsocket.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
 	basedll_threadpsx.o
@@ -1750,7 +1768,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dir.o \
-	basedll_gsocket.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
 	basedll_threadpsx.o
@@ -1758,7 +1775,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dirmac.o \
-	basedll_gsocket.o \
 	basedll_mimetmac.o \
 	basedll_utils.o \
 	basedll_utilsexc.o
@@ -1766,7 +1782,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dir.o \
-	baselib_gsocket.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
 	baselib_threadpsx.o
@@ -1774,7 +1789,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dir.o \
-	baselib_gsocket.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
 	baselib_threadpsx.o
@@ -1782,7 +1796,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dirmac.o \
-	baselib_gsocket.o \
 	baselib_mimetmac.o \
 	baselib_utils.o \
 	baselib_utilsexc.o
@@ -1792,14 +1805,11 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dir.o \
-	monodll_gsocket.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
 	monodll_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
-	monodll_gsocket.o \
-	monodll_gsockmsw.o \
 	monodll_basemsw.o \
 	monodll_dde.o \
 	monodll_dir.o \
@@ -1817,14 +1827,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dir.o \
-	monolib_gsocket.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
 	monolib_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_gsocket.o \
-	monolib_gsockmsw.o \
 	monolib_basemsw.o \
 	monolib_dde.o \
 	monolib_dir.o \
@@ -1842,14 +1849,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dir.o \
-	basedll_gsocket.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
 	basedll_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
-	basedll_gsocket.o \
-	basedll_gsockmsw.o \
 	basedll_basemsw.o \
 	basedll_dde.o \
 	basedll_dir.o \
@@ -1867,14 +1871,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dir.o \
-	baselib_gsocket.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
 	baselib_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
-	baselib_gsocket.o \
-	baselib_gsockmsw.o \
 	baselib_basemsw.o \
 	baselib_dde.o \
 	baselib_dir.o \
@@ -5301,6 +5302,38 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_htmprint.o \
 	monolib_htmllbox.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
+@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
+@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
+@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
+@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
+@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS)
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = \
+@COND_PLATFORM_WIN32_1@	monodll_gsocket.o monodll_gsockmsw.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
+@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_1)
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 \
+@COND_PLATFORM_WIN32_1@	= monolib_gsocket.o monolib_gsockmsw.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
+@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_2)
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 \
+@COND_PLATFORM_WIN32_1@	= netdll_gsocket.o netdll_gsockmsw.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
+@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_3)
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 \
+@COND_PLATFORM_WIN32_1@	= netlib_gsocket.o netlib_gsockmsw.o
 @COND_TOOLKIT_GTK@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
@@ -5509,6 +5542,8 @@ COND_MONOLITHIC_0_SHARED_0_USE_HTML_1___htmllib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	= install_htmllib
 @COND_MONOLITHIC_1_SHARED_1@__install_monodll___depname = install_monodll
 @COND_MONOLITHIC_1_SHARED_0@__install_monolib___depname = install_monolib
+@COND_MONOLITHIC_0_SHARED_1@__install_netdll___depname = install_netdll
+@COND_MONOLITHIC_0_SHARED_0@__install_netlib___depname = install_netlib
 @COND_WXUSE_EXPAT_BUILTIN@__install_wxexpat___depname = install_wxexpat
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__install_wxjpeg___depname \
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@	= install_wxjpeg
@@ -5561,6 +5596,44 @@ COND_USE_SOVERSOLARIS_1___monodll___soname_flags = \
 COND_MONOLITHIC_1_SHARED_0___monolib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_1_SHARED_0@__monolib___depname = $(COND_MONOLITHIC_1_SHARED_0___monolib___depname)
+COND_MONOLITHIC_0_SHARED_1___netdll___depname = \
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1@__netdll___depname = $(COND_MONOLITHIC_0_SHARED_1___netdll___depname)
+COND_PLATFORM_WIN32_1___netdll___importlib = \
+	-Wl,--out-implib,$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__netdll___importlib = $(COND_PLATFORM_WIN32_1___netdll___importlib)
+COND_PLATFORM_MACOSX_1___netdll___macinstnamecmd = -install_name \
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_PLATFORM_MACOSX_1@__netdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___netdll___macinstnamecmd)
+COND_USE_SOSYMLINKS_1___netdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT))
+@COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_cmd)
+COND_USE_SOSYMLINKS_1___netdll___so_symlinks_inst_cmd = rm -f \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_inst_cmd)
+COND_USE_SOVERLINUX_1___netdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_USE_SOVERLINUX_1@__netdll___soname_flags = $(COND_USE_SOVERLINUX_1___netdll___soname_flags)
+COND_USE_SOVERSOLARIS_1___netdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_USE_SOVERSOLARIS_1@__netdll___soname_flags = $(COND_USE_SOVERSOLARIS_1___netdll___soname_flags)
+COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
+	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a
+@COND_MONOLITHIC_0_SHARED_0@__netlib___depname = $(COND_MONOLITHIC_0_SHARED_0___netlib___depname)
 @COND_WXUSE_EXPAT_BUILTIN@__wxexpat___depname = \
 @COND_WXUSE_EXPAT_BUILTIN@	$(LIBDIRNAME)/libwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname \
@@ -5629,9 +5702,9 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname)
 
-@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(BASEDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(BASEDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_1@	$(SHARED_LD_CXX) $@ $(BASEDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__basedll___macinstnamecmd) $(__basedll___importlib) $(__basedll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS)
 @COND_MONOLITHIC_0_SHARED_1@	$(__basedll___so_symlinks_cmd)
 
@@ -5737,43 +5810,16 @@ basedll_filesys.o: $(srcdir)/src/common/filesys.cpp
 basedll_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 basedll_fs_mem.o: $(srcdir)/src/common/fs_mem.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_ftp.o: $(srcdir)/src/common/ftp.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_gsocket.o: $(srcdir)/src/mac/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-@COND_PLATFORM_UNIX_1@basedll_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-@COND_PLATFORM_WIN32_1@basedll_gsocket.o: $(srcdir)/src/msw/gsocket.c
-@COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-basedll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
-	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
 basedll_hash.o: $(srcdir)/src/common/hash.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_hashmap.o: $(srcdir)/src/common/hashmap.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_http.o: $(srcdir)/src/common/http.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_init.o: $(srcdir)/src/common/init.cpp
@@ -5836,9 +5882,6 @@ basedll_object.o: $(srcdir)/src/common/object.cpp
 basedll_process.o: $(srcdir)/src/common/process.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_protocol.o: $(srcdir)/src/common/protocol.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -5846,18 +5889,6 @@ basedll_regex.o: $(srcdir)/src/common/regex.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_registry.o: $(srcdir)/src/msw/registry.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_sckaddr.o: $(srcdir)/src/common/sckaddr.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_sckfile.o: $(srcdir)/src/common/sckfile.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_sckipc.o: $(srcdir)/src/common/sckipc.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@basedll_snglinst.o: $(srcdir)/src/msw/snglinst.cpp
@@ -5871,9 +5902,6 @@ basedll_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
-basedll_socket.o: $(srcdir)/src/common/socket.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -5916,9 +5944,6 @@ basedll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp
 
 basedll_unzip.o: $(srcdir)/src/common/unzip.c
 	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
-
-basedll_url.o: $(srcdir)/src/common/url.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_utils.o: $(srcdir)/src/mac/utils.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -6066,43 +6091,16 @@ baselib_filesys.o: $(srcdir)/src/common/filesys.cpp
 baselib_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
 baselib_fs_mem.o: $(srcdir)/src/common/fs_mem.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_ftp.o: $(srcdir)/src/common/ftp.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_gsocket.o: $(srcdir)/src/mac/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
-@COND_PLATFORM_UNIX_1@baselib_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_gsocket.o: $(srcdir)/src/unix/gsocket.c
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
-@COND_PLATFORM_WIN32_1@baselib_gsocket.o: $(srcdir)/src/msw/gsocket.c
-@COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
-baselib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
-	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
-
 baselib_hash.o: $(srcdir)/src/common/hash.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_hashmap.o: $(srcdir)/src/common/hashmap.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_http.o: $(srcdir)/src/common/http.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_init.o: $(srcdir)/src/common/init.cpp
@@ -6165,9 +6163,6 @@ baselib_object.o: $(srcdir)/src/common/object.cpp
 baselib_process.o: $(srcdir)/src/common/process.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_protocol.o: $(srcdir)/src/common/protocol.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
 baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
@@ -6175,18 +6170,6 @@ baselib_regex.o: $(srcdir)/src/common/regex.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_registry.o: $(srcdir)/src/msw/registry.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_sckaddr.o: $(srcdir)/src/common/sckaddr.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_sckfile.o: $(srcdir)/src/common/sckfile.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_sckipc.o: $(srcdir)/src/common/sckipc.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@baselib_snglinst.o: $(srcdir)/src/msw/snglinst.cpp
@@ -6200,9 +6183,6 @@ baselib_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_socket.o: $(srcdir)/src/common/socket.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -6246,9 +6226,6 @@ baselib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp
 baselib_unzip.o: $(srcdir)/src/common/unzip.c
 	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
 
-baselib_url.o: $(srcdir)/src/common/url.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_utils.o: $(srcdir)/src/mac/utils.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
@@ -6290,7 +6267,7 @@ baselib_zstream.o: $(srcdir)/src/common/zstream.cpp
 
 clean: 
 	rm -rf ./.deps
-	rm -f -f ./*.o
+	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/libwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 	rm -f $(LIBDIRNAME)/libwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 	rm -f $(LIBDIRNAME)/libwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX).a
@@ -6306,6 +6283,10 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
@@ -10789,13 +10770,13 @@ htmllib_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig $(__macos_res_install___depname)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig $(__macos_res_install___depname)
 	$(INSTALL_DIR) $(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(datadir)/aclocal)
 	$(INSTALL_DIR) $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
 	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx)
 	$(INSTALL_DIR) $(includedir)
-	for f in wx/apptrait.h wx/beforestd.h wx/containr.h wx/msgout.h wx/types.h wx/init.h wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/arrstr.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h wx/protocol/protocol.h wx/protocol/http.h $(BASE_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/wxhtml.h wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/htmllbox.h wx/xml/xml.h $(OPENGL_HDR); do \
+	for f in wx/apptrait.h wx/beforestd.h wx/containr.h wx/msgout.h wx/types.h wx/init.h wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/arrstr.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_zip.h wx/fs_mem.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/fs_inet.h wx/url.h wx/protocol/protocol.h wx/protocol/http.h wx/protocol/ftp.h wx/protocol/file.h wx/gsocket.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h $(NET_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/wxhtml.h wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/htmllbox.h wx/xml/xml.h $(OPENGL_HDR); do \
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
@@ -10813,6 +10794,7 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 install-strip: install
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -10872,6 +10854,16 @@ install-wxconfig:
 @COND_MONOLITHIC_1_SHARED_0@install_monolib: 
 @COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DIR) $(libdir)
 @COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a $(libdir)
+
+@COND_MONOLITHIC_0_SHARED_1@install_netdll: 
+@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1@	(cd $(libdir) ; $(__netdll___so_symlinks_inst_cmd))
+
+@COND_MONOLITHIC_0_SHARED_0@install_netlib: 
+@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_EXPAT_BUILTIN@install_wxexpat: 
 @COND_WXUSE_EXPAT_BUILTIN@	$(INSTALL_DIR) $(libdir)
@@ -15932,6 +15924,111 @@ monolib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 monolib_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(NETDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1@	$(SHARED_LD_CXX) $@ $(NETDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__netdll___macinstnamecmd) $(__netdll___importlib) $(__netdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1@	$(__netdll___so_symlinks_cmd)
+
+netdll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_ftp.o: $(srcdir)/src/common/ftp.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@netdll_gsocket.o: $(srcdir)/src/mac/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/msw/gsocket.c
+@COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+netdll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
+netdll_http.o: $(srcdir)/src/common/http.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_protocol.o: $(srcdir)/src/common/protocol.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_sckaddr.o: $(srcdir)/src/common/sckaddr.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_sckfile.o: $(srcdir)/src/common/sckfile.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_sckipc.o: $(srcdir)/src/common/sckipc.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_socket.o: $(srcdir)/src/common/socket.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+netdll_url.o: $(srcdir)/src/common/url.cpp
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
+
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a: $(NETLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(NETLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
+
+netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_ftp.o: $(srcdir)/src/common/ftp.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@netlib_gsocket.o: $(srcdir)/src/mac/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/msw/gsocket.c
+@COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+netlib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c
+	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
+netlib_http.o: $(srcdir)/src/common/http.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_protocol.o: $(srcdir)/src/common/protocol.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_sckaddr.o: $(srcdir)/src/common/sckaddr.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_sckfile.o: $(srcdir)/src/common/sckfile.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_sckipc.o: $(srcdir)/src/common/sckipc.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_sckstrm.o: $(srcdir)/src/common/sckstrm.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_socket.o: $(srcdir)/src/common/socket.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
+netlib_url.o: $(srcdir)/src/common/url.cpp
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
+
 uninstall: 
 
 @COND_WXUSE_EXPAT_BUILTIN@$(LIBDIRNAME)/libwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a: $(WXEXPAT_OBJECTS)
@@ -16371,7 +16468,7 @@ wxzlib_uncompr.o: $(srcdir)/src/zlib/uncompr.c
 wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XMLDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(XMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
 @COND_MONOLITHIC_0_SHARED_1@	$(SHARED_LD_CXX) $@ $(XMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__xmldll___macinstnamecmd) $(__xmldll___importlib) $(__xmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_XML)
 @COND_MONOLITHIC_0_SHARED_1@	$(__xmldll___so_symlinks_cmd)
 
@@ -16390,4 +16487,4 @@ xmllib_xml.o: $(srcdir)/src/xml/xml.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install install_basedll install_baselib install_coredll install_corelib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib uninstall
+.PHONY: all clean distclean install install_basedll install_baselib install_coredll install_corelib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_netdll install_netlib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib uninstall

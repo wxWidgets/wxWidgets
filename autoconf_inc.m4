@@ -334,6 +334,24 @@ dnl ### begin block COND_USE_GUI_1_WXUNIV_1 ###
         COND_USE_GUI_1_WXUNIV_1=""
     fi
     AC_SUBST(COND_USE_GUI_1_WXUNIV_1)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBPNG" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN)
+dnl ### begin block COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN ###
+    COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
+        COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN)
 dnl ### begin block COND_USE_SOSYMLINKS_1 ###
     COND_USE_SOSYMLINKS_1="#"
     if test "x$USE_SOSYMLINKS" = "x1" ; then
@@ -364,6 +382,12 @@ dnl ### begin block COND_WXUNIV_1 ###
         COND_WXUNIV_1=""
     fi
     AC_SUBST(COND_WXUNIV_1)
+dnl ### begin block COND_WXUSE_EXPAT_BUILTIN ###
+    COND_WXUSE_EXPAT_BUILTIN="#"
+    if test "x$wxUSE_EXPAT" = "xbuiltin" ; then
+        COND_WXUSE_EXPAT_BUILTIN=""
+    fi
+    AC_SUBST(COND_WXUSE_EXPAT_BUILTIN)
 dnl ### begin block COND_WXUSE_LIBJPEG_BUILTIN ###
     COND_WXUSE_LIBJPEG_BUILTIN="#"
     if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
@@ -418,27 +442,3 @@ dnl ### begin block COND_SHARED_0 ###
         COND_SHARED_0=""
     fi
     AC_SUBST(COND_SHARED_0)
-dnl ### begin block COND_WXUSE_EXPAT_BUILTIN ###
-    COND_WXUSE_EXPAT_BUILTIN="#"
-    if test "x$wxUSE_EXPAT" = "xbuiltin" ; then
-        COND_WXUSE_EXPAT_BUILTIN=""
-    fi
-    AC_SUBST(COND_WXUSE_EXPAT_BUILTIN)
-dnl ### begin block COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN ###
-    COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN=""
-    fi
-    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN)
-dnl ### begin block COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN ###
-    COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBPNG" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN=""
-    fi
-    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN)
-dnl ### begin block COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN ###
-    COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
-    fi
-    AC_SUBST(COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN)

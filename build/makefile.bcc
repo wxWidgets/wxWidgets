@@ -54,12 +54,9 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_filename.obj \
 	$(OBJS)\basedll_filesys.obj \
 	$(OBJS)\basedll_fmapbase.obj \
-	$(OBJS)\basedll_fs_inet.obj \
 	$(OBJS)\basedll_fs_zip.obj \
-	$(OBJS)\basedll_ftp.obj \
 	$(OBJS)\basedll_hash.obj \
 	$(OBJS)\basedll_hashmap.obj \
-	$(OBJS)\basedll_http.obj \
 	$(OBJS)\basedll_init.obj \
 	$(OBJS)\basedll_intl.obj \
 	$(OBJS)\basedll_ipcbase.obj \
@@ -72,13 +69,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_mstream.obj \
 	$(OBJS)\basedll_object.obj \
 	$(OBJS)\basedll_process.obj \
-	$(OBJS)\basedll_protocol.obj \
 	$(OBJS)\basedll_regex.obj \
-	$(OBJS)\basedll_sckaddr.obj \
-	$(OBJS)\basedll_sckfile.obj \
-	$(OBJS)\basedll_sckipc.obj \
-	$(OBJS)\basedll_sckstrm.obj \
-	$(OBJS)\basedll_socket.obj \
 	$(OBJS)\basedll_stopwatch.obj \
 	$(OBJS)\basedll_strconv.obj \
 	$(OBJS)\basedll_stream.obj \
@@ -89,14 +80,11 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_tokenzr.obj \
 	$(OBJS)\basedll_txtstrm.obj \
 	$(OBJS)\basedll_unzip.obj \
-	$(OBJS)\basedll_url.obj \
 	$(OBJS)\basedll_variant.obj \
 	$(OBJS)\basedll_wfstream.obj \
 	$(OBJS)\basedll_wxchar.obj \
 	$(OBJS)\basedll_zipstrm.obj \
 	$(OBJS)\basedll_zstream.obj \
-	$(OBJS)\basedll_gsocket.obj \
-	$(OBJS)\basedll_gsockmsw.obj \
 	$(OBJS)\basedll_basemsw.obj \
 	$(OBJS)\basedll_dde.obj \
 	$(OBJS)\basedll_dir.obj \
@@ -148,12 +136,9 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_filename.obj \
 	$(OBJS)\baselib_filesys.obj \
 	$(OBJS)\baselib_fmapbase.obj \
-	$(OBJS)\baselib_fs_inet.obj \
 	$(OBJS)\baselib_fs_zip.obj \
-	$(OBJS)\baselib_ftp.obj \
 	$(OBJS)\baselib_hash.obj \
 	$(OBJS)\baselib_hashmap.obj \
-	$(OBJS)\baselib_http.obj \
 	$(OBJS)\baselib_init.obj \
 	$(OBJS)\baselib_intl.obj \
 	$(OBJS)\baselib_ipcbase.obj \
@@ -166,13 +151,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_mstream.obj \
 	$(OBJS)\baselib_object.obj \
 	$(OBJS)\baselib_process.obj \
-	$(OBJS)\baselib_protocol.obj \
 	$(OBJS)\baselib_regex.obj \
-	$(OBJS)\baselib_sckaddr.obj \
-	$(OBJS)\baselib_sckfile.obj \
-	$(OBJS)\baselib_sckipc.obj \
-	$(OBJS)\baselib_sckstrm.obj \
-	$(OBJS)\baselib_socket.obj \
 	$(OBJS)\baselib_stopwatch.obj \
 	$(OBJS)\baselib_strconv.obj \
 	$(OBJS)\baselib_stream.obj \
@@ -183,14 +162,11 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_tokenzr.obj \
 	$(OBJS)\baselib_txtstrm.obj \
 	$(OBJS)\baselib_unzip.obj \
-	$(OBJS)\baselib_url.obj \
 	$(OBJS)\baselib_variant.obj \
 	$(OBJS)\baselib_wfstream.obj \
 	$(OBJS)\baselib_wxchar.obj \
 	$(OBJS)\baselib_zipstrm.obj \
 	$(OBJS)\baselib_zstream.obj \
-	$(OBJS)\baselib_gsocket.obj \
-	$(OBJS)\baselib_gsockmsw.obj \
 	$(OBJS)\baselib_basemsw.obj \
 	$(OBJS)\baselib_dde.obj \
 	$(OBJS)\baselib_dir.obj \
@@ -350,12 +326,9 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_filename.obj \
 	$(OBJS)\monodll_filesys.obj \
 	$(OBJS)\monodll_fmapbase.obj \
-	$(OBJS)\monodll_fs_inet.obj \
 	$(OBJS)\monodll_fs_zip.obj \
-	$(OBJS)\monodll_ftp.obj \
 	$(OBJS)\monodll_hash.obj \
 	$(OBJS)\monodll_hashmap.obj \
-	$(OBJS)\monodll_http.obj \
 	$(OBJS)\monodll_init.obj \
 	$(OBJS)\monodll_intl.obj \
 	$(OBJS)\monodll_ipcbase.obj \
@@ -368,13 +341,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_mstream.obj \
 	$(OBJS)\monodll_object.obj \
 	$(OBJS)\monodll_process.obj \
-	$(OBJS)\monodll_protocol.obj \
 	$(OBJS)\monodll_regex.obj \
-	$(OBJS)\monodll_sckaddr.obj \
-	$(OBJS)\monodll_sckfile.obj \
-	$(OBJS)\monodll_sckipc.obj \
-	$(OBJS)\monodll_sckstrm.obj \
-	$(OBJS)\monodll_socket.obj \
 	$(OBJS)\monodll_stopwatch.obj \
 	$(OBJS)\monodll_strconv.obj \
 	$(OBJS)\monodll_stream.obj \
@@ -385,14 +352,11 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_tokenzr.obj \
 	$(OBJS)\monodll_txtstrm.obj \
 	$(OBJS)\monodll_unzip.obj \
-	$(OBJS)\monodll_url.obj \
 	$(OBJS)\monodll_variant.obj \
 	$(OBJS)\monodll_wfstream.obj \
 	$(OBJS)\monodll_wxchar.obj \
 	$(OBJS)\monodll_zipstrm.obj \
 	$(OBJS)\monodll_zstream.obj \
-	$(OBJS)\monodll_gsocket.obj \
-	$(OBJS)\monodll_gsockmsw.obj \
 	$(OBJS)\monodll_basemsw.obj \
 	$(OBJS)\monodll_dde.obj \
 	$(OBJS)\monodll_dir.obj \
@@ -411,6 +375,18 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_main.obj \
 	$(OBJS)\monodll_mslu.obj \
 	$(OBJS)\monodll_volume.obj \
+	$(OBJS)\monodll_fs_inet.obj \
+	$(OBJS)\monodll_ftp.obj \
+	$(OBJS)\monodll_http.obj \
+	$(OBJS)\monodll_protocol.obj \
+	$(OBJS)\monodll_url.obj \
+	$(OBJS)\monodll_sckfile.obj \
+	$(OBJS)\monodll_sckaddr.obj \
+	$(OBJS)\monodll_sckipc.obj \
+	$(OBJS)\monodll_sckstrm.obj \
+	$(OBJS)\monodll_socket.obj \
+	$(OBJS)\monodll_gsocket.obj \
+	$(OBJS)\monodll_gsockmsw.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_xml.obj
 MONOLIB_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) \
@@ -446,12 +422,9 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_filename.obj \
 	$(OBJS)\monolib_filesys.obj \
 	$(OBJS)\monolib_fmapbase.obj \
-	$(OBJS)\monolib_fs_inet.obj \
 	$(OBJS)\monolib_fs_zip.obj \
-	$(OBJS)\monolib_ftp.obj \
 	$(OBJS)\monolib_hash.obj \
 	$(OBJS)\monolib_hashmap.obj \
-	$(OBJS)\monolib_http.obj \
 	$(OBJS)\monolib_init.obj \
 	$(OBJS)\monolib_intl.obj \
 	$(OBJS)\monolib_ipcbase.obj \
@@ -464,13 +437,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_mstream.obj \
 	$(OBJS)\monolib_object.obj \
 	$(OBJS)\monolib_process.obj \
-	$(OBJS)\monolib_protocol.obj \
 	$(OBJS)\monolib_regex.obj \
-	$(OBJS)\monolib_sckaddr.obj \
-	$(OBJS)\monolib_sckfile.obj \
-	$(OBJS)\monolib_sckipc.obj \
-	$(OBJS)\monolib_sckstrm.obj \
-	$(OBJS)\monolib_socket.obj \
 	$(OBJS)\monolib_stopwatch.obj \
 	$(OBJS)\monolib_strconv.obj \
 	$(OBJS)\monolib_stream.obj \
@@ -481,14 +448,11 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_tokenzr.obj \
 	$(OBJS)\monolib_txtstrm.obj \
 	$(OBJS)\monolib_unzip.obj \
-	$(OBJS)\monolib_url.obj \
 	$(OBJS)\monolib_variant.obj \
 	$(OBJS)\monolib_wfstream.obj \
 	$(OBJS)\monolib_wxchar.obj \
 	$(OBJS)\monolib_zipstrm.obj \
 	$(OBJS)\monolib_zstream.obj \
-	$(OBJS)\monolib_gsocket.obj \
-	$(OBJS)\monolib_gsockmsw.obj \
 	$(OBJS)\monolib_basemsw.obj \
 	$(OBJS)\monolib_dde.obj \
 	$(OBJS)\monolib_dir.obj \
@@ -507,8 +471,68 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_main.obj \
 	$(OBJS)\monolib_mslu.obj \
 	$(OBJS)\monolib_volume.obj \
+	$(OBJS)\monolib_fs_inet.obj \
+	$(OBJS)\monolib_ftp.obj \
+	$(OBJS)\monolib_http.obj \
+	$(OBJS)\monolib_protocol.obj \
+	$(OBJS)\monolib_url.obj \
+	$(OBJS)\monolib_sckfile.obj \
+	$(OBJS)\monolib_sckaddr.obj \
+	$(OBJS)\monolib_sckipc.obj \
+	$(OBJS)\monolib_sckstrm.obj \
+	$(OBJS)\monolib_socket.obj \
+	$(OBJS)\monolib_gsocket.obj \
+	$(OBJS)\monolib_gsockmsw.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_xml.obj
+NETDLL_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) \
+	-tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CFLAGS)
+NETDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) \
+	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_netdll.csm
+NETDLL_OBJECTS =  \
+	$(OBJS)\netdll_dummy.obj \
+	$(OBJS)\netdll_fs_inet.obj \
+	$(OBJS)\netdll_ftp.obj \
+	$(OBJS)\netdll_http.obj \
+	$(OBJS)\netdll_protocol.obj \
+	$(OBJS)\netdll_url.obj \
+	$(OBJS)\netdll_sckfile.obj \
+	$(OBJS)\netdll_sckaddr.obj \
+	$(OBJS)\netdll_sckipc.obj \
+	$(OBJS)\netdll_sckstrm.obj \
+	$(OBJS)\netdll_socket.obj \
+	$(OBJS)\netdll_gsocket.obj \
+	$(OBJS)\netdll_gsockmsw.obj
+NETLIB_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) \
+	-tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CFLAGS)
+NETLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) \
+	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
+	-I..\src\jpeg -I..\src\png -I..\src\zlib -I..\src\regex -I..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET $(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_netlib.csm
+NETLIB_OBJECTS =  \
+	$(OBJS)\netlib_dummy.obj \
+	$(OBJS)\netlib_fs_inet.obj \
+	$(OBJS)\netlib_ftp.obj \
+	$(OBJS)\netlib_http.obj \
+	$(OBJS)\netlib_protocol.obj \
+	$(OBJS)\netlib_url.obj \
+	$(OBJS)\netlib_sckfile.obj \
+	$(OBJS)\netlib_sckaddr.obj \
+	$(OBJS)\netlib_sckipc.obj \
+	$(OBJS)\netlib_sckstrm.obj \
+	$(OBJS)\netlib_socket.obj \
+	$(OBJS)\netlib_gsocket.obj \
+	$(OBJS)\netlib_gsockmsw.obj
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 WXEXPAT_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) \
@@ -720,10 +744,10 @@ __RUNTIME_LIBS = -tWR
 __RUNTIME_LIBS = 
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_4 = i
+__RUNTIME_LIBS_5 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_4 = 
+__RUNTIME_LIBS_5 = 
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
@@ -2458,6 +2482,14 @@ __monodll___depname = \
 __monolib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+__netdll___depname = \
+	$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_bcc$(VENDORTAG).dll
+!endif
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
+__netlib___depname = \
+	$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
+!endif
 !if "$(USE_GUI)" == "1"
 __wxjpeg___depname = $(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).lib
 !endif
@@ -2483,7 +2515,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: setup_h $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname)
+all: setup_h $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname)
 
 $(OBJS)\basedll_appbase.obj: ..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
@@ -2566,31 +2598,16 @@ $(OBJS)\basedll_filesys.obj: ..\src\common\filesys.cpp
 $(OBJS)\basedll_fmapbase.obj: ..\src\common\fmapbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\basedll_fs_inet.obj: ..\src\common\fs_inet.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
 $(OBJS)\basedll_fs_mem.obj: ..\src\common\fs_mem.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
 $(OBJS)\basedll_fs_zip.obj: ..\src\common\fs_zip.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\basedll_ftp.obj: ..\src\common\ftp.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_gsocket.obj: ..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(BASEDLL_CFLAGS) $**
-
-$(OBJS)\basedll_gsockmsw.obj: ..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(BASEDLL_CFLAGS) $**
-
 $(OBJS)\basedll_hash.obj: ..\src\common\hash.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
 $(OBJS)\basedll_hashmap.obj: ..\src\common\hashmap.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_http.obj: ..\src\common\http.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
 $(OBJS)\basedll_init.obj: ..\src\common\init.cpp
@@ -2641,9 +2658,6 @@ $(OBJS)\basedll_object.obj: ..\src\common\object.cpp
 $(OBJS)\basedll_process.obj: ..\src\common\process.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\basedll_protocol.obj: ..\src\common\protocol.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
 $(OBJS)\basedll_regconf.obj: ..\src\msw\regconf.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -2653,22 +2667,7 @@ $(OBJS)\basedll_regex.obj: ..\src\common\regex.cpp
 $(OBJS)\basedll_registry.obj: ..\src\msw\registry.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\basedll_sckaddr.obj: ..\src\common\sckaddr.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_sckfile.obj: ..\src\common\sckfile.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_sckipc.obj: ..\src\common\sckipc.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_sckstrm.obj: ..\src\common\sckstrm.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
 $(OBJS)\basedll_snglinst.obj: ..\src\msw\snglinst.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
-
-$(OBJS)\basedll_socket.obj: ..\src\common\socket.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
 $(OBJS)\basedll_stopwatch.obj: ..\src\common\stopwatch.cpp
@@ -2703,9 +2702,6 @@ $(OBJS)\basedll_txtstrm.obj: ..\src\common\txtstrm.cpp
 
 $(OBJS)\basedll_unzip.obj: ..\src\common\unzip.c
 	$(CC) -q -c -P- -o$@ $(BASEDLL_CFLAGS) $**
-
-$(OBJS)\basedll_url.obj: ..\src\common\url.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
 $(OBJS)\basedll_utils.obj: ..\src\msw\utils.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
@@ -2815,31 +2811,16 @@ $(OBJS)\baselib_filesys.obj: ..\src\common\filesys.cpp
 $(OBJS)\baselib_fmapbase.obj: ..\src\common\fmapbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
-$(OBJS)\baselib_fs_inet.obj: ..\src\common\fs_inet.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
 $(OBJS)\baselib_fs_mem.obj: ..\src\common\fs_mem.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_fs_zip.obj: ..\src\common\fs_zip.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
-$(OBJS)\baselib_ftp.obj: ..\src\common\ftp.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_gsocket.obj: ..\src\msw\gsocket.c
-	$(CC) -q -c -P- -o$@ $(BASELIB_CFLAGS) $**
-
-$(OBJS)\baselib_gsockmsw.obj: ..\src\msw\gsockmsw.c
-	$(CC) -q -c -P- -o$@ $(BASELIB_CFLAGS) $**
-
 $(OBJS)\baselib_hash.obj: ..\src\common\hash.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_hashmap.obj: ..\src\common\hashmap.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_http.obj: ..\src\common\http.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_init.obj: ..\src\common\init.cpp
@@ -2890,9 +2871,6 @@ $(OBJS)\baselib_object.obj: ..\src\common\object.cpp
 $(OBJS)\baselib_process.obj: ..\src\common\process.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
-$(OBJS)\baselib_protocol.obj: ..\src\common\protocol.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
 $(OBJS)\baselib_regconf.obj: ..\src\msw\regconf.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
@@ -2902,22 +2880,7 @@ $(OBJS)\baselib_regex.obj: ..\src\common\regex.cpp
 $(OBJS)\baselib_registry.obj: ..\src\msw\registry.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
-$(OBJS)\baselib_sckaddr.obj: ..\src\common\sckaddr.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_sckfile.obj: ..\src\common\sckfile.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_sckipc.obj: ..\src\common\sckipc.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_sckstrm.obj: ..\src\common\sckstrm.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
 $(OBJS)\baselib_snglinst.obj: ..\src\msw\snglinst.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
-
-$(OBJS)\baselib_socket.obj: ..\src\common\socket.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_stopwatch.obj: ..\src\common\stopwatch.cpp
@@ -2952,9 +2915,6 @@ $(OBJS)\baselib_txtstrm.obj: ..\src\common\txtstrm.cpp
 
 $(OBJS)\baselib_unzip.obj: ..\src\common\unzip.c
 	$(CC) -q -c -P- -o$@ $(BASELIB_CFLAGS) $**
-
-$(OBJS)\baselib_url.obj: ..\src\common\url.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_utils.obj: ..\src\msw\utils.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
@@ -8433,6 +8393,84 @@ $(OBJS)\monolib_zipstrm.obj: ..\src\common\zipstrm.cpp
 $(OBJS)\monolib_zstream.obj: ..\src\common\zstream.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\netdll_dummy.obj: ..\src\msw\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) -H $**
+
+$(OBJS)\netdll_fs_inet.obj: ..\src\common\fs_inet.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_ftp.obj: ..\src\common\ftp.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_gsocket.obj: ..\src\msw\gsocket.c
+	$(CC) -q -c -P- -o$@ $(NETDLL_CFLAGS) $**
+
+$(OBJS)\netdll_gsockmsw.obj: ..\src\msw\gsockmsw.c
+	$(CC) -q -c -P- -o$@ $(NETDLL_CFLAGS) $**
+
+$(OBJS)\netdll_http.obj: ..\src\common\http.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_protocol.obj: ..\src\common\protocol.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_sckaddr.obj: ..\src\common\sckaddr.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_sckfile.obj: ..\src\common\sckfile.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_sckipc.obj: ..\src\common\sckipc.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_sckstrm.obj: ..\src\common\sckstrm.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_socket.obj: ..\src\common\socket.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netdll_url.obj: ..\src\common\url.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
+
+$(OBJS)\netlib_dummy.obj: ..\src\msw\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) -H $**
+
+$(OBJS)\netlib_fs_inet.obj: ..\src\common\fs_inet.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_ftp.obj: ..\src\common\ftp.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_gsocket.obj: ..\src\msw\gsocket.c
+	$(CC) -q -c -P- -o$@ $(NETLIB_CFLAGS) $**
+
+$(OBJS)\netlib_gsockmsw.obj: ..\src\msw\gsockmsw.c
+	$(CC) -q -c -P- -o$@ $(NETLIB_CFLAGS) $**
+
+$(OBJS)\netlib_http.obj: ..\src\common\http.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_protocol.obj: ..\src\common\protocol.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_sckaddr.obj: ..\src\common\sckaddr.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_sckfile.obj: ..\src\common\sckfile.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_sckipc.obj: ..\src\common\sckipc.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_sckstrm.obj: ..\src\common\sckstrm.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_socket.obj: ..\src\common\socket.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
+$(OBJS)\netlib_url.obj: ..\src\common\url.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
+
 $(OBJS)\wxexpat_xmlparse.obj: ..\src\expat\lib\xmlparse.c
 	$(CC) -q -c -P- -o$@ $(WXEXPAT_CFLAGS) $**
 
@@ -8797,9 +8835,9 @@ $(OBJS)\xmllib_xml.obj: ..\src\xml\xml.cpp
 	$(CXX) -q -c -P -o$@ $(XMLLIB_CXXFLAGS) $**
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
-$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_bcc$(VENDORTAG).dll: $(BASEDLL_OBJECTS) $(OBJS)\basedll_dummy.obj $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib
+$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_bcc$(VENDORTAG).dll: $(BASEDLL_OBJECTS) $(OBJS)\basedll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(BASEDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(BASEDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG) $@
 !endif
@@ -8827,6 +8865,9 @@ clean:
 	-if exist $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_bcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib del $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 	-if exist $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib del $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+	-if exist $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_bcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib del $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
+	-if exist $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib del $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_bcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
@@ -8843,7 +8884,7 @@ clean:
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_bcc$(VENDORTAG).dll: $(COREDLL_OBJECTS) $(OBJS)\coredll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(COREDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(COREDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core $@
 !endif
@@ -8859,7 +8900,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.li
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_bcc$(VENDORTAG).dll: $(GLDLL_OBJECTS) $(OBJS)\gldll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(GLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(GLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl $@
 !endif
@@ -8875,7 +8916,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib:
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_HTML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_bcc$(VENDORTAG).dll: $(HTMLDLL_OBJECTS) $(OBJS)\htmldll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(HTMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(HTMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html $@
 !endif
@@ -8897,7 +8938,7 @@ $(LIBDIRNAME)\wx: $(LIBDIRNAME)
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_bcc$(VENDORTAG).dll: $(MONODLL_OBJECTS) $(OBJS)\monodll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib   cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib   cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG) $@
 !endif
@@ -8912,6 +8953,22 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib: $(
 
 ..\include\wx\msw\setup.h: 
 	if not exist ..\include\wx\msw\setup.h copy ..\include\wx\msw\setup0.h ..\include\wx\msw\setup.h
+
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_bcc$(VENDORTAG).dll: $(NETDLL_OBJECTS) $(OBJS)\netdll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname)
+	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
+	c0d32.obj $(NETDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib cw32mt$(__RUNTIME_LIBS_5).lib,,
+|
+	implib -f $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net $@
+!endif
+
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
+$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib: $(NETLIB_OBJECTS) $(OBJS)\netlib_dummy.obj
+	if exist $@ del $@
+	tlib /a /p2048 $@ @&&|
+	$(NETLIB_OBJECTS)
+|
+!endif
 
 $(LIBDIRNAME)\wx\setup.h: 
 	if not exist $(LIBDIRNAME)\wx\setup.h copy ..\include\wx\msw\setup.h $(LIBDIRNAME)\wx\setup.h
@@ -8961,9 +9018,9 @@ $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib: $(WXZLIB_OBJECTS)
 |
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
-$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml_bcc$(VENDORTAG).dll: $(XMLDLL_OBJECTS) $(OBJS)\xmldll_dummy.obj $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname)
+$(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml_bcc$(VENDORTAG).dll: $(XMLDLL_OBJECTS) $(OBJS)\xmldll_dummy.obj $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGFLAG)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(XMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  cw32mt$(__RUNTIME_LIBS_4).lib,,
+	c0d32.obj $(XMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  cw32mt$(__RUNTIME_LIBS_5).lib,,
 |
 	implib -f $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml $@
 !endif
