@@ -404,7 +404,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
     size_t count = m_threads.Count();
     for ( size_t i = 0; i < count; i++ )
     {
-        m_threads[i]->Delete();
+	// We must always use 0 because Delete() calls OnThreadExit() and 
+        // OnThreadExit() removed 0 from the array.
+        m_threads[0]->Delete();
     }
 
     Close(TRUE);

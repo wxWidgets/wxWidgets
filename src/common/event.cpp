@@ -562,6 +562,7 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     wxPendingEvents->Append(this);
     wxPendingEventsLocker->Leave();
 
+    // TODO: Wake up idle handler for the other platforms.
 #ifdef __WXGTK__
     if (g_isIdle) 
         wxapp_install_idle_handler();

@@ -15,17 +15,6 @@
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}
 
-\wxheading{Remark}
-
-You can create a similar stream by this way:
-
-\begin{verbatim}
-  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read);
-  wxInputStream *input = new wxInputStream(sb);
-
-  sb->SetBufferIO(data, data\_end);
-\end{verbatim}
-
 % ----------
 % Members
 % ----------
@@ -61,33 +50,6 @@ Destructor.
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}
 
-\wxheading{Remark}
-
-You can create a similar stream by this way:
-
-\begin{verbatim}
-  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::write);
-  wxOutputStream *input = new wxOutputStream(sb);
-
-  // If there are data
-    sb->SetBufferIO(data, data\_end);
-  // Else
-    sb->Fixed(FALSE);
-\end{verbatim}
-
-This way is also useful to create read/write memory stream:
-
-\begin{verbatim}
-  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read\_write);
-  wxOutputStream *output = new wxOutputStream(sb);
-  wxInputStream *input = new wxInputStream(sb);
-
-  // If there are data
-    sb->SetBufferIO(data, data\_end);
-  // Else
-    sb->Fixed(FALSE);
-\end{verbatim}
-
 % ----------
 % Members
 % ----------
@@ -111,3 +73,15 @@ stream.
 
 Destructor.
 
+\membersection{wxMemoryOutputStream::CopyTo}
+
+\constfunc{size\_t}{CopyTo}{\param{char *}{buffer}, \param{size\_t }{len}}
+
+CopyTo allowed you to transfer data from the internal buffer of
+wxMemoryOutputStream to an external buffer. \it{len} specifies the size of
+the buffer.
+
+\wxheading{Returned value}
+
+CopyTo returns the number of bytes copied to the buffer. Generally it is either
+len or the size of the stream buffer.

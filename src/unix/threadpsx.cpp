@@ -100,8 +100,12 @@ public:
 
 wxMutex::wxMutex()
 {
+    pthread_mutexattr_t attr_type;
+
+    pthread_mutexattr_settype( &attr_type, PTHREAD_MUTEX_FAST_NP );
+
     p_internal = new wxMutexInternal;
-    pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) NULL );
+    pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) &attr_type );
     m_locked = 0;
 }
 
@@ -696,6 +700,8 @@ wxThread::ExitCode wxThread::Delete()
             // wait until the thread stops
             p_internal->Wait();
     }
+    //GL: As we must auto-destroy, the destruction must happen here.
+    delete this;
 
     return NULL;
 }
@@ -717,6 +723,8 @@ wxThreadError wxThread::Kill()
 
                 return wxTHREAD_MISC_ERROR;
             }
+	    //GL: As we must auto-destroy, the destruction must happen here (2).
+	    delete this;
 
             return wxTHREAD_NO_ERROR;
     }
