@@ -849,7 +849,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
         szx, szy,       // view size (total)
         clix, cliy;     // view size (on screen)
 
-    ViewStart(&stx, &sty);
+    GetViewStart(&stx, &sty);
     GetClientSize(&clix, &cliy);
     GetVirtualSize(&szx, &szy);
 
