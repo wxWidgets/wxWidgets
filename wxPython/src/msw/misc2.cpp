@@ -520,7 +520,7 @@ static PyObject *_wrap_wxDirSelector(PyObject *self, PyObject *args, PyObject *k
     wxString * _result;
     wxString * _arg0 = (wxString *) &wxPyDirSelectorPromptStr;
     wxString * _arg1 = (wxString *) &wxPyEmptyString;
-    long  _arg2 = (long ) wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxDD_NEW_DIR_BUTTON;
+    long  _arg2 = (long ) wxDD_DEFAULT_STYLE;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxWindow * _arg4 = (wxWindow *) NULL;
     PyObject * _obj0 = 0;
@@ -10380,6 +10380,11 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxSYS_SWAP_BUTTONS", PyInt_FromLong((long) wxSYS_SWAP_BUTTONS));
 	 PyDict_SetItemString(d,"wxSYS_CAN_DRAW_FRAME_DECORATIONS", PyInt_FromLong((long) wxSYS_CAN_DRAW_FRAME_DECORATIONS));
 	 PyDict_SetItemString(d,"wxSYS_CAN_ICONIZE_FRAME", PyInt_FromLong((long) wxSYS_CAN_ICONIZE_FRAME));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_NONE", PyInt_FromLong((long) wxSYS_SCREEN_NONE));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_DESKTOP", PyInt_FromLong((long) wxSYS_SCREEN_DESKTOP));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_SMALL", PyInt_FromLong((long) wxSYS_SCREEN_SMALL));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_PDA", PyInt_FromLong((long) wxSYS_SCREEN_PDA));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_TINY", PyInt_FromLong((long) wxSYS_SCREEN_TINY));
 	 PyDict_SetItemString(d,"wxLOG_FatalError", PyInt_FromLong((long) wxLOG_FatalError));
 	 PyDict_SetItemString(d,"wxLOG_Error", PyInt_FromLong((long) wxLOG_Error));
 	 PyDict_SetItemString(d,"wxLOG_Warning", PyInt_FromLong((long) wxLOG_Warning));

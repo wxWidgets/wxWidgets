@@ -86,7 +86,7 @@ wxString wxSaveFileSelector(const wxString& what,
 
 wxString wxDirSelector(const wxString& message = wxPyDirSelectorPromptStr,
                        const wxString& defaultPath = wxPyEmptyString,
-                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
+                       long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow *parent = NULL);
 
@@ -303,6 +303,15 @@ enum wxSystemFeature
     wxSYS_CAN_ICONIZE_FRAME
 };
 
+// values for different screen designs
+enum wxSystemScreen
+{
+    wxSYS_SCREEN_NONE = 0,  //   not yet defined
+    wxSYS_SCREEN_DESKTOP,   //   >= 800x600
+    wxSYS_SCREEN_SMALL,     //   >= 640x480
+    wxSYS_SCREEN_PDA,       //   >= 320x240
+    wxSYS_SCREEN_TINY       //   <
+};
 
 
 class wxSystemSettings {
@@ -318,6 +327,13 @@ public:
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
+
+//     // Get system screen design (desktop, pda, ..) used for
+//     // laying out various dialogs.
+//     static wxSystemScreen GetScreen();
+
+//     // Override default.
+//     static void SetScreen( wxSystemScreen screen );
 
 };
 

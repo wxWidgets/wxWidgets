@@ -10,7 +10,7 @@ will be created.
 import sys, os, string
 
 KEEP_TEMPS = 0
-ISCC = r"C:\TOOLS\InnoSetup2Ex\ISCC.exe %s"
+ISCC = r"D:\TOOLS\InnoSetup2Ex\ISCC.exe %s"
 
 #----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ ISS_Template = r'''
 AppName = wxPython
 AppVerName = wxPython %(VERSION)s for Python %(PYTHONVER)s
 OutputBaseFilename = wxPython-%(VERSION)s-%(PYVER)s
-AppCopyright = Copyright © 2001 Total Control Software
+AppCopyright = Copyright © 2002 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(SHORTVER)s for Python %(PYTHONVER)s
 AlwaysCreateUninstallIcon = yes

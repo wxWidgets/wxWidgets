@@ -41,6 +41,8 @@
 %{
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(FileSelectorPromptStr);
+    DECLARE_DEF_STRING(DirSelectorPromptStr);
+    DECLARE_DEF_STRING(DirDialogNameStr);
     DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
     DECLARE_DEF_STRING(GetTextFromUserPromptStr);
     DECLARE_DEF_STRING(MessageBoxCaptionStr);
@@ -80,10 +82,12 @@ public:
 class wxDirDialog : public wxDialog {
 public:
     wxDirDialog(wxWindow* parent,
-                const wxString& message = wxPyFileSelectorPromptStr,
+                const wxString& message = wxPyDirSelectorPromptStr,
                 const wxString& defaultPath = wxPyEmptyString,
                 long style = 0,
-                const wxPoint& pos = wxDefaultPosition);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                const wxString& name = wxPyDirDialogNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 

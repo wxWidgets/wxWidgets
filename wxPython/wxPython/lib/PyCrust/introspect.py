@@ -154,7 +154,9 @@ def getCallTip(command='', locals=None):
             else:  # Drop the first argument.
                 argspec = '(' + ','.join(temp[1:]).lstrip()
         tip1 = name + argspec
-    doc = inspect.getdoc(object)
+    doc = ''
+    if callable(object):
+        doc = inspect.getdoc(object)
     if doc:
         # tip2 is the first separated line of the docstring, like:
         # "Return call tip text for a command."

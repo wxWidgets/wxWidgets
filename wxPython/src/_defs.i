@@ -452,6 +452,7 @@ enum {
     wxPD_REMAINING_TIME,
 
     wxDD_NEW_DIR_BUTTON,
+    wxDD_DEFAULT_STYLE,
 
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
