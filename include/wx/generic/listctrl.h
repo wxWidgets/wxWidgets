@@ -186,6 +186,7 @@ protected:
     virtual int OnGetItemImage(long item) const;
 
     // it calls our OnGetXXX() functions
+
     friend class WXDLLEXPORT wxListMainWindow;
 
 private:
