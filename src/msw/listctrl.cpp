@@ -2460,7 +2460,8 @@ void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
 
-    if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count, LVSICF_NOSCROLL) )
+    if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count,
+                        LVSICF_NOSCROLL | LVSICF_NOINVALIDATEALL) )
     {
         wxLogLastError(_T("ListView_SetItemCount"));
     }
