@@ -1582,6 +1582,8 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
     return wxBitmap(smallimg);
 }
 
+// This function is currently not unused anymore
+#if 0
 // finds empty borders and return non-empty area of image:
 static wxImage CutEmptyBorders(const wxImage& img)
 {
@@ -1625,6 +1627,8 @@ static wxImage CutEmptyBorders(const wxImage& img)
 
     return img.GetSubImage(wxRect(left, top, right - left + 1, bottom - top + 1));
 }
+#endif // #if 0
+
 #endif // wxUSE_MIMETYPE
 
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
