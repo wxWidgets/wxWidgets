@@ -55,6 +55,7 @@ void wxTopLevelWindowMGL::Init()
     m_isIconized = FALSE;
     m_isMaximized = FALSE;
     m_fsIsShowing = FALSE;
+    m_sizeSet = FALSE;
 }
 
 bool wxTopLevelWindowMGL::Create(wxWindow *parent,
@@ -140,6 +141,17 @@ bool wxTopLevelWindowMGL::ShowFullScreen(bool show, long style)
 bool wxTopLevelWindowMGL::Show(bool show)
 {
     bool ret = wxTopLevelWindowBase::Show(show);
+
+    // If this is the first time Show was called, send size event,
+    // so that the frame can adjust itself (think auto layout or single child)
+    if ( !m_sizeSet )
+    {
+        m_sizeSet = TRUE;
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+
     if ( ret && show && AcceptsFocus() )
         SetFocus();
         // FIXME_MGL -- don't do this for popup windows?

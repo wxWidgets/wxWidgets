@@ -21,3 +21,4 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 
+// FIXME_MGL

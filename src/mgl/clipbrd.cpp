@@ -15,6 +15,7 @@
 
 #if wxUSE_CLIPBOARD
 
+// FIXME_MGL
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 

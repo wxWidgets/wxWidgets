@@ -152,6 +152,10 @@ void wxEventLoop::Exit(int rc)
 
     m_impl->SetExitCode(rc);
     m_impl->SetKeepLooping(FALSE);
+    
+    // Send a dummy event so that the app won't block in EVT_halt if there
+    // are no user-generated events in the queue:
+    EVT_post(0, EVT_USEREVT, 0, 0);
 }
 
 // ----------------------------------------------------------------------------

@@ -71,16 +71,19 @@ protected:
     void Init();
 
     wxString      m_title;
-    bool          m_fsIsShowing;         /* full screen */
+    bool          m_fsIsShowing:1;         /* full screen */
     long          m_fsSaveStyle;
     long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
 
     // is the frame currently iconized?
-    bool          m_isIconized;
+    bool          m_isIconized:1;
     // and maximized?
-    bool          m_isMaximized;
+    bool          m_isMaximized:1;
     wxRect        m_savedFrame;
+
+    // did we sent wxSizeEvent at least once?
+    bool          m_sizeSet:1;
 };
 
 #endif // __WX_TOPLEVEL_H__

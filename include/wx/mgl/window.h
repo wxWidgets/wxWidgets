@@ -111,8 +111,8 @@ protected:
     struct window_t      *m_wnd;
     // whether there should be wxEraseEvent before wxPaintEvent or not
     // (see wxWindow::Refresh)
-    bool                  m_frozen;
-    bool                  m_refreshAfterThaw;
+    bool                  m_frozen:1;
+    bool                  m_refreshAfterThaw:1;
     int                   m_eraseBackground;
 
     // implement the base class pure virtuals
