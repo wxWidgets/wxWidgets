@@ -1,6 +1,6 @@
-# Note that this is NOT a relocatable package
 %define pref /usr
 %define ver 2.2.9
+%define ver2 2.2
 %define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
@@ -11,6 +11,7 @@ Copyright: wxWindows Licence
 Group: X11/Libraries
 Source: wxGTK-%{ver}.tar.bz2
 URL: http://www.wxwindows.org/
+Prefix: %{pref}
 BuildRoot: /var/tmp/%{name}-root
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
 
@@ -18,6 +19,11 @@ Packager: Vadim Zeitlin <vadim@wxwindows.org>
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
 # possible to require wxwin instead of requiring "wxgtk or wxmotif or wxqt..."
 Provides: wxwin
+
+# in addition, we should provide libwx_gtk as automatic generator only notices
+# libwx_gtk-%{ver}-%{rel}
+Provides: libwx_gtk.so
+Provides: libwx_gtk-%{ver2}.so
 
 %description
 wxWindows is a free C++ library for cross-platform GUI development.
@@ -44,7 +50,7 @@ OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 %setup -n wxGTK-%{ver}
 export CPPFLAGS=-I/usr/X11R6/include
 export LDFLAGS=-L/usr/X11R6/lib
-./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl
+./configure --prefix=%{pref} --no-recursion --enable-burnt_name --with-odbc --with-opengl
 
 %build
 if [ "$SMP" != "" ]; then
@@ -57,31 +63,29 @@ $MAKE
 %install
 make prefix=$RPM_BUILD_ROOT%{pref} install
 
+%find_lang wxstd
+
 %post
 /sbin/ldconfig
 
 %postun
 /sbin/ldconfig
 
-%files
+%files -f wxstd.lang
 %defattr(-, root, root)
-%defattr (644, root, root, 755)
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, root, root) %{pref}/lib/libwx_gtk.*
-%attr(755, root, root) %{pref}/lib/libwx_gtk-2.2.*
+%{pref}/lib/libwx_gtk*
 
 %files devel
 %defattr(-, root, root)
-%defattr (644, root, root, 755)
 %dir %{pref}/include/wx
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
-%attr(755, root, root) %{pref}/bin/wxgtk-config
-%attr(755, root, root) %{pref}/bin/wx-config
+%{pref}/bin/wx*-config
 
 %files gl
 %defattr(-, root, root)
-%attr(755, root, root) %{pref}/lib/libwx_gtk_gl*
+%{pref}/lib/libwx_gtk_gl*
