@@ -175,6 +175,8 @@ public:
     void OnNcPaint(wxNcPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnIdle(wxIdleEvent& event);
+    void OnMouseEvent( wxMouseEvent &event ) ;
+
     void MacOnScroll(wxScrollEvent&event ) ;
     
     bool AcceptsFocus() const ;
