@@ -59,7 +59,7 @@ wxBEGIN_FLAGS( wxListBoxStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -103,7 +103,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxListBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 #endif
@@ -183,6 +183,9 @@ bool wxListBox::Create(wxWindow *parent,
     {
         Append(choices[i]);
     }
+
+    // now we can compute our best size correctly, so do it if necessary
+    SetBestSize(size);
 
     return true;
 }
@@ -387,7 +390,7 @@ void wxListBox::Free()
 
 void wxListBox::SetSelection(int N, bool select)
 {
-    wxCHECK_RET( N == wxNOT_FOUND || 
+    wxCHECK_RET( N == wxNOT_FOUND ||
                     (N >= 0 && N < m_noItems),
                  wxT("invalid index in wxListBox::SetSelection") );
 
