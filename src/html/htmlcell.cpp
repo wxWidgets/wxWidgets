@@ -783,7 +783,7 @@ void wxHtmlContainerCell::Layout(int w)
 
                     const wxHtmlCell *c,
                                      *prev = NULL,
-                                     *next = NULL;
+                                     *next wxDUMMY_INITIALIZE(NULL);
                     for ( c = line; c != cell; prev = c, c = next )
                     {
                         next = c->GetNext();
