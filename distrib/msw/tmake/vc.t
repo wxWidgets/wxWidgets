@@ -24,31 +24,34 @@
         }
 
         $file =~ s/cp?p?$/obj/;
-        $project{$tag} .= "..\\generic\\\$D\\" . $file . " "
+        $project{$tag} .= "\$(GENDIR)\\\$D\\" . $file . " "
     }
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\b16\b/;
 
         $file =~ s/cp?p?$/obj/;
-        $project{"WXCOMMONOBJS"} .= "..\\common\\\$D\\" . $file . " "
+        $project{"WXCOMMONOBJS"} .= "\$(COMMDIR)\\\$D\\" . $file . " "
     }
 
     foreach $file (sort keys %wxMSW) {
         next if $wxMSW{$file} =~ /\b16\b/;
 
         #! OLE files live in a subdir
-        $project{"WXMSWOBJS"} .= '..\\msw\\';
-        $project{"WXMSWOBJS"} .= 'ole\\' if $wxMSW{$file} =~ /\bO\b/;
+        if( $wxMSW{$file} =~ /\bO\b/ ) {
+            $project{"WXMSWOBJS"} .= '$(OLEDIR)';
+        } else {
+            $project{"WXMSWOBJS"} .= '$(MSWDIR)';
+        }
         $file =~ s/cp?p?$/obj/;
-        $project{"WXMSWOBJS"} .= '$D\\' . $file . " ";
+        $project{"WXMSWOBJS"} .= '\\$D\\' . $file . " ";
     }
 
     foreach $file (sort keys %wxHTML) {
         next if $wxHTML{$file} =~ /\b16\b/;
 
         $file =~ s/cp?p?$/obj/;
-        $project{"WXHTMLOBJS"} .= "..\\html\\\$D\\" . $file . " "
+        $project{"WXHTMLOBJS"} .= "\$(HTMLDIR)\\\$D\\" . $file . " "
     }
 
 #$}
@@ -104,37 +107,37 @@ HTMLDIR = $(WXDIR)\src\html
 JPEGDIR = $(WXDIR)\src\jpeg
 TIFFDIR = $(WXDIR)\src\tiff
 
-{..\generic}.cpp{..\generic\$D}.obj:
+{$(GENDIR)}.cpp{$(GENDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
-{..\common}.cpp{..\common\$D}.obj:
+{$(COMMDIR)}.cpp{$(COMMDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
-{..\common}.c{..\common\$D}.obj:
+{$(COMMDIR)}.c{$(COMMDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS2) /Fo$@ /c /Tc $<
 <<
 
-{..\msw}.cpp{..\msw\$D}.obj:
+{$(MSWDIR)}.cpp{$(MSWDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
-{..\msw}.c{..\msw\$D}.obj:
+{$(MSWDIR)}.c{$(MSWDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS2) /Fo$@ /c /Tc $<
 <<
 
-{..\msw\ole}.cpp{..\msw\ole\$D}.obj:
+{$(OLEDIR)}.cpp{$(OLEDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
-{..\html}.cpp{..\html\$D}.obj:
+{$(HTMLDIR)}.cpp{$(HTMLDIR)\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
@@ -146,7 +149,7 @@ GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 NONESSENTIALOBJS= #$ ExpandList("WXNONESSENTIALOBJS");
 
 COMMONOBJS = \
-		..\common\$D\y_tab.obj \
+		$(COMMDIR)\$D\y_tab.obj \
 		#$ ExpandList("WXCOMMONOBJS");
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
@@ -344,20 +347,20 @@ $(CPPFLAGS2) /Od /Fo$(MSWDIR)\$D\treectrl.obj /c /Tp $(MSWDIR)\treectrl.cpp
 $(CPPFLAGS2) /Od /Fo$(HTMLDIR)\$D\helpfrm.obj /c /Tp $(HTMLDIR)\helpfrm.cpp
 <<
 
-..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
+$(COMMDIR)\$D\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
         cl @<<
-$(CPPFLAGS2) /c ..\common\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+$(CPPFLAGS2) /c $(COMMDIR)\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
 <<
 
-..\common\y_tab.c:     ..\common\dosyacc.c
-        copy "..\common"\dosyacc.c "..\common"\y_tab.c
+$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+        copy "$(COMMDIR)"\dosyacc.c "$(COMMDIR)"\y_tab.c
 
-..\common\lex_yy.c:    ..\common\doslex.c
-    copy "..\common"\doslex.c "..\common"\lex_yy.c
+$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+    copy "$(COMMDIR)"\doslex.c "$(COMMDIR)"\lex_yy.c
 
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
-..\common\$D\unzip.obj:     ..\common\unzip.c
+$(COMMDIR)\$D\unzip.obj:     $(COMMDIR)\unzip.c
         cl @<<
 $(CPPFLAGS2) /c $(COMMDIR)\unzip.c /Fo$@
 <<
