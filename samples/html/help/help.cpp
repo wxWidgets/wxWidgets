@@ -105,12 +105,7 @@
    // `Main program' equivalent: the program execution "starts" here
    bool MyApp::OnInit()
    {
-       #if wxUSE_LIBPNG
-        wxImage::AddHandler(new wxPNGHandler);
-       #endif
-       #if wxUSE_LIBJPEG
-        wxImage::AddHandler(new wxJPEGHandler);
-       #endif
+      wxInitAllImageHandlers();
 
       SetVendorName("wxWindows");
       SetAppName("wxHTMLHelp"); 
