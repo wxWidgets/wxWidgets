@@ -329,11 +329,16 @@ void wxWindowBase::Centre(int direction)
 
     if ( !(direction & wxCENTRE_ON_SCREEN) )
     {
-        // find the top level parent to centre this window on
+        // find the parent to centre this window on: it should be the
+        // immediate parent for the controls but the top level parent for the
+        // top level windows (like dialogs)
         parent = GetParent();
-        while ( parent && !parent->IsTopLevel() )
+        if ( IsTopLevel() )
         {
-            parent = parent->GetParent();
+            while ( parent && !parent->IsTopLevel() )
+            {
+                parent = parent->GetParent();
+            }
         }
 
         // did we find the parent?
