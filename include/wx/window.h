@@ -777,6 +777,11 @@ public:
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) { m_backgroundStyle = style; return true; }
     virtual wxBackgroundStyle GetBackgroundStyle() const { return m_backgroundStyle; }
 
+        // returns true if the control has "transparent" areas such as a
+        // wxStaticText and wxCheckBox and the background should be adapted
+        // from a parent window
+    virtual bool HasTransparentBackground() { return false; }
+
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
     virtual bool SetFont(const wxFont& font) = 0;

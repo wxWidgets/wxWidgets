@@ -101,8 +101,6 @@ public:
     // overridden base class virtuals
     virtual bool IsPressed() const { return m_isPressed; }
 
-    virtual bool HasTransparentBackground() { return true; }
-
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state));
     virtual wxCheckBoxState DoGet3StateValue() const;

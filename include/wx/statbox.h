@@ -18,27 +18,26 @@ public:
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
+    virtual bool HasTransparentBackground() { return true; }
 
 private:
     DECLARE_NO_COPY_CLASS(wxStaticBoxBase)
 };
 
 #if defined(__WXUNIVERSAL__)
-#include "wx/univ/statbox.h"
+    #include "wx/univ/statbox.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/statbox.h"
+    #include "wx/msw/statbox.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/statbox.h"
+    #include "wx/motif/statbox.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/statbox.h"
+    #include "wx/gtk/statbox.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/statbox.h"
+    #include "wx/mac/statbox.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/statbox.h"
+    #include "wx/cocoa/statbox.h"
 #elif defined(__WXPM__)
-#include "wx/os2/statbox.h"
+    #include "wx/os2/statbox.h"
 #endif
 
 #endif // wxUSE_STATBOX

@@ -55,8 +55,6 @@ public:
 
     virtual void SetLabel(const wxString& label);
 
-    virtual bool HasTransparentBackground() { return true; }
-
     virtual bool IsFocused() const { return false; }
 
 protected:

@@ -14,8 +14,7 @@ public:
 
     // overriden base virtuals
     virtual bool AcceptsFocus() const { return false; }
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
+    virtual bool HasTransparentBackground() { return true; }
 
 private:
     DECLARE_NO_COPY_CLASS(wxStaticTextBase)
