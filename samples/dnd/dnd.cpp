@@ -191,10 +191,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
   // associate drop targets with 2 text controls
-#ifdef __WXMSW__  // it's not supported (yet) on other platforms
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-#endif  //MSW
-  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
+  //m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
 
   wxLayoutConstraints *c;
 
