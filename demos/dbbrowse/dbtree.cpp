@@ -189,6 +189,7 @@ int  DBTree::OnPopulate()
     }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
   else
     {
+      return 0;
       wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
     }
   //----------------------------------------------------------------------------------------------------------------------------

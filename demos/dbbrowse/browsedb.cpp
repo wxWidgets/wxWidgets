@@ -208,23 +208,24 @@ bool BrowserDB::OnStartDB(int Quite)
   //---------------------------------------------------------------------------
   // Connect to datasource
   //---------------------------
-  DlgUser p_Dlg(pDoc->p_MainFrame, "Username and Password");
-  p_Dlg.s_DSN      = ODBCSource;
-  p_Dlg.s_User     = UserName;
-  p_Dlg.s_Password = Password;
-  p_Dlg.OnInit();
-  p_Dlg.Fit();
+  DlgUser *p_Dlg = new DlgUser(pDoc->p_MainFrame, "Username and Password");
+  p_Dlg->s_DSN      = ODBCSource;
+  p_Dlg->s_User     = UserName;
+  p_Dlg->s_Password = Password;
+  p_Dlg->OnInit();
+  p_Dlg->Fit();
 
   bool OK = FALSE;
-  if (p_Dlg.ShowModal() == wxID_OK)
+  if (p_Dlg->ShowModal() == wxID_OK)
     {
-      (pDoc->p_DSN+i_Which)->Usr = p_Dlg.s_User;
-      (pDoc->p_DSN+i_Which)->Pas = p_Dlg.s_Password;
-      UserName  = p_Dlg.s_User;
-      Password  = p_Dlg.s_Password;
+      (pDoc->p_DSN+i_Which)->Usr = p_Dlg->s_User;
+      (pDoc->p_DSN+i_Which)->Pas = p_Dlg->s_Password;
+      UserName  = p_Dlg->s_User;
+      Password  = p_Dlg->s_Password;
       OK = TRUE;
     }
-  p_Dlg.Destroy();
+  //p_Dlg.Destroy();
+  delete p_Dlg;
 
   if (OK)
     {

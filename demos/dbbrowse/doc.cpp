@@ -80,8 +80,10 @@ mjDoc::~mjDoc()
 bool mjDoc::OnNewDocument()
 {
   //-------------------------------------------------------------------
-  if (!OnInitView())                 // LogBook is now activ
+  if (!OnInitView())
+    {
     return FALSE;
+    }
   p_PgmCtrl->OnPopulate();
   //-------------------------------------------------------------------
   return TRUE;

@@ -398,7 +398,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
       long x,w,h;
       
       // set select default font of the window into it's device context
-      dc.SetFont( GetLabelingFont() );
+      //dc.SetFont( GetLabelingFont() );
       
       dc.SetTextBackground( GetBackgroundColour() );
       
@@ -525,7 +525,7 @@ void wxTabbedWindow::RecalcLayout(bool andRepaint)
       long w,h;
       
       // set select default font of the window into it's device context
-  dc.SetFont( GetLabelingFont() );
+  //dc.SetFont( GetLabelingFont() );
   
   dc.GetTextExtent(tab.mText, &w, &h );
   
@@ -769,7 +769,7 @@ void wxPaggedWindow::DrawPaperBar( twTabInfo& tab, int x, int y,
   long w,h;
   
   // set select default font of the window into it's device context
-  dc.SetFont( GetLabelingFont() );
+  //dc.SetFont( GetLabelingFont() );
   
   dc.SetTextBackground( brush.GetColour() );
   
@@ -999,7 +999,7 @@ void wxPaggedWindow::RecalcLayout(bool andRepaint)
       long w,h;
       
       // set select default font of the window into it's device context
-      dc.SetFont( GetLabelingFont() );
+      //dc.SetFont( GetLabelingFont() );
       dc.GetTextExtent(tab.mText, &w, &h );
       
       tab.mDims.x = w + tab.ImageToTxtGap(mImageTextGap) +
