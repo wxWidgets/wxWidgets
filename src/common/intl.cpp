@@ -46,9 +46,40 @@
 // simple types
 // ----------------------------------------------------------------------------
 
-// FIXME adjust if necessary
+// this should *not* be wxChar, this type must have exactly 8 bits!
 typedef unsigned char size_t8;
-typedef unsigned long size_t32;
+
+#ifdef __WXMSW__
+    #if defined(__WIN16__)
+        typedef unsigned long size_t32;
+    #elif defined(__WIN32__)
+        typedef unsigned int size_t32;
+    #else
+        // Win64 will have different type sizes
+        #error "Please define a 32 bit type"
+    #endif
+#else // !Windows
+    // SIZEOF_XXX are defined by configure
+    #if defined(SIZEOF_INT) && (SIZEOF_INT == 4)
+        typedef unsigned int size_t32;
+    #elif defined(SIZEOF_LONG) && (SIZEOF_LONG == 4)
+        typedef unsigned long size_t32;
+    #else
+        // assume sizeof(int) == 4 - what else can we do
+        typedef unsigned int size_t32;
+
+        // ... but at least check it during run time
+        static class IntSizeChecker
+        {
+        public:
+            IntSizeChecker()
+            {
+                wxASSERT_MSG( sizeof(int) == 4,
+                              "size_t32 is incorrectly defined!" );
+            }
+        } intsizechecker;
+    #endif
+#endif // Win/!Win
 
 // ----------------------------------------------------------------------------
 // constants
