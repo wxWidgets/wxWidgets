@@ -1,0 +1,91 @@
+# Makefile for zlib
+# Borland C++   ************ UNTESTED ***********
+
+# To use, do "make -fmakefile.bor"
+
+# WARNING: the small model is supported but only for small values of
+# MAX_WBITS and MAX_MEM_LEVEL. If you wish to reduce the memory
+# requirements (default 256K for big objects plus a few K), you can add
+# to CFLAGS below: -DMAX_MEM_LEVEL=7 -DMAX_WBITS=14
+# See zconf.h for details about the memory requirements.
+
+# ------------- Turbo C++, Borland C++ -------------
+CFLAGS=-O2 /MD # /GX
+CC=cl
+LD=cl
+LIB=tlib
+#   replace bcc with tcc for Turbo C++ 1.0
+LDFLAGS=$(MODEL)
+O=.obj
+
+LIBTARGET=..\..\lib\zlib.lib
+
+# variables
+OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
+  trees$(O) 
+OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
+  infutil$(O) inffast$(O) 
+
+all: $(LIBTARGET)
+
+adler32.obj: adler32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+compress.obj: compress.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+crc32.obj: crc32.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+deflate.obj: deflate.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+gzio.obj: gzio.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infblock.obj: infblock.c zutil.h zlib.h zconf.h infblock.h inftrees.h\
+   infcodes.h infutil.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infcodes.obj: infcodes.c zutil.h zlib.h zconf.h inftrees.h infutil.h\
+   infcodes.h inffast.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inflate.obj: inflate.c zutil.h zlib.h zconf.h infblock.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inftrees.obj: inftrees.c zutil.h zlib.h zconf.h inftrees.h
+	$(CC) -c $(CFLAGS) $*.c
+
+infutil.obj: infutil.c zutil.h zlib.h zconf.h inftrees.h infutil.h
+	$(CC) -c $(CFLAGS) $*.c
+
+inffast.obj: inffast.c zutil.h zlib.h zconf.h inftrees.h infutil.h inffast.h
+	$(CC) -c $(CFLAGS) $*.c
+
+trees.obj: trees.c deflate.h zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+uncompr.obj: uncompr.c zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+zutil.obj: zutil.c zutil.h zlib.h zconf.h
+	$(CC) -c $(CFLAGS) $*.c
+
+LIBOBJECTS = $(OBJ1) $(OBJ2)
+
+$(LIBTARGET): $(OBJ1) $(OBJ2)
+        del $(LIBTARGET)
+	    lib /PAGESIZE:128 @<<
+$(LIBTARGET)
+y
+$(OBJ1) $(OBJ2)
+nul
+;
+<<
+
+clean:
+    -erase *.obj
+    -erase *.exe
+    -erase *.sbr
+    -erase $(LIBTARGET)
