@@ -256,10 +256,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf(_T("This is the network functions test sample.\n"
-                  "© 1999 Vadim Zeitlin"));
+    msg.Printf( wxT("This is the network functions test sample.\n")
+                wxT("© 1999 Vadim Zeitlin") );
 
-    wxMessageBox(msg, _T("About NetTest"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, wxT("About NetTest"), wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))

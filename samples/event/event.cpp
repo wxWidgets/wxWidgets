@@ -293,9 +293,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Event sample shows different ways of using events\n"
-                    "© 2001 Vadim Zeitlin"),
-                 _T("About Event Sample"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox( wxT("Event sample shows different ways of using events\n")
+                  wxT("© 2001 Vadim Zeitlin"),
+                  wxT("About Event Sample"), wxOK | wxICON_INFORMATION, this );
 }
 
 // ----------------------------------------------------------------------------
@@ -304,9 +304,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDynamic(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("This is a dynamic event handler which can be connected "
-                    "and disconnected during run-time."),
-                 _T("Dynamic Event Handler"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox
+    (
+        wxT("This is a dynamic event handler which can be connected ")
+        wxT("and disconnected at run-time."),
+        wxT("Dynamic Event Handler"), wxOK | wxICON_INFORMATION, this
+    );
 }
 
 void MyFrame::OnConnect(wxCommandEvent& event)

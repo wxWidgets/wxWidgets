@@ -24,6 +24,10 @@
 #include "wx/wx.h"
 #endif
 
+#if wxUSE_UNICODE
+    #error "This sample can't be compiled in Unicode mode."
+#endif // wxUSE_UNICODE
+
 #include "wx/resource.h"
 
 #include <ctype.h>
@@ -52,8 +56,8 @@
 // Under Windows, some compilers can't include
 // a whole .wxr file. So we use a .rc user-defined resource
 // instead. dialog1 will point to the whole .wxr 'file'.
-static char *dialog1 = NULL;
-static char *menu1 = NULL;
+static wxChar *dialog1 = NULL;
+static wxChar *menu1 = NULL;
 #else
 // Other platforms should have sensible compilers that
 // cope with long strings.
@@ -76,39 +80,42 @@ MyApp::MyApp()
 bool MyApp::OnInit(void)
 {
 #if defined(__WXMSW__)
-  // Load the .wxr 'file' from a .rc resource, under Windows.
-  dialog1 = wxLoadUserResource("dialog1", "WXRDATA");
-  menu1 = wxLoadUserResource("menu1", "WXRDATA");
-  // All resources in the file (only one in this case) get parsed
-  // by this call.
-  wxResourceParseString(dialog1);
-  wxResourceParseString(menu1);
+    // Load the .wxr 'file' from a .rc resource, under Windows.
+    dialog1 = wxLoadUserResource(wxT("dialog1"), wxT("WXRDATA"));
+    menu1 = wxLoadUserResource(wxT("menu1"), wxT("WXRDATA"));
+    // All resources in the file (only one in this case) get parsed
+    // by this call.
+    wxResourceParseString(dialog1);
+    wxResourceParseString(menu1);
 #else
-  // Simply parse the data pointed to by the variable dialog1.
-  // If there were several resources, there would be several
-  // variables, and this would need to be called several times.
-  wxResourceParseData(dialog1);
-  wxResourceParseData(menu1);
+    // Simply parse the data pointed to by the variable dialog1.
+    // If there were several resources, there would be several
+    // variables, and this would need to be called several times.
+    wxResourceParseData(dialog1);
+    wxResourceParseData(menu1);
 #endif
 
-  // Create the main frame window
-  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "wxWindows Resource Sample", wxPoint(-1, -1), wxSize(300, 250));
+    // Create the main frame window
+    frame = new MyFrame( (wxFrame *) NULL, -1,
+                         (char *) "wxWindows Resource Sample",
+                         wxPoint(-1, -1), wxSize(300, 250) );
 
-  // Give it a status line
-  frame->CreateStatusBar(2);
+    // Give it a status line
+    frame->CreateStatusBar(2);
 
-  wxMenuBar *menu_bar = wxResourceCreateMenuBar("menu1");
-  
-  // Associate the menu bar with the frame
-  frame->SetMenuBar(menu_bar);
+    wxMenuBar *menu_bar = wxResourceCreateMenuBar("menu1");
 
-  // Make a panel
-  frame->panel = new MyPanel(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
-  frame->Show(TRUE);
+    // Associate the menu bar with the frame
+    frame->SetMenuBar(menu_bar);
 
-  SetTopWindow(frame);
+    // Make a panel
+    frame->panel = new MyPanel( frame, -1, wxPoint(0, 0), wxSize(400, 400),
+                                0, "MyMainFrame" );
+    frame->Show(TRUE);
 
-  return TRUE;
+    SetTopWindow(frame);
+
+    return TRUE;
 }
 
 MyApp::~MyApp()
@@ -123,17 +130,20 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_LEFT_DOWN( MyPanel::OnClick)
 END_EVENT_TABLE()
 
-MyPanel::MyPanel( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, 
-  int style, const wxString &name ) : 
-  wxPanel( parent, id, pos, size, style, name )
+MyPanel::MyPanel
+(
+    wxWindow *parent, wxWindowID id, const wxPoint& pos,
+    const wxSize& size,
+    int style, const wxString &name
+) : wxPanel( parent, id, pos, size, style, name )
 {
 }
 
 void MyPanel::OnClick( wxMouseEvent &WXUNUSED(event2) )
 {
-  MyFrame *frame = (MyFrame*)(wxTheApp->GetTopWindow());
-  wxCommandEvent event;
-  frame->OnTestDialog( event );
+    MyFrame *frame = (MyFrame*)(wxTheApp->GetTopWindow());
+    wxCommandEvent event;
+    frame->OnTestDialog( event );
 }
 
 
@@ -144,10 +154,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 // Define my frame constructor
-MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(parent, id, title, pos, size)
+MyFrame::MyFrame
+(
+    wxWindow *parent, const wxWindowID id,
+    const wxString& title, const wxPoint& pos, const wxSize& size
+) : wxFrame(parent, id, title, pos, size)
 {
-  panel = (wxWindow *) NULL;
+    panel = (wxWindow *) NULL;
 }
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
@@ -164,15 +177,20 @@ void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
 {
-      MyDialog *dialog = new MyDialog;
-      if (dialog->LoadFromResource(this, "dialog1"))
-      {
+    MyDialog *dialog = new MyDialog;
+
+    if (dialog->LoadFromResource(this, "dialog1"))
+    {
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("multitext3", dialog);
         if (text)
-          text->SetValue("wxWindows resource demo");
+        {
+            text->SetValue("wxWindows resource demo");
+        }
+
         dialog->ShowModal();
-      }
-      dialog->Close(TRUE);
+    }
+
+    dialog->Close(TRUE);
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -183,12 +201,12 @@ END_EVENT_TABLE()
 
 void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event) )
 {
-  //  EndModal(RESOURCE_OK);
+    //  EndModal(RESOURCE_OK);
 }
 
 void MyDialog::OnCancel(wxCommandEvent& WXUNUSED(event) )
 {
-  EndModal(ID_BUTTON109);
+    EndModal(ID_BUTTON109);
 }
 
 

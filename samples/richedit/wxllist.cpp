@@ -81,7 +81,7 @@
    wxLayoutObject::DebugDump(void) const
    {
       wxString str;
-      str.Printf("%s",g_aTypeStrings[GetType()]);
+      str.Printf(wxT("%s"), g_aTypeStrings[GetType()]);
       return str;
    }
 #else
@@ -176,12 +176,17 @@ bool Contains(const wxRect &r, const wxPoint &p)
 static
 void ReadString(wxString &to, wxString &from)
 {
-   to = "";
-   const char *cptr = from.c_str();
-   while(*cptr && *cptr != '\n')
-      to += *cptr++;
-   if(*cptr) cptr++;
-   from = cptr;
+    to = wxT("");
+    const wxChar *cptr = from.c_str();
+    while(*cptr && *cptr != wxT('\n'))
+    {
+        to += cptr;
+        cptr++;
+    }
+
+    if(*cptr) cptr++;
+
+    from = cptr;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -194,22 +199,23 @@ void ReadString(wxString &to, wxString &from)
 wxLayoutObject *
 wxLayoutObject::Read(wxString &istr)
 {
-   wxString tmp;
-   ReadString(tmp, istr);
-   int type = WXLO_TYPE_INVALID;
-   sscanf(tmp.c_str(),"%d", &type);
+    wxString tmp;
+    ReadString(tmp, istr);
+    long l = WXLO_TYPE_INVALID;
+    tmp.ToLong(&l);
+    int type = (int) l;
 
-   switch(type)
-   {
-   case WXLO_TYPE_TEXT:
-      return wxLayoutObjectText::Read(istr);
-   case WXLO_TYPE_CMD:
-      return wxLayoutObjectCmd::Read(istr);
-   case WXLO_TYPE_ICON:
-      return wxLayoutObjectIcon::Read(istr);
-   default:
-      return NULL;
-   }
+    switch(type)
+    {
+    case WXLO_TYPE_TEXT:
+        return wxLayoutObjectText::Read(istr);
+    case WXLO_TYPE_CMD:
+        return wxLayoutObjectCmd::Read(istr);
+    case WXLO_TYPE_ICON:
+        return wxLayoutObjectIcon::Read(istr);
+    default:
+        return NULL;
+    }
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -385,7 +391,7 @@ wxLayoutObjectText::DebugDump(void) const
    wxString str;
    str = wxLayoutObject::DebugDump();
    wxString str2;
-   str2.Printf(" `%s`", m_Text.c_str());
+   str2.Printf(wxT(" `%s`"), m_Text.c_str());
    return str+str2;
 }
 #endif
@@ -400,7 +406,7 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap const &icon)
 {
    if ( !icon.Ok() )
    {
-      wxFAIL_MSG("invalid icon");
+      wxFAIL_MSG(wxT("invalid icon"));
 
       m_Icon = NULL;
 
@@ -590,46 +596,76 @@ wxLayoutObjectCmd::Write(wxString &ostr)
 wxLayoutObjectCmd *
 wxLayoutObjectCmd::Read(wxString &istr)
 {
-   wxLayoutObjectCmd *obj = new wxLayoutObjectCmd;
+    wxLayoutObjectCmd *obj = new wxLayoutObjectCmd;
 
-   wxString tmp;
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->family);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->size);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->style);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->weight);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->underline);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->m_fg_valid);
-   ReadString(tmp, istr);
-   sscanf(tmp.c_str(),"%d", &obj->m_StyleInfo->m_bg_valid);
-   if(obj->m_StyleInfo->m_fg_valid)
-   {
-      int red, green, blue;
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &red);
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &green);
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &blue);
-      obj->m_StyleInfo->m_fg = wxColour(red, green, blue);
-   }
-   if(obj->m_StyleInfo->m_bg_valid)
-   {
-      int red, green, blue;
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &red);
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &green);
-      ReadString(tmp, istr);
-      sscanf(tmp.c_str(),"%d", &blue);
-      obj->m_StyleInfo->m_bg = wxColour(red, green, blue);
-   }
-   return obj;
+    long l = 0;
+    wxString tmp;
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->family = (int) l;
+
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->size = (int) l;
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->style = (int) l;
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->weight = (int) l;
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->underline = (int) l;
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->m_fg_valid = (int) l;
+
+    ReadString(tmp, istr);
+    tmp.ToLong(&l);
+    obj->m_StyleInfo->m_bg_valid = (int) l;
+
+    if(obj->m_StyleInfo->m_fg_valid)
+    {
+        int red, green, blue;
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        red = (int) l;
+
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        green = (int) l;
+
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        blue = (int) l;
+
+        obj->m_StyleInfo->m_fg = wxColour(red, green, blue);
+    }
+
+    if(obj->m_StyleInfo->m_bg_valid)
+    {
+        int red, green, blue;
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        red = (int) l;
+
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        green = (int) l;
+
+        ReadString(tmp, istr);
+        tmp.ToLong(&l);
+        blue = (int) l;
+
+        obj->m_StyleInfo->m_bg = wxColour(red, green, blue);
+    }
+
+    return obj;
 }
 
 
@@ -981,49 +1017,51 @@ wxLayoutLine::Delete(CoordType xpos, CoordType npos)
 bool
 wxLayoutLine::DeleteWord(CoordType xpos)
 {
-   wxASSERT(xpos >= 0);
-   CoordType offset;
-   MarkDirty(xpos);
+    wxASSERT(xpos >= 0);
+    CoordType offset;
+    MarkDirty(xpos);
 
-   wxLOiterator i = FindObject(xpos, &offset);
+    wxLOiterator i = FindObject(xpos, &offset);
 
-   for(;;)
-   {
-      if(i == NULLIT) return false;
-      if((**i).GetType() != WXLO_TYPE_TEXT)
-      {
-         // This should only happen when at end of line, behind a non-text
-         // object:
-         if(offset == (**i).GetLength()) return false;
-         m_Length -= (**i).GetLength(); // -1
-         m_ObjectList.erase(i);
-         return true; // we are done
-      }
-      else
-      {  // text object:
-         if(offset == (**i).GetLength()) // at end of object
-         {
-            i++; offset = 0;
-            continue;
-         }
-         wxLayoutObjectText *tobj = (wxLayoutObjectText *)*i;
-         size_t count = 0;
-         wxString str = tobj->GetText();
-         str = str.substr(offset,str.Length()-offset);
-         // Find out how many positions we need to delete:
-         // 1. eat leading space
-         while(isspace(str.c_str()[count])) count++;
-         // 2. eat the word itself:
-         while(isalnum(str.c_str()[count])) count++;
-         // now delete it:
-         wxASSERT(count+offset <= (size_t) (**i).GetLength());
-         ((wxLayoutObjectText *)*i)->GetText().erase(offset,count);
-         m_Length -= count;
-         return true;
-      }
-   }
+    for(;;)
+    {
+        if(i == NULLIT) return false;
+        if((**i).GetType() != WXLO_TYPE_TEXT)
+        {
+            // This should only happen when at end of line, behind a non-text
+            // object:
+            if(offset == (**i).GetLength()) return false;
+            m_Length -= (**i).GetLength(); // -1
+            m_ObjectList.erase(i);
+            return true; // we are done
+        }
+        else
+        {  // text object:
+            if(offset == (**i).GetLength()) // at end of object
+            {
+                i++; offset = 0;
+                continue;
+            }
 
-   wxFAIL_MSG("unreachable");
+            wxLayoutObjectText *tobj = (wxLayoutObjectText *)*i;
+            size_t count = 0;
+            wxString str = tobj->GetText();
+            str = str.substr(offset,str.Length()-offset);
+            // Find out how many positions we need to delete:
+            // 1. eat leading space
+            while(isspace(str.c_str()[count])) count++;
+            // 2. eat the word itself:
+            while(isalnum(str.c_str()[count])) count++;
+            // now delete it:
+            wxASSERT(count+offset <= (size_t) (**i).GetLength());
+            ((wxLayoutObjectText *)*i)->GetText().erase(offset,count);
+            m_Length -= count;
+
+            return true;
+        }
+    }
+
+    wxFAIL_MSG(wxT("unreachable"));
 }
 
 wxLayoutLine *
@@ -1322,7 +1360,8 @@ wxLayoutLine::Wrap(CoordType wrapmargin, wxLayoutList *llist)
    // find the object which covers the wrapmargin:
    CoordType offset;
    wxLOiterator i = FindObject(wrapmargin, &offset);
-   wxCHECK_MSG( i != NULLIT, FALSE, "Cannot find object covering wrapmargin.");
+   wxCHECK_MSG( i != NULLIT, FALSE,
+                wxT("Cannot find object covering wrapmargin."));
    
    // from this object on, the rest of the line must be copied to the
    // next one:
@@ -1451,7 +1490,8 @@ wxLayoutLine::ReNumber(void)
 void
 wxLayoutLine::MergeNextLine(wxLayoutList *llist)
 {
-   wxCHECK_RET(GetNextLine(),"wxLayout internal error: no next line to merge");
+   wxCHECK_RET( GetNextLine(),
+                wxT("wxLayout internal error: no next line to merge"));
    wxLayoutObjectList &list = GetNextLine()->m_ObjectList;
    wxLOiterator i;
 
@@ -1569,7 +1609,7 @@ void
 wxLayoutLine::Debug(void) const
 {
    wxPoint pos = GetPosition();
-   WXLO_DEBUG(("Line %ld, Pos (%ld,%ld), Height %ld, BL %ld, Font: %d",
+   WXLO_DEBUG((wxT("Line %ld, Pos (%ld,%ld), Height %ld, BL %ld, Font: %d"),
                (long int) GetLineNumber(),
                (long int) pos.x, (long int) pos.y,
                (long int) GetHeight(),
@@ -1675,7 +1715,7 @@ wxLayoutList::~wxLayoutList()
    Empty();
    m_FirstLine->DeleteLine(false, this);
 
-   wxASSERT_MSG( m_numLines == 0, "line count calculation broken" );
+   wxASSERT_MSG( m_numLines == 0, wxT("line count calculation broken"));
 }
 
 void
@@ -1728,8 +1768,10 @@ wxLayoutList::Read(wxString &istr)
       // check for a linebreak:
       wxString tmp;
       tmp = istr.BeforeFirst('\n');
-      int type = WXLO_TYPE_INVALID;
-      sscanf(tmp.c_str(),"%d", &type);
+      long l = WXLO_TYPE_INVALID;
+      tmp.ToLong(&l);
+      int type = (int) l;
+
       if(type == WXLO_TYPE_LINEBREAK)
       {
          LineBreak();
@@ -1962,8 +2004,8 @@ wxLayoutList::MoveCursorHorizontally(int n)
 bool
 wxLayoutList::MoveCursorWord(int n, bool untilNext)
 {
-   wxCHECK_MSG( m_CursorLine, false, "no current line" );
-   wxCHECK_MSG( n == -1 || n == +1, false, "not implemented yet" );
+   wxCHECK_MSG( m_CursorLine, false, wxT("no current line") );
+   wxCHECK_MSG( n == -1 || n == +1, false, wxT("not implemented yet") );
 
    CoordType moveDistance = 0;
    CoordType offset;
@@ -2052,9 +2094,9 @@ wxLayoutList::MoveCursorWord(int n, bool untilNext)
          if ( canAdvance )
          {
             const wxString& text = tobj->GetText();
-            const char *start = text.c_str();
-            const char *end = start + text.length();
-            const char *p = start + offset;
+            const wxChar *start = text.c_str();
+            const wxChar *end = start + text.length();
+            const wxChar *p = start + offset;
 
             if ( n < 0 )
             {
@@ -2123,7 +2165,8 @@ bool
 wxLayoutList::Insert(wxString const &text)
 {
    wxASSERT(m_CursorLine);
-   wxASSERT_MSG( text.Find('\n') == wxNOT_FOUND, "use wxLayoutImportText!" );
+   wxASSERT_MSG( text.Find(wxT('\n')) == wxNOT_FOUND,
+                 wxT("use wxLayoutImportText!") );
 
    if ( !text )
        return true;
@@ -2245,7 +2288,7 @@ wxLayoutList::WrapAll(CoordType column)
 bool
 wxLayoutList::Delete(CoordType npos)
 {
-   wxCHECK_MSG(m_CursorLine, false, "can't delete in non existing line");
+   wxCHECK_MSG(m_CursorLine, false, wxT("can't delete in non existing line"));
 
    if ( npos == 0 )
        return true;
@@ -2300,7 +2343,7 @@ wxLayoutList::Delete(CoordType npos)
                }
                else
                {
-                  wxFAIL_MSG("can't delete all this");
+                  wxFAIL_MSG(wxT("can't delete all this"));
 
                   return false;
                }
@@ -2537,8 +2580,8 @@ wxLayoutList::Draw(wxDC &dc,
    }
    InvalidateUpdateRect();
 
-   WXLO_DEBUG(("Selection is %s : %ld,%ld/%ld,%ld",
-               m_Selection.m_valid ? "valid" : "invalid",
+   WXLO_DEBUG((wxT("Selection is %s : %ld,%ld/%ld,%ld"),
+               m_Selection.m_valid ? wxT("valid") : wxT("invalid"),
                m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
                m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
 }
@@ -2650,14 +2693,14 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    coords += translate;
 
 #ifdef WXLAYOUT_DEBUG
-   WXLO_DEBUG(("Drawing cursor (%ld,%ld) at %ld,%ld, size %ld,%ld, line: %ld, len %ld",
+   WXLO_DEBUG((wxT("Drawing cursor (%ld,%ld) at %ld,%ld, size %ld,%ld, line: %ld, len %ld"),
                (long)m_CursorPos.x, (long)m_CursorPos.y,
                (long)coords.x, (long)coords.y, 
                (long)m_CursorSize.x, (long)m_CursorSize.y,
                (long)m_CursorLine->GetLineNumber(),
                (long)m_CursorLine->GetLength()));
 
-   wxLogStatus("Cursor is at (%d, %d)", m_CursorPos.x, m_CursorPos.y);
+   wxLogStatus(wxT("Cursor is at (%d, %d)"), m_CursorPos.x, m_CursorPos.y);
 #endif
 
 #ifdef WXLAYOUT_USE_CARET
@@ -2711,7 +2754,7 @@ wxLayoutList::StartSelection(const wxPoint& cposOrig, const wxPoint& spos)
    wxPoint cpos(cposOrig);
    if ( cpos.x == -1 )
       cpos = m_CursorPos;
-   WXLO_DEBUG(("Starting selection at %ld/%ld", cpos.x, cpos.y));
+   WXLO_DEBUG((wxT("Starting selection at %ld/%ld"), cpos.x, cpos.y));
    m_Selection.m_CursorA = cpos;
    m_Selection.m_CursorB = cpos;
    m_Selection.m_ScreenA = spos;
@@ -2729,7 +2772,7 @@ wxLayoutList::ContinueSelection(const wxPoint& cposOrig, const wxPoint& spos)
 
    wxASSERT(m_Selection.m_selecting == true);
    wxASSERT(m_Selection.m_valid == false);
-   WXLO_DEBUG(("Continuing selection at %ld/%ld", cpos.x, cpos.y));
+   WXLO_DEBUG((wxT("Continuing selection at %ld/%ld"), cpos.x, cpos.y));
 
    m_Selection.m_ScreenB = spos;
    m_Selection.m_CursorB = cpos;
@@ -2741,7 +2784,7 @@ wxLayoutList::EndSelection(const wxPoint& cposOrig, const wxPoint& spos)
    wxPoint cpos(cposOrig);
    if(cpos.x == -1) cpos = m_CursorPos;
    ContinueSelection(cpos, spos);
-   WXLO_DEBUG(("Ending selection at %ld/%ld", cpos.x, cpos.y));
+   WXLO_DEBUG((wxT("Ending selection at %ld/%ld"), cpos.x, cpos.y));
    // we always want m_CursorA <= m_CursorB!
    if( m_Selection.m_CursorA > m_Selection.m_CursorB )
    {
@@ -2930,7 +2973,7 @@ wxLayoutLine *
 wxLayoutList::GetLine(CoordType index) const
 {
    wxASSERT_MSG( (0 <= index) && (index < (CoordType)m_numLines),
-                 "invalid index" );
+                 wxT("invalid index") );
 
    wxLayoutLine *line;
    CoordType n = index;
@@ -3082,7 +3125,7 @@ wxLayoutList::ApplyStyle(wxLayoutStyleInfo const &si, wxDC &dc)
 void
 wxLayoutList::Debug(void)
 {
-   WXLO_DEBUG(("Cursor is in line %d, screen pos = (%d, %d)",
+   WXLO_DEBUG((wxT("Cursor is in line %d, screen pos = (%d, %d)"),
                m_CursorLine->GetLineNumber(),
                m_CursorScreenPos.x, m_CursorScreenPos.y));
 
@@ -3182,7 +3225,7 @@ bool wxLayoutPrintout::OnPrintPage(int page)
       top = (page - 1)*m_PrintoutHeight;
       bottom = top + m_PrintoutHeight; 
 
-      WXLO_DEBUG(("OnPrintPage(%d) printing from %d to %d", page, top, 
+      WXLO_DEBUG((wxT("OnPrintPage(%d) printing from %d to %d"), page, top, 
                   bottom));
       // SetDeviceOrigin() doesn't work here, so we need to manually
       // translate all coordinates.

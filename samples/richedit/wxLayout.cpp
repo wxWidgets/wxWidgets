@@ -263,128 +263,145 @@ MyFrame::Clear(void)
 
 void MyFrame::OnCommand( wxCommandEvent &event )
 {
-   switch (event.GetId())
-   {
-   case ID_QUIT:
-      Close( TRUE );
-      break;
-   case ID_PRINT:
-   {
-      wxPrinter printer;
-      wxLayoutPrintout printout(m_lwin->GetLayoutList(),_("M: Printout"));
-      if (! printer.Print(this, &printout, TRUE))
-         wxMessageBox(
-            _("There was a problem with printing the message:\n"
-              "perhaps your current printer is not set up correctly?"),
-            _("Printing"), wxOK);
-   }
-   break;
-   case ID_NOWRAP:
-   case ID_WRAP:
-      m_lwin->SetWrapMargin(event.GetId() == ID_NOWRAP ? 0 : 40);
-      break;
-   case ID_ADD_SAMPLE:
-      AddSampleText(m_lwin->GetLayoutList());
-      break;
-   case ID_CLEAR:
-      Clear();
-      break;
+    switch (event.GetId())
+    {
+    case ID_QUIT:
+        Close( TRUE );
+        break;
+    case ID_PRINT:
+    {
+        wxPrinter printer;
+        wxLayoutPrintout printout(m_lwin->GetLayoutList(),_("M: Printout"));
+        if (! printer.Print(this, &printout, TRUE))
+        {
+            // Had to remove the split up strings that used to be below, and
+            // put them into one long strong. Otherwise MSVC would give an
+            // error "C2308: concatenating mismatched wide strings" when
+            // building a Unicode version.
+            wxMessageBox
+            (
+                _("There was a problem with printing the message:\nperhaps your current printer is not set up correctly?"),
+                _("Printing"), wxOK
+            );
+        }
+        break;
+    }
+
+    case ID_NOWRAP:
+    case ID_WRAP:
+        m_lwin->SetWrapMargin(event.GetId() == ID_NOWRAP ? 0 : 40);
+        break;
+    case ID_ADD_SAMPLE:
+        AddSampleText(m_lwin->GetLayoutList());
+        break;
+    case ID_CLEAR:
+        Clear();
+        break;
    case ID_CLICK:
-      cerr << "Received click event." << endl;
-      break;
+        cerr << "Received click event." << endl;
+        break;
    case ID_PASTE:
-      m_lwin->Paste(TRUE);
-      m_lwin->Refresh(FALSE);
-      break;
+        m_lwin->Paste(TRUE);
+        m_lwin->Refresh(FALSE);
+        break;
 #ifdef __WXGTK__
-   case ID_PASTE_PRIMARY:
-      // text only from primary:
-      m_lwin->Paste(FALSE, TRUE);
-      m_lwin->Refresh(FALSE);
-      break;
-   case ID_COPY_PRIMARY:
-      // copy text-only to primary selection:
-      m_lwin->Copy(FALSE,FALSE,TRUE);
-      m_lwin->Refresh(FALSE);
-      break;
+    case ID_PASTE_PRIMARY:
+        // text only from primary:
+        m_lwin->Paste(FALSE, TRUE);
+        m_lwin->Refresh(FALSE);
+        break;
+    case ID_COPY_PRIMARY:
+        // copy text-only to primary selection:
+        m_lwin->Copy(FALSE,FALSE,TRUE);
+        m_lwin->Refresh(FALSE);
+        break;
 #endif
-   case ID_COPY:
-      m_lwin->Copy(TRUE,TRUE,FALSE);
-      m_lwin->Refresh(FALSE);
-      break;
-   case ID_CUT:
-      m_lwin->Cut();
-      m_lwin->Refresh(FALSE);
-      break;
+    case ID_COPY:
+        m_lwin->Copy(TRUE,TRUE,FALSE);
+        m_lwin->Refresh(FALSE);
+        break;
+    case ID_CUT:
+        m_lwin->Cut();
+        m_lwin->Refresh(FALSE);
+        break;
 #ifdef M_BASEDIR
-   case ID_FIND:
-      m_lwin->Find("void");
-      m_lwin->Refresh(FALSE);
-      break;
+    case ID_FIND:
+        m_lwin->Find("void");
+        m_lwin->Refresh(FALSE);
+        break;
 #endif
-   case ID_HTML:
-   {
-      wxLayoutExportObject *export0;
-      wxLayoutExportStatus status(m_lwin->GetLayoutList());
+    case ID_HTML:
+    {
+        wxLayoutExportObject *export0;
+        wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
-      cout << "<HTML>" << endl;
-      while((export0 = wxLayoutExport( &status,
-                                      WXLO_EXPORT_AS_HTML)) != NULL)
-      {
-         if(export0->type == WXLO_EXPORT_HTML)
-            cout << *(export0->content.text);
-         else
-            ; // ignore itcout << "<!--UNKNOWN OBJECT>";
-         delete export0;
-      }
-   }
-   break;
-   case ID_TEXT:
-   {
-      wxLayoutExportObject *export0;
-      wxLayoutExportStatus status(m_lwin->GetLayoutList());
+        cout << "<HTML>" << endl;
+        while((export0 = wxLayoutExport( &status,
+                                         WXLO_EXPORT_AS_HTML)) != NULL)
+        {
+            if(export0->type == WXLO_EXPORT_HTML)
+                cout << *(export0->content.text);
+            else
+                ; // ignore itcout << "<!--UNKNOWN OBJECT>";
 
-      while((export0 = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
-      {
-         if(export0->type == WXLO_EXPORT_TEXT)
-            cout << *(export0->content.text);
-         else
-            cout << "<!--UNKNOWN OBJECT>";
-         delete export0;
-      }
-   }
-   break;
-   case ID_LONG_TEST:
-   {
-      wxString line;
-      wxLayoutList *llist = m_lwin->GetLayoutList();
-      for(int i = 1; i < 300; i++)
-      {
-         line.Printf("This is line number %d.", i);
-         llist->Insert(line);
-         llist->LineBreak();
-      }
-      llist->MoveCursorTo(wxPoint(0,0));
-      m_lwin->SetDirty();
-      m_lwin->Refresh();
-      break;
-   }
+            delete export0;
+        }
+        break;
+    }
 
-   case ID_LINEBREAKS_TEST:
-      wxLayoutImportText(m_lwin->GetLayoutList(),
-                         "This is a text\n"
-                         "with embedded line\n"
-                         "breaks.\n");
-      m_lwin->SetDirty();
-      m_lwin->Refresh();
-      break;
+    case ID_TEXT:
+    {
+        wxLayoutExportObject *export0;
+        wxLayoutExportStatus status(m_lwin->GetLayoutList());
 
-   case ID_URL_TEST:
-      // VZ: this doesn't work, of course, but I think it should -
-      //     wxLayoutWindow should have a flag m_highlightUrls and do it itself
-      //     (instead of doing it manually like M does now)
-      m_lwin->GetLayoutList()->Insert("http://www.wxwindows.org/");
-   }
+        while((export0 = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
+        {
+            if(export0->type == WXLO_EXPORT_TEXT)
+                cout << *(export0->content.text);
+            else
+                cout << "<!--UNKNOWN OBJECT>";
+
+            delete export0;
+        }
+
+        break;
+    }
+
+
+    case ID_LONG_TEST:
+    {
+        wxString line;
+        wxLayoutList *llist = m_lwin->GetLayoutList();
+        for(int i = 1; i < 300; i++)
+        {
+            line.Printf(wxT("This is line number %d."), i);
+            llist->Insert(line);
+            llist->LineBreak();
+        }
+
+        llist->MoveCursorTo(wxPoint(0,0));
+        m_lwin->SetDirty();
+        m_lwin->Refresh();
+        break;
+    }
+
+    case ID_LINEBREAKS_TEST:
+        wxLayoutImportText
+        (
+            m_lwin->GetLayoutList(),
+            wxT("This is a text\nwith embedded line\nbreaks.\n")
+        );
+
+        m_lwin->SetDirty();
+        m_lwin->Refresh();
+        break;
+
+    case ID_URL_TEST:
+        // VZ: this doesn't work, of course, but I think it should -
+        //     wxLayoutWindow should have a flag m_highlightUrls and do it itself
+        //     (instead of doing it manually like M does now)
+        m_lwin->GetLayoutList()->Insert("http://www.wxwindows.org/");
+    }
 };
 
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))

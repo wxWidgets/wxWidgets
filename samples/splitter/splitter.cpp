@@ -254,14 +254,14 @@ void MyFrame::ToggleLive(wxCommandEvent& event )
 void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
-    str.Printf( _T(_T("%d")), m_splitter->GetMinimumPaneSize());
+    str.Printf( wxT("%d"), m_splitter->GetMinimumPaneSize());
     str = wxGetTextFromUser(_T("Enter minimal size for panes:"), _T(""), str, this);
     if ( str.IsEmpty() )
         return;
 
     int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
     m_splitter->SetMinimumPaneSize(minsize);
-    str.Printf( _T(_T("Min pane size = %d")), minsize);
+    str.Printf( wxT("Min pane size = %d"), minsize);
     SetStatusText(str, 1);
 }
 

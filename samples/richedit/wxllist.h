@@ -292,7 +292,7 @@ public:
    virtual wxString DebugDump(void) const;
 #endif
 
-   virtual CoordType GetLength(void) const { return strlen(m_Text.c_str()); }
+   virtual CoordType GetLength(void) const { return wxStrlen(m_Text.c_str()); }
 
    // for editing:
    wxString & GetText(void) { return m_Text; }
@@ -1273,7 +1273,7 @@ class wxLayoutDataObject : public wxCustomDataObject
 public:
    wxLayoutDataObject()
       {
-         SetFormat("application/wxlayoutlist");
+         SetFormat(wxT("application/wxlayoutlist"));
       }
 
    // type safe wrappers

@@ -471,7 +471,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     data = new char[size];
     sockstrm->Read(data, size);
 
-    connection->OnExecute (topic_name, data, size, format);
+    connection->OnExecute (topic_name, (wxChar *) data, size, format);
 
     delete [] data;
     break;
@@ -488,7 +488,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     data = new char[size];
     sockstrm->Read(data, size);
     
-    connection->OnAdvise (topic_name, item, data, size, format);
+    connection->OnAdvise (topic_name, item, (wxChar *) data, size, format);
 
     delete [] data;
     break;
