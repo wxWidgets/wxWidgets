@@ -79,6 +79,7 @@ dospinwxmotif()
 
   cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
+  mv $WXDEST/wxMOTIF-$WXVER.tar.gz $WXDEST/wxMotif-$WXVER.tar.gz
 }
 
 dospinwxmac()
@@ -104,6 +105,27 @@ dospinwxmac()
 
   cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
+  mv $WXDEST/wxMAC-$WXVER.tar.gz $WXDEST/wxMac-$WXVER.tar.gz
+}
+
+docopydocs()
+{
+  cp $WXSRC/docs/readme.txt $WXDEST/readme-${WXVER}.txt
+  cp $WXSRC/docs/changes.txt $WXDEST/changes-${WXVER}.txt
+  cp $WXSRC/docs/mgl/readme.txt $WXDEST/readme-mgl-${WXVER}.txt
+  cp $WXSRC/docs/mgl/install.txt $WXDEST/install-mgl-${WXVER}.txt
+  cp $WXSRC/docs/x11/readme.txt $WXDEST/readme-x11-${WXVER}.txt
+  cp $WXSRC/docs/x11/readme-nanox.txt $WXDEST/readme-nanox-${WXVER}.txt
+  cp $WXSRC/docs/x11/install.txt $WXDEST/install-x11-${WXVER}.txt
+  cp $WXSRC/docs/motif/readme.txt $WXDEST/readme-motif-${WXVER}.txt
+  cp $WXSRC/docs/motif/install.txt $WXDEST/install-motif-${WXVER}.txt
+  cp $WXSRC/docs/msw/readme.txt $WXDEST/readme-msw-${WXVER}.txt
+  cp $WXSRC/docs/msw/install.txt $WXDEST/install-msw-${WXVER}.txt
+  cp $WXSRC/docs/gtk/readme.txt $WXDEST/readme-gtk-${WXVER}.txt
+  cp $WXSRC/docs/gtk/install.txt $WXDEST/install-gtk-${WXVER}.txt
+  cp $WXSRC/docs/mac/readme.txt $WXDEST/readme-mac-${WXVER}.txt
+  cp $WXSRC/docs/mac/install.txt $WXDEST/install-mac-${WXVER}.txt
+  cp $WXSRC/docs/os2/install.txt $WXDEST/install-os2-${WXVER}.txt
 }
 
 PROGNAME=$0
@@ -198,3 +220,4 @@ if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxmac
 fi
 
+docopydocs

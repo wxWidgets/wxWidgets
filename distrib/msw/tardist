@@ -79,6 +79,13 @@ cd $WXDEST
 mkdir wxGTK-${WXVER}
 cd wxGTK-${WXVER}
 $TAR xf ../wxGTK-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/gtk/readme.txt README-GTK.txt
+cp $WXSRC/docs/gtk/install.txt INSTALL-GTK.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
 cd ..
 rm -f wxGTK-${WXVER}.tar
 $TAR cf $WXDEST/wxGTK-${WXVER}.tar wxGTK-${WXVER}/*
@@ -100,6 +107,13 @@ cd $WXDEST
 mkdir wxMotif-${WXVER}
 cd wxMotif-${WXVER}
 $TAR xf ../wxMotif-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
 cd ..
 rm -f wxMotif-${WXVER}.tar
 $TAR cf $WXDEST/wxMotif-${WXVER}.tar wxMotif-${WXVER}/*
@@ -122,6 +136,15 @@ cd $WXDEST
 mkdir wxX11-${WXVER}
 cd wxX11-${WXVER}
 $TAR xf ../wxX11-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/x11/readme.txt README-X11.txt
+cp $WXSRC/docs/x11/install.txt INSTALL-X11.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
 cd ..
 rm -f wxX11-${WXVER}.tar
 $TAR cf $WXDEST/wxX11-${WXVER}.tar wxX11-${WXVER}/*
@@ -163,6 +186,13 @@ fi
 
 $TAR xf ../wxMac-${WXVER}.tar
 rm -f -r contrib/src/mmedia contrib/samples/mmedia
+echo Copying readme files...
+cp $WXSRC/docs/mac/readme.txt README-MAC.txt
+cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
 cd ..
 rm -f wxMac-${WXVER}.tar
 $TAR cf $WXDEST/wxMac-${WXVER}.tar wxMac-${WXVER}/*
@@ -237,6 +267,22 @@ cp $WXSRC/src/os2/*.CPP $WXSRC/src/os2/*.I src/os2
 # Make all OS/2 files lower case
 $WXSRC/distrib/msw/namedown include/wx/os2/*.H
 $WXSRC/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
+
+echo Copying readme files...
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/x11/readme.txt README-X11.txt
+cp $WXSRC/docs/x11/install.txt INSTALL-X11.txt
+cp $WXSRC/docs/mac/readme.txt README-MAC.txt
+cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
+cp $WXSRC/docs/mgl/readme.txt README-MGL.txt
+cp $WXSRC/docs/mgl/install.txt INSTALL-MGL.txt
+#cp $WXSRC/docs/os2/readme.txt README-OS2.txt
+cp $WXSRC/docs/os2/install.txt INSTALL-OS2.txt
 
 cd ..
 rm -f wxAll-${WXVER}.tar
