@@ -62,6 +62,8 @@
 #   pragma warning(disable:4699)    // using precompiled header
 #   pragma warning(disable:4134)    // conversion between pointers to members of same class
 #   pragma warning(disable:4710)    // function not inlined
+#   pragma warning(disable:4284)    // 
+#   pragma warning(disable:4097)    // 
 #ifndef WIN32
 #   pragma warning(disable:4135)    // conversion between different integral types
 #   pragma warning(disable:4769)    // assignment of near pointer to long integer
@@ -1253,17 +1255,6 @@ enum wxBorder
 #define wxTC_BOTTOM           0x0080
 #define wxTC_MULTILINE        wxNB_MULTILINE
 #define wxTC_OWNERDRAW        0x0200
-
-// wxToolBar style flags
-#define wxTB_HORIZONTAL     wxHORIZONTAL    // == 0x0004
-#define wxTB_VERTICAL       wxVERTICAL      // == 0x0008
-#define wxTB_3DBUTTONS      0x0010
-#define wxTB_FLAT           0x0020          // supported only under Win98+/GTK
-#define wxTB_DOCKABLE       0x0040          // use native docking under GTK
-#define wxTB_NOICONS        0x0080          // don't show the icons
-#define wxTB_TEXT           0x0100          // show the text
-#define wxTB_NODIVIDER      0x0200          // don't show the divider (Windows)
-#define wxTB_NOALIGN        0x0400          // no automatic alignment (Windows)
 
 /*
  * wxStatusBar95 flags

@@ -340,7 +340,7 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     // do have tooltips wouldn't work
     msStyle |= TBSTYLE_TOOLTIPS;
 
-    if ( style & wxTB_FLAT )
+    if ( style & (wxTB_FLAT | wxTB_HORZ_LAYOUT) )
     {
         // static as it doesn't change during the program lifetime
         static int s_verComCtl = wxTheApp->GetComCtl32Version();
@@ -352,6 +352,11 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
         if ( s_verComCtl > 400 && s_verComCtl < 600 )
         {
             msStyle |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
+        }
+
+        if ( s_verComCtl >= 470 && style & wxTB_HORZ_LAYOUT )
+        {
+            msStyle |= TBSTYLE_LIST;
         }
     }
 

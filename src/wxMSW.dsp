@@ -48,7 +48,7 @@ CFG=wxWindows - Win32 Debug
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdllu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdllu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "NDEBUG" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -77,7 +77,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdllud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdllud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "_DEBUG" /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -105,7 +105,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswu" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -130,7 +130,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswud" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_DEBUG" /D "__WXDEBUG__" /D "_UNICODE" /D "UNICODE" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdll" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/mswdll" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "NDEBUG" /D "WXMAKINGDLL" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -185,7 +185,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdlld" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "WIN32" /D "_DEBUG" /D WINVER=0x0400 /D "STRICT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswdlld" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_USRDLL" /D "_DEBUG" /D "WXMAKINGDLL" /D wxUSE_BASE=0 /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -213,7 +213,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "NDEBUG" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/msw" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "NDEBUG" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -238,7 +238,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "WIN32" /D "_DEBUG" /D "__WXDEBUG__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/mswd" /I "../include" /I "./zlib" /I "./jpeg" /I "./png" /I "./regex" /I "./tiff" /D "_DEBUG" /D "__WXDEBUG__" /D "WIN32" /D WINVER=0x0400 /D "STRICT" /D wxUSE_BASE=0 /D wxUSE_GUI=1 /Yu"wx/wxprec.h" /FD /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409

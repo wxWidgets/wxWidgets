@@ -78,6 +78,7 @@ All GUI ports:
 - implemented alignment for wxGrid bool editor and renderer
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
+- added wxTB_HORZ_TEXT style for MSW and GTK (Axel Schlueter)
 - fixed user dash handling for MSW and GTK (Ken Edwards)
 - WXR resources can now be used in Unicode builds
 - it is now possible to use several wxFileHistory objects in the same menu
@@ -93,9 +94,9 @@ All GUI ports:
   a new document), and more intelligent addition of filenames to
   the file history, including not adding filenames if not using the
   default extension for the template
-- Speeded up wxImage::Scale using fixed point arithmetic (Wade Brainerd)
+- sped up wxImage::Scale using fixed point arithmetic (Wade Brainerd)
 - Added BLOB support to wxDB (John Skiff)
-- Wizard now validates when pressing Back or Next
+- wxWizard now validates when pressing Back or Next
 - Implemented wxNotebook::DoGetBestSize so Fit now works
 - Added FindItemByPosition to wxMenu
 - wxTimer now derives from wxEvtHandler and is its own owner object by default

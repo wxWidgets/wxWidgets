@@ -55,7 +55,7 @@ public:
 
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
+    virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
     virtual void PositionToolBar();

@@ -386,6 +386,18 @@ wxToolBar* wxFrameBase::CreateToolBar(long style,
     wxCHECK_MSG( !m_frameToolBar, (wxToolBar *)NULL,
                  wxT("recreating toolbar in wxFrame") );
 
+    if ( style == -1 )
+    {
+        // use default style
+        //
+        // NB: we don't specify the default value in the method declaration
+        //     because
+        //      a) this allows us to have different defaults for different
+        //         platforms (even if we don't have them right now)
+        //      b) we don't need to include wx/toolbar.h in the header then
+        style = wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_FLAT;
+    }
+
     m_frameToolBar = OnCreateToolBar(style, id, name);
 
     return m_frameToolBar;

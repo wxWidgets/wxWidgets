@@ -29,10 +29,10 @@ public:
         const wxString& name = wxFrameNameStr)
     {
         Init();
-        
+
         Create(parent, id, title, pos, size, style, name);
     }
-    
+
     bool Create(wxWindow *parent,
         wxWindowID id,
         const wxString& title,
@@ -40,17 +40,17 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE,
         const wxString& name = wxFrameNameStr);
-    
+
     virtual ~wxFrame();
 
     virtual bool Show(bool show = TRUE);
 
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
-    
+
     // Set title
     void SetTitle(const wxString& title);
-    
+
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons);
@@ -58,22 +58,22 @@ public:
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
 #endif // wxUSE_STATUSBAR
-    
+
     // Create toolbar
 #if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
+    virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
     virtual void SetToolBar(wxToolBar *toolbar);
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
-    
+
     // Implementation only from now on
     // -------------------------------
-    
+
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnActivate(wxActivateEvent& event);
-    
+
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
@@ -82,9 +82,9 @@ public:
     WXWidget GetWorkAreaWidget() const { return m_workArea; }
     WXWidget GetClientAreaWidget() const { return m_clientArea; }
     WXWidget GetTopWidget() const { return m_frameShell; }
-    
+
     virtual WXWidget GetMainWidget() const { return m_mainWidget; }
-    
+
     // The widget that can have children on it
     WXWidget GetClientWidget() const;
     bool GetVisibleStatus() const { return m_visibleStatus; }
@@ -95,7 +95,7 @@ public:
     void SendSizeEvent();
 
     // for generic/mdig.h
-    virtual void DoGetClientSize(int *width, int *height) const;    
+    virtual void DoGetClientSize(int *width, int *height) const;
 private:
     // common part of all ctors
     void Init();
@@ -109,14 +109,14 @@ private:
     WXWidget              m_clientArea;
     bool                  m_visibleStatus;
     bool                  m_iconized;
-    
+
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetSize(int x, int y,
         int width, int height,
         int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
-    
+
 private:
     virtual bool DoCreate( wxWindow* parent, wxWindowID id,
                            const wxString& title,

@@ -47,16 +47,29 @@ of a "separator" is a vertical line under Windows95 vs. simple space under GTK e
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxTB\_FLAT}}{Gives the toolbar a flat look ('coolbar' or 'flatbar' style). Windows 95 and GTK 1.2 only.}
-\twocolitem{\windowstyle{wxTB\_DOCKABLE}}{Makes the toolbar floatable and dockable. GTK only.}
-\twocolitem{\windowstyle{wxTB\_HORIZONTAL}}{Specifies horizontal layout.}
-\twocolitem{\windowstyle{wxTB\_VERTICAL}}{Specifies vertical layout (not available for the GTK and Windows 95
-toolbar).}
-\twocolitem{\windowstyle{wxTB\_3DBUTTONS}}{Gives wxToolBarSimple a mild 3D look to its buttons.}
-\twocolitem{\windowstyle{wxTB\_TEXT}}{Show the text in the toolbar buttons; by default only icons are shown.}
-\twocolitem{\windowstyle{wxTB\_NOICONS}}{Specifies no icons in the toolbar buttons; by default they are shown.}
-\twocolitem{\windowstyle{wxTB\_NODIVIDER}}{Specifies no divider above the toolbar; by default it is shown. Windows only.}
-\twocolitem{\windowstyle{wxTB\_NOALIGN}}{Specifies no alignment with the parent window. Windows only.}
+\twocolitem{\windowstyle{wxTB\_FLAT}}
+{Gives the toolbar a flat look (Windows and GTK 1.2 only).}
+\twocolitem{\windowstyle{wxTB\_DOCKABLE}}
+{Makes the toolbar floatable and dockable (GTK only).}
+\twocolitem{\windowstyle{wxTB\_HORIZONTAL}}
+{Specifies horizontal layout (default).}
+\twocolitem{\windowstyle{wxTB\_VERTICAL}}
+{Specifies vertical layout.}
+\twocolitem{\windowstyle{wxTB\_3DBUTTONS}}
+{Only for wxToolBarSimple: gives a mild 3D look to its buttons.}
+\twocolitem{\windowstyle{wxTB\_TEXT}}
+{Show the text in the toolbar buttons; by default only icons are shown.}
+\twocolitem{\windowstyle{wxTB\_NOICONS}}
+{Specifies no icons in the toolbar buttons; by default they are shown.}
+\twocolitem{\windowstyle{wxTB\_NODIVIDER}}
+{Specifies no divider (border) above the toolbar (Windows only).}
+\twocolitem{\windowstyle{wxTB\_NOALIGN}}
+{Specifies no alignment with the parent window (Windows only, not very useful).}
+\twocolitem{\windowstyle{wxTB\_HORZ\_LAYOUT}}
+{Show the text and the icons alongside, not vertically stacked (Windows and GTK
+only). This style must be used with wxTB\_TEXT.}
+\twocolitem{\windowstyle{wxTB\_HORZ\_TEXT}}
+{Combination of wxTB\_HORZ\_LAYOUT and wxTB\_TEXT.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}. Note that the Win32

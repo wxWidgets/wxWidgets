@@ -57,7 +57,8 @@ static void GetGtkStyle(long style,
 
     if ( style & wxTB_TEXT )
     {
-        *gtkStyle = style & wxTB_NOICONS ? GTK_TOOLBAR_TEXT : GTK_TOOLBAR_BOTH;
+        *gtkStyle = style & wxTB_NOICONS ? GTK_TOOLBAR_TEXT : 
+            ( style & wxTB_HORZ_LAYOUT ? GTK_TOOLBAR_BOTH_HORIZ: GTK_TOOLBAR_BOTH );
     }
     else // no text, hence we must have the icons or what would we show?
     {

@@ -68,7 +68,7 @@ public:
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT,
+    virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
     void SetToolBar(wxToolBar *toolbar);
