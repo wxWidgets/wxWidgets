@@ -566,12 +566,15 @@ bool wxTable::getRec(UWORD fetchType)
 {
 	RETCODE retcode;
 
-#if wxODBC_FWD_ONLY_CURSORS
+#if !wxODBC_FWD_ONLY_CURSORS
 
 	// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
 	UDWORD  cRowsFetched;
 	UWORD   rowStatus;
-	if ((retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus)) != SQL_SUCCESS)
+
+//	if ((retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus)) != SQL_SUCCESS)
+   retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
+   if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
 		if (retcode == SQL_NO_DATA_FOUND)
 			return(FALSE);
 		else
