@@ -1,0 +1,99 @@
+\section{Preprocesser symbols defined by wxWindows}\label{cppconst}
+
+Here is the list of preprocessor symbols used in the wxWindows source grouped
+by category (and sorted by alphabetical order inside each category).
+
+\subsection{GUI system}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_WINDOWS\_\_}{any Windows, yom may also use \_\_WXMSW\_\_}
+\twocolitem{\_\_WIN16\_\_}{Win16 API}
+\twocolitem{\_\_WIN32\_\_}{Win32 API}
+\twocolitem{\_\_WIN95\_\_}{Windows 95 or NT 4.0 and above system (not NT 3.5x)}
+\twocolitem{\_\_WXGTK\_\_}{GTK}
+\twocolitem{\_\_WXGTK12\_\_}{GTK 1.2 or higher}
+\twocolitem{\_\_WXGTK20\_\_}{GTK 2.0 or higher}
+\twocolitem{\_\_WXMOTIF\_\_}{Motif}
+\twocolitem{\_\_WXMAC\_\_}{MacOS}
+\twocolitem{\_\_WXMGL\_\_}{SciTech Soft MGL (\_\_WXUNIVERSAL\_\_ will be also
+defined)}
+\twocolitem{\_\_WXMSW\_\_}{Any Windows}
+\twocolitem{\_\_WXOS2\_\_}{Identical to \_\_WXPM\_\_}
+\twocolitem{\_\_WXPM\_\_}{OS/2 native Presentation Manager}
+\twocolitem{\_\_WXSTUBS\_\_}{Stubbed version ('template' wxWin implementation)}
+\twocolitem{\_\_WXXT\_\_}{Xt; mutually exclusive with WX\_MOTIF, not
+implemented in wxWindows 2.x}
+\twocolitem{\_\_WXX11\_\_}{wxX11 (\_\_WXUNIVERSAL\_\_ will be also defined)}
+\twocolitem{\_\_WXWINE\_\_}{WINE (i.e. Win32 on Unix)}
+\twocolitem{\_\_WXUNIVERSAL\_\_}{wxUniversal port, always defined in addition
+to one of the symbols above so this should be tested first.}
+\twocolitem{\_\_X\_\_}{any X11-based GUI toolkit except GTK+}
+\end{twocollist}
+
+In fact, they should better all start with \_\_WX instead of \_\_ only. The
+only GUIs implemented for 2.0 are \_\_WXGTK\_\_, \_\_WXMSW\_\_ and
+\_\_WXMOTIF\_\_ yet. Any new ones, please start the define with \_\_WX.
+
+\subsection{Operating systems}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_APPLE\_\_}{any Mac OS version}
+\twocolitem{\_\_AIX\_\_}{AIX}
+\twocolitem{\_\_BSD\_\_}{Any *BSD system}
+\twocolitem{\_\_CYGWIN\_\_}{Cygwin: Unix on Win32}
+\twocolitem{\_\_DARWIN\_\_}{Mac OS X}
+\twocolitem{\_\_DATA\_GENERAL\_\_}{DG-UX}
+\twocolitem{\_\_DOS\_GENERAL\_\_}{DOS (used with wxMGL only)}
+\twocolitem{\_\_FREEBSD\_\_}{FreeBSD}
+\twocolitem{\_\_HPUX\_\_}{HP-UX (Unix)}
+\twocolitem{\_\_LINUX\_\_}{Linux}
+\twocolitem{\_\_OSF\_\_}{OSF/1}
+\twocolitem{\_\_SGI\_\_}{IRIX}
+\twocolitem{\_\_SOLARIS\_\_}{Solaris}
+\twocolitem{\_\_SUN\_\_}{Any Sun}
+\twocolitem{\_\_SUNOS\_\_}{Sun OS}
+\twocolitem{\_\_SVR4\_\_}{SystemV R4}
+\twocolitem{\_\_SYSV\_\_}{SystemV generic}
+\twocolitem{\_\_ULTRIX\_\_}{Ultrix}
+\twocolitem{\_\_UNIX\_\_}{any Unix}
+\twocolitem{\_\_UNIX\_LIKE\_\_}{Unix, BeOS or VMS}
+\twocolitem{\_\_VMS\_\_}{VMS}
+\twocolitem{\_\_WINDOWS\_\_}{any Windows}
+\end{twocollist}
+
+\subsection{Hardware architectures}
+
+Note that not all of these symbols are always defined, it depends on the
+compiler used.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_ALPHA\_\_}{DEC Alpha architecture}
+\twocolitem{\_\_INTEL\_\_}{Intel i386 or compatible}
+\twocolitem{\_\_POWERPC\_\_}{Motorola Power PC}
+\end{twocollist}
+
+\subsection{Compilers}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_BORLANDC\_\_}{Borland C++}
+\twocolitem{\_\_DJGPP\_\_}{DJGPP}
+\twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform}
+\twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler}
+\twocolitem{\_\_MWERKS\_\_}{CodeWarrior MetroWerks compiler}
+\twocolitem{\_\_SUNCC\_\_}{Sun CC}
+\twocolitem{\_\_SYMANTECC\_\_}{Symantec C++}
+\twocolitem{\_\_VISAGECPP\_\_}{IBM Visual Age (OS/2)}
+\twocolitem{\_\_VISUALC\_\_}{Microsoft Visual C++}
+\twocolitem{\_\_XLC\_\_}{AIX compiler}
+\twocolitem{\_\_WATCOMC\_\_}{Watcom C++}
+\end{twocollist}
+
+\subsection{Miscellaneous}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\_\_WXDEBUG\_\_}{defined in debug mode, undefined in release mode}
+\twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active
+(the symbols of this form are always defined, use #if and not #ifdef to test
+ for them)}
+\end{twocollist}
+
