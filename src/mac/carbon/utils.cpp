@@ -466,10 +466,11 @@ void wxDisplaySize(int *width, int *height)
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-   wxDisplaySize(width, height);
-   // on mac 72 is fixed (at least now ;-)
-   *width *= 25.4 / 72 ;
-   *height *= 25.4 / 72 ;
+    wxDisplaySize(width, height);
+    // on mac 72 is fixed (at least now ;-)
+    float cvPt2Mm = 25.4 / 72;
+    *width = int( *width * cvPt2Mm );
+    *height = int( *height * cvPt2Mm );
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
