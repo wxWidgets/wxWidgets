@@ -168,7 +168,7 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     Release();
     hdc = new wxMemoryDC(surface_->hdc);
     hdcOwned = true;
-    bitmap = new wxBitmap(width, height);
+    bitmap = new wxBitmap(width, height+1);
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
     // **** ::SetTextAlign(hdc, TA_BASELINE);
 }
@@ -250,7 +250,8 @@ void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
 }
 
 void Surface::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
-    hdc->Blit(rc.left, rc.top, rc.Width(), rc.Height(),
+    wxRect r = wxRectFromPRectangle(rc);
+    hdc->Blit(r.x, r.y, r.width, r.height,
               surfaceSource.hdc, from.x, from.y, wxCOPY);
 }
 
@@ -377,7 +378,8 @@ PRectangle Window::GetPosition() {
 }
 
 void Window::SetPosition(PRectangle rc) {
-    id->SetSize(rc.left, rc.top, rc.Width(), rc.Height());
+    wxRect r = wxRectFromPRectangle(rc);
+    id->SetSize(r);
 }
 
 void Window::SetPositionRelative(PRectangle rc, Window) {
