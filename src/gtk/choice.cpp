@@ -90,8 +90,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_option_menu_new();
 
-    SetSizeOrDefault( size );
-
     if ( style & wxCB_SORT )
     {
         // if our m_strings != NULL, DoAppend() will check for it and insert
@@ -112,9 +110,21 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
+    ApplyWidgetStyle();
+
+    SetFont( parent->GetFont() );
+
+    wxSize size_best( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = size_best.x;
+    if (new_size.y == -1)
+        new_size.y = size_best.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
 
     Show( TRUE );
 
@@ -396,7 +406,10 @@ size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    return wxSize(80, 26);
+    wxSize ret( wxControl::DoGetBestSize() );
+    if (ret.x < 80) ret.x = 80;
+    ret.y = 16 + gdk_char_height( m_widget->style->font, 'H' );
+    return ret;
 }
 
 #endif

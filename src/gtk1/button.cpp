@@ -111,24 +111,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 #endif
 
-    int x = 0;  int y = 0;
-    wxFont new_font( parent->GetFont() );
-    GetTextExtent( m_label, &x, &y, (int*)NULL, (int*)NULL, &new_font );
-
-    wxSize newSize = size;
-    if (newSize.x == -1)
-    {  
-        newSize.x = 12+x;
-	if (newSize.x < 80) newSize.x = 80;
-    }
-    if (newSize.y == -1)
-    {
-        newSize.y = 11+y;
-	if (newSize.y < 26) newSize.y = 26;
-    }
-	
-    SetSize( newSize.x, newSize.y );
-
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
@@ -136,9 +118,23 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   
     PostCreation();
   
+    ApplyWidgetStyle();
+
+    SetFont( parent->GetFont() );
+
+    wxSize best_size( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = best_size.x;
+    if (new_size.y == -1)
+        new_size.y = best_size.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
+
+    SetSize( new_size );
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
 
     Show( TRUE );
 
@@ -184,3 +180,11 @@ void wxButton::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
     gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
+
+wxSize wxButton::DoGetBestSize() const
+{
+    wxSize ret( wxControl::DoGetBestSize() );
+    if (ret.x < 80) ret.x = 80;
+    return ret;
+}
+

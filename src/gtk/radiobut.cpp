@@ -84,35 +84,30 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
         wxRadioButton *chief = (wxRadioButton*) NULL;
         wxWindowList::Node *node = parent->GetChildren().GetLast();
         while (node)
-	{
-	    wxWindow *child = node->GetData();
-	    if (child->m_isRadioButton)
 	    {
-	         chief = (wxRadioButton*) child;
-		 if (child->HasFlag(wxRB_GROUP)) break;
-	    }
-	    node = node->GetPrevious();
+	        wxWindow *child = node->GetData();
+	        if (child->m_isRadioButton)
+	        {
+	            chief = (wxRadioButton*) child;
+		        if (child->HasFlag(wxRB_GROUP)) break;
+	        }
+	        node = node->GetPrevious();
         }
-	if (chief)
-	{
+	    if (chief)
+	    {
             /* we are part of the group started by chief */
-	    m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
-	}
-	else
-	{
+	        m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
+	    }
+	    else
+	    {
             /* start a new group */
             m_radioButtonGroup = (GSList*) NULL;
-	}
+	    }
     }
 
     m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, label.mbc_str() );
       
     SetLabel(label);
-
-    wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label.mbc_str() );
-    if (newSize.y == -1) newSize.y = 26;
-    SetSize( newSize.x, newSize.y );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
       GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
@@ -121,9 +116,21 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   
     PostCreation();
 
+    ApplyWidgetStyle();
+
+    SetFont( parent->GetFont() );
+
+    wxSize size_best( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = size_best.x;
+    if (new_size.y == -1)
+        new_size.y = size_best.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
+        
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
   
     Show( TRUE );
 
@@ -204,10 +211,15 @@ void wxRadioButton::OnInternalIdle()
 	   windows above so that checking for the current cursor is
 	   not possible. */
 	   
-	gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
+	   gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
     }
 
     UpdateWindowUI();
+}
+
+wxSize wxRadioButton::DoGetBestSize() const
+{
+    return wxControl::DoGetBestSize();
 }
 
 #endif

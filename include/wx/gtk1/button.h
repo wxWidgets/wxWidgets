@@ -64,6 +64,9 @@ public:
   
     void ApplyWidgetStyle();    
     
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxButton)
 };

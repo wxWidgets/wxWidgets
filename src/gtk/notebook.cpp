@@ -213,7 +213,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxNoteBook creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
 
@@ -230,14 +230,16 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-	if(m_windowStyle & wxNB_RIGHT)
+	if (m_windowStyle & wxNB_RIGHT)
 		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_RIGHT );
-	if(m_windowStyle & wxNB_LEFT)
+	if (m_windowStyle & wxNB_LEFT)
 		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_LEFT );
-	if(m_windowStyle & wxNB_BOTTOM)
+	if (m_windowStyle & wxNB_BOTTOM)
 		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
     PostCreation();
+
+    SetFont( parent->GetFont() );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                             GTK_SIGNAL_FUNC(gtk_notebook_realized_callback), (gpointer) this );
@@ -625,6 +627,8 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 
 void wxNotebook::ApplyWidgetStyle()
 {
+    // TODO, font for labels etc
+    
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }

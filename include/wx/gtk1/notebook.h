@@ -133,27 +133,29 @@ public:
     // overridden from wxWindow to make tabbing work  
   void SetFocus();
 
-  // implementation
+    // implementation
+    // --------------
 
-  void SetConstraintSizes(bool recurse);
-  bool DoPhase(int phase);
-  void ApplyWidgetStyle();
+    void SetConstraintSizes(bool recurse);
+    bool DoPhase(int phase);
+    void ApplyWidgetStyle();
 
-  // report if window belongs to notebook  
-  bool IsOwnGtkWindow( GdkWindow *window );
+    // report if window belongs to notebook  
+    bool IsOwnGtkWindow( GdkWindow *window );
 
-  // common part of all ctors
-  void Init();
+    // common part of all ctors
+    void Init();
 
-  // helper function
-  wxNotebookPage* GetNotebookPage(int page) const;
+    // helper function
+    wxNotebookPage* GetNotebookPage(int page) const;
 
-  wxImageList*    m_imageList;
-  wxList          m_pages;
-  int             m_lastSelection;  /* hack */
+    wxImageList*    m_imageList;
+    wxList          m_pages;
+    int             m_lastSelection;  /* hack */
 
-  DECLARE_DYNAMIC_CLASS(wxNotebook)
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_DYNAMIC_CLASS(wxNotebook)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -45,7 +45,7 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxStaticBox creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
     m_isStaticBox = TRUE;
@@ -61,9 +61,13 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
     SetLabel(label);
   
+    ApplyWidgetStyle();
+
+    SetFont( parent->GetFont() );
+    
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
 
     Show( TRUE );
 

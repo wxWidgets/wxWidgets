@@ -76,65 +76,78 @@ void wxSystemSettings::Done()
 
 wxColour wxSystemSettings::GetSystemColour( int index )
 {
-  switch (index)
-  {
-    case wxSYS_COLOUR_SCROLLBAR:
-    case wxSYS_COLOUR_BACKGROUND:
-    case wxSYS_COLOUR_ACTIVECAPTION:
-    case wxSYS_COLOUR_INACTIVECAPTION:
-    case wxSYS_COLOUR_MENU:
-    case wxSYS_COLOUR_WINDOWFRAME:
-    case wxSYS_COLOUR_ACTIVEBORDER:
-    case wxSYS_COLOUR_INACTIVEBORDER:
-    case wxSYS_COLOUR_BTNFACE:
+    switch (index)
     {
-      if (!g_systemBtnFaceColour)
-      {
-        g_systemBtnFaceColour = 
-	  new wxColour( 0xd6d6 >> SHIFT,
-	                0xd6d6 >> SHIFT,
-			0xd6d6 >> SHIFT );
-      }
-      return *g_systemBtnFaceColour;
-    }
-    case wxSYS_COLOUR_WINDOW:
-    {
-      return *wxWHITE;
-    }
-    case wxSYS_COLOUR_GRAYTEXT:
-    case wxSYS_COLOUR_BTNSHADOW:
-    {
-      if (!g_systemBtnShadowColour)
-      {
-        g_systemBtnShadowColour = 
-	  new wxColour( 0x7530 >> SHIFT,
-	                0x7530 >> SHIFT,
-			0x7530 >> SHIFT );
-      }
-      return *g_systemBtnShadowColour;
-    }
-    case wxSYS_COLOUR_BTNHIGHLIGHT:
-    {
-      if (!g_systemBtnHighlightColour)
-      {
-        g_systemBtnHighlightColour = 
-	  new wxColour( 0xea60 >> SHIFT,
-	                0xea60 >> SHIFT,
-			0xea60 >> SHIFT );
-      }
-      return *g_systemBtnHighlightColour;
-    }
-    case wxSYS_COLOUR_HIGHLIGHT:
-    {
-      if (!g_systemHighlightColour)
-      {
-        g_systemHighlightColour = 
-	  new wxColour( 0      >> SHIFT,
-	                0      >> SHIFT,
-			0x9c40 >> SHIFT );
-      }
-      return *g_systemHighlightColour;
-    }
+        case wxSYS_COLOUR_SCROLLBAR:
+        case wxSYS_COLOUR_BACKGROUND:
+        case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_MENU:
+        case wxSYS_COLOUR_WINDOWFRAME:
+        case wxSYS_COLOUR_ACTIVEBORDER:
+        case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_BTNFACE:
+        {
+            if (!g_systemBtnFaceColour)
+            {
+                g_systemBtnFaceColour = 
+	                new wxColour( 0xd6d6 >> SHIFT,
+	                              0xd6d6 >> SHIFT,
+			                      0xd6d6 >> SHIFT );
+            }
+            return *g_systemBtnFaceColour;
+        }
+        case wxSYS_COLOUR_WINDOW:
+        {
+            return *wxWHITE;
+        }
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_BTNSHADOW:
+        {
+            if (!g_systemBtnShadowColour)
+            {
+                g_systemBtnShadowColour = 
+	                new wxColour( 0x7530 >> SHIFT,
+	                              0x7530 >> SHIFT,
+			                      0x7530 >> SHIFT );
+            }
+            return *g_systemBtnShadowColour;
+        }
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
+        {
+            if (!g_systemBtnHighlightColour)
+            {
+                g_systemBtnHighlightColour = 
+	                new wxColour( 0xea60 >> SHIFT,
+	                              0xea60 >> SHIFT,
+			                      0xea60 >> SHIFT );
+            }
+            return *g_systemBtnHighlightColour;
+        }
+        case wxSYS_COLOUR_HIGHLIGHT:
+        {
+            if (!g_systemHighlightColour)
+            {
+/*
+                g_systemHighlightColour = 
+	                new wxColour( 0      >> SHIFT,
+	                              0      >> SHIFT,
+			                      0x9c40 >> SHIFT );
+*/              
+                GtkWidget *widget = gtk_button_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                int red = def->bg[GTK_STATE_SELECTED].red;
+                int green = def->bg[GTK_STATE_SELECTED].green;
+                int blue = def->bg[GTK_STATE_SELECTED].blue;
+                gtk_widget_destroy( widget );
+
+                g_systemHighlightColour = 
+	                new wxColour( red    >> SHIFT,
+	                              green  >> SHIFT,
+			                      blue   >> SHIFT );
+            }
+            return *g_systemHighlightColour;
+        }
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
@@ -173,7 +186,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
         case wxSYS_DEFAULT_GUI_FONT:
         {
             if (!g_systemFont)
-                g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+                g_systemFont = new wxFont( 16, wxSWISS, wxNORMAL, wxNORMAL );
             return *g_systemFont;
         }
     }

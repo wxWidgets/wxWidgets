@@ -62,8 +62,6 @@ bool wxStaticText::Create(wxWindow *parent,
     wxControl::SetLabel(label);
     m_widget = gtk_label_new( m_label.mbc_str() );
     
-    wxControl::SetFont( parent->GetFont() );
-
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
       justify = GTK_JUSTIFY_CENTER;
@@ -80,11 +78,22 @@ bool wxStaticText::Create(wxWindow *parent,
     // do not move this call elsewhere
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
 
-    SetSizeOrDefault( size );
-
     m_parent->DoAddChild( this );
 
     PostCreation();
+
+    ApplyWidgetStyle();
+
+    wxControl::SetFont( parent->GetFont() );
+    
+    wxSize size_best( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = size_best.x;
+    if (new_size.y == -1)
+        new_size.y = size_best.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
 
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );

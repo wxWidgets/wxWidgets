@@ -101,17 +101,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    wxSize newSize = size,
-           bestSize = DoGetBestSize();
-
-    if (newSize.x == -1)
-        newSize.x = bestSize.x;
-    if (newSize.y == -1)
-        newSize.y = bestSize.y;
-    if (newSize.y > 22)
-        newSize.y = 22;
-
-    if (!PreCreation( parent, pos, newSize ) ||
+    if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxComboBox creation failed") );
@@ -148,6 +138,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     PostCreation();
 
+    ApplyWidgetStyle();
+
     ConnectWidget( GTK_COMBO(m_widget)->button );
 
     if (!value.IsNull()) SetValue( value );
@@ -158,9 +150,19 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
+    wxSize size_best( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = size_best.x;
+    if (new_size.y == -1)
+        new_size.y = size_best.y;
+    if (new_size.y > size_best.y)
+        new_size.y = size_best.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
+
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
 
     Show( TRUE );
 
@@ -665,8 +667,9 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 
 wxSize wxComboBox::DoGetBestSize() const
 {
-    // totally bogus - should measure the strings in the combo!
-    return wxSize(100, 22);
+    wxSize ret( wxControl::DoGetBestSize() );
+    if (ret.x < 100) ret.x = 100;
+    return ret;
 }
 
 #endif

@@ -1634,9 +1634,6 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (win->m_delayedFont)
-        win->SetFont( win->GetFont() );
-
     if (win->m_delayedBackgroundColour)
         win->SetBackgroundColour( win->GetBackgroundColour() );
 
@@ -2024,6 +2021,8 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
     PostCreation();
+
+    ApplyWidgetStyle();
 
     Show( TRUE );
 
@@ -2963,7 +2962,7 @@ GtkStyle *wxWindow::GetWidgetStyle()
 {
     if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
 
-    m_widgetStyle = gtk_style_copy( gtk_widget_get_style( m_widget ) );
+    m_widgetStyle = gtk_style_copy( gtk_rc_get_style( m_widget ) );
 
     return m_widgetStyle;
 }
@@ -2972,28 +2971,37 @@ void wxWindow::SetWidgetStyle()
 {
     GtkStyle *style = GetWidgetStyle();
 
-    gdk_font_unref( style->font );
-    style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+    if (m_font != wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ))
+    {
+        gdk_font_unref( style->font );
+        style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+    }
 
     if (m_foregroundColour.Ok())
     {
         m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
-        style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
-        style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+        if (m_foregroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT))
+        {
+            style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
+            style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
+            style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+        }
     }
 
     if (m_backgroundColour.Ok())
     {
         m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-        style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-        style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-        style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+        if (m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE))
+        {
+            style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+            style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+            style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+            style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+            style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+            style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+            style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+            style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+       }
     }
 }
 

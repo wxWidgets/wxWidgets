@@ -78,6 +78,8 @@ wxMenuBar::wxMenuBar( long style )
     }
 
     PostCreation();
+    
+    ApplyWidgetStyle();
 }
 
 wxMenuBar::wxMenuBar()
@@ -108,6 +110,8 @@ wxMenuBar::wxMenuBar()
     m_widget = GTK_WIDGET(m_menubar);
 
     PostCreation();
+    
+    ApplyWidgetStyle();
 }
 
 wxMenuBar::~wxMenuBar()

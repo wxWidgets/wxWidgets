@@ -180,6 +180,16 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                          m_x+10, m_y+10+(i*24), 10, 10 );
     }
 
+    m_parent->DoAddChild( this );
+
+    PostCreation();
+
+    ApplyWidgetStyle();
+
+    SetLabel( title );
+
+    SetFont( parent->GetFont() );
+
     wxSize ls = LayoutItems();
 
     wxSize newSize = size;
@@ -187,15 +197,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     if (newSize.y == -1) newSize.y = ls.y;
     SetSize( newSize.x, newSize.y );
 
-    m_parent->DoAddChild( this );
-
-    PostCreation();
-
-    SetLabel( title );
-
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
-    SetFont( parent->GetFont() );
 
     Show( TRUE );
 

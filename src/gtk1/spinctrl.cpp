@@ -88,23 +88,27 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_spin_button_new( m_adjust, 1, 0 );
     
-    wxSize new_size = size,
-           sizeBest = DoGetBestSize();
-    if (new_size.x == -1)
-        new_size.x = sizeBest.x;
-    if (new_size.y == -1)
-        new_size.y = sizeBest.y;
-
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
-
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
     GtkEnableEvents();
+    
     m_parent->DoAddChild( this );
 
     PostCreation();
+
+    ApplyWidgetStyle();
+
+    SetFont( parent->GetFont() );
+    
+    wxSize size_best( DoGetBestSize() );
+    wxSize new_size( size );
+    if (new_size.x == -1)
+        new_size.x = size_best.x;
+    if (new_size.y == -1)
+        new_size.y = size_best.y;
+    if ((new_size.x != size.x) || (new_size.y != size.y))
+        SetSize( new_size.x, new_size.y );
 
     SetBackgroundColour( parent->GetBackgroundColour() );
 
