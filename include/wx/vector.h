@@ -15,9 +15,9 @@
 
 class WXDLLEXPORT wxVectorBase
 {
-private:
+public:
     typedef size_t size_type;
-
+private:
     size_type m_allocsize;
     size_type m_size,
               m_capacity;
