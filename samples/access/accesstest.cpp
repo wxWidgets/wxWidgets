@@ -31,6 +31,21 @@
 #endif
 
 #include "wx/access.h"
+#include "wx/splitter.h"
+
+#ifdef __WXMSW__
+#include "windows.h"
+#include <ole2.h>
+#include <oleauto.h>
+#include <oleacc.h>
+#include "wx/msw/ole/oleutils.h"
+#include "wx/msw/winundef.h"
+
+#ifndef OBJID_CLIENT
+#define OBJID_CLIENT 0xFFFFFFFC
+#endif
+
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -56,6 +71,7 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -68,9 +84,18 @@ public:
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
+    void OnQuery(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    // Log messages to the text control
+    void Log(const wxString& text);
+
+    // Recursively give information about an object
+    void LogObject(int indent, IAccessible* obj);
+
 private:
+    wxTextCtrl* m_textCtrl;
+
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -84,6 +109,9 @@ enum
 {
     // menu items
     AccessTest_Quit = 1,
+
+    // query the hierarchy
+    AccessTest_Query,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
@@ -100,6 +128,7 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(AccessTest_Quit,  MyFrame::OnQuit)
+    EVT_MENU(AccessTest_Query,  MyFrame::OnQuery)
     EVT_MENU(AccessTest_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
@@ -181,6 +210,8 @@ public:
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
        : wxFrame(NULL, -1, title, pos, size, style)
 {
+    m_textCtrl = NULL;
+
     SetAccessible(new FrameAccessible(this));
 
     // set the frame icon
@@ -194,6 +225,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(AccessTest_About, _T("&About...\tF1"), _T("Show about dialog"));
 
+    menuFile->Append(AccessTest_Query, _T("Query"), _T("Query the window hierarchy"));
+    menuFile->AppendSeparator();
     menuFile->Append(AccessTest_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
@@ -205,18 +238,32 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
+#if 1 // wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 
+    wxSplitterWindow* splitter = new wxSplitterWindow(this, -1);
+    splitter->CreateAccessible();
+
+    wxListBox* listBox = new wxListBox(splitter, -1);
+    listBox->CreateAccessible();
+
+    m_textCtrl = new wxTextCtrl(splitter, -1, wxT(""), wxDefaultPosition,
+        wxDefaultSize, wxTE_MULTILINE);
+    m_textCtrl->CreateAccessible();
+
+    splitter->SplitHorizontally(listBox, m_textCtrl, 150);
+
+#if 0
 #if 1
     wxListBox* listBox = new wxListBox(this, -1);
-    listBox->SetAccessible(new ScrolledWindowAccessible(listBox));
+    //listBox->SetAccessible(new wxAccessible(listBox));
 #else
     wxScrolledWindow* scrolledWindow = new wxScrolledWindow(this, -1);
     scrolledWindow->SetAccessible(new ScrolledWindowAccessible(scrolledWindow));
+#endif
 #endif
 }
 
@@ -237,3 +284,180 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     wxMessageBox(msg, _T("About AccessTest"), wxOK | wxICON_INFORMATION, this);
 }
+
+void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
+{
+    m_textCtrl->Clear();
+    IAccessible* accessibleFrame = NULL;
+    if (S_OK != AccessibleObjectFromWindow((HWND) GetHWND(), OBJID_CLIENT,
+        IID_IAccessible, (void**) & accessibleFrame))
+    {
+        Log(wxT("Could not get object."));
+        return;
+    }
+    if (accessibleFrame)
+    {
+        Log(wxT("Got an IAccessible for the frame."));
+        LogObject(0, accessibleFrame);
+        accessibleFrame->Release();
+    }
+}
+
+// Log messages to the text control
+void MyFrame::Log(const wxString& text)
+{
+    if (m_textCtrl)
+    {
+        wxString text2(text);
+        text2.Replace(wxT("\n"), wxT(" "));
+        text2.Replace(wxT("\r"), wxT(" "));
+        m_textCtrl->SetInsertionPointEnd();
+        m_textCtrl->WriteText(text2 + wxT("\n"));
+    }
+}
+
+// Recursively give information about an object
+void MyFrame::LogObject(int indent, IAccessible* obj)
+{
+    VARIANT var;
+    VariantInit(& var);
+    var.vt = VT_I4;
+    var.lVal = 0;
+    
+    BSTR bStrName = 0;
+    HRESULT hResult = obj->get_accName(var, & bStrName);
+    
+    if (hResult == S_OK)
+    {
+        wxString strName(wxConvertStringFromOle(bStrName));
+        SysFreeString(bStrName);
+        
+        wxString str;
+        str.Printf(wxT("Name: %s"), strName.c_str());
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+    }
+    else
+    {
+        wxString str;
+        str.Printf(wxT("NO NAME"));
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+    }
+    
+    VARIANT varRole;
+    VariantInit(& varRole);
+    
+    hResult = obj->get_accRole(var, & varRole);
+    
+    if (hResult == S_OK && varRole.vt == VT_I4)
+    {
+        wxChar buf[256];
+        GetRoleText(varRole.lVal, buf, 256);
+        
+        wxString strRole(buf);
+        
+        wxString str;
+        str.Printf(wxT("Role: %s"), strRole.c_str());
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+    }
+    else
+    {
+        wxString str;
+        str.Printf(wxT("NO ROLE"));
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+    }    
+
+    long childCount = 0;
+    if (S_OK == obj->get_accChildCount(& childCount))
+    {
+        wxString str;
+        str.Printf(wxT("There are %d children."), (int) childCount);
+        str.Pad(indent, wxT(' '), FALSE);
+        Log(str);
+    }
+
+    int i;
+    for (i = 1; i <= childCount; i++)
+    {
+        VARIANT var;
+        VariantInit(& var);
+        var.vt = VT_I4;
+        var.lVal = i;
+        IDispatch* pDisp = NULL;
+        IAccessible* childObject = NULL;
+
+        BSTR bStrName = 0;
+        HRESULT hResult = obj->get_accName(var, & bStrName);
+
+        if (hResult == S_OK)
+        {
+            wxString strName(wxConvertStringFromOle(bStrName));
+            SysFreeString(bStrName);
+
+            wxString str;
+            str.Printf(wxT("Name: %s"), strName.c_str());
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+        }
+        else
+        {
+            wxString str;
+            str.Printf(wxT("NO NAME"));
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+        }
+
+        VARIANT varRole;
+        VariantInit(& varRole);
+
+        hResult = obj->get_accRole(var, & varRole);
+
+        if (hResult == S_OK && varRole.vt == VT_I4)
+        {
+            wxChar buf[256];
+            GetRoleText(varRole.lVal, buf, 256);
+
+            wxString strRole(buf);
+
+            wxString str;
+            str.Printf(wxT("Role: %s"), strRole.c_str());
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+        }
+        else
+        {
+            wxString str;
+            str.Printf(wxT("NO ROLE"));
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+        }
+
+        if (S_OK == obj->get_accChild(var, & pDisp) && pDisp)
+        {
+            wxString str;
+            str.Printf(wxT("This is a real object."));
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+
+            if (pDisp->QueryInterface(IID_IAccessible, (LPVOID*) & childObject) == S_OK)
+            {
+                LogObject(indent + 4, childObject);
+                childObject->Release();
+            }
+            pDisp->Release();
+        }
+        else
+        {
+            wxString str;
+            str.Printf(wxT("This is an element."));
+            str.Pad(indent+4, wxT(' '), FALSE);
+            Log(str);
+        }
+        Log(wxT(""));
+    }
+
+}
+
