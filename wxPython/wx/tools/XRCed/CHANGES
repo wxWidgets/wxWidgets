@@ -1,0 +1,75 @@
+0.0.7
+-----
+
+Some command-line arguments.
+
+"Test window" command and toolbar button.
+
+New panel interphace (wxHTMLWindow is not used anymore).
+
+Toggling between embedded and detached panel.
+
+Cache for already used windows.
+
+Current top-level control is bold, if test window shown.
+
+Undo/redo broken.
+
+CheckListBox does not work unless wxXRC source fixed (in both wxPytnon and
+wxWin):
+
+contrib/src/xrc/xmlrsall.cpp
+45,46c45,46
+<     AddHandler(new wxListCtrlXmlHandler);
+< #if CHECKLISTBOX
+---
+>     AddHandler(new wxListCtrlXmlHandler);    
+> #if wxUSE_CHECKLISTBOX
+
+This is fixed in CVS.
+
+0.0.6
+-----
+
+Toolbar, bitmap, icon support (no display yet).
+
+Changed parameter objects, added support for multiple parameters (like 
+`growablecols').
+
+Fixed double-clicking problem with tree control on Windows.
+
+Some performance improovements.
+
+
+0.0.5
+-----
+
+Added notebook with properties page and style page. Fixed some problems
+on Windows.
+
+
+0.0.4
+-----
+
+Some fixes suggested by RD
+
+
+0.0.3
+-----
+
+Faster preview window refresh.
+
+Cut/Paste works better.
+
+Some tree icons.
+
+Tree item names.
+
+Bugfixes.
+
+
+0.0.2
+-----
+
+The first release.
+

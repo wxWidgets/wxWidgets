@@ -1,8 +1,42 @@
+True  = 1
+False = 0
 
-"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+def RestOfLine(sx, width, data, bool):
+    if len(data) == 0 and sx == 0:
+        return [('', bool)]
+    if sx >= len(data):
+        return []
+    return [(data[sx:sx+width], bool)]
 
-from wx import _rename
-from wxPython.lib.editor import selection
-_rename(globals(), selection.__dict__, modulename='lib.editor.selection')
-del selection
-del _rename
+def Selection(SelectBegin,SelectEnd, sx, width, line, data):
+    if SelectEnd is None or SelectBegin is None:
+        return RestOfLine(sx, width, data, False)
+    (bRow, bCol) = SelectBegin
+    (eRow, eCol) = SelectEnd
+    if (eRow < bRow):
+        (bRow, bCol) = SelectEnd
+        (eRow, eCol) = SelectBegin
+    if (line < bRow or eRow < line):
+        return RestOfLine(sx, width, data, False)
+    if (bRow < line and line < eRow):
+        return RestOfLine(sx, width, data, True)
+    if (bRow == eRow) and (eCol < bCol):
+        (bCol, eCol) = (eCol, bCol)
+    # selection either starts or ends on this line
+    end = min(sx+width, len(data))
+    if (bRow < line):
+        bCol = 0
+    if (line < eRow):
+        eCol = end
+    pieces = []
+    if (sx < bCol):
+        if bCol <= end:
+            pieces += [(data[sx:bCol], False)]
+        else:
+            return [(data[sx:end], False)]
+    pieces += [(data[max(bCol,sx):min(eCol,end)], True)]
+    if (eCol < end):
+        pieces += [(data[eCol:end], False)]
+    return pieces
+
+

@@ -1,8 +1,39 @@
+# Name:         globals.py
+# Purpose:      XRC editor, global variables
+# Author:       Roman Rolinsky <rolinsky@mema.ucl.ac.be>
+# Created:      02.12.2002
+# RCS-ID:       $Id$
 
-"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+from wxPython.wx import *
+from wxPython.xrc import *
 
-from wx import _rename
-from wxPython.tools.XRCed import globals
-_rename(globals(), globals.__dict__, modulename='tools.XRCed.globals')
-del globals
-del _rename
+# Global constants
+
+sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
+labelFont = wxFont(sysFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxBOLD)
+modernFont = wxFont(sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
+smallerFont = wxFont(sysFont.GetPointSize()-2, wxDEFAULT, wxNORMAL, wxNORMAL)
+
+progname = 'XRCed'
+version = '0.1.1-4'
+
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
+# Global variables
+
+class Globals:
+    panel = None
+    tree = None
+    frame = None
+    tools = None
+    undoMan = None
+    testWin = None
+    testWinPos = wxDefaultPosition
+    currentXXX = None
+    currentEncoding = sys.getdefaultencoding() # wxLocale_GetSystemEncodingName()
+
+g = Globals()
