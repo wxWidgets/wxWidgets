@@ -145,13 +145,10 @@ wxGLCanvas::~wxGLCanvas()
     delete m_glContext;
 }
 
-bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID id,
-			const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-			int *attribList, const wxPalette& palette)
+static AGLPixelFormat ChoosePixelFormat(const int *attribList)
 {
-  	m_macEraseOnRedraw = false ;
     GLint data[512];
-    GLint defs[] = { AGL_RGBA, 
+    GLint defaultAttribs[] = { AGL_RGBA, 
 		     AGL_DOUBLEBUFFER, 
 		     AGL_MINIMUM_POLICY, 
 		     AGL_DEPTH_SIZE, 1,  // use largest available depth buffer
@@ -163,11 +160,11 @@ bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID 
     GLint *attribs;
     if (!attribList)
     {
-	attribs = defs;
+	  attribs = defaultAttribs;
     }
     else
     {
-      int data[512], arg=0, p=0;
+      int arg=0, p=0;
 
       data[p++] = AGL_MINIMUM_POLICY; // make _SIZE tags behave more like GLX
       while( (attribList[arg]!=0) && (p<512) )
@@ -209,11 +206,20 @@ bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID 
       }       
       data[p] = 0; 
 
-      attribs = defs;
+      attribs = data;
     }
+    
+    return aglChoosePixelFormat(NULL, 0, attribs);
+}
+
+bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID id,
+			const wxPoint& pos, const wxSize& size, long style, const wxString& name,
+			int *attribList, const wxPalette& palette)
+{
+  	m_macEraseOnRedraw = false ;
     wxScrolledWindow::Create( parent, id, pos, size, style, name );
 
-    AGLPixelFormat fmt = aglChoosePixelFormat(NULL, 0, attribs);
+    AGLPixelFormat fmt = ChoosePixelFormat(attribList);
     wxCHECK_MSG( fmt, false, wxT("Couldn't create OpenGl pixel format") );
 
     m_glContext = new wxGLContext(fmt, this, palette, shared);
@@ -283,6 +289,23 @@ void wxGLCanvas::SetColour(const char *colour)
 {
   if (m_glContext)
     m_glContext->SetColour(colour);
+}
+
+
+//---------------------------------------------------------------------------
+// wxGLApp
+//---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGLApp, wxApp)
+
+bool wxGLApp::InitGLVisual(int *attribList)
+{
+    AGLPixelFormat fmt = ChoosePixelFormat(attribList);
+    return (fmt != NULL);
+}
+
+wxGLApp::~wxGLApp(void)
+{
 }
 
 #endif // wxUSE_GLCANVAS
