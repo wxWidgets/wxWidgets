@@ -20,6 +20,8 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
 
+class wxMacTextControl ;
+
 // Single-line text item
 class WXDLLEXPORT wxTextCtrl: public wxTextCtrlBase
 {
@@ -169,6 +171,7 @@ public:
     virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
     virtual void            MacControlUserPaneBackgroundProc(void* info) ;
 
+  wxMacTextControl*         GetPeer() const { return (wxMacTextControl*) m_peer ; }
 protected:
     // common part of all ctors
     void Init();
@@ -180,14 +183,8 @@ protected:
   // flag is set to true when the user edits the controls contents
   bool m_dirty;
 
-  WXWidget                  m_scrollView ;
-  WXWidget                  m_textView ;
-  
-  void*  m_macTXN ;
   unsigned long  m_maxLength ;
   // need to make this public because of the current implementation via callbacks
-public :  
-  void*  m_macTXNvars ;
 private :
   DECLARE_EVENT_TABLE()
 };

@@ -69,7 +69,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     m_peer = new wxMacControl() ;
     verify_noerr ( CreatePopupButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        -12345 , false /* no variable width */ , 0 , 0 , 0 , *m_peer ) );
+        -12345 , false /* no variable width */ , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
     
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;

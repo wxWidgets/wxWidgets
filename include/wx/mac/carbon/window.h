@@ -205,7 +205,7 @@ public:
         { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
 
     wxList&             GetSubcontrols() { return m_subControls; }
-    virtual void		MacInstallEventHandler() ;
+    virtual void		MacInstallEventHandler(WXWidget native) ;
 	virtual void		MacRedrawControl();
     WXEVENTHANDLERREF   MacGetControlEventHandler() { return m_macControlEventHandler ; }
     void                MacPostControlCreate(const wxPoint& pos, const wxSize& size) ;

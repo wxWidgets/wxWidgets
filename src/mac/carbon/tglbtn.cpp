@@ -67,7 +67,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        kControlBevelButtonNormalBevel , kControlBehaviorToggles , NULL , 0 , 0 , 0 , *m_peer ) );
+        kControlBevelButtonNormalBevel , kControlBehaviorToggles , NULL , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
     
     
     MacPostControlCreate(pos,size) ;
@@ -89,12 +89,12 @@ wxSize wxToggleButton::DoGetBestSize() const
 
 void wxToggleButton::SetValue(bool val)
 {
-    ::SetControl32BitValue( *m_peer , val ) ;
+    m_peer->SetValue( val ) ;
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return GetControl32BitValue( *m_peer ) ;
+    return m_peer->GetValue() ;
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)

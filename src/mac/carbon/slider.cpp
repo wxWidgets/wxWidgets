@@ -87,7 +87,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
     value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
-        wxMacLiveScrollbarActionUPP , *m_peer ) );
+        wxMacLiveScrollbarActionUPP , m_peer->GetControlRefAddr() ) );
     
         
     if(style & wxSL_VERTICAL) {
@@ -123,7 +123,7 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetValue() const
 {
-    return GetControl32BitValue( *m_peer) ;
+    return m_peer->GetValue() ;
 }
 
 void wxSlider::SetValue(int value)
@@ -132,7 +132,7 @@ void wxSlider::SetValue(int value)
     valuestring.Printf( wxT("%d") , value ) ;    
     if ( m_macValueStatic )
         m_macValueStatic->SetLabel( valuestring ) ;
-    SetControl32BitValue( *m_peer , value ) ;
+    m_peer->SetValue( value ) ;
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -142,8 +142,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
     
-    SetControl32BitMinimum( *m_peer, m_rangeMin);
-    SetControl32BitMaximum( *m_peer, m_rangeMax);
+    m_peer->SetMinimum( m_rangeMin);
+    m_peer->SetMaximum( m_rangeMax);
     
     if(m_macMinimumStatic) {
         value.Printf(wxT("%d"), m_rangeMin);
@@ -237,7 +237,7 @@ void wxSlider::Command (wxCommandEvent & event)
 
 void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool mouseStillDown ) 
 {
-    SInt16 value = ::GetControl32BitValue( *m_peer ) ;
+    SInt16 value = m_peer->GetValue() ;
     
     SetValue( value ) ;        
     
@@ -259,7 +259,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
 
 wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) 
 {
-    SInt16 value = ::GetControl32BitValue( *m_peer ) ;
+    SInt16 value = m_peer->GetValue() ;
     
     SetValue( value ) ;        
     

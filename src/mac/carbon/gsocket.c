@@ -163,7 +163,6 @@ pascal void OTInetEventHandler(void*s, OTEventCode event, OTResult result, void 
 	
 	if ( event == kOTSyncIdleEvent )
 	{
-		YieldToAnyThread() ;
 		return ;
 	}
 

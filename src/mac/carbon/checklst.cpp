@@ -233,7 +233,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
     m_peer = new wxMacControl() ;
-    verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , *m_peer ) );
+    verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , m_peer->GetControlRefAddr() ) );
     
 
     DataBrowserSelectionFlags  options = kDataBrowserDragSelect ;
@@ -249,7 +249,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     {
         options += kDataBrowserSelectOnlyOne ;
     }
-    verify_noerr(SetDataBrowserSelectionFlags  (*m_peer, options ) ); 
+    verify_noerr(m_peer->SetSelectionFlags( options ) ); 
 
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
@@ -273,7 +273,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 	columnDesc.propertyDesc.propertyType = kDataBrowserCheckboxType;
 	columnDesc.propertyDesc.propertyFlags = kDataBrowserPropertyIsMutable | kDataBrowserTableViewSelectionColumn |
                                             kDataBrowserDefaultPropertyFlags;
-	verify_noerr(::AddDataBrowserListViewColumn(*m_peer, &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+	verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
 
     // text column
 
@@ -289,12 +289,12 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 	  ;
 
 	
-	verify_noerr(::AddDataBrowserListViewColumn(*m_peer, &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+	verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
 
-    verify_noerr(::AutoSizeDataBrowserListViewColumns( *m_peer ) ) ;
-    verify_noerr(::SetDataBrowserHasScrollBars( *m_peer , false , true ) ) ;
-    verify_noerr(::SetDataBrowserTableViewHiliteStyle( *m_peer, kDataBrowserTableViewFillHilite  ) ) ;
-    verify_noerr(::SetDataBrowserListViewHeaderBtnHeight( *m_peer , 0 ) ) ;
+    verify_noerr( m_peer->AutoSizeListViewColumns() ) ;
+    verify_noerr( m_peer->SetHasScrollBars( false , true ) ) ;
+    verify_noerr( m_peer->SetTableViewHiliteStyle( kDataBrowserTableViewFillHilite  ) ) ;
+    verify_noerr( m_peer->SetListViewHeaderBtnHeight(0 ) ) ;
 
     DataBrowserCallbacks callbacks ;
     callbacks.version = kDataBrowserLatestCallbacks;
@@ -306,7 +306,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 #else
 	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
 #endif
-    SetDataBrowserCallbacks(*m_peer, &callbacks);
+    m_peer->SetCallbacks( &callbacks);
 
     MacPostControlCreate(pos,size) ;
 
@@ -337,13 +337,12 @@ void wxCheckListBox::Check(size_t item, bool check)
     wxCHECK_RET( item < m_checks.GetCount(),
                  _T("invalid index in wxCheckListBox::Check") );
 
-    // intermediate var is needed to avoid compiler warning with VC++
     bool isChecked = m_checks[item] != 0;
     if ( check != isChecked )
     {
         m_checks[item] = check;
         UInt32 id = m_idArray[item] ;
-        verify_noerr( ::UpdateDataBrowserItems( *m_peer , kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
+        verify_noerr( m_peer->UpdateItems(kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
     }
 }
 

@@ -336,12 +336,20 @@ public :
     virtual ~wxMacControl()
     {
     }
-    bool Ok() const { return m_controlRef != NULL ; }
     
+    virtual void Dispose() ;
+
+    bool Ok() const { return GetControlRef() != NULL ; }
+    
+    virtual ControlRef * GetControlRefAddr() { return &m_controlRef; } 
+    virtual ControlRef GetControlRef() const { return m_controlRef ; }  
+
+    virtual void SetReference( SInt32 data ) ; 
+    /*
     void operator= (ControlRef c) { m_controlRef = c ; }
     operator ControlRef () { return m_controlRef; }   
     operator ControlRef * () { return &m_controlRef; }   
-
+    */
     // accessing data and values
 
     virtual OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
@@ -362,6 +370,10 @@ public :
 
     virtual void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum ) ;
     virtual void SetRange( SInt32 minimum , SInt32 maximum ) ;
+    
+    virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
+    virtual bool HasFocus() const ;
+    virtual bool NeedsFocusRect() const ;
     
     // templated helpers
 
@@ -395,7 +407,67 @@ public :
     virtual void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
     virtual void VisibilityChanged( bool shown ) ;
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
+    virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers ) ;
+    void SetActionProc( ControlActionUPP   actionProc ) ;
+    void SetViewSize( SInt32 viewSize ) ;
+    SInt32 GetViewSize() const ;
+    
+    virtual bool IsVisible() const ;
+    virtual void SetVisibility( bool visible , bool redraw ) ;
+    virtual bool IsEnabled() const ;
+    virtual bool IsActive() const ;
+    virtual void Enable( bool enable ) ;
+    
+    // invalidates this control and all children
+    virtual void InvalidateWithChildren() ;
+    virtual void SetDrawingEnabled( bool enable ) ;
+    virtual bool GetNeedsDisplay() const ;
+    virtual void SetNeedsDisplay( bool needsDisplay , RgnHandle where = NULL ) ;
 
+    virtual void ScrollRect( const wxRect &rect , int dx , int dy ) ;
+
+    virtual void GetRect( Rect *r ) ;
+    virtual void SetRect( Rect *r ) ;
+    virtual void GetRectInWindowCoords( Rect *r ) ;
+    virtual void GetBestRect( Rect *r ) ;
+    virtual void SetTitle( const wxString &title ) ;
+    // converts from Toplevel-Content relative to local
+    static void Convert( wxPoint *pt , wxMacControl *convert , wxMacControl *to ) ;
+    
+    virtual void GetFeatures( UInt32 *features ) ;
+    virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region ) ;
+    virtual OSStatus SetZOrder( bool above , wxMacControl* other ) ;
+    // to be moved into a databrowser subclass
+    
+    virtual OSStatus SetSelectionFlags( DataBrowserSelectionFlags ) ;
+    virtual OSStatus AddListViewColumn( DataBrowserListViewColumnDesc *columnDesc,
+        DataBrowserTableViewColumnIndex position ) ;
+    virtual OSStatus AutoSizeListViewColumns() ;
+    virtual OSStatus SetHasScrollBars( bool horiz , bool vert ) ;
+    virtual OSStatus SetTableViewHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle ) ;
+    virtual OSStatus SetListViewHeaderBtnHeight(UInt16 height) ;
+    virtual OSStatus SetCallbacks(const DataBrowserCallbacks *  callbacks) ;
+    virtual OSStatus UpdateItems( DataBrowserItemID container, UInt32 numItems,
+            const DataBrowserItemID* items,                
+            DataBrowserPropertyID preSortProperty,
+            DataBrowserPropertyID propertyID ) ;
+    virtual OSStatus AddItems( DataBrowserItemID container, UInt32 numItems,
+            const DataBrowserItemID* items,                
+            DataBrowserPropertyID preSortProperty ) ;
+    virtual OSStatus RemoveItems( DataBrowserItemID container, UInt32 numItems,
+            const DataBrowserItemID* items,                
+            DataBrowserPropertyID preSortProperty ) ;
+    virtual OSStatus RevealItem( DataBrowserItemID item,
+            DataBrowserPropertyID propertyID,
+            DataBrowserRevealOptions options ) ;
+    virtual bool IsItemSelected( DataBrowserItemID item ) ;
+    virtual OSStatus SetSelectedItems(UInt32 numItems,
+            const DataBrowserItemID * items,
+            DataBrowserSetOption operation ) ;
+            
+    // to be moved into a tab control class
+    
+    virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable ) ;
 protected :
     ControlRef  m_controlRef ;
     wxFont      m_font ;

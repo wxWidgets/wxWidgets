@@ -1002,17 +1002,17 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
     // the content view, so we have to retrieve it explicitely
     HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
-        *m_peer ) ;
+        m_peer->GetControlRefAddr() ) ;
     if ( !m_peer->Ok() )
     {
         // compatibility mode fallback
-        GetRootControl( (WindowRef) m_macWindow , *m_peer ) ;
+        GetRootControl( (WindowRef) m_macWindow , m_peer->GetControlRefAddr() ) ;
     }
 #else
-    ::CreateRootControl( (WindowRef)m_macWindow , *m_peer ) ;
+    ::CreateRootControl( (WindowRef)m_macWindow , m_peer->GetControlRefAddr() ) ;
 #endif
     // the root control level handleer
-    MacInstallEventHandler() ;
+    MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;

@@ -1435,6 +1435,17 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
+void wxMacControl::Dispose()
+{
+    ::DisposeControl( m_controlRef ) ;
+    m_controlRef = NULL ;
+}
+
+void wxMacControl::SetReference( SInt32 data ) 
+{
+    SetControlReference( m_controlRef , data ) ;
+}
+
 OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) const
 {
     return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize ) ;   
@@ -1521,6 +1532,24 @@ void wxMacControl::SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maxi
     ::SetControl32BitValue( m_controlRef , value ) ;
 }
 
+OSStatus wxMacControl::SetFocus( ControlFocusPart focusPart ) 
+{
+    return SetKeyboardFocus(  GetControlOwner( m_controlRef )  , 
+        m_controlRef , focusPart ) ;
+}
+
+bool wxMacControl::HasFocus() const 
+{
+    ControlRef control ;
+    GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
+    return control == m_controlRef ;
+}
+
+bool wxMacControl::NeedsFocusRect() const 
+{
+    return false ;
+}
+
 void wxMacControl::VisibilityChanged(bool shown) 
 {
 }
@@ -1574,5 +1603,286 @@ void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
     ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
 }
 
+short wxMacControl::HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers ) 
+{
+    return HandleControlKey( m_controlRef , keyCode , charCode , modifiers ) ;
+}
+
+void wxMacControl::SetActionProc( ControlActionUPP   actionProc )
+{
+    SetControlAction( m_controlRef , actionProc ) ;
+}
+
+void wxMacControl::SetViewSize( SInt32 viewSize )
+{
+    SetControlViewSize(m_controlRef , viewSize ) ;
+}
+
+SInt32 wxMacControl::GetViewSize() const
+{
+    return GetControlViewSize( m_controlRef ) ;
+}
+
+bool wxMacControl::IsVisible() const 
+{
+    return IsControlVisible( m_controlRef ) ;
+}
+
+void wxMacControl::SetVisibility( bool visible , bool redraw ) 
+{
+    SetControlVisibility( m_controlRef , visible , redraw ) ;
+}
+
+bool wxMacControl::IsEnabled() const 
+{
+#if TARGET_API_MAC_OSX
+    return IsControlEnabled( m_controlRef ) ;
+#else
+    return IsControlActive( m_controlRef ) ;
+#endif
+}
+
+bool wxMacControl::IsActive() const 
+{
+    return IsControlActive( m_controlRef ) ;
+}
+
+void wxMacControl::Enable( bool enable ) 
+{
+#if TARGET_API_MAC_OSX
+    if ( enable )
+        EnableControl( m_controlRef ) ;
+    else
+        DisableControl( m_controlRef ) ;
+#else
+    if ( enable )
+        ActivateControl( m_controlRef ) ;
+    else
+        DeactivateControl( m_controlRef ) ;
+#endif
+}
+
+void wxMacControl::SetDrawingEnabled( bool enable ) 
+{
+#if TARGET_API_MAC_OSX
+    HIViewSetDrawingEnabled( m_controlRef , enable ) ;
+#endif
+}
+
+bool wxMacControl::GetNeedsDisplay() const 
+{
+#if TARGET_API_MAC_OSX
+    return HIViewGetNeedsDisplay( m_controlRef ) ;
+#else
+    return false ;
+#endif
+}
+
+void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where ) 
+{
+#if TARGET_API_MAC_OSX
+    if ( where != NULL )
+        HIViewSetNeedsDisplayInRegion( m_controlRef , where , needsDisplay ) ;
+    else
+        HIViewSetNeedsDisplay( m_controlRef , needsDisplay ) ;
+#endif
+}
+
+void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to ) 
+{
+#if TARGET_API_MAC_OSX
+    HIPoint hiPoint ;
+    hiPoint.x = pt->x ;
+    hiPoint.y = pt->y ;
+    HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  ) ;
+    pt->x = hiPoint.x ;
+    pt->y = hiPoint.y ;
+#endif
+}
+
+void wxMacControl::SetRect( Rect *r ) 
+{
+#if TARGET_API_MAC_OSX
+    HIRect hir = { r->left , r->top , r->right - r->left , r->bottom - r->top } ;
+    HIViewSetFrame ( m_controlRef , &hir ) ;
+#else
+    SetControlBounds( m_controlRef , r ) ;
+#endif
+
+}
+
+void wxMacControl::GetRect( Rect *r ) 
+{
+    GetControlBounds( m_controlRef , r ) ;
+}
+
+void wxMacControl::GetRectInWindowCoords( Rect *r ) 
+{
+    UMAGetControlBoundsInWindowCoords( m_controlRef , r ) ;
+}
+
+void wxMacControl::GetBestRect( Rect *r ) 
+{
+    Rect    bestsize = { 0 , 0 , 0 , 0 } ;
+    short   baselineoffset ;
+    GetBestControlRect( m_controlRef , r , &baselineoffset ) ;
+}
+
+void wxMacControl::SetTitle( const wxString &title ) 
+{
+    UMASetControlTitle(  m_controlRef , title , m_font.GetEncoding() ) ;
+}
+
+void wxMacControl::GetFeatures( UInt32 * features )
+{
+    GetControlFeatures( m_controlRef , features ) ;
+}
+
+OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region ) 
+{
+    return GetControlRegion( m_controlRef , partCode , region ) ;
+}
+
+OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other ) 
+{
+#if TARGET_API_MAC_OSX
+    return HIViewSetZOrder( m_controlRef,above ? kHIViewZOrderAbove : kHIViewZOrderBelow, 
+       (other != NULL) ? other->m_controlRef : NULL) ;
+#else
+    return 0 ;
+#endif
+}
+
+
+#if TARGET_API_MAC_OSX
+// SetNeedsDisplay would not invalidate the children
+static void InvalidateControlAndChildren( HIViewRef control )
+{
+    HIViewSetNeedsDisplay( control , true ) ;
+    UInt16 childrenCount = 0 ;
+    OSStatus err = CountSubControls( control , &childrenCount ) ; 
+    if ( err == errControlIsNotEmbedder )
+        return ;
+    wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
+
+    for ( UInt16 i = childrenCount ; i >=1  ; --i )
+    {
+        HIViewRef child ;
+        err = GetIndexedSubControl( control , i , & child ) ;
+        if ( err == errControlIsNotEmbedder )
+            return ;
+        InvalidateControlAndChildren( child ) ;
+    }
+}
+#endif
+
+void wxMacControl::InvalidateWithChildren() 
+{
+#if TARGET_API_MAC_OSX
+    InvalidateControlAndChildren( m_controlRef ) ;
+#endif
+}
+
+void wxMacControl::ScrollRect( const wxRect &r , int dx , int dy ) 
+{
+#if TARGET_API_MAC_OSX
+    HIRect scrollarea = CGRectMake( r.x , r.y , r.width , r.height) ;
+    HIViewScrollRect ( m_controlRef , &scrollarea , dx ,dy ) ;
+#endif
+}
+
+
+// SetNeedsDisplay would not invalidate the children
+
+//
+// Databrowser
+//
+
+OSStatus wxMacControl::SetSelectionFlags( DataBrowserSelectionFlags options ) 
+{
+    return SetDataBrowserSelectionFlags( m_controlRef , options ) ;
+}
+
+OSStatus wxMacControl::AddListViewColumn( DataBrowserListViewColumnDesc *columnDesc,
+        DataBrowserTableViewColumnIndex position ) 
+{
+    return AddDataBrowserListViewColumn( m_controlRef , columnDesc, position ) ;
+}
+
+OSStatus wxMacControl::AutoSizeListViewColumns()
+{
+    return AutoSizeDataBrowserListViewColumns(m_controlRef) ;
+}
+
+OSStatus wxMacControl::SetHasScrollBars( bool horiz , bool vert ) 
+{
+    return SetDataBrowserHasScrollBars( m_controlRef , horiz , vert ) ;
+}
+
+OSStatus wxMacControl::SetTableViewHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle )
+{
+    return SetDataBrowserTableViewHiliteStyle( m_controlRef , hiliteStyle ) ;
+}
+
+OSStatus wxMacControl::SetListViewHeaderBtnHeight(UInt16 height) 
+{
+    return SetDataBrowserListViewHeaderBtnHeight( m_controlRef ,height ) ;
+}
+
+OSStatus wxMacControl::SetCallbacks(const DataBrowserCallbacks *  callbacks) 
+{
+    return SetDataBrowserCallbacks( m_controlRef , callbacks ) ;
+}
+
+OSStatus wxMacControl::UpdateItems( DataBrowserItemID container, UInt32 numItems,
+        const DataBrowserItemID* items,                
+        DataBrowserPropertyID preSortProperty,
+        DataBrowserPropertyID propertyID ) 
+{
+    return UpdateDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty, propertyID ) ;
+}
+
+bool wxMacControl::IsItemSelected( DataBrowserItemID item ) 
+{
+    return IsDataBrowserItemSelected( m_controlRef , item ) ;
+}
+
+OSStatus wxMacControl::AddItems( DataBrowserItemID container, UInt32 numItems,
+            const DataBrowserItemID* items,                
+            DataBrowserPropertyID preSortProperty ) 
+{
+    return AddDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty ) ;
+}
+
+OSStatus wxMacControl::RemoveItems( DataBrowserItemID container, UInt32 numItems,
+            const DataBrowserItemID* items,                
+            DataBrowserPropertyID preSortProperty ) 
+{
+    return RemoveDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty ) ;
+}
+
+OSStatus wxMacControl::RevealItem( DataBrowserItemID item,
+            DataBrowserPropertyID propertyID,
+            DataBrowserRevealOptions options ) 
+{
+    return RevealDataBrowserItem( m_controlRef , item , propertyID , options ) ;
+}
+
+OSStatus wxMacControl::SetSelectedItems(UInt32 numItems,
+            const DataBrowserItemID * items,
+            DataBrowserSetOption operation ) 
+{
+    return SetDataBrowserSelectedItems( m_controlRef , numItems , items, operation ) ;
+}
+
+//
+// Tab Control
+//
+ 
+OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable ) 
+{
+    return ::SetTabEnabled( m_controlRef , tabNo , enable ) ;
+}
+ 
 #endif // wxUSE_GUI
 

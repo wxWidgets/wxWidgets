@@ -88,8 +88,6 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
     if ( m_peer == NULL || !m_peer->Ok() )
         return ;
     
-#if TARGET_CARBON
-
     char charCode ;
     UInt32 keyCode ;    
     UInt32 modifiers ;
@@ -98,16 +96,6 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
     GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
        GetEventParameter((EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
 
-    ::HandleControlKey( *m_peer , keyCode , charCode , modifiers ) ;
-    
-#else
-    EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
-    short keycode ;
-    short keychar ;
-    keychar = short(ev->message & charCodeMask);
-    keycode = short(ev->message & keyCodeMask) >> 8 ;
-
-    ::HandleControlKey( *m_peer , keycode , keychar , ev->modifiers ) ;
-#endif
+    m_peer->HandleKey( keyCode , charCode , modifiers ) ;
 }
 

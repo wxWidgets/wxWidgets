@@ -42,14 +42,14 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_peer = new wxMacControl() ;
     if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
-        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , *m_peer ) );
+        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , m_peer->GetControlRefAddr() ) );
     }
     else
     {
         ControlButtonContentInfo info ;
         info.contentType = kControlNoContent ;
         verify_noerr(CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds,CFSTR(""),
-            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , *m_peer ) );
+            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
     }
     
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
@@ -97,8 +97,7 @@ wxSize wxButton::DoGetBestSize() const
     }
   
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
-    short   baselineoffset ;
-    ::GetBestControlRect( *m_peer , &bestsize , &baselineoffset ) ;
+    m_peer->GetBestRect( &bestsize ) ;
   
     int wBtn = 0 ;
     if ( EmptyRect( &bestsize ) )
@@ -107,7 +106,7 @@ wxSize wxButton::DoGetBestSize() const
     }
     else
     {
-        sz.x = bestsize.right - bestsize.left ;
+        wBtn = bestsize.right - bestsize.left ;
         sz.y = bestsize.bottom - bestsize.top ;
     }
     

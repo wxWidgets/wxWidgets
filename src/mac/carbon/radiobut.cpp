@@ -41,7 +41,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateRadioButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        0 , false /* no autotoggle */ , *m_peer ) );
+        0 , false /* no autotoggle */ , m_peer->GetControlRefAddr() ) );
     
 
     MacPostControlCreate(pos,size) ;
@@ -75,10 +75,10 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 void wxRadioButton::SetValue(bool val)
 {
     wxRadioButton *cycle;
-      if ( GetControl32BitValue( *m_peer ) == val )
+      if ( m_peer->GetValue() == val )
         return ;
         
-   ::SetControl32BitValue( *m_peer , val ) ;
+   m_peer->SetValue( val ) ;
    if (val) 
    {
            cycle=this->NextInCycle();
@@ -94,7 +94,7 @@ void wxRadioButton::SetValue(bool val)
 
 bool wxRadioButton::GetValue() const
 {
-    return ::GetControl32BitValue( *m_peer ) ;
+    return m_peer->GetValue() ;
 }
 
 void wxRadioButton::Command (wxCommandEvent & event)
