@@ -611,6 +611,7 @@ void wxTreeCtrl::Init()
     m_oldSelection = (wxGenericTreeItem *)NULL;
 
     m_renameTimer = new wxTreeRenameTimer( this );
+    m_lastOnSame = FALSE;
 
     m_normalFont = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT );
     m_boldFont = wxFont( m_normalFont.GetPointSize(),
@@ -2172,7 +2173,8 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     // we process left mouse up event (enables in-place edit), right down
     // (pass to the user code), left dbl click (activate item) and
     // dragging/moving events for items drag-and-drop
-    if ( !(event.LeftUp() ||
+    if ( !(event.LeftDown() ||
+           event.LeftUp() ||
            event.RightDown() ||
            event.LeftDClick() ||
            event.Dragging() ||
@@ -2303,14 +2305,24 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
             nevent.SetEventObject(this);
             GetEventHandler()->ProcessEvent(nevent);
         }
-        else if ( event.LeftUp() && (item == m_current) &&
+        else if ( event.LeftUp() && m_lastOnSame )
+        {
+            if ( (item == m_current) &&
                  (flags & wxTREE_HITTEST_ONITEMLABEL) &&
                  HasFlag(wxTR_EDIT_LABELS) )
-        {
-            m_renameTimer->Start( 100, TRUE );
+            {
+                m_renameTimer->Start( 100, TRUE );
+            }
+
+            m_lastOnSame = FALSE;
         }
         else
         {
+            if ( event.LeftDown() )
+            {
+                m_lastOnSame = item == m_current;
+            }
+
             // how should the selection work for this event?
             bool is_multiple, extended_select, unselect_others;
             EventFlagsToSelType(GetWindowStyleFlag(),
@@ -2329,6 +2341,10 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
             if ( event.LeftDClick() )
             {
+                // double clicking should not start editing the item label
+                m_renameTimer->Stop();
+                m_lastOnSame = FALSE;
+
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 nevent.m_item = item;
                 nevent.m_code = 0;
