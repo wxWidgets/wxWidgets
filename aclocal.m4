@@ -1,6 +1,6 @@
-# generated automatically by aclocal 1.7.2 -*- Autoconf -*-
+# aclocal.m4 generated automatically by aclocal 1.6.3 -*- Autoconf -*-
 
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
+# Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1278,25 +1278,26 @@ AC_DEFUN(AC_BAKEFILE_SHARED_LD,
         dnl or with a double stage link in order to create a single module
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
 
-	dnl If using newer dev tools then there is a -single_module flag that
-	dnl we can use to do this, otherwise we'll need to use a helper
-	dnl script.  Check the version of gcc to see which way we can go.
-	AC_CACHE_CHECK([for gcc 3.1 or later], wx_cv_gcc31, [
-          AC_TRY_COMPILE([],
-              [
-                  #if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
-                      #error old gcc
-                  #endif
-              ],
-              [
-                  wx_cv_gcc31=yes
-              ],
-              [
-                  wx_cv_gcc31=no
-              ]
-          )
-	])
-	if test "$wx_cv_gcc31" = "no"; then
+        dnl If using newer dev tools then there is a -single_module flag that
+        dnl we can use to do this, otherwise we'll need to use a helper
+        dnl script.  Check the version of gcc to see which way we can go:
+        AC_CACHE_CHECK([for gcc 3.1 or later], wx_cv_gcc31, [
+           AC_TRY_COMPILE([],
+               [
+                   #if (__GNUC__ < 3) || \
+                       ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
+                       #error old gcc
+                   #endif
+               ],
+               [
+                   wx_cv_gcc31=yes
+               ],
+               [
+                   wx_cv_gcc31=no
+               ]
+           )
+        ])
+        if test "$wx_cv_gcc31" = "no"; then
             cat <<EOF >shared-ld-sh
 #!/bin/sh
 #-----------------------------------------------------------------------------
@@ -1369,7 +1370,7 @@ fi
 # Link the shared library from the single module created
 #
 if test \${verbose} = 1; then
-    echo "c++ \${linking_flag} master.\$\$.o \${args}"
+    echo "cc \${linking_flag} master.\$\$.o \${args}"
 fi
 c++ \${linking_flag} master.\$\$.o \${args}
 status=\$?
@@ -1386,19 +1387,20 @@ exit 0
 EOF
             chmod +x shared-ld-sh
 
-	    dnl Use the shared-ld-sh helper script
-	    SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
-	    SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
-	else
-	    dnl Use the -single_module flag and let the linker do it for us
-            SHARED_LD_CC="\${CXX} -dynamiclib -single_module -o"
-            SHARED_LD_MODULE_CC="\${CXX} -bundle -single_module -o"
-	fi
-        SHARED_LD_CXX="$SHARED_LD_CC"
-        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
+            dnl Use the shared-ld-sh helper script
+            SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
+            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
+            SHARED_LD_CXX="$SHARED_LD_CC"
+            SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
+        else
+            dnl Use the -single_module flag and let the linker do it for us
+            SHARED_LD_CC="\${CC} -dynamiclib -single_module -o"
+            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -o"
+            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -o"
+            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -o"
+        fi
+
         PIC_FLAG="-dynamic -fPIC"
-        dnl FIXME - what about C libs? Gilles says to use c++ because it doesn't
-        dnl         matter for C projects and matters for C++ ones
       ;;
 
       *-*-aix* )
