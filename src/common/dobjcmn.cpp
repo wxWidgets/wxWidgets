@@ -301,9 +301,13 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
 
+// NB: we can't use "new" in ctor initializer lists because this provokes an
+//     internal compiler error with VC++ 5.0 (hey, even gcc compiles this!),
+//     so use SetDataObject() instead
+
 wxTextDropTarget::wxTextDropTarget()
-                : wxDropTarget(new wxTextDataObject)
 {
+    SetDataObject(new wxTextDataObject);
 }
 
 wxDragResult wxTextDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
@@ -320,8 +324,8 @@ wxDragResult wxTextDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
 // ----------------------------------------------------------------------------
 
 wxFileDropTarget::wxFileDropTarget()
-                : wxDropTarget(new wxFileDataObject)
 {
+    SetDataObject(new wxFileDataObject);
 }
 
 wxDragResult wxFileDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
