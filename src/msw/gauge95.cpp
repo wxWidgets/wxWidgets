@@ -145,9 +145,6 @@ bool wxGauge95::Create(wxWindow *parent,
     if ( !MSWCreateControl(PROGRESS_CLASS, wxEmptyString, pos, size) )
         return false;
 
-    SetBackgroundColour(parent->GetBackgroundColour());
-    SetForegroundColour(parent->GetForegroundColour());
-
     SetRange(range);
 
     return true;
