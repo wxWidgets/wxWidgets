@@ -3485,10 +3485,28 @@ else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
         *-*-mingw32* )
-        CFLAGS="$CFLAGS -mthreads"
-        CXXFLAGS="$CXXFLAGS -mthreads"
-        TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -mthreads"
-        LDFLAGS="$LDFLAGS -mthreads"
+            dnl check if the compiler accepts -mthreads
+            AC_CACHE_CHECK([if compiler supports -mthreads],
+                wx_cv_cflags_mthread,
+                [
+                    CFLAGS_OLD="$CFLAGS"
+                    CFLAGS="$CFLAGS -mthreads"
+                    AC_TRY_COMPILE([], [],
+                        wx_cv_cflags_mthread=yes,
+                        wx_cv_cflags_mthread=no
+                    )
+                ]
+            )
+
+            if test "$wx_cv_cflags_mthread" = "yes"; then
+                dnl it does, use it
+                CXXFLAGS="$CXXFLAGS -mthreads"
+                TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -mthreads"
+                LDFLAGS="$LDFLAGS -mthreads"
+            else
+                dnl it doesn't
+                CFLAGS="$CFLAGS_OLD"
+            fi
         ;;
       esac
     fi
