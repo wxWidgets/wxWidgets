@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __WIN16__
+#error "Sorry, Life! will not work in 16-bit Windows"
+#endif
+
 // ==========================================================================
 // headers, declarations, constants
 // ==========================================================================
@@ -44,14 +48,8 @@
 
 #define HASH(x, y) (((x >> 3) & 0x7f) << 7) + ((y >> 3) & 0x7f)
 
-#ifdef __WIN16__
-#define HASHSIZE   10000
-#else
 #define HASHSIZE   32768
-#endif
-
 #define MAXDEAD    8
-
 
 class CellBox
 {

@@ -539,7 +539,6 @@ void LifeCanvas::DrawChanged()
                       TRUE);
    
     dc.BeginDrawing();
-    dc.SetLogicalFunction(wxINVERT);
 
     if (m_cellsize == 1)
     {
@@ -550,6 +549,7 @@ void LifeCanvas::DrawChanged()
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(*wxBLACK_BRUSH);
     }
+    dc.SetLogicalFunction(wxINVERT);
 
     while (!done)
     {

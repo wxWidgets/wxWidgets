@@ -54,9 +54,6 @@
 // IDs for the controls and the menu commands
 enum
 {
-    // bmp window in about dialog
-    ID_BMPWIN = 2001,
-
     // listbox in samples dialog
     ID_LISTBOX
 };
@@ -68,7 +65,6 @@ enum
 // Event tables
 BEGIN_EVENT_TABLE(LifeSamplesDialog, wxDialog)
     EVT_LISTBOX (ID_LISTBOX, LifeSamplesDialog::OnListBox)
-    
 END_EVENT_TABLE()
 
 
@@ -185,10 +181,10 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
-    sizer->Add( CreateTextSizer(_("Life! for wxWindows, version 2.0\n\n"
+    sizer->Add( CreateTextSizer(_("Life! version 2.0 for wxWindows\n\n"
                                   "(c) 2000 Guillermo Rodriguez Garcia\n\n"
                                   "<guille@iies.es>\n\n"
-                                  "Portions of the code are based in XLife\n"
+                                  "Portions of the code are based in XLife;\n"
                                   "XLife is (c) 1989 by Jon Bennett et al.")),
                                   0, wxCENTRE | wxALL, 20 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
