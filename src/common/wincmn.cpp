@@ -980,11 +980,10 @@ wxColour wxWindowBase::GetBackgroundColour() const
         if ( !colBg.Ok() )
             colBg = GetClassDefaultAttributes().colBg;
 
-        // cache it for the next call
-        wxConstCast(this, wxWindowBase)->m_backgroundColour = colBg;
+        return colBg;
     }
-
-    return m_backgroundColour;
+    else
+        return m_backgroundColour;
 }
 
 wxColour wxWindowBase::GetForegroundColour() const
@@ -999,10 +998,10 @@ wxColour wxWindowBase::GetForegroundColour() const
         if ( !colFg.Ok() )
             colFg = GetClassDefaultAttributes().colFg;
 
-        wxConstCast(this, wxWindowBase)->m_foregroundColour = colFg;
+        return colFg;
     }
-
-    return m_foregroundColour;
+    else
+        return m_foregroundColour;
 }
 
 bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
@@ -1042,7 +1041,7 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
     return true;
 }
 
-wxFont& wxWindowBase::DoGetFont() const
+wxFont wxWindowBase::GetFont() const
 {
     // logic is the same as in GetBackgroundColour()
     if ( !m_font.Ok() )
@@ -1053,11 +1052,10 @@ wxFont& wxWindowBase::DoGetFont() const
         if ( !font.Ok() )
             font = GetClassDefaultAttributes().font;
 
-        wxConstCast(this, wxWindowBase)->m_font = font;
+        return font;
     }
-
-    // cast is here for non-const GetFont() convenience
-    return wxConstCast(this, wxWindowBase)->m_font;
+    else
+        return m_font;
 }
 
 bool wxWindowBase::SetFont(const wxFont& font)
