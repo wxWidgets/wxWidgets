@@ -378,7 +378,11 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     DisposeDrag(theDrag);
     gTrackingGlobals.m_currentSource = NULL ;
     
-    return wxDragCopy ;
+    KeyMap keymap;
+    GetKeys((BigEndianLong*)&keymap);
+    bool optionDown = keymap[1] & 4;
+    wxDragResult dndresult = optionDown ? wxDragCopy : wxDragMove;
+    return dndresult;
 }
 
 bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
@@ -429,6 +433,12 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
     DragAttributes attributes;
     GetDragAttributes(theDrag, &attributes);
     wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow ) ; 
+
+    KeyMap keymap;
+    GetKeys((BigEndianLong*)&keymap);
+    bool optionDown = keymap[1] & 4;
+    wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
+
     switch(theMessage) 
     {
         case kDragTrackingEnterHandler:
@@ -446,6 +456,8 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
             GetDragMouse(theDrag, &mouse, 0L);
             localMouse = mouse;
             GlobalToLocal(&localMouse);
+
+
             
 //            if (attributes & kDragHasLeftSenderWindow) 
             {
@@ -478,41 +490,14 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                         trackingGlobals->m_currentTargetWindow = win ;
                         trackingGlobals->m_currentTarget = win->GetDropTarget() ;
                         {
-                        	wxDragResult result = wxDragNone ;
+
                         	if ( trackingGlobals->m_currentTarget )
                         	{
                             	trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
                             	result = trackingGlobals->m_currentTarget->OnEnter(
-                                	localx , localy , wxDragCopy ) ;
+                                	localx , localy , result ) ;
                             }
                                 
-                            if ( trackingGlobals->m_currentSource && trackingGlobals->m_currentSource->GiveFeedback( result ) == FALSE )
-                            {
-                            	if ( trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) == FALSE )
-                            	{
-                            		switch( result )
-                            		{
-                            			case wxDragCopy :
-                            			{
-                            				wxCursor cursor(wxCURSOR_COPY_ARROW) ;
-                            				cursor.MacInstall() ;
-                            			}
-                            			break ;
-                            			case wxDragMove :
-                            			{
-                             				wxCursor cursor(wxCURSOR_ARROW) ;
-                            				cursor.MacInstall() ;
-                           			    }
-                            			break ;
-                            			case wxDragNone :
-                            			{
-                            				wxCursor cursor(wxCURSOR_NO_ENTRY) ;
-                            				cursor.MacInstall() ;
-                            			}
-                            			break ;
-                            		}
-                            	}
-                            }
                            
                             if ( result != wxDragNone )
                             {
@@ -533,8 +518,37 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                     {
                         trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
                         trackingGlobals->m_currentTarget->OnDragOver(
-                            localx , localy , wxDragCopy ) ;
+                            localx , localy , result ) ;
                     }
+                }
+
+                // set cursor for OnEnter and OnDragOver
+                if ( trackingGlobals->m_currentSource && trackingGlobals->m_currentSource->GiveFeedback( result ) == FALSE )
+                {
+                  if ( trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) == FALSE )
+                  {
+                    switch( result )
+                    {
+                      case wxDragCopy :
+                      {
+                        wxCursor cursor(wxCURSOR_COPY_ARROW) ;
+                        cursor.MacInstall() ;
+                      }
+                      break ;
+                      case wxDragMove :
+                      {
+                        wxCursor cursor(wxCURSOR_ARROW) ;
+                        cursor.MacInstall() ;
+                        }
+                      break ;
+                      case wxDragNone :
+                      {
+                        wxCursor cursor(wxCURSOR_NO_ENTRY) ;
+                        cursor.MacInstall() ;
+                      }
+                      break ;
+                    }
+                  }
                 }
                 
           }
@@ -575,7 +589,11 @@ pascal OSErr wxMacWindowDragReceiveHandler(WindowPtr theWindow,
             trackingGlobals->m_currentTargetWindow->MacRootWindowToWindow( &localx , &localy ) ;
         if ( trackingGlobals->m_currentTarget->OnDrop( localx , localy ) )
         {
-            trackingGlobals->m_currentTarget->OnData( localx , localy , wxDragCopy ) ;
+            KeyMap keymap;
+            GetKeys((BigEndianLong*)&keymap);
+            bool optionDown = keymap[1] & 4;
+            wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
+            trackingGlobals->m_currentTarget->OnData( localx , localy , result ) ;
         }
     }
     return(noErr);
