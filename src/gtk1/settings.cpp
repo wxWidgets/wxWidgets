@@ -328,8 +328,23 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
             if (!g_systemFont)
             {
 #ifdef __WXGTK20__
-                const gchar *font_name = _gtk_rc_context_get_default_font_name (gtk_settings_get_default ());
-                g_systemFont = new wxFont( wxString::FromAscii( font_name ) );
+                GtkWidget *widget = gtk_button_new();
+                GtkStyle *def = gtk_rc_get_style( widget );
+                if (!def)  
+                    def = gtk_widget_get_default_style();  
+                if (def)  
+                {  
+                    wxNativeFontInfo info;  
+                    info.description = def->font_desc;  
+                    g_systemFont = new wxFont(info);  
+                }  
+                else  
+                {  
+                    const gchar *font_name =
+                        _gtk_rc_context_get_default_font_name(gtk_settings_get_default());
+                    g_systemFont = new wxFont(wxString::FromAscii(font_name));
+                }  
+                gtk_widget_destroy( widget );
 #else
                 g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
 #endif
