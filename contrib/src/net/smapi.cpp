@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#ifdef __WXMSW__
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -487,3 +489,5 @@ long wxMapiSession::GetLastError() const
 {
     return m_data->m_nLastError;
 }
+
+#endif // __WXMSW__
