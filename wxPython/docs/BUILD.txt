@@ -59,10 +59,12 @@ place, then do the same for wxPython.
 		      --disable-monolithic \
 		      --enable-debug \
 		      --enable-geometry \
+		      --enable-sound \
+		      --enable-display \
 		      
 
    On OS X of course you'll want to use --with-mac instead of
-   --with-gtk.  For GTK2 and unicode add:
+   --with-gtk.  For GTK2 and unicode add::
 		    	 
 		      --enable-gtk2 \
 		      --enable-unicode \

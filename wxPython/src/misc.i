@@ -50,6 +50,6 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 %include _dataobj.i
 %include _dnd.i
 %include _clipbrd.i
-
+%include _display.i
 
 //---------------------------------------------------------------------------

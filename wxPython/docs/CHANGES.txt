@@ -1,7 +1,7 @@
 CHANGES.txt for wxPython
 =====================================================================
 
-2.5.1.x
+2.5.1.1
 -------
 
 (See also the MigrationGuide.txt file for details about some of the
@@ -77,6 +77,8 @@ it.
 
 Updated wx.lib.calendar with many fixes and enhancements from Joerg
 "Adi" Sieker. 
+
+Added wx.Display and wx.VideoMode.
 
 
 

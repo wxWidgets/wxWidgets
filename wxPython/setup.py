@@ -107,6 +107,7 @@ WXPORT = 'gtk'     # On Linux/Unix there are several ports of wxWindows availabl
 
 BUILD_BASE = "build"       # Directory to use for temporary build files.
 
+CONTRIBS_INC = ""  # A dir to add as an -I flag when compiling the contribs
 
 
 # Some MSW build settings
@@ -190,7 +191,8 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'SWIG']:
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'SWIG',
+               'CONTRIBS_INC']:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
             pos = sys.argv[x].find('=') + 1
@@ -591,7 +593,7 @@ elif os.name == 'posix':
 
 #----------------------------------------------------------------------
 else:
-    raise 'Sorry Charlie, platform not supported...'
+    raise 'Sorry, platform not supported...'
 
 
 #----------------------------------------------------------------------
@@ -836,7 +838,7 @@ swig_sources = run_swig(['misc.i'], 'src', GENDIR, PKGDIR,
                           'src/_sound.i',         'src/_mimetype.i',
                           'src/_artprov.i',       'src/_config.i',
                           'src/_datetime.i',      'src/_dataobj.i',
-                          'src/_dnd.i',
+                          'src/_dnd.i',           'src/_display.i',
                           'src/_clipbrd.i',
                           ])
 ext = Extension('_misc', swig_sources,
@@ -914,8 +916,10 @@ ext = Extension('_wizard', swig_sources,
 wxpExtensions.append(ext)
 
 
+#----------------------------------------------------------------------
 
-
+if CONTRIBS_INC:
+    includes += [ CONTRIBS_INC ]
 
 #----------------------------------------------------------------------
 # Define the GLCanvas extension module

@@ -108,6 +108,8 @@ cd bld
 %endif
 	--enable-geometry \
 	--enable-optimise \
+	--enable-sound \
+	--enable-display \
 %if %{debug_flag}
 	--enable-debug_flag \
 %endif
