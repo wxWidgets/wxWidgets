@@ -332,6 +332,7 @@ bool wxWindow::Create(
 {
     HWND                            hParent = NULLHANDLE;
     wxPoint                         vPos = rPos; // The OS/2 position
+    ULONG                           ulCreateFlags = 0L;
 
     wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
@@ -354,7 +355,20 @@ bool wxWindow::Create(
         //
         // OS2 uses normal coordinates, no bassackwards Windows ones
         //
-        nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
+        if (pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+           )
+        {
+            wxWindow*               pGrandParent = NULL;
+
+            pGrandParent = pParent->GetParent();
+            if (pGrandParent)
+                nTempy = pGrandParent->GetSize().y - (vPos.y + rSize.y);
+            else
+                nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
+        }
+        else
+            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
 #if 0
         if (nTempy < 0)
         {
@@ -364,6 +378,10 @@ bool wxWindow::Create(
         }
 #endif
         vPos.y = nTempy;
+        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+           )
+            ulCreateFlags |= WS_CLIPSIBLINGS;
     }
     else
     {
@@ -374,9 +392,6 @@ bool wxWindow::Create(
         vPos.y = vRect.yTop - (vPos.y + rSize.y);
     }
 
-    ULONG                           ulCreateFlags = 0L;
-
-
     //
     // Most wxSTYLES are really PM Class specific styles and will be
     // set in those class create procs.  PM's basic windows styles are
@@ -385,7 +400,7 @@ bool wxWindow::Create(
     ulCreateFlags |=  WS_VISIBLE;
 
 
-    if ( lStyle & wxCLIP_SIBLINGS )
+    if (lStyle & wxCLIP_SIBLINGS)
         ulCreateFlags |= WS_CLIPSIBLINGS;
 
     if (lStyle & wxCLIP_CHILDREN )
@@ -907,15 +922,35 @@ void wxWindow::ScrollWindow(
     {
         wxWindow*                   pChildWin = pCurrent->GetData();
 
-        ::WinQueryWindowPos(pChildWin->GetHWND(), &vSwp);
-        ::WinSetWindowPos( pChildWin->GetHWND()
-                          ,HWND_TOP
-                          ,vSwp.x + nDx
-                          ,vSwp.y + nDy
-                          ,0
-                          ,0
-                          , SWP_MOVE | SWP_SHOW
-                         );
+        if (pChildWin->GetHWND() != NULLHANDLE)
+        {
+            ::WinQueryWindowPos(pChildWin->GetHWND(), &vSwp);
+            ::WinQueryWindowRect(pChildWin->GetHWND(), &vRect);
+            if (pChildWin->GetHWND() == m_hWndScrollBarVert ||
+                pChildWin->GetHWND() == m_hWndScrollBarHorz)
+            {
+                ::WinSetWindowPos( pChildWin->GetHWND()
+                                  ,HWND_TOP
+                                  ,vSwp.x + nDx
+                                  ,vSwp.y + nDy
+                                  ,0
+                                  ,0
+                                  ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
+                                 );
+            }
+            else
+            {
+                ::WinSetWindowPos( pChildWin->GetHWND()
+                                  ,HWND_BOTTOM
+                                  ,vSwp.x + nDx
+                                  ,vSwp.y + nDy
+                                  ,0
+                                  ,0
+                                  ,SWP_MOVE | SWP_ZORDER
+                                 );
+                ::WinInvalidateRect(pChildWin->GetHWND(), &vRect, FALSE);
+            }
+        }
         pCurrent = pCurrent->GetNext();
     }
 } // end of wxWindow::ScrollWindow
@@ -2573,10 +2608,8 @@ bool wxWindow::OS2Create(
     RECTL                           vParentRect;
     HWND                            hWndClient;
 
-    if (lX > -1L)
-        lX1 = lX;
-    if (lY > -1L)
-        lY1 = lY;
+    lX1 = lX;
+    lY1 = lY;
     if (lWidth > -1L)
         lWidth1 = lWidth;
     if (lHeight > -1L)
