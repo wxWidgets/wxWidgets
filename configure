@@ -18298,16 +18298,16 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
 EOF
 
 
-            if test "$wxUSE_TIPWINDOW" = "yes"; then
-                cat >> confdefs.h <<\EOF
-#define wxUSE_TIPWINDOW 1
-EOF
-
-            fi
-
             USES_CONTROLS=1
         fi
     fi
+fi
+
+if test "$wxUSE_TIPWINDOW" = "yes"; then
+    cat >> confdefs.h <<\EOF
+#define wxUSE_TIPWINDOW 1
+EOF
+
 fi
 
 if test "$USES_CONTROLS" = 1; then

@@ -4513,13 +4513,13 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
         else
             AC_DEFINE(wxUSE_POPUPWIN)
 
-            if test "$wxUSE_TIPWINDOW" = "yes"; then
-                AC_DEFINE(wxUSE_TIPWINDOW)
-            fi
-
             USES_CONTROLS=1
         fi
     fi
+fi
+
+if test "$wxUSE_TIPWINDOW" = "yes"; then
+    AC_DEFINE(wxUSE_TIPWINDOW)
 fi
 
 if test "$USES_CONTROLS" = 1; then
