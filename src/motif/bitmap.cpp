@@ -1022,7 +1022,7 @@ XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
 
 // Creates a bitmap with transparent areas drawn in
 // the given colour.
-wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour)
+wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
 {
     wxBitmap newBitmap(bitmap.GetWidth(),
         bitmap.GetHeight(),

@@ -205,7 +205,7 @@ protected:
 
 // Creates a bitmap with transparent areas drawn in
 // the given colour.
-wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour);
+wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour);
 
 #endif
   // _WX_BITMAP_H_
