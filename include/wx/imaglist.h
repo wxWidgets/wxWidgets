@@ -3,6 +3,8 @@
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/imaglist.h"
+#elif defined(__WXMAC_CARBON__)
+    #include "wx/mac/imaglist.h"
 #else
     #include "wx/generic/imaglist.h"
 #endif

@@ -1,13 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imaglist.h
-// Purpose:     wxImageList class. Note: if your GUI doesn't have
-//              an image list equivalent, you can use the generic class
-//              in src/generic.
-// Author:      Stefan Csomor
-// Modified by:
-// Created:     1998-01-01
-// RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// Purpose:
+// Author:      Robert Roebling, Stefan Csomor
+// Created:     01/02/97
+// Id:
+// Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +15,13 @@
 #pragma interface "imaglist.h"
 #endif
 
-#include "wx/bitmap.h"
+#include "wx/defs.h"
+#include "wx/list.h"
+#include "wx/icon.h"
+
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxColour;
 
 /*
  * wxImageList is used for wxListCtrl, wxTreeCtrl. These controls refer to
@@ -27,7 +30,14 @@
  * a variety of sources - a single bitmap plus a colour to indicate the mask,
  * two bitmaps, or an icon.
  *
+ * Image lists can also create and draw images used for drag and drop functionality.
+ * This is not yet implemented in wxImageList. We need to discuss a generic API
+ * for doing drag and drop and see whether it ties in with the Win95 view of it.
+ * See below for candidate functions and an explanation of how they might be
+ * used.
  */
+
+#if !defined(wxIMAGELIST_DRAW_NORMAL)
 
 // Flags for Draw
 #define wxIMAGELIST_DRAW_NORMAL         0x0001
@@ -42,106 +52,43 @@ enum {
     wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
 };
 
-// Eventually we'll make this a reference-counted wxGDIObject. For
-// now, the app must take care of ownership issues. That is, the
-// image lists must be explicitly deleted after the control(s) that uses them
-// is (are) deleted, or when the app exits.
+#endif
+
 class WXDLLEXPORT wxImageList: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxImageList)
- public:
-  /*
-   * Public interface
-   */
-
-  wxImageList();
-
-  // Creates an image list.
-  // Specify the width and height of the images in the list,
-  // whether there are masks associated with them (e.g. if creating images
-  // from icons), and the initial size of the list.
-  inline wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1)
-  {
-    Create(width, height, mask, initialCount);
-  }
-  ~wxImageList();
-
-
-  // Attributes
-  ////////////////////////////////////////////////////////////////////////////
-
-  // Returns the number of images in the image list.
-  int GetImageCount() const;
-  
-  bool GetSize(int index, int&width, int &height) const;
-
-  // Operations
-  ////////////////////////////////////////////////////////////////////////////
-
-  // Creates an image list
-  // width, height specify the size of the images in the list (all the same).
-  // mask specifies whether the images have masks or not.
-  // initialNumber is the initial number of images to reserve.
-  bool Create(int width, int height, bool mask = TRUE, int initialNumber = 1);
-
-  // Adds a bitmap, and optionally a mask bitmap.
-  // Note that wxImageList creates *new* bitmaps, so you may delete
-  // 'bitmap' and 'mask' after calling Add.
-  int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
-
-  // Adds a bitmap, using the specified colour to create the mask bitmap
-  // Note that wxImageList creates *new* bitmaps, so you may delete
-  // 'bitmap' after calling Add.
-  int Add(const wxBitmap& bitmap, const wxColour& maskColour);
-
-  // Adds a bitmap and mask from an icon.
-  int Add(const wxIcon& icon);
-
-  // Replaces a bitmap, optionally passing a mask bitmap.
-  // Note that wxImageList creates new bitmaps, so you may delete
-  // 'bitmap' and 'mask' after calling Replace.
-  bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
-
-/* Not supported by Win95
-  // Replacing a bitmap, using the specified colour to create the mask bitmap
-  // Note that wxImageList creates new bitmaps, so you may delete
-  // 'bitmap'.
-  bool Replace(int index, const wxBitmap& bitmap, const wxColour& maskColour);
-*/
-
-  // Replaces a bitmap and mask from an icon.
-  // You can delete 'icon' after calling Replace.
-  bool Replace(int index, const wxIcon& icon);
-
-  // Removes the image at the given index.
-  bool Remove(int index);
-
-  // Remove all images
-  bool RemoveAll();
-
-  // Draws the given image on a dc at the specified position.
-  // If 'solidBackground' is TRUE, Draw sets the image list background
-  // colour to the background colour of the wxDC, to speed up
-  // drawing by eliminating masked drawing where possible.
-  bool Draw(int index, wxDC& dc, int x, int y,
-    int flags = wxIMAGELIST_DRAW_NORMAL, bool solidBackground = FALSE);
-
-/* TODO (optional?)
-  wxIcon *MakeIcon(int index);
-*/
-
-/* TODO
-  // Implementation
-  ////////////////////////////////////////////////////////////////////////////
-
-  // Returns the native image list handle
-  inline WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
-
-protected:
-  WXHIMAGELIST m_hImageList;
-*/
-
+public:
+    wxImageList() { m_width = m_height = 0; }
+    wxImageList( int width, int height, bool mask = true, int initialCount = 1 );
+    ~wxImageList();
+    bool Create( int width, int height, bool mask = true, int initialCount = 1 );
+    bool Create();
+    
+    virtual int GetImageCount() const;
+    virtual bool GetSize( int index, int &width, int &height ) const;
+    
+    int Add( const wxIcon& bitmap );
+    int Add( const wxBitmap& bitmap );
+    int Add( const wxBitmap& bitmap, const wxBitmap& mask );
+    int Add( const wxBitmap& bitmap, const wxColour& maskColour );
+    wxBitmap GetBitmap(int index) const;
+    wxIcon GetIcon(int index) const;
+    bool Replace( int index, const wxIcon &bitmap );
+    bool Replace( int index, const wxBitmap &bitmap );
+    bool Remove( int index );
+    bool RemoveAll();
+    
+    virtual bool Draw(int index, wxDC& dc, int x, int y,
+                      int flags = wxIMAGELIST_DRAW_NORMAL,
+                      bool solidBackground = false);
+    
+private:
+    wxList  m_images;
+    
+    int     m_width;
+    int     m_height;
+    
+    DECLARE_DYNAMIC_CLASS(wxImageList)
 };
 
-#endif
-    // _WX_IMAGLIST_H_
+#endif  // _WX_IMAGLIST_H_
+
