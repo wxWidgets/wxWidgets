@@ -528,8 +528,6 @@ typedef struct {
 
   WINCOMMCTRLAPI BOOL WINAPI _TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
 
-  #define CCM_SETUNICODEFORMAT 8197
-  
 #endif
 
 // This didn't appear in mingw until 2.95.2
