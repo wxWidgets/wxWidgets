@@ -1704,6 +1704,7 @@ void wxWindowBase::CaptureMouse()
     wxWindow *winOld = GetCapture();
     if ( winOld )
     {
+	winOld->DoReleaseMouse();
         // save it on stack
         wxWindowNext *item = new wxWindowNext;
         item->win = winOld;
@@ -1725,7 +1726,7 @@ void wxWindowBase::ReleaseMouse()
 
     if ( ms_winCaptureNext )
     {
-        ms_winCaptureNext->win->CaptureMouse();
+        ms_winCaptureNext->win->DoCaptureMouse();
 
         wxWindowNext *item = ms_winCaptureNext;
         ms_winCaptureNext = item->next;
