@@ -108,6 +108,52 @@ wxPalette wxGLContext::CreateDefaultPalette()
     return wxNullPalette;
 }
 
+//-----------------------------------------------------------------------------
+// "expose_event" of m_glWidget
+//-----------------------------------------------------------------------------
+
+static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
+{
+    if (!win->HasVMT()) return;
+
+    win->m_updateRegion.Union( gdk_event->area.x,
+                               gdk_event->area.y,
+                               gdk_event->area.width,
+                               gdk_event->area.height );
+
+    if (gdk_event->count > 0) return;
+
+/*
+    printf( "OnExpose from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        printf( win->GetClassInfo()->GetClassName() );
+    printf( ".\n" );
+*/
+
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+
+    win->m_updateRegion.Clear();
+}
+
+//-----------------------------------------------------------------------------
+// "draw" of m_glWidget
+//-----------------------------------------------------------------------------
+
+static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
+{
+    if (!win->HasVMT()) return;
+
+    win->m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
+
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+
+    win->m_updateRegion.Clear();
+}
+
 //---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
@@ -175,6 +221,12 @@ bool wxGLCanvas::Create( wxWindow *parent, wxWindowID id,
   
     gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), m_glWidget, 0, 0 );
     
+    gtk_signal_connect( GTK_OBJECT(m_glWidget), "expose_event",
+      GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+
+    gtk_signal_connect( GTK_OBJECT(m_glWidget), "draw",
+      GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+      
     gtk_widget_show( m_glWidget );
     
     m_glContext = new wxGLContext( TRUE, this, palette );

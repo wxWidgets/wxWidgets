@@ -1683,11 +1683,11 @@ void wxWindow::PostCreation()
 {
     if (m_wxwindow)
     {
-      gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-        GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
+          GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
 
-      gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
-        GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
+        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
+          GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
     }
 
     ConnectWidget( GetConnectWidget() );
