@@ -327,29 +327,29 @@ void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int 
     m_width = width;
     m_height = height;
 
+    /* FIXME: is this a hack? */
+    /* since for some reason GTK will revert to using maximum size ever set
+       for this window, we have to set geometry hints maxsize to match
+       size given. */
     int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight(),
-        maxWidth = GetMaxWidth(),
-        maxHeight = GetMaxHeight();
+        minHeight = GetMinHeight();
 
     if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
     if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-    if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
-    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
 
     /* set size hints */
-    gint flag = 0; // GDK_HINT_POS;
+    gint flag = GDK_HINT_MAX_SIZE; // GDK_HINT_POS;
     if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-    if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
     GdkGeometry geom;
     geom.min_width = minWidth;
     geom.min_height = minHeight;
-    geom.max_width = maxWidth;
-    geom.max_height = maxHeight;
+    geom.max_width = m_width;
+    geom.max_height = m_height;
     gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
                                    (GtkWidget*) NULL,
                                    &geom,
                                    (GdkWindowHints) flag );
+
 
     m_sizeSet = TRUE;
 
