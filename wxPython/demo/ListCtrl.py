@@ -102,10 +102,12 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
                                  #| wx.BORDER_SUNKEN
                                  | wx.BORDER_NONE
                                  | wx.LC_EDIT_LABELS
-                                 #| wxLC_NO_HEADER
-                                 #| wxLC_VRULES | wxLC_HRULES
+                                 | wx.LC_SORT_ASCENDING
+                                 #| wx.LC_NO_HEADER
+                                 #| wx.LC_VRULES
+                                 #| wx.LC_HRULES
                                  )
-
+        
         self.list.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
 
         self.PopulateList()
