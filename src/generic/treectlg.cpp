@@ -322,6 +322,23 @@ static void EventFlagsToSelType(long style,
     unselect_others = !(extended_select || (ctrlDown && is_multiple));
 }
 
+// check if the given item is under another one
+static bool IsDescendantOf(wxGenericTreeItem *parent, wxGenericTreeItem *item)
+{
+    while ( item )
+    {
+        if ( item == parent )
+        {
+            // item is a descendant of parent
+            return TRUE;
+        }
+
+        item = item->GetParent();
+    }
+
+    return FALSE;
+}
+
 // -----------------------------------------------------------------------------
 // wxTreeRenameTimer (internal)
 // -----------------------------------------------------------------------------
@@ -1416,33 +1433,31 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
-    // don't stay with invalid m_key_current or we will crash in
-    // the next call to OnChar()
-    bool changeKeyCurrent = FALSE;
-    wxGenericTreeItem *itemKey = m_key_current;
-    while ( itemKey )
+    wxGenericTreeItem *parent = item->GetParent();
+
+    // don't keep stale pointers around!
+    if ( IsDescendantOf(item, m_key_current) )
     {
-        if ( itemKey == item )
-        {
-            // m_key_current is a descendant of the item being deleted
-            changeKeyCurrent = TRUE;
-            break;
-        }
-        itemKey = itemKey->GetParent();
+        m_key_current = parent;
     }
 
-    wxGenericTreeItem *parent = item->GetParent();
+    if ( IsDescendantOf(item, m_current) )
+    {
+        m_current = parent;
+    }
+
+    // remove the item from the tree
     if ( parent )
     {
         parent->GetChildren().Remove( item );  // remove by value
     }
-
-    if ( changeKeyCurrent )
+    else // deleting the root
     {
-        // may be NULL or not
-        m_key_current = parent;
+        // nothing will be left in the tree
+        m_anchor = NULL;
     }
 
+    // and delete all of its children and the item itself now
     item->DeleteChildren(this);
     SendDeleteEvent(item);
     delete item;
@@ -1452,12 +1467,7 @@ void wxGenericTreeCtrl::DeleteAllItems()
 {
     if ( m_anchor )
     {
-        m_dirty = TRUE;
-
-        m_anchor->DeleteChildren(this);
-        delete m_anchor;
-
-        m_anchor = NULL;
+        Delete(m_anchor);
     }
 }
 
