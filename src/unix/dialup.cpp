@@ -353,7 +353,7 @@ wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
    ( /* non-const */ (wxDialUpManagerImpl *)this)->CheckStatusInternal();
 
    // now send the events as appropriate:
-   if(m_IsOnline != oldIsOnline)
+   if(m_IsOnline != oldIsOnline && oldIsOnline != -1)
    {
       wxDialUpEvent event(m_IsOnline, ! fromAsync);
       (void)wxTheApp->ProcessEvent(event);

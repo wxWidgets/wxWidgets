@@ -2301,6 +2301,6 @@ clean:
 	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
-	$(RM) ./lib/*
+	$(RM) ./lib/*.a ./lib/*.so ./lib/*.sa
 
 cleanall: clean
