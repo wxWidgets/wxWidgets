@@ -195,3 +195,21 @@ will be smoother if you move the image when it is shown.
 
 Shows the image. Call this at least once when dragging.
 
+\membersection{wxDragImage::UpdateBackingFromWindow}\label{wxdragimageupdatebackingfromwindow}
+
+\constfunc{bool}{UpdateBackingFromWindow}{\param{wxDC\&}{ windowDC}, \param{wxMemoryDC\&}{ destDC},
+ \param{const wxRect\&}{ sourceRect}, \param{const wxRect\&}{ destRect}}
+
+Override this if you wish to draw the window contents to the backing bitmap
+yourself. This can be desirable if you wish to avoid flicker by not having to
+redraw the updated window itself just before dragging, which can cause a flicker just
+as the drag starts. Instead, paint the drag image's backing bitmap to show the appropriate
+graphic {\it minus the objects to be dragged}, and leave the window itself to be updated
+by the drag image. This can provide eerily smooth, flicker-free drag behaviour.
+
+The default implementation copies the window contents to the backing bitmap. A new
+implementation will normally copy information from another source, such as from its
+own backing bitmap if it has one, or directly from internal data structures.
+
+This function is available in wxGenericDragImage only.
+

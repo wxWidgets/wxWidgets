@@ -505,19 +505,13 @@ Sets the validity member (does not affect the bitmap data).
 
 \membersection{wxBitmap::SetPalette}\label{wxbitmapsetpalette}
 
-\func{void}{SetPalette}{\param{wxPalette* }{palette}}
+\func{void}{SetPalette}{\param{const wxPalette\& }{palette}}
 
-Sets the associated palette: it will be deleted in the wxBitmap
-destructor, so if you do not wish it to be deleted automatically,
-reset the palette to NULL before the bitmap is deleted.
+Sets the associated palette.
 
 \wxheading{Parameters}
 
 \docparam{palette}{The palette to set.}
-
-\wxheading{Remarks}
-
-The bitmap object owns the palette once this has been called.
 
 \wxheading{See also}
 

@@ -346,7 +346,8 @@ void wxDialog::DoShowModal()
         if ( !oldFocus )
         {
             oldFocus = parent;
-            hwndOldFocus = (HWND) parent->GetHWND();
+            if (parent)
+                hwndOldFocus = (HWND) parent->GetHWND();
         }
 
         // enter the modal loop
