@@ -1253,6 +1253,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 // wxFileIconsTable icons
 // ----------------------------------------------------------------------------
 
+#ifndef __WXGTK24__
 /* Computer */
 static const char * file_icons_tbl_computer_xpm[] = {
 "16 16 7 1",
@@ -1279,6 +1280,7 @@ static const char * file_icons_tbl_computer_xpm[] = {
 " .oXoXoXoXoXo.o ",
 ".XOXXXXXXXXX.o  ",
 "............o   "};
+#endif // GTK+ < 2.4
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable & friends
