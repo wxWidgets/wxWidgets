@@ -32,17 +32,14 @@ public:
        frames or parent frame to avoid recursion problems.
        @param title title for window
        @param message message to display in window
-       @param maximum maximum value for status bar, if <= 0, no bar is shown
+       @param maximum value for status bar, if <= 0, no bar is shown
        @param parent window or NULL
-       @param disableParentOnly if true, only disable parent window's
-       event handling
-       @param abortButton if true, dialog will show an abort button
+       @param style is the bit mask of wxPD_XXX constants from wx/defs.h
    */
    wxProgressDialog(const wxString &title, wxString const &message,
                    int maximum = 100,
                    wxWindow *parent = NULL,
-                   bool disableParentOnly = FALSE,
-                   bool abortButton = FALSE);
+                   int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
    /** Destructor.
        Re-enables event handling for other windows.
    */

@@ -51,6 +51,14 @@
     #include "icons/gauge.xpm"
 #endif
 
+#ifdef __WIN16__
+    // Win16 doesn't have them
+    #undef wxUSE_SPINBUTTON
+    #define wxUSE_SPINBUTTON 0
+#endif // __WIN16__
+
+#include "wx/progdlg.h"
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -101,9 +109,11 @@ public:
     void OnPageChanged( wxNotebookEvent &event );
     void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
-#ifndef __WIN16__
+#ifndef wxUSE_SPINBUTTON
     void OnSpinUpdate( wxSpinEvent &event );
-#endif
+    void OnUpdateShowProgress( wxUpdateUIEvent& event );
+    void OnShowProgress( wxCommandEvent &event );
+#endif // wxUSE_SPINBUTTON
     void OnPasteFromClipboard( wxCommandEvent &event );
     void OnCopyToClipboard( wxCommandEvent &event );
     void OnMoveToEndOfText( wxCommandEvent &event );
@@ -116,8 +126,9 @@ public:
     wxGauge       *m_gauge;
     wxSlider      *m_slider;
     wxButton      *m_fontButton;
-#ifndef __WIN16__
+#ifndef wxUSE_SPINBUTTON
     wxSpinButton  *m_spinbutton;
+    wxButton      *m_btnProgress;
 #endif
     wxTextCtrl    *m_spintext;
     MyTextCtrl    *m_multitext;
@@ -453,6 +464,7 @@ const int  ID_GAUGE             = 180;
 const int  ID_SLIDER            = 181;
 
 const int  ID_SPIN              = 182;
+const int  ID_BTNPROGRESS       = 183;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
@@ -490,8 +502,10 @@ EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
 EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
-#ifndef __WIN16__
+#ifndef wxUSE_SPINBUTTON
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
+EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
+EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif
 EVT_BUTTON    (ID_PASTE_TEXT,           MyPanel::OnPasteFromClipboard)
 EVT_BUTTON    (ID_COPY_TEXT,            MyPanel::OnCopyToClipboard)
@@ -701,10 +715,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                           );
 #endif
     m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
-#ifndef __WIN16__
+#ifndef wxUSE_SPINBUTTON
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
     m_spinbutton->SetRange(-10,30);
     m_spinbutton->SetValue(-5);
+
+    m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "Show progress dialog",
+                                  wxPoint(208, 159) );
 #endif
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 }
@@ -1065,7 +1082,7 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
     m_gauge->SetValue( m_slider->GetValue() );
 }
 
-#ifndef __WIN16__
+#ifndef wxUSE_SPINBUTTON
 void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
@@ -1078,7 +1095,47 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 
     m_text->AppendText(value);
 }
-#endif
+
+void MyPanel::OnUpdateShowProgress( wxUpdateUIEvent& event )
+{
+    event.Enable( m_spinbutton->GetValue() > 0 );
+}
+
+void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
+{
+    int max = m_spinbutton->GetValue();
+    wxProgressDialog dialog("Progress dialog example",
+                            "An informative message",
+                            max,    // range
+                            this,   // parent
+                            FALSE,  // modal
+                            TRUE);  // has abort button
+
+    bool cont = TRUE;
+    for ( int i = 0; i < max && cont; i++ )
+    {
+        wxSleep(1);
+        if ( i == max / 2 )
+        {
+            cont = dialog.Update(i, "Only a half left!");
+        }
+        else
+        {
+            cont = dialog.Update(i);
+        }
+    }
+
+    if ( !cont )
+    {
+        *m_text << "Progress dialog aborted!\n";
+    }
+    else
+    {
+        *m_text << "Countdown from " << max << " finished.\n";
+    }
+}
+
+#endif // wxUSE_SPINBUTTON
 
 MyPanel::~MyPanel()
 {

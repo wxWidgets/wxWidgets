@@ -56,7 +56,7 @@ wxDataFormat::wxDataFormat( const wxString &id )
     SetId( id );
 }
 
-wxDataFormat::wxDataFormat( wxDataFormat &format )
+wxDataFormat::wxDataFormat( const wxDataFormat &format )
 {
     if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
     m_type = format.GetType();
@@ -192,7 +192,7 @@ size_t wxDataBroker::GetFormatCount() const
     return m_dataObjects.GetCount();
 }
 
-wxDataFormat &wxDataBroker::GetPreferredFormat() const
+wxDataFormatId wxDataBroker::GetPreferredFormat() const
 {
     wxNode *node = m_dataObjects.Nth( m_preferred );
 
@@ -200,7 +200,7 @@ wxDataFormat &wxDataBroker::GetPreferredFormat() const
 
     wxDataObject* data_obj = (wxDataObject*)node->Data();
 
-    return data_obj->GetFormat();
+    return data_obj->GetFormat().GetType();
 }
 
 wxDataFormat &wxDataBroker::GetNthFormat( size_t nth ) const

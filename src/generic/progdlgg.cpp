@@ -39,27 +39,27 @@
 // wxTextEntryDialog
 
 #if !USE_SHARED_LIBRARY
-BEGIN_EVENT_TABLE(wxProgressDialog, wxFrame)
-   EVT_BUTTON(-1, wxProgressDialog::OnCancel)
-   EVT_CLOSE(wxProgressDialog::OnClose)
-END_EVENT_TABLE()
+    BEGIN_EVENT_TABLE(wxProgressDialog, wxFrame)
+       EVT_BUTTON(-1, wxProgressDialog::OnCancel)
+       EVT_CLOSE(wxProgressDialog::OnClose)
+    END_EVENT_TABLE()
 
-   IMPLEMENT_CLASS(wxProgressDialog, wxFrame)
+    IMPLEMENT_CLASS(wxProgressDialog, wxFrame)
 #endif
 
 wxProgressDialog::wxProgressDialog(wxString const &title,
                                  wxString const &message,
                                  int maximum,
                                  wxWindow *parent,
-                                 bool parentOnly,
-                                 bool abortButton)
+                                 int style)
 {
-   m_state = abortButton ? Continue : Uncancelable;
-   m_disableParentOnly = parentOnly;
+   bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
+   m_state = hasAbortButton ? Continue : Uncancelable;
+   m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
    m_parent = parent;
    
    int height = 70;     // FIXME arbitrary numbers
-   if ( abortButton )
+   if ( hasAbortButton )
       height += 35;
    wxFrame::Create(m_parent, -1, title,
                    wxPoint(0, 0), wxSize(220, height),
@@ -75,7 +75,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    c->height.AsIs();
    m_msg->SetConstraints(c);
 
-   if(maximum > 0)
+   if ( maximum > 0 )
    {
       m_gauge = new wxGauge(this, -1, maximum);
       c = new wxLayoutConstraints;
@@ -89,7 +89,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    else
       m_gauge = NULL;
    
-   if ( abortButton )
+   if ( hasAbortButton )
    {
       wxControl *ctrl = new wxButton(this, -1, _("Cancel"));
       c = new wxLayoutConstraints;
@@ -108,10 +108,10 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    Centre(wxCENTER_FRAME | wxBOTH);
 
    if(m_disableParentOnly)
-      m_parent->Enable(false);
+      m_parent->Enable(FALSE);
    else
-      wxEnableTopLevelWindows(false);
-   Enable(true); // enable this window
+      wxEnableTopLevelWindows(FALSE);
+   Enable(TRUE); // enable this window
    wxYield();
 }
 
@@ -119,12 +119,14 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
-   wxASSERT(value == -1 || m_gauge);
-   if(m_gauge)
+   wxASSERT_MSG( value == -1 || m_gauge, "can't update non existent dialog" );
+
+   if( m_gauge )
       m_gauge->SetValue(value);
-   if(!newmsg.IsNull())
+   if( !newmsg.IsNull() )
       m_msg->SetLabel(newmsg);
    wxYield();
+
    return m_state != Canceled;
 }
 
@@ -139,8 +141,8 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
 
 wxProgressDialog::~wxProgressDialog()
 {
-   if(m_disableParentOnly)
-      m_parent->Enable(true);
+   if ( m_disableParentOnly )
+      m_parent->Enable(TRUE);
    else
-      wxEnableTopLevelWindows(true);
+      wxEnableTopLevelWindows(TRUE);
 }

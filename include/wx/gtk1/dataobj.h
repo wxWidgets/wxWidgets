@@ -44,7 +44,7 @@ public:
     wxDataFormat( wxDataFormatId type );
     wxDataFormat( const wxString &id );
     wxDataFormat( const wxChar *id );
-    wxDataFormat( wxDataFormat &format );
+    wxDataFormat( const wxDataFormat &format );
     wxDataFormat( const GdkAtom atom );
 
     void SetType( wxDataFormatId type );
@@ -61,6 +61,12 @@ public:
 
     GdkAtom GetAtom();
     void SetAtom(GdkAtom atom) { m_hasAtom = TRUE; m_atom = atom; }
+
+    // implicit conversion to wxDataFormatId
+    operator wxDataFormatId() const { return m_type; }
+
+    bool operator==(wxDataFormatId type) const { return m_type == type; }
+    bool operator!=(wxDataFormatId type) const { return m_type != type; }
 
 private:
     wxDataFormatId  m_type;
@@ -96,7 +102,7 @@ private:
   virtual wxDataFormat &GetNthFormat( size_t nth ) const;
 
   /* return preferrd/best supported format */
-  virtual wxDataFormat &GetPreferredFormat() const;
+  virtual wxDataFormatId GetPreferredFormat() const;
 
   /* search through m_dataObjects, return TRUE if found */
   virtual bool IsSupportedFormat( wxDataFormat &format ) const;

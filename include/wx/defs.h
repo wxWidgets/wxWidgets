@@ -646,7 +646,12 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxLI_HORIZONTAL      wxHORIZONTAL
 #define wxLI_VERTICAL        wxVERTICAL
 
-
+/*
+ * wxProgressDialog flags
+ */
+#define wxPD_CAN_ABORT      0x0001
+#define wxPD_APP_MODAL      0x0002
+#define wxPD_AUTO_HIDE      0x0004
 
 /*
  * GDI descriptions
