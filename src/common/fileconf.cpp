@@ -1106,11 +1106,18 @@ bool ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
   }
 
   // and subgroups of this sungroup
+#if 0
+  // pGroup->m_aSubgroups.Count() gets decremented in DeleteSubgroup(),
+  // so we cannot do this.
+                        
   nCount = pGroup->m_aSubgroups.Count();
   for ( size_t nGroup = 0; nGroup < nCount; nGroup++ ) {
     pGroup->DeleteSubgroup(pGroup->m_aSubgroups[nGroup]);
   }
-
+#endif
+  while(pGroup->m_aSubgroups.Count() > 0)
+     pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
+     
   LineList *pLine = pGroup->m_pLine;
   if ( pLine != NULL ) {
     // notice that we may do this test inside the previous "if" because the
