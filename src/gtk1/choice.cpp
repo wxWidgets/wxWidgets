@@ -166,8 +166,7 @@ void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientObject") );
 
-    wxClientData *cd = (wxClientData*) node->Data();
-    delete cd;
+    // wxItemContainer already deletes data for us
 
     node->SetData( (wxObject*) clientData );
 }

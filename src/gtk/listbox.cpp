@@ -642,8 +642,7 @@ void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientObject") );
 
-    wxClientData *cd = (wxClientData*) node->Data();
-    delete cd;
+    // wxItemContainer already deletes data for us
 
     node->SetData( (wxObject*) clientData );
 }
