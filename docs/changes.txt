@@ -92,6 +92,9 @@ OTHER CHANGES
 All:
 
 - Hindi translations added (Dhananjaya Sharma)
+- wxDynamicCast() now uses static_cast<wxObject *> internally and so using it
+  with anything not deriving from wxObject will fail at compile time (instead
+  of run-time) now
 
 All (GUI):
 
