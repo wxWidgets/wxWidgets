@@ -735,8 +735,8 @@
 
 // wxUSE_DBEUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
 #if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
-#undef wxUSE_DBEUG_NEW_ALWAYS
-#define wxUSE_DBEUG_NEW_ALWAYS 0
+#undef wxUSE_DEBUG_NEW_ALWAYS
+#define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
 
 #if defined(__WXMSW__) && defined(__WATCOMC__)

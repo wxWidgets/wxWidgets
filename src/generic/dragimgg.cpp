@@ -187,13 +187,15 @@ bool wxGenericDragImage::Create(const wxListCtrl& listCtrl, long id)
 }
 
 // Begin drag
-bool wxGenericDragImage::BeginDrag(const wxPoint& WXUNUSED(hotspot),
+bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
                                    wxWindow* window,
                                    bool fullScreen,
                                    wxRect* rect)
 {
     wxASSERT_MSG( (window != 0), wxT("Window must not be null in BeginDrag."));
 
+    // The image should be offset by this amount
+    m_offset = hotspot;
     m_window = window;
     m_fullScreen = fullScreen;
 
@@ -320,7 +322,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
     bool eraseOldImage = (m_isDirty && m_isShown);
     
     if (m_isShown)
-        RedrawImage(oldPos, pt, eraseOldImage, TRUE);
+        RedrawImage(oldPos - m_offset, pt - m_offset, eraseOldImage, TRUE);
 
     m_position = pt;
 
@@ -346,7 +348,7 @@ bool wxGenericDragImage::Show()
         memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
         memDC.SelectObject(wxNullBitmap);
 
-        RedrawImage(m_position, m_position, FALSE, TRUE);
+        RedrawImage(m_position - m_offset, m_position - m_offset, FALSE, TRUE);
     }
 
     m_isShown = TRUE;
@@ -363,7 +365,7 @@ bool wxGenericDragImage::Hide()
 
     if (m_isShown && m_isDirty)
     {
-        RedrawImage(m_position, m_position, TRUE, FALSE);
+        RedrawImage(m_position - m_offset, m_position - m_offset, TRUE, FALSE);
     }
 
     m_isShown = FALSE;

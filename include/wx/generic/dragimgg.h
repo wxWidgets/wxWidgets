@@ -200,6 +200,7 @@ protected:
     wxCursor        m_cursor;
     wxCursor        m_oldCursor;
     wxPoint         m_hotspot;
+    wxPoint         m_offset; // The hostpot value passed to BeginDrag
     wxPoint         m_position;
     bool            m_isDirty;
     bool            m_isShown;
