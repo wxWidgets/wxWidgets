@@ -149,18 +149,16 @@ int wxEntry(int argc, char **argv)
 
 #if wxUSE_UNICODE
     wxTheApp->argv = new wxChar*[argc+1];
-    int mb_argc = 0;
-    while (mb_argc < argc)
+    for ( int mb_argc = 0; mb_argc < argc; mb_argc++ )
     {
         wxTheApp->argv[mb_argc] = wxStrdup(wxConvLocal.cMB2WX(argv[mb_argc]));
-        mb_argc++;
     }
     wxTheApp->argv[mb_argc] = (wxChar *)NULL;
 #else
     wxTheApp->argv = argv;
 #endif
 
-    wxString name = wxFileNameFromPath(argv[0]);
+    wxString name = wxFileNameFromPath(wxTheApp->argv[0]);
     wxStripExtension(name);
     wxTheApp->SetAppName(name);
 
@@ -231,4 +229,3 @@ static void DoCleanUp()
 #endif // wxUSE_LOG
 }
 
-// vi:sts=4:sw=4:et
