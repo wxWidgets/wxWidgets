@@ -411,5 +411,23 @@ WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
 #undef  WXDLLEXPORTLOCAL
 #define WXDLLEXPORTLOCAL
 
+// -----------------------------------------------------------------------------
+// convinience macros
+// -----------------------------------------------------------------------------
+
+// delete all array elements
+//
+// NB: the class declaration of the array elements must be visible from the
+//     place where you use this macro, otherwise the proper destructor may not
+//     be called (a decent compiler should give a warning about it, but don't
+//     count on it)!
+#define WX_CLEAR_ARRAY(array)                                                 \
+    {                                                                         \
+        size_t count = array.Count();                                         \
+        for ( size_t n = 0; n < count; n++ )                                  \
+        {                                                                     \
+            delete array[n];                                                  \
+        }                                                                     \
+    }
 #endif // _DYNARRAY_H
 
