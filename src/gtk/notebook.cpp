@@ -566,7 +566,7 @@ bool wxNotebook::DeleteAllPages()
 
 bool wxNotebook::DeletePage( size_t page )
 {
-    if ( m_selection == (int)m_pagesData.GetCount() - 1 )
+    if ( m_selection >= page )
     {
         // the index will become invalid after the page is deleted
         m_selection = -1;
