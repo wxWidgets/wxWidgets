@@ -89,7 +89,7 @@ static wxSockAddress *
 GetAddressFromName(const wxString& serverName, const wxString& host = _T(""))
 {
     // we always use INET sockets under non-Unix systems
-#ifdef __UNIX_LIKE__
+#if defined(__UNIX__) && !defined(__WXMAC__)
     // under Unix, if the server name looks like a path, create a AF_UNIX
     // socket instead of AF_INET one
     if ( serverName.Find(_T('/')) != wxNOT_FOUND )
@@ -181,11 +181,11 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
   if ( ok )
   {
     unsigned char msg;
-  
+
     // Send topic name, and enquire whether this has succeeded
     data_os->Write8(IPC_CONNECT);
     data_os->WriteString(topic);
-  
+
     msg = data_is->Read8();
 
     // OK! Confirmation.
@@ -522,7 +522,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 
   int msg = 0;
   wxDataInputStream *codeci;
-  wxDataOutputStream *codeco; 
+  wxDataOutputStream *codeco;
   wxSocketStream *sockstrm;
   wxString topic_name = connection->m_topic;
   wxString item;
@@ -547,9 +547,9 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   case IPC_EXECUTE:
   {
     char *data;
-    size_t size; 
+    size_t size;
     wxIPCFormat format;
-    
+
     format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
     data = new char[size];
@@ -571,7 +571,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     size = codeci->Read32();
     data = new char[size];
     sockstrm->Read(data, size);
-    
+
     connection->OnAdvise (topic_name, item, data, size, format);
 
     delete [] data;
@@ -612,7 +612,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     size = codeci->Read32();
     data = new wxChar[size];
     sockstrm->Read(data, size);
-    
+
     connection->OnPoke (topic_name, item, data, size, format);
 
     delete [] data;
@@ -699,7 +699,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
         // Acknowledge success
         codeco->Write8(IPC_CONNECT);
         new_connection->m_topic = topic_name;
-        new_connection->m_sock = sock;      
+        new_connection->m_sock = sock;
         new_connection->m_sockstrm = stream;
         new_connection->m_codeci = codeci;
         new_connection->m_codeco = codeco;
