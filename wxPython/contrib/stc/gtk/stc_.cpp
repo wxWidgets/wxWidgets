@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "stc_c"
 
-#include "export.h"
+#include "wxPython.h"
 #include "wx/stc/stc.h"
 
 

@@ -108,8 +108,8 @@ enum
 
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(ID_EXIT,      OnExit)
-    EVT_MENU(ID_PYFRAME,   OnPyFrame)
+    EVT_MENU(ID_EXIT,      MyFrame::OnExit)
+    EVT_MENU(ID_PYFRAME,   MyFrame::OnPyFrame)
 END_EVENT_TABLE()
 
 
