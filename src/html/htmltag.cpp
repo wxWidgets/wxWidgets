@@ -128,7 +128,9 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     if (source[i] == '/') {m_Ending = TRUE; i++;}
     else m_Ending = FALSE;
 
-    while ((i < end_pos) && ((c = source[i++]) != ' ') && (c != '>')) {
+    while ((i < end_pos) && 
+               ((c = source[i++]) != ' ' && c != '\r' && c != '\n' &&
+                c != '>')) {
         if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
         m_Name += c;
     }
@@ -136,6 +138,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     if (source[i-1] != '>')
         while ((i < end_pos) && ((c = source[i++]) != '>')) {
             if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
+            if (c == '\r' || c == '\n') c = ' '; // make future parsing a bit simpler
             m_Params += c;
             if (c == '"') {
                 while ((i < end_pos) && ((c = source[i++]) != '"')) m_Params += c;
