@@ -110,8 +110,8 @@ wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
         return NULL;
 
     wxIcon *self = wx_const_cast(wxIcon *, this);
-    lf->UnRef();
-    lf->m_refData = new wxIconRefData(*data);
+    self->UnRef();
+    self->m_refData = new wxIconRefData(*data);
 
     if ( data->m_hIcon )
     {
