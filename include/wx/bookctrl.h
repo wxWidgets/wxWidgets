@@ -248,11 +248,11 @@ private:
     #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
     #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)
     #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)
-    #define wxBC_TOP                               wxNB_TOP
-    #define wxBC_BOTTOM                            wxNB_BOTTOM
-    #define wxBC_LEFT                              wxNB_LEFT
-    #define wxBC_RIGHT                             wxNB_RIGHT
-    #define wxBC_DEFAULT                           wxNB_DEFAULT
+    #define wxBC_TOP                               wxCHB_TOP
+    #define wxBC_BOTTOM                            wxCHB_BOTTOM
+    #define wxBC_LEFT                              wxCHB_LEFT
+    #define wxBC_RIGHT                             wxCHB_RIGHT
+    #define wxBC_DEFAULT                           wxCHB_DEFAULT
 #else
     #include "wx\notebook.h"
     #define wxBookCtrl                             wxNotebook
@@ -261,11 +261,11 @@ private:
     #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
     #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_NOTEBOOK_PAGE_CHANGED(id, fn)
     #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_NOTEBOOK_PAGE_CHANGING(id, fn)
-    #define wxBC_TOP                               wxCHB_TOP
-    #define wxBC_BOTTOM                            wxCHB_BOTTOM
-    #define wxBC_LEFT                              wxCHB_LEFT
-    #define wxBC_RIGHT                             wxCHB_RIGHT
-    #define wxBC_DEFAULT                           wxCHB_DEFAULT
+    #define wxBC_TOP                               wxNB_TOP
+    #define wxBC_BOTTOM                            wxNB_BOTTOM
+    #define wxBC_LEFT                              wxNB_LEFT
+    #define wxBC_RIGHT                             wxNB_RIGHT
+    #define wxBC_DEFAULT                           wxNB_DEFAULT
 #endif
 
 #endif // wxUSE_BOOKCTRL
