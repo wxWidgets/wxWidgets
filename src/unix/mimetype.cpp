@@ -51,7 +51,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_FILE && wxUSE_TEXTFILE
+#if wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
@@ -2567,5 +2567,5 @@ static bool IsKnownUnimportantField(const wxString& fieldAll)
 }
 
 #endif
-  // wxUSE_FILE && wxUSE_TEXTFILE
+  // wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
 
