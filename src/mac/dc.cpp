@@ -527,13 +527,34 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 		wxCoord offset = ( (m_pen.GetWidth() == 0 ? 1 :
                             m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2;
 
-        wxCoord xx1 = XLOG2DEV(x1);
-        wxCoord yy1 = YLOG2DEV(y1);
-        wxCoord xx2 = XLOG2DEV(x2);
-        wxCoord yy2 = YLOG2DEV(y2);
+        wxCoord xx1 = XLOG2DEV(x1) - offset;
+        wxCoord yy1 = YLOG2DEV(y1) - offset;
+        wxCoord xx2 = XLOG2DEV(x2) - offset;
+        wxCoord yy2 = YLOG2DEV(y2) - offset;
 
-		::MoveTo(xx1 - offset, yy1 - offset);
-		::LineTo(xx2 - offset, yy2 - offset);
+        if ((m_pen.GetCap() == wxCAP_ROUND) &&
+            (m_pen.GetWidth() <= 1))
+    	{
+    	    // Implement LAST_NOT for MAC at least for
+    	    // orthogonal lines. RR.
+    	 	if (xx1 == xx2)
+    	 	{
+    	 	  	if (yy1 < yy2)
+    	 	  		yy2--;
+    	 	    if (yy1 > yy2)
+    	 	    	yy2++;
+    	 	}
+    	 	if (yy1 == yy2)
+    	 	{
+    	 	  	if (xx1 < xx2)
+    	 	  		xx2--;
+    	 	    if (xx1 > xx2)
+    	 	    	xx2++;
+    	 	}
+    	}
+    	
+		::MoveTo(xx1, yy1);
+		::LineTo(xx2, yy2);
   }
 }
 
