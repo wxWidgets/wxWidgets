@@ -116,10 +116,16 @@ class WXDLLEXPORT wxFileSystemHandler : public wxObject
                 // Returns MIME type of the file - w/o need to open it
                 // (default behaviour is that it returns type based on extension)
 
+    public:
+        static void CleanUpStatics();
+	        // deletes static members (m_MimeMng). It can be called
+		// as many times as you wish because m_MimeMng is created
+		// on demand
+
     private:
-        static wxMimeTypesManager m_MimeMng;
+        static wxMimeTypesManager *m_MimeMng;
                 // MIME manager
-        // (it's static and thus shared by all instances and derived classes)
+                // (it's static and thus shared by all instances and derived classes)
 };
 
 

@@ -195,7 +195,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
                 }
                 node = node -> GetNext();
             }
-            if (src == wxEmptyString) src = m_DefaultFilter.ReadFile(*f);
+            if (src == wxEmptyString) {
+	        if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
+	        src = m_DefaultFilter -> ReadFile(*f);
+	    }
 
             m_FS -> ChangePathTo(f -> GetLocation());
             rt_val = SetPage(src);
@@ -377,7 +380,15 @@ void wxHtmlWindow::HistoryClear()
 
 
 wxList wxHtmlWindow::m_Filters;
-wxHtmlFilterPlainText wxHtmlWindow::m_DefaultFilter;
+wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
+
+void wxHtmlWindow::CleanUpStatics()
+{
+    if (m_DefaultFilter) delete m_DefaultFilter;
+    m_DefaultFilter = NULL;
+}
+
+
 
 void wxHtmlWindow::AddFilter(wxHtmlFilter *filter)
 {
@@ -524,6 +535,21 @@ END_EVENT_TABLE()
 
 
 
+
+// A module to allow initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxHtmlWinModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxHtmlWinModule)
+public:
+    wxHtmlWinModule() : wxModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() { wxHtmlWindow::CleanUpStatics(); }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)
 
 
 

@@ -35,7 +35,13 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
-wxMimeTypesManager wxFileSystemHandler::m_MimeMng;
+wxMimeTypesManager *wxFileSystemHandler::m_MimeMng = NULL;
+
+void wxFileSystemHandler::CleanUpStatics()
+{
+    if (m_MimeMng) delete m_MimeMng;
+    m_MimeMng = NULL;
+}
 
 
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
@@ -53,7 +59,8 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
         if (c == _T('.')) {ext = loc.Right(l2-i-1); break;}
         if ((c == _T('/')) || (c == _T('\\')) || (c == _T(':'))) {return wxEmptyString;}
     }
-    ft = m_MimeMng.GetFileTypeFromExtension(ext);
+    if (m_MimeMng == NULL) m_MimeMng = new wxMimeTypesManager;
+    ft = m_MimeMng -> GetFileTypeFromExtension(ext);
     if (ft && (ft -> GetMimeType(&mime))) return mime;
     else return wxEmptyString;
 }
@@ -279,11 +286,16 @@ class wxFileSystemModule : public wxModule
             wxFileSystem::AddHandler(new wxLocalFSHandler);
             return TRUE;
         }
-        virtual void OnExit() {}
+        virtual void OnExit() 
+	{
+	    wxFileSystemHandler::CleanUpStatics();
+	}
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule)
 
 #endif 
   // (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+
+
 

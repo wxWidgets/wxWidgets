@@ -109,7 +109,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
         static wxList m_Filters;
                 // list of HTML filters
-        static wxHtmlFilterPlainText m_DefaultFilter;
+        static wxHtmlFilter *m_DefaultFilter;
                 // this filter is used when no filter is able to read some file
 
         HtmlHistoryArray m_History;
@@ -189,6 +189,9 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         virtual void OnLinkClicked(const wxString& link);
                 // called when users clicked on hypertext link. Default behavior is to
                 // call LoadPage(loc)
+		
+	static void CleanUpStatics();
+	        // cleans static variables
 
     protected:
         bool ScrollToAnchor(const wxString& anchor);
@@ -206,6 +209,9 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         void OnMouseEvent(wxMouseEvent& event);
         void OnIdle(wxIdleEvent& event);
         void OnKeyDown(wxKeyEvent& event);
+	
+	virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
+	        // returns new filter (will be stored into m_DefaultFilter variable)
 
     DECLARE_EVENT_TABLE()
 };
