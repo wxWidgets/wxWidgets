@@ -63,7 +63,7 @@
 
 #ifdef HAVE_STRINGS_H
     #include <strings.h>    // for strcasecmp()
-#endif // AIX
+#endif // HAVE_STRINGS_H
 
 #include "wx/defs.h"        // everybody should include this
 #include "wx/wxchar.h"      // for wxChar
