@@ -282,7 +282,7 @@ void oglCentreText(wxDC& dc, wxList *text_list,
     i ++;
   }
 
-  delete widths;
+  delete[] widths;
 }
 
 // Centre a list of strings in the given box
