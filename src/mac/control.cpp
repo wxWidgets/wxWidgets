@@ -332,6 +332,7 @@ void wxControl::MacPostControlCreate()
      SetSize(pos.x, pos.y, new_size.x, new_size.y);
  
      UMAShowControl( m_macControl ) ;
+     Refresh() ;
 }
 
 void wxControl::MacAdjustControlRect() 
@@ -647,28 +648,8 @@ void wxControl::MacRedrawControl()
                 wxMacDrawingHelper help( win ) ;
                 // the mac control manager always assumes to have the origin at 0,0
                 SetOrigin( 0 , 0 ) ;
-                
-                wxWindow* parent = GetParent() ;
-                while ( parent )
-                {
-                    if( parent->IsTopLevel() )
-                    {
-                    //    ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-                        break ;
-                    }
-                    
-                    if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                    {
-                        if ( ((wxControl*)parent)->m_macControl )
-                            SetUpControlBackground( ((wxControl*)parent)->m_macControl , -1 , true ) ;
-                        break ;
-                    }
-                    
-                    parent = parent->GetParent() ;
-                } 
-                
+                wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
                 UMADrawControl( m_macControl ) ;
-                // ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
             }
         }
     }
@@ -687,36 +668,14 @@ void wxControl::OnPaint(wxPaintEvent& event)
                 wxMacDrawingHelper help( win ) ;
                 // the mac control manager always assumes to have the origin at 0,0
                 SetOrigin( 0 , 0 ) ;
-
-                /*
-                wxWindow* parent = GetParent() ;
-                while ( parent )
-                {
-                    if( parent->IsTopLevel() )
-                    {
-                    //    ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-                        break ;
-                    }
-                    
-                    if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                    {
-                        if ( ((wxControl*)parent)->m_macControl )
-                            SetUpControlBackground( ((wxControl*)parent)->m_macControl , -1 , true ) ;
-                        break ;
-                    }
-                    
-                    parent = parent->GetParent() ;
-                } 
-                */
-                SetUpControlBackground( m_macControl , -1 , true ) ;
+                wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
                 UMADrawControl( m_macControl ) ;
-                // ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
             }
         }
     }
     else
     {
-        // wxWindow::OnPaint( event ) ;
+      event.Skip() ;
     }
 }
 void wxControl::OnEraseBackground(wxEraseEvent& event)
