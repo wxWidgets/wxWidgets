@@ -1304,11 +1304,14 @@ static void AdjustEventButtonState(wxMouseEvent& event)
 static
 wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 {
+    wxCoord xx = x;
+    wxCoord yy = y;
+
     if (win->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-        x += pizza->xoffset;
-        y += pizza->yoffset;
+        xx += pizza->xoffset;
+        yy += pizza->yoffset;
     }
 
     wxNode *node = win->GetChildren().First();
@@ -1329,13 +1332,13 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
             int yy2 = child->m_x + child->m_height;
 
             // left
-            if (((x >= xx1) && (x <= xx1+10) && (y >= yy1) && (y <= yy2)) ||
+            if (((xx >= xx1) && (xx <= xx1+10) && (yy >= yy1) && (yy <= yy2)) ||
             // right
-                ((x >= xx2-10) && (x <= xx2) && (y >= yy1) && (y <= yy2)) ||
+                ((xx >= xx2-10) && (xx <= xx2) && (yy >= yy1) && (yy <= yy2)) ||
             // top
-                ((x >= xx1) && (x <= xx2) && (y >= yy1) && (y <= yy1+10)) ||
+                ((xx >= xx1) && (xx <= xx2) && (yy >= yy1) && (yy <= yy1+10)) ||
             // bottom
-                ((x >= xx1) && (x <= xx2) && (y >= yy2-1) && (y <= yy2)))
+                ((xx >= xx1) && (xx <= xx2) && (yy >= yy2-1) && (yy <= yy2)))
             {
                 win = child;
                 x -= child->m_x;
@@ -1347,8 +1350,8 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         else
         {
             if ((child->m_wxwindow == (GtkWidget*) NULL) &&
-                (child->m_x <= x) &&
-                (child->m_y <= y) &&
+                (child->m_x <= xx) &&
+                (child->m_y <= yy) &&
                 (child->m_x+child->m_width  >= x) &&
                 (child->m_y+child->m_height >= y))
             {
