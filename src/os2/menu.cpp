@@ -609,7 +609,12 @@ wxMenuItem* wxMenu::FindItem(
         }
         else if ( pItem->IsSubMenu() )
         {
-            pItem = pItem->GetSubMenu()->FindItem(nItemId, hItem, ppItemMenu);
+            pItem = pItem->GetSubMenu()->FindItem( nItemId
+                                                  ,hItem
+                                                  ,ppItemMenu
+                                                 );
+            if (pItem)
+                break;
         }
         else
         {
