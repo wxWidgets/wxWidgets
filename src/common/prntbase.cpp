@@ -36,6 +36,7 @@
 #include "wx/dcmemory.h"
 #include "wx/stattext.h"
 #include "wx/intl.h"
+#include "wx/textdlg.h"
 #endif
 
 #include "wx/prntbase.h"
