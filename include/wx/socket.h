@@ -91,27 +91,28 @@ protected:
   wxSocketEventFlags m_neededreq;	// Specify which requet signals we need
   wxUint32 m_lcount;			// Last IO request size
   unsigned long m_timeout;		// IO timeout value
-
-  char *m_unread;			// Pushback buffer
+                     
+  char *m_unread;               // Pushback buffer
   wxUint32 m_unrd_size;			// Pushback buffer size
   wxUint32 m_unrd_cur;			// Pushback pointer
 
-  wxSockCbk m_cbk;			// C callback
-  char *m_cdata;			// C callback data
+  wxSockCbk m_cbk;              // C callback
+  char *m_cdata;                // C callback data
 
-  bool m_connected;			// Connected ?
+  bool m_connected;             // Connected ?
+  bool m_establishing;          // Pending connections?
   bool m_notify_state;			// Notify state
-  int m_id;				// Socket id (for event handler)
+  int m_id;                     // Socket id (for event handler)
 
   // Defering variables
   enum {
     DEFER_READ, DEFER_WRITE, NO_DEFER
   } m_defering;                         // Defering state
   char *m_defer_buffer;                 // Defering target buffer
-  wxUint32 m_defer_nbytes;                // Defering buffer size
-  wxTimer *m_defer_timer;		// Timer for defering mode
+  wxUint32 m_defer_nbytes;              // Defering buffer size
+  wxTimer *m_defer_timer;               // Timer for defering mode
 
-  wxList m_states;			// Stack of states
+  wxList m_states;                      // Stack of states
 
 public:
   wxSocketBase();
@@ -127,7 +128,7 @@ public:
   wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
   void Discard();
 
-  // Try not to use this two methods (they sould be protected)
+  // Try not to use these two methods (they sould be protected)
   void CreatePushbackAfter(const char *buffer, wxUint32 size);
   void CreatePushbackBefore(const char *buffer, wxUint32 size);
 
@@ -148,8 +149,8 @@ public:
   void SetTimeout(unsigned long sec);
 
   // seconds = -1 means infinite wait
-  // seconds = 0 means no wait
-  // seconds > 0 means specified wait
+  // seconds, milliseconds = 0 means no wait
+  // seconds, milliseconds > 0 means specified wait
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
@@ -221,8 +222,10 @@ public:
 
   wxSocketServer(wxSockAddress& addr_man, wxSockFlags flags = wxSocketBase::NONE);
 
-  wxSocketBase* Accept();
-  bool AcceptWith(wxSocketBase& sock);
+  wxSocketBase* Accept(bool wait = TRUE);
+  bool AcceptWith(wxSocketBase& sock, bool wait = TRUE);
+
+  bool WaitOnAccept(long seconds = -1, long milliseconds = 0);
 };
 
 ////////////////////////////////////////////////////////////////////////
