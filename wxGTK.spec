@@ -242,9 +242,7 @@ fi
 %{_libdir}/libwx_%{portname}*_fl*.so.*
 %{_libdir}/libwx_%{portname}*_gizmos*.so.*
 %{_libdir}/libwx_%{portname}*_mmedia*.so.*
-%if !%{unicode}
 %{_libdir}/libwx_%{portname}*_ogl*.so.*
-%endif
 %{_libdir}/libwx_%{portname}*_plot*.so.*
 %{_libdir}/libwx_%{portname}*_stc*.so.*
 %{_libdir}/libwx_%{portname}*_svg*.so.*
@@ -273,11 +271,9 @@ fi
 %{_includedir}/wx/mmedia/*
 %{_libdir}/libwx_%{portname}*_mmedia*.so
 
-%if !%{unicode}
 %dir %{_includedir}/wx/ogl
 %{_includedir}/wx/ogl/*
 %{_libdir}/libwx_%{portname}*_ogl*.so
-%endif
 
 %dir %{_includedir}/wx/plot
 %{_includedir}/wx/plot/*
