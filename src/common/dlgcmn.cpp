@@ -212,39 +212,39 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
     if (flags & wxYES)
     {
         yes = new wxButton( this, wxID_YES, _("Yes"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
-        inner_yes_no->Add( yes, 0, wxLEFT|wxRIGHT, margin );
+        inner_yes_no->Add( yes, 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
     }
     if (flags & wxNO)
     {
         no = new wxButton( this, wxID_NO, _("No"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
-        inner_yes_no->Add( no, 0, wxLEFT|wxRIGHT, margin );
+        inner_yes_no->Add( no, 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
     }
 
     if (flags & wxOK)
     {
         ok = new wxButton( this, wxID_OK, _("OK"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
-        inner_rest->Add( ok, 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( ok, 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
     }
 
     if (flags & wxFORWARD)
-        inner_rest->Add( new wxButton( this, wxID_FORWARD, _("Forward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( new wxButton( this, wxID_FORWARD, _("Forward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
 
     if (flags & wxBACKWARD)
-        inner_rest->Add( new wxButton( this, wxID_BACKWARD, _("Backward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( new wxButton( this, wxID_BACKWARD, _("Backward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
 
     if (flags & wxSETUP)
-        inner_rest->Add( new wxButton( this, wxID_SETUP, _("Setup"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( new wxButton( this, wxID_SETUP, _("Setup"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
 
     if (flags & wxMORE)
-        inner_rest->Add( new wxButton( this, wxID_MORE, _("More..."),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( new wxButton( this, wxID_MORE, _("More..."),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
 
     if (flags & wxHELP)
-        inner_rest->Add( new wxButton( this, wxID_HELP, _("Help"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( new wxButton( this, wxID_HELP, _("Help"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
 
     if (flags & wxCANCEL)
     {
         cancel = new wxButton( this, wxID_CANCEL, _("Cancel"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
-        inner_rest->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
+        inner_rest->Add( cancel, 0, wxLEFT|wxRIGHT|wxADJUST_MINSIZE, margin );
     }
 
     // choose the default button

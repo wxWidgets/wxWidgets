@@ -13,7 +13,7 @@ OTHER CHANGES
 
 All:
 
-- added wxCLOSE style for dialogs and frames
+- added wxCLOSE_BOX style for dialogs and frames
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - use true/false throughout the library instead of TRUE/FALSE
 - wxStopWatch::Start() resumes the stop watch if paused, as per the docs
@@ -95,6 +95,7 @@ wxMotif:
   xmcombo; xmcombo is still used for Motif 1.x and Lesstif when compiled
   with Motif 1.x compatibility
 - implemented wxToggleButton
+- made wxButton a bit smaller by default
 
 wxUniv:
 

@@ -50,9 +50,9 @@ public:
     static wxSize GetDefaultSize();
     
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
-    virtual void ChangeBackgroundColour();
-    virtual void ChangeForegroundColour();
+private:
+    virtual wxSize DoGetBestSize() const;
+    void SetDefaultShadowThicknessAndResize();
 };
 
 #endif
