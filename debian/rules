@@ -286,19 +286,16 @@ build-examples-stamp: build-gtk-shared-stamp
 	rm -f $(objdir_examples)/samples/Makefile
 	cp -a $(objdir_gtk_shared)/samples/Makefile $(objdir_examples)/samples
 
-	cp -a demos $(objdir_examples)
+	cd $(objdir_examples)/samples					\
+		&& find -name 'Makefile.in' -exec rm -f '{}' ';'	\
+		&& for d in $$(find -type d); do			\
+			if [ -f $$d/makefile.unx ]; then		\
+				mv $$d/makefile.unx $$d/Makefile;	\
+			fi;						\
+		done							\
+
 	cp -a wxPython/demo $(objdir_examples)/wxPython
-	@for d in $(objdir_examples)/demos $(objdir_examples)/samples; do \
-		(cd $$d \
-			&& mv Makefile.in Makefile \
-			&& rm -f configure* \
-			&& find -name 'Makefile.in' -exec rm -f '{}' ';' \
-			&& for f in $$(find -type d); do \
-				if [ -f $$f/makefile.unx ]; then \
-					mv $$f/makefile.unx $$f/Makefile; \
-				fi; \
-			done) \
-	done;
+
 	touch $@
 
 build-i18n-stamp: build-gtk-shared-stamp
@@ -378,6 +375,9 @@ clean: debian/control
 		&& rm -rf contrib/stc/contrib \
 		&& rm -rf contrib/xrc/contrib \
 		&& rm -rf *.pyc
+
+	cd wxPython/include/wx						\
+		&& for f in $(contrib_libs); do $(RM) $$f; done
 
 # We do the equivalent of this above by removing build, unfortunately
 # its not enough by itself to get the tree properly clean again.
