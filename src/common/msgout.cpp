@@ -33,6 +33,7 @@
     #include "wx/ffile.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/apptrait.h"
     #if wxUSE_GUI
         #include "wx/msgdlg.h"
     #endif // wxUSE_GUI
@@ -64,7 +65,7 @@ wxMessageOutput* wxMessageOutput::Get()
 {
     if ( !ms_msgOut && wxTheApp )
     {
-        ms_msgOut = wxTheApp->CreateMessageOutput();
+        ms_msgOut = wxTheApp->GetTraits()->CreateMessageOutput();
     }
 
     return ms_msgOut;

@@ -384,7 +384,7 @@ wxLog *wxLog::GetActiveTarget()
 
             // ask the application to create a log target for us
             if ( wxTheApp != NULL )
-                ms_pLogger = wxTheApp->CreateLogTarget();
+                ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
             else
                 ms_pLogger = new wxLogStderr;
 
@@ -425,7 +425,7 @@ void wxLog::RemoveTraceMask(const wxString& str)
 {
     int index = ms_aTraceMasks.Index(str);
     if ( index != wxNOT_FOUND )
-        ms_aTraceMasks.Remove((size_t)index);
+        ms_aTraceMasks.RemoveAt((size_t)index);
 }
 
 void wxLog::ClearTraceMasks()
