@@ -12,7 +12,7 @@
 #ifndef _WX_UNIX_APPTBASE_H_
 #define _WX_UNIX_APPTBASE_H_
 
-class wxExecuteData;
+struct wxExecuteData;
 class wxPipe;
 
 // ----------------------------------------------------------------------------
