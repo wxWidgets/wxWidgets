@@ -52,17 +52,17 @@ Windows  (build env is on Cyclops)
 	.make both-hybrid clean
 	.make both-hybrid
 
-* Make the .mo files
-
-       cd wx/locale
-       makemo.py
-
 * Build the tools. This btm script makes a static release version of
   wxWidgets, and then builds copies of wxrc.exe and tex2rtf.exe
   linking with that lib, placing them in wx/lib/vc_dll, (which you
   should have on the PATH.)
 
        .make_tools.btm
+
+* Make the .mo files
+
+       cd wx/locale
+       makemo.py
 
 * Make the HTMLHelp files.  In the wx\wxPython directory run: 
 
@@ -101,7 +101,7 @@ wx/wxPython dir:
 
 * Make the demo tarball:
        
-       dsitrib/makedemo
+       distrib/makedemo
 
 * Make the docs tarball:
 
