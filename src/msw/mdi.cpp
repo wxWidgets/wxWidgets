@@ -102,6 +102,9 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow);
 // the very end if not found
 static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu);
 
+// Remove the window menu
+static void RemoveWindowMenu(wxWindow *win, WXHMENU menu);
+
 // is this an id of an MDI child?
 inline bool IsMdiCommandId(int id)
 {
@@ -141,7 +144,7 @@ wxMDIParentFrame::wxMDIParentFrame()
 {
     m_clientWindow = NULL;
     m_currentChild = NULL;
-    m_windowMenu = 0;
+    m_windowMenu = (wxMenu*) NULL;
     m_parentFrameActive = TRUE;
 }
 
@@ -157,7 +160,23 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
   m_clientWindow = NULL;
   m_currentChild = NULL;
-  m_windowMenu = 0;
+
+  if (style & wxFRAME_NO_WINDOW_MENU)
+      m_windowMenu = (wxMenu*) NULL;
+  else
+  {
+  // m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), wxT("wxWindowMenu"));
+      m_windowMenu = new wxMenu;
+
+
+      m_windowMenu->Append(4002, wxT("&Cascade"));
+      m_windowMenu->Append(4001, wxT("Tile &Horizontally"));
+      m_windowMenu->Append(4005, wxT("Tile &Vertically"));
+      m_windowMenu->AppendSeparator();
+      m_windowMenu->Append(4003, wxT("&Arrange Icons"));
+      m_windowMenu->Append(4004, wxT("&Next"));
+  }
+
   m_parentFrameActive = TRUE;
 
   if (!parent)
@@ -177,8 +196,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   int y = pos.y;
   int width = size.x;
   int height = size.y;
-
-  m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), wxT("wxWindowMenu"));
 
   DWORD msflags = WS_OVERLAPPED;
   if (style & wxMINIMIZE_BOX)
@@ -213,8 +230,12 @@ wxMDIParentFrame::~wxMDIParentFrame()
     // already delete by DestroyChildren()
     m_frameToolBar = NULL;
 
-    ::DestroyMenu((HMENU)m_windowMenu);
-    m_windowMenu = 0;
+    // ::DestroyMenu((HMENU)m_windowMenu);
+    if (m_windowMenu)
+    {
+        delete m_windowMenu;
+        m_windowMenu = (wxMenu*) NULL;
+    }
 
     if ( m_clientWindow )
     {
@@ -228,11 +249,36 @@ wxMDIParentFrame::~wxMDIParentFrame()
 
 void wxMDIParentFrame::InternalSetMenuBar()
 {
-    HMENU subMenu = GetSubMenu((HMENU) m_windowMenu, 0);
+//    HMENU subMenu = GetSubMenu((HMENU) m_windowMenu, 0);
 
     m_parentFrameActive = TRUE;
 
+    HMENU subMenu = (HMENU) 0;
+    if (GetWindowMenu())
+        subMenu = (HMENU) GetWindowMenu()->GetHMenu();
+
     InsertWindowMenu(GetClientWindow(), m_hMenu, subMenu);
+}
+
+void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
+{
+    if (m_windowMenu)
+    {
+        if (GetMenuBar())
+        {
+            // Remove old window menu
+            RemoveWindowMenu(GetClientWindow(), m_hMenu);
+        }
+
+        delete m_windowMenu;
+        m_windowMenu = (wxMenu*) NULL;
+    }
+    if (menu)
+    {
+        m_windowMenu = menu;
+        if (GetMenuBar())
+            InsertWindowMenu(GetClientWindow(), m_hMenu, (HMENU) m_windowMenu->GetHMenu());
+    }
 }
 
 void wxMDIParentFrame::OnSize(wxSizeEvent& event)
@@ -722,7 +768,10 @@ void wxMDIChildFrame::InternalSetMenuBar()
 {
     wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
 
-    HMENU subMenu = GetSubMenu((HMENU)parent->GetWindowMenu(), 0);
+    // HMENU subMenu = GetSubMenu((HMENU)parent->GetWindowMenu(), 0);
+    HMENU subMenu = (HMENU) 0;
+    if (parent->GetWindowMenu())
+        subMenu = (HMENU) parent->GetWindowMenu()->GetHMenu();
 
     InsertWindowMenu(parent->GetClientWindow(), m_hMenu, subMenu);
 
@@ -953,7 +1002,9 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 
     if ( menuToSet )
     {
-        HMENU subMenu = GetSubMenu((HMENU) parent->GetWindowMenu(), 0);
+        HMENU subMenu = (HMENU) 0;
+        if (parent->GetWindowMenu())
+            subMenu = (HMENU) parent->GetWindowMenu()->GetHMenu();
 
         MDISetMenu(parent->GetClientWindow(), menuToSet, subMenu);
     }
@@ -1086,7 +1137,9 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     m_windowStyle = style;
     m_parent = parent;
 
-    ccs.hWindowMenu = (HMENU)parent->GetWindowMenu();
+    ccs.hWindowMenu = (HMENU) 0;
+    if (parent->GetWindowMenu())
+        ccs.hWindowMenu = (HMENU) parent->GetWindowMenu()->GetHMenu();
     ccs.idFirstChild = wxFIRST_MDI_CHILD;
 
     DWORD msStyle = WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN;
@@ -1167,6 +1220,9 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
 {
     // Try to insert Window menu in front of Help, otherwise append it.
     HMENU hmenu = (HMENU)menu;
+
+    if (subMenu)
+    {
     int N = GetMenuItemCount(hmenu);
     bool success = FALSE;
     for ( int i = 0; i < N; i++ )
@@ -1193,8 +1249,38 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
     {
         ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, wxT("&Window"));
     }
+    }
 
     MDISetMenu(win, hmenu, subMenu);
+}
+
+static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
+{
+    // Try to insert Window menu in front of Help, otherwise append it.
+    HMENU hmenu = (HMENU)menu;
+    int N = GetMenuItemCount(hmenu);
+    bool success = FALSE;
+    for ( int i = 0; i < N; i++ )
+    {
+        wxChar buf[256];
+        int chars = GetMenuString(hmenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION);
+        if ( chars == 0 )
+        {
+            wxLogLastError(wxT("GetMenuString"));
+
+            continue;
+        }
+
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(wxT("Window")) )
+        {
+            success = TRUE;
+            ::RemoveMenu(hmenu, i, MF_BYPOSITION);
+            break;
+        }
+    }
+
+    // Does passing 0 for the window menu really work with WM_MDISETMENU?
+    MDISetMenu(win, hmenu, 0);
 }
 
 static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,

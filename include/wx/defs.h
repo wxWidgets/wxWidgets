@@ -900,6 +900,12 @@ enum wxStretch
 // Add for normal Windows frame behaviour
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
+/*
+ * MDI parent frame style flags
+ * Can overlap with some of the above.
+ */
+
+#define wxFRAME_NO_WINDOW_MENU  0x0100
 
 #if WXWIN_COMPATIBILITY
 #define wxDEFAULT_FRAME wxDEFAULT_FRAME_STYLE

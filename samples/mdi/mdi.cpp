@@ -104,6 +104,14 @@ bool MyApp::OnInit()
     frame = new MyFrame((wxFrame *)NULL, -1, "MDI Demo",
                         wxPoint(-1, -1), wxSize(500, 400),
                         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+#ifdef __WXMSW__
+#if 0
+    // Experimental: change the window menu
+    wxMenu* windowMenu = new wxMenu;
+    windowMenu->Append(5000, "My menu item!");
+    frame->SetWindowMenu(windowMenu);
+#endif
+#endif
 
     // Give it an icon
 #ifdef __WXMSW__

@@ -145,7 +145,6 @@ Restores this MDI child frame (unmaximizes).
 \helpref{wxMDIChildFrame::Activate}{wxmdichildframeactivate},\rtfsp
 \helpref{wxMDIChildFrame::Maximize}{wxmdichildframemaximize}
 
-
 \section{\class{wxMDIClientWindow}}\label{wxmdiclientwindow}
 
 An MDI client window is a child of \helpref{wxMDIParentFrame}{wxmdiparentframe}, and manages zero or
@@ -276,6 +275,8 @@ for Windows, it is implicit in wxTHICK\_FRAME).}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Displays a thick frame around the window (Windows and Motif only).}
 \twocolitem{\windowstyle{wxVSCROLL}}{Displays a vertical scrollbar in the {\it client window}, allowing
 the user to view child frames that are off the current view.}
+\twocolitem{\windowxstyle{wxFRAME\_NO\_WINDOW\_MENU}{Under Windows, removes the Window menu that is normally
+added automatically.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -464,6 +465,13 @@ Returns the window being used as the toolbar for this frame.
 
 \helpref{wxMDIParentFrame::SetToolBar}{wxmdiparentframesettoolbar}
 
+\membersection{wxMDIParentFrame::GetWindowMenu}\label{wxmdiparentframegetwindowmenu}
+
+\constfunc{wxMenu*}{GetWindowMenu}{\void}
+
+Returns the current Window menu (added by wxWindows to the menubar). This function
+is available under Windows only.
+
 \membersection{wxMDIParentFrame::OnCreateClient}\label{wxmdiparentframeoncreateclient}
 
 \func{virtual wxMDIClientWindow*}{OnCreateClient}{\void}
@@ -516,6 +524,17 @@ toolbars managed by the application.
 
 \helpref{wxMDIParentFrame::GetToolBar}{wxmdiparentframegettoolbar},\rtfsp
 \helpref{wxMDIParentFrame::GetClientSize}{wxmdiparentframegetclientsize}
+
+\membersection{wxMDIParentFrame::SetWindowMenu}\label{wxmdiparentframesetwindowmenu}
+
+\func{void}{SetWindowMenu}{\param{wxMenu*}{ menu}}
+
+Call this to change the current Window menu. Ownership of the menu object passes to
+the frame when you call this function.
+
+This call is available under Windows only.
+
+To remove the window completely, use the wxFRAME\_NO\_WINDOW\_MENU window style.
 
 \membersection{wxMDIParentFrame::Tile}\label{wxmdiparentframetile}
 

@@ -268,8 +268,11 @@ wxWindow::~wxWindow()
 
     if ( m_hWnd )
     {
-        if ( !::DestroyWindow(GetHwnd()) )
-            wxLogLastError("DestroyWindow");
+        if (::IsWindow(GetHwnd()))
+        {
+            if ( !::DestroyWindow(GetHwnd()) )
+                wxLogLastError("DestroyWindow");
+        }
 
         // remove hWnd <-> wxWindow association
         wxRemoveHandleAssociation(this);

@@ -68,7 +68,9 @@ public:
     // just return a new class)
     virtual wxMDIClientWindow *OnCreateClient(void);
 
-    WXHMENU GetWindowMenu() const { return m_windowMenu; }
+//    WXHMENU GetWindowHMENU() const { return m_windowMenu; }
+    wxMenu* GetWindowMenu() const { return m_windowMenu; };
+    void SetWindowMenu(wxMenu* menu) ;
 
     // MDI operations
     // --------------
@@ -100,7 +102,8 @@ protected:
 
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
-    WXHMENU                         m_windowMenu;
+//    WXHMENU                         m_windowMenu;
+    wxMenu*                         m_windowMenu;
 
     // TRUE if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
