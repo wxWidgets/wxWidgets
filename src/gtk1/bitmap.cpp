@@ -23,6 +23,7 @@
 #include "wx/image.h"
 #include "wx/dcmemory.h"
 #include "wx/app.h"
+#include "wx/rawbmp.h"
 
 #ifdef __WXGTK20__
     // need this to get gdk_image_new_bitmap()
