@@ -104,14 +104,12 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
     #ifdef __WIN95__
         #include <commctrl.h>
     #endif
 #elif !defined(__WXMICROWIN__) // broken compiler
-    #ifndef __TWIN32__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -4824,7 +4822,7 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHookProc = MakeProcInstance((FARPROC) wxKeyboardHook, wxGetInstance());
         wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
 
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__)
             GetCurrentThreadId()
         //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
 #else

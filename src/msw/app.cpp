@@ -84,7 +84,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__) || defined(__WXMICROWIN__)) && !defined(__CYGWIN10__))
+#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__WXMICROWIN__)) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #endif
 
@@ -1381,6 +1381,6 @@ void wxWakeUpIdle()
 
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
-#if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__WINE__) && !defined(__TWIN32__) && !defined(WXMAKINGDLL))
+#if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__WINE__) && !defined(WXMAKINGDLL))
 #include "main.cpp"
 #endif

@@ -136,7 +136,7 @@
 #endif
 
 /* enable rich edit under Win32 */
-#if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
+#if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #else
 #define wxUSE_RICHEDIT 0

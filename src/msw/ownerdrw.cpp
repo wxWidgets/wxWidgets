@@ -225,7 +225,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // Win32 GDI functions and not wxWindows ones. Might help to whoever decides to
 // port this code to X. (VZ)
 
-#if defined(__WIN32__) && !defined(__SYMANTEC__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && !defined(__SYMANTEC__)
 #define   O_DRAW_NATIVE_API     // comments below explain why I use it
 #endif
 

@@ -49,15 +49,11 @@
 
 #include "wx/msw/private.h"
 
-#ifndef __TWIN32__
-
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #else
     #include "wx/msw/gnuwin32/extra.h"
 #endif
-
-#endif // __TWIN32__
 
 #include "wx/app.h"         // for GetComCtl32Version
 

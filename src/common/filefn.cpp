@@ -131,10 +131,6 @@
         #ifdef __CYGWIN__
             #include <sys/cygwin.h>
         #endif
-
-        #ifndef __TWIN32__
-            #include <sys/unistd.h>
-        #endif
     #endif // __GNUWIN32__
 #endif // __WINDOWS__
 

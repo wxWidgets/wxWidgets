@@ -39,13 +39,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
-// Can't resolve reference to CreateUpDownControl in
-// TWIN32, but could probably use normal CreateWindow instead.
-#if defined(__WIN95__) && !defined(__TWIN32__)
+#if defined(__WIN95__)
 
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #endif
 

@@ -29,7 +29,7 @@
 #include "wx/menu.h"
 #endif
 
-#if defined(__WIN95__) && !defined(__TWIN32__)
+#if defined(__WIN95__)
 
 #include <windows.h>
 
@@ -39,10 +39,8 @@
 #include "wx/taskbar.h"
 #include "wx/msw/private.h"
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 #ifdef __SALFORDC__

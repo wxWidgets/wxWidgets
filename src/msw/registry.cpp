@@ -313,7 +313,7 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
                           size_t *pnValues,
                           size_t *pnMaxValueLen) const
 {
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__)
 
     // old gcc headers incorrectly prototype RegQueryInfoKey()
 #if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
@@ -680,14 +680,14 @@ bool wxRegKey::DeleteValue(const wxChar *szValue)
   if ( !Open() )
     return FALSE;
 
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__)
     m_dwLastError = RegDeleteValue((HKEY) m_hKey, WXSTRINGCAST szValue);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("Can't delete value '%s' from key '%s'"),
                     szValue, GetName().c_str());
       return FALSE;
     }
-  #else   //WIN16
+#else   //WIN16
     // named registry values don't exist in Win16 world
     wxASSERT( IsEmpty(szValue) );
 
@@ -698,7 +698,7 @@ bool wxRegKey::DeleteValue(const wxChar *szValue)
                     GetName().c_str());
       return FALSE;
     }
-  #endif  //WIN16/32
+#endif  //WIN16/32
 
   return TRUE;
 }
@@ -788,10 +788,6 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
 #ifdef  __WIN32__
 bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
 {
-#ifdef __TWIN32__
-  wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
-  return FALSE;
-#else
   if ( CONST_CAST Open() ) {
     m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_DWORD,
                                   (RegString)&lValue, sizeof(lValue));
@@ -802,7 +798,6 @@ bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
   wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
                 GetFullName(this, szValue));
   return FALSE;
-#endif
 }
 
 bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
@@ -909,20 +904,20 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
 bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
-#if defined( __WIN32__) && !defined(__TWIN32__)
+#if defined( __WIN32__)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
-    #else   //WIN16
+#else   //WIN16
       // named registry values don't exist in Win16
       wxASSERT( IsEmpty(szValue) );
 
       m_dwLastError = RegSetValue((HKEY) m_hKey, NULL, REG_SZ, strValue, NULL);
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
-    #endif  //WIN16/32
+#endif  //WIN16/32
   }
 
   wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
@@ -960,7 +955,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
   if ( lIndex == -1 )
     return FALSE;
 
-#if defined( __WIN32__) && !defined(__TWIN32__)
+#if defined( __WIN32__)
     wxChar  szValueName[1024];                  // @@ use RegQueryInfoKey...
     DWORD dwValueLen = WXSIZEOF(szValueName);
 
@@ -985,13 +980,13 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
     }
 
     strValueName = szValueName;
-  #else   //WIN16
+#else   //WIN16
     // only one unnamed value
     wxASSERT( lIndex == 0 );
 
     lIndex = -1;
     strValueName.Empty();
-  #endif
+#endif
 
   return TRUE;
 }

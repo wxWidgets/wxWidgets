@@ -1011,7 +1011,7 @@
 //
 // Recommended setting: 1, only set it to 0 if your compiler doesn't have
 //                      or can't compile <richedit.h>
-#if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
+#if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT  1
 
 // TODO:  This should be ifdef'ed for any compilers that don't support
@@ -1132,16 +1132,6 @@
 #undef wxUSE_OWNER_DRAWN
 #define wxUSE_OWNER_DRAWN 0
 #endif // __SALFORDC__
-
-#ifdef __TWIN32__
-
-#undef wxUSE_THREADS
-#define wxUSE_THREADS 0
-
-#undef wxUSE_ODBC
-#define wxUSE_ODBC 0
-
-#endif // __TWIN32__
 
 // BC++/Win16 can't cope with the amount of data in resource.cpp
 #if defined(__WIN16__) && defined(__BORLANDC__)

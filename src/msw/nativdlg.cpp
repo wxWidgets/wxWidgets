@@ -34,7 +34,7 @@
     #include "wx/wx.h"
 #endif
 
-#if defined(__WIN95__) && !defined(__TWIN32__)
+#if defined(__WIN95__)
 #include "wx/spinbutt.h"
 #endif
 #include "wx/msw/private.h"
@@ -239,7 +239,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     {
         win = new wxScrollBar;
     }
-#if defined(__WIN95__) && !defined(__TWIN32__) && wxUSE_SPINBTN
+#if defined(__WIN95__) && wxUSE_SPINBTN
     else if (str == wxT("MSCTLS_UPDOWN32"))
     {
         win = new wxSpinButton;

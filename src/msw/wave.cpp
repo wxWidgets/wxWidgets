@@ -70,7 +70,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
     m_isResource = TRUE;
 
     HRSRC hresInfo;
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__)
 #ifdef _UNICODE
     hresInfo = ::FindResourceW((HMODULE) wxhInstance, fileName, wxT("WAVE"));
 #else

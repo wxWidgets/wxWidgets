@@ -54,7 +54,7 @@
 #endif
 #endif
 
-#if defined(__GNUWIN32__) && !defined(__TWIN32__)
+#if defined(__GNUWIN32__)
     #include <sys/unistd.h>
     #include <sys/stat.h>
 #endif
@@ -594,7 +594,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         command = cmd;
     }
 
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__)
 
     // the IO redirection is only supported with wxUSE_STREAMS
     BOOL redirect = FALSE;

@@ -63,14 +63,13 @@ makefiles to see what other files have been left out.
 16-bit compilation is supported under Visual C++ 1.5, and Borland BC++ 4 to 5.
 <P>
 
-wxWindows 2 for Windows will also compile on Unix with gcc using TWIN32 from <a href="http://www.willows.com" target=_top>Willows</a>,
-although TWIN32 is still in a preliminary state. The resulting executables are
-Unix binaries that work with the TWIN32 Windows API emulator.<P>
+wxWindows 2 for Windows will also compile on Unix with gcc using Wine from <a href="http://www.winehq.org" target=_top>WineHQ</a>.
+The resulting executables are Unix binaries that work with the Wine Windows API emulator.<P>
 
 You can also compile wxWindows 2 for Windows on Unix with Cygwin or Mingw32, resulting
 in executables that will run on Windows. So in theory you could write your applications
 using wxGTK or wxMotif, then check/debug your wxWindows for Windows
-programs with TWIN32, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
+programs with Wine, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
 without ever needing a copy of Microsoft Windows. See the Technical Note on the Web site detailing cross-compilation.<P>
 
 <h3><a name="wince">What about Windows CE?</a></h3>

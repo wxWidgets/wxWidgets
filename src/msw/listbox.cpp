@@ -43,10 +43,8 @@
     #include  "wx/ownerdrw.h"
 #endif
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)

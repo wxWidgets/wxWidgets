@@ -56,7 +56,7 @@
     #endif
 #endif  //GNUWIN32
 
-#if defined(__CYGWIN__) && !defined(__TWIN32__)
+#if defined(__CYGWIN__)
     #include <sys/unistd.h>
     #include <sys/stat.h>
     #include <sys/cygwin.h> // for cygwin_conv_to_full_win32_path()
@@ -147,7 +147,7 @@ static const wxChar eUSERID[]    = wxT("UserId");
 // Get hostname only (without domain name)
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -173,7 +173,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
+#if defined(__WIN32__) && !defined(__WXMICROWIN__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
     // TODO should use GetComputerNameEx() when available
 
     // the idea is that if someone had set wxUSE_SOCKETS to 0 the code
@@ -227,7 +227,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__win32s__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__win32s__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
@@ -366,7 +366,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 {
   wxString& strDir = *pstr;
 
-  #if defined(__UNIX__) && !defined(__TWIN32__)
+  #if defined(__UNIX__)
     const wxChar *szHome = wxGetenv("HOME");
     if ( szHome == NULL ) {
       // we're homeless...
@@ -934,7 +934,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-#if defined(__WIN32__) && !defined(__BORLANDC__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && !defined(__BORLANDC__)
     MEMORYSTATUS memStatus;
     memStatus.dwLength = sizeof(MEMORYSTATUS);
     GlobalMemoryStatus(&memStatus);
