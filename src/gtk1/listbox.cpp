@@ -223,6 +223,44 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     }
 #endif // wxUSE_CHECKLISTBOX
 
+    // Check or uncheck item with SPACE
+    if ((gdk_event->keyval == ' ') && (!ret) && 
+         (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
+          ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
+    {
+        int sel = listbox->GtkGetIndex( widget );
+        
+        if (sel != -1)
+        {
+            ret = TRUE;
+            
+            if (listbox->IsSelected( sel ))
+                gtk_list_unselect_item( listbox->m_list, sel );
+            else
+                gtk_list_select_item( listbox->m_list, sel );
+            
+            wxCommandEvent new_event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+            new_event.SetEventObject( listbox );
+            wxArrayInt aSelections;
+            int n, count = listbox->GetSelections(aSelections);
+            if ( count > 0 )
+            {
+                n = aSelections[0];
+                if ( listbox->HasClientObjectData() )
+                    new_event.SetClientObject( listbox->GetClientObject(n) );
+                else if ( listbox->HasClientUntypedData() )
+                    new_event.SetClientData( listbox->GetClientData(n) );
+                new_event.SetString( listbox->GetString(n) );
+            }
+            else
+            {
+                n = -1;
+            }
+            new_event.m_commandInt = n;
+            listbox->GetEventHandler()->ProcessEvent( new_event );
+        }
+    }
+    
     if (ret)
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
@@ -967,11 +1005,15 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 
 GtkWidget *wxListBox::GetConnectWidget()
 {
-    return GTK_WIDGET(m_list);
+    // return GTK_WIDGET(m_list);
+    return m_widget;
 }
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
+    return TRUE;
+
+#if 0    
     if (m_widget->window == window) return TRUE;
 
     if (GTK_WIDGET(m_list)->window == window) return TRUE;
@@ -985,6 +1027,7 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
     }
 
     return FALSE;
+#endif
 }
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
