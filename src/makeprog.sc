@@ -6,13 +6,9 @@ INCLUDE=$(INCDIR)
 
 include $(WXDIR)\src\makesc.env
 
-$(TARGET).exe: $(TARGET).obj $(TARGET).res
-	link $(LDFLAGS) /DELEXECUTABLE /RC  $*, $@, $*, $(LIBDIR)\ $(LIBS)
+$(TARGET).exe: $(OBJECTS) $(TARGET).res
+	link $(LDFLAGS) /DELEXECUTABLE /RC  $(OBJECTS), $@, $*, $(LIBDIR)\ $(LIBS)
     
-
-sc32.def:
-     echo EXETYPE NT > sc32.def
-     echo SUBSYSTEM WINDOWS >> sc32.def
 
 clean:
     -del *.obj
@@ -21,7 +17,7 @@ clean:
 	-del *.map
 	-del *.rws
     -del *.sym
-    -del sc16.def
+
 
 cleanexe:
     -del *.exe
