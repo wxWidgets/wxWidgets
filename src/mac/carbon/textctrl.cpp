@@ -2108,6 +2108,27 @@ void wxMacMLTEClassicControl::MacSetObjectVisibility(Boolean vis)
     {
         SetKeyboardFocus( m_txnWindow , m_controlRef , kControlFocusNoPart ) ;
     }
+    
+    TXNControlTag iControlTags[] = 
+        { 
+            kTXNVisibilityTag ,
+        };
+    TXNControlData iControlData[] = 
+        { 
+            {(UInt32) false },
+        };
+        
+    int toptag = WXSIZEOF( iControlTags ) ;
+
+    verify_noerr( TXNGetTXNObjectControls( m_txn , toptag,
+                                        iControlTags, iControlData ) ) ;
+                                        
+    if ( iControlData[0].uValue != vis )
+    {
+        iControlData[0].uValue = vis ;
+        verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag,
+                                        iControlTags, iControlData )) ;
+    }
     // we right now are always clipping as partial visibility (overlapped) visibility
     // is also a problem, if we run into further problems we might set the FrameBounds to an empty
     // rect here
@@ -2321,7 +2342,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneKeyDownProc (wxInt16 keyCode,
     ev.modifiers = modifiers ;
     ev.message = (( keyCode << 8 ) & keyCodeMask ) + ( charCode & charCodeMask ) ;
     TXNKeyDown( m_txn , &ev);
-
+    
     return kControlEntireControl;
 }
 
@@ -2388,9 +2409,9 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
 
     DoCreate();
 
-    MacSetObjectVisibility( wxPeer->MacIsReallyShown() ) ;
-
     AdjustCreationAttributes( *wxWHITE , true) ;
+
+    MacSetObjectVisibility( wxPeer->MacIsReallyShown() ) ;
 
     wxMacWindowClipper clipper( m_peer ) ;
     SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
