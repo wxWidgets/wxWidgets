@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<title>Building wxPython 2.5 for Development and Testing</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="building-wxpython-2-5-for-development-and-testing">
+<h1 class="title">Building wxPython 2.5 for Development and Testing</h1>
+<p>This file describes how I build wxWindows and wxPython while doing
+development and testing, and is meant to help other people that want
+to do the same thing.  I'll assume that you are using either a CVS
+snapshot from <a class="reference" href="http://wxwindows.org/snapshots/">http://wxwindows.org/snapshots/</a>, a checkout from CVS, or
+one of the released wxPythonSrc-2.5.* tarballs.  I'll also assume that
+you know your way around your system, the compiler, etc. and that you
+know what you are doing!  ;-)</p>
+<p>If you want to also install the version of wxPython you build to be in
+your site-packages dir and be your default version of wxPython, then a
+few additional steps are needed, and you may want to use slightly
+different options.  See INSTALL.txt for more details.  If you only use
+the instructions in this BUILD.txt file then you will end up with a
+separate installation of wxPython and you can switch back and forth
+between this and the release version that you may already have
+installed.</p>
+<p>If you want to make changes to any of the <tt class="literal"><span class="pre">*.i</span></tt> files, (SWIG interface
+definition files,) or to regenerate the extension sources or renamer
+modules, then you will need an up to date version of SWIG.  Either get
+and build the current CVS version, or version 1.3.20, and then apply
+the patches in wxPython/SWIG.  See the README.txt in that dir for
+details about each patch and also info about those that may already
+have been applied to the SWIG sources.  If you install this build of
+SWIG to a location that is not on the PATH (so it doesn't interfere
+with an existing SWIG install for example) then you can set a setup.py
+command-line variable named SWIG to be the full path name of the
+executable and the wxPython build will use it.  See below for an
+example.</p>
+<div class="section" id="building-on-unix-like-systems-e-g-linux-and-os-x">
+<h1><a name="building-on-unix-like-systems-e-g-linux-and-os-x">Building on Unix-like Systems (e.g. Linux and OS X)</a></h1>
+<p>These platforms are built almost the same way while in development
+so I'll combine the descriptions about their build process here.
+First we will build wxWindows and install it to an out of the way
+place, then do the same for wxPython.</p>
+<ol class="arabic">
+<li><p class="first">Create a build directory in the main wxWindows dir, and configure
+wxWindows.  If you want to have multiple builds with different
+configure options, just use different subdirectories.  I normally
+put the configure command in a script named &quot;.configure&quot; in each
+build dir so I can easily blow away everything in the build dir and
+rerun the script without having to remember the options I used
+before:</p>
+<pre class="literal-block">
+mkdir bld
+cd bld
+../configure --prefix=/opt/wx/2.5 \
+             --with-gtk \
+             --with-opengl \
+             --disable-monolithic \
+             --enable-debug \
+             --enable-geometry \
+</pre>
+<p>On OS X of course you'll want to use --with-mac instead of
+--with-gtk.  For GTK2 and unicode add:</p>
+<blockquote>
+<p>--enable-gtk2 --enable-unicode </p>
+</blockquote>
+<p>Notice that I used a prefix of /opt/wx/2.5.  You can use whatever
+path you want, such as a path in your HOME dir or even one of the
+standard prefix paths such as /usr or /usr/local if you like, but
+using /opt this way lets me easily have multiple versions and ports
+of wxWindows &quot;installed&quot; and makes it easy to switch between them,
+without impacting any versions of wxWindows that may have been
+installed via an RPM or whatever.  For the rest of the steps below
+be sure to also substitute &quot;/opt/wx/2.5&quot; with whatever prefix you
+choose for your build.</p>
+<p>If you want to use the image and zlib libraries included with
+wxWindows instead of those already installed on your system, (for
+example, to reduce dependencies on 3rd party libraries) then you
+can add these flags to the configure command:</p>
+<pre class="literal-block">
+--with-libjpeg=builtin \
+--with-libpng=builtin \
+--with-libtiff=builtin \
+--with-zlib=builtin \
+</pre>
+</li>
+<li><p class="first">To build and install wxWindows you could just use the &quot;make&quot;
+command but there are other libraries besides the main wxWindows
+libs that also need to be built so again I make a script to do it
+all for me so I don't forget anything.  This time it is called
+&quot;.make&quot; (I use the leading &quot;.  so when I do <tt class="literal"><span class="pre">rm</span> <span class="pre">-r</span> <span class="pre">*</span></tt> in my build
+dir I don't lose my scripts too.)  This is what it looks like:</p>
+<pre class="literal-block">
+make $* \
+    &amp;&amp; make -C contrib/src/gizmos $* \
+    &amp;&amp; make -C contrib/src/ogl CXXFLAGS=&quot;-DwxUSE_DEPRECATED=0&quot; $* \
+    &amp;&amp; make -C contrib/src/stc $* \
+    &amp;&amp; make -C contrib/src/xrc $* 
+</pre>
+<p>So you just use .make as if it where make, but don't forget to set
+the execute bit on .make first!:</p>
+<pre class="literal-block">
+.make
+.make install
+</pre>
+<p>When it's done you should have an installed set of files under
+/opt/wx/2.5 containing just wxWindows.  Now to use this version of
+wxWindows you just need to add /opt/wx/2.5/bin to the PATH and set
+LD_LIBRARY_PATH (or DYLD_LIBRARY_PATH on OS X) to /opt/wx/2.5/lib.</p>
+</li>
+<li><p class="first">I also have a script to help me build wxPython and it is checked in
+to the CVS as wxWindows/wxPython/b, but probably don't want to use
+it as it's very cryptic and expects that you want to run SWIG, so
+if you don't have the latest patched up version of SWIG then you'll
+probably get stuck.  So I'll just give the raw commands instead.</p>
+<p>We're not going to install the development version of wxPython with
+these commands, so it won't impact your already installed version
+of the latest release.  You'll be able test with this version when
+you want to, and use the installed release version the rest of the
+time.  If do want to install the development verison please read
+INSTALL.txt.</p>
+<p>If you have more than one version of Python on your system then be
+sure to use the version of Python that you want to use when running
+wxPython programs to run the setup.py commands below.  I'll be
+using python2.3.</p>
+<p>Make sure that the first wx-config found on the PATH is the one you
+installed above, and then change to the wxWindows/wxPython dir and
+run the this command:</p>
+<pre class="literal-block">
+cd wxPython
+python2.3 setup.py build_ext --inplace --debug
+</pre>
+<p>If your new wx-config script is not on the PATH, or there is some
+other version of it found first, then you can add this to the
+command line to ensure your new one is used instead:</p>
+<pre class="literal-block">
+WX_CONFIG=/opt/wx/2.5/bin/wx-config
+</pre>
+<p>If you are building with GTK2 then add the following flags to the
+command line:</p>
+<pre class="literal-block">
+WXPORT=gtk2 UNICODE=1
+</pre>
+<p>If you are wanting to have the source files regenerated with swig,
+then you need to turn on the USE_SWIG flag and optionally tell it
+where to find the new swig executable, so add these flags:</p>
+<pre class="literal-block">
+USE_SWIG=1 SWIG=/opt/swig/bin/swig
+</pre>
+<p>If you get errors about wxGLCanvas or being unable to find libGLU
+or something like that then you can add BUILD_GLCANVAS=0 to the
+setup.py command line to disable the building of the glcanvas
+module.</p>
+<p>When the setup.py command is done you should have fully populated
+wxPython and wx packages locally in wxWindows/wxPython/wxPython and
+.../wx, with all the extension modules (<tt class="literal"><span class="pre">*.so</span></tt> files) located in the
+wx package.</p>
+</li>
+<li><p class="first">To run code with the development verison of wxPython, just set the
+PYTHONPATH to the wxPython dir in the CVS tree.  For example:</p>
+<pre class="literal-block">
+export LD_LIBRARY=/opt/wx/2.5/lib
+export PYTHONPATH=/myprojects/wxWindows/wxPython
+cd /myprojects/wxWindows/wxPython/demo
+python2.3 demo.py
+</pre>
+<p>OS X NOTE: You need to use &quot;pythonw&quot; on the command line to run
+wxPython applications.  This version of the Python executable is
+part of the Python Framework and is allowed to interact with the
+display.  You can also Double Click on a .py or a .pyw file from
+the finder (assuming that PythonLauncher is still associated with
+these file extensions) and it will launch the Framework version of
+Python for you.  For information about creating Applicaiton Bundles
+of your wxPython apps please see the wiki and the mail lists.</p>
+<p>SOLARIS NOTE: If you get unresolved symbol errors when importing
+wxPython and you are running on Solaris and building with gcc, then
+you may be able to work around the problem by uncommenting a bit of
+code in setup.py and building again.  Look for 'SunOS' in setup.py
+and uncomment the block containing it.  The problem is that Sun's ld
+does not automatically add libgcc to the link step.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="building-on-windows">
+<h1><a name="building-on-windows">Building on Windows</a></h1>
+<p>The Windows builds currently require the use of Microsoft Visual C++.
+Theoretically, other compilers (such as mingw32 or the Borland
+compilers) can also be used but I've never done the work to make that
+happen.  If you want to try that then first you'll want to find out if
+there are any tricks that have to be done to make Python extension
+modules using that compiler, and then make a few changes to setup.py
+to accomodate that.  (And send the patches to me.)  If you plan on
+using VisualStudio.Net (a.k.a. MSVC 7.1) keep in mind that you'll also
+have to build Python and any other extension modules that you use with
+that compiler because a different version of the C runtime likbrary is
+used.  The Python executable that comes from PythonLabs and the
+wxPython extensions that I distribute are built with MSVC 6 with all
+the Service Packs applied.</p>
+<p>If you want to build a debugable version of wxWindows and wxPython you
+will need to have also built a debug version of Python and any other
+extension modules you need to use.  You can tell if you have them
+already if there is a _d in the file names, for example python_d.exe
+or python23_d.dll.  If you don't need to trace through the C/C++ parts
+of the code with the debugger then building the normal (or hybrid)
+version is fine, and you can use the regular python executables with
+it.</p>
+<p>Just like the unix versions I also use some scripts to help me build
+wxWindows, but I use some non-standard stuff to do it.  So if you want
+to use them too you'll need to get a copy or 4DOS or 4NT from
+<a class="reference" href="http://www.jpsoft.com/">http://www.jpsoft.com/</a> and also a copy of unix-like cat and sed
+programs.  You can also do by hand what my scripts are doing, but
+there are a lof steps involved and I won't be going into details
+here.  There is a copy of my build scripts in wxWindowswxPythondistribmsw</p>
+<ol class="arabic">
+<li><p class="first">Set an environment variable to the root of the wxWindows source
+tree:</p>
+<pre class="literal-block">
+set WXWIN=e:\projects\wxWindows
+</pre>
+</li>
+<li><p class="first">Copy setup0.h to setup.h</p>
+<blockquote>
+<p>cd %WXWIN%includewxmsw
+copy setup0.h setup.h</p>
+</blockquote>
+</li>
+<li><p class="first">Edit %WXWIN%includewxmswsetup.h and change a few settings.
+Some of them are changed by my build scripts depending on the type
+of build (debug/hybrid, unicode/ansi). I change a few of the other
+defaults to have these values:</p>
+<pre class="literal-block">
+wxDIALOG_UNIT_COMPATIBILITY    0
+wxUSE_DEBUG_CONTEXT            1
+wxUSE_MEMORY_TRACING           1
+wxUSE_DIALUP_MANAGER           0
+wxUSE_GLCANVAS                 1
+wxUSE_POSTSCRIPT               1
+wxUSE_AFM_FOR_POSTSCRIPT       0
+</pre>
+</li>
+<li><p class="first">Make a %WXWIN%BIN directory and add it to the PATH.  My build
+scripts will copy the wxWindows DLLs there.</p>
+</li>
+<li><p class="first">Change to the %WXWIN%buildmsw directory and copy my build scripts
+there.</p>
+</li>
+<li><p class="first">Use the .make.btm command to build wxWindows.  It needs one
+command-line parameter which controls what kind of build(s) to do.
+Use one of the following:</p>
+<pre class="literal-block">
+debug          Build debug version
+hybrid         Build hybrid version
+both           Both debug and hybrid
+debug-uni      Build a debug unicode library
+hybrid-uni     Hybrid unicode (see the pattern yet? ;-)
+both-uni       and finally both unicode libraries
+</pre>
+<p>For example:</p>
+<pre class="literal-block">
+     .make hybrid
+
+You can also pass additional command line parameters as needed and
+they will all be passed on to the nmake commands, for example to
+clean up the build::
+
+     .make hybrid clean
+</pre>
+</li>
+<li><p class="first">When that is done it will have built the main wxWindows DLLs and
+also some of the contribs DLLs.  There should be a ton of DLLs in
+%WXDIR%bin and lots of lib files and other stuff in
+%WXDIR%libvc_dll.</p>
+</li>
+<li><p class="first">Building wxPython on Windows is very similar to doing it for the
+unix systems.  We're not going to install the development version
+of wxPython with these commands, so it won't impact your already
+installed version of the latest release.  You'll be able to test
+with this version when you want to, and use the installed release
+version the rest of the time.  If you ever do want to install the
+development verison please refer to INSTALL.txt.</p>
+<p>Change to the wxWindowswxPython dir and run the this command,
+makeing sure that you use the version of python that you want to
+build for (if you have more than one on your system):</p>
+<pre class="literal-block">
+cd %WXWIN%\wxPython
+python setup.py build_ext --inplace 
+</pre>
+<p>If you are wanting to have the source files regenerated with swig,
+then you need to turn on the USE_SWIG flag and optionally tell it
+where to find the new swig executable, so add these flags:</p>
+<pre class="literal-block">
+USE_SWIG=1 SWIG=e:\projects\SWIG-cvs\swig.exe
+</pre>
+<p>If you built a Unicode version of wxWindows and want to also build
+the Unicode version of wxPython then add this flag:</p>
+<pre class="literal-block">
+UNICODE=1
+</pre>
+<p>If you have a debug version of Python and wxWindows and want to
+build a debug version of wxPython too, add the --debug flag to the
+command line.  You should then end up with a set of <tt class="literal"><span class="pre">*_d.pyd</span></tt>
+files in the wx package and you'll have to run <tt class="literal"><span class="pre">python_d.exe</span></tt> to
+use them.  The debug and hybrid(release) versions can coexist.</p>
+<p>When the setup.py command is done you should have fully populated
+wxPython and wx packages locally in wxWindows/wxPython/wxPython and
+wxWindows/wxPython/wx, with all the extension modules (<tt class="literal"><span class="pre">*.pyd</span></tt>
+files) located in the wx package.</p>
+</li>
+<li><p class="first">To run code with the development verison of wxPython, just set the
+PYTHONPATH to the wxPython dir in the CVS tree.  For example:</p>
+<pre class="literal-block">
+set PYTHONPATH=e:\projects\wxWindows\wxPython
+cd e:\projects\wxWindows\wxPython
+python demo.py
+</pre>
+</li>
+</ol>
+</div>
+</div>
+<hr class="footer" />
+<div class="footer">
+Generated on: 2004-02-04 23:31 UTC.
+</div>
+</body>
+</html>

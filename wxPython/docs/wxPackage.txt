@@ -7,6 +7,7 @@
 --------------------------------------------------
 
 :Author: Patrick K. O'Brien
+:Author: Robin Dunn
 :Contact: pobrien@orbtech.com
 :Organization: Orbtech_
 :Date: $Date$
@@ -20,14 +21,29 @@
 Introduction
 ============
 
-Big things sometimes come in small packages.  This is certainly true
-of the new wx package, which is being introduced in wxPython 2.4.1 as
-a way to allow the "wx" prefix to be dropped from the names of all
-wxPython classes, functions, and constants.  This document should
-answer all the questions you might have concerning the new wx package.
-If not, feel free to contact the author.  I hope you like the new wx
-package as much as I do.
+In the begining there was Python, and Python had modules, and Python
+was good.  But after a time Guido looked on Python and saw that Python
+needed organizational assistance, and so Guido took code from Python's
+side and created Packages and then Python was very good.  About this
+time wxPython was reborn, and wxPython used Packages, but being young
+and trying to use a new technology wxPython did not know how to use
+Packages effectivly.  wxPython was good, but dreamed of being much
+better...
 
+Now many years later, after tons of code reorganization and build
+hacking wxPython has reached that goal.  In version 2.4.1 a prototype
+of this new structure was introduced that dynamically built at import
+time a new toplevel package named simply "wx" that contained all the
+items from wxPython.wx but with the names edited to remove the wx
+prefix.  Now in 2.5 the final phase of that switcheroo has been
+completed and the *real* classes, functions and constants are now
+located in the wx package, leaving some compatibility modules in
+wxPython.wx.  This document should answer all the questions you might
+have concerning the new wx package.  Please also take a look at the
+`2.5 Migration Guide`_ to see notes about other big differences in
+this release.
+
+.. _2.5 Migration Guide: MigrationGuide.html
 
 Why change anything?
 ====================
@@ -51,22 +67,27 @@ The new wx package allows you to write code like this, instead::
 
     class Frame(wx.Frame)
 
-The third reason is that the wxWindows project intends to do the same
-thing (implement a new wx namespace and drop the "wx" prefix) and we
-want wxPython to lead the way.
+The third reason is that the wxWindows project has considered doing
+the same thing (implement a new wx namespace and drop the "wx" prefix)
+and we want wxPython to lead the way.
 
 
 What does the new wx package do?
 ================================
 
-As a way of getting to this new syntax as quickly as possible, the
-code in this new wx package was created.  What it does is alter the
-existing wx namespace dynamically.  By making the changes on-the-fly
-at runtime, we can try out the new syntax before any permanent changes
-are made to the underlying class library.  The downside of making
-these changes at runtime is that there is a slight delay when you
-``import wx``; the upside is that you can start using the new syntax
-now.
+As mentioned in the Introduction, wxPython 2.4.1 introduced a way of
+getting to this new syntax as quickly as possible.  It would import
+the old names (like "wxFrame") from the old package and then create new
+names in the wx package  without the wx prefix, (like "Frame".)
+Starting with wxPython 2.5 the renaming is moved up to the wxPython
+build step, so the real classes and etc. are actually named with the
+new name (like "Frame") and are located in the new wx package.
+
+For compatibility the old wxPython package still exists, but now it is
+populated with modules that simply import the new names and then
+"reverse-renames" them to the old names.  It probably sounds a bit
+complicated, but it is mostly automated and so it  doesn't cause
+problems in most cases.
 
 
 Will any of this effect my existing code?
@@ -78,55 +99,25 @@ syntax.  But all new documentation and code examples will use the new
 syntax.  So don't wait too long.  You wouldn't want anyone calling you
 old-fashioned, would you?
 
+When you import from wxPython.wx and use a class with the old name,
+such as wxButton, you are actually using the wx.Button class.  I
+expect that the vast majority of the existing code should work fine
+using this scheme.  The only things that may cause problems is if your
+old code is depending on some of the implemtation details, or if you
+are using other things that have changed in the API.  See the
+`Migration Guide`_ for more details.
 
-How does the new wx package work?
-=================================
-
-It's pretty simple, and pretty clever.  The wx directory contains an
-``__init__.py`` file, making it a Python package.  (In contrast, the
-old wxPython.wx module is a module, not a package.)  When you ``import
-wx`` the code in the ``__init__.py`` file is executed, and that's
-where all the magic takes place.  Let's take a look at the code inside
-the ``__init__.py`` file:
-
-.. include:: ../wx/__init__.py
-   :literal:
-
-Namespaces in Python are implemented as dictionaries.  The dictionary
-used to create the wx package's namespace is accessible using the
-``globals()`` function.  The dictionary used to create the old
-wxPython.wx module's namespace is ``wx.__dict__``.  Once we have these
-two dictionaries, it's a simple matter of iterating through one,
-changing the names, adding the renamed object to the other dictionary,
-and cleaning up a few local variables and imported modules.  Voila!
+.. _Migration Guide: MigrationGuide.html
 
 
 What about all the other modules, like grid, html, and stc?
 ===========================================================
 
-There's more to wxPython than just the wx namespace.  And we've got
-those extra modules covered as well.  For each of those modules (as
-well as the lib package) we've got matching modules in the new wx
-package.  Let's take a look at a few of them.
-
-Here is ``html.py``:
-
-.. include:: ../wx/html.py
-   :literal:
-
-And here is ``lib/dialogs.py``:
-
-.. include:: ../wx/lib/dialogs.py
-   :literal:
-
-As you can see, they both rely on the ``prefix.rename()`` function
-defined in ``prefix.py``:
-
-.. include:: ../wx/prefix.py
-   :literal:
-
-Again, the technique is very similar to the one used by the wx
-package.
+There's more to the old wxPython than just the wxPython.wx module.
+And we've got those extra modules covered as well.  Each of those
+modules (as well as the lib subpackage) has been moved to the new wx
+package and reverse-renamers have been placed in the wxPython package
+as needed.
 
 
 How do I use this new wx package?
@@ -161,11 +152,6 @@ as::
 In most cases, existing code can be modified with a simple search and
 replace.
 
-One extra issue you might run into when converting existing code is
-that the wx.__version__ attribute is no longer available, since the
-new wx namespace doesn't include any private attributes from the old
-wxPython.wx namespace.  The solution is to use the wx.VERSION_STRING
-attribute, which was introduced in wxPython 2.4.1.
 
 
 Where can I find example programs using the new wx syntax?

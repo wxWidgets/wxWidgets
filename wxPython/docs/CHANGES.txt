@@ -1,6 +1,5 @@
 CHANGES.txt for wxPython
-
-----------------------------------------------------------------------
+=====================================================================
 
 2.5.1.x
 -------
@@ -31,7 +30,7 @@ happen when there are nested attempts to aquire the GIL.
 
 The RPMs will now install menu items on Mandrake in
 Applications/Development/Tools for PyCrust, XRCed, etc.  They are also
-installing icons and *.desktop items in the generic KDE and GNOME
+installing icons and ``*.desktop`` items in the generic KDE and GNOME
 locations, but I don't know yet if they are resulting in menu items on
 non-Mandrake systems.  (It didn't automatically do it on my RH-9 build
 box but I didn't chase it very far...)  If you have ideas for how to
@@ -80,7 +79,7 @@ Added wxScrolledPanel from Will Sadkin
 Added SetShape method to top level windows (e.g. wxFrame.)
 
 Changed wxSWIG to not generate Python code using apply, (since it will
-be deprecated in the future) wxSWIG will use spam(*args, **kw) syntax
+be deprecated in the future) wxSWIG will use ``spam(*args, **kw)`` syntax
 instead.  Also changed the generated __repr__ methods to be a bit more
 informative.
 
@@ -90,7 +89,7 @@ and wxWindows match.
 
 Added the new wx "renamer" package that will dynamically import from
 the wxPython package and rename wxFooBar --> FooBar.  That means that
-people can do imports without "import *" and can use names like
+people can do imports without ``"import *"`` and can use names like
 wx.Frame instead of wx.wxFrame.  This is phase 1 of a full transition
 to the new namespace.
 
@@ -147,6 +146,7 @@ Added wxCursorFromBits.
 
 2.4.0.7
 -------
+
 Gave up on generating a warning upon the use of the old true/false or
 TRUE/FALSE values.
 
@@ -174,7 +174,8 @@ details.
 
 
 2.4.0.6 (a.k.a. the I'm so stupid release)
--------
+------------------------------------------
+
 The new deprecation class for the old true/false symbols can now be
 returned from OnInit.  And I promise to be sure I am testing what I
 think I am testing in the future...
@@ -182,7 +183,8 @@ think I am testing in the future...
 
 
 2.4.0.5 (a.k.a. the blame it on Kevin release)
--------
+----------------------------------------------
+
 A few little but annoying bug fixes.
 
 Updated pycolourchooser.
@@ -767,8 +769,7 @@ Added wxGetClientDisplayRect which on wxMSW returns a wxRect
 representing the area on screen not occupied by the taskbar and such.
 On other platforms it is equivallent to wxGetDisplaySize.
 
-
-***---***---***---***---***---***---***---***---***---***---***---
+OOR:
    Implemented the first phase of OOR (Original Object Return).  See
    the text in the demo for more details of what this means, but in a
    nutshell methods such as wxWindow.GetParent or FindWindowById will
@@ -789,7 +790,7 @@ On other platforms it is equivallent to wxGetDisplaySize.
    stomped on during my testing.  So please be sure to test everything
    thoroughly when you install this version and be sure to report any
    object-type related oddities to me.
-***---***---***---***---***---***---***---***---***---***---***---
+
 
 There is now a wxObject class that most other classes derive from like
 in C++, but the methods provided don't really match but are wxPython
@@ -1124,7 +1125,7 @@ Removed all non wx stuff from the glcanvas module since DA's PyOpenGL
 is better and compatible with the wxGLCanvas.  You can get it at
 http://starship.python.net:9673/crew/da/Code/PyOpenGL.
 
-Added some missing EVT_ functions.
+Added some missing EVT functions.
 
 Added Dirk Holtwic's editor classes to the wxPython.lib.editor
 package.
@@ -1554,8 +1555,8 @@ compatibility with the current wxWindows.
 
 What's new in 0.5.0
 -------------------
-Changed the import semantics from "from wxPython import *" to "from
-wxPython.wx import *"  This is for people who are worried about
+Changed the import semantics from ``"from wxPython import *"`` to 
+``"from wxPython.wx import *"``  This is for people who are worried about
 namespace pollution, they can use "from wxPython import wx" and then
 prefix all the wxPython identifiers with "wx."
 
@@ -1604,4 +1605,5 @@ version segfault shortly after starting up.
 
 3. Varioius bug fixes, enhancements, etc.
 
-----------------------------------------------------------------------
+
+

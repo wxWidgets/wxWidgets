@@ -221,5 +221,5 @@ History of changes
 This section lists all the changes that have been made to the Py
 programs and modules, since the beginning.
 
-.. include:: ../wxPython/py/CHANGES.txt
+.. include:: ../wx/py/CHANGES.txt
 
