@@ -97,14 +97,12 @@
 // and if __NO_VC_CRTDBG__ is not defined.
 
 // If 1, enables wxDebugContext, for writing error messages to file, etc. If
-// __WXDEBUG__ is not defined, will still use normal memory operators. It's
-// recommended to set this to 1, since you may well need to output an error log
-// in a production version (or non-debugging beta).
+// __WXDEBUG__ is not defined, will still use the normal memory operators.
 //
-// Default is 1.
+// Default is 0
 //
-// Recommended setting: 1 but see comment above
-#define wxUSE_DEBUG_CONTEXT 1
+// Recommended setting: 0
+#define wxUSE_DEBUG_CONTEXT 0
 
 // If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
 // __WXDEBUG__ is also defined.
@@ -112,29 +110,31 @@
 // WARNING: this code may not work with all architectures, especially if
 // alignment is an issue. This switch is currently ignored for mingw / cygwin
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_MEMORY_TRACING 1
+// Recommended setting: 1 if you are not using a memory debugging tool, else 0
+#define wxUSE_MEMORY_TRACING 0
 
 // In debug mode, cause new and delete to be redefined globally.
-// If this causes problems (e.g. link errors), set this to 0.
+// If this causes problems (e.g. link errors which is a common problem
+// especially if you use another library which also redefines the global new
+// and delete), set this to 0.
 // This switch is currently ignored for mingw / cygwin
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
+// Recommended setting: 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
 // this to 0 if using templates (at least for VC++). This switch is currently
 // ignored for mingw / cygwin
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_DEBUG_NEW_ALWAYS 1
+// Recommended setting: 0
+#define wxUSE_DEBUG_NEW_ALWAYS 0
 
 // wxHandleFatalExceptions() may be used to catch the program faults at run
 // time and, instead of terminating the program with a usual GPF message box,
@@ -1212,41 +1212,6 @@
 #define wxUSE_WCHAR_T 0
 
 #endif // Win16
-
-// ----------------------------------------------------------------------------
-// undef the things which don't make sense for wxBase build
-// ----------------------------------------------------------------------------
-
-#if !wxUSE_GUI
-
-#undef wxUSE_HTML
-#define wxUSE_HTML 0
-
-#endif // !wxUSE_GUI
-
-// ----------------------------------------------------------------------------
-// check the settings consistency: do it here to abort compilation immediately
-// and not almost in the very end when the relevant file fails to compile and
-// you need to modify setup.h and rebuild everything
-// ----------------------------------------------------------------------------
-
-#if wxUSE_DATETIME && !wxUSE_LONGLONG
-    #error wxDateTime requires wxLongLong
-#endif
-
-#if wxUSE_TEXTFILE && !wxUSE_FILE
-    #error You cannot compile wxTextFile without wxFile
-#endif
-
-#if wxUSE_FILESYSTEM && !wxUSE_STREAMS
-    #error You cannot compile virtual file systems without wxUSE_STREAMS
-#endif
-
-#if wxUSE_HTML && !wxUSE_FILESYSTEM
-    #error You cannot compile wxHTML without virtual file systems
-#endif
-
-// add more tests here...
 
 #endif
     // _WX_SETUP_H_
