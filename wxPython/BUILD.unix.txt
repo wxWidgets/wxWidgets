@@ -1,6 +1,241 @@
- ../configure --with-gtk --with-opengl --enable-permissive
+Building wxPython on Unix or Unix-like Systems
+----------------------------------------------
 
---enable-debug=yes --enable-mem_tracing=yes
+The basic steps for building wxPython for Unix or Unix-like systems
+are:
+
+     1. Compile and/or install glib and gtk+
+     2. Compile and/or install wxGTK
+     3. Compile and install wxPython
+
+We'll go into more detail of each of these steps below, but first a
+few bits of background information on tools.
+
+I use a tool called SWIG (http://www.swig.org) to help generate the
+C++ sources used in the wxPython extension module.  However you don't
+need to have SWIG unless you want to modify the *.i files.  If you do
+you'll want to have version 1.1-883 of SWIG and you'll need to change
+a flag in the setup.py script as described below.
+
+I use the new Python Distutils tool to build wxPython.  It is included
+with Python 2.0, but if you want to use Python 1.5.2 or 1.6 then
+you'll need to download and install Distutils 1.0 from
+http://www.python.org/sigs/distutils-sig/
+
+I usually use RedHat Linux when working on the wxGTK version of
+wxPython, but I occasionally build and test on Solaris and I hope to
+be able to add some other platforms soon.  The compiler I use is
+whatever comes with the current version of RedHat I am using.  I find
+that there are less portability problems with the RPMs if I don't try
+using the latest and greatest compilers all the time.  On the other
+platforms I usually stick with as recent a version of GCC that I can
+find pre-built for that platform.
+
+Okay, now on the the fun stuff...
 
 
-LDSHARED...
+1. Compile and/or install glib and gtk+
+---------------------------------------
+
+A. First of all, check and see if you've already got glib/gtk+ on your
+   system, all the Linux distributions I know of come with it, at
+   least as an option.  Look for libglib* and libgtk* in your system's
+   standard library directories.  You'll also need the headers and
+   config scripts in order to build things that use glib/gtk.  Try
+   running gtk-config:
+
+	   gtk-config --version
+
+   If you have version 1.2.5 or better then you're all set.  You can
+   skip to step #2.
+
+B. If your system has a binary package mechanism, (RPMs, debs,
+   whatever,) check and see if binaries for glib abd gtk+ are
+   available.  Be sure to get the runtime library package and the
+   development package.  Install them with your package tool, and skip
+   to step #2.
+
+C. If all else fails, you can get the source code for glib and gtk+ at
+   http://www.gtk.org/.  Fetch the latest of each in the 1.2.x
+   series.  Compile and install each of them like this:
+
+	    gzip -d [package].tar.gz | tar xvf -
+	    cd [package]
+	    ./configure
+	    make
+	    make install
+
+   The last step will probably have to be done as root.  Also, if your
+   system needs anything done to update the dynamic loader, (such as
+   running ldconfig on Linux) then do it now.
+
+
+
+2. Compile and/or install wxGTK
+-------------------------------
+
+A. You can find the sources and RPMs for wxGTK at
+   ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/, or
+   just follow the download links from http://wxwindows.org/.  You can
+   also check out a current snapshot of the sources from the CVS
+   server.  (Some information about annonymous CVS access is at
+   http://wxwindows.org/cvs.htm.)  The advantage of using CVS is that
+   you can easily update as soon as the developers check in new
+   sources or fixes.  The advantage of using a released version is
+   that it usually has had more testing done.  You can decide which
+   method is best for you.
+
+B. You'll usually want to use a version of wxGTK that haa the same
+   version number as the wxPython sources you are using.  (Another
+   advantage of using CVS is that you'll get both at the same time.)
+
+C. If using the RPMs be sure to get both the wxGTK and wxGTK-devel
+   RPMs (at a minimum) and then install them as root.
+
+	rpm -Uhv wxGTK-2.2.2-0.i386.rpm wxGTK-devel-2.2.2-0.i386.rpm
+
+D. If using the sources (either from the tarball or from CVS) then
+   configure it like this:
+
+	cd wxWindows   # or whatever your top-level directory is called
+	mkdir build
+	cd build
+	../configure --with-gtk
+
+   There are gobs abd gobs of options for the configure script, run
+   ../configure --help to see them all.  I'll descibe some that I find
+   useful here.
+
+   If you have OpenGL or compatible libraries installed, then add the
+   --with-opengl flag.
+
+   If you are on Solaris and are using a recent version of GCC, then
+   you'll probably want to add the --enable-permissive flag so the
+   compiler won't barf on your broken X11 header files.
+
+   To make a debugging version of wxGTK, add the --enable-debug flag.
+   This sets the -g flag for the compiler and also activates some
+   special debugging code in wxWindows by defining the __WXDEBUG__
+   macro.  You'll get some extra asserts, failure logging, etc.
+
+E. Now just compile and install.  You need to use GNU make, so if your
+   system has something else get GNU make and build, install it and
+   use it instead of your system's default make command.
+
+       make
+       make install
+
+   The last step will probably have to be done as root.  Also, if your
+   system needs anything done to update the dynamic loader, (such as
+   running ldconfig on Linux) then do it now.
+
+F. You can test your build by changing to one of the directories under
+   build/samples or build/demos, running make and then running the
+   executable that is built.
+
+
+
+3. Compile and install wxPython
+-------------------------------
+
+A. You have the same options (and same advantages/disadvantages) for
+   getting the wxPython source, either a released snapshot or from
+   CVS.  The released version file is named wxPython-[version].tar.gz
+   and is available at http://wxpython.org/download.php.  If you want
+   to use CVS you'll find wxPython in the wxWindows CVS tree (see
+   above) in the wxWindows/wxPython directory.
+
+B. As mentioned previouslly, wxPython is built with the standard
+   Python Distutils tool.  If you are using Python 2.0c1 or later you
+   are all set, otherwise you need to download and install Distutils
+   1.0 from http://www.python.org/sigs/distutils-sig/.
+
+   On Unix systems Distutils figures out what commands and flags to
+   use for the compiler and linker by looking in the Makefile that was
+   used to build Python itself.  Most of the time this works okay.  If
+   it doesn't, there doesn't seem to be a way to override the values
+   that Distutils uses without hacking either Distutils itself, or
+   Python's Makefile.  (Complain to the distutils-sig about this
+   please.)  For example, on my Solaris system I had to edit
+   /usr/local/lib/python1.5/config/Makefile and replace
+
+         LDSHARED=ld -G
+
+   with
+
+         LDSHARED=gcc -G
+
+C. Change to the root wxPython directory and look at the setup.py
+   file.  This is the script that configures and defines all the
+   information that Distutils needs to build wxPython.  There are some
+   options near the begining of the script that you may want or need
+   to change based on what options you have selected up to this point,
+   (sources from tar.gz or from CVS, etc.)  You can either change
+   these flags directly in setup.py or supply them on the
+   command-line.
+
+	BUILD_GLCANVAS Set to zero if you don't want to build the
+		       Open GL canvas extension module.  If you don't
+		       have OpenGL or compatible libraries then you'll
+		       need to set this to zero.
+
+	     BUILD_OGL Set to zero if you don't want to build the
+		       Object Graphics Library extension module.
+
+  	     BUILD_STC Set to zero if you don't want to build the
+		       wxStyledTextCtrl (the Scintilla wrapper)
+		       extension module.
+
+  	      USE_SWIG If you have edited any of the *.i files you
+		       will need to set this flag to non-zero so SWIG
+		       will be executed to regenerate the wrapper C++
+		       and shadow python files.
+
+	   IN_CVS_TREE If you using the CVS version of the wxWindows
+		       and wxPython sources then you will need to set
+		       this flag to non-zero.  This is needed because
+		       some source files from the wxWindows tree are
+		       copied to be under the wxPython tree in order
+		       to keep Distutils happy.  With this flag set
+		       then setup.py will automatically keep these
+		       copied sources up to date if the original
+		       version is ever updated.  If you are using the
+		       tar.gz version of the Python sources then these
+		       copied sources are already present in your
+		       source tree.
+
+
+D. To build and install wxPython you simply need to execute the
+   setup.py script.  If you have more than one version of Python
+   installed, be sure to execute setup.py with the version you want to
+   build wxPython for.  Depending on the permissions on your
+   site-packages directory you may need to be root to run the install
+   command.
+
+	 python setup.py build
+   	 python setup.py install
+
+E. At this point you should be able to change into the wxPython\demo
+   directory and run the demo:
+
+	 python demo.py
+
+F. If you would like to make a test build that doesn't overwrite the
+   installed version of wxPython you can do so with this command
+   instead of the install command above:
+
+	 python setup.py build_ext --inplace
+
+   This will build the wxPython package in the local wxPython
+   directory instead of installing it under your Python installation.
+   To run using this test version just add the base wxPython source
+   directory to the PYTHONPATH:
+
+         set PYTHONPATH=~/projects/wxWindows/wxPython
+	 cd ~/projects/wxWindows/wxPython/demo
+	 python demo.py
+
+
+That's all folks!
+
+

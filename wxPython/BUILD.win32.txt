@@ -181,8 +181,8 @@ A. You have the same options (and same advantages/disadvantages) for
    CVS.  The released version file is named wxPython-[version].tar.gz
    and is available at http://wxpython.org/download.php.  You can use
    WinZip to unpack it if you don't have tar and gzip.  If you want to
-   use CVS you'll find wxPython in the wxWindows CVS (see above) in
-   the wxWindows/wxPython directory.
+   use CVS you'll find wxPython in the wxWindows CVS tree (see above)
+   in the wxWindows/wxPython directory.
 
 
 
@@ -228,7 +228,7 @@ B. Change to the root wxPython directory and look at the setup.py
 		       copied sources up to date if the original
 		       version is ever updated.  If you are using the
 		       tar.gz version of the Python sources then these
-		       copoed sources are already present in your
+		       copied sources are already present in your
 		       source tree.
 
 
@@ -255,7 +255,7 @@ D. At this point you should be able to change into the wxPython\demo
 
 E. If you would like to make a test build that doesn't overwrite the
    installed version of wxPython you can do so with one of these
-   commands:
+   commands instead of the install command above:
 
 	 FINAL:	    python setup.py build_ext --inplace
 
@@ -274,4 +274,5 @@ E. If you would like to make a test build that doesn't overwrite the
 
 
 That's all folks!
+
 
