@@ -2327,6 +2327,7 @@ typedef void (wxEvtHandler::*wxScrollWinEventFunction)(wxScrollWinEvent&);
 typedef void (wxEvtHandler::*wxSizeEventFunction)(wxSizeEvent&);
 typedef void (wxEvtHandler::*wxMoveEventFunction)(wxMoveEvent&);
 typedef void (wxEvtHandler::*wxPaintEventFunction)(wxPaintEvent&);
+typedef void (wxEvtHandler::*wxNcPaintEventFunction)(wxNcPaintEvent&);
 typedef void (wxEvtHandler::*wxEraseEventFunction)(wxEraseEvent&);
 typedef void (wxEvtHandler::*wxMouseEventFunction)(wxMouseEvent&);
 typedef void (wxEvtHandler::*wxCharEventFunction)(wxKeyEvent&);
@@ -2402,7 +2403,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCloseEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_QUERY_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_END_SESSION, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCloseEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_PAINT, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPaintEventFunction, & func ), (wxObject *) NULL ),
-#define EVT_NC_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_NC_PAINT, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPaintEventFunction, & func ), (wxObject *) NULL ),
+#define EVT_NC_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_NC_PAINT, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxNcPaintEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_ERASE_BACKGROUND(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ERASE_BACKGROUND, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxEraseEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_CHAR(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCharEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_KEY_DOWN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCharEventFunction, & func ), (wxObject *) NULL ),
