@@ -44,7 +44,7 @@ class wxColour: public wxGDIObject
     wxColour();
     wxColour( char red, char green, char blue );
     wxColour( const wxString &colourName ) { InitFromName(colourName); }
-    wxColour( const char *colourName ) { InitFromName(colourName); }
+//    wxColour( const char *colourName ) { InitFromName(colourName); }
     wxColour( const wxColour& col );
     wxColour( const wxColour* col );
     ~wxColour();
@@ -60,16 +60,16 @@ class wxColour: public wxGDIObject
 
   private:
   public:
-  
+
     friend wxDC;
     friend wxPaintDC;
     friend wxBitmap;
     friend wxWindow;
-        
+
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;
     GdkColor *GetColor() const;
-    
+
 protected:
     // helper functions
     void InitFromName(const wxString& colourName);
@@ -77,5 +77,5 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
-  
+
 #endif // __GTKCOLOURH__
