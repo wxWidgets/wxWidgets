@@ -770,9 +770,13 @@ bool wxLocale::Init(int language, int flags)
     return FALSE;
 #endif
 
-    return Init(name, canonical, retloc,
-                (flags & wxLOCALE_LOAD_DEFAULT) != 0,
-                (flags & wxLOCALE_CONV_ENCODING) != 0);
+    wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
+    bool ret = Init(name, canonical, retloc,
+                    (flags & wxLOCALE_LOAD_DEFAULT) != 0,
+                    (flags & wxLOCALE_CONV_ENCODING) != 0);
+    if (szLocale)
+        free(szLocale);
+    return ret;
 }
 
 
