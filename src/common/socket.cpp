@@ -1060,31 +1060,6 @@ wxSocketClient *wxSocketHandler::CreateClient(wxSocketBase::wxSockFlags flags)
   return client;
 }
 
-#ifdef __WINDOWS__
-// --------------------------------------------------------------
-// --------- wxSocketHandler: Windows specific methods ----------
-// --------------------------------------------------------------
-
-UINT wxSocketHandler::NewMessage(wxSocketBase *sock)
-{
-  internal->firstAvailableMsg++;
-  smsg_list->Append(internal->firstAvailableMsg, sock);
-  return internal->firstAvailableMsg;
-}
-
-void wxSocketHandler::DestroyMessage(UINT msg)
-{
-  wxNode *node = smsg_list->Find(msg);
-  delete node;
-}
-
-HWND wxSocketHandler::GetHWND() const
-{
-  return internal->sockWin;
-}
-
-#endif
-
 bool wxSocketModule::OnInit() 
 {
   wxSocketHandler::master = new wxSocketHandler();

@@ -594,6 +594,8 @@ $(MSWDIR)\tokenzr.obj:	$(COMMDIR)\tokenzr.$(SRCSUFF)
 
 $(MSWDIR)\socket.obj:	$(COMMDIR)\socket.$(SRCSUFF)
 
+$(MSWDIR)\sckint.obj:	$(COMMDIR)\sckint.$(SRCSUFF)
+
 $(MSWDIR)\sckaddr.obj:	$(COMMDIR)\sckaddr.$(SRCSUFF)
 
 $(MSWDIR)\protocol.obj: $(COMMDIR)\protocol.$(SRCSUFF)

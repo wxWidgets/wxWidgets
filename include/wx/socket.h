@@ -252,17 +252,6 @@ public:
 
   // Create or reuse a socket handler
   static wxSocketHandler& Master() { return *master; }
-
-#if defined(WXSOCK_INTERNAL) && defined(__WINDOWS__)
-
-  friend LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd,
-                        UINT message, WPARAM wParam, LPARAM lParam);
-
-  UINT NewMessage(wxSocketBase *sock);
-  void DestroyMessage(UINT msg);
-
-  HWND GetHWND() const;
-#endif
 };
 
 class WXDLLEXPORT wxSocketEvent : public wxEvent {
