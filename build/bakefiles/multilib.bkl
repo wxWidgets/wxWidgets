@@ -11,7 +11,6 @@
          cond="SHARED=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL_BASE</define>
         <define>wxUSE_BASE=1</define>
-        <define>wxUSE_GUI=0</define> 
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
         <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
         <msvc-copy-setup-h/>
@@ -20,7 +19,6 @@
     <lib id="baselib" template="wx_base_lib"
          cond="SHARED=='0' and MONOLITHIC=='0'">
         <define>wxUSE_BASE=1</define> 
-        <define>wxUSE_GUI=0</define> 
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
         <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
         <msvc-copy-setup-h/>

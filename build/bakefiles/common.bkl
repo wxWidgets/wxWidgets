@@ -390,18 +390,20 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
     </template>
     
     <template id="wx_lib" template="wx_lib_b,wx_3rdparty_dependencies"/>
-    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_dependencies"/>
+    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_dependencies">
+        <define>wxUSE_GUI=0</define> 
+    </template>
+
     <template id="wx_dll" template="wx_dll_b,wx_3rdparty_dependencies"
                           template_append="wx_append_nomono"/>
     <template id="wx_base_dll" template="wx_dll_b,wx_3rdparty_dependencies"
-                               template_append="wx_append_base_nomono"/>
+                               template_append="wx_append_base_nomono">
+        <define>wxUSE_GUI=0</define> 
+    </template>
                            
     <!-- =============================================================== -->
     <!--             Templates for building wxWindows plugins:           -->
     <!-- =============================================================== -->
-
-    <set var="">
-    </set>
 
     <if cond="WX_STABLE_BRANCH=='1'">
         <set var="PLUGIN_VERSION">
@@ -430,6 +432,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
                 $(id)$(addPrefixIfNotEmpty('_',WXNAMESUFFIX))$(PLUGIN_VERSION)
             </dllname>
             <define>WXUSINGDLL</define>
+            <define>wxUSE_GUI=0</define>
         </template>
     </define-rule>
     
