@@ -9464,7 +9464,7 @@ wxGridCellCoordsArray wxGrid::GetSelectionBlockTopLeft() const
 wxGridCellCoordsArray wxGrid::GetSelectionBlockBottomRight() const
 {
     if (!m_selection) { wxGridCellCoordsArray a; return a; }
-    return m_selection->m_blockSelectionTopLeft;
+    return m_selection->m_blockSelectionBottomRight;
 }
 wxArrayInt wxGrid::GetSelectedRows() const
 {
