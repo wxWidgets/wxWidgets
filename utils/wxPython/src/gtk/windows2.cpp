@@ -2843,7 +2843,7 @@ static PyObject *_wrap_new_wxSplitterWindow(PyObject *self, PyObject *args) {
     wxWindowID  _arg1;
     wxPoint * _arg2 = &wxPyDefaultPosition;
     wxSize * _arg3 = &wxPyDefaultSize;
-    long  _arg4 = (wxSP_3D)|wxCLIP_CHILDREN;
+    long  _arg4 = (wxSP_3D)|(wxCLIP_CHILDREN);
     char * _arg5 = "splitterWindow";
     char * _argc0 = 0;
     char * _argc2 = 0;

@@ -123,7 +123,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     }
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    char * _result;
+    wxString * _result;
     char * _arg0;
     char * _arg1 = NULL;
     char * _arg2 = NULL;
@@ -144,8 +144,13 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (char *)wxFileSelector(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8);
-    _resultobj = Py_BuildValue("s", _result);
+    _result = new wxString (wxFileSelector(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8));
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 

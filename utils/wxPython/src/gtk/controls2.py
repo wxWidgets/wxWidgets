@@ -427,6 +427,9 @@ class wxTreeCtrlPtr(wxControlPtr):
     def SetItemData(self,arg0,arg1):
         val = controls2c.wxTreeCtrl_SetItemData(self.this,arg0.this,arg1.this)
         return val
+    def SetItemHasChildren(self,arg0,*args):
+        val = apply(controls2c.wxTreeCtrl_SetItemHasChildren,(self.this,arg0.this,)+args)
+        return val
     def IsVisible(self,arg0):
         val = controls2c.wxTreeCtrl_IsVisible(self.this,arg0.this)
         return val
@@ -523,6 +526,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def Delete(self,arg0):
         val = controls2c.wxTreeCtrl_Delete(self.this,arg0.this)
+        return val
+    def DeleteChildren(self,arg0):
+        val = controls2c.wxTreeCtrl_DeleteChildren(self.this,arg0.this)
         return val
     def DeleteAllItems(self):
         val = controls2c.wxTreeCtrl_DeleteAllItems(self.this)

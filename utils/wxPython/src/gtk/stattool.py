@@ -157,6 +157,10 @@ class wxToolBarPtr(wxControlPtr):
         val = apply(stattoolc.wxToolBar_AddTool,(self.this,arg0,arg1.this,)+args)
         val = wxToolBarToolPtr(val)
         return val
+    def AddSimpleTool(self,arg0,arg1,*args):
+        val = apply(stattoolc.wxToolBar_AddSimpleTool,(self.this,arg0,arg1.this,)+args)
+        val = wxToolBarToolPtr(val)
+        return val
     def EnableTool(self,arg0,arg1):
         val = stattoolc.wxToolBar_EnableTool(self.this,arg0,arg1)
         return val

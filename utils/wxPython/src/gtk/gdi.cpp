@@ -56,7 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/metafile.h>
 #ifndef __WXMSW__
-#include <wx/postscrp.h>
+#include <wx/dcps.h>
 #endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -1674,27 +1674,6 @@ static PyObject *_wrap_wxFont_GetFamily(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )wxFont_GetFamily(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxFont_GetFontId(_swigobj)  (_swigobj->GetFontId())
-static PyObject *_wrap_wxFont_GetFontId(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxFont * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxFont_GetFontId",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetFontId. Expected _wxFont_p.");
-        return NULL;
-        }
-    }
-    _result = (int )wxFont_GetFontId(_arg0);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -4951,7 +4930,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxFont_GetUnderlined", _wrap_wxFont_GetUnderlined, 1 },
 	 { "wxFont_GetStyle", _wrap_wxFont_GetStyle, 1 },
 	 { "wxFont_GetPointSize", _wrap_wxFont_GetPointSize, 1 },
-	 { "wxFont_GetFontId", _wrap_wxFont_GetFontId, 1 },
 	 { "wxFont_GetFamily", _wrap_wxFont_GetFamily, 1 },
 	 { "wxFont_GetFaceName", _wrap_wxFont_GetFaceName, 1 },
 	 { "new_wxFont", _wrap_new_wxFont, 1 },

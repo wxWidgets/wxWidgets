@@ -147,9 +147,6 @@ class wxFontPtr :
     def GetFamily(self):
         val = gdic.wxFont_GetFamily(self.this)
         return val
-    def GetFontId(self):
-        val = gdic.wxFont_GetFontId(self.this)
-        return val
     def GetPointSize(self):
         val = gdic.wxFont_GetPointSize(self.this)
         return val

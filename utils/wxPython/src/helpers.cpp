@@ -24,6 +24,7 @@
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
+#include <wx/module.h>
 
 //---------------------------------------------------------------------------
 
@@ -582,7 +583,14 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.18  1999/01/30 08:17:27  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.17  1999/01/30 07:30:12  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain
