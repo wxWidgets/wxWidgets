@@ -634,6 +634,7 @@ public:
 
 public:
   /// Motif-specific
+  bool                  m_needsRefresh; // Do we need to repaint the backing store?
   bool                  m_canAddEventHandler;
   bool                  m_button1Pressed;
   bool                  m_button2Pressed;

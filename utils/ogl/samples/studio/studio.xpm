@@ -1,5 +1,5 @@
 /* XPM */
-static char *clipstudio_xpm[] = {
+static char *studio_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 6 1",
 "  c Black",

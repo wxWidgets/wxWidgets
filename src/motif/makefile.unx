@@ -201,14 +201,19 @@ $(WXLIB) : $(OBJECTS)
 # problems with lex_yy.c. See also note about LEX_SCANNER
 # above.
 ../common/lex_yy.c:	../common/lexer.l
-	$(LEX) -o../common/lex.yy.c ../common/lexer.l 
-	sed -e "s/BUFSIZ/5000/g" < ../common/lex.yy.c | \
+	$(LEX) ../common/lexer.l
+	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \
 	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
         sed -e "s/YYLMAX 200/YYLMAX 5000/g" > ../common/lex_yy.c
-	/bin/rm -f ../common/lex.yy.c
+	/bin/rm -f lex.yy.c
 
-# N.B. if you have lex instead of flex, replace the $(LEX) line above
-# with the following:
+# The above should work with both lex and flex, but just in case not,
+# here are alternative syntaxes.
+#
+# Flex-style syntax:
+# $(LEX) -olex.yy.c ../common/lexer.l 
+
+# Lex-style syntax:
 #    $(LEX) ../common/lexer.l
 
 # Replace yacc with bison if you run into compilation

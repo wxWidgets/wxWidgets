@@ -84,6 +84,10 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
 {
+  my_horse = (wxBitmap*) NULL;
+  my_square = (wxBitmap*) NULL;
+  my_anti = (wxBitmap*) NULL;
+
   SetBackgroundColour(* wxWHITE);
 
   wxBitmap bitmap( 100, 100 );
@@ -109,7 +113,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
-  
+
   CreateAntiAliasedBitmap();
 }
 
@@ -124,26 +128,28 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
   wxPaintDC dc( this );
   PrepareDC( dc );
-  
+
   dc.DrawText( "Loaded image", 30, 10 );
-  if (my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
+  if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
 
   dc.DrawText( "Drawn directly", 150, 10 );
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 30, 100, 100 );
 
-  if (my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
+  if (my_anti && my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
   
-  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
+  if (my_horse && my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 140 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
 {
   wxBitmap bitmap( 300, 300 );
+
   wxMemoryDC dc;
+
   dc.SelectObject( bitmap );
-  
+
   dc.Clear();
   
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxDEFAULT, wxDEFAULT ) );
@@ -156,7 +162,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
   
   wxImage original( bitmap );
   wxImage anti( 150, 150 );
-  
+
   /* This is quite slow, but safe. Use wxImage::GetData() for speed instead. */
   
   for (int y = 1; y < 149; y++)
@@ -235,8 +241,6 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 bool MyApp::OnInit()
 {
-  wxImage::AddHandler( new wxPNGHandler );
-
   wxFrame *frame = new MyFrame();
   frame->Show( TRUE );
 

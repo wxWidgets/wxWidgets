@@ -49,6 +49,8 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 //  m_hDC = (WXHDC) ::GetDCEx((HWND) the_canvas->GetHWND(), NULL, DCX_WINDOW);
   m_hDC = (WXHDC) ::GetWindowDC((HWND) the_canvas->GetHWND() );
   m_hDCCount ++;
+
+  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC(void)
@@ -77,6 +79,8 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
   m_canvas = the_canvas;
 //  BeginDrawing();
   m_hDC = (WXHDC) ::GetDC((HWND) the_canvas->GetHWND());
+
+  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxClientDC::~wxClientDC(void)
@@ -128,6 +132,8 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     ms_PaintCount = 1;
     m_hDCCount++;
   }
+
+  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxPaintDC::~wxPaintDC()

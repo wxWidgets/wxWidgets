@@ -808,7 +808,14 @@ void wxDC::SetBackground(const wxBrush& brush)
       }
       else
       {
-        m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
+        // New behaviour, 10/2/99: setting the background brush of a DC
+        // doesn't affect the window background colour. However,
+        // I'm leaving in the transparency setting because it's needed by
+        // various controls (e.g. wxStaticText) to determine whether to draw
+        // transparently or not. TODO: maybe this should be a new function
+        // wxWindow::SetTransparency(). Should that apply to the child itself, or the
+        // parent?
+//        m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
         m_canvas->m_backgroundTransparent = FALSE;
       }
     }

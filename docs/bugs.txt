@@ -25,7 +25,8 @@ wxMotif:
 
 - wxRadioBox sometimes doesn't show (e.g. in controls sample).
 
-- wxStaticText doesn't wrap.
+- Can't set the colours for the buttons in the file selector, for
+  some reason.
 
 General:
 --------

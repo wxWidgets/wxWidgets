@@ -647,6 +647,18 @@ samples/thread/*.png
 samples/thread/*.ico
 samples/thread/*.txt
 
+samples/forty/*.cpp
+samples/forty/*.h
+samples/forty/makefile*
+samples/forty/*.rc
+samples/forty/*.def
+samples/forty/*.bmp
+samples/forty/*.xpm
+samples/forty/*.xbm
+samples/forty/*.png
+samples/forty/*.ico
+samples/forty/*.txt
+
 samples/dde/*.cpp
 samples/dde/*.h
 samples/dde/makefile*

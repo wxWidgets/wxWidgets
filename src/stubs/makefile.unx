@@ -186,7 +186,7 @@ $(WXLIB) : $(OBJECTS)
 # problems with lex_yy.c. See also note about LEX_SCANNER
 # above.
 ../common/lex_yy.c:	../common/lexer.l
-	$(LEX) -o../common/lex.yy.c ../common/lexer.l 
+	$(LEX) ../common/lexer.l
 	sed -e "s/BUFSIZ/5000/g" < ../common/lex.yy.c | \
 	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
         sed -e "s/YYLMAX 200/YYLMAX 5000/g" > ../common/lex_yy.c

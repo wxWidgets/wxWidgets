@@ -37,6 +37,8 @@ About pens, brushes, and the autoSetting flag:
 #include "wx/dcmemory.h"
 #include "wx/window.h"
 #include "wx/app.h"
+#include "wx/image.h"
+
 #include <math.h>
 
 #include <Xm/Xm.h>
@@ -144,6 +146,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     XGCValues valReturn;
     XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
     m_oldFont = (WXFont) valReturn.font;
+
+    SetBackground(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
 };
 
 wxWindowDC::~wxWindowDC(void)
@@ -935,8 +939,41 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     // last selected background color. [::SetBackground]
     if (m_pen.Ok() && m_autoSetting)
         SetPen (m_pen);
-    
-    if (m_pixmap && sourceDC->m_pixmap)
+
+    // Do bitmap scaling if necessary
+
+    wxBitmap *scaledBitmap = (wxBitmap*) NULL;
+    Pixmap sourcePixmap = (Pixmap) NULL;
+    double scaleX, scaleY;
+    GetUserScale(& scaleX, & scaleY);
+
+    // Sorry, can't scale masks just yet
+    if (!useMask && (scaleX != 1.0 || scaleY != 1.0) && sourceDC->IsKindOf(CLASSINFO(wxMemoryDC)))
+    {
+        wxMemoryDC* memDC = (wxMemoryDC*) sourceDC;
+        wxBitmap& bitmap = memDC->GetBitmap();
+
+        wxASSERT_MSG( (bitmap.Ok()), "Bad source bitmap in wxWindowDC::Blit");
+
+        wxImage image(bitmap);
+        if (!image.Ok())
+        {
+            sourcePixmap = (Pixmap) bitmap.GetPixmap();
+        }
+        else
+        {
+            int scaledW = (int) (bitmap.GetWidth() * scaleX);
+            int scaledH = (int) (bitmap.GetHeight() * scaleY);
+               
+            image = image.Scale(scaledW, scaledH);
+            scaledBitmap = new wxBitmap(image.ConvertToBitmap());
+            sourcePixmap = (Pixmap) scaledBitmap->GetPixmap();
+	}
+    }
+    else
+        sourcePixmap = (Pixmap) sourceDC->m_pixmap;
+
+    if (m_pixmap && sourcePixmap)
     {
         /* MATTHEW: [9] */
         int orig = m_logicalFunction;
@@ -949,7 +986,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             
             if (m_window && m_window->GetBackingPixmap())
                 XCopyRemote((Display*) sourceDC->m_display, (Display*) m_display,
-                (Pixmap) sourceDC->m_pixmap, (Pixmap) m_window->GetBackingPixmap(),
+                (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),
                 (GC) m_gcBacking,
                 source->LogicalToDeviceX (xsrc),
                 source->LogicalToDeviceY (ysrc),
@@ -969,7 +1006,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
                 }
             }
             
-            XCopyRemote((Display*) sourceDC->m_display, (Display*) m_display, (Pixmap) sourceDC->m_pixmap, (Pixmap) m_pixmap, (GC) m_gc,
+            XCopyRemote((Display*) sourceDC->m_display, (Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_pixmap, (GC) m_gc,
                 source->LogicalToDeviceX (xsrc),
                 source->LogicalToDeviceY (ysrc),
                 source->LogicalToDeviceXRel(width),
@@ -990,7 +1027,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
                 // +++ MARKUS (mho@comnets.rwth-aachen): error on blitting bitmaps with depth 1
                 if (source->IsKindOf(CLASSINFO(wxMemoryDC)) && ((wxMemoryDC*) source)->GetBitmap().GetDepth() == 1)
                 {
-                    XCopyPlane ((Display*) m_display, (Pixmap) sourceDC->m_pixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
+                    XCopyPlane ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
                         source->LogicalToDeviceX (xsrc),
                         source->LogicalToDeviceY (ysrc),
                         source->LogicalToDeviceXRel(width),
@@ -999,7 +1036,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
                 }
                 else
                 {
-                    XCopyArea ((Display*) m_display, (Pixmap) sourceDC->m_pixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
+                    XCopyArea ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
                         source->LogicalToDeviceX (xsrc),
                         source->LogicalToDeviceY (ysrc),
                         source->LogicalToDeviceXRel(width),
@@ -1022,7 +1059,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             if (source->IsKindOf(CLASSINFO(wxMemoryDC)) &&
                 ((wxMemoryDC*)source)->GetBitmap().Ok() && (((wxMemoryDC*)source)->GetBitmap().GetDepth () == 1))
             {
-                XCopyPlane ((Display*) m_display, (Pixmap) sourceDC->m_pixmap, (Pixmap) m_pixmap, (GC) m_gc,
+                XCopyPlane ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_pixmap, (GC) m_gc,
                     source->LogicalToDeviceX (xsrc),
                     source->LogicalToDeviceY (ysrc),
                     source->LogicalToDeviceXRel(width),
@@ -1031,7 +1068,7 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             }
             else
             {
-                XCopyArea ((Display*) m_display, (Pixmap) sourceDC->m_pixmap, (Pixmap) m_pixmap, (GC) m_gc,
+                XCopyArea ((Display*) m_display, (Pixmap) sourcePixmap, (Pixmap) m_pixmap, (GC) m_gc,
                     source->LogicalToDeviceX (xsrc),
                     source->LogicalToDeviceY (ysrc),
                     source->LogicalToDeviceXRel(width),
@@ -1050,9 +1087,13 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
         CalcBoundingBox (xdest + width, ydest + height);
         
         SetLogicalFunction(orig);
+
+        if (scaledBitmap) delete scaledBitmap;
         
         return TRUE;
   }
+  if (scaledBitmap) delete scaledBitmap;
+
   return FALSE;
 };
 
@@ -1878,10 +1919,14 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
         return;
     
     int pixel = m_backgroundBrush.GetColour().AllocColour(m_display);
-    
+
+    // New behaviour, 10/2/99: setting the background brush of a DC
+    // doesn't affect the window background colour.
+/*
     // XSetWindowBackground doesn't work for non-Window pixmaps
     if (!this->IsKindOf(CLASSINFO(wxMemoryDC)))
         XSetWindowBackground ((Display*) m_display, (Pixmap) m_pixmap, pixel);
+*/
     
     // Necessary for ::DrawIcon, which use fg/bg pixel or the GC.
     // And Blit,... (Any fct that use XCopyPlane, in fact.)

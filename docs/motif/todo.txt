@@ -1,7 +1,7 @@
 wxMotif TODO
 ------------
 
-Updated: 28/12/98
+Updated: 11/02/99
 
          -------------------------------o-------------------------
 
@@ -16,24 +16,10 @@ High Priority
 - Have a central/per app file for colour settings, with a wxWin
   app to allow changing settings interactively.
 
-- Colour setting in widgets (almost done). Should scrollbars take
-  on the background colour? Not right for e.g. wxScrolledWindows,
-  so maybe have wxSystemSettings value for scrollbar colour, and/or
-  ability to set scrollbar colour independently.
-
-- Optimize wxWindow OnPaint to avoid flicker, collapsing Expose events
-  as per flicker fix in 1.68. It will be tricky to avoid
-  interfering with non-wxScrolledWindow widgets except by
-  explicitly testing for wxScrolledWindow.
-
-- Implementation of OnEraseBackground. How? Call OnEraseBackground
-  just before OnPaint? Will duplicate Xlib's own erase of the background.
-  However, this is usually OK, because the default wxWindow::OnEraseBackground
-  can do nothing (SetBackgroundColour will make the background look OK).
-  And if a custom OnEraseBackground uses the same colour as the window
-  background, no flicker will be seen. If it does something else, such as
-  painting a tiled bitmap, then a slight flicker might be seen unless
-  X can be persuaded not to repaint the window background by default.
+- Implementation of default event processing (i.e. passing on an intercepted
+  event such as OnChar to the system). Currently, such events are processed
+  anyway, so for example intercepting left-click in a widget doesn't disable
+  the default behaviour. See TODOs in window.cpp.
 
 - wxRadioBox doesn't show up in the controls sample, though it's
   OK on other dialogs (e.g. printing sample).
@@ -46,10 +32,11 @@ High Priority
 
 - Use wxImage to load other formats into wxBitmaps, such as PNG, BMP.
 
-- Implement scaled Blit as per John Price's impementation for 1.68.
-
 Low Priority
 ------------
+
+- Painting a retained window could be optimized further (see
+  wxWindow::DoPaint).
 
 - Visuals: how to select an appropriate one? See Thomas Runge's
   visual patch for 1.68 -- should be straightforward to port to 2.0.
@@ -64,11 +51,7 @@ Low Priority
   when implemented as extra bitmap handlers, the code won't be linked
   unless needed. Update: see if wxImage can handle these formats.
 
-- Enhance event handling such that you override e.g. left-click
-  and unless you call the base OnMouseEvent, the click won't be
-  sent to the button. Required for Dialog Editor.
-
-- Get Dialog Editor working under Motif.
+- Get Dialog Editor working (better) under Motif.
 
 - New wxHelp version: try using the XmHTML widget at
   http://www.xs4all.nl/~ripley/XmHTML/.
@@ -106,8 +89,6 @@ Low Priority
 
 - Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
   Linux)
-
-- Blit scaling
 
 - Get ODBC classes and sample working.
 

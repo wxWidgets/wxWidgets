@@ -27,6 +27,7 @@
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
 #include "wx/frame.h"
+#include "wx/scrolwin.h"
 
 #include "wx/menuitem.h"
 #include "wx/log.h"
@@ -114,6 +115,7 @@ wxWindow::wxWindow()
     m_clientData = NULL;
     
     /// Motif-specific
+    m_needsRefresh = TRUE;
     m_mainWidget = (WXWidget) 0;
     m_button1Pressed = FALSE;
     m_button2Pressed = FALSE;
@@ -295,6 +297,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_clientData = NULL;
     
     // Motif-specific
+    m_needsRefresh = TRUE;
     m_canAddEventHandler = FALSE;
     m_mainWidget = (WXWidget) 0;
     m_button1Pressed = FALSE;
@@ -991,6 +994,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
 
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
+    m_needsRefresh = TRUE;
     Display *display = XtDisplay((Widget) GetMainWidget());
     Window thisWindow = XtWindow((Widget) GetMainWidget());
     
@@ -1477,11 +1481,13 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         delete rect;
         node = node->Next();
     }
-    
+
+    XmUpdateDisplay((Widget) GetMainWidget());
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
+    event.Skip();
 /* ??
 if ( event.KeyCode() == WXK_TAB ) {
 // propagate the TABs to the parent - it's up to it to decide what
@@ -1496,12 +1502,12 @@ return;
 
 void wxWindow::OnKeyDown(wxKeyEvent& event)
 {
-    Default();
+    event.Skip();
 }
 
 void wxWindow::OnKeyUp(wxKeyEvent& event)
 {
-    Default();
+    event.Skip();
 }
 
 void wxWindow::OnPaint(wxPaintEvent& event)
@@ -2359,10 +2365,13 @@ void wxCanvasRepaintProc (Widget drawingArea, XtPointer clientData,
             
             if (event -> xexpose.count == 0)
             {
+	      /*
                 wxPaintEvent event(win->GetId());
                 event.SetEventObject(win);
                 win->GetEventHandler()->ProcessEvent(event);
+		*/
                 
+                win->DoPaint();
                 win->ClearUpdateRects();
             }
             break;
@@ -2617,10 +2626,6 @@ void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallba
 
             wxEventType eventType = wxEVT_CHAR;
 
-            // TODO: Is this the correct criterion for wxEVT_KEY_DOWN down versus wxEVT_CHAR?
-            if (id > WXK_START) // Non-ASCII values
-                eventType = wxEVT_KEY_DOWN;
-            
             wxKeyEvent event (eventType);
             
             if (local_event.xkey.state & ShiftMask)
@@ -2647,10 +2652,18 @@ void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallba
                     event.SetEventType(wxEVT_CHAR_HOOK);
                     if (parent->GetEventHandler()->ProcessEvent(event))
                         return;
-                    event.SetEventType(wxEVT_CHAR);
                 }
-                
-                canvas->GetEventHandler()->ProcessEvent (event);
+
+                // For simplicity, OnKeyDown is the same as OnChar
+                // TODO: filter modifier key presses from OnChar
+                event.SetEventType(wxEVT_KEY_DOWN);
+
+                // Only process OnChar if OnKeyDown didn't swallow it
+                if (!canvas->GetEventHandler()->ProcessEvent (event))
+                {
+                  event.SetEventType(wxEVT_CHAR);
+                  canvas->GetEventHandler()->ProcessEvent (event);
+		}
             }
             break;
         }
@@ -2708,28 +2721,68 @@ void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallba
 void wxWindow::DoPaint()
 {
     //TODO : make a temporary gc so we can do the XCopyArea below
-    if (0) // m_backingPixmap)
+    if (m_backingPixmap && !m_needsRefresh)
     {
-    /*
-    Widget drawingArea = (Widget) m_drawingArea;
-    //      int orig = GetDC()->GetLogicalFunction();
-    //      GetDC()->SetLogicalFunction (wxCOPY);
+      wxPaintDC dc(this);
+
+      GC tempGC = (GC) dc.GetBackingGC();
+
+      Widget widget = (Widget) GetMainWidget();
+
+      int scrollPosX = 0;
+      int scrollPosY = 0;
+
+      // We have to test whether it's a wxScrolledWindow (hack!)
+      // because otherwise we don't know how many pixels have been
+      // scrolled. We might solve this in the future by defining
+      // virtual wxWindow functions to get the scroll position in pixels.
+      // Or, each kind of scrolled window has to implement backing
+      // stores itself, using generic wxWindows code.
+      if (this->IsKindOf(CLASSINFO(wxScrolledWindow)))
+      {
+          wxScrolledWindow* scrolledWindow = (wxScrolledWindow*) this;
+          int x, y;
+          scrolledWindow->CalcScrolledPosition(0, 0, & x, & y);
+
+          scrollPosX = - x;
+          scrollPosY = - y;
+      }
+
+      // TODO: This could be optimized further by only copying the
+      // areas in the current update region.
+
+      // Only blit the part visible in the client area. The backing pixmap
+      // always starts at 0, 0 but we may be looking at only a portion of it.
+      wxSize clientArea = GetClientSize();
+      int toBlitX = m_pixmapWidth - scrollPosX;
+      int toBlitY = m_pixmapHeight - scrollPosY;
+
+      // Copy whichever is samller, the amount of pixmap we have to copy,
+      // or the size of the client area.
+      toBlitX = wxMin(toBlitX, clientArea.x);
+      toBlitY = wxMin(toBlitY, clientArea.y);
+
+      // Make sure we're not negative
+      toBlitX = wxMax(0, toBlitX);
+      toBlitY = wxMax(0, toBlitY);
     
-      // TODO: it may not be necessary to store m_pixmapOffsetX/Y; we
-      // should be able to calculate them.
-      XCopyArea (XtDisplay (drawingArea), m_backingPixmap, XtWindow (drawingArea), GetDC ()->gc,
-      m_pixmapOffsetX, m_pixmapOffsetY,
-      m_pixmapWidth, m_pixmapHeight,
-      0, 0);
-      
-        //      GetDC()->SetLogicalFunction (orig);
-        */
+      XCopyArea (XtDisplay (widget), (Pixmap) m_backingPixmap, XtWindow (widget), tempGC,
+        scrollPosX, scrollPosY, // Start at the scroll position
+        toBlitX, toBlitY,       // How much of the pixmap to copy
+        0, 0);                  // Destination
     }
     else
     {
+        // Set an erase event first
+        wxEraseEvent eraseEvent(GetId());
+        eraseEvent.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eraseEvent);
+
         wxPaintEvent event(GetId());
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
+
+        m_needsRefresh = FALSE;
     }
 }
 

@@ -538,10 +538,11 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {
     if (!display) /* Must be called first with non-NULL display */
         return m_mainColormap;
+
+    int defaultScreen = DefaultScreen((Display*) display);
+    Screen* screen = XScreenOfDisplay((Display*) display, defaultScreen);
     
-    Colormap c =
-        DefaultColormapOfScreen(XScreenOfDisplay((Display*) display,
-        DefaultScreen((Display*) display)));
+    Colormap c = DefaultColormapOfScreen(screen);
     
     if (!m_mainColormap)
         m_mainColormap = (WXColormap) c;

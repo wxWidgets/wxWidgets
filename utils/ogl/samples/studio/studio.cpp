@@ -500,8 +500,8 @@ bool csApp::WriteOptions()
     config.Write("mainY", m_mainFramePos.y);
     config.Write("mainWidth", m_mainFrameSize.x);
     config.Write("mainHeight", m_mainFrameSize.y);
-    config.Write("gridStyle", m_gridStyle);
-    config.Write("gridSpacing", m_gridSpacing);
+    config.Write("gridStyle", (long) m_gridStyle);
+    config.Write("gridSpacing", (long) m_gridSpacing);
 
     m_docManager->FileHistorySave(config);
 

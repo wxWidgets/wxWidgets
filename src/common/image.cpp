@@ -34,6 +34,7 @@ extern "C" {
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
+#include "wx/module.h"
 
 #ifdef __SALFORDC__
 #ifdef FAR
@@ -1957,7 +1958,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     wxBitmap bitmap;
     
     wxCHECK_MSG( Ok(), bitmap, "invalid image" );
-    
+
     int width = GetWidth();
     int height = GetHeight();
     
@@ -1971,10 +1972,10 @@ wxBitmap wxImage::ConvertToBitmap() const
     // Create image
     
     XImage *data_image = XCreateImage( dpy, vis, bpp, ZPixmap, 0, 0, width, height, 32, 0 );
-    data_image->data = new char[ data_image->bytes_per_line * data_image->height ];
+    data_image->data = (char*) malloc( data_image->bytes_per_line * data_image->height );
     
     bitmap.Create( width, height, bpp );
-    
+
     /*
     // Create mask
     
@@ -2012,7 +2013,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     }
     
     XFree( vi );
-    
+
     if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
     if (bpp < 8) bpp = 8;
     
@@ -2278,3 +2279,19 @@ wxImage::wxImage( const wxBitmap &bitmap )
     */
 }
 #endif
+
+// A module to allow wxImage initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxImageModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxImageModule)
+public:
+    wxImageModule() {}
+    bool OnInit() { wxImage::InitStandardHandlers(); return TRUE; };
+    void OnExit() { wxImage::CleanUpHandlers(); };
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
+

@@ -40,6 +40,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxWindow)
 #include "windows.h"
 #endif
 
+#ifdef __WXMOTIF__
+// For wxRETAINED implementation
+#include <Xm/Xm.h>
+#endif
+
 wxScrolledWindow::wxScrolledWindow(void)
 {
     m_xScrollPixelsPerLine = 0;
@@ -104,6 +109,39 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     m_yScrollPosition = yPos;
     m_xScrollLines = noUnitsX;
     m_yScrollLines = noUnitsY;
+
+#ifdef __WXMOTIF__
+    // Sorry, some Motif-specific code to implement a backing pixmap
+    // for the wxRETAINED style. Implementing a backing store can't
+    // be entirely generic because it relies on the wxWindowDC implementation
+    // to duplicate X drawing calls for the backing pixmap.
+
+    if ((m_windowStyle & wxRETAINED) == wxRETAINED)
+    {
+        Display* dpy = XtDisplay((Widget) GetMainWidget());
+
+        int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
+        int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
+        if (m_backingPixmap &&
+           !((m_pixmapWidth == totalPixelWidth) &&
+             (m_pixmapHeight == totalPixelHeight)))
+        {
+            XFreePixmap (dpy, (Pixmap) m_backingPixmap);
+            m_backingPixmap = (WXPixmap) 0;
+        }
+
+        if (!m_backingPixmap &&
+           (noUnitsX != 0) && (noUnitsY != 0))
+        {
+            int depth = wxDisplayDepth();
+            m_pixmapWidth = totalPixelWidth;
+            m_pixmapHeight = totalPixelHeight;
+            m_backingPixmap = (WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+            m_pixmapWidth, m_pixmapHeight, depth);
+	}
+
+    }
+#endif
       
     AdjustScrollbars();
    

@@ -760,8 +760,8 @@ void wxListBox::ChangeBackgroundColour()
         XmNverticalScrollBar, &vsb,
         NULL);
     
-        /* TODO: should scrollbars be affected? Should probably have separate
-        * function to change them (by default, taken from wxSystemSettings)
+   /* TODO: should scrollbars be affected? Should probably have separate
+    * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
     DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);

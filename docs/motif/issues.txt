@@ -7,3 +7,7 @@ Outstanding issues
 - No wxSpinButton
 - Need a way of specifying default settings for colour/font/etc.
 - More optimisation could be done to reduce X server traffic, etc.
+- Should scrollbars take on the background colour? Not right for
+  e.g. wxScrolledWindows, so maybe have wxSystemSettings value for
+  scrollbar colour, and/or ability to set scrollbar colour independently.
+

@@ -649,9 +649,7 @@ static void wxDialogBoxRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent 
             
             if (event -> xexpose.count == 0)
             {
-                wxPaintEvent event(win->GetId());
-                event.SetEventObject(win);
-                win->GetEventHandler()->ProcessEvent(event);
+                win->DoPaint();
                 
                 win->ClearUpdateRects();
             }
@@ -699,8 +697,16 @@ static void wxDialogBoxEventHandler (Widget    wid,
                 }
                 else
                 {
-                    keyEvent.SetEventType(wxEVT_CHAR);
-                    dialog->GetEventHandler()->ProcessEvent(keyEvent);
+                    // For simplicity, OnKeyDown is the same as OnChar
+                    // TODO: filter modifier key presses from OnChar
+                    keyEvent.SetEventType(wxEVT_KEY_DOWN);
+
+                    // Only process OnChar if OnKeyDown didn't swallow it
+                    if (!dialog->GetEventHandler()->ProcessEvent (keyEvent))
+                    {
+                        keyEvent.SetEventType(wxEVT_CHAR);
+                        dialog->GetEventHandler()->ProcessEvent(keyEvent);
+		    }
                 }
             }
         }

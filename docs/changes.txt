@@ -12,16 +12,26 @@ wxMSW:
 
 - Makefiles for more compilers and samples; Cygwin makefiles
   rationalised.
-- Added DLL support to VC++ makefiles.
+- Added VC++ project file for compiling as DLL.
 
 wxMotif:
 
+- Added OnEraseBackground invocation.
+- Added wxRETAINED implementation for wxScrolledWindow.
+- Cured scrolling display problem by adding XmUpdateDisplay.
+- Tried to make lex-ing in the makefile more generic (command line
+  syntax should apply to both lex and flex).
+- Changed file selector colours for consistency (except for buttons:
+  crashes for some reason).
+- Fixed wxMotif version of wxImage::ConvertToBitmap (used new instead
+  of malloc, which causes memory problems).
 
 General:
 
 - Further doc improvements.
 - wxGenericValidator added.
-
+- Added wxImageModule to image.cpp, so adds/cleans up standard handlers
+  automatically.
 
 Beta 3, January 31st 1999
 -------------------------

@@ -19,6 +19,7 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 #include "wx/app.h"
+#include "wx/settings.h"
 
 #include <Xm/Xm.h>
 #include <Xm/MwmUtil.h>
@@ -142,6 +143,38 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_pos = pos;
 }
 
+static void wxChangeListBoxColours(wxWindow* win, Widget widget)
+{
+    win->DoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
+
+    // Change colour of the scrolled areas of the listboxes
+    Widget listParent = XtParent (widget);
+    win->DoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
+
+    Widget hsb = (Widget) 0;
+    Widget vsb = (Widget) 0;
+    XtVaGetValues (listParent,
+        XmNhorizontalScrollBar, &hsb,
+        XmNverticalScrollBar, &vsb,
+        NULL);
+    
+   /* TODO: should scrollbars be affected? Should probably have separate
+    * function to change them (by default, taken from wxSystemSettings)
+    */
+    wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    win->DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+    win->DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+
+    if (hsb)
+      XtVaSetValues (hsb,
+        XmNtroughColor, backgroundColour.AllocColour(XtDisplay(hsb)),
+        NULL);
+    if (vsb)
+      XtVaSetValues (vsb,
+        XmNtroughColor, backgroundColour.AllocColour(XtDisplay(vsb)),
+        NULL);
+}
+
 int wxFileDialog::ShowModal()
 {
     wxBeginBusyCursor();
@@ -157,6 +190,15 @@ int wxFileDialog::ShowModal()
     
     Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", NULL, 0);
     XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));
+
+    Widget filterWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_FILTER_TEXT);
+    Widget selectionWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_TEXT);
+    Widget dirListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_DIR_LIST);
+    Widget fileListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_LIST);
+    Widget okWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_OK_BUTTON);
+    Widget applyWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_APPLY_BUTTON);
+    Widget cancelWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_CANCEL_BUTTON);
+
     
     Widget shell = XtParent(fileSel);
     
@@ -180,7 +222,6 @@ int wxFileDialog::ShowModal()
     
     if (entirePath != "")
     {
-        Widget selectionWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_TEXT);
         XmTextSetString(selectionWidget, (char*) (const char*) entirePath);
     }
     
@@ -192,7 +233,6 @@ int wxFileDialog::ShowModal()
         else
             filter = m_wildCard;
         
-        Widget filterWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_FILTER_TEXT);
         XmTextSetString(filterWidget, (char*) (const char*) filter);
         XmFileSelectionDoSearch(fileSel, NULL);
     }
@@ -229,9 +269,21 @@ int wxFileDialog::ShowModal()
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
 #endif
+    DoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
+    DoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
+    DoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
+
+    /* For some reason this crashes
+    DoChangeBackgroundColour((WXWidget) okWidget, m_backgroundColour, TRUE);
+    DoChangeBackgroundColour((WXWidget) cancelWidget, m_backgroundColour, TRUE);
+    DoChangeBackgroundColour((WXWidget) applyWidget, m_backgroundColour, TRUE);
+    */
+
+    wxChangeListBoxColours(this, dirListWidget);
+    wxChangeListBoxColours(this, fileListWidget);
     
     XtManageChild(fileSel);
-    
+
     m_fileSelectorAnswer = "";
     m_fileSelectorReturned = FALSE;
     
