@@ -312,6 +312,8 @@ public:
 
         // expand this item
     void Expand(const wxTreeItemId& item);
+        // expand this item and all subitems recursively
+    void ExpandAll(const wxTreeItemId& item);
         // collapse the item without removing its children
     void Collapse(const wxTreeItemId& item);
         // collapse the item and remove all children
