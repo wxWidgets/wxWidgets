@@ -755,7 +755,6 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     int i;
     wxString sqlStmt;
     wxString s;
-//    int NumKeyCols=0;
 
     // Calculate the maximum size of the concatenated
     // keys for use with wxDbGrid
@@ -764,7 +763,6 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     {
         if (colDefs[i].KeyField)
         {
-//            NumKeyCols++;
             m_keysize += colDefs[i].SzDataObj;
         }
     }
@@ -852,7 +850,6 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
             if (needComma)
                 sqlStmt += wxT(",");
             sqlStmt += pDb->SQLColumnName(colDefs[i].ColName);
-//            sqlStmt += colDefs[i].ColName;
             needComma = true;
         }
         needComma = false;
@@ -1103,7 +1100,6 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
         {
             pSqlStmt += wxT(",");
             pSqlStmt += pDb->SQLTableName(queryTableName);
-//            pSqlStmt += queryTableName;
             pSqlStmt += wxT(".ROWID");
         }
         else
@@ -2714,8 +2710,14 @@ wxVariant wxDbTable::GetColumn(const int colNumber) const
     {
         switch (colDefs[colNumber].SqlCtype)
         {
+#if wxUSE_UNICODE
+    #if defined(SQL_WCHAR)
             case SQL_WCHAR:
+    #endif
+    #if defined(SQL_WVARCHAR)
             case SQL_WVARCHAR:
+    #endif
+#endif
             case SQL_CHAR:
             case SQL_VARCHAR:
                 val = (wxChar *)(colDefs[colNumber].PtrDataObj);
@@ -2780,8 +2782,14 @@ void wxDbTable::SetColumn(const int colNumber, const wxVariant val)
 
         switch (colDefs[colNumber].SqlCtype)
         {
+#if wxUSE_UNICODE
+    #if defined(SQL_WCHAR)
             case SQL_WCHAR:
+    #endif
+    #if defined(SQL_WVARCHAR)
             case SQL_WVARCHAR:
+    #endif
+#endif
             case SQL_CHAR:
             case SQL_VARCHAR:
                 csstrncpyt((wxChar *)(colDefs[colNumber].PtrDataObj),
