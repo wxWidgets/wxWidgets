@@ -1,13 +1,12 @@
-/*
- * Author: Robert Roebling
- *
- * Copyright: (C) 1997,1998 Robert Roebling
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the wxWindows Licence, which
- * you have received with this library (see Licence.htm).
- *
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        treectrl.h
+// Purpose:
+// Author:      Denis Pershin
+// Created:     08/08/98
+// Id:          $Id$
+// Copyright:   (c) 1998 Denis Pershin and Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKTREECTRL_H__
 #define __GTKTREECTRL_H__
@@ -183,8 +182,12 @@ private:
     return m_childlist.Number();
   }
 
-  guit expand_handler;
-  guit collapse_handler;
+  guint expand_handler;
+  guint collapse_handler;
+
+// It is a quick hack to make TreeCtrl working... I do not know why
+// but signals is GTK does not disconnected...
+  bool ignore;
 
   DECLARE_DYNAMIC_CLASS(wxTreeItem)
 };
@@ -212,7 +215,7 @@ public:
 
   int GetCount() const;
 
-  long InsertItem( long parent, const wxString& label, long data = 0, 
+  long InsertItem( long parent, const wxString& label,
                    int image = -1, int selImage = -1, 
                    long insertAfter = wxTREE_INSERT_LAST );
 
