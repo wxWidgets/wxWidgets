@@ -36,6 +36,8 @@ END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
 
+const short kTextColumnId = 1024 ;
+
 // new databrowserbased version
 
 // Listbox item
@@ -123,7 +125,7 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     	switch (property)
     	{
     		
-    	    case 1024:
+    	    case kTextColumnId:
     		{	
     		    long ref = GetControlReference( browser ) ;
     		    if ( ref )
@@ -208,7 +210,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	columnDesc.headerBtnDesc.btnFontStyle.style = normal;
 	columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
 
-	columnDesc.propertyDesc.propertyID = 1024;
+	columnDesc.propertyDesc.propertyID = kTextColumnId;
 	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
 	columnDesc.propertyDesc.propertyFlags =
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
@@ -707,7 +709,8 @@ void wxListBox::MacSet( int n , const wxString& text )
 
 void wxListBox::MacScrollTo( int n )
 {
-    // TODO implement scrolling
+    UInt32 id = m_idArray[n] ;
+    verify_noerr( ::RevealDataBrowserItem((ControlRef) m_macControl , id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
 void wxListBox::OnSize( wxSizeEvent &event)
