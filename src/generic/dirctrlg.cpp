@@ -1379,7 +1379,6 @@ wxFileIconsTable::~wxFileIconsTable()
 void wxFileIconsTable::Create()
 {
     wxCHECK_RET(!m_smallImageList && !m_HashTable, wxT("creating icons twice"));
-printf("creating \n"); fflush(stdout);
     m_HashTable = new wxHashTable(wxKEY_STRING);
     m_smallImageList = new wxImageList(16, 16);
 
