@@ -99,30 +99,40 @@ enum wxKeyType
     WX_DECLARE_LIST_XO(elT*, liT, decl)
 
 #define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
+    decl liT;                                                                 \
+                                                                              \
+    /* Workaround for broken VC6 STL incorrectly requires a std::greater<> */ \
+    /* to be passed into std::list::sort() */                                 \
+    template <>                                                               \
+    struct std::greater<elT>                                                  \
+    {                                                                         \
+        private:                                                              \
+            wxSortCompareFunction m_CompFunc;                                 \
+        public:                                                               \
+            greater( wxSortCompareFunction compfunc = NULL )                  \
+                : m_CompFunc( compfunc ) {}                                   \
+            bool operator()(const elT X, const elT Y) const                   \
+                {                                                             \
+                    return m_CompFunc ?                                       \
+                        ( m_CompFunc( X, Y ) < 0 ) :                          \
+                        ( X > Y );                                            \
+                }                                                             \
+    };                                                                        \
+                                                                              \
     decl liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
         bool m_destroy;                                                       \
     private:                                                                  \
-        class SortCompareFunction                                             \
-        {                                                                     \
-        private:                                                              \
-            wxSortCompareFunction m_CompFunc;                                 \
-        public:                                                               \
-            SortCompareFunction( wxSortCompareFunction compfunc )             \
-                : m_CompFunc( compfunc ) {}                                   \
-            bool operator()( const elT X, const elT Y ) const                 \
-                { return ( m_CompFunc( X, Y ) < 0 ); }                        \
-        };                                                                    \
-                                                                              \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
         static void DeleteFunction( const _WX_LIST_ITEM_TYPE_##liT X );       \
     public:                                                                   \
         class compatibility_iterator                                          \
         {                                                                     \
         private:                                                              \
-            typedef liT::iterator iterator;                                   \
-            friend class liT;                                                 \
+          /* Workaround for broken VC6 nested class name resolution */        \
+          typedef std::list<elT>::iterator iterator;                          \
+          friend class liT;                                                   \
         private:                                                              \
             iterator m_iter;                                                  \
             liT * m_list;                                                     \
@@ -260,8 +270,9 @@ enum wxKeyType
             clear();                                                          \
         }                                                                     \
                                                                               \
+        /* Workaround for broken VC6 std::list::sort() see above */           \
         void Sort( wxSortCompareFunction compfunc )                           \
-            { sort( SortCompareFunction( compfunc ) ); }                      \
+            { sort( std::greater<elT>( compfunc ) ); }                        \
                                                                               \
         ~liT() { Clear(); }                                                   \
     }
