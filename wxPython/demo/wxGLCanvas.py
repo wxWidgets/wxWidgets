@@ -1,4 +1,3 @@
-
 from wxPython.wx       import *
 try:
     from wxPython.glcanvas import *
@@ -72,6 +71,7 @@ else:
     def runTest(frame, nb, log):
         win = ButtonPanel(nb, log)
         return win
+
 
 
 
@@ -183,8 +183,8 @@ else:
             glVertex3f(-0.5, 0.5,-0.5)
             glEnd()
 
-            glRotatef(self.lasty - self.y, 1.0, 0.0, 0.0);
-            glRotatef(self.lastx - self.x, 0.0, 1.0, 0.0);
+            glRotatef((self.lasty - self.y)/100., 1.0, 0.0, 0.0);
+            glRotatef((self.lastx - self.x)/100., 0.0, 1.0, 0.0);
 
             self.SwapBuffers()
 
@@ -211,13 +211,13 @@ else:
             glDepthFunc(GL_LESS)
             glEnable(GL_DEPTH_TEST)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            # position viewer
+            glMatrixMode(GL_MODELVIEW);
 
 
         def OnDraw(self):
             # clear color and depth buffers
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            # position viewer
-            glMatrixMode(GL_MODELVIEW);
             # use a fresh transformation matrix
             glPushMatrix()
             # position object
@@ -227,8 +227,10 @@ else:
 
             glTranslate(0, -1, 0)
             glRotate(250, 1, 0, 0)
-            glutSolidCone(1, 2, 50, 10)
+            glutSolidCone(0.5, 1, 30, 5)
             glPopMatrix()
+            glRotatef((self.lasty - self.y)/100., 0.0, 0.0, 1.0);
+            glRotatef(0.0, (self.lastx - self.x)/100., 1.0, 0.0);
             # push into visible buffer
             self.SwapBuffers()
 
@@ -268,3 +270,4 @@ def _test():
 
 if __name__ == '__main__':
     _test()
+
