@@ -20,7 +20,7 @@
 // Double buffering helper.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxBufferedDC : public wxMemoryDC
+class wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
@@ -116,7 +116,7 @@ private:
 
 // Creates a double buffered wxPaintDC, optionally allowing the
 // user to specify their own buffer to use.
-class WXDLLIMPEXP_ADV wxBufferedPaintDC : public wxBufferedDC
+class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
     // If no bitmap is supplied by the user, a temporary one wil; be created.
