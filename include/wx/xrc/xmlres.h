@@ -31,14 +31,6 @@
 
 #include "wx/xml/xml.h"
 
-#ifdef WXMAKINGDLL_XRC
-    #define WXDLLIMPEXP_XRC WXEXPORT
-#elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_XRC WXIMPORT
-#else // not making nor using DLL
-    #define WXDLLIMPEXP_XRC
-#endif
-
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxDialog;

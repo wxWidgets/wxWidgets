@@ -78,6 +78,7 @@
 #    define WXMAKINGDLL_DBGRID
 #    define WXMAKINGDLL_HTML
 #    define WXMAKINGDLL_XML
+#    define WXMAKINGDLL_XRC
 #endif /* WXMAKINGDLL */
 
 /*
@@ -175,6 +176,14 @@
 #    define WXDLLIMPEXP_XML WXIMPORT
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_XML
+#endif
+
+#ifdef WXMAKINGDLL_XRC
+#    define WXDLLIMPEXP_XRC WXEXPORT
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_XRC WXIMPORT
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_XRC
 #endif
 
 /* for backwards compatibility, define suffix-less versions too */
