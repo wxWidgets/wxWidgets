@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/univ/inpcons.h"
+#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info

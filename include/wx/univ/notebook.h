@@ -16,6 +16,8 @@
     #pragma interface "univnotebook.h"
 #endif
 
+#include "wx/arrstr.h"
+
 class WXDLLEXPORT wxSpinButton;
 
 // ----------------------------------------------------------------------------

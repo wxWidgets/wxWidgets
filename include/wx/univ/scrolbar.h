@@ -19,6 +19,7 @@
 class WXDLLEXPORT wxScrollTimer;
 
 #include "wx/univ/scrarrow.h"
+#include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control

@@ -29,6 +29,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
+    #include "wx/renderer.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/scrtimer.h"
