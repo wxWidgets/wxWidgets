@@ -1109,6 +1109,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MSW_ONLY_LOWLEVEL_SRC" hints="files">
     src/msw/ole/automtn.cpp
+    src/msw/ole/uuid.cpp
     src/msw/dirdlg.cpp
 </set>
 
@@ -1295,7 +1296,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontdlg.cpp
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
-    src/msw/ole/uuid.cpp
 </set>
 <set var="MSW_ONLY_HDR" hints="files">
     wx/msw/fdrepdlg.h

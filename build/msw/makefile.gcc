@@ -934,6 +934,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_automtn.o \
+	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_statusbr.o \
 	$(OBJS)\monodll_prntdlgg.o \
@@ -984,7 +985,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontdlg.o \
 	$(OBJS)\monodll_helpchm.o \
 	$(OBJS)\monodll_helpwin.o \
-	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
@@ -1130,6 +1130,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_automtn.o \
+	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_accel.o \
 	$(OBJS)\monodll_colrdlgg.o \
@@ -1374,6 +1375,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_automtn.o \
+	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_statusbr.o \
 	$(OBJS)\monolib_prntdlgg.o \
@@ -1424,7 +1426,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontdlg.o \
 	$(OBJS)\monolib_helpchm.o \
 	$(OBJS)\monolib_helpwin.o \
-	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
@@ -1570,6 +1571,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_automtn.o \
+	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_accel.o \
 	$(OBJS)\monolib_colrdlgg.o \
@@ -1797,6 +1799,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_automtn.o \
+	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_statusbr.o \
 	$(OBJS)\coredll_prntdlgg.o \
@@ -1847,7 +1850,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontdlg.o \
 	$(OBJS)\coredll_helpchm.o \
 	$(OBJS)\coredll_helpwin.o \
-	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
@@ -1993,6 +1995,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_automtn.o \
+	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_accel.o \
 	$(OBJS)\coredll_colrdlgg.o \
@@ -2196,6 +2199,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_automtn.o \
+	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_statusbr.o \
 	$(OBJS)\corelib_prntdlgg.o \
@@ -2246,7 +2250,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontdlg.o \
 	$(OBJS)\corelib_helpchm.o \
 	$(OBJS)\corelib_helpwin.o \
-	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
@@ -2392,6 +2395,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_automtn.o \
+	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_accel.o \
 	$(OBJS)\corelib_colrdlgg.o \
@@ -3701,9 +3705,6 @@ $(OBJS)\monodll_helpchm.o: ../../src/msw/helpchm.cpp
 $(OBJS)\monodll_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -4118,6 +4119,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_automtn.o: ../../src/msw/ole/automtn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_uuid.o: ../../src/msw/ole/uuid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -5271,9 +5277,6 @@ $(OBJS)\monolib_helpchm.o: ../../src/msw/helpchm.cpp
 $(OBJS)\monolib_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5688,6 +5691,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_automtn.o: ../../src/msw/ole/automtn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_uuid.o: ../../src/msw/ole/uuid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
@@ -7117,9 +7125,6 @@ $(OBJS)\coredll_helpchm.o: ../../src/msw/helpchm.cpp
 $(OBJS)\coredll_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -7411,6 +7416,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_automtn.o: ../../src/msw/ole/automtn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_uuid.o: ../../src/msw/ole/uuid.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -8342,9 +8352,6 @@ $(OBJS)\corelib_helpchm.o: ../../src/msw/helpchm.cpp
 $(OBJS)\corelib_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -8636,6 +8643,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_automtn.o: ../../src/msw/ole/automtn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_uuid.o: ../../src/msw/ole/uuid.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
