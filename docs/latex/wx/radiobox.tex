@@ -125,6 +125,16 @@ Enables or disables an individual button in the radiobox.
 
 \docparam{n}{The zero-based button to enable or disable.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Enable(flag)}}{Enables or disables the entire radiobox.}
+\twocolitem{\bf{EnableItem(n, flag)}}{Enables or disables an
+individual button in the radiobox.}
+\end{twocollist}}
+}
+
+
 \membersection{wxRadioBox::FindString}\label{wxradioboxfindstring}
 
 \constfunc{int}{FindString}{\param{const wxString\& }{string}}
@@ -153,6 +163,15 @@ Returns the label for the given button.
 \wxheading{See also}
 
 \helpref{wxRadioBox::SetLabel}{wxradioboxsetlabel}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetLabel()}}{Returns the radiobox label.}
+\twocolitem{\bf{GetItemLabel(n)}}{Returns the label for the given button.}
+\end{twocollist}}
+}
+
 
 \membersection{wxRadioBox::GetSelection}\label{wxradioboxgetselection}
 
@@ -187,6 +206,14 @@ Sets a label for a radio button.
 \docparam{label}{The label to set.}
 
 \docparam{n}{The zero-based button index.}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetLabel(string)}}{Sets the radiobox label.}
+\twocolitem{\bf{SetItemLabel(n, string)}}{Sets a label for a radio button.}
+\end{twocollist}}
+}
 
 \membersection{wxRadioBox::SetSelection}\label{wxradioboxsetselection}
 
@@ -223,6 +250,14 @@ Shows or hides individual buttons.
 \docparam{show}{TRUE to show, FALSE to hide.}
 
 \docparam{item}{The zero-based position of the button to show or hide.}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Show(flag)}}{Shows or hides the entire radiobox.}
+\twocolitem{\bf{ShowItem(n, flag)}}{Shows or hides individual buttons.}
+\end{twocollist}}
+}
 
 \membersection{wxRadioBox::GetString}\label{wxradioboxgetstring}
 

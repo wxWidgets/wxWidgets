@@ -83,6 +83,16 @@ and widths, and/or default cell width and height.
 
 Call this function after creating the wxGrid object.
 
+\pythonnote{Currently the \tt{cellValues} and \tt{widths} parameters
+don't exisit in the wxPython version of this method.  So in other
+words, the definition of the  wxPython version of this method looks like this:
+\begin{verbatim}
+    CreateGrid(rows, cols,
+               defaultWidth = wxGRID_DEFAULT_CELL_WIDTH,
+               defaultHeight = wxGRID_DEFAULT_CELL_HEIGHT)
+\end{verbatim}
+}
+
 \membersection{wxGrid::CurrentCellVisible}\label{wxgridcurrentcellvisible}
 
 \func{bool}{CurrentCellVisible}{\void}
@@ -142,6 +152,14 @@ wxGenericGrid implementation only.
 Sets the text alignment for the cell at the given position, or the global alignment value.
 The return value is wxLEFT, wxRIGHT or wxCENTRE.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetCellAlignment(row, col)}}{}
+\twocolitem{\bf{GetDefCellAlignment()}}{}
+\end{twocollist}}
+}
+
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
 \constfunc{wxColour\&}{GetCellBackgroundColour}{\param{int}{ row}, \param{int}{ col}}
@@ -149,6 +167,14 @@ The return value is wxLEFT, wxRIGHT or wxCENTRE.
 \constfunc{wxColour\&}{GetCellBackgroundColour}{\void}
 
 Gets the background colour for the cell at the given position, or the global background colour.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetCellBackgroundColour(row, col)}}{}
+\twocolitem{\bf{GetDefCellBackgroundColourt()}}{}
+\end{twocollist}}
+}
 
 \membersection{wxGrid::GetCells}\label{wxgridgetcells}
 
@@ -164,6 +190,14 @@ Returns the array of grid cell object associated with this wxGrid.
 
 Gets the text colour for the cell at the given position, or the global text colour.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetCellTextColour(row, col)}}{}
+\twocolitem{\bf{GetDefCellTextColour()}}{}
+\end{twocollist}}
+}
+
 \membersection{wxGrid::GetCellTextFont}\label{wxgridgetcelltextfont}
 
 \constfunc{const wxFont\&}{GetCellTextFont}{\param{int}{ row}, \param{int}{ col}}
@@ -171,6 +205,14 @@ Gets the text colour for the cell at the given position, or the global text colo
 \constfunc{wxFont\&}{GetCellTextFont}{\void}
 
 Gets the text font for the cell at the given position, or the global text font.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetCellTextFont(row, col)}}{}
+\twocolitem{\bf{GetDefCellTextFont()}}{}
+\end{twocollist}}
+}
 
 \membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
 
@@ -360,7 +402,7 @@ Virtual function called when the right button is depressed within a cell, just a
 \func{void}{OnLeftClick}{\param{int}{ row}, \param{int}{ col}, \param{int}{ x}, \param{int}{ y}, \param{bool}{ control}, \param{bool}{ shift}}
 
 Virtual function called when the left button is depressed within a
-label.  
+label.
 
 {\it row} will be {\it -1} if the click is in the top labels.
 
@@ -403,6 +445,14 @@ call wxGrid::OnSelectCell to apply the default behaviour.
 
 Sets the text alignment for the cell at the given position, or for the whole grid. {\it alignment} may be wxLEFT, wxRIGHT or wxCENTRE.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetCellAlignment(alignment, row, col)}}{}
+\twocolitem{\bf{SetDefCellAlignment(alignment)}}{}
+\end{twocollist}}
+}
+
 \membersection{wxGrid::SetCellBackgroundColour}\label{wxgridsetcellbackgroundcolour}
 
 \func{void}{SetCellBackgroundColour}{\param{const wxColour\&}{ colour}, \param{int}{ row}, \param{int}{ col}}
@@ -410,6 +460,14 @@ Sets the text alignment for the cell at the given position, or for the whole gri
 \func{void}{SetCellBackgroundColour}{\param{const wxColour\&}{ colour}}
 
 Sets the background colour for the cell at the given position, or for the whole grid.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetCellBackgroundColour(colour, row, col)}}{}
+\twocolitem{\bf{SetDefCellBackgroundColour(colour)}}{}
+\end{twocollist}}
+}
 
 \membersection{wxGrid::SetCellTextColour}\label{wxgridsetcelltextcolour}
 
@@ -419,6 +477,14 @@ Sets the background colour for the cell at the given position, or for the whole 
 
 Sets the text colour for the cell at the given position, or for the whole grid.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetCellTextColour(colour, row, col)}}{}
+\twocolitem{\bf{SetDefCellTextColour(colour)}}{}
+\end{twocollist}}
+}
+
 \membersection{wxGrid::SetCellTextFont}\label{wxgridsetcelltextfont}
 
 \func{void}{SetCellTextFont}{\param{const wxFont\&}{ font}, \param{int}{ row}, \param{int}{ col}}
@@ -426,6 +492,14 @@ Sets the text colour for the cell at the given position, or for the whole grid.
 \func{void}{SetCellTextFont}{\param{const wxFont\&}{ font}}
 
 Sets the text font for the cell at the given position, or for the whole grid.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetCellTextFont(font, row, col)}}{}
+\twocolitem{\bf{SetDefCellTextFont(font)}}{}
+\end{twocollist}}
+}
 
 \membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
 

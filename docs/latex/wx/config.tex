@@ -124,7 +124,7 @@ sensible!):
 
   // create an entry in subgroup
   conf->Write("SubgroupEntry", 3);
-  
+
   // '..' is understood
   conf->Write("../GroupEntry", 2);
   conf->SetPath("..");
@@ -158,7 +158,7 @@ doesn't save and restore the path):
   void bar(wxConfigBase *config)
   {
     config->Write("Test", 17);
-    
+
     foo(config);
 
     // we're reading "/Foo/Data/Test" here! -1 will probably be returned...
@@ -443,12 +443,20 @@ index}}
 
 Gets the first group.
 
+\pythonnote{The wxPython version of this method returns a 3-tuple
+consisting of the continue flag, the value string, and the index for
+the next call.}
+
 \membersection{wxConfigBase::GetFirstEntry}\label{wxconfigbasegetfirstentry}
 
 \constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{
 index}}
 
 Gets the first entry.
+
+\pythonnote{The wxPython version of this method returns a 3-tuple
+consisting of the continue flag, the value string, and the index for
+the next call.}
 
 \membersection{wxConfigBase::GetNextGroup}\label{wxconfigbasegetnextgroup}
 
@@ -457,12 +465,20 @@ index}}
 
 Gets the next group.
 
+\pythonnote{The wxPython version of this method returns a 3-tuple
+consisting of the continue flag, the value string, and the index for
+the next call.}
+
 \membersection{wxConfigBase::GetNextEntry}\label{wxconfigbasegetnextentry}
 
 \constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{
 index}}
 
 Gets the next entry.
+
+\pythonnote{The wxPython version of this method returns a 3-tuple
+consisting of the continue flag, the value string, and the index for
+the next call.}
 
 \membersection{wxConfigBase::GetNumberOfEntries}\label{wxconfigbasegetnumberofentries}
 
@@ -580,6 +596,15 @@ not found, {\it b} is not changed.
 Reads a bool value, returning TRUE if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Read(key, default="")}}{Returns a string.}
+\twocolitem{\bf{ReadInt(key, default=0)}}{Returns an int.}
+\twocolitem{\bf{ReadFloat(key, default=0.0)}}{Returns a floating point number.}
+\end{twocollist}}
+}
+
 \membersection{wxConfigBase::RenameEntry}\label{wxconfigbaserenameentry}
 
 \func{bool}{RenameEntry}{\param{const wxString\& }{ oldName}, \param{const wxString\& }{ newName}}
@@ -658,5 +683,17 @@ value}}
 
 These functions write the specified value to the config file and return TRUE
 on success.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Write(key, value)}}{Writes a string.}
+\twocolitem{\bf{WriteInt(key, value)}}{Writes an int.}
+\twocolitem{\bf{WriteFloat(key, value)}}{Writes a floating point number.}
+\end{twocollist}}
+}
+
+
+
 
 
