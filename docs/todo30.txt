@@ -191,6 +191,11 @@ wxMiscellaneous
   but sending a wxSizeEvent will do it.
 - wxMac font selector dialog is the generic font selector -
   horrible.
+- No Append(wxArrayString&) for wxChoice and wxComboBox in wxGTK.
+  Probably other functions too. Consider adding Insert to
+  these classes, as per the patch on SF.
+- Rewrite wxFileHistory using wxString and wxArrayString, and
+  put in separate file.
 
 
 Version:      $Id$

@@ -88,4 +88,9 @@ PC Magazines:
 
 CD-ROM distributions for PC Plus, PCW
 
+Organisations:
+--------------
+
+http://www.egovos.org/ The Center of Open Source & Government 
+(Submitted to their directory, 2003-04-25)
 
