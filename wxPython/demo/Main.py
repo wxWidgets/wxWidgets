@@ -66,7 +66,6 @@ _treeList = [
 
     # core controls
     ('Core Windows/Controls', [
-        'VirtualListCtrl',
         'wxButton',
         'wxCheckBox',
         'wxCheckListBox',
@@ -77,6 +76,7 @@ _treeList = [
         'wxGrid',
         'wxListBox',
         'wxListCtrl',
+        'wxListCtrl_virtual',
         'wxNotebook',
         'wxPopupWindow',
         'wxRadioBox',
