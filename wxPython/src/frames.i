@@ -187,6 +187,9 @@ public:
     virtual wxToolBar *GetToolBar() const { return m_frameToolBar; }
     virtual void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
 
+    // sends a size event to the window using its current size -- this has an
+    // effect of refreshing the window layout
+    virtual void SendSizeEvent();
 };
 
 //---------------------------------------------------------------------------
