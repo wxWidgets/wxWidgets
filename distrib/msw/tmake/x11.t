@@ -15,6 +15,24 @@
     #! find all our sources
     $project{"COMMONOBJS"} .= "parser.o ";
 
+    foreach $file (sort keys %wxX11) {
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+
+        $project{"X11_SOURCES"} .= "x11/" . $file . " ";
+        $project{"GUIOBJS"} .= $fileobj . " ";
+    }
+
+    foreach $file (sort keys %wxUNIV) {
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+
+        if ( $wxUNIV{$file} =~ /Theme/ ) {
+            $file = "themes/" . $file
+        }
+
+        $project{"X11_SOURCES"} .= "univ/" . $file . " ";
+        $project{"GUIOBJS"} .= $fileobj . " ";
+    }
+
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotX11\b/;
 
@@ -31,13 +49,6 @@
 
         $project{"X11_SOURCES"} .= "common/" . $file . " ";
         $project{"COMMONOBJS"} .= $fileobj . " ";
-    }
-
-    foreach $file (sort keys %wxX11) {
-        ($fileobj = $file) =~ s/cp?p?$/\o/;
-
-        $project{"X11_SOURCES"} .= "x11/" . $file . " ";
-        $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
     }
 
     foreach $file (sort keys %wxUNIX) {
@@ -64,6 +75,10 @@
         $project{"X11_HEADERS"} .= "x11/" . $file . " "
     }
 
+    foreach $file (sort keys %wxUNIVINCLUDE) {
+        $project{"X11_HEADERS"} .= "univ/" . $file . " ";
+    }
+
     foreach $file (sort keys %wxGENERICINCLUDE) {
         $project{"X11_HEADERS"} .= "generic/" . $file . " "
     }
@@ -88,14 +103,14 @@ ALL_SOURCES = \
 ALL_HEADERS = \
 		#$ ExpandList("X11_HEADERS");
 
+GUIOBJS = \
+		#$ ExpandList("GUIOBJS");
+
 COMMONOBJS = \
 		#$ ExpandList("COMMONOBJS");
 
 GENERICOBJS = \
 		#$ ExpandList("GENERICOBJS");
-
-GUI_LOWLEVEL_OBJS = \
-		#$ ExpandList("GUI_LOWLEVEL_OBJS");
 
 UNIXOBJS = \
 		#$ ExpandList("UNIXOBJS");
