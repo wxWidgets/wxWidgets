@@ -751,7 +751,8 @@ public:
     }
 
 //protected:
-    // the array of all line objects for a non virtual list control
+    // the array of all line objects for a non virtual list control (for the
+    // virtual list control we only ever use m_lines[0])
     wxListLineDataArray  m_lines;
 
     // the list of column objects
@@ -1701,18 +1702,17 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         dc->DrawRectangle( rectHL );
     }
 
-    wxListItemDataList::Node *node = m_items.GetFirst();
-    wxCHECK_RET( node, _T("no subitems at all??") );
-
-    size_t col = 0;
     wxCoord x = rect.x + HEADER_OFFSET_X,
             y = rect.y + (LINE_SPACING + EXTRA_HEIGHT) / 2;
 
-    while ( node )
+    size_t col = 0;
+    for ( wxListItemDataList::Node *node = m_items.GetFirst();
+          node;
+          node = node->GetNext(), col++ )
     {
         wxListItemData *item = node->GetData();
 
-        int width = m_owner->GetColumnWidth(col++);
+        int width = m_owner->GetColumnWidth(col);
         int xOld = x;
         x += width;
 
@@ -1734,8 +1734,6 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         {
             dc->DrawText( item->GetText(), xOld, y );
         }
-
-        node = node->GetNext();
     }
 }
 
@@ -2395,15 +2393,27 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
 {
     wxASSERT_MSG( !IsEmpty(), _T("invalid line index") );
 
+    wxASSERT_MSG( IsVirtual(), _T("GetDummyLine() shouldn't be called") );
+
+    wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
+
+    // we need to recreate the dummy line if the number of columns in the
+    // control changed as it would have the incorrect number of fields
+    // otherwise
+    if ( !m_lines.IsEmpty() &&
+            m_lines[0].m_items.GetCount() != (size_t)GetColumnCount() )
+    {
+        self->m_lines.Clear();
+    }
+
     if ( m_lines.IsEmpty() )
     {
-        // normal controls are supposed to have something in m_lines
-        // already if it's not empty
-        wxASSERT_MSG( IsVirtual(), _T("logic error") );
-
-        wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
         wxListLineData *line = new wxListLineData(self);
         self->m_lines.Add(line);
+
+        // don't waste extra memory -- there never going to be anything
+        // else/more in this array
+        self->m_lines.Shrink();
     }
 
     return &m_lines[0];
@@ -4228,9 +4238,9 @@ void wxListMainWindow::DeleteAllItems()
 
 void wxListMainWindow::DeleteEverything()
 {
-    DeleteAllItems();
-
     m_columns.Clear();
+
+    DeleteAllItems();
 }
 
 // ----------------------------------------------------------------------------
@@ -5275,4 +5285,3 @@ void wxListCtrl::Thaw()
 
 #endif // wxUSE_LISTCTRL
 
-// vi:sts=4:sw=4:et
