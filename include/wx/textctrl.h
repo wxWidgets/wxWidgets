@@ -155,7 +155,7 @@ public:
     bool Modified() const { return IsModified(); }
 #endif
 
-private:
+protected:
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
     wxString m_filename;

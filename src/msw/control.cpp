@@ -204,10 +204,9 @@ bool wxControl::MSWOnNotify(int idCtrl,
 
 void wxControl::OnEraseBackground(wxEraseEvent& event)
 {
-    // In general, you don't want to erase the background of a control,
-    // or you'll get a flicker.
-    // TODO: move this 'null' function into each control that
-    // might flicker.
+    // notice that this 'dumb' implementation may cause flicker for some of the
+    // controls in which case they should intercept wxEraseEvent and process it
+    // themselves somehow
 
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);

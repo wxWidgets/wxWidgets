@@ -1420,9 +1420,16 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
             // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
+            // if it happened on an item (and not on empty place)
             {
-                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
                 NM_LISTVIEW* hdr = (NM_LISTVIEW*)lParam;
+                if ( hdr->iItem == -1 )
+                {
+                    // not on item
+                    return FALSE;
+                }
+
+                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
                 event.m_itemIndex = hdr->iItem;
             }
             break;

@@ -1627,7 +1627,7 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 
 static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
-                                                 wxWindow *win )
+                                                 wxWindow *WXUNUSED(win))
 {
     DEBUG_MAIN_THREAD
 
@@ -1650,7 +1650,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 
 static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
                                                    GdkEventButton *WXUNUSED(gdk_event),
-                                                   wxWindow *win )
+                                                   wxWindow *WXUNUSED(win))
 {
     DEBUG_MAIN_THREAD
 

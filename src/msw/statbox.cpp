@@ -41,7 +41,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
 // ============================================================================
 // implementation
@@ -102,8 +102,6 @@ long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
-            // VZ: I will remove (or change) this soon... (15.11.99)
-#if 0
         case WM_ERASEBKGND:
             // prevent wxControl from processing this message because it will
             // erase the background incorrectly and there is no way for us to
@@ -112,7 +110,6 @@ long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             // without painting over other controls - and if we don't,
             // wxControl still gets it)
             return MSWDefWindowProc(nMsg, wParam, lParam);
-#endif
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

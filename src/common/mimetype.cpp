@@ -355,8 +355,8 @@ class wxMimeTypeIconHandler
 {
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon) = 0;
-    
-    // this function fills manager with MIME types information gathered 
+
+    // this function fills manager with MIME types information gathered
     // (as side effect) when searching for icons. This may be particularly
     // useful if mime.types is incomplete (e.g. RedHat distributions).
     virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager) = 0;
@@ -370,7 +370,7 @@ class wxGNOMEIconHandler : public wxMimeTypeIconHandler
 public:
     virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
     virtual void GetMimeInfoRecords(wxMimeTypesManagerImpl *manager) {}
-    
+
 private:
     void Init();
     void LoadIconsFromKeyFile(const wxString& filename);
@@ -397,7 +397,7 @@ private:
     void LoadLinksForMimeType(const wxString& dirbase,
                               const wxString& subdir,
                               const wxArrayString& icondirs);
-    void LoadLinkFilesFromDir(const wxString& dirbase, 
+    void LoadLinkFilesFromDir(const wxString& dirbase,
                               const wxArrayString& icondirs);
     void Init();
 
@@ -758,13 +758,15 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
         return wxEmptyString;
     }
 
-    strKey << wxT("\\shell\\") << verb << wxT("\\command");
-    wxRegKey key(wxRegKey::HKCR, strKey);
+    strKey << wxT("\\shell\\") << verb;
+    wxRegKey key(wxRegKey::HKCR, strKey + _T("\\command"));
     wxString command;
     if ( key.Open() ) {
         // it's the default value of the key
         if ( key.QueryValue(wxT(""), command) ) {
-            // transform it from '%1' to '%s' style format string
+            // transform it from '%1' to '%s' style format string (now also
+            // test for %L - apparently MS started using it as well for the
+            // same purpose)
 
             // NB: we don't make any attempt to verify that the string is valid,
             //     i.e. doesn't contain %2, or second %1 or .... But we do make
@@ -773,7 +775,9 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
             size_t len = command.Len();
             for ( size_t n = 0; (n < len) && !foundFilename; n++ ) {
                 if ( command[n] == wxT('%') &&
-                     (n + 1 < len) && command[n + 1] == wxT('1') ) {
+                     (n + 1 < len) &&
+                     (command[n + 1] == wxT('1') ||
+                      command[n + 1] == wxT('L')) ) {
                     // replace it with '%s'
                     command[n + 1] = wxT('s');
 
@@ -781,8 +785,33 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
                 }
             }
 
-            if ( !foundFilename ) {
-                // we didn't find any '%1'!
+            // look whether we must issue some DDE requests to the application
+            // (and not just launch it)
+            strKey += _T("\\DDEExec");
+            wxRegKey keyDDE(wxRegKey::HKCR, strKey);
+            if ( keyDDE.Open() ) {
+                wxString ddeCommand, ddeServer, ddeTopic;
+                keyDDE.QueryValue(_T(""), ddeCommand);
+                ddeCommand.Replace(_T("%1"), _T("%s"));
+
+                wxRegKey(wxRegKey::HKCR, strKey + _T("\\Application")).
+                    QueryValue(_T(""), ddeServer);
+                wxRegKey(wxRegKey::HKCR, strKey + _T("\\Topic")).
+                    QueryValue(_T(""), ddeTopic);
+
+                // HACK: we use a special feature of wxExecute which exists
+                //       just because we need it here: it will establish DDE
+                //       conversation with the program it just launched
+                command.Prepend(_T("WX_DDE#"));
+                command << _T('#') << ddeServer
+                        << _T('#') << ddeTopic
+                        << _T('#') << ddeCommand;
+            }
+            else if ( !foundFilename ) {
+                // we didn't find any '%1' - the application doesn't know which
+                // file to open (note that we only do it if there is no DDEExec
+                // subkey)
+                //
                 // HACK: append the filename at the end, hope that it will do
                 command << wxT(" %s");
             }
@@ -1445,7 +1474,7 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
 
     wxString mime_extension, mime_desc;
 
-    pos = wxNOT_FOUND;    
+    pos = wxNOT_FOUND;
     if (wxGetLocale() != NULL)
         mime_desc = _T("Comment[") + wxGetLocale()->GetName() + _T("]=");
     if (pos == wxNOT_FOUND) mime_desc = _T("Comment=");
@@ -1466,7 +1495,7 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
         while ( *pc && *pc != _T('\n') ) exts += *pc++;
         wxStringTokenizer tokenizer(exts, _T(";"));
         wxString e;
-        
+
         while (tokenizer.HasMoreTokens())
         {
             e = tokenizer.GetNextToken();
@@ -1476,7 +1505,7 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
         }
         mime_extension.RemoveLast();
     }
-    
+
     ms_infoTypes.Add(mimetype);
     ms_infoDescriptions.Add(mime_desc);
     ms_infoExtensions.Add(mime_extension);
@@ -1640,7 +1669,7 @@ bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
 void wxKDEIconHandler::GetMimeInfoRecords(wxMimeTypesManagerImpl *manager)
 {
     if ( !m_inited ) Init();
-    
+
     size_t cnt = ms_infoTypes.GetCount();
     for (unsigned i = 0; i < cnt; i++)
         manager -> AddMimeTypeInfo(ms_infoTypes[i], ms_infoExtensions[i], ms_infoDescriptions[i]);
@@ -1779,7 +1808,8 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     };
 
     // first read the system wide file(s)
-    for ( size_t n = 0; n < WXSIZEOF(aStandardLocations); n++ ) {
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(aStandardLocations); n++ ) {
         wxString dir = aStandardLocations[n];
 
         wxString file = dir + wxT("/mailcap");
@@ -1806,11 +1836,11 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
     if ( wxFile::Exists(strUserMimeTypes) ) {
         ReadMimeTypes(strUserMimeTypes);
     }
-    
+
     // read KDE/GNOME tables
     ArrayIconHandlers& handlers = GetIconHandlers();
     size_t count = handlers.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
         handlers[n]->GetMimeInfoRecords(this);
 }
 

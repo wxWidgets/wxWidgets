@@ -74,6 +74,8 @@
 #endif
 #include <stdarg.h>
 
+#include "wx/dde.h"         // for WX_DDE hack in wxExecute
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -177,9 +179,78 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
 }
 #endif
 
-long wxExecute(const wxString& command, bool sync, wxProcess *handler)
+long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 {
-    wxCHECK_MSG( !!command, 0, wxT("empty command in wxExecute") );
+    wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
+
+    // DDE hack: this is really not pretty, but we need to allow this for
+    // transparent handling of DDE servers in wxMimeTypesManager. Usually it
+    // returns the command which should be run to view/open/... a file of the
+    // given type. Sometimes, however, this command just launches the server
+    // and an additional DDE request must be made to really open the file. To
+    // keep all this well hidden from the application, we allow a special form
+    // of command: WX_DDE:<command>:DDE_SERVER:DDE_TOPIC:DDE_COMMAND in which
+    // case we execute just <command> and process the rest below
+    wxString command, ddeServer, ddeTopic, ddeCommand;
+    static const size_t lenDdePrefix = 7;   // strlen("WX_DDE:")
+    if ( cmd.Left(lenDdePrefix) == _T("WX_DDE#") )
+    {
+        const wxChar *p = cmd.c_str() + 7;
+        while ( *p && *p != _T('#') )
+        {
+            command += *p++;
+        }
+
+        if ( *p )
+        {
+            // skip '#'
+            p++;
+        }
+        else
+        {
+            wxFAIL_MSG(_T("invalid WX_DDE command in wxExecute"));
+        }
+
+        while ( *p && *p != _T('#') )
+        {
+            ddeServer += *p++;
+        }
+
+        if ( *p )
+        {
+            // skip '#'
+            p++;
+        }
+        else
+        {
+            wxFAIL_MSG(_T("invalid WX_DDE command in wxExecute"));
+        }
+
+        while ( *p && *p != _T('#') )
+        {
+            ddeTopic += *p++;
+        }
+
+        if ( *p )
+        {
+            // skip '#'
+            p++;
+        }
+        else
+        {
+            wxFAIL_MSG(_T("invalid WX_DDE command in wxExecute"));
+        }
+
+        while ( *p )
+        {
+            ddeCommand += *p++;
+        }
+    }
+    else
+    {
+        // no DDE
+        command = cmd;
+    }
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
     // the old code is disabled because we really need a process handle
@@ -237,6 +308,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 
     return result;
 #else // 1
+
     // create the process
     STARTUPINFO si;
     wxZeroMemory(si);
@@ -336,6 +408,20 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 
         // the process still started up successfully...
         return pi.dwProcessId;
+    }
+
+    // second part of DDE hack: now establish the DDE conversation with the
+    // just launched process
+    if ( !!ddeServer )
+    {
+        wxDDEClient client;
+        wxConnectionBase *conn = client.MakeConnection(_T(""),
+                                                       ddeServer,
+                                                       ddeTopic);
+        if ( !conn || !conn->Execute(ddeCommand) )
+        {
+            wxLogError(_("Couldn't launch DDE server '%s'."), command.c_str());
+        }
     }
 
     if ( !sync )

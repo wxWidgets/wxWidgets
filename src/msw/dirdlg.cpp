@@ -88,6 +88,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
     m_message = message;
     m_parent = parent;
     m_path = defaultPath;
+    m_path.Replace(_T("/"), _T("\\")); // SHBrowseForFolder doesn't like '/'s
 }
 
 int wxDirDialog::ShowModal()

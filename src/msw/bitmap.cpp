@@ -227,23 +227,61 @@ wxBitmap::~wxBitmap()
         wxTheBitmapList->DeleteObject(this);
 }
 
-wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
+wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     Init();
 
     wxBitmapRefData *refData = new wxBitmapRefData;
     m_refData = refData;
 
-    refData->m_width = the_width;
-    refData->m_height = the_height;
-    refData->m_depth = no_bits;
+    refData->m_width = width;
+    refData->m_height = height;
+    refData->m_depth = depth;
     refData->m_numColors = 0;
     refData->m_selectedInto = NULL;
 
-    HBITMAP hbmp = ::CreateBitmap(the_width, the_height, 1, no_bits, bits);
+    char *data;
+    if ( depth == 1 )
+    {
+        // we assume that it is in XBM format which is not quite the same as
+        // the format CreateBitmap() wants because the order of bytes in the
+        // line is inversed!
+        static const size_t bytesPerLine = (width + 7) / 8;
+        static const size_t padding = bytesPerLine % 2;
+        static const size_t len = height * ( padding + bytesPerLine );
+        data = (char *)malloc(len);
+        const char *src = bits;
+        char *dst = data;
+
+        for ( int rows = 0; rows < height; rows++ )
+        {
+            // note that offset cannot be size_t due to >= 0 test!
+            for ( int offset = bytesPerLine - 1; offset >= 0; offset-- )
+            {
+                *dst++ = *(src + offset);
+            }
+
+            if ( padding )
+                *dst++ = 0;
+
+            src += bytesPerLine;
+        }
+    }
+    else
+    {
+        // bits should already be in Windows standard format
+        data = (char *)bits;    // const_cast is harmless
+    }
+
+    HBITMAP hbmp = ::CreateBitmap(width, height, 1, depth, data);
     if ( !hbmp )
     {
         wxLogLastError("CreateBitmap");
+    }
+
+    if ( data != bits )
+    {
+        free(data);
     }
 
     SetHBITMAP((WXHBITMAP)hbmp);
@@ -253,14 +291,14 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
 wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
     wxCHECK_MSG( Ok() &&
-                 (rect.x >= 0) && (rect.y >= 0) && 
+                 (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= GetWidth()) &&
                  (rect.y+rect.height <= GetHeight()),
                  wxNullBitmap, wxT("Invalid bitmap or bitmap region") );
-    
+
     wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
-    
+
     // copy bitmap data
     HDC dcSrc = ::CreateCompatibleDC(NULL);
     HDC dcDst = ::CreateCompatibleDC(NULL);
