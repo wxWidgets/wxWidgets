@@ -741,9 +741,9 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     wxScrolledWindow::Create( parent, id, pos, size,
                               style|wxHSCROLL|wxVSCROLL, name );
 
-        // If the tree display has no buttons, but does have
-        // connecting lines, we can use a narrower layout.
-        // It may not be a good idea to force this...
+    // If the tree display has no buttons, but does have
+    // connecting lines, we can use a narrower layout.
+    // It may not be a good idea to force this...
     if (!HasButtons() && !HasFlag(wxTR_NO_LINES))
     {
         m_indent= 10;
@@ -754,7 +754,8 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     SetValidator( validator );
 #endif
 
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
+    SetForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
+    SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX) );
 
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );
@@ -2061,7 +2062,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             if (attr && attr->HasTextColour())
                 colText = attr->GetTextColour();
             else
-                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+                colText = GetForegroundColour();
         }
 
         // prepare to draw
