@@ -1513,38 +1513,46 @@ case "${host}" in
           dnl Include resources for the "native" port (wxPM).
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
+      dnl Check for the gcc version (and thereby for the C runtime library).
+      dnl wx_cv_gccversion = EMX2 -> Standard EMX environment
+      dnl wx_cv_gccversion = EMX3 -> EMX with gcc-3.0.3 or gcc-3.2.1
+      dnl wx_cv_gccversion = Innotek5 -> gcc-3.2.2 with Innotek libc5
+      dnl wx_cv_gccversion = Innotek6 -> gcc-3.3.5 with Innotek libc6.
       AC_CACHE_CHECK([for gcc version], wx_cv_gccversion,[
-          AC_TRY_COMPILE([],
+          AC_TRY_RUN(
+              dnl Check the gcc version macro.	 
               [
+                  #include <stdio.h>
+
+                  int main()
+                  {
+                      FILE *f=fopen("conftestval", "w");
+                      if (!f) exit(1);
+                      fprintf(f,
                   #if (__GNUC__ < 3)
-                      #error old gcc
+                              "EMX2"
+                  #elif (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
+                              "EMX3"
+                  #elif (__GNUC__==3) && (__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__==2)
+                              "Innotek5"
+                  #else
+                              "Innotek6"
                   #endif
+		      );
+                      exit(0);
+                  }
               ],
-              [
-                  AC_TRY_COMPILE([],
-                      [
-                          #if (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
-                              #error intermediate gcc
-                          #endif
-                      ],
-                      [
-                         wx_cv_gccversion=Innotek
-                      ],
-                      [
-                         wx_cv_gccversion=3
-                      ]
-                  )
-              ],
-              [
-                  wx_cv_gccversion=2
-              ]
+	      wx_cv_gccversion=`cat conftestval`,
+              wx_cv_gccversion="EMX2",
+              dnl Compilation error: Assuming standard EMX environment
+              wx_cv_gccversion="EMX2"
           )
       ])
-      if test "$wx_cv_gccversion" = "2"; then
+      if test "$wx_cv_gccversion" = "EMX2"; then
           LIBS="$LIBS -lstdcpp"
           LDFLAGS="$LDFLAGS -Zsysv-signals"
       else
-          if test "$wx_cv_gccversion" = "3"; then
+          if test "$wx_cv_gccversion" = "EMX3"; then
               LIBS="$LIBS -lstdcxx"
               LDFLAGS="$LDFLAGS -Zsysv-signals"
           else
@@ -1637,8 +1645,12 @@ AC_CHECK_HEADERS(langinfo.h)
 
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
-      dnl Explicitly link -lintl if langinfo.h is available.
-      if test $ac_cv_header_langinfo_h = "yes"; then
+      dnl Explicitly link -lintl if langinfo.h is available
+      dnl and intl not yet included in libc
+      if test $ac_cv_header_langinfo_h = "yes" \
+                -a \(   "$wx_cv_gccversion" = "EMX2" \
+                     -o "$wx_cv_gccversion" = "EMX3" \
+                     -o "$wx_cv_gccversion" = "Innotek5" \); then
           LIBS="$LIBS -lintl"
       fi
   ;;
