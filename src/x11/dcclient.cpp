@@ -1771,6 +1771,16 @@ void wxWindowDC::SetFont( const wxFont &font )
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     m_font = font;
+    
+#if wxUSE_UNICODE
+    if (m_font.Ok())
+    {
+        if (m_fontdesc)
+            pango_font_description_free( m_fontdesc );
+
+        m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+    }
+#endif
 }
 
 void wxWindowDC::SetPen( const wxPen &pen )
