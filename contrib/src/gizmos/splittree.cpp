@@ -252,8 +252,10 @@ void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
 
 	wxTreeCtrl::OnPaint(event);
 
+    // The generic tree already knows how to draw lines
+#ifdef __WXMSW__
     if ((GetWindowStyle() & wxTR_ROW_LINES) == 0)
-        return ;
+        return FALSE;
 
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
@@ -280,6 +282,7 @@ void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
 		cy = itemRect.GetBottom();
 		dc.DrawLine(0, cy, clientSize.x, cy);
 	}
+#endif
 }
 
 
