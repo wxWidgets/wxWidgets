@@ -140,7 +140,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-compat20       enable wxWindows 2.0 compatibility"
 ac_help="$ac_help
-  --enable-compat22       enable wxWindows 2.2 compatibility"
+  --disable-compat22      disable wxWindows 2.2 compatibility"
 ac_help="$ac_help
   --enable-intl           use internationalization system"
 ac_help="$ac_help
@@ -17939,7 +17939,7 @@ EOF
     WXWIN_COMPATIBILITY_2_2="yes"
 fi
 
-if test "$WXWIN_COMPATIBILITY_2_2" = "yes"; then
+if test "x$WXWIN_COMPATIBILITY_2_2" != "xno"; then
     cat >> confdefs.h <<\EOF
 #define WXWIN_COMPATIBILITY_2_2 1
 EOF

@@ -767,7 +767,7 @@ WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregardin
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
 WX_ARG_ENABLE(compat20,      [  --enable-compat20       enable wxWindows 2.0 compatibility], WXWIN_COMPATIBILITY_2)
-WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWindows 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
+WX_ARG_ENABLE(compat22,      [  --disable-compat22      disable wxWindows 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -3417,7 +3417,7 @@ if test "$WXWIN_COMPATIBILITY_2" = "yes"; then
     WXWIN_COMPATIBILITY_2_2="yes"
 fi
 
-if test "$WXWIN_COMPATIBILITY_2_2" = "yes"; then
+if test "x$WXWIN_COMPATIBILITY_2_2" != "xno"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_2)
 fi
 
