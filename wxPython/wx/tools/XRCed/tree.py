@@ -5,6 +5,7 @@
 # RCS-ID:       $Id$
 
 from xxx import *                       # xxx imports globals and params
+import types
 
 # Constant to define standart window name
 STD_NAME = '_XRCED_T_W'
@@ -377,7 +378,7 @@ class XML_Tree(wxTreeCtrl):
     def ExpandAll(self, item):
         if self.ItemHasChildren(item):
             self.Expand(item)
-            i, cookie = self.GetFirstChild(item, 0)
+            i, cookie = self.GetFirstChild(item)
             children = []
             while i.IsOk():
                 children.append(i)
@@ -386,7 +387,7 @@ class XML_Tree(wxTreeCtrl):
                 self.ExpandAll(i)
     def CollapseAll(self, item):
         if self.ItemHasChildren(item):
-            i, cookie = self.GetFirstChild(item, 0)
+            i, cookie = self.GetFirstChild(item)
             children = []
             while i.IsOk():
                 children.append(i)
@@ -409,8 +410,8 @@ class XML_Tree(wxTreeCtrl):
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wxTreeItemData(self.rootObj))
         self.SetItemHasChildren(self.root)
-        self.Expand(self.root)
         self.Unselect()
+        self.Expand(self.root)
 
     # Clear old data and set new
     def SetData(self, dom):
@@ -646,7 +647,7 @@ class XML_Tree(wxTreeCtrl):
 #        if xxx.__class__ == xxxFrame:
             # Frame can't have many children,
             # but it's first child possibly can...
-#            child = self.GetFirstChild(item, 0)[0]
+#            child = self.GetFirstChild(item)[0]
 #            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
 #                # Clean-up before recursive call or error
 #                wxMemoryFSHandler_RemoveFile('xxx.xrc')
@@ -721,7 +722,7 @@ class XML_Tree(wxTreeCtrl):
         if xxx.__class__ == xxxFrame:
             # Frame can't have many children,
             # but it's first child possibly can...
-#            child = self.GetFirstChild(item, 0)[0]
+#            child = self.GetFirstChild(item)[0]
 #            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
 #                # Clean-up before recursive call or error
 #                wxMemoryFSHandler_RemoveFile('xxx.xrc')
@@ -809,7 +810,7 @@ class XML_Tree(wxTreeCtrl):
         if index is None: return wxTreeItemId()
         item = self.root
         for i in index:
-            item = self.GetFirstChild(item, 0)[0]
+            item = self.GetFirstChild(item)[0]
             for k in range(i): item = self.GetNextSibling(item)
         return item
 
