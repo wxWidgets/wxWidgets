@@ -37,18 +37,18 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxScrolledWindow : public wxPanel
 {
 public:
-    wxScrolledWindow();
+    wxScrolledWindow()
+        { Init(); }
+        
     wxScrolledWindow(wxWindow *parent,
                      wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxScrolledWindowStyle,
                      const wxString& name = wxPanelNameStr)
-    {
-        Create(parent, id, pos, size, style, name);
-    }
-
-    ~wxScrolledWindow();
+        { Create(parent, id, pos, size, style, name); }
+        
+    void Init();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -124,6 +124,10 @@ public:
     
     void GtkVScroll( float value );
     void GtkHScroll( float value );
+    void GtkVConnectEvent();
+    void GtkHConnectEvent();
+    void GtkVDisconnectEvent();
+    void GtkHDisconnectEvent();
 
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
