@@ -590,8 +590,8 @@ wxString wxFileName::GetShortPath() const
     }
     if (ok)
         return pathOut;
-    else
-        return path;
+
+    return path;
 #else
     return GetFullPath();
 #endif
@@ -605,7 +605,8 @@ wxString wxFileName::GetLongPath() const
     wxString pathOut;
     bool success = FALSE;
 
-#if wxUSE_DYNLIB_CLASS
+    // VZ: this code was disabled, why?
+#if 0 // wxUSE_DYNLIB_CLASS
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
@@ -613,7 +614,6 @@ wxString wxFileName::GetLongPath() const
     if ( !s_triedToLoad )
     {
         s_triedToLoad = TRUE;
-#if 0
         wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
         if ( dllKernel )
         {
@@ -651,12 +651,10 @@ wxString wxFileName::GetLongPath() const
                 }
             }
         }
-#endif		
     }
     if (success)
         return pathOut;
-#endif
-    // wxUSE_DYNLIB_CLASS
+#endif // wxUSE_DYNLIB_CLASS
 
     if (!success)
     {
@@ -705,6 +703,7 @@ wxString wxFileName::GetLongPath() const
             }
         }
     }
+
     return pathOut;
 #else
     return GetFullPath();

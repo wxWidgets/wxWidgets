@@ -376,8 +376,9 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
         HTML_COLOUR("teal",    0x00,0x80,0x80)
         HTML_COLOUR("aqua",    0x00,0xFF,0xFF)
         #undef HTML_COLOUR
-        return FALSE;
     }
+
+    return FALSE;
 }
 
 bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const

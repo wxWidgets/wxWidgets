@@ -2314,8 +2314,8 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
 
     if (m_anchor)
         return m_anchor->HitTest( wxPoint(x, y), this, flags);
-    else
-        return wxTreeItemId();
+
+    return wxTreeItemId();
 }
 
 // get the bounding rectangle of the item (or of its label only)

@@ -1074,8 +1074,8 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
         description = descriptions[n];
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 // Parses the global filter, returning the number of filters.
