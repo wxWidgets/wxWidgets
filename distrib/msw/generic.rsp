@@ -657,3 +657,27 @@ samples/png/*.ico
 samples/png/*.txt
 samples/png/*.png
 
+samples/image/*.cpp
+samples/image/*.h
+samples/image/makefile*
+samples/image/*.rc
+samples/image/*.def
+samples/image/*.bmp
+samples/image/*.xpm
+samples/image/*.xbm
+samples/image/*.png
+samples/image/*.ico
+samples/image/*.txt
+
+samples/thread/*.cpp
+samples/thread/*.h
+samples/thread/makefile*
+samples/thread/*.rc
+samples/thread/*.def
+samples/thread/*.bmp
+samples/thread/*.xpm
+samples/thread/*.xbm
+samples/thread/*.png
+samples/thread/*.ico
+samples/thread/*.txt
+

@@ -60,6 +60,8 @@ public:
   void GetSize(int *width, int *height) const ;
   void GetPosition(int *x, int *y) const ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void ClientToScreen(int *x, int *y) const;
+  void ScreenToClient(int *x, int *y) const;
 
   virtual bool OnClose();
 

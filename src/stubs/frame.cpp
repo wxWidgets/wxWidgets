@@ -481,6 +481,30 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
+void wxFrame::ScreenToClient(int *x, int *y) const
+{
+    wxWindow::ScreenToClient(x, y);
+
+    // We may be faking the client origin.
+    // So a window that's really at (0, 30) may appear
+    // (to wxWin apps) to be at (0, 0).
+    wxPoint pt(GetClientAreaOrigin());
+    *x -= pt.x;
+    *y -= pt.y;
+}
+
+void wxFrame::ClientToScreen(int *x, int *y) const
+{
+    // We may be faking the client origin.
+    // So a window that's really at (0, 30) may appear
+    // (to wxWin apps) to be at (0, 0).
+    wxPoint pt1(GetClientAreaOrigin());
+    *x += pt1.x;
+    *y += pt1.y;
+
+    wxWindow::ClientToScreen(x, y);
+}
+
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE,

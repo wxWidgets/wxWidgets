@@ -618,19 +618,8 @@ void wxWindow::ScreenToClient(int *x, int *y) const
     POINT pt;
     pt.x = *x;
     pt.y = *y;
-    ::ScreenToClient(hWnd, &pt);
 
-    /*
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    if (GetParent())
-    {
-    wxPoint pt1(GetParent()->GetClientAreaOrigin());
-    pt.x -= pt1.x;
-    pt.y -= pt1.y;
-    }
-    */
+    ::ScreenToClient(hWnd, &pt);
 
     *x = pt.x;
     *y = pt.y;
@@ -642,18 +631,6 @@ void wxWindow::ClientToScreen(int *x, int *y) const
     POINT pt;
     pt.x = *x;
     pt.y = *y;
-
-    /*
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    if (GetParent())
-    {
-    wxPoint pt1(GetParent()->GetClientAreaOrigin());
-    pt.x += pt1.x;
-    pt.y += pt1.y;
-    }
-    */
 
     ::ClientToScreen(hWnd, &pt);
 

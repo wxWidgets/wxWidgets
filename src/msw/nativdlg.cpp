@@ -227,7 +227,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 #if defined(__WIN95__)
 	else if (str == "MSCTLS_UPDOWN32")
 	{
-		win == new wxSpinButton;
+		win = new wxSpinButton;
 	}
 #endif
 	else if (str == "MSCTLS_TRACKBAR32")

@@ -134,6 +134,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	{
 		if ( !m_includeList.Member(val) )
 		{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s is invalid."), (const char *)val);
 			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
@@ -144,6 +145,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	{
 		if ( m_excludeList.Member(val) )
 		{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s is invalid."), (const char *)val);
 			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
@@ -152,6 +154,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	}
 	if ( (m_validatorStyle & wxFILTER_ASCII) && !val.IsAscii() )
 	{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s should only contain ASCII characters."), (const char *)val);
 			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
@@ -159,6 +162,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	}
 	if ( (m_validatorStyle & wxFILTER_ALPHA) && !wxIsAlpha(val) )
 	{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s should only contain alphabetic characters."), (const char *)val);
 			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
@@ -166,6 +170,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	}
 	if ( (m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsAlphaNumeric(val))
 	{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s should only contain alphabetic or numeric characters."), (const char *)val);
 			wxMessageBox(buf,_("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
@@ -174,6 +179,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !wxIsNumeric(val))
 
 	{
+            m_validatorWindow->SetFocus();
 			char buf[512];
 			sprintf(buf, _("%s should be numeric."), (const char *)val);
 			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
