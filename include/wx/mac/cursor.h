@@ -74,7 +74,7 @@ public:
   void SetHCURSOR(WXHCURSOR cursor);
   inline WXHCURSOR GetHCURSOR() const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
 private :
-    void Create(const wxImage & image) ;
+    void CreateFromImage(const wxImage & image) ;
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);

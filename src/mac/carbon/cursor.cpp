@@ -81,10 +81,10 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
 
 wxCursor::wxCursor( const wxImage &image )
 {
-    Create( image ) ;
+    CreateFromImage( image ) ;
 }
 
-void wxCursor::Create(const wxImage & image) 
+void wxCursor::CreateFromImage(const wxImage & image) 
 {
     m_refData = new wxCursorRefData;
 
@@ -187,7 +187,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
             image.SetOption(wxCUR_HOTSPOT_X,hotSpotX ) ;
             image.SetOption(wxCUR_HOTSPOT_Y,hotSpotY ) ;
             delete m_refData ;
-            Create(image) ;
+            CreateFromImage(image) ;
         }
     }
 }
