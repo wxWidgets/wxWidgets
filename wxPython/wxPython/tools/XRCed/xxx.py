@@ -326,7 +326,8 @@ class xxxFrame(xxxContainer):
 
 class xxxTool(xxxObject):
     allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp']
-    paramDict = {'bitmap2': ParamFile}
+    required = ['bitmap']
+    paramDict = {'bitmap2': ParamFile, 'toggle': ParamBool}
     hasStyle = false
 
 class xxxToolBar(xxxContainer):
