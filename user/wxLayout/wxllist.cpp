@@ -1598,10 +1598,6 @@ wxLayoutList::Draw(wxDC &dc,
       if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
-   // can only be 0 if we are on the first line and have no next line
-   wxASSERT(m_CursorSize.x != 0 || (m_CursorLine &&
-                                    m_CursorLine->GetNextLine() == NULL &&
-                                    m_CursorLine == m_FirstLine));
    InvalidateUpdateRect();
 
    WXLO_DEBUG(("Selection is %s : l%d,%ld/%ld,%ld",
