@@ -1292,7 +1292,76 @@ Restores the string passed to the constructor to the usable state by calling
 
 \membersection{wxStringBuffer::operator wxChar *}\label{wxstringbufferwxchar}
 
-\constfunc{wxChar *}{operator wxChar *}{\void}
+\func{wxChar *}{operator wxChar *}{\void}
+
+Returns the writable pointer to a buffer of the size at least equal to the
+length specified in the constructor.
+
+
+
+\section{\class{wxStringBufferLength}}\label{wxstringbufferlength}
+
+This tiny class allows to conveniently access the \helpref{wxString}{wxstring} 
+internal buffer as a writable pointer without any risk of forgetting to restore
+the string to the usable state later, and allows the user to set the internal
+length of the string.
+
+For example, assuming you have a low-level OS function called 
+{\tt int GetMeaningOfLifeAsString(char *)} copying the value in the provided
+buffer (which must be writable, of course), and returning the actual length
+of the string, you might call it like this:
+
+\begin{verbatim}
+    wxString theAnswer;
+    wxStringBuffer theAnswerBuffer(theAnswer, 1024);
+    int nLength = GetMeaningOfLifeAsString(theAnswerBuffer);
+    theAnswerBuffer.SetLength(nLength);
+    if ( theAnswer != "42" )
+    {
+        wxLogError("Something is very wrong!");
+    }
+\end{verbatim}
+
+Note that SetLength {\tt must} be called before wxStringBufferLength destructs.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/string.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringBufferLength::wxStringBufferLength}\label{wxstringbufferlengthctor}
+
+\func{}{wxStringBuffer}{\param{const wxString\& }{str}, \param{size\_t }{len}}
+
+Constructs a writable string buffer object associated with the given string
+and containing enough space for at least {\it len} characters. Basically, this
+is equivalent to calling \helpref{GetWriteBuf}{wxstringgetwritebuf} and
+saving the result.
+
+\membersection{wxStringBufferLength::\destruct{wxStringBufferLength}}\label{wxstringbufferlengthdtor}
+
+\func{}{\destruct{wxStringBufferLength}}{\void}
+
+Restores the string passed to the constructor to the usable state by calling 
+\helpref{UngetWriteBuf}{wxstringungetwritebuf} on it.
+
+\membersection{wxStringBufferLength::SetLength}\label{wxstringbufferlengthsetlength}
+
+\func{void}{SetLength}{\param{size\_t }{nLength}}
+
+Sets the internal length of the string referred to by wxStringBufferLength to 
+{\it nLength} characters.
+
+Must be called before wxStringBufferLength destructs.
+
+\membersection{wxStringBufferLength::operator wxChar *}\label{wxstringbufferlengthwxchar}
+
+\func{wxChar *}{operator wxChar *}{\void}
 
 Returns the writable pointer to a buffer of the size at least equal to the
 length specified in the constructor.
