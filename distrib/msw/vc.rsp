@@ -6,6 +6,12 @@ src/wxvc_dll.dsw
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw
 
+samples/calendar/CalendarVC.dsp
+samples/calendar/CalendarVC.dsw
+
+samples/caret/CaretVC.dsp
+samples/caret/CaretVC.dsw
+
 samples/checklst/ChecklstVC.dsp
 samples/checklst/ChecklstVC.dsw
 
@@ -21,6 +27,9 @@ samples/db/DbVC.dsw
 samples/dialogs/DialogsVC.dsp
 samples/dialogs/DialogsVC.dsw
 
+samples/dialup/DialupVC.dsp
+samples/dialup/DialupVC.dsw
+
 samples/dnd/DndVC.dsp
 samples/dnd/DndVC.dsw
 
@@ -30,11 +39,17 @@ samples/docview/DocviewVC.dsw
 samples/docvwmdi/DocVwVC.dsp
 samples/docvwmdi/DocVwVC.dsw
 
+samples/drawing/DrawingVC.dsp
+samples/drawing/DrawingVC.dsw
+
 samples/dynamic/DynamicVC.dsp
 samples/dynamic/DynamicVC.dsw
 
-samples/forty/FortyVC.dsp
-samples/forty/FortyVC.dsw
+samples/exec/ExecVC.dsp
+samples/exec/ExecVC.dsw
+
+samples/font/FontVC.dsp
+samples/font/FontVC.dsw
 
 samples/grid/GridVC.dsp
 samples/grid/GridVC.dsw
@@ -42,11 +57,33 @@ samples/grid/GridVC.dsw
 samples/help/HelpVC.dsp
 samples/help/HelpVC.dsw
 
+samples/html/AboutVC.dsp
+samples/html/AboutVC.dsw
+samples/html/HelpVC.dsp
+samples/html/HelpVC.dsw
+samples/html/HelpViewVC.dsp
+samples/html/HelpViewVC.dsw
+samples/html/PrintingVC.dsp
+samples/html/PrintingVC.dsw
+samples/html/TestVC.dsp
+samples/html/TestVC.dsw
+samples/html/VirtualVC.dsp
+samples/html/VirtualVC.dsw
+samples/html/WidgetVC.dsp
+samples/html/WidgetVC.dsw
+samples/html/ZipVC.dsp
+samples/html/ZipVC.dsw
+
 samples/image/ImageVC.dsp
 samples/image/ImageVC.dsw
 
 samples/internat/InternatVC.dsp
 samples/internat/InternatVC.dsw
+
+samples/ipc/ClientVC.dsp
+samples/ipc/ClientVC.dsw
+samples/ipc/ServerVC.dsp
+samples/ipc/ServerVC.dsw
 
 samples/joytest/JoytestVC.dsp
 samples/joytest/JoytestVC.dsw
@@ -63,6 +100,9 @@ samples/mdi/MdiVC.dsw
 samples/memcheck/MemcheckVC.dsp
 samples/memcheck/MemcheckVC.dsw
 
+samples/menu/MenuVC.dsp
+samples/menu/MenuVC.dsw
+
 samples/mfc/MfcVC.dsp
 samples/mfc/MfcVC.dsw
 
@@ -75,11 +115,17 @@ samples/minifram/MiniframVC.dsw
 samples/nativdlg/NativdlgVC.dsp
 samples/nativdlg/NativdlgVC.dsw
 
+samples/newgrid/NewgridVC.dsp
+samples/newgrid/NewgridVC.dsw
+
 samples/notebook/NotebookVC.dsp
 samples/notebook/NotebookVC.dsw
 
 samples/ownerdrw/OwnerDrwVC.dsp
 samples/ownerdrw/OwnerDrwVC.dsw
+
+samples/plot/PlotVC.dsp
+samples/plot/PlotVC.dsw
 
 samples/png/PngVC.dsp
 samples/png/PngVC.dsw
@@ -87,14 +133,32 @@ samples/png/PngVC.dsw
 samples/printing/PrintingVC.dsp
 samples/printing/PrintingVC.dsw
 
+samples/propsize/PropsizeVC.dsp
+samples/propsize/PropsizeVC.dsw
+
 samples/Regtest/RegtestVC.dsp
 samples/Regtest/RegtestVC.dsw
 
 samples/resource/ResourceVC.dsp
 samples/resource/ResourceVC.dsw
 
+samples/richedit/RichEditVC.dsp
+samples/richedit/RichEditVC.dsw
+
+samples/rotate/RotateVC.dsp
+samples/rotate/RotateVC.dsw
+
 samples/sashtest/SashtestVC.dsp
 samples/sashtest/SashtestVC.dsw
+
+samples/scroll/ScrollVC.dsp
+samples/scroll/ScrollVC.dsw
+
+samples/scrollsub/ScrollVC.dsp
+samples/scrollsub/ScrollVC.dsw
+
+samples/sockets/ClientVC.dsp
+samples/sockets/ServerVC.dsw
 
 samples/splitter/SplitterVC.dsp
 samples/splitter/SplitterVC.dsw
@@ -120,16 +184,26 @@ samples/typetest/TypetestVC.dsw
 samples/validate/ValidateVC.dsp
 samples/validate/ValidateVC.dsw
 
-samples/wxsocket/ClientVC.dsp
-samples/wxsocket/ServerVC.dsw
+samples/wizard/WizardVC.dsp
+samples/wizard/WizardVC.dsw
 
-samples/wxpoem/PoemVC.dsp
-samples/wxpoem/PoemVC.dsw
+demos/bombs/BombsVC.dsp
+demos/bombs/BombsVC.dsw
 
-utils/wxprop/src/PropVC.dsp
-utils/wxprop/src/PropVC.dsw
-utils/wxprop/src/PropSampleVC.dsp
-utils/wxprop/src/PropSampleVC.dsw
+demos/dbbrowse/DbbrowseVC.dsp
+demos/dbbrowse/DbbrowseVC.dsw
+
+demos/forty/FortyVC.dsp
+demos/forty/FortyVC.dsw
+
+demos/fractal/FractalVC.dsp
+demos/fractal/FractalVC.dsw
+
+demos/life/LifeVC.dsp
+demos/life/LifeVC.dsw
+
+demos/poem/PoemVC.dsp
+demos/poem/PoemVC.dsw
 
 utils/dialoged/src/DialogEdVC.dsp
 utils/dialoged/src/DialogEdVC.dsw

@@ -73,7 +73,11 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #  ifdef __BORLANDC__
 
 #  ifdef __WIN32__
+#if __BORLANDC__ > 0x530
+       typedef long (__stdcall * WndProcCast)( HWND__*, unsigned int, unsigned int, long) ;
+#else
        typedef int (pascal * WndProcCast) ();
+#endif
 #      define CASTWNDPROC (WndProcCast)
 // #    define CASTWNDPROC
 #  else

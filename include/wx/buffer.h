@@ -70,7 +70,7 @@ public:
         wxASSERT_MSG( wcs, wxT("NULL string in wxWCharBuffer") );
 
         if (wcs) {
-          size_t siz = (wcslen(wcs)+1)*sizeof(wchar_t);
+          size_t siz = (::wcslen(wcs)+1)*sizeof(wchar_t);
           m_wcs = (wchar_t *)malloc(siz);
           memcpy(m_wcs, wcs, siz);
         }

@@ -30,7 +30,7 @@ CPPFLAGS=$(DEBUG_FLAGS) $(EXTRACPPFLAGS) $(OPT) @$(CFG)
 all: $(TARGET).exe $(EXTRATARGETS)
 
 $(TARGET).exe:	$(OBJECTS) $(TARGET).res
-  tlink32 $(LINKFLAGS) @&&!
+  $(LINK) $(LINKFLAGS) @&&!
 c0w32.obj $(OBJECTS)
 $(TARGET)
 nul
@@ -54,4 +54,6 @@ clean:
         -erase *.res
         -erase *.map
         -erase *.rws
+        -erase *.tds
+        -erase *.il?
 

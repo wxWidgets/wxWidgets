@@ -454,7 +454,7 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     }
     return n;
   }
-  return wcslen(psz);
+  return ::wcslen(psz);
 }
 
 #endif

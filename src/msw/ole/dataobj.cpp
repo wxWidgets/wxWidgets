@@ -464,7 +464,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         break;
 #if !defined(__WATCOMC__) && ! (defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
-                        size = wcslen((const wchar_t *)pBuf);
+                        size = ::wcslen((const wchar_t *)pBuf);
                         break;
 #endif
                     case CF_BITMAP:

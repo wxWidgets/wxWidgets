@@ -263,12 +263,14 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("PngVC", "pngdemo", dir + wxString("/samples/png"), wxStringList("pngdemo.cpp", "pngdemo.h", 0));
     GenerateSample("PrintingVC", "printing", dir + wxString("/samples/printing"), wxStringList("printing.cpp", "printing.h", 0));
     GenerateSample("ProplistVC", "test", dir + wxString("/samples/proplist"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("PropsizeVC", "propsize", dir + wxString("/samples/propsize"), wxStringList("propsize.cpp", 0));
     GenerateSample("RegtestVC", "regtest", dir + wxString("/samples/regtest"), wxStringList("regtest.cpp", 0));
     GenerateSample("ResourceVC", "resource", dir + wxString("/samples/resource"), wxStringList("resource.cpp", "resource.h", 0));
     GenerateSample("RichEditVC", "wxLayout", dir + wxString("/samples/richedit"), wxStringList("wxLayout.cpp",
         "kbList.cpp", "wxllist.cpp", "wxlparser.cpp", "wxlwindow.cpp", 0));
     GenerateSample("SashtestVC", "sashtest", dir + wxString("/samples/sashtest"), wxStringList("sashtest.cpp", "sashtest.h", 0));
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
+    GenerateSample("ScrollsubVC", "scrollsub", dir + wxString("/samples/scrollsub"), wxStringList("scrollsub.cpp", 0));
     GenerateSample("SplitterVC", "test", dir + wxString("/samples/splitter"), wxStringList("test.cpp", 0));
     GenerateSample("TabVC", "test", dir + wxString("/samples/tab"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("TaskbarVC", "tbtest", dir + wxString("/samples/taskbar"), wxStringList("tbtest.cpp", "tbtest.h", 0));
@@ -278,15 +280,18 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("TreectrlVC", "treetest", dir + wxString("/samples/treectrl"), wxStringList("treetest.cpp", "treetest.h", 0));
     GenerateSample("TypetestVC", "typetest", dir + wxString("/samples/typetest"), wxStringList("typetest.cpp", "typetest.h", 0));
     GenerateSample("ValidateVC", "validate", dir + wxString("/samples/validate"), wxStringList("validate.cpp", "validate.h", 0));
-    GenerateSample("ClientVC", "client", dir + wxString("/samples/socket"), wxStringList("client.cpp", 0));
-    GenerateSample("ServerVC", "server", dir + wxString("/samples/socket"), wxStringList("server.cpp", 0));
-    GenerateSample("ClientVC", "client", dir + wxString("/samples/dde"), wxStringList("client.cpp", "client.h", "ddesetup.h", 0));
-    GenerateSample("ServerVC", "server", dir + wxString("/samples/dde"), wxStringList("server.cpp", "server.h", "ddesetup.h", 0));
+    GenerateSample("ClientVC", "client", dir + wxString("/samples/sockets"), wxStringList("client.cpp", 0));
+    GenerateSample("ServerVC", "server", dir + wxString("/samples/sockets"), wxStringList("server.cpp", 0));
+    GenerateSample("ClientVC", "client", dir + wxString("/samples/ipc"), wxStringList("client.cpp", "client.h", "ddesetup.h", 0));
+    GenerateSample("ServerVC", "server", dir + wxString("/samples/ipc"), wxStringList("server.cpp", "server.h", "ddesetup.h", 0));
     GenerateSample("CaretVC", "caret", dir + wxString("/samples/caret"), wxStringList("caret.cpp", 0));
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
     GenerateSample("WizardVC", "wizard", dir + wxString("/samples/wizard"), wxStringList("wiztest.cpp", 0));
     GenerateSample("RotateVC", "rotate", dir + wxString("/samples/rotate"), wxStringList("rotate.cpp", 0));
+    GenerateSample("ExecVC", "exec", dir + wxString("/samples/exec"), wxStringList("exec.cpp", 0));
+    GenerateSample("FontVC", "font", dir + wxString("/samples/font"), wxStringList("font.cpp", 0));
+    GenerateSample("MenuVC", "menu", dir + wxString("/samples/menu"), wxStringList("menu.cpp", 0));
 
     //// Demos
 
