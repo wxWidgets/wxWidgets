@@ -168,7 +168,11 @@ public:
     // Collapse & expand the tree, thus re-creating it from scratch:
     virtual void ReCreateTree();
 
+    // Collapse the entire tree
+    virtual void CollapseTree();
+
 protected:
+    virtual void ExpandRoot();
     virtual void ExpandDir(wxTreeItemId parentId);
     virtual void CollapseDir(wxTreeItemId parentId);
     virtual const wxTreeItemId AddSection(const wxString& path, const wxString& name, int imageId = 0);

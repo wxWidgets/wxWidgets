@@ -89,6 +89,12 @@ Create function for two-step construction. See \helpref{wxGenericDirCtrl::wxGene
 
 Initializes variables.
 
+\membersection{wxGenericDirCtrl::CollapseTree}\label{wxgenericdirctrlcollapsetree}
+
+\func{void}{CollapseTree}{\void}
+
+Collapses the entire tree.
+
 \membersection{wxGenericDirCtrl::ExpandPath}\label{wxgenericdirctrlexpandpath}
 
 \func{bool}{ExpandPath}{\param{const wxString\& }{path}}
@@ -144,6 +150,13 @@ Returns the root id for the tree control.
 \constfunc{wxTreeCtrl*}{GetTreeCtrl}{\void}
 
 Returns a pointer to the tree control.
+
+\membersection{wxGenericDirCtrl::ReCreateTree}\label{wxgenericdirctrlrecreatetree}
+
+\func{void}{ReCreateTree}{\void}
+
+Collapse and expand the tree, thus re-creating it from scratch.
+May be used to update the displayed directory content.
 
 \membersection{wxGenericDirCtrl::SetDefaultPath}\label{wxgenericdirctrlsetdefaultpath}
 

@@ -487,6 +487,26 @@ wxGenericDirCtrl::wxGenericDirCtrl(void)
     Init();
 }
 
+void wxGenericDirCtrl::ExpandRoot()
+{
+    ExpandDir(m_rootId); // automatically expand first level
+
+    // Expand and select the default path
+    if (!m_defaultPath.empty())
+    {
+        ExpandPath(m_defaultPath);
+    }
+#ifdef __UNIX__
+    else
+    {
+        // On Unix, there's only one node under the (hidden) root node. It
+        // represents the / path, so the user would always have to expand it;
+        // let's do it ourselves
+        ExpandPath( wxT("/") );
+    }
+#endif
+}
+
 bool wxGenericDirCtrl::Create(wxWindow *parent,
                               const wxWindowID id,
                               const wxString& dir,
@@ -560,22 +580,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     m_rootId = m_treeCtrl->AddRoot( rootName, 3, -1, rootData);
     m_treeCtrl->SetItemHasChildren(m_rootId);
-    ExpandDir(m_rootId); // automatically expand first level
 
-    // Expand and select the default path
-    if (!m_defaultPath.empty())
-    {
-        ExpandPath(m_defaultPath);
-    }
-#ifdef __UNIX__
-    else
-    {
-        // On Unix, there's only one node under the (hidden) root node. It
-        // represents the / path, so the user would always have to expand it;
-        // let's do it ourselves
-        ExpandPath( wxT("/") );
-    }
-#endif
+    ExpandRoot();
 
     SetBestSize(size);
     DoResize();
@@ -740,6 +746,8 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
          * handle disappearing children! */
         child = m_treeCtrl->GetFirstChild(parentId, cookie);
     }
+    if (parentId != m_treeCtrl->GetRootItem())
+        m_treeCtrl->Collapse(parentId);
 }
 
 void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
@@ -894,7 +902,18 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 void wxGenericDirCtrl::ReCreateTree()
 {
     CollapseDir(m_treeCtrl->GetRootItem());
-    ExpandDir(m_treeCtrl->GetRootItem());
+    ExpandRoot();
+}
+
+void wxGenericDirCtrl::CollapseTree()
+{
+    wxTreeItemIdValue cookie;
+    wxTreeItemId child = m_treeCtrl->GetFirstChild(m_rootId, cookie);
+    while (child.IsOk())
+    {
+        CollapseDir(child);
+        child = m_treeCtrl->GetNextChild(m_rootId, cookie);
+    }
 }
 
 // Find the child that matches the first part of 'path'.
