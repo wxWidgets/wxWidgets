@@ -1868,7 +1868,7 @@ void wxDb::logError(const wxString &errMsg, const wxString &SQLState)
     if (++pLast == DB_MAX_ERROR_HISTORY)
     {
         int i;
-        for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
+        for (i = 0; i < DB_MAX_ERROR_HISTORY-1; i++)
             wxStrcpy(errorList[i], errorList[i+1]);
         pLast--;
     }
