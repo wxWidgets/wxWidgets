@@ -4007,7 +4007,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     // removed, not only if the cell "underneath" it actually changes.
     // For now, I intentionally do not save the editor's content as the
     // cell it might want to save that stuff to might no longer exist.
-    DisableCellEditControl();
+    HideCellEditControl();
 #if 0
     // if we were using the default widths/heights so far, we must change them
     // now
@@ -5760,41 +5760,90 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     wxPaintDC dc(this);  // needed to prevent zillions of paint events on MSW
 }
 
-void wxGrid::Refresh(bool eraseb, wxRect* rect)
+void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 {
     // Don't do anything if between Begin/EndBatch...
     // EndBatch() will do all this on the last nested one anyway.
     if (! GetBatchCount())
     {
+        // Refresh to get correct scrolled position:
         wxScrolledWindow::Refresh(eraseb,rect);
 
-        int off_x=0 ,off_y=0;
-        wxRect * anotherrect = NULL ;
-        
         if (rect)
         {
+            int rect_x, rect_y, rectWidth, rectHeight;
+            int width_label, width_cell, height_label, height_cell;
+            int x, y;
+
             //Copy rectangle can get scroll offsets..
-            anotherrect = new wxRect(*rect);
-            CalcScrolledPosition( 0, 0, &off_x, &off_y );
+            rect_x = rect->GetX();
+            rect_y = rect->GetY();
+            rectWidth = rect->GetWidth();
+            rectHeight = rect->GetHeight();
+
+            width_label = m_rowLabelWidth - rect_x;
+            if (width_label > rectWidth) width_label = rectWidth;
+
+            height_label = m_colLabelHeight - rect_y;
+            if (height_label > rectHeight) height_label = rectHeight;
+
+            if (rect_x > m_rowLabelWidth)
+            {
+                x = rect_x - m_rowLabelWidth;
+                width_cell = rectWidth;
+            }
+            else
+            {
+                x = 0;
+                width_cell = rectWidth - (m_rowLabelWidth - rect_x);
+            }
+
+            if (rect_y > m_colLabelHeight)
+            {
+                y = rect_y - m_colLabelHeight;
+                height_cell = rectHeight;
+            }
+            else
+            {
+                y = 0;
+                height_cell = rectHeight - (m_colLabelHeight - rect_y);
+            }
+
+            // Paint corner label part intersecting rect.
+            if ( width_label > 0 && height_label > 0 )
+            {
+                wxRect anotherrect(rect_x, rect_y, width_label, height_label);
+                m_cornerLabelWin->Refresh(eraseb, &anotherrect);
+            }
+
+            // Paint col labels part intersecting rect.
+            if ( width_cell > 0 && height_label > 0 )
+            {
+                wxRect anotherrect(x, rect_y, width_cell, height_label);
+                m_colLabelWin->Refresh(eraseb, &anotherrect);
+            }
+
+            // Paint row labels part intersecting rect.
+            if ( width_label > 0 && height_cell > 0 )
+            {
+                wxRect anotherrect(rect_x, y, width_label, height_cell);
+                m_rowLabelWin->Refresh(eraseb, &anotherrect);
+            }
+
+            // Paint cell area part intersecting rect.
+            if ( width_cell > 0 && height_cell > 0 )
+            {
+                wxRect anotherrect(x, y, width_cell, height_cell);
+                m_gridWin->Refresh(eraseb, &anotherrect);
+            }
         }
-        //Corner label Doesn't move from the origin.
-        m_cornerLabelWin->Refresh(eraseb,rect);
-
-        //Move Rect down for row labels...
-        if (rect)
-            rect->Offset(0,off_y);
-        m_rowLabelWin->Refresh(eraseb,rect);
-
-        //Move rect copy along for col labels...
-        if (anotherrect)
-            anotherrect->Offset(off_x,0);
-        m_colLabelWin->Refresh(eraseb,anotherrect);     
-
-        //Move main rect along (so it's down and across!)
-        //  for cell window.
-        if (rect)
-            rect->Offset(off_x,0);
-        m_gridWin->Refresh(eraseb,rect);
+        else
+        {
+            m_cornerLabelWin->Refresh(eraseb, NULL);
+            m_colLabelWin->Refresh(eraseb, NULL);     
+            m_rowLabelWin->Refresh(eraseb, NULL);
+            m_gridWin->Refresh(eraseb, NULL);
+        }
     }
 }
 
@@ -6264,8 +6313,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
 bool wxGrid::GetModelValues()
 {
-    // Disable the editor, so it won't hide a changed value.
-    DisableCellEditControl();
+    // Hide the editor, so it won't hide a changed value.
+    HideCellEditControl();
 
     if ( m_table )
     {
@@ -6286,7 +6335,6 @@ bool wxGrid::SetModelValues()
     // Disable the editor, so it won't hide a changed value.
     // Do we also want to save the current value of the editor first?
     // I think so ...
-    SaveEditControlValue();
     DisableCellEditControl();
 
     if ( m_table )
