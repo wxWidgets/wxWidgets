@@ -308,7 +308,7 @@ bool CheckForKeyDown(XEvent* event)
         wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
         wxTranslateKeyEvent(keyEvent, win, (Widget) 0, event);
 
-        return win->ProcessEvent( keyEvent );
+        return win->GetEventHandler()->ProcessEvent( keyEvent );
     }
 
     return false;
@@ -334,7 +334,7 @@ bool CheckForKeyUp(XEvent* event)
         wxKeyEvent keyEvent(wxEVT_KEY_UP);
         wxTranslateKeyEvent(keyEvent, win, (Widget) 0, event);
 
-        return win->ProcessEvent( keyEvent );
+        return win->GetEventHandler()->ProcessEvent( keyEvent );
     }
 
     return false;
