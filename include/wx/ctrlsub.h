@@ -99,7 +99,7 @@ public:
 #if WXWIN_COMPATIBILITY_2_2
     // compatibility - these functions are deprecated, use the new ones
     // instead
-    int Number() const { return GetCount(); }
+    wxDEPRECATED( int Number() const );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:

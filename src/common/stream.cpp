@@ -673,6 +673,20 @@ wxFileOffset wxStreamBase::OnSysTell() const
     return wxInvalidOffset;
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
+wxStreamError wxStreamBase::LastError() const
+{
+    return m_lasterror;
+}
+
+size_t wxStreamBase::StreamSize() const
+{
+    return GetSize();
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 // ----------------------------------------------------------------------------
 // wxInputStream
 // ----------------------------------------------------------------------------

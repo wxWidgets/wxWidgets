@@ -902,6 +902,15 @@ void wxScrollHelper::GetViewStart (int *x, int *y) const
         *y = m_yScrollPosition;
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
+void wxScrollHelper::ViewStart(int *x, int *y) const
+{
+    GetViewStart( x, y );
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 void wxScrollHelper::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( xx )

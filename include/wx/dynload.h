@@ -116,7 +116,7 @@ public:
         // macro because it's of arguable use outside of that.
 
 #if WXWIN_COMPATIBILITY_2_2
-    static wxPluginLibrary *GetObjectFromHandle(wxDllType handle);
+    wxDEPRECATED( static wxPluginLibrary *GetObjectFromHandle(wxDllType handle) );
 #endif
 
         // Instance methods.

@@ -87,8 +87,8 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_2
     // deprecated, for compatibility only
-    wxStreamError LastError() const { return m_lasterror; }
-    size_t StreamSize() const { return GetSize(); }
+    wxDEPRECATED( wxStreamError LastError() const );
+    wxDEPRECATED( size_t StreamSize() const );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:

@@ -107,8 +107,7 @@ public:
 
     // for backwards compatibility only, don't use
 #if WXWIN_COMPATIBILITY_2_2
-    wxProcess(wxEvtHandler *parent, bool redirect)
-        { Init(parent, wxID_ANY, redirect ? wxPROCESS_REDIRECT : wxPROCESS_DEFAULT); }
+    wxDEPRECATED( wxProcess(wxEvtHandler *parent, bool redirect) );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:

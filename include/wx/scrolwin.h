@@ -142,7 +142,7 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_2
     // Compatibility only, don't use
-    void ViewStart(int *x, int *y) const { GetViewStart( x, y ); }
+    wxDEPRECATED( void ViewStart(int *x, int *y) const );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
