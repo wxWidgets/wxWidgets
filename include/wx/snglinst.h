@@ -50,16 +50,7 @@ public:
 
     // is another copy of this program already running?
     bool IsAnotherRunning() const;
-    
-#ifdef __WXMSW__
-    // Activates Previous Instance if a window whose Title contains the search string is found
-    bool ActivatePrevInstance(const wxString & sSearch);
-    
-    // Activates Previous Instance and passes CommandLine to wxCommandLineEvent
-    // if a window with matching Title is found
-    bool PassCommandLineToPrevInstance(const wxString & sSearch, const wxString & sCmdLine);
-#endif
-    
+
     // dtor is not virtual, this class is not meant to be used polymorphically
     ~wxSingleInstanceChecker();
 

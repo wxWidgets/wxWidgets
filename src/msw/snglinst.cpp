@@ -40,37 +40,6 @@
 
 #include "wx/msw/private.h"
 
-//variables held in common by the callback and wxSingleInstanceCheckerImpl
-static HWND FirsthWnd;
-static wxString s_Title;
-
-// callback to look for windows whose titles include the search string
-// BCC (at least) does not like the callback to be part of the class :-((
-bool CALLBACK EnumWindowsProc ( HWND hwnd, LPARAM lParam )
-{
-    // Get the title of this window
-    int iTitleLen = ::GetWindowTextLength(hwnd);
-    // possible UNICODE/ANSI bug here, see SDK documentation,
-    // so allow extra space
-    char * cTitle = new char [iTitleLen*2+10] ;
-    ::GetWindowText(hwnd, cTitle, iTitleLen*2+10);
-    
-    bool bSuccess = wxString(cTitle).Contains(s_Title) ;
-    delete [] cTitle ;
-    
-    if (bSuccess)
-    {
-        FirsthWnd = hwnd ;
-        return FALSE ;
-    }
-    else
-    {
-        //not this window
-        return TRUE;
-    }
-    
-}
-    
 // ----------------------------------------------------------------------------
 // wxSingleInstanceCheckerImpl: the real implementation class
 // ----------------------------------------------------------------------------
@@ -107,54 +76,6 @@ public:
                      _T("can't be called if mutex creation failed") );
 
         return m_wasOpened;
-    };
-    
-
-
-    // Activates Previous Instance if a window matching Title is found
-    bool ActivatePrevInstance(const wxString & sSearch)
-    {
-        //store search text and window handle for use by callback
-         s_Title = sSearch ;
-         FirsthWnd = 0;
-         
-         EnumWindows (WNDENUMPROC(&EnumWindowsProc), 0L);
-         if (FirsthWnd == 0)
-         {
-            //no matching window found
-            return FALSE;
-         }
-         
-         if (::IsIconic(FirsthWnd))
-         {
-             ::ShowWindow(FirsthWnd, SW_SHOWDEFAULT);
-         }
-         ::SetForegroundWindow(FirsthWnd);
-         
-         // now try to deal with any active children
-         // Handles to child of previous instance 
-         HWND FirstChildhWnd;
-         
-         FirstChildhWnd = ::GetLastActivePopup(FirsthWnd);
-         if (FirsthWnd != FirstChildhWnd)
-         {
-            // A pop-up is active so bring it to the top too.
-            ::BringWindowToTop(FirstChildhWnd); 
-         }
-        return TRUE;
-    }
-    
-    // Activates Previous Instance and passes CommandLine to wxCommandLineEvent
-    // if a window matching Title is found
-    bool PassCommandLineToPrevInstance(const wxString & sTitle, const wxString & sCmdLine)
-    {
-        // this stores a string of up to 255 bytes
-        //ATOM myAtom = GlobalAddAtom ( sCmdLine );
-
-        // this would create a call to wxWindow::OnCommandLine(wxCommandLineEvent & event)
-        // which should retrieve the commandline, and then delete the atom, GlobalDeleteAtom( myAtom );
-        //::SendMessage (FirsthWnd, wxCOMMANDLINE_MESSAGE, 0, myAtom) ;
-        return FALSE;
     }
 
     ~wxSingleInstanceCheckerImpl()
@@ -174,7 +95,6 @@ private:
 
     // the mutex handle, may be NULL
     HANDLE m_hMutex;
-    
 };
 
 // ============================================================================
@@ -202,27 +122,6 @@ bool wxSingleInstanceChecker::IsAnotherRunning() const
     // if the mutex had been opened, another instance is running - otherwise we
     // would have created it
     return m_impl->WasOpened();
-}
-
-    // Activates Previous Instance if a window whose Title contains the search string is found
-bool wxSingleInstanceChecker::ActivatePrevInstance(const wxString & sSearch)
-{
-    if (!IsAnotherRunning())
-    {
-        return FALSE;
-    }
-    return m_impl->ActivatePrevInstance(sSearch) ;
-}
-    
-    // Activates Previous Instance and passes CommandLine to wxCommandLineEvent
-    // if a window matching Title is found
-bool wxSingleInstanceChecker::PassCommandLineToPrevInstance(const wxString & sSearch, const wxString & sCmdLine)
-{
-    if (!ActivatePrevInstance(sSearch))
-    {
-        return FALSE;
-    }
-    return m_impl->PassCommandLineToPrevInstance(sSearch, sCmdLine);
 }
 
 wxSingleInstanceChecker::~wxSingleInstanceChecker()
