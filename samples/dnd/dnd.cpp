@@ -186,6 +186,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   wxLayoutConstraints *c;
 
+  // Top-left listbox
   c = new wxLayoutConstraints;
   c->left.SameAs		(this, wxLeft);
   c->top.SameAs			(this, wxTop);
@@ -193,6 +194,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   c->height.PercentOf(this, wxHeight, 40);
   m_ctrlFile->SetConstraints(c);
 
+  // Top-right listbox
   c = new wxLayoutConstraints;
   c->left.SameAs    (m_ctrlFile, wxRight);
   c->top.SameAs     (this, wxTop);
@@ -200,6 +202,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   c->height.PercentOf(this, wxHeight, 40);
   m_ctrlText->SetConstraints(c);
 
+  // Lower text control
   c = new wxLayoutConstraints;
   c->left.SameAs    (this, wxLeft);
   c->right.SameAs   (this, wxRight);

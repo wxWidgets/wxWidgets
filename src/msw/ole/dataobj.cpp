@@ -41,11 +41,7 @@
 // functions
 // ----------------------------------------------------------------------------
 
-#ifdef  __DEBUG__
-  static const char *GetTymedName(DWORD tymed);
-#else
-  #define GetTymedName(tymed) ""
-#endif
+static const char *GetTymedName(DWORD tymed);
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
@@ -355,10 +351,9 @@ wxDataObject::~wxDataObject()
   m_pIDataObject->Release();
 }
 
-#ifdef  __DEBUG__
-
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
+#ifdef __DEBUG__
   static char s_szBuf[128];
   switch ( format ) {
     case CF_TEXT:         return "CF_TEXT";
@@ -381,6 +376,9 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
       sprintf(s_szBuf, "clipboard format %d (unknown)", format);
       return s_szBuf;
   }
+ #else
+  return "";
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -402,5 +400,3 @@ static const char *GetTymedName(DWORD tymed)
       return s_szBuf;
   }
 }
-
-#endif  //DEBUG

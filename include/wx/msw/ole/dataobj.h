@@ -51,12 +51,8 @@ public:
     Max
   };
 
-  #ifdef  __DEBUG__
-    // function to return symbolic name of clipboard format (debug messages)
-    static const char *GetFormatName(wxDataFormat format);
-  #else // not used in release mode
-    inline const char* GetFormatName(wxDataFormat format) { return ""; }
-  #endif
+  // function to return symbolic name of clipboard format (debug messages)
+  static const char *GetFormatName(wxDataFormat format);
 
   // ctor & dtor
   wxDataObject();

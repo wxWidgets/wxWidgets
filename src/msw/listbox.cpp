@@ -184,13 +184,10 @@ bool wxListBox::Create(wxWindow *parent, const wxWindowID id,
       // we don't support LBS_OWNERDRAWVARIABLE yet
       wstyle |= LBS_OWNERDRAWFIXED;
     }
-#else
-  // Change from previous versions of wxWin: JACS Nov. 1995
-  // Not sure whether to have integral, or no integral
-  // style. With the latter we may get partial items showing.
-  // VZ: also it makes life more difficult for owner-drawn controls
-    wstyle |= LBS_NOINTEGRALHEIGHT;
 #endif
+  // Without this style, you get unexpected heights, so e.g. constraint layout
+  // doesn't work properly
+  wstyle |= LBS_NOINTEGRALHEIGHT;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
