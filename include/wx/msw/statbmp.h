@@ -52,6 +52,9 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
 
   inline wxBitmap& GetBitmap(void) const { return (wxBitmap&) m_messageBitmap; }
 
+  // overriden base class virtuals
+  virtual bool AcceptsFocus() const { return FALSE; }
+
   // Implementation
   virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
