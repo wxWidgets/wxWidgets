@@ -1695,8 +1695,8 @@ void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to
     hiPoint.x = pt->x ;
     hiPoint.y = pt->y ;
     HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  ) ;
-    pt->x = hiPoint.x ;
-    pt->y = hiPoint.y ;
+    pt->x = (int)hiPoint.x ;
+    pt->y = (int)hiPoint.y ;
 #endif
 }
 
@@ -1723,7 +1723,6 @@ void wxMacControl::GetRectInWindowCoords( Rect *r )
 
 void wxMacControl::GetBestRect( Rect *r ) 
 {
-    Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     short   baselineoffset ;
     GetBestControlRect( m_controlRef , r , &baselineoffset ) ;
 }

@@ -2125,9 +2125,6 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     int major,minor;
     wxGetOsVersion( &major, &minor );
 
-    RGBColor white = { 0xFFFF, 0xFFFF , 0xFFFF } ;
-    RGBColor face = { 0xDDDD, 0xDDDD , 0xDDDD } ;
-    
     RGBColor darkShadow = { 0x0000, 0x0000 , 0x0000 } ;
     RGBColor lightShadow = { 0x4444, 0x4444 , 0x4444 } ;
     // OS X has lighter border edges than classic:
@@ -2154,6 +2151,9 @@ void wxWindowMac::MacPaintBorders( int left , int top )
         InsetRect( &rect , border , border );
         DrawThemeEditTextFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 #else
+        RGBColor white = { 0xFFFF, 0xFFFF , 0xFFFF } ;
+        RGBColor face = { 0xDDDD, 0xDDDD , 0xDDDD } ;
+    
         bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
         RGBForeColor( &face );
         MoveTo( left + 0 , top + h - 2 );
