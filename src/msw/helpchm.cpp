@@ -27,6 +27,11 @@
 
 #include "wx/dynlib.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/app.h"
+#endif
+
 #include "wx/msw/private.h"
 
 // instead of including htmlhelp.h, duplicate the things from it we need here
