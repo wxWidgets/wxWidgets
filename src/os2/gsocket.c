@@ -7,7 +7,12 @@
  */
 
 #include "wx/setup.h"
+#ifndef __EMX__
+/* I don't see, why this include is needed, but it seems to be necessary
+   sometimes. For EMX, including C++ headers into plain C source breaks
+   compilation, so don't do it there.                                   */
 #include "wx/defs.h"
+#endif
 
 #if wxUSE_SOCKETS
 
