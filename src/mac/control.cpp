@@ -834,9 +834,13 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 	
 		if ( event.m_metaDown )
 			modifiers |= cmdKey ;
-	
-//		controlpart = FindControl( localwhere , window , &control ) ;
+
+#if TARGET_CARBON
         control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
+#else
+//        control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
+		controlpart = FindControl( localwhere , window , &control ) ;
+#endif
 		{
 		/*
 			if ( AcceptsFocus() && FindFocus() != this )

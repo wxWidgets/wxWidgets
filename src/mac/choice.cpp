@@ -23,7 +23,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 #endif
 
-short nextMenuId = 100 ; // wxMenu takes the lower ids
+extern MenuHandle NewUniqueMenu() ;
 
 wxChoice::~wxChoice()
 {
@@ -48,7 +48,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , -12345 , 0 , 
 	  	kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
 	
-		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
+		m_macPopUpMenuHandle =  NewUniqueMenu() ;
 		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
 	 	SetControlMinimum( m_macControl , 0 ) ;
 		SetControlMaximum( m_macControl , 0) ;

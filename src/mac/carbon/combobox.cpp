@@ -23,6 +23,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 // right now we don't support editable comboboxes
 
+static nextPopUpMenuId = 1000 ;
+MenuHandle NewUniqueMenu() 
+{
+  MenuHandle handle = NewMenu( nextPopUpMenuId , "\pMenu" ) ;
+  nextPopUpMenuId++ ;
+  return handle ;
+}
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
@@ -43,7 +50,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , -12345 , 0, 
 	  	kControlPopupButtonProc , (long) this ) ; 
 	
-		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
+		m_macPopUpMenuHandle =  NewUniqueMenu() ;
 		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
 		for ( int i = 0 ; i < n ; i++ )
 		{
