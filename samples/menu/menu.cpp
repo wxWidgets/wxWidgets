@@ -47,6 +47,14 @@
     #define USE_CONTEXT_MENU 1
 #endif
 
+// this sample is usefull when new port is developed
+// and usually new port has majority of flags turned off
+#if wxUSE_LOG && wxUSE_TEXTCTRL
+    #define USE_LOG_WINDOW 1
+#else
+    #define USE_LOG_WINDOW 0
+#endif
+
 #include "copy.xpm"
 
 // ----------------------------------------------------------------------------
@@ -72,7 +80,9 @@ public:
 
 protected:
     void OnQuit(wxCommandEvent& event);
+#if USE_LOG_WINDOW
     void OnClearLog(wxCommandEvent& event);
+#endif
 
     void OnAbout(wxCommandEvent& event);
 
@@ -85,9 +95,13 @@ protected:
     void OnCheckMenuItem(wxCommandEvent& event);
     void OnEnableMenuItem(wxCommandEvent& event);
     void OnGetLabelMenuItem(wxCommandEvent& event);
+#if wxUSE_TEXTDLG
     void OnSetLabelMenuItem(wxCommandEvent& event);
+#endif
     void OnGetMenuItemInfo(wxCommandEvent& event);
+#if wxUSE_TEXTDLG
     void OnFindMenuItem(wxCommandEvent& event);
+#endif
 
     void OnAppendMenu(wxCommandEvent& event);
     void OnInsertMenu(wxCommandEvent& event);
@@ -96,7 +110,9 @@ protected:
     void OnEnableMenu(wxCommandEvent& event);
     void OnGetLabelMenu(wxCommandEvent& event);
     void OnSetLabelMenu(wxCommandEvent& event);
+#if wxUSE_TEXTDLG
     void OnFindMenu(wxCommandEvent& event);
+#endif
 
     void OnTestNormal(wxCommandEvent& event);
     void OnTestCheck(wxCommandEvent& event);
@@ -115,9 +131,17 @@ protected:
 #endif
 
     void OnMenuOpen(wxMenuEvent& event)
-        { LogMenuOpenOrClose(event, _T("opened")); event.Skip(); }
+        {
+#if USE_LOG_WINDOW
+            LogMenuOpenOrClose(event, _T("opened")); event.Skip();
+#endif
+        }
     void OnMenuClose(wxMenuEvent& event)
-        { LogMenuOpenOrClose(event, _T("closed")); event.Skip(); }
+        {
+#if USE_LOG_WINDOW
+          LogMenuOpenOrClose(event, _T("closed")); event.Skip();
+#endif
+       }
 
     void OnUpdateCheckMenuItemUI(wxUpdateUIEvent& event);
 
@@ -137,8 +161,10 @@ private:
     // the count of dummy menus already created
     size_t m_countDummy;
 
+#if USE_LOG_WINDOW
     // the control used for logging
     wxTextCtrl *m_textctrl;
+#endif
 
     // the previous log target
     wxLog *m_logOld;
@@ -171,8 +197,10 @@ private:
 
 enum
 {
-    Menu_File_Quit = 100,
+    Menu_File_Quit = wxID_EXIT,
+#if USE_LOG_WINDOW
     Menu_File_ClearLog,
+#endif
 
     Menu_MenuBar_Toggle = 200,
     Menu_MenuBar_Append,
@@ -180,8 +208,10 @@ enum
     Menu_MenuBar_Delete,
     Menu_MenuBar_Enable,
     Menu_MenuBar_GetLabel,
+#if wxUSE_TEXTDLG
     Menu_MenuBar_SetLabel,
     Menu_MenuBar_FindMenu,
+#endif
 
     Menu_Menu_Append = 300,
     Menu_Menu_AppendSub,
@@ -190,9 +220,13 @@ enum
     Menu_Menu_Enable,
     Menu_Menu_Check,
     Menu_Menu_GetLabel,
+#if wxUSE_TEXTDLG
     Menu_Menu_SetLabel,
+#endif
     Menu_Menu_GetInfo,
+#if wxUSE_TEXTDLG
     Menu_Menu_FindItem,
+#endif
 
     Menu_Test_Normal = 400,
     Menu_Test_Check,
@@ -213,7 +247,7 @@ enum
     Menu_Dummy_Fourth,
     Menu_Dummy_Last,
 
-    Menu_Help_About = 1000,
+    Menu_Help_About = wxID_ABOUT,
 
     Menu_Popup_ToBeDeleted = 2000,
     Menu_Popup_ToBeGreyed,
@@ -229,7 +263,9 @@ enum
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_File_Quit,     MyFrame::OnQuit)
+#if USE_LOG_WINDOW
     EVT_MENU(Menu_File_ClearLog, MyFrame::OnClearLog)
+#endif
 
     EVT_MENU(Menu_Help_About, MyFrame::OnAbout)
 
@@ -239,8 +275,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_MenuBar_Delete,   MyFrame::OnDeleteMenu)
     EVT_MENU(Menu_MenuBar_Enable,   MyFrame::OnEnableMenu)
     EVT_MENU(Menu_MenuBar_GetLabel, MyFrame::OnGetLabelMenu)
+#if wxUSE_TEXTDLG
     EVT_MENU(Menu_MenuBar_SetLabel, MyFrame::OnSetLabelMenu)
     EVT_MENU(Menu_MenuBar_FindMenu, MyFrame::OnFindMenu)
+#endif
 
     EVT_MENU(Menu_Menu_Append,    MyFrame::OnAppendMenuItem)
     EVT_MENU(Menu_Menu_AppendSub, MyFrame::OnAppendSubMenu)
@@ -249,9 +287,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Menu_Enable,    MyFrame::OnEnableMenuItem)
     EVT_MENU(Menu_Menu_Check,     MyFrame::OnCheckMenuItem)
     EVT_MENU(Menu_Menu_GetLabel,  MyFrame::OnGetLabelMenuItem)
+#if wxUSE_TEXTDLG
     EVT_MENU(Menu_Menu_SetLabel,  MyFrame::OnSetLabelMenuItem)
+#endif
     EVT_MENU(Menu_Menu_GetInfo,   MyFrame::OnGetMenuItemInfo)
+#if wxUSE_TEXTDLG
     EVT_MENU(Menu_Menu_FindItem,  MyFrame::OnFindMenuItem)
+#endif
 
     EVT_MENU(Menu_Test_Normal,    MyFrame::OnTestNormal)
     EVT_MENU(Menu_Test_Check,     MyFrame::OnTestCheck)
@@ -282,7 +324,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
-    EVT_MENU(-1, MyEvtHandler::OnMenuEvent)
+    EVT_MENU(wxID_ANY, MyEvtHandler::OnMenuEvent)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -319,10 +361,11 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *)NULL, -1, _T("wxWindows menu sample"),
-                 wxDefaultPosition, wxSize(400, 250))
+       : wxFrame((wxFrame *)NULL, wxID_ANY, _T("wxWindows menu sample"))
 {
+#if USE_LOG_WINDOW
     m_textctrl = NULL;
+#endif
     m_menu = NULL;
     m_countDummy = 0;
     m_logOld = NULL;
@@ -334,11 +377,15 @@ MyFrame::MyFrame()
     // create the menubar
     wxMenu *fileMenu = new wxMenu;
 
+#if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       _T("Clear &log\tCtrl-L"));
+#if wxUSE_OWNER_DRAWN
     item->SetBitmap(copy_xpm);
+#endif
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
+#endif
     fileMenu->Append(Menu_File_Quit, _T("E&xit\tAlt-X"), _T("Quit menu sample"));
 
     wxMenu *menubarMenu = new wxMenu;
@@ -356,11 +403,13 @@ MyFrame::MyFrame()
     menubarMenu->AppendSeparator();
     menubarMenu->Append(Menu_MenuBar_GetLabel, _T("&Get menu label\tCtrl-G"),
                         _T("Get the label of the last menu"));
+#if wxUSE_TEXTDLG
     menubarMenu->Append(Menu_MenuBar_SetLabel, _T("&Set menu label\tCtrl-S"),
                         _T("Change the label of the last menu"));
     menubarMenu->AppendSeparator();
     menubarMenu->Append(Menu_MenuBar_FindMenu, _T("&Find menu from label\tCtrl-F"),
                         _T("Find a menu by searching for its label"));
+#endif
 
     wxMenu* subMenu = new wxMenu;
     subMenu->Append(Menu_SubMenu_Normal, _T("&Normal submenu item"), _T("Disabled submenu item"));
@@ -388,9 +437,11 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_GetInfo, _T("Get menu item in&fo\tAlt-F"),
                      _T("Show the state of the last menu item"));
+#if wxUSE_TEXTDLG
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, _T("Find menu item from label"),
                      _T("Find a menu item by searching for its label"));
+#endif
 
     wxMenu *testMenu = new wxMenu;
     testMenu->Append(Menu_Test_Normal, _T("&Normal item"));
@@ -424,8 +475,9 @@ MyFrame::MyFrame()
     // intercept all menu events and log them in this custom event handler
     PushEventHandler(new MyEvtHandler(this));
 
+#if USE_LOG_WINDOW
     // create the log text window
-    m_textctrl = new wxTextCtrl(this, -1, _T(""),
+    m_textctrl = new wxTextCtrl(this, wxID_ANY, _T(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
     m_textctrl->SetEditable(false);
@@ -438,6 +490,7 @@ MyFrame::MyFrame()
                  _T("The commands from \"Menubar\" menu work with the ")
                  _T("menubar itself.\n\n")
                  _T("Right click the band below to test popup menus.\n"));
+#endif
 }
 
 MyFrame::~MyFrame()
@@ -447,8 +500,10 @@ MyFrame::~MyFrame()
     // delete the event handler installed in ctor
     PopEventHandler(true);
 
+#if USE_LOG_WINDOW
     // restore old logger
     delete wxLog::SetActiveTarget(m_logOld);
+#endif
 }
 
 wxMenu *MyFrame::CreateDummyMenu(wxString *title)
@@ -509,10 +564,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
+#if USE_LOG_WINDOW
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_textctrl->Clear();
 }
+#endif
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
@@ -586,6 +643,7 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
                  mbar->GetLabelTop(count - 1).c_str());
 }
 
+#if wxUSE_TEXTDLG
 void MyFrame::OnSetLabelMenu(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *mbar = GetMenuBar();
@@ -636,6 +694,7 @@ void MyFrame::OnFindMenu(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif
 
 void MyFrame::OnDummy(wxCommandEvent& event)
 {
@@ -725,6 +784,7 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+#if wxUSE_TEXTDLG
 void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuItem *item = GetLastMenuItem();
@@ -745,6 +805,7 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif
 
 void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
 {
@@ -821,6 +882,7 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+#if wxUSE_TEXTDLG
 void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *mbar = GetMenuBar();
@@ -856,6 +918,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif
 
 void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
@@ -901,6 +964,7 @@ void MyFrame::OnTestRadio(wxCommandEvent& event)
                  event.GetId() - Menu_Test_Radio1 + 1);
 }
 
+#if USE_LOG_WINDOW
 void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
 {
     wxString msg;
@@ -912,6 +976,7 @@ void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
 
     wxLogStatus(this, msg.c_str());
 }
+#endif
 
 void MyFrame::OnUpdateSubMenuNormal(wxUpdateUIEvent& event)
 {
@@ -935,12 +1000,14 @@ void MyFrame::OnUpdateSubMenuRadio(wxUpdateUIEvent& event)
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+#if USE_LOG_WINDOW
     if ( !m_textctrl )
         return;
 
     // leave a band below for popup menu testing
     wxSize size = GetClientSize();
     m_textctrl->SetSize(0, 0, size.x, (3*size.y)/4);
+#endif
 
     // this is really ugly but we have to do it as we can't just call
     // event.Skip() because wxFrameBase would make the text control fill the
