@@ -942,6 +942,26 @@ wxToolBar* wxFrame::OnCreateToolBar( long style, wxWindowID id, const wxString& 
     return new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
 }
 
+void wxFrame::SetToolBar(wxToolBar *toolbar) 
+{ 
+    m_frameToolBar = toolbar; 
+    if (m_frameToolBar)
+    {
+        /* insert into toolbar area if not already there */
+        if (m_frameToolBar->m_widget->parent != m_mainWidget)
+        {
+	    gtk_widget_ref( m_frameToolBar->m_widget );
+	    gtk_widget_unparent( m_frameToolBar->m_widget );
+	    
+            m_insertInClientArea = TRUE;
+	    wxInsertChildInFrame( this, m_frameToolBar );
+            m_insertInClientArea = FALSE;
+	    
+	    gtk_widget_unref( m_frameToolBar->m_widget );
+	}
+    }
+}
+
 wxToolBar *wxFrame::GetToolBar() const
 {
     return m_frameToolBar;

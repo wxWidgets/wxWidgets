@@ -196,13 +196,7 @@ public:
     bool                 m_delayedFont:1;
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
-    bool                 m_delayedCursor:1;
     
-    // the cursor is set in OnInternalIdle(). this fields holds
-    // a reference to the cursor currently set in theGdk window 
-    // so that we don't have to set it more than once
-    wxCursor             m_currentGdkCursor;
-
     // contains GTK's widgets internal information about non-default widget
     // font and colours. we create one for each widget that gets any
     // non-default attribute set via SetFont() or SetForegroundColour() /

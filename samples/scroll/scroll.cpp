@@ -38,6 +38,7 @@ public:
     MyCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
     ~MyCanvas();
     void OnPaint( wxPaintEvent &event );
+    void OnQueryPosition( wxCommandEvent &event );
     void OnAddButton( wxCommandEvent &event );
     void OnDeleteButton( wxCommandEvent &event );
     void OnMoveButton( wxCommandEvent &event );
@@ -84,6 +85,7 @@ IMPLEMENT_APP(MyApp)
 #define   ID_DELBUTTON    2
 #define   ID_MOVEBUTTON   3
 #define   ID_SCROLLWIN    4
+#define   ID_QUERYPOS     5
 
 #define   ID_NEWBUTTON    10
 
@@ -92,7 +94,8 @@ IMPLEMENT_APP(MyApp)
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-  EVT_PAINT(                   MyCanvas::OnPaint)
+  EVT_PAINT(                  MyCanvas::OnPaint)
+  EVT_BUTTON( ID_QUERYPOS,    MyCanvas::OnQueryPosition)
   EVT_BUTTON( ID_ADDBUTTON,   MyCanvas::OnAddButton)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
   EVT_BUTTON( ID_MOVEBUTTON,  MyCanvas::OnMoveButton)
@@ -117,7 +120,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         "examples."
     };
   
-    m_button = new wxButton( this, -1, "wxButton", wxPoint(10,110) );
+    m_button = new wxButton( this, ID_QUERYPOS, "Query position", wxPoint(10,110) );
   
     (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,150) );
   
@@ -171,15 +174,25 @@ MyCanvas::~MyCanvas()
 {
 }
 
+void MyCanvas::OnQueryPosition( wxCommandEvent &WXUNUSED(event) )
+{
+    wxPoint pt( m_button->GetPosition() );
+    wxLogMessage( """wxButton"" position %d %d", pt.x, pt.y );
+    if ((pt.x == 10) && (pt.y == 110))
+        wxLogMessage( "-> Correct." );
+    else
+        wxLogMessage( "-> Incorrect." );
+}
+
 void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
 {
-    wxLogMessage( "Inserting button at position 50,50" );
-    (void) new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(50,50) );
+    wxLogMessage( "Inserting button at position 10,70..." );
+    (void) new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
 }
 
 void MyCanvas::OnDeleteButton( wxCommandEvent &event )
 {
-    wxLogMessage( "deleting button inserted with ""add button""" );
+    wxLogMessage( "Deleting button inserted with ""Add button""..." );
     wxWindow *win = FindWindow( ID_NEWBUTTON );
     if (win)
        win->Destroy();
@@ -209,6 +222,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.DrawText( "Some text", 140, 140 );
   
+    dc.DrawRectangle( 10, 70, 80, 25 );
+    
     dc.DrawRectangle( 100, 160, 200, 200 );
 }
 

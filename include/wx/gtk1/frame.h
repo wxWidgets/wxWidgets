@@ -78,7 +78,7 @@ public:
             const wxString& name = wxToolBarNameStr);
     virtual wxToolBar *OnCreateToolBar( long style, wxWindowID id, const wxString& name );
     virtual wxToolBar *GetToolBar() const;
-    void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
+    void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
     virtual void SetMenuBar( wxMenuBar *menuBar );

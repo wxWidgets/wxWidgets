@@ -931,10 +931,8 @@ void wxTextCtrl::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (cursor.Ok() && m_currentGdkCursor != cursor)
+    if (cursor.Ok())
     {
-        m_currentGdkCursor = cursor;
-	
         GdkWindow *window = (GdkWindow*) NULL;
 	if (HasFlag(wxTE_MULTILINE))
             window = GTK_TEXT(m_text)->text_area;
