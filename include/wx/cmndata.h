@@ -36,7 +36,8 @@ public:
     void SetChooseFull(bool flag) { chooseFull = flag; }
     bool GetChooseFull() const { return chooseFull; }
     void SetColour(const wxColour& colour) { dataColour = colour; }
-    wxColour &GetColour() { return dataColour; }
+    const wxColour& GetColour() const { return dataColour; }
+    wxColour& GetColour() { return dataColour; }
 
     // Array of 16 custom colours
     void SetCustomColour(int i, const wxColour& colour);
