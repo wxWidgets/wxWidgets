@@ -41,6 +41,7 @@
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h"
 
 #if defined(__WXWINCE__)
   #include <ole2.h>
@@ -512,6 +513,23 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
     {
         EnableCloseButton(false);
+    }
+
+    // for some reason we need to manually send ourselves this message as
+    // otherwise the mnemonics are always shown -- even if they're configured
+    // to be hidden until "Alt" is pressed in the control panel
+    //
+    // this could indicate a bug somewhere else but for now this is the only
+    // fix we have
+    if ( ret )
+    {
+        SendMessage
+        (
+            GetHwnd(),
+            WM_UPDATEUISTATE,
+            MAKEWPARAM(UIS_INITIALIZE, UISF_HIDEFOCUS | UISF_HIDEACCEL),
+            0
+        );
     }
 
     return ret;
