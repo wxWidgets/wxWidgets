@@ -51,24 +51,23 @@ wxObject* wxHtmlParser::Parse(const wxString& source)
     return result;
 }
 
-
-
 void wxHtmlParser::InitParser(const wxString& source)
 {
-    m_Source = source;
-    m_Cache = new wxHtmlTagsCache(m_Source);
+    SetSource(source);
 }
-        
-        
-        
+
 void wxHtmlParser::DoneParser()
 {
     delete m_Cache;
     m_Cache = NULL;
 }
 
-
-
+void wxHtmlParser::SetSource(const wxString& src)
+{
+    m_Source = src;
+    delete m_Cache;
+    m_Cache = new wxHtmlTagsCache(m_Source);
+}
 
 void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
 {
@@ -117,8 +116,6 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
     delete[] temp;
 }
 
-
-
 void wxHtmlParser::AddTag(const wxHtmlTag& tag)
 {
     wxHtmlTagHandler *h;
@@ -134,8 +131,6 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
     }
 }
 
-
-
 void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
 {
     wxString s(handler->GetSupportedTags());
@@ -149,8 +144,6 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
 
     handler->SetParser(this);
 }
-
-
 
 void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
 {
@@ -173,8 +166,6 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
     }
 }
 
-
-
 void wxHtmlParser::PopTagHandler()
 {
     wxNode *first;
@@ -189,8 +180,6 @@ void wxHtmlParser::PopTagHandler()
     m_HandlersStack->DeleteNode(first);
 }
 
-
-
 wxHtmlParser::~wxHtmlParser()
 {
     if (m_HandlersStack) delete m_HandlersStack;
@@ -198,8 +187,6 @@ wxHtmlParser::~wxHtmlParser()
     m_HandlersList.DeleteContents(TRUE);
     m_HandlersList.Clear();
 }
-
-
 
 //-----------------------------------------------------------------------------
 // wxHtmlTagHandler

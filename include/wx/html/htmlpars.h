@@ -36,97 +36,100 @@ class WXDLLEXPORT wxHtmlParser : public wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlParser)
 
-    public:
-        wxHtmlParser() : wxObject(), m_HandlersHash(wxKEY_STRING) {m_FS = NULL; m_Cache = NULL; m_HandlersStack = NULL;}
-        virtual ~wxHtmlParser();
+public:
+    wxHtmlParser() : wxObject(), m_HandlersHash(wxKEY_STRING) 
+        { m_FS = NULL; m_Cache = NULL; m_HandlersStack = NULL; }
+    virtual ~wxHtmlParser();
 
-        void SetFS(wxFileSystem *fs) {m_FS = fs;}
-                // Sets the class which will be used for opening files
-        wxFileSystem* GetFS() const {return m_FS;}
+    // Sets the class which will be used for opening files
+    void SetFS(wxFileSystem *fs) { m_FS = fs; }
 
-        wxObject* Parse(const wxString& source);
-                // You can simply call this method when you need parsed output.
-                // This method does these things:
-                // 1. call InitParser(source);
-                // 2. call DoParsing();
-                // 3. call GetProduct(); (it's return value is then returned)
-                // 4. call DoneParser();
+    wxFileSystem* GetFS() const { return m_FS; }
 
-        virtual void InitParser(const wxString& source);
-                // Sets the source. This must be called before running Parse() method.
-        virtual void DoneParser();
-                // This must be called after Parse().
-        
-        void DoParsing(int begin_pos, int end_pos);
-        inline void DoParsing() {DoParsing(0, m_Source.Length());};
-                // Parses the m_Source from begin_pos to end_pos-1.
-                // (in noparams version it parses whole m_Source)
+    // You can simply call this method when you need parsed output.
+    // This method does these things:
+    // 1. call InitParser(source);
+    // 2. call DoParsing();
+    // 3. call GetProduct(); (it's return value is then returned)
+    // 4. call DoneParser();
+    wxObject* Parse(const wxString& source);
 
-        virtual wxObject* GetProduct() = 0;
-                // Returns product of parsing
-                // Returned value is result of parsing of the part. The type of this result
-                // depends on internal representation in derived parser
-                // (see wxHtmlWinParser for details).
+    // Sets the source. This must be called before running Parse() method.
+    virtual void InitParser(const wxString& source);
+    // This must be called after Parse().
+    virtual void DoneParser();
 
-        virtual void AddTagHandler(wxHtmlTagHandler *handler);
-                // adds handler to the list & hash table of handlers.
-                
-        void PushTagHandler(wxHtmlTagHandler *handler, wxString tags);
-                // Forces the handler to handle additional tags (not returned by GetSupportedTags). 
-                // The handler should already be in use by this parser.
-                // Example: you want to parse following pseudo-html structure:
-                //   <myitems>
-                //     <it name="one" value="1">
-                //     <it name="two" value="2">
-                //   </myitems>
-                //   <it> This last it has different meaning, we don't want it to be parsed by myitems handler!
-                // handler can handle only 'myitems' (e.g. it's GetSupportedTags returns "MYITEMS")
-                // you can call PushTagHandler(handler, "IT") when you find <myitems>
-                // and call PopTagHandler() when you find </myitems>
-                
-        void PopTagHandler();
-                // Restores state before last call to PushTagHandler
+    // Parses the m_Source from begin_pos to end_pos-1.
+    // (in noparams version it parses whole m_Source)
+    void DoParsing(int begin_pos, int end_pos);
+    inline void DoParsing() {DoParsing(0, m_Source.Length());};
 
-        wxString* GetSource() {return &m_Source;}
+    // Returns product of parsing
+    // Returned value is result of parsing of the part. The type of this result
+    // depends on internal representation in derived parser
+    // (see wxHtmlWinParser for details).
+    virtual wxObject* GetProduct() = 0;
 
-    protected:
+    // adds handler to the list & hash table of handlers.
+    virtual void AddTagHandler(wxHtmlTagHandler *handler);
 
-        virtual void AddText(const char* txt) = 0;
-                // Adds text to the output.
-                // This is called from Parse() and must be overriden in derived classes.
-                // txt is not guaranteed to be only one word. It is largest continuous part of text
-                // (= not broken by tags)
-                // NOTE : using char* because of speed improvements
+    // Forces the handler to handle additional tags (not returned by GetSupportedTags). 
+    // The handler should already be in use by this parser.
+    // Example: you want to parse following pseudo-html structure:
+    //   <myitems>
+    //     <it name="one" value="1">
+    //     <it name="two" value="2">
+    //   </myitems>
+    //   <it> This last it has different meaning, we don't want it to be parsed by myitems handler!
+    // handler can handle only 'myitems' (e.g. it's GetSupportedTags returns "MYITEMS")
+    // you can call PushTagHandler(handler, "IT") when you find <myitems>
+    // and call PopTagHandler() when you find </myitems>
+    void PushTagHandler(wxHtmlTagHandler *handler, wxString tags);
 
-        virtual void AddTag(const wxHtmlTag& tag);
-                // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
-                // This is called from Parse() and may be overriden.
-                // Default behavior is that it looks for proper handler in m_Handlers. The tag is
-                // ignored if no hander is found.
-                // Derived class is *responsible* for filling in m_Handlers table.
+    // Restores state before last call to PushTagHandler
+    void PopTagHandler();
 
+    wxString* GetSource() {return &m_Source;}
+    void SetSource(const wxString& src);
 
-    protected:
-        wxString m_Source;
-                // source being parsed
-        wxHtmlTagsCache *m_Cache;
-                // tags cache, used during parsing.
-        wxHashTable m_HandlersHash;
-        wxList m_HandlersList;
-                // handlers that handle particular tags. The table is accessed by
-                // key = tag's name.
-                // This attribute MUST be filled by derived class otherwise it would
-                // be empty and no tags would be recognized
-                // (see wxHtmlWinParser for details about filling it)
-                // m_HandlersHash is for random access based on knowledge of tag name (BR, P, etc.)
-                //      it may (and often does) contain more references to one object
-                // m_HandlersList is list of all handlers and it is guaranteed to contain
-                //      only one reference to each handler instance.
-        wxFileSystem *m_FS;
-                // class for opening files (file system)
-        wxList *m_HandlersStack;
-                // handlers stack used by PushTagHandler and PopTagHandler
+protected:
+    // Adds text to the output.
+    // This is called from Parse() and must be overriden in derived classes.
+    // txt is not guaranteed to be only one word. It is largest continuous part of text
+    // (= not broken by tags)
+    // NOTE : using char* because of speed improvements
+    virtual void AddText(const char* txt) = 0;
 
+    // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
+    // This is called from Parse() and may be overriden.
+    // Default behavior is that it looks for proper handler in m_Handlers. The tag is
+    // ignored if no hander is found.
+    // Derived class is *responsible* for filling in m_Handlers table.
+    virtual void AddTag(const wxHtmlTag& tag);
+
+protected:
+    // source being parsed
+    wxString m_Source;
+
+    // tags cache, used during parsing.
+    wxHtmlTagsCache *m_Cache;
+    wxHashTable m_HandlersHash;
+
+    // handlers that handle particular tags. The table is accessed by
+    // key = tag's name.
+    // This attribute MUST be filled by derived class otherwise it would
+    // be empty and no tags would be recognized
+    // (see wxHtmlWinParser for details about filling it)
+    // m_HandlersHash is for random access based on knowledge of tag name (BR, P, etc.)
+    //      it may (and often does) contain more references to one object
+    // m_HandlersList is list of all handlers and it is guaranteed to contain
+    //      only one reference to each handler instance.
+    wxList m_HandlersList;
+
+    // class for opening files (file system)
+    wxFileSystem *m_FS;
+    // handlers stack used by PushTagHandler and PopTagHandler
+    wxList *m_HandlersStack;
 };
 
 
@@ -149,34 +152,35 @@ class WXDLLEXPORT wxHtmlTagHandler : public wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlTagHandler)
 
-    protected:
-        wxHtmlParser *m_Parser;
+public:
+    wxHtmlTagHandler() : wxObject () { m_Parser = NULL; }
 
-    public:
-        wxHtmlTagHandler() : wxObject () {m_Parser = NULL;};
-        
-        virtual void SetParser(wxHtmlParser *parser) {m_Parser = parser;}
-                // Sets the parser.
-                // NOTE : each _instance_ of handler is guaranteed to be called
-                // only by one parser. This means you don't have to care about
-                // reentrancy.
-        
-        virtual wxString GetSupportedTags() = 0;
-                // Returns list of supported tags. The list is in uppercase and
-                // tags are delimited by ','.
-                // Example : "I,B,FONT,P"
-                //   is capable of handling italic, bold, font and paragraph tags
-        
-        virtual bool HandleTag(const wxHtmlTag& tag) = 0;
-                // This is hadling core method. It does all the Steps 1-3.
-                // To process step 2, you can call ParseInner()
-                // returned value : TRUE if it called ParseInner(),
-                //                  FALSE etherwise
+    // Sets the parser.
+    // NOTE : each _instance_ of handler is guaranteed to be called
+    // only by one parser. This means you don't have to care about
+    // reentrancy.
+    virtual void SetParser(wxHtmlParser *parser) 
+        { m_Parser = parser; }
 
-    protected:
-        void ParseInner(const wxHtmlTag& tag) {m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1());}
-                // parses input between beginning and ending tag.
-                // m_Parser must be set.
+    // Returns list of supported tags. The list is in uppercase and
+    // tags are delimited by ','.
+    // Example : "I,B,FONT,P"
+    //   is capable of handling italic, bold, font and paragraph tags
+    virtual wxString GetSupportedTags() = 0;
+
+    // This is hadling core method. It does all the Steps 1-3.
+    // To process step 2, you can call ParseInner()
+    // returned value : TRUE if it called ParseInner(),
+    //                  FALSE etherwise
+    virtual bool HandleTag(const wxHtmlTag& tag) = 0;
+
+protected:
+    // parses input between beginning and ending tag.
+    // m_Parser must be set.
+    void ParseInner(const wxHtmlTag& tag) 
+        { m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1()); }
+
+    wxHtmlParser *m_Parser;
 };
 
 

@@ -33,82 +33,6 @@
 
 FORCE_LINK_ME(m_pre)
 
-
-//-----------------------------------------------------------------------------
-// wxHtmlCodeCell
-//-----------------------------------------------------------------------------
-
-class wxHtmlPRECell : public wxHtmlCell
-{
-    private:
-        wxString** m_Text;
-                // list of wxString objects.
-        int m_LinesCnt;
-                // number of lines
-        int m_LineHeight;
-                // height of single line of text
-
-    public:
-        wxHtmlPRECell(const wxString& s, wxDC& dc);
-        ~wxHtmlPRECell();
-        void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-};
-
-
-wxHtmlPRECell::wxHtmlPRECell(const wxString& s, wxDC& dc) : wxHtmlCell()
-{
-    wxStringTokenizer tokenizer(s, "\n");
-    wxString tmp;
-    long int x, z;
-    int i;
-
-    m_LineHeight = dc.GetCharHeight();
-    m_LinesCnt = 0;
-    m_Text = NULL;
-    m_Width = m_Height = 0;
-
-    i = 0;
-    while (tokenizer.HasMoreTokens()) 
-    {
-        if (i % 10 == 0) m_Text = (wxString**) realloc(m_Text, sizeof(wxString*) * (i + 10));
-        tmp = tokenizer.NextToken();
-        tmp.Replace(wxT("&copy;"), wxT("(c)"), TRUE);
-        tmp.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
-        tmp.Replace(wxT("&quot;"), wxT("\""), TRUE);
-        tmp.Replace(wxT("&lt;"), wxT("<"), TRUE);
-        tmp.Replace(wxT("&gt;"), wxT(">"), TRUE);
-        tmp.Replace(wxT("&amp;"), wxT("&"), TRUE);
-        tmp.Replace(wxT("\t"), wxT("        "), TRUE);
-        tmp.Replace(wxT("\r"), wxT(""), TRUE);
-        m_Text[i++] = new wxString(tmp);
-
-        dc.GetTextExtent(tmp, &x, &z, &z);
-        if (x > m_Width) m_Width = x;
-        m_Height += m_LineHeight;
-        m_LinesCnt++;
-    }
-}
-
-
-
-wxHtmlPRECell::~wxHtmlPRECell()
-{
-    for (int i = 0; i < m_LinesCnt; i++) delete m_Text[i];
-    free(m_Text);
-}
-
-
-void wxHtmlPRECell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
-{
-    for (int i = 0; i < m_LinesCnt; i++)
-        dc.DrawText(*(m_Text[i]), x + m_PosX, y + m_PosY + m_LineHeight * i);
-
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
-}
-
-
-
-
 //-----------------------------------------------------------------------------
 // The list handler:
 //-----------------------------------------------------------------------------
@@ -126,11 +50,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
             bold = m_WParser->GetFontBold(),
             fsize = m_WParser->GetFontSize();
 
-        m_WParser->CloseContainer();
-        c = m_WParser->OpenContainer();
-        c->SetAlignHor(wxHTML_ALIGN_LEFT);
-        c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_VERTICAL);
-
+        c = m_WParser->GetContainer();
         m_WParser->SetFontUnderlined(FALSE);
         m_WParser->SetFontBold(FALSE);
         m_WParser->SetFontItalic(FALSE);
@@ -138,18 +58,27 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         m_WParser->SetFontSize(3);
         c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
-        {
-            wxString cit;
-            wxEncodingConverter *encconv = m_WParser->GetEncodingConverter();
-            cit = m_WParser->GetSource()->Mid(tag.GetBeginPos(), 
-                                       tag.GetEndPos1() - tag.GetBeginPos());
-            if (encconv)
-                c->InsertCell(new wxHtmlPRECell(encconv->Convert(cit), 
-                                                  *(m_WParser->GetDC())));
-            else
-                c->InsertCell(new wxHtmlPRECell(cit, 
-                                                  *(m_WParser->GetDC())));
-        }
+        m_WParser->CloseContainer();
+        c = m_WParser->OpenContainer();
+        c->SetAlignHor(wxHTML_ALIGN_LEFT);
+
+        wxString src, srcMid;
+
+        src = *m_WParser->GetSource();
+        srcMid = src.Mid(tag.GetBeginPos(), 
+                         tag.GetEndPos1() - tag.GetBeginPos());
+        srcMid.Replace(wxT("\t"), wxT("        "));
+        srcMid.Replace(wxT(" "), wxT("&nbsp;"));
+        srcMid.Replace(wxT("\n"), wxT("<br>"));
+
+        // It is safe to temporarily change the source being parsed,
+        // provided we restore the state back after parsing
+        m_Parser->SetSource(srcMid);
+        m_Parser->DoParsing();
+        m_Parser->SetSource(src);
+        
+        m_WParser->CloseContainer();
+        c = m_WParser->OpenContainer();
 
         m_WParser->SetFontUnderlined(underlined);
         m_WParser->SetFontBold(bold);
@@ -158,8 +87,6 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         m_WParser->SetFontSize(fsize);
         c->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 
-        m_WParser->CloseContainer();
-        m_WParser->OpenContainer();
         return TRUE;
     }
 
