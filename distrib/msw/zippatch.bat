@@ -7,7 +7,7 @@ set src=%wxwin%
 set dest=%src%\deliver
 
 Rem Set this to the required wxWindows version
-set wxversion=2.3.2
+set wxversion=2.3.3
 Rem Set this to the required patch version
 set version=01
 

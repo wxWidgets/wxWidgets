@@ -2,7 +2,7 @@
 
 rem VZ: this is quick and _very_ dirty
 
-set VER=2.3.2
+set VER=2.3.3
 set DEST=s:\upload\wxBase-%VER%
 
 mkdir %DEST%
