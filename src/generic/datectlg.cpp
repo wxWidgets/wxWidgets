@@ -473,6 +473,8 @@ bool wxDatePickerCtrlGeneric::Enable(bool enable)
     {
         if ( m_cal )
             m_cal->Hide();
+        if ( m_popup )
+            m_popup->Hide();
     }
 
     if ( m_btn )
