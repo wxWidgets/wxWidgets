@@ -33,65 +33,66 @@
 wxFileInputStream::wxFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
-  m_file = new wxFile(fileName, wxFile::read);
-  m_file_destroy = TRUE;
+    m_file = new wxFile(fileName, wxFile::read);
+    m_file_destroy = TRUE;
 }
 
 wxFileInputStream::wxFileInputStream()
   : wxInputStream()
 {
-  m_file_destroy = FALSE;
-  m_file = NULL;
+    m_file_destroy = FALSE;
+    m_file = NULL;
 }
 
 wxFileInputStream::wxFileInputStream(wxFile& file)
 {
-  m_file = &file;
-  m_file_destroy = FALSE;
+    m_file = &file;
+    m_file_destroy = FALSE;
 }
 
 wxFileInputStream::wxFileInputStream(int fd)
 {
-  m_file = new wxFile(fd);
-  m_file_destroy = TRUE;
+    m_file = new wxFile(fd);
+    m_file_destroy = TRUE;
 }
 
 wxFileInputStream::~wxFileInputStream()
 {
-  if (m_file_destroy)
-    delete m_file;
+    if (m_file_destroy)
+        delete m_file;
 }
 
 size_t wxFileInputStream::GetSize() const
 {
-  return m_file->Length();
+    return m_file->Length();
 }
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-  off_t ret;
+    off_t ret;
 
-  ret = m_file->Read(buffer, size);
+    ret = m_file->Read(buffer, size);
 
-  m_lasterror = wxStream_NOERROR;
-  if (m_file->Eof())
-    m_lasterror = wxStream_EOF;
-  if (ret == wxInvalidOffset) {
-    m_lasterror = wxStream_READ_ERR;
-    ret = 0;
-  }
+    m_lasterror = wxStream_NOERROR;
+    if (m_file->Eof())
+        m_lasterror = wxStream_EOF;
+    if (ret == wxInvalidOffset) 
+    {
+        m_lasterror = wxStream_READ_ERR;
+        ret = 0;
+    }
 
-  return ret;
+    return ret;
 }
 
 off_t wxFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-  return m_file->Seek(pos, mode);
+    return m_file->Seek(pos, mode);
 }
 
 off_t wxFileInputStream::OnSysTell() const
 {
-  return m_file->Tell();
+    return m_file->Tell();
 }
 
 // ----------------------------------------------------------------------------
@@ -100,66 +101,67 @@ off_t wxFileInputStream::OnSysTell() const
 
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
-  m_file = new wxFile(fileName, wxFile::write);
-  m_file_destroy = TRUE;
+    m_file = new wxFile(fileName, wxFile::write);
+    m_file_destroy = TRUE;
 }
 
 wxFileOutputStream::wxFileOutputStream(wxFile& file)
 {
-  m_file = &file;
-  m_file_destroy = FALSE;
+    m_file = &file;
+    m_file_destroy = FALSE;
 }
 
 wxFileOutputStream::wxFileOutputStream()
   : wxOutputStream()
 {
-  m_file_destroy = FALSE;
-  m_file = NULL;
+    m_file_destroy = FALSE;
+    m_file = NULL;
 }
 
 wxFileOutputStream::wxFileOutputStream(int fd)
 {
-  m_file = new wxFile(fd);
-  m_file_destroy = TRUE;
+    m_file = new wxFile(fd);
+    m_file_destroy = TRUE;
 }
 
 wxFileOutputStream::~wxFileOutputStream()
 {
-  if (m_file_destroy) {
-    Sync();
-    delete m_file;
-  }
+    if (m_file_destroy) 
+    {
+        Sync();
+        delete m_file;
+    }
 }
 
 size_t wxFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-  size_t ret = m_file->Write(buffer, size);
-  if (m_file->Error())
-    m_lasterror = wxStream_WRITE_ERR;
-  else
-    m_lasterror = wxStream_NOERROR;
-  return ret;
+    size_t ret = m_file->Write(buffer, size);
+    if (m_file->Error())
+        m_lasterror = wxStream_WRITE_ERR;
+    else
+        m_lasterror = wxStream_NOERROR;
+    return ret;
 }
 
 off_t wxFileOutputStream::OnSysTell() const
 {
-  return m_file->Tell();
+    return m_file->Tell();
 }
 
 off_t wxFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-  return m_file->Seek(pos, mode);
+    return m_file->Seek(pos, mode);
 }
 
 void wxFileOutputStream::Sync()
 {
-  wxOutputStream::Sync();
-  m_file->Flush();
+    wxOutputStream::Sync();
+    m_file->Flush();
 }
 
 size_t wxFileOutputStream::GetSize() const
 {
-  return m_file->Length();
+    return m_file->Length();
 }
 
 // ----------------------------------------------------------------------------
@@ -179,64 +181,65 @@ wxFileStream::wxFileStream(const wxString& fileName)
 wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
-  m_file = new wxFFile(fileName, "r");
-  m_file_destroy = TRUE;
+    m_file = new wxFFile(fileName, "r");
+    m_file_destroy = TRUE;
 }
 
 wxFFileInputStream::wxFFileInputStream()
   : wxInputStream()
 {
-  m_file_destroy = FALSE;
-  m_file = NULL;
+    m_file_destroy = FALSE;
+    m_file = NULL;
 }
 
 wxFFileInputStream::wxFFileInputStream(wxFFile& file)
 {
-  m_file = &file;
-  m_file_destroy = FALSE;
+    m_file = &file;
+    m_file_destroy = FALSE;
 }
 
 wxFFileInputStream::wxFFileInputStream(FILE *file)
 {
-  m_file = new wxFFile(file);
-  m_file_destroy = TRUE;
+    m_file = new wxFFile(file);
+    m_file_destroy = TRUE;
 }
 
 wxFFileInputStream::~wxFFileInputStream()
 {
-  if (m_file_destroy)
-    delete m_file;
+    if (m_file_destroy)
+        delete m_file;
 }
 
 size_t wxFFileInputStream::GetSize() const
 {
-  return m_file->Length();
+    return m_file->Length();
 }
 
 size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-  off_t ret;
+    off_t ret;
 
-  ret = m_file->Read(buffer, size);
+    ret = m_file->Read(buffer, size);
 
-  if (m_file->Eof())
-    m_lasterror = wxStream_EOF;
-  if (ret == wxInvalidOffset) {
-    m_lasterror = wxStream_READ_ERR;
-    ret = 0;
-  }
+    if (m_file->Eof())
+        m_lasterror = wxStream_EOF;
+    if (ret == wxInvalidOffset) 
+    {
+        m_lasterror = wxStream_READ_ERR;
+        ret = 0;
+    }
 
-  return ret;
+    return ret;
 }
 
 off_t wxFFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-  return m_file->Seek(pos, mode);
+    return m_file->Seek(pos, mode);
 }
 
 off_t wxFFileInputStream::OnSysTell() const
 {
-  return m_file->Tell();
+    return m_file->Tell();
 }
 
 // ----------------------------------------------------------------------------
@@ -245,66 +248,67 @@ off_t wxFFileInputStream::OnSysTell() const
 
 wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
 {
-  m_file = new wxFFile(fileName, "w+");
-  m_file_destroy = TRUE;
+    m_file = new wxFFile(fileName, "w+b");
+    m_file_destroy = TRUE;
 }
 
 wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
 {
-  m_file = &file;
-  m_file_destroy = FALSE;
+    m_file = &file;
+    m_file_destroy = FALSE;
 }
 
 wxFFileOutputStream::wxFFileOutputStream()
   : wxOutputStream()
 {
-  m_file_destroy = FALSE;
-  m_file = NULL;
+    m_file_destroy = FALSE;
+    m_file = NULL;
 }
 
 wxFFileOutputStream::wxFFileOutputStream(FILE *file)
 {
-  m_file = new wxFFile(file);
-  m_file_destroy = TRUE;
+    m_file = new wxFFile(file);
+    m_file_destroy = TRUE;
 }
 
 wxFFileOutputStream::~wxFFileOutputStream()
 {
-  if (m_file_destroy) {
-    Sync();
-    delete m_file;
-  }
+    if (m_file_destroy) 
+    {
+        Sync();
+        delete m_file;
+    }
 }
 
 size_t wxFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-  size_t ret = m_file->Write(buffer, size);
-  if (m_file->Error())
-    m_lasterror = wxStream_WRITE_ERR;
-  else
-    m_lasterror = wxStream_NOERROR;
-  return ret;
+    size_t ret = m_file->Write(buffer, size);
+    if (m_file->Error())
+        m_lasterror = wxStream_WRITE_ERR;
+    else
+        m_lasterror = wxStream_NOERROR;
+    return ret;
 }
 
 off_t wxFFileOutputStream::OnSysTell() const
 {
-  return m_file->Tell();
+    return m_file->Tell();
 }
 
 off_t wxFFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-  return m_file->Seek(pos, mode);
+    return m_file->Seek(pos, mode);
 }
 
 void wxFFileOutputStream::Sync()
 {
-  wxOutputStream::Sync();
-  m_file->Flush();
+    wxOutputStream::Sync();
+    m_file->Flush();
 }
 
 size_t wxFFileOutputStream::GetSize() const
 {
-  return m_file->Length();
+    return m_file->Length();
 }
 
 // ----------------------------------------------------------------------------
