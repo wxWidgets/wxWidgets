@@ -15,10 +15,16 @@ These options are currently recognised by wxWidgets:
 In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
 DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
 }
+\twocolitem{msw.xp-tab-ok}{(wxMSW under Windows XP or later only) Some versions
+of Windows XP don't render \helpref{wxNotebook}{wxnotebook} controls with tabs
+not on the top of it correctly, so wxWidgets by default always uses 
+\texttt{wxTOP} style under XP. If you are sure that this problem will not be
+present on your users machines, set this option to a non zero value to enable
+tabs with non default orientation.}
 \twocolitem{mgl.aa-threshold}{(wxMGL only) Set this integer option to point
 size below which fonts are not antialiased. Default: 10.
 }
-\twocolitem{mgl.aa-threshold}{(wxMGL only) Screen refresh rate in Hz.
+\twocolitem{mgl.screen-refresh}{(wxMGL only) Screen refresh rate in Hz.
 Reasonable default is used if not specified.
 }
 \end{twocollist}
@@ -36,6 +42,7 @@ is wxUSE\_SYSTEM\_OPTIONS.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxSystemOptions::wxSystemOptions}\label{wxsystemoptionsctor}
 
 \func{}{wxSystemOptions}{\void}
@@ -43,11 +50,14 @@ is wxUSE\_SYSTEM\_OPTIONS.
 Default constructor. You don't need to create an instance of wxSystemOptions
 since all of its functions are static.
 
+
 \membersection{wxSystemOptions::GetOption}\label{wxsystemoptionsgetoption}
 
 \constfunc{wxString}{GetOption}{\param{const wxString\&}{ name}}
 
 Gets an option. The function is case-insensitive to {\it name}.
+
+Returns empty string if the option hasn't been set.
 
 \wxheading{See also}
 
@@ -55,11 +65,14 @@ Gets an option. The function is case-insensitive to {\it name}.
 \helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint},\rtfsp
 \helpref{wxSystemOptions::HasOption}{wxsystemoptionshasoption}
 
+
 \membersection{wxSystemOptions::GetOptionInt}\label{wxsystemoptionsgetoptionint}
 
 \constfunc{int}{GetOptionInt}{\param{const wxString\&}{ name}}
 
 Gets an option as an integer. The function is case-insensitive to {\it name}.
+
+If the option hasn't been set, this function returns $0$.
 
 \wxheading{See also}
 
@@ -67,17 +80,19 @@ Gets an option as an integer. The function is case-insensitive to {\it name}.
 \helpref{wxSystemOptions::GetOption}{wxsystemoptionsgetoption},\rtfsp
 \helpref{wxSystemOptions::HasOption}{wxsystemoptionshasoption}
 
+
 \membersection{wxSystemOptions::HasOption}\label{wxsystemoptionshasoption}
 
 \constfunc{bool}{HasOption}{\param{const wxString\&}{ name}}
 
-Returns true if the given option is present. The function is case-insensitive to {\it name}.
+Returns \true if the given option is present. The function is case-insensitive to {\it name}.
 
 \wxheading{See also}
 
 \helpref{wxSystemOptions::SetOption}{wxsystemoptionssetoption},\rtfsp
 \helpref{wxSystemOptions::GetOption}{wxsystemoptionsgetoption},\rtfsp
 \helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint}
+
 
 \membersection{wxSystemOptions::SetOption}\label{wxsystemoptionssetoption}
 
