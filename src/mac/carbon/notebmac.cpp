@@ -202,7 +202,6 @@ bool wxNotebook::Create(wxWindow *parent,
 // dtor
 wxNotebook::~wxNotebook()
 {
-    m_macControl = NULL ;
 }
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
@@ -259,7 +258,7 @@ void wxNotebook::SetPageSize(const wxSize& size)
     wxFAIL_MSG( wxT("wxNotebook::SetPageSize not implemented") );
 }
 
-int wxNotebook::SetSelection(int nPage)
+int wxNotebook::SetSelection(size_t nPage)
 {
     if( !IS_VALID_PAGE(nPage) )
         return m_nSelection ;
@@ -271,7 +270,7 @@ int wxNotebook::SetSelection(int nPage)
     return m_nSelection;
 }
 
-bool wxNotebook::SetPageText(int nPage, const wxString& strText)
+bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -282,7 +281,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
     return true;
 }
 
-wxString wxNotebook::GetPageText(int nPage) const
+wxString wxNotebook::GetPageText(size_t nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -290,14 +289,14 @@ wxString wxNotebook::GetPageText(int nPage) const
     return page->GetLabel();
 }
 
-int wxNotebook::GetPageImage(int nPage) const
+int wxNotebook::GetPageImage(size_t nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
     return m_images[nPage];
 }
 
-bool wxNotebook::SetPageImage(int nPage, int nImage)
+bool wxNotebook::SetPageImage(size_t nPage , int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
@@ -322,7 +321,7 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 // ----------------------------------------------------------------------------
 
 // remove one page from the notebook, without deleting the window
-wxNotebookPage* wxNotebook::DoRemovePage(int nPage)
+wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), NULL );
     wxNotebookPage* page = m_pages[nPage] ;
@@ -352,7 +351,7 @@ bool wxNotebook::DeleteAllPages()
 
 
 // same as AddPage() but does it at given position
-bool wxNotebook::InsertPage(int nPage,
+bool wxNotebook::InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect,
