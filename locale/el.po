@@ -1,0 +1,970 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWindows 2.3\n"
+"POT-Creation-Date: 2002-06-03 21:07+0200\n"
+"PO-Revision-Date: 2002-08-20 11:16+0200\n"
+"Last-Translator: Tsolakos Stavros <tsolako1@otenet.gr>\n"
+"Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-7\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid " (error %ld: %s)"
+msgstr " (σφάλμα %ld: %s)"
+
+msgid " - "
+msgstr " - "
+
+msgid " Preview"
+msgstr " Προεπισκόπηση"
+
+msgid " bytes "
+msgstr " bytes "
+
+msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+msgstr "#10 Φάκελος, 4 1/8 x 9 1/2 ίντσες"
+
+msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
+msgstr "#11 Φάκελος, 4 1/2 x 10 3/8 ίντσες"
+
+msgid "#12 Envelope, 4 3/4 x 11 in"
+msgstr "#12 Φάκελος, 4 3/4 x 11 ίντσες"
+
+msgid "#14 Envelope, 5 x 11 1/2 in"
+msgstr "#14 Φάκελος, 5 x 11 1/2 ίντσες"
+
+msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgstr "#9 Φάκελος, 3 7/8 x 8 7/8 ίντσες"
+
+msgid "#define %s must be an integer."
+msgstr "#define %s πρέπει να είναι ακέραιος (integer)."
+
+msgid "%i of %i"
+msgstr "%i από %i"
+
+msgid "%s (or %s)"
+msgstr "%s (ή %s)"
+
+msgid "%s Error"
+msgstr "%s Σφάλμα"
+
+msgid "%s Information"
+msgstr "%s Πληροφορίες"
+
+msgid "%s Warning"
+msgstr "%s Προειδοποίηση"
+
+msgid "%s not a bitmap resource specification."
+msgstr "%s δεν είναι καθορισμός πόρου τύπου bitmap ( bitmap resource )"
+
+msgid "%s not an icon resource specification."
+msgstr "%s δεν είναι καθορισμός πόρου τύπου icon ( icon resource )"
+
+msgid "%s: ill-formed resource file syntax."
+msgstr "%s: ill-formed σύνταξη αρχείου πόρων. ( resource file )"
+
+msgid "&Arrange Icons"
+msgstr "&Τακτοποίηση εικονιδίων"
+
+msgid "&Cancel"
+msgstr "&’κυρο"
+
+msgid "&Cascade"
+msgstr "&Επικάλυψη"
+
+msgid "&Close"
+msgstr "&Κλείσιμο"
+
+msgid "&Details"
+msgstr "&Λεπτομέρειες"
+
+msgid "&Find"
+msgstr "&Εύρεση"
+
+msgid "&Finish"
+msgstr "&Τέλος"
+
+msgid "&Help"
+msgstr "&Βοήθεια"
+
+msgid "&Log"
+msgstr "&Καταγραφή"
+
+msgid "&Move"
+msgstr "&Μετακίνηση"
+
+msgid "&Next"
+msgstr "&Επόμενο"
+
+msgid "&Next >"
+msgstr "&Επόμενο >"
+
+msgid "&Next Tip"
+msgstr "&Επόμενο Tip"
+
+msgid "&Redo"
+msgstr "&Επανάληψη"
+
+msgid "&Redo "
+msgstr "&Επανάληψη "
+
+msgid "&Replace"
+msgstr "&Αντικατάσταση"
+
+msgid "&Restore"
+msgstr "&Επαναφορά"
+
+msgid "&Save..."
+msgstr "&Αποθήκευση..."
+
+msgid "&Show tips at startup"
+msgstr "&Εμφάνιση tips κατά την εκκίνηση"
+
+msgid "&Size"
+msgstr "&Μέγεθος"
+
+msgid "&Undo"
+msgstr "&Αναίρεση"
+
+msgid "&Undo "
+msgstr "&Αναίρεση "
+
+msgid "&Window"
+msgstr "&Παράθυρο"
+
+msgid "'%s' has extra '..', ignored."
+msgstr "'%s' περιέχει επιπλέον '..', αγνοήθηκαν."
+
+msgid "'%s' is invalid"
+msgstr "'%s' δεν ισχύει"
+
+msgid "'%s' is not a correct numeric value for option '%s'."
+msgstr "'%s' δεν είναι μία σωστή αριθμητική τιμή για την επιλογή '%s'."
+
+msgid "'%s' is not a valid message catalog."
+msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
+
+msgid "'%s' is probably a binary buffer."
+msgstr "'%s' είναι πιθανόν ένας δυαδικός ( binary ) buffer"
+
+msgid "'%s' should be numeric."
+msgstr "'%s' πρέπει να είναι αριθμητικό."
+
+msgid "'%s' should only contain ASCII characters."
+msgstr "'%s' πρέπει να περιέχει ASCII χαρακτήρες."
+
+msgid "'%s' should only contain alphabetic characters."
+msgstr "'%s' πρέπει να περιέχει μόνο αλφαβητικούς χαρακτήρες."
+
+msgid "'%s' should only contain alphabetic or numeric characters."
+msgstr "'%s' πρέπει να περιέχει μόνο αλφαβητικούς ή αριθμητικούς χαρακτήρες."
+
+msgid "(Help)"
+msgstr "(Βοήθεια)"
+
+msgid "(bookmarks)"
+msgstr "(σελιδοδείκτες)"
+
+msgid ""
+", expected static, #include or #define\n"
+"whilst parsing resource."
+msgstr ""
+", αναμενόταν static, #include ή $define\n"
+"κατά την ανάγνωση του πόρου."
+
+msgid "."
+msgstr "."
+
+msgid ".."
+msgstr ".."
+
+msgid "10 x 14 in"
+msgstr "10 x 14 ίντσες"
+
+msgid "11 x 17 in"
+msgstr "11 x 17 ίντσες"
+
+msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
+msgstr "6 3/4 Φάκελος, 3 5/8 x 6 1/2 ίντσες"
+
+msgid ": file does not exist!"
+msgstr ": το αρχείο δεν υπάρχει!"
+
+msgid ": unknown charset"
+msgstr ": άγνωστο σετ χαρακτήρων"
+
+msgid ": unknown encoding"
+msgstr ": άγνωστη κωδικοποίηση"
+
+msgid "< &Back"
+msgstr "< &Πίσω"
+
+msgid "<DIR>"
+msgstr "<ΚΑΤΑΛΟΓΟΣ>"
+
+msgid "<DIR> "
+msgstr "<ΚΑΤΑΛΟΓΟΣ> "
+
+msgid "<LINK>"
+msgstr "<ΣΥΝΔΕΣΗ>"
+
+msgid "<LINK> "
+msgstr "<ΣΥΝΔΕΣΗ> "
+
+msgid ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
+msgstr ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
+
+msgid "A3 sheet, 297 x 420 mm"
+msgstr "Φύλλο A3, 297 x 420 mm"
+
+msgid "A4 sheet, 210 x 297 mm"
+msgstr "Φύλλο A4, 210 x 297 mm"
+
+msgid "A4 small sheet, 210 x 297 mm"
+msgstr "Μικρό φύλλο A4, 210 x 297 mm"
+
+msgid "A5 sheet, 148 x 210 mm"
+msgstr "Φύλλο A5, 148 x 210 mm"
+
+msgid "ABCDEFGabcdefg12345"
+msgstr "ΑΒΓΔΕΖαβγδεζ12345"
+
+msgid "ASCII"
+msgstr "ASCII"
+
+msgid "Add current page to bookmarks"
+msgstr "Προσθήκη της τρέχουσας σελίδας στους σελιδοδείκτες"
+
+msgid "Add to custom colours"
+msgstr "Προσθήκη στα χρώματα χρήστη"
+
+msgid "Adding book %s"
+msgstr "Προσθήκη βιβλίου %s"
+
+msgid "All"
+msgstr "Όλα"
+
+msgid "All files (*)|*"
+msgstr "Όλα τα αρχεία (*)|*"
+
+msgid "All files (*.*)|*.*"
+msgstr "Όλα τα αρχεία (*.*)|*.*"
+
+msgid "Already dialling ISP."
+msgstr "Γίνεται ήδη κλήση προς τον παροχέα Internet(ISP)."
+
+msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
+msgstr ""
+"Να γίνει προσάρτηση(append) της καταγραφής(log) στο αρχείο '%s' (Επιλέγοντας "
+"[Όχι] θα το επικαλύψει(overwrite));"
+
+msgid "Arabic (ISO-8859-6)"
+msgstr "Αραβικό (ISO-8859-6)"
+
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr "B4 Φάκελος, 250 x 353 mm"
+
+msgid "B4 sheet, 250 x 354 mm"
+msgstr "Φύλλο B4, 250 x 354 mm"
+
+msgid "B5 Envelope, 176 x 250 mm"
+msgstr "B5 Φάκελος, 176 x 250 mm"
+
+msgid "B5 sheet, 182 x 257 millimeter"
+msgstr "B5 Φάκελος, 182 x 257 mm"
+
+msgid "B6 Envelope, 176 x 125 mm"
+msgstr "B6 Φάκελος, 176 x 125 mm"
+
+msgid "BMP: Couldn't allocate memory."
+msgstr "BMP: Δεν ήταν δυνατή η δέσμευση(allocation) μνήμης."
+
+msgid "BMP: Couldn't save invalid image."
+msgstr "BMP: Δεν είναι δυνατή η αποθήκευση μη έγκυρης εικόνας."
+
+msgid "BMP: Couldn't write RGB color map."
+msgstr "BMP: Δεν ήταν δυνατή η εγγραφή του χάρτη RGB."
+
+msgid "BMP: Couldn't write data."
+msgstr "BMP: Δεν ήταν δυνατή η εγγραφή δεδομένων."
+
+msgid "BMP: Couldn't write the file (Bitmap) header."
+msgstr "BMP: Δεν ήταν δυνατή η εγγραφή της κεφαλής του αρχείου Bitmap."
+
+msgid "BMP: Couldn't write the file (BitmapInfo) header."
+msgstr "BMP: Δεν ήταν δυνατή η εγγραφή της κεφαλής του αρχείου BitmapInfo."
+
+msgid "BMP: wxImage doesn't have own wxPalette."
+msgstr "BMP: Το wxImage δεν κατέχει κάποιο wxPalette."
+
+msgid "Backward"
+msgstr "Πίσω"
+
+msgid "Baltic (ISO-8859-13)"
+msgstr "Βαλτικό (ISO-8859-13)"
+
+msgid "Baltic (old) (ISO-8859-4)"
+msgstr "Βαλτικό (παλαιό) (ISO-8859-4)"
+
+msgid "Bitmap resource specification %s not found."
+msgstr "Δεν βρέθηκε ο καθοριμός πόρου bitmap %s"
+
+msgid "Bold"
+msgstr "Έντονο"
+
+msgid "Bottom margin (mm):"
+msgstr "Κάτω περιθώριο (mm)"
+
+msgid "C sheet, 17 x 22 in"
+msgstr "Φύλλο C, 17 x 22 ίντσες"
+
+msgid "C&lear"
+msgstr "&Διαγραφή"
+
+msgid "C3 Envelope, 324 x 458 mm"
+msgstr "C3 Φάκελος, 324 x 458 mm"
+
+msgid "C4 Envelope, 229 x 324 mm"
+msgstr "C4 Φάκελος, 229 x 324 mm"
+
+msgid "C5 Envelope, 162 x 229 mm"
+msgstr "C5 Φάκελος, 162 x 229 mm"
+
+msgid "C6 Envelope, 114 x 162 mm"
+msgstr "C6 Φάκελος, 114 x 162 mm"
+
+msgid "C65 Envelope, 114 x 229 mm"
+msgstr "C65 Φάκελος, 114 x 229 mm"
+
+msgid "Can not create mutex"
+msgstr "Δεν είναι δυνατή η δημιουργία του mutex"
+
+msgid "Can not enumerate files '%s'"
+msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων '%s'"
+
+msgid "Can not enumerate files in directory '%s'"
+msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων στον κατάλογο '%s'"
+
+msgid "Can not resume thread %x"
+msgstr "Δεν είναι δυνατή η συνέχιση(resume) του νήματος(thread) %x"
+
+msgid "Can not start thread: error writing TLS."
+msgstr ""
+"Δεν είναι δυνατή η εκκίνηση του νήματος(thread: Σφάλμα κατά την εγγραφή του "
+"TLS"
+
+msgid "Can not suspend thread %x"
+msgstr "Δεν είναι δυνατή η αναστολή εκτέλεσης(suspend) του νήματος(thread) %x"
+
+msgid "Can not wait for thread termination"
+msgstr ""
+"Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος(thread)"
+
+msgid "Can't &Undo "
+msgstr "Δεν είναι δυνατή η αναίρεση"
+
+msgid "Can't check image format of file '%s': file does not exist."
+msgstr ""
+"Δεν είναι δυνατή η εξακρίβωση του τύπου του αρχείου %s: το αρχείο δεν "
+"υπάρχει."
+
+msgid "Can't close registry key '%s'"
+msgstr "Δεν είναι δυνατό το κλείσιμο του κλειδιού μητρώου(registry key) '%s'"
+
+msgid "Can't copy values of unsupported type %d."
+msgstr "Δεν είναι δυνατή η αντιγραφή τιμών μη υποστηριζομένου τύπου %d."
+
+msgid "Can't create dialog using memory template"
+msgstr ""
+"Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση προτύπου μνήμης. "
+"(memory template)"
+
+msgid "Can't create dialog using template '%ul'"
+msgstr ""
+"Δεν είναι δυνατή η δημιουργία του διαλόγου με τη χρήση του προτύπου '%ul'"
+
+msgid "Can't create list control window, check that comctl32.dll is installed."
+msgstr ""
+"Δεν είναι δυνατή η δημιουργία του στοιχείου ελέγχου λίστας (list control). "
+"Ελέγξτε ότι το comctl32.dll είναι εγατεστημένο."
+
+msgid "Can't create registry key '%s'"
+msgstr "Δεν είναι δυνατή η δημιουργία του κλειδιού μητρώου(registry key) '%s'"
+
+msgid "Can't create the inter-process read pipe"
+msgstr "Δεν είναι δυνατή η δημιουργία της inter-process read pipe"
+
+msgid "Can't create the inter-process write pipe"
+msgstr "Δεν είναι δυνατή η δημιουργία της inter-process write pipe"
+
+msgid "Can't create thread"
+msgstr "Δεν είναι δυνατή η δημιουργία του thread"
+
+msgid "Can't create window of class %s"
+msgstr "Δεν είναι δυνατή η δημιουργία παραθύρου τάξεως %s"
+
+msgid "Can't delete key '%s'"
+msgstr "Δεν είναι δυνατή η διαγραφή του κλειδιού '%s'"
+
+msgid "Can't delete the INI file '%s'"
+msgstr "'%s'"
+
+msgid "Can't delete value '%s' from key '%s'"
+msgstr "Δεν είναι δυνατή η διαγραφή της τιμής '%s' από το κλειδί '%s'"
+
+msgid "Can't delete value of key '%s'"
+msgstr "Δεν είναι δυνατή η διαγρσφή του κλειδιού '%s'"
+
+msgid "Can't enumerate subkeys of key '%s'"
+msgstr "Δεν είναι δυνατή η απαρίθμηση των υποκλειδιών του '%s'"
+
+msgid "Can't enumerate values of key '%s'"
+msgstr "Δεν είναι δυνατή η απαρίθμηση των τιμών του κλειδιού '%s'"
+
+msgid "Can't find current position in file '%s'"
+msgstr "Δεν είναι δυνατή η εύρεση της τρέχουσας θέσης στο αρχείου '%s'"
+
+msgid "Can't get info about registry key '%s'"
+msgstr ""
+"Δεν είναι δυνατή η συλλογή πληροφοριών για το κλειδί μητρώου(registry) '%s'"
+
+msgid "Can't load image from file '%s': file does not exist."
+msgstr ""
+"Δεν είναι δυνατή η ανάγνωση της εικόνας από το αρχείο '%s': Το αρχείο δεν "
+"υπάρχει."
+
+msgid "Can't open file '%s'"
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'"
+
+msgid "Can't open registry key '%s'"
+msgstr "Δεν είναι δυνατό το άνοιγμα του κλειδιού μητρώου(registry) '%s'"
+
+msgid "Can't read value of '%s'"
+msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής του '%s'"
+
+msgid "Can't read value of key '%s'"
+msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής του κλειδιού '%s'"
+
+msgid "Can't save image to file '%s': unknown extension."
+msgstr ""
+"Δεν είναι δυνατή η αποθήκευση της εικόνας στο αρχείο '%s': άγνωστη επέκταση"
+
+msgid "Can't save log contents to file."
+msgstr ""
+"Δεν είναι δυνατή η αποθήκευση των περιεχομένων της καταγραφής(log) στο "
+"αρχείο."
+
+msgid "Can't set thread priority"
+msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
+
+msgid "Can't set value of '%s'"
+msgstr "Δεν είναι δυνατή η ανάθεση τιμής του '%s'"
+
+msgid "Cancel"
+msgstr "’κυρο"
+
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+"Δεν είναι δυνατή η μετατροπή των μονάδων διαλόγου(dialog units): άγνωστος "
+"διάλογος."
+
+msgid "Cannot convert from encoding '%s'!"
+msgstr "Δεν είναι δυνατή η μετατροπη από την κωδικοποίηση '%s'!"
+
+msgid "Cannot find active dialup connection: %s"
+msgstr "Δεν είναι δυνατή η εύρεση της ενεργού τηλεφωνικής συνδέσεως: %s"
+
+msgid "Cannot find container for unknown control '%s'."
+msgstr ""
+"Δεν είναι δυνατή η εύρεση φορέα(container) για άγνωστο στοιχείο ελέγχου"
+"{control) '%s'."
+
+msgid "Cannot find font node '%s'."
+msgstr "Δεν είναι δυνατή η εύρεση καταστάσεως γραμματοσειράς(font mode) '%s'."
+
+msgid "Cannot find the location of address book file"
+msgstr "Δεν είναι δυνατή η εύρεση της θέσης του αρχείου βιβλίου διευθύνσεων"
+
+msgid "Cannot get priority range for scheduling policy %d."
+msgstr "Δεν είναι δυνατή η ανάγνωση του εύρους προτεραιοτήτων"
+
+msgid "Cannot get the hostname"
+msgstr "Δεν είναι δυνατή η ανάγνωση του ονόματος διακομιστή(hostname)"
+
+msgid "Cannot get the official hostname"
+msgstr ""
+"Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official "
+"hostname)"
+
+msgid "Cannot hang up - no active dialup connection."
+msgstr ""
+"Δεν είναι δυνατό το κλείσιμο της γραμμής - δεν υπάρχει ενεργός τηλεφωνική "
+"σύνδεση."
+
+msgid "Cannot initialize OLE"
+msgstr "Δεν είναι δυνατή η αρχικοποίηση του OLE"
+
+msgid "Cannot initialize display."
+msgstr "Δεν είναι δυνατή η αρχικοποίηση απεικόνησης."
+
+msgid "Cannot load icon from '%s'."
+msgstr "Δεν είναι δυνατή η ανάγνωση icon από το '%s'"
+
+msgid "Cannot load resources from file '%s'."
+msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
+
+msgid "Cannot open HTML document: %s"
+msgstr "Δεν είναι δυνατό το άνοιγμα εγγράφου HTML: %s"
+
+msgid "Cannot open HTML help book: %s"
+msgstr "Δεν είναι δυνατό το άνοιγμα βιβλίου βοήθειας HTML: %s"
+
+msgid "Cannot open URL '%s'"
+msgstr "Δεν είναι δυνατό to άνοιγμα του URL '%s'"
+
+msgid "Cannot open contents file: %s"
+msgstr "Δεν είναι δυνατό το άνοιγμα των περιεχομένων του αρχείου: %s"
+
+msgid "Cannot open file '%s'."
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου '%s'."
+
+msgid "Cannot open file for PostScript printing!"
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου για εκτύπωση PostScript!"
+
+msgid "Cannot open index file: %s"
+msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου ευρετηρίου(index): %s"
+
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Δεν είναι δυνατή η ανάγνωση συντεταγμένων από '%s'."
+
+msgid "Cannot parse dimension from '%s'."
+msgstr "Δεν είναι δυνατή η ανάγνωση διαστάσεων από '%s'."
+
+msgid "Cannot print empty page."
+msgstr "Δεν είναι δυνατή η εκτύπωση άδειας σελίδας."
+
+msgid "Cannot read typename from '%s'!"
+msgstr "Δεν είναι δυνατή η ανάγνωση ονομάτων τύπων(typenames) από το '%s'"
+
+msgid "Cannot retrieve thread scheduling policy."
+msgstr "Δεν είναι δυνατή η ανάκτηση της thread scheduling policy."
+
+msgid "Cannot start thread: error writing TLS"
+msgstr ""
+"Δεν είναι δυνατή η εκκίνηση του thread: σφάλμα κατά την εγγραφή του TLS"
+
+msgid "Case sensitive"
+msgstr "Διάκριση κεφαλαίων-πεζών"
+
+msgid "Celtic (ISO-8859-14)"
+msgstr "Κελτικό (ISO-8859-14)"
+
+msgid "Central European (ISO-8859-2)"
+msgstr "Κεντροευρωπαϊκό (ISO-8859-2)"
+
+msgid "Choose ISP to dial"
+msgstr "Επιλέξτε παροχέα Internet για κλήση"
+
+msgid "Choose font"
+msgstr "Επιλέξτε γραμματοσειρά"
+
+msgid "ChoosePixelFormat failed."
+msgstr "H ChoosePixelFormat ap;etyxe."
+
+msgid "Clear the log contents"
+msgstr "Καθαρισμός περιεχομένων καταγραφής(log)"
+
+msgid "Close"
+msgstr "Κλείσιμο"
+
+msgid "Close\tAlt-F4"
+msgstr "Κλείσιμο\tAlt-F4"
+
+msgid "Close this window"
+msgstr "Κλείσιμο αυτού του παραθύρου."
+
+msgid "Computer"
+msgstr "Υπολογιστής"
+
+msgid "Config entry name cannot start with '%c'."
+msgstr "'%c'"
+
+msgid "Confirm"
+msgstr "Επιβεβαίωση"
+
+msgid "Confirm registry update"
+msgstr "Επιβεβαίωση ενημέρωσης μητρώου(registry update)"
+
+msgid "Connecting..."
+msgstr "Γίνεται σύνδεση..."
+
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+msgid "Convertion to charset '%s' doesn't work."
+msgstr "Η μετατροπή στο σετ χαρακτήρων '%s' δεν λειτουργεί"
+
+msgid "Copies:"
+msgstr "Αντίγραφα:"
+
+msgid "Could not find resource include file %s."
+msgstr "Δεν βρέθηκε το αρχείο συμπερήληψης πόρων(resource include file) %s."
+
+msgid "Could not find tab for id"
+msgstr "Δεν ήταν δυνατή η εύρεση tab για το id"
+
+msgid "Could not load Rich Edit DLL '%s'"
+msgstr "Δεν ήταν δυνατή η φόρτωση του Rich DLL '%s'"
+
+msgid ""
+"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr ""
+"Δεν ήταν δυνατή η αντιστοίχηση της κλάσης ελέγχου ή του id '%s'. "
+"Χρησιμοποιήστε (μη-μηδενικό) ακέραιο\n"
+" ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
+
+msgid ""
+"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr ""
+"Δεν ήταν δυνατή η αντιστοίχηση του menu id '%s'. Χρησιμοποιήστε (μη-"
+"μηδενικό) ακέραιο\n"
+"ή μία οδηγία #define (ανατρέξατε στο εγχειρίδιο για λεπτομέρειες)"
+
+msgid "Could not start document preview."
+msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
+
+msgid "Could not start printing."
+msgstr "Δεν ήταν δυνατή η εκκλινηση της εκτύπωσης."
+
+msgid "Could not transfer data to window"
+msgstr "Δεν ήταν δυνατή η μεταφορά δεδομένων στο παράθυρο."
+
+msgid "Couldn't acquire a mutex lock"
+msgstr "Δεν ήταν δυνατή η κατάληψη της κλειδωνιάς ενός mutex"
+
+msgid "Couldn't add an image to the image list."
+msgstr "Δεν ήταν δυνατή η προσθήκη μιας εικόνας στην λίστα εικόνων."
+
+msgid "Couldn't create a timer"
+msgstr "Δεν ήταν δυνατή η δημιουργία timer"
+
+msgid "Couldn't create cursor."
+msgstr "Δεν ήταν δυνατή η δημιουργία δείκτη ποντικιού."
+
+msgid "Couldn't find symbol '%s' in a dynamic library"
+msgstr ""
+"Δεν ήταν δυνατός ο εντοπισμός του συμβόλου '%s' σε μια δυναμική βιβλιοθήκη."
+
+msgid "Couldn't get the current thread pointer"
+msgstr "Δεν ήταν δυνατή η ανάκτηση δείκτη στο τρέχον νήμα εκτέλεσης(thread)"
+
+msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
+msgstr ""
+"Δεν ήταν δυνατή η φόρτωση εικόνας PNG - είτε το αρχείο δεν είναι έγκυρο ή "
+"δεν υπάρχει αρκετή μνήμη."
+
+msgid "Couldn't register clipboard format '%s'."
+msgstr ""
+"Δεν ήταν δυνατή η καταχώρηση του τύπου προχείρου(clipboard format) '%s'"
+
+msgid "Couldn't release a mutex"
+msgstr "Δεν ήταν δυνατή η απελευθέρωση ενός mutex"
+
+msgid "Couldn't retrieve information about list control item %d."
+msgstr ""
+"Δεν ήταν δυνατή η ανάκτηση πληροφοριών σχετικά με το στοιχείο λίστας %d."
+
+msgid "Couldn't save PNG image."
+msgstr "Δεν ήταν δυνατή η αποθήκευση εικόνας PNG."
+
+msgid "Couldn't terminate thread"
+msgstr "Δεν ήταν δυνατός ο τερματισμός του thread"
+
+msgid "Create directory"
+msgstr "Δημιουργία καταλόγου"
+
+msgid "Create new directory"
+msgstr "Δημιουργία νέου καταλόγου"
+
+msgid "Current directory:"
+msgstr "Τρέχον κατάλογος:"
+
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Κυριλλικό (ISO-8859-5)"
+
+msgid "DDE poke request failed"
+msgstr "Η DDE poke αίτηση απέτυχε"
+
+msgid "DIB Header: Cannot deal with 4bit encoded yet."
+msgstr "DIB Header: Δεν είναι ακόμα δυνατός ο χειρισμός 4bit κωδικοποίησης."
+
+msgid "DIB Header: Encoding doesn't match bitdepth."
+msgstr "DIB Header: "
+
+msgid "DIB Header: Image height > 32767 pixels for file."
+msgstr "DIB Header: Το ύψος της εικόνας είναι > 32767 για το αρχείο."
+
+msgid "DIB Header: Image width > 32767 pixels for file."
+msgstr "DIB Header: Το πλάτος της εικόνας είναι > 32767 για το αρχείο."
+
+msgid "DIB Header: Unknown bitdepth in file."
+msgstr "DIB Header: Αγνωστο βάθος bit στο αρχείο."
+
+msgid "DIB Header: Unknown encoding in file."
+msgstr "DIB Header: Αγνωστη κωδικοποίηση στο αρχείο."
+
+msgid "DL Envelope, 110 x 220 mm"
+msgstr "Φάκελος DL, 110 x 220 mm"
+
+msgid "Date"
+msgstr "Ημερομηνία"
+
+msgid "Decorative"
+msgstr "Διακοσμητικός"
+
+msgid "Default encoding"
+msgstr "Προκαθορισμένη κωδικοποίηση"
+
+msgid "Deleted stale lock file '%s'."
+msgstr "Διεγράφη το αρχείο κλειδαριά (lock file) '%s'"
+
+msgid "Did you know..."
+msgstr "Γνωρίζατε ότι..."
+
+msgid "Directory '%s' couldn't be created"
+msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
+
+msgid "Directory '%s' doesn't exist!"
+msgstr "Ο κατάλογος '%s' δεν υπάρχει!"
+
+msgid "Directory does not exist"
+msgstr "Ο κατάλογος δεν υπάρχει"
+
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"Εμφάνιση όλων των στοιχείων του ευρετηρίου δεδομένου substring. Η αναζήτηση "
+"διακρίνει μεταξύ κεφαλαίων/πεζών."
+
+msgid "Display options dialog"
+msgstr "Εμφάνιση του διαλόγου επιλογών"
+
+msgid ""
+"Do you want to overwrite the command used to %s files with extension \"%s"
+"\" ?\n"
+"Current value is \n"
+"%s, \n"
+"New value is \n"
+"%s %1"
+msgstr ""
+"Θέλετε να αντικαταστήσετε την εντολή που χρησιμοποιήθηκε για να %s τα αρχεία "
+"με επέκταση \"%s\" ?\n"
+"Η τρέχουσα τιμή είναι \n"
+"%s, \n"
+"Η νέα τιμή είναι \n"
+"%s %1"
+
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgstr "'%s'"
+
+msgid "Error"
+msgstr "Σφάλμα"
+
+msgid "Error "
+msgstr "Σφάλμα "
+
+msgid "Error creating directory"
+msgstr "Σφάλμα κατα τη δημιουργία υποκαταλόγου"
+
+msgid "Error in reading image DIB ."
+msgstr "Σφάλμα κατά την ανάγνωση εικόνας DIB."
+
+msgid "Error: "
+msgstr "Σφάλμα: "
+
+msgid "Esperanto (ISO-8859-3)"
+msgstr "Εσπεράντο (ISO-8859-3)"
+
+msgid "Estimated time : "
+msgstr "Υπολογισθείς χρόνος : "
+
+msgid "Execution of command '%s' failed"
+msgstr "Η εκτέλεση της εντολής '%s' απέτυχε"
+
+msgid "Expected '*' whilst parsing resource."
+msgstr "Αναμενόταν '*' κατά την ανάγνωση  του πόρου(resource)."
+
+msgid "Expected '=' whilst parsing resource."
+msgstr "Αναμενόταν '=' κατά την ανάγνωση  του πόρου(resource)."
+
+msgid "Expected 'char' whilst parsing resource."
+msgstr "Αναμενόταν 'char' κατά την ανάγνωση  του πόρου(resource)."
+
+msgid "Failed to %s dialup connection: %s"
+msgstr "Αποτυχία %s της σύνδεσης μέσω τηλεφώνου : %s"
+
+msgid "Failed to access lock file."
+msgstr "Αποτυχία κατά την πρόσβαση στο αρχείο 'κλειδωνιά'(lock file)."
+
+msgid "Failed to close file handle"
+msgstr "Αποτυχία κατά το κλείσιμο του χειριστηρίου του αρχείου(file handle)"
+
+msgid "Failed to close lock file '%s'"
+msgstr "'%s'"
+
+msgid "Failed to copy registry value '%s'"
+msgstr "'%s'"
+
+msgid "Failed to copy the contents of registry key '%s' to '%s'."
+msgstr "'%s''%s'"
+
+msgid "Failed to copy the file '%s' to '%s'"
+msgstr "Αποτυχία αντιγραφής του αρχείου '%s' στο '%s'"
+
+msgid "Failed to create a temporary file name"
+msgstr "Αποτυχία δημιουργίας ονόματος προσωρινού αρχείου"
+
+msgid "Failed to create connection to server '%s' on topic '%s'"
+msgstr "'%s''%s'"
+
+msgid ""
+"Failed to create directory '%s'\n"
+"(Do you have the required permissions?)"
+msgstr ""
+"Αποτυχία κατά τη δημιουργία υποκαταλόγου '%s'\n"
+"(Έχετε τα απαιτούμενα δικαιώματα(permissions);)"
+
+msgid "Failed to create registry entry for '%s' files."
+msgstr "'%s'"
+
+msgid "Failed to execute '%s'\n"
+msgstr "'%s'\n"
+
+msgid "Failed to load image %d from file '%s'."
+msgstr "'%s'"
+
+msgid "Failed to load shared library '%s'"
+msgstr "'%s'"
+
+msgid "Failed to load shared library '%s' Error '%s'"
+msgstr "'%s''%s'"
+
+msgid "Failed to lock the lock file '%s'"
+msgstr "'%s'"
+
+msgid "Failed to match '%s' in regular expression: %s"
+msgstr "'%s'"
+
+msgid "Failed to modify file times for '%s'"
+msgstr "'%s'"
+
+msgid "Failed to open '%s' for %s"
+msgstr "'%s'"
+
+msgid "Failed to register DDE server '%s'"
+msgstr "'%s'"
+
+msgid "Failed to remember the encoding for the charset '%s'."
+msgstr "'%s'"
+
+msgid "Failed to remove lock file '%s'"
+msgstr "'%s'"
+
+msgid "Failed to remove stale lock file '%s'."
+msgstr "'%s'"
+
+msgid "Failed to rename registry value '%s' to '%s'."
+msgstr "'%s''%s'"
+
+msgid "Failed to rename the registry key '%s' to '%s'."
+msgstr "'%s''%s'"
+
+msgid "Failed to retrieve file times for '%s'"
+msgstr "'%s'"
+
+msgid "Failed to store image '%s' to memory VFS!"
+msgstr "'%s'"
+
+msgid "Failed to touch the file '%s'"
+msgstr "'%s'"
+
+msgid "Failed to unlock lock file '%s'"
+msgstr "'%s'"
+
+msgid "Failed to unregister DDE server '%s'"
+msgstr "'%s'"
+
+msgid "Failed to write to lock file '%s'"
+msgstr "'%s'"
+
+msgid "File '%s' already exists, do you really want to overwrite it?"
+msgstr "'%s'"
+
+msgid ""
+"File '%s' already exists.\n"
+"Do you want to replace it?"
+msgstr "'%s'"
+
+msgid "Greek (ISO-8859-7)"
+msgstr "Ελληνικό (ISO-8859-7)"
+
+msgid "Tile &Horizontally"
+msgstr "Οριζόντια παράθεση"
+
+msgid "Tile &Vertically"
+msgstr "Κατακόρυφη παράθεση"
+
+msgid "Time"
+msgstr "Ώρα"
+
+msgid "Windows 3.1"
+msgstr "Windows 3.1"
+
+msgid "Windows 9%c"
+msgstr "Windows 9%c"
+
+msgid "Windows Arabic (CP 1256)"
+msgstr "Windows Αραβικά (CP 1256)"
+
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr "Δεν είναι δυνατή "
+
+msgid "wxSocket: unknown event!."
+msgstr "wxSocket: άγνωστο γεγονός (event)!"
+
+msgid "wxWindows could not open display for '%s': exiting."
+msgstr ""
+"Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση για το '%s': "
+"'Εξοδος..."
+
+msgid "wxWindows could not open display. Exiting."
+msgstr "Η βιλιοθήκη wxWindows δεν μπορεί να ανοίξει την απεικόνιση. 'Εξοδος..."
+
+msgid "yesterday"
+msgstr "χθες"
