@@ -178,7 +178,7 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
 wxDebugReport::wxDebugReport()
 {
     // get a temporary directory name
-    wxString appname(wxTheApp ? wxTheApp->GetAppName() : _T("wx"));
+    wxString appname = GetReportName();
 
     // we can't use CreateTempFileName() because it creates a file, not a
     // directory, so do our best to create a unique name ourselves
@@ -223,7 +223,7 @@ wxDebugReport::~wxDebugReport()
 
     if ( !m_dir.empty() )
     {
-        if ( wxRmDir(m_dir) != 0 )
+        if ( wxRmDir(m_dir.fn_str()) != 0 )
         {
             wxLogSysError(_("Failed to clean up debug report directory \"%s\""),
                           m_dir.c_str());
@@ -237,7 +237,10 @@ wxDebugReport::~wxDebugReport()
 
 wxString wxDebugReport::GetReportName() const
 {
-    return wxString(wxTheApp ? wxTheApp->GetAppName() : _T("wx"));
+    if(wxTheApp)
+        return wxTheApp->GetAppName();
+
+    return _T("wx");
 }
 
 void wxDebugReport::AddFile(const wxString& name, const wxString& description)
@@ -279,6 +282,10 @@ void wxDebugReport::AddAll(Context context)
 #if wxUSE_CRASHREPORT
     AddDump(context);
 #endif // wxUSE_CRASHREPORT
+
+#if !wxUSE_STACKWALKER && !wxUSE_CRASHREPORT
+    wxUnusedVar(context);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -560,7 +567,8 @@ bool wxDebugReportCompress::DoProcess()
         if ( !zos.PutNextEntry(ze) )
             return false;
 
-        wxFFileInputStream is(wxFileName(fn.GetPath(), name).GetFullPath());
+        wxFileName filename(fn.GetPath(), name);
+        wxFFileInputStream is(filename.GetFullPath());
         if ( !is.IsOk() || !zos.Write(is).IsOk() )
             return false;
     }
