@@ -15,8 +15,7 @@ class TestChoice(wxPanel):
                                wxPoint(15, 10))
 
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 20))
-        self.ch = wxChoice(self, 40, (80, 50), (95, 125),
-                 choices = sampleList)
+        self.ch = wxChoice(self, 40, (80, 50), choices = sampleList)
         EVT_CHOICE(self, 40, self.EvtChoice)
 
 
