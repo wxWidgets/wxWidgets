@@ -798,6 +798,7 @@ void wxKDEIconHandler::Init()
         dirs.Add(_T("/usr/share"));
         dirs.Add(_T("/opt/kde/share"));
         icondirs.Add(_T("/usr/share/icons/"));
+        icondirs.Add(_T("/usr/X11R6/share/icons/")); // Debian/Corel linux
         icondirs.Add(_T("/opt/kde/share/icons/"));
     }
 
