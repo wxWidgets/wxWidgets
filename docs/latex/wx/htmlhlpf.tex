@@ -15,10 +15,10 @@ for wxHTML (or helpview) to read; and the .zip file can optionally be renamed to
 Header file must contain these lines (and may contain additional lines which are ignored) :
 
 \begin{verbatim}
-Contents file=@filename.hhc@
-Index file=@filename.hhk@
-Title=@title of your book@
-Default topic=@default page to be displayed.htm@
+Contents file=<filename.hhc>
+Index file=<filename.hhk>
+Title=<title of your book>
+Default topic=<default page to be displayed.htm>
 \end{verbatim}
 
 All filenames (including the Default topic) are relative to the 
@@ -27,7 +27,7 @@ location of .hhp file.
 {\bf Localization note:} In addition, .hhp file may contain line
 
 \begin{verbatim}
-Charset=@rfc_charset@
+Charset=<rfc_charset>
 \end{verbatim}
 
 which specifies what charset (e.g. "iso8859\_1") was used in contents
@@ -44,15 +44,15 @@ Contents file has HTML syntax and it can be parsed by regular HTML parser. It co
 \begin{verbatim}
 <ul>
 
-  <li> <object>
+  <li> <object type="text/sitemap">
            <param name="Name" value="@topic name@">
-	   <param name="ID" value=@numeric_id@>
-	   <param name="Local" value="@filename.htm@">
+           <param name="ID" value=@numeric_id@>
+           <param name="Local" value="@filename.htm@">
        </object>
-  <li> <object>
+  <li> <object type="text/sitemap">
            <param name="Name" value="@topic name@">
-	   <param name="ID" value=@numeric_id@>
-	   <param name="Local" value="@filename.htm@">
+           <param name="ID" value=@numeric_id@>
+           <param name="Local" value="@filename.htm@">
        </object>
   ...    
 
@@ -68,21 +68,21 @@ Items in the list may be nested - one \tt{<li>} statement may contain a \tt{<ul>
 \begin{verbatim}
 <ul>
 
-  <li> <object>
+  <li> <object type="text/sitemap">
            <param name="Name" value="Top node">
-	   <param name="Local" value="top.htm">
+           <param name="Local" value="top.htm">
        </object>
        <ul>
-         <li> <object>
-                  <param name="Name" value="subnode in topnode">
-	          <param name="Local" value="subnode1.htm">
+         <li> <object type="text/sitemap">
+              <param name="Name" value="subnode in topnode">
+              <param name="Local" value="subnode1.htm">
               </object>
-	  ...
+      ...
        </ul>
        
-  <li> <object>
+  <li> <object type="text/sitemap">
            <param name="Name" value="Another Top">
-	   <param name="Local" value="top2.htm">
+           <param name="Local" value="top2.htm">
        </object>
   ...    
 
