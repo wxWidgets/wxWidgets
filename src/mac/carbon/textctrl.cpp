@@ -1446,20 +1446,20 @@ int wxTextCtrl::GetNumberOfLines() const
 {
     if ( m_macUsesTXN ) 
     {
-    	ItemCount lines ;
-		TXNGetLineCount((TXNObject)m_macTXN, &lines ) ;
-		return lines ;
+        ItemCount lines ;
+        TXNGetLineCount((TXNObject)m_macTXN, &lines ) ;
+        return lines ;
     }
     else
     {    	
-	    wxString content = GetValue() ;
+        wxString content = GetValue() ;
 
-	    int count = 1;
-	    for (size_t i = 0; i < content.Length() ; i++)
-	    {
-	        if (content[i] == '\r') count++;
-	    }
-    	return count;
+        int count = 1;
+        for (size_t i = 0; i < content.Length() ; i++)
+        {
+            if (content[i] == '\r') count++;
+        }
+        return count;
     }
 }
 
@@ -1479,22 +1479,22 @@ void wxTextCtrl::ShowPosition(long pos)
 #if TARGET_RT_MAC_MACHO && defined(AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER)
     if ( m_macUsesTXN ) 
     {
-     	Point current ;
-    	Point desired ;
-    	TXNOffset selstart , selend ;
+        Point current ;
+        Point desired ;
+        TXNOffset selstart , selend ;
         TXNGetSelection(  (TXNObject) m_macTXN , &selstart , &selend) ;
-    	TXNOffsetToPoint( (TXNObject) m_macTXN,  selstart , &current);
-    	TXNOffsetToPoint( (TXNObject) m_macTXN,  pos , &desired);
-    	//TODO use HIPoints for 10.3 and above
-		if ( (UInt32) TXNScroll != (UInt32) kUnresolvedCFragSymbolAddress )
-		{
-       		OSErr theErr = noErr;
-       		SInt32 dv = desired.v - current.v ;
-       		SInt32 dh = desired.h - current.h ;
-       		TXNShowSelection(  (TXNObject) m_macTXN , true ) ;
+        TXNOffsetToPoint( (TXNObject) m_macTXN,  selstart , &current);
+        TXNOffsetToPoint( (TXNObject) m_macTXN,  pos , &desired);
+        //TODO use HIPoints for 10.3 and above
+        if ( (UInt32) TXNScroll != (UInt32) kUnresolvedCFragSymbolAddress )
+        {
+            OSErr theErr = noErr;
+            SInt32 dv = desired.v - current.v ;
+            SInt32 dh = desired.h - current.h ;
+            TXNShowSelection(  (TXNObject) m_macTXN , true ) ;
             theErr = TXNScroll( (TXNObject) m_macTXN, kTXNScrollUnitsInPixels , kTXNScrollUnitsInPixels , &dv , &dh );          
-			wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
-		}
+            wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
+        }
     }
 #endif
 }
