@@ -62,6 +62,20 @@ public:
                          );
 
 private:
+    inline virtual bool LoadFile( wxBitmap*       pBitmap
+                                 ,int             nId
+                                 ,long            lFlags
+                                 ,int             nDesiredWidth
+                                 ,int             nDesiredHeight
+                                )
+    {
+        return wxBitmapHandler::LoadFile( pBitmap
+                                         ,nId
+                                         ,lFlags
+                                         ,nDesiredWidth
+                                         ,nDesiredHeight
+                                        );
+    }
     DECLARE_DYNAMIC_CLASS(wxBMPFileHandler)
 };
 
@@ -75,8 +89,7 @@ public:
     }
 
     virtual bool LoadFile( wxBitmap*       pBitmap
-                          ,const wxString& rName
-                          ,HPS             hPs
+                          ,int             nId
                           ,long            lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
@@ -146,6 +159,16 @@ protected:
                           ,int             nDesiredWidth = -1
                           ,int             nDesiredHeight = -1
                          ) = 0;
+private:
+    inline virtual bool Load( wxGDIImage*     pImage
+                             ,int             nId
+                             ,long            lFlags
+                             ,int             nDesiredWidth
+                             ,int             nDesiredHeight
+                            )
+    {
+        return FALSE;
+    }
 };
 
 class WXDLLEXPORT wxICOFileHandler : public wxIconHandler
@@ -354,43 +377,39 @@ void wxGDIImage::InitStandardHandlers()
 
 bool wxBMPResourceHandler::LoadFile(
   wxBitmap*                         pBitmap
-, const wxString&                   rName
-, HPS                               hPs
+, int                               nId
 , long                              lFlags
 , int                               nDesiredWidth
 , int                               nDesiredHeight
 )
 {
-    // TODO: load a bitmap from a file
-    /*
-    rBitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), rName));
+    SIZEL                               vSize = {0, 0};
+    DEVOPENSTRUC                        vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    HDC                                 hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HPS                                 hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
 
-    wxBitmapRefData*                pData = bitmap->GetBitmapData();
+    pBitmap->SetHBITMAP((WXHBITMAP)::GpiLoadBitmap( hPS
+                                                   ,NULLHANDLE
+                                                   ,nId
+                                                   ,0
+                                                   ,0
+                                                  ));
+    ::GpiDestroyPS(hPS);
+    ::DevCloseDC(hDC);
 
-    if (pBitmap->Ok())
+    wxBitmapRefData*                pData = pBitmap->GetBitmapData();
+
+    if ( pBitmap->Ok() )
     {
-        BITMAP                       bm;
+        BITMAPINFOHEADER            vBmph;
 
-        if ( !::GetObject(GetHbitmapOf(*pBitmap), sizeof(BITMAP), (LPSTR) &bm) )
-        {
-            wxLogLastError("GetObject(HBITMAP)");
-        }
-
-        data->m_width = bm.bmWidth;
-        data->m_height = bm.bmHeight;
-        data->m_depth = bm.bmBitsPixel;
+        ::GpiQueryBitmapParameters(GetHbitmapOf(*pBitmap), &vBmph);
+        pData->m_nWidth  = vBmph.cx;
+        pData->m_nHeight = vBmph.cy;
+        pData->m_nDepth  = vBmph.cBitCount;
     }
-    else
-    {
-        // it's probably not found
-        wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
-                   name.c_str());
-    }
-
-    return bitmap->Ok();
-    */
-    return(FALSE);
-}
+    return(pBitmap->Ok());
+} // end of wxBMPResourceHandler::LoadFile
 
 bool wxBMPFileHandler::LoadFile(
   wxBitmap*                         pBitmap
@@ -463,44 +482,6 @@ bool wxICOFileHandler::LoadIcon(
     // actual size
     wxSize                          vSize;
 
-    // TODO: load icon directly from a file
-    /*
-#ifdef __WIN32__
-    HICON hicon = ::ExtractIcon(wxGetInstance(), name, first);
-    if ( !hicon )
-    {
-        wxLogSysError(_T("Failed to load icon from the file '%s'"),
-                      name.c_str());
-
-        return FALSE;
-    }
-
-    size = GetHiconSize(hicon);
-#else // Win16
-    HICON hicon = ReadIconFile((wxChar *)name.c_str(),
-                               wxGetInstance(),
-                               &size.x, &size.y);
-#endif // Win32/Win16
-
-    if ( (desiredWidth != -1 && desiredWidth != size.x) ||
-         (desiredHeight != -1 && desiredHeight != size.y) )
-    {
-        wxLogDebug(_T("Returning FALSE from wxICOFileHandler::Load because "
-                      "of the size mismatch: actual (%d, %d), "
-                      "requested (%d, %d)"),
-                      size.x, size.y,
-                      desiredWidth, desiredHeight);
-
-        ::DestroyIcon(hicon);
-
-        return FALSE;
-    }
-
-    icon->SetHICON((WXHICON)hicon);
-    icon->SetSize(size.x, size.y);
-
-    return icon->Ok();
-    */
     return(FALSE);
 #else
     return(FALSE);

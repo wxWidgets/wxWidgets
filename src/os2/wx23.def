@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1946,7 +1946,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6150,7 +6150,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -11623,12 +11623,10 @@ EXPORTS
       Create__8wxBitmapFPvliN23
       ;wxBitmap::GetBitmapForDC(wxDC&) const
       GetBitmapForDC__8wxBitmapCFR4wxDC
-      ;wxBitmap::wxBitmap(const wxString&,long)
-      __ct__8wxBitmapFRC8wxStringl
-      ;wxMask::wxMask(const wxBitmap&)
-      __ct__6wxMaskFRC8wxBitmap
       ;wxBitmap::GetSubBitmap(const wxRect&) const
       GetSubBitmap__8wxBitmapCFRC6wxRect
+      ;wxMask::wxMask(const wxBitmap&)
+      __ct__6wxMaskFRC8wxBitmap
       ;wxMask::Create(const wxBitmap&)
       Create__6wxMaskFRC8wxBitmap
       ;wxBitmapHandler::Create(wxBitmap*,void*,long,int,int,int)
@@ -11660,30 +11658,32 @@ EXPORTS
       __ct__8wxBitmapFPCciN22
       ;wxBitmapRefData::wxBitmapRefData()
       __ct__15wxBitmapRefDataFv
+      ;wxBitmapHandler::Load(wxGDIImage*,int,long,int,int)
+      Load__15wxBitmapHandlerFP10wxGDIImageilN22
       ;wxMask::Create(const wxBitmap&,const wxColour&)
       Create__6wxMaskFRC8wxBitmapRC8wxColour
       ;wxBitmap::ConvertToImage() const
       ConvertToImage__8wxBitmapCFv
       ;wxBitmap::wxBitmap(void*,long,int,int,int)
       __ct__8wxBitmapFPvliN23
-      ;wxBitmap::LoadFile(const wxString&,long)
-      LoadFile__8wxBitmapFRC8wxStringl
+      ;wxBitmap::LoadFile(int,long)
+      LoadFile__8wxBitmapFil
       ;wxBitmap::CreateFromImage(const wxImage&,int)
       CreateFromImage__8wxBitmapFRC7wxImagei
       ;wxBitmap::SetPalette(const wxPalette&)
       SetPalette__8wxBitmapFRC9wxPalette
       ;wxBitmapHandler::Save(wxGDIImage*,const wxString&,int)
       Save__15wxBitmapHandlerFP10wxGDIImageRC8wxStringi
-      ;wxBitmapHandler::LoadFile(wxBitmap*,const wxString&,unsigned long,long,int,int)
-      LoadFile__15wxBitmapHandlerFP8wxBitmapRC8wxStringUlliT5
       ;wxConstructorForwxBitmapHandler()
       wxConstructorForwxBitmapHandler__Fv
+      ;wxBitmapHandler::LoadFile(wxBitmap*,int,long,int,int)
+      LoadFile__15wxBitmapHandlerFP8wxBitmapilN22
       ;wxBitmapRefData::Free()
       Free__15wxBitmapRefDataFv
+      ;wxBitmap::wxBitmap(int,long)
+      __ct__8wxBitmapFil
       ;wxBitmap::sm_classwxBitmap
       sm_classwxBitmap__8wxBitmap
-      ;wxBitmapHandler::Load(wxGDIImage*,const wxString&,unsigned long,long,int,int)
-      Load__15wxBitmapHandlerFP10wxGDIImageRC8wxStringUlliT5
       ;wxConstructorForwxBitmap()
       wxConstructorForwxBitmap__Fv
       ;wxConstructorForwxMask()
@@ -12915,6 +12915,8 @@ EXPORTS
       wxConstructorForwxICOResourceHandler__Fv
       ;wxBMPFileHandler::sm_classwxBMPFileHandler
       sm_classwxBMPFileHandler__16wxBMPFileHandler
+      ;wxBMPResourceHandler::LoadFile(wxBitmap*,int,long,int,int)
+      LoadFile__20wxBMPResourceHandlerFP8wxBitmapilN22
       ;wxGDIImage::CleanUpHandlers()
       CleanUpHandlers__10wxGDIImageFv
       ;wxGDIImage::AddHandler(wxGDIImageHandler*)
@@ -12922,8 +12924,6 @@ EXPORTS
       ;wxGDIImage::FindHandler(long)
       FindHandler__10wxGDIImageFl
       __vft20wxBMPResourceHandler8wxObject
-      ;wxBMPResourceHandler::LoadFile(wxBitmap*,const wxString&,unsigned long,long,int,int)
-      LoadFile__20wxBMPResourceHandlerFP8wxBitmapRC8wxStringUlliT5
       ;wxICOResourceHandler::LoadIcon(wxIcon*,const wxString&,unsigned long,long,int,int)
       LoadIcon__20wxICOResourceHandlerFP6wxIconRC8wxStringUlliT5
       ;wxConstructorForwxBMPResourceHandler()
@@ -13776,58 +13776,6 @@ EXPORTS
       __dt__12wxPenRefDataFv
       ;wxPen::SetColour(const wxColour&)
       SetColour__5wxPenFRC8wxColour
-  ;From object file:  ..\os2\pnghand.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxPNGReader::Create(int,int,int,int)
-      Create__11wxPNGReaderFiN31
-      ;wxCopyPalette(const wxPalette*)
-      wxCopyPalette__FPC9wxPalette
-      ;wxPNGFileHandler::SaveFile(wxBitmap*,const wxString&,int,const wxPalette*)
-      SaveFile__16wxPNGFileHandlerFP8wxBitmapRC8wxStringiPC9wxPalette
-      ;wxPNGReader::GetIndex(int,int)
-      GetIndex__11wxPNGReaderFiT1
-      ;wxPNGReader::~wxPNGReader()
-      __dt__11wxPNGReaderFv
-      ;wxPNGReader::ReadFile(char*)
-      ReadFile__11wxPNGReaderFPc
-      ;wxPNGReader::SetRGB(int,int,unsigned char,unsigned char,unsigned char)
-      SetRGB__11wxPNGReaderFiT1UcN23
-      ;wxPNGReader::SetPalette(int,rgb_color_struct*)
-      SetPalette__11wxPNGReaderFiP16rgb_color_struct
-      ;wxPNGReader::InstantiateBitmap(wxBitmap*)
-      InstantiateBitmap__11wxPNGReaderFP8wxBitmap
-      ;wxPNGReader::SetPalette(int,unsigned char*,unsigned char*,unsigned char*)
-      SetPalette__11wxPNGReaderFiPUcN22
-      ;wxConstructorForwxPNGFileHandler()
-      wxConstructorForwxPNGFileHandler__Fv
-      ;wxPNGReader::NullData()
-      NullData__11wxPNGReaderFv
-      ;wxPNGReader::SaveFile(char*)
-      SaveFile__11wxPNGReaderFPc
-      ;wxPNGReader::SetIndex(int,int,int)
-      SetIndex__11wxPNGReaderFiN21
-      ;wxPNGReader::SaveXPM(char*,char*)
-      SaveXPM__11wxPNGReaderFPcT1
-      ;wxPNGFileHandler::LoadFile(wxBitmap*,const wxString&,unsigned long,long,int,int)
-      LoadFile__16wxPNGFileHandlerFP8wxBitmapRC8wxStringUlliT5
-      __vft11wxPNGReader
-      ;ima_png_error(png_struct_def*,char*)
-      ima_png_error__FP14png_struct_defPc
-      ;wxPNGReader::wxPNGReader(char*)
-      __ct__11wxPNGReaderFPc
-      ;wxPNGReader::GetRGB(int,int,unsigned char*,unsigned char*,unsigned char*)
-      GetRGB__11wxPNGReaderFiT1PUcN23
-      __vft16wxPNGFileHandler8wxObject
-      ;wxPNGReader::SetPalette(wxPalette*)
-      SetPalette__11wxPNGReaderFP9wxPalette
-      ;wxPNGReader::wxPNGReader()
-      __ct__11wxPNGReaderFv
-      ;wxPNGFileHandler::sm_classwxPNGFileHandler
-      sm_classwxPNGFileHandler__16wxPNGFileHandler
-      ;wxPNGReader::GetBitmap()
-      GetBitmap__11wxPNGReaderFv
-      ;wxPNGReader::CreateMask()
-      CreateMask__11wxPNGReaderFv
   ;From object file:  ..\os2\popupwin.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft13wxPopupWindow8wxObject
@@ -14717,6 +14665,8 @@ EXPORTS
       CreateTool__9wxToolBarFP9wxControl
       ;wxToolBar::DoToggleTool(wxToolBarToolBase*,unsigned long)
       DoToggleTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::DeleteToolByPos(unsigned int)
+      DeleteToolByPos__9wxToolBarFUi
       ;wxToolBar::SpringUpButton(int)
       SpringUpButton__9wxToolBarFi
       ;wxToolBar::Init()
@@ -14725,10 +14675,14 @@ EXPORTS
       sm_eventTable__9wxToolBar
       ;wxToolBar::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__9wxToolBarFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
+      ;wxToolBar::InsertControl(unsigned int,wxControl*)
+      InsertControl__9wxToolBarFUiP9wxControl
       ;wxToolBar::OnKillFocus(wxFocusEvent&)
       OnKillFocus__9wxToolBarFR12wxFocusEvent
       ;wxToolBar::LowerTool(wxToolBarToolBase*,unsigned long)
       LowerTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::InsertSeparator(unsigned int)
+      InsertSeparator__9wxToolBarFUi
       ;wxToolBar::DoInsertTool(unsigned int,wxToolBarToolBase*)
       DoInsertTool__9wxToolBarFUiP17wxToolBarToolBase
       ;wxToolBar::Realize()
@@ -14737,11 +14691,15 @@ EXPORTS
       sm_eventTableEntries__9wxToolBar
       ;wxToolBar::sm_classwxToolBar
       sm_classwxToolBar__9wxToolBar
-      ;wxToolBar::OnPaint(wxPaintEvent&)
-      OnPaint__9wxToolBarFR12wxPaintEvent
+      ;wxToolBar::InsertTool(unsigned int,int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,const wxString&,const wxString&,wxObject*)
+      InsertTool__9wxToolBarFUiiRC8wxStringRC8wxBitmapT410wxItemKindN23P8wxObject
       __vft9wxToolBar8wxObject
       ;wxToolBar::RaiseTool(wxToolBarToolBase*,unsigned long)
       RaiseTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::OnPaint(wxPaintEvent&)
+      OnPaint__9wxToolBarFR12wxPaintEvent
+      ;wxToolBar::DeleteTool(int)
+      DeleteTool__9wxToolBarFi
       ;wxToolBar::DrawTool(wxDC&,wxToolBarToolBase*)
       DrawTool__9wxToolBarFR4wxDCP17wxToolBarToolBase
       ;wxToolBar::OnSize(wxSizeEvent&)

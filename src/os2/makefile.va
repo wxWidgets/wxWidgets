@@ -519,7 +519,6 @@ OS2OBJS = \
   ..\os2\$D\ownerdrw.obj \
   ..\os2\$D\palette.obj \
   ..\os2\$D\pen.obj \
-  ..\os2\$D\pnghand.obj \
   ..\os2\$D\popupwin.obj \
   ..\os2\$D\print.obj \
   ..\os2\$D\radiobox.obj \
@@ -603,7 +602,6 @@ OS2LIBOBJS2 = \
   ownerdrw.obj \
   palette.obj \
   pen.obj \
-  pnghand.obj \
   popupwin.obj \
   print.obj \
   radiobox.obj \
@@ -962,7 +960,6 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\ownerdrw.obj
   copy ..\os2\$D\palette.obj
   copy ..\os2\$D\pen.obj
-  copy ..\os2\$D\pnghand.obj
   copy ..\os2\$D\popupwin.obj
   copy ..\os2\$D\print.obj
   copy ..\os2\$D\radiobox.obj

@@ -228,7 +228,10 @@ wxBitmap wxDisableBitmap(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
     }
-    vNewBmp.SetMask(rBmp.GetMask());
+    wxMask*                         pNewMask;
+
+    pNewMask = new wxMask(pMask->GetMaskBitmap());
+    vNewBmp.SetMask(pNewMask);
     free(pucBits);
     ::GpiSetBitmap(hPS, NULLHANDLE);
     ::GpiDestroyPS(hPS);
@@ -396,6 +399,92 @@ wxToolBarToolBase* wxToolBar::DoAddTool(
                                    );
 } // end of wxToolBar::DoAddTool
 
+bool wxToolBar::DeleteTool(
+  int                               nId
+)
+{
+    bool                            bOk = wxToolBarBase::DeleteTool(nId);
+
+    if (bOk)
+    {
+        Realize();
+    }
+    return bOk;
+} // end of wxToolBar::DeleteTool
+
+bool wxToolBar::DeleteToolByPos(
+  size_t                            nPos
+)
+{
+    bool                            bOk = wxToolBarBase::DeleteToolByPos(nPos);
+
+    if (bOk)
+    {
+        Realize();
+    }
+    return bOk;
+} // end of wxToolBar::DeleteTool
+
+wxToolBarToolBase* wxToolBar::InsertControl(
+  size_t                            nPos
+, wxControl*                        pControl
+)
+{
+    wxToolBarToolBase*              pTool = wxToolBarBase::InsertControl( nPos
+                                                                         ,pControl
+                                                                        );
+    if (m_bInitialized)
+    {
+        Realize();
+        Refresh();
+    }
+    return pTool;
+} // end of wxToolBar::InsertControl
+
+wxToolBarToolBase* wxToolBar::InsertSeparator(
+  size_t                            nPos
+)
+{
+    wxToolBarToolBase*              pTool = wxToolBarBase::InsertSeparator(nPos);
+
+    if (m_bInitialized)
+    {
+        Realize();
+        Refresh();
+    }
+    return pTool;
+} // end of wxToolBar::InsertSeparator
+
+wxToolBarToolBase* wxToolBar::InsertTool(
+  size_t                            nPos
+, int                               nId
+, const wxString&                   rsLabel
+, const wxBitmap&                   rBitmap
+, const wxBitmap&                   rBmpDisabled
+, wxItemKind                        eKind
+, const wxString&                   rsShortHelp
+, const wxString&                   rsLongHelp
+, wxObject*                         pClientData
+)
+{
+    wxToolBarToolBase*              pTool = wxToolBarBase::InsertTool( nPos
+                                                                      ,nId
+                                                                      ,rsLabel
+                                                                      ,rBitmap
+                                                                      ,rBmpDisabled
+                                                                      ,eKind
+                                                                      ,rsShortHelp
+                                                                      ,rsLongHelp
+                                                                      ,pClientData
+                                                                     );
+    if (m_bInitialized)
+    {
+        Realize();
+        Refresh();
+    }
+    return pTool;
+} // end of wxToolBar::InsertTool
+
 bool wxToolBar::DoInsertTool(
   size_t                            WXUNUSED(nPos)
 , wxToolBarToolBase*                pToolBase
@@ -511,7 +600,7 @@ bool wxToolBar::Create(
         if (nHeight <= 0)
         {
             if (lStyle & wxTB_TEXT)
-                nHeight = m_defaultHeight + 18;
+                nHeight = m_defaultHeight + m_vTextY;
             else
                 nHeight = m_defaultHeight;
         }
@@ -575,18 +664,43 @@ bool wxToolBar::Realize()
             //
             // Set the height according to the font and the border size
             //
-            nMaxToolWidth = m_vTextX;
+            if (pTool->GetWidth() > m_vTextX)
+                nMaxToolWidth = pTool->GetWidth() + 4;
+            else
+                nMaxToolWidth = m_vTextX;
             if (pTool->GetHeight() + m_vTextY > nMaxToolHeight)
                 nMaxToolHeight = pTool->GetHeight() + m_vTextY;
         }
         else
         {
             if (pTool->GetWidth() > nMaxToolWidth )
-                nMaxToolWidth = pTool->GetWidth();
+                nMaxToolWidth = pTool->GetWidth() + 4;
             if (pTool->GetHeight() > nMaxToolHeight)
                 nMaxToolHeight = pTool->GetHeight();
         }
         pNode = pNode->GetNext();
+    }
+
+    wxCoord                         vTbWidth = 0L;
+    wxCoord                         vTbHeight = 0L;
+
+    GetSize( &vTbWidth
+            ,&vTbHeight
+           );
+    if (vTbHeight < nMaxToolHeight)
+    {
+        SetSize( -1L
+                ,-1L
+                ,vTbWidth
+                ,nMaxToolHeight + 4
+               );
+        if (GetParent()->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            wxFrame*            pFrame = wxDynamicCast(GetParent(), wxFrame);
+
+            if (pFrame)
+                pFrame->PositionToolBar();
+        }
     }
 
     int                             nSeparatorSize = m_toolSeparation;
@@ -605,7 +719,7 @@ bool wxToolBar::Realize()
                 if (m_nCurrentRowsOrColumns >= m_maxCols)
                     m_vLastY += nSeparatorSize;
                 else
-                    m_vLastX += nSeparatorSize;
+                    m_vLastX += nSeparatorSize * 4;
             }
             else
             {
@@ -614,7 +728,7 @@ bool wxToolBar::Realize()
                 if (m_nCurrentRowsOrColumns >= m_maxRows)
                     m_vLastX += nSeparatorSize;
                 else
-                    m_vLastY += nSeparatorSize;
+                    m_vLastY += nSeparatorSize * 4;
             }
         }
         else if (pTool->IsButton())
@@ -671,6 +785,7 @@ bool wxToolBar::Realize()
 
     m_maxWidth += m_xMargin;
     m_maxHeight += m_yMargin;
+    m_bInitialized = TRUE;
     return TRUE;
 } // end of wxToolBar::Realize
 
@@ -781,7 +896,7 @@ void wxToolBar::OnMouseEvent(
             if (rEvent.LeftIsDown())
                 SpringUpButton(m_nCurrentTool);
             pTool = (wxToolBarTool *)FindById(m_nCurrentTool);
-            if (pTool && pTool->IsToggled())
+            if (pTool && !pTool->IsToggled())
             {
                 RaiseTool( pTool
                           ,FALSE
@@ -809,6 +924,12 @@ void wxToolBar::OnMouseEvent(
                 }
                 DrawTool(pTool);
             }
+            wxToolBarTool*          pOldTool = (wxToolBarTool*)FindById(m_nCurrentTool);
+
+            if (pOldTool && !pTool->IsToggled())
+                RaiseTool( pOldTool
+                          ,FALSE
+                         );
             m_nCurrentTool = pTool->GetId();
             OnMouseEnter(m_nCurrentTool);
             if (!pTool->IsToggled())
@@ -948,11 +1069,23 @@ void wxToolBar::DrawTool(
                               ,&vX
                               ,&vY
                              );
-            vLeft += (wxCoord)((m_vTextX - vX)/2);
-            rDc.DrawText( pTool->GetLabel()
-                         ,vLeft
-                         ,pTool->m_vY + m_vTextY + 4 // a bit of margin
-                        );
+            if (pTool->GetWidth() > vX) // large tools
+            {
+                vLeft = pTool->m_vX + (pTool->GetWidth() - vX);
+                GetSize(&vX, &vY);
+                rDc.DrawText( pTool->GetLabel()
+                             ,vLeft
+                             ,vY - (m_vTextY - 2)
+                            );
+            }
+            else  // normal tools
+            {
+                vLeft += (wxCoord)((m_vTextX - vX)/2);
+                rDc.DrawText( pTool->GetLabel()
+                             ,vLeft
+                             ,pTool->m_vY + m_vTextY + 4 // a bit of margin
+                            );
+            }
         }
     }
     else
@@ -1013,6 +1146,10 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
     wxCoord                         vTextY = 0;
     wxCoord                         vTBarHeight = 0;
 
+    GetSize( NULL
+            ,&vTBarHeight
+           );
+    vY = vTBarHeight - vY;
     wxToolBarToolsList::Node* pNode = m_tools.GetFirst();
     while (pNode)
     {
@@ -1133,14 +1270,22 @@ void wxToolBar::LowerTool (
 
     if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
     {
-        vX = pTool->m_vX - (wxCoord)(pTool->GetWidth()/2);
+        if (pTool->GetWidth() > m_vTextX)
+        {
+            vX = pTool->m_vX - 2;
+            vWidth = pTool->GetWidth() + 4;
+        }
+        else
+        {
+            vX = pTool->m_vX - (wxCoord)(pTool->GetWidth()/2);
+            vWidth = m_vTextX + 4;
+        }
         vY = pTool->m_vY - 2;
-        vWidth = m_vTextX + 4;
         vHeight = pTool->GetHeight() + m_vTextY + 2;
     }
     else
     {
-        vX = pTool->m_vX;
+        vX = pTool->m_vX - 2;
         vY = pTool->m_vY - 2;
         vWidth = pTool->GetWidth() + 4;
         vHeight = pTool->GetHeight() + 4;
@@ -1205,14 +1350,22 @@ void wxToolBar::RaiseTool (
 
     if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
     {
-        vX = pTool->m_vX - (wxCoord)(pTool->GetWidth()/2);
+        if (pTool->GetWidth() > m_vTextX)
+        {
+            vX = pTool->m_vX - 2;
+            vWidth = pTool->GetWidth() + 4;
+        }
+        else
+        {
+            vX = pTool->m_vX - (wxCoord)(pTool->GetWidth()/2);
+            vWidth = m_vTextX + 4;
+        }
         vY = pTool->m_vY - 2;
-        vWidth = m_vTextX + 4;
         vHeight = pTool->GetHeight() + m_vTextY + 2;
     }
     else
     {
-        vX = pTool->m_vX;
+        vX = pTool->m_vX - 2;
         vY = pTool->m_vY - 2;
         vWidth = pTool->GetWidth() + 4;
         vHeight = pTool->GetHeight() + 4;

@@ -295,12 +295,12 @@ wxBitmap::wxBitmap(
 } // end of wxBitmap::wxBitmap
 
 wxBitmap::wxBitmap(
-  const wxString&                   rFilename
+  int                               nId
 , long                              lType
 )
 {
     Init();
-    LoadFile( rFilename
+    LoadFile( nId
              ,(int)lType
             );
 } // end of wxBitmap::wxBitmap
@@ -411,7 +411,7 @@ bool wxBitmap::CreateFromXpm(
 } // end of wxBitmap::CreateFromXpm
 
 bool wxBitmap::LoadFile(
-  const wxString&                   rFilename
+  int                               nId
 , long                              lType
 )
 {
@@ -428,8 +428,7 @@ bool wxBitmap::LoadFile(
         m_refData = new wxBitmapRefData;
 
         return(pHandler->LoadFile( this
-                                  ,rFilename
-                                  ,hPs
+                                  ,nId
                                   ,lType
                                   , -1
                                   , -1
@@ -437,14 +436,7 @@ bool wxBitmap::LoadFile(
     }
     else
     {
-        wxImage                     vImage;
-
-        if (!vImage.LoadFile(rFilename, lType) || !vImage.Ok() )
-            return(FALSE);
-
-        *this = wxBitmap(vImage);
-
-        return(TRUE);
+        return(FALSE);
     }
 } // end of wxBitmap::LoadFile
 
@@ -1481,8 +1473,7 @@ bool wxBitmapHandler::Create(
 
 bool wxBitmapHandler::Load(
   wxGDIImage*                       pImage
-, const wxString&                   rName
-, HPS                               hPs
+, int                               nId
 , long                              lFlags
 , int                               nWidth
 , int                               nHeight
@@ -1493,8 +1484,7 @@ bool wxBitmapHandler::Load(
                                                            );
 
     return(pBitmap ? LoadFile( pBitmap
-                              ,rName
-                              ,hPs
+                              ,nId
                               ,lFlags
                               ,nWidth
                               ,nHeight
@@ -1531,8 +1521,7 @@ bool wxBitmapHandler::Create(
 
 bool wxBitmapHandler::LoadFile(
   wxBitmap*                         WXUNUSED(pBitmap)
-, const wxString&                   WXUNUSED(rName)
-, HPS                               WXUNUSED(hPs)
+, int                               WXUNUSED(nId)
 , long                              WXUNUSED(lType)
 , int                               WXUNUSED(nDesiredWidth)
 , int                               WXUNUSED(nDesiredHeight)
