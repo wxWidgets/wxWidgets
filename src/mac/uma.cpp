@@ -379,7 +379,7 @@ GrafPtr		UMAGetWindowPort( WindowRef inWindowRef )
 {
 	wxASSERT( inWindowRef != NULL ) ;
 #if TARGET_CARBON 
-	return GetWindowPort( inWindowRef ) ; 
+	return (GrafPtr) GetWindowPort( inWindowRef ) ; 
 #else
 	return (GrafPtr) inWindowRef ;
 #endif
