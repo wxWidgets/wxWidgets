@@ -126,7 +126,7 @@ public:
 
 private:
     // free the data
-    inline void Free();
+    void Free();
 
     // the data
     size_t     m_size;
