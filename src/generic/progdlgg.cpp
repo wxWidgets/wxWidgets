@@ -62,7 +62,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    m_parent = parent;
    m_maximum = maximum;
 
-   wxFrame::Create(m_parent, -1, title);
+   wxFrame::Create(m_parent, -1, title, wxDefaultPosition,
+                   wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 
    wxLayoutConstraints *c;
