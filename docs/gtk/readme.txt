@@ -7,13 +7,10 @@ wxWindows GUI library.
 wxWindows no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
 GTK 1.2.6 or above is recommended although some programs 
-will work with GTK 1.2.3 onwards.
+will work with GTK 1.2.3 onwards. There is now beta support
+for GTK 2.0.
 
-More information is available from my homepage at:
-
-  http://wesley.informatik.uni-freiburg.de/~wxxt
-  
-and about the wxWindows project as a whole (and the MSW
+More info about the wxWindows project (and the Windows
 and Motif ports in particular) can be found at Julian's 
 homepage at:
 

@@ -1061,6 +1061,13 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.mms $(DISTDIR)/samples/minimal
 
+	mkdir $(DISTDIR)/samples/mobile
+	cp $(SAMPDIR)/mobile/Makefile.in $(DISTDIR)/samples/mobile
+	mkdir $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/Makefile.in $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/*.cpp $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/*.h $(DISTDIR)/samples/mobile/wxedit
+    
 	mkdir $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup

@@ -87,6 +87,8 @@ private:
     bool m_isInAssert;
 #endif // __WXDEBUG__
 
+    bool CallInternalIdle( wxWindow* win );
+    
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };

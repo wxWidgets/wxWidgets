@@ -486,10 +486,35 @@ bool wxApp::SendIdleEvents()
         wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
+            
         node = node->GetNext();
     }
 
+    node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        CallInternalIdle( win );
+        
+        node = node->GetNext();
+    }
     return needMore;
+}
+
+bool wxApp::CallInternalIdle( wxWindow* win )
+{
+    win->OnInternalIdle();
+
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        CallInternalIdle( win );
+
+        node = node->Next();
+    }
+    
+    return TRUE;
 }
 
 bool wxApp::SendIdleEvents( wxWindow* win )
@@ -514,8 +539,6 @@ bool wxApp::SendIdleEvents( wxWindow* win )
         node = node->Next();
     }
     
-    win->OnInternalIdle();
-
     return needMore;
 }
 

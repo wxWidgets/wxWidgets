@@ -1,6 +1,23 @@
 
 *** wxWindows 2.3.3 ***
 
+Beta support for GTK 2.0.
+
+Added wxArtProvider for changing default icons and more.
+
+Corrected wxScrolledWindow in some rare cases.
+
+Added wxIconBundle for mini- and normal icons.
+
+Made wxWindow::SetFocus() work before a wxDialog
+is created. Until now always the first item
+was focussed.
+
+Corrected wxComboBox's semantics of pressing <Enter>.
+
+Corrected SeekI() return values and other related functions
+in wxFilterStream and wxBufferedStream.
+
 Implemented new ref-counting for GDI classes.
 
 New implemenation of wxCondition.
@@ -39,7 +56,7 @@ Added IFF image handler.
 
 Added ICO, CUR and ANI image handler.
 
-wxFrame::SetMenuBar() corrected.
+wxFrame::SetMenuBar() corrected (for NULL etc.)
 
 wxButton honours wxBU_EXACTFIT.
 

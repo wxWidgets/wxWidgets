@@ -551,35 +551,13 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     }
 #endif
 
-#ifndef __WXUNIVERSAL__
-    GtkPizza *pizza = GTK_PIZZA (widget);
-
-    if (win->GetThemeEnabled())
-    {
-        wxWindow *parent = win->GetParent();
-        while (parent && !parent->IsTopLevel())
-            parent = parent->GetParent();
-        if (!parent)
-            parent = win;
-
-        gtk_paint_flat_box (parent->m_widget->style,
-                            pizza->bin_window,
-                            GTK_STATE_NORMAL,
-                            GTK_SHADOW_NONE,
-                            &gdk_event->area,
-                            parent->m_widget,
-                            (char *)"base",
-                            0, 0, -1, -1);
-    }
-#endif
-
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
     // Actual redrawing takes place in idle time.
-    win->Update();
+    win->GtkUpdate();
 
 #ifdef __WXGTK20__
 
@@ -686,7 +664,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 
     // Actual redrawing takes place in idle time.
 
-    win->Update();
+    win->GtkUpdate();
 
 #ifndef __WXUNIVERSAL__
     // Redraw child widgets
@@ -2902,7 +2880,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 void wxWindowGTK::OnInternalIdle()
 {
     // Update invalidated regions.
-    Update();
+    GtkUpdate();
 
     // Synthetize activate events.
     if ( g_sendActivateEvent != -1 )
@@ -3501,6 +3479,11 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 
 void wxWindowGTK::Update()
 {
+    GtkUpdate();
+}
+
+void wxWindowGTK::GtkUpdate()
+{
 #ifdef __WXGTK20__
     if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
         gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
@@ -3538,11 +3521,41 @@ void wxWindowGTK::GtkSendPaintEvents()
             }
             gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
 
+            // widget to draw on
+            GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
+            
+            // find ancestor from which to steal background
+            wxWindow *parent = GetParent();
+            while (parent && !parent->IsTopLevel())
+                parent = parent->GetParent();
+            if (!parent)
+                parent = this;
+    
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                gdk_draw_rectangle( GTK_PIZZA(m_wxwindow)->bin_window, g_eraseGC, 1,
-                                       upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                if (GetThemeEnabled())
+                { 
+                    GdkRectangle rect;
+                    rect.x = upd.GetX();
+                    rect.y = upd.GetY();
+                    rect.width = upd.GetWidth();
+                    rect.height = upd.GetHeight();
+                    
+                    gtk_paint_flat_box( parent->m_widget->style,
+                        pizza->bin_window,
+                        GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        &rect,
+                        parent->m_widget,
+                        (char *)"base",
+                        0, 0, -1, -1 );
+                }
+                else
+                {
+                    gdk_draw_rectangle( pizza->bin_window, g_eraseGC, 1,
+                                        upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                }
                 upd ++;
             }
         }
@@ -3619,7 +3632,7 @@ void wxWindowGTK::Clear()
         m_clearRegion.Union( 0,0,size.x,size.y );
         
         // Better do this in idle?
-        Update();
+        GtkUpdate();
     }
 }
 

@@ -112,6 +112,9 @@ public:
     // OnInternalIdle
     virtual void OnInternalIdle();
 
+    // Internal represention of Update()
+    void GtkUpdate();
+    
     // For delayed background 
     void GtkSetBackgroundColour( const wxColour &colour );
     void GtkSetForegroundColour( const wxColour &colour );
