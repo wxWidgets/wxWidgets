@@ -38,17 +38,18 @@ class wxPostScriptDC;
 class WXDLLEXPORT wxPostScriptDC: public wxDC
 {
 public:
-  wxPostScriptDC();
+    wxPostScriptDC();
 
-  // Recommended constructor
-  wxPostScriptDC(const wxPrintData& printData);
+    // Recommended constructor
+    wxPostScriptDC(const wxPrintData& printData);
   
-  ~wxPostScriptDC();
+    // Recommended destructor :-)
+    ~wxPostScriptDC();
 
 #if WXWIN_COMPATIBILITY_2_2
-  wxPostScriptDC( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL )
-      { Create( output, interactive, parent ); }
-  bool Create ( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL );
+    wxPostScriptDC( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL )
+        { Create( output, interactive, parent ); }
+    bool Create ( const wxString &output, bool interactive = FALSE, wxWindow *parent = NULL );
 #endif
 
   virtual bool Ok() const;
@@ -132,6 +133,12 @@ private:
     static float ms_PSScaleFactor;
 
 protected:
+#if wxUSE_PANGO
+    PangoContext *m_context;
+    PangoLayout *m_layout;
+    PangoFontDescription *m_fontdesc;
+#endif
+
     FILE*             m_pstream;    // PostScript output stream
     wxString          m_title;
     unsigned char     m_currentRed;
