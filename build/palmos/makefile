@@ -41,9 +41,24 @@ PRC_NAME = wxWidgets.prc
 
 # TODO: Update all sources and resources
 
-SOURCES =  ../../samples/minimal/minimal.cpp \
-../../src/common/accesscmn.cpp \
+BASE_CMN_SRC = \
 ../../src/common/appbase.cpp \
+../../src/common/archive.cpp \
+../../src/common/clntdata.cpp \
+../../src/common/cmdline.cpp \
+../../src/common/config.cpp \
+../../src/common/datetime.cpp \
+../../src/common/datstrm.cpp \
+../../src/common/dircmn.cpp \
+../../src/common/dynarray.cpp \
+../../src/common/dynlib.cpp \
+../../src/common/dynload.cpp \
+../../src/common/encconv.cpp \
+../../src/common/extended.c
+
+SOURCES =  ../../samples/minimal/minimal.cpp \
+$(BASE_CMN_SRC) \
+../../src/common/accesscmn.cpp \
 ../../src/common/appcmn.cpp \
 ../../src/common/artprov.cpp \
 ../../src/common/artstd.cpp \
@@ -51,22 +66,17 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/common/bookctrl.cpp \
 ../../src/common/choiccmn.cpp \
 ../../src/common/clipcmn.cpp \
-../../src/common/clntdata.cpp \
 ../../src/common/cmdproc.cpp \
 ../../src/common/cmndata.cpp \
-../../src/common/config.cpp \
 ../../src/common/containr.cpp \
 ../../src/common/cshelp.cpp \
 ../../src/common/ctrlcmn.cpp \
 ../../src/common/ctrlsub.cpp \
 ../../src/common/datacmn.cpp \
-../../src/common/datetime.cpp \
-../../src/common/datstrm.cpp \
 ../../src/common/db.cpp \
 ../../src/common/dbgrid.cpp \
 ../../src/common/dbtable.cpp \
 ../../src/common/dcbase.cpp \
-../../src/common/dircmn.cpp \
 ../../src/common/dlgcmn.cpp \
 ../../src/common/dndcmn.cpp \
 ../../src/common/dobjcmn.cpp \
@@ -74,11 +84,7 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/common/docview.cpp \
 ../../src/common/dpycmn.cpp \
 ../../src/common/dseldlg.cpp \
-../../src/common/dynarray.cpp \
-../../src/common/dynlib.cpp \
-../../src/common/dynload.cpp \
 ../../src/common/effects.cpp \
-../../src/common/encconv.cpp \
 ../../src/common/event.cpp \
 ../../src/common/fddlgcmn.cpp \
 ../../src/common/ffile.cpp \
