@@ -193,14 +193,6 @@ class wxImagePtr(wxObjectPtr):
     def __del__(self,imagec=imagec):
         if self.thisown == 1 :
             imagec.delete_wxImage(self)
-    def ConvertToBitmap(self, *_args, **_kwargs):
-        val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
-    def ConvertToMonoBitmap(self, *_args, **_kwargs):
-        val = apply(imagec.wxImage_ConvertToMonoBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
     def Create(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Create,(self,) + _args, _kwargs)
         return val
@@ -325,6 +317,14 @@ class wxImagePtr(wxObjectPtr):
         return val
     def CountColours(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_CountColours,(self,) + _args, _kwargs)
+        return val
+    def ConvertToBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
+        return val
+    def ConvertToMonoBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToMonoBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
         return "<C wxImage instance at %s>" % (self.this,)

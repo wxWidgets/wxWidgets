@@ -93,6 +93,9 @@ class wxToolBarToolBasePtr(wxObjectPtr):
     def GetStyle(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetStyle,(self,) + _args, _kwargs)
         return val
+    def GetKind(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarToolBase_GetKind,(self,) + _args, _kwargs)
+        return val
     def IsEnabled(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_IsEnabled,(self,) + _args, _kwargs)
         return val
@@ -183,6 +186,12 @@ class wxToolBarBasePtr(wxControlPtr):
         return val
     def AddSimpleTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_AddSimpleTool,(self,) + _args, _kwargs)
+        return val
+    def AddCheckTool(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_AddCheckTool,(self,) + _args, _kwargs)
+        return val
+    def AddRadioTool(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarBase_AddRadioTool,(self,) + _args, _kwargs)
         return val
     def InsertTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarBase_InsertTool,(self,) + _args, _kwargs)

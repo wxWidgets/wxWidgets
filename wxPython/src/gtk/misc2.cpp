@@ -2184,11 +2184,11 @@ static PyObject *_wrap_wxExecute(PyObject *self, PyObject *args, PyObject *kwarg
     PyObject * _resultobj;
     long  _result;
     wxString * _arg0;
-    int  _arg1 = (int ) FALSE;
+    int  _arg1 = (int ) (wxEXEC_ASYNC);
     wxPyProcess * _arg2 = (wxPyProcess *) NULL;
     PyObject * _obj0 = 0;
     PyObject * _argo2 = 0;
-    char *_kwnames[] = { "command","sync","process", NULL };
+    char *_kwnames[] = { "command","flags","process", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iO:wxExecute",_kwnames,&_obj0,&_arg1,&_argo2)) 
@@ -10492,6 +10492,9 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxLOG_Progress", PyInt_FromLong((long) wxLOG_Progress));
 	 PyDict_SetItemString(d,"wxLOG_User", PyInt_FromLong((long) wxLOG_User));
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
+	 PyDict_SetItemString(d,"wxEXEC_ASYNC", PyInt_FromLong((long) wxEXEC_ASYNC));
+	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
+	 PyDict_SetItemString(d,"wxEXEC_NOHIDE", PyInt_FromLong((long) wxEXEC_NOHIDE));
 	 PyDict_SetItemString(d,"wxMAILCAP_STANDARD", PyInt_FromLong((long) wxMAILCAP_STANDARD));
 	 PyDict_SetItemString(d,"wxMAILCAP_NETSCAPE", PyInt_FromLong((long) wxMAILCAP_NETSCAPE));
 	 PyDict_SetItemString(d,"wxMAILCAP_KDE", PyInt_FromLong((long) wxMAILCAP_KDE));
