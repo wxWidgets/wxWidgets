@@ -144,43 +144,40 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
                                wxOrientation orient,
                                int flags)
 {
-    if (win->GetWindowStyle() & wxSP_NO_XP_THEME)
+    if ( !win->HasFlag(wxSP_NO_XP_THEME) )
     {
-        m_rendererNative.DrawSplitterSash(
-                   win, dc, size, position, orient, flags);
-        return;
+        wxUxThemeHandle hTheme(win, L"WINDOW");
+        if ( hTheme )
+        {
+            RECT rect;
+            if ( orient == wxVERTICAL )
+            {
+                rect.left = position;
+                rect.right = position + SASH_WIDTH;
+                rect.top = 0;
+                rect.bottom = size.y;
+            }
+            else // wxHORIZONTAL
+            {
+                rect.left = 0;
+                rect.right = size.x;
+                rect.top = position;
+                rect.bottom = position + SASH_WIDTH;
+            }
+
+            wxUxThemeEngine::Get()->DrawThemeBackground
+                                    (
+                                        (WXHTHEME)hTheme,
+                                        dc.GetHDC(),
+                                        29, // WP_DIALOG: dlg background
+                                        0, // no particular state
+                                        &rect,
+                                        NULL
+                                    );
+            return;
+        }
     }
 
-    // I don't know if it is correct to use the rebar background for the
-    // splitter but it least this works ok in the default theme
-    wxUxThemeHandle hTheme(win, L"REBAR");
-    if ( hTheme )
-    {
-        RECT rect;
-        if ( orient == wxVERTICAL )
-        {
-            rect.left = position;
-            rect.right = position + SASH_WIDTH;
-            rect.top = 0;
-            rect.bottom = size.y;
-        }
-        else // wxHORIZONTAL
-        {
-            rect.left = 0;
-            rect.right = size.x;
-            rect.top = position;
-            rect.bottom = position + SASH_WIDTH;
-        }
-
-        wxUxThemeEngine::Get()->DrawThemeBackground
-                                (
-                                    (WXHTHEME)hTheme,
-                                    dc.GetHDC(),
-                                    3 /* RP_BAND */,
-                                    0 /* no state */ ,
-                                    &rect,
-                                    NULL
-                                );
-    }
+    m_rendererNative.DrawSplitterSash(win, dc, size, position, orient, flags);
 }
 
