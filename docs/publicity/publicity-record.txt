@@ -29,3 +29,32 @@ adcnews@apple.com
 presse@ct.heise.de
 press_releases@mactech.com
 
+2.4.1, 2003-06-13:
+
+wx-users
+wx-announce
+
+comp.os.ms-windows.programmer.misc
+comp.os.ms-windows.programmer.tools
+comp.os.ms-windows.programmer.tools.mfc
+comp.os.ms-windows.programmer.tools.misc
+comp.os.ms-windows.programmer.win32
+comp.windows.ms.programmer
+
+comp.programming
+comp.software-eng
+comp.lang.c++
+comp.os.linux.development.apps
+
+microsoft.public.win32.programmer.3rdparty
+microsoft.public.win32.programmer.tools
+microsoft.public.win32.programmer.ui
+comp.windows.x
+comp.windows.x.announce
+comp.windows.x.motif
+comp.sys.mac.programmer.tools
+borland.public.cppbuilder.thirdpartytools
+
+Submitted to comp.windows.linux.announce via
+cola@stump.algebra.com
+
