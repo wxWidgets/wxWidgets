@@ -12115,7 +12115,13 @@ static int _wrap_ART_TOOLBAR_set(PyObject *_val) {
 static PyObject *_wrap_ART_TOOLBAR_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_TOOLBAR, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_TOOLBAR)->c_str(), (&wxPyART_TOOLBAR)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_TOOLBAR)->c_str(), (&wxPyART_TOOLBAR)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12129,7 +12135,13 @@ static int _wrap_ART_MENU_set(PyObject *_val) {
 static PyObject *_wrap_ART_MENU_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_MENU, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_MENU)->c_str(), (&wxPyART_MENU)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_MENU)->c_str(), (&wxPyART_MENU)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12143,7 +12155,13 @@ static int _wrap_ART_FRAME_ICON_set(PyObject *_val) {
 static PyObject *_wrap_ART_FRAME_ICON_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_FRAME_ICON, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FRAME_ICON)->c_str(), (&wxPyART_FRAME_ICON)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FRAME_ICON)->c_str(), (&wxPyART_FRAME_ICON)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12157,7 +12175,13 @@ static int _wrap_ART_CMN_DIALOG_set(PyObject *_val) {
 static PyObject *_wrap_ART_CMN_DIALOG_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_CMN_DIALOG, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_CMN_DIALOG)->c_str(), (&wxPyART_CMN_DIALOG)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_CMN_DIALOG)->c_str(), (&wxPyART_CMN_DIALOG)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12171,7 +12195,13 @@ static int _wrap_ART_HELP_BROWSER_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_BROWSER_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_BROWSER, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_BROWSER)->c_str(), (&wxPyART_HELP_BROWSER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_BROWSER)->c_str(), (&wxPyART_HELP_BROWSER)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12185,7 +12215,13 @@ static int _wrap_ART_MESSAGE_BOX_set(PyObject *_val) {
 static PyObject *_wrap_ART_MESSAGE_BOX_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_MESSAGE_BOX, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_MESSAGE_BOX)->c_str(), (&wxPyART_MESSAGE_BOX)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_MESSAGE_BOX)->c_str(), (&wxPyART_MESSAGE_BOX)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12199,7 +12235,13 @@ static int _wrap_ART_OTHER_set(PyObject *_val) {
 static PyObject *_wrap_ART_OTHER_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_OTHER, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_OTHER)->c_str(), (&wxPyART_OTHER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_OTHER)->c_str(), (&wxPyART_OTHER)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12213,7 +12255,13 @@ static int _wrap_ART_ADD_BOOKMARK_set(PyObject *_val) {
 static PyObject *_wrap_ART_ADD_BOOKMARK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_ADD_BOOKMARK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_ADD_BOOKMARK)->c_str(), (&wxPyART_ADD_BOOKMARK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_ADD_BOOKMARK)->c_str(), (&wxPyART_ADD_BOOKMARK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12227,7 +12275,13 @@ static int _wrap_ART_DEL_BOOKMARK_set(PyObject *_val) {
 static PyObject *_wrap_ART_DEL_BOOKMARK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_DEL_BOOKMARK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_DEL_BOOKMARK)->c_str(), (&wxPyART_DEL_BOOKMARK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_DEL_BOOKMARK)->c_str(), (&wxPyART_DEL_BOOKMARK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12241,7 +12295,13 @@ static int _wrap_ART_HELP_SIDE_PANEL_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_SIDE_PANEL_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_SIDE_PANEL, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_SIDE_PANEL)->c_str(), (&wxPyART_HELP_SIDE_PANEL)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_SIDE_PANEL)->c_str(), (&wxPyART_HELP_SIDE_PANEL)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12255,7 +12315,13 @@ static int _wrap_ART_HELP_SETTINGS_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_SETTINGS_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_SETTINGS, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_SETTINGS)->c_str(), (&wxPyART_HELP_SETTINGS)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_SETTINGS)->c_str(), (&wxPyART_HELP_SETTINGS)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12269,7 +12335,13 @@ static int _wrap_ART_HELP_BOOK_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_BOOK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_BOOK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_BOOK)->c_str(), (&wxPyART_HELP_BOOK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_BOOK)->c_str(), (&wxPyART_HELP_BOOK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12283,7 +12355,13 @@ static int _wrap_ART_HELP_FOLDER_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_FOLDER_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_FOLDER, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_FOLDER)->c_str(), (&wxPyART_HELP_FOLDER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_FOLDER)->c_str(), (&wxPyART_HELP_FOLDER)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12297,7 +12375,13 @@ static int _wrap_ART_HELP_PAGE_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_PAGE_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP_PAGE, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP_PAGE)->c_str(), (&wxPyART_HELP_PAGE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP_PAGE)->c_str(), (&wxPyART_HELP_PAGE)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12311,7 +12395,13 @@ static int _wrap_ART_GO_BACK_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_BACK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_BACK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_BACK)->c_str(), (&wxPyART_GO_BACK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_BACK)->c_str(), (&wxPyART_GO_BACK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12325,7 +12415,13 @@ static int _wrap_ART_GO_FORWARD_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_FORWARD_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_FORWARD, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_FORWARD)->c_str(), (&wxPyART_GO_FORWARD)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_FORWARD)->c_str(), (&wxPyART_GO_FORWARD)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12339,7 +12435,13 @@ static int _wrap_ART_GO_UP_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_UP_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_UP, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_UP)->c_str(), (&wxPyART_GO_UP)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_UP)->c_str(), (&wxPyART_GO_UP)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12353,7 +12455,13 @@ static int _wrap_ART_GO_DOWN_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_DOWN_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_DOWN, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_DOWN)->c_str(), (&wxPyART_GO_DOWN)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_DOWN)->c_str(), (&wxPyART_GO_DOWN)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12367,7 +12475,13 @@ static int _wrap_ART_GO_TO_PARENT_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_TO_PARENT_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_TO_PARENT, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_TO_PARENT)->c_str(), (&wxPyART_GO_TO_PARENT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_TO_PARENT)->c_str(), (&wxPyART_GO_TO_PARENT)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12381,7 +12495,13 @@ static int _wrap_ART_GO_HOME_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_HOME_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_HOME, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_HOME)->c_str(), (&wxPyART_GO_HOME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_HOME)->c_str(), (&wxPyART_GO_HOME)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12395,7 +12515,13 @@ static int _wrap_ART_FILE_OPEN_set(PyObject *_val) {
 static PyObject *_wrap_ART_FILE_OPEN_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_FILE_OPEN, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FILE_OPEN)->c_str(), (&wxPyART_FILE_OPEN)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FILE_OPEN)->c_str(), (&wxPyART_FILE_OPEN)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12409,7 +12535,13 @@ static int _wrap_ART_PRINT_set(PyObject *_val) {
 static PyObject *_wrap_ART_PRINT_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_PRINT, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_PRINT)->c_str(), (&wxPyART_PRINT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_PRINT)->c_str(), (&wxPyART_PRINT)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12423,7 +12555,13 @@ static int _wrap_ART_HELP_set(PyObject *_val) {
 static PyObject *_wrap_ART_HELP_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_HELP, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HELP)->c_str(), (&wxPyART_HELP)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HELP)->c_str(), (&wxPyART_HELP)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12437,7 +12575,13 @@ static int _wrap_ART_TIP_set(PyObject *_val) {
 static PyObject *_wrap_ART_TIP_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_TIP, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_TIP)->c_str(), (&wxPyART_TIP)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_TIP)->c_str(), (&wxPyART_TIP)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12451,7 +12595,13 @@ static int _wrap_ART_REPORT_VIEW_set(PyObject *_val) {
 static PyObject *_wrap_ART_REPORT_VIEW_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_REPORT_VIEW, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_REPORT_VIEW)->c_str(), (&wxPyART_REPORT_VIEW)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_REPORT_VIEW)->c_str(), (&wxPyART_REPORT_VIEW)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12465,7 +12615,13 @@ static int _wrap_ART_LIST_VIEW_set(PyObject *_val) {
 static PyObject *_wrap_ART_LIST_VIEW_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_LIST_VIEW, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_LIST_VIEW)->c_str(), (&wxPyART_LIST_VIEW)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_LIST_VIEW)->c_str(), (&wxPyART_LIST_VIEW)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12479,7 +12635,13 @@ static int _wrap_ART_NEW_DIR_set(PyObject *_val) {
 static PyObject *_wrap_ART_NEW_DIR_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_NEW_DIR, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_NEW_DIR)->c_str(), (&wxPyART_NEW_DIR)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_NEW_DIR)->c_str(), (&wxPyART_NEW_DIR)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12493,7 +12655,13 @@ static int _wrap_ART_FOLDER_set(PyObject *_val) {
 static PyObject *_wrap_ART_FOLDER_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_FOLDER, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FOLDER)->c_str(), (&wxPyART_FOLDER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FOLDER)->c_str(), (&wxPyART_FOLDER)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12507,7 +12675,13 @@ static int _wrap_ART_GO_DIR_UP_set(PyObject *_val) {
 static PyObject *_wrap_ART_GO_DIR_UP_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_GO_DIR_UP, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_GO_DIR_UP)->c_str(), (&wxPyART_GO_DIR_UP)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_GO_DIR_UP)->c_str(), (&wxPyART_GO_DIR_UP)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12521,7 +12695,13 @@ static int _wrap_ART_EXECUTABLE_FILE_set(PyObject *_val) {
 static PyObject *_wrap_ART_EXECUTABLE_FILE_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_EXECUTABLE_FILE, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_EXECUTABLE_FILE)->c_str(), (&wxPyART_EXECUTABLE_FILE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_EXECUTABLE_FILE)->c_str(), (&wxPyART_EXECUTABLE_FILE)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12535,7 +12715,13 @@ static int _wrap_ART_NORMAL_FILE_set(PyObject *_val) {
 static PyObject *_wrap_ART_NORMAL_FILE_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_NORMAL_FILE, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_NORMAL_FILE)->c_str(), (&wxPyART_NORMAL_FILE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_NORMAL_FILE)->c_str(), (&wxPyART_NORMAL_FILE)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12549,7 +12735,13 @@ static int _wrap_ART_TICK_MARK_set(PyObject *_val) {
 static PyObject *_wrap_ART_TICK_MARK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_TICK_MARK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_TICK_MARK)->c_str(), (&wxPyART_TICK_MARK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_TICK_MARK)->c_str(), (&wxPyART_TICK_MARK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12563,7 +12755,13 @@ static int _wrap_ART_CROSS_MARK_set(PyObject *_val) {
 static PyObject *_wrap_ART_CROSS_MARK_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_CROSS_MARK, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_CROSS_MARK)->c_str(), (&wxPyART_CROSS_MARK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_CROSS_MARK)->c_str(), (&wxPyART_CROSS_MARK)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12577,7 +12775,13 @@ static int _wrap_ART_ERROR_set(PyObject *_val) {
 static PyObject *_wrap_ART_ERROR_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_ERROR, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_ERROR)->c_str(), (&wxPyART_ERROR)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_ERROR)->c_str(), (&wxPyART_ERROR)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12591,7 +12795,13 @@ static int _wrap_ART_QUESTION_set(PyObject *_val) {
 static PyObject *_wrap_ART_QUESTION_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_QUESTION, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_QUESTION)->c_str(), (&wxPyART_QUESTION)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_QUESTION)->c_str(), (&wxPyART_QUESTION)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12605,7 +12815,13 @@ static int _wrap_ART_WARNING_set(PyObject *_val) {
 static PyObject *_wrap_ART_WARNING_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_WARNING, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_WARNING)->c_str(), (&wxPyART_WARNING)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_WARNING)->c_str(), (&wxPyART_WARNING)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12619,7 +12835,13 @@ static int _wrap_ART_INFORMATION_set(PyObject *_val) {
 static PyObject *_wrap_ART_INFORMATION_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_INFORMATION, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_INFORMATION)->c_str(), (&wxPyART_INFORMATION)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_INFORMATION)->c_str(), (&wxPyART_INFORMATION)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -12633,7 +12855,13 @@ static int _wrap_ART_MISSING_IMAGE_set(PyObject *_val) {
 static PyObject *_wrap_ART_MISSING_IMAGE_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyART_MISSING_IMAGE, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_MISSING_IMAGE)->c_str(), (&wxPyART_MISSING_IMAGE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_MISSING_IMAGE)->c_str(), (&wxPyART_MISSING_IMAGE)->Len());
+#endif
+    }
     return pyobj;
 }
 

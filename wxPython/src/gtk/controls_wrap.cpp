@@ -337,8 +337,6 @@ static swig_type_info *swig_types[81];
     DECLARE_DEF_STRING(GaugeNameStr);
 
 
-#include <wx/statline.h>
-
     DECLARE_DEF_STRING(StaticBitmapNameStr);
     DECLARE_DEF_STRING(StaticBoxNameStr);
     DECLARE_DEF_STRING(StaticTextNameStr);
@@ -404,9 +402,6 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
     DECLARE_DEF_STRING(ScrollBarNameStr);
 
 
-#include <wx/spinbutt.h>
-#include <wx/spinctrl.h>
-
     DECLARE_DEF_STRING(SPIN_BUTTON_NAME);
     wxChar* wxSpinCtrlNameStr = _T("wxSpinCtrl");
     DECLARE_DEF_STRING(SpinCtrlNameStr);
@@ -426,11 +421,8 @@ int wxRadioBox_GetNextItem(wxRadioBox const *self,int item,wxDirection dir,long 
     DECLARE_DEF_STRING(SliderNameStr);
 
 
-#include <wx/tglbtn.h>
-
     wxChar* wxToggleButtonNameStr = _T("wxToggleButton");
     DECLARE_DEF_STRING(ToggleButtonNameStr);
-
 
 
 #ifdef __WXMAC__
@@ -451,11 +443,7 @@ public:
 #endif
 
 
-#include <wx/notebook.h>
-#include <wx/listbook.h>
-
     DECLARE_DEF_STRING(NOTEBOOK_NAME);
-
 
 
     DECLARE_DEF_STRING(ToolBarNameStr);
@@ -744,8 +732,6 @@ PyObject *wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,wxTreeItemId const &it
                 RETURN_NONE();
         }
 
-#include <wx/dirctrl.h>
-
     DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
 
  // C++ version of Python aware wxControl
@@ -818,7 +804,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 
 
-#include <wx/cshelp.h>
 
 void wxHelpProvider_Destroy(wxHelpProvider *self){ delete self; }
 #ifdef __cplusplus

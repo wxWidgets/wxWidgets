@@ -9948,7 +9948,13 @@ static int _wrap_IMAGE_OPTION_BMP_FORMAT_set(PyObject *_val) {
 static PyObject *_wrap_IMAGE_OPTION_BMP_FORMAT_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_BMP_FORMAT, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_BMP_FORMAT)->c_str(), (&wxPyIMAGE_OPTION_BMP_FORMAT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_BMP_FORMAT)->c_str(), (&wxPyIMAGE_OPTION_BMP_FORMAT)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -9962,7 +9968,13 @@ static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set(PyObject *_val) {
 static PyObject *_wrap_IMAGE_OPTION_CUR_HOTSPOT_X_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_CUR_HOTSPOT_X, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_CUR_HOTSPOT_X)->c_str(), (&wxPyIMAGE_OPTION_CUR_HOTSPOT_X)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_CUR_HOTSPOT_X)->c_str(), (&wxPyIMAGE_OPTION_CUR_HOTSPOT_X)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -9976,7 +9988,13 @@ static int _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set(PyObject *_val) {
 static PyObject *_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_CUR_HOTSPOT_Y, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_CUR_HOTSPOT_Y)->c_str(), (&wxPyIMAGE_OPTION_CUR_HOTSPOT_Y)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_CUR_HOTSPOT_Y)->c_str(), (&wxPyIMAGE_OPTION_CUR_HOTSPOT_Y)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -9990,7 +10008,13 @@ static int _wrap_IMAGE_OPTION_RESOLUTION_set(PyObject *_val) {
 static PyObject *_wrap_IMAGE_OPTION_RESOLUTION_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_RESOLUTION, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTION)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTION)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTION)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTION)->Len());
+#endif
+    }
     return pyobj;
 }
 
@@ -10004,7 +10028,13 @@ static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *_val) {
 static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get() {
     PyObject *pyobj;
     
-    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_RESOLUTIONUNIT, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
+#endif
+    }
     return pyobj;
 }
 
