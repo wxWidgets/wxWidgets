@@ -102,6 +102,7 @@ public:
   void SetEditable( bool editable );
   
   void OnSize( wxSizeEvent &event );
+  void OnChar( wxKeyEvent &event );
   
 // implementation
     
