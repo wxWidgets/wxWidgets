@@ -348,7 +348,7 @@ wxInputStream& wxInputStream::operator>>(float& f)
   }
 
   if (c == '.') {
-    float f_multiplicator = 0.1;
+    float f_multiplicator = (float) 0.1;
     c = GetC();
 
     while (isdigit(c)) {

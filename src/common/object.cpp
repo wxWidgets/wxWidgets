@@ -41,9 +41,9 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-wxClassInfo wxObject::classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
-wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
-wxHashTable wxClassInfo::classTable(wxKEY_STRING);
+wxClassInfo wxObject::sm_classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
+wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
+wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 #endif
 
 /*
@@ -130,36 +130,36 @@ void wxObject::operator delete[] (void * buf)
 
 wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn constr)
 {
-  className = cName;
-  baseClassName1 = baseName1;
-  baseClassName2 = baseName2;
+  m_className = cName;
+  m_baseClassName1 = baseName1;
+  m_baseClassName2 = baseName2;
 
-  objectSize = sz;
-  objectConstructor = constr;
+  m_objectSize = sz;
+  m_objectConstructor = constr;
   
-  next = first;
-  first = this;
+  m_next = sm_first;
+  sm_first = this;
 
-  baseInfo1 = (wxClassInfo *) NULL;
-  baseInfo2 = (wxClassInfo *) NULL;
+  m_baseInfo1 = (wxClassInfo *) NULL;
+  m_baseInfo2 = (wxClassInfo *) NULL;
 }
 
 wxObject *wxClassInfo::CreateObject(void)
 {
-  if (objectConstructor)
-    return (wxObject *)(*objectConstructor)();
+  if (m_objectConstructor)
+    return (wxObject *)(*m_objectConstructor)();
   else
     return (wxObject *) NULL;
 }
 
 wxClassInfo *wxClassInfo::FindClass(char *c)
 {
-  wxClassInfo *p = first;
+  wxClassInfo *p = sm_first;
   while (p)
   {
     if (p && p->GetClassName() && strcmp(p->GetClassName(), c) == 0)
       return p;
-    p = p->next;
+    p = p->m_next;
   }
   return (wxClassInfo *) NULL;
 }
@@ -174,20 +174,22 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info)
   // For some reason, when making/using a DLL, static data has to be included
   // in both the DLL and the application. This can lead to duplicate
   // wxClassInfo objects, so we have to test the name instead of the pointers.
+  // PROBABLY NO LONGER TRUE now I've done DLL creation right.
+/*
 #if WXMAKINGDLL
   if (GetClassName() && info->GetClassName() && (strcmp(GetClassName(), info->GetClassName()) == 0))
     return TRUE;
 #else
+*/
   if (this == info)
     return TRUE;
-#endif
 
-  if (baseInfo1)
-    if (baseInfo1->IsKindOf(info))
+  if (m_baseInfo1)
+    if (m_baseInfo1->IsKindOf(info))
       return TRUE;
 
-  if (baseInfo2)
-    return baseInfo2->IsKindOf(info);
+  if (m_baseInfo2)
+    return m_baseInfo2->IsKindOf(info);
 
   return FALSE;
 }
@@ -195,37 +197,58 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info)
 // Set pointers to base class(es) to speed up IsKindOf
 void wxClassInfo::InitializeClasses(void)
 {
+  wxClassInfo::sm_classTable = new wxHashTable(wxKEY_STRING);
+
   // Index all class infos by their class name
-  wxClassInfo *info = first;
+  wxClassInfo *info = sm_first;
   while (info)
   {
-    if (info->className)
-      classTable.Put(info->className, (wxObject *)info);
-    info = info->next;
+    if (info->m_className)
+      sm_classTable->Put(info->m_className, (wxObject *)info);
+    info = info->m_next;
   }
 
   // Set base pointers for each wxClassInfo
-  info = first;
+  info = sm_first;
   while (info)
   {
     if (info->GetBaseClassName1())
-      info->baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
+      info->m_baseInfo1 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName1());
     if (info->GetBaseClassName2())
-      info->baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
-    info = info->next;
+      info->m_baseInfo2 = (wxClassInfo *)sm_classTable->Get(info->GetBaseClassName2());
+    info = info->m_next;
   }
-  first = NULL;
 }
 
-wxObject *wxCreateDynamicObject(char *name)
+// Clean up hash table
+void wxClassInfo::CleanUpClasses(void)
 {
-  wxClassInfo *info;
+    delete wxClassInfo::sm_classTable;
+    wxClassInfo::sm_classTable = NULL;
+}
 
-  info = (wxClassInfo *)wxClassInfo::classTable.Get(name);
-  if (!info)
-    return (wxObject *)NULL;
+wxObject *wxCreateDynamicObject(const char *name)
+{
+    if (wxClassInfo::sm_classTable)
+    {
+        wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
+        if (!info)
+            return (wxObject *)NULL;
 
-  return info->CreateObject();
+        return info->CreateObject();
+    }
+    else
+    {
+        wxClassInfo *info = wxClassInfo::sm_first;
+        while (info)
+        {
+            if (info->m_className && strcmp(info->m_className, name) == 0)
+                return info->CreateObject();
+            info = info->m_next;
+        }
+        return (wxObject*) NULL;
+    }
+    return (wxObject*) NULL;
 }
 
 #ifdef USE_SERIAL

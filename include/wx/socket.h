@@ -8,11 +8,12 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_NETWORK_SOCKET_H
 #define _WX_NETWORK_SOCKET_H
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "socket.h"
 #endif
 
 // ---------------------------------------------------------------------------

@@ -39,18 +39,18 @@ bool wxModule::RegisterModules(void)
     wxNode *node;
     wxClassInfo* classInfo;
 
-    wxClassInfo::classTable.BeginFind();
-    node = wxClassInfo::classTable.Next();
+    wxClassInfo::sm_classTable->BeginFind();
+    node = wxClassInfo::sm_classTable->Next();
     while (node)
     {
         classInfo = (wxClassInfo *)node->Data();
-        if ((classInfo != (& (wxModule::classwxModule))) &&
+        if ((classInfo != (& (wxModule::sm_classwxModule))) &&
             classInfo->IsKindOf(CLASSINFO(wxModule)))
         {
             wxModule* module = (wxModule*) classInfo->CreateObject();
             RegisterModule(module);
         }
-        node = wxClassInfo::classTable.Next();
+        node = wxClassInfo::sm_classTable->Next();
     }
     return TRUE;
 }

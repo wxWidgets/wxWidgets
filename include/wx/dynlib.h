@@ -10,6 +10,10 @@
 #include <wx/dynarray.h>
 #include <wx/hash.h>
 
+#ifdef LoadLibrary
+#undef LoadLibrary
+#endif
+
 // ---------------------------------------------------------------------------
 // wxLibrary
 

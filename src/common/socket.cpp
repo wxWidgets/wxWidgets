@@ -11,8 +11,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__     
 #pragma implementation "socket.h"
-#pragma interface
-#pragma implementation "socket.cpp"
+// #pragma interface
+// #pragma implementation "socket.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -92,6 +92,9 @@
 #ifdef __WINDOWS__
 #define close closesocket
 #define ioctl ioctlsocket
+#ifdef errno
+#undef errno
+#endif
 #define errno WSAGetLastError()
 #ifdef EWOULDBLOCK
 #undef EWOULDBLOCK
@@ -369,26 +372,26 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
 {
   SockMsg msg;
   
-  msg.sig[0] = 0xad;
-  msg.sig[1] = 0xde;
-  msg.sig[2] = 0xed;
-  msg.sig[3] = 0xfe;
+  msg.sig[0] = (char) 0xad;
+  msg.sig[1] = (char) 0xde;
+  msg.sig[2] = (char) 0xed;
+  msg.sig[3] = (char) 0xfe;
 
-  msg.len[0] = nbytes & 0xff;
-  msg.len[1] = (nbytes >> 8) & 0xff;
-  msg.len[2] = (nbytes >> 16) & 0xff;
-  msg.len[3] = (nbytes >> 24) & 0xff;
+  msg.len[0] = (char) nbytes & 0xff;
+  msg.len[1] = (char) (nbytes >> 8) & 0xff;
+  msg.len[2] = (char) (nbytes >> 16) & 0xff;
+  msg.len[3] = (char) (nbytes >> 24) & 0xff;
 
   if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
     return *this;
   if (Write(buffer, nbytes).LastCount() < nbytes)
     return *this; 
 
-  msg.sig[0] = 0xed;
-  msg.sig[1] = 0xfe;
-  msg.sig[2] = 0xad;
-  msg.sig[3] = 0xde;
-  msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = 0; 
+  msg.sig[0] = (char) 0xed;
+  msg.sig[1] = (char) 0xfe;
+  msg.sig[2] = (char) 0xad;
+  msg.sig[3] = (char) 0xde;
+  msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = (char) 0;
   Write((char *)&msg, sizeof(msg));
 
   return *this;
@@ -415,7 +418,7 @@ bool wxSocketBase::IsData() const
   FD_ZERO(&sock_set);
   FD_SET(m_fd, &sock_set);
   select(FD_SETSIZE, &sock_set, NULL, NULL, &tv);
-  return FD_ISSET(m_fd, &sock_set);
+  return (FD_ISSET(m_fd, &sock_set) != 0);
 }
 
 // ---------------------------------------------------------------------

@@ -13,6 +13,15 @@
 #pragma implementation "dynlib.h"
 #endif
 
+#include  "wx/wxprec.h"
+
+#ifdef    __BORLANDC__
+  #pragma hdrstop
+#endif  //__BORLANDC__
+
+#ifndef WX_PRECOMP
+#endif //WX_PRECOMP
+
 #include <wx/dynlib.h>
 #include <wx/filefn.h>
 #include <wx/list.h>
@@ -87,9 +96,9 @@ void wxLibrary::PrepareClasses(wxClassInfo **first)
   wxClassInfo *info = *first;
   while (info)
   {
-    if (info->className)
-      classTable.Put(info->className, (wxObject *)info);
-    info = info->next;
+    if (info->m_className)
+      classTable.Put(info->m_className, (wxObject *)info);
+    info = info->m_next;
   }
 
   // Set base pointers for each wxClassInfo
@@ -97,10 +106,10 @@ void wxLibrary::PrepareClasses(wxClassInfo **first)
   while (info)
   {
     if (info->GetBaseClassName1())
-      info->baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
+      info->m_baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
     if (info->GetBaseClassName2())
-      info->baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
-    info = info->next;
+      info->m_baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
+    info = info->m_next;
   }
   *first = NULL;
 }
@@ -111,7 +120,7 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
   return dlsym(m_handle, WXSTRINGCAST symbname);
 #endif
 #ifdef __WINDOWS__
-  return GetProcAddress(m_handle, WXSTRINGCAST symbname);
+  return GetProcAddress((HINSTANCE) m_handle, WXSTRINGCAST symbname);
 #endif
   return NULL;
 }

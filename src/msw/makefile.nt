@@ -81,6 +81,7 @@ COMMONOBJS = \
   $(COMMDIR)\docview.obj \
   $(COMMDIR)\docmdi.obj \
   $(COMMDIR)\dynarray.obj \
+  $(COMMDIR)\dynlib.obj \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
   $(COMMDIR)\filefn.obj \
@@ -766,6 +767,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/dynarray.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/dynlib.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

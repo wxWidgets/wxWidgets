@@ -788,8 +788,8 @@ bool wxDebugContext::PrintClasses(void)
   wxNode *node;
   wxClassInfo *info;
 
-  wxClassInfo::classTable.BeginFind();
-  node = wxClassInfo::classTable.Next();
+  wxClassInfo::sm_classTable->BeginFind();
+  node = wxClassInfo::sm_classTable->Next();
   while (node)
   {
     info = (wxClassInfo *)node->Data();
@@ -801,7 +801,7 @@ bool wxDebugContext::PrintClasses(void)
         wxTrace("is a %s", info->GetBaseClassName1());
       else if (info->GetBaseClassName1() && info->GetBaseClassName2())
         wxTrace("is a %s, %s", info->GetBaseClassName1(), info->GetBaseClassName2());
-      if (info->objectConstructor)
+      if (info->GetConstructor())
         wxTrace(": dynamic\n");
       else
         wxTrace("\n");

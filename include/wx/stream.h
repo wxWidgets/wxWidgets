@@ -29,6 +29,13 @@ typedef wxOutputStream& (*__wxOutputManip)(wxOutputStream&);
 
 wxOutputStream& WXDLLEXPORT wxEndL(wxOutputStream& o_stream);
 
+// Disable warnings such as
+// 'wxFilterStream' : inherits 'wxFilterInputStream::Peek' via dominance
+
+#ifdef _MSC_VER
+#pragma warning(disable:4250)
+#endif
+
 // ---------------------------------------------------------------------------
 // Stream buffer
 // ---------------------------------------------------------------------------
@@ -243,5 +250,9 @@ class WXDLLEXPORT wxFilterStream: public wxStream,
   wxFilterStream(wxStream& stream);
   wxFilterStream();
 };
+
+#ifdef _MSC_VER
+#pragma warning(default:4250)
+#endif
 
 #endif

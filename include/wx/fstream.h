@@ -8,13 +8,25 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_WXFSTREAM_H__
 #define _WX_WXFSTREAM_H__
+
+#ifdef __GNUG__
+#pragma interface "fstream.h"
+#endif
 
 #include <wx/object.h>
 #include <wx/string.h>
 #include <wx/stream.h>
 #include <wx/file.h>
+
+// Disable warnings such as
+// 'wxFileStream' : inherits 'wxFileInputStream::Peek' via dominance
+
+#ifdef _MSC_VER
+#pragma warning(disable:4250)
+#endif
 
 class wxFileStreamBase {
 protected:
@@ -68,5 +80,9 @@ class wxFileStream: public wxStream,
   wxFileStream(const wxString& fileName);
   virtual ~wxFileStream();
 };
+
+#ifdef _MSC_VER
+#pragma warning(default:4250)
+#endif
 
 #endif

@@ -293,6 +293,8 @@ void wxApp::CommonCleanUp(void)
   wxCleanUpResourceSystem();
 
   wxSystemSettings::Done();
+
+  wxClassInfo::CleanUpClasses();
 }
 
 wxLog *wxApp::CreateLogTarget()

@@ -45,38 +45,48 @@ typedef wxObject * (*wxObjectConstructorFn) (void);
 class WXDLLEXPORT wxClassInfo
 {
  public:
-   char *className;
-   char *baseClassName1;
-   char *baseClassName2;
-   int objectSize;
-   wxObjectConstructorFn objectConstructor;
-   
-   // Pointers to base wxClassInfos: set in InitializeClasses
-   // called from wx_main.cc
-   wxClassInfo *baseInfo1;
-   wxClassInfo *baseInfo2;
-
-   static wxClassInfo *first;
-   wxClassInfo *next;
-
-   static wxHashTable classTable;
-
    wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn);
 
    wxObject *CreateObject(void);
    
-   inline char *GetClassName(void) const { return className; }
-   inline char *GetBaseClassName1(void) const { return baseClassName1; }
-   inline char *GetBaseClassName2(void) const { return baseClassName2; }
-   inline int GetSize(void) const { return objectSize; }
+   inline char *GetClassName(void) const { return m_className; }
+   inline char *GetBaseClassName1(void) const { return m_baseClassName1; }
+   inline char *GetBaseClassName2(void) const { return m_baseClassName2; }
+   inline wxClassInfo* GetBaseClass1() const { return m_baseInfo1; }
+   inline wxClassInfo* GetBaseClass2() const { return m_baseInfo2; }
+   inline int GetSize(void) const { return m_objectSize; }
+   inline wxObjectConstructorFn GetConstructor() const { return m_objectConstructor; }
+   inline wxClassInfo* GetFirst() const { return sm_first; }
+   inline wxClassInfo* GetNext() const { return m_next; }
    bool IsKindOf(wxClassInfo *info);
 
    static wxClassInfo *FindClass(char *c);
-   // Initializes parent pointers for fast searching.
+
+   // Initializes parent pointers and hash table for fast searching.
    static void InitializeClasses(void);
+
+   // Cleans up hash table used for fast searching.
+   static void CleanUpClasses(void);
+
+public:
+   char*                    m_className;
+   char*                    m_baseClassName1;
+   char*                    m_baseClassName2;
+   int                      m_objectSize;
+   wxObjectConstructorFn    m_objectConstructor;
+   
+   // Pointers to base wxClassInfos: set in InitializeClasses
+   // called from wx_main.cc
+   wxClassInfo*             m_baseInfo1;
+   wxClassInfo*             m_baseInfo2;
+
+   static wxClassInfo*      sm_first;
+   wxClassInfo*             m_next;
+
+   static wxHashTable*      sm_classTable;
 };
 
-wxObject* WXDLLEXPORT wxCreateDynamicObject(char *name);
+wxObject* WXDLLEXPORT wxCreateDynamicObject(const char *name);
 
 #ifdef USE_SERIAL
 wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
@@ -84,9 +94,9 @@ wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 
 #define DECLARE_DYNAMIC_CLASS(name) \
  public:\
-  static wxClassInfo class##name;\
+  static wxClassInfo sm_class##name;\
   wxClassInfo *GetClassInfo() \
-   { return &name::class##name; }
+   { return &name::sm_class##name; }
 
 #define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 #define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
@@ -99,13 +109,13 @@ wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::class##name((char *) #name, (char *) #basename, (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
+ wxClassInfo name::sm_class##name((char *) #name, (char *) #basename, (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
- wxClassInfo name::class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
+ wxClassInfo name::sm_class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 //////
 ////// for abstract classes
@@ -113,17 +123,17 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // Single inheritance with one base class
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename) \
- wxClassInfo name::class##name((char *) #name, (char *) #basename, \
+ wxClassInfo name::sm_class##name((char *) #name, (char *) #basename, \
 		 (char *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) \
- wxClassInfo name::class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) NULL);
+ wxClassInfo name::sm_class##name((char *) #name, (char *) #basename1, (char *) #basename2, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
 
-#define CLASSINFO(name) (&name::class##name)
+#define CLASSINFO(name) (&name::sm_class##name)
 
 #else
 
@@ -140,7 +150,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 #endif
 
-#define IS_KIND_OF(obj, className) obj->IsKindOf(&className::class##className)
+#define IS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
 
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__
@@ -158,12 +168,12 @@ class WXDLLEXPORT wxObject
  public:
 
   // This is equivalent to using the macro DECLARE_ABSTRACT_CLASS
-  static wxClassInfo classwxObject;
+  static wxClassInfo sm_classwxObject;
 
   wxObject(void);
   virtual ~wxObject(void);
 
-  virtual wxClassInfo *GetClassInfo(void) { return &classwxObject; }
+  virtual wxClassInfo *GetClassInfo(void) { return &sm_classwxObject; }
 
   bool IsKindOf(wxClassInfo *info);
 
@@ -198,9 +208,9 @@ class WXDLLEXPORT wxObject
   inline void SetRefData(wxObjectRefData *data) { m_refData = data; }
 
 protected:
-  wxObjectRefData *m_refData;
+  wxObjectRefData*      m_refData;
 #ifdef USE_SERIAL
-  wxObject_Serialize *m_serialObj;
+  wxObject_Serialize*   m_serialObj;
 #endif
 };
 

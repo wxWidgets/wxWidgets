@@ -2,6 +2,17 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
+Alpha 16, September 8th 1998
+----------------------------
+
+- Added wxSashWindow, wxSashLayoutWindow classes, and sashtest
+  sample.
+- Guilhem's socket classes added, plus wxsocket sample.
+- A few more makefiles added.
+- GnuWin32/BC++ compatibility mods.
+- Further doc updates.
+- wxProp updates for correct working with wxGTK.
+
 Alpha 15, August 31st 1998
 --------------------------
 

@@ -337,6 +337,8 @@ void wxApp::CleanUp()
   if (wxWinHandleList)
     delete wxWinHandleList ;
 
+  wxClassInfo::CleanUpClasses();
+
   // do it as the very last thing because everything else can log messages
   wxLog::DontCreateOnDemand();
   delete wxLog::SetActiveTarget(NULL);

@@ -34,9 +34,9 @@ wxDirInfo::wxDirInfo( const wxString &path )
   {
     m_name = "My Home";
     m_path += "/";
-    char buf[300];
-    wxGetHomeDir( buf );
-    m_path = buf;
+    wxString str;
+    wxGetHomeDir( & str );
+    m_path = str;
   }
   else
   if (m_path == "/proc") m_name = "Info Filesystem";
