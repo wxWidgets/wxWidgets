@@ -365,18 +365,6 @@ public:
     // return TRUE if the rectangles have a non empty intersection
     bool Intersects(const wxRect& rect) const;
 
-    // align in another rectangle according to WX alignment flags.
-    void AlignIn(const wxRect& rect, int align)
-    {
-        if (align & wxALIGN_CENTER_HORIZONTAL) x = rect.x + (rect.width-width)/2;
-        else if (align & wxALIGN_RIGHT) x = rect.x+rect.width - width;
-        else x = rect.x;
-
-        if (align & wxALIGN_CENTER_VERTICAL) y = rect.y + (rect.height-height)/2;
-        else if (align & wxALIGN_BOTTOM) y = rect.y+rect.height - height;
-        else y = rect.y;
-    }
-
 public:
     int x, y, width, height;
 };
