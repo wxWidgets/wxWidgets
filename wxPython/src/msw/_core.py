@@ -85,6 +85,7 @@ SIMPLE_BORDER = _core_.SIMPLE_BORDER
 STATIC_BORDER = _core_.STATIC_BORDER
 TRANSPARENT_WINDOW = _core_.TRANSPARENT_WINDOW
 NO_BORDER = _core_.NO_BORDER
+DEFAULT_CONTROL_BORDER = _core_.DEFAULT_CONTROL_BORDER
 TAB_TRAVERSAL = _core_.TAB_TRAVERSAL
 WANTS_CHARS = _core_.WANTS_CHARS
 POPUP_WINDOW = _core_.POPUP_WINDOW
@@ -2033,6 +2034,9 @@ def MemoryFSHandler_RemoveFile(*args, **kwargs):
     """MemoryFSHandler_RemoveFile(String filename)"""
     return _core_.MemoryFSHandler_RemoveFile(*args, **kwargs)
 
+IMAGE_ALPHA_TRANSPARENT = _core_.IMAGE_ALPHA_TRANSPARENT
+IMAGE_ALPHA_THRESHOLD = _core_.IMAGE_ALPHA_THRESHOLD
+IMAGE_ALPHA_OPAQUE = _core_.IMAGE_ALPHA_OPAQUE
 #---------------------------------------------------------------------------
 
 class ImageHandler(Object):
@@ -2241,6 +2245,15 @@ class Image(Object):
         """
         return _core_.Image_InitAlpha(*args, **kwargs)
 
+    def IsTransparent(*args, **kwargs):
+        """
+        IsTransparent(self, int x, int y, unsigned char threshold=IMAGE_ALPHA_THRESHOLD) -> bool
+
+        Returns True if this pixel is masked or has an alpha value less than
+        the spcified threshold.
+        """
+        return _core_.Image_IsTransparent(*args, **kwargs)
+
     def FindFirstUnusedColour(*args, **kwargs):
         """
         FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
@@ -2253,7 +2266,7 @@ class Image(Object):
 
     def ConvertAlphaToMask(*args, **kwargs):
         """
-        ConvertAlphaToMask(self, byte threshold=128) -> bool
+        ConvertAlphaToMask(self, byte threshold=IMAGE_ALPHA_THRESHOLD) -> bool
 
         If the image has alpha channel, this method converts it to mask. All pixels
         with alpha value less than ``threshold`` are replaced with mask colour and the
