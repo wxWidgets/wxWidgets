@@ -1,12 +1,3 @@
 * Implement toggle buttons
-
 * Implement popup windows
-
 * Implement joystick support
-
-* Implement drag and drop
-
-* Correct smart processing errors that provoke the following error:
-
-cpp-precomp: warning: errors during smart preprocessing, retrying in basic mode
-
