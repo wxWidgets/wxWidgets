@@ -449,7 +449,7 @@ public:
 
     void DrawGridCellArea( wxDC& dc );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
-    void DrawAllGridLines( wxDC& dc );  // TODO - delete this ?
+    void DrawAllGridLines( wxDC& dc, const wxRegion & reg = wxRegion() );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawCellBackground( wxDC& dc, const wxGridCellCoords& );
     void DrawCellValue( wxDC& dc, const wxGridCellCoords& );

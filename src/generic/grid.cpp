@@ -36,6 +36,10 @@
 
 #include "wx/generic/grid.h"
 
+#ifndef DRAW_LINES
+#define DRAW_LINES 1
+#endif
+
 //////////////////////////////////////////////////////////////////////
 
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
@@ -869,9 +873,12 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
     m_owner->PrepareDC( dc );
-
-    m_owner->CalcCellsExposed( GetUpdateRegion() );
+    wxRegion reg = GetUpdateRegion();
+    m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc );
+#if DRAW_LINES
+    m_owner->DrawAllGridLines( dc, reg );
+#endif
 }
 
 
@@ -2602,8 +2609,10 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     if ( m_colWidths[coords.GetCol()] <=0  ||
          m_rowHeights[coords.GetRow()] <= 0 ) return;
 
+#if !DRAW_LINES
     if ( m_gridLinesEnabled )
         DrawCellBorder( dc, coords );
+#endif
 
     DrawCellBackground( dc, coords );
 
@@ -2707,20 +2716,29 @@ void wxGrid::DrawCellValue( wxDC& dc, const wxGridCellCoords& coords )
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //
-void wxGrid::DrawAllGridLines( wxDC& dc )
+void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
 {
     if ( !m_gridLinesEnabled ||
          !m_numRows ||
          !m_numCols ) return;
 
-    int cw, ch;
-    m_gridWin->GetClientSize(&cw, &ch);
-
-    // virtual coords of visible area
-    //
     int top, bottom, left, right;
-    CalcUnscrolledPosition( 0, 0, &left, &top );
-    CalcUnscrolledPosition( cw, ch, &right, &bottom );
+
+    if (reg.IsEmpty()){
+      int cw, ch;
+      m_gridWin->GetClientSize(&cw, &ch);
+
+      // virtual coords of visible area
+      //
+      CalcUnscrolledPosition( 0, 0, &left, &top );
+      CalcUnscrolledPosition( cw, ch, &right, &bottom );
+    }
+    else{
+      wxCoord x, y, w, h;
+      reg.GetBox(x, y, w, h);
+      CalcUnscrolledPosition( x, y, &left, &top );
+      CalcUnscrolledPosition( x + w, y + h, &right, &bottom );
+    }
 
     dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
 
