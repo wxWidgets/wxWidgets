@@ -3045,6 +3045,8 @@ void wxWindow::SetFont( const wxFont &font )
     else
         m_font = *wxSWISS_FONT;
 
+    if (!m_widget->window) return;
+
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if (sysbg.Red() == m_backgroundColour.Red() &&
         sysbg.Green() == m_backgroundColour.Green() &&
