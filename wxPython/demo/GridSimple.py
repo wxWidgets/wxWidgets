@@ -187,8 +187,37 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 class TestFrame(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, "Simple Grid Demo", size=(640,480))
-        grid = SimpleGrid(self, log)
+        self.grid = grid = SimpleGrid(self, log)
 
+        self.mainmenu = wxMenuBar()
+
+        menu = wxMenu()
+
+        mID = NewId()
+        menu.Append(mID, 'Preview Grid', 'Print Displayed Grid')
+        EVT_MENU(self, mID, self.OnPreviewGrid)
+        self.mainmenu.Append(menu, '&Print')
+
+        self.SetMenuBar(self.mainmenu)
+
+    def OnPreviewGrid(self, event):
+        from wxPython.lib.printout import PrintGrid
+        grid = self.grid
+
+        total_col = 4   # not all columns to be used for printing
+        total_row = 4
+
+        format = [1, 1.5, 2.5, 4, 5, 7]     # column spacing
+
+        # class to print and preview
+        prt = PrintGrid(self, grid, format, total_col, total_row )
+        prt.SetAttributes()     # get the colour and text attributes
+
+        table = prt.GetTable()      # the table print control class
+        table.SetHeader("Simple Grid Test Header")
+        table.SetFooter()
+
+        prt.Preview()       # preview the table
 
 
 #---------------------------------------------------------------------------

@@ -35,7 +35,7 @@ Updated wxColumnSorterMixin to also be able to place sort icons on the
 column headers, and updated the wxListCtrl demo to show it off by
 using wxColumnSorterMixin.
 
-Added wxGenBitmapTextButton contrib from Lorne White.
+Added wxGenBitmapTextButton, TablePrint, etc. contribs from Lorne White.
 
 
 

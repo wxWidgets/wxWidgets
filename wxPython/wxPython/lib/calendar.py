@@ -5,8 +5,8 @@
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.85
-# Date:         June 20, 2001
+# Version       0.90
+# Date:         July 19, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ import string, time
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]
 AbrWeekday = {6:"Sun", 0:"Mon", 1:"Tue", 2:"Wed", 3:"Thu", 4:"Fri", 5:"Sat"}
-_MIDSIZE = 160
+_MIDSIZE = 180
 
 BusCalDays = [0, 1, 2, 3, 4, 5, 6]
 
@@ -44,6 +44,19 @@ class CalDraw:
         self.DefParms()
 
     def DefParms(self):
+        self.num_auto = TRUE       # auto scale of the cal number day size
+        self.num_size = 12          # default size of calendar if no auto size
+        self.max_num_size = 12     # maximum size for calendar number
+
+        self.num_align_horz = wxALIGN_CENTRE    # alignment of numbers
+        self.num_align_vert = wxALIGN_CENTRE
+        self.num_indent_horz = 0     # points indent from position, used to offset if not centered
+        self.num_indent_vert = 0
+
+        self.week_auto = TRUE       # auto scale of week font text
+        self.week_size = 10
+        self.max_week_size = 12
+
         self.grid_color = 'BLACK'       # grid and selection colors
         self.back_color = 'WHITE'
         self.sel_color = 'RED'
@@ -227,20 +240,29 @@ class CalDraw:
         self.DC.DrawText(year, self.cx_st + adjust, self.cy_st + th)
 
     def DrawWeek(self):     # draw the week days
-        sizef = 8
-        if self.sizeh < _MIDSIZE:
-            sizef = 7
+        width = self.gridx[1]-self.gridx[0]
+        height = self.gridy[1] - self.gridy[0]
+        rect_w = self.gridx[7]-self.gridx[0]
 
-        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
-        self.DC.SetFont(f)
+        f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
+        if self.week_auto == TRUE:
+            test_size = self.max_week_size      # max size
+            test_day = ' Sun '
+            while test_size > 2:
+                f.SetPointSize(test_size)
+                self.DC.SetFont(f)
+                tw,th = self.DC.GetTextExtent(test_day)
+                if tw < width and th < height:
+                    break
+                test_size = test_size - 1
+        else:
+            f.SetPointSize(self.week_size)   # set fixed size
+            self.DC.SetFont(f)
+
         self.DC.SetTextForeground(wxNamedColour(self.week_font_color))
 
         cnt_x = 0
         cnt_y = 0
-        width = self.gridx[1]-self.gridx[0]
-        height = self.gridy[1] - self.gridy[0]
-
-        rect_w = self.gridx[7]-self.gridx[0]
 
         brush = wxBrush(wxNamedColour(self.week_color), wxSOLID)
         self.DC.SetBrush(brush)
@@ -265,12 +287,22 @@ class CalDraw:
             self.DC.DrawText(day, x+diffx, y+diffy)
             cnt_x = cnt_x + 1
 
-
     def DrawNum(self):      # draw the day numbers
-        sizef = 10
-        if self.sizeh < _MIDSIZE:
-            sizef = 8
-        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
+        f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
+        if self.num_auto == TRUE:
+            test_size = self.max_num_size      # max size
+            test_day = ' 99 '
+            while test_size > 2:
+                f.SetPointSize(test_size)
+                self.DC.SetFont(f)
+                tw,th = self.DC.GetTextExtent(test_day)
+                if tw < self.dl_w and th < self.dl_h:
+                    sizef = test_size
+                    break
+                test_size = test_size - 1
+        else:
+            f.SetPointSize(self.num_size)   # set fixed size
+            self.DC.SetFont(f)
 
         cnt_x = 0
         cnt_y = 1
@@ -287,7 +319,26 @@ class CalDraw:
             self.DC.SetTextForeground(wxNamedColour(num_color))
             self.DC.SetFont(f)
 
-            self.DC.DrawText(val, x+5, y+5)
+            tw,th = self.DC.GetTextExtent(val)
+            if self.num_align_horz == wxALIGN_CENTRE:
+                adj_h = (self.dl_w - tw)/2
+            elif self.num_align_horz == wxALIGN_RIGHT:
+                adj_h = self.dl_w - tw
+            else:
+                adj_h = 0   # left alignment
+
+            adj_h = adj_h + self.num_indent_horz
+
+            if self.num_align_vert == wxALIGN_CENTRE:
+                adj_v = (self.dl_h - th)/2
+            elif self.num_align_horz == wxALIGN_RIGHT:
+                adj_v = self.dl_h - th
+            else:
+                adj_v = 0   # left alignment
+
+            adj_v = adj_v + self.num_indent_vert
+
+            self.DC.DrawText(val, x+adj_h, y+adj_v)
             if cnt_x < 6:
                 cnt_x = cnt_x + 1
             else:
@@ -425,6 +476,8 @@ class wxCalendar(wxWindow):
 
     def OnLeftEvent(self, event):
         self.click = 'LEFT'
+        self.shiftkey = event.ShiftDown()
+        self.ctrlkey = event.ControlDown()
         self.ProcessClick(event)
 
     def OnLeftDEvent(self, event):
@@ -524,6 +577,8 @@ class wxCalendar(wxWindow):
         else:
             evt = wxPyCommandEvent(2100, self.GetId())
             evt.click, evt.day, evt.month, evt.year = self.click, self.day, self.month, self.year
+            evt.shiftkey = self.shiftkey
+            evt.ctrlkey = self.ctrlkey
             self.GetEventHandler().ProcessEvent(evt)
 
             self.set_day = self.day

@@ -29,7 +29,7 @@ day_abbr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', ]
 
 def leapdays(y1, y2):
     return (y2+3)/4 - (y1+3)/4
-	
+
 # Return 1 for leap years, 0 for non-leap years
 def isleap(year):
     return year % 4 == 0 and (year % 100 <> 0 or year % 400 == 0)
@@ -40,7 +40,7 @@ def FillDate(val):
         s = '0' + s
     return s
 
-	
+
 def julianDay(year, month, day):
     b = 0L
     year, month, day = long(year), long(month), long(day)
@@ -62,7 +62,7 @@ def julianDay(year, month, day):
         b = 2L - year/100L + year/400L
     return (1461L*year - yearCorr)/4L + 306001L*(month + 1L)/10000L + day + 1720994L + b
 
-	
+
 def TodayDay():
     date = time.localtime(time.time())
     year = date[0]
@@ -109,14 +109,14 @@ def daysPerMonth(month, year):
     return ndays
 
 class now:
-    def __init__(self):        
+    def __init__(self):
         self.date = time.localtime(time.time())
         self.year = self.date[0]
         self.month = self.date[1]
         self.day = self.date[2]
-		
+
 class Date:
-    def __init__(self, year, month, day):        
+    def __init__(self, year, month, day):
         self.julian = julianDay(year, month, day)
         self.month = month
         self.year = year

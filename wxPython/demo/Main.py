@@ -26,10 +26,10 @@ _treeList = [
                                 'PyCrust',
                                 'VirtualListCtrl',
                                 'wxListCtrl',
+                                'TablePrint',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
-                 '',
                  'wxGrid', 'wxSashWindow',
                  'wxScrolledWindow', 'wxSplitterWindow',
                  'wxStatusBar', 'wxNotebook',
@@ -64,7 +64,7 @@ _treeList = [
                           'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
                           'ColourSelect', 'ImageBrowser',
-                          'infoframe', 'ColourDB', 'PyCrust',
+                          'infoframe', 'ColourDB', 'PyCrust', 'TablePrint',
                           ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),

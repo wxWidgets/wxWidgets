@@ -5,8 +5,8 @@
 #
 # Author:       Lorne White
 #
-# Version:      0.6
-# Date:         March 27, 2001
+# Version:      0.9
+# Date:         August 15, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ dir_path = os.getcwd()
 #---------------------------------------------------------------------------
 
 def ConvertBMP(file_nm):
+    if file_nm is None:
+        return None
+
     fl_fld = os.path.splitext(file_nm)
     ext = fl_fld[1]
     ext = string.lower(ext[1:])
@@ -33,27 +36,62 @@ def ConvertBMP(file_nm):
 
     return image
 
-class ImageView:
-    def __init__(self, iparent, ipos, isize):
-        self.win = iparent
-        self.ImagePanel = wxPanel(size = isize, parent = iparent, id = -1, name = 'backgroundPanel', style = wxSIMPLE_BORDER | wxCLIP_CHILDREN, pos= ipos)
-        self.clear = wxColour(255, 255, 255)
-        self.ImagePanel.SetBackgroundColour(self.clear)     # clear the panel
+def GetSize(file_nm):       # for scaling image values
+    image = ConvertBMP(file_nm)
+    bmp = image.ConvertToBitmap()
+    size = bmp.GetWidth(), bmp.GetHeight()
+    return size
 
-        self.image_sizex = isize.width
-        self.image_sizey = isize.height
-        self.image_posx = ipos.x
-        self.image_posy = ipos.y
+class ImageView(wxWindow):
+    def __init__(self, parent, id=-1, pos=wxDefaultPosition, size=wxDefaultSize):
+        wxWindow.__init__(self, parent, id, pos, size)
+        self.win = parent
+        self.image = None
+        self.back_color = 'WHITE'
+        self.border_color = 'BLACK'
+
+        self.image_sizex = size.width
+        self.image_sizey = size.height
+        self.image_posx = pos.x
+        self.image_posy = pos.y
+        EVT_PAINT(self, self.OnPaint)
 
         wxInitAllImageHandlers()
 
+    def OnPaint(self, event):
+        dc = wxPaintDC(self)
+        self.DrawImage(dc)
+
+    def DrawImage(self, dc):
+        dc.BeginDrawing()
+        self.DrawImage(dc)
+        dc.EndDrawing()
+
     def SetValue(self, file_nm):    # display the selected file in the panel
-        image = ConvertBMP(file_nm).ConvertToBitmap()
-        if image is None:
+        image = ConvertBMP(file_nm)
+        self.image = image
+        self.Refresh()
+
+    def DrawBorder(self, dc):
+        brush = wxBrush(wxNamedColour(self.back_color), wxSOLID)
+        dc.SetBrush(brush)
+        dc.SetPen(wxPen(wxNamedColour(self.border_color), 1))
+        dc.DrawRectangle(0, 0, self.image_sizex, self.image_sizey)
+
+    def DrawImage(self, dc):
+        try:
+            image = self.image   
+        except:
             return
 
-        iwidth = image.GetWidth()   # dimensions of image file
-        iheight = image.GetHeight()
+        self.DrawBorder(dc)
+        if image is None:
+            return
+ 
+        bmp = image.ConvertToBitmap()
+  
+        iwidth = bmp.GetWidth()   # dimensions of image file
+        iheight = bmp.GetHeight()
         
         diffx = (self.image_sizex - iwidth)/2   # center calc
         if iwidth >= self.image_sizex -10:      # if image width fits in window adjust
@@ -64,13 +102,12 @@ class ImageView:
         if iheight >= self.image_sizey - 10:    # if image height fits in window adjust
             diffy = 5
             iheight = self.image_sizey - 10
-   
-        self.ClearPanel()
-        wxStaticBitmap(self.win, -1, image, wxPoint(self.image_posx+diffx, self.image_posy+diffy), wxSize(iwidth, iheight ))
 
-    def ClearPanel(self):   # clear the image panel
-        self.ImagePanel.SetBackgroundColour(self.clear)
-        self.ImagePanel.Refresh()
+        image.Rescale(iwidth, iheight)      # rescale to fit the window
+        image.ConvertToBitmap()  
+        bmp = image.ConvertToBitmap()
+        dc.DrawBitmap(bmp, diffx, diffy)        # draw the image to window
+
 
 class ImageDialog(wxDialog):
     def __init__(self, parent, set_dir = None):
@@ -128,7 +165,7 @@ class ImageDialog(wxDialog):
         self.sel_type = wxComboBox(self, mID, self.set_type, wxPoint(image_posx , self.type_posy), wxSize(150, -1), self.fl_types, wxCB_DROPDOWN)
         EVT_COMBOBOX(self, mID, self.OnSetType)
 
-        self.image_view = ImageView(self, wxPoint(image_posx, image_posy), wxSize(image_sizex, image_sizey))
+        self.image_view = ImageView(self, pos=wxPoint(image_posx, image_posy), size=wxSize(image_sizex, image_sizey))
 
         self.y_pos = self.y_pos + height + 20
 
@@ -177,7 +214,6 @@ class ImageDialog(wxDialog):
         dlg.Destroy()
     
     def ResetFiles(self):   # refresh the display with files and initial image
-        self.image_view.ClearPanel()
         self.DisplayDir()
         self.GetFiles()
         self.tb.Set(self.fl_list)
@@ -185,10 +221,13 @@ class ImageDialog(wxDialog):
             self.tb.SetSelection(0)
             self.SetListValue(0)
         except:
-            pass
+            self.image_view.SetValue(None)
  
     def GetFile(self):
         return self.set_file
+
+    def GetDirectory(self):
+        return self.set_dir
         
     def OnCancel(self, event):
         self.result = None

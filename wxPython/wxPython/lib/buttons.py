@@ -366,7 +366,6 @@ class wxGenBitmapButton(wxGenButton):
             return -1, -1, false
         return self.bmpLabel.GetWidth()+2, self.bmpLabel.GetHeight()+2, false
 
-
     def DrawLabel(self, dc, width, height, dw=0, dy=0):
         bmp = self.bmpLabel
         if self.bmpDisabled and not self.IsEnabled():
@@ -383,6 +382,7 @@ class wxGenBitmapButton(wxGenButton):
 
 
 #----------------------------------------------------------------------
+
 
 class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button with Text Label
     def __init__(self, parent, ID, bitmap, label,
@@ -443,7 +443,9 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
 
         dc.DrawText(label, pos_x + dw+bw, (height-th)/2+dy)             # draw the text
 
+
 #----------------------------------------------------------------------
+
 
 class __ToggleMixin:
     def SetToggle(self, flag):
@@ -490,6 +492,7 @@ class wxGenBitmapToggleButton(__ToggleMixin, wxGenBitmapButton):
 
 class wxGenBitmapTextToggleButton(__ToggleMixin, wxGenBitmapTextButton):
     pass
+
 #----------------------------------------------------------------------
 
 

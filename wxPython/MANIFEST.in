@@ -20,7 +20,7 @@ include demo/bmp_source/*.ico
 include demo/bmp_source/*.gif
 include demo/bmp_source/*.png
 include demo/bmp_source/*.jpg
-include demo/README.txt
+include demo/*.txt
 include demo/*.xml
 include demo/data/*.png
 include demo/data/*.htm
