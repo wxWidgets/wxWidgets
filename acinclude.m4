@@ -440,7 +440,7 @@ define(WX_SYS_LARGEFILE_MACRO_VALUE,
     )
 
     if test "$$3" != no; then
-        $wx_largefile=yes
+        wx_largefile=yes
         AC_DEFINE_UNQUOTED([$1], [$$3])
     fi
 ])
@@ -458,13 +458,16 @@ AC_DEFUN([AC_SYS_LARGEFILE],
 if test "$enable_largefile" != no; then
     dnl _FILE_OFFSET_BITS==64 is needed for Linux, Solaris, ...
     dnl _LARGE_FILES -- for AIX
+    wx_largefile=no
     WX_SYS_LARGEFILE_MACRO_VALUE(_FILE_OFFSET_BITS, 64, ac_cv_sys_file_offset_bits)
     if test "x$wx_largefile" != "xyes"; then
         WX_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1, ac_cv_sys_large_files)
     fi
 
+    AC_MSG_CHECKING(if large file support is available)
     if test "x$wx_largefile" = "xyes"; then
         AC_DEFINE(HAVE_LARGEFILE_SUPPORT)
     fi
+    AC_MSG_RESULT($wx_largefile)
 fi
 ])
