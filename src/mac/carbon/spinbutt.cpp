@@ -30,6 +30,8 @@
     IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 #endif
 
+extern ControlActionUPP wxMacLiveScrollbarActionUPP ;
+
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()
 {
@@ -54,7 +56,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
         
     verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
      (ControlRef*) &m_macControl ) ) ;
-    
+    SetControlAction( (ControlRef) m_macControl , wxMacLiveScrollbarActionUPP ) ;
     MacPostControlCreate(pos,size) ;
     
     return TRUE;
@@ -148,8 +150,26 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     }
 }
 
+void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) 
+{
+    int nScrollInc = 0;
+    
+    switch( controlpart )
+    {
+    case kControlUpButtonPart :
+        nScrollInc = 1;
+        break ;
+    case kControlDownButtonPart :
+        nScrollInc = -1;
+        break ;
+    }
+    MacHandleValueChanged( nScrollInc ) ;
+}
+
 wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )  
 {
+    /*
+    // these have been handled by the live action proc already
     int nScrollInc = 0;
     wxMacCarbonEvent cEvent( (EventRef) event ) ;
     
@@ -163,6 +183,7 @@ wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVEN
         break ;
     }
     MacHandleValueChanged( nScrollInc ) ;
+    */
     return noErr ;
 }
 
