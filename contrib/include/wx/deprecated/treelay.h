@@ -83,7 +83,7 @@ protected:
     long          m_ySpacing;
     long          m_topMargin;
     long          m_leftMargin;
-    bool          m_orientation; // TRUE for top-to-bottom, FALSE for left-to-right
+    bool          m_orientation; // true for top-to-bottom, false for left-to-right
     
 private:
     DECLARE_ABSTRACT_CLASS(wxTreeLayout)

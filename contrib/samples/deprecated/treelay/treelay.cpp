@@ -41,7 +41,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame* frame = new MyFrame(NULL, _T("Tree Test"), wxPoint(-1, -1), wxSize(400, 550));
+  MyFrame* frame = new MyFrame(NULL, _T("Tree Test"), wxDefaultPosition, wxSize(400, 550));
 
 #if wxUSE_STATUSBAR
   // Give it a status line
@@ -85,14 +85,14 @@ bool MyApp::OnInit()
   dc.SetFont(font);
   TreeTest(*myTree, dc);
 
-  frame->Show(TRUE);
+  frame->Show(true);
 
 #if wxUSE_STATUSBAR
   frame->SetStatusText(_T("Hello, tree!"));
 #endif // wxUSE_STATUSBAR
 
   // Return the main frame window
-  return TRUE;
+  return true;
 }
 
 int MyApp::OnExit()
@@ -152,20 +152,20 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(parent, -1, title, pos, size)
+  wxFrame(parent, wxID_ANY, title, pos, size)
 {
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnLeftRight(wxCommandEvent& WXUNUSED(event))
 {
       if (myTree)
       {
-        myTree->SetOrientation(FALSE);
+        myTree->SetOrientation(false);
         wxClientDC dc(canvas);
         wxFont font(10, wxROMAN, wxNORMAL, wxBOLD);
         dc.SetFont(font);
@@ -178,7 +178,7 @@ void MyFrame::OnTopBottom(wxCommandEvent& WXUNUSED(event))
 {
       if (myTree)
       {
-        myTree->SetOrientation(TRUE);
+        myTree->SetOrientation(true);
         wxClientDC dc(canvas);
         wxFont font(10, wxROMAN, wxNORMAL, wxBOLD);
         dc.SetFont(font);
@@ -203,7 +203,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent):
- wxScrolledWindow(parent, -1)
+ wxScrolledWindow(parent, wxID_ANY)
 {
     SetBackgroundColour(*wxWHITE);
 }

@@ -103,9 +103,9 @@ bool MyApp::OnInit(void)
 #endif
 
     // Create the main frame window
-    frame = new MyFrame( (wxFrame *) NULL, -1,
+    frame = new MyFrame( (wxFrame *) NULL, wxID_ANY,
                          wxT("wxWidgets Resource Sample"),
-                         wxPoint(-1, -1), wxSize(300, 250) );
+                         wxDefaultPosition, wxSize(300, 250) );
 
 #if wxUSE_STATUSBAR
     // Give it a status line
@@ -118,13 +118,13 @@ bool MyApp::OnInit(void)
     frame->SetMenuBar(menu_bar);
 
     // Make a panel
-    frame->panel = new MyPanel( frame, -1, wxPoint(0, 0), wxSize(400, 400),
+    frame->panel = new MyPanel( frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400),
                                 0, wxT("MyMainFrame") );
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 MyApp::~MyApp()
@@ -181,7 +181,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
@@ -199,7 +199,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
         dialog->ShowModal();
     }
 
-    dialog->Close(TRUE);
+    dialog->Close(true);
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)

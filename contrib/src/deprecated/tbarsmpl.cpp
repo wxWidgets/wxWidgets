@@ -155,8 +155,8 @@ void wxToolBarSimple::Init()
 
     m_xScrollPixelsPerLine = 1;
     m_yScrollPixelsPerLine = 1;
-    m_xScrollingEnabled = FALSE;
-    m_yScrollingEnabled = FALSE;
+    m_xScrollingEnabled = false;
+    m_yScrollingEnabled = false;
     m_xScrollPosition = 0;
     m_yScrollPosition = 0;
     m_xScrollLines = 0;
@@ -190,7 +190,7 @@ bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
 {
     wxToolBarToolSimple *tool = (wxToolBarToolSimple *)toolBase;
 
-    wxCHECK_MSG( !tool->IsControl(), FALSE,
+    wxCHECK_MSG( !tool->IsControl(), false,
                  _T("generic wxToolBarSimple doesn't support controls") );
 
     tool->m_x = m_xPos;
@@ -213,7 +213,7 @@ bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
             m_maxHeight = (wxCoord)((tool->m_y + tool->GetHeight() + m_yMargin));
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarSimple::DoDeleteTool(size_t WXUNUSED(pos),
@@ -224,7 +224,7 @@ bool wxToolBarSimple::DoDeleteTool(size_t WXUNUSED(pos),
 
     Refresh();
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarSimple::Create(wxWindow *parent,
@@ -235,7 +235,7 @@ bool wxToolBarSimple::Create(wxWindow *parent,
                              const wxString& name)
 {
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
-        return FALSE;
+        return false;
 
     // Set it to grey (or other 3D face colour)
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -259,7 +259,7 @@ bool wxToolBarSimple::Create(wxWindow *parent,
 
     SetCursor(*wxSTANDARD_CURSOR);
 
-    return TRUE;
+    return true;
 }
 
 wxToolBarSimple::~wxToolBarSimple()
@@ -366,7 +366,7 @@ bool wxToolBarSimple::Realize()
 
     SetSize(m_maxWidth, m_maxHeight);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -570,11 +570,11 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
     // No second bitmap, so draw a thick line around bitmap, or invert if mono
     else if ( tool->IsToggled() )
     {
-        bool drawBorder = FALSE;
+        bool drawBorder = false;
 #ifdef __X__ // X doesn't invert properly on colour
         drawBorder = wxColourDisplay();
 #else       // Inversion works fine under Windows
-        drawBorder = FALSE;
+        drawBorder = false;
 #endif
 
         if (!drawBorder)
@@ -730,22 +730,22 @@ void wxToolBarSimple::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     if (m_xScrollLines > 0)
     {
         m_xScrollPosition = xPos;
-        SetScrollPos (wxHORIZONTAL, m_xScrollPosition, TRUE);
+        SetScrollPos (wxHORIZONTAL, m_xScrollPosition, true);
     }
     else
     {
-        SetScrollbar(wxHORIZONTAL, 0, 0, 0, FALSE);
+        SetScrollbar(wxHORIZONTAL, 0, 0, 0, false);
         m_xScrollPosition = 0;
     }
 
     if (m_yScrollLines > 0)
     {
         m_yScrollPosition = yPos;
-        SetScrollPos (wxVERTICAL, m_yScrollPosition, TRUE);
+        SetScrollPos (wxVERTICAL, m_yScrollPosition, true);
     }
     else
     {
-        SetScrollbar(wxVERTICAL, 0, 0, 0, FALSE);
+        SetScrollbar(wxVERTICAL, 0, 0, 0, false);
         m_yScrollPosition = 0;
     }
     AdjustScrollbars();
@@ -767,12 +767,12 @@ void wxToolBarSimple::OnScroll(wxScrollEvent& event)
     if (orient == wxHORIZONTAL)
     {
         int newPos = m_xScrollPosition + nScrollInc;
-        SetScrollPos(wxHORIZONTAL, newPos, TRUE );
+        SetScrollPos(wxHORIZONTAL, newPos, true );
     }
     else
     {
         int newPos = m_yScrollPosition + nScrollInc;
-        SetScrollPos(wxVERTICAL, newPos, TRUE );
+        SetScrollPos(wxVERTICAL, newPos, true );
     }
 
     if (orient == wxHORIZONTAL)
@@ -974,12 +974,12 @@ void wxToolBarSimple::Scroll (int x_pos, int y_pos)
     if (x_pos > -1)
     {
         m_xScrollPosition = x_pos;
-        SetScrollPos (wxHORIZONTAL, x_pos, TRUE);
+        SetScrollPos (wxHORIZONTAL, x_pos, true);
     }
     if (y_pos > -1)
     {
         m_yScrollPosition = y_pos;
-        SetScrollPos (wxVERTICAL, y_pos, TRUE);
+        SetScrollPos (wxVERTICAL, y_pos, true);
     }
     Refresh();
 

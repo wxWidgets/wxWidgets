@@ -44,7 +44,7 @@ wxTreeLayout::wxTreeLayout()
     m_ySpacing = 20;
     m_topMargin = 5;
     m_leftMargin = 5;
-    m_orientation = FALSE;
+    m_orientation = false;
     m_parentNode = 0;
 }
 
@@ -59,7 +59,7 @@ void wxTreeLayout::DoLayout(wxDC& dc, long topId)
     {
         SetNodeX(id, 0);
         SetNodeY(id, 0);
-        ActivateNode(id, FALSE);
+        ActivateNode(id, false);
         id = GetNextNode(id);
     }
     m_lastY = m_topMargin;
@@ -144,7 +144,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
     GetChildren(nodeId, children);
     int n = children.GetCount();
 
-    if (m_orientation == FALSE)
+    if (m_orientation == false)
     {
         // Left to right
         // X Calculations
@@ -160,7 +160,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeX(nodeId, (long)(GetNodeX(parentId) + m_xSpacing + x));
         }
 
-        wxNode *node = children.GetFirst();
+        wxList::compatibility_iterator node = children.GetFirst();
         while (node)
         {
             CalcLayout((long)node->GetData(), level+1, dc);
@@ -169,7 +169,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
 
         // Y Calculations
         long averageY;
-        ActivateNode(nodeId, TRUE);
+        ActivateNode(nodeId, true);
 
         if (n > 0)
         {
@@ -209,7 +209,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeY(nodeId, (long)(GetNodeY(parentId) + m_ySpacing + y));
         }
 
-        wxNode *node = children.GetFirst();
+        wxList::compatibility_iterator node = children.GetFirst();
         while (node)
         {
             CalcLayout((long)node->GetData(), level+1, dc);
@@ -218,7 +218,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
 
         // X Calculations
         long averageX;
-        ActivateNode(nodeId, TRUE);
+        ActivateNode(nodeId, true);
 
         if (n > 0)
         {
@@ -273,7 +273,7 @@ void wxTreeLayoutStored::Initialize(int n)
     for (i = 0; i < n; i++)
     {
         m_nodes[i].m_name = wxT("");
-        m_nodes[i].m_active = FALSE;
+        m_nodes[i].m_active = false;
         m_nodes[i].m_parentId = -1;
         m_nodes[i].m_x = 0;
         m_nodes[i].m_y = 0;
