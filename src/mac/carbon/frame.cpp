@@ -40,7 +40,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 #endif
 
-#define WX_MAC_STATUSBAR_HEIGHT 15 
+#define WX_MAC_STATUSBAR_HEIGHT 18 
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
