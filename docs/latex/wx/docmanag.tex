@@ -58,6 +58,12 @@ A list of all documents.
 
 Stores the flags passed to the constructor.
 
+\membersection{wxDocManager::m\_lastDirectory}
+
+The directory last selected by the user when opening a file.
+
+\member{wxFileHistory*}{m\_fileHistory}
+
 \membersection{wxDocManager::m\_templates}
 
 \member{wxList}{mnTemplates}
@@ -222,6 +228,12 @@ Returns a reference to the list of documents.
 
 Returns a pointer to file history.
 
+\membersection{wxDocManager::GetLastDirectory}\label{wxdocmanagergetlastdirectory}
+
+\constfunc{wxString}{GetLastDirectory}{\void}
+
+Returns the directory last selected by the user when opening a file. Initially empty.
+
 \membersection{wxDocManager::GetMaxDocsOpen}
 
 \func{int}{GetMaxDocsOpen}{\void}
@@ -350,6 +362,12 @@ Returns a document template by asking the user (if there is more than one templa
 displaying a list of valid views. This function is used in wxDocManager::CreateView.
 The dialog normally won't appear because the array of templates only contains
 those relevant to the document in question, and often there will only be one such.
+
+\membersection{wxDocManager::SetLastDirectory}\label{wxdocmanagersetlastdirectory}
+
+\func{void}{SetLastDirectory}{\param{const wxString\&}{ dir}}
+
+Sets the directory to be displayed to the user when opening a file. Initially this is empty.
 
 \membersection{wxDocManager::SetMaxDocsOpen}
 

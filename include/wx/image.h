@@ -53,7 +53,7 @@ class WXDLLEXPORT wxImage;
 
 class WXDLLEXPORT wxImageHandler: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxImageHandler)
+  DECLARE_CLASS(wxImageHandler)
 
 public:
   wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }

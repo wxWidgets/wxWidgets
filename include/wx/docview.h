@@ -375,6 +375,9 @@ public:
     virtual void FileHistoryAddFilesToMenu();
     virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
 
+    inline wxString GetLastDirectory() const { return m_lastDirectory; }
+    inline void SetLastDirectory(const wxString& dir) { m_lastDirectory = dir; }
+
 protected:
     long              m_flags;
     int               m_defaultDocumentNameCounter;
@@ -383,6 +386,7 @@ protected:
     wxList            m_templates;
     wxView*           m_currentView;
     wxFileHistory*    m_fileHistory;
+    wxString          m_lastDirectory;
 
     DECLARE_EVENT_TABLE()
 };

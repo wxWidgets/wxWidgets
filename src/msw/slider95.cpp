@@ -239,7 +239,7 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             nScrollInc = 0;
     }
 
-    if ( nScrollInc == 0 )
+    if (scrollEvent == wxEVT_NULL)
     {
         // no event...
         return FALSE;

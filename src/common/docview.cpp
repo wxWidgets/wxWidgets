@@ -706,6 +706,7 @@ wxDocManager::wxDocManager(long flags, bool initialize)
     m_currentView = (wxView *) NULL;
     m_maxDocsOpen = 10000;
     m_fileHistory = (wxFileHistory *) NULL;
+    m_lastDirectory = wxT("") ;
     if (initialize)
         Initialize();
 }
@@ -1224,7 +1225,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     int FilterIndex = 0;
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
-                                        wxT(""),
+                                        m_lastDirectory,
                                         wxT(""),
                                         &FilterIndex,
                                         descrBuf,
@@ -1233,6 +1234,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     if (!pathTmp.IsEmpty())
     {
+        m_lastDirectory = wxPathOnly(pathTmp);
+
         path = pathTmp;
         wxString theExt = FindExtension(path);
         if (!theExt)
