@@ -1628,23 +1628,28 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
             break;
         case inGrow:
           {
-                int growResult = GrowWindow(window , ev->where, &screenBits.bounds);
-                if (growResult != 0)
+                Rect newContentRect ;
+                Rect constraintRect ;
+                constraintRect.top = win->GetMinHeight() ;
+                if ( constraintRect.top == -1 )
+                    constraintRect.top  == 0 ;
+                constraintRect.left = win->GetMinWidth() ;
+                if ( constraintRect.left == -1 )
+                    constraintRect.left  == 0 ;
+                constraintRect.right = win->GetMaxWidth() ;
+                if ( constraintRect.right == -1 )
+                    constraintRect.right  == 32768 ;
+                constraintRect.bottom = win->GetMaxWidth() ;
+                if ( constraintRect.bottom == -1 )
+                    constraintRect.bottom  == 32768 ;
+
+                Boolean growResult = ResizeWindow( window , ev->where ,
+                    &constraintRect , &newContentRect ) ;
+                if ( growResult )
                 {
-                    int newWidth = LoWord(growResult);
-                    int newHeight = HiWord(growResult);
-                    int oldWidth, oldHeight;
-
-
-                    if (win)
-                    {
-                        win->GetSize(&oldWidth, &oldHeight);
-                        if (newWidth == 0)
-                            newWidth = oldWidth;
-                        if (newHeight == 0)
-                            newHeight = oldHeight;
-                        win->SetSize( -1, -1 , newWidth, newHeight, wxSIZE_USE_EXISTING);
-                    }
+                    win->SetSize( newContentRect.left , newContentRect.top , 
+                        newContentRect.right - newContentRect.left , 
+                        newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
                 }
                 s_lastMouseDown = 0;
           }
