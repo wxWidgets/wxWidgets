@@ -626,12 +626,12 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
         wxPendingEvents = new wxList;
     wxPendingEvents->Append(this);
 
-    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
-
     // 3) Inform the system that new pending events are somwehere,
     //    and that these should be processed in idle time.
     
     wxWakeUpIdle();
+
+    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 }
 
 void wxEvtHandler::ProcessPendingEvents()
