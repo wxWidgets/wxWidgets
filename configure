@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP IF_GNU_MAKE YACC LEX LEXLIB LEX_OUTPUT_ROOT LN_S CXXCPP PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG PANGOFT2_CFLAGS PANGOFT2_LIBS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS PANGOX_CFLAGS PANGOX_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS AIX_CXX_LD RESCOMP DEREZ SETFILE LIBICONV wxUSE_ZLIB wxUSE_REGEX wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF WXUNIV MONOLITHIC EXTRALIBS UNICODE BUILD SHARED TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG SET_MAKE MAKE_SET INSTALL_DIR PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOSX SO_SUFFIX DLLPREFIX SHARED_LD_CC SHARED_LD_CXX PIC_FLAG USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TYPE COND_WXUSE_ZLIB_BUILTIN COND_UNICODE_1 COND_BUILD_DEBUG COND_WXUSE_REGEX_BUILTIN COND_USE_SOSYMLINKS_1 COND_WXUSE_LIBJPEG_BUILTIN COND_WXUSE_LIBPNG_BUILTIN COND_SHARED_1_MONOLITHIC_1 COND_WXUSE_ODBC_BUILTIN COND_TOOLKIT_GTK COND_TOOLKIT_MOTIF COND_TOOLKIT_MSW COND_TOOLKIT_MAC COND_TOOLKIT_COCOA COND_TOOLKIT_OS2 COND_TOOLKIT_X11 COND_TOOLKIT_MGL COND_WXUNIV_1 COND_WXUSE_LIBTIFF_BUILTIN COND_PLATFORM_UNIX_1 COND_PLATFORM_MACOSX_1 COND_PLATFORM_WIN32_1 COND_USE_SOVERSION_1_PLATFORM_MACOSX_0 COND_USE_SOVERSION_1_PLATFORM_MACOSX_1 COND_PLATFORM_WIN32_0 COND_MONOLITHIC_1 COND_MONOLITHIC_0 COND_USE_GUI_1 COND_DEPS_TYPE_GCC COND_USE_GUI_0 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_SHARED_0_MONOLITHIC_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSOLARIS_1 COND_PLATFORM_MAC_1 COND_SHARED_0 COND_SHARED_1 LEX_STEM PATH_IFS WX_MAJOR_VERSION_NUMBER WX_MINOR_VERSION_NUMBER WX_RELEASE_NUMBER WX_LIBRARY_NAME_STATIC WX_LIBRARY_NAME_SHARED WX_LIBRARY_BASENAME WX_LIBRARY_IMPORTLIB WX_TARGET_LIBRARY WX_LIBRARY_LINK1 WX_LIBRARY_LINK2 PROGRAM_EXT WX_LIBRARY_NAME_STATIC_GL WX_LIBRARY_NAME_SHARED_GL WX_TARGET_LIBRARY_GL WX_LIBRARY_LINK1_GL WX_LIBRARY_LINK2_GL WX_ALL WX_ALL_INSTALLED SHARED_LD CODE_GEN_FLAGS CODE_GEN_FLAGS_CXX SONAME_FLAGS SONAME_FLAGS_GL WX_TARGET_LIBRARY_SONAME WX_TARGET_LIBRARY_TYPE STATIC_FLAG WXDEBUG_DEFINE USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLKIT_VPATH TOOLCHAIN_NAME TOOLCHAIN_DEFS TOOLCHAIN_DLL_DEFS top_builddir_wxconfig cross_compiling WXCONFIG_LIBS WXCONFIG_LIBS_GL WXCONFIG_LIBS_STATIC WXCONFIG_LIBS_STATIC_GL WXCONFIG_INCLUDE WXCONFIG_RPATH WX_LARGEFILE_FLAGS ALL_OBJECTS ALL_HEADERS ALL_SOURCES GUIDIST PORT_FILES DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL LDFLAGS_VERSIONING LDFLAGS_EXE OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA MACOSX_BUNDLE LIBWXMACRES MACRESCOMP MACSETFILE MACRESWXCONFIG GCC DLLTOOL AS NM LD MAKEINFO INSTALL_LIBRARY ESD_LINK LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP IF_GNU_MAKE YACC LEX LEXLIB LEX_OUTPUT_ROOT LN_S CXXCPP PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG PANGOFT2_CFLAGS PANGOFT2_LIBS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS PANGOX_CFLAGS PANGOX_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS AIX_CXX_LD RESCOMP DEREZ SETFILE LIBICONV wxUSE_ZLIB wxUSE_REGEX wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF WXUNIV MONOLITHIC EXTRALIBS UNICODE BUILD SHARED TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG SET_MAKE MAKE_SET INSTALL_DIR PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOSX SO_SUFFIX DLLPREFIX SHARED_LD_CC SHARED_LD_CXX PIC_FLAG USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TYPE COND_SHARED_1_MONOLITHIC_0 COND_WXUSE_LIBPNG_BUILTIN COND_WXUSE_ZLIB_BUILTIN COND_USE_SOSYMLINKS_1 COND_USE_GUI_1 COND_WXUSE_ODBC_BUILTIN COND_TOOLKIT_X11 COND_TOOLKIT_MGL COND_TOOLKIT_GTK COND_TOOLKIT_MSW COND_TOOLKIT_MAC COND_USE_SOVERSION_1_PLATFORM_MACOSX_0 COND_USE_SOVERSION_1_PLATFORM_MACOSX_1 COND_PLATFORM_WIN32_1 COND_SHARED_0_USE_GUI_1_MONOLITHIC_0 COND_PLATFORM_UNIX_1 COND_PLATFORM_MACOSX_1 COND_WXUSE_LIBTIFF_BUILTIN COND_SHARED_1_USE_GUI_1_MONOLITHIC_0 COND_MONOLITHIC_0 COND_WXUSE_REGEX_BUILTIN COND_TOOLKIT_MOTIF COND_TOOLKIT_COCOA COND_TOOLKIT_OS2 COND_WXUNIV_1 COND_WXUSE_LIBJPEG_BUILTIN COND_USE_GUI_0 COND_SHARED_1_MONOLITHIC_1 COND_SHARED_0_MONOLITHIC_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSOLARIS_1 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_UNICODE_1 COND_PLATFORM_WIN32_0 COND_MONOLITHIC_1 COND_SHARED_0_MONOLITHIC_0 COND_BUILD_DEBUG COND_DEPS_TYPE_GCC COND_PLATFORM_MAC_1 COND_SHARED_1 COND_SHARED_0 LEX_STEM PATH_IFS WX_MAJOR_VERSION_NUMBER WX_MINOR_VERSION_NUMBER WX_RELEASE_NUMBER WX_LIBRARY_NAME_STATIC WX_LIBRARY_NAME_SHARED WX_LIBRARY_BASENAME WX_LIBRARY_IMPORTLIB WX_TARGET_LIBRARY WX_LIBRARY_LINK1 WX_LIBRARY_LINK2 PROGRAM_EXT WX_LIBRARY_NAME_STATIC_GL WX_LIBRARY_NAME_SHARED_GL WX_TARGET_LIBRARY_GL WX_LIBRARY_LINK1_GL WX_LIBRARY_LINK2_GL WX_ALL WX_ALL_INSTALLED SHARED_LD CODE_GEN_FLAGS CODE_GEN_FLAGS_CXX SONAME_FLAGS SONAME_FLAGS_GL WX_TARGET_LIBRARY_SONAME WX_TARGET_LIBRARY_TYPE STATIC_FLAG WXDEBUG_DEFINE USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLKIT_VPATH TOOLCHAIN_NAME TOOLCHAIN_DEFS TOOLCHAIN_DLL_DEFS top_builddir_wxconfig cross_compiling WXCONFIG_LIBS WXCONFIG_LIBS_GL WXCONFIG_LIBS_STATIC WXCONFIG_LIBS_STATIC_GL WXCONFIG_INCLUDE WXCONFIG_RPATH WX_LARGEFILE_FLAGS ALL_OBJECTS ALL_HEADERS ALL_SOURCES GUIDIST PORT_FILES DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL LDFLAGS_VERSIONING LDFLAGS_EXE OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA MACOSX_BUNDLE LIBWXMACRES MACRESCOMP MACSETFILE MACRESWXCONFIG GCC DLLTOOL AS NM LD MAKEINFO INSTALL_LIBRARY ESD_LINK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -866,6 +866,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-gui            use GUI classes
+  --disable-monolithic    don't build wxWindows as single library
   --enable-universal      use wxWindows GUI controls instead of native ones
   --enable-nanox          use NanoX
   --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)
@@ -2108,6 +2109,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_XPM=no
   DEFAULT_wxUSE_ICO_CUR=no
   DEFAULT_wxUSE_ACCESSIBILITY=no
+
+  DEFAULT_wxUSE_MONOLITHIC=yes
 else
   DEFAULT_wxUSE_UNIVERSAL=no
 
@@ -2280,6 +2283,8 @@ else
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
   DEFAULT_wxUSE_ACCESSIBILITY=no
+
+  DEFAULT_wxUSE_MONOLITHIC=yes
 fi
 
 
@@ -2328,6 +2333,47 @@ fi;
           fi
 
           if test "$wxUSE_GUI" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-monolithic" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-monolithic... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-monolithic or --disable-monolithic was given.
+if test "${enable_monolithic+set}" = set; then
+  enableval="$enable_monolithic"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_monolithic='wxUSE_MONOLITHIC=yes'
+                          else
+                            ac_cv_use_monolithic='wxUSE_MONOLITHIC=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_MONOLITHIC" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_monolithic='wxUSE_MONOLITHIC='$DEFAULT_wxUSE_MONOLITHIC
+
+fi;
+
+          eval "$ac_cv_use_monolithic"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_monolithic >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_MONOLITHIC" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -33436,7 +33482,11 @@ fi
 
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 
-MONOLITHIC=1
+if test $wxUSE_MONOLITHIC = "yes" ; then
+    MONOLITHIC=1
+else
+    MONOLITHIC=0
+fi
 
 
 
@@ -34261,34 +34311,10 @@ fi
 
 
 
-    COND_WXUSE_ZLIB_BUILTIN="#"
-    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
-        COND_WXUSE_ZLIB_BUILTIN=
-    fi
-
-    COND_UNICODE_1="#"
-    if test "x$UNICODE" = "x1" ; then
-        COND_UNICODE_1=
-    fi
-
-    COND_BUILD_DEBUG="#"
-    if test "x$BUILD" = "xdebug" ; then
-        COND_BUILD_DEBUG=
-    fi
-
-    COND_WXUSE_REGEX_BUILTIN="#"
-    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
-        COND_WXUSE_REGEX_BUILTIN=
-    fi
-
-    COND_USE_SOSYMLINKS_1="#"
-    if test "x$USE_SOSYMLINKS" = "x1" ; then
-        COND_USE_SOSYMLINKS_1=
-    fi
-
-    COND_WXUSE_LIBJPEG_BUILTIN="#"
-    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_WXUSE_LIBJPEG_BUILTIN=
+    COND_SHARED_1_MONOLITHIC_0="#"
+    if test "x$SHARED" = "x1" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_1_MONOLITHIC_0=
     fi
 
     COND_WXUSE_LIBPNG_BUILTIN="#"
@@ -34296,45 +34322,24 @@ fi
         COND_WXUSE_LIBPNG_BUILTIN=
     fi
 
-    COND_SHARED_1_MONOLITHIC_1="#"
-    if test "x$SHARED" = "x1" -a \
-            "x$MONOLITHIC" = "x1" ; then
-        COND_SHARED_1_MONOLITHIC_1=
+    COND_WXUSE_ZLIB_BUILTIN="#"
+    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
+        COND_WXUSE_ZLIB_BUILTIN=
+    fi
+
+    COND_USE_SOSYMLINKS_1="#"
+    if test "x$USE_SOSYMLINKS" = "x1" ; then
+        COND_USE_SOSYMLINKS_1=
+    fi
+
+    COND_USE_GUI_1="#"
+    if test "x$USE_GUI" = "x1" ; then
+        COND_USE_GUI_1=
     fi
 
     COND_WXUSE_ODBC_BUILTIN="#"
     if test "x$wxUSE_ODBC" = "xbuiltin" ; then
         COND_WXUSE_ODBC_BUILTIN=
-    fi
-
-    COND_TOOLKIT_GTK="#"
-    if test "x$TOOLKIT" = "xGTK" ; then
-        COND_TOOLKIT_GTK=
-    fi
-
-    COND_TOOLKIT_MOTIF="#"
-    if test "x$TOOLKIT" = "xMOTIF" ; then
-        COND_TOOLKIT_MOTIF=
-    fi
-
-    COND_TOOLKIT_MSW="#"
-    if test "x$TOOLKIT" = "xMSW" ; then
-        COND_TOOLKIT_MSW=
-    fi
-
-    COND_TOOLKIT_MAC="#"
-    if test "x$TOOLKIT" = "xMAC" ; then
-        COND_TOOLKIT_MAC=
-    fi
-
-    COND_TOOLKIT_COCOA="#"
-    if test "x$TOOLKIT" = "xCOCOA" ; then
-        COND_TOOLKIT_COCOA=
-    fi
-
-    COND_TOOLKIT_OS2="#"
-    if test "x$TOOLKIT" = "xOS2" ; then
-        COND_TOOLKIT_OS2=
     fi
 
     COND_TOOLKIT_X11="#"
@@ -34347,29 +34352,19 @@ fi
         COND_TOOLKIT_MGL=
     fi
 
-    COND_WXUNIV_1="#"
-    if test "x$WXUNIV" = "x1" ; then
-        COND_WXUNIV_1=
+    COND_TOOLKIT_GTK="#"
+    if test "x$TOOLKIT" = "xGTK" ; then
+        COND_TOOLKIT_GTK=
     fi
 
-    COND_WXUSE_LIBTIFF_BUILTIN="#"
-    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_WXUSE_LIBTIFF_BUILTIN=
+    COND_TOOLKIT_MSW="#"
+    if test "x$TOOLKIT" = "xMSW" ; then
+        COND_TOOLKIT_MSW=
     fi
 
-    COND_PLATFORM_UNIX_1="#"
-    if test "x$PLATFORM_UNIX" = "x1" ; then
-        COND_PLATFORM_UNIX_1=
-    fi
-
-    COND_PLATFORM_MACOSX_1="#"
-    if test "x$PLATFORM_MACOSX" = "x1" ; then
-        COND_PLATFORM_MACOSX_1=
-    fi
-
-    COND_PLATFORM_WIN32_1="#"
-    if test "x$PLATFORM_WIN32" = "x1" ; then
-        COND_PLATFORM_WIN32_1=
+    COND_TOOLKIT_MAC="#"
+    if test "x$TOOLKIT" = "xMAC" ; then
+        COND_TOOLKIT_MAC=
     fi
 
     COND_USE_SOVERSION_1_PLATFORM_MACOSX_0="#"
@@ -34384,14 +34379,38 @@ fi
         COND_USE_SOVERSION_1_PLATFORM_MACOSX_1=
     fi
 
-    COND_PLATFORM_WIN32_0="#"
-    if test "x$PLATFORM_WIN32" = "x0" ; then
-        COND_PLATFORM_WIN32_0=
+    COND_PLATFORM_WIN32_1="#"
+    if test "x$PLATFORM_WIN32" = "x1" ; then
+        COND_PLATFORM_WIN32_1=
     fi
 
-    COND_MONOLITHIC_1="#"
-    if test "x$MONOLITHIC" = "x1" ; then
-        COND_MONOLITHIC_1=
+    COND_SHARED_0_USE_GUI_1_MONOLITHIC_0="#"
+    if test "x$SHARED" = "x0" -a \
+            "x$USE_GUI" = "x1" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_0_USE_GUI_1_MONOLITHIC_0=
+    fi
+
+    COND_PLATFORM_UNIX_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" ; then
+        COND_PLATFORM_UNIX_1=
+    fi
+
+    COND_PLATFORM_MACOSX_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" ; then
+        COND_PLATFORM_MACOSX_1=
+    fi
+
+    COND_WXUSE_LIBTIFF_BUILTIN="#"
+    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
+        COND_WXUSE_LIBTIFF_BUILTIN=
+    fi
+
+    COND_SHARED_1_USE_GUI_1_MONOLITHIC_0="#"
+    if test "x$SHARED" = "x1" -a \
+            "x$USE_GUI" = "x1" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_1_USE_GUI_1_MONOLITHIC_0=
     fi
 
     COND_MONOLITHIC_0="#"
@@ -34399,14 +34418,34 @@ fi
         COND_MONOLITHIC_0=
     fi
 
-    COND_USE_GUI_1="#"
-    if test "x$USE_GUI" = "x1" ; then
-        COND_USE_GUI_1=
+    COND_WXUSE_REGEX_BUILTIN="#"
+    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
+        COND_WXUSE_REGEX_BUILTIN=
     fi
 
-    COND_DEPS_TYPE_GCC="#"
-    if test "x$DEPS_TYPE" = "xgcc" ; then
-        COND_DEPS_TYPE_GCC=
+    COND_TOOLKIT_MOTIF="#"
+    if test "x$TOOLKIT" = "xMOTIF" ; then
+        COND_TOOLKIT_MOTIF=
+    fi
+
+    COND_TOOLKIT_COCOA="#"
+    if test "x$TOOLKIT" = "xCOCOA" ; then
+        COND_TOOLKIT_COCOA=
+    fi
+
+    COND_TOOLKIT_OS2="#"
+    if test "x$TOOLKIT" = "xOS2" ; then
+        COND_TOOLKIT_OS2=
+    fi
+
+    COND_WXUNIV_1="#"
+    if test "x$WXUNIV" = "x1" ; then
+        COND_WXUNIV_1=
+    fi
+
+    COND_WXUSE_LIBJPEG_BUILTIN="#"
+    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
+        COND_WXUSE_LIBJPEG_BUILTIN=
     fi
 
     COND_USE_GUI_0="#"
@@ -34414,16 +34453,10 @@ fi
         COND_USE_GUI_0=
     fi
 
-    COND_USE_GUI_1_WXUNIV_0="#"
-    if test "x$USE_GUI" = "x1" -a \
-            "x$WXUNIV" = "x0" ; then
-        COND_USE_GUI_1_WXUNIV_0=
-    fi
-
-    COND_USE_GUI_1_WXUNIV_1="#"
-    if test "x$USE_GUI" = "x1" -a \
-            "x$WXUNIV" = "x1" ; then
-        COND_USE_GUI_1_WXUNIV_1=
+    COND_SHARED_1_MONOLITHIC_1="#"
+    if test "x$SHARED" = "x1" -a \
+            "x$MONOLITHIC" = "x1" ; then
+        COND_SHARED_1_MONOLITHIC_1=
     fi
 
     COND_SHARED_0_MONOLITHIC_1="#"
@@ -34442,19 +34475,62 @@ fi
         COND_USE_SOVERSOLARIS_1=
     fi
 
+    COND_USE_GUI_1_WXUNIV_0="#"
+    if test "x$USE_GUI" = "x1" -a \
+            "x$WXUNIV" = "x0" ; then
+        COND_USE_GUI_1_WXUNIV_0=
+    fi
+
+    COND_USE_GUI_1_WXUNIV_1="#"
+    if test "x$USE_GUI" = "x1" -a \
+            "x$WXUNIV" = "x1" ; then
+        COND_USE_GUI_1_WXUNIV_1=
+    fi
+
+    COND_UNICODE_1="#"
+    if test "x$UNICODE" = "x1" ; then
+        COND_UNICODE_1=
+    fi
+
+    COND_PLATFORM_WIN32_0="#"
+    if test "x$PLATFORM_WIN32" = "x0" ; then
+        COND_PLATFORM_WIN32_0=
+    fi
+
+    COND_MONOLITHIC_1="#"
+    if test "x$MONOLITHIC" = "x1" ; then
+        COND_MONOLITHIC_1=
+    fi
+
+    COND_SHARED_0_MONOLITHIC_0="#"
+    if test "x$SHARED" = "x0" -a \
+            "x$MONOLITHIC" = "x0" ; then
+        COND_SHARED_0_MONOLITHIC_0=
+    fi
+
+    COND_BUILD_DEBUG="#"
+    if test "x$BUILD" = "xdebug" ; then
+        COND_BUILD_DEBUG=
+    fi
+
+    COND_DEPS_TYPE_GCC="#"
+    if test "x$DEPS_TYPE" = "xgcc" ; then
+        COND_DEPS_TYPE_GCC=
+    fi
+
     COND_PLATFORM_MAC_1="#"
     if test "x$PLATFORM_MAC" = "x1" ; then
         COND_PLATFORM_MAC_1=
     fi
 
-    COND_SHARED_0="#"
-    if test "x$SHARED" = "x0" ; then
-        COND_SHARED_0=
-    fi
-
     COND_SHARED_1="#"
     if test "x$SHARED" = "x1" ; then
         COND_SHARED_1=
+    fi
+
+    COND_SHARED_0="#"
+    if test "x$SHARED" = "x0" ; then
+        COND_SHARED_0=
     fi
 
 
@@ -34621,25 +34697,16 @@ fi
 
 
 
-if test -d ${srcdir}/samples ; then
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files samples/Makefile samples/access/Makefile samples/artprov/Makefile samples/caret/Makefile samples/calendar/Makefile samples/checklst/Makefile samples/config/Makefile samples/controls/Makefile samples/console/Makefile samples/db/Makefile samples/dialogs/Makefile samples/dialup/Makefile samples/docview/Makefile samples/docvwmdi/Makefile samples/dnd/Makefile samples/dragimag/Makefile samples/drawing/Makefile samples/dynamic/Makefile samples/erase/Makefile samples/event/Makefile samples/exec/Makefile samples/font/Makefile samples/grid/Makefile samples/help/Makefile samples/image/Makefile samples/internat/Makefile samples/ipc/Makefile samples/joytest/Makefile samples/keyboard/Makefile samples/layout/Makefile samples/listctrl/Makefile samples/mdi/Makefile samples/menu/Makefile samples/memcheck/Makefile samples/minifram/Makefile samples/minimal/Makefile samples/mobile/Makefile samples/mobile/wxedit/Makefile samples/mobile/styles/Makefile samples/multimon/Makefile samples/notebook/Makefile samples/oleauto/Makefile samples/ownerdrw/Makefile samples/png/Makefile samples/printing/Makefile samples/propsize/Makefile samples/regtest/Makefile samples/rotate/Makefile samples/sashtest/Makefile samples/shaped/Makefile samples/scroll/Makefile samples/scrollsub/Makefile samples/sockets/Makefile samples/splitter/Makefile samples/statbar/Makefile samples/taskbar/Makefile samples/text/Makefile samples/thread/Makefile samples/toolbar/Makefile samples/treectrl/Makefile samples/typetest/Makefile samples/validate/Makefile samples/widgets/Makefile samples/wizard/Makefile samples/htlbox/Makefile samples/html/Makefile samples/html/about/Makefile samples/html/help/Makefile samples/html/printing/Makefile samples/html/helpview/Makefile samples/html/test/Makefile samples/html/zip/Makefile samples/html/virtual/Makefile samples/html/widget/Makefile samples/opengl/Makefile samples/opengl/cube/Makefile samples/opengl/penguin/Makefile samples/opengl/isosurf/Makefile"
+for subdir in samples demos utils contrib ; do
+    if test -d ${srcdir}/${subdir} ; then
+        makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        for mkin in $makefiles ; do
+            mk=`echo $mkin | sed 's/Makefile\.in/Makefile/g'`
+                      ac_config_files="$ac_config_files $mk"
 
-fi
-
-if test -d ${srcdir}/demos ; then
-                                                                          ac_config_files="$ac_config_files demos/Makefile demos/bombs/Makefile demos/dbbrowse/Makefile demos/forty/Makefile demos/fractal/Makefile demos/life/Makefile demos/poem/Makefile"
-
-fi
-
-if test -d ${srcdir}/utils ; then
-                                                                                                                                                          ac_config_files="$ac_config_files utils/Makefile utils/makegen/Makefile utils/HelpGen/Makefile utils/HelpGen/src/Makefile utils/tex2rtf/Makefile utils/tex2rtf/src/Makefile utils/hhp2cached/Makefile utils/dialoged/Makefile utils/dialoged/src/Makefile utils/emulator/Makefile utils/emulator/src/Makefile utils/helpview/Makefile utils/helpview/src/Makefile utils/configtool/Makefile utils/configtool/src/Makefile"
-
-fi
-
-if test -d ${srcdir}/contrib ; then
-                                                                                                                                                                                                                                                                                                                                                                                                                                                  ac_config_files="$ac_config_files contrib/src/Makefile contrib/src/deprecated/Makefile contrib/src/ogl/Makefile contrib/src/mmedia/Makefile contrib/src/stc/Makefile contrib/src/svg/Makefile contrib/src/xrc/Makefile contrib/src/gizmos/Makefile contrib/src/plot/Makefile contrib/src/applet/Makefile contrib/src/fl/Makefile contrib/src/net/Makefile contrib/samples/Makefile contrib/samples/deprecated/Makefile contrib/samples/deprecated/proplist/Makefile contrib/samples/deprecated/resource/Makefile contrib/samples/deprecated/treelay/Makefile contrib/samples/mmedia/Makefile contrib/samples/ogl/Makefile contrib/samples/ogl/ogledit/Makefile contrib/samples/ogl/studio/Makefile contrib/samples/stc/Makefile contrib/samples/svg/Makefile contrib/samples/gizmos/Makefile contrib/samples/gizmos/editlbox/Makefile contrib/samples/gizmos/dynsash/Makefile contrib/samples/gizmos/dynsash_switch/Makefile contrib/samples/gizmos/multicell/Makefile contrib/samples/gizmos/splittree/Makefile contrib/samples/gizmos/led/Makefile contrib/samples/xrc/Makefile contrib/samples/plot/Makefile contrib/samples/applet/Makefile contrib/samples/fl/Makefile contrib/samples/fl/fl_demo1/Makefile contrib/samples/fl/fl_demo2/Makefile contrib/samples/fl/fl_sample1/Makefile contrib/samples/fl/fl_sample2/Makefile contrib/samples/fl/fl_sample3/Makefile contrib/utils/Makefile contrib/utils/wxrc/Makefile contrib/utils/wxrcedit/Makefile contrib/utils/convertrc/Makefile"
-
-fi
+        done
+    fi
+done
 
 
 cat >confcache <<\_ACEOF
@@ -35183,149 +35250,7 @@ do
   "wx-config" ) CONFIG_FILES="$CONFIG_FILES wx-config" ;;
   "version-script" ) CONFIG_FILES="$CONFIG_FILES version-script" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "samples/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/Makefile" ;;
-  "samples/access/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/access/Makefile" ;;
-  "samples/artprov/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/artprov/Makefile" ;;
-  "samples/caret/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/caret/Makefile" ;;
-  "samples/calendar/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/calendar/Makefile" ;;
-  "samples/checklst/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/checklst/Makefile" ;;
-  "samples/config/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/config/Makefile" ;;
-  "samples/controls/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/controls/Makefile" ;;
-  "samples/console/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/console/Makefile" ;;
-  "samples/db/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/db/Makefile" ;;
-  "samples/dialogs/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/dialogs/Makefile" ;;
-  "samples/dialup/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/dialup/Makefile" ;;
-  "samples/docview/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/docview/Makefile" ;;
-  "samples/docvwmdi/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/docvwmdi/Makefile" ;;
-  "samples/dnd/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/dnd/Makefile" ;;
-  "samples/dragimag/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/dragimag/Makefile" ;;
-  "samples/drawing/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/drawing/Makefile" ;;
-  "samples/dynamic/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/dynamic/Makefile" ;;
-  "samples/erase/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/erase/Makefile" ;;
-  "samples/event/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/event/Makefile" ;;
-  "samples/exec/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/exec/Makefile" ;;
-  "samples/font/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/font/Makefile" ;;
-  "samples/grid/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/grid/Makefile" ;;
-  "samples/help/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/help/Makefile" ;;
-  "samples/image/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/image/Makefile" ;;
-  "samples/internat/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/internat/Makefile" ;;
-  "samples/ipc/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/ipc/Makefile" ;;
-  "samples/joytest/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/joytest/Makefile" ;;
-  "samples/keyboard/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/keyboard/Makefile" ;;
-  "samples/layout/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/layout/Makefile" ;;
-  "samples/listctrl/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/listctrl/Makefile" ;;
-  "samples/mdi/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/mdi/Makefile" ;;
-  "samples/menu/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/menu/Makefile" ;;
-  "samples/memcheck/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/memcheck/Makefile" ;;
-  "samples/minifram/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/minifram/Makefile" ;;
-  "samples/minimal/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/minimal/Makefile" ;;
-  "samples/mobile/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/mobile/Makefile" ;;
-  "samples/mobile/wxedit/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/mobile/wxedit/Makefile" ;;
-  "samples/mobile/styles/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/mobile/styles/Makefile" ;;
-  "samples/multimon/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/multimon/Makefile" ;;
-  "samples/notebook/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/notebook/Makefile" ;;
-  "samples/oleauto/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/oleauto/Makefile" ;;
-  "samples/ownerdrw/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/ownerdrw/Makefile" ;;
-  "samples/png/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/png/Makefile" ;;
-  "samples/printing/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/printing/Makefile" ;;
-  "samples/propsize/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/propsize/Makefile" ;;
-  "samples/regtest/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/regtest/Makefile" ;;
-  "samples/rotate/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/rotate/Makefile" ;;
-  "samples/sashtest/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/sashtest/Makefile" ;;
-  "samples/shaped/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/shaped/Makefile" ;;
-  "samples/scroll/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/scroll/Makefile" ;;
-  "samples/scrollsub/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/scrollsub/Makefile" ;;
-  "samples/sockets/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/sockets/Makefile" ;;
-  "samples/splitter/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/splitter/Makefile" ;;
-  "samples/statbar/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/statbar/Makefile" ;;
-  "samples/taskbar/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/taskbar/Makefile" ;;
-  "samples/text/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/text/Makefile" ;;
-  "samples/thread/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/thread/Makefile" ;;
-  "samples/toolbar/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/toolbar/Makefile" ;;
-  "samples/treectrl/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/treectrl/Makefile" ;;
-  "samples/typetest/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/typetest/Makefile" ;;
-  "samples/validate/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/validate/Makefile" ;;
-  "samples/widgets/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/widgets/Makefile" ;;
-  "samples/wizard/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/wizard/Makefile" ;;
-  "samples/htlbox/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/htlbox/Makefile" ;;
-  "samples/html/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/Makefile" ;;
-  "samples/html/about/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/about/Makefile" ;;
-  "samples/html/help/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/help/Makefile" ;;
-  "samples/html/printing/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/printing/Makefile" ;;
-  "samples/html/helpview/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/helpview/Makefile" ;;
-  "samples/html/test/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/test/Makefile" ;;
-  "samples/html/zip/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/zip/Makefile" ;;
-  "samples/html/virtual/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/virtual/Makefile" ;;
-  "samples/html/widget/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/html/widget/Makefile" ;;
-  "samples/opengl/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/opengl/Makefile" ;;
-  "samples/opengl/cube/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/opengl/cube/Makefile" ;;
-  "samples/opengl/penguin/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/opengl/penguin/Makefile" ;;
-  "samples/opengl/isosurf/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/opengl/isosurf/Makefile" ;;
-  "demos/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/Makefile" ;;
-  "demos/bombs/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/bombs/Makefile" ;;
-  "demos/dbbrowse/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/dbbrowse/Makefile" ;;
-  "demos/forty/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/forty/Makefile" ;;
-  "demos/fractal/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/fractal/Makefile" ;;
-  "demos/life/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/life/Makefile" ;;
-  "demos/poem/Makefile" ) CONFIG_FILES="$CONFIG_FILES demos/poem/Makefile" ;;
-  "utils/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/Makefile" ;;
-  "utils/makegen/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/makegen/Makefile" ;;
-  "utils/HelpGen/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/HelpGen/Makefile" ;;
-  "utils/HelpGen/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/HelpGen/src/Makefile" ;;
-  "utils/tex2rtf/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/tex2rtf/Makefile" ;;
-  "utils/tex2rtf/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/tex2rtf/src/Makefile" ;;
-  "utils/hhp2cached/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/hhp2cached/Makefile" ;;
-  "utils/dialoged/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/dialoged/Makefile" ;;
-  "utils/dialoged/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/dialoged/src/Makefile" ;;
-  "utils/emulator/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/emulator/Makefile" ;;
-  "utils/emulator/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/emulator/src/Makefile" ;;
-  "utils/helpview/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/helpview/Makefile" ;;
-  "utils/helpview/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/helpview/src/Makefile" ;;
-  "utils/configtool/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/configtool/Makefile" ;;
-  "utils/configtool/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES utils/configtool/src/Makefile" ;;
-  "contrib/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/Makefile" ;;
-  "contrib/src/deprecated/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/deprecated/Makefile" ;;
-  "contrib/src/ogl/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/ogl/Makefile" ;;
-  "contrib/src/mmedia/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/mmedia/Makefile" ;;
-  "contrib/src/stc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/stc/Makefile" ;;
-  "contrib/src/svg/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/svg/Makefile" ;;
-  "contrib/src/xrc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/xrc/Makefile" ;;
-  "contrib/src/gizmos/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/gizmos/Makefile" ;;
-  "contrib/src/plot/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/plot/Makefile" ;;
-  "contrib/src/applet/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/applet/Makefile" ;;
-  "contrib/src/fl/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/fl/Makefile" ;;
-  "contrib/src/net/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/src/net/Makefile" ;;
-  "contrib/samples/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/Makefile" ;;
-  "contrib/samples/deprecated/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/deprecated/Makefile" ;;
-  "contrib/samples/deprecated/proplist/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/deprecated/proplist/Makefile" ;;
-  "contrib/samples/deprecated/resource/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/deprecated/resource/Makefile" ;;
-  "contrib/samples/deprecated/treelay/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/deprecated/treelay/Makefile" ;;
-  "contrib/samples/mmedia/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/mmedia/Makefile" ;;
-  "contrib/samples/ogl/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/ogl/Makefile" ;;
-  "contrib/samples/ogl/ogledit/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/ogl/ogledit/Makefile" ;;
-  "contrib/samples/ogl/studio/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/ogl/studio/Makefile" ;;
-  "contrib/samples/stc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/stc/Makefile" ;;
-  "contrib/samples/svg/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/svg/Makefile" ;;
-  "contrib/samples/gizmos/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/Makefile" ;;
-  "contrib/samples/gizmos/editlbox/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/editlbox/Makefile" ;;
-  "contrib/samples/gizmos/dynsash/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/dynsash/Makefile" ;;
-  "contrib/samples/gizmos/dynsash_switch/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/dynsash_switch/Makefile" ;;
-  "contrib/samples/gizmos/multicell/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/multicell/Makefile" ;;
-  "contrib/samples/gizmos/splittree/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/splittree/Makefile" ;;
-  "contrib/samples/gizmos/led/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/gizmos/led/Makefile" ;;
-  "contrib/samples/xrc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/xrc/Makefile" ;;
-  "contrib/samples/plot/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/plot/Makefile" ;;
-  "contrib/samples/applet/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/applet/Makefile" ;;
-  "contrib/samples/fl/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/Makefile" ;;
-  "contrib/samples/fl/fl_demo1/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/fl_demo1/Makefile" ;;
-  "contrib/samples/fl/fl_demo2/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/fl_demo2/Makefile" ;;
-  "contrib/samples/fl/fl_sample1/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/fl_sample1/Makefile" ;;
-  "contrib/samples/fl/fl_sample2/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/fl_sample2/Makefile" ;;
-  "contrib/samples/fl/fl_sample3/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/samples/fl/fl_sample3/Makefile" ;;
-  "contrib/utils/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/utils/Makefile" ;;
-  "contrib/utils/wxrc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/utils/wxrc/Makefile" ;;
-  "contrib/utils/wxrcedit/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/utils/wxrcedit/Makefile" ;;
-  "contrib/utils/convertrc/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/utils/convertrc/Makefile" ;;
+  "$mk" ) CONFIG_FILES="$CONFIG_FILES $mk" ;;
   "default" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;
   "setup.h" ) CONFIG_HEADERS="$CONFIG_HEADERS setup.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
@@ -35505,44 +35430,48 @@ s,@USE_MACVERSION@,$USE_MACVERSION,;t t
 s,@USE_SOSYMLINKS@,$USE_SOSYMLINKS,;t t
 s,@SONAME_FLAG@,$SONAME_FLAG,;t t
 s,@DEPS_TYPE@,$DEPS_TYPE,;t t
-s,@COND_WXUSE_ZLIB_BUILTIN@,$COND_WXUSE_ZLIB_BUILTIN,;t t
-s,@COND_UNICODE_1@,$COND_UNICODE_1,;t t
-s,@COND_BUILD_DEBUG@,$COND_BUILD_DEBUG,;t t
-s,@COND_WXUSE_REGEX_BUILTIN@,$COND_WXUSE_REGEX_BUILTIN,;t t
-s,@COND_USE_SOSYMLINKS_1@,$COND_USE_SOSYMLINKS_1,;t t
-s,@COND_WXUSE_LIBJPEG_BUILTIN@,$COND_WXUSE_LIBJPEG_BUILTIN,;t t
+s,@COND_SHARED_1_MONOLITHIC_0@,$COND_SHARED_1_MONOLITHIC_0,;t t
 s,@COND_WXUSE_LIBPNG_BUILTIN@,$COND_WXUSE_LIBPNG_BUILTIN,;t t
-s,@COND_SHARED_1_MONOLITHIC_1@,$COND_SHARED_1_MONOLITHIC_1,;t t
+s,@COND_WXUSE_ZLIB_BUILTIN@,$COND_WXUSE_ZLIB_BUILTIN,;t t
+s,@COND_USE_SOSYMLINKS_1@,$COND_USE_SOSYMLINKS_1,;t t
+s,@COND_USE_GUI_1@,$COND_USE_GUI_1,;t t
 s,@COND_WXUSE_ODBC_BUILTIN@,$COND_WXUSE_ODBC_BUILTIN,;t t
-s,@COND_TOOLKIT_GTK@,$COND_TOOLKIT_GTK,;t t
-s,@COND_TOOLKIT_MOTIF@,$COND_TOOLKIT_MOTIF,;t t
-s,@COND_TOOLKIT_MSW@,$COND_TOOLKIT_MSW,;t t
-s,@COND_TOOLKIT_MAC@,$COND_TOOLKIT_MAC,;t t
-s,@COND_TOOLKIT_COCOA@,$COND_TOOLKIT_COCOA,;t t
-s,@COND_TOOLKIT_OS2@,$COND_TOOLKIT_OS2,;t t
 s,@COND_TOOLKIT_X11@,$COND_TOOLKIT_X11,;t t
 s,@COND_TOOLKIT_MGL@,$COND_TOOLKIT_MGL,;t t
-s,@COND_WXUNIV_1@,$COND_WXUNIV_1,;t t
-s,@COND_WXUSE_LIBTIFF_BUILTIN@,$COND_WXUSE_LIBTIFF_BUILTIN,;t t
-s,@COND_PLATFORM_UNIX_1@,$COND_PLATFORM_UNIX_1,;t t
-s,@COND_PLATFORM_MACOSX_1@,$COND_PLATFORM_MACOSX_1,;t t
-s,@COND_PLATFORM_WIN32_1@,$COND_PLATFORM_WIN32_1,;t t
+s,@COND_TOOLKIT_GTK@,$COND_TOOLKIT_GTK,;t t
+s,@COND_TOOLKIT_MSW@,$COND_TOOLKIT_MSW,;t t
+s,@COND_TOOLKIT_MAC@,$COND_TOOLKIT_MAC,;t t
 s,@COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@,$COND_USE_SOVERSION_1_PLATFORM_MACOSX_0,;t t
 s,@COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@,$COND_USE_SOVERSION_1_PLATFORM_MACOSX_1,;t t
-s,@COND_PLATFORM_WIN32_0@,$COND_PLATFORM_WIN32_0,;t t
-s,@COND_MONOLITHIC_1@,$COND_MONOLITHIC_1,;t t
+s,@COND_PLATFORM_WIN32_1@,$COND_PLATFORM_WIN32_1,;t t
+s,@COND_SHARED_0_USE_GUI_1_MONOLITHIC_0@,$COND_SHARED_0_USE_GUI_1_MONOLITHIC_0,;t t
+s,@COND_PLATFORM_UNIX_1@,$COND_PLATFORM_UNIX_1,;t t
+s,@COND_PLATFORM_MACOSX_1@,$COND_PLATFORM_MACOSX_1,;t t
+s,@COND_WXUSE_LIBTIFF_BUILTIN@,$COND_WXUSE_LIBTIFF_BUILTIN,;t t
+s,@COND_SHARED_1_USE_GUI_1_MONOLITHIC_0@,$COND_SHARED_1_USE_GUI_1_MONOLITHIC_0,;t t
 s,@COND_MONOLITHIC_0@,$COND_MONOLITHIC_0,;t t
-s,@COND_USE_GUI_1@,$COND_USE_GUI_1,;t t
-s,@COND_DEPS_TYPE_GCC@,$COND_DEPS_TYPE_GCC,;t t
+s,@COND_WXUSE_REGEX_BUILTIN@,$COND_WXUSE_REGEX_BUILTIN,;t t
+s,@COND_TOOLKIT_MOTIF@,$COND_TOOLKIT_MOTIF,;t t
+s,@COND_TOOLKIT_COCOA@,$COND_TOOLKIT_COCOA,;t t
+s,@COND_TOOLKIT_OS2@,$COND_TOOLKIT_OS2,;t t
+s,@COND_WXUNIV_1@,$COND_WXUNIV_1,;t t
+s,@COND_WXUSE_LIBJPEG_BUILTIN@,$COND_WXUSE_LIBJPEG_BUILTIN,;t t
 s,@COND_USE_GUI_0@,$COND_USE_GUI_0,;t t
-s,@COND_USE_GUI_1_WXUNIV_0@,$COND_USE_GUI_1_WXUNIV_0,;t t
-s,@COND_USE_GUI_1_WXUNIV_1@,$COND_USE_GUI_1_WXUNIV_1,;t t
+s,@COND_SHARED_1_MONOLITHIC_1@,$COND_SHARED_1_MONOLITHIC_1,;t t
 s,@COND_SHARED_0_MONOLITHIC_1@,$COND_SHARED_0_MONOLITHIC_1,;t t
 s,@COND_USE_SOVERLINUX_1@,$COND_USE_SOVERLINUX_1,;t t
 s,@COND_USE_SOVERSOLARIS_1@,$COND_USE_SOVERSOLARIS_1,;t t
+s,@COND_USE_GUI_1_WXUNIV_0@,$COND_USE_GUI_1_WXUNIV_0,;t t
+s,@COND_USE_GUI_1_WXUNIV_1@,$COND_USE_GUI_1_WXUNIV_1,;t t
+s,@COND_UNICODE_1@,$COND_UNICODE_1,;t t
+s,@COND_PLATFORM_WIN32_0@,$COND_PLATFORM_WIN32_0,;t t
+s,@COND_MONOLITHIC_1@,$COND_MONOLITHIC_1,;t t
+s,@COND_SHARED_0_MONOLITHIC_0@,$COND_SHARED_0_MONOLITHIC_0,;t t
+s,@COND_BUILD_DEBUG@,$COND_BUILD_DEBUG,;t t
+s,@COND_DEPS_TYPE_GCC@,$COND_DEPS_TYPE_GCC,;t t
 s,@COND_PLATFORM_MAC_1@,$COND_PLATFORM_MAC_1,;t t
-s,@COND_SHARED_0@,$COND_SHARED_0,;t t
 s,@COND_SHARED_1@,$COND_SHARED_1,;t t
+s,@COND_SHARED_0@,$COND_SHARED_0,;t t
 s,@LEX_STEM@,$LEX_STEM,;t t
 s,@PATH_IFS@,$PATH_IFS,;t t
 s,@WX_MAJOR_VERSION_NUMBER@,$WX_MAJOR_VERSION_NUMBER,;t t
@@ -36169,6 +36098,7 @@ echo
 echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
 echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
+echo "  Should wxWindows be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"

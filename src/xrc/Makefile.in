@@ -73,56 +73,55 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
-@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p_1 = -lwxregex
-@COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
-@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p_1 = -lwxzlib
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__xrcdll___targetsuf2 = .$(SO_SUFFIX).0
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__xrcdll___targetsuf2 = .0.$(SO_SUFFIX)
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__xrcdll___targetsuf3 = .$(SO_SUFFIX).0.0.0
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__xrcdll___targetsuf3 = .0.0.0.$(SO_SUFFIX)
-@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
-@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_SHARED_0@__xrclib___depname = $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a
-@COND_MONOLITHIC_1@WXLIB_MONO = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
-@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
-@COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc
-@COND_MONOLITHIC_0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
-@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p_1 = -lwxtiff
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p_1 = -lwxpng
-@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2) libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
-@COND_USE_SOVERLINUX_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
-@COND_USE_SOVERSOLARIS_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3)
-@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
-@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p_1 = -lwxodbc
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
+@COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
 @COND_PLATFORM_MACOSX_1@__xrcdll___macver = -compatibility_version 2.5 -current_version 2.5.0
-@COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_PLATFORM_WIN32_1@__xrcdll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__xrcdll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_PLATFORM_MACOSX_1@__xrcdll___macinstnamecmd = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
 @COND_SHARED_1@__install_xrcdll___depname = install_xrcdll
 @COND_SHARED_0@__install_xrclib___depname = install_xrclib
+@COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
-@COND_PLATFORM_WIN32_1@__xrcdll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
-@COND_PLATFORM_WIN32_1@__xrcdll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
-@COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
-@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -D__WXUNIVERSAL__
+@COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__xrcdll___targetsuf2 = .$(SO_SUFFIX).0
+@COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__xrcdll___targetsuf2 = .0.$(SO_SUFFIX)
+@COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
+@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
+@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
 @COND_WXUSE_LIBJPEG_BUILTIN@LIB_JPEG = wxjpeg
-@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p_1 = -lwxjpeg
+@COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
+@COND_MONOLITHIC_1@WXLIB_MONO = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@__xrcdll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2) libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff
+@COND_SHARED_0@__xrclib___depname = $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = -D__WXUNIVERSAL__
+@COND_MONOLITHIC_0@__WXLIB_HTML_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
+@COND_MONOLITHIC_0@WXLIB_HTML = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
+@COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_MONOLITHIC_0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_PLATFORM_MACOSX_1@__xrcdll___macinstnamecmd = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
 @COND_WXUSE_LIBTIFF_BUILTIN@LIB_TIFF = wxtiff
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_SHARED_1@__xrcdll___depname = $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3)
 @COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex
+@COND_USE_SOVERLINUX_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
+@COND_USE_SOVERSOLARIS_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3)
+@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 
 ### Targets: ###
 
@@ -132,31 +131,31 @@ install-strip: install
 	$(STRIP) $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3)
 
 xh_notbk.o: $(srcdir)/xh_notbk.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_listb.o: $(srcdir)/xh_listb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_listc.o: $(srcdir)/xh_listc.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_stlin.o: $(srcdir)/xh_stlin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_toolb.o: $(srcdir)/xh_toolb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xmlparse.o: $(srcdir)/expat/xmlparse/xmlparse.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_html.o: $(srcdir)/xh_html.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_sttxt.o: $(srcdir)/xh_sttxt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_gdctl.o: $(srcdir)/xh_gdctl.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a: xrclib-xmlparse.o xrclib-xmltok.o xrclib-xmlrole.o xrclib-xml.o xrclib-xmlres.o xrclib-xh_bmp.o xrclib-xh_bmpbt.o xrclib-xh_bttn.o xrclib-xh_cald.o xrclib-xh_chckb.o xrclib-xh_chckl.o xrclib-xh_choic.o xrclib-xh_combo.o xrclib-xh_dlg.o xrclib-xh_frame.o xrclib-xh_gauge.o xrclib-xh_gdctl.o xrclib-xh_html.o xrclib-xh_listb.o xrclib-xh_listc.o xrclib-xh_menu.o xrclib-xh_notbk.o xrclib-xh_panel.o xrclib-xh_radbt.o xrclib-xh_radbx.o xrclib-xh_scrol.o xrclib-xh_scwin.o xrclib-xh_sizer.o xrclib-xh_slidr.o xrclib-xh_spin.o xrclib-xh_split.o xrclib-xh_stbmp.o xrclib-xh_stbox.o xrclib-xh_stlin.o xrclib-xh_sttxt.o xrclib-xh_text.o xrclib-xh_toolb.o xrclib-xh_tree.o xrclib-xh_unkwn.o xrclib-xh_wizrd.o xrclib-xmlrsall.o
 	rm -f $@
@@ -164,139 +163,146 @@ $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_
 	$(RANLIB) $@
 
 xh_sttxt.o: $(srcdir)/xh_sttxt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_menu.o: $(srcdir)/xh_menu.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_text.o: $(srcdir)/xh_text.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_html.o: $(srcdir)/xh_html.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_unkwn.o: $(srcdir)/xh_unkwn.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_gdctl.o: $(srcdir)/xh_gdctl.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_cald.o: $(srcdir)/xh_cald.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_listb.o: $(srcdir)/xh_listb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_split.o: $(srcdir)/xh_split.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_spin.o: $(srcdir)/xh_spin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_bmpbt.o: $(srcdir)/xh_bmpbt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xmlparse.o: $(srcdir)/expat/xmlparse/xmlparse.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
 
 xrclib-xh_bmpbt.o: $(srcdir)/xh_bmpbt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_split.o: $(srcdir)/xh_split.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_bttn.o: $(srcdir)/xh_bttn.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_listc.o: $(srcdir)/xh_listc.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xmlrole.o: $(srcdir)/expat/xmltok/xmlrole.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
 
 xh_scwin.o: $(srcdir)/xh_scwin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_spin.o: $(srcdir)/xh_spin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_stbox.o: $(srcdir)/xh_stbox.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_frame.o: $(srcdir)/xh_frame.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_chckb.o: $(srcdir)/xh_chckb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_choic.o: $(srcdir)/xh_choic.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xmlres.o: $(srcdir)/xmlres.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_dlg.o: $(srcdir)/xh_dlg.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xmltok.o: $(srcdir)/expat/xmltok/xmltok.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_stbmp.o: $(srcdir)/xh_stbmp.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_wizrd.o: $(srcdir)/xh_wizrd.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_radbx.o: $(srcdir)/xh_radbx.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_panel.o: $(srcdir)/xh_panel.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_wizrd.o: $(srcdir)/xh_wizrd.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xmltok.o: $(srcdir)/expat/xmltok/xmltok.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
 
 xh_combo.o: $(srcdir)/xh_combo.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3): xmlparse.o xmltok.o xmlrole.o xml.o xmlres.o xh_bmp.o xh_bmpbt.o xh_bttn.o xh_cald.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o xh_frame.o xh_gauge.o xh_gdctl.o xh_html.o xh_listb.o xh_listc.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o xh_radbx.o xh_scrol.o xh_scwin.o xh_sizer.o xh_slidr.o xh_spin.o xh_split.o xh_stbmp.o xh_stbox.o xh_stlin.o xh_sttxt.o xh_text.o xh_toolb.o xh_tree.o xh_unkwn.o xh_wizrd.o xmlrsall.o
-	$(SHARED_LD_CXX) $@  xmlparse.o xmltok.o xmlrole.o xml.o xmlres.o xh_bmp.o xh_bmpbt.o xh_bttn.o xh_cald.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o xh_frame.o xh_gauge.o xh_gdctl.o xh_html.o xh_listb.o xh_listc.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o xh_radbx.o xh_scrol.o xh_scwin.o xh_sizer.o xh_slidr.o xh_spin.o xh_split.o xh_stbmp.o xh_stbox.o xh_stlin.o xh_sttxt.o xh_text.o xh_toolb.o xh_tree.o xh_unkwn.o xh_wizrd.o xmlrsall.o  $(__xrcdll___importlib) -L$(top_builddir)lib $(__xrcdll___importlib) $(__xrcdll___macinstnamecmd) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__xrcdll___soname_flags) $(__xrcdll___macver) $(__WXLIB_CORE_p)
+	$(SHARED_LD_CXX) $@  xmlparse.o xmltok.o xmlrole.o xml.o xmlres.o xh_bmp.o xh_bmpbt.o xh_bttn.o xh_cald.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o xh_frame.o xh_gauge.o xh_gdctl.o xh_html.o xh_listb.o xh_listc.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o xh_radbx.o xh_scrol.o xh_scwin.o xh_sizer.o xh_slidr.o xh_spin.o xh_split.o xh_stbmp.o xh_stbox.o xh_stlin.o xh_sttxt.o xh_text.o xh_toolb.o xh_tree.o xh_unkwn.o xh_wizrd.o xmlrsall.o  $(__xrcdll___importlib) -L$(top_builddir)lib $(__xrcdll___importlib) $(__xrcdll___macinstnamecmd) $(__xrcdll___soname_flags) $(__xrcdll___macver) $(__WXLIB_MONO_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__WXLIB_CORE_p) $(__WXLIB_HTML_p)
 	$(__xrcdll___so_symlinks_cmd)
 
 xrclib-xh_slidr.o: $(srcdir)/xh_slidr.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_chckl.o: $(srcdir)/xh_chckl.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_text.o: $(srcdir)/xh_text.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_combo.o: $(srcdir)/xh_combo.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_sizer.o: $(srcdir)/xh_sizer.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_unkwn.o: $(srcdir)/xh_unkwn.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 install: all $(__install_xrcdll___depname) $(__install_xrclib___depname)
+	$(INSTALL_DIR) $(includedir)
+	for f in wx/xrc/xml.h wx/xrc/xmlres.h wx/xrc/xh_all.h wx/xrc/xh_bmp.h wx/xrc/xh_bmpbt.h wx/xrc/xh_bttn.h wx/xrc/xh_cald.h wx/xrc/xh_chckb.h wx/xrc/xh_chckl.h wx/xrc/xh_choic.h wx/xrc/xh_combo.h wx/xrc/xh_dlg.h wx/xrc/xh_frame.h wx/xrc/xh_gauge.h wx/xrc/xh_gdctl.h wx/xrc/xh_html.h wx/xrc/xh_listb.h wx/xrc/xh_listc.h wx/xrc/xh_menu.h wx/xrc/xh_notbk.h wx/xrc/xh_panel.h wx/xrc/xh_radbt.h wx/xrc/xh_radbx.h wx/xrc/xh_scrol.h wx/xrc/xh_scwin.h wx/xrc/xh_sizer.h wx/xrc/xh_slidr.h wx/xrc/xh_spin.h wx/xrc/xh_split.h wx/xrc/xh_stbmp.h wx/xrc/xh_stbox.h wx/xrc/xh_stlin.h wx/xrc/xh_sttxt.h wx/xrc/xh_text.h wx/xrc/xh_toolb.h wx/xrc/xh_tree.h wx/xrc/xh_unkwn.h wx/xrc/xh_wizrd.h; do \
+	if test ! -d $(includedir)/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
+	fi; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	done
 
 xh_tree.o: $(srcdir)/xh_tree.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_stbmp.o: $(srcdir)/xh_stbmp.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_bttn.o: $(srcdir)/xh_bttn.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_tree.o: $(srcdir)/xh_tree.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 install_xrcdll: 
 	$(INSTALL_DIR) $(libdir)
@@ -305,86 +311,86 @@ install_xrcdll:
 	(cd $(libdir) ; $(__xrcdll___so_symlinks_inst_cmd))
 
 xrclib-xmlrole.o: $(srcdir)/expat/xmltok/xmlrole.c
-	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
+	$(CC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CFLAGS) $<
 
 xh_slidr.o: $(srcdir)/xh_slidr.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_scrol.o: $(srcdir)/xh_scrol.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_cald.o: $(srcdir)/xh_cald.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_scwin.o: $(srcdir)/xh_scwin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_gauge.o: $(srcdir)/xh_gauge.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_scrol.o: $(srcdir)/xh_scrol.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_bmp.o: $(srcdir)/xh_bmp.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_radbx.o: $(srcdir)/xh_radbx.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 install_xrclib: 
 	$(INSTALL_DIR) $(libdir)
 	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a $(libdir)
 
 xh_menu.o: $(srcdir)/xh_menu.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xml.o: $(srcdir)/xml.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_toolb.o: $(srcdir)/xh_toolb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_frame.o: $(srcdir)/xh_frame.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_choic.o: $(srcdir)/xh_choic.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xml.o: $(srcdir)/xml.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_bmp.o: $(srcdir)/xh_bmp.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_radbt.o: $(srcdir)/xh_radbt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_stbox.o: $(srcdir)/xh_stbox.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xmlrsall.o: $(srcdir)/xmlrsall.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_sizer.o: $(srcdir)/xh_sizer.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_panel.o: $(srcdir)/xh_panel.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xh_radbt.o: $(srcdir)/xh_radbt.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_gauge.o: $(srcdir)/xh_gauge.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xmlrsall.o: $(srcdir)/xmlrsall.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_notbk.o: $(srcdir)/xh_notbk.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xrclib-xh_dlg.o: $(srcdir)/xh_dlg.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 clean: 
 	rm -f ./*.o ./*.d
@@ -393,16 +399,16 @@ clean:
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a
 
 xrclib-xh_stlin.o: $(srcdir)/xh_stlin.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 xh_chckb.o: $(srcdir)/xh_chckb.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xh_chckl.o: $(srcdir)/xh_chckl.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -DwxUSE_GUI=1 -I$(srcdir)/../../include -DWXMAKINGDLL -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 xrclib-xmlres.o: $(srcdir)/xmlres.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(DEPS_FLAG) $(CXXFLAGS) $<
 
 uninstall: 
 
