@@ -610,8 +610,6 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
       return FALSE;
     }
 
-    strName = FilterOutEntryName(strName);
-
     ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(strName);
     if ( pEntry == NULL )
       pEntry = m_pCurrentGroup->AddEntry(strName);
@@ -906,7 +904,10 @@ LineList *ConfigGroup::GetGroupLine()
     // this group wasn't present in local config file, add it now
     if ( pParent != NULL ) {
       wxString strFullName;
-      strFullName << _T("[") << (GetFullName().c_str() + 1) << _T("]"); // +1: no '/'
+      strFullName << _T("[")
+                  // +1: no '/'
+                  << FilterOutEntryName(GetFullName().c_str() + 1)
+                  << _T("]");
       m_pLine = m_pConfig->LineListInsert(strFullName,
                                           pParent->GetLastGroupLine());
       pParent->SetLastGroup(this);  // we're surely after all the others
@@ -1273,7 +1274,7 @@ void ConfigEntry::SetValue(const wxString& strValue, bool bUser)
   if ( bUser ) {
     wxString strVal = FilterOutValue(strValue);
     wxString strLine;
-    strLine << m_strName << _T(" = ") << strVal;
+    strLine << FilterOutEntryName(m_strName) << _T(" = ") << strVal;
 
     if ( m_pLine != NULL ) {
       // entry was read from the local config file, just modify the line
