@@ -2836,7 +2836,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
             ]
         )
     ])
-    if test "$wx_cv_type_pthread_rec_mutex_init"="yes"; then
+    if test "$wx_cv_type_pthread_rec_mutex_init" = "yes"; then
       AC_DEFINE(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
     else
       dnl this may break code working elsewhere, so at least warn about it

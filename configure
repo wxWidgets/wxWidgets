@@ -12898,7 +12898,7 @@ rm -f conftest*
 fi
 
 echo "$ac_t""$wx_cv_type_pthread_rec_mutex_init" 1>&6
-    if test "$wx_cv_type_pthread_rec_mutex_init"="yes"; then
+    if test "$wx_cv_type_pthread_rec_mutex_init" = "yes"; then
       cat >> confdefs.h <<\EOF
 #define HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER 1
 EOF
