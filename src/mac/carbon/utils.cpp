@@ -761,7 +761,7 @@ wxString wxMacCFStringHolder::AsString()
 #if wxUSE_UNICODE
     CFStringGetCharacters( m_cfs , CFRangeMake( 0 , len ) , (UniChar*) buf ) ;
 #else
-    CFStringGetCString( m_cfs , buf , len+1 , s_macDefaultEncodingIsPC ? 
+    CFStringGetCString( m_cfs , buf , len+1 , wxApp::s_macDefaultEncodingIsPC ? 
         kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
 #endif
     buf[len] = 0 ;

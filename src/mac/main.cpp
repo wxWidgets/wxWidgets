@@ -11,8 +11,4 @@
 
 #include "wx/app.h"
 
-WXDLLEXPORT int main(int argc, char* argv[])
-{
-    return wxEntry(argc, argv);
-}
-
+IMPLEMENT_WXWIN_MAIN

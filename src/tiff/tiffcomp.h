@@ -52,8 +52,12 @@
 #endif
 
 #if defined(__MWERKS__) || defined(THINK_C)
+#ifdef __MACH__
+#include <sys/types.h>
+#else
 #include <unix.h>
 #include <math.h>
+#endif
 #endif
 
 #include <stdio.h>

@@ -5,7 +5,7 @@
  * macros that code uses.  This lets the same code operate on two different
  * representations for state sets.
  */
-#ifdef __MWERKS__
+#if defined(__MWERKS__) && !defined(__MACH__)
 typedef long off_t ;
 #else
 #include <sys/types.h>
