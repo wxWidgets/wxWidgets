@@ -283,7 +283,8 @@ wxLongLong wxGetLocalTimeMillis()
     // If your platform/compiler needs to use two different functions
     // to get ms resolution, please do NOT just shut off these warnings,
     // drop me a line instead at <guille@iies.es>
-    #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
+    // Visualage does not support #warning
+    // #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
 
     DATETIME dt;
     ::DosGetDateTime(&dt);

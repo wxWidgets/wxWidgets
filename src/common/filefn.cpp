@@ -1176,9 +1176,15 @@ bool wxPathExists(const wxChar *pszPathName)
 #endif // __WINDOWS__
 
     wxStructStat st;
-
+#ifndef __VISAGECPP__
     return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
         ((st.st_mode & S_IFMT) == S_IFDIR);
+#else
+    // S_IFMT not supported in VA compilers.. st_mode is a 2byte value only
+    return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
+        (st.st_mode == S_IFDIR);
+#endif
+
 }
 
 // Get a temporary filename, opening and closing the file.
