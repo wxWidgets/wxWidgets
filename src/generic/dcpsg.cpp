@@ -1581,7 +1581,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 
     if (!m_pstream)
     {
-        wxMessageBox( _("Cannot open file for PostScript printing!"), _("Error"), wxOK );
+        wxLogError( _("Cannot open file for PostScript printing!"));
         m_ok = FALSE;
         return FALSE;
     }
