@@ -483,6 +483,9 @@ public:
 
     // does this window have the capture?
     bool HasCapture() const;
+
+    void SetThemeEnabled(bool enable);
+    bool GetThemeEnabled();
 };
 
 
